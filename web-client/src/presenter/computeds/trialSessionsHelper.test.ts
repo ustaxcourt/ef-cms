@@ -12,6 +12,7 @@ import { getUserPermissions } from '@shared/authorization/getUserPermissions';
 import { initialTrialSessionPageState } from '../state/trialSessionsPageState';
 import {
   isTrialSessionRow,
+  isTrialSessionWeek,
   trialSessionsHelper as trialSessionsHelperComputed,
 } from './trialSessionsHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -399,8 +400,31 @@ describe('trialSessionsHelper', () => {
         );
       });
     });
+
     describe('formatting', () => {
-      it('sets userIsAssignedToSession false for all sessions if there is no associated judgeUser', () => {
+      it('should format trialSessions startDate, endDate, noticeIssuedDate', () => {
+        trialSession1.noticeIssuedDate = '2020-05-03T21:00:00.000Z';
+        trialSession1.startDate = '2020-05-03T21:00:00.000Z';
+        trialSession1.estimatedEndDate = '2020-05-03T21:00:00.000Z';
+        trialSessionsPageState.trialSessions = [trialSession1];
+
+        const result = runCompute(trialSessionsHelper, {
+          state: {
+            permissions: getUserPermissions(docketClerk1User),
+            trialSessionsPage: trialSessionsPageState,
+          },
+        });
+
+        const trialSessionsOnly =
+          result.trialSessionRows.filter(isTrialSessionRow);
+        expect(trialSessionsOnly[0]).toMatchObject({
+          formattedEstimatedEndDate: '05/03/20',
+          formattedNoticeIssuedDate: '05/03/2020',
+          formattedStartDate: '05/03/20',
+        });
+      });
+
+      it('should set userIsAssignedToSession false for all sessions if there is no associated judgeUser', () => {
         trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
 
         const result = runCompute(trialSessionsHelper, {
@@ -417,7 +441,8 @@ describe('trialSessionsHelper', () => {
           expect(t.userIsAssignedToSession).toEqual(false);
         });
       });
-      it('sets userIsAssignedToSession true for all sessions the judge user is assigned to', () => {
+
+      it('should set userIsAssignedToSession true for all sessions the judge user is assigned to', () => {
         trialSession1.judge!.userId = '1';
         trialSession2.judge!.userId = '2';
         trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
@@ -441,6 +466,102 @@ describe('trialSessionsHelper', () => {
             expect(t.userIsAssignedToSession).toEqual(false);
           }
         });
+      });
+
+      it('should show an alertMessage for NOTT reminders when the user has not dismissed the alert and the start day is within the reminder range', () => {
+        trialSession1.dismissedAlertForNOTT = false;
+        trialSession1.isStartDateWithinNOTTReminderRange = true;
+        trialSession1.thirtyDaysBeforeTrialFormatted = '06/03/13';
+        trialSessionsPageState.trialSessions = [trialSession1];
+
+        const result = runCompute(trialSessionsHelper, {
+          state: {
+            permissions: getUserPermissions(docketClerk1User),
+            trialSessionsPage: trialSessionsPageState,
+          },
+        });
+
+        const trialSessionsOnly =
+          result.trialSessionRows.filter(isTrialSessionRow);
+        expect(trialSessionsOnly[0].alertMessageForNOTT).toEqual(
+          `The 30-day notice is due by ${trialSession1.thirtyDaysBeforeTrialFormatted}`,
+        );
+        expect(trialSessionsOnly[0].showAlertForNOTTReminder).toEqual(true);
+      });
+    });
+
+    describe('sorting', () => {
+      it('should order trial sessions by start date from oldest to newest', () => {
+        trialSession1.startDate = '2022-03-01T21:00:00.000Z';
+        trialSession2.startDate = '2020-03-01T21:00:00.000Z';
+        trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
+
+        const result = runCompute(trialSessionsHelper, {
+          state: {
+            permissions: getUserPermissions(docketClerk1User),
+            trialSessionsPage: trialSessionsPageState,
+          },
+        });
+
+        const trialSessionsOnly =
+          result.trialSessionRows.filter(isTrialSessionRow);
+        expect(trialSessionsOnly.length).toEqual(2);
+        expect(trialSessionsOnly[0].trialSessionId).toEqual(
+          trialSession2.trialSessionId,
+        );
+        expect(trialSessionsOnly[1].trialSessionId).toEqual(
+          trialSession1.trialSessionId,
+        );
+      });
+    });
+
+    describe('trial session weeks', () => {
+      it('should insert one trialSessionWeek row when two trial sessions are within the same week(week starts on Monday EST)', () => {
+        trialSession1.startDate = '2024-09-03T21:00:00.000Z'; // A Tuesday
+        trialSession2.startDate = '2024-09-05T21:00:00.000Z'; // A Thursday
+        trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
+
+        const result = runCompute(trialSessionsHelper, {
+          state: {
+            permissions: getUserPermissions(docketClerk1User),
+            trialSessionsPage: trialSessionsPageState,
+          },
+        });
+
+        const trialSessionWeeks =
+          result.trialSessionRows.filter(isTrialSessionWeek);
+        expect(trialSessionWeeks).toEqual([
+          {
+            formattedSessionWeekStartDate: 'September 2, 2024',
+            sessionWeekStartDate: '2024-09-02T04:00:00.000+00:00',
+          },
+        ]);
+      });
+
+      it('should insert two trialSessionWeek rows when two trial sessions are not within the same week(week starts on Monday EST)', () => {
+        trialSession1.startDate = '2024-09-03T21:00:00.000Z'; // A Tuesday
+        trialSession2.startDate = '2024-09-12T21:00:00.000Z'; // A Thursday next week
+        trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
+
+        const result = runCompute(trialSessionsHelper, {
+          state: {
+            permissions: getUserPermissions(docketClerk1User),
+            trialSessionsPage: trialSessionsPageState,
+          },
+        });
+
+        const trialSessionWeeks =
+          result.trialSessionRows.filter(isTrialSessionWeek);
+        expect(trialSessionWeeks).toEqual([
+          {
+            formattedSessionWeekStartDate: 'September 2, 2024',
+            sessionWeekStartDate: '2024-09-02T04:00:00.000+00:00',
+          },
+          {
+            formattedSessionWeekStartDate: 'September 9, 2024',
+            sessionWeekStartDate: '2024-09-09T04:00:00.000+00:00',
+          },
+        ]);
       });
     });
   });

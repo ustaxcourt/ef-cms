@@ -1,12 +1,11 @@
 import {
   FORMATS,
   formatNow,
-  prepareDateFromString,
 } from '../../../../shared/src/business/utilities/DateHandler';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { formatTrialSessionDisplayOptions } from './addToTrialSessionModalHelper';
 import { formattedTrialSessions as formattedTrialSessionsComputed } from './formattedTrialSessions';
-import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
+import { judgeUser } from '@shared/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 jest.mock('./addToTrialSessionModalHelper.ts');
@@ -24,16 +23,7 @@ const formattedTrialSessions = withAppContextDecorator(
   },
 );
 
-const getStartOfWeek = date => {
-  return prepareDateFromString(date).startOf('week').toFormat('DDD');
-};
-
 let nextYear;
-
-const testTrialClerkUser = {
-  role: ROLES.trialClerk,
-  userId: '10',
-};
 
 const baseState = {
   constants: { USER_ROLES: ROLES },
@@ -160,108 +150,9 @@ describe('formattedTrialSessions', () => {
       },
     ];
 
-    formatTrialSessionDisplayOptions.mockImplementation(session => session);
-  });
-
-  it('does not error if user is undefined', () => {
-    let error;
-    try {
-      runCompute(formattedTrialSessions, {
-        state: {
-          ...baseState,
-          trialSessions: TRIAL_SESSIONS_LIST,
-          user: judgeUser,
-        },
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeUndefined();
-  });
-
-  it('groups trial sessions into arrays according to session weeks', () => {
-    const result = runCompute(formattedTrialSessions, {
-      state: {
-        ...baseState,
-        trialSessions: TRIAL_SESSIONS_LIST,
-        user: judgeUser,
-      },
-    });
-
-    expect(result.filteredTrialSessions).toBeDefined();
-    expect(result.formattedSessions.length).toBe(4);
-    expect(result.formattedSessions[0].dateFormatted).toEqual(
-      'November 25, 2019',
+    (formatTrialSessionDisplayOptions as jest.Mock).mockImplementation(
+      session => session,
     );
-    expect(result.formattedSessions[1].dateFormatted).toEqual(
-      getStartOfWeek(result.formattedSessions[1].sessions[0].startDate),
-    );
-  });
-
-  it('should filter trial sessions by judge', () => {
-    const result = runCompute(formattedTrialSessions, {
-      state: {
-        ...baseState,
-        screenMetadata: {
-          trialSessionFilters: { judge: { userId: judgeUser.userId } },
-        },
-        trialSessions: TRIAL_SESSIONS_LIST,
-        user: judgeUser,
-      },
-    });
-    expect(result.formattedSessions.length).toBe(1);
-  });
-
-  it('should double filter trial sessions', () => {
-    const result = runCompute(formattedTrialSessions, {
-      state: {
-        ...baseState,
-        screenMetadata: {
-          trialSessionFilters: {
-            proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-            sessionType: SESSION_TYPES.regular,
-          },
-        },
-        trialSessions: TRIAL_SESSIONS_LIST,
-        user: judgeUser,
-      },
-    });
-    const flattenedSessions = result.formattedSessions.flatMap(
-      week => week.sessions,
-    );
-    expect(flattenedSessions.length).toBe(5);
-  });
-
-  it('returns all trial sessions if judge userId trial session filter is an empty string', () => {
-    const result = runCompute(formattedTrialSessions, {
-      state: {
-        ...baseState,
-        screenMetadata: { trialSessionFilters: { judge: { userId: '' } } },
-        trialSessions: TRIAL_SESSIONS_LIST,
-        user: judgeUser,
-      },
-    });
-    expect(result.formattedSessions.length).toBe(4);
-  });
-
-  it('does NOT return the unassigned judge filter on trial sessions tabs other than "new"', () => {
-    let result = runCompute(formattedTrialSessions, {
-      state: {
-        ...baseState,
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'open',
-          },
-        },
-        screenMetadata: {
-          trialSessionFilters: { judge: { userId: 'unassigned' } },
-        },
-        trialSessions: TRIAL_SESSIONS_LIST,
-        user: judgeUser,
-      },
-    });
-
-    expect(result.formattedSessions.length).toBe(4);
   });
 
   it('shows swing session option only if matching term and term year is found', () => {
@@ -439,216 +330,5 @@ describe('formattedTrialSessions', () => {
           session.trialSessionId === TRIAL_SESSIONS_LIST[1].trialSessionId,
       ),
     ).toBeUndefined();
-  });
-
-  it('sets userIsAssignedToSession false for all sessions if there is no associated judgeUser', () => {
-    const result = runCompute(formattedTrialSessions, {
-      state: {
-        ...baseState,
-        judgeUser: undefined,
-        trialSessions: TRIAL_SESSIONS_LIST,
-        user: petitionsClerkUser,
-      },
-    });
-
-    expect(result.formattedSessions[0]).toMatchObject({
-      dateFormatted: 'November 25, 2019',
-      sessions: [
-        {
-          judge: { name: '5', userId: '5' },
-          userIsAssignedToSession: false,
-        },
-        {
-          judge: { name: judgeUser.name, userId: judgeUser.userId },
-          userIsAssignedToSession: false,
-        },
-        {
-          judge: { name: '2', userId: '2' },
-          userIsAssignedToSession: false,
-        },
-        {
-          judge: { name: '3', userId: '3' },
-          userIsAssignedToSession: false,
-        },
-        {
-          judge: { name: '4', userId: '4' },
-          userIsAssignedToSession: false,
-        },
-      ],
-    });
-
-    expect(result.formattedSessions[1]).toMatchObject({
-      dateFormatted: getStartOfWeek(
-        result.formattedSessions[1].sessions[0].startDate,
-      ),
-      sessions: [
-        {
-          judge: { name: '55', userId: '55' },
-          userIsAssignedToSession: false,
-        },
-      ],
-    });
-  });
-
-  it('sets userIsAssignedToSession true for sessions the judge user is assigned to', () => {
-    const result = runCompute(formattedTrialSessions, {
-      state: {
-        ...baseState,
-        trialSessions: TRIAL_SESSIONS_LIST,
-        user: judgeUser,
-      },
-    });
-    expect(result.formattedSessions).toMatchObject([
-      {
-        dateFormatted: 'November 25, 2019',
-        sessions: [
-          {
-            judge: { name: '5', userId: '5' },
-            userIsAssignedToSession: false,
-          },
-          {
-            judge: { name: judgeUser.name, userId: judgeUser.userId },
-            userIsAssignedToSession: true,
-          },
-          {
-            judge: { name: '2', userId: '2' },
-            userIsAssignedToSession: false,
-          },
-          {
-            judge: { name: '3', userId: '3' },
-            userIsAssignedToSession: false,
-          },
-          {
-            judge: { name: '4', userId: '4' },
-            userIsAssignedToSession: false,
-          },
-        ],
-      },
-      {
-        dateFormatted: getStartOfWeek(
-          result.formattedSessions[1].sessions[0].startDate,
-        ),
-        sessions: [
-          {
-            judge: { name: '55', userId: '55' },
-            userIsAssignedToSession: false,
-          },
-        ],
-      },
-      {
-        dateFormatted: 'November 23, 2020',
-        sessions: [
-          {
-            judge: { name: '88', userId: '88' },
-            userIsAssignedToSession: false,
-          },
-        ],
-      },
-      {
-        dateFormatted: 'February 17, 2025',
-        sessions: [
-          {
-            caseOrder: [],
-            estimatedEndDate: '2045-02-17T15:00:00.000Z',
-            formattedEstimatedEndDate: '02/17/45',
-            formattedNoticeIssuedDate: '',
-            formattedStartDate: '02/17/25',
-            isCalendared: true,
-            judge: { name: '6', userId: '6' },
-            proceedingType: 'In Person',
-            sessionStatus: 'Open',
-            sessionType: SESSION_TYPES.regular,
-            showAlertForNOTTReminder: undefined,
-            startDate: '2025-02-17T15:00:00.000Z',
-            startOfWeek: 'February 17, 2025',
-            startOfWeekSortable: '20250217',
-            swingSession: false,
-            term: 'Spring',
-            trialLocation: 'Jacksonville, FL',
-            userIsAssignedToSession: false,
-          },
-        ],
-      },
-    ]);
-  });
-
-  it('sets userIsAssignedToSession true for sessions the current trial clerk user is assigned to', () => {
-    const result = runCompute(formattedTrialSessions, {
-      state: {
-        ...baseState,
-        judgeUser: undefined,
-        trialSessions: TRIAL_SESSIONS_LIST,
-        user: testTrialClerkUser,
-      },
-    });
-
-    expect(result.formattedSessions[0]).toMatchObject({
-      dateFormatted: 'November 25, 2019',
-      sessions: [
-        {
-          judge: { name: '5', userId: '5' },
-          userIsAssignedToSession: false,
-        },
-        {
-          judge: { name: judgeUser.name, userId: judgeUser.userId },
-          userIsAssignedToSession: false,
-        },
-        {
-          trialClerk: { name: '10', userId: '10' },
-          userIsAssignedToSession: true,
-        },
-        {
-          judge: { name: '3', userId: '3' },
-          userIsAssignedToSession: false,
-        },
-        {
-          judge: { name: '4', userId: '4' },
-          userIsAssignedToSession: false,
-        },
-      ],
-    });
-
-    expect(result.formattedSessions[1]).toMatchObject({
-      dateFormatted: getStartOfWeek(
-        result.formattedSessions[1].sessions[0].startDate,
-      ),
-      sessions: [
-        {
-          judge: { name: '55', userId: '55' },
-          userIsAssignedToSession: false,
-        },
-      ],
-    });
-  });
-
-  it('sets userIsAssignedToSession false if the current user and session have no associated judge', () => {
-    const startDate = `${nextYear}-02-17T15:00:00.000Z`;
-    const result = runCompute(formattedTrialSessions, {
-      state: {
-        ...baseState,
-        judgeUser: undefined,
-        trialSessions: [
-          {
-            caseOrder: [],
-            judge: undefined,
-            sessionStatus: 'Open',
-            startDate,
-            swingSession: false,
-            trialLocation: 'Jacksonville, FL',
-          },
-        ],
-        user: petitionsClerkUser,
-      },
-    });
-    expect(result.formattedSessions).toMatchObject([
-      {
-        dateFormatted: getStartOfWeek(startDate),
-        sessions: [
-          {
-            userIsAssignedToSession: false,
-          },
-        ],
-      },
-    ]);
   });
 });
