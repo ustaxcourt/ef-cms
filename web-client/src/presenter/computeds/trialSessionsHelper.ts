@@ -43,6 +43,7 @@ export const trialSessionsHelper = (
     })
     .filter(trialSession => {
       if (filters.judgeId === 'All') return true;
+      if (filters.judgeId === 'unassigned') return !trialSession.judge?.userId;
       return trialSession.judge?.userId === filters.judgeId;
     })
     .filter(trialSession => {
