@@ -71,13 +71,12 @@ button:disabled {
   }
 
   &.ustc-button--unstyled {
-    margin-top: 0.75rem;
-    margin-bottom: 0.75rem;
+    padding: 0.75rem 0;
     line-height: normal;
     text-align: center;
 
-    &.margin-top-0 {
-      margin-top: 0;
+    &.padding-top-0 {
+      padding-top: 0;
     }
   }
 
@@ -230,9 +229,7 @@ table.ustc-table .ustc-button--unstyled {
     color: $color-white;
 
     &.usa-button--unstyled {
-      padding: 0.75rem 0 0.75rem 20px;
-      margin-top: 0;
-      margin-bottom: 0;
+      padding-left: 20px;
     }
 
     &:hover {

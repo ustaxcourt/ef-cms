@@ -90,7 +90,7 @@ export const TrialSessionInformation = connect(
     return (
       <>
         <div className="grid-container padding-x-0">
-          <div className="grid-row flex-justify-space-between">
+          <div className="grid-row">
             <div className="grid-col-auto">
               <h1>
                 Session Information
@@ -115,7 +115,7 @@ export const TrialSessionInformation = connect(
                 )}
               </h1>
             </div>
-            <div className="grid-col-fill tablet:grid-col-auto">
+            <div className="grid-col-fill display-flex flex-justify-end">
               {formattedTrialSessionDetails.canDelete && (
                 <Button
                   link

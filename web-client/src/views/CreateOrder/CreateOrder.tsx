@@ -86,7 +86,7 @@ export const CreateOrder = connect(
                 {createOrderHelper.showAddDocketNumbersButton && (
                   <Button
                     link
-                    className="margin-top-0"
+                    className="padding-top-0"
                     data-testid="add-docket-number-btn"
                     icon={createOrderHelper.addDocketNumbersButtonIcon}
                     id="add-docket-numbers-btn"

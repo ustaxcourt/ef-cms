@@ -38,13 +38,6 @@ hr {
   &.underlined {
     border-bottom: 1px solid color($theme-color-base-lighter);
   }
-
-  /* big screens */
-  @media only screen and (min-width: $medium-screen) {
-    &.flex-justify-space-between {
-      justify-content: space-between;
-    }
-  }
 }
 
 .max-width-200 {
