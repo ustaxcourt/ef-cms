@@ -93,6 +93,7 @@ export const UpdatedFilePetitionStep1 = connect(
             handleChangeCountryType={updateFormValueCountryTypeSequence}
             nameLabel={isPetitioner ? 'Full Name' : 'Petitioner’s full name'}
             registerRef={registerRef}
+            showEmail={isPractitioner}
           />
         )}
         {(form.filingType === 'Myself and my spouse' ||
@@ -106,6 +107,7 @@ export const UpdatedFilePetitionStep1 = connect(
               handleChangeCountryType={updateFormValueCountryTypeSequence}
               nameLabel={isPetitioner ? 'Full Name' : 'Petitioner’s full name'}
               registerRef={registerRef}
+              showEmail={isPractitioner}
             />
             <h2 data-testid="spouse-header">
               {isPetitioner ? "Your spouse's" : 'Petitioner Spouse'} information
@@ -132,6 +134,7 @@ export const UpdatedFilePetitionStep1 = connect(
           <BusinessInfo
             businessFieldNames={updatedFilePetitionHelper.businessFieldNames}
             form={form}
+            isPractitioner={isPractitioner}
             petitionGenerationLiveValidationSequence={
               petitionGenerationLiveValidationSequence
             }
@@ -147,10 +150,11 @@ export const UpdatedFilePetitionStep1 = connect(
         {form.filingType === 'Other' && (
           <OtherInfo
             form={form}
-            isPetitioner={isPetitioner}
+            isPractitioner={isPractitioner}
             otherContactNameLabel={
               updatedFilePetitionHelper.otherContactNameLabel
             }
+            otherFilingOptions={updatedFilePetitionHelper.otherFilingOptions}
             petitionGenerationLiveValidationSequence={
               petitionGenerationLiveValidationSequence
             }

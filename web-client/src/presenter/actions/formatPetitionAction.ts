@@ -37,6 +37,7 @@ export const formatPetitionAction = ({
   const { contactPrimary, irsNotices } = petitionInfo;
 
   const user = get(state.user);
+
   contactPrimary.email = user.email;
 
   const irsNoticesWithCaseTypes = irsNotices.map(irsNotice => {

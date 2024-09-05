@@ -6,8 +6,9 @@ import React from 'react';
 
 export function OtherInfo({
   form,
-  isPetitioner,
+  isPractitioner,
   otherContactNameLabel,
+  otherFilingOptions,
   petitionGenerationLiveValidationSequence,
   registerRef,
   showContactInformationForOtherPartyType,
@@ -30,13 +31,7 @@ export function OtherInfo({
           <legend id="other-type-legend">
             What other type of taxpayer are you filing for?
           </legend>
-          {[
-            'An estate or trust',
-            'A minor or legally incompetent person',
-            'Donor',
-            'Transferee',
-            'Deceased Spouse',
-          ].map((otherType, idx) => (
+          {otherFilingOptions.map((otherType, idx) => (
             <div className="usa-radio max-width-fit-content" key={otherType}>
               <input
                 aria-describedby="other-type-legend"
@@ -74,7 +69,6 @@ export function OtherInfo({
       )}
       {selectedOtherType === 'A minor or legally incompetent person' && (
         <SecondaryMinorIncompetentOptions
-          isPetitioner={isPetitioner}
           selectedMinorIncompetentType={selectedMinorIncompetentType}
           updateFilingTypeSequence={updateFilingTypeSequence}
           validationErrors={validationErrors}
@@ -83,6 +77,7 @@ export function OtherInfo({
       {showContactInformationForOtherPartyType && (
         <OtherContactInformation
           form={form}
+          isPractitioner={isPractitioner}
           otherContactNameLabel={otherContactNameLabel}
           petitionGenerationLiveValidationSequence={
             petitionGenerationLiveValidationSequence

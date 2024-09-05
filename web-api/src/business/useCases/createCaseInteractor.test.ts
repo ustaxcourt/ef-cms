@@ -347,7 +347,7 @@ describe('createCaseInteractor', () => {
           stinFile: new File([], 'test.pdf'),
           stinFileSize: 1,
         },
-        stinFileId: '96759830-8970-486f-916b-23439a8ebb70',
+        stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       },
       user,
     );
@@ -398,7 +398,7 @@ describe('createCaseInteractor', () => {
           stinFile: new File([], 'test.pdf'),
           stinFileSize: 1,
         },
-        stinFileId: '96759830-8970-486f-916b-23439a8ebb70',
+        stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       },
       user,
     );
@@ -548,7 +548,7 @@ describe('createCaseInteractor', () => {
     });
   });
 
-  it('should set serviceIndicator to none for petitioner when case is created by a private petitioner', async () => {
+  it('should remove email and serviceIndicator for petitioner when case is created by a private petitioner', async () => {
     user = new PrivatePractitioner({
       barNumber: 'BN1234',
       email: 'kb@example.com',
@@ -594,6 +594,7 @@ describe('createCaseInteractor', () => {
 
     result.petitioners.forEach(p => {
       expect(p.serviceIndicator).toBe(SERVICE_INDICATOR_TYPES.SI_NONE);
+      expect(p.email).toBeUndefined();
     });
   });
 });

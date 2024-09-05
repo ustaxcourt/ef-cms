@@ -1,10 +1,10 @@
-import {
-  CASE_TYPES_MAP,
-  ROLES,
-} from '@shared/business/entities/EntityConstants';
+import { CASE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { formatPetitionAction } from '@web-client/presenter/actions/formatPetitionAction';
-import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
+import {
+  mockPetitionerUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -170,6 +170,7 @@ describe('formatPetitionAction', () => {
       state: {
         petitionFormatted: undefined,
         user: {
+          ...mockPrivatePractitionerUser,
           barNumber: 'TEST_barNumber',
           contact: {
             address1: 'TEST_address1',
@@ -180,10 +181,7 @@ describe('formatPetitionAction', () => {
             postalCode: 'TEST_postalCode',
             state: 'TEST_state',
           },
-          email: TEST_EMAIL,
           firmName: 'TEST_firmName',
-          name: 'TEST_Name',
-          role: ROLES.privatePractitioner,
         },
       },
     });
@@ -194,12 +192,51 @@ describe('formatPetitionAction', () => {
       address3: 'TEST_address3',
       barNumber: 'TEST_barNumber',
       city: 'TEST_city',
-      email: 'TEST_EMAIL',
+      email: 'mockPrivatePractitioner@example.com',
       firmName: 'TEST_firmName',
-      name: 'TEST_Name',
+      name: 'Reginald Barclay',
       phone: 'TEST_phone',
       postalCode: 'TEST_postalCode',
       state: 'TEST_state',
     });
+  });
+
+  it('should set primary contact email to user email when the user is a petitioner', async () => {
+    const results = await runAction(formatPetitionAction, {
+      modules: {
+        presenter,
+      },
+      props: PROPS,
+      state: {
+        petitionFormatted: undefined,
+        user: mockPetitionerUser,
+      },
+    });
+
+    expect(results.state.petitionFormatted?.contactPrimary?.email).toEqual(
+      'mockPetitioner@example.com',
+    );
+  });
+
+  it('should not set primary contact email to user email when the user is a private practitioner', async () => {
+    const results = await runAction(formatPetitionAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        ...PROPS,
+        createPetitionStep1Data: {
+          contactPrimary: { email: 'test@example.com' },
+        },
+      },
+      state: {
+        petitionFormatted: undefined,
+        user: mockPrivatePractitionerUser,
+      },
+    });
+
+    expect(results.state.petitionFormatted?.contactPrimary?.email).toEqual(
+      'mockPrivatePractitioner@example.com',
+    );
   });
 });

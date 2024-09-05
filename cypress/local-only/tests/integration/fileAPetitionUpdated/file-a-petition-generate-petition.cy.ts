@@ -363,15 +363,15 @@ describe('File a petition', () => {
               "Petitioner's contact information: John Cruz 123 Test Drive Boulder, CO 12345 Phone: Test Phone",
             );
             expect(text).to.include(
-              "Counsel's contact information: Test Private Practitioner Bogus Barristers 234 Main St Apartment 4 Under the stairs Chicago, IL 61234 +1 (555) 555-5555 privatePractitioner1@example.com Tax Court Bar No.: PT5432",
+              "Counsel's contact information: Test Private Practitioner Bogus Barristers 234 Main St Apartment 4 Under the stairs Chicago, IL 61234 Phone: +1 (555) 555-5555 Email: privatePractitioner1@example.com Tax Court Bar No.: PT5432",
+            );
+            expect(text).not.to.include('Service Email');
+            expect(text).not.to.include(
+              'Register for electronic filing and service',
             );
           },
         );
       });
-
-      // should not display Service Email
-      // should not display Register for electronic filing and service:
-      // should display counsel contact information
     });
   });
 });

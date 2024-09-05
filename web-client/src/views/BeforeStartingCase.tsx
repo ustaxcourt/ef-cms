@@ -14,6 +14,8 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
+type PetitionCreationRoles = 'petitioner' | 'privatePractitioner';
+
 export const BeforeStartingCase = connect(
   {
     closeModalAndReturnToDashboardSequence:
@@ -30,7 +32,9 @@ export const BeforeStartingCase = connect(
   }) {
     const redirectUrl =
       petitionFlowUpdated &&
-      [ROLES.petitioner, ROLES.privatePractitioner].includes(user.role)
+      [ROLES.petitioner, ROLES.privatePractitioner].includes(
+        user.role as PetitionCreationRoles,
+      )
         ? '/file-a-petition/new'
         : '/file-a-petition/step-1';
 
@@ -209,7 +213,8 @@ export const BeforeStartingCase = connect(
             >
               If {isPetitioner ? 'you' : 'the petitioner'} received a notice in
               the mail from the IRS, it may show the last date to file or the
-              number of days you have to file a Petition.{' '}
+              number of days {isPetitioner ? 'you have' : ''} to file a
+              Petition.{' '}
               <b>
                 In most cases, the Court must receive{' '}
                 {isPetitioner ? 'your' : 'the'} electronically filed Petition no
@@ -219,85 +224,7 @@ export const BeforeStartingCase = connect(
               {isPetitioner ? 'your' : 'the'} case may be dismissed.
             </div>
           </div>
-          <div className="grid-row grid-gap">
-            {isPetitioner && (
-              <Accordion
-                className="petitioner-accordion-title"
-                headingLevel="3"
-              >
-                <AccordionItem
-                  customTitleClassName="petitioner-accordion-title"
-                  key="Are you filing jointly with a spouse?"
-                  title="Are you filing jointly with a spouse?"
-                >
-                  <div data-testid="filing-jointly-accordion-item">
-                    {
-                      "To file a joint Petition with your spouse, you must have the spouse's consent. If you do not have your spouse's consent, select “Myself” as the person who is filing."
-                    }
-                  </div>
-                </AccordionItem>
-              </Accordion>
-            )}
-            {isPetitioner && (
-              <Accordion
-                className="petitioner-accordion-title"
-                headingLevel="3"
-              >
-                <AccordionItem
-                  customTitleClassName="petitioner-accordion-title"
-                  key="Are you filing on behalf of someone else?"
-                  title="Are you filing on behalf of someone else?"
-                >
-                  <div data-testid="filing-someone-else-accordion-item">
-                    To file a case on behalf of someone else, you must be
-                    authorized to practice before this Court as provided by the{' '}
-                    <Button
-                      link
-                      className="usa-link--external text-left mobile-text-wrap"
-                      href="https://ustaxcourt.gov/rules.html"
-                      overrideMargin="margin-right-0"
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      Tax Court Rules of Practice and Procedure (Rule 60)
-                    </Button>
-                    {
-                      '. Enrolled agents, certified public accountants, and attorneys who are not admitted to practice before the Court are not eligible to represent a party.'
-                    }
-                  </div>
-                </AccordionItem>
-              </Accordion>
-            )}
-            <Accordion className="petitioner-accordion-title" headingLevel="3">
-              <AccordionItem
-                customTitleClassName="petitioner-accordion-title"
-                key="Are you filing for a business?"
-                title="Are you filing for a business?"
-              >
-                <div className="margin-bottom-1">
-                  {`If ${isPetitioner ? "you're filing for" : 'the petitioner is'} a business, you'll need to complete and
-                  submit the Corporate Disclosure Statement.`}
-                </div>
-                <div>
-                  {
-                    "Download and fill out the form if you haven't already done so:"
-                  }
-                </div>
-                <Button
-                  link
-                  className="usa-link--external text-left mobile-text-wrap"
-                  href="https://www.ustaxcourt.gov/resources/forms/Corporate_Disclosure_Statement_Form.pdf"
-                  icon="file-pdf"
-                  iconColor="blue"
-                  overrideMargin="margin-right-0"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Corporate Disclosure Statement (T.C. Form 6)
-                </Button>
-              </AccordionItem>
-            </Accordion>
-          </div>
+          <CaseInfoAccordion isPetitioner={isPetitioner} />
           <Button
             className="before-case-button"
             data-testid="go-to-step-1"
@@ -344,3 +271,83 @@ export const BeforeStartingCase = connect(
 );
 
 BeforeStartingCase.displayName = 'BeforeStartingCase';
+
+function CaseInfoAccordion({ isPetitioner }: { isPetitioner: boolean }) {
+  return (
+    <div className="grid-row grid-gap">
+      {isPetitioner && (
+        <Accordion className="petitioner-accordion-title" headingLevel="3">
+          <AccordionItem
+            customTitleClassName="petitioner-accordion-title"
+            key="Are you filing jointly with a spouse?"
+            title="Are you filing jointly with a spouse?"
+          >
+            <div data-testid="filing-jointly-accordion-item">
+              {
+                "To file a joint Petition with your spouse, you must have the spouse's consent. If you do not have your spouse's consent, select “Myself” as the person who is filing."
+              }
+            </div>
+          </AccordionItem>
+        </Accordion>
+      )}
+      {isPetitioner && (
+        <Accordion className="petitioner-accordion-title" headingLevel="3">
+          <AccordionItem
+            customTitleClassName="petitioner-accordion-title"
+            key="Are you filing on behalf of someone else?"
+            title="Are you filing on behalf of someone else?"
+          >
+            <div data-testid="filing-someone-else-accordion-item">
+              To file a case on behalf of someone else, you must be authorized
+              to practice before this Court as provided by the{' '}
+              <Button
+                link
+                className="usa-link--external text-left mobile-text-wrap"
+                href="https://ustaxcourt.gov/rules.html"
+                overrideMargin="margin-right-0"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Tax Court Rules of Practice and Procedure (Rule 60)
+              </Button>
+              {
+                '. Enrolled agents, certified public accountants, and attorneys who are not admitted to practice before the Court are not eligible to represent a party.'
+              }
+            </div>
+          </AccordionItem>
+        </Accordion>
+      )}
+      <Accordion className="petitioner-accordion-title" headingLevel="3">
+        <AccordionItem
+          customTitleClassName="petitioner-accordion-title"
+          key="Are you filing for a business?"
+          title={
+            isPetitioner
+              ? 'Are you filing for a business?'
+              : 'Is the petitioner a business?'
+          }
+        >
+          <div className="margin-bottom-1">
+            {`If ${isPetitioner ? "you're filing for" : 'the petitioner is'} a business, you'll need to complete and
+          submit the Corporate Disclosure Statement.`}
+          </div>
+          <div>
+            {"Download and fill out the form if you haven't already done so:"}
+          </div>
+          <Button
+            link
+            className="usa-link--external text-left mobile-text-wrap"
+            href="https://www.ustaxcourt.gov/resources/forms/Corporate_Disclosure_Statement_Form.pdf"
+            icon="file-pdf"
+            iconColor="blue"
+            overrideMargin="margin-right-0"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Corporate Disclosure Statement (T.C. Form 6)
+          </Button>
+        </AccordionItem>
+      </Accordion>
+    </div>
+  );
+}

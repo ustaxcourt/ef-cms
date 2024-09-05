@@ -1,6 +1,8 @@
 import {
   ALL_STATE_OPTIONS,
   BUSINESS_TYPES,
+  PARTY_TYPES,
+  PartyType,
 } from '@shared/business/entities/EntityConstants';
 import { AddressDisplay } from '../CaseDetail/AddressDisplay';
 import { Button } from '@web-client/ustc-ui/Button/Button';
@@ -15,7 +17,9 @@ export function PetitionerInformation({ isPetitioner, petitionFormatted }) {
         <div className="petition-review-petitioner-section">
           <div>
             <span className="usa-label usa-label-display">Party type</span>
-            <div data-testid="party-type">{petitionFormatted.partyType}</div>
+            <div data-testid="party-type">
+              {getPartyType(petitionFormatted.partyType, isPetitioner)}
+            </div>
             {petitionFormatted.corporateDisclosureFile && (
               <div className="margin-top-3">
                 <span
@@ -57,7 +61,13 @@ export function PetitionerInformation({ isPetitioner, petitionFormatted }) {
                     noMargin
                     showEmailLabel
                     showPhoneLabel
-                    contact={petitionFormatted.contactPrimary}
+                    contact={{
+                      ...petitionFormatted.contactPrimary,
+                      email:
+                        petitionFormatted.contactPrimary.paperPetitionEmail ||
+                        'Email not provided',
+                    }}
+                    showEmail={!isPetitioner}
                   />
                   {petitionFormatted.contactPrimary.placeOfLegalResidence && (
                     <div className="margin-top-1">
@@ -121,6 +131,9 @@ export function PetitionerInformation({ isPetitioner, petitionFormatted }) {
                       email:
                         petitionFormatted.contactSecondary.paperPetitionEmail ||
                         'Email not provided',
+                      phone:
+                        petitionFormatted.contactSecondary.phone ||
+                        'Phone number not provided',
                     }}
                   />
                 </address>
@@ -164,4 +177,11 @@ export function PetitionerInformation({ isPetitioner, petitionFormatted }) {
       </div>
     </div>
   );
+}
+
+function getPartyType(partyType: PartyType, isPetitioner: boolean) {
+  if (!isPetitioner && partyType === PARTY_TYPES.petitionerSpouse) {
+    return 'Petitioner & petitioner spouse';
+  }
+  return partyType;
 }
