@@ -46,8 +46,10 @@ export const validatePdf = ({
             });
           }
         }
-        console.log(err);
-        resolve({ errorMessage: 'An unknown error occurred', isValid: false });
+        resolve({
+          errorMessage: 'An unknown error occurred: ${err}',
+          isValid: false,
+        });
       }
     };
 
