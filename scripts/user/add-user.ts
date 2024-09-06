@@ -7,9 +7,9 @@ import {
   getUserPoolId,
   requireEnvVars,
 } from '../../shared/admin-tools/util';
+import { getNewPasswordForEnvironment } from './make-new-password';
 import { judgeUser } from '@shared/test/mockUsers';
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
-import { sendWelcomeEmail } from 'scripts/user/email-helpers';
 import joi from 'joi';
 
 requireEnvVars(['ENV', 'DEFAULT_ACCOUNT_PASS']);
@@ -104,6 +104,18 @@ const checkParams = ({
   return value;
 };
 
+export const sendWelcomeEmail = async ({ email }) => {
+  try {
+    await applicationContext.getCognito().adminCreateUser({
+      MessageAction: 'RESEND',
+      UserPoolId: environment.userPoolId,
+      Username: email.toLowerCase(),
+    });
+  } catch (err) {
+    console.error('Error sending welcome email', err);
+  }
+};
+
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const { tableName } = await getDestinationTableInfo();
@@ -126,9 +138,9 @@ const checkParams = ({
   checkParams({ params, validChambersSections });
   environment.userPoolId = await getUserPoolId();
   await createOrUpdateUser(applicationContext, {
-    password: environment.defaultAccountPass,
+    password: getNewPasswordForEnvironment(),
     setPasswordAsPermanent: true,
     user: { ...params },
   });
-  await sendWelcomeEmail({ applicationContext, email: params.email });
+  await sendWelcomeEmail({ email: params.email });
 })();
