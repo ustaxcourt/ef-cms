@@ -1219,24 +1219,17 @@ const router = {
       '/file-a-petition/step-*',
       ifHasAccess({ app }, step => {
         setPageTitle('File a petition');
-        if (app.getState('currentPage') === 'StartCaseWizard') {
-          return app.getSequence('chooseStartCaseWizardStepSequence')({
-            step: `${step}`,
-            wizardStep: `StartCaseStep${step}`,
-          });
-        } else {
-          if (app.getState('currentPage') !== 'StartCaseInternal') {
-            switch (step) {
-              case '1':
-                return app.getSequence('gotoStartCaseWizardSequence')({
-                  step: `${step}`,
-                  wizardStep: `StartCaseStep${step}`,
-                });
-              default:
-                return app.getSequence('navigateToPathSequence')({
-                  path: '/file-a-petition/step-1',
-                });
-            }
+        if (app.getState('currentPage') !== 'StartCaseInternal') {
+          switch (step) {
+            case '1':
+              return app.getSequence('gotoStartCaseWizardSequence')({
+                step: `${step}`,
+                wizardStep: `StartCaseStep${step}`,
+              });
+            default:
+              return app.getSequence('navigateToPathSequence')({
+                path: '/file-a-petition/step-1',
+              });
           }
         }
       }),
@@ -1247,14 +1240,6 @@ const router = {
       ifHasAccess({ app }, () => {
         setPageTitle('File a petition');
         return app.getSequence('gotoUpdatedPetitionFlowSequence')();
-      }),
-    );
-
-    registerRoute(
-      '/file-a-petition/success',
-      ifHasAccess({ app }, () => {
-        setPageTitle('Petition Filed Successfully');
-        return app.getSequence('gotoFilePetitionSuccessSequence')();
       }),
     );
 

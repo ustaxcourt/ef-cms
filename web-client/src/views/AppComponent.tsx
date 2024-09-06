@@ -85,7 +85,6 @@ import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { SignOrder } from './SignOrder';
 import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
 import { StartCaseInternal } from './StartCaseInternal/StartCaseInternal';
-import { StartCaseWizard } from './StartCase/StartCaseWizard';
 import { StatusReportOrder } from './StatusReportOrder';
 import { StyleGuide } from './StyleGuide/StyleGuide';
 import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
@@ -185,7 +184,6 @@ const pages = {
   SignOrder,
   SimplePdfPreviewPage,
   StartCaseInternal,
-  StartCaseWizard,
   StatusReportOrder,
   StyleGuide,
   TrialSessionDetail,
