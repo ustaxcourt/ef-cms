@@ -20,28 +20,28 @@ export const UpdatedFilePetitionStep3 = connect(
     caseTypeDescriptionHelper: state.caseTypeDescriptionHelper,
     deleteValidationErrorMessageSequence:
       sequences.deleteValidationErrorMessageSequence,
+    filePetitionHelper: state.filePetitionHelper,
     form: state.form,
     irsNoticeUploadFormInfo: state.irsNoticeUploadFormInfo,
     petitionGenerationLiveValidationSequence:
       sequences.petitionGenerationLiveValidationSequence,
     setHasIrsNoticeSequence: sequences.setHasIrsNoticeSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    updatedFilePetitionHelper: state.updatedFilePetitionHelper,
     validationErrors: state.validationErrors,
   },
   function UpdatedFilePetitionStep3({
     addAnotherIrsNoticeToFormSequence,
     caseTypeDescriptionHelper,
     deleteValidationErrorMessageSequence,
+    filePetitionHelper,
     form,
     irsNoticeUploadFormInfo,
     petitionGenerationLiveValidationSequence,
     setHasIrsNoticeSequence,
-    updatedFilePetitionHelper,
     updateFormValueSequence,
     validationErrors,
   }) {
-    const { isPetitioner } = updatedFilePetitionHelper;
+    const { isPetitioner } = filePetitionHelper;
 
     const handleIrsNoticeErrors = (errors, refs, elementsToFocus, prefix) => {
       if (!Array.isArray(errors)) {
@@ -181,7 +181,7 @@ export const UpdatedFilePetitionStep3 = connect(
                     Add another IRS Notice
                   </Button>
                 )}
-                {updatedFilePetitionHelper.irsNoticeRequiresRedactionAcknowledgement && (
+                {filePetitionHelper.irsNoticeRequiresRedactionAcknowledgement && (
                   <div className="grid-row grid-gap margin-top-05">
                     <span className="margin-bottom-1 font-sans-pro">
                       <b>
@@ -230,7 +230,7 @@ export const UpdatedFilePetitionStep3 = connect(
 
         <UpdatedFilePetitionButtons
           isNextButtonDisabled={
-            irsNoticeRequiresRedactionAcknowledgement &&
+            filePetitionHelper.irsNoticeRequiresRedactionAcknowledgement &&
             !form.irsNoticesRedactionAcknowledgement
           }
           resetFocus={resetFocus}

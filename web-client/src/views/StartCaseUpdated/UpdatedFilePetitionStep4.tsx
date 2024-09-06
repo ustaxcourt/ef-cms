@@ -12,20 +12,20 @@ export const UpdatedFilePetitionStep4 = connect(
   {
     deleteValidationErrorMessageSequence:
       sequences.deleteValidationErrorMessageSequence,
+    filePetitionHelper: state.filePetitionHelper,
     form: state.form,
     petitionGenerationLiveValidationSequence:
       sequences.petitionGenerationLiveValidationSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    updatedFilePetitionHelper: state.updatedFilePetitionHelper,
   },
   function UpdatedFilePetitionStep4({
     deleteValidationErrorMessageSequence,
+    filePetitionHelper,
     form,
     petitionGenerationLiveValidationSequence,
-    updatedFilePetitionHelper,
     updateFormValueSequence,
   }) {
-    const { isPetitioner } = updatedFilePetitionHelper;
+    const { isPetitioner } = filePetitionHelper;
 
     return (
       <>
