@@ -333,4 +333,34 @@ describe('updatedFilePetitionHelper', () => {
       });
     });
   });
+  describe('irsNoticeRequiresRedactionAcknowledgement', () => {
+    it('should be true when file is present in at least one notice in state.irsNoticeUploadFormInfo', () => {
+      const result = runCompute(updatedFilePetitionHelper, {
+        state: {
+          form: {},
+          irsNoticeUploadFormInfo: [
+            {
+              file: {},
+            },
+            {},
+          ],
+          user: petitionerUser,
+        },
+      });
+
+      expect(result.irsNoticeRequiresRedactionAcknowledgement).toEqual(true);
+    });
+
+    it('should be false when file is not present in any notice in state.irsNoticeUploadFormInfo', () => {
+      const result = runCompute(updatedFilePetitionHelper, {
+        state: {
+          form: {},
+          irsNoticeUploadFormInfo: [{}, {}],
+          user: petitionerUser,
+        },
+      });
+
+      expect(result.irsNoticeRequiresRedactionAcknowledgement).toEqual(false);
+    });
+  });
 });

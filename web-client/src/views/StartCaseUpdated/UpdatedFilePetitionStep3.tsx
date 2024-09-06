@@ -25,7 +25,6 @@ export const UpdatedFilePetitionStep3 = connect(
     petitionGenerationLiveValidationSequence:
       sequences.petitionGenerationLiveValidationSequence,
     setHasIrsNoticeSequence: sequences.setHasIrsNoticeSequence,
-    startCaseHelper: state.startCaseHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updatedFilePetitionHelper: state.updatedFilePetitionHelper,
     validationErrors: state.validationErrors,
@@ -38,7 +37,6 @@ export const UpdatedFilePetitionStep3 = connect(
     irsNoticeUploadFormInfo,
     petitionGenerationLiveValidationSequence,
     setHasIrsNoticeSequence,
-    startCaseHelper,
     updatedFilePetitionHelper,
     updateFormValueSequence,
     validationErrors,
@@ -77,7 +75,9 @@ export const UpdatedFilePetitionStep3 = connect(
         <div className="padding-bottom-0 margin-bottom-1">
           <div>
             <h2 data-testid="has-irs-notice-legend">
-              {startCaseHelper.noticeLegend}
+              {isPetitioner
+                ? 'Did you receive a notice from the IRS?'
+                : 'Did the petitioner receive a notice from the IRS?'}
             </h2>
             <FormGroup
               className="irs-notice-form"
@@ -121,7 +121,7 @@ export const UpdatedFilePetitionStep3 = connect(
               </fieldset>
             </FormGroup>
 
-            {startCaseHelper.showHasIrsNoticeOptions && (
+            {form.hasIrsNotice && (
               <>
                 <WarningNotificationComponent
                   alertWarning={{
@@ -181,7 +181,7 @@ export const UpdatedFilePetitionStep3 = connect(
                     Add another IRS Notice
                   </Button>
                 )}
-                {startCaseHelper.irsNoticeRequiresRedactionAcknowledgement && (
+                {updatedFilePetitionHelper.irsNoticeRequiresRedactionAcknowledgement && (
                   <div className="grid-row grid-gap margin-top-05">
                     <span className="margin-bottom-1 font-sans-pro">
                       <b>
@@ -204,7 +204,7 @@ export const UpdatedFilePetitionStep3 = connect(
               </>
             )}
 
-            {startCaseHelper.showNotHasIrsNoticeOptions && (
+            {!form.hasIrsNotice && (
               <CaseTypeSelect
                 allowDefaultOption={true}
                 caseTypes={caseTypeDescriptionHelper.caseTypes}
@@ -230,7 +230,7 @@ export const UpdatedFilePetitionStep3 = connect(
 
         <UpdatedFilePetitionButtons
           isNextButtonDisabled={
-            startCaseHelper.irsNoticeRequiresRedactionAcknowledgement &&
+            irsNoticeRequiresRedactionAcknowledgement &&
             !form.irsNoticesRedactionAcknowledgement
           }
           resetFocus={resetFocus}
