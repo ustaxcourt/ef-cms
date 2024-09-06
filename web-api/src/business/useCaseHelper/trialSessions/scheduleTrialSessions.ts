@@ -10,7 +10,12 @@ import {
 } from '@shared/business/entities/trialSessions/TrialSession';
 
 // use different lib?
-import { addWeeks, isWithinInterval, startOfWeek } from 'date-fns';
+import {
+  FORMATS,
+  createDateAtStartOfWeekEST,
+} from '@shared/business/utilities/DateHandler';
+import { addWeeks } from 'date-fns';
+
 // One session per location per week.
 const MAX_SESSIONS_PER_LOCATION_PER_WEEK = 1; // sessionScheduledPerCityPerWeek
 // Maximum of 6 sessions per week overall.
@@ -44,6 +49,8 @@ export type EligibleCase = Pick<
   RawCase,
   'preferredTrialCity' | 'procedureType'
 >;
+
+export type TrialSessionReadyForCalendaring = TrialSession & { weekOf: string };
 
 // export type ScheduledSpecialTrialSession = {
 //   //
@@ -79,7 +86,7 @@ export function scheduleTrialSessions({
     hybridCaseMaxQuantity: number;
     hybridCaseMinimumQuantity: number;
   };
-}): TrialSession[] {
+}): TrialSessionReadyForCalendaring[] {
   const sessions: {}[] = [];
   const sessionCountPerWeek: Record<string, number> = {}; // weekOf -> session count
   const sessionCountPerCity: Record<string, number> = {}; // city -> session count
@@ -215,5 +222,5 @@ export function scheduleTrialSessions({
 
 // Helper function to get the Monday of the week for a given date
 function getMondayOfWeek(date: string): string {
-  return startOfWeek(date, { weekStartsOn: 1 }); // Monday as the first day of the week
+  return createDateAtStartOfWeekEST(date, FORMATS.MMDDYY); // Monday as the first day of the week
 }
