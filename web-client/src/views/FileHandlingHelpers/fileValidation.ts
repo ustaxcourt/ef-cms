@@ -75,7 +75,6 @@ export const validateFileOnSelect = async ({
   }
 
   const selectedFile = target.files[0];
-  console.log('here', target.files);
   const { errorMessage, isValid } = await validateFile({
     allowedFileExtensions,
     file: selectedFile,
