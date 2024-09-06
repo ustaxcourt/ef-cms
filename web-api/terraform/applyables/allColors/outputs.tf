@@ -57,3 +57,7 @@ output "rds_host_name_west" {
 output "postgres_user" {
   value = module.rds_users.postgres_user
 }
+
+output "database_name" {
+  value = module.rds.database_name
+}

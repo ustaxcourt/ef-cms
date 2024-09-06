@@ -81,6 +81,7 @@ resource "terraform_data" "locals" {
     POSTGRES_HOST                      = data.terraform_remote_state.remote.outputs.rds_host_name
     POSTGRES_READ_HOST                 = data.terraform_remote_state.remote.outputs.rds_host_name_west
     POSTGRES_USER                      = data.terraform_remote_state.remote.outputs.postgres_user
+    DATABASE_NAME                      = data.terraform_remote_state.remote.outputs.database_name
   }
 }
 
