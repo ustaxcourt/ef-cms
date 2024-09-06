@@ -6,7 +6,7 @@ export const PDF_PASSWORD_PROTECTED_ERROR_MESSAGE =
 export const PDF_CORRUPTED_ERROR_MESSAGE =
   'File is corrupted or in an unsupported PDF format. Ensure the file is not corrupted and/or is in a supported PDF format and try again.';
 
-export const validatePDFUpload = ({
+export const validatePdf = ({
   file,
 }: {
   file: File;
@@ -19,7 +19,6 @@ export const validatePDFUpload = ({
       const { result } = fileReader;
 
       if (!result || typeof result === 'string') {
-        console.error('Failed to read file as ArrayBuffer.');
         resolve({
           errorMessage: 'Failed to read file as ArrayBuffer.',
           isValid: false,
@@ -47,6 +46,7 @@ export const validatePDFUpload = ({
             });
           }
         }
+        console.log(err);
         resolve({ errorMessage: 'An unknown error occurred', isValid: false });
       }
     };
