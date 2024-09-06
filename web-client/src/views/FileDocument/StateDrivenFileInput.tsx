@@ -57,11 +57,16 @@ export const StateDrivenFileInput = connect<
         allowedFileExtensions: accept.split(','),
         e,
         megabyteLimit: constants.MAX_FILE_SIZE_MB,
-        onError: showErrorModalSequence,
-        onSuccess: () => {
+        onError: ({ message }) => {
+          showErrorModalSequence({
+            errorToLog: !message,
+            message,
+            title: 'File Upload Error',
+          });
+        },
+        onSuccess: ({ selectedFile }) => {
           const { name: inputName } = e.target;
-          const selectedFile = e.target.files[0];
-          cloneFile(selectedFile)
+          cloneFile(selectedFile!)
             .then(clonedFile => {
               updateFormValueSequence({
                 key: inputName,

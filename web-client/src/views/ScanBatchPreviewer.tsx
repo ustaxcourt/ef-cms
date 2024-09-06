@@ -415,13 +415,18 @@ export const ScanBatchPreviewer = connect(
                   allowedFileExtensions: ['.pdf'],
                   e,
                   megabyteLimit: constants.MAX_FILE_SIZE_MB,
-                  onError: showErrorModalSequence,
-                  onSuccess: () => {
-                    const file = e.target.files[0];
+                  onError: ({ message }) => {
+                    showErrorModalSequence({
+                      errorToLog: !message,
+                      message,
+                      title: 'File Upload Error',
+                    });
+                  },
+                  onSuccess: ({ selectedFile }) => {
                     setDocumentForUploadSequence({
                       documentType,
                       documentUploadMode: 'preview',
-                      file,
+                      selectedFile,
                     });
                     if (validateSequence) {
                       validateSequence();
