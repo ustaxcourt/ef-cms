@@ -129,7 +129,7 @@ export function petitionerAttemptsToUploadCorruptPdfUpdated() {
     selector: '[data-testid="stin-file"]',
   });
   cy.get('[data-testid="error-modal"]').contains(
-    'File is corrupted or in an unsupported PDF format. Ensure the file is not corrupted and/or is in a supported PDF format and try again.',
+    'Your file is corrupted or in an unsupported PDF format. Ensure that the file is not corrupted and/or is in a supported PDF format and try again.',
   );
 }
 

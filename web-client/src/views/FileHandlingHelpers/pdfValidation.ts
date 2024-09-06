@@ -2,9 +2,9 @@ import { FileValidationResponse } from '@web-client/views/FileHandlingHelpers/fi
 import { applicationContext } from '@web-client/applicationContext';
 
 export const PDF_PASSWORD_PROTECTED_ERROR_MESSAGE =
-  'File is encrypted or password protected. Remove encryption or password protection and try again.';
+  'Your file is encrypted or password protected. Remove encryption or password protection and try again.';
 export const PDF_CORRUPTED_ERROR_MESSAGE =
-  'File is corrupted or in an unsupported PDF format. Ensure the file is not corrupted and/or is in a supported PDF format and try again.';
+  'Your file is corrupted or in an unsupported PDF format. Ensure that the file is not corrupted and/or is in a supported PDF format and try again.';
 
 export const validatePdf = ({
   file,
@@ -52,7 +52,10 @@ export const validatePdf = ({
     };
 
     fileReader.onerror = () => {
-      resolve({ errorMessage: 'Error reading the file.', isValid: false });
+      resolve({
+        errorMessage: 'There is a problem uploading the file. Try again later.',
+        isValid: false,
+      });
     };
   });
 };

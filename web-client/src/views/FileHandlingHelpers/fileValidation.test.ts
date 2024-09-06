@@ -34,7 +34,7 @@ describe('validateFileOnSelect', () => {
   it('should call onError with the validation error message when the file is invalid', async () => {
     (validateFile as jest.Mock).mockResolvedValue({
       errorMessage:
-        'File is not a PDF. Select a PDF file or resave the file as a PDF.',
+        'Your file is not a PDF. Select a PDF file or resave the file as a PDF.',
       isValid: false,
     });
     const onError = jest.fn();
@@ -57,7 +57,7 @@ describe('validateFileOnSelect', () => {
 
     expect(onError).toHaveBeenCalledWith({
       message:
-        'File is not a PDF. Select a PDF file or resave the file as a PDF.',
+        'Your file is not a PDF. Select a PDF file or resave the file as a PDF.',
     });
     expect(onSuccess).not.toHaveBeenCalled();
     expect(event.target.value).toBe('');
@@ -118,7 +118,7 @@ describe('fileValidation', () => {
 
     expect(validationResult.isValid).toBe(false);
     expect(validationResult.errorMessage).toBe(
-      'File is not a PDF. Select a PDF file or resave the file as a PDF.',
+      'Your file is not a PDF. Select a PDF file or resave the file as a PDF.',
     );
   });
   it('should return invalid with error message for improper file multiple allowed extensions', async () => {
@@ -133,7 +133,7 @@ describe('fileValidation', () => {
 
     expect(validationResult.isValid).toBe(false);
     expect(validationResult.errorMessage).toBe(
-      'File is not in a supported format (.pdf, .doc, .docx). Select a different file or resave it in a supported format.',
+      'Your file is not in a supported format (.pdf, .doc, .docx). Select a different file or resave it in a supported format.',
     );
   });
   it('should return invalid with error message for file too big', async () => {
@@ -149,7 +149,7 @@ describe('fileValidation', () => {
 
     expect(validationResult.isValid).toBe(false);
     expect(validationResult.errorMessage).toBe(
-      `Your file size is too big. The maximum file size is ${megabyteLimit}MB.`,
+      `Your file size is too big. The maximum file size is ${megabyteLimit}MB. Reduce the file size and try again.`,
     );
   });
   it('should call pdf validation for a pdf', async () => {
