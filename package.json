@@ -331,7 +331,6 @@
     "sass-loader": "16.0.1",
     "shuffle-seed": "1.1.6",
     "stream-browserify": "3.0.0",
-    "style-loader": "4.0.0",
     "stylelint": "16.9.0",
     "stylelint-config-idiomatic-order": "10.0.0",
     "stylelint-config-standard": "36.0.1",
