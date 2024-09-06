@@ -1,15 +1,15 @@
 import { BusinessInfo } from './BusinessInfo';
 import { ContactPrimaryUpdated } from '@web-client/views/StartCase/ContactPrimaryUpdated';
+import { FilePetitionButtons } from '@web-client/views/StartCaseUpdated/FilePetitionButtons';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { OtherInfo } from './OtherInfo';
 import { PetitionerAndSpouseInfo } from './PetitionerAndSpouseInfo';
-import { UpdatedFilePetitionButtons } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionButtons';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import { useValidationFocus } from '@web-client/views/UseValidationFocus';
 import React from 'react';
 
-export const UpdatedFilePetitionStep1 = connect(
+export const FilePetitionStep1 = connect(
   {
     filePetitionHelper: state.filePetitionHelper,
     form: state.form,
@@ -23,7 +23,7 @@ export const UpdatedFilePetitionStep1 = connect(
     updateFormValueUpdatedSequence: sequences.updateFormValueUpdatedSequence,
     validationErrors: state.validationErrors,
   },
-  function UpdatedFilePetitionStep1({
+  function FilePetitionStep1({
     filePetitionHelper,
     form,
     petitionGenerationLiveValidationSequence,
@@ -167,7 +167,7 @@ export const UpdatedFilePetitionStep1 = connect(
           />
         )}
 
-        <UpdatedFilePetitionButtons resetFocus={resetFocus} />
+        <FilePetitionButtons resetFocus={resetFocus} />
       </>
     );
   },

@@ -5,11 +5,11 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setupPetitionStateAction } from '@web-client/presenter/actions/setupPetitionStateAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-export const gotoUpdatedPetitionFlowSequence =
+export const gotoPetitionFlowSequence =
   startWebSocketConnectionSequenceDecorator([
     setIrsNoticeUploadFormInfoAction,
     setStepIndicatorInfoForPetitionGeneratorAction,
     setupPetitionStateAction,
     setDefaultCaseProcedureAction,
-    setupCurrentPageAction('UpdatedFilePetition'),
+    setupCurrentPageAction('FilePetition'),
   ]) as unknown as () => void;

@@ -1,10 +1,10 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseTypeSelect } from '@web-client/views/StartCase/CaseTypeSelect';
+import { FilePetitionButtons } from '@web-client/views/StartCaseUpdated/FilePetitionButtons';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { IrsNoticeUploadForm } from './IrsNoticeUploadForm';
 import { RedactionAcknowledgement } from '@web-client/views/StartCaseUpdated/RedactionAcknowledgement';
-import { UpdatedFilePetitionButtons } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionButtons';
 import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -13,7 +13,7 @@ import { useValidationFocus } from '@web-client/views/UseValidationFocus';
 import React from 'react';
 import classNames from 'classnames';
 
-export const UpdatedFilePetitionStep3 = connect(
+export const FilePetitionStep3 = connect(
   {
     addAnotherIrsNoticeToFormSequence:
       sequences.addAnotherIrsNoticeToFormSequence,
@@ -29,7 +29,7 @@ export const UpdatedFilePetitionStep3 = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
-  function UpdatedFilePetitionStep3({
+  function FilePetitionStep3({
     addAnotherIrsNoticeToFormSequence,
     caseTypeDescriptionHelper,
     deleteValidationErrorMessageSequence,
@@ -228,7 +228,7 @@ export const UpdatedFilePetitionStep3 = connect(
           </div>
         </div>
 
-        <UpdatedFilePetitionButtons
+        <FilePetitionButtons
           isNextButtonDisabled={
             filePetitionHelper.irsNoticeRequiresRedactionAcknowledgement &&
             !form.irsNoticesRedactionAcknowledgement

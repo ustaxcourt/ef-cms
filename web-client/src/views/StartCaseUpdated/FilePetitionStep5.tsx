@@ -1,22 +1,22 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
+import { FilePetitionButtons } from '@web-client/views/StartCaseUpdated/FilePetitionButtons';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
-import { UpdatedFilePetitionButtons } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionButtons';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const UpdatedFilePetitionStep5 = connect(
+export const FilePetitionStep5 = connect(
   {
     constants: state.constants,
     user: state.user,
     validationErrors: state.validationErrors,
   },
-  function UpdatedFilePetitionStep5({ constants, user, validationErrors }) {
+  function FilePetitionStep5({ constants, user, validationErrors }) {
     return (
       <>
         <div className="margin-bottom-5">
@@ -88,7 +88,7 @@ export const UpdatedFilePetitionStep5 = connect(
           </div>
         </div>
         <div>
-          <UpdatedFilePetitionButtons />
+          <FilePetitionButtons />
         </div>
       </>
     );

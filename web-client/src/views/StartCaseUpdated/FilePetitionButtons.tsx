@@ -11,52 +11,51 @@ type FilePetitionButtonsProps = {
 };
 
 const filePetitionButtonsDependencies = {
+  filePetitionCompleteStep1Sequence:
+    sequences.filePetitionCompleteStep1Sequence,
+  filePetitionCompleteStep2Sequence:
+    sequences.filePetitionCompleteStep2Sequence,
+  filePetitionCompleteStep3Sequence:
+    sequences.filePetitionCompleteStep3Sequence,
+  filePetitionCompleteStep4Sequence:
+    sequences.filePetitionCompleteStep4Sequence,
+  filePetitionCompleteStep5Sequence:
+    sequences.filePetitionCompleteStep5Sequence,
+  filePetitionCompleteStep6Sequence:
+    sequences.filePetitionCompleteStep6Sequence,
+  filePetitionGoBackAStepSequence: sequences.filePetitionGoBackAStepSequence,
   formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
   stepIndicatorInfo: state.stepIndicatorInfo,
-  updatedFilePetitionCompleteStep1Sequence:
-    sequences.updatedFilePetitionCompleteStep1Sequence,
-  updatedFilePetitionCompleteStep2Sequence:
-    sequences.updatedFilePetitionCompleteStep2Sequence,
-  updatedFilePetitionCompleteStep3Sequence:
-    sequences.updatedFilePetitionCompleteStep3Sequence,
-  updatedFilePetitionCompleteStep4Sequence:
-    sequences.updatedFilePetitionCompleteStep4Sequence,
-  updatedFilePetitionCompleteStep5Sequence:
-    sequences.updatedFilePetitionCompleteStep5Sequence,
-  updatedFilePetitionCompleteStep6Sequence:
-    sequences.updatedFilePetitionCompleteStep6Sequence,
-  updatedFilePetitionGoBackAStepSequence:
-    sequences.updatedFilePetitionGoBackAStepSequence,
   validationErrors: state.validationErrors,
 };
 
-export const UpdatedFilePetitionButtons = connect<
+export const FilePetitionButtons = connect<
   FilePetitionButtonsProps,
   typeof filePetitionButtonsDependencies
 >(
   filePetitionButtonsDependencies,
   function UpdatedFilePetition({
+    filePetitionCompleteStep1Sequence,
+    filePetitionCompleteStep2Sequence,
+    filePetitionCompleteStep3Sequence,
+    filePetitionCompleteStep4Sequence,
+    filePetitionCompleteStep5Sequence,
+    filePetitionCompleteStep6Sequence,
+    filePetitionGoBackAStepSequence,
     formCancelToggleCancelSequence,
     isNextButtonDisabled,
     primaryLabel,
     resetFocus,
     stepIndicatorInfo,
-    updatedFilePetitionCompleteStep1Sequence,
-    updatedFilePetitionCompleteStep2Sequence,
-    updatedFilePetitionCompleteStep3Sequence,
-    updatedFilePetitionCompleteStep4Sequence,
-    updatedFilePetitionCompleteStep5Sequence,
-    updatedFilePetitionCompleteStep6Sequence,
-    updatedFilePetitionGoBackAStepSequence,
   }) {
     const { currentStep } = stepIndicatorInfo;
     const NEXT_SEQUENCE = {
-      1: updatedFilePetitionCompleteStep1Sequence,
-      2: updatedFilePetitionCompleteStep2Sequence,
-      3: updatedFilePetitionCompleteStep3Sequence,
-      4: updatedFilePetitionCompleteStep4Sequence,
-      5: updatedFilePetitionCompleteStep5Sequence,
-      6: updatedFilePetitionCompleteStep6Sequence,
+      1: filePetitionCompleteStep1Sequence,
+      2: filePetitionCompleteStep2Sequence,
+      3: filePetitionCompleteStep3Sequence,
+      4: filePetitionCompleteStep4Sequence,
+      5: filePetitionCompleteStep5Sequence,
+      6: filePetitionCompleteStep6Sequence,
     };
 
     return (
@@ -80,7 +79,7 @@ export const UpdatedFilePetitionButtons = connect<
             secondary
             className="create-petition-navigation-buttons create-petition-navigation-follow-up-buttons"
             onClick={() => {
-              updatedFilePetitionGoBackAStepSequence();
+              filePetitionGoBackAStepSequence();
             }}
           >
             Back
@@ -100,4 +99,4 @@ export const UpdatedFilePetitionButtons = connect<
   },
 );
 
-UpdatedFilePetitionButtons.displayName = 'UpdatedFilePetitionButtons';
+FilePetitionButtons.displayName = 'FilePetitionButtons';

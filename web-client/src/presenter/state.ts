@@ -67,6 +67,7 @@ import { emptyUserState } from '@web-client/presenter/state/userState';
 import { externalConsolidatedCaseGroupHelper } from './computeds/externalConsolidatedCaseGroupHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
+import { filePetitionHelper } from '@web-client/presenter/computeds/filePetitionHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
 import { filingPartiesFormHelper } from './computeds/filingPartiesFormHelper';
 import { formattedCaseDeadlines } from './computeds/formattedCaseDeadlines';
@@ -144,7 +145,6 @@ import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCo
 import { trialSessionsHelper } from './computeds/trialSessionsHelper';
 import { trialSessionsSummaryHelper } from './computeds/trialSessionsSummaryHelper';
 import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
-import { updatedFilePetitionHelper } from '@web-client/presenter/computeds/updatedFilePetitionHelper';
 import { userContactEditHelper } from './computeds/userContactEditHelper';
 import { userContactEditProgressHelper } from './computeds/userContactEditProgressHelper';
 import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
@@ -326,6 +326,9 @@ export const computeds = {
   >,
   fileDocumentHelper: fileDocumentHelper as unknown as ReturnType<
     typeof fileDocumentHelper
+  >,
+  filePetitionHelper: filePetitionHelper as unknown as ReturnType<
+    typeof filePetitionHelper
   >,
   fileUploadStatusHelper: fileUploadStatusHelper as unknown as ReturnType<
     typeof fileUploadStatusHelper
@@ -544,9 +547,6 @@ export const computeds = {
     >,
   updateCaseModalHelper: updateCaseModalHelper as unknown as ReturnType<
     typeof updateCaseModalHelper
-  >,
-  updatedFilePetitionHelper: updatedFilePetitionHelper as unknown as ReturnType<
-    typeof updatedFilePetitionHelper
   >,
   userContactEditHelper: userContactEditHelper as unknown as ReturnType<
     typeof userContactEditHelper

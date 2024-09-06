@@ -3,17 +3,17 @@ import {
   PARTY_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
+import { filePetitionHelper as filePetitionHelperComputed } from './filePetitionHelper';
 import {
   petitionerUser,
   privatePractitionerUser,
 } from '@shared/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { updatedFilePetitionHelper as updatedFilePetitionHelperComputed } from './updatedFilePetitionHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 
-describe('updatedFilePetitionHelper', () => {
-  const updatedFilePetitionHelper = withAppContextDecorator(
-    updatedFilePetitionHelperComputed,
+describe('filePetitionHelper', () => {
+  const filePetitionHelper = withAppContextDecorator(
+    filePetitionHelperComputed,
     {
       ...applicationContext,
       getConstants: () => {
@@ -24,7 +24,7 @@ describe('updatedFilePetitionHelper', () => {
 
   describe('businessFieldNames', () => {
     it('should return business field names for the Corporation business type', () => {
-      const result = runCompute(updatedFilePetitionHelper, {
+      const result = runCompute(filePetitionHelper, {
         state: {
           form: {
             businessType: 'Corporation',
@@ -40,7 +40,7 @@ describe('updatedFilePetitionHelper', () => {
     });
 
     it('should return business field names for the "Partnership (as the Tax Matters Partner)" business type', () => {
-      const result = runCompute(updatedFilePetitionHelper, {
+      const result = runCompute(filePetitionHelper, {
         state: {
           form: {
             businessType: 'Partnership (as the Tax Matters Partner)',
@@ -55,7 +55,7 @@ describe('updatedFilePetitionHelper', () => {
     });
 
     it('should return business field names for the "Partnership (as a partner other than Tax Matters Partner)" business type', () => {
-      const result = runCompute(updatedFilePetitionHelper, {
+      const result = runCompute(filePetitionHelper, {
         state: {
           form: {
             businessType:
@@ -71,7 +71,7 @@ describe('updatedFilePetitionHelper', () => {
     });
 
     it('should return business field names for the "Partnership (as a partnership representative under BBA)" business type', () => {
-      const result = runCompute(updatedFilePetitionHelper, {
+      const result = runCompute(filePetitionHelper, {
         state: {
           form: {
             businessType:
@@ -88,7 +88,7 @@ describe('updatedFilePetitionHelper', () => {
   });
   describe('filingOptions', () => {
     it('should return the filing options for petitioner', () => {
-      const result = runCompute(updatedFilePetitionHelper, {
+      const result = runCompute(filePetitionHelper, {
         state: { form: {}, user: petitionerUser },
       });
       expect(result.filingOptions).toEqual([
@@ -99,7 +99,7 @@ describe('updatedFilePetitionHelper', () => {
       ]);
     });
     it('should return filing options for practitioner', () => {
-      const result = runCompute(updatedFilePetitionHelper, {
+      const result = runCompute(filePetitionHelper, {
         state: { form: {}, user: privatePractitionerUser },
       });
       expect(result.filingOptions).toEqual([
@@ -115,7 +115,7 @@ describe('updatedFilePetitionHelper', () => {
   });
   describe('otherFilingOptions', () => {
     it('should return the other filing options for petitioner', () => {
-      const result = runCompute(updatedFilePetitionHelper, {
+      const result = runCompute(filePetitionHelper, {
         state: { form: {}, user: petitionerUser },
       });
       expect(result.otherFilingOptions).toEqual([
@@ -127,7 +127,7 @@ describe('updatedFilePetitionHelper', () => {
       ]);
     });
     it('should return other filing options for practitioner', () => {
-      const result = runCompute(updatedFilePetitionHelper, {
+      const result = runCompute(filePetitionHelper, {
         state: { form: {}, user: privatePractitionerUser },
       });
       expect(result.otherFilingOptions).toEqual([
@@ -156,7 +156,7 @@ describe('updatedFilePetitionHelper', () => {
     it.each(partyTypesWithOtherPartyTypeContactInfo)(
       'should return true for "%s" party type',
       partyType => {
-        const result = runCompute(updatedFilePetitionHelper, {
+        const result = runCompute(filePetitionHelper, {
           state: {
             form: {
               partyType,
@@ -169,7 +169,7 @@ describe('updatedFilePetitionHelper', () => {
     );
 
     it('should return false when party type should not show contact information for other party type', () => {
-      const result = runCompute(updatedFilePetitionHelper, {
+      const result = runCompute(filePetitionHelper, {
         state: {
           form: {
             partyType: PARTY_TYPES.petitioner,
@@ -182,7 +182,7 @@ describe('updatedFilePetitionHelper', () => {
   });
   describe('otherContactNameLabel', () => {
     it('should return correct labels for survivingSpouse', () => {
-      const result = runCompute(updatedFilePetitionHelper, {
+      const result = runCompute(filePetitionHelper, {
         state: {
           form: {
             partyType: PARTY_TYPES.survivingSpouse,
@@ -197,7 +197,7 @@ describe('updatedFilePetitionHelper', () => {
     });
 
     it('should return correct labels for estate', () => {
-      const result = runCompute(updatedFilePetitionHelper, {
+      const result = runCompute(filePetitionHelper, {
         state: {
           form: {
             partyType: PARTY_TYPES.estate,
@@ -214,7 +214,7 @@ describe('updatedFilePetitionHelper', () => {
     });
 
     it('should return correct labels for estateWithoutExecutor', () => {
-      const result = runCompute(updatedFilePetitionHelper, {
+      const result = runCompute(filePetitionHelper, {
         state: {
           form: {
             partyType: PARTY_TYPES.estateWithoutExecutor,
@@ -230,7 +230,7 @@ describe('updatedFilePetitionHelper', () => {
     });
 
     it('should return correct labels for trust', () => {
-      const result = runCompute(updatedFilePetitionHelper, {
+      const result = runCompute(filePetitionHelper, {
         state: {
           form: {
             partyType: PARTY_TYPES.trust,
@@ -245,7 +245,7 @@ describe('updatedFilePetitionHelper', () => {
     });
 
     it('should return correct labels for conservator', () => {
-      const result = runCompute(updatedFilePetitionHelper, {
+      const result = runCompute(filePetitionHelper, {
         state: {
           form: {
             partyType: PARTY_TYPES.conservator,
@@ -260,7 +260,7 @@ describe('updatedFilePetitionHelper', () => {
     });
 
     it('should return correct labels for guardian', () => {
-      const result = runCompute(updatedFilePetitionHelper, {
+      const result = runCompute(filePetitionHelper, {
         state: {
           form: {
             partyType: PARTY_TYPES.guardian,
@@ -275,7 +275,7 @@ describe('updatedFilePetitionHelper', () => {
     });
 
     it('should return correct labels for custodian', () => {
-      const result = runCompute(updatedFilePetitionHelper, {
+      const result = runCompute(filePetitionHelper, {
         state: {
           form: {
             partyType: PARTY_TYPES.custodian,
@@ -290,7 +290,7 @@ describe('updatedFilePetitionHelper', () => {
     });
 
     it('should return correct labels for nextFriendForMinor', () => {
-      const result = runCompute(updatedFilePetitionHelper, {
+      const result = runCompute(filePetitionHelper, {
         state: {
           form: {
             partyType: PARTY_TYPES.nextFriendForMinor,
@@ -305,7 +305,7 @@ describe('updatedFilePetitionHelper', () => {
     });
 
     it('should return correct labels for nextFriendForIncompetentPerson', () => {
-      const result = runCompute(updatedFilePetitionHelper, {
+      const result = runCompute(filePetitionHelper, {
         state: {
           form: {
             partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
@@ -320,7 +320,7 @@ describe('updatedFilePetitionHelper', () => {
     });
 
     it('should return correct labels for default case', () => {
-      const result = runCompute(updatedFilePetitionHelper, {
+      const result = runCompute(filePetitionHelper, {
         state: {
           form: {
             partyType: 'unknown party',
@@ -335,7 +335,7 @@ describe('updatedFilePetitionHelper', () => {
   });
   describe('irsNoticeRequiresRedactionAcknowledgement', () => {
     it('should be true when file is present in at least one notice in state.irsNoticeUploadFormInfo', () => {
-      const result = runCompute(updatedFilePetitionHelper, {
+      const result = runCompute(filePetitionHelper, {
         state: {
           form: {},
           irsNoticeUploadFormInfo: [
@@ -352,7 +352,7 @@ describe('updatedFilePetitionHelper', () => {
     });
 
     it('should be false when file is not present in any notice in state.irsNoticeUploadFormInfo', () => {
-      const result = runCompute(updatedFilePetitionHelper, {
+      const result = runCompute(filePetitionHelper, {
         state: {
           form: {},
           irsNoticeUploadFormInfo: [{}, {}],

@@ -1,6 +1,7 @@
 import { CaseInformation } from './CaseInformation';
 import { CounselInformation } from '@web-client/views/StartCaseUpdated/CounselInformation';
 import { ErrorNotification } from '@web-client/views/ErrorNotification';
+import { FilePetitionButtons } from '@web-client/views/StartCaseUpdated/FilePetitionButtons';
 import { FileUploadErrorModal } from '@web-client/views/FileUploadErrorModal';
 import { FileUploadStatusModal } from '@web-client/views/FileUploadStatusModal';
 import { IRSNoticeInformation } from './IRSNoticeInformation';
@@ -9,13 +10,12 @@ import { PETITION_TYPES } from '@shared/business/entities/EntityConstants';
 import { PetitionInformation } from './PetitionInformation';
 import { PetitionerInformation } from './PetitionerInformation';
 import { STINInformation } from './STINInformation';
-import { UpdatedFilePetitionButtons } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionButtons';
 import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const UpdatedFilePetitionStep6 = connect(
+export const FilePetitionStep6 = connect(
   {
     filePetitionHelper: state.filePetitionHelper,
     form: state.form,
@@ -24,7 +24,7 @@ export const UpdatedFilePetitionStep6 = connect(
     user: state.user,
   },
 
-  function UpdatedFilePetitionStep6({
+  function FilePetitionStep6({
     filePetitionHelper,
     form,
     petitionFormatted,
@@ -126,7 +126,7 @@ export const UpdatedFilePetitionStep6 = connect(
                 />
 
                 <div className="margin-top-4">
-                  <UpdatedFilePetitionButtons primaryLabel="Submit Documents & Create Case" />
+                  <FilePetitionButtons primaryLabel="Submit Documents & Create Case" />
                 </div>
               </div>
             </div>

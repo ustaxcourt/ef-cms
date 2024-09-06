@@ -13,7 +13,7 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateUploadPetitionStep5Action } from '@web-client/presenter/actions/validateUploadPetitionStep5Action';
 
-export const updatedFilePetitionCompleteStep5Sequence = [
+export const filePetitionCompleteStep5Sequence = [
   startShowValidationAction,
   getCreatePetitionStep5DataAction,
   validateUploadPetitionStep5Action,

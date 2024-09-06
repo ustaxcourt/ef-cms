@@ -9,11 +9,11 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 import React from 'react';
 
-export const UpdatedFilePetitionStep7 = connect(
+export const FilePetitionStep7 = connect(
   {
     filePetitionHelper: state.filePetitionHelper,
   },
-  function UpdatedFilePetitionStep7({ filePetitionHelper }) {
+  function FilePetitionStep7({ filePetitionHelper }) {
     const { isPetitioner } = filePetitionHelper;
 
     return (
