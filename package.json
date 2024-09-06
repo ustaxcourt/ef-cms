@@ -321,7 +321,6 @@
     "pixelmatch": "6.0.0",
     "pngjs": "7.0.0",
     "postcss": "8.4.45",
-    "postcss-loader": "8.1.1",
     "postcss-preset-env": "10.0.2",
     "prettier": "3.3.3",
     "prop-types": "15.8.1",
