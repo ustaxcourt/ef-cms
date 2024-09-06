@@ -1,4 +1,4 @@
-import { validatePDFUpload } from '@web-client/views/FileHandlingHelpers/pdfValidation';
+import { validatePdf } from '@web-client/views/FileHandlingHelpers/pdfValidation';
 import React from 'react';
 
 export interface FileValidationResponse {
@@ -75,6 +75,7 @@ export const validateFileOnSelect = async ({
   }
 
   const selectedFile = target.files[0];
+  console.log('here', target.files);
   const { errorMessage, isValid } = await validateFile({
     allowedFileExtensions,
     file: selectedFile,
@@ -113,7 +114,7 @@ export const validateFile = async ({
     return correctFileValidation;
   }
   if (file.type === 'application/pdf') {
-    return await validatePDFUpload({ file });
+    return await validatePdf({ file });
   }
   return { isValid: true };
 };
