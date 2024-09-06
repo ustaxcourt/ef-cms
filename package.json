@@ -313,7 +313,6 @@
     "jest-environment-jsdom": "29.7.0",
     "jest-environment-node": "29.7.0",
     "jsdom": "25.0.0",
-    "json2yaml": "1.1.0",
     "lint-staged": "15.2.10",
     "lint-staged-shellcheck": "0.1.2",
     "livereload": "0.9.3",
