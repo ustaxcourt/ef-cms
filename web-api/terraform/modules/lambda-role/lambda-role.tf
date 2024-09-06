@@ -122,7 +122,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
                 "rds-db:connect"
             ],
             "Resource": [
-                "arn:aws:rds-db:*:${data.aws_caller_identity.current.account_id}:dbuser:*/${var.postgres_user}",
+                "arn:aws:rds-db:*:${data.aws_caller_identity.current.account_id}:dbuser:*/${var.postgres_user}"
             ]
         },
         {
