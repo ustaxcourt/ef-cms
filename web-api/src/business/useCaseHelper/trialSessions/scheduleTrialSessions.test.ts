@@ -6,7 +6,11 @@ import {
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING } from '../../../../../shared/src/test/mockCase';
-import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  PROCEDURE_TYPES_MAP,
+  SESSION_TYPES,
+  TRIAL_CITY_STRINGS,
+} from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { scheduleTrialSessions } from './scheduleTrialSessions';
 import { serveGeneratedNoticesOnCase } from './serveGeneratedNoticesOnCase';
@@ -26,15 +30,27 @@ const mockEndDate = '2019-09-22T04:00:00.000Z';
 const mockStartDate = '2019-08-22T04:00:00.000Z';
 
 describe('scheduleTrialSessions', () => {
-  it('should format case and trial sessions into calendar compatible format', () => {
+  it('should not schedule more than the max number of sessions for a given week when passed more regular cases than maxSessionsPerWeek * regularCaseMaxQuantity', () => {
     const mockCases = [MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING];
 
+    const totalNumberOfMockCases =
+      mockCalendaringConfig.maxSessionsPerWeek *
+        mockCalendaringConfig.regularCaseMaxQuantity +
+      mockCalendaringConfig.regularCaseMinimumQuantity;
 
-    for (let i = 0; i < 11; ++i) {
-      mockCases.push({...MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING, docketNumber:`10${i}-${i}${i}`, preferredTrialCity: ,})
+    for (let i = 0; i < totalNumberOfMockCases; ++i) {
+      mockCases.push({
+        ...MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING,
+        docketNumber: `10${i}-24`,
+        preferredTrialCity: TRIAL_CITY_STRINGS[i],
+        procedureType: PROCEDURE_TYPES_MAP.regular,
+      });
     }
 
+    //console.log('mockCases', mockCases);
+
     let params = {
+      calendaringConfig: mockCalendaringConfig,
       cases: mockCases,
       endDate: mockEndDate,
       specialSessions: mockSpecialSessions,
@@ -43,17 +59,28 @@ describe('scheduleTrialSessions', () => {
 
     let result = scheduleTrialSessions(params);
 
-    expect(result).toEqual([
-      {
-        city: 'City A',
-        sessionType: SESSION_TYPES.regular,
-        weekOf: '01/01/01',
-      },
-      {
-        city: 'City B',
-        sessionType: SESSION_TYPES.small,
-        weekOf: '01/07/01',
-      },
-    ]);
+    const weekOfMap = result.reduce((acc, session) => {
+      acc[session.weekOf] = (acc[session.weekOf] || 0) + 1;
+      return acc;
+    }, {});
+
+    Object.values(weekOfMap).forEach(count => {
+      expect(count).toBeLessThanOrEqual(
+        mockCalendaringConfig.maxSessionsPerWeek,
+      );
+    });
+
+    // expect(result).toEqual([
+    //   {
+    //     city: 'City A',
+    //     sessionType: SESSION_TYPES.regular,
+    //     weekOf: '01/01/01',
+    //   },
+    //   {
+    //     city: 'City B',
+    //     sessionType: SESSION_TYPES.small,
+    //     weekOf: '01/07/01',
+    //   },
+    // ]);
   });
 });
