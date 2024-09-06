@@ -82,7 +82,7 @@ describe('validatePdf', () => {
     const result = await resultPromise;
 
     expect(result).toEqual({
-      errorMessage: 'Error reading the file.',
+      errorMessage: 'There is a problem uploading the file. Try again later.',
       isValid: false,
     });
   });

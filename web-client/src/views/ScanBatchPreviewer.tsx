@@ -419,7 +419,7 @@ export const ScanBatchPreviewer = connect(
                     showErrorModalSequence({
                       errorToLog: !message,
                       message,
-                      title: 'File Upload Error',
+                      title: 'There Is a Problem With Your File',
                     });
                   },
                   onSuccess: ({ selectedFile }) => {
