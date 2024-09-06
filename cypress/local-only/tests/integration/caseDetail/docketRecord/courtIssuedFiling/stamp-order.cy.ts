@@ -26,7 +26,6 @@ describe('Judge`s chambers stamps an order', () => {
         selector: 'input#primaryDocumentFile-file',
         selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
       });
-      cy.get('[data-testid="remove-pdf"]');
       cy.get('[data-testid="save-and-serve"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();
       cy.get('.usa-alert').should(
