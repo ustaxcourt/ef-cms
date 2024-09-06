@@ -10,6 +10,10 @@ import { state } from '@web-client/presenter/app.cerebral';
  */
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import {
+  INITIAL_DOCUMENT_TYPES,
+  INITIAL_DOCUMENT_TYPES_FILE_MAP,
+} from '@shared/business/entities/EntityConstants';
 export const startCaseInternalHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -34,7 +38,18 @@ export const startCaseInternalHelper = (
 
   const shouldShowIrsNoticeDate = get(state.form.hasVerifiedIrsNotice) === true;
 
+  const documentTabs = Object.keys(INITIAL_DOCUMENT_TYPES)
+    .map(key => {
+      const tab = INITIAL_DOCUMENT_TYPES[key];
+      return {
+        ...tab,
+        documentType: INITIAL_DOCUMENT_TYPES_FILE_MAP[key],
+      };
+    })
+    .sort((a, b) => a.sort - b.sort);
+
   return {
+    documentTabs,
     partyTypes: PARTY_TYPES,
     shouldShowIrsNoticeDate,
     showOrderForCorporateDisclosureStatement,

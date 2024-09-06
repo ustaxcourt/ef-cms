@@ -132,7 +132,6 @@ import { serveThirtyDayNoticeModalHelper } from './computeds/serveThirtyDayNotic
 import { sessionAssignmentHelper } from './computeds/sessionAssignmentHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
-import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
@@ -507,9 +506,6 @@ export const computeds = {
   >,
   showAppTimeoutModalHelper: showAppTimeoutModalHelper as unknown as ReturnType<
     typeof showAppTimeoutModalHelper
-  >,
-  startCaseHelper: startCaseHelper as unknown as ReturnType<
-    typeof startCaseHelper
   >,
   startCaseInternalHelper: startCaseInternalHelper as unknown as ReturnType<
     typeof startCaseInternalHelper

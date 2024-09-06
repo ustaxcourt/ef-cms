@@ -22,6 +22,7 @@ interface IOtherContactNameLabel {
 
 type UpdatedFilePetitionHelper = {
   filingOptions: { label: string; value: string }[];
+  irsNoticeRequiresRedactionAcknowledgement: boolean;
   isPetitioner: boolean;
   isPractitioner: boolean;
   businessFieldNames: IBusinessFields | {};
@@ -39,6 +40,7 @@ export const updatedFilePetitionHelper = (
 
   const businessType = get(state.form.businessType);
   const partyType = get(state.form.partyType);
+  const irsNoticeUploadFormInfo = get(state.irsNoticeUploadFormInfo);
 
   const filingOptions = formatFilingTypes(FILING_TYPES[user.role]);
   const businessFieldNames = getBusinessFieldLabels(businessType);
@@ -49,12 +51,15 @@ export const updatedFilePetitionHelper = (
 
   const isPetitioner = user.role === ROLES.petitioner;
   const isPractitioner = user.role === ROLES.privatePractitioner;
+  const irsNoticeRequiresRedactionAcknowledgement =
+    irsNoticeUploadFormInfo?.some(notice => 'file' in notice);
 
   const otherFilingOptions = getOtherFilingOptions(isPractitioner);
 
   return {
     businessFieldNames,
     filingOptions,
+    irsNoticeRequiresRedactionAcknowledgement,
     isPetitioner,
     isPractitioner,
     otherContactNameLabel,
