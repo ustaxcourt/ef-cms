@@ -1,4 +1,4 @@
-import { FileUploadProgressMapType } from '../../../../shared/src/business/entities/EntityConstants';
+import { FileUploadProgressType } from '../../../../shared/src/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setProgressForFileUploadAction = ({
@@ -15,7 +15,7 @@ export const setProgressForFileUploadAction = ({
         name: string;
       }[];
 }>): {
-  fileUploadProgressMap: FileUploadProgressMapType;
+  fileUploadProgressMap: FileUploadProgressType;
 } => {
   const { files } = props;
   const loadedAmounts: Record<string, number> = {};
@@ -80,7 +80,7 @@ export const setProgressForFileUploadAction = ({
   store.set(state.fileUploadProgress.timeRemaining, Number.POSITIVE_INFINITY);
   store.set(state.fileUploadProgress.isUploading, true);
 
-  const fileUploadProgressMap = {} as FileUploadProgressMapType;
+  const fileUploadProgressMap = {} as FileUploadProgressType;
 
   Object.keys(files).forEach(key => {
     if (!files[key]) return;
