@@ -1,9 +1,13 @@
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { NumberLiteralType } from 'typescript';
 import {
   PROCEDURE_TYPES_MAP,
   SESSION_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
-import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import {
+  RawTrialSession,
+  TrialSession,
+} from '@shared/business/entities/trialSessions/TrialSession';
 
 // use different lib?
 import { addWeeks, isWithinInterval, startOfWeek } from 'date-fns';
@@ -36,16 +40,45 @@ const HYBRID_CASE_MAX_QUANTITY = 100;
 
 // NOTE: will front-load term with trial sessions, and prioritize Regular > Small > Hybrid
 
+export type EligibleCase = Pick<
+  RawCase,
+  'preferredTrialCity' | 'procedureType'
+>;
+
+// export type ScheduledSpecialTrialSession = {
+//   //
+// };
+
 export function scheduleTrialSessions({
+  calendaringConfig = {
+    hybridCaseMaxQuantity: HYBRID_CASE_MAX_QUANTITY,
+    hybridCaseMinimumQuantity: HYBRID_CASE_MINIMUM_QUANTITY,
+    maxSessionsPerLocation: MAX_SESSIONS_PER_LOCATION,
+    maxSessionsPerWeek: MAX_SESSIONS_PER_WEEK,
+    regularCaseMaxQuantity: REGULAR_CASE_MAX_QUANTITY,
+    regularCaseMinimumQuantity: REGULAR_CASE_MINIMUM_QUANTITY,
+    smallCaseMaxQuantity: SMALL_CASE_MAX_QUANTITY,
+    smallCaseMinimumQuantity: SMALL_CASE_MINIMUM_QUANTITY,
+  },
   cases,
   endDate,
   specialSessions,
   startDate,
 }: {
-  cases: RawCase[];
+  cases: EligibleCase[];
   specialSessions: RawTrialSession[];
   endDate: string;
   startDate: string;
+  calendaringConfig: {
+    maxSessionsPerWeek: number;
+    maxSessionsPerLocation: number;
+    regularCaseMinimumQuantity: number;
+    regularCaseMaxQuantity: number;
+    smallCaseMinimumQuantity: number;
+    smallCaseMaxQuantity: number;
+    hybridCaseMaxQuantity: number;
+    hybridCaseMinimumQuantity: number;
+  };
 }): TrialSession[] {
   const sessions: {}[] = [];
   const sessionCountPerWeek: Record<string, number> = {}; // weekOf -> session count
@@ -71,7 +104,7 @@ export function scheduleTrialSessions({
 
     specialSessionsForWeek.forEach(session => {
       sessions.push({
-        cases: [],
+        cases: session.caseOrder,
         city: session.trialLocation,
         sessionType: SESSION_TYPES.special,
         weekOf: getMondayOfWeek(session.startDate), // Special sessions cases are handled differently
@@ -95,8 +128,9 @@ export function scheduleTrialSessions({
       }
 
       if (
-        sessionCountPerWeek[weekOfString] < MAX_SESSIONS_PER_WEEK && // TODO, currently we're going to move to the next city if this limit is reached, and keep checking until we move to the next week.
-        sessionCountPerCity[city] < MAX_SESSIONS_PER_LOCATION
+        sessionCountPerWeek[weekOfString] <
+          calendaringConfig.maxSessionsPerWeek && // TODO, currently we're going to move to the next city if this limit is reached, and keep checking until we move to the next week.
+        sessionCountPerCity[city] < calendaringConfig.maxSessionsPerLocation
       ) {
         const regularCases = cases.filter(
           c =>
@@ -114,11 +148,13 @@ export function scheduleTrialSessions({
         let smallCaseSliceSize;
 
         if (
-          regularCases.length >= REGULAR_CASE_MINIMUM_QUANTITY ||
-          smallCases.length >= SMALL_CASE_MINIMUM_QUANTITY
+          regularCases.length >= calendaringConfig.regularCaseMinimumQuantity ||
+          smallCases.length >= calendaringConfig.smallCaseMinimumQuantity
         ) {
-          if (regularCases.length >= REGULAR_CASE_MINIMUM_QUANTITY) {
-            regularCaseSliceSize = REGULAR_CASE_MAX_QUANTITY;
+          if (
+            regularCases.length >= calendaringConfig.regularCaseMinimumQuantity
+          ) {
+            regularCaseSliceSize = calendaringConfig.regularCaseMaxQuantity;
             sessions.push({
               cases: regularCases.slice(0, regularCaseSliceSize),
               city,
@@ -132,8 +168,8 @@ export function scheduleTrialSessions({
             continue; // Only one session per city per week, so continue to the next city
           }
 
-          if (smallCases.length >= SMALL_CASE_MINIMUM_QUANTITY) {
-            smallCaseSliceSize = SMALL_CASE_MAX_QUANTITY;
+          if (smallCases.length >= calendaringConfig.smallCaseMinimumQuantity) {
+            smallCaseSliceSize = calendaringConfig.smallCaseMaxQuantity;
             sessions.push({
               cases: smallCases.slice(0, smallCaseSliceSize),
               city,
@@ -154,12 +190,12 @@ export function scheduleTrialSessions({
           const remainingSmallCases = smallCases.slice(smallCaseSliceSize);
           if (
             remainingRegularCases.length + remainingSmallCases.length >=
-            HYBRID_CASE_MINIMUM_QUANTITY
+            calendaringConfig.hybridCaseMinimumQuantity
           ) {
             sessions.push({
               cases: [...remainingRegularCases, ...remainingSmallCases].slice(
                 0,
-                HYBRID_CASE_MAX_QUANTITY,
+                calendaringConfig.hybridCaseMaxQuantity,
               ),
               city,
               sessionType: SESSION_TYPES.hybrid,
