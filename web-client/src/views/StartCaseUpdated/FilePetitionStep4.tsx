@@ -1,14 +1,14 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
+import { FilePetitionButtons } from '@web-client/views/StartCaseUpdated/FilePetitionButtons';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { ProcedureType } from '@web-client/views/StartCase/ProcedureType';
 import { TrialCity } from '@web-client/views/StartCase/TrialCity';
-import { UpdatedFilePetitionButtons } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionButtons';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const UpdatedFilePetitionStep4 = connect(
+export const FilePetitionStep4 = connect(
   {
     deleteValidationErrorMessageSequence:
       sequences.deleteValidationErrorMessageSequence,
@@ -18,7 +18,7 @@ export const UpdatedFilePetitionStep4 = connect(
       sequences.petitionGenerationLiveValidationSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  function UpdatedFilePetitionStep4({
+  function FilePetitionStep4({
     deleteValidationErrorMessageSequence,
     filePetitionHelper,
     form,
@@ -123,7 +123,7 @@ export const UpdatedFilePetitionStep4 = connect(
           )}
         </div>
         <div>
-          <UpdatedFilePetitionButtons />
+          <FilePetitionButtons />
         </div>
       </>
     );

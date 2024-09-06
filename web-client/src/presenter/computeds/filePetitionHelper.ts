@@ -20,7 +20,7 @@ interface IOtherContactNameLabel {
   titleLabelNote?: string;
 }
 
-type UpdatedFilePetitionHelper = {
+type FilePetitionHelper = {
   filingOptions: { label: string; value: string }[];
   irsNoticeRequiresRedactionAcknowledgement: boolean;
   isPetitioner: boolean;
@@ -31,10 +31,10 @@ type UpdatedFilePetitionHelper = {
   showContactInformationForOtherPartyType: boolean;
 };
 
-export const updatedFilePetitionHelper = (
+export const filePetitionHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): UpdatedFilePetitionHelper => {
+): FilePetitionHelper => {
   const user = get(state.user);
   const { FILING_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 

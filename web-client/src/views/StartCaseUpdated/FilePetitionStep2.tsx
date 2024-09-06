@@ -1,10 +1,10 @@
 import { AutoGeneratePetitionForm } from '@web-client/views/StartCaseUpdated/AutoGeneratePetitionForm';
 import { Button } from '@web-client/ustc-ui/Button/Button';
+import { FilePetitionButtons } from '@web-client/views/StartCaseUpdated/FilePetitionButtons';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { PETITION_TYPES } from '@shared/business/entities/EntityConstants';
 import { RedactionAcknowledgement } from '@web-client/views/StartCaseUpdated/RedactionAcknowledgement';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
-import { UpdatedFilePetitionButtons } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionButtons';
 import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -12,7 +12,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const UpdatedFilePetitionStep2 = connect(
+export const FilePetitionStep2 = connect(
   {
     constants: state.constants,
     form: state.form,
@@ -20,7 +20,7 @@ export const UpdatedFilePetitionStep2 = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
-  function UpdatedFilePetitionStep2({
+  function FilePetitionStep2({
     constants,
     form,
     setPetitionTypeSequence,
@@ -154,9 +154,7 @@ export const UpdatedFilePetitionStep2 = connect(
             </div>
           </div>
         )}
-        <UpdatedFilePetitionButtons
-          isNextButtonDisabled={isNextButtonDisabled}
-        />
+        <FilePetitionButtons isNextButtonDisabled={isNextButtonDisabled} />
       </>
     );
   },

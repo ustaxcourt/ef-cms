@@ -19,8 +19,9 @@ import { unsetWaitingForResponseAction } from '@web-client/presenter/actions/uns
 import { updatedSetupFilesForCaseCreationAction } from '@web-client/presenter/actions/CaseCreation/updatedSetupFilesForCaseCreationAction';
 import { updatedValidatePetitionAction } from '@web-client/presenter/actions/updatedValidatePetitionAction';
 
-export const updatedFilePetitionCompleteStep6Sequence =
-  debounceSequenceDecorator(500, [
+export const filePetitionCompleteStep6Sequence = debounceSequenceDecorator(
+  500,
+  [
     clearAlertsAction,
     startShowValidationAction,
     setWaitingForResponseAction,
@@ -51,4 +52,5 @@ export const updatedFilePetitionCompleteStep6Sequence =
         },
       ],
     },
-  ]) as unknown as () => void;
+  ],
+) as unknown as () => void;

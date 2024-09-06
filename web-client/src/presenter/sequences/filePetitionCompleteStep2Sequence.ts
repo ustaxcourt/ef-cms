@@ -7,7 +7,7 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateUploadPetitionStep2Action } from '@web-client/presenter/actions/validateUploadPetitionStep2Action';
 
-export const updatedFilePetitionCompleteStep2Sequence = [
+export const filePetitionCompleteStep2Sequence = [
   startShowValidationAction,
   formatPetitionFactsAndReasonsAction,
   getCreatePetitionStep2DataAction,
