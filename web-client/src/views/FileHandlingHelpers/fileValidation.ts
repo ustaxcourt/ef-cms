@@ -1,4 +1,5 @@
 import { validatePDFUpload } from '@web-client/views/FileHandlingHelpers/pdfValidation';
+import React from 'react';
 
 export interface FileValidationResponse {
   isValid: boolean;
@@ -59,20 +60,21 @@ export const validateFileOnSelect = async ({
   onSuccess,
 }: {
   allowedFileExtensions: string[];
-  e: any;
+  e: React.ChangeEvent<HTMLInputElement>;
   megabyteLimit: number;
-  onSuccess: () => void;
-  onError: ({
-    errorToLog,
-    message,
-    title,
-  }: {
-    errorToLog: string;
-    message: string;
-    title: string;
-  }) => void;
+  onSuccess: ({ selectedFile }: { selectedFile: File }) => void;
+  onError: ({ message }: { message: string }) => void;
 }) => {
-  const selectedFile = e.target.files[0];
+  const target = e.target as HTMLInputElement;
+
+  if (!target || !target.files || target.files.length === 0) {
+    onError({
+      message: 'No file selected',
+    });
+    return;
+  }
+
+  const selectedFile = target.files[0];
   const { errorMessage, isValid } = await validateFile({
     allowedFileExtensions,
     file: selectedFile,
@@ -80,14 +82,12 @@ export const validateFileOnSelect = async ({
   });
   if (!isValid) {
     onError({
-      errorToLog: errorMessage!,
       message: errorMessage!,
-      title: 'File Upload Error',
     });
-    e.target.value = null;
+    target.value = '';
     return;
   }
-  onSuccess();
+  onSuccess({ selectedFile });
 };
 
 export const validateFile = async ({
@@ -99,7 +99,6 @@ export const validateFile = async ({
   megabyteLimit: number;
   allowedFileExtensions: string[];
 }): Promise<FileValidationResponse> => {
-  console.log(file);
   if (file.size > megabyteLimit * 1024 * 1024) {
     return {
       errorMessage: `Your file size is too big. The maximum file size is ${megabyteLimit}MB.`,
