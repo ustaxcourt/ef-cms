@@ -11,10 +11,10 @@ import React from 'react';
 
 export const UpdatedFilePetitionStep7 = connect(
   {
-    updatedFilePetitionHelper: state.updatedFilePetitionHelper,
+    filePetitionHelper: state.filePetitionHelper,
   },
-  function UpdatedFilePetitionStep7({ updatedFilePetitionHelper }) {
-    const { isPetitioner } = updatedFilePetitionHelper;
+  function UpdatedFilePetitionStep7({ filePetitionHelper }) {
+    const { isPetitioner } = filePetitionHelper;
 
     return (
       <>

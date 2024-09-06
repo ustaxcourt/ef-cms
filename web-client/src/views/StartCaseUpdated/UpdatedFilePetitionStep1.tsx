@@ -11,6 +11,7 @@ import React from 'react';
 
 export const UpdatedFilePetitionStep1 = connect(
   {
+    filePetitionHelper: state.filePetitionHelper,
     form: state.form,
     petitionGenerationLiveValidationSequence:
       sequences.petitionGenerationLiveValidationSequence,
@@ -20,14 +21,13 @@ export const UpdatedFilePetitionStep1 = connect(
       sequences.updateFormValueCountryTypeSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updateFormValueUpdatedSequence: sequences.updateFormValueUpdatedSequence,
-    updatedFilePetitionHelper: state.updatedFilePetitionHelper,
     validationErrors: state.validationErrors,
   },
   function UpdatedFilePetitionStep1({
+    filePetitionHelper,
     form,
     petitionGenerationLiveValidationSequence,
     resetSecondaryAddressSequence,
-    updatedFilePetitionHelper,
     updateFilingTypeSequence,
     updateFormValueCountryTypeSequence,
     updateFormValueSequence,
@@ -35,7 +35,7 @@ export const UpdatedFilePetitionStep1 = connect(
     validationErrors,
   }) {
     const { registerRef, resetFocus } = useValidationFocus(validationErrors);
-    const { isPetitioner, isPractitioner } = updatedFilePetitionHelper;
+    const { isPetitioner, isPractitioner } = filePetitionHelper;
     return (
       <>
         <p className="margin-top-0 required-statement">
@@ -47,40 +47,38 @@ export const UpdatedFilePetitionStep1 = connect(
           errorText={validationErrors.filingType}
         >
           <fieldset className="usa-fieldset margin-bottom-2">
-            {updatedFilePetitionHelper.filingOptions.map(
-              (filingType, index) => {
-                return (
-                  <div
-                    className="usa-radio margin-bottom-2 filing-type-radio-option max-width-fit-content"
-                    key={filingType.value}
+            {filePetitionHelper.filingOptions.map((filingType, index) => {
+              return (
+                <div
+                  className="usa-radio margin-bottom-2 filing-type-radio-option max-width-fit-content"
+                  key={filingType.value}
+                >
+                  <input
+                    aria-describedby="filing-type-legend"
+                    checked={form.filingType === filingType.value}
+                    className="usa-radio__input"
+                    id={filingType.value}
+                    name="filingType"
+                    type="radio"
+                    value={filingType.value}
+                    onChange={e => {
+                      updateFilingTypeSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                  <label
+                    className="usa-radio__label"
+                    data-testid={`filing-type-${index}`}
+                    htmlFor={filingType.value}
+                    id={`${filingType.value}-radio-option-label`}
                   >
-                    <input
-                      aria-describedby="filing-type-legend"
-                      checked={form.filingType === filingType.value}
-                      className="usa-radio__input"
-                      id={filingType.value}
-                      name="filingType"
-                      type="radio"
-                      value={filingType.value}
-                      onChange={e => {
-                        updateFilingTypeSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                      }}
-                    />
-                    <label
-                      className="usa-radio__label"
-                      data-testid={`filing-type-${index}`}
-                      htmlFor={filingType.value}
-                      id={`${filingType.value}-radio-option-label`}
-                    >
-                      {filingType.label}
-                    </label>
-                  </div>
-                );
-              },
-            )}{' '}
+                    {filingType.label}
+                  </label>
+                </div>
+              );
+            })}{' '}
           </fieldset>
         </FormGroup>
 
@@ -132,7 +130,7 @@ export const UpdatedFilePetitionStep1 = connect(
         )}
         {form.filingType === 'A business' && (
           <BusinessInfo
-            businessFieldNames={updatedFilePetitionHelper.businessFieldNames}
+            businessFieldNames={filePetitionHelper.businessFieldNames}
             form={form}
             isPractitioner={isPractitioner}
             petitionGenerationLiveValidationSequence={
@@ -151,16 +149,14 @@ export const UpdatedFilePetitionStep1 = connect(
           <OtherInfo
             form={form}
             isPractitioner={isPractitioner}
-            otherContactNameLabel={
-              updatedFilePetitionHelper.otherContactNameLabel
-            }
-            otherFilingOptions={updatedFilePetitionHelper.otherFilingOptions}
+            otherContactNameLabel={filePetitionHelper.otherContactNameLabel}
+            otherFilingOptions={filePetitionHelper.otherFilingOptions}
             petitionGenerationLiveValidationSequence={
               petitionGenerationLiveValidationSequence
             }
             registerRef={registerRef}
             showContactInformationForOtherPartyType={
-              updatedFilePetitionHelper.showContactInformationForOtherPartyType
+              filePetitionHelper.showContactInformationForOtherPartyType
             }
             updateFilingTypeSequence={updateFilingTypeSequence}
             updateFormValueCountryTypeSequence={
