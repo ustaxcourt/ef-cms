@@ -379,7 +379,7 @@ describe('getUserFromAuthHeader', () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    expect(user.name).toEqual(mockUser.name);
+    expect(user?.name).toEqual(mockUser.name);
   });
 
   it('should return undefined if the user token is not a valid jwt token', () => {
@@ -396,14 +396,14 @@ describe('getUserFromAuthHeader', () => {
     expect(user).toEqual(undefined);
   });
 
-  it('returns custom:userId when it is present in the token', () => {
+  it('should return custom:userId when it is present in the token', () => {
     const user = getUserFromAuthHeader({
       headers: {
         Authorization: `Bearer ${token}`,
         token,
       },
     });
-    expect(user.userId).toEqual(mockUser['custom:userId']);
+    expect(user?.userId).toEqual(mockUser['custom:userId']);
   });
 
   describe('redirect', () => {

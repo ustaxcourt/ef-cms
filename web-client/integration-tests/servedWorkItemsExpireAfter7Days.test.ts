@@ -7,12 +7,12 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
+import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 
 const {
   IRS_SYSTEM_SECTION,
   PETITIONS_SECTION,
   STATUS_TYPES: CASE_STATUS_TYPES,
-  USER_ROLES: ROLES,
 } = applicationContext.getConstants();
 
 const cerebralTest = setupTest();
@@ -37,11 +37,12 @@ describe('verify old served work items do not show up in the outbox', () => {
     caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
 
-    const appContext = applicationContextFactory({
-      role: ROLES.petitionsClerk,
-      section: PETITIONS_SECTION,
+    const mockUser = {
+      ...mockPetitionsClerkUser,
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-    });
+    };
+
+    const appContext = applicationContextFactory(mockUser);
     appContext.environment.dynamoDbTableName = 'efcms-local';
 
     const CREATED_8_DAYS_AGO = applicationContext
@@ -59,11 +60,11 @@ describe('verify old served work items do not show up in the outbox', () => {
     workItemId8 = appContext.getUniqueId();
 
     workItem8Days = {
-      assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
+      assigneeId: mockUser.userId,
       assigneeName: 'Test petitionsclerk1',
       caseStatus: CASE_STATUS_TYPES.new,
       completedAt: '2019-06-26T16:31:17.643Z',
-      completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
+      completedByUserId: mockUser.userId,
       createdAt: CREATED_8_DAYS_AGO,
       docketEntry: {
         createdAt: '2019-06-25T15:14:11.924Z',
@@ -76,7 +77,7 @@ describe('verify old served work items do not show up in the outbox', () => {
       section: IRS_SYSTEM_SECTION,
       sentBy: 'Test petitionsclerk1',
       sentBySection: PETITIONS_SECTION,
-      sentByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
+      sentByUserId: mockUser.userId,
       updatedAt: '2019-06-26T16:31:17.643Z',
       workItemId: `${workItemId8}`,
     };
@@ -97,16 +98,19 @@ describe('verify old served work items do not show up in the outbox', () => {
 
     await appContext.getPersistenceGateway().putWorkItemInOutbox({
       applicationContext: appContext,
+      authorizedUser: mockUser,
       workItem: workItem8Days,
     });
 
     await appContext.getPersistenceGateway().putWorkItemInOutbox({
       applicationContext: appContext,
+      authorizedUser: mockUser,
       workItem: workItem7Days,
     });
 
     await appContext.getPersistenceGateway().putWorkItemInOutbox({
       applicationContext: appContext,
+      authorizedUser: mockUser,
       workItem: workItem6Days,
     });
   });

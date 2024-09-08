@@ -34,7 +34,7 @@ export class ElectronicPetitionInformationFactory extends JoiValidationEntity {
   public wizardStep: number;
   public petitionType: string;
 
-  constructor(rawCase, { applicationContext }) {
+  constructor(rawCase) {
     super('ElectronicPetitionInformationFactory');
 
     this.attachmentToPetitionFile = rawCase.attachmentToPetitionFile;
@@ -58,7 +58,6 @@ export class ElectronicPetitionInformationFactory extends JoiValidationEntity {
 
     if (+this.wizardStep >= 3) {
       const contacts = ContactFactory({
-        applicationContext,
         contactInfo: {
           primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
           secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,

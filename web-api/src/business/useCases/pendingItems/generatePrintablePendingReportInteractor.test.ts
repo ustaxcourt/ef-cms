@@ -1,14 +1,13 @@
-import {
-  DOCKET_NUMBER_SUFFIXES,
-  ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+import { DOCKET_NUMBER_SUFFIXES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generatePrintablePendingReportInteractor } from './generatePrintablePendingReportInteractor';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('generatePrintablePendingReportInteractor', () => {
-  let mockUser;
-
   const mockFoundDocuments = [
     {
       associatedJudge: 'Judge Judgey',
@@ -87,13 +86,6 @@ describe('generatePrintablePendingReportInteractor', () => {
   });
 
   beforeEach(() => {
-    mockUser = {
-      role: ROLES.petitionsClerk,
-      userId: 'petitionsclerk',
-    };
-
-    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
-
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
@@ -104,15 +96,14 @@ describe('generatePrintablePendingReportInteractor', () => {
   });
 
   it('should throw an unauthorized error when the user does not have access', async () => {
-    mockUser = {
-      role: ROLES.petitioner,
-      userId: 'petitioner',
-    };
-
     await expect(
-      generatePrintablePendingReportInteractor(applicationContext, {
-        judge: 'Colvin',
-      } as any),
+      generatePrintablePendingReportInteractor(
+        applicationContext,
+        {
+          judge: 'Colvin',
+        } as any,
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -120,6 +111,7 @@ describe('generatePrintablePendingReportInteractor', () => {
     const results = await generatePrintablePendingReportInteractor(
       applicationContext,
       {} as any,
+      mockPetitionsClerkUser,
     );
 
     expect(
@@ -135,6 +127,7 @@ describe('generatePrintablePendingReportInteractor', () => {
     await generatePrintablePendingReportInteractor(
       applicationContext,
       {} as any,
+      mockPetitionsClerkUser,
     );
 
     const { pendingItems } =
@@ -223,6 +216,7 @@ describe('generatePrintablePendingReportInteractor', () => {
     await generatePrintablePendingReportInteractor(
       applicationContext,
       {} as any,
+      mockPetitionsClerkUser,
     );
 
     const { subtitle } =
@@ -232,9 +226,13 @@ describe('generatePrintablePendingReportInteractor', () => {
   });
 
   it('should generate a subtitle with the judge name if a judge filter is applied', async () => {
-    await generatePrintablePendingReportInteractor(applicationContext, {
-      judge: 'Colvin',
-    } as any);
+    await generatePrintablePendingReportInteractor(
+      applicationContext,
+      {
+        judge: 'Colvin',
+      } as any,
+      mockPetitionsClerkUser,
+    );
 
     const { subtitle } =
       applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0]
@@ -243,9 +241,13 @@ describe('generatePrintablePendingReportInteractor', () => {
   });
 
   it('should get case information from persistence and generate a subtitle with the docket number if a docketNumber is present', async () => {
-    await generatePrintablePendingReportInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    } as any);
+    await generatePrintablePendingReportInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+      } as any,
+      mockPetitionsClerkUser,
+    );
 
     const { subtitle } =
       applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0]
@@ -257,9 +259,13 @@ describe('generatePrintablePendingReportInteractor', () => {
   it('should generate a subtitle with the docket number suffix if present', async () => {
     MOCK_CASE.docketNumberWithSuffix = `${MOCK_CASE.docketNumber}${DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER}`;
 
-    await generatePrintablePendingReportInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    } as any);
+    await generatePrintablePendingReportInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+      } as any,
+      mockPetitionsClerkUser,
+    );
 
     const { subtitle } =
       applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0]
@@ -271,6 +277,7 @@ describe('generatePrintablePendingReportInteractor', () => {
     await generatePrintablePendingReportInteractor(
       applicationContext,
       {} as any,
+      mockPetitionsClerkUser,
     );
 
     expect(
@@ -282,6 +289,7 @@ describe('generatePrintablePendingReportInteractor', () => {
     await generatePrintablePendingReportInteractor(
       applicationContext,
       {} as any,
+      mockPetitionsClerkUser,
     );
 
     expect(
@@ -293,6 +301,7 @@ describe('generatePrintablePendingReportInteractor', () => {
     const results = await generatePrintablePendingReportInteractor(
       applicationContext,
       {} as any,
+      mockPetitionsClerkUser,
     );
 
     expect(
