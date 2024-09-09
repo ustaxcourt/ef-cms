@@ -25,8 +25,8 @@ resource "aws_rds_cluster" "postgres" {
   kms_key_id                          = var.kms_key_id_primary
 
   serverlessv2_scaling_configuration {
-    max_capacity = 1.0
-    min_capacity = 0.5
+    max_capacity = var.max_capacity
+    min_capacity = var.min_capacity
   }
 
   lifecycle {
