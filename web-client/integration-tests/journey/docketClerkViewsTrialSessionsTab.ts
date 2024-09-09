@@ -49,7 +49,7 @@ export const docketClerkViewsTrialSessionsTab = (
       expect(legacyJudge).toBeFalsy();
     }
 
-    const filteredSessions = formatted.filteredTrialSessions[status];
+    const filteredSessions = formatted.sessionsByTerm[status];
 
     let foundSession;
     filteredSessions.some(trialSession => {
