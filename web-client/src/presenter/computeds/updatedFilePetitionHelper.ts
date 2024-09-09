@@ -22,6 +22,7 @@ interface IOtherContactNameLabel {
 
 type UpdatedFilePetitionHelper = {
   filingOptions: { label: string; value: string }[];
+  getLetterByIndex: (index: number) => string;
   isPetitioner: boolean;
   isPractitioner: boolean;
   businessFieldNames: IBusinessFields | {};
@@ -55,6 +56,7 @@ export const updatedFilePetitionHelper = (
   return {
     businessFieldNames,
     filingOptions,
+    getLetterByIndex,
     isPetitioner,
     isPractitioner,
     otherContactNameLabel,
@@ -212,4 +214,16 @@ function getShowContactInformationForOtherPartyType(
     PARTY_TYPES.nextFriendForMinor,
     PARTY_TYPES.nextFriendForIncompetentPerson,
   ].includes(partyType);
+}
+
+function getLetterByIndex(index: number): string {
+  const asciiOfA = 97;
+  let result = '';
+
+  while (index >= 0) {
+    result = String.fromCharCode(asciiOfA + (index % 26)) + result;
+    index = Math.floor(index / 26) - 1;
+  }
+
+  return result;
 }

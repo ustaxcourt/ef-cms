@@ -1,24 +1,35 @@
 #!/usr/bin/env npx ts-node --transpile-only
 
-// usage: scripts/reports/event-codes-by-year.ts M071,M074 [-y 2021-2022] > ~/Desktop/m071s-and-m074s-filed-2021-2022.csv
+// usage: scripts/reports/count-event-codes-by-year.ts  m01,m02 feew [-y 2000-2020]
 
 import { DateTime } from 'luxon';
-import { createApplicationContext } from '@web-api/applicationContext';
+import {
+  ServerApplicationContext,
+  createApplicationContext,
+} from '@web-api/applicationContext';
+import { count } from '@web-api/persistence/elasticsearch/searchClient';
 import { parseArgs } from 'node:util';
 import { parseIntsArg } from './reportUtils';
 import { requireEnvVars } from '../../shared/admin-tools/util';
-import {
-  search,
-  searchAll,
-} from '@web-api/persistence/elasticsearch/searchClient';
 import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
 
 requireEnvVars(['ENV', 'REGION']);
+
 let positionals, values;
 
 const config = {
   allowPositionals: true,
   options: {
+    stricken: {
+      default: false,
+      short: 's',
+      type: 'boolean',
+    },
+    verbose: {
+      default: false,
+      short: 'v',
+      type: 'boolean',
+    },
     years: {
       default: `${DateTime.now().toObject().year}`,
       short: 'y',
@@ -32,57 +43,21 @@ function usage(warning: string | undefined) {
   if (warning) {
     console.log(warning);
   }
-  console.log(`Usage: ${process.argv[1]} M071,m074 [-y 2023,2024]`);
+  console.log(`Usage: ${process.argv[1]} M071,m074 `);
   console.log('Options:', JSON.stringify(config, null, 4));
 }
 
-const cachedCases: { [key: string]: RawCase } = {};
-
-const getCase = async ({
-  applicationContext,
-  docketNumber,
-}: {
-  applicationContext: IApplicationContext;
-  docketNumber: string;
-}): Promise<RawCase | undefined> => {
-  if (docketNumber in cachedCases) {
-    return cachedCases[docketNumber];
-  }
-  const { results } = await search({
-    applicationContext,
-    searchParameters: {
-      body: {
-        from: 0,
-        query: {
-          bool: {
-            must: {
-              term: {
-                'docketNumber.S': docketNumber,
-              },
-            },
-          },
-        },
-        size: 1,
-      },
-      index: 'efcms-case',
-    },
-  });
-  if (!results) {
-    return;
-  }
-  cachedCases[docketNumber] = results[0];
-  return cachedCases[docketNumber];
-};
-
-const getDocketEntriesByEventCodesAndYears = async ({
+const getCountDocketEntriesByEventCodesAndYears = async ({
   applicationContext,
   eventCodes,
+  onlyNonStricken,
   years,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   eventCodes: string[];
+  onlyNonStricken: boolean;
   years?: number[];
-}): Promise<RawDocketEntry[]> => {
+}): Promise<number> => {
   const must: {}[] = [
     {
       bool: {
@@ -96,6 +71,13 @@ const getDocketEntriesByEventCodesAndYears = async ({
       },
     },
   ];
+  if (onlyNonStricken) {
+    must.push({
+      term: {
+        'isStricken.BOOL': false,
+      },
+    });
+  }
   if (years && years.length) {
     if (years.length === 1) {
       must.push({
@@ -139,19 +121,21 @@ const getDocketEntriesByEventCodesAndYears = async ({
       });
     }
   }
-  const { results } = await searchAll({
-    applicationContext,
-    searchParameters: {
-      body: {
-        query: {
-          bool: {
-            must,
-          },
+  const searchParameters = {
+    body: {
+      query: {
+        bool: {
+          must,
         },
-        sort: [{ 'receivedAt.S': 'asc' }],
       },
-      index: 'efcms-docket-entry',
     },
+    index: 'efcms-docket-entry',
+  };
+  // console.log('Effective Query:', JSON.stringify(searchParameters, null, 4));
+
+  const results = await count({
+    applicationContext,
+    searchParameters,
   });
   return results;
 };
@@ -170,37 +154,17 @@ const getDocketEntriesByEventCodesAndYears = async ({
   }
   const eventCodes = positionals[0].split(',').map(s => s.toUpperCase());
   const years: number[] = parseIntsArg(values.years);
-  const applicationContext = createApplicationContext({});
-
-  const docketEntries = await getDocketEntriesByEventCodesAndYears({
-    applicationContext,
+  const includeStricken = values.stricken;
+  const ret = await getCountDocketEntriesByEventCodesAndYears({
+    applicationContext: createApplicationContext({}),
     eventCodes,
+    onlyNonStricken: !includeStricken,
     years,
   });
-
-  console.log(
-    '"Docket Number","Date Filed","Document Type","Associated Judge",' +
-      '"Case Status","Case Caption"',
-  );
-  for (const de of docketEntries) {
-    if (!('docketNumber' in de)) {
-      continue;
-    }
-    const c = await getCase({
-      applicationContext,
-      docketNumber: de.docketNumber,
-    });
-    if (!c) {
-      continue;
-    }
-    const associatedJudge = c.associatedJudge
-      ?.replace('Chief Special Trial ', '')
-      .replace('Special Trial ', '')
-      .replace('Judge ', '');
-    console.log(
-      `"${c.docketNumberWithSuffix}","${de.receivedAt.split('T')[0]}",` +
-        `"${de.documentType}","${associatedJudge}","${c.status}",` +
-        `"${c.caseCaption}"`,
-    );
+  if (values.verbose) {
+    usage('Verbose output enabled');
+    console.log(`positionals: ${positionals}`);
+    console.log(`option values: ${values}`);
   }
+  console.log(ret);
 })();
