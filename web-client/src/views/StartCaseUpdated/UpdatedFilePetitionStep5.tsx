@@ -1,7 +1,6 @@
-import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
+import { InlineLink } from '@web-client/ustc-ui/InlineLink/InlineLink';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
 import { UpdatedFilePetitionButtons } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionButtons';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -36,21 +35,9 @@ export const UpdatedFilePetitionStep5 = connect(
           <div style={{ fontSize: '18px', marginBottom: '3px' }}>
             Download and fill out the form if you haven&apos;t already done so:
           </div>
-          <Button
-            link
-            className="usa-link--external text-left mobile-text-wrap text-semibold"
-            href="https://www.ustaxcourt.gov/resources/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf"
-            marginDirection="bottom"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Statement of Taxpayer Identification Number (T.C. Form 4).{' '}
-            <Icon
-              className="fa-icon-blue"
-              icon={['fa-soli', 'fa-arrow-up-right-from-square']}
-              size="1x"
-            />
-          </Button>
+          <InlineLink href="https://www.ustaxcourt.gov/resources/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf">
+            Statement of Taxpayer Identification Number (T.C. Form 4).
+          </InlineLink>
 
           <div className="margin-top-3">
             <FormGroup

@@ -1,5 +1,4 @@
-import { Button } from '@web-client/ustc-ui/Button/Button';
-import { Icon } from '@web-client/ustc-ui/Icon/Icon';
+import { InlineLink } from '@web-client/ustc-ui/InlineLink/InlineLink';
 import { ProcedureType } from '@web-client/views/StartCase/ProcedureType';
 import { TrialCity } from '@web-client/views/StartCase/TrialCity';
 import { UpdatedFilePetitionButtons } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionButtons';
@@ -34,21 +33,9 @@ export const UpdatedFilePetitionStep4 = connect(
             If your case qualifies, you may choose to have it handled as a small
             tax case. The Court handles small tax cases differently.
           </div>
-          <Button
-            link
-            className="usa-link--external text-left mobile-text-wrap"
-            href="https://ustaxcourt.gov/case_procedure.html"
-            overrideMargin="margin-right-1"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Which case procedure should I choose?{' '}
-            <Icon
-              className="fa-icon-blue"
-              icon={['fa-soli', 'fa-arrow-up-right-from-square']}
-              size="1x"
-            />
-          </Button>
+          <InlineLink href="https://ustaxcourt.gov/case_procedure.html">
+            Which case procedure should I choose?
+          </InlineLink>
 
           <div className="margin-top-3">
             <ProcedureType
@@ -77,21 +64,9 @@ export const UpdatedFilePetitionStep4 = connect(
                 procedure selected.
                 <span>
                   {' '}
-                  <Button
-                    link
-                    className="usa-link--external text-left mobile-text-wrap"
-                    href="https://www.ustaxcourt.gov/dpt_cities.html"
-                    overrideMargin="margin-right-1"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
+                  <InlineLink href="https://www.ustaxcourt.gov/dpt_cities.html">
                     Trial locations
-                    <Icon
-                      className="fa-icon-blue"
-                      icon={['fa-soli', 'fa-arrow-up-right-from-square']}
-                      size="1x"
-                    />
-                  </Button>
+                  </InlineLink>
                 </span>
               </div>
               <TrialCity

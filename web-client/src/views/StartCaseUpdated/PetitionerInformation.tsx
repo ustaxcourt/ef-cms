@@ -3,8 +3,8 @@ import {
   BUSINESS_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { AddressDisplay } from '../CaseDetail/AddressDisplay';
-import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CardHeader } from './CardHeader';
+import { InlineLink } from '@web-client/ustc-ui/InlineLink/InlineLink';
 import React from 'react';
 
 export function PetitionerInformation({ petitionFormatted }) {
@@ -27,16 +27,12 @@ export function PetitionerInformation({ petitionFormatted }) {
                 <div>
                   <div>
                     <div className="grid-col flex-auto">
-                      <Button
-                        link
-                        className="padding-0 text-left word-break"
+                      <InlineLink
                         data-testid="cds-preview-button"
                         href={petitionFormatted.corporateDisclosureFileUrl}
-                        rel="noopener noreferrer"
-                        target="_blank"
                       >
                         {petitionFormatted.corporateDisclosureFile.name}
-                      </Button>
+                      </InlineLink>
                     </div>
                   </div>
                 </div>
