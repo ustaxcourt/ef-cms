@@ -15,6 +15,8 @@ import React from 'react';
 
 export const EditPetitionerCounsel = connect(
   {
+    closeModalAndReturnToCaseDetailSequence:
+      sequences.closeModalAndReturnToCaseDetailSequence,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     formattedCaseDetail: state.formattedCaseDetail,
@@ -30,6 +32,7 @@ export const EditPetitionerCounsel = connect(
     validationErrors: state.validationErrors,
   },
   function EditPetitionerCounsel({
+    closeModalAndReturnToCaseDetailSequence,
     form,
     formattedCaseDetail,
     formCancelToggleCancelSequence,
@@ -151,7 +154,9 @@ export const EditPetitionerCounsel = connect(
         </section>
 
         {showModal === 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+          <FormCancelModalDialog
+            onCancelSequence={closeModalAndReturnToCaseDetailSequence}
+          />
         )}
         {showModal === 'MatchingEmailFoundModal' && <MatchingEmailFoundModal />}
         {showModal === 'NoMatchingEmailFoundModal' && (

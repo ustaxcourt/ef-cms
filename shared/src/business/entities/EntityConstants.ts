@@ -6,6 +6,8 @@ import courtIssuedEventCodesJson from '../../tools/courtIssuedEventCodes.json';
 import externalFilingEventsJson from '../../tools/externalFilingEvents.json';
 import internalFilingEventsJson from '../../tools/internalFilingEvents.json';
 
+export const DEBOUNCE_TIME_MILLISECONDS = 500;
+
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
 // a number (100 to 99999) followed by a - and a 2 digit year
 export const DOCUMENT_INTERNAL_CATEGORIES_MAP = internalFilingEventsJson;
@@ -1685,6 +1687,27 @@ export type CreatedCaseType = {
     name: string;
   };
 };
+
+export const BROADCAST_MESSAGES = {
+  appHasUpdated: 'appHasUpdated',
+  userLogout: 'userLogout',
+  idleLogout: 'idleLogout',
+  idleStatusActive: 'idleStatusActive',
+  stayLoggedIn: 'stayLoggedIn',
+};
+
+export const IDLE_LOGOUT_STATES = {
+  INITIAL: 'INITIAL',
+  MONITORING: 'MONITORING',
+  COUNTDOWN: 'COUNTDOWN',
+};
+
+export type IdleLogoutStateType =
+  (typeof IDLE_LOGOUT_STATES)[keyof typeof IDLE_LOGOUT_STATES];
+
+export type IdleLogoutType =
+  | (typeof BROADCAST_MESSAGES)['idleLogout']
+  | (typeof BROADCAST_MESSAGES)['userLogout'];
 
 export const STATUS_REPORT_ORDER_OPTIONS = {
   issueOrderOptions: {

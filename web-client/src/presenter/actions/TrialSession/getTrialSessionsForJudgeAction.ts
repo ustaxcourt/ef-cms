@@ -10,7 +10,7 @@ export const getTrialSessionsForJudgeAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const { role, userId } = applicationContext.getCurrentUser();
+  const { role, userId } = get(state.user);
   const { USER_ROLES } = applicationContext.getConstants();
   const chambersJudgeUser = get(state.judgeUser);
   const isChambersUser = role === USER_ROLES.chambers;

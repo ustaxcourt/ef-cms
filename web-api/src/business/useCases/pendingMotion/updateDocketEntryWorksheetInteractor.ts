@@ -8,6 +8,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const updateDocketEntryWorksheetInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -16,16 +17,15 @@ export const updateDocketEntryWorksheetInteractor = async (
   }: {
     worksheet: RawDocketEntryWorksheet;
   },
+  authorizedUser: UnknownAuthUser,
 ): Promise<RawDocketEntryWorksheet> => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.DOCKET_ENTRY_WORKSHEET)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY_WORKSHEET)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
   const judgeUser = await applicationContext
     .getUseCaseHelpers()
-    .getJudgeForUserHelper(applicationContext, { user });
+    .getJudgeForUserHelper(applicationContext, { user: authorizedUser });
 
   const docketEntryWorksheetEntity = new DocketEntryWorksheet(
     worksheet,

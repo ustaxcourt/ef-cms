@@ -86,16 +86,23 @@ export const formattedTrialSessionDetails = (
       .getUtilities()
       .formatNow(DATE_FORMATS.YYYYMMDD);
 
-    const user = applicationContext.getCurrentUser();
+    const user = get(state.user);
     const isChambersUser = user.role === USER_ROLES.chambers;
-
     const trialDateInFuture = trialDateFormatted > nowDateFormatted;
+    const docketClerkCanEditCheck = sessionType => {
+      const editableSessionTypes = ['Special', 'Motion/Hearing'];
+      return editableSessionTypes.includes(sessionType);
+    };
 
     canDelete = trialDateInFuture && !formattedTrialSession.isCalendared;
     canEdit =
       trialDateInFuture &&
       formattedTrialSession.sessionStatus !== SESSION_STATUS_GROUPS.closed &&
       !isChambersUser;
+
+    if (user.role === USER_ROLES.docketClerk && canEdit) {
+      canEdit = docketClerkCanEditCheck(formattedTrialSession.sessionType);
+    }
 
     const allCases = formattedTrialSession.caseOrder || [];
     const inactiveCases = allCases.filter(

@@ -1,5 +1,4 @@
 import { DocketEntry } from './DocketEntry';
-import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('strikeEntry', () => {
   it('strikes a document if isOnDocketRecord is true', () => {
@@ -12,7 +11,7 @@ describe('strikeEntry', () => {
         index: 1,
         isOnDocketRecord: true,
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
     docketEntry.strikeEntry({
       name: 'Test User',
@@ -36,7 +35,7 @@ describe('strikeEntry', () => {
         index: 1,
         isOnDocketRecord: false,
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
     let error;
     try {

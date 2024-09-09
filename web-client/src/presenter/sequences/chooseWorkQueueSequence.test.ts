@@ -1,17 +1,13 @@
 import { CerebralTest } from 'cerebral/test';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { chooseWorkQueueSequence } from '../sequences/chooseWorkQueueSequence';
+import { docketClerk1User } from '@shared/test/mockUsers';
 import { presenter } from '../presenter-mock';
 
 describe('chooseWorkQueueSequence', () => {
-  const { PETITIONS_SECTION } = applicationContext.getConstants();
   let cerebralTest;
 
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: 'petitionsclerk',
-      section: PETITIONS_SECTION,
-    });
     applicationContext
       .getUseCases()
       .getDocumentQCInboxForSectionInteractor.mockReturnValue([
@@ -25,6 +21,7 @@ describe('chooseWorkQueueSequence', () => {
       chooseWorkQueueSequence,
     };
     cerebralTest = CerebralTest(presenter);
+    cerebralTest.setState('user', docketClerk1User);
   });
 
   it('should set the workQueueToDisplay to match the props passed in', async () => {
