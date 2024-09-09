@@ -668,9 +668,9 @@ export const addWeeksToDate = ({
   weeksToAdd: number;
   startDate: string;
 }): string => {
-  const parsedDate = DateTime.fromFormat(startDate, FORMATS.MMDDYY);
+  const parsedDate = DateTime.fromFormat(startDate, FORMATS.ISO);
 
   const newDate = parsedDate.plus({ weeks: weeksToAdd });
 
-  return newDate.toFormat(FORMATS.MMDDYY);
+  return newDate.toFormat(FORMATS.ISO);
 };
