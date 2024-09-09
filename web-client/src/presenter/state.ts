@@ -85,7 +85,6 @@ import { formattedMessageDetail } from './computeds/formattedMessageDetail';
 import { formattedMessages } from './computeds/formattedMessages';
 import { formattedPendingItemsHelper } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
-import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getAllIrsPractitionersForSelectHelper } from '@web-client/presenter/computeds/TrialSession/getAllIrsPractitionersForSelectHelper';
 import { getConstants } from '../getConstants';
@@ -381,9 +380,6 @@ export const computeds = {
     formattedTrialSessionDetails as unknown as ReturnType<
       typeof formattedTrialSessionDetails
     >,
-  formattedTrialSessions: formattedTrialSessions as unknown as ReturnType<
-    typeof formattedTrialSessions
-  >,
   formattedWorkQueue: formattedWorkQueue as unknown as ReturnType<
     typeof formattedWorkQueue
   >,
