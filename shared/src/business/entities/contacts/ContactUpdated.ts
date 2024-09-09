@@ -75,6 +75,9 @@ export class ContactUpdated extends JoiValidationEntity {
     name: JoiValidationConstants.STRING.max(100)
       .required()
       .messages({ '*': 'Enter name' }),
+    paperPetitionEmail: JoiValidationConstants.EMAIL.optional().messages({
+      'string.email': 'Enter email address in format: yourname@example.com',
+    }),
     phone: JoiValidationConstants.STRING.max(100)
       .when('contactType', {
         is: CONTACT_TYPES.secondary,
