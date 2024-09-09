@@ -27,3 +27,13 @@ variable "kms_key_id_primary" {
 variable "kms_key_id_replica" {
   type = string
 }
+
+variable "max_capacity" {
+  type = number
+  default = 1.0
+}
+
+variable "min_capacity" {
+  type = number
+  default = 0.5
+}
