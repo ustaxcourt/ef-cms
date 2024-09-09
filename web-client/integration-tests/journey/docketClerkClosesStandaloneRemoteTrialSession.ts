@@ -1,12 +1,4 @@
-import { formattedTrialSessions as formattedTrialSessionsComputed } from '../../src/presenter/computeds/formattedTrialSessions';
-import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../../src/withAppContext';
-
-const formattedTrialSessions = withAppContextDecorator(
-  formattedTrialSessionsComputed,
-);
-
-const status = 'Closed';
+import { SESSION_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 
 export const docketClerkClosesStandaloneRemoteTrialSession = cerebralTest => {
   return it('Docket Clerk closes the trial session', async () => {
@@ -17,25 +9,13 @@ export const docketClerkClosesStandaloneRemoteTrialSession = cerebralTest => {
 
     await cerebralTest.runSequence('closeTrialSessionSequence');
 
-    const formatted = runCompute(formattedTrialSessions, {
-      state: cerebralTest.getState(),
-    });
+    const { trialSessions } = cerebralTest.getState().trialSessionsPage;
+    expect(trialSessions.length).toBeGreaterThan(0);
 
-    const filteredSessions = formatted.sessionsByTerm[status];
-
-    let foundSession;
-    filteredSessions.some(trialSession => {
-      trialSession.sessions.some(session => {
-        if (session.trialSessionId === cerebralTest.lastCreatedTrialSessionId) {
-          foundSession = session;
-          return true;
-        }
-      });
-      if (foundSession) {
-        return true;
-      }
-    });
-
+    const foundSession = trialSessions.find(
+      t => t.trialSessionId === cerebralTest.lastCreatedTrialSessionId,
+    );
     expect(foundSession).toBeTruthy();
+    expect(foundSession.sessionStatus).toEqual(SESSION_STATUS_TYPES.closed);
   });
 };
