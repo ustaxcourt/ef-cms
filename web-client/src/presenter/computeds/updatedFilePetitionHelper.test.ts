@@ -333,4 +333,24 @@ describe('updatedFilePetitionHelper', () => {
       });
     });
   });
+  describe('getLetterByIndex', () => {
+    it('should return the correct single-letter label for a given index', () => {
+      const result = runCompute(updatedFilePetitionHelper, {
+        state: {
+          form: {},
+          user: petitionerUser,
+        },
+      });
+      expect(result.getLetterByIndex(1)).toEqual('b');
+    });
+    it('returns the correct multi-letter label when index exceeds 25 (ex: aa, ab)', () => {
+      const result = runCompute(updatedFilePetitionHelper, {
+        state: {
+          form: {},
+          user: petitionerUser,
+        },
+      });
+      expect(result.getLetterByIndex(26)).toEqual('aa');
+    });
+  });
 });
