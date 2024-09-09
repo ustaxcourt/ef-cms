@@ -1,7 +1,9 @@
 import {
   FORMATS,
   addWeeksToDate,
+  calculateDifferenceInDays,
   createDateAtStartOfWeekEST,
+  formatDateString,
 } from '@shared/business/utilities/DateHandler';
 import {
   PROCEDURE_TYPES_MAP,
@@ -84,7 +86,12 @@ export function scheduleTrialSessions({
 }): TrialSessionReadyForCalendaring[] {
   let currentWeek = getMondayOfWeek(startDate);
 
-  while (currentWeek <= endDate) {
+  const differenceInDays = calculateDifferenceInDays(
+    formatDateString(endDate, FORMATS.ISO),
+    formatDateString(currentWeek, FORMATS.ISO),
+  );
+
+  while (differenceInDays > 0) {
     const weekOfString = currentWeek;
 
     if (!sessionCountPerWeek[weekOfString]) {
@@ -108,132 +115,132 @@ export function scheduleTrialSessions({
       });
     });
 
-    // // filter instead of preferredTrialCity!?
-    // const cities: string[] = cases.map(c => c.preferredTrialCity!);
-
-    const regularCases = cases.filter(
-      c => c.procedureType === PROCEDURE_TYPES_MAP.regular,
-    );
-
-    const smallCases = cases.filter(
-      c => c.procedureType === PROCEDURE_TYPES_MAP.small,
-    );
-
     const potentialTrialLocations: Set<string> = new Set();
 
-    const regularCasesByCity = regularCases.reduce((acc, currentCase) => {
-      if (!acc[currentCase.preferredTrialCity!]) {
-        acc[currentCase.preferredTrialCity!] = [];
-      }
-      potentialTrialLocations.add(currentCase.preferredTrialCity!);
-      acc[currentCase.preferredTrialCity!].push(currentCase);
+    const regularCasesByCity = cases
+      .filter(c => c.procedureType === PROCEDURE_TYPES_MAP.regular)
+      .reduce((acc, currentCase) => {
+        if (!acc[currentCase.preferredTrialCity!]) {
+          acc[currentCase.preferredTrialCity!] = [];
+        }
+        potentialTrialLocations.add(currentCase.preferredTrialCity!);
+        acc[currentCase.preferredTrialCity!].push(currentCase);
 
-      return acc;
-    }, {});
+        return acc;
+      }, {});
 
-    const smallCasesByCity = smallCases.reduce((acc, currentCase) => {
-      if (!acc[currentCase.preferredTrialCity!]) {
-        acc[currentCase.preferredTrialCity!] = [];
-      }
-      potentialTrialLocations.add(currentCase.preferredTrialCity!);
-      acc[currentCase.preferredTrialCity!].push(currentCase);
+    const smallCasesByCity = cases
+      .filter(c => c.procedureType === PROCEDURE_TYPES_MAP.small)
+      .reduce((acc, currentCase) => {
+        if (!acc[currentCase.preferredTrialCity!]) {
+          acc[currentCase.preferredTrialCity!] = [];
+        }
+        potentialTrialLocations.add(currentCase.preferredTrialCity!);
+        acc[currentCase.preferredTrialCity!].push(currentCase);
 
-      return acc;
-    }, {});
+        return acc;
+      }, {});
 
     for (const city of potentialTrialLocations) {
-      if (!sessionCountPerCity[city]) {
-        sessionCountPerCity[city] = 0;
-      }
-
-      if (sessionScheduledPerCityPerWeek[weekOfString].has(city)) {
-        continue; // Skip this city if a session is already scheduled for this week
-      }
-
-      if (
-        sessionCountPerWeek[weekOfString] <
-          calendaringConfig.maxSessionsPerWeek && // TODO, currently we're going to move to the next city if this limit is reached, and keep checking until we move to the next week.
-        sessionCountPerCity[city] < calendaringConfig.maxSessionsPerLocation
+      // TODO: pick up here (maybe move hybrid handling out of while loop?)
+      while (
+        regularCasesByCity[city]?.length > 0 ||
+        smallCasesByCity[city]?.length > 0
       ) {
-        let regularCaseSliceSize;
-        let smallCaseSliceSize;
-        let numberOfRegularCasesForCity = regularCasesByCity[city].length;
-        let numberOfSmallCasesForCity = smallCasesByCity[city].length;
+        if (!sessionCountPerCity[city]) {
+          sessionCountPerCity[city] = 0;
+        }
+
+        if (sessionScheduledPerCityPerWeek[weekOfString].has(city)) {
+          continue; // Skip this city if a session is already scheduled for this week
+        }
 
         if (
-          numberOfRegularCasesForCity >=
-            calendaringConfig.regularCaseMinimumQuantity ||
-          numberOfSmallCasesForCity >=
-            calendaringConfig.smallCaseMinimumQuantity
+          sessionCountPerWeek[weekOfString] <
+            calendaringConfig.maxSessionsPerWeek && // TODO, currently we're going to move to the next city if this limit is reached, and keep checking until we move to the next week.
+          sessionCountPerCity[city] < calendaringConfig.maxSessionsPerLocation
         ) {
+          let regularCaseSliceSize;
+          let smallCaseSliceSize;
+          let numberOfRegularCasesForCity =
+            regularCasesByCity[city]?.length || 0;
+          let numberOfSmallCasesForCity = smallCasesByCity[city]?.length || 0;
+
           if (
             numberOfRegularCasesForCity >=
-            calendaringConfig.regularCaseMinimumQuantity
-          ) {
-            regularCaseSliceSize = calendaringConfig.regularCaseMaxQuantity;
-
-            const casesToBeAdded = regularCasesByCity[city].splice(
-              0,
-              regularCaseSliceSize,
-            );
-
-            addTrialSession({
-              cases: casesToBeAdded,
-              city,
-              sessionType: SESSION_TYPES.regular,
-              weekOfString,
-            });
-
-            continue; // Only one session per city per week, so continue to the next city
-          }
-
-          if (
+              calendaringConfig.regularCaseMinimumQuantity ||
             numberOfSmallCasesForCity >=
-            calendaringConfig.smallCaseMinimumQuantity
+              calendaringConfig.smallCaseMinimumQuantity
           ) {
-            smallCaseSliceSize = calendaringConfig.smallCaseMaxQuantity;
+            if (
+              numberOfRegularCasesForCity >=
+              calendaringConfig.regularCaseMinimumQuantity
+            ) {
+              regularCaseSliceSize = calendaringConfig.regularCaseMaxQuantity;
 
-            const casesToBeAdded = smallCasesByCity[city].splice(
-              0,
-              smallCaseSliceSize,
-            );
+              const casesToBeAdded = regularCasesByCity[city].splice(
+                0,
+                regularCaseSliceSize,
+              );
 
-            addTrialSession({
-              cases: casesToBeAdded,
-              city,
-              sessionType: SESSION_TYPES.small,
-              weekOfString,
-            });
+              addTrialSession({
+                cases: casesToBeAdded,
+                city,
+                sessionType: SESSION_TYPES.regular,
+                weekOfString,
+              });
 
-            continue; // Only one session per city per week, so continue to the next city
-          }
-        } else {
-          // Handle Hybrid Sessions
-          const remainingRegularCases = regularCasesByCity[city];
-          const remainingSmallCases = smallCasesByCity[city];
+              continue; // Only one session per city per week, so continue to the next city
+            }
 
-          if (
-            remainingRegularCases.length + remainingSmallCases.length >=
-            calendaringConfig.hybridCaseMinimumQuantity
-          ) {
-            const casesToBeAdded = [
-              ...remainingRegularCases,
-              ...remainingSmallCases,
-            ].slice(0, calendaringConfig.hybridCaseMaxQuantity);
+            if (
+              numberOfSmallCasesForCity >=
+              calendaringConfig.smallCaseMinimumQuantity
+            ) {
+              smallCaseSliceSize = calendaringConfig.smallCaseMaxQuantity;
 
-            addTrialSession({
-              cases: casesToBeAdded,
-              city,
-              sessionType: SESSION_TYPES.hybrid,
-              weekOfString,
-            });
+              const casesToBeAdded = smallCasesByCity[city].splice(
+                0,
+                smallCaseSliceSize,
+              );
+
+              addTrialSession({
+                cases: casesToBeAdded,
+                city,
+                sessionType: SESSION_TYPES.small,
+                weekOfString,
+              });
+
+              continue; // Only one session per city per week, so continue to the next city
+            }
+          } else {
+            // Handle Hybrid Sessions
+            const remainingRegularCases = regularCasesByCity[city] || [];
+            const remainingSmallCases = smallCasesByCity[city] || [];
+
+            if (
+              remainingRegularCases.length + remainingSmallCases.length >=
+              calendaringConfig.hybridCaseMinimumQuantity
+            ) {
+              const casesToBeAdded = [
+                ...remainingRegularCases,
+                ...remainingSmallCases,
+              ].slice(0, calendaringConfig.hybridCaseMaxQuantity);
+
+              addTrialSession({
+                cases: casesToBeAdded,
+                city,
+                sessionType: SESSION_TYPES.hybrid,
+                weekOfString,
+              });
+            }
           }
         }
       }
     }
-    console.log('currentWeek before', currentWeek);
+    console.debug('currentWeek before', currentWeek);
     currentWeek = addWeeksToDate({ startDate: currentWeek, weeksToAdd: 1 }); // Move to the next week
-    console.log('currentWeek after', currentWeek);
+    console.debug('currentWeek after', currentWeek);
   }
 
   return sessions;
@@ -241,7 +248,7 @@ export function scheduleTrialSessions({
 
 // Helper function to get the Monday of the week for a given date
 function getMondayOfWeek(date: string): string {
-  return createDateAtStartOfWeekEST(date, FORMATS.MMDDYY); // Monday as the first day of the week
+  return createDateAtStartOfWeekEST(date, FORMATS.ISO); // Monday as the first day of the week
 }
 
 function addTrialSession({ cases, city, sessionType, weekOfString }) {

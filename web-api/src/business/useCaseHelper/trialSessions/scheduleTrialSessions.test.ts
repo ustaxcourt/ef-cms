@@ -1,19 +1,19 @@
-import {
-  getFakeFile,
-  testPdfDoc,
-} from '../../../../../shared/src/business/test/getFakeFile';
+// import {
+//   getFakeFile,
+//   testPdfDoc,
+// } from '../../../../../shared/src/business/test/getFakeFile';
 
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+// import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+// import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING } from '../../../../../shared/src/test/mockCase';
 import {
   PROCEDURE_TYPES_MAP,
-  SESSION_TYPES,
+  // SESSION_TYPES,
   TRIAL_CITY_STRINGS,
 } from '@shared/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+// import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { scheduleTrialSessions } from './scheduleTrialSessions';
-import { serveGeneratedNoticesOnCase } from './serveGeneratedNoticesOnCase';
+// import { serveGeneratedNoticesOnCase } from './serveGeneratedNoticesOnCase';
 
 const mockSpecialSessions = [];
 const mockCalendaringConfig = {
@@ -42,12 +42,13 @@ describe('scheduleTrialSessions', () => {
       mockCases.push({
         ...MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING,
         docketNumber: `10${i}-24`,
-        preferredTrialCity: TRIAL_CITY_STRINGS[i],
+        preferredTrialCity: TRIAL_CITY_STRINGS[0],
         procedureType: PROCEDURE_TYPES_MAP.regular,
       });
     }
 
-    //console.log('mockCases', mockCases);
+    // console.log('mockCases', mockCases);
+    // console.log('mockCases.length', mockCases.length);
 
     let params = {
       calendaringConfig: mockCalendaringConfig,
