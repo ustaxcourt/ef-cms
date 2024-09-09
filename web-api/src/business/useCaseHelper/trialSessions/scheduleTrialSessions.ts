@@ -108,10 +108,40 @@ export function scheduleTrialSessions({
       });
     });
 
-    // filter instead of preferredTrialCity!?
-    const cities: string[] = cases.map(c => c.preferredTrialCity!);
+    // // filter instead of preferredTrialCity!?
+    // const cities: string[] = cases.map(c => c.preferredTrialCity!);
 
-    for (const city of cities) {
+    const regularCases = cases.filter(
+      c => c.procedureType === PROCEDURE_TYPES_MAP.regular,
+    );
+
+    const smallCases = cases.filter(
+      c => c.procedureType === PROCEDURE_TYPES_MAP.small,
+    );
+
+    const potentialTrialLocations: Set<string> = new Set();
+
+    const regularCasesByCity = regularCases.reduce((acc, currentCase) => {
+      if (!acc[currentCase.preferredTrialCity!]) {
+        acc[currentCase.preferredTrialCity!] = [];
+      }
+      potentialTrialLocations.add(currentCase.preferredTrialCity!);
+      acc[currentCase.preferredTrialCity!].push(currentCase);
+
+      return acc;
+    }, {});
+
+    const smallCasesByCity = smallCases.reduce((acc, currentCase) => {
+      if (!acc[currentCase.preferredTrialCity!]) {
+        acc[currentCase.preferredTrialCity!] = [];
+      }
+      potentialTrialLocations.add(currentCase.preferredTrialCity!);
+      acc[currentCase.preferredTrialCity!].push(currentCase);
+
+      return acc;
+    }, {});
+
+    for (const city of potentialTrialLocations) {
       if (!sessionCountPerCity[city]) {
         sessionCountPerCity[city] = 0;
       }
@@ -125,31 +155,27 @@ export function scheduleTrialSessions({
           calendaringConfig.maxSessionsPerWeek && // TODO, currently we're going to move to the next city if this limit is reached, and keep checking until we move to the next week.
         sessionCountPerCity[city] < calendaringConfig.maxSessionsPerLocation
       ) {
-        const regularCases = cases.filter(
-          c =>
-            c.procedureType === PROCEDURE_TYPES_MAP.regular &&
-            c.preferredTrialCity === city,
-        );
-
-        const smallCases = cases.filter(
-          c =>
-            c.procedureType === PROCEDURE_TYPES_MAP.small &&
-            c.preferredTrialCity === city,
-        );
-
         let regularCaseSliceSize;
         let smallCaseSliceSize;
+        let numberOfRegularCasesForCity = regularCasesByCity[city].length;
+        let numberOfSmallCasesForCity = smallCasesByCity[city].length;
 
         if (
-          regularCases.length >= calendaringConfig.regularCaseMinimumQuantity ||
-          smallCases.length >= calendaringConfig.smallCaseMinimumQuantity
+          numberOfRegularCasesForCity >=
+            calendaringConfig.regularCaseMinimumQuantity ||
+          numberOfSmallCasesForCity >=
+            calendaringConfig.smallCaseMinimumQuantity
         ) {
           if (
-            regularCases.length >= calendaringConfig.regularCaseMinimumQuantity
+            numberOfRegularCasesForCity >=
+            calendaringConfig.regularCaseMinimumQuantity
           ) {
             regularCaseSliceSize = calendaringConfig.regularCaseMaxQuantity;
 
-            const casesToBeAdded = regularCases.slice(0, regularCaseSliceSize);
+            const casesToBeAdded = regularCasesByCity[city].splice(
+              0,
+              regularCaseSliceSize,
+            );
 
             addTrialSession({
               cases: casesToBeAdded,
@@ -161,10 +187,16 @@ export function scheduleTrialSessions({
             continue; // Only one session per city per week, so continue to the next city
           }
 
-          if (smallCases.length >= calendaringConfig.smallCaseMinimumQuantity) {
+          if (
+            numberOfSmallCasesForCity >=
+            calendaringConfig.smallCaseMinimumQuantity
+          ) {
             smallCaseSliceSize = calendaringConfig.smallCaseMaxQuantity;
 
-            const casesToBeAdded = regularCases.slice(0, smallCaseSliceSize);
+            const casesToBeAdded = smallCasesByCity[city].splice(
+              0,
+              smallCaseSliceSize,
+            );
 
             addTrialSession({
               cases: casesToBeAdded,
@@ -176,12 +208,10 @@ export function scheduleTrialSessions({
             continue; // Only one session per city per week, so continue to the next city
           }
         } else {
-          regularCaseSliceSize = 0;
-          smallCaseSliceSize = 0;
           // Handle Hybrid Sessions
-          const remainingRegularCases =
-            regularCases.slice(regularCaseSliceSize);
-          const remainingSmallCases = smallCases.slice(smallCaseSliceSize);
+          const remainingRegularCases = regularCasesByCity[city];
+          const remainingSmallCases = smallCasesByCity[city];
+
           if (
             remainingRegularCases.length + remainingSmallCases.length >=
             calendaringConfig.hybridCaseMinimumQuantity
