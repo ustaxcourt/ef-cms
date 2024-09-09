@@ -18,7 +18,7 @@ export const docketClerkViewsTrialSessionList = (
     const formatted = runCompute(formattedTrialSessions, {
       state: cerebralTest.getState(),
     });
-    expect(formatted.formattedSessions.length).toBeGreaterThan(0);
+    expect(formatted.sessionsByTerm.length).toBeGreaterThan(0);
 
     const trialSession = find(formatted.sessionsByTerm, {
       trialSessionId: cerebralTest.lastCreatedTrialSessionId,
