@@ -8,6 +8,7 @@ import {
 import {
   PROCEDURE_TYPES_MAP,
   SESSION_TYPES,
+  TrialSessionTypes,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   RawTrialSession,
@@ -48,7 +49,11 @@ export type EligibleCase = Pick<
 
 export type TrialSessionReadyForCalendaring = TrialSession & { weekOf: string };
 
-const sessions: {}[] = [];
+const sessions: {
+  city: string;
+  sessionType: TrialSessionTypes;
+  weekOf: string;
+}[] = [];
 const sessionCountPerWeek: Record<string, number> = {}; // weekOf -> session count
 const sessionCountPerCity: Record<string, number> = {}; // city -> session count
 const sessionScheduledPerCityPerWeek: Record<string, Set<string>> = {}; // weekOf -> Set of cities
@@ -83,7 +88,11 @@ export function scheduleTrialSessions({
     hybridCaseMaxQuantity: number;
     hybridCaseMinimumQuantity: number;
   };
-}): TrialSessionReadyForCalendaring[] {
+}): {
+  city: string;
+  sessionType: TrialSessionTypes;
+  weekOf: string;
+}[] {
   let currentWeek = getMondayOfWeek(startDate);
 
   let differenceInDays = calculateDifferenceInDays(
@@ -177,13 +186,9 @@ export function scheduleTrialSessions({
           ) {
             regularCaseSliceSize = calendaringConfig.regularCaseMaxQuantity;
 
-            const casesToBeAdded = regularCasesByCity[city].splice(
-              0,
-              regularCaseSliceSize,
-            );
+            regularCasesByCity[city].splice(0, regularCaseSliceSize);
 
             addTrialSession({
-              cases: casesToBeAdded,
               city,
               sessionType: SESSION_TYPES.regular,
               weekOfString,
@@ -198,13 +203,9 @@ export function scheduleTrialSessions({
           ) {
             smallCaseSliceSize = calendaringConfig.smallCaseMaxQuantity;
 
-            const casesToBeAdded = smallCasesByCity[city].splice(
-              0,
-              smallCaseSliceSize,
-            );
+            smallCasesByCity[city].splice(0, smallCaseSliceSize);
 
             addTrialSession({
-              cases: casesToBeAdded,
               city,
               sessionType: SESSION_TYPES.small,
               weekOfString,
@@ -224,13 +225,19 @@ export function scheduleTrialSessions({
         remainingRegularCases.length + remainingSmallCases.length >=
         calendaringConfig.hybridCaseMinimumQuantity
       ) {
-        const casesToBeAdded = [
-          ...remainingRegularCases,
-          ...remainingSmallCases,
-        ].slice(0, calendaringConfig.hybridCaseMaxQuantity);
+        // Since the min of reg cases is 40, and the min of small cases is 40,
+        // and the sum of these two values is below the hybrid case max of 100,
+        // we can safely assume that if the combination of remaining regular
+        // cases and remaining small cases is above the minimum of 50, so we can
+        // assign all of those remaining cases to a hybrid session.
+        //
+        // This comment applies to the if statement's condition, as well as to
+        // the setting of regularCasesByCity[city] and smallCasesByCity[city] to
+        // empty arrays below.
+        regularCasesByCity[city] = [];
+        smallCasesByCity[city] = [];
 
         addTrialSession({
-          cases: casesToBeAdded,
           city,
           sessionType: SESSION_TYPES.hybrid,
           weekOfString,
@@ -256,9 +263,8 @@ function getMondayOfWeek(date: string): string {
   return createDateAtStartOfWeekEST(date, FORMATS.ISO); // Monday as the first day of the week
 }
 
-function addTrialSession({ cases, city, sessionType, weekOfString }) {
+function addTrialSession({ city, sessionType, weekOfString }) {
   sessions.push({
-    cases,
     city,
     sessionType,
     weekOf: weekOfString,
