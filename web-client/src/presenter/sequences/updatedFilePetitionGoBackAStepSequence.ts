@@ -2,4 +2,4 @@ import { decrementCurrentStepIndicatorAction } from '@web-client/presenter/actio
 
 export const updatedFilePetitionGoBackAStepSequence = [
   decrementCurrentStepIndicatorAction,
-];
+] as unknown as () => void;

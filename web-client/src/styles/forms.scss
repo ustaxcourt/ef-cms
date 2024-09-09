@@ -668,7 +668,7 @@ label.ustc-upload {
 }
 
 .usa-date-picker {
-  min-width: 245px;
+  min-width: 250px;
 
   * {
     animation: none;
@@ -738,7 +738,6 @@ label.ustc-upload {
 
 .remove-fact-reason-button {
   @media only screen and (max-width: $medium-screen - 1px) {
-    padding-right: 1rem !important;
     text-align: right !important;
   }
 }

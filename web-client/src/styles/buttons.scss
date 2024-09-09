@@ -229,7 +229,9 @@ table.ustc-table .ustc-button--unstyled {
     color: $color-white;
 
     &.usa-button--unstyled {
-      padding-left: 20px;
+      padding: 0.75rem 0 0.75rem 20px;
+      margin-top: 0;
+      margin-bottom: 0;
     }
 
     &:hover {
