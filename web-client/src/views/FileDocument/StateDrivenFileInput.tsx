@@ -124,7 +124,11 @@ export const StateDrivenFileInput = connect<
           <div>
             <span
               className="success-message icon-upload margin-right-1"
-              data-testid={`upload-file-success-${id}`}
+              data-testid={
+                fileOnForm
+                  ? `upload-file-success-${id}`
+                  : `pending-upload-file-success-${id}`
+              }
             >
               <FontAwesomeIcon icon={'check-circle'} size="1x" />
             </span>
