@@ -335,7 +335,7 @@ describe('ContactUpdated', () => {
           );
 
           const errors = entity.getFormattedValidationErrors();
-          expect(errors).toEqual({ postalCode: 'Enter ZIP code' });
+          expect(errors).toEqual({ postalCode: 'Enter a valid ZIP code' });
         });
 
         it('should return an error message for "postalCode" if it does not match regex', () => {
@@ -351,7 +351,7 @@ describe('ContactUpdated', () => {
           );
 
           const errors = entity.getFormattedValidationErrors();
-          expect(errors).toEqual({ postalCode: 'Enter ZIP code' });
+          expect(errors).toEqual({ postalCode: 'Enter a valid ZIP code' });
         });
       });
 

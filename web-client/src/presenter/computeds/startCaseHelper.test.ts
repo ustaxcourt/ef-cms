@@ -298,6 +298,34 @@ describe('startCaseHelper', () => {
     ]);
   });
 
+  it('should set notice legend correctly when user is petitioner', () => {
+    const result = runCompute(startCaseHelper, {
+      state: {
+        form: {
+          hasIrsNotice: false,
+        },
+        user: petitionerUser,
+      },
+    });
+    expect(result.noticeLegend).toEqual(
+      'Did you receive a notice from the IRS?',
+    );
+  });
+
+  it('should set notice legend correctly when user is private practitioner', () => {
+    const result = runCompute(startCaseHelper, {
+      state: {
+        form: {
+          hasIrsNotice: false,
+        },
+        user: privatePractitionerUser,
+      },
+    });
+    expect(result.noticeLegend).toEqual(
+      'Did the petitioner receive a notice from the IRS?',
+    );
+  });
+
   describe('formattedCaseType', () => {
     it('should be Disclosure if form.caseType is Disclosure1', () => {
       const result = runCompute(startCaseHelper, {
