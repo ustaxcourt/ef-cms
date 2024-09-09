@@ -42,6 +42,8 @@ export const ScanBatchPreviewer = connect(
     setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
     setDocumentForUploadSequence: sequences.setDocumentForUploadSequence,
     setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,
+    setIsLoadingSequence: sequences.setIsLoadingSequence,
+    setIsNotLoadingSequence: sequences.setIsNotLoadingSequence,
     setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
     showErrorModalSequence: sequences.showErrorModalSequence,
     showModal: state.modal.showModal,
@@ -66,6 +68,8 @@ export const ScanBatchPreviewer = connect(
     setCurrentPageIndexSequence,
     setDocumentForUploadSequence,
     setDocumentUploadModeSequence,
+    setIsLoadingSequence,
+    setIsNotLoadingSequence,
     setSelectedBatchIndexSequence,
     showErrorModalSequence,
     showModal,
@@ -411,6 +415,7 @@ export const ScanBatchPreviewer = connect(
               type="file"
               onChange={async e => {
                 e.preventDefault();
+                setIsLoadingSequence();
                 await validateFileOnSelect({
                   allowedFileExtensions: ['.pdf'],
                   e,
@@ -433,6 +438,7 @@ export const ScanBatchPreviewer = connect(
                     }
                   },
                 });
+                setIsNotLoadingSequence();
               }}
             />
           </FormGroup>

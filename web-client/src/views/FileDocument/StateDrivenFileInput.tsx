@@ -6,7 +6,7 @@ import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { validateFileOnSelect } from '@web-client/views/FileHandlingHelpers/fileValidation';
-import React from 'react';
+import React, { useState } from 'react';
 
 type StateDriveFileInputProps = {
   'aria-describedby': string;
@@ -22,6 +22,8 @@ type StateDriveFileInputProps = {
 const deps = {
   constants: state.constants,
   form: state.form,
+  setIsLoadingSequence: sequences.setIsLoadingSequence,
+  setIsNotLoadingSequence: sequences.setIsNotLoadingSequence,
   showErrorModalSequence: sequences.showErrorModalSequence,
   updateFormValueSequence: sequences[props.updateFormValueSequence],
   validationSequence: sequences[props.validationSequence],
@@ -41,6 +43,8 @@ export const StateDrivenFileInput = connect<
     id,
     ignoreSizeKey,
     name: fileInputName,
+    setIsLoadingSequence,
+    setIsNotLoadingSequence,
     showErrorModalSequence,
     updateFormValueSequence,
     validationSequence,
@@ -50,14 +54,21 @@ export const StateDrivenFileInput = connect<
 
     const fileOnForm = file || form[fileInputName] || form.existingFileName;
 
+    // Setting the filename here so that we can display it before validation
+    // finishes, otherwise slow machine might have slight lag.
+    const [selectedFilename, setSelectedFilename] = useState('');
+
     const onFileSelectionChange = async (
       e: React.ChangeEvent<HTMLInputElement>,
     ) => {
+      setSelectedFilename(e.target?.files?.[0]?.name || '');
+      setIsLoadingSequence();
       await validateFileOnSelect({
         allowedFileExtensions: accept.split(','),
         e,
         megabyteLimit: constants.MAX_FILE_SIZE_MB,
         onError: ({ message }) => {
+          setSelectedFilename('');
           showErrorModalSequence({
             errorToLog: !message,
             message,
@@ -85,6 +96,7 @@ export const StateDrivenFileInput = connect<
             });
         },
       });
+      setIsNotLoadingSequence();
     };
 
     return (
@@ -99,7 +111,7 @@ export const StateDrivenFileInput = connect<
           name={fileInputName}
           ref={ref => (inputRef = ref)}
           style={{
-            display: fileOnForm ? 'none' : 'block',
+            display: fileOnForm || selectedFilename ? 'none' : 'block',
           }}
           type="file"
           onChange={onFileSelectionChange}
@@ -108,20 +120,22 @@ export const StateDrivenFileInput = connect<
           }}
         />
 
-        {fileOnForm && (
+        {(fileOnForm || selectedFilename) && (
           <div>
             <span
               className="success-message icon-upload margin-right-1"
               data-testid={`upload-file-success-${id}`}
             >
-              <FontAwesomeIcon icon="check-circle" size="1x" />
+              <FontAwesomeIcon icon={'check-circle'} size="1x" />
             </span>
             <span className="mr-1">
-              {fileOnForm.name || form.existingFileName}
+              {fileOnForm
+                ? fileOnForm.name || form.existingFileName
+                : selectedFilename}
             </span>
             <Button
               link
-              className="ustc-button--mobile-inline margin-left-1"
+              className={'ustc-button--mobile-inline margin-left-1'}
               onClick={() => {
                 updateFormValueSequence({
                   key: fileInputName,
@@ -139,6 +153,7 @@ export const StateDrivenFileInput = connect<
                 });
                 inputRef.value = null;
                 inputRef.click();
+                setSelectedFilename('');
               }}
             >
               Change
