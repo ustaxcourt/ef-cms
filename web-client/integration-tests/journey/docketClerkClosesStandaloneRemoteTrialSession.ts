@@ -21,7 +21,7 @@ export const docketClerkClosesStandaloneRemoteTrialSession = cerebralTest => {
       state: cerebralTest.getState(),
     });
 
-    const filteredSessions = formatted.filteredTrialSessions[status];
+    const filteredSessions = formatted.sessionsByTerm[status];
 
     let foundSession;
     filteredSessions.some(trialSession => {
