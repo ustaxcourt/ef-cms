@@ -50,43 +50,43 @@ export const PetitionFactOrReason = connect<
         <div className="fact-or-reason">
           <NonMobile>
             <div style={{ display: 'flex' }}>
-              <div>
-                <textarea
-                  aria-labelledby={labelId}
-                  className="usa-textarea max-width-unset"
-                  data-testid={id}
-                  id={id}
-                  name={textName}
-                  style={{ marginTop: '0px' }}
-                  value={form[textName][factOrReasonCount] || ''}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      allowEmptyString: true,
-                      index: factOrReasonCount,
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                    deleteValidationErrorMessageSequence({
-                      validationKey: [KEY],
-                    });
-                  }}
-                />
+              <textarea
+                aria-labelledby={labelId}
+                className="usa-textarea max-width-unset"
+                data-testid={id}
+                id={id}
+                name={textName}
+                style={{ marginTop: '0px' }}
+                value={form[textName][factOrReasonCount] || ''}
+                onChange={e => {
+                  updateFormValueSequence({
+                    allowEmptyString: true,
+                    index: factOrReasonCount,
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                  deleteValidationErrorMessageSequence({
+                    validationKey: [KEY],
+                  });
+                }}
+              />
+              <div className="fact-reason-button-wrapper">
+                {factOrReasonCount > 0 && (
+                  <Button
+                    link
+                    className="reason-button remove-fact-reason-button"
+                    icon="times"
+                    onClick={() =>
+                      removeFactOrReasonSequence({
+                        index: factOrReasonCount,
+                        key: textName,
+                      })
+                    }
+                  >
+                    Remove
+                  </Button>
+                )}
               </div>
-              {factOrReasonCount > 0 && (
-                <Button
-                  link
-                  className="reason-button remove-fact-reason-button"
-                  icon="times"
-                  onClick={() =>
-                    removeFactOrReasonSequence({
-                      index: factOrReasonCount,
-                      key: textName,
-                    })
-                  }
-                >
-                  Remove
-                </Button>
-              )}
             </div>
           </NonMobile>
 
