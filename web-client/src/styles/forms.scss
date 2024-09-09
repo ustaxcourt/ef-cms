@@ -13,8 +13,9 @@
       border-left-style: unset;
       border-left-color: unset;
     }
-
+    
     max-width: 65rem;
+    flex: 1;
 
     ol {
       padding-inline-start: 15px;
@@ -22,16 +23,7 @@
 
     .fact-or-reason {
       textarea {
-        display: inline-block;
-        width: 55rem;
-        max-width: 80vw;
         height: 4rem;
-        vertical-align: top;
-
-        // mobile screens
-        @media only screen and (max-width: ($medium-screen - 1px)) {
-          max-width: 90vw;
-        }
       }
     }
 
@@ -41,7 +33,16 @@
       }
 
       margin-left: 1rem;
+
     }
+
+    .fact-reason-button-wrapper {
+      display: flex;
+      width: 40px;
+      align-items: center;
+      margin-left: 10px;
+    }
+   
 
     .usa-form-group {
       margin-bottom: 15px;
