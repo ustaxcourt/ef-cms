@@ -15,7 +15,6 @@ const sessionInformationDeps = {
   form: state.form,
   formatAndUpdateDateFromDatePickerSequence:
     sequences.formatAndUpdateDateFromDatePickerSequence,
-  formattedTrialSessions: state.formattedTrialSessions,
   updateTrialSessionFormDataSequence:
     sequences.updateTrialSessionFormDataSequence,
   user: state.user,
@@ -34,7 +33,6 @@ export const SessionInformationForm = connect<
     DATE_FORMATS,
     form,
     formatAndUpdateDateFromDatePickerSequence,
-    formattedTrialSessions,
     TRIAL_SESSION_SCOPE_TYPES,
     updateTrialSessionFormDataSequence,
     validateTrialSessionSequence,
@@ -223,7 +221,7 @@ export const SessionInformationForm = connect<
             </div>
           </div>
 
-          {formattedTrialSessions.showSwingSessionOption &&
+          {addTrialSessionInformationHelper.showSwingSessionOption &&
             !addTrialSessionInformationHelper.isStandaloneSession && (
               <>
                 <div className="usa-form-group">
@@ -249,7 +247,7 @@ export const SessionInformationForm = connect<
                     </label>
                   </div>
                 </div>
-                {formattedTrialSessions.showSwingSessionList && (
+                {addTrialSessionInformationHelper.showSwingSessionList && (
                   <FormGroup errorText={validationErrors.swingSessionId}>
                     <label
                       className="usa-label"
@@ -276,14 +274,16 @@ export const SessionInformationForm = connect<
                       }}
                     >
                       <option value="">- Select -</option>
-                      {formattedTrialSessions.swingSessions.map(session => (
-                        <option
-                          key={session.trialSessionId}
-                          value={session.trialSessionId}
-                        >
-                          {session.swingSessionText}
-                        </option>
-                      ))}
+                      {addTrialSessionInformationHelper.swingSessions.map(
+                        session => (
+                          <option
+                            key={session.trialSessionId}
+                            value={session.trialSessionId}
+                          >
+                            {session.swingSessionText}
+                          </option>
+                        ),
+                      )}
                     </select>
                   </FormGroup>
                 )}
