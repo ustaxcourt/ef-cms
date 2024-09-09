@@ -235,7 +235,7 @@ jobs:
           command: |
             OUTPUT_ONLY=true npm run deploy:allColors $ENV
             POSTGRES_HOST=$(cat ./web-api/terraform/applyables/allColors/output.json | jq -r '.rds_host_name.value')
-            POSTGRES_HOST=$POSTGRES_HOST NODE_ENV=production npm run migration:postgres
+            POSTGRES_HOST=$POSTGRES_HOST POSTGRES_USER=$POSTGRES_USER NODE_ENV=production npm run migration:postgres
       - run:
           name: Enable Check Migration Status Cron
           command: |
