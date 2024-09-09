@@ -8,6 +8,7 @@ import {
 } from '@web-client/ustc-ui/Accordion/Accordion';
 import { Button } from '../ustc-ui/Button/Button';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
+import { InlineLink } from '@web-client/ustc-ui/InlineLink/InlineLink';
 import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -97,32 +98,19 @@ export const BeforeStartingCase = connect(
                   {
                     "Complete and upload for filing the Court's standard Petition form. "
                   }
-                  <Button
-                    link
-                    className="usa-link--external text-left mobile-text-wrap margin-left-1"
+                  <InlineLink
                     href="https://www.ustaxcourt.gov/resources/forms/Petition_Simplified_Form_2.pdf"
                     icon="file-pdf"
-                    iconColor="blue"
-                    rel="noopener noreferrer"
-                    target="_blank"
                   >
                     Petition form (T.C. Form 2)
-                  </Button>
+                  </InlineLink>
                 </li>
                 <li>
                   Upload for filing your own Petition that complies with the
                   requirements of the{' '}
-                  <Button
-                    link
-                    className="usa-link--external text-left mobile-text-wrap"
-                    href="https://www.ustaxcourt.gov/rules.html"
-                    iconColor="blue"
-                    overrideMargin="margin-right-1"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
+                  <InlineLink href="https://www.ustaxcourt.gov/rules.html">
                     Tax Court Rules of Practice and Procedure.
-                  </Button>
+                  </InlineLink>
                 </li>
               </ul>
 
@@ -157,17 +145,9 @@ export const BeforeStartingCase = connect(
                   </li>
                   <li>
                     {' '}
-                    <Button
-                      link
-                      className="usa-link--external text-left mobile-text-wrap"
-                      href="https://www.ustaxcourt.gov/resources/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf"
-                      iconColor="blue"
-                      overrideMargin="margin-right-1"
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
+                    <InlineLink href="https://www.ustaxcourt.gov/resources/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf">
                       Download the form
-                    </Button>{' '}
+                    </InlineLink>{' '}
                     and fill it out to submit it.
                   </li>
                 </ul>
