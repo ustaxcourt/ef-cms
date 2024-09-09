@@ -1,4 +1,9 @@
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import {
+  FORMATS,
+  addWeeksToDate,
+  createDateAtStartOfWeekEST,
+} from '@shared/business/utilities/DateHandler';
 import { NumberLiteralType } from 'typescript';
 import {
   PROCEDURE_TYPES_MAP,
@@ -8,13 +13,6 @@ import {
   RawTrialSession,
   TrialSession,
 } from '@shared/business/entities/trialSessions/TrialSession';
-
-// use different lib?
-import {
-  FORMATS,
-  createDateAtStartOfWeekEST,
-} from '@shared/business/utilities/DateHandler';
-import { addWeeks } from 'date-fns';
 
 // One session per location per week.
 const MAX_SESSIONS_PER_LOCATION_PER_WEEK = 1; // sessionScheduledPerCityPerWeek
@@ -215,7 +213,7 @@ export function scheduleTrialSessions({
         }
       }
     }
-    currentWeek = addWeeks(currentWeek, 1); // Move to the next week
+    currentWeek = addWeeksToDate({ startDate: currentWeek, weeksToAdd: 1 }); // Move to the next week
   }
   return sessions;
 }
