@@ -108,7 +108,9 @@ export class Contact extends JoiValidationEntity {
     paperPetitionEmail: JoiValidationConstants.EMAIL.optional()
       .allow(null)
       .description('Email provided by the petitioner on their petition form')
-      .messages({ '*': 'Enter email address in format: yourname@example.com' }),
+      .messages({
+        'string.email': 'Enter email address in format: yourname@example.com',
+      }),
     phone: JoiValidationConstants.STRING.max(100)
       .when('contactType', {
         is: CONTACT_TYPES.secondary,
