@@ -1,5 +1,5 @@
 module.exports = {
-  plugins: ['babel-plugin-cerebral', 'transform-html-import-require-to-string'],
+  plugins: ['babel-plugin-cerebral'],
   presets: [
     [
       '@babel/preset-env',
