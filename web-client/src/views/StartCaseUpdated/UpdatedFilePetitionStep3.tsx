@@ -161,7 +161,7 @@ export const UpdatedFilePetitionStep3 = connect(
                 {irsNoticeUploadFormInfo.length < 5 && (
                   <Button
                     link
-                    className="add-another-notice-button padding-0"
+                    className="add-another-notice-button padding-0 margin-bottom-2"
                     data-testid="add-another-irs-notice-button"
                     icon="plus"
                     onClick={() => addAnotherIrsNoticeToFormSequence()}
