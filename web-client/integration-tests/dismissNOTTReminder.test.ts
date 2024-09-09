@@ -2,7 +2,10 @@ import { SESSION_TYPES } from '../../shared/src/business/entities/EntityConstant
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkViewsTrialSessionsTab } from './journey/docketClerkViewsTrialSessionsTab';
 import { formattedTrialSessionDetails } from '../src/presenter/computeds/formattedTrialSessionDetails';
-import { formattedTrialSessions } from '../src/presenter/computeds/formattedTrialSessions';
+import {
+  isTrialSessionRow,
+  trialSessionsHelper as trialSessionsHelperComputed,
+} from '@web-client/presenter/computeds/trialSessionsHelper';
 import { loginAs, setupTest } from './helpers';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkViewsNewTrialSession } from './journey/petitionsClerkViewsNewTrialSession';
@@ -58,35 +61,21 @@ describe('Dismiss NOTT reminder on calendared trial session within 30-35 day ran
 
       expect(cerebralTest.getState('currentPage')).toEqual('TrialSessions');
 
-      const trialSessionFormatted: any = runCompute(
-        withAppContextDecorator(formattedTrialSessions),
-        {
-          state: cerebralTest.getState(),
-        },
+      const trialSessionsHelper = withAppContextDecorator(
+        trialSessionsHelperComputed,
       );
-
-      const filteredSessions: any[] =
-        trialSessionFormatted.filteredTrialSessions['Open'];
-
-      let foundSession;
-      filteredSessions.some(trialSession => {
-        trialSession.sessions.some(session => {
-          if (
-            session.trialSessionId === cerebralTest.lastCreatedTrialSessionId
-          ) {
-            foundSession = session;
-            return true;
-          }
-        });
-        if (foundSession) {
-          return true;
-        }
+      const helper = runCompute(trialSessionsHelper, {
+        state: cerebralTest.getState(),
       });
 
+      const foundSession = helper.trialSessionRows
+        .filter(isTrialSessionRow)
+        .find(t => t.trialSessionId === cerebralTest.lastCreatedTrialSessionId);
+
       expect(foundSession).toBeDefined();
-      expect(foundSession.showAlertForNOTTReminder).toEqual(true);
-      expect(foundSession.alertMessageForNOTT).toEqual(
-        `The 30-day notice is due by ${foundSession.thirtyDaysBeforeTrialFormatted}`,
+      expect(foundSession?.showAlertForNOTTReminder).toEqual(true);
+      expect(foundSession?.alertMessageForNOTT).toContain(
+        'The 30-day notice is due by',
       );
     });
 
@@ -124,16 +113,9 @@ describe('Dismiss NOTT reminder on calendared trial session within 30-35 day ran
   describe('Petitions clerk views calendared trial session in trial session list', () => {
     loginAs(cerebralTest, 'petitionsclerk@example.com');
     it('should go to the created trial session', async () => {
-      await cerebralTest.runSequence('gotoTrialSessionsSequence', {
-        query: {
-          status: 'Open',
-        },
-      });
+      await cerebralTest.runSequence('gotoTrialSessionsSequence');
 
       expect(cerebralTest.getState('currentPage')).toEqual('TrialSessions');
-      expect(
-        cerebralTest.getState('screenMetadata.trialSessionFilters.status'),
-      ).toEqual('Open');
     });
 
     it('should see the alert banner in the latest trial session and can clear it', async () => {

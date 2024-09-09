@@ -1,35 +1,26 @@
-import { formattedTrialSessions as formattedTrialSessionsComputed } from '../../src/presenter/computeds/formattedTrialSessions';
+import {
+  isTrialSessionRow,
+  trialSessionsHelper as trialSessionsHelperComputed,
+} from '@web-client/presenter/computeds/trialSessionsHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { trialSessionsHelper as trialSessionsHelperComputed } from '../../src/presenter/computeds/trialSessionsHelper';
 import { withAppContextDecorator } from '../../src/withAppContext';
-
-const formattedTrialSessions = withAppContextDecorator(
-  formattedTrialSessionsComputed,
-);
 
 export const docketClerkViewsTrialSessionsTab = (
   cerebralTest: any,
-  overrides: { tab?: string } = { tab: undefined },
+  overrides: { tab?: 'calendared' | 'new' } = { tab: 'calendared' },
 ) => {
-  const status = overrides.tab || 'Open';
-  return it(`Docket clerk views ${status} Trial Sessions tab`, async () => {
-    // resetting view metadata to counteract the fact that state is not being reset on login as it would be outside of a test
-    cerebralTest.setState('currentViewMetadata.trialSessions.tab', undefined);
-
+  const { tab } = overrides;
+  return it(`Docket clerk views ${tab} Trial Sessions tab`, async () => {
     await cerebralTest.runSequence('gotoTrialSessionsSequence', {
       query: {
-        status,
+        status: tab,
       },
+    });
+    await cerebralTest.runSequence('setTrialSessionsFiltersSequence', {
+      currentTab: tab,
     });
 
     expect(cerebralTest.getState('currentPage')).toEqual('TrialSessions');
-    expect(
-      cerebralTest.getState('screenMetadata.trialSessionFilters.status'),
-    ).toEqual(status);
-
-    const formatted = runCompute(formattedTrialSessions, {
-      state: cerebralTest.getState(),
-    });
 
     const trialSessionsHelper = withAppContextDecorator(
       trialSessionsHelperComputed,
@@ -43,26 +34,15 @@ export const docketClerkViewsTrialSessionsTab = (
       judge => judge.role === 'legacyJudge',
     );
 
-    if (status === 'Closed' || status === 'All') {
+    if (tab === 'calendared') {
       expect(legacyJudge).toBeTruthy();
     } else {
       expect(legacyJudge).toBeFalsy();
     }
 
-    const filteredSessions = formatted.sessionsByTerm[status];
-
-    let foundSession;
-    filteredSessions.some(trialSession => {
-      trialSession.sessions.some(session => {
-        if (session.trialSessionId === cerebralTest.trialSessionId) {
-          foundSession = session;
-          return true;
-        }
-      });
-      if (foundSession) {
-        return true;
-      }
-    });
+    const foundSession = helper.trialSessionRows
+      .filter(isTrialSessionRow)
+      .find(t => t.trialSessionId === cerebralTest.trialSessionId);
 
     expect(foundSession).toBeTruthy();
   });
