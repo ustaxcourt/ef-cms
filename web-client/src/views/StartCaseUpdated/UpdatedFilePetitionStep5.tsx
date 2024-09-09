@@ -34,10 +34,11 @@ export const UpdatedFilePetitionStep5 = connect(
           />
           <div style={{ fontSize: '18px', marginBottom: '3px' }}>
             Download and fill out the form if you haven&apos;t already done so:
+            <br />
+            <InlineLink href="https://www.ustaxcourt.gov/resources/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf">
+              Statement of Taxpayer Identification Number (T.C. Form 4).
+            </InlineLink>
           </div>
-          <InlineLink href="https://www.ustaxcourt.gov/resources/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf">
-            Statement of Taxpayer Identification Number (T.C. Form 4).
-          </InlineLink>
 
           <div className="margin-top-3">
             <FormGroup
