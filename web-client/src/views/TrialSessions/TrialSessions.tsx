@@ -18,14 +18,12 @@ import React from 'react';
 
 export const TrialSessions = connect(
   {
-    defaultTab: state.screenMetadata.trialSessionFilters.status,
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
     setTrialSessionsFiltersSequence: sequences.setTrialSessionsFiltersSequence,
     trialSessionHelper: state.trialSessionsHelper,
   },
   function TrialSessions({
-    defaultTab,
     openTrialSessionPlanningModalSequence,
     setTrialSessionsFiltersSequence,
     trialSessionHelper,
@@ -38,7 +36,7 @@ export const TrialSessions = connect(
           <ErrorNotification />
           <Tabs
             bind="trialSessionsPage.filters.currentTab"
-            defaultActiveTab={defaultTab || 'calendared'}
+            defaultActiveTab={'calendared'}
             headingLevel="2"
             id="trial-sessions-tabs"
             onSelect={tabName => {
