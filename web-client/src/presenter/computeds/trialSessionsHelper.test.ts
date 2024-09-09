@@ -290,6 +290,7 @@ describe('trialSessionsHelper', () => {
         trialSession1.proceedingType = TRIAL_SESSION_PROCEEDING_TYPES.remote;
         trialSession2.proceedingType = TRIAL_SESSION_PROCEEDING_TYPES.inPerson;
         trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
+        trialSessionsPageState.filters.proceedingType = 'Remote';
 
         const result = runCompute(trialSessionsHelper, {
           state: {
@@ -303,6 +304,27 @@ describe('trialSessionsHelper', () => {
 
         expect(trialSessionsOnly[0].trialSessionId).toEqual(
           trialSession1.trialSessionId,
+        );
+      });
+
+      it('should show in person proceeding types when proceeding type is in person', () => {
+        trialSession1.proceedingType = TRIAL_SESSION_PROCEEDING_TYPES.remote;
+        trialSession2.proceedingType = TRIAL_SESSION_PROCEEDING_TYPES.inPerson;
+        trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
+        trialSessionsPageState.filters.proceedingType = 'In Person';
+
+        const result = runCompute(trialSessionsHelper, {
+          state: {
+            permissions: getUserPermissions(docketClerk1User),
+            trialSessionsPage: trialSessionsPageState,
+          },
+        });
+
+        const trialSessionsOnly =
+          result.trialSessionRows.filter(isTrialSessionRow);
+
+        expect(trialSessionsOnly[0].trialSessionId).toEqual(
+          trialSession2.trialSessionId,
         );
       });
 
