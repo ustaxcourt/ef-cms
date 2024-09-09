@@ -108,10 +108,7 @@ export default async function ({
       babel({
         config: {
           ignore: ['node_modules'],
-          plugins: [
-            'babel-plugin-cerebral',
-            'transform-html-import-require-to-string',
-          ],
+          plugins: ['babel-plugin-cerebral'],
           presets: [
             [
               '@babel/preset-env',
