@@ -654,3 +654,23 @@ export function normalizeIsoDateRange(
   //validate time string
   //create IsoDateRange from day + time range
 }
+
+/**
+ * Returns startDate plus n weeksToAdd
+ * @param {string} startDate the date to add days to
+ * @param {number} weeksToAdd number of days to add to startDate
+ * @returns {string} a formatted MMDDYY string if date object is valid
+ */
+export const addWeeksToDate = ({
+  startDate,
+  weeksToAdd,
+}: {
+  weeksToAdd: number;
+  startDate: string;
+}): string => {
+  const parsedDate = DateTime.fromFormat(startDate, FORMATS.MMDDYY);
+
+  const newDate = parsedDate.plus({ weeks: weeksToAdd });
+
+  return newDate.toFormat(FORMATS.MMDDYY);
+};
