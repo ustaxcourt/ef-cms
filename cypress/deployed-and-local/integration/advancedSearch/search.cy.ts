@@ -108,6 +108,7 @@ describe('Advanced Search', () => {
       attachFile({
         filePath: '../../helpers/file/sample.pdf',
         selector: '[data-testid="primary-document-file"]',
+        selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
       cy.get('[data-testid="save-uploaded-pdf-button"]').click();
       cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
