@@ -276,12 +276,12 @@ export const SessionInformationForm = connect<
                       }}
                     >
                       <option value="">- Select -</option>
-                      {formattedTrialSessions.sessionsByTerm.map(session => (
+                      {formattedTrialSessions.swingSessions.map(session => (
                         <option
                           key={session.trialSessionId}
                           value={session.trialSessionId}
                         >
-                          {session.optionText}
+                          {session.swingSessionText}
                         </option>
                       ))}
                     </select>
