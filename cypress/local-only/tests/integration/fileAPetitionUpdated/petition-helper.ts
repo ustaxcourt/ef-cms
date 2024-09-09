@@ -188,7 +188,8 @@ export function fillMultipleIRSNotices(filePath: string) {
   attachFile({
     filePath,
     selector: '[data-testid="irs-notice-upload-0"]',
-    selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+    selectorToAwaitOnSuccess:
+      '[data-testid^="upload-file-success"][data-testid*="0"]',
   });
   cy.get('[data-testid="case-type-select"]').select('Deficiency');
   cy.get(
@@ -202,8 +203,9 @@ export function fillMultipleIRSNotices(filePath: string) {
   // IRS Notice #2
   attachFile({
     filePath,
-    selector: '[data-testid="add-another-irs-notice-button"]',
-    selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+    selector: '[data-testid="irs-notice-upload-1"]',
+    selectorToAwaitOnSuccess:
+      '[data-testid^="upload-file-success"][data-testid*="1"]',
   });
   cy.get('[data-testid="case-type-select"]').eq(1).select('CDP (Lien/Levy)');
   cy.get(
