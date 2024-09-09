@@ -1,10 +1,10 @@
-import { uploadFile } from '../file/upload-file';
+import { attachSamplePdfFile } from '../file/upload-file';
 
 export function practitionerCreatesElectronicCase() {
   cy.get('[data-testid="file-a-petition"]').click();
-  uploadFile('stin-file');
+  attachSamplePdfFile('stin-file');
   cy.get('[data-testid="complete-step-1"]').click();
-  uploadFile('petition-file');
+  attachSamplePdfFile('petition-file');
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
   cy.get('[data-testid="complete-step-2"]').click();

@@ -84,10 +84,3 @@ describe('upload court issued document validations', () => {
     cy.get('[data-testid^="upload-file-success"]').should('exist');
   });
 });
-
-// upload court-issued document
-// check for corrupt pdf
-// check for non-pdf
-// check for file size
-// check for generic error (attach non-file)
-// check for success

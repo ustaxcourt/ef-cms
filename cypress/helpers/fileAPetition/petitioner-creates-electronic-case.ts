@@ -1,4 +1,5 @@
 import { attachFile } from '../file/upload-file';
+import { attachSamplePdfFile } from '../file/upload-file';
 import {
   petitionerAttemptsToUploadCorruptPdfUpdated,
   petitionerCreatesElectronicCaseForBusinessUpdated,
@@ -6,7 +7,6 @@ import {
   petitionerCreatesElectronicCaseWithDeceasedSpouseUpdated,
   petitionerCreatesElectronicCaseWithSpouseUpdated,
 } from './petitioner-creates-electronic-case-updated';
-import { uploadFile } from '../file/upload-file';
 
 export function petitionerCreatesElectronicCaseWithDeceasedSpouseOld(
   primaryFilerName = 'John',
@@ -14,9 +14,9 @@ export function petitionerCreatesElectronicCaseWithDeceasedSpouseOld(
 ) {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
-  uploadFile('stin-file');
+  attachSamplePdfFile('stin-file');
   cy.get('[data-testid="complete-step-1"]').click();
-  uploadFile('petition-file');
+  attachSamplePdfFile('petition-file');
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
   cy.get('[data-testid="complete-step-2"]').click();
@@ -94,9 +94,9 @@ export function petitionerCreatesElectronicCaseWithSpouseOld(
 ) {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
-  uploadFile('stin-file');
+  attachSamplePdfFile('stin-file');
   cy.get('[data-testid="complete-step-1"]').click();
-  uploadFile('petition-file');
+  attachSamplePdfFile('petition-file');
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
   cy.get('[data-testid="complete-step-2"]').click();
@@ -143,12 +143,12 @@ export function petitionerCreatesElectronicCase(
 function petitionerCreatesElectronicCaseOld(primaryFilerName = 'John') {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
-  uploadFile('stin-file');
+  attachSamplePdfFile('stin-file');
   cy.get('[data-testid="complete-step-1"]').click();
-  uploadFile('petition-file');
+  attachSamplePdfFile('petition-file');
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
-  uploadFile('atp-file-upload');
+  attachSamplePdfFile('atp-file-upload');
 
   cy.get('[data-testid="complete-step-2"]').click();
   cy.get('[data-testid="filing-type-0"]').click();
@@ -183,12 +183,12 @@ function petitionerCreatesElectronicCaseOld(primaryFilerName = 'John') {
 export function petitionerCreatesElectronicCaseForBusinessOld() {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
-  uploadFile('stin-file');
+  attachSamplePdfFile('stin-file');
   cy.get('[data-testid="complete-step-1"]').click();
-  uploadFile('petition-file');
+  attachSamplePdfFile('petition-file');
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
-  uploadFile('atp-file-upload');
+  attachSamplePdfFile('atp-file-upload');
 
   cy.get('[data-testid="complete-step-2"]').click();
 
@@ -202,7 +202,7 @@ export function petitionerCreatesElectronicCaseForBusinessOld() {
   cy.get('[data-testid="contactPrimary.postalCode"]').type('32154');
   cy.get('[data-testid="phone"]').type('123456789');
 
-  uploadFile('corporate-disclosure-file');
+  attachSamplePdfFile('corporate-disclosure-file');
 
   cy.get('[data-testid="complete-step-3"]').click();
   cy.get('[data-testid="procedure-type-1"]').click();
@@ -238,12 +238,12 @@ export function petitionerCreatesElectronicCaseForBusiness() {
 
 export function privatePractitionerCreatesElectronicCaseForBusiness() {
   cy.get('[data-testid="file-a-petition"]').click();
-  uploadFile('stin-file');
+  attachSamplePdfFile('stin-file');
   cy.get('[data-testid="complete-step-1"]').click();
-  uploadFile('petition-file');
+  attachSamplePdfFile('petition-file');
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
-  uploadFile('atp-file-upload');
+  attachSamplePdfFile('atp-file-upload');
 
   cy.get('[data-testid="complete-step-2"]').click();
 
@@ -257,7 +257,7 @@ export function privatePractitionerCreatesElectronicCaseForBusiness() {
   cy.get('[data-testid="contactPrimary.postalCode"]').type('32154');
   cy.get('[data-testid="phone"]').type('123456789');
 
-  uploadFile('corporate-disclosure-file');
+  attachSamplePdfFile('corporate-disclosure-file');
 
   cy.get('[data-testid="complete-step-3"]').click();
   cy.get('[data-testid="procedure-type-1"]').click();

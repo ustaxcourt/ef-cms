@@ -1,4 +1,4 @@
-import { attachFile, uploadFile } from '../file/upload-file';
+import { attachFile, attachSamplePdfFile } from '../file/upload-file';
 
 export function petitionerCreatesElectronicCaseUpdated(
   primaryFilerName = 'John',
@@ -22,7 +22,7 @@ export function petitionerCreatesElectronicCaseUpdated(
 
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
-  uploadFile('irs-notice-upload-0');
+  attachSamplePdfFile('irs-notice-upload-0');
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="step-3-next-button"]').click();
 
@@ -31,7 +31,7 @@ export function petitionerCreatesElectronicCaseUpdated(
   cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
   cy.get('[data-testid="step-4-next-button"]').click();
 
-  uploadFile('stin-file');
+  attachSamplePdfFile('stin-file');
   cy.get('[data-testid="step-5-next-button"]').click();
 
   cy.get('[data-testid="atp-preview-button"]').should('exist');
@@ -59,11 +59,11 @@ export function petitionerCreatesElectronicCaseForBusinessUpdated() {
   cy.get('[data-testid="contactPrimary.state"]').select('CO');
   cy.get('[data-testid="contactPrimary.postalCode"]').type('12345');
   cy.get('[data-testid="contact-primary-phone"]').type('123456789');
-  uploadFile('corporate-disclosure-file');
+  attachSamplePdfFile('corporate-disclosure-file');
   cy.get('[data-testid="step-1-next-button"]').click();
 
   cy.get('[data-testid="upload-a-petition-label"]').click();
-  uploadFile('petition-file');
+  attachSamplePdfFile('petition-file');
   cy.get('[data-testid="petition-redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="step-2-next-button"]').click();
 
@@ -71,14 +71,14 @@ export function petitionerCreatesElectronicCaseForBusinessUpdated() {
   cy.get('[data-testid="case-type-select"]').select('Deficiency');
   cy.get('[data-testid="irs-notice-tax-year-0"]').type('2020');
   cy.get('[data-testid="city-and-state-issuing-office-0"]').type('Boulder, CO');
-  uploadFile('irs-notice-upload-0');
+  attachSamplePdfFile('irs-notice-upload-0');
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="step-3-next-button"]').click();
 
   cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
   cy.get('[data-testid="step-4-next-button"]').click();
 
-  uploadFile('stin-file');
+  attachSamplePdfFile('stin-file');
   cy.get('[data-testid="step-5-next-button"]').click();
 
   cy.get('[data-testid="stin-preview-button"]').should('exist');
@@ -115,7 +115,7 @@ export function petitionerAttemptsToUploadCorruptPdfUpdated() {
 
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
-  uploadFile('irs-notice-upload-0');
+  attachSamplePdfFile('irs-notice-upload-0');
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="step-3-next-button"]').click();
 
@@ -158,7 +158,7 @@ export function petitionerCreatesElectronicCaseWithSpouseUpdated(
 
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
-  uploadFile('irs-notice-upload-0');
+  attachSamplePdfFile('irs-notice-upload-0');
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="step-3-next-button"]').click();
 
@@ -167,7 +167,7 @@ export function petitionerCreatesElectronicCaseWithSpouseUpdated(
   cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
   cy.get('[data-testid="step-4-next-button"]').click();
 
-  uploadFile('stin-file');
+  attachSamplePdfFile('stin-file');
   cy.get('[data-testid="step-5-next-button"]').click();
 
   cy.get('[data-testid="atp-preview-button"]').should('exist');
@@ -209,7 +209,7 @@ export function petitionerCreatesElectronicCaseWithDeceasedSpouseUpdated(
 
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
-  uploadFile('irs-notice-upload-0');
+  attachSamplePdfFile('irs-notice-upload-0');
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="step-3-next-button"]').click();
 
@@ -218,7 +218,7 @@ export function petitionerCreatesElectronicCaseWithDeceasedSpouseUpdated(
   cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
   cy.get('[data-testid="step-4-next-button"]').click();
 
-  uploadFile('stin-file');
+  attachSamplePdfFile('stin-file');
   cy.get('[data-testid="step-5-next-button"]').click();
 
   cy.get('[data-testid="atp-preview-button"]').should('exist');
