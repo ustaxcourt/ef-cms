@@ -9,6 +9,7 @@ export const InlineLink = ({
   href,
   icon,
   iconSize = '1x',
+  shouldWrapText = false,
   tooltip,
 }: {
   children: string | React.ReactNode;
@@ -17,19 +18,20 @@ export const InlineLink = ({
   href: string;
   iconSize?: '1x' | '2x' | '3x' | '4x' | '5x';
   tooltip?: string;
+  shouldWrapText?: boolean;
 }) => {
   const classes = classNames(
-    'usa-link--external no-wrap',
+    'usa-link--external',
     className,
     tooltip && 'usa-tooltip',
-    // icon && !shouldWrapText && 'no-wrap',
+    !shouldWrapText && 'no-wrap',
   );
 
   return (
     <a
       className={classes}
       href={href}
-      rel="noopener noreferrer"
+      rel="noreferrer"
       target="_blank"
       title={tooltip}
     >

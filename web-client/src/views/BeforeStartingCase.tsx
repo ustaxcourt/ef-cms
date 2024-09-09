@@ -211,16 +211,9 @@ export const BeforeStartingCase = connect(
                 <div>
                   To file a case on behalf of someone else, you must be
                   authorized to practice before this Court as provided by the{' '}
-                  <Button
-                    link
-                    className="usa-link--external text-left mobile-text-wrap"
-                    href="https://ustaxcourt.gov/rules.html"
-                    overrideMargin="margin-right-0"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
+                  <InlineLink href="https://ustaxcourt.gov/rules.html">
                     Tax Court Rules of Practice and Procedure (Rule 60)
-                  </Button>
+                  </InlineLink>
                   {
                     '. Enrolled agents, certified public accountants, and attorneys who are not admitted to practice before the Court are not eligible to represent a party.'
                   }
@@ -242,18 +235,12 @@ export const BeforeStartingCase = connect(
                     "Download and fill out the form if you haven't already done so:"
                   }
                 </div>
-                <Button
-                  link
-                  className="usa-link--external text-left mobile-text-wrap"
+                <InlineLink
                   href="https://www.ustaxcourt.gov/resources/forms/Corporate_Disclosure_Statement_Form.pdf"
                   icon="file-pdf"
-                  iconColor="blue"
-                  overrideMargin="margin-right-0"
-                  rel="noopener noreferrer"
-                  target="_blank"
                 >
                   Corporate Disclosure Statement (T.C. Form 6)
-                </Button>
+                </InlineLink>
               </AccordionItem>
             </Accordion>
           </div>
