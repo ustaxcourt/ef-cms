@@ -391,6 +391,8 @@ import { setForHearingSequence } from './sequences/setForHearingSequence';
 import { setHasIrsNoticeSequence } from '@web-client/presenter/sequences/setHasIrsNoticeSequence';
 import { setIdleStatusActiveSequence } from './sequences/setIdleStatusActiveSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
+import { setIsLoadingSequence } from '@web-client/presenter/sequences/setIsLoadingSequence';
+import { setIsNotLoadingSequence } from '@web-client/presenter/sequences/setIsNotLoadingSequence';
 import { setJudgeActivityReportFiltersSequence } from './sequences/setJudgeActivityReportFiltersSequence';
 import { setMessageDetailViewerDocumentToDisplaySequence } from './sequences/setMessageDetailViewerDocumentToDisplaySequence';
 import { setPDFPageForSigningSequence } from './sequences/setPDFPageForSigningSequence';
@@ -1258,6 +1260,8 @@ export const presenterSequences = {
   setIdleStatusActiveSequence:
     setIdleStatusActiveSequence as unknown as Function,
   setIrsNoticeFalseSequence: setIrsNoticeFalseSequence as unknown as Function,
+  setIsLoadingSequence,
+  setIsNotLoadingSequence,
   setJudgeActivityReportFiltersSequence,
   setMessageDetailViewerDocumentToDisplaySequence:
     setMessageDetailViewerDocumentToDisplaySequence as unknown as Function,
