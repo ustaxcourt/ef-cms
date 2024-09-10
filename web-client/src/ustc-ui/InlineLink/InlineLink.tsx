@@ -9,7 +9,6 @@ export const InlineLink = ({
   href,
   icon,
   iconSize = '1x',
-  shouldWrapText = false,
   tooltip,
 }: {
   children: string | React.ReactNode;
@@ -24,7 +23,6 @@ export const InlineLink = ({
     'usa-link--external',
     className,
     tooltip && 'usa-tooltip',
-    !shouldWrapText && 'no-wrap',
   );
 
   return (
