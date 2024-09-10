@@ -62,7 +62,8 @@ export const StateDrivenFileInput = connect<
     const fileOnForm = file || form[fileInputName] || form.existingFileName;
 
     // Setting the filename here so that we can display it before validation
-    // finishes, otherwise slow machine might have slight lag.
+    // finishes, otherwise a slow machine might have slight lag and allow the user
+    // to "choose file" again.
     const [selectedFilename, setSelectedFilename] = useState('');
 
     const onFileSelectionChange = async (
