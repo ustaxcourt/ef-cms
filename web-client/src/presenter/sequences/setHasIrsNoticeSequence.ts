@@ -6,4 +6,9 @@ export const setHasIrsNoticeSequence = [
   clearIrsNoticeFormAction,
   setIrsNoticeUploadFormInfoAction,
   setFormValueAction,
-];
+] as unknown as (props: {
+  allowEmptyString?: boolean;
+  index?: number;
+  key: string;
+  value: any;
+}) => void;

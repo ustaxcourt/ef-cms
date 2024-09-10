@@ -6,14 +6,14 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-type PetitionFormResponseProps = {
+type PetitionFactOrReasonProps = {
   factOrReasonCount: number;
   id: string;
   labelId: string;
   textName: string;
 };
 
-const petitionFormResponseDependencies = {
+const petitionFactOrReasonDependencies = {
   deleteValidationErrorMessageSequence:
     sequences.deleteValidationErrorMessageSequence,
   form: state.form,
@@ -22,11 +22,11 @@ const petitionFormResponseDependencies = {
   validationErrors: state.validationErrors,
 };
 
-export const PetitionFormResponse = connect<
-  PetitionFormResponseProps,
-  typeof petitionFormResponseDependencies
+export const PetitionFactOrReason = connect<
+  PetitionFactOrReasonProps,
+  typeof petitionFactOrReasonDependencies
 >(
-  petitionFormResponseDependencies,
+  petitionFactOrReasonDependencies,
   function PetitionFormResponse({
     deleteValidationErrorMessageSequence,
     factOrReasonCount,
@@ -50,43 +50,43 @@ export const PetitionFormResponse = connect<
         <div className="fact-or-reason">
           <NonMobile>
             <div style={{ display: 'flex' }}>
-              <div>
-                <textarea
-                  aria-labelledby={labelId}
-                  className="usa-textarea max-width-unset"
-                  data-testid={id}
-                  id={id}
-                  name={textName}
-                  style={{ marginTop: '0px' }}
-                  value={form[textName][factOrReasonCount] || ''}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      allowEmptyString: true,
-                      index: factOrReasonCount,
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                    deleteValidationErrorMessageSequence({
-                      validationKey: [KEY],
-                    });
-                  }}
-                />
+              <textarea
+                aria-labelledby={labelId}
+                className="usa-textarea max-width-unset"
+                data-testid={id}
+                id={id}
+                name={textName}
+                style={{ marginTop: '0px' }}
+                value={form[textName][factOrReasonCount] || ''}
+                onChange={e => {
+                  updateFormValueSequence({
+                    allowEmptyString: true,
+                    index: factOrReasonCount,
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                  deleteValidationErrorMessageSequence({
+                    validationKey: [KEY],
+                  });
+                }}
+              />
+              <div className="fact-reason-button-wrapper">
+                {factOrReasonCount > 0 && (
+                  <Button
+                    link
+                    className="reason-button remove-fact-reason-button"
+                    icon="times"
+                    onClick={() =>
+                      removeFactOrReasonSequence({
+                        index: factOrReasonCount,
+                        key: textName,
+                      })
+                    }
+                  >
+                    Remove
+                  </Button>
+                )}
               </div>
-              {factOrReasonCount > 0 && (
-                <Button
-                  link
-                  className="reason-button remove-fact-reason-button"
-                  icon="times"
-                  onClick={() =>
-                    removeFactOrReasonSequence({
-                      index: factOrReasonCount,
-                      key: textName,
-                    })
-                  }
-                >
-                  Remove
-                </Button>
-              )}
             </div>
           </NonMobile>
 
@@ -98,7 +98,7 @@ export const PetitionFormResponse = connect<
                 data-testid={id}
                 id={id}
                 name={textName}
-                style={{ marginTop: '0px', width: '100%' }}
+                style={{ marginTop: '0px' }}
                 value={form[textName][factOrReasonCount] || ''}
                 onChange={e => {
                   updateFormValueSequence({
@@ -135,4 +135,4 @@ export const PetitionFormResponse = connect<
   },
 );
 
-PetitionFormResponse.displayName = 'PetitionFormResponse';
+PetitionFactOrReason.displayName = 'PetitionFactOrReason';

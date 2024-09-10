@@ -709,6 +709,7 @@ jobs:
       - run:
           name: Set Marker to Indicate Data is Finished Gluing
           command: |
+            export DEPLOYING_COLOR="$CURRENT_COLOR"
             JOB_NAME="wait-for-glued-data-to-index" ./scripts/migration/set-migration-complete-marker.sh
       - run:
           name: Enable Dynamodb Streams

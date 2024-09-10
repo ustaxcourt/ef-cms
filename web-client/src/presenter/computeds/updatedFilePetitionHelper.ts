@@ -1,4 +1,5 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
+import { FilingType, ROLES } from '@shared/business/entities/EntityConstants';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -20,9 +21,13 @@ interface IOtherContactNameLabel {
 }
 
 type UpdatedFilePetitionHelper = {
-  filingOptions: string[];
+  filingOptions: { label: string; value: string }[];
+  getLetterByIndex: (index: number) => string;
+  isPetitioner: boolean;
+  isPractitioner: boolean;
   businessFieldNames: IBusinessFields | {};
   otherContactNameLabel?: IOtherContactNameLabel;
+  otherFilingOptions: string[];
   showContactInformationForOtherPartyType: boolean;
 };
 
@@ -36,21 +41,73 @@ export const updatedFilePetitionHelper = (
   const businessType = get(state.form.businessType);
   const partyType = get(state.form.partyType);
 
-  const filingOptions = FILING_TYPES[user.role];
+  const filingOptions = formatFilingTypes(FILING_TYPES[user.role]);
   const businessFieldNames = getBusinessFieldLabels(businessType);
   const otherContactNameLabel = getOtherContactNameLabel(
     partyType,
     PARTY_TYPES,
   );
 
+  const isPetitioner = user.role === ROLES.petitioner;
+  const isPractitioner = user.role === ROLES.privatePractitioner;
+
+  const otherFilingOptions = getOtherFilingOptions(isPractitioner);
+
   return {
     businessFieldNames,
     filingOptions,
+    getLetterByIndex,
+    isPetitioner,
+    isPractitioner,
     otherContactNameLabel,
+    otherFilingOptions,
     showContactInformationForOtherPartyType:
       getShowContactInformationForOtherPartyType(partyType, PARTY_TYPES),
   };
 };
+
+function getOtherFilingOptions(isPractitioner) {
+  const estateOrTrust = 'An estate or trust';
+  const minorOrIncompetentPerson = 'A minor or legally incompetent person';
+  const donor = 'Donor';
+  const transferee = 'Transferee';
+  const deceasedSpouse = 'Deceased Spouse';
+
+  const otherFilingOptions = isPractitioner
+    ? [estateOrTrust, donor, transferee, deceasedSpouse]
+    : [
+        estateOrTrust,
+        minorOrIncompetentPerson,
+        donor,
+        transferee,
+        deceasedSpouse,
+      ];
+
+  return otherFilingOptions;
+}
+
+function formatFilingTypes(filingOptions: FilingType[]) {
+  return filingOptions.map(option => {
+    if (option === 'Individual petitioner') {
+      return {
+        label: 'Petitioner',
+        value: option,
+      };
+    }
+
+    if (option === 'Petitioner and spouse') {
+      return {
+        label: 'Petitioner and petitioner spouse',
+        value: option,
+      };
+    }
+
+    return {
+      label: option,
+      value: option,
+    };
+  });
+}
 
 function getBusinessFieldLabels(businessType): IBusinessFields | {} {
   switch (businessType) {
@@ -157,4 +214,16 @@ function getShowContactInformationForOtherPartyType(
     PARTY_TYPES.nextFriendForMinor,
     PARTY_TYPES.nextFriendForIncompetentPerson,
   ].includes(partyType);
+}
+
+function getLetterByIndex(index: number): string {
+  const asciiOfA = 97;
+  let result = '';
+
+  while (index >= 0) {
+    result = String.fromCharCode(asciiOfA + (index % 26)) + result;
+    index = Math.floor(index / 26) - 1;
+  }
+
+  return result;
 }
