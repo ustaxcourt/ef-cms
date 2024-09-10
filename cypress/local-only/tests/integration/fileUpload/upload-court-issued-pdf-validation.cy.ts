@@ -22,7 +22,7 @@ describe('upload court issued document validations', () => {
       selector: '[data-testid="primary-document-file"]',
     });
 
-    cy.get('[data-testid="error-modal"]').contains(
+    cy.get('[data-testid="file-upload-error-modal"]').contains(
       'Your file is not a PDF. Select a PDF file or resave the file as a PDF.',
     );
     cy.get('[data-testid="modal-button-confirm"').click();
@@ -35,7 +35,7 @@ describe('upload court issued document validations', () => {
       selector: '[data-testid="primary-document-file"]',
     });
 
-    cy.get('[data-testid="error-modal"]').contains(
+    cy.get('[data-testid="file-upload-error-modal"]').contains(
       'Your file is corrupted or in an unsupported PDF format. Ensure that the file is not corrupted and/or is in a supported PDF format and try again.',
     );
   });
@@ -46,7 +46,7 @@ describe('upload court issued document validations', () => {
       selector: '[data-testid="primary-document-file"]',
     });
 
-    cy.get('[data-testid="error-modal"]').contains(
+    cy.get('[data-testid="file-upload-error-modal"]').contains(
       'Your file is encrypted or password protected. Remove encryption or password protection and try again.',
     );
   });
@@ -70,7 +70,7 @@ describe('upload court issued document validations', () => {
       cy.wrap(input).trigger('change', { force: true });
     });
 
-    cy.get('[data-testid="error-modal"]').contains(
+    cy.get('[data-testid="file-upload-error-modal"]').contains(
       `Your file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB. Reduce the file size and try again.`,
     );
   });
