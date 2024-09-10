@@ -1,4 +1,7 @@
-import { FileValidationResponse } from '@web-client/views/FileHandlingHelpers/fileValidation';
+import {
+  ErrorTypes,
+  FileValidationResponse,
+} from '@web-client/views/FileHandlingHelpers/fileValidation';
 import { applicationContext } from '@web-client/applicationContext';
 
 export const PDF_PASSWORD_PROTECTED_ERROR_MESSAGE =
@@ -37,11 +40,13 @@ export const validatePdf = ({
           if (err.name === 'PasswordException') {
             resolve({
               errorMessage: PDF_PASSWORD_PROTECTED_ERROR_MESSAGE,
+              errorType: ErrorTypes.ENCRYPTED_FILE,
               isValid: false,
             });
           } else if (err.name === 'InvalidPDFException') {
             resolve({
               errorMessage: PDF_CORRUPTED_ERROR_MESSAGE,
+              errorType: ErrorTypes.CORRUPT_FILE,
               isValid: false,
             });
           }

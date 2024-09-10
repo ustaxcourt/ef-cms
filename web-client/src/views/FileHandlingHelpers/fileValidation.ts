@@ -1,9 +1,18 @@
 import { validatePdf } from '@web-client/views/FileHandlingHelpers/pdfValidation';
 import React from 'react';
 
+export enum ErrorTypes {
+  WRONG_FILE_TYPE = 'WRONG_FILE_TYPE',
+  FILE_TOO_BIG = 'FILE_TOO_BIG',
+  CORRUPT_FILE = 'CORRUPT_FILE',
+  ENCRYPTED_FILE = 'ENCRYPTED_FILE',
+  UNKNOWN = 'UNKNOWN',
+}
+
 export interface FileValidationResponse {
   isValid: boolean;
   errorMessage?: string;
+  errorType?: ErrorTypes;
 }
 
 function getFileExtension(filename: string) {
@@ -46,6 +55,7 @@ const validateCorrectFileType = ({
   if (!allowedFileExtensions.includes(getFileExtension(file.name))) {
     return {
       errorMessage: getWrongFileTypeMessage(allowedFileExtensions),
+      errorType: ErrorTypes.WRONG_FILE_TYPE,
       isValid: false,
     };
   }
@@ -63,7 +73,13 @@ export const validateFileOnSelect = async ({
   e: React.ChangeEvent<HTMLInputElement>;
   megabyteLimit: number;
   onSuccess: ({ selectedFile }: { selectedFile: File }) => void;
-  onError: ({ message }: { message: string }) => void;
+  onError: ({
+    errorType,
+    message,
+  }: {
+    message: string;
+    errorType?: ErrorTypes;
+  }) => void;
 }) => {
   const target = e.target as HTMLInputElement;
 
@@ -75,13 +91,14 @@ export const validateFileOnSelect = async ({
   }
 
   const selectedFile = target.files[0];
-  const { errorMessage, isValid } = await validateFile({
+  const { errorMessage, errorType, isValid } = await validateFile({
     allowedFileExtensions,
     file: selectedFile,
     megabyteLimit,
   });
   if (!isValid) {
     onError({
+      errorType,
       message: errorMessage!,
     });
     target.value = '';
@@ -102,6 +119,7 @@ export const validateFile = async ({
   if (file.size > megabyteLimit * 1024 * 1024) {
     return {
       errorMessage: `Your file size is too big. The maximum file size is ${megabyteLimit}MB. Reduce the file size and try again.`,
+      errorType: ErrorTypes.FILE_TOO_BIG,
       isValid: false,
     };
   }

@@ -14,13 +14,26 @@ export const GenericErrorModal = connect(
     return (
       <ModalDialog
         cancelLink={false}
-        closeLink={false}
+        cancelSequence={clearModalSequence}
+        closeLink={true}
         confirmLabel="Close"
         confirmSequence={clearModalSequence}
         dataTestId="error-modal"
         title={modalTitle || 'An error occurred'}
       >
         {message || 'Something went wrong, please try again later.'}
+        <br />
+        <br />
+        <a className="usa-link--external" href="https://google.com">
+          Learn about troubleshooting files
+        </a>
+        <br />
+        <br />
+        If you still have a problem uploading the file, email{' '}
+        <a href="mailto:dawson.support@ustaxcourt.gov">
+          dawson.support@ustaxcourt.gov
+        </a>
+        .
       </ModalDialog>
     );
   },

@@ -1,11 +1,14 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import {
+  ErrorTypes,
+  validateFileOnSelect,
+} from '@web-client/views/FileHandlingHelpers/fileValidation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { cloneFile } from '../FileHandlingHelpers/cloneFile';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import { validateFileOnSelect } from '@web-client/views/FileHandlingHelpers/fileValidation';
 import React, { useState } from 'react';
 
 type StateDriveFileInputProps = {
@@ -24,7 +27,7 @@ const deps = {
   form: state.form,
   setIsLoadingSequence: sequences.setIsLoadingSequence,
   setIsNotLoadingSequence: sequences.setIsNotLoadingSequence,
-  showErrorModalSequence: sequences.showErrorModalSequence,
+  showFileUploadErrorModalSequence: sequences.showFileUploadErrorModalSequence,
   updateFormValueSequence: sequences[props.updateFormValueSequence],
   validationSequence: sequences[props.validationSequence],
 };
@@ -45,7 +48,7 @@ export const StateDrivenFileInput = connect<
     name: fileInputName,
     setIsLoadingSequence,
     setIsNotLoadingSequence,
-    showErrorModalSequence,
+    showFileUploadErrorModalSequence,
     updateFormValueSequence,
     validationSequence,
     ...remainingProps
@@ -67,12 +70,21 @@ export const StateDrivenFileInput = connect<
         allowedFileExtensions: accept.split(','),
         e,
         megabyteLimit: constants.MAX_FILE_SIZE_MB,
-        onError: ({ message }) => {
+        onError: ({ errorType, message }) => {
           setSelectedFilename('');
-          showErrorModalSequence({
+          showFileUploadErrorModalSequence({
+            contactSupportMessage:
+              'If you still have a problem uploading the file, email',
             errorToLog: !message,
             message,
             title: 'There Is a Problem With Your File',
+            troubleshootingLink:
+              errorType && errorType !== ErrorTypes.WRONG_FILE_TYPE
+                ? {
+                    link: 'https://google.com',
+                    message: 'Learn about troubleshooting files',
+                  }
+                : undefined,
           });
         },
         onSuccess: ({ selectedFile }) => {
