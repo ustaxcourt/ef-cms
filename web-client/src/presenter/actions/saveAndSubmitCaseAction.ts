@@ -85,7 +85,7 @@ export const saveAndSubmitCaseAction = async ({
 
   const isPetitioner = user.role === ROLES.petitioner;
   const successTitle = `${isPetitioner ? 'Your' : 'The'} case has been assigned docket number ${caseDetail.docketNumberWithSuffix || caseDetail.docketNumber}`;
-  const successMessage = `${isPetitioner ? 'Your' : 'The'} case has been created and ${isPetitioner ? 'your' : ''} documents sent to the U.S. Tax Court.`;
+  const successMessage = `${isPetitioner ? 'Your' : 'The'} case has been created and${isPetitioner ? ' your' : ''} documents were sent to the U.S. Tax Court.`;
 
   return path.success({
     alertSuccess: {

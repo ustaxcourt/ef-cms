@@ -23,11 +23,13 @@ interface IOtherContactNameLabel {
 type FilePetitionHelper = {
   filingOptions: { label: string; value: string }[];
   irsNoticeRequiresRedactionAcknowledgement: boolean;
+  getLetterByIndex: (index: number) => string;
   isPetitioner: boolean;
   isPractitioner: boolean;
   businessFieldNames: IBusinessFields | {};
   otherContactNameLabel?: IOtherContactNameLabel;
   otherFilingOptions: string[];
+  primaryContactNameLabel: string;
   showContactInformationForOtherPartyType: boolean;
 };
 
@@ -42,28 +44,36 @@ export const filePetitionHelper = (
   const partyType = get(state.form.partyType);
   const irsNoticeUploadFormInfo = get(state.irsNoticeUploadFormInfo);
 
+  const isPetitioner = user.role === ROLES.petitioner;
+  const isPractitioner = user.role === ROLES.privatePractitioner;
+
   const filingOptions = formatFilingTypes(FILING_TYPES[user.role]);
+
+  const otherFilingOptions = getOtherFilingOptions(isPractitioner);
+  const primaryContactNameLabel = isPetitioner
+    ? 'Full Name'
+    : 'Petitioner’s full name';
+
   const businessFieldNames = getBusinessFieldLabels(businessType);
+
   const otherContactNameLabel = getOtherContactNameLabel(
     partyType,
     PARTY_TYPES,
   );
 
-  const isPetitioner = user.role === ROLES.petitioner;
-  const isPractitioner = user.role === ROLES.privatePractitioner;
   const irsNoticeRequiresRedactionAcknowledgement =
     irsNoticeUploadFormInfo?.some(notice => 'file' in notice);
-
-  const otherFilingOptions = getOtherFilingOptions(isPractitioner);
 
   return {
     businessFieldNames,
     filingOptions,
+    getLetterByIndex,
     irsNoticeRequiresRedactionAcknowledgement,
     isPetitioner,
     isPractitioner,
     otherContactNameLabel,
     otherFilingOptions,
+    primaryContactNameLabel,
     showContactInformationForOtherPartyType:
       getShowContactInformationForOtherPartyType(partyType, PARTY_TYPES),
   };
@@ -217,4 +227,16 @@ function getShowContactInformationForOtherPartyType(
     PARTY_TYPES.nextFriendForMinor,
     PARTY_TYPES.nextFriendForIncompetentPerson,
   ].includes(partyType);
+}
+
+function getLetterByIndex(index: number): string {
+  const asciiOfA = 97;
+  let result = '';
+
+  while (index >= 0) {
+    result = String.fromCharCode(asciiOfA + (index % 26)) + result;
+    index = Math.floor(index / 26) - 1;
+  }
+
+  return result;
 }

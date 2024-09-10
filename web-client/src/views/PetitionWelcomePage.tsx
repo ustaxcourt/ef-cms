@@ -35,16 +35,16 @@ export const PetitionWelcomePage = ({
       <ul style={{ marginBottom: '0px', marginTop: '0px' }}>
         <li>Immediately receive a docket number upon filing a Petition</li>
         <li>File and view documents electronically</li>
-        <li>Access your case documents over the internet</li>
+        <li>Access case documents over the internet</li>
         <li>
-          Receive email notifications anytime there is activity in your case
+          {`Receive email notifications anytime there is activity in ${isPetitioner ? 'your' : 'the'} case`}
         </li>
       </ul>
     </div>
     <div className="petitioner-flow-text">
       {`To create a case, you'll need to submit a Petition to the Court. After the
       Petition is processed by the Court, you'll be able to view the status of
-      your case, submit new documents and perform other
+      ${isPetitioner ? 'your' : 'the'} case, submit new documents and perform other
       actions.`}
     </div>
     <Button
