@@ -6,6 +6,7 @@ import {
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { calculateISODate } from '@shared/business/utilities/DateHandler';
 import {
   colvinsChambersUser,
   docketClerkUser,
@@ -522,11 +523,12 @@ describe('formattedTrialSessionDetails', () => {
   });
 
   describe('NOTT reminder', () => {
-    it('should set showAlertForNOTTReminder to true when the alert has not been previously dismissed and isStartDateWithinNOTTReminderRange is true', () => {
+    it('should set showAlertForNOTTReminder to true when the alert has not been previously dismissed and start date is within NOTT reminder range', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         dismissedAlertForNOTT: false,
-        isStartDateWithinNOTTReminderRange: true,
+        isCalendared: true,
+        startDate: calculateISODate({ howMuch: 30, units: 'days' }),
         thirtyDaysBeforeTrialFormatted: '2/2/2022',
       };
 
@@ -549,7 +551,8 @@ describe('formattedTrialSessionDetails', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         dismissedAlertForNOTT: true,
-        isStartDateWithinNOTTReminderRange: true,
+        isCalendared: true,
+        startDate: calculateISODate({ howMuch: 30, units: 'days' }),
       };
 
       const result: any = runCompute(formattedTrialSessionDetails, {
@@ -565,11 +568,12 @@ describe('formattedTrialSessionDetails', () => {
       expect(result.alertMessageForNOTT).toBeUndefined();
     });
 
-    it('should set showAlertForNOTTReminder to false when isStartDateWithinNOTTReminderRange is false', () => {
+    it('should set showAlertForNOTTReminder to false when start date is within NOTT reminder range', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         dismissedAlertForNOTT: true,
-        isStartDateWithinNOTTReminderRange: false,
+        isCalendared: true,
+        startDate: calculateISODate({ howMuch: 60, units: 'days' }),
       };
 
       const result: any = runCompute(formattedTrialSessionDetails, {

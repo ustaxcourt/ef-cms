@@ -1,6 +1,7 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { FormattedTrialSessionDetailsType } from '@shared/business/utilities/getFormattedTrialSessionDetails';
 import { Get } from 'cerebral';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { isEmpty, isEqual } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -58,7 +59,10 @@ export const formattedTrialSessionDetails = (
 
   showAlertForNOTTReminder =
     !formattedTrialSession.dismissedAlertForNOTT &&
-    !!formattedTrialSession.isStartDateWithinNOTTReminderRange &&
+    TrialSession.isStartDateWithinNOTTReminderRange({
+      isCalendared: formattedTrialSession.isCalendared,
+      startDate: formattedTrialSession.startDate,
+    }) &&
     formattedTrialSession.sessionStatus !== SESSION_STATUS_TYPES.closed;
 
   if (showAlertForNOTTReminder) {
