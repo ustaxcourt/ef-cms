@@ -17,6 +17,7 @@ import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
 import { PreviewControls } from './PreviewControls';
 import { SelectScannerSourceModal } from './ScanBatchPreviewer/SelectScannerSourceModal';
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -435,7 +436,7 @@ export const ScanBatchPreviewer = connect(
                       troubleshootingLink:
                         errorType && errorType !== ErrorTypes.WRONG_FILE_TYPE
                           ? {
-                              link: 'https://google.com',
+                              link: TROUBLESHOOTING_INFO.FILE_UPLOAD_TROUBLESHOOTING_LINK,
                               message: 'Learn about troubleshooting files',
                             }
                           : undefined,

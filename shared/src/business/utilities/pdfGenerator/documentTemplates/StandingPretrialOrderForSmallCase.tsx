@@ -2,6 +2,7 @@ import React from 'react';
 
 import { OrderDocketHeader } from '../components/OrderDocketHeader.tsx';
 import { OrderPrimaryHeader } from '../components/OrderPrimaryHeader.tsx';
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants.js';
 
 export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
   return (
@@ -97,8 +98,8 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
             electronically file and view documents in your case. If you are not
             registered for eFiling, you must send the opposing party a copy of
             any document you file with the Court. To register for DAWSON, email{' '}
-            <a href="mailto:dawson.support@ustaxcourt.gov">
-              dawson.support@ustaxcourt.gov
+            <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
+              {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
             </a>
             . eFiling will remain available to parties during the trial session.
             For more information, see{' '}
