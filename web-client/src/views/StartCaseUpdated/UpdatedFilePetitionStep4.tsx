@@ -31,7 +31,8 @@ export const UpdatedFilePetitionStep4 = connect(
           <h2>Case procedure</h2>
           <div className="maxw-none tax-case-info">
             If your case qualifies, you may choose to have it handled as a small
-            tax case. The Court handles small tax cases differently.{' '}
+            tax case. The Court handles small tax cases differently.
+            <br />
             <InlineLink href="https://ustaxcourt.gov/case_procedure.html">
               Which case procedure should I choose?
             </InlineLink>
