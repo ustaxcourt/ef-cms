@@ -50,7 +50,10 @@ export const MessagesIndividualOutbox = connect(
           onSelect={updateScreenMetadataSequence}
         ></TableFilters>
 
-        <table className="usa-table ustc-table subsection">
+        <table
+          className="usa-table ustc-table subsection"
+          data-testid="message-individual-outbox-table"
+        >
           <thead>
             <tr>
               <th aria-hidden="true" className="consolidated-case-column"></th>
@@ -154,62 +157,60 @@ export const MessagesIndividualOutbox = connect(
               </th>
             </tr>
           </thead>
+          <tbody></tbody>
           {formattedMessages.messages.map(message => {
             return (
-              <tbody key={`message-${message.messageId}`}>
-                <tr>
-                  <td className="consolidated-case-column">
-                    <ConsolidatedCaseIcon
-                      consolidatedIconTooltipText={
-                        message.consolidatedIconTooltipText
-                      }
-                      inConsolidatedGroup={message.inConsolidatedGroup}
-                      showLeadCaseIcon={message.isLeadCase}
-                    />
-                  </td>
-                  <td
-                    className="message-queue-row small"
-                    colSpan={2}
-                    data-testid="individual-message-outbox-docket-number-cell"
-                  >
-                    {message.docketNumberWithSuffix}
-                  </td>
-                  <td
-                    className="message-queue-row small"
-                    data-testid="individual-message-outbox-completed-at-cell"
-                  >
-                    <span className="no-wrap">
-                      {message.createdAtFormatted}
-                    </span>
-                  </td>
-                  <td
-                    className="message-queue-row message-subject"
-                    data-testid="individual-message-outbox-subject-cell"
-                  >
-                    <div className="message-document-title">
-                      <Button
-                        link
-                        className="padding-0"
-                        href={message.messageDetailLink}
-                      >
-                        {message.subject}
-                      </Button>
-                    </div>
+              <tr
+                data-testid={message.messageId}
+                key={`message-${message.messageId}`}
+              >
+                <td className="consolidated-case-column">
+                  <ConsolidatedCaseIcon
+                    consolidatedIconTooltipText={
+                      message.consolidatedIconTooltipText
+                    }
+                    inConsolidatedGroup={message.inConsolidatedGroup}
+                    showLeadCaseIcon={message.isLeadCase}
+                  />
+                </td>
+                <td
+                  className="message-queue-row small"
+                  colSpan={2}
+                  data-testid="individual-message-outbox-docket-number-cell"
+                >
+                  {message.docketNumberWithSuffix}
+                </td>
+                <td
+                  className="message-queue-row small"
+                  data-testid="individual-message-outbox-completed-at-cell"
+                >
+                  <span className="no-wrap">{message.createdAtFormatted}</span>
+                </td>
+                <td
+                  className="message-queue-row message-subject"
+                  data-testid="individual-message-outbox-subject-cell"
+                >
+                  <div className="message-document-title">
+                    <Button
+                      link
+                      className="padding-0"
+                      href={message.messageDetailLink}
+                    >
+                      {message.subject}
+                    </Button>
+                  </div>
 
-                    <div className="message-document-detail">
-                      {message.message}
-                    </div>
-                  </td>
-                  <td className="message-queue-row max-width-25">
-                    {message.caseTitle}
-                  </td>
-                  <td className="message-queue-row">{message.caseStatus}</td>
-                  <td className="message-queue-row to">{message.to}</td>
-                  <td className="message-queue-row small">
-                    {message.toSection}
-                  </td>
-                </tr>
-              </tbody>
+                  <div className="message-document-detail">
+                    {message.message}
+                  </div>
+                </td>
+                <td className="message-queue-row max-width-25">
+                  {message.caseTitle}
+                </td>
+                <td className="message-queue-row">{message.caseStatus}</td>
+                <td className="message-queue-row to">{message.to}</td>
+                <td className="message-queue-row small">{message.toSection}</td>
+              </tr>
             );
           })}
         </table>

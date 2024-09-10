@@ -21,7 +21,10 @@ export const MessagesIndividualCompleted = connect(
   }) {
     return (
       <>
-        <table className="usa-table ustc-table subsection">
+        <table
+          className="usa-table ustc-table subsection"
+          data-testid="message-individual-completed-table"
+        >
           <thead>
             <tr>
               <th aria-hidden="true" className="consolidated-case-column"></th>
@@ -97,10 +100,13 @@ export const MessagesIndividualCompleted = connect(
               </th>
             </tr>
           </thead>
-          {formattedMessages.completedMessages.map(message => {
-            return (
-              <tbody key={`message-individual-${message.messageId}`}>
-                <tr>
+          <tbody>
+            {formattedMessages.completedMessages.map(message => {
+              return (
+                <tr
+                  data-testid={message.messageId}
+                  key={`message-individual-${message.messageId}`}
+                >
                   <td className="consolidated-case-column">
                     <ConsolidatedCaseIcon
                       consolidatedIconTooltipText={
@@ -145,9 +151,9 @@ export const MessagesIndividualCompleted = connect(
                   </td>
                   <td className="message-queue-row">{message.caseTitle}</td>
                 </tr>
-              </tbody>
-            );
-          })}
+              );
+            })}
+          </tbody>
         </table>
         {!formattedMessages.hasMessages && <div>There are no messages.</div>}
       </>

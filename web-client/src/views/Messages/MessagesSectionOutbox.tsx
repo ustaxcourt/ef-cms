@@ -56,7 +56,10 @@ export const MessagesSectionOutbox = connect(
           onSelect={updateScreenMetadataSequence}
         ></TableFilters>
 
-        <table className="usa-table ustc-table subsection">
+        <table
+          className="usa-table ustc-table subsection"
+          data-testid="message-section-outbox-table"
+        >
           <thead>
             <tr>
               <th aria-hidden="true" className="consolidated-case-column"></th>
@@ -174,9 +177,11 @@ export const MessagesSectionOutbox = connect(
               </th>
             </tr>
           </thead>
-          {formattedMessages.messages.map(message => (
-            <MessageOutboxRow key={message.messageId} message={message} />
-          ))}
+          <tbody>
+            {formattedMessages.messages.map(message => (
+              <MessageOutboxRow key={message.messageId} message={message} />
+            ))}
+          </tbody>
         </table>
         {!formattedMessages.hasMessages && <div>There are no messages.</div>}
       </>
@@ -188,48 +193,46 @@ MessagesSectionOutbox.displayName = 'MessagesSectionOutbox';
 
 const MessageOutboxRow = React.memo(function MessageOutboxRow({ message }) {
   return (
-    <tbody>
-      <tr>
-        <td className="consolidated-case-column">
-          <ConsolidatedCaseIcon
-            consolidatedIconTooltipText={message.consolidatedIconTooltipText}
-            inConsolidatedGroup={message.inConsolidatedGroup}
-            showLeadCaseIcon={message.isLeadCase}
-          />
-        </td>
-        <td
-          className="message-queue-row small"
-          colSpan={2}
-          data-testid="section-message-outbox-docket-number-cell"
-        >
-          {message.docketNumberWithSuffix}
-        </td>
-        <td
-          className="message-queue-row small"
-          data-testid="section-message-outbox-created-at-cell"
-        >
-          <span className="no-wrap">{message.createdAtFormatted}</span>
-        </td>
-        <td className="message-queue-row message-subject">
-          <div className="message-document-title">
-            <Button link className="padding-0" href={message.messageDetailLink}>
-              {message.subject}
-            </Button>
-          </div>
+    <tr data-testid={message.messageId}>
+      <td className="consolidated-case-column">
+        <ConsolidatedCaseIcon
+          consolidatedIconTooltipText={message.consolidatedIconTooltipText}
+          inConsolidatedGroup={message.inConsolidatedGroup}
+          showLeadCaseIcon={message.isLeadCase}
+        />
+      </td>
+      <td
+        className="message-queue-row small"
+        colSpan={2}
+        data-testid="section-message-outbox-docket-number-cell"
+      >
+        {message.docketNumberWithSuffix}
+      </td>
+      <td
+        className="message-queue-row small"
+        data-testid="section-message-outbox-created-at-cell"
+      >
+        <span className="no-wrap">{message.createdAtFormatted}</span>
+      </td>
+      <td className="message-queue-row message-subject">
+        <div className="message-document-title">
+          <Button link className="padding-0" href={message.messageDetailLink}>
+            {message.subject}
+          </Button>
+        </div>
 
-          <div
-            className="message-document-detail"
-            data-testid="section-message-outbox-subject-cell"
-          >
-            {message.message}
-          </div>
-        </td>
-        <td className="message-queue-row max-width-25">{message.caseTitle}</td>
-        <td className="message-queue-row">{message.caseStatus}</td>
-        <td className="message-queue-row to">{message.to}</td>
-        <td className="message-queue-row from">{message.from}</td>
-        <td className="message-queue-row small">{message.toSection}</td>
-      </tr>
-    </tbody>
+        <div
+          className="message-document-detail"
+          data-testid="section-message-outbox-subject-cell"
+        >
+          {message.message}
+        </div>
+      </td>
+      <td className="message-queue-row max-width-25">{message.caseTitle}</td>
+      <td className="message-queue-row">{message.caseStatus}</td>
+      <td className="message-queue-row to">{message.to}</td>
+      <td className="message-queue-row from">{message.from}</td>
+      <td className="message-queue-row small">{message.toSection}</td>
+    </tr>
   );
 });

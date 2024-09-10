@@ -111,7 +111,10 @@ export const MessagesIndividualInbox = connect(
           </div>
         </div>
 
-        <table className="usa-table ustc-table subsection">
+        <table
+          className="usa-table ustc-table subsection"
+          data-testid="message-individual-inbox-table"
+        >
           <thead>
             <tr>
               <th>
@@ -238,10 +241,10 @@ export const MessagesIndividualInbox = connect(
               </th>
             </tr>
           </thead>
-          {formattedMessages.messages.map(message => {
-            return (
-              <tbody key={message.messageId}>
-                <tr key={message.messageId}>
+          <tbody>
+            {formattedMessages.messages.map(message => {
+              return (
+                <tr data-testid={message.messageId} key={message.messageId}>
                   <td>
                     <input
                       aria-label={`${message.caseTitle}-${message.subject}-checkbox`}
@@ -322,9 +325,9 @@ export const MessagesIndividualInbox = connect(
                     {message.fromSectionFormatted}
                   </td>
                 </tr>
-              </tbody>
-            );
-          })}
+              );
+            })}
+          </tbody>
         </table>
         {!formattedMessages.hasMessages && <div>There are no messages.</div>}
       </>

@@ -39,7 +39,10 @@ export const MessagesSectionCompleted = connect(
           onSelect={updateScreenMetadataSequence}
         ></TableFilters>
 
-        <table className="usa-table ustc-table subsection">
+        <table
+          className="usa-table ustc-table subsection"
+          data-testid="message-section-completed-table"
+        >
           <thead>
             <tr>
               <th aria-hidden="true" className="consolidated-case-column"></th>
@@ -129,9 +132,11 @@ export const MessagesSectionCompleted = connect(
               </th>
             </tr>
           </thead>
-          {formattedMessages.completedMessages.map(message => (
-            <CompletedMessageRow key={message.messageId} message={message} />
-          ))}
+          <tbody>
+            {formattedMessages.completedMessages.map(message => (
+              <CompletedMessageRow key={message.messageId} message={message} />
+            ))}
+          </tbody>
         </table>
         {!formattedMessages.hasMessages && <div>There are no messages.</div>}
       </>
@@ -145,44 +150,42 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
   message,
 }) {
   return (
-    <tbody>
-      <tr>
-        <td className="consolidated-case-column">
-          <ConsolidatedCaseIcon
-            consolidatedIconTooltipText={message.consolidatedIconTooltipText}
-            inConsolidatedGroup={message.inConsolidatedGroup}
-            showLeadCaseIcon={message.isLeadCase}
-          />
-        </td>
-        <td
-          className="message-queue-row small"
-          colSpan={2}
-          data-testid="section-message-completed-docket-number-cell"
+    <tr data-testid={message.messageId}>
+      <td className="consolidated-case-column">
+        <ConsolidatedCaseIcon
+          consolidatedIconTooltipText={message.consolidatedIconTooltipText}
+          inConsolidatedGroup={message.inConsolidatedGroup}
+          showLeadCaseIcon={message.isLeadCase}
+        />
+      </td>
+      <td
+        className="message-queue-row small"
+        colSpan={2}
+        data-testid="section-message-completed-docket-number-cell"
+      >
+        {message.docketNumberWithSuffix}
+      </td>
+      <td
+        className="message-queue-row small"
+        data-testid="section-message-completed-completed-at-cell"
+      >
+        <span className="no-wrap">{message.completedAtFormatted}</span>
+      </td>
+      <td className="message-queue-row">
+        <div
+          className="message-document-title"
+          data-testid="section-message-completed-subject-cell"
         >
-          {message.docketNumberWithSuffix}
-        </td>
-        <td
-          className="message-queue-row small"
-          data-testid="section-message-completed-completed-at-cell"
-        >
-          <span className="no-wrap">{message.completedAtFormatted}</span>
-        </td>
-        <td className="message-queue-row">
-          <div
-            className="message-document-title"
-            data-testid="section-message-completed-subject-cell"
-          >
-            <Button link className="padding-0" href={message.messageDetailLink}>
-              {message.subject}
-            </Button>
-          </div>
+          <Button link className="padding-0" href={message.messageDetailLink}>
+            {message.subject}
+          </Button>
+        </div>
 
-          <div className="message-document-detail">{message.message}</div>
-        </td>
-        <td className="message-queue-row">{message.completedMessage}</td>
-        <td className="message-queue-row">{message.completedBy}</td>
-        <td className="message-queue-row">{message.completedBySection}</td>
-      </tr>
-    </tbody>
+        <div className="message-document-detail">{message.message}</div>
+      </td>
+      <td className="message-queue-row">{message.completedMessage}</td>
+      <td className="message-queue-row">{message.completedBy}</td>
+      <td className="message-queue-row">{message.completedBySection}</td>
+    </tr>
   );
 });
