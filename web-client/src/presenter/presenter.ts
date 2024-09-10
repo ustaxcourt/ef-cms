@@ -952,8 +952,9 @@ export const presenterSequences = {
     gotoTrialSessionPlanningReportSequence as unknown as Function,
   gotoTrialSessionWorkingCopySequence:
     gotoTrialSessionWorkingCopySequence as unknown as Function,
-  gotoTrialSessionsSequence: gotoTrialSessionsSequence as unknown as Function,
-  gotoUpdatedPetitionFlowSequence,
+  gotoTrialSessionsSequence,
+  gotoUpdatedPetitionFlowSequence:
+    gotoUpdatedPetitionFlowSequence as unknown as Function,
   gotoUploadCorrespondenceDocumentSequence:
     gotoUploadCorrespondenceDocumentSequence as unknown as Function,
   gotoUploadCourtIssuedDocumentSequence:
