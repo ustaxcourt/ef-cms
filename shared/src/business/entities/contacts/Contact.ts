@@ -87,6 +87,10 @@ export class Contact extends JoiValidationEntity {
       is: true,
       otherwise: joi.optional(),
       then: joi.required(),
+    }).messages({
+      'any.required': 'Enter a valid email address',
+      'string.email': 'Enter email address in format: yourname@example.com',
+      'string.empty': 'Enter a valid email address',
     }),
     hasConsentedToEService: joi
       .boolean()
