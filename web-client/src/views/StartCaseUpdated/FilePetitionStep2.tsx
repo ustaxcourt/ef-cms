@@ -15,21 +15,21 @@ import classNames from 'classnames';
 export const FilePetitionStep2 = connect(
   {
     constants: state.constants,
+    filePetitionHelper: state.filePetitionHelper,
     form: state.form,
     setPetitionTypeSequence: sequences.setPetitionTypeSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    updatedFilePetitionHelper: state.updatedFilePetitionHelper,
     validationErrors: state.validationErrors,
   },
   function FilePetitionStep2({
     constants,
+    filePetitionHelper,
     form,
     setPetitionTypeSequence,
-    updatedFilePetitionHelper,
     updateFormValueSequence,
     validationErrors,
   }) {
-    const { isPetitioner } = updatedFilePetitionHelper;
+    const { isPetitioner } = filePetitionHelper;
 
     const isNextButtonDisabled =
       form.petitionType === PETITION_TYPES.userUploaded &&
