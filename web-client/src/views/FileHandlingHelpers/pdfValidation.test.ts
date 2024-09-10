@@ -1,3 +1,4 @@
+import { ErrorTypes } from '@web-client/views/FileHandlingHelpers/fileValidation';
 import {
   PDF_CORRUPTED_ERROR_MESSAGE,
   PDF_PASSWORD_PROTECTED_ERROR_MESSAGE,
@@ -55,6 +56,7 @@ describe('validatePdf', () => {
 
     expect(result).toEqual({
       errorMessage: PDF_PASSWORD_PROTECTED_ERROR_MESSAGE,
+      errorType: ErrorTypes.ENCRYPTED_FILE,
       isValid: false,
     });
   });
@@ -72,6 +74,7 @@ describe('validatePdf', () => {
 
     expect(result).toEqual({
       errorMessage: PDF_CORRUPTED_ERROR_MESSAGE,
+      errorType: ErrorTypes.CORRUPT_FILE,
       isValid: false,
     });
   });
