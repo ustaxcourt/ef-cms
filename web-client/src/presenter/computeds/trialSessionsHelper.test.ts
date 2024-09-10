@@ -1,4 +1,9 @@
 import {
+  FORMATS,
+  calculateISODate,
+  formatNow,
+} from '@shared/business/utilities/DateHandler';
+import {
   ROLES,
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
@@ -6,7 +11,6 @@ import {
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
-import { calculateISODate } from '@shared/business/utilities/DateHandler';
 import { cloneDeep } from 'lodash';
 import { docketClerk1User, judgeUser } from '@shared/test/mockUsers';
 import { getUserPermissions } from '@shared/authorization/getUserPermissions';
@@ -516,10 +520,9 @@ describe('trialSessionsHelper', () => {
         trialSession1.dismissedAlertForNOTT = false;
         trialSession1.isCalendared = true;
         trialSession1.startDate = calculateISODate({
-          howMuch: 30,
+          howMuch: 29,
           units: 'days',
         });
-        trialSession1.thirtyDaysBeforeTrialFormatted = '06/03/13';
         trialSessionsPageState.trialSessions = [trialSession1];
 
         const result = runCompute(trialSessionsHelper, {
@@ -532,7 +535,7 @@ describe('trialSessionsHelper', () => {
         const trialSessionsOnly =
           result.trialSessionRows.filter(isTrialSessionRow);
         expect(trialSessionsOnly[0].alertMessageForNOTT).toEqual(
-          `The 30-day notice is due by ${trialSession1.thirtyDaysBeforeTrialFormatted}`,
+          `The 30-day notice is due by ${formatNow(FORMATS.MMDDYY)}`,
         );
         expect(trialSessionsOnly[0].showAlertForNOTTReminder).toEqual(true);
       });

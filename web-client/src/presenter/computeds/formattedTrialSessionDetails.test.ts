@@ -1,4 +1,9 @@
 import {
+  FORMATS,
+  calculateISODate,
+  formatNow,
+} from '@shared/business/utilities/DateHandler';
+import {
   HYBRID_SESSION_TYPES,
   SESSION_STATUS_GROUPS,
   SESSION_STATUS_TYPES,
@@ -6,7 +11,6 @@ import {
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { calculateISODate } from '@shared/business/utilities/DateHandler';
 import {
   colvinsChambersUser,
   docketClerkUser,
@@ -528,8 +532,7 @@ describe('formattedTrialSessionDetails', () => {
         ...TRIAL_SESSION,
         dismissedAlertForNOTT: false,
         isCalendared: true,
-        startDate: calculateISODate({ howMuch: 30, units: 'days' }),
-        thirtyDaysBeforeTrialFormatted: '2/2/2022',
+        startDate: calculateISODate({ howMuch: 29, units: 'days' }),
       };
 
       const result: any = runCompute(formattedTrialSessionDetails, {
@@ -543,7 +546,7 @@ describe('formattedTrialSessionDetails', () => {
 
       expect(result.showAlertForNOTTReminder).toBe(true);
       expect(result.alertMessageForNOTT).toEqual(
-        '30-day trial notices are due by 2/2/2022. Have notices been served?',
+        `30-day trial notices are due by ${formatNow(FORMATS.MMDDYY)}. Have notices been served?`,
       );
     });
 
