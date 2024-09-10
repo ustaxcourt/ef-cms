@@ -333,6 +333,30 @@ describe('updatedFilePetitionHelper', () => {
       });
     });
   });
+  describe('primaryContactNameLabel', () => {
+    it('should return the correct primary contact name label when filing as a petitioner', () => {
+      const result = runCompute(updatedFilePetitionHelper, {
+        state: {
+          form: {
+            partyType: PARTY_TYPES.petitioner,
+          },
+          user: petitionerUser,
+        },
+      });
+      expect(result.primaryContactNameLabel).toEqual('Full Name');
+    });
+    it('should return the correct primary contact name label when filing as a private practitioner', () => {
+      const result = runCompute(updatedFilePetitionHelper, {
+        state: {
+          form: {
+            partyType: PARTY_TYPES.petitioner,
+          },
+          user: privatePractitionerUser,
+        },
+      });
+      expect(result.primaryContactNameLabel).toEqual('Petitioner’s full name');
+    });
+  });
   describe('getLetterByIndex', () => {
     it('should return the correct single-letter label for a given index', () => {
       const result = runCompute(updatedFilePetitionHelper, {

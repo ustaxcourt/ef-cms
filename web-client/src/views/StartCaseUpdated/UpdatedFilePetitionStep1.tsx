@@ -91,7 +91,7 @@ export const UpdatedFilePetitionStep1 = connect(
             handleBlur={petitionGenerationLiveValidationSequence}
             handleChange={updateFormValueUpdatedSequence}
             handleChangeCountryType={updateFormValueCountryTypeSequence}
-            nameLabel={isPetitioner ? 'Full Name' : 'Petitioner’s full name'}
+            nameLabel={updatedFilePetitionHelper.primaryContactNameLabel}
             registerRef={registerRef}
             showEmail={isPractitioner}
           />
@@ -105,7 +105,7 @@ export const UpdatedFilePetitionStep1 = connect(
               handleBlur={petitionGenerationLiveValidationSequence}
               handleChange={updateFormValueUpdatedSequence}
               handleChangeCountryType={updateFormValueCountryTypeSequence}
-              nameLabel={isPetitioner ? 'Full Name' : 'Petitioner’s full name'}
+              nameLabel={updatedFilePetitionHelper.primaryContactNameLabel}
               registerRef={registerRef}
               showEmail={isPractitioner}
             />
