@@ -1,4 +1,9 @@
 import {
+  FORMATS,
+  calculateISODate,
+  formatNow,
+} from '@shared/business/utilities/DateHandler';
+import {
   ROLES,
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
@@ -513,8 +518,11 @@ describe('trialSessionsHelper', () => {
 
       it('should show an alertMessage for NOTT reminders when the user has not dismissed the alert and the start day is within the reminder range', () => {
         trialSession1.dismissedAlertForNOTT = false;
-        trialSession1.isStartDateWithinNOTTReminderRange = true;
-        trialSession1.thirtyDaysBeforeTrialFormatted = '06/03/13';
+        trialSession1.isCalendared = true;
+        trialSession1.startDate = calculateISODate({
+          howMuch: 29,
+          units: 'days',
+        });
         trialSessionsPageState.trialSessions = [trialSession1];
 
         const result = runCompute(trialSessionsHelper, {
@@ -527,7 +535,7 @@ describe('trialSessionsHelper', () => {
         const trialSessionsOnly =
           result.trialSessionRows.filter(isTrialSessionRow);
         expect(trialSessionsOnly[0].alertMessageForNOTT).toEqual(
-          `The 30-day notice is due by ${trialSession1.thirtyDaysBeforeTrialFormatted}`,
+          `The 30-day notice is due by ${formatNow(FORMATS.MMDDYY)}`,
         );
         expect(trialSessionsOnly[0].showAlertForNOTTReminder).toEqual(true);
       });
