@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { OrderDocketHeader } from '../components/OrderDocketHeader.tsx';
-import { OrderPrimaryHeader } from '../components/OrderPrimaryHeader.tsx';
-import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants.js';
+import { OrderDocketHeader } from '../components/OrderDocketHeader';
+import { OrderPrimaryHeader } from '../components/OrderPrimaryHeader';
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 
 export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
   return (
