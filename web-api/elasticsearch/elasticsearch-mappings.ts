@@ -7,10 +7,6 @@ import {
   efcmsDocketEntryIndex,
   efcmsDocketEntryMappings,
 } from './efcms-docket-entry-mappings';
-import {
-  efcmsMessageIndex,
-  efcmsMessageMappings,
-} from './efcms-message-mappings';
 import { efcmsUserIndex, efcmsUserMappings } from './efcms-user-mappings';
 import {
   efcmsWorkItemIndex,
@@ -39,7 +35,6 @@ export const elasticsearchMappings = {
   [efcmsCaseDeadlineIndex]: efcmsCaseDeadlineMappings,
   [efcmsCaseIndex]: efcmsCaseMappings,
   [efcmsDocketEntryIndex]: efcmsDocketEntryMappings,
-  [efcmsMessageIndex]: efcmsMessageMappings,
   [efcmsUserIndex]: efcmsUserMappings,
   [efcmsWorkItemIndex]: efcmsWorkItemMappings,
 };

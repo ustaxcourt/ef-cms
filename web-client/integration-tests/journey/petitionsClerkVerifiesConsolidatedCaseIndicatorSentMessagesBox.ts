@@ -1,5 +1,4 @@
 import { formattedMessages as formattedMessagesComputed } from '../../src/presenter/computeds/formattedMessages';
-import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -10,7 +9,6 @@ export const petitionsClerkVerifiesConsolidatedCaseIndicatorSentMessagesBox = (
   const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 
   return it('petitions clerk verifies consolidated case indicator sent messages box', async () => {
-    await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoMessagesSequence', {
       box: 'outbox',
       queue: 'section',

@@ -1,6 +1,5 @@
 import { CASE_STATUS_TYPES, PETITIONS_SECTION } from './EntityConstants';
 import { MessageResult } from './MessageResult';
-import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('MessageResult', () => {
   const mockRawMessageResult = {
@@ -27,20 +26,16 @@ describe('MessageResult', () => {
   };
 
   it('should create a valid MessageResult', () => {
-    const messageResult = new MessageResult(mockRawMessageResult, {
-      applicationContext,
-    });
+    const messageResult = new MessageResult(mockRawMessageResult);
 
     expect(messageResult.isValid()).toBeTruthy();
   });
 
   it('should fail validation when trialLocation is not one of TRIAL_CITY_STRINGS or StandaloneRemote', () => {
-    const messageResult = new MessageResult(
-      { ...mockRawMessageResult, trialLocation: 'New Delhi, India' },
-      {
-        applicationContext,
-      },
-    );
+    const messageResult = new MessageResult({
+      ...mockRawMessageResult,
+      trialLocation: 'New Delhi, India',
+    });
 
     expect(messageResult.isValid()).toBeFalsy();
   });
