@@ -1,6 +1,6 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const updatedValidatePetitionAction = ({
+export const validatePetitionAction = ({
   applicationContext,
   get,
   path,
