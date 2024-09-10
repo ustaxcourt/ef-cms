@@ -27,21 +27,25 @@
       }
     }
 
-    .reason-button {
-      @media only screen and (max-width: ($medium-screen - 1px)) {
-        margin-left: 0;
-      }
-
-      margin-left: 1rem;
-
-    }
-
-    .fact-reason-button-wrapper {
+    .fact-or-reason-text-area-wrapper {
       display: flex;
-      width: 40px;
       align-items: center;
-      margin-left: 10px;
+
+      @media only screen and (max-width: ($medium-screen - 1px)) {
+          flex-direction: column;
+          align-items: flex-end; 
+      }
     }
+
+    .fact-or-reason-button-wrapper {
+      width: 40px;
+      margin-left: 10px;
+      
+      @media only screen and (max-width: ($medium-screen - 1px)) {
+        margin-right: 35px;
+      }
+    }
+
 
     .fact-reason-character-label {
       width: 2ch;
@@ -739,12 +743,6 @@ label.ustc-upload {
 .add-another-fact-button {
   @media only screen and (max-width: $medium-screen - 1px) {
     text-align: left !important;
-  }
-}
-
-.remove-fact-reason-button {
-  @media only screen and (max-width: $medium-screen - 1px) {
-    text-align: right !important;
   }
 }
 
