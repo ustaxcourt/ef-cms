@@ -32,11 +32,6 @@ describe('validateFileOnSelect', () => {
   });
 
   it('should call onError with the validation error message when the file is invalid', async () => {
-    (validateFile as jest.Mock).mockResolvedValue({
-      errorMessage:
-        'Your file is not a PDF. Select a PDF file or resave the file as a PDF.',
-      isValid: false,
-    });
     const onError = jest.fn();
     const onSuccess = jest.fn();
     const event = {
@@ -56,6 +51,7 @@ describe('validateFileOnSelect', () => {
     });
 
     expect(onError).toHaveBeenCalledWith({
+      errorType: fileValidation.ErrorTypes.WRONG_FILE_TYPE,
       message:
         'Your file is not a PDF. Select a PDF file or resave the file as a PDF.',
     });
@@ -64,9 +60,6 @@ describe('validateFileOnSelect', () => {
   });
 
   it('should call onSuccess with the file when the file is valid', async () => {
-    (validateFile as jest.Mock).mockResolvedValue({
-      isValid: true,
-    });
     const mockFile = new File(['dummy content'], 'test.txt', {
       type: 'text/plain',
     });
