@@ -7,17 +7,22 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkViewsTrialSessionsTab = (
   cerebralTest: any,
-  overrides: { tab?: 'calendared' | 'new' } = { tab: 'calendared' },
+  overrides: {
+    tab?: 'calendared' | 'new';
+    sessionStatus?: 'Closed' | 'Open' | 'All';
+  } = {
+    sessionStatus: 'Open',
+    tab: 'calendared',
+  },
 ) => {
   const { tab } = overrides;
   return it(`Docket clerk views ${tab} Trial Sessions tab`, async () => {
-    await cerebralTest.runSequence('gotoTrialSessionsSequence', {
-      query: {
-        status: tab,
-      },
-    });
+    await cerebralTest.runSequence('gotoTrialSessionsSequence');
     await cerebralTest.runSequence('setTrialSessionsFiltersSequence', {
       currentTab: tab,
+    });
+    await cerebralTest.runSequence('setTrialSessionsFiltersSequence', {
+      sessionStatus: overrides.sessionStatus,
     });
 
     expect(cerebralTest.getState('currentPage')).toEqual('TrialSessions');

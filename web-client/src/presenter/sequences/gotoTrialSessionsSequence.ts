@@ -29,4 +29,4 @@ export const gotoTrialSessionsSequence =
       ],
     ]),
     setupCurrentPageAction('TrialSessions'),
-  ]);
+  ]) as unknown as () => void;
