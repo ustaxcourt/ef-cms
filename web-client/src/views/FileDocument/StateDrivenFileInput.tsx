@@ -3,6 +3,7 @@ import {
   ErrorTypes,
   validateFileOnSelect,
 } from '@web-client/views/FileHandlingHelpers/fileValidation';
+import { FileUploadErrorModal } from '@web-client/views/FileUploadErrorModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { cloneFile } from '../FileHandlingHelpers/cloneFile';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -28,6 +29,7 @@ const deps = {
   setIsLoadingSequence: sequences.setIsLoadingSequence,
   setIsNotLoadingSequence: sequences.setIsNotLoadingSequence,
   showFileUploadErrorModalSequence: sequences.showFileUploadErrorModalSequence,
+  showModal: state.modal.showModal,
   updateFormValueSequence: sequences[props.updateFormValueSequence],
   validationSequence: sequences[props.validationSequence],
 };
@@ -49,6 +51,7 @@ export const StateDrivenFileInput = connect<
     setIsLoadingSequence,
     setIsNotLoadingSequence,
     showFileUploadErrorModalSequence,
+    showModal,
     updateFormValueSequence,
     validationSequence,
     ...remainingProps
@@ -77,7 +80,7 @@ export const StateDrivenFileInput = connect<
               'If you still have a problem uploading the file, email',
             errorToLog: !message,
             message,
-            title: 'There Is a Problem With Your File',
+            title: 'There Is a Problem With This File',
             troubleshootingLink:
               errorType && errorType !== ErrorTypes.WRONG_FILE_TYPE
                 ? {
@@ -176,6 +179,7 @@ export const StateDrivenFileInput = connect<
             </Button>
           </div>
         )}
+        {showModal === 'FileUploadErrorModal' && <FileUploadErrorModal />}
       </React.Fragment>
     );
   },
