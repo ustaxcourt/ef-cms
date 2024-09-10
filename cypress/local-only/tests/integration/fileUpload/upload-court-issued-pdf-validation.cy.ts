@@ -4,8 +4,6 @@ import { MAX_FILE_SIZE_MB } from '../../../../../shared/src/business/entities/En
 import { attachFile } from '../../../../helpers/file/upload-file';
 import { loginAsDocketClerk1 } from '../../../../helpers/authentication/login-as-helpers';
 
-// TODO 10001: Pull out error messages into a shared?
-
 describe('upload court issued document validations', () => {
   const docketNumber = '102-67'; // Any existing docket number works
 
@@ -52,7 +50,6 @@ describe('upload court issued document validations', () => {
   });
 
   it('should display error modal when a file larger than the limit is selected', () => {
-    // Create a 300MB Blob (300 * 1024 * 1024 bytes)
     const largeFile = new Blob(
       [new ArrayBuffer((MAX_FILE_SIZE_MB + 1) * 1024 * 1024)],
       {
@@ -61,7 +58,7 @@ describe('upload court issued document validations', () => {
     );
     const fileName = 'large-file.pdf';
 
-    // Use Cypress to trigger the file upload
+    // Trigger the file upload
     cy.get('[data-testid="primary-document-file"]').then(input => {
       const dataTransfer = new DataTransfer();
       const file = new File([largeFile], fileName, { type: largeFile.type });

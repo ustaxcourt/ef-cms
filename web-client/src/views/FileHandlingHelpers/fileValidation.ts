@@ -11,8 +11,9 @@ export enum ErrorTypes {
 
 export interface FileValidationResponse {
   isValid: boolean;
-  errorMessage?: string;
+  errorMessageToDisplay?: string;
   errorType?: ErrorTypes;
+  errorMessageToLog?: string; // Decouple this from the display so we can send finer-grained errors to our logging
 }
 
 function getFileExtension(filename: string) {
@@ -51,10 +52,10 @@ const validateCorrectFileType = ({
 }: {
   file: File;
   allowedFileExtensions: string[];
-}) => {
+}): FileValidationResponse => {
   if (!allowedFileExtensions.includes(getFileExtension(file.name))) {
     return {
-      errorMessage: getWrongFileTypeMessage(allowedFileExtensions),
+      errorMessageToDisplay: getWrongFileTypeMessage(allowedFileExtensions),
       errorType: ErrorTypes.WRONG_FILE_TYPE,
       isValid: false,
     };
@@ -76,30 +77,34 @@ export const validateFileOnSelect = async ({
   onError: ({
     errorType,
     message,
+    messageToLog,
   }: {
     message: string;
     errorType?: ErrorTypes;
+    messageToLog?: string;
   }) => void;
 }) => {
   const target = e.target as HTMLInputElement;
 
   if (!target || !target.files || target.files.length === 0) {
     onError({
-      message: 'No file selected',
+      message: 'No file selected. Please upload a file.',
     });
     return;
   }
 
   const selectedFile = target.files[0];
-  const { errorMessage, errorType, isValid } = await validateFile({
-    allowedFileExtensions,
-    file: selectedFile,
-    megabyteLimit,
-  });
+  const { errorMessageToDisplay, errorMessageToLog, errorType, isValid } =
+    await validateFile({
+      allowedFileExtensions,
+      file: selectedFile,
+      megabyteLimit,
+    });
   if (!isValid) {
     onError({
       errorType,
-      message: errorMessage!,
+      message: errorMessageToDisplay!,
+      messageToLog: errorMessageToLog,
     });
     target.value = '';
     return;
@@ -118,7 +123,7 @@ export const validateFile = async ({
 }): Promise<FileValidationResponse> => {
   if (file.size > megabyteLimit * 1024 * 1024) {
     return {
-      errorMessage: `The file size is too big. The maximum file size is ${megabyteLimit}MB. Reduce the file size and try again.`,
+      errorMessageToDisplay: `The file size is too big. The maximum file size is ${megabyteLimit}MB. Reduce the file size and try again.`,
       errorType: ErrorTypes.FILE_TOO_BIG,
       isValid: false,
     };

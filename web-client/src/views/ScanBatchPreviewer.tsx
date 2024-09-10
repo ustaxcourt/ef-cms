@@ -426,11 +426,11 @@ export const ScanBatchPreviewer = connect(
                   allowedFileExtensions: ['.pdf'],
                   e,
                   megabyteLimit: constants.MAX_FILE_SIZE_MB,
-                  onError: ({ errorType, message }) => {
+                  onError: ({ errorType, message, messageToLog }) => {
                     showFileUploadErrorModalSequence({
                       contactSupportMessage:
                         'If you still have a problem uploading the file, email',
-                      errorToLog: !message,
+                      errorToLog: messageToLog || message,
                       message,
                       title: 'There Is a Problem With This File',
                       troubleshootingLink:

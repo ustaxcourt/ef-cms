@@ -9,6 +9,9 @@ export const PDF_PASSWORD_PROTECTED_ERROR_MESSAGE =
 export const PDF_CORRUPTED_ERROR_MESSAGE =
   'The file is corrupted or in an unsupported PDF format. Ensure that the file is not corrupted and/or is in a supported PDF format and try again.';
 
+const GENERIC_FILE_ERROR_MESSAGE =
+  'There is a problem uploading the file. Try again later.';
+
 export const validatePdf = ({
   file,
 }: {
@@ -23,7 +26,8 @@ export const validatePdf = ({
 
       if (!result || typeof result === 'string') {
         resolve({
-          errorMessage: 'Failed to read file as ArrayBuffer.',
+          errorMessageToDisplay: GENERIC_FILE_ERROR_MESSAGE,
+          errorMessageToLog: 'Failed to read file as ArrayBuffer.',
           isValid: false,
         });
         return;
@@ -39,20 +43,21 @@ export const validatePdf = ({
         if (err instanceof Error) {
           if (err.name === 'PasswordException') {
             resolve({
-              errorMessage: PDF_PASSWORD_PROTECTED_ERROR_MESSAGE,
+              errorMessageToDisplay: PDF_PASSWORD_PROTECTED_ERROR_MESSAGE,
               errorType: ErrorTypes.ENCRYPTED_FILE,
               isValid: false,
             });
           } else if (err.name === 'InvalidPDFException') {
             resolve({
-              errorMessage: PDF_CORRUPTED_ERROR_MESSAGE,
+              errorMessageToDisplay: PDF_CORRUPTED_ERROR_MESSAGE,
               errorType: ErrorTypes.CORRUPT_FILE,
               isValid: false,
             });
           }
         }
         resolve({
-          errorMessage: 'An unknown error occurred: ${err}',
+          errorMessageToDisplay: GENERIC_FILE_ERROR_MESSAGE,
+          errorMessageToLog: 'An unknown error occurred: ${err}',
           isValid: false,
         });
       }
@@ -60,7 +65,8 @@ export const validatePdf = ({
 
     fileReader.onerror = () => {
       resolve({
-        errorMessage: 'There is a problem uploading the file. Try again later.',
+        errorMessageToDisplay: GENERIC_FILE_ERROR_MESSAGE,
+        errorMessageToLog: GENERIC_FILE_ERROR_MESSAGE,
         isValid: false,
       });
     };

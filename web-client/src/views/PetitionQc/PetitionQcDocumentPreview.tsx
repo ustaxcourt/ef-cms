@@ -13,6 +13,7 @@ export const PetitionQcDocumentPreview = connect(
     documentSelectedForPreview,
     petitionQcHelper,
   }) {
+    console.log('HERE!!');
     return (
       <>
         <PetitionQcScanBatchPreviewer
