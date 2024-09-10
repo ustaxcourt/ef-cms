@@ -151,11 +151,6 @@ export function scheduleTrialSessions({
       }, {});
 
     for (const city of potentialTrialLocations) {
-      // TODO: pick up here (maybe move hybrid handling out of while loop?)
-      // while (
-      //   regularCasesByCity[city]?.length > 0 ||
-      //   smallCasesByCity[city]?.length > 0
-      // ) {
       if (!sessionCountPerCity[city]) {
         sessionCountPerCity[city] = 0;
       }
@@ -166,7 +161,7 @@ export function scheduleTrialSessions({
 
       if (
         sessionCountPerWeek[weekOfString] <
-          calendaringConfig.maxSessionsPerWeek && // TODO, currently we're going to move to the next city if this limit is reached, and keep checking until we move to the next week.
+          calendaringConfig.maxSessionsPerWeek &&
         sessionCountPerCity[city] < calendaringConfig.maxSessionsPerLocation
       ) {
         let regularCaseSliceSize;
@@ -215,7 +210,6 @@ export function scheduleTrialSessions({
           }
         }
       }
-      // }
 
       // Handle Hybrid Sessions
       const remainingRegularCases = regularCasesByCity[city] || [];
@@ -228,7 +222,7 @@ export function scheduleTrialSessions({
         // Since the min of reg cases is 40, and the min of small cases is 40,
         // and the sum of these two values is below the hybrid case max of 100,
         // we can safely assume that if the combination of remaining regular
-        // cases and remaining small cases is above the minimum of 50, so we can
+        // cases and remaining small cases is above the minimum of 50, we can
         // assign all of those remaining cases to a hybrid session.
         //
         // This comment applies to the if statement's condition, as well as to
@@ -245,14 +239,11 @@ export function scheduleTrialSessions({
       }
     }
 
-    console.debug('currentWeek before', currentWeek);
     currentWeek = addWeeksToDate({ startDate: currentWeek, weeksToAdd: 1 }); // Move to the next week
     differenceInDays = calculateDifferenceInDays(
       formatDateString(endDate, FORMATS.ISO),
       formatDateString(currentWeek, FORMATS.ISO),
     );
-
-    console.debug('currentWeek after', currentWeek);
   }
 
   return sessions;
