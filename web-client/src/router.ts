@@ -1239,7 +1239,7 @@ const router = {
       '/file-a-petition/new',
       ifHasAccess({ app }, () => {
         setPageTitle('File a petition');
-        return app.getSequence('gotoUpdatedPetitionFlowSequence')();
+        return app.getSequence('gotoPetitionFlowSequence')();
       }),
     );
 
