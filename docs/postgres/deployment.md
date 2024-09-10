@@ -6,7 +6,7 @@
     - POSTGRES_USER ${ENV}_dawson
     - DATABASE_NAME ${ENV}_dawson
     - POSTGRES_MASTER_USERNAME master
-    - POSTGRES_MASTER_PASSWORD ${GENERATE_A_SECURE_PASS}
+    - POSTGRES_MASTER_PASSWORD ${GENERATE_A_SECURE_PASS} # we recommend 32+ character alpha numeric.  special character might mess stuff up
     - (optional) RDS_MAX_CAPACITY 1
     - (optional) RDS_MIN_CAPACITY 0.5
 2. source scripts/env/set-env.zsh ${ENV}
