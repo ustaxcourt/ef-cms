@@ -4,6 +4,7 @@ import { Get } from 'cerebral';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { isEmpty, isEqual } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+import { thirtyDaysBeforeTrial } from '@web-client/presenter/computeds/trialSessionsHelper';
 
 type FormatTrialSessionHelperType = FormattedTrialSessionDetailsType & {
   alertMessageForNOTT?: string;
@@ -66,7 +67,7 @@ export const formattedTrialSessionDetails = (
     formattedTrialSession.sessionStatus !== SESSION_STATUS_TYPES.closed;
 
   if (showAlertForNOTTReminder) {
-    alertMessageForNOTT = `30-day trial notices are due by ${formattedTrialSession.thirtyDaysBeforeTrialFormatted}. Have notices been served?`;
+    alertMessageForNOTT = `30-day trial notices are due by ${thirtyDaysBeforeTrial(formattedTrialSession.startDate)}. Have notices been served?`;
   }
 
   if (formattedTrialSession.chambersPhoneNumber) {
