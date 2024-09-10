@@ -18,10 +18,9 @@ describe('NewPetitionerUser', () => {
 
   describe('Email', () => {
     it('should return an error message for email when no email is provided', () => {
-      const { email, ...rest } = validEntity;
-      void email;
       const formEntity = new NewPetitionerUser({
-        ...rest,
+        ...validEntity,
+        email: undefined,
       });
 
       expect(formEntity.isValid()).toBeFalsy();
