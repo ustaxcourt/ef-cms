@@ -75,12 +75,12 @@ export const StateDrivenFileInput = connect<
         allowedFileExtensions: accept.split(','),
         e,
         megabyteLimit: constants.MAX_FILE_SIZE_MB,
-        onError: ({ errorType, message }) => {
+        onError: ({ errorType, message, messageToLog }) => {
           setSelectedFilename('');
           showFileUploadErrorModalSequence({
             contactSupportMessage:
               'If you still have a problem uploading the file, email',
-            errorToLog: !message,
+            errorToLog: messageToLog || message,
             message,
             title: 'There Is a Problem With This File',
             troubleshootingLink:

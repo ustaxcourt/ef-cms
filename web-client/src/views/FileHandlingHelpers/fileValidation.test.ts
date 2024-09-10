@@ -27,7 +27,9 @@ describe('validateFileOnSelect', () => {
       onSuccess,
     });
 
-    expect(onError).toHaveBeenCalledWith({ message: 'No file selected' });
+    expect(onError).toHaveBeenCalledWith({
+      message: 'No file selected. Please upload a file.',
+    });
     expect(onSuccess).not.toHaveBeenCalled();
   });
 
@@ -110,7 +112,7 @@ describe('fileValidation', () => {
     });
 
     expect(validationResult.isValid).toBe(false);
-    expect(validationResult.errorMessage).toBe(
+    expect(validationResult.errorMessageToDisplay).toBe(
       'The file is not a PDF. Select a PDF file or resave the file as a PDF.',
     );
   });
@@ -125,7 +127,7 @@ describe('fileValidation', () => {
     });
 
     expect(validationResult.isValid).toBe(false);
-    expect(validationResult.errorMessage).toBe(
+    expect(validationResult.errorMessageToDisplay).toBe(
       'The file is not in a supported format (.pdf, .doc, .docx). Select a different file or resave it in a supported format.',
     );
   });
@@ -141,7 +143,7 @@ describe('fileValidation', () => {
     });
 
     expect(validationResult.isValid).toBe(false);
-    expect(validationResult.errorMessage).toBe(
+    expect(validationResult.errorMessageToDisplay).toBe(
       `The file size is too big. The maximum file size is ${megabyteLimit}MB. Reduce the file size and try again.`,
     );
   });

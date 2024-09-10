@@ -55,7 +55,7 @@ describe('validatePdf', () => {
     const result = await resultPromise;
 
     expect(result).toEqual({
-      errorMessage: PDF_PASSWORD_PROTECTED_ERROR_MESSAGE,
+      errorMessageToDisplay: PDF_PASSWORD_PROTECTED_ERROR_MESSAGE,
       errorType: ErrorTypes.ENCRYPTED_FILE,
       isValid: false,
     });
@@ -73,7 +73,7 @@ describe('validatePdf', () => {
     const result = await resultPromise;
 
     expect(result).toEqual({
-      errorMessage: PDF_CORRUPTED_ERROR_MESSAGE,
+      errorMessageToDisplay: PDF_CORRUPTED_ERROR_MESSAGE,
       errorType: ErrorTypes.CORRUPT_FILE,
       isValid: false,
     });
@@ -85,7 +85,10 @@ describe('validatePdf', () => {
     const result = await resultPromise;
 
     expect(result).toEqual({
-      errorMessage: 'There is a problem uploading the file. Try again later.',
+      errorMessageToDisplay:
+        'There is a problem uploading the file. Try again later.',
+      errorMessageToLog:
+        'There is a problem uploading the file. Try again later.',
       isValid: false,
     });
   });
@@ -98,7 +101,9 @@ describe('validatePdf', () => {
     const result = await resultPromise;
 
     expect(result).toEqual({
-      errorMessage: 'Failed to read file as ArrayBuffer.',
+      errorMessageToDisplay:
+        'There is a problem uploading the file. Try again later.',
+      errorMessageToLog: 'Failed to read file as ArrayBuffer.',
       isValid: false,
     });
   });
