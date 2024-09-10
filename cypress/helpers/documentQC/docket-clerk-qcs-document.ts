@@ -1,3 +1,5 @@
+import { getIdOfLastSentMessage } from '../messages/get-id-of-last-sent-message';
+
 export const docketClerkQCsDocument = (
   docketNumber: string,
   docketEntryId: string,
@@ -14,16 +16,7 @@ export const docketClerkQCsDocument = (
     cy.get('#message').type(sendMessage.body);
     cy.get('[data-testid="modal-confirm"]').click();
     cy.get('[data-testid="success-alert"]').should('exist');
-    cy.get('[data-testid="header-messages-link"]').click();
-    cy.get('[data-testid="messages-outbox-tab"]').click();
-    return cy
-      .get('[data-testid="message-individual-outbox-table"]')
-      .find('tbody > tr')
-      .first()
-      .invoke('attr', 'data-testid')
-      .then(messageId => {
-        return cy.wrap(messageId);
-      });
+    return getIdOfLastSentMessage();
   } else {
     cy.get('#save-and-finish').click();
     cy.get('[data-testid="success-alert"]').should('exist');
