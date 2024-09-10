@@ -584,6 +584,8 @@ import { validateDocumentSequence } from './sequences/validateDocumentSequence';
 import { validateEditPetitionerCounselSequence } from './sequences/CaseAssociation/validateEditPetitionerCounselSequence';
 import { validateEditRespondentCounselSequence } from './sequences/CaseAssociation/validateEditRespondentCounselSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
+import { validateFilePetitionStep2Sequence } from '@web-client/presenter/sequences/validateFilePetitionStep2Sequence';
+import { validateFilePetitionStep5Sequence } from '@web-client/presenter/sequences/validateFilePetitionStep5Sequence';
 import { validateNoteSequence } from './sequences/validateNoteSequence';
 import { validateOpinionSearchSequence } from './sequences/validateOpinionSearchSequence';
 import { validateOrderSearchSequence } from './sequences/validateOrderSearchSequence';
@@ -603,8 +605,6 @@ import { validateTrialSessionPlanningSequence } from './sequences/validateTrialS
 import { validateTrialSessionSequence } from './sequences/validateTrialSessionSequence';
 import { validateUpdateCaseModalSequence } from './sequences/validateUpdateCaseModalSequence';
 import { validateUpdatePractitionerSequence } from './sequences/validateUpdatePractitionerSequence';
-import { validateUpdatedFilePetitionStep2Sequence } from '@web-client/presenter/sequences/validateUpdatedFilePetitionStep2Sequence';
-import { validateUpdatedFilePetitionStep5Sequence } from '@web-client/presenter/sequences/validateUpdatedFilePetitionStep5Sequence';
 import { validateUploadCorrespondenceDocumentSequence } from './sequences/validateUploadCorrespondenceDocumentSequence';
 import { validateUploadCourtIssuedDocumentSequence } from './sequences/validateUploadCourtIssuedDocumentSequence';
 import { validateUserContactSequence } from './sequences/validateUserContactSequence';
@@ -1561,6 +1561,8 @@ export const presenterSequences = {
     validateEditRespondentCounselSequence as unknown as Function,
   validateExternalDocumentInformationSequence:
     validateExternalDocumentInformationSequence as unknown as Function,
+  validateFilePetitionStep2Sequence,
+  validateFilePetitionStep5Sequence,
   validateNoteSequence: validateNoteSequence as unknown as Function,
   validateOpinionSearchSequence:
     validateOpinionSearchSequence as unknown as Function,
@@ -1596,8 +1598,6 @@ export const presenterSequences = {
     validateUpdateCaseModalSequence as unknown as Function,
   validateUpdatePractitionerSequence:
     validateUpdatePractitionerSequence as unknown as Function,
-  validateUpdatedFilePetitionStep2Sequence,
-  validateUpdatedFilePetitionStep5Sequence,
   validateUploadCorrespondenceDocumentSequence:
     validateUploadCorrespondenceDocumentSequence as unknown as Function,
   validateUploadCourtIssuedDocumentSequence:

@@ -82,7 +82,7 @@ export const FilePetitionStep5 = connect(
                 id="stin-file"
                 name="stinFile"
                 updateFormValueSequence="updateFormValueUpdatedSequence"
-                validationSequence="validateUpdatedFilePetitionStep5Sequence"
+                validationSequence="validateFilePetitionStep5Sequence"
               />
             </FormGroup>
           </div>

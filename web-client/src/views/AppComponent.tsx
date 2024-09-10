@@ -52,6 +52,7 @@ import { ErrorView } from './Error';
 import { ErrorView500 } from './ErrorView500';
 import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
+import { FilePetition } from './StartCaseUpdated/FilePetition';
 import { FilePetitionSuccess } from './StartCase/FilePetitionSuccess';
 import { Footer } from './Footer';
 import { ForgotPassword } from '@web-client/views/Login/ForgotPassword';
@@ -92,7 +93,6 @@ import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
 import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
-import { UpdatedFilePetition } from './StartCaseUpdated/UpdatedFilePetition';
 import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCourtIssuedDocument';
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
@@ -155,6 +155,7 @@ const pages = {
   ErrorView,
   ErrorView500,
   FileDocumentWizard,
+  FilePetition,
   FilePetitionSuccess,
   ForgotPassword,
   IdleLogout,
@@ -190,7 +191,6 @@ const pages = {
   TrialSessionPlanningReport,
   TrialSessionWorkingCopy,
   TrialSessions,
-  UpdatedFilePetition,
   UploadCourtIssuedDocument,
   UserContactEdit,
   UserContactEditProgress,
