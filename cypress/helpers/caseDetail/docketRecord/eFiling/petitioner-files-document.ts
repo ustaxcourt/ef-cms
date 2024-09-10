@@ -11,7 +11,7 @@ export const petitionerFilesDocument = (
   selectTypeaheadInput('document-type', documentType);
   cy.get('[data-testid="submit-document"]').click();
   cy.get('[data-testid="primary-document"]').attachFile(
-    '../../../../helpers/file/sample.pdf',
+    '../../helpers/file/sample.pdf',
   );
   cy.get('[data-testid="upload-file-success"]').should('exist');
   cy.get('[data-testid=primaryDocument-objections-No]').click();
