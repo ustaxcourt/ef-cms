@@ -40,9 +40,9 @@ const getDisplayNameForFileExtension = (fileExtension: string) => {
 const getWrongFileTypeMessage = (fileExtensions: string[]) => {
   if (fileExtensions.length === 1) {
     const displayName = getDisplayNameForFileExtension(fileExtensions[0]);
-    return `Your file is not ${displayName}. Select ${displayName} file or resave the file as ${displayName}.`;
+    return `The file is not ${displayName}. Select ${displayName} file or resave the file as ${displayName}.`;
   }
-  return `Your file is not in a supported format (${fileExtensions.join(', ')}). Select a different file or resave it in a supported format.`;
+  return `The file is not in a supported format (${fileExtensions.join(', ')}). Select a different file or resave it in a supported format.`;
 };
 
 const validateCorrectFileType = ({
@@ -118,7 +118,7 @@ export const validateFile = async ({
 }): Promise<FileValidationResponse> => {
   if (file.size > megabyteLimit * 1024 * 1024) {
     return {
-      errorMessage: `Your file size is too big. The maximum file size is ${megabyteLimit}MB. Reduce the file size and try again.`,
+      errorMessage: `The file size is too big. The maximum file size is ${megabyteLimit}MB. Reduce the file size and try again.`,
       errorType: ErrorTypes.FILE_TOO_BIG,
       isValid: false,
     };

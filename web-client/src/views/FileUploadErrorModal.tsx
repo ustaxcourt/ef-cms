@@ -33,14 +33,20 @@ export const FileUploadErrorModal = connect(
         confirmLabel="Close"
         confirmSequence={clearModalSequence}
         dataTestId="file-upload-error-modal"
-        title={modalTitle || 'An error occurred'}
+        title={modalTitle || 'There Is a Problem with This Submission'}
       >
-        {message || 'There is a problem with your submission. Try again later.'}
+        {message ||
+          'There is a problem with the submission. Your firewall or network may be preventing the submission. Check your firewall or network setting and try again.'}
         {!isEmpty(troubleshootingLink) && (
           <React.Fragment>
             <br />
             <br />
-            <a className="usa-link--external" href={troubleshootingLink.link}>
+            <a
+              className="usa-link--external"
+              href={troubleshootingLink.link}
+              rel="noreferrer"
+              target="_blank"
+            >
               {troubleshootingLink.message}
             </a>
           </React.Fragment>

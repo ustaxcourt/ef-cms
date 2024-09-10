@@ -13,7 +13,7 @@ export const limitFileSize = (e, megabyteLimit, callback) => {
   }
   if (file.size >= megabyteLimit * 1024 * 1024) {
     alert(
-      `Your file size is too big. The maximum file size is ${megabyteLimit}MB.`,
+      `The file size is too big. The maximum file size is ${megabyteLimit}MB.`,
     );
     if (e.target) {
       e.target.value = null;

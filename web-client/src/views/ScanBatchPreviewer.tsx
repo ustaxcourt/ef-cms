@@ -11,6 +11,7 @@ import {
   ErrorTypes,
   validateFileOnSelect,
 } from '@web-client/views/FileHandlingHelpers/fileValidation';
+import { FileUploadErrorModal } from '@web-client/views/FileUploadErrorModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
@@ -430,7 +431,7 @@ export const ScanBatchPreviewer = connect(
                         'If you still have a problem uploading the file, email',
                       errorToLog: !message,
                       message,
-                      title: 'There Is a Problem With Your File',
+                      title: 'There Is a Problem With This File',
                       troubleshootingLink:
                         errorType && errorType !== ErrorTypes.WRONG_FILE_TYPE
                           ? {
@@ -564,6 +565,7 @@ export const ScanBatchPreviewer = connect(
           scanBatchPreviewerHelper.selectedPageImage && (
             <div className="preview-container">{renderPreviewSection()}</div>
           )}
+        {showModal === 'FileUploadErrorModal' && <FileUploadErrorModal />}
       </>
     );
   },
