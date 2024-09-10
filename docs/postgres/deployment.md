@@ -13,7 +13,8 @@
 3. npm run deploy:account-specific (to update the necessary circle policies)
 4. npm run deploy:allColors ${ENV}
     - this will create the rds cluster with the master username and password
-5. create the database users
+5. setup-for-blue-green-migration.sh ${ENV} - we need an alpha - beta migration so messages get moved to rds
+6. create the database users
     - look up rds endpoint for the writer instance
     - cd scripts/postgres && DB_HOST=${REPLACE_WITH_RDS_HOST} ./create-rds-users.sh
-6. merge PR into your environment and run a deployment.
+7. merge PR into your environment and run a deployment.
