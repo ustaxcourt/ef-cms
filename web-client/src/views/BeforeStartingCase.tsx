@@ -1,43 +1,27 @@
 import {
-  ALLOWLIST_FEATURE_FLAGS,
-  ROLES,
-} from '../../../shared/src/business/entities/EntityConstants';
-import {
   Accordion,
   AccordionItem,
 } from '@web-client/ustc-ui/Accordion/Accordion';
 import { Button } from '../ustc-ui/Button/Button';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
+import { ROLES } from '../../../shared/src/business/entities/EntityConstants';
 import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-type PetitionCreationRoles = 'petitioner' | 'privatePractitioner';
-
 export const BeforeStartingCase = connect(
   {
     closeModalAndReturnToDashboardSequence:
       sequences.closeModalAndReturnToDashboardSequence,
-    petitionFlowUpdated:
-      state.featureFlags[ALLOWLIST_FEATURE_FLAGS.UPDATED_PETITION_FLOW.key],
     showModal: state.modal.showModal,
     user: state.user,
   },
   function BeforeStartingCase({
     closeModalAndReturnToDashboardSequence,
-    petitionFlowUpdated,
     user,
   }) {
-    const redirectUrl =
-      petitionFlowUpdated &&
-      [ROLES.petitioner, ROLES.privatePractitioner].includes(
-        user.role as PetitionCreationRoles,
-      )
-        ? '/file-a-petition/new'
-        : '/file-a-petition/step-1';
-
     const isPetitioner = user.role === ROLES.petitioner;
     return (
       <>
@@ -88,16 +72,13 @@ export const BeforeStartingCase = connect(
                 style={{ marginBottom: '5px' }}
               >
                 {`This is the document that explains why ${isPetitioner ? 'you disagree' : 'the petitioner disagrees'} with the
-                Internal Revenue Service (IRS). There are ${petitionFlowUpdated ? 'three' : 'two'} methods to file the
-                Petition:`}
+                Internal Revenue Service (IRS). There are three methods to file the Petition:`}
               </div>
               <ul className="margin-top-0">
-                {petitionFlowUpdated && (
-                  <li>
-                    Answer some questions and have DAWSON create and file the
-                    Petition.
-                  </li>
-                )}
+                <li>
+                  Answer some questions and have DAWSON create and file the
+                  Petition.
+                </li>
                 <li>
                   {
                     "Complete and upload for filing the Court's standard Petition form. "
@@ -227,7 +208,7 @@ export const BeforeStartingCase = connect(
           <Button
             className="before-case-button"
             data-testid="go-to-step-1"
-            href={redirectUrl}
+            href="/file-a-petition/new"
           >
             {"I'm Ready to Start"}
           </Button>
