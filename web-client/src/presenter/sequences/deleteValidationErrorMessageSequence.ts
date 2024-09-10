@@ -2,4 +2,6 @@ import { deleteValidationErrorMessageAction } from '@web-client/presenter/action
 
 export const deleteValidationErrorMessageSequence = [
   deleteValidationErrorMessageAction,
-];
+] as unknown as (props: {
+  validationKey: (string | { property: string; value: any })[];
+}) => void;

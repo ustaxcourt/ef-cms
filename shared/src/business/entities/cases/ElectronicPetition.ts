@@ -23,6 +23,8 @@ import joi from 'joi';
  * add to the system.
  */
 export class ElectronicPetition extends JoiValidationEntity {
+  public attachmentToPetitionFile?: File;
+  public attachmentToPetitionFileSize?: number;
   public businessType: string;
   public caseType: string;
   public corporateDisclosureFile?: object;
@@ -30,18 +32,18 @@ export class ElectronicPetition extends JoiValidationEntity {
   public countryType: string;
   public filingType: string;
   public hasIrsNotice: boolean;
+  public irsNoticesRedactionAcknowledgement: string;
   public partyType: string;
   public petitioners: any;
   public petitionFile?: object;
-  public petitionFileSize?: number;
   public petitionFileId?: string;
+  public petitionFileSize?: number;
+  public petitionRedactionAcknowledgement?: boolean;
+  public petitionType: string;
   public preferredTrialCity: string;
   public procedureType: string;
   public stinFile?: object;
   public stinFileSize?: number;
-  public attachmentToPetitionFile?: File;
-  public attachmentToPetitionFileSize?: number;
-  public petitionType: string;
 
   constructor(rawCase) {
     super('ElectronicPetition');
@@ -53,6 +55,8 @@ export class ElectronicPetition extends JoiValidationEntity {
     this.countryType = rawCase.countryType;
     this.filingType = rawCase.filingType;
     this.hasIrsNotice = rawCase.hasIrsNotice;
+    this.irsNoticesRedactionAcknowledgement =
+      rawCase.irsNoticesRedactionAcknowledgement;
     this.partyType = rawCase.partyType;
     this.preferredTrialCity = rawCase.preferredTrialCity;
     this.procedureType = rawCase.procedureType;
@@ -64,6 +68,8 @@ export class ElectronicPetition extends JoiValidationEntity {
     this.petitionFileSize = rawCase.petitionFileSize;
     this.petitionFileId = rawCase.petitionFileId;
     this.petitionType = rawCase.petitionType || PETITION_TYPES.userUploaded;
+    this.petitionRedactionAcknowledgement =
+      rawCase.petitionRedactionAcknowledgement;
 
     this.corporateDisclosureFile = rawCase.corporateDisclosureFile;
     this.corporateDisclosureFileSize = rawCase.corporateDisclosureFileSize;
@@ -141,6 +147,11 @@ export class ElectronicPetition extends JoiValidationEntity {
       .boolean()
       .required()
       .messages({ '*': 'Indicate whether you received an IRS notice' }),
+    irsNoticesRedactionAcknowledgement: joi.boolean().when('hasIrsNotice', {
+      is: true,
+      otherwise: joi.optional(),
+      then: joi.boolean().optional().invalid(false),
+    }),
     partyType: JoiValidationConstants.STRING.valid(
       ...Object.values(PARTY_TYPES),
     )
@@ -173,6 +184,11 @@ export class ElectronicPetition extends JoiValidationEntity {
         '*': 'Your Petition file size is empty',
         'number.max': `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       }),
+    petitionRedactionAcknowledgement: joi.boolean().when('petitionType', {
+      is: JoiValidationConstants.STRING.valid(PETITION_TYPES.userUploaded),
+      otherwise: joi.optional(),
+      then: joi.boolean().optional().invalid(false),
+    }),
     petitionType: JoiValidationConstants.STRING.required().valid(
       ...Object.values(PETITION_TYPES),
     ),
