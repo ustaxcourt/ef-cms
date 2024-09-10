@@ -298,7 +298,7 @@ export function petitionerAttemptsToUploadCorruptPdfOld() {
     filePath: '../../helpers/file/corrupt-pdf.pdf',
     selector: '[data-testid="stin-file"]',
   });
-  cy.get('[data-testid="error-modal"]').contains(
+  cy.get('[data-testid="file-upload-error-modal"]').contains(
     'Your file is corrupted or in an unsupported PDF format. Ensure that the file is not corrupted and/or is in a supported PDF format and try again.',
   );
 }

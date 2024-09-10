@@ -25,7 +25,7 @@ describe('File a petition - Corrupted Files', () => {
       filePath: CORRUPTED_FILE,
       selector: '#petition-file',
     });
-    cy.get('[data-testid="error-modal"]').contains(
+    cy.get('[data-testid="file-upload-error-modal"]').contains(
       'Your file is corrupted or in an unsupported PDF format. Ensure that the file is not corrupted and/or is in a supported PDF format and try again',
     );
   });
@@ -40,7 +40,7 @@ describe('File a petition - Corrupted Files', () => {
       filePath: CORRUPTED_FILE,
       selector: '[data-testid="irs-notice-upload-0"]',
     });
-    cy.get('[data-testid="error-modal"]').contains(
+    cy.get('[data-testid="file-upload-error-modal"]').contains(
       'Your file is corrupted or in an unsupported PDF format. Ensure that the file is not corrupted and/or is in a supported PDF format and try again.',
     );
   });
@@ -59,7 +59,7 @@ describe('File a petition - Corrupted Files', () => {
       selector: '[data-testid="stin-file"]',
     });
 
-    cy.get('[data-testid="error-modal"]').contains(
+    cy.get('[data-testid="file-upload-error-modal"]').contains(
       'Your file is corrupted or in an unsupported PDF format. Ensure that the file is not corrupted and/or is in a supported PDF format and try again.',
     );
   });
