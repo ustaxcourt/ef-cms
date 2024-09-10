@@ -16,5 +16,6 @@
 5. setup-for-blue-green-migration.sh ${ENV} - we need an alpha - beta migration so messages get moved to rds
 6. create the database users
     - look up rds endpoint for the writer instance
+    - install psql (brew install libpq)
     - cd scripts/postgres && DB_HOST=${REPLACE_WITH_RDS_HOST} ./create-rds-users.sh
 7. merge PR into your environment and run a deployment.
