@@ -17,7 +17,7 @@ import { startShowValidationAction } from '@web-client/presenter/actions/startSh
 import { stopShowValidationAction } from '@web-client/presenter/actions/stopShowValidationAction';
 import { unsetWaitingForResponseAction } from '@web-client/presenter/actions/unsetWaitingForResponseAction';
 import { updatedSetupFilesForCaseCreationAction } from '@web-client/presenter/actions/CaseCreation/updatedSetupFilesForCaseCreationAction';
-import { updatedValidatePetitionAction } from '@web-client/presenter/actions/updatedValidatePetitionAction';
+import { validatePetitionAction } from '@web-client/presenter/actions/validatePetitionAction';
 
 export const filePetitionCompleteStep6Sequence = debounceSequenceDecorator(
   500,
@@ -26,7 +26,7 @@ export const filePetitionCompleteStep6Sequence = debounceSequenceDecorator(
     startShowValidationAction,
     setWaitingForResponseAction,
     generatePetitionPdfAction,
-    updatedValidatePetitionAction,
+    validatePetitionAction,
     {
       error: [
         unsetWaitingForResponseAction,

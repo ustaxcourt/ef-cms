@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { updatedValidatePetitionAction } from '@web-client/presenter/actions/updatedValidatePetitionAction';
+import { validatePetitionAction } from '@web-client/presenter/actions/validatePetitionAction';
 
-describe('updatedValidatePetitionAction', () => {
+describe('validatePetitionAction', () => {
   let successStub;
   let errorStub;
 
@@ -23,7 +23,7 @@ describe('updatedValidatePetitionAction', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    await runAction(updatedValidatePetitionAction, {
+    await runAction(validatePetitionAction, {
       modules: {
         presenter,
       },
@@ -43,7 +43,7 @@ describe('updatedValidatePetitionAction', () => {
       .getUseCases()
       .validatePetitionInteractor.mockReturnValue('validation errors');
 
-    await runAction(updatedValidatePetitionAction, {
+    await runAction(validatePetitionAction, {
       modules: {
         presenter,
       },
