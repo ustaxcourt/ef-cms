@@ -11,6 +11,7 @@ import { validUser } from '@shared/test/mockUsers';
 describe('getJudgeForUserHelper', () => {
   const judgeUser = {
     ...validUser,
+    contact: { phone: validUser.contact?.phone },
     role: ROLES.judge,
     section: 'judgeChambers',
   };
@@ -51,7 +52,7 @@ describe('getJudgeForUserHelper', () => {
       });
     });
 
-    it('returns the retrieved from the database', async () => {
+    it('returns the retrieved judge from the database', async () => {
       const result = await getJudgeForUserHelper(applicationContext, {
         user: mockJudgeUser,
       });

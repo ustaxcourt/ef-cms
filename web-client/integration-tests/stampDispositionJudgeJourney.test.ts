@@ -1,6 +1,5 @@
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { MOTION_DISPOSITIONS } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
   contactPrimaryFromState,
   fakeFile,
@@ -9,14 +8,12 @@ import {
   uploadPetition,
   waitForCondition,
 } from './helpers';
+import { getTestJudgesChambers } from '@shared/test/mockJudgesChambers';
 import { userSendsMessage } from './journey/userSendsMessage';
 
 describe('Stamp disposition judge journey test', () => {
   const cerebralTest = setupTest();
-
-  const judgesChambers = applicationContext
-    .getPersistenceGateway()
-    .getJudgesChambers();
+  const judgesChambers = getTestJudgesChambers();
   const judgeCohenUserId = 'dabbad04-18d0-43ec-bafb-654e83405416';
   const messageSubject = 'Motion to Stamp';
   const deniedMotionDocketEntryTitle =

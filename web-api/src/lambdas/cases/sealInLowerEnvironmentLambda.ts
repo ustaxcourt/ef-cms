@@ -1,5 +1,6 @@
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createApplicationContext } from '../../applicationContext';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { sealInLowerEnvironment } from '@web-api/business/useCaseHelper/sealInLowerEnvironment';
 
 /**
@@ -16,7 +17,8 @@ export const sealInLowerEnvironmentLambda = async event => {
     userId: 'N/A',
   };
 
-  const applicationContext = createApplicationContext(user);
+  const applicationContext = createApplicationContext();
+  getLogger().addUser({ user });
 
   const records = event.Records.map(record => ({
     ...JSON.parse(record.Sns.Message),

@@ -1,3 +1,5 @@
+import { ProcedureType } from '../../../../../shared/src/business/entities/EntityConstants';
+
 type TextFillType = {
   errorMessage: string;
   input: string;
@@ -148,10 +150,19 @@ export function fillPetitionerInformation() {
 export function fillIrsNoticeInformation(
   filePath: string,
   caseType: string = 'Deficiency',
+  hasIrsNotice: boolean = true,
 ) {
+  if (!hasIrsNotice) {
+    cy.get('[data-testid="irs-notice-No"]').click();
+    cy.get('[data-testid="case-type-select"]').select(caseType);
+    cy.get('[data-testid="step-3-next-button"]').click();
+    return;
+  }
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="irs-notice-upload-0"]').attachFile(filePath);
   cy.get('[data-testid="case-type-select"]').select(caseType);
+  cy.get('[data-testid="irs-notice-tax-year-0"]').type('2024');
+  cy.get('[data-testid="city-and-state-issuing-office-0"]').type('Jackson, NJ');
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="step-3-next-button"]').click();
 }
@@ -196,13 +207,10 @@ export function fillMultipleIRSNotices(filePath: string) {
   cy.get('[data-testid="step-3-next-button"]').click();
 }
 
-export function fillCaseProcedureInformation(procedureType = 'regular') {
-  if (procedureType === 'regular') {
-    cy.get('[data-testid="procedure-type-0"]').click();
-  }
-  if (procedureType === 'small') {
-    cy.get('[data-testid="procedure-type-1"]').click();
-  }
+export function fillCaseProcedureInformation(
+  procedureType: ProcedureType = 'Regular',
+) {
+  cy.get(`[data-testid="procedure-type-${procedureType}-radio"]`).click();
   cy.get('[data-testid="preferred-trial-city"]').select('Birmingham, Alabama');
   cy.get('[data-testid="step-4-next-button"]').click();
 }
