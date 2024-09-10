@@ -39,8 +39,8 @@ export const AutoGeneratePetitionForm = connect(
                 const key = `petition-reason-${index - 1}`;
                 return (
                   <div className="display-flex" key={key}>
-                    <div className="text-semibold margin-right-05">
-                      {getCharacter(index)}
+                    <div className="text-semibold margin-right-1 fact-reason-character-label">
+                      {`${updatedFilePetitionHelper.getLetterByIndex(index)}. `}
                     </div>
                     <PetitionFactOrReason
                       factOrReasonCount={index}
@@ -78,8 +78,8 @@ export const AutoGeneratePetitionForm = connect(
                 const key = `petition-fact-${index - 1}`;
                 return (
                   <div className="display-flex" key={key}>
-                    <div className="text-semibold margin-right-05">
-                      {getCharacter(index)}
+                    <div className="text-semibold margin-right-1 fact-reason-character-label">
+                      {`${updatedFilePetitionHelper.getLetterByIndex(index)}. `}
                     </div>
                     <PetitionFactOrReason
                       factOrReasonCount={index}
@@ -109,11 +109,5 @@ export const AutoGeneratePetitionForm = connect(
     );
   },
 );
-
-function getCharacter(index: number): string {
-  const asciiOfA = 97;
-  const asciiValue = asciiOfA + index;
-  return `${String.fromCharCode(asciiValue)}. `;
-}
 
 AutoGeneratePetitionForm.displayName = 'AutoGeneratePetitionForm';

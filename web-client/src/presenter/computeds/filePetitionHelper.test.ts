@@ -359,8 +359,52 @@ describe('filePetitionHelper', () => {
           user: petitionerUser,
         },
       });
-
       expect(result.irsNoticeRequiresRedactionAcknowledgement).toEqual(false);
+    });
+  });
+
+  describe('primaryContactNameLabel', () => {
+    it('should return the correct primary contact name label when filing as a petitioner', () => {
+      const result = runCompute(filePetitionHelper, {
+        state: {
+          form: {
+            partyType: PARTY_TYPES.petitioner,
+          },
+          user: petitionerUser,
+        },
+      });
+      expect(result.primaryContactNameLabel).toEqual('Full Name');
+    });
+    it('should return the correct primary contact name label when filing as a private practitioner', () => {
+      const result = runCompute(filePetitionHelper, {
+        state: {
+          form: {
+            partyType: PARTY_TYPES.petitioner,
+          },
+          user: privatePractitionerUser,
+        },
+      });
+      expect(result.primaryContactNameLabel).toEqual('Petitioner’s full name');
+    });
+  });
+  describe('getLetterByIndex', () => {
+    it('should return the correct single-letter label for a given index', () => {
+      const result = runCompute(filePetitionHelper, {
+        state: {
+          form: {},
+          user: petitionerUser,
+        },
+      });
+      expect(result.getLetterByIndex(1)).toEqual('b');
+    });
+    it('returns the correct multi-letter label when index exceeds 25 (ex: aa, ab)', () => {
+      const result = runCompute(filePetitionHelper, {
+        state: {
+          form: {},
+          user: petitionerUser,
+        },
+      });
+      expect(result.getLetterByIndex(26)).toEqual('aa');
     });
   });
 });
