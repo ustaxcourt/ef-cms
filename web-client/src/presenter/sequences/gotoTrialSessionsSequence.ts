@@ -9,8 +9,7 @@ import { parallel } from 'cerebral/factories';
 import { setAllAndCurrentJudgesAction } from '../actions/setAllAndCurrentJudgesAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setNotificationsAction } from '../actions/setNotificationsAction';
-import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
-import { setTrialSessionsFiltersAction } from '../actions/TrialSession/setTrialSessionsFiltersAction';
+import { setTrialSessionsPageAction } from '@web-client/presenter/actions/TrialSession/setTrialSessionsPageAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
@@ -23,12 +22,11 @@ export const gotoTrialSessionsSequence =
     parallel([
       [getJudgeForCurrentUserAction, setJudgeUserAction],
       [getNotificationsAction, setNotificationsAction],
-      [getTrialSessionsAction, setTrialSessionsAction],
+      [getTrialSessionsAction, setTrialSessionsPageAction],
       [
         getUsersInSectionAction({ section: 'judge' }),
         setAllAndCurrentJudgesAction,
       ],
     ]),
-    setTrialSessionsFiltersAction,
     setupCurrentPageAction('TrialSessions'),
-  ]);
+  ]) as unknown as () => void;
