@@ -1,5 +1,6 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { ErrorBanner } from '@web-client/views/ErrorBanner';
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import React from 'react';
 
 export const PetitionWelcomePage = () => (
@@ -7,8 +8,8 @@ export const PetitionWelcomePage = () => (
     <ErrorBanner
       showSingleMessage
       messages={[
-        `Do not start a new case. Email <a href="mailto:dawson.support@ustaxcourt.gov">
-        dawson.support@ustaxcourt.gov
+        `Do not start a new case. Email <a href="mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}">
+        ${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
       </a> with your case's docket number (e.g. 12345-67) to get access to
     your existing case.`,
       ]}

@@ -5,6 +5,7 @@ import {
 } from '@web-client/views/FileHandlingHelpers/fileValidation';
 import { FileUploadErrorModal } from '@web-client/views/FileUploadErrorModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import { cloneFile } from '../FileHandlingHelpers/cloneFile';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
@@ -84,7 +85,7 @@ export const StateDrivenFileInput = connect<
             troubleshootingLink:
               errorType && errorType !== ErrorTypes.WRONG_FILE_TYPE
                 ? {
-                    link: 'https://google.com',
+                    link: TROUBLESHOOTING_INFO.FILE_UPLOAD_TROUBLESHOOTING_LINK,
                     message: 'Learn about troubleshooting files',
                   }
                 : undefined,

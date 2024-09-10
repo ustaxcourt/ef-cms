@@ -1,4 +1,5 @@
 import { ModalDialog } from './ModalDialog';
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import { TroubleshootingLinkInfo } from '@web-client/presenter/sequences/showFileUploadErrorModalSequence';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { isEmpty } from 'lodash';
@@ -55,8 +56,8 @@ export const FileUploadErrorModal = connect(
         <br />
         {(contactSupportMessage ||
           'If you still have a problem after trying again, email') + ' '}
-        <a href="mailto:dawson.support@ustaxcourt.gov">
-          dawson.support@ustaxcourt.gov
+        <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
+          {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
         </a>
         .
       </ModalDialog>
