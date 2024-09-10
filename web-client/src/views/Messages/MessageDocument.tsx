@@ -179,6 +179,7 @@ export const MessageDocument = connect(
         {messageDocumentHelper.showApplyStampButton && (
           <Button
             link
+            data-testid="apply-stamp"
             icon="stamp"
             onClick={() => {
               navigateToPathSequence({
