@@ -953,7 +953,7 @@ export const presenterSequences = {
     gotoTrialSessionPlanningReportSequence as unknown as Function,
   gotoTrialSessionWorkingCopySequence:
     gotoTrialSessionWorkingCopySequence as unknown as Function,
-  gotoTrialSessionsSequence: gotoTrialSessionsSequence as unknown as Function,
+  gotoTrialSessionsSequence,
   gotoUpdatedPetitionFlowSequence:
     gotoUpdatedPetitionFlowSequence as unknown as Function,
   gotoUploadCorrespondenceDocumentSequence:
