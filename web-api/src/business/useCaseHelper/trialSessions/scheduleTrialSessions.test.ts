@@ -1,21 +1,12 @@
-// import {
-//   getFakeFile,
-//   testPdfDoc,
-// } from '../../../../../shared/src/business/test/getFakeFile';
-
-// import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-// import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING } from '../../../../../shared/src/test/mockCase';
 import {
   PROCEDURE_TYPES_MAP,
-  // SESSION_TYPES,
   TRIAL_CITY_STRINGS,
 } from '@shared/business/entities/EntityConstants';
 // import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { scheduleTrialSessions } from './scheduleTrialSessions';
-// import { serveGeneratedNoticesOnCase } from './serveGeneratedNoticesOnCase';
 
-const mockSpecialSessions = [];
+// const mockSpecialSessions = [];
 const mockCalendaringConfig = {
   hybridCaseMaxQuantity: 10,
   hybridCaseMinimumQuantity: 5,
@@ -30,7 +21,7 @@ const mockEndDate = '2019-09-22T04:00:00.000Z';
 const mockStartDate = '2019-08-22T04:00:00.000Z';
 
 describe('scheduleTrialSessions', () => {
-  it('should not schedule more than the max number of sessions for a given week when passed more regular cases than maxSessionsPerWeek * regularCaseMaxQuantity', () => {
+  it('should not schedule more than the max number of sessions for a given week when passed more regular cases than maxSessionsPerWeek * regularCaseMaxQuantity given that we only pass cases in one city', () => {
     const mockCases = [MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING];
 
     const totalNumberOfMockCases =
@@ -47,14 +38,11 @@ describe('scheduleTrialSessions', () => {
       });
     }
 
-    // console.log('mockCases', mockCases);
-    // console.log('mockCases.length', mockCases.length);
-
     let params = {
       calendaringConfig: mockCalendaringConfig,
       cases: mockCases,
       endDate: mockEndDate,
-      specialSessions: mockSpecialSessions,
+      specialSessions: [],
       startDate: mockStartDate,
     };
 
