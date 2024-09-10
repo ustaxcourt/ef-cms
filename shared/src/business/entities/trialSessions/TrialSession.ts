@@ -87,7 +87,6 @@ export class TrialSession extends JoiValidationEntity {
   public irsCalendarAdministratorInfo?: RawIrsCalendarAdministratorInfo;
   public isCalendared: boolean;
   public isClosed?: boolean;
-  public isStartDateWithinNOTTReminderRange?: boolean;
   public joinPhoneNumber?: string;
   public judge?: TJudge;
   public maxCases?: number;
@@ -200,8 +199,6 @@ export class TrialSession extends JoiValidationEntity {
 
     if (rawSession.isCalendared && rawSession.startDate) {
       this.setNoticeOfTrialReminderAlert();
-    } else {
-      this.isStartDateWithinNOTTReminderRange = false;
     }
 
     if (rawSession.trialClerk && rawSession.trialClerk.name) {
@@ -214,6 +211,33 @@ export class TrialSession extends JoiValidationEntity {
 
   static isStandaloneRemote(sessionScope) {
     return sessionScope === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote;
+  }
+
+  static isStartDateWithinNOTTReminderRange({
+    isCalendared,
+    startDate,
+  }: {
+    isCalendared?: boolean;
+    startDate?: string;
+  }): boolean {
+    if (!isCalendared || !startDate) {
+      return false;
+    }
+
+    const formattedStartDate = formatDateString(startDate, FORMATS.MMDDYY);
+    const trialStartDateString = prepareDateFromString(
+      formattedStartDate,
+      FORMATS.MMDDYY,
+    );
+
+    return isTodayWithinGivenInterval({
+      intervalEndDate: trialStartDateString.minus({
+        ['days']: 24, // luxon's interval end date is not inclusive
+      }),
+      intervalStartDate: trialStartDateString.minus({
+        ['days']: 34,
+      }),
+    });
   }
 
   static validationRules = {
@@ -408,19 +432,10 @@ export class TrialSession extends JoiValidationEntity {
 
   setNoticeOfTrialReminderAlert() {
     const formattedStartDate = formatDateString(this.startDate, FORMATS.MMDDYY);
-    const trialStartDateString: any = prepareDateFromString(
+    const trialStartDateString = prepareDateFromString(
       formattedStartDate,
       FORMATS.MMDDYY,
     );
-
-    this.isStartDateWithinNOTTReminderRange = isTodayWithinGivenInterval({
-      intervalEndDate: trialStartDateString.minus({
-        ['days']: 24, // luxon's interval end date is not inclusive
-      }),
-      intervalStartDate: trialStartDateString.minus({
-        ['days']: 34,
-      }),
-    });
 
     const thirtyDaysBeforeTrialInclusive: any = trialStartDateString.minus({
       ['days']: 29,
