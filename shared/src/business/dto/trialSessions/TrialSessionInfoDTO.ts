@@ -21,14 +21,11 @@ export class TrialSessionInfoDTO {
   public sessionStatus: string;
   public swingSession?: boolean;
   public dismissedAlertForNOTT?: boolean;
-  public thirtyDaysBeforeTrialFormatted?: string;
 
   constructor(rawTrialSession: RawTrialSession) {
     this.estimatedEndDate = rawTrialSession.estimatedEndDate;
     this.isCalendared = rawTrialSession.isCalendared;
     this.judge = rawTrialSession.judge;
-    this.thirtyDaysBeforeTrialFormatted =
-      rawTrialSession.thirtyDaysBeforeTrialFormatted;
     this.proceedingType = rawTrialSession.proceedingType;
     this.sessionType = rawTrialSession.sessionType;
     this.startDate = rawTrialSession.startDate;

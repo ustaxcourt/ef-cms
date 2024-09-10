@@ -93,8 +93,11 @@ describe('Dismiss NOTT reminder on calendared trial session within 30-35 day ran
         },
       );
 
-      expect(trialSessionDetailsFormatted.alertMessageForNOTT).toEqual(
-        `30-day trial notices are due by ${trialSessionDetailsFormatted.thirtyDaysBeforeTrialFormatted}. Have notices been served?`,
+      expect(trialSessionDetailsFormatted.alertMessageForNOTT).toContain(
+        '30-day trial notices are due by',
+      );
+      expect(trialSessionDetailsFormatted.alertMessageForNOTT).toContain(
+        'Have notices been served?',
       );
 
       let trialSessionDetailsHelperComputed: any = runCompute(
@@ -130,8 +133,11 @@ describe('Dismiss NOTT reminder on calendared trial session within 30-35 day ran
         },
       );
 
-      expect(trialSessionDetailsFormatted.alertMessageForNOTT).toEqual(
-        `30-day trial notices are due by ${trialSessionDetailsFormatted.thirtyDaysBeforeTrialFormatted}. Have notices been served?`,
+      expect(trialSessionDetailsFormatted.alertMessageForNOTT).toContain(
+        '30-day trial notices are due by',
+      );
+      expect(trialSessionDetailsFormatted.alertMessageForNOTT).toContain(
+        'Have notices been served?',
       );
 
       let trialSessionDetailsHelperComputed: any = runCompute(

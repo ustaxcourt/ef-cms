@@ -106,7 +106,6 @@ export class TrialSession extends JoiValidationEntity {
   public swingSessionId?: string;
   public term: string;
   public termYear: string;
-  public thirtyDaysBeforeTrialFormatted?: string;
   public trialClerk?: TTrialClerk;
   public trialLocation?: string;
   public trialSessionId?: string;
@@ -195,10 +194,6 @@ export class TrialSession extends JoiValidationEntity {
         name: rawSession.judge.name,
         userId: rawSession.judge.userId,
       };
-    }
-
-    if (rawSession.isCalendared && rawSession.startDate) {
-      this.setNoticeOfTrialReminderAlert();
     }
 
     if (rawSession.trialClerk && rawSession.trialClerk.name) {
@@ -428,23 +423,6 @@ export class TrialSession extends JoiValidationEntity {
     const skPrefix = [formattedTrialCity, caseProcedureSymbol].join('-');
 
     return skPrefix;
-  }
-
-  setNoticeOfTrialReminderAlert() {
-    const formattedStartDate = formatDateString(this.startDate, FORMATS.MMDDYY);
-    const trialStartDateString = prepareDateFromString(
-      formattedStartDate,
-      FORMATS.MMDDYY,
-    );
-
-    const thirtyDaysBeforeTrialInclusive: any = trialStartDateString.minus({
-      ['days']: 29,
-    });
-
-    this.thirtyDaysBeforeTrialFormatted = formatDateString(
-      thirtyDaysBeforeTrialInclusive,
-      FORMATS.MMDDYY,
-    );
   }
 
   setAsCalendared() {

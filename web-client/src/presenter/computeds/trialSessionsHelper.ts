@@ -2,6 +2,7 @@ import {
   FORMATS,
   createDateAtStartOfWeekEST,
   formatDateString,
+  subtractISODates,
 } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { RawUser } from '@shared/business/entities/User';
@@ -100,7 +101,7 @@ const formatTrialSessions = ({
         });
 
       const alertMessageForNOTT = showAlertForNOTTReminder
-        ? `The 30-day notice is due by ${trialSession.thirtyDaysBeforeTrialFormatted}`
+        ? `The 30-day notice is due by ${thirtyDaysBeforeTrial(trialSession.startDate)}`
         : '';
       const formattedEstimatedEndDate = formatDateString(
         trialSession.estimatedEndDate,
@@ -170,6 +171,13 @@ const formatTrialSessions = ({
   });
 
   return trialSessionWithStartWeeks;
+};
+
+export const thirtyDaysBeforeTrial = (startDate?: string): string => {
+  if (!startDate) return '';
+  const thirtyDaysBeforeTrialIso = subtractISODates(startDate, { day: 29 });
+
+  return formatDateString(thirtyDaysBeforeTrialIso, FORMATS.MMDDYY);
 };
 
 type TrialSessionRow = {
