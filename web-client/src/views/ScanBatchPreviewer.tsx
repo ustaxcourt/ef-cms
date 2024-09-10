@@ -7,6 +7,10 @@ import {
   ScanErrorModal,
   UnfinishedScansModal,
 } from './ScanBatchPreviewer/ScanBatchModals';
+import {
+  ErrorTypes,
+  validateFileOnSelect,
+} from '@web-client/views/FileHandlingHelpers/fileValidation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
@@ -16,7 +20,6 @@ import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import { validateFileOnSelect } from '@web-client/views/FileHandlingHelpers/fileValidation';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
@@ -45,7 +48,8 @@ export const ScanBatchPreviewer = connect(
     setIsLoadingSequence: sequences.setIsLoadingSequence,
     setIsNotLoadingSequence: sequences.setIsNotLoadingSequence,
     setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
-    showErrorModalSequence: sequences.showErrorModalSequence,
+    showFileUploadErrorModalSequence:
+      sequences.showFileUploadErrorModalSequence,
     showModal: state.modal.showModal,
     startScanSequence: sequences.startScanSequence,
     validationErrors: state.validationErrors,
@@ -71,7 +75,7 @@ export const ScanBatchPreviewer = connect(
     setIsLoadingSequence,
     setIsNotLoadingSequence,
     setSelectedBatchIndexSequence,
-    showErrorModalSequence,
+    showFileUploadErrorModalSequence,
     showModal,
     startScanSequence,
     title,
@@ -420,11 +424,20 @@ export const ScanBatchPreviewer = connect(
                   allowedFileExtensions: ['.pdf'],
                   e,
                   megabyteLimit: constants.MAX_FILE_SIZE_MB,
-                  onError: ({ message }) => {
-                    showErrorModalSequence({
+                  onError: ({ errorType, message }) => {
+                    showFileUploadErrorModalSequence({
+                      contactSupportMessage:
+                        'If you still have a problem uploading the file, email',
                       errorToLog: !message,
                       message,
                       title: 'There Is a Problem With Your File',
+                      troubleshootingLink:
+                        errorType && errorType !== ErrorTypes.WRONG_FILE_TYPE
+                          ? {
+                              link: 'https://google.com',
+                              message: 'Learn about troubleshooting files',
+                            }
+                          : undefined,
                     });
                   },
                   onSuccess: ({ selectedFile }) => {

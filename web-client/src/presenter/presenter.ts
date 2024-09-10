@@ -412,7 +412,7 @@ import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumen
 import { setViewerDraftDocumentToDisplaySequence } from './sequences/setViewerDraftDocumentToDisplaySequence';
 import { showCalculatePenaltiesModalSequence } from './sequences/showCalculatePenaltiesModalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
-import { showErrorModalSequence } from '@web-client/presenter/sequences/showErrorModalSequence';
+import { showFileUploadErrorModalSequence } from '@web-client/presenter/sequences/showFileUploadErrorModalSequence';
 import { showGenerateNoticesProgressSequence } from './sequences/showGenerateNoticesProgressSequence';
 import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequence';
 import { showMoreOpenCasesSequence } from './sequences/showMoreOpenCasesSequence';
@@ -1292,7 +1292,7 @@ export const presenterSequences = {
     showCalculatePenaltiesModalSequence as unknown as Function,
   showDocketRecordDetailModalSequence:
     showDocketRecordDetailModalSequence as unknown as Function,
-  showErrorModalSequence,
+  showFileUploadErrorModalSequence,
   showGenerateNoticesProgressSequence:
     showGenerateNoticesProgressSequence as unknown as Function,
   showMoreClosedCasesSequence:
