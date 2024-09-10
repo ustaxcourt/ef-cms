@@ -6,6 +6,7 @@ import {
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
+import { calculateISODate } from '@shared/business/utilities/DateHandler';
 import { cloneDeep } from 'lodash';
 import { docketClerk1User, judgeUser } from '@shared/test/mockUsers';
 import { getUserPermissions } from '@shared/authorization/getUserPermissions';
@@ -513,7 +514,11 @@ describe('trialSessionsHelper', () => {
 
       it('should show an alertMessage for NOTT reminders when the user has not dismissed the alert and the start day is within the reminder range', () => {
         trialSession1.dismissedAlertForNOTT = false;
-        trialSession1.isStartDateWithinNOTTReminderRange = true;
+        trialSession1.isCalendared = true;
+        trialSession1.startDate = calculateISODate({
+          howMuch: 30,
+          units: 'days',
+        });
         trialSession1.thirtyDaysBeforeTrialFormatted = '06/03/13';
         trialSessionsPageState.trialSessions = [trialSession1];
 

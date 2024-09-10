@@ -5,6 +5,7 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { RawUser } from '@shared/business/entities/User';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -93,7 +94,10 @@ const formatTrialSessions = ({
     trialSession => {
       const showAlertForNOTTReminder =
         !trialSession.dismissedAlertForNOTT &&
-        !!trialSession.isStartDateWithinNOTTReminderRange;
+        TrialSession.isStartDateWithinNOTTReminderRange({
+          isCalendared: trialSession.isCalendared,
+          startDate: trialSession.startDate,
+        });
 
       const alertMessageForNOTT = showAlertForNOTTReminder
         ? `The 30-day notice is due by ${trialSession.thirtyDaysBeforeTrialFormatted}`
