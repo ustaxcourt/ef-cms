@@ -28,6 +28,7 @@ type UpdatedFilePetitionHelper = {
   businessFieldNames: IBusinessFields | {};
   otherContactNameLabel?: IOtherContactNameLabel;
   otherFilingOptions: string[];
+  primaryContactNameLabel: string;
   showContactInformationForOtherPartyType: boolean;
 };
 
@@ -41,17 +42,22 @@ export const updatedFilePetitionHelper = (
   const businessType = get(state.form.businessType);
   const partyType = get(state.form.partyType);
 
+  const isPetitioner = user.role === ROLES.petitioner;
+  const isPractitioner = user.role === ROLES.privatePractitioner;
+
   const filingOptions = formatFilingTypes(FILING_TYPES[user.role]);
+
+  const otherFilingOptions = getOtherFilingOptions(isPractitioner);
+  const primaryContactNameLabel = isPetitioner
+    ? 'Full Name'
+    : 'Petitioner’s full name';
+
   const businessFieldNames = getBusinessFieldLabels(businessType);
+
   const otherContactNameLabel = getOtherContactNameLabel(
     partyType,
     PARTY_TYPES,
   );
-
-  const isPetitioner = user.role === ROLES.petitioner;
-  const isPractitioner = user.role === ROLES.privatePractitioner;
-
-  const otherFilingOptions = getOtherFilingOptions(isPractitioner);
 
   return {
     businessFieldNames,
@@ -61,6 +67,7 @@ export const updatedFilePetitionHelper = (
     isPractitioner,
     otherContactNameLabel,
     otherFilingOptions,
+    primaryContactNameLabel,
     showContactInformationForOtherPartyType:
       getShowContactInformationForOtherPartyType(partyType, PARTY_TYPES),
   };
