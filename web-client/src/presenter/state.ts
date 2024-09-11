@@ -89,6 +89,7 @@ import { getAllIrsPractitionersForSelectHelper } from '@web-client/presenter/com
 import { getConstants } from '../getConstants';
 import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTypeHelper';
 import { headerHelper } from './computeds/headerHelper';
+import { initialBlockedCaseReportFilter } from '@web-client/presenter/state/blockedCasesReportState';
 import { initialCustomCaseReportState } from './customCaseReportState';
 import { initialPendingReportsState } from '@web-client/presenter/state/pendingReportState';
 import { initialTrialSessionState } from '@web-client/presenter/state/trialSessionState';
@@ -127,6 +128,7 @@ import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
 import { sealedCaseDetailHelper } from './computeds/sealedCaseDetailHelper';
+import { selectCriteriaHelper } from '@web-client/presenter/computeds/selectCriteriaHelper';
 import { serveThirtyDayNoticeModalHelper } from './computeds/serveThirtyDayNoticeModalHelper';
 import { sessionAssignmentHelper } from './computeds/sessionAssignmentHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
@@ -494,6 +496,9 @@ export const computeds = {
   sealedCaseDetailHelper: sealedCaseDetailHelper as unknown as ReturnType<
     typeof sealedCaseDetailHelper
   >,
+  selectCriteriaHelper: selectCriteriaHelper as unknown as ReturnType<
+    typeof selectCriteriaHelper
+  >,
   serveThirtyDayNoticeModalHelper:
     serveThirtyDayNoticeModalHelper as unknown as ReturnType<
       typeof serveThirtyDayNoticeModalHelper
@@ -602,6 +607,8 @@ export const baseState = {
     fileCount?: number;
     title?: string;
   },
+  blockedCaseReportFilter: cloneDeep(initialBlockedCaseReportFilter),
+  blockedCases: [] as RawCase[],
   caseDeadlineReport: {} as {
     caseDeadlines: (RawCaseDeadline & {
       caseCaption: string;
