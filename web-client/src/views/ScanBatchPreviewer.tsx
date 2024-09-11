@@ -7,19 +7,18 @@ import {
   ScanErrorModal,
   UnfinishedScansModal,
 } from './ScanBatchPreviewer/ScanBatchModals';
-import {
-  ErrorTypes,
-  validateFileOnSelect,
-} from '@web-client/views/FileHandlingHelpers/fileValidation';
 import { FileUploadErrorModal } from '@web-client/views/FileUploadErrorModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
 import { PreviewControls } from './PreviewControls';
 import { SelectScannerSourceModal } from './ScanBatchPreviewer/SelectScannerSourceModal';
-import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import {
+  genericOnValidationErrorHandler,
+  validateFileOnSelect,
+} from '@web-client/views/FileHandlingHelpers/fileValidation';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
@@ -426,20 +425,12 @@ export const ScanBatchPreviewer = connect(
                   allowedFileExtensions: ['.pdf'],
                   e,
                   megabyteLimit: constants.MAX_FILE_SIZE_MB,
-                  onError: ({ errorType, message, messageToLog }) => {
-                    showFileUploadErrorModalSequence({
-                      contactSupportMessage:
-                        'If you still have a problem uploading the file, email',
-                      errorToLog: messageToLog || message,
-                      message,
-                      title: 'There Is a Problem With This File',
-                      troubleshootingLink:
-                        errorType && errorType !== ErrorTypes.WRONG_FILE_TYPE
-                          ? {
-                              link: TROUBLESHOOTING_INFO.FILE_UPLOAD_TROUBLESHOOTING_LINK,
-                              message: 'Learn about troubleshooting files',
-                            }
-                          : undefined,
+                  onError: ({ errorType, messageToDisplay, messageToLog }) => {
+                    genericOnValidationErrorHandler({
+                      errorType,
+                      messageToDisplay,
+                      messageToLog,
+                      showFileUploadErrorModalSequence,
                     });
                   },
                   onSuccess: ({ selectedFile }) => {

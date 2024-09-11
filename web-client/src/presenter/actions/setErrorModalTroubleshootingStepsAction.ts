@@ -5,5 +5,5 @@ export const setErrorModalTroubleshootingStepsAction = ({
   store,
 }: ActionProps) => {
   store.set(state.modal.contactSupportMessage, props.contactSupportMessage);
-  store.set(state.modal.troubleshootingLink, props.troubleshootingLink);
+  store.set(state.modal.troubleshootingInfo, props.troubleshootingInfo);
 };

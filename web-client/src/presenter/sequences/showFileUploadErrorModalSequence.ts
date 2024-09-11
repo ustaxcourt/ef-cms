@@ -5,8 +5,8 @@ import { setModalMessageAction } from '@web-client/presenter/actions/setModalMes
 import { setModalTitleAction } from '@web-client/presenter/actions/setModalTitleAction';
 
 export interface TroubleshootingLinkInfo {
-  link: string;
-  message: string;
+  linkUrl: string;
+  linkMessage: string;
 }
 
 export const showFileUploadErrorModalSequence = [
@@ -18,7 +18,7 @@ export const showFileUploadErrorModalSequence = [
 ] as unknown as (props: {
   message?: string; // Overwrites the default
   title?: string; // Overwrites the default
-  errorToLog?: any; // Error message to send to backend, if any
+  errorToLog?: string; // Error message to send to backend, if any
   contactSupportMessage?: string; // Please reach out to ...
-  troubleshootingLink?: TroubleshootingLinkInfo; // Follow this link for helpful tips ...
+  troubleshootingInfo?: TroubleshootingLinkInfo; // Follow this link for helpful tips ...
 }) => void;

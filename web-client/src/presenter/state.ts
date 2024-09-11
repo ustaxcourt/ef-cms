@@ -716,7 +716,7 @@ export const baseState = {
     pdfPreviewModal: undefined,
     showModal: undefined, // the name of the modal to display
     title: undefined,
-    troubleshootingLink: undefined as unknown as TroubleshootingLinkInfo, // steps for troubleshooting
+    troubleshootingInfo: undefined as unknown as TroubleshootingLinkInfo, // steps for troubleshooting
   } as Record<string, any>,
   navigation: {
     caseDetailMenu: '',

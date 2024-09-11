@@ -1,13 +1,12 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import {
-  ErrorTypes,
-  validateFileOnSelect,
-} from '@web-client/views/FileHandlingHelpers/fileValidation';
 import { FileUploadErrorModal } from '@web-client/views/FileUploadErrorModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import { cloneFile } from '../FileHandlingHelpers/cloneFile';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import {
+  genericOnValidationErrorHandler,
+  validateFileOnSelect,
+} from '@web-client/views/FileHandlingHelpers/fileValidation';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -75,21 +74,13 @@ export const StateDrivenFileInput = connect<
         allowedFileExtensions: accept.split(','),
         e,
         megabyteLimit: constants.MAX_FILE_SIZE_MB,
-        onError: ({ errorType, message, messageToLog }) => {
+        onError: ({ errorType, messageToDisplay, messageToLog }) => {
           setSelectedFilename('');
-          showFileUploadErrorModalSequence({
-            contactSupportMessage:
-              'If you still have a problem uploading the file, email',
-            errorToLog: messageToLog || message,
-            message,
-            title: 'There Is a Problem With This File',
-            troubleshootingLink:
-              errorType && errorType !== ErrorTypes.WRONG_FILE_TYPE
-                ? {
-                    link: TROUBLESHOOTING_INFO.FILE_UPLOAD_TROUBLESHOOTING_LINK,
-                    message: 'Learn about troubleshooting files',
-                  }
-                : undefined,
+          genericOnValidationErrorHandler({
+            errorType,
+            messageToDisplay,
+            messageToLog,
+            showFileUploadErrorModalSequence,
           });
         },
         onSuccess: ({ selectedFile }) => {
