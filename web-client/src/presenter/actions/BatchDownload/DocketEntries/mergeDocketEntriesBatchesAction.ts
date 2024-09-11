@@ -19,9 +19,8 @@ const mergeZipFiles = async (
     const arrayBuffer = response.data;
     const contents = await unzipSync(new Uint8Array(arrayBuffer));
 
-    Object.entries(contents).forEach(([filePath, content]) => {
-      const dir = filePath.split('/');
-      const fileName = `${dir[dir.length - 1]}`;
+    Object.entries(contents).forEach(([rootPath, content]) => {
+      const fileName = rootPath.split('/').slice(1).join('/');
       allFiles[fileName] = content;
     });
   }
