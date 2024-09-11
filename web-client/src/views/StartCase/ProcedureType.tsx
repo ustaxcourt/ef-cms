@@ -1,17 +1,23 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const ProcedureType = connect(
-  {
-    PROCEDURE_TYPES: state.constants.PROCEDURE_TYPES,
-    legend: props.legend,
-    onChange: props.onChange,
-    validationErrors: state.validationErrors,
-    value: props.value,
-  },
+type ProcedureTypeType = {
+  legend: string;
+  onChange: (event: any) => void;
+  value: string;
+};
+
+const procedureTypeDependencies = {
+  PROCEDURE_TYPES: state.constants.PROCEDURE_TYPES,
+  validationErrors: state.validationErrors,
+};
+export const ProcedureType = connect<
+  ProcedureTypeType,
+  typeof procedureTypeDependencies
+>(
+  procedureTypeDependencies,
   function ProcedureType({
     legend,
     onChange,
