@@ -17,7 +17,6 @@ export const InlineLink = ({
   href: string;
   iconSize?: '1x' | '2x' | '3x' | '4x' | '5x';
   tooltip?: string;
-  shouldWrapText?: boolean;
 }) => {
   const classes = classNames(
     'usa-link--external',
