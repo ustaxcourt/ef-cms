@@ -33,6 +33,16 @@ export function toKyselyUpdateMessage(message: RawMessage): UpdateMessage {
   return pickFields(message);
 }
 
+export function toKyselyUpdateMessages(
+  messages: RawMessage[],
+): UpdateMessage[] {
+  return messages.map(pickFields);
+}
+
 export function toKyselyNewMessage(message: RawMessage): NewMessage {
   return pickFields(message);
+}
+
+export function toKyselyNewMessages(messages: RawMessage[]): NewMessage[] {
+  return messages.map(pickFields);
 }
