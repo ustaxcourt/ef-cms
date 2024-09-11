@@ -85,19 +85,19 @@ Conducting usability testing with pro se petitioners (public) on the Start a Cas
 
 [Case Form Usability Test - Petitioner  - Test Plan](https://docs.google.com/document/d/1wRmXNfXAumPpczC_P3XbOY4uxUPgUZfY6xc-RNHVmTk/edit?usp=sharing)
 
-[Case Form Usability Test - Petitioner - Findings](https://docs.google.com/presentation/d/1E4MJ4y6lf7C2DkACHvBEubtRdfGCJBsyZ83qDNzXZdo/edit?usp=sharing)
+[Case Form Usability Test - Petitioner - Findings](https://docs.google.com/presentation/d/1Im10X9KW-jkJ76UH6sYdjlHwawJVGMSu/edit?usp=sharing&ouid=101093926770181931184&rtpof=true&sd=true)
 
 ### Petition QC Usability Testing (March 2019)
 In this study, Flexion UX Designers tested the Petitions QC Workflow in a development environment for the first time. Previously, the team conducted several iterative design studies with Petitions Clerks using Figma wireframes.
 
-[Petitions Workflow Usability Study Findings](https://drive.google.com/open?id=1a3el4zlM0P_sXDZXt75-krHRBW92XVAn24etA0tcCDE)
+[Petitions Workflow Usability Study Findings](https://docs.google.com/presentation/d/19wDxfsMNwsSF6jgCCvvBRaPBUyB2q6Mp/edit?usp=sharing&ouid=101093926770181931184&rtpof=true&sd=true)
 
 ### Practitioner Interviews / Usability Testing (April 2019)
 In this study, Flexion UX Designers interviewed current practitioners to understand their use of the existing Tax Court system. The Flexion UX Team then tested the new Case Form with the practitioners, as well as the file document functionality for the first time.
 
-#### [Case Form Interview and Usability Test - Practitioner - Test Plan](https://docs.google.com/document/d/1zrlYYbbgJsscnl6zDlhf9sooaz7ne0rKujATB2ZbJkw/edit?usp=sharing)
+[Case Form Interview and Usability Test - Practitioner - Test Plan](https://docs.google.com/document/d/1zrlYYbbgJsscnl6zDlhf9sooaz7ne0rKujATB2ZbJkw/edit?usp=sharing)
 
-#### [Case Form Usability Test - Practitioner - Findings](https://drive.google.com/open?id=1HcjhQ3_nKtgIR-9hh8uqKMS4yB02XGwznEKfFrx6SyA)
+[Case Form Usability Test - Practitioner - Findings](https://docs.google.com/presentation/d/1HIwkfqs4Mr2nYAmNw1BFQegLNDcm72Rt/edit?usp=sharing&ouid=101093926770181931184&rtpof=true&sd=true)
 
 
 ### Core System Usability Testing (September 2019)
@@ -141,7 +141,7 @@ In this study, Flexion UX Designers performed usability testing for creating a c
 
 [File a Petition Usability Test - Petitioner - Plan](https://docs.google.com/document/d/1M6tj8AMpr94BGeMpqcuK7gBy1xqTaS-b8AfsHT7CWws/edit?usp=sharing)
 
-[File a Petition Usability Test - Petitioner - Findings](https://docs.google.com/presentation/d/1Olul5MtM7gp8WIs6ugREigsm5QSQvSL_6rgblGha83s/edit?usp=sharing)
+[File a Petition Usability Test - Petitioner - Findings](https://docs.google.com/presentation/d/14uwSvoAyevQbfA8ZZSNRCzZOfQKPCCH6/edit?usp=sharing&ouid=101093926770181931184&rtpof=true&sd=true)
 
 
 ### Order Search Interviews (March 2021)
