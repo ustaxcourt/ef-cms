@@ -81,7 +81,7 @@ These document the user flow of the new system we are building. It's a work-in-p
 # User Interviews and Usability Testing
 
 ### Case Form Usability Testing (January 2019)
-Conductingusability testing with pro se petitioners (public) on the Start a Case form design and user flow.
+Conducting usability testing with pro se petitioners (public) on the Start a Case form design and user flow.
 
 [Case Form Usability Test - Petitioner  - Test Plan](https://docs.google.com/document/d/1wRmXNfXAumPpczC_P3XbOY4uxUPgUZfY6xc-RNHVmTk/edit?usp=sharing)
 
