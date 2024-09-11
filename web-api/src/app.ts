@@ -825,8 +825,14 @@ app.delete(
     lambdaWrapper(getCustomCaseReportLambda),
   );
   app.get(
-    '/reports/printable-case-inventory-report',
-    lambdaWrapper(generatePrintableCaseInventoryReportLambda),
+    '/async/reports/printable-case-inventory-report',
+    lambdaWrapper(
+      generatePrintableCaseInventoryReportLambda,
+      {
+        isAsyncSync: true,
+      },
+      applicationContext,
+    ),
   );
   app.get('/reports/pending-items', lambdaWrapper(fetchPendingItemsLambda));
   app.get(
