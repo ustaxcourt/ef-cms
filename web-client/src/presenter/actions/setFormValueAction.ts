@@ -6,18 +6,20 @@ export const setFormValueAction = ({
 }: ActionProps<{
   allowEmptyString?: boolean;
   index?: number;
+  root?: string;
   key: string;
   value: any;
 }>) => {
-  const { allowEmptyString, index, key, value } = props;
+  const { allowEmptyString, index, key, root, value } = props;
+  const stateRoot = root || 'form';
 
   if ((!allowEmptyString && value === '') || value === null) {
-    return store.unset(state.form[key]);
+    return store.unset(state[stateRoot][key]);
   }
 
   if (typeof index === 'number') {
-    return store.set(state.form[key][index], value);
+    return store.set(state[stateRoot][key][index], value);
   }
 
-  store.set(state.form[key], value);
+  store.set(state[stateRoot][key], value);
 };

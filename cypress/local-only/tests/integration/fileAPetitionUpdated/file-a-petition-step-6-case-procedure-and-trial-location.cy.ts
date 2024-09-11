@@ -1,3 +1,4 @@
+import { PROCEDURE_TYPES_MAP } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   fillCaseProcedureInformation,
   fillIrsNoticeInformation,
@@ -41,9 +42,12 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
       });
 
       it('should display Case Procedure and Trial Location information correctly for small case', () => {
-        fillCaseProcedureInformation('small');
+        fillCaseProcedureInformation(PROCEDURE_TYPES_MAP.small);
         fillStinInformation(VALID_FILE);
-        cy.get('[data-testid="procedure-type"]').should('have.text', 'Small');
+        cy.get('[data-testid="procedure-type"]').should(
+          'have.text',
+          PROCEDURE_TYPES_MAP.small,
+        );
         cy.get('[data-testid="trial-location"]').should(
           'have.text',
           'Birmingham, Alabama',
