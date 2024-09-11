@@ -4,6 +4,7 @@ import {
   calculateDifferenceInDays,
   createDateAtStartOfWeekEST,
   formatDateString,
+  getWeeksInRange,
 } from '@shared/business/utilities/DateHandler';
 import {
   PROCEDURE_TYPES_MAP,
@@ -49,11 +50,6 @@ export type EligibleCase = Pick<
 
 export type TrialSessionReadyForCalendaring = TrialSession & { weekOf: string };
 
-const sessions: {
-  city: string;
-  sessionType: TrialSessionTypes;
-  weekOf: string;
-}[] = [];
 const sessionCountPerWeek: Record<string, number> = {}; // weekOf -> session count
 const sessionCountPerCity: Record<string, number> = {}; // city -> session count
 const sessionScheduledPerCityPerWeek: Record<string, Set<string>> = {}; // weekOf -> Set of cities
@@ -93,21 +89,21 @@ export function scheduleTrialSessions({
   sessionType: TrialSessionTypes;
   weekOf: string;
 }[] {
-  let prospectiveSessions = createProspectiveTrialSessions({
+  console.log('did we get here');
+  const prospectiveSessions = createProspectiveTrialSessions({
     calendaringConfig,
     cases,
   });
 
-  // let scheduledTrialSessions = assignSessionsToWeeks({
-  //   calendaringConfig,
-  //   endDate,
-  //   prospectiveSessions,
-  //   specialSessions,
-  //   startDate,
-  // });
+  const scheduledTrialSessions = assignSessionsToWeeks({
+    calendaringConfig,
+    endDate,
+    prospectiveSessions,
+    specialSessions,
+    startDate,
+  });
 
-  // return scheduledTrialSessions;
-  return prospectiveSessions;
+  return scheduledTrialSessions;
 }
 
 // Helper function to get the Monday of the week for a given date
@@ -115,24 +111,27 @@ function getMondayOfWeek(date: string): string {
   return createDateAtStartOfWeekEST(date, FORMATS.ISO); // Monday as the first day of the week
 }
 
-function addTrialSession({ city, sessionType, weekOfString }) {
-  sessions.push({
+function addScheduledTrialSession({
+  city,
+  scheduledSessions,
+  sessionType,
+  weekOfString,
+}) {
+  scheduledSessions.push({
     city,
     sessionType,
     weekOf: weekOfString,
   });
   sessionCountPerWeek[weekOfString]++;
-  sessionCountPerCity[city]++;
-
   sessionScheduledPerCityPerWeek[weekOfString].add(city); // Mark this city as scheduled for the current week
 }
 
-let sessionsV2: {
-  city: string;
-  sessionType: TrialSessionTypes;
-}[] = [];
-function addTrialSessionV2({ city, sessionType }) {
-  sessionsV2.push({
+function addProspectiveTrialSession({
+  city,
+  prospectiveSessions,
+  sessionType,
+}) {
+  prospectiveSessions.push({
     city,
     sessionType,
   });
@@ -167,6 +166,10 @@ function createProspectiveTrialSessions({
   city: string;
   sessionType: TrialSessionTypes;
 }[] {
+  let prospectiveSessions: {
+    city: string;
+    sessionType: TrialSessionTypes;
+  }[] = [];
   const potentialTrialLocations: Set<string> = new Set();
 
   const regularCasesByCity = cases
@@ -199,95 +202,123 @@ function createProspectiveTrialSessions({
     }
 
     while (
-      regularCasesByCity[city].length >=
-        calendaringConfig.regularCaseMinimumQuantity ||
-      smallCasesByCity[city].length >=
-        calendaringConfig.smallCaseMinimumQuantity ||
-      regularCasesByCity[city].length + smallCasesByCity[city]?.length >=
-        calendaringConfig.hybridCaseMinimumQuantity
-    )
-      if (
-        sessionCountPerCity[city] < calendaringConfig.maxSessionsPerLocation
-      ) {
-        let regularCaseSliceSize;
-        let smallCaseSliceSize;
-        let numberOfRegularCasesForCity = regularCasesByCity[city]?.length || 0;
-        let numberOfSmallCasesForCity = smallCasesByCity[city]?.length || 0;
-
-        if (
-          numberOfRegularCasesForCity >=
-            calendaringConfig.regularCaseMinimumQuantity ||
-          numberOfSmallCasesForCity >=
-            calendaringConfig.smallCaseMinimumQuantity
-        ) {
-          // schedule regular or small
-          // TODO prioritize the larger backlog
-
-          // Our idea for what needs to change
-          // split the mega-while into at leaast 2, maybe 3 while
-          // while there are more regulars than minumum, create regulars
-          // while there are more smalls than min, create smalls
-          // with any remaining, create hybrid
-
-          if (
-            numberOfRegularCasesForCity >=
-            calendaringConfig.regularCaseMinimumQuantity
-          ) {
-            regularCaseSliceSize = calendaringConfig.regularCaseMaxQuantity;
-
-            regularCasesByCity[city].splice(0, regularCaseSliceSize);
-
-            addTrialSessionV2({
-              city,
-              sessionType: SESSION_TYPES.regular,
-            });
-          }
-
-          if (
-            numberOfSmallCasesForCity >=
-            calendaringConfig.smallCaseMinimumQuantity
-          ) {
-            smallCaseSliceSize = calendaringConfig.smallCaseMaxQuantity;
-
-            smallCasesByCity[city].splice(0, smallCaseSliceSize);
-
-            addTrialSessionV2({
-              city,
-              sessionType: SESSION_TYPES.small,
-            });
-          }
-        }
-        // Handle Hybrid Sessions
-        const remainingRegularCases = regularCasesByCity[city] || [];
-        const remainingSmallCases = smallCasesByCity[city] || [];
-
-        if (
-          remainingRegularCases.length + remainingSmallCases.length >=
-          calendaringConfig.hybridCaseMinimumQuantity
-        ) {
-          // Since the min of reg cases is 40, and the min of small cases is 40,
-          // and the sum of these two values is below the hybrid case max of 100,
-          // we can safely assume that if the combination of remaining regular
-          // cases and remaining small cases is above the minimum of 50, we can
-          // assign all of those remaining cases to a hybrid session.
-          //
-          // This comment applies to the if statement's condition, as well as to
-          // the setting of regularCasesByCity[city] and smallCasesByCity[city] to
-          // empty arrays below.
-          regularCasesByCity[city] = [];
-          smallCasesByCity[city] = [];
-
-          addTrialSessionV2({
-            city,
-            sessionType: SESSION_TYPES.hybrid,
-          });
-        }
+      sessionCountPerCity[city] < calendaringConfig.maxSessionsPerLocation
+    ) {
+      let regularCaseSliceSize;
+      let smallCaseSliceSize;
+      // One of these arrays will continue to decrease in size until it is smaller than the other, at which point prioritization below will flip.
+      // For now, we are okay with this -- TODO 10275 confirm
+      // schedule regular or small
+      if (regularCasesByCity[city]?.length > smallCasesByCity[city]?.length) {
+        scheduleRegularCases({
+          calendaringConfig,
+          city,
+          prospectiveSessions,
+          regularCaseSliceSize,
+          regularCasesByCity,
+        });
+        scheduleSmallCases({
+          calendaringConfig,
+          city,
+          prospectiveSessions,
+          smallCaseSliceSize,
+          smallCasesByCity,
+        });
+      } else {
+        scheduleSmallCases({
+          calendaringConfig,
+          city,
+          prospectiveSessions,
+          smallCaseSliceSize,
+          smallCasesByCity,
+        });
+        scheduleRegularCases({
+          calendaringConfig,
+          city,
+          prospectiveSessions,
+          regularCaseSliceSize,
+          regularCasesByCity,
+        });
       }
+
+      // Handle Hybrid Sessions
+      const remainingRegularCases = regularCasesByCity[city] || [];
+      const remainingSmallCases = smallCasesByCity[city] || [];
+
+      if (
+        remainingRegularCases?.length + remainingSmallCases.length >=
+        calendaringConfig.hybridCaseMinimumQuantity
+      ) {
+        // Since the min of reg cases is 40, and the min of small cases is 40,
+        // and the sum of these two values is below the hybrid case max of 100,
+        // we can safely assume that if the combination of remaining regular
+        // cases and remaining small cases is above the minimum of 50, we can
+        // assign all of those remaining cases to a hybrid session.
+        //
+        // This comment applies to the if statement's condition, as well as to
+        // the setting of regularCasesByCity[city] and smallCasesByCity[city] to
+        // empty arrays below.
+        regularCasesByCity[city] = [];
+        smallCasesByCity[city] = [];
+
+        addProspectiveTrialSession({
+          city,
+          prospectiveSessions,
+          sessionType: SESSION_TYPES.hybrid,
+        });
+      }
+    }
   }
 
   // TODO don't forget we need to deal with overrides.
 
-  return sessionsV2;
+  return prospectiveSessions;
+}
+
+function scheduleRegularCases({
+  calendaringConfig,
+  city,
+  prospectiveSessions,
+  regularCasesByCity,
+  regularCaseSliceSize,
+}) {
+  while (
+    (regularCasesByCity[city]?.length || 0) >=
+    calendaringConfig.regularCaseMinimumQuantity
+  ) {
+    regularCaseSliceSize = calendaringConfig.regularCaseMaxQuantity;
+
+    regularCasesByCity[city].splice(0, regularCaseSliceSize);
+
+    addProspectiveTrialSession({
+      city,
+      prospectiveSessions,
+      sessionType: SESSION_TYPES.regular,
+    });
+  }
+}
+
+function scheduleSmallCases({
+  calendaringConfig,
+  city,
+  prospectiveSessions,
+  smallCasesByCity,
+  smallCaseSliceSize,
+}) {
+  while (
+    (smallCasesByCity[city].length || 0) >=
+    calendaringConfig.smallCaseMinimumQuantity
+  ) {
+    smallCaseSliceSize = calendaringConfig.smallCaseMaxQuantity;
+
+    smallCasesByCity[city].splice(0, smallCaseSliceSize);
+
+    addProspectiveTrialSession({
+      city,
+      prospectiveSessions,
+      sessionType: SESSION_TYPES.small,
+    });
+  }
 }
 
 function assignSessionsToWeeks({
@@ -323,19 +354,21 @@ function assignSessionsToWeeks({
   // -- Max 1 per location per week.
   // -- Max x per week across all locations
 
+  const scheduledSessions: {
+    city: string;
+    sessionType: TrialSessionTypes;
+    weekOf: string;
+  }[] = [];
+
   const potentialTrialLocations: Set<string> = new Set();
   prospectiveSessions.forEach(prospectiveSession => {
     potentialTrialLocations.add(prospectiveSession.city);
   });
 
-  let currentWeek = getMondayOfWeek(startDate);
+  // Get array of weeks in range to loop through
+  const weeksToLoop = getWeeksInRange({ endDate, startDate });
 
-  let differenceInDays = calculateDifferenceInDays(
-    formatDateString(endDate, FORMATS.ISO),
-    formatDateString(currentWeek, FORMATS.ISO),
-  );
-
-  while (differenceInDays > 0) {
+  for (const currentWeek of weeksToLoop) {
     const weekOfString = currentWeek;
 
     if (!sessionCountPerWeek[weekOfString]) {
@@ -343,7 +376,7 @@ function assignSessionsToWeeks({
     }
 
     if (
-      sessionCountPerWeek[weekOfString] < calendaringConfig.maxSessionsPerWeek
+      sessionCountPerWeek[weekOfString] >= calendaringConfig.maxSessionsPerWeek
     ) {
       continue;
     }
@@ -357,8 +390,9 @@ function assignSessionsToWeeks({
     );
 
     specialSessionsForWeek.forEach(session => {
-      addTrialSession({
+      addScheduledTrialSession({
         city: session.trialLocation,
+        scheduledSessions,
         sessionType: SESSION_TYPES.special,
         weekOfString,
       });
@@ -381,18 +415,13 @@ function assignSessionsToWeeks({
         continue;
       }
 
-      addTrialSession({
+      addScheduledTrialSession({
         ...prospectiveSession,
+        scheduledSessions,
         weekOfString,
       });
     }
-
-    currentWeek = addWeeksToDate({ startDate: currentWeek, weeksToAdd: 1 }); // Move to the next week
-    differenceInDays = calculateDifferenceInDays(
-      formatDateString(endDate, FORMATS.ISO),
-      formatDateString(currentWeek, FORMATS.ISO),
-    );
   }
 
-  return sessions;
+  return scheduledSessions;
 }
