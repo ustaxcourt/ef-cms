@@ -54,6 +54,8 @@ Post-launch, the team continues with research and testing activities.
 
 These document the user flow of the new system we are building. It's a work-in-progress, that's updated to include the new workflows that we developed.
 
+[High Level Case Flow](https://drive.google.com/file/d/1jn1VdIxtP0Cq6Nd8lbLpHzD8QStT304R/view?usp=sharing)
+
 [Create a New Case (Paper Petition)](./Create-a-new-case.pdf)
 
 [Create and Save Order/Notice](./Court-Issued-Orders-Notices.pdf)
@@ -190,6 +192,15 @@ In this study, Flexion UX Designers performed usability testing for creating a c
 
 [QC Process Flow Lucid Chart - Petition's Clerks](https://lucid.app/lucidchart/54368542-072c-44c2-9ed3-06149590268f/edit?viewport_loc=-488%2C-1745%2C8238%2C4912%2C0_0&invitationId=inv_4d57de35-151d-41b9-819a-9590b8e250c0)
 
+## Minutes Sheet
+
+[Minutes Sheet Research Plan - Trial Clerks April 2023](https://docs.google.com/document/d/1ZRdusjqnauG3kHpvHeH8dsbJfHAi539M-AeK4j2bPVI/edit?usp=sharing)
+
+## Calendaring Trial Sessions
+
+[Calendaring Trial Sessions Research Plan - April & May 2024](https://docs.google.com/document/d/136HJ_4gGGKd1HhLLBICzPIacKymgGsadzug0YqDb4ag/edit?usp=sharing)
+
+[Calendaring Trial Sessions Prototype Testing Research Plan - May 2024](https://docs.google.com/document/d/1H3JJFRn5vN8dYIvb7MWcnTg5JHqfE_NTLaW3bWFM2-4/edit?usp=sharing)
 
 # UI Design System
 
