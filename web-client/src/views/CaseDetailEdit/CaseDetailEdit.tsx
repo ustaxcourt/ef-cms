@@ -14,11 +14,13 @@ export const CaseDetailEdit = connect(
     navigateBackSequence: sequences.navigateBackSequence,
     saveSavedCaseForLaterSequence: sequences.saveSavedCaseForLaterSequence,
     screenMetadata: state.screenMetadata,
+    validateCaseDetailSequence: sequences.validateCaseDetailSequence,
   },
   function CaseDetailEdit({
     navigateBackSequence,
     saveSavedCaseForLaterSequence,
     screenMetadata,
+    validateCaseDetailSequence,
   }) {
     return (
       <div noValidate id="case-edit-form" role="form">
@@ -46,7 +48,7 @@ export const CaseDetailEdit = connect(
             title="IRS Notice"
           >
             <div className="blue-container">
-              <IRSNotice validationName="validateCaseDetailSequence" />
+              <IRSNotice validationSequence={validateCaseDetailSequence} />
             </div>
           </Tab>
         </Tabs>

@@ -97,7 +97,7 @@ export const FilePetitionStep3 = connect(
                       name="hasIrsNotice"
                       ref={registerRef && registerRef('hasIrsNotice')}
                       type="radio"
-                      value={option === 'Yes'}
+                      value={String(option === 'Yes')}
                       onChange={e => {
                         setHasIrsNoticeSequence({
                           key: e.target.name,
@@ -158,7 +158,6 @@ export const FilePetitionStep3 = connect(
                             `irsNotices.${validationError.index}.caseType`,
                           )
                         }
-                        registerRef={registerRef}
                         taxYear={info.taxYear}
                         todayDate={info.todayDate}
                         validationError={validationError}
@@ -203,8 +202,7 @@ export const FilePetitionStep3 = connect(
                 )}
               </>
             )}
-
-            {!form.hasIrsNotice && (
+            {form.hasIrsNotice === false && (
               <CaseTypeSelect
                 allowDefaultOption={true}
                 caseTypes={caseTypeDescriptionHelper.caseTypes}
@@ -212,7 +210,7 @@ export const FilePetitionStep3 = connect(
                 errorMessageId="case-type-root-error-message"
                 legend={`Which topic most closely matches ${isPetitioner ? 'your' : 'the petitioner’s'} complaint with the IRS?`}
                 value={form.caseType}
-                onBlurSequence={() => {
+                onBlur={() => {
                   petitionGenerationLiveValidationSequence({
                     validationKey: ['caseType'],
                   });
