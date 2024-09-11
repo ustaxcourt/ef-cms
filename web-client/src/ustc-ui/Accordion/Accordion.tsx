@@ -7,10 +7,8 @@ import {
 } from '../Utils/useCerebralState';
 import { map } from '../Utils/ElementChildren';
 import { pick, uniqueId } from 'lodash';
-import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import classNames from 'classnames';
 
 /**
@@ -119,12 +117,24 @@ const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
     );
   };
 
-export const Accordion = connect(
-  {
-    bind: props.bind,
-    simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
-    value: state[props.bind],
-  },
+type AccordionProps = {
+  bind?: any;
+  bordered?: boolean;
+  children: ReactNode;
+  className?: string;
+  headingLevel?: string;
+  id?: string;
+  onSelect?: () => void;
+  role?: string;
+  simpleSetter?: any;
+};
+
+const accordionDependencies = {
+  simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
+};
+
+export const Accordion = connect<AccordionProps, typeof accordionDependencies>(
+  accordionDependencies,
   function Accordion(accordionProps) {
     const {
       bind,
@@ -135,7 +145,6 @@ export const Accordion = connect(
       id,
       onSelect,
       simpleSetter,
-      value,
     } = accordionProps;
     const passThroughProps = pick(accordionProps, ['role']);
 

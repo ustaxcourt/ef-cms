@@ -11,7 +11,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 type IrsNoticeUpload = {
-  attachmentToPetitionFile: File;
+  attachmentToPetitionFile?: File;
   index: number;
   noticeIssuedDate?: string;
   taxYear?: string;
