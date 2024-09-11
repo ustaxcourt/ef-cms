@@ -55,7 +55,6 @@ export const FilingFeeOptions = function () {
             <InlineLink
               href="https://www.ustaxcourt.gov/resources/forms/Application_for_Waiver_of_Filing_Fee.pdf"
               icon="file-pdf"
-              shouldWrapText={true}
             >
               Download Application For Waiver of Filing Fee
             </InlineLink>
