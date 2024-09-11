@@ -23,6 +23,7 @@ export const StartCaseInternal = connect(
     showModal: state.modal.showModal,
     startCaseInternalHelper: state.startCaseInternalHelper,
     submitPetitionFromPaperSequence: sequences.submitPetitionFromPaperSequence,
+    validateCaseDetailSequence: sequences.validateCaseDetailSequence,
     validatePetitionFromPaperSequence:
       sequences.validatePetitionFromPaperSequence,
   },
@@ -33,6 +34,7 @@ export const StartCaseInternal = connect(
     showModal,
     startCaseInternalHelper,
     submitPetitionFromPaperSequence,
+    validateCaseDetailSequence,
     validatePetitionFromPaperSequence,
   }) {
     return (
@@ -75,7 +77,9 @@ export const StartCaseInternal = connect(
                     title="IRS Notice"
                   >
                     <div className="blue-container">
-                      <IRSNotice validationName="validateCaseDetailSequence" />
+                      <IRSNotice
+                        validationSequence={validateCaseDetailSequence}
+                      />
                     </div>
                   </Tab>
                 </Tabs>
