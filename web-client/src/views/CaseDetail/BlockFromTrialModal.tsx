@@ -43,10 +43,10 @@ export const BlockFromTrialModal = connect(
               <textarea
                 aria-label="block from trial"
                 className="usa-textarea"
+                data-testid="blocked-from-trial-reason-textarea"
                 id="reason"
-                maxLength="120"
+                maxLength={120}
                 name="reason"
-                type="text"
                 value={modal.reason}
                 onChange={e => {
                   updateModalValueSequence({
