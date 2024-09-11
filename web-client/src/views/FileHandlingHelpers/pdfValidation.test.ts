@@ -93,7 +93,7 @@ describe('validatePdf', () => {
         errorMessageToDisplay:
           'There is a problem uploading the file. Try again later.',
         errorMessageToLog:
-          'There is a problem uploading the file. Try again later.',
+          'There is a problem uploading the file. Try again later. (FileReader encountered an error: Unknown error.)',
         errorType: ErrorTypes.UNKNOWN,
       },
       isValid: false,
@@ -111,7 +111,8 @@ describe('validatePdf', () => {
       errorInformation: {
         errorMessageToDisplay:
           'There is a problem uploading the file. Try again later.',
-        errorMessageToLog: 'Failed to read file as ArrayBuffer.',
+        errorMessageToLog:
+          'There is a problem uploading the file. Try again later. (Failed to read file as ArrayBuffer.)',
         errorType: ErrorTypes.UNKNOWN,
       },
       isValid: false,
