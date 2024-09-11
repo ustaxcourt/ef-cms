@@ -13,20 +13,20 @@ export const FileUploadErrorModal = connect(
     contactSupportMessage: state.modal.contactSupportMessage,
     message: state.modal.message,
     modalTitle: state.modal.title,
-    troubleshootingLink: state.modal.troubleshootingLink,
+    troubleshootingInfo: state.modal.troubleshootingInfo,
   },
   function FileUploadErrorModal({
     clearModalSequence,
     contactSupportMessage,
     message,
     modalTitle,
-    troubleshootingLink,
+    troubleshootingInfo,
   }: {
     clearModalSequence: any;
     contactSupportMessage: string;
     message: string;
     modalTitle: string;
-    troubleshootingLink: TroubleshootingLinkInfo;
+    troubleshootingInfo: TroubleshootingLinkInfo;
   }) {
     return (
       <ModalDialog
@@ -38,17 +38,17 @@ export const FileUploadErrorModal = connect(
       >
         {message ||
           'There is a problem with the submission. Your firewall or network may be preventing the submission. Check your firewall or network setting and try again.'}
-        {!isEmpty(troubleshootingLink) && (
+        {!isEmpty(troubleshootingInfo) && (
           <React.Fragment>
             <br />
             <br />
             <a
               className="usa-link--external"
-              href={troubleshootingLink.link}
+              href={troubleshootingInfo.linkUrl}
               rel="noreferrer"
               target="_blank"
             >
-              {troubleshootingLink.message}
+              {troubleshootingInfo.linkMessage}
             </a>
           </React.Fragment>
         )}

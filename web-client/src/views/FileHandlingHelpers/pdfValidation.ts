@@ -26,8 +26,11 @@ export const validatePdf = ({
 
       if (!result || typeof result === 'string') {
         resolve({
-          errorMessageToDisplay: GENERIC_FILE_ERROR_MESSAGE,
-          errorMessageToLog: 'Failed to read file as ArrayBuffer.',
+          errorInformation: {
+            errorMessageToDisplay: GENERIC_FILE_ERROR_MESSAGE,
+            errorMessageToLog: 'Failed to read file as ArrayBuffer.',
+            errorType: ErrorTypes.UNKNOWN,
+          },
           isValid: false,
         });
         return;
@@ -35,29 +38,37 @@ export const validatePdf = ({
 
       const fileAsArrayBuffer = new Uint8Array(result as ArrayBuffer);
 
+      // We try to load the pdf. If we get any errors, we return an errorInformation accordingly.
       try {
         const pdfjs = await applicationContext.getPdfJs();
         await pdfjs.getDocument(fileAsArrayBuffer).promise;
-        resolve({ isValid: true }); // Return true if the PDF is valid
+        resolve({ isValid: true });
       } catch (err) {
         if (err instanceof Error) {
           if (err.name === 'PasswordException') {
             resolve({
-              errorMessageToDisplay: PDF_PASSWORD_PROTECTED_ERROR_MESSAGE,
-              errorType: ErrorTypes.ENCRYPTED_FILE,
+              errorInformation: {
+                errorMessageToDisplay: PDF_PASSWORD_PROTECTED_ERROR_MESSAGE,
+                errorType: ErrorTypes.ENCRYPTED_FILE,
+              },
               isValid: false,
             });
           } else if (err.name === 'InvalidPDFException') {
             resolve({
-              errorMessageToDisplay: PDF_CORRUPTED_ERROR_MESSAGE,
-              errorType: ErrorTypes.CORRUPT_FILE,
+              errorInformation: {
+                errorMessageToDisplay: PDF_CORRUPTED_ERROR_MESSAGE,
+                errorType: ErrorTypes.CORRUPT_FILE,
+              },
               isValid: false,
             });
           }
         }
         resolve({
-          errorMessageToDisplay: GENERIC_FILE_ERROR_MESSAGE,
-          errorMessageToLog: 'An unknown error occurred: ${err}',
+          errorInformation: {
+            errorMessageToDisplay: GENERIC_FILE_ERROR_MESSAGE,
+            errorMessageToLog: 'An unknown error occurred: ${err}',
+            errorType: ErrorTypes.UNKNOWN,
+          },
           isValid: false,
         });
       }
@@ -65,8 +76,11 @@ export const validatePdf = ({
 
     fileReader.onerror = () => {
       resolve({
-        errorMessageToDisplay: GENERIC_FILE_ERROR_MESSAGE,
-        errorMessageToLog: GENERIC_FILE_ERROR_MESSAGE,
+        errorInformation: {
+          errorMessageToDisplay: GENERIC_FILE_ERROR_MESSAGE,
+          errorMessageToLog: GENERIC_FILE_ERROR_MESSAGE,
+          errorType: ErrorTypes.UNKNOWN,
+        },
         isValid: false,
       });
     };

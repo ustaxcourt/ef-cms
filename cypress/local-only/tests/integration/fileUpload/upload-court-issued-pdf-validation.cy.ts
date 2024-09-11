@@ -15,11 +15,15 @@ describe('upload court issued document validations', () => {
   });
 
   it('should display error modal when a non-pdf file is selected and see no file selected after closing modal', () => {
+    cy.intercept('POST', '/logError').as('logErrorRequest');
+
     attachFile({
       filePath: '../../helpers/file/non-pdf.txt',
       selector: '[data-testid="primary-document-file"]',
     });
+    cy.wait('@logErrorRequest');
 
+    cy.get('@logErrorRequest.all').should('have.length', 1);
     cy.get('[data-testid="file-upload-error-modal"]').contains(
       'The file is not a PDF. Select a PDF file or resave the file as a PDF.',
     );
@@ -28,28 +32,37 @@ describe('upload court issued document validations', () => {
   });
 
   it('should display error modal when a non-supported pdf format is selected', () => {
+    cy.intercept('POST', '/logError').as('logErrorRequest');
+
     attachFile({
       filePath: '../../helpers/file/corrupt-pdf.pdf',
       selector: '[data-testid="primary-document-file"]',
     });
+    cy.wait('@logErrorRequest');
 
+    cy.get('@logErrorRequest.all').should('have.length', 1);
     cy.get('[data-testid="file-upload-error-modal"]').contains(
       'The file is corrupted or in an unsupported PDF format. Ensure that the file is not corrupted and/or is in a supported PDF format and try again.',
     );
   });
 
   it('should display error modal when a password-protected pdf is selected', () => {
+    cy.intercept('POST', '/logError').as('logErrorRequest');
+
     attachFile({
       filePath: '../../helpers/file/password-protected-pdf.pdf',
       selector: '[data-testid="primary-document-file"]',
     });
+    cy.wait('@logErrorRequest');
 
+    cy.get('@logErrorRequest.all').should('have.length', 1);
     cy.get('[data-testid="file-upload-error-modal"]').contains(
       'The file is encrypted or password protected. Remove encryption or password protection and try again.',
     );
   });
 
   it('should display error modal when a file larger than the limit is selected', () => {
+    cy.intercept('POST', '/logError').as('logErrorRequest');
     const largeFile = new Blob(
       [new ArrayBuffer((MAX_FILE_SIZE_MB + 1) * 1024 * 1024)],
       {
@@ -66,7 +79,9 @@ describe('upload court issued document validations', () => {
       (input[0] as HTMLInputElement).files = dataTransfer.files;
       cy.wrap(input).trigger('change', { force: true });
     });
+    cy.wait('@logErrorRequest');
 
+    cy.get('@logErrorRequest.all').should('have.length', 1);
     cy.get('[data-testid="file-upload-error-modal"]').contains(
       `The file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB. Reduce the file size and try again.`,
     );

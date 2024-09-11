@@ -1,3 +1,5 @@
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
+import { TroubleshootingLinkInfo } from '@web-client/presenter/sequences/showFileUploadErrorModalSequence';
 import { validatePdf } from '@web-client/views/FileHandlingHelpers/pdfValidation';
 import React from 'react';
 
@@ -9,11 +11,15 @@ export enum ErrorTypes {
   UNKNOWN = 'UNKNOWN',
 }
 
+interface FileValidationErrorInfo {
+  errorType: ErrorTypes;
+  errorMessageToDisplay: string;
+  errorMessageToLog?: string; // Decouple this from the display so we can send finer-grained errors to our logging as needed
+}
+
 export interface FileValidationResponse {
   isValid: boolean;
-  errorMessageToDisplay?: string;
-  errorType?: ErrorTypes;
-  errorMessageToLog?: string; // Decouple this from the display so we can send finer-grained errors to our logging
+  errorInformation?: FileValidationErrorInfo;
 }
 
 function getFileExtension(filename: string) {
@@ -46,6 +52,25 @@ const getWrongFileTypeMessage = (fileExtensions: string[]) => {
   return `The file is not in a supported format (${fileExtensions.join(', ')}). Select a different file or resave it in a supported format.`;
 };
 
+export const validateFileSize = ({
+  file,
+  megabyteLimit,
+}: {
+  file: File;
+  megabyteLimit: number;
+}): FileValidationResponse => {
+  if (file.size > megabyteLimit * 1024 * 1024) {
+    return {
+      errorInformation: {
+        errorMessageToDisplay: `The file size is too big. The maximum file size is ${megabyteLimit}MB. Reduce the file size and try again.`,
+        errorType: ErrorTypes.FILE_TOO_BIG,
+      },
+      isValid: false,
+    };
+  }
+  return { isValid: true };
+};
+
 const validateCorrectFileType = ({
   allowedFileExtensions,
   file,
@@ -55,8 +80,10 @@ const validateCorrectFileType = ({
 }): FileValidationResponse => {
   if (!allowedFileExtensions.includes(getFileExtension(file.name))) {
     return {
-      errorMessageToDisplay: getWrongFileTypeMessage(allowedFileExtensions),
-      errorType: ErrorTypes.WRONG_FILE_TYPE,
+      errorInformation: {
+        errorMessageToDisplay: getWrongFileTypeMessage(allowedFileExtensions),
+        errorType: ErrorTypes.WRONG_FILE_TYPE,
+      },
       isValid: false,
     };
   }
@@ -76,10 +103,10 @@ export const validateFileOnSelect = async ({
   onSuccess: ({ selectedFile }: { selectedFile: File }) => void;
   onError: ({
     errorType,
-    message,
+    messageToDisplay,
     messageToLog,
   }: {
-    message: string;
+    messageToDisplay: string;
     errorType?: ErrorTypes;
     messageToLog?: string;
   }) => void;
@@ -88,23 +115,22 @@ export const validateFileOnSelect = async ({
 
   if (!target || !target.files || target.files.length === 0) {
     onError({
-      message: 'No file selected. Please upload a file.',
+      messageToDisplay: 'No file selected. Please upload a file.',
     });
     return;
   }
 
   const selectedFile = target.files[0];
-  const { errorMessageToDisplay, errorMessageToLog, errorType, isValid } =
-    await validateFile({
-      allowedFileExtensions,
-      file: selectedFile,
-      megabyteLimit,
-    });
+  const { errorInformation, isValid } = await validateFile({
+    allowedFileExtensions,
+    file: selectedFile,
+    megabyteLimit,
+  });
   if (!isValid) {
     onError({
-      errorType,
-      message: errorMessageToDisplay!,
-      messageToLog: errorMessageToLog,
+      errorType: errorInformation?.errorType,
+      messageToDisplay: errorInformation?.errorMessageToDisplay!,
+      messageToLog: errorInformation?.errorMessageToLog,
     });
     target.value = '';
     return;
@@ -121,12 +147,9 @@ export const validateFile = async ({
   megabyteLimit: number;
   allowedFileExtensions: string[];
 }): Promise<FileValidationResponse> => {
-  if (file.size > megabyteLimit * 1024 * 1024) {
-    return {
-      errorMessageToDisplay: `The file size is too big. The maximum file size is ${megabyteLimit}MB. Reduce the file size and try again.`,
-      errorType: ErrorTypes.FILE_TOO_BIG,
-      isValid: false,
-    };
+  const fileSizeValidation = validateFileSize({ file, megabyteLimit });
+  if (!fileSizeValidation.isValid) {
+    return fileSizeValidation;
   }
   const correctFileValidation = validateCorrectFileType({
     allowedFileExtensions,
@@ -139,4 +162,43 @@ export const validateFile = async ({
     return await validatePdf({ file });
   }
   return { isValid: true };
+};
+
+export const genericOnValidationErrorHandler = ({
+  errorType,
+  messageToDisplay,
+  messageToLog,
+  showFileUploadErrorModalSequence,
+}: {
+  errorType?: ErrorTypes;
+  messageToDisplay: string;
+  messageToLog?: string;
+  showFileUploadErrorModalSequence: ({
+    contactSupportMessage,
+    errorToLog,
+    message,
+    title,
+    troubleshootingInfo,
+  }: {
+    contactSupportMessage: string;
+    errorToLog?: string;
+    message: string;
+    title: string;
+    troubleshootingInfo?: TroubleshootingLinkInfo;
+  }) => void;
+}) => {
+  showFileUploadErrorModalSequence({
+    contactSupportMessage:
+      'If you still have a problem uploading the file, email',
+    errorToLog: messageToLog || messageToDisplay,
+    message: messageToDisplay,
+    title: 'There Is a Problem With This File',
+    troubleshootingInfo:
+      errorType && errorType !== ErrorTypes.WRONG_FILE_TYPE
+        ? {
+            linkMessage: 'Learn about troubleshooting files',
+            linkUrl: TROUBLESHOOTING_INFO.FILE_UPLOAD_TROUBLESHOOTING_LINK,
+          }
+        : undefined,
+  });
 };
