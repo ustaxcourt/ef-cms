@@ -1147,8 +1147,9 @@ const router = {
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
         () => {
+          const queryParams = route.query();
           setPageTitle('Trial sessions');
-          return app.getSequence('gotoTrialSessionsSequence')();
+          return app.getSequence('gotoTrialSessionsSequence')(queryParams);
         },
       ),
     );
