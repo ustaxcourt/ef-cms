@@ -51,6 +51,7 @@ export const FilingFeeOptions = function () {
             <br />
             <br />
             <strong>Can’t afford to pay the filing fee?</strong>
+            <br />
             <InlineLink
               href="https://www.ustaxcourt.gov/resources/forms/Application_for_Waiver_of_Filing_Fee.pdf"
               icon="file-pdf"
