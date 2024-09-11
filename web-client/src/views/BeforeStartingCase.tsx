@@ -169,7 +169,7 @@ export const BeforeStartingCase = connect(
               <div className="petitioner-flow-text">
                 <ul className="margin-top-0">
                   <li>
-                    {`After you submit ${isPetitioner ? 'your' : 'the'} case, you'll be asked to pay a $60
+                    {`After you submit ${isPetitioner ? 'your' : 'the'} Petition, you'll be asked to pay a $60
                     filing fee.`}
                   </li>
                   <li>You may pay online or mail a check/money order.</li>

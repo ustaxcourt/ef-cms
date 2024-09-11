@@ -10,12 +10,12 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const DashboardPetitioner = connect(
+export const DashboardExternalUser = connect(
   {
     dashboardExternalHelper: state.dashboardExternalHelper,
     user: state.user,
   },
-  function DashboardPetitioner({ dashboardExternalHelper, user }) {
+  function DashboardExternalUser({ dashboardExternalHelper, user }) {
     return (
       <React.Fragment>
         <BigHeader
@@ -103,4 +103,4 @@ export const DashboardPetitioner = connect(
   },
 );
 
-DashboardPetitioner.displayName = 'DashboardPetitioner';
+DashboardExternalUser.displayName = 'DashboardExternalUser';
