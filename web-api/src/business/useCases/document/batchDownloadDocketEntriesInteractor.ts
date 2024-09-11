@@ -104,7 +104,7 @@ const batchDownloadDocketEntriesHelper = async (
   const { caseCaption, isSealed: isCaseSealed } = caseToBatch;
   const caseTitle = Case.getCaseTitle(caseCaption);
   const caseFolder = `${docketNumber}, ${caseTitle}`;
-  const zipName = `${uuid}-${batchIndex}  ${caseFolder}.zip`;
+  const zipName = `${uuid}-${batchIndex} ${caseFolder}.zip`;
   const documentsToZip: {
     key: string;
     filePathInZip: string;
