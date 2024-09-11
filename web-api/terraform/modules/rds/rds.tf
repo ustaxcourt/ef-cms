@@ -5,7 +5,7 @@ resource "aws_rds_global_cluster" "global_cluster" {
   deletion_protection       = var.delete_protection
 
   lifecycle {
-    prevent_destroy = false
+    prevent_destroy = true
   }
 }
 
@@ -30,7 +30,7 @@ resource "aws_rds_cluster" "postgres" {
   }
 
   lifecycle {
-    prevent_destroy = false
+    prevent_destroy = true
     # ignore_changes  = [global_cluster_identifier] - used for a snapshot restore
   }
 }
@@ -43,7 +43,7 @@ resource "aws_rds_cluster_instance" "cluster_instance" {
   publicly_accessible = true
 
   lifecycle {
-    prevent_destroy = false
+    prevent_destroy = true
   }
 }
 
@@ -67,7 +67,7 @@ resource "aws_rds_cluster" "west_replica" {
   }
 
   lifecycle {
-    prevent_destroy = false
+    prevent_destroy = true
   }
 }
 
@@ -80,6 +80,6 @@ resource "aws_rds_cluster_instance" "west_replica_instance" {
   publicly_accessible = true
 
   lifecycle {
-    prevent_destroy = false
+    prevent_destroy = true
   }
 }

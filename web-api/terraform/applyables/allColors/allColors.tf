@@ -134,7 +134,7 @@ module "rds" {
   kms_key_id_replica       = module.kms.kms_key_id_replica
   min_capacity             = var.rds_min_capacity
   max_capacity             = var.rds_max_capacity
-  delete_protection        = false
+  delete_protection        = true
 
   providers = {
     aws           = aws.us-east-1

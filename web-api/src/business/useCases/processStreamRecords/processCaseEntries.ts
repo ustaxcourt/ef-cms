@@ -33,7 +33,7 @@ export const processCaseEntries = async ({
     // streams from getting blocked in case there is an issue connecting to
     // rds.  For right now, we don't think the functionality of getting the case
     // metadata over to RDS warrants blocking the entire stream.
-    await upsertCase({ rawCase: caseMetadataWithCounsel }).catch(console.error);
+    await upsertCase({ rawCase: caseMetadataWithCounsel });
 
     caseRecords.push({
       dynamodb: {
