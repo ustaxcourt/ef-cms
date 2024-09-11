@@ -674,3 +674,28 @@ export const addWeeksToDate = ({
 
   return newDate.toFormat(FORMATS.ISO);
 };
+
+export const getWeeksInRange = ({
+  endDate,
+  startDate,
+}: {
+  startDate: string;
+  endDate: string;
+}): string[] => {
+  // Parse the start and end dates
+  let start = DateTime.fromISO(startDate).startOf('week'); // Get the Monday of the start week
+  const end = DateTime.fromISO(endDate).startOf('week'); // Get the Monday of the end week
+
+  const weeks: string[] = [];
+
+  // Loop through each week, adding each Monday to the array
+  while (start <= end) {
+    const isoStart = start.toISODate();
+    if (isoStart !== null) {
+      weeks.push(isoStart); // Add the Monday (ISO format) to the array
+    }
+    start = start.plus({ weeks: 1 }); // Move to the next Monday
+  }
+
+  return weeks;
+};

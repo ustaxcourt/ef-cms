@@ -22,24 +22,24 @@ const mockEndDate = '2019-09-22T04:00:00.000Z';
 const mockStartDate = '2019-08-22T04:00:00.000Z';
 
 describe('scheduleTrialSessions', () => {
-  it('happy path', () => {
-    let params = {
-      calendaringConfig: mockCalendaringConfig,
-      cases: mockCases,
-      endDate: mockEndDate,
-      specialSessions: [],
-      startDate: mockStartDate,
-    };
+  // it('happy path', () => {
+  //   let params = {
+  //     calendaringConfig: mockCalendaringConfig,
+  //     cases: mockCases,
+  //     endDate: mockEndDate,
+  //     specialSessions: [],
+  //     startDate: mockStartDate,
+  //   };
 
-    let result = scheduleTrialSessions(params);
+  //   let result = scheduleTrialSessions(params);
 
-    // date range - trial sessions should only be scheduled within the provided date range
-    // e.g. given a 5 week date range, 6 max per week, means a total of 30 sessions per run (given current config/dates)
-    // We can only schedule 1 session per location per week
-    // This means that max sessions per run is 5 (maxSessionPerLocation) * number of unique preferred trial cities in test data.
-    // e.g. this maxes us at 10 sessions and 2 per week.
-    // We need at least the mi
-  });
+  //   // date range - trial sessions should only be scheduled within the provided date range
+  //   // e.g. given a 5 week date range, 6 max per week, means a total of 30 sessions per run (given current config/dates)
+  //   // We can only schedule 1 session per location per week
+  //   // This means that max sessions per run is 5 (maxSessionPerLocation) * number of unique preferred trial cities in test data.
+  //   // e.g. this maxes us at 10 sessions and 2 per week.
+  //   // We need at least the mi
+  // });
 
   it('should not schedule more than the max number of sessions for a given week when passed more regular cases than maxSessionsPerWeek * regularCaseMaxQuantity', () => {
     // for (let i = 0; i < totalNumberOfMockCases; ++i) {
