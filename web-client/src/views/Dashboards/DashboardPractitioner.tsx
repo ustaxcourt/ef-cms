@@ -4,6 +4,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { CaseListTable } from '../CaseListTable';
 import { CaseSearchBox } from '../CaseSearchBox';
 import { ErrorNotification } from '../ErrorNotification';
+import { InlineLink } from '@web-client/ustc-ui/InlineLink/InlineLink';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -65,18 +66,13 @@ export const DashboardPractitioner = connect(
                       <br />
                       <br />
                       <strong>Can’t afford to pay the filing fee?</strong>
-                      <Button
-                        link
-                        className="usa-link--external text-left"
+                      <br />
+                      <InlineLink
                         href="https://www.ustaxcourt.gov/resources/forms/Application_for_Waiver_of_Filing_Fee.pdf"
                         icon="file-pdf"
-                        iconColor="blue"
-                        rel="noopener noreferrer"
-                        shouldWrapText={true}
-                        target="_blank"
                       >
                         Download Application For Waiver of Filing Fee
-                      </Button>
+                      </InlineLink>
                     </AccordionItem>
                   </Accordion>
                 </div>
