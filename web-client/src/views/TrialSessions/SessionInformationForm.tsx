@@ -15,7 +15,6 @@ const sessionInformationDeps = {
   form: state.form,
   formatAndUpdateDateFromDatePickerSequence:
     sequences.formatAndUpdateDateFromDatePickerSequence,
-  formattedTrialSessions: state.formattedTrialSessions,
   updateTrialSessionFormDataSequence:
     sequences.updateTrialSessionFormDataSequence,
   user: state.user,
@@ -34,7 +33,6 @@ export const SessionInformationForm = connect<
     DATE_FORMATS,
     form,
     formatAndUpdateDateFromDatePickerSequence,
-    formattedTrialSessions,
     TRIAL_SESSION_SCOPE_TYPES,
     updateTrialSessionFormDataSequence,
     validateTrialSessionSequence,
@@ -223,7 +221,7 @@ export const SessionInformationForm = connect<
             </div>
           </div>
 
-          {formattedTrialSessions.showSwingSessionOption &&
+          {addTrialSessionInformationHelper.showSwingSessionOption &&
             !addTrialSessionInformationHelper.isStandaloneSession && (
               <>
                 <div className="usa-form-group">
@@ -249,14 +247,14 @@ export const SessionInformationForm = connect<
                     </label>
                   </div>
                 </div>
-                {formattedTrialSessions.showSwingSessionList && (
+                {addTrialSessionInformationHelper.showSwingSessionList && (
                   <FormGroup errorText={validationErrors.swingSessionId}>
                     <label
                       className="usa-label"
                       htmlFor="swing-session-id"
                       id="swing-session-id-label"
                     >
-                      Which Trial Session is This Associated With?
+                      Which trial session is this associated with?
                     </label>
                     <select
                       aria-describedby="swing-session-id-label"
@@ -276,14 +274,16 @@ export const SessionInformationForm = connect<
                       }}
                     >
                       <option value="">- Select -</option>
-                      {formattedTrialSessions.sessionsByTerm.map(session => (
-                        <option
-                          key={session.trialSessionId}
-                          value={session.trialSessionId}
-                        >
-                          {session.optionText}
-                        </option>
-                      ))}
+                      {addTrialSessionInformationHelper.swingSessions.map(
+                        session => (
+                          <option
+                            key={session.trialSessionId}
+                            value={session.trialSessionId}
+                          >
+                            {session.swingSessionText}
+                          </option>
+                        ),
+                      )}
                     </select>
                   </FormGroup>
                 )}
