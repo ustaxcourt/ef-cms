@@ -1,3 +1,4 @@
+import { checkDocumentTypeAction } from '../actions/checkDocumentTypeAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { getCaseAction } from '../actions/getCaseAction';
@@ -29,16 +30,22 @@ export const navigateToEditOrderSequence = [
   setFormFromDraftStateAction,
   setDocumentToEditAction,
   removeSignatureAction,
-  isStatusReportOrderAction,
+  checkDocumentTypeAction,
   {
-    isNotStatusReportOrder: [
-      getDocumentEditUrlAsPathAction,
-      navigateToPathAction,
-    ],
-    isStatusReportOrder: [
-      setEditStatusReportOrderFormAction,
-      navigateToPathAction,
-      statusReportOrderPdfPreviewSequence,
+    documentTypeMiscellaneous: [navigateToPathAction],
+    documentTypeOrder: [
+      isStatusReportOrderAction,
+      {
+        isNotStatusReportOrder: [
+          getDocumentEditUrlAsPathAction,
+          navigateToPathAction,
+        ],
+        isStatusReportOrder: [
+          setEditStatusReportOrderFormAction,
+          navigateToPathAction,
+          statusReportOrderPdfPreviewSequence,
+        ],
+      },
     ],
   },
 ] as unknown as () => void;
