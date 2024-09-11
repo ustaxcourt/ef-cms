@@ -11,9 +11,9 @@
   "dependencies": {
     "@18f/us-federal-holidays": "4.0.0",
     "@aws-crypto/sha256-browser": "5.2.0",
-    "@aws-sdk/client-api-gateway": "3.645.0",
-    "@aws-sdk/client-apigatewaymanagementapi": "3.645.0",
-    "@aws-sdk/client-apigatewayv2": "3.645.0",
+    "@aws-sdk/client-api-gateway": "3.650.0",
+    "@aws-sdk/client-apigatewaymanagementapi": "3.650.0",
+    "@aws-sdk/client-apigatewayv2": "3.650.0",
     "@aws-sdk/client-cloudfront": "3.645.0",
     "@aws-sdk/client-cloudwatch": "3.645.0",
     "@aws-sdk/client-cloudwatch-logs": "3.645.0",
