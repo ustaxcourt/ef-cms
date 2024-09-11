@@ -515,8 +515,8 @@ export const MOCK_CAV_CONSOLIDATED_MEMBER_CASE = {
   status: CASE_STATUS_TYPES.cav,
 };
 
-export const MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING = {
-  ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+export const MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING: RawCase = {
+  ...MOCK_SUBMITTED_CASE,
   leadDocketNumber: undefined,
   preferredTrialCity: 'Washington, District of Columbia',
   procedureType: PROCEDURE_TYPES_MAP.regular,

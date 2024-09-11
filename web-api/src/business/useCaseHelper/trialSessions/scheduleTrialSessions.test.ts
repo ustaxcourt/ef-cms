@@ -77,6 +77,7 @@ describe('scheduleTrialSessions', () => {
       );
     });
 
+    console.log('weekOfMap', weekOfMap);
     // expect(result).toEqual([
     //   {
     //     city: 'City A',
