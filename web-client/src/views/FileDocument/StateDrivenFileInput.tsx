@@ -1,5 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { FileUploadErrorModal } from '@web-client/views/FileUploadErrorModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { cloneFile } from '../FileHandlingHelpers/cloneFile';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -29,7 +28,6 @@ const deps = {
   setIsLoadingSequence: sequences.setIsLoadingSequence,
   setIsNotLoadingSequence: sequences.setIsNotLoadingSequence,
   showFileUploadErrorModalSequence: sequences.showFileUploadErrorModalSequence,
-  showModal: state.modal.showModal,
   updateFormValueSequence: sequences[props.updateFormValueSequence],
   validationSequence: sequences[props.validationSequence],
 };
@@ -51,7 +49,6 @@ export const StateDrivenFileInput = connect<
     setIsLoadingSequence,
     setIsNotLoadingSequence,
     showFileUploadErrorModalSequence,
-    showModal,
     updateFormValueSequence,
     validationSequence,
     ...remainingProps
@@ -172,7 +169,6 @@ export const StateDrivenFileInput = connect<
             </Button>
           </div>
         )}
-        {showModal === 'FileUploadErrorModal' && <FileUploadErrorModal />}
       </React.Fragment>
     );
   },

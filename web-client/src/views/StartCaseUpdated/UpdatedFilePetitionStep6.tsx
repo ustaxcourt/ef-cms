@@ -1,6 +1,5 @@
 import { CaseInformation } from './CaseInformation';
 import { ErrorNotification } from '@web-client/views/ErrorNotification';
-import { FileUploadErrorModal } from '@web-client/views/FileUploadErrorModal';
 import { FileUploadStatusModal } from '@web-client/views/FileUploadStatusModal';
 import { IRSNoticeInformation } from './IRSNoticeInformation';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
@@ -119,7 +118,6 @@ export const UpdatedFilePetitionStep6 = connect(
           </div>
         </div>
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
-        {showModal === 'FileUploadErrorModal' && <FileUploadErrorModal />}
       </>
     );
   },

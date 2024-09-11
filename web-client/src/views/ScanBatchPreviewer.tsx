@@ -7,7 +7,6 @@ import {
   ScanErrorModal,
   UnfinishedScansModal,
 } from './ScanBatchPreviewer/ScanBatchModals';
-import { FileUploadErrorModal } from '@web-client/views/FileUploadErrorModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
@@ -557,7 +556,6 @@ export const ScanBatchPreviewer = connect(
           scanBatchPreviewerHelper.selectedPageImage && (
             <div className="preview-container">{renderPreviewSection()}</div>
           )}
-        {showModal === 'FileUploadErrorModal' && <FileUploadErrorModal />}
       </>
     );
   },

@@ -1,6 +1,5 @@
 import { BigHeader } from '../BigHeader';
 import { ErrorNotification } from '../ErrorNotification';
-import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { StartCaseStep1 } from './StartCaseStep1';
@@ -22,7 +21,7 @@ export const StartCaseWizard = connect(
     showModal: state.modal.showModal,
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
   },
-  function StartCaseWizard({ showModal, submitFilePetitionSequence }) {
+  function StartCaseWizard({ showModal }) {
     return (
       <>
         <BigHeader text="Create a Case" />
@@ -58,9 +57,6 @@ export const StartCaseWizard = connect(
           />
         )}
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
-        {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal confirmSequence={submitFilePetitionSequence} />
-        )}
       </>
     );
   },

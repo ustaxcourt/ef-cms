@@ -1,7 +1,6 @@
 import { AddressDisplay } from '../CaseDetail/AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDifferenceModalOverlay } from './CaseDifferenceModalOverlay';
-import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { Hint } from '../../ustc-ui/Hint/Hint';
@@ -290,9 +289,6 @@ export const StartCaseStep5 = connect(
           <CaseDifferenceModalOverlay />
         )}
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
-        {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal confirmSequence={submitFilePetitionSequence} />
-        )}
       </>
     );
   },
