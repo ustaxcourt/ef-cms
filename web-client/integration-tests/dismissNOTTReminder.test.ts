@@ -58,6 +58,9 @@ describe('Dismiss NOTT reminder on calendared trial session within 30-35 day ran
     loginAs(cerebralTest, 'docketclerk@example.com');
     it('should see the NOTT reminder icon on the trial session list', async () => {
       await cerebralTest.runSequence('gotoTrialSessionsSequence');
+      await cerebralTest.runSequence('setTrialSessionsFiltersSequence', {
+        currentTab: 'calendared',
+      });
 
       expect(cerebralTest.getState('currentPage')).toEqual('TrialSessions');
 
