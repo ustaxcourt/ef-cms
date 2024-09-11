@@ -28,7 +28,7 @@ export const validatePdf = ({
         resolve({
           errorInformation: {
             errorMessageToDisplay: GENERIC_FILE_ERROR_MESSAGE,
-            errorMessageToLog: 'Failed to read file as ArrayBuffer.',
+            errorMessageToLog: `${GENERIC_FILE_ERROR_MESSAGE} Failed to read file as ArrayBuffer.`,
             errorType: ErrorTypes.UNKNOWN,
           },
           isValid: false,
@@ -66,7 +66,7 @@ export const validatePdf = ({
         resolve({
           errorInformation: {
             errorMessageToDisplay: GENERIC_FILE_ERROR_MESSAGE,
-            errorMessageToLog: 'An unknown error occurred: ${err}',
+            errorMessageToLog: `${GENERIC_FILE_ERROR_MESSAGE} An unknown error occurred: ${err}`,
             errorType: ErrorTypes.UNKNOWN,
           },
           isValid: false,
@@ -75,10 +75,11 @@ export const validatePdf = ({
     };
 
     fileReader.onerror = () => {
+      const error = fileReader?.error ?? 'Unknown error';
       resolve({
         errorInformation: {
           errorMessageToDisplay: GENERIC_FILE_ERROR_MESSAGE,
-          errorMessageToLog: GENERIC_FILE_ERROR_MESSAGE,
+          errorMessageToLog: `${GENERIC_FILE_ERROR_MESSAGE} FileReader encountered an error: ${error}.`,
           errorType: ErrorTypes.UNKNOWN,
         },
         isValid: false,
