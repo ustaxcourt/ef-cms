@@ -1,4 +1,9 @@
 import {
+  FORMATS,
+  calculateISODate,
+  formatNow,
+} from '@shared/business/utilities/DateHandler';
+import {
   HYBRID_SESSION_TYPES,
   SESSION_STATUS_GROUPS,
   SESSION_STATUS_TYPES,
@@ -8,7 +13,8 @@ import {
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
   colvinsChambersUser,
-  docketClerk1User,
+  docketClerkUser,
+  trialClerkUser,
 } from '../../../../shared/src/test/mockUsers';
 import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from './formattedTrialSessionDetails';
 import { omit } from 'lodash';
@@ -63,7 +69,7 @@ describe('formattedTrialSessionDetails', () => {
     const result: any = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {},
-        user: docketClerk1User,
+        user: trialClerkUser,
       },
     });
 
@@ -78,7 +84,7 @@ describe('formattedTrialSessionDetails', () => {
     let result: any = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {},
-        user: docketClerk1User,
+        user: trialClerkUser,
       },
     });
 
@@ -91,7 +97,7 @@ describe('formattedTrialSessionDetails', () => {
     result = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {},
-        user: docketClerk1User,
+        user: trialClerkUser,
       },
     });
 
@@ -123,7 +129,7 @@ describe('formattedTrialSessionDetails', () => {
     const result: any = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {},
-        user: docketClerk1User,
+        user: trialClerkUser,
       },
     });
 
@@ -138,7 +144,7 @@ describe('formattedTrialSessionDetails', () => {
     const result: any = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {},
-        user: docketClerk1User,
+        user: trialClerkUser,
       },
     });
 
@@ -151,7 +157,7 @@ describe('formattedTrialSessionDetails', () => {
     const result: any = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {},
-        user: docketClerk1User,
+        user: trialClerkUser,
       },
     });
 
@@ -169,7 +175,7 @@ describe('formattedTrialSessionDetails', () => {
             isCalendared: false,
             startDate: PAST_DATE,
           },
-          user: docketClerk1User,
+          user: trialClerkUser,
         },
       });
       expect(result).toMatchObject({
@@ -187,7 +193,7 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
-          user: docketClerk1User,
+          user: trialClerkUser,
         },
       });
 
@@ -206,7 +212,7 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
-          user: docketClerk1User,
+          user: trialClerkUser,
         },
       });
 
@@ -225,7 +231,7 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
-          user: docketClerk1User,
+          user: trialClerkUser,
         },
       });
 
@@ -244,7 +250,7 @@ describe('formattedTrialSessionDetails', () => {
             sessionStatus: SESSION_STATUS_GROUPS.open,
             startDate: PAST_DATE,
           },
-          user: docketClerk1User,
+          user: trialClerkUser,
         },
       });
       expect(result).toMatchObject({
@@ -262,7 +268,7 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
-          user: docketClerk1User,
+          user: trialClerkUser,
         },
       });
 
@@ -281,12 +287,74 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
-          user: docketClerk1User,
+          user: trialClerkUser,
         },
       });
 
       expect(result).toMatchObject({
         canEdit: true,
+      });
+    });
+
+    describe('docketClerk user canEdit', () => {
+      it('should be true when canEdit is true and docketClerk user is editing a Special TrialSession', () => {
+        mockTrialSession = {
+          ...TRIAL_SESSION,
+          sessionStatus: SESSION_STATUS_GROUPS.open,
+          sessionType: SESSION_TYPES.special,
+          startDate: FUTURE_DATE,
+        };
+
+        const result: any = runCompute(formattedTrialSessionDetails, {
+          state: {
+            trialSession: {},
+            user: docketClerkUser,
+          },
+        });
+
+        expect(result).toMatchObject({
+          canEdit: true,
+        });
+      });
+
+      it('should be true when canEdit is true and docketClerk user is editing a Motion/Hearing TrialSession', () => {
+        mockTrialSession = {
+          ...TRIAL_SESSION,
+          sessionStatus: SESSION_STATUS_GROUPS.open,
+          sessionType: SESSION_TYPES.motionHearing,
+          startDate: FUTURE_DATE,
+        };
+
+        const result: any = runCompute(formattedTrialSessionDetails, {
+          state: {
+            trialSession: {},
+            user: docketClerkUser,
+          },
+        });
+
+        expect(result).toMatchObject({
+          canEdit: true,
+        });
+      });
+
+      it('should be false when docketClerk user sees a non- Motion/Hearing or Special TrialSession', () => {
+        mockTrialSession = {
+          ...TRIAL_SESSION,
+          sessionStatus: SESSION_STATUS_GROUPS.open,
+          sessionType: SESSION_TYPES.hybrid,
+          startDate: FUTURE_DATE,
+        };
+
+        const result: any = runCompute(formattedTrialSessionDetails, {
+          state: {
+            trialSession: {},
+            user: docketClerkUser,
+          },
+        });
+
+        expect(result).toMatchObject({
+          canEdit: false,
+        });
       });
     });
 
@@ -319,7 +387,7 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
-          user: docketClerk1User,
+          user: trialClerkUser,
         },
       });
 
@@ -341,7 +409,7 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
-          user: docketClerk1User,
+          user: trialClerkUser,
         },
       });
 
@@ -359,7 +427,7 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
-          user: docketClerk1User,
+          user: trialClerkUser,
         },
       });
 
@@ -377,7 +445,7 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
-          user: docketClerk1User,
+          user: trialClerkUser,
         },
       });
       expect(result.canClose).toBe(false);
@@ -394,7 +462,7 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
-          user: docketClerk1User,
+          user: trialClerkUser,
         },
       });
 
@@ -412,7 +480,7 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
-          user: docketClerk1User,
+          user: trialClerkUser,
         },
       });
 
@@ -430,7 +498,7 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
-          user: docketClerk1User,
+          user: trialClerkUser,
         },
       });
 
@@ -450,7 +518,7 @@ describe('formattedTrialSessionDetails', () => {
           trialSession: {
             ...mockTrialSession,
           },
-          user: docketClerk1User,
+          user: trialClerkUser,
         },
       });
 
@@ -459,12 +527,12 @@ describe('formattedTrialSessionDetails', () => {
   });
 
   describe('NOTT reminder', () => {
-    it('should set showAlertForNOTTReminder to true when the alert has not been previously dismissed and isStartDateWithinNOTTReminderRange is true', () => {
+    it('should set showAlertForNOTTReminder to true when the alert has not been previously dismissed and start date is within NOTT reminder range', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         dismissedAlertForNOTT: false,
-        isStartDateWithinNOTTReminderRange: true,
-        thirtyDaysBeforeTrialFormatted: '2/2/2022',
+        isCalendared: true,
+        startDate: calculateISODate({ howMuch: 29, units: 'days' }),
       };
 
       const result: any = runCompute(formattedTrialSessionDetails, {
@@ -472,13 +540,13 @@ describe('formattedTrialSessionDetails', () => {
           trialSession: {
             ...mockTrialSession,
           },
-          user: docketClerk1User,
+          user: trialClerkUser,
         },
       });
 
       expect(result.showAlertForNOTTReminder).toBe(true);
       expect(result.alertMessageForNOTT).toEqual(
-        '30-day trial notices are due by 2/2/2022. Have notices been served?',
+        `30-day trial notices are due by ${formatNow(FORMATS.MMDDYY)}. Have notices been served?`,
       );
     });
 
@@ -486,7 +554,8 @@ describe('formattedTrialSessionDetails', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         dismissedAlertForNOTT: true,
-        isStartDateWithinNOTTReminderRange: true,
+        isCalendared: true,
+        startDate: calculateISODate({ howMuch: 30, units: 'days' }),
       };
 
       const result: any = runCompute(formattedTrialSessionDetails, {
@@ -494,7 +563,7 @@ describe('formattedTrialSessionDetails', () => {
           trialSession: {
             ...mockTrialSession,
           },
-          user: docketClerk1User,
+          user: trialClerkUser,
         },
       });
 
@@ -502,11 +571,12 @@ describe('formattedTrialSessionDetails', () => {
       expect(result.alertMessageForNOTT).toBeUndefined();
     });
 
-    it('should set showAlertForNOTTReminder to false when isStartDateWithinNOTTReminderRange is false', () => {
+    it('should set showAlertForNOTTReminder to false when start date is within NOTT reminder range', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         dismissedAlertForNOTT: true,
-        isStartDateWithinNOTTReminderRange: false,
+        isCalendared: true,
+        startDate: calculateISODate({ howMuch: 60, units: 'days' }),
       };
 
       const result: any = runCompute(formattedTrialSessionDetails, {
@@ -514,7 +584,7 @@ describe('formattedTrialSessionDetails', () => {
           trialSession: {
             ...mockTrialSession,
           },
-          user: docketClerk1User,
+          user: trialClerkUser,
         },
       });
 
@@ -535,7 +605,7 @@ describe('formattedTrialSessionDetails', () => {
             trialSession: {
               ...mockTrialSession,
             },
-            user: docketClerk1User,
+            user: trialClerkUser,
           },
         },
       );

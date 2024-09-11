@@ -10,7 +10,9 @@ import {
   UnknownAuthUser,
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
+import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { orderBy } from 'lodash';
+import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 
 const saveOriginalDocumentWithNewId = async ({
   applicationContext,
@@ -123,25 +125,19 @@ export const saveSignedDocumentInteractor = async (
     caseEntity.addDocketEntry(signedDocketEntryEntity);
 
     if (parentMessageId) {
-      const messages = await applicationContext
-        .getPersistenceGateway()
-        .getMessageThreadByParentId({
-          applicationContext,
-          parentMessageId,
-        });
+      const messages = await getMessageThreadByParentId({
+        parentMessageId,
+      });
 
       const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
 
-      const messageEntity = new Message(mostRecentMessage, {
-        applicationContext,
-      }).validate();
+      const messageEntity = new Message(mostRecentMessage).validate();
       messageEntity.addAttachment({
         documentId: signedDocketEntryEntity.docketEntryId,
         documentTitle: signedDocketEntryEntity.documentTitle,
       });
 
-      await applicationContext.getPersistenceGateway().updateMessage({
-        applicationContext,
+      await updateMessage({
         message: messageEntity.validate().toRawObject(),
       });
     }

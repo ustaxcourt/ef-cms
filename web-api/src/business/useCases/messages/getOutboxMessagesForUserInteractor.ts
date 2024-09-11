@@ -6,6 +6,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getUserOutboxMessages } from '@web-api/persistence/postgres/messages/getUserOutboxMessages';
 
 /**
  * getOutboxMessagesForUserInteractor
@@ -24,14 +25,9 @@ export const getOutboxMessagesForUserInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const messages = await applicationContext
-    .getPersistenceGateway()
-    .getUserOutboxMessages({
-      applicationContext,
-      userId,
-    });
-
-  return MessageResult.validateRawCollection(messages, {
-    applicationContext,
+  const messages = await getUserOutboxMessages({
+    userId,
   });
+
+  return MessageResult.validateRawCollection(messages);
 };

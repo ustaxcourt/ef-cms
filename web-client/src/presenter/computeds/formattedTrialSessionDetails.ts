@@ -1,8 +1,10 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { FormattedTrialSessionDetailsType } from '@shared/business/utilities/getFormattedTrialSessionDetails';
 import { Get } from 'cerebral';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { isEmpty, isEqual } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+import { thirtyDaysBeforeTrial } from '@web-client/presenter/computeds/trialSessionsHelper';
 
 type FormatTrialSessionHelperType = FormattedTrialSessionDetailsType & {
   alertMessageForNOTT?: string;
@@ -58,11 +60,14 @@ export const formattedTrialSessionDetails = (
 
   showAlertForNOTTReminder =
     !formattedTrialSession.dismissedAlertForNOTT &&
-    !!formattedTrialSession.isStartDateWithinNOTTReminderRange &&
+    TrialSession.isStartDateWithinNOTTReminderRange({
+      isCalendared: formattedTrialSession.isCalendared,
+      startDate: formattedTrialSession.startDate,
+    }) &&
     formattedTrialSession.sessionStatus !== SESSION_STATUS_TYPES.closed;
 
   if (showAlertForNOTTReminder) {
-    alertMessageForNOTT = `30-day trial notices are due by ${formattedTrialSession.thirtyDaysBeforeTrialFormatted}. Have notices been served?`;
+    alertMessageForNOTT = `30-day trial notices are due by ${thirtyDaysBeforeTrial(formattedTrialSession.startDate)}. Have notices been served?`;
   }
 
   if (formattedTrialSession.chambersPhoneNumber) {
@@ -88,14 +93,21 @@ export const formattedTrialSessionDetails = (
 
     const user = get(state.user);
     const isChambersUser = user.role === USER_ROLES.chambers;
-
     const trialDateInFuture = trialDateFormatted > nowDateFormatted;
+    const docketClerkCanEditCheck = sessionType => {
+      const editableSessionTypes = ['Special', 'Motion/Hearing'];
+      return editableSessionTypes.includes(sessionType);
+    };
 
     canDelete = trialDateInFuture && !formattedTrialSession.isCalendared;
     canEdit =
       trialDateInFuture &&
       formattedTrialSession.sessionStatus !== SESSION_STATUS_GROUPS.closed &&
       !isChambersUser;
+
+    if (user.role === USER_ROLES.docketClerk && canEdit) {
+      canEdit = docketClerkCanEditCheck(formattedTrialSession.sessionType);
+    }
 
     const allCases = formattedTrialSession.caseOrder || [];
     const inactiveCases = allCases.filter(
