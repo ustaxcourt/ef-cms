@@ -242,7 +242,7 @@
     "verify-authorizers": "./scripts/circleci/verify-authorizers.sh",
     "verify-private-elasticsearch": "./scripts/circleci/verify-private-elasticsearch.sh",
     "visualize-bundle": "esbuild-visualizer --metadata ./metadata.json && open stats.html",
-    "dev:api-local": "dev:app-local & dev:streams-local",
+    "dev:api-local": "npm run dev:app-local & npm run dev:streams-local",
     "dev:app-local": "./run-api-local.sh",
     "dev:streams-local": "./run-streams-local.sh"
   },
