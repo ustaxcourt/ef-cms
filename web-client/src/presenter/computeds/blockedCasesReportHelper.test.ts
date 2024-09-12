@@ -10,21 +10,13 @@ describe('blockedCasesReportHelper', () => {
     blockedCasesReportHelperComputed,
   );
 
-  const noBlockedCasesLocationMessage =
-    'There are no blocked cases for this location.';
-  const noBlockedCasesProcedureTypeMessage =
-    'There are no blocked cases for this case type.';
-
-  it('returns blockedCasesCount as 0 if blockedCases is not on the state', () => {
-    const result = runCompute(blockedCasesReportHelper, {
-      state: {},
-    });
-    expect(result).toMatchObject({ blockedCasesCount: 0 });
-  });
-
   it('returns blockedCasesCount as 0 if the blockedCases array is empty', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
+        blockedCaseReportFilter: {
+          caseStatusFilter: 'All',
+          reasonFilter: 'All',
+        },
         blockedCases: [],
       },
     });
@@ -34,6 +26,10 @@ describe('blockedCasesReportHelper', () => {
   it('returns blockedCasesCount as the length of the blockedCases array', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
+        blockedCaseReportFilter: {
+          caseStatusFilter: 'All',
+          reasonFilter: 'All',
+        },
         blockedCases: [
           { docketNumber: '101-19' },
           { docketNumber: '102-19' },
@@ -50,6 +46,10 @@ describe('blockedCasesReportHelper', () => {
   it('formats blocked cases with caseTitle, docketNumberWithSuffix, and blockedDateFormatted and sorts by docket number', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
+        blockedCaseReportFilter: {
+          caseStatusFilter: 'All',
+          reasonFilter: 'All',
+        },
         blockedCases: [
           {
             blocked: true,
@@ -162,6 +162,11 @@ describe('blockedCasesReportHelper', () => {
   it('should return blocked small cases when small is selected', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
+        blockedCaseReportFilter: {
+          caseStatusFilter: 'All',
+          procedureTypeFilter: 'Small',
+          reasonFilter: 'All',
+        },
         blockedCases: [
           {
             blocked: true,
@@ -202,7 +207,6 @@ describe('blockedCasesReportHelper', () => {
             procedureType: 'Regular',
           },
         ],
-        form: { procedureType: 'Small' },
       },
     });
     expect(result.blockedCasesCount).toBe(2);
@@ -221,6 +225,11 @@ describe('blockedCasesReportHelper', () => {
   it('should return blocked regular cases when regular is selected', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
+        blockedCaseReportFilter: {
+          caseStatusFilter: 'All',
+          procedureTypeFilter: 'Regular',
+          reasonFilter: 'All',
+        },
         blockedCases: [
           {
             blocked: true,
@@ -261,7 +270,6 @@ describe('blockedCasesReportHelper', () => {
             procedureType: 'Regular',
           },
         ],
-        form: { procedureType: 'Regular' },
       },
     });
     expect(result.blockedCasesCount).toBe(2);
@@ -280,6 +288,11 @@ describe('blockedCasesReportHelper', () => {
   it('should return all cases if the procedureType is undefined', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
+        blockedCaseReportFilter: {
+          caseStatusFilter: 'All',
+          procedureTypeFilter: undefined,
+          reasonFilter: 'All',
+        },
         blockedCases: [
           {
             blocked: true,
@@ -320,103 +333,139 @@ describe('blockedCasesReportHelper', () => {
             procedureType: 'Regular',
           },
         ],
-        form: { procedureType: undefined },
       },
     });
     expect(result.blockedCasesCount).toEqual(4);
   });
 
-  it('should display correct display message when blockedCasesCount equals zero', () => {
-    const result = runCompute(blockedCasesReportHelper, {
-      state: {
-        blockedCases: [],
-        form: { procedureType: 'All' },
-      },
-    });
-    expect(result.displayMessage).toEqual(noBlockedCasesLocationMessage);
-  });
+  describe('filters', () => {
+    describe('caseStatusFilter', () => {
+      it('should return all the blocked cases when "caseStatusFilter" is set to "All', () => {
+        const TEST_CASES = [
+          { docketNumber: '101-19' },
+          { docketNumber: '102-19' },
+          { docketNumber: '103-19' },
+        ];
 
-  it('should display correct display message when procedureType is set to Small and there are no Small Blocked Cases', () => {
-    const result = runCompute(blockedCasesReportHelper, {
-      state: {
-        blockedCases: [
-          {
-            automaticBlocked: true,
-            automaticBlockedDate: '2019-03-05T21:42:29.073Z',
-            caseCaption: 'Bob Barker, Petitioner',
-            docketNumber: '104-19',
-            docketNumberWithSuffix: '104-19',
-            procedureType: 'Regular',
+        const result = runCompute(blockedCasesReportHelper, {
+          state: {
+            blockedCaseReportFilter: {
+              caseStatusFilter: 'All',
+              reasonFilter: 'All',
+            },
+            blockedCases: TEST_CASES,
           },
-        ],
-        form: { procedureType: 'Small' },
-      },
-    });
-    expect(result.displayMessage).toEqual(noBlockedCasesProcedureTypeMessage);
-  });
+        });
+        expect(result.blockedCasesFormatted.length).toEqual(TEST_CASES.length);
+      });
 
-  it('should not display any message when procedureType is set to Regular and there are Regular Blocked Cases', () => {
-    const result = runCompute(blockedCasesReportHelper, {
-      state: {
-        blockedCases: [
-          {
-            automaticBlocked: true,
-            automaticBlockedDate: '2019-03-05T21:42:29.073Z',
-            caseCaption: 'Bob Barker, Petitioner',
-            docketNumber: '104-19',
-            docketNumberWithSuffix: '104-19',
-            procedureType: 'Regular',
+      it('should filter out blocked cases that do not match "caseStatusFilter"', () => {
+        const TEST_STATUS = 'TEST_STATUS';
+        const TEST_CASES = [
+          { docketNumber: '101-19', status: 'RANDOM' },
+          { docketNumber: '102-19', status: TEST_STATUS },
+          { docketNumber: '103-19', status: 'RANDOM' },
+        ];
+
+        const result = runCompute(blockedCasesReportHelper, {
+          state: {
+            blockedCaseReportFilter: {
+              caseStatusFilter: TEST_STATUS,
+              reasonFilter: 'All',
+            },
+            blockedCases: TEST_CASES,
           },
-        ],
-        form: { procedureType: 'Regular' },
-      },
-    });
-    expect(result.displayMessage).toBeUndefined();
-  });
+        });
 
-  it('should not display any message when procedureType is set to All and there are Blocked Cases', () => {
-    const result = runCompute(blockedCasesReportHelper, {
-      state: {
-        blockedCases: [
-          {
-            automaticBlocked: true,
-            automaticBlockedDate: '2019-03-05T21:42:29.073Z',
-            caseCaption: 'Bob Barker, Petitioner',
-            docketNumber: '104-19',
-            docketNumberWithSuffix: '104-19',
-            procedureType: 'Regular',
+        expect(result.blockedCasesFormatted.length).toEqual(1);
+        expect(result.blockedCasesFormatted[0]).toMatchObject({
+          docketNumber: '102-19',
+          status: TEST_STATUS,
+        });
+      });
+    });
+
+    describe('reasonFilter', () => {
+      it('should return all the blocked cases when "reasonFilter" is set to "All', () => {
+        const TEST_CASES = [
+          { docketNumber: '101-19' },
+          { docketNumber: '102-19' },
+          { docketNumber: '103-19' },
+        ];
+
+        const result = runCompute(blockedCasesReportHelper, {
+          state: {
+            blockedCaseReportFilter: {
+              caseStatusFilter: 'All',
+              reasonFilter: 'All',
+            },
+            blockedCases: TEST_CASES,
           },
-        ],
-        form: { procedureType: 'All' },
-      },
-    });
-    expect(result.displayMessage).toBeUndefined();
-  });
+        });
+        expect(result.blockedCasesFormatted.length).toEqual(TEST_CASES.length);
+      });
 
-  it('should not display any message when procedureType is not set on form and there are Blocked Cases', () => {
-    const result = runCompute(blockedCasesReportHelper, {
-      state: {
-        blockedCases: [
-          {
-            automaticBlocked: true,
-            automaticBlockedDate: '2019-03-05T21:42:29.073Z',
-            caseCaption: 'Bob Barker, Petitioner',
-            docketNumber: '104-19',
-            docketNumberWithSuffix: '104-19',
-            procedureType: 'Regular',
+      it('should filter out blocked cases that do not match "reasonFilter"', () => {
+        const TEST_REASON = 'TEST_REASON';
+        const TEST_CASES = [
+          { automaticBlockedReason: 'RANDOM', docketNumber: '101-19' },
+          { automaticBlockedReason: TEST_REASON, docketNumber: '102-19' },
+          { automaticBlockedReason: 'RANDOM', docketNumber: '103-19' },
+        ];
+
+        const result = runCompute(blockedCasesReportHelper, {
+          state: {
+            blockedCaseReportFilter: {
+              caseStatusFilter: 'All',
+              reasonFilter: TEST_REASON,
+            },
+            blockedCases: TEST_CASES,
           },
-        ],
-      },
-    });
-    expect(result.displayMessage).toBeUndefined();
-  });
+        });
 
-  it('should display correct display message when procedureType is not on form and there are no Blocked Cases', () => {
-    const result = runCompute(blockedCasesReportHelper, {
-      state: {
-        blockedCases: [],
-      },
+        expect(result.blockedCasesFormatted.length).toEqual(1);
+        expect(result.blockedCasesFormatted[0]).toMatchObject({
+          automaticBlockedReason: TEST_REASON,
+          docketNumber: '102-19',
+        });
+      });
+
+      it('should filter out blocked cases that do not have user added reason if "reasonFilter" is "Manual Block"', () => {
+        const TEST_CASES = [
+          {
+            automaticBlockedReason: 'RANDOM',
+            blockedReason: '',
+            docketNumber: '101-19',
+          },
+          {
+            automaticBlockedReason: 'RANDOM',
+            blockedReason: 'RANDOM USER REASON',
+            docketNumber: '102-19',
+          },
+          {
+            automaticBlockedReason: 'RANDOM',
+            blockedReason: '',
+            docketNumber: '103-19',
+          },
+        ];
+
+        const result = runCompute(blockedCasesReportHelper, {
+          state: {
+            blockedCaseReportFilter: {
+              caseStatusFilter: 'All',
+              reasonFilter: 'Manual Block',
+            },
+            blockedCases: TEST_CASES,
+          },
+        });
+
+        expect(result.blockedCasesFormatted.length).toEqual(1);
+        expect(result.blockedCasesFormatted[0]).toMatchObject({
+          automaticBlockedReason: 'RANDOM',
+          blockedReason: 'RANDOM USER REASON',
+          docketNumber: '102-19',
+        });
+      });
     });
-    expect(result.displayMessage).toEqual(noBlockedCasesLocationMessage);
   });
 });

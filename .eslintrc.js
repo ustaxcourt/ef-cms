@@ -44,6 +44,7 @@ module.exports = {
         'no-underscore-dangle': 'off',
         'promise/always-return': 'off',
         'promise/catch-or-return': 'off',
+        'promise/no-nesting': 'off',
       },
     },
     {

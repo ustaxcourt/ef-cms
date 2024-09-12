@@ -758,6 +758,6 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await cerebralTest.runSequence('gotoDashboardSequence');
 
-    expect(cerebralTest.getState('currentPage')).toBe('DashboardPetitioner');
+    expect(cerebralTest.getState('currentPage')).toBe('DashboardExternalUser');
   });
 };
