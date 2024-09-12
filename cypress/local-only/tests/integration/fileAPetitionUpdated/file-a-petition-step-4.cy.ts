@@ -5,6 +5,7 @@ import {
   fillPetitionerInformation,
   selectInput,
 } from './petition-helper';
+import { PROCEDURE_TYPES_MAP } from '../../../../../shared/src/business/entities/EntityConstants';
 import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('File a petition - Step 4 Case Procedure & Trial Location', () => {
@@ -20,21 +21,20 @@ describe('File a petition - Step 4 Case Procedure & Trial Location', () => {
   });
 
   it('should display all the possible options', () => {
-    const EXPECTED_CASE_PROCEDURES: string[] = ['Regular case', 'Small case'];
     cy.get('[data-testid^="procedure-type-"]').should('have.length', 2);
-
-    EXPECTED_CASE_PROCEDURES.forEach((option: string, index: number) => {
-      cy.get(`[data-testid="procedure-type-${index}"]`).should('exist');
-      cy.get(`[data-testid="procedure-type-${index}"]`).should(
-        'have.text',
-        option,
-      );
-    });
+    cy.get(
+      `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
+    ).should('have.text', 'Regular case');
+    cy.get(
+      `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.small}-radio"]`,
+    ).should('have.text', 'Small case');
   });
 
   describe('Regular case', () => {
     beforeEach(() => {
-      cy.get('[data-testid="procedure-type-0"]').click();
+      cy.get(
+        `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
+      ).click();
     });
 
     it('should display validation error message when user presses "Next" button without selecting a trial location', () => {
@@ -100,7 +100,9 @@ describe('File a petition - Step 4 Case Procedure & Trial Location', () => {
 
   describe('Small case', () => {
     beforeEach(() => {
-      cy.get('[data-testid="procedure-type-1"]').click();
+      cy.get(
+        `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.small}-radio"]`,
+      ).click();
     });
 
     it('should display validation error message when user presses "Next" button without selecting a trial location', () => {

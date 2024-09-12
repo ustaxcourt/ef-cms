@@ -1,6 +1,11 @@
-// usage: npx ts-node --transpile-only scripts/reports/event-codes-by-year.ts M071,M074 2021-2022 > ~/Desktop/m071s-and-m074s-filed-2021-2022.csv
+#!/usr/bin/env npx ts-node --transpile-only
 
+// usage: scripts/reports/event-codes-by-year.ts M071,M074 [-y 2021-2022] > ~/Desktop/m071s-and-m074s-filed-2021-2022.csv
+
+import { DateTime } from 'luxon';
 import { createApplicationContext } from '@web-api/applicationContext';
+import { parseArgs } from 'node:util';
+import { parseIntsArg } from './reportUtils';
 import { requireEnvVars } from '../../shared/admin-tools/util';
 import {
   search,
@@ -9,6 +14,27 @@ import {
 import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
 
 requireEnvVars(['ENV', 'REGION']);
+let positionals, values;
+
+const config = {
+  allowPositionals: true,
+  options: {
+    years: {
+      default: `${DateTime.now().toObject().year}`,
+      short: 'y',
+      type: 'string',
+    },
+  },
+  strict: true,
+} as const;
+
+function usage(warning: string | undefined) {
+  if (warning) {
+    console.log(warning);
+  }
+  console.log(`Usage: ${process.argv[1]} M071,m074 [-y 2023,2024]`);
+  console.log('Options:', JSON.stringify(config, null, 4));
+}
 
 const cachedCases: { [key: string]: RawCase } = {};
 
@@ -132,22 +158,19 @@ const getDocketEntriesByEventCodesAndYears = async ({
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext = createApplicationContext({});
-
-  const eventCodes = process.argv[2].split(',');
-  const years: number[] = [];
-  const yearArg = process.argv[3];
-  if (yearArg.includes('-')) {
-    const [lower, upper] = yearArg.split('-');
-    for (let i = Number(lower); i <= Number(upper); i++) {
-      years.push(Number(i));
-    }
-  } else {
-    const yearStrings = yearArg.split(',');
-    for (const year of yearStrings) {
-      years.push(Number(year));
-    }
+  try {
+    ({ positionals, values } = parseArgs(config));
+  } catch (ex) {
+    usage(`Error: ${ex}`);
+    process.exit(1);
   }
+  if (positionals.length === 0) {
+    usage('invalid input: expected event codes');
+    process.exit(1);
+  }
+  const eventCodes = positionals[0].split(',').map(s => s.toUpperCase());
+  const years: number[] = parseIntsArg(values.years);
+  const applicationContext = createApplicationContext({});
 
   const docketEntries = await getDocketEntriesByEventCodesAndYears({
     applicationContext,
