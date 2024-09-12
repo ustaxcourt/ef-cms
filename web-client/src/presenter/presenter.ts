@@ -67,6 +67,7 @@ import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrial
 import { clearSelectedWorkItemsSequence } from './sequences/clearSelectedWorkItemsSequence';
 import { clearStatusReportOrderFormSequence } from './sequences/StatusReportOrder/clearStatusReportOrderFormSequence';
 import { clearViewerDocumentToDisplaySequence } from './sequences/clearViewerDocumentToDisplaySequence';
+import { cloneDeep } from 'lodash';
 import { closeModalAndNavigateBackSequence } from './sequences/closeModalAndNavigateBackSequence';
 import { closeModalAndNavigateSequence } from './sequences/closeModalAndNavigateSequence';
 import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeModalAndNavigateToMaintenanceSequence';
@@ -1650,7 +1651,7 @@ export const presenter = {
   ],
   providers: {} as { applicationContext: ClientApplicationContext; router: {} },
   sequences: presenterSequences,
-  state: initialState,
+  state: cloneDeep(initialState),
 };
 
 export type Sequences = typeof presenterSequences;
