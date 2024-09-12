@@ -9,21 +9,24 @@ const mergeZipFiles = async (
   if (zipUrls.length === 0) return;
 
   const allFiles = {};
+  const zipContents = await Promise.all(
+    zipUrls.map(async url => {
+      const response = await applicationContext
+        .getHttpClient()
+        .get(url, { responseType: 'arraybuffer' });
 
-  for (let i = 0; i < zipUrls.length; i++) {
-    const url = zipUrls[i];
-    const response = await applicationContext
-      .getHttpClient()
-      .get(url, { responseType: 'arraybuffer' });
+      const arrayBuffer = response.data;
+      const contents = await unzipSync(new Uint8Array(arrayBuffer));
+      return contents;
+    }),
+  );
 
-    const arrayBuffer = response.data;
-    const contents = await unzipSync(new Uint8Array(arrayBuffer));
-
+  zipContents.forEach(contents => {
     Object.entries(contents).forEach(([rootPath, content]) => {
       const fileName = rootPath.split('/').slice(1).join('/');
       allFiles[fileName] = content;
     });
-  }
+  });
 
   const newZip = zipSync(allFiles);
   return new Blob([newZip], { type: 'application/zip' });
