@@ -6,6 +6,7 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { RawUser } from '@shared/business/entities/User';
+import { SESSION_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -21,15 +22,13 @@ export const trialSessionsHelper = (
   trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
 } => {
   const permissions = get(state.permissions)!;
-  const tab = get(state.trialSessionsPage.filters.currentTab);
   const trialSessions = get(state.trialSessionsPage.trialSessions);
   const filters = get(state.trialSessionsPage.filters);
   const judge = get(state.judgeUser);
 
-  const isNewTab = tab === 'new';
-  const isCalendared = tab === 'calendared';
-
-  const showCurrentJudgesOnly = isNewTab;
+  const showCurrentJudgesOnly =
+    filters.currentTab === 'new' ||
+    filters.sessionStatus === SESSION_STATUS_TYPES.open;
 
   let trialSessionJudges;
   if (showCurrentJudgesOnly) {
@@ -76,9 +75,9 @@ export const trialSessionsHelper = (
 
   return {
     showNewTrialSession: permissions.CREATE_TRIAL_SESSION,
-    showNoticeIssued: isCalendared,
-    showSessionStatus: isCalendared,
-    showUnassignedJudgeFilter: isNewTab,
+    showNoticeIssued: filters.currentTab === 'calendared',
+    showSessionStatus: filters.currentTab === 'calendared',
+    showUnassignedJudgeFilter: filters.currentTab === 'new',
     trialSessionJudges,
     trialSessionRows,
   };
