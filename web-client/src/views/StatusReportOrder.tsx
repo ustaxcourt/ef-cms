@@ -357,7 +357,7 @@ export const StatusReportOrder = connect(
                         autoCapitalize="none"
                         className="usa-textarea maxw-none height-8 usa-character-count__field"
                         id="additional-order-text"
-                        maxLength={80}
+                        maxLength={256}
                         name="additionalOrderText"
                         value={form.additionalOrderText}
                         onChange={e => {
@@ -368,7 +368,7 @@ export const StatusReportOrder = connect(
                         }}
                       ></textarea>
                       <CharactersRemainingHint
-                        maxCharacters={80}
+                        maxCharacters={256}
                         stringToCount={form.additionalOrderText}
                       />
                     </div>
