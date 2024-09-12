@@ -1,3 +1,4 @@
+import { PROCEDURE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { uploadFile } from '../file/upload-file';
 
 export function petitionerCreatesElectronicCase(
@@ -26,8 +27,9 @@ export function petitionerCreatesElectronicCase(
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="step-3-next-button"]').click();
 
-  cy.get('[data-testid="procedure-type-1"]').click();
-  cy.get('[data-testid="procedure-type-0"]').click();
+  cy.get(
+    `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
+  ).click();
   cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
   cy.get('[data-testid="step-4-next-button"]').click();
 
@@ -77,8 +79,9 @@ export function petitionerCreatesElectronicCaseWithDeceasedSpouse(
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="step-3-next-button"]').click();
 
-  cy.get('[data-testid="procedure-type-1"]').click();
-  cy.get('[data-testid="procedure-type-0"]').click();
+  cy.get(
+    `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
+  ).click();
   cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
   cy.get('[data-testid="step-4-next-button"]').click();
 
@@ -128,8 +131,9 @@ export function petitionerCreatesElectronicCaseWithSpouse(
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="step-3-next-button"]').click();
 
-  cy.get('[data-testid="procedure-type-1"]').click();
-  cy.get('[data-testid="procedure-type-0"]').click();
+  cy.get(
+    `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
+  ).click();
   cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
   cy.get('[data-testid="step-4-next-button"]').click();
 
@@ -221,8 +225,9 @@ export function petitionerAttemptsToUploadCorruptPdf() {
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="step-3-next-button"]').click();
 
-  cy.get('[data-testid="procedure-type-1"]').click();
-  cy.get('[data-testid="procedure-type-0"]').click();
+  cy.get(
+    `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
+  ).click();
   cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
   cy.get('[data-testid="step-4-next-button"]').click();
 

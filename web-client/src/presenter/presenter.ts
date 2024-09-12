@@ -381,6 +381,7 @@ import { servePaperFiledDocumentSequence } from './sequences/servePaperFiledDocu
 import { serveThirtyDayNoticeOfTrialSequence } from './sequences/serveThirtyDayNoticeOfTrialSequence';
 import { serveToIrsCompleteSequence } from './sequences/serveToIrsCompleteSequence';
 import { serveToIrsErrorSequence } from './sequences/serveToIrsErrorSequence';
+import { setBlockedCaseReportProcedureTypeSequence } from '@web-client/presenter/sequences/Reports/BlockedCases/setBlockedCaseReportProcedureTypeSequence';
 import { setCaseDetailPageTabSequence } from './sequences/setCaseDetailPageTabSequence';
 import { setCaseDetailPrimaryTabSequence } from './sequences/setCaseDetailPrimaryTabSequence';
 import { setCaseTypeToDisplaySequence } from './sequences/setCaseTypeToDisplaySequence';
@@ -1223,6 +1224,7 @@ export const presenterSequences = {
     serveThirtyDayNoticeOfTrialSequence as unknown as Function,
   serveToIrsCompleteSequence: serveToIrsCompleteSequence as unknown as Function,
   serveToIrsErrorSequence: serveToIrsErrorSequence as unknown as Function,
+  setBlockedCaseReportProcedureTypeSequence,
   setCaseDetailPageTabSequence:
     setCaseDetailPageTabSequence as unknown as Function,
   setCaseDetailPrimaryTabSequence:
