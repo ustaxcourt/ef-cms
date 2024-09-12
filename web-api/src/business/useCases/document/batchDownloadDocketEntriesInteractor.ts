@@ -175,6 +175,7 @@ const batchDownloadDocketEntriesHelper = async (
     .getDownloadPolicyUrl({
       applicationContext,
       key: zipName,
+      urlTtl: 900,
       useTempBucket: true,
     });
 
