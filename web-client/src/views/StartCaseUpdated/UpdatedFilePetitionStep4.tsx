@@ -16,13 +16,17 @@ export const UpdatedFilePetitionStep4 = connect(
     petitionGenerationLiveValidationSequence:
       sequences.petitionGenerationLiveValidationSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    updatedFilePetitionHelper: state.updatedFilePetitionHelper,
   },
   function UpdatedFilePetitionStep4({
     deleteValidationErrorMessageSequence,
     form,
     petitionGenerationLiveValidationSequence,
+    updatedFilePetitionHelper,
     updateFormValueSequence,
   }) {
+    const { isPetitioner } = updatedFilePetitionHelper;
+
     return (
       <>
         <div className="margin-bottom-5">
@@ -31,8 +35,8 @@ export const UpdatedFilePetitionStep4 = connect(
           </p>
           <h2>Case procedure</h2>
           <div className="maxw-none tax-case-info">
-            If your case qualifies, you may choose to have it handled as a small
-            tax case. The Court handles small tax cases differently.
+            {`If ${isPetitioner ? 'your' : 'the'} case qualifies, ${isPetitioner ? 'you may choose to have it' : 'it may be'} handled as a small
+            tax case. The Court handles small tax cases differently.`}
           </div>
           <Button
             link
@@ -72,9 +76,9 @@ export const UpdatedFilePetitionStep4 = connect(
             <div>
               <h2>U.S. Tax Court trial locations</h2>
               <div className="max-width-900 tax-case-info">
-                This is your preferred location where your case may be heard if
+                {`This is ${isPetitioner ? 'your' : 'the'} preferred location where ${isPetitioner ? 'your' : 'the'} case may be heard if
                 it goes to trial. Trial locations may vary based on case
-                procedure selected.
+                procedure selected.`}
                 <span>
                   {' '}
                   <Button

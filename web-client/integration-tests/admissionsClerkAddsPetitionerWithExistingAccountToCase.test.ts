@@ -83,7 +83,9 @@ describe('admissions clerk adds petitioner with existing cognito account to case
   it('petitioner with existing account verifies case is added to dashboard', async () => {
     await cerebralTest.runSequence('gotoDashboardSequence');
 
-    expect(cerebralTest.getState('currentPage')).toEqual('DashboardPetitioner');
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'DashboardExternalUser',
+    );
     const openCases = cerebralTest.getState('openCases');
 
     const addedCase = openCases.find(
