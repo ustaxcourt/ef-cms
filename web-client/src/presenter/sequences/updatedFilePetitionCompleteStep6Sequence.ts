@@ -51,4 +51,4 @@ export const updatedFilePetitionCompleteStep6Sequence =
         },
       ],
     },
-  ]);
+  ]) as unknown as () => void;
