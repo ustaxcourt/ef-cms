@@ -177,7 +177,7 @@ describe('batchDownloadDocketEntriesInteractor', () => {
         },
       ],
       onProgress: expect.anything(),
-      outputZipName: `${TEST_GUID}-${TEST_BATCH_INDEX} 101-18, Test Petitioner.zip`,
+      outputZipName: `${TEST_GUID}-${TEST_BATCH_INDEX}.zip`,
     });
   });
 
@@ -218,7 +218,7 @@ describe('batchDownloadDocketEntriesInteractor', () => {
         },
       ],
       onProgress: expect.anything(),
-      outputZipName: `${TEST_GUID}-${TEST_BATCH_INDEX} 101-18, Test Petitioner.zip`,
+      outputZipName: `${TEST_GUID}-${TEST_BATCH_INDEX}.zip`,
     });
   });
 
