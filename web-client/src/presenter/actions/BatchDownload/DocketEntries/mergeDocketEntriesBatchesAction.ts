@@ -38,9 +38,9 @@ export const mergeDocketEntriesBatchesAction = async ({
   caseFolder: string;
 }>) => {
   const { caseFolder, uuid } = props;
-  const docketEtriesBatchDownload = get(state.docketEtriesBatchDownload);
+  const docketEntriesBatchDownload = get(state.docketEntriesBatchDownload);
 
-  const sortedUrls = docketEtriesBatchDownload[uuid]
+  const sortedUrls = docketEntriesBatchDownload[uuid]
     .sort((a, b) => a.index - b.index)
     .map(x => x.url);
 

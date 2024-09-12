@@ -11,22 +11,22 @@ export const updateDocketEntriesBatchDownloadProgressAction = ({
   uuid: string;
 }>) => {
   const { filesCompleted, index, totalFiles, uuid } = props;
-  const docketEtriesBatchDownloadProgress = get(
-    state.docketEtriesBatchDownloadProgress,
+  const docketEntriesBatchDownloadProgress = get(
+    state.docketEntriesBatchDownloadProgress,
   );
 
-  docketEtriesBatchDownloadProgress[uuid] = {
-    ...docketEtriesBatchDownloadProgress[uuid],
+  docketEntriesBatchDownloadProgress[uuid] = {
+    ...docketEntriesBatchDownloadProgress[uuid],
     [index]: filesCompleted,
   };
 
   store.set(
-    state.docketEtriesBatchDownloadProgress,
-    docketEtriesBatchDownloadProgress,
+    state.docketEntriesBatchDownloadProgress,
+    docketEntriesBatchDownloadProgress,
   );
 
   const batchTotal = Object.values(
-    docketEtriesBatchDownloadProgress[uuid],
+    docketEntriesBatchDownloadProgress[uuid],
   ).reduce((acc, current) => {
     return acc + current;
   }, 0 as number);
