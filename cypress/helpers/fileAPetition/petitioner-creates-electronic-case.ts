@@ -1,3 +1,4 @@
+import { PROCEDURE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import {
   petitionerAttemptsToUploadCorruptPdfUpdated,
   petitionerCreatesElectronicCaseForBusinessUpdated,
@@ -31,8 +32,9 @@ export function petitionerCreatesElectronicCaseWithDeceasedSpouseOld(
   cy.get('[data-testid="phone"]').type('1111111111');
   cy.get('[data-testid="use-same-address-above-label"]').click();
   cy.get('[data-testid="complete-step-3"]').click();
-  cy.get('[data-testid="procedure-type-1"]').click();
-  cy.get('[data-testid="procedure-type-0"]').click();
+  cy.get(
+    `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
+  ).click();
   cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
   cy.get('[data-testid="complete-step-4"]').click();
   cy.get('[data-testid="file-petition"]').click();
@@ -111,8 +113,9 @@ export function petitionerCreatesElectronicCaseWithSpouseOld(
   cy.get('[data-testid="phone"]').type('1111111111');
   cy.get('[data-testid="use-same-address-above-label"]').click();
   cy.get('[data-testid="complete-step-3"]').click();
-  cy.get('[data-testid="procedure-type-1"]').click();
-  cy.get('[data-testid="procedure-type-0"]').click();
+  cy.get(
+    `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
+  ).click();
   cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
   cy.get('[data-testid="complete-step-4"]').click();
   cy.get('[data-testid="file-petition"]').click();
@@ -160,8 +163,9 @@ function petitionerCreatesElectronicCaseOld(primaryFilerName = 'John') {
   cy.get('[data-testid="phone"]').type('1111111111');
 
   cy.get('[data-testid="complete-step-3"]').click();
-  cy.get('[data-testid="procedure-type-1"]').click();
-  cy.get('[data-testid="procedure-type-0"]').click();
+  cy.get(
+    `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
+  ).click();
   cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
   cy.get('[data-testid="complete-step-4"]').click();
 
@@ -204,8 +208,9 @@ export function petitionerCreatesElectronicCaseForBusinessOld() {
   uploadFile('corporate-disclosure-file');
 
   cy.get('[data-testid="complete-step-3"]').click();
-  cy.get('[data-testid="procedure-type-1"]').click();
-  cy.get('[data-testid="procedure-type-0"]').click();
+  cy.get(
+    `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
+  ).click();
   cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
   cy.get('[data-testid="complete-step-4"]').click();
 
@@ -259,8 +264,9 @@ export function privatePractitionerCreatesElectronicCaseForBusiness() {
   uploadFile('corporate-disclosure-file');
 
   cy.get('[data-testid="complete-step-3"]').click();
-  cy.get('[data-testid="procedure-type-1"]').click();
-  cy.get('[data-testid="procedure-type-0"]').click();
+  cy.get(
+    `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
+  ).click();
   cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
   cy.get('[data-testid="complete-step-4"]').click();
 
@@ -313,8 +319,9 @@ export function petitionerAttemptsToUploadCorruptPdfOld() {
   cy.get('[data-testid="phone"]').type('1111111111');
 
   cy.get('[data-testid="complete-step-3"]').click();
-  cy.get('[data-testid="procedure-type-1"]').click();
-  cy.get('[data-testid="procedure-type-0"]').click();
+  cy.get(
+    `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
+  ).click();
   cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
   cy.get('[data-testid="complete-step-4"]').click();
 

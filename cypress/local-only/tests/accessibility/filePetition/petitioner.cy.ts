@@ -1,3 +1,4 @@
+import { PROCEDURE_TYPES_MAP } from '../../../../../shared/src/business/entities/EntityConstants';
 import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
 
@@ -262,7 +263,9 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       loginAsPetitioner();
       cy.visit('/file-a-petition-pa11y/step-4');
       cy.get('[data-testid="complete-step-4"]').should('exist');
-      cy.get('#procedure-type-0').click();
+      cy.get(
+        `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
+      ).click();
       cy.get('#preferred-trial-city').should('exist');
 
       checkA11y();
