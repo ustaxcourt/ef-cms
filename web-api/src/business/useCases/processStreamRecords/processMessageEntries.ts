@@ -1,6 +1,6 @@
 import { RawMessage } from '@shared/business/entities/Message';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
-import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessage';
+import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const processMessageEntries = async ({
