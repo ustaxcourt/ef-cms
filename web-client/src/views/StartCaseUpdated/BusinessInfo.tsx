@@ -7,6 +7,7 @@ import React from 'react';
 export function BusinessInfo({
   businessFieldNames,
   form,
+  isPractitioner,
   petitionGenerationLiveValidationSequence,
   registerRef,
   updateFilingTypeSequence,
@@ -71,6 +72,7 @@ export function BusinessInfo({
             placeOfLegalResidenceTitle="Place of business"
             registerRef={registerRef}
             secondaryLabel={businessFieldNames.secondary}
+            showEmail={isPractitioner}
             showInCareOf={businessFieldNames.showInCareOf}
             showInCareOfOptional={businessFieldNames.showInCareOfOptional}
           />
