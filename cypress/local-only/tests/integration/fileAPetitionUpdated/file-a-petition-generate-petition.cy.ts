@@ -311,7 +311,7 @@ describe('File a petition', () => {
       attachFile({
         filePath: VALID_FILE,
         selector: '[data-testid="contact-primary-phone"]',
-        selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+        selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
       });
       cy.get('[data-testid="step-1-next-button"]').click();
 
