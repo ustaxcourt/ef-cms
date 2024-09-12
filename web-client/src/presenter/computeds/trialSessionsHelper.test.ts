@@ -145,8 +145,10 @@ describe('trialSessionsHelper', () => {
   });
 
   describe('trialSessionJudges', () => {
-    it('returns all current and legacy judges when the current tab is calendared', () => {
+    it('returns all current and legacy judges when the session status is closed', () => {
       trialSessionsPageState.filters.currentTab = 'calendared';
+      trialSessionsPageState.filters.sessionStatus =
+        SESSION_STATUS_TYPES.closed;
       const result = runCompute(trialSessionsHelper, {
         state: {
           judges: [
@@ -167,8 +169,29 @@ describe('trialSessionsHelper', () => {
       ]);
     });
 
-    it('returns only non-legacy judges when the current tab is new', () => {
+    it('returns only current judges when the current tab is new', () => {
       trialSessionsPageState.filters.currentTab = 'new';
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          judges: [
+            { name: 'I am not a legacy judge part 2', role: ROLES.judge },
+          ],
+          legacyAndCurrentJudges: [
+            { name: 'I am not a legacy judge', role: ROLES.judge },
+            { name: 'I am a legacy judge', role: ROLES.legacyJudge },
+          ],
+          permissions: getUserPermissions(docketClerk1User),
+          trialSessionsPage: trialSessionsPageState,
+        },
+      });
+
+      expect(result.trialSessionJudges).toEqual([
+        { name: 'I am not a legacy judge part 2', role: ROLES.judge },
+      ]);
+    });
+
+    it('returns only current judges when the session status is open', () => {
+      trialSessionsPageState.filters.sessionStatus = SESSION_STATUS_TYPES.open;
       const result = runCompute(trialSessionsHelper, {
         state: {
           judges: [
