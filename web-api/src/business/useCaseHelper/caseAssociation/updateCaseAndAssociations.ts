@@ -8,6 +8,8 @@ import { PrivatePractitioner } from '../../../../../shared/src/business/entities
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
+import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import diff from 'diff-arrays-of-objects';
 
 /**
@@ -89,12 +91,10 @@ const updateCaseMessages = async ({
     return [];
   }
 
-  const caseMessages = await applicationContext
-    .getPersistenceGateway()
-    .getMessagesByDocketNumber({
-      applicationContext,
-      docketNumber: caseToUpdate.docketNumber,
-    });
+  const caseMessages = await getMessagesByDocketNumber({
+    applicationContext,
+    docketNumber: caseToUpdate.docketNumber,
+  });
 
   if (!caseMessages) {
     return [];
@@ -106,15 +106,12 @@ const updateCaseMessages = async ({
     message.docketNumberSuffix = caseToUpdate.docketNumberSuffix;
   });
 
-  const validMessages = Message.validateRawCollection(caseMessages, {
-    applicationContext,
-  });
+  const validMessages = Message.validateRawCollection(caseMessages);
 
   return validMessages.map(
     message =>
-      function updateCaseMessages_cb() {
-        return applicationContext.getPersistenceGateway().updateMessage({
-          applicationContext,
+      async function updateCaseMessages_cb() {
+        return await updateMessage({
           message,
         });
       },

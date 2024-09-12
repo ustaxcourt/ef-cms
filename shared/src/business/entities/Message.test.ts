@@ -1,6 +1,5 @@
 import { CASE_STATUS_TYPES, PETITIONS_SECTION } from './EntityConstants';
 import { Message, RawMessage } from './Message';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { createISODateString } from '../utilities/DateHandler';
 import { getTextByCount } from '../utilities/getTextByCount';
 
@@ -42,46 +41,31 @@ describe('Message', () => {
   (createISODateString as jest.Mock).mockReturnValue(mockCreatedAt);
 
   describe('constructor', () => {
-    it('should throw an error when application context is not provided as an argument', () => {
-      expect(() => new Message(mockMessage, {} as any)).toThrow(
-        'applicationContext must be defined',
-      );
-    });
-
     it('should populate leadDocketNumber when it is provided', () => {
       const mockLeadDocketNumber = '999-99';
 
-      const message = new Message(
-        {
-          ...mockMessage,
-          leadDocketNumber: mockLeadDocketNumber,
-        },
-        { applicationContext },
-      );
+      const message = new Message({
+        ...mockMessage,
+        leadDocketNumber: mockLeadDocketNumber,
+      });
 
       expect(message.leadDocketNumber).toEqual(mockLeadDocketNumber);
     });
 
     it('should set createdAt to now when createdAt is not provided', () => {
-      const message = new Message(
-        {
-          ...mockMessage,
-          createdAt: undefined,
-        },
-        { applicationContext },
-      );
+      const message = new Message({
+        ...mockMessage,
+        createdAt: undefined,
+      });
 
       expect(message.createdAt).toEqual(mockCreatedAt);
     });
 
     it('should set parentMessageId to messageId when parentMessageId is not provided', () => {
-      const message = new Message(
-        {
-          ...mockMessage,
-          parentMessageId: undefined,
-        },
-        { applicationContext },
-      );
+      const message = new Message({
+        ...mockMessage,
+        parentMessageId: undefined,
+      });
 
       expect(message.parentMessageId).toEqual(mockMessage.messageId);
     });
@@ -89,37 +73,28 @@ describe('Message', () => {
 
   describe('isValid', () => {
     it('should be true when messageId is not provided', () => {
-      const message = new Message(
-        {
-          ...mockMessage,
-          messageId: undefined,
-        },
-        { applicationContext },
-      );
+      const message = new Message({
+        ...mockMessage,
+        messageId: undefined,
+      });
 
       expect(message.isValid()).toBeTruthy();
     });
 
     it('should be false when no message is provided', () => {
-      const message = new Message(
-        {
-          ...mockMessage,
-          message: undefined,
-        },
-        { applicationContext },
-      );
+      const message = new Message({
+        ...mockMessage,
+        message: undefined,
+      });
 
       expect(message.isValid()).toBeFalsy();
     });
 
     it('should be false when no subject is provided', () => {
-      const message = new Message(
-        {
-          ...mockMessage,
-          subject: undefined,
-        },
-        { applicationContext },
-      );
+      const message = new Message({
+        ...mockMessage,
+        subject: undefined,
+      });
 
       expect(message.isValid()).toBeFalsy();
       expect(message.getFormattedValidationErrors()!.subject).toEqual(
@@ -128,13 +103,10 @@ describe('Message', () => {
     });
 
     it('should be false when subject contains no characters other than spaces', () => {
-      const message = new Message(
-        {
-          ...mockMessage,
-          subject: '   ',
-        },
-        { applicationContext },
-      );
+      const message = new Message({
+        ...mockMessage,
+        subject: '   ',
+      });
 
       expect(message.isValid()).toBeFalsy();
       expect(message.getFormattedValidationErrors()!.subject).toEqual(
@@ -143,13 +115,10 @@ describe('Message', () => {
     });
 
     it('should be false when subject is an empty string', () => {
-      const message = new Message(
-        {
-          ...mockMessage,
-          subject: '',
-        },
-        { applicationContext },
-      );
+      const message = new Message({
+        ...mockMessage,
+        subject: '',
+      });
 
       expect(message.isValid()).toBeFalsy();
       expect(message.getFormattedValidationErrors()!.subject).toEqual(
@@ -158,14 +127,11 @@ describe('Message', () => {
     });
 
     it('should be false when a subject is provided that is too long', () => {
-      const message = new Message(
-        {
-          ...mockMessage,
-          subject:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nec fringilla diam. Donec molestie metus eu purus posuere, eu porta ex aliquet. Sed metus justo, sodales sit amet vehicula a, elementum a dolor. Aliquam matis mi eget erat scelerisque ph.', // 250 chars
-        },
-        { applicationContext },
-      );
+      const message = new Message({
+        ...mockMessage,
+        subject:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nec fringilla diam. Donec molestie metus eu purus posuere, eu porta ex aliquet. Sed metus justo, sodales sit amet vehicula a, elementum a dolor. Aliquam matis mi eget erat scelerisque ph.', // 250 chars
+      });
 
       expect(message.isValid()).toBeFalsy();
       expect(message.getFormattedValidationErrors()!.subject).toEqual(
@@ -174,17 +140,14 @@ describe('Message', () => {
     });
 
     it('should be false when isCompleted is true but other required completedBy fields are not provided', () => {
-      const message = new Message(
-        {
-          ...mockMessage,
-          completedAt: undefined,
-          completedBy: undefined,
-          completedBySection: undefined,
-          completedByUserId: undefined,
-          isCompleted: true,
-        },
-        { applicationContext },
-      );
+      const message = new Message({
+        ...mockMessage,
+        completedAt: undefined,
+        completedBy: undefined,
+        completedBySection: undefined,
+        completedByUserId: undefined,
+        isCompleted: true,
+      });
 
       expect(message.isValid()).toBeFalsy();
       expect(Object.keys(message.getFormattedValidationErrors()!)).toEqual([
@@ -196,20 +159,17 @@ describe('Message', () => {
     });
 
     it('should be true when valid attachments are provided', () => {
-      const message = new Message(
-        {
-          ...mockMessage,
-          attachments: [
-            {
-              documentId: 'b5533197-01c7-40e6-abf2-1a705fd6ed27',
-              documentTitle: 'Petition',
-              documentType: 'Petition',
-              eventCode: 'P',
-            },
-          ],
-        },
-        { applicationContext },
-      );
+      const message = new Message({
+        ...mockMessage,
+        attachments: [
+          {
+            documentId: 'b5533197-01c7-40e6-abf2-1a705fd6ed27',
+            documentTitle: 'Petition',
+            documentType: 'Petition',
+            eventCode: 'P',
+          },
+        ],
+      });
 
       expect(message.isValid()).toBeTruthy();
       expect(message.attachments).toEqual([
@@ -220,18 +180,15 @@ describe('Message', () => {
     });
 
     it('should be false when attachements are provided that are missing required fields', () => {
-      const message = new Message(
-        {
-          ...mockMessage,
-          attachments: [
-            {
-              documentType: 'Petition',
-              eventCode: 'P',
-            },
-          ],
-        },
-        { applicationContext },
-      );
+      const message = new Message({
+        ...mockMessage,
+        attachments: [
+          {
+            documentType: 'Petition',
+            eventCode: 'P',
+          },
+        ],
+      });
 
       expect(message.isValid()).toBeFalsy();
       expect(Object.keys(message.getFormattedValidationErrors()!)).toEqual([
@@ -242,13 +199,10 @@ describe('Message', () => {
 
   describe('validation', () => {
     it('should return a message when the message is over 700 characters long', () => {
-      const message = new Message(
-        {
-          ...mockMessage,
-          message: getTextByCount(1001),
-        },
-        { applicationContext },
-      );
+      const message = new Message({
+        ...mockMessage,
+        message: getTextByCount(1001),
+      });
 
       expect(message.getFormattedValidationErrors()).toEqual({
         message: 'Limit is 700 characters. Enter 700 or fewer characters.',
@@ -258,12 +212,9 @@ describe('Message', () => {
 
   describe('markAsCompleted', () => {
     it('should mark the message as replied to and completed by the provided user', () => {
-      const message = new Message(
-        {
-          ...mockMessage,
-        },
-        { applicationContext },
-      );
+      const message = new Message({
+        ...mockMessage,
+      });
 
       message.markAsCompleted({
         message: 'the completed message',
@@ -287,7 +238,7 @@ describe('Message', () => {
     });
 
     it('should not throw an error when the completed message is a blank string', () => {
-      const message = new Message(mockMessage, { applicationContext });
+      const message = new Message(mockMessage);
 
       message.markAsCompleted({
         message: '',
@@ -313,7 +264,7 @@ describe('Message', () => {
 
   describe('addAttachment', () => {
     it('should add the provided attachment to the attachments array', () => {
-      const message = new Message(mockMessage, { applicationContext });
+      const message = new Message(mockMessage);
 
       message.addAttachment({
         documentId: '1f63acc7-d3f1-4115-9310-0570559a023a',
