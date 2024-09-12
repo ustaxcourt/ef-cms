@@ -1,5 +1,6 @@
 import * as fileValidation from './fileValidation';
 import * as pdfValidation from './pdfValidation';
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import {
   validateFile,
   validateFileOnSelect,
@@ -205,5 +206,44 @@ describe('fileValidation', () => {
     });
 
     expect(validationResult).toMatchObject({ isValid: true });
+  });
+
+  describe('genericOnValidationErrorHandler', () => {
+    it('should call error modal sequence with correct arguments for an error that is not wrong file type', () => {
+      const mockFunc = jest.fn();
+      fileValidation.genericOnValidationErrorHandler({
+        errorType: fileValidation.ErrorTypes.CORRUPT_FILE,
+        messageToDisplay: 'messageToDisplayTest',
+        messageToLog: 'messageToLogTest',
+        showFileUploadErrorModalSequence: mockFunc,
+      });
+      expect(mockFunc).toHaveBeenCalledWith({
+        contactSupportMessage:
+          'If you still have a problem uploading the file, email',
+        errorToLog: 'messageToLogTest',
+        message: 'messageToDisplayTest',
+        title: 'There Is a Problem With This File',
+        troubleshootingInfo: {
+          linkMessage: 'Learn about troubleshooting files',
+          linkUrl: TROUBLESHOOTING_INFO.FILE_UPLOAD_TROUBLESHOOTING_LINK,
+        },
+      });
+    });
+  });
+  it('should call error modal sequence with correct arguments for wrong file type error', () => {
+    const mockFunc = jest.fn();
+    fileValidation.genericOnValidationErrorHandler({
+      errorType: fileValidation.ErrorTypes.WRONG_FILE_TYPE,
+      messageToDisplay: 'messageToDisplayTest',
+      messageToLog: 'messageToLogTest',
+      showFileUploadErrorModalSequence: mockFunc,
+    });
+    expect(mockFunc).toHaveBeenCalledWith({
+      contactSupportMessage:
+        'If you still have a problem uploading the file, email',
+      errorToLog: 'messageToLogTest',
+      message: 'messageToDisplayTest',
+      title: 'There Is a Problem With This File',
+    });
   });
 });
