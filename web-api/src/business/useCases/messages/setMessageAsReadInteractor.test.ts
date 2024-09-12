@@ -1,8 +1,10 @@
+import '@web-api/persistence/postgres/messages/mocks.jest';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { setMessageAsRead } from '@web-api/persistence/postgres/messages/setMessageAsRead';
 import { setMessageAsReadInteractor } from './setMessageAsReadInteractor';
 
 describe('setMessageAsReadInteractor', () => {
@@ -17,9 +19,7 @@ describe('setMessageAsReadInteractor', () => {
         mockPetitionerUser,
       ),
     ).rejects.toThrow('Unauthorized');
-    expect(
-      applicationContext.getPersistenceGateway().setMessageAsRead,
-    ).not.toHaveBeenCalled();
+    expect(setMessageAsRead).not.toHaveBeenCalled();
   });
 
   it('calls the persistence method for marking a message as read for the given messageId', async () => {
@@ -32,11 +32,7 @@ describe('setMessageAsReadInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().setMessageAsRead,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      docketNumber: '123-45',
+    expect(setMessageAsRead).toHaveBeenCalledWith({
       messageId: '123',
     });
   });
