@@ -24,7 +24,7 @@ describe('getBlockedCasesByTrialLocationAction', () => {
         presenter,
       },
       state: {
-        form: {},
+        blockedCaseReportFilter: {},
       },
     });
 
@@ -39,8 +39,8 @@ describe('getBlockedCasesByTrialLocationAction', () => {
         presenter,
       },
       state: {
-        form: {
-          trialLocation: 'Boise, Idaho',
+        blockedCaseReportFilter: {
+          trialLocationFilter: 'Boise, Idaho',
         },
       },
     });

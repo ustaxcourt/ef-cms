@@ -1,4 +1,5 @@
-import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { asyncSyncHandler, get } from '../requests';
 
 /**
  * generatePrintableCaseInventoryReportInteractor
@@ -10,12 +11,26 @@ import { get } from '../requests';
  * @returns {Promise<*>} the promise of the api call
  */
 export const generatePrintableCaseInventoryReportInteractor = (
-  applicationContext,
-  { associatedJudge, status },
+  applicationContext: ClientApplicationContext,
+  {
+    associatedJudge,
+    status,
+  }: {
+    associatedJudge?: string;
+    status?: string;
+  },
 ) => {
-  return get({
+  return asyncSyncHandler(
     applicationContext,
-    endpoint: '/reports/printable-case-inventory-report',
-    params: { associatedJudge, status },
-  });
+    async asyncSyncId =>
+      await get({
+        applicationContext,
+        asyncSyncId,
+        endpoint: '/async/reports/printable-case-inventory-report',
+        params: { associatedJudge, status },
+      }),
+  ) as Promise<{
+    fileId: string;
+    url: string;
+  }>;
 };

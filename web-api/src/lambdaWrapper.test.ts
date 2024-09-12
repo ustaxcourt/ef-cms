@@ -10,6 +10,10 @@ describe('lambdaWrapper', () => {
   let orignalParse;
 
   beforeAll(() => {
+    (getCurrentInvoke as jest.Mock).mockReturnValue({
+      event: {},
+    });
+
     orignalParse = JSON.parse;
     jest.spyOn(console, 'log').mockImplementation(() => {});
   });

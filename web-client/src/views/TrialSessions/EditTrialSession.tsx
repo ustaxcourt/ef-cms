@@ -67,7 +67,7 @@ export const EditTrialSession = connect(
                 <textarea
                   className="usa-textarea"
                   id="notes"
-                  maxLength="400"
+                  maxLength={400}
                   name="notes"
                   value={form.notes}
                   onChange={e => {
