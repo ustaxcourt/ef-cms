@@ -105,7 +105,7 @@ export const TrialSessionsTable = connect(
           ))}
         </table>
         {trialSessionsHelper.trialSessionRows.length === 0 && (
-          <p>There are no trial sessions.</p>
+          <p>There are no trial sessions for the selected filters.</p>
         )}
       </>
     );
