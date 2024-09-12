@@ -21,7 +21,7 @@ export const batchDownloadDocketEntriesAction = async ({
       docketRecordFilter,
     });
 
-  const batchSize = 100;
+  const batchSize = 50;
   const batchedDocumentIds: string[][] = [];
   const uuid = applicationContext.getUniqueId();
 
