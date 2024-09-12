@@ -272,10 +272,10 @@
 
             /* this is for buttons in submenus that should be styled the same as links in submenus */
             .usa-nav__submenu-item button {
-              padding: 0;
+              padding-top: 0;
+              padding-bottom: 0;
               color: $color-white;
               font-weight: $font-regular;
-              line-height: 1.3;
 
               &:hover {
                 text-decoration: underline;
