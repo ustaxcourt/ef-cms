@@ -6,7 +6,7 @@ export const privatePractitionerViewsOpenConsolidatedCases = cerebralTest => {
     await cerebralTest.runSequence('gotoDashboardSequence');
 
     expect(cerebralTest.getState('currentPage')).toEqual(
-      'DashboardPractitioner',
+      'DashboardExternalUser',
     );
     const openCases = cerebralTest.getState('openCases');
     expect(openCases.length).toBeGreaterThan(0);
