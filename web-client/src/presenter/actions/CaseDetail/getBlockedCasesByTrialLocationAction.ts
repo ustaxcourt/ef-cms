@@ -11,16 +11,14 @@ export const getBlockedCasesByTrialLocationAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const trialLocation = get(state.form.trialLocation);
+  const trialLocation = get(state.blockedCaseReportFilter.trialLocationFilter);
+  if (!trialLocation) return { blockedCases: [] };
 
-  let blockedCases = [];
-  if (trialLocation) {
-    blockedCases = await applicationContext
-      .getUseCases()
-      .getBlockedCasesInteractor(applicationContext, {
-        trialLocation,
-      });
-  }
+  const blockedCases = await applicationContext
+    .getUseCases()
+    .getBlockedCasesInteractor(applicationContext, {
+      trialLocation,
+    });
 
   return { blockedCases };
 };
