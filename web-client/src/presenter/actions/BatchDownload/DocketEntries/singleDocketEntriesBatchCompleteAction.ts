@@ -13,16 +13,16 @@ export const singleDocketEntriesBatchCompleteAction = ({
 }>) => {
   const { index, totalNumberOfBatches, url, uuid } = props;
 
-  const docketEtriesBatchDownload = get(state.docketEtriesBatchDownload);
+  const docketEntriesBatchDownload = get(state.docketEntriesBatchDownload);
 
-  docketEtriesBatchDownload[uuid] = [
-    ...(docketEtriesBatchDownload[uuid] || []),
+  docketEntriesBatchDownload[uuid] = [
+    ...(docketEntriesBatchDownload[uuid] || []),
     { index, url },
   ];
 
-  store.set(state.docketEtriesBatchDownload, docketEtriesBatchDownload);
+  store.set(state.docketEntriesBatchDownload, docketEntriesBatchDownload);
 
-  const completedBatchCount = docketEtriesBatchDownload[uuid].length;
+  const completedBatchCount = docketEntriesBatchDownload[uuid].length;
   if (completedBatchCount !== totalNumberOfBatches)
     return path.batchIncomplete();
 
