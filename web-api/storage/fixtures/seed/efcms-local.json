@@ -31602,7 +31602,7 @@
   {
     "associatedJudge": "Colvin",
     "isSealed": false,
-    "procedureType": "Regular",
+    "procedureType": "Small",
     "isPaper": true,
     "automaticBlocked": true,
     "automaticBlockedDate": "2023-11-22T01:17:49.276Z",
@@ -31848,7 +31848,7 @@
     "receivedAt": "2011-10-11T04:00:00.000Z",
     "caseType": "Partnership (Section 6226)",
     "orderDesignatingPlaceOfTrial": false,
-    "automaticBlockedReason": "Pending Item",
+    "automaticBlockedReason": "Due Date",
     "createdAt": "2021-10-29T13:41:06.778Z",
     "noticeOfAttachments": false,
     "leadDocketNumber": "404-22",

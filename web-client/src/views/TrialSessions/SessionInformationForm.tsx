@@ -256,7 +256,7 @@ export const SessionInformationForm = connect<
                       htmlFor="swing-session-id"
                       id="swing-session-id-label"
                     >
-                      Which Trial Session is This Associated With?
+                      Which trial session is this associated with?
                     </label>
                     <select
                       aria-describedby="swing-session-id-label"
