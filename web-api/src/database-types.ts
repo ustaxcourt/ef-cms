@@ -40,6 +40,7 @@ export interface CaseTable {
   docketNumber: string;
   trialLocation?: string;
   trialDate?: string;
+  leadDocketNumber?: string;
   docketNumberSuffix?: string;
 }
 
