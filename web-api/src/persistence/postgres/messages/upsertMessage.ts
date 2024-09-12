@@ -4,7 +4,6 @@ import {
   toKyselyNewMessage,
   toKyselyNewMessages,
   toKyselyUpdateMessage,
-  toKyselyUpdateMessages,
 } from './mapper';
 
 export const upsertMessage = async (message: RawMessage) => {
@@ -20,12 +19,19 @@ export const upsertMessage = async (message: RawMessage) => {
 };
 
 export const upsertMessages = async (messages: RawMessage[]) => {
+  if (messages.length === 0) return;
+
   await getDbWriter(writer =>
     writer
       .insertInto('message')
       .values(toKyselyNewMessages(messages))
       .onConflict(oc =>
-        oc.column('messageId').doUpdateSet(toKyselyUpdateMessages(messages)),
+        oc.column('messageId').doUpdateSet(c => {
+          const keys = Object.keys(messages[0]!) as any[];
+          return toKyselyUpdateMessage(
+            Object.fromEntries(keys.map(key => [key, c.ref(key)])),
+          );
+        }),
       )
       .execute(),
   );
