@@ -5,6 +5,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { setMessageAsRead } from '@web-api/persistence/postgres/messages/setMessageAsRead';
 
 /**
  * setMessageAsReadInteractor
@@ -17,6 +18,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
  */
 export const setMessageAsReadInteractor = async (
   applicationContext: ServerApplicationContext,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   { docketNumber, messageId }: { docketNumber: string; messageId: string },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -24,7 +26,5 @@ export const setMessageAsReadInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  await applicationContext
-    .getPersistenceGateway()
-    .setMessageAsRead({ applicationContext, docketNumber, messageId });
+  await setMessageAsRead({ messageId });
 };

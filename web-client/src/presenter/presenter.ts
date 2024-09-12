@@ -406,6 +406,7 @@ import { setSelectedDocumentsForDownloadSequence } from './sequences/setSelected
 import { setSelectedMessagesSequence } from './sequences/setSelectedMessagesSequence';
 import { setTrialSessionCalendarErrorSequence } from '@web-client/presenter/sequences/setTrialSessionCalendarErrorSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
+import { setTrialSessionsFiltersSequence } from '@web-client/presenter/sequences/setTrialSessionsFiltersSequence';
 import { setViewerCorrespondenceToDisplaySequence } from './sequences/setViewerCorrespondenceToDisplaySequence';
 import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumentToDisplaySequence';
 import { setViewerDraftDocumentToDisplaySequence } from './sequences/setViewerDraftDocumentToDisplaySequence';
@@ -514,6 +515,8 @@ import { updateCourtIssuedDocketEntryFormValueSequence } from './sequences/updat
 import { updateCourtIssuedDocketEntryTitleSequence } from '@web-client/presenter/sequences/updateCourtIssuedDocketEntryTitleSequence';
 import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
 import { updateDateRangeForDeadlinesSequence } from './sequences/updateDateRangeForDeadlinesSequence';
+import { updateDocketEntriesBatchDownloadDownloadSequence } from '@web-client/presenter/sequences/updateDocketEntriesBatchDownloadDownloadSequence';
+import { updateDocketEntriesBatchDownloadProgressSequence } from '@web-client/presenter/sequences/updateDocketEntriesBatchDownloadProgressSequence';
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
 import { updateDocketEntryMetaDocumentFormValueSequence } from './sequences/updateDocketEntryMetaDocumentFormValueSequence';
 import { updateDocketEntryWorksheetSequence } from '@web-client/presenter/sequences/updateDocketEntryWorksheetSequence';
@@ -951,7 +954,7 @@ export const presenterSequences = {
     gotoTrialSessionPlanningReportSequence as unknown as Function,
   gotoTrialSessionWorkingCopySequence:
     gotoTrialSessionWorkingCopySequence as unknown as Function,
-  gotoTrialSessionsSequence: gotoTrialSessionsSequence as unknown as Function,
+  gotoTrialSessionsSequence,
   gotoUpdatedPetitionFlowSequence,
   gotoUploadCorrespondenceDocumentSequence:
     gotoUploadCorrespondenceDocumentSequence as unknown as Function,
@@ -1274,6 +1277,7 @@ export const presenterSequences = {
   setSelectedMessagesSequence,
   setTrialSessionCalendarErrorSequence,
   setTrialSessionCalendarSequence,
+  setTrialSessionsFiltersSequence,
   setViewerCorrespondenceToDisplaySequence:
     setViewerCorrespondenceToDisplaySequence as unknown as Function,
   setViewerDocumentToDisplaySequence:
@@ -1454,6 +1458,10 @@ export const presenterSequences = {
     updateCreateOrderModalFormValueSequence as unknown as Function,
   updateDateRangeForDeadlinesSequence:
     updateDateRangeForDeadlinesSequence as unknown as Function,
+  updateDocketEntriesBatchDownloadDownloadSequence:
+    updateDocketEntriesBatchDownloadDownloadSequence as unknown as Function,
+  updateDocketEntriesBatchDownloadProgressSequence:
+    updateDocketEntriesBatchDownloadProgressSequence as unknown as Function,
   updateDocketEntryFormValueSequence:
     updateDocketEntryFormValueSequence as unknown as Function,
   updateDocketEntryMetaDocumentFormValueSequence:
