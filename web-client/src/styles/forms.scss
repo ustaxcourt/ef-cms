@@ -13,8 +13,9 @@
       border-left-style: unset;
       border-left-color: unset;
     }
-
+    
     max-width: 65rem;
+    flex: 1;
 
     ol {
       padding-inline-start: 15px;
@@ -22,26 +23,35 @@
 
     .fact-or-reason {
       textarea {
-        display: inline-block;
-        width: 55rem;
-        max-width: 80vw;
         height: 4rem;
-        vertical-align: top;
-
-        // mobile screens
-        @media only screen and (max-width: ($medium-screen - 1px)) {
-          max-width: 90vw;
-        }
       }
     }
 
-    .reason-button {
+    .fact-or-reason-text-area-wrapper {
+      display: flex;
+      align-items: center;
+
       @media only screen and (max-width: ($medium-screen - 1px)) {
-        margin-left: 0;
+          flex-direction: column;
+          align-items: flex-end; 
       }
-
-      margin-left: 1rem;
     }
+
+    .fact-or-reason-button-wrapper {
+      width: 40px;
+      margin-left: 10px;
+      
+      @media only screen and (max-width: ($medium-screen - 1px)) {
+        margin-right: 35px;
+      }
+    }
+
+
+    .fact-reason-character-label {
+      width: 2ch;
+      text-align: left;
+    }
+   
 
     .usa-form-group {
       margin-bottom: 15px;
@@ -668,7 +678,7 @@ label.ustc-upload {
 }
 
 .usa-date-picker {
-  min-width: 245px;
+  min-width: 250px;
 
   * {
     animation: none;
@@ -733,13 +743,6 @@ label.ustc-upload {
 .add-another-fact-button {
   @media only screen and (max-width: $medium-screen - 1px) {
     text-align: left !important;
-  }
-}
-
-.remove-fact-reason-button {
-  @media only screen and (max-width: $medium-screen - 1px) {
-    padding-right: 1rem !important;
-    text-align: right !important;
   }
 }
 

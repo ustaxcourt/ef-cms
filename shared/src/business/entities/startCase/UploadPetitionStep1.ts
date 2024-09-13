@@ -47,6 +47,7 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
     const contactInfo = ContactFactoryUpdated({
       contactInfoPrimary: rawProps.contactPrimary,
       contactInfoSecondary: rawProps.contactSecondary,
+      filingType: rawProps.filingType,
       hasSpouseConsent: rawProps.hasSpouseConsent,
       partyType: rawProps.partyType,
       petitionType: rawProps.petitionType,
@@ -109,15 +110,20 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
       .messages({ '*': 'Select a type of estate or trust' }),
     filingType: JoiValidationConstants.STRING.valid(
       ...FILING_TYPES[ROLES.petitioner],
+      ...FILING_TYPES[ROLES.privatePractitioner],
     )
       .required()
       .messages({ '*': 'Select on whose behalf you are filing' }),
     hasSpouseConsent: joi
       .boolean()
-      .when('isSpouseDeceased', {
-        is: 'No',
-        otherwise: joi.optional().allow(null),
-        then: joi.boolean().valid(true).required(),
+      .when('filingType', {
+        is: 'Petitioner and spouse',
+        otherwise: joi.when('isSpouseDeceased', {
+          is: 'No',
+          otherwise: joi.optional().allow(null),
+          then: joi.boolean().valid(true).required(),
+        }),
+        then: joi.optional().allow(null),
       })
       .messages({
         '*': "Check the box to confirm that you have your spouse's consent",
@@ -126,7 +132,7 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
       .string()
       .valid('Yes', 'No')
       .when('filingType', {
-        is: 'Myself and my spouse',
+        is: joi.valid('Myself and my spouse', 'Petitioner and spouse'),
         otherwise: joi.optional().allow(null),
         then: joi.required(),
       })
@@ -166,9 +172,13 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
 
   getFormattedValidationErrors(): Record<string, any> | null {
     const errors = super.getFormattedValidationErrors();
-    // // If partyType is failing and user selects "Myself and my spouse" as the filing type
-    // // don't show party type error since we show the isSpousedDeceased error
-    if (errors?.partyType && this.filingType === 'Myself and my spouse') {
+    // // If partyType is failing and user selects "Myself and my spouse" or "Petitioner and spouse" as the filing type
+    // // don't show party type error since we show the isSpouseDeceased error
+    if (
+      errors?.partyType &&
+      (this.filingType === 'Myself and my spouse' ||
+        this.filingType === 'Petitioner and spouse')
+    ) {
       return {
         ...errors,
         partyType: undefined,
@@ -182,6 +192,7 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
         contactPrimary: undefined,
         partyType: undefined,
       };
+
     return errors;
   }
 }
