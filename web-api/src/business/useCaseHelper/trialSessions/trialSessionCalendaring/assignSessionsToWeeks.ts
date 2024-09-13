@@ -63,12 +63,6 @@ export const assignSessionsToWeeks = ({
       sessionCountPerWeek[weekOfString] = 0;
     }
 
-    if (
-      sessionCountPerWeek[weekOfString] >= calendaringConfig.maxSessionsPerWeek
-    ) {
-      continue;
-    }
-
     if (!sessionScheduledPerCityPerWeek[weekOfString]) {
       sessionScheduledPerCityPerWeek[weekOfString] = new Set();
     }
@@ -96,14 +90,16 @@ export const assignSessionsToWeeks = ({
         continue;
       }
 
+      // Just use the first session!
       for (const prospectiveSession of prospectiveSessionsByCity[city]) {
-        // do the thing
         if (
           sessionScheduledPerCityPerWeek[weekOfString].has(
             prospectiveSession.city,
-          )
+          ) ||
+          sessionCountPerWeek[weekOfString] >=
+            calendaringConfig.maxSessionsPerWeek
         ) {
-          continue; // Skip this city if a session is already scheduled for this week
+          break; // Skip this city if a session is already scheduled for this week (must allow at most one in this loop)
         }
 
         addScheduledTrialSession({
@@ -111,6 +107,12 @@ export const assignSessionsToWeeks = ({
           scheduledSessions,
           weekOfString,
         });
+
+        const index =
+          prospectiveSessionsByCity[city].indexOf(prospectiveSession);
+        if (index !== -1) {
+          prospectiveSessionsByCity[city].splice(index, 1);
+        }
       }
     }
   }
