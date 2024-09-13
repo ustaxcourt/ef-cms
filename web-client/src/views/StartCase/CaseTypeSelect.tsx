@@ -19,9 +19,9 @@ export const CaseTypeSelect = connect(
     onChangePreValidation: sequences[props.onChangePreValidation],
     rawOnChange: props.onChange,
     refProp: props.refProp,
-    validation: sequences[props.validation],
     validationError: props.validationError,
     validationErrors: state.validationErrors,
+    validationFunction: props.validationFunction,
     value: props.value,
   },
   function CaseTypeSelect({
@@ -37,9 +37,9 @@ export const CaseTypeSelect = connect(
     onChangePreValidation,
     rawOnChange,
     refProp,
-    validation,
     validationError,
     validationErrors,
+    validationFunction,
     value,
   }) {
     return (
@@ -69,7 +69,7 @@ export const CaseTypeSelect = connect(
                   value: e.target.value,
                 });
                 if (onChangePreValidation) onChangePreValidation();
-                if (validation) validation();
+                if (validationFunction) validationFunction();
               }}
             >
               {allowDefaultOption && <option value="">-- Select --</option>}

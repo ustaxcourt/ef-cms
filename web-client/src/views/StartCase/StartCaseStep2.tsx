@@ -145,7 +145,7 @@ export const StartCaseStep2 = connect(
                   allowDefaultOption={true}
                   caseTypes={caseTypeDescriptionHelper.caseTypes}
                   legend="Type of notice / case"
-                  validation="validateStartCaseWizardSequence"
+                  validationFunction={validateStartCaseWizardSequence}
                   value={form.caseType}
                   onChange="updateFormValueSequence"
                 />
@@ -193,7 +193,7 @@ export const StartCaseStep2 = connect(
                 className="margin-bottom-0"
                 legend="Which topic most closely matches your complaint with the
                 IRS?"
-                validation="validateStartCaseWizardSequence"
+                validationFunction={validateStartCaseWizardSequence}
                 value={form.caseType}
                 onChange="updateFormValueSequence"
               />

@@ -23,6 +23,7 @@ export const StartCaseInternal = connect(
     showModal: state.modal.showModal,
     startCaseHelper: state.startCaseHelper,
     submitPetitionFromPaperSequence: sequences.submitPetitionFromPaperSequence,
+    validateCaseDetailSequence: sequences.validateCaseDetailSequence,
     validatePetitionFromPaperSequence:
       sequences.validatePetitionFromPaperSequence,
   },
@@ -33,6 +34,7 @@ export const StartCaseInternal = connect(
     showModal,
     startCaseHelper,
     submitPetitionFromPaperSequence,
+    validateCaseDetailSequence,
     validatePetitionFromPaperSequence,
   }) {
     return (
@@ -75,7 +77,13 @@ export const StartCaseInternal = connect(
                     title="IRS Notice"
                   >
                     <div className="blue-container">
-                      <IRSNotice validationName="validateCaseDetailSequence" />
+                      <IRSNotice
+                        validationFunction={() =>
+                          validateCaseDetailSequence({
+                            preventAutoScroll: true,
+                          })
+                        }
+                      />
                     </div>
                   </Tab>
                 </Tabs>
@@ -85,7 +93,11 @@ export const StartCaseInternal = connect(
                   documentTabs={startCaseHelper.documentTabs}
                   documentType={documentSelectedForScan}
                   title="Add Document(s)"
-                  validateSequence={validatePetitionFromPaperSequence}
+                  validateSequence={() =>
+                    validatePetitionFromPaperSequence({
+                      preventAutoScroll: true,
+                    })
+                  }
                 />
               </div>
             </div>
