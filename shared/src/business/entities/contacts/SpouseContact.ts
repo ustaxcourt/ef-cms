@@ -24,8 +24,9 @@ export class SpouseContact extends ContactUpdated {
           then: joi.string().required(),
         },
       ).messages({
+        'any.required':
+          'Enter an email address to register for electronic service',
         'string.email': 'Enter email address in format: yourname@example.com',
-        'string.empty': 'Enter a valid email address',
       }),
       phone: JoiValidationConstants.STRING.max(100).optional().allow(null),
     };

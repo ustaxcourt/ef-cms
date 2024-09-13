@@ -59,12 +59,12 @@ describe('DeceasedSpouseContact', () => {
         expect(errors).toEqual(null);
       });
 
-      it('should not return an error message for "paperPetitionEmail" if not a valid email string', () => {
+      it('should return an error message for "paperPetitionEmail" if not a valid email string', () => {
         const entity = new DeceasedSpouseContact(
           {
             ...VALID_ENTITY,
             hasConsentedToEService: true,
-            paperPetitionEmail: 'not a email string',
+            paperPetitionEmail: 'not a valid email string',
           },
           TEST_PETITION_TYPE,
           PARTY_TYPE,
@@ -73,7 +73,7 @@ describe('DeceasedSpouseContact', () => {
         const errors = entity.getFormattedValidationErrors();
         expect(errors).toEqual({
           paperPetitionEmail:
-            'Enter an email address to register for electronic service',
+            'Enter email address in format: yourname@example.com',
         });
       });
     });
