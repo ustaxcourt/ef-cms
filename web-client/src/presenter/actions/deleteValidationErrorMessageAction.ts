@@ -5,7 +5,9 @@ export const deleteValidationErrorMessageAction = ({
   get,
   props,
   store,
-}: ActionProps<{ validationKey: any }>) => {
+}: ActionProps<{
+  validationKey: (string | { property: string; value: any })[];
+}>) => {
   const { validationKey } = props;
   const validationErrors = cloneDeep(
     get(state.validationErrors),
