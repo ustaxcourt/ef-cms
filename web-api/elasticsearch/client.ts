@@ -57,10 +57,12 @@ export const getClient = async ({
       });
 };
 
-export const listDomains = async (): Promise<string[]> => {
+export const listDomains = async (
+  engineType: 'OpenSearch' | 'Elasticsearch',
+): Promise<string[]> => {
   const openSearchClient = new OpenSearchClient({ region: 'us-east-1' });
   const listDomainsCommand: ListDomainNamesCommand = new ListDomainNamesCommand(
-    { EngineType: 'OpenSearch' || 'Elasticsearch' },
+    { EngineType: engineType },
   );
   const listDomainsResponse = await openSearchClient.send(listDomainsCommand);
   const domainNames: string[] = [];
