@@ -9,6 +9,13 @@ import {
 import { ElectronicPetition } from './ElectronicPetition';
 
 describe('ElectronicPetition entity', () => {
+  const validPetitionData = {
+    caseType: CASE_TYPES_MAP.other,
+    hasIrsNotice: false,
+    preferredTrialCity: 'Memphis, Tennessee',
+    procedureType: 'Small',
+  };
+
   describe('isValid', () => {
     it('requires corporate disclosure if filing type is a business', () => {
       const electronicPetition = new ElectronicPetition({
@@ -389,6 +396,50 @@ describe('ElectronicPetition entity', () => {
         .toRawObject()
         .petitioners.find(p => p.contactType === CONTACT_TYPES.secondary);
       expect(secondaryContact.phone).toEqual('N/A');
+    });
+  });
+
+  describe('Redaction acknowledgements', () => {
+    it('should fail validation when petitionRedactionAcknowledgement is false', () => {
+      const electronicPetition = new ElectronicPetition({
+        ...validPetitionData,
+        petitionRedactionAcknowledgement: false,
+      });
+
+      expect(
+        electronicPetition.getFormattedValidationErrors()!
+          .petitionRedactionAcknowledgement,
+      ).toBeDefined();
+    });
+
+    it('should fail validation when hasIrsNotice is true and irsNoticesRedactionAcknowledgement is false', () => {
+      const electronicPetition = new ElectronicPetition({
+        ...validPetitionData,
+        hasIrsNotice: true,
+        irsNoticesRedactionAcknowledgement: false,
+      });
+
+      expect(
+        electronicPetition.getFormattedValidationErrors()!
+          .irsNoticesRedactionAcknowledgement,
+      ).toBeDefined();
+    });
+
+    it('should pass validation when petitionRedactionAcknowledgement and/or irsNoticesRedactionAcknowledgement are undefined or true', () => {
+      const electronicPetition = new ElectronicPetition({
+        ...validPetitionData,
+        irsNoticesRedactionAcknowledgement: undefined,
+        petitionRedactionAcknowledgement: true,
+      });
+
+      expect(
+        electronicPetition.getFormattedValidationErrors()!
+          .petitionRedactionAcknowledgement,
+      ).toBeUndefined();
+      expect(
+        electronicPetition.getFormattedValidationErrors()!
+          .irsNoticesRedactionAcknowledgement,
+      ).toBeUndefined();
     });
   });
 });

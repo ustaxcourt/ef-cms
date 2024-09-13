@@ -75,6 +75,9 @@ export class ContactUpdated extends JoiValidationEntity {
     name: JoiValidationConstants.STRING.max(100)
       .required()
       .messages({ '*': 'Enter name' }),
+    paperPetitionEmail: JoiValidationConstants.EMAIL.optional().messages({
+      'string.email': 'Enter email address in format: yourname@example.com',
+    }),
     phone: JoiValidationConstants.STRING.max(100)
       .when('contactType', {
         is: CONTACT_TYPES.secondary,
@@ -97,7 +100,7 @@ export class ContactUpdated extends JoiValidationEntity {
       .required()
       .messages({ '*': 'Enter country type' }),
     postalCode: JoiValidationConstants.US_POSTAL_CODE.required().messages({
-      '*': 'Enter ZIP code',
+      '*': 'Enter a valid ZIP code',
     }),
     state: JoiValidationConstants.STRING.valid(
       ...Object.keys(US_STATES),
