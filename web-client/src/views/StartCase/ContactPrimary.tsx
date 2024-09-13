@@ -13,7 +13,7 @@ import React from 'react';
 const props = cerebralProps as unknown as {
   contactsHelper: string;
   bind: string;
-  onBlur: string;
+  onBlur: () => void;
   onChange: string;
   parentView: string;
 };
@@ -25,7 +25,6 @@ export const ContactPrimary = connect(
     contactsHelper: state[props.contactsHelper],
     data: state[props.bind],
     onBlur: props.onBlur,
-    onBlurSequence: sequences[props.onBlur],
     onChange: props.onChange,
     onChangeSequence: sequences[props.onChange],
     parentView: props.parentView,
@@ -39,7 +38,6 @@ export const ContactPrimary = connect(
     contactsHelper,
     data,
     onBlur,
-    onBlurSequence,
     onChange,
     onChangeSequence,
     parentView,
@@ -139,9 +137,7 @@ export const ContactPrimary = connect(
           name="contactPrimary.inCareOf"
           type="text"
           value={data.contactPrimary.inCareOf || ''}
-          onBlur={() => {
-            onBlurSequence();
-          }}
+          onBlur={onBlur}
           onChange={e => {
             onChangeSequence({
               key: e.target.name,
@@ -179,9 +175,7 @@ export const ContactPrimary = connect(
               name="contactPrimary.name"
               type="text"
               value={data.contactPrimary.name || ''}
-              onBlur={() => {
-                onBlurSequence();
-              }}
+              onBlur={onBlur}
               onChange={e => {
                 onChangeSequence({
                   key: e.target.name,
@@ -253,9 +247,7 @@ export const ContactPrimary = connect(
               name="contactPrimary.phone"
               type="text"
               value={data.contactPrimary.phone || ''}
-              onBlur={() => {
-                onBlurSequence();
-              }}
+              onBlur={onBlur}
               onChange={e => {
                 updateFormValueAndSecondaryContactInfoSequence({
                   key: e.target.name,

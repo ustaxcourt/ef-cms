@@ -53,7 +53,7 @@ export const CaseInformation = connect(
               toFormat: DATE_FORMATS.ISO,
               value: e.target.value,
             });
-            validatePetitionFromPaperSequence();
+            validatePetitionFromPaperSequence({ preventAutoScroll: true });
           }}
         />
         <FormGroup errorText={validationErrors.mailingDate}>
@@ -66,7 +66,9 @@ export const CaseInformation = connect(
             maxLength="25"
             name="mailingDate"
             value={form.mailingDate || ''}
-            onBlur={() => validatePetitionFromPaperSequence()}
+            onBlur={() =>
+              validatePetitionFromPaperSequence({ preventAutoScroll: true })
+            }
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
@@ -85,7 +87,7 @@ export const CaseInformation = connect(
             name="caseCaption"
             value={form.caseCaption}
             onBlur={() => {
-              validatePetitionFromPaperSequence();
+              validatePetitionFromPaperSequence({ preventAutoScroll: true });
             }}
             onChange={e => {
               updateFormValueSequence({
@@ -107,7 +109,7 @@ export const CaseInformation = connect(
               value: e.target.value,
             });
             clearPreferredTrialCitySequence();
-            validatePetitionFromPaperSequence();
+            validatePetitionFromPaperSequence({ preventAutoScroll: true });
           }}
         />
         <FormGroup>
@@ -148,7 +150,7 @@ export const CaseInformation = connect(
               key: e.target.name,
               value: e.target.value || null,
             });
-            validatePetitionFromPaperSequence();
+            validatePetitionFromPaperSequence({ preventAutoScroll: true });
           }}
         />
         <FormGroup errorText={validationErrors['object.missing']}>
@@ -165,7 +167,7 @@ export const CaseInformation = connect(
                   key: e.target.name,
                   value: e.target.checked,
                 });
-                validatePetitionFromPaperSequence();
+                validatePetitionFromPaperSequence({ preventAutoScroll: true });
               }}
             />
             <label
@@ -180,7 +182,9 @@ export const CaseInformation = connect(
         <PetitionPaymentForm
           bind="form"
           updateSequence={updatePetitionPaymentFormValueSequence}
-          validateSequence={validatePetitionFromPaperSequence}
+          validateSequence={() =>
+            validatePetitionFromPaperSequence({ preventAutoScroll: true })
+          }
           validationErrorsBind="validationErrors"
         />
         {startCaseInternalHelper.showOrderForFilingFee && (
