@@ -69,6 +69,7 @@ export const ContactPrimary = connect(
           name="contactPrimary.secondaryName"
           type="text"
           value={data.contactPrimary.secondaryName || ''}
+          onBlur={onBlur}
           onChange={e => {
             onChangeSequence({
               key: e.target.name,
