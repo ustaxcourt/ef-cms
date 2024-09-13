@@ -1,13 +1,13 @@
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { processMessageEntries } from './processMessageEntries';
-import { upsertMessage } from '@web-api/persistence/postgres/messages/upsertMessage';
+import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 
-jest.mock('@web-api/persistence/postgres/messages/upsertMessage');
+jest.mock('@web-api/persistence/postgres/messages/upsertMessages');
 
 describe('processMessageEntries', () => {
   beforeEach(() => {
-    (upsertMessage as jest.Mock).mockResolvedValue(undefined);
+    (upsertMessages as jest.Mock).mockResolvedValue(undefined);
   });
 
   it('should attempt to store the messages using the upsert method', async () => {
@@ -41,6 +41,6 @@ describe('processMessageEntries', () => {
       messageRecords: [mockRepliedToMessageRecord],
     });
 
-    expect(upsertMessage).toHaveBeenCalled();
+    expect(upsertMessages).toHaveBeenCalled();
   });
 });

@@ -2,8 +2,8 @@ import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { processCaseEntries } from './processCaseEntries';
-import { upsertCase } from '@web-api/persistence/postgres/cases/upsertCase';
-jest.mock('@web-api/persistence/postgres/cases/upsertCase');
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
+jest.mock('@web-api/persistence/postgres/cases/upsertCases');
 
 describe('processCaseEntries', () => {
   const mockCaseRecord = {
@@ -34,7 +34,7 @@ describe('processCaseEntries', () => {
       .getPersistenceGateway()
       .getCaseMetadataWithCounsel.mockReturnValue(mockCaseRecord);
 
-    (upsertCase as jest.Mock).mockResolvedValue(undefined);
+    (upsertCases as jest.Mock).mockResolvedValue(undefined);
   });
 
   it('should do nothing when no case records are found', async () => {
