@@ -386,7 +386,6 @@ export const ApplyStamp = connect(
                         id="custom-text"
                         maxLength={constants.MAX_STAMP_CUSTOM_TEXT_CHARACTERS}
                         name="customText"
-                        type="text"
                         value={form.customText}
                         onChange={e => {
                           updateFormValueSequence({

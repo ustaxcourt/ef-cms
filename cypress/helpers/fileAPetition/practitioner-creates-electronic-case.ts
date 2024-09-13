@@ -1,6 +1,19 @@
+import { PROCEDURE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
+import { petitionerCreatesElectronicCaseUpdated } from './petitioner-creates-electronic-case-updated';
 import { uploadFile } from '../file/upload-file';
 
 export function practitionerCreatesElectronicCase() {
+  return cy
+    .task('getFeatureFlagValue', { flag: 'updated-petition-flow' })
+    .then(updatedFlow => {
+      if (updatedFlow) {
+        return petitionerCreatesElectronicCaseUpdated();
+      }
+      return practitionerCreatesElectronicCaseOld();
+    });
+}
+
+export function practitionerCreatesElectronicCaseOld() {
   cy.get('[data-testid="file-a-petition"]').click();
   uploadFile('stin-file');
   cy.get('[data-testid="complete-step-1"]').click();
@@ -20,8 +33,9 @@ export function practitionerCreatesElectronicCase() {
   cy.get('[data-testid="phone"]').type('1111111111');
   cy.get('[data-testid="use-same-address-above-label"]').click();
   cy.get('[data-testid="complete-step-3"]').click();
-  cy.get('[data-testid="procedure-type-1"]').click();
-  cy.get('[data-testid="procedure-type-0"]').click();
+  cy.get(
+    `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
+  ).click();
   cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
   cy.get('[data-testid="complete-step-4"]').click();
   cy.get('[data-testid="file-petition"]').click();

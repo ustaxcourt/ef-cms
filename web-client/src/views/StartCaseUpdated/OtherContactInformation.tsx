@@ -3,6 +3,7 @@ import React from 'react';
 
 export function OtherContactInformation({
   form,
+  isPractitioner,
   otherContactNameLabel,
   petitionGenerationLiveValidationSequence,
   registerRef,
@@ -18,6 +19,7 @@ export function OtherContactInformation({
       nameLabel={otherContactNameLabel.primaryLabel}
       registerRef={registerRef}
       secondaryLabel={otherContactNameLabel.secondaryLabel}
+      showEmail={isPractitioner}
       showInCareOf={otherContactNameLabel.showInCareOf}
       showInCareOfOptional={otherContactNameLabel.showInCareOfOptional}
       titleLabel={otherContactNameLabel.titleLabel}
