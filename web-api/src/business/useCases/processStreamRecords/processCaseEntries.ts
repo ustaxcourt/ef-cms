@@ -108,8 +108,6 @@ export const processCaseEntries = async ({
     return caseRecords;
   };
 
-  await upsertCases(casesToUpsert);
-
   const indexRecords = await Promise.all(caseEntityRecords.map(indexCaseEntry));
 
   const { failedRecords } = await applicationContext
@@ -118,6 +116,8 @@ export const processCaseEntries = async ({
       applicationContext,
       records: flattenDeep(indexRecords),
     });
+
+  await upsertCases(casesToUpsert);
 
   if (failedRecords.length > 0) {
     applicationContext.logger.error(
