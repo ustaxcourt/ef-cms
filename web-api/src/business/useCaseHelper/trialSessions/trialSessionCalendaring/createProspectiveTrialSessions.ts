@@ -39,29 +39,15 @@ export const createProspectiveTrialSessions = ({
     }[]
   > = {};
 
-  const regularCasesByCity = cases
-    .filter(c => c.procedureType === PROCEDURE_TYPES_MAP.regular)
-    .reduce((acc, currentCase) => {
-      if (!acc[currentCase.preferredTrialCity!]) {
-        acc[currentCase.preferredTrialCity!] = [];
-      }
-      potentialTrialLocations[currentCase.preferredTrialCity!] = [];
-      acc[currentCase.preferredTrialCity!].push(currentCase);
+  const regularCasesByCity = getCasesByCity(cases, PROCEDURE_TYPES_MAP.regular);
+  const smallCasesByCity = getCasesByCity(cases, PROCEDURE_TYPES_MAP.small);
 
-      return acc;
-    }, {});
-
-  const smallCasesByCity = cases
-    .filter(c => c.procedureType === PROCEDURE_TYPES_MAP.small)
-    .reduce((acc, currentCase) => {
-      if (!acc[currentCase.preferredTrialCity!]) {
-        acc[currentCase.preferredTrialCity!] = [];
-      }
-      potentialTrialLocations[currentCase.preferredTrialCity!] = [];
-      acc[currentCase.preferredTrialCity!].push(currentCase);
-
-      return acc;
-    }, {});
+  Object.keys(regularCasesByCity).forEach(city => {
+    potentialTrialLocations[city] = [];
+  });
+  Object.keys(smallCasesByCity).forEach(city => {
+    potentialTrialLocations[city] = [];
+  });
 
   for (const city in potentialTrialLocations) {
     let regularCaseSliceSize;
@@ -139,6 +125,18 @@ export const createProspectiveTrialSessions = ({
 
   return potentialTrialLocations;
 };
+
+function getCasesByCity(cases, type) {
+  return cases
+    .filter(c => c.procedureType === type)
+    .reduce((acc, currentCase) => {
+      if (!acc[currentCase.preferredTrialCity!]) {
+        acc[currentCase.preferredTrialCity!] = [];
+      }
+      acc[currentCase.preferredTrialCity!].push(currentCase);
+      return acc;
+    }, {});
+}
 
 function addProspectiveTrialSession({
   city,
