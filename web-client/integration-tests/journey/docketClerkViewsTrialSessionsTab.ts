@@ -1,3 +1,4 @@
+import { SESSION_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import {
   isTrialSessionRow,
   trialSessionsHelper as trialSessionsHelperComputed,
@@ -39,10 +40,13 @@ export const docketClerkViewsTrialSessionsTab = (
       judge => judge.role === 'legacyJudge',
     );
 
-    if (tab === 'calendared') {
-      expect(legacyJudge).toBeTruthy();
-    } else {
+    if (
+      tab === 'new' ||
+      overrides.sessionStatus === SESSION_STATUS_TYPES.open
+    ) {
       expect(legacyJudge).toBeFalsy();
+    } else {
+      expect(legacyJudge).toBeTruthy();
     }
 
     const foundSession = helper.trialSessionRows
