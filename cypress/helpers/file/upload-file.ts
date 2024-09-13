@@ -25,7 +25,7 @@ export function attachFile({
 }) {
   cy.get(selector).attachFile(filePath);
   if (selectorToAwaitOnSuccess) {
-    cy.get('loading-overlay').should('not.exist');
+    cy.get('[data-testid="loading-overlay"]').should('not.exist');
     cy.get(selectorToAwaitOnSuccess).should('exist');
   }
 }
