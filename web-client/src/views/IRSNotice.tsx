@@ -21,8 +21,8 @@ export const IRSNotice = connect(
     showModal: state.modal.showModal,
     statisticsFormHelper: state.statisticsFormHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validation: sequences[props.validationName],
     validationErrors: state.validationErrors,
+    validationFunction: props.validationFunction,
   },
   function IRSNotice({
     caseDetailEditHelper,
@@ -35,9 +35,8 @@ export const IRSNotice = connect(
     showModal,
     statisticsFormHelper,
     updateFormValueSequence,
-    validation,
     validationErrors,
-    validationName,
+    validationFunction,
   }) {
     const renderIrsNoticeRadios = () => {
       return (
@@ -120,7 +119,7 @@ export const IRSNotice = connect(
               toFormat: constants.DATE_FORMATS.ISO,
               value: e.target.value,
             });
-            validation();
+            validationFunction({ preventAutoScroll: true });
           }}
         />
       );
@@ -134,7 +133,7 @@ export const IRSNotice = connect(
           allowDefaultOption={true}
           caseTypes={constants.CASE_TYPES}
           legend="Type of case"
-          validation={validationName}
+          validationFunction={validationFunction}
           value={form.caseType}
           onChange="updateFormValueSequence"
           onChangePreValidation="refreshStatisticsSequence"
