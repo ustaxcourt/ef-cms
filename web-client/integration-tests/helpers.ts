@@ -624,6 +624,38 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
     return fakeFile;
   };
   global.WebSocket = require('websocket').w3cwebsocket;
+
+  global.FileReader = class {
+    constructor() {
+      this.onload = null;
+      this.onerror = null;
+      this.result = null;
+    }
+
+    readAsDataURL() {
+      // Trigger the onload event with fake result
+      if (this.onload) {
+        this.result = 'data:application/pdf;base64,ZmFrZURhdGE='; // Fake Base64 result
+        this.onload({ target: { result: this.result } });
+      }
+    }
+
+    readAsArrayBuffer() {
+      // Trigger the onload event with fake result
+      if (this.onload) {
+        this.result = new ArrayBuffer(8); // Fake ArrayBuffer result
+        this.onload({ target: { result: this.result } });
+      }
+    }
+
+    abort() {
+      // Trigger an error if necessary
+      if (this.onerror) {
+        this.onerror(new Error('FileReader aborted'));
+      }
+    }
+  };
+
   const dom = new JSDOM(
     `<!DOCTYPE html>
 <body>
