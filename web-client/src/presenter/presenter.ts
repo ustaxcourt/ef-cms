@@ -67,6 +67,7 @@ import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrial
 import { clearSelectedWorkItemsSequence } from './sequences/clearSelectedWorkItemsSequence';
 import { clearStatusReportOrderFormSequence } from './sequences/StatusReportOrder/clearStatusReportOrderFormSequence';
 import { clearViewerDocumentToDisplaySequence } from './sequences/clearViewerDocumentToDisplaySequence';
+import { cloneDeep } from 'lodash';
 import { closeModalAndNavigateBackSequence } from './sequences/closeModalAndNavigateBackSequence';
 import { closeModalAndNavigateSequence } from './sequences/closeModalAndNavigateSequence';
 import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeModalAndNavigateToMaintenanceSequence';
@@ -515,6 +516,8 @@ import { updateCourtIssuedDocketEntryFormValueSequence } from './sequences/updat
 import { updateCourtIssuedDocketEntryTitleSequence } from '@web-client/presenter/sequences/updateCourtIssuedDocketEntryTitleSequence';
 import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
 import { updateDateRangeForDeadlinesSequence } from './sequences/updateDateRangeForDeadlinesSequence';
+import { updateDocketEntriesBatchDownloadDownloadSequence } from '@web-client/presenter/sequences/updateDocketEntriesBatchDownloadDownloadSequence';
+import { updateDocketEntriesBatchDownloadProgressSequence } from '@web-client/presenter/sequences/updateDocketEntriesBatchDownloadProgressSequence';
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
 import { updateDocketEntryMetaDocumentFormValueSequence } from './sequences/updateDocketEntryMetaDocumentFormValueSequence';
 import { updateDocketEntryWorksheetSequence } from '@web-client/presenter/sequences/updateDocketEntryWorksheetSequence';
@@ -1456,6 +1459,10 @@ export const presenterSequences = {
     updateCreateOrderModalFormValueSequence as unknown as Function,
   updateDateRangeForDeadlinesSequence:
     updateDateRangeForDeadlinesSequence as unknown as Function,
+  updateDocketEntriesBatchDownloadDownloadSequence:
+    updateDocketEntriesBatchDownloadDownloadSequence as unknown as Function,
+  updateDocketEntriesBatchDownloadProgressSequence:
+    updateDocketEntriesBatchDownloadProgressSequence as unknown as Function,
   updateDocketEntryFormValueSequence:
     updateDocketEntryFormValueSequence as unknown as Function,
   updateDocketEntryMetaDocumentFormValueSequence:
@@ -1649,7 +1656,7 @@ export const presenter = {
   ],
   providers: {} as { applicationContext: ClientApplicationContext; router: {} },
   sequences: presenterSequences,
-  state: initialState,
+  state: cloneDeep(initialState),
 };
 
 export type Sequences = typeof presenterSequences;
