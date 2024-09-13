@@ -1,5 +1,4 @@
 import {
-  PROCEDURE_TYPES_MAP,
   SESSION_TYPES,
   TRIAL_CITY_STRINGS,
   TrialSessionTypes,
@@ -22,30 +21,49 @@ const defaultMockCalendaringConfig = {
 const mockEndDate = '2019-09-22T04:00:00.000Z';
 const mockStartDate = '2019-08-22T04:00:00.000Z';
 
+function getMockTrialSessions() {
+  const mockSessions: Record<
+    string,
+    {
+      city: string;
+      sessionType: TrialSessionTypes;
+    }[]
+  > = {};
+
+  const numberOfSessions = defaultMockCalendaringConfig.maxSessionsPerWeek + 1;
+
+  for (let i = 0; i < numberOfSessions; ++i) {
+    mockSessions[TRIAL_CITY_STRINGS[i]] = [
+      {
+        city: `${TRIAL_CITY_STRINGS[i]}`,
+        sessionType: SESSION_TYPES.regular,
+      },
+    ];
+  }
+
+  return mockSessions;
+}
+
 describe('assignSessionsToWeeks', () => {
-  it(
-    'should not schedule more than the max number of sessions for a given city' +
-      'when passed more regular cases than maxSessionsPerLocation * regularCaseMaxQuantity',
-    () => {
-      const mockSessions: Record<
-        string,
-        {
-          city: string;
-          sessionType: TrialSessionTypes;
-        }[]
-      >;
+  it('should not schedule more than the maximum number of sessions for a given week', () => {
+    const mockSessions = getMockTrialSessions();
 
-      for (let i = 0; i < 10; ++i) {
-        const city = i;
-        mockSessions[city] = {
-          city: `${i}`,
-          sessionType: SESSION_TYPES.regular,
-        };
-      }
+    const result = assignSessionsToWeeks({
+      calendaringConfig: defaultMockCalendaringConfig,
+      endDate: mockEndDate,
+      prospectiveSessionsByCity: mockSessions,
+      specialSessions: [],
+      startDate: mockStartDate,
+    });
 
-      const result = assignSessionsToWeeks({});
+    //TODO: refactor this
+    const weekOfMap = result.reduce((acc, session) => {
+      acc[session.weekOf] = (acc[session.weekOf] || 0) + 1;
+      return acc;
+    }, {});
 
-      expect(result).toEqual({});
-    },
-  );
+    expect(Object.values(weekOfMap)[0]).toEqual(
+      defaultMockCalendaringConfig.maxSessionsPerWeek,
+    );
+  });
 });
