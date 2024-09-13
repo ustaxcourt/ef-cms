@@ -17,8 +17,12 @@ export const upsertCases = async (rawCases: RawCase[]) => {
       .values(casesToUpsert)
       .onConflict(oc =>
         oc.column('docketNumber').doUpdateSet(c => {
-          const keys = Object.keys(casesToUpsert[0]!) as any[];
-          return Object.fromEntries(keys.map(key => [key, c.ref(key)]));
+          return {
+            docketNumberSuffix: c.ref('excluded.docketNumberSuffix'),
+            leadDocketNumber: c.ref('excluded.leadDocketNumber'),
+            trialDate: c.ref('excluded.trialDate'),
+            trialLocation: c.ref('excluded.trialLocation'),
+          };
         }),
       )
       .execute(),
