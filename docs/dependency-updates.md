@@ -75,8 +75,8 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 ### puppeteer and @sparticuz/chromium
 
-- When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json.  Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
-- Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on.
+- When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json.  Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file. 
+- Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on. The chromium versions supported by puppeteer can be found [here](https://pptr.dev/supported-browsers)
 - As of 8/15/2024, we cannot update puppeteer or puppeteer-core beyond 22.13.1 because the latest release of @sparticuz/chromium only supports version 126 of chromium.
 - There is a high-severity security issue with ws (ws affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q); however, we only use ws on the client side, so this should not be an issue. (We tried to upgrade puppeteer anyway, but unsurprisingly the PDF tests failed because there is no newer version of Chromium that supports puppeteer.)
 
@@ -94,10 +94,6 @@ See: https://github.com/jsx-eslint/eslint-plugin-react/issues/3699
 
 ### ws, 3rd party dependency of Cerebral
 - When running npm audit, you'll see a high severity issue with ws, 'affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q'. This doesn't affect us as the vulnerability is on the server side and we're not using this package on the server. We tried to override this to 5.2.4 and 8.18.0 and weren't able to make this work as import paths have changed. In the mean time, we recommend skipping this issue. We could always fork the cerebral repo in the future if needed.
-
-### typescript
-- We currently run version 5.4.5; upon upgrading to version 5.5.3 on 6 July 2024, we ran into a series of issues. While the tests passed, we ran into issues linting and type-checking. The recurring issue was a RangeError: Maximum call stack size exceeded, which occurred with our npx tsc command as well as our lint-staged command. We noticed related issues in Github around this release. In order to prevent delaying other devs and ensure the remaining dependency updates are completed, we decided to hold on this update till version 5.5.3+ and/or we can spend more time to determine why this is occurring.
-- Update 12 July 2024: There are two new related open issues (https://github.com/microsoft/TypeScript/issues/59255 and https://github.com/microsoft/TypeScript/issues/59253), which provides further evidence for a TS bug. TS is still on version 5.5.3.
 
 ## Incrementing the Node Cache Key Version
 

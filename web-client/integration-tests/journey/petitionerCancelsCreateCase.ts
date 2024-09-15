@@ -26,6 +26,8 @@ export const petitionerCancelsCreateCase = cerebralTest => {
     await cerebralTest.runSequence('formCancelToggleCancelSequence');
     await cerebralTest.runSequence('closeModalAndReturnToDashboardSequence');
     expect(cerebralTest.getState('modal.showModal')).toBeFalsy();
-    expect(cerebralTest.getState('currentPage')).toEqual('DashboardPetitioner');
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'DashboardExternalUser',
+    );
   });
 };
