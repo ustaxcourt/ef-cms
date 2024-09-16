@@ -1,15 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
-import { connect } from '@web-client/presenter/shared.cerebral';
-import {
-  decorateWithPostCallback,
-  useCerebralStateFactory,
-} from '../Utils/useCerebralState';
 import { map } from '../Utils/ElementChildren';
-import { pick, uniqueId } from 'lodash';
-import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { uniqueId } from 'lodash';
 
 import React, { ReactNode, useState } from 'react';
 import classNames from 'classnames';
@@ -32,7 +24,7 @@ export function AccordionItem(properties: {
   return <></>;
 }
 
-const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
+const renderAccordionFactory = ({ headingLevel }) =>
   function AccordionContent(child, index) {
     const {
       children,
@@ -45,27 +37,28 @@ const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
       id,
       title,
     } = child.props;
-    let { itemName } = child.props;
 
-    itemName = itemName || `item-${index}`;
+    const [isActive, setIsActive] = useState(false);
+
     const itemButtonId =
       id || uniqueId(`ustc-ui-accordion-item-button-${index}`);
     const itemContentId =
       (id && `${id}-item-content`) ||
       uniqueId(`ustc-ui-accordion-item-content-${index}`);
+
     const HeadingElement = `h${headingLevel || 2}`;
-    const isActiveItem = itemName === activeKey;
-    const expandedText = (isActiveItem && 'true') || 'false';
+    const expandedText = (isActive && 'true') || 'false';
 
     if (!title) {
       return null;
     }
+
     const buttonProps = {
       'aria-controls': itemContentId,
       'aria-expanded': expandedText,
       className: 'usa-accordion__button grid-container',
       id: itemButtonId,
-      onClick: () => setTab(itemName),
+      onClick: () => setIsActive(!isActive),
       type: 'button',
     };
 
@@ -108,7 +101,7 @@ const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
             </div>
           </button>
         </HeadingElement>
-        {isActiveItem && (
+        {isActive && (
           <div
             className={customClassName || 'usa-accordion__content'}
             id={itemContentId}
@@ -120,79 +113,37 @@ const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
     );
   };
 
-type AccordionProps = {
-  bind?: any;
+export const Accordion = ({
+  bordered,
+  children,
+  className,
+  headingLevel,
+  id,
+  role,
+}: {
   bordered?: boolean;
   children: ReactNode;
   className?: string;
   headingLevel?: string;
   id?: string;
-  onSelect?: () => void;
   role?: string;
-  simpleSetter?: any;
+}) => {
+  const passThroughProps = { role };
+
+  const AccordionContent = renderAccordionFactory({
+    headingLevel,
+  });
+  return (
+    <div
+      className={classNames(
+        className,
+        'usa-accordion',
+        bordered && 'usa-accordion--bordered',
+      )}
+      id={id}
+      {...passThroughProps}
+    >
+      {map(children, AccordionContent)}
+    </div>
+  );
 };
-
-const accordionDependencies = {
-  simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
-  value: state[props.bind],
-};
-
-export const Accordion = connect<AccordionProps, typeof accordionDependencies>(
-  accordionDependencies,
-  function Accordion(accordionProps) {
-    const {
-      bind,
-      bordered,
-      children,
-      className,
-      headingLevel,
-      id,
-      onSelect,
-      simpleSetter,
-      value,
-    } = accordionProps;
-    const passThroughProps = pick(accordionProps, ['role']);
-
-    let activeKey, setTab;
-
-    if (bind) {
-      const useCerebralState = useCerebralStateFactory(simpleSetter, value);
-      [activeKey, setTab] = useCerebralState(bind);
-    } else {
-      [activeKey, setTab] = useState();
-    }
-
-    const toggleAlreadySelectedValueDecorator = delegate => {
-      return delegatedValue => {
-        if (activeKey === delegatedValue) {
-          delegatedValue = '~no item selected~';
-        }
-        delegate(delegatedValue);
-      };
-    };
-
-    setTab = toggleAlreadySelectedValueDecorator(setTab);
-    setTab = decorateWithPostCallback(setTab, onSelect);
-
-    const AccordionContent = renderAccordionFactory({
-      activeKey,
-      headingLevel,
-      setTab,
-    });
-    return (
-      <div
-        className={classNames(
-          className,
-          'usa-accordion',
-          bordered && 'usa-accordion--bordered',
-        )}
-        id={id}
-        {...passThroughProps}
-      >
-        {map(children, AccordionContent)}
-      </div>
-    );
-  },
-);
-
-Accordion.displayName = 'Accordion';
