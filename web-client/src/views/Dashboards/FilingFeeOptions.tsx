@@ -31,12 +31,8 @@ export const FilingFeeOptions = function () {
         </p>
         <hr />
 
-        <Accordion gray headingLevel="3">
-          <AccordionItem
-            customClassName="payment-options"
-            key={'other-options accordion-icon'}
-            title={'Other options'}
-          >
+        <Accordion>
+          <AccordionItem title="Other options">
             <hr />
             <strong>Mail-in payment</strong>
             <br />
