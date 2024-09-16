@@ -30,7 +30,9 @@ export const UserContactEditForm = connect(
         <Country
           bind={bind}
           type={type}
-          onBlur={'validateUserContactSequence'}
+          onBlur={() =>
+            validateUserContactSequence({ preventAutoScroll: true })
+          }
           onChange={'updateFormValueSequence'}
           onChangeCountryType={'changeCountryTypeSequence'}
         />
@@ -38,14 +40,18 @@ export const UserContactEditForm = connect(
           <Address
             bind={bind}
             type={type}
-            onBlur={'validateUserContactSequence'}
+            onBlur={() =>
+              validateUserContactSequence({ preventAutoScroll: true })
+            }
             onChange={'updateFormValueSequence'}
           />
         ) : (
           <InternationalAddress
             bind={bind}
             type={type}
-            onBlur={'validateUserContactSequence'}
+            onBlur={() =>
+              validateUserContactSequence({ preventAutoScroll: true })
+            }
             onChange={'updateFormValueSequence'}
           />
         )}
@@ -64,9 +70,9 @@ export const UserContactEditForm = connect(
             name="contact.phone"
             type="text"
             value={form.contact.phone || ''}
-            onBlur={() => {
-              validateUserContactSequence();
-            }}
+            onBlur={() =>
+              validateUserContactSequence({ preventAutoScroll: true })
+            }
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,

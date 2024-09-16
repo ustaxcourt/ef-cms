@@ -51,7 +51,8 @@ export const AddPetitionerToCase = connect(
   }) {
     const type = 'contact';
     const bind = 'form';
-    const onBlur = 'validateAddPetitionerSequence';
+    const onBlur = () =>
+      validateAddPetitionerSequence({ preventAutoScroll: true });
 
     return (
       <>
