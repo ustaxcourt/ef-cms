@@ -48,7 +48,7 @@ describe('NewPractitioner', () => {
 
     expect(user.isValid()).toBeFalsy();
     expect(user.getFormattedValidationErrors()).toMatchObject({
-      email: 'Enter email address',
+      email: 'Enter a valid email address',
     });
   });
 
@@ -92,7 +92,7 @@ describe('NewPractitioner', () => {
       expect(validNewPractitioner.isValid()).toBeFalsy();
       expect(validNewPractitioner.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Enter a valid email address',
-        email: 'Enter email address',
+        email: 'Enter email address in format: yourname@example.com',
       });
     });
 
@@ -112,7 +112,7 @@ describe('NewPractitioner', () => {
 
       expect(validNewPractitioner.isValid()).toBeFalsy();
       expect(validNewPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail: 'Enter a valid email address',
+        confirmEmail: 'Enter email address in format: yourname@example.com',
       });
     });
 
