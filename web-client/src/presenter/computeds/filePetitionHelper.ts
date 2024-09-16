@@ -25,7 +25,6 @@ type FilePetitionHelper = {
   irsNoticeRequiresRedactionAcknowledgement: boolean;
   getLetterByIndex: (index: number) => string;
   isPetitioner: boolean;
-  isPractitioner: boolean;
   businessFieldNames: IBusinessFields | {};
   otherContactNameLabel?: IOtherContactNameLabel;
   otherFilingOptions: string[];
@@ -45,11 +44,10 @@ export const filePetitionHelper = (
   const irsNoticeUploadFormInfo = get(state.irsNoticeUploadFormInfo);
 
   const isPetitioner = user.role === ROLES.petitioner;
-  const isPractitioner = user.role === ROLES.privatePractitioner;
 
   const filingOptions = formatFilingTypes(FILING_TYPES[user.role]);
 
-  const otherFilingOptions = getOtherFilingOptions(isPractitioner);
+  const otherFilingOptions = getOtherFilingOptions(isPetitioner);
   const primaryContactNameLabel = isPetitioner
     ? 'Full Name'
     : 'Petitioner’s full name';
@@ -70,7 +68,6 @@ export const filePetitionHelper = (
     getLetterByIndex,
     irsNoticeRequiresRedactionAcknowledgement,
     isPetitioner,
-    isPractitioner,
     otherContactNameLabel,
     otherFilingOptions,
     primaryContactNameLabel,
@@ -79,22 +76,22 @@ export const filePetitionHelper = (
   };
 };
 
-function getOtherFilingOptions(isPractitioner) {
+function getOtherFilingOptions(isPetitioner) {
   const estateOrTrust = 'An estate or trust';
   const minorOrIncompetentPerson = 'A minor or legally incompetent person';
   const donor = 'Donor';
   const transferee = 'Transferee';
   const deceasedSpouse = 'Deceased Spouse';
 
-  const otherFilingOptions = isPractitioner
-    ? [estateOrTrust, donor, transferee, deceasedSpouse]
-    : [
+  const otherFilingOptions = isPetitioner
+    ? [
         estateOrTrust,
         minorOrIncompetentPerson,
         donor,
         transferee,
         deceasedSpouse,
-      ];
+      ]
+    : [estateOrTrust, donor, transferee, deceasedSpouse];
 
   return otherFilingOptions;
 }

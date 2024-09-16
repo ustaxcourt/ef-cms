@@ -35,7 +35,7 @@ export const FilePetitionStep1 = connect(
     validationErrors,
   }) {
     const { registerRef, resetFocus } = useValidationFocus(validationErrors);
-    const { isPetitioner, isPractitioner } = filePetitionHelper;
+    const { isPetitioner } = filePetitionHelper;
     return (
       <>
         <p className="margin-top-0 required-statement">
@@ -91,13 +91,13 @@ export const FilePetitionStep1 = connect(
             handleChangeCountryType={updateFormValueCountryTypeSequence}
             nameLabel={filePetitionHelper.primaryContactNameLabel}
             registerRef={registerRef}
-            showEmail={isPractitioner}
+            showEmail={!isPetitioner}
           />
         )}
         {(form.filingType === 'Myself and my spouse' ||
           form.filingType === 'Petitioner and spouse') && (
           <>
-            {isPractitioner && <h2>Petitioner&#39;s information</h2>}
+            {!isPetitioner && <h2>Petitioner&#39;s information</h2>}
             <ContactPrimaryUpdated
               addressInfo={form.contactPrimary}
               handleBlur={petitionGenerationLiveValidationSequence}
@@ -105,7 +105,7 @@ export const FilePetitionStep1 = connect(
               handleChangeCountryType={updateFormValueCountryTypeSequence}
               nameLabel={filePetitionHelper.primaryContactNameLabel}
               registerRef={registerRef}
-              showEmail={isPractitioner}
+              showEmail={!isPetitioner}
             />
             <h2 data-testid="spouse-header">
               {isPetitioner ? "Your spouse's" : 'Petitioner Spouse'} information
@@ -132,7 +132,7 @@ export const FilePetitionStep1 = connect(
           <BusinessInfo
             businessFieldNames={filePetitionHelper.businessFieldNames}
             form={form}
-            isPractitioner={isPractitioner}
+            isPetitioner={isPetitioner}
             petitionGenerationLiveValidationSequence={
               petitionGenerationLiveValidationSequence
             }
@@ -148,7 +148,7 @@ export const FilePetitionStep1 = connect(
         {form.filingType === 'Other' && (
           <OtherInfo
             form={form}
-            isPractitioner={isPractitioner}
+            isPetitioner={isPetitioner}
             otherContactNameLabel={filePetitionHelper.otherContactNameLabel}
             otherFilingOptions={filePetitionHelper.otherFilingOptions}
             petitionGenerationLiveValidationSequence={
