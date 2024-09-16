@@ -38,10 +38,39 @@ export const validatePdf = ({
 
       const fileAsArrayBuffer = new Uint8Array(result as ArrayBuffer);
 
-      // We try to load the pdf. If we get any errors, we return an errorInformation accordingly.
+      // eslint-disable-next-line spellcheck/spell-checker
+      // As of 2024 September, pdfjs can sometimes render PDFs with invalid characters,
+      // and it only indicates this by logging a warning via console.log.
+      // These PDFs are corrupt and should not be allowed to be uploaded.
+      // Therefore, to catch these warnings, we will temporarily override console.log.
+      const consoleLog = console.log;
+
+      // We will try to load the PDF. If we get any errors, we will return an errorInformation object accordingly.
       try {
+        let pdfIsCorrupt = false;
+        // We will listen for invalid hex string warnings logged by pdfjs, which indicate a corrupt PDF
+        console.log = message => {
+          consoleLog(message);
+          if (message.includes('Warning: getHexString')) {
+            pdfIsCorrupt = true;
+          }
+        };
+
+        // Attempt to load the PDF
         const pdfjs = await applicationContext.getPdfJs();
-        await pdfjs.getDocument(fileAsArrayBuffer).promise;
+        await pdfjs.getDocument({
+          data: fileAsArrayBuffer,
+          isEvalSupported: false,
+        }).promise;
+
+        // We raise a custom error even if the load was successful
+        // when invalid hex string warnings were caught
+        if (pdfIsCorrupt) {
+          const corruptPdfError = new Error('PDF has invalid characters');
+          corruptPdfError.name = 'CorruptPDFException';
+          throw corruptPdfError;
+        }
+
         resolve({ isValid: true });
       } catch (err) {
         if (err instanceof Error) {
@@ -53,10 +82,13 @@ export const validatePdf = ({
               },
               isValid: false,
             });
-          } else if (err.name === 'InvalidPDFException') {
+          } else if (
+            ['InvalidPDFException', 'CorruptPDFException'].includes(err.name)
+          ) {
             resolve({
               errorInformation: {
                 errorMessageToDisplay: PDF_CORRUPTED_ERROR_MESSAGE,
+                errorMessageToLog: `${PDF_CORRUPTED_ERROR_MESSAGE} (${err.name})`,
                 errorType: ErrorTypes.CORRUPT_FILE,
               },
               isValid: false,
@@ -71,6 +103,8 @@ export const validatePdf = ({
           },
           isValid: false,
         });
+      } finally {
+        console.log = consoleLog;
       }
     };
 
