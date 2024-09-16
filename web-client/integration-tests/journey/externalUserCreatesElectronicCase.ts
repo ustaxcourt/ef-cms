@@ -9,6 +9,40 @@ export const externalUserCreatesElectronicCase = (
     preferredTrialCity?: string;
   },
 ) => {
+  beforeAll(() => {
+    global.FileReader = class {
+      onload: any;
+      onerror: any;
+      result: any;
+
+      constructor() {
+        (this as any).onload = null;
+        (this as any).onerror = null;
+        (this as any).result = null;
+      }
+
+      readAsDataURL(this: any) {
+        if (this.onload) {
+          this.result = 'data:application/pdf;base64,ZmFrZURhdGE=';
+          this.onload({ target: { result: this.result } });
+        }
+      }
+
+      readAsArrayBuffer(this: any) {
+        if (this.onload) {
+          this.result = new ArrayBuffer(8);
+          this.onload({ target: { result: this.result } });
+        }
+      }
+
+      abort(this: any) {
+        if (this.onerror) {
+          this.onerror(new Error('FileReader aborted'));
+        }
+      }
+    } as any;
+  });
+
   return it('externalUser creates an electronic case', async () => {
     // STEP 1
     await cerebralTest.runSequence('updateFilingTypeSequence', {
