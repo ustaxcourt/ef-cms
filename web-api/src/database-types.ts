@@ -32,17 +32,18 @@ export interface MessageTable {
   toUserId: string;
 }
 
-export type Message = Selectable<MessageTable>;
-export type NewMessage = Insertable<MessageTable>;
-export type UpdateMessage = Updateable<MessageTable>;
+export type MessageKysely = Selectable<MessageTable>;
+export type NewMessageKysely = Insertable<MessageTable>;
+export type UpdateMessageKysely = Updateable<MessageTable>;
 
 export interface CaseTable {
   docketNumber: string;
   trialLocation?: string;
   trialDate?: string;
+  leadDocketNumber?: string;
   docketNumberSuffix?: string;
 }
 
-export type Case = Selectable<CaseTable>;
-export type NewCase = Insertable<CaseTable>;
-export type UpdateCase = Updateable<CaseTable>;
+export type CaseKysely = Selectable<CaseTable>;
+export type NewCaseKysely = Insertable<CaseTable>;
+export type UpdateCaseKysely = Updateable<CaseTable>;

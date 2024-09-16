@@ -1,4 +1,4 @@
-import { NewMessage, UpdateMessage } from '@web-api/database-types';
+import { NewMessageKysely, UpdateMessageKysely } from '@web-api/database-types';
 import { RawMessage } from '@shared/business/entities/Message';
 
 function pickFields(message) {
@@ -29,10 +29,24 @@ function pickFields(message) {
   };
 }
 
-export function toKyselyUpdateMessage(message: RawMessage): UpdateMessage {
+export function toKyselyUpdateMessage(
+  message: RawMessage,
+): UpdateMessageKysely {
   return pickFields(message);
 }
 
-export function toKyselyNewMessage(message: RawMessage): NewMessage {
+export function toKyselyUpdateMessages(
+  messages: RawMessage[],
+): UpdateMessageKysely[] {
+  return messages.map(pickFields);
+}
+
+export function toKyselyNewMessage(message: RawMessage): NewMessageKysely {
   return pickFields(message);
+}
+
+export function toKyselyNewMessages(
+  messages: RawMessage[],
+): NewMessageKysely[] {
+  return messages.map(pickFields);
 }

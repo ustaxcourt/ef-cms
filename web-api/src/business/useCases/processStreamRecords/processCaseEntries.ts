@@ -1,6 +1,6 @@
 import { flattenDeep } from 'lodash';
 import { marshall } from '@aws-sdk/util-dynamodb';
-import { upsertCase } from '@web-api/persistence/postgres/cases/upsertCase';
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import type {
   AttributeValueWithName,
   IDynamoDBRecord,
@@ -16,6 +16,8 @@ export const processCaseEntries = async ({
 }) => {
   if (!caseEntityRecords.length) return;
 
+  const casesToUpsert: RawCase[] = [];
+
   const indexCaseEntry = async caseRecord => {
     const caseNewImage = caseRecord.dynamodb.NewImage;
     const caseRecords: IDynamoDBRecord[] = [];
@@ -29,11 +31,7 @@ export const processCaseEntries = async ({
 
     const marshalledCase = marshall(caseMetadataWithCounsel);
 
-    // we are explicitly catching this upsert to prevent the entire
-    // streams from getting blocked in case there is an issue connecting to
-    // rds.  For right now, we don't think the functionality of getting the case
-    // metadata over to RDS warrants blocking the entire stream.
-    await upsertCase({ rawCase: caseMetadataWithCounsel }).catch(console.error);
+    casesToUpsert.push(caseMetadataWithCounsel);
 
     caseRecords.push({
       dynamodb: {
@@ -118,6 +116,8 @@ export const processCaseEntries = async ({
       applicationContext,
       records: flattenDeep(indexRecords),
     });
+
+  await upsertCases(casesToUpsert);
 
   if (failedRecords.length > 0) {
     applicationContext.logger.error(

@@ -1,6 +1,6 @@
 import { RawMessage } from '@shared/business/entities/Message';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
-import { upsertMessage } from '@web-api/persistence/postgres/messages/upsertMessage';
+import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const processMessageEntries = async ({
@@ -16,15 +16,9 @@ export const processMessageEntries = async ({
     `going to index ${messageRecords.length} message records`,
   );
 
-  await Promise.all(
-    messageRecords.map(async messageRecord => {
-      const messageNewImage = messageRecord.dynamodb.NewImage;
-      const rawMessage = unmarshall(messageNewImage) as RawMessage;
-      // we are explicitly catching this upsert to prevent the entire
-      // streams from getting blocked in case there is an issue connecting to
-      // rds.  For right now, we don't think the functionality of getting the message
-      // metadata over to RDS warrants blocking the entire stream.
-      await upsertMessage(rawMessage).catch(console.error);
+  await upsertMessages(
+    messageRecords.map(messageRecord => {
+      return unmarshall(messageRecord.dynamodb.NewImage) as RawMessage;
     }),
   );
 };
