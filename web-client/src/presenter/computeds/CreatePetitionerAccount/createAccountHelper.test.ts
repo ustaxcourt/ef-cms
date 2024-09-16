@@ -84,7 +84,7 @@ describe('createAccountHelper', () => {
       });
     });
 
-    it('should return the correct error message when an invalid email address is provided', () => {
+    it('should return the correct error message when no email address is provided', () => {
       const result = runCompute(createAccountHelper, {
         state: {
           form: {
