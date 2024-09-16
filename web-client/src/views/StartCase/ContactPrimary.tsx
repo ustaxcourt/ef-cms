@@ -13,7 +13,7 @@ import React from 'react';
 const props = cerebralProps as unknown as {
   contactsHelper: string;
   bind: string;
-  onBlur: () => void;
+  onBlur: (args: Record<string, any>) => void;
   onChange: string;
   parentView: string;
 };

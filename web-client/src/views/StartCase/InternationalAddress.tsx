@@ -7,7 +7,7 @@ import React from 'react';
 
 const props = cerebralProps as unknown as {
   bind: string;
-  onBlur: any;
+  onBlur: (args: Record<string, any>) => void;
   type: string;
   onChange: string;
   registerRef: (param: string) => void;
