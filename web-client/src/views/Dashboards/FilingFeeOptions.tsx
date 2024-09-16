@@ -32,7 +32,7 @@ export const FilingFeeOptions = function () {
         <hr />
 
         <Accordion>
-          <AccordionItem title="Other options">
+          <AccordionItem className="bg-gray" title="Other options">
             <hr />
             <strong>Mail-in payment</strong>
             <br />
