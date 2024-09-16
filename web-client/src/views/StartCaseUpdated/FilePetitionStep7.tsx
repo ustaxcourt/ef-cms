@@ -43,16 +43,8 @@ export const FilePetitionStep7 = connect(
         </Button>
 
         <div className="grid-row grid-gap margin-top-205" role="list">
-          <Accordion
-            className="petitioner-accordion-title"
-            headingLevel="3"
-            role="listitem"
-          >
-            <AccordionItem
-              customTitleClassName="petitioner-accordion-title"
-              key="Mail-in payment"
-              title="Mail-in payment"
-            >
+          <Accordion role="listitem">
+            <AccordionItem key="Mail-in payment" title="Mail-in payment">
               <div className="line-height-2">
                 <div className="margin-bottom-1">
                   Make checks/money orders payable to:{' '}
@@ -66,14 +58,7 @@ export const FilePetitionStep7 = connect(
                 </div>
               </div>
             </AccordionItem>
-          </Accordion>
-          <Accordion
-            className="petitioner-accordion-title"
-            headingLevel="3"
-            role="listitem"
-          >
             <AccordionItem
-              customTitleClassName="petitioner-accordion-title"
               key="Can’t afford to pay the filing fee?"
               title="Can’t afford to pay the filing fee?"
             >

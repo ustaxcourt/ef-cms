@@ -255,25 +255,18 @@ BeforeStartingCase.displayName = 'BeforeStartingCase';
 function CaseInfoAccordion({ isPetitioner }: { isPetitioner: boolean }) {
   return (
     <div className="grid-row grid-gap">
-      {isPetitioner && (
-        <Accordion className="petitioner-accordion-title" headingLevel="3">
-          <AccordionItem
-            customTitleClassName="petitioner-accordion-title"
-            key="Are you filing jointly with a spouse?"
-            title="Are you filing jointly with a spouse?"
-          >
+      <Accordion>
+        {isPetitioner && (
+          <AccordionItem title="Are you filing jointly with a spouse?">
             <div data-testid="filing-jointly-accordion-item">
               {
                 "To file a joint Petition with your spouse, you must have the spouse's consent. If you do not have your spouse's consent, select “Myself” as the person who is filing."
               }
             </div>
           </AccordionItem>
-        </Accordion>
-      )}
-      {isPetitioner && (
-        <Accordion className="petitioner-accordion-title" headingLevel="3">
+        )}
+        {isPetitioner && (
           <AccordionItem
-            customTitleClassName="petitioner-accordion-title"
             key="Are you filing on behalf of someone else?"
             title="Are you filing on behalf of someone else?"
           >
@@ -295,11 +288,8 @@ function CaseInfoAccordion({ isPetitioner }: { isPetitioner: boolean }) {
               }
             </div>
           </AccordionItem>
-        </Accordion>
-      )}
-      <Accordion className="petitioner-accordion-title" headingLevel="3">
+        )}
         <AccordionItem
-          customTitleClassName="petitioner-accordion-title"
           key="Are you filing for a business?"
           title={
             isPetitioner
@@ -309,7 +299,7 @@ function CaseInfoAccordion({ isPetitioner }: { isPetitioner: boolean }) {
         >
           <div className="margin-bottom-1">
             {`If ${isPetitioner ? "you're filing for" : 'the petitioner is'} a business, you'll need to complete and
-          submit the Corporate Disclosure Statement.`}
+            submit the Corporate Disclosure Statement.`}
           </div>
           <div>
             {"Download and fill out the form if you haven't already done so:"}
