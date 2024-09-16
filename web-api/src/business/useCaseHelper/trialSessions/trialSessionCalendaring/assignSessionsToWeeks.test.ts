@@ -95,7 +95,6 @@ describe('assignSessionsToWeeks', () => {
 
   it('should assign no more than the max number of sessions per location when passed more than the max for a given location', () => {
     const mockSessions = getMockTrialSessionsForSingleCity();
-    console.log('mockSessions', mockSessions);
     const result = assignSessionsToWeeks({
       calendaringConfig: defaultMockCalendaringConfig,
       endDate: mockEndDate,
@@ -104,20 +103,12 @@ describe('assignSessionsToWeeks', () => {
       startDate: mockStartDate,
     });
 
-    //TODO: refactor this
-    // const weekOfMap = result.reduce((acc, session) => {
-    //   acc[session.weekOf] = (acc[session.weekOf] || 0) + 1;
-    //   return acc;
-    // }, {});
-    console.log('result', result);
-    console.log('typeof result', typeof result);
-
     expect(result.length).toEqual(
       defaultMockCalendaringConfig.maxSessionsPerLocation,
     );
   });
 
-  it.only('should prioritize special sessions over non-special sessions', () => {
+  it('should prioritize special sessions over non-special sessions', () => {
     const mockSpecialSessions = [
       {
         ...MOCK_TRIAL_REGULAR,
@@ -151,13 +142,6 @@ describe('assignSessionsToWeeks', () => {
         ...MOCK_TRIAL_REGULAR,
         sessionType: SESSION_TYPES.special,
         startDate: '2019-09-19T04:00:00.000Z',
-        trialLocation: TRIAL_CITY_STRINGS[0],
-        trialSessionId: getUniqueId(),
-      },
-      {
-        ...MOCK_TRIAL_REGULAR,
-        sessionType: SESSION_TYPES.special,
-        startDate: '2019-09-26T04:00:00.000Z',
         trialLocation: TRIAL_CITY_STRINGS[0],
         trialSessionId: getUniqueId(),
       },

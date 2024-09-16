@@ -42,6 +42,7 @@ export const assignSessionsToWeeks = ({
   weekOf: string;
 }[] => {
   const sessionCountPerWeek: Record<string, number> = {}; // weekOf -> session count
+  const sessionCountPerCity: Record<string, number> = {}; // trialLocation -> session count
   const sessionScheduledPerCityPerWeek: Record<string, Set<string>> = {}; // weekOf -> Set of cities
   //   -- Prioritize overridden and special sessions that have already been scheduled
   // -- Max 1 per location per week.
@@ -52,6 +53,27 @@ export const assignSessionsToWeeks = ({
     sessionType: TrialSessionTypes;
     weekOf: string;
   }[] = [];
+
+  // check special sessions
+  const specialSessionsByLocation = specialSessions.reduce((acc, session) => {
+    if (!acc[session.trialLocation!]) {
+      acc[session.trialLocation!] = [];
+    }
+    acc[session.trialLocation!].push(session);
+    return acc;
+  }, {});
+
+  for (const location in specialSessionsByLocation) {
+    if (
+      specialSessionsByLocation[location].length >
+      calendaringConfig.maxSessionsPerLocation
+    ) {
+      throw new Error(
+        `Special session count exceeds the max sessions per location for ${location}`,
+      );
+    }
+  }
+
   // Get array of weeks in range to loop through
   const weeksToLoop = getWeeksInRange({ endDate, startDate });
 
@@ -73,7 +95,7 @@ export const assignSessionsToWeeks = ({
       );
     });
 
-    const specialSessionsByLocation = specialSessionsForWeek.reduce(
+    const specialSessionsForWeekByLocation = specialSessionsForWeek.reduce(
       (acc, session) => {
         if (!acc[session.trialLocation!]) {
           acc[session.trialLocation!] = [];
@@ -84,8 +106,8 @@ export const assignSessionsToWeeks = ({
       {},
     );
 
-    for (const location in specialSessionsByLocation) {
-      if (specialSessionsByLocation[location].length > 1) {
+    for (const location in specialSessionsForWeekByLocation) {
+      if (specialSessionsForWeekByLocation[location].length > 1) {
         throw new Error(
           'There must only be one special trial session per location per week.',
         );
@@ -96,6 +118,7 @@ export const assignSessionsToWeeks = ({
       addScheduledTrialSession({
         city: session.trialLocation,
         scheduledSessions,
+        sessionCountPerCity,
         sessionCountPerWeek,
         sessionScheduledPerCityPerWeek,
         sessionType: SESSION_TYPES.special,
@@ -106,25 +129,11 @@ export const assignSessionsToWeeks = ({
     for (const city in prospectiveSessionsByCity) {
       // This is a redundant check, as we expect the length of the array to have
       // already been trimmed to at most the max before entering this function.
-      // TODO lets reeval whether we need or how to do this check
-      // if (
-      //   prospectiveSessionsByCity[city].length <
-      //   calendaringConfig.maxSessionsPerLocation
-      // ) {
-      //   continue;
-      // }
+      // since we ignore things beyond the max, force prospective array to at most the max
+      if (sessionCountPerCity[city] >= calendaringConfig.maxSessionsPerLocation)
+        continue;
 
-      if (weeksToLoop.indexOf(currentWeek) === 0) {
-        // TODO currently, this will incorrectly ignore special sessions beyond the max for the location
-        // we need to figure out a way to fix this.
-        prospectiveSessionsByCity[city].unshift(
-          specialSessionsByLocation[city],
-        );
-        // since we ignore things beyond the max, force prospective array to at most the max
-        prospectiveSessionsByCity[city] = prospectiveSessionsByCity[
-          city
-        ].splice(0, calendaringConfig.maxSessionsPerLocation);
-      }
+      // Check if we're already at the max for this location
 
       // Just use the first session!
       for (const prospectiveSession of prospectiveSessionsByCity[city]) {
@@ -141,6 +150,7 @@ export const assignSessionsToWeeks = ({
         addScheduledTrialSession({
           ...prospectiveSession,
           scheduledSessions,
+          sessionCountPerCity,
           sessionCountPerWeek,
           sessionScheduledPerCityPerWeek,
           weekOfString,
@@ -161,16 +171,19 @@ export const assignSessionsToWeeks = ({
 function addScheduledTrialSession({
   city,
   scheduledSessions,
+  sessionCountPerCity,
   sessionCountPerWeek,
   sessionScheduledPerCityPerWeek,
   sessionType,
   weekOfString,
 }) {
+  if (!sessionCountPerCity[city]) sessionCountPerCity[city] = 0;
   scheduledSessions.push({
     city,
     sessionType,
     weekOf: weekOfString,
   });
   sessionCountPerWeek[weekOfString]++;
+  sessionCountPerCity[city]++;
   sessionScheduledPerCityPerWeek[weekOfString].add(city); // Mark this city as scheduled for the current week
 }
