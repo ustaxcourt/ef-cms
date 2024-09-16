@@ -41,7 +41,7 @@ export const AccordionItem = ({
 
   return (
     <>
-      <h3 className={classNames('usa-accordion__heading', className)}>
+      <h3 className="usa-accordion__heading">
         <button
           aria-controls={id}
           aria-expanded={isOpen}
@@ -53,7 +53,11 @@ export const AccordionItem = ({
           {title}
         </button>
       </h3>
-      <div className="usa-accordion__content" hidden={!isOpen} id={id}>
+      <div
+        className={classNames('usa-accordion__content', className)}
+        hidden={!isOpen}
+        id={id}
+      >
         {children}
       </div>
     </>
