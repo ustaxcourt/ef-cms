@@ -22,7 +22,6 @@ export const PractitionerContactForm = connect(
     changeCountryTypeSequence,
     COUNTRY_TYPES,
     form,
-    onBlurSequenceName,
     onBlurValidationSequence,
     onChangeSequenceName,
     onChangeUpdateSequence,
@@ -34,7 +33,7 @@ export const PractitionerContactForm = connect(
         <Country
           bind={bind}
           type={type}
-          onBlur={onBlurSequenceName}
+          onBlur={() => onBlurValidationSequence({ preventAutoScroll: true })}
           onChange={onChangeSequenceName}
           onChangeCountryType={changeCountryTypeSequence}
         />
@@ -42,14 +41,14 @@ export const PractitionerContactForm = connect(
           <Address
             bind={bind}
             type={type}
-            onBlur={onBlurSequenceName}
+            onBlur={() => onBlurValidationSequence({ preventAutoScroll: true })}
             onChange={onChangeSequenceName}
           />
         ) : (
           <InternationalAddress
             bind={bind}
             type={type}
-            onBlur={onBlurSequenceName}
+            onBlur={() => onBlurValidationSequence({ preventAutoScroll: true })}
             onChange={onChangeSequenceName}
           />
         )}
@@ -70,9 +69,9 @@ export const PractitionerContactForm = connect(
                 name="contact.phone"
                 type="text"
                 value={form.contact.phone || ''}
-                onBlur={() => {
-                  onBlurValidationSequence();
-                }}
+                onBlur={() =>
+                  onBlurValidationSequence({ preventAutoScroll: true })
+                }
                 onChange={e => {
                   onChangeUpdateSequence({
                     key: e.target.name,

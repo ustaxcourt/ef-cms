@@ -55,7 +55,8 @@ export const EditPetitionerInformationInternal = connect(
   }) {
     const type = 'contact';
     const bind = 'form';
-    const onBlur = 'validatePetitionerSequence';
+    const onBlur = () =>
+      validatePetitionerSequence({ preventAutoScroll: true });
 
     return (
       <>
