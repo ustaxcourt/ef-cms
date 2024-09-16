@@ -362,6 +362,20 @@ describe('filePetitionHelper', () => {
       expect(result.irsNoticeRequiresRedactionAcknowledgement).toEqual(false);
     });
   });
+  describe('isPetitioner', () => {
+    it('should return true when user role is petitioner', () => {
+      const result = runCompute(filePetitionHelper, {
+        state: { form: {}, user: petitionerUser },
+      });
+      expect(result.isPetitioner).toEqual(true);
+    });
+    it('should return false when user role is practitioner', () => {
+      const result = runCompute(filePetitionHelper, {
+        state: { form: {}, user: privatePractitionerUser },
+      });
+      expect(result.isPetitioner).toEqual(false);
+    });
+  });
 
   describe('primaryContactNameLabel', () => {
     it('should return the correct primary contact name label when filing as a petitioner', () => {
