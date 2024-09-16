@@ -3,7 +3,6 @@ import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
 import { CreateMessageModalDialog } from './Messages/CreateMessageModalDialog';
 import { DocumentDisplayIframe } from './DocumentDisplayIframe';
 import { ErrorNotification } from './ErrorNotification';
-import { FileUploadErrorModal } from './FileUploadErrorModal';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { Hint } from '../ustc-ui/Hint/Hint';
 import { PrimaryDocumentForm } from './EditDocketEntry/PrimaryDocumentForm';
@@ -129,11 +128,6 @@ export const DocketEntryQc = connect(
           <CreateMessageModalDialog
             title="Complete and Send Message"
             onConfirmSequence={completeDocketEntryQCAndSendMessageSequence}
-          />
-        )}
-        {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal
-            confirmSequence={completeDocketEntryQCSequence}
           />
         )}
         {showModal === 'WorkItemAlreadyCompletedModal' && (

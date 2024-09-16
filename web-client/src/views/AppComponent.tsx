@@ -53,6 +53,7 @@ import { ErrorView500 } from './ErrorView500';
 import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { FilePetitionSuccess } from './StartCase/FilePetitionSuccess';
+import { FileUploadErrorModal } from '@web-client/views/FileUploadErrorModal';
 import { Footer } from './Footer';
 import { ForgotPassword } from '@web-client/views/Login/ForgotPassword';
 import { GenericErrorModal } from './GenericErrorModal';
@@ -302,6 +303,7 @@ export const AppComponent = connect(
         {showModal === 'WebSocketErrorModal' && <WebSocketErrorModal />}
         {showModal === 'AppMaintenanceModal' && <AppMaintenanceModal />}
         {showModal === 'GenericErrorModal' && <GenericErrorModal />}
+        {showModal === 'FileUploadErrorModal' && <FileUploadErrorModal />}
       </>
     );
   },
