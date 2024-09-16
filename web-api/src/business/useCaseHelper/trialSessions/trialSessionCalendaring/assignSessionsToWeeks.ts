@@ -9,9 +9,6 @@ import {
   TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
 
-const sessionCountPerWeek: Record<string, number> = {}; // weekOf -> session count
-const sessionScheduledPerCityPerWeek: Record<string, Set<string>> = {}; // weekOf -> Set of cities
-
 export const assignSessionsToWeeks = ({
   calendaringConfig,
   endDate,
@@ -44,6 +41,8 @@ export const assignSessionsToWeeks = ({
   sessionType: TrialSessionTypes;
   weekOf: string;
 }[] => {
+  const sessionCountPerWeek: Record<string, number> = {}; // weekOf -> session count
+  const sessionScheduledPerCityPerWeek: Record<string, Set<string>> = {}; // weekOf -> Set of cities
   //   -- Prioritize overridden and special sessions that have already been scheduled
   // -- Max 1 per location per week.
   // -- Max x per week across all locations
@@ -67,27 +66,64 @@ export const assignSessionsToWeeks = ({
       sessionScheduledPerCityPerWeek[weekOfString] = new Set();
     }
 
-    const specialSessionsForWeek = specialSessions.filter(
-      s => getMondayOfWeek(s.startDate) === weekOfString,
+    const specialSessionsForWeek = specialSessions.filter(s => {
+      return (
+        createDateAtStartOfWeekEST(s.startDate, FORMATS.YYYYMMDD) ===
+        weekOfString
+      );
+    });
+
+    const specialSessionsByLocation = specialSessionsForWeek.reduce(
+      (acc, session) => {
+        if (!acc[session.trialLocation!]) {
+          acc[session.trialLocation!] = [];
+        }
+        acc[session.trialLocation!].push(session);
+        return acc;
+      },
+      {},
     );
+
+    for (const location in specialSessionsByLocation) {
+      if (specialSessionsByLocation[location].length > 1) {
+        throw new Error(
+          'There must only be one special trial session per location per week.',
+        );
+      }
+    }
 
     specialSessionsForWeek.forEach(session => {
       addScheduledTrialSession({
         city: session.trialLocation,
         scheduledSessions,
+        sessionCountPerWeek,
+        sessionScheduledPerCityPerWeek,
         sessionType: SESSION_TYPES.special,
         weekOfString,
       });
     });
 
     for (const city in prospectiveSessionsByCity) {
-      // This is a redundant checks, as we expect the length of the array to have already been trimmed to at most the max
-      // before entering this function.
-      if (
-        prospectiveSessionsByCity[city].length >=
-        calendaringConfig.maxSessionsPerLocation
-      ) {
-        continue;
+      // This is a redundant check, as we expect the length of the array to have
+      // already been trimmed to at most the max before entering this function.
+      // TODO lets reeval whether we need or how to do this check
+      // if (
+      //   prospectiveSessionsByCity[city].length <
+      //   calendaringConfig.maxSessionsPerLocation
+      // ) {
+      //   continue;
+      // }
+
+      if (weeksToLoop.indexOf(currentWeek) === 0) {
+        // TODO currently, this will incorrectly ignore special sessions beyond the max for the location
+        // we need to figure out a way to fix this.
+        prospectiveSessionsByCity[city].unshift(
+          specialSessionsByLocation[city],
+        );
+        // since we ignore things beyond the max, force prospective array to at most the max
+        prospectiveSessionsByCity[city] = prospectiveSessionsByCity[
+          city
+        ].splice(0, calendaringConfig.maxSessionsPerLocation);
       }
 
       // Just use the first session!
@@ -105,6 +141,8 @@ export const assignSessionsToWeeks = ({
         addScheduledTrialSession({
           ...prospectiveSession,
           scheduledSessions,
+          sessionCountPerWeek,
+          sessionScheduledPerCityPerWeek,
           weekOfString,
         });
 
@@ -123,6 +161,8 @@ export const assignSessionsToWeeks = ({
 function addScheduledTrialSession({
   city,
   scheduledSessions,
+  sessionCountPerWeek,
+  sessionScheduledPerCityPerWeek,
   sessionType,
   weekOfString,
 }) {
@@ -133,9 +173,4 @@ function addScheduledTrialSession({
   });
   sessionCountPerWeek[weekOfString]++;
   sessionScheduledPerCityPerWeek[weekOfString].add(city); // Mark this city as scheduled for the current week
-}
-
-// Helper function to get the Monday of the week for a given date
-function getMondayOfWeek(date: string): string {
-  return createDateAtStartOfWeekEST(date, FORMATS.ISO); // Monday as the first day of the week
 }
