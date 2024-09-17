@@ -110,7 +110,9 @@ export const createCaseInteractor = async (
       );
     }
 
-    // remove the email from contactPrimary since the practitioners array should have a service email
+    // remove the email from contactPrimary
+    // since the practitioners array should have a service email
+    // and paperPetitionEmail is used as email for the petitioner
     delete petitionEntity.getContactPrimary().email;
     delete petitionEntity.getContactPrimary().serviceIndicator;
 
@@ -162,6 +164,7 @@ export const createCaseInteractor = async (
       isFileAttached: true,
       isOnDocketRecord: true,
       privatePractitioners,
+      redactionAcknowledgement: petitionEntity.petitionRedactionAcknowledgement,
     },
     { authorizedUser, petitioners: caseToAdd.petitioners },
   );
@@ -261,6 +264,8 @@ export const createCaseInteractor = async (
             petitionMetadata.hasIrsNotice &&
             petitionMetadata.irsNotices?.[index]?.noticeIssuedDate,
           privatePractitioners,
+          redactionAcknowledgement:
+            petitionEntity.irsNoticesRedactionAcknowledgement,
           taxYear:
             petitionMetadata.hasIrsNotice &&
             petitionMetadata.irsNotices?.[index]?.taxYear,

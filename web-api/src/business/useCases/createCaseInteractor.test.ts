@@ -48,9 +48,11 @@ describe('createCaseInteractor', () => {
     contactSecondary: {},
     filingType: 'Myself',
     hasIrsNotice: true,
+    irsNoticesRedactionAcknowledgement: true,
     partyType: PARTY_TYPES.petitioner,
     petitionFile: new File([], 'test.pdf'),
     petitionFileSize: 1,
+    petitionRedactionAcknowledgement: true,
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Small',
     signature: true,
@@ -123,6 +125,11 @@ describe('createCaseInteractor', () => {
     );
 
     expect(result).toBeDefined();
+    const petitionDocketEntry = result.docketEntries.find(
+      d => d.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
+    );
+    expect(petitionDocketEntry).toBeDefined();
+    expect(petitionDocketEntry.redactionAcknowledgement).toEqual(true);
     expect(
       applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
         .calls[0][0].caseToCreate,
@@ -271,9 +278,11 @@ describe('createCaseInteractor', () => {
           contactSecondary: {},
           filingType: 'Myself',
           hasIrsNotice: true,
+          irsNoticesRedactionAcknowledgement: true,
           partyType: PARTY_TYPES.petitioner,
           petitionFile: new File([], 'test.pdf'),
           petitionFileSize: 1,
+          petitionRedactionAcknowledgement: true,
           preferredTrialCity: 'Fresno, California',
           procedureType: 'Small',
           signature: true,
@@ -290,6 +299,12 @@ describe('createCaseInteractor', () => {
     expect(result.privatePractitioners![0].representing).toEqual([
       getContactPrimary(result).contactId,
     ]);
+    const petitionDocketEntry = result.docketEntries.find(
+      d => d.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
+    );
+
+    expect(petitionDocketEntry).toBeDefined();
+    expect(petitionDocketEntry.redactionAcknowledgement).toEqual(true);
     expect(
       applicationContext.getUseCaseHelpers().createCaseAndAssociations,
     ).toHaveBeenCalled();
@@ -321,16 +336,18 @@ describe('createCaseInteractor', () => {
           contactSecondary: {},
           filingType: 'Myself',
           hasIrsNotice: true,
+          irsNoticesRedactionAcknowledgement: true,
           partyType: PARTY_TYPES.petitioner,
           petitionFile: new File([], 'test.pdf'),
           petitionFileSize: 1,
+          petitionRedactionAcknowledgement: true,
           preferredTrialCity: 'Fresno, California',
           procedureType: 'Small',
           signature: true,
           stinFile: new File([], 'test.pdf'),
           stinFileSize: 1,
         },
-        stinFileId: '96759830-8970-486f-916b-23439a8ebb70',
+        stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       },
       user,
     );
@@ -341,6 +358,7 @@ describe('createCaseInteractor', () => {
     );
 
     expect(atpDocketEntry).toBeDefined();
+    expect(atpDocketEntry.redactionAcknowledgement).toEqual(true);
   });
 
   it('should create a case successfully with multiple "Attachment to Petition" documents', async () => {
@@ -369,16 +387,18 @@ describe('createCaseInteractor', () => {
           contactSecondary: {},
           filingType: 'Myself',
           hasIrsNotice: true,
+          irsNoticesRedactionAcknowledgement: true,
           partyType: PARTY_TYPES.petitioner,
           petitionFile: new File([], 'test.pdf'),
           petitionFileSize: 1,
+          petitionRedactionAcknowledgement: true,
           preferredTrialCity: 'Fresno, California',
           procedureType: 'Small',
           signature: true,
           stinFile: new File([], 'test.pdf'),
           stinFileSize: 1,
         },
-        stinFileId: '96759830-8970-486f-916b-23439a8ebb70',
+        stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       },
       user,
     );
@@ -388,6 +408,8 @@ describe('createCaseInteractor', () => {
         d.eventCode === INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
     );
     expect(atpDocketEntries).toHaveLength(2);
+    expect(atpDocketEntries[0].redactionAcknowledgement).toEqual(true);
+    expect(atpDocketEntries[1].redactionAcknowledgement).toEqual(true);
   });
 
   it('should create a case with contact primary and secondary successfully as a practitioner', async () => {
@@ -526,7 +548,7 @@ describe('createCaseInteractor', () => {
     });
   });
 
-  it('should set serviceIndicator to none for petitioner when case is created by a private petitioner', async () => {
+  it('should remove email and serviceIndicator for petitioner when case is created by a private petitioner', async () => {
     user = new PrivatePractitioner({
       barNumber: 'BN1234',
       email: 'kb@example.com',
@@ -572,6 +594,7 @@ describe('createCaseInteractor', () => {
 
     result.petitioners.forEach(p => {
       expect(p.serviceIndicator).toBe(SERVICE_INDICATOR_TYPES.SI_NONE);
+      expect(p.email).toBeUndefined();
     });
   });
 });

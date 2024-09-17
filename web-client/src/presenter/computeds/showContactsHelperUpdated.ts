@@ -1,19 +1,29 @@
-export const showContactsHelperUpdated = (partyType, PARTY_TYPES, props) => {
-  const showContactPrimary = getShowContactPrimary(
-    partyType,
-    PARTY_TYPES,
-    props.value,
-  );
+import {
+  FilingType,
+  PARTY_TYPES,
+  PartyType,
+} from '@shared/business/entities/EntityConstants';
 
-  const showContactSecondary = getShowContactSecondary(
+export const showContactsHelperUpdated = ({
+  filingType,
+  isSpouseDeceased,
+  partyType,
+}: {
+  filingType: FilingType;
+  isSpouseDeceased: boolean;
+  partyType: PartyType;
+}) => {
+  const showContactPrimary = getShowContactPrimary(partyType, filingType);
+
+  const showContactSecondary = getShowContactSecondary({
+    filingType,
+    isSpouseDeceased,
     partyType,
-    PARTY_TYPES,
-    props,
-  );
+  });
   return { showContactPrimary, showContactSecondary };
 };
 
-function getShowContactPrimary(partyType, PARTY_TYPES, filingType) {
+function getShowContactPrimary(partyType, filingType) {
   return (
     [
       PARTY_TYPES.conservator,
@@ -40,14 +50,24 @@ function getShowContactPrimary(partyType, PARTY_TYPES, filingType) {
   );
 }
 
-function getShowContactSecondary(partyType, PARTY_TYPES, props) {
-  const isContactSecondaryPartyType = [
-    PARTY_TYPES.petitionerDeceasedSpouse,
-    PARTY_TYPES.petitionerSpouse,
-  ].includes(partyType);
+function getShowContactSecondary({
+  filingType,
+  isSpouseDeceased,
+  partyType,
+}: {
+  filingType: FilingType;
+  isSpouseDeceased: boolean;
+  partyType: PartyType;
+}): boolean {
+  const isContactSecondaryPartyType =
+    PARTY_TYPES.petitionerDeceasedSpouse === partyType ||
+    PARTY_TYPES.petitionerSpouse === partyType;
 
   if (!isContactSecondaryPartyType) return false;
-  if (props.key !== 'isSpouseDeceased') return false;
-  if (props.value !== 'Yes') return false;
+
+  if (filingType === 'Myself and my spouse' && !isSpouseDeceased) {
+    return false;
+  }
+
   return true;
 }
