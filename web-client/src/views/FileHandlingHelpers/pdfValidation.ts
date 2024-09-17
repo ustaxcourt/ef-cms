@@ -12,6 +12,13 @@ export const PDF_CORRUPTED_ERROR_MESSAGE =
 const GENERIC_FILE_ERROR_MESSAGE =
   'There is a problem uploading the file. Try again later.';
 
+export const validatePdfHeader = (pdfData: Uint8Array): boolean => {
+  const stringDecoder = new TextDecoder('utf8');
+  const pdfHeaderBytes = pdfData.slice(0, 5);
+  const pdfHeaderString = stringDecoder.decode(pdfHeaderBytes);
+  return pdfHeaderString === '%PDF-';
+};
+
 export const validatePdf = ({
   file,
 }: {
@@ -38,23 +45,13 @@ export const validatePdf = ({
 
       const fileAsArrayBuffer = new Uint8Array(result as ArrayBuffer);
 
-      // eslint-disable-next-line spellcheck/spell-checker
-      // As of 2024 September, pdfjs can sometimes render PDFs with invalid characters,
-      // and it only indicates this by logging a warning via console.log.
-      // These PDFs are corrupt and should not be allowed to be uploaded.
-      // Therefore, to catch these warnings, we will temporarily override console.log.
-      const consoleLog = console.log;
-
       // We will try to load the PDF. If we get any errors, we will return an errorInformation object accordingly.
       try {
-        let pdfIsCorrupt = false;
-        // We will listen for invalid hex string warnings logged by pdfjs, which indicate a corrupt PDF
-        console.log = message => {
-          consoleLog(message);
-          if (message.includes('Warning: getHexString')) {
-            pdfIsCorrupt = true;
-          }
-        };
+        if (!validatePdfHeader(fileAsArrayBuffer)) {
+          const corruptPdfError = new Error('PDF header is invalid');
+          corruptPdfError.name = 'CorruptPDFHeaderException';
+          throw corruptPdfError;
+        }
 
         // Attempt to load the PDF
         const pdfjs = await applicationContext.getPdfJs();
@@ -62,14 +59,6 @@ export const validatePdf = ({
           data: fileAsArrayBuffer,
           isEvalSupported: false,
         }).promise;
-
-        // We raise a custom error even if the load was successful
-        // when invalid hex string warnings were caught
-        if (pdfIsCorrupt) {
-          const corruptPdfError = new Error('PDF has invalid characters');
-          corruptPdfError.name = 'CorruptPDFException';
-          throw corruptPdfError;
-        }
 
         resolve({ isValid: true });
       } catch (err) {
@@ -83,7 +72,9 @@ export const validatePdf = ({
               isValid: false,
             });
           } else if (
-            ['InvalidPDFException', 'CorruptPDFException'].includes(err.name)
+            ['InvalidPDFException', 'CorruptPDFHeaderException'].includes(
+              err.name,
+            )
           ) {
             resolve({
               errorInformation: {
@@ -103,8 +94,6 @@ export const validatePdf = ({
           },
           isValid: false,
         });
-      } finally {
-        console.log = consoleLog;
       }
     };
 
