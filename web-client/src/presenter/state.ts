@@ -151,7 +151,6 @@ import { trialSessionsSummaryHelper } from './computeds/trialSessionsSummaryHelp
 import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
 import { userContactEditHelper } from './computeds/userContactEditHelper';
 import { userContactEditProgressHelper } from './computeds/userContactEditProgressHelper';
-import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 
@@ -559,9 +558,6 @@ export const computeds = {
     userContactEditProgressHelper as unknown as ReturnType<
       typeof userContactEditProgressHelper
     >,
-  viewAllDocumentsHelper: viewAllDocumentsHelper as unknown as ReturnType<
-    typeof viewAllDocumentsHelper
-  >,
   viewCounselHelper: viewCounselHelper as unknown as ReturnType<
     typeof viewCounselHelper
   >,

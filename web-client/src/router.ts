@@ -525,24 +525,6 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/file-a-document/all-document-categories',
-      ifHasAccess({ app }, docketNumber => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} File a document`,
-        );
-        if (app.getState('currentPage') === 'FileDocumentWizard') {
-          return app.getSequence('chooseWizardStepSequence')({
-            value: 'ViewAllDocuments',
-          });
-        } else {
-          return app.getSequence('navigateToPathSequence')({
-            path: `/case-detail/${docketNumber}/file-a-document`,
-          });
-        }
-      }),
-    );
-
-    registerRoute(
       '/case-detail/*/contacts/*/edit',
       ifHasAccess({ app }, (docketNumber, contactId) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Contact`);

@@ -111,7 +111,6 @@ import { deleteWorkingCopySessionNoteSequence } from './sequences/deleteWorkingC
 import { disengageAppMaintenanceSequence } from './sequences/disengageAppMaintenanceSequence';
 import { dismissAddEditCaseWorksheetModalSequence } from '@web-client/presenter/sequences/dismissAddEditCaseWorksheetModalSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
-import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { dismissThirtyDayTrialAlertSequence } from './sequences/dismissThirtyDayTrialAlertSequence';
 import { downloadCsvFileSequence } from '@web-client/presenter/sequences/downloadCsvFileSequence';
@@ -223,7 +222,6 @@ import { gotoUploadCorrespondenceDocumentSequence } from './sequences/gotoUpload
 import { gotoUploadCourtIssuedDocumentSequence } from './sequences/gotoUploadCourtIssuedDocumentSequence';
 import { gotoUserContactEditSequence } from './sequences/gotoUserContactEditSequence';
 import { gotoVerifyEmailSequence } from './sequences/gotoVerifyEmailSequence';
-import { gotoViewAllDocumentsSequence } from './sequences/gotoViewAllDocumentsSequence';
 import { gotoWorkQueueSequence } from './sequences/gotoWorkQueueSequence';
 import { handleAppHasUpdatedSequence } from './sequences/handleAppHasUpdatedSequence';
 import { handleIdleLogoutSequence } from './sequences/handleIdleLogoutSequence';
@@ -275,7 +273,6 @@ import { openChangeScannerSourceModalSequence } from './sequences/openChangeScan
 import { openCleanModalSequence } from './sequences/openCleanModalSequence';
 import { openCompleteAndSendMessageModalSequence } from './sequences/openCompleteAndSendMessageModalSequence';
 import { openCompleteMessageModalSequence } from './sequences/openCompleteMessageModalSequence';
-import { openCompleteSelectDocumentTypeModalSequence } from './sequences/openCompleteSelectDocumentTypeModalSequence';
 import { openConfirmDeleteBatchModalSequence } from './sequences/openConfirmDeleteBatchModalSequence';
 import { openConfirmDeleteCorrespondenceModalSequence } from './sequences/openConfirmDeleteCorrespondenceModalSequence';
 import { openConfirmDeleteDeficiencyStatisticsModalSequence } from './sequences/openConfirmDeleteDeficiencyStatisticsModalSequence';
@@ -782,8 +779,6 @@ export const presenterSequences = {
   dismissAddEditCaseWorksheetModalSequence:
     dismissAddEditCaseWorksheetModalSequence as unknown as Function,
   dismissAlertSequence: dismissAlertSequence as unknown as Function,
-  dismissCreateMessageModalSequence:
-    dismissCreateMessageModalSequence as unknown as Function,
   dismissModalSequence: dismissModalSequence as unknown as Function,
   dismissThirtyDayTrialAlertSequence:
     dismissThirtyDayTrialAlertSequence as unknown as Function,
@@ -960,8 +955,6 @@ export const presenterSequences = {
   gotoUserContactEditSequence:
     gotoUserContactEditSequence as unknown as Function,
   gotoVerifyEmailSequence,
-  gotoViewAllDocumentsSequence:
-    gotoViewAllDocumentsSequence as unknown as Function,
   gotoWorkQueueSequence: gotoWorkQueueSequence as unknown as Function,
   handleAppHasUpdatedSequence,
   handleIdleLogoutSequence: handleIdleLogoutSequence as unknown as Function,
@@ -1046,8 +1039,6 @@ export const presenterSequences = {
     openCompleteAndSendMessageModalSequence as unknown as Function,
   openCompleteMessageModalSequence:
     openCompleteMessageModalSequence as unknown as Function,
-  openCompleteSelectDocumentTypeModalSequence:
-    openCompleteSelectDocumentTypeModalSequence as unknown as Function,
   openConfirmDeleteBatchModalSequence:
     openConfirmDeleteBatchModalSequence as unknown as Function,
   openConfirmDeleteCorrespondenceModalSequence:
