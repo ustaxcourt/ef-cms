@@ -1,15 +1,15 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
+import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
 import {
   SESSION_STATUS_TYPES,
-  SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TrialSessionProceedingType,
 } from '@shared/business/entities/EntityConstants';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
-import { TrialCityOptions } from '@web-client/views/TrialCityOptions';
 import { TrialSessionsTable } from './TrialSessionsTable';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -21,12 +21,12 @@ export const TrialSessions = connect(
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
     setTrialSessionsFiltersSequence: sequences.setTrialSessionsFiltersSequence,
-    trialSessionHelper: state.trialSessionsHelper,
+    trialSessionsHelper: state.trialSessionsHelper,
   },
   function TrialSessions({
     openTrialSessionPlanningModalSequence,
     setTrialSessionsFiltersSequence,
-    trialSessionHelper,
+    trialSessionsHelper,
   }) {
     return (
       <>
@@ -52,8 +52,17 @@ export const TrialSessions = connect(
               >
                 Trial Session Planning Report
               </Button>
+              {trialSessionsHelper.showNewTrialSession && (
+                <Button
+                  data-testid="add-trial-session-button"
+                  href="/add-a-trial-session"
+                  icon="plus-circle"
+                >
+                  Add Trial Session
+                </Button>
+              )}
             </div>
-            {trialSessionHelper.showNewTrialSession && (
+            {trialSessionsHelper.showNewTrialSession && (
               <Tab
                 data-testid="new-trial-sessions-tab"
                 id="new-trial-sessions-tab"
@@ -93,13 +102,11 @@ const TrialSessionFilters = connect(
   }) {
     return (
       <>
-        <div className="margin-bottom-4">
+        <div className="grid-row gap-3">
           {trialSessionsHelper.showSessionStatus && (
             <fieldset className="usa-fieldset">
+              <legend className="usa-legend">Session Status</legend>
               <div className="usa-radio usa-radio__inline">
-                <legend className="usa-legend usa-legend">
-                  Session Status
-                </legend>
                 <input
                   checked={trialSessionsPage.filters.sessionStatus === 'All'}
                   className="usa-radio__input"
@@ -163,104 +170,133 @@ const TrialSessionFilters = connect(
               </div>
             </fieldset>
           )}
+          <fieldset className="usa-fieldset">
+            <legend className="usa-legend">Proceeding Type</legend>
+            <div className="usa-radio usa-radio__inline">
+              <input
+                checked={trialSessionsPage.filters.proceedingType === 'All'}
+                className="usa-radio__input"
+                id="proceedingType-All"
+                name="proceedingType"
+                type="radio"
+                value="All"
+                onChange={e => {
+                  setTrialSessionsFiltersSequence({
+                    proceedingType: e.target.value as 'All',
+                  });
+                }}
+              />
+              <label className="usa-radio__label" htmlFor="proceedingType-All">
+                All
+              </label>
+              <input
+                checked={
+                  trialSessionsPage.filters.proceedingType ===
+                  TRIAL_SESSION_PROCEEDING_TYPES.inPerson
+                }
+                className="usa-radio__input"
+                id="proceedingType-In-Person"
+                name="proceedingType"
+                type="radio"
+                value={TRIAL_SESSION_PROCEEDING_TYPES.inPerson}
+                onChange={e => {
+                  setTrialSessionsFiltersSequence({
+                    proceedingType: e.target
+                      .value as TrialSessionProceedingType,
+                  });
+                }}
+              />
+              <label
+                className="usa-radio__label"
+                htmlFor="proceedingType-In-Person"
+              >
+                In Person
+              </label>
+              <input
+                checked={
+                  trialSessionsPage.filters.proceedingType ===
+                  TRIAL_SESSION_PROCEEDING_TYPES.remote
+                }
+                className="usa-radio__input"
+                id="proceedingType-remote"
+                name="proceedingType"
+                type="radio"
+                value={TRIAL_SESSION_PROCEEDING_TYPES.remote}
+                onChange={e => {
+                  setTrialSessionsFiltersSequence({
+                    proceedingType: e.target
+                      .value as TrialSessionProceedingType,
+                  });
+                }}
+              />
+              <label
+                className="usa-radio__label"
+                htmlFor="proceedingType-remote"
+              >
+                Remote
+              </label>
+            </div>
+          </fieldset>
+          <DateRangePickerComponent
+            endDateErrorText={''}
+            endName="trialSessionStartDate"
+            endValue=""
+            formGroupCls="margin-bottom-0"
+            maxDate={''}
+            rangePickerCls={'grid-row '}
+            startDateErrorText={''}
+            startName="trialSessionEndDate"
+            startPickerCls="padding-right-2"
+            startValue=""
+            onChangeEnd={e => {
+              console.log('onChangeEnd', e.target.value);
+            }}
+            onChangeStart={e => {
+              console.log('onChangeStart', e.target.value);
+            }}
+          />
         </div>
-        <div className="margin-bottom-5 grid-row flex-justify">
-          <div>
-            <label
-              className="dropdown-label-serif margin-right-3"
-              htmlFor="inline-select"
-              id="trial-sessions-filter-label"
-            >
-              Filter by
+        <div className="margin-bottom-5 grid-row flex-row gap-2">
+          <div className="grid-col">
+            <label className="usa-label" htmlFor="session-type-filter">
+              Session type{' '}
+              <span className="optional-light-text">(optional)</span>
             </label>
-            <select
-              aria-label="location"
-              className="usa-select select-left width-180 inline-select"
-              value={trialSessionsPage.filters.trialLocation}
-              onChange={e => {
-                setTrialSessionsFiltersSequence({
-                  trialLocation: e.target.value,
-                });
-              }}
-            >
-              <option value="All">-Location-</option>
-              <TrialCityOptions procedureType="AllPlusStandalone" />
-            </select>
-            <select
-              aria-label="proceeding"
-              className="usa-select select-left width-180 inline-select margin-left-1pt5rem"
-              id="proceedingFilter"
-              name="proceedingType"
-              value={trialSessionsPage.filters.proceedingType}
-              onChange={e => {
-                setTrialSessionsFiltersSequence({
-                  proceedingType: e.target.value as TrialSessionProceedingType,
-                });
-              }}
-            >
-              <option value="All">-Proceeding Type-</option>
-              {Object.values(TRIAL_SESSION_PROCEEDING_TYPES).map(
-                proceedingType => (
-                  <option key={proceedingType} value={proceedingType}>
-                    {proceedingType}
-                  </option>
-                ),
-              )}
-            </select>
-            <select
-              aria-label="session"
-              className="usa-select select-left width-180 inline-select margin-left-1pt5rem"
-              id="sessionFilter"
+            <SelectSearch
+              id="session-type-filter"
               name="sessionType"
-              value={trialSessionsPage.filters.sessionType}
-              onChange={e => {
-                setTrialSessionsFiltersSequence({
-                  sessionType: e.target.value,
-                });
+              options={[]}
+              onChange={inputValue => {
+                console.log('session type', inputValue);
               }}
-            >
-              <option value="All">-Session Type-</option>
-              {Object.values(SESSION_TYPES).map(sessionType => (
-                <option key={sessionType} value={sessionType}>
-                  {sessionType}
-                </option>
-              ))}
-            </select>
-            <select
-              aria-label="judge"
-              className="usa-select select-left width-180 inline-select margin-left-1pt5rem"
-              id="judgeFilter"
-              name="judge"
-              value={trialSessionsPage.filters.judgeId}
-              onChange={e => {
-                setTrialSessionsFiltersSequence({
-                  judgeId: e.target.value,
-                });
-              }}
-            >
-              <option value="All">-Judge-</option>
-              {trialSessionsHelper.trialSessionJudges.map(judge => (
-                <option key={judge.userId} value={judge.userId}>
-                  {judge.name}
-                </option>
-              ))}
-
-              {trialSessionsHelper.showUnassignedJudgeFilter && (
-                <option key="unassigned" value="unassigned">
-                  Unassigned
-                </option>
-              )}
-            </select>
+            />
           </div>
-          {trialSessionsHelper.showNewTrialSession && (
-            <Button
-              data-testid="add-trial-session-button"
-              href="/add-a-trial-session"
-              icon="plus-circle"
-            >
-              Add Trial Session
-            </Button>
-          )}
+          <div className="grid-col">
+            <label className="usa-label" htmlFor="location-filter">
+              Location <span className="optional-light-text">(optional)</span>
+            </label>
+            <SelectSearch
+              id="location-filter"
+              name="location"
+              options={[]}
+              onChange={inputValue => {
+                console.log('location', inputValue);
+              }}
+            />
+          </div>
+          <div className="grid-col">
+            <label className="usa-label" htmlFor="judge-filter">
+              Judge <span className="optional-light-text">(optional)</span>
+            </label>
+            <SelectSearch
+              id="judge-filter"
+              name="judgeId"
+              options={[]}
+              onChange={inputValue => {
+                console.log('judgeId', inputValue);
+              }}
+            />
+          </div>
         </div>
       </>
     );
