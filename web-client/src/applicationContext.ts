@@ -106,6 +106,7 @@ import { deletePractitionerDocumentInteractor } from '../../shared/src/proxies/p
 import { deleteTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/deleteTrialSessionProxy';
 import { deleteUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteUserCaseNoteProxy';
 import { dismissNOTTReminderForTrialInteractor } from '../../shared/src/proxies/trialSessions/dismissNOTTReminderForTrialProxy';
+import { downloadBlob } from '@web-client/presenter/utilities/downloadBlob';
 import { downloadCsv } from '@web-client/presenter/utilities/downloadCsv';
 import { editPaperFilingInteractor } from '../../shared/src/proxies/documents/editPaperFilingProxy';
 import { editPractitionerDocumentInteractor } from '../../shared/src/proxies/practitioners/editPractitionerDocumentProxy';
@@ -235,6 +236,7 @@ import { getUsersPendingEmailInteractor } from '../../shared/src/proxies/users/g
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { loadPDFForPreviewInteractor } from '../../shared/src/business/useCases/loadPDFForPreviewInteractor';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
+import { logErrorInteractor } from '../../shared/src/proxies/logErrorProxy';
 import { loginInteractor } from '@shared/proxies/auth/loginProxy';
 import { openUrlInNewTab } from './presenter/utilities/openUrlInNewTab';
 import { opinionAdvancedSearchInteractor } from '../../shared/src/proxies/opinionAdvancedSearchProxy';
@@ -499,6 +501,7 @@ const allUseCases = {
   getWorkItemInteractor,
   loadPDFForPreviewInteractor,
   loadPDFForSigningInteractor,
+  logErrorInteractor,
   loginInteractor,
   opinionAdvancedSearchInteractor,
   orderAdvancedSearchInteractor,
@@ -619,6 +622,22 @@ const applicationContext = {
   convertBlobToUInt8Array: async blob => {
     return new Uint8Array(await new Response(blob).arrayBuffer());
   },
+  createCsvString: (
+    data: any[],
+    config: { displayLabel: string; key: string }[],
+  ) => {
+    const headers = config.map(c => `"${c.displayLabel}"`).join();
+    const body = data.reduce((acc, currentData) => {
+      const row = config
+        .map(c => c.key)
+        .map(key => `"${currentData[key]}"`)
+        .join();
+      acc += `${row}\n`;
+      return acc;
+    }, '');
+
+    return `${headers}\n${body}`;
+  },
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:4000';
   },
@@ -716,6 +735,7 @@ const applicationContext = {
       createStartOfDayISO,
       dateStringsCompared,
       deconstructDate,
+      downloadBlob,
       downloadCsv,
       filterEmptyStrings,
       formatAttachments,

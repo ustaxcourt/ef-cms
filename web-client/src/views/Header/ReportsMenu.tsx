@@ -1,4 +1,4 @@
-import { Button } from '../../ustc-ui/Button/Button';
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -99,6 +99,7 @@ export const ReportsMenu = connect(
             </li>
             <li className="usa-nav__submenu-item">
               <a
+                data-testid="blocked-cases-report"
                 href="/reports/blocked-cases"
                 id="all-blocked-cases"
                 onClick={() => {

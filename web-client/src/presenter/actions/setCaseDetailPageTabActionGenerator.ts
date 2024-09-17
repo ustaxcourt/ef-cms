@@ -6,7 +6,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {string} tab the tab to display
  * @returns {Function} a function that sets the tab name
  */
-export const setCaseDetailPageTabActionGenerator = tab => {
+export const setCaseDetailPageTabActionGenerator = (tab?: string) => {
   return ({ props, store }) => {
     const tabName = tab || props.tab;
     if (props.isSecondary) {

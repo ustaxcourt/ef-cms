@@ -1,4 +1,5 @@
 import { Icon } from '../ustc-ui/Icon/Icon';
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -40,8 +41,8 @@ export const Contact = connect(
             />
             <div className="inline-block">
               Email{' '}
-              <a href="mailto:dawson.support@ustaxcourt.gov">
-                dawson.support@ustaxcourt.gov
+              <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
+                {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
               </a>
               <br />
               <span className="usa-hint margin-top-1">

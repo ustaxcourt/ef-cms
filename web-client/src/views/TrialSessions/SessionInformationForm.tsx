@@ -6,27 +6,33 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const SessionInformationForm = connect(
-  {
-    DATE_FORMATS: state.constants.DATE_FORMATS,
-    TRIAL_SESSION_SCOPE_TYPES: state.constants.TRIAL_SESSION_SCOPE_TYPES,
-    addTrialSessionInformationHelper: state.addTrialSessionInformationHelper,
-    form: state.form,
-    formatAndUpdateDateFromDatePickerSequence:
-      sequences.formatAndUpdateDateFromDatePickerSequence,
-    formattedTrialSessions: state.formattedTrialSessions,
-    updateTrialSessionFormDataSequence:
-      sequences.updateTrialSessionFormDataSequence,
-    validateTrialSessionSequence: sequences.validateTrialSessionSequence,
-    validationErrors: state.validationErrors,
-  },
+type SessionInformationFormProps = { addingTrialSession: boolean };
+
+const sessionInformationDeps = {
+  DATE_FORMATS: state.constants.DATE_FORMATS,
+  TRIAL_SESSION_SCOPE_TYPES: state.constants.TRIAL_SESSION_SCOPE_TYPES,
+  addTrialSessionInformationHelper: state.addTrialSessionInformationHelper,
+  form: state.form,
+  formatAndUpdateDateFromDatePickerSequence:
+    sequences.formatAndUpdateDateFromDatePickerSequence,
+  updateTrialSessionFormDataSequence:
+    sequences.updateTrialSessionFormDataSequence,
+  user: state.user,
+  validateTrialSessionSequence: sequences.validateTrialSessionSequence,
+  validationErrors: state.validationErrors,
+};
+
+export const SessionInformationForm = connect<
+  SessionInformationFormProps,
+  typeof sessionInformationDeps
+>(
+  sessionInformationDeps,
   function SessionInformationForm({
     addingTrialSession,
     addTrialSessionInformationHelper,
     DATE_FORMATS,
     form,
     formatAndUpdateDateFromDatePickerSequence,
-    formattedTrialSessions,
     TRIAL_SESSION_SCOPE_TYPES,
     updateTrialSessionFormDataSequence,
     validateTrialSessionSequence,
@@ -215,7 +221,7 @@ export const SessionInformationForm = connect(
             </div>
           </div>
 
-          {formattedTrialSessions.showSwingSessionOption &&
+          {addTrialSessionInformationHelper.showSwingSessionOption &&
             !addTrialSessionInformationHelper.isStandaloneSession && (
               <>
                 <div className="usa-form-group">
@@ -241,14 +247,14 @@ export const SessionInformationForm = connect(
                     </label>
                   </div>
                 </div>
-                {formattedTrialSessions.showSwingSessionList && (
+                {addTrialSessionInformationHelper.showSwingSessionList && (
                   <FormGroup errorText={validationErrors.swingSessionId}>
                     <label
                       className="usa-label"
                       htmlFor="swing-session-id"
                       id="swing-session-id-label"
                     >
-                      Which Trial Session is This Associated With?
+                      Which trial session is this associated with?
                     </label>
                     <select
                       aria-describedby="swing-session-id-label"
@@ -268,14 +274,16 @@ export const SessionInformationForm = connect(
                       }}
                     >
                       <option value="">- Select -</option>
-                      {formattedTrialSessions.sessionsByTerm.map(session => (
-                        <option
-                          key={session.trialSessionId}
-                          value={session.trialSessionId}
-                        >
-                          {session.optionText}
-                        </option>
-                      ))}
+                      {addTrialSessionInformationHelper.swingSessions.map(
+                        session => (
+                          <option
+                            key={session.trialSessionId}
+                            value={session.trialSessionId}
+                          >
+                            {session.swingSessionText}
+                          </option>
+                        ),
+                      )}
                     </select>
                   </FormGroup>
                 )}

@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import { Contact } from '@shared/business/useCases/generatePetitionPdfInteractor';
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import {
@@ -12,6 +13,7 @@ import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawMessage } from '@shared/business/entities/Message';
 import { RawUser } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
+import { TroubleshootingLinkInfo } from '@web-client/presenter/sequences/showFileUploadErrorModalSequence';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
@@ -84,14 +86,15 @@ import { formattedMessageDetail } from './computeds/formattedMessageDetail';
 import { formattedMessages } from './computeds/formattedMessages';
 import { formattedPendingItemsHelper } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
-import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getAllIrsPractitionersForSelectHelper } from '@web-client/presenter/computeds/TrialSession/getAllIrsPractitionersForSelectHelper';
 import { getConstants } from '../getConstants';
 import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTypeHelper';
 import { headerHelper } from './computeds/headerHelper';
+import { initialBlockedCaseReportFilter } from '@web-client/presenter/state/blockedCasesReportState';
 import { initialCustomCaseReportState } from './customCaseReportState';
 import { initialPendingReportsState } from '@web-client/presenter/state/pendingReportState';
+import { initialTrialSessionPageState } from '@web-client/presenter/state/trialSessionsPageState';
 import { initialTrialSessionState } from '@web-client/presenter/state/trialSessionState';
 import { initialTrialSessionWorkingCopyState } from '@web-client/presenter/state/trialSessionWorkingCopyState';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
@@ -128,6 +131,7 @@ import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
 import { sealedCaseDetailHelper } from './computeds/sealedCaseDetailHelper';
+import { selectCriteriaHelper } from '@web-client/presenter/computeds/selectCriteriaHelper';
 import { serveThirtyDayNoticeModalHelper } from './computeds/serveThirtyDayNoticeModalHelper';
 import { sessionAssignmentHelper } from './computeds/sessionAssignmentHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
@@ -377,9 +381,6 @@ export const computeds = {
     formattedTrialSessionDetails as unknown as ReturnType<
       typeof formattedTrialSessionDetails
     >,
-  formattedTrialSessions: formattedTrialSessions as unknown as ReturnType<
-    typeof formattedTrialSessions
-  >,
   formattedWorkQueue: formattedWorkQueue as unknown as ReturnType<
     typeof formattedWorkQueue
   >,
@@ -495,6 +496,9 @@ export const computeds = {
   sealedCaseDetailHelper: sealedCaseDetailHelper as unknown as ReturnType<
     typeof sealedCaseDetailHelper
   >,
+  selectCriteriaHelper: selectCriteriaHelper as unknown as ReturnType<
+    typeof selectCriteriaHelper
+  >,
   serveThirtyDayNoticeModalHelper:
     serveThirtyDayNoticeModalHelper as unknown as ReturnType<
       typeof serveThirtyDayNoticeModalHelper
@@ -603,6 +607,8 @@ export const baseState = {
     fileCount?: number;
     title?: string;
   },
+  blockedCaseReportFilter: cloneDeep(initialBlockedCaseReportFilter),
+  blockedCases: [] as RawCase[],
   caseDeadlineReport: {} as {
     caseDeadlines: (RawCaseDeadline & {
       caseCaption: string;
@@ -657,6 +663,12 @@ export const baseState = {
     },
   },
   customCaseReport: cloneDeep(initialCustomCaseReportState),
+  docketEntriesBatchDownload: {} as {
+    [uuid: string]: { index: number; url: string }[];
+  },
+  docketEntriesBatchDownloadProgress: {} as {
+    [uuid: string]: { [index: number]: number };
+  },
   docketEntryId: null,
   docketRecordIndex: 0,
   documentToEdit: {} as any,
@@ -711,9 +723,13 @@ export const baseState = {
   },
   messagesSectionCount: 0,
   modal: {
+    contactSupportMessage: undefined, // the "contact support" message sans email address
     docketEntry: undefined,
+    message: undefined, // the message to show
     pdfPreviewModal: undefined,
     showModal: undefined, // the name of the modal to display
+    title: undefined,
+    troubleshootingInfo: undefined as unknown as TroubleshootingLinkInfo, // steps for troubleshooting
   } as Record<string, any>,
   navigation: {
     caseDetailMenu: '',
@@ -760,8 +776,9 @@ export const baseState = {
     caseCaptionExtension: undefined,
     caseTitle: undefined,
     caseType: undefined,
-    contactPrimary: undefined,
-    contactSecondary: undefined,
+    contactCounsel: undefined,
+    contactPrimary: undefined as Contact | undefined,
+    contactSecondary: undefined as Contact | undefined,
     corporateDisclosureFile: undefined,
     corporateDisclosureFileUrl: undefined,
     hasIrsNotice: undefined,
@@ -841,11 +858,14 @@ export const baseState = {
     name: '',
   },
   trialSessionWorkingCopy: cloneDeep(initialTrialSessionWorkingCopyState),
+  trialSessions: [] as any[], // Sometimes trialSessions, sometimes TrialSessionInfoDTO, sometimes ad-hoc trial sessions
+  trialSessionsPage: cloneDeep(initialTrialSessionPageState),
   user: cloneDeep(emptyUserState),
   userContactEditProgress: {} as { inProgress?: boolean },
   users: [] as RawUser[],
-  validationErrors: {} as Record<string, string>,
+  validationErrors: {} as Record<string, any>,
   viewerDocumentToDisplay: undefined as unknown as ViewerDocument,
+  viewerDraftDocumentToDisplay: undefined as unknown as ViewerDocument,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
@@ -868,7 +888,7 @@ export type CreateCaseIrsForm = {
   size?: number;
   caseType?: string;
   noticeIssuedDate?: string;
-  taxYear?: number;
+  taxYear?: string;
   irsNoticeFileUrl?: string;
   cityAndStateIssuingOffice?: string;
 };
@@ -876,6 +896,8 @@ export type CreateCaseIrsForm = {
 export type ViewerDocument = {
   docketEntryId: string;
   documentTitle?: string; // Should this be required?
+  documentType?: string;
+  eventCode?: string;
   filingDate?: string;
   index?: number;
 };

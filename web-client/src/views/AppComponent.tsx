@@ -30,11 +30,10 @@ import { CreatePetitionerAccount } from '@web-client/views/CreatePetitionerAccou
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
 import { CustomCaseReport } from './CustomCaseReport/CustomCaseReport';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
+import { DashboardExternalUser } from './Dashboards/DashboardExternalUser';
 import { DashboardInactive } from './Dashboards/DashboardInactive';
 import { DashboardIrsSuperuser } from './Dashboards/DashboardIrsSuperuser';
 import { DashboardJudge } from './Dashboards/DashboardJudge';
-import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
-import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
 import { DashboardRespondent } from './Dashboards/DashboardRespondent';
 import { DocketEntryQc } from './DocketEntryQc';
 import { DownloadDocketEntriesModal } from '@web-client/views/DownloadDocketEntriesModal';
@@ -54,6 +53,7 @@ import { ErrorView500 } from './ErrorView500';
 import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { FilePetitionSuccess } from './StartCase/FilePetitionSuccess';
+import { FileUploadErrorModal } from '@web-client/views/FileUploadErrorModal';
 import { Footer } from './Footer';
 import { ForgotPassword } from '@web-client/views/Login/ForgotPassword';
 import { GenericErrorModal } from './GenericErrorModal';
@@ -137,11 +137,10 @@ const pages = {
   CreatePractitionerUser,
   CustomCaseReport,
   DashboardChambers,
+  DashboardExternalUser,
   DashboardInactive,
   DashboardIrsSuperuser,
   DashboardJudge,
-  DashboardPetitioner,
-  DashboardPractitioner,
   DashboardRespondent,
   DocketEntryQc,
   EditCaseDetails,
@@ -304,6 +303,7 @@ export const AppComponent = connect(
         {showModal === 'WebSocketErrorModal' && <WebSocketErrorModal />}
         {showModal === 'AppMaintenanceModal' && <AppMaintenanceModal />}
         {showModal === 'GenericErrorModal' && <GenericErrorModal />}
+        {showModal === 'FileUploadErrorModal' && <FileUploadErrorModal />}
       </>
     );
   },

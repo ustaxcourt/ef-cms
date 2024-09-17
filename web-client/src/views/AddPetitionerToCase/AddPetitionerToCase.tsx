@@ -16,6 +16,8 @@ import React from 'react';
 export const AddPetitionerToCase = connect(
   {
     COUNTRY_TYPES: state.constants.COUNTRY_TYPES,
+    closeModalAndReturnToCaseDetailSequence:
+      sequences.closeModalAndReturnToCaseDetailSequence,
     constants: state.constants,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
@@ -32,6 +34,7 @@ export const AddPetitionerToCase = connect(
     validationErrors: state.validationErrors,
   },
   function AddPetitionerToCase({
+    closeModalAndReturnToCaseDetailSequence,
     constants,
     COUNTRY_TYPES,
     form,
@@ -296,7 +299,9 @@ export const AddPetitionerToCase = connect(
         </section>
 
         {showModal === 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+          <FormCancelModalDialog
+            onCancelSequence={closeModalAndReturnToCaseDetailSequence}
+          />
         )}
       </>
     );

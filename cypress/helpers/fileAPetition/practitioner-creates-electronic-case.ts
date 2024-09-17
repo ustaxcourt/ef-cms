@@ -1,10 +1,23 @@
-import { uploadFile } from '../file/upload-file';
+import { PROCEDURE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
+import { attachSamplePdfFile } from '../file/upload-file';
+import { petitionerCreatesElectronicCaseUpdated } from './petitioner-creates-electronic-case-updated';
 
 export function practitionerCreatesElectronicCase() {
+  return cy
+    .task('getFeatureFlagValue', { flag: 'updated-petition-flow' })
+    .then(updatedFlow => {
+      if (updatedFlow) {
+        return petitionerCreatesElectronicCaseUpdated();
+      }
+      return practitionerCreatesElectronicCaseOld();
+    });
+}
+
+export function practitionerCreatesElectronicCaseOld() {
   cy.get('[data-testid="file-a-petition"]').click();
-  uploadFile('stin-file');
+  attachSamplePdfFile('stin-file');
   cy.get('[data-testid="complete-step-1"]').click();
-  uploadFile('petition-file');
+  attachSamplePdfFile('petition-file');
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
   cy.get('[data-testid="complete-step-2"]').click();
@@ -20,8 +33,9 @@ export function practitionerCreatesElectronicCase() {
   cy.get('[data-testid="phone"]').type('1111111111');
   cy.get('[data-testid="use-same-address-above-label"]').click();
   cy.get('[data-testid="complete-step-3"]').click();
-  cy.get('[data-testid="procedure-type-1"]').click();
-  cy.get('[data-testid="procedure-type-0"]').click();
+  cy.get(
+    `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
+  ).click();
   cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
   cy.get('[data-testid="complete-step-4"]').click();
   cy.get('[data-testid="file-petition"]').click();

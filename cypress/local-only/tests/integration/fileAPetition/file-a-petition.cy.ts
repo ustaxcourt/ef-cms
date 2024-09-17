@@ -1,3 +1,4 @@
+import { attachFile } from '../../../../helpers/file/upload-file';
 import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
 import { petitionerAttemptsToUploadCorruptPdf } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 
@@ -58,7 +59,11 @@ describe('File a Petition', () => {
       cy.get('label#stin-file-label').scrollIntoView();
       cy.get('label#stin-file-label').should('not.have.class', 'validated');
 
-      cy.get('input#stin-file').attachFile('../../helpers/file/sample.pdf');
+      attachFile({
+        filePath: '../../helpers/file/sample.pdf',
+        selector: 'input#stin-file',
+        selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+      });
       cy.get('label#stin-file-label').should('have.class', 'validated');
     });
 
@@ -75,7 +80,11 @@ describe('File a Petition', () => {
       cy.get('label#petition-file-label').scrollIntoView();
       cy.get('label#petition-file-label').should('not.have.class', 'validated');
 
-      cy.get('input#petition-file').attachFile('../../helpers/file/sample.pdf');
+      attachFile({
+        filePath: '../../helpers/file/sample.pdf',
+        selector: 'input#petition-file',
+        selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+      });
 
       cy.get('label#petition-file-label').should('have.class', 'validated');
     });
@@ -176,9 +185,24 @@ describe('File a Petition', () => {
 
     it('reviews information before filing', () => {
       cy.get('button#submit-case').click();
+
+      // check pdf preview for desktop
       cy.get('button#petition-preview-button').click();
       cy.get('dialog.modal-screen').should('exist');
       cy.get('button#close-modal-button').click();
+
+      // check pdf preview for mobile
+      cy.viewport('iphone-6+');
+      cy.window().then(win => {
+        // Stub the window.open in the context of the window
+        cy.stub(win, 'open').as('windowOpen');
+      });
+      cy.get('button#petition-preview-button').click();
+      cy.get('@windowOpen').should(
+        'be.calledWithMatch',
+        new RegExp('^blob:', 'm'),
+        '_blank',
+      );
     });
 
     it('submits forms and redirects to the file petition success page', () => {

@@ -1,3 +1,4 @@
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -24,6 +25,37 @@ describe('submitLoginAction', () => {
       error: mockErrorPath,
       success: mockSuccessPath,
     };
+  });
+
+  it('should ignore leading/trailing spaces in password entry', async () => {
+    applicationContext.getUseCases().loginInteractor.mockResolvedValue({
+      accessToken: testAccessToken,
+      idToken: testIdToken,
+      refreshToken: testRefreshToken,
+    });
+
+    await runAction(submitLoginAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        authentication: {
+          form: {
+            code: '',
+            confirmPassword: '',
+            email: testEmail,
+            password: ' ' + testPassword + ' ',
+          },
+          tempPassword: '',
+        },
+      },
+    });
+    expect(
+      applicationContext.getUseCases().loginInteractor.mock.calls[0][1],
+    ).toEqual({
+      email: testEmail,
+      password: testPassword,
+    });
   });
 
   it('should call the success path when user is authenticated successfully', async () => {
@@ -200,8 +232,8 @@ describe('submitLoginAction', () => {
           <>
             You can try again later or reset your password. If you’re still
             having problems, contact{' '}
-            <a href="mailto:dawson.support@ustaxcourt.gov">
-              dawson.support@ustaxcourt.gov
+            <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
+              {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
             </a>
             .
           </>
@@ -243,8 +275,8 @@ describe('submitLoginAction', () => {
             We sent an email with a link to verify the email address. If you
             don’t see it, check your spam folder. If you’re still having
             trouble, email{' '}
-            <a href="mailto:dawson.support@ustaxcourt.gov">
-              dawson.support@ustaxcourt.gov
+            <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
+              {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
             </a>
             .
           </>

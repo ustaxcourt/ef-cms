@@ -2,7 +2,6 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { ErrorNotification } from '../ErrorNotification';
-import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { Hint } from '../../ustc-ui/Hint/Hint';
@@ -18,6 +17,8 @@ import React from 'react';
 
 export const PaperFiling = connect(
   {
+    closeModalAndReturnToCaseDetailSequence:
+      sequences.closeModalAndReturnToCaseDetailSequence,
     confirmWorkItemAlreadyCompleteSequence:
       sequences.confirmWorkItemAlreadyCompleteSequence,
     form: state.form,
@@ -30,6 +31,7 @@ export const PaperFiling = connect(
     submitPaperFilingSequence: sequences.submitPaperFilingSequence,
   },
   function PaperFiling({
+    closeModalAndReturnToCaseDetailSequence,
     confirmWorkItemAlreadyCompleteSequence,
     form,
     formCancelToggleCancelSequence,
@@ -119,7 +121,9 @@ export const PaperFiling = connect(
                     Cancel
                   </Button>
                   {showModal === 'FormCancelModalDialog' && (
-                    <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+                    <FormCancelModalDialog
+                      onCancelSequence={closeModalAndReturnToCaseDetailSequence}
+                    />
                   )}
                 </div>
               </section>
@@ -134,9 +138,6 @@ export const PaperFiling = connect(
         </section>
 
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
-        {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal confirmSequence={submitPaperFilingSequence} />
-        )}
         {showModal === 'ConfirmInitiatePaperFilingServiceModal' && (
           <ConfirmInitiateServiceModal
             confirmSequence={submitPaperFilingSequence}
