@@ -204,7 +204,7 @@ export const BeforeStartingCase = connect(
               {isPetitioner ? 'your' : 'the'} case may be dismissed.
             </div>
           </div>
-          <CaseInfoAccordion isPetitioner={isPetitioner} />
+          <BeforeStartingCaseAccordion isPetitioner={isPetitioner} />
           <Button
             className="before-case-button"
             data-testid="go-to-step-1"
@@ -252,14 +252,17 @@ export const BeforeStartingCase = connect(
 
 BeforeStartingCase.displayName = 'BeforeStartingCase';
 
-function CaseInfoAccordion({ isPetitioner }: { isPetitioner: boolean }) {
+function BeforeStartingCaseAccordion({
+  isPetitioner,
+}: {
+  isPetitioner: boolean;
+}) {
   return (
     <div className="grid-row grid-gap">
-      {isPetitioner && (
-        <Accordion className="petitioner-accordion-title" headingLevel="3">
+      <Accordion dataTestId="before-starting-case-accordion">
+        {isPetitioner && (
           <AccordionItem
-            customTitleClassName="petitioner-accordion-title"
-            key="Are you filing jointly with a spouse?"
+            dataTestId="are-you-filing-jointly-with-a-spouse"
             title="Are you filing jointly with a spouse?"
           >
             <div data-testid="filing-jointly-accordion-item">
@@ -268,12 +271,9 @@ function CaseInfoAccordion({ isPetitioner }: { isPetitioner: boolean }) {
               }
             </div>
           </AccordionItem>
-        </Accordion>
-      )}
-      {isPetitioner && (
-        <Accordion className="petitioner-accordion-title" headingLevel="3">
+        )}
+        {isPetitioner && (
           <AccordionItem
-            customTitleClassName="petitioner-accordion-title"
             key="Are you filing on behalf of someone else?"
             title="Are you filing on behalf of someone else?"
           >
@@ -295,11 +295,8 @@ function CaseInfoAccordion({ isPetitioner }: { isPetitioner: boolean }) {
               }
             </div>
           </AccordionItem>
-        </Accordion>
-      )}
-      <Accordion className="petitioner-accordion-title" headingLevel="3">
+        )}
         <AccordionItem
-          customTitleClassName="petitioner-accordion-title"
           key="Are you filing for a business?"
           title={
             isPetitioner
@@ -309,7 +306,7 @@ function CaseInfoAccordion({ isPetitioner }: { isPetitioner: boolean }) {
         >
           <div className="margin-bottom-1">
             {`If ${isPetitioner ? "you're filing for" : 'the petitioner is'} a business, you'll need to complete and
-          submit the Corporate Disclosure Statement.`}
+            submit the Corporate Disclosure Statement.`}
           </div>
           <div>
             {"Download and fill out the form if you haven't already done so:"}
