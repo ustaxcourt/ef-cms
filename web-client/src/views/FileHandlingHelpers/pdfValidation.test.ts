@@ -34,8 +34,6 @@ describe('validatePdf', () => {
   let mockFileReader: any;
 
   beforeEach(() => {
-    jest.restoreAllMocks();
-
     mockFileReader = {
       onerror: null,
       onload: null,
