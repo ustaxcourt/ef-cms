@@ -27,7 +27,7 @@ import { isEmpty } from 'lodash';
  * It updates both the Cognito record (if necessary) and the associated Dynamo record.
  * Required parameters: the current email of the judge to update
  * Optional parameters (although at least one required): --judgeFullName, --judgeTitle, --email, --phone, --isSeniorJudge
- * There is some initial logic for updating --name, but testing has revealed more that needs donem so it is not yet supported.
+ * There is some initial logic for updating --name, but testing has revealed more that needs done so it is not yet supported.
  *
  *  Example usage:
  *
