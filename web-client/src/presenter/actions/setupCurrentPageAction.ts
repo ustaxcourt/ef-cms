@@ -20,6 +20,7 @@ export const setupCurrentPageAction =
           .getAllFeatureFlagsInteractor(applicationContext);
         store.set(state.featureFlags, featureFlags);
       } catch (err) {
+        console.log(err);
         page = 'ErrorView500';
       }
     }
