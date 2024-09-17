@@ -204,7 +204,7 @@ export const BeforeStartingCase = connect(
               {isPetitioner ? 'your' : 'the'} case may be dismissed.
             </div>
           </div>
-          <CaseInfoAccordion isPetitioner={isPetitioner} />
+          <BeforeStartingCaseAccordion isPetitioner={isPetitioner} />
           <Button
             className="before-case-button"
             data-testid="go-to-step-1"
@@ -252,12 +252,19 @@ export const BeforeStartingCase = connect(
 
 BeforeStartingCase.displayName = 'BeforeStartingCase';
 
-function CaseInfoAccordion({ isPetitioner }: { isPetitioner: boolean }) {
+function BeforeStartingCaseAccordion({
+  isPetitioner,
+}: {
+  isPetitioner: boolean;
+}) {
   return (
     <div className="grid-row grid-gap">
-      <Accordion>
+      <Accordion dataTestId="before-starting-case-accordion">
         {isPetitioner && (
-          <AccordionItem title="Are you filing jointly with a spouse?">
+          <AccordionItem
+            dataTestId="are-you-filing-jointly-with-a-spouse"
+            title="Are you filing jointly with a spouse?"
+          >
             <div data-testid="filing-jointly-accordion-item">
               {
                 "To file a joint Petition with your spouse, you must have the spouse's consent. If you do not have your spouse's consent, select “Myself” as the person who is filing."

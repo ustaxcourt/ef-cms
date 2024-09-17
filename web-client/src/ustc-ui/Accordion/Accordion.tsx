@@ -5,9 +5,11 @@ import classNames from 'classnames';
 export const Accordion = ({
   children,
   className,
+  dataTestId,
   ...props
 }: {
   children: ReactNode;
+  dataTestId?: string;
   className?: string;
 } & HTMLAttributes<HTMLDivElement>) => {
   return (
@@ -18,6 +20,7 @@ export const Accordion = ({
         'usa-accordion',
         'usa-accordion--multiselectable',
       )}
+      data-testid={dataTestId}
       {...props}
     >
       {children}
@@ -28,10 +31,12 @@ export const Accordion = ({
 export const AccordionItem = ({
   children,
   contentClassName,
+  dataTestId,
   headerClassName,
   initiallyOpen = false,
   title,
 }: {
+  dataTestId?: string;
   initiallyOpen?: boolean;
   headerClassName?: string;
   contentClassName?: string;
@@ -52,6 +57,7 @@ export const AccordionItem = ({
             'accordion-title',
             headerClassName,
           )}
+          data-testid={dataTestId}
           onClick={() => {
             setIsOpen(!isOpen);
           }}
