@@ -1730,3 +1730,8 @@ export const STATUS_REPORT_ORDER_OPTIONS = {
     restored: 'restoredToGeneralDocket',
   },
 };
+
+export const TROUBLESHOOTING_INFO = {
+  APP_SUPPORT_EMAIL: 'dawson.support@ustaxcourt.gov',
+  FILE_UPLOAD_TROUBLESHOOTING_LINK: '', // TODO 10001
+};

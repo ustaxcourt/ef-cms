@@ -7,11 +7,9 @@ export const validatePetitionAction = ({
 }: ActionProps) => {
   const petition = get(state.petitionFormatted);
 
-  const errors = applicationContext
-    .getUseCases()
-    .validatePetitionInteractor(applicationContext, {
-      petition,
-    });
+  const errors = applicationContext.getUseCases().validatePetitionInteractor({
+    petition,
+  });
 
   if (errors) {
     return path.error({

@@ -1,7 +1,7 @@
 import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
+import { getTestJudgesChambers } from '@shared/test/mockJudgesChambers';
 import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { userSendsMessage } from './journey/userSendsMessage';
@@ -18,9 +18,7 @@ describe('messages table journey', () => {
   };
   const messageSubjectForJudge = 'Check your recent messages!';
 
-  const judgesChambers = applicationContext
-    .getPersistenceGateway()
-    .getJudgesChambers();
+  const JUDGES_CHAMBERS = getTestJudgesChambers();
   const judgeCohenUserId = 'dabbad04-18d0-43ec-bafb-654e83405416';
 
   const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
@@ -159,7 +157,7 @@ describe('messages table journey', () => {
   userSendsMessage(
     cerebralTest,
     messageSubjectForJudge,
-    judgesChambers.COHENS_CHAMBERS_SECTION.section,
+    JUDGES_CHAMBERS.COHENS_CHAMBERS_SECTION.section,
     judgeCohenUserId,
   );
 

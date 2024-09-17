@@ -6,6 +6,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCompletedSectionInboxMessages } from '@web-api/persistence/postgres/messages/getCompletedSectionInboxMessages';
 
 /**
  * getCompletedMessagesForSectionInteractor
@@ -24,14 +25,9 @@ export const getCompletedMessagesForSectionInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const messages = await applicationContext
-    .getPersistenceGateway()
-    .getCompletedSectionInboxMessages({
-      applicationContext,
-      section,
-    });
-
-  return MessageResult.validateRawCollection(messages, {
-    applicationContext,
+  const messages = await getCompletedSectionInboxMessages({
+    section,
   });
+
+  return MessageResult.validateRawCollection(messages);
 };

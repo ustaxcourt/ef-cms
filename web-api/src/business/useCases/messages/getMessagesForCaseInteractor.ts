@@ -6,6 +6,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 
 /**
  * gets messages for a case
@@ -24,14 +25,10 @@ export const getMessagesForCaseInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const messages = await applicationContext
-    .getPersistenceGateway()
-    .getMessagesByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
-
-  return Message.validateRawCollection(messages, {
+  const messages = await getMessagesByDocketNumber({
     applicationContext,
+    docketNumber,
   });
+
+  return Message.validateRawCollection(messages);
 };

@@ -18,14 +18,17 @@ export function caseStatusWithTrialInformation({
     return caseStatus;
   }
 
-  const formattedTrialDate = applicationContext
-    .getUtilities()
-    .formatDateString(trialDate, 'MM/dd/yy');
+  const formattedTrialDate = trialDate
+    ? applicationContext.getUtilities().formatDateString(trialDate, 'MM/dd/yy')
+    : 'NA';
 
-  const formattedTrialLocation =
-    trialLocation === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
-      ? TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
-      : applicationContext.getUtilities().abbreviateState(trialLocation);
+  let formattedTrialLocation = '';
+  if (trialLocation) {
+    formattedTrialLocation =
+      trialLocation === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
+        ? TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
+        : applicationContext.getUtilities().abbreviateState(trialLocation);
+  }
 
   return `${caseStatus} - ${formattedTrialDate} ${formattedTrialLocation}`;
 }
