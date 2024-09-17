@@ -1,29 +1,40 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const CaseTypeSelect = connect(
-  {
-    allowDefaultOption: props.allowDefaultOption,
-    caseTypes: props.caseTypes,
-    errorMessageId: props.errorMessageId,
-    hint: props.hint,
-    legend: props.legend,
-    name: props.name,
-    onBlurSequence: props.onBlurSequence,
-    onChange: sequences[props.onChange],
-    onChangePreValidation: sequences[props.onChangePreValidation],
-    rawOnChange: props.onChange,
-    refProp: props.refProp,
-    validation: sequences[props.validation],
-    validationError: props.validationError,
-    validationErrors: state.validationErrors,
-    value: props.value,
-  },
+type CaseTypeSelectType = {
+  allowDefaultOption: boolean;
+  caseTypes:
+    | {
+        description: string;
+        type: string;
+      }[]
+    | string[];
+  className?: string;
+  errorMessageId?: string;
+  hint?: string;
+  legend: string;
+  name?: string;
+  onBlur?: Function;
+  onChange: Function;
+  onChangePreValidation?: Function;
+  refProp?: (element: any) => void;
+  validationError?: { [key: string]: string | undefined };
+  validationSequence?: Function;
+  value?: string;
+};
+
+const caseTypeSelectDependencies = {
+  validationErrors: state.validationErrors,
+};
+
+export const CaseTypeSelect = connect<
+  CaseTypeSelectType,
+  typeof caseTypeSelectDependencies
+>(
+  caseTypeSelectDependencies,
   function CaseTypeSelect({
     allowDefaultOption,
     caseTypes,
@@ -32,14 +43,13 @@ export const CaseTypeSelect = connect(
     hint,
     legend,
     name,
-    onBlurSequence,
+    onBlur,
     onChange,
     onChangePreValidation,
-    rawOnChange,
     refProp,
-    validation,
     validationError,
     validationErrors,
+    validationSequence,
     value,
   }) {
     return (
@@ -61,15 +71,15 @@ export const CaseTypeSelect = connect(
               name={name || 'caseType'}
               ref={refProp}
               value={value}
-              onBlur={onBlurSequence}
+              onBlur={onBlur}
               onChange={e => {
-                (onChange || rawOnChange)({
+                onChange({
                   key: e.target.name,
                   property: 'caseType',
                   value: e.target.value,
                 });
                 if (onChangePreValidation) onChangePreValidation();
-                if (validation) validation();
+                if (validationSequence) validationSequence();
               }}
             >
               {allowDefaultOption && <option value="">-- Select --</option>}

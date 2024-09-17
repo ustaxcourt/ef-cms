@@ -624,6 +624,7 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
     return fakeFile;
   };
   global.WebSocket = require('websocket').w3cwebsocket;
+
   const dom = new JSDOM(
     `<!DOCTYPE html>
 <body>
