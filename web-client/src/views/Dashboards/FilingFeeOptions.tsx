@@ -34,6 +34,7 @@ export const FilingFeeOptions = function () {
         <Accordion>
           <AccordionItem
             contentClassName="bg-gray padding-x-0"
+            dataTestId="other-options"
             headerClassName="padding-0"
             title="Other options"
           >
