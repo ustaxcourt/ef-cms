@@ -8,7 +8,7 @@ import {
 import { applicationContext } from '@web-client/applicationContext';
 
 const VALID_PDF_HEADER_BYTES = [0x25, 0x50, 0x44, 0x46, 0x2d]; // %PDF-
-const INVALID_PDF_HEADER_BYTES = [0x50, 0x44, 0x46, 0x25, 0x2d]; // %PDF-
+const INVALID_PDF_HEADER_BYTES = [0x50, 0x44, 0x46, 0x25, 0x2d]; // PFD%-
 
 describe('validatePdfHeader', () => {
   it('should return true for valid PDF header', () => {
