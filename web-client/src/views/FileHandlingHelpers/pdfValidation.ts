@@ -12,6 +12,13 @@ export const PDF_CORRUPTED_ERROR_MESSAGE =
 const GENERIC_FILE_ERROR_MESSAGE =
   'There is a problem uploading the file. Try again later.';
 
+export const validatePdfHeader = (pdfData: Uint8Array): boolean => {
+  const stringDecoder = new TextDecoder('utf8');
+  const pdfHeaderBytes = pdfData.slice(0, 5);
+  const pdfHeaderString = stringDecoder.decode(pdfHeaderBytes);
+  return pdfHeaderString === '%PDF-';
+};
+
 export const validatePdf = ({
   file,
 }: {
@@ -38,10 +45,21 @@ export const validatePdf = ({
 
       const fileAsArrayBuffer = new Uint8Array(result as ArrayBuffer);
 
-      // We try to load the pdf. If we get any errors, we return an errorInformation accordingly.
+      // We will try to load the PDF. If we get any errors, we will return an errorInformation object accordingly.
       try {
+        if (!validatePdfHeader(fileAsArrayBuffer)) {
+          const corruptPdfError = new Error('PDF header is invalid');
+          corruptPdfError.name = 'CorruptPDFHeaderException';
+          throw corruptPdfError;
+        }
+
+        // Attempt to load the PDF
         const pdfjs = await applicationContext.getPdfJs();
-        await pdfjs.getDocument(fileAsArrayBuffer).promise;
+        await pdfjs.getDocument({
+          data: fileAsArrayBuffer,
+          isEvalSupported: false,
+        }).promise;
+
         resolve({ isValid: true });
       } catch (err) {
         if (err instanceof Error) {
@@ -53,10 +71,15 @@ export const validatePdf = ({
               },
               isValid: false,
             });
-          } else if (err.name === 'InvalidPDFException') {
+          } else if (
+            ['InvalidPDFException', 'CorruptPDFHeaderException'].includes(
+              err.name,
+            )
+          ) {
             resolve({
               errorInformation: {
                 errorMessageToDisplay: PDF_CORRUPTED_ERROR_MESSAGE,
+                errorMessageToLog: `${PDF_CORRUPTED_ERROR_MESSAGE} (${err.name})`,
                 errorType: ErrorTypes.CORRUPT_FILE,
               },
               isValid: false,
