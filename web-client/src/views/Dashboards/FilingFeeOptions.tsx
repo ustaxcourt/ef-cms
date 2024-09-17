@@ -32,20 +32,26 @@ export const FilingFeeOptions = function () {
         <hr />
 
         <Accordion>
-          <AccordionItem className="bg-gray" title="Other options">
-            <hr />
-            <strong>Mail-in payment</strong>
-            <br />
-            Make checks/money orders payable to:
-            <br />
-            Clerk, United States Tax Court
-            <br />
-            400 Second Street, NW
-            <br />
-            Washington, DC 20217
-            <br />
-            <br />
-            <strong>Can’t afford to pay the filing fee?</strong>
+          <AccordionItem
+            contentClassName="bg-gray padding-0"
+            headerClassName="padding-0"
+            title="Other options"
+          >
+            <div>
+              <hr />
+              <strong>Mail-in payment</strong>
+              <br />
+              Make checks/money orders payable to:
+              <br />
+              Clerk, United States Tax Court
+              <br />
+              400 Second Street, NW
+              <br />
+              Washington, DC 20217
+              <br />
+              <br />
+              <strong>Can’t afford to pay the filing fee?</strong>
+            </div>
             <Button
               link
               className="usa-link--external text-left"
