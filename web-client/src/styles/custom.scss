@@ -1385,11 +1385,9 @@ hr.lighter {
   font-size: 20px !important;
 }
 
-
 .usa-accordion__heading:not(:first-child) {
   margin-top: 1rem;
 }
-
 
 .all-columns-view {
   column-count: 4;
@@ -2408,4 +2406,9 @@ button.change-scanner-button {
 .accordion-title {
   padding-top: 24px;
   padding-bottom: 24px;
+}
+
+.padding-0 {
+  // This has higher importance than uwds padding-0
+  padding: 0;
 }

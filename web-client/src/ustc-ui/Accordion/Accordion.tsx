@@ -27,12 +27,14 @@ export const Accordion = ({
 
 export const AccordionItem = ({
   children,
-  className,
+  contentClassName,
+  headerClassName,
   initiallyOpen = false,
   title,
 }: {
   initiallyOpen?: boolean;
-  className?: string;
+  headerClassName?: string;
+  contentClassName?: string;
   children: ReactNode;
   title: string;
 }) => {
@@ -41,11 +43,15 @@ export const AccordionItem = ({
 
   return (
     <>
-      <h3 className="usa-accordion__heading">
+      <h3 className={classNames('usa-accordion__heading')}>
         <button
           aria-controls={id}
           aria-expanded={isOpen}
-          className="usa-accordion__button"
+          className={classNames(
+            'usa-accordion__button',
+            'accordion-title',
+            headerClassName,
+          )}
           onClick={() => {
             setIsOpen(!isOpen);
           }}
@@ -54,7 +60,7 @@ export const AccordionItem = ({
         </button>
       </h3>
       <div
-        className={classNames('usa-accordion__content', className)}
+        className={classNames('usa-accordion__content', contentClassName)}
         hidden={!isOpen}
         id={id}
       >
