@@ -11,6 +11,7 @@ export const marshallContact = contactObject => {
     address2: contactObject.address2,
     address3: contactObject.address3,
     city: contactObject.city,
+    country: contactObject.country,
     email: contactObject.email,
     name: contactObject.name,
     phone: contactObject.phone,
