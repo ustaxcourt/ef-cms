@@ -5,7 +5,7 @@ export const practitionerViewsDashboard = cerebralTest => {
     await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoDashboardSequence');
     expect(cerebralTest.getState('currentPage')).toEqual(
-      'DashboardPractitioner',
+      'DashboardExternalUser',
     );
     expect(cerebralTest.getState('openCases').length).toBeGreaterThan(0);
     const latestDocketNumber = cerebralTest.getState(

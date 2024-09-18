@@ -1,5 +1,5 @@
 import { BusinessContact } from './BusinessContact';
-import { CONTACT_TYPES, PARTY_TYPES } from '../EntityConstants';
+import { CONTACT_TYPES, FilingType, PARTY_TYPES } from '../EntityConstants';
 import { ContactUpdated } from '@shared/business/entities/contacts/ContactUpdated';
 import { DeceasedSpouseContact } from '@shared/business/entities/contacts/DeceasedSpouseContact';
 import { OtherContact } from '@shared/business/entities/contacts/OtherContact';
@@ -8,12 +8,14 @@ import { SpouseContact } from '@shared/business/entities/contacts/SpouseContact'
 export function ContactFactoryUpdated({
   contactInfoPrimary,
   contactInfoSecondary,
+  filingType,
   hasSpouseConsent,
   partyType,
   petitionType,
 }: {
   contactInfoPrimary: {};
   contactInfoSecondary: {};
+  filingType: FilingType;
   partyType: string;
   petitionType: string;
   hasSpouseConsent: boolean;
@@ -61,7 +63,9 @@ export function ContactFactoryUpdated({
   }
 
   if (partyType === PARTY_TYPES.petitionerSpouse) {
-    const shouldValidateSecondary = !!hasSpouseConsent;
+    const shouldValidateSecondary =
+      filingType === 'Petitioner and spouse' ||
+      (filingType === 'Myself and my spouse' && !!hasSpouseConsent);
     return {
       primary: new ContactUpdated(
         { ...contactInfoPrimary, contactType: CONTACT_TYPES.primary },

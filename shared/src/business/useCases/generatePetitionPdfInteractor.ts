@@ -1,7 +1,3 @@
-import {
-  CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE,
-  CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE,
-} from '@shared/business/entities/EntityConstants';
 import { CreateCaseIrsForm } from '@web-client/presenter/state';
 import {
   ROLE_PERMISSIONS,
@@ -9,6 +5,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseDescription } from '@shared/business/utilities/getCaseDescription';
 
 export type IrsNotice = CreateCaseIrsForm & {
   noticeIssuedDateFormatted: string;
@@ -25,11 +22,12 @@ export interface Contact {
   inCareOf?: string;
   secondaryName?: string;
   title?: string;
-  country: string;
+  country?: string;
   address1: string;
   address2?: string;
   address3?: string;
   city: string;
+  paperPetitionEmail?: string;
   postalCode: string;
   phone: string;
   state: string;
@@ -44,9 +42,24 @@ export type ContactSecondary = Contact & {
   paperPetitionEmail?: string;
 };
 
+export type ContactCounsel = {
+  name: string;
+  firmName: string;
+  address1: string;
+  address2?: string;
+  address3?: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  phone: string;
+  email: string;
+  barNumber: string;
+};
+
 export interface PetitionPdfBase {
   caseCaptionExtension: string;
   caseTitle: string;
+  contactCounsel?: ContactCounsel;
   contactPrimary: Contact;
   contactSecondary?: ContactSecondary;
   hasUploadedIrsNotice: boolean;
@@ -62,6 +75,7 @@ export const generatePetitionPdfInteractor = async (
   {
     caseCaptionExtension,
     caseTitle,
+    contactCounsel,
     contactPrimary,
     contactSecondary,
     hasIrsNotice,
@@ -91,6 +105,7 @@ export const generatePetitionPdfInteractor = async (
       caseCaptionExtension,
       caseDescription,
       caseTitle,
+      contactCounsel,
       contactPrimary,
       contactSecondary,
       hasUploadedIrsNotice,
@@ -119,10 +134,3 @@ export const generatePetitionPdfInteractor = async (
 
   return { fileId };
 };
-
-function getCaseDescription(hasIrsNotice: boolean, caseType: string) {
-  if (hasIrsNotice) {
-    return CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE[caseType];
-  }
-  return CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE[caseType];
-}

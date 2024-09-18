@@ -1,6 +1,10 @@
 import { createApplicationContext } from '../../applicationContext';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 
+export type PdfGenerationResult = {
+  tempId: string;
+};
+
 export const handler = async event => {
   const applicationContext = createApplicationContext({});
 
@@ -21,7 +25,7 @@ export const handler = async event => {
     useTempBucket: true,
   });
 
-  return tempId;
+  return { tempId };
 };
 
 export const changeOfAddressHandler = async event => {
