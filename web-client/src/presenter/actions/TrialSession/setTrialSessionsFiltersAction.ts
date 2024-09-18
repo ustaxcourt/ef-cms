@@ -1,4 +1,7 @@
-import { TrialSessionProceedingType } from '@shared/business/entities/EntityConstants';
+import {
+  TrialSessionProceedingType,
+  TrialSessionTypes,
+} from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export type SetTrialSessionsFilters = Partial<{
@@ -9,7 +12,7 @@ export type SetTrialSessionsFilters = Partial<{
   };
   proceedingType: TrialSessionProceedingType | 'All';
   sessionStatus: string;
-  sessionType: string;
+  sessionTypes: { action: 'add' | 'remove'; sessionType: TrialSessionTypes };
   trialLocations: {
     action: 'add' | 'remove';
     trialLocation: string;
@@ -28,10 +31,11 @@ export const setTrialSessionsFiltersAction = ({
   }
 
   if (props.judges) {
-    if (props.judges.action === 'add') {
-      currentFilters.judges[props.judges.judge.userId] = props.judges.judge;
+    const { action, judge } = props.judges;
+    if (action === 'add') {
+      currentFilters.judges[judge.userId] = judge;
     } else {
-      delete currentFilters.judges[props.judges.judge.userId];
+      delete currentFilters.judges[judge.userId];
     }
 
     store.set(state.trialSessionsPage.filters.judges, currentFilters.judges);
@@ -50,11 +54,21 @@ export const setTrialSessionsFiltersAction = ({
       props.sessionStatus,
     );
   }
-  // Update for Trial Sessions Page
-  if (props.sessionType) {
-    store.set(state.trialSessionsPage.filters.sessionType, props.sessionType);
+
+  if (props.sessionTypes) {
+    const { action, sessionType } = props.sessionTypes;
+    if (action === 'add') {
+      currentFilters.sessionTypes[sessionType] = sessionType;
+    } else {
+      delete currentFilters.sessionTypes[sessionType];
+    }
+
+    store.set(
+      state.trialSessionsPage.filters.sessionTypes,
+      currentFilters.sessionTypes,
+    );
   }
-  // Update for Trial Sessions Page
+
   if (props.trialLocations) {
     const { action, trialLocation } = props.trialLocations;
     if (action === 'add') {

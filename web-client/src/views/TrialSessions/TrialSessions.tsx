@@ -266,23 +266,48 @@ const TrialSessionFilters = connect(
         </div>
         <div className="margin-bottom-5 grid-row flex-row gap-2">
           <div className="grid-col">
-            <label className="usa-label" htmlFor="session-type-filter">
-              Session type{' '}
-              <span className="optional-light-text">(optional)</span>
-            </label>
-            <SelectSearch
-              id="session-type-filter"
-              name="sessionType"
-              options={trialSessionsHelper.sessionTypeOptions}
-              placeholder="- Select one or more -"
-              value="Select one or more"
-              onChange={inputValue => {
-                console.log('session type', inputValue);
-              }}
-            />
+            <div className="margin-bottom-1">
+              <label className="usa-label" htmlFor="session-type-filter">
+                Session type{' '}
+                <span className="optional-light-text">(optional)</span>
+              </label>
+              <SelectSearch
+                id="session-type-filter"
+                name="sessionType"
+                options={trialSessionsHelper.sessionTypeOptions}
+                placeholder="- Select one or more -"
+                value="Select one or more"
+                onChange={sessionType => {
+                  setTrialSessionsFiltersSequence({
+                    sessionTypes: {
+                      action: 'add',
+                      sessionType: sessionType.value,
+                    },
+                  });
+                }}
+              />
+            </div>
+            <div>
+              {Object.values(trialSessionsPage.filters.sessionTypes).map(
+                sessionType => (
+                  <PillButton
+                    key={sessionType}
+                    text={sessionType}
+                    onRemove={() => {
+                      setTrialSessionsFiltersSequence({
+                        sessionTypes: {
+                          action: 'remove',
+                          sessionType,
+                        },
+                      });
+                    }}
+                  />
+                ),
+              )}
+            </div>
           </div>
           <div className="grid-col">
-            <div>
+            <div className="margin-bottom-1">
               <label className="usa-label" htmlFor="location-filter">
                 Location <span className="optional-light-text">(optional)</span>
               </label>
@@ -325,7 +350,7 @@ const TrialSessionFilters = connect(
             </div>
           </div>
           <div className="grid-col">
-            <div>
+            <div className="margin-bottom-1">
               <label className="usa-label" htmlFor="judge-filter">
                 Judge <span className="optional-light-text">(optional)</span>
               </label>
