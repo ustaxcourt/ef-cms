@@ -286,8 +286,11 @@ const TrialSessionFilters = connect(
             <SelectSearch
               id="location-filter"
               name="location"
-              options={[]}
+              options={trialSessionsHelper.trialCitiesByState}
               placeholder="- Select one or more -"
+              searchableOptions={
+                trialSessionsHelper.searchableTrialLocationOptions
+              }
               value="Select one or more"
               onChange={inputValue => {
                 console.log('location', inputValue);
@@ -299,13 +302,20 @@ const TrialSessionFilters = connect(
               Judge <span className="optional-light-text">(optional)</span>
             </label>
             <SelectSearch
-              id="judge-filter"
-              name="judgeId"
-              options={[]}
+              id="judges"
+              name="judges"
+              options={trialSessionsHelper.trialSessionJudgeOptions}
               placeholder="- Select one or more -"
               value="Select one or more"
               onChange={inputValue => {
-                console.log('judgeId', inputValue);
+                if (inputValue) {
+                  setTrialSessionsFiltersSequence({
+                    judges: {
+                      action: 'add',
+                      judge: inputValue.value,
+                    },
+                  });
+                }
               }}
             />
           </div>
