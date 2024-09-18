@@ -271,7 +271,9 @@ const TrialSessionFilters = connect(
             <SelectSearch
               id="session-type-filter"
               name="sessionType"
-              options={[]}
+              options={trialSessionsHelper.sessionTypeOptions}
+              placeholder="- Select one or more -"
+              value="Select one or more"
               onChange={inputValue => {
                 console.log('session type', inputValue);
               }}
@@ -285,6 +287,8 @@ const TrialSessionFilters = connect(
               id="location-filter"
               name="location"
               options={[]}
+              placeholder="- Select one or more -"
+              value="Select one or more"
               onChange={inputValue => {
                 console.log('location', inputValue);
               }}
@@ -298,6 +302,8 @@ const TrialSessionFilters = connect(
               id="judge-filter"
               name="judgeId"
               options={[]}
+              placeholder="- Select one or more -"
+              value="Select one or more"
               onChange={inputValue => {
                 console.log('judgeId', inputValue);
               }}
