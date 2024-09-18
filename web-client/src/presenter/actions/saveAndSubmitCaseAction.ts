@@ -3,6 +3,7 @@ import {
   FileUploadProgressType,
   FileUploadProgressValueType,
   PETITION_TYPES,
+  ROLES,
 } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -82,11 +83,14 @@ export const saveAndSubmitCaseAction = async ({
 
   await Promise.all(documentsThatNeedCoverSheet.map(addCoversheet));
 
+  const isPetitioner = user.role === ROLES.petitioner;
+  const successTitle = `${isPetitioner ? 'Your' : 'The'} case has been assigned docket number ${caseDetail.docketNumberWithSuffix || caseDetail.docketNumber}`;
+  const successMessage = `${isPetitioner ? 'Your' : 'The'} case has been created and${isPetitioner ? ' your' : ''} documents were sent to the U.S. Tax Court.`;
+
   return path.success({
     alertSuccess: {
-      message:
-        'Your case has been created and your documents sent to the U.S. Tax Court.',
-      title: `Your case has been assigned docket number ${caseDetail.docketNumberWithSuffix || caseDetail.docketNumber}`,
+      message: successMessage,
+      title: successTitle,
     },
     caseDetail,
   });
