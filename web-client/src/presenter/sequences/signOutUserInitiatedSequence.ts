@@ -8,12 +8,12 @@ import { signOutSequence } from '@web-client/presenter/sequences/signOutSequence
 export const signOutUserInitiatedSequence = [
   checkClientNeedsToRefresh,
   {
-    no: [
+    clientDoesNotNeedToRefresh: [
       setLogoutTypeAction(BROADCAST_MESSAGES.userLogout),
       signOutSequence,
       navigateToLoginSequence,
     ],
-    yes: [],
+    clientNeedsToRefresh: [],
   },
 ] as unknown as (props: {
   skipBroadcast?: boolean;
