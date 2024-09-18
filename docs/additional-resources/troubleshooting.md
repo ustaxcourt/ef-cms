@@ -317,3 +317,23 @@ Solution:
 - These are also known as an **Internal Server Error**. In our case, it often means that Lambda is trying to return too much information (6mb) to API Gateway. When each request ends, Lambda logs `Request ended: ${req.method} ${req.url}` and additional context that includes the `response.responseSize`. If those are approaching 6 megabytes, this is likely the cause of the problem. We will need to refactor our endpoint to return less information to the client via API Gateway. Does the client really need all of that information to do its job? Perhaps we can write a Data Transfer Object (DTO) to reduce what we return to the client and keep the `responseSize` in check.
 - Additionally, we include the `request.url` in the API Gateway logs for each request. In Kibana, filter `response.statusCode` = `502`, and find the log entries to identify the offending URLs by `request.url` or the Lambda invocation by `requestId.lambda` to attain additional information about what Lambda returned to API Gateway that triggered the `502` error.
 - `Amazon-Route53-Health-Check-Service` can also trigger a `502` status code if it fails. Most of these failures are false positives as AWS is throttling our requests for whether an AWS Service is healthy. [opex card to address](https://trello.com/c/wcGB8sO5/1124-amazon-route53-health-check-service-are-returning-erroneous-502-errors-because-they-are-throttling-our-requests)
+
+## NPM Install Errors
+
+- When trying to install node modules, you get an error involving node-gyp
+
+Solution:
+
+- You may be running into this because you're running on an M1, M2, M3, or M4 Apple chip. The error might look something like this:
+
+    ```text
+    npm error code 1
+    npm error path /Users/Michael.Marcotte/Documents/git/ustaxcourt/ef-cms/node_modules/canvas
+    npm error command failed
+    npm error command sh -c node-pre-gyp install --fallback-to-build --update-binary
+    npm error Failed to execute ...
+    ...
+    npm error gyp: Call to 'pkg-config pixman-1 --libs' returned exit status 127 while in binding.gyp. while trying to load binding.gyp
+    ```
+
+    Refer to the section on running locally to [install the node-canvas depdencies globally](https://github.com/ustaxcourt/ef-cms/blob/staging/docs/running-locally.md#m1-macs---non-docker-method).
