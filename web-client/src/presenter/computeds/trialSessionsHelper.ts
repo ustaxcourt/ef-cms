@@ -40,11 +40,13 @@ export const trialSessionsHelper = (
     filters.currentTab === 'new' ||
     filters.sessionStatus === SESSION_STATUS_TYPES.open;
 
-  let trialSessionJudges;
+  let trialSessionJudges; // 10409 TODO BUG. The judge options is not updating correctly. Showing legacy when it should not.
   if (showCurrentJudgesOnly) {
     trialSessionJudges = get(state.judges);
+    console.log('current length: ', trialSessionJudges.length);
   } else {
     trialSessionJudges = get(state.legacyAndCurrentJudges);
+    console.log('legecy length: ', trialSessionJudges.length);
   }
 
   const sessionTypeOptions = Object.values(SESSION_TYPES).map(sessionType => ({
@@ -52,10 +54,10 @@ export const trialSessionsHelper = (
     value: sessionType,
   }));
 
-  const trialSessionJudgeOptions = trialSessionJudges.map(
+  const trialSessionJudgeOptions: InputOption[] = trialSessionJudges.map(
     trialSessionJudge => ({
       label: trialSessionJudge.name,
-      value: trialSessionJudge.name,
+      value: trialSessionJudge.userId,
     }),
   );
   const trialCities = sortBy(TRIAL_CITIES.ALL, ['state', 'city']);
@@ -91,9 +93,13 @@ export const trialSessionsHelper = (
       return trialSession.isCalendared === isCalendaredFilter;
     })
     .filter(trialSession => {
-      if (filters.judgeId === 'All') return true;
-      if (filters.judgeId === 'unassigned') return !trialSession.judge?.userId;
-      return trialSession.judge?.userId === filters.judgeId;
+      if (filters.judgeIds.length === 0) return true;
+      const trialSessionHasJudge = filters.judgeIds.some(judgeIdFilter => {
+        if (judgeIdFilter === 'unassigned') return !trialSession.judge?.userId;
+        return judgeIdFilter === trialSession.judge?.userId;
+      });
+
+      return trialSessionHasJudge;
     })
     .filter(trialSession => {
       if (filters.proceedingType === 'All') return true;
