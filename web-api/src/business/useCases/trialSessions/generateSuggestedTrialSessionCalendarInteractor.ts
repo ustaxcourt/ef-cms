@@ -2,7 +2,6 @@ import {
   SESSION_STATUS_TYPES,
   SESSION_TERMS_BY_MONTH,
   SESSION_TYPES,
-  TRIAL_CITY_STRINGS,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
@@ -94,13 +93,10 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     }
   });
 
-  const citiesThatHaveNotBeenVisitedInTwoTerms = TRIAL_CITY_STRINGS.filter(
-    city => !citiesFromLastTwoTerms.includes(city),
-  );
-
   const prospectiveSessionsByCity = createProspectiveTrialSessions({
     calendaringConfig,
     cases,
+    citiesFromLastTwoTerms,
   });
 
   const scheduledTrialSessions = assignSessionsToWeeks({
@@ -128,11 +124,11 @@ const getPreviousTwoTerms = (startDate: string) => {
     `fall ${deconstructedDate.year}`,
   ];
   const termsReversed = terms.reverse();
-  const termI = terms.findIndex(
+  const termIndex = terms.findIndex(
     t => `${currentTerm} ${deconstructedDate.year}` === t,
   );
-  const [term1, year1] = termsReversed[termI + 1].split(' ');
-  const [term2, year2] = termsReversed[termI + 2].split(' ');
+  const [term1, year1] = termsReversed[termIndex + 1].split(' ');
+  const [term2, year2] = termsReversed[termIndex + 2].split(' ');
 
   return [`${term1}, ${year1}`, `${term2}, ${year2}`];
 };

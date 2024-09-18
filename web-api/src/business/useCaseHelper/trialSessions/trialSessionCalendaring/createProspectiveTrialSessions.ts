@@ -13,6 +13,7 @@ export type EligibleCase = Pick<
 export const createProspectiveTrialSessions = ({
   calendaringConfig,
   cases,
+  citiesFromLastTwoTerms,
 }: {
   cases: EligibleCase[];
   calendaringConfig: {
@@ -25,6 +26,7 @@ export const createProspectiveTrialSessions = ({
     hybridCaseMaxQuantity: number;
     hybridCaseMinimumQuantity: number;
   };
+  citiesFromLastTwoTerms: string[];
 }): Record<
   string,
   {
@@ -53,6 +55,10 @@ export const createProspectiveTrialSessions = ({
   for (const city in potentialTrialLocations) {
     let regularCaseSliceSize;
     let smallCaseSliceSize;
+
+    const cityWasNotVisitedInLastTwoTerms =
+      !citiesFromLastTwoTerms.includes(city);
+
     // One of these arrays will continue to decrease in size until it is smaller than the other, at which point prioritization below will flip.
     // For now, we are okay with this -- TODO 10275 confirm
     // schedule regular or small
@@ -60,6 +66,7 @@ export const createProspectiveTrialSessions = ({
       scheduleRegularCases({
         calendaringConfig,
         city,
+        cityWasNotVisitedInLastTwoTerms,
         potentialTrialLocations,
         regularCaseSliceSize,
         regularCasesByCity,
@@ -67,6 +74,7 @@ export const createProspectiveTrialSessions = ({
       scheduleSmallCases({
         calendaringConfig,
         city,
+        cityWasNotVisitedInLastTwoTerms,
         potentialTrialLocations,
         smallCaseSliceSize,
         smallCasesByCity,
@@ -87,6 +95,15 @@ export const createProspectiveTrialSessions = ({
         regularCasesByCity,
       });
     }
+
+    // TODO (10275): Handle cities that have not been visited in the past two terms
+
+    // Are there any cities that have not been visited in the last two terms
+    // that have not yet had any sessions scheduled? For any locations that
+    // meet this criterion, assemble all cases associated with that location in
+    // a session, disregarding the minimum quantity rule. The type of each
+    // session will depend on the sort of cases for that city: i.e., could be a
+    // regular, small, or hybrid session depending on the cases.
 
     // Handle Hybrid Sessions
     const remainingRegularCases = regularCasesByCity[city] || [];
@@ -110,6 +127,7 @@ export const createProspectiveTrialSessions = ({
 
       addProspectiveTrialSession({
         city,
+        cityWasNotVisitedInLastTwoTerms: false,
         potentialTrialLocations,
         sessionType: SESSION_TYPES.hybrid,
       });
@@ -149,11 +167,13 @@ function getCasesByCity(cases, type) {
 
 function addProspectiveTrialSession({
   city,
+  cityWasNotVisitedInLastTwoTerms,
   potentialTrialLocations,
   sessionType,
 }) {
   potentialTrialLocations[city].push({
     city,
+    cityWasNotVisitedInLastTwoTerms,
     sessionType,
   });
 }
@@ -161,6 +181,7 @@ function addProspectiveTrialSession({
 function scheduleRegularCases({
   calendaringConfig,
   city,
+  cityWasNotVisitedInLastTwoTerms = false,
   potentialTrialLocations,
   regularCasesByCity,
   regularCaseSliceSize,
@@ -175,6 +196,7 @@ function scheduleRegularCases({
 
     addProspectiveTrialSession({
       city,
+      cityWasNotVisitedInLastTwoTerms,
       potentialTrialLocations,
       sessionType: SESSION_TYPES.regular,
     });
@@ -184,6 +206,7 @@ function scheduleRegularCases({
 function scheduleSmallCases({
   calendaringConfig,
   city,
+  cityWasNotVisitedInLastTwoTerms = false,
   potentialTrialLocations,
   smallCasesByCity,
   smallCaseSliceSize,
@@ -198,6 +221,7 @@ function scheduleSmallCases({
 
     addProspectiveTrialSession({
       city,
+      cityWasNotVisitedInLastTwoTerms,
       potentialTrialLocations,
       sessionType: SESSION_TYPES.small,
     });
