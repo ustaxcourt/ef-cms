@@ -104,11 +104,11 @@ Use one of the mock logins documented below to log in to the private UI.
 
 If you have unexpected errors with running in Docker, try allocating 2+ CPUs, 8+ GB of RAM, and 4+ GB of swap.
 
-### M1 Macs - Non-Docker Method
+### Apple Silicon Macs - Non-Docker Method
 
-This method does not use Docker, nor does it use Rosetta. It is also the method preferred by other M1 users on the team.
+This method does not use Docker, nor does it use Rosetta. It is also the method preferred by other M1, M2, M3, or M4 users on the team.
 
-Follow the instructions for setup as you would for Non-M1 Macs, but **before you run `npm i`**, run the following commands:
+Follow the instructions for setup as you would for Non Apple Silicon Macs, but **before you run `npm i`**, run the following commands:
 
 ```sh
 brew install pkg-config cairo pango libpng jpeg giflib librsvg pixman libffi expat zlib
@@ -120,7 +120,7 @@ export PKG_CONFIG_PATH=/opt/homebrew/lib/pkgconfig/
 
 This will install `node-canvas` dependencies globally. As of 12/05/2022, `node-canvas` does not have a package compatible with M1 Macs.
 
-### Non-M1 Macs
+### Non-Apple Silicon Macs
 
 #### Checkout Develop
 
