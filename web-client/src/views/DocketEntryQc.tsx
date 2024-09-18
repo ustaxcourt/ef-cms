@@ -3,7 +3,6 @@ import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
 import { CreateMessageModalDialog } from './Messages/CreateMessageModalDialog';
 import { DocumentDisplayIframe } from './DocumentDisplayIframe';
 import { ErrorNotification } from './ErrorNotification';
-import { FileUploadErrorModal } from './FileUploadErrorModal';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { Hint } from '../ustc-ui/Hint/Hint';
 import { PrimaryDocumentForm } from './EditDocketEntry/PrimaryDocumentForm';
@@ -84,19 +83,21 @@ export const DocketEntryQc = connect(
 
                 <div className="margin-top-5">
                   <Button
+                    disableOnClick
                     id="save-and-finish"
                     type="submit"
-                    onClick={() => {
-                      completeDocketEntryQCSequence();
+                    onClick={async () => {
+                      await completeDocketEntryQCSequence();
                     }}
                   >
                     Complete
                   </Button>
                   <Button
+                    disableOnClick
                     secondary
                     id="save-and-add-supporting"
-                    onClick={() => {
-                      openCompleteAndSendMessageModalSequence();
+                    onClick={async () => {
+                      await openCompleteAndSendMessageModalSequence();
                     }}
                   >
                     Complete &amp; Send Message
@@ -127,11 +128,6 @@ export const DocketEntryQc = connect(
           <CreateMessageModalDialog
             title="Complete and Send Message"
             onConfirmSequence={completeDocketEntryQCAndSendMessageSequence}
-          />
-        )}
-        {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal
-            confirmSequence={completeDocketEntryQCSequence}
           />
         )}
         {showModal === 'WorkItemAlreadyCompletedModal' && (

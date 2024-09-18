@@ -1,8 +1,30 @@
+import { ProcedureType } from '../../../shared/src/business/entities/EntityConstants';
+import { attachFile } from '../file/upload-file';
 import { loginAsPetitionsClerk1 } from '../authentication/login-as-helpers';
 
 export function createAndServePaperPetition(
-  options = { yearReceived: '2020' },
-) {
+  {
+    procedureType = 'Regular',
+    trialLocation = 'Birmingham, Alabama',
+    yearReceived = '2020',
+  }: Partial<{
+    yearReceived: string;
+    procedureType: ProcedureType;
+    trialLocation: string;
+  }> = {
+    procedureType: 'Regular',
+    trialLocation: 'Birmingham, Alabama',
+    yearReceived: '2020',
+  },
+): Cypress.Chainable<{
+  docketNumber: string;
+  documentsCreated: {
+    eventCode: string;
+    index: number;
+    servedTo: string;
+  }[];
+  name: string;
+}> {
   const name = 'rick james ' + Date.now();
   loginAsPetitionsClerk1();
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
@@ -22,10 +44,11 @@ export function createAndServePaperPetition(
   cy.get('[data-testid="phone"]').type('n/a');
   cy.get('#tab-case-info > .button-text').click();
   cy.get('#date-received-picker').clear();
-  cy.get('#date-received-picker').type(`01/02/${options.yearReceived}`);
+  cy.get('#date-received-picker').type(`01/02/${yearReceived}`);
   cy.get('#mailing-date').clear();
   cy.get('#mailing-date').type('01/02/2019');
-  cy.get('[data-testid="preferred-trial-city"]').select('Birmingham, Alabama');
+  cy.get(`[data-testid="procedure-type-${procedureType}-radio"]`).click();
+  cy.get('[data-testid="preferred-trial-city"]').select(trialLocation);
   cy.get(
     ':nth-child(9) > .usa-fieldset > :nth-child(3) > .usa-radio__label',
   ).click();
@@ -43,38 +66,55 @@ export function createAndServePaperPetition(
   cy.get('[data-testid="case-type-select"]').select('CDP (Lien/Levy)');
   cy.get('#upload-mode-upload').click();
   cy.get('#uploadMode').check();
-  cy.get('#petitionFile-file').attachFile('../../helpers/file/sample.pdf');
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: '#petitionFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
   cy.get('#tabButton-requestForPlaceOfTrialFile > .button-text').click();
   cy.get('#scan-mode-radios').click();
   cy.get('#upload-mode-upload').click();
   cy.get('#uploadMode').check();
-  cy.get('#requestForPlaceOfTrialFile-file').attachFile(
-    '../../helpers/file/sample.pdf',
-  );
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: '#requestForPlaceOfTrialFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
 
   cy.get('[data-testid="tabButton-stinFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
-  cy.get('input#stinFile-file').attachFile('../../helpers/file/sample.pdf');
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: 'input#stinFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
 
   cy.get('[data-testid="tabButton-attachmentToPetitionFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
-  cy.get('input#attachmentToPetitionFile-file').attachFile(
-    '../../helpers/file/sample.pdf',
-  );
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: 'input#attachmentToPetitionFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
   cy.get('[data-testid="remove-pdf"]');
 
   cy.get('[data-testid="tabButton-corporateDisclosureFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
-  cy.get('input#corporateDisclosureFile-file').attachFile(
-    '../../helpers/file/sample.pdf',
-  );
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: 'input#corporateDisclosureFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
+
   cy.get(
     '[data-testid="tabButton-applicationForWaiverOfFilingFeeFile"]',
   ).click();
   cy.get('[data-testid="upload-pdf-button"]').click();
-  cy.get('input#applicationForWaiverOfFilingFeeFile-file').attachFile(
-    '../../helpers/file/sample.pdf',
-  );
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: 'input#applicationForWaiverOfFilingFeeFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
 
   cy.get('[data-testid="submit-paper-petition"]').click();
   return cy
@@ -176,17 +216,27 @@ export function createAndServePaperPetitionMyselfAndSpouse() {
   cy.get('[data-testid="case-type-select"]').select('Deficiency');
 
   cy.get('#upload-mode-upload').click();
-  cy.get('#petitionFile-file').attachFile('../../helpers/file/sample.pdf');
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: '#petitionFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
 
   cy.get('#tabButton-requestForPlaceOfTrialFile > .button-text').click();
   cy.get('#upload-mode-upload').click();
-  cy.get('#requestForPlaceOfTrialFile-file').attachFile(
-    '../../helpers/file/sample.pdf',
-  );
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: '#requestForPlaceOfTrialFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
 
   cy.get('[data-testid="tabButton-stinFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
-  cy.get('input#stinFile-file').attachFile('../../helpers/file/sample.pdf');
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: 'input#stinFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
 
   cy.get('[data-testid="submit-paper-petition"]').click();
 

@@ -1,17 +1,23 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const ProcedureType = connect(
-  {
-    PROCEDURE_TYPES: state.constants.PROCEDURE_TYPES,
-    legend: props.legend,
-    onChange: props.onChange,
-    validationErrors: state.validationErrors,
-    value: props.value,
-  },
+type ProcedureTypeType = {
+  legend: string;
+  onChange: (event: any) => void;
+  value: string;
+};
+
+const procedureTypeDependencies = {
+  PROCEDURE_TYPES: state.constants.PROCEDURE_TYPES,
+  validationErrors: state.validationErrors,
+};
+export const ProcedureType = connect<
+  ProcedureTypeType,
+  typeof procedureTypeDependencies
+>(
+  procedureTypeDependencies,
   function ProcedureType({
     legend,
     onChange,
@@ -31,11 +37,11 @@ export const ProcedureType = connect(
           <legend className="usa-legend" id="procedure-type-legend">
             {legend}
           </legend>
-          {PROCEDURE_TYPES.map((procedureType, idx) => (
+          {PROCEDURE_TYPES.map(procedureType => (
             <div className="usa-radio usa-radio__inline" key={procedureType}>
               <input
                 aria-describedby="procedure-type-legend"
-                aria-labelledby={`procedure-type-${idx}`}
+                aria-labelledby={`procedure-type-${procedureType}`}
                 checked={value === procedureType}
                 className="usa-radio__input"
                 data-type={procedureType}
@@ -47,9 +53,9 @@ export const ProcedureType = connect(
               />
               <label
                 className="usa-radio__label"
-                data-testid={`procedure-type-${idx}`}
+                data-testid={`procedure-type-${procedureType}-radio`}
                 htmlFor={procedureType}
-                id={`procedure-type-${idx}`}
+                id={`procedure-type-${procedureType}`}
               >
                 {procedureType} case
               </label>

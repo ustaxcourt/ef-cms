@@ -1,4 +1,5 @@
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -43,8 +44,8 @@ export const FileCompressionErrorModal = connect(
         )) || (
           <p>
             Please try again. If this error persists, contact{' '}
-            <a href="mailto:dawson.support@ustaxcourt.gov">
-              dawson.support@ustaxcourt.gov
+            <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
+              {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
             </a>
             .
           </p>

@@ -35,9 +35,6 @@ export const bulkIndexRecords = async ({
             if (doc.entityName.S === 'DocketEntry') {
               routing = `${doc.pk.S}_${doc.pk.S}|mapping`;
             }
-            if (doc.entityName.S === 'Message') {
-              routing = `${doc.pk.S}_${doc.pk.S}|mapping`;
-            }
             if (doc.entityName.S === 'WorkItem') {
               routing = `${doc.pk.S}_${doc.pk.S}|mapping`;
             }

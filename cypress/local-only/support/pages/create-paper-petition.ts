@@ -1,3 +1,5 @@
+import { PROCEDURE_TYPES_MAP } from '../../../../shared/src/business/entities/EntityConstants';
+import { attachFile } from '../../../helpers/file/upload-file';
 import { faker } from '@faker-js/faker';
 import {
   getCreateACaseButton,
@@ -54,7 +56,9 @@ export const fillInCreateCaseFromPaperForm = (testData?: {
 
   cy.get('input#date-received-picker').type('01/01/2020');
   cy.get('#mailing-date').type('01/01/2020');
-  cy.get('#procedure-type-0').click();
+  cy.get(
+    `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
+  ).click();
   cy.get('#preferred-trial-city').scrollIntoView();
   cy.get('#preferred-trial-city').select('Birmingham, Alabama');
   cy.get('label[for="payment-status-paid"]').click();
@@ -88,31 +92,44 @@ export const fillInCreateCaseFromPaperForm = (testData?: {
 
   // petition
   cy.get('[data-testid="upload-pdf-button"]').click();
-  cy.get('input#petitionFile-file').attachFile('../../helpers/file/sample.pdf');
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: 'input#petitionFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
   cy.get('[data-testid="remove-pdf"]');
 
   //stin
   cy.get('[data-testid="tabButton-stinFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
-  cy.get('input#stinFile-file').attachFile('../../helpers/file/sample.pdf');
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: 'input#stinFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
   cy.get('[data-testid="remove-pdf"]');
 
-  //rqt
+  // rqt
   cy.get('[data-testid="tabButton-requestForPlaceOfTrialFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
-  cy.get('input#requestForPlaceOfTrialFile-file').attachFile(
-    '../../helpers/file/sample.pdf',
-  );
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: 'input#requestForPlaceOfTrialFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
   cy.get('[data-testid="remove-pdf"]');
   cy.get('[data-testid="icon-requestForPlaceOfTrialFile"]').should(
     'be.visible',
   );
 
-  //atp
+  // atp
   cy.get('[data-testid="tabButton-attachmentToPetitionFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
-  cy.get('input#attachmentToPetitionFile-file').attachFile(
-    '../../helpers/file/sample.pdf',
-  );
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: 'input#attachmentToPetitionFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
+
   cy.get('[data-testid="remove-pdf"]');
 };

@@ -217,6 +217,7 @@ export const TrialInformation = connect(
                   <Button
                     link
                     className="block-from-trial-btn red-warning margin-bottom-3"
+                    data-testid="add-manual-block-button"
                     icon="hand-paper"
                     onClick={() => {
                       openBlockFromTrialModalSequence();
@@ -260,6 +261,7 @@ export const TrialInformation = connect(
               <Button
                 link
                 className="block-from-trial-btn red-warning"
+                data-testid="add-manual-block-button"
                 icon="hand-paper"
                 onClick={() => {
                   openBlockFromTrialModalSequence();

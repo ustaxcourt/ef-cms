@@ -1,3 +1,4 @@
+import { attachFile } from '../../../../../../helpers/file/upload-file';
 import { externalUserSearchesDocketNumber } from '../../../../../../helpers/advancedSearch/external-user-searches-docket-number';
 import { loginAsPetitioner } from '../../../../../../helpers/authentication/login-as-helpers';
 import { petitionerCreatesElectronicCase } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
@@ -22,9 +23,11 @@ describe(
         '[data-testid="secondary-doc-secondary-document-type"] .select-react-element__input',
       ).type('Answer{enter}');
       cy.get('[data-testid="submit-document"]').click();
-      cy.get('[data-testid="primary-document"]').attachFile(
-        '../../helpers/file/sample.pdf',
-      );
+      attachFile({
+        filePath: '../../helpers/file/sample.pdf',
+        selector: '[data-testid="primary-document"]',
+        selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+      });
       cy.get('[data-testid=primaryDocument-objections-No]').click();
       cy.get('#submit-document').click();
       cy.get('[data-testid=redaction-acknowledgement-label]').click();

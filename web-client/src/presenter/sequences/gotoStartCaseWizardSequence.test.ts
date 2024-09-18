@@ -2,7 +2,7 @@ import { CerebralTest } from 'cerebral/test';
 import { DEFAULT_PROCEDURE_TYPE } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { gotoStartCaseWizardSequence } from '../sequences/gotoStartCaseWizardSequence';
-import { petitionerUser, petitionsClerkUser } from '@shared/test/mockUsers';
+import { petitionsClerkUser } from '@shared/test/mockUsers';
 import { presenter } from '../presenter-mock';
 
 describe('gotoStartCaseWizardSequence', () => {
@@ -37,21 +37,5 @@ describe('gotoStartCaseWizardSequence', () => {
         statistics: [],
       },
     });
-  });
-
-  it('should set up state for an external user going to start case form', async () => {
-    cerebralTest.setState('user', petitionerUser);
-
-    await cerebralTest.runSequence('gotoStartCaseWizardSequence');
-
-    const endState = cerebralTest.getState();
-    expect(endState).toMatchObject({
-      currentPage: 'StartCaseWizard',
-      form: {
-        contactPrimary: {},
-      },
-    });
-    expect(endState.form.wizardStep).toBeUndefined();
-    expect(endState.wizardStep).toBeUndefined();
   });
 });

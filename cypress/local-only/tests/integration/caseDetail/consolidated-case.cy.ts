@@ -1,3 +1,4 @@
+import { attachFile } from '../../../../helpers/file/upload-file';
 import { getCaseDetailTab } from '../../../support/pages/case-detail';
 
 describe('Docket clerk views consolidated case', function () {
@@ -53,9 +54,11 @@ describe('Docket clerk views consolidated case', function () {
       cy.get('input#upload-description').clear();
       cy.get('input#upload-description').type('temp correspondence');
       cy.get('[data-testid="upload-pdf-button"]').click();
-      cy.get('input#primaryDocumentFile-file').attachFile(
-        '../../helpers/file/sample.pdf',
-      );
+      attachFile({
+        filePath: '../../helpers/file/sample.pdf',
+        selector: 'input#primaryDocumentFile-file',
+        selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+      });
       cy.get('[data-testid="remove-pdf"]');
       cy.get('button#upload-correspondence').click();
       // delete correspondence

@@ -1,15 +1,17 @@
-import { createLogger } from '../../createLogger';
 import { handler } from './cognito-authorizer';
-import { transports } from 'winston';
 import axios from 'axios';
-import fs from 'fs';
 import jwk from 'jsonwebtoken';
 
-const { createLogger: actualCreateLogger } = jest.requireActual(
-  '../../../src/createLogger',
-);
-jest.mock('../../../src/createLogger', () => {
-  return { createLogger: jest.fn() };
+const mockLogger = {
+  addContext: jest.fn(),
+  clearContext: jest.fn(),
+  info: jest.fn(),
+  warn: jest.fn(),
+};
+jest.mock('@web-api/utilities/logger/getLogger', () => {
+  return {
+    getLogger: () => mockLogger,
+  };
 });
 jest.mock('jsonwebtoken', () => {
   return {
@@ -48,18 +50,9 @@ describe('cognito-authorizer', () => {
     });
   };
 
-  let event, context, transport;
+  let event, context;
 
   beforeEach(() => {
-    transport = new transports.Stream({
-      stream: fs.createWriteStream('/dev/null'),
-    });
-
-    (createLogger as jest.Mock).mockImplementation(opts => {
-      opts.transports = [transport];
-      return actualCreateLogger(opts);
-    });
-
     event = {
       authorizationToken:
         'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWlzc2lvbnNjbGVya0BleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IEFkbWlzc2lvbnMgQ2xlcmsiLCJyb2xlIjoiYWRtaXNzaW9uc2NsZXJrIiwic2VjdGlvbiI6ImFkbWlzc2lvbnMiLCJ1c2VySWQiOiI5ZDdkNjNiNy1kN2E1LTQ5MDUtYmE4OS1lZjcxYmYzMDA1N2YiLCJjdXN0b206cm9sZSI6ImFkbWlzc2lvbnNjbGVyayIsInN1YiI6IjlkN2Q2M2I3LWQ3YTUtNDkwNS1iYTg5LWVmNzFiZjMwMDU3ZiIsImlhdCI6MTYwOTQ0NTUyNn0.kow3pAUloDseD3isrxgtKBpcKsjMktbRBzY41c1NRqA',
@@ -79,7 +72,6 @@ describe('cognito-authorizer', () => {
     });
 
     jest.spyOn(axios, 'get');
-    jest.spyOn(transport, 'log');
   });
 
   it('returns unauthorized when token is missing', async () => {
@@ -87,12 +79,8 @@ describe('cognito-authorizer', () => {
 
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
 
-    expect(transport.log).toHaveBeenCalledWith(
-      expect.objectContaining({
-        level: expect.stringContaining('info'),
-        message: expect.stringContaining('No authorizationToken found'),
-      }),
-      expect.any(Function),
+    expect(mockLogger.info).toHaveBeenCalledWith(
+      'No authorizationToken found in the header',
     );
   });
 
@@ -103,15 +91,9 @@ describe('cognito-authorizer', () => {
 
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
 
-    expect(transport.log).toHaveBeenCalledWith(
-      expect.objectContaining({
-        level: expect.stringContaining('warning'),
-        message: expect.stringContaining(
-          'Could not fetch keys for token issuer',
-        ),
-        stack: expect.stringContaining('Error: any error'),
-      }),
-      expect.any(Function),
+    expect(mockLogger.warn).toHaveBeenCalledWith(
+      'Could not fetch keys for token issuer, considering request unauthorized',
+      new Error('any error'),
     );
   });
 
@@ -122,15 +104,9 @@ describe('cognito-authorizer', () => {
 
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
 
-    expect(transport.log).toHaveBeenCalledWith(
-      expect.objectContaining({
-        level: expect.stringContaining('warning'),
-        message: expect.stringContaining(
-          'Could not fetch keys for token issuer',
-        ),
-        stack: expect.any(String),
-      }),
-      expect.any(Function),
+    expect(mockLogger.warn).toHaveBeenCalledWith(
+      'Could not fetch keys for token issuer, considering request unauthorized',
+      expect.anything(),
     );
   });
 
@@ -143,17 +119,13 @@ describe('cognito-authorizer', () => {
 
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
 
-    expect(transport.log).toHaveBeenCalledWith(
+    expect(mockLogger.warn).toHaveBeenCalledWith(
+      'The key used to sign the authorization token was not found in the user pool’s keys, considering request unauthorized',
       expect.objectContaining({
         issuer: expect.any(String),
         keys: expect.any(Array),
-        level: expect.stringContaining('warning'),
-        message: expect.stringContaining(
-          'was not found in the user pool’s keys',
-        ),
         requestedKeyId: 'key-identifier',
       }),
-      expect.any(Function),
     );
   });
 
@@ -175,13 +147,9 @@ describe('cognito-authorizer', () => {
 
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
 
-    expect(transport.log).toHaveBeenCalledWith(
-      expect.objectContaining({
-        level: expect.stringContaining('warning'),
-        message: expect.stringContaining('token is not valid'),
-        stack: expect.stringContaining('Error: verification failed'),
-      }),
-      expect.any(Function),
+    expect(mockLogger.warn).toHaveBeenCalledWith(
+      'The token is not valid, considering request unauthorized',
+      new Error('verification failed'),
     );
   });
 
@@ -207,14 +175,9 @@ describe('cognito-authorizer', () => {
       }),
     );
 
-    expect(transport.log).toHaveBeenCalledWith(
-      expect.objectContaining({
-        level: expect.stringContaining('info'),
-        message: expect.stringContaining('Request authorized'),
-        metadata: expect.objectContaining({ policy }),
-      }),
-      expect.any(Function),
-    );
+    expect(mockLogger.info).toHaveBeenCalledWith('Request authorized', {
+      metadata: { policy },
+    });
   });
 
   it('returns IAM policy to allow invoking requested lambda when authorized using the payload custom:userId', async () => {
@@ -239,14 +202,9 @@ describe('cognito-authorizer', () => {
       }),
     );
 
-    expect(transport.log).toHaveBeenCalledWith(
-      expect.objectContaining({
-        level: expect.stringContaining('info'),
-        message: expect.stringContaining('Request authorized'),
-        metadata: expect.objectContaining({ policy }),
-      }),
-      expect.any(Function),
-    );
+    expect(mockLogger.info).toHaveBeenCalledWith('Request authorized', {
+      metadata: { policy },
+    });
   });
 
   it('caches keys for issuers', async () => {

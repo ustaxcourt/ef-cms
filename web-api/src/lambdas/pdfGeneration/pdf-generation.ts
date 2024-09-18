@@ -1,4 +1,9 @@
 import { createApplicationContext } from '../../applicationContext';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
+
+export type PdfGenerationResult = {
+  tempId: string;
+};
 
 export const handler = async event => {
   const applicationContext = createApplicationContext({});
@@ -20,7 +25,7 @@ export const handler = async event => {
     useTempBucket: true,
   });
 
-  return tempId;
+  return { tempId };
 };
 
 export const changeOfAddressHandler = async event => {
@@ -28,7 +33,8 @@ export const changeOfAddressHandler = async event => {
   const { body } = Records[0];
   const eventBody = JSON.parse(body);
 
-  const applicationContext = createApplicationContext(eventBody.requestUser);
+  const applicationContext = createApplicationContext();
+  getLogger().addUser({ user: eventBody.requestUser });
 
   applicationContext.logger.info(
     `processing job "change-of-address-job|${eventBody.jobId}", task for case ${eventBody.docketNumber}`,
