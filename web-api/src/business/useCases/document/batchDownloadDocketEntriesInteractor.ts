@@ -15,10 +15,6 @@ export type DownloadDocketEntryRequestType = {
   clientConnectionId: string;
   docketNumber: string;
   printableDocketRecordFileId?: string;
-  index: number;
-  totalNumberOfBatches: number;
-  totalNumberOfFiles: number;
-  uuid: string;
 };
 
 export const batchDownloadDocketEntriesInteractor = async (
@@ -59,11 +55,7 @@ const batchDownloadDocketEntriesHelper = async (
     clientConnectionId,
     docketNumber,
     documentsSelectedForDownload,
-    index: batchIndex,
     printableDocketRecordFileId,
-    totalNumberOfBatches,
-    totalNumberOfFiles,
-    uuid,
   }: DownloadDocketEntryRequestType,
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
@@ -80,12 +72,9 @@ const batchDownloadDocketEntriesHelper = async (
     applicationContext,
     clientConnectionId,
     message: {
-      action: 'docket_entries_batch_download_progress',
+      action: 'batch_download_progress',
       filesCompleted: 0,
-      index: batchIndex,
-      totalFiles: totalNumberOfFiles,
-      totalNumberOfBatches,
-      uuid,
+      totalFiles: documentsSelectedForDownload.length,
     },
     userId: authorizedUser.userId,
   });
@@ -104,7 +93,7 @@ const batchDownloadDocketEntriesHelper = async (
   const { caseCaption, isSealed: isCaseSealed } = caseToBatch;
   const caseTitle = Case.getCaseTitle(caseCaption);
   const caseFolder = `${docketNumber}, ${caseTitle}`;
-  const zipName = `${uuid}-${batchIndex}.zip`;
+  const zipName = `${caseFolder}.zip`;
   const documentsToZip: {
     key: string;
     filePathInZip: string;
@@ -152,11 +141,9 @@ const batchDownloadDocketEntriesHelper = async (
       applicationContext,
       clientConnectionId,
       message: {
-        action: 'docket_entries_batch_download_progress',
+        action: 'batch_download_progress',
         filesCompleted: progressData.filesCompleted,
-        index: batchIndex,
-        totalFiles: totalNumberOfFiles,
-        uuid,
+        totalFiles: progressData.totalFiles,
       },
       userId: authorizedUser.userId,
     });
@@ -175,7 +162,6 @@ const batchDownloadDocketEntriesHelper = async (
     .getDownloadPolicyUrl({
       applicationContext,
       key: zipName,
-      urlTtl: 60 * 60 * 2,
       useTempBucket: true,
     });
 
@@ -183,12 +169,8 @@ const batchDownloadDocketEntriesHelper = async (
     applicationContext,
     clientConnectionId,
     message: {
-      action: 'docket_entries_batch_download_ready',
-      caseFolder,
-      index: batchIndex,
-      totalNumberOfBatches,
+      action: 'batch_download_ready',
       url,
-      uuid,
     },
     userId: authorizedUser.userId,
   });
