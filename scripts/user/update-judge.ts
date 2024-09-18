@@ -26,12 +26,12 @@ import { isEmpty } from 'lodash';
  * This script will update the judge user in a deployed environment.
  * It updates both the Cognito record (if necessary) and the associated Dynamo record.
  * Required parameters: the current email of the judge to update
- * Optional parameters (although at least one required): --judgeFullName, --judgeTitle, --email, --phone, --isSeniorJudge
- * There is some initial logic for updating --name, but testing has revealed more that needs donem so it is not yet supported.
+ * Optional parameters (although at least one required): --judgeTitle, --email, --phone, --isSeniorJudge
+ * There is some initial logic for updating --name, but testing has revealed more that needs done so it is not yet supported.
  *
  *  Example usage:
  *
- * $ npx ts-node --transpile-only update-judge.ts judge.someone.ustaxcourt.gov --judgeTitle Judge --email judge.way@ustaxcourt.gov --phone "(123) 123-1234" --isSeniorJudge true
+ * $ npx ts-node --transpile-only update-judge.ts judge.someone@ustaxcourt.gov --judgeTitle Judge --email judge.way@ustaxcourt.gov --phone "(123) 123-1234" --isSeniorJudge true
  *
  * Note that this script SHOULD be temporary: it is meant as a slight improvement from the current ill-defined process.
  * Please extract into application logic!
@@ -49,7 +49,7 @@ const getArgValue = (param: string): string => {
 };
 
 const validateUpdates = ({ updates }: { updates: Record<string, string> }) => {
-  if (updates.name) {
+  if (updates.name || updates.judgeFullName) {
     // There is logic in place to update the judge and chambers records.
     // However, we need to update messages, cases, etc. to use the new name as well.
     throw new Error('Updating the judge name is currently not supported.');
