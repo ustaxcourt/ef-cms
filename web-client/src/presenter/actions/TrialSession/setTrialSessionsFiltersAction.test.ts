@@ -9,7 +9,7 @@ describe('setTrialSessionsFiltersAction', () => {
       },
     });
 
-    expect(result.state.trialSessionsPage.filters.trialLocation).toEqual(
+    expect(result.state.trialSessionsPage.filters.trialLocations).toEqual(
       'Baton Rouge, Louisiana',
     );
   });

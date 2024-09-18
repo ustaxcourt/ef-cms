@@ -24,8 +24,7 @@ export const trialSessionsHelper = (
   showNoticeIssued: boolean;
   showSessionStatus: boolean;
   showUnassignedJudgeFilter: boolean;
-  trialSessionJudges: RawUser[];
-  trialSessionJudgeOptions: InputOption[];
+  trialSessionJudgeOptions: InputOption<{ name: string; userId: string }>[];
   trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
   sessionTypeOptions: InputOption[];
   searchableTrialLocationOptions: InputOption[];
@@ -40,7 +39,7 @@ export const trialSessionsHelper = (
     filters.currentTab === 'new' ||
     filters.sessionStatus === SESSION_STATUS_TYPES.open;
 
-  let trialSessionJudges; // 10409 TODO BUG. The judge options is not updating correctly. Showing legacy when it should not.
+  let trialSessionJudges: { name: string; userId: string }[]; // 10409 TODO BUG. The judge options is not updating correctly. Showing legacy when it should not.
   if (showCurrentJudgesOnly) {
     trialSessionJudges = get(state.judges);
     console.log('current length: ', trialSessionJudges.length);
@@ -54,10 +53,10 @@ export const trialSessionsHelper = (
     value: sessionType,
   }));
 
-  const trialSessionJudgeOptions: InputOption[] = trialSessionJudges.map(
+  const trialSessionJudgeOptions = trialSessionJudges.map(
     trialSessionJudge => ({
       label: trialSessionJudge.name,
-      value: trialSessionJudge.userId,
+      value: { name: trialSessionJudge.name, userId: trialSessionJudge.userId },
     }),
   );
   const trialCities = sortBy(TRIAL_CITIES.ALL, ['state', 'city']);
@@ -93,10 +92,13 @@ export const trialSessionsHelper = (
       return trialSession.isCalendared === isCalendaredFilter;
     })
     .filter(trialSession => {
-      if (filters.judgeIds.length === 0) return true;
-      const trialSessionHasJudge = filters.judgeIds.some(judgeIdFilter => {
-        if (judgeIdFilter === 'unassigned') return !trialSession.judge?.userId;
-        return judgeIdFilter === trialSession.judge?.userId;
+      const selectedJudges = Object.values(filters.judges);
+      if (selectedJudges.length === 0) return true;
+      const trialSessionHasJudge = selectedJudges.some(judgeFilter => {
+        if (judgeFilter.userId === 'unassigned') {
+          return !trialSession.judge?.userId;
+        }
+        return judgeFilter.userId === trialSession.judge?.userId;
       });
 
       return trialSessionHasJudge;
@@ -115,8 +117,8 @@ export const trialSessionsHelper = (
       return filters.sessionType === trialSession.sessionType;
     })
     .filter(trialSession => {
-      if (filters.trialLocation === 'All') return true;
-      return filters.trialLocation === trialSession.trialLocation;
+      if (Object.values(filters.trialLocations).length === 0) return true;
+      return !!filters.trialLocations[trialSession.trialLocation || ''];
     })
     .sort((sessionA, sessionB) => {
       return sessionA.startDate.localeCompare(sessionB.startDate);
@@ -136,7 +138,6 @@ export const trialSessionsHelper = (
     showUnassignedJudgeFilter: filters.currentTab === 'new',
     trialCitiesByState: states,
     trialSessionJudgeOptions,
-    trialSessionJudges,
     trialSessionRows,
   };
 };
