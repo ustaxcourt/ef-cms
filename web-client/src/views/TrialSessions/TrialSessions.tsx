@@ -2,6 +2,7 @@ import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
+import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 import {
   SESSION_STATUS_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -281,44 +282,85 @@ const TrialSessionFilters = connect(
             />
           </div>
           <div className="grid-col">
-            <label className="usa-label" htmlFor="location-filter">
-              Location <span className="optional-light-text">(optional)</span>
-            </label>
-            <SelectSearch
-              id="location-filter"
-              name="location"
-              options={trialSessionsHelper.trialCitiesByState}
-              placeholder="- Select one or more -"
-              searchableOptions={
-                trialSessionsHelper.searchableTrialLocationOptions
-              }
-              value="Select one or more"
-              onChange={inputValue => {
-                console.log('location', inputValue);
-              }}
-            />
-          </div>
-          <div className="grid-col">
-            <label className="usa-label" htmlFor="judge-filter">
-              Judge <span className="optional-light-text">(optional)</span>
-            </label>
-            <SelectSearch
-              id="judges"
-              name="judges"
-              options={trialSessionsHelper.trialSessionJudgeOptions}
-              placeholder="- Select one or more -"
-              value="Select one or more"
-              onChange={inputValue => {
-                if (inputValue) {
+            <div>
+              <label className="usa-label" htmlFor="location-filter">
+                Location <span className="optional-light-text">(optional)</span>
+              </label>
+              <SelectSearch
+                id="location-filter"
+                name="location"
+                options={trialSessionsHelper.trialCitiesByState}
+                placeholder="- Select one or more -"
+                searchableOptions={
+                  trialSessionsHelper.searchableTrialLocationOptions
+                }
+                value="Select one or more"
+                onChange={location => {
                   setTrialSessionsFiltersSequence({
-                    judgeIds: {
+                    trialLocations: {
                       action: 'add',
-                      judgeId: inputValue.value,
+                      trialLocation: location.value,
                     },
                   });
-                }
-              }}
-            />
+                }}
+              />
+            </div>
+            <div>
+              {Object.values(trialSessionsPage.filters.trialLocations).map(
+                location => (
+                  <PillButton
+                    key={location}
+                    text={location}
+                    onRemove={() => {
+                      setTrialSessionsFiltersSequence({
+                        trialLocations: {
+                          action: 'remove',
+                          trialLocation: location,
+                        },
+                      });
+                    }}
+                  />
+                ),
+              )}
+            </div>
+          </div>
+          <div className="grid-col">
+            <div>
+              <label className="usa-label" htmlFor="judge-filter">
+                Judge <span className="optional-light-text">(optional)</span>
+              </label>
+              <SelectSearch
+                id="judges"
+                name="judges"
+                options={trialSessionsHelper.trialSessionJudgeOptions}
+                placeholder="- Select one or more -"
+                value="Select one or more"
+                onChange={inputValue => {
+                  setTrialSessionsFiltersSequence({
+                    judges: {
+                      action: 'add',
+                      judge: inputValue.value,
+                    },
+                  });
+                }}
+              />
+            </div>
+            <div>
+              {Object.values(trialSessionsPage.filters.judges).map(judge => (
+                <PillButton
+                  key={judge.userId}
+                  text={judge.name}
+                  onRemove={() => {
+                    setTrialSessionsFiltersSequence({
+                      judges: {
+                        action: 'remove',
+                        judge,
+                      },
+                    });
+                  }}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </>
