@@ -2199,6 +2199,12 @@ button.change-scanner-button {
   color: $color-white;
   font-weight: $font-semibold;
   text-align: center;
+
+  button {
+    border: none;
+    background: none;
+    color: white;
+  }
 }
 
 .cursor-pointer {
@@ -2388,4 +2394,17 @@ button.change-scanner-button {
 
 .no-wrap-white-space {
   white-space: normal;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.petitioner-welcome-name {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.stepper-line-height {
+  line-height: 18px;
 }

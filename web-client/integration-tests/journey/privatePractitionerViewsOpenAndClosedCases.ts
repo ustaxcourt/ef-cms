@@ -3,7 +3,7 @@ export const privatePractitionerViewsOpenAndClosedCases = cerebralTest => {
     await cerebralTest.runSequence('gotoDashboardSequence');
 
     expect(cerebralTest.getState('currentPage')).toEqual(
-      'DashboardPractitioner',
+      'DashboardExternalUser',
     );
     expect(cerebralTest.getState('openCases').length).toBeGreaterThan(0);
     expect(cerebralTest.getState('closedCases').length).toBeGreaterThan(0);

@@ -99,6 +99,7 @@ export const ReportsMenu = connect(
             </li>
             <li className="usa-nav__submenu-item">
               <a
+                data-testid="blocked-cases-report"
                 href="/reports/blocked-cases"
                 id="all-blocked-cases"
                 onClick={() => {

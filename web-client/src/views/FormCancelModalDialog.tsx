@@ -1,18 +1,20 @@
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const FormCancelModalDialog = connect(
-  {
-    cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences[props.onCancelSequence],
-    useRunConfirmSequence: props.useRunConfirmSequence,
-  },
+type Props = {
+  onCancelSequence: Function;
+  useRunConfirmSequence?: boolean;
+};
+
+const deps = { cancelSequence: sequences.dismissModalSequence };
+
+export const FormCancelModalDialog = connect<Props, typeof deps>(
+  deps,
   function FormCancelModalDialog({
     cancelSequence,
-    confirmSequence,
+    onCancelSequence,
     useRunConfirmSequence,
   }) {
     return (
@@ -20,7 +22,7 @@ export const FormCancelModalDialog = connect(
         cancelLabel="No, Take Me Back"
         cancelSequence={cancelSequence}
         confirmLabel="Yes, Cancel"
-        confirmSequence={confirmSequence}
+        confirmSequence={onCancelSequence}
         message="If you cancel, your form selections will be lost."
         title="Are You Sure You Want to Cancel?"
         useRunConfirmSequence={useRunConfirmSequence}

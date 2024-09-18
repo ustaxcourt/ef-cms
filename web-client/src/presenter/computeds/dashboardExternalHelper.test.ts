@@ -37,30 +37,6 @@ describe('dashboardExternalHelper', () => {
     expect(result.showPetitionWelcomePage).toEqual(false);
   });
 
-  it('should keep the showFileACase flag as false when the user role is petitioner', () => {
-    const result = runCompute(dashboardExternalHelper, {
-      state: {
-        closedCases: [{ something: true }],
-        openCases: [{ something: true }],
-        user: petitionerUser,
-      },
-    });
-
-    expect(result.showFileACase).toEqual(false);
-  });
-
-  it('should set the showFileACase flag as true when the user role is a private practitioner', () => {
-    const result = runCompute(dashboardExternalHelper, {
-      state: {
-        closedCases: [{ something: true }],
-        openCases: [{ something: true }],
-        user: privatePractitionerUser,
-      },
-    });
-
-    expect(result.showFileACase).toEqual(true);
-  });
-
   it('should keep the showStartButton flag as false when the user role is irs practitioner', () => {
     const result = runCompute(dashboardExternalHelper, {
       state: {
@@ -115,5 +91,35 @@ describe('dashboardExternalHelper', () => {
     });
 
     expect(result.showFilingFee).toEqual(false);
+  });
+
+  it('should set the return welcome message for private practitioner', () => {
+    const result = runCompute(dashboardExternalHelper, {
+      state: {
+        user: privatePractitionerUser,
+      },
+    });
+
+    expect(result.welcomeMessageTitle).toEqual(
+      'Do you need access to an existing case?',
+    );
+    expect(result.welcomeMessage).toEqual(
+      'Search for the case docket number to file the appropriate document.',
+    );
+  });
+
+  it('should set the return welcome message for petitioner', () => {
+    const result = runCompute(dashboardExternalHelper, {
+      state: {
+        user: petitionerUser,
+      },
+    });
+
+    expect(result.welcomeMessageTitle).toEqual(
+      'Have you already filed a petition by mail or do you want electronic access to your existing case?',
+    );
+    expect(result.welcomeMessage).toContain(
+      'Do not start a new case. Email <a href="mailto:dawson.support@ustaxcourt.gov"> dawson.support@ustaxcourt.gov </a> with your case\'s docket number (e.g. 12345-67) to get access to your existing case.',
+    );
   });
 });

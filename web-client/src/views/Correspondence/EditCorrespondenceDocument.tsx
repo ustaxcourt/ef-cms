@@ -4,7 +4,7 @@ import { DocumentDisplayIframe } from '../DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { Hint } from '../../ustc-ui/Hint/Hint';
+import { InfoNotificationComponent } from '../InfoNotification';
 import { ScanBatchPreviewer } from '../ScanBatchPreviewer';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -14,6 +14,8 @@ import React from 'react';
 
 export const EditCorrespondenceDocument = connect(
   {
+    cancelAndNavigateToCorrespondenceSequence:
+      sequences.cancelAndNavigateToCorrespondenceSequence,
     clearExistingDocumentSequence: sequences.clearExistingDocumentSequence,
     editCorrespondenceDocumentSequence:
       sequences.editCorrespondenceDocumentSequence,
@@ -28,6 +30,7 @@ export const EditCorrespondenceDocument = connect(
     validationErrors: state.validationErrors,
   },
   function EditCorrespondenceDocument({
+    cancelAndNavigateToCorrespondenceSequence,
     clearExistingDocumentSequence,
     editCorrespondenceDocumentSequence,
     form,
@@ -43,14 +46,22 @@ export const EditCorrespondenceDocument = connect(
       <>
         <CaseDetailHeader hideActionButtons />
         {showModal === 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="cancelAndNavigateToCorrespondenceSequence" />
+          <FormCancelModalDialog
+            onCancelSequence={cancelAndNavigateToCorrespondenceSequence}
+          />
         )}
 
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
           {screenMetadata.documentReset && (
-            <Hint>When you submit it will overwrite the previous document</Hint>
+            <InfoNotificationComponent
+              alertInfo={{
+                message: 'Saving will replace the previous document.',
+              }}
+              dismissible={false}
+              scrollToTop={false}
+            />
           )}
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
@@ -90,6 +101,27 @@ export const EditCorrespondenceDocument = connect(
                     />
                   </FormGroup>
                 </div>
+                <div className="grid-row grid-gap margin-top-4">
+                  <div className="grid-col-8">
+                    <Button
+                      onClick={() => {
+                        editCorrespondenceDocumentSequence({
+                          tab: 'correspondence',
+                        });
+                      }}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      link
+                      onClick={() => {
+                        formCancelToggleCancelSequence();
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
               </div>
 
               <div className="desktop:grid-col-7 tablet:grid-row">
@@ -126,28 +158,6 @@ export const EditCorrespondenceDocument = connect(
                     <DocumentDisplayIframe />
                   </>
                 )}
-              </div>
-            </div>
-
-            <div className="grid-row grid-gap margin-top-4">
-              <div className="grid-col-8">
-                <Button
-                  onClick={() => {
-                    editCorrespondenceDocumentSequence({
-                      tab: 'correspondence',
-                    });
-                  }}
-                >
-                  Save
-                </Button>
-                <Button
-                  link
-                  onClick={() => {
-                    formCancelToggleCancelSequence();
-                  }}
-                >
-                  Cancel
-                </Button>
               </div>
             </div>
           </div>

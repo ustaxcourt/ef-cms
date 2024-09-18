@@ -216,7 +216,7 @@ describe('Admissions Clerk Grants E-Access', () => {
           getCypressEnv().defaultAccountPass,
         );
         cy.get('[data-testid="change-password-button"]').click();
-        cy.get('[data-testid="open-cases-count"]');
+        cy.get('[data-testid="petition-welcome-text"]');
         createAndServePaperPetition().then(({ docketNumber }) => {
           cy.login('admissionsclerk1');
           cy.get('[data-testid="messages-banner"]');
