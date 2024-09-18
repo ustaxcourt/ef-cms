@@ -7,7 +7,7 @@ const lambdaClientMock = jest
   .spyOn(LambdaClient.prototype, 'send')
   .mockImplementation(() => {
     return {
-      Payload: Buffer.from(JSON.stringify({ key: documentKey })),
+      Payload: Buffer.from(JSON.stringify({ tempId: documentKey })),
     };
   });
 
@@ -45,5 +45,33 @@ describe('generatePdfFromHtmlInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getDocument,
     ).toHaveBeenCalled();
+  });
+
+  it('should throw an error when the pdf generator lambda does not generate a file id', async () => {
+    applicationContext.environment.stage = 'prod';
+    applicationContext.environment.currentColor = 'blue';
+    jest.spyOn(LambdaClient.prototype, 'send').mockImplementation(() => {
+      return {
+        Payload: Buffer.from(JSON.stringify({})),
+      };
+    });
+
+    await expect(
+      generatePdfFromHtmlInteractor(applicationContext, {
+        contentHtml: '<p>this is content</p>',
+        displayHeaderFooter: false,
+        docketNumber: '102-24',
+        footerHtml: '<div>this is a footer</div>',
+        headerHtml: '<span>this is a header</span>',
+        overwriteFooter: false,
+      }),
+    ).rejects.toThrow(
+      `Unable to generate pdf. Check pdf_generator_${applicationContext.environment.stage}_${applicationContext.environment.currentColor} lambda for errors`,
+    );
+
+    expect(lambdaClientMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).not.toHaveBeenCalled();
   });
 });
