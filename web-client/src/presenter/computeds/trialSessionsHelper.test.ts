@@ -453,7 +453,7 @@ describe('trialSessionsHelper', () => {
       it('should show trial sessions in honolulu when trial sessions when trial location filter is honolulu', () => {
         trialSession1.trialLocation = 'Honolulu, Hawaii';
         trialSession2.trialLocation = 'Jacksonville, Florida';
-        trialSessionsPageState.filters.trialLocation = 'Honolulu, Hawaii';
+        trialSessionsPageState.filters.trialLocations = 'Honolulu, Hawaii';
         trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
 
         const result = runCompute(trialSessionsHelper, {

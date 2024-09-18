@@ -3,11 +3,17 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 export type SetTrialSessionsFilters = Partial<{
   currentTab: 'calendared' | 'new';
-  judgeIds: { action: 'add' | 'remove'; judgeId: string };
+  judges: {
+    action: 'add' | 'remove';
+    judge: { name: string; userId: string };
+  };
   proceedingType: TrialSessionProceedingType | 'All';
   sessionStatus: string;
   sessionType: string;
-  trialLocation: string;
+  trialLocations: {
+    action: 'add' | 'remove';
+    trialLocation: string;
+  };
 }>;
 
 export const setTrialSessionsFiltersAction = ({
@@ -21,14 +27,14 @@ export const setTrialSessionsFiltersAction = ({
     store.set(state.trialSessionsPage.filters.currentTab, props.currentTab);
   }
 
-  if (props.judgeIds) {
-    const newJudgeIds =
-      props.judgeIds.action === 'add'
-        ? currentFilters.judgeIds.concat([props.judgeIds.judgeId])
-        : currentFilters.judgeIds.filter(
-            (id: string) => id !== props.judgeIds!.judgeId,
-          );
-    store.set(state.trialSessionsPage.filters.judgeIds, newJudgeIds);
+  if (props.judges) {
+    if (props.judges.action === 'add') {
+      currentFilters.judges[props.judges.judge.userId] = props.judges.judge;
+    } else {
+      delete currentFilters.judges[props.judges.judge.userId];
+    }
+
+    store.set(state.trialSessionsPage.filters.judges, currentFilters.judges);
   }
 
   if (props.proceedingType) {
@@ -49,10 +55,17 @@ export const setTrialSessionsFiltersAction = ({
     store.set(state.trialSessionsPage.filters.sessionType, props.sessionType);
   }
   // Update for Trial Sessions Page
-  if (props.trialLocation) {
+  if (props.trialLocations) {
+    const { action, trialLocation } = props.trialLocations;
+    if (action === 'add') {
+      currentFilters.trialLocations[trialLocation] = trialLocation;
+    } else {
+      delete currentFilters.trialLocations[trialLocation];
+    }
+
     store.set(
-      state.trialSessionsPage.filters.trialLocation,
-      props.trialLocation,
+      state.trialSessionsPage.filters.trialLocations,
+      currentFilters.trialLocations,
     );
   }
 };
