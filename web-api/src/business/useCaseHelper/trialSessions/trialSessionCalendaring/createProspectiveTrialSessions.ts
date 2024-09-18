@@ -83,6 +83,7 @@ export const createProspectiveTrialSessions = ({
       scheduleSmallCases({
         calendaringConfig,
         city,
+        cityWasNotVisitedInLastTwoTerms,
         potentialTrialLocations,
         smallCaseSliceSize,
         smallCasesByCity,
@@ -90,20 +91,12 @@ export const createProspectiveTrialSessions = ({
       scheduleRegularCases({
         calendaringConfig,
         city,
+        cityWasNotVisitedInLastTwoTerms,
         potentialTrialLocations,
         regularCaseSliceSize,
         regularCasesByCity,
       });
     }
-
-    // TODO (10275): Handle cities that have not been visited in the past two terms
-
-    // Are there any cities that have not been visited in the last two terms
-    // that have not yet had any sessions scheduled? For any locations that
-    // meet this criterion, assemble all cases associated with that location in
-    // a session, disregarding the minimum quantity rule. The type of each
-    // session will depend on the sort of cases for that city: i.e., could be a
-    // regular, small, or hybrid session depending on the cases.
 
     // Handle Hybrid Sessions
     const remainingRegularCases = regularCasesByCity[city] || [];
@@ -131,6 +124,43 @@ export const createProspectiveTrialSessions = ({
         potentialTrialLocations,
         sessionType: SESSION_TYPES.hybrid,
       });
+    }
+
+    // TODO (10275): Handle cities that have not been visited in the past two terms
+
+    // Are there any cities that have not been visited in the last two terms
+    // that have not yet had any sessions scheduled? For any locations that
+    // meet this criterion, assemble all cases associated with that location in
+    // a session, disregarding the minimum quantity rule. The type of each
+    // session will depend on the sort of cases for that city: i.e., could be a
+    // regular, small, or hybrid session depending on the cases.
+
+    // if current city is low volume city and has not yet been scheduled, we know it did not meet any minimums above.
+    // So, add one session, determining the type based on the procedure type of the associated cases.
+    if (
+      cityWasNotVisitedInLastTwoTerms &&
+      potentialTrialLocations[city].length === 0
+    ) {
+      console.log('regular cases for low volume', regularCasesByCity[city]);
+      console.log('small cases for low volume', smallCasesByCity[city]);
+      const containsRegularCase = regularCasesByCity[city]?.length > 0;
+      const containsSmallCase = smallCasesByCity[city]?.length > 0;
+      const lowVolumeSessionType =
+        containsRegularCase && containsSmallCase
+          ? SESSION_TYPES.hybrid
+          : containsRegularCase
+            ? SESSION_TYPES.regular
+            : SESSION_TYPES.small;
+
+      addProspectiveTrialSession({
+        city,
+        cityWasNotVisitedInLastTwoTerms,
+        potentialTrialLocations,
+        sessionType: lowVolumeSessionType,
+      });
+
+      regularCasesByCity[city] = [];
+      smallCasesByCity[city] = [];
     }
   }
 
