@@ -254,7 +254,6 @@ const TrialSessionFilters = connect(
             startName="trialSessionEndDate"
             startPickerCls="padding-right-2"
             startValue=""
-            to={true}
             onChangeEnd={e => {
               console.log('onChangeEnd', e.target.value);
             }}
