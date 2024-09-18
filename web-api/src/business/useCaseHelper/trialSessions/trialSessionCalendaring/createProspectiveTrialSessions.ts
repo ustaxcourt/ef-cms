@@ -1,5 +1,6 @@
 import {
   PROCEDURE_TYPES_MAP,
+  REGULAR_TRIAL_CITY_STRINGS,
   SESSION_TYPES,
   TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
@@ -130,6 +131,14 @@ function getCasesByCity(cases, type) {
   return cases
     .filter(c => c.procedureType === type)
     .reduce((acc, currentCase) => {
+      if (
+        type === SESSION_TYPES.regular &&
+        !REGULAR_TRIAL_CITY_STRINGS.includes(currentCase.preferredTrialCity)
+      ) {
+        throw new Error(
+          `Case ${currentCase.docketNumber} cannot be scheduled in ${currentCase.preferredTrialCity} because the session type does not match the trial city`,
+        );
+      }
       if (!acc[currentCase.preferredTrialCity!]) {
         acc[currentCase.preferredTrialCity!] = [];
       }

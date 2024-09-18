@@ -18,6 +18,8 @@ const defaultMockCalendaringConfig = {
   smallCaseMaxQuantity: 13,
   smallCaseMinimumQuantity: 4,
 };
+const mockRegularCityString = TRIAL_CITY_STRINGS[TRIAL_CITY_STRINGS.length - 1];
+const mockSmallCityString = TRIAL_CITY_STRINGS[0];
 
 describe('createProspectiveTrialSessions', () => {
   it(
@@ -34,7 +36,7 @@ describe('createProspectiveTrialSessions', () => {
         mockCases.push({
           ...MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING,
           docketNumber: `10${i}-24`,
-          preferredTrialCity: TRIAL_CITY_STRINGS[0],
+          preferredTrialCity: mockRegularCityString,
           procedureType: PROCEDURE_TYPES_MAP.regular,
         });
       }
@@ -44,7 +46,7 @@ describe('createProspectiveTrialSessions', () => {
         cases: mockCases,
       });
 
-      expect(result[TRIAL_CITY_STRINGS[0]].length).toEqual(
+      expect(result[mockRegularCityString].length).toEqual(
         defaultMockCalendaringConfig.maxSessionsPerLocation,
       );
     },
@@ -66,7 +68,7 @@ describe('createProspectiveTrialSessions', () => {
         mockCases.push({
           ...MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING,
           docketNumber: `10${i}-24`,
-          preferredTrialCity: TRIAL_CITY_STRINGS[0],
+          preferredTrialCity: mockRegularCityString,
           procedureType: PROCEDURE_TYPES_MAP.regular,
         });
       }
@@ -75,7 +77,7 @@ describe('createProspectiveTrialSessions', () => {
         mockCases.push({
           ...MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING,
           docketNumber: `10${i}-23`,
-          preferredTrialCity: TRIAL_CITY_STRINGS[0],
+          preferredTrialCity: mockRegularCityString,
           procedureType: PROCEDURE_TYPES_MAP.small,
         });
       }
@@ -85,13 +87,13 @@ describe('createProspectiveTrialSessions', () => {
         cases: mockCases,
       });
 
-      expect(result[TRIAL_CITY_STRINGS[0]][0].sessionType).toEqual(
+      expect(result[mockRegularCityString][0].sessionType).toEqual(
         SESSION_TYPES.small,
       );
-      expect(result[TRIAL_CITY_STRINGS[0]][1].sessionType).toEqual(
+      expect(result[mockRegularCityString][1].sessionType).toEqual(
         SESSION_TYPES.regular,
       );
-      expect(result[TRIAL_CITY_STRINGS[0]][2].sessionType).toEqual(
+      expect(result[mockRegularCityString][2].sessionType).toEqual(
         SESSION_TYPES.hybrid,
       );
     },
@@ -117,18 +119,12 @@ describe('createProspectiveTrialSessions', () => {
       const totalNumberOfRegularMockCases =
         mockCalendaringConfig.regularCaseMaxQuantity + 39;
 
-      console.log(
-        'totalNumberOfRegularMockCases',
-        totalNumberOfRegularMockCases,
-      );
-      console.log('totalNumberOfSmallMockCases', totalNumberOfSmallMockCases);
-
       const mockCases: RawCase[] = [];
       for (let i = 0; i < totalNumberOfRegularMockCases; ++i) {
         mockCases.push({
           ...MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING,
           docketNumber: `10${i}-24`,
-          preferredTrialCity: TRIAL_CITY_STRINGS[0],
+          preferredTrialCity: mockRegularCityString,
           procedureType: PROCEDURE_TYPES_MAP.regular,
         });
       }
@@ -137,7 +133,7 @@ describe('createProspectiveTrialSessions', () => {
         mockCases.push({
           ...MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING,
           docketNumber: `10${i}-23`,
-          preferredTrialCity: TRIAL_CITY_STRINGS[0],
+          preferredTrialCity: mockRegularCityString,
           procedureType: PROCEDURE_TYPES_MAP.small,
         });
       }
@@ -147,17 +143,34 @@ describe('createProspectiveTrialSessions', () => {
         cases: mockCases,
       });
 
-      console.log('results', result);
-
-      expect(result[TRIAL_CITY_STRINGS[0]][0].sessionType).toEqual(
+      expect(result[mockRegularCityString][0].sessionType).toEqual(
         SESSION_TYPES.regular,
       );
-      expect(result[TRIAL_CITY_STRINGS[0]][1].sessionType).toEqual(
+      expect(result[mockRegularCityString][1].sessionType).toEqual(
         SESSION_TYPES.small,
       );
-      expect(result[TRIAL_CITY_STRINGS[0]][2].sessionType).toEqual(
+      expect(result[mockRegularCityString][2].sessionType).toEqual(
         SESSION_TYPES.hybrid,
       );
     },
   );
+
+  it('should throw an error when attempting to schedule a regular case at a small city', () => {
+    const mockCases: RawCase[] = [];
+
+    mockCases.push({
+      ...MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING,
+      docketNumber: '101-24',
+      // This is a small-only city
+      preferredTrialCity: mockSmallCityString,
+      procedureType: PROCEDURE_TYPES_MAP.regular,
+    });
+
+    expect(() => {
+      createProspectiveTrialSessions({
+        calendaringConfig: defaultMockCalendaringConfig,
+        cases: mockCases,
+      });
+    }).toThrow(Error);
+  });
 });
