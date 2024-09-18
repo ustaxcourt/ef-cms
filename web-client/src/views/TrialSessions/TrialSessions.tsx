@@ -100,6 +100,7 @@ const TrialSessionFilters = connect(
     trialSessionsHelper,
     trialSessionsPage,
   }) {
+    console.log(trialSessionsPage.filters);
     return (
       <>
         <div className="grid-row gap-3">
@@ -310,9 +311,9 @@ const TrialSessionFilters = connect(
               onChange={inputValue => {
                 if (inputValue) {
                   setTrialSessionsFiltersSequence({
-                    judges: {
+                    judgeIds: {
                       action: 'add',
-                      judge: inputValue.value,
+                      judgeId: inputValue.value,
                     },
                   });
                 }
