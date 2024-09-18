@@ -243,11 +243,18 @@ const TrialSessionFilters = connect(
             endValue=""
             formGroupCls="margin-bottom-0"
             maxDate={''}
-            rangePickerCls={'grid-row '}
+            rangePickerCls={'display-flex flex-align-end'}
             startDateErrorText={''}
+            startLabel={
+              <span>
+                Trial Start Date range{' '}
+                <span className="optional-light-text">(optional)</span>
+              </span>
+            }
             startName="trialSessionEndDate"
             startPickerCls="padding-right-2"
             startValue=""
+            to={true}
             onChangeEnd={e => {
               console.log('onChangeEnd', e.target.value);
             }}
