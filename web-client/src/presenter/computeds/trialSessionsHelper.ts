@@ -113,8 +113,8 @@ export const trialSessionsHelper = (
       return filters.sessionStatus === trialSession.sessionStatus;
     })
     .filter(trialSession => {
-      if (filters.sessionType === 'All') return true;
-      return filters.sessionType === trialSession.sessionType;
+      if (Object.values(filters.sessionTypes).length === 0) return true;
+      return !!filters.sessionTypes[trialSession.sessionType];
     })
     .filter(trialSession => {
       if (Object.values(filters.trialLocations).length === 0) return true;

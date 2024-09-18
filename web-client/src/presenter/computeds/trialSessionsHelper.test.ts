@@ -432,7 +432,7 @@ describe('trialSessionsHelper', () => {
       it('should show regular trial sessions when session type filter is regular', () => {
         trialSession1.sessionType = SESSION_TYPES.regular;
         trialSession2.sessionType = SESSION_TYPES.hybridSmall;
-        trialSessionsPageState.filters.sessionType = SESSION_TYPES.regular;
+        trialSessionsPageState.filters.sessionTypes = SESSION_TYPES.regular;
         trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
 
         const result = runCompute(trialSessionsHelper, {
