@@ -1,3 +1,4 @@
+import { SESSION_TERMS_BY_MONTH } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const computeTermAndUpdateState = (
@@ -12,20 +13,13 @@ export const computeTermAndUpdateState = (
 
     const monthAsNumber = +date.month;
 
-    const termsByMonth = {
-      fall: [9, 10, 11, 12],
-      spring: [4, 5, 6],
-      summer: [7, 8],
-      winter: [1, 2, 3],
-    };
-
-    if (termsByMonth.winter.includes(monthAsNumber)) {
+    if (SESSION_TERMS_BY_MONTH.winter.includes(monthAsNumber)) {
       term = 'Winter';
-    } else if (termsByMonth.spring.includes(monthAsNumber)) {
+    } else if (SESSION_TERMS_BY_MONTH.spring.includes(monthAsNumber)) {
       term = 'Spring';
-    } else if (termsByMonth.summer.includes(monthAsNumber)) {
+    } else if (SESSION_TERMS_BY_MONTH.summer.includes(monthAsNumber)) {
       term = 'Summer';
-    } else if (termsByMonth.fall.includes(monthAsNumber)) {
+    } else if (SESSION_TERMS_BY_MONTH.fall.includes(monthAsNumber)) {
       term = 'Fall';
     }
 

@@ -1,11 +1,14 @@
 import {
   SESSION_STATUS_TYPES,
+  SESSION_TERMS_BY_MONTH,
   SESSION_TYPES,
+  TRIAL_CITY_STRINGS,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { assignSessionsToWeeks } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
+import { getUtilities } from '@web-api/getUtilities';
 
 // Maximum of 6 sessions per week overall.
 const MAX_SESSIONS_PER_WEEK = 6;
@@ -68,6 +71,9 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     .getPersistenceGateway()
     .getTrialSessions({ applicationContext });
 
+  // Note (10275): storing trial session data differently would make for a more
+  // efficient process of determining which sessions are special, calendared,
+  // and not closed.
   const specialSessions = sessions.filter(session => {
     return (
       session.sessionType === SESSION_TYPES.special &&
@@ -75,6 +81,22 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
       session.sessionStatus !== SESSION_STATUS_TYPES.closed
     );
   });
+
+  // Note (10275): storing trial session data differently would make for a more
+  // efficient process of determining which cities were not visited within the
+  // past two terms.
+  const previousTwoTerms = getPreviousTwoTerms(startDate);
+
+  const citiesFromLastTwoTerms = sessions.map(session => {
+    const termString = `${session.term}, ${session.termYear}`;
+    if (previousTwoTerms.includes(termString)) {
+      return session.trialLocation;
+    }
+  });
+
+  const citiesThatHaveNotBeenVisitedInTwoTerms = TRIAL_CITY_STRINGS.filter(
+    city => !citiesFromLastTwoTerms.includes(city),
+  );
 
   const prospectiveSessionsByCity = createProspectiveTrialSessions({
     calendaringConfig,
@@ -91,3 +113,34 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   return scheduledTrialSessions;
 };
+
+const getPreviousTwoTerms = (startDate: string) => {
+  //TODO: refactor this, maybe?
+
+  const deconstructedDate = getUtilities().deconstructDate(startDate);
+
+  const currentTerm = getTermByMonth(deconstructedDate.month);
+
+  const terms = [
+    `fall ${+deconstructedDate.year - 1}`,
+    `winter ${deconstructedDate.year}`,
+    `spring ${deconstructedDate.year}`,
+    `fall ${deconstructedDate.year}`,
+  ];
+  const termsReversed = terms.reverse();
+  const termI = terms.findIndex(
+    t => `${currentTerm} ${deconstructedDate.year}` === t,
+  );
+  const [term1, year1] = termsReversed[termI + 1].split(' ');
+  const [term2, year2] = termsReversed[termI + 2].split(' ');
+
+  return [`${term1}, ${year1}`, `${term2}, ${year2}`];
+};
+
+function getTermByMonth(currentMonth: string) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const term = Object.entries(SESSION_TERMS_BY_MONTH).find(([_, months]) =>
+    months.includes(parseInt(currentMonth)),
+  );
+  return term ? term[0] : 'Unknown term';
+}
