@@ -3,8 +3,30 @@ import {
   PDF_CORRUPTED_ERROR_MESSAGE,
   PDF_PASSWORD_PROTECTED_ERROR_MESSAGE,
   validatePdf,
+  validatePdfHeader,
 } from './pdfValidation';
 import { applicationContext } from '@web-client/applicationContext';
+
+const VALID_PDF_HEADER_BYTES = [0x25, 0x50, 0x44, 0x46, 0x2d]; // %PDF-
+const INVALID_PDF_HEADER_BYTES = [0x50, 0x44, 0x46, 0x25, 0x2d]; // PFD%-
+
+describe('validatePdfHeader', () => {
+  it('should return true for valid PDF header', () => {
+    const validPdfData = new Uint8Array(VALID_PDF_HEADER_BYTES);
+
+    const result = validatePdfHeader(validPdfData);
+
+    expect(result).toBe(true);
+  });
+
+  it('should return false for invalid PDF header', () => {
+    const invalidPdfData = new Uint8Array(INVALID_PDF_HEADER_BYTES);
+
+    const result = validatePdfHeader(invalidPdfData);
+
+    expect(result).toBe(false);
+  });
+});
 
 describe('validatePdf', () => {
   let mockFile: File;
@@ -16,7 +38,7 @@ describe('validatePdf', () => {
       onerror: null,
       onload: null,
       readAsArrayBuffer: jest.fn(),
-      result: new ArrayBuffer(8),
+      result: VALID_PDF_HEADER_BYTES,
     };
 
     (global as any).FileReader = jest.fn(() => mockFileReader);
@@ -63,6 +85,23 @@ describe('validatePdf', () => {
     });
   });
 
+  it('should return error message for PDF with invalid header', async () => {
+    const resultPromise = validatePdf({ file: mockFile });
+    mockFileReader.result = INVALID_PDF_HEADER_BYTES;
+    mockFileReader.onload();
+
+    const result = await resultPromise;
+
+    expect(result).toEqual({
+      errorInformation: {
+        errorMessageToDisplay: PDF_CORRUPTED_ERROR_MESSAGE,
+        errorMessageToLog: `${PDF_CORRUPTED_ERROR_MESSAGE} (CorruptPDFHeaderException)`,
+        errorType: ErrorTypes.CORRUPT_FILE,
+      },
+      isValid: false,
+    });
+  });
+
   it('should return error message for corrupted PDF', async () => {
     const error = new Error();
     error.name = 'InvalidPDFException';
@@ -77,6 +116,7 @@ describe('validatePdf', () => {
     expect(result).toEqual({
       errorInformation: {
         errorMessageToDisplay: PDF_CORRUPTED_ERROR_MESSAGE,
+        errorMessageToLog: `${PDF_CORRUPTED_ERROR_MESSAGE} (InvalidPDFException)`,
         errorType: ErrorTypes.CORRUPT_FILE,
       },
       isValid: false,

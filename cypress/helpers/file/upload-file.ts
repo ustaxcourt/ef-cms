@@ -15,6 +15,7 @@ export function attachSamplePdfFile(testId: string) {
 }
 
 export function attachFile({
+  encoding,
   filePath,
   selector,
   selectorToAwaitOnSuccess,
@@ -22,8 +23,9 @@ export function attachFile({
   selector: string;
   filePath: string;
   selectorToAwaitOnSuccess?: string;
+  encoding?: 'binary'; // Default to binary, which better mimics PDF data handling on the browser
 }) {
-  cy.get(selector).attachFile(filePath);
+  cy.get(selector).attachFile({ encoding, filePath });
   if (selectorToAwaitOnSuccess) {
     cy.get('[data-testid="loading-overlay"]').should('not.exist');
     cy.get(selectorToAwaitOnSuccess).should('exist');
