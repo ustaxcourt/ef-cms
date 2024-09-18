@@ -1,9 +1,11 @@
-import { SESSION_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  SESSION_STATUS_TYPES,
+  SESSION_TYPES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { assignSessionsToWeeks } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
-import { scheduleTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/scheduleTrialSessions';
 
 // Maximum of 6 sessions per week overall.
 const MAX_SESSIONS_PER_WEEK = 6;
@@ -66,9 +68,13 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     .getPersistenceGateway()
     .getTrialSessions({ applicationContext });
 
-  const specialSessions = sessions.filter(
-    session => session.sessionType === SESSION_TYPES.special,
-  );
+  const specialSessions = sessions.filter(session => {
+    return (
+      session.sessionType === SESSION_TYPES.special &&
+      session.isCalendared &&
+      session.sessionStatus !== SESSION_STATUS_TYPES.closed
+    );
+  });
 
   const prospectiveSessionsByCity = createProspectiveTrialSessions({
     calendaringConfig,
