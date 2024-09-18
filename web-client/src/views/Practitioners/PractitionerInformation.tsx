@@ -1,4 +1,6 @@
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import { OpenPractitionerCaseListPdfModal } from './OpenPractitionerCaseListPdfModal';
+import { PractitionerCaseList } from '@web-client/views/Practitioners/PractitionerCases/PractitionerCaseList';
 import { PractitionerDetails } from './PractitionerDetails';
 import { PractitionerDocumentation } from './PractitionerDocumentation';
 import { PractitionerUserHeader } from './PractitionerUserHeader';
@@ -11,17 +13,26 @@ import React from 'react';
 
 export const PractitionerInformation = connect(
   {
+    gotoPrintPractitionerCasesSequence:
+      sequences.gotoPrintPractitionerCasesSequence,
     onPractitionerInformationTabSelectSequence:
       sequences.onPractitionerInformationTabSelectSequence,
-    showDocumentationTab:
-      state.practitionerInformationHelper.showDocumentationTab,
+    practitionerDetailHelper: state.practitionerDetailHelper,
+    practitionerInformationHelper: state.practitionerInformationHelper,
     showModal: state.modal.showModal,
   },
   function PractitionerInformation({
+    gotoPrintPractitionerCasesSequence,
     onPractitionerInformationTabSelectSequence,
-    showDocumentationTab,
+    practitionerInformationHelper,
     showModal,
   }) {
+    const numOpenCases = practitionerInformationHelper.openCases?.length || 0;
+    const numClosedCases =
+      practitionerInformationHelper.closedCases?.length || 0;
+
+    console.log(practitionerInformationHelper);
+
     return (
       <React.Fragment>
         <PractitionerUserHeader />
@@ -47,14 +58,50 @@ export const PractitionerInformation = connect(
               });
             }}
           >
+            {practitionerInformationHelper.showPrintCaseListLink && (
+              <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
+                <Button
+                  link
+                  className="margin-top-1"
+                  data-testid="print-practitioner-case-list"
+                  icon="print"
+                  overrideMargin={true}
+                  onClick={() => {
+                    gotoPrintPractitionerCasesSequence({
+                      userId: practitionerInformationHelper.userId,
+                    });
+                  }}
+                >
+                  Print case list
+                </Button>
+              </div>
+            )}
             <Tab tabName="practitioner-details" title={'Details'}>
               <PractitionerDetails />
             </Tab>
-            {showDocumentationTab && (
+            {practitionerInformationHelper.showDocumentationTab && (
               <Tab tabName="practitioner-documentation" title={'Documentation'}>
                 <PractitionerDocumentation />
               </Tab>
             )}
+            <Tab
+              tabName="practitioner-open-cases"
+              title={`Open Cases (${numOpenCases})`}
+            >
+              <PractitionerCaseList
+                cases={practitionerInformationHelper.openCases}
+                showStatus={true}
+              />
+            </Tab>
+            <Tab
+              tabName="practitioner-closed-cases"
+              title={`Closed Cases (${numClosedCases})`}
+            >
+              <PractitionerCaseList
+                cases={practitionerInformationHelper.closedCases}
+                showStatus={false}
+              />
+            </Tab>
           </Tabs>
         </section>
 
