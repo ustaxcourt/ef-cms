@@ -4,8 +4,8 @@ const defaultEmailHost = 'ustaxcourt.gov';
 
 export const getChambersNameFromJudgeName = (judgeName: string) => {
   return judgeName.endsWith('s')
-    ? `${judgeName}Chambers`
-    : `${judgeName}sChambers`;
+    ? `${judgeName.toLowerCase()}Chambers`
+    : `${judgeName.toLowerCase()}sChambers`;
 };
 
 export async function promptUser(query: string): Promise<string> {
