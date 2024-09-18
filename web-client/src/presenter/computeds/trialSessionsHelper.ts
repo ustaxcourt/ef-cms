@@ -5,10 +5,16 @@ import {
   subtractISODates,
 } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
+import { InputOption } from '@web-client/ustc-ui/Utils/types';
 import { RawUser } from '@shared/business/entities/User';
-import { SESSION_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  SESSION_STATUS_TYPES,
+  SESSION_TYPES,
+  TRIAL_CITIES,
+} from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
+import { sortBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const trialSessionsHelper = (
@@ -20,6 +26,8 @@ export const trialSessionsHelper = (
   showUnassignedJudgeFilter: boolean;
   trialSessionJudges: RawUser[];
   trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
+  sessionTypeOptions: InputOption[];
+  trialLocationOptions: InputOption[];
 } => {
   const permissions = get(state.permissions)!;
   const trialSessions = get(state.trialSessionsPage.trialSessions);
@@ -36,6 +44,38 @@ export const trialSessionsHelper = (
   } else {
     trialSessionJudges = get(state.legacyAndCurrentJudges);
   }
+
+  const sessionTypeOptions = Object.values(SESSION_TYPES).map(sessionType => ({
+    label: sessionType,
+    value: sessionType,
+  }));
+
+  const trialCities = sortBy(TRIAL_CITIES.ALL, ['state', 'city']);
+  const trialLocationOptions: InputOption[] = [];
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const states: InputOption[] = trialCities.reduce(
+    (listOfStates: InputOption[], cityStatePair) => {
+      const existingState = listOfStates.find(
+        trialState => trialState.label === cityStatePair.state,
+      );
+      const cityOption: InputOption = {
+        label: `${cityStatePair.city}, ${cityStatePair.state}`,
+        value: `${cityStatePair.city}, ${cityStatePair.state}`,
+      };
+      if (existingState) {
+        existingState.options?.push(cityOption);
+      } else {
+        listOfStates.push({
+          label: cityStatePair.state,
+          options: [cityOption],
+        });
+      }
+      trialLocationOptions.push(cityOption);
+      return listOfStates;
+    },
+    [],
+  );
 
   const filteredTrialSessions = trialSessions
     .filter(trialSession => {
@@ -74,6 +114,7 @@ export const trialSessionsHelper = (
   });
 
   return {
+    sessionTypeOptions,
     showNewTrialSession: permissions.CREATE_TRIAL_SESSION,
     showNoticeIssued: filters.currentTab === 'calendared',
     showSessionStatus: filters.currentTab === 'calendared',
