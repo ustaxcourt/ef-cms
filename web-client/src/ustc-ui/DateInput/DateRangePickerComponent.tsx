@@ -22,7 +22,6 @@ export const DateRangePickerComponent = ({
   startName,
   startPickerCls,
   startValue,
-  to = false,
 }: {
   showDateHint?: boolean;
   endDateErrorText?: string;
@@ -37,7 +36,6 @@ export const DateRangePickerComponent = ({
   startDateErrorText?: string;
   startPickerCls?: string;
   startLabel?: string | React.ReactNode;
-  to?: boolean;
   omitFormGroupClass?: boolean;
   startName: string;
   startValue: string;
@@ -173,9 +171,6 @@ export const DateRangePickerComponent = ({
             </div>
           </FormGroup>
         </div>
-
-        {/* {to && <span className="">to</span>} */}
-
         <div className={endPickerCls} data-testid={`${endName}-date-end}`}>
           <FormGroup
             errorText={endDateErrorText}
