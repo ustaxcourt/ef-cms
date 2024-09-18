@@ -3,7 +3,7 @@ import { TrialSessionProceedingType } from '@shared/business/entities/EntityCons
 
 const filters: TrialSessionsFilters = {
   currentTab: 'calendared' as 'calendared' | 'new',
-  judgeId: 'All',
+  judges: [],
   proceedingType: 'All' as TrialSessionProceedingType,
   sessionStatus: 'Open',
   sessionType: 'All',
@@ -17,7 +17,7 @@ export const initialTrialSessionPageState = {
 
 export type TrialSessionsFilters = {
   currentTab: 'calendared' | 'new';
-  judgeId: string;
+  judges: string[];
   proceedingType: TrialSessionProceedingType | 'All';
   sessionStatus: string;
   sessionType: string;

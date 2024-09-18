@@ -25,9 +25,11 @@ export const trialSessionsHelper = (
   showSessionStatus: boolean;
   showUnassignedJudgeFilter: boolean;
   trialSessionJudges: RawUser[];
+  trialSessionJudgeOptions: InputOption[];
   trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
   sessionTypeOptions: InputOption[];
-  trialLocationOptions: InputOption[];
+  searchableTrialLocationOptions: InputOption[];
+  trialCitiesByState: InputOption[];
 } => {
   const permissions = get(state.permissions)!;
   const trialSessions = get(state.trialSessionsPage.trialSessions);
@@ -50,8 +52,14 @@ export const trialSessionsHelper = (
     value: sessionType,
   }));
 
+  const trialSessionJudgeOptions = trialSessionJudges.map(
+    trialSessionJudge => ({
+      label: trialSessionJudge.name,
+      value: trialSessionJudge.name,
+    }),
+  );
   const trialCities = sortBy(TRIAL_CITIES.ALL, ['state', 'city']);
-  const trialLocationOptions: InputOption[] = [];
+  const searchableTrialLocationOptions: InputOption[] = [];
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const states: InputOption[] = trialCities.reduce(
@@ -71,7 +79,7 @@ export const trialSessionsHelper = (
           options: [cityOption],
         });
       }
-      trialLocationOptions.push(cityOption);
+      searchableTrialLocationOptions.push(cityOption);
       return listOfStates;
     },
     [],
@@ -114,11 +122,14 @@ export const trialSessionsHelper = (
   });
 
   return {
+    searchableTrialLocationOptions,
     sessionTypeOptions,
     showNewTrialSession: permissions.CREATE_TRIAL_SESSION,
     showNoticeIssued: filters.currentTab === 'calendared',
     showSessionStatus: filters.currentTab === 'calendared',
     showUnassignedJudgeFilter: filters.currentTab === 'new',
+    trialCitiesByState: states,
+    trialSessionJudgeOptions,
     trialSessionJudges,
     trialSessionRows,
   };
