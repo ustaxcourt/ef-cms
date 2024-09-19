@@ -17,8 +17,9 @@ export type SetTrialSessionsFilters = Partial<{
     action: 'add' | 'remove';
     trialLocation: string;
   };
-  startDate?: string;
-  endDate?: string;
+  pageNumber: number;
+  startDate: string;
+  endDate: string;
 }>;
 
 export const setTrialSessionsFiltersAction = ({
@@ -83,6 +84,10 @@ export const setTrialSessionsFiltersAction = ({
       state.trialSessionsPage.filters.trialLocations,
       currentFilters.trialLocations,
     );
+  }
+
+  if (props.pageNumber || props.pageNumber === 0) {
+    store.set(state.trialSessionsPage.filters.pageNumber, props.pageNumber);
   }
 
   if (props.startDate || props.startDate === '') {

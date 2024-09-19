@@ -9,6 +9,7 @@ const filters: TrialSessionsFilters = {
   currentTab: 'calendared' as 'calendared' | 'new',
   endDate: '',
   judges: {},
+  pageNumber: 0,
   proceedingType: 'All' as TrialSessionProceedingType,
   sessionStatus: SESSION_STATUS_TYPES.open,
   sessionTypes: {},
@@ -24,6 +25,7 @@ export const initialTrialSessionPageState = {
 export type TrialSessionsFilters = {
   currentTab: 'calendared' | 'new';
   endDate: string;
+  pageNumber: number;
   judges: Record<string, { name: string; userId: string }>;
   proceedingType: TrialSessionProceedingType | 'All';
   sessionStatus: string;

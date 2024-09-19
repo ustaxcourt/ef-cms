@@ -33,11 +33,14 @@ export const trialSessionsHelper = (
   searchableTrialLocationOptions: InputOption[];
   trialCitiesByState: InputOption[];
   trialSessionsCount: number;
+  totalPages: number;
 } => {
   const permissions = get(state.permissions)!;
   const trialSessions = get(state.trialSessionsPage.trialSessions);
   const filters = get(state.trialSessionsPage.filters);
   const judge = get(state.judgeUser);
+
+  const pageSize = 5;
 
   const showCurrentJudgesOnly =
     filters.currentTab === 'new' ||
@@ -140,7 +143,11 @@ export const trialSessionsHelper = (
     })
     .sort((sessionA, sessionB) => {
       return sessionA.startDate.localeCompare(sessionB.startDate);
-    });
+    })
+    .slice(
+      filters.pageNumber * pageSize,
+      filters.pageNumber * pageSize + pageSize,
+    );
   const trialSessionRows = formatTrialSessions({
     judgeAssociatedToUser: judge,
     trialSessions: filteredTrialSessions,
@@ -165,6 +172,7 @@ export const trialSessionsHelper = (
     showNoticeIssued: filters.currentTab === 'calendared',
     showSessionStatus: filters.currentTab === 'calendared',
     showUnassignedJudgeFilter: filters.currentTab === 'new',
+    totalPages: Math.ceil(filteredTrialSessions.length / pageSize),
     trialCitiesByState: states,
     trialSessionJudgeOptions,
     trialSessionRows,

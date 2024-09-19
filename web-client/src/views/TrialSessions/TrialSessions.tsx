@@ -2,6 +2,7 @@ import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
+import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 import {
   SESSION_STATUS_TYPES,
@@ -411,6 +412,13 @@ const TrialSessionFilters = connect(
         >
           Reset Filters
         </Button>
+        <Paginator
+          currentPageIndex={trialSessionsPage.filters.pageNumber}
+          totalPages={trialSessionsHelper.totalPages}
+          onPageChange={selectedPage => {
+            setTrialSessionsFiltersSequence({ pageNumber: selectedPage });
+          }}
+        />
       </>
     );
   },
