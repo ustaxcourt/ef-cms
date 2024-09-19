@@ -19,9 +19,9 @@ export const CaseTypeSelect = connect(
     onChangePreValidation: sequences[props.onChangePreValidation],
     rawOnChange: props.onChange,
     refProp: props.refProp,
+    validateFormData: props.validateFormData,
     validationError: props.validationError,
     validationErrors: state.validationErrors,
-    validationFunction: props.validationFunction,
     value: props.value,
   },
   function CaseTypeSelect({
@@ -37,9 +37,9 @@ export const CaseTypeSelect = connect(
     onChangePreValidation,
     rawOnChange,
     refProp,
+    validateFormData,
     validationError,
     validationErrors,
-    validationFunction,
     value,
   }) {
     return (
@@ -69,8 +69,8 @@ export const CaseTypeSelect = connect(
                   value: e.target.value,
                 });
                 if (onChangePreValidation) onChangePreValidation();
-                if (validationFunction)
-                  validationFunction({ preventAutoScroll: true });
+                if (validateFormData)
+                  validateFormData({ preventAutoScroll: true });
               }}
             >
               {allowDefaultOption && <option value="">-- Select --</option>}

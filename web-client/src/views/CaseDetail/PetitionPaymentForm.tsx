@@ -8,7 +8,7 @@ import classNames from 'classnames';
 
 interface ComponentProps {
   onUpdate: (args: Record<string, any>) => void;
-  onValidate: (args: Record<string, any>) => void;
+  validateFormData: (args: Record<string, any>) => void;
 }
 
 // It would be better to use ComponentProps & CerebralProps, but
@@ -18,8 +18,8 @@ const PetitionPaymentFormComponent: React.FC<ComponentProps & any> = ({
   DATE_FORMATS,
   formatAndUpdateDateFromDatePickerSequence,
   onUpdate,
-  onValidate,
   paymentStatus,
+  validateFormData,
   validationErrors,
 }) => {
   return (
@@ -44,7 +44,7 @@ const PetitionPaymentFormComponent: React.FC<ComponentProps & any> = ({
                   key: e.target.name,
                   value: e.target.value,
                 });
-                onValidate({ preventAutoScroll: true });
+                validateFormData({ preventAutoScroll: true });
               }}
             />
             <label
@@ -70,7 +70,7 @@ const PetitionPaymentFormComponent: React.FC<ComponentProps & any> = ({
                   key: e.target.name,
                   value: e.target.value,
                 });
-                onValidate({ preventAutoScroll: true });
+                validateFormData({ preventAutoScroll: true });
               }}
             />
             <label
@@ -96,7 +96,7 @@ const PetitionPaymentFormComponent: React.FC<ComponentProps & any> = ({
                   key: e.target.name,
                   value: e.target.value,
                 });
-                onValidate({ preventAutoScroll: true });
+                validateFormData({ preventAutoScroll: true });
               }}
             />
             <label
@@ -123,7 +123,7 @@ const PetitionPaymentFormComponent: React.FC<ComponentProps & any> = ({
                 toFormat: DATE_FORMATS.ISO,
                 value: e.target.value,
               });
-              onValidate({ preventAutoScroll: true });
+              validateFormData({ preventAutoScroll: true });
             }}
           />
 
@@ -139,7 +139,7 @@ const PetitionPaymentFormComponent: React.FC<ComponentProps & any> = ({
               id="petition-payment-method"
               name="petitionPaymentMethod"
               value={bind.petitionPaymentMethod || ''}
-              onBlur={() => onValidate({ preventAutoScroll: true })}
+              onBlur={() => validateFormData({ preventAutoScroll: true })}
               onChange={e => {
                 onUpdate({
                   allowEmptyString: true,
@@ -164,7 +164,7 @@ const PetitionPaymentFormComponent: React.FC<ComponentProps & any> = ({
               toFormat: DATE_FORMATS.ISO,
               value: e.target.value,
             });
-            onValidate({ preventAutoScroll: true });
+            validateFormData({ preventAutoScroll: true });
           }}
         />
       )}
