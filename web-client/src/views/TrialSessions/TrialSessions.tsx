@@ -104,7 +104,6 @@ const TrialSessionFilters = connect(
     trialSessionsHelper,
     trialSessionsPage,
   }) {
-    console.log(trialSessionsPage.filters);
     return (
       <>
         <div className="grid-row gap-3">

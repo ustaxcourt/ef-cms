@@ -43,7 +43,6 @@ export const trialSessionsHelper = (
   let trialSessionJudges: { name: string; userId: string }[]; // 10409 TODO BUG. The judge options is not updating correctly. Showing legacy when it should not.
   if (showCurrentJudgesOnly) {
     trialSessionJudges = get(state.judges);
-    console.log('current length: ', trialSessionJudges.length);
   } else {
     trialSessionJudges = get(state.legacyAndCurrentJudges);
     console.log('legecy length: ', trialSessionJudges.length);
