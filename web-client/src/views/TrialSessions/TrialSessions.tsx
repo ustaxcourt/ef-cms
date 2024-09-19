@@ -21,12 +21,13 @@ export const TrialSessions = connect(
   {
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
-    setTrialSessionsFiltersSequence: sequences.setTrialSessionsFiltersSequence,
+    resetTrialSessionsFiltersSequence:
+      sequences.resetTrialSessionsFiltersSequence,
     trialSessionsHelper: state.trialSessionsHelper,
   },
   function TrialSessions({
     openTrialSessionPlanningModalSequence,
-    setTrialSessionsFiltersSequence,
+    resetTrialSessionsFiltersSequence,
     trialSessionsHelper,
   }) {
     return (
@@ -41,7 +42,7 @@ export const TrialSessions = connect(
             headingLevel="2"
             id="trial-sessions-tabs"
             onSelect={tabName => {
-              setTrialSessionsFiltersSequence({ currentTab: tabName });
+              resetTrialSessionsFiltersSequence({ currentTab: tabName });
             }}
           >
             <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
@@ -245,6 +246,12 @@ const TrialSessionFilters = connect(
           </fieldset>
           <DateRangePickerComponent
             endDateErrorText={''}
+            endLabel={
+              <span>
+                Last start date{' '}
+                <span className="optional-light-text">(optional)</span>
+              </span>
+            }
             endName="trialSessionStartDate"
             endValue={trialSessionsPage.filters.endDate}
             formGroupCls="margin-bottom-0"
@@ -253,7 +260,7 @@ const TrialSessionFilters = connect(
             startDateErrorText={''}
             startLabel={
               <span>
-                Trial Start Date range{' '}
+                First start date{' '}
                 <span className="optional-light-text">(optional)</span>
               </span>
             }
