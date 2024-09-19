@@ -88,6 +88,13 @@ module "lambda_role_green" {
   dns_domain  = var.dns_domain
 }
 
+module "zip_bach" {
+  source            = "../../modules/batch"
+  environment       = var.environment
+  dns_domain        = var.dns_domain
+  current_color     = "green"
+}
+
 module "api-east-green" {
   lambda_role_arn     = module.lambda_role_green.role_arn
   source              = "../../modules/api"
