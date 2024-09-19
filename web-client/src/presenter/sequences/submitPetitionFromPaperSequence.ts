@@ -12,6 +12,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setProgressForFileUploadAction } from '@web-client/presenter/actions/setProgressForFileUploadAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -32,7 +33,11 @@ export const submitPetitionFromPaperSequence = [
       filterEmptyStatisticsAction,
       validatePetitionFromPaperAction,
       {
-        error: [setValidationErrorsAction, setValidationAlertErrorsAction],
+        error: [
+          setValidationErrorsAction,
+          setScrollToErrorNotificationAction,
+          setValidationAlertErrorsAction,
+        ],
         success: [
           setupCurrentPageAction('Interstitial'),
           stopShowValidationAction,

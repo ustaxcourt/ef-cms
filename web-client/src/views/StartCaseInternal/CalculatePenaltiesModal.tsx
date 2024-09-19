@@ -40,7 +40,7 @@ export const CalculatePenaltiesModal = connect(
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
         confirmLabel="Calculate and Save"
-        confirmSequence={() => confirmSequence({ isSubmitting: false })}
+        confirmSequence={confirmSequence}
         title={title}
       >
         {errors &&

@@ -53,7 +53,7 @@ export const CaseInformation = connect(
               toFormat: DATE_FORMATS.ISO,
               value: e.target.value,
             });
-            validatePetitionFromPaperSequence({ isSubmitting: false });
+            validatePetitionFromPaperSequence();
           }}
         />
         <FormGroup errorText={validationErrors.mailingDate}>
@@ -66,9 +66,7 @@ export const CaseInformation = connect(
             maxLength="25"
             name="mailingDate"
             value={form.mailingDate || ''}
-            onBlur={() =>
-              validatePetitionFromPaperSequence({ isSubmitting: false })
-            }
+            onBlur={() => validatePetitionFromPaperSequence()}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
@@ -87,7 +85,7 @@ export const CaseInformation = connect(
             name="caseCaption"
             value={form.caseCaption}
             onBlur={() => {
-              validatePetitionFromPaperSequence({ isSubmitting: false });
+              validatePetitionFromPaperSequence();
             }}
             onChange={e => {
               updateFormValueSequence({
@@ -109,7 +107,7 @@ export const CaseInformation = connect(
               value: e.target.value,
             });
             clearPreferredTrialCitySequence();
-            validatePetitionFromPaperSequence({ isSubmitting: false });
+            validatePetitionFromPaperSequence();
           }}
         />
         <FormGroup>
@@ -150,7 +148,7 @@ export const CaseInformation = connect(
               key: e.target.name,
               value: e.target.value || null,
             });
-            validatePetitionFromPaperSequence({ isSubmitting: false });
+            validatePetitionFromPaperSequence();
           }}
         />
         <FormGroup errorText={validationErrors['object.missing']}>
@@ -167,7 +165,7 @@ export const CaseInformation = connect(
                   key: e.target.name,
                   value: e.target.checked,
                 });
-                validatePetitionFromPaperSequence({ isSubmitting: false });
+                validatePetitionFromPaperSequence();
               }}
             />
             <label
