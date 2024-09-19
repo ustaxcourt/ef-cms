@@ -78,11 +78,7 @@ export const StartCaseInternal = connect(
                   >
                     <div className="blue-container">
                       <IRSNotice
-                        validationFunction={() =>
-                          validateCaseDetailSequence({
-                            preventAutoScroll: true,
-                          })
-                        }
+                        validateFormData={validateCaseDetailSequence}
                       />
                     </div>
                   </Tab>
@@ -93,11 +89,7 @@ export const StartCaseInternal = connect(
                   documentTabs={startCaseHelper.documentTabs}
                   documentType={documentSelectedForScan}
                   title="Add Document(s)"
-                  validateSequence={() =>
-                    validatePetitionFromPaperSequence({
-                      preventAutoScroll: true,
-                    })
-                  }
+                  validateSequence={validatePetitionFromPaperSequence}
                 />
               </div>
             </div>
