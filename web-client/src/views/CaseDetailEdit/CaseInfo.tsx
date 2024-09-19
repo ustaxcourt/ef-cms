@@ -222,9 +222,9 @@ export const CaseInfo = connect(
 
         <PetitionPaymentForm
           bind="form"
-          updateSequence={updatePetitionPaymentFormValueSequence}
-          validateSequence={validateCaseDetailSequence}
           validationErrorsBind="validationErrors"
+          onUpdate={updatePetitionPaymentFormValueSequence}
+          onValidate={validateCaseDetailSequence}
         />
 
         {caseDetailEditHelper.showOrderForFilingFee && (
