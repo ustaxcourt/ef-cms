@@ -2,4 +2,10 @@ import { resetTrialSessionsFiltersAction } from '@web-client/presenter/actions/T
 
 export const resetTrialSessionsFiltersSequence = [
   resetTrialSessionsFiltersAction,
-] as unknown as () => void;
+] as unknown as (props?: ResetTrialSessionsFiltersSequence) => void;
+
+export type ResetTrialSessionsFiltersSequence =
+  | undefined
+  | {
+      currentTab: 'calendared' | 'new';
+    };
