@@ -57,9 +57,7 @@ export const SessionInformationForm = connect<
                     name="sessionScope"
                     type="radio"
                     value={value}
-                    onBlur={() => {
-                      validateTrialSessionSequence({ isSubmitting: false });
-                    }}
+                    onBlur={() => validateTrialSessionSequence()}
                     onChange={e => {
                       updateTrialSessionFormDataSequence({
                         key: e.target.name,
@@ -100,7 +98,7 @@ export const SessionInformationForm = connect<
                     toFormat: DATE_FORMATS.ISO,
                     value: e.target.value,
                   });
-                  validateTrialSessionSequence({ isSubmitting: false });
+                  validateTrialSessionSequence();
                 }}
               />
             </div>
@@ -167,9 +165,7 @@ export const SessionInformationForm = connect<
                                 type="radio"
                                 value={option}
                                 onBlur={() => {
-                                  validateTrialSessionSequence({
-                                    isSubmitting: false,
-                                  });
+                                  validateTrialSessionSequence();
                                 }}
                                 onChange={e => {
                                   updateTrialSessionFormDataSequence({
@@ -217,7 +213,7 @@ export const SessionInformationForm = connect<
                     toFormat: DATE_FORMATS.ISO,
                     value: e.target.value,
                   });
-                  validateTrialSessionSequence({ isSubmitting: false });
+                  validateTrialSessionSequence();
                 }}
               />
             </div>
@@ -272,9 +268,7 @@ export const SessionInformationForm = connect<
                           key: e.target.name,
                           value: e.target.value,
                         });
-                        validateTrialSessionSequence({
-                          isSubmitting: false,
-                        });
+                        validateTrialSessionSequence();
                       }}
                     >
                       <option value="">- Select -</option>
@@ -316,7 +310,7 @@ export const SessionInformationForm = connect<
                         key: e.target.name,
                         value: e.target.value,
                       });
-                      validateTrialSessionSequence({ isSubmitting: false });
+                      validateTrialSessionSequence();
                     }}
                   />
                   <label
@@ -344,7 +338,7 @@ export const SessionInformationForm = connect<
                 type="text"
                 value={form.maxCases || ''}
                 onBlur={() => {
-                  validateTrialSessionSequence({ isSubmitting: false });
+                  validateTrialSessionSequence();
                 }}
                 onChange={e => {
                   updateTrialSessionFormDataSequence({

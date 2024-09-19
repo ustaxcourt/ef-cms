@@ -44,7 +44,7 @@ const PetitionPaymentFormComponent: React.FC<ComponentProps & any> = ({
                   key: e.target.name,
                   value: e.target.value,
                 });
-                validateFormData({ isSubmitting: false });
+                validateFormData();
               }}
             />
             <label
@@ -70,7 +70,7 @@ const PetitionPaymentFormComponent: React.FC<ComponentProps & any> = ({
                   key: e.target.name,
                   value: e.target.value,
                 });
-                validateFormData({ isSubmitting: false });
+                validateFormData();
               }}
             />
             <label
@@ -96,7 +96,7 @@ const PetitionPaymentFormComponent: React.FC<ComponentProps & any> = ({
                   key: e.target.name,
                   value: e.target.value,
                 });
-                validateFormData({ isSubmitting: false });
+                validateFormData();
               }}
             />
             <label
@@ -123,7 +123,7 @@ const PetitionPaymentFormComponent: React.FC<ComponentProps & any> = ({
                 toFormat: DATE_FORMATS.ISO,
                 value: e.target.value,
               });
-              validateFormData({ isSubmitting: false });
+              validateFormData();
             }}
           />
 
@@ -139,7 +139,7 @@ const PetitionPaymentFormComponent: React.FC<ComponentProps & any> = ({
               id="petition-payment-method"
               name="petitionPaymentMethod"
               value={bind.petitionPaymentMethod || ''}
-              onBlur={() => validateFormData({ isSubmitting: false })}
+              onBlur={validateFormData}
               onChange={e => {
                 onUpdate({
                   allowEmptyString: true,
@@ -164,7 +164,7 @@ const PetitionPaymentFormComponent: React.FC<ComponentProps & any> = ({
               toFormat: DATE_FORMATS.ISO,
               value: e.target.value,
             });
-            validateFormData({ isSubmitting: false });
+            validateFormData();
           }}
         />
       )}
