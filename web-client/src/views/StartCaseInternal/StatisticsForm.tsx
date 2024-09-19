@@ -49,9 +49,7 @@ export const StatisticsForm = connect(
           id={`deficiency-amount-${index}`}
           name={`statistics.${index}.irsDeficiencyAmount`}
           value={form.statistics[index].irsDeficiencyAmount || ''}
-          onBlur={() =>
-            validatePetitionFromPaperSequence({ isSubmitting: false })
-          }
+          onBlur={validatePetitionFromPaperSequence}
           onValueChange={values => {
             updateStatisticsFormValueSequence({
               key: `statistics.${index}.irsDeficiencyAmount`,
@@ -134,11 +132,7 @@ export const StatisticsForm = connect(
                     name={`statistics.${index}.year`}
                     placeholder="YYYY"
                     value={form.statistics[index].year || ''}
-                    onBlur={() =>
-                      validatePetitionFromPaperSequence({
-                        isSubmitting: false,
-                      })
-                    }
+                    onBlur={() => validatePetitionFromPaperSequence()}
                     onChange={e => {
                       updateStatisticsFormValueSequence({
                         key: e.target.name,

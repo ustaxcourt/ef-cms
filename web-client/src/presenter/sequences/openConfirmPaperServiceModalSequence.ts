@@ -5,6 +5,7 @@ import { isDocketEntryMultiDocketableAction } from '../actions/CaseConsolidation
 import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setMultiDocketingCheckboxesAction } from '../actions/CaseConsolidation/setMultiDocketingCheckboxesAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -24,6 +25,7 @@ export const openConfirmPaperServiceModalSequence = [
     error: [
       suggestSaveForLaterValidationAction,
       setValidationErrorsAction,
+      setScrollToErrorNotificationAction,
       setValidationAlertErrorsAction,
     ],
     success: [
