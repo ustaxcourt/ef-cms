@@ -1,9 +1,5 @@
 data "aws_caller_identity" "current" {}
 
-provider "aws" {
-  region = "us-west-2"
-}
-
 # Fetch the default VPC (optional if you already know the VPC ID)
 data "aws_vpc" "default" {
   default = true
@@ -93,7 +89,7 @@ resource "aws_iam_role_policy" "batch_service_role_policy" {
                 "ecs:DeleteCluster"
             ],
             "Resource": [
-                "arn:aws:ecs:us-west-2:${data.aws_caller_identity.current.account_id}:cluster/*"
+                "arn:aws:ecs:us-east-1:${data.aws_caller_identity.current.account_id}:cluster/*"
             ],
             "Effect": "Allow"
         }
