@@ -1,9 +1,12 @@
 import {
+  ServerApplicationContext,
+  createApplicationContext,
+} from '@web-api/applicationContext';
+import {
   batchDelete,
   queryFull,
 } from '@web-api/persistence/dynamodbClientService';
 import { chunk } from 'lodash';
-import { createApplicationContext } from '@web-api/applicationContext';
 import { createSectionOutboxRecords } from '@web-api/persistence/dynamo/workitems/createSectionOutboxRecords';
 import { createUserOutboxRecord } from '@web-api/persistence/dynamo/workitems/createUserOutboxRecord';
 import { readFileSync } from 'fs';
@@ -11,7 +14,7 @@ import { sleep } from '@shared/tools/helpers';
 import type { RawWorkItem } from '@shared/business/entities/WorkItem';
 
 const archiveUserOutboxItems = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { items, userId }: { items: RawWorkItem[]; userId: string },
 ): Promise<void> => {
   const promises = items.map(workItem =>
@@ -21,7 +24,7 @@ const archiveUserOutboxItems = async (
 };
 
 const archiveSectionOutboxItems = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { items, section }: { items: RawWorkItem[]; section: string },
 ): Promise<void> => {
   const promises = items.map(workItem =>
@@ -31,7 +34,7 @@ const archiveSectionOutboxItems = async (
 };
 
 const archiveOutboxItems = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     bucketKey,
     bucketType,
@@ -76,7 +79,7 @@ const archiveOutboxItems = async (
 };
 
 const processPrimaryKey = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { pk }: { pk: string },
 ): Promise<void> => {
   const [bucketType, bucketKey] = pk.split('|');
@@ -119,7 +122,9 @@ const processPrimaryKey = async (
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const jsonFile = process.argv[2];
-  const applicationContext = createApplicationContext({});
+  const applicationContext: ServerApplicationContext = createApplicationContext(
+    {},
+  );
 
   const pks = JSON.parse(readFileSync(jsonFile, 'utf-8'));
   for (const pk of pks) {
