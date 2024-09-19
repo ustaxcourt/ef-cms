@@ -86,7 +86,7 @@ export const setValidationAlertErrorsAction = ({
           }
         }),
     ),
-    preventAutoScroll: props.preventAutoScroll || false,
+    preventAutoScroll: props.isSubmitting || false,
     title: 'Please correct the following errors on the page:',
   };
   store.set(state.alertError, alertError);
