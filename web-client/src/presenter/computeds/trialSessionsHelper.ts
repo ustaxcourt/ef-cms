@@ -15,7 +15,10 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
-import { initialTrialSessionPageState } from '@web-client/presenter/state/trialSessionsPageState';
+import {
+  TrialSessionsFilters,
+  initialTrialSessionPageState,
+} from '@web-client/presenter/state/trialSessionsPageState';
 import { sortBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -52,6 +55,17 @@ export const trialSessionsHelper = (
   } else {
     trialSessionJudges = get(state.legacyAndCurrentJudges);
   }
+
+  const userHasSelectedAFilter =
+    filters.proceedingType !==
+      initialTrialSessionPageState.filters.proceedingType ||
+    filters.sessionStatus !==
+      initialTrialSessionPageState.filters.sessionStatus ||
+    Object.keys(filters.judges).length > 0 ||
+    Object.keys(filters.sessionTypes).length > 0 ||
+    Object.keys(filters.trialLocations).length > 0 ||
+    !!filters.startDate ||
+    !!filters.endDate;
 
   const sessionTypeOptions = Object.values(SESSION_TYPES).map(sessionType => ({
     label: sessionType,
@@ -91,7 +105,43 @@ export const trialSessionsHelper = (
     [],
   );
 
-  const filteredTrialSessions = trialSessions
+  const filteredTrialSessions = filterAndSortTrialSessions({
+    filters,
+    trialSessions,
+  });
+  const trialSessionPage = filteredTrialSessions.slice(
+    filters.pageNumber * pageSize,
+    filters.pageNumber * pageSize + pageSize,
+  );
+  const trialSessionRows = formatTrialSessions({
+    judgeAssociatedToUser: judge,
+    trialSessions: trialSessionPage,
+  });
+
+  return {
+    isResetFiltersDisabled: !userHasSelectedAFilter,
+    searchableTrialLocationOptions,
+    sessionTypeOptions,
+    showNewTrialSession: permissions.CREATE_TRIAL_SESSION,
+    showNoticeIssued: filters.currentTab === 'calendared',
+    showSessionStatus: filters.currentTab === 'calendared',
+    showUnassignedJudgeFilter: filters.currentTab === 'new',
+    totalPages: Math.ceil(filteredTrialSessions.length / pageSize),
+    trialCitiesByState: states,
+    trialSessionJudgeOptions,
+    trialSessionRows,
+    trialSessionsCount: filteredTrialSessions.length,
+  };
+};
+
+const filterAndSortTrialSessions = ({
+  filters,
+  trialSessions,
+}: {
+  trialSessions: TrialSessionInfoDTO[];
+  filters: TrialSessionsFilters;
+}): TrialSessionInfoDTO[] => {
+  return trialSessions
     .filter(trialSession => {
       const isCalendaredFilter = filters.currentTab === 'calendared';
       return trialSession.isCalendared === isCalendaredFilter;
@@ -143,41 +193,7 @@ export const trialSessionsHelper = (
     })
     .sort((sessionA, sessionB) => {
       return sessionA.startDate.localeCompare(sessionB.startDate);
-    })
-    .slice(
-      filters.pageNumber * pageSize,
-      filters.pageNumber * pageSize + pageSize,
-    );
-  const trialSessionRows = formatTrialSessions({
-    judgeAssociatedToUser: judge,
-    trialSessions: filteredTrialSessions,
-  });
-
-  const userHasSelectedAFilter =
-    filters.proceedingType !==
-      initialTrialSessionPageState.filters.proceedingType ||
-    filters.sessionStatus !==
-      initialTrialSessionPageState.filters.sessionStatus ||
-    Object.keys(filters.judges).length > 0 ||
-    Object.keys(filters.sessionTypes).length > 0 ||
-    Object.keys(filters.trialLocations).length > 0 ||
-    !!filters.startDate ||
-    !!filters.endDate;
-
-  return {
-    isResetFiltersDisabled: !userHasSelectedAFilter,
-    searchableTrialLocationOptions,
-    sessionTypeOptions,
-    showNewTrialSession: permissions.CREATE_TRIAL_SESSION,
-    showNoticeIssued: filters.currentTab === 'calendared',
-    showSessionStatus: filters.currentTab === 'calendared',
-    showUnassignedJudgeFilter: filters.currentTab === 'new',
-    totalPages: Math.ceil(filteredTrialSessions.length / pageSize),
-    trialCitiesByState: states,
-    trialSessionJudgeOptions,
-    trialSessionRows,
-    trialSessionsCount: filteredTrialSessions.length,
-  };
+    });
 };
 
 const formatTrialSessions = ({
