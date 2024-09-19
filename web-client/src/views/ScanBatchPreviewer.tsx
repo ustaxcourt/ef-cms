@@ -282,6 +282,7 @@ export const ScanBatchPreviewer = connect(
             <ConfirmDeletePDFModal
               confirmSequence={() => {
                 removeScannedPdfSequence();
+                if (validateSequence) validateSequence();
               }}
               confirmText="Yes, Delete"
               modalContent="This action cannot be undone."
