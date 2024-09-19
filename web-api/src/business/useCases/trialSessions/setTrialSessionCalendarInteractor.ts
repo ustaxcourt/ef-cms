@@ -143,8 +143,11 @@ export const setTrialSessionCalendarInteractor = async (
     ];
 
     // Story: 10422
-    // We chunk this array of functions so that we don't fire all of them at once.
-    // If firing all at once, we exhaust the available connections and will run into connection timeouts.
+    //If we executed all functions at once we may exhaust the available connections and run into timeouts.
+    //So instead we use a priority queue so that only CHUNK_SIZE number of functions will execute at any given time.
+    //This has the additional benefit over feeding the chunks to Promise.all(), as the priority queue will swap out
+    //completed tasks for new tasks until completion, whereas Promise.all() will block until every promise in
+    //a given chunk is completed.
     const queue = new PQueue({ concurrency: CHUNK_SIZE });
     await queue.addAll(funcs);
 
