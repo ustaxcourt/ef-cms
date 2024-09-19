@@ -142,6 +142,7 @@ const PetitionPaymentFormComponent: React.FC<ComponentProps & any> = ({
               onBlur={() => onValidate({ preventAutoScroll: true })}
               onChange={e => {
                 onUpdate({
+                  allowEmptyString: true,
                   key: e.target.name,
                   value: e.target.value,
                 });
