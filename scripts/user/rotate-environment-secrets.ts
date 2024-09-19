@@ -4,8 +4,8 @@ import {
   PutSecretValueCommand,
   SecretsManagerClient,
 } from '@aws-sdk/client-secrets-manager';
+import { makeNewPassword } from './make-new-password';
 import { requireEnvVars } from '../../shared/admin-tools/util';
-import { shuffle } from 'lodash';
 
 requireEnvVars(['COGNITO_USER_POOL', 'ENV']);
 
@@ -18,34 +18,6 @@ const cognitoClient = new CognitoIdentityProvider({
 
 const isDevelopmentEnvironment =
   process.argv[2] && process.argv[2] === '--development';
-
-const makeNewPassword = (): string => {
-  const getRandomChar = charSet =>
-    charSet.charAt(Math.floor(Math.random() * charSet.length));
-
-  // get number between 12 and 20
-  const passwordLength = 12 + Math.floor(Math.random() * 9);
-  const charSets = {
-    characters: '^*.()@#%&/,><:;_~=+-',
-    lowercase: 'abcdefghijklmnopqrstuvwxyz',
-    numbers: '0123456789',
-    uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-  };
-  const allCharacters = Object.keys(charSets)
-    .map(key => charSets[key])
-    .join('');
-
-  // get at least one random char from each of the sets
-  let result = Object.keys(key => getRandomChar(charSets[key])).join('');
-
-  // build the password
-  for (let i = result.length; i <= passwordLength; i++) {
-    result += getRandomChar(allCharacters);
-  }
-
-  // shuffle the password
-  return shuffle(result.split('')).join('');
-};
 
 const loadSecrets = async (environmentName: string): Promise<any> => {
   const getSecretValueCommand = new GetSecretValueCommand({
