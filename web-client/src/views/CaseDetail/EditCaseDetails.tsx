@@ -87,9 +87,9 @@ export const EditCaseDetails = connect(
 
             <PetitionPaymentForm
               bind="form"
-              updateSequence={updateFormValueSequence}
-              validateSequence={validateCaseDetailsSequence}
               validationErrorsBind="validationErrors"
+              onUpdate={updateFormValueSequence}
+              onValidate={validateCaseDetailsSequence}
             />
           </div>
 
