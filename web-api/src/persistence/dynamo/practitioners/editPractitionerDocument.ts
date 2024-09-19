@@ -1,3 +1,4 @@
+import { RawPractitionerDocument } from '@shared/business/entities/PractitionerDocument';
 import { put } from '../../dynamodbClientService';
 
 export const editPractitionerDocument = async ({

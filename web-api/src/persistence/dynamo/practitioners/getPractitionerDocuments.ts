@@ -1,4 +1,5 @@
 import * as client from '../../dynamodbClientService';
+import { RawPractitionerDocument } from '@shared/business/entities/PractitionerDocument';
 
 export const getPractitionerDocuments = async ({
   applicationContext,

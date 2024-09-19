@@ -9,7 +9,7 @@ describe('paperServiceStatusHelper', () => {
           pdfsAppended: 100,
           totalPdfs: 200,
         },
-      } as Partial<State>,
+      },
     });
     expect(result.percentComplete).toEqual(50);
   });

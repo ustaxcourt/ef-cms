@@ -1,3 +1,4 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import { omit } from 'lodash';
 import { put } from '../../dynamodbClientService';
 
