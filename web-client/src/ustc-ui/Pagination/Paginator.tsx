@@ -5,8 +5,8 @@ const numberOfPaginatorSlots = 7;
 
 /*
 This component is based off of USWDS implementation of a paginator: https://designsystem.digital.gov/components/pagination/
-The totalPages and selected page work similarly to counting arrays. TotalPages is similar to array.length and selectedPage is 0 based indexing.
-totalPages could be 20 but the maximum value selectedPage could be is 19 and the lowest pages is 0.
+The totalPages and selected page work similarly to counting arrays. TotalPages is similar to array.length and currentPageIndex is 0 based indexing.
+totalPages could be 20 but the maximum value currentPageIndex could be is 19 and the lowest pages is 0.
 */
 
 export const Paginator = ({
@@ -18,6 +18,9 @@ export const Paginator = ({
   totalPages: number;
   onPageChange: (selectedPage: number) => any;
 }) => {
+  if (totalPages === 0) {
+    return;
+  }
   const sevenDisplayedSlots: React.JSX.Element[] = [];
 
   for (let slotNumber = 0; slotNumber < numberOfPaginatorSlots; slotNumber++) {
@@ -35,7 +38,10 @@ export const Paginator = ({
 
   return (
     <>
-      <nav aria-label="Pagination" className="usa-pagination margin-bottom-0">
+      <nav
+        aria-label="Pagination"
+        className="usa-pagination margin-bottom-0 margin-top-0"
+      >
         <ul className="usa-pagination__list">
           {currentPageIndex !== 0 && (
             <PreviousPage
@@ -157,6 +163,7 @@ function getSlotComponent({
   if (slotNumber === 0) {
     return (
       <PageButton
+        key={slotNumber}
         pageNumber={0}
         selected={currentPageIndex === 0}
         onClick={selectedPage => {
@@ -167,10 +174,11 @@ function getSlotComponent({
   }
   if (slotNumber === 1) {
     if (isHidingPreviousOptions) {
-      return <PageEllipsis />;
+      return <PageEllipsis key={slotNumber} />;
     } else {
       return (
         <PageButton
+          key={slotNumber}
           pageNumber={1}
           selected={currentPageIndex === 1}
           onClick={selectedPage => {
@@ -184,6 +192,7 @@ function getSlotComponent({
     if (!isHidingPreviousOptions) {
       return (
         <PageButton
+          key={slotNumber}
           pageNumber={slotNumber}
           selected={currentPageIndex === slotNumber}
           onClick={selectedPage => {
@@ -195,6 +204,7 @@ function getSlotComponent({
     if (!isHidingFutureOptions) {
       return (
         <PageButton
+          key={slotNumber}
           pageNumber={totalPages - numberOfPaginatorSlots + slotNumber}
           selected={
             currentPageIndex ===
@@ -208,6 +218,7 @@ function getSlotComponent({
     }
     return (
       <PageButton
+        key={slotNumber}
         pageNumber={currentPageIndex + slotNumber - 3}
         selected={currentPageIndex === currentPageIndex + slotNumber - 3}
         onClick={selectedPage => {
@@ -218,11 +229,12 @@ function getSlotComponent({
   }
   if (slotNumber === 5) {
     if (isHidingFutureOptions) {
-      return <PageEllipsis />;
+      return <PageEllipsis key={slotNumber} />;
     } else {
       const subtractor = totalPages >= 7 ? 2 : 1;
       return (
         <PageButton
+          key={slotNumber}
           pageNumber={totalPages - subtractor}
           selected={currentPageIndex === totalPages - subtractor}
           onClick={selectedPage => {
@@ -235,6 +247,7 @@ function getSlotComponent({
   if (slotNumber === 6) {
     return (
       <PageButton
+        key={slotNumber}
         pageNumber={totalPages - 1}
         selected={currentPageIndex === totalPages - 1}
         onClick={selectedPage => {
