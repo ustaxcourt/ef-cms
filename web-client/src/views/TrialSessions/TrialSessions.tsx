@@ -259,10 +259,14 @@ const TrialSessionFilters = connect(
             startPickerCls="padding-right-2"
             startValue=""
             onChangeEnd={e => {
-              console.log('onChangeEnd', e.target.value);
+              setTrialSessionsFiltersSequence({
+                endDate: e.target.value,
+              });
             }}
             onChangeStart={e => {
-              console.log('onChangeStart', e.target.value);
+              setTrialSessionsFiltersSequence({
+                startDate: e.target.value,
+              });
             }}
           />
         </div>
