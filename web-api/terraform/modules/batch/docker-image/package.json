@@ -1,0 +1,12 @@
+{
+  "name": "docker-image",
+  "version": "1.0.0",
+  "main": "testScript.js",
+  "scripts": {
+		"deploy": "./deploy-to-ecr.sh"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
