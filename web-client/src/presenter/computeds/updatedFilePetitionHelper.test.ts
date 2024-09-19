@@ -3,7 +3,10 @@ import {
   PARTY_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
-import { petitionerUser } from '@shared/test/mockUsers';
+import {
+  petitionerUser,
+  privatePractitionerUser,
+} from '@shared/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { updatedFilePetitionHelper as updatedFilePetitionHelperComputed } from './updatedFilePetitionHelper';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -89,10 +92,49 @@ describe('updatedFilePetitionHelper', () => {
         state: { form: {}, user: petitionerUser },
       });
       expect(result.filingOptions).toEqual([
-        'Myself',
-        'Myself and my spouse',
-        'A business',
-        'Other',
+        { label: 'Myself', value: 'Myself' },
+        { label: 'Myself and my spouse', value: 'Myself and my spouse' },
+        { label: 'A business', value: 'A business' },
+        { label: 'Other', value: 'Other' },
+      ]);
+    });
+    it('should return filing options for practitioner', () => {
+      const result = runCompute(updatedFilePetitionHelper, {
+        state: { form: {}, user: privatePractitionerUser },
+      });
+      expect(result.filingOptions).toEqual([
+        { label: 'Petitioner', value: 'Individual petitioner' },
+        {
+          label: 'Petitioner and petitioner spouse',
+          value: 'Petitioner and spouse',
+        },
+        { label: 'A business', value: 'A business' },
+        { label: 'Other', value: 'Other' },
+      ]);
+    });
+  });
+  describe('otherFilingOptions', () => {
+    it('should return the other filing options for petitioner', () => {
+      const result = runCompute(updatedFilePetitionHelper, {
+        state: { form: {}, user: petitionerUser },
+      });
+      expect(result.otherFilingOptions).toEqual([
+        'An estate or trust',
+        'A minor or legally incompetent person',
+        'Donor',
+        'Transferee',
+        'Deceased Spouse',
+      ]);
+    });
+    it('should return other filing options for practitioner', () => {
+      const result = runCompute(updatedFilePetitionHelper, {
+        state: { form: {}, user: privatePractitionerUser },
+      });
+      expect(result.otherFilingOptions).toEqual([
+        'An estate or trust',
+        'Donor',
+        'Transferee',
+        'Deceased Spouse',
       ]);
     });
   });
@@ -138,7 +180,6 @@ describe('updatedFilePetitionHelper', () => {
       expect(result.showContactInformationForOtherPartyType).toBeFalsy();
     });
   });
-
   describe('otherContactNameLabel', () => {
     it('should return correct labels for survivingSpouse', () => {
       const result = runCompute(updatedFilePetitionHelper, {
@@ -290,6 +331,50 @@ describe('updatedFilePetitionHelper', () => {
       expect(result.otherContactNameLabel).toEqual({
         primaryLabel: 'Full name of petitioner',
       });
+    });
+  });
+  describe('primaryContactNameLabel', () => {
+    it('should return the correct primary contact name label when filing as a petitioner', () => {
+      const result = runCompute(updatedFilePetitionHelper, {
+        state: {
+          form: {
+            partyType: PARTY_TYPES.petitioner,
+          },
+          user: petitionerUser,
+        },
+      });
+      expect(result.primaryContactNameLabel).toEqual('Full Name');
+    });
+    it('should return the correct primary contact name label when filing as a private practitioner', () => {
+      const result = runCompute(updatedFilePetitionHelper, {
+        state: {
+          form: {
+            partyType: PARTY_TYPES.petitioner,
+          },
+          user: privatePractitionerUser,
+        },
+      });
+      expect(result.primaryContactNameLabel).toEqual('Petitioner’s full name');
+    });
+  });
+  describe('getLetterByIndex', () => {
+    it('should return the correct single-letter label for a given index', () => {
+      const result = runCompute(updatedFilePetitionHelper, {
+        state: {
+          form: {},
+          user: petitionerUser,
+        },
+      });
+      expect(result.getLetterByIndex(1)).toEqual('b');
+    });
+    it('returns the correct multi-letter label when index exceeds 25 (ex: aa, ab)', () => {
+      const result = runCompute(updatedFilePetitionHelper, {
+        state: {
+          form: {},
+          user: petitionerUser,
+        },
+      });
+      expect(result.getLetterByIndex(26)).toEqual('aa');
     });
   });
 });

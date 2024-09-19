@@ -1,6 +1,6 @@
 import { AutoGeneratePetitionForm } from '@web-client/views/StartCaseUpdated/AutoGeneratePetitionForm';
-import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
+import { InlineLink } from '@web-client/ustc-ui/InlineLink/InlineLink';
 import { PETITION_TYPES } from '@shared/business/entities/EntityConstants';
 import { RedactionAcknowledgement } from '@web-client/views/StartCaseUpdated/RedactionAcknowledgement';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
@@ -18,15 +18,19 @@ export const UpdatedFilePetitionStep2 = connect(
     form: state.form,
     setPetitionTypeSequence: sequences.setPetitionTypeSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    updatedFilePetitionHelper: state.updatedFilePetitionHelper,
     validationErrors: state.validationErrors,
   },
   function UpdatedFilePetitionStep2({
     constants,
     form,
     setPetitionTypeSequence,
+    updatedFilePetitionHelper,
     updateFormValueSequence,
     validationErrors,
   }) {
+    const { isPetitioner } = updatedFilePetitionHelper;
+
     const isNextButtonDisabled =
       form.petitionType === PETITION_TYPES.userUploaded &&
       !form.petitionRedactionAcknowledgement;
@@ -79,8 +83,7 @@ export const UpdatedFilePetitionStep2 = connect(
           <div>
             <WarningNotificationComponent
               alertWarning={{
-                message:
-                  'Do not include personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers, birthdates, names of minor children, or financial account information) in your Petition or any other filing with the Court except in the Statement of Taxpayer Identification Number.',
+                message: `Do not include personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers, birthdates, names of minor children, or financial account information) in ${isPetitioner ? 'your' : 'the'} Petition or any other filing with the Court except in the Statement of Taxpayer Identification Number.`,
               }}
               dismissible={false}
               scrollToTop={false}
@@ -90,18 +93,12 @@ export const UpdatedFilePetitionStep2 = connect(
                 You may download and fill out the Court’s form if you haven’t
                 already done so:
               </p>
-              <Button
-                link
-                className="usa-link--external text-left mobile-text-wrap"
+              <InlineLink
                 href="https://www.ustaxcourt.gov/resources/forms/Petition_Simplified_Form_2.pdf"
                 icon="file-pdf"
-                iconColor="blue"
-                overrideMargin="margin-right-1"
-                rel="noopener noreferrer"
-                target="_blank"
               >
                 Petition form (T.C. Form 2)
-              </Button>
+              </InlineLink>
             </div>
             <FormGroup
               className="margin-top-2"

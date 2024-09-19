@@ -35,10 +35,32 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
         fillIrsNoticeInformation(VALID_FILE);
         fillCaseProcedureInformation();
         fillStinInformation(VALID_FILE);
-        cy.get('[data-testid="petition-preview-button"]').should(
-          'have.text',
-          'sample.pdf',
-        );
+        cy.get(`[data-testid="irs-notice-info-${0}"]`).within(() => {
+          cy.contains('IRS notice 1').should('exist');
+          cy.contains('Notice of Deficiency').should('exist');
+          cy.get('[data-testid="atp-preview-button"]').should(
+            'have.text',
+            'sample.pdf',
+          );
+        });
+        cy.get(`[data-testid="irs-notice-info-${1}"]`).should('not.exist');
+      });
+
+      it('should display IRS notice information for a disclosure case type', () => {
+        fillIrsNoticeInformation(VALID_FILE, 'Disclosure2');
+        fillCaseProcedureInformation();
+        fillStinInformation(VALID_FILE);
+        cy.get(`[data-testid="irs-notice-info-${0}"]`).within(() => {
+          cy.contains('IRS notice 1').should('exist');
+          cy.contains(
+            'Notice - We Are Going To Make Your Determination Letter Available for Public Inspection',
+          ).should('exist');
+          cy.get('[data-testid="atp-preview-button"]').should(
+            'have.text',
+            'sample.pdf',
+          );
+        });
+        cy.get(`[data-testid="irs-notice-info-${1}"]`).should('not.exist');
       });
       it('should display IRS notice information for multiple IRS notices', () => {
         fillMultipleIRSNotices(VALID_FILE);
@@ -47,6 +69,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
 
         cy.get(`[data-testid="irs-notice-info-${0}"]`).within(() => {
           cy.contains('IRS notice 1').should('exist');
+          cy.contains('Notice of Deficiency').should('exist');
           cy.contains('2024').should('exist');
           cy.contains('05/02/24').should('exist');
           cy.contains('Jackson, NJ').should('exist');
@@ -58,6 +81,9 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
 
         cy.get(`[data-testid="irs-notice-info-${1}"]`).within(() => {
           cy.contains('IRS notice 2').should('exist');
+          cy.contains(
+            'Notice of Determination Concerning Collection Action',
+          ).should('exist');
           cy.contains('2023').should('exist');
           cy.contains('05/02/23').should('exist');
           cy.contains('New York, NY').should('exist');

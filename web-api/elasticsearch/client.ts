@@ -2,7 +2,6 @@ import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws-v3';
 import { Client } from '@opensearch-project/opensearch';
 import {
   DescribeDomainCommand,
-  ListDomainNamesCommand,
   OpenSearchClient,
 } from '@aws-sdk/client-opensearch';
 import { defaultProvider } from '@aws-sdk/credential-provider-node';
@@ -55,21 +54,4 @@ export const getClient = async ({
         }),
         node: elasticsearchEndpoint,
       });
-};
-
-export const listDomains = async (): Promise<string[]> => {
-  const openSearchClient = new OpenSearchClient({ region: 'us-east-1' });
-  const listDomainsCommand: ListDomainNamesCommand = new ListDomainNamesCommand(
-    { EngineType: 'OpenSearch' || 'Elasticsearch' },
-  );
-  const listDomainsResponse = await openSearchClient.send(listDomainsCommand);
-  const domainNames: string[] = [];
-  if (listDomainsResponse.DomainNames) {
-    for (const domainInfo of listDomainsResponse.DomainNames) {
-      if (domainInfo.DomainName) {
-        domainNames.push(domainInfo.DomainName);
-      }
-    }
-  }
-  return domainNames;
 };

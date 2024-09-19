@@ -310,7 +310,7 @@ describe('File a petition', () => {
       cy.get('[data-testid="contact-primary-phone"]').type(contactInfo.phone);
       attachFile({
         filePath: VALID_FILE,
-        selector: '[data-testid="contact-primary-phone"]',
+        selector: '[data-testid="corporate-disclosure-file"]',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
       cy.get('[data-testid="step-1-next-button"]').click();
