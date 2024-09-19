@@ -50,7 +50,7 @@ export const StatisticsForm = connect(
           name={`statistics.${index}.irsDeficiencyAmount`}
           value={form.statistics[index].irsDeficiencyAmount || ''}
           onBlur={() =>
-            validatePetitionFromPaperSequence({ preventAutoScroll: true })
+            validatePetitionFromPaperSequence({ isSubmitting: true })
           }
           onValueChange={values => {
             updateStatisticsFormValueSequence({
@@ -136,7 +136,7 @@ export const StatisticsForm = connect(
                     value={form.statistics[index].year || ''}
                     onBlur={() =>
                       validatePetitionFromPaperSequence({
-                        preventAutoScroll: true,
+                        isSubmitting: true,
                       })
                     }
                     onChange={e => {

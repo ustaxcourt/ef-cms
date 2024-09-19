@@ -53,7 +53,7 @@ export const CaseInformation = connect(
               toFormat: DATE_FORMATS.ISO,
               value: e.target.value,
             });
-            validatePetitionFromPaperSequence({ preventAutoScroll: true });
+            validatePetitionFromPaperSequence({ isSubmitting: true });
           }}
         />
         <FormGroup errorText={validationErrors.mailingDate}>
@@ -67,7 +67,7 @@ export const CaseInformation = connect(
             name="mailingDate"
             value={form.mailingDate || ''}
             onBlur={() =>
-              validatePetitionFromPaperSequence({ preventAutoScroll: true })
+              validatePetitionFromPaperSequence({ isSubmitting: true })
             }
             onChange={e => {
               updateFormValueSequence({
@@ -87,7 +87,7 @@ export const CaseInformation = connect(
             name="caseCaption"
             value={form.caseCaption}
             onBlur={() => {
-              validatePetitionFromPaperSequence({ preventAutoScroll: true });
+              validatePetitionFromPaperSequence({ isSubmitting: true });
             }}
             onChange={e => {
               updateFormValueSequence({
@@ -109,7 +109,7 @@ export const CaseInformation = connect(
               value: e.target.value,
             });
             clearPreferredTrialCitySequence();
-            validatePetitionFromPaperSequence({ preventAutoScroll: true });
+            validatePetitionFromPaperSequence({ isSubmitting: true });
           }}
         />
         <FormGroup>
@@ -150,7 +150,7 @@ export const CaseInformation = connect(
               key: e.target.name,
               value: e.target.value || null,
             });
-            validatePetitionFromPaperSequence({ preventAutoScroll: true });
+            validatePetitionFromPaperSequence({ isSubmitting: true });
           }}
         />
         <FormGroup errorText={validationErrors['object.missing']}>
@@ -167,7 +167,7 @@ export const CaseInformation = connect(
                   key: e.target.name,
                   value: e.target.checked,
                 });
-                validatePetitionFromPaperSequence({ preventAutoScroll: true });
+                validatePetitionFromPaperSequence({ isSubmitting: true });
               }}
             />
             <label
