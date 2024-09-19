@@ -40,7 +40,7 @@ export const Parties = connect(
                 key: e.target.name,
                 value: e.target.value,
               });
-              validatePetitionFromPaperSequence({ isSubmitting: true });
+              validatePetitionFromPaperSequence({ isSubmitting: false });
             }}
           >
             <option value="">- Select -</option>
@@ -93,7 +93,7 @@ export const Parties = connect(
               }
               useSameAsPrimary={true}
               onBlur={() =>
-                validatePetitionFromPaperSequence({ isSubmitting: true })
+                validatePetitionFromPaperSequence({ isSubmitting: false })
               }
               onChange="updateFormValueAndCaseCaptionSequence"
             />
