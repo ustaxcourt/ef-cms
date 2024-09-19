@@ -18,4 +18,4 @@ export const updatedFilePetitionCompleteStep3Sequence = [
       incrementCurrentStepIndicatorAction,
     ],
   },
-];
+] as unknown as () => void;

@@ -1,7 +1,10 @@
 import { CASE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { formatPetitionAction } from '@web-client/presenter/actions/formatPetitionAction';
-import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
+import {
+  mockPetitionerUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -158,38 +161,82 @@ describe('formatPetitionAction', () => {
     });
   });
 
-  it('should set noticeIssuedDate and taxYear as undefined if there is no irsNotice', async () => {
-    const propsWithoutIrsNotice = {
-      ...PROPS,
-      createPetitionStep3Data: {
-        caseType: CASE_TYPES_MAP.deficiency,
-        irsNotices: [],
-      },
-    };
+  it('should set counsel contact if user is a private practitioner', async () => {
     const results = await runAction(formatPetitionAction, {
       modules: {
         presenter,
       },
-      props: propsWithoutIrsNotice,
+      props: PROPS,
       state: {
         petitionFormatted: undefined,
         user: {
-          ...mockPetitionerUser,
-          email: TEST_EMAIL,
+          ...mockPrivatePractitionerUser,
+          barNumber: 'TEST_barNumber',
+          contact: {
+            address1: 'TEST_address1',
+            address2: 'TEST_address2',
+            address3: 'TEST_address3',
+            city: 'TEST_city',
+            phone: 'TEST_phone',
+            postalCode: 'TEST_postalCode',
+            state: 'TEST_state',
+          },
+          firmName: 'TEST_firmName',
         },
       },
     });
 
-    expect(results.state.petitionFormatted).toEqual({
-      caseCaption: 'TEST_CASE_CAPTION',
-      caseCaptionExtension: '',
-      caseTitle: 'TEST_CASE_CAPTION',
-      caseType: CASE_TYPES_MAP.deficiency,
-      contactPrimary: {
-        email: 'TEST_EMAIL',
-      },
-      irsNotices: [],
-      originalCaseType: CASE_TYPES_MAP.deficiency,
+    expect(results.state.petitionFormatted.contactCounsel).toEqual({
+      address1: 'TEST_address1',
+      address2: 'TEST_address2',
+      address3: 'TEST_address3',
+      barNumber: 'TEST_barNumber',
+      city: 'TEST_city',
+      email: 'mockPrivatePractitioner@example.com',
+      firmName: 'TEST_firmName',
+      name: 'Reginald Barclay',
+      phone: 'TEST_phone',
+      postalCode: 'TEST_postalCode',
+      state: 'TEST_state',
     });
+  });
+
+  it('should set primary contact email to user email when the user is a petitioner', async () => {
+    const results = await runAction(formatPetitionAction, {
+      modules: {
+        presenter,
+      },
+      props: PROPS,
+      state: {
+        petitionFormatted: undefined,
+        user: mockPetitionerUser,
+      },
+    });
+
+    expect(results.state.petitionFormatted?.contactPrimary?.email).toEqual(
+      'mockPetitioner@example.com',
+    );
+  });
+
+  it('should not set primary contact email to user email when the user is a private practitioner', async () => {
+    const results = await runAction(formatPetitionAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        ...PROPS,
+        createPetitionStep1Data: {
+          contactPrimary: { email: 'test@example.com' },
+        },
+      },
+      state: {
+        petitionFormatted: undefined,
+        user: mockPrivatePractitionerUser,
+      },
+    });
+
+    expect(results.state.petitionFormatted?.contactPrimary?.email).toEqual(
+      'mockPrivatePractitioner@example.com',
+    );
   });
 });

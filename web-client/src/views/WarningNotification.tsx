@@ -63,7 +63,10 @@ export const WarningNotificationComponent =
                 <div className="grid-row">
                   <div className="tablet:grid-col-10">
                     {alertWarning.title && (
-                      <p className="usa-alert__heading padding-top-0">
+                      <p
+                        className="usa-alert__heading padding-top-0"
+                        data-testid="warning-alert-title"
+                      >
                         {alertWarning.title}
                       </p>
                     )}
@@ -72,6 +75,7 @@ export const WarningNotificationComponent =
                         'usa-alert__text',
                         messageNotBold && 'font-weight-normal',
                       )}
+                      data-testid="warning-alert-message"
                     >
                       {alertWarning.message}
                     </p>

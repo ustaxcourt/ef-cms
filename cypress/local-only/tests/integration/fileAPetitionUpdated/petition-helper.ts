@@ -155,7 +155,14 @@ export function fillPetitionerInformation() {
 export function fillIrsNoticeInformation(
   filePath: string,
   caseType: string = 'Deficiency',
+  hasIrsNotice: boolean = true,
 ) {
+  if (!hasIrsNotice) {
+    cy.get('[data-testid="irs-notice-No"]').click();
+    cy.get('[data-testid="case-type-select"]').select(caseType);
+    cy.get('[data-testid="step-3-next-button"]').click();
+    return;
+  }
   cy.get('[data-testid="irs-notice-Yes"]').click();
   attachFile({
     filePath,
@@ -163,6 +170,8 @@ export function fillIrsNoticeInformation(
     selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
   });
   cy.get('[data-testid="case-type-select"]').select(caseType);
+  cy.get('[data-testid="irs-notice-tax-year-0"]').type('2024');
+  cy.get('[data-testid="city-and-state-issuing-office-0"]').type('Jackson, NJ');
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="step-3-next-button"]').click();
 }
