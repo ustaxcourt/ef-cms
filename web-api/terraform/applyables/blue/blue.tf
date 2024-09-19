@@ -88,6 +88,13 @@ module "lambda_role_blue" {
   dns_domain  = var.dns_domain
 }
 
+module "zip_bach" {
+  source            = "../../modules/batch"
+  environment       = var.environment
+  dns_domain        = var.dns_domain
+  current_color     = "blue"
+}
+
 module "api-east-blue" {
   source              = "../../modules/api"
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_east.arn
