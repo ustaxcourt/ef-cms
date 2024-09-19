@@ -93,6 +93,11 @@ module "zip_bach" {
   environment       = var.environment
   dns_domain        = var.dns_domain
   current_color     = "blue"
+
+  providers = {
+    aws           = aws.us-east-1
+    aws.us-east-1 = aws.us-east-1
+  }
 }
 
 module "api-east-blue" {
