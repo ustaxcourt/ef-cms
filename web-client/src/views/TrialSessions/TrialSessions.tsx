@@ -244,7 +244,7 @@ const TrialSessionFilters = connect(
           <DateRangePickerComponent
             endDateErrorText={''}
             endName="trialSessionStartDate"
-            endValue=""
+            endValue={trialSessionsPage.filters.endDate}
             formGroupCls="margin-bottom-0"
             maxDate={''}
             rangePickerCls={'display-flex flex-align-end'}
@@ -257,7 +257,7 @@ const TrialSessionFilters = connect(
             }
             startName="trialSessionEndDate"
             startPickerCls="padding-right-2"
-            startValue=""
+            startValue={trialSessionsPage.filters.startDate}
             onChangeEnd={e => {
               setTrialSessionsFiltersSequence({
                 endDate: e.target.value,
@@ -396,11 +396,11 @@ const TrialSessionFilters = connect(
         </div>
         <Button
           link
-          disabled={trialSessionsHelper.isClearFiltersDisabled}
-          tooltip="Clear Filters"
+          disabled={trialSessionsHelper.isResetFiltersDisabled}
+          tooltip="Reset Filters"
           onClick={() => resetTrialSessionsFiltersSequence()}
         >
-          Clear Filters
+          Reset Filters
         </Button>
       </>
     );

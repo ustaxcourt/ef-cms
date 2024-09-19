@@ -15,13 +15,14 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
+import { initialTrialSessionPageState } from '@web-client/presenter/state/trialSessionsPageState';
 import { sortBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const trialSessionsHelper = (
   get: Get,
 ): {
-  isClearFiltersDisabled: boolean;
+  isResetFiltersDisabled: boolean;
   showNewTrialSession: boolean;
   showNoticeIssued: boolean;
   showSessionStatus: boolean;
@@ -46,7 +47,6 @@ export const trialSessionsHelper = (
     trialSessionJudges = get(state.judges);
   } else {
     trialSessionJudges = get(state.legacyAndCurrentJudges);
-    console.log('legecy length: ', trialSessionJudges.length);
   }
 
   const sessionTypeOptions = Object.values(SESSION_TYPES).map(sessionType => ({
@@ -87,7 +87,6 @@ export const trialSessionsHelper = (
     [],
   );
 
-  console.log('filters', filters);
   const filteredTrialSessions = trialSessions
     .filter(trialSession => {
       const isCalendaredFilter = filters.currentTab === 'calendared';
@@ -123,14 +122,20 @@ export const trialSessionsHelper = (
       return !!filters.trialLocations[trialSession.trialLocation || ''];
     })
     .filter(trialSession => {
-      if (filters.startDate && filters.endDate) {
-        const startDate = createISODateString(filters.startDate, 'MM/dd/yyyy');
-        const endDate = createISODateString(filters.endDate, 'MM/dd/yyyy');
-
-        const sessionDate = trialSession.startDate;
-        return sessionDate >= startDate && sessionDate <= endDate;
-      }
-      return true;
+      if (!filters.startDate) return true;
+      const filterIsoStartDate = createISODateString(
+        filters.startDate,
+        FORMATS.MMDDYYYY,
+      );
+      return trialSession.startDate >= filterIsoStartDate;
+    })
+    .filter(trialSession => {
+      if (!filters.endDate) return true;
+      const filterIsoEndDate = createISODateString(
+        filters.endDate,
+        FORMATS.MMDDYYYY,
+      );
+      return trialSession.startDate <= filterIsoEndDate;
     })
     .sort((sessionA, sessionB) => {
       return sessionA.startDate.localeCompare(sessionB.startDate);
@@ -141,14 +146,19 @@ export const trialSessionsHelper = (
     trialSessions: filteredTrialSessions,
   });
 
-  const isClearFiltersDisabled = ![
-    ...Object.keys(filters.judges),
-    ...Object.keys(filters.sessionTypes),
-    ...Object.keys(filters.trialLocations),
-  ].length;
+  const userHasSelectedAFilter =
+    filters.proceedingType !==
+      initialTrialSessionPageState.filters.proceedingType ||
+    filters.sessionStatus !==
+      initialTrialSessionPageState.filters.sessionStatus ||
+    Object.keys(filters.judges).length > 0 ||
+    Object.keys(filters.sessionTypes).length > 0 ||
+    Object.keys(filters.trialLocations).length > 0 ||
+    !!filters.startDate ||
+    !!filters.endDate;
 
   return {
-    isClearFiltersDisabled,
+    isResetFiltersDisabled: !userHasSelectedAFilter,
     searchableTrialLocationOptions,
     sessionTypeOptions,
     showNewTrialSession: permissions.CREATE_TRIAL_SESSION,
