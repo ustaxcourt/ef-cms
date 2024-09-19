@@ -12,6 +12,12 @@ export const TrialSessionsTable = connect(
   function TrialSessionsTable({ trialSessionsHelper, trialSessionsPage }) {
     return (
       <>
+        <div className="text-right margin-bottom-5">
+          <span className="text-bold">Count:</span>{' '}
+          <span className="text-semibold">
+            {trialSessionsHelper.trialSessionsCount}
+          </span>
+        </div>
         <table
           aria-describedby="trial-sessions-filter-label locationFilter proceedingFilter sessionFilter judgeFilter"
           aria-label={`${trialSessionsPage.filters.currentTab} trial sessions`}
