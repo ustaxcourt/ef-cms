@@ -67,6 +67,7 @@ export const TrialSessions = connect(
               <Tab
                 data-testid="new-trial-sessions-tab"
                 id="new-trial-sessions-tab"
+                key="new"
                 tabName="new"
                 title="New"
               >
@@ -77,6 +78,7 @@ export const TrialSessions = connect(
             <Tab
               data-testid="calendared-trial-sessions-tab"
               id="calendared-trial-sessions-tab"
+              key="calendared"
               tabName="calendared"
               title="Calendared"
             >
