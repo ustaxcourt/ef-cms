@@ -8,7 +8,6 @@ import { filterEmptyStatisticsAction } from '../actions/StartCaseInternal/filter
 import { getPetitionIdAction } from '../actions/getPetitionIdAction';
 import { navigateToReviewSavedPetitionAction } from '../actions/CaseDetailEdit/navigateToReviewSavedPetitionAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
@@ -33,11 +32,7 @@ export const submitPetitionFromPaperSequence = [
       filterEmptyStatisticsAction,
       validatePetitionFromPaperAction,
       {
-        error: [
-          setAlertErrorAction,
-          setValidationErrorsAction,
-          setValidationAlertErrorsAction,
-        ],
+        error: [setValidationErrorsAction, setValidationAlertErrorsAction],
         success: [
           setupCurrentPageAction('Interstitial'),
           stopShowValidationAction,

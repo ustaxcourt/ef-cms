@@ -79,8 +79,7 @@ export const CaseTypeSelect = connect<
                   value: e.target.value,
                 });
                 if (onChangePreValidation) onChangePreValidation();
-                if (validateFormData)
-                  validateFormData({ preventAutoScroll: true });
+                if (validateFormData) validateFormData({ isSubmitting: true });
               }}
             >
               {allowDefaultOption && <option value="">-- Select --</option>}

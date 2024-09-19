@@ -89,9 +89,7 @@ export const PartyInformation = connect(
               showPrimaryContact={caseDetailEditHelper.showPrimaryContact}
               showSecondaryContact={caseDetailEditHelper.showSecondaryContact}
               useSameAsPrimary={true}
-              onBlur={() =>
-                validateCaseDetailSequence({ preventAutoScroll: true })
-              }
+              onBlur={() => validateCaseDetailSequence({ isSubmitting: true })}
               onChange="updateFormValueAndCaseCaptionSequence"
             />
           </div>
