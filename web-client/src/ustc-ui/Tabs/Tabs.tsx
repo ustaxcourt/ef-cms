@@ -82,7 +82,7 @@ export function Tab(properties: {
 const HeadingElement = ({ children, level }) => {
   return React.createElement(
     `h${level}`,
-    { ariaHidden: 'false', className: 'sr-only' },
+    { 'aria-hidden': 'false', className: 'sr-only' },
     children,
   );
 };
