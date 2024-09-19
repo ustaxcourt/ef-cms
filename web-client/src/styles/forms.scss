@@ -13,7 +13,7 @@
       border-left-style: unset;
       border-left-color: unset;
     }
-    
+
     max-width: 65rem;
     flex: 1;
 
@@ -32,26 +32,24 @@
       align-items: center;
 
       @media only screen and (max-width: ($medium-screen - 1px)) {
-          flex-direction: column;
-          align-items: flex-end; 
+        flex-direction: column;
+        align-items: flex-end;
       }
     }
 
     .fact-or-reason-button-wrapper {
       width: 40px;
       margin-left: 10px;
-      
+
       @media only screen and (max-width: ($medium-screen - 1px)) {
         margin-right: 35px;
       }
     }
 
-
     .fact-reason-character-label {
       width: 2ch;
       text-align: left;
     }
-   
 
     .usa-form-group {
       margin-bottom: 15px;
@@ -132,6 +130,10 @@ legend {
     max-width: 580px;
     margin-top: 0;
   }
+}
+
+textarea {
+  resize: vertical;
 }
 
 input[type='email'],
