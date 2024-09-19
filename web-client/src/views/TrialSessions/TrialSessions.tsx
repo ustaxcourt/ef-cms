@@ -92,11 +92,14 @@ export const TrialSessions = connect(
 
 const TrialSessionFilters = connect(
   {
+    resetTrialSessionsFiltersSequence:
+      sequences.resetTrialSessionsFiltersSequence,
     setTrialSessionsFiltersSequence: sequences.setTrialSessionsFiltersSequence,
     trialSessionsHelper: state.trialSessionsHelper,
     trialSessionsPage: state.trialSessionsPage,
   },
   function TrialSessionFilters({
+    resetTrialSessionsFiltersSequence,
     setTrialSessionsFiltersSequence,
     trialSessionsHelper,
     trialSessionsPage,
@@ -388,6 +391,14 @@ const TrialSessionFilters = connect(
             </div>
           </div>
         </div>
+        <Button
+          link
+          // disabled
+          tooltip="Clear Filters"
+          onClick={() => resetTrialSessionsFiltersSequence()}
+        >
+          Clear Filters
+        </Button>
       </>
     );
   },

@@ -1,14 +1,15 @@
-import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import {
+  SESSION_STATUS_TYPES,
   TrialSessionProceedingType,
   TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
+import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 
 const filters: TrialSessionsFilters = {
   currentTab: 'calendared' as 'calendared' | 'new',
   judges: {},
   proceedingType: 'All' as TrialSessionProceedingType,
-  sessionStatus: 'Open',
+  sessionStatus: SESSION_STATUS_TYPES.open,
   sessionTypes: {},
   trialLocations: {},
 };

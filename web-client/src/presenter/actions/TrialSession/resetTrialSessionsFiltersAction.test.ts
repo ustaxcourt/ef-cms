@@ -8,8 +8,8 @@ describe('resetTrialSessionsFiltersAction', () => {
       state: {},
     });
 
-    expect(result.state.trialSessionsPage).toEqual(
-      initialTrialSessionPageState,
+    expect(result.state.trialSessionsPage.filters).toEqual(
+      initialTrialSessionPageState.filters,
     );
   });
 });
