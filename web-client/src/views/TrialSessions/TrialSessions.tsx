@@ -393,7 +393,7 @@ const TrialSessionFilters = connect(
         </div>
         <Button
           link
-          // disabled
+          disabled={trialSessionsHelper.isClearFiltersDisabled}
           tooltip="Clear Filters"
           onClick={() => resetTrialSessionsFiltersSequence()}
         >

@@ -20,6 +20,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const trialSessionsHelper = (
   get: Get,
 ): {
+  isClearFiltersDisabled: boolean;
   showNewTrialSession: boolean;
   showNoticeIssued: boolean;
   showSessionStatus: boolean;
@@ -129,7 +130,14 @@ export const trialSessionsHelper = (
     trialSessions: filteredTrialSessions,
   });
 
+  const isClearFiltersDisabled = ![
+    ...Object.keys(filters.judges),
+    ...Object.keys(filters.sessionTypes),
+    ...Object.keys(filters.trialLocations),
+  ].length;
+
   return {
+    isClearFiltersDisabled,
     searchableTrialLocationOptions,
     sessionTypeOptions,
     showNewTrialSession: permissions.CREATE_TRIAL_SESSION,
