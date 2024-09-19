@@ -18,18 +18,23 @@ export const TrialSessionsTable = connect(
   }) {
     return (
       <>
-        <div className="text-right margin-bottom-5">
-          <Paginator
-            currentPageIndex={trialSessionsPage.filters.pageNumber}
-            totalPages={trialSessionsHelper.totalPages}
-            onPageChange={selectedPage => {
-              setTrialSessionsFiltersSequence({ pageNumber: selectedPage });
-            }}
-          />
-          <span className="text-bold">Count:</span>{' '}
-          <span className="text-semibold">
-            {trialSessionsHelper.trialSessionsCount}
-          </span>
+        <div className="grid-row margin-bottom-2 flex-align-center">
+          <div className="grid-col"></div>
+          <div className="grid-col">
+            <Paginator
+              currentPageIndex={trialSessionsPage.filters.pageNumber}
+              totalPages={trialSessionsHelper.totalPages}
+              onPageChange={selectedPage => {
+                setTrialSessionsFiltersSequence({ pageNumber: selectedPage });
+              }}
+            />
+          </div>
+          <div className="grid-col text-right">
+            <span className="text-bold">Count:</span>{' '}
+            <span className="text-semibold">
+              {trialSessionsHelper.trialSessionsCount}
+            </span>
+          </div>
         </div>
         <table
           aria-describedby="trial-sessions-filter-label locationFilter proceedingFilter sessionFilter judgeFilter"

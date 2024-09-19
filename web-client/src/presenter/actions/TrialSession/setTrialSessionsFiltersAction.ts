@@ -86,14 +86,12 @@ export const setTrialSessionsFiltersAction = ({
     );
   }
 
-  if (props.pageNumber || props.pageNumber === 0) {
-    store.set(state.trialSessionsPage.filters.pageNumber, props.pageNumber);
-  }
-
   if (props.startDate || props.startDate === '') {
     store.set(state.trialSessionsPage.filters.startDate, props.startDate);
   }
   if (props.endDate || props.endDate === '') {
     store.set(state.trialSessionsPage.filters.endDate, props.endDate);
   }
+
+  store.set(state.trialSessionsPage.filters.pageNumber, props.pageNumber || 0); // Always reset page number to 0
 };
