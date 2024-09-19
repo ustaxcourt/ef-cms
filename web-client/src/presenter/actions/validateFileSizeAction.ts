@@ -1,4 +1,4 @@
-import { limitFileSize } from '../../views/limitFileSize';
+import { validateFileSize } from '@web-client/views/FileHandlingHelpers/fileValidation';
 
 /**
  * validates whether the given file size does not exceed the set max upload limit
@@ -17,9 +17,12 @@ export const validateFileSizeAction = ({
   const { MAX_FILE_SIZE_MB } = applicationContext.getConstants();
   const { file } = props;
 
-  const isFileSizeValid = limitFileSize(file, MAX_FILE_SIZE_MB, () => null);
+  const fileSizeValidation = validateFileSize({
+    file,
+    megabyteLimit: MAX_FILE_SIZE_MB,
+  });
 
-  if (isFileSizeValid) {
+  if (fileSizeValidation.isValid) {
     return path.valid();
   } else {
     return path.invalid();

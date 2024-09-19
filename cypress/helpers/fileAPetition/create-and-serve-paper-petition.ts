@@ -1,4 +1,5 @@
 import { ProcedureType } from '../../../shared/src/business/entities/EntityConstants';
+import { attachFile } from '../file/upload-file';
 import { loginAsPetitionsClerk1 } from '../authentication/login-as-helpers';
 
 export function createAndServePaperPetition(
@@ -65,38 +66,55 @@ export function createAndServePaperPetition(
   cy.get('[data-testid="case-type-select"]').select('CDP (Lien/Levy)');
   cy.get('#upload-mode-upload').click();
   cy.get('#uploadMode').check();
-  cy.get('#petitionFile-file').attachFile('../../helpers/file/sample.pdf');
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: '#petitionFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
   cy.get('#tabButton-requestForPlaceOfTrialFile > .button-text').click();
   cy.get('#scan-mode-radios').click();
   cy.get('#upload-mode-upload').click();
   cy.get('#uploadMode').check();
-  cy.get('#requestForPlaceOfTrialFile-file').attachFile(
-    '../../helpers/file/sample.pdf',
-  );
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: '#requestForPlaceOfTrialFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
 
   cy.get('[data-testid="tabButton-stinFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
-  cy.get('input#stinFile-file').attachFile('../../helpers/file/sample.pdf');
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: 'input#stinFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
 
   cy.get('[data-testid="tabButton-attachmentToPetitionFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
-  cy.get('input#attachmentToPetitionFile-file').attachFile(
-    '../../helpers/file/sample.pdf',
-  );
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: 'input#attachmentToPetitionFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
   cy.get('[data-testid="remove-pdf"]');
 
   cy.get('[data-testid="tabButton-corporateDisclosureFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
-  cy.get('input#corporateDisclosureFile-file').attachFile(
-    '../../helpers/file/sample.pdf',
-  );
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: 'input#corporateDisclosureFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
+
   cy.get(
     '[data-testid="tabButton-applicationForWaiverOfFilingFeeFile"]',
   ).click();
   cy.get('[data-testid="upload-pdf-button"]').click();
-  cy.get('input#applicationForWaiverOfFilingFeeFile-file').attachFile(
-    '../../helpers/file/sample.pdf',
-  );
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: 'input#applicationForWaiverOfFilingFeeFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
 
   cy.get('[data-testid="submit-paper-petition"]').click();
   return cy
@@ -198,17 +216,27 @@ export function createAndServePaperPetitionMyselfAndSpouse() {
   cy.get('[data-testid="case-type-select"]').select('Deficiency');
 
   cy.get('#upload-mode-upload').click();
-  cy.get('#petitionFile-file').attachFile('../../helpers/file/sample.pdf');
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: '#petitionFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
 
   cy.get('#tabButton-requestForPlaceOfTrialFile > .button-text').click();
   cy.get('#upload-mode-upload').click();
-  cy.get('#requestForPlaceOfTrialFile-file').attachFile(
-    '../../helpers/file/sample.pdf',
-  );
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: '#requestForPlaceOfTrialFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
 
   cy.get('[data-testid="tabButton-stinFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
-  cy.get('input#stinFile-file').attachFile('../../helpers/file/sample.pdf');
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: 'input#stinFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
 
   cy.get('[data-testid="submit-paper-petition"]').click();
 

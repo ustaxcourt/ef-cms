@@ -1,3 +1,4 @@
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import React from 'react';
 
 export const CreatePetitionerAccountInfo = () => {
@@ -22,8 +23,8 @@ export const CreatePetitionerAccountInfo = () => {
       </p>
       <p>
         For additional questions, contact DAWSON support:{' '}
-        <a href="mailto:dawson.support@ustaxcourt.gov">
-          dawson.support@ustaxcourt.gov
+        <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
+          {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
         </a>
       </p>
       <hr />
@@ -41,8 +42,8 @@ export const CreatePetitionerAccountInfo = () => {
       <h2>Need help?</h2>
       <p>
         Contact DAWSON support:{' '}
-        <a href="mailto:dawson.support@ustaxcourt.gov">
-          dawson.support@ustaxcourt.gov
+        <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
+          {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
         </a>
       </p>
     </div>

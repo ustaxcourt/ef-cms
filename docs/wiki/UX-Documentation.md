@@ -3,10 +3,10 @@
 # UX & UI Design Documentation
 
 ## Index
-   1. User Research
-   2. Usability Testing
-   3. UI Design System  
-   4. Content Strategy
+   1. [User Research](#user-research)
+   2. [User Interviews and Usability Testing](#user-interviews-and-usability-testing)
+   3. [UI Design System](#ui-design-system)
+   4. [Content Strategy](#content-strategy)
 
 # User Research
 
@@ -54,6 +54,8 @@ Post-launch, the team continues with research and testing activities.
 
 These document the user flow of the new system we are building. It's a work-in-progress, that's updated to include the new workflows that we developed.
 
+[High Level Case Flow](https://drive.google.com/file/d/1jn1VdIxtP0Cq6Nd8lbLpHzD8QStT304R/view?usp=sharing)
+
 [Create a New Case (Paper Petition)](./Create-a-new-case.pdf)
 
 [Create and Save Order/Notice](./Court-Issued-Orders-Notices.pdf)
@@ -76,29 +78,29 @@ These document the user flow of the new system we are building. It's a work-in-p
 * [Set Calendar](./set-calendar.pdf)
 
 
-# Usability Testing
+# User Interviews and Usability Testing
 
-## Case Form Usability Testing (January 2019)
+### Case Form Usability Testing (January 2019)
 Conducting usability testing with pro se petitioners (public) on the Start a Case form design and user flow.
 
 [Case Form Usability Test - Petitioner  - Test Plan](https://docs.google.com/document/d/1wRmXNfXAumPpczC_P3XbOY4uxUPgUZfY6xc-RNHVmTk/edit?usp=sharing)
 
-[Case Form Usability Test - Petitioner - Findings](https://docs.google.com/presentation/d/1E4MJ4y6lf7C2DkACHvBEubtRdfGCJBsyZ83qDNzXZdo/edit?usp=sharing)
+[Case Form Usability Test - Petitioner - Findings](https://docs.google.com/presentation/d/1Im10X9KW-jkJ76UH6sYdjlHwawJVGMSu/edit?usp=sharing&ouid=101093926770181931184&rtpof=true&sd=true)
 
-## Petition QC Usability Testing (March 2019)
+### Petition QC Usability Testing (March 2019)
 In this study, Flexion UX Designers tested the Petitions QC Workflow in a development environment for the first time. Previously, the team conducted several iterative design studies with Petitions Clerks using Figma wireframes.
 
-[Petitions Workflow Usability Study Findings](https://drive.google.com/open?id=1a3el4zlM0P_sXDZXt75-krHRBW92XVAn24etA0tcCDE)
+[Petitions Workflow Usability Study Findings](https://docs.google.com/presentation/d/19wDxfsMNwsSF6jgCCvvBRaPBUyB2q6Mp/edit?usp=sharing&ouid=101093926770181931184&rtpof=true&sd=true)
 
-## Practitioner Interviews / Usability Testing (April 2019)
+### Practitioner Interviews / Usability Testing (April 2019)
 In this study, Flexion UX Designers interviewed current practitioners to understand their use of the existing Tax Court system. The Flexion UX Team then tested the new Case Form with the practitioners, as well as the file document functionality for the first time.
 
-#### [Case Form Interview and Usability Test - Practitioner - Test Plan](https://docs.google.com/document/d/1zrlYYbbgJsscnl6zDlhf9sooaz7ne0rKujATB2ZbJkw/edit?usp=sharing)
+[Case Form Interview and Usability Test - Practitioner - Test Plan](https://docs.google.com/document/d/1zrlYYbbgJsscnl6zDlhf9sooaz7ne0rKujATB2ZbJkw/edit?usp=sharing)
 
-#### [Case Form Usability Test - Practitioner - Findings](https://drive.google.com/open?id=1HcjhQ3_nKtgIR-9hh8uqKMS4yB02XGwznEKfFrx6SyA)
+[Case Form Usability Test - Practitioner - Findings](https://docs.google.com/presentation/d/1HIwkfqs4Mr2nYAmNw1BFQegLNDcm72Rt/edit?usp=sharing&ouid=101093926770181931184&rtpof=true&sd=true)
 
 
-## Core System Usability Testing (September 2019)
+### Core System Usability Testing (September 2019)
 In this comprehensive study, Flexion UX Designers performed a usability study with several user groups to test the core system functionality implemented to date.  This study included all major user roles, including both internal and external users.
 
 [Petition Clerk Research Plan](https://docs.google.com/document/d/13PbCRJ2fIl5sAtWbZQztOlCHa3YNqsZA5AOOUBsuTuI/edit?usp=sharing)
@@ -115,34 +117,32 @@ In this comprehensive study, Flexion UX Designers performed a usability study wi
 
 [Core System Usability Testing - Findings](https://docs.google.com/presentation/d/1AK5_1L7hdrarOxXo12nuSezJbCukPMh_/edit#slide=id.p1)
 
-## Petitioner Usability Testing (October 2019)
+### Petitioner Usability Testing (October 2019)
 In this study, Flexion UX Designers performed a usability study with potential petitioners to test the petitioner dashboard and file a petition flow.
 
 [File a Petition Usability Test - Plan](https://docs.google.com/document/d/1Przz2jtmD_JGSAsTFsox--jp8sdvw6M8OH5OIInVrCg/edit?usp=sharing)
 
 [File a Petition Usability Test - Findings](https://drive.google.com/open?id=1A8ma-ZUgt46NuagDmSUZcbRgEaVHfRvaMJ-G6rB_1O4)
 
-## Docket Clerk Usability Testing (January 2020)
+### Docket Clerk Usability Testing (January 2020)
 In this study, Flexion UX Designers observed Docket Clerks performing their normal job functions to test end-to-end processes using the new CMS.
 
 [Docket Clerk Usability Testing - Findings](https://drive.google.com/open?id=1ay3hwjE2WrUH4izPs7BHNCRUY0S7WkhNZuuOTkWCyTI)
 
-## Cooperative Usability Testing (January 2020)
+### Cooperative Usability Testing (January 2020)
 In this study, Flexion UX Designers performed an end-to-end testing of a U.S. Tax Court case workflow in order to validate system features and handoffs between roles at the Court.
 
 A modified methodology for cooperative usability testing was used to meet our unique needs. Users performed their daily tasks and then reflected with the entire group on the experience.
 
 [Roundtable Cooperative Usability Testing - Findings](https://drive.google.com/open?id=1_boNwUlm-FEa5qm74bC_beud0ZJ7urBkS0prDXFCc00)
 
-## Pro-Se Petitioner: Create Case Usability Testing (May, 2020)
+### Pro-Se Petitioner: Create Case Usability Testing (May, 2020)
 In this study, Flexion UX Designers performed usability testing for creating a case as a pro-se petitioner. Goals focused on validating iterative design choices from the previous usability study and testing specifically on a mobile device.
 
 [File a Petition Usability Test - Petitioner - Plan](https://docs.google.com/document/d/1M6tj8AMpr94BGeMpqcuK7gBy1xqTaS-b8AfsHT7CWws/edit?usp=sharing)
 
-[File a Petition Usability Test - Petitioner - Findings](https://docs.google.com/presentation/d/1Olul5MtM7gp8WIs6ugREigsm5QSQvSL_6rgblGha83s/edit?usp=sharing)
+[File a Petition Usability Test - Petitioner - Findings](https://docs.google.com/presentation/d/14uwSvoAyevQbfA8ZZSNRCzZOfQKPCCH6/edit?usp=sharing&ouid=101093926770181931184&rtpof=true&sd=true)
 
-
-## Order Search Research 
 
 ### Order Search Interviews (March 2021)
 [User Interview Mural Board](https://app.mural.co/invitation/mural/flexion6734/1615995967668?sender=uac81c807303039588f330143&key=34845658-c81f-4cc4-82ac-73839e18b48a)
@@ -151,16 +151,12 @@ In this study, Flexion UX Designers performed usability testing for creating a c
 
 [Order Search Recommendations July 2021](./OrderSearchRecommendationsJuly2021.pdf)
 
-## Sealing/Unsealing Research
-
 ### Sealing/Unsealing Cases and Documents (November 2021)
 [UX Sealing/Unsealing Research Plan October 2021](https://docs.google.com/document/d/1Kx33vIlerGeTJr7X7RvVeiSDvcMtVa8SCaC5U3NAOXk/edit?usp=sharing)
 
 [UX Sealing/Unsealing Research Findings Report November 2021](https://drive.google.com/file/d/1Sa9a7FnZo-ARqqI9MsfmQKpJEweFmVvc/view?usp=sharing)
 
 [User Interview Mural Board](https://app.mural.co/invitation/mural/flexion6734/1634754569414?sender=u9a89dc65e6273d6559349431&key=3c0af023-c471-44a1-8372-64e7e2b4db44)
-
-## Consolidation Research
 
 ### Consolidation Discovery Research (March-November 2022)
 
@@ -178,7 +174,6 @@ In this study, Flexion UX Designers performed usability testing for creating a c
 
 [User Interview Mural Board - All user types](https://app.mural.co/invitation/mural/flexion6734/1646751586915?sender=u9a89dc65e6273d6559349431&key=d1201bf3-3904-4e0e-97e0-3d878568cc32)
 
-## Petition's QC Research
 
 ### Petition's QC - Petition's Clerks (February-March 2023)
 
@@ -190,6 +185,15 @@ In this study, Flexion UX Designers performed usability testing for creating a c
 
 [QC Process Flow Lucid Chart - Petition's Clerks](https://lucid.app/lucidchart/54368542-072c-44c2-9ed3-06149590268f/edit?viewport_loc=-488%2C-1745%2C8238%2C4912%2C0_0&invitationId=inv_4d57de35-151d-41b9-819a-9590b8e250c0)
 
+### Minutes Sheet
+
+[Minutes Sheet Research Plan - Trial Clerks April 2023](https://docs.google.com/document/d/1ZRdusjqnauG3kHpvHeH8dsbJfHAi539M-AeK4j2bPVI/edit?usp=sharing)
+
+### Calendaring Trial Sessions
+
+[Calendaring Trial Sessions Research Plan - April & May 2024](https://docs.google.com/document/d/136HJ_4gGGKd1HhLLBICzPIacKymgGsadzug0YqDb4ag/edit?usp=sharing)
+
+[Calendaring Trial Sessions Prototype Testing Research Plan - May 2024](https://docs.google.com/document/d/1H3JJFRn5vN8dYIvb7MWcnTg5JHqfE_NTLaW3bWFM2-4/edit?usp=sharing)
 
 # UI Design System
 

@@ -1,0 +1,1 @@
+This is a non-pdf file used for tests that expect a pdf but don't get one.

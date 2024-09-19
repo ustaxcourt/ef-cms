@@ -2,6 +2,7 @@ import {
   CASE_TYPES_MAP,
   PARTY_TYPES,
 } from '../../../shared/src/business/entities/EntityConstants';
+import { attachFile } from '../file/upload-file';
 import { faker } from '@faker-js/faker';
 
 export function createAndServePaperPetitionMultipleParties(
@@ -58,14 +59,20 @@ export function createAndServePaperPetitionMultipleParties(
   cy.get('[data-testid="case-type-select"]').select(CASE_TYPES_MAP.passport);
   cy.get('#upload-mode-upload').click();
   cy.get('#uploadMode').check();
-  cy.get('#petitionFile-file').attachFile('../../helpers/file/sample.pdf');
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: '#petitionFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
   cy.get('#tabButton-requestForPlaceOfTrialFile > .button-text').click();
   cy.get('#scan-mode-radios').click();
   cy.get('#upload-mode-upload').click();
   cy.get('#uploadMode').check();
-  cy.get('#requestForPlaceOfTrialFile-file').attachFile(
-    '../../helpers/file/sample.pdf',
-  );
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: '#requestForPlaceOfTrialFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
   cy.get('[data-testid="submit-paper-petition"]').click();
   return cy
     .get('.docket-number-header a')

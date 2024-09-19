@@ -45,17 +45,11 @@ export const CaseListTable = connect(
         aria-describedby=""
         className="margin-top-1 margin-right-0"
         data-testid="file-a-petition"
-        href={
-          dashboardExternalHelper.showFileACase
-            ? '/file-a-petition/step-1'
-            : '/before-filing-a-petition'
-        }
+        href={'/before-filing-a-petition'}
         icon="file"
         id="file-a-petition"
       >
-        {dashboardExternalHelper.showFileACase
-          ? 'File a Case'
-          : 'Create a Case'}
+        Create a Case
       </Button>
     );
 
