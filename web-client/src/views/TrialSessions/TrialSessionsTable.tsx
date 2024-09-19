@@ -1,18 +1,31 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { isTrialSessionWeek } from '@web-client/presenter/computeds/trialSessionsHelper';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const TrialSessionsTable = connect(
   {
+    setTrialSessionsFiltersSequence: sequences.setTrialSessionsFiltersSequence,
     trialSessionsHelper: state.trialSessionsHelper,
     trialSessionsPage: state.trialSessionsPage,
   },
-  function TrialSessionsTable({ trialSessionsHelper, trialSessionsPage }) {
+  function TrialSessionsTable({
+    setTrialSessionsFiltersSequence,
+    trialSessionsHelper,
+    trialSessionsPage,
+  }) {
     return (
       <>
         <div className="text-right margin-bottom-5">
+          <Paginator
+            currentPageIndex={trialSessionsPage.filters.pageNumber}
+            totalPages={trialSessionsHelper.totalPages}
+            onPageChange={selectedPage => {
+              setTrialSessionsFiltersSequence({ pageNumber: selectedPage });
+            }}
+          />
           <span className="text-bold">Count:</span>{' '}
           <span className="text-semibold">
             {trialSessionsHelper.trialSessionsCount}

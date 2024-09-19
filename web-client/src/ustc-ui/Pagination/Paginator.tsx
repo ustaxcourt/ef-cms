@@ -2,6 +2,64 @@ import React from 'react';
 import classNames from 'classnames';
 
 const numberOfPaginatorSlots = 7;
+
+/*
+This component is based off of USWDS implementation of a paginator: https://designsystem.digital.gov/components/pagination/
+The totalPages and selected page work similarly to counting arrays. TotalPages is similar to array.length and selectedPage is 0 based indexing.
+totalPages could be 20 but the maximum value selectedPage could be is 19 and the lowest pages is 0.
+*/
+
+export const Paginator = ({
+  currentPageIndex,
+  onPageChange,
+  totalPages,
+}: {
+  currentPageIndex: number;
+  totalPages: number;
+  onPageChange: (selectedPage: number) => any;
+}) => {
+  const sevenDisplayedSlots: React.JSX.Element[] = [];
+
+  for (let slotNumber = 0; slotNumber < numberOfPaginatorSlots; slotNumber++) {
+    if (slotNumber >= totalPages) {
+      continue;
+    }
+    const slotComponent = getSlotComponent({
+      currentPageIndex,
+      onPageChange,
+      slotNumber,
+      totalPages,
+    });
+    sevenDisplayedSlots.push(slotComponent);
+  }
+
+  return (
+    <>
+      <nav aria-label="Pagination" className="usa-pagination margin-bottom-0">
+        <ul className="usa-pagination__list">
+          {currentPageIndex !== 0 && (
+            <PreviousPage
+              onPreviousClick={() => {
+                onPageChange(currentPageIndex - 1);
+              }}
+            />
+          )}
+          {sevenDisplayedSlots}
+          {currentPageIndex < totalPages - 1 && (
+            <NextPage
+              onNextClick={() => {
+                onPageChange(currentPageIndex + 1);
+              }}
+            />
+          )}
+        </ul>
+      </nav>
+    </>
+  );
+};
+
+Paginator.displayName = 'Paginator';
+
 const PageButton = (props: {
   pageNumber: number;
   selected: boolean;
@@ -185,65 +243,6 @@ function getSlotComponent({
       />
     );
   }
+
+  return <></>;
 }
-
-/*
-This component is based off of USWDS implementation of a paginator: https://designsystem.digital.gov/components/pagination/
-The totalPages and selected page work similarly to counting arrays. TotalPages is similar to array.length and selectedPage is 0 based indexing.
-totalPages could be 20 but the maximum value selectedPage could be is 19 and the lowest pages is 0.
-*/
-
-export const Paginator = ({
-  currentPageIndex,
-  onPageChange,
-  totalPages,
-}: {
-  currentPageIndex: number;
-  totalPages: number;
-  onPageChange: (selectedPage: number) => any;
-}) => {
-  const sevenDisplayedSlots = [];
-  console.log('selected page number: ', currentPageIndex);
-  // 1. Should it render the slot at all?
-  // 2. Should it render a page button or an ellipse?
-  // 3. Should it render The slot number it is or should it add some extras?
-
-  for (let slotNumber = 0; slotNumber < numberOfPaginatorSlots; slotNumber++) {
-    if (slotNumber >= totalPages) {
-      continue;
-    }
-    const slotComponent = getSlotComponent({
-      currentPageIndex,
-      onPageChange,
-      slotNumber,
-      totalPages,
-    });
-    sevenDisplayedSlots.push(slotComponent);
-  }
-
-  return (
-    <>
-      <nav aria-label="Pagination" className="usa-pagination margin-bottom-0">
-        <ul className="usa-pagination__list">
-          {currentPageIndex !== 0 && (
-            <PreviousPage
-              onPreviousClick={() => {
-                onPageChange(currentPageIndex - 1);
-              }}
-            />
-          )}
-          {sevenDisplayedSlots}
-          {currentPageIndex < totalPages - 1 && (
-            <NextPage
-              onNextClick={() => {
-                onPageChange(currentPageIndex + 1);
-              }}
-            />
-          )}
-        </ul>
-      </nav>
-    </>
-  );
-};
-
-Paginator.displayName = 'Paginator';
