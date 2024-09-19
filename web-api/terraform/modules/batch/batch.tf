@@ -151,13 +151,7 @@ resource "aws_batch_job_definition" "example_aws_batch_job_definition" {
 
 
  container_properties = jsonencode({
-		command = [
-			"node",
-			"-e",
-			file("${path.module}/testScript.js")
-		]
-
-		image      = "node:latest"
+		image      = "${data.aws_caller_identity.current.account_id}.dkr.ecr.us-east-1.amazonaws.com/docket-entry-zipper-${var.environment}:latest"
 
     fargatePlatformConfiguration = {
       platformVersion = "LATEST"

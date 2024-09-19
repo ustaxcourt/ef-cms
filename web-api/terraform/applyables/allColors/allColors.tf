@@ -114,3 +114,8 @@ module "ui-healthcheck" {
   alarm_name = "app.${var.dns_domain} is accessible over HTTPS"
   dns_domain = "app.${var.dns_domain}"
 }
+
+module "ecr" {
+  source     = "../../modules/ecr-for-env"
+	environment            = var.environment
+}
