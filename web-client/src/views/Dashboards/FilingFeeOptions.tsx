@@ -1,5 +1,6 @@
 import { Accordion, AccordionItem } from '../../ustc-ui/Accordion/Accordion';
 import { Button } from '../../ustc-ui/Button/Button';
+import { InlineLink } from '@web-client/ustc-ui/InlineLink/InlineLink';
 import React from 'react';
 
 export const FilingFeeOptions = function () {
@@ -50,18 +51,13 @@ export const FilingFeeOptions = function () {
             <br />
             <br />
             <strong>Can’t afford to pay the filing fee?</strong>
-            <Button
-              link
-              className="usa-link--external text-left"
+            <br />
+            <InlineLink
               href="https://www.ustaxcourt.gov/resources/forms/Application_for_Waiver_of_Filing_Fee.pdf"
               icon="file-pdf"
-              iconColor="blue"
-              rel="noopener noreferrer"
-              shouldWrapText={true}
-              target="_blank"
             >
               Download Application For Waiver of Filing Fee
-            </Button>
+            </InlineLink>
           </AccordionItem>
         </Accordion>
       </div>
