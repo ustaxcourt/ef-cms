@@ -16,6 +16,7 @@ import { setDocumentTitleFromFreeTextAction } from '../actions/UploadCourtIssued
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setPrimaryDocumentFileIdPropAction } from '../actions/EditUploadCourtIssuedDocument/setPrimaryDocumentFileIdPropAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setupUploadMetadataAction } from '../actions/UploadCourtIssuedDocument/setupUploadMetadataAction';
@@ -53,6 +54,7 @@ export const editUploadCourtIssuedDocumentSequence = [
     error: [
       setAlertErrorAction,
       setValidationErrorsAction,
+      setScrollToErrorNotificationAction,
       setValidationAlertErrorsAction,
     ],
     success: showProgressSequenceDecorator([
