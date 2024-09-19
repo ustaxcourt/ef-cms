@@ -32,6 +32,7 @@ export const trialSessionsHelper = (
   sessionTypeOptions: InputOption[];
   searchableTrialLocationOptions: InputOption[];
   trialCitiesByState: InputOption[];
+  trialSessionsCount: number;
 } => {
   const permissions = get(state.permissions)!;
   const trialSessions = get(state.trialSessionsPage.trialSessions);
@@ -140,7 +141,6 @@ export const trialSessionsHelper = (
     .sort((sessionA, sessionB) => {
       return sessionA.startDate.localeCompare(sessionB.startDate);
     });
-
   const trialSessionRows = formatTrialSessions({
     judgeAssociatedToUser: judge,
     trialSessions: filteredTrialSessions,
@@ -168,6 +168,7 @@ export const trialSessionsHelper = (
     trialCitiesByState: states,
     trialSessionJudgeOptions,
     trialSessionRows,
+    trialSessionsCount: filteredTrialSessions.length,
   };
 };
 
