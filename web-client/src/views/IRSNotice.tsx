@@ -123,7 +123,7 @@ export const IRSNotice = connect<IrsNoticeType, typeof irsNoticeDependencies>(
               toFormat: constants.DATE_FORMATS.ISO,
               value: e.target.value,
             });
-            validateFormData({ isSubmitting: true });
+            validateFormData({ isSubmitting: false });
           }}
         />
       );
