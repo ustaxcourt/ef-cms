@@ -43,7 +43,7 @@ export const trialSessionsHelper = (
   const filters = get(state.trialSessionsPage.filters);
   const judge = get(state.judgeUser);
 
-  const pageSize = 5;
+  const pageSize = 1;
 
   const showCurrentJudgesOnly =
     filters.currentTab === 'new' ||

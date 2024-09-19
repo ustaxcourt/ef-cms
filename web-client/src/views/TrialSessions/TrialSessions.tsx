@@ -279,7 +279,7 @@ const TrialSessionFilters = connect(
             }}
           />
         </div>
-        <div className="margin-bottom-5 grid-row flex-row gap-2">
+        <div className="margin-bottom-2 grid-row flex-row gap-2">
           <div className="grid-col">
             <div className="margin-bottom-1">
               <label className="usa-label" htmlFor="session-type-filter">
