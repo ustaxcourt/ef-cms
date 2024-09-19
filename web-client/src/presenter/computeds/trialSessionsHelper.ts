@@ -1,6 +1,7 @@
 import {
   FORMATS,
   createDateAtStartOfWeekEST,
+  createISODateString,
   formatDateString,
   subtractISODates,
 } from '@shared/business/utilities/DateHandler';
@@ -86,6 +87,7 @@ export const trialSessionsHelper = (
     [],
   );
 
+  console.log('filters', filters);
   const filteredTrialSessions = trialSessions
     .filter(trialSession => {
       const isCalendaredFilter = filters.currentTab === 'calendared';
@@ -119,6 +121,16 @@ export const trialSessionsHelper = (
     .filter(trialSession => {
       if (Object.values(filters.trialLocations).length === 0) return true;
       return !!filters.trialLocations[trialSession.trialLocation || ''];
+    })
+    .filter(trialSession => {
+      if (filters.startDate && filters.endDate) {
+        const startDate = createISODateString(filters.startDate, 'MM/dd/yyyy');
+        const endDate = createISODateString(filters.endDate, 'MM/dd/yyyy');
+
+        const sessionDate = trialSession.startDate;
+        return sessionDate >= startDate && sessionDate <= endDate;
+      }
+      return true;
     })
     .sort((sessionA, sessionB) => {
       return sessionA.startDate.localeCompare(sessionB.startDate);

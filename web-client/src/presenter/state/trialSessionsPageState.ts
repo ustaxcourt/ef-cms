@@ -7,10 +7,12 @@ import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSes
 
 const filters: TrialSessionsFilters = {
   currentTab: 'calendared' as 'calendared' | 'new',
+  endDate: '',
   judges: {},
   proceedingType: 'All' as TrialSessionProceedingType,
   sessionStatus: SESSION_STATUS_TYPES.open,
   sessionTypes: {},
+  startDate: '',
   trialLocations: {},
 };
 
@@ -21,9 +23,11 @@ export const initialTrialSessionPageState = {
 
 export type TrialSessionsFilters = {
   currentTab: 'calendared' | 'new';
+  endDate: string;
   judges: Record<string, { name: string; userId: string }>;
   proceedingType: TrialSessionProceedingType | 'All';
   sessionStatus: string;
   sessionTypes: Record<string, TrialSessionTypes>;
+  startDate: string;
   trialLocations: Record<string, string>;
 };
