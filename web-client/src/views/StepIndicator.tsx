@@ -37,7 +37,7 @@ export const StepIndicator = connect(
                   key={title}
                 >
                   <Button
-                    className="usa-button--unstyled no-underline"
+                    className="usa-button--unstyled no-underline stepper-line-height"
                     disabled={
                       +step > currentStep ||
                       currentStep >= Object.keys(steps).length
