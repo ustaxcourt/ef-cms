@@ -3,6 +3,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { hasUpdatedEmailFactoryAction } from '../actions/hasUpdatedEmailFactoryAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
@@ -38,8 +39,8 @@ export const submitUpdatePractitionerUserSequence = [
             emailInUse: [
               unsetWaitingForResponseAction,
               clearAlertsAction,
-              setAlertErrorAction,
               setValidationErrorsAction,
+              setScrollToErrorNotificationAction,
               setValidationAlertErrorsAction,
               stopShowValidationAction,
             ],

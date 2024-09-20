@@ -6,11 +6,11 @@ import { getPendingMotionDocketEntriesAction } from '@web-client/presenter/actio
 import { getSubmittedAndCavCasesByJudgeAction } from '@web-client/presenter/actions/JudgeActivityReport/getSubmittedAndCavCasesByJudgeAction';
 import { parallel } from 'cerebral';
 import { resetHasUserSubmittedFormAction } from '@web-client/presenter/actions/JudgeActivityReport/resetHasUserSubmittedFormAction';
-import { setAlertErrorAction } from '../../actions/setAlertErrorAction';
 import { setCavAndSubmittedCasesAction } from '@web-client/presenter/actions/JudgeActivityReport/setCavAndSubmittedCasesAction';
 import { setDefaultSubmittedAndCavSortOrderAction } from '@web-client/presenter/actions/JudgeActivityReport/setDefaultSubmittedAndCavSortOrderAction';
 import { setJudgeActivityReportFiltersAction } from '@web-client/presenter/actions/JudgeActivityReport/setJudgeActivityReportFiltersAction';
 import { setPendingMotionDocketEntriesForCurrentJudgeAction } from '@web-client/presenter/actions/PendingMotion/setPendingMotionDocketEntriesForCurrentJudgeAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '../../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '@web-client/presenter/utilities/showProgressSequenceDecorator';
@@ -27,8 +27,8 @@ export const submitJudgeActivityReportSequence = showProgressSequenceDecorator([
   validateJudgeActivityReportSearchAction,
   {
     error: [
-      setAlertErrorAction,
       setValidationErrorsAction,
+      setScrollToErrorNotificationAction,
       setValidationAlertErrorsAction,
     ],
     success: [
