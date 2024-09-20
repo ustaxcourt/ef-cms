@@ -2,6 +2,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearCaseDeadlineReportAction } from '../actions/CaseDeadline/clearCaseDeadlineReportAction';
 import { getCaseDeadlinesAction } from '../actions/CaseDeadline/getCaseDeadlinesAction';
 import { setCaseDeadlinesAction } from '../actions/CaseDeadline/setCaseDeadlinesAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
@@ -17,6 +18,7 @@ export const updateDateRangeForDeadlinesSequence =
       error: [
         startShowValidationAction,
         setValidationErrorsAction,
+        setScrollToErrorNotificationAction,
         setValidationAlertErrorsAction,
       ],
       success: [
