@@ -84,7 +84,6 @@ export const trialSessionsHelper = (
   const trialCities = sortBy(TRIAL_CITIES.ALL, ['state', 'city']);
   const searchableTrialLocationOptions: InputOption[] = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const states: InputOption[] = trialCities.reduce(
     (listOfStates: InputOption[], cityStatePair) => {
       const existingState = listOfStates.find(
