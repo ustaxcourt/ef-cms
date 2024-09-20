@@ -729,7 +729,6 @@ export class Case extends JoiValidationEntity {
   }
 
   assignFieldsForAllUsers({ rawCase }) {
-    console.log(rawCase);
     this.caseCaption = rawCase.caseCaption;
     this.caseType = rawCase.caseType;
     this.closedDate = rawCase.closedDate;
