@@ -4,10 +4,10 @@ import { getCaseAction } from '../actions/getCaseAction';
 import { getJudgesChambersSequence } from '@web-client/presenter/sequences/getJudgesChambersSequence';
 import { isWorkItemAlreadyCompletedAction } from '../actions/isWorkItemAlreadyCompletedAction';
 import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setPreviousDocumentDocketEntryAction } from '../actions/FileDocument/setPreviousDocumentDocketEntryAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -24,8 +24,8 @@ export const openCompleteAndSendMessageModalSequence = [
       validateDocketEntryAction,
       {
         error: [
-          setAlertErrorAction,
           setValidationErrorsAction,
+          setScrollToErrorNotificationAction,
           setValidationAlertErrorsAction,
         ],
         success: [
