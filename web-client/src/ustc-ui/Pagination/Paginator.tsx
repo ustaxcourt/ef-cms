@@ -43,21 +43,19 @@ export const Paginator = ({
         className="usa-pagination margin-bottom-0 margin-top-0"
       >
         <ul className="usa-pagination__list">
-          {currentPageIndex !== 0 && (
-            <PreviousPage
-              onPreviousClick={() => {
-                onPageChange(currentPageIndex - 1);
-              }}
-            />
-          )}
+          <PreviousPage
+            isHidden={currentPageIndex === 0}
+            onPreviousClick={() => {
+              onPageChange(currentPageIndex - 1);
+            }}
+          />
           {sevenDisplayedSlots}
-          {currentPageIndex < totalPages - 1 && (
-            <NextPage
-              onNextClick={() => {
-                onPageChange(currentPageIndex + 1);
-              }}
-            />
-          )}
+          <NextPage
+            isHidden={currentPageIndex === totalPages - 1}
+            onNextClick={() => {
+              onPageChange(currentPageIndex + 1);
+            }}
+          />
         </ul>
       </nav>
     </>
@@ -90,19 +88,34 @@ const PageButton = (props: {
   );
 };
 
-const PreviousPage = (props: { onPreviousClick: Function }) => {
+const PreviousPage = (props: {
+  onPreviousClick: Function;
+  isHidden: boolean;
+}) => {
   return (
     <>
       <li className="usa-pagination__item usa-pagination__arrow">
         <button
           aria-label="Previous page"
-          className="usa-pagination__link usa-pagination__previous-page background-none border-none"
+          className={classNames(
+            'usa-pagination__link',
+            'usa-pagination__next-page',
+            'background-none',
+            'border-none',
+            props.isHidden && 'visibility-hidden',
+          )}
           onClick={() => {
             props.onPreviousClick();
           }}
         >
-          <svg aria-hidden="true" className="usa-icon" role="img">
-            <use xlinkHref="/assets/img/sprite.svg#navigate_before"></use>
+          <svg
+            aria-hidden="true"
+            className="usa-icon"
+            role="img"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M14.71 6.71a1 1 0 0 1 0 1.41L10.83 12l3.88 3.88a1 1 0 0 1-1.41 1.41l-4.58-4.59a1 1 0 0 1 0-1.41l4.58-4.59a1 1 0 0 1 1.41 0z"></path>
           </svg>
           <span className="usa-pagination__link-text">Previous</span>
         </button>
@@ -111,21 +124,33 @@ const PreviousPage = (props: { onPreviousClick: Function }) => {
   );
 };
 
-const NextPage = (props: { onNextClick: Function }) => {
+const NextPage = (props: { onNextClick: Function; isHidden: boolean }) => {
   return (
     <>
       <li className="usa-pagination__item usa-pagination__arrow">
         <button
           aria-label="Next page"
-          className="usa-pagination__link usa-pagination__next-page background-none border-none"
+          className={classNames(
+            'usa-pagination__link',
+            'usa-pagination__next-page',
+            'background-none',
+            'border-none',
+            props.isHidden && 'visibility-hidden',
+          )}
           onClick={() => {
             props.onNextClick();
           }}
         >
-          <svg aria-hidden="true" className="usa-icon" role="img">
-            <use xlinkHref="/assets/img/sprite.svg#navigate_before"></use>
-          </svg>
           <span className="usa-pagination__link-text">Next</span>
+          <svg
+            aria-hidden="true"
+            className="usa-icon"
+            role="img"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M9.29 6.71a1 1 0 0 0 0 1.41L13.17 12l-3.88 3.88a1 1 0 0 0 1.41 1.41l4.58-4.59a1 1 0 0 0 0-1.41l-4.58-4.59a1 1 0 0 0-1.41 0z"></path>
+          </svg>
         </button>
       </li>
     </>
