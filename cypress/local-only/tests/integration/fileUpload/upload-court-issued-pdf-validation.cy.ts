@@ -61,6 +61,21 @@ describe('upload court issued document validations', () => {
     );
   });
 
+  it('should display error modal when a readonly pdf is selected', () => {
+    cy.intercept('POST', '/logError').as('logErrorRequest');
+
+    attachFile({
+      filePath: '../../helpers/file/readonly-pdf.pdf',
+      selector: '[data-testid="primary-document-file"]',
+    });
+    cy.wait('@logErrorRequest');
+
+    cy.get('@logErrorRequest.all').should('have.length', 1);
+    cy.get('[data-testid="file-upload-error-modal"]').contains(
+      'The file is encrypted or password protected. Remove encryption or password protection and try again.',
+    );
+  });
+
   it('should display error modal when a file larger than the limit is selected', () => {
     cy.intercept('POST', '/logError').as('logErrorRequest');
     const largeFile = new Blob(

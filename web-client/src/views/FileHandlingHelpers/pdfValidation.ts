@@ -3,6 +3,10 @@ import {
   FileValidationResponse,
 } from '@web-client/views/FileHandlingHelpers/fileValidation';
 import { applicationContext } from '@web-client/applicationContext';
+import {
+  validatePdfHeader,
+  validatePermissions,
+} from '@web-client/views/FileHandlingHelpers/pdfValidationHelpers';
 
 export const PDF_PASSWORD_PROTECTED_ERROR_MESSAGE =
   'The file is encrypted or password protected. Remove encryption or password protection and try again.';
@@ -11,13 +15,6 @@ export const PDF_CORRUPTED_ERROR_MESSAGE =
 
 const GENERIC_FILE_ERROR_MESSAGE =
   'There is a problem uploading the file. Try again later.';
-
-export const validatePdfHeader = (pdfData: Uint8Array): boolean => {
-  const stringDecoder = new TextDecoder('utf8');
-  const pdfHeaderBytes = pdfData.slice(0, 5);
-  const pdfHeaderString = stringDecoder.decode(pdfHeaderBytes);
-  return pdfHeaderString === '%PDF-';
-};
 
 export const validatePdf = ({
   file,
@@ -47,26 +44,37 @@ export const validatePdf = ({
 
       // We will try to load the PDF. If we get any errors, we will return an errorInformation object accordingly.
       try {
+        // Ensure PDF has a valid header
         if (!validatePdfHeader(fileAsArrayBuffer)) {
           const corruptPdfError = new Error('PDF header is invalid');
           corruptPdfError.name = 'CorruptPDFHeaderException';
           throw corruptPdfError;
         }
 
-        // Attempt to load the PDF
+        // Attempt to load the PDF to check for any errors
         const pdfjs = await applicationContext.getPdfJs();
-        await pdfjs.getDocument({
+        const document = await pdfjs.getDocument({
           data: fileAsArrayBuffer,
           isEvalSupported: false,
         }).promise;
 
+        // Check that the PDF doesn't have password protection on edits
+        if (!(await validatePermissions(document))) {
+          const readOnlyError = new Error(
+            'PDF has password protection on edits',
+          );
+          readOnlyError.name = 'ReadOnlyException';
+          throw readOnlyError;
+        }
+
         resolve({ isValid: true });
       } catch (err) {
         if (err instanceof Error) {
-          if (err.name === 'PasswordException') {
+          if (['PasswordException', 'ReadOnlyException'].includes(err.name)) {
             resolve({
               errorInformation: {
                 errorMessageToDisplay: PDF_PASSWORD_PROTECTED_ERROR_MESSAGE,
+                errorMessageToLog: `${PDF_PASSWORD_PROTECTED_ERROR_MESSAGE} (${err.name})`,
                 errorType: ErrorTypes.ENCRYPTED_FILE,
               },
               isValid: false,
