@@ -1,5 +1,6 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
+import { CreateTermModal } from '@web-client/views/CreateTermModal';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
@@ -12,13 +13,17 @@ import React from 'react';
 export const TrialSessions = connect(
   {
     defaultTab: state.screenMetadata.trialSessionFilters.status,
+    openCreateTermModalSequence: sequences.openCreateTermModalSequence,
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
+    showModal: state.modal.showModal,
     showNewTrialSession: state.trialSessionsHelper.showNewTrialSession,
   },
   function TrialSessions({
     defaultTab,
+    openCreateTermModalSequence,
     openTrialSessionPlanningModalSequence,
+    showModal,
     showNewTrialSession,
   }) {
     return (
@@ -35,6 +40,14 @@ export const TrialSessions = connect(
             id="trial-sessions-tabs"
           >
             <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
+              <Button
+                link
+                className="margin-top-1"
+                icon="calendar"
+                onClick={() => openCreateTermModalSequence()}
+              >
+                Create Term
+              </Button>
               <Button
                 link
                 className="margin-top-1"
@@ -90,6 +103,7 @@ export const TrialSessions = connect(
             </Tab>
           </Tabs>
         </section>
+        {showModal === 'CreateTermModal' && <CreateTermModal />}
       </>
     );
   },
