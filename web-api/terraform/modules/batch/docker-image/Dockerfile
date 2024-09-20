@@ -6,10 +6,6 @@ RUN apt-get update && \
 	apt-get install -y awscli && \
 	apt-get clean
 
-
-# Set the environment variables using the passed build arguments
-ENV CURRENT_COLOR="blue"
-
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
