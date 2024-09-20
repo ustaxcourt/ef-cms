@@ -44,15 +44,19 @@ export const TrialSessionsTable = connect(
         >
           <thead>
             <tr>
-              <th>Start Date</th>
-              <th>Est. End Date</th>
+              <th className="column-width-sm">Start Date</th>
+              <th className="column-width-sm">Est. End Date</th>
               <th className="icon-column" />
-              <th>Location</th>
-              <th>Proceeding Type</th>
-              <th>Session Type</th>
-              <th>Judge</th>
-              {trialSessionsHelper.showNoticeIssued && <th>Notice Issued</th>}
-              {trialSessionsHelper.showSessionStatus && <th>Session Status</th>}
+              <th className="column-width-lg">Location</th>
+              <th className="column-width-md">Proceeding Type</th>
+              <th className="column-width-sm">Session Type</th>
+              <th className="column-width-sm">Judge</th>
+              {trialSessionsHelper.showNoticeIssued && (
+                <th className="column-width-sm">Notice Issued</th>
+              )}
+              {trialSessionsHelper.showSessionStatus && (
+                <th className="column-width-sm">Session Status</th>
+              )}
             </tr>
           </thead>
           {trialSessionsHelper.trialSessionRows.map(row => {
