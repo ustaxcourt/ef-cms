@@ -27,7 +27,11 @@ fi
 # shellcheck disable=SC2091
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com"
 
-docker build --no-cache -t "docket-entry-zipper-${ENV}:${DESTINATION_TAG}" -f Dockerfile .
+docker build --no-cache \
+  --build-arg "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" \
+  --build-arg "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" \
+  -t "docket-entry-zipper-${ENV}:${DESTINATION_TAG}" \
+  -f Dockerfile .
 
 docker tag "docket-entry-zipper-${ENV}:${DESTINATION_TAG}" "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/docket-entry-zipper-${ENV}:${DESTINATION_TAG}"
 docker push "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/docket-entry-zipper-${ENV}:${DESTINATION_TAG}"
