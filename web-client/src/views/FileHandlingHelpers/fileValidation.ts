@@ -96,6 +96,7 @@ export const validateFileOnSelect = async ({
   megabyteLimit,
   onError,
   onSuccess,
+  skipFileTypeValidation = false,
 }: {
   allowedFileExtensions: string[];
   e: React.ChangeEvent<HTMLInputElement>;
@@ -110,6 +111,7 @@ export const validateFileOnSelect = async ({
     errorType?: ErrorTypes;
     messageToLog?: string;
   }) => void;
+  skipFileTypeValidation?: boolean;
 }) => {
   const target = e.target as HTMLInputElement;
 
@@ -125,6 +127,7 @@ export const validateFileOnSelect = async ({
     allowedFileExtensions,
     file: selectedFile,
     megabyteLimit,
+    skipFileTypeValidation,
   });
   if (!isValid) {
     onError({
@@ -132,7 +135,7 @@ export const validateFileOnSelect = async ({
       messageToDisplay: errorInformation?.errorMessageToDisplay!,
       messageToLog: errorInformation?.errorMessageToLog,
     });
-    target.value = '';
+    target.value = ''; // Deselect the file
     return;
   }
   onSuccess({ selectedFile });
@@ -142,25 +145,31 @@ export const validateFile = async ({
   allowedFileExtensions,
   file,
   megabyteLimit,
+  skipFileTypeValidation = false,
 }: {
   file: File;
   megabyteLimit: number;
   allowedFileExtensions: string[];
+  skipFileTypeValidation?: boolean;
 }): Promise<FileValidationResponse> => {
   const fileSizeValidation = validateFileSize({ file, megabyteLimit });
   if (!fileSizeValidation.isValid) {
     return fileSizeValidation;
   }
-  const correctFileValidation = validateCorrectFileType({
-    allowedFileExtensions,
-    file,
-  });
-  if (!correctFileValidation.isValid) {
-    return correctFileValidation;
+
+  if (!skipFileTypeValidation) {
+    const correctFileValidation = validateCorrectFileType({
+      allowedFileExtensions,
+      file,
+    });
+    if (!correctFileValidation.isValid) {
+      return correctFileValidation;
+    }
+    if (file.type === 'application/pdf') {
+      return await validatePdf({ file });
+    }
   }
-  if (file.type === 'application/pdf') {
-    return await validatePdf({ file });
-  }
+
   return { isValid: true };
 };
 
