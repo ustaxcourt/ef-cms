@@ -15,7 +15,7 @@ export function attachSamplePdfFile(testId: string) {
 }
 
 export function attachFile({
-  encoding,
+  encoding = 'binary', // Default to binary, which better mimics PDF data handling on the browser
   filePath,
   selector,
   selectorToAwaitOnSuccess,
@@ -23,7 +23,7 @@ export function attachFile({
   selector: string;
   filePath: string;
   selectorToAwaitOnSuccess?: string;
-  encoding?: 'binary'; // Use binary for non-text files because it better mimics, e.g., readAsArrayBuffer
+  encoding?: 'binary' | 'utf8'; // Expand as needed
 }) {
   cy.get(selector).attachFile({ encoding, filePath });
   if (selectorToAwaitOnSuccess) {
