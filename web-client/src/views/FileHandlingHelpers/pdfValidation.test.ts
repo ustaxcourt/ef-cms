@@ -1,11 +1,12 @@
+import * as pdfValidationHelpers from './pdfValidationHelpers';
 import { ErrorTypes } from '@web-client/views/FileHandlingHelpers/fileValidation';
 import {
   PDF_CORRUPTED_ERROR_MESSAGE,
   PDF_PASSWORD_PROTECTED_ERROR_MESSAGE,
   validatePdf,
-  validatePdfHeader,
 } from './pdfValidation';
 import { applicationContext } from '@web-client/applicationContext';
+import { validatePdfHeader } from '@web-client/views/FileHandlingHelpers/pdfValidationHelpers';
 
 const VALID_PDF_HEADER_BYTES = [0x25, 0x50, 0x44, 0x46, 0x2d]; // %PDF-
 const INVALID_PDF_HEADER_BYTES = [0x50, 0x44, 0x46, 0x25, 0x2d]; // PFD%-
@@ -40,6 +41,10 @@ describe('validatePdf', () => {
       readAsArrayBuffer: jest.fn(),
       result: VALID_PDF_HEADER_BYTES,
     };
+
+    jest
+      .spyOn(pdfValidationHelpers, 'validatePermissions')
+      .mockResolvedValue(true);
 
     (global as any).FileReader = jest.fn(() => mockFileReader);
 
@@ -79,6 +84,29 @@ describe('validatePdf', () => {
     expect(result).toEqual({
       errorInformation: {
         errorMessageToDisplay: PDF_PASSWORD_PROTECTED_ERROR_MESSAGE,
+        errorMessageToLog: `${PDF_PASSWORD_PROTECTED_ERROR_MESSAGE} (PasswordException)`,
+        errorType: ErrorTypes.ENCRYPTED_FILE,
+      },
+      isValid: false,
+    });
+  });
+
+  it('should return error message for readonly PDF', async () => {
+    mockPdfJs.getDocument.mockReturnValue({
+      promise: Promise.resolve(),
+    });
+    jest
+      .spyOn(pdfValidationHelpers, 'validatePermissions')
+      .mockResolvedValue(false);
+
+    const resultPromise = validatePdf({ file: mockFile });
+    mockFileReader.onload();
+    const result = await resultPromise;
+
+    expect(result).toEqual({
+      errorInformation: {
+        errorMessageToDisplay: PDF_PASSWORD_PROTECTED_ERROR_MESSAGE,
+        errorMessageToLog: `${PDF_PASSWORD_PROTECTED_ERROR_MESSAGE} (ReadOnlyException)`,
         errorType: ErrorTypes.ENCRYPTED_FILE,
       },
       isValid: false,
