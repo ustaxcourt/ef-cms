@@ -3,6 +3,7 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
+import { requireEnvVars } from '../../shared/admin-tools/util';
 
 const userId = process.argv[2];
 const docketNumber = process.argv[3];
@@ -14,6 +15,7 @@ if (!userId || !docketNumber) {
   );
   process.exit(1);
 }
+requireEnvVars(['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'ENV']);
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
