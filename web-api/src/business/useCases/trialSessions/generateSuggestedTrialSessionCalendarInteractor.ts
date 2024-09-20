@@ -40,7 +40,11 @@ export type TrialSessionReadyForCalendaring = TrialSession & { weekOf: string };
 
 export const generateSuggestedTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
-  { endDate, startDate }: { endDate: string; startDate: string },
+  {
+    endDate,
+    startDate,
+    termName,
+  }: { endDate: string; startDate: string; termName: string },
 ) => {
   //
   // Maximum of 6 sessions per week

@@ -13,7 +13,6 @@ export const CreateTermModal = connect(
     cancelSequence: sequences.clearModalSequence,
     confirmSequence: sequences.submitCreateTermModalSequence,
     modal: state.modal,
-    trialYears: state.modal.trialYears,
     updateModalValueSequence: sequences.updateModalValueSequence,
     validationErrors: state.validationErrors,
   },
@@ -21,7 +20,6 @@ export const CreateTermModal = connect(
     cancelSequence,
     confirmSequence,
     modal,
-    trialYears,
     updateModalValueSequence,
     validationErrors,
   }) {
@@ -35,7 +33,7 @@ export const CreateTermModal = connect(
         title="Create Term"
       >
         <div className="margin-bottom-4">
-          <FormGroup errorText={validationErrors.term}>
+          <FormGroup errorText={validationErrors.termName}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="display-block" id="trial-term">
                 Term name
@@ -91,14 +89,14 @@ export const CreateTermModal = connect(
             </fieldset>
           </FormGroup>
 
-          <FormGroup errorText={validationErrors.year}>
+          <FormGroup>
             <fieldset className="usa-fieldset margin-bottom-0">
               <DateRangePickerComponent
                 endDateErrorText={validationErrors.termEndDate}
                 endLabel="Term end date"
                 endName="termEndDate"
                 endPickerCls={'grid-col-6'}
-                endValue={modal.termStartDate}
+                endValue={modal.termEndDate}
                 formGroupCls="margin-bottom-0"
                 rangePickerCls={'grid-row '}
                 startDateErrorText={validationErrors.termStartDate}

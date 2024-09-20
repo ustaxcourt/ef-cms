@@ -9,7 +9,7 @@ export const validateCreateTermModalAction = ({
   const { term, termEndDate, termName, termStartDate } = get(state.modal);
   // const { STATUS_TYPES_WITH_ASSOCIATED_JUDGE } =
   //   applicationContext.getConstants();
-
+  console.log(get(state.modal));
   const errors: {
     term?: string;
     termEndDate?: string;
@@ -18,7 +18,6 @@ export const validateCreateTermModalAction = ({
   } = {};
 
   if (!term) {
-    console.log(term);
     errors.term = 'Select a term';
   }
   if (!termName) {
