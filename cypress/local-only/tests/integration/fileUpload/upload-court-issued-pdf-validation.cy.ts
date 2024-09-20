@@ -65,6 +65,7 @@ describe('upload court issued document validations', () => {
     cy.intercept('POST', '/logError').as('logErrorRequest');
 
     attachFile({
+      encoding: 'binary',
       filePath: '../../helpers/file/readonly-pdf.pdf',
       selector: '[data-testid="primary-document-file"]',
     });
