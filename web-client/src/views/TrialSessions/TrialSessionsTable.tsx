@@ -1,7 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { isTrialSessionWeek } from '@web-client/presenter/computeds/trialSessionsHelper';
+import {
+  isTrialSessionRow,
+  isTrialSessionWeek,
+} from '@web-client/presenter/computeds/trialSessionsHelper';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
@@ -74,57 +77,61 @@ export const TrialSessionsTable = connect(
                 </tbody>
               );
             }
-            return (
-              <tbody key={row.trialSessionId}>
-                <tr
-                  className="trial-sessions-row"
-                  data-testid={`trial-sessions-row-${row.trialSessionId}`}
-                >
-                  <td>
-                    {row.showAlertForNOTTReminder && (
-                      <FontAwesomeIcon
-                        className="fa-icon-blue margin-right-05"
-                        icon="clock"
-                        size="sm"
-                        title={row.alertMessageForNOTT}
-                      />
-                    )}
-                    {row.formattedStartDate}
-                  </td>
-                  <td>{row.formattedEstimatedEndDate}</td>
-                  <td>
-                    {row.swingSession && (
-                      <FontAwesomeIcon
-                        className="fa-icon-blue"
-                        icon="link"
-                        size="sm"
-                        title="swing session"
-                      />
-                    )}
-                  </td>
-                  <td data-testid={`trial-location-link-${row.trialSessionId}`}>
-                    <a
-                      href={
-                        row.userIsAssignedToSession
-                          ? `/trial-session-working-copy/${row.trialSessionId}`
-                          : `/trial-session-detail/${row.trialSessionId}`
-                      }
+            if (isTrialSessionRow(row)) {
+              return (
+                <tbody key={row.trialSessionId}>
+                  <tr
+                    className="trial-sessions-row"
+                    data-testid={`trial-sessions-row-${row.trialSessionId}`}
+                  >
+                    <td>
+                      {row.showAlertForNOTTReminder && (
+                        <FontAwesomeIcon
+                          className="fa-icon-blue margin-right-05"
+                          icon="clock"
+                          size="sm"
+                          title={row.alertMessageForNOTT}
+                        />
+                      )}
+                      {row.formattedStartDate}
+                    </td>
+                    <td>{row.formattedEstimatedEndDate}</td>
+                    <td>
+                      {row.swingSession && (
+                        <FontAwesomeIcon
+                          className="fa-icon-blue"
+                          icon="link"
+                          size="sm"
+                          title="swing session"
+                        />
+                      )}
+                    </td>
+                    <td
+                      data-testid={`trial-location-link-${row.trialSessionId}`}
                     >
-                      {row.trialLocation}
-                    </a>
-                  </td>
-                  <td>{row.proceedingType}</td>
-                  <td>{row.sessionType}</td>
-                  <td>{row.judge && row.judge.name}</td>
-                  {trialSessionsHelper.showNoticeIssued && (
-                    <td>{row.formattedNoticeIssuedDate}</td>
-                  )}
-                  {trialSessionsHelper.showSessionStatus && (
-                    <td>{row.sessionStatus}</td>
-                  )}
-                </tr>
-              </tbody>
-            );
+                      <a
+                        href={
+                          row.userIsAssignedToSession
+                            ? `/trial-session-working-copy/${row.trialSessionId}`
+                            : `/trial-session-detail/${row.trialSessionId}`
+                        }
+                      >
+                        {row.trialLocation}
+                      </a>
+                    </td>
+                    <td>{row.proceedingType}</td>
+                    <td>{row.sessionType}</td>
+                    <td>{row.judge && row.judge.name}</td>
+                    {trialSessionsHelper.showNoticeIssued && (
+                      <td>{row.formattedNoticeIssuedDate}</td>
+                    )}
+                    {trialSessionsHelper.showSessionStatus && (
+                      <td>{row.sessionStatus}</td>
+                    )}
+                  </tr>
+                </tbody>
+              );
+            }
           })}
         </table>
         {trialSessionsHelper.trialSessionRows.length === 0 && (
