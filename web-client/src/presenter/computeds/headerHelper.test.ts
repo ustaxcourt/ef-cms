@@ -221,7 +221,7 @@ describe('headerHelper', () => {
     const result = runCompute(headerHelper, {
       state: {
         ...getBaseState({ role: ROLES.petitioner }),
-        currentPage: 'DashboardPetitioner',
+        currentPage: 'DashboardExternalUser',
       },
     });
     expect(result.pageIsMyCases).toBeTruthy();
@@ -289,7 +289,7 @@ describe('headerHelper', () => {
       const result = runCompute(headerHelper, {
         state: {
           ...getBaseState({ role: ROLES.privatePractitioner }),
-          currentPage: 'DashboardPractitioner',
+          currentPage: 'DashboardExternalUser',
         },
       });
 
@@ -311,7 +311,7 @@ describe('headerHelper', () => {
       const result = runCompute(headerHelper, {
         state: {
           ...getBaseState({ role: ROLES.petitioner }),
-          currentPage: 'DashboardPetitioner',
+          currentPage: 'DashboardExternalUser',
         },
       });
 

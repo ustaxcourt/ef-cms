@@ -38,7 +38,7 @@ export class StatusReportOrderForm extends JoiValidationEntity {
   );
 
   static VALIDATION_RULES = {
-    additionalOrderText: JoiValidationConstants.STRING.max(80)
+    additionalOrderText: JoiValidationConstants.STRING.max(256)
       .optional()
       .allow(null, ''),
     docketEntryDescription: JoiValidationConstants.STRING.max(80)

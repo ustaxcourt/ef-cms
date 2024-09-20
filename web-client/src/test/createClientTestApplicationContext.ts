@@ -70,12 +70,6 @@ import { getAllWebSocketConnections } from '@web-api/persistence/dynamo/notifica
 import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
-import {
-  getChambersSections,
-  getChambersSectionsLabels,
-  getJudgesChambers,
-  getJudgesChambersWithLegacy,
-} from '@web-client/business/chambers/getJudgesChambers';
 import { getConstants } from '@web-client/getConstants';
 import { getCropBox } from '@shared/business/utilities/getCropBox';
 import { getDescriptionDisplay } from '@shared/business/utilities/getDescriptionDisplay';
@@ -272,7 +266,6 @@ const createTestApplicationContext = () => {
       .fn()
       .mockImplementation(getFormattedTrialSessionDetails),
     getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
-    getJudgesChambers: jest.fn().mockImplementation(getJudgesChambers),
     getMonthDayYearInETObj: jest
       .fn()
       .mockImplementation(DateHandler.getMonthDayYearInETObj),
@@ -446,10 +439,6 @@ const createTestApplicationContext = () => {
       .fn()
       .mockImplementation(getCaseDeadlinesByDocketNumber),
     getCasesByFilters: jest.fn(),
-    getChambersSections: jest.fn().mockImplementation(getChambersSections),
-    getChambersSectionsLabels: jest
-      .fn()
-      .mockImplementation(getChambersSectionsLabels),
     getDispatchNotification: jest.fn(),
     getDocument: jest.fn(),
     getDocumentQCInboxForSection: jest.fn(),
@@ -459,10 +448,6 @@ const createTestApplicationContext = () => {
       .mockReturnValue({ url: 'http://example.com/' }),
     getElasticsearchReindexRecords: jest.fn(),
     getItem: jest.fn().mockImplementation(getItem),
-    getJudgesChambers: jest.fn().mockImplementation(getJudgesChambers),
-    getJudgesChambersWithLegacy: jest
-      .fn()
-      .mockImplementation(getJudgesChambersWithLegacy),
     getLimiterByKey: jest.fn(),
     getMaintenanceMode: jest.fn(),
     getMessagesByDocketNumber: jest.fn(),
@@ -524,6 +509,7 @@ const createTestApplicationContext = () => {
     convertBlobToUInt8Array: jest
       .fn()
       .mockImplementation(() => new Uint8Array([])),
+    createCsvString: jest.fn(),
     filterCaseMetadata: jest.fn(),
     getBaseUrl: () => 'http://localhost',
     getBounceAlertRecipients: jest.fn(),
