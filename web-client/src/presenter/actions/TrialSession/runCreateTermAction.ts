@@ -4,13 +4,14 @@ export const runCreateTermAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const { termEndDate, termStartDate } = get(state.modal);
+  const { termEndDate, termName, termStartDate } = get(state.modal);
 
   const { url } = await applicationContext
     .getUseCases()
-    .runTrialSessionPlanningReportInteractor(applicationContext, {
-      term,
-      year,
+    .generateSuggestedTrialSessionCalendarInteractor(applicationContext, {
+      termEndDate,
+      termName,
+      termStartDate,
     });
 
   return { pdfUrl: url };
