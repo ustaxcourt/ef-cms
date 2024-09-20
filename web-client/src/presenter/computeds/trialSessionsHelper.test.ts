@@ -4,7 +4,6 @@ import {
   formatNow,
 } from '@shared/business/utilities/DateHandler';
 import {
-  ROLES,
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -12,7 +11,12 @@ import {
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { cloneDeep } from 'lodash';
-import { docketClerk1User, judgeUser } from '@shared/test/mockUsers';
+import {
+  docketClerk1User,
+  judgeColvin,
+  judgeUser,
+  legacyJudgeUser,
+} from '@shared/test/mockUsers';
 import { getUserPermissions } from '@shared/authorization/getUserPermissions';
 import { initialTrialSessionPageState } from '../state/trialSessionsPageState';
 import {
@@ -67,6 +71,7 @@ describe('trialSessionsHelper', () => {
 
       const result = runCompute(trialSessionsHelper, {
         state: {
+          judges: [judgeUser, judgeColvin],
           permissions: getUserPermissions(docketClerk1User),
           trialSessionsPage: trialSessionsPageState,
         },
@@ -79,6 +84,7 @@ describe('trialSessionsHelper', () => {
       trialSessionsPageState.filters.currentTab = 'new';
       const result = runCompute(trialSessionsHelper, {
         state: {
+          judges: [judgeUser, judgeColvin],
           permissions: getUserPermissions(docketClerk1User),
           trialSessionsPage: trialSessionsPageState,
         },
@@ -94,6 +100,7 @@ describe('trialSessionsHelper', () => {
 
       const result = runCompute(trialSessionsHelper, {
         state: {
+          judges: [judgeUser, judgeColvin],
           permissions: getUserPermissions(docketClerk1User),
           trialSessionsPage: trialSessionsPageState,
         },
@@ -107,6 +114,7 @@ describe('trialSessionsHelper', () => {
 
       const result = runCompute(trialSessionsHelper, {
         state: {
+          judges: [judgeUser, judgeColvin],
           permissions: getUserPermissions(docketClerk1User),
           trialSessionsPage: trialSessionsPageState,
         },
@@ -119,9 +127,11 @@ describe('trialSessionsHelper', () => {
   describe('showUnassignedJudgeFilter', () => {
     it('should show the `unassigned` judge filter when on the new tab', () => {
       trialSessionsPageState.filters.currentTab = 'new';
+      console.log('Judge Colvin: ', judgeColvin);
 
       const result = runCompute(trialSessionsHelper, {
         state: {
+          judges: [judgeUser, judgeColvin],
           permissions: getUserPermissions(docketClerk1User),
           trialSessionsPage: trialSessionsPageState,
         },
@@ -135,6 +145,7 @@ describe('trialSessionsHelper', () => {
 
       const result = runCompute(trialSessionsHelper, {
         state: {
+          judges: [judgeUser, judgeColvin],
           permissions: getUserPermissions(docketClerk1User),
           trialSessionsPage: trialSessionsPageState,
         },
@@ -151,21 +162,27 @@ describe('trialSessionsHelper', () => {
         SESSION_STATUS_TYPES.closed;
       const result = runCompute(trialSessionsHelper, {
         state: {
-          judges: [
-            { name: 'I am not a legacy judge part 2', role: ROLES.judge },
-          ],
-          legacyAndCurrentJudges: [
-            { name: 'I am not a legacy judge', role: ROLES.judge },
-            { name: 'I am a legacy judge', role: ROLES.legacyJudge },
-          ],
+          legacyAndCurrentJudges: [judgeUser, legacyJudgeUser],
           permissions: getUserPermissions(docketClerk1User),
           trialSessionsPage: trialSessionsPageState,
         },
       });
 
-      expect(result.trialSessionJudges).toEqual([
-        { name: 'I am not a legacy judge', role: ROLES.judge },
-        { name: 'I am a legacy judge', role: ROLES.legacyJudge },
+      expect(result.trialSessionJudgeOptions).toEqual([
+        {
+          label: 'Sotomayor',
+          value: {
+            name: 'Sotomayor',
+            userId: '43b00e5f-b78c-476c-820e-5d6ed1d58828',
+          },
+        },
+        {
+          label: 'Legacy Judge Ginsburg',
+          value: {
+            name: 'Legacy Judge Ginsburg',
+            userId: 'dc67e189-cf3e-4ca3-a33f-91db111ec270',
+          },
+        },
       ]);
     });
 
@@ -173,20 +190,21 @@ describe('trialSessionsHelper', () => {
       trialSessionsPageState.filters.currentTab = 'new';
       const result = runCompute(trialSessionsHelper, {
         state: {
-          judges: [
-            { name: 'I am not a legacy judge part 2', role: ROLES.judge },
-          ],
-          legacyAndCurrentJudges: [
-            { name: 'I am not a legacy judge', role: ROLES.judge },
-            { name: 'I am a legacy judge', role: ROLES.legacyJudge },
-          ],
+          judges: [judgeUser],
+          legacyAndCurrentJudges: [legacyJudgeUser],
           permissions: getUserPermissions(docketClerk1User),
           trialSessionsPage: trialSessionsPageState,
         },
       });
 
-      expect(result.trialSessionJudges).toEqual([
-        { name: 'I am not a legacy judge part 2', role: ROLES.judge },
+      expect(result.trialSessionJudgeOptions).toEqual([
+        {
+          label: 'Sotomayor',
+          value: {
+            name: 'Sotomayor',
+            userId: '43b00e5f-b78c-476c-820e-5d6ed1d58828',
+          },
+        },
       ]);
     });
 
@@ -194,28 +212,32 @@ describe('trialSessionsHelper', () => {
       trialSessionsPageState.filters.sessionStatus = SESSION_STATUS_TYPES.open;
       const result = runCompute(trialSessionsHelper, {
         state: {
-          judges: [
-            { name: 'I am not a legacy judge part 2', role: ROLES.judge },
-          ],
-          legacyAndCurrentJudges: [
-            { name: 'I am not a legacy judge', role: ROLES.judge },
-            { name: 'I am a legacy judge', role: ROLES.legacyJudge },
-          ],
+          judges: [judgeUser],
+          legacyAndCurrentJudges: [legacyJudgeUser],
           permissions: getUserPermissions(docketClerk1User),
           trialSessionsPage: trialSessionsPageState,
         },
       });
 
-      expect(result.trialSessionJudges).toEqual([
-        { name: 'I am not a legacy judge part 2', role: ROLES.judge },
+      expect(result.trialSessionJudgeOptions).toEqual([
+        {
+          label: 'Sotomayor',
+          value: {
+            name: 'Sotomayor',
+            userId: '43b00e5f-b78c-476c-820e-5d6ed1d58828',
+          },
+        },
       ]);
     });
   });
 
   describe('showNewTrialSession', () => {
     it('should return showNewTrialSession as true when current user has CREATE_TRIAL_SESSION permission', () => {
+      trialSessionsPageState.filters.currentTab = 'new';
+      // TODO: Fix
       const result = runCompute(trialSessionsHelper, {
         state: {
+          jugdes: [judgeUser],
           permissions: getUserPermissions(docketClerk1User),
           trialSessionsPage: trialSessionsPageState,
         },
@@ -227,6 +249,7 @@ describe('trialSessionsHelper', () => {
     it('should return showNewTrialSession as false when current user does not have CREATE_TRIAL_SESSION permission', () => {
       const result = runCompute(trialSessionsHelper, {
         state: {
+          judges: [judgeUser],
           permissions: getUserPermissions(judgeUser),
           trialSessionsPage: trialSessionsPageState,
         },
@@ -246,6 +269,7 @@ describe('trialSessionsHelper', () => {
 
         const result = runCompute(trialSessionsHelper, {
           state: {
+            judges: [judgeUser],
             permissions: getUserPermissions(docketClerk1User),
             trialSessionsPage: trialSessionsPageState,
           },
@@ -264,6 +288,7 @@ describe('trialSessionsHelper', () => {
 
         const result = runCompute(trialSessionsHelper, {
           state: {
+            judges: [judgeUser],
             permissions: getUserPermissions(docketClerk1User),
             trialSessionsPage: trialSessionsPageState,
           },
@@ -277,12 +302,15 @@ describe('trialSessionsHelper', () => {
         );
       });
 
+      // TODO: This test is affectd by pagination now. Ergo, one trial sessionis filtered out
+      //      when it should not be base on this test
       it('should not filter trial sessions by judge when judge filter is All', () => {
         trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
         trialSessionsPageState.filters.judgeId = 'All';
 
         const result = runCompute(trialSessionsHelper, {
           state: {
+            judges: [judgeUser],
             permissions: getUserPermissions(docketClerk1User),
             trialSessionsPage: trialSessionsPageState,
           },
@@ -301,6 +329,7 @@ describe('trialSessionsHelper', () => {
 
         const result = runCompute(trialSessionsHelper, {
           state: {
+            judges: [judgeUser],
             permissions: getUserPermissions(docketClerk1User),
             trialSessionsPage: trialSessionsPageState,
           },
@@ -322,6 +351,7 @@ describe('trialSessionsHelper', () => {
 
         const result = runCompute(trialSessionsHelper, {
           state: {
+            judges: [judgeUser],
             permissions: getUserPermissions(docketClerk1User),
             trialSessionsPage: trialSessionsPageState,
           },
@@ -343,6 +373,7 @@ describe('trialSessionsHelper', () => {
 
         const result = runCompute(trialSessionsHelper, {
           state: {
+            judges: [judgeUser],
             permissions: getUserPermissions(docketClerk1User),
             trialSessionsPage: trialSessionsPageState,
           },
@@ -367,6 +398,7 @@ describe('trialSessionsHelper', () => {
 
         const result = runCompute(trialSessionsHelper, {
           state: {
+            judges: [judgeUser],
             permissions: getUserPermissions(docketClerk1User),
             trialSessionsPage: trialSessionsPageState,
           },
@@ -391,6 +423,7 @@ describe('trialSessionsHelper', () => {
 
         const result = runCompute(trialSessionsHelper, {
           state: {
+            judges: [judgeUser],
             permissions: getUserPermissions(docketClerk1User),
             trialSessionsPage: trialSessionsPageState,
           },
@@ -416,6 +449,7 @@ describe('trialSessionsHelper', () => {
 
         const result = runCompute(trialSessionsHelper, {
           state: {
+            judges: [judgeUser],
             permissions: getUserPermissions(docketClerk1User),
             trialSessionsPage: trialSessionsPageState,
           },
@@ -437,6 +471,7 @@ describe('trialSessionsHelper', () => {
 
         const result = runCompute(trialSessionsHelper, {
           state: {
+            judges: [judgeUser],
             permissions: getUserPermissions(docketClerk1User),
             trialSessionsPage: trialSessionsPageState,
           },
@@ -458,6 +493,7 @@ describe('trialSessionsHelper', () => {
 
         const result = runCompute(trialSessionsHelper, {
           state: {
+            judges: [judgeUser],
             permissions: getUserPermissions(docketClerk1User),
             trialSessionsPage: trialSessionsPageState,
           },
@@ -481,6 +517,7 @@ describe('trialSessionsHelper', () => {
 
         const result = runCompute(trialSessionsHelper, {
           state: {
+            judges: [judgeUser],
             permissions: getUserPermissions(docketClerk1User),
             trialSessionsPage: trialSessionsPageState,
           },
@@ -501,6 +538,7 @@ describe('trialSessionsHelper', () => {
         const result = runCompute(trialSessionsHelper, {
           state: {
             judgeUser: {},
+            judges: [judgeUser],
             permissions: getUserPermissions(docketClerk1User),
             trialSessionsPage: trialSessionsPageState,
           },
@@ -523,6 +561,7 @@ describe('trialSessionsHelper', () => {
             judgeUser: {
               userId: '1',
             },
+            judges: [judgeUser],
             permissions: getUserPermissions(docketClerk1User),
             trialSessionsPage: trialSessionsPageState,
           },
@@ -550,6 +589,7 @@ describe('trialSessionsHelper', () => {
 
         const result = runCompute(trialSessionsHelper, {
           state: {
+            judges: [judgeUser],
             permissions: getUserPermissions(docketClerk1User),
             trialSessionsPage: trialSessionsPageState,
           },
@@ -572,6 +612,7 @@ describe('trialSessionsHelper', () => {
 
         const result = runCompute(trialSessionsHelper, {
           state: {
+            judges: [judgeUser],
             permissions: getUserPermissions(docketClerk1User),
             trialSessionsPage: trialSessionsPageState,
           },
@@ -597,6 +638,7 @@ describe('trialSessionsHelper', () => {
 
         const result = runCompute(trialSessionsHelper, {
           state: {
+            judges: [judgeUser],
             permissions: getUserPermissions(docketClerk1User),
             trialSessionsPage: trialSessionsPageState,
           },
@@ -619,6 +661,7 @@ describe('trialSessionsHelper', () => {
 
         const result = runCompute(trialSessionsHelper, {
           state: {
+            judges: [judgeUser],
             permissions: getUserPermissions(docketClerk1User),
             trialSessionsPage: trialSessionsPageState,
           },
