@@ -123,6 +123,37 @@ describe('validateFileOnSelect', () => {
     );
     expect(event.target.value).toBe('test.txt');
   });
+
+  it('should call onSuccess with a file of incorrect type when skipFileTypeValidation is true', async () => {
+    const mockFile = new File(['dummy content'], 'test.txt', {
+      type: 'text/plain',
+    });
+    const onError = jest.fn();
+    const onSuccess = jest.fn();
+    const event = {
+      target: {
+        files: [mockFile],
+        value: 'test.txt',
+      },
+    } as unknown as React.ChangeEvent<HTMLInputElement>;
+
+    await validateFileOnSelect({
+      allowedFileExtensions: ['.pdf'],
+      e: event,
+      megabyteLimit: 5,
+      onError,
+      onSuccess,
+      skipFileTypeValidation: true,
+    });
+
+    expect(onError).not.toHaveBeenCalled();
+    expect(onSuccess).toHaveBeenCalledWith(
+      expect.objectContaining({
+        selectedFile: mockFile,
+      }),
+    );
+    expect(event.target.value).toBe('test.txt');
+  });
 });
 
 describe('fileValidation', () => {
@@ -149,6 +180,7 @@ describe('fileValidation', () => {
       'The file is not a PDF. Select a PDF file or resave the file as a PDF.',
     );
   });
+
   it('should return invalid with error message for improper file multiple allowed extensions', async () => {
     const file = new File([], 'test.csv');
     const allowedFileExtensions = ['.pdf', '.doc', '.docx'];
@@ -164,6 +196,7 @@ describe('fileValidation', () => {
       'The file is not in a supported format (.pdf, .doc, .docx). Select a different file or resave it in a supported format.',
     );
   });
+
   it('should return invalid with error message for file too big', async () => {
     const file = new File([], 'test.csv');
     const allowedFileExtensions = ['.pdf', '.doc', '.docx'];
@@ -180,6 +213,7 @@ describe('fileValidation', () => {
       `The file size is too big. The maximum file size is ${megabyteLimit}MB. Reduce the file size and try again.`,
     );
   });
+
   it('should call pdf validation for a pdf', async () => {
     const file = new File([], 'test.pdf', { type: 'application/pdf' });
     const allowedFileExtensions = ['.pdf'];
@@ -193,6 +227,23 @@ describe('fileValidation', () => {
 
     expect(validatePdf).toHaveBeenCalled();
   });
+
+  it('should not validate file type if skipFileTypeValidation is passed', async () => {
+    const file = new File([], 'test.pdf', { type: 'application/pdf' });
+    const allowedFileExtensions = ['.csv'];
+    const megabyteLimit = 250;
+    (validatePdf as jest.Mock).mockReturnValue({ isValid: true });
+
+    const validationResult = await validateFile({
+      allowedFileExtensions,
+      file,
+      megabyteLimit,
+      skipFileTypeValidation: true,
+    });
+
+    expect(validationResult).toMatchObject({ isValid: true });
+  });
+
   it('should return valid for valid PDF', async () => {
     const file = new File([], 'test.pdf', { type: 'application/pdf' });
     const allowedFileExtensions = ['.pdf'];
@@ -230,6 +281,7 @@ describe('fileValidation', () => {
       });
     });
   });
+
   it('should call error modal sequence with correct arguments for wrong file type error', () => {
     const mockFunc = jest.fn();
     fileValidation.genericOnValidationErrorHandler({
