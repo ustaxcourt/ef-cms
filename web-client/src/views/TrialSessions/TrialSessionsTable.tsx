@@ -19,7 +19,7 @@ export const TrialSessionsTable = connect(
     return (
       <>
         <div className="grid-row margin-bottom-2 flex-align-center">
-          <div className="grid-col"></div>
+          <div className="grid-col-2"></div>
           <div className="grid-col">
             <Paginator
               currentPageIndex={trialSessionsPage.filters.pageNumber}
@@ -29,7 +29,7 @@ export const TrialSessionsTable = connect(
               }}
             />
           </div>
-          <div className="grid-col text-right">
+          <div className="grid-col-2 text-right">
             <span className="text-bold">Count:</span>{' '}
             <span className="text-semibold">
               {trialSessionsHelper.trialSessionsCount}
