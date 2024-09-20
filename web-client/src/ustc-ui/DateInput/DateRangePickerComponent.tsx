@@ -13,6 +13,8 @@ export const DateRangePickerComponent = ({
   formGroupCls,
   maxDate,
   omitFormGroupClass,
+  onBlurEnd,
+  onBlurStart,
   onChangeEnd,
   onChangeStart,
   rangePickerCls,
@@ -31,6 +33,8 @@ export const DateRangePickerComponent = ({
   endValue: string;
   formGroupCls?: string;
   rangePickerCls?: string;
+  onBlurEnd?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlurStart?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeEnd: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeStart: (event: React.ChangeEvent<HTMLInputElement>) => void;
   startDateErrorText?: string;
@@ -122,6 +126,9 @@ export const DateRangePickerComponent = ({
       if (dateEndInput) {
         dateEndInput.addEventListener('change', onChangeEnd);
         dateEndInput.addEventListener('input', onChangeEnd);
+        if (onBlurEnd) {
+          dateEndInput.addEventListener('blur', onBlurEnd);
+        }
       }
       const dateStartInput = window.document.getElementById(
         `${startName}-date-start`,
@@ -129,6 +136,9 @@ export const DateRangePickerComponent = ({
       if (dateStartInput) {
         dateStartInput.addEventListener('change', onChangeStart);
         dateStartInput.addEventListener('input', onChangeStart);
+        if (onBlurStart) {
+          dateStartInput.addEventListener('blur', onBlurStart);
+        }
       }
     }
   }, [startDateInputRef, endDateInputRef]);

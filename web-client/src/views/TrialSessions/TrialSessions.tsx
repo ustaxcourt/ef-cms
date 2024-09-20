@@ -267,6 +267,14 @@ const TrialSessionFilters = connect(
             startName="trialSessionEndDate"
             startPickerCls="padding-right-2"
             startValue={trialSessionsPage.filters.startDate}
+            onBlurEnd={e => {
+              console.log('end we blurred!!', e.target.value);
+              // run validation
+            }}
+            onBlurStart={e => {
+              console.log('start we blurred!!', e.target.value);
+              // run validation
+            }}
             onChangeEnd={e => {
               setTrialSessionsFiltersSequence({
                 endDate: e.target.value,
