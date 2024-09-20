@@ -3,6 +3,7 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getUniqueId } from '@shared/sharedAppContext';
 import { requireEnvVars } from '../../shared/admin-tools/util';
 
 const userId = process.argv[2];
@@ -40,6 +41,7 @@ requireEnvVars(['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'ENV']);
     process.exit(1);
   }
 
+  offendingPetitioner.contactId = getUniqueId();
   offendingPetitioner.serviceIndicator = 'Paper';
   delete offendingPetitioner.email;
   const caseToUpdate = new Case(rawCase, { authorizedUser: undefined })
