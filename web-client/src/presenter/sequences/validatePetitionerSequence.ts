@@ -5,7 +5,6 @@ import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validatePetitionerAction } from '../actions/validatePetitionerAction';
 
 export const validatePetitionerSequence = [
-  () => console.log('Running validation'),
   shouldValidateAction,
   {
     ignore: [],
