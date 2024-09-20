@@ -125,6 +125,7 @@ describe('generateDocketRecordPdfInteractor', () => {
   it('sets counsel name to `None` when there is no counsel representing the petitioner', async () => {
     const mockPractitionerOnCase = {
       ...privatePractitionerUser,
+      email: 'privatePractitioner@example.com',
       representing: ['b4302f61-2cff-4a57-bacf-1f817ffbaf8d'],
     };
 

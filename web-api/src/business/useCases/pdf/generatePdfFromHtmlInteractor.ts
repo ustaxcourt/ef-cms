@@ -1,4 +1,5 @@
 import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
+import { PdfGenerationResult } from '@web-api/lambdas/pdfGeneration/pdf-generation';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const generatePdfFromHtmlInteractor = async (
@@ -63,8 +64,21 @@ export const generatePdfFromHtmlInteractor = async (
 
   const response = await client.send(command);
   const textDecoder = new TextDecoder('utf-8');
-  const responseStr = textDecoder.decode(response.Payload);
-  const key = JSON.parse(responseStr);
+  let key: string;
+  try {
+    const responseStr = textDecoder.decode(response.Payload);
+    const pdfGenerationResult: PdfGenerationResult = JSON.parse(responseStr);
+    if (!pdfGenerationResult.tempId) {
+      throw new Error(
+        `Unable to generate pdf. Check pdf_generator_${stage}_${currentColor} lambda for errors`,
+      );
+    }
+    key = pdfGenerationResult.tempId;
+  } catch (e) {
+    throw new Error(
+      `Unable to generate pdf. Check pdf_generator_${stage}_${currentColor} lambda for errors`,
+    );
+  }
 
   return await applicationContext.getPersistenceGateway().getDocument({
     applicationContext,

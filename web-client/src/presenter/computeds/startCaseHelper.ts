@@ -69,6 +69,11 @@ export const startCaseHelper = (
     state.irsNoticeUploadFormInfo,
   )?.some(notice => 'file' in notice);
 
+  const noticeLegend =
+    user.role === USER_ROLES.petitioner
+      ? 'Did you receive a notice from the IRS?'
+      : 'Did the petitioner receive a notice from the IRS?';
+
   return {
     caseTitle,
     contactPrimaryLabel,
@@ -86,10 +91,7 @@ export const startCaseHelper = (
       user.role === USER_ROLES.petitioner
         ? 'What is your role in filing for this minor or legally incompetent person?'
         : 'What is the petitioner’s role in filing for this minor or incompetent person?',
-    noticeLegend:
-      user.role === USER_ROLES.petitioner
-        ? 'Did you receive a notice from the IRS?'
-        : 'Do you have a notice from the IRS?',
+    noticeLegend,
     showAttachmentToPetitionFileValid: form.attachmentToPetitionFile,
     showBusinessFilingTypeOptions: form.filingType === 'A business',
     showCorporateDisclosure: form.partyType && form.filingType === 'A business',

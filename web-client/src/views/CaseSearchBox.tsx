@@ -29,11 +29,11 @@ export const CaseSearchBox = connect(
           <div className="case-search margin-bottom-4">
             <div className="card" data-testid="search-for-a-case-card">
               <div className="content-wrapper gray">
-                <div className="grid-row underlined">
-                  <div className="grid-col-8">
+                <div className="grid-row underlined display-flex align-items-center">
+                  <div className="grid-col-7">
                     <h3>Search for a Case</h3>
                   </div>
-                  <div className="tablet:grid-col-4 padding-top-05">
+                  <div className="grid-col-5 margin-bottom-2">
                     {caseSearchBoxHelper.showAdvancedSearch && (
                       <a
                         className="usa-link float-right"
@@ -47,7 +47,7 @@ export const CaseSearchBox = connect(
                   </div>
                 </div>
                 {caseSearchBoxHelper.showSearchDescription && (
-                  <p>
+                  <p className="margin-bottom-2">
                     To file an Entry of Appearance, Substitution of Counsel,
                     etc.
                   </p>

@@ -8,17 +8,18 @@ import { showProgressSequenceDecorator } from '../utilities/showProgressSequence
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { validateCaseInventoryReportModalAction } from '../actions/CaseInventoryReport/validateCaseInventoryReportModalAction';
 
-export const submitCaseInventoryReportModalSequence = [
-  startShowValidationAction,
-  validateCaseInventoryReportModalAction,
-  {
-    error: [setValidationErrorsAction],
-    success: showProgressSequenceDecorator([
-      clearCaseInventoryReportDataAction,
-      clearModalAction,
-      getCaseInventoryReportAction,
-      clearModalStateAction,
-      navigateToCaseInventoryReportAction,
-    ]),
-  },
-];
+export const submitCaseInventoryReportModalSequence =
+  showProgressSequenceDecorator([
+    startShowValidationAction,
+    validateCaseInventoryReportModalAction,
+    {
+      error: [setValidationErrorsAction],
+      success: [
+        clearCaseInventoryReportDataAction,
+        clearModalAction,
+        getCaseInventoryReportAction,
+        clearModalStateAction,
+        navigateToCaseInventoryReportAction,
+      ],
+    },
+  ]);

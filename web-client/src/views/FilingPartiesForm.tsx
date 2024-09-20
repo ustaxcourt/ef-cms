@@ -31,7 +31,6 @@ export const FilingPartiesForm = connect(
               className="usa-textarea height-8"
               id="filed-by"
               name="filedBy"
-              type="text"
               value={form.filedBy || ''}
               onChange={e => {
                 updateSequence({

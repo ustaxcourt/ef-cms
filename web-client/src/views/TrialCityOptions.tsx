@@ -1,13 +1,13 @@
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const TrialCityOptions = connect(
-  {
-    procedureType: props.procedureType,
-    trialCitiesHelper: state.trialCitiesHelper,
-  },
+type TrialCityProps = { procedureType: string };
+
+const trialCityDeps = { trialCitiesHelper: state.trialCitiesHelper };
+
+export const TrialCityOptions = connect<TrialCityProps, typeof trialCityDeps>(
+  trialCityDeps,
   function TrialCityOptions({ procedureType, trialCitiesHelper }) {
     const { shouldAddStandalone, trialCitiesByState } =
       trialCitiesHelper(procedureType);

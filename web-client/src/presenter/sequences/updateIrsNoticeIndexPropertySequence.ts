@@ -4,4 +4,9 @@ import { updateIrsNoticeIndexPropertyAction } from '@web-client/presenter/action
 export const updateIrsNoticeIndexPropertySequence = [
   updateIrsNoticeIndexPropertyAction,
   clearIrsNoticeRedactionAcknowledgementAction,
-];
+] as unknown as (props: {
+  key: string | number;
+  property: string;
+  toFormat?: string;
+  value: string | null;
+}) => void;

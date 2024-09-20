@@ -1,7 +1,6 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseTypeSelect } from '@web-client/views/StartCase/CaseTypeSelect';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { IrsNoticeUploadForm } from './IrsNoticeUploadForm';
 import { RedactionAcknowledgement } from '@web-client/views/StartCaseUpdated/RedactionAcknowledgement';
 import { UpdatedFilePetitionButtons } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionButtons';
@@ -11,7 +10,6 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { useValidationFocus } from '@web-client/views/UseValidationFocus';
 import React from 'react';
-import classNames from 'classnames';
 
 export const UpdatedFilePetitionStep3 = connect(
   {
@@ -27,6 +25,7 @@ export const UpdatedFilePetitionStep3 = connect(
     setHasIrsNoticeSequence: sequences.setHasIrsNoticeSequence,
     startCaseHelper: state.startCaseHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    updatedFilePetitionHelper: state.updatedFilePetitionHelper,
     validationErrors: state.validationErrors,
   },
   function UpdatedFilePetitionStep3({
@@ -38,9 +37,12 @@ export const UpdatedFilePetitionStep3 = connect(
     petitionGenerationLiveValidationSequence,
     setHasIrsNoticeSequence,
     startCaseHelper,
+    updatedFilePetitionHelper,
     updateFormValueSequence,
     validationErrors,
   }) {
+    const { isPetitioner } = updatedFilePetitionHelper;
+
     const handleIrsNoticeErrors = (errors, refs, elementsToFocus, prefix) => {
       if (!Array.isArray(errors)) {
         return;
@@ -72,7 +74,9 @@ export const UpdatedFilePetitionStep3 = connect(
       <>
         <div className="padding-bottom-0 margin-bottom-1">
           <div>
-            <h2>{startCaseHelper.noticeLegend}</h2>
+            <h2 data-testid="has-irs-notice-legend">
+              {startCaseHelper.noticeLegend}
+            </h2>
             <FormGroup
               className="irs-notice-form"
               errorText={validationErrors.hasIrsNotice}
@@ -120,7 +124,7 @@ export const UpdatedFilePetitionStep3 = connect(
                 <WarningNotificationComponent
                   alertWarning={{
                     message:
-                      'Ensure that personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers) has been removed or blocked out (redacted) of every form except the Statement of Taxpayer Identification Number.',
+                      'Ensure that personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers) has been removed or blocked out (redacted) from every form except the Statement of Taxpayer Identification Number.',
                   }}
                   dismissible={false}
                   scrollToTop={false}
@@ -163,15 +167,11 @@ export const UpdatedFilePetitionStep3 = connect(
                 {irsNoticeUploadFormInfo.length < 5 && (
                   <Button
                     link
-                    className={classNames('padding-top-0', 'text-left')}
+                    className="add-another-notice-button padding-0 margin-bottom-2"
                     data-testid="add-another-irs-notice-button"
+                    icon="plus"
                     onClick={() => addAnotherIrsNoticeToFormSequence()}
                   >
-                    <Icon
-                      className="fa-icon-blue"
-                      icon={['fas', 'plus']}
-                      size="1x"
-                    />
                     Add another IRS Notice
                   </Button>
                 )}
@@ -204,8 +204,7 @@ export const UpdatedFilePetitionStep3 = connect(
                 caseTypes={caseTypeDescriptionHelper.caseTypes}
                 className="margin-bottom-0"
                 errorMessageId="case-type-root-error-message"
-                legend="Which topic most closely matches your complaint with the
-                IRS?"
+                legend={`Which topic most closely matches ${isPetitioner ? 'your' : 'the petitioner’s'} complaint with the IRS?`}
                 value={form.caseType}
                 onBlurSequence={() => {
                   petitionGenerationLiveValidationSequence({
