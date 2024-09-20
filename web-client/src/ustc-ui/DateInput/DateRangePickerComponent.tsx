@@ -35,8 +35,8 @@ export const DateRangePickerComponent = ({
   rangePickerCls?: string;
   onBlurEnd?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlurStart?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onChangeEnd: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onChangeStart: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeEnd?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeStart?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   startDateErrorText?: string;
   startPickerCls?: string;
   startLabel?: string | React.ReactNode;
@@ -124,8 +124,10 @@ export const DateRangePickerComponent = ({
         `${endName}-date-end`,
       );
       if (dateEndInput) {
-        dateEndInput.addEventListener('change', onChangeEnd);
-        dateEndInput.addEventListener('input', onChangeEnd);
+        if (onChangeEnd) {
+          dateEndInput.addEventListener('change', onChangeEnd);
+          dateEndInput.addEventListener('input', onChangeEnd);
+        }
         if (onBlurEnd) {
           dateEndInput.addEventListener('blur', onBlurEnd);
         }
@@ -134,8 +136,10 @@ export const DateRangePickerComponent = ({
         `${startName}-date-start`,
       );
       if (dateStartInput) {
-        dateStartInput.addEventListener('change', onChangeStart);
-        dateStartInput.addEventListener('input', onChangeStart);
+        if (onChangeStart) {
+          dateStartInput.addEventListener('change', onChangeStart);
+          dateStartInput.addEventListener('input', onChangeStart);
+        }
         if (onBlurStart) {
           dateStartInput.addEventListener('blur', onBlurStart);
         }

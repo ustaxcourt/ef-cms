@@ -19,6 +19,7 @@ import {
   TrialSessionsFilters,
   initialTrialSessionPageState,
 } from '@web-client/presenter/state/trialSessionsPageState';
+import { TrialSessionsPageValidation } from '@shared/business/entities/trialSessions/TrialSessionsPageValidation';
 import { sortBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -36,6 +37,8 @@ export const trialSessionsHelper = (
   searchableTrialLocationOptions: InputOption[];
   trialCitiesByState: InputOption[];
   trialSessionsCount: number;
+  endDateErrorMessage?: string;
+  startDateErrorMessage?: string;
   totalPages: number;
 } => {
   const permissions = get(state.permissions)!;
@@ -104,6 +107,11 @@ export const trialSessionsHelper = (
     },
     [],
   );
+  const { endDateErrorMessage, startDateErrorMessage } =
+    validateTrialSessionDateRange({
+      endDate: filters.endDate,
+      startDate: filters.startDate,
+    });
 
   const filteredTrialSessions = filterAndSortTrialSessions({
     filters,
@@ -119,6 +127,7 @@ export const trialSessionsHelper = (
   });
 
   return {
+    endDateErrorMessage,
     isResetFiltersDisabled: !userHasSelectedAFilter,
     searchableTrialLocationOptions,
     sessionTypeOptions,
@@ -126,6 +135,7 @@ export const trialSessionsHelper = (
     showNoticeIssued: filters.currentTab === 'calendared',
     showSessionStatus: filters.currentTab === 'calendared',
     showUnassignedJudgeFilter: filters.currentTab === 'new',
+    startDateErrorMessage,
     totalPages: Math.ceil(filteredTrialSessions.length / pageSize),
     trialCitiesByState: states,
     trialSessionJudgeOptions,
@@ -318,4 +328,30 @@ type TrialSessionWeek = {
 };
 export function isTrialSessionWeek(item: any): item is TrialSessionWeek {
   return !!item?.sessionWeekStartDate;
+}
+
+function validateTrialSessionDateRange({
+  endDate,
+  startDate,
+}: {
+  startDate: string;
+  endDate: string;
+}): { startDateErrorMessage?: string; endDateErrorMessage?: string } {
+  const formattedEndDate = endDate
+    ? createISODateString(endDate, FORMATS.MMDDYYYY)
+    : undefined;
+
+  const formattedStartDate = startDate
+    ? createISODateString(startDate, FORMATS.MMDDYYYY)
+    : undefined;
+
+  const errors = new TrialSessionsPageValidation({
+    endDate: formattedEndDate,
+    startDate: formattedStartDate,
+  }).getFormattedValidationErrors();
+
+  return {
+    endDateErrorMessage: errors?.endDate,
+    startDateErrorMessage: errors?.startDate,
+  };
 }

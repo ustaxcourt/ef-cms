@@ -245,7 +245,7 @@ const TrialSessionFilters = connect(
             </div>
           </fieldset>
           <DateRangePickerComponent
-            endDateErrorText={''}
+            endDateErrorText={trialSessionsHelper.endDateErrorMessage}
             endLabel={
               <span>
                 Last start date{' '}
@@ -254,10 +254,8 @@ const TrialSessionFilters = connect(
             }
             endName="trialSessionStartDate"
             endValue={trialSessionsPage.filters.endDate}
-            formGroupCls="margin-bottom-0"
-            maxDate={''}
-            rangePickerCls={'display-flex flex-align-end'}
-            startDateErrorText={''}
+            rangePickerCls={'display-flex'}
+            startDateErrorText={trialSessionsHelper.startDateErrorMessage}
             startLabel={
               <span>
                 First start date{' '}
@@ -268,19 +266,11 @@ const TrialSessionFilters = connect(
             startPickerCls="padding-right-2"
             startValue={trialSessionsPage.filters.startDate}
             onBlurEnd={e => {
-              console.log('end we blurred!!', e.target.value);
-              // run validation
-            }}
-            onBlurStart={e => {
-              console.log('start we blurred!!', e.target.value);
-              // run validation
-            }}
-            onChangeEnd={e => {
               setTrialSessionsFiltersSequence({
                 endDate: e.target.value,
               });
             }}
-            onChangeStart={e => {
+            onBlurStart={e => {
               setTrialSessionsFiltersSequence({
                 startDate: e.target.value,
               });
