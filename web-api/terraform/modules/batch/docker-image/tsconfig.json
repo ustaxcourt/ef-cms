@@ -1,24 +1,9 @@
 {
   "compilerOptions": {
-    "target": "ES2022",                       // Node 20 supports modern JavaScript features
-    "module": "ESNext",                       // Use ES module syntax, compatible with Node 20
-    "moduleResolution": "node",               // Use Node.js module resolution
-    "esModuleInterop": true,                  // Enables ES module interop
-    "strict": true,                           // Enable strict type checking
-    "skipLibCheck": true,                     // Skip type checking for declaration files
-    "forceConsistentCasingInFileNames": true, // Ensure consistent casing in import paths
-    "resolveJsonModule": true,                // Support importing JSON files
-    "noImplicitAny": true,                    // No implicit 'any' types
-    "sourceMap": true,                        // Generate source maps for debugging
-    "outDir": "./dist",                       // Output directory for compiled files
-    "allowSyntheticDefaultImports": true,     // Allow default imports from modules with no default export
-    "lib": ["ES2022"],                        // Include ES2022 library definitions
-    "types": ["node"]                         // Include Node.js types
-  },
-  "ts-node": {
-    "esm": true,                              // Enable support for ES modules in `ts-node`
-    "experimentalSpecifierResolution": "node" // Experimental support for node-style resolution of ESM imports
-  },
-  "include": ["src/**/*"],                    // Include all TypeScript files in the `src` folder
-  "exclude": ["node_modules", "dist"]         // Exclude `node_modules` and output directory
+    "module": "commonjs",
+    "target": "es6",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  }
 }
