@@ -18,6 +18,8 @@ export const validateCaseDetailsAction = async ({
         caseDetail: {
           ...caseDetail,
           ...form,
+          petitionPaymentDate: form.petitionPaymentDate || null,
+          petitionPaymentMethod: form.petitionPaymentMethod || null,
           preferredTrialCity: form.preferredTrialCity
             ? form.preferredTrialCity
             : null,

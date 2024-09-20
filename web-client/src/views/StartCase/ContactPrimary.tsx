@@ -13,7 +13,7 @@ import React from 'react';
 const props = cerebralProps as unknown as {
   contactsHelper: string;
   bind: string;
-  onBlur: (args: Record<string, any>) => void;
+  onBlur: () => void;
   onChange: string;
   parentView: string;
 };
@@ -98,6 +98,7 @@ export const ContactPrimary = connect(
           name="contactPrimary.title"
           type="text"
           value={data.contactPrimary.title || ''}
+          onBlur={onBlur}
           onChange={e => {
             onChangeSequence({
               key: e.target.name,
