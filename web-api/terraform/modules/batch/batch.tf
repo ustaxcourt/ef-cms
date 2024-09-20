@@ -45,6 +45,13 @@ resource "aws_iam_role" "batch_service_role" {
         "Service": "batch.amazonaws.com"
       },
       "Action": "sts:AssumeRole"
+    },
+		{
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
     }
   ]
 }
@@ -63,7 +70,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
 
 # IAM policy for S3 access
 resource "aws_iam_role_policy" "batch_service_role_policy" {
-  name = "batch_service_role_policy_${var.environment}"
+  name = "batch_service_role_policy_${var.environment}_${var.current_color}"
   role = aws_iam_role.batch_service_role.id
 
   policy = <<EOF
@@ -99,7 +106,7 @@ EOF
 }
 
 resource "aws_batch_compute_environment" "aws_batch_compute_environment" {
-  compute_environment_name = "compute_environment_${var.environment}"
+  compute_environment_name = "compute_environment_${var.environment}_${var.current_color}"
   service_role             = aws_iam_role.batch_service_role.arn
   type                     = "MANAGED"
 
@@ -112,7 +119,7 @@ resource "aws_batch_compute_environment" "aws_batch_compute_environment" {
 }
 
 resource "aws_batch_job_queue" "example_aws_batch_job_queue" {
-  name                 = "${var.environment}-aws-batch-job-queue"
+  name                 = "${var.environment}-${var.current_color}-aws-batch-job-queue"
   state                = "ENABLED"
   priority             = 1
   compute_environments = [aws_batch_compute_environment.aws_batch_compute_environment.arn]
@@ -131,7 +138,7 @@ data "aws_iam_policy_document" "ecs_assume_role_policy" {
 }
 
 resource "aws_iam_role" "job_definition_iam_role" {
-  name               = "job_definition_iam_role_${var.environment}"
+  name               = "job_definition_iam_role_${var.environment}_${var.current_color}"
   assume_role_policy = data.aws_iam_policy_document.ecs_assume_role_policy.json
 }
 
@@ -142,7 +149,7 @@ resource "aws_iam_role_policy_attachment" "job_definition_execution_role_policy"
 
 # Define the Job Definition to download, zip, and upload files to S3
 resource "aws_batch_job_definition" "example_aws_batch_job_definition" {
-  name       = "s3-zip-job-${var.environment}"
+  name       = "s3-zip-job-${var.environment}-${var.current_color}"
   type       = "container"
 
 
@@ -163,6 +170,8 @@ resource "aws_batch_job_definition" "example_aws_batch_job_definition" {
         value = "2048"
       }
     ]
+
+		jobRoleArn = aws_iam_role.batch_service_role.arn
 
 		executionRoleArn = aws_iam_role.job_definition_iam_role.arn
 

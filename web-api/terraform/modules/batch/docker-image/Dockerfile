@@ -6,13 +6,9 @@ RUN apt-get update && \
 	apt-get install -y awscli && \
 	apt-get clean
 
-# Define build arguments that will accept values at build time
-ARG AWS_ACCESS_KEY_ID
-ARG AWS_SECRET_ACCESS_KEY
 
 # Set the environment variables using the passed build arguments
-ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-ENV AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+ENV CURRENT_COLOR="blue"
 
 # Set the working directory inside the container
 WORKDIR /usr/src/app
