@@ -1,18 +1,19 @@
+import { clearAlertsAction } from '@web-client/presenter/actions/clearAlertsAction';
+import { setValidationAlertErrorsAction } from '@web-client/presenter/actions/setValidationAlertErrorsAction';
+import { setValidationErrorsAction } from '@web-client/presenter/actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
-import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validatePetitionerAction } from '../actions/validatePetitionerAction';
 
 export const validatePetitionerSequence = [
-  stopShowValidationAction,
+  () => console.log('Running validation'),
   shouldValidateAction,
   {
     ignore: [],
     validate: [
       validatePetitionerAction,
       {
-        error: [startShowValidationAction],
-        success: [],
+        error: [setValidationErrorsAction, setValidationAlertErrorsAction],
+        success: [clearAlertsAction],
       },
     ],
   },

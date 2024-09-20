@@ -21,7 +21,6 @@ export const submitTrialSessionSequence = [
   validateTrialSessionAction,
   {
     error: [
-      setAlertErrorAction,
       setValidationErrorsAction,
       setScrollToErrorNotificationAction,
       setValidationAlertErrorsAction,

@@ -6,7 +6,6 @@ import { getUploadCourtIssuedDocumentAlertSuccessAction } from '../actions/Uploa
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { overwriteOrderFileAction } from '../actions/CourtIssuedOrder/overwriteOrderFileAction';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
@@ -52,7 +51,6 @@ export const editUploadCourtIssuedDocumentSequence = [
   validateUploadCourtIssuedDocumentAction,
   {
     error: [
-      setAlertErrorAction,
       setValidationErrorsAction,
       setScrollToErrorNotificationAction,
       setValidationAlertErrorsAction,
