@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "main": "testScript.js",
   "scripts": {
-		"deploy": "./deploy-to-ecr.sh"
+    "deploy": "./deploy-to-ecr.sh"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "@types/node": "22.5.5"
+  }
 }
