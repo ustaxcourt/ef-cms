@@ -142,10 +142,10 @@ const PetitionPaymentFormComponent: React.FC<ComponentProps & any> = ({
               onBlur={validateFormData}
               onChange={e => {
                 onUpdate({
-                  allowEmptyString: true,
                   key: e.target.name,
                   value: e.target.value,
                 });
+                validateFormData();
               }}
             />
           </FormGroup>

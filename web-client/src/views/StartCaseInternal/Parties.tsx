@@ -68,6 +68,7 @@ export const Parties = connect(
                   key: e.target.name,
                   value: e.target.checked,
                 });
+                validatePetitionFromPaperSequence();
               }}
             />
             <label
@@ -92,7 +93,7 @@ export const Parties = connect(
                 startCaseInternalHelper.showSecondaryContact
               }
               useSameAsPrimary={true}
-              onBlur={validatePetitionFromPaperSequence}
+              onBlur={() => validatePetitionFromPaperSequence()}
               onChange="updateFormValueAndCaseCaptionSequence"
             />
           </div>
