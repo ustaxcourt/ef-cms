@@ -1,3 +1,5 @@
+import { LeftChevron } from '@web-client/ustc-ui/Icon/LeftChevron';
+import { RightChevron } from '@web-client/ustc-ui/Icon/RightChevron';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -108,15 +110,7 @@ const PreviousPage = (props: {
             props.onPreviousClick();
           }}
         >
-          <svg
-            aria-hidden="true"
-            className="usa-icon"
-            role="img"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M14.71 6.71a1 1 0 0 1 0 1.41L10.83 12l3.88 3.88a1 1 0 0 1-1.41 1.41l-4.58-4.59a1 1 0 0 1 0-1.41l4.58-4.59a1 1 0 0 1 1.41 0z"></path>
-          </svg>
+          <LeftChevron />
           <span className="usa-pagination__link-text">Previous</span>
         </button>
       </li>
@@ -142,15 +136,7 @@ const NextPage = (props: { onNextClick: Function; isHidden: boolean }) => {
           }}
         >
           <span className="usa-pagination__link-text">Next</span>
-          <svg
-            aria-hidden="true"
-            className="usa-icon"
-            role="img"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M9.29 6.71a1 1 0 0 0 0 1.41L13.17 12l-3.88 3.88a1 1 0 0 0 1.41 1.41l4.58-4.59a1 1 0 0 0 0-1.41l-4.58-4.59a1 1 0 0 0-1.41 0z"></path>
-          </svg>
+          <RightChevron />
         </button>
       </li>
     </>
