@@ -30,7 +30,7 @@ describe('Get users in section', () => {
     {
       ...mockJudgeUser,
       isSeniorJudge: false,
-      judgeFullName: 'Test Judge 1',
+      judgeFullName: 'Test Judge 2',
       judgeTitle: 'Judge',
       name: 'Test Judge 2',
       userId: 'ea83cea2-5ce9-451d-b3d6-1e7c0e51d311',
