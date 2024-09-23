@@ -7,6 +7,7 @@ import {
   SESSION_STATUS_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TrialSessionProceedingType,
+  TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
 import { SelectSearch2 } from '@web-client/ustc-ui/Select/SelectSearch2';
 import { SuccessNotification } from '../SuccessNotification';
@@ -289,14 +290,19 @@ const TrialSessionFilters = connect(
                 name="sessionType"
                 options={trialSessionsHelper.sessionTypeOptions}
                 placeholder="- Select one or more -"
-                value="Select one or more"
+                value={{
+                  label: '- Select one or more -',
+                  value: '' as TrialSessionTypes,
+                }}
                 onChange={sessionType => {
-                  setTrialSessionsFiltersSequence({
-                    sessionTypes: {
-                      action: 'add',
-                      sessionType: sessionType.value,
-                    },
-                  });
+                  if (sessionType) {
+                    setTrialSessionsFiltersSequence({
+                      sessionTypes: {
+                        action: 'add',
+                        sessionType: sessionType.value,
+                      },
+                    });
+                  }
                 }}
               />
             </div>
@@ -329,17 +335,19 @@ const TrialSessionFilters = connect(
                 name="location"
                 options={trialSessionsHelper.trialCitiesByState}
                 placeholder="- Select one or more -"
-                searchableOptions={
-                  trialSessionsHelper.searchableTrialLocationOptions
-                }
-                value="Select one or more"
+                value={{
+                  label: '- Select one or more -',
+                  value: '',
+                }}
                 onChange={location => {
-                  setTrialSessionsFiltersSequence({
-                    trialLocations: {
-                      action: 'add',
-                      trialLocation: location.value,
-                    },
-                  });
+                  if (location) {
+                    setTrialSessionsFiltersSequence({
+                      trialLocations: {
+                        action: 'add',
+                        trialLocation: location.value,
+                      },
+                    });
+                  }
                 }}
               />
             </div>
@@ -372,14 +380,19 @@ const TrialSessionFilters = connect(
                 name="judges"
                 options={trialSessionsHelper.trialSessionJudgeOptions}
                 placeholder="- Select one or more -"
-                value="Select one or more"
+                value={{
+                  label: '- Select one or more -',
+                  value: { name: '', userId: '' },
+                }}
                 onChange={inputValue => {
-                  setTrialSessionsFiltersSequence({
-                    judges: {
-                      action: 'add',
-                      judge: inputValue.value,
-                    },
-                  });
+                  if (inputValue) {
+                    setTrialSessionsFiltersSequence({
+                      judges: {
+                        action: 'add',
+                        judge: inputValue.value,
+                      },
+                    });
+                  }
                 }}
               />
             </div>

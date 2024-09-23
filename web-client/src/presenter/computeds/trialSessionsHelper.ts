@@ -6,12 +6,12 @@ import {
   subtractISODates,
 } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
-import { InputOption } from '@web-client/ustc-ui/Utils/types';
 import { RawUser } from '@shared/business/entities/User';
 import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
   TRIAL_CITIES,
+  TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
@@ -31,11 +31,16 @@ export const trialSessionsHelper = (
   showNoticeIssued: boolean;
   showSessionStatus: boolean;
   showUnassignedJudgeFilter: boolean;
-  trialSessionJudgeOptions: InputOption<{ name: string; userId: string }>[];
+  trialSessionJudgeOptions: {
+    label: string;
+    value: { name: string; userId: string };
+  }[];
   trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
-  sessionTypeOptions: InputOption[];
-  searchableTrialLocationOptions: InputOption[];
-  trialCitiesByState: InputOption[];
+  sessionTypeOptions: { label: string; value: TrialSessionTypes }[];
+  trialCitiesByState: {
+    label: string;
+    options: { label: string; value: string }[];
+  }[];
   trialSessionsCount: number;
   endDateErrorMessage?: string;
   startDateErrorMessage?: string;
@@ -82,30 +87,31 @@ export const trialSessionsHelper = (
     }),
   );
   const trialCities = sortBy(TRIAL_CITIES.ALL, ['state', 'city']);
-  const searchableTrialLocationOptions: InputOption[] = [];
-
-  const states: InputOption[] = trialCities.reduce(
-    (listOfStates: InputOption[], cityStatePair) => {
+  const states = trialCities.reduce(
+    (listOfStates, cityStatePair) => {
       const existingState = listOfStates.find(
         trialState => trialState.label === cityStatePair.state,
       );
-      const cityOption: InputOption = {
+      const cityOption = {
         label: `${cityStatePair.city}, ${cityStatePair.state}`,
         value: `${cityStatePair.city}, ${cityStatePair.state}`,
       };
       if (existingState) {
-        existingState.options?.push(cityOption);
+        existingState.options.push(cityOption);
       } else {
         listOfStates.push({
           label: cityStatePair.state,
           options: [cityOption],
         });
       }
-      searchableTrialLocationOptions.push(cityOption);
       return listOfStates;
     },
-    [],
+    [] as {
+      label: string;
+      options: { label: string; value: string }[];
+    }[],
   );
+
   const { endDateErrorMessage, startDateErrorMessage } =
     validateTrialSessionDateRange({
       endDate: filters.endDate,
@@ -128,7 +134,6 @@ export const trialSessionsHelper = (
   return {
     endDateErrorMessage,
     isResetFiltersDisabled: !userHasSelectedAFilter,
-    searchableTrialLocationOptions,
     sessionTypeOptions,
     showNewTrialSession: permissions.CREATE_TRIAL_SESSION,
     showNoticeIssued: filters.currentTab === 'calendared',
