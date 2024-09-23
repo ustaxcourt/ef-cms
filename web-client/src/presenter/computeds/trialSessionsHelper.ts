@@ -51,7 +51,7 @@ export const trialSessionsHelper = (
   const judge = get(state.judgeUser);
   const judges = get(state.judges);
 
-  const pageSize = 1;
+  const pageSize = 5; // set this to sane value for testing purposes
 
   const showCurrentJudgesOnly =
     filters.currentTab === 'new' ||
@@ -79,6 +79,7 @@ export const trialSessionsHelper = (
     label: sessionType,
     value: sessionType,
   }));
+
   const trialSessionJudgeOptions = trialSessionJudges.map(
     trialSessionJudge => ({
       label: trialSessionJudge.name,
@@ -97,10 +98,12 @@ export const trialSessionsHelper = (
     filters,
     trialSessions,
   });
+
   const trialSessionPage = filteredTrialSessions.slice(
     filters.pageNumber * pageSize,
     filters.pageNumber * pageSize + pageSize,
   );
+
   const trialSessionRows = formatTrialSessions({
     judgeAssociatedToUser: judge,
     trialSessions: trialSessionPage,
