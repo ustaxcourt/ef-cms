@@ -71,7 +71,7 @@ export const CaseTypeSelect = connect<
               name={name || 'caseType'}
               ref={refProp}
               value={value}
-              onBlur={onBlur}
+              onBlur={onBlur ? () => onBlur() : undefined}
               onChange={e => {
                 onChange({
                   key: e.target.name,
