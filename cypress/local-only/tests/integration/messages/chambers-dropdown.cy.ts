@@ -19,10 +19,28 @@ import { v4 } from 'uuid';
 describe('BUG: chambers dropdown should be populated in message modals', () => {
   const chambersSection = 'buchsChambers';
   const recipient = 'Judge Buch';
+  const caseNumber = '103-20';
+  let messageToForwardSubject = '';
+
+  before(() => {
+    // Send a message that we will forward later.
+    // We do this here rather than in the message forward test itself because
+    // judgesChambers are cached, so the message forward test could
+    // "pass" when it shouldn't if we create a message (and populate cache) first.
+    loginAsDocketClerk();
+    goToCase(caseNumber);
+    createMessage();
+    selectSection('Docket');
+    selectRecipient('Test Docketclerk');
+    messageToForwardSubject = v4();
+    enterSubject(messageToForwardSubject);
+    fillOutMessageField();
+    sendMessage();
+  });
 
   it('should have nonempty chambers section in create new message modal', () => {
     loginAsDocketClerk();
-    goToCase('103-20');
+    goToCase(caseNumber);
     createMessage();
 
     selectSection('Chambers');
@@ -32,15 +50,8 @@ describe('BUG: chambers dropdown should be populated in message modals', () => {
 
   it('should have nonempty chambers sections in forward message modal', () => {
     loginAsDocketClerk();
-    goToCase('103-20');
-    createMessage();
-    selectSection('Docket');
-    selectRecipient('Test Docketclerk');
-    const subject = v4();
-    enterSubject(subject);
-    fillOutMessageField();
-    sendMessage();
-    forwardMessage(subject);
+    goToCase(caseNumber);
+    forwardMessage(messageToForwardSubject);
 
     selectSection('Chambers');
     selectChambers(chambersSection);
