@@ -63,6 +63,7 @@ describe('trialSessionsHelper', () => {
       trialLocation: 'Boise',
       trialSessionId: '392810',
     };
+    trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
   });
 
   describe('showNoticeIssued', () => {
@@ -127,7 +128,6 @@ describe('trialSessionsHelper', () => {
   describe('showUnassignedJudgeFilter', () => {
     it('should show the `unassigned` judge filter when on the new tab', () => {
       trialSessionsPageState.filters.currentTab = 'new';
-      console.log('Judge Colvin: ', judgeColvin);
 
       const result = runCompute(trialSessionsHelper, {
         state: {
@@ -234,10 +234,10 @@ describe('trialSessionsHelper', () => {
   describe('showNewTrialSession', () => {
     it('should return showNewTrialSession as true when current user has CREATE_TRIAL_SESSION permission', () => {
       trialSessionsPageState.filters.currentTab = 'new';
-      // TODO: Fix
+      const judges = [judgeUser, judgeColvin];
       const result = runCompute(trialSessionsHelper, {
         state: {
-          jugdes: [judgeUser],
+          judges,
           permissions: getUserPermissions(docketClerk1User),
           trialSessionsPage: trialSessionsPageState,
         },
@@ -302,19 +302,21 @@ describe('trialSessionsHelper', () => {
         );
       });
 
+      // #ix this
       // TODO: This test is affectd by pagination now. Ergo, one trial sessionis filtered out
       //      when it should not be base on this test
       it('should not filter trial sessions by judge when judge filter is All', () => {
         trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
         trialSessionsPageState.filters.judgeId = 'All';
-
+        console.log('Trial Sessions: ', trialSessionsPageState.trialSessions);
         const result = runCompute(trialSessionsHelper, {
           state: {
-            judges: [judgeUser],
+            judges: [judgeUser, judgeColvin],
             permissions: getUserPermissions(docketClerk1User),
             trialSessionsPage: trialSessionsPageState,
           },
         });
+        console.log('TrialSessionRows: ', result.trialSessionRows);
 
         const trialSessionsOnly =
           result.trialSessionRows.filter(isTrialSessionRow);
