@@ -69,24 +69,20 @@ async function downloadFile(
   s3Client: S3,
   DIRECTORY: string,
 ) {
-  try {
-    const command = new GetObjectCommand({
-      Bucket: S3_BUCKET,
-      Key: docketEntry.key,
-    });
+  const command = new GetObjectCommand({
+    Bucket: S3_BUCKET,
+    Key: docketEntry.key,
+  });
 
-    const data = await s3Client.send(command);
+  const data = await s3Client.send(command);
 
-    if (!data.Body)
-      throw new Error(`Unable to get document (${docketEntry.key})`);
+  if (!data.Body)
+    throw new Error(`Unable to get document (${docketEntry.key})`);
 
-    const bodyContents: any = await streamToBuffer(data.Body);
-    const FILE_PATH = path.join(DIRECTORY, `${docketEntry.filePathInZip}`);
-    fs.mkdirSync(path.dirname(FILE_PATH), { recursive: true });
-    await writeFile(FILE_PATH, bodyContents);
-  } catch (error) {
-    console.error(`Error downloading ${docketEntry}:`, error);
-  }
+  const bodyContents: any = await streamToBuffer(data.Body);
+  const FILE_PATH = path.join(DIRECTORY, `${docketEntry.filePathInZip}`);
+  fs.mkdirSync(path.dirname(FILE_PATH), { recursive: true });
+  await writeFile(FILE_PATH, bodyContents);
 }
 
 function zipFolder(
@@ -116,11 +112,7 @@ async function uploadZipFile(s3Client: S3, filePath: string) {
     Key: fileName,
   };
 
-  try {
-    return await s3Client.send(new PutObjectCommand(uploadParams));
-  } catch (err) {
-    console.error('Error uploading file:', err);
-  }
+  await s3Client.send(new PutObjectCommand(uploadParams));
 }
 
 export async function app({
@@ -141,9 +133,7 @@ export async function app({
 
   const ZIP_PATH = path.join(__dirname, zipName);
   await zipFolder(DIRECTORY, ZIP_PATH);
-
-  const results = await uploadZipFile(s3Client, ZIP_PATH);
-  console.log('results', results);
+  await uploadZipFile(s3Client, ZIP_PATH);
 }
 
 app({
