@@ -11,6 +11,8 @@ import { setScrollToErrorNotificationAction } from '@web-client/presenter/action
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { startShowValidationAction } from '@web-client/presenter/actions/startShowValidationAction';
+import { stopShowValidationAction } from '@web-client/presenter/actions/stopShowValidationAction';
 import { updateMessageModalAfterQCAction } from '../actions/updateMessageModalAfterQCAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
@@ -20,6 +22,7 @@ export const openCompleteAndSendMessageModalSequence = [
   isWorkItemAlreadyCompletedAction,
   {
     no: [
+      startShowValidationAction,
       setFilersFromFilersMapAction,
       validateDocketEntryAction,
       {
@@ -29,6 +32,7 @@ export const openCompleteAndSendMessageModalSequence = [
           setValidationAlertErrorsAction,
         ],
         success: [
+          stopShowValidationAction,
           clearModalStateAction,
           getJudgesChambersSequence,
           refreshExternalDocumentTitleFromEventCodeAction,
