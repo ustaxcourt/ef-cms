@@ -2,13 +2,14 @@ import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseInventory } from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { CaseType } from '@shared/business/entities/EntityConstants';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
-import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
+import { SelectSearch2 } from '@web-client/ustc-ui/Select/SelectSearch2';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
@@ -247,13 +248,13 @@ export const CustomCaseReport = connect(
                   Case status{' '}
                   <span className="optional-light-text">(optional)</span>
                 </label>
-                <SelectSearch
+                <SelectSearch2
                   aria-labelledby="case-status-label"
                   id="case-status"
                   name="caseStatus"
                   options={customCaseReportHelper.caseStatuses}
                   placeholder="- Select one or more -"
-                  value={'Select one or more'}
+                  value={{ label: '- Select one or more -', value: '' }}
                   onChange={inputValue => {
                     if (inputValue) {
                       setCustomCaseReportFiltersSequence({
@@ -275,13 +276,16 @@ export const CustomCaseReport = connect(
                   Case types{' '}
                   <span className="optional-light-text">(optional)</span>
                 </label>
-                <SelectSearch
+                <SelectSearch2
                   aria-labelledby="case-type-label"
                   id="case-type"
                   name="eventCode"
                   options={customCaseReportHelper.caseTypes}
                   placeholder="- Select one or more -"
-                  value="Select one or more"
+                  value={{
+                    label: '- Select one or more -',
+                    value: '' as CaseType,
+                  }}
                   onChange={inputValue => {
                     if (inputValue) {
                       setCustomCaseReportFiltersSequence({
@@ -304,13 +308,13 @@ export const CustomCaseReport = connect(
                   Assigned judge{' '}
                   <span className="optional-light-text">(optional)</span>
                 </label>
-                <SelectSearch
+                <SelectSearch2
                   aria-labelledby="judges-label"
                   id="judges"
                   name="judges"
                   options={customCaseReportHelper.judges}
                   placeholder="- Select one or more -"
-                  value={'Select one or more'}
+                  value={{ label: '- Select one or more -', value: '' }}
                   onChange={inputValue => {
                     if (inputValue) {
                       setCustomCaseReportFiltersSequence({
@@ -332,16 +336,13 @@ export const CustomCaseReport = connect(
                   Requested place of trial{' '}
                   <span className="optional-light-text">(optional)</span>
                 </label>
-                <SelectSearch
+                <SelectSearch2
                   aria-labelledby="requested-place-of-trial-label"
                   id="trial-location"
                   name="requestedPlaceOfTrial"
                   options={customCaseReportHelper.trialCitiesByState}
                   placeholder="- Select one or more -"
-                  searchableOptions={
-                    customCaseReportHelper.searchableTrialCities
-                  }
-                  value="Select one or more"
+                  value={{ label: '- Select one or more -', value: '' }}
                   onChange={inputValue => {
                     if (inputValue) {
                       setCustomCaseReportFiltersSequence({
