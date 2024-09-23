@@ -3,6 +3,7 @@ import { ApiGatewayManagementApiClient } from '@aws-sdk/client-apigatewaymanagem
 import { GetObjectCommand, S3 } from '@aws-sdk/client-s3';
 import { NodeHttpHandler } from '@aws-sdk/node-http-handler';
 import { writeFile } from 'fs/promises';
+import archiver from 'archiver';
 import fs from 'fs';
 import path from 'path';
 
@@ -70,6 +71,43 @@ async function downloadFile(
   }
 }
 
+function zipFolder(
+  sourceFolderPath: string,
+  outZipPath: string,
+): Promise<void> {
+  const output = fs.createWriteStream(outZipPath);
+  const archive = archiver('zip', { zlib: { level: 9 } });
+
+  return new Promise((resolve, reject) => {
+    output.on('close', () => resolve());
+    archive.on('error', (err: Error) => reject(err));
+    archive.pipe(output);
+    archive.directory(sourceFolderPath, false);
+    void archive.finalize();
+  });
+}
+
+function uploadZipFile = async (bucketName, filePath) => {
+	const fileStream = fs.createReadStream(filePath);
+	const fileName = path.basename(filePath);
+
+	const uploadParams = {
+			Bucket: bucketName,
+			Key: fileName,
+			Body: fileStream,
+			ContentType: 'application/zip' // Set the content type
+	};
+
+	try {
+			const data = await s3Client.send(new PutObjectCommand(uploadParams));
+			console.log(`Successfully uploaded ${fileName} to ${bucketName}`);
+			return data;
+	} catch (err) {
+			console.error('Error uploading file:', err);
+	}
+};
+
+
 export async function app({
   docketEntries,
   s3Client,
@@ -84,6 +122,9 @@ export async function app({
       batch.map(docketEntry => downloadFile(docketEntry, s3Client, DIRECTORY)),
     );
   }
+
+  const ZIP_PATH = path.join(__dirname, 'Docket_Entries.zip');
+  await zipFolder(DIRECTORY, ZIP_PATH);
 
   const filesInDir = fs.readdirSync(__dirname);
   console.log('filesInDir', filesInDir);
