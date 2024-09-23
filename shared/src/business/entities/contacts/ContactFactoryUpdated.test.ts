@@ -9,6 +9,7 @@ describe('ContactFactoryUpdated', () => {
     const { primary, secondary } = ContactFactoryUpdated({
       contactInfoPrimary: EMPTY_VALUE,
       contactInfoSecondary: EMPTY_VALUE,
+      filingType: 'Myself',
       hasSpouseConsent: false,
       partyType: '',
       petitionType: '',
@@ -28,6 +29,7 @@ describe('ContactFactoryUpdated', () => {
       const { primary, secondary } = ContactFactoryUpdated({
         contactInfoPrimary: {},
         contactInfoSecondary: EMPTY_VALUE,
+        filingType: 'Myself',
         hasSpouseConsent: false,
         partyType,
         petitionType: TEST_PETITION_TYPE,
@@ -46,6 +48,7 @@ describe('ContactFactoryUpdated', () => {
     const { primary, secondary } = ContactFactoryUpdated({
       contactInfoPrimary: {},
       contactInfoSecondary: EMPTY_VALUE,
+      filingType: 'Myself and my spouse',
       hasSpouseConsent: false,
       partyType: PARTY_TYPES.petitionerDeceasedSpouse,
       petitionType: TEST_PETITION_TYPE,
@@ -63,6 +66,7 @@ describe('ContactFactoryUpdated', () => {
     const { primary, secondary } = ContactFactoryUpdated({
       contactInfoPrimary: {},
       contactInfoSecondary: {},
+      filingType: 'Myself and my spouse',
       hasSpouseConsent: false,
       partyType: PARTY_TYPES.petitionerDeceasedSpouse,
       petitionType: TEST_PETITION_TYPE,
@@ -83,6 +87,7 @@ describe('ContactFactoryUpdated', () => {
     const { primary, secondary } = ContactFactoryUpdated({
       contactInfoPrimary: {},
       contactInfoSecondary: EMPTY_VALUE,
+      filingType: 'Myself and my spouse',
       hasSpouseConsent: false,
       partyType: PARTY_TYPES.petitionerSpouse,
       petitionType: TEST_PETITION_TYPE,
@@ -100,6 +105,7 @@ describe('ContactFactoryUpdated', () => {
     const { primary, secondary } = ContactFactoryUpdated({
       contactInfoPrimary: {},
       contactInfoSecondary: {},
+      filingType: 'Myself and my spouse',
       hasSpouseConsent: false,
       partyType: PARTY_TYPES.petitionerSpouse,
       petitionType: TEST_PETITION_TYPE,
@@ -117,6 +123,7 @@ describe('ContactFactoryUpdated', () => {
     const { primary, secondary } = ContactFactoryUpdated({
       contactInfoPrimary: {},
       contactInfoSecondary: {},
+      filingType: 'Myself and my spouse',
       hasSpouseConsent: true,
       partyType: PARTY_TYPES.petitionerSpouse,
       petitionType: TEST_PETITION_TYPE,
@@ -149,6 +156,7 @@ describe('ContactFactoryUpdated', () => {
       const { primary, secondary } = ContactFactoryUpdated({
         contactInfoPrimary: {},
         contactInfoSecondary: {},
+        filingType: 'Other',
         hasSpouseConsent: false,
         partyType,
         petitionType: TEST_PETITION_TYPE,
@@ -167,6 +175,7 @@ describe('ContactFactoryUpdated', () => {
     const { primary, secondary } = ContactFactoryUpdated({
       contactInfoPrimary: {},
       contactInfoSecondary: {},
+      filingType: 'Other',
       hasSpouseConsent: false,
       partyType: 'SOMETHING_RANDOM',
       petitionType: TEST_PETITION_TYPE,

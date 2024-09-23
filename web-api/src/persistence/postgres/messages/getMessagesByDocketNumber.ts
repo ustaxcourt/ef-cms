@@ -18,7 +18,7 @@ export const getMessagesByDocketNumber = async ({
       .execute(),
   );
 
-  return messages.map(message =>
-    new MessageResult(transformNullToUndefined(message)).validate(),
+  return messages.map(
+    message => new MessageResult(transformNullToUndefined(message)),
   );
 };
