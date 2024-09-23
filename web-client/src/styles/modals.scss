@@ -321,6 +321,14 @@ button {
   }
 }
 
+.create-term-modal {
+  overflow-y: visible;
+
+  .usa-date-picker {
+    min-width: unset;
+  }
+}
+
 .add-consolidated-case-search-modal {
   .usa-button {
     &.ustc-search-button {

@@ -27,8 +27,8 @@ export const CreateTermModal = connect(
       <ModalDialog
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
-        className="trial-session-planning-modal"
-        confirmLabel="Run Report"
+        className="create-term-modal"
+        confirmLabel="Create Term"
         confirmSequence={confirmSequence}
         title="Create Term"
         onModalMount={() => setIsModalMounted(true)}
@@ -56,35 +56,33 @@ export const CreateTermModal = connect(
         </FormGroup>
 
         <FormGroup>
-          <fieldset className="usa-fieldset margin-bottom-0">
-            <DateRangePickerComponent
-              endDateErrorText={validationErrors.termEndDate}
-              endLabel="Term end date"
-              endName="termEndDate"
-              endPickerCls={'grid-col-6'}
-              endValue={modal.termEndDate}
-              formGroupCls="margin-bottom-0"
-              parentModalHasMounted={isModalMounted}
-              rangePickerCls={'grid-row '}
-              startDateErrorText={validationErrors.termStartDate}
-              startLabel="Term start date"
-              startName="termStartDate"
-              startPickerCls={'grid-col-6'}
-              startValue={modal.termStartDate}
-              onChangeEnd={e => {
-                updateModalValueSequence({
-                  key: 'termEndDate',
-                  value: e.target.value,
-                });
-              }}
-              onChangeStart={e => {
-                updateModalValueSequence({
-                  key: 'termStartDate',
-                  value: e.target.value,
-                });
-              }}
-            />
-          </fieldset>
+          <DateRangePickerComponent
+            endDateErrorText={validationErrors.termEndDate}
+            endLabel="Term end date"
+            endName="termEndDate"
+            endPickerCls={''}
+            endValue={modal.termEndDate}
+            formGroupCls="margin-bottom-0"
+            parentModalHasMounted={isModalMounted}
+            rangePickerCls={'display-flex'}
+            startDateErrorText={validationErrors.termStartDate}
+            startLabel="Term start date"
+            startName="termStartDate"
+            startPickerCls={''}
+            startValue={modal.termStartDate}
+            onChangeEnd={e => {
+              updateModalValueSequence({
+                key: 'termEndDate',
+                value: e.target.value,
+              });
+            }}
+            onChangeStart={e => {
+              updateModalValueSequence({
+                key: 'termStartDate',
+                value: e.target.value,
+              });
+            }}
+          />
         </FormGroup>
       </ModalDialog>
     );
