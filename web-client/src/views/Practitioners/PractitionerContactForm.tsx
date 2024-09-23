@@ -69,7 +69,7 @@ export const PractitionerContactForm = connect(
                 name="contact.phone"
                 type="text"
                 value={form.contact.phone || ''}
-                onBlur={onBlurValidationSequence}
+                onBlur={() => onBlurValidationSequence()}
                 onChange={e => {
                   onChangeUpdateSequence({
                     key: e.target.name,
