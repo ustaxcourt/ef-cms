@@ -1,6 +1,7 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getCaseAction } from '../actions/getCaseAction';
+import { getJudgesChambersSequence } from '@web-client/presenter/sequences/getJudgesChambersSequence';
 import { isWorkItemAlreadyCompletedAction } from '../actions/isWorkItemAlreadyCompletedAction';
 import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
@@ -29,6 +30,7 @@ export const openCompleteAndSendMessageModalSequence = [
         ],
         success: [
           clearModalStateAction,
+          getJudgesChambersSequence,
           refreshExternalDocumentTitleFromEventCodeAction,
           setPreviousDocumentDocketEntryAction,
           generateTitleAction,
