@@ -49,7 +49,7 @@ export const StatisticsForm = connect(
           id={`deficiency-amount-${index}`}
           name={`statistics.${index}.irsDeficiencyAmount`}
           value={form.statistics[index].irsDeficiencyAmount || ''}
-          onBlur={validatePetitionFromPaperSequence}
+          onBlur={() => validatePetitionFromPaperSequence()}
           onValueChange={values => {
             updateStatisticsFormValueSequence({
               key: `statistics.${index}.irsDeficiencyAmount`,
