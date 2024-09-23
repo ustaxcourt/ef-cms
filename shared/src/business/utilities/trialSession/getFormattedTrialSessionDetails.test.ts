@@ -1,8 +1,8 @@
-import { DOCKET_NUMBER_SUFFIXES } from '../entities/EntityConstants';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { DOCKET_NUMBER_SUFFIXES } from '../../entities/EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { TrialSessionState } from '@web-client/presenter/state/trialSessionState';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   formatCaseForTrialSession,
   getFormattedTrialSessionDetails,
