@@ -3,8 +3,6 @@ import { RightChevron } from '@web-client/ustc-ui/Icon/RightChevron';
 import React from 'react';
 import classNames from 'classnames';
 
-const numberOfPaginatorSlots = 7;
-
 /*
 This component is based off of USWDS implementation of a paginator: https://designsystem.digital.gov/components/pagination/
 The totalPages and selected page work similarly to counting arrays. TotalPages is similar to array.length and currentPageIndex is 0 based indexing.
@@ -14,15 +12,18 @@ totalPages could be 20 but the maximum value currentPageIndex could be is 19 and
 export const Paginator = ({
   currentPageIndex,
   onPageChange,
+  showSinglePage = false,
   totalPages,
 }: {
   currentPageIndex: number;
   totalPages: number;
+  showSinglePage?: boolean;
   onPageChange: (selectedPage: number) => any;
 }) => {
   if (totalPages === 0) {
     return;
   }
+  const numberOfPaginatorSlots = showSinglePage ? 1 : 7;
   const sevenDisplayedSlots: React.JSX.Element[] = [];
 
   for (let slotNumber = 0; slotNumber < numberOfPaginatorSlots; slotNumber++) {
@@ -31,6 +32,7 @@ export const Paginator = ({
     }
     const slotComponent = getSlotComponent({
       currentPageIndex,
+      numberOfPaginatorSlots,
       onPageChange,
       slotNumber,
       totalPages,
@@ -158,6 +160,7 @@ const PageEllipsis = () => {
 
 function getSlotComponent({
   currentPageIndex,
+  numberOfPaginatorSlots,
   onPageChange,
   slotNumber,
   totalPages,
@@ -166,12 +169,25 @@ function getSlotComponent({
   onPageChange: (selectedPage: number) => any;
   slotNumber: number;
   totalPages: number;
+  numberOfPaginatorSlots: number;
 }) {
   const isHidingPreviousOptions =
     currentPageIndex > 3 && totalPages > numberOfPaginatorSlots;
   const isHidingFutureOptions =
     totalPages - currentPageIndex > 4 && totalPages > numberOfPaginatorSlots;
   if (slotNumber === 0) {
+    if (numberOfPaginatorSlots === 1) {
+      return (
+        <PageButton
+          key={slotNumber}
+          pageNumber={currentPageIndex}
+          selected={true}
+          onClick={selectedPage => {
+            onPageChange(selectedPage);
+          }}
+        />
+      );
+    }
     return (
       <PageButton
         key={slotNumber}
