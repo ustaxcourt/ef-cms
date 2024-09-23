@@ -1,5 +1,6 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { OpenPractitionerCaseListPdfModal } from './OpenPractitionerCaseListPdfModal';
+import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { PractitionerCaseList } from '@web-client/views/Practitioners/PractitionerCases/PractitionerCaseList';
 import { PractitionerDetails } from './PractitionerDetails';
 import { PractitionerDocumentation } from './PractitionerDocumentation';
@@ -19,17 +20,20 @@ export const PractitionerInformation = connect(
       sequences.onPractitionerInformationTabSelectSequence,
     practitionerDetailHelper: state.practitionerDetailHelper,
     practitionerInformationHelper: state.practitionerInformationHelper,
+    setPractitionerOpenCasesPageSequence:
+      sequences.setPractitionerOpenCasesPageSequence,
     showModal: state.modal.showModal,
   },
   function PractitionerInformation({
     gotoPrintPractitionerCasesSequence,
     onPractitionerInformationTabSelectSequence,
     practitionerInformationHelper,
+    setPractitionerOpenCasesPageSequence,
     showModal,
   }) {
-    const numOpenCases = practitionerInformationHelper.openCases?.length || 0;
+    const numOpenCases = practitionerInformationHelper.openCasesTotal || 0;
     const numClosedCases =
-      practitionerInformationHelper.closedCases?.length || 0;
+      practitionerInformationHelper.closedCases.closedCasesTotal || 0;
 
     console.log(practitionerInformationHelper);
 
@@ -88,6 +92,19 @@ export const PractitionerInformation = connect(
               tabName="practitioner-open-cases"
               title={`Open Cases (${numOpenCases})`}
             >
+              {practitionerInformationHelper.showOpenCasesPagination && (
+                <Paginator
+                  currentPageIndex={
+                    practitionerInformationHelper.openCasesPageNumber
+                  }
+                  totalPages={practitionerInformationHelper.totalOpenCasePages}
+                  onPageChange={selectedPage => {
+                    setPractitionerOpenCasesPageSequence({
+                      pageNumber: selectedPage,
+                    });
+                  }}
+                />
+              )}
               <PractitionerCaseList
                 cases={practitionerInformationHelper.openCases}
                 showStatus={true}
@@ -97,6 +114,15 @@ export const PractitionerInformation = connect(
               tabName="practitioner-closed-cases"
               title={`Closed Cases (${numClosedCases})`}
             >
+              {practitionerInformationHelper.showClosedCasesPagination && (
+                <Paginator
+                  currentPageIndex={practitionerInformationHelper.pageNumber}
+                  totalPages={practitionerInformationHelper.totalOpenCasePages}
+                  onPageChange={selectedPage => {
+                    console.log(selectedPage);
+                  }}
+                />
+              )}
               <PractitionerCaseList
                 cases={practitionerInformationHelper.closedCases}
                 showStatus={false}

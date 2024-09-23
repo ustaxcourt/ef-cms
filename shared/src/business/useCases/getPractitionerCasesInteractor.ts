@@ -39,10 +39,6 @@ export const getPractitionerCasesInteractor = async (
     .getPersistenceGateway()
     .getCasesByDocketNumbers({ applicationContext, docketNumbers });
 
-  cases.forEach(
-    aCase => (aCase.caseTitle = Case.getCaseTitle(aCase.caseCaption)),
-  );
-
   console.log('CASES?!', cases);
 
   const [closedCases, openCases] = partition(
