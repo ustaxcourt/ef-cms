@@ -60,7 +60,10 @@ export const uploadCourtIssuedDocumentAndEditViaDocumentQC = () => {
   const freeText = `court document ${Math.random()}`;
   cy.get('#upload-description').clear();
   cy.get('#upload-description').type(freeText);
-  cy.attachFile('../../helpers/file/sample.pdf');
+  cy.get('input#primary-document-file').attachFile(
+    '../../helpers/file/sample.pdf',
+  );
+  cy.get('[data-testid="upload-file-success"]');
   cy.get('#save-uploaded-pdf-button').click();
   cy.get('#add-court-issued-docket-entry-button').click();
   cy.get('#document-type .select-react-element__input-container input').clear();
