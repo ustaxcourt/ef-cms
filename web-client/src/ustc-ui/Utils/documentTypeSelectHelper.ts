@@ -114,29 +114,6 @@ export const courtIssuedDocketEntryOnChange = ({
   }
 };
 
-export const irsCalendarAdminInfoOnChange = ({
-  action,
-  inputValue,
-  updateTrialSessionFormDataSequence,
-}) => {
-  switch (action) {
-    case 'select-option':
-      ['name', 'email', 'phone'].forEach(key =>
-        updateTrialSessionFormDataSequence({
-          key: `irsCalendarAdministratorInfo.${key}`,
-          value: inputValue[key],
-        }),
-      );
-      break;
-    case 'clear':
-      updateTrialSessionFormDataSequence({
-        key: 'irsCalendarAdministratorInfo',
-        value: {},
-      });
-      break;
-  }
-};
-
 export const onInputChange = ({ action, inputText, updateSequence }) => {
   if (action === 'input-change') {
     updateSequence({

@@ -1,10 +1,6 @@
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
+import { SelectSearch2 } from '@web-client/ustc-ui/Select/SelectSearch2';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import {
-  irsCalendarAdminInfoOnChange,
-  onInputChange,
-} from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -18,7 +14,6 @@ export const SessionAssignmentsForm = connect(
       state.getAllIrsPractitionersForSelectHelper,
     judges: state.judges,
     sessionAssignmentHelper: state.sessionAssignmentHelper,
-    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
   },
@@ -28,7 +23,6 @@ export const SessionAssignmentsForm = connect(
     judges,
     sessionAssignmentHelper,
     TRIAL_SESSION_PROCEEDING_TYPES,
-    updateScreenMetadataSequence,
     updateTrialSessionFormDataSequence,
   }) {
     return (
@@ -180,28 +174,30 @@ export const SessionAssignmentsForm = connect(
                 <span className="usa-hint">(optional)</span>
               </label>
 
-              <SelectSearch
+              <SelectSearch2
                 aria-label="irs-calendar-administrator-info-search-label"
                 id="irs-calendar-administrator-info-search"
+                isClearable={true}
+                isMulti={false}
                 name="irsCalendarAdministratorInfoSearch "
                 options={
                   getAllIrsPractitionersForSelectHelper.irsPractitionersContactInfo
                 }
                 placeholder="- Enter name -"
-                onChange={(inputValue, { action }) => {
-                  irsCalendarAdminInfoOnChange({
-                    action,
-                    inputValue,
-                    updateTrialSessionFormDataSequence,
-                  });
-                  return true;
-                }}
-                onInputChange={(inputText, { action }) => {
-                  onInputChange({
-                    action,
-                    inputText,
-                    updateSequence: updateScreenMetadataSequence,
-                  });
+                onChange={inputValue => {
+                  if (!inputValue) {
+                    updateTrialSessionFormDataSequence({
+                      key: 'irsCalendarAdministratorInfo',
+                      value: {},
+                    });
+                    return;
+                  }
+                  ['name', 'email', 'phone'].forEach(key =>
+                    updateTrialSessionFormDataSequence({
+                      key: `irsCalendarAdministratorInfo.${key}`,
+                      value: inputValue[key],
+                    }),
+                  );
                 }}
               />
             </FormGroup>
