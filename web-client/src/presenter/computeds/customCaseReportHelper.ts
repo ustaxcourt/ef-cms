@@ -3,6 +3,7 @@ import {
   CASE_TYPES,
   CHIEF_JUDGE,
   CUSTOM_CASE_REPORT_PAGE_SIZE,
+  CaseType,
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import {
@@ -12,7 +13,6 @@ import {
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
-import { InputOption } from '@web-client/ustc-ui/Utils/types';
 import { getTrialCitiesGroupedByState } from '@shared/business/utilities/trialSession/trialCitiesGroupedByState';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -20,8 +20,8 @@ export const customCaseReportHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): {
-  caseStatuses: InputOption[];
-  caseTypes: InputOption[];
+  caseStatuses: { label: string; value: string }[];
+  caseTypes: { label: string; value: CaseType }[];
   cases: (CaseInventory & {
     inConsolidatedGroup: boolean;
     consolidatedIconTooltipText: string;
@@ -29,7 +29,7 @@ export const customCaseReportHelper = (
     isLeadCase: boolean;
   })[];
   clearFiltersIsDisabled: boolean;
-  judges: InputOption[];
+  judges: { label: string; value: string }[];
   pageCount: number;
   today: string;
   trialCitiesByState: {

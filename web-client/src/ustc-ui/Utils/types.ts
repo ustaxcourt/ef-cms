@@ -4,12 +4,6 @@ import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/j
 import { JudgeActivityReportFilters } from '@web-api/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { TrialSessionReturnType } from '@web-api/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
 
-export type InputOption<T = string> = {
-  label: string;
-  value?: T;
-  options?: InputOption[];
-};
-
 type JudgeActivityReportData = {
   trialSessions: TrialSessionReturnType;
   casesClosedByJudge: CasesClosedReturnType;
