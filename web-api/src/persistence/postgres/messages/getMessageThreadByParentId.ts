@@ -15,9 +15,10 @@ export const getMessageThreadByParentId = async ({
       .execute(),
   );
 
-  return messages.map(result =>
-    new Message(
-      transformNullToUndefined({ ...result, createdAt: result.createdAt }),
-    ).validate(),
+  return messages.map(
+    result =>
+      new Message(
+        transformNullToUndefined({ ...result, createdAt: result.createdAt }),
+      ),
   );
 };

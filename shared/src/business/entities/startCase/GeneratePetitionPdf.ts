@@ -1,6 +1,7 @@
 import { CASE_TYPES, PARTY_TYPES, PROCEDURE_TYPES } from '../EntityConstants';
 import {
   Contact,
+  ContactCounsel,
   ContactSecondary,
   IrsNotice,
 } from '@shared/business/useCases/generatePetitionPdfInteractor';
@@ -13,6 +14,7 @@ export class GeneratePetitionPdf extends JoiValidationEntity {
   public caseTitle: string;
   public contactPrimary: Contact;
   public contactSecondary?: ContactSecondary;
+  public contactCounsel?: ContactCounsel;
   public hasUploadedIrsNotice: boolean;
   public partyType: string;
   public petitionFacts: string[];
@@ -30,6 +32,7 @@ export class GeneratePetitionPdf extends JoiValidationEntity {
     this.caseTitle = rawProps.caseTitle;
     this.contactPrimary = rawProps.contactPrimary;
     this.contactSecondary = rawProps.contactSecondary;
+    this.contactCounsel = rawProps.contactCounsel;
     this.hasUploadedIrsNotice = rawProps.hasUploadedIrsNotice;
     this.partyType = rawProps.partyType;
     this.petitionFacts = rawProps.petitionFacts;
@@ -44,6 +47,7 @@ export class GeneratePetitionPdf extends JoiValidationEntity {
   static VALIDATION_RULES = {
     caseCaptionExtension: joi.string().required(),
     caseTitle: joi.string().required(),
+    contactCounsel: joi.object().optional(),
     contactPrimary: joi.object().required(),
     contactSecondary: joi.object().optional(),
     hasIrsNotice: joi.boolean().required(),

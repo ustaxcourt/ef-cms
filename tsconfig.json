@@ -17,7 +17,7 @@
       "jest",
       "node"
     ],
-    "target": "es6",
+    "target": "ES2020",
     "jsx": "react",
     "strict": true,
     "baseUrl": "./",

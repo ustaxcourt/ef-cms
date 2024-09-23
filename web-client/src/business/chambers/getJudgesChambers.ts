@@ -208,7 +208,7 @@ const JUDGES_CHAMBERS: Record<string, JudgeInfo> = omitBy(
     WAYS_CHAMBERS_SECTION: {
       judgeFullName: 'Kashi Way',
       label: 'Way’s Chambers',
-      phoneNumber: '', // TODO
+      phoneNumber: '(202) 521-0871',
       section: 'waysChambers',
     },
     WEILERS_CHAMBERS_SECTION: {

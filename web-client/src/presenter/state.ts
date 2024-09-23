@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import { Contact } from '@shared/business/useCases/generatePetitionPdfInteractor';
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import {
@@ -89,6 +90,7 @@ import { getAllIrsPractitionersForSelectHelper } from '@web-client/presenter/com
 import { getConstants } from '../getConstants';
 import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTypeHelper';
 import { headerHelper } from './computeds/headerHelper';
+import { initialBlockedCaseReportFilter } from '@web-client/presenter/state/blockedCasesReportState';
 import { initialCustomCaseReportState } from './customCaseReportState';
 import { initialPendingReportsState } from '@web-client/presenter/state/pendingReportState';
 import { initialTrialSessionState } from '@web-client/presenter/state/trialSessionState';
@@ -127,6 +129,7 @@ import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
 import { sealedCaseDetailHelper } from './computeds/sealedCaseDetailHelper';
+import { selectCriteriaHelper } from '@web-client/presenter/computeds/selectCriteriaHelper';
 import { serveThirtyDayNoticeModalHelper } from './computeds/serveThirtyDayNoticeModalHelper';
 import { sessionAssignmentHelper } from './computeds/sessionAssignmentHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
@@ -494,6 +497,9 @@ export const computeds = {
   sealedCaseDetailHelper: sealedCaseDetailHelper as unknown as ReturnType<
     typeof sealedCaseDetailHelper
   >,
+  selectCriteriaHelper: selectCriteriaHelper as unknown as ReturnType<
+    typeof selectCriteriaHelper
+  >,
   serveThirtyDayNoticeModalHelper:
     serveThirtyDayNoticeModalHelper as unknown as ReturnType<
       typeof serveThirtyDayNoticeModalHelper
@@ -602,6 +608,8 @@ export const baseState = {
     fileCount?: number;
     title?: string;
   },
+  blockedCaseReportFilter: cloneDeep(initialBlockedCaseReportFilter),
+  blockedCases: [] as RawCase[],
   caseDeadlineReport: {} as {
     caseDeadlines: (RawCaseDeadline & {
       caseCaption: string;
@@ -758,8 +766,9 @@ export const baseState = {
     caseCaptionExtension: undefined,
     caseTitle: undefined,
     caseType: undefined,
-    contactPrimary: undefined,
-    contactSecondary: undefined,
+    contactCounsel: undefined,
+    contactPrimary: undefined as Contact | undefined,
+    contactSecondary: undefined as Contact | undefined,
     corporateDisclosureFile: undefined,
     corporateDisclosureFileUrl: undefined,
     hasIrsNotice: undefined,
@@ -842,7 +851,7 @@ export const baseState = {
   user: cloneDeep(emptyUserState),
   userContactEditProgress: {} as { inProgress?: boolean },
   users: [] as RawUser[],
-  validationErrors: {} as Record<string, string>,
+  validationErrors: {} as Record<string, any>,
   viewerDocumentToDisplay: undefined as unknown as ViewerDocument,
   viewerDraftDocumentToDisplay: undefined as unknown as ViewerDocument,
   workItem: {},
@@ -867,7 +876,7 @@ export type CreateCaseIrsForm = {
   size?: number;
   caseType?: string;
   noticeIssuedDate?: string;
-  taxYear?: number;
+  taxYear?: string;
   irsNoticeFileUrl?: string;
   cityAndStateIssuingOffice?: string;
 };

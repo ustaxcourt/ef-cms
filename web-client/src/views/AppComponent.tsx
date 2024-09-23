@@ -30,11 +30,10 @@ import { CreatePetitionerAccount } from '@web-client/views/CreatePetitionerAccou
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
 import { CustomCaseReport } from './CustomCaseReport/CustomCaseReport';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
+import { DashboardExternalUser } from './Dashboards/DashboardExternalUser';
 import { DashboardInactive } from './Dashboards/DashboardInactive';
 import { DashboardIrsSuperuser } from './Dashboards/DashboardIrsSuperuser';
 import { DashboardJudge } from './Dashboards/DashboardJudge';
-import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
-import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
 import { DashboardRespondent } from './Dashboards/DashboardRespondent';
 import { DocketEntryQc } from './DocketEntryQc';
 import { DownloadDocketEntriesModal } from '@web-client/views/DownloadDocketEntriesModal';
@@ -137,11 +136,10 @@ const pages = {
   CreatePractitionerUser,
   CustomCaseReport,
   DashboardChambers,
+  DashboardExternalUser,
   DashboardInactive,
   DashboardIrsSuperuser,
   DashboardJudge,
-  DashboardPetitioner,
-  DashboardPractitioner,
   DashboardRespondent,
   DocketEntryQc,
   EditCaseDetails,

@@ -48,9 +48,8 @@ export const RemoveFromTrialSessionModal = connect(
                 aria-label="remove from trial session"
                 className="usa-textarea"
                 id="disposition"
-                maxLength="120"
+                maxLength={120}
                 name="disposition"
-                type="text"
                 value={modal.disposition}
                 onChange={e => {
                   updateModalValueSequence({

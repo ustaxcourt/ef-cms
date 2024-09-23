@@ -21,7 +21,7 @@ export const messages = {
   },
 };
 export const expectedPdfLines = [
-  'On June 28, 2024, a status report was filed (Index no. 5). For cause, it is',
+  'On June 28, 2024, a status report was filed (Document no. 5). For cause, it is',
   `ORDERED that the parties shall file a further status report by ${formatNow(FORMATS.MONTH_DAY_YEAR)}. It is further`,
   'ORDERED that this case is stricken from the trial session. It is further',
   'ORDERED that jurisdiction is retained by the undersigned. It is further',

@@ -26,7 +26,7 @@ const TableName = 'efcms-local';
 let chunks: any[] = [];
 
 /**
- * This endpoint it hit to know when the streams queue is empty.  An empty queue
+ * This endpoint is hit to know when the streams queue is empty.  An empty queue
  * means everything added to dynamo should have been indexed into elasticsearch.
  */
 localStreamsApp.get('/isDone', (req, res) => {

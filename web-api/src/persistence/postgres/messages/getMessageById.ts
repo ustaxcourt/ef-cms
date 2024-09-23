@@ -15,5 +15,5 @@ export const getMessageById = async ({
       .executeTakeFirst(),
   );
 
-  return new Message(transformNullToUndefined({ ...message })).validate();
+  return new Message(transformNullToUndefined({ ...message }));
 };

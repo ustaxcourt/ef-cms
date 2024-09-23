@@ -21,5 +21,5 @@ export const updateMessage = async ({
     throw new Error('could not update the message');
   }
 
-  return new Message(transformNullToUndefined(message)).validate();
+  return new Message(transformNullToUndefined(message));
 };

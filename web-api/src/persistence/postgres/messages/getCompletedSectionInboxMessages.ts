@@ -21,7 +21,7 @@ export const getCompletedSectionInboxMessages = async ({
       .execute(),
   );
 
-  return messages.map(message =>
-    new Message(transformNullToUndefined(message)).validate(),
+  return messages.map(
+    message => new Message(transformNullToUndefined(message)),
   );
 };

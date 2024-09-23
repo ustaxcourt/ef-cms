@@ -1,6 +1,6 @@
 # Postgres Migration
 
-Migration happen automatically and always run if needed. We no longer utilize the migrate flag or alpha/beta setup. Migrations will happen in-place and only a single migration can run at any given time. 
+Migrations happen automatically and always run if needed. We no longer utilize the migrate flag or alpha/beta setup. Migrations will happen in-place and only a single migration can run at any given time. 
 
 ## Creating New Migrations
 
