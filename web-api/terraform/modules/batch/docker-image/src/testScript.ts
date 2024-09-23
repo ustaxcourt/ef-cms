@@ -1,15 +1,28 @@
 import { Agent } from 'https';
 import { ApiGatewayManagementApiClient } from '@aws-sdk/client-apigatewaymanagementapi';
-import { GetObjectCommand, S3 } from '@aws-sdk/client-s3';
+import { GetObjectCommand, PutObjectCommand, S3 } from '@aws-sdk/client-s3';
 import { NodeHttpHandler } from '@aws-sdk/node-http-handler';
 import { writeFile } from 'fs/promises';
 import archiver from 'archiver';
 import fs from 'fs';
 import path from 'path';
 
+type DocketEntryDownloadInfo = {
+  key: string;
+  filePathInZip: string;
+};
+
+type DocketEntriesZipperParameter = {
+  s3Client: S3;
+  socketClient: ApiGatewayManagementApiClient;
+  docketEntries: DocketEntryDownloadInfo[];
+};
+
 const { CURRENT_COLOR, DOCKET_ENTRY_FILES, EFCMS_DOMAIN, STAGE } = process.env;
 
-const DOCKET_ENTRIES = JSON.parse(DOCKET_ENTRY_FILES!);
+const DOCKET_ENTRIES: DocketEntryDownloadInfo[] = JSON.parse(
+  DOCKET_ENTRY_FILES!,
+);
 const AWS_REGION = 'us-east-1';
 
 const storageClient = new S3({
@@ -25,6 +38,8 @@ const storageClient = new S3({
 });
 
 const WEBSOCKET_ENDPOINT = `websocket_api_${STAGE}_${CURRENT_COLOR}`;
+const TEMP_S3_BUCKET = `${EFCMS_DOMAIN}-temp-documents-${STAGE}-${AWS_REGION}`;
+const S3_BUCKET = `${EFCMS_DOMAIN}-documents-${STAGE}-${AWS_REGION}`;
 
 const notificationClient = new ApiGatewayManagementApiClient({
   endpoint: WEBSOCKET_ENDPOINT,
@@ -32,12 +47,6 @@ const notificationClient = new ApiGatewayManagementApiClient({
     requestTimeout: 900000,
   }),
 });
-
-type DocketEntriesZipperParameter = {
-  s3Client: S3;
-  socketClient: ApiGatewayManagementApiClient;
-  docketEntries: string[];
-};
 
 function streamToBuffer(stream: any) {
   return new Promise((resolve, reject) => {
@@ -49,22 +58,24 @@ function streamToBuffer(stream: any) {
 }
 
 async function downloadFile(
-  docketEntry: string,
+  docketEntry: DocketEntryDownloadInfo,
   s3Client: S3,
   DIRECTORY: string,
 ) {
   try {
     const command = new GetObjectCommand({
-      Bucket: `${EFCMS_DOMAIN}-documents-${STAGE}-${AWS_REGION}`,
-      Key: docketEntry,
+      Bucket: S3_BUCKET,
+      Key: docketEntry.key,
     });
 
     const data = await s3Client.send(command);
 
-    if (!data.Body) throw new Error(`Unable to get document (${docketEntry})`);
+    if (!data.Body)
+      throw new Error(`Unable to get document (${docketEntry.key})`);
 
     const bodyContents: any = await streamToBuffer(data.Body);
-    const FILE_PATH = path.join(DIRECTORY, `${docketEntry}.pdf`);
+    const FILE_PATH = path.join(DIRECTORY, `${docketEntry.filePathInZip}`);
+    fs.mkdirSync(path.dirname(FILE_PATH), { recursive: true });
     await writeFile(FILE_PATH, bodyContents);
   } catch (error) {
     console.error(`Error downloading ${docketEntry}:`, error);
@@ -87,26 +98,23 @@ function zipFolder(
   });
 }
 
-function uploadZipFile = async (bucketName, filePath) => {
-	const fileStream = fs.createReadStream(filePath);
-	const fileName = path.basename(filePath);
+async function uploadZipFile(s3Client: S3, filePath: string) {
+  const fileStream = fs.createReadStream(filePath);
+  const fileName = path.basename(filePath);
 
-	const uploadParams = {
-			Bucket: bucketName,
-			Key: fileName,
-			Body: fileStream,
-			ContentType: 'application/zip' // Set the content type
-	};
+  const uploadParams = {
+    Body: fileStream,
+    Bucket: TEMP_S3_BUCKET,
+    ContentType: 'application/zip',
+    Key: fileName,
+  };
 
-	try {
-			const data = await s3Client.send(new PutObjectCommand(uploadParams));
-			console.log(`Successfully uploaded ${fileName} to ${bucketName}`);
-			return data;
-	} catch (err) {
-			console.error('Error uploading file:', err);
-	}
-};
-
+  try {
+    return await s3Client.send(new PutObjectCommand(uploadParams));
+  } catch (err) {
+    console.error('Error uploading file:', err);
+  }
+}
 
 export async function app({
   docketEntries,
@@ -126,8 +134,8 @@ export async function app({
   const ZIP_PATH = path.join(__dirname, 'Docket_Entries.zip');
   await zipFolder(DIRECTORY, ZIP_PATH);
 
-  const filesInDir = fs.readdirSync(__dirname);
-  console.log('filesInDir', filesInDir);
+  const results = await uploadZipFile(s3Client, ZIP_PATH);
+  console.log('results', results);
 }
 
 app({
