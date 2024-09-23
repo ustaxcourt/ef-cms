@@ -155,6 +155,7 @@ describe('Docket clerk advanced order search', () => {
 
     expect(cerebralTest.getState('alertError')).toEqual({
       messages: ['Start date cannot be in the future. Enter valid start date.'],
+      scrollToErrorNotification: true,
       title: 'Please correct the following errors:',
     });
 
