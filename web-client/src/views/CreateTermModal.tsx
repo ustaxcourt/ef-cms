@@ -1,11 +1,10 @@
 import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
-import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 
 export const CreateTermModal = connect(
@@ -23,6 +22,8 @@ export const CreateTermModal = connect(
     updateModalValueSequence,
     validationErrors,
   }) {
+    const [isModalMounted, setIsModalMounted] = useState(false);
+
     return (
       <ModalDialog
         cancelLabel="Cancel"
@@ -31,6 +32,7 @@ export const CreateTermModal = connect(
         confirmLabel="Run Report"
         confirmSequence={confirmSequence}
         title="Create Term"
+        onModalMount={() => setIsModalMounted(true)}
       >
         <div className="margin-bottom-4">
           <FormGroup errorText={validationErrors.termName}>
@@ -98,6 +100,7 @@ export const CreateTermModal = connect(
                 endPickerCls={'grid-col-6'}
                 endValue={modal.termEndDate}
                 formGroupCls="margin-bottom-0"
+                parentModalHasMounted={isModalMounted}
                 rangePickerCls={'grid-row '}
                 startDateErrorText={validationErrors.termStartDate}
                 startLabel="Term start date"
@@ -106,13 +109,13 @@ export const CreateTermModal = connect(
                 startValue={modal.termStartDate}
                 onChangeEnd={e => {
                   updateModalValueSequence({
-                    key: e.target.name,
+                    key: 'termEndDate',
                     value: e.target.value,
                   });
                 }}
                 onChangeStart={e => {
                   updateModalValueSequence({
-                    key: e.target.name,
+                    key: 'termStartDate',
                     value: e.target.value,
                   });
                 }}

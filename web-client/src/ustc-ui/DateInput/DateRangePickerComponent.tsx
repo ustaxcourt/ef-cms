@@ -15,6 +15,7 @@ export const DateRangePickerComponent = ({
   omitFormGroupClass,
   onChangeEnd,
   onChangeStart,
+  parentModalHasMounted = false,
   rangePickerCls,
   showDateHint = false,
   startDateErrorText,
@@ -24,6 +25,7 @@ export const DateRangePickerComponent = ({
   startValue,
 }: {
   showDateHint?: boolean;
+  parentModalHasMounted?: boolean;
   endDateErrorText?: string;
   endLabel?: string | React.ReactNode;
   endName: string;
@@ -115,23 +117,37 @@ export const DateRangePickerComponent = ({
   }, [endValue]);
 
   useEffect(() => {
+    let dateEndInput;
+    let dateStartInput;
+
     if (startDateInputRef.current && endDateInputRef.current) {
-      const dateEndInput = window.document.getElementById(
-        `${endName}-date-end`,
-      );
+      dateEndInput = window.document.getElementById(`${endName}-date-end`);
+
       if (dateEndInput) {
         dateEndInput.addEventListener('change', onChangeEnd);
         dateEndInput.addEventListener('input', onChangeEnd);
       }
-      const dateStartInput = window.document.getElementById(
+      dateStartInput = window.document.getElementById(
         `${startName}-date-start`,
       );
+
       if (dateStartInput) {
         dateStartInput.addEventListener('change', onChangeStart);
         dateStartInput.addEventListener('input', onChangeStart);
       }
     }
-  }, [startDateInputRef, endDateInputRef]);
+
+    return () => {
+      if (dateEndInput) {
+        dateEndInput.removeEventListener('change', onChangeEnd);
+        dateEndInput.removeEventListener('input', onChangeEnd);
+      }
+      if (dateStartInput) {
+        dateStartInput.removeEventListener('change', onChangeStart);
+        dateStartInput.removeEventListener('input', onChangeStart);
+      }
+    };
+  }, [startDateInputRef, endDateInputRef, parentModalHasMounted]);
 
   return (
     <FormGroup
