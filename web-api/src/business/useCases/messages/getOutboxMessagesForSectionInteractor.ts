@@ -6,6 +6,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getSectionOutboxMessages } from '@web-api/persistence/postgres/messages/getSectionOutboxMessages';
 
 export const getOutboxMessagesForSectionInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -16,14 +17,10 @@ export const getOutboxMessagesForSectionInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const messages = await applicationContext
-    .getPersistenceGateway()
-    .getSectionOutboxMessages({
-      applicationContext,
-      section,
-    });
-
-  return MessageResult.validateRawCollection(messages, {
+  const messages = await getSectionOutboxMessages({
     applicationContext,
+    section,
   });
+
+  return MessageResult.validateRawCollection(messages);
 };

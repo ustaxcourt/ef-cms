@@ -1,4 +1,5 @@
 import { RawWorkItem } from '@shared/business/entities/WorkItem';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { deleteByGsi } from '../helpers/deleteByGsi';
 
 export const deleteWorkItem = ({
@@ -8,4 +9,7 @@ export const deleteWorkItem = ({
   applicationContext: IApplicationContext;
   workItem: RawWorkItem;
 }) =>
-  deleteByGsi({ applicationContext, gsi: `work-item|${workItem.workItemId}` });
+  deleteByGsi({
+    applicationContext: applicationContext as ServerApplicationContext,
+    gsi: `work-item|${workItem.workItemId}`,
+  });

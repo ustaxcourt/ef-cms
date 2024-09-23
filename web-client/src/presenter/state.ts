@@ -13,6 +13,7 @@ import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawMessage } from '@shared/business/entities/Message';
 import { RawUser } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
+import { TroubleshootingLinkInfo } from '@web-client/presenter/sequences/showFileUploadErrorModalSequence';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
@@ -68,6 +69,7 @@ import { emptyUserState } from '@web-client/presenter/state/userState';
 import { externalConsolidatedCaseGroupHelper } from './computeds/externalConsolidatedCaseGroupHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
+import { filePetitionHelper } from '@web-client/presenter/computeds/filePetitionHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
 import { filingPartiesFormHelper } from './computeds/filingPartiesFormHelper';
 import { formattedCaseDeadlines } from './computeds/formattedCaseDeadlines';
@@ -85,7 +87,6 @@ import { formattedMessageDetail } from './computeds/formattedMessageDetail';
 import { formattedMessages } from './computeds/formattedMessages';
 import { formattedPendingItemsHelper } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
-import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getAllIrsPractitionersForSelectHelper } from '@web-client/presenter/computeds/TrialSession/getAllIrsPractitionersForSelectHelper';
 import { getConstants } from '../getConstants';
@@ -94,6 +95,7 @@ import { headerHelper } from './computeds/headerHelper';
 import { initialBlockedCaseReportFilter } from '@web-client/presenter/state/blockedCasesReportState';
 import { initialCustomCaseReportState } from './customCaseReportState';
 import { initialPendingReportsState } from '@web-client/presenter/state/pendingReportState';
+import { initialTrialSessionPageState } from '@web-client/presenter/state/trialSessionsPageState';
 import { initialTrialSessionState } from '@web-client/presenter/state/trialSessionState';
 import { initialTrialSessionWorkingCopyState } from '@web-client/presenter/state/trialSessionWorkingCopyState';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
@@ -135,7 +137,6 @@ import { serveThirtyDayNoticeModalHelper } from './computeds/serveThirtyDayNotic
 import { sessionAssignmentHelper } from './computeds/sessionAssignmentHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
-import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
@@ -148,10 +149,8 @@ import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCo
 import { trialSessionsHelper } from './computeds/trialSessionsHelper';
 import { trialSessionsSummaryHelper } from './computeds/trialSessionsSummaryHelper';
 import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
-import { updatedFilePetitionHelper } from '@web-client/presenter/computeds/updatedFilePetitionHelper';
 import { userContactEditHelper } from './computeds/userContactEditHelper';
 import { userContactEditProgressHelper } from './computeds/userContactEditProgressHelper';
-import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 
@@ -331,6 +330,9 @@ export const computeds = {
   fileDocumentHelper: fileDocumentHelper as unknown as ReturnType<
     typeof fileDocumentHelper
   >,
+  filePetitionHelper: filePetitionHelper as unknown as ReturnType<
+    typeof filePetitionHelper
+  >,
   fileUploadStatusHelper: fileUploadStatusHelper as unknown as ReturnType<
     typeof fileUploadStatusHelper
   >,
@@ -380,9 +382,6 @@ export const computeds = {
     formattedTrialSessionDetails as unknown as ReturnType<
       typeof formattedTrialSessionDetails
     >,
-  formattedTrialSessions: formattedTrialSessions as unknown as ReturnType<
-    typeof formattedTrialSessions
-  >,
   formattedWorkQueue: formattedWorkQueue as unknown as ReturnType<
     typeof formattedWorkQueue
   >,
@@ -514,9 +513,6 @@ export const computeds = {
   showAppTimeoutModalHelper: showAppTimeoutModalHelper as unknown as ReturnType<
     typeof showAppTimeoutModalHelper
   >,
-  startCaseHelper: startCaseHelper as unknown as ReturnType<
-    typeof startCaseHelper
-  >,
   startCaseInternalHelper: startCaseInternalHelper as unknown as ReturnType<
     typeof startCaseInternalHelper
   >,
@@ -555,9 +551,6 @@ export const computeds = {
   updateCaseModalHelper: updateCaseModalHelper as unknown as ReturnType<
     typeof updateCaseModalHelper
   >,
-  updatedFilePetitionHelper: updatedFilePetitionHelper as unknown as ReturnType<
-    typeof updatedFilePetitionHelper
-  >,
   userContactEditHelper: userContactEditHelper as unknown as ReturnType<
     typeof userContactEditHelper
   >,
@@ -565,9 +558,6 @@ export const computeds = {
     userContactEditProgressHelper as unknown as ReturnType<
       typeof userContactEditProgressHelper
     >,
-  viewAllDocumentsHelper: viewAllDocumentsHelper as unknown as ReturnType<
-    typeof viewAllDocumentsHelper
-  >,
   viewCounselHelper: viewCounselHelper as unknown as ReturnType<
     typeof viewCounselHelper
   >,
@@ -665,6 +655,12 @@ export const baseState = {
     },
   },
   customCaseReport: cloneDeep(initialCustomCaseReportState),
+  docketEntriesBatchDownload: {} as {
+    [uuid: string]: { index: number; url: string }[];
+  },
+  docketEntriesBatchDownloadProgress: {} as {
+    [uuid: string]: { [index: number]: number };
+  },
   docketEntryId: null,
   docketRecordIndex: 0,
   documentToEdit: {} as any,
@@ -719,9 +715,13 @@ export const baseState = {
   },
   messagesSectionCount: 0,
   modal: {
+    contactSupportMessage: undefined, // the "contact support" message sans email address
     docketEntry: undefined,
+    message: undefined, // the message to show
     pdfPreviewModal: undefined,
     showModal: undefined, // the name of the modal to display
+    title: undefined,
+    troubleshootingInfo: undefined as unknown as TroubleshootingLinkInfo, // steps for troubleshooting
   } as Record<string, any>,
   navigation: {
     caseDetailMenu: '',
@@ -850,6 +850,8 @@ export const baseState = {
     name: '',
   },
   trialSessionWorkingCopy: cloneDeep(initialTrialSessionWorkingCopyState),
+  trialSessions: [] as any[], // Sometimes trialSessions, sometimes TrialSessionInfoDTO, sometimes ad-hoc trial sessions
+  trialSessionsPage: cloneDeep(initialTrialSessionPageState),
   user: cloneDeep(emptyUserState),
   userContactEditProgress: {} as { inProgress?: boolean },
   users: [] as RawUser[],
