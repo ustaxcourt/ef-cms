@@ -143,7 +143,7 @@ export const petitionsClerkUpdatesCaseDetail = cerebralTest => {
     });
     expect(cerebralTest.getState('alertError')).toEqual({
       messages: ['Select a case type', 'Select a case procedure'],
-      scrollToErrorNotification: false,
+      scrollToErrorNotification: true,
       title: 'Please correct the following errors on the page:',
     });
 
