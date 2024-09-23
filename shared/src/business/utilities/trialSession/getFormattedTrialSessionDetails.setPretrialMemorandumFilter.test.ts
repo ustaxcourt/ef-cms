@@ -1,6 +1,6 @@
-import { MOCK_CASE } from '../../test/mockCase';
-import { PARTIES_CODES } from '../entities/EntityConstants';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { PARTIES_CODES } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { setPretrialMemorandumFiler } from './getFormattedTrialSessionDetails';
 
 describe('getFormattedTrialSessionDetails', () => {

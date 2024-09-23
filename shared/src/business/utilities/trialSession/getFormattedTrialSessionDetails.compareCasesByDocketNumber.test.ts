@@ -1,4 +1,4 @@
-import { applicationContext } from '../test/createTestApplicationContext';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   compareCasesByDocketNumber,
   compareCasesByDocketNumberFactory,

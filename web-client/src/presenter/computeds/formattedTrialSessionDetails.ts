@@ -1,5 +1,5 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { FormattedTrialSessionDetailsType } from '@shared/business/utilities/getFormattedTrialSessionDetails';
+import { FormattedTrialSessionDetailsType } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { Get } from 'cerebral';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { isEmpty, isEqual } from 'lodash';

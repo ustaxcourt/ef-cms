@@ -5,9 +5,9 @@ import {
 import {
   DOCKET_NUMBER_SUFFIXES,
   PARTIES_CODES,
-} from '../entities/EntityConstants';
-import { FORMATS } from './DateHandler';
-import { RawEligibleCase } from '../entities/cases/EligibleCase';
+} from '../../entities/EntityConstants';
+import { FORMATS } from '../DateHandler';
+import { RawEligibleCase } from '../../entities/cases/EligibleCase';
 import { RawIrsCalendarAdministratorInfo } from '@shared/business/entities/trialSessions/IrsCalendarAdministratorInfo';
 import { compact, partition } from 'lodash';
 

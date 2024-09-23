@@ -10,7 +10,6 @@ import { RawUser } from '@shared/business/entities/User';
 import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
-  TRIAL_CITIES,
   TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
@@ -20,7 +19,7 @@ import {
   initialTrialSessionPageState,
 } from '@web-client/presenter/state/trialSessionsPageState';
 import { TrialSessionsPageValidation } from '@shared/business/entities/trialSessions/TrialSessionsPageValidation';
-import { sortBy } from 'lodash';
+import { getTrialCitiesGroupedByState } from '@shared/business/utilities/trialSession/trialCitiesGroupedByState';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const trialSessionsHelper = (
@@ -86,31 +85,7 @@ export const trialSessionsHelper = (
       value: { name: trialSessionJudge.name, userId: trialSessionJudge.userId },
     }),
   );
-  const trialCities = sortBy(TRIAL_CITIES.ALL, ['state', 'city']);
-  const states = trialCities.reduce(
-    (listOfStates, cityStatePair) => {
-      const existingState = listOfStates.find(
-        trialState => trialState.label === cityStatePair.state,
-      );
-      const cityOption = {
-        label: `${cityStatePair.city}, ${cityStatePair.state}`,
-        value: `${cityStatePair.city}, ${cityStatePair.state}`,
-      };
-      if (existingState) {
-        existingState.options.push(cityOption);
-      } else {
-        listOfStates.push({
-          label: cityStatePair.state,
-          options: [cityOption],
-        });
-      }
-      return listOfStates;
-    },
-    [] as {
-      label: string;
-      options: { label: string; value: string }[];
-    }[],
-  );
+  const states = getTrialCitiesGroupedByState();
 
   const { endDateErrorMessage, startDateErrorMessage } =
     validateTrialSessionDateRange({
