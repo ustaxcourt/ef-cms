@@ -1,3 +1,6 @@
+import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import React from 'react';
 
 export function PractitionerCaseList({
@@ -16,6 +19,7 @@ export function PractitionerCaseList({
       >
         <thead>
           <tr>
+            <th aria-hidden="true" className="icon-column" />
             <th>Docket No.</th>
             <th>Case Title</th>
             {showStatus && <th>Case Status</th>}
@@ -23,13 +27,33 @@ export function PractitionerCaseList({
         </thead>
         {cases.map(item => (
           <tr key={item.pk}>
+            <td aria-hidden="true" className="filing-type-icon">
+              {item.isSealed && (
+                <FontAwesomeIcon
+                  className="sealed-in-blackstone icon-sealed"
+                  icon="lock"
+                  size="1x"
+                  title={item.sealedToTooltip}
+                />
+              )}
+              {item.inConsolidatedGroup && (
+                <span
+                  className="fa-layers fa-fw"
+                  title={item.consolidatedIconTooltipText}
+                >
+                  <Icon
+                    aria-label={item.consolidatedIconTooltipText}
+                    className="fa-icon-blue"
+                    icon="copy"
+                  />
+                  {item.isLeadCase && (
+                    <span className="fa-inverse lead-case-icon-text">L</span>
+                  )}
+                </span>
+              )}
+            </td>
             <td>
-              <a
-                className="case-link"
-                href={`/case-detail/${item.docketNumber}`}
-              >
-                {item.docketNumberWithSuffix}
-              </a>
+              <CaseLink formattedCase={item} />
             </td>
             <td>{`${item.caseTitle}`}</td>
             {showStatus && <td>{`${item.status}`}</td>}
