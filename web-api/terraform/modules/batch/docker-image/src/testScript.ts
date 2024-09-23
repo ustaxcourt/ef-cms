@@ -1,7 +1,11 @@
 import { Agent } from 'https';
-import { ApiGatewayManagementApiClient } from '@aws-sdk/client-apigatewaymanagementapi';
+import {
+  ApiGatewayManagementApiClient,
+  PostToConnectionCommand,
+} from '@aws-sdk/client-apigatewaymanagementapi';
 import { GetObjectCommand, PutObjectCommand, S3 } from '@aws-sdk/client-s3';
 import { NodeHttpHandler } from '@aws-sdk/node-http-handler';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { writeFile } from 'fs/promises';
 import archiver from 'archiver';
 import fs from 'fs';
@@ -17,6 +21,7 @@ type DocketEntriesZipperParameter = {
   socketClient: ApiGatewayManagementApiClient;
   docketEntries: DocketEntryDownloadInfo[];
   zipName: string;
+  connectionId: string;
 };
 
 const {
@@ -24,8 +29,12 @@ const {
   DOCKET_ENTRY_FILES,
   EFCMS_DOMAIN,
   STAGE,
+  WEBSOCKET_CONNECTION_ID,
   ZIP_FILE_NAME,
 } = process.env;
+
+console.log('CURRENT_COLOR', CURRENT_COLOR);
+console.log('EFCMS_DOMAIN', EFCMS_DOMAIN);
 
 const DOCKET_ENTRIES: DocketEntryDownloadInfo[] = JSON.parse(
   DOCKET_ENTRY_FILES!,
@@ -43,8 +52,8 @@ const storageClient = new S3({
     requestTimeout: 30000,
   }),
 });
-
-const WEBSOCKET_ENDPOINT = `websocket_api_${STAGE}_${CURRENT_COLOR}`;
+const WEBSOCKET_ENDPOINT = `https://ws-${CURRENT_COLOR}.${EFCMS_DOMAIN}`;
+console.log('WEBSOCKET_ENDPOINT', WEBSOCKET_ENDPOINT);
 const TEMP_S3_BUCKET = `${EFCMS_DOMAIN}-temp-documents-${STAGE}-${AWS_REGION}`;
 const S3_BUCKET = `${EFCMS_DOMAIN}-documents-${STAGE}-${AWS_REGION}`;
 
@@ -116,8 +125,10 @@ async function uploadZipFile(s3Client: S3, filePath: string) {
 }
 
 export async function app({
+  connectionId,
   docketEntries,
   s3Client,
+  socketClient,
   zipName,
 }: DocketEntriesZipperParameter) {
   const DIRECTORY = path.join(__dirname, `${Date.now()}/`);
@@ -134,9 +145,28 @@ export async function app({
   const ZIP_PATH = path.join(__dirname, zipName);
   await zipFolder(DIRECTORY, ZIP_PATH);
   await uploadZipFile(s3Client, ZIP_PATH);
+
+  const command = new GetObjectCommand({
+    Bucket: TEMP_S3_BUCKET,
+    Key: zipName,
+  });
+
+  const url = await getSignedUrl(s3Client, command, { expiresIn: 120 });
+  console.log('url', url);
+
+  const postToConnectionCommand = new PostToConnectionCommand({
+    ConnectionId: connectionId,
+    Data: JSON.stringify({
+      action: 'batch_download_ready',
+      url,
+    }),
+  });
+
+  await socketClient.send(postToConnectionCommand).catch(console.error);
 }
 
 app({
+  connectionId: WEBSOCKET_CONNECTION_ID!,
   docketEntries: DOCKET_ENTRIES,
   s3Client: storageClient,
   socketClient: notificationClient,
