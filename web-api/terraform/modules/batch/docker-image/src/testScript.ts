@@ -16,9 +16,16 @@ type DocketEntriesZipperParameter = {
   s3Client: S3;
   socketClient: ApiGatewayManagementApiClient;
   docketEntries: DocketEntryDownloadInfo[];
+  zipName: string;
 };
 
-const { CURRENT_COLOR, DOCKET_ENTRY_FILES, EFCMS_DOMAIN, STAGE } = process.env;
+const {
+  CURRENT_COLOR,
+  DOCKET_ENTRY_FILES,
+  EFCMS_DOMAIN,
+  STAGE,
+  ZIP_FILE_NAME,
+} = process.env;
 
 const DOCKET_ENTRIES: DocketEntryDownloadInfo[] = JSON.parse(
   DOCKET_ENTRY_FILES!,
@@ -119,8 +126,9 @@ async function uploadZipFile(s3Client: S3, filePath: string) {
 export async function app({
   docketEntries,
   s3Client,
+  zipName,
 }: DocketEntriesZipperParameter) {
-  const DIRECTORY = path.join(__dirname, 'Docket_Entries/');
+  const DIRECTORY = path.join(__dirname, `${Date.now()}/`);
   if (!fs.existsSync(DIRECTORY)) fs.mkdirSync(DIRECTORY);
 
   const BATCH_SIZE = 10;
@@ -131,7 +139,7 @@ export async function app({
     );
   }
 
-  const ZIP_PATH = path.join(__dirname, 'Docket_Entries.zip');
+  const ZIP_PATH = path.join(__dirname, zipName);
   await zipFolder(DIRECTORY, ZIP_PATH);
 
   const results = await uploadZipFile(s3Client, ZIP_PATH);
@@ -142,4 +150,5 @@ app({
   docketEntries: DOCKET_ENTRIES,
   s3Client: storageClient,
   socketClient: notificationClient,
+  zipName: ZIP_FILE_NAME!,
 }).catch(console.error);
