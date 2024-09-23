@@ -20,6 +20,7 @@ type StateDriveFileInputProps = {
   name: string;
   accept?: string;
   ignoreSizeKey?: boolean;
+  skipFileTypeValidation?: boolean;
 };
 
 const deps = {
@@ -49,6 +50,7 @@ export const StateDrivenFileInput = connect<
     setIsLoadingSequence,
     setIsNotLoadingSequence,
     showFileUploadErrorModalSequence,
+    skipFileTypeValidation = false, // skipFileTypeValidation is only here to support PractitionerAddEditDocument "accepting" certain file types but not enforcing that acceptance
     updateFormValueSequence,
     validationSequence,
     ...remainingProps
@@ -100,6 +102,7 @@ export const StateDrivenFileInput = connect<
               /* no-op */
             });
         },
+        skipFileTypeValidation,
       });
       setIsNotLoadingSequence();
     };
