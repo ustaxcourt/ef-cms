@@ -6,6 +6,7 @@ import { loginAsDocketClerk1 } from '../../../../helpers/authentication/login-as
 
 describe('upload court issued document validations', () => {
   const docketNumber = '102-67'; // Any existing docket number works
+  const encoding = 'binary'; // Some Cypress tests were not mimicking real app behavior without manually setting the encoding to binary
 
   beforeEach(() => {
     loginAsDocketClerk1();
@@ -18,6 +19,7 @@ describe('upload court issued document validations', () => {
     cy.intercept('POST', '/logError').as('logErrorRequest');
 
     attachFile({
+      encoding,
       filePath: '../../helpers/file/non-pdf.txt',
       selector: '[data-testid="primary-document-file"]',
     });
@@ -35,6 +37,7 @@ describe('upload court issued document validations', () => {
     cy.intercept('POST', '/logError').as('logErrorRequest');
 
     attachFile({
+      encoding,
       filePath: '../../helpers/file/corrupt-pdf.pdf',
       selector: '[data-testid="primary-document-file"]',
     });
@@ -50,7 +53,24 @@ describe('upload court issued document validations', () => {
     cy.intercept('POST', '/logError').as('logErrorRequest');
 
     attachFile({
+      encoding,
       filePath: '../../helpers/file/password-protected-pdf.pdf',
+      selector: '[data-testid="primary-document-file"]',
+    });
+    cy.wait('@logErrorRequest');
+
+    cy.get('@logErrorRequest.all').should('have.length', 1);
+    cy.get('[data-testid="file-upload-error-modal"]').contains(
+      'The file is encrypted or password protected. Remove encryption or password protection and try again.',
+    );
+  });
+
+  it('should display error modal when a readonly pdf is selected', () => {
+    cy.intercept('POST', '/logError').as('logErrorRequest');
+
+    attachFile({
+      encoding,
+      filePath: '../../helpers/file/readonly-pdf.pdf',
       selector: '[data-testid="primary-document-file"]',
     });
     cy.wait('@logErrorRequest');
@@ -89,6 +109,7 @@ describe('upload court issued document validations', () => {
 
   it('should see success on valid pdf upload', () => {
     attachFile({
+      encoding,
       filePath: '../../helpers/file/sample.pdf',
       selector: '[data-testid="primary-document-file"]',
     });
