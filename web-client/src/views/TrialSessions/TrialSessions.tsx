@@ -8,7 +8,7 @@ import {
   TRIAL_SESSION_PROCEEDING_TYPES,
   TrialSessionProceedingType,
 } from '@shared/business/entities/EntityConstants';
-import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
+import { SelectSearch2 } from '@web-client/ustc-ui/Select/SelectSearch2';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { TrialSessionsTable } from './TrialSessionsTable';
@@ -284,7 +284,7 @@ const TrialSessionFilters = connect(
                 Session type{' '}
                 <span className="optional-light-text">(optional)</span>
               </label>
-              <SelectSearch
+              <SelectSearch2
                 id="session-type-filter"
                 name="sessionType"
                 options={trialSessionsHelper.sessionTypeOptions}
@@ -324,7 +324,7 @@ const TrialSessionFilters = connect(
               <label className="usa-label" htmlFor="location-filter">
                 Location <span className="optional-light-text">(optional)</span>
               </label>
-              <SelectSearch
+              <SelectSearch2
                 id="location-filter"
                 name="location"
                 options={trialSessionsHelper.trialCitiesByState}
@@ -367,7 +367,7 @@ const TrialSessionFilters = connect(
               <label className="usa-label" htmlFor="judge-filter">
                 Judge <span className="optional-light-text">(optional)</span>
               </label>
-              <SelectSearch
+              <SelectSearch2
                 id="judges"
                 name="judges"
                 options={trialSessionsHelper.trialSessionJudgeOptions}
