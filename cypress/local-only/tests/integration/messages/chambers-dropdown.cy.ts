@@ -20,7 +20,7 @@ describe('BUG: chambers dropdown should be populated in message modals', () => {
   const chambersSection = 'buchsChambers';
   const recipient = 'Judge Buch';
   const caseNumber = '103-20';
-  let messageToForwardSubject = '';
+  const messageToForwardSubject = v4();
 
   before(() => {
     // Send a message that we will forward later.
@@ -32,7 +32,6 @@ describe('BUG: chambers dropdown should be populated in message modals', () => {
     createMessage();
     selectSection('Docket');
     selectRecipient('Test Docketclerk');
-    messageToForwardSubject = v4();
     enterSubject(messageToForwardSubject);
     fillOutMessageField();
     sendMessage();
