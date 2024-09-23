@@ -1,15 +1,9 @@
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const validateCreateTermModalAction = ({
-  // applicationContext,
-  get,
-  path,
-}: ActionProps) => {
+export const validateCreateTermModalAction = ({ get, path }: ActionProps) => {
   const { term, termEndDate, termName, termStartDate } = get(state.modal);
-  // const { STATUS_TYPES_WITH_ASSOCIATED_JUDGE } =
-  //   applicationContext.getConstants();
-  console.log(get(state.modal));
+
   const errors: {
     term?: string;
     termEndDate?: string;
