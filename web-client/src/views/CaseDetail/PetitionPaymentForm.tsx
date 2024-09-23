@@ -139,7 +139,7 @@ const PetitionPaymentFormComponent: React.FC<ComponentProps & any> = ({
               id="petition-payment-method"
               name="petitionPaymentMethod"
               value={bind.petitionPaymentMethod || ''}
-              onBlur={validateFormData}
+              onBlur={() => validateFormData()}
               onChange={e => {
                 onUpdate({
                   key: e.target.name,
