@@ -142,7 +142,7 @@ describe('setValidationAlertErrors', () => {
     });
   });
 
-  it('state.alertError sets scrollToErrorNotification appropriately', async () => {
+  it('should set state.alertError to true when scrollToErrorNotification is true', async () => {
     const { state } = await runAction(setValidationAlertErrorsAction, {
       modules: {
         presenter,
