@@ -3,7 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import React from 'react';
 
-const EMPTY_STATE_TEXT = 'No cases to display';
+const getEmptyStateText = (isOpen: boolean) => {
+  return `There are no ${isOpen ? 'open' : 'closed'} cases.`;
+};
 
 export function PractitionerCaseList({
   cases,
@@ -26,7 +28,7 @@ export function PractitionerCaseList({
           >
             <thead>
               <tr>
-                <th aria-hidden="true" className="icon-column" />
+                <th aria-hidden="true" />
                 <th>Docket No.</th>
                 <th>Case Title</th>
                 {showStatus && <th>Case Status</th>}
@@ -34,10 +36,10 @@ export function PractitionerCaseList({
             </thead>
             {cases.map(item => (
               <tr key={item.pk}>
-                <td aria-hidden="true" className="filing-type-icon">
+                <td aria-hidden="true" className="multi-filing-type-icon">
                   {item.isSealed && (
                     <FontAwesomeIcon
-                      className="sealed-in-blackstone icon-sealed"
+                      className="sealed-docket-entry"
                       icon="lock"
                       size="1x"
                       title={item.sealedToTooltip}
@@ -70,7 +72,7 @@ export function PractitionerCaseList({
             ))}
           </table>
         ) : (
-          EMPTY_STATE_TEXT
+          getEmptyStateText(showStatus)
         )}
       </div>
     </>
