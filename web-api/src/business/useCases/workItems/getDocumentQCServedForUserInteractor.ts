@@ -7,6 +7,11 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { getDocumentQCServedForUser } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForUser';
+import {
+  calculateISODate,
+  createISODateAtStartOfDayEST,
+} from '@shared/business/utilities/DateHandler';
 
 /**
  *
@@ -24,12 +29,17 @@ export const getDocumentQCServedForUserInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const workItems = await applicationContext
-    .getPersistenceGateway()
-    .getDocumentQCServedForUser({
-      applicationContext,
-      userId,
-    });
+  const startOfDay = createISODateAtStartOfDayEST();
+  const afterDate = calculateISODate({
+    dateString: startOfDay,
+    howMuch: -7,
+    units: 'days',
+  });
+
+  const workItems = await getDocumentQCServedForUser({
+    userId,
+    afterDate,
+  });
 
   const filteredWorkItems = workItems.filter(workItem =>
     authorizedUser.role === ROLES.petitionsClerk ? !!workItem.section : true,
