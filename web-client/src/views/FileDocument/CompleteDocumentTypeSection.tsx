@@ -54,6 +54,7 @@ export const CompleteDocumentTypeSection = connect(
             aria-labelledby="document-type-label"
             data-testid="document-type"
             id="document-type"
+            isClearable={true}
             name="eventCode"
             options={
               completeDocumentTypeSectionHelper.documentTypesForSelectSorted

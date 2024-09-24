@@ -96,6 +96,7 @@ export const EditDocketEntryMetaFormDocument = connect(
           <SelectSearch
             aria-describedby="document-type-label"
             id="document-type"
+            isClearable={true}
             name="eventCode"
             options={internalTypesHelper.internalDocumentTypesForSelectSorted}
             value={reactSelectValue({
