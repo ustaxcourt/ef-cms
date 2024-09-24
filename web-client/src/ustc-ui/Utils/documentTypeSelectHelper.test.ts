@@ -1,5 +1,4 @@
 import {
-  courtIssuedDocketEntryOnChange,
   docketEntryOnChange,
   fileDocumentPrimaryOnChange,
   fileDocumentSecondaryOnChange,
@@ -198,83 +197,6 @@ describe('documentTypeSelectHelper', () => {
       docketEntryOnChange({
         action: 'something-else',
         inputName: undefined,
-        inputValue: undefined,
-        updateSequence: updateSequenceSpy,
-        validateSequence: validateSequenceSpy,
-      });
-
-      expect(updateSequenceSpy).not.toHaveBeenCalled();
-      expect(validateSequenceSpy).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('courtIssuedDocketEntryOnChange', () => {
-    it('should call update sequence multiple times with correct props followed by validate sequence if "action" is "select-option"', () => {
-      const inputValue = {
-        documentTitle: '[Anything]',
-        documentType: 'Order',
-        eventCode: 'O',
-        scenario: 'Type A',
-      };
-
-      courtIssuedDocketEntryOnChange({
-        action: 'select-option',
-        inputValue,
-        updateSequence: updateSequenceSpy,
-        validateSequence: validateSequenceSpy,
-      });
-
-      expect(updateSequenceSpy).toHaveBeenCalled();
-      expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
-        key: 'documentType',
-        value: inputValue.documentType,
-      });
-      expect(updateSequenceSpy.mock.calls[1][0]).toEqual({
-        key: 'documentTitle',
-        value: inputValue.documentTitle,
-      });
-      expect(updateSequenceSpy.mock.calls[2][0]).toEqual({
-        key: 'eventCode',
-        value: inputValue.eventCode,
-      });
-      expect(updateSequenceSpy.mock.calls[3][0]).toEqual({
-        key: 'scenario',
-        value: inputValue.scenario,
-      });
-      expect(validateSequenceSpy).toHaveBeenCalled();
-    });
-
-    it('should call update sequence multiple times followed by validate sequence if "action" is "clear"', () => {
-      courtIssuedDocketEntryOnChange({
-        action: 'clear',
-        inputValue: undefined,
-        updateSequence: updateSequenceSpy,
-        validateSequence: validateSequenceSpy,
-      });
-
-      expect(updateSequenceSpy).toHaveBeenCalled();
-      expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
-        key: 'documentType',
-        value: '',
-      });
-      expect(updateSequenceSpy.mock.calls[1][0]).toEqual({
-        key: 'documentTitle',
-        value: '',
-      });
-      expect(updateSequenceSpy.mock.calls[2][0]).toEqual({
-        key: 'eventCode',
-        value: '',
-      });
-      expect(updateSequenceSpy.mock.calls[3][0]).toEqual({
-        key: 'scenario',
-        value: '',
-      });
-      expect(validateSequenceSpy).toHaveBeenCalled();
-    });
-
-    it('should not call update or validate sequence if "action" is not "select-option" or "clear"', () => {
-      courtIssuedDocketEntryOnChange({
-        action: 'something-else',
         inputValue: undefined,
         updateSequence: updateSequenceSpy,
         validateSequence: validateSequenceSpy,

@@ -88,32 +88,6 @@ export const docketEntryOnChange = ({
   return true;
 };
 
-export const courtIssuedDocketEntryOnChange = ({
-  action,
-  inputValue,
-  updateSequence,
-  validateSequence,
-}) => {
-  const updateFieldsAndValidate = (clearFields = false) => {
-    ['documentType', 'documentTitle', 'eventCode', 'scenario'].forEach(key =>
-      updateSequence({
-        key,
-        value: clearFields ? '' : inputValue[key],
-      }),
-    );
-    validateSequence();
-  };
-
-  switch (action) {
-    case 'select-option':
-      updateFieldsAndValidate();
-      break;
-    case 'clear':
-      updateFieldsAndValidate(true);
-      break;
-  }
-};
-
 export const onInputChange = ({ action, inputText, updateSequence }) => {
   if (action === 'input-change') {
     updateSequence({
