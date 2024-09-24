@@ -2,7 +2,7 @@ import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import joi from 'joi';
 
-export class UpdateUserEmail extends JoiValidationEntity {
+export class UpdateUserEmailForm extends JoiValidationEntity {
   public confirmEmail: string;
   public email: string;
 
@@ -28,8 +28,8 @@ export class UpdateUserEmail extends JoiValidationEntity {
   };
 
   getValidationRules() {
-    return UpdateUserEmail.VALIDATION_RULES;
+    return UpdateUserEmailForm.VALIDATION_RULES;
   }
 }
 
-export type RawUpdateUserEmail = ExcludeMethods<UpdateUserEmail>;
+export type RawUpdateUserEmailForm = ExcludeMethods<UpdateUserEmailForm>;
