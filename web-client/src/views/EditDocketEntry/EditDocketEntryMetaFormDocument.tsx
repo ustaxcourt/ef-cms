@@ -4,13 +4,8 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Inclusions } from '../PaperFiling/Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from '../PaperFiling/SecondaryDocumentForm';
-import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
+import { SelectSearch2 } from '@web-client/ustc-ui/Select/SelectSearch2';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import {
-  docketEntryOnChange,
-  onInputChange,
-  reactSelectValue,
-} from '../../ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -93,33 +88,19 @@ export const EditDocketEntryMetaFormDocument = connect(
             Document type
           </label>
 
-          <SelectSearch
+          <SelectSearch2
             aria-describedby="document-type-label"
             id="document-type"
             isClearable={true}
             name="eventCode"
             options={internalTypesHelper.internalDocumentTypesForSelectSorted}
-            value={reactSelectValue({
-              documentTypes:
-                internalTypesHelper.internalDocumentTypesForSelectWithLegacySorted,
-              selectedEventCode: form.eventCode,
-            })}
-            onChange={(inputValue, { action, name: inputName }) => {
-              docketEntryOnChange({
-                action,
-                inputName,
-                inputValue,
-                updateSequence: updateDocketEntryMetaDocumentFormValueSequence,
-                validateSequence: validateDocumentSequence,
+            onChange={inputValue => {
+              const value = inputValue?.value || '';
+              updateDocketEntryMetaDocumentFormValueSequence({
+                key: 'eventCode',
+                value,
               });
-              return true;
-            }}
-            onInputChange={(inputText, { action }) => {
-              onInputChange({
-                action,
-                inputText,
-                updateSequence: validateDocumentSequence,
-              });
+              validateDocumentSequence();
             }}
           />
         </FormGroup>
@@ -140,36 +121,19 @@ export const EditDocketEntryMetaFormDocument = connect(
                 entry for it.
               </span>
             </label>
-            <SelectSearch
+            <SelectSearch2
               aria-label="secondary-document-type-label"
               id="secondary-document-type"
               isClearable={true}
               name="secondaryDocument.eventCode"
               options={internalTypesHelper.internalDocumentTypesForSelectSorted}
-              value={reactSelectValue({
-                documentTypes:
-                  internalTypesHelper.internalDocumentTypesForSelectWithLegacySorted,
-                selectedEventCode:
-                  form.secondaryDocument && form.secondaryDocument.eventCode,
-              })}
-              onChange={(inputValue, { action, name: inputName }) => {
-                docketEntryOnChange({
-                  action,
-                  inputName,
-                  inputValue,
-                  updateSequence:
-                    updateDocketEntryMetaDocumentFormValueSequence,
-                  validateSequence: validateDocumentSequence,
+              onChange={inputValue => {
+                const value = inputValue?.value || '';
+                updateDocketEntryMetaDocumentFormValueSequence({
+                  key: 'secondaryDocument.eventCode',
+                  value,
                 });
-                return true;
-              }}
-              onInputChange={(inputText, { action }) => {
-                onInputChange({
-                  action,
-                  inputText,
-                  updateSequence:
-                    updateDocketEntryMetaDocumentFormValueSequence,
-                });
+                validateDocumentSequence();
               }}
             />
           </FormGroup>
