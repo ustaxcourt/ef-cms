@@ -1,7 +1,6 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseTypeSelect } from '@web-client/views/StartCase/CaseTypeSelect';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { IrsNoticeUploadForm } from './IrsNoticeUploadForm';
 import { RedactionAcknowledgement } from '@web-client/views/StartCaseUpdated/RedactionAcknowledgement';
 import { UpdatedFilePetitionButtons } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionButtons';
@@ -11,7 +10,6 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { useValidationFocus } from '@web-client/views/UseValidationFocus';
 import React from 'react';
-import classNames from 'classnames';
 
 export const UpdatedFilePetitionStep3 = connect(
   {
@@ -169,15 +167,11 @@ export const UpdatedFilePetitionStep3 = connect(
                 {irsNoticeUploadFormInfo.length < 5 && (
                   <Button
                     link
-                    className={classNames('padding-top-0', 'text-left')}
+                    className="add-another-notice-button padding-0 margin-bottom-2"
                     data-testid="add-another-irs-notice-button"
+                    icon="plus"
                     onClick={() => addAnotherIrsNoticeToFormSequence()}
                   >
-                    <Icon
-                      className="fa-icon-blue"
-                      icon={['fas', 'plus']}
-                      size="1x"
-                    />
                     Add another IRS Notice
                   </Button>
                 )}
