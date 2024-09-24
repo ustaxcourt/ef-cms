@@ -343,14 +343,6 @@ p {
     font-size: 17px;
     font-weight: normal;
   }
-
-  button:not([disabled]):focus {
-    outline: none;
-  }
-
-  .usa-accordion__button:hover {
-    background-color: inherit;
-  }
 }
 
 .other-filing-option {

@@ -1,7 +1,19 @@
 import { PROCEDURE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
+import { petitionerCreatesElectronicCaseUpdated } from './petitioner-creates-electronic-case-updated';
 import { uploadFile } from '../file/upload-file';
 
 export function practitionerCreatesElectronicCase() {
+  return cy
+    .task('getFeatureFlagValue', { flag: 'updated-petition-flow' })
+    .then(updatedFlow => {
+      if (updatedFlow) {
+        return petitionerCreatesElectronicCaseUpdated();
+      }
+      return practitionerCreatesElectronicCaseOld();
+    });
+}
+
+export function practitionerCreatesElectronicCaseOld() {
   cy.get('[data-testid="file-a-petition"]').click();
   uploadFile('stin-file');
   cy.get('[data-testid="complete-step-1"]').click();

@@ -1,6 +1,6 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { PetitionFormResponse } from '@web-client/views/StartCaseUpdated/PetitionFormResponse';
+import { PetitionFactOrReason } from '@web-client/views/StartCaseUpdated/PetitionFactOrReason';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -10,9 +10,16 @@ export const AutoGeneratePetitionForm = connect(
   {
     addFactOrReasonSequence: sequences.addFactOrReasonSequence,
     form: state.form,
+    updatedFilePetitionHelper: state.updatedFilePetitionHelper,
   },
 
-  function AutoGeneratePetitionForm({ addFactOrReasonSequence, form }) {
+  function AutoGeneratePetitionForm({
+    addFactOrReasonSequence,
+    form,
+    updatedFilePetitionHelper,
+  }) {
+    const { isPetitioner } = updatedFilePetitionHelper;
+
     return (
       <>
         <FormGroup className="autogenerate-petition-form">
@@ -21,8 +28,9 @@ export const AutoGeneratePetitionForm = connect(
             htmlFor="petitionReasons"
             id="petition-reason-label"
           >
-            1. Explain why you disagree with the IRS action(s) in this case
-            (please add each reason separately):
+            {`1. Explain why ${isPetitioner ? 'you disagree' : 'the petitioner disagrees'} with the IRS action(s) in this case
+            (please add each reason separately)`}
+            :
           </label>
 
           <div className="margin-bottom-2-rem">
@@ -31,10 +39,10 @@ export const AutoGeneratePetitionForm = connect(
                 const key = `petition-reason-${index - 1}`;
                 return (
                   <div className="display-flex" key={key}>
-                    <div className="text-semibold margin-right-05">
-                      {getCharacter(index)}
+                    <div className="text-semibold margin-right-1 fact-reason-character-label">
+                      {`${updatedFilePetitionHelper.getLetterByIndex(index)}. `}
                     </div>
-                    <PetitionFormResponse
+                    <PetitionFactOrReason
                       factOrReasonCount={index}
                       id={`petition-reason-${index - 1}`}
                       labelId="petition-reason-label"
@@ -61,8 +69,8 @@ export const AutoGeneratePetitionForm = connect(
             htmlFor="petitionFacts"
             id="petition-fact-label"
           >
-            2. State the facts upon which you rely (please add each fact
-            separately):
+            {`2. State the facts upon which ${isPetitioner ? 'you rely' : 'the petitioner relies'} (please add each fact
+            separately):`}
           </label>
           <div>
             {form.petitionFacts &&
@@ -70,10 +78,10 @@ export const AutoGeneratePetitionForm = connect(
                 const key = `petition-fact-${index - 1}`;
                 return (
                   <div className="display-flex" key={key}>
-                    <div className="text-semibold margin-right-05">
-                      {getCharacter(index)}
+                    <div className="text-semibold margin-right-1 fact-reason-character-label">
+                      {`${updatedFilePetitionHelper.getLetterByIndex(index)}. `}
                     </div>
-                    <PetitionFormResponse
+                    <PetitionFactOrReason
                       factOrReasonCount={index}
                       id={`petition-fact-${index - 1}`}
                       labelId="petition-fact-label"
@@ -101,11 +109,5 @@ export const AutoGeneratePetitionForm = connect(
     );
   },
 );
-
-function getCharacter(index: number): string {
-  const asciiOfA = 97;
-  const asciiValue = asciiOfA + index;
-  return `${String.fromCharCode(asciiValue)}. `;
-}
 
 AutoGeneratePetitionForm.displayName = 'AutoGeneratePetitionForm';

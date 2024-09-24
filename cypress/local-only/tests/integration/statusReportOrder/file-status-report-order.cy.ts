@@ -20,9 +20,9 @@ describe('file status report order', () => {
   const today = formatNow(FORMATS.MMDDYYYY);
   const formattedToday = formatNow(FORMATS.MONTH_DAY_YEAR);
   const firstPdfLineJustThisCase =
-    'On June 28, 2024, a status report was filed (Index no.';
+    'On June 28, 2024, a status report was filed (Document no.';
   const firstPdfLineForAllCasesInGroup =
-    'On June 28, 2024, a status report was filed (Lead case index no.';
+    'On June 28, 2024, a status report was filed (Lead case document no.';
 
   describe('judge', () => {
     beforeEach(() => {

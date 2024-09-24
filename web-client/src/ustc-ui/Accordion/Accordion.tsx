@@ -97,7 +97,12 @@ const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
                 <div className={mobileTitleClassName}>{title}</div>
               </Mobile>
               <NonMobile>
-                <div className={titleClassName}>{title}</div>
+                <div
+                  className={titleClassName}
+                  data-testid="accordion-item-title"
+                >
+                  {title}
+                </div>
               </NonMobile>
             </div>
           </button>

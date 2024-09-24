@@ -35,13 +35,13 @@ export const UpdatedFilePetitionStep1 = connect(
     validationErrors,
   }) {
     const { registerRef, resetFocus } = useValidationFocus(validationErrors);
-
+    const { isPetitioner, isPractitioner } = updatedFilePetitionHelper;
     return (
       <>
         <p className="margin-top-0 required-statement">
           *All fields required unless otherwise noted
         </p>
-        <h2>I am filing this petition on behalf of...</h2>
+        <h2>I am filing this Petition on behalf of...</h2>
         <FormGroup
           errorMessageId="filling-type-error-message"
           errorText={validationErrors.filingType}
@@ -52,16 +52,16 @@ export const UpdatedFilePetitionStep1 = connect(
                 return (
                   <div
                     className="usa-radio margin-bottom-2 filing-type-radio-option max-width-fit-content"
-                    key={filingType}
+                    key={filingType.value}
                   >
                     <input
                       aria-describedby="filing-type-legend"
-                      checked={form.filingType === filingType}
+                      checked={form.filingType === filingType.value}
                       className="usa-radio__input"
-                      id={filingType}
+                      id={filingType.value}
                       name="filingType"
                       type="radio"
-                      value={filingType}
+                      value={filingType.value}
                       onChange={e => {
                         updateFilingTypeSequence({
                           key: e.target.name,
@@ -72,10 +72,10 @@ export const UpdatedFilePetitionStep1 = connect(
                     <label
                       className="usa-radio__label"
                       data-testid={`filing-type-${index}`}
-                      htmlFor={filingType}
-                      id={`${filingType}-radio-option-label`}
+                      htmlFor={filingType.value}
+                      id={`${filingType.value}-radio-option-label`}
                     >
-                      {filingType}
+                      {filingType.label}
                     </label>
                   </div>
                 );
@@ -84,28 +84,37 @@ export const UpdatedFilePetitionStep1 = connect(
           </fieldset>
         </FormGroup>
 
-        {form.filingType === 'Myself' && (
+        {(form.filingType === 'Myself' ||
+          form.filingType === 'Individual petitioner') && (
           <ContactPrimaryUpdated
             addressInfo={form.contactPrimary}
             handleBlur={petitionGenerationLiveValidationSequence}
             handleChange={updateFormValueUpdatedSequence}
             handleChangeCountryType={updateFormValueCountryTypeSequence}
-            nameLabel="Full Name"
+            nameLabel={updatedFilePetitionHelper.primaryContactNameLabel}
             registerRef={registerRef}
+            showEmail={isPractitioner}
           />
         )}
-        {form.filingType === 'Myself and my spouse' && (
+        {(form.filingType === 'Myself and my spouse' ||
+          form.filingType === 'Petitioner and spouse') && (
           <>
+            {isPractitioner && <h2>Petitioner&#39;s information</h2>}
             <ContactPrimaryUpdated
               addressInfo={form.contactPrimary}
               handleBlur={petitionGenerationLiveValidationSequence}
               handleChange={updateFormValueUpdatedSequence}
               handleChangeCountryType={updateFormValueCountryTypeSequence}
-              nameLabel="Full Name"
+              nameLabel={updatedFilePetitionHelper.primaryContactNameLabel}
               registerRef={registerRef}
+              showEmail={isPractitioner}
             />
+            <h2 data-testid="spouse-header">
+              {isPetitioner ? "Your spouse's" : 'Petitioner Spouse'} information
+            </h2>
             <PetitionerAndSpouseInfo
               form={form}
+              isPetitioner={isPetitioner}
               petitionGenerationLiveValidationSequence={
                 petitionGenerationLiveValidationSequence
               }
@@ -125,6 +134,7 @@ export const UpdatedFilePetitionStep1 = connect(
           <BusinessInfo
             businessFieldNames={updatedFilePetitionHelper.businessFieldNames}
             form={form}
+            isPractitioner={isPractitioner}
             petitionGenerationLiveValidationSequence={
               petitionGenerationLiveValidationSequence
             }
@@ -140,9 +150,11 @@ export const UpdatedFilePetitionStep1 = connect(
         {form.filingType === 'Other' && (
           <OtherInfo
             form={form}
+            isPractitioner={isPractitioner}
             otherContactNameLabel={
               updatedFilePetitionHelper.otherContactNameLabel
             }
+            otherFilingOptions={updatedFilePetitionHelper.otherFilingOptions}
             petitionGenerationLiveValidationSequence={
               petitionGenerationLiveValidationSequence
             }

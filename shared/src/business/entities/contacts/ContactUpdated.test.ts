@@ -318,6 +318,41 @@ describe('ContactUpdated', () => {
           });
         });
       });
+
+      describe('paperPetitionEmail', () => {
+        it('should not return an error message for "paperPetitionEmail" if its undefined', () => {
+          const entity = new ContactUpdated(
+            {
+              ...VALID_ENTITY,
+              paperPetitionEmail: undefined,
+            },
+            CONTACT_NAME,
+            PETITION_TYPE,
+            PARTY_TYPE,
+          );
+
+          const errors = entity.getFormattedValidationErrors();
+          expect(errors).toEqual(null);
+        });
+
+        it('should return an error message for "paperPetitionEmail" if it is not a valid email format', () => {
+          const entity = new ContactUpdated(
+            {
+              ...VALID_ENTITY,
+              paperPetitionEmail: 'Iceland',
+            },
+            CONTACT_NAME,
+            PETITION_TYPE,
+            PARTY_TYPE,
+          );
+
+          const errors = entity.getFormattedValidationErrors();
+          expect(errors).toEqual({
+            paperPetitionEmail:
+              'Enter email address in format: yourname@example.com',
+          });
+        });
+      });
     });
 
     describe('DOMESTIC', () => {
@@ -335,7 +370,7 @@ describe('ContactUpdated', () => {
           );
 
           const errors = entity.getFormattedValidationErrors();
-          expect(errors).toEqual({ postalCode: 'Enter ZIP code' });
+          expect(errors).toEqual({ postalCode: 'Enter a valid ZIP code' });
         });
 
         it('should return an error message for "postalCode" if it does not match regex', () => {
@@ -351,7 +386,7 @@ describe('ContactUpdated', () => {
           );
 
           const errors = entity.getFormattedValidationErrors();
-          expect(errors).toEqual({ postalCode: 'Enter ZIP code' });
+          expect(errors).toEqual({ postalCode: 'Enter a valid ZIP code' });
         });
       });
 
