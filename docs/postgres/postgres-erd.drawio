@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="h8sX6S1mLoBgmJrfqR-_" name="Page-1">
-        <mxGraphModel dx="1070" dy="840" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="932" dy="840" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -11,9 +11,9 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="15" value="Case" style="swimlane;" parent="1" vertex="1">
-                    <mxGeometry x="75" y="220" width="270" height="150" as="geometry"/>
+                    <mxGeometry x="75" y="220" width="270" height="170" as="geometry"/>
                 </mxCell>
-                <mxCell id="17" value="&lt;div style=&quot;color: rgb(179, 179, 212); background-color: rgb(29, 29, 38); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 12px; line-height: 18px;&quot;&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;color: rgb(179, 179, 212);&quot;&gt;&lt;b&gt;🔑 docketNumber: VARCHAR NOT NULL &lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-weight: normal;&quot;&gt;&lt;span style=&quot;color: #b3b3d4;&quot;&gt;trialLocation: VARCHAR NULL&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-weight: normal;&quot;&gt;&lt;span style=&quot;color: #b3b3d4;&quot;&gt;trialDate: VARCHAR NULL&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-weight: normal;&quot;&gt;&lt;span style=&quot;color: #b3b3d4;&quot;&gt;leadDocketNumber: VARCHAR NULL&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-weight: normal;&quot;&gt;&lt;span style=&quot;color: #b3b3d4;&quot;&gt;docketNumberSuffix: VARCHAR NULL&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="15">
+                <mxCell id="17" value="&lt;div style=&quot;background-color: rgb(29, 29, 38); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 12px; line-height: 18px;&quot;&gt;&lt;div style=&quot;color: rgb(179, 179, 212);&quot;&gt;&lt;span style=&quot;color: rgb(179, 179, 212);&quot;&gt;&lt;b&gt;🔑 docketNumber: VARCHAR NOT NULL &lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(179, 179, 212); font-weight: normal;&quot;&gt;&lt;span style=&quot;color: #b3b3d4;&quot;&gt;trialLocation: VARCHAR NULL&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(179, 179, 212); font-weight: normal;&quot;&gt;&lt;span style=&quot;color: #b3b3d4;&quot;&gt;trialDate: VARCHAR NULL&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(179, 179, 212); font-weight: normal;&quot;&gt;&lt;span style=&quot;color: #b3b3d4;&quot;&gt;leadDocketNumber: VARCHAR NULL&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(179, 179, 212); font-weight: normal;&quot;&gt;&lt;span style=&quot;color: #b3b3d4;&quot;&gt;docketNumberSuffix: VARCHAR NULL&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-weight: normal;&quot;&gt;&lt;div style=&quot;&quot;&gt;&lt;font color=&quot;#009900&quot; style=&quot;&quot;&gt;caseTitle: VARCHAR NOT NULL&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font color=&quot;#009900&quot; style=&quot;&quot;&gt;caseStatus: VARCHAR NOT NULL&lt;/font&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="15">
                     <mxGeometry x="10" y="30" width="260" height="110" as="geometry"/>
                 </mxCell>
                 <mxCell id="16" value="Message" style="swimlane;" parent="1" vertex="1">
