@@ -200,21 +200,29 @@ describe('trialSessionsHelper', () => {
         },
       });
 
-      expect(result.trialSessionJudgeOptions).toContain({
-        label: judgeUser.name,
-        value: {
-          name: judgeUser.name,
-          userId: judgeUser.userId,
-        },
-      });
+      expect(result.trialSessionJudgeOptions).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            label: judgeUser.name,
+            value: expect.objectContaining({
+              name: judgeUser.name,
+              userId: judgeUser.userId,
+            }),
+          }),
+        ]),
+      );
 
-      expect(result.trialSessionJudgeOptions).not.toContain({
-        label: legacyJudgeUser.name,
-        value: {
-          name: legacyJudgeUser.name,
-          userId: legacyJudgeUser.userId,
-        },
-      });
+      expect(result.trialSessionJudgeOptions).not.toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            label: legacyJudgeUser.name,
+            value: expect.objectContaining({
+              name: legacyJudgeUser.name,
+              userId: legacyJudgeUser.userId,
+            }),
+          }),
+        ]),
+      );
     });
 
     it('returns only current judges when the session status is open', () => {
@@ -441,6 +449,7 @@ describe('trialSessionsHelper', () => {
         const result = runCompute(trialSessionsHelper, {
           state: {
             judges: [judgeUser],
+            legacyAndCurrentJudges: [legacyJudgeUser],
             permissions: getUserPermissions(docketClerk1User),
             trialSessionsPage: trialSessionsPageState,
           },
@@ -483,8 +492,13 @@ describe('trialSessionsHelper', () => {
       it('should show regular trial sessions when session type filter is regular', () => {
         trialSession1.sessionType = SESSION_TYPES.regular;
         trialSession2.sessionType = SESSION_TYPES.hybridSmall;
-        trialSessionsPageState.filters.sessionTypes = SESSION_TYPES.regular;
-        trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
+        (trialSessionsPageState.filters.sessionTypes = {
+          [SESSION_TYPES.regular]: SESSION_TYPES.regular,
+        }),
+          (trialSessionsPageState.trialSessions = [
+            trialSession1,
+            trialSession2,
+          ]);
 
         const result = runCompute(trialSessionsHelper, {
           state: {
@@ -505,7 +519,9 @@ describe('trialSessionsHelper', () => {
       it('should show trial sessions in honolulu when trial sessions when trial location filter is honolulu', () => {
         trialSession1.trialLocation = 'Honolulu, Hawaii';
         trialSession2.trialLocation = 'Jacksonville, Florida';
-        trialSessionsPageState.filters.trialLocations = 'Honolulu, Hawaii';
+        trialSessionsPageState.filters.trialLocations = {
+          'Honolulu, Hawaii': 'Honolulu, Hawaii',
+        };
         trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
 
         const result = runCompute(trialSessionsHelper, {
