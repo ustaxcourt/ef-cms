@@ -1,0 +1,6 @@
+TODO:
+
+- verify that PractitionerCaseList.tsx is the appropriate name, especially given that we already have that as a name elsewhere
+- type the cases
+- ensure that the icons are being rendered correctly, and see if refactoring would be helpful
+- check how long lists take to populate on test
