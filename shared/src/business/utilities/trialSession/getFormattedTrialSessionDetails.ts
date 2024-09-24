@@ -243,13 +243,14 @@ export const getFormattedTrialSessionDetails = ({
     .formatDateString(trialSession.startDate, 'MONTH_DAY_YEAR');
 
   let [hour, min] = trialSession.startTime!.split(':');
-  let startTimeExtension = +hour >= 12 ? 'pm' : 'am';
+  let hourNumber = +hour;
+  let startTimeExtension = hourNumber >= 12 ? 'pm' : 'am';
 
-  if (+hour > 12) {
-    hour = +hour - 12;
+  if (hourNumber > 12) {
+    hourNumber = hourNumber - 12;
   }
 
-  const formattedStartTime = `${hour}:${min} ${startTimeExtension}`;
+  const formattedStartTime = `${hourNumber}:${min} ${startTimeExtension}`;
 
   const formattedJudge =
     (trialSession.judge && trialSession.judge.name) || 'Not assigned';
