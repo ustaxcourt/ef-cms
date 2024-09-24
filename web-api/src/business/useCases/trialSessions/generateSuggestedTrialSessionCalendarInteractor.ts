@@ -1,4 +1,8 @@
 import {
+  FORMATS,
+  formatDateString,
+} from '@shared/business/utilities/DateHandler';
+import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
@@ -47,10 +51,10 @@ export type TrialSessionReadyForCalendaring = TrialSession & { weekOf: string };
 export const generateSuggestedTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
   {
-    endDate,
-    startDate,
+    termEndDate,
+    termStartDate,
     // termName,
-  }: { endDate: string; startDate: string; termName: string },
+  }: { termEndDate: string; termStartDate: string; termName: string },
   authorizedUser: UnknownAuthUser,
 ) => {
   if (
@@ -58,7 +62,6 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   ) {
     throw new UnauthorizedError('Unauthorized to generate term');
   }
-
   //
   // Maximum of 6 sessions per week
   // Maximum of 5 sessions total per location
@@ -101,7 +104,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   // Note (10275): storing trial session data differently would make for a more
   // efficient process of determining which cities were not visited within the
   // past two terms.
-  const previousTwoTerms = getPreviousTwoTerms(startDate);
+  const previousTwoTerms = getPreviousTwoTerms(termStartDate);
 
   const citiesFromLastTwoTerms = sessions.map(session => {
     const termString = `${session.term}, ${session.termYear}`;
@@ -118,32 +121,32 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   const scheduledTrialSessions = assignSessionsToWeeks({
     calendaringConfig,
-    endDate,
     prospectiveSessionsByCity,
     specialSessions,
-    startDate,
+    termEndDate,
+    termStartDate,
   });
 
   return scheduledTrialSessions;
 };
 
-const getPreviousTwoTerms = (startDate: string) => {
+const getPreviousTwoTerms = (termStartDate: string) => {
   //TODO: refactor this, maybe?
 
-  const deconstructedDate = getUtilities().deconstructDate(startDate);
+  console.log('termStartDate', termStartDate);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [month, day, year] = termStartDate.split('/');
 
-  const currentTerm = getTermByMonth(deconstructedDate.month);
+  const currentTerm = getTermByMonth(month);
 
   const terms = [
-    `fall ${+deconstructedDate.year - 1}`,
-    `winter ${deconstructedDate.year}`,
-    `spring ${deconstructedDate.year}`,
-    `fall ${deconstructedDate.year}`,
+    `fall ${+year - 1}`,
+    `winter ${year}`,
+    `spring ${year}`,
+    `fall ${year}`,
   ];
   const termsReversed = terms.reverse();
-  const termIndex = terms.findIndex(
-    t => `${currentTerm} ${deconstructedDate.year}` === t,
-  );
+  const termIndex = terms.findIndex(t => `${currentTerm} ${year}` === t);
   const [term1, year1] = termsReversed[termIndex + 1].split(' ');
   const [term2, year2] = termsReversed[termIndex + 2].split(' ');
 
