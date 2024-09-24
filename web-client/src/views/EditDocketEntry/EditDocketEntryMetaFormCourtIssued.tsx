@@ -60,6 +60,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
           {addCourtIssuedDocketEntryHelper.showDocumentTypeDropdown && (
             <SelectSearch
               aria-labelledby="document-type-label"
+              data-testid="add-court-issued-document-type-search"
               id="document-type"
               isClearable={true}
               name="eventCode"

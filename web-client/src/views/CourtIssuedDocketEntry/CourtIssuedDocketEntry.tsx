@@ -116,7 +116,7 @@ export const CourtIssuedDocketEntry = connect(
                   </label>
                   <SelectSearch
                     aria-labelledby="document-type-label"
-                    data-testid="primary-document"
+                    data-testid="court-issued-document-type-search"
                     id="document-type"
                     isClearable={true}
                     name="eventCode"

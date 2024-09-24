@@ -250,6 +250,7 @@ export const CustomCaseReport = connect(
                 </label>
                 <SelectSearch
                   aria-labelledby="case-status-label"
+                  data-testid="case-status-search"
                   id="case-status"
                   name="caseStatus"
                   options={customCaseReportHelper.caseStatuses}
@@ -278,6 +279,7 @@ export const CustomCaseReport = connect(
                 </label>
                 <SelectSearch
                   aria-labelledby="case-type-label"
+                  data-testid="case-type-search"
                   id="case-type"
                   name="eventCode"
                   options={customCaseReportHelper.caseTypes}
@@ -310,6 +312,7 @@ export const CustomCaseReport = connect(
                 </label>
                 <SelectSearch
                   aria-labelledby="judges-label"
+                  data-testid="judges-search"
                   id="judges"
                   name="judges"
                   options={customCaseReportHelper.judges}
@@ -338,6 +341,7 @@ export const CustomCaseReport = connect(
                 </label>
                 <SelectSearch
                   aria-labelledby="requested-place-of-trial-label"
+                  data-testid="trial-location-search"
                   id="trial-location"
                   name="requestedPlaceOfTrial"
                   options={customCaseReportHelper.trialCitiesByState}

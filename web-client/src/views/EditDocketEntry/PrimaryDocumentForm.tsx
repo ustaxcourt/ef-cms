@@ -92,6 +92,7 @@ export const PrimaryDocumentForm = connect(
 
             <SelectSearch
               aria-describedby="document-type-label"
+              data-testid="primary-document-type-search"
               id="document-type"
               isClearable={true}
               name="eventCode"
@@ -131,6 +132,7 @@ export const PrimaryDocumentForm = connect(
               </label>
               <SelectSearch
                 aria-describedby="secondary-document-type-label"
+                data-testid="secondary-document-type-search"
                 id="secondary-document-type"
                 isClearable={true}
                 name="secondaryDocument.eventCode"
