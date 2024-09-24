@@ -74,6 +74,7 @@ export const CompleteDocumentTypeSectionRemainder = connect(
                 aria-labelledby="secondary-document-type-label"
                 data-testid="secondary-doc-secondary-document-type"
                 id="secondary-doc-secondary-document-type"
+                isClearable={true}
                 name="secondaryDocument.eventCode"
                 options={
                   completeDocumentTypeSectionHelper.documentTypesForSecondarySelectSorted

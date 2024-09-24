@@ -99,6 +99,7 @@ export const PrimaryDocumentForm = connect(
             <SelectSearch
               aria-describedby="document-type-label"
               id="document-type"
+              isClearable={true}
               name="eventCode"
               options={internalTypesHelper.internalDocumentTypesForSelectSorted}
               value={reactSelectValue({
@@ -145,6 +146,7 @@ export const PrimaryDocumentForm = connect(
               <SelectSearch
                 aria-describedby="secondary-document-type-label"
                 id="secondary-document-type"
+                isClearable={true}
                 name="secondaryDocument.eventCode"
                 options={
                   internalTypesHelper.internalDocumentTypesForSelectSorted

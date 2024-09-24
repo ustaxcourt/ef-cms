@@ -65,6 +65,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
             <SelectSearch
               aria-labelledby="document-type-label"
               id="document-type"
+              isClearable={true}
               name="eventCode"
               options={addCourtIssuedDocketEntryHelper.documentTypes}
               value={reactSelectValue({
