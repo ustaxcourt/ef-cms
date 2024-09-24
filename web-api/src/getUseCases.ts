@@ -44,6 +44,7 @@ import { deletePractitionerDocumentInteractor } from './business/useCases/practi
 import { deleteTrialSessionInteractor } from './business/useCases/trialSessions/deleteTrialSessionInteractor';
 import { deleteUserCaseNoteInteractor } from './business/useCases/caseNote/deleteUserCaseNoteInteractor';
 import { dismissNOTTReminderForTrialInteractor } from './business/useCases/trialSessions/dismissNOTTReminderForTrialInteractor';
+import { downloadFileWorker } from '@web-api/business/useCases/downloadFile/downloadFileWorker';
 import { editPaperFilingInteractor } from './business/useCases/docketEntry/editPaperFilingInteractor';
 import { editPractitionerDocumentInteractor } from './business/useCases/practitioner/editPractitionerDocumentInteractor';
 import { exportPendingReportInteractor } from '@web-api/business/useCases/pendingItems/exportPendingReportInteractor';
@@ -258,6 +259,7 @@ const useCases = {
   deleteTrialSessionInteractor,
   deleteUserCaseNoteInteractor,
   dismissNOTTReminderForTrialInteractor,
+  downloadFileWorker,
   editPaperFilingInteractor,
   editPractitionerDocumentInteractor,
   exportPendingReportInteractor,
