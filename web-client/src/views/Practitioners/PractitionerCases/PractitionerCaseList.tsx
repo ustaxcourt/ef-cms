@@ -1,5 +1,4 @@
 import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import React from 'react';
 
@@ -38,10 +37,10 @@ export function PractitionerCaseList({
               <tr key={item.pk}>
                 <td aria-hidden="true" className="multi-filing-type-icon">
                   {item.isSealed && (
-                    <FontAwesomeIcon
+                    <Icon
+                      aria-label={item.sealedToTooltip}
                       className="sealed-docket-entry"
                       icon="lock"
-                      size="1x"
                       title={item.sealedToTooltip}
                     />
                   )}
