@@ -281,11 +281,16 @@ const TrialSessionFilters = connect(
         <div className="margin-bottom-2 grid-row flex-row gap-2">
           <div className="grid-col">
             <div className="margin-bottom-1">
-              <label className="usa-label" htmlFor="session-type-filter">
+              <label
+                className="usa-label"
+                htmlFor="session-type-filter"
+                id="session-type-filter-label"
+              >
                 Session type{' '}
                 <span className="optional-light-text">(optional)</span>
               </label>
               <SelectSearch
+                aria-labelledby="session-type-filter-label"
                 id="session-type-filter"
                 name="sessionType"
                 options={trialSessionsHelper.sessionTypeOptions}
@@ -327,10 +332,15 @@ const TrialSessionFilters = connect(
           </div>
           <div className="grid-col">
             <div className="margin-bottom-1">
-              <label className="usa-label" htmlFor="location-filter">
+              <label
+                className="usa-label"
+                htmlFor="location-filter"
+                id="location-filter-label"
+              >
                 Location <span className="optional-light-text">(optional)</span>
               </label>
               <SelectSearch
+                aria-labelledby="location-filter-label"
                 id="location-filter"
                 name="location"
                 options={trialSessionsHelper.trialCitiesByState}
@@ -372,10 +382,15 @@ const TrialSessionFilters = connect(
           </div>
           <div className="grid-col">
             <div className="margin-bottom-1">
-              <label className="usa-label" htmlFor="judge-filter">
+              <label
+                className="usa-label"
+                htmlFor="judge-filter"
+                id="judges-filter-label"
+              >
                 Judge <span className="optional-light-text">(optional)</span>
               </label>
               <SelectSearch
+                aria-labelledby="judges-filter-label"
                 id="judges"
                 name="judges"
                 options={trialSessionsHelper.trialSessionJudgeOptions}

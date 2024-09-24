@@ -6,7 +6,7 @@ import dateRangePicker from '../../../../node_modules/@uswds/uswds/packages/usa-
 
 export const DateRangePickerComponent = ({
   endDateErrorText,
-  endLabel,
+  endLabel = 'End date',
   endName,
   endPickerCls,
   endValue,
@@ -20,7 +20,7 @@ export const DateRangePickerComponent = ({
   rangePickerCls,
   showDateHint = false,
   startDateErrorText,
-  startLabel,
+  startLabel = 'Start date',
   startName,
   startPickerCls,
   startValue,
