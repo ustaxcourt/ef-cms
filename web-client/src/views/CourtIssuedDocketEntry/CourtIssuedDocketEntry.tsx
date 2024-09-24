@@ -14,6 +14,7 @@ import { SuccessNotification } from '../SuccessNotification';
 import { WarningNotificationComponent } from '../WarningNotification';
 import { WorkItemAlreadyCompletedModal } from '../DocketEntryQc/WorkItemAlreadyCompletedModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -120,6 +121,11 @@ export const CourtIssuedDocketEntry = connect(
                     isClearable={true}
                     name="eventCode"
                     options={addCourtIssuedDocketEntryHelper.documentTypes}
+                    value={reactSelectValue({
+                      documentTypes:
+                        addCourtIssuedDocketEntryHelper.documentTypes,
+                      selectedEventCode: form.eventCode,
+                    })}
                     onChange={inputValue => {
                       [
                         'documentType',

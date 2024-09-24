@@ -5,6 +5,7 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PartiesRepresenting } from './PartiesRepresenting';
 import { SelectSearch2 } from '@web-client/ustc-ui/Select/SelectSearch2';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -13,6 +14,7 @@ import classNames from 'classnames';
 export const CaseAssociationRequest = connect(
   {
     caseAssociationRequestHelper: state.caseAssociationRequestHelper,
+    form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     reviewCaseAssociationRequestSequence:
       sequences.reviewCaseAssociationRequestSequence,
@@ -24,6 +26,7 @@ export const CaseAssociationRequest = connect(
   },
   function CaseAssociationRequest({
     caseAssociationRequestHelper,
+    form,
     formCancelToggleCancelSequence,
     reviewCaseAssociationRequestSequence,
     updateCaseAssociationFormValueSequence,
@@ -74,6 +77,10 @@ export const CaseAssociationRequest = connect(
               isClearable={true}
               name="documentType"
               options={caseAssociationRequestHelper.documentsForSelect}
+              value={reactSelectValue({
+                documentTypes: caseAssociationRequestHelper.documentsForSelect,
+                selectedEventCode: form.eventCode,
+              })}
               onChange={e => {
                 updateCaseAssociationFormValueSequence({
                   key: 'documentType',
