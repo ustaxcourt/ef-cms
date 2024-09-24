@@ -12,6 +12,7 @@ import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/message
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import diff from 'diff-arrays-of-objects';
 import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 
 /**
  * Identifies docket entries which have been updated and issues persistence calls
@@ -358,14 +359,11 @@ const updateCaseWorkItems = async ({
     return [];
   }
 
-  const rawWorkItems = await applicationContext
-    .getPersistenceGateway()
-    .getWorkItemsByDocketNumber({
-      applicationContext,
-      docketNumber: caseToUpdate.docketNumber,
-    });
+  const workItems = await getWorkItemsByDocketNumber({
+    docketNumber: caseToUpdate.docketNumber,
+  });
 
-  const updatedWorkItems = rawWorkItems.map(rawWorkItem => ({
+  const updatedWorkItems = workItems.map(rawWorkItem => ({
     ...rawWorkItem,
     associatedJudge: caseToUpdate.associatedJudge,
     associatedJudgeId: caseToUpdate.associatedJudgeId,
