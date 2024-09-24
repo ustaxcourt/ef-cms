@@ -793,7 +793,7 @@ export const baseState = {
     stinFileUrl: undefined,
     taxYear: undefined,
   },
-  practitionerDetail: {},
+  practitionerDetail: {} as PractitionerDetail,
   previewPdfFile: null,
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses
@@ -888,4 +888,19 @@ export type ViewerDocument = {
   eventCode?: string;
   filingDate?: string;
   index?: number;
+};
+
+export type PractitionerDetail = {
+  barNumber: string;
+  contact: any; // TODO
+  name: string;
+  userId: string;
+  openCaseDetail: PractitionerCaseDetail;
+  closedCaseDetails: PractitionerCaseDetail;
+  email?: string;
+};
+
+export type PractitionerCaseDetail = {
+  allCases: any;
+  currentPage: number;
 };

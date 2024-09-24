@@ -15,20 +15,6 @@ export const practitionerInformationHelper = (
   const permissions = get(state.permissions);
   const practitionerDetail = get(state.practitionerDetail);
 
-  if (
-    practitionerDetail.openCasesPageNumber === null ||
-    practitionerDetail.openCasesPageNumber === undefined
-  ) {
-    practitionerDetail.openCasesPageNumber = 0;
-  }
-
-  if (
-    practitionerDetail.closedCases.pageNumber === null ||
-    practitionerDetail.closedCases.pageNumber === undefined
-  ) {
-    practitionerDetail.closedCases.pageNumber = 0;
-  }
-
   const user = get(state.user);
   const isInternalUser = applicationContext
     .getUtilities()
@@ -37,20 +23,20 @@ export const practitionerInformationHelper = (
   console.log('practitionerDetail', practitionerDetail);
 
   const totalOpenCasePages = Math.ceil(
-    practitionerDetail.openCases.length / PAGE_SIZE,
+    practitionerDetail.openCaseDetail.allCases.length / PAGE_SIZE,
   );
 
   const totalClosedCasesPages = Math.ceil(
-    practitionerDetail.closedCases.length / PAGE_SIZE,
+    practitionerDetail.closedCaseDetails.allCases.length / PAGE_SIZE,
   );
 
   const showOpenCasesPagination = totalOpenCasePages > 1;
   const showClosedCasesPagination = totalClosedCasesPages > 1;
 
-  const openCases = practitionerDetail.openCases
+  const openCasesToDisplay = practitionerDetail.openCaseDetail.allCases
     .slice(
-      practitionerDetail.openCasesPageNumber * PAGE_SIZE,
-      (practitionerDetail.openCasesPageNumber + 1) * PAGE_SIZE,
+      practitionerDetail.openCaseDetail.currentPage * PAGE_SIZE,
+      (practitionerDetail.openCaseDetail.currentPage + 1) * PAGE_SIZE,
     )
     .map(c => {
       c = formatCase(applicationContext, c, user);
@@ -58,10 +44,10 @@ export const practitionerInformationHelper = (
       return c;
     });
 
-  const closedCases = practitionerDetail.closedCases
+  const closedCasesToDisplay = practitionerDetail.closedCaseDetails.allCases
     .slice(
-      practitionerDetail.closedCases.pageNumber * PAGE_SIZE,
-      (practitionerDetail.closedCases.pageNumber + 1) * PAGE_SIZE,
+      practitionerDetail.closedCaseDetails.currentPage * PAGE_SIZE,
+      (practitionerDetail.closedCaseDetails.currentPage + 1) * PAGE_SIZE,
     )
     .map(c => {
       c = formatCase(applicationContext, c, user);
@@ -70,12 +56,12 @@ export const practitionerInformationHelper = (
     });
 
   return {
-    closedCases,
-    closedCasesTotal: practitionerDetail.closedCases.length,
-    openCases,
-    openCasesPageNumber: practitionerDetail.openCasesPageNumber,
-    openCasesTotal: practitionerDetail.openCases.length,
-    pageNumber: 0,
+    closedCases: closedCasesToDisplay,
+    closedCasesPageNumber: practitionerDetail.closedCaseDetails.currentPage,
+    closedCasesTotal: practitionerDetail.closedCaseDetails.allCases.length,
+    openCases: openCasesToDisplay,
+    openCasesPageNumber: practitionerDetail.openCaseDetail.currentPage,
+    openCasesTotal: practitionerDetail.openCaseDetail.allCases.length,
     showClosedCasesPagination,
     showDocumentationTab: permissions.UPLOAD_PRACTITIONER_DOCUMENT,
     showOpenCasesPagination,

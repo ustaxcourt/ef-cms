@@ -1,11 +1,11 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const setPractitionerOpenCasesPageAction = ({
+export const setPractitionerClosedCasesPageAction = ({
   props,
   store,
 }: ActionProps<{
   pageNumber: number;
 }>) => {
   const { pageNumber } = props;
-  store.set(state.practitionerDetail.openCaseDetail.currentPage, pageNumber);
+  store.set(state.practitionerDetail.closedCaseDetails.currentPage, pageNumber);
 };

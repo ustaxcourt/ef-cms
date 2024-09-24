@@ -6,6 +6,10 @@
  * @returns {object} containing practitionerDetail
  */
 
+import {
+  PractitionerCaseDetail,
+  PractitionerDetail,
+} from '@web-client/presenter/state';
 import { getPractitionerCasesInteractor } from '@shared/proxies/practitioners/getPractionerCasesProxy';
 
 export const getPractitionerDetailAction = async ({
@@ -14,7 +18,7 @@ export const getPractitionerDetailAction = async ({
 }: ActionProps<{ barNumber: string }>) => {
   const { barNumber } = props;
 
-  const practitionerDetail = await applicationContext
+  const practitionerDetail: PractitionerDetail = await applicationContext
     .getUseCases()
     .getPractitionerByBarNumberInteractor(applicationContext, {
       barNumber,
@@ -25,12 +29,16 @@ export const getPractitionerDetailAction = async ({
     { userId: practitionerDetail.userId },
   );
 
-  console.log(closedCases, openCases);
-
-  practitionerDetail.openCases = openCases;
-  practitionerDetail.closedCases = closedCases;
-
-  console.log(practitionerDetail);
+  const openCaseDetail: PractitionerCaseDetail = {
+    allCases: openCases,
+    currentPage: 0,
+  };
+  const closedCaseDetail: PractitionerCaseDetail = {
+    allCases: closedCases,
+    currentPage: 0,
+  };
+  practitionerDetail.openCaseDetail = openCaseDetail;
+  practitionerDetail.closedCaseDetails = closedCaseDetail;
 
   return { practitionerDetail };
 };
