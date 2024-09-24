@@ -99,6 +99,16 @@ resource "aws_iam_role_policy" "batch_service_role_policy" {
                 "arn:aws:ecs:us-east-1:${data.aws_caller_identity.current.account_id}:cluster/*"
             ],
             "Effect": "Allow"
+        },
+				{
+            "Action": [
+                "sqs:SendMessage"
+            ],
+            "Resource": [
+                "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:worker_queue_${var.environment}_*",
+                "arn:aws:sqs:us-west-1:${data.aws_caller_identity.current.account_id}:worker_queue_${var.environment}_*"
+            ],
+            "Effect": "Allow"
         }
     ]
 }
