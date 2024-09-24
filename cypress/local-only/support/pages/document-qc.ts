@@ -35,12 +35,20 @@ export const fillOutMessageField = () => {
   cy.get('#message').clear().type("I don't appreciate your lack of sarcasm.");
 };
 
-export const enterSubject = () => {
-  cy.get('#subject').clear().type('Demeanor');
+export const enterSubject = (subject?: string) => {
+  cy.get('#subject')
+    .clear()
+    .type(subject || 'Demeanor');
 };
 
 export const sendMessage = () => {
   cy.get('#confirm').click();
+};
+
+export const forwardMessage = (messageSubject: string) => {
+  cy.get('#tab-case-messages').click();
+  cy.contains('a', messageSubject).click();
+  cy.get('#button-forward').click();
 };
 
 export const progressIndicatorDoesNotExist = () => {

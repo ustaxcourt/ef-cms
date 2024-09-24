@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import { Contact } from '@shared/business/useCases/generatePetitionPdfInteractor';
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import {
@@ -7,6 +8,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
 import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
+import { JudgeChambersInfo } from '@web-client/presenter/actions/getJudgesChambersAction';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawMessage } from '@shared/business/entities/Message';
 import { RawUser } from '@shared/business/entities/User';
@@ -701,6 +703,7 @@ export const baseState = {
   } as JudgeActivityReportState,
   judgeUser: {} as any,
   judges: [] as RawUser[],
+  judgesChambers: [] as JudgeChambersInfo[],
   lastIdleAction: undefined,
   legacyAndCurrentJudges: [],
   login: {} as any,
@@ -765,8 +768,9 @@ export const baseState = {
     caseCaptionExtension: undefined,
     caseTitle: undefined,
     caseType: undefined,
-    contactPrimary: undefined,
-    contactSecondary: undefined,
+    contactCounsel: undefined,
+    contactPrimary: undefined as Contact | undefined,
+    contactSecondary: undefined as Contact | undefined,
     corporateDisclosureFile: undefined,
     corporateDisclosureFileUrl: undefined,
     hasIrsNotice: undefined,
@@ -849,7 +853,7 @@ export const baseState = {
   user: cloneDeep(emptyUserState),
   userContactEditProgress: {} as { inProgress?: boolean },
   users: [] as RawUser[],
-  validationErrors: {} as Record<string, string>,
+  validationErrors: {} as Record<string, any>,
   viewerDocumentToDisplay: undefined as unknown as ViewerDocument,
   viewerDraftDocumentToDisplay: undefined as unknown as ViewerDocument,
   workItem: {},
@@ -874,7 +878,7 @@ export type CreateCaseIrsForm = {
   size?: number;
   caseType?: string;
   noticeIssuedDate?: string;
-  taxYear?: number;
+  taxYear?: string;
   irsNoticeFileUrl?: string;
   cityAndStateIssuingOffice?: string;
 };
