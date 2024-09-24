@@ -176,6 +176,7 @@ export const SessionAssignmentsForm = connect(
 
               <SelectSearch
                 aria-label="irs-calendar-administrator-info-search-label"
+                data-testid="irs-calendar-administrator-info-search"
                 id="irs-calendar-administrator-info-search"
                 isClearable={true}
                 isMulti={false}

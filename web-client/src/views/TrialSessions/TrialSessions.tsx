@@ -291,6 +291,7 @@ const TrialSessionFilters = connect(
               </label>
               <SelectSearch
                 aria-labelledby="session-type-filter-label"
+                data-testid="trial-session-type-filter-search"
                 id="session-type-filter"
                 name="sessionType"
                 options={trialSessionsHelper.sessionTypeOptions}
@@ -341,6 +342,7 @@ const TrialSessionFilters = connect(
               </label>
               <SelectSearch
                 aria-labelledby="location-filter-label"
+                data-testid="trial-session-location-filter-search"
                 id="location-filter"
                 name="location"
                 options={trialSessionsHelper.trialCitiesByState}
@@ -391,6 +393,7 @@ const TrialSessionFilters = connect(
               </label>
               <SelectSearch
                 aria-labelledby="judges-filter-label"
+                data-testid="trial-session-judge-filter-search"
                 id="judges"
                 name="judges"
                 options={trialSessionsHelper.trialSessionJudgeOptions}

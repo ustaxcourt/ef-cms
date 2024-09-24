@@ -72,7 +72,7 @@ export const CaseAssociationRequest = connect(
               className={classNames(
                 validationErrors.documentType && 'usa-select--error',
               )}
-              data-testid="document-type"
+              data-testid="case-association-document-type-search"
               id="document-type"
               isClearable={true}
               name="documentType"

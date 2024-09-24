@@ -46,7 +46,7 @@ export const CompleteDocumentTypeSection = connect(
 
           <SelectSearch
             aria-labelledby="document-type-label"
-            data-testid="document-type"
+            data-testid="complete-doc-document-type-search"
             id="document-type"
             isClearable={true}
             name="eventCode"
