@@ -80,8 +80,9 @@ const PageButton = (props: {
           aria-label="Page 1"
           className={classNames(
             'usa-pagination__button',
-            'background-none',
-            props.selected && 'usa-current',
+            'cursor-pointer',
+            props.selected && 'paginator-current',
+            !props.selected && 'background-none',
           )}
           onClick={() => props.onClick(props.pageNumber)}
         >
