@@ -26,6 +26,37 @@ describe('submitLoginAction', () => {
     };
   });
 
+  it('should ignore leading/trailing spaces in password entry', async () => {
+    applicationContext.getUseCases().loginInteractor.mockResolvedValue({
+      accessToken: testAccessToken,
+      idToken: testIdToken,
+      refreshToken: testRefreshToken,
+    });
+
+    await runAction(submitLoginAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        authentication: {
+          form: {
+            code: '',
+            confirmPassword: '',
+            email: testEmail,
+            password: ' ' + testPassword + ' ',
+          },
+          tempPassword: '',
+        },
+      },
+    });
+    expect(
+      applicationContext.getUseCases().loginInteractor.mock.calls[0][1],
+    ).toEqual({
+      email: testEmail,
+      password: testPassword,
+    });
+  });
+
   it('should call the success path when user is authenticated successfully', async () => {
     applicationContext.getUseCases().loginInteractor.mockResolvedValue({
       accessToken: testAccessToken,

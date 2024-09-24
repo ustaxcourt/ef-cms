@@ -1,14 +1,14 @@
 import { InputFillType, selectInput, textInput } from './petition-helper';
-import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
+import {
+  loginAsPetitioner,
+  loginAsPrivatePractitioner,
+} from '../../../../helpers/authentication/login-as-helpers';
 
-describe('File a petition', () => {
-  beforeEach(() => {
-    loginAsPetitioner();
-    cy.visit('/file-a-petition/new');
-  });
-
-  describe('Step 1 - Petitioner Information', () => {
+describe('File a petition: Step 1 - Petitioner Information', () => {
+  describe('Petitioner', () => {
     beforeEach(() => {
+      loginAsPetitioner();
+      cy.visit('/file-a-petition/new');
       cy.get('[data-testid="step-indicator-current-step-1-icon"]');
     });
 
@@ -25,7 +25,7 @@ describe('File a petition', () => {
       });
     });
 
-    it('should display a validaiton error message if user does not select filing type', () => {
+    it('should display a validation error message if user does not select filing type', () => {
       cy.get('[data-testid="filling-type-error-message"]').should('not.exist');
 
       cy.get('[data-testid="step-1-next-button"]').click();
@@ -44,6 +44,20 @@ describe('File a petition', () => {
         );
       });
 
+      it('should display correct label for contact name', () => {
+        cy.get('[data-testid="filing-type-0"]').click();
+        cy.get('[data-testid="contact-primary-name-label"]').should(
+          'have.text',
+          'Full Name',
+        );
+      });
+
+      it('should not display email field', () => {
+        cy.get('[data-testid="filing-type-0"]').click();
+        cy.get('[data-testid="contact-primary-paper-petition-email"]').should(
+          'not.exist',
+        );
+      });
       it('should display validation error messages to all required fields left empty', () => {
         const ERROR_MESSAGES_DATA_TEST_ID = [
           'primary-contact-name-error-message',
@@ -162,6 +176,42 @@ describe('File a petition', () => {
 
         cy.get('[data-testid="step-1-next-button"]').click();
         cy.get('[data-testid="step-indicator-current-step-2-icon"]');
+      });
+    });
+  });
+
+  describe('Practitioner', () => {
+    beforeEach(() => {
+      loginAsPrivatePractitioner();
+      cy.visit('/file-a-petition/new');
+    });
+
+    describe('Myself', () => {
+      it('should display correct filing type options for private practitioner', () => {
+        const EXPECTED_FILING_TYPES: string[] = [
+          'Petitioner',
+          'Petitioner and petitioner spouse',
+          'A business',
+          'Other',
+        ];
+        cy.get('.filing-type-radio-option').should('have.length', 4);
+        cy.get('.filing-type-radio-option').each((element, index) => {
+          cy.wrap(element).should('have.text', EXPECTED_FILING_TYPES[index]);
+        });
+      });
+
+      it('should display correct label for contact name', () => {
+        cy.get('[data-testid="filing-type-0"]').click();
+        cy.get('[data-testid="contact-primary-name-label"]').should(
+          'have.text',
+          'Petitioner’s full name',
+        );
+      });
+      it('should display email field', () => {
+        cy.get('[data-testid="filing-type-0"]').click();
+        cy.get('[data-testid="contact-primary-paper-petition-email"]').should(
+          'exist',
+        );
       });
     });
   });

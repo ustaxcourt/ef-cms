@@ -45,7 +45,6 @@ export const InfoNotificationComponent = function InfoNotificationComponent({
           aria-live="polite"
           className={classNames(
             'usa-alert',
-            'info-alert',
             'usa-alert--info',
             isMessageOnly && 'usa-alert-info-message-only',
           )}

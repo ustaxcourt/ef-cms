@@ -74,7 +74,7 @@ npm run build:assets
 # exit on any failure
 set -eo pipefail
 
-if [ -z "${CIRCLE_BRANCH}" ]; then
+if [ -z "${CIRCLE_BRANCH}" ]; then # Build lambda layer for generating pdfs.
   pushd ../../../runtimes/puppeteer/
   sh build-local.sh
   popd

@@ -12,17 +12,22 @@ export const submitLoginAction = async ({
 }> => {
   const { email, password } = get(state.authentication.form);
 
+  const cleanedPassword = password.trim();
+
   try {
     const { accessToken, idToken, refreshToken } = await applicationContext
       .getUseCases()
-      .loginInteractor(applicationContext, { email, password });
+      .loginInteractor(applicationContext, {
+        email,
+        password: cleanedPassword,
+      });
 
     return path.success({ accessToken, idToken, refreshToken });
   } catch (err: any) {
     const originalErrorMessage = err?.originalError?.response?.data;
 
     if (originalErrorMessage === 'NewPasswordRequired') {
-      return path.changePassword({ email, tempPassword: password });
+      return path.changePassword({ email, tempPassword: cleanedPassword });
     }
 
     if (originalErrorMessage === 'Invalid Username or Password') {

@@ -196,6 +196,12 @@ resource "aws_api_gateway_integration" "api_async_integration_get" {
     "content-type": "$input.params('Content-Type')",
     "x-test-user": "$input.params('x-test-user')"
   },
+  "queryStringParameters": {
+    #foreach($param in $input.params().querystring.keySet())
+      "$param": "$util.escapeJavaScript($input.params().querystring.get($param))"
+      #if($foreach.hasNext),#end
+    #end
+  },
   "requestContext" : {
     "account-id" : "$context.identity.accountId",
     "api-id" : "$context.apiId",

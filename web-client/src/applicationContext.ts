@@ -164,11 +164,6 @@ import { getCaseInventoryReportInteractor } from '../../shared/src/proxies/repor
 import { getCaseWorksheetsByJudgeInteractor } from '@shared/proxies/reports/getCaseWorksheetsByJudgeProxy';
 import { getCasesClosedByJudgeInteractor } from '../../shared/src/proxies/reports/getCasesClosedByJudgeProxy';
 import { getCasesForUserInteractor } from '../../shared/src/proxies/getCasesForUserProxy';
-import {
-  getChambersSections,
-  getChambersSectionsLabels,
-  getJudgesChambers,
-} from './business/chambers/getJudgesChambers';
 import { getClinicLetterKey } from '../../shared/src/business/utilities/getClinicLetterKey';
 import { getColdCaseReportInteractor } from '../../shared/src/proxies/reports/getColdCaseReportProxy';
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
@@ -626,6 +621,22 @@ const applicationContext = {
   convertBlobToUInt8Array: async blob => {
     return new Uint8Array(await new Response(blob).arrayBuffer());
   },
+  createCsvString: (
+    data: any[],
+    config: { displayLabel: string; key: string }[],
+  ) => {
+    const headers = config.map(c => `"${c.displayLabel}"`).join();
+    const body = data.reduce((acc, currentData) => {
+      const row = config
+        .map(c => c.key)
+        .map(key => `"${currentData[key]}"`)
+        .join();
+      acc += `${row}\n`;
+      return acc;
+    }, '');
+
+    return `${headers}\n${body}`;
+  },
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:4000';
   },
@@ -676,8 +687,6 @@ const applicationContext = {
   },
   getPersistenceGateway: () => {
     return {
-      getChambersSections,
-      getChambersSectionsLabels,
       getDocument,
       getItem,
       getPdfFromUrl,
@@ -756,7 +765,6 @@ const applicationContext = {
       getFormattedPartiesNameAndTitle,
       getFormattedTrialSessionDetails,
       getJudgeLastName,
-      getJudgesChambers,
       getMonthDayYearInETObj,
       getOtherFilers,
       getPetitionDocketEntry,

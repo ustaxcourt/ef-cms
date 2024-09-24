@@ -6,7 +6,9 @@ export const petitionerViewsDashboard = cerebralTest => {
 
     await cerebralTest.runSequence('gotoDashboardSequence');
 
-    expect(cerebralTest.getState('currentPage')).toEqual('DashboardPetitioner');
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'DashboardExternalUser',
+    );
     expect(cerebralTest.getState('openCases').length).toBeGreaterThan(0);
     cerebralTest.docketNumber = cerebralTest.getState(
       'openCases.0.docketNumber',
