@@ -1,8 +1,4 @@
 import {
-  FORMATS,
-  formatDateString,
-} from '@shared/business/utilities/DateHandler';
-import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
@@ -17,7 +13,6 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { assignSessionsToWeeks } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
-import { getUtilities } from '@web-api/getUtilities';
 
 // Maximum of 6 sessions per week overall.
 const MAX_SESSIONS_PER_WEEK = 6;
@@ -106,12 +101,14 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   // past two terms.
   const previousTwoTerms = getPreviousTwoTerms(termStartDate);
 
-  const citiesFromLastTwoTerms = sessions.map(session => {
-    const termString = `${session.term}, ${session.termYear}`;
-    if (previousTwoTerms.includes(termString)) {
-      return session.trialLocation;
-    }
-  });
+  const citiesFromLastTwoTerms = sessions
+    .filter(session => {
+      const termString = `${session.term}, ${session.termYear}`;
+      return previousTwoTerms.includes(termString);
+    })
+    .map(relevantSession => {
+      return relevantSession.trialLocation!;
+    });
 
   const prospectiveSessionsByCity = createProspectiveTrialSessions({
     calendaringConfig,
@@ -126,6 +123,10 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     termEndDate,
     termStartDate,
   });
+
+  if (scheduledTrialSessions.length < 1) {
+    //tell the user the bad news
+  }
 
   return scheduledTrialSessions;
 };
