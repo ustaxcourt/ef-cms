@@ -28,6 +28,7 @@ export const trialSessionsHelper = (get: Get): any => {
 
   return {
     additionalColumnsShown,
+    showCreateTermButton: permissions.SET_TRIAL_SESSION_CALENDAR,
     showNewTrialSession: permissions.CREATE_TRIAL_SESSION,
     showNoticeIssued: isOpenTab,
     showSessionStatus: isAllTab,
