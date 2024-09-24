@@ -281,7 +281,6 @@ export const PrimaryDocumentForm = connect(
               className="usa-textarea height-8"
               id="additional-info2"
               name="additionalInfo2"
-              type="text"
               value={form.additionalInfo2 || ''}
               onBlur={() => {
                 validateDocketEntrySequence();

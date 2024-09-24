@@ -910,7 +910,10 @@ export type PaymentStatusTypes =
 export const PROCEDURE_TYPES_MAP = {
   regular: 'Regular',
   small: 'Small',
-};
+} as const;
+
+export type ProcedureType =
+  (typeof PROCEDURE_TYPES_MAP)[keyof typeof PROCEDURE_TYPES_MAP];
 
 export const PROCEDURE_TYPES = [
   PROCEDURE_TYPES_MAP.regular,
@@ -963,7 +966,10 @@ export const AUTOMATIC_BLOCKED_REASONS = {
   dueDate: 'Due Date',
   pending: 'Pending Item',
   pendingAndDueDate: 'Pending Item and Due Date',
-};
+} as const;
+
+export type AutomaticBlockedReasons =
+  (typeof AUTOMATIC_BLOCKED_REASONS)[keyof typeof AUTOMATIC_BLOCKED_REASONS];
 
 export const CUSTOM_CASE_REPORT_PAGE_SIZE = 100;
 
@@ -1062,7 +1068,11 @@ export const FILING_TYPES = {
     'A business',
     'Other',
   ],
-};
+} as const;
+
+export type FilingType =
+  | (typeof FILING_TYPES)['petitioner'][number]
+  | (typeof FILING_TYPES)['privatePractitioner'][number];
 
 export const ANSWER_CUTOFF_AMOUNT_IN_DAYS = 45;
 

@@ -77,4 +77,19 @@ describe('setFormValueAction', () => {
     });
     expect(result.state.form.appleType).toEqual(undefined);
   });
+
+  describe('root', () => {
+    it('should save to the specified root level of state', async () => {
+      const TEST_ROOT = 'TEST_ROOT';
+      const result = await runAction(setFormValueAction, {
+        props: {
+          key: 'hasApples',
+          root: TEST_ROOT,
+          value: true,
+        },
+        state: {},
+      });
+      expect(result.state[TEST_ROOT].hasApples).toEqual(true);
+    });
+  });
 });

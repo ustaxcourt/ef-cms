@@ -99,11 +99,9 @@ export const computeTrialSessionFormDataAction = ({
     store.set(state.form.judgeId, selectedJudge.userId);
     store.set(state.form.judge, selectedJudge);
 
-    const JUDGES_CHAMBERS = applicationContext
-      .getUtilities()
-      .getJudgesChambers();
+    const JUDGES_CHAMBERS = get(state.judgesChambers);
 
-    const judge = Object.values(JUDGES_CHAMBERS).find(
+    const judge = JUDGES_CHAMBERS.find(
       ({ section }) => section === selectedJudge.section,
     );
 
