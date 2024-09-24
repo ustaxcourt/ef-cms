@@ -11,10 +11,10 @@ import {
 
 export const assignSessionsToWeeks = ({
   calendaringConfig,
-  endDate,
   prospectiveSessionsByCity,
   specialSessions,
-  startDate,
+  termEndDate,
+  termStartDate,
 }: {
   specialSessions: RawTrialSession[];
   prospectiveSessionsByCity: Record<
@@ -24,8 +24,8 @@ export const assignSessionsToWeeks = ({
       sessionType: TrialSessionTypes;
     }[]
   >;
-  endDate: string;
-  startDate: string;
+  termEndDate: string;
+  termStartDate: string;
   calendaringConfig: {
     maxSessionsPerWeek: number;
     maxSessionsPerLocation: number;
@@ -75,7 +75,10 @@ export const assignSessionsToWeeks = ({
   }
 
   // Get array of weeks in range to loop through
-  const weeksToLoop = getWeeksInRange({ endDate, startDate });
+  const weeksToLoop = getWeeksInRange({
+    endDate: termStartDate,
+    startDate: termEndDate,
+  });
 
   for (const currentWeek of weeksToLoop) {
     const weekOfString = currentWeek;
