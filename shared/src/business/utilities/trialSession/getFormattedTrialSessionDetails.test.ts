@@ -19,9 +19,11 @@ describe('getFormattedTrialSessionDetails', () => {
   beforeEach(() => {
     TRIAL_SESSION = {
       ...MOCK_TRIAL_REGULAR,
+      calendaredCases: [],
       caseOrder: [],
       city: 'Hartford',
       courtReporter: 'Test Court Reporter',
+      eligibleCases: [],
       estimatedEndDate: '2040-11-25T15:00:00.000Z',
       irsCalendarAdministrator: 'Test Calendar Admin',
       postalCode: '12345',
