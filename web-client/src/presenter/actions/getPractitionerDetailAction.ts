@@ -10,7 +10,7 @@ import {
   PractitionerCaseInfo,
   PractitionerDetail,
 } from '@web-client/presenter/state';
-import { getPractitionerCasesInteractor } from '@shared/proxies/practitioners/getPractionerCasesProxy';
+import { getPractitionerCasesInteractor } from '@shared/proxies/practitioners/getPractitionerCasesProxy';
 
 export const getPractitionerDetailAction = async ({
   applicationContext,

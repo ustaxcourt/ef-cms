@@ -8,7 +8,7 @@ import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Get } from 'cerebral';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
 
-const PAGE_SIZE = 1;
+const PAGE_SIZE = 100;
 
 const getPagesToDisplay = ({
   applicationContext,
@@ -33,7 +33,21 @@ const getPagesToDisplay = ({
 export const practitionerInformationHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): {
+  closedCases: any;
+  closedCasesPageNumber: number;
+  closedCasesTotal: number;
+  openCases: any;
+  openCasesPageNumber: number;
+  openCasesTotal: number;
+  showClosedCasesPagination: boolean;
+  showDocumentationTab: boolean;
+  showOpenCasesPagination: boolean;
+  showPrintCaseListLink: boolean;
+  totalClosedCasesPages: number;
+  totalOpenCasesPages: number;
+  userId: string;
+} => {
   const permissions = get(state.permissions);
   const practitionerDetail = get(state.practitionerDetail);
 
@@ -41,8 +55,6 @@ export const practitionerInformationHelper = (
   const isInternalUser = applicationContext
     .getUtilities()
     .isInternalUser(user.role);
-
-  console.log('practitionerDetail', practitionerDetail);
 
   const totalOpenCasesPages = Math.ceil(
     practitionerDetail.openCaseInfo.allCases.length / PAGE_SIZE,

@@ -892,7 +892,7 @@ export type ViewerDocument = {
 
 export type PractitionerDetail = {
   barNumber: string;
-  contact: any; // TODO
+  contact?: any; // TODO
   name: string;
   userId: string;
   openCaseInfo: PractitionerCaseInfo;
@@ -901,6 +901,6 @@ export type PractitionerDetail = {
 };
 
 export type PractitionerCaseInfo = {
-  allCases: any;
+  allCases: any[];
   currentPage: number;
 };
