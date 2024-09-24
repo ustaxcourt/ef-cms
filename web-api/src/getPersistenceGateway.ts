@@ -45,7 +45,6 @@ import { deleteTrialSessionWorkingCopy } from './persistence/dynamo/trialSession
 import { deleteUserCaseNote } from './persistence/dynamo/userCaseNotes/deleteUserCaseNote';
 import { deleteUserConnection } from './persistence/dynamo/notifications/deleteUserConnection';
 import { deleteUserFromCase } from './persistence/dynamo/cases/deleteUserFromCase';
-import { deleteWorkItem } from './persistence/dynamo/workitems/deleteWorkItem';
 import { editPractitionerDocument } from './persistence/dynamo/practitioners/editPractitionerDocument';
 import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { fetchPendingItems } from './persistence/elasticsearch/fetchPendingItems';
@@ -86,9 +85,6 @@ import { getDocketEntryWorksheetsByDocketEntryIds } from '@web-api/persistence/d
 import { getDocketNumbersByStatusAndByJudge } from './persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
 import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
-import { getDocumentQCInboxForUser } from './persistence/dynamo/workitems/getDocumentQCInboxForUser';
-import { getDocumentQCServedForSection } from './persistence/dynamo/workitems/getDocumentQCServedForSection';
-import { getDocumentQCServedForUser } from './persistence/dynamo/workitems/getDocumentQCServedForUser';
 import { getDownloadPolicyUrl } from './persistence/s3/getDownloadPolicyUrl';
 import { getEligibleCasesForTrialCity } from './persistence/dynamo/trialSessions/getEligibleCasesForTrialCity';
 import { getEligibleCasesForTrialSession } from './persistence/dynamo/trialSessions/getEligibleCasesForTrialSession';
@@ -120,8 +116,6 @@ import { getUsersById } from './persistence/dynamo/users/getUsersById';
 import { getUsersBySearchKey } from './persistence/dynamo/users/getUsersBySearchKey';
 import { getUsersInSection } from './persistence/dynamo/users/getUsersInSection';
 import { getWebSocketConnectionsByUserId } from './persistence/dynamo/notifications/getWebSocketConnectionsByUserId';
-import { getWorkItemsByDocketNumber } from './persistence/dynamo/workitems/getWorkItemsByDocketNumber';
-import { getWorkItemsByWorkItemId } from './persistence/dynamo/workitems/getWorkItemsByWorkItemId';
 import { incrementCounter } from './persistence/dynamo/helpers/incrementCounter';
 import { isEmailAvailable } from './persistence/cognito/isEmailAvailable';
 import { isFileExists } from './persistence/s3/isFileExists';
@@ -275,7 +269,6 @@ const gatewayMethods = {
   deleteUserCaseNote,
   deleteUserConnection,
   deleteUserFromCase,
-  deleteWorkItem,
   fetchEventCodesCountForJudges,
   generateAccountConfirmationCode,
   getAccountConfirmationCode,
@@ -312,9 +305,6 @@ const gatewayMethods = {
   getDocketNumbersByUser,
   getDocument,
   getDocumentIdFromSQSMessage,
-  getDocumentQCInboxForUser,
-  getDocumentQCServedForSection,
-  getDocumentQCServedForUser,
   getDownloadPolicyUrl,
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
@@ -348,8 +338,6 @@ const gatewayMethods = {
   getUsersBySearchKey,
   getUsersInSection,
   getWebSocketConnectionsByUserId,
-  getWorkItemsByDocketNumber,
-  getWorkItemsByWorkItemId,
   isEmailAvailable,
   isFileExists,
   refreshConfirmationCodeExpiration,
