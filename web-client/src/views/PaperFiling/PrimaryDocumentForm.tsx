@@ -4,7 +4,7 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Inclusions } from './Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from './SecondaryDocumentForm';
-import { SelectSearch2 } from '@web-client/ustc-ui/Select/SelectSearch2';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -117,7 +117,7 @@ export const PrimaryDocumentForm = connect(
               or use the dropdown to select your document type.
             </span>
 
-            <SelectSearch2
+            <SelectSearch
               aria-label="document-type-label"
               data-testid="primary-document-type-search"
               id="document-type"
@@ -158,7 +158,7 @@ export const PrimaryDocumentForm = connect(
                   docket entry for it.
                 </span>
               </label>
-              <SelectSearch2
+              <SelectSearch
                 aria-label="secondary-document-type-label"
                 data-testid="secondary-document-type-search"
                 id="secondary-document-type"

@@ -1,6 +1,6 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { NonstandardForm } from './NonstandardForm';
-import { SelectSearch2 } from '@web-client/ustc-ui/Select/SelectSearch2';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { reactSelectValue } from '../../ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -63,7 +63,7 @@ export const CompleteDocumentTypeSectionRemainder = connect(
                 or use the dropdown to select your document type.
               </span>
 
-              <SelectSearch2
+              <SelectSearch
                 aria-describedby="secondary-document-type-label"
                 aria-labelledby="secondary-document-type-label"
                 data-testid="secondary-doc-secondary-document-type"

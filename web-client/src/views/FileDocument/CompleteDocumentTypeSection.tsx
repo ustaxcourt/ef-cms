@@ -1,7 +1,7 @@
 import { CompleteDocumentTypeSectionRemainder } from './CompleteDocumentTypeSectionRemainder';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { SelectDocumentWizardOverlay } from './SelectDocumentWizardOverlay';
-import { SelectSearch2 } from '@web-client/ustc-ui/Select/SelectSearch2';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { reactSelectValue } from '../../ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -44,7 +44,7 @@ export const CompleteDocumentTypeSection = connect(
             or use the dropdown to select your document type.
           </span>
 
-          <SelectSearch2
+          <SelectSearch
             aria-labelledby="document-type-label"
             data-testid="document-type"
             id="document-type"

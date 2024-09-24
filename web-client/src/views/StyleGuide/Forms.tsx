@@ -1,5 +1,5 @@
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
-import { SelectSearch2 } from '@web-client/ustc-ui/Select/SelectSearch2';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import React from 'react';
 
 export const Forms = () => (
@@ -143,7 +143,7 @@ export const Forms = () => (
           <label className="usa-label" htmlFor="options-searchable">
             Dropdown label (searchable)
           </label>
-          <SelectSearch2
+          <SelectSearch
             id="options-searchable"
             isClearable={true}
             options={[

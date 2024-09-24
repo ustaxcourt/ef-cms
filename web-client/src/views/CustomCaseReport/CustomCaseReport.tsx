@@ -9,7 +9,7 @@ import { ErrorNotification } from '../ErrorNotification';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
-import { SelectSearch2 } from '@web-client/ustc-ui/Select/SelectSearch2';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
@@ -248,7 +248,7 @@ export const CustomCaseReport = connect(
                   Case status{' '}
                   <span className="optional-light-text">(optional)</span>
                 </label>
-                <SelectSearch2
+                <SelectSearch
                   aria-labelledby="case-status-label"
                   id="case-status"
                   name="caseStatus"
@@ -276,7 +276,7 @@ export const CustomCaseReport = connect(
                   Case types{' '}
                   <span className="optional-light-text">(optional)</span>
                 </label>
-                <SelectSearch2
+                <SelectSearch
                   aria-labelledby="case-type-label"
                   id="case-type"
                   name="eventCode"
@@ -308,7 +308,7 @@ export const CustomCaseReport = connect(
                   Assigned judge{' '}
                   <span className="optional-light-text">(optional)</span>
                 </label>
-                <SelectSearch2
+                <SelectSearch
                   aria-labelledby="judges-label"
                   id="judges"
                   name="judges"
@@ -336,7 +336,7 @@ export const CustomCaseReport = connect(
                   Requested place of trial{' '}
                   <span className="optional-light-text">(optional)</span>
                 </label>
-                <SelectSearch2
+                <SelectSearch
                   aria-labelledby="requested-place-of-trial-label"
                   id="trial-location"
                   name="requestedPlaceOfTrial"

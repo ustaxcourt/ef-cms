@@ -4,7 +4,7 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Inclusions } from '../PaperFiling/Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from '../PaperFiling/SecondaryDocumentForm';
-import { SelectSearch2 } from '@web-client/ustc-ui/Select/SelectSearch2';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { reactSelectValue } from '../../ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
@@ -90,7 +90,7 @@ export const PrimaryDocumentForm = connect(
               Document type
             </label>
 
-            <SelectSearch2
+            <SelectSearch
               aria-describedby="document-type-label"
               id="document-type"
               isClearable={true}
@@ -129,7 +129,7 @@ export const PrimaryDocumentForm = connect(
                   docket entry for it.
                 </span>
               </label>
-              <SelectSearch2
+              <SelectSearch
                 aria-describedby="secondary-document-type-label"
                 id="secondary-document-type"
                 isClearable={true}
