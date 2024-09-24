@@ -1,5 +1,5 @@
 import { FormGroup } from '../FormGroup/FormGroup';
-import React, { useEffect, useRef } from 'react';
+import React, { ChangeEvent, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import datePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-picker/src';
 import dateRangePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-range-picker/src';
@@ -125,8 +125,13 @@ export const DateRangePickerComponent = ({
       );
       if (dateEndInput) {
         if (onChangeEnd) {
-          dateEndInput.addEventListener('change', onChangeEnd);
-          dateEndInput.addEventListener('input', onChangeEnd);
+          dateEndInput.addEventListener('change', event => {
+            onChangeEnd(event as unknown as ChangeEvent<HTMLInputElement>);
+          });
+
+          dateEndInput.addEventListener('input', event => {
+            onChangeEnd(event as unknown as ChangeEvent<HTMLInputElement>);
+          });
         }
         if (onBlurEnd) {
           dateEndInput.addEventListener('blur', onBlurEnd);
@@ -137,8 +142,12 @@ export const DateRangePickerComponent = ({
       );
       if (dateStartInput) {
         if (onChangeStart) {
-          dateStartInput.addEventListener('change', onChangeStart);
-          dateStartInput.addEventListener('input', onChangeStart);
+          dateStartInput.addEventListener('change', event => {
+            onChangeStart(event as unknown as ChangeEvent<HTMLInputElement>);
+          });
+          dateStartInput.addEventListener('input', event => {
+            onChangeStart(event as unknown as ChangeEvent<HTMLInputElement>);
+          });
         }
         if (onBlurStart) {
           dateStartInput.addEventListener('blur', onBlurStart);

@@ -36,8 +36,8 @@ export const docketClerkViewsTrialSessionsTab = (
       state: cerebralTest.getState(),
     });
 
-    const legacyJudge = helper.trialSessionJudges.find(
-      judge => judge.role === 'legacyJudge',
+    const legacyJudge = helper.trialSessionJudgeOptions.find(
+      option => option.value.name === 'Fieri',
     );
 
     if (
