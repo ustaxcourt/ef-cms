@@ -11,6 +11,7 @@ import {
   calculateISODate,
   createISODateAtStartOfDayEST,
 } from '../../../../../shared/src/business/utilities/DateHandler';
+import { getDocumentQCServedForSection } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForSection';
 
 /**
  *
@@ -31,19 +32,14 @@ export const getDocumentQCServedForSectionInteractor = async (
   }
 
   const afterDate = await calculateAfterDate(applicationContext);
-  const workItems = await applicationContext
-    .getPersistenceGateway()
-    .getDocumentQCServedForSection({
-      afterDate,
-      applicationContext,
-      section,
-    });
+  const workItems = await getDocumentQCServedForSection({
+    afterDate,
+    section,
+  });
 
-  const filteredWorkItems = workItems
-    .filter(workItem =>
-      authorizedUser.role === ROLES.petitionsClerk ? !!workItem.section : true,
-    )
-    .map(workItem => new OutboxItem(workItem, { applicationContext }));
+  const filteredWorkItems = workItems.filter(workItem =>
+    authorizedUser.role === ROLES.petitionsClerk ? !!workItem.section : true,
+  );
 
   return OutboxItem.validateRawCollection(filteredWorkItems, {
     applicationContext,

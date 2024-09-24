@@ -9,6 +9,7 @@ import { getSectionInboxMessages } from '@web-api/persistence/postgres/messages/
 import { getUserInboxMessages } from '@web-api/persistence/postgres/messages/getUserInboxMessages';
 import { isEmpty } from 'lodash';
 import { getDocumentQCInboxForSection } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForSection';
+import { getDocumentQCInboxForUser } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 
 const getJudgeUser = async (
   judgeUserId: string,
@@ -102,8 +103,7 @@ export const getNotificationsInteractor = async (
       applicationContext,
       section,
     }),
-    applicationContext.getPersistenceGateway().getDocumentQCInboxForUser({
-      applicationContext,
+    getDocumentQCInboxForUser({
       userId,
     }),
     getDocumentQCInboxForSection({
