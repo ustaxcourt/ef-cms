@@ -5,10 +5,12 @@ import React from 'react';
 
 export function PractitionerCaseList({
   cases,
+  id,
   showStatus,
 }: {
   cases: any;
   showStatus: boolean;
+  id: string;
 }) {
   return (
     <>
@@ -16,7 +18,8 @@ export function PractitionerCaseList({
         <table
           aria-label="Open Cases"
           className="usa-table ustc-table"
-          id={'practitioner-open-cases-table'}
+          data-testid={id}
+          id={id}
         >
           <thead>
             <tr>

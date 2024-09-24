@@ -37,14 +37,12 @@ export const PractitionerInformation = connect(
     const numOpenCases = practitionerInformationHelper.openCasesTotal || 0;
     const numClosedCases = practitionerInformationHelper.closedCasesTotal || 0;
 
-    console.log(practitionerInformationHelper);
-
     const openPagesPaginator = () => {
       return (
         practitionerInformationHelper.showOpenCasesPagination && (
           <Paginator
             currentPageIndex={practitionerInformationHelper.openCasesPageNumber}
-            totalPages={practitionerInformationHelper.totalOpenCasePages}
+            totalPages={practitionerInformationHelper.totalOpenCasesPages}
             onPageChange={selectedPage => {
               setPractitionerOpenCasesPageSequence({
                 pageNumber: selectedPage,
@@ -62,7 +60,7 @@ export const PractitionerInformation = connect(
             currentPageIndex={
               practitionerInformationHelper.closedCasesPageNumber
             }
-            totalPages={practitionerInformationHelper.totalClosedCasePages}
+            totalPages={practitionerInformationHelper.totalClosedCasesPages}
             onPageChange={selectedPage => {
               setPractitionerClosedCasesPageSequence({
                 pageNumber: selectedPage,
@@ -130,6 +128,7 @@ export const PractitionerInformation = connect(
               {openPagesPaginator()}
               <PractitionerCaseList
                 cases={practitionerInformationHelper.openCases}
+                id={'practitioner-open-cases-list'}
                 showStatus={true}
               />
               {openPagesPaginator()}
@@ -141,6 +140,7 @@ export const PractitionerInformation = connect(
               {closedPagesPaginator()}
               <PractitionerCaseList
                 cases={practitionerInformationHelper.closedCases}
+                id={'practitioner-closed-cases-list'}
                 showStatus={false}
               />
               {closedPagesPaginator()}
