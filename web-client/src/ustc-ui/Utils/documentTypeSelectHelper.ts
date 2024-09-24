@@ -30,38 +30,6 @@ export const fileDocumentPrimaryOnChange = ({
   }
 };
 
-export const fileDocumentSecondaryOnChange = ({
-  action,
-  inputValue,
-  updateSequence,
-  validateSequence,
-}) => {
-  switch (action) {
-    case 'select-option':
-      [
-        'category',
-        'documentType',
-        'documentTitle',
-        'eventCode',
-        'scenario',
-      ].forEach(key =>
-        updateSequence({
-          key: `secondaryDocument.${key}`,
-          value: inputValue[key],
-        }),
-      );
-      validateSequence();
-      break;
-    case 'clear':
-      updateSequence({
-        key: 'secondaryDocument.category',
-        value: '',
-      });
-      validateSequence();
-      break;
-  }
-};
-
 export const docketEntryOnChange = ({
   action,
   inputName,

@@ -29,7 +29,6 @@ export const CompleteDocumentTypeSection = connect(
   }) {
     return (
       <React.Fragment>
-        <p>THIS IS ZACH</p>
         <FormGroup errorText={validationErrors.documentType}>
           <label
             className="usa-label"
