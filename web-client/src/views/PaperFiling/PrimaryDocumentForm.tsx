@@ -6,6 +6,7 @@ import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from './SecondaryDocumentForm';
 import { SelectSearch2 } from '@web-client/ustc-ui/Select/SelectSearch2';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -124,6 +125,11 @@ export const PrimaryDocumentForm = connect(
               isMulti={false}
               name="eventCode"
               options={internalTypesHelper.internalDocumentTypesForSelectSorted}
+              value={reactSelectValue({
+                documentTypes:
+                  internalTypesHelper.internalDocumentTypesForSelectSorted,
+                selectedEventCode: form.eventCode,
+              })}
               onChange={inputValue => {
                 const value = inputValue?.value || '';
                 updateDocketEntryFormValueSequence({
@@ -161,6 +167,11 @@ export const PrimaryDocumentForm = connect(
                 options={
                   internalTypesHelper.internalDocumentTypesForSelectSorted
                 }
+                value={reactSelectValue({
+                  documentTypes:
+                    internalTypesHelper.internalDocumentTypesForSelectSorted,
+                  selectedEventCode: form?.secondaryDocument?.eventCode,
+                })}
                 onChange={inputValue => {
                   const value = inputValue?.value || '';
                   updateDocketEntryFormValueSequence({

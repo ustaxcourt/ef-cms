@@ -6,6 +6,7 @@ import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from '../PaperFiling/SecondaryDocumentForm';
 import { SelectSearch2 } from '@web-client/ustc-ui/Select/SelectSearch2';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -94,6 +95,11 @@ export const EditDocketEntryMetaFormDocument = connect(
             isClearable={true}
             name="eventCode"
             options={internalTypesHelper.internalDocumentTypesForSelectSorted}
+            value={reactSelectValue({
+              documentTypes:
+                internalTypesHelper.internalDocumentTypesForSelectWithLegacySorted,
+              selectedEventCode: form.eventCode,
+            })}
             onChange={inputValue => {
               const value = inputValue?.value || '';
               updateDocketEntryMetaDocumentFormValueSequence({
@@ -127,6 +133,11 @@ export const EditDocketEntryMetaFormDocument = connect(
               isClearable={true}
               name="secondaryDocument.eventCode"
               options={internalTypesHelper.internalDocumentTypesForSelectSorted}
+              value={reactSelectValue({
+                documentTypes:
+                  internalTypesHelper.internalDocumentTypesForSelectWithLegacySorted,
+                selectedEventCode: form?.secondaryDocument?.eventCode,
+              })}
               onChange={inputValue => {
                 const value = inputValue?.value || '';
                 updateDocketEntryMetaDocumentFormValueSequence({
