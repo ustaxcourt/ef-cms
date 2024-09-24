@@ -4,11 +4,16 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import {
+  RawWorkItem,
+  WorkItem,
+} from '../../../../../shared/src/business/entities/WorkItem';
 import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 /**
  * completeWorkItemInteractor
@@ -34,13 +39,13 @@ export const completeWorkItem = async (
     throw new UnauthorizedError('Unauthorized for complete workItem');
   }
 
-  const originalWorkItem = await applicationContext
-    .getPersistenceGateway()
-    .getWorkItemById({
-      applicationContext,
-      workItemId,
-    });
-  const originalWorkItemEntity = new WorkItem(originalWorkItem);
+  const originalWorkItemEntity = await getWorkItemById({
+    workItemId,
+  });
+
+  if (!originalWorkItemEntity) {
+    throw new NotFoundError(`WorkItem ${workItemId} was not found.`);
+  }
 
   const completedWorkItem = originalWorkItemEntity
     .setAsCompleted({
@@ -59,8 +64,7 @@ export const completeWorkItem = async (
     },
   });
 
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
+  await saveWorkItem({
     workItem: completedWorkItem,
   });
 
@@ -94,12 +98,13 @@ export const determineEntitiesToLock = async (
   applicationContext: ServerApplicationContext,
   { workItemId }: { workItemId: string },
 ) => {
-  const originalWorkItem: RawWorkItem = await applicationContext
-    .getPersistenceGateway()
-    .getWorkItemById({
-      applicationContext,
-      workItemId,
-    });
+  const originalWorkItem = await getWorkItemById({
+    workItemId,
+  });
+
+  if (!originalWorkItem) {
+    throw new NotFoundError(`WorkItem ${workItemId} was not found.`);
+  }
 
   return {
     identifiers: [`case|${originalWorkItem.docketNumber}`],

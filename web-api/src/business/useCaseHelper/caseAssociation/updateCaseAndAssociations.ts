@@ -11,6 +11,7 @@ import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import diff from 'diff-arrays-of-objects';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 /**
  * Identifies docket entries which have been updated and issues persistence calls
@@ -381,8 +382,7 @@ const updateCaseWorkItems = async ({
   return validWorkItems.map(
     validWorkItem =>
       function () {
-        return applicationContext.getPersistenceGateway().saveWorkItem({
-          applicationContext,
+        return saveWorkItem({
           workItem: validWorkItem,
         });
       },

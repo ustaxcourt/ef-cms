@@ -18,6 +18,7 @@ import { UserCase } from '../../../../shared/src/business/entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '../../../../shared/src/business/entities/WorkItem';
 import { setServiceIndicatorsForCase } from '../../../../shared/src/business/utilities/setServiceIndicatorsForCase';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 
@@ -294,8 +295,7 @@ export const createCaseInteractor = async (
     userId: user.userId,
   });
 
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
+  await saveWorkItem({
     workItem: newWorkItem.validate().toRawObject(),
   });
 

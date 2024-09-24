@@ -6,6 +6,8 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 /**
  * setWorkItemAsReadInteractor
@@ -24,9 +26,11 @@ export const setWorkItemAsReadInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const workItemRecord = await applicationContext
-    .getPersistenceGateway()
-    .getWorkItemById({ applicationContext, workItemId });
+  const workItemRecord = await getWorkItemById({ workItemId });
+
+  if (!workItemRecord) {
+    throw new NotFoundError(`WorkItem ${workItemId} was not found.`);
+  }
 
   const { docketNumber } = workItemRecord;
   const { docketEntryId } = workItemRecord.docketEntry;
@@ -59,8 +63,7 @@ export const setWorkItemAsReadInteractor = async (
     document: docketEntryEntity.validate().toRawObject(),
   });
 
-  return await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
+  return saveWorkItem({
     workItem: docketEntryEntity.workItem.validate().toRawObject(),
   });
 };

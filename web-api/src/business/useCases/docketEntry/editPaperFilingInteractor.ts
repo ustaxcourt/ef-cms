@@ -20,6 +20,7 @@ import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { cloneDeep, uniq } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
@@ -480,8 +481,7 @@ const updateAndSaveWorkItem = async ({
     sentByUserId: user.userId,
   });
 
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
+  await saveWorkItem({
     workItem: workItem.validate().toRawObject(),
   });
 };

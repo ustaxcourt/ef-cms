@@ -11,6 +11,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { addCoverToPdf } from '../../useCases/addCoverToPdf';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 /**
  * This function isolates task of generating the Docket Entry
@@ -165,8 +166,7 @@ const createWorkItemForChange = async ({
 
   changeOfAddressDocketEntry.setWorkItem(workItem);
 
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
+  await saveWorkItem({
     workItem: workItem.validate().toRawObject(),
   });
 };

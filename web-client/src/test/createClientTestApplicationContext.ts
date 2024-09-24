@@ -94,12 +94,10 @@ import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCo
 import { getTextByCount } from '@shared/business/utilities/getTextByCount';
 import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 import { getUserById as getUserByIdPersistence } from '@web-api/persistence/dynamo/users/getUserById';
-import { getWorkItemById as getWorkItemByIdPersistence } from '@web-api/persistence/dynamo/workitems/getWorkItemById';
 import { incrementCounter } from '@web-api/persistence/dynamo/helpers/incrementCounter';
 import { putWorkItemInOutbox } from '@web-api/persistence/dynamo/workitems/putWorkItemInOutbox';
 import { removeItem } from '@web-client/persistence/localStorage/removeItem';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
-import { saveWorkItem } from '@web-api/persistence/dynamo/workitems/saveWorkItem';
 import { sealCaseInteractor } from '@shared/proxies/sealCaseProxy';
 import { sealDocketEntryInteractor } from '@shared/proxies/editDocketEntry/sealDocketEntryProxy';
 import { serveCaseDocument } from '@shared/business/utilities/serveCaseDocument';
@@ -473,7 +471,6 @@ const createTestApplicationContext = () => {
     getTrialSessionJobStatusForCase: jest.fn(),
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getUserCaseMappingsByDocketNumber: jest.fn().mockReturnValue([]),
-    getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     getWorkItemsByDocketNumber: jest.fn().mockReturnValue([]),
     incrementCounter,
     incrementKeyCount: jest.fn(),
@@ -484,7 +481,6 @@ const createTestApplicationContext = () => {
     removeItem: jest.fn().mockImplementation(removeItem),
     saveDispatchNotification: jest.fn(),
     saveDocumentFromLambda: jest.fn(),
-    saveWorkItem: jest.fn().mockImplementation(saveWorkItem),
     setExpiresAt: jest.fn(),
     setItem: jest.fn().mockImplementation(setItem),
     setPriorityOnAllWorkItems: jest.fn(),

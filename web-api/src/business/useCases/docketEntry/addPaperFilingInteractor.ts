@@ -18,6 +18,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -145,7 +146,7 @@ export const addPaperFiling = async (
       docketEntryEntity.setAsServed(servedParties.all);
     }
 
-    await saveWorkItem({
+    await saveWorkItemInternal({
       applicationContext,
       isReadyForService,
       workItem,
@@ -232,7 +233,7 @@ export const addPaperFiling = async (
  * @param {boolean} providers.isSavingForLater Whether or not we are saving these work items for later
  * @param {object} providers.workItem The work item we are saving
  */
-const saveWorkItem = async ({
+const saveWorkItemInternal = async ({
   applicationContext,
   isReadyForService,
   workItem,
@@ -248,8 +249,7 @@ const saveWorkItem = async ({
     });
   }
 
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
+  await saveWorkItem({
     workItem: workItemRaw,
   });
 };
