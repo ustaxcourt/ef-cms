@@ -5,11 +5,9 @@ import { navigateToLoginAction } from '@web-client/presenter/actions/Login/navig
 import { navigateToPathAction } from '@web-client/presenter/actions/navigateToPathAction';
 import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertErrorAction';
 import { setSaveAlertsForNavigationAction } from '@web-client/presenter/actions/setSaveAlertsForNavigationAction';
-import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setTokenAction } from '@web-client/presenter/actions/Login/setTokenAction';
 import { setUserAction } from '@web-client/presenter/actions/setUserAction';
 import { setUserPermissionsAction } from '@web-client/presenter/actions/setUserPermissionsAction';
-import { setValidationAlertErrorsAction } from '@web-client/presenter/actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '@web-client/presenter/actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
 import { submitChangePasswordAction } from '@web-client/presenter/actions/Login/submitChangePasswordAction';
@@ -20,11 +18,7 @@ export const submitChangePasswordSequence = [
     clearAlertsAction,
     validateChangePasswordFormAction,
     {
-      error: [
-        setValidationErrorsAction,
-        setScrollToErrorNotificationAction,
-        setValidationAlertErrorsAction,
-      ],
+      error: [setValidationErrorsAction],
       success: [
         submitChangePasswordAction,
         {

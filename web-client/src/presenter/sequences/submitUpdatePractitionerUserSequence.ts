@@ -26,7 +26,11 @@ export const submitUpdatePractitionerUserSequence = [
   startShowValidationAction,
   validatePractitionerAction,
   {
-    error: [setValidationErrorsAction, setValidationAlertErrorsAction],
+    error: [
+      setValidationErrorsAction,
+      setScrollToErrorNotificationAction,
+      setValidationAlertErrorsAction,
+    ],
     success: [
       setWaitingForResponseAction,
       hasUpdatedEmailFactoryAction('updatedEmail'),
