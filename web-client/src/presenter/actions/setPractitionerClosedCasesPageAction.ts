@@ -7,5 +7,5 @@ export const setPractitionerClosedCasesPageAction = ({
   pageNumber: number;
 }>) => {
   const { pageNumber } = props;
-  store.set(state.practitionerDetail.closedCaseDetails.currentPage, pageNumber);
+  store.set(state.practitionerDetail.closedCaseInfo.currentPage, pageNumber);
 };

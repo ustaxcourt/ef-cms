@@ -895,12 +895,12 @@ export type PractitionerDetail = {
   contact: any; // TODO
   name: string;
   userId: string;
-  openCaseDetail: PractitionerCaseDetail;
-  closedCaseDetails: PractitionerCaseDetail;
+  openCaseInfo: PractitionerCaseInfo;
+  closedCaseInfo: PractitionerCaseInfo;
   email?: string;
 };
 
-export type PractitionerCaseDetail = {
+export type PractitionerCaseInfo = {
   allCases: any;
   currentPage: number;
 };

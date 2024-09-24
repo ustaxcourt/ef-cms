@@ -4,14 +4,36 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { formatCase } from '@shared/business/utilities/getFormattedCaseDetail';
 import { state } from '@web-client/presenter/app.cerebral';
 
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Get } from 'cerebral';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
+
+const PAGE_SIZE = 1;
+
+const getPagesToDisplay = ({
+  applicationContext,
+  cases,
+  pageNumber,
+  user,
+}: {
+  pageNumber: number;
+  cases: any[];
+  applicationContext: ClientApplicationContext;
+  user: AuthUser;
+}) => {
+  return cases
+    .slice(pageNumber * PAGE_SIZE, (pageNumber + 1) * PAGE_SIZE)
+    .map(c => {
+      c = formatCase(applicationContext, c, user);
+      c.sealedToTooltip = getSealedDocketEntryTooltip(applicationContext, c);
+      return c;
+    });
+};
+
 export const practitionerInformationHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const PAGE_SIZE = 3;
-
   const permissions = get(state.permissions);
   const practitionerDetail = get(state.practitionerDetail);
 
@@ -22,52 +44,44 @@ export const practitionerInformationHelper = (
 
   console.log('practitionerDetail', practitionerDetail);
 
-  const totalOpenCasePages = Math.ceil(
-    practitionerDetail.openCaseDetail.allCases.length / PAGE_SIZE,
+  const totalOpenCasesPages = Math.ceil(
+    practitionerDetail.openCaseInfo.allCases.length / PAGE_SIZE,
   );
 
   const totalClosedCasesPages = Math.ceil(
-    practitionerDetail.closedCaseDetails.allCases.length / PAGE_SIZE,
+    practitionerDetail.closedCaseInfo.allCases.length / PAGE_SIZE,
   );
 
-  const showOpenCasesPagination = totalOpenCasePages > 1;
+  const showOpenCasesPagination = totalOpenCasesPages > 1;
   const showClosedCasesPagination = totalClosedCasesPages > 1;
 
-  const openCasesToDisplay = practitionerDetail.openCaseDetail.allCases
-    .slice(
-      practitionerDetail.openCaseDetail.currentPage * PAGE_SIZE,
-      (practitionerDetail.openCaseDetail.currentPage + 1) * PAGE_SIZE,
-    )
-    .map(c => {
-      c = formatCase(applicationContext, c, user);
-      c.sealedToTooltip = getSealedDocketEntryTooltip(applicationContext, c);
-      return c;
-    });
+  const openCasesToDisplay = getPagesToDisplay({
+    applicationContext,
+    cases: practitionerDetail.openCaseInfo.allCases,
+    pageNumber: practitionerDetail.openCaseInfo.currentPage,
+    user,
+  });
 
-  const closedCasesToDisplay = practitionerDetail.closedCaseDetails.allCases
-    .slice(
-      practitionerDetail.closedCaseDetails.currentPage * PAGE_SIZE,
-      (practitionerDetail.closedCaseDetails.currentPage + 1) * PAGE_SIZE,
-    )
-    .map(c => {
-      c = formatCase(applicationContext, c, user);
-      c.sealedToTooltip = getSealedDocketEntryTooltip(applicationContext, c);
-      return c;
-    });
+  const closedCasesToDisplay = getPagesToDisplay({
+    applicationContext,
+    cases: practitionerDetail.closedCaseInfo.allCases,
+    pageNumber: practitionerDetail.closedCaseInfo.currentPage,
+    user,
+  });
 
   return {
     closedCases: closedCasesToDisplay,
-    closedCasesPageNumber: practitionerDetail.closedCaseDetails.currentPage,
-    closedCasesTotal: practitionerDetail.closedCaseDetails.allCases.length,
+    closedCasesPageNumber: practitionerDetail.closedCaseInfo.currentPage,
+    closedCasesTotal: practitionerDetail.closedCaseInfo.allCases.length,
     openCases: openCasesToDisplay,
-    openCasesPageNumber: practitionerDetail.openCaseDetail.currentPage,
-    openCasesTotal: practitionerDetail.openCaseDetail.allCases.length,
+    openCasesPageNumber: practitionerDetail.openCaseInfo.currentPage,
+    openCasesTotal: practitionerDetail.openCaseInfo.allCases.length,
     showClosedCasesPagination,
     showDocumentationTab: permissions.UPLOAD_PRACTITIONER_DOCUMENT,
     showOpenCasesPagination,
     showPrintCaseListLink: isInternalUser,
     totalClosedCasesPages,
-    totalOpenCasePages,
+    totalOpenCasesPages,
     userId: practitionerDetail.userId,
   };
 };

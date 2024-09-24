@@ -7,7 +7,7 @@
  */
 
 import {
-  PractitionerCaseDetail,
+  PractitionerCaseInfo,
   PractitionerDetail,
 } from '@web-client/presenter/state';
 import { getPractitionerCasesInteractor } from '@shared/proxies/practitioners/getPractionerCasesProxy';
@@ -29,16 +29,16 @@ export const getPractitionerDetailAction = async ({
     { userId: practitionerDetail.userId },
   );
 
-  const openCaseDetail: PractitionerCaseDetail = {
+  const openCaseInfo: PractitionerCaseInfo = {
     allCases: openCases,
     currentPage: 0,
   };
-  const closedCaseDetail: PractitionerCaseDetail = {
+  const closedCaseInfo: PractitionerCaseInfo = {
     allCases: closedCases,
     currentPage: 0,
   };
-  practitionerDetail.openCaseDetail = openCaseDetail;
-  practitionerDetail.closedCaseDetails = closedCaseDetail;
+  practitionerDetail.openCaseInfo = openCaseInfo;
+  practitionerDetail.closedCaseInfo = closedCaseInfo;
 
   return { practitionerDetail };
 };
