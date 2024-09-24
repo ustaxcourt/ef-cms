@@ -17,14 +17,14 @@ export const TrialSessions = connect(
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
     showModal: state.modal.showModal,
-    showNewTrialSession: state.trialSessionsHelper.showNewTrialSession,
+    trialSessionsHelper: state.trialSessionsHelper,
   },
   function TrialSessions({
     defaultTab,
     openCreateTermModalSequence,
     openTrialSessionPlanningModalSequence,
     showModal,
-    showNewTrialSession,
+    trialSessionsHelper,
   }) {
     return (
       <>
@@ -40,14 +40,16 @@ export const TrialSessions = connect(
             id="trial-sessions-tabs"
           >
             <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
-              <Button
-                link
-                className="margin-top-1"
-                icon={['far', 'calendar']}
-                onClick={() => openCreateTermModalSequence()}
-              >
-                Create Term
-              </Button>
+              {trialSessionsHelper.showCreateTermButton && (
+                <Button
+                  link
+                  className="margin-top-1"
+                  icon={['far', 'calendar']}
+                  onClick={() => openCreateTermModalSequence()}
+                >
+                  Create Term
+                </Button>
+              )}
               <Button
                 link
                 className="margin-top-1"
@@ -57,7 +59,7 @@ export const TrialSessions = connect(
                 Trial Session Planning Report
               </Button>
             </div>
-            {showNewTrialSession && (
+            {trialSessionsHelper.showNewTrialSession && (
               <Button
                 className="tab-right-button"
                 data-testid="add-trial-session-button"
@@ -67,7 +69,7 @@ export const TrialSessions = connect(
                 Add Trial Session
               </Button>
             )}
-            {showNewTrialSession && (
+            {trialSessionsHelper.showNewTrialSession && (
               <Tab
                 data-testid="new-trial-sessions-tab"
                 id="new-trial-sessions-tab"

@@ -1,11 +1,16 @@
 import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '@shared/authorization/authorizationClientService';
+import {
   SESSION_STATUS_TYPES,
   SESSION_TERMS_BY_MONTH,
   SESSION_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
-// import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { assignSessionsToWeeks } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 import { getUtilities } from '@web-api/getUtilities';
@@ -46,10 +51,14 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     startDate,
     // termName,
   }: { endDate: string; startDate: string; termName: string },
-  //TODO: check for auth
-  // authorizedUser: UnknownAuthUser,
+  authorizedUser: UnknownAuthUser,
 ) => {
-  console.log('!!!!!!!!! we don it');
+  if (
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.SET_TRIAL_SESSION_CALENDAR)
+  ) {
+    throw new UnauthorizedError('Unauthorized to generate term');
+  }
+
   //
   // Maximum of 6 sessions per week
   // Maximum of 5 sessions total per location
