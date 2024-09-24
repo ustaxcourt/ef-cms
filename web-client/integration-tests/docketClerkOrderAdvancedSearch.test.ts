@@ -147,6 +147,7 @@ describe('Docket clerk advanced order search', () => {
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+        scrollToErrorNotification: true,
         startDate: '01/01/3001',
       },
     });
@@ -156,7 +157,7 @@ describe('Docket clerk advanced order search', () => {
     expect(cerebralTest.getState('alertError')).toEqual({
       messages: ['Start date cannot be in the future. Enter valid start date.'],
       scrollToErrorNotification: true,
-      title: 'Please correct the following errors:',
+      title: 'Please correct the following errors on the page:',
     });
 
     await cerebralTest.runSequence('advancedSearchTabChangeSequence');
