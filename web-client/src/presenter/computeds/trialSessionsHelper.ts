@@ -29,7 +29,6 @@ export const trialSessionsHelper = (
   showNewTrialSession: boolean;
   showNoticeIssued: boolean;
   showSessionStatus: boolean;
-  showUnassignedJudgeFilter: boolean;
   trialSessionJudgeOptions: {
     label: string;
     value: { name: string; userId: string };
@@ -86,6 +85,15 @@ export const trialSessionsHelper = (
       value: { name: trialSessionJudge.name, userId: trialSessionJudge.userId },
     }),
   );
+
+  const showUnassignedJudgeFilter = filters.currentTab === 'new';
+  if (showUnassignedJudgeFilter) {
+    trialSessionJudgeOptions.push({
+      label: 'Unassigned',
+      value: { name: 'Unassigned', userId: 'unassigned' },
+    });
+  }
+
   const states = getTrialCitiesGroupedByState();
 
   const { endDateErrorMessage, startDateErrorMessage } =
@@ -116,7 +124,6 @@ export const trialSessionsHelper = (
     showNewTrialSession: permissions.CREATE_TRIAL_SESSION,
     showNoticeIssued: filters.currentTab === 'calendared',
     showSessionStatus: filters.currentTab === 'calendared',
-    showUnassignedJudgeFilter: filters.currentTab === 'new',
     startDateErrorMessage,
     totalPages: Math.ceil(filteredTrialSessions.length / pageSize),
     trialCitiesByState: states,
