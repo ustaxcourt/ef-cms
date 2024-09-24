@@ -2,18 +2,14 @@ import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const validateCreateTermModalAction = ({ get, path }: ActionProps) => {
-  const { term, termEndDate, termName, termStartDate } = get(state.modal);
+  const { termEndDate, termName, termStartDate } = get(state.modal);
 
   const errors: {
-    term?: string;
     termEndDate?: string;
     termName?: string;
     termStartDate?: string;
   } = {};
 
-  if (!term) {
-    errors.term = 'Select a term';
-  }
   if (!termName) {
     errors.termName = 'Enter a term name';
   }

@@ -66,6 +66,7 @@ import { generatePractitionerCaseListPdfLambda } from './lambdas/cases/generateP
 import { generatePrintableCaseInventoryReportLambda } from './lambdas/reports/generatePrintableCaseInventoryReportLambda';
 import { generatePrintableFilingReceiptLambda } from './lambdas/documents/generatePrintableFilingReceiptLambda';
 import { generatePrintablePendingReportLambda } from './lambdas/pendingItems/generatePrintablePendingReportLambda';
+import { generateSuggestedTrialSessionCalendarLambda } from '@web-api/lambdas/trialSessions/generateSuggestedTrialSessionCalendarLambda';
 import { generateTrialCalendarPdfLambda } from './lambdas/trialSessions/generateTrialCalendarPdfLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
 import { getAllUsersByRoleLambda } from '@web-api/lambdas/users/getAllUsersByRoleLambda';
@@ -976,6 +977,10 @@ app.delete(
   app.post(
     '/judge-activity-report/trial-sessions',
     lambdaWrapper(getTrialSessionsForJudgeActivityReportLambda),
+  );
+  app.post(
+    '/trial-sessions/generate-term',
+    lambdaWrapper(generateSuggestedTrialSessionCalendarLambda),
   );
 }
 
