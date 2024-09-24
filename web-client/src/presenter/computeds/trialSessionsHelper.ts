@@ -50,13 +50,13 @@ export const trialSessionsHelper = (
   const judge = get(state.judgeUser);
   const judges = get(state.judges);
 
-  const pageSize = 5; // set this to sane value for testing purposes
+  const pageSize = 100;
 
   const showCurrentJudgesOnly =
     filters.currentTab === 'new' ||
     filters.sessionStatus === SESSION_STATUS_TYPES.open;
 
-  let trialSessionJudges: { name: string; userId: string }[]; // 10409 TODO BUG. The judge options is not updating correctly. Showing legacy when it should not.
+  let trialSessionJudges: { name: string; userId: string }[];
   if (showCurrentJudgesOnly) {
     trialSessionJudges = judges;
   } else {
