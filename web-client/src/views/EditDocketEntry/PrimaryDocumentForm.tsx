@@ -4,13 +4,9 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Inclusions } from '../PaperFiling/Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from '../PaperFiling/SecondaryDocumentForm';
-import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
+import { SelectSearch2 } from '@web-client/ustc-ui/Select/SelectSearch2';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import {
-  docketEntryOnChange,
-  onInputChange,
-  reactSelectValue,
-} from '../../ustc-ui/Utils/documentTypeSelectHelper';
+import { reactSelectValue } from '../../ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
@@ -24,7 +20,6 @@ export const PrimaryDocumentForm = connect(
     internalTypesHelper: state.internalTypesHelper,
     updateDocketEntryFormValueSequence:
       sequences.updateDocketEntryFormValueSequence,
-    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
@@ -35,7 +30,6 @@ export const PrimaryDocumentForm = connect(
     formatAndUpdateDateFromDatePickerSequence,
     internalTypesHelper,
     updateDocketEntryFormValueSequence,
-    updateScreenMetadataSequence,
     validateDocketEntrySequence,
     validationErrors,
   }) {
@@ -96,7 +90,7 @@ export const PrimaryDocumentForm = connect(
               Document type
             </label>
 
-            <SelectSearch
+            <SelectSearch2
               aria-describedby="document-type-label"
               id="document-type"
               isClearable={true}
@@ -107,22 +101,14 @@ export const PrimaryDocumentForm = connect(
                   internalTypesHelper.internalDocumentTypesForSelectWithLegacySorted,
                 selectedEventCode: form.eventCode,
               })}
-              onChange={(inputValue, { action, name: inputName }) => {
-                docketEntryOnChange({
-                  action,
-                  inputName,
-                  inputValue,
-                  updateSequence: updateDocketEntryFormValueSequence,
-                  validateSequence: validateDocketEntrySequence,
+              onChange={inputValue => {
+                const value = inputValue?.value || '';
+                updateDocketEntryFormValueSequence({
+                  key: 'eventCode',
+                  value,
                 });
+                validateDocketEntrySequence();
                 return true;
-              }}
-              onInputChange={(inputText, { action }) => {
-                onInputChange({
-                  action,
-                  inputText,
-                  updateSequence: updateScreenMetadataSequence,
-                });
               }}
             />
           </FormGroup>
@@ -143,7 +129,7 @@ export const PrimaryDocumentForm = connect(
                   docket entry for it.
                 </span>
               </label>
-              <SelectSearch
+              <SelectSearch2
                 aria-describedby="secondary-document-type-label"
                 id="secondary-document-type"
                 isClearable={true}
@@ -157,22 +143,13 @@ export const PrimaryDocumentForm = connect(
                   selectedEventCode:
                     form.secondaryDocument && form.secondaryDocument.eventCode,
                 })}
-                onChange={(inputValue, { action, name: inputName }) => {
-                  docketEntryOnChange({
-                    action,
-                    inputName,
-                    inputValue,
-                    updateSequence: updateDocketEntryFormValueSequence,
-                    validateSequence: validateDocketEntrySequence,
+                onChange={inputValue => {
+                  const value = inputValue?.value || '';
+                  updateDocketEntryFormValueSequence({
+                    key: 'secondaryDocument.eventCode',
+                    value,
                   });
-                  return true;
-                }}
-                onInputChange={(inputText, { action }) => {
-                  onInputChange({
-                    action,
-                    inputText,
-                    updateSequence: updateScreenMetadataSequence,
-                  });
+                  validateDocketEntrySequence();
                 }}
               />
             </FormGroup>
