@@ -125,7 +125,7 @@ describe('trialSessionsHelper', () => {
     });
   });
 
-  describe('showUnassignedJudgeFilter', () => {
+  describe('trialSessionJudgeOptions', () => {
     it('should show the `unassigned` judge filter when on the new tab', () => {
       trialSessionsPageState.filters.currentTab = 'new';
 
@@ -137,10 +137,13 @@ describe('trialSessionsHelper', () => {
         },
       });
 
-      expect(result.showUnassignedJudgeFilter).toBeTruthy();
+      expect(result.trialSessionJudgeOptions[2]).toEqual({
+        label: 'Unassigned',
+        value: { name: 'Unassigned', userId: 'unassigned' },
+      });
     });
 
-    it('should show the `unassigned` judge filter when on the calendared tab', () => {
+    it('should not show the `unassigned` judge filter when on the calendared tab', () => {
       trialSessionsPageState.filters.currentTab = 'calendared';
 
       const result = runCompute(trialSessionsHelper, {
@@ -151,7 +154,7 @@ describe('trialSessionsHelper', () => {
         },
       });
 
-      expect(result.showUnassignedJudgeFilter).toEqual(false);
+      expect(result.trialSessionJudgeOptions.length).toEqual(2);
     });
   });
 
@@ -197,15 +200,21 @@ describe('trialSessionsHelper', () => {
         },
       });
 
-      expect(result.trialSessionJudgeOptions).toEqual([
-        {
-          label: 'Sotomayor',
-          value: {
-            name: 'Sotomayor',
-            userId: '43b00e5f-b78c-476c-820e-5d6ed1d58828',
-          },
+      expect(result.trialSessionJudgeOptions).toContain({
+        label: judgeUser.name,
+        value: {
+          name: judgeUser.name,
+          userId: judgeUser.userId,
         },
-      ]);
+      });
+
+      expect(result.trialSessionJudgeOptions).not.toContain({
+        label: legacyJudgeUser.name,
+        value: {
+          name: legacyJudgeUser.name,
+          userId: legacyJudgeUser.userId,
+        },
+      });
     });
 
     it('returns only current judges when the session status is open', () => {
