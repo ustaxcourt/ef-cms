@@ -330,9 +330,9 @@ describe('trialSessionsHelper', () => {
         );
       });
 
-      it('should not filter trial sessions by judge when judge filter is All', () => {
+      it('should not filter trial sessions by judge when judge filter is empty', () => {
         trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
-        trialSessionsPageState.filters.judgeId = 'All';
+        trialSessionsPageState.filters.judges = {};
         const result = runCompute(trialSessionsHelper, {
           state: {
             judges: [judgeUser, judgeColvin],
