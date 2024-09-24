@@ -262,14 +262,19 @@ describe('trialSessionsHelper', () => {
   describe('trialSessionRows', () => {
     describe('filters', () => {
       it('should filter trial sessions by judge', () => {
-        trialSession1.judge!.userId = '1';
-        trialSession2.judge!.userId = '2';
+        trialSession1.judge!.userId = '43b00e5f-b78c-476c-820e-5d6ed1d58828';
+        trialSession2.judge!.userId = 'd17b07dc-6455-447e-bea3-f91d12ac5a6';
         trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
-        trialSessionsPageState.filters.judgeId = '1';
+        trialSessionsPageState.filters.judges = {
+          'd17b07dc-6455-447e-bea3-f91d12ac5a6': {
+            name: 'Colvin',
+            userId: 'd17b07dc-6455-447e-bea3-f91d12ac5a6',
+          },
+        };
 
         const result = runCompute(trialSessionsHelper, {
           state: {
-            judges: [judgeUser],
+            judges: [judgeUser, judgeColvin],
             permissions: getUserPermissions(docketClerk1User),
             trialSessionsPage: trialSessionsPageState,
           },
@@ -280,15 +285,21 @@ describe('trialSessionsHelper', () => {
         expect(trialSessionsOnly.length).toEqual(1);
       });
 
+      // NOTE: This test passes, but I am unable to find when the userId for a judge would be set to unassigned
       it('should only show trial sessions who do not have a judge when the judge filter is "unassigned"', () => {
         trialSession1.judge = undefined;
         trialSession2.judge!.userId = '2';
         trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
-        trialSessionsPageState.filters.judgeId = 'unassigned';
+        trialSessionsPageState.filters.judges = {
+          'd17b07dc-6455-447e-bea3-f91d12ac5a6a': {
+            name: 'Colvin',
+            userId: 'unassigned',
+          },
+        };
 
         const result = runCompute(trialSessionsHelper, {
           state: {
-            judges: [judgeUser],
+            judges: [],
             permissions: getUserPermissions(docketClerk1User),
             trialSessionsPage: trialSessionsPageState,
           },
@@ -302,13 +313,9 @@ describe('trialSessionsHelper', () => {
         );
       });
 
-      // #ix this
-      // TODO: This test is affectd by pagination now. Ergo, one trial sessionis filtered out
-      //      when it should not be base on this test
       it('should not filter trial sessions by judge when judge filter is All', () => {
         trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
         trialSessionsPageState.filters.judgeId = 'All';
-        console.log('Trial Sessions: ', trialSessionsPageState.trialSessions);
         const result = runCompute(trialSessionsHelper, {
           state: {
             judges: [judgeUser, judgeColvin],
@@ -316,7 +323,6 @@ describe('trialSessionsHelper', () => {
             trialSessionsPage: trialSessionsPageState,
           },
         });
-        console.log('TrialSessionRows: ', result.trialSessionRows);
 
         const trialSessionsOnly =
           result.trialSessionRows.filter(isTrialSessionRow);
