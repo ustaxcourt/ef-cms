@@ -322,11 +322,8 @@ button {
 }
 
 .create-term-modal {
+  min-width: 550px;
   overflow-y: visible;
-
-  .usa-date-picker {
-    min-width: unset;
-  }
 }
 
 .add-consolidated-case-search-modal {
