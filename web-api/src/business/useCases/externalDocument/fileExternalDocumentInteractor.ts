@@ -16,6 +16,7 @@ import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { pick } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 /**
  * fileExternalDocumentInteractor
@@ -218,8 +219,7 @@ export const fileExternalDocument = async (
         });
 
         for (let workItem of workItems) {
-          await applicationContext.getPersistenceGateway().saveWorkItem({
-            applicationContext,
+          saveWorkItem({
             workItem: workItem.validate().toRawObject(),
           });
         }

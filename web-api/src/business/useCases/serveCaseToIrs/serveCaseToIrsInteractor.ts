@@ -32,6 +32,7 @@ import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities
 import { getClinicLetterKey } from '../../../../../shared/src/business/utilities/getClinicLetterKey';
 import { random, remove } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
@@ -122,8 +123,7 @@ const createPetitionWorkItems = async ({
     workItem: initializeCaseWorkItem.validate().toRawObject(),
   });
 
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
+  await saveWorkItem({
     workItem: initializeCaseWorkItem.validate().toRawObject(),
   });
 };

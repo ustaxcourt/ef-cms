@@ -86,7 +86,6 @@ import { getDocketEntryWorksheetsByDocketEntryIds } from '@web-api/persistence/d
 import { getDocketNumbersByStatusAndByJudge } from './persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
 import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
-import { getDocumentQCInboxForSection } from './persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
 import { getDocumentQCInboxForUser } from './persistence/dynamo/workitems/getDocumentQCInboxForUser';
 import { getDocumentQCServedForSection } from './persistence/dynamo/workitems/getDocumentQCServedForSection';
 import { getDocumentQCServedForUser } from './persistence/dynamo/workitems/getDocumentQCServedForUser';
@@ -121,7 +120,6 @@ import { getUsersById } from './persistence/dynamo/users/getUsersById';
 import { getUsersBySearchKey } from './persistence/dynamo/users/getUsersBySearchKey';
 import { getUsersInSection } from './persistence/dynamo/users/getUsersInSection';
 import { getWebSocketConnectionsByUserId } from './persistence/dynamo/notifications/getWebSocketConnectionsByUserId';
-import { getWorkItemById } from './persistence/dynamo/workitems/getWorkItemById';
 import { getWorkItemsByDocketNumber } from './persistence/dynamo/workitems/getWorkItemsByDocketNumber';
 import { getWorkItemsByWorkItemId } from './persistence/dynamo/workitems/getWorkItemsByWorkItemId';
 import { incrementCounter } from './persistence/dynamo/helpers/incrementCounter';
@@ -139,7 +137,6 @@ import {
 import { saveDispatchNotification } from './persistence/dynamo/notifications/saveDispatchNotification';
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
 import { saveUserConnection } from './persistence/dynamo/notifications/saveUserConnection';
-import { saveWorkItem } from './persistence/dynamo/workitems/saveWorkItem';
 import { saveWorkItemForDocketClerkFilingExternalDocument } from './persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument';
 import { setChangeOfAddressCaseAsDone } from './persistence/dynamo/jobs/ChangeOfAddress/setChangeOfAddressCaseAsDone';
 import { setPriorityOnAllWorkItems } from './persistence/dynamo/workitems/setPriorityOnAllWorkItems';
@@ -235,7 +232,6 @@ const gatewayMethods = {
     saveDispatchNotification,
     saveDocumentFromLambda,
     saveUserConnection,
-    saveWorkItem,
     saveWorkItemForDocketClerkFilingExternalDocument,
     setExpiresAt,
     setPriorityOnAllWorkItems,
@@ -316,7 +312,6 @@ const gatewayMethods = {
   getDocketNumbersByUser,
   getDocument,
   getDocumentIdFromSQSMessage,
-  getDocumentQCInboxForSection,
   getDocumentQCInboxForUser,
   getDocumentQCServedForSection,
   getDocumentQCServedForUser,
@@ -353,7 +348,6 @@ const gatewayMethods = {
   getUsersBySearchKey,
   getUsersInSection,
   getWebSocketConnectionsByUserId,
-  getWorkItemById,
   getWorkItemsByDocketNumber,
   getWorkItemsByWorkItemId,
   isEmailAvailable,

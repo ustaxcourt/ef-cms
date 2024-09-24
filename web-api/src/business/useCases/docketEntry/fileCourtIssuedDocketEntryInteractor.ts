@@ -11,6 +11,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { omit } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 /**
  *
@@ -163,7 +164,7 @@ export const fileCourtIssuedDocketEntry = async (
         sentByUserId: user.userId,
       });
 
-      const saveItems = [
+      const saveItems: Promise<any>[] = [
         applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
           applicationContext,
           authorizedUser,
@@ -183,8 +184,7 @@ export const fileCourtIssuedDocketEntry = async (
         );
       } else {
         saveItems.push(
-          applicationContext.getPersistenceGateway().saveWorkItem({
-            applicationContext,
+          saveWorkItem({
             workItem: rawValidWorkItem,
           }),
         );

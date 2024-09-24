@@ -21,6 +21,7 @@ import { aggregatePartiesForService } from '../utilities/aggregatePartiesForServ
 import { cloneDeep, isEmpty } from 'lodash';
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 /**
  * updateContact
@@ -194,8 +195,7 @@ export const updateContact = async (
 
       changeOfAddressDocketEntry.setWorkItem(workItem);
 
-      await applicationContext.getPersistenceGateway().saveWorkItem({
-        applicationContext,
+      await saveWorkItem({
         workItem: workItem.validate().toRawObject(),
       });
     }
