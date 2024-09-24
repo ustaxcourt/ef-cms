@@ -11,6 +11,6 @@ export const generateSuggestedTrialSessionCalendarInteractor = (
       termName,
       termStartDate,
     },
-    endpoint: '', //`/trial-sessions/${trialSessionId}/printable-working-copy`,
+    endpoint: '/trial-sessions/generate-term',
   });
 };

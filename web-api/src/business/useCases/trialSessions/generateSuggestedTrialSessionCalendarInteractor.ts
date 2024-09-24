@@ -5,6 +5,7 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+// import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { assignSessionsToWeeks } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 import { getUtilities } from '@web-api/getUtilities';
@@ -43,9 +44,12 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   {
     endDate,
     startDate,
-    termName,
+    // termName,
   }: { endDate: string; startDate: string; termName: string },
+  //TODO: check for auth
+  // authorizedUser: UnknownAuthUser,
 ) => {
+  console.log('!!!!!!!!! we don it');
   //
   // Maximum of 6 sessions per week
   // Maximum of 5 sessions total per location
