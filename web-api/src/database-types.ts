@@ -3,6 +3,7 @@ import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
 export interface Database {
   message: MessageTable;
   case: CaseTable;
+  workItem: WorkItemTable;
 }
 
 export interface MessageTable {
@@ -47,3 +48,39 @@ export interface CaseTable {
 export type CaseKysely = Selectable<CaseTable>;
 export type NewCaseKysely = Insertable<CaseTable>;
 export type UpdateCaseKysely = Updateable<CaseTable>;
+
+export interface WorkItemTable {
+  workItemId: string;
+  assigneeId?: string;
+  assigneeName?: string;
+  associatedJudge: string;
+  associatedJudgeId?: string;
+  caseIsInProgress?: boolean;
+  caseStatus: string;
+  caseTitle?: string;
+  completedAt?: string;
+  completedBy?: string;
+  completedByUserId?: string;
+  completedMessage?: string;
+  createdAt: string;
+  docketEntry: any;
+  docketNumber: string;
+  docketNumberWithSuffix?: string;
+  hideFromPendingMessages?: boolean;
+  highPriority?: boolean;
+  inProgress?: boolean;
+  isInitializeCase?: boolean;
+  isRead?: boolean;
+  leadDocketNumber?: string;
+  section: string;
+  sentBy: string;
+  sentBySection?: string;
+  sentByUserId?: string;
+  trialDate?: string;
+  trialLocation?: string;
+  updatedAt: string;
+}
+
+export type WorkItemKysely = Selectable<WorkItemTable>;
+export type NewWorkItemKysely = Insertable<WorkItemTable>;
+export type UpdateWorkItemKysely = Updateable<WorkItemTable>;
