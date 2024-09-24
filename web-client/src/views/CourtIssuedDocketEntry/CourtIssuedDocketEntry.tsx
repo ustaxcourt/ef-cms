@@ -14,11 +14,6 @@ import { SuccessNotification } from '../SuccessNotification';
 import { WarningNotificationComponent } from '../WarningNotification';
 import { WorkItemAlreadyCompletedModal } from '../DocketEntryQc/WorkItemAlreadyCompletedModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import {
-  courtIssuedDocketEntryOnChange,
-  onInputChange,
-  reactSelectValue,
-} from '../../ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -124,30 +119,19 @@ export const CourtIssuedDocketEntry = connect(
                     id="document-type"
                     name="eventCode"
                     options={addCourtIssuedDocketEntryHelper.documentTypes}
-                    value={reactSelectValue({
-                      documentTypes:
-                        addCourtIssuedDocketEntryHelper.documentTypes,
-                      selectedEventCode: form.eventCode,
-                    })}
-                    onChange={(inputValue, { action, name }) => {
-                      courtIssuedDocketEntryOnChange({
-                        action,
-                        inputValue,
-                        name,
-                        updateSequence:
-                          updateCourtIssuedDocketEntryFormValueSequence,
-                        validateSequence:
-                          validateCourtIssuedDocketEntrySequence,
-                      });
-                      return true;
-                    }}
-                    onInputChange={(inputText, { action }) => {
-                      onInputChange({
-                        action,
-                        inputText,
-                        updateSequence:
-                          updateCourtIssuedDocketEntryFormValueSequence,
-                      });
+                    onChange={inputValue => {
+                      [
+                        'documentType',
+                        'documentTitle',
+                        'eventCode',
+                        'scenario',
+                      ].forEach(key =>
+                        updateCourtIssuedDocketEntryFormValueSequence({
+                          key,
+                          value: inputValue ? inputValue[key] : '',
+                        }),
+                      );
+                      validateCourtIssuedDocketEntrySequence();
                     }}
                   />
                 </FormGroup>
