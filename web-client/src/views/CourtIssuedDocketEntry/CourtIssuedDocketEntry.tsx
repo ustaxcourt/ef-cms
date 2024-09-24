@@ -9,7 +9,7 @@ import { DocumentDisplayIframe } from '../DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
-import { SelectSearch2 } from '@web-client/ustc-ui/Select/SelectSearch2';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { WarningNotificationComponent } from '../WarningNotification';
 import { WorkItemAlreadyCompletedModal } from '../DocketEntryQc/WorkItemAlreadyCompletedModal';
@@ -114,7 +114,7 @@ export const CourtIssuedDocketEntry = connect(
                   >
                     Document type
                   </label>
-                  <SelectSearch2
+                  <SelectSearch
                     aria-labelledby="document-type-label"
                     data-testid="primary-document"
                     id="document-type"

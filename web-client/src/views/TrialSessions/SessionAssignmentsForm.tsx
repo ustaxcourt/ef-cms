@@ -1,5 +1,5 @@
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import { SelectSearch2 } from '@web-client/ustc-ui/Select/SelectSearch2';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -174,7 +174,7 @@ export const SessionAssignmentsForm = connect(
                 <span className="usa-hint">(optional)</span>
               </label>
 
-              <SelectSearch2
+              <SelectSearch
                 aria-label="irs-calendar-administrator-info-search-label"
                 id="irs-calendar-administrator-info-search"
                 isClearable={true}

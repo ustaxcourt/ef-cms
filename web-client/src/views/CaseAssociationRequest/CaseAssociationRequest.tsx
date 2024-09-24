@@ -3,7 +3,7 @@ import { CaseAssociationRequestDocumentForm } from './CaseAssociationRequestDocu
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PartiesRepresenting } from './PartiesRepresenting';
-import { SelectSearch2 } from '@web-client/ustc-ui/Select/SelectSearch2';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -67,7 +67,7 @@ export const CaseAssociationRequest = connect(
               or use the dropdown to select your document type.
             </span>
 
-            <SelectSearch2
+            <SelectSearch
               aria-describedby="document-type-label"
               className={classNames(
                 validationErrors.documentType && 'usa-select--error',
