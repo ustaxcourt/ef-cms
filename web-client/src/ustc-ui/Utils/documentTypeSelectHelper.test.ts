@@ -1,7 +1,6 @@
 import {
   docketEntryOnChange,
   fileDocumentPrimaryOnChange,
-  fileDocumentSecondaryOnChange,
   onInputChange,
   reactSelectValue,
 } from './documentTypeSelectHelper';
@@ -73,76 +72,6 @@ describe('documentTypeSelectHelper', () => {
 
     it('should not call update or validate sequence if "action" is not "select-option" or "clear"', () => {
       fileDocumentPrimaryOnChange({
-        action: 'something-else',
-        inputValue: undefined,
-        updateSequence: updateSequenceSpy,
-        validateSequence: validateSequenceSpy,
-      });
-
-      expect(updateSequenceSpy).not.toHaveBeenCalled();
-      expect(validateSequenceSpy).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('fileDocumentSecondaryOnChange', () => {
-    it('should call update sequence multiple times with correct props followed by validate sequence if "action" is "select-option"', () => {
-      const inputValue = {
-        category: 'Answer (filed by respondent only)',
-        documentTitle: 'Amended Answer',
-        documentType: 'Amended Answer',
-        eventCode: 'AA',
-        scenario: 'Standard',
-      };
-
-      fileDocumentSecondaryOnChange({
-        action: 'select-option',
-        inputValue,
-        updateSequence: updateSequenceSpy,
-        validateSequence: validateSequenceSpy,
-      });
-
-      expect(updateSequenceSpy).toHaveBeenCalled();
-      expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
-        key: 'secondaryDocument.category',
-        value: inputValue.category,
-      });
-      expect(updateSequenceSpy.mock.calls[1][0]).toEqual({
-        key: 'secondaryDocument.documentType',
-        value: inputValue.documentType,
-      });
-      expect(updateSequenceSpy.mock.calls[2][0]).toEqual({
-        key: 'secondaryDocument.documentTitle',
-        value: inputValue.documentTitle,
-      });
-      expect(updateSequenceSpy.mock.calls[3][0]).toEqual({
-        key: 'secondaryDocument.eventCode',
-        value: inputValue.eventCode,
-      });
-      expect(updateSequenceSpy.mock.calls[4][0]).toEqual({
-        key: 'secondaryDocument.scenario',
-        value: inputValue.scenario,
-      });
-      expect(validateSequenceSpy).toHaveBeenCalled();
-    });
-
-    it('should call update sequence a single time followed by validate sequence if "action" is "clear"', () => {
-      fileDocumentSecondaryOnChange({
-        action: 'clear',
-        inputValue: undefined,
-        updateSequence: updateSequenceSpy,
-        validateSequence: validateSequenceSpy,
-      });
-
-      expect(updateSequenceSpy).toHaveBeenCalled();
-      expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
-        key: 'secondaryDocument.category',
-        value: '',
-      });
-      expect(validateSequenceSpy).toHaveBeenCalled();
-    });
-
-    it('should not call update or validate sequence if "action" is not "select-option" or "clear"', () => {
-      fileDocumentSecondaryOnChange({
         action: 'something-else',
         inputValue: undefined,
         updateSequence: updateSequenceSpy,
