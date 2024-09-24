@@ -20,6 +20,8 @@ export const PractitionerInformation = connect(
       sequences.onPractitionerInformationTabSelectSequence,
     practitionerDetailHelper: state.practitionerDetailHelper,
     practitionerInformationHelper: state.practitionerInformationHelper,
+    setPractitionerClosedCasesPageSequence:
+      sequences.setPractitionerClosedCasesPageSequence,
     setPractitionerOpenCasesPageSequence:
       sequences.setPractitionerOpenCasesPageSequence,
     showModal: state.modal.showModal,
@@ -28,14 +30,48 @@ export const PractitionerInformation = connect(
     gotoPrintPractitionerCasesSequence,
     onPractitionerInformationTabSelectSequence,
     practitionerInformationHelper,
+    setPractitionerClosedCasesPageSequence,
     setPractitionerOpenCasesPageSequence,
     showModal,
   }) {
     const numOpenCases = practitionerInformationHelper.openCasesTotal || 0;
-    const numClosedCases =
-      practitionerInformationHelper.closedCases.closedCasesTotal || 0;
+    const numClosedCases = practitionerInformationHelper.closedCasesTotal || 0;
 
     console.log(practitionerInformationHelper);
+
+    const openPagesPaginator = () => {
+      return (
+        practitionerInformationHelper.showOpenCasesPagination && (
+          <Paginator
+            currentPageIndex={practitionerInformationHelper.openCasesPageNumber}
+            totalPages={practitionerInformationHelper.totalOpenCasePages}
+            onPageChange={selectedPage => {
+              setPractitionerOpenCasesPageSequence({
+                pageNumber: selectedPage,
+              });
+            }}
+          />
+        )
+      );
+    };
+
+    const closedPagesPaginator = () => {
+      return (
+        practitionerInformationHelper.showClosedCasesPagination && (
+          <Paginator
+            currentPageIndex={
+              practitionerInformationHelper.closedCasesPageNumber
+            }
+            totalPages={practitionerInformationHelper.totalClosedCasePages}
+            onPageChange={selectedPage => {
+              setPractitionerClosedCasesPageSequence({
+                pageNumber: selectedPage,
+              });
+            }}
+          />
+        )
+      );
+    };
 
     return (
       <React.Fragment>
@@ -55,7 +91,6 @@ export const PractitionerInformation = connect(
             bind="currentViewMetadata.tab"
             className="classic-horizontal-header3 tab-border"
             defaultActiveTab="practitioner-details"
-            marginBottom={false}
             onSelect={tabName => {
               onPractitionerInformationTabSelectSequence({
                 tabName,
@@ -92,41 +127,23 @@ export const PractitionerInformation = connect(
               tabName="practitioner-open-cases"
               title={`Open Cases (${numOpenCases})`}
             >
-              {practitionerInformationHelper.showOpenCasesPagination && (
-                <Paginator
-                  currentPageIndex={
-                    practitionerInformationHelper.openCasesPageNumber
-                  }
-                  totalPages={practitionerInformationHelper.totalOpenCasePages}
-                  onPageChange={selectedPage => {
-                    setPractitionerOpenCasesPageSequence({
-                      pageNumber: selectedPage,
-                    });
-                  }}
-                />
-              )}
+              {openPagesPaginator()}
               <PractitionerCaseList
                 cases={practitionerInformationHelper.openCases}
                 showStatus={true}
               />
+              {openPagesPaginator()}
             </Tab>
             <Tab
               tabName="practitioner-closed-cases"
               title={`Closed Cases (${numClosedCases})`}
             >
-              {practitionerInformationHelper.showClosedCasesPagination && (
-                <Paginator
-                  currentPageIndex={practitionerInformationHelper.pageNumber}
-                  totalPages={practitionerInformationHelper.totalOpenCasePages}
-                  onPageChange={selectedPage => {
-                    console.log(selectedPage);
-                  }}
-                />
-              )}
+              {closedPagesPaginator()}
               <PractitionerCaseList
                 cases={practitionerInformationHelper.closedCases}
                 showStatus={false}
               />
+              {closedPagesPaginator()}
             </Tab>
           </Tabs>
         </section>
