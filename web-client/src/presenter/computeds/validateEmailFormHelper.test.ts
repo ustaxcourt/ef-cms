@@ -1,16 +1,16 @@
 import { applicationContext } from '../../applicationContext';
-import { changeLoginAndSupportEmailHelper as changeLoginAndSupportEmailComputed } from './changeLoginAndSupportEmailHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
+import { validateEmailFormHelper as validateEmailFormComputed } from './validateEmailFormHelper';
 import { withAppContextDecorator } from '@web-client/withAppContext';
 
-const changeLoginAndSupportEmailHelper = withAppContextDecorator(
-  changeLoginAndSupportEmailComputed,
+const validateEmailFormHelper = withAppContextDecorator(
+  validateEmailFormComputed,
   applicationContext,
 );
 
-describe('changeLoginAndSupportEmailHelper', () => {
+describe('validateEmailFormHelper', () => {
   it('should not return any error messages when two valid email addresses are provided', () => {
-    const result = runCompute(changeLoginAndSupportEmailHelper, {
+    const result = runCompute(validateEmailFormHelper, {
       state: {
         form: {
           confirmEmail: 'hi@example.com',
@@ -24,7 +24,7 @@ describe('changeLoginAndSupportEmailHelper', () => {
   });
 
   it('should return an error message if an invalid email address is provided', () => {
-    const result = runCompute(changeLoginAndSupportEmailHelper, {
+    const result = runCompute(validateEmailFormHelper, {
       state: {
         form: {
           confirmEmail: 'hi@example',
@@ -40,7 +40,7 @@ describe('changeLoginAndSupportEmailHelper', () => {
   });
 
   it('should return an error message if an invalid email address is provided', () => {
-    const result = runCompute(changeLoginAndSupportEmailHelper, {
+    const result = runCompute(validateEmailFormHelper, {
       state: {
         form: {
           confirmEmail: undefined,
