@@ -5,10 +5,29 @@ import ExcelJS from 'excelJs';
 export const writeTrialSessionDataToExcel = async ({
   scheduledTrialSessions,
   termName,
+  weeks,
 }: {
   termName: string;
   scheduledTrialSessions: ScheduledTrialSession[];
+  weeks: string[];
 }) => {
+  //
+  scheduledTrialSessions = [];
+
+  const cities = ['cityA', 'cityB', 'cityC', 'cityD', 'cityE', 'cityF'];
+  weeks = ['09/01', '09/08', '09/15', '09/45', '09/89', '09/37'];
+  for (const city of cities) {
+    for (const week of weeks) {
+      const randomType = Math.floor(Math.random() * 3);
+      scheduledTrialSessions.push({
+        city,
+        sessionType: SESSION_TYPES[Object.keys(SESSION_TYPES)[randomType]],
+        weekOf: week,
+      });
+    }
+  }
+
+  //
   const workbook = new ExcelJS.Workbook();
   const worksheetOptions = { properties: { outlineLevelCol: 2 } };
   const worksheet = workbook.addWorksheet(termName, worksheetOptions);
@@ -20,12 +39,6 @@ export const writeTrialSessionDataToExcel = async ({
     acc[session.city!][session.weekOf!] = session.sessionType;
     return acc;
   }, {});
-
-  // Get list of unique weeks
-  const weeks = new Set<string>();
-  scheduledTrialSessions.forEach(session => {
-    weeks.add(session.weekOf);
-  });
 
   let columns: { header: string; key: string }[] = [
     {
@@ -111,5 +124,6 @@ export const writeTrialSessionDataToExcel = async ({
   };
 
   // term name takes more input
-  await workbook.xlsx.writeFile(`${termName}.xlsx`);
+  // await workbook.xlsx.writeFile(`${termName}.xlsx`);
+  return await workbook.xlsx.writeBuffer();
 };

@@ -16,6 +16,19 @@ import jwt from 'jsonwebtoken';
  * @param {Function} fun an function which either returns a promise containing payload data, or throws an exception
  * @returns {object} the api gateway response object containing the statusCode, body, and headers
  */
+function isZipBuffer(buffer: Buffer): boolean {
+  if (!buffer) return false;
+  // Check if the buffer length is at least 4 bytes
+  if (buffer.length < 4) return false;
+
+  // ZIP files start with: 0x50 0x4B 0x03 0x04
+  return (
+    buffer[0] === 0x50 &&
+    buffer[1] === 0x4b &&
+    buffer[2] === 0x03 &&
+    buffer[3] === 0x04
+  );
+}
 export const handle = async (event, fun) => {
   const applicationContext = createApplicationContext({});
   try {
@@ -25,6 +38,19 @@ export const handle = async (event, fun) => {
       response != null &&
       typeof response[Symbol.iterator] === 'function' &&
       response.indexOf('%PDF-') > -1;
+
+    const isXlsxBuffer = isZipBuffer(response);
+
+    // let isPdfBuffer = false;
+    // let isXlsxBuffer = false;
+
+    // if (response != null && typeof response[Symbol.iterator] === 'function') {
+    //   if (response.indexOf('%PDF-') > -1) {
+    //     isPdfBuffer = true;
+    //   } else {
+    //     isXlsxBuffer = true;
+    //   }
+    // }
 
     if (
       response &&
@@ -43,6 +69,20 @@ export const handle = async (event, fun) => {
           'accept-ranges': 'bytes',
         },
         isBase64Encoded: true,
+        statusCode: 200,
+      };
+    } else if (isXlsxBuffer) {
+      return {
+        // body: response.toString('base64'),
+        body: response,
+        headers: {
+          ...headerOverride,
+          // 'accept-ranges': 'bytes',
+          'Content-Disposition': 'attachment; filename=TrialSessions.xlsx',
+          'Content-Type':
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        },
+        // isBase64Encoded: true,
         statusCode: 200,
       };
     } else {
