@@ -87,7 +87,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
           cy.contains('2023').should('exist');
           cy.contains('05/02/23').should('exist');
           cy.contains('New York, NY').should('exist');
-          cy.get('[data-testid="atp-preview-button"]').and(
+          cy.get('[data-testid="atp-preview-button"]').should(
             'have.text',
             'sample.pdf',
           );
