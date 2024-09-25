@@ -1,5 +1,5 @@
 import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
-import { Icon } from '@web-client/ustc-ui/Icon/Icon';
+import { PractitionerCaseIcons } from './PractitionerCaseIcons';
 import React from 'react';
 
 const getEmptyStateText = (isOpen: boolean) => {
@@ -8,13 +8,14 @@ const getEmptyStateText = (isOpen: boolean) => {
 
 export function PractitionerCaseList({
   cases,
+  caseType,
   id,
-  showStatus,
 }: {
   cases: any;
-  showStatus: boolean;
+  caseType: 'open' | 'closed';
   id: string;
 }) {
+  const showStatus = caseType === 'open';
   return (
     <>
       <div
@@ -31,7 +32,7 @@ export function PractitionerCaseList({
           >
             <thead>
               <tr>
-                <th aria-hidden="true" />
+                <th aria-hidden="true" className="icon-column" />
                 <th>Docket No.</th>
                 <th>Case Title</th>
                 {showStatus && <th>Case Status</th>}
@@ -39,32 +40,8 @@ export function PractitionerCaseList({
             </thead>
             {cases.map(item => (
               <tr key={item.pk}>
-                <td aria-hidden="true" className="multi-filing-type-icon">
-                  {item.isSealed && (
-                    <Icon
-                      aria-label={item.sealedToTooltip}
-                      className="sealed-docket-entry"
-                      icon="lock"
-                      title={item.sealedToTooltip}
-                    />
-                  )}
-                  {item.inConsolidatedGroup && (
-                    <span
-                      className="fa-layers fa-fw"
-                      title={item.consolidatedIconTooltipText}
-                    >
-                      <Icon
-                        aria-label={item.consolidatedIconTooltipText}
-                        className="fa-icon-blue"
-                        icon="copy"
-                      />
-                      {item.isLeadCase && (
-                        <span className="fa-inverse lead-case-icon-text">
-                          L
-                        </span>
-                      )}
-                    </span>
-                  )}
+                <td aria-hidden="true">
+                  <PractitionerCaseIcons formattedCase={item} />
                 </td>
                 <td>
                   <CaseLink formattedCase={item} />

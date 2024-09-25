@@ -1,7 +1,7 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { OpenPractitionerCaseListPdfModal } from './OpenPractitionerCaseListPdfModal';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
-import { PractitionerCaseList } from '@web-client/views/Practitioners/PractitionerCases/PractitionerCaseList';
+import { PractitionerCaseList } from './PractitionerCaseList';
 import { PractitionerDetails } from './PractitionerDetails';
 import { PractitionerDocumentation } from './PractitionerDocumentation';
 import { PractitionerUserHeader } from './PractitionerUserHeader';
@@ -127,9 +127,9 @@ export const PractitionerInformation = connect(
             >
               {openPagesPaginator()}
               <PractitionerCaseList
+                caseType={'open'}
                 cases={practitionerInformationHelper.openCases}
                 id={'practitioner-open-cases-list'}
-                showStatus={true}
               />
               {openPagesPaginator()}
             </Tab>
@@ -139,9 +139,9 @@ export const PractitionerInformation = connect(
             >
               {closedPagesPaginator()}
               <PractitionerCaseList
+                caseType={'closed'}
                 cases={practitionerInformationHelper.closedCases}
                 id={'practitioner-closed-cases-list'}
-                showStatus={false}
               />
               {closedPagesPaginator()}
             </Tab>
