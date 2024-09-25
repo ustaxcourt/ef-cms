@@ -1,4 +1,6 @@
-export function petitionsClerkCreatesTrialSession() {
+export function createTrialSession(): Cypress.Chainable<{
+  trialSessionId: string;
+}> {
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
   cy.get('[data-testid="trial-session-link"]').click();
   cy.get('[data-testid="add-trial-session-button"]').click();
@@ -24,10 +26,15 @@ export function petitionsClerkCreatesTrialSession() {
   cy.get('[data-testid="trial-session-trial-clerk"]').select(
     'Test trialclerk1',
   );
+  cy.intercept('POST', '**/trial-sessions').as('createTrialSession');
   cy.get('[data-testid="submit-trial-session"]').click();
   cy.get('[data-testid="success-alert"]').should('exist');
 
   return cy
-    .get('[data-testid="success-alert"]')
-    .invoke('attr', 'data-metadata');
+    .wait('@createTrialSession')
+    .then(({ response: trialSessionResponse }) => {
+      expect(trialSessionResponse?.body).to.have.property('trialSessionId');
+      const createdTrialSessionId = trialSessionResponse?.body.trialSessionId;
+      return cy.wrap({ trialSessionId: createdTrialSessionId });
+    });
 }
