@@ -26,7 +26,10 @@ export const getPractitionerDetailAction = async ({
       barNumber,
     });
 
-  if (applicationContext.getUtilities().isInternalUser(user.role)) {
+  if (
+    practitionerDetail &&
+    applicationContext.getUtilities().isInternalUser(user.role)
+  ) {
     const { closedCases, openCases } = await applicationContext
       .getUseCases()
       .getPractitionerCasesInteractor(applicationContext, {
