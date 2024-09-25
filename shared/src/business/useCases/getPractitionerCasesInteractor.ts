@@ -13,19 +13,10 @@ export const getPractitionerCasesInteractor = async (
   { userId }: { userId: string },
   authorizedUser: UnknownAuthUser,
 ) => {
-  console.log('getPractitionerCasesInteractor?!');
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_PRACTITIONER_CASE_LIST)
   ) {
     throw new UnauthorizedError('Unauthorized to view practitioners cases');
-  }
-
-  const practitionerUser = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId });
-
-  if (!practitionerUser || !practitionerUser.barNumber) {
-    throw new UnauthorizedError('Practitioner not found');
   }
 
   const docketNumbers = await applicationContext
@@ -38,8 +29,6 @@ export const getPractitionerCasesInteractor = async (
   const cases = await applicationContext
     .getPersistenceGateway()
     .getCasesByDocketNumbers({ applicationContext, docketNumbers });
-
-  console.log('CASES?!', cases);
 
   const [closedCases, openCases] = partition(
     Case.sortByDocketNumber(cases).reverse(),

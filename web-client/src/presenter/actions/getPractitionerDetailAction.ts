@@ -10,7 +10,6 @@ import {
   PractitionerCaseInfo,
   PractitionerDetail,
 } from '@web-client/presenter/state';
-import { getPractitionerCasesInteractor } from '@shared/proxies/practitioners/getPractitionerCasesProxy';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const getPractitionerDetailAction = async ({
@@ -28,10 +27,11 @@ export const getPractitionerDetailAction = async ({
     });
 
   if (applicationContext.getUtilities().isInternalUser(user.role)) {
-    const { closedCases, openCases } = await getPractitionerCasesInteractor(
-      applicationContext,
-      { userId: practitionerDetail.userId },
-    );
+    const { closedCases, openCases } = await applicationContext
+      .getUseCases()
+      .getPractitionerCasesInteractor(applicationContext, {
+        userId: practitionerDetail.userId,
+      });
 
     const openCaseInfo: PractitionerCaseInfo = {
       allCases: openCases,
