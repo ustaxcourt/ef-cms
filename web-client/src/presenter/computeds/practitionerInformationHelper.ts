@@ -57,11 +57,11 @@ export const practitionerInformationHelper = (
     .isInternalUser(user.role);
 
   const totalOpenCasesPages = Math.ceil(
-    practitionerDetail.openCaseInfo.allCases.length / PAGE_SIZE,
+    (practitionerDetail.openCaseInfo?.allCases.length || 0) / PAGE_SIZE,
   );
 
   const totalClosedCasesPages = Math.ceil(
-    practitionerDetail.closedCaseInfo.allCases.length / PAGE_SIZE,
+    (practitionerDetail.closedCaseInfo?.allCases.length || 0) / PAGE_SIZE,
   );
 
   const showOpenCasesPagination = totalOpenCasesPages > 1;
@@ -69,25 +69,25 @@ export const practitionerInformationHelper = (
 
   const openCasesToDisplay = getPagesToDisplay({
     applicationContext,
-    cases: practitionerDetail.openCaseInfo.allCases,
-    pageNumber: practitionerDetail.openCaseInfo.currentPage,
+    cases: practitionerDetail.openCaseInfo?.allCases || [],
+    pageNumber: practitionerDetail.openCaseInfo?.currentPage || 0,
     user,
   });
 
   const closedCasesToDisplay = getPagesToDisplay({
     applicationContext,
-    cases: practitionerDetail.closedCaseInfo.allCases,
-    pageNumber: practitionerDetail.closedCaseInfo.currentPage,
+    cases: practitionerDetail.closedCaseInfo?.allCases || [],
+    pageNumber: practitionerDetail.closedCaseInfo?.currentPage || 0,
     user,
   });
 
   return {
     closedCases: closedCasesToDisplay,
-    closedCasesPageNumber: practitionerDetail.closedCaseInfo.currentPage,
-    closedCasesTotal: practitionerDetail.closedCaseInfo.allCases.length,
+    closedCasesPageNumber: practitionerDetail.closedCaseInfo?.currentPage || 0,
+    closedCasesTotal: practitionerDetail.closedCaseInfo?.allCases.length || 0,
     openCases: openCasesToDisplay,
-    openCasesPageNumber: practitionerDetail.openCaseInfo.currentPage,
-    openCasesTotal: practitionerDetail.openCaseInfo.allCases.length,
+    openCasesPageNumber: practitionerDetail.openCaseInfo?.currentPage || 0,
+    openCasesTotal: practitionerDetail.openCaseInfo?.allCases.length || 0,
     showClosedCasesPagination,
     showDocumentationTab: permissions.UPLOAD_PRACTITIONER_DOCUMENT,
     showOpenCasesPagination,

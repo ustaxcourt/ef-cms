@@ -238,11 +238,11 @@ describe('practitionerInformationHelper', () => {
     });
 
     const expectedDocketNumbers = [
-      mockedPractitionerDetail.openCaseInfo.allCases
-        .slice(0, pageSize)
+      mockedPractitionerDetail
+        .openCaseInfo!.allCases.slice(0, pageSize)
         .map(x => x.docketNumberWithSuffix),
-      mockedPractitionerDetail.openCaseInfo.allCases
-        .slice(-1)
+      mockedPractitionerDetail
+        .openCaseInfo!.allCases.slice(-1)
         .map(x => x.docketNumberWithSuffix),
     ];
 
@@ -276,11 +276,11 @@ describe('practitionerInformationHelper', () => {
     });
 
     const expectedDocketNumbers = [
-      mockedPractitionerDetail.closedCaseInfo.allCases
-        .slice(0, pageSize)
+      mockedPractitionerDetail
+        .closedCaseInfo!.allCases.slice(0, pageSize)
         .map(x => x.docketNumberWithSuffix),
-      mockedPractitionerDetail.closedCaseInfo.allCases
-        .slice(-1)
+      mockedPractitionerDetail
+        .closedCaseInfo!.allCases.slice(-1)
         .map(x => x.docketNumberWithSuffix),
     ];
 
