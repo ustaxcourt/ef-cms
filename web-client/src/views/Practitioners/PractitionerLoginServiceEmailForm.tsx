@@ -12,6 +12,7 @@ const practitionerLoginServiceEmailFormDependencies = {
   createPractitionerUserHelper: state.createPractitionerUserHelper,
   form: state.form,
   updateFormValueSequence: sequences.updateFormValueSequence,
+  validateEmailFormHelper: state.validateEmailFormHelper,
   validationErrors: state.validationErrors,
 };
 
@@ -25,6 +26,7 @@ export const PractitionerLoginServiceEmailForm = connect<
     emailFormName,
     form,
     updateFormValueSequence,
+    validateEmailFormHelper,
   }) {
     const [inFocusEmail, setInFocusEmail] = useState(true);
     const [inFocusConfirmEmail, setInFocusConfirmEmail] = useState(true);
@@ -53,7 +55,7 @@ export const PractitionerLoginServiceEmailForm = connect<
             <h4>Change Login & Service Email</h4>
             <FormGroup
               errorText={
-                !inFocusEmail && createPractitionerUserHelper.emailErrorMessage
+                !inFocusEmail && validateEmailFormHelper.emailErrorMessage
               }
             >
               <label className="usa-label" htmlFor="updatedEmail">
@@ -83,7 +85,7 @@ export const PractitionerLoginServiceEmailForm = connect<
             <FormGroup
               errorText={
                 !inFocusConfirmEmail &&
-                createPractitionerUserHelper.confirmEmailErrorMessage
+                validateEmailFormHelper.confirmEmailErrorMessage
               }
             >
               <label className="usa-label" htmlFor="confirm-email">

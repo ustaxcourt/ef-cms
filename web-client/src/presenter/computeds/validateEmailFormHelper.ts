@@ -1,10 +1,10 @@
+import { EmailForm } from '@shared/business/entities/EmailForm';
 import { Get } from 'cerebral';
-import { UpdateUserEmailForm } from '@shared/business/entities/UpdateUserEmailForm';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const changeLoginAndSupportEmailHelper = (get: Get) => {
+export const validateEmailFormHelper = (get: Get) => {
   const form = get(state.form);
-  const formEntity = new UpdateUserEmailForm(form);
+  const formEntity = new EmailForm(form);
   const errors = formEntity.getFormattedValidationErrors();
 
   return {

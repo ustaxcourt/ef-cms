@@ -10,7 +10,6 @@ import React, { useState } from 'react';
 
 export const ChangeLoginAndServiceEmail = connect(
   {
-    changeLoginAndSupportEmailHelper: state.changeLoginAndSupportEmailHelper,
     form: state.form,
     navigateToPathSequence: sequences.navigateToPathSequence,
     showModal: state.modal.showModal,
@@ -20,16 +19,17 @@ export const ChangeLoginAndServiceEmail = connect(
     user: state.user,
     validateChangeLoginAndServiceEmailSequence:
       sequences.validateChangeLoginAndServiceEmailSequence,
+    validateEmailFormHelper: state.validateEmailFormHelper,
     validationErrors: state.validationErrors,
   },
   function ChangeLoginAndServiceEmail({
-    changeLoginAndSupportEmailHelper,
     form,
     navigateToPathSequence,
     showModal,
     submitChangeLoginAndServiceEmailSequence,
     updateFormValueSequence,
     user,
+    validateEmailFormHelper,
   }) {
     const [inFocusEmail, setInFocusEmail] = useState(true);
     const [inFocusConfirmEmail, setInFocusConfirmEmail] = useState(true);
@@ -64,8 +64,7 @@ export const ChangeLoginAndServiceEmail = connect(
               <h4>Change Login & Service Email</h4>
               <FormGroup
                 errorText={
-                  !inFocusEmail &&
-                  changeLoginAndSupportEmailHelper.emailErrorMessage
+                  !inFocusEmail && validateEmailFormHelper.emailErrorMessage
                 }
               >
                 <label className="usa-label" htmlFor="email">
@@ -94,7 +93,7 @@ export const ChangeLoginAndServiceEmail = connect(
               <FormGroup
                 errorText={
                   !inFocusConfirmEmail &&
-                  changeLoginAndSupportEmailHelper.confirmEmailErrorMessage
+                  validateEmailFormHelper.confirmEmailErrorMessage
                 }
               >
                 <label className="usa-label" htmlFor="confirm-email">
