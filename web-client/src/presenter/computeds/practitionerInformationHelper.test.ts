@@ -37,6 +37,7 @@ describe('practitionerInformationHelper', () => {
     closedCasesCurrentPage?: number;
   }): PractitionerDetail => {
     return {
+      admissionsDate: '2019-03-01',
       barNumber: '1234',
       closedCaseInfo: {
         allCases: getFakeCases(numClosedCases),
