@@ -1,7 +1,7 @@
 import { loginAsAdmissionsClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Practitioner Information', () => {
-  const barNumber = 'RT6789';
+  const barNumber = 'PT1234';
 
   before(() => {
     loginAsAdmissionsClerk();
@@ -12,20 +12,20 @@ describe('Practitioner Information', () => {
   });
 
   describe('Open Cases Tab', () => {
-    it('should display correct number of open cases', () => {
-      cy.contains('#tabButton-practitionerOpenCases', '(7)');
+    it('should display correct number of open cases in tab header', () => {
+      cy.contains('#tabButton-practitionerOpenCases', '(8)');
     });
-    it('should render correct number of open cases', () => {
+    it('should render correct number of open cases in list', () => {
       cy.get('#tabButton-practitionerOpenCases').click();
-      cy.get('tr').should('have.length', 7);
+      cy.get('tr').should('have.length', 9); // Including the header tr
     });
   });
 
   describe('Closed Cases Tab', () => {
-    it('should display correct number of closed cases', () => {
+    it('should display correct number of closed cases in tab header', () => {
       cy.contains('#tabButton-practitionerClosedCases', '(0)');
     });
-    it('should render correct number of closed cases', () => {
+    it('should render correct number of closed cases in list', () => {
       cy.get('#tabButton-practitionerClosedCases').click();
       cy.get('tr').should('have.length', 0);
     });
