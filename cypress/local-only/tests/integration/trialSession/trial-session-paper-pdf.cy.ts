@@ -1,5 +1,6 @@
 import { fillInCreateCaseFromPaperForm } from '../../../support/pages/create-paper-petition';
 import { getCreateACaseButton } from '../../../support/pages/document-qc';
+import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/select-typeahead-input';
 
 describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
   it('should create a trial session, add a case, and generate a pdf for paper service', () => {
@@ -33,13 +34,8 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
     cy.get('[data-testid="trial-session-trial-clerk"]').select('Other');
     cy.get('[data-testid="trial-session-trial-clerk-alternate"]').type('Abu');
     cy.get('[data-testid="trial-session-court-reporter"]').type('Fameet');
-    cy.get(
-      '#irs-calendar-administrator-info-search .select-react-element__input-container input',
-    ).clear();
-    cy.get(
-      '#irs-calendar-administrator-info-search .select-react-element__input-container input',
-    ).type('Nero West');
-    cy.get('#react-select-2-option-0').click({ force: true });
+
+    selectTypeaheadInput('irs-calendar-administrator-info-search', 'Nero West');
 
     cy.intercept('POST', '**/trial-sessions').as('createTrialSession');
     cy.get('[data-testid="submit-trial-session"]').click();

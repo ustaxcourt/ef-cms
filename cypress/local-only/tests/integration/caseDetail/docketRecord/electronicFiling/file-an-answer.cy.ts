@@ -8,7 +8,7 @@ describe('Filing an Answer', function () {
   });
 
   it('can select a document type and go to the next step in the wizard', () => {
-    selectTypeaheadInput('document-type', 'Answer');
+    selectTypeaheadInput('complete-doc-document-type-search', 'Answer');
     cy.get('button#submit-document').click();
   });
 
