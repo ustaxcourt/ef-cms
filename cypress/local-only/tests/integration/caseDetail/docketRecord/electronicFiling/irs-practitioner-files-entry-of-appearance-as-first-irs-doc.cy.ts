@@ -41,17 +41,16 @@ describe('IRS Practitioner files Entry of Appearance as First IRS Document', () 
           'contain.text',
           'Entry of Appearance for Respondent',
         );
+        // should not allow filing Entry of Appearance once already associated
+        cy.get('[data-testid="button-file-document"]').click();
+        cy.get('[data-testid="ready-to-file"]').click();
+        selectTypeaheadInput(
+          'complete-doc-document-type-search',
+          'Entry of Appearance',
+        );
+        cy.get('[data-testid="submit-document"]').click();
+        cy.get('[data-testid="error-alert"]').should('be.visible');
       });
-    });
-    it('should not allow filing Entry of Appearance once already associated', () => {
-      cy.get('[data-testid="button-file-document"]').click();
-      cy.get('[data-testid="ready-to-file"]').click();
-      selectTypeaheadInput(
-        'complete-doc-document-type-search',
-        'Entry of Appearance',
-      );
-      cy.get('[data-testid="submit-document"]').click();
-      cy.get('[data-testid="error-alert"]').should('be.visible');
     });
   });
 
