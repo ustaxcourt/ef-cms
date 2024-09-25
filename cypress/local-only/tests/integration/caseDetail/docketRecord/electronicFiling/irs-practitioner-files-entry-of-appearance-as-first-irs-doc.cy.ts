@@ -22,7 +22,10 @@ describe('IRS Practitioner files Entry of Appearance as First IRS Document', () 
 
         cy.get('[data-testid="button-first-irs-document"]').click();
 
-        selectTypeaheadInput('document-type', 'Entry of Appearance');
+        selectTypeaheadInput(
+          'complete-doc-document-type-search',
+          'Entry of Appearance',
+        );
         cy.get('[data-testid="submit-document"]').click();
 
         cy.get('[data-testid="auto-generation"]').should('exist');
@@ -39,13 +42,16 @@ describe('IRS Practitioner files Entry of Appearance as First IRS Document', () 
           'Entry of Appearance for Respondent',
         );
       });
-      it('should not allow filing Entry of Appearance once already associated', () => {
-        cy.get('[data-testid="button-file-document"]').click();
-        cy.get('[data-testid="ready-to-file"]').click();
-        selectTypeaheadInput('document-type', 'Entry of Appearance');
-        cy.get('[data-testid="submit-document"]').click();
-        cy.get('[data-testid="error-alert"]').should('be.visible');
-      });
+    });
+    it('should not allow filing Entry of Appearance once already associated', () => {
+      cy.get('[data-testid="button-file-document"]').click();
+      cy.get('[data-testid="ready-to-file"]').click();
+      selectTypeaheadInput(
+        'complete-doc-document-type-search',
+        'Entry of Appearance',
+      );
+      cy.get('[data-testid="submit-document"]').click();
+      cy.get('[data-testid="error-alert"]').should('be.visible');
     });
   });
 
@@ -60,7 +66,10 @@ describe('IRS Practitioner files Entry of Appearance as First IRS Document', () 
         externalUserSearchesDocketNumber(docketNumber);
         cy.get('[data-testid="button-first-irs-document"]').click();
 
-        selectTypeaheadInput('document-type', 'Entry of Appearance');
+        selectTypeaheadInput(
+          'complete-doc-document-type-search',
+          'Entry of Appearance',
+        );
         cy.get('[data-testid="submit-document"]').click();
 
         cy.get('[data-testid="manual-generation-label"]').click();
