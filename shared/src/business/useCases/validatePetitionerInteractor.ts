@@ -30,8 +30,8 @@ export const validatePetitionerInteractor = (
   let updateUserEmailErrors;
   if (contactInfo.updatedEmail || contactInfo.confirmEmail) {
     updateUserEmailErrors = new EmailForm({
-      confirmEmail: contactInfo.confirmEmail || '',
-      email: contactInfo.updatedEmail || '',
+      confirmEmail: contactInfo.confirmEmail as string,
+      email: contactInfo.updatedEmail as string,
     }).getFormattedValidationErrors();
   }
 
