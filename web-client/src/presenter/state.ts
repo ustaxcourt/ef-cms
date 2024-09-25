@@ -895,9 +895,9 @@ export type PractitionerDetail = {
   contact?: any; // TODO
   name: string;
   userId: string;
-  openCaseInfo: PractitionerCaseInfo;
-  closedCaseInfo: PractitionerCaseInfo;
   admissionsDate: string;
+  openCaseInfo?: PractitionerCaseInfo; // Only for internal users
+  closedCaseInfo?: PractitionerCaseInfo; // Only for internal users
   email?: string;
   pendingEmail?: string;
   additionalPhone?: string;

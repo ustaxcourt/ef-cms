@@ -11,12 +11,15 @@ import {
   PractitionerDetail,
 } from '@web-client/presenter/state';
 import { getPractitionerCasesInteractor } from '@shared/proxies/practitioners/getPractitionerCasesProxy';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const getPractitionerDetailAction = async ({
   applicationContext,
+  get,
   props,
 }: ActionProps<{ barNumber: string }>) => {
   const { barNumber } = props;
+  const user = get(state.user);
 
   const practitionerDetail: PractitionerDetail = await applicationContext
     .getUseCases()
@@ -24,21 +27,23 @@ export const getPractitionerDetailAction = async ({
       barNumber,
     });
 
-  const { closedCases, openCases } = await getPractitionerCasesInteractor(
-    applicationContext,
-    { userId: practitionerDetail.userId },
-  );
+  if (applicationContext.getUtilities().isInternalUser(user.role)) {
+    const { closedCases, openCases } = await getPractitionerCasesInteractor(
+      applicationContext,
+      { userId: practitionerDetail.userId },
+    );
 
-  const openCaseInfo: PractitionerCaseInfo = {
-    allCases: openCases,
-    currentPage: 0,
-  };
-  const closedCaseInfo: PractitionerCaseInfo = {
-    allCases: closedCases,
-    currentPage: 0,
-  };
-  practitionerDetail.openCaseInfo = openCaseInfo;
-  practitionerDetail.closedCaseInfo = closedCaseInfo;
+    const openCaseInfo: PractitionerCaseInfo = {
+      allCases: openCases,
+      currentPage: 0,
+    };
+    const closedCaseInfo: PractitionerCaseInfo = {
+      allCases: closedCases,
+      currentPage: 0,
+    };
+    practitionerDetail.openCaseInfo = openCaseInfo;
+    practitionerDetail.closedCaseInfo = closedCaseInfo;
+  }
 
   return { practitionerDetail };
 };
