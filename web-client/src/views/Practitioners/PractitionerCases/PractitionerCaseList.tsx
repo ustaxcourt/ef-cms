@@ -17,7 +17,11 @@ export function PractitionerCaseList({
 }) {
   return (
     <>
-      <div className="margin-top-1">
+      <div
+        className="margin-top-1"
+        data-testid={`${id}-container`}
+        id={`${id}-container`}
+      >
         {cases.length > 0 ? (
           <table
             aria-label="Open Cases"

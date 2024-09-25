@@ -39,5 +39,6 @@ export const practitionerDetailHelper = (
     pendingEmailFormatted,
     showEAccessFlag: isInternalUser && practitionerDetail.hasEAccess,
     showEditLink: permissions.ADD_EDIT_PRACTITIONER_USER,
+    showPrintCaseListLink: isInternalUser,
   };
 };

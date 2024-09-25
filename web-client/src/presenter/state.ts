@@ -897,7 +897,12 @@ export type PractitionerDetail = {
   userId: string;
   openCaseInfo: PractitionerCaseInfo;
   closedCaseInfo: PractitionerCaseInfo;
+  admissionsDate: string;
   email?: string;
+  pendingEmail?: string;
+  additionalPhone?: string;
+  firmName?: string;
+  hasEAccess?: boolean;
 };
 
 export type PractitionerCaseInfo = {

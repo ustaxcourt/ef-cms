@@ -14,11 +14,11 @@ describe('Practitioner Details - Admissions Clerk Accessibility', () => {
       checkA11y();
 
       cy.visit('/practitioner-detail/PT1234?tab=practitioner-open-cases');
-      cy.get('[data-testid="practitioner-open-cases-list"]');
+      cy.get('[data-testid="practitioner-open-cases-list-container"]');
       checkA11y();
 
       cy.visit('/practitioner-detail/PT1234?tab=practitioner-closed-cases');
-      cy.get('[data-testid="practitioner-closed-cases-list"]');
+      cy.get('[data-testid="practitioner-closed-cases-list-container"]');
       checkA11y();
     });
   });
