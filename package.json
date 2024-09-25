@@ -61,6 +61,7 @@
     "deep-freeze": "0.0.1",
     "diff-arrays-of-objects": "1.1.9",
     "english-ordinals": "3.3.0",
+    "exceljs": "^4.4.0",
     "export-to-csv": "1.4.0",
     "express": "4.21.0",
     "fflate": "0.8.2",

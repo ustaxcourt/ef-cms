@@ -9,6 +9,12 @@ import {
   TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
 
+export type ScheduledTrialSession = {
+  city: string;
+  sessionType: TrialSessionTypes;
+  weekOf: string;
+};
+
 export const assignSessionsToWeeks = ({
   calendaringConfig,
   prospectiveSessionsByCity,
@@ -36,11 +42,7 @@ export const assignSessionsToWeeks = ({
     hybridCaseMaxQuantity: number;
     hybridCaseMinimumQuantity: number;
   };
-}): {
-  city: string;
-  sessionType: TrialSessionTypes;
-  weekOf: string;
-}[] => {
+}): ScheduledTrialSession[] => {
   const sessionCountPerWeek: Record<string, number> = {}; // weekOf -> session count
   const sessionCountPerCity: Record<string, number> = {}; // trialLocation -> session count
   const sessionScheduledPerCityPerWeek: Record<string, Set<string>> = {}; // weekOf -> Set of cities
