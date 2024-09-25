@@ -1,26 +1,34 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { useState } from 'react';
 
-export const PractitionerLoginServiceEmailForm = connect(
-  {
-    createPractitionerUserHelper: state.createPractitionerUserHelper,
-    form: state.form,
-    updateFormValueSequence: sequences.updateFormValueSequence,
-    validateSequence: sequences[props.validateSequenceName],
-    validationErrors: state.validationErrors,
-  },
+type PractitionerLoginServiceEmailFormProps = {
+  emailFormName: string;
+};
+
+const practitionerLoginServiceEmailFormDependencies = {
+  createPractitionerUserHelper: state.createPractitionerUserHelper,
+  form: state.form,
+  updateFormValueSequence: sequences.updateFormValueSequence,
+  validationErrors: state.validationErrors,
+};
+
+export const PractitionerLoginServiceEmailForm = connect<
+  PractitionerLoginServiceEmailFormProps,
+  typeof practitionerLoginServiceEmailFormDependencies
+>(
+  practitionerLoginServiceEmailFormDependencies,
   function PractitionerLoginServiceEmailForm({
     createPractitionerUserHelper,
     emailFormName,
     form,
     updateFormValueSequence,
-    validateSequence,
-    validationErrors,
   }) {
+    const [inFocusEmail, setInFocusEmail] = useState(true);
+    const [inFocusConfirmEmail, setInFocusConfirmEmail] = useState(true);
+
     return (
       <div className="margin-bottom-4">
         <h2>Login & Service Email</h2>
@@ -45,7 +53,7 @@ export const PractitionerLoginServiceEmailForm = connect(
             <h4>Change Login & Service Email</h4>
             <FormGroup
               errorText={
-                validationErrors.updatedEmail || validationErrors.email
+                !inFocusEmail && createPractitionerUserHelper.emailErrorMessage
               }
             >
               <label className="usa-label" htmlFor="updatedEmail">
@@ -60,16 +68,24 @@ export const PractitionerLoginServiceEmailForm = connect(
                 name={emailFormName}
                 type="text"
                 value={form[emailFormName] || ''}
-                onBlur={() => validateSequence()}
+                onBlur={() => {
+                  setInFocusEmail(false);
+                }}
                 onChange={e =>
                   updateFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   })
                 }
+                onFocus={() => setInFocusEmail(true)}
               />
             </FormGroup>
-            <FormGroup errorText={validationErrors.confirmEmail}>
+            <FormGroup
+              errorText={
+                !inFocusConfirmEmail &&
+                createPractitionerUserHelper.confirmEmailErrorMessage
+              }
+            >
               <label className="usa-label" htmlFor="confirm-email">
                 Re-enter new email address
               </label>
@@ -82,13 +98,14 @@ export const PractitionerLoginServiceEmailForm = connect(
                 name="confirmEmail"
                 type="text"
                 value={form.confirmEmail || ''}
-                onBlur={() => validateSequence()}
+                onBlur={() => setInFocusConfirmEmail(false)}
                 onChange={e =>
                   updateFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   })
                 }
+                onFocus={() => setInFocusConfirmEmail(true)}
               />
             </FormGroup>
           </div>
