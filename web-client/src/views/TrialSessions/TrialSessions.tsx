@@ -181,68 +181,35 @@ const TrialSessionFilters = connect(
           <fieldset className="usa-fieldset">
             <legend className="usa-legend">Proceeding Type</legend>
             <div className="usa-radio usa-radio__inline">
-              <input
-                checked={trialSessionsPage.filters.proceedingType === 'All'}
-                className="usa-radio__input"
-                id="proceedingType-All"
-                name="proceedingType"
-                type="radio"
-                value="All"
-                onChange={e => {
-                  setTrialSessionsFiltersSequence({
-                    proceedingType: e.target.value as 'All',
-                  });
-                }}
-              />
-              <label className="usa-radio__label" htmlFor="proceedingType-All">
-                All
-              </label>
-              <input
-                checked={
-                  trialSessionsPage.filters.proceedingType ===
-                  TRIAL_SESSION_PROCEEDING_TYPES.inPerson
-                }
-                className="usa-radio__input"
-                id="proceedingType-In-Person"
-                name="proceedingType"
-                type="radio"
-                value={TRIAL_SESSION_PROCEEDING_TYPES.inPerson}
-                onChange={e => {
-                  setTrialSessionsFiltersSequence({
-                    proceedingType: e.target
-                      .value as TrialSessionProceedingType,
-                  });
-                }}
-              />
-              <label
-                className="usa-radio__label"
-                htmlFor="proceedingType-In-Person"
-              >
-                In Person
-              </label>
-              <input
-                checked={
-                  trialSessionsPage.filters.proceedingType ===
-                  TRIAL_SESSION_PROCEEDING_TYPES.remote
-                }
-                className="usa-radio__input"
-                id="proceedingType-remote"
-                name="proceedingType"
-                type="radio"
-                value={TRIAL_SESSION_PROCEEDING_TYPES.remote}
-                onChange={e => {
-                  setTrialSessionsFiltersSequence({
-                    proceedingType: e.target
-                      .value as TrialSessionProceedingType,
-                  });
-                }}
-              />
-              <label
-                className="usa-radio__label"
-                htmlFor="proceedingType-remote"
-              >
-                Remote
-              </label>
+              {['All', ...Object.values(TRIAL_SESSION_PROCEEDING_TYPES)].map(
+                proceedingOption => (
+                  <React.Fragment key={proceedingOption}>
+                    <input
+                      checked={
+                        trialSessionsPage.filters.proceedingType ===
+                        proceedingOption
+                      }
+                      className="usa-radio__input"
+                      id={`proceedingType-${proceedingOption}`}
+                      name="proceedingType"
+                      type="radio"
+                      value={proceedingOption}
+                      onChange={e => {
+                        setTrialSessionsFiltersSequence({
+                          proceedingType: e.target
+                            .value as TrialSessionProceedingType,
+                        });
+                      }}
+                    />
+                    <label
+                      className="usa-radio__label"
+                      htmlFor={`proceedingType-${proceedingOption}`}
+                    >
+                      {proceedingOption}
+                    </label>
+                  </React.Fragment>
+                ),
+              )}
             </div>
           </fieldset>
           <DateRangePickerComponent
