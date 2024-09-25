@@ -12,4 +12,10 @@ describe('resetTrialSessionsFiltersAction', () => {
       initialTrialSessionPageState.filters,
     );
   });
+  it('should set allow the current tab to be preserved when resetting filters', async () => {
+    const result = await runAction(resetTrialSessionsFiltersAction, {
+      props: { currentTab: 'new' },
+    });
+    expect(result.state.trialSessionsPage.filters.currentTab).toEqual('new');
+  });
 });
