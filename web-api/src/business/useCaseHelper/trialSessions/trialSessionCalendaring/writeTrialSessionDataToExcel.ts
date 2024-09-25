@@ -13,9 +13,6 @@ export const writeTrialSessionDataToExcel = async ({
   const worksheetOptions = { properties: { outlineLevelCol: 2 } };
   const worksheet = workbook.addWorksheet(termName, worksheetOptions);
 
-  // {
-  // 'someCity: {location: 'someCity', 02/23: 'hybrid'},
-  // }
   const sessionsByCity = scheduledTrialSessions.reduce((acc, session) => {
     if (!acc[session.city!]) {
       acc[session.city!] = {};
@@ -45,51 +42,73 @@ export const writeTrialSessionDataToExcel = async ({
 
   for (const city in sessionsByCity) {
     const values = { city, ...sessionsByCity[city] };
-    const row = worksheet.addRow(values);
+    worksheet.addRow(values);
+  }
 
+  worksheet.eachRow(row => {
     row.eachCell({ includeEmpty: true }, cell => {
-      // cell.border = {
-      //   bottom: { style: 'thin' },
-      //   left: { style: 'thin' },
-      //   right: { style: 'thin' },
-      //   top: { style: 'thin' },
-      // };
+      cell.border = {
+        bottom: { style: 'thin' },
+        left: { style: 'thin' },
+        right: { style: 'thin' },
+        top: { style: 'thin' },
+      };
 
       switch (cell.value) {
         case SESSION_TYPES.hybrid:
           cell.fill = {
-            fgColor: { argb: 'FFFFA500' },
+            fgColor: { argb: 'ffFDB8AE' },
             pattern: 'solid',
             type: 'pattern', // Orange
           };
           break;
         case SESSION_TYPES.small:
           cell.fill = {
-            fgColor: { argb: 'FF008000' },
+            fgColor: { argb: 'ff97D4EA' },
             pattern: 'solid',
             type: 'pattern', // Green
           };
           break;
         case SESSION_TYPES.regular:
           cell.fill = {
-            fgColor: { argb: 'FFFFFF00' },
+            fgColor: { argb: 'ffb4d0b9' },
             pattern: 'solid',
             type: 'pattern', // Yellow
           };
           break;
         case SESSION_TYPES.special:
           cell.fill = {
-            fgColor: { argb: 'FF9d00ff' },
+            fgColor: { argb: 'ffD0C3E9' },
             pattern: 'solid',
             type: 'pattern', // Purple?
           };
           break;
         default:
+          if (cell.value) {
+            cell.fill = {
+              fgColor: { argb: 'ff989ca3' },
+              pattern: 'solid',
+              type: 'pattern', // grey
+            };
+          }
           break;
       }
     });
-  }
+  });
+
   worksheet.insertRow(1, [null, 'Week Of']);
+
+  const cityTitleCell = worksheet.getCell('A2');
+  cityTitleCell.border = {
+    bottom: undefined,
+    left: undefined,
+    right: undefined,
+    top: undefined,
+  };
+  cityTitleCell.fill = {
+    pattern: 'none',
+    type: 'pattern',
+  };
 
   // term name takes more input
   await workbook.xlsx.writeFile(`${termName}.xlsx`);
