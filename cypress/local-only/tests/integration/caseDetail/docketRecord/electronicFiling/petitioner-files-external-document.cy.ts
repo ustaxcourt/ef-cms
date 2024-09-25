@@ -21,9 +21,7 @@ describe(
         'complete-doc-document-type-search',
         'Motion for Leave to File',
       );
-      cy.get(
-        '[data-testid="secondary-doc-secondary-document-type"] .select-react-element__input',
-      ).type('Answer{enter}');
+      selectTypeaheadInput('secondary-doc-secondary-document-type', 'Answer');
       cy.get('[data-testid="submit-document"]').click();
       cy.get('[data-testid="primary-document"]').attachFile(
         '../../helpers/file/sample.pdf',
