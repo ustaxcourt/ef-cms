@@ -1,3 +1,5 @@
+import { selectTypeaheadInput } from '../../../helpers/components/typeAhead/select-typeahead-input';
+
 export const navigateTo = username => {
   cy.login(username, '/document-qc');
 };
@@ -66,11 +68,9 @@ export const uploadCourtIssuedDocumentAndEditViaDocumentQC = () => {
   cy.get('[data-testid="upload-file-success"]');
   cy.get('#save-uploaded-pdf-button').click();
   cy.get('#add-court-issued-docket-entry-button').click();
-  cy.get('#document-type .select-react-element__input-container input').clear();
-  cy.get('#document-type .select-react-element__input-container input').type(
-    'Miscellaneous',
-  );
-  cy.get('#react-select-2-option-0').click({ force: true });
+
+  selectTypeaheadInput('court-issued-document-type-search', 'Miscellaneous');
+
   cy.get('[data-testid="save-docket-entry-button"]').click();
   cy.url().should('not.contain', '/add-court-issued-docket-entry');
 
