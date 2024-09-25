@@ -565,6 +565,26 @@ describe('trialSessionsHelper', () => {
         });
       });
 
+      it('should set the judge to "Unassigned" when the trial session does not yet have a judge assigned', () => {
+        trialSession1.judge = undefined;
+        trialSessionsPageState.trialSessions = [trialSession1];
+
+        const result = runCompute(trialSessionsHelper, {
+          state: {
+            judges: [judgeUser],
+            permissions: getUserPermissions(docketClerk1User),
+            trialSessionsPage: trialSessionsPageState,
+          },
+        });
+
+        const trialSessionsOnly =
+          result.trialSessionRows.filter(isTrialSessionRow);
+        expect(trialSessionsOnly[0].judge).toEqual({
+          name: 'Unassigned',
+          userId: '',
+        });
+      });
+
       it('should set userIsAssignedToSession false for all sessions if there is no associated judgeUser', () => {
         trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
 
