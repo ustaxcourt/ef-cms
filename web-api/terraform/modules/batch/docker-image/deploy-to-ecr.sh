@@ -12,6 +12,11 @@ export DOCKER_DEFAULT_PLATFORM=linux/amd64
 IMAGE_TAG=$(git rev-parse --short HEAD)
 MANIFEST=$(aws ecr batch-get-image --repository-name "docket-entry-zipper-${ENV}" --image-ids imageTag="${DESTINATION_TAG}" --region us-east-1 --query 'images[].imageManifest' --output text)
 
+# DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh "${ENV}")
+DEPLOYING_COLOR="blue"
+WEST_WEBSOCKET_API_GATEWAY_ID=$(aws apigatewayv2 get-apis --region us-west-1 --query "Items[?Name=='websocket_api_${ENV}_${DEPLOYING_COLOR}'].ApiId" --output text)
+EAST_WEBSOCKET_API_GATEWAY_ID=$(aws apigatewayv2 get-apis --region us-east-1 --query "Items[?Name=='websocket_api_${ENV}_${DEPLOYING_COLOR}'].ApiId" --output text)
+
 if [[ -n $MANIFEST ]]; then
 
   read -p "Manifest already exists. Do you want to continue? (y/n): " -n 1 -r
@@ -28,6 +33,8 @@ fi
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com"
 
 docker build --no-cache \
+  --build-arg EAST_WEBSOCKET_API_GATEWAY_ID="${EAST_WEBSOCKET_API_GATEWAY_ID}" \
+  --build-arg WEST_WEBSOCKET_API_GATEWAY_ID="${WEST_WEBSOCKET_API_GATEWAY_ID}" \
   -t "docket-entry-zipper-${ENV}:${DESTINATION_TAG}" \
   -f Dockerfile .
 
