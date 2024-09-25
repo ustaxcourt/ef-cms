@@ -8,6 +8,7 @@ import {
   loginAsDocketClerk1,
   loginAsPetitionsClerk1,
 } from '../../../helpers/authentication/login-as-helpers';
+import { selectTypeaheadInput } from '../../../helpers/components/typeAhead/select-typeahead-input';
 
 describe('Advanced Search', () => {
   beforeEach(() => {
@@ -110,9 +111,10 @@ describe('Advanced Search', () => {
       cy.get('[data-testid="upload-file-success"]').should('exist');
       cy.get('[data-testid="save-uploaded-pdf-button"]').click();
       cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
-      cy.get(
-        '[data-testid="primary-document"] .select-react-element__input',
-      ).type('Summary Opinion{enter}');
+      selectTypeaheadInput(
+        'court-issued-document-type-search',
+        'Summary Opinion',
+      );
       cy.get('[data-testid="judge-select"]').select('Ashford');
       cy.get('[data-testid="serve-to-parties-btn"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();

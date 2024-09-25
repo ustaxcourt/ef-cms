@@ -7,6 +7,7 @@ import {
 } from '../../../helpers/authentication/login-as-helpers';
 import { petitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../helpers/documentQC/petitionsclerk-serves-petition';
+import { selectTypeaheadInput } from '../../../helpers/components/typeAhead/select-typeahead-input';
 import { uploadFile } from '../../../helpers/file/upload-file';
 
 describe('Document QC Complete', () => {
@@ -196,11 +197,7 @@ function petitionerFilesADocument(docketNumber: string) {
   cy.get('[data-testid="search-by-docket-number"]').click();
   cy.get('[data-testid="button-file-document"]').click();
   cy.get('[data-testid="ready-to-file"]').click();
-  cy.get('[data-testid="document-type"]').click();
-
-  cy.get('[data-testid="document-type"]').click();
-  cy.get('[data-testid="document-type"]').type('Exhibit(s)');
-  cy.get('#react-select-2-option-0').click();
+  selectTypeaheadInput('complete-doc-document-type-search', 'Exhibit(s)');
   cy.get('[data-testid="submit-document"]').click();
   uploadFile('primary-document');
   cy.get('#submit-document').click();
