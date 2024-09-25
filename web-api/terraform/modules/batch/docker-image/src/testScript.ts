@@ -1,7 +1,10 @@
 import { Agent } from 'https';
+import {
+  ApiGatewayManagementApiClient,
+  PostToConnectionCommand,
+} from '@aws-sdk/client-apigatewaymanagementapi';
 import { GetObjectCommand, PutObjectCommand, S3 } from '@aws-sdk/client-s3';
-import { NodeHttpHandler } from '@aws-sdk/node-http-handler';
-import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
+import { NodeHttpHandler } from '@smithy/node-http-handler';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { writeFile } from 'fs/promises';
 import archiver from 'archiver';
@@ -15,20 +18,20 @@ type DocketEntryDownloadInfo = {
 
 type DocketEntriesZipperParameter = {
   s3Client: S3;
-  sqsClient: SQSClient;
   docketEntries: DocketEntryDownloadInfo[];
-  userId: string;
   zipName: string;
-  clientConnectionId: string;
+  connectionId: string;
+  wsClient: ApiGatewayManagementApiClient;
 };
 
 const {
-  CURRENT_COLOR,
   DOCKET_ENTRY_FILES,
+  EAST_WEBSOCKET_API_GATEWAY_ID,
   EFCMS_DOMAIN,
   STAGE,
-  USER_ID,
-  WEBSOCKET_CLIENT_CONNECTION_ID,
+  WEBSOCKET_CONNECTION_ID,
+  WEBSOCKET_REGION,
+  WEST_WEBSOCKET_API_GATEWAY_ID,
   ZIP_FILE_NAME,
 } = process.env;
 
@@ -52,12 +55,17 @@ const storageClient = new S3({
 const TEMP_S3_BUCKET = `${EFCMS_DOMAIN}-temp-documents-${STAGE}-${AWS_REGION}`;
 const S3_BUCKET = `${EFCMS_DOMAIN}-documents-${STAGE}-${AWS_REGION}`;
 
-const simpleQueueClient = new SQSClient({
-  maxAttempts: 3,
-  region: AWS_REGION,
+const WEBSOCKET_API_GATEWAY_ID =
+  WEBSOCKET_REGION === 'us-east-1'
+    ? EAST_WEBSOCKET_API_GATEWAY_ID
+    : WEST_WEBSOCKET_API_GATEWAY_ID;
+
+const WEBSOCKET_ENPOINT = `https://${WEBSOCKET_API_GATEWAY_ID}.execute-api.${WEBSOCKET_REGION}.amazonaws.com/${STAGE}`;
+const notificationClient = new ApiGatewayManagementApiClient({
+  endpoint: WEBSOCKET_ENPOINT,
+  region: WEBSOCKET_REGION,
   requestHandler: new NodeHttpHandler({
-    connectionTimeout: 3000,
-    requestTimeout: 5000,
+    requestTimeout: 900000,
   }),
 });
 
@@ -122,11 +130,10 @@ async function uploadZipFile(s3Client: S3, filePath: string) {
 }
 
 export async function app({
-  clientConnectionId,
+  connectionId,
   docketEntries,
   s3Client,
-  sqsClient,
-  userId,
+  wsClient,
   zipName,
 }: DocketEntriesZipperParameter) {
   const DIRECTORY = path.join(__dirname, `${Date.now()}/`);
@@ -150,23 +157,21 @@ export async function app({
   });
 
   const url = await getSignedUrl(s3Client, command, { expiresIn: 120 });
-  const QueueUrl = `https://sqs.us-east-1.amazonaws.com/515554424717/worker_queue_${STAGE}_${CURRENT_COLOR}`;
-  const cmd = new SendMessageCommand({
-    MessageBody: JSON.stringify({
-      payload: { clientConnectionId, url, userId },
-      type: 'DOWNLOAD_FILE_READY',
+  const WS_MESSAGE = new PostToConnectionCommand({
+    ConnectionId: connectionId,
+    Data: JSON.stringify({
+      action: 'batch_download_ready',
+      url,
     }),
-    QueueUrl,
   });
-  console.log('Gonna send the SQS message');
-  await sqsClient.send(cmd).then(console.log).catch(console.error);
+
+  await wsClient.send(WS_MESSAGE).catch(console.error);
 }
 
 app({
-  clientConnectionId: WEBSOCKET_CLIENT_CONNECTION_ID!,
+  connectionId: WEBSOCKET_CONNECTION_ID!,
   docketEntries: DOCKET_ENTRIES,
   s3Client: storageClient,
-  sqsClient: simpleQueueClient,
-  userId: USER_ID!,
+  wsClient: notificationClient,
   zipName: ZIP_FILE_NAME!,
 }).catch(console.error);
