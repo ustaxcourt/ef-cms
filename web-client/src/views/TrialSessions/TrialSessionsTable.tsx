@@ -121,7 +121,7 @@ export const TrialSessionsTable = connect(
                     </td>
                     <td>{row.proceedingType}</td>
                     <td>{row.sessionType}</td>
-                    <td>{row.judge && row.judge.name}</td>
+                    <td>{row.judge.name}</td>
                     {trialSessionsHelper.showNoticeIssued && (
                       <td>{row.formattedNoticeIssuedDate}</td>
                     )}

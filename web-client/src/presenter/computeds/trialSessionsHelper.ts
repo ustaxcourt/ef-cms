@@ -230,6 +230,7 @@ const formatTrialSessions = ({
         trialSession.judge?.userId === judgeAssociatedToUser?.userId &&
         judgeAssociatedToUser?.userId
       );
+      const judge = trialSession.judge || { name: 'Unassigned', userId: '' };
       /* TODO 10409: There may be a bug in userIsAssignedToSession to session as the previous formatted needed a trialClerk to compute userIsAssignedToSession.
         Look at how formattedTrialSessions.ts calculates userIsAssignedToSession for reference
       */
@@ -240,7 +241,7 @@ const formatTrialSessions = ({
         formattedEstimatedEndDate,
         formattedNoticeIssuedDate,
         formattedStartDate,
-        judge: trialSession.judge,
+        judge,
         proceedingType: trialSession.proceedingType,
         sessionStatus: trialSession.sessionStatus,
         sessionType: trialSession.sessionType,
@@ -303,7 +304,7 @@ type TrialSessionRow = {
   proceedingType: string;
   startDate: string; // ISO format
   sessionType: string;
-  judge?: { name: string; userId: string };
+  judge: { name: string; userId: string };
   formattedNoticeIssuedDate: string;
   sessionStatus: string;
 };
