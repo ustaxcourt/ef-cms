@@ -13,6 +13,8 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { assignSessionsToWeeks } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
+import { getWeeksInRange } from '@shared/business/utilities/DateHandler';
+import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
 
 // Maximum of 6 sessions per week overall.
 const MAX_SESSIONS_PER_WEEK = 6;
@@ -47,8 +49,8 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
   {
     termEndDate,
+    termName,
     termStartDate,
-    // termName,
   }: { termEndDate: string; termStartDate: string; termName: string },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -116,25 +118,32 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     citiesFromLastTwoTerms,
   });
 
+  const weeksToLoop = getWeeksInRange({
+    endDate: termStartDate,
+    startDate: termEndDate,
+  });
+
   const scheduledTrialSessions = assignSessionsToWeeks({
     calendaringConfig,
     prospectiveSessionsByCity,
     specialSessions,
-    termEndDate,
-    termStartDate,
+    weeksToLoop,
   });
 
   if (scheduledTrialSessions.length < 1) {
     //tell the user the bad news
   }
 
-  return scheduledTrialSessions;
+  return writeTrialSessionDataToExcel({
+    scheduledTrialSessions,
+    termName,
+    weeks: weeksToLoop,
+  });
 };
 
 const getPreviousTwoTerms = (termStartDate: string) => {
   //TODO: refactor this, maybe?
 
-  console.log('termStartDate', termStartDate);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [month, day, year] = termStartDate.split('/');
 

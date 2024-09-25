@@ -1,7 +1,6 @@
 import {
   FORMATS,
   createDateAtStartOfWeekEST,
-  getWeeksInRange,
 } from '@shared/business/utilities/DateHandler';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
@@ -19,8 +18,7 @@ export const assignSessionsToWeeks = ({
   calendaringConfig,
   prospectiveSessionsByCity,
   specialSessions,
-  termEndDate,
-  termStartDate,
+  weeksToLoop,
 }: {
   specialSessions: RawTrialSession[];
   prospectiveSessionsByCity: Record<
@@ -30,8 +28,7 @@ export const assignSessionsToWeeks = ({
       sessionType: TrialSessionTypes;
     }[]
   >;
-  termEndDate: string;
-  termStartDate: string;
+  weeksToLoop: string[];
   calendaringConfig: {
     maxSessionsPerWeek: number;
     maxSessionsPerLocation: number;
@@ -75,12 +72,6 @@ export const assignSessionsToWeeks = ({
       );
     }
   }
-
-  // Get array of weeks in range to loop through
-  const weeksToLoop = getWeeksInRange({
-    endDate: termStartDate,
-    startDate: termEndDate,
-  });
 
   for (const currentWeek of weeksToLoop) {
     const weekOfString = currentWeek;

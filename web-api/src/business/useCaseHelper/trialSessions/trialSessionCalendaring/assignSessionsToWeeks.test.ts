@@ -6,9 +6,8 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { assignSessionsToWeeks } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import { getUniqueId } from '@shared/sharedAppContext';
-// import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { getWeeksInRange } from '@shared/business/utilities/DateHandler';
 
-// const mockSpecialSessions = [];
 const defaultMockCalendaringConfig = {
   hybridCaseMaxQuantity: 10,
   hybridCaseMinimumQuantity: 5,
@@ -22,6 +21,10 @@ const defaultMockCalendaringConfig = {
 
 const mockEndDate = '2019-10-10T04:00:00.000Z';
 const mockStartDate = '2019-08-22T04:00:00.000Z';
+const mockWeeksToLoop = getWeeksInRange({
+  endDate: mockEndDate,
+  startDate: mockStartDate,
+});
 
 function getMockTrialSessions() {
   const mockSessions: Record<
@@ -76,10 +79,9 @@ describe('assignSessionsToWeeks', () => {
 
     const result = assignSessionsToWeeks({
       calendaringConfig: defaultMockCalendaringConfig,
-      endDate: mockEndDate,
       prospectiveSessionsByCity: mockSessions,
       specialSessions: [],
-      startDate: mockStartDate,
+      weeksToLoop: mockWeeksToLoop,
     });
 
     //TODO: refactor this
@@ -97,10 +99,9 @@ describe('assignSessionsToWeeks', () => {
     const mockSessions = getMockTrialSessionsForSingleCity();
     const result = assignSessionsToWeeks({
       calendaringConfig: defaultMockCalendaringConfig,
-      endDate: mockEndDate,
       prospectiveSessionsByCity: mockSessions,
       specialSessions: [],
-      startDate: mockStartDate,
+      weeksToLoop: mockWeeksToLoop,
     });
 
     expect(result.length).toEqual(
@@ -150,10 +151,9 @@ describe('assignSessionsToWeeks', () => {
     const mockSessions = getMockTrialSessionsForSingleCity();
     const result = assignSessionsToWeeks({
       calendaringConfig: defaultMockCalendaringConfig,
-      endDate: mockEndDate,
       prospectiveSessionsByCity: mockSessions,
       specialSessions: mockSpecialSessions,
-      startDate: mockStartDate,
+      weeksToLoop: mockWeeksToLoop,
     });
 
     expect(result.length).toEqual(mockSpecialSessions.length);
@@ -207,10 +207,9 @@ describe('assignSessionsToWeeks', () => {
     expect(() => {
       assignSessionsToWeeks({
         calendaringConfig: defaultMockCalendaringConfig,
-        endDate: mockEndDate,
         prospectiveSessionsByCity: mockSessions,
         specialSessions: mockSpecialSessions,
-        startDate: mockStartDate,
+        weeksToLoop: mockWeeksToLoop,
       });
     }).toThrow(Error);
   });
