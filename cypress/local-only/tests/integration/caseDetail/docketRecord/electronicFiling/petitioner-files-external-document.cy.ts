@@ -17,7 +17,10 @@ describe(
       });
       cy.get('[data-testid="button-file-document"]').click();
       cy.get('[data-testid="ready-to-file"]').click();
-      selectTypeaheadInput('document-type', 'Motion for Leave to File');
+      selectTypeaheadInput(
+        'complete-doc-document-type-search',
+        'Motion for Leave to File',
+      );
       cy.get(
         '[data-testid="secondary-doc-secondary-document-type"] .select-react-element__input',
       ).type('Answer{enter}');

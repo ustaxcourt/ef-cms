@@ -26,9 +26,7 @@ describe('Private Practitioner requests to represent a party to a case', () => {
 
       cy.get('[data-testid="case-detail-menu-button"]').click();
       cy.get('[data-testid="menu-button-add-paper-filing"]').click();
-      cy.get('[data-testid="primary-document-type-search"]').type(
-        'MLSP{enter}',
-      );
+      selectTypeaheadInput('primary-document-type-search', 'MLSP');
 
       cy.get(
         '.usa-date-picker__wrapper > [data-testid="date-received-picker"]',
@@ -64,10 +62,7 @@ describe('Private Practitioner requests to represent a party to a case', () => {
       cy.get(
         `[data-testid="${docketNumber}-qc-item-row"] [data-testid="qc-link"]`,
       ).click();
-
-      cy.get('[data-testid="primary-document-type-search"]').type(
-        'MLSP{enter}',
-      );
+      selectTypeaheadInput('primary-document-type-search', 'MLSP');
 
       cy.get('[data-testid="save-and-serve"]').click();
 
@@ -93,7 +88,7 @@ describe('Petitioner files motion to lift stay of proceedings', () => {
     });
     cy.get('[data-testid="button-file-document"]').click();
     cy.get('[data-testid="ready-to-file"]').click();
-    selectTypeaheadInput('document-type', 'MLSP');
+    selectTypeaheadInput('complete-doc-document-type-search', 'MLSP');
     cy.get('[data-testid="submit-document"]').click();
     cy.get('[data-testid="primary-document"]').attachFile(
       '../../helpers/file/sample.pdf',
