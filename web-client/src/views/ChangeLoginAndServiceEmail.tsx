@@ -10,8 +10,8 @@ import React, { useState } from 'react';
 
 export const ChangeLoginAndServiceEmail = connect(
   {
+    changeLoginAndSupportEmailHelper: state.changeLoginAndSupportEmailHelper,
     form: state.form,
-    helper: state.changeLoginAndSupportEmailHelper,
     navigateToPathSequence: sequences.navigateToPathSequence,
     showModal: state.modal.showModal,
     submitChangeLoginAndServiceEmailSequence:
@@ -23,8 +23,8 @@ export const ChangeLoginAndServiceEmail = connect(
     validationErrors: state.validationErrors,
   },
   function ChangeLoginAndServiceEmail({
+    changeLoginAndSupportEmailHelper,
     form,
-    helper,
     navigateToPathSequence,
     showModal,
     submitChangeLoginAndServiceEmailSequence,
@@ -62,7 +62,12 @@ export const ChangeLoginAndServiceEmail = connect(
             </div>
             <div>
               <h4>Change Login & Service Email</h4>
-              <FormGroup errorText={!inFocusEmail && helper.emailErrorMessage}>
+              <FormGroup
+                errorText={
+                  !inFocusEmail &&
+                  changeLoginAndSupportEmailHelper.emailErrorMessage
+                }
+              >
                 <label className="usa-label" htmlFor="email">
                   New email address
                 </label>
@@ -88,7 +93,8 @@ export const ChangeLoginAndServiceEmail = connect(
               </FormGroup>
               <FormGroup
                 errorText={
-                  !inFocusConfirmEmail && helper.confirmEmailErrorMessage
+                  !inFocusConfirmEmail &&
+                  changeLoginAndSupportEmailHelper.confirmEmailErrorMessage
                 }
               >
                 <label className="usa-label" htmlFor="confirm-email">
