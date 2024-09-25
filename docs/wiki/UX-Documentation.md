@@ -183,7 +183,7 @@ In this study, Flexion UX Designers performed usability testing for creating a c
 
 [User Interview Mural Board - Petition's Clerks](https://app.mural.co/t/flexion6734/m/flexion6734/1676650484691/d7e0f4b66540cf5af851fec027276aface62083e?sender=u9a89dc65e6273d6559349431)
 
-[QC Process Flow Lucid Chart - Petition's Clerks](https://lucid.app/lucidchart/54368542-072c-44c2-9ed3-06149590268f/edit?viewport_loc=-488%2C-1745%2C8238%2C4912%2C0_0&invitationId=inv_4d57de35-151d-41b9-819a-9590b8e250c0)
+[QC Process Flow Chart - Petition's Clerks](./Petitions-Clerk-QC-Process-Flow.pdf)
 
 ### Minutes Sheet
 
