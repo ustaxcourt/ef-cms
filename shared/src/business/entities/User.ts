@@ -46,6 +46,8 @@ export class User extends JoiValidationEntity {
     if (!filtered) {
       this.pendingEmailVerificationToken =
         rawUser.pendingEmailVerificationToken;
+      this.pendingEmailVerificationTokenTimestamp =
+        rawUser.pendingEmailVerificationTokenTimestamp;
     }
 
     this.email = rawUser.email;
