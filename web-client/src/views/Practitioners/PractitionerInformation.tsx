@@ -128,7 +128,7 @@ export const PractitionerInformation = connect(
               {openPagesPaginator()}
               <PractitionerCaseList
                 caseType={'open'}
-                cases={practitionerInformationHelper.openCases}
+                cases={practitionerInformationHelper.openCasesToDisplay}
                 id={'practitioner-open-cases-list'}
               />
               {openPagesPaginator()}
@@ -140,7 +140,7 @@ export const PractitionerInformation = connect(
               {closedPagesPaginator()}
               <PractitionerCaseList
                 caseType={'closed'}
-                cases={practitionerInformationHelper.closedCases}
+                cases={practitionerInformationHelper.closedCasesToDisplay}
                 id={'practitioner-closed-cases-list'}
               />
               {closedPagesPaginator()}

@@ -1,5 +1,8 @@
+import {
+  PRACTICE_TYPE,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
 import { PractitionerDetail } from '@web-client/presenter/state';
-import { ROLES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { practitionerInformationHelper as practitionerInformationHelperComputed } from './practitionerInformationHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -9,6 +12,7 @@ import { withAppContextDecorator } from '../../withAppContext';
 describe('practitionerInformationHelper', () => {
   const pageSize = 100; // This should match the page size in practitionerInformationHelper
 
+  // Helper function to make a lot of cases in order to test pagination
   const getFakeCase = () => {
     return {
       caseTitle: `Case Title ${v4()}`,
@@ -37,8 +41,10 @@ describe('practitionerInformationHelper', () => {
     closedCasesCurrentPage?: number;
   }): PractitionerDetail => {
     return {
+      admissionStatus: 'Test',
       admissionsDate: '2019-03-01',
       barNumber: '1234',
+      birthYear: '1939',
       closedCaseInfo: {
         allCases: getFakeCases(numClosedCases),
         currentPage: closedCasesCurrentPage,
@@ -48,6 +54,7 @@ describe('practitionerInformationHelper', () => {
         allCases: getFakeCases(numOpenCases),
         currentPage: openCasesCurrentPage,
       },
+      practiceType: PRACTICE_TYPE.DOJ,
       userId: '1234',
     };
   };
@@ -247,7 +254,7 @@ describe('practitionerInformationHelper', () => {
     ];
 
     for (let page = 0; page < 2; page++) {
-      const { openCases } = runCompute(practitionerInformationHelper, {
+      const { openCasesToDisplay } = runCompute(practitionerInformationHelper, {
         state: {
           permissions: {
             UPLOAD_PRACTITIONER_DOCUMENT: true,
@@ -263,9 +270,9 @@ describe('practitionerInformationHelper', () => {
         },
       });
 
-      expect(openCases.map(x => x.docketNumberWithSuffix)).toMatchObject(
-        expectedDocketNumbers[page],
-      );
+      expect(
+        openCasesToDisplay.map(x => x.docketNumberWithSuffix),
+      ).toMatchObject(expectedDocketNumbers[page]);
     }
   });
 
@@ -285,25 +292,28 @@ describe('practitionerInformationHelper', () => {
     ];
 
     for (let page = 0; page < 2; page++) {
-      const { closedCases } = runCompute(practitionerInformationHelper, {
-        state: {
-          permissions: {
-            UPLOAD_PRACTITIONER_DOCUMENT: true,
-          },
-          practitionerDetail: {
-            ...mockedPractitionerDetail,
-            closedCaseInfo: {
-              ...mockedPractitionerDetail.closedCaseInfo,
-              currentPage: page,
+      const { closedCasesToDisplay } = runCompute(
+        practitionerInformationHelper,
+        {
+          state: {
+            permissions: {
+              UPLOAD_PRACTITIONER_DOCUMENT: true,
             },
+            practitionerDetail: {
+              ...mockedPractitionerDetail,
+              closedCaseInfo: {
+                ...mockedPractitionerDetail.closedCaseInfo,
+                currentPage: page,
+              },
+            },
+            user: { role: ROLES.admissionsClerk },
           },
-          user: { role: ROLES.admissionsClerk },
         },
-      });
-
-      expect(closedCases.map(x => x.docketNumberWithSuffix)).toMatchObject(
-        expectedDocketNumbers[page],
       );
+
+      expect(
+        closedCasesToDisplay.map(x => x.docketNumberWithSuffix),
+      ).toMatchObject(expectedDocketNumbers[page]);
     }
   });
 });
