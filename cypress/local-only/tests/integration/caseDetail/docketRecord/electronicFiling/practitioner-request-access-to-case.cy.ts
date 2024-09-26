@@ -1,4 +1,5 @@
 import { addIntervenorAsPartyToCase } from '../../../../../../helpers/caseDetail/caseInformation/add-intervenor-to-case';
+import { attachSamplePdfFile } from '../../../../../../helpers/file/upload-file';
 import { externalUserSearchesDocketNumber } from '../../../../../../helpers/advancedSearch/external-user-searches-docket-number';
 import { goToCase } from '../../../../../../helpers/caseDetail/go-to-case';
 import {
@@ -12,7 +13,6 @@ import {
 } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { selectTypeaheadInput } from '../../../../../../helpers/components/typeAhead/select-typeahead-input';
-import { uploadFile } from '../../../../../../helpers/file/upload-file';
 
 describe('Private Practitioner requests to represent a party to a case', () => {
   describe('Auto Generate Entry of Appearance', () => {
@@ -120,7 +120,7 @@ describe('Private Practitioner requests to represent a party to a case', () => {
         ).click();
 
         cy.get('[data-testid="manual-generation-label"]').click();
-        uploadFile('primary-document');
+        attachSamplePdfFile('primary-document');
         cy.get('[data-testid="request-access-submit-document"]').click();
 
         cy.get('[data-testid="redaction-acknowledgement-label"]').click();

@@ -1,3 +1,6 @@
+import { attachFile } from '../file/upload-file';
+import { attachSamplePdfFile } from '../file/upload-file';
+
 import { PROCEDURE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import {
   petitionerAttemptsToUploadCorruptPdfUpdated,
@@ -6,7 +9,6 @@ import {
   petitionerCreatesElectronicCaseWithDeceasedSpouseUpdated,
   petitionerCreatesElectronicCaseWithSpouseUpdated,
 } from './petitioner-creates-electronic-case-updated';
-import { uploadFile } from '../file/upload-file';
 
 export function petitionerCreatesElectronicCaseWithDeceasedSpouseOld(
   primaryFilerName = 'John',
@@ -14,9 +16,9 @@ export function petitionerCreatesElectronicCaseWithDeceasedSpouseOld(
 ) {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
-  uploadFile('stin-file');
+  attachSamplePdfFile('stin-file');
   cy.get('[data-testid="complete-step-1"]').click();
-  uploadFile('petition-file');
+  attachSamplePdfFile('petition-file');
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
   cy.get('[data-testid="complete-step-2"]').click();
@@ -95,9 +97,9 @@ export function petitionerCreatesElectronicCaseWithSpouseOld(
 ) {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
-  uploadFile('stin-file');
+  attachSamplePdfFile('stin-file');
   cy.get('[data-testid="complete-step-1"]').click();
-  uploadFile('petition-file');
+  attachSamplePdfFile('petition-file');
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
   cy.get('[data-testid="complete-step-2"]').click();
@@ -145,12 +147,12 @@ export function petitionerCreatesElectronicCase(
 function petitionerCreatesElectronicCaseOld(primaryFilerName = 'John') {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
-  uploadFile('stin-file');
+  attachSamplePdfFile('stin-file');
   cy.get('[data-testid="complete-step-1"]').click();
-  uploadFile('petition-file');
+  attachSamplePdfFile('petition-file');
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
-  uploadFile('atp-file-upload');
+  attachSamplePdfFile('atp-file-upload');
 
   cy.get('[data-testid="complete-step-2"]').click();
   cy.get('[data-testid="filing-type-0"]').click();
@@ -186,12 +188,12 @@ function petitionerCreatesElectronicCaseOld(primaryFilerName = 'John') {
 export function petitionerCreatesElectronicCaseForBusinessOld() {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
-  uploadFile('stin-file');
+  attachSamplePdfFile('stin-file');
   cy.get('[data-testid="complete-step-1"]').click();
-  uploadFile('petition-file');
+  attachSamplePdfFile('petition-file');
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
-  uploadFile('atp-file-upload');
+  attachSamplePdfFile('atp-file-upload');
 
   cy.get('[data-testid="complete-step-2"]').click();
 
@@ -205,7 +207,7 @@ export function petitionerCreatesElectronicCaseForBusinessOld() {
   cy.get('[data-testid="contactPrimary.postalCode"]').type('32154');
   cy.get('[data-testid="phone"]').type('123456789');
 
-  uploadFile('corporate-disclosure-file');
+  attachSamplePdfFile('corporate-disclosure-file');
 
   cy.get('[data-testid="complete-step-3"]').click();
   cy.get(
@@ -242,12 +244,12 @@ export function petitionerCreatesElectronicCaseForBusiness() {
 
 export function privatePractitionerCreatesElectronicCaseForBusiness() {
   cy.get('[data-testid="file-a-petition"]').click();
-  uploadFile('stin-file');
+  attachSamplePdfFile('stin-file');
   cy.get('[data-testid="complete-step-1"]').click();
-  uploadFile('petition-file');
+  attachSamplePdfFile('petition-file');
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
-  uploadFile('atp-file-upload');
+  attachSamplePdfFile('atp-file-upload');
 
   cy.get('[data-testid="complete-step-2"]').click();
 
@@ -261,7 +263,7 @@ export function privatePractitionerCreatesElectronicCaseForBusiness() {
   cy.get('[data-testid="contactPrimary.postalCode"]').type('32154');
   cy.get('[data-testid="phone"]').type('123456789');
 
-  uploadFile('corporate-disclosure-file');
+  attachSamplePdfFile('corporate-disclosure-file');
 
   cy.get('[data-testid="complete-step-3"]').click();
   cy.get(
@@ -299,41 +301,11 @@ export function petitionerAttemptsToUploadCorruptPdf() {
 export function petitionerAttemptsToUploadCorruptPdfOld() {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
-  cy.get('[data-testid="stin-file"]').attachFile(
-    '../../helpers/file/corrupt-pdf.pdf',
-  );
-  cy.get('[data-testid="complete-step-1"]').click();
-  uploadFile('petition-file');
-  cy.get('[data-testid="irs-notice-Yes"]').click();
-  cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
-  uploadFile('atp-file-upload');
-
-  cy.get('[data-testid="complete-step-2"]').click();
-  cy.get('[data-testid="filing-type-0"]').click();
-
-  cy.get('[data-testid="contact-primary-name"]').type('John');
-  cy.get('[data-testid="contactPrimary.address1"]').type('111 South West St.');
-  cy.get('[data-testid="contactPrimary.city"]').type('Orlando');
-  cy.get('[data-testid="contactPrimary.state"]').select('AL');
-  cy.get('[data-testid="contactPrimary.postalCode"]').type('12345');
-  cy.get('[data-testid="phone"]').type('1111111111');
-
-  cy.get('[data-testid="complete-step-3"]').click();
-  cy.get(
-    `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
-  ).click();
-  cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
-  cy.get('[data-testid="complete-step-4"]').click();
-
-  cy.get('[data-testid="stin-preview-button"]').should('exist');
-  cy.get('[data-testid="petition-preview-button"]').should('exist');
-  cy.get('[data-testid="atp-preview-button"]').should('exist');
-
-  cy.get('[data-testid="file-petition"]').click();
-
-  cy.get('[data-testid="modal-dialog"]').should('exist');
-  cy.get('[data-testid="modal-dialog-header"]').should(
-    'contain.text',
-    'Your Request Was Not Completed',
+  attachFile({
+    filePath: '../../helpers/file/corrupt-pdf.pdf',
+    selector: '[data-testid="stin-file"]',
+  });
+  cy.get('[data-testid="file-upload-error-modal"]').contains(
+    'The file is corrupted or in an unsupported PDF format. Ensure that the file is not corrupted and/or is in a supported PDF format and try again.',
   );
 }

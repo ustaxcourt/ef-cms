@@ -1,3 +1,4 @@
+import { attachFile } from '../../../../../../helpers/file/upload-file';
 import { externalUserSearchesDocketNumber } from '../../../../../../helpers/advancedSearch/external-user-searches-docket-number';
 import { goToCase } from '../../../../../../helpers/caseDetail/go-to-case';
 import {
@@ -46,9 +47,11 @@ describe('Private Practitioner requests to represent a party to a case', () => {
       cy.get('[data-testid="objections-No"').click();
 
       cy.get('[data-testid="upload-pdf-button"]').click();
-      cy.get('input#primaryDocumentFile-file').attachFile(
-        '../../helpers/file/sample.pdf',
-      );
+      attachFile({
+        filePath: '../../helpers/file/sample.pdf',
+        selector: 'input#primaryDocumentFile-file',
+        selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+      });
 
       cy.get('[data-testid="save-for-later"]').click();
       cy.get('[data-testid="success-alert"]').contains(
@@ -90,9 +93,11 @@ describe('Petitioner files motion to lift stay of proceedings', () => {
     cy.get('[data-testid="ready-to-file"]').click();
     selectTypeaheadInput('complete-doc-document-type-search', 'MLSP');
     cy.get('[data-testid="submit-document"]').click();
-    cy.get('[data-testid="primary-document"]').attachFile(
-      '../../helpers/file/sample.pdf',
-    );
+    attachFile({
+      filePath: '../../helpers/file/sample.pdf',
+      selector: '[data-testid="primary-document"]',
+      selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+    });
     cy.get('[data-testid=primaryDocument-objections-No]').click();
     cy.get('#submit-document').click();
     cy.get('[data-testid=redaction-acknowledgement-label]').click();
