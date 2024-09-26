@@ -18,6 +18,15 @@ export const writeTrialSessionDataToExcel = async ({
 
   const cities = ['cityA', 'cityB', 'cityC', 'cityD', 'cityE', 'cityF'];
   weeks = ['09/01', '09/08', '09/15', '09/45', '09/89', '09/37'];
+  sessionCountPerWeek = {
+    '09/01': 10,
+    '09/08': 20,
+    '09/15': 5,
+    '09/37': 42,
+    '09/45': 3,
+    '09/89': 4,
+  };
+
   for (const city of cities) {
     for (const week of weeks) {
       const randomType = Math.floor(Math.random() * 3);
@@ -111,10 +120,9 @@ export const writeTrialSessionDataToExcel = async ({
     });
   });
 
-  const counterRowValues = Object.values(sessionCountPerWeek);
-
   worksheet.insertRow(1, [null, 'Week Of']);
-  worksheet.insertRow(15, [null, ...counterRowValues]);
+  worksheet.addRow({ city: 'No. of Sessions', ...sessionCountPerWeek });
+
   const cityTitleCell = worksheet.getCell('A2');
   cityTitleCell.border = {
     bottom: undefined,
@@ -127,7 +135,5 @@ export const writeTrialSessionDataToExcel = async ({
     type: 'pattern',
   };
 
-  // term name takes more input
-  // await workbook.xlsx.writeFile(`${termName}.xlsx`);
-  return await workbook.xlsx.writeBuffer();
+  return (await workbook.xlsx.writeBuffer) as unknown as Buffer;
 };

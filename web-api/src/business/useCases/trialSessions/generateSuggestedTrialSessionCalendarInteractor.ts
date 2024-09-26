@@ -53,7 +53,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     termStartDate,
   }: { termEndDate: string; termStartDate: string; termName: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<{ message: string; bufferArray: Buffer | undefined }> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.SET_TRIAL_SESSION_CALENDAR)
   ) {
@@ -133,15 +133,24 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   );
 
   if (scheduledTrialSessions.length < 1) {
-    //tell the user the bad news
+    return {
+      bufferArray: undefined,
+      message:
+        'There are no trial sessions to schedule within the dates provided',
+    };
   }
 
-  return writeTrialSessionDataToExcel({
+  const bufferArray = await writeTrialSessionDataToExcel({
     scheduledTrialSessions,
     sessionCountPerWeek,
     termName,
     weeks: weeksToLoop,
   });
+
+  return {
+    bufferArray,
+    message: 'Trial session calendar generated (or some sheeeeet)',
+  };
 };
 
 const getPreviousTwoTerms = (termStartDate: string) => {
