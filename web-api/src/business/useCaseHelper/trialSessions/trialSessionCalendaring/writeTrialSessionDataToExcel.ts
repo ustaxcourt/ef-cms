@@ -4,12 +4,14 @@ import ExcelJS from 'excelJs';
 
 export const writeTrialSessionDataToExcel = async ({
   scheduledTrialSessions,
+  sessionCountPerWeek,
   termName,
   weeks,
 }: {
   termName: string;
   scheduledTrialSessions: ScheduledTrialSession[];
   weeks: string[];
+  sessionCountPerWeek: Record<string, number>;
 }) => {
   //
   scheduledTrialSessions = [];
@@ -109,8 +111,10 @@ export const writeTrialSessionDataToExcel = async ({
     });
   });
 
-  worksheet.insertRow(1, [null, 'Week Of']);
+  const counterRowValues = Object.values(sessionCountPerWeek);
 
+  worksheet.insertRow(1, [null, 'Week Of']);
+  worksheet.insertRow(15, [null, ...counterRowValues]);
   const cityTitleCell = worksheet.getCell('A2');
   cityTitleCell.border = {
     bottom: undefined,

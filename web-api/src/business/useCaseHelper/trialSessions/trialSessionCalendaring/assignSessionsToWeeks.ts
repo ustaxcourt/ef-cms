@@ -39,7 +39,10 @@ export const assignSessionsToWeeks = ({
     hybridCaseMaxQuantity: number;
     hybridCaseMinimumQuantity: number;
   };
-}): ScheduledTrialSession[] => {
+}): {
+  sessionCountPerWeek: Record<string, number>;
+  scheduledTrialSessions: ScheduledTrialSession[];
+} => {
   const sessionCountPerWeek: Record<string, number> = {}; // weekOf -> session count
   const sessionCountPerCity: Record<string, number> = {}; // trialLocation -> session count
   const sessionScheduledPerCityPerWeek: Record<string, Set<string>> = {}; // weekOf -> Set of cities
@@ -47,7 +50,7 @@ export const assignSessionsToWeeks = ({
   // -- Max 1 per location per week.
   // -- Max x per week across all locations
 
-  const scheduledSessions: {
+  const scheduledTrialSessions: {
     city: string;
     sessionType: TrialSessionTypes;
     weekOf: string;
@@ -113,7 +116,7 @@ export const assignSessionsToWeeks = ({
     specialSessionsForWeek.forEach(session => {
       addScheduledTrialSession({
         city: session.trialLocation,
-        scheduledSessions,
+        scheduledTrialSessions,
         sessionCountPerCity,
         sessionCountPerWeek,
         sessionScheduledPerCityPerWeek,
@@ -145,7 +148,7 @@ export const assignSessionsToWeeks = ({
 
         addScheduledTrialSession({
           ...prospectiveSession,
-          scheduledSessions,
+          scheduledTrialSessions,
           sessionCountPerCity,
           sessionCountPerWeek,
           sessionScheduledPerCityPerWeek,
@@ -161,12 +164,12 @@ export const assignSessionsToWeeks = ({
     }
   }
 
-  return scheduledSessions;
+  return { scheduledTrialSessions, sessionCountPerWeek };
 };
 
 function addScheduledTrialSession({
   city,
-  scheduledSessions,
+  scheduledTrialSessions,
   sessionCountPerCity,
   sessionCountPerWeek,
   sessionScheduledPerCityPerWeek,
@@ -174,7 +177,7 @@ function addScheduledTrialSession({
   weekOfString,
 }) {
   if (!sessionCountPerCity[city]) sessionCountPerCity[city] = 0;
-  scheduledSessions.push({
+  scheduledTrialSessions.push({
     city,
     sessionType,
     weekOf: weekOfString,
