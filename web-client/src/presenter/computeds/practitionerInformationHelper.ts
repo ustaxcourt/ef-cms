@@ -6,6 +6,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Get } from 'cerebral';
+import { PractitionerCaseDetail } from '@web-client/presenter/state';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
 
 const PAGE_SIZE = 100;
@@ -17,7 +18,7 @@ const getPagesToDisplay = ({
   user,
 }: {
   pageNumber: number;
-  cases: any[];
+  cases: PractitionerCaseDetail[];
   applicationContext: ClientApplicationContext;
   user: AuthUser;
 }) => {
@@ -34,10 +35,10 @@ export const practitionerInformationHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): {
-  closedCases: any;
+  closedCasesToDisplay: any;
   closedCasesPageNumber: number;
   closedCasesTotal: number;
-  openCases: any;
+  openCasesToDisplay: any;
   openCasesPageNumber: number;
   openCasesTotal: number;
   showClosedCasesPagination: boolean;
@@ -82,11 +83,11 @@ export const practitionerInformationHelper = (
   });
 
   return {
-    closedCases: closedCasesToDisplay,
     closedCasesPageNumber: practitionerDetail.closedCaseInfo?.currentPage || 0,
+    closedCasesToDisplay,
     closedCasesTotal: practitionerDetail.closedCaseInfo?.allCases.length || 0,
-    openCases: openCasesToDisplay,
     openCasesPageNumber: practitionerDetail.openCaseInfo?.currentPage || 0,
+    openCasesToDisplay,
     openCasesTotal: practitionerDetail.openCaseInfo?.allCases.length || 0,
     showClosedCasesPagination,
     showDocumentationTab: permissions.UPLOAD_PRACTITIONER_DOCUMENT,

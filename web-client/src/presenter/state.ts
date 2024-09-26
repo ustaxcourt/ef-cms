@@ -5,12 +5,14 @@ import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/j
 import {
   IDLE_LOGOUT_STATES,
   IdleLogoutStateType,
+  PRACTICE_TYPE,
+  SERVICE_INDICATOR_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
 import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawMessage } from '@shared/business/entities/Message';
-import { RawUser } from '@shared/business/entities/User';
+import { RawUser, UserContact } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
@@ -890,12 +892,23 @@ export type ViewerDocument = {
   index?: number;
 };
 
+export type PracticeType = (typeof PRACTICE_TYPE)[keyof typeof PRACTICE_TYPE];
+export type ServiceIndicatorType =
+  (typeof SERVICE_INDICATOR_TYPES)[keyof typeof SERVICE_INDICATOR_TYPES];
+
 export type PractitionerDetail = {
-  barNumber: string;
-  contact?: any; // TODO
-  name: string;
-  userId: string;
   admissionsDate: string;
+  admissionStatus: string;
+  barNumber: string;
+  name: string;
+  practiceType: PracticeType;
+  serviceIndicator?: ServiceIndicatorType;
+  userId: string;
+  birthYear?: string;
+  originalBarState?: string;
+  practitionerType?: string;
+  middleName?: string;
+  contact?: Partial<UserContact>;
   openCaseInfo?: PractitionerCaseInfo; // Only for internal users
   closedCaseInfo?: PractitionerCaseInfo; // Only for internal users
   email?: string;
@@ -906,6 +919,17 @@ export type PractitionerDetail = {
 };
 
 export type PractitionerCaseInfo = {
-  allCases: any[];
+  allCases: PractitionerCaseDetail[];
   currentPage: number;
+};
+
+export type PractitionerCaseDetail = {
+  docketNumberWithSuffix: string;
+  caseTitle: string;
+  inConsolidatedGroup: boolean;
+  isLeadCase: boolean;
+  isSealed: boolean;
+  status: string;
+  sealedToTooltip?: string;
+  consolidatedIconTooltipText?: string;
 };

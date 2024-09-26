@@ -39,7 +39,7 @@ export function PractitionerCaseList({
               </tr>
             </thead>
             {cases.map(item => (
-              <tr key={item.pk}>
+              <tr key={item.docketNumberWithSuffix}>
                 <td aria-hidden="true">
                   <PractitionerCaseIcons formattedCase={item} />
                 </td>
