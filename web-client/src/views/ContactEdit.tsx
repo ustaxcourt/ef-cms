@@ -37,7 +37,7 @@ export const ContactEdit = connect(
   }) {
     const type = 'contact';
     const bind = 'form';
-    const onBlur = 'validatePetitionerSequence';
+    const onBlur = () => validatePetitionerSequence();
 
     return (
       <>
@@ -77,6 +77,7 @@ export const ContactEdit = connect(
               bind={bind}
               clearTypeOnCountryChange={true}
               type={type}
+              onBlur={onBlur}
               onChange="contactPrimaryCountryTypeChangeSequence"
             />
             {form.contact.countryType === COUNTRY_TYPES.DOMESTIC ? (

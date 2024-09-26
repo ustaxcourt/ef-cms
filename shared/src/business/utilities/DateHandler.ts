@@ -233,7 +233,7 @@ export const createISODateStringFromObject = options => {
  * @returns {string} a formatted date string
  */
 export const formatDateString = (
-  dateString: string,
+  dateString: string | undefined,
   formatArg: TimeFormatNames | TimeFormats = FORMATS.ISO,
 ): string => {
   if (!dateString) return '';

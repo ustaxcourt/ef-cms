@@ -4,6 +4,7 @@ import {
   SECTIONS,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { getTestJudgesChambers } from '../../../../shared/src/test/mockJudgesChambers';
 import { messageModalHelper as messageModalHelperComputed } from './messageModalHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -16,9 +17,7 @@ describe('messageModalHelper', () => {
   };
   const mockDocketEntryIdOnDocketRecord = '123';
   const mockDocketEntryIdAlsoOnDocketRecord = '234';
-  const JUDGES_CHAMBERS = applicationContext
-    .getPersistenceGateway()
-    .getJudgesChambers();
+  const JUDGES_CHAMBERS = getTestJudgesChambers();
 
   const mockDocketEntryWithFileAttachedOnDocketRecord = {
     descriptionDisplay: 'Hello with additional info',
@@ -484,6 +483,7 @@ describe('messageModalHelper', () => {
         {
           state: {
             caseDetail: {},
+            judgesChambers: Object.values(JUDGES_CHAMBERS),
             modal: {
               form: {
                 attachments: [{}, {}], // 2/2 documents attached
@@ -509,6 +509,7 @@ describe('messageModalHelper', () => {
         {
           state: {
             ...baseState,
+            judgesChambers: Object.values(JUDGES_CHAMBERS),
             modal: {
               form: {
                 attachments: [{}],

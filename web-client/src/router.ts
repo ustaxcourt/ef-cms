@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-import { forEach, set } from 'lodash';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
 import qs from 'qs';
 import route from 'riot-route';
@@ -516,24 +515,6 @@ const router = {
         if (app.getState('currentPage') === 'FileDocumentWizard') {
           return app.getSequence('chooseWizardStepSequence')({
             value: 'FileDocumentReview',
-          });
-        } else {
-          return app.getSequence('navigateToPathSequence')({
-            path: `/case-detail/${docketNumber}/file-a-document`,
-          });
-        }
-      }),
-    );
-
-    registerRoute(
-      '/case-detail/*/file-a-document/all-document-categories',
-      ifHasAccess({ app }, docketNumber => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} File a document`,
-        );
-        if (app.getState('currentPage') === 'FileDocumentWizard') {
-          return app.getSequence('chooseWizardStepSequence')({
-            value: 'ViewAllDocuments',
           });
         } else {
           return app.getSequence('navigateToPathSequence')({
@@ -1148,14 +1129,9 @@ const router = {
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
         () => {
-          const trialSessionFilter = {};
-          forEach(route.query(), (value, key) => {
-            set(trialSessionFilter, key, value);
-          });
+          const queryParams = route.query();
           setPageTitle('Trial sessions');
-          return app.getSequence('gotoTrialSessionsSequence')({
-            query: trialSessionFilter,
-          });
+          return app.getSequence('gotoTrialSessionsSequence')(queryParams);
         },
       ),
     );
@@ -1219,24 +1195,17 @@ const router = {
       '/file-a-petition/step-*',
       ifHasAccess({ app }, step => {
         setPageTitle('File a petition');
-        if (app.getState('currentPage') === 'StartCaseWizard') {
-          return app.getSequence('chooseStartCaseWizardStepSequence')({
-            step: `${step}`,
-            wizardStep: `StartCaseStep${step}`,
-          });
-        } else {
-          if (app.getState('currentPage') !== 'StartCaseInternal') {
-            switch (step) {
-              case '1':
-                return app.getSequence('gotoStartCaseWizardSequence')({
-                  step: `${step}`,
-                  wizardStep: `StartCaseStep${step}`,
-                });
-              default:
-                return app.getSequence('navigateToPathSequence')({
-                  path: '/file-a-petition/step-1',
-                });
-            }
+        if (app.getState('currentPage') !== 'StartCaseInternal') {
+          switch (step) {
+            case '1':
+              return app.getSequence('gotoStartCaseWizardSequence')({
+                step: `${step}`,
+                wizardStep: `StartCaseStep${step}`,
+              });
+            default:
+              return app.getSequence('navigateToPathSequence')({
+                path: '/file-a-petition/step-1',
+              });
           }
         }
       }),
@@ -1246,15 +1215,7 @@ const router = {
       '/file-a-petition/new',
       ifHasAccess({ app }, () => {
         setPageTitle('File a petition');
-        return app.getSequence('gotoUpdatedPetitionFlowSequence')();
-      }),
-    );
-
-    registerRoute(
-      '/file-a-petition/success',
-      ifHasAccess({ app }, () => {
-        setPageTitle('Petition Filed Successfully');
-        return app.getSequence('gotoFilePetitionSuccessSequence')();
+        return app.getSequence('gotoPetitionFlowSequence')();
       }),
     );
 
