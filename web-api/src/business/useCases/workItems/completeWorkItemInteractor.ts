@@ -55,41 +55,41 @@ export const completeWorkItem = async (
     .validate()
     .toRawObject();
 
-  await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
-    applicationContext,
-    authorizedUser,
-    workItem: {
-      ...completedWorkItem,
-      createdAt: createISODateString(),
-    },
-  });
+  // await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
+  //   applicationContext,
+  //   authorizedUser,
+  //   workItem: {
+  //     ...completedWorkItem,
+  //     createdAt: createISODateString(),
+  //   },
+  // });
 
   await saveWorkItem({
     workItem: completedWorkItem,
   });
 
-  const caseObject = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: completedWorkItem.docketNumber,
-    });
+  // const caseObject = await applicationContext
+  //   .getPersistenceGateway()
+  //   .getCaseByDocketNumber({
+  //     applicationContext,
+  //     docketNumber: completedWorkItem.docketNumber,
+  //   });
 
-  const caseToUpdate = new Case(caseObject, { authorizedUser });
+  // const caseToUpdate = new Case(caseObject, { authorizedUser });
 
-  const workItemEntity = new WorkItem(completedWorkItem);
+  // const workItemEntity = new WorkItem(completedWorkItem);
 
-  caseToUpdate.docketEntries.forEach(doc => {
-    if (doc.workItem && doc.workItem.workItemId === workItemEntity.workItemId) {
-      doc.workItem = workItemEntity;
-    }
-  });
+  // caseToUpdate.docketEntries.forEach(doc => {
+  //   if (doc.workItem && doc.workItem.workItemId === workItemEntity.workItemId) {
+  //     doc.workItem = workItemEntity;
+  //   }
+  // });
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
-    authorizedUser,
-    caseToUpdate,
-  });
+  // await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+  //   applicationContext,
+  //   authorizedUser,
+  //   caseToUpdate,
+  // });
 
   return completedWorkItem;
 };

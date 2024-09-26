@@ -9,6 +9,7 @@ import { TrialSession } from '../../../../../shared/src/business/entities/trialS
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 
 export const removeCaseFromTrial = async (
   applicationContext: ServerApplicationContext,
@@ -74,8 +75,7 @@ export const removeCaseFromTrial = async (
       updatedCaseStatus: caseStatus,
     });
 
-    await applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
-      applicationContext,
+    await setPriorityOnAllWorkItems({
       docketNumber: caseEntity.docketNumber,
       highPriority: false,
     });
