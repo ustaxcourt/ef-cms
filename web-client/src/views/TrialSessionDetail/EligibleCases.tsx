@@ -136,8 +136,8 @@ export const EligibleCases = connect(
                           item.qcCompleteForTrial[trialSessionId] === true
                         }
                         className="usa-checkbox__input"
-                        data-testid={`${item.docketNumber}-complete`}
-                        id={`${item.docketNumber}-complete`}
+                        data-testid={`qc-complete-${item.docketNumber}`}
+                        id={`qc-complete-${item.docketNumber}`}
                         name={`${item.docketNumber}Complete`}
                         type="checkbox"
                         onChange={() => {
@@ -150,7 +150,7 @@ export const EligibleCases = connect(
                       />
                       <label
                         className="usa-checkbox__label"
-                        htmlFor={`${item.docketNumber}-complete`}
+                        htmlFor={`qc-complete-${item.docketNumber}`}
                       >
                         {''}
                       </label>

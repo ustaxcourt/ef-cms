@@ -99,11 +99,11 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
             '+1 (555) 555-5555',
           );
 
-          cy.get(`[data-testid="${docketNumber}-complete"]:checked`).should(
+          cy.get(`[data-testid="qc-complete-${docketNumber}"]:checked`).should(
             'not.exist',
           );
-          cy.get(`label[for="${docketNumber}-complete"]`).click();
-          cy.get(`[data-testid="${docketNumber}-complete"]:checked`).should(
+          cy.get(`label[for="qc-complete-${docketNumber}"]`).click();
+          cy.get(`[data-testid="qc-complete-${docketNumber}"]:checked`).should(
             'exist',
           );
           cy.get('#set-calendar-button').click();

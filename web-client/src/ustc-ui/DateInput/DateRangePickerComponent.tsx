@@ -212,7 +212,7 @@ export const DateRangePickerComponent = ({
               <input
                 aria-describedby={`${endName}-date-end-label ${endName}-date-end-hint`}
                 className="usa-input"
-                data-testid={`${endName}-date-end-input}`}
+                data-testid={`${endName}-date-end-input`}
                 id={`${endName}-date-end`}
                 name={`${endName}-date-end`}
                 placeholder={showDateHint ? '' : 'MM/DD/YYYY'}
