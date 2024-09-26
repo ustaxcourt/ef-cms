@@ -12,15 +12,19 @@ describe('Practitioner Information', () => {
   });
 
   describe('Open Cases Tab', () => {
-    it('should display correct number of open cases in tab header', () => {
-      cy.contains('#tabButton-practitionerOpenCases', '(8)');
-    });
-    it('should render correct number of open cases in list', () => {
+    it('should display number of cases in the tab header and list the correct number of open cases', () => {
       cy.get('#tabButton-practitionerOpenCases').click();
-      cy.get('tr').should('have.length', 9); // Including the header tr
+      cy.contains('#tabButton-practitionerOpenCases', /\(\d+\)/)
+        .invoke('text')
+        .then(text => {
+          const match = text.match(/\d+/);
+          const numberInParentheses = parseInt(match![0], 10); // Extract and convert the header number
+          // The seeded data has at least 7 cases, but other tests sometimes add them.
+          expect(numberInParentheses).to.be.greaterThan(6);
+          cy.get('tr').should('have.length', numberInParentheses + 1); // Include the header tr in the count
+        });
     });
   });
-
   describe('Closed Cases Tab', () => {
     it('should display correct number of closed cases in tab header', () => {
       cy.contains('#tabButton-practitionerClosedCases', '(0)');
