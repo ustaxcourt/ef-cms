@@ -14,7 +14,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { updateUserPendingEmailRecord } from '@web-api/business/useCases/auth/changePasswordInteractor';
 
-const TOKEN_EXPIRATION_TIME_HOURS = 1;
+export const TOKEN_EXPIRATION_TIME_HOURS = 1;
 
 const userTokenHasExpired = (user: UserRecord): boolean => {
   if (!user.pendingEmailVerificationTokenTimestamp) {
@@ -56,7 +56,7 @@ export const verifyUserPendingEmailInteractor = async (
     applicationContext.logger.info('Pending email verification link expired', {
       email: authorizedUser.email,
     });
-    throw new UnauthorizedError('Tokens do not match');
+    throw new UnauthorizedError('Link has expired');
   }
 
   const isEmailAvailable = await applicationContext

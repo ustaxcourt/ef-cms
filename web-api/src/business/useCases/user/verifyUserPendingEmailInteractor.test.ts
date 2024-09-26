@@ -3,7 +3,12 @@ import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
+import { DateTime } from 'luxon';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import {
+  TOKEN_EXPIRATION_TIME_HOURS,
+  verifyUserPendingEmailInteractor,
+} from './verifyUserPendingEmailInteractor';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getContactPrimary } from '../../../../../shared/src/business/entities/cases/Case';
@@ -13,10 +18,10 @@ import {
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { validUser } from '../../../../../shared/src/test/mockUsers';
-import { verifyUserPendingEmailInteractor } from './verifyUserPendingEmailInteractor';
 
 describe('verifyUserPendingEmailInteractor', () => {
   const TOKEN = '41189629-abe1-46d7-b7a4-9d3834f919cb';
+  const TOKEN_TIMESTAMP = createISODateString();
   const mockPractitioner = {
     ...validUser,
     ...mockPrivatePractitionerUser,
@@ -31,7 +36,7 @@ describe('verifyUserPendingEmailInteractor', () => {
     originalBarState: 'FL',
     pendingEmail: 'other@example.com',
     pendingEmailVerificationToken: TOKEN,
-    pendingEmailVerificationTokenTimestamp: createISODateString(),
+    pendingEmailVerificationTokenTimestamp: TOKEN_TIMESTAMP,
     practiceType: 'Private',
     practitionerType: 'Attorney',
     role: ROLES.privatePractitioner,
@@ -45,6 +50,7 @@ describe('verifyUserPendingEmailInteractor', () => {
     lastName: 'Vivas',
     pendingEmail: 'other@example.com',
     pendingEmailVerificationToken: '42289629-abe1-46d7-b7a4-9d3834f919xd',
+    pendingEmailVerificationTokenTimestamp: TOKEN_TIMESTAMP,
     role: ROLES.petitioner,
     userId: getContactPrimary(MOCK_CASE).contactId,
   };
@@ -120,6 +126,43 @@ describe('verifyUserPendingEmailInteractor', () => {
     ).rejects.toThrow('Tokens do not match');
   });
 
+  it('should throw an unauthorized error when there is no token timestamp', async () => {
+    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+      ...mockPractitioner,
+      pendingEmailVerificationTokenTimestamp: undefined,
+    });
+
+    await expect(
+      verifyUserPendingEmailInteractor(
+        applicationContext,
+        {
+          token: TOKEN,
+        },
+        mockPrivatePractitionerUser,
+      ),
+    ).rejects.toThrow('Link has expired');
+  });
+
+  it('should throw an unauthorized error when token timestamp is expired', async () => {
+    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+      ...mockPractitioner,
+      pendingEmailVerificationTokenTimestamp: DateTime.now()
+        .setZone('utc')
+        .minus({ hours: TOKEN_EXPIRATION_TIME_HOURS + 1 })
+        .toISO(),
+    });
+
+    await expect(
+      verifyUserPendingEmailInteractor(
+        applicationContext,
+        {
+          token: TOKEN,
+        },
+        mockPrivatePractitionerUser,
+      ),
+    ).rejects.toThrow('Link has expired');
+  });
+
   it('should throw an error when the pendingEmail address is not available in cognito', async () => {
     applicationContext
       .getPersistenceGateway()
@@ -172,10 +215,11 @@ describe('verifyUserPendingEmailInteractor', () => {
       email: 'other@example.com',
       pendingEmail: undefined,
       pendingEmailVerificationToken: undefined,
+      pendingEmailVerificationTokenTimestamp: undefined,
     });
   });
 
-  it('should call updateUser with email set to pendingEmail and pendingEmail set to undefined, and service indicator set to electronic with a practitioner user', async () => {
+  it('should call updateUser with email set to pendingEmail and pending fields set to undefined, and service indicator set to electronic with a practitioner user', async () => {
     await verifyUserPendingEmailInteractor(
       applicationContext,
       {
@@ -191,11 +235,13 @@ describe('verifyUserPendingEmailInteractor', () => {
       email: 'other@example.com',
       entityName: 'Practitioner',
       pendingEmail: undefined,
+      pendingEmailVerificationToken: undefined,
+      pendingEmailVerificationTokenTimestamp: undefined,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
   });
 
-  it('should call updateUser with email set to pendingEmail and pendingEmail set to undefined', async () => {
+  it('should call updateUser with email set to pendingEmail and pending fields set to undefined', async () => {
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(mockPetitioner);
@@ -214,6 +260,8 @@ describe('verifyUserPendingEmailInteractor', () => {
     ).toMatchObject({
       email: 'other@example.com',
       pendingEmail: undefined,
+      pendingEmailVerificationToken: undefined,
+      pendingEmailVerificationTokenTimestamp: undefined,
     });
   });
 });
