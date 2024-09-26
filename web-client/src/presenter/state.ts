@@ -8,6 +8,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
 import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
+import { JudgeChambersInfo } from '@web-client/presenter/actions/getJudgesChambersAction';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawMessage } from '@shared/business/entities/Message';
 import { RawUser } from '@shared/business/entities/User';
@@ -694,6 +695,7 @@ export const baseState = {
   } as JudgeActivityReportState,
   judgeUser: {} as any,
   judges: [] as RawUser[],
+  judgesChambers: [] as JudgeChambersInfo[],
   lastIdleAction: undefined,
   legacyAndCurrentJudges: [],
   login: {} as any,
