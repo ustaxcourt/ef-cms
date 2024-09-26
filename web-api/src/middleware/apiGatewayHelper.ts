@@ -71,21 +71,23 @@ export const handle = async (event, fun) => {
         isBase64Encoded: true,
         statusCode: 200,
       };
-    } else if (isXlsxBuffer) {
-      return {
-        // body: response.toString('base64'),
-        body: response,
-        headers: {
-          ...headerOverride,
-          // 'accept-ranges': 'bytes',
-          'Content-Disposition': 'attachment; filename=TrialSessions.xlsx',
-          'Content-Type':
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        },
-        // isBase64Encoded: true,
-        statusCode: 200,
-      };
-    } else {
+    }
+    //  else if (isXlsxBuffer) {
+    //   return {
+    //     // body: response.toString('base64'),
+    //     body: response,
+    //     headers: {
+    //       ...headerOverride,
+    //       // 'accept-ranges': 'bytes',
+    //       'Content-Disposition': 'attachment; filename=TrialSessions.xlsx',
+    //       'Content-Type':
+    //         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    //     },
+    //     // isBase64Encoded: true,
+    //     statusCode: 200,
+    //   };
+    // }
+    else {
       const privateKeys = applicationContext.getPersistencePrivateKeys();
       (Array.isArray(response) ? response : [response]).forEach(item => {
         if (item && Object.keys(item).some(key => privateKeys.includes(key))) {

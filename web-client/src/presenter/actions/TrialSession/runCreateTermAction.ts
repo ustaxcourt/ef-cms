@@ -6,7 +6,7 @@ export const runCreateTermAction = async ({
 }: ActionProps) => {
   const { termEndDate, termName, termStartDate } = get(state.modal);
 
-  const { url } = await applicationContext
+  const termResult = await applicationContext
     .getUseCases()
     .generateSuggestedTrialSessionCalendarInteractor(applicationContext, {
       termEndDate,
@@ -14,5 +14,19 @@ export const runCreateTermAction = async ({
       termStartDate,
     });
 
-  return { pdfUrl: url };
+  let uint8array = new Uint8Array(termResult.data);
+
+  const blob = new Blob([uint8array]);
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', 'funnestTermInTheBrowser.xlsx');
+
+  document.body.appendChild(link);
+  link.click();
+
+  link.remove();
+  window.URL.revokeObjectURL(url);
+
+  return {};
 };
