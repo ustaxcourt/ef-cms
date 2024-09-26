@@ -107,6 +107,7 @@ import { deleteTrialSessionInteractor } from '../../shared/src/proxies/trialSess
 import { deleteUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteUserCaseNoteProxy';
 import { dismissNOTTReminderForTrialInteractor } from '../../shared/src/proxies/trialSessions/dismissNOTTReminderForTrialProxy';
 import { downloadCsv } from '@web-client/presenter/utilities/downloadCsv';
+import { downloadXlsx } from '@web-client/presenter/utilities/downloadXlsx';
 import { editPaperFilingInteractor } from '../../shared/src/proxies/documents/editPaperFilingProxy';
 import { editPractitionerDocumentInteractor } from '../../shared/src/proxies/practitioners/editPractitionerDocumentProxy';
 import { exportPendingReportInteractor } from '@shared/proxies/pendingItems/exportPendingReportProxy';
@@ -735,6 +736,7 @@ const applicationContext = {
       dateStringsCompared,
       deconstructDate,
       downloadCsv,
+      downloadXlsx,
       filterEmptyStrings,
       formatAttachments,
       formatCase,

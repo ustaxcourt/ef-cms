@@ -14,19 +14,7 @@ export const runCreateTermAction = async ({
       termStartDate,
     });
 
-  let uint8array = new Uint8Array(termResult.data);
-
-  const blob = new Blob([uint8array]);
-  const url = window.URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.setAttribute('download', 'funnestTermInTheBrowser.xlsx');
-
-  document.body.appendChild(link);
-  link.click();
-
-  link.remove();
-  window.URL.revokeObjectURL(url);
-
-  return {};
+  applicationContext
+    .getUtilities()
+    .downloadXlsx({ encodedXlsxArray: termResult.data, fileName: termName });
 };
