@@ -115,7 +115,14 @@ module "ui-healthcheck" {
   dns_domain = "app.${var.dns_domain}"
 }
 
-module "ecr" {
+module "ecr-east" {
   source     = "../../modules/ecr-for-env"
 	environment            = var.environment
+	region                 = "us-east-1"
+}
+
+module "ecr-west" {
+  source     = "../../modules/ecr-for-env"
+	environment            = var.environment
+	region                 = "us-west-1"
 }
