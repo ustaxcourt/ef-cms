@@ -115,66 +115,36 @@ const TrialSessionFilters = connect(
             <fieldset className="usa-fieldset">
               <legend className="usa-legend">Session Status</legend>
               <div className="usa-radio usa-radio__inline">
-                <input
-                  checked={trialSessionsPage.filters.sessionStatus === 'All'}
-                  className="usa-radio__input"
-                  id="sessionStatus-All"
-                  name="sessionStatus"
-                  type="radio"
-                  value="All"
-                  onChange={e => {
-                    setTrialSessionsFiltersSequence({
-                      sessionStatus: e.target.value,
-                    });
-                  }}
-                />
-                <label className="usa-radio__label" htmlFor="sessionStatus-All">
-                  All
-                </label>
-                <input
-                  checked={
-                    trialSessionsPage.filters.sessionStatus ===
-                    SESSION_STATUS_TYPES.open
-                  }
-                  className="usa-radio__input"
-                  id="sessionStatus-Open"
-                  name="sessionStatus"
-                  type="radio"
-                  value={SESSION_STATUS_TYPES.open}
-                  onChange={e => {
-                    setTrialSessionsFiltersSequence({
-                      sessionStatus: e.target.value,
-                    });
-                  }}
-                />
-                <label
-                  className="usa-radio__label"
-                  htmlFor="sessionStatus-Open"
-                >
-                  Open
-                </label>
-                <input
-                  checked={
-                    trialSessionsPage.filters.sessionStatus ===
-                    SESSION_STATUS_TYPES.closed
-                  }
-                  className="usa-radio__input"
-                  id="sessionStatus-Closed"
-                  name="sessionStatus"
-                  type="radio"
-                  value={SESSION_STATUS_TYPES.closed}
-                  onChange={e => {
-                    setTrialSessionsFiltersSequence({
-                      sessionStatus: e.target.value,
-                    });
-                  }}
-                />
-                <label
-                  className="usa-radio__label"
-                  htmlFor="sessionStatus-Closed"
-                >
-                  Closed
-                </label>
+                {[
+                  'All',
+                  SESSION_STATUS_TYPES.open,
+                  SESSION_STATUS_TYPES.closed,
+                ].map(statusOption => (
+                  <React.Fragment key={statusOption}>
+                    <input
+                      checked={
+                        trialSessionsPage.filters.sessionStatus === statusOption
+                      }
+                      className="usa-radio__input"
+                      id={`sessionStatus-${statusOption}`}
+                      name="sessionStatus"
+                      type="radio"
+                      value={statusOption}
+                      onChange={e => {
+                        setTrialSessionsFiltersSequence({
+                          sessionStatus: e.target.value,
+                        });
+                      }}
+                    />
+                    <label
+                      className="usa-radio__label"
+                      data-testid={`sessionStatus-${statusOption}`}
+                      htmlFor={`sessionStatus-${statusOption}`}
+                    >
+                      {statusOption}
+                    </label>
+                  </React.Fragment>
+                ))}
               </div>
             </fieldset>
           )}
