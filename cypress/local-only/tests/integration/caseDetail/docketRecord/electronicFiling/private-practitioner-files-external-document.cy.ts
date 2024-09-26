@@ -1,3 +1,4 @@
+import { attachSamplePdfFile } from '../../../../../../helpers/file/upload-file';
 import { externalUserSearchesDocketNumber } from '../../../../../../helpers/advancedSearch/external-user-searches-docket-number';
 import {
   loginAsPetitioner,
@@ -6,7 +7,6 @@ import {
 import { petitionerCreatesElectronicCase } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { selectTypeaheadInput } from '../../../../../../helpers/components/typeAhead/select-typeahead-input';
-import { uploadFile } from '../../../../../../helpers/file/upload-file';
 
 describe('Private practitioner files document on case they are already associated with', () => {
   describe('Upload File on already associated case', () => {
@@ -34,7 +34,7 @@ describe('Private practitioner files document on case they are already associate
           'Motion for a New Trial',
         );
         cy.get('[data-testid="submit-document"]').click();
-        uploadFile('primary-document');
+        attachSamplePdfFile('primary-document');
         cy.get('[data-testid="primaryDocument-objections-No"]').click();
         cy.get('[data-testid="filingParty-John, Petitioner"]').click();
         cy.get('[data-testid="file-document-submit-document"]').click();

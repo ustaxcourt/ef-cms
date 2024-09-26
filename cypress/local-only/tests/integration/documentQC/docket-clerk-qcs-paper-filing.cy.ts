@@ -1,3 +1,4 @@
+import { attachFile } from '../../../../helpers/file/upload-file';
 import {
   loginAsDocketClerk1,
   loginAsPetitioner,
@@ -54,9 +55,11 @@ describe('Docket clerk QC-ing a paper filing', () => {
       cy.get('[data-testid="objections-No"').click();
 
       cy.get('[data-testid="upload-pdf-button"]').click();
-      cy.get('input#primaryDocumentFile-file').attachFile(
-        '../../helpers/file/sample.pdf',
-      );
+      attachFile({
+        filePath: '../../helpers/file/sample.pdf',
+        selector: 'input#primaryDocumentFile-file',
+        selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+      });
 
       cy.get('[data-testid="save-for-later"]').click();
       cy.get('[data-testid="success-alert"]').contains(

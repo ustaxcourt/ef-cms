@@ -1,3 +1,4 @@
+import { attachSamplePdfFile } from '../../../../../../helpers/file/upload-file';
 import { externalUserSearchesDocketNumber } from '../../../../../../helpers/advancedSearch/external-user-searches-docket-number';
 import {
   loginAsIrsPractitioner1,
@@ -6,7 +7,6 @@ import {
 import { petitionerCreatesElectronicCase } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { selectTypeaheadInput } from '../../../../../../helpers/components/typeAhead/select-typeahead-input';
-import { uploadFile } from '../../../../../../helpers/file/upload-file';
 
 describe('IRS Practitioner files Entry of Appearance as First IRS Document', () => {
   describe('Auto Generate Entry of Appearance', () => {
@@ -72,7 +72,7 @@ describe('IRS Practitioner files Entry of Appearance as First IRS Document', () 
         cy.get('[data-testid="submit-document"]').click();
 
         cy.get('[data-testid="manual-generation-label"]').click();
-        uploadFile('primary-document');
+        attachSamplePdfFile('primary-document');
         cy.get('[data-testid="file-document-submit-document"]').click();
 
         cy.get('[data-testid="redaction-acknowledgement-label"]').click();

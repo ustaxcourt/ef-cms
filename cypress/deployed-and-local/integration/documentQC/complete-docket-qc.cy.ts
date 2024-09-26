@@ -1,5 +1,6 @@
 /* eslint-disable promise/no-nesting */
 import { assertExists, retry } from '../../../helpers/retry';
+import { attachSamplePdfFile } from '../../../helpers/file/upload-file';
 import { goToCase } from '../../../helpers/caseDetail/go-to-case';
 import {
   loginAsAdmissionsClerk,
@@ -8,7 +9,6 @@ import {
 import { petitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { selectTypeaheadInput } from '../../../helpers/components/typeAhead/select-typeahead-input';
-import { uploadFile } from '../../../helpers/file/upload-file';
 
 describe('Document QC Complete', () => {
   const docketSectionMessage = 'To CSS under Docket Section';
@@ -199,7 +199,7 @@ function petitionerFilesADocument(docketNumber: string) {
   cy.get('[data-testid="ready-to-file"]').click();
   selectTypeaheadInput('complete-doc-document-type-search', 'Exhibit(s)');
   cy.get('[data-testid="submit-document"]').click();
-  uploadFile('primary-document');
+  attachSamplePdfFile('primary-document');
   cy.get('#submit-document').click();
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="file-document-review-submit-document"]').click();

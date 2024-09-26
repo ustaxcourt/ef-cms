@@ -1,3 +1,4 @@
+import { attachFile } from '../../../../../../helpers/file/upload-file';
 import { navigateTo as navigateToDashboard } from '../../../../../support/pages/dashboard';
 import { selectTypeaheadInput } from '../../../../../../helpers/components/typeAhead/select-typeahead-input';
 
@@ -18,7 +19,11 @@ describe('Filing an Answer', function () {
       'not.have.class',
       'validated',
     );
-    cy.get('#primary-document').attachFile('../../helpers/file/sample.pdf');
+    attachFile({
+      filePath: '../../helpers/file/sample.pdf',
+      selector: '#primary-document',
+      selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+    });
     cy.get('label#primary-document-label').should('have.class', 'validated');
   });
 
