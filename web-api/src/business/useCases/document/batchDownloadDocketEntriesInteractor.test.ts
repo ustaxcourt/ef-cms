@@ -4,12 +4,9 @@ import {
   MOCK_MINUTE_ENTRY,
   STANDING_PRETRIAL_ORDER_ENTRY,
 } from '@shared/test/mockDocketEntry';
-import {
-  DownloadDocketEntryRequestType,
-  batchDownloadDocketEntriesInteractor,
-} from '@web-api/business/useCases/document/batchDownloadDocketEntriesInteractor';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { batchDownloadDocketEntriesInteractor } from '@web-api/business/useCases/document/batchDownloadDocketEntriesInteractor';
 import {
   mockDocketClerkUser,
   mockPrivatePractitionerUser,
@@ -33,19 +30,18 @@ describe('batchDownloadDocketEntriesInteractor', () => {
     STANDING_PRETRIAL_ORDER_ENTRY.docketEntryId,
   ];
 
-  let requestParams: DownloadDocketEntryRequestType;
-  const TEST_GUID = 'TEST_GUID';
-  const TEST_BATCH_INDEX = 1;
+  let requestParams: {
+    clientConnectionId: string;
+    docketNumber: string;
+    documentsSelectedForDownload: string[];
+    printableDocketRecordFileId?: string;
+  };
 
   beforeEach(() => {
     requestParams = {
       clientConnectionId: mockClientConnectionId,
       docketNumber: MOCK_CASE.docketNumber,
       documentsSelectedForDownload: mockDocumentsSelectedForDownload,
-      index: TEST_BATCH_INDEX,
-      totalNumberOfBatches: 1,
-      totalNumberOfFiles: 0,
-      uuid: TEST_GUID,
     };
     applicationContext
       .getPersistenceGateway()
@@ -177,7 +173,7 @@ describe('batchDownloadDocketEntriesInteractor', () => {
         },
       ],
       onProgress: expect.anything(),
-      outputZipName: `${TEST_GUID}-${TEST_BATCH_INDEX}.zip`,
+      outputZipName: '101-18, Test Petitioner.zip',
     });
   });
 
@@ -218,7 +214,7 @@ describe('batchDownloadDocketEntriesInteractor', () => {
         },
       ],
       onProgress: expect.anything(),
-      outputZipName: `${TEST_GUID}-${TEST_BATCH_INDEX}.zip`,
+      outputZipName: '101-18, Test Petitioner.zip',
     });
   });
 
@@ -235,12 +231,8 @@ describe('batchDownloadDocketEntriesInteractor', () => {
       applicationContext: expect.anything(),
       clientConnectionId: mockClientConnectionId,
       message: {
-        action: 'docket_entries_batch_download_ready',
-        caseFolder: '101-18, Test Petitioner',
-        index: TEST_BATCH_INDEX,
-        totalNumberOfBatches: 1,
+        action: 'batch_download_ready',
         url: MOCK_URL,
-        uuid: TEST_GUID,
       },
       userId: mockDocketClerkUser.userId,
     });

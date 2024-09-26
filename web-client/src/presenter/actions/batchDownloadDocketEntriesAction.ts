@@ -21,36 +21,15 @@ export const batchDownloadDocketEntriesAction = async ({
       docketRecordFilter,
     });
 
-  const batchSize = 50;
-  const batchedDocumentIds: string[][] = [];
-  const uuid = applicationContext.getUniqueId();
-
-  for (let i = 0; i < filteredDocumentsIds.length; i += batchSize) {
-    const batchSlice = filteredDocumentsIds.slice(i, i + batchSize);
-    batchedDocumentIds.push(batchSlice);
-  }
-
-  const totalNumberOfFiles = props.fileId
-    ? filteredDocumentsIds.length + 1
-    : filteredDocumentsIds.length;
-
   try {
-    await Promise.all(
-      batchedDocumentIds.map((batch, index) =>
-        applicationContext
-          .getUseCases()
-          .batchDownloadDocketEntriesInteractor(applicationContext, {
-            clientConnectionId,
-            docketNumber,
-            documentsSelectedForDownload: batch,
-            index,
-            printableDocketRecordFileId: !index ? props.fileId : undefined,
-            totalNumberOfBatches: batchedDocumentIds.length,
-            totalNumberOfFiles,
-            uuid,
-          }),
-      ),
-    );
+    await applicationContext
+      .getUseCases()
+      .batchDownloadDocketEntriesInteractor(applicationContext, {
+        clientConnectionId,
+        docketNumber,
+        documentsSelectedForDownload: filteredDocumentsIds,
+        printableDocketRecordFileId: props.fileId,
+      });
 
     return path.success();
   } catch (e) {

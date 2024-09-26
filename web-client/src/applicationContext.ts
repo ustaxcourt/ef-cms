@@ -106,7 +106,6 @@ import { deletePractitionerDocumentInteractor } from '../../shared/src/proxies/p
 import { deleteTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/deleteTrialSessionProxy';
 import { deleteUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteUserCaseNoteProxy';
 import { dismissNOTTReminderForTrialInteractor } from '../../shared/src/proxies/trialSessions/dismissNOTTReminderForTrialProxy';
-import { downloadBlob } from '@web-client/presenter/utilities/downloadBlob';
 import { downloadCsv } from '@web-client/presenter/utilities/downloadCsv';
 import { editPaperFilingInteractor } from '../../shared/src/proxies/documents/editPaperFilingProxy';
 import { editPractitionerDocumentInteractor } from '../../shared/src/proxies/practitioners/editPractitionerDocumentProxy';
@@ -731,7 +730,6 @@ const applicationContext = {
       createStartOfDayISO,
       dateStringsCompared,
       deconstructDate,
-      downloadBlob,
       downloadCsv,
       filterEmptyStrings,
       formatAttachments,

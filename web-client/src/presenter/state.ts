@@ -655,12 +655,6 @@ export const baseState = {
     },
   },
   customCaseReport: cloneDeep(initialCustomCaseReportState),
-  docketEntriesBatchDownload: {} as {
-    [uuid: string]: { index: number; url: string }[];
-  },
-  docketEntriesBatchDownloadProgress: {} as {
-    [uuid: string]: { [index: number]: number };
-  },
   docketEntryId: null,
   docketRecordIndex: 0,
   documentToEdit: {} as any,
