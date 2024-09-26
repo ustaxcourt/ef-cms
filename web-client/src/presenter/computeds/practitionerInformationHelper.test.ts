@@ -166,7 +166,7 @@ describe('practitionerInformationHelper', () => {
     },
   );
 
-  it('should set showOpenCasesPagination to true if there is more than 1 open case page', () => {
+  it('should set showOpenCasesPagination to true when there is more than 1 open case page', () => {
     const numOpenCases = pageSize + 1;
     const { showOpenCasesPagination } = runCompute(
       practitionerInformationHelper,
@@ -184,7 +184,7 @@ describe('practitionerInformationHelper', () => {
     expect(showOpenCasesPagination).toBe(true);
   });
 
-  it('should set showClosedCasesPagination to true if there is more than 1 open case page', () => {
+  it('should set showClosedCasesPagination to true when there is more than 1 open case page', () => {
     const numClosedCases = pageSize + 1;
     const { showClosedCasesPagination } = runCompute(
       practitionerInformationHelper,
