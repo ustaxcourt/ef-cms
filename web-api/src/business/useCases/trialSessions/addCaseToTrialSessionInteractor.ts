@@ -9,6 +9,7 @@ import { TrialSession } from '../../../../../shared/src/business/entities/trialS
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 
 /**
  * addCaseToTrialSession
@@ -82,8 +83,7 @@ export const addCaseToTrialSession = async (
     });
 
   if (trialSessionEntity.isCalendared) {
-    await applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
-      applicationContext,
+    await setPriorityOnAllWorkItems({
       docketNumber: caseEntity.docketNumber,
       highPriority: true,
       trialDate: caseEntity.trialDate,
