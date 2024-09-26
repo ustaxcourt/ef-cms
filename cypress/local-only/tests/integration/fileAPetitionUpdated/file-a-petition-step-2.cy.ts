@@ -1,3 +1,4 @@
+import { attachFile } from '../../../../helpers/file/upload-file';
 import { fillPetitionerInformation } from './petition-helper';
 import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
 
@@ -148,7 +149,11 @@ describe('File a petition', () => {
 
           cy.get('[data-testid="petition-error-message-0"]').should('exist');
 
-          cy.get('#petition-file').attachFile('../../helpers/file/sample.pdf');
+          attachFile({
+            filePath: '../../helpers/file/sample.pdf',
+            selector: '#petition-file',
+            selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+          });
 
           cy.get('[data-testid="petition-error-message-0"]').should(
             'not.exist',
@@ -156,7 +161,11 @@ describe('File a petition', () => {
         });
 
         it('should be able to navigate to step 2 when the user uploads a petition correctly', () => {
-          cy.get('#petition-file').attachFile('../../helpers/file/sample.pdf');
+          attachFile({
+            filePath: '../../helpers/file/sample.pdf',
+            selector: '#petition-file',
+            selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+          });
 
           cy.get('[data-testid="petition-error-message-0"]').should(
             'not.exist',
