@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "docket_entry_zipper_repo" {
-  name = "docket-entry-zipper-${var.environment}"
+  name = "docket-entry-zipper-${var.environment}-${var.region}"
 }
 
 # TODO: This is not applying as we do not tag images with 'SNAPSHOT-' prefix anymore. 
