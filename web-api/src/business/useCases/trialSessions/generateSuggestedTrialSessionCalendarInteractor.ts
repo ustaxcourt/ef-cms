@@ -123,12 +123,14 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     startDate: termEndDate,
   });
 
-  const scheduledTrialSessions = assignSessionsToWeeks({
-    calendaringConfig,
-    prospectiveSessionsByCity,
-    specialSessions,
-    weeksToLoop,
-  });
+  const { scheduledTrialSessions, sessionCountPerWeek } = assignSessionsToWeeks(
+    {
+      calendaringConfig,
+      prospectiveSessionsByCity,
+      specialSessions,
+      weeksToLoop,
+    },
+  );
 
   if (scheduledTrialSessions.length < 1) {
     //tell the user the bad news
@@ -136,6 +138,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   return writeTrialSessionDataToExcel({
     scheduledTrialSessions,
+    sessionCountPerWeek,
     termName,
     weeks: weeksToLoop,
   });
