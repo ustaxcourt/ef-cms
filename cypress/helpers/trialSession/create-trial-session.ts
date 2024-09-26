@@ -34,22 +34,19 @@ export function createTrialSession(
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
   cy.get('[data-testid="trial-session-link"]').click();
   cy.get('[data-testid="add-trial-session-button"]').click();
-  cy.get('#start-date-picker').clear();
   cy.get('#start-date-picker').type(startDate);
-  cy.get('#estimated-end-date-picker').clear();
   cy.get('#estimated-end-date-picker').type(endDate);
   cy.get(`[data-testid="session-type-${sessionType}"]`).click();
-  cy.get('[data-testid="trial-session-number-of-cases-allowed"]').clear();
   cy.get('[data-testid="trial-session-number-of-cases-allowed"]').type('10');
   cy.get(`[data-testid="${proceedingType}-proceeding-label"]`).click();
   cy.get('[data-testid="trial-session-trial-location"]').select(trialLocation);
-  cy.get('[data-testid="courthouse-name"]').clear();
-  cy.get('[data-testid="courthouse-name"]').type('a courthouse');
-  cy.get('[data-testid="city"]').clear();
-  cy.get('[data-testid="city"]').type('cleveland');
-  cy.get('[data-testid="state"]').select('TN');
-  cy.get('[data-testid="postal-code"]').clear();
-  cy.get('[data-testid="postal-code"]').type('33333');
+  cy.get('[data-testid="trial-session-courthouse-name"]').type('a courthouse');
+  cy.get('[data-testid="trial-session-address-1-input"]').type(
+    '429 Birdhouse Dr.',
+  );
+  cy.get('[data-testid="trial-session-city-input"]').type('cleveland');
+  cy.get('[data-testid="trial-session-state-select"]').select('TN');
+  cy.get('[data-testid="trial-session-postal-code-input"]').type('33333');
   cy.get('[data-testid="trial-session-judge"]').select(judge);
   cy.get('[data-testid="trial-session-trial-clerk"]').select(
     'Test trialclerk1',

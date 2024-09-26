@@ -203,6 +203,7 @@ const TrialSessionFilters = connect(
                     />
                     <label
                       className="usa-radio__label"
+                      data-testid={`proceedingType-${proceedingOption}`}
                       htmlFor={`proceedingType-${proceedingOption}`}
                     >
                       {proceedingOption}
@@ -220,7 +221,7 @@ const TrialSessionFilters = connect(
                 <span className="optional-light-text">(optional)</span>
               </span>
             }
-            endName="trialSessionStartDate"
+            endName="trialSessionLastStartDate"
             endValue={trialSessionsPage.filters.endDate}
             rangePickerCls={'display-flex'}
             startDateErrorText={trialSessionsHelper.startDateErrorMessage}
@@ -230,7 +231,7 @@ const TrialSessionFilters = connect(
                 <span className="optional-light-text">(optional)</span>
               </span>
             }
-            startName="trialSessionEndDate"
+            startName="trialSessionFirstStartDate"
             startPickerCls="padding-right-2"
             startValue={trialSessionsPage.filters.startDate}
             onBlurEnd={e => {
