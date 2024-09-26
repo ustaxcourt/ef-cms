@@ -11,17 +11,18 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '../../../errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { updateUserPendingEmailRecord } from '@web-api/business/useCases/auth/changePasswordInteractor';
 
 export const TOKEN_EXPIRATION_TIME_HOURS = 1;
 
-const userTokenHasExpired = (user: UserRecord): boolean => {
-  if (!user.pendingEmailVerificationTokenTimestamp) {
+export const userTokenHasExpired = (
+  tokenExpirationTimestamp?: string,
+): boolean => {
+  if (!tokenExpirationTimestamp) {
     return true;
   }
   const expirationTime = prepareDateFromString(
-    user.pendingEmailVerificationTokenTimestamp,
+    tokenExpirationTimestamp,
     FORMATS.ISO,
   ).plus({ hours: TOKEN_EXPIRATION_TIME_HOURS });
   const now = DateTime.now().setZone('utc');
@@ -52,7 +53,7 @@ export const verifyUserPendingEmailInteractor = async (
     throw new UnauthorizedError('Tokens do not match');
   }
 
-  if (userTokenHasExpired(user)) {
+  if (userTokenHasExpired(user.pendingEmailVerificationTokenTimestamp)) {
     applicationContext.logger.info('Pending email verification link expired', {
       email: authorizedUser.email,
     });
