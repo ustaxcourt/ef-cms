@@ -9,26 +9,25 @@ const getEmptyStateText = (isOpen: boolean) => {
 export function PractitionerCaseList({
   cases,
   caseType,
-  id,
 }: {
   cases: any;
   caseType: 'open' | 'closed';
-  id: string;
 }) {
   const showStatus = caseType === 'open';
+  const tableId = `practitioner-${caseType}-cases-list`;
   return (
     <>
       <div
         className="margin-top-1"
-        data-testid={`${id}-container`}
-        id={`${id}-container`}
+        data-testid={`${tableId}-container`}
+        id={`${tableId}-container`}
       >
         {cases.length > 0 ? (
           <table
             aria-label="Open Cases"
             className="usa-table ustc-table"
-            data-testid={id}
-            id={id}
+            data-testid={tableId}
+            id={tableId}
           >
             <thead>
               <tr>
