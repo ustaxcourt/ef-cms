@@ -76,7 +76,6 @@ Found in `web-api/src/persistence/dynamo/**/*.ts`
 - Practitioner
 - Hearing
 - ...
-- .....
 
 
 ### OpenSearch Functions
