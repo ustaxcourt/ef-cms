@@ -22,6 +22,7 @@ describe('trial sessions filtering', () => {
     const proceedingType = 'In Person';
 
     loginAsPetitionsClerk1();
+    //X create a trial session
     createTrialSession({
       endDate,
       judge,
@@ -30,35 +31,35 @@ describe('trial sessions filtering', () => {
       startDate,
       trialLocation,
     }).then(({ trialSessionId }) => {
+      //X see that that trial session shows in new trial session tab
       cy.get('[data-testid="trial-session-link"]').click();
-      cy.get('[data-testid="new-trial-sessions-tab"]').click();
-      cy.get(`[data-testid="proceedingType-${proceedingType}"]`).click();
-      cy.get('[data-testid="trialSessionFirstStartDate-date-start-input"]')
-        .eq(1)
-        .type(startDate);
-      cy.get('[data-testid="trialSessionLastStartDate-date-end-input"]')
-        .eq(1)
-        .type(startDate);
-      selectTypeaheadInput('trial-session-type-filter-search', sessionType);
-      selectTypeaheadInput(
-        'trial-session-location-filter-search',
+      setTrialSessionFilters({
+        judge,
+        proceedingType,
+        sessionType,
+        startDate,
+        tabName: 'new',
         trialLocation,
-      );
-      selectTypeaheadInput('trial-session-judge-filter-search', judge);
+      });
       cy.get(`[data-testid="trial-sessions-row-${trialSessionId}"]`).should(
         'exist',
       );
+
+      //X create a case
       createAndServePaperPetition({
         procedureType: sessionType,
         trialLocation,
       }).then(({ docketNumber }) => {
+        // X set case as ready for trial
         loginAsDocketClerk1();
         goToCase(docketNumber);
         updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+
+        //X petition clerk views eligible cases
         loginAsPetitionsClerk1();
         cy.get('[data-testid="trial-session-link"]').click();
-        cy.log(docketNumber);
         cy.visit(`/trial-session-detail/${trialSessionId}`);
+        //X mark trial session cases as QC'd
         cy.get(`[data-testid="qc-complete-${docketNumber}"]:checked`).should(
           'not.exist',
         );
@@ -66,28 +67,68 @@ describe('trial sessions filtering', () => {
         cy.get(`[data-testid="qc-complete-${docketNumber}"]:checked`).should(
           'exist',
         );
+        //X set trial session schedule
         cy.get('[data-testid="set-calendar-button"]').click();
         cy.get('#modal-button-confirm').click();
         cy.url().should('include', 'print-paper-trial-notices');
         cy.get('[data-testid="printing-complete"]').click();
         cy.url().should('include', `trial-session-detail/${trialSessionId}`);
+
+        //View that the trial session is now in the "Calendared" tab and in OPEN status
+        cy.get('[data-testid="trial-session-link"]').click();
+        setTrialSessionFilters({
+          judge,
+          proceedingType,
+          sessionStatus: 'Open',
+          sessionType,
+          startDate,
+          tabName: 'calendared',
+          trialLocation,
+        });
+        cy.get(`[data-testid="trial-sessions-row-${trialSessionId}"]`).should(
+          'exist',
+        );
       });
     });
   });
 });
 
+function setTrialSessionFilters({
+  judge,
+  proceedingType,
+  sessionStatus,
+  sessionType,
+  startDate,
+  tabName,
+  trialLocation,
+}: {
+  tabName: 'calendared' | 'new';
+  proceedingType: string;
+  startDate: string;
+  sessionType: string;
+  trialLocation: string;
+  judge: string;
+  sessionStatus?: string;
+}) {
+  cy.get(`[data-testid="${tabName}-trial-sessions-tab"]`).click();
+  if (sessionStatus) {
+    cy.get(`[data-testid="sessionStatus-${sessionStatus}"]`).click();
+  }
+  cy.get(`[data-testid="proceedingType-${proceedingType}"]`).click();
+  cy.get('[data-testid="trialSessionFirstStartDate-date-start-input"]')
+    .eq(1)
+    .type(startDate);
+  cy.get('[data-testid="trialSessionLastStartDate-date-end-input"]')
+    .eq(1)
+    .type(startDate);
+  selectTypeaheadInput('trial-session-type-filter-search', sessionType);
+  selectTypeaheadInput('trial-session-location-filter-search', trialLocation);
+  selectTypeaheadInput('trial-session-judge-filter-search', judge);
+}
+
 /*
-X create a trial session
-see that that trial session shows in new trial session tab
-X create a case
-X set case as ready for trial
-X petition clerk views eligible cases
-not needed? ----- petition clerk manually adds case to trial session
-X mark trial session cases as QC'd
-X set trial session schedule
-View that the trial session is now in the "Calendared" tab and in OPEN status
-Remove a case from the trial session
-View trial session in "Calendared" tab and in Closed status
-View trial session in "Calendared" tab when  looking at ALL filter
+//Remove a case from the trial session
+//View trial session in "Calendared" tab and in Closed status
+//View trial session in "Calendared" tab when  looking at ALL filter
 });
 */
