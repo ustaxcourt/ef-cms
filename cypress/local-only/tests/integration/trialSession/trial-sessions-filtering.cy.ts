@@ -17,8 +17,8 @@ describe('trial sessions filtering', () => {
     const trialLocation = 'Honolulu, Hawaii';
     const sessionType = SESSION_TYPES.small;
     const judge = 'Carluzzo';
-    const startDate = '02/02/2033';
-    const endDate = '02/03/2033';
+    const startDate = '02/02/2233';
+    const endDate = '02/03/2233';
     const proceedingType = 'In Person';
 
     loginAsPetitionsClerk1();
@@ -32,47 +32,46 @@ describe('trial sessions filtering', () => {
     }).then(({ trialSessionId }) => {
       cy.get('[data-testid="trial-session-link"]').click();
       cy.get('[data-testid="new-trial-sessions-tab"]').click();
-      selectTypeaheadInput(
-        'trial-session-location-filter-search',
-        trialLocation,
-      );
-      selectTypeaheadInput('trial-session-judge-filter-search', judge);
-      selectTypeaheadInput('trial-session-type-filter-search', sessionType);
+      cy.get(`[data-testid="proceedingType-${proceedingType}"]`).click();
       cy.get('[data-testid="trialSessionFirstStartDate-date-start-input"]')
         .eq(1)
         .type(startDate);
       cy.get('[data-testid="trialSessionLastStartDate-date-end-input"]')
         .eq(1)
-        .type(endDate);
-      cy.get(`[data-testid="proceedingType-${proceedingType}"]`).click();
-
+        .type(startDate);
+      selectTypeaheadInput('trial-session-type-filter-search', sessionType);
+      selectTypeaheadInput(
+        'trial-session-location-filter-search',
+        trialLocation,
+      );
+      selectTypeaheadInput('trial-session-judge-filter-search', judge);
       cy.get(`[data-testid="trial-sessions-row-${trialSessionId}"]`).should(
         'exist',
       );
-      // createAndServePaperPetition({
-      //   procedureType: sessionType,
-      //   trialLocation,
-      // }).then(({ docketNumber }) => {
-      //   loginAsDocketClerk1();
-      //   goToCase(docketNumber);
-      //   updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
-      //   loginAsPetitionsClerk1();
-      //   cy.get('[data-testid="trial-session-link"]').click();
-      //   cy.log(docketNumber);
-      //   cy.visit(`/trial-session-detail/${trialSessionId}`);
-      //   cy.get(`[data-testid="qc-complete-${docketNumber}"]:checked`).should(
-      //     'not.exist',
-      //   );
-      //   cy.get(`label[for="qc-complete-${docketNumber}"]`).click();
-      //   cy.get(`[data-testid="qc-complete-${docketNumber}"]:checked`).should(
-      //     'exist',
-      //   );
-      //   cy.get('[data-testid="set-calendar-button"]').click();
-      //   cy.get('#modal-button-confirm').click();
-      //   cy.url().should('include', 'print-paper-trial-notices');
-      //   cy.get('[data-testid="printing-complete"]').click();
-      //   cy.url().should('include', `trial-session-detail/${trialSessionId}`);
-      // });
+      createAndServePaperPetition({
+        procedureType: sessionType,
+        trialLocation,
+      }).then(({ docketNumber }) => {
+        loginAsDocketClerk1();
+        goToCase(docketNumber);
+        updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+        loginAsPetitionsClerk1();
+        cy.get('[data-testid="trial-session-link"]').click();
+        cy.log(docketNumber);
+        cy.visit(`/trial-session-detail/${trialSessionId}`);
+        cy.get(`[data-testid="qc-complete-${docketNumber}"]:checked`).should(
+          'not.exist',
+        );
+        cy.get(`label[for="qc-complete-${docketNumber}"]`).click();
+        cy.get(`[data-testid="qc-complete-${docketNumber}"]:checked`).should(
+          'exist',
+        );
+        cy.get('[data-testid="set-calendar-button"]').click();
+        cy.get('#modal-button-confirm').click();
+        cy.url().should('include', 'print-paper-trial-notices');
+        cy.get('[data-testid="printing-complete"]').click();
+        cy.url().should('include', `trial-session-detail/${trialSessionId}`);
+      });
     });
   });
 });

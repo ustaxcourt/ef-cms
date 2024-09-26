@@ -1,6 +1,7 @@
 import {
   FORMATS,
   createDateAtStartOfWeekEST,
+  createEndOfDayISO,
   createISODateString,
   formatDateString,
   subtractISODates,
@@ -180,15 +181,30 @@ const filterAndSortTrialSessions = ({
         filters.startDate,
         FORMATS.MMDDYYYY,
       );
-      return trialSession.startDate >= filterIsoStartDate;
+      const formattdFilterStartDate = formatDateString(
+        filterIsoStartDate,
+        FORMATS.ISO,
+      );
+      const formattedTrialSessionStartDate = formatDateString(
+        trialSession.startDate,
+        FORMATS.ISO,
+      );
+      return formattedTrialSessionStartDate >= formattdFilterStartDate;
     })
     .filter(trialSession => {
       if (!filters.endDate) return true;
-      const filterIsoEndDate = createISODateString(
-        filters.endDate,
-        FORMATS.MMDDYYYY,
+      const [month, day, year] = filters.endDate.split('/');
+      const filterIsoEndofDay = createEndOfDayISO({ day, month, year });
+      const formattedFilterEndDate = formatDateString(
+        filterIsoEndofDay,
+        FORMATS.ISO,
       );
-      return trialSession.startDate <= filterIsoEndDate;
+      const formattedTrialSessionStartDate = formatDateString(
+        trialSession.startDate,
+        FORMATS.ISO,
+      );
+
+      return formattedTrialSessionStartDate <= formattedFilterEndDate;
     })
     .sort((sessionA, sessionB) => {
       return sessionA.startDate.localeCompare(sessionB.startDate);

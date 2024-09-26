@@ -302,7 +302,6 @@ describe('trialSessionsHelper', () => {
         expect(trialSessionsOnly.length).toEqual(1);
       });
 
-      // NOTE: This test passes, but I am unable to find when the userId for a judge would be set to unassigned
       it('should only show trial sessions who do not have a judge when the judge filter is "unassigned"', () => {
         trialSession1.judge = undefined;
         trialSession2.judge!.userId = '2';
@@ -522,6 +521,50 @@ describe('trialSessionsHelper', () => {
         trialSessionsPageState.filters.trialLocations = {
           'Honolulu, Hawaii': 'Honolulu, Hawaii',
         };
+        trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
+
+        const result = runCompute(trialSessionsHelper, {
+          state: {
+            judges: [judgeUser],
+            permissions: getUserPermissions(docketClerk1User),
+            trialSessionsPage: trialSessionsPageState,
+          },
+        });
+
+        const trialSessionsOnly =
+          result.trialSessionRows.filter(isTrialSessionRow);
+        expect(trialSessionsOnly.length).toEqual(1);
+        expect(trialSessionsOnly[0].trialSessionId).toEqual(
+          trialSession1.trialSessionId,
+        );
+      });
+
+      it('should show trial sessions that begin on the same selected start date', () => {
+        trialSession1.startDate = '2233-02-03T00:00:00.000-05:00';
+        trialSession2.startDate = '2233-02-02T00:00:00.000-05:00';
+        trialSessionsPageState.filters.startDate = '02/03/2233';
+        trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
+
+        const result = runCompute(trialSessionsHelper, {
+          state: {
+            judges: [judgeUser],
+            permissions: getUserPermissions(docketClerk1User),
+            trialSessionsPage: trialSessionsPageState,
+          },
+        });
+
+        const trialSessionsOnly =
+          result.trialSessionRows.filter(isTrialSessionRow);
+        expect(trialSessionsOnly.length).toEqual(1);
+        expect(trialSessionsOnly[0].trialSessionId).toEqual(
+          trialSession1.trialSessionId,
+        );
+      });
+
+      it('should show trial sessions that begin on the same selected last start date regardless of time', () => {
+        trialSession1.startDate = '2233-02-03T18:05:00.000-05:00';
+        trialSession2.startDate = '2233-02-04T00:00:00.000-05:00';
+        trialSessionsPageState.filters.endDate = '02/03/2233';
         trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
 
         const result = runCompute(trialSessionsHelper, {
