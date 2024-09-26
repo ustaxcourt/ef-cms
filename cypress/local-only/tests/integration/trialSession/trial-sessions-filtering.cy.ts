@@ -22,7 +22,7 @@ describe('trial sessions filtering', () => {
     const proceedingType = 'In Person';
 
     loginAsPetitionsClerk1();
-    //X create a trial session
+    // create a trial session
     createTrialSession({
       endDate,
       judge,
@@ -31,7 +31,7 @@ describe('trial sessions filtering', () => {
       startDate,
       trialLocation,
     }).then(({ trialSessionId }) => {
-      //X see that that trial session shows in new trial session tab
+      // see that that trial session shows in new trial session tab
       cy.get('[data-testid="trial-session-link"]').click();
       setTrialSessionFilters({
         judge,
@@ -45,21 +45,20 @@ describe('trial sessions filtering', () => {
         'exist',
       );
 
-      //X create a case
+      // create a case
       createAndServePaperPetition({
         procedureType: sessionType,
         trialLocation,
       }).then(({ docketNumber }) => {
-        // X set case as ready for trial
+        // set case as ready for trial
         loginAsDocketClerk1();
         goToCase(docketNumber);
         updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
 
-        //X petition clerk views eligible cases
+        // mark trial session cases as QC'd
         loginAsPetitionsClerk1();
         cy.get('[data-testid="trial-session-link"]').click();
         cy.visit(`/trial-session-detail/${trialSessionId}`);
-        //X mark trial session cases as QC'd
         cy.get(`[data-testid="qc-complete-${docketNumber}"]:checked`).should(
           'not.exist',
         );
@@ -67,19 +66,60 @@ describe('trial sessions filtering', () => {
         cy.get(`[data-testid="qc-complete-${docketNumber}"]:checked`).should(
           'exist',
         );
-        //X set trial session schedule
+        // set trial session schedule
         cy.get('[data-testid="set-calendar-button"]').click();
         cy.get('#modal-button-confirm').click();
         cy.url().should('include', 'print-paper-trial-notices');
         cy.get('[data-testid="printing-complete"]').click();
         cy.url().should('include', `trial-session-detail/${trialSessionId}`);
 
-        //View that the trial session is now in the "Calendared" tab and in OPEN status
+        // View that the trial session is now in the "Calendared" tab and in OPEN status
         cy.get('[data-testid="trial-session-link"]').click();
         setTrialSessionFilters({
           judge,
           proceedingType,
           sessionStatus: 'Open',
+          sessionType,
+          startDate,
+          tabName: 'calendared',
+          trialLocation,
+        });
+        cy.get(`[data-testid="trial-sessions-row-${trialSessionId}"]`).should(
+          'exist',
+        );
+
+        //Remove a case from the trial session
+        goToCase(docketNumber);
+        cy.get('[data-testid="tab-case-information"]').click();
+        cy.get('#edit-case-trial-information-btn').click();
+        cy.get('#remove-from-trial-session-btn').click();
+        cy.get(
+          '[data-testid="remove-from-trial-session-disposition-textarea"]',
+        ).type(
+          'We are removing the case from the trial session to close the trial session.',
+        );
+        cy.get('[data-testid="modal-button-confirm"]').click();
+
+        // View trial session in "Calendared" tab and in Closed status
+        cy.get('[data-testid="trial-session-link"]').click();
+        setTrialSessionFilters({
+          judge,
+          proceedingType,
+          sessionStatus: 'Closed',
+          sessionType,
+          startDate,
+          tabName: 'calendared',
+          trialLocation,
+        });
+        cy.get(`[data-testid="trial-sessions-row-${trialSessionId}"]`).should(
+          'exist',
+        );
+
+        //View trial session in "Calendared" tab when  looking at ALL filter
+        setTrialSessionFilters({
+          judge,
+          proceedingType,
+          sessionStatus: 'All',
           sessionType,
           startDate,
           tabName: 'calendared',
@@ -125,10 +165,3 @@ function setTrialSessionFilters({
   selectTypeaheadInput('trial-session-location-filter-search', trialLocation);
   selectTypeaheadInput('trial-session-judge-filter-search', judge);
 }
-
-/*
-//Remove a case from the trial session
-//View trial session in "Calendared" tab and in Closed status
-//View trial session in "Calendared" tab when  looking at ALL filter
-});
-*/
