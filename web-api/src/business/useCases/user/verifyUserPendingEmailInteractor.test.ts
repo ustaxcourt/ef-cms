@@ -5,6 +5,7 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getContactPrimary } from '../../../../../shared/src/business/entities/cases/Case';
 import {
   mockPetitionerUser,
@@ -30,6 +31,7 @@ describe('verifyUserPendingEmailInteractor', () => {
     originalBarState: 'FL',
     pendingEmail: 'other@example.com',
     pendingEmailVerificationToken: TOKEN,
+    pendingEmailVerificationTokenTimestamp: createISODateString(),
     practiceType: 'Private',
     practitionerType: 'Attorney',
     role: ROLES.privatePractitioner,

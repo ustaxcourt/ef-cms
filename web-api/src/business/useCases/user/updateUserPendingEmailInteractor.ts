@@ -8,6 +8,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 
 /**
  * updateUserPendingEmailInteractor
@@ -46,6 +47,7 @@ export const updateUserPendingEmailInteractor = async (
 
   const pendingEmailVerificationToken = applicationContext.getUniqueId();
   user.pendingEmailVerificationToken = pendingEmailVerificationToken;
+  user.pendingEmailVerificationTokenTimestamp = createISODateString();
 
   let updatedUserRaw;
   if (user.role === ROLES.petitioner) {

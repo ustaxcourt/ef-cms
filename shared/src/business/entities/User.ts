@@ -15,6 +15,7 @@ import joi from 'joi';
 
 export class User extends JoiValidationEntity {
   public pendingEmailVerificationToken?: string;
+  public pendingEmailVerificationTokenTimestamp?: string;
   public email?: string;
   public name: string;
   public pendingEmail?: string;
