@@ -9,9 +9,9 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { generateChangeOfAddress } from '../user/generateChangeOfAddress';
 import { omit, union } from 'lodash';
+import { updateUserPendingEmail } from '@web-api/business/useCases/user/updateUserPendingEmailInteractor';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const updatePractitionerUser = async (
@@ -149,30 +149,6 @@ export const updatePractitionerUser = async (
       userId: authorizedUser.userId,
     });
   }
-};
-
-const updateUserPendingEmail = async ({
-  applicationContext,
-  user,
-}: {
-  applicationContext: ServerApplicationContext;
-  user: any;
-}) => {
-  const isEmailAvailable = await applicationContext
-    .getPersistenceGateway()
-    .isEmailAvailable({
-      applicationContext,
-      email: user.updatedEmail,
-    });
-
-  if (!isEmailAvailable) {
-    throw new Error('Email is not available');
-  }
-
-  const pendingEmailVerificationToken = applicationContext.getUniqueId();
-  user.pendingEmailVerificationToken = pendingEmailVerificationToken;
-  user.pendingEmailVerificationTokenTimestamp = createISODateString();
-  user.pendingEmail = user.updatedEmail;
 };
 
 const getUpdatedFieldNames = ({
