@@ -8,8 +8,6 @@ export interface Database {
 
 export interface MessageTable {
   attachments?: ColumnType<{ documentId: string }[], string, string>;
-  caseStatus: string;
-  caseTitle: string;
   completedAt?: string;
   completedBy?: string;
   completedBySection?: string;
@@ -38,11 +36,13 @@ export type NewMessageKysely = Insertable<MessageTable>;
 export type UpdateMessageKysely = Updateable<MessageTable>;
 
 export interface CaseTable {
+  caption: string;
   docketNumber: string;
-  trialLocation?: string;
-  trialDate?: string;
-  leadDocketNumber?: string;
   docketNumberSuffix?: string;
+  leadDocketNumber?: string;
+  status: string;
+  trialDate?: string;
+  trialLocation?: string;
 }
 
 export type CaseKysely = Selectable<CaseTable>;
@@ -50,14 +50,11 @@ export type NewCaseKysely = Insertable<CaseTable>;
 export type UpdateCaseKysely = Updateable<CaseTable>;
 
 export interface WorkItemTable {
-  workItemId: string;
   assigneeId?: string;
   assigneeName?: string;
   associatedJudge: string;
   associatedJudgeId?: string;
   caseIsInProgress?: boolean;
-  caseStatus: string;
-  caseTitle?: string;
   completedAt?: string;
   completedBy?: string;
   completedByUserId?: string;
@@ -65,20 +62,17 @@ export interface WorkItemTable {
   createdAt: string;
   docketEntry: any;
   docketNumber: string;
-  docketNumberWithSuffix?: string;
   hideFromPendingMessages?: boolean;
   highPriority?: boolean;
   inProgress?: boolean;
   isInitializeCase?: boolean;
   isRead?: boolean;
-  leadDocketNumber?: string;
   section: string;
   sentBy: string;
   sentBySection?: string;
   sentByUserId?: string;
-  trialDate?: string;
-  trialLocation?: string;
   updatedAt: string;
+  workItemId: string;
 }
 
 export type WorkItemKysely = Selectable<WorkItemTable>;
