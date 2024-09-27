@@ -28,25 +28,11 @@ export const updateUserPendingEmailInteractor = async (
     throw new UnauthorizedError('Unauthorized to manage emails.');
   }
 
-  const isEmailAvailable = await applicationContext
-    .getPersistenceGateway()
-    .isEmailAvailable({
-      applicationContext,
-      email: pendingEmail,
-    });
-
-  if (!isEmailAvailable) {
-    throw new Error('Email is not available');
-  }
-
   const user: any = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const pendingEmailVerificationToken = applicationContext.getUniqueId();
-  user.pendingEmailVerificationToken = pendingEmailVerificationToken;
-  user.pendingEmailVerificationTokenTimestamp = createISODateString();
-  user.pendingEmail = pendingEmail;
+  await updateUserPendingEmail({ applicationContext, user });
 
   let updatedUserRaw;
   if (user.role === ROLES.petitioner) {
@@ -63,8 +49,32 @@ export const updateUserPendingEmailInteractor = async (
   await applicationContext.getUseCaseHelpers().sendEmailVerificationLink({
     applicationContext,
     pendingEmail,
-    pendingEmailVerificationToken,
+    pendingEmailVerificationToken: updatedUserRaw.pendingEmailVerificationToken,
   });
 
   return updatedUserRaw;
+};
+
+export const updateUserPendingEmail = async ({
+  applicationContext,
+  user,
+}: {
+  applicationContext: ServerApplicationContext;
+  user: any;
+}) => {
+  const isEmailAvailable = await applicationContext
+    .getPersistenceGateway()
+    .isEmailAvailable({
+      applicationContext,
+      email: user.updatedEmail,
+    });
+
+  if (!isEmailAvailable) {
+    throw new Error('Email is not available');
+  }
+
+  const pendingEmailVerificationToken = applicationContext.getUniqueId();
+  user.pendingEmailVerificationToken = pendingEmailVerificationToken;
+  user.pendingEmailVerificationTokenTimestamp = createISODateString();
+  user.pendingEmail = user.updatedEmail;
 };
