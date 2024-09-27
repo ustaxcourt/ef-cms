@@ -392,6 +392,8 @@ import { setForHearingSequence } from './sequences/setForHearingSequence';
 import { setHasIrsNoticeSequence } from '@web-client/presenter/sequences/setHasIrsNoticeSequence';
 import { setIdleStatusActiveSequence } from './sequences/setIdleStatusActiveSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
+import { setIsLoadingSequence } from '@web-client/presenter/sequences/setIsLoadingSequence';
+import { setIsNotLoadingSequence } from '@web-client/presenter/sequences/setIsNotLoadingSequence';
 import { setJudgeActivityReportFiltersSequence } from './sequences/setJudgeActivityReportFiltersSequence';
 import { setMessageDetailViewerDocumentToDisplaySequence } from './sequences/setMessageDetailViewerDocumentToDisplaySequence';
 import { setPDFPageForSigningSequence } from './sequences/setPDFPageForSigningSequence';
@@ -411,6 +413,7 @@ import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumen
 import { setViewerDraftDocumentToDisplaySequence } from './sequences/setViewerDraftDocumentToDisplaySequence';
 import { showCalculatePenaltiesModalSequence } from './sequences/showCalculatePenaltiesModalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
+import { showFileUploadErrorModalSequence } from '@web-client/presenter/sequences/showFileUploadErrorModalSequence';
 import { showGenerateNoticesProgressSequence } from './sequences/showGenerateNoticesProgressSequence';
 import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequence';
 import { showMoreOpenCasesSequence } from './sequences/showMoreOpenCasesSequence';
@@ -1236,6 +1239,8 @@ export const presenterSequences = {
   setIdleStatusActiveSequence:
     setIdleStatusActiveSequence as unknown as Function,
   setIrsNoticeFalseSequence: setIrsNoticeFalseSequence as unknown as Function,
+  setIsLoadingSequence,
+  setIsNotLoadingSequence,
   setJudgeActivityReportFiltersSequence,
   setMessageDetailViewerDocumentToDisplaySequence:
     setMessageDetailViewerDocumentToDisplaySequence as unknown as Function,
@@ -1266,6 +1271,7 @@ export const presenterSequences = {
     showCalculatePenaltiesModalSequence as unknown as Function,
   showDocketRecordDetailModalSequence:
     showDocketRecordDetailModalSequence as unknown as Function,
+  showFileUploadErrorModalSequence,
   showGenerateNoticesProgressSequence:
     showGenerateNoticesProgressSequence as unknown as Function,
   showMoreClosedCasesSequence:
