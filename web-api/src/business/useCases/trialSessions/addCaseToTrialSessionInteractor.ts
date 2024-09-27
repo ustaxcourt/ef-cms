@@ -8,8 +8,8 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
  * addCaseToTrialSession
@@ -86,7 +86,6 @@ export const addCaseToTrialSession = async (
     await setPriorityOnAllWorkItems({
       docketNumber: caseEntity.docketNumber,
       highPriority: true,
-      trialDate: caseEntity.trialDate,
     });
   }
 

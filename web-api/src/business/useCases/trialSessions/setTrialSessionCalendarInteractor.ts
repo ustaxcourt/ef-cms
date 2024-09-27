@@ -240,7 +240,6 @@ const setManuallyAddedCaseAsCalendared = async (
     setPriorityOnAllWorkItems({
       docketNumber: caseEntity.docketNumber,
       highPriority: true,
-      trialDate: caseEntity.trialDate,
     }),
     applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
@@ -271,7 +270,6 @@ const setTrialSessionCalendarForEligibleCase = async (
     setPriorityOnAllWorkItems({
       docketNumber: caseEntity.docketNumber,
       highPriority: true,
-      trialDate: caseEntity.trialDate,
     }),
     applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
