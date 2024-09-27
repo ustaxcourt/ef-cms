@@ -1,5 +1,5 @@
+import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
 import { Database } from './database-types';
-import { Kysely, PostgresDialect } from 'kysely';
 import { Pool } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
 import { environment } from './environment';
@@ -29,6 +29,7 @@ export function connect(pool) {
     dialect: new PostgresDialect({
       pool: new Pool(pool),
     }),
+    plugins: [new CamelCasePlugin()],
   });
 }
 

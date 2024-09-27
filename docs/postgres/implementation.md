@@ -24,12 +24,6 @@ Court would like to avoid this as it combines work thus:
 - Shorter stories become longer stories 
 - Increased test requirements
 
-#### 3. Other options
-...
-
-.....
-
-.......
 
 ### Process
 - Create table & relations (ex: message.docketNumber = case.docketNumber) if doesn't exist (via migration process, see docs/postgres/migrations.md)
@@ -58,7 +52,6 @@ Found in `web-api/src/persistence/dynamo/**/*.ts`
 - Case Worksheet
 - Correspondence
 - Docket Entries (Documents)
-- Pending Motion
 - Practitioners
 - Trial Sessions
 - User Case Notes
@@ -83,7 +76,6 @@ Found in `web-api/src/persistence/dynamo/**/*.ts`
 - Practitioner
 - Hearing
 - ...
-- .....
 
 
 ### OpenSearch Functions
