@@ -1,4 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
@@ -12,7 +13,11 @@ export const submitUpdateUserContactInformationSequence = [
   startShowValidationAction,
   validateUserContactAction,
   {
-    error: [setValidationErrorsAction, setValidationAlertErrorsAction],
+    error: [
+      setValidationErrorsAction,
+      setScrollToErrorNotificationAction,
+      setValidationAlertErrorsAction,
+    ],
     success: [
       setWaitingForResponseAction,
       setupCurrentPageAction('Interstitial'),

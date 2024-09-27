@@ -20,8 +20,9 @@ export const StartCaseInternal = connect(
     documentSelectedForScan: state.currentViewMetadata.documentSelectedForScan,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
-    startCaseHelper: state.startCaseHelper,
+    startCaseInternalHelper: state.startCaseInternalHelper,
     submitPetitionFromPaperSequence: sequences.submitPetitionFromPaperSequence,
+    validateCaseDetailSequence: sequences.validateCaseDetailSequence,
     validatePetitionFromPaperSequence:
       sequences.validatePetitionFromPaperSequence,
   },
@@ -30,8 +31,9 @@ export const StartCaseInternal = connect(
     documentSelectedForScan,
     formCancelToggleCancelSequence,
     showModal,
-    startCaseHelper,
+    startCaseInternalHelper,
     submitPetitionFromPaperSequence,
+    validateCaseDetailSequence,
     validatePetitionFromPaperSequence,
   }) {
     return (
@@ -74,14 +76,16 @@ export const StartCaseInternal = connect(
                     title="IRS Notice"
                   >
                     <div className="blue-container">
-                      <IRSNotice validationName="validateCaseDetailSequence" />
+                      <IRSNotice
+                        validateFormData={validateCaseDetailSequence}
+                      />
                     </div>
                   </Tab>
                 </Tabs>
               </div>
               <div className="grid-col-7">
                 <ScanBatchPreviewer
-                  documentTabs={startCaseHelper.documentTabs}
+                  documentTabs={startCaseInternalHelper.documentTabs}
                   documentType={documentSelectedForScan}
                   title="Add Document(s)"
                   validateSequence={validatePetitionFromPaperSequence}
