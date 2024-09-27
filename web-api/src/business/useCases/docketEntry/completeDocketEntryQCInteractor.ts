@@ -25,6 +25,7 @@ import { generateNoticeOfDocketChangePdf } from '@web-api/business/useCaseHelper
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { getDocumentTitleForNoticeOfChange } from '@shared/business/utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 const completeDocketEntryQC = async (
@@ -203,12 +204,7 @@ const completeDocketEntryQC = async (
     sentByUserId: user.userId,
   });
 
-  await applicationContext
-    .getPersistenceGateway()
-    .saveWorkItemForDocketClerkFilingExternalDocument({
-      applicationContext,
-      workItem: workItemToUpdate.validate().toRawObject(),
-    });
+  await saveWorkItem(workItemToUpdate.validate().toRawObject());
 
   let servedParties = aggregatePartiesForService(caseEntity);
   let paperServicePdfUrl;

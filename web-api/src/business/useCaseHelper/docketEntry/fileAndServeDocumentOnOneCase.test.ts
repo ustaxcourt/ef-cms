@@ -364,20 +364,6 @@ describe('fileAndServeDocumentOnOneCase', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should make a call to put the docketEntry`s work item in the user`s outbox', async () => {
-    await fileAndServeDocumentOnOneCase({
-      applicationContext,
-      caseEntity: mockCaseEntity,
-      docketEntryEntity: mockDocketEntry,
-      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
-      user: docketClerkUser,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
-    ).toHaveBeenCalled();
-  });
-
   it('should pass the caseEntity`s trialDate and trialLocation to the docketEntry`s work item when they exist', async () => {
     mockCaseEntity = new Case(
       {
