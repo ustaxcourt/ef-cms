@@ -11,9 +11,6 @@ import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('verify old sent work items do not show up in the outbox', () => {
   const cerebralTest = setupTest();
-
-  let workItemNMinus1Days;
-  let workItemNDays;
   let workItemNPlus1Days;
   let workItemIdNMinus1;
   let workItemIdN;
@@ -97,24 +94,6 @@ describe('verify old sent work items do not show up in the outbox', () => {
       createdAt: CREATED_N_MINUS_1_DAYS_AGO,
       workItemId: `${workItemIdNMinus1}`,
     };
-
-    await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
-      applicationContext,
-      authorizedUser: mockUser,
-      workItem: workItemNPlus1Days,
-    });
-
-    await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
-      applicationContext,
-      authorizedUser: mockUser,
-      workItem: workItemNDays,
-    });
-
-    await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
-      applicationContext,
-      authorizedUser: mockUser,
-      workItem: workItemNMinus1Days,
-    });
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');

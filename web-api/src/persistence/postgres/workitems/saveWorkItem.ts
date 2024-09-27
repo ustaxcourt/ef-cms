@@ -11,6 +11,9 @@ export const saveWorkItem = async ({
     writer
       .insertInto('workItem')
       .values(toKyselyNewWorkItem(workItem))
+      .onConflict(oc =>
+        oc.column('workItemId').doUpdateSet(toKyselyNewWorkItem(workItem)),
+      )
       .returningAll()
       .executeTakeFirst(),
   );

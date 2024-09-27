@@ -103,9 +103,6 @@ describe('addPaperFilingInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
-    ).toHaveBeenCalled();
-    expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
     expect(
@@ -221,9 +218,6 @@ describe('addPaperFilingInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
-    ).not.toHaveBeenCalled();
-    expect(
       applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
         .workItem,
     ).toMatchObject({ leadDocketNumber: mockCase.leadDocketNumber });
@@ -257,10 +251,6 @@ describe('addPaperFilingInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument,
-    ).not.toHaveBeenCalled();
-    expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
     expect(
@@ -292,10 +282,6 @@ describe('addPaperFilingInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
-        .calls[0][0].userId,
-    ).toEqual(docketClerkUser.userId);
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();

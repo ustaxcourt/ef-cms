@@ -105,7 +105,6 @@ export const fileAndServeDocumentOnOneCase = async ({
 };
 
 const completeWorkItem = async ({
-  applicationContext,
   docketEntryEntity,
   leadDocketNumber,
   user,
@@ -131,13 +130,6 @@ const completeWorkItem = async ({
   workItemToUpdate.setAsCompleted({ message: 'completed', user });
 
   await saveWorkItem({
-    workItem: workItemToUpdate.validate().toRawObject(),
-  });
-
-  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-    applicationContext,
-    section: user.section,
-    userId: user.userId,
     workItem: workItemToUpdate.validate().toRawObject(),
   });
 };

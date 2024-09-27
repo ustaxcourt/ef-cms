@@ -10,8 +10,8 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { omit } from 'lodash';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
  *
@@ -173,22 +173,12 @@ export const fileCourtIssuedDocketEntry = async (
       ];
 
       const rawValidWorkItem = workItem.validate().toRawObject();
-      if (isUnservable) {
-        saveItems.push(
-          applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-            applicationContext,
-            section: user.section,
-            userId: user.userId,
-            workItem: rawValidWorkItem,
-          }),
-        );
-      } else {
-        saveItems.push(
-          saveWorkItem({
-            workItem: rawValidWorkItem,
-          }),
-        );
-      }
+
+      saveItems.push(
+        saveWorkItem({
+          workItem: rawValidWorkItem,
+        }),
+      );
 
       return Promise.all(saveItems);
     }),

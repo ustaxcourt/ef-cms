@@ -18,8 +18,6 @@ const {
 const cerebralTest = setupTest();
 
 describe('verify old served work items do not show up in the outbox', () => {
-  let workItem6Days;
-  let workItem7Days;
   let workItem8Days;
   let caseDetail;
 
@@ -95,24 +93,6 @@ describe('verify old served work items do not show up in the outbox', () => {
       createdAt: CREATED_6_DAYS_AGO,
       workItemId: `${workItemId6}`,
     };
-
-    await appContext.getPersistenceGateway().putWorkItemInOutbox({
-      applicationContext: appContext,
-      authorizedUser: mockUser,
-      workItem: workItem8Days,
-    });
-
-    await appContext.getPersistenceGateway().putWorkItemInOutbox({
-      applicationContext: appContext,
-      authorizedUser: mockUser,
-      workItem: workItem7Days,
-    });
-
-    await appContext.getPersistenceGateway().putWorkItemInOutbox({
-      applicationContext: appContext,
-      authorizedUser: mockUser,
-      workItem: workItem6Days,
-    });
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');

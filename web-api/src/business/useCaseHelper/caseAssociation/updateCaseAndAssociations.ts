@@ -341,13 +341,7 @@ const updatePrivatePractitioners = ({
  */
 const updateCaseWorkItems = async ({ caseToUpdate, oldCase }) => {
   const workItemsRequireUpdate =
-    oldCase.associatedJudge !== caseToUpdate.associatedJudge ||
-    oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
-    oldCase.caseCaption !== caseToUpdate.caseCaption ||
-    oldCase.status !== caseToUpdate.status ||
-    oldCase.trialDate !== caseToUpdate.trialDate ||
-    oldCase.trialLocation !== caseToUpdate.trialLocation ||
-    oldCase.leadDocketNumber !== caseToUpdate.leadDocketNumber;
+    oldCase.associatedJudge !== caseToUpdate.associatedJudge;
 
   if (!workItemsRequireUpdate) {
     return [];
@@ -361,12 +355,6 @@ const updateCaseWorkItems = async ({ caseToUpdate, oldCase }) => {
     ...rawWorkItem,
     associatedJudge: caseToUpdate.associatedJudge,
     associatedJudgeId: caseToUpdate.associatedJudgeId,
-    caseStatus: caseToUpdate.status,
-    caseTitle: Case.getCaseTitle(caseToUpdate.caseCaption),
-    docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
-    leadDocketNumber: caseToUpdate.leadDocketNumber,
-    trialDate: caseToUpdate.trialDate || null,
-    trialLocation: caseToUpdate.trialLocation || null,
   }));
 
   const validWorkItems = WorkItem.validateRawCollection(updatedWorkItems);

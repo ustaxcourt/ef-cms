@@ -1,19 +1,13 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import {
-  RawWorkItem,
-  WorkItem,
-} from '../../../../../shared/src/business/entities/WorkItem';
-import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
  * completeWorkItemInteractor
@@ -54,15 +48,6 @@ export const completeWorkItem = async (
     })
     .validate()
     .toRawObject();
-
-  // await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
-  //   applicationContext,
-  //   authorizedUser,
-  //   workItem: {
-  //     ...completedWorkItem,
-  //     createdAt: createISODateString(),
-  //   },
-  // });
 
   await saveWorkItem({
     workItem: completedWorkItem,
