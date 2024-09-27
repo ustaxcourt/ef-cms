@@ -117,6 +117,7 @@ export const FilingPartiesForm = connect(
                           key: e.target.name,
                           value: e.target.checked,
                         });
+                        validateSequence();
                       }}
                     />
                     <label
