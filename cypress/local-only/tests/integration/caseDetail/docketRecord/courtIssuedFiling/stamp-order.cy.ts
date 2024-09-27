@@ -1,3 +1,4 @@
+import { attachFile } from '../../../../../../helpers/file/upload-file';
 import { loginAsPetitioner } from '../../../../../../helpers/authentication/login-as-helpers';
 import { petitionerCreatesElectronicCaseWithSpouse } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../../../helpers/documentQC/petitionsclerk-serves-petition';
@@ -20,10 +21,11 @@ describe('Judge`s chambers stamps an order', () => {
       cy.get('#react-select-2-option-0').click({ force: true });
       cy.get('[data-testid="filed-by-option"]').contains('Petitioner').click();
       cy.get('[data-testid="upload-pdf-button"]').click();
-      cy.get('input#primaryDocumentFile-file').attachFile(
-        '../../helpers/file/sample.pdf',
-      );
-      cy.get('[data-testid="remove-pdf"]');
+      attachFile({
+        filePath: '../../helpers/file/sample.pdf',
+        selector: 'input#primaryDocumentFile-file',
+        selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+      });
       cy.get('[data-testid="save-and-serve"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();
       cy.get('.usa-alert').should(
