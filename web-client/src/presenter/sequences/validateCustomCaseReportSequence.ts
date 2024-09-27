@@ -1,19 +1,19 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { setValidationAlertErrorsAction } from '@web-client/presenter/actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { shouldValidateAction } from '../actions/shouldValidateAction';
-import { validateCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDocketEntry/validateCourtIssuedDocketEntryAction';
+import { shouldValidateAction } from '@web-client/presenter/actions/shouldValidateAction';
+import { validateCustomCaseReportFiltersAction } from '@web-client/presenter/actions/validateCustomCaseReportFiltersAction';
 
-export const validateCourtIssuedDocketEntrySequence = [
+export const validateCustomCaseReportSequence = [
   shouldValidateAction,
   {
     ignore: [],
     validate: [
-      validateCourtIssuedDocketEntryAction,
+      validateCustomCaseReportFiltersAction,
       {
         error: [setValidationErrorsAction, setValidationAlertErrorsAction],
         success: [clearAlertsAction],
       },
     ],
   },
-];
+] as unknown as (props: { selectedPage: number }) => void;
