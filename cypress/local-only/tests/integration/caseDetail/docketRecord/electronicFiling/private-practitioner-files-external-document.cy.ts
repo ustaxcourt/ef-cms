@@ -1,10 +1,10 @@
 import { attachSamplePdfFile } from '../../../../../../helpers/file/upload-file';
+import { externalUserCreatesElectronicCase } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { externalUserSearchesDocketNumber } from '../../../../../../helpers/advancedSearch/external-user-searches-docket-number';
 import {
   loginAsPetitioner,
   loginAsPrivatePractitioner,
 } from '../../../../../../helpers/authentication/login-as-helpers';
-import { petitionerCreatesElectronicCase } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { selectTypeaheadInput } from '../../../../../../helpers/components/typeAhead/select-typeahead-input';
 
@@ -14,7 +14,7 @@ describe('Private practitioner files document on case they are already associate
       const primaryFilerName = 'John';
 
       loginAsPetitioner();
-      petitionerCreatesElectronicCase(primaryFilerName).then(docketNumber => {
+      externalUserCreatesElectronicCase(primaryFilerName).then(docketNumber => {
         petitionsClerkServesPetition(docketNumber);
         loginAsPrivatePractitioner();
         externalUserSearchesDocketNumber(docketNumber);
