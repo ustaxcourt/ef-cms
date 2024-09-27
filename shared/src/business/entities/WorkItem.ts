@@ -83,7 +83,9 @@ export class WorkItem extends JoiValidationEntity {
       : rawWorkItem.leadDocketNumber;
     this.docketNumberWithSuffix = caseEntity
       ? caseEntity.docketNumberWithSuffix
-      : rawWorkItem.docketNumberWithSuffix;
+      : `${rawWorkItem.docketNumber}${
+          rawWorkItem.docketNumberSuffix ? rawWorkItem.docketNumberSuffix : ''
+        }`;
     this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
     this.highPriority =
       rawWorkItem.highPriority ||

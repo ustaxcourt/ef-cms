@@ -1,10 +1,10 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import { NewWorkItemKysely } from '@web-api/database-types';
-import { RawWorkItem } from '@shared/business/entities/WorkItem';
+import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
+import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 function pickFields(workItem) {
   return {
-    docketEntry: JSON.stringify(workItem.docketEntry),
-    workItemId: workItem.workItemId,
     assigneeId: workItem.assigneeId,
     assigneeName: workItem.assigneeName,
     associatedJudge: workItem.associatedJudge,
@@ -17,6 +17,7 @@ function pickFields(workItem) {
     completedByUserId: workItem.completedByUserId,
     completedMessage: workItem.completedMessage,
     createdAt: workItem.createdAt,
+    docketEntry: JSON.stringify(workItem.docketEntry),
     docketNumber: workItem.docketNumber,
     docketNumberWithSuffix: workItem.docketNumberWithSuffix,
     hideFromPendingMessages: workItem.hideFromPendingMessages,
@@ -32,6 +33,7 @@ function pickFields(workItem) {
     trialDate: workItem.trialDate,
     trialLocation: workItem.trialLocation,
     updatedAt: workItem.updatedAt,
+    workItemId: workItem.workItemId,
   };
 }
 
@@ -56,3 +58,13 @@ export function toKyselyNewWorkItem(workItem: RawWorkItem): NewWorkItemKysely {
 // ): NewMessageKysely[] {
 //   return messages.map(pickFields);
 // }
+
+export function workItemEntity(workItem) {
+  return new WorkItem(
+    transformNullToUndefined({
+      ...workItem,
+      caseStatus: workItem.status,
+      caseTitle: Case.getCaseTitle(workItem.caption),
+    }),
+  );
+}

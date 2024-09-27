@@ -1,5 +1,5 @@
-import { getDbWriter } from '@web-api/database';
 import { RawWorkItem } from '@shared/business/entities/WorkItem';
+import { getDbWriter } from '@web-api/database';
 
 export const deleteWorkItem = async ({
   workItem,

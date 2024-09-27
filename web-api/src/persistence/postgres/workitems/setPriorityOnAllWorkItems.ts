@@ -13,7 +13,6 @@ import { getDbWriter } from '@web-api/database';
 export const setPriorityOnAllWorkItems = async ({
   docketNumber,
   highPriority,
-  trialDate,
 }: {
   docketNumber: string;
   highPriority: boolean;
@@ -23,10 +22,6 @@ export const setPriorityOnAllWorkItems = async ({
     let builder = writer
       .updateTable('workItem')
       .set('highPriority', highPriority);
-
-    if (trialDate) {
-      builder = builder.set('trialDate', trialDate);
-    }
 
     return builder.where('docketNumber', '=', docketNumber).execute();
   });

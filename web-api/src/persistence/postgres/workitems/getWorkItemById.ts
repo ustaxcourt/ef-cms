@@ -1,6 +1,6 @@
-import { getDbReader } from '@web-api/database';
-import { transformNullToUndefined } from '../utils/transformNullToUndefined';
 import { WorkItem } from '@shared/business/entities/WorkItem';
+import { getDbReader } from '@web-api/database';
+import { workItemEntity } from '@web-api/persistence/postgres/workitems/mapper';
 
 export const getWorkItemById = async ({
   workItemId,
@@ -9,13 +9,15 @@ export const getWorkItemById = async ({
 }): Promise<WorkItem | undefined> => {
   const workItem = await getDbReader(reader =>
     reader
-      .selectFrom('workItem')
-      .where('workItemId', '=', workItemId)
+      .selectFrom('workItem as w')
+      .leftJoin('case as c', 'c.docketNumber', 'w.docketNumber')
+      .where('w.workItemId', '=', workItemId)
       .selectAll()
+      .select('w.docketNumber')
       .executeTakeFirst(),
   );
 
   if (!workItem) return undefined;
 
-  return new WorkItem(transformNullToUndefined({ ...workItem }));
+  return workItemEntity(workItem);
 };
