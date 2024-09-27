@@ -32,7 +32,7 @@ export const updateUserPendingEmailInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  await updateUserPendingEmail({ applicationContext, user });
+  await updateUserPendingEmail({ applicationContext, pendingEmail, user });
 
   let updatedUserRaw;
   if (user.role === ROLES.petitioner) {
@@ -57,16 +57,18 @@ export const updateUserPendingEmailInteractor = async (
 
 export const updateUserPendingEmail = async ({
   applicationContext,
+  pendingEmail,
   user,
 }: {
   applicationContext: ServerApplicationContext;
   user: any;
+  pendingEmail: string;
 }) => {
   const isEmailAvailable = await applicationContext
     .getPersistenceGateway()
     .isEmailAvailable({
       applicationContext,
-      email: user.updatedEmail,
+      email: pendingEmail,
     });
 
   if (!isEmailAvailable) {
@@ -76,5 +78,5 @@ export const updateUserPendingEmail = async ({
   const pendingEmailVerificationToken = applicationContext.getUniqueId();
   user.pendingEmailVerificationToken = pendingEmailVerificationToken;
   user.pendingEmailVerificationTokenTimestamp = createISODateString();
-  user.pendingEmail = user.updatedEmail;
+  user.pendingEmail = pendingEmail;
 };

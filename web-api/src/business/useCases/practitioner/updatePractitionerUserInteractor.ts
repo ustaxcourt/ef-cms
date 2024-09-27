@@ -49,7 +49,11 @@ export const updatePractitionerUser = async (
   }
 
   if (userHasAccount && userIsUpdatingEmail) {
-    await updateUserPendingEmail({ applicationContext, user });
+    await updateUserPendingEmail({
+      applicationContext,
+      pendingEmail: user.updatedEmail!,
+      user,
+    });
   }
 
   // do not allow edit of bar number
