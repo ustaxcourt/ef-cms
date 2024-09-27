@@ -43,11 +43,10 @@ export const updateUserPendingEmailInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  user.pendingEmail = pendingEmail;
-
   const pendingEmailVerificationToken = applicationContext.getUniqueId();
   user.pendingEmailVerificationToken = pendingEmailVerificationToken;
   user.pendingEmailVerificationTokenTimestamp = createISODateString();
+  user.pendingEmail = pendingEmail;
 
   let updatedUserRaw;
   if (user.role === ROLES.petitioner) {

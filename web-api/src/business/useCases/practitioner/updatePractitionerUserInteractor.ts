@@ -9,6 +9,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { generateChangeOfAddress } from '../user/generateChangeOfAddress';
 import { omit, union } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -118,6 +119,7 @@ export const updatePractitionerUser = async (
   const propertiesNotRequiringChangeOfAddress = [
     'pendingEmail',
     'pendingEmailVerificationToken',
+    'pendingEmailVerificationTokenTimestamp',
     'practitionerNotes',
   ];
   const combinedDiffKeys = union(
@@ -169,6 +171,7 @@ const updateUserPendingEmail = async ({
 
   const pendingEmailVerificationToken = applicationContext.getUniqueId();
   user.pendingEmailVerificationToken = pendingEmailVerificationToken;
+  user.pendingEmailVerificationTokenTimestamp = createISODateString();
   user.pendingEmail = user.updatedEmail;
 };
 
