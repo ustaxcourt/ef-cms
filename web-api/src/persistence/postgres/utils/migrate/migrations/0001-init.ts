@@ -4,6 +4,8 @@ export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .createTable('case')
     .addColumn('docketNumber', 'varchar', col => col.primaryKey())
+    .addColumn('status', 'varchar', col => col.notNull())
+    .addColumn('caption', 'varchar', col => col.notNull())
     .addColumn('trialLocation', 'varchar')
     .addColumn('leadDocketNumber', 'varchar')
     .addColumn('trialDate', 'varchar')
@@ -14,8 +16,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .createTable('message')
     .addColumn('messageId', 'varchar', col => col.primaryKey())
     .addColumn('attachments', 'jsonb')
-    .addColumn('caseStatus', 'varchar', col => col.notNull())
-    .addColumn('caseTitle', 'varchar', col => col.notNull())
     .addColumn('completedAt', 'varchar')
     .addColumn('completedBy', 'varchar')
     .addColumn('completedBySection', 'varchar')

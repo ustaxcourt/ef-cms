@@ -9,10 +9,10 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
+import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import diff from 'diff-arrays-of-objects';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
-import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 
 /**
  * Identifies docket entries which have been updated and issues persistence calls
@@ -103,8 +103,6 @@ const updateCaseMessages = async ({
   }
 
   caseMessages.forEach(message => {
-    message.caseStatus = caseToUpdate.status;
-    message.caseTitle = Case.getCaseTitle(caseToUpdate.caseCaption);
     message.docketNumberSuffix = caseToUpdate.docketNumberSuffix;
   });
 
@@ -341,11 +339,7 @@ const updatePrivatePractitioners = ({
  * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
  * @returns {Array<function>} the persistence functions required to complete this action
  */
-const updateCaseWorkItems = async ({
-  applicationContext,
-  caseToUpdate,
-  oldCase,
-}) => {
+const updateCaseWorkItems = async ({ caseToUpdate, oldCase }) => {
   const workItemsRequireUpdate =
     oldCase.associatedJudge !== caseToUpdate.associatedJudge ||
     oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
