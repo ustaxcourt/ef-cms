@@ -13,6 +13,7 @@ import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawMessage } from '@shared/business/entities/Message';
 import { RawUser } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
+import { TroubleshootingLinkInfo } from '@web-client/presenter/sequences/showFileUploadErrorModalSequence';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
@@ -711,9 +712,13 @@ export const baseState = {
   },
   messagesSectionCount: 0,
   modal: {
+    contactSupportMessage: undefined, // the "contact support" message sans email address
     docketEntry: undefined,
+    message: undefined, // the message to show
     pdfPreviewModal: undefined,
     showModal: undefined, // the name of the modal to display
+    title: undefined,
+    troubleshootingInfo: undefined as unknown as TroubleshootingLinkInfo, // steps for troubleshooting
   } as Record<string, any>,
   navigation: {
     caseDetailMenu: '',
