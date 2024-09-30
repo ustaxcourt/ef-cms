@@ -3,7 +3,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ExternalConsolidatedGroupCards } from './ExternalConsolidatedGroupCards';
 import { FileEntryOfAppearanceReview } from '@web-client/views/FileDocument/FileEntryOfAppearanceReview';
-import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { PDFPreviewButton } from '../PDFPreviewButton';
@@ -431,11 +430,6 @@ export const FileDocumentReview = connect(
             </div>
 
             {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
-            {showModal === 'FileUploadErrorModal' && (
-              <FileUploadErrorModal
-                confirmSequence={submitExternalDocumentSequence}
-              />
-            )}
           </>
         )}
       </>

@@ -1,5 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { NonMobile } from '../../ustc-ui/Responsive/Responsive';
@@ -370,11 +369,6 @@ export const CaseAssociationRequestReview = connect(
         </div>
 
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
-        {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal
-            confirmSequence={submitCaseAssociationRequestSequence}
-          />
-        )}
       </React.Fragment>
     );
   },
