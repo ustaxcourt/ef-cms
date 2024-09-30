@@ -7,7 +7,5 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.props the cerebral props object
  */
 export const setModalValueAction = ({ props, store }: ActionProps) => {
-  console.log('key', props.key);
-  console.log('value', props.value);
   store.set(state.modal[props.key], props.value);
 };
