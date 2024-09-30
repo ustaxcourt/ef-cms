@@ -106,7 +106,10 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   const citiesFromLastTwoTerms = sessions
     .filter(session => {
       const termString = `${session.term}, ${session.termYear}`;
-      return previousTwoTerms.includes(termString);
+      return (
+        previousTwoTerms.includes(termString) &&
+        session.sessionType !== SESSION_TYPES.special
+      );
     })
     .map(relevantSession => {
       return relevantSession.trialLocation!;
