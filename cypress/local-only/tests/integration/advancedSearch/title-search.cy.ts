@@ -2,12 +2,12 @@ import {
   addOrderToDocketEntry,
   createOrder,
 } from '../../../../helpers/caseDetail/docketRecord/courtIssuedFiling/create-order-and-decision';
+import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import {
   loginAsDocketClerk1,
   loginAsPetitioner,
 } from '../../../../helpers/authentication/login-as-helpers';
-import { petitionerCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { retry } from '../../../../helpers/retry';
 
@@ -15,7 +15,7 @@ describe('Docket clerk', () => {
   it('should should be able to search for orders using the case title', () => {
     const titleId = Math.random() + '';
     loginAsPetitioner();
-    petitionerCreatesElectronicCase(`John${titleId}`).then(docketNumber => {
+    externalUserCreatesElectronicCase(`John${titleId}`).then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
       loginAsDocketClerk1();
       goToCase(docketNumber);
@@ -24,7 +24,7 @@ describe('Docket clerk', () => {
     });
 
     loginAsPetitioner();
-    petitionerCreatesElectronicCase(`Bob${titleId}`).then(docketNumber => {
+    externalUserCreatesElectronicCase(`Bob${titleId}`).then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
       loginAsDocketClerk1();
       goToCase(docketNumber);

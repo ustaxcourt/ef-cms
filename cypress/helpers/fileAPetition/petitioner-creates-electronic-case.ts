@@ -1,8 +1,7 @@
 import { PROCEDURE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
-import { attachFile } from '../file/upload-file';
-import { attachSamplePdfFile } from '../file/upload-file';
+import { attachFile, attachSamplePdfFile } from '../file/upload-file';
 
-export function petitionerCreatesElectronicCase(
+export function externalUserCreatesElectronicCase(
   primaryFilerName: string = 'John',
 ) {
   cy.get('[data-testid="file-a-petition"]').click();
