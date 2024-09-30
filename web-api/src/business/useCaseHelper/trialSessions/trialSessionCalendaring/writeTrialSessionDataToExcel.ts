@@ -1,6 +1,6 @@
 import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { ScheduledTrialSession } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
-import ExcelJS from 'excelJs';
+import ExcelJS from 'exceljs';
 
 export const writeTrialSessionDataToExcel = async ({
   scheduledTrialSessions,
