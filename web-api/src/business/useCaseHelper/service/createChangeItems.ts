@@ -136,7 +136,6 @@ const createDocketEntryForChange = async ({
 };
 
 const createWorkItemForChange = async ({
-  applicationContext,
   caseEntity,
   changeOfAddressDocketEntry,
   user,

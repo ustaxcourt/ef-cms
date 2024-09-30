@@ -15,8 +15,8 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { pick } from 'lodash';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
  * fileExternalDocumentInteractor
@@ -219,7 +219,7 @@ export const fileExternalDocument = async (
         });
 
         for (let workItem of workItems) {
-          saveWorkItem({
+          await saveWorkItem({
             workItem: workItem.validate().toRawObject(),
           });
         }

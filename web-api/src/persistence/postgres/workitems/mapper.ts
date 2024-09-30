@@ -31,27 +31,9 @@ function pickFields(workItem) {
   };
 }
 
-// export function toKyselyUpdateMessage(
-//   message: RawMessage,
-// ): UpdateMessageKysely {
-//   return pickFields(message);
-// }
-
-// export function toKyselyUpdateMessages(
-//   messages: RawMessage[],
-// ): UpdateMessageKysely[] {
-//   return messages.map(pickFields);
-// }
-
 export function toKyselyNewWorkItem(workItem: RawWorkItem): NewWorkItemKysely {
   return pickFields(workItem);
 }
-
-// export function toKyselyNewMessages(
-//   messages: RawMessage[],
-// ): NewMessageKysely[] {
-//   return messages.map(pickFields);
-// }
 
 export function workItemEntity(workItem) {
   return new WorkItem(
