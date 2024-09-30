@@ -1,6 +1,6 @@
 import { AutoGeneratePetitionForm } from '@web-client/views/StartCaseUpdated/AutoGeneratePetitionForm';
-import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
+import { InlineLink } from '@web-client/ustc-ui/InlineLink/InlineLink';
 import { PETITION_TYPES } from '@shared/business/entities/EntityConstants';
 import { RedactionAcknowledgement } from '@web-client/views/StartCaseUpdated/RedactionAcknowledgement';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
@@ -93,18 +93,12 @@ export const UpdatedFilePetitionStep2 = connect(
                 You may download and fill out the Court’s form if you haven’t
                 already done so:
               </p>
-              <Button
-                link
-                className="usa-link--external text-left mobile-text-wrap"
+              <InlineLink
                 href="https://www.ustaxcourt.gov/resources/forms/Petition_Simplified_Form_2.pdf"
                 icon="file-pdf"
-                iconColor="blue"
-                overrideMargin="margin-right-1"
-                rel="noopener noreferrer"
-                target="_blank"
               >
                 Petition form (T.C. Form 2)
-              </Button>
+              </InlineLink>
             </div>
             <FormGroup
               className="margin-top-2"
