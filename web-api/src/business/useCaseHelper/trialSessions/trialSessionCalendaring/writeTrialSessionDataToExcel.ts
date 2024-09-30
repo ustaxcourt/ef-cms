@@ -133,5 +133,5 @@ export const writeTrialSessionDataToExcel = async ({
     type: 'pattern',
   };
 
-  return (await workbook.xlsx.writeBuffer) as unknown as Buffer;
+  return (await workbook.xlsx.writeBuffer()) as unknown as Buffer;
 };
