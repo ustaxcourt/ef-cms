@@ -4,7 +4,6 @@ import {
   PETITIONS_SECTION,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { getMessagesForCaseInteractor } from './getMessagesForCaseInteractor';
 import {
@@ -16,7 +15,6 @@ describe('getMessagesForCaseInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
     await expect(
       getMessagesForCaseInteractor(
-        applicationContext,
         {
           docketNumber: '101-20',
         },
@@ -49,7 +47,6 @@ describe('getMessagesForCaseInteractor', () => {
     (getMessagesByDocketNumber as jest.Mock).mockReturnValue([mockMessage]);
 
     const returnedMessage = await getMessagesForCaseInteractor(
-      applicationContext,
       {
         docketNumber: mockMessage.docketNumber,
       },
