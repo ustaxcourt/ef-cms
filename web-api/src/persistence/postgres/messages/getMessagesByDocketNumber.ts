@@ -5,7 +5,6 @@ import { messageResultEntity } from '@web-api/persistence/postgres/messages/mapp
 export const getMessagesByDocketNumber = async ({
   docketNumber,
 }: {
-  applicationContext: IApplicationContext;
   docketNumber: string;
 }): Promise<MessageResult[]> => {
   const messages = await getDbReader(reader =>

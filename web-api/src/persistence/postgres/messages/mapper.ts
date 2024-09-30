@@ -57,7 +57,7 @@ export function messageResultEntity(message) {
     transformNullToUndefined({
       ...message,
       caseStatus: message.status,
-      caseTitle: Case.getCaseTitle(message.caption),
+      caseTitle: Case.getCaseTitle(message.caption || ''),
     }),
   );
 }
