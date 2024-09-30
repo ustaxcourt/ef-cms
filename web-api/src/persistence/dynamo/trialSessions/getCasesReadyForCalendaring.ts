@@ -17,7 +17,7 @@ export const getCasesReadyForCalendaring = async ({
     applicationContext,
   });
 
-  let docketNumbers = [];
+  let docketNumbers: string[] = [];
   mappings.map(metadata => {
     const { docketNumber } = metadata;
     if (docketNumbers.includes(docketNumber)) {
