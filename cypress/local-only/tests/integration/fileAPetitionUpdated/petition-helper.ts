@@ -1,4 +1,5 @@
 import { ProcedureType } from '../../../../../shared/src/business/entities/EntityConstants';
+import { attachFile } from '../../../../helpers/file/upload-file';
 
 type TextFillType = {
   errorMessage: string;
@@ -55,7 +56,11 @@ export function selectInput(
 
 export function fillPetitionFileInformation(filePath: string) {
   cy.get('[data-testid="upload-a-petition-label"').click();
-  cy.get('#petition-file').attachFile(filePath);
+  attachFile({
+    filePath,
+    selector: '#petition-file',
+    selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+  });
   cy.get('[data-testid="petition-redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="step-2-next-button"]').click();
 }
@@ -159,7 +164,11 @@ export function fillIrsNoticeInformation(
     return;
   }
   cy.get('[data-testid="irs-notice-Yes"]').click();
-  cy.get('[data-testid="irs-notice-upload-0"]').attachFile(filePath);
+  attachFile({
+    filePath,
+    selector: '[data-testid="irs-notice-upload-0"]',
+    selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+  });
   cy.get('[data-testid="case-type-select"]').select(caseType);
   cy.get('[data-testid="irs-notice-tax-year-0"]').type('2024');
   cy.get('[data-testid="city-and-state-issuing-office-0"]').type('Jackson, NJ');
@@ -168,7 +177,11 @@ export function fillIrsNoticeInformation(
 }
 
 export function fillIrsNotice(index: number, filePath: string) {
-  cy.get(`[data-testid="irs-notice-upload-${index}"]`).attachFile(filePath);
+  attachFile({
+    filePath,
+    selector: `[data-testid="irs-notice-upload-${index}"]`,
+    selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+  });
   cy.get('[data-testid="case-type-select"]').eq(index).select('Deficiency');
   cy.get(`[data-testid="irs-notice-tax-year-${index}"]`).type(
     `Tax Year ${index}`,
@@ -182,7 +195,12 @@ export function fillMultipleIRSNotices(filePath: string) {
   cy.get('[data-testid="irs-notice-Yes"]').click();
 
   // IRS Notice #1
-  cy.get('[data-testid="irs-notice-upload-0"]').attachFile(filePath);
+  attachFile({
+    filePath,
+    selector: '[data-testid="irs-notice-upload-0"]',
+    selectorToAwaitOnSuccess:
+      '[data-testid^="upload-file-success"][data-testid*="0"]',
+  });
   cy.get('[data-testid="case-type-select"]').select('Deficiency');
   cy.get(
     '.usa-date-picker__wrapper > [data-testid="notice-issued-date-0-picker"]',
@@ -193,7 +211,12 @@ export function fillMultipleIRSNotices(filePath: string) {
   cy.get('[data-testid="add-another-irs-notice-button"]').click();
 
   // IRS Notice #2
-  cy.get('[data-testid="irs-notice-upload-1"]').attachFile(filePath);
+  attachFile({
+    filePath,
+    selector: '[data-testid="irs-notice-upload-1"]',
+    selectorToAwaitOnSuccess:
+      '[data-testid^="upload-file-success"][data-testid*="1"]',
+  });
   cy.get('[data-testid="case-type-select"]').eq(1).select('CDP (Lien/Levy)');
   cy.get(
     '.usa-date-picker__wrapper > [data-testid="notice-issued-date-1-picker"]',
@@ -216,7 +239,11 @@ export function fillCaseProcedureInformation(
 }
 
 export function fillStinInformation(filePath: string) {
-  cy.get('[data-testid="stin-file"]').attachFile(filePath);
+  attachFile({
+    filePath,
+    selector: '[data-testid="stin-file"]',
+    selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+  });
   cy.get('[data-testid="step-5-next-button"]').click();
 }
 
