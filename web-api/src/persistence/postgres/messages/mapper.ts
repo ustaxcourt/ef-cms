@@ -58,6 +58,7 @@ export function messageResultEntity(message) {
       ...message,
       caseStatus: message.status,
       caseTitle: Case.getCaseTitle(message.caption || ''),
+      createdAt: message.createdAt.toISOString(),
     }),
   );
 }
