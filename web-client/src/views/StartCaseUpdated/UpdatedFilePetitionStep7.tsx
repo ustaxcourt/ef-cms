@@ -3,6 +3,7 @@ import {
   AccordionItem,
 } from '@web-client/ustc-ui/Accordion/Accordion';
 import { Button } from '@web-client/ustc-ui/Button/Button';
+import { InlineLink } from '@web-client/ustc-ui/InlineLink/InlineLink';
 import { SuccessNotification } from '@web-client/views/SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -79,17 +80,9 @@ export const UpdatedFilePetitionStep7 = connect(
             >
               <div className="line-height-2">
                 <span>Submit an </span>
-                <Button
-                  link
-                  className="usa-link--external text-left mobile-text-wrap"
-                  href="https://www.ustaxcourt.gov/resources/forms/Application_for_Waiver_of_Filing_Fee.pdf"
-                  iconColor="blue"
-                  overrideMargin="margin-right-1"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
+                <InlineLink href="https://www.ustaxcourt.gov/resources/forms/Application_for_Waiver_of_Filing_Fee.pdf">
                   Application for Waiver of Filing Fee.
-                </Button>
+                </InlineLink>
                 <span>
                   This form requires detailed financial information and must be
                   signed under penalty of perjury.

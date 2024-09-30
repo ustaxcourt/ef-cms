@@ -29,6 +29,7 @@ describe('cloneFile', () => {
   it('should fail when attempting to clone something other than a file', async () => {
     let error;
     try {
+      // @ts-ignore
       const clonePromise = cloneFile(2);
       keys.error();
       await clonePromise;

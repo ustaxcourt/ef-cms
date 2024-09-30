@@ -1,3 +1,4 @@
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import React from 'react';
 
 export const verifyUserPendingEmailAction = async ({
@@ -28,8 +29,8 @@ export const verifyUserPendingEmailAction = async ({
           <>
             Your request cannot be completed. Please try to log in. If you’re
             still having trouble, contact{' '}
-            <a href="mailto:dawson.support@ustaxcourt.gov">
-              dawson.support@ustaxcourt.gov
+            <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
+              {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
             </a>
             .
           </>

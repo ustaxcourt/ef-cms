@@ -1,3 +1,4 @@
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -99,8 +100,8 @@ describe('submitChangePasswordAction', () => {
         message: (
           <>
             Please contact{' '}
-            <a href="mailto:dawson.support@ustaxcourt.gov">
-              dawson.support@ustaxcourt.gov
+            <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
+              {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
             </a>
             .
           </>
@@ -158,8 +159,8 @@ describe('submitChangePasswordAction', () => {
             We sent an email with a link to verify the email address. If you
             don’t see it, check your spam folder. If you’re still having
             trouble, email{' '}
-            <a href="mailto:dawson.support@ustaxcourt.gov">
-              dawson.support@ustaxcourt.gov
+            <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
+              {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
             </a>
             .
           </>
