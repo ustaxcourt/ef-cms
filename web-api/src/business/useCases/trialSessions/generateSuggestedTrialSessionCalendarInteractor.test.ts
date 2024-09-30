@@ -1,22 +1,13 @@
-import {
-  CASE_STATUS_TYPES,
-  SESSION_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
+import { SESSION_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { checkForReadyForTrialCasesInteractor } from '../checkForReadyForTrialCasesInteractor';
-import { generateSuggestedTrialSessionCalendar } from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendar';
+import { generateSuggestedTrialSessionCalendarInteractor } from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
+import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 
-describe('checkForReadyForTrialCasesInteractor', () => {
+describe('generateSuggestedTrialSessionCalendar', () => {
   // beforeAll(() => {
   //   applicationContext
   //     .getPersistenceGateway()
   //     .getReadyForTrialCases.mockImplementation(() => mockCasesReadyForTrial);
-
-  //   applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});
-  // });
 
   // beforeEach(() => {
   //   applicationContext
@@ -28,9 +19,10 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     const mockStartDate = '2019-08-22T04:00:00.000Z';
     const mockEndDate = '2019-09-22T04:00:00.000Z';
 
-    const result = await generateSuggestedTrialSessionCalendar(
+    const result = await generateSuggestedTrialSessionCalendarInteractor(
       applicationContext,
-      { trialTermEndDate: mockEndDate, trialTermStartDate: mockStartDate },
+      { termEndDate: mockEndDate, termStartDate: mockStartDate },
+      mockPetitionsClerkUser,
     );
 
     expect(result).toEqual([
