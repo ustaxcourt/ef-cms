@@ -7,8 +7,6 @@ export interface Database {
 
 export interface MessageTable {
   attachments?: ColumnType<{ documentId: string }[], string, string>;
-  caseStatus: string;
-  caseTitle: string;
   completedAt?: string;
   completedBy?: string;
   completedBySection?: string;
@@ -37,11 +35,13 @@ export type NewMessageKysely = Insertable<MessageTable>;
 export type UpdateMessageKysely = Updateable<MessageTable>;
 
 export interface CaseTable {
+  caption: string;
   docketNumber: string;
-  trialLocation?: string;
-  trialDate?: string;
-  leadDocketNumber?: string;
   docketNumberSuffix?: string;
+  leadDocketNumber?: string;
+  status: string;
+  trialDate?: string;
+  trialLocation?: string;
 }
 
 export type CaseKysely = Selectable<CaseTable>;
