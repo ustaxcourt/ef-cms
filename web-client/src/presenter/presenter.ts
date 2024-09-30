@@ -66,6 +66,7 @@ import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrial
 import { clearSelectedWorkItemsSequence } from './sequences/clearSelectedWorkItemsSequence';
 import { clearStatusReportOrderFormSequence } from './sequences/StatusReportOrder/clearStatusReportOrderFormSequence';
 import { clearViewerDocumentToDisplaySequence } from './sequences/clearViewerDocumentToDisplaySequence';
+import { cloneDeep } from 'lodash';
 import { closeModalAndNavigateBackSequence } from './sequences/closeModalAndNavigateBackSequence';
 import { closeModalAndNavigateSequence } from './sequences/closeModalAndNavigateSequence';
 import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeModalAndNavigateToMaintenanceSequence';
@@ -408,6 +409,7 @@ import { setSelectedDocumentsForDownloadSequence } from './sequences/setSelected
 import { setSelectedMessagesSequence } from './sequences/setSelectedMessagesSequence';
 import { setTrialSessionCalendarErrorSequence } from '@web-client/presenter/sequences/setTrialSessionCalendarErrorSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
+import { setTrialSessionsFiltersSequence } from '@web-client/presenter/sequences/setTrialSessionsFiltersSequence';
 import { setViewerCorrespondenceToDisplaySequence } from './sequences/setViewerCorrespondenceToDisplaySequence';
 import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumentToDisplaySequence';
 import { setViewerDraftDocumentToDisplaySequence } from './sequences/setViewerDraftDocumentToDisplaySequence';
@@ -600,6 +602,7 @@ import { validateRemoveFromTrialSessionSequence } from './sequences/validateRemo
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateSetForHearingSequence } from './sequences/validateSetForHearingSequence';
 import { validateStampSequence } from './sequences/validateStampSequence';
+import { validateStatusReportOrderSequence } from '@web-client/presenter/sequences/StatusReportOrder/validateStatusReportOrderSequence';
 import { validateTrialSessionHearingNoteSequence } from './sequences/validateTrialSessionHearingNoteSequence';
 import { validateTrialSessionNoteSequence } from './sequences/validateTrialSessionNoteSequence';
 import { validateTrialSessionPlanningSequence } from './sequences/validateTrialSessionPlanningSequence';
@@ -943,7 +946,7 @@ export const presenterSequences = {
     gotoTrialSessionPlanningReportSequence as unknown as Function,
   gotoTrialSessionWorkingCopySequence:
     gotoTrialSessionWorkingCopySequence as unknown as Function,
-  gotoTrialSessionsSequence: gotoTrialSessionsSequence as unknown as Function,
+  gotoTrialSessionsSequence,
   gotoUploadCorrespondenceDocumentSequence:
     gotoUploadCorrespondenceDocumentSequence as unknown as Function,
   gotoUploadCourtIssuedDocumentSequence:
@@ -1261,6 +1264,7 @@ export const presenterSequences = {
   setSelectedMessagesSequence,
   setTrialSessionCalendarErrorSequence,
   setTrialSessionCalendarSequence,
+  setTrialSessionsFiltersSequence,
   setViewerCorrespondenceToDisplaySequence:
     setViewerCorrespondenceToDisplaySequence as unknown as Function,
   setViewerDocumentToDisplaySequence:
@@ -1585,6 +1589,7 @@ export const presenterSequences = {
   validateSetForHearingSequence:
     validateSetForHearingSequence as unknown as Function,
   validateStampSequence: validateStampSequence as unknown as Function,
+  validateStatusReportOrderSequence,
   validateTrialSessionHearingNoteSequence:
     validateTrialSessionHearingNoteSequence as unknown as Function,
   validateTrialSessionNoteSequence:
@@ -1621,7 +1626,7 @@ export const presenter = {
   ],
   providers: {} as { applicationContext: ClientApplicationContext; router: {} },
   sequences: presenterSequences,
-  state: initialState,
+  state: cloneDeep(initialState),
 };
 
 export type Sequences = typeof presenterSequences;

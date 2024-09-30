@@ -47,7 +47,10 @@ describe('Docket Clerk Views Trial Session Tabs', () => {
   docketClerkCreatesATrialSession(cerebralTest, overrides);
   docketClerkViewsTrialSessionList(cerebralTest);
   // Trial Session should exist in New tab
-  docketClerkViewsTrialSessionsTab(cerebralTest, { tab: 'New' });
+  docketClerkViewsTrialSessionsTab(cerebralTest, {
+    sessionStatus: 'All',
+    tab: 'new',
+  });
 
   for (let i = 0; i < caseCount; i++) {
     const id = i + 1;
@@ -65,15 +68,24 @@ describe('Docket Clerk Views Trial Session Tabs', () => {
   petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  // Trial Session should exist in Open tab
-  docketClerkViewsTrialSessionsTab(cerebralTest, { tab: 'Open' });
+  // Trial Session should exist in Open
+  docketClerkViewsTrialSessionsTab(cerebralTest, {
+    sessionStatus: 'Open',
+    tab: 'calendared',
+  });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkManuallyRemovesCaseFromTrial(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  // Trial Session should exist in Closed tab
-  docketClerkViewsTrialSessionsTab(cerebralTest, { tab: 'Closed' });
-  // Trial Session should exist in All tab
-  docketClerkViewsTrialSessionsTab(cerebralTest, { tab: 'All' });
+  // Trial Session should exist in Closed
+  docketClerkViewsTrialSessionsTab(cerebralTest, {
+    sessionStatus: 'Closed',
+    tab: 'calendared',
+  });
+  // Trial Session should exist in All
+  docketClerkViewsTrialSessionsTab(cerebralTest, {
+    sessionStatus: 'All',
+    tab: 'calendared',
+  });
 });

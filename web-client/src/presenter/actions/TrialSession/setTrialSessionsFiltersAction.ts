@@ -1,17 +1,40 @@
-import { pick } from 'lodash';
+import { TrialSessionsFilters } from '@web-client/presenter/state/trialSessionsPageState';
 import { state } from '@web-client/presenter/app.cerebral';
-/**
- * sets the state.screenMetadata.trialSessionFilters
- * @param {object} providers the providers object
- * @param {object} providers.props the cerebral props object containing the props.query
- * @param {object} providers.store the cerebral store used for setting the state.screenMetadata.trialSessionFilters
- */
+
 export const setTrialSessionsFiltersAction = ({
   props,
   store,
-}: ActionProps) => {
-  store.set(
-    state.screenMetadata.trialSessionFilters,
-    pick(props.query, ['trialLocation', 'judge', 'sessionType', 'status']),
-  );
+}: ActionProps<Partial<TrialSessionsFilters>>) => {
+  if (props.currentTab) {
+    store.set(state.trialSessionsPage.filters.currentTab, props.currentTab);
+  }
+
+  if (props.judgeId) {
+    store.set(state.trialSessionsPage.filters.judgeId, props.judgeId);
+  }
+
+  if (props.proceedingType) {
+    store.set(
+      state.trialSessionsPage.filters.proceedingType,
+      props.proceedingType,
+    );
+  }
+
+  if (props.sessionStatus) {
+    store.set(
+      state.trialSessionsPage.filters.sessionStatus,
+      props.sessionStatus,
+    );
+  }
+
+  if (props.sessionType) {
+    store.set(state.trialSessionsPage.filters.sessionType, props.sessionType);
+  }
+
+  if (props.trialLocation) {
+    store.set(
+      state.trialSessionsPage.filters.trialLocation,
+      props.trialLocation,
+    );
+  }
 };

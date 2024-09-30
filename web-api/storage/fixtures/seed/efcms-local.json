@@ -12464,35 +12464,7 @@
     "pk": "case|103-20",
     "docketNumber": "103-20"
   },
-  {
-    "attachments": [
-      {
-        "documentId": "4796a931-14fb-43e6-948f-d2b67ce4c1cb"
-      }
-    ],
-    "isRepliedTo": false,
-    "caseStatus": "Calendared",
-    "fromUserId": "9d7d63b7-d7a5-4905-ba89-ef71bf30057f",
-    "subject": "Administrative Record",
-    "toSection": "petitions",
-    "gsi1pk": "message|1d4c1fd9-5265-4e46-894f-b8426d3a6836",
-    "caseTitle": "Reuben Blair",
-    "isRead": false,
-    "messageId": "1d4c1fd9-5265-4e46-894f-b8426d3a6836",
-    "message": "Could you please review this?",
-    "toUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "createdAt": "2023-06-02T21:15:50.105Z",
-    "entityName": "Message",
-    "parentMessageId": "1d4c1fd9-5265-4e46-894f-b8426d3a6836",
-    "sk": "message|1d4c1fd9-5265-4e46-894f-b8426d3a6836",
-    "docketNumberWithSuffix": "103-20L",
-    "from": "Test Admissions Clerk",
-    "to": "Test Petitionsclerk",
-    "pk": "case|103-20",
-    "fromSection": "admissions",
-    "docketNumber": "103-20",
-    "isCompleted": false
-  },
+
   {
     "role": "privatePractitioner",
     "serviceIndicator": "Electronic",
@@ -13838,35 +13810,6 @@
     "pk": "case|104-19",
     "documentTitle": "Petition",
     "docketNumber": "104-19"
-  },
-  {
-    "attachments": [
-      {
-        "documentId": "8ed9bad9-db58-43c8-b03f-c2e3ad92995f"
-      }
-    ],
-    "isRepliedTo": false,
-    "caseStatus": "New",
-    "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "subject": "Order",
-    "toSection": "docket",
-    "gsi1pk": "message|2d1191d3-4597-454a-a2b2-84e267ccf01e",
-    "caseTitle": "Mufutau Wade",
-    "isRead": false,
-    "messageId": "2d1191d3-4597-454a-a2b2-84e267ccf01e",
-    "message": "Test message with deleted document.",
-    "toUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "createdAt": "2020-08-18T18:07:36.333Z",
-    "entityName": "Message",
-    "sk": "message|2d1191d3-4597-454a-a2b2-84e267ccf01e",
-    "parentMessageId": "2d1191d3-4597-454a-a2b2-84e267ccf01e",
-    "docketNumberWithSuffix": "104-19",
-    "from": "Test Docketclerk",
-    "pk": "case|104-19",
-    "to": "Test Docketclerk",
-    "fromSection": "docket",
-    "docketNumber": "104-19",
-    "isCompleted": false
   },
   {
     "associatedJudge": "Chief Judge",
@@ -15363,31 +15306,7 @@
     "servedAt": "2020-09-25T19:27:16.469Z",
     "docketNumber": "105-20"
   },
-  {
-    "isRepliedTo": false,
-    "attachments": [],
-    "caseStatus": "General Docket - Not at Issue",
-    "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "subject": "message to myself",
-    "toSection": "petitions",
-    "gsi1pk": "message|eb0a139a-8951-4de1-8b83-f02a27504105",
-    "caseTitle": "Bill Burr",
-    "isRead": false,
-    "messageId": "eb0a139a-8951-4de1-8b83-f02a27504105",
-    "message": "hello!",
-    "toUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "createdAt": "2020-06-05T18:02:25.280Z",
-    "entityName": "Message",
-    "sk": "message|eb0a139a-8951-4de1-8b83-f02a27504105",
-    "parentMessageId": "eb0a139a-8951-4de1-8b83-f02a27504105",
-    "docketNumberWithSuffix": "105-20L",
-    "from": "Test Petitionsclerk",
-    "pk": "case|105-20",
-    "to": "Test Petitionsclerk",
-    "fromSection": "petitions",
-    "docketNumber": "105-20",
-    "isCompleted": false
-  },
+
   {
     "role": "privatePractitioner",
     "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
@@ -50345,7 +50264,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
-    "sessionStatus": "New",
+    "sessionStatus": "Open",
     "trialLocation": "Denver, Colorado",
     "proceedingType": "In Person",
     "createdAt": "2019-11-02T05:00:00.000Z",
@@ -50362,7 +50281,7 @@
     "startDate": "2019-12-02T05:00:00.000Z",
     "maxCases": 30,
     "trialSessionId": "0d943468-bc2e-4631-84e3-b084cf5b1fbb",
-    "isCalendared": false,
+    "isCalendared": true,
     "status": "Closed"
   },
   {

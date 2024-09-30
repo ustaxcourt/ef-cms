@@ -1,6 +1,8 @@
 /* eslint-disable max-lines */
 jest.mock('@shared/business/entities/Message.ts');
 jest.mock('@shared/business/entities/CaseDeadline');
+jest.mock('@web-api/persistence/postgres/messages/getMessagesByDocketNumber');
+jest.mock('@web-api/persistence/postgres/messages/updateMessage');
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
@@ -16,9 +18,14 @@ import { Message } from '../../../../../shared/src/business/entities/Message';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { getMessagesByDocketNumber as getMessagesByDocketNumberMock } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseAndAssociations } from './updateCaseAndAssociations';
+import { updateMessage as updateMessageMock } from '@web-api/persistence/postgres/messages/updateMessage';
 import { v4 as uuidv4 } from 'uuid';
+
+const getMessagesByDocketNumber = getMessagesByDocketNumberMock as jest.Mock;
+const updateMessage = updateMessageMock as jest.Mock;
 
 describe('updateCaseAndAssociations', () => {
   let updateCaseMock = jest.fn();
@@ -135,9 +142,7 @@ describe('updateCaseAndAssociations', () => {
     ).not.toHaveBeenCalled();
 
     // updateCaseMessages
-    expect(
-      applicationContext.getPersistenceGateway().updateMessage,
-    ).not.toHaveBeenCalled();
+    expect(updateMessage).not.toHaveBeenCalled();
 
     // updateCorrespondence
     expect(
@@ -858,12 +863,8 @@ describe('updateCaseAndAssociations', () => {
   describe('user case messages', () => {
     beforeAll(() => {
       const mockMessages = [{ messageId: 'abc' }];
-      applicationContext
-        .getPersistenceGateway()
-        .updateMessage.mockResolvedValue(true);
-      applicationContext
-        .getPersistenceGateway()
-        .getMessagesByDocketNumber.mockResolvedValue(mockMessages);
+      updateMessage.mockResolvedValue(true);
+      getMessagesByDocketNumber.mockResolvedValue(mockMessages);
     });
     it('completes without altering message records if no message updates are necessary', async () => {
       await updateCaseAndAssociations({
@@ -871,12 +872,8 @@ describe('updateCaseAndAssociations', () => {
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: validMockCase,
       });
-      expect(
-        applicationContext.getPersistenceGateway().getMessagesByDocketNumber,
-      ).not.toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().updateMessage,
-      ).not.toHaveBeenCalled();
+      expect(getMessagesByDocketNumber).not.toHaveBeenCalled();
+      expect(updateMessage).not.toHaveBeenCalled();
     });
 
     it('gets messages and throws validation errors if updates are not valid', async () => {
@@ -898,12 +895,8 @@ describe('updateCaseAndAssociations', () => {
           },
         }),
       ).rejects.toThrow('entity was invalid');
-      expect(
-        applicationContext.getPersistenceGateway().getMessagesByDocketNumber,
-      ).toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().updateMessage,
-      ).not.toHaveBeenCalled();
+      expect(getMessagesByDocketNumber).toHaveBeenCalled();
+      expect(updateMessage).not.toHaveBeenCalled();
     });
 
     it('gets messages and persists them if valid', async () => {
@@ -919,12 +912,8 @@ describe('updateCaseAndAssociations', () => {
           },
         }),
       ).resolves.not.toThrow();
-      expect(
-        applicationContext.getPersistenceGateway().getMessagesByDocketNumber,
-      ).toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().updateMessage,
-      ).toHaveBeenCalled();
+      expect(getMessagesByDocketNumberMock).toHaveBeenCalled();
+      expect(updateMessage).toHaveBeenCalled();
     });
   });
 

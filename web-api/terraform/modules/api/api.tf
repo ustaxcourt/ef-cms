@@ -140,7 +140,6 @@ module "cognito_authorizer_lambda" {
   memory_size    = "3008"
 }
 
-# 
 resource "aws_api_gateway_resource" "api_system_resource" {
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   parent_id   = aws_api_gateway_rest_api.gateway_for_api.root_resource_id
@@ -169,7 +168,6 @@ resource "aws_api_gateway_integration" "api_integration_system" {
   type                    = "AWS_PROXY"
   uri                     = module.api_lambda.invoke_arn
 }
-# 
 
 resource "aws_api_gateway_authorizer" "custom_authorizer" {
   name                   = "custom_authorizer_${var.environment}_${var.current_color}"
