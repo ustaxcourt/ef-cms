@@ -6,6 +6,7 @@ import {
 import { logout } from '../../../../helpers/authentication/logout';
 import { petitionerCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
+import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/select-typeahead-input';
 
 /**
  * Given a case
@@ -39,11 +40,9 @@ describe('Docket clerk QC-ing a paper filing', () => {
         '.usa-date-picker__wrapper > [data-testid="date-received-picker"]',
       ).type('01/01/2018');
 
-      cy.get('[data-testid="primary-document-type-search"]').type('M115');
-      cy.get('#react-select-2-option-0').click();
+      selectTypeaheadInput('primary-document-type-search', 'M115');
 
-      cy.get('[data-testid="secondary-document-type-search"]').type('APPW');
-      cy.get('#react-select-3-option-0').click();
+      selectTypeaheadInput('secondary-document-type-search', 'APPW');
 
       cy.get('[data-testid="additional-info-1-textarea"]').type(
         'Test Secondary Additional Info',
@@ -75,8 +74,7 @@ describe('Docket clerk QC-ing a paper filing', () => {
         `[data-testid="${docketNumber}-qc-item-row"] [data-testid="qc-link"]`,
       ).click();
 
-      cy.get('#react-select-5-input').type('A');
-      cy.get('#react-select-5-option-0').click();
+      selectTypeaheadInput('secondary-document-type-search', 'Answer');
       cy.get('[data-testid="save-and-serve"]').click();
 
       cy.get('[data-testid="confirm-initiate-service-modal"]').contains(

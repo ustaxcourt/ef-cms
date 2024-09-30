@@ -1,51 +1,162 @@
 import {
   FORMATS,
   createDateAtStartOfWeekEST,
+  createEndOfDayISO,
+  createISODateString,
   formatDateString,
   subtractISODates,
 } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { RawUser } from '@shared/business/entities/User';
-import { SESSION_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  SESSION_STATUS_TYPES,
+  SESSION_TYPES,
+  TrialSessionTypes,
+} from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
+import {
+  TrialSessionsFilters,
+  initialTrialSessionPageState,
+} from '@web-client/presenter/state/trialSessionsPageState';
+import { TrialSessionsPageValidation } from '@shared/business/entities/trialSessions/TrialSessionsPageValidation';
+import { getTrialCitiesGroupedByState } from '@shared/business/utilities/trialSession/trialCitiesGroupedByState';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const trialSessionsHelper = (
   get: Get,
 ): {
+  isResetFiltersDisabled: boolean;
   showNewTrialSession: boolean;
   showNoticeIssued: boolean;
   showSessionStatus: boolean;
-  showUnassignedJudgeFilter: boolean;
-  trialSessionJudges: RawUser[];
+  trialSessionJudgeOptions: {
+    label: string;
+    value: { name: string; userId: string };
+  }[];
   trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
+  sessionTypeOptions: { label: string; value: TrialSessionTypes }[];
+  trialCitiesByState: {
+    label: string;
+    options: { label: string; value: string }[];
+  }[];
+  trialSessionsCount: number;
+  endDateErrorMessage?: string;
+  startDateErrorMessage?: string;
+  totalPages: number;
 } => {
   const permissions = get(state.permissions)!;
   const trialSessions = get(state.trialSessionsPage.trialSessions);
   const filters = get(state.trialSessionsPage.filters);
   const judge = get(state.judgeUser);
+  const judges = get(state.judges);
+
+  const pageSize = 100;
 
   const showCurrentJudgesOnly =
     filters.currentTab === 'new' ||
     filters.sessionStatus === SESSION_STATUS_TYPES.open;
 
-  let trialSessionJudges;
+  let trialSessionJudges: { name: string; userId: string }[];
   if (showCurrentJudgesOnly) {
-    trialSessionJudges = get(state.judges);
+    trialSessionJudges = judges;
   } else {
     trialSessionJudges = get(state.legacyAndCurrentJudges);
   }
 
-  const filteredTrialSessions = trialSessions
+  const userHasSelectedAFilter =
+    filters.proceedingType !==
+      initialTrialSessionPageState.filters.proceedingType ||
+    filters.sessionStatus !==
+      initialTrialSessionPageState.filters.sessionStatus ||
+    Object.keys(filters.judges).length > 0 ||
+    Object.keys(filters.sessionTypes).length > 0 ||
+    Object.keys(filters.trialLocations).length > 0 ||
+    !!filters.startDate ||
+    !!filters.endDate;
+
+  const sessionTypeOptions = Object.values(SESSION_TYPES).map(sessionType => ({
+    label: sessionType,
+    value: sessionType,
+  }));
+
+  const trialSessionJudgeOptions = trialSessionJudges.map(
+    trialSessionJudge => ({
+      label: trialSessionJudge.name,
+      value: { name: trialSessionJudge.name, userId: trialSessionJudge.userId },
+    }),
+  );
+
+  const showUnassignedJudgeFilter = filters.currentTab === 'new';
+  if (showUnassignedJudgeFilter) {
+    trialSessionJudgeOptions.push({
+      label: 'Unassigned',
+      value: { name: 'Unassigned', userId: 'unassigned' },
+    });
+  }
+
+  const states = getTrialCitiesGroupedByState();
+
+  const { endDateErrorMessage, startDateErrorMessage } =
+    validateTrialSessionDateRange({
+      endDate: filters.endDate,
+      startDate: filters.startDate,
+    });
+
+  const filteredTrialSessions = filterAndSortTrialSessions({
+    filters,
+    trialSessions,
+  });
+
+  const trialSessionPage = filteredTrialSessions.slice(
+    filters.pageNumber * pageSize,
+    filters.pageNumber * pageSize + pageSize,
+  );
+
+  const trialSessionRows = formatTrialSessions({
+    judgeAssociatedToUser: judge,
+    trialSessions: trialSessionPage,
+  });
+
+  return {
+    endDateErrorMessage,
+    isResetFiltersDisabled: !userHasSelectedAFilter,
+    sessionTypeOptions,
+    showNewTrialSession: permissions.CREATE_TRIAL_SESSION,
+    showNoticeIssued: filters.currentTab === 'calendared',
+    showSessionStatus: filters.currentTab === 'calendared',
+    startDateErrorMessage,
+    totalPages: Math.ceil(filteredTrialSessions.length / pageSize),
+    trialCitiesByState: states,
+    trialSessionJudgeOptions,
+    trialSessionRows,
+    trialSessionsCount: filteredTrialSessions.length,
+  };
+};
+
+const filterAndSortTrialSessions = ({
+  filters,
+  trialSessions,
+}: {
+  trialSessions: TrialSessionInfoDTO[];
+  filters: TrialSessionsFilters;
+}): TrialSessionInfoDTO[] => {
+  return trialSessions
     .filter(trialSession => {
       const isCalendaredFilter = filters.currentTab === 'calendared';
       return trialSession.isCalendared === isCalendaredFilter;
     })
     .filter(trialSession => {
-      if (filters.judgeId === 'All') return true;
-      if (filters.judgeId === 'unassigned') return !trialSession.judge?.userId;
-      return trialSession.judge?.userId === filters.judgeId;
+      const selectedJudges = Object.values(filters.judges);
+      if (selectedJudges.length === 0) return true;
+      const trialSessionHasJudge = selectedJudges.some(judgeFilter => {
+        if (judgeFilter.userId === 'unassigned') {
+          return !trialSession.judge?.userId;
+        }
+        return judgeFilter.userId === trialSession.judge?.userId;
+      });
+
+      return trialSessionHasJudge;
     })
     .filter(trialSession => {
       if (filters.proceedingType === 'All') return true;
@@ -57,30 +168,47 @@ export const trialSessionsHelper = (
       return filters.sessionStatus === trialSession.sessionStatus;
     })
     .filter(trialSession => {
-      if (filters.sessionType === 'All') return true;
-      return filters.sessionType === trialSession.sessionType;
+      if (Object.values(filters.sessionTypes).length === 0) return true;
+      return !!filters.sessionTypes[trialSession.sessionType];
     })
     .filter(trialSession => {
-      if (filters.trialLocation === 'All') return true;
-      return filters.trialLocation === trialSession.trialLocation;
+      if (Object.values(filters.trialLocations).length === 0) return true;
+      return !!filters.trialLocations[trialSession.trialLocation || ''];
+    })
+    .filter(trialSession => {
+      if (!filters.startDate) return true;
+      const filterIsoStartDate = createISODateString(
+        filters.startDate,
+        FORMATS.MMDDYYYY,
+      );
+      const formattdFilterStartDate = formatDateString(
+        filterIsoStartDate,
+        FORMATS.ISO,
+      );
+      const formattedTrialSessionStartDate = formatDateString(
+        trialSession.startDate,
+        FORMATS.ISO,
+      );
+      return formattedTrialSessionStartDate >= formattdFilterStartDate;
+    })
+    .filter(trialSession => {
+      if (!filters.endDate) return true;
+      const [month, day, year] = filters.endDate.split('/');
+      const filterIsoEndofDay = createEndOfDayISO({ day, month, year });
+      const formattedFilterEndDate = formatDateString(
+        filterIsoEndofDay,
+        FORMATS.ISO,
+      );
+      const formattedTrialSessionStartDate = formatDateString(
+        trialSession.startDate,
+        FORMATS.ISO,
+      );
+
+      return formattedTrialSessionStartDate <= formattedFilterEndDate;
     })
     .sort((sessionA, sessionB) => {
       return sessionA.startDate.localeCompare(sessionB.startDate);
     });
-
-  const trialSessionRows = formatTrialSessions({
-    judgeAssociatedToUser: judge,
-    trialSessions: filteredTrialSessions,
-  });
-
-  return {
-    showNewTrialSession: permissions.CREATE_TRIAL_SESSION,
-    showNoticeIssued: filters.currentTab === 'calendared',
-    showSessionStatus: filters.currentTab === 'calendared',
-    showUnassignedJudgeFilter: filters.currentTab === 'new',
-    trialSessionJudges,
-    trialSessionRows,
-  };
 };
 
 const formatTrialSessions = ({
@@ -118,6 +246,7 @@ const formatTrialSessions = ({
         trialSession.judge?.userId === judgeAssociatedToUser?.userId &&
         judgeAssociatedToUser?.userId
       );
+      const judge = trialSession.judge || { name: 'Unassigned', userId: '' };
       /* TODO 10409: There may be a bug in userIsAssignedToSession to session as the previous formatted needed a trialClerk to compute userIsAssignedToSession.
         Look at how formattedTrialSessions.ts calculates userIsAssignedToSession for reference
       */
@@ -128,7 +257,7 @@ const formatTrialSessions = ({
         formattedEstimatedEndDate,
         formattedNoticeIssuedDate,
         formattedStartDate,
-        judge: trialSession.judge,
+        judge,
         proceedingType: trialSession.proceedingType,
         sessionStatus: trialSession.sessionStatus,
         sessionType: trialSession.sessionType,
@@ -191,7 +320,7 @@ type TrialSessionRow = {
   proceedingType: string;
   startDate: string; // ISO format
   sessionType: string;
-  judge?: { name: string; userId: string };
+  judge: { name: string; userId: string };
   formattedNoticeIssuedDate: string;
   sessionStatus: string;
 };
@@ -205,4 +334,30 @@ type TrialSessionWeek = {
 };
 export function isTrialSessionWeek(item: any): item is TrialSessionWeek {
   return !!item?.sessionWeekStartDate;
+}
+
+function validateTrialSessionDateRange({
+  endDate,
+  startDate,
+}: {
+  startDate: string;
+  endDate: string;
+}): { startDateErrorMessage?: string; endDateErrorMessage?: string } {
+  const formattedEndDate = endDate
+    ? createISODateString(endDate, FORMATS.MMDDYYYY)
+    : undefined;
+
+  const formattedStartDate = startDate
+    ? createISODateString(startDate, FORMATS.MMDDYYYY)
+    : undefined;
+
+  const errors = new TrialSessionsPageValidation({
+    endDate: formattedEndDate,
+    startDate: formattedStartDate,
+  }).getFormattedValidationErrors();
+
+  return {
+    endDateErrorMessage: errors?.endDate,
+    startDateErrorMessage: errors?.startDate,
+  };
 }

@@ -4,13 +4,9 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Inclusions } from '../PaperFiling/Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from '../PaperFiling/SecondaryDocumentForm';
-import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import {
-  docketEntryOnChange,
-  onInputChange,
-  reactSelectValue,
-} from '../../ustc-ui/Utils/documentTypeSelectHelper';
+import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -95,7 +91,9 @@ export const EditDocketEntryMetaFormDocument = connect(
 
           <SelectSearch
             aria-describedby="document-type-label"
+            data-testid="edit-docket-entry-meta-document-type-search"
             id="document-type"
+            isClearable={true}
             name="eventCode"
             options={internalTypesHelper.internalDocumentTypesForSelectSorted}
             value={reactSelectValue({
@@ -103,22 +101,13 @@ export const EditDocketEntryMetaFormDocument = connect(
                 internalTypesHelper.internalDocumentTypesForSelectWithLegacySorted,
               selectedEventCode: form.eventCode,
             })}
-            onChange={(inputValue, { action, name: inputName }) => {
-              docketEntryOnChange({
-                action,
-                inputName,
-                inputValue,
-                updateSequence: updateDocketEntryMetaDocumentFormValueSequence,
-                validateSequence: validateDocumentSequence,
+            onChange={inputValue => {
+              const value = inputValue?.value || '';
+              updateDocketEntryMetaDocumentFormValueSequence({
+                key: 'eventCode',
+                value,
               });
-              return true;
-            }}
-            onInputChange={(inputText, { action }) => {
-              onInputChange({
-                action,
-                inputText,
-                updateSequence: validateDocumentSequence,
-              });
+              validateDocumentSequence();
             }}
           />
         </FormGroup>
@@ -141,6 +130,7 @@ export const EditDocketEntryMetaFormDocument = connect(
             </label>
             <SelectSearch
               aria-label="secondary-document-type-label"
+              data-testid="edit-docket-entry-meta-secondary-document-type-search"
               id="secondary-document-type"
               isClearable={true}
               name="secondaryDocument.eventCode"
@@ -148,27 +138,15 @@ export const EditDocketEntryMetaFormDocument = connect(
               value={reactSelectValue({
                 documentTypes:
                   internalTypesHelper.internalDocumentTypesForSelectWithLegacySorted,
-                selectedEventCode:
-                  form.secondaryDocument && form.secondaryDocument.eventCode,
+                selectedEventCode: form?.secondaryDocument?.eventCode,
               })}
-              onChange={(inputValue, { action, name: inputName }) => {
-                docketEntryOnChange({
-                  action,
-                  inputName,
-                  inputValue,
-                  updateSequence:
-                    updateDocketEntryMetaDocumentFormValueSequence,
-                  validateSequence: validateDocumentSequence,
+              onChange={inputValue => {
+                const value = inputValue?.value || '';
+                updateDocketEntryMetaDocumentFormValueSequence({
+                  key: 'secondaryDocument.eventCode',
+                  value,
                 });
-                return true;
-              }}
-              onInputChange={(inputText, { action }) => {
-                onInputChange({
-                  action,
-                  inputText,
-                  updateSequence:
-                    updateDocketEntryMetaDocumentFormValueSequence,
-                });
+                validateDocumentSequence();
               }}
             />
           </FormGroup>

@@ -8,8 +8,14 @@ describe('resetTrialSessionsFiltersAction', () => {
       state: {},
     });
 
-    expect(result.state.trialSessionsPage).toEqual(
-      initialTrialSessionPageState,
+    expect(result.state.trialSessionsPage.filters).toEqual(
+      initialTrialSessionPageState.filters,
     );
+  });
+  it('should set allow the current tab to be preserved when resetting filters', async () => {
+    const result = await runAction(resetTrialSessionsFiltersAction, {
+      props: { currentTab: 'new' },
+    });
+    expect(result.state.trialSessionsPage.filters.currentTab).toEqual('new');
   });
 });

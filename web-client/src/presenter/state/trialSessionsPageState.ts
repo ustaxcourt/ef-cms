@@ -1,13 +1,20 @@
+import {
+  SESSION_STATUS_TYPES,
+  TrialSessionProceedingType,
+  TrialSessionTypes,
+} from '@shared/business/entities/EntityConstants';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
-import { TrialSessionProceedingType } from '@shared/business/entities/EntityConstants';
 
 const filters: TrialSessionsFilters = {
   currentTab: 'calendared' as 'calendared' | 'new',
-  judgeId: 'All',
+  endDate: '',
+  judges: {},
+  pageNumber: 0,
   proceedingType: 'All' as TrialSessionProceedingType,
-  sessionStatus: 'Open',
-  sessionType: 'All',
-  trialLocation: 'All',
+  sessionStatus: SESSION_STATUS_TYPES.open,
+  sessionTypes: {},
+  startDate: '',
+  trialLocations: {},
 };
 
 export const initialTrialSessionPageState = {
@@ -17,9 +24,12 @@ export const initialTrialSessionPageState = {
 
 export type TrialSessionsFilters = {
   currentTab: 'calendared' | 'new';
-  judgeId: string;
+  endDate: string;
+  pageNumber: number;
+  judges: Record<string, { name: string; userId: string }>;
   proceedingType: TrialSessionProceedingType | 'All';
   sessionStatus: string;
-  sessionType: string;
-  trialLocation: string;
+  sessionTypes: Record<string, TrialSessionTypes>;
+  startDate: string;
+  trialLocations: Record<string, string>;
 };
