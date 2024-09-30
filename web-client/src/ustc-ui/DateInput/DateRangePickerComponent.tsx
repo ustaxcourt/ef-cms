@@ -12,6 +12,7 @@ export const DateRangePickerComponent = ({
   endValue,
   formGroupCls,
   maxDate,
+  minDate,
   omitFormGroupClass,
   onChangeEnd,
   onChangeStart,
@@ -42,6 +43,7 @@ export const DateRangePickerComponent = ({
   startName: string;
   startValue: string;
   maxDate?: string; // Must be in YYYY-MM-DD format
+  minDate?: string; // Must be in YYYY-MM-DD format
 }) => {
   const dateRangePickerRef = useRef();
   const startDatePickerRef = useRef();
@@ -158,6 +160,7 @@ export const DateRangePickerComponent = ({
       <div
         className={classNames('usa-date-range-picker', rangePickerCls)}
         data-max-date={maxDate}
+        data-min-date={minDate}
       >
         <div className={startPickerCls} data-testid={`${startName}-date-start`}>
           <FormGroup
