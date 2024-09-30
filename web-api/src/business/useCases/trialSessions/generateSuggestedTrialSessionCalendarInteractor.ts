@@ -49,9 +49,8 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
   {
     termEndDate,
-    termName,
     termStartDate,
-  }: { termEndDate: string; termStartDate: string; termName: string },
+  }: { termEndDate: string; termStartDate: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<{ message: string; bufferArray: Buffer | undefined }> => {
   if (
@@ -146,7 +145,6 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   const bufferArray = await writeTrialSessionDataToExcel({
     scheduledTrialSessions,
     sessionCountPerWeek,
-    termName,
     weeks: weeksToLoop,
   });
 

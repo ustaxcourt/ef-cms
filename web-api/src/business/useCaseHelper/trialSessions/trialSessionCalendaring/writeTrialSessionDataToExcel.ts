@@ -5,10 +5,8 @@ import ExcelJS from 'excelJs';
 export const writeTrialSessionDataToExcel = async ({
   scheduledTrialSessions,
   sessionCountPerWeek,
-  termName,
   weeks,
 }: {
-  termName: string;
   scheduledTrialSessions: ScheduledTrialSession[];
   weeks: string[];
   sessionCountPerWeek: Record<string, number>;
@@ -41,7 +39,7 @@ export const writeTrialSessionDataToExcel = async ({
   //
   const workbook = new ExcelJS.Workbook();
   const worksheetOptions = { properties: { outlineLevelCol: 2 } };
-  const worksheet = workbook.addWorksheet(termName, worksheetOptions);
+  const worksheet = workbook.addWorksheet('sheetInProgress', worksheetOptions);
 
   const sessionsByCity = scheduledTrialSessions.reduce((acc, session) => {
     if (!acc[session.city!]) {
