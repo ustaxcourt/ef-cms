@@ -11,6 +11,7 @@ export const CreateTermModal = connect(
     cancelSequence: sequences.clearModalSequence,
     confirmSequence: sequences.submitCreateTermModalSequence,
     modal: state.modal,
+    todaysDate: state.todaysDate,
     updateModalValueSequence: sequences.updateModalValueSequence,
     validationErrors: state.validationErrors,
   },
@@ -18,6 +19,7 @@ export const CreateTermModal = connect(
     cancelSequence,
     confirmSequence,
     modal,
+    todaysDate,
     updateModalValueSequence,
     validationErrors,
   }) {
@@ -63,6 +65,7 @@ export const CreateTermModal = connect(
             endPickerCls={''}
             endValue={modal.termEndDate}
             formGroupCls="margin-bottom-0"
+            minDate={todaysDate}
             parentModalHasMounted={isModalMounted}
             rangePickerCls={'display-flex flex-justify'}
             startDateErrorText={validationErrors.termStartDate}
