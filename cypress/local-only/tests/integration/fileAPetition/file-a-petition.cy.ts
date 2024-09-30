@@ -1,3 +1,4 @@
+import { attachFile } from '../../../../helpers/file/upload-file';
 import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
 import { petitionerAttemptsToUploadCorruptPdf } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 
@@ -58,7 +59,11 @@ describe('File a Petition', () => {
       cy.get('label#stin-file-label').scrollIntoView();
       cy.get('label#stin-file-label').should('not.have.class', 'validated');
 
-      cy.get('input#stin-file').attachFile('../../helpers/file/sample.pdf');
+      attachFile({
+        filePath: '../../helpers/file/sample.pdf',
+        selector: 'input#stin-file',
+        selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+      });
       cy.get('label#stin-file-label').should('have.class', 'validated');
     });
 
@@ -75,7 +80,11 @@ describe('File a Petition', () => {
       cy.get('label#petition-file-label').scrollIntoView();
       cy.get('label#petition-file-label').should('not.have.class', 'validated');
 
-      cy.get('input#petition-file').attachFile('../../helpers/file/sample.pdf');
+      attachFile({
+        filePath: '../../helpers/file/sample.pdf',
+        selector: 'input#petition-file',
+        selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+      });
 
       cy.get('label#petition-file-label').should('have.class', 'validated');
     });
