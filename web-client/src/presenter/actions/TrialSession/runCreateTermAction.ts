@@ -10,7 +10,6 @@ export const runCreateTermAction = async ({
     .getUseCases()
     .generateSuggestedTrialSessionCalendarInteractor(applicationContext, {
       termEndDate,
-      termName,
       termStartDate,
     });
 

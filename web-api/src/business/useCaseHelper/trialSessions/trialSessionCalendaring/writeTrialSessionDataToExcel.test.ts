@@ -4,6 +4,14 @@ import { writeTrialSessionDataToExcel } from './writeTrialSessionDataToExcel';
 
 const cities = ['cityA', 'cityB', 'cityC', 'cityD', 'cityE', 'cityF'];
 const weeks = ['09/01', '09/08', '09/15', '09/45', '09/89', '09/37'];
+const mockSessionCountPerWeek = {
+  '09/01': 10,
+  '09/08': 20,
+  '09/15': 5,
+  '09/37': 42,
+  '09/45': 3,
+  '09/89': 4,
+};
 
 describe('writeTrialSessionDataToExcel', () => {
   it('should produce a vaguely valid xlsx file', async () => {
@@ -20,7 +28,7 @@ describe('writeTrialSessionDataToExcel', () => {
     }
     await writeTrialSessionDataToExcel({
       scheduledTrialSessions: mockScheduledTrialSessions,
-      termName: 'The Best Term 1',
+      sessionCountPerWeek: mockSessionCountPerWeek,
       weeks,
     });
   });
@@ -43,7 +51,7 @@ describe('writeTrialSessionDataToExcel', () => {
 
     await writeTrialSessionDataToExcel({
       scheduledTrialSessions: mockScheduledTrialSessions,
-      termName: 'The Best Term 2',
+      sessionCountPerWeek: mockSessionCountPerWeek,
       weeks,
     });
   });
