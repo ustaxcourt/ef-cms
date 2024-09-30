@@ -41,7 +41,7 @@ export const ModalDialog = ({
   dataTestId?: string;
   disableSubmit?: boolean;
   message?: string;
-  onModalMount: () => void;
+  onModalMount?: () => void;
   preventScrolling?: boolean;
   showButtons?: boolean;
   title: string;
