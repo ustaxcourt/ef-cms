@@ -58,6 +58,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   ) {
     throw new UnauthorizedError('Unauthorized to generate term');
   }
+
   //
   // Maximum of 6 sessions per week
   // Maximum of 5 sessions total per location
@@ -121,8 +122,8 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   });
 
   const weeksToLoop = getWeeksInRange({
-    endDate: termStartDate,
-    startDate: termEndDate,
+    endDate: termEndDate,
+    startDate: termStartDate,
   });
 
   const { scheduledTrialSessions, sessionCountPerWeek } = assignSessionsToWeeks(
@@ -134,6 +135,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     },
   );
 
+  // TODO: extract messages to constants
   if (scheduledTrialSessions.length < 1) {
     return {
       bufferArray: undefined,
@@ -150,7 +152,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   return {
     bufferArray,
-    message: 'Trial session calendar generated (or some sheeeeet)',
+    message: 'Trial session calendar generated',
   };
 };
 
