@@ -13,6 +13,8 @@ export const upsertCases = async (rawCases: RawCase[]) => {
     trialLocation: rawCase.trialLocation,
   }));
 
+  console.log('**** rawCases', rawCases);
+
   await getDbWriter(writer =>
     writer
       .insertInto('case')
