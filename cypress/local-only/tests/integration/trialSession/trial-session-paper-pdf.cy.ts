@@ -120,6 +120,10 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
           );
           cy.visit(`/edit-trial-session/${createdTrialSessionId}`);
           cy.get('[data-testid="trial-session-judge"]').select('Colvin');
+          cy.get('[data-testid="trial-session-judge"] option:selected').should(
+            'have.text',
+            'Colvin',
+          );
           cy.get('[data-testid="submit-edit-trial-session"]').click();
           cy.url().should('include', 'print-paper-trial-notices');
           cy.get('[data-testid="printing-complete"]').click();
