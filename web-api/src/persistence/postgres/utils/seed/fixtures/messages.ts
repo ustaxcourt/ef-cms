@@ -2,8 +2,6 @@
 export const messages = [
   {
     attachments: JSON.stringify([]),
-    caseStatus: 'General Docket - Not at Issue',
-    caseTitle: 'Bill Burr',
     createdAt: new Date('2020-06-05T18:02:25.280Z').toISOString(),
     docketNumber: '105-20',
     from: 'Test Petitionsclerk',
@@ -26,8 +24,6 @@ export const messages = [
         documentId: '4796a931-14fb-43e6-948f-d2b67ce4c1cb',
       },
     ]),
-    caseStatus: 'Calendared',
-    caseTitle: 'Reuben Blair',
     createdAt: new Date('2023-06-02T21:15:50.105Z').toISOString(),
     docketNumber: '103-20',
     from: 'Test Admissions Clerk',
@@ -50,8 +46,6 @@ export const messages = [
         documentId: '8ed9bad9-db58-43c8-b03f-c2e3ad92995f',
       },
     ]),
-    caseStatus: 'New',
-    caseTitle: 'Mufutau Wade',
     createdAt: new Date('2020-08-18T18:07:36.333Z').toISOString(),
     docketNumber: '104-19',
     from: 'Test Docketclerk',
