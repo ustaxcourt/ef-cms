@@ -12,7 +12,7 @@ export interface MessageTable {
   completedBySection?: string;
   completedByUserId?: string;
   completedMessage?: string;
-  createdAt: string;
+  createdAt: Date;
   docketNumber: string;
   from: string;
   fromSection: string;
