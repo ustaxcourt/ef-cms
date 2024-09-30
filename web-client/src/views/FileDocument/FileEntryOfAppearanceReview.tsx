@@ -1,5 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -146,7 +145,6 @@ export const FileEntryOfAppearanceReview = ({
       </div>
 
       {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
-      {showModal === 'FileUploadErrorModal' && <FileUploadErrorModal />}
     </React.Fragment>
   );
 };
