@@ -13,7 +13,8 @@ export const runCreateTermAction = async ({
       termStartDate,
     });
 
-  applicationContext
-    .getUtilities()
-    .downloadXlsx({ encodedXlsxArray: termResult.data, fileName: termName });
+  applicationContext.getUtilities().downloadXlsx({
+    encodedXlsxArray: termResult.bufferArray.data,
+    fileName: termName,
+  });
 };
