@@ -1,3 +1,5 @@
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
+
 /**
  * Send email with link to verify pending email
  *
@@ -28,7 +30,7 @@ export const sendEmailVerificationLink = async ({
   <a href="${verificationLink}">${verificationLink}</a>
   </div>
   <div style="margin-top: 20px;">
-  If you did not make this change, please contact support at <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.
+  If you did not make this change, please contact support at <a href="mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}">${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}/a>.
   </div>
   <div>
   <hr style="margin-top: 20px; border-top:1px solid #000000;">
