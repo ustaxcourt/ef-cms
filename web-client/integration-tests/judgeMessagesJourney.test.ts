@@ -1,3 +1,4 @@
+//import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { judgeViewsCaseDetail } from './journey/judgeViewsCaseDetail';
 import { judgeViewsDashboardMessages } from './journey/judgeViewsDashboardMessages';
 import { loginAs, setupTest, uploadPetition } from './helpers';
@@ -15,6 +16,8 @@ describe('Judge messages journey', () => {
     const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
+
+    //await pollForCaseUpsert(caseDetail.docketNumber);
   });
 
   const message1Subject = `message 1 ${Date.now()}`;
@@ -30,3 +33,24 @@ describe('Judge messages journey', () => {
   judgeViewsDashboardMessages(cerebralTest, [message1Subject, message2Subject]);
   judgeViewsCaseDetail(cerebralTest);
 });
+
+// const pollForCaseUpsert = async (
+//   docketNumber,
+//   timeout = 15000,
+//   interval = 1000,
+// ) => {
+//   const endTime = Date.now() + timeout;
+
+//   console.log('docketNumber', docketNumber);
+
+//   while (Date.now() < endTime) {
+//     const caseDetail = await getCaseByDocketNumber(docketNumber);
+//     console.log('**** pollForCaseUpsert', caseDetail);
+//     if (caseDetail) {
+//       return caseDetail;
+//     }
+//     await new Promise(resolve => setTimeout(resolve, interval));
+//   }
+
+//    throw new Error('Case not found in database after upsert');
+// };
