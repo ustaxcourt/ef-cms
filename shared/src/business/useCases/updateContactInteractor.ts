@@ -20,8 +20,8 @@ import { addCoverToPdf } from '../../../../web-api/src/business/useCases/addCove
 import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
 import { cloneDeep, isEmpty } from 'lodash';
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
  * updateContact

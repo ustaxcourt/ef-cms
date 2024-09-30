@@ -19,8 +19,8 @@ import {
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { cloneDeep, uniq } from 'lodash';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
@@ -460,7 +460,6 @@ const updateDocketEntry = async ({
 };
 
 const updateAndSaveWorkItem = async ({
-  applicationContext,
   docketEntry,
   user,
 }: {

@@ -17,8 +17,8 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { UserCase } from '../../../../shared/src/business/entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '../../../../shared/src/business/entities/WorkItem';
-import { setServiceIndicatorsForCase } from '../../../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { setServiceIndicatorsForCase } from '../../../../shared/src/business/utilities/setServiceIndicatorsForCase';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 

@@ -7,8 +7,8 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const updateCourtIssuedDocketEntry = async (
   applicationContext: ServerApplicationContext,
