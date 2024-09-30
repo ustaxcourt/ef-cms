@@ -1,4 +1,9 @@
 import {
+  FORMATS,
+  createISODateString,
+  getWeeksInRange,
+} from '@shared/business/utilities/DateHandler';
+import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
@@ -13,7 +18,6 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { assignSessionsToWeeks } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
-import { getWeeksInRange } from '@shared/business/utilities/DateHandler';
 import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
 
 // Maximum of 6 sessions per week overall.
@@ -122,8 +126,8 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   });
 
   const weeksToLoop = getWeeksInRange({
-    endDate: termEndDate,
-    startDate: termStartDate,
+    endDate: createISODateString(termEndDate, FORMATS.MMDDYYYY),
+    startDate: createISODateString(termStartDate, FORMATS.MMDDYYYY),
   });
 
   const { scheduledTrialSessions, sessionCountPerWeek } = assignSessionsToWeeks(
