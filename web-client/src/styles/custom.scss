@@ -1934,6 +1934,13 @@ button.change-scanner-button {
   text-align: right;
 }
 
+.trial-sessions-filters {
+  .usa-fieldset,
+  .usa-form-group {
+    margin-bottom: 0;
+  }
+}
+
 #app-footer {
   width: 100%;
 
@@ -2414,13 +2421,13 @@ button.change-scanner-button {
 }
 
 .column-width-sm {
-  width: 150px
+  width: 150px;
 }
 
 .column-width-md {
-  width: 200px
+  width: 200px;
 }
 
 .column-width-lg {
-  width: 300px
+  width: 300px;
 }
