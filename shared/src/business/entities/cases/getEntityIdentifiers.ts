@@ -19,13 +19,15 @@ async function getExportedConstants() {
       const moduleExports = await import(filePath);
 
       Object.keys(moduleExports).forEach(exportKey => {
-        console.log();
-        if (moduleExports?.[exportKey]?.VALIDATION_RULES) {
-          const identifier = createValidationIdentifier(
-            moduleExports[exportKey].VALIDATION_RULES,
-          );
-          console.log(`Hash for ${exportKey}: ${identifier}`);
-        }
+        const validationRegex = /validation/i;
+        Object.keys(moduleExports[exportKey]).forEach(key => {
+          if (validationRegex.test(key)) {
+            const identifier = createValidationIdentifier(
+              moduleExports[exportKey][key],
+            );
+            console.log(`Hash for ${exportKey}.${key}: ${identifier}`);
+          }
+        });
       });
     }
   }

@@ -1,5 +1,5 @@
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
-import { createValidationIdentifier } from '@shared/business/entities/cases/fingerprintValidationRules';
+import { createValidationIdentifier } from '@shared/business/entities/cases/createValidationIdentifier';
 import joi from 'joi';
 
 const trialSession = new TrialSession({});
