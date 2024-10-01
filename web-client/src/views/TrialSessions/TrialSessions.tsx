@@ -113,7 +113,7 @@ const TrialSessionFilters = connect(
         <div className="grid-row gap-3 flex-align-center trial-sessions-filters">
           {trialSessionsHelper.showSessionStatus && (
             <fieldset className="usa-fieldset">
-              <legend className="usa-legend">Session Status</legend>
+              <legend className="usa-legend">Session status</legend>
               <div className="usa-radio usa-radio__inline">
                 {[
                   'All',
@@ -149,7 +149,7 @@ const TrialSessionFilters = connect(
             </fieldset>
           )}
           <fieldset className="usa-fieldset">
-            <legend className="usa-legend">Proceeding Type</legend>
+            <legend className="usa-legend">Proceeding type</legend>
             <div className="usa-radio usa-radio__inline">
               {['All', ...Object.values(TRIAL_SESSION_PROCEEDING_TYPES)].map(
                 proceedingOption => (
