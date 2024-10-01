@@ -15,7 +15,6 @@ Cons
 - (Avoidable if we require the user to approve validation) If our compiler changes(esbuild) our string representation of what a function is will change and trigger re-validation
 - (Avoidable if we require the user to approve validation) refactoring a function, even if it produces the same output will cause re-validation
 - (Simple Fix) Validation rules are not static in all entities. getValidationRules() can return different schemas.
-- (Simple Fix) Not all entities call their rules VALIDATION_RULES, making it hard to detect where the rules are stored.
 - (Very complex Fix) Not all entities have a specific way to get all of them from the DB. For instance there is no way to get all CaseNotes in the DB.
 
 ## Contract Tests
