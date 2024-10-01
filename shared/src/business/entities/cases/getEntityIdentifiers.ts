@@ -2,7 +2,8 @@ import { createValidationIdentifier } from '@shared/business/entities/cases/crea
 import fs from 'fs/promises';
 import path from 'path';
 
-async function getExportedConstants() {
+async function getEntityIdentifiers() {
+  let entitiesFound = 0;
   const directoryPath = path.join(
     process.cwd(),
     './shared/src/business/entities',
@@ -18,19 +19,22 @@ async function getExportedConstants() {
     if (file.endsWith('.ts')) {
       const moduleExports = await import(filePath);
 
-      Object.keys(moduleExports).forEach(exportKey => {
+      Object.keys(moduleExports).forEach(exportName => {
         const validationRegex = /validation/i;
-        Object.keys(moduleExports[exportKey]).forEach(key => {
+        const individualExport = moduleExports[exportName];
+        Object.keys(individualExport).forEach(key => {
           if (validationRegex.test(key)) {
             const identifier = createValidationIdentifier(
-              moduleExports[exportKey][key],
+              individualExport[key],
             );
-            console.log(`Hash for ${exportKey}.${key}: ${identifier}`);
+            entitiesFound++;
+            console.log(`Hash for ${exportName}.${key}: ${identifier}`);
           }
         });
       });
     }
   }
+  console.log(`Found ${entitiesFound} entities with validation rules.`);
 }
 
-void getExportedConstants();
+void getEntityIdentifiers();
