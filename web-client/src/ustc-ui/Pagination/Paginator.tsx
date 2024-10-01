@@ -105,7 +105,7 @@ const PreviousPage = (props: {
           aria-label="Previous page"
           className={classNames(
             'usa-pagination__link',
-            'usa-pagination__next-page',
+            'usa-pagination__previous-page',
             'background-none',
             'border-none',
             props.isHidden && 'visibility-hidden',
