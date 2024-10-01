@@ -9,7 +9,7 @@ import React, { useState } from 'react';
 
 export const CreateTermModal = connect(
   {
-    cancelSequence: sequences.clearModalSequence,
+    cancelSequence: sequences.clearModalFormSequence,
     confirmSequence: sequences.submitCreateTermModalSequence,
     modal: state.modal,
     todaysDate: state.todaysDate,
@@ -42,7 +42,7 @@ export const CreateTermModal = connect(
               Term name
             </legend>
             <input
-              className="usa-input"
+              className="usa-input term-name-field"
               data-testid="term-name-field"
               id="term-name-field"
               name="termName"
@@ -63,7 +63,7 @@ export const CreateTermModal = connect(
             endDateErrorText={validationErrors.termEndDate}
             endLabel="Term end date"
             endName="termEndDate"
-            endPickerCls={''}
+            endPickerCls={'grid-col-6'}
             endValue={modal.termEndDate}
             formGroupCls="margin-bottom-0"
             minDate={calculateISODate({
@@ -72,11 +72,11 @@ export const CreateTermModal = connect(
               units: 'days',
             })}
             parentModalHasMounted={isModalMounted}
-            rangePickerCls={'display-flex flex-justify'}
+            rangePickerCls={'grid-row grid-gap'}
             startDateErrorText={validationErrors.termStartDate}
             startLabel="Term start date"
             startName="termStartDate"
-            startPickerCls={''}
+            startPickerCls={'grid-col-6'}
             startValue={modal.termStartDate}
             onChangeEnd={e => {
               updateModalValueSequence({

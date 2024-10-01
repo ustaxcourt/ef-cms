@@ -324,6 +324,10 @@ button {
 .create-term-modal {
   min-width: 550px;
   overflow-y: visible;
+
+  .usa-form-group--error {
+    max-width: 40rem;
+  }
 }
 
 .add-consolidated-case-search-modal {
