@@ -1,5 +1,4 @@
-import { createHash } from 'crypto';
-import { stringifyEverything } from '@shared/business/entities/cases/somFile';
+import { createValidationIdentifier } from '@shared/business/entities/cases/fingerprintValidationRules';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -20,13 +19,10 @@ async function getExportedConstants() {
 
         Object.keys(moduleExports).forEach(exportKey => {
           if (moduleExports?.[exportKey]?.VALIDATION_RULES) {
-            const validationString = stringifyEverything(
+            const identifier = createValidationIdentifier(
               moduleExports[exportKey].VALIDATION_RULES,
             );
-            const hash = createHash('sha256')
-              .update(validationString)
-              .digest('hex');
-            console.log(`Hash for ${exportKey}: ${hash}`);
+            console.log(`Hash for ${exportKey}: ${identifier}`);
           }
         });
       }
