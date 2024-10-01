@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import {
   FORMATS,
   calculateISODate,
@@ -278,6 +279,24 @@ describe('trialSessionsHelper', () => {
 
   describe('trialSessionRows', () => {
     describe('filters', () => {
+      it('should not filter when there are validation errors', () => {
+        trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
+        trialSessionsPageState.filters.startDate = 'a';
+        trialSessionsPageState.filters.endDate = 'stuff';
+
+        const result = runCompute(trialSessionsHelper, {
+          state: {
+            judges: [judgeUser],
+            permissions: getUserPermissions(docketClerk1User),
+            trialSessionsPage: trialSessionsPageState,
+          },
+        });
+
+        const trialSessionsOnly =
+          result.trialSessionRows.filter(isTrialSessionRow);
+        expect(trialSessionsOnly.length).toEqual(0);
+      });
+
       it('should filter trial sessions by judge', () => {
         trialSession1.judge!.userId = '43b00e5f-b78c-476c-820e-5d6ed1d58828';
         trialSession2.judge!.userId = 'd17b07dc-6455-447e-bea3-f91d12ac5a6';
