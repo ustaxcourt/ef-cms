@@ -1,5 +1,7 @@
+import { NewMessageKysely } from '@web-api/database-types';
+
 /* eslint-disable @miovision/disallow-date/no-new-date */
-export const messages = [
+export const messages: NewMessageKysely[] = [
   {
     attachments: JSON.stringify([]),
     createdAt: new Date('2020-06-05T18:02:25.280Z'),
