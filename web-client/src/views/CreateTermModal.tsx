@@ -1,6 +1,7 @@
 import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { ModalDialog } from './ModalDialog';
+import { calculateISODate } from '@shared/business/utilities/DateHandler';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -65,7 +66,11 @@ export const CreateTermModal = connect(
             endPickerCls={''}
             endValue={modal.termEndDate}
             formGroupCls="margin-bottom-0"
-            minDate={todaysDate}
+            minDate={calculateISODate({
+              dateString: todaysDate,
+              howMuch: 1,
+              units: 'days',
+            })}
             parentModalHasMounted={isModalMounted}
             rangePickerCls={'display-flex flex-justify'}
             startDateErrorText={validationErrors.termStartDate}
