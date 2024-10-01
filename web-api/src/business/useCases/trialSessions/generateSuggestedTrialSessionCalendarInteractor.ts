@@ -57,6 +57,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   }: { termEndDate: string; termStartDate: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<{ message: string; bufferArray: Buffer | undefined }> => {
+  console.time('10275: Total interactor time');
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.SET_TRIAL_SESSION_CALENDAR)
   ) {
@@ -82,18 +83,22 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     smallCaseMaxQuantity: SMALL_CASE_MAX_QUANTITY,
     smallCaseMinimumQuantity: SMALL_CASE_MINIMUM_QUANTITY,
   };
-
+  console.time('10275: Get ready for trial cases time');
   const cases = await applicationContext
     .getPersistenceGateway()
     .getReadyForTrialCases({ applicationContext });
+  console.timeEnd('10275: Get ready for trial cases time');
 
+  console.time('10275: Get trial sessions time');
   const sessions = await applicationContext
     .getPersistenceGateway()
     .getTrialSessions({ applicationContext });
-
+  console.timeEnd('10275: Get trial sessions time');
   // Note (10275): storing trial session data differently would make for a more
   // efficient process of determining which sessions are special, calendared,
   // and not closed.
+
+  console.time('10275: Filter trial sessions time');
   const specialSessions = sessions.filter(session => {
     return (
       session.sessionType === SESSION_TYPES.special &&
@@ -101,10 +106,12 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
       session.sessionStatus !== SESSION_STATUS_TYPES.closed
     );
   });
-
+  console.timeEnd('10275: Filter trial sessions time');
   // Note (10275): storing trial session data differently would make for a more
   // efficient process of determining which cities were not visited within the
   // past two terms.
+
+  console.time('10275: Compile cities from last two term time');
   const previousTwoTerms = getPreviousTwoTerms(termStartDate);
 
   const citiesFromLastTwoTerms = sessions
@@ -118,18 +125,22 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     .map(relevantSession => {
       return relevantSession.trialLocation!;
     });
+  console.timeEnd('10275: Compile cities from last two term time');
 
+  console.time('10275: Generate prospectiveSessionsByCity time');
   const prospectiveSessionsByCity = createProspectiveTrialSessions({
     calendaringConfig,
     cases,
     citiesFromLastTwoTerms,
   });
+  console.timeEnd('10275: Generate prospectiveSessionsByCity time');
 
   const weeksToLoop = getWeeksInRange({
     endDate: createISODateString(termEndDate, FORMATS.MMDDYYYY),
     startDate: createISODateString(termStartDate, FORMATS.MMDDYYYY),
   });
 
+  console.time('10275: assignSessionsToWeeks time');
   const { scheduledTrialSessions, sessionCountPerWeek } = assignSessionsToWeeks(
     {
       calendaringConfig,
@@ -138,22 +149,24 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
       weeksToLoop,
     },
   );
-
+  console.timeEnd('10275: assignSessionsToWeeks time');
   // TODO: extract messages to constants
   if (scheduledTrialSessions.length < 1) {
     return {
       bufferArray: undefined,
       message:
-        'There are no trial sessions to schedule within the dates provided',
+        'There are no trial sessions to schedule within the dates provided.',
     };
   }
 
+  console.time('10275: writeTrialSessionDataToExcel');
   const bufferArray = await writeTrialSessionDataToExcel({
     scheduledTrialSessions,
     sessionCountPerWeek,
     weeks: weeksToLoop,
   });
-
+  console.timeEnd('10275: writeTrialSessionDataToExcel');
+  console.timeEnd('10275: Total interactor time');
   return {
     bufferArray,
     message: 'Trial session calendar generated',
