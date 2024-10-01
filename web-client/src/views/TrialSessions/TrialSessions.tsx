@@ -375,7 +375,11 @@ const TrialSessionFilters = connect(
           link
           disabled={trialSessionsHelper.isResetFiltersDisabled}
           tooltip="Reset Filters"
-          onClick={() => resetTrialSessionsFiltersSequence()}
+          onClick={() =>
+            resetTrialSessionsFiltersSequence({
+              currentTab: trialSessionsPage.filters.currentTab,
+            })
+          }
         >
           Reset Filters
         </Button>
