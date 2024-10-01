@@ -110,7 +110,7 @@ const TrialSessionFilters = connect(
   }) {
     return (
       <>
-        <div className="grid-row gap-3">
+        <div className="grid-row gap-3 flex-align-center trial-sessions-filters">
           {trialSessionsHelper.showSessionStatus && (
             <fieldset className="usa-fieldset">
               <legend className="usa-legend">Session Status</legend>
@@ -216,6 +216,7 @@ const TrialSessionFilters = connect(
             }}
           />
         </div>
+        <div className="padding-y-3"></div>
         <div className="margin-bottom-2 grid-row flex-row gap-2">
           <div className="grid-col">
             <div className="margin-bottom-1">
