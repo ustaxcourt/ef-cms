@@ -104,10 +104,13 @@ export const trialSessionsHelper = (
       startDate: filters.startDate,
     });
 
-  const filteredTrialSessions = filterAndSortTrialSessions({
-    filters,
-    trialSessions,
-  });
+  let filteredTrialSessions: TrialSessionInfoDTO[] = [];
+  if (!endDateErrorMessage && !startDateErrorMessage) {
+    filteredTrialSessions = filterAndSortTrialSessions({
+      filters,
+      trialSessions,
+    });
+  }
 
   const trialSessionPage = filteredTrialSessions.slice(
     filters.pageNumber * pageSize,
@@ -143,6 +146,7 @@ const filterAndSortTrialSessions = ({
   trialSessions: TrialSessionInfoDTO[];
   filters: TrialSessionsFilters;
 }): TrialSessionInfoDTO[] => {
+  //
   return trialSessions
     .filter(trialSession => {
       const isCalendaredFilter = filters.currentTab === 'calendared';

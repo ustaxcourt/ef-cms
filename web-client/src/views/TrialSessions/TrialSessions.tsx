@@ -126,10 +126,10 @@ const TrialSessionFilters = connect(
   }) {
     return (
       <>
-        <div className="grid-row gap-3">
+        <div className="grid-row gap-3 flex-align-center trial-sessions-filters">
           {trialSessionsHelper.showSessionStatus && (
             <fieldset className="usa-fieldset">
-              <legend className="usa-legend">Session Status</legend>
+              <legend className="usa-legend">Session status</legend>
               <div className="usa-radio usa-radio__inline">
                 {[
                   'All',
@@ -165,7 +165,7 @@ const TrialSessionFilters = connect(
             </fieldset>
           )}
           <fieldset className="usa-fieldset">
-            <legend className="usa-legend">Proceeding Type</legend>
+            <legend className="usa-legend">Proceeding type</legend>
             <div className="usa-radio usa-radio__inline">
               {['All', ...Object.values(TRIAL_SESSION_PROCEEDING_TYPES)].map(
                 proceedingOption => (
@@ -232,6 +232,7 @@ const TrialSessionFilters = connect(
             }}
           />
         </div>
+        <div className="padding-y-3"></div>
         <div className="margin-bottom-2 grid-row flex-row gap-2">
           <div className="grid-col">
             <div className="margin-bottom-1">
@@ -390,7 +391,11 @@ const TrialSessionFilters = connect(
           link
           disabled={trialSessionsHelper.isResetFiltersDisabled}
           tooltip="Reset Filters"
-          onClick={() => resetTrialSessionsFiltersSequence()}
+          onClick={() =>
+            resetTrialSessionsFiltersSequence({
+              currentTab: trialSessionsPage.filters.currentTab,
+            })
+          }
         >
           Reset Filters
         </Button>
