@@ -9,7 +9,6 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import {
   SESSION_STATUS_TYPES,
-  SESSION_TERMS_BY_MONTH,
   SESSION_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
@@ -173,31 +172,34 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   };
 };
 
-const getPreviousTwoTerms = (termStartDate: string) => {
-  //TODO: refactor this, maybe?
-
+export const getPreviousTwoTerms = (termStartDate: string) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [month, day, year] = termStartDate.split('/');
 
-  const currentTerm = getTermByMonth(month);
-
+  const currentTerm = getCurrentTermByMonth(month);
   const terms = [
-    `fall ${+year - 1}`,
-    `winter ${year}`,
-    `spring ${year}`,
-    `fall ${year}`,
+    `spring, ${+year - 1}`,
+    `fall, ${+year - 1}`,
+    `winter, ${year}`,
+    `spring, ${year}`,
+    `fall, ${year}`,
   ];
-  const termsReversed = terms.reverse();
-  const termIndex = terms.findIndex(t => `${currentTerm} ${year}` === t);
-  const [term1, year1] = termsReversed[termIndex + 1].split(' ');
-  const [term2, year2] = termsReversed[termIndex + 2].split(' ');
+  const termIndex = terms.findIndex(t => `${currentTerm}, ${year}` === t);
+  const term1 = terms[termIndex - 1];
+  const term2 = terms[termIndex - 2];
 
-  return [`${term1}, ${year1}`, `${term2}, ${year2}`];
+  return [term1, term2];
 };
 
-function getTermByMonth(currentMonth: string) {
+const SESSION_TERMS_FOR_GENERATOR = {
+  fall: [9, 10, 11, 12],
+  spring: [4, 5, 6, 7, 8],
+  winter: [1, 2, 3],
+};
+
+function getCurrentTermByMonth(currentMonth: string) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const term = Object.entries(SESSION_TERMS_BY_MONTH).find(([_, months]) =>
+  const term = Object.entries(SESSION_TERMS_FOR_GENERATOR).find(([_, months]) =>
     months.includes(parseInt(currentMonth)),
   );
   return term ? term[0] : 'Unknown term';
