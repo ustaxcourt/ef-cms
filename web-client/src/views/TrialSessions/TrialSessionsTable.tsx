@@ -1,12 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import {
   isTrialSessionRow,
   isTrialSessionWeek,
 } from '@web-client/presenter/computeds/trialSessionsHelper';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { useRef } from 'react';
 
 export const TrialSessionsTable = connect(
   {
@@ -19,16 +20,19 @@ export const TrialSessionsTable = connect(
     trialSessionsHelper,
     trialSessionsPage,
   }) {
+    const paginatorTop = useRef(null);
+
     return (
       <>
         <div className="grid-row margin-bottom-2 flex-align-center">
           <div className="grid-col-2"></div>
-          <div className="grid-col">
+          <div className="grid-col" ref={paginatorTop}>
             <Paginator
               currentPageIndex={trialSessionsPage.filters.pageNumber}
               totalPages={trialSessionsHelper.totalPages}
               onPageChange={selectedPage => {
                 setTrialSessionsFiltersSequence({ pageNumber: selectedPage });
+                focusPaginatorTop(paginatorTop);
               }}
             />
           </div>
@@ -137,6 +141,16 @@ export const TrialSessionsTable = connect(
         {trialSessionsHelper.trialSessionRows.length === 0 && (
           <p>There are no trial sessions for the selected filters.</p>
         )}
+        <div>
+          <Paginator
+            currentPageIndex={trialSessionsPage.filters.pageNumber}
+            totalPages={trialSessionsHelper.totalPages}
+            onPageChange={selectedPage => {
+              setTrialSessionsFiltersSequence({ pageNumber: selectedPage });
+              focusPaginatorTop(paginatorTop);
+            }}
+          />
+        </div>
       </>
     );
   },

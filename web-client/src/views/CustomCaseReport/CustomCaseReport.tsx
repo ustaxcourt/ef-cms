@@ -471,20 +471,18 @@ export const CustomCaseReport = connect(
           </Button>
           <hr className="margin-top-3 margin-bottom-3 border-top-1px border-base-lighter" />
           <div ref={paginatorTop}>
-            {customCaseReportHelper.pageCount > 1 && (
-              <Paginator
-                currentPageIndex={activePage}
-                showSinglePage={true}
-                totalPages={customCaseReportHelper.pageCount}
-                onPageChange={async pageChange => {
-                  setActivePage(pageChange);
-                  await getCustomCaseReportSequence({
-                    selectedPage: pageChange,
-                  });
-                  focusPaginatorTop(paginatorTop);
-                }}
-              />
-            )}
+            <Paginator
+              currentPageIndex={activePage}
+              showSinglePage={true}
+              totalPages={customCaseReportHelper.pageCount}
+              onPageChange={async pageChange => {
+                setActivePage(pageChange);
+                await getCustomCaseReportSequence({
+                  selectedPage: pageChange,
+                });
+                focusPaginatorTop(paginatorTop);
+              }}
+            />
           </div>
           <div className="text-right margin-bottom-2">
             <Button
