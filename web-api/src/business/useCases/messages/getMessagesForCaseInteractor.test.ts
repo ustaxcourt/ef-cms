@@ -1,9 +1,11 @@
+import '@web-api/persistence/postgres/messages/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { getMessagesForCaseInteractor } from './getMessagesForCaseInteractor';
 import {
   mockPetitionerUser,
@@ -30,7 +32,6 @@ describe('getMessagesForCaseInteractor', () => {
       caseTitle: 'Bill Burr',
       createdAt: '2019-03-01T21:40:46.415Z',
       docketNumber: '123-45',
-      docketNumberWithSuffix: '123-45S',
       entityName: 'Message',
       from: 'Test Petitionsclerk2',
       fromSection: PETITIONS_SECTION,
@@ -44,9 +45,8 @@ describe('getMessagesForCaseInteractor', () => {
       toSection: PETITIONS_SECTION,
       toUserId: 'b427ca37-0df1-48ac-94bb-47aed073d6f7',
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getMessagesByDocketNumber.mockReturnValue([mockMessage]);
+
+    (getMessagesByDocketNumber as jest.Mock).mockReturnValue([mockMessage]);
 
     const returnedMessage = await getMessagesForCaseInteractor(
       applicationContext,
@@ -56,9 +56,7 @@ describe('getMessagesForCaseInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getMessagesByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getMessagesByDocketNumber).toHaveBeenCalled();
     expect(returnedMessage).toMatchObject([mockMessage]);
   });
 });

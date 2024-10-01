@@ -40,7 +40,7 @@ import {
   compareCasesByDocketNumber,
   formatCaseForTrialSession,
   getFormattedTrialSessionDetails,
-} from '@shared/business/utilities/getFormattedTrialSessionDetails';
+} from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import {
   compareISODateStrings,
   compareStrings,
@@ -512,7 +512,6 @@ export const createTestApplicationContext = () => {
     getItem: jest.fn().mockImplementation(getItem),
     getLimiterByKey: jest.fn(),
     getMaintenanceMode: jest.fn(),
-    getMessagesByDocketNumber: jest.fn(),
     getPractitionerDocuments: jest.fn(),
     getReconciliationReport: jest.fn(),
     getRecord: jest.fn(),

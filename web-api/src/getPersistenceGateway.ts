@@ -18,7 +18,6 @@ import {
   getLock,
   removeLock,
 } from './persistence/dynamo/locks/acquireLock';
-import { createMessage } from './persistence/dynamo/messages/createMessage';
 import { createNewPetitionerUser } from './persistence/dynamo/users/createNewPetitionerUser';
 import { createNewPractitionerUser } from './persistence/dynamo/users/createNewPractitionerUser';
 import { createOrUpdatePractitionerUser } from './persistence/dynamo/users/createOrUpdatePractitionerUser';
@@ -77,8 +76,6 @@ import { getCasesMetadataByLeadDocketNumber } from './persistence/dynamo/cases/g
 import { getCasesReadyForCalendaring } from '@web-api/persistence/dynamo/trialSessions/getCasesReadyForCalendaring';
 import { getClientId } from './persistence/cognito/getClientId';
 import { getColdCases } from './persistence/elasticsearch/reports/getColdCases';
-import { getCompletedSectionInboxMessages } from './persistence/elasticsearch/messages/getCompletedSectionInboxMessages';
-import { getCompletedUserInboxMessages } from './persistence/elasticsearch/messages/getCompletedUserInboxMessages';
 import { getConfigurationItemValue } from './persistence/dynamo/deployTable/getConfigurationItemValue';
 import { getConsolidatedCasesCount } from '@web-api/persistence/dynamo/cases/getConsolidatedCasesCount';
 import { getCountOfConsolidatedCases } from '@web-api/persistence/elasticsearch/getCountOfConsolidatedCases';
@@ -101,9 +98,6 @@ import { getFeatureFlagValue } from './persistence/dynamo/deployTable/getFeature
 import { getFirstSingleCaseRecord } from './persistence/elasticsearch/getFirstSingleCaseRecord';
 import { getInternalUsers } from './persistence/dynamo/users/getInternalUsers';
 import { getMaintenanceMode } from './persistence/dynamo/deployTable/getMaintenanceMode';
-import { getMessageById } from './persistence/dynamo/messages/getMessageById';
-import { getMessageThreadByParentId } from './persistence/dynamo/messages/getMessageThreadByParentId';
-import { getMessagesByDocketNumber } from './persistence/dynamo/messages/getMessagesByDocketNumber';
 import { getPractitionerByBarNumber } from './persistence/dynamo/users/getPractitionerByBarNumber';
 import { getPractitionerDocumentByFileId } from './persistence/dynamo/practitioners/getPractitionerDocumentByFileId';
 import { getPractitionerDocuments } from './persistence/dynamo/practitioners/getPractitionerDocuments';
@@ -111,8 +105,6 @@ import { getPractitionersByName } from './persistence/elasticsearch/getPractitio
 import { getReadyForTrialCases } from './persistence/elasticsearch/getReadyForTrialCases';
 import { getReconciliationReport } from './persistence/elasticsearch/getReconciliationReport';
 import { getRequestResults } from '@web-api/persistence/dynamo/polling/getRequestResults';
-import { getSectionInboxMessages } from './persistence/elasticsearch/messages/getSectionInboxMessages';
-import { getSectionOutboxMessages } from './persistence/elasticsearch/messages/getSectionOutboxMessages';
 import { getSesStatus } from './persistence/ses/getSesStatus';
 import { getStoredApplicationHealth } from '@web-api/persistence/dynamo/deployTable/getStoredApplicationHealth';
 import { getTableStatus } from './persistence/dynamo/getTableStatus';
@@ -126,8 +118,6 @@ import { getUserByEmail } from './persistence/dynamo/users/getUserByEmail';
 import { getUserById } from './persistence/dynamo/users/getUserById';
 import { getUserCaseNote } from './persistence/dynamo/userCaseNotes/getUserCaseNote';
 import { getUserCaseNoteForCases } from './persistence/dynamo/userCaseNotes/getUserCaseNoteForCases';
-import { getUserInboxMessages } from './persistence/elasticsearch/messages/getUserInboxMessages';
-import { getUserOutboxMessages } from './persistence/elasticsearch/messages/getUserOutboxMessages';
 import { getUsersById } from './persistence/dynamo/users/getUsersById';
 import { getUsersBySearchKey } from './persistence/dynamo/users/getUsersBySearchKey';
 import { getUsersInSection } from './persistence/dynamo/users/getUsersInSection';
@@ -138,7 +128,6 @@ import { getWorkItemsByWorkItemId } from './persistence/dynamo/workitems/getWork
 import { incrementCounter } from './persistence/dynamo/helpers/incrementCounter';
 import { isEmailAvailable } from './persistence/cognito/isEmailAvailable';
 import { isFileExists } from './persistence/s3/isFileExists';
-import { markMessageThreadRepliedTo } from './persistence/dynamo/messages/markMessageThreadRepliedTo';
 import { persistUser } from './persistence/dynamo/users/persistUser';
 import { putWorkItemInOutbox } from './persistence/dynamo/workitems/putWorkItemInOutbox';
 import { putWorkItemInUsersOutbox } from './persistence/dynamo/workitems/putWorkItemInUsersOutbox';
@@ -154,7 +143,6 @@ import { saveUserConnection } from './persistence/dynamo/notifications/saveUserC
 import { saveWorkItem } from './persistence/dynamo/workitems/saveWorkItem';
 import { saveWorkItemForDocketClerkFilingExternalDocument } from './persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument';
 import { setChangeOfAddressCaseAsDone } from './persistence/dynamo/jobs/ChangeOfAddress/setChangeOfAddressCaseAsDone';
-import { setMessageAsRead } from './persistence/dynamo/messages/setMessageAsRead';
 import { setPriorityOnAllWorkItems } from './persistence/dynamo/workitems/setPriorityOnAllWorkItems';
 import { setStoredApplicationHealth } from '@web-api/persistence/dynamo/deployTable/setStoredApplicationHealth';
 import { setTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
@@ -172,7 +160,6 @@ import {
   updatePrivatePractitionerOnCase,
 } from './persistence/dynamo/cases/updatePractitionerOnCase';
 import { updateMaintenanceMode } from './persistence/dynamo/deployTable/updateMaintenanceMode';
-import { updateMessage } from './persistence/dynamo/messages/updateMessage';
 import { updatePractitionerUser } from './persistence/dynamo/users/updatePractitionerUser';
 import { updateTrialSession } from './persistence/dynamo/trialSessions/updateTrialSession';
 import { updateTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy';
@@ -230,7 +217,6 @@ const gatewayMethods = {
     createCaseDeadline,
     createCaseTrialSortMappingRecords,
     createJobStatus,
-    createMessage,
     createNewPetitionerUser,
     createNewPractitionerUser,
     createOrUpdatePractitionerUser,
@@ -244,7 +230,6 @@ const gatewayMethods = {
     getCasesReadyForCalendaring,
     incrementCounter,
     incrementKeyCount,
-    markMessageThreadRepliedTo,
     persistUser,
     putWorkItemInOutbox,
     putWorkItemInUsersOutbox,
@@ -255,7 +240,6 @@ const gatewayMethods = {
     saveWorkItem,
     saveWorkItemForDocketClerkFilingExternalDocument,
     setExpiresAt,
-    setMessageAsRead,
     setPriorityOnAllWorkItems,
     setTrialSessionJobStatusForCase,
     setTrialSessionProcessingStatus,
@@ -269,7 +253,6 @@ const gatewayMethods = {
     updateDocketEntryWorksheet,
     updateIrsPractitionerOnCase,
     updateMaintenanceMode,
-    updateMessage,
     updatePractitionerUser,
     updatePrivatePractitionerOnCase,
     updateTrialSession,
@@ -323,8 +306,6 @@ const gatewayMethods = {
   getCasesMetadataByLeadDocketNumber,
   getClientId,
   getColdCases,
-  getCompletedSectionInboxMessages,
-  getCompletedUserInboxMessages,
   getConfigurationItemValue,
   getConsolidatedCasesCount,
   getCountOfConsolidatedCases,
@@ -350,9 +331,6 @@ const gatewayMethods = {
   getLimiterByKey,
   getLock,
   getMaintenanceMode,
-  getMessageById,
-  getMessageThreadByParentId,
-  getMessagesByDocketNumber,
   getPractitionerByBarNumber,
   getPractitionerDocumentByFileId,
   getPractitionerDocuments,
@@ -360,8 +338,6 @@ const gatewayMethods = {
   getReadyForTrialCases,
   getReconciliationReport,
   getRequestResults,
-  getSectionInboxMessages,
-  getSectionOutboxMessages,
   getSesStatus,
   getStoredApplicationHealth,
   getTableStatus,
@@ -375,8 +351,6 @@ const gatewayMethods = {
   getUserById,
   getUserCaseNote,
   getUserCaseNoteForCases,
-  getUserInboxMessages,
-  getUserOutboxMessages,
   getUsersById,
   getUsersBySearchKey,
   getUsersInSection,

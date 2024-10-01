@@ -840,7 +840,7 @@ textarea#case-caption {
     padding: 10px 10px 0 10px;
   }
 
-  @media only screen and (max-width: $large-screen - 1px) {
+  @media only screen and (max-width: ($large-screen - 1px)) {
     padding: 10px;
   }
 }
@@ -1385,19 +1385,17 @@ hr.lighter {
   font-size: 20px !important;
 }
 
-.need-help-selecting {
-  .usa-accordion__heading:not(:first-child) {
-    margin-top: 1rem;
-  }
+.usa-accordion__heading:not(:first-child) {
+  margin-top: 1rem;
 }
 
-.need-help-selecting,
 .submit-reminders {
   .content-header {
     padding: 11px 20px;
     margin: 0;
   }
 }
+
 
 .all-columns-view {
   column-count: 4;
@@ -2407,4 +2405,34 @@ button.change-scanner-button {
 
 .stepper-line-height {
   line-height: 18px;
+}
+
+.visibility-hidden {
+  visibility: hidden;
+}
+
+.column-width-sm {
+  width: 150px
+}
+
+.column-width-md {
+  width: 200px
+}
+
+.column-width-lg {
+  width: 300px
+}
+
+.bg-gray {
+  background-color: color($theme-color-base-lightest);
+}
+
+.accordion-title {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.padding-0 {
+  // This has higher importance than uwds padding-0
+  padding: 0;
 }

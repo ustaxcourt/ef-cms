@@ -1,7 +1,16 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CreateTermModal } from '@web-client/views/CreateTermModal';
+import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
+import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
+import {
+  SESSION_STATUS_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+  TrialSessionProceedingType,
+  TrialSessionTypes,
+} from '@shared/business/entities/EntityConstants';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { TrialSessionsTable } from './TrialSessionsTable';
@@ -12,17 +21,18 @@ import React from 'react';
 
 export const TrialSessions = connect(
   {
-    defaultTab: state.screenMetadata.trialSessionFilters.status,
     openCreateTermModalSequence: sequences.openCreateTermModalSequence,
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
+    resetTrialSessionsFiltersSequence:
+      sequences.resetTrialSessionsFiltersSequence,
     showModal: state.modal.showModal,
     trialSessionsHelper: state.trialSessionsHelper,
   },
   function TrialSessions({
-    defaultTab,
     openCreateTermModalSequence,
     openTrialSessionPlanningModalSequence,
+    resetTrialSessionsFiltersSequence,
     showModal,
     trialSessionsHelper,
   }) {
@@ -32,12 +42,14 @@ export const TrialSessions = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-
           <Tabs
-            bind="currentViewMetadata.trialSessions.tab"
-            defaultActiveTab={defaultTab || 'open'}
+            bind="trialSessionsPage.filters.currentTab"
+            defaultActiveTab={'calendared'}
             headingLevel="2"
             id="trial-sessions-tabs"
+            onSelect={tabName => {
+              resetTrialSessionsFiltersSequence({ currentTab: tabName });
+            }}
           >
             <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
               {trialSessionsHelper.showCreateTermButton && (
@@ -58,54 +70,330 @@ export const TrialSessions = connect(
               >
                 Trial Session Planning Report
               </Button>
+              {trialSessionsHelper.showNewTrialSession && (
+                <Button
+                  data-testid="add-trial-session-button"
+                  href="/add-a-trial-session"
+                  icon="plus-circle"
+                >
+                  Add Trial Session
+                </Button>
+              )}
             </div>
-            {trialSessionsHelper.showNewTrialSession && (
-              <Button
-                className="tab-right-button"
-                data-testid="add-trial-session-button"
-                href="/add-a-trial-session"
-                icon="plus-circle"
-              >
-                Add Trial Session
-              </Button>
-            )}
             {trialSessionsHelper.showNewTrialSession && (
               <Tab
                 data-testid="new-trial-sessions-tab"
                 id="new-trial-sessions-tab"
+                key="new"
                 tabName="new"
                 title="New"
               >
-                <TrialSessionsTable filter="New" />
+                <TrialSessionFilters />
+                <TrialSessionsTable />
               </Tab>
             )}
             <Tab
-              data-testid="open-trial-sessions-tab"
-              id="open-trial-sessions-tab"
-              tabName="open"
-              title="Open"
+              data-testid="calendared-trial-sessions-tab"
+              id="calendared-trial-sessions-tab"
+              key="calendared"
+              tabName="calendared"
+              title="Calendared"
             >
-              <TrialSessionsTable filter="Open" />
-            </Tab>
-            <Tab
-              data-testid="closed-trial-sessions-tab"
-              id="closed-trial-sessions-tab"
-              tabName="closed"
-              title="Closed"
-            >
-              <TrialSessionsTable filter="Closed" />
-            </Tab>
-            <Tab
-              data-testid="all-trial-sessions-tab"
-              id="all-trial-sessions-tab"
-              tabName="all"
-              title="All"
-            >
-              <TrialSessionsTable filter="All" />
+              <TrialSessionFilters />
+              <TrialSessionsTable />
             </Tab>
           </Tabs>
         </section>
         {showModal === 'CreateTermModal' && <CreateTermModal />}
+      </>
+    );
+  },
+);
+
+const TrialSessionFilters = connect(
+  {
+    resetTrialSessionsFiltersSequence:
+      sequences.resetTrialSessionsFiltersSequence,
+    setTrialSessionsFiltersSequence: sequences.setTrialSessionsFiltersSequence,
+    trialSessionsHelper: state.trialSessionsHelper,
+    trialSessionsPage: state.trialSessionsPage,
+  },
+  function TrialSessionFilters({
+    resetTrialSessionsFiltersSequence,
+    setTrialSessionsFiltersSequence,
+    trialSessionsHelper,
+    trialSessionsPage,
+  }) {
+    return (
+      <>
+        <div className="grid-row gap-3">
+          {trialSessionsHelper.showSessionStatus && (
+            <fieldset className="usa-fieldset">
+              <legend className="usa-legend">Session Status</legend>
+              <div className="usa-radio usa-radio__inline">
+                {[
+                  'All',
+                  SESSION_STATUS_TYPES.open,
+                  SESSION_STATUS_TYPES.closed,
+                ].map(statusOption => (
+                  <React.Fragment key={statusOption}>
+                    <input
+                      checked={
+                        trialSessionsPage.filters.sessionStatus === statusOption
+                      }
+                      className="usa-radio__input"
+                      id={`sessionStatus-${statusOption}`}
+                      name="sessionStatus"
+                      type="radio"
+                      value={statusOption}
+                      onChange={e => {
+                        setTrialSessionsFiltersSequence({
+                          sessionStatus: e.target.value,
+                        });
+                      }}
+                    />
+                    <label
+                      className="usa-radio__label"
+                      data-testid={`sessionStatus-${statusOption}`}
+                      htmlFor={`sessionStatus-${statusOption}`}
+                    >
+                      {statusOption}
+                    </label>
+                  </React.Fragment>
+                ))}
+              </div>
+            </fieldset>
+          )}
+          <fieldset className="usa-fieldset">
+            <legend className="usa-legend">Proceeding Type</legend>
+            <div className="usa-radio usa-radio__inline">
+              {['All', ...Object.values(TRIAL_SESSION_PROCEEDING_TYPES)].map(
+                proceedingOption => (
+                  <React.Fragment key={proceedingOption}>
+                    <input
+                      checked={
+                        trialSessionsPage.filters.proceedingType ===
+                        proceedingOption
+                      }
+                      className="usa-radio__input"
+                      id={`proceedingType-${proceedingOption}`}
+                      name="proceedingType"
+                      type="radio"
+                      value={proceedingOption}
+                      onChange={e => {
+                        setTrialSessionsFiltersSequence({
+                          proceedingType: e.target
+                            .value as TrialSessionProceedingType,
+                        });
+                      }}
+                    />
+                    <label
+                      className="usa-radio__label"
+                      data-testid={`proceedingType-${proceedingOption}`}
+                      htmlFor={`proceedingType-${proceedingOption}`}
+                    >
+                      {proceedingOption}
+                    </label>
+                  </React.Fragment>
+                ),
+              )}
+            </div>
+          </fieldset>
+          <DateRangePickerComponent
+            endDateErrorText={trialSessionsHelper.endDateErrorMessage}
+            endLabel={
+              <span>
+                Last start date{' '}
+                <span className="optional-light-text">(optional)</span>
+              </span>
+            }
+            endName="trialSessionLastStartDate"
+            endValue={trialSessionsPage.filters.endDate}
+            rangePickerCls={'display-flex'}
+            startDateErrorText={trialSessionsHelper.startDateErrorMessage}
+            startLabel={
+              <span>
+                First start date{' '}
+                <span className="optional-light-text">(optional)</span>
+              </span>
+            }
+            startName="trialSessionFirstStartDate"
+            startPickerCls="padding-right-2"
+            startValue={trialSessionsPage.filters.startDate}
+            onBlurEnd={e => {
+              setTrialSessionsFiltersSequence({
+                endDate: e.target.value,
+              });
+            }}
+            onBlurStart={e => {
+              setTrialSessionsFiltersSequence({
+                startDate: e.target.value,
+              });
+            }}
+          />
+        </div>
+        <div className="margin-bottom-2 grid-row flex-row gap-2">
+          <div className="grid-col">
+            <div className="margin-bottom-1">
+              <label
+                className="usa-label"
+                htmlFor="session-type-filter"
+                id="session-type-filter-label"
+              >
+                Session type{' '}
+                <span className="optional-light-text">(optional)</span>
+              </label>
+              <SelectSearch
+                aria-labelledby="session-type-filter-label"
+                data-testid="trial-session-type-filter-search"
+                id="session-type-filter"
+                name="sessionType"
+                options={trialSessionsHelper.sessionTypeOptions}
+                placeholder="- Select one or more -"
+                value={{
+                  label: '- Select one or more -',
+                  value: '' as TrialSessionTypes,
+                }}
+                onChange={sessionType => {
+                  if (sessionType) {
+                    setTrialSessionsFiltersSequence({
+                      sessionTypes: {
+                        action: 'add',
+                        sessionType: sessionType.value,
+                      },
+                    });
+                  }
+                }}
+              />
+            </div>
+            <div>
+              {Object.values(trialSessionsPage.filters.sessionTypes).map(
+                sessionType => (
+                  <PillButton
+                    key={sessionType}
+                    text={sessionType}
+                    onRemove={() => {
+                      setTrialSessionsFiltersSequence({
+                        sessionTypes: {
+                          action: 'remove',
+                          sessionType,
+                        },
+                      });
+                    }}
+                  />
+                ),
+              )}
+            </div>
+          </div>
+          <div className="grid-col">
+            <div className="margin-bottom-1">
+              <label
+                className="usa-label"
+                htmlFor="location-filter"
+                id="location-filter-label"
+              >
+                Location <span className="optional-light-text">(optional)</span>
+              </label>
+              <SelectSearch
+                aria-labelledby="location-filter-label"
+                data-testid="trial-session-location-filter-search"
+                id="location-filter"
+                name="location"
+                options={trialSessionsHelper.trialCitiesByState}
+                placeholder="- Select one or more -"
+                value={{
+                  label: '- Select one or more -',
+                  value: '',
+                }}
+                onChange={location => {
+                  if (location) {
+                    setTrialSessionsFiltersSequence({
+                      trialLocations: {
+                        action: 'add',
+                        trialLocation: location.value,
+                      },
+                    });
+                  }
+                }}
+              />
+            </div>
+            <div>
+              {Object.values(trialSessionsPage.filters.trialLocations).map(
+                location => (
+                  <PillButton
+                    key={location}
+                    text={location}
+                    onRemove={() => {
+                      setTrialSessionsFiltersSequence({
+                        trialLocations: {
+                          action: 'remove',
+                          trialLocation: location,
+                        },
+                      });
+                    }}
+                  />
+                ),
+              )}
+            </div>
+          </div>
+          <div className="grid-col">
+            <div className="margin-bottom-1">
+              <label
+                className="usa-label"
+                htmlFor="judge-filter"
+                id="judges-filter-label"
+              >
+                Judge <span className="optional-light-text">(optional)</span>
+              </label>
+              <SelectSearch
+                aria-labelledby="judges-filter-label"
+                data-testid="trial-session-judge-filter-search"
+                id="judges"
+                name="judges"
+                options={trialSessionsHelper.trialSessionJudgeOptions}
+                placeholder="- Select one or more -"
+                value={{
+                  label: '- Select one or more -',
+                  value: { name: '', userId: '' },
+                }}
+                onChange={inputValue => {
+                  if (inputValue) {
+                    setTrialSessionsFiltersSequence({
+                      judges: {
+                        action: 'add',
+                        judge: inputValue.value,
+                      },
+                    });
+                  }
+                }}
+              />
+            </div>
+            <div>
+              {Object.values(trialSessionsPage.filters.judges).map(judge => (
+                <PillButton
+                  key={judge.userId}
+                  text={judge.name}
+                  onRemove={() => {
+                    setTrialSessionsFiltersSequence({
+                      judges: {
+                        action: 'remove',
+                        judge,
+                      },
+                    });
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+        <Button
+          link
+          disabled={trialSessionsHelper.isResetFiltersDisabled}
+          tooltip="Reset Filters"
+          onClick={() => resetTrialSessionsFiltersSequence()}
+        >
+          Reset Filters
+        </Button>
       </>
     );
   },
