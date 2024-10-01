@@ -1,3 +1,8 @@
+import { DateTime } from 'luxon';
+import {
+  FORMATS,
+  prepareDateFromString,
+} from '@shared/business/utilities/DateHandler';
 import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
 import {
   ROLE_PERMISSIONS,
@@ -7,6 +12,22 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '../../../errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { updateUserPendingEmailRecord } from '@web-api/business/useCases/auth/changePasswordInteractor';
+
+export const TOKEN_EXPIRATION_TIME_HOURS = 1;
+
+export const userTokenHasExpired = (
+  tokenExpirationTimestamp?: string,
+): boolean => {
+  if (!tokenExpirationTimestamp) {
+    return true;
+  }
+  const expirationTime = prepareDateFromString(
+    tokenExpirationTimestamp,
+    FORMATS.ISO,
+  ).plus({ hours: TOKEN_EXPIRATION_TIME_HOURS });
+  const now = DateTime.now().setZone('utc');
+  return now > expirationTime;
+};
 
 export const verifyUserPendingEmailInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -30,6 +51,13 @@ export const verifyUserPendingEmailInteractor = async (
       { email: authorizedUser.email },
     );
     throw new UnauthorizedError('Tokens do not match');
+  }
+
+  if (userTokenHasExpired(user.pendingEmailVerificationTokenTimestamp)) {
+    applicationContext.logger.info('Pending email verification link expired', {
+      email: authorizedUser.email,
+    });
+    throw new UnauthorizedError('Link has expired');
   }
 
   const isEmailAvailable = await applicationContext

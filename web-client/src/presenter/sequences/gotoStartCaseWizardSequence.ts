@@ -1,4 +1,3 @@
-import { chooseStartCaseWizardStepAction } from '../actions/chooseStartCaseWizardStepAction';
 import { clearConfirmationTextStatisticsAction } from '../actions/clearConfirmationTextStatisticsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
@@ -24,11 +23,6 @@ const gotoStartCaseInternal = [
   setupCurrentPageAction('StartCaseInternal'),
 ];
 
-const gotoStartCaseExternal = [
-  chooseStartCaseWizardStepAction,
-  setupCurrentPageAction('StartCaseWizard'),
-];
-
 export const gotoStartCaseWizardSequence =
   startWebSocketConnectionSequenceDecorator([
     clearFormAction,
@@ -51,10 +45,6 @@ export const gotoStartCaseWizardSequence =
           USER_ROLES.trialClerk,
         ],
         gotoStartCaseInternal,
-      ),
-      ...takePathForRoles(
-        [USER_ROLES.petitioner, USER_ROLES.privatePractitioner],
-        gotoStartCaseExternal,
       ),
     },
   ]);

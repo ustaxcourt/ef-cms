@@ -1,6 +1,4 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
-import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 import { userNavigatesToCreateCaseConfirmation } from './journey/userNavigatesToCreateCaseConfirmation';
@@ -26,8 +24,6 @@ describe('Case Confirmation', () => {
 
   describe('Petitioner creates a case / Petitionsclerk Sends to Holding Queue / Petitioner then has access to case confirmation', () => {
     loginAs(cerebralTest, 'petitioner@example.com');
-    petitionerChoosesProcedureType(cerebralTest);
-    petitionerChoosesCaseType(cerebralTest);
 
     it('login as a petitioner and create a case', async () => {
       const caseDetail = await uploadPetition(cerebralTest);
