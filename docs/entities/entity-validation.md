@@ -10,14 +10,13 @@ Pros
 - Will fail a deployment if there are failing entities in the DB.
 
 Cons
-- simple changes can trigger the mechanism, like updating a console log, updating joi package, if joi decides how it structures its validation functions.
-- Updating error messages triggers re-validation
-- If the function is using an imported const re-validation will not trigger when variable updated
-- If our compiler changes(esbuild) our string representation of what a function is will change and trigger re-validation
-- refactoring a function, even if it produces the same output will cause re-validation
-- validation rules are not static in all entities. getValidationRules() can return different schemas.
-- Not all entities call their rules VALIDATION_RULES, making it hard to detect where the rules are stored.
-- Not all entities have a specific way to get all of them from the DB. For instance there is no way to get all CaseNotes in the DB.
+- (Avoidable if we require the user to approve validation) simple changes can trigger the mechanism, like updating a console log, updating joi package, if joi decides how it structures its validation functions.
+- (Avoidable if we require the user to approve validation) Updating error messages triggers re-validation
+- (Avoidable if we require the user to approve validation) If our compiler changes(esbuild) our string representation of what a function is will change and trigger re-validation
+- (Avoidable if we require the user to approve validation) refactoring a function, even if it produces the same output will cause re-validation
+- (Simple Fix) Validation rules are not static in all entities. getValidationRules() can return different schemas.
+- (Simple Fix) Not all entities call their rules VALIDATION_RULES, making it hard to detect where the rules are stored.
+- (Very complex Fix) Not all entities have a specific way to get all of them from the DB. For instance there is no way to get all CaseNotes in the DB.
 
 ## Contract Tests
 Strategy: Create a wide range of entities touching the edge cases of entities that should always pass validation
