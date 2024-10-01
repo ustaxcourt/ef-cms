@@ -73,7 +73,6 @@ import {
   getDocketNumbersByUser,
 } from './persistence/dynamo/users/getCasesForUser';
 import { getCasesMetadataByLeadDocketNumber } from './persistence/dynamo/cases/getCasesMetadataByLeadDocketNumber';
-import { getCasesReadyForCalendaring } from '@web-api/persistence/dynamo/trialSessions/getCasesReadyForCalendaring';
 import { getClientId } from './persistence/cognito/getClientId';
 import { getColdCases } from './persistence/elasticsearch/reports/getColdCases';
 import { getConfigurationItemValue } from './persistence/dynamo/deployTable/getConfigurationItemValue';
@@ -227,7 +226,6 @@ const gatewayMethods = {
     deleteKeyCount,
     editPractitionerDocument,
     fetchPendingItems,
-    getCasesReadyForCalendaring,
     incrementCounter,
     incrementKeyCount,
     persistUser,
