@@ -1,5 +1,5 @@
 import { MessageResult } from '@shared/business/entities/MessageResult';
-import { calculateISODate } from '@shared/business/utilities/DateHandler';
+import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getDbReader } from '@web-api/database';
 import { messageResultEntity } from '@web-api/persistence/postgres/messages/mapper';
 
@@ -9,7 +9,7 @@ export const getSectionOutboxMessages = async ({
   applicationContext: IApplicationContext;
   section: string;
 }): Promise<MessageResult[]> => {
-  const filterDate = calculateISODate({ howMuch: -7 });
+  const filterDate = calculateDate({ howMuch: -7 });
 
   const messages = await getDbReader(reader =>
     reader
