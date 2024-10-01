@@ -126,8 +126,6 @@ export const createProspectiveTrialSessions = ({
       });
     }
 
-    // TODO (10275): Handle cities that have not been visited in the past two terms
-
     // Are there any cities that have not been visited in the last two terms
     // that have not yet had any sessions scheduled? For any locations that
     // meet this criterion, assemble all cases associated with that location in
@@ -164,7 +162,6 @@ export const createProspectiveTrialSessions = ({
     }
   }
 
-  // TODO don't forget we need to deal with overrides.
   Object.keys(potentialTrialLocations).forEach(city => {
     potentialTrialLocations[city] = potentialTrialLocations[city].splice(
       0,
