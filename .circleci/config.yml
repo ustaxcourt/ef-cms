@@ -140,8 +140,12 @@ jobs:
           command: |
             if [ "${DEPLOYING_COLOR}" == "blue" ]; then
               npm run deploy:blue $ENV
+              npm run deploy:zipper us-east-1
+              npm run deploy:zipper us-west-1
             else
               npm run deploy:green $ENV
+              npm run deploy:zipper us-east-1
+              npm run deploy:zipper us-west-1
             fi
       - run:
           name: Setup Elasticsearch Index Settings

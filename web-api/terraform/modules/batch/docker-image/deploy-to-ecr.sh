@@ -3,7 +3,7 @@
 TARGET_REGION=$1
 export DOCKER_DEFAULT_PLATFORM=linux/amd64
 
-echo "Running script to deploy Docker Image to ${TARGET_REGION} ECR"
+echo "Running script to deploy Docker Image to ECR"
 
 ./check-env-variables.sh \
   "ENV" \
@@ -11,8 +11,13 @@ echo "Running script to deploy Docker Image to ${TARGET_REGION} ECR"
   "AWS_ACCESS_KEY_ID" \
   "AWS_SECRET_ACCESS_KEY"
 
+# DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh "${ENV}")
+DEPLOYING_COLOR="blue"
+echo "Current color -> ${DEPLOYING_COLOR}"
+echo "Region -> ${TARGET_REGION}"
+
 LATEST_TAGS=$(aws ecr describe-images \
-  --repository-name "docket-entry-zipper-${ENV}-${TARGET_REGION}" \
+  --repository-name "docket-entry-zipper-${ENV}-${DEPLOYING_COLOR}-${TARGET_REGION}" \
 	--query "imageDetails[?contains(imageTags, \`latest\`)].imageTags" \
 	--region "${TARGET_REGION}")
 
@@ -28,15 +33,13 @@ else
   DESTINATION_TAG="${major}.${minor}.${patch}"
 fi
 
-MANIFEST=$(aws ecr batch-get-image --repository-name "docket-entry-zipper-${ENV}-${TARGET_REGION}" --image-ids imageTag="${DESTINATION_TAG}" --region "${TARGET_REGION}" --query 'images[].imageManifest' --output text)
+MANIFEST=$(aws ecr batch-get-image --repository-name "docket-entry-zipper-${ENV}-${DEPLOYING_COLOR}-${TARGET_REGION}" --image-ids imageTag="${DESTINATION_TAG}" --region "${TARGET_REGION}" --query 'images[].imageManifest' --output text)
 
-# DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh "${ENV}")
-DEPLOYING_COLOR="blue"
 WEBSOCKET_API_GATEWAY_ID=$(aws apigatewayv2 get-apis --region "${TARGET_REGION}" --query "Items[?Name=='websocket_api_${ENV}_${DEPLOYING_COLOR}'].ApiId" --output text)
 
 if [[ -n $MANIFEST ]]; then
   echo "A Docker image with the destination tag ${DESTINATION_TAG} already exists. Deleting the existing image."
-  aws ecr batch-delete-image --repository-name "docket-entry-zipper-${ENV}-${TARGET_REGION}" --image-ids imageTag="${DESTINATION_TAG}" --region "${TARGET_REGION}"
+  aws ecr batch-delete-image --repository-name "docket-entry-zipper-${ENV}-${DEPLOYING_COLOR}-${TARGET_REGION}" --image-ids imageTag="${DESTINATION_TAG}" --region "${TARGET_REGION}"
 fi
 
 aws ecr get-login-password --region "${TARGET_REGION}" | docker login --username AWS --password-stdin "${AWS_ACCOUNT_ID}.dkr.ecr.${TARGET_REGION}.amazonaws.com"
@@ -44,11 +47,11 @@ aws ecr get-login-password --region "${TARGET_REGION}" | docker login --username
 docker build --no-cache \
   --build-arg AWS_REGION="${TARGET_REGION}" \
   --build-arg WEBSOCKET_API_GATEWAY_ID="${WEBSOCKET_API_GATEWAY_ID}" \
-  -t "docket-entry-zipper-${ENV}-${TARGET_REGION}:${DESTINATION_TAG}" \
+  -t "docket-entry-zipper-${ENV}-${DEPLOYING_COLOR}-${TARGET_REGION}:${DESTINATION_TAG}" \
   -f Dockerfile .
 
-docker tag "docket-entry-zipper-${ENV}-${TARGET_REGION}:${DESTINATION_TAG}" "${AWS_ACCOUNT_ID}.dkr.ecr.${TARGET_REGION}.amazonaws.com/docket-entry-zipper-${ENV}-${TARGET_REGION}:${DESTINATION_TAG}"
-docker tag "docket-entry-zipper-${ENV}-${TARGET_REGION}:${DESTINATION_TAG}" "${AWS_ACCOUNT_ID}.dkr.ecr.${TARGET_REGION}.amazonaws.com/docket-entry-zipper-${ENV}-${TARGET_REGION}:latest"
+docker tag "docket-entry-zipper-${ENV}-${DEPLOYING_COLOR}-${TARGET_REGION}:${DESTINATION_TAG}" "${AWS_ACCOUNT_ID}.dkr.ecr.${TARGET_REGION}.amazonaws.com/docket-entry-zipper-${ENV}-${DEPLOYING_COLOR}-${TARGET_REGION}:${DESTINATION_TAG}"
+docker tag "docket-entry-zipper-${ENV}-${DEPLOYING_COLOR}-${TARGET_REGION}:${DESTINATION_TAG}" "${AWS_ACCOUNT_ID}.dkr.ecr.${TARGET_REGION}.amazonaws.com/docket-entry-zipper-${ENV}-${DEPLOYING_COLOR}-${TARGET_REGION}:latest"
 
-docker push "${AWS_ACCOUNT_ID}.dkr.ecr.${TARGET_REGION}.amazonaws.com/docket-entry-zipper-${ENV}-${TARGET_REGION}:${DESTINATION_TAG}"
-docker push "${AWS_ACCOUNT_ID}.dkr.ecr.${TARGET_REGION}.amazonaws.com/docket-entry-zipper-${ENV}-${TARGET_REGION}:latest"
+docker push "${AWS_ACCOUNT_ID}.dkr.ecr.${TARGET_REGION}.amazonaws.com/docket-entry-zipper-${ENV}-${DEPLOYING_COLOR}-${TARGET_REGION}:${DESTINATION_TAG}"
+docker push "${AWS_ACCOUNT_ID}.dkr.ecr.${TARGET_REGION}.amazonaws.com/docket-entry-zipper-${ENV}-${DEPLOYING_COLOR}-${TARGET_REGION}:latest"
