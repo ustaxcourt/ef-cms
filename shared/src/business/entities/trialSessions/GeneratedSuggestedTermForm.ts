@@ -32,14 +32,10 @@ export class GenerateSuggestedTermForm extends JoiValidationEntity {
         }),
       termStartDate: JoiValidationConstants.DATE_RANGE_PICKER_DATE.greater(
         'now',
-      )
-        .description(
-          'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
-        )
-        .messages({
-          '*': 'Enter date in format MM/DD/YYYY.',
-          'date.min': 'Start date cannot be in the past. Enter a valid date.',
-        }),
+      ).messages({
+        '*': 'Enter date in format MM/DD/YYYY.',
+        'date.min': 'Start date cannot be in the past. Enter a valid date.',
+      }),
     };
   }
 }

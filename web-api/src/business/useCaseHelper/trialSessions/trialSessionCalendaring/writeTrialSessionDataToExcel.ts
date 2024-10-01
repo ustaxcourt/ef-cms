@@ -11,32 +11,6 @@ export const writeTrialSessionDataToExcel = async ({
   weeks: string[];
   sessionCountPerWeek: Record<string, number>;
 }) => {
-  //
-  scheduledTrialSessions = [];
-
-  const cities = ['cityA', 'cityB', 'cityC', 'cityD', 'cityE', 'cityF'];
-  weeks = ['09/01', '09/08', '09/15', '09/45', '09/89', '09/37'];
-  sessionCountPerWeek = {
-    '09/01': 10,
-    '09/08': 20,
-    '09/15': 5,
-    '09/37': 42,
-    '09/45': 3,
-    '09/89': 4,
-  };
-
-  for (const city of cities) {
-    for (const week of weeks) {
-      const randomType = Math.floor(Math.random() * 3);
-      scheduledTrialSessions.push({
-        city,
-        sessionType: SESSION_TYPES[Object.keys(SESSION_TYPES)[randomType]],
-        weekOf: week,
-      });
-    }
-  }
-
-  //
   const workbook = new ExcelJS.Workbook();
   const worksheetOptions = { properties: { outlineLevelCol: 2 } };
   const worksheet = workbook.addWorksheet('sheetInProgress', worksheetOptions);
@@ -81,28 +55,28 @@ export const writeTrialSessionDataToExcel = async ({
           cell.fill = {
             fgColor: { argb: 'ffFDB8AE' },
             pattern: 'solid',
-            type: 'pattern', // Orange
+            type: 'pattern',
           };
           break;
         case SESSION_TYPES.small:
           cell.fill = {
             fgColor: { argb: 'ff97D4EA' },
             pattern: 'solid',
-            type: 'pattern', // Green
+            type: 'pattern',
           };
           break;
         case SESSION_TYPES.regular:
           cell.fill = {
             fgColor: { argb: 'ffb4d0b9' },
             pattern: 'solid',
-            type: 'pattern', // Yellow
+            type: 'pattern',
           };
           break;
         case SESSION_TYPES.special:
           cell.fill = {
             fgColor: { argb: 'ffD0C3E9' },
             pattern: 'solid',
-            type: 'pattern', // Purple?
+            type: 'pattern',
           };
           break;
         default:
@@ -110,7 +84,7 @@ export const writeTrialSessionDataToExcel = async ({
             cell.fill = {
               fgColor: { argb: 'ff989ca3' },
               pattern: 'solid',
-              type: 'pattern', // grey
+              type: 'pattern',
             };
           }
           break;

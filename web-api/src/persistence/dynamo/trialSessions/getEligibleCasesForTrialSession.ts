@@ -34,8 +34,7 @@ export const getEligibleCasesForTrialSession = async ({
       docketNumbers.push(docketNumber);
     }
   });
-  // Why are we fetching the base case record twice??
-  // TODO: 10275
+  // TODO: 10275 Why are we fetching the base case record twice??
   const results = await batchGet({
     applicationContext,
     keys: docketNumbers.map(docketNumber => ({

@@ -110,11 +110,9 @@ export const lambdaWrapper = (
     });
 
     if (
-      [
-        'application/pdf',
-        'text/html',
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      ].includes(response.headers['Content-Type'])
+      ['application/pdf', 'text/html'].includes(
+        response.headers['Content-Type'],
+      )
     ) {
       res.set('Content-Type', response.headers['Content-Type']);
       res.send(response.body);
