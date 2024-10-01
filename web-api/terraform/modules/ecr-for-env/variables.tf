@@ -5,3 +5,7 @@ variable "environment" {
 variable "region" {
   type = string
 }
+
+variable "color" {
+  type = string
+}
