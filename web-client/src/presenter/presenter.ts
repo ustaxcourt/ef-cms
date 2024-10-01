@@ -293,6 +293,7 @@ import { openConfirmServeToIrsModalSequence } from './sequences/openConfirmServe
 import { openCreateCaseDeadlineModalSequence } from './sequences/openCreateCaseDeadlineModalSequence';
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
 import { openCreateOrderChooseTypeModalSequence } from './sequences/openCreateOrderChooseTypeModalSequence';
+import { openCreateTermModalSequence } from '@web-client/presenter/sequences/TrialSessions/openCreateTermModalSequence';
 import { openDeleteCaseDeadlineModalSequence } from './sequences/openDeleteCaseDeadlineModalSequence';
 import { openDeleteCaseNoteConfirmModalSequence } from './sequences/openDeleteCaseNoteConfirmModalSequence';
 import { openDeletePractitionerDocumentConfirmModalSequence } from './sequences/openDeletePractitionerDocumentConfirmModalSequence';
@@ -451,6 +452,7 @@ import { submitCourtIssuedDocketEntrySequence } from './sequences/submitCourtIss
 import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrderSequence';
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
 import { submitCreatePetitionerAccountFormSequence } from '@web-client/presenter/sequences/submitCreatePetitionerAccountFormSequence';
+import { submitCreateTermModalSequence } from '@web-client/presenter/sequences/TrialSessions/submitCreateTermModalSequence';
 import { submitEditContactSequence } from './sequences/submitEditContactSequence';
 import { submitEditDeficiencyStatisticSequence } from './sequences/submitEditDeficiencyStatisticSequence';
 import { submitEditDocketEntryMetaSequence } from './sequences/submitEditDocketEntryMetaSequence';
@@ -1078,6 +1080,8 @@ export const presenterSequences = {
     openCreateMessageModalSequence as unknown as Function,
   openCreateOrderChooseTypeModalSequence:
     openCreateOrderChooseTypeModalSequence as unknown as Function,
+  openCreateTermModalSequence:
+    openCreateTermModalSequence as unknown as Function,
   openDeleteCaseDeadlineModalSequence:
     openDeleteCaseDeadlineModalSequence as unknown as Function,
   openDeleteCaseNoteConfirmModalSequence:
@@ -1334,6 +1338,8 @@ export const presenterSequences = {
     submitCreateOrderModalSequence as unknown as Function,
   submitCreatePetitionerAccountFormSequence:
     submitCreatePetitionerAccountFormSequence as unknown as Function,
+  submitCreateTermModalSequence:
+    submitCreateTermModalSequence as unknown as Function,
   submitEditContactSequence: submitEditContactSequence as unknown as Function,
   submitEditDeficiencyStatisticSequence:
     submitEditDeficiencyStatisticSequence as unknown as Function,
