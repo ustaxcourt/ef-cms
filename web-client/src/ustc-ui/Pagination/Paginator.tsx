@@ -20,7 +20,8 @@ export const Paginator = ({
   showSinglePage?: boolean;
   onPageChange: (selectedPage: number) => any;
 }) => {
-  if (totalPages === 0) {
+  if (totalPages === 0 || totalPages === 1) {
+    // This is default behavior requested by UX. Do not show paginator if there is only one page.
     return;
   }
   const numberOfPaginatorSlots = showSinglePage ? 1 : 7;
