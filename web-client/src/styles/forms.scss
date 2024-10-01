@@ -133,7 +133,10 @@ legend {
 }
 
 textarea {
-  min-height: 40px;
+  min-height: calc(
+    1em + 24px
+  ); // Don't allow resizing smaller than the line of text
+
   resize: vertical;
 }
 
