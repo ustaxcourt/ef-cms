@@ -21,7 +21,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('completedBySection', 'varchar')
     .addColumn('completedByUserId', 'varchar')
     .addColumn('completedMessage', 'varchar')
-    .addColumn('createdAt', 'varchar', col => col.notNull())
+    .addColumn('createdAt', 'timestamptz', col => col.notNull())
     .addColumn('docketNumber', 'varchar', col => col.notNull())
     .addColumn('from', 'varchar')
     .addColumn('fromSection', 'varchar')
