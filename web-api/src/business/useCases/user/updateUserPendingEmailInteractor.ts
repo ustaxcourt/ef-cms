@@ -8,6 +8,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 
 /**
  * updateUserPendingEmailInteractor
@@ -27,25 +28,11 @@ export const updateUserPendingEmailInteractor = async (
     throw new UnauthorizedError('Unauthorized to manage emails.');
   }
 
-  const isEmailAvailable = await applicationContext
-    .getPersistenceGateway()
-    .isEmailAvailable({
-      applicationContext,
-      email: pendingEmail,
-    });
-
-  if (!isEmailAvailable) {
-    throw new Error('Email is not available');
-  }
-
   const user: any = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  user.pendingEmail = pendingEmail;
-
-  const pendingEmailVerificationToken = applicationContext.getUniqueId();
-  user.pendingEmailVerificationToken = pendingEmailVerificationToken;
+  await updateUserPendingEmail({ applicationContext, pendingEmail, user });
 
   let updatedUserRaw;
   if (user.role === ROLES.petitioner) {
@@ -62,8 +49,34 @@ export const updateUserPendingEmailInteractor = async (
   await applicationContext.getUseCaseHelpers().sendEmailVerificationLink({
     applicationContext,
     pendingEmail,
-    pendingEmailVerificationToken,
+    pendingEmailVerificationToken: updatedUserRaw.pendingEmailVerificationToken,
   });
 
   return updatedUserRaw;
+};
+
+export const updateUserPendingEmail = async ({
+  applicationContext,
+  pendingEmail,
+  user,
+}: {
+  applicationContext: ServerApplicationContext;
+  user: any;
+  pendingEmail: string;
+}) => {
+  const isEmailAvailable = await applicationContext
+    .getPersistenceGateway()
+    .isEmailAvailable({
+      applicationContext,
+      email: pendingEmail,
+    });
+
+  if (!isEmailAvailable) {
+    throw new Error('Email is not available');
+  }
+
+  const pendingEmailVerificationToken = applicationContext.getUniqueId();
+  user.pendingEmailVerificationToken = pendingEmailVerificationToken;
+  user.pendingEmailVerificationTokenTimestamp = createISODateString();
+  user.pendingEmail = pendingEmail;
 };
