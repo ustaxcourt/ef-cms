@@ -37,7 +37,7 @@ if [[ -n $MANIFEST ]]; then
 
 
   aws ecr batch-delete-image --repository-name "docket-entry-zipper-${ENV}-${TARGET_REGION}" --image-ids imageTag="${DESTINATION_TAG}" --region "${TARGET_REGION}"
-  aws ecr put-image --repository-name "docket-entry-zipper-${ENV}" --image-tag "SNAPSHOT-${DESTINATION_TAG}-${IMAGE_TAG}" --image-manifest "${MANIFEST}" --region "${TARGET_REGION}"
+  aws ecr put-image --repository-name "docket-entry-zipper-${ENV}-${TARGET_REGION}" --image-tag "SNAPSHOT-${DESTINATION_TAG}-${IMAGE_TAG}" --image-manifest "${MANIFEST}" --region "${TARGET_REGION}"
 fi
 
 aws ecr get-login-password --region "${TARGET_REGION}" | docker login --username AWS --password-stdin "${AWS_ACCOUNT_ID}.dkr.ecr.${TARGET_REGION}.amazonaws.com"
@@ -45,15 +45,8 @@ aws ecr get-login-password --region "${TARGET_REGION}" | docker login --username
 docker build --no-cache \
   --build-arg AWS_REGION="${TARGET_REGION}" \
   --build-arg WEBSOCKET_API_GATEWAY_ID="${WEBSOCKET_API_GATEWAY_ID}" \
-  -t "docket-entry-zipper-${ENV}:${DESTINATION_TAG}" \
+  -t "docket-entry-zipper-${ENV}-${TARGET_REGION}:${DESTINATION_TAG}" \
   -f Dockerfile .
 
-docker tag "docket-entry-zipper-${ENV}:${DESTINATION_TAG}" "${AWS_ACCOUNT_ID}.dkr.ecr.${TARGET_REGION}.amazonaws.com/docket-entry-zipper-${ENV}:${DESTINATION_TAG}"
-docker push "${AWS_ACCOUNT_ID}.dkr.ecr.${TARGET_REGION}.amazonaws.com/docket-entry-zipper-${ENV}:${DESTINATION_TAG}"
-
-# Delete the previous 'latest' tag if it exists
-aws ecr batch-delete-image --repository-name "docket-entry-zipper-${ENV}-${TARGET_REGION}" --image-ids imageTag="latest" --region "${TARGET_REGION}" || echo "No existing latest tag found."
-
-
-docker tag "docket-entry-zipper-${ENV}:${DESTINATION_TAG}" "${AWS_ACCOUNT_ID}.dkr.ecr.${TARGET_REGION}.amazonaws.com/docket-entry-zipper-${ENV}:latest"
-docker push "${AWS_ACCOUNT_ID}.dkr.ecr.${TARGET_REGION}.amazonaws.com/docket-entry-zipper-${ENV}:latest"
+docker tag "docket-entry-zipper-${ENV}-${TARGET_REGION}:${DESTINATION_TAG}" "${AWS_ACCOUNT_ID}.dkr.ecr.${TARGET_REGION}.amazonaws.com/docket-entry-zipper-${ENV}-${TARGET_REGION}:${DESTINATION_TAG}"
+docker push "${AWS_ACCOUNT_ID}.dkr.ecr.${TARGET_REGION}.amazonaws.com/docket-entry-zipper-${ENV}-${TARGET_REGION}:${DESTINATION_TAG}"
