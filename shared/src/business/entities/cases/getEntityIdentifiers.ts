@@ -4,6 +4,7 @@ import path from 'path';
 
 async function getEntityIdentifiers() {
   let entitiesFound = 0;
+  const validationIdentityMap = new Map<string, string>();
   const directoryPath = path.join(
     process.cwd(),
     './shared/src/business/entities',
@@ -24,16 +25,18 @@ async function getEntityIdentifiers() {
         const individualExport = moduleExports[exportName];
         Object.keys(individualExport).forEach(key => {
           if (validationRegex.test(key)) {
+            // Check if the export contains a property with 'validation' in it. We are looking for VALIDATION_RULES.
             const identifier = createValidationIdentifier(
               individualExport[key],
             );
             entitiesFound++;
-            console.log(`Hash for ${exportName}.${key}: ${identifier}`);
+            validationIdentityMap.set(`${exportName}.${key}`, identifier);
           }
         });
       });
     }
   }
+  console.log(validationIdentityMap);
   console.log(`Found ${entitiesFound} entities with validation rules.`);
 }
 
