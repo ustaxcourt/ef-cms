@@ -10,6 +10,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
+import { upsertCase } from '@web-api/persistence/postgres/cases/upsertCase';
 import diff from 'diff-arrays-of-objects';
 
 /**
@@ -490,6 +491,8 @@ export const updateCaseAndAssociations = async ({
   });
 
   await Promise.all(persistenceRequests);
+
+  await upsertCase({ rawCase: validRawCaseEntity });
 
   return applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
