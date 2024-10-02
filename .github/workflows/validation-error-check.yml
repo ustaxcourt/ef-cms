@@ -24,9 +24,6 @@ jobs:
       - name: NPM Install in your branch
         working-directory: ./branchToBeCompared
         run: npm ci
-      - name: NPM Install in staging
-        working-directory: ./stagingBranch
-        run: npm ci
-      - name: Compare errors between your branch and staging
+      - name: Compare validation rules between your branch and staging
         working-directory: ./branchToBeCompared
         run: npx ts-node scripts/getEntityIdentifiers.ts
