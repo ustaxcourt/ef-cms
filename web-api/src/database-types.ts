@@ -55,11 +55,11 @@ export interface WorkItemTable {
   associatedJudge: string;
   associatedJudgeId?: string;
   caseIsInProgress?: boolean;
-  completedAt?: string;
+  completedAt?: Date;
   completedBy?: string;
   completedByUserId?: string;
   completedMessage?: string;
-  createdAt: string;
+  createdAt: Date;
   docketEntry: any;
   docketNumber: string;
   hideFromPendingMessages?: boolean;
@@ -71,7 +71,7 @@ export interface WorkItemTable {
   sentBy: string;
   sentBySection?: string;
   sentByUserId?: string;
-  updatedAt: string;
+  updatedAt: Date;
   workItemId: string;
 }
 

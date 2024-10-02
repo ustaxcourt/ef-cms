@@ -9,11 +9,11 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('associatedJudge', 'varchar', col => col.notNull())
     .addColumn('associatedJudgeId', 'varchar')
     .addColumn('caseIsInProgress', 'boolean')
-    .addColumn('completedAt', 'varchar')
+    .addColumn('completedAt', 'timestamptz')
     .addColumn('completedBy', 'varchar')
     .addColumn('completedByUserId', 'varchar')
     .addColumn('completedMessage', 'varchar')
-    .addColumn('createdAt', 'varchar', col => col.notNull())
+    .addColumn('createdAt', 'timestamptz', col => col.notNull())
     .addColumn('docketEntry', 'jsonb', col => col.notNull())
     .addColumn('docketNumber', 'varchar', col => col.notNull())
     .addColumn('hideFromPendingMessages', 'boolean')
@@ -25,7 +25,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('sentBy', 'varchar', col => col.notNull())
     .addColumn('sentBySection', 'varchar')
     .addColumn('sentByUserId', 'varchar')
-    .addColumn('updatedAt', 'varchar', col => col.notNull())
+    .addColumn('updatedAt', 'timestamptz', col => col.notNull())
     .execute();
 }
 
