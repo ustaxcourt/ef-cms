@@ -1,43 +1,43 @@
 import { mockFactory } from '@shared/test/mockFactory';
 
-jest.mock('@web-api/persistence/postgres/workItems/deleteWorkItem', () =>
+jest.mock('@web-api/persistence/postgres/workitems/deleteWorkItem', () =>
   mockFactory('deleteWorkItem'),
 );
 
 jest.mock(
-  '@web-api/persistence/postgres/workItems/getDocumentQCInboxForSection',
+  '@web-api/persistence/postgres/workitems/getDocumentQCInboxForSection',
   () => mockFactory('getDocumentQCInboxForSection'),
 );
 
 jest.mock(
-  '@web-api/persistence/postgres/workItems/getDocumentQCInboxForUser',
+  '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser',
   () => mockFactory('getDocumentQCInboxForUser'),
 );
 
 jest.mock(
-  '@web-api/persistence/postgres/workItems/getDocumentQCServedForSection',
+  '@web-api/persistence/postgres/workitems/getDocumentQCServedForSection',
   () => mockFactory('getDocumentQCServedForSection'),
 );
 
 jest.mock(
-  '@web-api/persistence/postgres/workItems/getDocumentQCServedForUser',
+  '@web-api/persistence/postgres/workitems/getDocumentQCServedForUser',
   () => mockFactory('getDocumentQCServedForUser'),
 );
 
-jest.mock('@web-api/persistence/postgres/workItems/getWorkItemById', () =>
+jest.mock('@web-api/persistence/postgres/workitems/getWorkItemById', () =>
   mockFactory('getWorkItemById'),
 );
 
 jest.mock(
-  '@web-api/persistence/postgres/workItems/getWorkItemsByDocketNumber',
-  () => mockFactory('getWorkItemsByDocketNumber'),
+  '@web-api/persistence/postgres/workitems/getworkitemsByDocketNumber',
+  () => mockFactory('getworkitemsByDocketNumber'),
 );
 
-jest.mock('@web-api/persistence/postgres/workItems/saveWorkItem', () =>
+jest.mock('@web-api/persistence/postgres/workitems/saveWorkItem', () =>
   mockFactory('saveWorkItem'),
 );
 
 jest.mock(
-  '@web-api/persistence/postgres/workItems/setPriorityOnAllWorkItems',
-  () => mockFactory('setPriorityOnAllWorkItems'),
+  '@web-api/persistence/postgres/workitems/setPriorityOnAllworkitems',
+  () => mockFactory('setPriorityOnAllworkitems'),
 );
