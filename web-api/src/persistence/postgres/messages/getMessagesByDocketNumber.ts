@@ -1,11 +1,10 @@
 import { MessageResult } from '@shared/business/entities/MessageResult';
 import { getDbReader } from '@web-api/database';
-import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import { messageResultEntity } from '@web-api/persistence/postgres/messages/mapper';
 
 export const getMessagesByDocketNumber = async ({
   docketNumber,
 }: {
-  applicationContext: IApplicationContext;
   docketNumber: string;
 }): Promise<MessageResult[]> => {
   const messages = await getDbReader(reader =>
@@ -18,7 +17,7 @@ export const getMessagesByDocketNumber = async ({
       .execute(),
   );
 
-  return messages.map(
-    message => new MessageResult(transformNullToUndefined(message)),
-  );
+  console.log('*** messages', messages);
+
+  return messages.map(message => messageResultEntity(message));
 };

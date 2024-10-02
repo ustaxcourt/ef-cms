@@ -1,11 +1,12 @@
+import { Case } from '@shared/business/entities/cases/Case';
+import { MessageResult } from '@shared/business/entities/MessageResult';
 import { NewMessageKysely, UpdateMessageKysely } from '@web-api/database-types';
 import { RawMessage } from '@shared/business/entities/Message';
+import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 function pickFields(message) {
   return {
     attachments: JSON.stringify(message.attachments),
-    caseStatus: message.caseStatus,
-    caseTitle: message.caseTitle,
     completedAt: message.completedAt,
     completedBy: message.completedBy,
     completedBySection: message.completedBySection,
@@ -49,4 +50,17 @@ export function toKyselyNewMessages(
   messages: RawMessage[],
 ): NewMessageKysely[] {
   return messages.map(pickFields);
+}
+
+export function messageResultEntity(message) {
+  return new MessageResult(
+    transformNullToUndefined({
+      ...message,
+      caseStatus: message.status,
+      caseTitle: Case.getCaseTitle(message.caption || ''),
+      completedAt: message.completedAt?.toISOString(),
+      createdAt: message.createdAt.toISOString(),
+      trialDate: message.trialDate?.toISOString(),
+    }),
+  );
 }

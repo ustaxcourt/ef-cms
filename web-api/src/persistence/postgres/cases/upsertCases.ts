@@ -1,15 +1,22 @@
+import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getDbWriter } from '@web-api/database';
 
 export const upsertCases = async (rawCases: RawCase[]) => {
   if (rawCases.length === 0) return;
 
   const casesToUpsert = rawCases.map(rawCase => ({
+    caption: rawCase.caseCaption,
     docketNumber: rawCase.docketNumber,
     docketNumberSuffix: rawCase.docketNumberSuffix,
     leadDocketNumber: rawCase.leadDocketNumber,
-    trialDate: rawCase.trialDate,
+    status: rawCase.status,
+    trialDate: rawCase.trialDate
+      ? calculateDate({ dateString: rawCase.trialDate })
+      : undefined,
     trialLocation: rawCase.trialLocation,
   }));
+
+  console.log('**** rawCases', rawCases);
 
   await getDbWriter(writer =>
     writer
@@ -18,8 +25,10 @@ export const upsertCases = async (rawCases: RawCase[]) => {
       .onConflict(oc =>
         oc.column('docketNumber').doUpdateSet(c => {
           return {
+            caption: c.ref('excluded.caption'),
             docketNumberSuffix: c.ref('excluded.docketNumberSuffix'),
             leadDocketNumber: c.ref('excluded.leadDocketNumber'),
+            status: c.ref('excluded.status'),
             trialDate: c.ref('excluded.trialDate'),
             trialLocation: c.ref('excluded.trialLocation'),
           };
