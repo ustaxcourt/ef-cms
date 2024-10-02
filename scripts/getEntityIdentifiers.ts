@@ -4,10 +4,7 @@ import path from 'path';
 
 async function getEntityIdentifiers() {
   const validationIdentityMap = {};
-  const directoryPath = path.join(
-    process.cwd(),
-    './shared/src/business/entities',
-  );
+  const directoryPath = path.join(__dirname, '../shared/src/business/entities');
   const files = await fs.readdir(directoryPath, { recursive: true });
 
   for (const file of files) {
