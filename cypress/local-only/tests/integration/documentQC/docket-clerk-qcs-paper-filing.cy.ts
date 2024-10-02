@@ -1,9 +1,10 @@
+import { attachFile } from '../../../../helpers/file/upload-file';
+import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import {
   loginAsDocketClerk1,
   loginAsPetitioner,
 } from '../../../../helpers/authentication/login-as-helpers';
 import { logout } from '../../../../helpers/authentication/logout';
-import { petitionerCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
 
 /**
@@ -14,7 +15,7 @@ import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/pet
 describe('Docket clerk QC-ing a paper filing', () => {
   it('should see the document title was updated when they change the event code while QC-ing', () => {
     loginAsPetitioner();
-    petitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
       logout();
 
@@ -55,9 +56,11 @@ describe('Docket clerk QC-ing a paper filing', () => {
       cy.get('[data-testid="objections-No"').click();
 
       cy.get('[data-testid="upload-pdf-button"]').click();
-      cy.get('input#primaryDocumentFile-file').attachFile(
-        '../../helpers/file/sample.pdf',
-      );
+      attachFile({
+        filePath: '../../helpers/file/sample.pdf',
+        selector: 'input#primaryDocumentFile-file',
+        selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+      });
 
       cy.get('[data-testid="save-for-later"]').click();
       cy.get('[data-testid="success-alert"]').contains(

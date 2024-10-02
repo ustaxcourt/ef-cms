@@ -2,6 +2,7 @@ import { AddressLabel } from '../components/AddressLabel';
 import { CompressedDocketHeader } from '../components/CompressedDocketHeader';
 import { PrimaryHeader } from '../components/PrimaryHeader';
 import { RawContact } from '@shared/business/entities/contacts/Contact';
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import React from 'react';
 
 const StandardNOTRText = () => (
@@ -10,8 +11,8 @@ const StandardNOTRText = () => (
     and case management system, so that you can electronically file and view
     documents in your case. For more information about electronic service, email{' '}
     <strong>
-      <a href="mailto:dawson.support@ustaxcourt.gov">
-        dawson.support@ustaxcourt.gov
+      <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
+        {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
       </a>
     </strong>
     , and a letter with eAccess instructions will be mailed to the address of
@@ -31,8 +32,8 @@ const ElectronicServiceNOTRText = ({ accessCode, contact }) => (
     for your case at <strong>{contact.paperPetitionEmail}</strong>. You must
     verify your electronic service address by e-mailing{' '}
     <strong>
-      <a href="mailto:dawson.support@ustaxcourt.gov">
-        dawson.support@ustaxcourt.gov
+      <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
+        {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
       </a>
     </strong>{' '}
     with the subject line “E-Access Request” and include your docket number and
