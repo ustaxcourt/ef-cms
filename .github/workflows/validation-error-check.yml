@@ -1,0 +1,32 @@
+name: Validation Rule Change
+
+on:
+  pull_request:
+
+jobs:
+  DetectValidationRuleChange:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout USTC Staging
+        uses: actions/checkout@v4
+        with:
+          repository: ustaxcourt/ef-cms
+          ref: staging
+          path: stagingBranch
+      - name: Checkout current branch
+        uses: actions/checkout@v4
+        with:
+          path: branchToBeCompared
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.14.0'
+      - name: NPM Install in your branch
+        working-directory: ./branchToBeCompared
+        run: npm ci
+      - name: NPM Install in staging
+        working-directory: ./stagingBranch
+        run: npm ci
+      - name: Compare errors between your branch and staging
+        working-directory: ./branchToBeCompared
+        run: npx ts-node scripts/getEntityIdentifiers.ts

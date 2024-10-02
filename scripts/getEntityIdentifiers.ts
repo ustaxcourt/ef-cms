@@ -2,13 +2,11 @@ import { createValidationIdentifier } from '@shared/business/entities/cases/crea
 import fs from 'fs/promises';
 import path from 'path';
 
-async function getEntityIdentifiers() {
-  let entitiesFound = 0;
+export async function getEntityIdentifiers(
+  entitiesFolderLocation: string,
+): Promise<Map<string, string>> {
   const validationIdentityMap = new Map<string, string>();
-  const directoryPath = path.join(
-    process.cwd(),
-    './shared/src/business/entities',
-  );
+  const directoryPath = path.join(process.cwd(), entitiesFolderLocation);
   const files = await fs.readdir(directoryPath, { recursive: true });
 
   for (const file of files) {
@@ -29,15 +27,11 @@ async function getEntityIdentifiers() {
             const identifier = createValidationIdentifier(
               individualExport[key],
             );
-            entitiesFound++;
             validationIdentityMap.set(`${exportName}.${key}`, identifier);
           }
         });
       });
     }
   }
-  console.log(validationIdentityMap);
-  console.log(`Found ${entitiesFound} entities with validation rules.`);
+  return validationIdentityMap;
 }
-
-void getEntityIdentifiers();
