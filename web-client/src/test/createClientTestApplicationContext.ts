@@ -46,7 +46,6 @@ import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPa
 import { createCase } from '@web-api/persistence/dynamo/cases/createCase';
 import { createMockDocumentClient } from '@shared/business/test/createMockDocumentClient';
 import { deleteRecord } from '@web-api/persistence/elasticsearch/deleteRecord';
-import { deleteWorkItem } from '@web-api/persistence/dynamo/workitems/deleteWorkItem';
 import { filterEmptyStrings } from '@shared/business/utilities/filterEmptyStrings';
 import { formatAttachments } from '@shared/business/utilities/formatAttachments';
 import {
@@ -424,7 +423,6 @@ const createTestApplicationContext = () => {
     deleteKeyCount: jest.fn(),
     deleteLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
     deleteRecord: jest.fn().mockImplementation(deleteRecord),
-    deleteWorkItem: jest.fn(deleteWorkItem),
     fetchPendingItems: jest.fn(),
     getAllWebSocketConnections: jest
       .fn()

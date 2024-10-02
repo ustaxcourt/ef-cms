@@ -51,7 +51,6 @@ import { createCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { createDocketNumber } from '@web-api/persistence/dynamo/cases/docketNumberGenerator';
 import { createMockDocumentClient } from './createMockDocumentClient';
 import { deleteRecord } from '@web-api/persistence/elasticsearch/deleteRecord';
-import { deleteWorkItem } from '@web-api/persistence/dynamo/workitems/deleteWorkItem';
 import { documentUrlTranslator } from '@web-api/utilities/documentUrlTranslator';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { filterEmptyStrings } from '@shared/business/utilities/filterEmptyStrings';
@@ -472,7 +471,6 @@ export const createTestApplicationContext = () => {
     deleteKeyCount: jest.fn(),
     deleteLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
     deleteRecord: jest.fn().mockImplementation(deleteRecord),
-    deleteWorkItem: jest.fn(deleteWorkItem),
     fetchPendingItems: jest.fn(),
     getAllWebSocketConnections: jest
       .fn()

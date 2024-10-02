@@ -41,6 +41,10 @@ export function workItemEntity(workItem) {
       ...workItem,
       caseStatus: workItem.status,
       caseTitle: Case.getCaseTitle(workItem.caption),
+      completedAt: workItem.completedAt?.toISOString(),
+      createdAt: workItem.createdAt.toISOString(),
+      trialDate: workItem.trialDate?.toISOString(),
+      updatedAt: workItem.createdAt.toISOString(),
     }),
   );
 }
