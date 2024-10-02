@@ -1,5 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import '@web-api/persistence/postgres/workItem/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
