@@ -2,20 +2,20 @@ import {
   addOrderToDocketEntry,
   createOrder,
 } from '../../../../helpers/caseDetail/docketRecord/courtIssuedFiling/create-order-and-decision';
+import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import {
   loginAsDocketClerk1,
   loginAsPetitioner,
   loginAsPrivatePractitioner,
 } from '../../../../helpers/authentication/login-as-helpers';
-import { petitionerCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { retry } from '../../../../helpers/retry';
 
 describe('Private privatePractitioner', () => {
   it('should allow for searching for orders after serving them if not sealed', () => {
     loginAsPetitioner();
-    petitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
 
       loginAsDocketClerk1();
@@ -136,7 +136,7 @@ describe('Private privatePractitioner', () => {
 
   it('should not show orders in a sealed case to unassociated user in search results', () => {
     loginAsPetitioner();
-    petitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
 
       loginAsDocketClerk1();
@@ -181,7 +181,7 @@ describe('Private privatePractitioner', () => {
 
   it('should not show sealed orders in an unsealed case to unassociated user in search results', () => {
     loginAsPetitioner();
-    petitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
 
       loginAsDocketClerk1();
@@ -216,7 +216,7 @@ describe('Private privatePractitioner', () => {
 
   it('should show sealed-from-public orders in an unsealed case to associated user in search results', () => {
     loginAsPetitioner();
-    petitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
 
       loginAsDocketClerk1();
@@ -259,7 +259,7 @@ describe('Private privatePractitioner', () => {
 
   it('should not show sealed-from-all orders in an unsealed case to associated user in search results', () => {
     loginAsPetitioner();
-    petitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
 
       loginAsDocketClerk1();
