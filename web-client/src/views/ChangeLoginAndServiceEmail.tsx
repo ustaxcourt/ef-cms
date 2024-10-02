@@ -6,7 +6,7 @@ import { VerifyNewEmailModal } from './MyAccount/VerifyNewEmailModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { useState } from 'react';
 
 export const ChangeLoginAndServiceEmail = connect(
   {
@@ -19,6 +19,7 @@ export const ChangeLoginAndServiceEmail = connect(
     user: state.user,
     validateChangeLoginAndServiceEmailSequence:
       sequences.validateChangeLoginAndServiceEmailSequence,
+    validateEmailFormHelper: state.validateEmailFormHelper,
     validationErrors: state.validationErrors,
   },
   function ChangeLoginAndServiceEmail({
@@ -28,20 +29,20 @@ export const ChangeLoginAndServiceEmail = connect(
     submitChangeLoginAndServiceEmailSequence,
     updateFormValueSequence,
     user,
-    validateChangeLoginAndServiceEmailSequence,
-    validationErrors,
+    validateEmailFormHelper,
   }) {
+    const [inFocusEmail, setInFocusEmail] = useState(true);
+    const [inFocusConfirmEmail, setInFocusConfirmEmail] = useState(true);
+
     return (
       <React.Fragment>
         <BigHeader text={'Change Login & Service Email Address'} />
         <section className="usa-section grid-container">
           <ErrorNotification />
-
           <p>
             This is the email you will use to log in to the system and where you
             will receive service.
           </p>
-
           <div className="blue-container margin-bottom-5">
             <div className="grid-row margin-bottom-6">
               <div className="desktop:grid-col-3">
@@ -61,7 +62,11 @@ export const ChangeLoginAndServiceEmail = connect(
             </div>
             <div>
               <h4>Change Login & Service Email</h4>
-              <FormGroup errorText={validationErrors.email}>
+              <FormGroup
+                errorText={
+                  !inFocusEmail && validateEmailFormHelper.emailErrorMessage
+                }
+              >
                 <label className="usa-label" htmlFor="email">
                   New email address
                 </label>
@@ -73,16 +78,24 @@ export const ChangeLoginAndServiceEmail = connect(
                   name="email"
                   type="text"
                   value={form.email || ''}
-                  onBlur={() => validateChangeLoginAndServiceEmailSequence()}
+                  onBlur={() => {
+                    setInFocusEmail(false);
+                  }}
                   onChange={e =>
                     updateFormValueSequence({
                       key: e.target.name,
                       value: e.target.value,
                     })
                   }
+                  onFocus={() => setInFocusEmail(true)}
                 />
               </FormGroup>
-              <FormGroup errorText={validationErrors.confirmEmail}>
+              <FormGroup
+                errorText={
+                  !inFocusConfirmEmail &&
+                  validateEmailFormHelper.confirmEmailErrorMessage
+                }
+              >
                 <label className="usa-label" htmlFor="confirm-email">
                   Re-enter new email address
                 </label>
@@ -94,13 +107,14 @@ export const ChangeLoginAndServiceEmail = connect(
                   name="confirmEmail"
                   type="text"
                   value={form.confirmEmail || ''}
-                  onBlur={() => validateChangeLoginAndServiceEmailSequence()}
+                  onBlur={() => setInFocusConfirmEmail(false)}
                   onChange={e =>
                     updateFormValueSequence({
                       key: e.target.name,
                       value: e.target.value,
                     })
                   }
+                  onFocus={() => setInFocusConfirmEmail(true)}
                 />
               </FormGroup>
             </div>
@@ -122,7 +136,6 @@ export const ChangeLoginAndServiceEmail = connect(
             </div>
           </div>
         </section>
-
         {showModal === 'VerifyNewEmailModal' && <VerifyNewEmailModal />}
       </React.Fragment>
     );

@@ -1,13 +1,8 @@
 import { CompleteDocumentTypeSectionRemainder } from './CompleteDocumentTypeSectionRemainder';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { SelectDocumentWizardOverlay } from './SelectDocumentWizardOverlay';
-import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import {
-  fileDocumentPrimaryOnChange,
-  onInputChange,
-  reactSelectValue,
-} from '../../ustc-ui/Utils/documentTypeSelectHelper';
+import { reactSelectValue } from '../../ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -16,10 +11,8 @@ export const CompleteDocumentTypeSection = connect(
   {
     completeDocumentTypeSectionHelper: state.completeDocumentTypeSectionHelper,
     form: state.form,
-    showModal: state.modal.showModal,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
-    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     validateSelectDocumentTypeSequence:
       sequences.validateSelectDocumentTypeSequence,
     validationErrors: state.validationErrors,
@@ -27,9 +20,7 @@ export const CompleteDocumentTypeSection = connect(
   function CompleteDocumentTypeSection({
     completeDocumentTypeSectionHelper,
     form,
-    showModal,
     updateFileDocumentWizardFormValueSequence,
-    updateScreenMetadataSequence,
     validateSelectDocumentTypeSequence,
     validationErrors,
   }) {
@@ -52,8 +43,9 @@ export const CompleteDocumentTypeSection = connect(
 
           <SelectSearch
             aria-labelledby="document-type-label"
-            data-testid="document-type"
+            data-testid="complete-doc-document-type-search"
             id="document-type"
+            isClearable={true}
             name="eventCode"
             options={
               completeDocumentTypeSectionHelper.documentTypesForSelectSorted
@@ -63,30 +55,25 @@ export const CompleteDocumentTypeSection = connect(
                 completeDocumentTypeSectionHelper.documentTypesForSelectSorted,
               selectedEventCode: form.eventCode,
             })}
-            onChange={(inputValue, { action }) => {
-              fileDocumentPrimaryOnChange({
-                action,
-                inputValue,
-                updateSequence: updateFileDocumentWizardFormValueSequence,
-                validateSequence: validateSelectDocumentTypeSequence,
-              });
-              return true;
-            }}
-            onInputChange={(inputText, { action }) => {
-              onInputChange({
-                action,
-                inputText,
-                updateSequence: updateScreenMetadataSequence,
-              });
+            onChange={inputValue => {
+              [
+                'category',
+                'documentType',
+                'documentTitle',
+                'eventCode',
+                'scenario',
+              ].forEach(key =>
+                updateFileDocumentWizardFormValueSequence({
+                  key,
+                  value: inputValue ? inputValue[key] : '',
+                }),
+              );
+              validateSelectDocumentTypeSequence();
             }}
           />
         </FormGroup>
 
         <CompleteDocumentTypeSectionRemainder />
-
-        {showModal === 'SelectDocumentWizardOverlay' && (
-          <SelectDocumentWizardOverlay />
-        )}
       </React.Fragment>
     );
   },

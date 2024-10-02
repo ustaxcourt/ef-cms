@@ -2,7 +2,6 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { ErrorNotification } from '../ErrorNotification';
-import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { Hint } from '../../ustc-ui/Hint/Hint';
@@ -30,6 +29,7 @@ export const PaperFiling = connect(
     paperDocketEntryHelper: state.paperDocketEntryHelper,
     showModal: state.modal.showModal,
     submitPaperFilingSequence: sequences.submitPaperFilingSequence,
+    validateDocketEntrySequence: sequences.validateDocketEntrySequence,
   },
   function PaperFiling({
     closeModalAndReturnToCaseDetailSequence,
@@ -41,6 +41,7 @@ export const PaperFiling = connect(
     paperDocketEntryHelper,
     showModal,
     submitPaperFilingSequence,
+    validateDocketEntrySequence,
   }) {
     return (
       <>
@@ -133,15 +134,13 @@ export const PaperFiling = connect(
               <ScanBatchPreviewer
                 documentType="primaryDocumentFile"
                 title="Add Document"
+                validateSequence={validateDocketEntrySequence}
               />
             </div>
           </div>
         </section>
 
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
-        {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal confirmSequence={submitPaperFilingSequence} />
-        )}
         {showModal === 'ConfirmInitiatePaperFilingServiceModal' && (
           <ConfirmInitiateServiceModal
             confirmSequence={submitPaperFilingSequence}

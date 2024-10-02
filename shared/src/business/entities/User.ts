@@ -13,8 +13,21 @@ import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEnti
 import { formatPhoneNumber } from '../utilities/formatPhoneNumber';
 import joi from 'joi';
 
+export interface UserContact {
+  address1: string;
+  address2?: string;
+  address3?: string;
+  city: string;
+  country: string;
+  countryType: string;
+  phone: string;
+  postalCode: string;
+  state: string;
+}
+
 export class User extends JoiValidationEntity {
   public pendingEmailVerificationToken?: string;
+  public pendingEmailVerificationTokenTimestamp?: string;
   public email?: string;
   public name: string;
   public pendingEmail?: string;
@@ -22,21 +35,12 @@ export class User extends JoiValidationEntity {
   public token?: string;
   public userId: string;
   public isUpdatingInformation?: boolean;
-  public contact?: {
-    address1: string;
-    address2?: string;
-    address3?: string;
-    city: string;
-    country: string;
-    countryType: string;
-    phone: string;
-    postalCode: string;
-    state: string;
-  };
+  public contact?: UserContact;
   public judgeFullName?: string;
   public judgeTitle?: JudgeTitle;
   public section?: string;
   public isSeniorJudge?: boolean;
+  public judgePhoneNumber?: string;
 
   constructor(rawUser, { filtered = false } = {}) {
     super('User');
@@ -44,6 +48,8 @@ export class User extends JoiValidationEntity {
     if (!filtered) {
       this.pendingEmailVerificationToken =
         rawUser.pendingEmailVerificationToken;
+      this.pendingEmailVerificationTokenTimestamp =
+        rawUser.pendingEmailVerificationTokenTimestamp;
     }
 
     this.email = rawUser.email;
@@ -53,7 +59,20 @@ export class User extends JoiValidationEntity {
     this.token = rawUser.token;
     this.userId = rawUser.userId;
     this.isUpdatingInformation = rawUser.isUpdatingInformation;
-    if (rawUser.contact) {
+    this.setContactInformation(rawUser);
+    if (this.role === ROLES.judge || this.role === ROLES.legacyJudge) {
+      this.judgeFullName = rawUser.judgeFullName;
+      this.judgeTitle = rawUser.judgeTitle;
+      this.isSeniorJudge = rawUser.isSeniorJudge;
+    }
+
+    this.section = rawUser.section;
+  }
+
+  setContactInformation(rawUser) {
+    if ([ROLES.judge, ROLES.legacyJudge].includes(rawUser.role)) {
+      this.judgePhoneNumber = formatPhoneNumber(rawUser.judgePhoneNumber);
+    } else if (rawUser.contact) {
       this.contact = {
         address1: rawUser.contact.address1,
         address2: rawUser.contact.address2 ? rawUser.contact.address2 : null,
@@ -66,13 +85,6 @@ export class User extends JoiValidationEntity {
         state: rawUser.contact.state,
       };
     }
-    if (this.role === ROLES.judge || this.role === ROLES.legacyJudge) {
-      this.judgeFullName = rawUser.judgeFullName;
-      this.judgeTitle = rawUser.judgeTitle;
-      this.isSeniorJudge = rawUser.isSeniorJudge;
-    }
-
-    this.section = rawUser.section;
   }
 
   static USER_CONTACT_VALIDATION_RULES = {
@@ -138,6 +150,7 @@ export class User extends JoiValidationEntity {
       otherwise: joi.optional().allow(null),
       then: joi.required(),
     }),
+    judgePhoneNumber: JoiValidationConstants.STRING.max(100).optional(),
     judgeTitle: JoiValidationConstants.STRING.max(100).when('role', {
       is: ROLES.judge,
       otherwise: joi.optional().allow(null),

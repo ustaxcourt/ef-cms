@@ -14,7 +14,6 @@ export const validatePetitionerAction = ({
   applicationContext,
   get,
   path,
-  store,
 }: ActionProps) => {
   const { contact } = get(state.form);
   const caseDetail = get(state.caseDetail);
@@ -26,11 +25,9 @@ export const validatePetitionerAction = ({
       existingPetitioners: caseDetail.petitioners,
     });
 
-  store.set(state.validationErrors.contact, errors);
-
   if (isEmpty(errors)) {
     return path.success();
   } else {
-    return path.error({ errors });
+    return path.error({ errors: { contact: errors } });
   }
 };
