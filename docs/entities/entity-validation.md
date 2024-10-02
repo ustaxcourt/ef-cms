@@ -1,5 +1,9 @@
 Problem Statement: How can we detect when making validation changes to entities, we do not invalidate data in the database?
 
+What is the bigger problem
+  - Remembering to run a migration?
+  - Difficulty in knowing if your validation changes break existing data?
+
 # 1. Proactive Detection
 ## Generate a fingerprint of validation rules. Run validation when fingerprint changes.
  Strategy: Have a script which can scan a directory looking for entities, when an entity is found generate a hash of its validation rules and compare it with its previous validation rules hash, if a difference is detected in validation rules then run validation on all entities of that type in the DB. Fail the pipeline if validation does not pass.
@@ -26,6 +30,18 @@ Pros
 Cons
 - Requires us to have all entities in varied combinations being tested. Anything not within the tested examples will slip through the cracks.
 - Does not solve the problem of forgetting to update migration scripts as what if we forget to add more test cases to the contract tests?
+
+## Utility to validate the whole database or a portion of the database
+Strategy: Create individual scripts or processes that allows a devloper to scan a database and run all entities through validation to see what is and is not valid. 
+
+Pros
+- Allows devs to run real validation on data in test
+- Relatively simple to achieve
+
+Cons
+- Slow if validating the whole DB
+- You need to remember to run the utility
+
 
 # 2. Better Team Awareness
 ## Creating Folders for DB entities vs. non DB entities
