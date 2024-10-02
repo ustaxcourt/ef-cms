@@ -114,11 +114,11 @@ describe('filingPartiesFormHelper', () => {
     });
   });
 
-  describe('partyValidationError', () => {
+  describe('partyValidationCheckboxError', () => {
     it('should be undefined when none of the party validation errors exists', () => {
       const result = runCompute(filingPartiesFormHelper, { state: baseState });
 
-      expect(result.partyValidationError).toBeUndefined();
+      expect(result.partyValidationCheckboxError).toBeUndefined();
     });
 
     it('should be defined when validation errors include an entry for filers', () => {
@@ -129,7 +129,7 @@ describe('filingPartiesFormHelper', () => {
         },
       });
 
-      expect(result.partyValidationError).toBeDefined();
+      expect(result.partyValidationCheckboxError).toBeDefined();
     });
 
     it('should be defined when validation errors include an entry for irs practitioners', () => {
@@ -140,18 +140,7 @@ describe('filingPartiesFormHelper', () => {
         },
       });
 
-      expect(result.partyValidationError).toBeDefined();
-    });
-
-    it('should be defined when validation errors include an entry for other filing party', () => {
-      const result = runCompute(filingPartiesFormHelper, {
-        state: {
-          ...baseState,
-          validationErrors: { otherFilingParty: 'You did something bad.' },
-        },
-      });
-
-      expect(result.partyValidationError).toBeDefined();
+      expect(result.partyValidationCheckboxError).toBeDefined();
     });
   });
 
