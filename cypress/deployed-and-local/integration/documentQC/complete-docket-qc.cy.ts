@@ -1,12 +1,12 @@
 /* eslint-disable promise/no-nesting */
 import { assertExists, retry } from '../../../helpers/retry';
 import { attachSamplePdfFile } from '../../../helpers/file/upload-file';
+import { externalUserCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { goToCase } from '../../../helpers/caseDetail/go-to-case';
 import {
   loginAsAdmissionsClerk,
   loginAsPetitioner,
 } from '../../../helpers/authentication/login-as-helpers';
-import { petitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../helpers/documentQC/petitionsclerk-serves-petition';
 
 describe('Document QC Complete', () => {
@@ -15,14 +15,14 @@ describe('Document QC Complete', () => {
 
   before(() => {
     loginAsPetitioner();
-    petitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       cy.wrap(docketNumber).as('DOCKET_NUMBER');
       petitionsClerkServesPetition(docketNumber);
       petitionerFilesADocument(docketNumber);
     });
 
     loginAsPetitioner();
-    petitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       cy.wrap(docketNumber).as('UNSERVED_DOCKET_NUMBER');
     });
   });
