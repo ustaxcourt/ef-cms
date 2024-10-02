@@ -26,4 +26,4 @@ jobs:
         run: npm ci
       - name: Compare validation rules between your branch and staging
         working-directory: ./branchToBeCompared
-        run: npx ts-node scripts/getEntityIdentifiers.ts
+        run: npx ts-node --transpile-only scripts/validationRuleChangeDetection.ts
