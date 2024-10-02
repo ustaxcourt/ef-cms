@@ -32,26 +32,40 @@ async function main() {
     branchToBeComparedTypescriptOutput.stdout,
   );
 
-  JSON.parse(branchToBeComparedTypescriptOutput.stdout);
+  const yourBranchValidationMap = JSON.parse(
+    branchToBeComparedTypescriptOutput.stdout,
+  );
 
   // ************************************ Staging Validation Hash ***********************************
-  // console.log('Identifying staging branch...');
-  // const stagingValidationMap = await getEntityIdentifiers(
-  //   '../stagingBranch/shared/src/business/entities',
-  // );
-  // console.log('STAGING VALIDATION MAP:', stagingValidationMap);
+  console.log('Identifying staging branch...');
+  const stagingOutput = spawnSync(
+    'npx',
+    ['ts-node', '--transpile-only', 'scripts/getEntityIdentifiers.ts'],
+    {
+      cwd: '../stagingBranch',
+      encoding: 'utf-8',
+      maxBuffer: 1024 * 5000,
+    },
+  );
 
-  // if (branchToBeComparedErrorCount > stagingProjectErrorCount) {
-  //   console.log(
-  //     'ERROR: Your branch has more errors or the same number of errors as staging. Failing. :(',
-  //   );
-  //   process.exit(1);
-  // } else {
-  //   console.log(
-  //     'Yay! Your branch has fewer errors than staging. Thanks for making a better codebase!',
-  //   );
-  //   process.exit(0);
-  // }
+  console.log('STAGING VALIDATION MAP:', stagingOutput.stdout);
+
+  const stagingValidationMap = JSON.parse(stagingOutput.stdout);
+
+  const entitiesWithDifferentValidation: string[] = [];
+  Object.entries(stagingValidationMap).forEach(([entityName, hash]) => {
+    // eslint-disable-next-line security/detect-possible-timing-attacks
+    if (yourBranchValidationMap[entityName] !== hash) {
+      entitiesWithDifferentValidation.push(entityName);
+    }
+  });
+  if (entitiesWithDifferentValidation.length > 0) {
+    console.warn(
+      'Theses entities have different validation rules between your branch and staging. Please make sure this does not break existing data in the database. Run a migration if necessary.',
+      entitiesWithDifferentValidation,
+    );
+    process.exit(1);
+  }
 }
 
 void main();
