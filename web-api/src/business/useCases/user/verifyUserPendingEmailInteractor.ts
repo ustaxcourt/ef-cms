@@ -13,7 +13,7 @@ import { UnauthorizedError } from '../../../errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { updateUserPendingEmailRecord } from '@web-api/business/useCases/auth/changePasswordInteractor';
 
-export const TOKEN_EXPIRATION_TIME_HOURS = 1;
+export const TOKEN_EXPIRATION_TIME_HOURS = 24;
 
 export const userTokenHasExpired = (
   tokenExpirationTimestamp?: string,
