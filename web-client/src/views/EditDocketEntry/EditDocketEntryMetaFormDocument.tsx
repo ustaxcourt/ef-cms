@@ -6,7 +6,10 @@ import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from '../PaperFiling/SecondaryDocumentForm';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
+import {
+  onInputChange,
+  reactSelectValue,
+} from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -109,6 +112,13 @@ export const EditDocketEntryMetaFormDocument = connect(
               });
               validateDocumentSequence();
             }}
+            onInputChange={(inputText, { action }) => {
+              onInputChange({
+                action,
+                inputText,
+                updateSequence: validateDocumentSequence,
+              });
+            }}
           />
         </FormGroup>
         {editDocketEntryMetaHelper.primary.showSecondaryDocumentForm && (
@@ -147,6 +157,14 @@ export const EditDocketEntryMetaFormDocument = connect(
                   value,
                 });
                 validateDocumentSequence();
+              }}
+              onInputChange={(inputText, { action }) => {
+                onInputChange({
+                  action,
+                  inputText,
+                  updateSequence:
+                    updateDocketEntryMetaDocumentFormValueSequence,
+                });
               }}
             />
           </FormGroup>

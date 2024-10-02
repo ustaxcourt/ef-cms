@@ -6,7 +6,10 @@ import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from '../PaperFiling/SecondaryDocumentForm';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { reactSelectValue } from '../../ustc-ui/Utils/documentTypeSelectHelper';
+import {
+  onInputChange,
+  reactSelectValue,
+} from '../../ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
@@ -20,6 +23,7 @@ export const PrimaryDocumentForm = connect(
     internalTypesHelper: state.internalTypesHelper,
     updateDocketEntryFormValueSequence:
       sequences.updateDocketEntryFormValueSequence,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
@@ -30,6 +34,7 @@ export const PrimaryDocumentForm = connect(
     formatAndUpdateDateFromDatePickerSequence,
     internalTypesHelper,
     updateDocketEntryFormValueSequence,
+    updateScreenMetadataSequence,
     validateDocketEntrySequence,
     validationErrors,
   }) {
@@ -111,6 +116,13 @@ export const PrimaryDocumentForm = connect(
                 validateDocketEntrySequence();
                 return true;
               }}
+              onInputChange={(inputText, { action }) => {
+                onInputChange({
+                  action,
+                  inputText,
+                  updateSequence: updateScreenMetadataSequence,
+                });
+              }}
             />
           </FormGroup>
           {addDocketEntryHelper.primary.showSecondaryDocumentForm && (
@@ -152,6 +164,13 @@ export const PrimaryDocumentForm = connect(
                     value,
                   });
                   validateDocketEntrySequence();
+                }}
+                onInputChange={(inputText, { action }) => {
+                  onInputChange({
+                    action,
+                    inputText,
+                    updateSequence: updateScreenMetadataSequence,
+                  });
                 }}
               />
             </FormGroup>

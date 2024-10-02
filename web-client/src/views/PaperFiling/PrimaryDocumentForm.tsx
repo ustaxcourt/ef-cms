@@ -6,7 +6,10 @@ import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from './SecondaryDocumentForm';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
+import {
+  onInputChange,
+  reactSelectValue,
+} from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -21,6 +24,7 @@ export const PrimaryDocumentForm = connect(
     internalTypesHelper: state.internalTypesHelper,
     updateDocketEntryFormValueSequence:
       sequences.updateDocketEntryFormValueSequence,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
@@ -31,6 +35,7 @@ export const PrimaryDocumentForm = connect(
     formatAndUpdateDateFromDatePickerSequence,
     internalTypesHelper,
     updateDocketEntryFormValueSequence,
+    updateScreenMetadataSequence,
     validateDocketEntrySequence,
     validationErrors,
   }) {
@@ -116,7 +121,6 @@ export const PrimaryDocumentForm = connect(
               <br />
               or use the dropdown to select your document type.
             </span>
-
             <SelectSearch
               aria-label="document-type-label"
               data-testid="primary-document-type-search"
@@ -138,6 +142,15 @@ export const PrimaryDocumentForm = connect(
                 });
                 validateDocketEntrySequence();
                 return true;
+              }}
+              onInputChange={(inputText, { action }) => {
+                console.log('onInputChange.inputText', inputText);
+                console.log('onInputChange.action', action);
+                onInputChange({
+                  action,
+                  inputText,
+                  updateSequence: updateScreenMetadataSequence,
+                });
               }}
             />
           </FormGroup>
@@ -180,6 +193,13 @@ export const PrimaryDocumentForm = connect(
                   });
                   validateDocketEntrySequence();
                   return true;
+                }}
+                onInputChange={(inputText, { action }) => {
+                  onInputChange({
+                    action,
+                    inputText,
+                    updateSequence: updateScreenMetadataSequence,
+                  });
                 }}
               />
             </FormGroup>
