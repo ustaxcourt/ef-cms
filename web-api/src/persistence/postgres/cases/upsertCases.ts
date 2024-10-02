@@ -1,3 +1,4 @@
+import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getDbWriter } from '@web-api/database';
 
 export const upsertCases = async (rawCases: RawCase[]) => {
@@ -9,9 +10,13 @@ export const upsertCases = async (rawCases: RawCase[]) => {
     docketNumberSuffix: rawCase.docketNumberSuffix,
     leadDocketNumber: rawCase.leadDocketNumber,
     status: rawCase.status,
-    trialDate: rawCase.trialDate,
+    trialDate: rawCase.trialDate
+      ? calculateDate({ dateString: rawCase.trialDate })
+      : undefined,
     trialLocation: rawCase.trialLocation,
   }));
+
+  console.log('**** rawCases', rawCases);
 
   await getDbWriter(writer =>
     writer

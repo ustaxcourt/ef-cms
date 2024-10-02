@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
