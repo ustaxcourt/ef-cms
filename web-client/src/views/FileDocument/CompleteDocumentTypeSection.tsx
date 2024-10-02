@@ -3,7 +3,10 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { SelectDocumentWizardOverlay } from './SelectDocumentWizardOverlay';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { reactSelectValue } from '../../ustc-ui/Utils/documentTypeSelectHelper';
+import {
+  onInputChange,
+  reactSelectValue,
+} from '../../ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -15,6 +18,7 @@ export const CompleteDocumentTypeSection = connect(
     showModal: state.modal.showModal,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     validateSelectDocumentTypeSequence:
       sequences.validateSelectDocumentTypeSequence,
     validationErrors: state.validationErrors,
@@ -24,6 +28,7 @@ export const CompleteDocumentTypeSection = connect(
     form,
     showModal,
     updateFileDocumentWizardFormValueSequence,
+    updateScreenMetadataSequence,
     validateSelectDocumentTypeSequence,
     validationErrors,
   }) {
@@ -72,6 +77,13 @@ export const CompleteDocumentTypeSection = connect(
                 }),
               );
               validateSelectDocumentTypeSequence();
+            }}
+            onInputChange={(inputText, { action }) => {
+              onInputChange({
+                action,
+                inputText,
+                updateSequence: updateScreenMetadataSequence,
+              });
             }}
           />
         </FormGroup>

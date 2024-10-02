@@ -1,6 +1,38 @@
-import { reactSelectValue } from './documentTypeSelectHelper';
+import { onInputChange, reactSelectValue } from './documentTypeSelectHelper';
 
 describe('documentTypeSelectHelper', () => {
+  let updateSequenceSpy;
+
+  beforeEach(() => {
+    updateSequenceSpy = jest.fn();
+  });
+
+  describe('onInputChange', () => {
+    it('should call update sequence a single time if "action" is "input-change"', () => {
+      onInputChange({
+        action: 'input-change',
+        inputText: 'something',
+        updateSequence: updateSequenceSpy,
+      });
+
+      expect(updateSequenceSpy).toHaveBeenCalled();
+      expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
+        key: 'searchText',
+        value: 'something',
+      });
+    });
+
+    it('should not call update sequence if "action" is not "input-change"', () => {
+      onInputChange({
+        action: 'something-else',
+        inputText: 'something',
+        updateSequence: updateSequenceSpy,
+      });
+
+      expect(updateSequenceSpy).not.toHaveBeenCalled();
+    });
+  });
+
   describe('reactSelectValue', () => {
     const documentTypes = [
       {

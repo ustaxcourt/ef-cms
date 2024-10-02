@@ -1,6 +1,7 @@
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { onInputChange } from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -14,6 +15,7 @@ export const SessionAssignmentsForm = connect(
       state.getAllIrsPractitionersForSelectHelper,
     judges: state.judges,
     sessionAssignmentHelper: state.sessionAssignmentHelper,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
   },
@@ -23,6 +25,7 @@ export const SessionAssignmentsForm = connect(
     judges,
     sessionAssignmentHelper,
     TRIAL_SESSION_PROCEEDING_TYPES,
+    updateScreenMetadataSequence,
     updateTrialSessionFormDataSequence,
   }) {
     return (
@@ -199,6 +202,13 @@ export const SessionAssignmentsForm = connect(
                       value: inputValue[key],
                     }),
                   );
+                }}
+                onInputChange={(inputText, { action }) => {
+                  onInputChange({
+                    action,
+                    inputText,
+                    updateSequence: updateScreenMetadataSequence,
+                  });
                 }}
               />
             </FormGroup>
