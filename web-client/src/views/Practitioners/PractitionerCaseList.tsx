@@ -43,7 +43,7 @@ export function PractitionerCaseList({
                   <PractitionerCaseIcons formattedCase={item} />
                 </td>
                 <td>
-                  <CaseLink formattedCase={item} />
+                  <CaseLink formattedCase={item} target="_blank" />
                 </td>
                 <td>{`${item.caseTitle}`}</td>
                 {showStatus && <td>{`${item.status}`}</td>}
