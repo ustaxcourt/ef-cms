@@ -20,8 +20,8 @@ import {
   getBusinessDateInFuture,
   getDateFormat,
   getMonthDayYearInETObj,
+  isDateWithinGivenInterval,
   isStringISOFormatted,
-  isTodayWithinGivenInterval,
   isValidDateString,
   normalizeIsoDateRange,
   prepareDateFromString,
@@ -707,18 +707,12 @@ describe('DateHandler', () => {
     });
   });
 
-  describe('isTodayWithinGivenInterval', () => {
+  describe('isDateWithinGivenInterval', () => {
     it('should return false when the current date does not fall within the specified date time range', () => {
-      const mockPastStartDate = prepareDateFromString(
-        '10/10/2020',
-        FORMATS.MMDDYY,
-      );
-      const mockPastEndDate = prepareDateFromString(
-        '12/12/2020',
-        FORMATS.MMDDYY,
-      );
+      const mockPastStartDate = '2020-10-10T00:00:00.000Z';
+      const mockPastEndDate = '2020-12-12T00:00:00.000Z';
 
-      const result = isTodayWithinGivenInterval({
+      const result = isDateWithinGivenInterval({
         intervalEndDate: mockPastEndDate,
         intervalStartDate: mockPastStartDate,
       });
@@ -727,15 +721,19 @@ describe('DateHandler', () => {
     });
 
     it('should return true when the current date falls within the specified date time range', () => {
-      const mockPastStartDate = prepareDateFromString().minus({
-        ['days']: 2,
-      });
+      const mockPastStartDate = prepareDateFromString()
+        .minus({
+          ['days']: 2,
+        })
+        .toISO()!;
 
-      const mockPastEndDate = prepareDateFromString().plus({
-        ['days']: 2,
-      });
+      const mockPastEndDate = prepareDateFromString()
+        .plus({
+          ['days']: 2,
+        })
+        .toISO()!;
 
-      const result = isTodayWithinGivenInterval({
+      const result = isDateWithinGivenInterval({
         intervalEndDate: mockPastEndDate,
         intervalStartDate: mockPastStartDate,
       });

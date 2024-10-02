@@ -3,7 +3,7 @@ import {
   FORMATS,
   createISODateString,
   formatDateString,
-  isTodayWithinGivenInterval,
+  isDateWithinGivenInterval,
   prepareDateFromString,
 } from '../../utilities/DateHandler';
 import {
@@ -406,21 +406,27 @@ export class TrialSession extends JoiValidationEntity {
 
   setNoticeOfTrialReminderAlert() {
     const formattedStartDate = formatDateString(this.startDate, FORMATS.MMDDYY);
-    const trialStartDateString: any = prepareDateFromString(
+    const trialStartDateTime = prepareDateFromString(
       formattedStartDate,
       FORMATS.MMDDYY,
     );
-
-    this.isStartDateWithinNOTTReminderRange = isTodayWithinGivenInterval({
-      intervalEndDate: trialStartDateString.minus({
+    const intervalEndDate = trialStartDateTime
+      .minus({
         ['days']: 24, // luxon's interval end date is not inclusive
-      }),
-      intervalStartDate: trialStartDateString.minus({
+      })
+      .toISO()!;
+    const intervalStartDate = trialStartDateTime
+      .minus({
         ['days']: 34,
-      }),
+      })
+      .toISO()!;
+
+    this.isStartDateWithinNOTTReminderRange = isDateWithinGivenInterval({
+      intervalEndDate,
+      intervalStartDate,
     });
 
-    const thirtyDaysBeforeTrialInclusive: any = trialStartDateString.minus({
+    const thirtyDaysBeforeTrialInclusive: any = trialStartDateTime.minus({
       ['days']: 29,
     });
 

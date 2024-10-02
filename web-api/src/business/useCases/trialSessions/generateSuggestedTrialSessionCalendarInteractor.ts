@@ -1,18 +1,23 @@
 import {
   FORMATS,
   createISODateString,
+  formatDateString,
   getWeeksInRange,
+  isDateWithinGivenInterval,
 } from '@shared/business/utilities/DateHandler';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import {
+  RawTrialSession,
+  TrialSession,
+} from '@shared/business/entities/trialSessions/TrialSession';
+import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { assignSessionsToWeeks } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
@@ -98,13 +103,12 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   // and not closed.
 
   console.time('10275: Filter trial sessions time');
-  const specialSessions = sessions.filter(session => {
-    return (
-      session.sessionType === SESSION_TYPES.special &&
-      session.isCalendared &&
-      session.sessionStatus !== SESSION_STATUS_TYPES.closed
-    );
+  const specialSessions = getSpecialSessionsInTerm({
+    sessions,
+    termEndDate,
+    termStartDate,
   });
+
   console.timeEnd('10275: Filter trial sessions time');
   // Note (10275): storing trial session data differently would make for a more
   // efficient process of determining which cities were not visited within the
@@ -170,6 +174,31 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     bufferArray,
     message: 'Trial session calendar generated',
   };
+};
+
+export const getSpecialSessionsInTerm = ({
+  sessions,
+  termEndDate,
+  termStartDate,
+}: {
+  sessions: RawTrialSession[];
+  termEndDate: string;
+  termStartDate: string;
+}): RawTrialSession[] => {
+  return sessions.filter(session => {
+    const isSessionInTerm = isDateWithinGivenInterval({
+      date: session.startDate,
+      intervalEndDate: formatDateString(termEndDate, FORMATS.ISO),
+      intervalStartDate: formatDateString(termStartDate, FORMATS.ISO),
+    });
+
+    return (
+      session.sessionType === SESSION_TYPES.special &&
+      session.isCalendared &&
+      session.sessionStatus !== SESSION_STATUS_TYPES.closed &&
+      isSessionInTerm
+    );
+  });
 };
 
 export const getPreviousTwoTerms = (termStartDate: string) => {
