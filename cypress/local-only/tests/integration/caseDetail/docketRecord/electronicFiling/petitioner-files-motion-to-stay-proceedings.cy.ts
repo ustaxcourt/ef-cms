@@ -1,11 +1,11 @@
 import { attachFile } from '../../../../../../helpers/file/upload-file';
+import { externalUserCreatesElectronicCase } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { externalUserSearchesDocketNumber } from '../../../../../../helpers/advancedSearch/external-user-searches-docket-number';
 import { goToCase } from '../../../../../../helpers/caseDetail/go-to-case';
 import {
   loginAsDocketClerk1,
   loginAsPetitioner,
 } from '../../../../../../helpers/authentication/login-as-helpers';
-import { petitionerCreatesElectronicCase } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { selectTypeaheadInput } from '../../../../../../helpers/components/typeAhead/select-typeahead-input';
 
@@ -19,7 +19,7 @@ describe('Private Practitioner requests to represent a party to a case', () => {
     const primaryFilerName = 'John';
 
     loginAsPetitioner();
-    petitionerCreatesElectronicCase(primaryFilerName).then(docketNumber => {
+    externalUserCreatesElectronicCase(primaryFilerName).then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
 
       loginAsDocketClerk1();
@@ -84,7 +84,7 @@ describe('Private Practitioner requests to represent a party to a case', () => {
 describe('Petitioner files motion to lift stay of proceedings', () => {
   it('should show MLSP document type option and let us select it', () => {
     loginAsPetitioner();
-    petitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
       loginAsPetitioner();
       externalUserSearchesDocketNumber(docketNumber);

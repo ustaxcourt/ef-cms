@@ -28,7 +28,6 @@ describe('setMessageAsReadAction', () => {
       applicationContext.getUseCases().setMessageAsReadInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      docketNumber: '123-45',
       messageId: '123',
     });
     expect(result.state.notifications.unreadMessageCount).toBe(0);
@@ -52,7 +51,6 @@ describe('setMessageAsReadAction', () => {
       applicationContext.getUseCases().setMessageAsReadInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      docketNumber: '123-45',
       messageId: '123',
     });
     expect(result.state.notifications.unreadMessageCount).toBe(undefined);

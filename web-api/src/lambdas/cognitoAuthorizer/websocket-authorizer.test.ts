@@ -1,14 +1,17 @@
-const { createLogger: actualCreateLogger } = jest.requireActual(
-  '../../../src/createLogger',
-);
-import { createLogger } from '../../createLogger';
 import { handler } from './websocket-authorizer';
-import { transports } from 'winston';
 import axios from 'axios';
-import fs from 'fs';
 import jwk from 'jsonwebtoken';
-jest.mock('../../../src/createLogger', () => {
-  return { createLogger: jest.fn() };
+
+const mockLogger = {
+  addContext: jest.fn(),
+  clearContext: jest.fn(),
+  info: jest.fn(),
+  warn: jest.fn(),
+};
+jest.mock('@web-api/utilities/logger/getLogger', () => {
+  return {
+    getLogger: () => mockLogger,
+  };
 });
 jest.mock('jsonwebtoken', () => {
   return {
@@ -47,18 +50,9 @@ describe('websocket-authorizer', () => {
     });
   };
 
-  let event, context, transport;
+  let event, context;
 
   beforeEach(() => {
-    transport = new transports.Stream({
-      stream: fs.createWriteStream('/dev/null'),
-    });
-
-    createLogger.mockImplementation(opts => {
-      opts.transports = [transport];
-      return actualCreateLogger(opts);
-    });
-
     event = {
       methodArn:
         'arn:aws:execute-api:us-east-1:aws-account-id:api-gateway-id/stage/GET/path',
@@ -75,7 +69,6 @@ describe('websocket-authorizer', () => {
     };
 
     jest.spyOn(axios, 'get');
-    jest.spyOn(transport, 'log');
 
     jwk.decode.mockReturnValue({
       header: { kid: 'key-identifier' },
@@ -88,12 +81,8 @@ describe('websocket-authorizer', () => {
 
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
 
-    expect(transport.log).toHaveBeenCalledWith(
-      expect.objectContaining({
-        level: expect.stringContaining('info'),
-        message: expect.stringContaining('No authorizationToken found'),
-      }),
-      expect.any(Function),
+    expect(mockLogger.info).toHaveBeenCalledWith(
+      'No authorizationToken found in the header',
     );
   });
 
@@ -104,15 +93,9 @@ describe('websocket-authorizer', () => {
 
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
 
-    expect(transport.log).toHaveBeenCalledWith(
-      expect.objectContaining({
-        level: expect.stringContaining('warning'),
-        message: expect.stringContaining(
-          'Could not fetch keys for token issuer',
-        ),
-        stack: expect.stringContaining('Error: any error'),
-      }),
-      expect.any(Function),
+    expect(mockLogger.warn).toHaveBeenCalledWith(
+      'Could not fetch keys for token issuer, considering request unauthorized',
+      new Error('any error'),
     );
   });
 
@@ -123,15 +106,9 @@ describe('websocket-authorizer', () => {
 
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
 
-    expect(transport.log).toHaveBeenCalledWith(
-      expect.objectContaining({
-        level: expect.stringContaining('warning'),
-        message: expect.stringContaining(
-          'Could not fetch keys for token issuer',
-        ),
-        stack: expect.any(String),
-      }),
-      expect.any(Function),
+    expect(mockLogger.warn).toHaveBeenCalledWith(
+      'Could not fetch keys for token issuer, considering request unauthorized',
+      expect.anything(),
     );
   });
 
@@ -144,17 +121,13 @@ describe('websocket-authorizer', () => {
 
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
 
-    expect(transport.log).toHaveBeenCalledWith(
+    expect(mockLogger.warn).toHaveBeenCalledWith(
+      'The key used to sign the authorization token was not found in the user pool’s keys, considering request unauthorized',
       expect.objectContaining({
         issuer: expect.any(String),
         keys: expect.any(Array),
-        level: expect.stringContaining('warning'),
-        message: expect.stringContaining(
-          'was not found in the user pool’s keys',
-        ),
         requestedKeyId: 'key-identifier',
       }),
-      expect.any(Function),
     );
   });
 
@@ -176,13 +149,9 @@ describe('websocket-authorizer', () => {
 
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
 
-    expect(transport.log).toHaveBeenCalledWith(
-      expect.objectContaining({
-        level: expect.stringContaining('warning'),
-        message: expect.stringContaining('token is not valid'),
-        stack: expect.stringContaining('Error: verification failed'),
-      }),
-      expect.any(Function),
+    expect(mockLogger.warn).toHaveBeenCalledWith(
+      'The token is not valid, considering request unauthorized',
+      expect.anything(),
     );
   });
 
@@ -208,14 +177,9 @@ describe('websocket-authorizer', () => {
       }),
     );
 
-    expect(transport.log).toHaveBeenCalledWith(
-      expect.objectContaining({
-        level: expect.stringContaining('info'),
-        message: expect.stringContaining('Request authorized'),
-        metadata: expect.objectContaining({ policy }),
-      }),
-      expect.any(Function),
-    );
+    expect(mockLogger.info).toHaveBeenCalledWith('Request authorized', {
+      metadata: { policy },
+    });
   });
 
   it('returns IAM policy to allow invoking requested lambda when authorized using the payload custom:userId', async () => {
@@ -240,14 +204,9 @@ describe('websocket-authorizer', () => {
       }),
     );
 
-    expect(transport.log).toHaveBeenCalledWith(
-      expect.objectContaining({
-        level: expect.stringContaining('info'),
-        message: expect.stringContaining('Request authorized'),
-        metadata: expect.objectContaining({ policy }),
-      }),
-      expect.any(Function),
-    );
+    expect(mockLogger.info).toHaveBeenCalledWith('Request authorized', {
+      metadata: { policy },
+    });
   });
 
   it('caches keys for issuers', async () => {
