@@ -1,4 +1,4 @@
-import '@web-api/persistence/postgres/workItem/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import {
