@@ -1,3 +1,7 @@
+provider "aws" {
+  region = var.region
+}
+
 resource "aws_ecr_repository" "docket_entry_zipper_repo" {
   name = "docket-entry-zipp`r-${var.environment}-${var.color}-${var.region}"
 }
