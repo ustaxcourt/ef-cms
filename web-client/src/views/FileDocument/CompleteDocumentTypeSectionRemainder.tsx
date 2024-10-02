@@ -1,12 +1,8 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { NonstandardForm } from './NonstandardForm';
-import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import {
-  fileDocumentSecondaryOnChange,
-  onInputChange,
-  reactSelectValue,
-} from '../../ustc-ui/Utils/documentTypeSelectHelper';
+import { reactSelectValue } from '../../ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -17,7 +13,6 @@ export const CompleteDocumentTypeSectionRemainder = connect(
     form: state.form,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
-    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     validateSelectDocumentTypeSequence:
       sequences.validateSelectDocumentTypeSequence,
     validationErrors: state.validationErrors,
@@ -26,7 +21,6 @@ export const CompleteDocumentTypeSectionRemainder = connect(
     completeDocumentTypeSectionHelper,
     form,
     updateFileDocumentWizardFormValueSequence,
-    updateScreenMetadataSequence,
     validateSelectDocumentTypeSequence,
     validationErrors,
   }) {
@@ -74,6 +68,7 @@ export const CompleteDocumentTypeSectionRemainder = connect(
                 aria-labelledby="secondary-document-type-label"
                 data-testid="secondary-doc-secondary-document-type"
                 id="secondary-doc-secondary-document-type"
+                isClearable={true}
                 name="secondaryDocument.eventCode"
                 options={
                   completeDocumentTypeSectionHelper.documentTypesForSecondarySelectSorted
@@ -84,21 +79,20 @@ export const CompleteDocumentTypeSectionRemainder = connect(
                     completeDocumentTypeSectionHelper.documentTypesForSecondarySelectSorted,
                   selectedEventCode: form.secondaryDocument.eventCode,
                 })}
-                onChange={(inputValue, { action }) => {
-                  fileDocumentSecondaryOnChange({
-                    action,
-                    inputValue,
-                    updateSequence: updateFileDocumentWizardFormValueSequence,
-                    validateSequence: validateSelectDocumentTypeSequence,
-                  });
-                  return true;
-                }}
-                onInputChange={(inputText, { action }) => {
-                  onInputChange({
-                    action,
-                    inputText,
-                    updateSequence: updateScreenMetadataSequence,
-                  });
+                onChange={inputValue => {
+                  [
+                    'category',
+                    'documentType',
+                    'documentTitle',
+                    'eventCode',
+                    'scenario',
+                  ].forEach(key =>
+                    updateFileDocumentWizardFormValueSequence({
+                      key: `secondaryDocument.${key}`,
+                      value: inputValue ? inputValue[key] : '',
+                    }),
+                  );
+                  validateSelectDocumentTypeSequence();
                 }}
               />
             </FormGroup>

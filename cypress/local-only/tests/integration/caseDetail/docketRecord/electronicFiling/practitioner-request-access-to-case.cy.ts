@@ -1,5 +1,9 @@
 import { addIntervenorAsPartyToCase } from '../../../../../../helpers/caseDetail/caseInformation/add-intervenor-to-case';
 import { attachSamplePdfFile } from '../../../../../../helpers/file/upload-file';
+import {
+  externalUserCreatesElectronicCase,
+  petitionerCreatesElectronicCaseWithSpouse,
+} from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { externalUserSearchesDocketNumber } from '../../../../../../helpers/advancedSearch/external-user-searches-docket-number';
 import { goToCase } from '../../../../../../helpers/caseDetail/go-to-case';
 import {
@@ -7,10 +11,6 @@ import {
   loginAsPetitioner,
   loginAsPrivatePractitioner,
 } from '../../../../../../helpers/authentication/login-as-helpers';
-import {
-  petitionerCreatesElectronicCase,
-  petitionerCreatesElectronicCaseWithSpouse,
-} from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { selectTypeaheadInput } from '../../../../../../helpers/components/typeAhead/select-typeahead-input';
 
@@ -32,7 +32,10 @@ describe('Private Practitioner requests to represent a party to a case', () => {
 
         cy.get('[data-testid="request-represent-a-party-button"]').click();
 
-        selectTypeaheadInput('document-type', 'Entry of Appearance');
+        selectTypeaheadInput(
+          'case-association-document-type-search',
+          'Entry of Appearance',
+        );
 
         cy.get(`[data-testid="filer-${primaryFilerName}, Petitioner"]`).click();
         cy.get(
@@ -58,7 +61,7 @@ describe('Private Practitioner requests to represent a party to a case', () => {
       const primaryFilerName = 'John';
 
       loginAsPetitioner();
-      petitionerCreatesElectronicCase(primaryFilerName).then(docketNumber => {
+      externalUserCreatesElectronicCase(primaryFilerName).then(docketNumber => {
         petitionsClerkServesPetition(docketNumber);
 
         loginAsDocketClerk1();
@@ -68,7 +71,10 @@ describe('Private Practitioner requests to represent a party to a case', () => {
         loginAsPrivatePractitioner();
         externalUserSearchesDocketNumber(docketNumber);
         cy.get('[data-testid="request-represent-a-party-button"]').click();
-        selectTypeaheadInput('document-type', 'Entry of Appearance');
+        selectTypeaheadInput(
+          'case-association-document-type-search',
+          'Entry of Appearance',
+        );
         cy.get(`[data-testid="filer-${primaryFilerName}, Petitioner"]`).click();
         cy.get('[data-testid="auto-generation"]').should('exist');
         cy.get('[data-testid="request-access-submit-document"]').click();
@@ -103,7 +109,10 @@ describe('Private Practitioner requests to represent a party to a case', () => {
 
         cy.get('[data-testid="request-represent-a-party-button"]').click();
 
-        selectTypeaheadInput('document-type', 'Entry of Appearance');
+        selectTypeaheadInput(
+          'case-association-document-type-search',
+          'Entry of Appearance',
+        );
 
         cy.get(`[data-testid="filer-${primaryFilerName}, Petitioner"]`).click();
         cy.get(

@@ -50264,7 +50264,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
-    "sessionStatus": "New",
+    "sessionStatus": "Open",
     "trialLocation": "Denver, Colorado",
     "proceedingType": "In Person",
     "createdAt": "2019-11-02T05:00:00.000Z",
@@ -50281,7 +50281,7 @@
     "startDate": "2019-12-02T05:00:00.000Z",
     "maxCases": 30,
     "trialSessionId": "0d943468-bc2e-4631-84e3-b084cf5b1fbb",
-    "isCalendared": false,
+    "isCalendared": true,
     "status": "Closed"
   },
   {
@@ -50816,11 +50816,6 @@
     "sk": "use-external-pdf-generation",
     "current": false,
     "pk": "use-external-pdf-generation"
-  },
-  {
-    "sk": "updated-petition-flow",
-    "current": true,
-    "pk": "updated-petition-flow"
   },
   {
     "sk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
