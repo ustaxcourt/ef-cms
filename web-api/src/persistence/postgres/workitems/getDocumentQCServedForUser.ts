@@ -7,7 +7,7 @@ export const getDocumentQCServedForUser = async ({
   userId,
 }: {
   userId: string;
-  afterDate: string;
+  afterDate: Date;
 }): Promise<WorkItem[]> => {
   const workItems = await getDbReader(reader => {
     return reader

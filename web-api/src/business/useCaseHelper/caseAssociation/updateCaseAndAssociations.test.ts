@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workItem/mocks.jest';
 jest.mock('@shared/business/entities/Message.ts');
 jest.mock('@shared/business/entities/CaseDeadline');
 jest.mock('@web-api/persistence/postgres/messages/getMessagesByDocketNumber');

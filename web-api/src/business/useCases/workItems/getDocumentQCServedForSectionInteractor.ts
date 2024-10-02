@@ -8,7 +8,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
-  calculateISODate,
+  calculateDate,
   createISODateAtStartOfDayEST,
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import { getDocumentQCServedForSection } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForSection';
@@ -62,7 +62,7 @@ export const calculateAfterDate = async applicationContext => {
   daysToRetrieve = Math.abs(daysToRetrieve);
 
   const startOfDay = createISODateAtStartOfDayEST();
-  const afterDate = calculateISODate({
+  const afterDate = calculateDate({
     dateString: startOfDay,
     howMuch: daysToRetrieve * -1,
     units: 'days',
