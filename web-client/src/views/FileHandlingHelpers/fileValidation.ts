@@ -22,12 +22,12 @@ export interface FileValidationResponse {
   errorInformation?: FileValidationErrorInfo;
 }
 
-function getFileExtension(filename: string) {
+export const getFileExtension = (filename: string) => {
   // Shift to avoid -1 - 1 = -2 in the case of no period
   return filename
     .slice(((filename.lastIndexOf('.') - 1) >>> 0) + 1)
     .toLowerCase();
-}
+};
 
 // Including the article to avoid worrying about a/an logic
 const fileExtensionDisplayNames = {
