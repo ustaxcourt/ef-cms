@@ -20,6 +20,7 @@ export const PrimaryDocumentForm = connect(
     internalTypesHelper: state.internalTypesHelper,
     updateDocketEntryFormValueSequence:
       sequences.updateDocketEntryFormValueSequence,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
@@ -30,6 +31,7 @@ export const PrimaryDocumentForm = connect(
     formatAndUpdateDateFromDatePickerSequence,
     internalTypesHelper,
     updateDocketEntryFormValueSequence,
+    updateScreenMetadataSequence,
     validateDocketEntrySequence,
     validationErrors,
   }) {
@@ -111,6 +113,12 @@ export const PrimaryDocumentForm = connect(
                 validateDocketEntrySequence();
                 return true;
               }}
+              onInputChange={inputText => {
+                updateScreenMetadataSequence({
+                  key: 'searchText',
+                  value: inputText,
+                });
+              }}
             />
           </FormGroup>
           {addDocketEntryHelper.primary.showSecondaryDocumentForm && (
@@ -152,6 +160,12 @@ export const PrimaryDocumentForm = connect(
                     value,
                   });
                   validateDocketEntrySequence();
+                }}
+                onInputChange={inputText => {
+                  updateScreenMetadataSequence({
+                    key: 'searchText',
+                    value: inputText,
+                  });
                 }}
               />
             </FormGroup>

@@ -140,6 +140,12 @@ export const CourtIssuedDocketEntry = connect(
                       );
                       validateCourtIssuedDocketEntrySequence();
                     }}
+                    onInputChange={inputText => {
+                      updateCourtIssuedDocketEntryFormValueSequence({
+                        key: 'searchText',
+                        value: inputText,
+                      });
+                    }}
                   />
                 </FormGroup>
 

@@ -83,6 +83,12 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
                 );
                 validateCourtIssuedDocketEntrySequence();
               }}
+              onInputChange={inputText => {
+                updateCourtIssuedDocketEntryFormValueSequence({
+                  key: 'searchText',
+                  value: inputText,
+                });
+              }}
             />
           )}
           {!addCourtIssuedDocketEntryHelper.showDocumentTypeDropdown && (

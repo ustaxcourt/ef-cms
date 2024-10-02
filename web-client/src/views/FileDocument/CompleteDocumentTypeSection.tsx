@@ -13,6 +13,7 @@ export const CompleteDocumentTypeSection = connect(
     form: state.form,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     validateSelectDocumentTypeSequence:
       sequences.validateSelectDocumentTypeSequence,
     validationErrors: state.validationErrors,
@@ -21,6 +22,7 @@ export const CompleteDocumentTypeSection = connect(
     completeDocumentTypeSectionHelper,
     form,
     updateFileDocumentWizardFormValueSequence,
+    updateScreenMetadataSequence,
     validateSelectDocumentTypeSequence,
     validationErrors,
   }) {
@@ -69,6 +71,12 @@ export const CompleteDocumentTypeSection = connect(
                 }),
               );
               validateSelectDocumentTypeSequence();
+            }}
+            onInputChange={inputText => {
+              updateScreenMetadataSequence({
+                key: 'searchText',
+                value: inputText,
+              });
             }}
           />
         </FormGroup>

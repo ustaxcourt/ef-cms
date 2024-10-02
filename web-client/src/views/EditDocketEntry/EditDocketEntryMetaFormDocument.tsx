@@ -109,6 +109,12 @@ export const EditDocketEntryMetaFormDocument = connect(
               });
               validateDocumentSequence();
             }}
+            onInputChange={inputText => {
+              validateDocumentSequence({
+                key: 'searchText',
+                value: inputText,
+              });
+            }}
           />
         </FormGroup>
         {editDocketEntryMetaHelper.primary.showSecondaryDocumentForm && (
@@ -147,6 +153,12 @@ export const EditDocketEntryMetaFormDocument = connect(
                   value,
                 });
                 validateDocumentSequence();
+              }}
+              onInputChange={inputText => {
+                updateDocketEntryMetaDocumentFormValueSequence({
+                  key: 'searchText',
+                  value: inputText,
+                });
               }}
             />
           </FormGroup>
