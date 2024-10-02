@@ -1,4 +1,4 @@
-import { getEntityIdentifiers } from 'scripts/getEntityIdentifiers';
+import { spawnSync } from 'child_process';
 
 /*
  This script is meant to be run in a CI machine and compare the number of type errors your branch has with staging.
@@ -18,17 +18,28 @@ import { getEntityIdentifiers } from 'scripts/getEntityIdentifiers';
 async function main() {
   // ************************************ Your Branch Validation Hash ***********************************
   console.log('Identifying your branch...');
-  const yourBranchValidationMap = await getEntityIdentifiers(
-    './shared/src/business/entities',
+  const branchToBeComparedTypescriptOutput = spawnSync(
+    'npx',
+    ['ts-node', '--transpile-only', 'scripts/getEntityIdentifiers.ts'],
+    {
+      encoding: 'utf-8',
+      maxBuffer: 1024 * 5000,
+    },
   );
-  console.log('YOUR BRANCH VALIDATION MAP:', yourBranchValidationMap);
+
+  console.log(
+    'YOUR BRANCH VALIDATION MAP:',
+    branchToBeComparedTypescriptOutput.stdout,
+  );
+
+  JSON.parse(branchToBeComparedTypescriptOutput.stdout);
 
   // ************************************ Staging Validation Hash ***********************************
-  console.log('Identifying staging branch...');
-  const stagingValidationMap = await getEntityIdentifiers(
-    '../stagingBranch/shared/src/business/entities',
-  );
-  console.log('STAGING VALIDATION MAP:', stagingValidationMap);
+  // console.log('Identifying staging branch...');
+  // const stagingValidationMap = await getEntityIdentifiers(
+  //   '../stagingBranch/shared/src/business/entities',
+  // );
+  // console.log('STAGING VALIDATION MAP:', stagingValidationMap);
 
   // if (branchToBeComparedErrorCount > stagingProjectErrorCount) {
   //   console.log(
