@@ -198,25 +198,6 @@ Rather than running using the pre-defined NPM scripts, you may want to try a  di
 
 At one point in this project, our team agreed to comprehensively manually test our system on a quarterly basis.  We have a [Testing Matrix Google Sheet](https://docs.google.com/spreadsheets/d/1FUHKC_YrT-PosaWD5gRVmsDzI1HS_U-8CyMIb-qX9EA) which outlines a variety of different scenarios and the expected outcomes.  I'd recommend trying to at least read through *some* of this test matrix since it will give you good insight into many of the business rules our system needs to abide by.
 
-## Load Testing
-
-!> We instead use Artillery to do load testing. Check out the `Performance Testing` section below for more information.
-
-In the past, we found that large amounts of traffic to order and opinion search was causing our Elasticsearch cluster to become overwhelmed and unstable.  In order to verify that our application can handle the load of various requests, a load testing runner was setup using [Gatling](https://gatling.io/).  This load testing tool is written in Groovy which is why we keep it separate from our main repo.  
-
-See [ustaxcourt/ef-cms-load-tests](https://github.com/ustaxcourt/ef-cms-load-tests) for Gatling load tests.
-
-## Performance Testing
-
-Similar to the load testing mentioned above, we run performance testing against Dawson using [Artillery](https://www.artillery.io/).  This tool is based on Javascript, is set up using .yml files, and is easier to read and understand than the Java based [gatling](https://gatling.io/) tool. 
-
-To run the performance tests, you can run one of the following:
-
-- `npm run test:performance` (runs the ./artillery/private-app.yml file)
-- `npm run test:performance:order` (runs the ./artillery/private-advanced-order.yml file)
-
-Each lower environment's ElasticSearch cluster indices' replica count is 0.  If you want to performance test these lower environments, set the `OVERRIDE_ES_NUMBER_OF_REPLICAS` to the production count in AWS Secrets Manager and redeploy the environment beforehand.
-
 ## Testing / Coverage Tips
 
 You can put the following command into your .bashrc file to have code coverage display when running unit tests individually:
