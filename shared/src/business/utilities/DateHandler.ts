@@ -563,23 +563,31 @@ export const getBusinessDateInFuture = ({
   return laterDate.toFormat(FORMATS.MONTH_DAY_YEAR);
 };
 
-/**
- * Returns whether or not the current date falls within the given date time range
- * @param {string} intervalStartDate the interval start ISO date string
- * @param {string} intervalEndDate the interval end ISO date string
- * @returns {boolean} whether or not the current date falls within the given date time range
- */
-export const isTodayWithinGivenInterval = ({
+type IsoDateString = string;
+export const isDateWithinGivenInterval = ({
+  date = createISODateString(),
   intervalEndDate,
   intervalStartDate,
+}: {
+  date?: IsoDateString;
+  intervalEndDate: IsoDateString;
+  intervalStartDate: IsoDateString;
 }): boolean => {
-  const today = DateTime.now().setZone(USTC_TZ);
-  const dateRangeInterval = Interval.fromDateTimes(
+  const dateToCheck = prepareDateFromString(date, FORMATS.ISO);
+  const intervalStartDateTime = prepareDateFromString(
     intervalStartDate,
+    FORMATS.ISO,
+  );
+  const intervalEndDateTime = prepareDateFromString(
     intervalEndDate,
+    FORMATS.ISO,
+  );
+  const dateRangeInterval = Interval.fromDateTimes(
+    intervalStartDateTime,
+    intervalEndDateTime,
   );
 
-  return dateRangeInterval.contains(today);
+  return dateRangeInterval.contains(dateToCheck);
 };
 
 export type IsoDateRange = {
@@ -607,8 +615,6 @@ export const isValidReconciliationDate = dateString => {
   const dateInputValid = isValidISODate(dateString);
   const todayDate = formatNow(FORMATS.YYYYMMDD);
   const dateLessthanOrEqualToToday = dateString <= todayDate;
-  // console.log(`dateInputValid: ${dateInputValid}`);
-  // console.log(`dateLessthanOrEqualToToday: ${dateLessthanOrEqualToToday}`);
   return dateInputValid && dateLessthanOrEqualToToday;
 };
 
