@@ -10,7 +10,7 @@ import {
   getDocumentQCServedForSectionInteractor,
 } from './getDocumentQCServedForSectionInteractor';
 import {
-  calculateISODate,
+  calculateDate,
   createISODateAtStartOfDayEST,
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import {
@@ -169,7 +169,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
     });
 
     it('should get a date that is five days ago', async () => {
-      const expected = calculateISODate({
+      const expected = calculateDate({
         dateString: startOfDay,
         howMuch: -5,
         units: 'days',
@@ -180,7 +180,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
 
     it('should get a date that is seven days ago', async () => {
       mockDaysToRetrieve = 7;
-      const expected = calculateISODate({
+      const expected = calculateDate({
         dateString: startOfDay,
         howMuch: -7,
         units: 'days',
@@ -191,7 +191,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
 
     it('should get a date that is twelve days ago', async () => {
       mockDaysToRetrieve = 12;
-      const expected = calculateISODate({
+      const expected = calculateDate({
         dateString: startOfDay,
         howMuch: -12,
         units: 'days',
@@ -202,7 +202,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
 
     it('should get a date that is seven (default) days ago', async () => {
       mockDaysToRetrieve = 'twelve';
-      const expected = calculateISODate({
+      const expected = calculateDate({
         dateString: startOfDay,
         howMuch: -7,
         units: 'days',

@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/workItem/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,

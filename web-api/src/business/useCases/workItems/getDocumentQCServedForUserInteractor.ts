@@ -7,11 +7,11 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
-import { getDocumentQCServedForUser } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForUser';
 import {
-  calculateISODate,
+  calculateDate,
   createISODateAtStartOfDayEST,
 } from '@shared/business/utilities/DateHandler';
+import { getDocumentQCServedForUser } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForUser';
 
 /**
  *
@@ -30,15 +30,15 @@ export const getDocumentQCServedForUserInteractor = async (
   }
 
   const startOfDay = createISODateAtStartOfDayEST();
-  const afterDate = calculateISODate({
+  const afterDate = calculateDate({
     dateString: startOfDay,
     howMuch: -7,
     units: 'days',
   });
 
   const workItems = await getDocumentQCServedForUser({
-    userId,
     afterDate,
+    userId,
   });
 
   const filteredWorkItems = workItems.filter(workItem =>
