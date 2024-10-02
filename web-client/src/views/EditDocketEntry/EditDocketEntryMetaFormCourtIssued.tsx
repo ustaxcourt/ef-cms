@@ -3,10 +3,7 @@ import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import {
-  onInputChange,
-  reactSelectValue,
-} from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
+import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -86,11 +83,10 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
                 );
                 validateCourtIssuedDocketEntrySequence();
               }}
-              onInputChange={(inputText, { action }) => {
-                onInputChange({
-                  action,
-                  inputText,
-                  updateSequence: updateCourtIssuedDocketEntryFormValueSequence,
+              onInputChange={inputText => {
+                updateCourtIssuedDocketEntryFormValueSequence({
+                  key: 'searchText',
+                  value: inputText,
                 });
               }}
             />

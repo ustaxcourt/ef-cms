@@ -6,10 +6,7 @@ import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from '../PaperFiling/SecondaryDocumentForm';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import {
-  onInputChange,
-  reactSelectValue,
-} from '../../ustc-ui/Utils/documentTypeSelectHelper';
+import { reactSelectValue } from '../../ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
@@ -116,11 +113,10 @@ export const PrimaryDocumentForm = connect(
                 validateDocketEntrySequence();
                 return true;
               }}
-              onInputChange={(inputText, { action }) => {
-                onInputChange({
-                  action,
-                  inputText,
-                  updateSequence: updateScreenMetadataSequence,
+              onInputChange={inputText => {
+                updateScreenMetadataSequence({
+                  key: 'searchText',
+                  value: inputText,
                 });
               }}
             />
@@ -165,11 +161,10 @@ export const PrimaryDocumentForm = connect(
                   });
                   validateDocketEntrySequence();
                 }}
-                onInputChange={(inputText, { action }) => {
-                  onInputChange({
-                    action,
-                    inputText,
-                    updateSequence: updateScreenMetadataSequence,
+                onInputChange={inputText => {
+                  updateScreenMetadataSequence({
+                    key: 'searchText',
+                    value: inputText,
                   });
                 }}
               />

@@ -2,10 +2,7 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { NonstandardForm } from './NonstandardForm';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import {
-  onInputChange,
-  reactSelectValue,
-} from '../../ustc-ui/Utils/documentTypeSelectHelper';
+import { reactSelectValue } from '../../ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -99,11 +96,10 @@ export const CompleteDocumentTypeSectionRemainder = connect(
                   );
                   validateSelectDocumentTypeSequence();
                 }}
-                onInputChange={(inputText, { action }) => {
-                  onInputChange({
-                    action,
-                    inputText,
-                    updateSequence: updateScreenMetadataSequence,
+                onInputChange={inputText => {
+                  updateScreenMetadataSequence({
+                    key: 'searchText',
+                    value: inputText,
                   });
                 }}
               />
