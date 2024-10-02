@@ -77,7 +77,7 @@ import {
   compareCasesByDocketNumber,
   formatCaseForTrialSession,
   getFormattedTrialSessionDetails,
-} from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
+} from '../../shared/src/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import {
   compareISODateStrings,
   compareStrings,
@@ -107,6 +107,7 @@ import { deleteTrialSessionInteractor } from '../../shared/src/proxies/trialSess
 import { deleteUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteUserCaseNoteProxy';
 import { dismissNOTTReminderForTrialInteractor } from '../../shared/src/proxies/trialSessions/dismissNOTTReminderForTrialProxy';
 import { downloadCsv } from '@web-client/presenter/utilities/downloadCsv';
+import { downloadXlsx } from '@web-client/presenter/utilities/downloadXlsx';
 import { editPaperFilingInteractor } from '../../shared/src/proxies/documents/editPaperFilingProxy';
 import { editPractitionerDocumentInteractor } from '../../shared/src/proxies/practitioners/editPractitionerDocumentProxy';
 import { exportPendingReportInteractor } from '@shared/proxies/pendingItems/exportPendingReportProxy';
@@ -149,6 +150,7 @@ import { generatePrintableFilingReceiptInteractor } from '../../shared/src/proxi
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
 import { generatePrintableTrialSessionCopyReportInteractor } from '../../shared/src/proxies/trialSessions/generatePrintableTrialSessionCopyReportProxy';
 import { generateSignedDocumentInteractor } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
+import { generateSuggestedTrialSessionCalendarInteractor } from '@shared/proxies/trialSessions/generateSuggestedTrialSessionCalendarProxy';
 import { generateTrialCalendarPdfInteractor } from '../../shared/src/proxies/trialSessions/generateTrialCalendarPdfProxy';
 import { getAllFeatureFlagsInteractor } from '../../shared/src/proxies/featureFlag/getAllFeatureFlagsProxy';
 import { getAllUsersByRoleInteractor } from '@shared/proxies/users/getAllUsersByRoleProxy';
@@ -208,6 +210,7 @@ import { getPdfFromUrl } from '@web-client/persistence/s3/getPdfFromUrl';
 import { getPdfFromUrlInteractor } from '../../shared/src/business/useCases/document/getPdfFromUrlInteractor';
 import { getPendingMotionDocketEntriesForCurrentJudgeInteractor } from '@shared/proxies/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeProxy';
 import { getPractitionerByBarNumberInteractor } from '../../shared/src/proxies/users/getPractitionerByBarNumberProxy';
+import { getPractitionerCasesInteractor } from '@shared/proxies/practitioners/getPractitionerCasesProxy';
 import { getPractitionerDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getPractitionerDocumentDownloadUrlProxy';
 import { getPractitionerDocumentInteractor } from '../../shared/src/proxies/getPractitionerDocumentProxy';
 import { getPractitionerDocumentsInteractor } from '../../shared/src/proxies/practitioners/getPractitionerDocumentsProxy';
@@ -345,12 +348,10 @@ import { validatePdfInteractor } from '../../shared/src/proxies/documents/valida
 import { validatePenaltiesInteractor } from '../../shared/src/business/useCases/validatePenaltiesInteractor';
 import { validatePetitionFromPaperInteractor } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
 import { validatePetitionInteractor } from '../../shared/src/business/useCases/validatePetitionInteractor';
-import { validatePetitionerInformationFormInteractor } from '../../shared/src/business/useCases/validatePetitionerInformationFormInteractor';
 import { validatePetitionerInteractor } from '../../shared/src/business/useCases/validatePetitionerInteractor';
 import { validatePractitionerInteractor } from '../../shared/src/business/useCases/practitioners/validatePractitionerInteractor';
 import { validateSearchDeadlinesInteractor } from '../../shared/src/business/useCases/validateSearchDeadlinesInteractor';
 import { validateStampInteractor } from '../../shared/src/business/useCases/stampMotion/validateStampInteractor';
-import { validateStartCaseWizardInteractor } from '../../shared/src/business/useCases/startCase/validateStartCaseWizardInteractor';
 import { validateTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
 import { validateUpdateUserEmailInteractor } from '../../shared/src/business/useCases/validateUpdateUserEmailInteractor';
 import { validateUserContactInteractor } from '../../shared/src/business/useCases/users/validateUserContactInteractor';
@@ -438,6 +439,7 @@ const allUseCases = {
   generatePrintablePendingReportInteractor,
   generatePrintableTrialSessionCopyReportInteractor,
   generateSignedDocumentInteractor,
+  generateSuggestedTrialSessionCalendarInteractor,
   generateTrialCalendarPdfInteractor,
   getAllFeatureFlagsInteractor,
   getAllUsersByRoleInteractor,
@@ -480,6 +482,7 @@ const allUseCases = {
   getPdfFromUrlInteractor,
   getPendingMotionDocketEntriesForCurrentJudgeInteractor,
   getPractitionerByBarNumberInteractor,
+  getPractitionerCasesInteractor,
   getPractitionerDocumentDownloadUrlInteractor,
   getPractitionerDocumentInteractor,
   getPractitionerDocumentsInteractor,
@@ -598,12 +601,10 @@ const allUseCases = {
   validatePenaltiesInteractor,
   validatePetitionFromPaperInteractor,
   validatePetitionInteractor,
-  validatePetitionerInformationFormInteractor,
   validatePetitionerInteractor,
   validatePractitionerInteractor,
   validateSearchDeadlinesInteractor,
   validateStampInteractor,
-  validateStartCaseWizardInteractor,
   validateTrialSessionInteractor,
   validateUpdateUserEmailInteractor,
   validateUserContactInteractor,
@@ -735,6 +736,7 @@ const applicationContext = {
       dateStringsCompared,
       deconstructDate,
       downloadCsv,
+      downloadXlsx,
       filterEmptyStrings,
       formatAttachments,
       formatCase,

@@ -11,7 +11,7 @@ import {
   createISODateString,
   dateStringsCompared,
 } from '@shared/business/utilities/DateHandler';
-import { createLogger } from '@web-api/createLogger';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { migrationsToRun } from './migrationsToRun';
 import { migrateItems as validationMigration } from './migrations/0000-validate-all-items';
 import promiseRetry from 'promise-retry';
@@ -150,19 +150,16 @@ export const processItems = async (
 };
 
 export const handler: Handler = async (event: SQSEvent, context: Context) => {
-  const applicationContext = createApplicationContext(
-    {},
-    createLogger({
-      defaultMeta: {
-        environment: {
-          stage: process.env.STAGE || 'local',
-        },
-        requestId: {
-          lambda: context.awsRequestId,
-        },
-      },
-    }),
-  );
+  const applicationContext = createApplicationContext();
+  getLogger().clearContext();
+  getLogger().addContext({
+    environment: {
+      stage: process.env.STAGE || 'local',
+    },
+    requestId: {
+      lambda: context.awsRequestId,
+    },
+  });
   const { Records } = event;
   const { body, receiptHandle } = Records[0];
   const { segment, totalSegments } = JSON.parse(body);

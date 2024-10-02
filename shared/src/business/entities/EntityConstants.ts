@@ -91,9 +91,6 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   ENTITY_LOCKING_FEATURE_FLAG: {
     key: 'entity-locking-feature-flag',
   },
-  UPDATED_PETITION_FLOW: {
-    key: 'updated-petition-flow',
-  },
   USE_CHANGE_OF_ADDRESS_LAMBDA: {
     disabledMessage:
       'A flag to know when to use the change of address lambda for processing.',
@@ -1341,11 +1338,22 @@ export const TRIAL_CITY_STRINGS = SMALL_CITIES.map(
   trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
 );
 
+export const REGULAR_TRIAL_CITY_STRINGS = COMMON_CITIES.map(
+  trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
+);
+
 export const LEGACY_TRIAL_CITY_STRINGS = LEGACY_TRIAL_CITIES.map(
   trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
 );
 
 export const SESSION_TERMS = ['Winter', 'Fall', 'Spring', 'Summer'];
+
+export const SESSION_TERMS_BY_MONTH = {
+  fall: [9, 10, 11, 12],
+  spring: [4, 5, 6],
+  summer: [7, 8],
+  winter: [1, 2, 3],
+};
 
 export const SESSION_TYPES = {
   regular: 'Regular',

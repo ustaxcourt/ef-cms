@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,

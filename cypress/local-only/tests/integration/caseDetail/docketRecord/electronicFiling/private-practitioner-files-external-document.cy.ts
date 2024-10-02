@@ -1,10 +1,10 @@
 import { attachSamplePdfFile } from '../../../../../../helpers/file/upload-file';
+import { externalUserCreatesElectronicCase } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { externalUserSearchesDocketNumber } from '../../../../../../helpers/advancedSearch/external-user-searches-docket-number';
 import {
   loginAsPetitioner,
   loginAsPrivatePractitioner,
 } from '../../../../../../helpers/authentication/login-as-helpers';
-import { petitionerCreatesElectronicCase } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { selectTypeaheadInput } from '../../../../../../helpers/components/typeAhead/select-typeahead-input';
 
@@ -14,19 +14,25 @@ describe('Private practitioner files document on case they are already associate
       const primaryFilerName = 'John';
 
       loginAsPetitioner();
-      petitionerCreatesElectronicCase(primaryFilerName).then(docketNumber => {
+      externalUserCreatesElectronicCase(primaryFilerName).then(docketNumber => {
         petitionsClerkServesPetition(docketNumber);
         loginAsPrivatePractitioner();
         externalUserSearchesDocketNumber(docketNumber);
 
         cy.get('[data-testid="request-represent-a-party-button"]').click();
-        selectTypeaheadInput('document-type', 'Entry of Appearance');
+        selectTypeaheadInput(
+          'case-association-document-type-search',
+          'Entry of Appearance',
+        );
         cy.get('[data-testid="filer-John, Petitioner"]').click();
         cy.get('[data-testid="request-access-submit-document"]').click();
         cy.get('[data-testid="submit-represent-a-party-button"]').click();
         cy.get('[data-testid="button-file-document"]').click();
         cy.get('[data-testid="ready-to-file"]').click();
-        selectTypeaheadInput('document-type', 'Motion for a New Trial');
+        selectTypeaheadInput(
+          'complete-doc-document-type-search',
+          'Motion for a New Trial',
+        );
         cy.get('[data-testid="submit-document"]').click();
         attachSamplePdfFile('primary-document');
         cy.get('[data-testid="primaryDocument-objections-No"]').click();
