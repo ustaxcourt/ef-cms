@@ -8,12 +8,12 @@ export interface Database {
 
 export interface MessageTable {
   attachments?: ColumnType<{ documentId: string }[], string, string>;
-  completedAt?: string;
+  completedAt?: Date;
   completedBy?: string;
   completedBySection?: string;
   completedByUserId?: string;
   completedMessage?: string;
-  createdAt: string;
+  createdAt: Date;
   docketNumber: string;
   from: string;
   fromSection: string;
@@ -41,7 +41,7 @@ export interface CaseTable {
   docketNumberSuffix?: string;
   leadDocketNumber?: string;
   status: string;
-  trialDate?: string;
+  trialDate?: Date;
   trialLocation?: string;
 }
 

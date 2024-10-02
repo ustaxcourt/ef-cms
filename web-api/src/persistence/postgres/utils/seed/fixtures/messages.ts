@@ -1,8 +1,10 @@
+import { NewMessageKysely } from '@web-api/database-types';
+
 /* eslint-disable @miovision/disallow-date/no-new-date */
-export const messages = [
+export const messages: NewMessageKysely[] = [
   {
     attachments: JSON.stringify([]),
-    createdAt: new Date('2020-06-05T18:02:25.280Z').toISOString(),
+    createdAt: new Date('2020-06-05T18:02:25.280Z'),
     docketNumber: '105-20',
     from: 'Test Petitionsclerk',
     fromSection: 'petitions',
@@ -24,7 +26,7 @@ export const messages = [
         documentId: '4796a931-14fb-43e6-948f-d2b67ce4c1cb',
       },
     ]),
-    createdAt: new Date('2023-06-02T21:15:50.105Z').toISOString(),
+    createdAt: new Date('2023-06-02T21:15:50.105Z'),
     docketNumber: '103-20',
     from: 'Test Admissions Clerk',
     fromSection: 'admissions',
@@ -46,7 +48,7 @@ export const messages = [
         documentId: '8ed9bad9-db58-43c8-b03f-c2e3ad92995f',
       },
     ]),
-    createdAt: new Date('2020-08-18T18:07:36.333Z').toISOString(),
+    createdAt: new Date('2020-08-18T18:07:36.333Z'),
     docketNumber: '104-19',
     from: 'Test Docketclerk',
     fromSection: 'docket',

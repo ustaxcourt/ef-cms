@@ -12,6 +12,7 @@ import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/message
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
+import { upsertCase } from '@web-api/persistence/postgres/cases/upsertCase';
 import diff from 'diff-arrays-of-objects';
 
 /**
@@ -71,16 +72,9 @@ const updateCaseDocketEntries = ({
   );
 };
 
-/**
- * Identifies case messages which have been updated and issues persistence calls
- * @param {object} args the arguments for updating the case
- * @param {object} args.applicationContext the application context
- * @param {object} args.caseToUpdate the case with its updated document data
- * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
- * @returns {Array<function>} the persistence functions required to complete this action
- */
 const updateCaseMessages = async ({
-  applicationContext,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  applicationContext, // cannot remove till remaining RELATED_CASE_OPERATIONS functions no longer use applicationContext
   caseToUpdate,
   oldCase,
 }) => {
@@ -94,7 +88,6 @@ const updateCaseMessages = async ({
   }
 
   const caseMessages = await getMessagesByDocketNumber({
-    applicationContext,
     docketNumber: caseToUpdate.docketNumber,
   });
 
@@ -478,6 +471,8 @@ export const updateCaseAndAssociations = async ({
   });
 
   await Promise.all(persistenceRequests);
+
+  await upsertCase({ rawCase: validRawCaseEntity });
 
   return applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
