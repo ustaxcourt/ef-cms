@@ -49,6 +49,7 @@ async function main() {
   );
 
   console.log('STAGING VALIDATION MAP:', stagingOutput.stdout);
+  console.log('STAGING error:', stagingOutput.stderr);
 
   const stagingValidationMap = JSON.parse(stagingOutput.stdout);
 
