@@ -228,7 +228,7 @@ describe('validateFile', () => {
     expect(validatePdf).toHaveBeenCalled();
   });
 
-  it('should not validate file type if skipFileTypeValidation is passed', async () => {
+  it('should not validate file type when skipFileTypeValidation is passed', async () => {
     const file = new File([], 'test.pdf', { type: 'application/pdf' });
     const allowedFileExtensions = ['.csv'];
     const megabyteLimit = 250;
@@ -284,7 +284,7 @@ describe('getFileExtension', () => {
   it('should get correct file extension when file has multiple periods', () => {
     expect(fileValidation.getFileExtension('test.pdf.txt')).toBe('.txt');
   });
-  it('should get no file extension for a file without a file extension', () => {
+  it('should get blank file extension for a file without a file extension', () => {
     expect(fileValidation.getFileExtension('test')).toBe('');
   });
 });
