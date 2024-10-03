@@ -224,4 +224,68 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
       total: 0,
     });
   });
+
+  it('should not count trial sessions whose start date is past the end date range', async () => {
+    const request = {
+      ...mockValidRequest,
+      endDate: '03/02/2020',
+      judges: [MOCK_TRIAL_REGULAR.judge?.name!],
+    };
+    const dayAfterTrialSession: RawTrialSession = {
+      ...MOCK_TRIAL_REGULAR,
+      startDate: '2020-03-03T00:00:00.000-05:00',
+    };
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessions.mockResolvedValue([dayAfterTrialSession]);
+
+    const result = await getTrialSessionsForJudgeActivityReportInteractor(
+      applicationContext,
+      request,
+      mockJudgeUser,
+    );
+
+    expect(result).toEqual({
+      aggregations: {
+        Hybrid: 0,
+        'Motion/Hearing': 0,
+        Regular: 0,
+        Small: 0,
+        Special: 0,
+      },
+      total: 0,
+    });
+  });
+
+  it('should not count trial sessions whose start date is before the start date range', async () => {
+    const request = {
+      ...mockValidRequest,
+      judges: [MOCK_TRIAL_REGULAR.judge?.name!],
+      startDate: '03/02/2020',
+    };
+    const dayAfterTrialSession: RawTrialSession = {
+      ...MOCK_TRIAL_REGULAR,
+      startDate: '2020-03-02T04:59:59.000Z',
+    };
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessions.mockResolvedValue([dayAfterTrialSession]);
+
+    const result = await getTrialSessionsForJudgeActivityReportInteractor(
+      applicationContext,
+      request,
+      mockJudgeUser,
+    );
+
+    expect(result).toEqual({
+      aggregations: {
+        Hybrid: 0,
+        'Motion/Hearing': 0,
+        Regular: 0,
+        Small: 0,
+        Special: 0,
+      },
+      total: 0,
+    });
+  });
 });
