@@ -193,7 +193,7 @@ const TrialSessionFilters = connect(
             }
             endName="trialSessionLastStartDate"
             endValue={trialSessionsPage.filters.endDate}
-            rangePickerCls={'display-flex'}
+            rangePickerCls={'display-flex flex-wrap gap-2'}
             startDateErrorText={trialSessionsHelper.startDateErrorMessage}
             startLabel={
               <span>
@@ -202,7 +202,6 @@ const TrialSessionFilters = connect(
               </span>
             }
             startName="trialSessionFirstStartDate"
-            startPickerCls="padding-right-2"
             startValue={trialSessionsPage.filters.startDate}
             onBlurEnd={e => {
               setTrialSessionsFiltersSequence({
@@ -216,7 +215,7 @@ const TrialSessionFilters = connect(
             }}
           />
         </div>
-        <div className="padding-y-3"></div>
+        <div className="padding-y-2"></div>
         <div className="margin-bottom-2 grid-row flex-row gap-2">
           <div className="tablet:grid-col grid-col-12">
             <div className="margin-bottom-1">
