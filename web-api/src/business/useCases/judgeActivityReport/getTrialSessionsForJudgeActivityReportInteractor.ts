@@ -54,11 +54,10 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
     });
 
   const trialSessionsForSelectedJudges = trialSessions.filter(session => {
-    if (judges && session.judge) {
-      return searchEntity.judges.includes(session.judge.name);
-    } else {
-      return true;
+    if (!session.judge) {
+      return false;
     }
+    return searchEntity.judges.includes(session.judge.name);
   });
 
   const judgeSessionsInDateRange = trialSessionsForSelectedJudges.filter(
