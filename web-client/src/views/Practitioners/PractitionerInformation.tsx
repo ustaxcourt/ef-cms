@@ -42,6 +42,7 @@ export const PractitionerInformation = connect(
         practitionerInformationHelper.showOpenCasesPagination && (
           <Paginator
             currentPageIndex={practitionerInformationHelper.openCasesPageNumber}
+            showSinglePage={true}
             totalPages={practitionerInformationHelper.totalOpenCasesPages}
             onPageChange={selectedPage => {
               setPractitionerOpenCasesPageSequence({
@@ -60,6 +61,7 @@ export const PractitionerInformation = connect(
             currentPageIndex={
               practitionerInformationHelper.closedCasesPageNumber
             }
+            showSinglePage={true}
             totalPages={practitionerInformationHelper.totalClosedCasesPages}
             onPageChange={selectedPage => {
               setPractitionerClosedCasesPageSequence({
