@@ -68,6 +68,9 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     throw new UnauthorizedError('Unauthorized to generate term');
   }
 
+  const termStartDateISO = createISODateString(termStartDate, FORMATS.MMDDYYYY);
+  const termEndDateISO = createISODateString(termEndDate, FORMATS.MMDDYYYY);
+
   //
   // Maximum of 6 sessions per week
   // Maximum of 5 sessions total per location
@@ -106,8 +109,8 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   console.time('10275: Filter trial sessions time');
   const specialSessions = getSpecialSessionsInTerm({
     sessions,
-    termEndDate: createISODateString(termEndDate, FORMATS.ISO),
-    termStartDate: createISODateString(termStartDate, FORMATS.ISO),
+    termEndDate: termEndDateISO,
+    termStartDate: termStartDateISO,
   });
 
   console.timeEnd('10275: Filter trial sessions time');
@@ -140,8 +143,8 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   console.timeEnd('10275: Generate prospectiveSessionsByCity time');
 
   const weeksToLoop = getWeeksInRange({
-    endDate: createISODateString(termEndDate, FORMATS.MMDDYYYY),
-    startDate: createISODateString(termStartDate, FORMATS.MMDDYYYY),
+    endDate: termEndDateISO,
+    startDate: termStartDateISO,
   });
 
   console.time('10275: assignSessionsToWeeks time');
