@@ -1,14 +1,14 @@
+import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import {
   loginAsCaseServicesSupervisor,
   loginAsPetitioner,
 } from '../../../../helpers/authentication/login-as-helpers';
-import { petitionerCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 
 describe('Case services supervisor performing petition QC', () => {
   it('should show STIN during petition QC', () => {
     loginAsPetitioner();
-    petitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       loginAsCaseServicesSupervisor();
       goToCase(docketNumber);
 
