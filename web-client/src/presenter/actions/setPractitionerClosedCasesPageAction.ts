@@ -8,7 +8,7 @@ export const setPractitionerClosedCasesPageAction = ({
   pageNumber: number;
 }>) => {
   const { pageNumber } = props;
-  const closedCaseInfo = get(state.practitionerDetail.openCaseInfo);
+  const closedCaseInfo = get(state.practitionerDetail.closedCaseInfo);
 
   if (!closedCaseInfo) {
     throw new Error(
