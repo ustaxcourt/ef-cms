@@ -15,7 +15,7 @@ export const markMessageThreadRepliedTo = async ({
       messages.map(async message => {
         await getDbWriter(writer =>
           writer
-            .updateTable('message')
+            .updateTable('dwMessage')
             .set({
               isRepliedTo: true,
             })
