@@ -3,6 +3,7 @@ import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATr
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkVerifiesPetitionReceiptLength } from './journey/docketClerkVerifiesPetitionReceiptLength';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
+import { externalUserCreatesElectronicCase } from './journey/externalUserCreatesElectronicCase';
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
@@ -11,7 +12,6 @@ import { petitionsClerkReviewsPaperCaseBeforeServing } from './journey/petitions
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkViewsNewTrialSession } from './journey/petitionsClerkViewsNewTrialSession';
-import { practitionerCreatesNewCase } from './journey/practitionerCreatesNewCase';
 import { userVerifiesLengthOfDocketEntry } from './journey/userVerifiesLengthOfDocketEntry';
 
 describe('Petitions Clerk creates a paper case which should have a clinic letter appended to the receipt', () => {
@@ -77,13 +77,10 @@ describe('Petitions Clerk creates a paper case which should have a clinic letter
   });
 
   loginAs(cerebralTest, 'privatePractitioner@example.com');
-  // creating petition with prefferredTrialCity and procedureType that DOES have a corresponding clinic letter
-  practitionerCreatesNewCase(
-    cerebralTest,
-    fakeFile,
-    'Los Angeles, California',
-    'Regular',
-  );
+  // creating petition with prefferredTrialCity that DOES have a corresponding clinic letter
+  externalUserCreatesElectronicCase(cerebralTest, fakeFile, {
+    preferredTrialCity: 'Los Angeles, California',
+  });
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
