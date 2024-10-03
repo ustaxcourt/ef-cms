@@ -156,7 +156,7 @@ describe('validateFileOnSelect', () => {
   });
 });
 
-describe('fileValidation', () => {
+describe('validateFile', () => {
   beforeEach(() => {
     jest.spyOn(pdfValidation, 'validatePdf').mockImplementation(jest.fn());
   });
@@ -228,7 +228,7 @@ describe('fileValidation', () => {
     expect(validatePdf).toHaveBeenCalled();
   });
 
-  it('should not validate file type if skipFileTypeValidation is passed', async () => {
+  it('should not validate file type when skipFileTypeValidation is passed', async () => {
     const file = new File([], 'test.pdf', { type: 'application/pdf' });
     const allowedFileExtensions = ['.csv'];
     const megabyteLimit = 250;
@@ -239,6 +239,20 @@ describe('fileValidation', () => {
       file,
       megabyteLimit,
       skipFileTypeValidation: true,
+    });
+
+    expect(validationResult).toMatchObject({ isValid: true });
+  });
+
+  it('BUG: should return valid for valid file with uppercase extension', async () => {
+    const file = new File([], 'test.TXT');
+    const allowedFileExtensions = ['.txt'];
+    const megabyteLimit = 250;
+
+    const validationResult = await validateFile({
+      allowedFileExtensions,
+      file,
+      megabyteLimit,
     });
 
     expect(validationResult).toMatchObject({ isValid: true });
@@ -258,27 +272,42 @@ describe('fileValidation', () => {
 
     expect(validationResult).toMatchObject({ isValid: true });
   });
+});
 
-  describe('genericOnValidationErrorHandler', () => {
-    it('should call error modal sequence with correct arguments for an error that is not wrong file type', () => {
-      const mockFunc = jest.fn();
-      fileValidation.genericOnValidationErrorHandler({
-        errorType: fileValidation.ErrorTypes.CORRUPT_FILE,
-        messageToDisplay: 'messageToDisplayTest',
-        messageToLog: 'messageToLogTest',
-        showFileUploadErrorModalSequence: mockFunc,
-      });
-      expect(mockFunc).toHaveBeenCalledWith({
-        contactSupportMessage:
-          'If you still have a problem uploading the file, email',
-        errorToLog: 'messageToLogTest',
-        message: 'messageToDisplayTest',
-        title: 'There Is a Problem With This File',
-        troubleshootingInfo: {
-          linkMessage: 'Learn about troubleshooting files',
-          linkUrl: TROUBLESHOOTING_INFO.FILE_UPLOAD_TROUBLESHOOTING_LINK,
-        },
-      });
+describe('getFileExtension', () => {
+  it('should get correct file extension for .pdf file', () => {
+    expect(fileValidation.getFileExtension('test.pdf')).toBe('.pdf');
+  });
+  it('should get correct file extension for .PDF file (case insensitive)', () => {
+    expect(fileValidation.getFileExtension('test.PDF')).toBe('.pdf');
+  });
+  it('should get correct file extension when file has multiple periods', () => {
+    expect(fileValidation.getFileExtension('test.pdf.txt')).toBe('.txt');
+  });
+  it('should get blank file extension for a file without a file extension', () => {
+    expect(fileValidation.getFileExtension('test')).toBe('');
+  });
+});
+
+describe('genericOnValidationErrorHandler', () => {
+  it('should call error modal sequence with correct arguments for an error that is not wrong file type', () => {
+    const mockFunc = jest.fn();
+    fileValidation.genericOnValidationErrorHandler({
+      errorType: fileValidation.ErrorTypes.CORRUPT_FILE,
+      messageToDisplay: 'messageToDisplayTest',
+      messageToLog: 'messageToLogTest',
+      showFileUploadErrorModalSequence: mockFunc,
+    });
+    expect(mockFunc).toHaveBeenCalledWith({
+      contactSupportMessage:
+        'If you still have a problem uploading the file, email',
+      errorToLog: 'messageToLogTest',
+      message: 'messageToDisplayTest',
+      title: 'There Is a Problem With This File',
+      troubleshootingInfo: {
+        linkMessage: 'Learn about troubleshooting files',
+        linkUrl: TROUBLESHOOTING_INFO.FILE_UPLOAD_TROUBLESHOOTING_LINK,
+      },
     });
   });
 

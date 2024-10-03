@@ -32,26 +32,28 @@ export const FilingFeeOptions = function () {
         </p>
         <hr />
 
-        <Accordion gray headingLevel="3">
+        <Accordion>
           <AccordionItem
-            customClassName="payment-options"
-            key={'other-options accordion-icon'}
-            title={'Other options'}
+            contentClassName="bg-gray padding-x-0"
+            dataTestId="other-options"
+            headerClassName="padding-0"
+            title="Other options"
           >
-            <hr />
-            <strong>Mail-in payment</strong>
-            <br />
-            Make checks/money orders payable to:
-            <br />
-            Clerk, United States Tax Court
-            <br />
-            400 Second Street, NW
-            <br />
-            Washington, DC 20217
-            <br />
-            <br />
-            <strong>Can’t afford to pay the filing fee?</strong>
-            <br />
+            <div>
+              <hr />
+              <strong>Mail-in payment</strong>
+              <br />
+              Make checks/money orders payable to:
+              <br />
+              Clerk, United States Tax Court
+              <br />
+              400 Second Street, NW
+              <br />
+              Washington, DC 20217
+              <br />
+              <br />
+              <strong>Can’t afford to pay the filing fee?</strong>
+            </div>
             <InlineLink
               href="https://www.ustaxcourt.gov/resources/forms/Application_for_Waiver_of_Filing_Fee.pdf"
               icon="file-pdf"
