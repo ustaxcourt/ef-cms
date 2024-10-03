@@ -1,5 +1,6 @@
 name,judgeTitle,judgeFullName,email,role,section,isSeniorJudge,judgePhoneNumber
 Aarons,Judge,Aarons,legacy.judge.aarons@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
+Arbeit,Judge,Jeffrey S. Arbeit,judge.arbeit@example.com,judge,arbeitsChambers,false,(202) 521-4718
 Armen,Special Trial Judge,Armen,legacy.judge.armen@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
 Ashford,Judge,Tamara W. Ashford,judge.ashford@example.com,judge,ashfordsChambers,false,(202) 521-0822
 Beghe,Judge,Beghe,legacy.judge.beghe@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
@@ -30,6 +31,7 @@ Goeke,Judge,Joseph Robert Goeke,judge.goeke@example.com,judge,goekesChambers,tru
 Goffe,Judge,Goffe,legacy.judge.goffe@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
 Goldberg,Special Trial Judge,Goldberg,legacy.judge.goldberg@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
 Greaves,Judge,Travis A. Greaves,judge.greaves@example.com,judge,greavesChambers,false,(202) 521-0736
+Guider,Judge,Benjamin A. Guider III,judge.guider@example.com,judge,guidersChambers,false,(202) 521-0885
 Gussis,Special Trial Judge,Gussis,legacy.judge.gussis@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
 Gustafson,Judge,David Gustafson,judge.gustafson@example.com,judge,gustafsonsChambers,true,(202) 521-0850
 Guy,Special Trial Judge,"Daniel A. Guy, Jr.",stjudge.guy@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
