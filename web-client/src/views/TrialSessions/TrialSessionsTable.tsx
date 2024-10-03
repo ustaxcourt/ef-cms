@@ -25,7 +25,7 @@ export const TrialSessionsTable = connect(
     return (
       <>
         <div className="grid-row margin-bottom-2 flex-align-center">
-          <div className="grid-col-2"></div>
+          <div className="display-none tablet-lg:display-block grid-col-2"></div>
           <div className="grid-col" ref={paginatorTop}>
             <Paginator
               currentPageIndex={trialSessionsPage.filters.pageNumber}
@@ -36,7 +36,7 @@ export const TrialSessionsTable = connect(
               }}
             />
           </div>
-          <div className="grid-col-2 text-right">
+          <div className="display-none tablet-lg:display-block grid-col-2 text-right">
             <span className="text-bold">Count:</span>{' '}
             <span className="text-semibold">
               {trialSessionsHelper.trialSessionsCount}
