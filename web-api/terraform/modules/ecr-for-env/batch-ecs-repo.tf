@@ -1,9 +1,9 @@
-provider "aws" {
-  region = var.region
-}
+# resource "aws_ecr_repository" "docket_entry_zipper_repo" {
+#   name = "docket-entry-zipper-${var.environment}-${var.region}"
+# }
 
 resource "aws_ecr_repository" "docket_entry_zipper_repo" {
-  name = "docket-entry-zipp`r-${var.environment}-${var.color}-${var.region}"
+  name = "docket-entry-zipper-${var.environment}-${var.color}-${var.region}"
 }
 
 # # TODO: This is not applying as we do not tag images with 'SNAPSHOT-' prefix anymore. 

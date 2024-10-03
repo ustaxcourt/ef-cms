@@ -115,6 +115,26 @@ module "ui-healthcheck" {
   dns_domain = "app.${var.dns_domain}"
 }
 
+# module "ecr-east" {
+#   source     = "../../modules/ecr-for-env"
+# 	environment            = var.environment
+# 	region                 = "east"
+# 	# color                  = "blue"
+# 	providers = {
+#     aws = aws.us-east-1
+#   }
+# }
+
+# module "ecr-west" {
+#   source     = "../../modules/ecr-for-env"
+# 	environment            = var.environment
+# 	region                 = "west"
+# 	# color                  = "blue"
+# 	providers = {
+#     aws = aws.us-west-1
+#   }
+# }
+
 module "ecr-blue-east" {
   source     = "../../modules/ecr-for-env"
 	environment            = var.environment
@@ -140,9 +160,6 @@ module "ecr-green-east" {
 	environment            = var.environment
 	region                 = "us-east-1"
 	color                  = "green"
-	providers = {
-    aws = aws.us-east-1
-  }
 }
 
 module "ecr-green-west" {
@@ -150,7 +167,4 @@ module "ecr-green-west" {
 	environment            = var.environment
 	region                 = "us-west-1"
 	color                  = "green"
-	providers = {
-    aws = aws.us-west-1
-  }
 }

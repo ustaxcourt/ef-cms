@@ -140,12 +140,8 @@ jobs:
           command: |
             if [ "${DEPLOYING_COLOR}" == "blue" ]; then
               npm run deploy:blue $ENV
-              npm run deploy:zipper us-east-1
-              npm run deploy:zipper us-west-1
             else
               npm run deploy:green $ENV
-              npm run deploy:zipper us-east-1
-              npm run deploy:zipper us-west-1
             fi
       - run:
           name: Setup Elasticsearch Index Settings
@@ -197,6 +193,30 @@ jobs:
       - run:
           name: 'Deploy - Pending Color Switch'
           command: npm run pending-color-switch
+
+  docker-image-zipper:
+    docker:
+      - image: cimg/node:20.14
+    resource_class: xlarge
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Install AWS CLI
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+      - setup_remote_docker:
+          version: docker23
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Deploy ECR Images
+          command: |
+            npm run deploy:zipper
 
   migrate:
     docker:
@@ -881,10 +901,14 @@ workflows:
     jobs:
       - deploy:
           <<: *only-deployed-lower-environments
-      - migrate:
+      - docker-image-zipper:
           <<: *only-deployed-lower-environments
           requires:
             - deploy
+      - migrate:
+          <<: *only-deployed-lower-environments
+          requires:
+            - docker-image-zipper
       - wait-for-migration:
           <<: *only-deployed-lower-environments
           type: approval
