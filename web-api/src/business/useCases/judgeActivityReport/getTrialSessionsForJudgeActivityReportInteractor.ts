@@ -1,3 +1,7 @@
+import {
+  FORMATS,
+  formatDateString,
+} from '@shared/business/utilities/DateHandler';
 import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import { JudgeActivityReportSearch } from '../../../../../shared/src/business/entities/judgeActivityReport/JudgeActivityReportSearch';
 import { JudgeActivityStatisticsRequest } from '@web-api/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
@@ -60,10 +64,25 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
     return searchEntity.judges.includes(session.judge.name);
   });
 
+  const formattedSearchStartDate = formatDateString(
+    searchEntity.startDate,
+    FORMATS.ISO,
+  );
+  const formattedSearchEndDate = formatDateString(
+    searchEntity.endDate,
+    FORMATS.ISO,
+  );
   const judgeSessionsInDateRange = trialSessionsForSelectedJudges.filter(
-    session =>
-      session.startDate <= searchEntity.endDate &&
-      session.startDate >= searchEntity.startDate,
+    session => {
+      const formattedSessionStartDate = formatDateString(
+        session.startDate,
+        FORMATS.ISO,
+      );
+      return (
+        formattedSessionStartDate <= formattedSearchEndDate &&
+        formattedSessionStartDate >= formattedSearchStartDate
+      );
+    },
   );
 
   const smallNonSwingSessions = judgeSessionsInDateRange.filter(
