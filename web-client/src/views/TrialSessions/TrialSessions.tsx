@@ -218,7 +218,7 @@ const TrialSessionFilters = connect(
         </div>
         <div className="padding-y-3"></div>
         <div className="margin-bottom-2 grid-row flex-row gap-2">
-          <div className="grid-col">
+          <div className="tablet:grid-col grid-col-12">
             <div className="margin-bottom-1">
               <label
                 className="usa-label"
@@ -270,7 +270,7 @@ const TrialSessionFilters = connect(
               )}
             </div>
           </div>
-          <div className="grid-col">
+          <div className="tablet:grid-col grid-col-12">
             <div className="margin-bottom-1">
               <label
                 className="usa-label"
@@ -321,7 +321,7 @@ const TrialSessionFilters = connect(
               )}
             </div>
           </div>
-          <div className="grid-col">
+          <div className="tablet:grid-col grid-col-12">
             <div className="margin-bottom-1">
               <label
                 className="usa-label"
