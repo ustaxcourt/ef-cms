@@ -531,9 +531,11 @@ export const subtractISODates = (
  */
 export const getBusinessDateInFuture = ({
   numberOfDays,
+  outputFormat = FORMATS.MONTH_DAY_YEAR,
   startDate,
 }: {
   numberOfDays: number;
+  outputFormat?: TimeFormats;
   startDate: string;
 }): string => {
   let laterDate = prepareDateFromString(startDate).plus({
@@ -560,7 +562,7 @@ export const getBusinessDateInFuture = ({
     );
   }
 
-  return laterDate.toFormat(FORMATS.MONTH_DAY_YEAR);
+  return laterDate.toFormat(outputFormat);
 };
 
 type IsoDateString = string;
