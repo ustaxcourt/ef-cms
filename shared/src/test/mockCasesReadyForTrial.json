@@ -1102,7 +1102,7 @@
   {
     "isCaseSealed": false,
     "isDocketEntrySealed": false,
-    "procedureType": "Regular",
+    "procedureType": "Small",
     "preferredTrialCity": "Cheyenne, Wyoming",
     "caseCaption": "Garfield Morissette",
     "docketNumber": "11906-24",
