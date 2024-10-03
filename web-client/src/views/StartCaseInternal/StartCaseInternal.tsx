@@ -77,7 +77,7 @@ export const StartCaseInternal = connect(
                   >
                     <div className="blue-container">
                       <IRSNotice
-                        validationSequence={validateCaseDetailSequence}
+                        validateFormData={validateCaseDetailSequence}
                       />
                     </div>
                   </Tab>

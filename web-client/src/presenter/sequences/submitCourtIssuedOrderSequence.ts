@@ -17,6 +17,7 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDefaultDraftDocumentIdAction } from '../actions/setDefaultDraftDocumentIdAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
@@ -88,7 +89,11 @@ export const submitCourtIssuedOrderSequence = showProgressSequenceDecorator([
       startShowValidationAction,
       validateCourtOrderAction,
       {
-        error: [setValidationErrorsAction, setValidationAlertErrorsAction],
+        error: [
+          setValidationErrorsAction,
+          setScrollToErrorNotificationAction,
+          setValidationAlertErrorsAction,
+        ],
         success: submitCourtIssuedOrder,
       },
     ],

@@ -20,13 +20,19 @@ describe('Private practitioner files document on case they are already associate
         externalUserSearchesDocketNumber(docketNumber);
 
         cy.get('[data-testid="request-represent-a-party-button"]').click();
-        selectTypeaheadInput('document-type', 'Entry of Appearance');
+        selectTypeaheadInput(
+          'case-association-document-type-search',
+          'Entry of Appearance',
+        );
         cy.get('[data-testid="filer-John, Petitioner"]').click();
         cy.get('[data-testid="request-access-submit-document"]').click();
         cy.get('[data-testid="submit-represent-a-party-button"]').click();
         cy.get('[data-testid="button-file-document"]').click();
         cy.get('[data-testid="ready-to-file"]').click();
-        selectTypeaheadInput('document-type', 'Motion for a New Trial');
+        selectTypeaheadInput(
+          'complete-doc-document-type-search',
+          'Motion for a New Trial',
+        );
         cy.get('[data-testid="submit-document"]').click();
         attachSamplePdfFile('primary-document');
         cy.get('[data-testid="primaryDocument-objections-No"]').click();
