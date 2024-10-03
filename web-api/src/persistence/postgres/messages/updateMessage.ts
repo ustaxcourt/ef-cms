@@ -10,7 +10,7 @@ export const updateMessage = async ({
 }): Promise<Message> => {
   const updatedMessage = await getDbWriter(writer =>
     writer
-      .updateTable('message')
+      .updateTable('dwMessage')
       .set(toKyselyUpdateMessage(message))
       .where('messageId', '=', message.messageId)
       .returningAll()

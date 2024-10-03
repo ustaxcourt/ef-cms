@@ -8,13 +8,11 @@ export const getCaseByDocketNumber = async ({
 }): Promise<Case | undefined> => {
   const caseResult = await getDbReader(reader =>
     reader
-      .selectFrom('case')
+      .selectFrom('dwCase')
       .where('docketNumber', '=', docketNumber)
       .selectAll()
       .executeTakeFirst(),
   );
-
-  console.log('*** getCaseByDocketNumber', caseResult);
 
   return caseResult
     ? new Case(

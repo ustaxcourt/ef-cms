@@ -7,7 +7,7 @@ export const setMessageAsRead = async ({
 }): Promise<void> => {
   await getDbWriter(writer =>
     writer
-      .updateTable('message')
+      .updateTable('dwMessage')
       .set({
         isRead: true,
       })

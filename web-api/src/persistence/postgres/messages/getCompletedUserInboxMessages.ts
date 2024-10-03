@@ -12,8 +12,8 @@ export const getCompletedUserInboxMessages = async ({
 
   const messages = await getDbReader(reader =>
     reader
-      .selectFrom('message as m')
-      .leftJoin('case as c', 'c.docketNumber', 'm.docketNumber')
+      .selectFrom('dwMessage as m')
+      .leftJoin('dwCase as c', 'c.docketNumber', 'm.docketNumber')
       .where('m.completedByUserId', '=', userId)
       .where('m.isCompleted', '=', true)
       .where('m.completedAt', '>=', filterDate)
