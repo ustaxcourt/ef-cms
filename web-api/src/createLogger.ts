@@ -1,10 +1,11 @@
-import { cloneDeep, isEqual, unset } from 'lodash';
 import {
+  LoggerOptions,
   config,
   createLogger as createWinstonLogger,
   format,
   transports,
 } from 'winston';
+import { cloneDeep, isEqual, unset } from 'lodash';
 import colorize from 'logform/colorize';
 import combine from 'logform/combine';
 import errors from 'logform/errors';
@@ -37,12 +38,17 @@ export const removeDuplicateLogInformation = format(logEntry => {
   return copy;
 });
 
-export const createLogger = (opts = {}) => {
+export const createLogger = (opts: LoggerOptions = {}) => {
   const options = {
     defaultMeta: {},
-    level: opts.logLevel || process.env.LOG_LEVEL || 'debug',
+    level: opts.level || process.env.LOG_LEVEL || 'debug',
     levels: config.syslog.levels,
-    transports: [new transports.Console()],
+    transports: [
+      new transports.Console({
+        handleExceptions: true,
+        handleRejections: true,
+      }),
+    ],
     ...opts,
   };
 
