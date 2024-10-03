@@ -1,8 +1,3 @@
-import { DateTime } from 'luxon';
-import {
-  FORMATS,
-  prepareDateFromString,
-} from '@shared/business/utilities/DateHandler';
 import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
 import {
   ROLE_PERMISSIONS,
@@ -11,6 +6,10 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '../../../errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import {
+  calculateDifferenceInHours,
+  createISODateString,
+} from '@shared/business/utilities/DateHandler';
 import { updateUserPendingEmailRecord } from '@web-api/business/useCases/auth/changePasswordInteractor';
 
 export const TOKEN_EXPIRATION_TIME_HOURS = 24;
@@ -21,12 +20,12 @@ export const userTokenHasExpired = (
   if (!tokenExpirationTimestamp) {
     return true;
   }
-  const expirationTime = prepareDateFromString(
-    tokenExpirationTimestamp,
-    FORMATS.ISO,
-  ).plus({ hours: TOKEN_EXPIRATION_TIME_HOURS });
-  const now = DateTime.now().setZone('utc');
-  return now > expirationTime;
+  return (
+    calculateDifferenceInHours(
+      createISODateString(),
+      tokenExpirationTimestamp,
+    ) > 1
+  );
 };
 
 export const verifyUserPendingEmailInteractor = async (
