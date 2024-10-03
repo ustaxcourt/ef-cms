@@ -1,32 +1,27 @@
-# resource "aws_ecr_repository" "docket_entry_zipper_repo" {
-#   name = "docket-entry-zipper-${var.environment}-${var.region}"
-# }
-
 resource "aws_ecr_repository" "docket_entry_zipper_repo" {
   name = "docket-entry-zipper-${var.environment}-${var.color}-${var.region}"
 }
 
-# # TODO: This is not applying as we do not tag images with 'SNAPSHOT-' prefix anymore. 
-# resource "aws_ecr_lifecycle_policy" "repo_policy" {
-#   repository = aws_ecr_repository.docket_entry_zipper_repo.name
+resource "aws_ecr_lifecycle_policy" "example" {
+  repository = aws_ecr_repository.docket_entry_zipper_repo.name
 
-#   policy = <<EOF
-# {
-#     "rules": [
-#         {
-#             "rulePriority": 1,
-#             "description": "Keep last 30 images",
-#             "selection": {
-#                 "tagStatus": "tagged",
-#                 "tagPrefixList": ["SNAPSHOT-"],
-#                 "countType": "imageCountMoreThan",
-#                 "countNumber": 10
-#             },
-#             "action": {
-#                 "type": "expire"
-#             }
-#         }
-#     ]
-# }
-# EOF
-# }
+  policy = <<EOF
+{
+  "rules": [
+    {
+      "rulePriority": 1,
+      "description": "Keep only the last 15 images",
+      "selection": {
+        "tagStatus": "any",
+        "countType": "imageCountMoreThan",
+        "countNumber": 15,
+        "tagPrefixList": [""]
+      },
+      "action": {
+        "type": "expire"
+      }
+    }
+  ]
+}
+EOF
+}
