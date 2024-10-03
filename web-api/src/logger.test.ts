@@ -1,6 +1,4 @@
-import { logger } from './logger';
-import { transports } from 'winston';
-import fs from 'fs';
+import { expressLogger } from './logger';
 jest.mock('@vendia/serverless-express');
 import { getCurrentInvoke } from '@vendia/serverless-express';
 
@@ -36,11 +34,7 @@ describe('logger', () => {
 
   const subject = (request, response) =>
     new Promise(resolve => {
-      const middleware = logger(
-        new transports.Stream({
-          stream: fs.createWriteStream('/dev/null'),
-        }),
-      );
+      const middleware = expressLogger;
       middleware(request, response, resolve);
     });
 
@@ -51,7 +45,7 @@ describe('logger', () => {
   });
 
   it('defaults to using a console logger if not specified', () => {
-    const middleware = logger();
+    const middleware = expressLogger;
 
     jest.spyOn(console, 'log').mockImplementation(jest.fn());
     middleware(req, res, () => {
@@ -80,7 +74,7 @@ describe('logger', () => {
     );
   });
 
-  it('sets logger.defaultMeta.environment color stage to from the environment variables', async () => {
+  it('sets logger.getContext().environment based on environment variables and clears the context at the end of the request', async () => {
     process.env.NODE_ENV = 'production';
     process.env.CURRENT_COLOR = 'blue';
     process.env.STAGE = 'someEnv';
@@ -88,16 +82,16 @@ describe('logger', () => {
     await subject(req, res);
     const instance = req.locals.logger;
 
-    instance.info = jest.fn();
-
-    res.end();
-    expect(instance.defaultMeta.environment).toEqual({
+    expect(instance.getContext().environment).toEqual({
       color: 'blue',
       stage: 'someEnv',
     });
+
+    res.end();
+    expect(instance.getContext()).toEqual(undefined);
   });
 
-  it('sets logger.defaultMeta.environment color to green and stage to local when those environment variables are undefined', async () => {
+  it('sets logger.getContext().environment color to green and stage to local when those environment variables are undefined', async () => {
     delete process.env.CURRENT_COLOR;
     delete process.env.STAGE;
     process.env.NODE_ENV = 'production';
@@ -107,8 +101,7 @@ describe('logger', () => {
 
     instance.info = jest.fn();
 
-    res.end();
-    expect(instance.defaultMeta.environment).toEqual({
+    expect(instance.getContext().environment).toEqual({
       color: 'green',
       stage: 'local',
     });
@@ -137,14 +130,14 @@ describe('logger', () => {
 
     await subject(req, res);
 
-    expect(req.locals.logger.defaultMeta.requestId).toBeDefined();
-    expect(req.locals.logger.defaultMeta.requestId.apiGateway).toBe(
+    expect(req.locals.logger.getContext().requestId).toBeDefined();
+    expect(req.locals.logger.getContext().requestId.apiGateway).toBe(
       '11ff704e-b35b-4472-8280-29be3fb957ca',
     );
     expect(
-      req.locals.logger.defaultMeta.requestId.applicationLoadBalancer,
+      req.locals.logger.getContext().requestId.applicationLoadBalancer,
     ).toBe('Root=1-5fa1efc9-164cfd9602fe2b523bf82292;Sampled=0');
-    expect(req.locals.logger.defaultMeta.requestId.lambda).toBe(
+    expect(req.locals.logger.getContext().requestId.lambda).toBe(
       'c840522b-1e43-4d03-995c-014d199fa237',
     );
   });
@@ -176,15 +169,15 @@ describe('logger', () => {
 
       await subject(request, res);
 
-      expect(request.locals.logger.defaultMeta.requestId).toBeDefined();
+      expect(request.locals.logger.getContext().requestId).toBeDefined();
       expect(
-        request.locals.logger.defaultMeta.requestId.apiGateway,
+        request.locals.logger.getContext().requestId.apiGateway,
       ).not.toBeDefined();
       expect(
-        request.locals.logger.defaultMeta.requestId.applicationLoadBalancer,
+        request.locals.logger.getContext().requestId.applicationLoadBalancer,
       ).not.toBeDefined();
       expect(
-        request.locals.logger.defaultMeta.requestId.lambda,
+        request.locals.logger.getContext().requestId.lambda,
       ).not.toBeDefined();
     }
   });
@@ -216,7 +209,7 @@ describe('logger', () => {
     await subject(req, res);
 
     const bodyToBeLogged = JSON.parse(
-      req.locals.logger.defaultMeta.request.body,
+      req.locals.logger.getContext().request.body,
     );
 
     expect(bodyToBeLogged.username).toBe(body.username);
