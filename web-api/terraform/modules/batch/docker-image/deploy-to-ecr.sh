@@ -11,8 +11,7 @@ echo "Running script to deploy Docker Image to ECR"
   "AWS_ACCESS_KEY_ID" \
   "AWS_SECRET_ACCESS_KEY"
 
-# DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh "${ENV}")
-DEPLOYING_COLOR="blue"
+DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh "${ENV}")
 echo "Current color -> ${DEPLOYING_COLOR}"
 echo "Region -> ${TARGET_REGION}"
 
