@@ -11,8 +11,9 @@ describe('Run the suggested trial session calendar generator', () => {
     outputFormat: FORMATS.MMDDYYYY,
     startDate: createISODateString(),
   });
+
   const oneMonthFromNow = getBusinessDateInFuture({
-    numberOfDays: 1,
+    numberOfDays: 30,
     outputFormat: FORMATS.MMDDYYYY,
     startDate: createISODateString(),
   });
