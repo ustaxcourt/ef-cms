@@ -926,14 +926,12 @@ export type PractitionerAllCasesInfo = {
 };
 
 export type PractitionerCaseDetail = {
-  docketNumberWithSuffix: string;
   docketNumber: string;
+  docketNumberWithSuffix: string;
   caseTitle: string;
   inConsolidatedGroup: boolean;
   isLeadCase: boolean;
   isSealed: boolean;
-  leadDocketNumber?: string;
-  sealedDate?: string;
   status: string;
   sealedToTooltip?: string;
   consolidatedIconTooltipText?: string;
