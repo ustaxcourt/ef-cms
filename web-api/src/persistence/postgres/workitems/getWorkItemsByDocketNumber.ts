@@ -9,8 +9,8 @@ export const getWorkItemsByDocketNumber = async ({
 }): Promise<WorkItem[]> => {
   const workItems = await getDbReader(reader => {
     return reader
-      .selectFrom('workItem as w')
-      .leftJoin('case as c', 'c.docketNumber', 'w.docketNumber')
+      .selectFrom('dwWorkItem as w')
+      .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
       .where('w.docketNumber', '=', docketNumber)
       .selectAll()
       .select('w.docketNumber')

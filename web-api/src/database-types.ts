@@ -3,7 +3,7 @@ import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
 export interface Database {
   dwCase: CaseTable;
   dwMessage: MessageTable;
-  workItem: WorkItemTable;
+  dwWorkItem: WorkItemTable;
 }
 
 export interface MessageTable {

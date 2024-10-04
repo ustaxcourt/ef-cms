@@ -20,7 +20,7 @@ export const setPriorityOnAllWorkItems = async ({
 }) => {
   await getDbWriter(writer => {
     let builder = writer
-      .updateTable('workItem')
+      .updateTable('dwWorkItem')
       .set('highPriority', highPriority);
 
     return builder.where('docketNumber', '=', docketNumber).execute();

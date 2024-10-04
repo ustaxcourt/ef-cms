@@ -13,7 +13,7 @@ export const seed = async () => {
 
   await getDbWriter(writer =>
     writer
-      .insertInto('workItem')
+      .insertInto('dwWorkItem')
       .values(workItems)
       .onConflict(oc => oc.column('workItemId').doNothing()) // ensure doesn't fail if exists
       .execute(),

@@ -9,7 +9,7 @@ export const saveWorkItem = async ({
 }): Promise<RawWorkItem> => {
   const createdWorkItem = await getDbWriter(writer =>
     writer
-      .insertInto('workItem')
+      .insertInto('dwWorkItem')
       .values(toKyselyNewWorkItem(workItem))
       .onConflict(oc =>
         oc.column('workItemId').doUpdateSet(toKyselyNewWorkItem(workItem)),

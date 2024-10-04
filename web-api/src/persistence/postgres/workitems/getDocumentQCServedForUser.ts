@@ -11,8 +11,8 @@ export const getDocumentQCServedForUser = async ({
 }): Promise<WorkItem[]> => {
   const workItems = await getDbReader(reader => {
     return reader
-      .selectFrom('workItem as w')
-      .leftJoin('case as c', 'c.docketNumber', 'w.docketNumber')
+      .selectFrom('dwWorkItem as w')
+      .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
       .where('w.assigneeId', '=', userId)
       .where('w.createdAt', '>', afterDate)
       .selectAll()
