@@ -336,6 +336,7 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "iam:PassRole",
         "iam:GetRolePolicy",
         "iam:GetInstanceProfile",
+				"iam:DetachRolePolicy",
 				"iam:RemoveRoleFromInstanceProfile",
         "iam:GetPolicy",
 				"iam:AttachRolePolicy",
