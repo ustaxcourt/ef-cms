@@ -1,6 +1,5 @@
 import { CompleteDocumentTypeSectionRemainder } from './CompleteDocumentTypeSectionRemainder';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { SelectDocumentWizardOverlay } from './SelectDocumentWizardOverlay';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { reactSelectValue } from '../../ustc-ui/Utils/documentTypeSelectHelper';
@@ -12,7 +11,6 @@ export const CompleteDocumentTypeSection = connect(
   {
     completeDocumentTypeSectionHelper: state.completeDocumentTypeSectionHelper,
     form: state.form,
-    showModal: state.modal.showModal,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
@@ -23,7 +21,6 @@ export const CompleteDocumentTypeSection = connect(
   function CompleteDocumentTypeSection({
     completeDocumentTypeSectionHelper,
     form,
-    showModal,
     updateFileDocumentWizardFormValueSequence,
     updateScreenMetadataSequence,
     validateSelectDocumentTypeSequence,
@@ -85,10 +82,6 @@ export const CompleteDocumentTypeSection = connect(
         </FormGroup>
 
         <CompleteDocumentTypeSectionRemainder />
-
-        {showModal === 'SelectDocumentWizardOverlay' && (
-          <SelectDocumentWizardOverlay />
-        )}
       </React.Fragment>
     );
   },

@@ -1,5 +1,9 @@
 import { addIntervenorAsPartyToCase } from '../../../../../../helpers/caseDetail/caseInformation/add-intervenor-to-case';
 import { attachSamplePdfFile } from '../../../../../../helpers/file/upload-file';
+import {
+  externalUserCreatesElectronicCase,
+  petitionerCreatesElectronicCaseWithSpouse,
+} from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { externalUserSearchesDocketNumber } from '../../../../../../helpers/advancedSearch/external-user-searches-docket-number';
 import { goToCase } from '../../../../../../helpers/caseDetail/go-to-case';
 import {
@@ -7,10 +11,6 @@ import {
   loginAsPetitioner,
   loginAsPrivatePractitioner,
 } from '../../../../../../helpers/authentication/login-as-helpers';
-import {
-  petitionerCreatesElectronicCase,
-  petitionerCreatesElectronicCaseWithSpouse,
-} from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { selectTypeaheadInput } from '../../../../../../helpers/components/typeAhead/select-typeahead-input';
 
@@ -61,7 +61,7 @@ describe('Private Practitioner requests to represent a party to a case', () => {
       const primaryFilerName = 'John';
 
       loginAsPetitioner();
-      petitionerCreatesElectronicCase(primaryFilerName).then(docketNumber => {
+      externalUserCreatesElectronicCase(primaryFilerName).then(docketNumber => {
         petitionsClerkServesPetition(docketNumber);
 
         loginAsDocketClerk1();

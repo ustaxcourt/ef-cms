@@ -6,10 +6,10 @@ import {
   goToMyAccount,
 } from '../../../local-only/support/pages/my-account';
 import { createAPetitioner } from '../../../helpers/accountCreation/create-a-petitioner';
+import { externalUserCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { faker } from '@faker-js/faker';
 import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
 import { logout } from '../../../helpers/authentication/logout';
-import { petitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { v4 } from 'uuid';
 import { verifyPetitionerAccount } from '../../../helpers/authentication/verify-petitioner-account';
@@ -74,7 +74,7 @@ describe('Petitioner Updates e-mail', () => {
 
     cy.login(username);
 
-    petitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
 
       const updatedUsername = `cypress_test_account+${v4()}`;

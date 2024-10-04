@@ -1,9 +1,9 @@
+import { externalUserCreatesElectronicCase } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import {
   loginAsDocketClerk1,
   loginAsPetitioner,
 } from '../../../../../../helpers/authentication/login-as-helpers';
 import { logout } from '../../../../../../helpers/authentication/logout';
-import { petitionerCreatesElectronicCase } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../../../helpers/documentQC/petitionsclerk-serves-petition';
 
 /**
@@ -14,7 +14,7 @@ import { petitionsClerkServesPetition } from '../../../../../../helpers/document
 describe('Docket clerk adding a paper filing', () => {
   it('should be alerted when the paper filing is not valid when they attempt to serve', () => {
     loginAsPetitioner();
-    petitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
       logout();
 
