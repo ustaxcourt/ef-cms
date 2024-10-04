@@ -1,7 +1,7 @@
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
+import { externalUserCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
 import { loginAsPetitioner } from '../../../helpers/authentication/login-as-helpers';
-import { petitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkQcsAndServesElectronicCase } from '../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
 import { v4 } from 'uuid';
 
@@ -31,7 +31,7 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
 
       cy.task('getIrsBearerToken', { password, userName }).then(idToken => {
         loginAsPetitioner();
-        petitionerCreatesElectronicCase().then(docketNumber => {
+        externalUserCreatesElectronicCase().then(docketNumber => {
           petitionsClerkQcsAndServesElectronicCase(docketNumber);
           verifyReconciliationReportAndStinUrl(idToken as string);
         });

@@ -2,26 +2,26 @@ import { Kysely } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
-    .createTable('case')
+    .createTable('dwCase')
     .addColumn('docketNumber', 'varchar', col => col.primaryKey())
+    .addColumn('status', 'varchar', col => col.notNull())
+    .addColumn('caption', 'varchar', col => col.notNull())
     .addColumn('trialLocation', 'varchar')
     .addColumn('leadDocketNumber', 'varchar')
-    .addColumn('trialDate', 'varchar')
+    .addColumn('trialDate', 'timestamptz')
     .addColumn('docketNumberSuffix', 'varchar')
     .execute();
 
   await db.schema
-    .createTable('message')
+    .createTable('dwMessage')
     .addColumn('messageId', 'varchar', col => col.primaryKey())
     .addColumn('attachments', 'jsonb')
-    .addColumn('caseStatus', 'varchar', col => col.notNull())
-    .addColumn('caseTitle', 'varchar', col => col.notNull())
-    .addColumn('completedAt', 'varchar')
+    .addColumn('completedAt', 'timestamptz')
     .addColumn('completedBy', 'varchar')
     .addColumn('completedBySection', 'varchar')
     .addColumn('completedByUserId', 'varchar')
     .addColumn('completedMessage', 'varchar')
-    .addColumn('createdAt', 'varchar', col => col.notNull())
+    .addColumn('createdAt', 'timestamptz', col => col.notNull())
     .addColumn('docketNumber', 'varchar', col => col.notNull())
     .addColumn('from', 'varchar')
     .addColumn('fromSection', 'varchar')

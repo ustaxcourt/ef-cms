@@ -1,21 +1,19 @@
 import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
 
 export interface Database {
-  message: MessageTable;
-  case: CaseTable;
   dwUserCaseNote: UserCaseNoteTable;
+  dwMessage: MessageTable;
+  dwCase: CaseTable;
 }
 
 export interface MessageTable {
   attachments?: ColumnType<{ documentId: string }[], string, string>;
-  caseStatus: string;
-  caseTitle: string;
-  completedAt?: string;
+  completedAt?: Date;
   completedBy?: string;
   completedBySection?: string;
   completedByUserId?: string;
   completedMessage?: string;
-  createdAt: string;
+  createdAt: Date;
   docketNumber: string;
   from: string;
   fromSection: string;
@@ -38,11 +36,13 @@ export type NewMessageKysely = Insertable<MessageTable>;
 export type UpdateMessageKysely = Updateable<MessageTable>;
 
 export interface CaseTable {
+  caption: string;
   docketNumber: string;
-  trialLocation?: string;
-  trialDate?: string;
-  leadDocketNumber?: string;
   docketNumberSuffix?: string;
+  leadDocketNumber?: string;
+  status: string;
+  trialDate?: Date;
+  trialLocation?: string;
 }
 
 export type CaseKysely = Selectable<CaseTable>;

@@ -1,4 +1,5 @@
 import { NewPetitionerUser } from '@shared/business/entities/NewPetitionerUser';
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
@@ -44,8 +45,8 @@ export const createNewPetitionerUserAction = async ({
               verified. We sent an email with a link to verify the email
               address. If you don&apos;t see it, check your spam folder. If
               you&apos;re still having trouble, please contact{' '}
-              <a href="mailto:dawson.support@ustaxcourt.gov">
-                dawson.support@ustaxcourt.gov
+              <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
+                {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
               </a>
               .
             </>

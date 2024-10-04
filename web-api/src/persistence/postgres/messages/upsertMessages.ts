@@ -7,14 +7,12 @@ export const upsertMessages = async (messages: RawMessage[]) => {
 
   await getDbWriter(writer =>
     writer
-      .insertInto('message')
+      .insertInto('dwMessage')
       .values(toKyselyNewMessages(messages))
       .onConflict(oc =>
         oc.column('messageId').doUpdateSet(c => {
           return {
             attachments: c.ref('excluded.attachments'),
-            caseStatus: c.ref('excluded.caseStatus'),
-            caseTitle: c.ref('excluded.caseTitle'),
             completedAt: c.ref('excluded.completedAt'),
             completedBy: c.ref('excluded.completedBy'),
             completedBySection: c.ref('excluded.completedBySection'),
