@@ -9,3 +9,7 @@ variable "dns_domain" {
 variable "current_color" {
   type = string
 }
+
+variable "region" {
+  type = string
+}
