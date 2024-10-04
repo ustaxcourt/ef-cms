@@ -1,6 +1,6 @@
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { processMessageEntries } from './processMessageEntries';
+import { processUserCaseNoteEntries } from '@web-api/business/useCases/processStreamRecords/processUserCaseNoteEntries';
 import { upsertUserCaseNotes } from '@web-api/persistence/postgres/userCaseNotes/upsertUserCaseNotes';
 
 jest.mock('@web-api/persistence/postgres/messages/upsertMessages');
@@ -36,9 +36,9 @@ describe('processUserCaseNoteEntries', () => {
       },
     };
 
-    await processMessageEntries({
+    await processUserCaseNoteEntries({
       applicationContext,
-      messageRecords: [mockUserCaseNoteRecord],
+      userCaseNoteRecords: [mockUserCaseNoteRecord],
     });
 
     expect(upsertUserCaseNotes).toHaveBeenCalled();
