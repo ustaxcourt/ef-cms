@@ -8,7 +8,7 @@ export const deleteWorkItem = async ({
 }): Promise<void> => {
   await getDbWriter(writer =>
     writer
-      .deleteFrom('workItem')
+      .deleteFrom('dwWorkItem')
       .where('workItemId', '=', workItem.workItemId)
       .execute(),
   );

@@ -9,8 +9,8 @@ export const getWorkItemById = async ({
 }): Promise<WorkItem | undefined> => {
   const workItem = await getDbReader(reader =>
     reader
-      .selectFrom('workItem as w')
-      .leftJoin('case as c', 'c.docketNumber', 'w.docketNumber')
+      .selectFrom('dwWorkItem as w')
+      .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
       .where('w.workItemId', '=', workItemId)
       .selectAll()
       .select('w.docketNumber')
