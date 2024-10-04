@@ -7,8 +7,9 @@ import {
 
 export type EligibleCase = Pick<
   RawCase,
-  'preferredTrialCity' | 'procedureType'
+  'preferredTrialCity' | 'procedureType' | 'docketNumber'
 >;
+
 export type ProspectiveSessionsByCity = Record<
   string,
   {
@@ -18,43 +19,41 @@ export type ProspectiveSessionsByCity = Record<
   }[]
 >;
 
+export type CalendaringConfig = {
+  maxSessionsPerWeek: number;
+  maxSessionsPerLocation: number;
+  regularCaseMinimumQuantity: number;
+  regularCaseMaxQuantity: number;
+  smallCaseMinimumQuantity: number;
+  smallCaseMaxQuantity: number;
+  hybridCaseMaxQuantity: number;
+  hybridCaseMinimumQuantity: number;
+};
+
+export type CasesByCity = Record<string, EligibleCase[]>;
+
 export const createProspectiveTrialSessions = ({
   calendaringConfig,
   cases,
   citiesFromLastTwoTerms,
 }: {
   cases: EligibleCase[];
-  calendaringConfig: {
-    maxSessionsPerWeek: number;
-    maxSessionsPerLocation: number;
-    regularCaseMinimumQuantity: number;
-    regularCaseMaxQuantity: number;
-    smallCaseMinimumQuantity: number;
-    smallCaseMaxQuantity: number;
-    hybridCaseMaxQuantity: number;
-    hybridCaseMinimumQuantity: number;
-  };
+  calendaringConfig: CalendaringConfig;
   citiesFromLastTwoTerms: string[];
-}): Record<
-  string,
-  {
-    city: string;
-    sessionType: TrialSessionTypes;
-  }[]
-> => {
-  const potentialTrialLocations: ProspectiveSessionsByCity = {};
+}): ProspectiveSessionsByCity => {
+  const prospectiveSessionsByCity: ProspectiveSessionsByCity = {};
 
   const regularCasesByCity = getCasesByCity(cases, PROCEDURE_TYPES_MAP.regular);
   const smallCasesByCity = getCasesByCity(cases, PROCEDURE_TYPES_MAP.small);
 
   Object.keys(regularCasesByCity).forEach(city => {
-    potentialTrialLocations[city] = [];
+    prospectiveSessionsByCity[city] = [];
   });
   Object.keys(smallCasesByCity).forEach(city => {
-    potentialTrialLocations[city] = [];
+    prospectiveSessionsByCity[city] = [];
   });
 
-  for (const city in potentialTrialLocations) {
+  for (const city in prospectiveSessionsByCity) {
     let regularCaseSliceSize;
     let smallCaseSliceSize;
 
@@ -69,7 +68,7 @@ export const createProspectiveTrialSessions = ({
         calendaringConfig,
         city,
         cityWasNotVisitedInLastTwoTerms,
-        potentialTrialLocations,
+        prospectiveSessionsByCity,
         regularCaseSliceSize,
         regularCasesByCity,
       });
@@ -77,7 +76,7 @@ export const createProspectiveTrialSessions = ({
         calendaringConfig,
         city,
         cityWasNotVisitedInLastTwoTerms,
-        potentialTrialLocations,
+        prospectiveSessionsByCity,
         smallCaseSliceSize,
         smallCasesByCity,
       });
@@ -86,7 +85,7 @@ export const createProspectiveTrialSessions = ({
         calendaringConfig,
         city,
         cityWasNotVisitedInLastTwoTerms,
-        potentialTrialLocations,
+        prospectiveSessionsByCity,
         smallCaseSliceSize,
         smallCasesByCity,
       });
@@ -94,7 +93,7 @@ export const createProspectiveTrialSessions = ({
         calendaringConfig,
         city,
         cityWasNotVisitedInLastTwoTerms,
-        potentialTrialLocations,
+        prospectiveSessionsByCity,
         regularCaseSliceSize,
         regularCasesByCity,
       });
@@ -123,7 +122,7 @@ export const createProspectiveTrialSessions = ({
       addProspectiveTrialSession({
         city,
         cityWasNotVisitedInLastTwoTerms: false,
-        potentialTrialLocations,
+        prospectiveSessionsByCity,
         sessionType: SESSION_TYPES.hybrid,
       });
     }
@@ -139,10 +138,8 @@ export const createProspectiveTrialSessions = ({
     // So, add one session, determining the type based on the procedure type of the associated cases.
     if (
       cityWasNotVisitedInLastTwoTerms &&
-      potentialTrialLocations[city].length === 0
+      prospectiveSessionsByCity[city].length === 0
     ) {
-      console.log('regular cases for low volume', regularCasesByCity[city]);
-      console.log('small cases for low volume', smallCasesByCity[city]);
       const containsRegularCase = regularCasesByCity[city]?.length > 0;
       const containsSmallCase = smallCasesByCity[city]?.length > 0;
       const lowVolumeSessionType =
@@ -155,7 +152,7 @@ export const createProspectiveTrialSessions = ({
       addProspectiveTrialSession({
         city,
         cityWasNotVisitedInLastTwoTerms,
-        potentialTrialLocations,
+        prospectiveSessionsByCity,
         sessionType: lowVolumeSessionType,
       });
 
@@ -164,23 +161,26 @@ export const createProspectiveTrialSessions = ({
     }
   }
 
-  Object.keys(potentialTrialLocations).forEach(city => {
-    potentialTrialLocations[city] = potentialTrialLocations[city].splice(
+  Object.keys(prospectiveSessionsByCity).forEach(city => {
+    prospectiveSessionsByCity[city] = prospectiveSessionsByCity[city].splice(
       0,
       calendaringConfig.maxSessionsPerLocation,
     );
   });
 
-  return potentialTrialLocations;
+  return prospectiveSessionsByCity;
 };
 
-function getCasesByCity(cases, type) {
+function getCasesByCity(
+  cases: EligibleCase[],
+  type: TrialSessionTypes,
+): CasesByCity {
   return cases
     .filter(c => c.procedureType === type)
     .reduce((acc, currentCase) => {
       if (
         type === SESSION_TYPES.regular &&
-        !REGULAR_TRIAL_CITY_STRINGS.includes(currentCase.preferredTrialCity)
+        !REGULAR_TRIAL_CITY_STRINGS.includes(currentCase.preferredTrialCity!)
       ) {
         throw new Error(
           `Case ${currentCase.docketNumber} cannot be scheduled in ${currentCase.preferredTrialCity} because the session type does not match the trial city`,
@@ -197,15 +197,15 @@ function getCasesByCity(cases, type) {
 function addProspectiveTrialSession({
   city,
   cityWasNotVisitedInLastTwoTerms,
-  potentialTrialLocations,
+  prospectiveSessionsByCity,
   sessionType,
 }: {
   city: string;
   cityWasNotVisitedInLastTwoTerms: boolean;
-  potentialTrialLocations: ProspectiveSessionsByCity;
+  prospectiveSessionsByCity: ProspectiveSessionsByCity;
   sessionType: TrialSessionTypes;
-}) {
-  potentialTrialLocations[city].push({
+}): void {
+  prospectiveSessionsByCity[city].push({
     city,
     cityWasNotVisitedInLastTwoTerms,
     sessionType,
@@ -216,10 +216,17 @@ function scheduleRegularCases({
   calendaringConfig,
   city,
   cityWasNotVisitedInLastTwoTerms = false,
-  potentialTrialLocations,
+  prospectiveSessionsByCity,
   regularCasesByCity,
   regularCaseSliceSize,
-}) {
+}: {
+  calendaringConfig: CalendaringConfig;
+  city: string;
+  cityWasNotVisitedInLastTwoTerms: boolean;
+  prospectiveSessionsByCity: ProspectiveSessionsByCity;
+  regularCasesByCity: CasesByCity;
+  regularCaseSliceSize: number;
+}): void {
   while (
     (regularCasesByCity[city]?.length || 0) >=
     calendaringConfig.regularCaseMinimumQuantity
@@ -231,7 +238,7 @@ function scheduleRegularCases({
     addProspectiveTrialSession({
       city,
       cityWasNotVisitedInLastTwoTerms,
-      potentialTrialLocations,
+      prospectiveSessionsByCity,
       sessionType: SESSION_TYPES.regular,
     });
   }
@@ -241,10 +248,17 @@ function scheduleSmallCases({
   calendaringConfig,
   city,
   cityWasNotVisitedInLastTwoTerms = false,
-  potentialTrialLocations,
+  prospectiveSessionsByCity,
   smallCasesByCity,
   smallCaseSliceSize,
-}) {
+}: {
+  calendaringConfig: CalendaringConfig;
+  city: string;
+  cityWasNotVisitedInLastTwoTerms: boolean;
+  prospectiveSessionsByCity: ProspectiveSessionsByCity;
+  smallCasesByCity: CasesByCity;
+  smallCaseSliceSize: number;
+}): void {
   while (
     (smallCasesByCity[city]?.length || 0) >=
     calendaringConfig.smallCaseMinimumQuantity
@@ -256,7 +270,7 @@ function scheduleSmallCases({
     addProspectiveTrialSession({
       city,
       cityWasNotVisitedInLastTwoTerms,
-      potentialTrialLocations,
+      prospectiveSessionsByCity,
       sessionType: SESSION_TYPES.small,
     });
   }
