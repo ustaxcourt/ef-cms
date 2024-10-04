@@ -96,7 +96,8 @@ resource "aws_iam_role_policy" "batch_service_role_policy" {
                 "ecs:DeleteCluster"
             ],
             "Resource": [
-                "arn:aws:ecs:us-east-1:${data.aws_caller_identity.current.account_id}:cluster/*"
+                "arn:aws:ecs:us-east-1:${data.aws_caller_identity.current.account_id}:cluster/compute_environment_*",
+                "arn:aws:ecs:us-west-1:${data.aws_caller_identity.current.account_id}:cluster/compute_environment_*"
             ],
             "Effect": "Allow"
         },
