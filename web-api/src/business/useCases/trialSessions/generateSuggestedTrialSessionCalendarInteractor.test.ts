@@ -5,6 +5,7 @@ import {
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import mockCases from '@shared/test/mockCasesReadyForTrial.json';
+import mockSpecialSessions from '@shared/test/mockSpecialTrialSessions.json';
 
 describe('generateSuggestedTrialSessionCalendar', () => {
   beforeAll(() => {
@@ -14,7 +15,7 @@ describe('generateSuggestedTrialSessionCalendar', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getTrialSessions.mockResolvedValue([]);
+      .getTrialSessions.mockResolvedValue(mockSpecialSessions);
   });
 
   it('should generate a trial term when valid date range is provided and sufficient data is present in the system', async () => {
@@ -30,5 +31,6 @@ describe('generateSuggestedTrialSessionCalendar', () => {
 
     expect(message).toEqual(SUGGESTED_TRIAL_SESSION_MESSAGES.success);
     expect(bufferArray).toBeDefined();
+    expect(bufferArray?.length).toBeGreaterThan(0);
   });
 });
