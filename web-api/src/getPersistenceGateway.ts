@@ -42,7 +42,6 @@ import { deletePractitionerDocument } from './persistence/dynamo/practitioners/d
 import { deleteRecord } from './persistence/elasticsearch/deleteRecord';
 import { deleteTrialSession } from './persistence/dynamo/trialSessions/deleteTrialSession';
 import { deleteTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/deleteTrialSessionWorkingCopy';
-import { deleteUserCaseNote } from './persistence/dynamo/userCaseNotes/deleteUserCaseNote';
 import { deleteUserConnection } from './persistence/dynamo/notifications/deleteUserConnection';
 import { deleteUserFromCase } from './persistence/dynamo/cases/deleteUserFromCase';
 import { deleteWorkItem } from './persistence/dynamo/workitems/deleteWorkItem';
@@ -115,8 +114,6 @@ import { getTrialSessions } from './persistence/dynamo/trialSessions/getTrialSes
 import { getUploadPolicy } from './persistence/s3/getUploadPolicy';
 import { getUserByEmail } from './persistence/dynamo/users/getUserByEmail';
 import { getUserById } from './persistence/dynamo/users/getUserById';
-import { getUserCaseNote } from './persistence/dynamo/userCaseNotes/getUserCaseNote';
-import { getUserCaseNoteForCases } from './persistence/dynamo/userCaseNotes/getUserCaseNoteForCases';
 import { getUsersById } from './persistence/dynamo/users/getUsersById';
 import { getUsersBySearchKey } from './persistence/dynamo/users/getUsersBySearchKey';
 import { getUsersInSection } from './persistence/dynamo/users/getUsersInSection';
@@ -163,7 +160,6 @@ import { updatePractitionerUser } from './persistence/dynamo/users/updatePractit
 import { updateTrialSession } from './persistence/dynamo/trialSessions/updateTrialSession';
 import { updateTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy';
 import { updateUser } from './persistence/dynamo/users/updateUser';
-import { updateUserCaseNote } from './persistence/dynamo/userCaseNotes/updateUserCaseNote';
 import { updateUserRecords } from './persistence/dynamo/users/updateUserRecords';
 import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
 import { verifyCaseForUser } from './persistence/dynamo/cases/verifyCaseForUser';
@@ -256,7 +252,6 @@ const gatewayMethods = {
     updateTrialSession,
     updateTrialSessionWorkingCopy,
     updateUser,
-    updateUserCaseNote,
     updateUserRecords,
   }),
   // methods below are not known to create or update "entity" records
@@ -276,7 +271,6 @@ const gatewayMethods = {
   deleteRecord,
   deleteTrialSession,
   deleteTrialSessionWorkingCopy,
-  deleteUserCaseNote,
   deleteUserConnection,
   deleteUserFromCase,
   deleteWorkItem,
@@ -347,8 +341,6 @@ const gatewayMethods = {
   getUploadPolicy,
   getUserByEmail,
   getUserById,
-  getUserCaseNote,
-  getUserCaseNoteForCases,
   getUsersById,
   getUsersBySearchKey,
   getUsersInSection,

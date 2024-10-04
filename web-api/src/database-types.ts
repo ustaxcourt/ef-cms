@@ -1,6 +1,7 @@
 import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
 
 export interface Database {
+  dwUserCaseNote: UserCaseNoteTable;
   dwMessage: MessageTable;
   dwCase: CaseTable;
 }
@@ -47,3 +48,13 @@ export interface CaseTable {
 export type CaseKysely = Selectable<CaseTable>;
 export type NewCaseKysely = Insertable<CaseTable>;
 export type UpdateCaseKysely = Updateable<CaseTable>;
+
+export interface UserCaseNoteTable {
+  docketNumber: string;
+  userId: string;
+  notes?: string;
+}
+
+export type UserCaseNoteKysely = Selectable<UserCaseNoteTable>;
+export type NewUserCaseNoteKysely = Insertable<UserCaseNoteTable>;
+export type UpdateUserCaseNoteKysely = Updateable<UserCaseNoteTable>;
