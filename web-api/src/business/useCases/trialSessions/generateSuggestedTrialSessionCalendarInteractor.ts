@@ -51,6 +51,11 @@ const HYBRID_CASE_MAX_QUANTITY = 100;
 
 // NOTE: will front-load term with trial sessions, and prioritize Regular > Small > Hybrid
 
+export const SUGGESTED_TRIAL_SESSION_MESSAGES = {
+  invalid: 'There are no trial sessions to schedule within the dates provided.',
+  success: 'Trial session calendar generated.',
+};
+
 export type TrialSessionReadyForCalendaring = TrialSession & { weekOf: string };
 
 export const generateSuggestedTrialSessionCalendarInteractor = async (
@@ -161,8 +166,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   if (scheduledTrialSessions.length < 1) {
     return {
       bufferArray: undefined,
-      message:
-        'There are no trial sessions to schedule within the dates provided.',
+      message: SUGGESTED_TRIAL_SESSION_MESSAGES.invalid,
     };
   }
 
@@ -176,7 +180,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   console.timeEnd('10275: Total interactor time');
   return {
     bufferArray,
-    message: 'Trial session calendar generated',
+    message: SUGGESTED_TRIAL_SESSION_MESSAGES.success,
   };
 };
 
