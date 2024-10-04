@@ -1,5 +1,5 @@
+import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
-import { petitionerCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkAddsRespondentToCase } from '../../../../helpers/caseDetail/caseInformation/petitionsclerk-adds-respondent-to-case';
 import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { respondentModifiesContactInfo } from '../../../../helpers/myAccount/respondent-modifies-contact-info';
@@ -10,7 +10,7 @@ const USER = 'irspractitioner2';
 describe('a repondent modifies their address', () => {
   it('should generate a notice of change address for all cases associated with the respondent', function () {
     loginAsPetitioner();
-    petitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
       petitionsClerkAddsRespondentToCase(docketNumber, BAR_NUMBER);
       respondentModifiesContactInfo(USER).then(newAddress => {
@@ -28,7 +28,7 @@ describe('a repondent modifies their address', () => {
 
   it('should not generate a notice of change address for any cases with unserved petitions', function () {
     loginAsPetitioner();
-    petitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       petitionsClerkAddsRespondentToCase(docketNumber, BAR_NUMBER);
       respondentModifiesContactInfo(USER);
       cy.login(USER, `case-detail/${docketNumber}`);

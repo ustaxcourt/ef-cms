@@ -4,18 +4,17 @@ import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
-import { props as cerebralProps } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React, { MutableRefObject } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 
-const props = cerebralProps as unknown as {
-  attachmentToPetitionFile: File;
+type IrsNoticeUpload = {
+  attachmentToPetitionFile?: File;
   index: number;
-  noticeIssuedDate: string;
-  taxYear: string;
+  noticeIssuedDate?: string;
+  taxYear?: string;
   todayDate: string;
   validationError: {
     file?: string;
@@ -24,42 +23,35 @@ const props = cerebralProps as unknown as {
     taxYear?: string;
     cityAndStateIssuingOffice?: string;
   };
-  caseType: string;
-  file: File;
-  cityAndStateIssuingOffice: string;
-  refProp: MutableRefObject<Object>;
+  caseType?: string;
+  file?: File;
+  cityAndStateIssuingOffice?: string;
+  refProp: (element: any) => void;
 };
 
-export const IrsNoticeUploadForm = connect(
-  {
-    DATE_FORMATS: state.constants.DATE_FORMATS,
-    attachmentToPetitionFile: props.attachmentToPetitionFile,
-    caseType: props.caseType,
-    caseTypeDescriptionHelper: state.caseTypeDescriptionHelper,
-    cityAndStateIssuingOffice: props.cityAndStateIssuingOffice,
-    constants: state.constants,
-    deleteValidationErrorMessageSequence:
-      sequences.deleteValidationErrorMessageSequence,
-    file: props.file,
-    index: props.index,
-    noticeIssuedDate: props.noticeIssuedDate,
-    petitionGenerationLiveValidationSequence:
-      sequences.petitionGenerationLiveValidationSequence,
-    refProp: props.refProp,
-    removeIrsNoticeFromFormSequence: sequences.removeIrsNoticeFromFormSequence,
-    taxYear: props.taxYear,
-    todayDate: props.todayDate,
-    updateIrsNoticeIndexPropertySequence:
-      sequences.updateIrsNoticeIndexPropertySequence,
-    validationError: props.validationError,
-  },
+const irsNoticeUploadDependencies = {
+  caseTypeDescriptionHelper: state.caseTypeDescriptionHelper,
+  constants: state.constants,
+  deleteValidationErrorMessageSequence:
+    sequences.deleteValidationErrorMessageSequence,
+  petitionGenerationLiveValidationSequence:
+    sequences.petitionGenerationLiveValidationSequence,
+  removeIrsNoticeFromFormSequence: sequences.removeIrsNoticeFromFormSequence,
+  updateIrsNoticeIndexPropertySequence:
+    sequences.updateIrsNoticeIndexPropertySequence,
+};
+
+export const IrsNoticeUploadForm = connect<
+  IrsNoticeUpload,
+  typeof irsNoticeUploadDependencies
+>(
+  irsNoticeUploadDependencies,
   function IrsNoticeUploadForm({
     attachmentToPetitionFile,
     caseType,
     caseTypeDescriptionHelper,
     cityAndStateIssuingOffice,
     constants,
-    DATE_FORMATS,
     deleteValidationErrorMessageSequence,
     file,
     index,
@@ -134,7 +126,7 @@ export const IrsNoticeUploadForm = connect(
                 refProp={refProp}
                 validationError={validationError}
                 value={caseType}
-                onBlurSequence={() => {
+                onBlur={() => {
                   petitionGenerationLiveValidationSequence({
                     validationKey: [
                       'irsNotices',
@@ -175,7 +167,7 @@ export const IrsNoticeUploadForm = connect(
                   updateIrsNoticeIndexPropertySequence({
                     key: index.toString(),
                     property: 'noticeIssuedDate',
-                    toFormat: DATE_FORMATS.ISO,
+                    toFormat: constants.DATE_FORMATS.ISO,
                     value: e.target.value,
                   });
 
