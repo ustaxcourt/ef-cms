@@ -7,7 +7,7 @@
  */
 
 import {
-  PractitionerCaseInfo,
+  PractitionerAllCasesInfo,
   PractitionerDetail,
 } from '@web-client/presenter/state';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -36,11 +36,11 @@ export const getPractitionerDetailAction = async ({
         userId: practitionerDetail.userId,
       });
 
-    const openCaseInfo: PractitionerCaseInfo = {
+    const openCaseInfo: PractitionerAllCasesInfo = {
       allCases: openCases,
       currentPage: 0,
     };
-    const closedCaseInfo: PractitionerCaseInfo = {
+    const closedCaseInfo: PractitionerAllCasesInfo = {
       allCases: closedCases,
       currentPage: 0,
     };

@@ -1,4 +1,5 @@
 import { Case, isClosed } from '../entities/cases/Case';
+import { PractitionerCaseDetail } from '@web-client/presenter/state';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -34,8 +35,24 @@ export const getPractitionerCasesInteractor = async (
     aCase => (aCase.caseTitle = Case.getCaseTitle(aCase.caseCaption)),
   );
 
+  const caseDetails: PractitionerCaseDetail[] = cases.map(c => {
+    return {
+      caseTitle: c.caseTitle,
+      consolidatedIconTooltipText: c.consolidatedIconTooltipText,
+      docketNumber: c.docketNumber,
+      docketNumberWithSuffix: c.docketNumberWithSuffix,
+      inConsolidatedGroup: c.inConsolidatedGroup,
+      isLeadCase: c.isLeadCase,
+      isSealed: c.isSealed,
+      leadDocketNumber: c.leadDocketNumber,
+      sealedDate: c.sealedDate,
+      sealedToTooltip: c.sealedToToolTip,
+      status: c.status,
+    };
+  });
+
   const [closedCases, openCases] = partition(
-    Case.sortByDocketNumber(cases).reverse(),
+    Case.sortByDocketNumber(caseDetails).reverse(),
     theCase => isClosed(theCase),
   );
 
