@@ -33,7 +33,7 @@ data "aws_security_group" "default" {
 
 # IAM role for AWS Batch
 resource "aws_iam_role" "batch_service_role" {
-  name = "batch_role_${var.environment}_${var.current_color}"
+  name = "batch_role_${var.environment}_${var.current_color}_${var.region}"
 
   assume_role_policy = <<EOF
 {
@@ -70,7 +70,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
 
 # IAM policy for S3 access
 resource "aws_iam_role_policy" "batch_service_role_policy" {
-  name = "batch_service_role_policy_${var.environment}_${var.current_color}"
+  name = "batch_service_role_policy_${var.environment}_${var.current_color}_${var.region}"
   role = aws_iam_role.batch_service_role.id
 
   policy = <<EOF
@@ -116,7 +116,7 @@ EOF
 }
 
 resource "aws_batch_compute_environment" "aws_batch_compute_environment" {
-  compute_environment_name = "compute_environment_${var.environment}_${var.current_color}"
+  compute_environment_name = "compute_environment_${var.environment}_${var.current_color}_${var.region}"
   service_role             = aws_iam_role.batch_service_role.arn
   type                     = "MANAGED"
 
@@ -129,7 +129,7 @@ resource "aws_batch_compute_environment" "aws_batch_compute_environment" {
 }
 
 resource "aws_batch_job_queue" "example_aws_batch_job_queue" {
-  name                 = "${var.environment}-${var.current_color}-aws-batch-job-queue"
+  name                 = "aws-batch-job-queue-${var.environment}-${var.current_color}-${var.region}"
   state                = "ENABLED"
   priority             = 1
   compute_environments = [aws_batch_compute_environment.aws_batch_compute_environment.arn]
@@ -148,7 +148,7 @@ data "aws_iam_policy_document" "ecs_assume_role_policy" {
 }
 
 resource "aws_iam_role" "job_definition_iam_role" {
-  name               = "job_definition_iam_role_${var.environment}_${var.current_color}"
+  name               = "job_definition_iam_role_${var.environment}_${var.current_color}_${var.region}"
   assume_role_policy = data.aws_iam_policy_document.ecs_assume_role_policy.json
 }
 
@@ -164,7 +164,7 @@ resource "aws_batch_job_definition" "example_aws_batch_job_definition" {
 
 
  container_properties = jsonencode({
-		image      = "${data.aws_caller_identity.current.account_id}.dkr.ecr.us-east-1.amazonaws.com/docket-entry-zipper-${var.environment}:latest"
+		image      = "${data.aws_caller_identity.current.account_id}.dkr.ecr.us-east-1.amazonaws.com/docket-entry-zipper-${var.environment}-${var.current_color}-${var.region}:latest"
 
     fargatePlatformConfiguration = {
       platformVersion = "LATEST"
