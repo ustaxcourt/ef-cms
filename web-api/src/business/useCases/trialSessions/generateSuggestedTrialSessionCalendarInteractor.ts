@@ -189,6 +189,7 @@ export const getSpecialSessionsInTerm = ({
   termEndDate: string;
   termStartDate: string;
 }): RawTrialSession[] => {
+  // TODO 10275 ignore the Motion / Hearing special sessions in DC that occur near-weekly
   return sessions.filter(session => {
     const isSessionInTerm = isDateWithinGivenInterval({
       date: session.startDate,

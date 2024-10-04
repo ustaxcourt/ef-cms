@@ -2,6 +2,7 @@ import { applicationContext } from '../../../../../shared/src/business/test/crea
 import { generateSuggestedTrialSessionCalendarInteractor } from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import mockCases from '@shared/test/mockCasesReadyForTrial.json';
+import mockSpecialSessions from '@shared/test/mockSpecialTrialSessions.json';
 
 describe('generateSuggestedTrialSessionCalendar', () => {
   beforeAll(() => {
@@ -11,7 +12,7 @@ describe('generateSuggestedTrialSessionCalendar', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getTrialSessions.mockResolvedValue([]);
+      .getTrialSessions.mockResolvedValue(mockSpecialSessions);
   });
 
   it('should generate a trial term when valid date range is provided and sufficient data is present in the system', async () => {
@@ -29,5 +30,6 @@ describe('generateSuggestedTrialSessionCalendar', () => {
 
     expect(message).toEqual('Trial session calendar generated');
     expect(bufferArray).toBeDefined();
+    expect(bufferArray?.length).toBeGreaterThan(0);
   });
 });
