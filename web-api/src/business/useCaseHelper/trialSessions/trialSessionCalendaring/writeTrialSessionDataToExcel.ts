@@ -1,3 +1,7 @@
+import {
+  FORMATS,
+  formatDateString,
+} from '@shared/business/utilities/DateHandler';
 import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { ScheduledTrialSession } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import ExcelJS from 'exceljs';
@@ -31,7 +35,7 @@ export const writeTrialSessionDataToExcel = async ({
   ];
 
   for (const week of weeks) {
-    columns.push({ header: week, key: week });
+    columns.push({ header: formatDateString(week, FORMATS.MD), key: week });
   }
 
   worksheet.columns = columns;

@@ -1,6 +1,7 @@
 import {
   FORMATS,
   createISODateString,
+  deconstructDate,
   formatDateString,
   getWeeksInRange,
   isDateWithinGivenInterval,
@@ -120,7 +121,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   // past two terms.
 
   console.time('10275: Compile cities from last two term time');
-  const previousTwoTerms = getPreviousTwoTerms(termStartDate);
+  const previousTwoTerms = getPreviousTwoTerms(termStartDateISO);
 
   const citiesFromLastTwoTerms = sessions
     .filter(session => {
@@ -189,7 +190,6 @@ export const getSpecialSessionsInTerm = ({
   termEndDate: string;
   termStartDate: string;
 }): RawTrialSession[] => {
-  // TODO 10275 ignore the Motion / Hearing special sessions in DC that occur near-weekly
   return sessions.filter(session => {
     const isSessionInTerm = isDateWithinGivenInterval({
       date: session.startDate,
@@ -207,9 +207,7 @@ export const getSpecialSessionsInTerm = ({
 };
 
 export const getPreviousTwoTerms = (termStartDate: string) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [month, day, year] = termStartDate.split('/');
-
+  const { month, year } = deconstructDate(termStartDate);
   const currentTerm = getCurrentTermByMonth(month);
   const terms = [
     `spring, ${+year - 1}`,
