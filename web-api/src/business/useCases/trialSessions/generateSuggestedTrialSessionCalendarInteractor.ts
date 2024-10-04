@@ -92,6 +92,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   const cases = await applicationContext
     .getPersistenceGateway()
     .getReadyForTrialCases({ applicationContext });
+
   console.timeEnd('10275: Get ready for trial cases time');
 
   console.time('10275: Get trial sessions time');
@@ -137,6 +138,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     cases,
     citiesFromLastTwoTerms,
   });
+
   console.timeEnd('10275: Generate prospectiveSessionsByCity time');
 
   const weeksToLoop = getWeeksInRange({
@@ -203,6 +205,7 @@ export const getSpecialSessionsInTerm = ({
 
 export const getPreviousTwoTerms = (termStartDate: string) => {
   const { month, year } = deconstructDate(termStartDate);
+
   const currentTerm = getCurrentTermByMonth(month);
   const terms = [
     `spring, ${+year - 1}`,
