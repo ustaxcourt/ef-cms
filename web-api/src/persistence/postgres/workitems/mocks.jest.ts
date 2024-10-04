@@ -38,6 +38,6 @@ jest.mock('@web-api/persistence/postgres/workitems/saveWorkItem', () =>
 );
 
 jest.mock(
-  '@web-api/persistence/postgres/workitems/setPriorityOnAllworkitems',
-  () => mockFactory('setPriorityOnAllworkitems'),
+  '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems',
+  () => mockFactory('setPriorityOnAllWorkItems'),
 );
