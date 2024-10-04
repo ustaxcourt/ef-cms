@@ -1,12 +1,11 @@
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
-import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
