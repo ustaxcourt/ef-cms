@@ -14,8 +14,7 @@ resource "aws_ecr_lifecycle_policy" "docket_entry_zipper_lifecycle_policy" {
       "selection": {
         "tagStatus": "any",
         "countType": "imageCountMoreThan",
-        "countNumber": 15,
-        "tagPrefixList": [""]
+        "countNumber": 15
       },
       "action": {
         "type": "expire"
@@ -25,3 +24,4 @@ resource "aws_ecr_lifecycle_policy" "docket_entry_zipper_lifecycle_policy" {
 }
 EOF
 }
+
