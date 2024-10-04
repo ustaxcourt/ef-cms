@@ -1,4 +1,4 @@
-import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/userCaseNotes/mocks.jest';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { processUserCaseNoteEntries } from '@web-api/business/useCases/processStreamRecords/processUserCaseNoteEntries';
 import { upsertUserCaseNotes } from '@web-api/persistence/postgres/userCaseNotes/upsertUserCaseNotes';
