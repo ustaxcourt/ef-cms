@@ -3,8 +3,6 @@ import { applicationContext } from '../../../../../shared/src/business/test/crea
 import { processUserCaseNoteEntries } from '@web-api/business/useCases/processStreamRecords/processUserCaseNoteEntries';
 import { upsertUserCaseNotes } from '@web-api/persistence/postgres/userCaseNotes/upsertUserCaseNotes';
 
-jest.mock('@web-api/persistence/postgres/messages/upsertMessages');
-
 describe('processUserCaseNoteEntries', () => {
   beforeEach(() => {
     (upsertUserCaseNotes as jest.Mock).mockResolvedValue(undefined);
