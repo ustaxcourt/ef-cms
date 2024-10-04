@@ -86,7 +86,6 @@ export class TrialSession extends JoiValidationEntity {
   public irsCalendarAdministrator?: string;
   public irsCalendarAdministratorInfo?: RawIrsCalendarAdministratorInfo;
   public isCalendared: boolean;
-  public isClosed?: boolean;
   public isStartDateWithinNOTTReminderRange?: boolean;
   public joinPhoneNumber?: string;
   public judge?: TJudge;
@@ -107,7 +106,6 @@ export class TrialSession extends JoiValidationEntity {
   public swingSessionId?: string;
   public term: string;
   public termYear: string;
-  public thirtyDaysBeforeTrialFormatted?: string;
   public trialClerk?: TTrialClerk;
   public trialLocation?: string;
   public trialSessionId?: string;
@@ -159,7 +157,6 @@ export class TrialSession extends JoiValidationEntity {
     this.irsCalendarAdministrator = rawSession.irsCalendarAdministrator;
     this.irsCalendarAdministratorInfo = rawSession.irsCalendarAdministratorInfo;
     this.isCalendared = rawSession.isCalendared || false;
-    this.isClosed = rawSession.isClosed || false;
     this.joinPhoneNumber = rawSession.joinPhoneNumber;
     this.maxCases = rawSession.maxCases;
     this.meetingId = rawSession.meetingId;
@@ -198,12 +195,6 @@ export class TrialSession extends JoiValidationEntity {
       };
     }
 
-    if (rawSession.isCalendared && rawSession.startDate) {
-      this.setNoticeOfTrialReminderAlert();
-    } else {
-      this.isStartDateWithinNOTTReminderRange = false;
-    }
-
     if (rawSession.trialClerk && rawSession.trialClerk.name) {
       this.trialClerk = {
         name: rawSession.trialClerk.name,
@@ -214,6 +205,33 @@ export class TrialSession extends JoiValidationEntity {
 
   static isStandaloneRemote(sessionScope) {
     return sessionScope === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote;
+  }
+
+  static isStartDateWithinNOTTReminderRange({
+    isCalendared,
+    startDate,
+  }: {
+    isCalendared?: boolean;
+    startDate?: string;
+  }): boolean {
+    if (!isCalendared || !startDate) {
+      return false;
+    }
+
+    const formattedStartDate = formatDateString(startDate, FORMATS.MMDDYY);
+    const trialStartDateString = prepareDateFromString(
+      formattedStartDate,
+      FORMATS.MMDDYY,
+    );
+
+    return isTodayWithinGivenInterval({
+      intervalEndDate: trialStartDateString.minus({
+        ['days']: 24, // luxon's interval end date is not inclusive
+      }),
+      intervalStartDate: trialStartDateString.minus({
+        ['days']: 34,
+      }),
+    });
   }
 
   static validationRules = {
@@ -406,32 +424,6 @@ export class TrialSession extends JoiValidationEntity {
     return skPrefix;
   }
 
-  setNoticeOfTrialReminderAlert() {
-    const formattedStartDate = formatDateString(this.startDate, FORMATS.MMDDYY);
-    const trialStartDateString: any = prepareDateFromString(
-      formattedStartDate,
-      FORMATS.MMDDYY,
-    );
-
-    this.isStartDateWithinNOTTReminderRange = isTodayWithinGivenInterval({
-      intervalEndDate: trialStartDateString.minus({
-        ['days']: 24, // luxon's interval end date is not inclusive
-      }),
-      intervalStartDate: trialStartDateString.minus({
-        ['days']: 34,
-      }),
-    });
-
-    const thirtyDaysBeforeTrialInclusive: any = trialStartDateString.minus({
-      ['days']: 29,
-    });
-
-    this.thirtyDaysBeforeTrialFormatted = formatDateString(
-      thirtyDaysBeforeTrialInclusive,
-      FORMATS.MMDDYY,
-    );
-  }
-
   setAsCalendared() {
     this.isCalendared = true;
     this.sessionStatus = SESSION_STATUS_TYPES.open;
@@ -546,6 +538,10 @@ export class TrialSession extends JoiValidationEntity {
 
   addPaperServicePdf(fileId: string, title: string): void {
     this.paperServicePdfs.push({ fileId, title });
+  }
+
+  isClosed(): boolean {
+    return this.sessionStatus === SESSION_STATUS_TYPES.closed;
   }
 }
 
