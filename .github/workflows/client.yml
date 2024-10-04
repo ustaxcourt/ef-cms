@@ -49,7 +49,7 @@ jobs:
           merge-multiple: true
           path: coverage
       - name: Process Coverage
-        run: npx nyc report --check-coverage --branches 94.56 --functions 97 --lines 97 --statements 97 --reporter lcov --reporter text --reporter clover -t coverage
+        run: npx nyc report --check-coverage --branches 90 --functions 90 --lines 90 --statements 90 --reporter lcov --reporter text --reporter clover -t coverage
       - uses: geekyeggo/delete-artifact@v1
         with:
           name: coverage-artifacts

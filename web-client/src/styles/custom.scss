@@ -1385,19 +1385,17 @@ hr.lighter {
   font-size: 20px !important;
 }
 
-.need-help-selecting {
-  .usa-accordion__heading:not(:first-child) {
-    margin-top: 1rem;
-  }
+.usa-accordion__heading:not(:first-child) {
+  margin-top: 1rem;
 }
 
-.need-help-selecting,
 .submit-reminders {
   .content-header {
     padding: 11px 20px;
     margin: 0;
   }
 }
+
 
 .all-columns-view {
   column-count: 4;
@@ -2430,4 +2428,18 @@ button.change-scanner-button {
 
 .column-width-lg {
   width: 300px;
+}
+
+.bg-gray {
+  background-color: color($theme-color-base-lightest);
+}
+
+.accordion-title {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.padding-0 {
+  // This has higher importance than uwds padding-0
+  padding: 0;
 }
