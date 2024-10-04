@@ -6,6 +6,7 @@ import { applicationContext } from '../../../../../shared/src/business/test/crea
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
 import { updateUserCaseNoteInteractor } from './updateUserCaseNoteInteractor';
+import { updateUserCaseNote as updateUserCaseNoteMock } from '@web-api/persistence/postgres/userCaseNotes/updateUserCaseNote';
 
 describe('updateUserCaseNoteInteractor', () => {
   const mockCaseNote = {
@@ -13,6 +14,8 @@ describe('updateUserCaseNoteInteractor', () => {
     notes: 'hello world',
     userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
   };
+
+  const updateUserCaseNote = updateUserCaseNoteMock as jest.Mock;
 
   it('throws an error if the user is not valid or authorized', async () => {
     await expect(
@@ -35,9 +38,7 @@ describe('updateUserCaseNoteInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockImplementation(() => mockUser);
-    applicationContext
-      .getPersistenceGateway()
-      .updateUserCaseNote.mockImplementation(v => v.caseNoteToUpdate);
+    updateUserCaseNote.mockImplementation(v => v.caseNoteToUpdate);
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue({
@@ -68,7 +69,6 @@ describe('updateUserCaseNoteInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockImplementation(() => mockUser);
-    applicationContext.getPersistenceGateway().updateUserCaseNote = jest.fn();
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(null);
@@ -82,9 +82,8 @@ describe('updateUserCaseNoteInteractor', () => {
       omit(mockUser, 'section'),
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateUserCaseNote.mock
-        .calls[0][0].caseNoteToUpdate.userId,
-    ).toEqual(userIdToExpect);
+    expect(updateUserCaseNote.mock.calls[0][0].caseNoteToUpdate.userId).toEqual(
+      userIdToExpect,
+    );
   });
 });
