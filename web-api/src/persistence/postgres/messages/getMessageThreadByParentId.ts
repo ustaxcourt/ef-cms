@@ -9,8 +9,8 @@ export const getMessageThreadByParentId = async ({
 }): Promise<Message[]> => {
   const messages = await getDbReader(reader =>
     reader
-      .selectFrom('message as m')
-      .leftJoin('case as c', 'c.docketNumber', 'm.docketNumber')
+      .selectFrom('dwMessage as m')
+      .leftJoin('dwCase as c', 'c.docketNumber', 'm.docketNumber')
       .where('m.parentMessageId', '=', parentMessageId)
       .selectAll()
       .select('m.docketNumber')

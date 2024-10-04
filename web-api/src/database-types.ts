@@ -1,8 +1,8 @@
 import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
 
 export interface Database {
-  message: MessageTable;
-  case: CaseTable;
+  dwCase: CaseTable;
+  dwMessage: MessageTable;
   workItem: WorkItemTable;
 }
 

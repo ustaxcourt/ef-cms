@@ -51,11 +51,13 @@ describe('File a petition: Intro', () => {
         cy.get('[data-testid="deadline-to-file"]').contains(
           'If you received a notice in the mail from the IRS',
         );
-        cy.get('[data-testid="accordion-item-title"]').contains(
+        cy.get('[data-testid="are-you-filing-jointly-with-a-spouse"]').contains(
           'Are you filing jointly with a spouse?',
         );
 
-        cy.get('[data-testid="accordion-item-title"]').eq(0).click();
+        cy.get('[data-testid="are-you-filing-jointly-with-a-spouse"]')
+          .eq(0)
+          .click();
         cy.get('[data-testid="filing-jointly-accordion-item"]').contains(
           "To file a joint Petition with your spouse, you must have the spouse's consent",
         );
@@ -118,9 +120,9 @@ describe('File a petition: Intro', () => {
         cy.get('[data-testid="deadline-to-file"]').contains(
           'If the petitioner received a notice in the mail from the IRS',
         );
-        cy.get('[data-testid="accordion-item-title"]')
-          .contains('Is the petitioner filing jointly with a spouse?')
-          .should('not.exist');
+        cy.get('[data-testid="are-you-filing-jointly-with-a-spouse"]').should(
+          'not.exist',
+        );
       });
     });
   });

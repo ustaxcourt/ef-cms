@@ -9,7 +9,7 @@ export const createMessage = async ({
 }): Promise<RawMessage> => {
   const createdMessage = await getDbWriter(writer =>
     writer
-      .insertInto('message')
+      .insertInto('dwMessage')
       .values(toKyselyNewMessage(message))
       .returningAll()
       .executeTakeFirst(),

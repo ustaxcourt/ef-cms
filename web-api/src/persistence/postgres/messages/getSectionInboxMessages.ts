@@ -10,8 +10,8 @@ export const getSectionInboxMessages = async ({
 }): Promise<MessageResult[]> => {
   const messages = await getDbReader(reader =>
     reader
-      .selectFrom('message as m')
-      .leftJoin('case as c', 'c.docketNumber', 'm.docketNumber')
+      .selectFrom('dwMessage as m')
+      .leftJoin('dwCase as c', 'c.docketNumber', 'm.docketNumber')
       .where('m.toSection', '=', section)
       .where('m.isRepliedTo', '=', false)
       .where('m.isCompleted', '=', false)

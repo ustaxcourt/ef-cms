@@ -6,12 +6,16 @@
     - POSTGRES_MASTER_USERNAME master
     - POSTGRES_MASTER_PASSWORD ${GENERATE_A_SECURE_PASS} # we recommend 32+ character alpha numeric.  special character might mess stuff up
     - (optional) RDS_MAX_CAPACITY 1
-    - (optional) RDS_MIN_CAPACITY 0.5
+    - (optional) RDS_MIN_CAPACITY 32
 3. source scripts/env/set-env.zsh ${ENV}
 4. npm run deploy:account-specific (to update the necessary circle policies)
 5. npm run deploy:allColors ${ENV}
     - this will create the rds cluster with the master username and password
-6. setup-for-blue-green-migration.sh ${ENV} - we need an alpha - beta migration so messages get moved to rds
+6. setup for migration 
+    - in deploy table
+        - migrate = true
+        - source = <beta/alpha> (based on current table with data)
+        - destination = <beta/alpha> (based on current table without data)
 7. create the database users
     - look up rds endpoint for the writer instance
     - install psql (brew install libpq)
