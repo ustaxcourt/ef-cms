@@ -7,6 +7,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { formatCase } from '@shared/business/utilities/getFormattedCaseDetail';
 import { partition } from 'lodash';
 
 export const getPractitionerCasesInteractor = async (
@@ -31,11 +32,8 @@ export const getPractitionerCasesInteractor = async (
     .getPersistenceGateway()
     .getCasesByDocketNumbers({ applicationContext, docketNumbers });
 
-  cases.forEach(
-    aCase => (aCase.caseTitle = Case.getCaseTitle(aCase.caseCaption)),
-  );
-
   const caseDetails: PractitionerCaseDetail[] = cases.map(c => {
+    c = formatCase(applicationContext, c, authorizedUser);
     return {
       caseTitle: c.caseTitle,
       consolidatedIconTooltipText: c.consolidatedIconTooltipText,
@@ -44,9 +42,6 @@ export const getPractitionerCasesInteractor = async (
       inConsolidatedGroup: c.inConsolidatedGroup,
       isLeadCase: c.isLeadCase,
       isSealed: c.isSealed,
-      leadDocketNumber: c.leadDocketNumber,
-      sealedDate: c.sealedDate,
-      sealedToTooltip: c.sealedToToolTip,
       status: c.status,
     };
   });

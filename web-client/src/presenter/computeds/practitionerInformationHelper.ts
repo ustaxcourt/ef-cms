@@ -1,10 +1,8 @@
 /* eslint-disable complexity */
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { formatCase } from '@shared/business/utilities/getFormattedCaseDetail';
 import { state } from '@web-client/presenter/app.cerebral';
 
-import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Get } from 'cerebral';
 import { PractitionerCaseDetail } from '@web-client/presenter/state';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
@@ -15,17 +13,14 @@ const getPagesToDisplay = ({
   applicationContext,
   cases,
   pageNumber,
-  user,
 }: {
   pageNumber: number;
   cases: PractitionerCaseDetail[];
   applicationContext: ClientApplicationContext;
-  user: AuthUser;
 }) => {
   return cases
     .slice(pageNumber * PAGE_SIZE, (pageNumber + 1) * PAGE_SIZE)
     .map(c => {
-      c = formatCase(applicationContext, c, user);
       c.sealedToTooltip = getSealedDocketEntryTooltip(applicationContext, c);
       return c;
     });
@@ -72,14 +67,12 @@ export const practitionerInformationHelper = (
     applicationContext,
     cases: practitionerDetail.openCaseInfo?.allCases || [],
     pageNumber: practitionerDetail.openCaseInfo?.currentPage || 0,
-    user,
   });
 
   const closedCasesToDisplay = getPagesToDisplay({
     applicationContext,
     cases: practitionerDetail.closedCaseInfo?.allCases || [],
     pageNumber: practitionerDetail.closedCaseInfo?.currentPage || 0,
-    user,
   });
 
   return {
