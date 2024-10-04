@@ -162,7 +162,6 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     },
   );
   console.timeEnd('10275: assignSessionsToWeeks time');
-  // TODO: extract messages to constants
   if (scheduledTrialSessions.length < 1) {
     return {
       bufferArray: undefined,

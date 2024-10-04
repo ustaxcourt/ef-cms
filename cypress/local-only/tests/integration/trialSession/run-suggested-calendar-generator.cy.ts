@@ -3,6 +3,7 @@ import {
   createISODateString,
   getBusinessDateInFuture,
 } from '../../../../../shared/src/business/utilities/DateHandler';
+import { SUGGESTED_TRIAL_SESSION_MESSAGES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { loginAsPetitionsClerk1 } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Run the suggested trial session calendar generator', () => {
@@ -30,5 +31,9 @@ describe('Run the suggested trial session calendar generator', () => {
       '.usa-date-picker__wrapper > [data-testid="termEndDate-date-end-input"]',
     ).type(oneMonthFromNow);
     cy.get('[data-testid="modal-button-confirm"]').click();
+    cy.get('[data-testid="success-alert"]').should(
+      'contain.text',
+      SUGGESTED_TRIAL_SESSION_MESSAGES.success,
+    );
   });
 });
