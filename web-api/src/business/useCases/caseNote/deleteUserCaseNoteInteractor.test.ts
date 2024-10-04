@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/userCaseNotes/mocks.jest';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';

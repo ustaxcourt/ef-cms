@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/userCaseNotes/mocks.jest';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';

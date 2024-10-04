@@ -19,3 +19,8 @@ jest.mock(
   '@web-api/persistence/postgres/userCaseNotes/updateUserCaseNote.ts',
   () => mockFactory('updateUserCaseNote'),
 );
+
+jest.mock(
+  '@web-api/persistence/postgres/userCaseNotes/upsertUserCaseNotes.ts',
+  () => mockFactory('upsertUserCaseNotes'),
+);
