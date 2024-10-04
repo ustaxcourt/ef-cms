@@ -15,7 +15,7 @@ export const upsertCase = async ({ rawCase }: { rawCase: RawCase }) => {
   };
   await getDbWriter(writer =>
     writer
-      .insertInto('case')
+      .insertInto('dwCase')
       .values(caseToUpsert)
       .onConflict(oc => oc.column('docketNumber').doUpdateSet(caseToUpsert))
       .execute(),

@@ -16,11 +16,9 @@ export const upsertCases = async (rawCases: RawCase[]) => {
     trialLocation: rawCase.trialLocation,
   }));
 
-  console.log('**** rawCases', rawCases);
-
   await getDbWriter(writer =>
     writer
-      .insertInto('case')
+      .insertInto('dwCase')
       .values(casesToUpsert)
       .onConflict(oc =>
         oc.column('docketNumber').doUpdateSet(c => {

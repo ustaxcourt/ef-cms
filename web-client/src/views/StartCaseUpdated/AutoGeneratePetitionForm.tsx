@@ -9,16 +9,16 @@ import React from 'react';
 export const AutoGeneratePetitionForm = connect(
   {
     addFactOrReasonSequence: sequences.addFactOrReasonSequence,
+    filePetitionHelper: state.filePetitionHelper,
     form: state.form,
-    updatedFilePetitionHelper: state.updatedFilePetitionHelper,
   },
 
   function AutoGeneratePetitionForm({
     addFactOrReasonSequence,
+    filePetitionHelper,
     form,
-    updatedFilePetitionHelper,
   }) {
-    const { isPetitioner } = updatedFilePetitionHelper;
+    const { isPetitioner } = filePetitionHelper;
 
     return (
       <>
@@ -40,7 +40,7 @@ export const AutoGeneratePetitionForm = connect(
                 return (
                   <div className="display-flex" key={key}>
                     <div className="text-semibold margin-right-1 fact-reason-character-label">
-                      {`${updatedFilePetitionHelper.getLetterByIndex(index)}. `}
+                      {`${filePetitionHelper.getLetterByIndex(index)}. `}
                     </div>
                     <PetitionFactOrReason
                       factOrReasonCount={index}
@@ -79,7 +79,7 @@ export const AutoGeneratePetitionForm = connect(
                 return (
                   <div className="display-flex" key={key}>
                     <div className="text-semibold margin-right-1 fact-reason-character-label">
-                      {`${updatedFilePetitionHelper.getLetterByIndex(index)}. `}
+                      {`${filePetitionHelper.getLetterByIndex(index)}. `}
                     </div>
                     <PetitionFactOrReason
                       factOrReasonCount={index}

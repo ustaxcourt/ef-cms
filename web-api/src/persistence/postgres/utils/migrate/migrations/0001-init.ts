@@ -2,7 +2,7 @@ import { Kysely } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
-    .createTable('case')
+    .createTable('dwCase')
     .addColumn('docketNumber', 'varchar', col => col.primaryKey())
     .addColumn('status', 'varchar', col => col.notNull())
     .addColumn('caption', 'varchar', col => col.notNull())
@@ -13,7 +13,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .execute();
 
   await db.schema
-    .createTable('message')
+    .createTable('dwMessage')
     .addColumn('messageId', 'varchar', col => col.primaryKey())
     .addColumn('attachments', 'jsonb')
     .addColumn('completedAt', 'timestamptz')
