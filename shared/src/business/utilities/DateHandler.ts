@@ -8,6 +8,7 @@ export const FORMATS = {
   FILENAME_DATE: 'MMMM_d_yyyy',
   ISO: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ",
   LOG_TIMESTAMP: "yyyy/MM/dd HH:mm:ss.SSS 'ET'",
+  MD: 'M/d',
   MDYY: 'M/d/yy',
   MDYYYY: 'M/d/yyyy',
   MDYYYY_DASHED: 'M-d-yyyy',
