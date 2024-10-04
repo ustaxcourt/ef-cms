@@ -1,43 +1,28 @@
 import {
-  ALLOWLIST_FEATURE_FLAGS,
-  ROLES,
-} from '../../../shared/src/business/entities/EntityConstants';
-import {
   Accordion,
   AccordionItem,
 } from '@web-client/ustc-ui/Accordion/Accordion';
 import { Button } from '../ustc-ui/Button/Button';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
+import { InlineLink } from '@web-client/ustc-ui/InlineLink/InlineLink';
+import { ROLES } from '../../../shared/src/business/entities/EntityConstants';
 import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-type PetitionCreationRoles = 'petitioner' | 'privatePractitioner';
-
 export const BeforeStartingCase = connect(
   {
     closeModalAndReturnToDashboardSequence:
       sequences.closeModalAndReturnToDashboardSequence,
-    petitionFlowUpdated:
-      state.featureFlags[ALLOWLIST_FEATURE_FLAGS.UPDATED_PETITION_FLOW.key],
     showModal: state.modal.showModal,
     user: state.user,
   },
   function BeforeStartingCase({
     closeModalAndReturnToDashboardSequence,
-    petitionFlowUpdated,
     user,
   }) {
-    const redirectUrl =
-      petitionFlowUpdated &&
-      [ROLES.petitioner, ROLES.privatePractitioner].includes(
-        user.role as PetitionCreationRoles,
-      )
-        ? '/file-a-petition/new'
-        : '/file-a-petition/step-1';
-
     const isPetitioner = user.role === ROLES.petitioner;
     return (
       <>
@@ -88,46 +73,30 @@ export const BeforeStartingCase = connect(
                 style={{ marginBottom: '5px' }}
               >
                 {`This is the document that explains why ${isPetitioner ? 'you disagree' : 'the petitioner disagrees'} with the
-                Internal Revenue Service (IRS). There are ${petitionFlowUpdated ? 'three' : 'two'} methods to file the
-                Petition:`}
+                Internal Revenue Service (IRS). There are three methods to file the Petition:`}
               </div>
               <ul className="margin-top-0">
-                {petitionFlowUpdated && (
-                  <li>
-                    Answer some questions and have DAWSON create and file the
-                    Petition.
-                  </li>
-                )}
+                <li>
+                  Answer some questions and have DAWSON create and file the
+                  Petition.
+                </li>
                 <li>
                   {
                     "Complete and upload for filing the Court's standard Petition form. "
                   }
-                  <Button
-                    link
-                    className="usa-link--external text-left mobile-text-wrap margin-left-1"
+                  <InlineLink
                     href="https://www.ustaxcourt.gov/resources/forms/Petition_Simplified_Form_2.pdf"
                     icon="file-pdf"
-                    iconColor="blue"
-                    rel="noopener noreferrer"
-                    target="_blank"
                   >
                     Petition form (T.C. Form 2)
-                  </Button>
+                  </InlineLink>
                 </li>
                 <li>
                   {`Upload for filing ${isPetitioner ? 'your own' : 'a'} Petition that complies with the
                   requirements of the `}
-                  <Button
-                    link
-                    className="usa-link--external text-left mobile-text-wrap"
-                    href="https://www.ustaxcourt.gov/rules.html"
-                    iconColor="blue"
-                    overrideMargin="margin-right-1"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
+                  <InlineLink href="https://www.ustaxcourt.gov/rules.html">
                     Tax Court Rules of Practice and Procedure.
-                  </Button>
+                  </InlineLink>
                 </li>
               </ul>
 
@@ -169,17 +138,9 @@ export const BeforeStartingCase = connect(
                   </li>
                   <li>
                     {' '}
-                    <Button
-                      link
-                      className="usa-link--external text-left mobile-text-wrap"
-                      href="https://www.ustaxcourt.gov/resources/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf"
-                      iconColor="blue"
-                      overrideMargin="margin-right-1"
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
+                    <InlineLink href="https://www.ustaxcourt.gov/resources/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf">
                       Download the form
-                    </Button>{' '}
+                    </InlineLink>{' '}
                     and fill it out to submit it.
                   </li>
                 </ul>
@@ -223,11 +184,11 @@ export const BeforeStartingCase = connect(
               {isPetitioner ? 'your' : 'the'} case may be dismissed.
             </div>
           </div>
-          <CaseInfoAccordion isPetitioner={isPetitioner} />
+          <BeforeStartingCaseAccordion isPetitioner={isPetitioner} />
           <Button
             className="before-case-button"
             data-testid="go-to-step-1"
-            href={redirectUrl}
+            href="/file-a-petition/new"
           >
             {"I'm Ready to Start"}
           </Button>
@@ -271,14 +232,17 @@ export const BeforeStartingCase = connect(
 
 BeforeStartingCase.displayName = 'BeforeStartingCase';
 
-function CaseInfoAccordion({ isPetitioner }: { isPetitioner: boolean }) {
+function BeforeStartingCaseAccordion({
+  isPetitioner,
+}: {
+  isPetitioner: boolean;
+}) {
   return (
     <div className="grid-row grid-gap">
-      {isPetitioner && (
-        <Accordion className="petitioner-accordion-title" headingLevel="3">
+      <Accordion dataTestId="before-starting-case-accordion">
+        {isPetitioner && (
           <AccordionItem
-            customTitleClassName="petitioner-accordion-title"
-            key="Are you filing jointly with a spouse?"
+            dataTestId="are-you-filing-jointly-with-a-spouse"
             title="Are you filing jointly with a spouse?"
           >
             <div data-testid="filing-jointly-accordion-item">
@@ -287,38 +251,25 @@ function CaseInfoAccordion({ isPetitioner }: { isPetitioner: boolean }) {
               }
             </div>
           </AccordionItem>
-        </Accordion>
-      )}
-      {isPetitioner && (
-        <Accordion className="petitioner-accordion-title" headingLevel="3">
+        )}
+        {isPetitioner && (
           <AccordionItem
-            customTitleClassName="petitioner-accordion-title"
             key="Are you filing on behalf of someone else?"
             title="Are you filing on behalf of someone else?"
           >
             <div data-testid="filing-someone-else-accordion-item">
               To file a case on behalf of someone else, you must be authorized
               to practice before this Court as provided by the{' '}
-              <Button
-                link
-                className="usa-link--external text-left mobile-text-wrap"
-                href="https://ustaxcourt.gov/rules.html"
-                overrideMargin="margin-right-0"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
+              <InlineLink href="https://ustaxcourt.gov/rules.html">
                 Tax Court Rules of Practice and Procedure (Rule 60)
-              </Button>
+              </InlineLink>
               {
                 '. Enrolled agents, certified public accountants, and attorneys who are not admitted to practice before the Court are not eligible to represent a party.'
               }
             </div>
           </AccordionItem>
-        </Accordion>
-      )}
-      <Accordion className="petitioner-accordion-title" headingLevel="3">
+        )}
         <AccordionItem
-          customTitleClassName="petitioner-accordion-title"
           key="Are you filing for a business?"
           title={
             isPetitioner
@@ -328,23 +279,17 @@ function CaseInfoAccordion({ isPetitioner }: { isPetitioner: boolean }) {
         >
           <div className="margin-bottom-1">
             {`If ${isPetitioner ? "you're filing for" : 'the petitioner is'} a business, you'll need to complete and
-          submit the Corporate Disclosure Statement.`}
+            submit the Corporate Disclosure Statement.`}
           </div>
           <div>
             {"Download and fill out the form if you haven't already done so:"}
           </div>
-          <Button
-            link
-            className="usa-link--external text-left mobile-text-wrap"
+          <InlineLink
             href="https://www.ustaxcourt.gov/resources/forms/Corporate_Disclosure_Statement_Form.pdf"
             icon="file-pdf"
-            iconColor="blue"
-            overrideMargin="margin-right-0"
-            rel="noopener noreferrer"
-            target="_blank"
           >
             Corporate Disclosure Statement (T.C. Form 6)
-          </Button>
+          </InlineLink>
         </AccordionItem>
       </Accordion>
     </div>

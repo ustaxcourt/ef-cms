@@ -81,12 +81,6 @@ import { getAllWebSocketConnections } from '@web-api/persistence/dynamo/notifica
 import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
-import {
-  getChambersSections,
-  getChambersSectionsLabels,
-  getJudgesChambers,
-  getJudgesChambersWithLegacy,
-} from '@web-client/business/chambers/getJudgesChambers';
 import { getConfigurationItemValue } from '@web-api/persistence/dynamo/deployTable/getConfigurationItemValue';
 import { getConstants } from '@web-client/getConstants';
 import { getCropBox } from '@shared/business/utilities/getCropBox';
@@ -288,7 +282,6 @@ export const createTestApplicationContext = () => {
       .fn()
       .mockImplementation(getFormattedTrialSessionDetails),
     getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
-    getJudgesChambers: jest.fn().mockImplementation(getJudgesChambers),
     getMonthDayYearInETObj: jest
       .fn()
       .mockImplementation(DateHandler.getMonthDayYearInETObj),
@@ -495,10 +488,6 @@ export const createTestApplicationContext = () => {
       .fn()
       .mockImplementation(getCaseDeadlinesByDocketNumber),
     getCasesByFilters: jest.fn(),
-    getChambersSections: jest.fn().mockImplementation(getChambersSections),
-    getChambersSectionsLabels: jest
-      .fn()
-      .mockImplementation(getChambersSectionsLabels),
     getConfigurationItemValue: jest
       .fn()
       .mockImplementation(getConfigurationItemValue),
@@ -521,10 +510,6 @@ export const createTestApplicationContext = () => {
       }
     }),
     getItem: jest.fn().mockImplementation(getItem),
-    getJudgesChambers: jest.fn().mockImplementation(getJudgesChambers),
-    getJudgesChambersWithLegacy: jest
-      .fn()
-      .mockImplementation(getJudgesChambersWithLegacy),
     getLimiterByKey: jest.fn(),
     getMaintenanceMode: jest.fn(),
     getPractitionerDocuments: jest.fn(),

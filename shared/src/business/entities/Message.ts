@@ -2,7 +2,7 @@ import { CASE_STATUS_TYPES } from './EntityConstants';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { createISODateString } from '../utilities/DateHandler';
-import { getUniqueId } from './utils';
+import { getUniqueId } from '@shared/sharedAppContext';
 import joi from 'joi';
 
 export class Message extends JoiValidationEntity {

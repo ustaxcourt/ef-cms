@@ -1,6 +1,6 @@
 import { Message } from '@shared/business/entities/Message';
 import { getDbReader } from '@web-api/database';
-import { transformNullToUndefined } from '../utils/transformNullToUndefined';
+import { messageResultEntity } from '@web-api/persistence/postgres/messages/mapper';
 
 export const getMessageById = async ({
   messageId,
@@ -9,11 +9,13 @@ export const getMessageById = async ({
 }): Promise<Message> => {
   const message = await getDbReader(reader =>
     reader
-      .selectFrom('message')
+      .selectFrom('dwMessage as m')
+      .leftJoin('dwCase as c', 'c.docketNumber', 'm.docketNumber')
       .where('messageId', '=', messageId)
       .selectAll()
+      .select('m.docketNumber')
       .executeTakeFirst(),
   );
 
-  return new Message(transformNullToUndefined({ ...message }));
+  return messageResultEntity(message);
 };
