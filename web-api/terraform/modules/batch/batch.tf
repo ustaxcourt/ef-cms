@@ -159,7 +159,7 @@ resource "aws_iam_role_policy_attachment" "job_definition_execution_role_policy"
 
 # Define the Job Definition to download, zip, and upload files to S3
 resource "aws_batch_job_definition" "example_aws_batch_job_definition" {
-  name       = "s3-zip-job-${var.environment}-${var.current_color}"
+  name       = "s3-zip-job-${var.environment}-${var.current_color}-${var.region}"
   type       = "container"
 
 
