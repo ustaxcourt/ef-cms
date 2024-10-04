@@ -1,6 +1,5 @@
 import {
   FORMATS,
-  createISODateString,
   deconstructDate,
   formatDateString,
   getWeeksInRange,
@@ -70,9 +69,6 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     throw new UnauthorizedError('Unauthorized to generate term');
   }
 
-  const termStartDateISO = createISODateString(termStartDate, FORMATS.MMDDYYYY);
-  const termEndDateISO = createISODateString(termEndDate, FORMATS.MMDDYYYY);
-
   //
   // Maximum of 6 sessions per week
   // Maximum of 5 sessions total per location
@@ -111,8 +107,8 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   console.time('10275: Filter trial sessions time');
   const specialSessions = getSpecialSessionsInTerm({
     sessions,
-    termEndDate: termEndDateISO,
-    termStartDate: termStartDateISO,
+    termEndDate,
+    termStartDate,
   });
 
   console.timeEnd('10275: Filter trial sessions time');
@@ -121,7 +117,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   // past two terms.
 
   console.time('10275: Compile cities from last two term time');
-  const previousTwoTerms = getPreviousTwoTerms(termStartDateISO);
+  const previousTwoTerms = getPreviousTwoTerms(termStartDate);
 
   const citiesFromLastTwoTerms = sessions
     .filter(session => {
@@ -145,8 +141,8 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   console.timeEnd('10275: Generate prospectiveSessionsByCity time');
 
   const weeksToLoop = getWeeksInRange({
-    endDate: termEndDateISO,
-    startDate: termStartDateISO,
+    endDate: termEndDate,
+    startDate: termStartDate,
   });
 
   console.time('10275: assignSessionsToWeeks time');
