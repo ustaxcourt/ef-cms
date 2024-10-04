@@ -1,8 +1,6 @@
-import {
-  SUGGESTED_TRIAL_SESSION_MESSAGES,
-  generateSuggestedTrialSessionCalendarInteractor,
-} from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
+import { SUGGESTED_TRIAL_SESSION_MESSAGES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { generateSuggestedTrialSessionCalendarInteractor } from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import mockCases from '@shared/test/mockCasesReadyForTrial.json';
 import mockSpecialSessions from '@shared/test/mockSpecialTrialSessions.json';

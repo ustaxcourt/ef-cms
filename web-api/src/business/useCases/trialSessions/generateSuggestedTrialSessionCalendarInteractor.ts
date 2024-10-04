@@ -51,11 +51,6 @@ const HYBRID_CASE_MAX_QUANTITY = 100;
 
 // NOTE: will front-load term with trial sessions, and prioritize Regular > Small > Hybrid
 
-export const SUGGESTED_TRIAL_SESSION_MESSAGES = {
-  invalid: 'There are no trial sessions to schedule within the dates provided.',
-  success: 'Trial session calendar generated.',
-};
-
 export type TrialSessionReadyForCalendaring = TrialSession & { weekOf: string };
 
 export const generateSuggestedTrialSessionCalendarInteractor = async (
@@ -162,6 +157,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     },
   );
   console.timeEnd('10275: assignSessionsToWeeks time');
+
   if (scheduledTrialSessions.length < 1) {
     return {
       bufferArray: undefined,
