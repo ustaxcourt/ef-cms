@@ -12,6 +12,7 @@ export type ScheduledTrialSession = {
   city: string;
   sessionType: TrialSessionTypes;
   weekOf: string;
+  cityWasNotVisitedInLastTwoTerms: string;
 };
 
 export const assignSessionsToWeeks = ({
