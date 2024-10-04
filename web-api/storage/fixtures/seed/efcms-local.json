@@ -58611,5 +58611,13 @@
     "pk": "user|f0a1e52a-876f-4c03-853c-f66e407e5a1e",
     "userId": "f0a1e52a-876f-4c03-853c-f66e407e5a1e",
     "email": "trialclerk@example.com"
+  },
+  {
+    "pk": "user-case-note|107-19",
+    "sk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "107-19",
+    "entityName": "UserCaseNote",
+    "notes": "Test",
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
   }
 ]
