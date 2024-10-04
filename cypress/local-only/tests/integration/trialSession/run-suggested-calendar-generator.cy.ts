@@ -3,7 +3,7 @@ import {
   createISODateString,
   getBusinessDateInFuture,
 } from '../../../../../shared/src/business/utilities/DateHandler';
-import { SUGGESTED_TRIAL_SESSION_MESSAGES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { SUGGESTED_TRIAL_SESSION_MESSAGES } from '../../../../../web-api/src/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
 import { loginAsPetitionsClerk1 } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Run the suggested trial session calendar generator', () => {
