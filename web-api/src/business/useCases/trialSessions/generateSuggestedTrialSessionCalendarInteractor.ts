@@ -103,7 +103,6 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   // efficient process of determining which sessions are special, calendared,
   // and not closed.
 
-  // TODO 10275: dates
   console.time('10275: Filter trial sessions time');
   const specialSessions = getSpecialSessionsInTerm({
     sessions,

@@ -9,6 +9,14 @@ export type EligibleCase = Pick<
   RawCase,
   'preferredTrialCity' | 'procedureType'
 >;
+export type ProspectiveSessionsByCity = Record<
+  string,
+  {
+    city: string;
+    sessionType: TrialSessionTypes;
+    cityWasNotVisitedInLastTwoTerms: boolean;
+  }[]
+>;
 
 export const createProspectiveTrialSessions = ({
   calendaringConfig,
@@ -34,13 +42,7 @@ export const createProspectiveTrialSessions = ({
     sessionType: TrialSessionTypes;
   }[]
 > => {
-  const potentialTrialLocations: Record<
-    string,
-    {
-      city: string;
-      sessionType: TrialSessionTypes;
-    }[]
-  > = {};
+  const potentialTrialLocations: ProspectiveSessionsByCity = {};
 
   const regularCasesByCity = getCasesByCity(cases, PROCEDURE_TYPES_MAP.regular);
   const smallCasesByCity = getCasesByCity(cases, PROCEDURE_TYPES_MAP.small);
@@ -60,7 +62,7 @@ export const createProspectiveTrialSessions = ({
       !citiesFromLastTwoTerms.includes(city);
 
     // One of these arrays will continue to decrease in size until it is smaller than the other, at which point prioritization below will flip.
-    // For now, we are okay with this -- TODO 10275 confirm
+    // For now, we are okay with this
     // schedule regular or small
     if (regularCasesByCity[city]?.length >= smallCasesByCity[city]?.length) {
       scheduleRegularCases({
@@ -197,6 +199,11 @@ function addProspectiveTrialSession({
   cityWasNotVisitedInLastTwoTerms,
   potentialTrialLocations,
   sessionType,
+}: {
+  city: string;
+  cityWasNotVisitedInLastTwoTerms: boolean;
+  potentialTrialLocations: ProspectiveSessionsByCity;
+  sessionType: TrialSessionTypes;
 }) {
   potentialTrialLocations[city].push({
     city,
