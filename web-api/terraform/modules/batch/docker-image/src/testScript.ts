@@ -25,20 +25,19 @@ type DocketEntriesZipperParameter = {
 };
 
 const {
+  AWS_REGION,
   DOCKET_ENTRY_FILES,
-  EAST_WEBSOCKET_API_GATEWAY_ID,
   EFCMS_DOMAIN,
   STAGE,
+  WEBSOCKET_API_GATEWAY_ID,
   WEBSOCKET_CONNECTION_ID,
   WEBSOCKET_REGION,
-  WEST_WEBSOCKET_API_GATEWAY_ID,
   ZIP_FILE_NAME,
 } = process.env;
 
 const DOCKET_ENTRIES: DocketEntryDownloadInfo[] = JSON.parse(
   DOCKET_ENTRY_FILES!,
 );
-const AWS_REGION = 'us-east-1';
 
 const storageClient = new S3({
   endpoint: `https://s3.${AWS_REGION}.amazonaws.com`,
@@ -54,11 +53,6 @@ const storageClient = new S3({
 
 const TEMP_S3_BUCKET = `${EFCMS_DOMAIN}-temp-documents-${STAGE}-${AWS_REGION}`;
 const S3_BUCKET = `${EFCMS_DOMAIN}-documents-${STAGE}-${AWS_REGION}`;
-
-const WEBSOCKET_API_GATEWAY_ID =
-  WEBSOCKET_REGION === 'us-east-1'
-    ? EAST_WEBSOCKET_API_GATEWAY_ID
-    : WEST_WEBSOCKET_API_GATEWAY_ID;
 
 const WEBSOCKET_ENPOINT = `https://${WEBSOCKET_API_GATEWAY_ID}.execute-api.${WEBSOCKET_REGION}.amazonaws.com/${STAGE}`;
 const notificationClient = new ApiGatewayManagementApiClient({
