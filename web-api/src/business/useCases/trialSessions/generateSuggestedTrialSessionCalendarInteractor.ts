@@ -16,6 +16,7 @@ import {
 import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
+  SUGGESTED_TRIAL_SESSION_MESSAGES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
