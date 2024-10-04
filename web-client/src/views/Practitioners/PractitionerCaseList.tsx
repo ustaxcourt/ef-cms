@@ -32,7 +32,7 @@ export function PractitionerCaseList({
             <thead>
               <tr>
                 <th aria-hidden="true" className="icon-column" />
-                <th>Docket No.</th>
+                <th className="no-wrap">Docket No.</th>
                 <th>Case Title</th>
                 {showStatus && <th>Case Status</th>}
               </tr>
