@@ -1,4 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { setValidationAlertErrorsAction } from '@web-client/presenter/actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validatePractitionerSearchByBarNumberAction } from '../actions/AdvancedSearch/validatePractitionerSearchByBarNumberAction';
@@ -10,7 +11,7 @@ export const validatePractitionerSearchByBarNumberFormSequence = [
     validate: [
       validatePractitionerSearchByBarNumberAction,
       {
-        error: [setValidationErrorsAction],
+        error: [setValidationErrorsAction, setValidationAlertErrorsAction],
         success: [clearAlertsAction],
       },
     ],
