@@ -1,3 +1,4 @@
+import '@web-api/persistence/elasticsearch/searchClient/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
@@ -8,18 +9,19 @@ import {
   CustomCaseReportFilters,
   GetCustomCaseReportRequest,
 } from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   emptyResults,
   mockCaseSearchResult,
 } from './searchClient.test.constants';
 import { formatResults } from './searchClient';
 import { getCasesByFilters } from './getCasesByFilters';
+import { getSearchClient as mockGetSearchClient } from '@web-api/persistence/elasticsearch/searchClient/getSearchClient';
 
 jest.mock('./searchClient', () => ({
   formatResults: jest.fn(),
 }));
 const mockFormatResults = formatResults as jest.Mock;
+const getSearchClient = mockGetSearchClient as jest.Mock;
 
 describe('getCasesByFilters', () => {
   const defaultStartDate = '2000-06-13T12:00:00.000Z';
@@ -57,22 +59,21 @@ describe('getCasesByFilters', () => {
   });
 
   beforeAll(() => {
-    applicationContext.getSearchClient().search.mockReturnValue(emptyResults);
+    getSearchClient.mockReturnValue({
+      search: jest.fn().mockReturnValue(emptyResults),
+    });
     mockFormatResults.mockReturnValue({ results: {}, total: 0 });
   });
 
   it('should search for all cases in a given date range when only default filters are applied', async () => {
     await getCasesByFilters({
-      applicationContext,
       params: defaultRequest,
     });
 
-    expect(
-      applicationContext.getSearchClient().search.mock.calls[0][0].size,
-    ).toEqual(CUSTOM_CASE_REPORT_PAGE_SIZE);
-    expect(
-      applicationContext.getSearchClient().search.mock.calls[0][0].body.query,
-    ).toMatchObject({
+    expect(getSearchClient().search.mock.calls[0][0].size).toEqual(
+      CUSTOM_CASE_REPORT_PAGE_SIZE,
+    );
+    expect(getSearchClient().search.mock.calls[0][0].body.query).toMatchObject({
       bool: {
         must: [
           {
@@ -91,13 +92,10 @@ describe('getCasesByFilters', () => {
 
   it('should apply selected filters to search query', async () => {
     await getCasesByFilters({
-      applicationContext,
       params: requestWithFilters,
     });
 
-    expect(
-      applicationContext.getSearchClient().search.mock.calls[0][0].body.query,
-    ).toMatchObject({
+    expect(getSearchClient().search.mock.calls[0][0].body.query).toMatchObject({
       bool: {
         must: [
           {
@@ -143,13 +141,10 @@ describe('getCasesByFilters', () => {
     requestWithFilters.judges = judgesIds;
 
     await getCasesByFilters({
-      applicationContext,
       params: requestWithFilters,
     });
 
-    expect(
-      applicationContext.getSearchClient().search.mock.calls[0][0].body.query,
-    ).toMatchObject({
+    expect(getSearchClient().search.mock.calls[0][0].body.query).toMatchObject({
       bool: {
         must: [
           {
@@ -182,11 +177,8 @@ describe('getCasesByFilters', () => {
   });
 
   it('should return the last case id returned from persistence', async () => {
-    applicationContext
-      .getSearchClient()
-      .search.mockReturnValueOnce(mockCaseSearchResult);
+    getSearchClient().search.mockReturnValueOnce(mockCaseSearchResult);
     const result = await getCasesByFilters({
-      applicationContext,
       params: defaultRequest,
     });
 
@@ -200,7 +192,6 @@ describe('getCasesByFilters', () => {
 
   it('should run the query using search_after if receivedAt and pk are present', async () => {
     await getCasesByFilters({
-      applicationContext,
       params: {
         ...defaultRequest,
         searchAfter: {
@@ -209,20 +200,17 @@ describe('getCasesByFilters', () => {
         },
       },
     });
-    expect(
-      applicationContext.getSearchClient().search.mock.calls[0][0].body
-        .search_after,
-    ).toEqual([1678746212843, 'case|101-23']);
+    expect(getSearchClient().search.mock.calls[0][0].body.search_after).toEqual(
+      [1678746212843, 'case|101-23'],
+    );
   });
 
   it('should run the query using search_after if receivedAt and pk are not present', async () => {
     await getCasesByFilters({
-      applicationContext,
       params: defaultRequest,
     });
     expect(
-      applicationContext.getSearchClient().search.mock.calls[0][0].body
-        .search_after,
+      getSearchClient().search.mock.calls[0][0].body.search_after,
     ).toBeUndefined();
   });
 });
