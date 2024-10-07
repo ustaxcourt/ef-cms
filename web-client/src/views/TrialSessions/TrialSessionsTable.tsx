@@ -56,18 +56,18 @@ export const TrialSessionsTable = connect(
             >
               <thead>
                 <tr>
-                  <th className="column-width-sm">Start Date</th>
-                  <th className="column-width-sm">Est. End Date</th>
+                  <th className="width-card">Start Date</th>
+                  <th className="width-card">Est. End Date</th>
                   <th className="icon-column" />
-                  <th className="column-width-lg">Location</th>
-                  <th className="column-width-md">Proceeding Type</th>
-                  <th className="column-width-sm">Session Type</th>
-                  <th className="column-width-sm">Judge</th>
+                  <th className="width-mobile">Location</th>
+                  <th className="width-card-lg">Proceeding Type</th>
+                  <th className="width-card">Session Type</th>
+                  <th className="width-card">Judge</th>
                   {trialSessionsHelper.showNoticeIssued && (
-                    <th className="column-width-sm">Notice Issued</th>
+                    <th className="width-card">Notice Issued</th>
                   )}
                   {trialSessionsHelper.showSessionStatus && (
-                    <th className="column-width-sm">Session Status</th>
+                    <th className="width-card">Session Status</th>
                   )}
                 </tr>
               </thead>
