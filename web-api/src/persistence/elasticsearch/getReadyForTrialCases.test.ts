@@ -47,7 +47,13 @@ describe('getReadyForTrialCases', () => {
             has_parent: {
               inner_hits: {
                 _source: {
-                  includes: ['caseCaption', 'docketNumber', 'status'],
+                  includes: [
+                    'caseCaption',
+                    'docketNumber',
+                    'status',
+                    'preferredTrialCity',
+                    'procedureType',
+                  ],
                 },
                 name: 'case-mappings',
               },
