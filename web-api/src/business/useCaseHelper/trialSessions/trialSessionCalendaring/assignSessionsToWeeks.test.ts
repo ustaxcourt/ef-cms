@@ -1,8 +1,8 @@
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
+import { ProspectiveSessionsByCity } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 import {
   SESSION_TYPES,
   TRIAL_CITY_STRINGS,
-  TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
 import { assignSessionsToWeeks } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import { getUniqueId } from '@shared/sharedAppContext';
@@ -27,13 +27,7 @@ const mockWeeksToLoop = getWeeksInRange({
 });
 
 function getMockTrialSessions() {
-  const mockSessions: Record<
-    string,
-    {
-      city: string;
-      sessionType: TrialSessionTypes;
-    }[]
-  > = {};
+  const mockSessions: ProspectiveSessionsByCity = {};
 
   const numberOfSessions = defaultMockCalendaringConfig.maxSessionsPerWeek + 1;
 
@@ -41,6 +35,7 @@ function getMockTrialSessions() {
     mockSessions[TRIAL_CITY_STRINGS[i]] = [
       {
         city: `${TRIAL_CITY_STRINGS[i]}`,
+        cityWasNotVisitedInLastTwoTerms: false,
         sessionType: SESSION_TYPES.regular,
       },
     ];
@@ -50,13 +45,7 @@ function getMockTrialSessions() {
 }
 
 function getMockTrialSessionsForSingleCity() {
-  const mockSessions: Record<
-    string,
-    {
-      city: string;
-      sessionType: TrialSessionTypes;
-    }[]
-  > = {};
+  const mockSessions: ProspectiveSessionsByCity = {};
 
   const numberOfSessions =
     defaultMockCalendaringConfig.maxSessionsPerLocation + 1;
@@ -67,6 +56,7 @@ function getMockTrialSessionsForSingleCity() {
     }
     mockSessions[TRIAL_CITY_STRINGS[0]].push({
       city: `${TRIAL_CITY_STRINGS[0]}`,
+      cityWasNotVisitedInLastTwoTerms: false,
       sessionType: SESSION_TYPES.regular,
     });
   }
