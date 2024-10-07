@@ -1,4 +1,8 @@
 import {
+  CalendaringConfig,
+  ProspectiveSessionsByCity,
+} from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
+import {
   FORMATS,
   createDateAtStartOfWeekEST,
 } from '@shared/business/utilities/DateHandler';
@@ -21,24 +25,9 @@ export const assignSessionsToWeeks = ({
   weeksToLoop,
 }: {
   specialSessions: RawTrialSession[];
-  prospectiveSessionsByCity: Record<
-    string,
-    {
-      city: string;
-      sessionType: TrialSessionTypes;
-    }[]
-  >;
+  prospectiveSessionsByCity: ProspectiveSessionsByCity;
   weeksToLoop: string[];
-  calendaringConfig: {
-    maxSessionsPerWeek: number;
-    maxSessionsPerLocation: number;
-    regularCaseMinimumQuantity: number;
-    regularCaseMaxQuantity: number;
-    smallCaseMinimumQuantity: number;
-    smallCaseMaxQuantity: number;
-    hybridCaseMaxQuantity: number;
-    hybridCaseMinimumQuantity: number;
-  };
+  calendaringConfig: CalendaringConfig;
 }): {
   sessionCountPerWeek: Record<string, number>;
   scheduledTrialSessions: ScheduledTrialSession[];
@@ -50,11 +39,7 @@ export const assignSessionsToWeeks = ({
   // -- Max 1 per location per week.
   // -- Max x per week across all locations
 
-  const scheduledTrialSessions: {
-    city: string;
-    sessionType: TrialSessionTypes;
-    weekOf: string;
-  }[] = [];
+  const scheduledTrialSessions: ScheduledTrialSession[] = [];
 
   // check special sessions
   const specialSessionsByLocation = specialSessions.reduce((acc, session) => {
@@ -115,7 +100,7 @@ export const assignSessionsToWeeks = ({
 
     specialSessionsForWeek.forEach(session => {
       addScheduledTrialSession({
-        city: session.trialLocation,
+        city: session.trialLocation!,
         scheduledTrialSessions,
         sessionCountPerCity,
         sessionCountPerWeek,
@@ -125,7 +110,26 @@ export const assignSessionsToWeeks = ({
       });
     });
 
-    for (const city in prospectiveSessionsByCity) {
+    // TODO 10275: test this (and be sure it works)
+    const sortedProspectiveSessionsByCity = Object.keys(
+      prospectiveSessionsByCity,
+    )
+      .sort((a, b) => {
+        const aNotVisited =
+          prospectiveSessionsByCity[a][0]?.cityWasNotVisitedInLastTwoTerms ||
+          false;
+        const bNotVisited =
+          prospectiveSessionsByCity[b][0]?.cityWasNotVisitedInLastTwoTerms ||
+          false;
+
+        return aNotVisited === bNotVisited ? 0 : aNotVisited ? -1 : 1;
+      })
+      .reduce((obj, key) => {
+        obj[key] = prospectiveSessionsByCity[key];
+        return obj;
+      }, {});
+
+    for (const city in sortedProspectiveSessionsByCity) {
       // This is a redundant check, as we expect the length of the array to have
       // already been trimmed to at most the max before entering this function.
       // since we ignore things beyond the max, force prospective array to at most the max
@@ -135,7 +139,7 @@ export const assignSessionsToWeeks = ({
       // Check if we're already at the max for this location
 
       // Just use the first session!
-      for (const prospectiveSession of prospectiveSessionsByCity[city]) {
+      for (const prospectiveSession of sortedProspectiveSessionsByCity[city]) {
         if (
           sessionScheduledPerCityPerWeek[weekOfString].has(
             prospectiveSession.city,
@@ -156,9 +160,9 @@ export const assignSessionsToWeeks = ({
         });
 
         const index =
-          prospectiveSessionsByCity[city].indexOf(prospectiveSession);
+          sortedProspectiveSessionsByCity[city].indexOf(prospectiveSession);
         if (index !== -1) {
-          prospectiveSessionsByCity[city].splice(index, 1);
+          sortedProspectiveSessionsByCity[city].splice(index, 1);
         }
       }
     }
@@ -175,6 +179,14 @@ function addScheduledTrialSession({
   sessionScheduledPerCityPerWeek,
   sessionType,
   weekOfString,
+}: {
+  city: string;
+  scheduledTrialSessions: ScheduledTrialSession[];
+  sessionCountPerCity: Record<string, number>;
+  sessionCountPerWeek: Record<string, number>;
+  sessionScheduledPerCityPerWeek: Record<string, Set<string>>;
+  sessionType: TrialSessionTypes;
+  weekOfString: string;
 }) {
   if (!sessionCountPerCity[city]) sessionCountPerCity[city] = 0;
   scheduledTrialSessions.push({

@@ -3,7 +3,7 @@ import {
   FORMATS,
   createISODateString,
   formatDateString,
-  isTodayWithinGivenInterval,
+  isDateWithinGivenInterval,
   prepareDateFromString,
 } from '../../utilities/DateHandler';
 import {
@@ -224,13 +224,17 @@ export class TrialSession extends JoiValidationEntity {
       FORMATS.MMDDYY,
     );
 
-    return isTodayWithinGivenInterval({
-      intervalEndDate: trialStartDateString.minus({
-        ['days']: 24, // luxon's interval end date is not inclusive
-      }),
-      intervalStartDate: trialStartDateString.minus({
-        ['days']: 34,
-      }),
+    return isDateWithinGivenInterval({
+      intervalEndDate: trialStartDateString
+        .minus({
+          ['days']: 24, // luxon's interval end date is not inclusive
+        })
+        .toISO()!,
+      intervalStartDate: trialStartDateString
+        .minus({
+          ['days']: 34,
+        })
+        .toISO()!,
     });
   }
 

@@ -1,6 +1,7 @@
 import { clearModalAction } from '@web-client/presenter/actions/clearModalAction';
 import { clearModalStateAction } from '@web-client/presenter/actions/clearModalStateAction';
 import { downloadXlsxAction } from '@web-client/presenter/actions/downloadXlsxAction';
+import { formatCreateTermDatesAction } from '@web-client/presenter/actions/TrialSession/formatCreateTermDatesAction';
 import { runCreateTermAction } from '@web-client/presenter/actions/TrialSession/runCreateTermAction';
 import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '@web-client/presenter/actions/setAlertSuccessAction';
@@ -16,6 +17,7 @@ export const submitCreateTermModalSequence = [
     error: [setValidationErrorsAction],
     success: showProgressSequenceDecorator([
       clearModalAction,
+      formatCreateTermDatesAction,
       runCreateTermAction,
       {
         error: [setAlertErrorAction, clearModalStateAction],

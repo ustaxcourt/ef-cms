@@ -1,19 +1,24 @@
 import {
   FORMATS,
-  createISODateString,
+  deconstructDate,
+  formatDateString,
   getWeeksInRange,
+  isDateWithinGivenInterval,
 } from '@shared/business/utilities/DateHandler';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import {
+  RawTrialSession,
+  TrialSession,
+} from '@shared/business/entities/trialSessions/TrialSession';
+import {
   SESSION_STATUS_TYPES,
-  SESSION_TERMS_BY_MONTH,
   SESSION_TYPES,
+  SUGGESTED_TRIAL_SESSION_MESSAGES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { assignSessionsToWeeks } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
@@ -87,6 +92,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   const cases = await applicationContext
     .getPersistenceGateway()
     .getReadyForTrialCases({ applicationContext });
+
   console.timeEnd('10275: Get ready for trial cases time');
 
   console.time('10275: Get trial sessions time');
@@ -99,13 +105,12 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   // and not closed.
 
   console.time('10275: Filter trial sessions time');
-  const specialSessions = sessions.filter(session => {
-    return (
-      session.sessionType === SESSION_TYPES.special &&
-      session.isCalendared &&
-      session.sessionStatus !== SESSION_STATUS_TYPES.closed
-    );
+  const specialSessions = getSpecialSessionsInTerm({
+    sessions,
+    termEndDate,
+    termStartDate,
   });
+
   console.timeEnd('10275: Filter trial sessions time');
   // Note (10275): storing trial session data differently would make for a more
   // efficient process of determining which cities were not visited within the
@@ -133,11 +138,12 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     cases,
     citiesFromLastTwoTerms,
   });
+
   console.timeEnd('10275: Generate prospectiveSessionsByCity time');
 
   const weeksToLoop = getWeeksInRange({
-    endDate: createISODateString(termEndDate, FORMATS.MMDDYYYY),
-    startDate: createISODateString(termStartDate, FORMATS.MMDDYYYY),
+    endDate: termEndDate,
+    startDate: termStartDate,
   });
 
   console.time('10275: assignSessionsToWeeks time');
@@ -150,12 +156,11 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     },
   );
   console.timeEnd('10275: assignSessionsToWeeks time');
-  // TODO: extract messages to constants
+
   if (scheduledTrialSessions.length < 1) {
     return {
       bufferArray: undefined,
-      message:
-        'There are no trial sessions to schedule within the dates provided.',
+      message: SUGGESTED_TRIAL_SESSION_MESSAGES.invalid,
     };
   }
 
@@ -169,35 +174,62 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   console.timeEnd('10275: Total interactor time');
   return {
     bufferArray,
-    message: 'Trial session calendar generated',
+    message: SUGGESTED_TRIAL_SESSION_MESSAGES.success,
   };
 };
 
-const getPreviousTwoTerms = (termStartDate: string) => {
-  //TODO: refactor this, maybe?
+export const getSpecialSessionsInTerm = ({
+  sessions,
+  termEndDate,
+  termStartDate,
+}: {
+  sessions: RawTrialSession[];
+  termEndDate: string;
+  termStartDate: string;
+}): RawTrialSession[] => {
+  return sessions.filter(session => {
+    const isSessionInTerm = isDateWithinGivenInterval({
+      date: session.startDate,
+      intervalEndDate: formatDateString(termEndDate, FORMATS.ISO),
+      intervalStartDate: formatDateString(termStartDate, FORMATS.ISO),
+    });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [month, day, year] = termStartDate.split('/');
-
-  const currentTerm = getTermByMonth(month);
-
-  const terms = [
-    `fall ${+year - 1}`,
-    `winter ${year}`,
-    `spring ${year}`,
-    `fall ${year}`,
-  ];
-  const termsReversed = terms.reverse();
-  const termIndex = terms.findIndex(t => `${currentTerm} ${year}` === t);
-  const [term1, year1] = termsReversed[termIndex + 1].split(' ');
-  const [term2, year2] = termsReversed[termIndex + 2].split(' ');
-
-  return [`${term1}, ${year1}`, `${term2}, ${year2}`];
+    return (
+      session.sessionType === SESSION_TYPES.special &&
+      session.isCalendared &&
+      session.sessionStatus !== SESSION_STATUS_TYPES.closed &&
+      isSessionInTerm
+    );
+  });
 };
 
-function getTermByMonth(currentMonth: string) {
+export const getPreviousTwoTerms = (termStartDate: string) => {
+  const { month, year } = deconstructDate(termStartDate);
+
+  const currentTerm = getCurrentTermByMonth(month);
+  const terms = [
+    `spring, ${+year - 1}`,
+    `fall, ${+year - 1}`,
+    `winter, ${year}`,
+    `spring, ${year}`,
+    `fall, ${year}`,
+  ];
+  const termIndex = terms.findIndex(t => `${currentTerm}, ${year}` === t);
+  const term1 = terms[termIndex - 1];
+  const term2 = terms[termIndex - 2];
+
+  return [term1, term2];
+};
+
+const SESSION_TERMS_FOR_GENERATOR = {
+  fall: [9, 10, 11, 12],
+  spring: [4, 5, 6, 7, 8],
+  winter: [1, 2, 3],
+};
+
+function getCurrentTermByMonth(currentMonth: string) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const term = Object.entries(SESSION_TERMS_BY_MONTH).find(([_, months]) =>
+  const term = Object.entries(SESSION_TERMS_FOR_GENERATOR).find(([_, months]) =>
     months.includes(parseInt(currentMonth)),
   );
   return term ? term[0] : 'Unknown term';

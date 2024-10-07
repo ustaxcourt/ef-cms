@@ -56,6 +56,7 @@ export const TrialSessions = connect(
                 <Button
                   link
                   className="margin-top-1"
+                  data-testid="open-create-term-modal-button"
                   icon={['far', 'calendar']}
                   onClick={() => openCreateTermModalSequence()}
                 >
