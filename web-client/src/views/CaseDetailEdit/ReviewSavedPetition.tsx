@@ -27,7 +27,6 @@ export const ReviewSavedPetition = connect(
     reviewSavedPetitionHelper: state.reviewSavedPetitionHelper,
     serveCaseToIrsSequence: sequences.serveCaseToIrsSequence,
     showModal: state.modal.showModal,
-    startCaseHelper: state.startCaseHelper,
   },
   function ReviewSavedPetition({
     clearModalSequence,
@@ -40,7 +39,6 @@ export const ReviewSavedPetition = connect(
     reviewSavedPetitionHelper,
     serveCaseToIrsSequence,
     showModal,
-    startCaseHelper,
   }) {
     return (
       <>
@@ -118,35 +116,38 @@ export const ReviewSavedPetition = connect(
                         )}
                       </div>
                       <div className="tablet:grid-col-4 margin-bottom-1">
-                        {startCaseHelper.hasContactSecondary && (
-                          <>
-                            <span
-                              className="usa-label usa-label-display"
-                              id="filing-contact-secondary"
-                            >
-                              Spouse’s information
-                            </span>
-                            <address aria-labelledby="filing-contact-secondary">
-                              <AddressDisplay contact={form.contactSecondary} />
-                            </address>
-                            {reviewSavedPetitionHelper.eConsentFieldsEnabledFeatureFlag && (
-                              <>
-                                {form.contactSecondary.paperPetitionEmail && (
-                                  <div className="margin-top-1 word-wrap-break-word">
-                                    {form.contactSecondary.paperPetitionEmail}
-                                  </div>
-                                )}
-                                {reviewSavedPetitionHelper.shouldDisplayEConsentTextForSecondaryContact && (
-                                  <div className="margin-top-1">
-                                    {
-                                      reviewSavedPetitionHelper.eServiceConsentTextForSecondaryContact
-                                    }
-                                  </div>
-                                )}
-                              </>
-                            )}
-                          </>
-                        )}
+                        {form.contactSecondary &&
+                          form.contactSecondary.name && (
+                            <>
+                              <span
+                                className="usa-label usa-label-display"
+                                id="filing-contact-secondary"
+                              >
+                                Spouse’s information
+                              </span>
+                              <address aria-labelledby="filing-contact-secondary">
+                                <AddressDisplay
+                                  contact={form.contactSecondary}
+                                />
+                              </address>
+                              {reviewSavedPetitionHelper.eConsentFieldsEnabledFeatureFlag && (
+                                <>
+                                  {form.contactSecondary.paperPetitionEmail && (
+                                    <div className="margin-top-1 word-wrap-break-word">
+                                      {form.contactSecondary.paperPetitionEmail}
+                                    </div>
+                                  )}
+                                  {reviewSavedPetitionHelper.shouldDisplayEConsentTextForSecondaryContact && (
+                                    <div className="margin-top-1">
+                                      {
+                                        reviewSavedPetitionHelper.eServiceConsentTextForSecondaryContact
+                                      }
+                                    </div>
+                                  )}
+                                </>
+                              )}
+                            </>
+                          )}
                       </div>
                     </div>
                   </div>

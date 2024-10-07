@@ -6,7 +6,7 @@ import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { SelectDocumentType } from './SelectDocumentType';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
-import { ViewAllDocuments } from './ViewAllDocuments';
+
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -41,9 +41,6 @@ export const FileDocumentWizard = connect(
           >
             <Tab tabName="SelectDocumentType">
               <SelectDocumentType />
-            </Tab>
-            <Tab tabName="ViewAllDocuments">
-              <ViewAllDocuments />
             </Tab>
             <Tab tabName="FileDocument">
               <FileDocument />

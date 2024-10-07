@@ -1,10 +1,11 @@
+import { attachFile } from '../../../../../../helpers/file/upload-file';
+import { externalUserCreatesElectronicCase } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { externalUserSearchesDocketNumber } from '../../../../../../helpers/advancedSearch/external-user-searches-docket-number';
 import { goToCase } from '../../../../../../helpers/caseDetail/go-to-case';
 import {
   loginAsDocketClerk1,
   loginAsPetitioner,
 } from '../../../../../../helpers/authentication/login-as-helpers';
-import { petitionerCreatesElectronicCase } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { selectTypeaheadInput } from '../../../../../../helpers/components/typeAhead/select-typeahead-input';
 
@@ -18,7 +19,7 @@ describe('Private Practitioner requests to represent a party to a case', () => {
     const primaryFilerName = 'John';
 
     loginAsPetitioner();
-    petitionerCreatesElectronicCase(primaryFilerName).then(docketNumber => {
+    externalUserCreatesElectronicCase(primaryFilerName).then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
 
       loginAsDocketClerk1();
@@ -48,9 +49,11 @@ describe('Private Practitioner requests to represent a party to a case', () => {
       cy.get('[data-testid="objections-No"').click();
 
       cy.get('[data-testid="upload-pdf-button"]').click();
-      cy.get('input#primaryDocumentFile-file').attachFile(
-        '../../helpers/file/sample.pdf',
-      );
+      attachFile({
+        filePath: '../../helpers/file/sample.pdf',
+        selector: 'input#primaryDocumentFile-file',
+        selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+      });
 
       cy.get('[data-testid="save-for-later"]').click();
       cy.get('[data-testid="success-alert"]').contains(
@@ -86,7 +89,7 @@ describe('Private Practitioner requests to represent a party to a case', () => {
 describe('Petitioner files motion to lift stay of proceedings', () => {
   it('should show MLSP document type option and let us select it', () => {
     loginAsPetitioner();
-    petitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
       loginAsPetitioner();
       externalUserSearchesDocketNumber(docketNumber);
@@ -95,9 +98,11 @@ describe('Petitioner files motion to lift stay of proceedings', () => {
     cy.get('[data-testid="ready-to-file"]').click();
     selectTypeaheadInput('document-type', 'MLSP');
     cy.get('[data-testid="submit-document"]').click();
-    cy.get('[data-testid="primary-document"]').attachFile(
-      '../../helpers/file/sample.pdf',
-    );
+    attachFile({
+      filePath: '../../helpers/file/sample.pdf',
+      selector: '[data-testid="primary-document"]',
+      selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+    });
     cy.get('[data-testid=primaryDocument-objections-No]').click();
     cy.get('#submit-document').click();
     cy.get('[data-testid=redaction-acknowledgement-label]').click();
