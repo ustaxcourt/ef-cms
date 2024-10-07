@@ -1,3 +1,4 @@
+import '@shared/proxies/reports/mocks.jest';
 import {
   CHIEF_JUDGE,
   CUSTOM_CASE_REPORT_PAGE_SIZE,
@@ -7,11 +8,14 @@ import {
   GetCustomCaseReportRequest,
   GetCustomCaseReportResponse,
 } from '../../../../../web-api/src/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
-import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getCustomCaseReportAction } from './getCustomCaseReportAction';
+import { getCustomCaseReportInteractor as getCustomCaseReportInteractorMock } from '@shared/proxies/reports/getCustomCaseReportProxy';
 import { judgeUser } from '@shared/test/mockUsers';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
+
+const getCustomCaseReportInteractor =
+  getCustomCaseReportInteractorMock as jest.Mock;
 
 describe('getCustomCaseReportAction', () => {
   const lastCaseId = { pk: 'lastCaseId', receivedAt: 8394 };
@@ -26,13 +30,10 @@ describe('getCustomCaseReportAction', () => {
       totalCount: 0,
     };
 
-    applicationContext
-      .getUseCases()
-      .getCustomCaseReportInteractor.mockResolvedValue(
-        mockCustomCaseReportResponse,
-      );
+    getCustomCaseReportInteractor.mockResolvedValue(
+      mockCustomCaseReportResponse,
+    );
 
-    presenter.providers.applicationContext = applicationContext;
     filterValues = {
       caseStatuses: ['Assigned - Case'],
       caseTypes: ['Deficiency'],
@@ -70,9 +71,7 @@ describe('getCustomCaseReportAction', () => {
       },
     });
 
-    expect(
-      applicationContext.getUseCases().getCustomCaseReportInteractor,
-    ).toHaveBeenCalledWith(expect.anything(), expectedRequest);
+    expect(getCustomCaseReportInteractor).toHaveBeenCalledWith(expectedRequest);
     expect(result.state.customCaseReport.cases).toEqual(
       mockCustomCaseReportResponse.foundCases,
     );
@@ -92,11 +91,9 @@ describe('getCustomCaseReportAction', () => {
       lastCaseId: page2SearchId,
       totalCount: 0,
     };
-    applicationContext
-      .getUseCases()
-      .getCustomCaseReportInteractor.mockResolvedValue(
-        mockCustomCaseReportResponse,
-      );
+    getCustomCaseReportInteractor.mockResolvedValue(
+      mockCustomCaseReportResponse,
+    );
     const page1SearchId = { pk: 'page1', receivedAt: 123 };
     const expectedRequestWithSearchAfter = {
       ...expectedRequest,
@@ -118,9 +115,9 @@ describe('getCustomCaseReportAction', () => {
       },
     });
 
-    expect(
-      applicationContext.getUseCases().getCustomCaseReportInteractor,
-    ).toHaveBeenCalledWith(expect.anything(), expectedRequestWithSearchAfter);
+    expect(getCustomCaseReportInteractor).toHaveBeenCalledWith(
+      expectedRequestWithSearchAfter,
+    );
     expect(result.state.customCaseReport.cases).toEqual(
       mockCustomCaseReportResponse.foundCases,
     );
@@ -150,9 +147,7 @@ describe('getCustomCaseReportAction', () => {
       },
     });
 
-    expect(
-      applicationContext.getUseCases().getCustomCaseReportInteractor,
-    ).toHaveBeenCalledWith(expect.anything(), {
+    expect(getCustomCaseReportInteractor).toHaveBeenCalledWith({
       ...expectedRequest,
       highPriority: undefined,
     });
@@ -179,9 +174,7 @@ describe('getCustomCaseReportAction', () => {
       },
     });
 
-    expect(
-      applicationContext.getUseCases().getCustomCaseReportInteractor,
-    ).toHaveBeenCalledWith(expect.anything(), expectedRequest);
+    expect(getCustomCaseReportInteractor).toHaveBeenCalledWith(expectedRequest);
   });
 
   it('should get the custom case report with judges ids if judges names have been selected', async () => {
@@ -215,8 +208,6 @@ describe('getCustomCaseReportAction', () => {
       },
     });
 
-    expect(
-      applicationContext.getUseCases().getCustomCaseReportInteractor,
-    ).toHaveBeenCalledWith(expect.anything(), expectedRequest);
+    expect(getCustomCaseReportInteractor).toHaveBeenCalledWith(expectedRequest);
   });
 });
