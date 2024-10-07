@@ -164,8 +164,8 @@ const PageEllipsis = () => {
   return (
     <>
       <li
+        aria-label="ellipsis indicating non-visible pages"
         className="usa-pagination__item usa-pagination__overflow"
-        role="presentation"
       >
         <span>…</span>
       </li>
