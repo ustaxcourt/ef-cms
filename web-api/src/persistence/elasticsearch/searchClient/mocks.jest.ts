@@ -1,6 +1,12 @@
-import { mockFactory } from '@shared/test/mockFactory';
+const mockSearchClient = {
+  search: jest.fn(() =>
+    console.debug('search was not implemented, using default mock'),
+  ),
+};
 
 jest.mock(
   '@web-api/persistence/elasticsearch/searchClient/getSearchClient',
-  () => mockFactory('getSearchClient'),
+  () => ({
+    getSearchClient: () => mockSearchClient,
+  }),
 );
