@@ -51,7 +51,7 @@ export const TrialSessionsTable = connect(
             <table
               aria-describedby="trial-sessions-filter-label locationFilter proceedingFilter sessionFilter judgeFilter"
               aria-label={`${trialSessionsPage.filters.currentTab} trial sessions`}
-              className="usa-table ustc-table trial-sessions subsection"
+              className="usa-table ustc-table trial-sessions"
               id={`${trialSessionsPage.filters.currentTab}-sessions`}
             >
               <thead>
@@ -148,16 +148,16 @@ export const TrialSessionsTable = connect(
         {trialSessionsHelper.trialSessionRows.length === 0 && (
           <p>There are no trial sessions for the selected filters.</p>
         )}
-        <div>
-          <Paginator
-            currentPageIndex={trialSessionsPage.filters.pageNumber}
-            totalPages={trialSessionsHelper.totalPages}
-            onPageChange={selectedPage => {
-              setTrialSessionsFiltersSequence({ pageNumber: selectedPage });
-              focusPaginatorTop(paginatorTop);
-            }}
-          />
-        </div>
+        <div className="padding-1" />
+
+        <Paginator
+          currentPageIndex={trialSessionsPage.filters.pageNumber}
+          totalPages={trialSessionsHelper.totalPages}
+          onPageChange={selectedPage => {
+            setTrialSessionsFiltersSequence({ pageNumber: selectedPage });
+            focusPaginatorTop(paginatorTop);
+          }}
+        />
       </>
     );
   },
