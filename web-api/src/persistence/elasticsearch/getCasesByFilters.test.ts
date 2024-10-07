@@ -21,7 +21,9 @@ jest.mock('./searchClient', () => ({
   formatResults: jest.fn(),
 }));
 const mockFormatResults = formatResults as jest.Mock;
-const getSearchClient = mockGetSearchClient as jest.Mock;
+const getSearchClient = mockGetSearchClient as unknown as () => {
+  search: jest.Mock;
+};
 
 describe('getCasesByFilters', () => {
   const defaultStartDate = '2000-06-13T12:00:00.000Z';
@@ -59,9 +61,7 @@ describe('getCasesByFilters', () => {
   });
 
   beforeAll(() => {
-    getSearchClient.mockReturnValue({
-      search: jest.fn().mockReturnValue(emptyResults),
-    });
+    getSearchClient().search.mockResolvedValue(emptyResults);
     mockFormatResults.mockReturnValue({ results: {}, total: 0 });
   });
 
@@ -177,7 +177,7 @@ describe('getCasesByFilters', () => {
   });
 
   it('should return the last case id returned from persistence', async () => {
-    getSearchClient().search.mockReturnValueOnce(mockCaseSearchResult);
+    getSearchClient().search.mockResolvedValueOnce(mockCaseSearchResult);
     const result = await getCasesByFilters({
       params: defaultRequest,
     });
