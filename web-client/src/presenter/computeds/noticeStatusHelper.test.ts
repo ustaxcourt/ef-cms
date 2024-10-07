@@ -9,7 +9,7 @@ describe('orderTypesHelper', () => {
           casesProcessed: 100,
           totalCases: 200,
         },
-      } as Partial<State>,
+      },
     });
     expect(result.percentComplete).toEqual(50);
   });

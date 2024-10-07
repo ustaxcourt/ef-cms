@@ -94,7 +94,7 @@ export const determineEntitiesToLock = async (
   applicationContext: ServerApplicationContext,
   { workItemId }: { workItemId: string },
 ) => {
-  const originalWorkItem: RawWorkItem = await applicationContext
+  const originalWorkItem = await applicationContext
     .getPersistenceGateway()
     .getWorkItemById({
       applicationContext,
@@ -102,7 +102,7 @@ export const determineEntitiesToLock = async (
     });
 
   return {
-    identifiers: [`case|${originalWorkItem.docketNumber}`],
+    identifiers: [`case|${originalWorkItem!.docketNumber}`],
   };
 };
 
