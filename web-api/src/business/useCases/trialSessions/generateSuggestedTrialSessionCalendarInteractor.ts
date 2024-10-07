@@ -17,6 +17,7 @@ import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
   SUGGESTED_TRIAL_SESSION_MESSAGES,
+  TRIAL_CITY_STRINGS,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
@@ -147,27 +148,43 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   });
 
   console.time('10275: assignSessionsToWeeks time');
-  const { scheduledTrialSessions, sessionCountPerWeek } = assignSessionsToWeeks(
-    {
+  const { scheduledTrialSessionsByCity, sessionCountPerWeek } =
+    assignSessionsToWeeks({
       calendaringConfig,
       prospectiveSessionsByCity,
       specialSessions,
       weeksToLoop,
-    },
-  );
+    });
   console.timeEnd('10275: assignSessionsToWeeks time');
 
-  if (scheduledTrialSessions.length < 1) {
+  if (Object.keys(scheduledTrialSessionsByCity).length < 1) {
     return {
       bufferArray: undefined,
       message: SUGGESTED_TRIAL_SESSION_MESSAGES.invalid,
     };
   }
 
+  TRIAL_CITY_STRINGS.forEach(cityStringKey => {
+    if (!Object.keys(scheduledTrialSessionsByCity).includes(cityStringKey)) {
+      scheduledTrialSessionsByCity[cityStringKey] = [];
+    }
+  });
+
+  const sortedScheduledTrialSessionsByCity = Object.keys(
+    scheduledTrialSessionsByCity,
+  )
+    .sort((a, b) => {
+      return a.localeCompare(b);
+    })
+    .reduce((obj, key) => {
+      obj[key] = scheduledTrialSessionsByCity[key];
+      return obj;
+    }, {});
+
   console.time('10275: writeTrialSessionDataToExcel');
   const bufferArray = await writeTrialSessionDataToExcel({
-    scheduledTrialSessions,
     sessionCountPerWeek,
+    sortedScheduledTrialSessionsByCity,
     weeks: weeksToLoop,
   });
   console.timeEnd('10275: writeTrialSessionDataToExcel');
