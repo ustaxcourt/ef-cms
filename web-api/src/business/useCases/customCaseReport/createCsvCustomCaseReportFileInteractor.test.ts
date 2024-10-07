@@ -1,9 +1,16 @@
+jest.mock(
+  '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor',
+);
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createCsvCustomCaseReportFileInteractor } from '@web-api/business/useCases/customCaseReport/createCsvCustomCaseReportFileInteractor';
+import { getCustomCaseReportInteractor as getCustomCaseReportInteractorMock } from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import {
   mockDocketClerkUser,
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
+
+const getCustomCaseReportInteractor =
+  getCustomCaseReportInteractorMock as jest.Mock;
 
 describe('createCsvCustomCaseReportFileInteractor', () => {
   const DEFAULT_PARAMS = {
@@ -25,23 +32,21 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
       .fn()
       .mockReturnValue(null);
 
-    applicationContext.getUseCases().getCustomCaseReportInteractor = jest
-      .fn()
-      .mockReturnValue({
-        foundCases: [
-          {
-            associatedJudge: 'associatedJudge',
-            calendaringHighPriority: 'calendaringHighPriority',
-            caseCaption: 'caseCaption',
-            caseType: 'caseType',
-            docketNumber: 'docketNumber',
-            highPriority: true,
-            preferredTrialCity: 'preferredTrialCity',
-            receivedAt: 'receivedAt',
-            status: 'status',
-          },
-        ],
-      });
+    getCustomCaseReportInteractor.mockReturnValue({
+      foundCases: [
+        {
+          associatedJudge: 'associatedJudge',
+          calendaringHighPriority: 'calendaringHighPriority',
+          caseCaption: 'caseCaption',
+          caseType: 'caseType',
+          docketNumber: 'docketNumber',
+          highPriority: true,
+          preferredTrialCity: 'preferredTrialCity',
+          receivedAt: 'receivedAt',
+          status: 'status',
+        },
+      ],
+    });
 
     applicationContext.getUtilities().formatNow = jest
       .fn()
@@ -128,23 +133,21 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
   });
 
   it('should handle values with new lines', async () => {
-    applicationContext.getUseCases().getCustomCaseReportInteractor = jest
-      .fn()
-      .mockReturnValue({
-        foundCases: [
-          {
-            associatedJudge: 'associatedJudge',
-            calendaringHighPriority: 'calendaringHighPriority',
-            caseCaption: 'caseCaption\nextra line',
-            caseType: 'caseType',
-            docketNumber: 'docketNumber',
-            highPriority: true,
-            preferredTrialCity: 'preferredTrialCity',
-            receivedAt: 'receivedAt',
-            status: 'status',
-          },
-        ],
-      });
+    getCustomCaseReportInteractor.mockReturnValue({
+      foundCases: [
+        {
+          associatedJudge: 'associatedJudge',
+          calendaringHighPriority: 'calendaringHighPriority',
+          caseCaption: 'caseCaption\nextra line',
+          caseType: 'caseType',
+          docketNumber: 'docketNumber',
+          highPriority: true,
+          preferredTrialCity: 'preferredTrialCity',
+          receivedAt: 'receivedAt',
+          status: 'status',
+        },
+      ],
+    });
 
     await createCsvCustomCaseReportFileInteractor(
       applicationContext,
@@ -166,23 +169,21 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
   });
 
   it('should get case title correctly', async () => {
-    applicationContext.getUseCases().getCustomCaseReportInteractor = jest
-      .fn()
-      .mockReturnValue({
-        foundCases: [
-          {
-            associatedJudge: 'associatedJudge',
-            calendaringHighPriority: 'calendaringHighPriority',
-            caseCaption: 'caseCaption, Petitioner',
-            caseType: 'caseType',
-            docketNumber: 'docketNumber',
-            highPriority: true,
-            preferredTrialCity: 'preferredTrialCity',
-            receivedAt: 'receivedAt',
-            status: 'status',
-          },
-        ],
-      });
+    getCustomCaseReportInteractor.mockReturnValue({
+      foundCases: [
+        {
+          associatedJudge: 'associatedJudge',
+          calendaringHighPriority: 'calendaringHighPriority',
+          caseCaption: 'caseCaption, Petitioner',
+          caseType: 'caseType',
+          docketNumber: 'docketNumber',
+          highPriority: true,
+          preferredTrialCity: 'preferredTrialCity',
+          receivedAt: 'receivedAt',
+          status: 'status',
+        },
+      ],
+    });
 
     await createCsvCustomCaseReportFileInteractor(
       applicationContext,

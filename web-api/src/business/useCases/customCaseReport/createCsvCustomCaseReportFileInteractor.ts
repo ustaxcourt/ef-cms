@@ -4,6 +4,7 @@ import {
   CustomCaseReportFilters,
   CustomCaseReportSearchAfter,
   GetCustomCaseReportResponse,
+  getCustomCaseReportInteractor,
 } from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
@@ -69,10 +70,8 @@ export const createCsvCustomCaseReportFileInteractor = async (
       });
     }
 
-    const iterationData: GetCustomCaseReportResponse = await applicationContext
-      .getUseCases()
-      .getCustomCaseReportInteractor(
-        applicationContext,
+    const iterationData: GetCustomCaseReportResponse =
+      await getCustomCaseReportInteractor(
         {
           caseStatuses,
           caseTypes,
