@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.12
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.13
 
 parameters:
   run_build_and_deploy:
@@ -128,6 +128,10 @@ jobs:
       - run:
           name: Setup Blue Green Migration If Needed
           command: |
+            if [ "$DEPLOY_EMPTY_PERSISTENCE" == "true" ]; then
+              echo "skipping…"
+              exit 0
+            fi
             ./setup-for-blue-green-migration.sh
       - run:
           no_output_timeout: 20m
@@ -230,6 +234,12 @@ jobs:
             if [ "$MIGRATE_FLAG" == "true" ]; then
               npm run start:migration -- $ENV
             fi
+      - run:
+          name: Run Postgres Migration
+          command: |
+            OUTPUT_ONLY=true npm run deploy:allColors $ENV
+            POSTGRES_HOST=$(cat ./web-api/terraform/applyables/allColors/output.json | jq -r '.rds_host_name.value')
+            POSTGRES_HOST=$POSTGRES_HOST POSTGRES_USER=$POSTGRES_USER NODE_ENV=production npm run migration:postgres
       - run:
           name: Enable Check Migration Status Cron
           command: |
@@ -709,6 +719,7 @@ jobs:
       - run:
           name: Set Marker to Indicate Data is Finished Gluing
           command: |
+            export DEPLOYING_COLOR="$CURRENT_COLOR"
             JOB_NAME="wait-for-glued-data-to-index" ./scripts/migration/set-migration-complete-marker.sh
       - run:
           name: Enable Dynamodb Streams

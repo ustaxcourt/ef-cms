@@ -8,6 +8,7 @@ export const FORMATS = {
   FILENAME_DATE: 'MMMM_d_yyyy',
   ISO: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ",
   LOG_TIMESTAMP: "yyyy/MM/dd HH:mm:ss.SSS 'ET'",
+  MD: 'M/d',
   MDYY: 'M/d/yy',
   MDYYYY: 'M/d/yyyy',
   MDYYYY_DASHED: 'M-d-yyyy',
@@ -123,6 +124,22 @@ export const calculateISODate = ({
   return prepareDateFromString(dateString)
     .plus({ [units]: howMuch })
     .toISO()!;
+};
+
+export const calculateDate = ({
+  dateString = undefined,
+  howMuch = 0,
+  units = 'days',
+}: {
+  dateString?: string;
+  howMuch?: number;
+  units?: string;
+}): Date => {
+  if (!howMuch) return prepareDateFromString(dateString).toJSDate();
+
+  return prepareDateFromString(dateString)
+    .plus({ [units]: howMuch })
+    .toJSDate();
 };
 
 /**
@@ -531,9 +548,11 @@ export const subtractISODates = (
  */
 export const getBusinessDateInFuture = ({
   numberOfDays,
+  outputFormat = FORMATS.MONTH_DAY_YEAR,
   startDate,
 }: {
   numberOfDays: number;
+  outputFormat?: TimeFormats;
   startDate: string;
 }): string => {
   let laterDate = prepareDateFromString(startDate).plus({
@@ -560,26 +579,34 @@ export const getBusinessDateInFuture = ({
     );
   }
 
-  return laterDate.toFormat(FORMATS.MONTH_DAY_YEAR);
+  return laterDate.toFormat(outputFormat);
 };
 
-/**
- * Returns whether or not the current date falls within the given date time range
- * @param {string} intervalStartDate the interval start ISO date string
- * @param {string} intervalEndDate the interval end ISO date string
- * @returns {boolean} whether or not the current date falls within the given date time range
- */
-export const isTodayWithinGivenInterval = ({
+type IsoDateString = string;
+export const isDateWithinGivenInterval = ({
+  date = createISODateString(),
   intervalEndDate,
   intervalStartDate,
+}: {
+  date?: IsoDateString;
+  intervalEndDate: IsoDateString;
+  intervalStartDate: IsoDateString;
 }): boolean => {
-  const today = DateTime.now().setZone(USTC_TZ);
-  const dateRangeInterval = Interval.fromDateTimes(
+  const dateToCheck = prepareDateFromString(date, FORMATS.ISO);
+  const intervalStartDateTime = prepareDateFromString(
     intervalStartDate,
+    FORMATS.ISO,
+  );
+  const intervalEndDateTime = prepareDateFromString(
     intervalEndDate,
+    FORMATS.ISO,
+  );
+  const dateRangeInterval = Interval.fromDateTimes(
+    intervalStartDateTime,
+    intervalEndDateTime,
   );
 
-  return dateRangeInterval.contains(today);
+  return dateRangeInterval.contains(dateToCheck);
 };
 
 export type IsoDateRange = {
@@ -607,8 +634,6 @@ export const isValidReconciliationDate = dateString => {
   const dateInputValid = isValidISODate(dateString);
   const todayDate = formatNow(FORMATS.YYYYMMDD);
   const dateLessthanOrEqualToToday = dateString <= todayDate;
-  // console.log(`dateInputValid: ${dateInputValid}`);
-  // console.log(`dateLessthanOrEqualToToday: ${dateLessthanOrEqualToToday}`);
   return dateInputValid && dateLessthanOrEqualToToday;
 };
 
@@ -654,3 +679,47 @@ export function normalizeIsoDateRange(
   //validate time string
   //create IsoDateRange from day + time range
 }
+
+/**
+ * Returns startDate plus n weeksToAdd
+ * @param {string} startDate the date to add days to
+ * @param {number} weeksToAdd number of days to add to startDate
+ * @returns {string} a formatted MMDDYY string if date object is valid
+ */
+export const addWeeksToDate = ({
+  startDate,
+  weeksToAdd,
+}: {
+  weeksToAdd: number;
+  startDate: string;
+}): string => {
+  const parsedDate = DateTime.fromFormat(startDate, FORMATS.ISO);
+
+  const newDate = parsedDate.plus({ weeks: weeksToAdd });
+
+  return newDate.toFormat(FORMATS.ISO);
+};
+
+export const getWeeksInRange = ({
+  endDate,
+  startDate,
+}: {
+  startDate: string;
+  endDate: string;
+}): string[] => {
+  let start = DateTime.fromISO(startDate).startOf('week');
+  const end = DateTime.fromISO(endDate).startOf('week');
+
+  const weeks: string[] = [];
+
+  // Loop through each week, adding each Monday to the array
+  while (start <= end) {
+    const isoStart = start.toISODate();
+    if (isoStart !== null) {
+      weeks.push(isoStart);
+    }
+    start = start.plus({ weeks: 1 });
+  }
+
+  return weeks;
+};

@@ -18,7 +18,7 @@ terraform {
   }
 
   required_providers {
-    aws = "5.68.0"
+    aws = "5.69.0"
   }
 }
 
@@ -78,6 +78,10 @@ resource "terraform_data" "locals" {
     STAGE                              = var.environment
     USER_POOL_ID                       = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_id
     USER_POOL_IRS_ID                   = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_irs_id
+    POSTGRES_HOST                      = data.terraform_remote_state.remote.outputs.rds_host_name
+    POSTGRES_READ_HOST                 = data.terraform_remote_state.remote.outputs.rds_host_name_west
+    POSTGRES_USER                      = data.terraform_remote_state.remote.outputs.postgres_user
+    DATABASE_NAME                      = data.terraform_remote_state.remote.outputs.database_name
   }
 }
 
@@ -86,7 +90,9 @@ module "lambda_role_blue" {
   role_name   = "lambda_role_${var.environment}_blue"
   environment = var.environment
   dns_domain  = var.dns_domain
+  postgres_user = data.terraform_remote_state.remote.outputs.postgres_user
 }
+
 
 module "api-east-blue" {
   source              = "../../modules/api"
@@ -181,6 +187,7 @@ module "worker-east-blue" {
   providers = {
     aws = aws.us-east-1
   }
+
   environment = var.environment
 }
 
