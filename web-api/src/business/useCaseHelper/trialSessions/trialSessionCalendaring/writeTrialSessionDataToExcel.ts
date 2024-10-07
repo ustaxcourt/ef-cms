@@ -20,16 +20,18 @@ export const writeTrialSessionDataToExcel = async ({
   const worksheet = workbook.addWorksheet('sheetInProgress', worksheetOptions);
 
   const trialSessionCalendar = {};
+  let allWeekOfSlots = weeks.reduce((acc, weekOfString) => {
+    acc[weekOfString] = '';
+    return acc;
+  }, {});
+
   for (const city in sortedScheduledTrialSessionsByCity) {
     const weekOfsForCity = sortedScheduledTrialSessionsByCity[city].reduce(
       (acc, session) => {
-        // if (!acc[session.weekOf]) {
-        //   acc[session.weekOf] = '';
-        // }
         acc[session.weekOf] = session.sessionType;
         return acc;
       },
-      {},
+      { ...allWeekOfSlots },
     );
 
     trialSessionCalendar[city] = weekOfsForCity;
@@ -39,7 +41,6 @@ export const writeTrialSessionDataToExcel = async ({
     {
       header: 'City',
       key: 'city',
-      style: undefined,
     },
   ];
 
@@ -47,14 +48,6 @@ export const writeTrialSessionDataToExcel = async ({
     columns.push({
       header: formatDateString(week, FORMATS.MD),
       key: week,
-      // style: {
-      //   border: {
-      //     bottom: { style: 'thin' },
-      //     left: { style: 'thin' },
-      //     right: { style: 'thin' },
-      //     top: { style: 'thin' },
-      //   },
-      // },
     });
   }
 
@@ -117,11 +110,12 @@ export const writeTrialSessionDataToExcel = async ({
   });
 
   worksheet.insertRow(1, [null, 'Week Of']);
-  worksheet.addRow({ city: 'No. of Sessions', ...sessionCountPerWeek });
+  const countPerWeekRow = worksheet.addRow({
+    city: 'No. of Sessions',
+    ...sessionCountPerWeek,
+  });
 
-  const topRow = worksheet.getRow(1);
-
-  topRow.border = {
+  countPerWeekRow.border = {
     bottom: { style: 'thin' },
     left: { style: 'thin' },
     right: { style: 'thin' },
@@ -136,6 +130,7 @@ export const writeTrialSessionDataToExcel = async ({
     right: undefined,
     top: undefined,
   };
+
   cityTitleCell.fill = {
     pattern: 'none',
     type: 'pattern',
