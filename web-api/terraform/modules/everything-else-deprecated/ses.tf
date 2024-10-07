@@ -26,7 +26,7 @@ resource "aws_ses_email_identity" "ses_sender" {
   email = "noreply@${var.dns_domain}"
 }
 
-resource "aws_ses_domain_mail_from" "example" {
+resource "aws_ses_domain_mail_from" "ses_sender_mail_from" {
   domain           = aws_ses_email_identity.ses_sender.email
   mail_from_domain = "from.${aws_ses_domain_identity.main.domain}"
 }
