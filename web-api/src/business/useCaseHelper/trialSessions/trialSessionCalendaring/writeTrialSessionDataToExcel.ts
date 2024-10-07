@@ -7,11 +7,11 @@ import { ScheduledTrialSession } from '@web-api/business/useCaseHelper/trialSess
 import ExcelJS from 'exceljs';
 
 export const writeTrialSessionDataToExcel = async ({
-  scheduledTrialSessions,
   sessionCountPerWeek,
+  sortedScheduledTrialSessionsByCity,
   weeks,
 }: {
-  scheduledTrialSessions: ScheduledTrialSession[];
+  sortedScheduledTrialSessionsByCity: Record<string, ScheduledTrialSession[]>;
   weeks: string[];
   sessionCountPerWeek: Record<string, number>;
 }) => {
@@ -19,29 +19,49 @@ export const writeTrialSessionDataToExcel = async ({
   const worksheetOptions = { properties: { outlineLevelCol: 2 } };
   const worksheet = workbook.addWorksheet('sheetInProgress', worksheetOptions);
 
-  const sessionsByCity = scheduledTrialSessions.reduce((acc, session) => {
-    if (!acc[session.city!]) {
-      acc[session.city!] = {};
-    }
-    acc[session.city!][session.weekOf!] = session.sessionType;
-    return acc;
-  }, {});
+  const trialSessionCalendar = {};
+  for (const city in sortedScheduledTrialSessionsByCity) {
+    const weekOfsForCity = sortedScheduledTrialSessionsByCity[city].reduce(
+      (acc, session) => {
+        // if (!acc[session.weekOf]) {
+        //   acc[session.weekOf] = '';
+        // }
+        acc[session.weekOf] = session.sessionType;
+        return acc;
+      },
+      {},
+    );
 
-  let columns: { header: string; key: string }[] = [
+    trialSessionCalendar[city] = weekOfsForCity;
+  }
+
+  let columns: any[] = [
     {
       header: 'City',
       key: 'city',
+      style: undefined,
     },
   ];
 
   for (const week of weeks) {
-    columns.push({ header: formatDateString(week, FORMATS.MD), key: week });
+    columns.push({
+      header: formatDateString(week, FORMATS.MD),
+      key: week,
+      // style: {
+      //   border: {
+      //     bottom: { style: 'thin' },
+      //     left: { style: 'thin' },
+      //     right: { style: 'thin' },
+      //     top: { style: 'thin' },
+      //   },
+      // },
+    });
   }
 
   worksheet.columns = columns;
 
-  for (const city in sessionsByCity) {
-    const values = { city, ...sessionsByCity[city] };
+  for (const city in trialSessionCalendar) {
+    const values = { city, ...trialSessionCalendar[city] };
     worksheet.addRow(values);
   }
 
@@ -99,7 +119,17 @@ export const writeTrialSessionDataToExcel = async ({
   worksheet.insertRow(1, [null, 'Week Of']);
   worksheet.addRow({ city: 'No. of Sessions', ...sessionCountPerWeek });
 
+  const topRow = worksheet.getRow(1);
+
+  topRow.border = {
+    bottom: { style: 'thin' },
+    left: { style: 'thin' },
+    right: { style: 'thin' },
+    top: { style: 'thin' },
+  };
+
   const cityTitleCell = worksheet.getCell('A2');
+
   cityTitleCell.border = {
     bottom: undefined,
     left: undefined,

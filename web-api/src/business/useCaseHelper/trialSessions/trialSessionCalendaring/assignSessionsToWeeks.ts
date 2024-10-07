@@ -30,7 +30,7 @@ export const assignSessionsToWeeks = ({
   calendaringConfig: CalendaringConfig;
 }): {
   sessionCountPerWeek: Record<string, number>;
-  scheduledTrialSessions: ScheduledTrialSession[];
+  scheduledTrialSessionsByCity: Record<string, ScheduledTrialSession[]>;
 } => {
   const sessionCountPerWeek: Record<string, number> = {}; // weekOf -> session count
   const sessionCountPerCity: Record<string, number> = {}; // trialLocation -> session count
@@ -39,7 +39,9 @@ export const assignSessionsToWeeks = ({
   // -- Max 1 per location per week.
   // -- Max x per week across all locations
 
-  const scheduledTrialSessions: ScheduledTrialSession[] = [];
+  // const scheduledTrialSessions: ScheduledTrialSession[] = [];
+  const scheduledTrialSessionsByCity: Record<string, ScheduledTrialSession[]> =
+    {};
 
   // check special sessions
   const specialSessionsByLocation = specialSessions.reduce((acc, session) => {
@@ -101,7 +103,7 @@ export const assignSessionsToWeeks = ({
     specialSessionsForWeek.forEach(session => {
       addScheduledTrialSession({
         city: session.trialLocation!,
-        scheduledTrialSessions,
+        scheduledTrialSessionsByCity,
         sessionCountPerCity,
         sessionCountPerWeek,
         sessionScheduledPerCityPerWeek,
@@ -152,7 +154,7 @@ export const assignSessionsToWeeks = ({
 
         addScheduledTrialSession({
           ...prospectiveSession,
-          scheduledTrialSessions,
+          scheduledTrialSessionsByCity,
           sessionCountPerCity,
           sessionCountPerWeek,
           sessionScheduledPerCityPerWeek,
@@ -168,12 +170,15 @@ export const assignSessionsToWeeks = ({
     }
   }
 
-  return { scheduledTrialSessions, sessionCountPerWeek };
+  return {
+    scheduledTrialSessionsByCity,
+    sessionCountPerWeek,
+  };
 };
 
 function addScheduledTrialSession({
   city,
-  scheduledTrialSessions,
+  scheduledTrialSessionsByCity,
   sessionCountPerCity,
   sessionCountPerWeek,
   sessionScheduledPerCityPerWeek,
@@ -181,7 +186,7 @@ function addScheduledTrialSession({
   weekOfString,
 }: {
   city: string;
-  scheduledTrialSessions: ScheduledTrialSession[];
+  scheduledTrialSessionsByCity: Record<string, ScheduledTrialSession[]>;
   sessionCountPerCity: Record<string, number>;
   sessionCountPerWeek: Record<string, number>;
   sessionScheduledPerCityPerWeek: Record<string, Set<string>>;
@@ -189,11 +194,15 @@ function addScheduledTrialSession({
   weekOfString: string;
 }) {
   if (!sessionCountPerCity[city]) sessionCountPerCity[city] = 0;
-  scheduledTrialSessions.push({
+  if (!scheduledTrialSessionsByCity[city])
+    scheduledTrialSessionsByCity[city] = [];
+
+  scheduledTrialSessionsByCity[city].push({
     city,
     sessionType,
     weekOf: weekOfString,
   });
+
   sessionCountPerWeek[weekOfString]++;
   sessionCountPerCity[city]++;
   sessionScheduledPerCityPerWeek[weekOfString].add(city); // Mark this city as scheduled for the current week
