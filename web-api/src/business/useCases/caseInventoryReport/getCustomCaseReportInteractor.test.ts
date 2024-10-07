@@ -1,12 +1,15 @@
+import '@web-api/persistence/elasticsearch/mocks.jest';
 import {
   GetCustomCaseReportRequest,
   getCustomCaseReportInteractor,
 } from './getCustomCaseReportInteractor';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { getCasesByFilters as getCasesByFiltersMock } from '@web-api/persistence/elasticsearch/getCasesByFilters';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+
+const getCasesByFilters = getCasesByFiltersMock as jest.Mock;
 
 describe('getCustomCaseReportInteractor', () => {
   let params: GetCustomCaseReportRequest;
@@ -28,18 +31,13 @@ describe('getCustomCaseReportInteractor', () => {
   describe('Validation', () => {
     it('throws an error if user is not authorized for case inventory report', async () => {
       await expect(
-        getCustomCaseReportInteractor(
-          applicationContext,
-          params,
-          mockPetitionerUser,
-        ),
+        getCustomCaseReportInteractor(params, mockPetitionerUser),
       ).rejects.toThrow('Unauthorized for case inventory report');
     });
 
     it('should be valid when no arguments are passed in for getCustomCaseReportInteractor', async () => {
       await expect(
         getCustomCaseReportInteractor(
-          applicationContext,
           {
             caseStatuses: undefined,
             caseTypes: undefined,
@@ -64,34 +62,21 @@ describe('getCustomCaseReportInteractor', () => {
         delete params[testCase.missingField];
 
         await expect(
-          getCustomCaseReportInteractor(
-            applicationContext,
-            params,
-            mockDocketClerkUser,
-          ),
+          getCustomCaseReportInteractor(params, mockDocketClerkUser),
         ).rejects.toThrow();
       });
     });
   });
 
   it('should fetch cases from persistence with the user selected filters', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByFilters.mockResolvedValue({
-        foundCases: [],
-        totalCount: 0,
-      });
+    getCasesByFilters.mockResolvedValue({
+      foundCases: [],
+      totalCount: 0,
+    });
 
-    await getCustomCaseReportInteractor(
-      applicationContext,
-      params,
-      mockDocketClerkUser,
-    );
+    await getCustomCaseReportInteractor(params, mockDocketClerkUser);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCasesByFilters,
-    ).toHaveBeenCalledWith({
-      applicationContext: expect.anything(),
+    expect(getCasesByFilters).toHaveBeenCalledWith({
       params,
     });
   });

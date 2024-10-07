@@ -11,9 +11,9 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCasesByFilters } from '@web-api/persistence/elasticsearch/getCasesByFilters';
 
 export type CustomCaseReportFilters = {
   caseStatuses: CaseStatus[];
@@ -59,7 +59,6 @@ export type CustomCaseReportSearchAfter = {
 };
 
 export const getCustomCaseReportInteractor = async (
-  applicationContext: ServerApplicationContext,
   params: GetCustomCaseReportRequest,
   authorizedUser: UnknownAuthUser,
 ): Promise<GetCustomCaseReportResponse> => {
@@ -78,8 +77,7 @@ export const getCustomCaseReportInteractor = async (
 
   new CustomCaseReportSearch(params).validate();
 
-  return await applicationContext.getPersistenceGateway().getCasesByFilters({
-    applicationContext,
+  return await getCasesByFilters({
     params,
   });
 };

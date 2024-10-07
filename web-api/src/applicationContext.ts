@@ -3,7 +3,6 @@ import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerat
 import * as docketNumberGenerator from './persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
-import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws-v3';
 import {
   CASE_STATUS_TYPES,
   CLERK_OF_THE_COURT_CONFIGURATION,
@@ -17,7 +16,6 @@ import {
 } from '../../shared/src/business/entities/EntityConstants';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
-import { Client } from '@opensearch-project/opensearch';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { Correspondence } from '../../shared/src/business/entities/Correspondence';
 import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
@@ -34,7 +32,6 @@ import { UserCase } from '../../shared/src/business/entities/UserCase';
 import { UserCaseNote } from '../../shared/src/business/entities/notes/UserCaseNote';
 import { WorkItem } from '../../shared/src/business/entities/WorkItem';
 import { WorkerMessage } from '@web-api/gateways/worker/workerRouter';
-import { defaultProvider } from '@aws-sdk/credential-provider-node';
 import { environment } from '@web-api/environment';
 import {
   getChromiumBrowser,
@@ -53,6 +50,7 @@ import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { getNotificationClient } from '@web-api/notifications/getNotificationClient';
 import { getNotificationService } from '@web-api/notifications/getNotificationService';
 import { getPersistenceGateway } from './getPersistenceGateway';
+import { getSearchClient } from '@web-api/persistence/elasticsearch/searchClient/getSearchClient';
 import { getStorageClient } from '@web-api/persistence/s3/getStorageClient';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
 import { getUseCases } from './getUseCases';
@@ -77,7 +75,6 @@ import pug from 'pug';
 import sass from 'sass';
 
 let sqsCache: SQSClient;
-let searchClientCache: Client;
 
 const entitiesByName = {
   Case,
@@ -228,27 +225,7 @@ export const createApplicationContext = (appContextUser = {}) => {
         process.env.SCANNER_RESOURCE_URI || 'http://localhost:10000/Resources'
       );
     },
-    getSearchClient: () => {
-      if (!searchClientCache) {
-        if (environment.stage === 'local') {
-          searchClientCache = new Client({
-            node: environment.elasticsearchEndpoint,
-          });
-        } else {
-          searchClientCache = new Client({
-            ...AwsSigv4Signer({
-              getCredentials: () => {
-                const credentialsProvider = defaultProvider();
-                return credentialsProvider();
-              },
-              region: 'us-east-1',
-            }),
-            node: `https://${environment.elasticsearchEndpoint}:443`,
-          });
-        }
-      }
-      return searchClientCache;
-    },
+    getSearchClient,
     getSlackWebhookUrl: () => process.env.SLACK_WEBHOOK_URL,
     getStorageClient,
     getUniqueId,
