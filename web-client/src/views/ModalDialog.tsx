@@ -21,6 +21,7 @@ export const ModalDialog = ({
   disableSubmit = false,
   message,
   messageClass = 'margin-bottom-5',
+  onModalMount,
   preventScrolling,
   showButtons = true,
   title,
@@ -40,6 +41,7 @@ export const ModalDialog = ({
   dataTestId?: string;
   disableSubmit?: boolean;
   message?: string;
+  onModalMount?: () => void;
   preventScrolling?: boolean;
   showButtons?: boolean;
   title: string;
@@ -85,6 +87,10 @@ export const ModalDialog = ({
   };
 
   useEffect(() => {
+    if (onModalMount) {
+      onModalMount();
+    }
+
     modalRoot.appendChild(getEl());
     toggleNoScroll(true);
 
