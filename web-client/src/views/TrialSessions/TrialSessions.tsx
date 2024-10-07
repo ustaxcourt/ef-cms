@@ -37,11 +37,12 @@ export const TrialSessions = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-          <div className="display-flex flex-justify-end flex-align-center flex-wrap">
+          <div className="display-flex flex-justify-end flex-align-center flex-wrap gap-1">
             <div>
               <Button
                 link
-                className="margin-top-1"
+                noMargin
+                className="margin-right-0"
                 icon="print"
                 onClick={() => openTrialSessionPlanningModalSequence()}
               >
@@ -51,6 +52,8 @@ export const TrialSessions = connect(
             {trialSessionsHelper.showNewTrialSession && (
               <div>
                 <Button
+                  noMargin
+                  className="margin-right-0"
                   data-testid="add-trial-session-button"
                   href="/add-a-trial-session"
                   icon="plus-circle"
