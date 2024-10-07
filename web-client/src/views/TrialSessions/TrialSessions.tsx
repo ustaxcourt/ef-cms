@@ -37,6 +37,29 @@ export const TrialSessions = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
+          <div className="display-flex flex-justify-end flex-align-center flex-wrap">
+            <div>
+              <Button
+                link
+                className="margin-top-1"
+                icon="print"
+                onClick={() => openTrialSessionPlanningModalSequence()}
+              >
+                Trial Session Planning Report
+              </Button>
+            </div>
+            {trialSessionsHelper.showNewTrialSession && (
+              <div>
+                <Button
+                  data-testid="add-trial-session-button"
+                  href="/add-a-trial-session"
+                  icon="plus-circle"
+                >
+                  Add Trial Session
+                </Button>
+              </div>
+            )}
+          </div>
           <Tabs
             bind="trialSessionsPage.filters.currentTab"
             defaultActiveTab={'calendared'}
@@ -46,25 +69,6 @@ export const TrialSessions = connect(
               resetTrialSessionsFiltersSequence({ currentTab: tabName });
             }}
           >
-            <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
-              <Button
-                link
-                className="margin-top-1"
-                icon="print"
-                onClick={() => openTrialSessionPlanningModalSequence()}
-              >
-                Trial Session Planning Report
-              </Button>
-              {trialSessionsHelper.showNewTrialSession && (
-                <Button
-                  data-testid="add-trial-session-button"
-                  href="/add-a-trial-session"
-                  icon="plus-circle"
-                >
-                  Add Trial Session
-                </Button>
-              )}
-            </div>
             {trialSessionsHelper.showNewTrialSession && (
               <Tab
                 data-testid="new-trial-sessions-tab"
