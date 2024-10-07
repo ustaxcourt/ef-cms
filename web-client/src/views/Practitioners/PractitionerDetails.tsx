@@ -1,21 +1,15 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const PractitionerDetails = connect(
   {
-    gotoPrintPractitionerCasesSequence:
-      sequences.gotoPrintPractitionerCasesSequence,
     practitionerDetailHelper: state.practitionerDetailHelper,
     showModal: state.modal.showModal,
   },
-  function PractitionerDetails({
-    gotoPrintPractitionerCasesSequence,
-    practitionerDetailHelper,
-  }) {
+  function PractitionerDetails({ practitionerDetailHelper }) {
     return (
       <React.Fragment>
         <div className="display-flex flex-justify-end">
@@ -28,22 +22,6 @@ export const PractitionerDetails = connect(
               icon="edit"
             >
               Edit
-            </Button>
-          )}
-          {practitionerDetailHelper.showPrintCaseListLink && (
-            <Button
-              link
-              className="push-right margin-bottom-1"
-              data-testid="print-practitioner-case-list"
-              icon="print"
-              overrideMargin={true}
-              onClick={() => {
-                gotoPrintPractitionerCasesSequence({
-                  userId: practitionerDetailHelper.userId,
-                });
-              }}
-            >
-              Print case list
             </Button>
           )}
         </div>
