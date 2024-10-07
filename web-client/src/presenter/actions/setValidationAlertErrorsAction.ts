@@ -86,6 +86,7 @@ export const setValidationAlertErrorsAction = ({
           }
         }),
     ),
+    scrollToErrorNotification: props.scrollToErrorNotification || false,
     title: 'Please correct the following errors on the page:',
   };
   store.set(state.alertError, alertError);

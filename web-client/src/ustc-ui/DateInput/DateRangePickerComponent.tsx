@@ -1,12 +1,12 @@
 import { FormGroup } from '../FormGroup/FormGroup';
-import React, { useEffect, useRef } from 'react';
+import React, { ChangeEvent, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import datePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-picker/src';
 import dateRangePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-range-picker/src';
 
 export const DateRangePickerComponent = ({
   endDateErrorText,
-  endLabel,
+  endLabel = 'End date',
   endName,
   endPickerCls,
   endValue,
@@ -14,13 +14,15 @@ export const DateRangePickerComponent = ({
   maxDate,
   minDate,
   omitFormGroupClass,
+  onBlurEnd,
+  onBlurStart,
   onChangeEnd,
   onChangeStart,
   parentModalHasMounted = false,
   rangePickerCls,
   showDateHint = false,
   startDateErrorText,
-  startLabel,
+  startLabel = 'Start date',
   startName,
   startPickerCls,
   startValue,
@@ -34,8 +36,10 @@ export const DateRangePickerComponent = ({
   endValue: string;
   formGroupCls?: string;
   rangePickerCls?: string;
-  onChangeEnd: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onChangeStart: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlurEnd?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlurStart?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeEnd?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeStart?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   startDateErrorText?: string;
   startPickerCls?: string;
   startLabel?: string | React.ReactNode;
@@ -126,16 +130,35 @@ export const DateRangePickerComponent = ({
       dateEndInput = window.document.getElementById(`${endName}-date-end`);
 
       if (dateEndInput) {
-        dateEndInput.addEventListener('change', onChangeEnd);
-        dateEndInput.addEventListener('input', onChangeEnd);
+        if (onChangeEnd) {
+          dateEndInput.addEventListener('change', event => {
+            onChangeEnd(event as unknown as ChangeEvent<HTMLInputElement>);
+          });
+
+          dateEndInput.addEventListener('input', event => {
+            onChangeEnd(event as unknown as ChangeEvent<HTMLInputElement>);
+          });
+        }
+        if (onBlurEnd) {
+          dateEndInput.addEventListener('blur', onBlurEnd);
+        }
       }
       dateStartInput = window.document.getElementById(
         `${startName}-date-start`,
       );
 
       if (dateStartInput) {
-        dateStartInput.addEventListener('change', onChangeStart);
-        dateStartInput.addEventListener('input', onChangeStart);
+        if (onChangeStart) {
+          dateStartInput.addEventListener('change', event => {
+            onChangeStart(event as unknown as ChangeEvent<HTMLInputElement>);
+          });
+          dateStartInput.addEventListener('input', event => {
+            onChangeStart(event as unknown as ChangeEvent<HTMLInputElement>);
+          });
+        }
+        if (onBlurStart) {
+          dateStartInput.addEventListener('blur', onBlurStart);
+        }
       }
     }
 
@@ -173,7 +196,7 @@ export const DateRangePickerComponent = ({
               htmlFor={`${startName}-date-start`}
               id={`${startName}-date-start-label`}
             >
-              {startLabel || 'Start date'}{' '}
+              {startLabel}{' '}
             </label>
             {showDateHint && <span className="usa-hint">MM/DD/YYYY</span>}
             <div className="usa-date-picker">
@@ -190,7 +213,6 @@ export const DateRangePickerComponent = ({
             </div>
           </FormGroup>
         </div>
-
         <div className={endPickerCls} data-testid={`${endName}-date-end}`}>
           <FormGroup
             errorText={endDateErrorText}
@@ -202,7 +224,7 @@ export const DateRangePickerComponent = ({
               htmlFor={`${endName}-date-end`}
               id={`${endName}-date-end-label`}
             >
-              {endLabel || 'End date'}{' '}
+              {endLabel}{' '}
             </label>
             {showDateHint && <span className="usa-hint">MM/DD/YYYY</span>}
             <div className="usa-date-picker">

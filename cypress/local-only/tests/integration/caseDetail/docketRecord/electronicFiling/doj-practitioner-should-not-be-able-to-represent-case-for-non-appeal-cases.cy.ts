@@ -13,6 +13,22 @@ import { selectTypeaheadInput } from '../../../../../../helpers/components/typeA
 import { updateCaseStatus } from '../../../../../../helpers/caseDetail/caseInformation/update-case-status';
 
 describe('DOJ Practitioners - Represent A Party', () => {
+  before(() => {
+    cy.task('toggleFeatureFlag', {
+      flag: 'updated-petition-flow',
+      flagValue: false,
+    });
+
+    cy.reload(true);
+  });
+
+  after(() => {
+    cy.task('toggleFeatureFlag', {
+      flag: 'updated-petition-flow',
+      flagValue: true,
+    });
+  });
+
   it('should only display the "Represent A Party" button when the case is "On Appeal"', () => {
     const BAR_NUMBER = 'WN7777';
     const primaryFilerName = 'John';
@@ -28,7 +44,10 @@ describe('DOJ Practitioners - Represent A Party', () => {
       loginAsPrivatePractitioner();
       externalUserSearchesDocketNumber(docketNumber);
       cy.get('[data-testid="request-represent-a-party-button"]').click();
-      selectTypeaheadInput('document-type', 'Entry of Appearance');
+      selectTypeaheadInput(
+        'case-association-document-type-search',
+        'Entry of Appearance',
+      );
       cy.get(`[data-testid="filer-${primaryFilerName}, Petitioner"]`).click();
       cy.get(`[data-testid="filer-${secondaryFilerName}, Petitioner"]`).click();
       cy.get('[data-testid="auto-generation"]').should('exist');

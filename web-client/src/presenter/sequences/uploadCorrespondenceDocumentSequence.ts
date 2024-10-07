@@ -3,7 +3,6 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { getUploadCorrespondenceDocumentAlertSuccessAction } from '../actions/CorrespondenceDocument/getUploadCorrespondenceDocumentAlertSuccessAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
@@ -11,6 +10,7 @@ import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseD
 import { setCorrespondenceIdToDisplayAction } from '../actions/CorrespondenceDocument/setCorrespondenceIdToDisplayAction';
 import { setDocumentTitleFromFormAction } from '../actions/CorrespondenceDocument/setDocumentTitleFromFormAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -30,8 +30,8 @@ export const uploadCorrespondenceDocumentSequence = [
       validateUploadCorrespondenceDocumentAction,
       {
         error: [
-          setAlertErrorAction,
           setValidationErrorsAction,
+          setScrollToErrorNotificationAction,
           setValidationAlertErrorsAction,
         ],
         success: showProgressSequenceDecorator([
