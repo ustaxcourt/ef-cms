@@ -1,8 +1,13 @@
 @use '../uswds' as *;
 @use '../variables' as *;
 
+// Gap
 .gap-1 {
   gap: 8px;
+}
+
+.gap-105 {
+  gap: 12px;
 }
 
 .gap-2 {
@@ -11,4 +16,27 @@
 
 .gap-3 {
   gap: 24px;
+}
+
+
+
+// Width
+.minw-card-lg {
+  min-width: 240px;
+}
+
+.minw-mobile {
+  min-width: 320px;
+}
+
+.minw-mobile-lg {
+  min-width: 480px;
+}
+
+.minw-tablet {
+  min-width: 640px;
+}
+
+.minw-tablet-lg {
+  min-width: 880px;
 }

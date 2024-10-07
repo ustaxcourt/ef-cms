@@ -42,6 +42,46 @@ export const TrialSessions = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
+          <div className="display-flex flex-justify-end flex-align-center flex-wrap gap-105">
+            <div>
+              {trialSessionsHelper.showCreateTermButton && (
+                <Button
+                  link
+                  noMargin
+                  className="margin-right-0 padding-0"
+                  data-testid="open-create-term-modal-button"
+                  icon={['far', 'calendar']}
+                  onClick={() => openCreateTermModalSequence()}
+                >
+                  Create Term
+                </Button>
+              )}
+            </div>
+            <div>
+              <Button
+                link
+                noMargin
+                className="margin-right-0 padding-0"
+                icon="print"
+                onClick={() => openTrialSessionPlanningModalSequence()}
+              >
+                Trial Session Planning Report
+              </Button>
+            </div>
+            {trialSessionsHelper.showNewTrialSession && (
+              <div>
+                <Button
+                  noMargin
+                  className="margin-right-0"
+                  data-testid="add-trial-session-button"
+                  href="/add-a-trial-session"
+                  icon="plus-circle"
+                >
+                  Add Trial Session
+                </Button>
+              </div>
+            )}
+          </div>
           <Tabs
             bind="trialSessionsPage.filters.currentTab"
             defaultActiveTab={'calendared'}
@@ -51,36 +91,6 @@ export const TrialSessions = connect(
               resetTrialSessionsFiltersSequence({ currentTab: tabName });
             }}
           >
-            <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
-              {trialSessionsHelper.showCreateTermButton && (
-                <Button
-                  link
-                  className="margin-top-1"
-                  data-testid="open-create-term-modal-button"
-                  icon={['far', 'calendar']}
-                  onClick={() => openCreateTermModalSequence()}
-                >
-                  Create Term
-                </Button>
-              )}
-              <Button
-                link
-                className="margin-top-1"
-                icon="print"
-                onClick={() => openTrialSessionPlanningModalSequence()}
-              >
-                Trial Session Planning Report
-              </Button>
-              {trialSessionsHelper.showNewTrialSession && (
-                <Button
-                  data-testid="add-trial-session-button"
-                  href="/add-a-trial-session"
-                  icon="plus-circle"
-                >
-                  Add Trial Session
-                </Button>
-              )}
-            </div>
             {trialSessionsHelper.showNewTrialSession && (
               <Tab
                 data-testid="new-trial-sessions-tab"
@@ -210,7 +220,7 @@ const TrialSessionFilters = connect(
             }
             endName="trialSessionLastStartDate"
             endValue={trialSessionsPage.filters.endDate}
-            rangePickerCls={'display-flex'}
+            rangePickerCls={'display-flex flex-wrap gap-2'}
             startDateErrorText={trialSessionsHelper.startDateErrorMessage}
             startLabel={
               <span>
@@ -219,7 +229,6 @@ const TrialSessionFilters = connect(
               </span>
             }
             startName="trialSessionFirstStartDate"
-            startPickerCls="padding-right-2"
             startValue={trialSessionsPage.filters.startDate}
             onBlurEnd={e => {
               setTrialSessionsFiltersSequence({
@@ -233,9 +242,9 @@ const TrialSessionFilters = connect(
             }}
           />
         </div>
-        <div className="padding-y-3"></div>
+        <div className="padding-y-2"></div>
         <div className="margin-bottom-2 grid-row flex-row gap-2">
-          <div className="grid-col">
+          <div className="tablet:grid-col grid-col-12">
             <div className="margin-bottom-1">
               <label
                 className="usa-label"
@@ -287,7 +296,7 @@ const TrialSessionFilters = connect(
               )}
             </div>
           </div>
-          <div className="grid-col">
+          <div className="tablet:grid-col grid-col-12">
             <div className="margin-bottom-1">
               <label
                 className="usa-label"
@@ -338,7 +347,7 @@ const TrialSessionFilters = connect(
               )}
             </div>
           </div>
-          <div className="grid-col">
+          <div className="tablet:grid-col grid-col-12">
             <div className="margin-bottom-1">
               <label
                 className="usa-label"

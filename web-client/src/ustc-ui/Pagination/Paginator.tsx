@@ -69,7 +69,11 @@ export const Paginator = ({
 
 Paginator.displayName = 'Paginator';
 
-const PageButton = (props: {
+const PageButton = ({
+  onClick,
+  pageNumber,
+  selected,
+}: {
   pageNumber: number;
   selected: boolean;
   onClick: (selectedPage: number) => void;
@@ -78,24 +82,27 @@ const PageButton = (props: {
     <>
       <li className="usa-pagination__item usa-pagination__page-no">
         <button
-          aria-label="Page 1"
+          aria-label={`Page ${pageNumber + 1}`}
           className={classNames(
             'usa-pagination__button',
             'cursor-pointer',
-            props.selected && 'paginator-current',
-            !props.selected && 'background-none',
+            selected && 'paginator-current',
+            !selected && 'background-none',
           )}
-          onClick={() => props.onClick(props.pageNumber)}
+          onClick={() => onClick(pageNumber)}
         >
-          {props.pageNumber + 1}
+          {pageNumber + 1}
         </button>
       </li>
     </>
   );
 };
 
-const PreviousPage = (props: {
-  onPreviousClick: Function;
+const PreviousPage = ({
+  isHidden,
+  onPreviousClick,
+}: {
+  onPreviousClick: () => void;
   isHidden: boolean;
 }) => {
   return (
@@ -108,10 +115,10 @@ const PreviousPage = (props: {
             'usa-pagination__previous-page',
             'background-none',
             'border-none',
-            props.isHidden && 'visibility-hidden',
+            isHidden && 'visibility-hidden',
           )}
           onClick={() => {
-            props.onPreviousClick();
+            onPreviousClick();
           }}
         >
           <LeftChevron />
@@ -122,7 +129,13 @@ const PreviousPage = (props: {
   );
 };
 
-const NextPage = (props: { onNextClick: Function; isHidden: boolean }) => {
+const NextPage = ({
+  isHidden,
+  onNextClick,
+}: {
+  onNextClick: Function;
+  isHidden: boolean;
+}) => {
   return (
     <>
       <li className="usa-pagination__item usa-pagination__arrow">
@@ -133,10 +146,10 @@ const NextPage = (props: { onNextClick: Function; isHidden: boolean }) => {
             'usa-pagination__next-page',
             'background-none',
             'border-none',
-            props.isHidden && 'visibility-hidden',
+            isHidden && 'visibility-hidden',
           )}
           onClick={() => {
-            props.onNextClick();
+            onNextClick();
           }}
         >
           <span className="usa-pagination__link-text">Next</span>
@@ -151,8 +164,8 @@ const PageEllipsis = () => {
   return (
     <>
       <li
+        aria-label="ellipsis indicating non-visible pages"
         className="usa-pagination__item usa-pagination__overflow"
-        role="presentation"
       >
         <span>…</span>
       </li>
