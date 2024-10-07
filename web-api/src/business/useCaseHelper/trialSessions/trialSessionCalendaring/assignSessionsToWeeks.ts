@@ -62,8 +62,6 @@ export const assignSessionsToWeeks = ({
   }
 
   for (const currentWeek of weeksToLoop) {
-    // TODO ensure we're scheduling cities that haven't been visited in the last two terms first,
-    // so that we guarantee they make it into the suggested term.
     const weekOfString = currentWeek;
 
     if (!sessionCountPerWeek[weekOfString]) {
@@ -112,7 +110,7 @@ export const assignSessionsToWeeks = ({
       });
     });
 
-    // TODO 10275: test this
+    // TODO 10275: test this (and be sure it works)
     const sortedProspectiveSessionsByCity = Object.keys(
       prospectiveSessionsByCity,
     )
