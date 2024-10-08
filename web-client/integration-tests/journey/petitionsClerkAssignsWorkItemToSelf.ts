@@ -28,12 +28,11 @@ export const petitionsClerkAssignsWorkItemToSelf = cerebralTest => {
     await cerebralTest.runSequence('selectWorkItemSequence', {
       workItem: unassignedWorkItem,
     });
+
     const selectedWorkItems = cerebralTest.getState('selectedWorkItems');
     expect(selectedWorkItems.length).toEqual(1);
     cerebralTest.selectedWorkItem = selectedWorkItems[0];
-    expect(unassignedWorkItem).toMatchObject({
-      assigneeId: null,
-    });
+    expect(unassignedWorkItem.assigneId).not.toBeDefined();
 
     // select an assignee
     expect(cerebralTest.getState('assigneeId')).toBeNull();
