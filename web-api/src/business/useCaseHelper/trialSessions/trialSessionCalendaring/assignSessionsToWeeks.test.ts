@@ -98,7 +98,7 @@ describe('assignSessionsToWeeks', () => {
 
   it('should assign no more than the max number of sessions per location when passed more than the max for a given location', () => {
     const mockSessions = getMockTrialSessionsForSingleCity();
-    const { scheduledTrialSessions, sessionCountPerWeek } =
+    const { scheduledTrialSessionsByCity, sessionCountPerWeek } =
       assignSessionsToWeeks({
         calendaringConfig: defaultMockCalendaringConfig,
         prospectiveSessionsByCity: mockSessions,
@@ -106,7 +106,7 @@ describe('assignSessionsToWeeks', () => {
         weeksToLoop: mockWeeksToLoop,
       });
 
-    expect(scheduledTrialSessions.length).toEqual(
+    expect(Object.values(scheduledTrialSessionsByCity)[0].length).toEqual(
       defaultMockCalendaringConfig.maxSessionsPerLocation,
     );
 
@@ -155,14 +155,16 @@ describe('assignSessionsToWeeks', () => {
     ];
 
     const mockSessions = getMockTrialSessionsForSingleCity();
-    const { scheduledTrialSessions } = assignSessionsToWeeks({
+    const { scheduledTrialSessionsByCity } = assignSessionsToWeeks({
       calendaringConfig: defaultMockCalendaringConfig,
       prospectiveSessionsByCity: mockSessions,
       specialSessions: mockSpecialSessions,
       weeksToLoop: mockWeeksToLoop,
     });
 
-    expect(scheduledTrialSessions.length).toEqual(mockSpecialSessions.length);
+    expect(Object.values(scheduledTrialSessionsByCity)[0].length).toEqual(
+      mockSpecialSessions.length,
+    );
 
     // 5 special sessions at the same location
     // 1 non-special session also at that same location
