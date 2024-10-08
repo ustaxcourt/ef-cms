@@ -15,32 +15,43 @@ const mockSessionCountPerWeek = {
 
 describe('writeTrialSessionDataToExcel', () => {
   it('should produce a vaguely valid xlsx file', async () => {
-    let mockScheduledTrialSessions: ScheduledTrialSession[] = [];
+    let mockScheduledTrialSessionsByCity: Record<
+      string,
+      ScheduledTrialSession[]
+    > = {};
     for (const city of cities) {
       for (const week of weeks) {
         const randomType = Math.floor(Math.random() * 3);
-        mockScheduledTrialSessions.push({
+        if (!mockScheduledTrialSessionsByCity[city])
+          mockScheduledTrialSessionsByCity[city] = [];
+        mockScheduledTrialSessionsByCity[city].push({
           city,
           sessionType: SESSION_TYPES[Object.keys(SESSION_TYPES)[randomType]],
           weekOf: week,
         });
       }
     }
+
     await writeTrialSessionDataToExcel({
-      scheduledTrialSessions: mockScheduledTrialSessions,
       sessionCountPerWeek: mockSessionCountPerWeek,
+      sortedScheduledTrialSessionsByCity: mockScheduledTrialSessionsByCity,
       weeks,
     });
   });
 
   it('should handle data that produces empty cells gracefully', async () => {
-    let mockScheduledTrialSessions: ScheduledTrialSession[] = [];
+    let mockScheduledTrialSessionsByCity: Record<
+      string,
+      ScheduledTrialSession[]
+    > = {};
     let counter = 1;
     for (const city of cities) {
       for (const week of weeks) {
         counter++;
         if (counter % 4 !== 0) {
-          mockScheduledTrialSessions.push({
+          if (!mockScheduledTrialSessionsByCity[city])
+            mockScheduledTrialSessionsByCity[city] = [];
+          mockScheduledTrialSessionsByCity[city].push({
             city,
             sessionType: SESSION_TYPES.regular,
             weekOf: week,
@@ -50,8 +61,8 @@ describe('writeTrialSessionDataToExcel', () => {
     }
 
     await writeTrialSessionDataToExcel({
-      scheduledTrialSessions: mockScheduledTrialSessions,
       sessionCountPerWeek: mockSessionCountPerWeek,
+      sortedScheduledTrialSessionsByCity: mockScheduledTrialSessionsByCity,
       weeks,
     });
   });
