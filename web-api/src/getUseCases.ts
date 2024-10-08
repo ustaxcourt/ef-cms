@@ -30,7 +30,6 @@ import { createCaseDeadlineInteractor } from './business/useCases/caseDeadline/c
 import { createCaseFromPaperInteractor } from './business/useCases/createCaseFromPaperInteractor';
 import { createCaseInteractor } from './business/useCases/createCaseInteractor';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from './business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor';
-import { createCsvCustomCaseReportFileInteractor } from '@web-api/business/useCases/customCaseReport/createCsvCustomCaseReportFileInteractor';
 import { createMessageInteractor } from './business/useCases/messages/createMessageInteractor';
 import { createPractitionerDocumentInteractor } from './business/useCases/practitioner/createPractitionerDocumentInteractor';
 import { createPractitionerUserInteractor } from './business/useCases/practitioner/createPractitionerUserInteractor';
@@ -244,7 +243,6 @@ const useCases = {
   createCaseFromPaperInteractor,
   createCaseInteractor,
   createCourtIssuedOrderPdfFromHtmlInteractor,
-  createCsvCustomCaseReportFileInteractor,
   createMessageInteractor,
   createPractitionerDocumentInteractor,
   createPractitionerUserInteractor,
