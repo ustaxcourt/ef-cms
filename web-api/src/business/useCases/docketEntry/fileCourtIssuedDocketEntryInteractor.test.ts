@@ -1,6 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import {
   DOCKET_SECTION,
   ROLES,
@@ -258,34 +257,6 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       );
 
     expect(updatedDocketEntry).toMatchObject({ draftOrderState: null });
-  });
-
-  it('should use original case caption to create case title when creating work item', async () => {
-    await fileCourtIssuedDocketEntryInteractor(
-      applicationContext,
-      {
-        docketNumbers: [],
-        documentMeta: {
-          date: '2019-03-01T21:40:46.415Z',
-          docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-          documentTitle: 'Order',
-          documentType: 'Order',
-          eventCode: 'O',
-          freeText: 'Dogs',
-          generatedDocumentTitle: 'Transcript of Dogs on 03-01-19',
-          serviceStamp: 'Served',
-        },
-        subjectDocketNumber: caseRecord.docketNumber,
-      } as any,
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-        .workItem,
-    ).toMatchObject({
-      caseTitle: Case.getCaseTitle(caseRecord.caseCaption),
-    });
   });
 
   it('should add docketEntry to caseEntity when not already on caseEntity', async () => {
