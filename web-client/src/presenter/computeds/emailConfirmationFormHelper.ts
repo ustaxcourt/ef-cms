@@ -14,15 +14,19 @@ export const emailConfirmationFormHelper = (get: Get): any => {
 
   const confirmEmailChangedSinceSubmission =
     !formWasSubmitted && isDirtyConfirmEmail;
-
   const emailChangedSinceSubmission = !formWasSubmitted && isDirtyEmail;
-
   const showConfirmEmailErrorMessage =
     formWasSubmitted ||
     (confirmEmailChangedSinceSubmission && !inFocusConfirmEmail);
   const showEmailErrorMessage =
     formWasSubmitted || (emailChangedSinceSubmission && !inFocusEmail);
 
+  console.log(
+    confirmEmailErrorMessage,
+    emailErrorMessage,
+    showConfirmEmailErrorMessage,
+    showEmailErrorMessage,
+  );
   return {
     confirmEmailErrorMessage,
     emailErrorMessage,

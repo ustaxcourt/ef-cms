@@ -6,15 +6,19 @@ export const updateEmailConfirmationFormAction = ({
   props,
   store,
 }: ActionProps) => {
-  const form = get(state.form);
-  const formEntity = new EmailConfirmationForm(form);
+  const { confirmEmail, email, updatedEmail } = get(state.form);
+  const emailToValidate = updatedEmail || email;
+  const formEntity = new EmailConfirmationForm({
+    confirmEmail,
+    email: emailToValidate,
+  });
   const errors = formEntity.getFormattedValidationErrors();
 
   store.set(state.emailConfirmation.formWasSubmitted, false);
 
   const { field, inFocus } = get(props);
 
-  if (field === 'email') {
+  if (field === 'email' || field === 'updatedEmail') {
     store.set(state.emailConfirmation.inFocusEmail, inFocus);
     store.set(state.emailConfirmation.isDirtyEmail, true);
 
@@ -38,4 +42,6 @@ export const updateEmailConfirmationFormAction = ({
   } else {
     store.unset(state.emailConfirmation.confirmEmailErrorMessage);
   }
+
+  // console.log('state after update action ran', get(state.emailConfirmation));
 };

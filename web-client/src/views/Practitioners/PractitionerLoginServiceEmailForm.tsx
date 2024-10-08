@@ -2,7 +2,7 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React, { useState } from 'react';
+import React from 'react';
 
 type PractitionerLoginServiceEmailFormProps = {
   emailFormName: string;
@@ -10,9 +10,11 @@ type PractitionerLoginServiceEmailFormProps = {
 
 const practitionerLoginServiceEmailFormDependencies = {
   createPractitionerUserHelper: state.createPractitionerUserHelper,
+  emailConfirmationFormHelper: state.emailConfirmationFormHelper,
   form: state.form,
+  updateEmailConfirmationFormSequence:
+    sequences.updateEmailConfirmationFormSequence,
   updateFormValueSequence: sequences.updateFormValueSequence,
-  validateEmailFormHelper: state.validateEmailFormHelper,
   validationErrors: state.validationErrors,
 };
 
@@ -23,14 +25,12 @@ export const PractitionerLoginServiceEmailForm = connect<
   practitionerLoginServiceEmailFormDependencies,
   function PractitionerLoginServiceEmailForm({
     createPractitionerUserHelper,
+    emailConfirmationFormHelper,
     emailFormName,
     form,
+    updateEmailConfirmationFormSequence,
     updateFormValueSequence,
-    validateEmailFormHelper,
   }) {
-    const [inFocusEmail, setInFocusEmail] = useState(true);
-    const [inFocusConfirmEmail, setInFocusConfirmEmail] = useState(true);
-
     return (
       <div className="margin-bottom-4">
         <h2>Login & Service Email</h2>
@@ -55,7 +55,8 @@ export const PractitionerLoginServiceEmailForm = connect<
             <h4>Change Login & Service Email</h4>
             <FormGroup
               errorText={
-                !inFocusEmail && validateEmailFormHelper.emailErrorMessage
+                emailConfirmationFormHelper.showEmailErrorMessage &&
+                emailConfirmationFormHelper.emailErrorMessage
               }
             >
               <label className="usa-label" htmlFor="updatedEmail">
@@ -71,7 +72,10 @@ export const PractitionerLoginServiceEmailForm = connect<
                 type="text"
                 value={form[emailFormName] || ''}
                 onBlur={() => {
-                  setInFocusEmail(false);
+                  updateEmailConfirmationFormSequence({
+                    field: emailFormName,
+                    inFocus: false,
+                  });
                 }}
                 onChange={e =>
                   updateFormValueSequence({
@@ -79,13 +83,18 @@ export const PractitionerLoginServiceEmailForm = connect<
                     value: e.target.value,
                   })
                 }
-                onFocus={() => setInFocusEmail(true)}
+                onFocus={() =>
+                  updateEmailConfirmationFormSequence({
+                    field: emailFormName,
+                    inFocus: true,
+                  })
+                }
               />
             </FormGroup>
             <FormGroup
               errorText={
-                !inFocusConfirmEmail &&
-                validateEmailFormHelper.confirmEmailErrorMessage
+                emailConfirmationFormHelper.showConfirmEmailErrorMessage &&
+                emailConfirmationFormHelper.confirmEmailErrorMessage
               }
             >
               <label className="usa-label" htmlFor="confirm-email">
@@ -100,14 +109,24 @@ export const PractitionerLoginServiceEmailForm = connect<
                 name="confirmEmail"
                 type="text"
                 value={form.confirmEmail || ''}
-                onBlur={() => setInFocusConfirmEmail(false)}
+                onBlur={() =>
+                  updateEmailConfirmationFormSequence({
+                    field: 'confirmEmail',
+                    inFocus: false,
+                  })
+                }
                 onChange={e =>
                   updateFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   })
                 }
-                onFocus={() => setInFocusConfirmEmail(true)}
+                onFocus={() =>
+                  updateEmailConfirmationFormSequence({
+                    field: 'confirmEmail',
+                    inFocus: true,
+                  })
+                }
               />
             </FormGroup>
           </div>
