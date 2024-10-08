@@ -7,12 +7,14 @@ import {
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { completeWorkItemInteractor } from './completeWorkItemInteractor';
+import { getWorkItemById as getWorkItemByIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 
 describe('completeWorkItemInteractor', () => {
+  const getWorkItemById = getWorkItemByIdMock as jest.Mock;
   const mockWorkItem = {
     assigneeId: applicationContext.getUniqueId(),
     createdAt: '2019-03-11T21:56:01.625Z',
@@ -38,9 +40,7 @@ describe('completeWorkItemInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getWorkItemById.mockResolvedValue(mockWorkItem);
+    getWorkItemById.mockResolvedValue(mockWorkItem);
 
     applicationContext
       .getPersistenceGateway()
@@ -72,10 +72,9 @@ describe('completeWorkItemInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getWorkItemById.mock
-        .calls[0][0],
-    ).toMatchObject({ workItemId: mockWorkItemId });
+    expect(getWorkItemById.mock.calls[0][0]).toMatchObject({
+      workItemId: mockWorkItemId,
+    });
   });
 
   it('should update the docket entry work item if it matches the completed work item id', async () => {

@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
@@ -13,6 +14,7 @@ import {
   calculateDate,
   createISODateAtStartOfDayEST,
 } from '../../../../../shared/src/business/utilities/DateHandler';
+import { getDocumentQCServedForSection as getDocumentQCServedForSectionMock } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForSection';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
@@ -20,52 +22,53 @@ import {
 } from '@shared/test/mockAuthUsers';
 
 describe('getDocumentQCServedForSectionInteractor', () => {
+  const getDocumentQCServedForSection =
+    getDocumentQCServedForSectionMock as jest.Mock;
   describe('interactor', () => {
     beforeEach(() => {
-      applicationContext.getPersistenceGateway().getDocumentQCServedForSection =
-        () => [
-          {
-            caseStatus: 'Closed',
-            caseTitle: 'Lewis Dodgson does not have a case',
-            docketEntry: {
-              createdAt: '2019-03-11T21:56:01.625Z',
-              descriptionDisplay: 'Petition filed by Lewis Dodgson',
-              docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-              documentType: 'Petition',
-              entityName: 'DocketEntry',
-              eventCode: 'P',
-              filedBy: 'Lewis Dodgson',
-              filingDate: '2019-03-11T21:56:01.625Z',
-              isDraft: false,
-              isOnDocketRecord: true,
-              sentBy: 'petitioner',
-              userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
-            },
-            docketNumber: '101-18',
-            docketNumberWithSuffix: '101-18S',
-            section: DOCKET_SECTION,
-            sentBy: 'docketclerk',
+      getDocumentQCServedForSection.mockReturnValue([
+        {
+          caseStatus: 'Closed',
+          caseTitle: 'Lewis Dodgson does not have a case',
+          docketEntry: {
+            createdAt: '2019-03-11T21:56:01.625Z',
+            descriptionDisplay: 'Petition filed by Lewis Dodgson',
+            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+            documentType: 'Petition',
+            entityName: 'DocketEntry',
+            eventCode: 'P',
+            filedBy: 'Lewis Dodgson',
+            filingDate: '2019-03-11T21:56:01.625Z',
+            isDraft: false,
+            isOnDocketRecord: true,
+            sentBy: 'petitioner',
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
           },
-          {
-            caseStatus: 'Closed',
-            caseTitle: 'Lewis Dodgson does not have a case',
-            docketEntry: {
-              createdAt: '2019-03-11T21:56:01.625Z',
-              docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-              documentType: 'Order',
-              entityName: 'DocketEntry',
-              eventCode: 'O',
-              filedBy: 'Lewis Dodgson',
-              filingDate: '2019-03-11T21:56:01.625Z',
-              isDraft: false,
-              isOnDocketRecord: true,
-              userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
-            },
-            docketNumber: '101-18',
-            docketNumberWithSuffix: '101-18S',
-            section: DOCKET_SECTION,
+          docketNumber: '101-18',
+          docketNumberWithSuffix: '101-18S',
+          section: DOCKET_SECTION,
+          sentBy: 'docketclerk',
+        },
+        {
+          caseStatus: 'Closed',
+          caseTitle: 'Lewis Dodgson does not have a case',
+          docketEntry: {
+            createdAt: '2019-03-11T21:56:01.625Z',
+            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+            documentType: 'Order',
+            entityName: 'DocketEntry',
+            eventCode: 'O',
+            filedBy: 'Lewis Dodgson',
+            filingDate: '2019-03-11T21:56:01.625Z',
+            isDraft: false,
+            isOnDocketRecord: true,
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
           },
-        ];
+          docketNumber: '101-18',
+          docketNumberWithSuffix: '101-18S',
+          section: DOCKET_SECTION,
+        },
+      ]);
       applicationContext.getPersistenceGateway().getUserById = ({ userId }) =>
         MOCK_USERS[userId];
 
