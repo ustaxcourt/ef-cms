@@ -114,6 +114,7 @@ import { getSectionInboxMessages } from './persistence/elasticsearch/messages/ge
 import { getSectionOutboxMessages } from './persistence/elasticsearch/messages/getSectionOutboxMessages';
 import { getSesStatus } from './persistence/ses/getSesStatus';
 import { getStoredApplicationHealth } from '@web-api/persistence/dynamo/deployTable/getStoredApplicationHealth';
+import { getSuggestedCalendarCases } from './persistence/elasticsearch/getSuggestedCalendarCases';
 import { getTableStatus } from './persistence/dynamo/getTableStatus';
 import { getTrialSessionById } from './persistence/dynamo/trialSessions/getTrialSessionById';
 import { getTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/getTrialSessionJobStatusForCase';
@@ -362,6 +363,7 @@ const gatewayMethods = {
   getSectionOutboxMessages,
   getSesStatus,
   getStoredApplicationHealth,
+  getSuggestedCalendarCases,
   getTableStatus,
   getTrialSessionById,
   getTrialSessionJobStatusForCase,

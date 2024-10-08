@@ -92,7 +92,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   console.time('10275: Get ready for trial cases time');
   const cases = await applicationContext
     .getPersistenceGateway()
-    .getReadyForTrialCases({ applicationContext });
+    .getSuggestedCalendarCases({ applicationContext });
 
   console.timeEnd('10275: Get ready for trial cases time');
 
