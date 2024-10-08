@@ -17,4 +17,4 @@
 ./scripts/dynamo/setup-add-docket-numbers-to-orders-flag.sh
 ./scripts/dynamo/setup-updated-trial-session-types-flag.sh
 ./scripts/dynamo/setup-consolidated-cases-group-access-petitioner-flag.sh
-./scripts/dynamo/setup-aws-batch-zipper-minimum-count-flag.sh
+./scripts/dynamo/setup-aws-batch-zipper-minimum-count.sh

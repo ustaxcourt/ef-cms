@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# creates the entry for the AWS BATCH Zipper flag count in the dynamo deploy table
+# creates the entry for the AWS BATCH Zipper minimum count in the dynamo deploy table
 
 # Usage
-#   ENV=dev ./setup-aws-batch-zipper-minimum-count-flag.sh
+#   ENV=dev ./setup-aws-batch-zipper-minimum-count.sh
 
 ./check-env-variables.sh \
   "ENV" \
@@ -19,7 +19,7 @@ ITEM=$(cat <<-END
         "S": "aws-batch-zipper-minimum-count"
     },
     "current": {
-        "N": 0
+        "N": "0"
     }
 }
 END
