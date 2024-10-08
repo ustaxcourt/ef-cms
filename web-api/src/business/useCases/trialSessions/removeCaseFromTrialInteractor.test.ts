@@ -20,8 +20,11 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { removeCaseFromTrialInteractor } from './removeCaseFromTrialInteractor';
+import { setPriorityOnAllWorkItems as setPriorityOnAllWorkItemsMock } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 
 describe('removeCaseFromTrialInteractor', () => {
+  const setPriorityOnAllWorkItems = setPriorityOnAllWorkItemsMock as jest.Mock;
+
   let mockLock;
   let mockTrialSession: RawTrialSession;
 
@@ -210,13 +213,8 @@ describe('removeCaseFromTrialInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems.mock
-        .calls[0][0],
-    ).toMatchObject({
+    expect(setPriorityOnAllWorkItems).toHaveBeenCalled();
+    expect(setPriorityOnAllWorkItems.mock.calls[0][0]).toMatchObject({
       highPriority: false,
     });
   });
