@@ -4,7 +4,10 @@ import {
   SESSION_TYPES,
   TRIAL_CITY_STRINGS,
 } from '@shared/business/entities/EntityConstants';
-import { assignSessionsToWeeks } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
+import {
+  ScheduledTrialSession,
+  assignSessionsToWeeks,
+} from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { getWeeksInRange } from '@shared/business/utilities/DateHandler';
 
@@ -67,19 +70,27 @@ describe('assignSessionsToWeeks', () => {
   it('should not schedule more than the maximum number of sessions for a given week', () => {
     const mockSessions = getMockTrialSessions();
 
-    const { scheduledTrialSessions } = assignSessionsToWeeks({
-      calendaringConfig: defaultMockCalendaringConfig,
-      prospectiveSessionsByCity: mockSessions,
-      specialSessions: [],
-      weeksToLoop: mockWeeksToLoop,
+    const { scheduledTrialSessionsByCity, sessionCountPerWeek } =
+      assignSessionsToWeeks({
+        calendaringConfig: defaultMockCalendaringConfig,
+        prospectiveSessionsByCity: mockSessions,
+        specialSessions: [],
+        weeksToLoop: mockWeeksToLoop,
+      });
+
+    let flatSessionArray: ScheduledTrialSession[] = [];
+    Object.values(scheduledTrialSessionsByCity).forEach(sessions => {
+      flatSessionArray.push(...sessions);
     });
 
-    //TODO: refactor this
-    const weekOfMap = scheduledTrialSessions.reduce((acc, session) => {
+    const weekOfMap = flatSessionArray.reduce((acc, session) => {
       acc[session.weekOf] = (acc[session.weekOf] || 0) + 1;
       return acc;
     }, {});
 
+    expect(Object.values(sessionCountPerWeek)[0]).toEqual(
+      defaultMockCalendaringConfig.maxSessionsPerWeek,
+    );
     expect(Object.values(weekOfMap)[0]).toEqual(
       defaultMockCalendaringConfig.maxSessionsPerWeek,
     );
