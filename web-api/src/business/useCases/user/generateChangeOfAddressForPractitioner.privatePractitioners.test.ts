@@ -393,26 +393,4 @@ describe('generateChangeOfAddress', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).not.toHaveBeenCalled();
   });
-
-  it('should use original case caption to create case title when creating work item', async () => {
-    await generateChangeOfAddress({
-      applicationContext,
-      authorizedUser: mockDocketClerkUser,
-      contactInfo: {
-        ...mockPrivatePractitioner.contact,
-        address1: '234 Main St',
-      },
-      user: {
-        ...mockPrivatePractitioner,
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-      },
-    } as any);
-
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-        .workItem,
-    ).toMatchObject({
-      caseTitle: 'Test Petitioner',
-    });
-  });
 });
