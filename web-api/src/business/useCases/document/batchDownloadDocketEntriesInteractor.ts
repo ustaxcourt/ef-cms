@@ -197,7 +197,7 @@ const batchDownloadDocketEntriesHelper = async (
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
-    clientConnectionId, //GUID WE GENERATE
+    clientConnectionId,
     message: {
       action: 'batch_download_ready',
       url,

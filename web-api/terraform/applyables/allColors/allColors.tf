@@ -115,28 +115,8 @@ module "ui-healthcheck" {
   dns_domain = "app.${var.dns_domain}"
 }
 
-# module "ecr-east" {
-#   source     = "../../modules/ecr-for-env"
-# 	environment            = var.environment
-# 	region                 = "east"
-# 	# color                  = "blue"
-# 	providers = {
-#     aws = aws.us-east-1
-#   }
-# }
-
-# module "ecr-west" {
-#   source     = "../../modules/ecr-for-env"
-# 	environment            = var.environment
-# 	region                 = "west"
-# 	# color                  = "blue"
-# 	providers = {
-#     aws = aws.us-west-1
-#   }
-# }
-
 module "ecr-blue-east" {
-  source     = "../../modules/ecr-for-env"
+  source     = "../../modules/elastic-container-registry"
 	environment            = var.environment
 	region                 = "us-east-1"
 	color                  = "blue"
@@ -146,7 +126,7 @@ module "ecr-blue-east" {
 }
 
 module "ecr-blue-west" {
-  source     = "../../modules/ecr-for-env"
+  source     = "../../modules/elastic-container-registry"
 	environment            = var.environment
 	region                 = "us-west-1"
 	color                  = "blue"
@@ -156,7 +136,7 @@ module "ecr-blue-west" {
 }
 
 module "ecr-green-east" {
-  source     = "../../modules/ecr-for-env"
+  source     = "../../modules/elastic-container-registry"
 	environment            = var.environment
 	region                 = "us-east-1"
 	color                  = "green"
@@ -166,7 +146,7 @@ module "ecr-green-east" {
 }
 
 module "ecr-green-west" {
-  source     = "../../modules/ecr-for-env"
+  source     = "../../modules/elastic-container-registry"
 	environment            = var.environment
 	region                 = "us-west-1"
 	color                  = "green"
