@@ -19,6 +19,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
+import { WorkItem } from '@shared/business/entities/WorkItem';
 import { addServedStampToDocument } from '@web-api/business/useCases/courtIssuedDocument/addServedStampToDocument';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { generateNoticeOfDocketChangePdf } from '@web-api/business/useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
@@ -174,7 +175,7 @@ const completeDocketEntryQC = async (
     .getUseCaseHelpers()
     .updateCaseAutomaticBlock({ applicationContext, caseEntity });
 
-  const workItemToUpdate = updatedDocketEntry.workItem;
+  const workItemToUpdate = updatedDocketEntry.workItem as WorkItem;
 
   Object.assign(workItemToUpdate, {
     docketEntry: {
@@ -204,7 +205,7 @@ const completeDocketEntryQC = async (
     sentByUserId: user.userId,
   });
 
-  await saveWorkItem(workItemToUpdate.validate().toRawObject());
+  await saveWorkItem({ workItem: workItemToUpdate.validate().toRawObject() });
 
   let servedParties = aggregatePartiesForService(caseEntity);
   let paperServicePdfUrl;
