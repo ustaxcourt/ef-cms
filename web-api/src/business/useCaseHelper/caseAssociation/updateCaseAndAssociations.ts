@@ -336,13 +336,13 @@ const updateCaseWorkItems = async ({ caseToUpdate, oldCase }) => {
   const workItemsRequireUpdate =
     oldCase.associatedJudge !== caseToUpdate.associatedJudge;
 
-  if (!workItemsRequireUpdate) {
-    return [];
-  }
-
   const workItems = await getWorkItemsByDocketNumber({
     docketNumber: caseToUpdate.docketNumber,
   });
+
+  if (!workItems || !workItemsRequireUpdate) {
+    return [];
+  }
 
   const updatedWorkItems = workItems.map(rawWorkItem => ({
     ...rawWorkItem,
