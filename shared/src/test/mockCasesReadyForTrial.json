@@ -1,0 +1,1162 @@
+[
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Los Angeles, California",
+    "procedureType": "Small",
+    "caseCaption": "Stanford Smith",
+    "docketNumber": "11116-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Cleveland, Ohio",
+    "procedureType": "Regular",
+    "caseCaption": "Marcelina Goyette",
+    "docketNumber": "11160-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Detroit, Michigan",
+    "caseCaption": "Riley White",
+    "docketNumber": "11444-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Los Angeles, California",
+    "procedureType": "Small",
+    "caseCaption": "Irwin Streich",
+    "docketNumber": "11701-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Boise, Idaho",
+    "caseCaption": "Bartholome Waters",
+    "docketNumber": "10740-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Dallas, Texas",
+    "caseCaption": "Evan Johnson",
+    "docketNumber": "10881-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Los Angeles, California",
+    "caseCaption": "Merritt Halvorson",
+    "docketNumber": "10823-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Los Angeles, California",
+    "procedureType": "Regular",
+    "caseCaption": "Lenna Blanda",
+    "docketNumber": "11650-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Birmingham, Alabama",
+    "caseCaption": "Lew Conroy",
+    "docketNumber": "11384-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Los Angeles, California",
+    "caseCaption": "Rhoda Mann",
+    "docketNumber": "11323-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Wichita, Kansas",
+    "caseCaption": "Darien Feil",
+    "docketNumber": "10827-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "New York City, New York",
+    "procedureType": "Regular",
+    "caseCaption": "Chanel Murray",
+    "docketNumber": "11004-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Atlanta, Georgia",
+    "caseCaption": "Ezequiel Hermann",
+    "docketNumber": "10836-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Portland, Oregon",
+    "procedureType": "Small",
+    "caseCaption": "Anna Kovacek",
+    "docketNumber": "10832-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "New York City, New York",
+    "caseCaption": "Quinten Marvin",
+    "docketNumber": "10958-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Los Angeles, California",
+    "procedureType": "Small",
+    "caseCaption": "Damon Barton",
+    "docketNumber": "10863-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Miami, Florida",
+    "caseCaption": "Edward Predovic",
+    "docketNumber": "11055-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Denver, Colorado",
+    "caseCaption": "Kory Johns",
+    "docketNumber": "10693-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Milwaukee, Wisconsin",
+    "procedureType": "Regular",
+    "caseCaption": "Jason Jones",
+    "docketNumber": "6511-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "St. Paul, Minnesota",
+    "caseCaption": "Alejandra Shields",
+    "docketNumber": "10673-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Los Angeles, California",
+    "caseCaption": "Trisha Bode",
+    "docketNumber": "10736-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Dallas, Texas",
+    "caseCaption": "Abby Larkin",
+    "docketNumber": "11014-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Birmingham, Alabama",
+    "caseCaption": "Sabina White",
+    "docketNumber": "10159-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "San Antonio, Texas",
+    "caseCaption": "Nedra Bruen",
+    "docketNumber": "10759-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Winston-Salem, North Carolina",
+    "procedureType": "Small",
+    "caseCaption": "Olga Runolfsson",
+    "docketNumber": "11371-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Chicago, Illinois",
+    "caseCaption": "Kaycee Kihn",
+    "docketNumber": "10543-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Denver, Colorado",
+    "procedureType": "Regular",
+    "caseCaption": "Lillian Bergnaum",
+    "docketNumber": "10659-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Oklahoma City, Oklahoma",
+    "caseCaption": "Lonzo Bins",
+    "docketNumber": "10724-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Dallas, Texas",
+    "caseCaption": "Will Gibson",
+    "docketNumber": "11478-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Winston-Salem, North Carolina",
+    "procedureType": "Small",
+    "caseCaption": "Reba Kutch",
+    "docketNumber": "10931-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Oklahoma City, Oklahoma",
+    "caseCaption": "Guido Hamill-Russel",
+    "docketNumber": "7651-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Portland, Oregon",
+    "caseCaption": "Hope Friesen",
+    "docketNumber": "10658-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Buffalo, New York",
+    "caseCaption": "Wade Rodriguez",
+    "docketNumber": "10833-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Miami, Florida",
+    "caseCaption": "Dangelo Kunde",
+    "docketNumber": "10632-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Houston, Texas",
+    "caseCaption": "Verdie Skiles",
+    "docketNumber": "10637-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "San Antonio, Texas",
+    "procedureType": "Small",
+    "caseCaption": "Sasha Hilpert",
+    "docketNumber": "11370-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Winston-Salem, North Carolina",
+    "caseCaption": "Ahmad Lindgren",
+    "docketNumber": "10713-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Phoenix, Arizona",
+    "caseCaption": "Josiah Macejkovic",
+    "docketNumber": "10171-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Los Angeles, California",
+    "procedureType": "Small",
+    "caseCaption": "Kylie Ferry",
+    "docketNumber": "7228-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "St. Paul, Minnesota",
+    "procedureType": "Small",
+    "caseCaption": "Kaitlyn Gleichner",
+    "docketNumber": "10809-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Houston, Texas",
+    "caseCaption": "Lina Kuphal",
+    "docketNumber": "12259-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Milwaukee, Wisconsin",
+    "procedureType": "Small",
+    "caseCaption": "Herminia Marks",
+    "docketNumber": "10508-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "San Francisco, California",
+    "caseCaption": "Ali Gottlieb",
+    "docketNumber": "10617-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "San Francisco, California",
+    "procedureType": "Small",
+    "caseCaption": "Carolyne Kautzer",
+    "docketNumber": "10821-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Las Vegas, Nevada",
+    "procedureType": "Regular",
+    "caseCaption": "Ismael Rogahn",
+    "docketNumber": "12319-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Portland, Oregon",
+    "caseCaption": "Yessenia Kling",
+    "docketNumber": "11191-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "San Francisco, California",
+    "caseCaption": "Domenico Runolfsdottir-Lindgren",
+    "docketNumber": "10669-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Jacksonville, Florida",
+    "caseCaption": "Kacie Prosacco",
+    "docketNumber": "11526-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Columbia, South Carolina",
+    "procedureType": "Small",
+    "caseCaption": "Brook Pacocha",
+    "docketNumber": "11223-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "San Antonio, Texas",
+    "caseCaption": "Efrain Brekke",
+    "docketNumber": "10704-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Milwaukee, Wisconsin",
+    "caseCaption": "Teagan Walter",
+    "docketNumber": "10557-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Tampa, Florida",
+    "caseCaption": "Kylie Bode",
+    "docketNumber": "12193-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Winston-Salem, North Carolina",
+    "caseCaption": "Kailey Anderson",
+    "docketNumber": "11060-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Los Angeles, California",
+    "procedureType": "Small",
+    "caseCaption": "Shayne Haley",
+    "docketNumber": "9489-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "San Diego, California",
+    "caseCaption": "Fabian Jacobs",
+    "docketNumber": "10810-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "New York City, New York",
+    "procedureType": "Regular",
+    "caseCaption": "Kip Watsica",
+    "docketNumber": "10920-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Milwaukee, Wisconsin",
+    "procedureType": "Small",
+    "caseCaption": "Gabrielle Berge",
+    "docketNumber": "10509-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Los Angeles, California",
+    "caseCaption": "Candelario Bradtke",
+    "docketNumber": "11710-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "St. Paul, Minnesota",
+    "procedureType": "Regular",
+    "caseCaption": "Jennie Corkery",
+    "docketNumber": "11003-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "San Francisco, California",
+    "procedureType": "Regular",
+    "caseCaption": "Joana Boyer",
+    "docketNumber": "10837-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Dallas, Texas",
+    "caseCaption": "Creola Lemke",
+    "docketNumber": "11383-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Pittsburgh, Pennsylvania",
+    "caseCaption": "Bell Kshlerin",
+    "docketNumber": "10789-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "St. Paul, Minnesota",
+    "caseCaption": "Brandon Schaefer",
+    "docketNumber": "10797-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "New York City, New York",
+    "procedureType": "Regular",
+    "caseCaption": "Terrance Hegmann",
+    "docketNumber": "10717-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Los Angeles, California",
+    "caseCaption": "Adrienne Ritchie",
+    "docketNumber": "11578-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Los Angeles, California",
+    "procedureType": "Regular",
+    "caseCaption": "Rodrick Hoeger",
+    "docketNumber": "10753-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Los Angeles, California",
+    "procedureType": "Regular",
+    "caseCaption": "Thelma Leannon",
+    "docketNumber": "11565-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Indianapolis, Indiana",
+    "procedureType": "Regular",
+    "caseCaption": "Lela Muller",
+    "docketNumber": "12477-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Phoenix, Arizona",
+    "caseCaption": "Margarete O'Conner",
+    "docketNumber": "11265-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Pittsburgh, Pennsylvania",
+    "caseCaption": "Emery Runolfsdottir",
+    "docketNumber": "10923-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Los Angeles, California",
+    "procedureType": "Regular",
+    "caseCaption": "Vella Rempel",
+    "docketNumber": "10867-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "San Francisco, California",
+    "caseCaption": "Magnus Larkin",
+    "docketNumber": "11033-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Los Angeles, California",
+    "procedureType": "Regular",
+    "caseCaption": "Conor Beahan",
+    "docketNumber": "12190-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Jacksonville, Florida",
+    "caseCaption": "Celestino Carroll",
+    "docketNumber": "10699-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "St. Paul, Minnesota",
+    "caseCaption": "Cordelia Marks",
+    "docketNumber": "10780-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Detroit, Michigan",
+    "caseCaption": "Reinhold Jacobi",
+    "docketNumber": "10798-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Atlanta, Georgia",
+    "caseCaption": "Glen Jones",
+    "docketNumber": "10849-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Los Angeles, California",
+    "caseCaption": "Casandra King",
+    "docketNumber": "10583-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Albuquerque, New Mexico",
+    "caseCaption": "Adrien Hammes",
+    "docketNumber": "10771-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "San Francisco, California",
+    "caseCaption": "Arlo Senger",
+    "docketNumber": "4254-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Los Angeles, California",
+    "procedureType": "Regular",
+    "caseCaption": "Laverna Kertzmann",
+    "docketNumber": "11593-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Los Angeles, California",
+    "procedureType": "Regular",
+    "caseCaption": "Consuelo Orn",
+    "docketNumber": "11671-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "New York City, New York",
+    "procedureType": "Regular",
+    "caseCaption": "Eriberto Lueilwitz",
+    "docketNumber": "7781-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Salt Lake City, Utah",
+    "procedureType": "Small",
+    "caseCaption": "Sean Simonis",
+    "docketNumber": "12118-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "San Francisco, California",
+    "caseCaption": "Brendon Kuhlman",
+    "docketNumber": "10974-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Los Angeles, California",
+    "caseCaption": "Destiny Lind",
+    "docketNumber": "10844-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Seattle, Washington",
+    "caseCaption": "Jerrod Smith",
+    "docketNumber": "10733-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "New Orleans, Louisiana",
+    "procedureType": "Regular",
+    "caseCaption": "Kylie Hettinger",
+    "docketNumber": "10286-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Winston-Salem, North Carolina",
+    "caseCaption": "Warren West",
+    "docketNumber": "12770-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Los Angeles, California",
+    "procedureType": "Regular",
+    "caseCaption": "Pierce Bartell",
+    "docketNumber": "12188-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Los Angeles, California",
+    "procedureType": "Regular",
+    "caseCaption": "Estelle Heidenreich",
+    "docketNumber": "11750-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Nashville, Tennessee",
+    "caseCaption": "Oleta Leffler",
+    "docketNumber": "10902-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Baltimore, Maryland",
+    "caseCaption": "Alverta Boyer",
+    "docketNumber": "10888-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Kansas City, Missouri",
+    "caseCaption": "Charity Klein",
+    "docketNumber": "11137-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Des Moines, Iowa",
+    "caseCaption": "Madisen Glover",
+    "docketNumber": "10727-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Los Angeles, California",
+    "procedureType": "Regular",
+    "caseCaption": "Elinore Homenick",
+    "docketNumber": "11659-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Los Angeles, California",
+    "procedureType": "Small",
+    "caseCaption": "Rocky Kutch",
+    "docketNumber": "11699-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "New York City, New York",
+    "caseCaption": "Jimmie Leffler",
+    "docketNumber": "10904-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Pittsburgh, Pennsylvania",
+    "procedureType": "Regular",
+    "caseCaption": "Ansel Hodkiewicz",
+    "docketNumber": "11031-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Los Angeles, California",
+    "caseCaption": "Grayce Treutel",
+    "docketNumber": "12036-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Pittsburgh, Pennsylvania",
+    "caseCaption": "Sadye Sawayn",
+    "docketNumber": "10698-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Detroit, Michigan",
+    "caseCaption": "Lea Bechtelar",
+    "docketNumber": "10960-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Richmond, Virginia",
+    "caseCaption": "Leif Hand",
+    "docketNumber": "11233-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Pittsburgh, Pennsylvania",
+    "procedureType": "Regular",
+    "caseCaption": "Delbert Cruickshank",
+    "docketNumber": "6164-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Miami, Florida",
+    "procedureType": "Regular",
+    "caseCaption": "Nathanial Boyle",
+    "docketNumber": "10612-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Los Angeles, California",
+    "caseCaption": "Lesly Langworth",
+    "docketNumber": "11174-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Los Angeles, California",
+    "caseCaption": "Katharina Koelpin-Sanford",
+    "docketNumber": "10723-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Albuquerque, New Mexico",
+    "caseCaption": "Blanche Veum",
+    "docketNumber": "10657-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Dallas, Texas",
+    "caseCaption": "Vladimir Paucek-Beier",
+    "docketNumber": "10869-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Miami, Florida",
+    "caseCaption": "Roscoe Olson",
+    "docketNumber": "11429-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Cheyenne, Wyoming",
+    "caseCaption": "Garfield Morissette",
+    "docketNumber": "11906-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Nashville, Tennessee",
+    "caseCaption": "Carrie Kunze",
+    "docketNumber": "10674-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Small",
+    "preferredTrialCity": "Houston, Texas",
+    "caseCaption": "Isabel Streich",
+    "docketNumber": "11047-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "preferredTrialCity": "Reno, Nevada",
+    "procedureType": "Small",
+    "caseCaption": "Morgan Zulauf",
+    "docketNumber": "10761-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Atlanta, Georgia",
+    "caseCaption": "Chandler Murphy",
+    "docketNumber": "10897-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  },
+  {
+    "isCaseSealed": false,
+    "isDocketEntrySealed": false,
+    "procedureType": "Regular",
+    "preferredTrialCity": "Dallas, Texas",
+    "caseCaption": "Brielle Kuhic",
+    "docketNumber": "10948-24",
+    "status": "General Docket - Not at Issue",
+    "_score": 7.46895
+  }
+]

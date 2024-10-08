@@ -19,6 +19,7 @@ import {
 
 import { faAddressCard } from '@fortawesome/free-regular-svg-icons/faAddressCard';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftRegular } from '@fortawesome/free-regular-svg-icons/faArrowAltCircleLeft';
+import { faCalendar } from '@fortawesome/free-regular-svg-icons/faCalendar';
 import { faCheckCircle as faCheckCircleRegular } from '@fortawesome/free-regular-svg-icons/faCheckCircle';
 import { faClock } from '@fortawesome/free-regular-svg-icons/faClock';
 import { faClone } from '@fortawesome/free-regular-svg-icons/faClone';
@@ -153,6 +154,7 @@ const app = {
       faAddressCard,
       faExchangeAlt,
       faCalculator,
+      faCalendar,
       faCalendarAlt,
       faTimes,
       faCalendarCheck,

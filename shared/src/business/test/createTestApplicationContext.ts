@@ -40,7 +40,7 @@ import {
   compareCasesByDocketNumber,
   formatCaseForTrialSession,
   getFormattedTrialSessionDetails,
-} from '@shared/business/utilities/getFormattedTrialSessionDetails';
+} from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import {
   compareISODateStrings,
   compareStrings,
@@ -305,6 +305,9 @@ export const createTestApplicationContext = () => {
       .mockImplementation(getStampBoxCoordinates),
     getTextByCount: jest.fn().mockImplementation(getTextByCount),
     getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
+    isDateWithinGivenInterval: jest
+      .fn()
+      .mockImplementation(DateHandler.isDateWithinGivenInterval),
     isExternalUser: User.isExternalUser,
     isInternalUser: jest.fn().mockImplementation(User.isInternalUser),
     isLeadCase: jest.fn().mockImplementation(isLeadCase),
@@ -317,9 +320,6 @@ export const createTestApplicationContext = () => {
     isStringISOFormatted: jest
       .fn()
       .mockImplementation(DateHandler.isStringISOFormatted),
-    isTodayWithinGivenInterval: jest
-      .fn()
-      .mockImplementation(DateHandler.isTodayWithinGivenInterval),
     isUserPartOfGroup: jest.fn().mockImplementation(isUserPartOfGroup),
     isValidDateString: jest
       .fn()
@@ -512,7 +512,6 @@ export const createTestApplicationContext = () => {
     getItem: jest.fn().mockImplementation(getItem),
     getLimiterByKey: jest.fn(),
     getMaintenanceMode: jest.fn(),
-    getMessagesByDocketNumber: jest.fn(),
     getPractitionerDocuments: jest.fn(),
     getReconciliationReport: jest.fn(),
     getRecord: jest.fn(),
