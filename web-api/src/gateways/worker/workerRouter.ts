@@ -8,7 +8,6 @@ export type WorkerMessage = {
 };
 
 export const MESSAGE_TYPES = {
-  DOWNLOAD_FILE_READY: 'DOWNLOAD_FILE_READY',
   QUEUE_UPDATE_ASSOCIATED_CASES: 'QUEUE_UPDATE_ASSOCIATED_CASES',
   UPDATE_ASSOCIATED_CASE: 'UPDATE_ASSOCIATED_CASE',
 } as const;
@@ -42,11 +41,6 @@ export const workerRouter = async (
           message.payload,
           message.authorizedUser,
         );
-      break;
-    case MESSAGE_TYPES.DOWNLOAD_FILE_READY:
-      await applicationContext
-        .getUseCases()
-        .downloadFileWorker(applicationContext, message.payload);
       break;
 
     default:
