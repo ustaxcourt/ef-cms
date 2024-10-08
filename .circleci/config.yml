@@ -932,18 +932,18 @@ workflows:
           <<: *only-deployed-lower-environments
           requires:
             - wait-for-reindex
-      # - smoketests:
-      #     <<: *only-deployed-lower-environments
-      #     requires:
-      #       - disable-reindex-cron
-      # - loadtests:
-      #     <<: *only-deployed-lower-environments
-      #     requires:
-      #       - disable-reindex-cron
-      # - smoketests-readonly:
-      #     <<: *only-deployed-lower-environments
-      #     requires:
-      #       - disable-reindex-cron
+      - smoketests:
+          <<: *only-deployed-lower-environments
+          requires:
+            - disable-reindex-cron
+      - loadtests:
+          <<: *only-deployed-lower-environments
+          requires:
+            - disable-reindex-cron
+      - smoketests-readonly:
+          <<: *only-deployed-lower-environments
+          requires:
+            - disable-reindex-cron
       - api-hosted-environment-tests:
           <<: *only-deployed-lower-environments
           requires:
@@ -951,9 +951,9 @@ workflows:
       - switch-colors:
           <<: *only-deployed-lower-environments
           requires:
-            # - smoketests
-            # - loadtests
-            # - smoketests-readonly
+            - smoketests
+            - loadtests
+            - smoketests-readonly
             - api-hosted-environment-tests
       - cleanup:
           <<: *only-deployed-lower-environments
