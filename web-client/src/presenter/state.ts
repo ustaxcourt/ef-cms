@@ -65,6 +65,7 @@ import { draftDocumentViewerHelper } from './computeds/draftDocumentViewerHelper
 import { editDocketEntryMetaHelper } from './computeds/editDocketEntryMetaHelper';
 import { editPetitionerInformationHelper } from './computeds/editPetitionerInformationHelper';
 import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
+import { emailConfirmationFormHelper } from '@web-client/presenter/computeds/emailConfirmationFormHelper';
 import { emptyUserState } from '@web-client/presenter/state/userState';
 import { externalConsolidatedCaseGroupHelper } from './computeds/externalConsolidatedCaseGroupHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
@@ -151,7 +152,6 @@ import { trialSessionsSummaryHelper } from './computeds/trialSessionsSummaryHelp
 import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
 import { userContactEditHelper } from './computeds/userContactEditHelper';
 import { userContactEditProgressHelper } from './computeds/userContactEditProgressHelper';
-import { validateEmailFormHelper } from '@web-client/presenter/computeds/validateEmailFormHelper';
 import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 
@@ -321,6 +321,10 @@ export const computeds = {
   editStatisticFormHelper: editStatisticFormHelper as unknown as ReturnType<
     typeof editStatisticFormHelper
   >,
+  emailConfirmationFormHelper:
+    emailConfirmationFormHelper as unknown as ReturnType<
+      typeof emailConfirmationFormHelper
+    >,
   externalConsolidatedCaseGroupHelper:
     externalConsolidatedCaseGroupHelper as unknown as ReturnType<
       typeof externalConsolidatedCaseGroupHelper
@@ -562,9 +566,6 @@ export const computeds = {
     userContactEditProgressHelper as unknown as ReturnType<
       typeof userContactEditProgressHelper
     >,
-  validateEmailFormHelper: validateEmailFormHelper as unknown as ReturnType<
-    typeof validateEmailFormHelper
-  >,
   viewCounselHelper: viewCounselHelper as unknown as ReturnType<
     typeof viewCounselHelper
   >,
@@ -667,6 +668,15 @@ export const baseState = {
   documentToEdit: {} as any,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
   draftDocumentViewerDocketEntryId: null,
+  emailConfirmation: {
+    confirmEmailErrorMessage: '',
+    emailErrorMessage: '',
+    formWasSubmitted: false,
+    inFocusConfirmEmail: false,
+    inFocusEmail: false,
+    isDirtyConfirmEmail: false,
+    isDirtyEmail: false,
+  },
   featureFlags: undefined as unknown as { [key: string]: string },
   fileUploadProgress: {
     isHavingSystemIssues: false,

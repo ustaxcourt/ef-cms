@@ -9,12 +9,14 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { submitChangeLoginAndServiceEmailAction } from '../actions/submitChangeLoginAndServiceEmailAction';
 import { updateUserPendingEmailAction } from '../actions/updateUserPendingEmailAction';
 import { validateChangeLoginAndServiceEmailAction } from '../actions/validateChangeLoginAndServiceEmailAction';
 
 export const submitChangeLoginAndServiceEmailSequence = [
   clearAlertsAction,
   startShowValidationAction,
+  submitChangeLoginAndServiceEmailAction,
   validateChangeLoginAndServiceEmailAction,
   {
     error: [
