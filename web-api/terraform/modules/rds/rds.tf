@@ -24,6 +24,8 @@ resource "aws_rds_cluster" "postgres" {
   iam_database_authentication_enabled = true
   kms_key_id                          = var.kms_key_id_primary
 
+  backup_retention_period = 35
+
   serverlessv2_scaling_configuration {
     max_capacity = var.max_capacity
     min_capacity = var.min_capacity
