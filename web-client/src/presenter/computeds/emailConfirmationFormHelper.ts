@@ -21,12 +21,6 @@ export const emailConfirmationFormHelper = (get: Get): any => {
   const showEmailErrorMessage =
     formWasSubmitted || (emailChangedSinceSubmission && !inFocusEmail);
 
-  console.log(
-    confirmEmailErrorMessage,
-    emailErrorMessage,
-    showConfirmEmailErrorMessage,
-    showEmailErrorMessage,
-  );
   return {
     confirmEmailErrorMessage,
     emailErrorMessage,
