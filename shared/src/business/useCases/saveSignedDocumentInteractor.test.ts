@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   PETITIONS_SECTION,

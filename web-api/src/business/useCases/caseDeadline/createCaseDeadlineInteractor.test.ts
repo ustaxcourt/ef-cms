@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   AUTOMATIC_BLOCKED_REASONS,
   CHIEF_JUDGE,
