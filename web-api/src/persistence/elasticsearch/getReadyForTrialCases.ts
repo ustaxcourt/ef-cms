@@ -45,13 +45,7 @@ export const getReadyForTrialCases = async ({ applicationContext }) => {
                 has_parent: {
                   inner_hits: {
                     _source: {
-                      includes: [
-                        'caseCaption',
-                        'docketNumber',
-                        'status',
-                        'preferredTrialCity',
-                        'procedureType',
-                      ],
+                      includes: ['caseCaption', 'docketNumber', 'status'],
                     },
                     name: 'case-mappings',
                   },

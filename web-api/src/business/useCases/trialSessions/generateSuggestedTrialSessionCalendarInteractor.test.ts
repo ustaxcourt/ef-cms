@@ -9,7 +9,7 @@ describe('generateSuggestedTrialSessionCalendar', () => {
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getReadyForTrialCases.mockResolvedValue(mockCases);
+      .getSuggestedCalendarCases.mockResolvedValue(mockCases);
 
     applicationContext
       .getPersistenceGateway()
