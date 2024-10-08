@@ -71,6 +71,7 @@ import { sendNotificationToConnection } from './notifications/sendNotificationTo
 import { sendNotificationToUser } from './notifications/sendNotificationToUser';
 import { sendSetTrialSessionCalendarEvent } from './persistence/messages/sendSetTrialSessionCalendarEvent';
 import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification';
+import { sendZipperBatchJob } from '@web-api/dispatchers/batch/sendZipperBatchJob';
 import { worker } from '@web-api/gateways/worker/worker';
 import { workerLocal } from '@web-api/gateways/worker/workerLocal';
 import axios from 'axios';
@@ -157,6 +158,7 @@ export const createApplicationContext = (appContextUser = {}) => {
           ? sendNotificationOfSealing
           : () => {},
       sendSlackNotification,
+      sendZipperBatchJob,
     }),
     getDocumentClient,
     getDocumentGenerators,
