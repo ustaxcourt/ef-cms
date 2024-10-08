@@ -11,9 +11,12 @@ import archiver from 'archiver';
 import fs from 'fs';
 import path from 'path';
 
+//TODO: Meaningful logs for debugging
+
 type DocketEntryDownloadInfo = {
   key: string;
   filePathInZip: string;
+  useTempBucket: boolean;
 };
 
 type DocketEntriesZipperParameter = {
@@ -77,18 +80,18 @@ async function downloadFile(
   s3Client: S3,
   DIRECTORY: string,
 ) {
+  const { filePathInZip, key, useTempBucket } = docketEntry;
   const command = new GetObjectCommand({
-    Bucket: S3_BUCKET,
-    Key: docketEntry.key,
+    Bucket: useTempBucket ? TEMP_S3_BUCKET : S3_BUCKET,
+    Key: key,
   });
 
   const data = await s3Client.send(command);
 
-  if (!data.Body)
-    throw new Error(`Unable to get document (${docketEntry.key})`);
+  if (!data.Body) throw new Error(`Unable to get document (${key})`);
 
   const bodyContents: any = await streamToBuffer(data.Body);
-  const FILE_PATH = path.join(DIRECTORY, `${docketEntry.filePathInZip}`);
+  const FILE_PATH = path.join(DIRECTORY, `${filePathInZip}`);
   fs.mkdirSync(path.dirname(FILE_PATH), { recursive: true });
   await writeFile(FILE_PATH, bodyContents);
 }
