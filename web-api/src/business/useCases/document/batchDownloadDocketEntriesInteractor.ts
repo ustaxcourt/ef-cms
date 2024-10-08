@@ -1,3 +1,4 @@
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { NotFoundError } from '../../../errors/errors';
 import { ProgressData } from '@web-api/persistence/s3/zipDocuments';
@@ -136,18 +137,33 @@ const batchDownloadDocketEntriesHelper = async (
     });
   }
 
-  if (documentsToZip.length > 5) {
-    console.log('OVER THE LIMIT');
-    await applicationContext
-      .getDispatchers()
-      .sendZipperBatchJob(
-        applicationContext,
-        documentsToZip,
-        zipName,
-        clientConnectionId,
-        authorizedUser.userId,
-      );
-    return;
+  //add integration test in CI CD
+  //test script
+  //queue job
+  //wait until download link is sent through web socket
+
+  if (applicationContext.environment.stage !== 'local') {
+    const featureFlags = await applicationContext
+      .getUseCases()
+      .getAllFeatureFlagsInteractor(applicationContext);
+
+    const awsBatchMinimumCount =
+      featureFlags[ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key];
+
+    if (awsBatchMinimumCount > 0) {
+      if (documentsToZip.length > awsBatchMinimumCount) {
+        await applicationContext
+          .getDispatchers()
+          .sendZipperBatchJob(
+            applicationContext,
+            documentsToZip,
+            zipName,
+            clientConnectionId,
+            authorizedUser.userId,
+          );
+        return;
+      }
+    }
   }
 
   const onProgress = async (progressData: ProgressData) => {
