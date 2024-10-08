@@ -136,11 +136,25 @@ export async function app({
   const DIRECTORY = path.join(__dirname, `${Date.now()}/`);
   if (!fs.existsSync(DIRECTORY)) fs.mkdirSync(DIRECTORY);
 
+  let counter = 0;
   const BATCH_SIZE = 10;
   for (let i = 0; i < docketEntries.length; i += BATCH_SIZE) {
     const batch = docketEntries.slice(i, i + BATCH_SIZE);
     await Promise.all(
-      batch.map(docketEntry => downloadFile(docketEntry, s3Client, DIRECTORY)),
+      batch.map(async docketEntry => {
+        await downloadFile(docketEntry, s3Client, DIRECTORY);
+        counter += 1;
+        const WS_MESSAGE = new PostToConnectionCommand({
+          ConnectionId: connectionId,
+          Data: JSON.stringify({
+            action: 'batch_download_progress',
+            filesCompleted: counter,
+            totalFiles: docketEntries.length,
+          }),
+        });
+
+        await wsClient.send(WS_MESSAGE).catch(console.error);
+      }),
     );
   }
 
