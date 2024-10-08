@@ -80,7 +80,7 @@ export const PARTY_VIEW_TABS = {
 
 export const ALLOWLIST_FEATURE_FLAGS = {
   AWS_BATCH_ZIPPER_MINIMUM_COUNT: {
-    key: 'setup-aws-batch-zipper-minimum-count',
+    key: 'aws-batch-zipper-minimum-count',
   },
   CHIEF_JUDGE_NAME: {
     key: 'chief-judge-name',
