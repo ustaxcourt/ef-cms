@@ -138,6 +138,7 @@ export async function app({
 
   let counter = 0;
   const BATCH_SIZE = 10;
+  console.log('STARTING TO DOWNLOAD THE FILES');
   for (let i = 0; i < docketEntries.length; i += BATCH_SIZE) {
     const batch = docketEntries.slice(i, i + BATCH_SIZE);
     await Promise.all(
@@ -157,10 +158,14 @@ export async function app({
       }),
     );
   }
+  console.log('DOWNLOADED ALL THE FILES');
 
+  console.log('GOING TO ZIP THE FOLDER');
   const ZIP_PATH = path.join(__dirname, zipName);
   await zipFolder(DIRECTORY, ZIP_PATH);
+  console.log('UPLOADING THE ZIP FILE TO S3');
   await uploadZipFile(s3Client, ZIP_PATH);
+  console.log('FETCHING THE DOWNLOAD LINK FOR THE ZIP FILE IN S3');
 
   const command = new GetObjectCommand({
     Bucket: TEMP_S3_BUCKET,
@@ -176,7 +181,9 @@ export async function app({
     }),
   });
 
+  console.log('SENDING LINK TO USER');
   await wsClient.send(WS_MESSAGE).catch(console.error);
+  console.log('COMPLETE');
 }
 
 app({
