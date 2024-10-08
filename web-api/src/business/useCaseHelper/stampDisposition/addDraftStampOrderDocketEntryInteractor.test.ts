@@ -1,3 +1,5 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/messages/mocks.jest';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
@@ -13,7 +15,9 @@ import {
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { addDraftStampOrderDocketEntryInteractor } from './addDraftStampOrderDocketEntryInteractor';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
+import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 
 describe('addDraftStampOrderDocketEntryInteractor', () => {
   let mockLock;
@@ -123,9 +127,7 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
       toUserId: '449b916e-3362-4a5d-bf56-b2b94ba29c12',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getMessageThreadByParentId.mockReturnValue([mockMessage]);
+    (getMessageThreadByParentId as jest.Mock).mockReturnValue([mockMessage]);
 
     await addDraftStampOrderDocketEntryInteractor(
       applicationContext,
@@ -136,19 +138,16 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
       mockJudgeUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateMessage,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateMessage.mock.calls[0][0]
-        .message,
-    ).toMatchObject({
-      attachments: [
-        {
-          documentId: mockStampedDocketEntryId,
-        },
-      ],
-    });
+    expect(updateMessage).toHaveBeenCalled();
+    expect((updateMessage as jest.Mock).mock.calls[0][0].message).toMatchObject(
+      {
+        attachments: [
+          {
+            documentId: mockStampedDocketEntryId,
+          },
+        ],
+      },
+    );
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {

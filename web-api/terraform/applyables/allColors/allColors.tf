@@ -154,3 +154,36 @@ module "ecr-green-west" {
     aws = aws.us-west-1
   }
 }
+
+module "kms" {
+  source      = "../../modules/kms"
+  environment = var.environment
+
+  providers = {
+    aws           = aws.us-east-1
+    aws.us-west-1 = aws.us-west-1
+  }
+}
+
+module "rds" {
+  source                   = "../../modules/rds"
+  environment              = var.environment
+  postgres_master_username = var.postgres_master_username
+  postgres_master_password = var.postgres_master_password
+  kms_key_id_primary       = module.kms.kms_key_id_primary
+  kms_key_id_replica       = module.kms.kms_key_id_replica
+  min_capacity             = var.rds_min_capacity
+  max_capacity             = var.rds_max_capacity
+  delete_protection        = true
+
+  providers = {
+    aws           = aws.us-east-1
+    aws.us-west-1 = aws.us-west-1
+  }
+}
+
+
+module "rds_users" {
+  source      = "../../modules/rds-users"
+  environment = var.environment
+}
