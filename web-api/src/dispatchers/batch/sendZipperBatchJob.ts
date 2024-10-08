@@ -28,7 +28,6 @@ export const sendZipperBatchJob = async (
   const { currentColor, efcmsDomain, region, stage } =
     applicationContext.environment;
   const awsRegion = region as 'us-east-1' | 'us-west-1';
-  const uuid = applicationContext.getUniqueId();
   const params: SubmitJobCommandInput = {
     containerOverrides: {
       environment: [
@@ -59,7 +58,7 @@ export const sendZipperBatchJob = async (
       ],
     },
     jobDefinition: `s3-zip-job-${stage}-${currentColor}-${awsRegion}`,
-    jobName: `${zipName}-${uuid}`,
+    jobName: `batch-docket-entries-download-${Date.now()}`,
     jobQueue: `aws-batch-job-queue-${stage}-${currentColor}-${awsRegion}`,
   };
 
