@@ -5,6 +5,12 @@
 . ./setup-local-env.sh
 
 if [[ -z "$CI" ]]; then
+  echo "Stopping postgres in case it's already running"
+  docker-compose -f web-api/src/persistence/postgres/docker-compose.yml down || true
+
+  echo "Starting postgres"
+  docker-compose -f web-api/src/persistence/postgres/docker-compose.yml up -d || { echo "Failed to start Postgres containers"; exit 1; }
+
   echo "Stopping dynamodb in case it's already running"
   pkill -f DynamoDBLocal
 

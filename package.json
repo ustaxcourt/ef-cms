@@ -237,7 +237,6 @@
     "test:shared:ci": "npm run build:assets && jest --config shared/jest-shared.config.ts --coverageDirectory=./coverage/${NODE_INDEX} ${TESTFILES}",
     "test:shared:file": "npm run build:assets && jest --config shared/jest-shared.config.ts --coverage=false",
     "test:watch": "jest --watch .*test\\.js$",
-    "postgres:run": "cd web-api/src/persistence/postgres && docker compose up -d",
     "verify-authorizers": "./scripts/circleci/verify-authorizers.sh",
     "verify-private-elasticsearch": "./scripts/circleci/verify-private-elasticsearch.sh",
     "visualize-bundle": "esbuild-visualizer --metadata ./metadata.json && open stats.html",
