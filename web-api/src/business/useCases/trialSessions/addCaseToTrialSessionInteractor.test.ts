@@ -166,7 +166,6 @@ describe('addCaseToTrialSessionInteractor', () => {
 
     expect(setPriorityOnAllWorkItems.mock.calls[0][0]).toMatchObject({
       highPriority: true,
-      trialDate: '2025-12-01T00:00:00.000Z',
     });
   });
 

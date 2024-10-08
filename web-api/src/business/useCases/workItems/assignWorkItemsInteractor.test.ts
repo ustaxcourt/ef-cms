@@ -1,16 +1,21 @@
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
 } from '../../../../../shared/src/business/entities/EntityConstants';
+import { WorkItem } from '@shared/business/entities/WorkItem';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { assignWorkItemsInteractor } from './assignWorkItemsInteractor';
 import { caseServicesSupervisorUser } from '../../../../../shared/src/test/mockUsers';
+import { getWorkItemById as getWorkItemByIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { saveWorkItem as saveWorkItemMock } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 describe('assignWorkItemsInteractor', () => {
   const saveWorkItem = saveWorkItemMock as jest.Mock;
+  const getWorkItemById = getWorkItemByIdMock as jest.Mock;
+
   const options = { assigneeId: 'ss', assigneeName: 'ss', workItemId: '' };
   let mockWorkItem;
 
@@ -50,9 +55,7 @@ describe('assignWorkItemsInteractor', () => {
       section: DOCKET_SECTION,
     });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getWorkItemById.mockReturnValue(mockWorkItem);
+    getWorkItemById.mockReturnValue(new WorkItem(mockWorkItem));
   });
 
   it('should throw an unauthorized error when the user does not have permission to assign work items', async () => {
@@ -66,10 +69,12 @@ describe('assignWorkItemsInteractor', () => {
   });
 
   it('should throw an error when the work item is invalid', async () => {
-    applicationContext.getPersistenceGateway().getWorkItemById.mockReturnValue({
-      ...mockWorkItem,
-      docketNumber: undefined,
-    });
+    getWorkItemById.mockReturnValue(
+      new WorkItem({
+        ...mockWorkItem,
+        docketNumber: undefined,
+      }),
+    );
 
     await expect(
       assignWorkItemsInteractor(
