@@ -8,9 +8,12 @@ import {
   uploadPetition,
 } from './helpers';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 describe('verify old sent work items do not show up in the outbox', () => {
   const cerebralTest = setupTest();
+  let workItemNMinus1Days;
+  let workItemNDays;
   let workItemNPlus1Days;
   let workItemIdNMinus1;
   let workItemIdN;
@@ -60,6 +63,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
     workItemNPlus1Days = {
       assigneeId: mockUser.userId,
       assigneeName: 'Test petitionsclerk1',
+      associatedJudge: 'Chief Judge',
       caseStatus: CASE_STATUS_TYPES.new,
       completedAt: CREATED_N_PLUS_1_DAYS_AGO,
       completedBy: 'Test Petitionsclerk',
@@ -94,6 +98,10 @@ describe('verify old sent work items do not show up in the outbox', () => {
       createdAt: CREATED_N_MINUS_1_DAYS_AGO,
       workItemId: `${workItemIdNMinus1}`,
     };
+
+    await saveWorkItem({ workItem: workItemNPlus1Days });
+    await saveWorkItem({ workItem: workItemNDays });
+    await saveWorkItem({ workItem: workItemNMinus1Days });
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
