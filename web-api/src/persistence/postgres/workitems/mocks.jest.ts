@@ -6,12 +6,12 @@ jest.mock('@web-api/persistence/postgres/workitems/deleteWorkItem', () =>
 
 jest.mock(
   '@web-api/persistence/postgres/workitems/getDocumentQCInboxForSection',
-  () => mockFactory('getDocumentQCInboxForSection'),
+  () => mockFactory('getDocumentQCInboxForSection', []),
 );
 
 jest.mock(
   '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser',
-  () => mockFactory('getDocumentQCInboxForUser'),
+  () => mockFactory('getDocumentQCInboxForUser', []),
 );
 
 jest.mock(
