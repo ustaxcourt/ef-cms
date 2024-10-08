@@ -1,3 +1,4 @@
+import { attachFile } from '../../../../helpers/file/upload-file';
 import {
   contactInfo,
   fillBusinessandOtherContact,
@@ -307,9 +308,11 @@ describe('File a petition', () => {
         contactInfo.placeOfLegalResidence,
       );
       cy.get('[data-testid="contact-primary-phone"]').type(contactInfo.phone);
-      cy.get('[data-testid="corporate-disclosure-file"]').attachFile(
-        VALID_FILE,
-      );
+      attachFile({
+        filePath: VALID_FILE,
+        selector: '[data-testid="corporate-disclosure-file"]',
+        selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+      });
       cy.get('[data-testid="step-1-next-button"]').click();
 
       fillGeneratePetitionFileInformation();

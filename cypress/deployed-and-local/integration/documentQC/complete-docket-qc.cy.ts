@@ -1,13 +1,13 @@
 /* eslint-disable promise/no-nesting */
 import { assertExists, retry } from '../../../helpers/retry';
+import { attachSamplePdfFile } from '../../../helpers/file/upload-file';
+import { externalUserCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { goToCase } from '../../../helpers/caseDetail/go-to-case';
 import {
   loginAsAdmissionsClerk,
   loginAsPetitioner,
 } from '../../../helpers/authentication/login-as-helpers';
-import { petitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../helpers/documentQC/petitionsclerk-serves-petition';
-import { uploadFile } from '../../../helpers/file/upload-file';
 
 describe('Document QC Complete', () => {
   const docketSectionMessage = 'To CSS under Docket Section';
@@ -15,14 +15,14 @@ describe('Document QC Complete', () => {
 
   before(() => {
     loginAsPetitioner();
-    petitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       cy.wrap(docketNumber).as('DOCKET_NUMBER');
       petitionsClerkServesPetition(docketNumber);
       petitionerFilesADocument(docketNumber);
     });
 
     loginAsPetitioner();
-    petitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       cy.wrap(docketNumber).as('UNSERVED_DOCKET_NUMBER');
     });
   });
@@ -202,7 +202,7 @@ function petitionerFilesADocument(docketNumber: string) {
   cy.get('[data-testid="document-type"]').type('Exhibit(s)');
   cy.get('#react-select-2-option-0').click();
   cy.get('[data-testid="submit-document"]').click();
-  uploadFile('primary-document');
+  attachSamplePdfFile('primary-document');
   cy.get('#submit-document').click();
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="file-document-review-submit-document"]').click();

@@ -1,3 +1,4 @@
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
@@ -45,8 +46,8 @@ export const submitLoginAction = async ({
             <>
               You can try again later or reset your password. If you’re still
               having problems, contact{' '}
-              <a href="mailto:dawson.support@ustaxcourt.gov">
-                dawson.support@ustaxcourt.gov
+              <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
+                {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
               </a>
               .
             </>
@@ -65,8 +66,8 @@ export const submitLoginAction = async ({
               with a new temporary password that expires in 7 days. If you don’t
               see it, check your spam folder. If you’re still having trouble,
               email{' '}
-              <a href="mailto:dawson.support@ustaxcourt.gov">
-                dawson.support@ustaxcourt.gov
+              <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
+                {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
               </a>
               .
             </>
@@ -85,8 +86,8 @@ export const submitLoginAction = async ({
               verified. We sent an email with a link to verify the email
               address. If you don’t see it, check your spam folder. If you’re
               still having trouble, email{' '}
-              <a href="mailto:dawson.support@ustaxcourt.gov">
-                dawson.support@ustaxcourt.gov
+              <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
+                {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
               </a>
               .
             </>

@@ -35,7 +35,6 @@ import { UserCase } from '../../shared/src/business/entities/UserCase';
 import { UserCaseNote } from '../../shared/src/business/entities/notes/UserCaseNote';
 import { WorkItem } from '../../shared/src/business/entities/WorkItem';
 import { WorkerMessage } from '@web-api/gateways/worker/workerRouter';
-import { createLogger } from './createLogger';
 import { defaultProvider } from '@aws-sdk/credential-provider-node';
 import { environment } from '@web-api/environment';
 import {
@@ -51,6 +50,7 @@ import { getDocumentGenerators } from './getDocumentGenerators';
 import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
 import { getEmailClient } from './persistence/messages/getEmailClient';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { getNotificationClient } from '@web-api/notifications/getNotificationClient';
 import { getNotificationService } from '@web-api/notifications/getNotificationService';
 import { getPersistenceGateway } from './getPersistenceGateway';
@@ -73,7 +73,6 @@ import { sendSetTrialSessionCalendarEvent } from './persistence/messages/sendSet
 import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification';
 import { worker } from '@web-api/gateways/worker/worker';
 import { workerLocal } from '@web-api/gateways/worker/workerLocal';
-
 import axios from 'axios';
 import pug from 'pug';
 import sass from 'sass';
@@ -99,20 +98,8 @@ const entitiesByName = {
   WorkItem,
 };
 
-export const createApplicationContext = (
-  appContextUser = {},
-  logger = createLogger(),
-) => {
-  const user = new User(appContextUser);
-
-  if (process.env.NODE_ENV === 'production') {
-    const authenticated = user && Object.keys(user).length;
-    logger.defaultMeta = logger.defaultMeta || {};
-    logger.defaultMeta.user = authenticated
-      ? user
-      : { role: 'unauthenticated' };
-  }
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const createApplicationContext = (appContextUser = {}) => {
   return {
     barNumberGenerator,
     docketNumberGenerator,
@@ -289,12 +276,7 @@ export const createApplicationContext = (
     }),
     isAuthorized,
     isCurrentColorActive,
-    logger: {
-      debug: (message, context?) => logger.debug(message, { context }),
-      error: (message, context?) => logger.error(message, { context }),
-      info: (message, context?) => logger.info(message, { context }),
-      warn: (message, context?) => logger.warn(message, { context }),
-    },
+    logger: getLogger(),
     setTimeout: (callback, timeout) => setTimeout(callback, timeout),
   };
 };

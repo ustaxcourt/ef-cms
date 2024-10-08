@@ -13,6 +13,7 @@ import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawMessage } from '@shared/business/entities/Message';
 import { RawUser } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
+import { TroubleshootingLinkInfo } from '@web-client/presenter/sequences/showFileUploadErrorModalSequence';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
@@ -68,6 +69,7 @@ import { emptyUserState } from '@web-client/presenter/state/userState';
 import { externalConsolidatedCaseGroupHelper } from './computeds/externalConsolidatedCaseGroupHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
+import { filePetitionHelper } from '@web-client/presenter/computeds/filePetitionHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
 import { filingPartiesFormHelper } from './computeds/filingPartiesFormHelper';
 import { formattedCaseDeadlines } from './computeds/formattedCaseDeadlines';
@@ -135,7 +137,6 @@ import { serveThirtyDayNoticeModalHelper } from './computeds/serveThirtyDayNotic
 import { sessionAssignmentHelper } from './computeds/sessionAssignmentHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
-import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
@@ -148,10 +149,8 @@ import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCo
 import { trialSessionsHelper } from './computeds/trialSessionsHelper';
 import { trialSessionsSummaryHelper } from './computeds/trialSessionsSummaryHelper';
 import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
-import { updatedFilePetitionHelper } from '@web-client/presenter/computeds/updatedFilePetitionHelper';
 import { userContactEditHelper } from './computeds/userContactEditHelper';
 import { userContactEditProgressHelper } from './computeds/userContactEditProgressHelper';
-import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 
@@ -330,6 +329,9 @@ export const computeds = {
   >,
   fileDocumentHelper: fileDocumentHelper as unknown as ReturnType<
     typeof fileDocumentHelper
+  >,
+  filePetitionHelper: filePetitionHelper as unknown as ReturnType<
+    typeof filePetitionHelper
   >,
   fileUploadStatusHelper: fileUploadStatusHelper as unknown as ReturnType<
     typeof fileUploadStatusHelper
@@ -514,9 +516,6 @@ export const computeds = {
   showAppTimeoutModalHelper: showAppTimeoutModalHelper as unknown as ReturnType<
     typeof showAppTimeoutModalHelper
   >,
-  startCaseHelper: startCaseHelper as unknown as ReturnType<
-    typeof startCaseHelper
-  >,
   startCaseInternalHelper: startCaseInternalHelper as unknown as ReturnType<
     typeof startCaseInternalHelper
   >,
@@ -555,9 +554,6 @@ export const computeds = {
   updateCaseModalHelper: updateCaseModalHelper as unknown as ReturnType<
     typeof updateCaseModalHelper
   >,
-  updatedFilePetitionHelper: updatedFilePetitionHelper as unknown as ReturnType<
-    typeof updatedFilePetitionHelper
-  >,
   userContactEditHelper: userContactEditHelper as unknown as ReturnType<
     typeof userContactEditHelper
   >,
@@ -565,9 +561,6 @@ export const computeds = {
     userContactEditProgressHelper as unknown as ReturnType<
       typeof userContactEditProgressHelper
     >,
-  viewAllDocumentsHelper: viewAllDocumentsHelper as unknown as ReturnType<
-    typeof viewAllDocumentsHelper
-  >,
   viewCounselHelper: viewCounselHelper as unknown as ReturnType<
     typeof viewCounselHelper
   >,
@@ -719,9 +712,13 @@ export const baseState = {
   },
   messagesSectionCount: 0,
   modal: {
+    contactSupportMessage: undefined, // the "contact support" message sans email address
     docketEntry: undefined,
+    message: undefined, // the message to show
     pdfPreviewModal: undefined,
     showModal: undefined, // the name of the modal to display
+    title: undefined,
+    troubleshootingInfo: undefined as unknown as TroubleshootingLinkInfo, // steps for troubleshooting
   } as Record<string, any>,
   navigation: {
     caseDetailMenu: '',
