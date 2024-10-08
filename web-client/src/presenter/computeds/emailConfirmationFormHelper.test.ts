@@ -12,7 +12,6 @@ const baseInitialState = {
   emailConfirmation: {
     confirmEmailErrorMessage: undefined,
     emailErrorMessage: undefined,
-    formWasSubmitted: false,
     inFocusConfirmEmail: false,
     inFocusEmail: false,
     isDirtyConfirmEmail: false,
@@ -66,7 +65,6 @@ describe('emailConfirmationFormHelper', () => {
         emailConfirmation: {
           confirmEmailErrorMessage: 'Enter a valid email address',
           emailErrorMessage: 'Enter a valid email address',
-          formWasSubmitted: true,
           inFocusConfirmEmail: false,
           inFocusEmail: false,
           isDirtyConfirmEmail: true,

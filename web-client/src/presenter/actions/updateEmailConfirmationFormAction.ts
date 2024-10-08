@@ -14,8 +14,6 @@ export const updateEmailConfirmationFormAction = ({
   });
   const errors = formEntity.getFormattedValidationErrors();
 
-  store.set(state.emailConfirmation.formWasSubmitted, false);
-
   const { field, inFocus } = get(props);
 
   if (field === 'email' || field === 'updatedEmail') {
@@ -42,6 +40,4 @@ export const updateEmailConfirmationFormAction = ({
   } else {
     store.unset(state.emailConfirmation.confirmEmailErrorMessage);
   }
-
-  // console.log('state after update action ran', get(state.emailConfirmation));
 };

@@ -5,7 +5,6 @@ const baseInitialState = {
   emailConfirmation: {
     confirmEmailErrorMessage: undefined,
     emailErrorMessage: undefined,
-    formWasSubmitted: false,
     inFocusConfirmEmail: false,
     inFocusEmail: false,
     isDirtyConfirmEmail: false,
