@@ -136,6 +136,20 @@ const batchDownloadDocketEntriesHelper = async (
     });
   }
 
+  if (documentsToZip.length > 5) {
+    console.log('OVER THE LIMIT');
+    await applicationContext
+      .getDispatchers()
+      .sendZipperBatchJob(
+        applicationContext,
+        documentsToZip,
+        zipName,
+        clientConnectionId,
+        authorizedUser.userId,
+      );
+    return;
+  }
+
   const onProgress = async (progressData: ProgressData) => {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
@@ -167,7 +181,7 @@ const batchDownloadDocketEntriesHelper = async (
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
-    clientConnectionId,
+    clientConnectionId, //GUID WE GENERATE
     message: {
       action: 'batch_download_ready',
       url,
