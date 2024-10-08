@@ -47,7 +47,8 @@ import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
 import { getEmailClient } from './persistence/messages/getEmailClient';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
-import { getNotificationClient } from '@web-api/notifications/getNotificationClient';
+import { getNotificationClient } from '@web-api/notifications/notificationClient/getNotificationClient';
+import { getNotificationGateway } from '@web-api/notifications/notificationClient/getNotificationGateway';
 import { getNotificationService } from '@web-api/notifications/getNotificationService';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getSearchClient } from '@web-api/persistence/elasticsearch/searchClient/getSearchClient';
@@ -58,14 +59,10 @@ import { getUserGateway } from '@web-api/getUserGateway';
 import { getUtilities } from './getUtilities';
 import { isAuthorized } from '../../shared/src/authorization/authorizationClientService';
 import { isCurrentColorActive } from './persistence/dynamo/helpers/isCurrentColorActive';
-import { retrySendNotificationToConnections } from './notifications/retrySendNotificationToConnections';
-import { saveRequestResponse } from '@web-api/persistence/dynamo/polling/saveRequestResponse';
 import { sendBulkTemplatedEmail } from './dispatchers/ses/sendBulkTemplatedEmail';
 import { sendEmailEventToQueue } from './persistence/messages/sendEmailEventToQueue';
 import { sendEmailToUser } from '@web-api/persistence/messages/sendEmailToUser';
 import { sendNotificationOfSealing } from './dispatchers/sns/sendNotificationOfSealing';
-import { sendNotificationToConnection } from './notifications/sendNotificationToConnection';
-import { sendNotificationToUser } from './notifications/sendNotificationToUser';
 import { sendSetTrialSessionCalendarEvent } from './persistence/messages/sendSetTrialSessionCalendarEvent';
 import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification';
 import { worker } from '@web-api/gateways/worker/worker';
@@ -201,12 +198,7 @@ export const createApplicationContext = (appContextUser = {}) => {
       return sass;
     },
     getNotificationClient,
-    getNotificationGateway: () => ({
-      retrySendNotificationToConnections,
-      saveRequestResponse,
-      sendNotificationToConnection,
-      sendNotificationToUser,
-    }),
+    getNotificationGateway,
     getNotificationService,
     getPdfJs: () => {
       pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
@@ -250,6 +242,8 @@ export const createApplicationContext = (appContextUser = {}) => {
     setTimeout: (callback, timeout) => setTimeout(callback, timeout),
   };
 };
+
+export const applicationContext = createApplicationContext();
 
 export type ServerApplicationContext = ReturnType<
   typeof createApplicationContext
