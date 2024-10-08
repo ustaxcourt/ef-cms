@@ -88,11 +88,11 @@ module "lambda_role_blue" {
   dns_domain  = var.dns_domain
 }
 
-module "zip_bach_east" {
+module "zip_batch_east" {
   source            = "../../modules/batch"
   environment       = var.environment
   dns_domain        = var.dns_domain
-	region            = "us-east-1"
+  region            = "us-east-1"
   current_color     = "blue"
 
   providers = {
@@ -100,11 +100,11 @@ module "zip_bach_east" {
   }
 }
 
-module "zip_bach_west" {
+module "zip_batch_west" {
   source            = "../../modules/batch"
   environment       = var.environment
   dns_domain        = var.dns_domain
-	region            = "us-west-1"
+  region            = "us-west-1"
   current_color     = "blue"
 
   providers = {

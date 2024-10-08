@@ -1,11 +1,9 @@
 data "aws_caller_identity" "current" {}
 
-# Fetch the default VPC (optional if you already know the VPC ID)
 data "aws_vpc" "default" {
   default = true
 }
 
-# Fetch all default subnets in the default VPC
 data "aws_subnets" "default_subnets" {
   filter {
     name   = "default-for-az"
@@ -18,7 +16,6 @@ data "aws_subnets" "default_subnets" {
   }
 }
 
-# Fetch the default security group for the default VPC
 data "aws_security_group" "default" {
   filter {
     name   = "vpc-id"
@@ -31,7 +28,6 @@ data "aws_security_group" "default" {
   }
 }
 
-# IAM role for AWS Batch
 resource "aws_iam_role" "batch_service_role" {
   name = "batch_role_${var.environment}_${var.current_color}_${var.region}"
 
@@ -68,7 +64,6 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
-# IAM policy for S3 access
 resource "aws_iam_role_policy" "batch_service_role_policy" {
   name = "batch_service_role_policy_${var.environment}_${var.current_color}_${var.region}"
   role = aws_iam_role.batch_service_role.id
@@ -98,16 +93,6 @@ resource "aws_iam_role_policy" "batch_service_role_policy" {
             "Resource": [
                 "arn:aws:ecs:us-east-1:${data.aws_caller_identity.current.account_id}:cluster/compute_environment_*",
                 "arn:aws:ecs:us-west-1:${data.aws_caller_identity.current.account_id}:cluster/compute_environment_*"
-            ],
-            "Effect": "Allow"
-        },
-				{
-            "Action": [
-                "sqs:SendMessage"
-            ],
-            "Resource": [
-                "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:worker_queue_${var.environment}_*",
-                "arn:aws:sqs:us-west-1:${data.aws_caller_identity.current.account_id}:worker_queue_${var.environment}_*"
             ],
             "Effect": "Allow"
         }
@@ -158,20 +143,19 @@ resource "aws_iam_role_policy_attachment" "job_definition_execution_role_policy"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
-# Define the Job Definition to download, zip, and upload files to S3
 resource "aws_batch_job_definition" "example_aws_batch_job_definition" {
   name       = "s3-zip-job-${var.environment}-${var.current_color}-${var.region}"
   type       = "container"
 
 
  container_properties = jsonencode({
-		image      = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com/docket-entry-zipper-${var.environment}-${var.current_color}-${var.region}:latest"
+    image      = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com/docket-entry-zipper-${var.environment}-${var.current_color}-${var.region}:latest"
 
     fargatePlatformConfiguration = {
       platformVersion = "LATEST"
     }
 
-		resourceRequirements = [
+    resourceRequirements = [
       {
         type  = "VCPU"
         value = "1"
@@ -182,27 +166,18 @@ resource "aws_batch_job_definition" "example_aws_batch_job_definition" {
       }
     ]
 
-		jobRoleArn = aws_iam_role.batch_service_role.arn
+    jobRoleArn = aws_iam_role.batch_service_role.arn
 
-		executionRoleArn = aws_iam_role.job_definition_iam_role.arn
+    executionRoleArn = aws_iam_role.job_definition_iam_role.arn
 
-		networkConfiguration = {
+    networkConfiguration = {
 			assignPublicIp  = "ENABLED"
 		}
   })
 
-	platform_capabilities = ["FARGATE"]
+  platform_capabilities = ["FARGATE"]
 
   retry_strategy {
     attempts = 1
   }
-}
-
-# Output default subnets and security group for verification
-output "default_subnets_ids" {
-  value = data.aws_subnets.default_subnets.ids
-}
-
-output "default_security_group_id" {
-  value = data.aws_security_group.default.id
 }

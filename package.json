@@ -137,7 +137,7 @@
     "deploy:blue": "cd web-api/terraform/applyables/blue && COLOR=blue ../../bin/deploy-app-color.sh",
     "deploy:green": "cd web-api/terraform/applyables/green && COLOR=green ../../bin/deploy-app-color.sh",
     "deploy:ci-image": "./docker-to-ecr.sh",
-		"deploy:zipper": "cd web-api/terraform/modules/batch/docker-image && npm run deploy",
+    "deploy:zipper": "cd web-api/terraform/modules/batch/docker-image && npm run deploy",
     "deploy:glue-cron": "cd web-api/terraform/applyables/glue-cron && ../../bin/deploy-glue-cron.sh",
     "deploy:migration": "cd web-api/terraform/applyables/migration && ../../bin/deploy-migration.sh",
     "deploy:migration-cron": "cd web-api/terraform/applyables/migration-cron && ../../bin/deploy-migration-cron.sh",
