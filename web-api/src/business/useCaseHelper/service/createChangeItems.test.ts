@@ -8,6 +8,7 @@ import {
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateAndServeDocketEntry } from './createChangeItems';
 import { mockAdmissionsClerkUser } from '@shared/test/mockAuthUsers';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 describe('generateAndServeDocketEntry', () => {
   let testCaseEntity;
@@ -79,9 +80,7 @@ describe('generateAndServeDocketEntry', () => {
       privatePractitionersRepresentingContact: true,
       user: testUser,
     });
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).not.toHaveBeenCalled();
+    expect(saveWorkItem).not.toHaveBeenCalled();
   });
 
   it('should create a work item when admissions clerk updates a unrepresented petitioner email', async () => {
@@ -91,9 +90,7 @@ describe('generateAndServeDocketEntry', () => {
       privatePractitionersRepresentingContact: false,
       user: testUser,
     });
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(saveWorkItem).toHaveBeenCalled();
   });
 
   it('should create a work item when admissions clerk updates a petitioner email on a case with a party with paper service', async () => {
@@ -114,9 +111,7 @@ describe('generateAndServeDocketEntry', () => {
       privatePractitionersRepresentingContact: true,
       user: testUser,
     });
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(saveWorkItem).toHaveBeenCalled();
   });
 
   it('should NOT create a work item when admissions clerk updates a petitioner email on a case with no parties having paper service', async () => {
@@ -137,9 +132,7 @@ describe('generateAndServeDocketEntry', () => {
       privatePractitionersRepresentingContact: true,
       user: testUser,
     });
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).not.toHaveBeenCalled();
+    expect(saveWorkItem).not.toHaveBeenCalled();
   });
 
   it('should NOT create a work item when privatePractitioner updates their email and no parties have paper service', async () => {
@@ -163,9 +156,7 @@ describe('generateAndServeDocketEntry', () => {
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
     });
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).not.toHaveBeenCalled();
+    expect(saveWorkItem).not.toHaveBeenCalled();
   });
 
   it('should create a work item when privatePractitioner updates their email and their service was set to paper', async () => {
@@ -189,9 +180,7 @@ describe('generateAndServeDocketEntry', () => {
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       },
     });
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(saveWorkItem).toHaveBeenCalled();
   });
 
   it('should pass the number of docket entries on the docket Record + 1 to the coverSheet', async () => {

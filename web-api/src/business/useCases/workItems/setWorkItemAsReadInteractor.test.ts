@@ -10,9 +10,11 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { saveWorkItem as saveWorkItemMock } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 import { setWorkItemAsReadInteractor } from './setWorkItemAsReadInteractor';
 
 describe('setWorkItemAsReadInteractor', () => {
+  const saveWorkItem = saveWorkItemMock as jest.Mock;
   const mockWorkItem = {
     assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
     assigneeName: 'bob',
@@ -98,9 +100,7 @@ describe('setWorkItemAsReadInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0],
-    ).toMatchObject({
+    expect(saveWorkItem.mock.calls[0][0]).toMatchObject({
       workItem: { isRead: true },
     });
   });

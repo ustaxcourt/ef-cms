@@ -7,8 +7,10 @@ import { applicationContext } from '../../../../../shared/src/business/test/crea
 import { assignWorkItemsInteractor } from './assignWorkItemsInteractor';
 import { caseServicesSupervisorUser } from '../../../../../shared/src/test/mockUsers';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { saveWorkItem as saveWorkItemMock } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 describe('assignWorkItemsInteractor', () => {
+  const saveWorkItem = saveWorkItemMock as jest.Mock;
   const options = { assigneeId: 'ss', assigneeName: 'ss', workItemId: '' };
   let mockWorkItem;
 
@@ -89,10 +91,7 @@ describe('assignWorkItemsInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-        .workItem,
-    ).toMatchObject({
+    expect(saveWorkItem.mock.calls[0][0].workItem).toMatchObject({
       section: DOCKET_SECTION,
       sentBy: mockDocketClerkUser.name,
       sentBySection: DOCKET_SECTION,
@@ -119,10 +118,7 @@ describe('assignWorkItemsInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-        .workItem,
-    ).toMatchObject({
+    expect(saveWorkItem.mock.calls[0][0].workItem).toMatchObject({
       section: DOCKET_SECTION,
       sentBy: caseServicesSupervisorUser.name,
       sentBySection: caseServicesSupervisorUser.section,

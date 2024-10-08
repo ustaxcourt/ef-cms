@@ -12,6 +12,7 @@ import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
 import { addCoverToPdf } from '@web-api/business/useCases/addCoverToPdf';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 import { updatePetitionerInformationInteractor } from './updatePetitionerInformationInteractor';
 jest.mock('@web-api/business/useCases/addCoverToPdf');
 
@@ -91,9 +92,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
     const noticeOfChangeDocketEntryWithWorkItem =
       result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(saveWorkItem).toHaveBeenCalled();
     expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
     expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
       'for Test Primary Petitioner',
@@ -124,9 +123,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
 
     const noticeOfChangeDocketEntryWithWorkItem =
       result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).not.toHaveBeenCalled();
+    expect(saveWorkItem).not.toHaveBeenCalled();
     expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeUndefined();
     expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
       'for Test Primary Petitioner',
@@ -159,9 +156,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
     const noticeOfChangeDocketEntryWithWorkItem =
       result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(saveWorkItem).toHaveBeenCalled();
     expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
     expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
       'for Test Primary Petitioner',
@@ -195,9 +190,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
     const noticeOfChangeDocketEntryWithWorkItem =
       result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(saveWorkItem).toHaveBeenCalled();
     expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
     expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
       'for Test Secondary Petitioner',
