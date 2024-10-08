@@ -671,7 +671,6 @@ export const baseState = {
   emailConfirmation: {
     confirmEmailErrorMessage: '',
     emailErrorMessage: '',
-    formWasSubmitted: false,
     inFocusConfirmEmail: false,
     inFocusEmail: false,
     isDirtyConfirmEmail: false,
