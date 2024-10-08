@@ -16,8 +16,10 @@ import { addPaperFilingInteractor } from './addPaperFilingInteractor';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { saveWorkItem as saveWorkItemMock } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 describe('addPaperFilingInteractor', () => {
+  const saveWorkItem = saveWorkItemMock as jest.Mock;
   const mockClientConnectionId = '987654';
   const mockCase = { ...MOCK_CASE, leadDocketNumber: MOCK_CASE.docketNumber };
   let defaultParamaters: {
@@ -103,9 +105,7 @@ describe('addPaperFilingInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(saveWorkItem).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -218,10 +218,9 @@ describe('addPaperFilingInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-        .workItem,
-    ).toMatchObject({ leadDocketNumber: mockCase.leadDocketNumber });
+    expect(saveWorkItem.mock.calls[0][0].workItem).toMatchObject({
+      leadDocketNumber: mockCase.leadDocketNumber,
+    });
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -251,9 +250,7 @@ describe('addPaperFilingInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(saveWorkItem).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -283,9 +280,7 @@ describe('addPaperFilingInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(saveWorkItem).toHaveBeenCalled();
   });
 
   it('sets the case as blocked if the document filed is a tracked document type', async () => {
@@ -529,9 +524,7 @@ describe('addPaperFilingInteractor', () => {
       expect(
         applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
       ).toHaveBeenCalledTimes(1);
-      expect(
-        applicationContext.getPersistenceGateway().saveWorkItem,
-      ).toHaveBeenCalledTimes(1);
+      expect(saveWorkItem).toHaveBeenCalledTimes(1);
     });
 
     it('should still save only one copy of the document to s3', async () => {

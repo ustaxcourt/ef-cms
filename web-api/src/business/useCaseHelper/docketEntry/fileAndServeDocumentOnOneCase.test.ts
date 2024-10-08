@@ -23,12 +23,14 @@ import {
 } from '../../../../../shared/src/test/mockUsers';
 import { fileAndServeDocumentOnOneCase } from './fileAndServeDocumentOnOneCase';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { saveWorkItem as saveWorkItemMock } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 describe('fileAndServeDocumentOnOneCase', () => {
   let mockCaseEntity;
   let mockWorkItem;
   let mockDocketEntry;
 
+  const saveWorkItem = saveWorkItemMock as jest.Mock;
   const mockDocketEntryId = '85a5b1c81eed44b6932a967af060597a';
   const differentDocketNumber = '3875-32';
   const docketEntriesWithCaseClosingEventCodes =
@@ -240,10 +242,9 @@ describe('fileAndServeDocumentOnOneCase', () => {
       user: docketClerkUser,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-        .workItem.leadDocketNumber,
-    ).toBe(MOCK_CASE.docketNumber);
+    expect(saveWorkItem.mock.calls[0][0].workItem.leadDocketNumber).toBe(
+      MOCK_CASE.docketNumber,
+    );
   });
 
   it('should assign the docketEntry`s work item to the provided user', async () => {
@@ -360,9 +361,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
       user: docketClerkUser,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(saveWorkItem).toHaveBeenCalled();
   });
 
   it('should pass the caseEntity`s trialDate and trialLocation to the docketEntry`s work item when they exist', async () => {
