@@ -24,7 +24,7 @@ export type JudgeActivityStatisticsRequest = {
 export type GetCountOfCaseDocumentsFiledByJudgesRequest = {
   endDate: string;
   startDate: string;
-  judges: string[];
+  judgeIds: string[];
   documentEventCodes: string[];
 };
 
@@ -50,7 +50,7 @@ export const getCountOfCaseDocumentsFiledByJudgesInteractor = async (
       params: {
         documentEventCodes: params.documentEventCodes,
         endDate: searchEntity.endDate,
-        judges: searchEntity.judgeIds,
+        judgeIds: searchEntity.judgeIds,
         startDate: searchEntity.startDate,
       },
     });

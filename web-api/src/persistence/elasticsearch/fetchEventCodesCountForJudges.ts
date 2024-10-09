@@ -1,7 +1,4 @@
-import {
-  computeDocumentFilters,
-  computeShouldFilters,
-} from './helpers/searchQueryForAggregation';
+import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { search } from './searchClient';
 
 export type CaseDocumentsCountType = {
@@ -17,8 +14,8 @@ export type AggregatedEventCodesType = {
 
 export type FetchEventCodesParamsType = {
   endDate: string;
-  documentEventCodes: any;
-  judges: string[];
+  documentEventCodes: string[];
+  judgeIds: string[];
   startDate: string;
 };
 
@@ -30,7 +27,6 @@ export const fetchEventCodesCountForJudges = async ({
   params: FetchEventCodesParamsType;
 }): Promise<AggregatedEventCodesType> => {
   const documentFilters = computeDocumentFilters({ params });
-  const shouldFilters = computeShouldFilters({ params });
 
   const documentQuery = {
     body: {
@@ -44,9 +40,23 @@ export const fetchEventCodesCountForJudges = async ({
       },
       query: {
         bool: {
-          filter: documentFilters,
-          minimum_should_match: 1,
-          should: shouldFilters,
+          filter: [
+            ...documentFilters,
+            {
+              has_parent: {
+                parent_type: 'case',
+                query: {
+                  bool: {
+                    filter: [
+                      {
+                        terms: { 'associatedJudgeId.S': params.judgeIds },
+                      },
+                    ],
+                  },
+                },
+              },
+            },
+          ],
         },
       },
       size: 0,
@@ -80,4 +90,40 @@ export const fetchEventCodesCountForJudges = async ({
   );
 
   return { aggregations: computedAggregatedEventCodes, total };
+};
+
+export const computeDocumentFilters = ({ params }) => {
+  // add filters to return 'served'/'stricken' orders/opinions
+  const documentFilters: QueryDslQueryContainer[] = [
+    { term: { 'entityName.S': 'DocketEntry' } },
+    {
+      exists: {
+        field: 'servedAt',
+      },
+    },
+    {
+      term: {
+        'isStricken.BOOL': false,
+      },
+    },
+  ];
+
+  if (params.endDate && params.startDate) {
+    documentFilters.push({
+      range: {
+        'filingDate.S': {
+          gte: `${params.startDate}||/h`,
+          lte: `${params.endDate}||/h`,
+        },
+      },
+    });
+  }
+
+  if (params.documentEventCodes && params.documentEventCodes.length) {
+    documentFilters.push({
+      terms: { 'eventCode.S': params.documentEventCodes },
+    });
+  }
+
+  return documentFilters;
 };

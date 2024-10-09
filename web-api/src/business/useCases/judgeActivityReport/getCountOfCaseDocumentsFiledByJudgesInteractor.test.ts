@@ -21,11 +21,11 @@ jest.mock('./addDocumentTypeToEventCodeAggregation');
 describe('getCountOfCaseDocumentsFiledByJudgesInteractor', () => {
   const mockStartDate = '02/12/2020';
   const mockEndDate = '03/21/2020';
-  const mockJudges = [judgeUser.name];
+  const mockJudges = [judgeUser.userId];
   const mockValidRequest: GetCountOfCaseDocumentsFiledByJudgesRequest = {
     documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
     endDate: mockEndDate,
-    judges: mockJudges,
+    judgeIds: mockJudges,
     startDate: mockStartDate,
   };
 
@@ -55,7 +55,7 @@ describe('getCountOfCaseDocumentsFiledByJudgesInteractor', () => {
         {
           documentEventCodes: [],
           endDate: 'baddabingbaddaboom',
-          judges: [judgeUser.name],
+          judgeIds: [judgeUser.userId],
           startDate: 'yabbadabbadoo',
         },
         mockJudgeUser,
