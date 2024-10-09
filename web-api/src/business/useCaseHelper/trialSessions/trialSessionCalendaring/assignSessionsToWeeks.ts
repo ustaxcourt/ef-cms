@@ -11,6 +11,11 @@ import {
   SESSION_TYPES,
   TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
+import {
+  WASHINGTON_DC_NORTH_STRING,
+  WASHINGTON_DC_SOUTH_STRING,
+  WASHINGTON_DC_STRING,
+} from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
 
 export type ScheduledTrialSession = {
   city: string;
@@ -39,7 +44,6 @@ export const assignSessionsToWeeks = ({
   // -- Max 1 per location per week.
   // -- Max x per week across all locations
 
-  // const scheduledTrialSessions: ScheduledTrialSession[] = [];
   const scheduledTrialSessionsByCity: Record<string, ScheduledTrialSession[]> =
     {};
 
@@ -63,6 +67,35 @@ export const assignSessionsToWeeks = ({
     }
   }
 
+  // TODO 10275: test this (and be sure it works)
+  const sortedProspectiveSessionsByCity = Object.keys(prospectiveSessionsByCity)
+    .sort((a, b) => {
+      const aNotVisited =
+        prospectiveSessionsByCity[a][0]?.cityWasNotVisitedInLastTwoTerms ||
+        false;
+      const bNotVisited =
+        prospectiveSessionsByCity[b][0]?.cityWasNotVisitedInLastTwoTerms ||
+        false;
+
+      return aNotVisited === bNotVisited ? 0 : aNotVisited ? -1 : 1;
+    })
+    .reduce((obj, key) => {
+      if (key === WASHINGTON_DC_STRING) {
+        obj[WASHINGTON_DC_SOUTH_STRING] = [];
+
+        for (const prospectiveSession of prospectiveSessionsByCity[key]) {
+          obj[WASHINGTON_DC_SOUTH_STRING].push({
+            ...prospectiveSession,
+            city: WASHINGTON_DC_SOUTH_STRING,
+          });
+        }
+
+        return obj;
+      }
+      obj[key] = prospectiveSessionsByCity[key];
+      return obj;
+    }, {});
+
   for (const currentWeek of weeksToLoop) {
     const weekOfString = currentWeek;
 
@@ -81,19 +114,15 @@ export const assignSessionsToWeeks = ({
       );
     });
 
-    let washingtonDc = 'Washington, District of Columbia';
-    const washingtonDcNorth = 'Washington, District of Columbia (North)'; // specials only
-    const washingtonDcSouth = 'Washington, District of Columbia (South)'; // open for any type
-
     const specialSessionsForWeekByLocation = specialSessionsForWeek.reduce(
       (acc, session) => {
-        if (session.trialLocation === washingtonDc) {
+        if (session.trialLocation === WASHINGTON_DC_STRING) {
           // assign special to special-only slot (north)
           // if north is occupied, assign to south
-          if (!acc[washingtonDcNorth]) {
-            acc[washingtonDcNorth] = session;
-          } else if (!acc[washingtonDcSouth]) {
-            acc[washingtonDcSouth] = session;
+          if (!acc[WASHINGTON_DC_NORTH_STRING]) {
+            acc[WASHINGTON_DC_NORTH_STRING] = session;
+          } else if (!acc[WASHINGTON_DC_SOUTH_STRING]) {
+            acc[WASHINGTON_DC_SOUTH_STRING] = session;
           } else {
             throw new Error(
               'There must only be no more than two special trial sessions per week in Washington, DC.',
@@ -128,31 +157,6 @@ export const assignSessionsToWeeks = ({
       });
     }
 
-    // TODO 10275: test this (and be sure it works)
-    const sortedProspectiveSessionsByCity = Object.keys(
-      prospectiveSessionsByCity,
-    )
-      .sort((a, b) => {
-        const aNotVisited =
-          prospectiveSessionsByCity[a][0]?.cityWasNotVisitedInLastTwoTerms ||
-          false;
-        const bNotVisited =
-          prospectiveSessionsByCity[b][0]?.cityWasNotVisitedInLastTwoTerms ||
-          false;
-
-        return aNotVisited === bNotVisited ? 0 : aNotVisited ? -1 : 1;
-      })
-      .reduce((obj, key) => {
-        if (key === washingtonDc) {
-          obj[washingtonDcSouth] = {
-            ...prospectiveSessionsByCity[key],
-            city: washingtonDcSouth,
-          };
-        }
-        obj[key] = prospectiveSessionsByCity[key];
-        return obj;
-      }, {});
-
     for (const city in sortedProspectiveSessionsByCity) {
       // This is a redundant check, as we expect the length of the array to have
       // already been trimmed to at most the max before entering this function.
@@ -162,7 +166,7 @@ export const assignSessionsToWeeks = ({
 
       // Check if we're already at the max for this location
 
-      // Just use the first session!
+      // Just use the first session!?
       for (const prospectiveSession of sortedProspectiveSessionsByCity[city]) {
         if (
           sessionScheduledPerCityPerWeek[weekOfString].has(
@@ -185,6 +189,7 @@ export const assignSessionsToWeeks = ({
 
         const index =
           sortedProspectiveSessionsByCity[city].indexOf(prospectiveSession);
+
         if (index !== -1) {
           sortedProspectiveSessionsByCity[city].splice(index, 1);
         }

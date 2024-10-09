@@ -8,6 +8,11 @@ import {
   ScheduledTrialSession,
   assignSessionsToWeeks,
 } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
+import {
+  WASHINGTON_DC_NORTH_STRING,
+  WASHINGTON_DC_SOUTH_STRING,
+  WASHINGTON_DC_STRING,
+} from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { getWeeksInRange } from '@shared/business/utilities/DateHandler';
 
@@ -222,10 +227,10 @@ describe('assignSessionsToWeeks', () => {
     }).toThrow(
       'There must only be one special trial session per location per week.',
     );
+    // 5 special sessions, all at different locations, in the same week
+    // 2 non-special sessions, all at different locations, in the same week
+    // in the end, we should have 5 special and 1 non-special scheduled for that week
   });
-  // 5 special sessions, all at different locations, in the same week
-  // 2 non-special sessions, all at different locations, in the same week
-  // in the end, we should have 5 special and 1 non-special scheduled for that week
 
   it('should throw an error when passed more special sessions in one location than the maximum allowed for that location', () => {
     const mockSpecialSessions = [
@@ -285,5 +290,170 @@ describe('assignSessionsToWeeks', () => {
     }).toThrow(
       `Special session count exceeds the max sessions per location for ${TRIAL_CITY_STRINGS[0]}`,
     );
+  });
+
+  it('should allow for double the maximum number of special sessions for Washington, DC as there are two DC-based courtrooms', () => {
+    const mockSpecialSessions = [
+      {
+        ...MOCK_TRIAL_REGULAR,
+        sessionType: SESSION_TYPES.special,
+        startDate: '2019-08-22T04:00:00.000Z',
+        trialLocation: WASHINGTON_DC_STRING,
+        trialSessionId: getUniqueId(),
+      },
+      {
+        ...MOCK_TRIAL_REGULAR,
+        sessionType: SESSION_TYPES.special,
+        startDate: '2019-08-22T04:00:00.000Z',
+        trialLocation: WASHINGTON_DC_STRING,
+        trialSessionId: getUniqueId(),
+      },
+    ];
+
+    const mockSessions = {};
+
+    const { scheduledTrialSessionsByCity, sessionCountPerWeek } =
+      assignSessionsToWeeks({
+        calendaringConfig: defaultMockCalendaringConfig,
+        prospectiveSessionsByCity: mockSessions,
+        specialSessions: mockSpecialSessions,
+        weeksToLoop: mockWeeksToLoop,
+      });
+
+    expect(
+      scheduledTrialSessionsByCity[WASHINGTON_DC_SOUTH_STRING].length,
+    ).toEqual(1);
+    expect(
+      scheduledTrialSessionsByCity[WASHINGTON_DC_NORTH_STRING].length,
+    ).toEqual(1);
+
+    expect(Object.values(sessionCountPerWeek)[0]).toEqual(2);
+  });
+
+  it('should not allow for more than double the maximum', () => {
+    const mockSpecialSessions = [
+      {
+        ...MOCK_TRIAL_REGULAR,
+        sessionType: SESSION_TYPES.special,
+        startDate: '2019-08-22T04:00:00.000Z',
+        trialLocation: WASHINGTON_DC_STRING,
+        trialSessionId: getUniqueId(),
+      },
+      {
+        ...MOCK_TRIAL_REGULAR,
+        sessionType: SESSION_TYPES.special,
+        startDate: '2019-08-22T04:00:00.000Z',
+        trialLocation: WASHINGTON_DC_STRING,
+        trialSessionId: getUniqueId(),
+      },
+      {
+        ...MOCK_TRIAL_REGULAR,
+        sessionType: SESSION_TYPES.special,
+        startDate: '2019-08-22T04:00:00.000Z',
+        trialLocation: WASHINGTON_DC_STRING,
+        trialSessionId: getUniqueId(),
+      },
+    ];
+
+    const mockSessions = {};
+
+    expect(() => {
+      assignSessionsToWeeks({
+        calendaringConfig: defaultMockCalendaringConfig,
+        prospectiveSessionsByCity: mockSessions,
+        specialSessions: mockSpecialSessions,
+        weeksToLoop: mockWeeksToLoop,
+      });
+    }).toThrow(
+      'There must only be no more than two special trial sessions per week in Washington, DC.',
+    );
+  });
+
+  it('should schedule one regular and one special session in the same week despite the max per week per location', () => {
+    const mockSpecialSessions = [
+      {
+        ...MOCK_TRIAL_REGULAR,
+        sessionType: SESSION_TYPES.special,
+        startDate: '2019-08-22T04:00:00.000Z',
+        trialLocation: WASHINGTON_DC_STRING,
+        trialSessionId: getUniqueId(),
+      },
+    ];
+
+    const mockSessions = {
+      [WASHINGTON_DC_STRING]: [
+        {
+          city: WASHINGTON_DC_STRING,
+          cityWasNotVisitedInLastTwoTerms: false,
+          sessionType: SESSION_TYPES.regular,
+        },
+      ],
+    };
+
+    const { scheduledTrialSessionsByCity, sessionCountPerWeek } =
+      assignSessionsToWeeks({
+        calendaringConfig: defaultMockCalendaringConfig,
+        prospectiveSessionsByCity: mockSessions,
+        specialSessions: mockSpecialSessions,
+        weeksToLoop: mockWeeksToLoop,
+      });
+
+    console.log('scheduledTrialSessionsByCity', scheduledTrialSessionsByCity);
+    console.log('sessionCountPerWeek', sessionCountPerWeek);
+
+    expect(
+      scheduledTrialSessionsByCity[WASHINGTON_DC_SOUTH_STRING].length,
+    ).toEqual(1);
+    expect(
+      scheduledTrialSessionsByCity[WASHINGTON_DC_NORTH_STRING].length,
+    ).toEqual(1);
+
+    expect(Object.values(sessionCountPerWeek)[0]).toEqual(2);
+  });
+
+  it('should schedule no more than one non-special session per week in Washington, DC', () => {
+    const mockSessions = {
+      [WASHINGTON_DC_STRING]: [
+        {
+          city: WASHINGTON_DC_STRING,
+          cityWasNotVisitedInLastTwoTerms: false,
+          sessionType: SESSION_TYPES.regular,
+        },
+        {
+          city: WASHINGTON_DC_STRING,
+          cityWasNotVisitedInLastTwoTerms: false,
+          sessionType: SESSION_TYPES.regular,
+        },
+      ],
+    };
+
+    const WEEK_ONE = '2019-08-19';
+    const WEEK_TWO = '2019-08-26';
+
+    const { scheduledTrialSessionsByCity, sessionCountPerWeek } =
+      assignSessionsToWeeks({
+        calendaringConfig: defaultMockCalendaringConfig,
+        prospectiveSessionsByCity: mockSessions,
+        specialSessions: [],
+        weeksToLoop: mockWeeksToLoop,
+      });
+
+    expect(scheduledTrialSessionsByCity[WASHINGTON_DC_SOUTH_STRING][0]).toEqual(
+      {
+        city: WASHINGTON_DC_SOUTH_STRING,
+        sessionType: SESSION_TYPES.regular,
+        weekOf: WEEK_ONE,
+      },
+    );
+    expect(scheduledTrialSessionsByCity[WASHINGTON_DC_SOUTH_STRING][1]).toEqual(
+      {
+        city: WASHINGTON_DC_SOUTH_STRING,
+        sessionType: SESSION_TYPES.regular,
+        weekOf: WEEK_TWO,
+      },
+    );
+
+    expect(sessionCountPerWeek[WEEK_ONE]).toEqual(1);
+    expect(sessionCountPerWeek[WEEK_TWO]).toEqual(1);
   });
 });
