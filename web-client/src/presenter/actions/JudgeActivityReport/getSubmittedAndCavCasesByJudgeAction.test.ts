@@ -23,7 +23,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
 
   const getCasesByStatusAndByJudgeRequestParams: GetCasesByStatusAndByJudgeRequest =
     {
-      judges: [judgeUser.name],
+      judgeIds: [judgeUser.userId],
       statuses: CAV_AND_SUBMITTED_CASE_STATUS,
     };
 

@@ -11,7 +11,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export type GetCasesByStatusAndByJudgeRequest = {
   statuses: string[];
-  judges: string[];
+  judgeIds: string[];
 };
 
 export type GetCasesByStatusAndByJudgeResponse = SubmittedCAVTableFields & {
@@ -66,7 +66,7 @@ const getCases = async (
       applicationContext,
       params: {
         excludeMemberCases: true,
-        judges: searchEntity.judges,
+        judgeIds: searchEntity.judgeIds,
         statuses: searchEntity.statuses,
       },
     });

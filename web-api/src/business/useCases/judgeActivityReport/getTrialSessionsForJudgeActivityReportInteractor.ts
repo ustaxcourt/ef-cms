@@ -61,7 +61,7 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
     if (!session.judge) {
       return false;
     }
-    return searchEntity.judges.includes(session.judge.name);
+    return searchEntity.judgeIds.includes(session.judge.userId);
   });
 
   const formattedSearchStartDate = formatDateString(

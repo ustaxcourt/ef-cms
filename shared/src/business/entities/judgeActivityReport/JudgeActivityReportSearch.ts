@@ -20,7 +20,7 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
   public judgeName: string;
   public judgeId: string;
   public statuses: CAV_AND_SUBMITTED_CASE_STATUS_TYPES;
-  public judges: string[];
+  public judgeIds: string[];
 
   protected tomorrow: string;
 
@@ -30,7 +30,7 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
     this.judgeId = rawProps.judgeId;
     this.judgeName = rawProps.judgeName;
     this.statuses = rawProps.statuses;
-    this.judges = rawProps.judges;
+    this.judgeIds = rawProps.judgeIds;
 
     this.tomorrow = calculateISODate({
       howMuch: +1,

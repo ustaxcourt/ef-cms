@@ -4,7 +4,7 @@ import { search } from './searchClient';
 
 export type DocketNumberByStatusRequest = {
   statuses: string[];
-  judges?: string[];
+  judgeIds?: string[];
   excludeMemberCases?: boolean;
 };
 
@@ -37,11 +37,11 @@ export const getDocketNumbersByStatusAndByJudge = async ({
     },
   ];
 
-  if (params.judges) {
-    params.judges.forEach(judge => {
+  if (params.judgeIds) {
+    params.judgeIds.forEach(judgeId => {
       const associatedJudgeFilters = {
         match_phrase: {
-          'associatedJudge.S': judge,
+          'associatedJudgeId.S': judgeId,
         },
       };
       shouldFilters.push(associatedJudgeFilters);

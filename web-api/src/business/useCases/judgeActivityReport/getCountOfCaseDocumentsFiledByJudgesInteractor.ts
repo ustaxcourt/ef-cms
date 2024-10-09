@@ -50,7 +50,7 @@ export const getCountOfCaseDocumentsFiledByJudgesInteractor = async (
       params: {
         documentEventCodes: params.documentEventCodes,
         endDate: searchEntity.endDate,
-        judges: searchEntity.judges,
+        judges: searchEntity.judgeIds,
         startDate: searchEntity.startDate,
       },
     });

@@ -13,7 +13,7 @@ jest.mock('./searchClient');
 
 describe('getDocketNumbersByStatusAndByJudge', () => {
   const mockValidRequest: DocketNumberByStatusRequest = {
-    judges: [judgeUser.name],
+    judgeIds: [judgeUser.userId],
     statuses: CAV_AND_SUBMITTED_CASE_STATUS,
   };
 
@@ -71,7 +71,7 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
   it('should make a persistence call to obtain all cases with a status of "Submitted" or "CAV" without judges', async () => {
     await getDocketNumbersByStatusAndByJudge({
       applicationContext,
-      params: { ...mockValidRequest, judges: undefined },
+      params: { ...mockValidRequest, judgeIds: undefined },
     });
 
     expect(

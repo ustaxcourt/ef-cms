@@ -21,7 +21,7 @@ describe('getCaseWorksheetsByJudgeInteractor', () => {
   let mockGetDocketNumbersByStatusAndByJudgeResult: RawCase[] = [];
 
   const mockValidRequest: GetCasesByStatusAndByJudgeRequest = {
-    judges: [judgeUser.name],
+    judgeIds: [judgeUser.userId],
     statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
   };
 
@@ -80,7 +80,7 @@ describe('getCaseWorksheetsByJudgeInteractor', () => {
       getCaseWorksheetsByJudgeInteractor(
         applicationContext,
         {
-          judges: [judgeUser.name],
+          judgeIds: [judgeUser.userId],
           statuses: [undefined as any],
         },
         mockJudgeUser,
@@ -102,7 +102,7 @@ describe('getCaseWorksheetsByJudgeInteractor', () => {
       applicationContext,
       params: {
         excludeMemberCases: true,
-        judges: mockValidRequest.judges,
+        judges: mockValidRequest.judgeIds,
         statuses: mockValidRequest.statuses,
       },
     });

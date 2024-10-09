@@ -8,12 +8,12 @@ export const getSubmittedAndCavCasesForCurrentJudgeAction = async ({
 }: ActionProps): Promise<{
   cases: GetCasesByStatusAndByJudgeResponse[];
 }> => {
-  const { name } = get(state.judgeUser);
+  const { userId } = get(state.judgeUser);
 
   const { cases } = await applicationContext
     .getUseCases()
     .getCaseWorksheetsByJudgeInteractor(applicationContext, {
-      judges: [name],
+      judgeIds: [userId],
       statuses: CAV_AND_SUBMITTED_CASE_STATUS,
     });
 
