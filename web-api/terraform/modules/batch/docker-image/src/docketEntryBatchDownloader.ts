@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 import { Agent } from 'https';
 import {
   ApiGatewayManagementApiClient,

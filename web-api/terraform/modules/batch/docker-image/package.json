@@ -1,7 +1,7 @@
 {
   "name": "docker-image",
   "version": "1.0.0",
-  "main": "testScript.js",
+  "main": "docketEntryBatchDownloader.js",
   "scripts": {
 		"deploy": "./deploy-to-ecr.sh us-east-1 && ./deploy-to-ecr.sh us-west-1"
   },
