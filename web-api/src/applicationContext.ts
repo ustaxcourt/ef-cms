@@ -36,6 +36,7 @@ import { WorkItem } from '../../shared/src/business/entities/WorkItem';
 import { WorkerMessage } from '@web-api/gateways/worker/workerRouter';
 import { defaultProvider } from '@aws-sdk/credential-provider-node';
 import { environment } from '@web-api/environment';
+import { getBatchClient } from '@web-api/persistence/batch/getBatchClient';
 import {
   getChromiumBrowser,
   getChromiumBrowserAWS,
@@ -70,6 +71,7 @@ import { sendNotificationToConnection } from './notifications/sendNotificationTo
 import { sendNotificationToUser } from './notifications/sendNotificationToUser';
 import { sendSetTrialSessionCalendarEvent } from './persistence/messages/sendSetTrialSessionCalendarEvent';
 import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification';
+import { sendZipperBatchJob } from '@web-api/dispatchers/batch/sendZipperBatchJob';
 import { worker } from '@web-api/gateways/worker/worker';
 import { workerLocal } from '@web-api/gateways/worker/workerLocal';
 import axios from 'axios';
@@ -102,6 +104,7 @@ export const createApplicationContext = (appContextUser = {}) => {
     barNumberGenerator,
     docketNumberGenerator,
     environment,
+    getBatchClient,
     getBounceAlertRecipients: () =>
       process.env.BOUNCE_ALERT_RECIPIENTS?.split(',') || [],
     getCaseTitle: Case.getCaseTitle,
@@ -150,6 +153,7 @@ export const createApplicationContext = (appContextUser = {}) => {
           ? sendNotificationOfSealing
           : () => {},
       sendSlackNotification,
+      sendZipperBatchJob,
     }),
     getDocumentClient,
     getDocumentGenerators,
