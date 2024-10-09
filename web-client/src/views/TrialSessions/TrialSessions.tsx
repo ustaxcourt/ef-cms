@@ -37,7 +37,7 @@ export const TrialSessions = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-          <div className="display-flex flex-justify-end flex-align-center flex-wrap gap-1">
+          <div className="display-flex flex-justify-end flex-align-center flex-wrap gap-205">
             <div>
               <Button
                 link
