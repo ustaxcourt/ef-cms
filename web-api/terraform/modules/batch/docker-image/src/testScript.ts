@@ -12,8 +12,6 @@ import archiver from 'archiver';
 import fs from 'fs';
 import path from 'path';
 
-//TODO: Meaningful logs for debugging
-
 type DocketEntryDownloadInfo = {
   key: string;
   filePathInZip: string;
