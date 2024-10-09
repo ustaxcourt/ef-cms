@@ -16,9 +16,10 @@ export const checkWorkitemOnCalendaredCase = (
     const expectedTrialDate = formatDateString(
       `${trialDate.year}-${trialDate.month}-${trialDate.day}`,
     );
-
+    expect(formatDateString(calendaredWorkItem.trialDate)).toEqual(
+      expectedTrialDate,
+    );
     expect(calendaredWorkItem.caseStatus).toBe(CASE_STATUS_TYPES.calendared);
-    expect(calendaredWorkItem.trialDate).toEqual(expectedTrialDate);
     expect(calendaredWorkItem.trialLocation).toEqual(trialLocation);
   });
 };
