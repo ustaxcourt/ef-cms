@@ -26,6 +26,18 @@ export const getSuggestedCalendarCases = async ({ applicationContext }) => {
                 },
               },
             ],
+            must_not: [
+              {
+                term: {
+                  'blocked.BOOL': true,
+                },
+              },
+              {
+                term: {
+                  'automaticBlocked.BOOL': true,
+                },
+              },
+            ],
           },
         },
         size: 10000,
