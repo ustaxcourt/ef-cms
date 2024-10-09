@@ -81,28 +81,44 @@ export const assignSessionsToWeeks = ({
       );
     });
 
+    let washingtonDc = 'Washington, District of Columbia';
+    const washingtonDcNorth = 'Washington, District of Columbia (North)'; // specials only
+    const washingtonDcSouth = 'Washington, District of Columbia (South)'; // open for any type
+
     const specialSessionsForWeekByLocation = specialSessionsForWeek.reduce(
       (acc, session) => {
-        if (!acc[session.trialLocation!]) {
-          acc[session.trialLocation!] = [];
+        if (session.trialLocation === washingtonDc) {
+          // assign special to special-only slot (north)
+          // if north is occupied, assign to south
+          if (!acc[washingtonDcNorth]) {
+            acc[washingtonDcNorth] = session;
+          } else if (!acc[washingtonDcSouth]) {
+            acc[washingtonDcSouth] = session;
+          } else {
+            throw new Error(
+              'There must only be no more than two special trial sessions per week in Washington, DC.',
+            );
+          }
+
+          return acc;
         }
-        acc[session.trialLocation!].push(session);
+
+        if (!acc[session.trialLocation!]) {
+          acc[session.trialLocation!] = session;
+        } else {
+          throw new Error(
+            'There must only be one special trial session per location per week.',
+          );
+        }
+
         return acc;
       },
       {},
     );
 
     for (const location in specialSessionsForWeekByLocation) {
-      if (specialSessionsForWeekByLocation[location].length > 1) {
-        throw new Error(
-          'There must only be one special trial session per location per week.',
-        );
-      }
-    }
-
-    specialSessionsForWeek.forEach(session => {
       addScheduledTrialSession({
-        city: session.trialLocation!,
+        city: location,
         scheduledTrialSessionsByCity,
         sessionCountPerCity,
         sessionCountPerWeek,
@@ -110,7 +126,7 @@ export const assignSessionsToWeeks = ({
         sessionType: SESSION_TYPES.special,
         weekOfString,
       });
-    });
+    }
 
     // TODO 10275: test this (and be sure it works)
     const sortedProspectiveSessionsByCity = Object.keys(
@@ -127,6 +143,12 @@ export const assignSessionsToWeeks = ({
         return aNotVisited === bNotVisited ? 0 : aNotVisited ? -1 : 1;
       })
       .reduce((obj, key) => {
+        if (key === washingtonDc) {
+          obj[washingtonDcSouth] = {
+            ...prospectiveSessionsByCity[key],
+            city: washingtonDcSouth,
+          };
+        }
         obj[key] = prospectiveSessionsByCity[key];
         return obj;
       }, {});
