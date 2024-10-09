@@ -51,6 +51,12 @@ const SMALL_CASE_MAX_QUANTITY = 125;
 const HYBRID_CASE_MINIMUM_QUANTITY = 50;
 const HYBRID_CASE_MAX_QUANTITY = 100;
 
+export const WASHINGTON_DC_STRING = 'Washington, District of Columbia';
+export const WASHINGTON_DC_NORTH_STRING =
+  'Washington, District of Columbia (North)'; // specials only
+export const WASHINGTON_DC_SOUTH_STRING =
+  'Washington, District of Columbia (South)'; // all session types
+
 // NOTE: will front-load term with trial sessions, and prioritize Regular > Small > Hybrid
 
 export type TrialSessionReadyForCalendaring = TrialSession & { weekOf: string };
