@@ -17,6 +17,7 @@ import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
   SUGGESTED_TRIAL_SESSION_MESSAGES,
+  TRIAL_CITY_STRINGS,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
@@ -49,6 +50,12 @@ const SMALL_CASE_MAX_QUANTITY = 125;
 // Maximum of 100 cases per hybrid session.
 const HYBRID_CASE_MINIMUM_QUANTITY = 50;
 const HYBRID_CASE_MAX_QUANTITY = 100;
+
+export const WASHINGTON_DC_STRING = 'Washington, District of Columbia';
+export const WASHINGTON_DC_NORTH_STRING =
+  'Washington (North), District of Columbia'; // specials only
+export const WASHINGTON_DC_SOUTH_STRING =
+  'Washington (South), District of Columbia'; // all session types
 
 // NOTE: will front-load term with trial sessions, and prioritize Regular > Small > Hybrid
 
@@ -91,7 +98,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   console.time('10275: Get ready for trial cases time');
   const cases = await applicationContext
     .getPersistenceGateway()
-    .getReadyForTrialCases({ applicationContext });
+    .getSuggestedCalendarCases({ applicationContext });
 
   console.timeEnd('10275: Get ready for trial cases time');
 
@@ -147,27 +154,50 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   });
 
   console.time('10275: assignSessionsToWeeks time');
-  const { scheduledTrialSessions, sessionCountPerWeek } = assignSessionsToWeeks(
-    {
+  const { scheduledTrialSessionsByCity, sessionCountPerWeek } =
+    assignSessionsToWeeks({
       calendaringConfig,
       prospectiveSessionsByCity,
       specialSessions,
       weeksToLoop,
-    },
-  );
+    });
   console.timeEnd('10275: assignSessionsToWeeks time');
 
-  if (scheduledTrialSessions.length < 1) {
+  if (Object.keys(scheduledTrialSessionsByCity).length < 1) {
     return {
       bufferArray: undefined,
       message: SUGGESTED_TRIAL_SESSION_MESSAGES.invalid,
     };
   }
 
+  TRIAL_CITY_STRINGS.forEach(cityStringKey => {
+    if (cityStringKey === WASHINGTON_DC_STRING) {
+      scheduledTrialSessionsByCity[WASHINGTON_DC_NORTH_STRING] =
+        scheduledTrialSessionsByCity[WASHINGTON_DC_NORTH_STRING] || [];
+      scheduledTrialSessionsByCity[WASHINGTON_DC_SOUTH_STRING] =
+        scheduledTrialSessionsByCity[WASHINGTON_DC_SOUTH_STRING] || [];
+    } else {
+      if (!Object.keys(scheduledTrialSessionsByCity).includes(cityStringKey)) {
+        scheduledTrialSessionsByCity[cityStringKey] = [];
+      }
+    }
+  });
+
+  const sortedScheduledTrialSessionsByCity = Object.keys(
+    scheduledTrialSessionsByCity,
+  )
+    .sort((a, b) => {
+      return a.localeCompare(b);
+    })
+    .reduce((obj, key) => {
+      obj[key] = scheduledTrialSessionsByCity[key];
+      return obj;
+    }, {});
+
   console.time('10275: writeTrialSessionDataToExcel');
   const bufferArray = await writeTrialSessionDataToExcel({
-    scheduledTrialSessions,
     sessionCountPerWeek,
+    sortedScheduledTrialSessionsByCity,
     weeks: weeksToLoop,
   });
   console.timeEnd('10275: writeTrialSessionDataToExcel');

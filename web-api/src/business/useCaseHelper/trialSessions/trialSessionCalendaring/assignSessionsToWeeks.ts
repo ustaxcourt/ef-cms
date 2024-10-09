@@ -11,6 +11,11 @@ import {
   SESSION_TYPES,
   TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
+import {
+  WASHINGTON_DC_NORTH_STRING,
+  WASHINGTON_DC_SOUTH_STRING,
+  WASHINGTON_DC_STRING,
+} from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
 
 export type ScheduledTrialSession = {
   city: string;
@@ -30,7 +35,7 @@ export const assignSessionsToWeeks = ({
   calendaringConfig: CalendaringConfig;
 }): {
   sessionCountPerWeek: Record<string, number>;
-  scheduledTrialSessions: ScheduledTrialSession[];
+  scheduledTrialSessionsByCity: Record<string, ScheduledTrialSession[]>;
 } => {
   const sessionCountPerWeek: Record<string, number> = {}; // weekOf -> session count
   const sessionCountPerCity: Record<string, number> = {}; // trialLocation -> session count
@@ -39,7 +44,8 @@ export const assignSessionsToWeeks = ({
   // -- Max 1 per location per week.
   // -- Max x per week across all locations
 
-  const scheduledTrialSessions: ScheduledTrialSession[] = [];
+  const scheduledTrialSessionsByCity: Record<string, ScheduledTrialSession[]> =
+    {};
 
   // check special sessions
   const specialSessionsByLocation = specialSessions.reduce((acc, session) => {
@@ -61,6 +67,35 @@ export const assignSessionsToWeeks = ({
     }
   }
 
+  // TODO 10275: test this (and be sure it works)
+  const sortedProspectiveSessionsByCity = Object.keys(prospectiveSessionsByCity)
+    .sort((a, b) => {
+      const aNotVisited =
+        prospectiveSessionsByCity[a][0]?.cityWasNotVisitedInLastTwoTerms ||
+        false;
+      const bNotVisited =
+        prospectiveSessionsByCity[b][0]?.cityWasNotVisitedInLastTwoTerms ||
+        false;
+
+      return aNotVisited === bNotVisited ? 0 : aNotVisited ? -1 : 1;
+    })
+    .reduce((obj, key) => {
+      if (key === WASHINGTON_DC_STRING) {
+        obj[WASHINGTON_DC_SOUTH_STRING] = [];
+
+        for (const prospectiveSession of prospectiveSessionsByCity[key]) {
+          obj[WASHINGTON_DC_SOUTH_STRING].push({
+            ...prospectiveSession,
+            city: WASHINGTON_DC_SOUTH_STRING,
+          });
+        }
+
+        return obj;
+      }
+      obj[key] = prospectiveSessionsByCity[key];
+      return obj;
+    }, {});
+
   for (const currentWeek of weeksToLoop) {
     const weekOfString = currentWeek;
 
@@ -81,53 +116,46 @@ export const assignSessionsToWeeks = ({
 
     const specialSessionsForWeekByLocation = specialSessionsForWeek.reduce(
       (acc, session) => {
-        if (!acc[session.trialLocation!]) {
-          acc[session.trialLocation!] = [];
+        if (session.trialLocation === WASHINGTON_DC_STRING) {
+          // assign special to special-only slot (north)
+          // if north is occupied, assign to south
+          if (!acc[WASHINGTON_DC_NORTH_STRING]) {
+            acc[WASHINGTON_DC_NORTH_STRING] = session;
+          } else if (!acc[WASHINGTON_DC_SOUTH_STRING]) {
+            acc[WASHINGTON_DC_SOUTH_STRING] = session;
+          } else {
+            throw new Error(
+              'There must only be no more than two special trial sessions per week in Washington, DC.',
+            );
+          }
+
+          return acc;
         }
-        acc[session.trialLocation!].push(session);
+
+        if (!acc[session.trialLocation!]) {
+          acc[session.trialLocation!] = session;
+        } else {
+          throw new Error(
+            'There must only be one special trial session per location per week.',
+          );
+        }
+
         return acc;
       },
       {},
     );
 
     for (const location in specialSessionsForWeekByLocation) {
-      if (specialSessionsForWeekByLocation[location].length > 1) {
-        throw new Error(
-          'There must only be one special trial session per location per week.',
-        );
-      }
-    }
-
-    specialSessionsForWeek.forEach(session => {
       addScheduledTrialSession({
-        city: session.trialLocation!,
-        scheduledTrialSessions,
+        city: location,
+        scheduledTrialSessionsByCity,
         sessionCountPerCity,
         sessionCountPerWeek,
         sessionScheduledPerCityPerWeek,
         sessionType: SESSION_TYPES.special,
         weekOfString,
       });
-    });
-
-    // TODO 10275: test this (and be sure it works)
-    const sortedProspectiveSessionsByCity = Object.keys(
-      prospectiveSessionsByCity,
-    )
-      .sort((a, b) => {
-        const aNotVisited =
-          prospectiveSessionsByCity[a][0]?.cityWasNotVisitedInLastTwoTerms ||
-          false;
-        const bNotVisited =
-          prospectiveSessionsByCity[b][0]?.cityWasNotVisitedInLastTwoTerms ||
-          false;
-
-        return aNotVisited === bNotVisited ? 0 : aNotVisited ? -1 : 1;
-      })
-      .reduce((obj, key) => {
-        obj[key] = prospectiveSessionsByCity[key];
-        return obj;
-      }, {});
+    }
 
     for (const city in sortedProspectiveSessionsByCity) {
       // This is a redundant check, as we expect the length of the array to have
@@ -138,7 +166,7 @@ export const assignSessionsToWeeks = ({
 
       // Check if we're already at the max for this location
 
-      // Just use the first session!
+      // Just use the first session!?
       for (const prospectiveSession of sortedProspectiveSessionsByCity[city]) {
         if (
           sessionScheduledPerCityPerWeek[weekOfString].has(
@@ -152,7 +180,7 @@ export const assignSessionsToWeeks = ({
 
         addScheduledTrialSession({
           ...prospectiveSession,
-          scheduledTrialSessions,
+          scheduledTrialSessionsByCity,
           sessionCountPerCity,
           sessionCountPerWeek,
           sessionScheduledPerCityPerWeek,
@@ -161,6 +189,7 @@ export const assignSessionsToWeeks = ({
 
         const index =
           sortedProspectiveSessionsByCity[city].indexOf(prospectiveSession);
+
         if (index !== -1) {
           sortedProspectiveSessionsByCity[city].splice(index, 1);
         }
@@ -168,12 +197,15 @@ export const assignSessionsToWeeks = ({
     }
   }
 
-  return { scheduledTrialSessions, sessionCountPerWeek };
+  return {
+    scheduledTrialSessionsByCity,
+    sessionCountPerWeek,
+  };
 };
 
 function addScheduledTrialSession({
   city,
-  scheduledTrialSessions,
+  scheduledTrialSessionsByCity,
   sessionCountPerCity,
   sessionCountPerWeek,
   sessionScheduledPerCityPerWeek,
@@ -181,7 +213,7 @@ function addScheduledTrialSession({
   weekOfString,
 }: {
   city: string;
-  scheduledTrialSessions: ScheduledTrialSession[];
+  scheduledTrialSessionsByCity: Record<string, ScheduledTrialSession[]>;
   sessionCountPerCity: Record<string, number>;
   sessionCountPerWeek: Record<string, number>;
   sessionScheduledPerCityPerWeek: Record<string, Set<string>>;
@@ -189,11 +221,15 @@ function addScheduledTrialSession({
   weekOfString: string;
 }) {
   if (!sessionCountPerCity[city]) sessionCountPerCity[city] = 0;
-  scheduledTrialSessions.push({
+  if (!scheduledTrialSessionsByCity[city])
+    scheduledTrialSessionsByCity[city] = [];
+
+  scheduledTrialSessionsByCity[city].push({
     city,
     sessionType,
     weekOf: weekOfString,
   });
+
   sessionCountPerWeek[weekOfString]++;
   sessionCountPerCity[city]++;
   sessionScheduledPerCityPerWeek[weekOfString].add(city); // Mark this city as scheduled for the current week
