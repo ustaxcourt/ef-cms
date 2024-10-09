@@ -398,9 +398,6 @@ describe('assignSessionsToWeeks', () => {
         weeksToLoop: mockWeeksToLoop,
       });
 
-    console.log('scheduledTrialSessionsByCity', scheduledTrialSessionsByCity);
-    console.log('sessionCountPerWeek', sessionCountPerWeek);
-
     expect(
       scheduledTrialSessionsByCity[WASHINGTON_DC_SOUTH_STRING].length,
     ).toEqual(1);
@@ -455,5 +452,33 @@ describe('assignSessionsToWeeks', () => {
 
     expect(sessionCountPerWeek[WEEK_ONE]).toEqual(1);
     expect(sessionCountPerWeek[WEEK_TWO]).toEqual(1);
+  });
+
+  it('should return an object with keys for each of TRIAL_CITY_STRINGS, with two Washington locations', () => {
+    const expectedKeys: string[] = [];
+    TRIAL_CITY_STRINGS.forEach(cityString => {
+      if (cityString === WASHINGTON_DC_STRING) {
+        expectedKeys.push(WASHINGTON_DC_NORTH_STRING);
+        expectedKeys.push(WASHINGTON_DC_SOUTH_STRING);
+      } else {
+        expectedKeys.push(cityString);
+      }
+    });
+
+    const { scheduledTrialSessionsByCity, sessionCountPerWeek } =
+      assignSessionsToWeeks({
+        calendaringConfig: defaultMockCalendaringConfig,
+        prospectiveSessionsByCity: {},
+        specialSessions: [],
+        weeksToLoop: mockWeeksToLoop,
+      });
+
+    expectedKeys.forEach(expectedKey => {
+      expect(Object.keys(scheduledTrialSessionsByCity)).toContain(expectedKey);
+    });
+
+    Object.values(sessionCountPerWeek).forEach(countForWeek => {
+      expect(countForWeek).toEqual(0);
+    });
   });
 });

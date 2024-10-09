@@ -3,7 +3,10 @@ import {
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
 import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
-import { ScheduledTrialSession } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
+import {
+  SessionCountByWeek,
+  TrialSessionsByCity,
+} from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import ExcelJS from 'exceljs';
 
 export const writeTrialSessionDataToExcel = async ({
@@ -11,9 +14,9 @@ export const writeTrialSessionDataToExcel = async ({
   sortedScheduledTrialSessionsByCity,
   weeks,
 }: {
-  sortedScheduledTrialSessionsByCity: Record<string, ScheduledTrialSession[]>;
+  sortedScheduledTrialSessionsByCity: TrialSessionsByCity;
   weeks: string[];
-  sessionCountPerWeek: Record<string, number>;
+  sessionCountPerWeek: SessionCountByWeek;
 }) => {
   const workbook = new ExcelJS.Workbook();
   const worksheetOptions = { properties: { outlineLevelCol: 2 } };

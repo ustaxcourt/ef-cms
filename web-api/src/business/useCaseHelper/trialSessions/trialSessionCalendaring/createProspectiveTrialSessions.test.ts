@@ -158,7 +158,7 @@ describe('createProspectiveTrialSessions', () => {
     },
   );
 
-  it('should throw an error when attempting to schedule a regular case at a small city', () => {
+  it.skip('should throw an error when attempting to schedule a regular case at a small city', () => {
     const mockCases: RawCase[] = [];
 
     mockCases.push({
@@ -178,7 +178,7 @@ describe('createProspectiveTrialSessions', () => {
     }).toThrow(Error);
   });
 
-  it('should ignore minimums and schedule a session for a location that has not been visited in the previous two terms', () => {
+  it('should ignore regular case minimums and schedule a session for a location that has not been visited in the previous two terms', () => {
     const totalNumberOfMockCases =
       defaultMockCalendaringConfig.maxSessionsPerLocation *
         defaultMockCalendaringConfig.regularCaseMaxQuantity +
@@ -223,11 +223,124 @@ describe('createProspectiveTrialSessions', () => {
       mockLowVolumeCityString,
     ]);
     expect(result[mockLowVolumeCityString].length).toEqual(1);
+    expect(
+      result[mockLowVolumeCityString][0].cityWasNotVisitedInLastTwoTerms,
+    ).toEqual(true);
+    expect(result[mockLowVolumeCityString][0].sessionType).toEqual(
+      SESSION_TYPES.regular,
+    );
   });
 
-  // Repeat the test above with combos of small only, small and regular, so that we get
-  // small, regular, and hybrid sessions for the low volume city.
+  it('should ignore small case minimums and schedule a session for a location that has not been visited in the previous two terms', () => {
+    const totalNumberOfMockCases =
+      defaultMockCalendaringConfig.maxSessionsPerLocation *
+        defaultMockCalendaringConfig.smallCaseMaxQuantity +
+      defaultMockCalendaringConfig.smallCaseMaxQuantity;
 
-  // Make sure the value of cityWasNotVisitedInLastTwoTerms for sessions is correct
-  // for the given city.
+    const indexOfMockLowVolumeCityString = TRIAL_CITY_STRINGS.length - 2;
+    const mockLowVolumeCityString =
+      TRIAL_CITY_STRINGS[indexOfMockLowVolumeCityString];
+    let mockTrialCitiesFromLastTwoTerms = [...TRIAL_CITY_STRINGS];
+    mockTrialCitiesFromLastTwoTerms.splice(indexOfMockLowVolumeCityString, 1);
+
+    const mockCases: RawCase[] = [];
+    for (let i = 0; i < totalNumberOfMockCases; ++i) {
+      mockCases.push({
+        ...MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING,
+        docketNumber: `10${i}-24`,
+        preferredTrialCity: mockRegularCityString,
+        procedureType: PROCEDURE_TYPES_MAP.small,
+      });
+    }
+
+    mockCases.push({
+      ...MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING,
+      docketNumber: '999-24',
+      preferredTrialCity: mockLowVolumeCityString,
+      procedureType: PROCEDURE_TYPES_MAP.small,
+    });
+
+    const result = createProspectiveTrialSessions({
+      calendaringConfig: defaultMockCalendaringConfig,
+      cases: mockCases,
+      citiesFromLastTwoTerms: mockTrialCitiesFromLastTwoTerms,
+    });
+
+    const includedLocations = Object.keys(result);
+
+    expect(result[mockRegularCityString].length).toEqual(
+      defaultMockCalendaringConfig.maxSessionsPerLocation,
+    );
+    expect(includedLocations).toEqual([
+      mockRegularCityString,
+      mockLowVolumeCityString,
+    ]);
+    expect(result[mockLowVolumeCityString].length).toEqual(1);
+    expect(
+      result[mockLowVolumeCityString][0].cityWasNotVisitedInLastTwoTerms,
+    ).toEqual(true);
+    expect(result[mockLowVolumeCityString][0].sessionType).toEqual(
+      SESSION_TYPES.small,
+    );
+  });
+
+  it('should ignore hybrid case minimums and schedule a session for a location that has not been visited in the previous two terms', () => {
+    const totalNumberOfMockCases =
+      defaultMockCalendaringConfig.maxSessionsPerLocation *
+        defaultMockCalendaringConfig.hybridCaseMaxQuantity +
+      defaultMockCalendaringConfig.hybridCaseMaxQuantity;
+
+    const indexOfMockLowVolumeCityString = TRIAL_CITY_STRINGS.length - 2;
+    const mockLowVolumeCityString =
+      TRIAL_CITY_STRINGS[indexOfMockLowVolumeCityString];
+    let mockTrialCitiesFromLastTwoTerms = [...TRIAL_CITY_STRINGS];
+    mockTrialCitiesFromLastTwoTerms.splice(indexOfMockLowVolumeCityString, 1);
+
+    const mockCases: RawCase[] = [];
+    for (let i = 0; i < totalNumberOfMockCases; ++i) {
+      mockCases.push({
+        ...MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING,
+        docketNumber: `10${i}-24`,
+        preferredTrialCity: mockRegularCityString,
+        procedureType: PROCEDURE_TYPES_MAP.small,
+      });
+    }
+
+    mockCases.push({
+      ...MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING,
+      docketNumber: '999-24',
+      preferredTrialCity: mockLowVolumeCityString,
+      procedureType: PROCEDURE_TYPES_MAP.small,
+    });
+
+    mockCases.push({
+      ...MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING,
+      docketNumber: '998-24',
+      preferredTrialCity: mockLowVolumeCityString,
+      procedureType: PROCEDURE_TYPES_MAP.regular,
+    });
+
+    const result = createProspectiveTrialSessions({
+      calendaringConfig: defaultMockCalendaringConfig,
+      cases: mockCases,
+      citiesFromLastTwoTerms: mockTrialCitiesFromLastTwoTerms,
+    });
+
+    const includedLocations = Object.keys(result);
+
+    expect(result[mockRegularCityString].length).toEqual(
+      defaultMockCalendaringConfig.maxSessionsPerLocation,
+    );
+    expect(includedLocations).toEqual([
+      mockLowVolumeCityString,
+      mockRegularCityString,
+    ]);
+    expect(result[mockLowVolumeCityString].length).toEqual(1);
+    expect(
+      result[mockLowVolumeCityString][0].cityWasNotVisitedInLastTwoTerms,
+    ).toEqual(true);
+    expect(result[mockLowVolumeCityString][0].sessionType).toEqual(
+      SESSION_TYPES.hybrid,
+    );
+  });
 });

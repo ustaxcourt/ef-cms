@@ -17,7 +17,6 @@ import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
   SUGGESTED_TRIAL_SESSION_MESSAGES,
-  TRIAL_CITY_STRINGS,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
@@ -154,6 +153,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   });
 
   console.time('10275: assignSessionsToWeeks time');
+
   const { scheduledTrialSessionsByCity, sessionCountPerWeek } =
     assignSessionsToWeeks({
       calendaringConfig,
@@ -169,19 +169,6 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
       message: SUGGESTED_TRIAL_SESSION_MESSAGES.invalid,
     };
   }
-
-  TRIAL_CITY_STRINGS.forEach(cityStringKey => {
-    if (cityStringKey === WASHINGTON_DC_STRING) {
-      scheduledTrialSessionsByCity[WASHINGTON_DC_NORTH_STRING] =
-        scheduledTrialSessionsByCity[WASHINGTON_DC_NORTH_STRING] || [];
-      scheduledTrialSessionsByCity[WASHINGTON_DC_SOUTH_STRING] =
-        scheduledTrialSessionsByCity[WASHINGTON_DC_SOUTH_STRING] || [];
-    } else {
-      if (!Object.keys(scheduledTrialSessionsByCity).includes(cityStringKey)) {
-        scheduledTrialSessionsByCity[cityStringKey] = [];
-      }
-    }
-  });
 
   const sortedScheduledTrialSessionsByCity = Object.keys(
     scheduledTrialSessionsByCity,
