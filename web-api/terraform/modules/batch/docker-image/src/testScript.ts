@@ -4,7 +4,12 @@ import {
   ApiGatewayManagementApiClient,
   PostToConnectionCommand,
 } from '@aws-sdk/client-apigatewaymanagementapi';
-import { GetObjectCommand, PutObjectCommand, S3 } from '@aws-sdk/client-s3';
+import {
+  GetObjectCommand,
+  HeadObjectCommand,
+  PutObjectCommand,
+  S3,
+} from '@aws-sdk/client-s3';
 import { NodeHttpHandler } from '@smithy/node-http-handler';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { writeFile } from 'fs/promises';
@@ -21,6 +26,7 @@ type DocketEntryDownloadInfo = {
 };
 
 type DocketEntriesZipperParameter = {
+  oppositeS3Client: S3;
   s3Client: S3;
   docketEntries: DocketEntryDownloadInfo[];
   zipName: string;
@@ -39,15 +45,21 @@ const {
   ZIP_FILE_NAME,
 } = process.env;
 
+const SELECTED_REGION = AWS_REGION! as 'us-east-1' | 'us-west-1';
+const OPPOSITE_REGION_DICT = {
+  'us-east-1': 'us-west-1',
+  'us-west-1': 'us-east-1',
+};
+
 const DOCKET_ENTRIES: DocketEntryDownloadInfo[] = JSON.parse(
   DOCKET_ENTRY_FILES!,
 );
 
 const storageClient = new S3({
-  endpoint: `https://s3.${AWS_REGION}.amazonaws.com`,
+  endpoint: `https://s3.${SELECTED_REGION}.amazonaws.com`,
   forcePathStyle: true,
   maxAttempts: 3,
-  region: AWS_REGION,
+  region: SELECTED_REGION,
   requestHandler: new NodeHttpHandler({
     connectionTimeout: 3000,
     httpsAgent: new Agent({ keepAlive: true, maxSockets: 75 }),
@@ -55,8 +67,20 @@ const storageClient = new S3({
   }),
 });
 
-const TEMP_S3_BUCKET = `${EFCMS_DOMAIN}-temp-documents-${STAGE}-${AWS_REGION}`;
-const S3_BUCKET = `${EFCMS_DOMAIN}-documents-${STAGE}-${AWS_REGION}`;
+const oppositeRegionStorageClient = new S3({
+  endpoint: `https://s3.${OPPOSITE_REGION_DICT[SELECTED_REGION]}.amazonaws.com`,
+  forcePathStyle: true,
+  maxAttempts: 3,
+  region: OPPOSITE_REGION_DICT[SELECTED_REGION],
+  requestHandler: new NodeHttpHandler({
+    connectionTimeout: 3000,
+    httpsAgent: new Agent({ keepAlive: true, maxSockets: 75 }),
+    requestTimeout: 30000,
+  }),
+});
+
+const TEMP_S3_BUCKET = `${EFCMS_DOMAIN}-temp-documents-${STAGE}-${SELECTED_REGION}`;
+const S3_BUCKET = `${EFCMS_DOMAIN}-documents-${STAGE}-${SELECTED_REGION}`;
 
 const WEBSOCKET_ENPOINT = `https://${WEBSOCKET_API_GATEWAY_ID}.execute-api.${WEBSOCKET_REGION}.amazonaws.com/${STAGE}`;
 const notificationClient = new ApiGatewayManagementApiClient({
@@ -76,19 +100,43 @@ function streamToBuffer(stream: any) {
   });
 }
 
-async function downloadFile(
-  docketEntry: DocketEntryDownloadInfo,
-  s3Client: S3,
-  DIRECTORY: string,
-) {
-  const { filePathInZip, key, useTempBucket } = docketEntry;
-  const command = new GetObjectCommand({
-    Bucket: useTempBucket ? TEMP_S3_BUCKET : S3_BUCKET,
+async function getS3ClientBasedOnObjectExistence(
+  key: string,
+  bucketName: string,
+  client1: S3,
+  client2: S3,
+): Promise<S3> {
+  const command = new HeadObjectCommand({
+    Bucket: bucketName,
     Key: key,
   });
 
-  const data = await s3Client.send(command);
+  return await client1
+    .send(command)
+    .then(() => client1)
+    .catch(() => client2);
+}
 
+async function downloadFile(
+  docketEntry: DocketEntryDownloadInfo,
+  s3Client: S3,
+  oppositeS3Client: S3,
+  DIRECTORY: string,
+) {
+  const { filePathInZip, key, useTempBucket } = docketEntry;
+  const BUCKET_NAME = useTempBucket ? TEMP_S3_BUCKET : S3_BUCKET;
+  const client = await getS3ClientBasedOnObjectExistence(
+    key,
+    BUCKET_NAME,
+    s3Client,
+    oppositeS3Client,
+  );
+  const command = new GetObjectCommand({
+    Bucket: BUCKET_NAME,
+    Key: key,
+  });
+
+  const data = await client.send(command);
   if (!data.Body) throw new Error(`Unable to get document (${key})`);
 
   const bodyContents: any = await streamToBuffer(data.Body);
@@ -130,6 +178,7 @@ async function uploadZipFile(s3Client: S3, filePath: string) {
 export async function app({
   connectionId,
   docketEntries,
+  oppositeS3Client,
   s3Client,
   wsClient,
   zipName,
@@ -144,7 +193,7 @@ export async function app({
     const batch = docketEntries.slice(i, i + BATCH_SIZE);
     await Promise.all(
       batch.map(async docketEntry => {
-        await downloadFile(docketEntry, s3Client, DIRECTORY);
+        await downloadFile(docketEntry, s3Client, oppositeS3Client, DIRECTORY);
         counter += 1;
         const WS_MESSAGE = new PostToConnectionCommand({
           ConnectionId: connectionId,
@@ -190,6 +239,7 @@ export async function app({
 app({
   connectionId: WEBSOCKET_CONNECTION_ID!,
   docketEntries: DOCKET_ENTRIES,
+  oppositeS3Client: oppositeRegionStorageClient,
   s3Client: storageClient,
   wsClient: notificationClient,
   zipName: ZIP_FILE_NAME!,
