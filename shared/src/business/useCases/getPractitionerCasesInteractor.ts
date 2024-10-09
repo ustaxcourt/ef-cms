@@ -33,16 +33,28 @@ export const getPractitionerCasesInteractor = async (
     .getCasesByDocketNumbers({ applicationContext, docketNumbers });
 
   const caseDetails: PractitionerCaseDetail[] = cases.map(c => {
-    c = formatCase(applicationContext, c, authorizedUser);
+    const formattedCase = formatCase(applicationContext, c, authorizedUser);
+
+    const {
+      caseTitle,
+      consolidatedIconTooltipText,
+      docketNumber,
+      docketNumberWithSuffix,
+      inConsolidatedGroup,
+      isLeadCase,
+      isSealed,
+      status,
+    } = formattedCase;
+
     return {
-      caseTitle: c.caseTitle,
-      consolidatedIconTooltipText: c.consolidatedIconTooltipText,
-      docketNumber: c.docketNumber,
-      docketNumberWithSuffix: c.docketNumberWithSuffix,
-      inConsolidatedGroup: c.inConsolidatedGroup,
-      isLeadCase: c.isLeadCase,
-      isSealed: c.isSealed,
-      status: c.status,
+      caseTitle,
+      consolidatedIconTooltipText,
+      docketNumber,
+      docketNumberWithSuffix,
+      inConsolidatedGroup,
+      isLeadCase,
+      isSealed,
+      status,
     };
   });
 
