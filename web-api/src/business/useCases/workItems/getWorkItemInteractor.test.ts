@@ -1,5 +1,8 @@
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { DOCKET_SECTION } from '../../../../../shared/src/business/entities/EntityConstants';
+import { WorkItem } from '@shared/business/entities/WorkItem';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { getWorkItemById as getWorkItemByIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import { getWorkItemInteractor } from './getWorkItemInteractor';
 import {
   mockDocketClerkUser,
@@ -7,6 +10,7 @@ import {
 } from '@shared/test/mockAuthUsers';
 
 describe('getWorkItemInteractor', () => {
+  const getWorkItemById = getWorkItemByIdMock as jest.Mock;
   let mockWorkItem = {
     createdAt: '',
     docketEntry: {
@@ -23,6 +27,7 @@ describe('getWorkItemInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
     },
     docketNumber: '101-18',
+    docketNumberSuffix: 'S',
     docketNumberWithSuffix: '101-18S',
     section: DOCKET_SECTION,
     sentBy: 'docketclerk',
@@ -30,9 +35,7 @@ describe('getWorkItemInteractor', () => {
   };
 
   it('throws an error if the work item was not found', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getWorkItemById.mockResolvedValue(null);
+    getWorkItemById.mockResolvedValue(null);
     let error;
     try {
       await getWorkItemInteractor(
@@ -49,9 +52,7 @@ describe('getWorkItemInteractor', () => {
   });
 
   it('throws an error if the user does not have access to the work item', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getWorkItemById.mockResolvedValue(mockWorkItem);
+    getWorkItemById.mockResolvedValue(new WorkItem(mockWorkItem));
 
     let error;
     try {
@@ -69,9 +70,7 @@ describe('getWorkItemInteractor', () => {
   });
 
   it('successfully returns the work item for a docketclerk', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getWorkItemById.mockResolvedValue(mockWorkItem);
+    getWorkItemById.mockResolvedValue(new WorkItem(mockWorkItem));
 
     const result = await getWorkItemInteractor(
       applicationContext,
@@ -83,7 +82,6 @@ describe('getWorkItemInteractor', () => {
     expect(result).toMatchObject({
       docketEntry: { sentBy: 'petitioner' },
       docketNumber: '101-18',
-      docketNumberWithSuffix: '101-18S',
       section: DOCKET_SECTION,
       sentBy: 'docketclerk',
       workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
