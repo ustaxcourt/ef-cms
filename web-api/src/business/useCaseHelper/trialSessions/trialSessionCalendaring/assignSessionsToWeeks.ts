@@ -9,6 +9,7 @@ import {
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
   SESSION_TYPES,
+  TRIAL_CITY_STRINGS,
   TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
 import {
@@ -23,6 +24,10 @@ export type ScheduledTrialSession = {
   weekOf: string;
 };
 
+export type SessionCountByWeek = Record<string, number>;
+
+export type TrialSessionsByCity = Record<string, ScheduledTrialSession[]>;
+
 export const assignSessionsToWeeks = ({
   calendaringConfig,
   prospectiveSessionsByCity,
@@ -34,8 +39,8 @@ export const assignSessionsToWeeks = ({
   weeksToLoop: string[];
   calendaringConfig: CalendaringConfig;
 }): {
-  sessionCountPerWeek: Record<string, number>;
-  scheduledTrialSessionsByCity: Record<string, ScheduledTrialSession[]>;
+  sessionCountPerWeek: SessionCountByWeek;
+  scheduledTrialSessionsByCity: TrialSessionsByCity;
 } => {
   const sessionCountPerWeek: Record<string, number> = {}; // weekOf -> session count
   const sessionCountPerCity: Record<string, number> = {}; // trialLocation -> session count
@@ -44,8 +49,15 @@ export const assignSessionsToWeeks = ({
   // -- Max 1 per location per week.
   // -- Max x per week across all locations
 
-  const scheduledTrialSessionsByCity: Record<string, ScheduledTrialSession[]> =
-    {};
+  const scheduledTrialSessionsByCity: TrialSessionsByCity = {};
+  TRIAL_CITY_STRINGS.forEach(cityStringKey => {
+    if (cityStringKey === WASHINGTON_DC_STRING) {
+      scheduledTrialSessionsByCity[WASHINGTON_DC_NORTH_STRING] = [];
+      scheduledTrialSessionsByCity[WASHINGTON_DC_SOUTH_STRING] = [];
+    } else {
+      scheduledTrialSessionsByCity[cityStringKey] = [];
+    }
+  });
 
   // check special sessions
   const specialSessionsByLocation = specialSessions.reduce((acc, session) => {
@@ -221,8 +233,6 @@ function addScheduledTrialSession({
   weekOfString: string;
 }) {
   if (!sessionCountPerCity[city]) sessionCountPerCity[city] = 0;
-  if (!scheduledTrialSessionsByCity[city])
-    scheduledTrialSessionsByCity[city] = [];
 
   scheduledTrialSessionsByCity[city].push({
     city,
