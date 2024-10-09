@@ -148,9 +148,7 @@ export class WorkItem extends JoiValidationEntity {
     this.completedBy = user.name;
     this.completedByUserId = user.userId;
     this.completedMessage = message;
-
-    delete this.inProgress;
-
+    this.inProgress = false;
     return this;
   }
 
