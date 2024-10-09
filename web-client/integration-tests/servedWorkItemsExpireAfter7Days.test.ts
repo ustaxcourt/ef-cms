@@ -1,3 +1,4 @@
+import { CHIEF_JUDGE } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { createApplicationContext as applicationContextFactory } from '../../web-api/src/applicationContext';
 import {
@@ -8,6 +9,7 @@ import {
   uploadPetition,
 } from './helpers';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 const {
   IRS_SYSTEM_SECTION,
@@ -19,6 +21,8 @@ const cerebralTest = setupTest();
 
 describe('verify old served work items do not show up in the outbox', () => {
   let workItem8Days;
+  let workItem7Days;
+  let workItem6Days;
   let caseDetail;
 
   let workItemId6;
@@ -60,6 +64,7 @@ describe('verify old served work items do not show up in the outbox', () => {
     workItem8Days = {
       assigneeId: mockUser.userId,
       assigneeName: 'Test petitionsclerk1',
+      associatedJudge: CHIEF_JUDGE,
       caseStatus: CASE_STATUS_TYPES.new,
       completedAt: '2019-06-26T16:31:17.643Z',
       completedByUserId: mockUser.userId,
@@ -93,6 +98,18 @@ describe('verify old served work items do not show up in the outbox', () => {
       createdAt: CREATED_6_DAYS_AGO,
       workItemId: `${workItemId6}`,
     };
+
+    await saveWorkItem({
+      workItem: workItem8Days,
+    });
+
+    await saveWorkItem({
+      workItem: workItem7Days,
+    });
+
+    await saveWorkItem({
+      workItem: workItem6Days,
+    });
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');

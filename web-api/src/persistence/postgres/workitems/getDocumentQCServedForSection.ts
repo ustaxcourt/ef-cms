@@ -4,17 +4,17 @@ import { workItemEntity } from '@web-api/persistence/postgres/workitems/mapper';
 
 export const getDocumentQCServedForSection = async ({
   afterDate,
-  section,
+  sections,
 }: {
-  section: string;
+  sections: string[];
   afterDate: Date;
 }): Promise<WorkItem[]> => {
   const workItems = await getDbReader(reader => {
     return reader
       .selectFrom('dwWorkItem as w')
       .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
-      .where('w.section', '=', section)
-      .where('w.createdAt', '>=', afterDate)
+      .where('w.section', 'in', sections)
+      .where('w.completedAt', '>=', afterDate)
       .selectAll()
       .select('w.docketNumber')
       .execute();
