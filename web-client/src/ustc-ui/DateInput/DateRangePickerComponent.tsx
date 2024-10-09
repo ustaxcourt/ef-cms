@@ -77,6 +77,16 @@ export const DateRangePickerComponent = ({
       `input[aria-describedby="${startName}-date-start-label ${startName}-date-start-hint"]`,
     ) as HTMLInputElement;
 
+    if (startInput) {
+      startInput.id = `${startName}-date-start`;
+      startInput.name = `${startName}-date-start`;
+    }
+
+    if (startHiddenInput) {
+      startHiddenInput.id = `${startName}-date-start-hidden`;
+      startHiddenInput.name = `${startName}-date-start-hidden`;
+    }
+
     if (!startValue && startInput) {
       startInput.value = '';
       startHiddenInput.value = '';
@@ -103,6 +113,17 @@ export const DateRangePickerComponent = ({
     const endHiddenInput = window.document.querySelector(
       `input[aria-describedby="${endName}-date-end-label ${endName}-date-end-hint"]`,
     ) as HTMLInputElement;
+
+    if (endInput) {
+      endInput.id = `${endName}-date-end`;
+      endInput.name = `${endName}-date-end`;
+    }
+
+    if (endHiddenInput) {
+      endHiddenInput.id = `${endName}-date-end-hidden`;
+      endHiddenInput.name = `${endName}-date-end-hidden`;
+    }
+
     if (!endValue && endInput) {
       endInput.value = '';
       endHiddenInput.value = '';

@@ -42,7 +42,7 @@ export const TrialSessions = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-          <div className="display-flex flex-justify-end flex-align-center flex-wrap gap-105">
+          <div className="display-flex flex-justify-end flex-align-center flex-wrap gap-205">
             <div>
               {trialSessionsHelper.showCreateTermButton && (
                 <Button
@@ -257,7 +257,7 @@ const TrialSessionFilters = connect(
               <SelectSearch
                 aria-labelledby="session-type-filter-label"
                 data-testid="trial-session-type-filter-search"
-                id="session-type-filter"
+                inputId="session-type-filter"
                 name="sessionType"
                 options={trialSessionsHelper.sessionTypeOptions}
                 placeholder="- Select one or more -"
@@ -308,7 +308,7 @@ const TrialSessionFilters = connect(
               <SelectSearch
                 aria-labelledby="location-filter-label"
                 data-testid="trial-session-location-filter-search"
-                id="location-filter"
+                inputId="location-filter"
                 name="location"
                 options={trialSessionsHelper.trialCitiesByState}
                 placeholder="- Select one or more -"
@@ -351,7 +351,7 @@ const TrialSessionFilters = connect(
             <div className="margin-bottom-1">
               <label
                 className="usa-label"
-                htmlFor="judge-filter"
+                htmlFor="judges-filter"
                 id="judges-filter-label"
               >
                 Judge <span className="optional-light-text">(optional)</span>
@@ -359,7 +359,7 @@ const TrialSessionFilters = connect(
               <SelectSearch
                 aria-labelledby="judges-filter-label"
                 data-testid="trial-session-judge-filter-search"
-                id="judges"
+                inputId="judges-filter"
                 name="judges"
                 options={trialSessionsHelper.trialSessionJudgeOptions}
                 placeholder="- Select one or more -"
