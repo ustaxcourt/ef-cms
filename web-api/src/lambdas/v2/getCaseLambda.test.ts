@@ -1,3 +1,5 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { MOCK_CASE_WITH_TRIAL_SESSION } from '../../../../shared/src/test/mockCase';
 import { MOCK_COMPLEX_CASE } from '../../../../shared/src/test/mockComplexCase';
 import { MOCK_PRACTITIONER } from '../../../../shared/src/test/mockUsers';
