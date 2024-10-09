@@ -36,10 +36,6 @@ export const sendZipperBatchJob = async (
           value: connectionId,
         },
         {
-          name: 'WEBSOCKET_REGION',
-          value: awsRegion,
-        },
-        {
           name: 'EFCMS_DOMAIN',
           value: efcmsDomain,
         },
