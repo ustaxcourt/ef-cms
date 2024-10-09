@@ -46,7 +46,7 @@ describe('getCasesClosedByJudgeInteractor', () => {
 
   const mockValidRequest: JudgeActivityStatisticsRequest = {
     endDate: calculatedEndDate,
-    judges: [judgeUser.name],
+    judgeIds: [judgeUser.userId],
     startDate: calculatedStartDate,
   };
 
@@ -76,7 +76,7 @@ describe('getCasesClosedByJudgeInteractor', () => {
         applicationContext,
         {
           endDate: 'baddabingbaddaboom',
-          judges: [judgeUser.name],
+          judgeIds: [judgeUser.userId],
           startDate: 'yabbadabbadoo',
         },
         mockJudgeUser,

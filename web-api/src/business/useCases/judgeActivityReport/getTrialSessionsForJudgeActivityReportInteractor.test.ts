@@ -108,13 +108,13 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
 
   const mockValidRequest: JudgeActivityStatisticsRequest = {
     endDate: '04/01/2020',
-    judges: [judgeUser.name],
+    judgeIds: [judgeUser.userId],
     startDate: '01/01/2020',
   };
 
   const mockInvalidRequest = {
     endDate: '04/01/5000',
-    judges: [judgeUser.name],
+    judgeIds: [judgeUser.userId],
     startDate: '01/01/2020',
   };
 

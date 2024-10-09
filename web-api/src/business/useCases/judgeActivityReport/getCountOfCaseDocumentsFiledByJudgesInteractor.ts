@@ -18,7 +18,7 @@ export type JudgeActivityReportFilters = {
 export type JudgeActivityStatisticsRequest = {
   endDate: string;
   startDate: string;
-  judges: string[];
+  judgeIds: string[];
 };
 
 export type GetCountOfCaseDocumentsFiledByJudgesRequest = {

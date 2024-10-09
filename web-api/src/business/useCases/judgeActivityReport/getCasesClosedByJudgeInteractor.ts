@@ -37,7 +37,7 @@ export const getCasesClosedByJudgeInteractor = async (
     .getCasesClosedCountByJudge({
       applicationContext,
       endDate: searchEntity.endDate,
-      judges: searchEntity.judgeIds,
+      judgeIds: searchEntity.judgeIds,
       startDate: searchEntity.startDate,
     });
 };

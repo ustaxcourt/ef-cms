@@ -6,23 +6,28 @@ import { search } from './searchClient';
 export const getCasesClosedCountByJudge = async ({
   applicationContext,
   endDate,
-  judges,
+  judgeIds,
   startDate,
 }: {
   applicationContext: IApplicationContext;
   endDate: string;
-  judges: string[];
+  judgeIds: string[];
   startDate: string;
 }): Promise<CasesClosedReturnType> => {
   const source = ['status'];
 
-  const shouldFilters: QueryDslQueryContainer[] = [];
+  const mustClause: QueryDslQueryContainer[] = [];
 
-  judges.forEach(judge => {
-    shouldFilters.push({
-      match_phrase: { 'associatedJudge.S': `${judge}` },
-    });
+  mustClause.push({
+    range: {
+      'closedDate.S': {
+        gte: `${startDate}||/h`,
+        lte: `${endDate}||/h`,
+      },
+    },
   });
+
+  mustClause.push({ terms: { 'associatedJudgeId.S': judgeIds } });
 
   const documentQuery = {
     body: {
@@ -36,18 +41,7 @@ export const getCasesClosedCountByJudge = async ({
       },
       query: {
         bool: {
-          filter: [
-            {
-              range: {
-                'closedDate.S': {
-                  gte: `${startDate}||/h`,
-                  lte: `${endDate}||/h`,
-                },
-              },
-            },
-          ],
-          minimum_should_match: 1,
-          should: shouldFilters,
+          must: mustClause,
         },
       },
       size: 0,
