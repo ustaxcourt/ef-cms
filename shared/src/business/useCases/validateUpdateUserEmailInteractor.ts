@@ -1,9 +1,11 @@
-import { UpdateUserEmail } from '../entities/UpdateUserEmail';
+import { EmailConfirmationForm } from '../entities/EmailConfirmationForm';
 
 export const validateUpdateUserEmailInteractor = ({
-  updateUserEmail,
+  updateUserEmailForm,
 }: {
-  updateUserEmail: { email: string; confirmEmail: string };
+  updateUserEmailForm: { email: string; confirmEmail: string };
 }) => {
-  return new UpdateUserEmail(updateUserEmail).getFormattedValidationErrors();
+  return new EmailConfirmationForm(
+    updateUserEmailForm,
+  ).getFormattedValidationErrors();
 };
