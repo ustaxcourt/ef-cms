@@ -20,6 +20,11 @@ export const getSuggestedCalendarCases = async ({ applicationContext }) => {
                   'status.S': CASE_STATUS_TYPES.generalDocketReadyForTrial,
                 },
               },
+              {
+                exists: {
+                  field: 'preferredTrialCity',
+                },
+              },
             ],
           },
         },
