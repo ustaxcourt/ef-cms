@@ -182,15 +182,17 @@ function getCasesByCity(
         type === SESSION_TYPES.regular &&
         !REGULAR_TRIAL_CITY_STRINGS.includes(currentCase.preferredTrialCity!)
       ) {
-        throw new Error(
-          `Case ${currentCase.docketNumber} cannot be scheduled in ${currentCase.preferredTrialCity} because the session type does not match the trial city`,
-        );
+        // throw new Error(
+        //   `Case ${currentCase.docketNumber} cannot be scheduled in ${currentCase.preferredTrialCity} because the session type does not match the trial city`,
+        // );
+        return acc;
+      } else {
+        if (!acc[currentCase.preferredTrialCity!]) {
+          acc[currentCase.preferredTrialCity!] = [];
+        }
+        acc[currentCase.preferredTrialCity!].push(currentCase);
+        return acc;
       }
-      if (!acc[currentCase.preferredTrialCity!]) {
-        acc[currentCase.preferredTrialCity!] = [];
-      }
-      acc[currentCase.preferredTrialCity!].push(currentCase);
-      return acc;
     }, {});
 }
 
