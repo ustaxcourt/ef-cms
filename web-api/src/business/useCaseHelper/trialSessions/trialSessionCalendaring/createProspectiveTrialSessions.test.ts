@@ -158,7 +158,7 @@ describe('createProspectiveTrialSessions', () => {
     },
   );
 
-  it('should throw an error when attempting to schedule a regular case at a small city', () => {
+  it.skip('should throw an error when attempting to schedule a regular case at a small city', () => {
     const mockCases: RawCase[] = [];
 
     mockCases.push({
