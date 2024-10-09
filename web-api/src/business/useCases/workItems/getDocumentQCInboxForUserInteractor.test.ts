@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
@@ -5,12 +6,15 @@ import {
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { getDocumentQCInboxForUserInteractor } from './getDocumentQCInboxForUserInteractor';
+import { getDocumentQCInboxForUser as getDocumentQCInboxForUserMock } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 
 describe('getDocumentQCInboxForUserInteractor', () => {
+  const getDocumentQCInboxForUser = getDocumentQCInboxForUserMock as jest.Mock;
+
   beforeEach(() => {
     const workItem = {
       assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
@@ -24,9 +28,7 @@ describe('getDocumentQCInboxForUserInteractor', () => {
       sentBy: 'bob',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getDocumentQCInboxForUser.mockReturnValue([workItem]);
+    getDocumentQCInboxForUser.mockReturnValue([workItem]);
 
     applicationContext
       .getPersistenceGateway()
@@ -69,10 +71,9 @@ describe('getDocumentQCInboxForUserInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getDocumentQCInboxForUser.mock
-        .calls[0][0].userId,
-    ).toEqual(docketClerkUser.userId);
+    expect(getDocumentQCInboxForUser.mock.calls[0][0].userId).toEqual(
+      docketClerkUser.userId,
+    );
   });
 
   it('should filter the workItems for the provided user', async () => {
