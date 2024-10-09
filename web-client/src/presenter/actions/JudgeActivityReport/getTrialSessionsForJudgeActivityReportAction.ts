@@ -11,7 +11,7 @@ export const getTrialSessionsForJudgeActivityReportAction = async ({
     .getUseCases()
     .getTrialSessionsForJudgeActivityReportInteractor(applicationContext, {
       endDate,
-      judges: getJudgesFilters(get).map(judge => judge.name),
+      judgeIds: getJudgesFilters(get).map(judge => judge.userId),
       startDate,
     });
 

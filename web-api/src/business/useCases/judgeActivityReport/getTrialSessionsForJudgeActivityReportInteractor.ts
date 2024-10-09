@@ -32,7 +32,7 @@ export type TrialSessionReturnType = {
 
 export const getTrialSessionsForJudgeActivityReportInteractor = async (
   applicationContext: ServerApplicationContext,
-  { endDate, judges, startDate }: JudgeActivityStatisticsRequest,
+  { endDate, judgeIds, startDate }: JudgeActivityStatisticsRequest,
   authorizedUser: UnknownAuthUser,
 ): Promise<TrialSessionReturnType> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
@@ -41,7 +41,7 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
 
   const searchEntity = new JudgeActivityReportSearch({
     endDate,
-    judges,
+    judgeIds,
     startDate,
   });
 

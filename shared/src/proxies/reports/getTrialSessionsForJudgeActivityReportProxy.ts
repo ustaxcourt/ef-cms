@@ -5,14 +5,10 @@ import { post } from '../requests';
 
 export const getTrialSessionsForJudgeActivityReportInteractor = (
   applicationContext: ClientApplicationContext,
-  { endDate, judges, startDate }: JudgeActivityStatisticsRequest,
+  params: JudgeActivityStatisticsRequest,
 ): Promise<TrialSessionTypes> =>
   post({
     applicationContext,
-    body: {
-      endDate,
-      judges,
-      startDate,
-    },
+    body: params,
     endpoint: '/judge-activity-report/trial-sessions',
   });
