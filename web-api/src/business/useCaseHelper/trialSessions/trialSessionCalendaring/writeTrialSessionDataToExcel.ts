@@ -53,8 +53,9 @@ export const writeTrialSessionDataToExcel = async ({
 
   worksheet.columns = columns;
 
-  for (const city in trialSessionCalendar) {
-    const values = { city, ...trialSessionCalendar[city] };
+  for (const cityStateString in trialSessionCalendar) {
+    const city = cityStateString.split(',')[0];
+    const values = { city, ...trialSessionCalendar[cityStateString] };
     worksheet.addRow(values);
   }
 

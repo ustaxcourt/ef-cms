@@ -53,9 +53,9 @@ const HYBRID_CASE_MAX_QUANTITY = 100;
 
 export const WASHINGTON_DC_STRING = 'Washington, District of Columbia';
 export const WASHINGTON_DC_NORTH_STRING =
-  'Washington, District of Columbia (North)'; // specials only
+  'Washington (North), District of Columbia'; // specials only
 export const WASHINGTON_DC_SOUTH_STRING =
-  'Washington, District of Columbia (South)'; // all session types
+  'Washington (South), District of Columbia'; // all session types
 
 // NOTE: will front-load term with trial sessions, and prioritize Regular > Small > Hybrid
 
@@ -171,8 +171,15 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   }
 
   TRIAL_CITY_STRINGS.forEach(cityStringKey => {
-    if (!Object.keys(scheduledTrialSessionsByCity).includes(cityStringKey)) {
-      scheduledTrialSessionsByCity[cityStringKey] = [];
+    if (cityStringKey === WASHINGTON_DC_STRING) {
+      scheduledTrialSessionsByCity[WASHINGTON_DC_NORTH_STRING] =
+        scheduledTrialSessionsByCity[WASHINGTON_DC_NORTH_STRING] || [];
+      scheduledTrialSessionsByCity[WASHINGTON_DC_SOUTH_STRING] =
+        scheduledTrialSessionsByCity[WASHINGTON_DC_SOUTH_STRING] || [];
+    } else {
+      if (!Object.keys(scheduledTrialSessionsByCity).includes(cityStringKey)) {
+        scheduledTrialSessionsByCity[cityStringKey] = [];
+      }
     }
   });
 
