@@ -1,5 +1,8 @@
+import {
+  IRS_SYSTEM_SECTION,
+  ROLES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { OutboxItem } from '../../../../../shared/src/business/entities/OutboxItem';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -34,7 +37,7 @@ export const getDocumentQCServedForSectionInteractor = async (
   const afterDate = await calculateAfterDate(applicationContext);
   const workItems = await getDocumentQCServedForSection({
     afterDate,
-    section,
+    sections: [section, IRS_SYSTEM_SECTION],
   });
 
   const filteredWorkItems = workItems.filter(workItem =>
