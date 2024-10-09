@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
@@ -5,7 +6,9 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
+import { WorkItem } from '@shared/business/entities/WorkItem';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { getWorkItemById as getWorkItemByIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
@@ -15,6 +18,7 @@ import { setWorkItemAsReadInteractor } from './setWorkItemAsReadInteractor';
 
 describe('setWorkItemAsReadInteractor', () => {
   const saveWorkItem = saveWorkItemMock as jest.Mock;
+  const getWorkItemById = getWorkItemByIdMock as jest.Mock;
   const mockWorkItem = {
     assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
     assigneeName: 'bob',
@@ -29,9 +33,7 @@ describe('setWorkItemAsReadInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getWorkItemById.mockResolvedValue(mockWorkItem);
+    getWorkItemById.mockReturnValue(new WorkItem(mockWorkItem));
 
     applicationContext
       .getPersistenceGateway()
@@ -56,12 +58,12 @@ describe('setWorkItemAsReadInteractor', () => {
   });
 
   it('should throw an error when the docket entry is not found on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getWorkItemById.mockResolvedValue({
+    getWorkItemById.mockReturnValue(
+      new WorkItem({
         ...mockWorkItem,
         docketEntry: { docketEntryId: 'ff54c9e8-93c5-4098-ba34-fa6edaa9da91' },
-      });
+      }),
+    );
 
     await expect(
       setWorkItemAsReadInteractor(
