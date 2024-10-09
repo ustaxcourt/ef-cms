@@ -260,7 +260,7 @@ export const AddPetitionerToCase = connect(
                 Case caption
               </label>
               <textarea
-                className="usa-textarea"
+                className="usa-textarea textarea-resize-vertical"
                 id="case-caption"
                 name="caseCaption"
                 value={form.contact.caseCaption || ''}

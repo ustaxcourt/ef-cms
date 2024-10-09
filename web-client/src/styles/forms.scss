@@ -132,7 +132,7 @@ legend {
   }
 }
 
-textarea {
+.textarea-resize-vertical {
   min-height: calc(
     1em + 24px
   ); // Don't allow resizing smaller than the line of text
@@ -738,11 +738,6 @@ label.ustc-upload {
   margin-top: 0;
   margin-bottom: 35px;
   margin-left: -1.25rem;
-}
-
-.status-report-order-form-group textarea,
-.ustc-message-modal-text-area {
-  resize: vertical;
 }
 
 .add-another-irs-notice-button,
