@@ -53,29 +53,6 @@ export const completeWorkItem = async (
     workItem: completedWorkItem,
   });
 
-  // const caseObject = await applicationContext
-  //   .getPersistenceGateway()
-  //   .getCaseByDocketNumber({
-  //     applicationContext,
-  //     docketNumber: completedWorkItem.docketNumber,
-  //   });
-
-  // const caseToUpdate = new Case(caseObject, { authorizedUser });
-
-  // const workItemEntity = new WorkItem(completedWorkItem);
-
-  // caseToUpdate.docketEntries.forEach(doc => {
-  //   if (doc.workItem && doc.workItem.workItemId === workItemEntity.workItemId) {
-  //     doc.workItem = workItemEntity;
-  //   }
-  // });
-
-  // await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-  //   applicationContext,
-  //   authorizedUser,
-  //   caseToUpdate,
-  // });
-
   return completedWorkItem;
 };
 
