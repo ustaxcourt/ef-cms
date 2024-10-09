@@ -69,17 +69,6 @@ const batchDownloadDocketEntriesHelper = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId,
-    message: {
-      action: 'batch_download_progress',
-      filesCompleted: 0,
-      totalFiles: documentsSelectedForDownload.length,
-    },
-    userId: authorizedUser.userId,
-  });
-
   const caseToBatch = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -142,29 +131,58 @@ const batchDownloadDocketEntriesHelper = async (
   //queue job
   //wait until download link is sent through web socket
 
-  if (applicationContext.environment.stage !== 'local') {
-    const featureFlags = await applicationContext
-      .getUseCases()
-      .getAllFeatureFlagsInteractor(applicationContext);
+  const featureFlags = await applicationContext
+    .getUseCases()
+    .getAllFeatureFlagsInteractor(applicationContext);
 
-    const awsBatchMinimumCount =
-      featureFlags[ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key];
+  const awsBatchMinimumCount =
+    featureFlags[ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key];
 
-    if (awsBatchMinimumCount > 0) {
-      if (documentsToZip.length > awsBatchMinimumCount) {
-        await applicationContext
-          .getDispatchers()
-          .sendZipperBatchJob(
-            applicationContext,
-            documentsToZip,
-            zipName,
-            clientConnectionId,
-            authorizedUser.userId,
-          );
-        return;
-      }
+  const useAwsBatchMechanism =
+    applicationContext.environment.stage !== 'local' &&
+    !!awsBatchMinimumCount &&
+    documentsToZip.length > awsBatchMinimumCount;
+
+  if (useAwsBatchMechanism) {
+    await applicationContext
+      .getDispatchers()
+      .sendZipperBatchJob(
+        applicationContext,
+        documentsToZip,
+        zipName,
+        clientConnectionId,
+        authorizedUser.userId,
+      );
+
+    //TEST: Provide fake progress bar to trick user (AWS BATCH takes around 50 sec to boot up VM)
+    const FAKE_NUMBER = 45;
+    for (let index = 0; index < FAKE_NUMBER; index++) {
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        clientConnectionId,
+        message: {
+          action: 'aws_batch_download_progress',
+          filesCompleted: index,
+          totalFiles: FAKE_NUMBER,
+        },
+        userId: authorizedUser.userId,
+      });
+      await new Promise(resolve => setTimeout(() => resolve(null), 1000));
     }
+
+    return;
   }
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'batch_download_progress',
+      filesCompleted: 0,
+      totalFiles: documentsSelectedForDownload.length,
+    },
+    userId: authorizedUser.userId,
+  });
 
   const onProgress = async (progressData: ProgressData) => {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
