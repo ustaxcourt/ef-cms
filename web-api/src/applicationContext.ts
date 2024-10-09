@@ -4,7 +4,6 @@ import * as docketNumberGenerator from './persistence/dynamo/cases/docketNumberG
 import * as pdfLib from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
 import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws-v3';
-import { BatchClient } from '@aws-sdk/client-batch';
 import {
   CASE_STATUS_TYPES,
   CLERK_OF_THE_COURT_CONFIGURATION,
@@ -37,6 +36,7 @@ import { WorkItem } from '../../shared/src/business/entities/WorkItem';
 import { WorkerMessage } from '@web-api/gateways/worker/workerRouter';
 import { defaultProvider } from '@aws-sdk/credential-provider-node';
 import { environment } from '@web-api/environment';
+import { getBatchClient } from '@web-api/persistence/batch/getBatchClient';
 import {
   getChromiumBrowser,
   getChromiumBrowserAWS,
@@ -78,7 +78,6 @@ import axios from 'axios';
 import pug from 'pug';
 import sass from 'sass';
 
-const batchClients: { [key: string]: BatchClient } = {};
 let sqsCache: SQSClient;
 let searchClientCache: Client;
 
@@ -105,11 +104,7 @@ export const createApplicationContext = (appContextUser = {}) => {
     barNumberGenerator,
     docketNumberGenerator,
     environment,
-    getBatchClient: (region: 'us-east-1' | 'us-west-1') => {
-      if (batchClients[region]) return batchClients[region];
-      batchClients[region] = new BatchClient({ region });
-      return batchClients[region];
-    },
+    getBatchClient,
     getBounceAlertRecipients: () =>
       process.env.BOUNCE_ALERT_RECIPIENTS?.split(',') || [],
     getCaseTitle: Case.getCaseTitle,
