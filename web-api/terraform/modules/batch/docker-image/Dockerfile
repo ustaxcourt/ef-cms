@@ -19,4 +19,4 @@ RUN npm install
 COPY . .
 
 RUN npm install -g ts-node typescript
-CMD ["ts-node", "src/testScript.ts"]
+CMD ["ts-node", "src/docketEntryBatchDownloader.ts"]
