@@ -13,6 +13,18 @@ import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEnti
 import { formatPhoneNumber } from '../utilities/formatPhoneNumber';
 import joi from 'joi';
 
+export interface UserContact {
+  address1: string;
+  address2?: string;
+  address3?: string;
+  city: string;
+  country: string;
+  countryType: string;
+  phone: string;
+  postalCode: string;
+  state: string;
+}
+
 export class User extends JoiValidationEntity {
   public pendingEmailVerificationToken?: string;
   public pendingEmailVerificationTokenTimestamp?: string;
@@ -23,17 +35,7 @@ export class User extends JoiValidationEntity {
   public token?: string;
   public userId: string;
   public isUpdatingInformation?: boolean;
-  public contact?: {
-    address1: string;
-    address2?: string;
-    address3?: string;
-    city: string;
-    country: string;
-    countryType: string;
-    phone: string;
-    postalCode: string;
-    state: string;
-  };
+  public contact?: UserContact;
   public judgeFullName?: string;
   public judgeTitle?: JudgeTitle;
   public section?: string;

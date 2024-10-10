@@ -6,8 +6,9 @@ import { getPractitionerDetailAction } from '../actions/getPractitionerDetailAct
 import { hasPractitionerDetailAction } from '../actions/hasPractitionerDetailAction';
 import { navigateToPractitionerDetailSequence } from './navigateToPractitionerDetailSequence';
 import { setAdvancedSearchResultsAction } from '../actions/AdvancedSearch/setAdvancedSearchResultsAction';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
+import { setValidationAlertErrorsAction } from '@web-client/presenter/actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -19,8 +20,9 @@ export const submitPractitionerBarNumberSearchSequence = [
   validatePractitionerSearchByBarNumberAction,
   {
     error: [
-      setAlertErrorAction,
       setValidationErrorsAction,
+      setScrollToErrorNotificationAction,
+      setValidationAlertErrorsAction,
       clearSearchResultsAction,
     ],
     success: showProgressSequenceDecorator([

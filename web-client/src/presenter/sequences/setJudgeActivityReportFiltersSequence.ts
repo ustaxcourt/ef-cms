@@ -1,5 +1,4 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setJudgeActivityReportFiltersAction } from '../actions/JudgeActivityReport/setJudgeActivityReportFiltersAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -14,11 +13,7 @@ export const setJudgeActivityReportFiltersSequence = [
     validate: [
       validateJudgeActivityReportSearchAction,
       {
-        error: [
-          setAlertErrorAction,
-          setValidationErrorsAction,
-          setValidationAlertErrorsAction,
-        ],
+        error: [setValidationErrorsAction, setValidationAlertErrorsAction],
         success: [clearAlertsAction],
       },
     ],

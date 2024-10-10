@@ -2,6 +2,7 @@ import { clearAlertsAction } from '@web-client/presenter/actions/clearAlertsActi
 import { navigateToPathAction } from '@web-client/presenter/actions/navigateToPathAction';
 import { prepareStatusReportOrderAction } from '../../actions/StatusReportOrder/prepareStatusReportOrderAction';
 import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertErrorAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '@web-client/presenter/actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
@@ -13,7 +14,11 @@ export const submitStatusReportOrderSequence = [
     clearAlertsAction,
     validateStatusReportOrderFormAction,
     {
-      error: [setValidationErrorsAction, setValidationAlertErrorsAction],
+      error: [
+        setValidationErrorsAction,
+        setScrollToErrorNotificationAction,
+        setValidationAlertErrorsAction,
+      ],
       success: [
         prepareStatusReportOrderAction,
         submitCourtIssuedOrderSequence,

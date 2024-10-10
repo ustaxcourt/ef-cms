@@ -13,7 +13,9 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { Stamp } from '../../../../../shared/src/business/entities/Stamp';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { orderBy } from 'lodash';
+import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -107,25 +109,19 @@ export const addDraftStampOrderDocketEntry = async (
   caseEntity.addDocketEntry(stampedDocketEntryEntity);
 
   if (parentMessageId) {
-    const messages = await applicationContext
-      .getPersistenceGateway()
-      .getMessageThreadByParentId({
-        applicationContext,
-        parentMessageId,
-      });
+    const messages = await getMessageThreadByParentId({
+      parentMessageId,
+    });
 
     const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
 
-    const messageEntity = new Message(mostRecentMessage, {
-      applicationContext,
-    }).validate();
+    const messageEntity = new Message(mostRecentMessage).validate();
     messageEntity.addAttachment({
       documentId: stampedDocketEntryEntity.docketEntryId,
       documentTitle: stampedDocketEntryEntity.documentTitle,
     });
 
-    await applicationContext.getPersistenceGateway().updateMessage({
-      applicationContext,
+    await updateMessage({
       message: messageEntity.validate().toRawObject(),
     });
   }

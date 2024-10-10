@@ -82,6 +82,23 @@ describe('ChangePasswordForm', () => {
         email: 'Enter a valid email address',
       });
     });
+
+    it('should not be valid when an email in the correct format is not present', () => {
+      const inValidChangePasswordForm = {
+        confirmPassword: 'TestPassword!1',
+        email: 'myemailaddress',
+        password: 'TestPassword!1',
+      };
+
+      const changePasswordForm = new ChangePasswordForm(
+        inValidChangePasswordForm,
+      );
+
+      expect(changePasswordForm.isValid()).toBe(false);
+      expect(changePasswordForm.getFormattedValidationErrors()).toMatchObject({
+        email: 'Enter email address in format: yourname@example.com',
+      });
+    });
   });
 
   describe('Password Requirements', () => {
