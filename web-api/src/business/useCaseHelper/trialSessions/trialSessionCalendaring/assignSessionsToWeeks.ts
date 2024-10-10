@@ -52,10 +52,23 @@ export const assignSessionsToWeeks = ({
   const scheduledTrialSessionsByCity: TrialSessionsByCity = {};
   TRIAL_CITY_STRINGS.forEach(cityStringKey => {
     if (cityStringKey === WASHINGTON_DC_STRING) {
+      sessionCountPerCity[WASHINGTON_DC_NORTH_STRING] = 0;
       scheduledTrialSessionsByCity[WASHINGTON_DC_NORTH_STRING] = [];
+      sessionCountPerCity[WASHINGTON_DC_SOUTH_STRING] = 0;
       scheduledTrialSessionsByCity[WASHINGTON_DC_SOUTH_STRING] = [];
     } else {
+      sessionCountPerCity[cityStringKey] = 0;
       scheduledTrialSessionsByCity[cityStringKey] = [];
+    }
+  });
+
+  weeksToLoop.forEach(weekOfString => {
+    if (!sessionCountPerWeek[weekOfString]) {
+      sessionCountPerWeek[weekOfString] = 0;
+    }
+
+    if (!sessionScheduledPerCityPerWeek[weekOfString]) {
+      sessionScheduledPerCityPerWeek[weekOfString] = new Set();
     }
   });
 
@@ -108,76 +121,84 @@ export const assignSessionsToWeeks = ({
       return obj;
     }, {});
 
+  // special sessions handled ahead of all reg, small
+
+  specialSessions.forEach(session => {
+    const sessionWeekOf = createDateAtStartOfWeekEST(
+      session.startDate,
+      FORMATS.YYYYMMDD,
+    );
+    let trialLocation = session.trialLocation!;
+
+    if (
+      sessionCountPerWeek[sessionWeekOf] >= calendaringConfig.maxSessionsPerWeek
+    ) {
+      throw new Error(
+        `Specials sessions for week of ${sessionWeekOf} exceed maximum sessions allowed per week`,
+      );
+    }
+
+    if (sessionScheduledPerCityPerWeek[sessionWeekOf].has(trialLocation)) {
+      throw new Error(
+        'There must only be one special trial session per location per week.',
+      );
+    }
+
+    if (session.trialLocation === WASHINGTON_DC_STRING) {
+      if (
+        sessionCountPerCity[WASHINGTON_DC_NORTH_STRING] >=
+          calendaringConfig.maxSessionsPerLocation ||
+        sessionScheduledPerCityPerWeek[sessionWeekOf].has(
+          WASHINGTON_DC_NORTH_STRING,
+        )
+      ) {
+        if (
+          sessionCountPerCity[WASHINGTON_DC_SOUTH_STRING] >=
+          calendaringConfig.maxSessionsPerLocation
+        ) {
+          throw new Error(
+            `Special sessions in ${WASHINGTON_DC_STRING} exceed the maximum allowed`,
+          );
+        } else if (
+          sessionScheduledPerCityPerWeek[sessionWeekOf].has(
+            WASHINGTON_DC_SOUTH_STRING,
+          )
+        ) {
+          throw new Error(
+            'There must be no more than two special trial sessions per week in Washington, DC.',
+          );
+        } else {
+          trialLocation = WASHINGTON_DC_SOUTH_STRING;
+        }
+      } else {
+        trialLocation = WASHINGTON_DC_NORTH_STRING;
+      }
+    }
+
+    addScheduledTrialSession({
+      city: trialLocation,
+      scheduledTrialSessionsByCity,
+      sessionCountPerCity,
+      sessionCountPerWeek,
+      sessionScheduledPerCityPerWeek,
+      sessionType: SESSION_TYPES.special,
+      weekOfString: sessionWeekOf,
+    });
+  });
+
   for (const currentWeek of weeksToLoop) {
     const weekOfString = currentWeek;
-
-    if (!sessionCountPerWeek[weekOfString]) {
-      sessionCountPerWeek[weekOfString] = 0;
-    }
-
-    if (!sessionScheduledPerCityPerWeek[weekOfString]) {
-      sessionScheduledPerCityPerWeek[weekOfString] = new Set();
-    }
-
-    const specialSessionsForWeek = specialSessions.filter(s => {
-      return (
-        createDateAtStartOfWeekEST(s.startDate, FORMATS.YYYYMMDD) ===
-        weekOfString
-      );
-    });
-
-    const specialSessionsForWeekByLocation = specialSessionsForWeek.reduce(
-      (acc, session) => {
-        if (session.trialLocation === WASHINGTON_DC_STRING) {
-          // assign special to special-only slot (north)
-          // if north is occupied, assign to south
-          if (!acc[WASHINGTON_DC_NORTH_STRING]) {
-            acc[WASHINGTON_DC_NORTH_STRING] = session;
-          } else if (!acc[WASHINGTON_DC_SOUTH_STRING]) {
-            acc[WASHINGTON_DC_SOUTH_STRING] = session;
-          } else {
-            throw new Error(
-              'There must only be no more than two special trial sessions per week in Washington, DC.',
-            );
-          }
-
-          return acc;
-        }
-
-        if (!acc[session.trialLocation!]) {
-          acc[session.trialLocation!] = session;
-        } else {
-          throw new Error(
-            'There must only be one special trial session per location per week.',
-          );
-        }
-
-        return acc;
-      },
-      {},
-    );
-
-    for (const location in specialSessionsForWeekByLocation) {
-      addScheduledTrialSession({
-        city: location,
-        scheduledTrialSessionsByCity,
-        sessionCountPerCity,
-        sessionCountPerWeek,
-        sessionScheduledPerCityPerWeek,
-        sessionType: SESSION_TYPES.special,
-        weekOfString,
-      });
-    }
-
     for (const city in sortedProspectiveSessionsByCity) {
       // This is a redundant check, as we expect the length of the array to have
       // already been trimmed to at most the max before entering this function.
       // since we ignore things beyond the max, force prospective array to at most the max
-      if (sessionCountPerCity[city] >= calendaringConfig.maxSessionsPerLocation)
+      if (
+        sessionCountPerCity[city] >= calendaringConfig.maxSessionsPerLocation
+      ) {
         continue;
+      }
 
       // Check if we're already at the max for this location
-
       // Just use the first session!?
       for (const prospectiveSession of sortedProspectiveSessionsByCity[city]) {
         if (
@@ -232,8 +253,6 @@ function addScheduledTrialSession({
   sessionType: TrialSessionTypes;
   weekOfString: string;
 }) {
-  if (!sessionCountPerCity[city]) sessionCountPerCity[city] = 0;
-
   scheduledTrialSessionsByCity[city].push({
     city,
     sessionType,
