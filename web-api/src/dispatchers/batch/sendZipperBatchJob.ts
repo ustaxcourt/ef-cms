@@ -3,11 +3,7 @@ import { SubmitJobCommand, SubmitJobCommandInput } from '@aws-sdk/client-batch';
 
 export const sendZipperBatchJob = async (
   applicationContext: ServerApplicationContext,
-  documents: {
-    key: string;
-    filePathInZip: string;
-    useTempBucket: boolean;
-  }[],
+  documentsReference: string,
   zipName: string,
   clientConnectionId: string,
   userId: string,
@@ -44,8 +40,8 @@ export const sendZipperBatchJob = async (
           value: stage,
         },
         {
-          name: 'DOCKET_ENTRY_FILES',
-          value: JSON.stringify(documents),
+          name: 'DOCKET_ENTRY_FILES_REFRENCE',
+          value: documentsReference,
         },
         {
           name: 'ZIP_FILE_NAME',

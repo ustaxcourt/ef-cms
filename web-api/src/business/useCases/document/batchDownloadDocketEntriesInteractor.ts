@@ -144,11 +144,19 @@ const batchDownloadDocketEntriesHelper = async (
     documentsToZip.length > awsBatchMinimumCount;
 
   if (useAwsBatchMechanism) {
+    const UUID = applicationContext.getUniqueId();
+    await applicationContext.getPersistenceGateway().uploadDocument({
+      applicationContext,
+      pdfData: JSON.stringify(documentsToZip),
+      pdfName: UUID,
+      useTempBucket: true,
+    });
+
     await applicationContext
       .getDispatchers()
       .sendZipperBatchJob(
         applicationContext,
-        documentsToZip,
+        UUID,
         zipName,
         clientConnectionId,
         authorizedUser.userId,
