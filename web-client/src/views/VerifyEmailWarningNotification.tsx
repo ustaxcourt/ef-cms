@@ -1,12 +1,20 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { WarningIcon } from '@web-client/ustc-ui/Icon/WarningIcon';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const VerifyEmailWarningNotification = connect(
-  { user: state.user },
-  function VerifyEmailWarningNotification({ user }) {
+  {
+    resendVerifyPendingUserEmailSequence:
+      sequences.resendVerifyPendingUserEmailSequence,
+    user: state.user,
+  },
+  function VerifyEmailWarningNotification({
+    resendVerifyPendingUserEmailSequence,
+    user,
+  }) {
     return (
       <div className="verify-email-notification text-semibold padding-2">
         <div className="display-flex flex-align-center">
@@ -19,7 +27,12 @@ export const VerifyEmailWarningNotification = connect(
               link
               noMargin
               className="margin-0 padding-0"
-              onClick={() => {}}
+              disableOnClick={true}
+              onClick={async () => {
+                await resendVerifyPendingUserEmailSequence({
+                  pendingEmail: user.pendingEmail!,
+                });
+              }}
             >
               Resend verification email.
             </Button>
