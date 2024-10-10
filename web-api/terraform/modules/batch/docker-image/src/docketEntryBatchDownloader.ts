@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 import { Agent } from 'https';
 import {
   ApiGatewayManagementApiClient,
@@ -8,6 +8,7 @@ import { GetObjectCommand, PutObjectCommand, S3 } from '@aws-sdk/client-s3';
 import { NodeHttpHandler } from '@smithy/node-http-handler';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { writeFile } from 'fs/promises';
+//DO NOT USE ARCHIVER
 import archiver from 'archiver';
 import fs from 'fs';
 import path from 'path';
@@ -20,7 +21,7 @@ type DocketEntryDownloadInfo = {
 
 type DocketEntriesZipperParameter = {
   s3Client: S3;
-  docketEntries: DocketEntryDownloadInfo[];
+  documentsReference: string;
   zipName: string;
   connectionId: string;
   wsClient: ApiGatewayManagementApiClient;
@@ -28,7 +29,7 @@ type DocketEntriesZipperParameter = {
 
 const {
   AWS_REGION,
-  DOCKET_ENTRY_FILES,
+  DOCKET_ENTRY_FILES_REFRENCE,
   EFCMS_DOMAIN,
   STAGE,
   WEBSOCKET_API_GATEWAY_ID,
@@ -38,10 +39,6 @@ const {
   [key: string]: string;
   AWS_REGION: 'us-east-1' | 'us-west-1';
 };
-
-const DOCKET_ENTRIES: DocketEntryDownloadInfo[] = JSON.parse(
-  DOCKET_ENTRY_FILES!,
-);
 
 const S3_REGION = 'us-east-1';
 const TEMP_S3_BUCKET = `${EFCMS_DOMAIN}-temp-documents-${STAGE}-${S3_REGION}`;
@@ -67,6 +64,7 @@ const notificationClient = new ApiGatewayManagementApiClient({
   }),
 });
 
+//TYPE THIS INSTEAD OF ANY
 function streamToBuffer(stream: any) {
   return new Promise((resolve, reject) => {
     const chunks: any[] = [];
@@ -93,6 +91,7 @@ async function downloadFile(
 
   const bodyContents: any = await streamToBuffer(data.Body);
   const FILE_PATH = path.join(DIRECTORY, `${filePathInZip}`);
+  //use fs/primse???? remove fs import
   fs.mkdirSync(path.dirname(FILE_PATH), { recursive: true });
   await writeFile(FILE_PATH, bodyContents);
 }
@@ -127,13 +126,42 @@ async function uploadZipFile(s3Client: S3, filePath: string) {
   await s3Client.send(new PutObjectCommand(uploadParams));
 }
 
+async function getDocketEntriesFromS3(
+  documentsReference: string,
+  s3Client: S3,
+) {
+  const fetchDocumentsReferenceCommand = new GetObjectCommand({
+    Bucket: TEMP_S3_BUCKET,
+    Key: documentsReference,
+  });
+
+  const documentsReferenceData = await s3Client.send(
+    fetchDocumentsReferenceCommand,
+  );
+
+  if (!documentsReferenceData.Body) throw new Error('Unable to get documents');
+
+  const docketEntriesBuffer: any = await streamToBuffer(
+    documentsReferenceData.Body,
+  );
+  const docketEntriesString: string = docketEntriesBuffer.toString('utf-8');
+  const docketEntries: DocketEntryDownloadInfo[] =
+    JSON.parse(docketEntriesString);
+  return docketEntries;
+}
+
 export async function app({
   connectionId,
-  docketEntries,
+  documentsReference,
   s3Client,
   wsClient,
   zipName,
 }: DocketEntriesZipperParameter) {
+  const docketEntries: DocketEntryDownloadInfo[] = await getDocketEntriesFromS3(
+    documentsReference,
+    s3Client,
+  );
+
   const DIRECTORY = path.join(__dirname, `${Date.now()}/`);
   if (!fs.existsSync(DIRECTORY)) fs.mkdirSync(DIRECTORY);
 
@@ -189,7 +217,7 @@ export async function app({
 
 app({
   connectionId: WEBSOCKET_CONNECTION_ID!,
-  docketEntries: DOCKET_ENTRIES,
+  documentsReference: DOCKET_ENTRY_FILES_REFRENCE!,
   s3Client: storageClient,
   wsClient: notificationClient,
   zipName: ZIP_FILE_NAME!,
