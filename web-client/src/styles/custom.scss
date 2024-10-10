@@ -1396,7 +1396,6 @@ hr.lighter {
   }
 }
 
-
 .all-columns-view {
   column-count: 4;
 
@@ -2091,10 +2090,6 @@ button.change-scanner-button {
 
 .verify-email-notification {
   background: color($theme-color-warning-lighter);
-
-  svg {
-    color: color($theme-color-warning);
-  }
 }
 
 #document-advanced .advanced-search-full-width {
