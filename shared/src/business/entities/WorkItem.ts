@@ -89,8 +89,7 @@ export class WorkItem extends JoiValidationEntity {
     this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
     this.highPriority =
       rawWorkItem.highPriority ||
-      caseEntity?.status === CASE_STATUS_TYPES.calendared ||
-      rawWorkItem.caseStatus === CASE_STATUS_TYPES.calendared;
+      caseEntity?.status === CASE_STATUS_TYPES.calendared;
     this.inProgress = rawWorkItem.inProgress;
     this.isInitializeCase = rawWorkItem.isInitializeCase;
     this.isRead = rawWorkItem.isRead;
