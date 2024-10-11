@@ -1,3 +1,5 @@
+import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
+
 /**
  * updateCaseAutomaticBlock
  *
@@ -13,12 +15,9 @@ export const updateCaseAutomaticBlock = async ({
   if (caseEntity.trialDate || caseEntity.highPriority) {
     return caseEntity;
   }
-  const caseDeadlines = await applicationContext
-    .getPersistenceGateway()
-    .getCaseDeadlinesByDocketNumber({
-      applicationContext,
-      docketNumber: caseEntity.docketNumber,
-    });
+  const caseDeadlines = await getCaseDeadlinesByDocketNumber({
+    docketNumber: caseEntity.docketNumber,
+  });
 
   caseEntity.updateAutomaticBlocked({ caseDeadlines });
 

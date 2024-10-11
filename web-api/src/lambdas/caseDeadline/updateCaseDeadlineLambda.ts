@@ -12,9 +12,8 @@ export const updateCaseDeadlineLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ): Promise<any | undefined> =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     return await updateCaseDeadlineInteractor(
-      applicationContext,
       {
         ...JSON.parse(event.body),
       },

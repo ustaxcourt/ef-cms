@@ -7,6 +7,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { createCaseDeadline as createDeadline } from '@web-api/persistence/postgres/caseDeadlines/createCaseDeadline';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const createCaseDeadline = async (
@@ -26,19 +27,13 @@ export const createCaseDeadline = async (
     });
   let caseEntity = new Case(caseDetail, { authorizedUser });
 
-  const newCaseDeadline = new CaseDeadline(
-    {
-      ...caseDeadline,
-      associatedJudge: caseEntity.associatedJudge,
-      associatedJudgeId: caseEntity.associatedJudgeId,
-    },
-    {
-      applicationContext,
-    },
-  );
+  const newCaseDeadline = new CaseDeadline({
+    ...caseDeadline,
+    associatedJudge: caseEntity.associatedJudge,
+    associatedJudgeId: caseEntity.associatedJudgeId,
+  });
 
-  await applicationContext.getPersistenceGateway().createCaseDeadline({
-    applicationContext,
+  await createDeadline({
     caseDeadline: newCaseDeadline.validate().toRawObject(),
   });
 

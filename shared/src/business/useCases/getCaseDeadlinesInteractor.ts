@@ -9,6 +9,7 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { getCaseDeadlinesByDateRange } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDateRange';
 import { pick } from 'lodash';
 
 export const getCaseDeadlinesInteractor = async (
@@ -32,23 +33,16 @@ export const getCaseDeadlinesInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { foundDeadlines, totalCount } = await applicationContext
-    .getPersistenceGateway()
-    .getCaseDeadlinesByDateRange({
-      applicationContext,
-      endDate,
-      from,
-      judge,
-      pageSize,
-      startDate,
-    });
+  const { foundDeadlines, totalCount } = await getCaseDeadlinesByDateRange({
+    endDate,
+    from,
+    judge,
+    pageSize,
+    startDate,
+  });
 
-  const validatedCaseDeadlines = CaseDeadline.validateRawCollection(
-    foundDeadlines,
-    {
-      applicationContext,
-    },
-  );
+  const validatedCaseDeadlines =
+    CaseDeadline.validateRawCollection(foundDeadlines);
 
   const caseMap = await getCasesByDocketNumbers({
     applicationContext,

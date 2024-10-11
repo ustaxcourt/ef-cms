@@ -1,29 +1,21 @@
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
-import { put } from '../../dynamodbClientService';
+import {
+  caseDeadlineEntity,
+  toKyselyNewCaseDeadline,
+} from '@web-api/persistence/postgres/caseDeadlines/mapper';
+import { getDbWriter } from '@web-api/database';
 
-export const createCaseDeadline = ({
-  applicationContext,
+export const createCaseDeadline = async ({
   caseDeadline,
 }: {
-  applicationContext: IApplicationContext;
   caseDeadline: RawCaseDeadline;
 }) => {
-  const { caseDeadlineId, docketNumber } = caseDeadline;
-  return Promise.all([
-    put({
-      Item: {
-        ...caseDeadline,
-        pk: `case-deadline|${caseDeadlineId}`,
-        sk: `case-deadline|${caseDeadlineId}`,
-      },
-      applicationContext,
-    }),
-    put({
-      Item: {
-        pk: `case|${docketNumber}`,
-        sk: `case-deadline|${caseDeadlineId}`,
-      },
-      applicationContext,
-    }),
-  ]);
+  const createdCaseDeadline = await getDbWriter(writer =>
+    writer
+      .insertInto('dwCaseDeadline')
+      .values(toKyselyNewCaseDeadline(caseDeadline))
+      .returningAll()
+      .executeTakeFirst(),
+  );
+  return caseDeadlineEntity(createdCaseDeadline);
 };

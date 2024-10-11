@@ -51,10 +51,10 @@ export type NewCaseKysely = Insertable<CaseTable>;
 export type UpdateCaseKysely = Updateable<CaseTable>;
 
 export interface CaseCorrespondenceTable {
-  archived: boolean;
+  archived?: boolean;
   correspondenceId: string;
   documentTitle: string;
-  filedBy: string;
+  filedBy?: string;
   filingDate: string;
   userId: string;
 }
