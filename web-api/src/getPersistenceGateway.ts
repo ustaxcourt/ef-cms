@@ -143,7 +143,6 @@ import { setStoredApplicationHealth } from '@web-api/persistence/dynamo/deployTa
 import { setTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
 import { setTrialSessionProcessingStatus } from './persistence/dynamo/trialSessions/setTrialSessionProcessingStatus';
 import { updateCase } from './persistence/dynamo/cases/updateCase';
-import { updateCaseCorrespondence } from './persistence/dynamo/correspondence/updateCaseCorrespondence';
 import { updateCaseHearing } from './persistence/dynamo/trialSessions/updateCaseHearing';
 import { updateCaseWorksheet } from '@web-api/persistence/dynamo/caseWorksheet/updateCaseWorksheet';
 import { updateDocketEntry } from './persistence/dynamo/documents/updateDocketEntry';
@@ -237,7 +236,6 @@ const gatewayMethods = {
     setTrialSessionJobStatusForCase,
     setTrialSessionProcessingStatus,
     updateCase,
-    updateCaseCorrespondence,
     updateCaseHearing,
     updateCaseWorksheet,
     updateDocketEntry,

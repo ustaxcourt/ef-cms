@@ -6,6 +6,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { updateCaseCorrespondence } from '@web-api/persistence/postgres/correspondence/updateCaseCorrespondence';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const archiveCorrespondenceDocument = async (
@@ -36,8 +37,7 @@ export const archiveCorrespondenceDocument = async (
 
   caseEntity.archiveCorrespondence(correspondenceToArchiveEntity);
 
-  await applicationContext.getPersistenceGateway().updateCaseCorrespondence({
-    applicationContext,
+  await updateCaseCorrespondence({
     correspondence: correspondenceToArchiveEntity.validate().toRawObject(),
     docketNumber,
   });

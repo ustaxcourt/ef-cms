@@ -1,28 +1,31 @@
-import { put } from '../../dynamodbClientService';
+import { RawCorrespondence } from '@shared/business/entities/Correspondence';
+import { calculateDate } from '@shared/business/utilities/DateHandler';
+import { getDbWriter } from '@web-api/database';
 
-/**
- * updateCaseCorrespondence
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.docketNumber the docket number of the case the correspondence is attached to
- * @param {string} providers.correspondence the correspondence document to update
- * @returns {Promise} resolved promise upon completion of client request
- */
-export const updateCaseCorrespondence = ({
-  applicationContext,
+export const updateCaseCorrespondence = async ({
   correspondence,
   docketNumber,
 }: {
-  applicationContext: IApplicationContext;
-  correspondence: any;
+  correspondence: RawCorrespondence;
   docketNumber: string;
-}) =>
-  put({
-    Item: {
-      ...correspondence,
-      pk: `case|${docketNumber}`,
-      sk: `correspondence|${correspondence.correspondenceId}`,
-    },
-    applicationContext,
-  });
+}) => {
+  const correspondenceToUpsert = {
+    archived: correspondence.archived,
+    correspondenceId: correspondence.correspondenceId,
+    docketNumber,
+    // numberOfPages: correspondence.numberOfPages,
+    documentTitle: correspondence.documentTitle,
+    filedBy: correspondence.filedBy,
+    filingDate: calculateDate({ dateString: correspondence.filingDate }),
+    userId: correspondence.userId,
+  };
+  await getDbWriter(writer =>
+    writer
+      .insertInto('dwCaseCorrespondence')
+      .values(correspondenceToUpsert)
+      .onConflict(oc =>
+        oc.column('correspondenceId').doUpdateSet(correspondenceToUpsert),
+      )
+      .execute(),
+  );
+};

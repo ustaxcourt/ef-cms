@@ -9,6 +9,7 @@ import {
   aggregateConsolidatedCaseItems,
   isCaseItem,
 } from '../helpers/aggregateCaseItems';
+import { getCaseCorrespondenceByDocketNumber } from '@web-api/persistence/postgres/correspondence/getCaseCorrespondenceByDocketNumber';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { queryFull } from '../../dynamodbClientService';
 
@@ -21,16 +22,21 @@ export const getCaseByDocketNumber = async ({
   docketNumber: string;
   includeConsolidatedCases?: boolean;
 }): Promise<RawCase> => {
-  const caseItems = await queryFull({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `case|${docketNumber}`,
-    },
-    KeyConditionExpression: '#pk = :pk',
-    applicationContext,
-  });
+  const [caseItems, correspodenceItems] = await Promise.all([
+    queryFull({
+      ExpressionAttributeNames: {
+        '#pk': 'pk',
+      },
+      ExpressionAttributeValues: {
+        ':pk': `case|${docketNumber}`,
+      },
+      KeyConditionExpression: '#pk = :pk',
+      applicationContext,
+    }),
+    getCaseCorrespondenceByDocketNumber({
+      docketNumber,
+    }),
+  ]);
 
   const leadDocketNumber = caseItems.find((caseItem): caseItem is CaseRecord =>
     isCaseItem(caseItem),
@@ -55,7 +61,14 @@ export const getCaseByDocketNumber = async ({
   }
 
   return purgeDynamoKeys({
-    ...aggregateCaseItems(caseItems),
+    ...aggregateCaseItems([
+      ...caseItems,
+      ...correspodenceItems.map(correspodenceItem => ({
+        ...correspodenceItem,
+        pk: `case|${docketNumber}`,
+        sk: `correspondence|${correspodenceItem.correspondenceId}`,
+      })),
+    ]),
     consolidatedCases,
   });
 };
