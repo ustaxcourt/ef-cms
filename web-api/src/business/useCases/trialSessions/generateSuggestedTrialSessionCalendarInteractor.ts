@@ -105,6 +105,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   const sessions = await applicationContext
     .getPersistenceGateway()
     .getTrialSessions({ applicationContext });
+
   console.timeEnd('10275: Get trial sessions time');
   // Note (10275): storing trial session data differently would make for a more
   // efficient process of determining which sessions are special, calendared,
@@ -130,11 +131,18 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   console.timeEnd('10275: Compile cities from last two term time');
 
   console.time('10275: Generate prospectiveSessionsByCity time');
-  const prospectiveSessionsByCity = createProspectiveTrialSessions({
+  const {
+    initialRegularCasesByCity,
+    initialSmallCasesByCity,
+    prospectiveSessionsByCity,
+  } = createProspectiveTrialSessions({
     calendaringConfig,
     cases,
     citiesFromLastTwoTerms,
   });
+
+  console.log('initialRegularCasesByCity!!!!', initialRegularCasesByCity);
+  console.log('initialSmallCasesByCity!!!!', initialSmallCasesByCity);
 
   console.timeEnd('10275: Generate prospectiveSessionsByCity time');
 
