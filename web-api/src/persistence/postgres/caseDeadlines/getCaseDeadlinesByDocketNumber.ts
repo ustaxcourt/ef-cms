@@ -10,7 +10,7 @@ export const getCaseDeadlinesByDocketNumber = async ({
     reader
       .selectFrom('dwCaseDeadline as cd')
       .leftJoin('dwCase as c', 'c.docketNumber', 'cd.docketNumber')
-      .where('docketNumber', '=', docketNumber)
+      .where('cd.docketNumber', '=', docketNumber)
       .selectAll()
       .select('cd.docketNumber')
       .execute(),
