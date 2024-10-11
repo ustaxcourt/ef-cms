@@ -57,7 +57,12 @@ export const writeTrialSessionDataToExcel = async ({
   worksheet.columns = columns;
 
   for (const cityStateString in trialSessionCalendar) {
-    const city = cityStateString.split(',')[0];
+    let city;
+    if (!cityStateString.toLowerCase().startsWith('portland')) {
+      city = cityStateString.split(',')[0];
+    } else {
+      city = cityStateString;
+    }
     const values = { city, ...trialSessionCalendar[cityStateString] };
     worksheet.addRow(values);
   }
@@ -119,12 +124,14 @@ export const writeTrialSessionDataToExcel = async ({
     ...sessionCountPerWeek,
   });
 
-  countPerWeekRow.border = {
-    bottom: { style: 'thin' },
-    left: { style: 'thin' },
-    right: { style: 'thin' },
-    top: { style: 'thin' },
-  };
+  countPerWeekRow.eachCell(cell => {
+    cell.border = {
+      bottom: { style: 'thin' },
+      left: { style: 'thin' },
+      right: { style: 'thin' },
+      top: { style: 'thin' },
+    };
+  });
 
   const cityTitleCell = worksheet.getCell('A2');
 
