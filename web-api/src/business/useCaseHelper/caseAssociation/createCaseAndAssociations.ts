@@ -4,6 +4,7 @@ import { DocketEntry } from '../../../../../shared/src/business/entities/DocketE
 import { IrsPractitioner } from '../../../../../shared/src/business/entities/IrsPractitioner';
 import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { upsertCase } from '@web-api/persistence/postgres/cases/upsertCase';
 
 /**
  * createCaseDocketEntries
@@ -130,6 +131,7 @@ export const createCaseAndAssociations = async ({
       applicationContext,
       caseToCreate,
     }),
+    upsertCase({ rawCase: caseToCreate }),
     ...createCaseDocketEntries({
       applicationContext,
       authorizedUser,
