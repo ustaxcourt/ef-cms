@@ -18,7 +18,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('docketNumber', 'varchar', col => col.notNull())
     .addColumn('sortableDocketNumber', 'int8', col => col.notNull())
     .addColumn('associatedJudge', 'varchar', col => col.notNull())
-    .addColumn('associatedJudgeId', 'varchar', col => col.notNull())
+    .addColumn('associatedJudgeId', 'varchar')
     .addColumn('createdAt', 'timestamptz', col => col.notNull())
     .addColumn('deadlineDate', 'timestamptz', col => col.notNull())
     .execute();

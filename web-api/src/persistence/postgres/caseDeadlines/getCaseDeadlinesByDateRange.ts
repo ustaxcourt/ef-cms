@@ -17,10 +17,12 @@ export const getCaseDeadlinesByDateRange = async ({
   const { results: caseDeadlines, total: totalCount } = await getDbReader(
     async reader => {
       let deadlineQuery = reader
-        .selectFrom('dwCaseDeadline')
+        .selectFrom('dwCaseDeadline as cd')
+        .leftJoin('dwCase as c', 'c.docketNumber', 'cd.docketNumber')
         .selectAll()
-        .where('deadlineDate', '>=', startDate)
-        .where('deadlineDate', '<=', endDate);
+        .select('cd.docketNumber')
+        .where('cd.deadlineDate', '>=', startDate)
+        .where('cd.deadlineDate', '<=', endDate);
 
       if (judge) {
         deadlineQuery = deadlineQuery.where('associatedJudge', '=', judge);
@@ -29,8 +31,8 @@ export const getCaseDeadlinesByDateRange = async ({
       deadlineQuery = deadlineQuery
         .offset(from)
         .limit(size)
-        .orderBy('deadlineDate', 'asc')
-        .orderBy('sortableDocketNumber', 'asc');
+        .orderBy('cd.deadlineDate', 'asc')
+        .orderBy('cd.sortableDocketNumber', 'asc');
 
       const results = await deadlineQuery.execute();
 

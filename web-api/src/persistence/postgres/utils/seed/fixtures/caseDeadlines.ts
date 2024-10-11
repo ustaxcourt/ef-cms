@@ -1,0 +1,70 @@
+/* eslint-disable @miovision/disallow-date/no-new-date */
+
+import { NewCaseDeadlineKysely } from '@web-api/database-types';
+
+export const caseDeadlines: NewCaseDeadlineKysely[] = [
+  {
+    associatedJudge: 'Chief Judge',
+    caseDeadlineId: '08855730-3047-4ca6-a9e7-16ff64c9dcaa',
+    createdAt: new Date('2019-08-22T12:46:01.052Z'),
+    deadlineDate: new Date('2019-08-22T04:00:00.000Z'),
+    description: 'Pre-trial memorandum due',
+    docketNumber: '104-19',
+    sortableDocketNumber: 19000104,
+  },
+  {
+    associatedJudge: 'Chief Judge',
+    caseDeadlineId: '0f5a666d-63c5-4378-9cd6-0b2ae141280f',
+    createdAt: new Date('2019-08-22T12:49:10.949Z'),
+    deadlineDate: new Date('2019-08-23T04:00:00.000Z'),
+    description: 'This is a test deadline',
+    docketNumber: '106-19',
+    sortableDocketNumber: 19000106,
+  },
+  {
+    associatedJudge: 'Chief Judge',
+    caseDeadlineId: '307fd0e4-eeed-41bc-bbc3-a9555fccc231',
+    createdAt: new Date('2019-08-22T12:51:32.434Z'),
+    deadlineDate: new Date('2019-08-22T04:00:00.000Z'),
+    description: 'Filing fee due',
+    docketNumber: '107-19',
+    sortableDocketNumber: 19000107,
+  },
+  {
+    associatedJudge: 'Chief Judge',
+    caseDeadlineId: '95b46eae-70f0-45df-91de-febdc610fed9',
+    createdAt: new Date('2019-08-22T12:47:16.905Z'),
+    deadlineDate: new Date('2019-08-25T04:00:00.000Z'),
+    description: 'Final status report due to Judge Ashford',
+    docketNumber: '109-19',
+    sortableDocketNumber: 19000109,
+  },
+  {
+    associatedJudge: 'Buch',
+    associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
+    caseDeadlineId: 'ad1ddb24-f3c4-47b4-b10e-76d1d050b2ab',
+    createdAt: new Date('2020-01-01T01:02:15.185-04:00'),
+    deadlineDate: new Date('2020-01-24T00:00:00.000-05:00'),
+    description: 'Due date migrated from Blackstone',
+    docketNumber: '1338-20',
+    sortableDocketNumber: 20001338,
+  },
+  {
+    associatedJudge: 'Chief Judge',
+    caseDeadlineId: 'e7aeadd8-b0d0-4826-af31-22c0d8c6c173',
+    createdAt: new Date('2020-01-01T01:02:15.185-04:00'),
+    deadlineDate: new Date('2020-01-24T00:00:00.000-05:00'),
+    description: 'Due date migrated from Blackstone',
+    docketNumber: '152-12',
+    sortableDocketNumber: 12000152,
+  },
+  {
+    associatedJudge: 'Chief Judge',
+    caseDeadlineId: 'ff22fe63-4117-42ee-a66c-8cfd2062a057',
+    createdAt: new Date('2019-08-22T12:47:16.905Z'),
+    deadlineDate: new Date('2019-08-25T04:00:00.000Z'),
+    description: 'Final status report due to Judge Ashford',
+    docketNumber: '104-19',
+    sortableDocketNumber: 19000104,
+  },
+];

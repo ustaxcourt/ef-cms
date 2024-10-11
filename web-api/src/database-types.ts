@@ -66,10 +66,10 @@ export type UpdateCaseCorrespondenceKysely =
 
 export interface CaseDeadlineTable {
   associatedJudge: string;
-  associatedJudgeId: string;
+  associatedJudgeId?: string;
   caseDeadlineId: string;
-  createdAt: string;
-  deadlineDate: string;
+  createdAt: Date;
+  deadlineDate: Date;
   description: string;
   docketNumber: string;
   sortableDocketNumber: number;
