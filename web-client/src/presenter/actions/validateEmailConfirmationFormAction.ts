@@ -4,6 +4,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const validateEmailConfirmationFormAction = ({
   get,
   path,
+  props,
 }: ActionProps) => {
   const { confirmEmail, email, updatedEmail } = get(state.form);
   const emailToValidate = updatedEmail || email;
@@ -12,24 +13,25 @@ export const validateEmailConfirmationFormAction = ({
     email: emailToValidate,
   });
 
-  const showErrorsToShow = get(state.showValidation);
+  const currentValidationErrors = get(state.validationErrors);
 
-  const errors = formEntity.getFormattedValidationErrors();
+  let errors = formEntity.getFormattedValidationErrors();
 
   for (let error in errors) {
-    if (!showErrorsToShow[error]) {
+    if (error !== props.field && !currentValidationErrors[error]) {
       delete errors[error];
     }
   }
 
-  console.log('errors after validation action ran', errors);
+  if (Object.keys(currentValidationErrors).includes(props.field)) {
+    delete currentValidationErrors[props.field];
+  }
+  errors = { ...currentValidationErrors, ...errors };
+
   if (!errors) {
     return path.success();
   } else {
     return path.error({
-      alertError: {
-        title: 'Errors were found. Please correct your form and resubmit.',
-      },
       errors,
     });
   }

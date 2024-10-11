@@ -10,7 +10,6 @@ import React from 'react';
 
 export const ChangeLoginAndServiceEmail = connect(
   {
-    // emailConfirmationFormHelper: state.emailConfirmationFormHelper,
     form: state.form,
     navigateToPathSequence: sequences.navigateToPathSequence,
     showModal: state.modal.showModal,
@@ -25,7 +24,6 @@ export const ChangeLoginAndServiceEmail = connect(
     validationErrors: state.validationErrors,
   },
   function ChangeLoginAndServiceEmail({
-    // emailConfirmationFormHelper,
     form,
     navigateToPathSequence,
     showModal,
@@ -78,19 +76,12 @@ export const ChangeLoginAndServiceEmail = connect(
                   onBlur={e => {
                     validateEmailConfirmationFormSequence({
                       field: e.target.name,
-                      showValidation: true,
                     });
                   }}
                   onChange={e =>
                     updateFormValueSequence({
                       key: e.target.name,
                       value: e.target.value,
-                    })
-                  }
-                  onFocus={e =>
-                    validateEmailConfirmationFormSequence({
-                      field: e.target.name,
-                      showValidation: false,
                     })
                   }
                 />
@@ -110,19 +101,12 @@ export const ChangeLoginAndServiceEmail = connect(
                   onBlur={e => {
                     validateEmailConfirmationFormSequence({
                       field: e.target.name,
-                      showValidation: true,
                     });
                   }}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
                       value: e.target.value,
-                    });
-                  }}
-                  onFocus={e => {
-                    validateEmailConfirmationFormSequence({
-                      field: e.target.name,
-                      showValidation: false,
                     });
                   }}
                 />
