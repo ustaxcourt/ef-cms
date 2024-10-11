@@ -12,9 +12,9 @@ const practitionerLoginServiceEmailFormDependencies = {
   createPractitionerUserHelper: state.createPractitionerUserHelper,
   emailConfirmationFormHelper: state.emailConfirmationFormHelper,
   form: state.form,
-  updateEmailConfirmationFormSequence:
-    sequences.updateEmailConfirmationFormSequence,
   updateFormValueSequence: sequences.updateFormValueSequence,
+  validateEmailConfirmationFormSequence:
+    sequences.validateEmailConfirmationFormSequence,
   validationErrors: state.validationErrors,
 };
 
@@ -25,11 +25,11 @@ export const PractitionerLoginServiceEmailForm = connect<
   practitionerLoginServiceEmailFormDependencies,
   function PractitionerLoginServiceEmailForm({
     createPractitionerUserHelper,
-    emailConfirmationFormHelper,
     emailFormName,
     form,
-    updateEmailConfirmationFormSequence,
     updateFormValueSequence,
+    validateEmailConfirmationFormSequence,
+    validationErrors,
   }) {
     return (
       <div className="margin-bottom-4">
@@ -55,8 +55,7 @@ export const PractitionerLoginServiceEmailForm = connect<
             <h4>Change Login & Service Email</h4>
             <FormGroup
               errorText={
-                emailConfirmationFormHelper.showEmailErrorMessage &&
-                emailConfirmationFormHelper.emailErrorMessage
+                validationErrors?.email || validationErrors[emailFormName]
               }
             >
               <label className="usa-label" htmlFor="updatedEmail">
@@ -72,9 +71,9 @@ export const PractitionerLoginServiceEmailForm = connect<
                 type="text"
                 value={form[emailFormName] || ''}
                 onBlur={() => {
-                  updateEmailConfirmationFormSequence({
-                    field: emailFormName,
-                    inFocus: false,
+                  validateEmailConfirmationFormSequence({
+                    // intentionally not using `emailFormName` to leverage live validation using EmailConfirmationForm entity
+                    field: 'email',
                   });
                 }}
                 onChange={e =>
@@ -83,20 +82,9 @@ export const PractitionerLoginServiceEmailForm = connect<
                     value: e.target.value,
                   })
                 }
-                onFocus={() =>
-                  updateEmailConfirmationFormSequence({
-                    field: emailFormName,
-                    inFocus: true,
-                  })
-                }
               />
             </FormGroup>
-            <FormGroup
-              errorText={
-                emailConfirmationFormHelper.showConfirmEmailErrorMessage &&
-                emailConfirmationFormHelper.confirmEmailErrorMessage
-              }
-            >
+            <FormGroup errorText={validationErrors?.confirmEmail}>
               <label className="usa-label" htmlFor="confirm-email">
                 Re-enter new email address
               </label>
@@ -109,22 +97,15 @@ export const PractitionerLoginServiceEmailForm = connect<
                 name="confirmEmail"
                 type="text"
                 value={form.confirmEmail || ''}
-                onBlur={() =>
-                  updateEmailConfirmationFormSequence({
-                    field: 'confirmEmail',
-                    inFocus: false,
-                  })
-                }
+                onBlur={e => {
+                  validateEmailConfirmationFormSequence({
+                    field: e.target.name,
+                  });
+                }}
                 onChange={e =>
                   updateFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
-                  })
-                }
-                onFocus={() =>
-                  updateEmailConfirmationFormSequence({
-                    field: 'confirmEmail',
-                    inFocus: true,
                   })
                 }
               />
