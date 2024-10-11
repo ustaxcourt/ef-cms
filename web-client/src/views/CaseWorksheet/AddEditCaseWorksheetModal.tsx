@@ -106,7 +106,6 @@ export const AddEditCaseWorksheetModal = connect(
           <BindedTextarea
             aria-labelledby="primary-issue-label"
             bind="form.primaryIssue"
-            className="textarea-resize-vertical"
             id="primary-issue"
           />
         </FormGroup>
