@@ -3,16 +3,19 @@ import {
   FORMATS,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
-import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import {
+  RemainingCaseCountByCity,
   SessionCountByWeek,
   TrialSessionsByCity,
 } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
+import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import ExcelJS from 'exceljs';
 
 export const writeTrialSessionDataToExcel = async ({
   initialRegularCasesByCity,
   initialSmallCasesByCity,
+  remainingRegularCaseCountByCity,
+  remainingSmallCaseCountByCity,
   sessionCountPerWeek,
   sortedScheduledTrialSessionsByCity,
   weeks,
@@ -22,6 +25,8 @@ export const writeTrialSessionDataToExcel = async ({
   sessionCountPerWeek: SessionCountByWeek;
   initialRegularCasesByCity: CasesByCity;
   initialSmallCasesByCity: CasesByCity;
+  remainingRegularCaseCountByCity: RemainingCaseCountByCity;
+  remainingSmallCaseCountByCity: RemainingCaseCountByCity;
 }) => {
   const workbook = new ExcelJS.Workbook();
   const worksheetOptions = { properties: { outlineLevelCol: 2 } };
@@ -69,6 +74,16 @@ export const writeTrialSessionDataToExcel = async ({
     key: 'initialRegularCaseCount',
   });
 
+  columns.push({
+    header: 'Small Cases Remaining',
+    key: 'remainingSmallCaseCount',
+  });
+
+  columns.push({
+    header: 'Regular Cases Remaining',
+    key: 'remainingRegularCaseCount',
+  });
+
   worksheet.columns = columns;
 
   for (const cityStateString in trialSessionCalendar) {
@@ -85,6 +100,9 @@ export const writeTrialSessionDataToExcel = async ({
         initialRegularCasesByCity[cityStateString]?.length || 0,
       initialSmallCaseCount:
         initialSmallCasesByCity[cityStateString]?.length || 0,
+      remainingRegularCaseCount:
+        remainingRegularCaseCountByCity[cityStateString],
+      remainingSmallCaseCount: remainingSmallCaseCountByCity[cityStateString],
     };
     worksheet.addRow(values);
   }

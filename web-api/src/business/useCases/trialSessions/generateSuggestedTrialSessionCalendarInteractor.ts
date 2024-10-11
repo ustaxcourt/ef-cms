@@ -24,8 +24,6 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { assignSessionsToWeeks } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
-// import mockCases from '@shared/test/mockEligibleCases.json';
-// import mockSpecialSessions from '@shared/test/mockSpecialTrialSessions.json';
 
 const MAX_SESSIONS_PER_WEEK = 6;
 const MAX_SESSIONS_PER_LOCATION = 5;
@@ -80,16 +78,12 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     .getPersistenceGateway()
     .getSuggestedCalendarCases({ applicationContext });
 
-  // const cases = mockCases;
-
   console.timeEnd('10275: Get ready for trial cases time');
 
   console.time('10275: Get trial sessions time');
   const sessions = await applicationContext
     .getPersistenceGateway()
     .getTrialSessions({ applicationContext });
-
-  // const sessions = mockSpecialSessions;
 
   console.timeEnd('10275: Get trial sessions time');
   // Note (10275): storing trial session data differently would make for a more
@@ -135,13 +129,36 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   console.time('10275: assignSessionsToWeeks time');
 
-  const { scheduledTrialSessionsByCity, sessionCountPerWeek } =
-    assignSessionsToWeeks({
-      calendaringConfig,
-      prospectiveSessionsByCity,
-      specialSessions,
-      weeksToLoop,
-    });
+  const regularCaseCountByCity = Object.keys(initialRegularCasesByCity).reduce(
+    (acc, city) => {
+      acc[city] = initialRegularCasesByCity[city]?.length || 0;
+      return acc;
+    },
+    {},
+  );
+
+  const smallCaseCountByCity = Object.keys(initialSmallCasesByCity).reduce(
+    (acc, city) => {
+      acc[city] = initialSmallCasesByCity[city]?.length || 0;
+      return acc;
+    },
+    {},
+  );
+
+  const {
+    remainingRegularCaseCountByCity,
+    remainingSmallCaseCountByCity,
+    scheduledTrialSessionsByCity,
+    sessionCountPerWeek,
+  } = assignSessionsToWeeks({
+    calendaringConfig,
+    prospectiveSessionsByCity,
+    regularCaseCountByCity,
+    smallCaseCountByCity,
+    specialSessions,
+    weeksToLoop,
+  });
+
   console.timeEnd('10275: assignSessionsToWeeks time');
 
   if (Object.keys(scheduledTrialSessionsByCity).length < 1) {
@@ -166,6 +183,8 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   const bufferArray = await writeTrialSessionDataToExcel({
     initialRegularCasesByCity,
     initialSmallCasesByCity,
+    remainingRegularCaseCountByCity,
+    remainingSmallCaseCountByCity,
     sessionCountPerWeek,
     sortedScheduledTrialSessionsByCity,
     weeks: weeksToLoop,
