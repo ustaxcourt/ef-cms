@@ -382,6 +382,7 @@ const TrialSessionFilters = connect(
         </div>
         <Button
           link
+          data-testid="trial-session-reset-filter-button"
           disabled={trialSessionsHelper.isResetFiltersDisabled}
           tooltip="Reset Filters"
           onClick={() =>
