@@ -41,6 +41,7 @@ describe('trial sessions filtering', () => {
         tabName: 'new',
         trialLocation,
       });
+
       cy.get(`[data-testid="trial-sessions-row-${trialSessionId}"]`).should(
         'exist',
       );
@@ -84,6 +85,7 @@ describe('trial sessions filtering', () => {
           tabName: 'calendared',
           trialLocation,
         });
+
         cy.get(`[data-testid="trial-sessions-row-${trialSessionId}"]`).should(
           'exist',
         );
@@ -111,6 +113,7 @@ describe('trial sessions filtering', () => {
           tabName: 'calendared',
           trialLocation,
         });
+
         cy.get(`[data-testid="trial-sessions-row-${trialSessionId}"]`).should(
           'exist',
         );
@@ -119,12 +122,14 @@ describe('trial sessions filtering', () => {
         setTrialSessionFilters({
           judge,
           proceedingType,
+          resetFilters: true,
           sessionStatus: 'All',
           sessionType,
           startDate,
           tabName: 'calendared',
           trialLocation,
         });
+
         cy.get(`[data-testid="trial-sessions-row-${trialSessionId}"]`).should(
           'exist',
         );
@@ -136,12 +141,14 @@ describe('trial sessions filtering', () => {
 function setTrialSessionFilters({
   judge,
   proceedingType,
+  resetFilters,
   sessionStatus,
   sessionType,
   startDate,
   tabName,
   trialLocation,
 }: {
+  resetFilters?: boolean;
   tabName: 'calendared' | 'new';
   proceedingType: string;
   startDate: string;
@@ -151,6 +158,9 @@ function setTrialSessionFilters({
   sessionStatus?: string;
 }) {
   cy.get(`[data-testid="${tabName}-trial-sessions-tab"]`).click();
+  if (resetFilters) {
+    cy.get('[data-testid="trial-session-reset-filter-button"]').click();
+  }
   if (sessionStatus) {
     cy.get(`[data-testid="sessionStatus-${sessionStatus}"]`).click();
   }
