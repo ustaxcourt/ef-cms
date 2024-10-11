@@ -6,6 +6,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { getDocumentQCInboxForUser } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 
 /**
  * getDocumentQCInboxForUserInteractor
@@ -28,12 +29,9 @@ export const getDocumentQCInboxForUserInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const workItems = await applicationContext
-    .getPersistenceGateway()
-    .getDocumentQCInboxForUser({
-      applicationContext,
-      userId,
-    });
+  const workItems = await getDocumentQCInboxForUser({
+    userId,
+  });
 
   const filteredWorkItems = workItems.filter(
     workItem =>

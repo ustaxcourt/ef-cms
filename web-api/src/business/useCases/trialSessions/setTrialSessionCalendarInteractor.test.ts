@@ -1,3 +1,6 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
@@ -6,9 +9,11 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { setPriorityOnAllWorkItems as setPriorityOnAllWorkItemsMock } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 import { setTrialSessionCalendarInteractor } from './setTrialSessionCalendarInteractor';
 
 describe('setTrialSessionCalendarInteractor', () => {
+  const setPriorityOnAllWorkItems = setPriorityOnAllWorkItemsMock as jest.Mock;
   const MOCK_TRIAL = {
     chambersPhoneNumber: '1111111',
     joinPhoneNumber: '0987654321',
@@ -193,26 +198,13 @@ describe('setTrialSessionCalendarInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems.mock
-        .calls.length,
-    ).toEqual(2);
-    expect(
-      applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems.mock
-        .calls[0][0],
-    ).toMatchObject({
+    expect(setPriorityOnAllWorkItems).toHaveBeenCalled();
+    expect(setPriorityOnAllWorkItems.mock.calls.length).toEqual(2);
+    expect(setPriorityOnAllWorkItems.mock.calls[0][0]).toMatchObject({
       highPriority: true,
-      trialDate: '2025-12-01T00:00:00.000Z',
     });
-    expect(
-      applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems.mock
-        .calls[1][0],
-    ).toMatchObject({
+    expect(setPriorityOnAllWorkItems.mock.calls[1][0]).toMatchObject({
       highPriority: true,
-      trialDate: '2025-12-01T00:00:00.000Z',
     });
   });
 

@@ -1,3 +1,5 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
@@ -14,6 +16,7 @@ import { applicationContext } from '../test/createTestApplicationContext';
 import { fakeData } from '../test/getFakeFile';
 import { getContactPrimary } from '../entities/cases/Case';
 import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 import { updateContactInteractor } from './updateContactInteractor';
 
 describe('updates the contact on a case', () => {
@@ -161,9 +164,7 @@ describe('updates the contact on a case', () => {
       mockPetitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(saveWorkItem).toHaveBeenCalled();
   });
 
   it('creates a work item if the contact is represented by a privatePractitioner and there is paper service on the case', async () => {
@@ -201,9 +202,7 @@ describe('updates the contact on a case', () => {
       mockPetitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(saveWorkItem).toHaveBeenCalled();
   });
 
   it('does not create a work item if the contact is represented by a privatePractitioner and there is no paper service on the case', async () => {
@@ -241,9 +240,7 @@ describe('updates the contact on a case', () => {
       mockPetitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).not.toHaveBeenCalled();
+    expect(saveWorkItem).not.toHaveBeenCalled();
   });
 
   it('throws an error if the case was not found', async () => {
@@ -388,27 +385,6 @@ describe('updates the contact on a case', () => {
     expect(
       applicationContext.getUseCases().generatePdfFromHtmlInteractor,
     ).not.toHaveBeenCalled();
-  });
-
-  it('should use original case caption to create case title when creating work item', async () => {
-    await updateContactInteractor(
-      applicationContext,
-      {
-        contactInfo: {
-          ...mockCaseContactPrimary,
-          address1: '453 Electric Ave',
-        },
-        docketNumber: mockCase.docketNumber,
-      },
-      mockPetitionerUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-        .workItem,
-    ).toMatchObject({
-      caseTitle: 'Test Petitioner',
-    });
   });
 
   it('should NOT generate a notice if the case was closed over 6 months ago', async () => {

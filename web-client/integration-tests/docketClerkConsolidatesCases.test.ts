@@ -145,7 +145,7 @@ describe('Case Consolidation Journey', () => {
         expect(orderDocument.workItem.completedBy).toEqual('Test Docketclerk');
         expect(orderDocument.workItem.completedMessage).toEqual('completed');
         expect(orderDocument.workItem.completedAt).toBeDefined();
-        expect(orderDocument.workItem.inProgress).toBeUndefined();
+        expect(orderDocument.workItem.inProgress).toBeFalsy();
       } else {
         expect(orderDocument).toBeUndefined();
       }
@@ -194,7 +194,7 @@ describe('Case Consolidation Journey', () => {
         expect(orderDocument.workItem.completedBy).toEqual('Test Docketclerk');
         expect(orderDocument.workItem.completedMessage).toEqual('completed');
         expect(orderDocument.workItem.completedAt).toBeDefined();
-        expect(orderDocument.workItem.inProgress).toBeUndefined();
+        expect(orderDocument.workItem.inProgress).toBeFalsy();
       } else {
         expect(orderDocument).toBeUndefined();
       }

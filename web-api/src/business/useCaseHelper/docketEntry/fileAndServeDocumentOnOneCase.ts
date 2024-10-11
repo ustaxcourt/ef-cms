@@ -4,6 +4,7 @@ import { ENTERED_AND_SERVED_EVENT_CODES } from '../../../../../shared/src/busine
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 export const fileAndServeDocumentOnOneCase = async ({
   applicationContext,
@@ -104,7 +105,6 @@ export const fileAndServeDocumentOnOneCase = async ({
 };
 
 const completeWorkItem = async ({
-  applicationContext,
   docketEntryEntity,
   leadDocketNumber,
   user,
@@ -129,15 +129,7 @@ const completeWorkItem = async ({
 
   workItemToUpdate.setAsCompleted({ message: 'completed', user });
 
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
-    workItem: workItemToUpdate.validate().toRawObject(),
-  });
-
-  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-    applicationContext,
-    section: user.section,
-    userId: user.userId,
+  await saveWorkItem({
     workItem: workItemToUpdate.validate().toRawObject(),
   });
 };

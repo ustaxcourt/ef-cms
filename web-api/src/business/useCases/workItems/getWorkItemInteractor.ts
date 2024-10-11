@@ -6,6 +6,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 
 /**
  * getWorkItemInteractor
@@ -20,12 +21,9 @@ export const getWorkItemInteractor = async (
   { workItemId }: { workItemId: string },
   authorizedUser: UnknownAuthUser,
 ) => {
-  const workItem = await applicationContext
-    .getPersistenceGateway()
-    .getWorkItemById({
-      applicationContext,
-      workItemId,
-    });
+  const workItem = await getWorkItemById({
+    workItemId,
+  });
 
   if (!workItem) {
     throw new NotFoundError(`WorkItem ${workItemId} was not found.`);

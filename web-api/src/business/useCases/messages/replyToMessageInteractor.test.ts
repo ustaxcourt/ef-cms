@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/messages/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
@@ -5,11 +6,16 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { createMessage as createMessageMock } from '@web-api/persistence/postgres/messages/createMessage';
+import { markMessageThreadRepliedTo as markMessageThreadRepliedToMock } from '@web-api/persistence/postgres/messages/markMessageThreadRepliedTo';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { replyToMessageInteractor } from './replyToMessageInteractor';
+
+const createMessage = createMessageMock as jest.Mock;
+const markMessageThreadRepliedTo = markMessageThreadRepliedToMock as jest.Mock;
 
 describe('replyToMessageInteractor', () => {
   const mockAttachments = [
@@ -81,31 +87,35 @@ describe('replyToMessageInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createMessage,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().createMessage.mock.calls[0][0]
-        .message,
-    ).toMatchObject({
+    expect(createMessage).toHaveBeenCalled();
+    expect((createMessage as jest.Mock).mock.calls[0][0].message).toMatchObject(
+      {
+        ...messageData,
+        attachments: mockAttachments,
+        caseStatus: CASE_STATUS_TYPES.generalDocket,
+        caseTitle: 'Roslindis Angelino',
+        docketNumber: '101-20',
+        from: 'Test Petitionsclerk',
+        fromSection: PETITIONS_SECTION,
+        fromUserId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
+        to: 'Test Petitionsclerk2',
+      },
+    );
+    expect(markMessageThreadRepliedTo).toHaveBeenCalled();
+    expect(createMessage).toHaveBeenCalled();
+    expect(createMessage.mock.calls[0][0].message).toMatchObject({
       ...messageData,
       attachments: mockAttachments,
       caseStatus: CASE_STATUS_TYPES.generalDocket,
       caseTitle: 'Roslindis Angelino',
       docketNumber: '101-20',
-      docketNumberWithSuffix: '123-45S',
       from: 'Test Petitionsclerk',
       fromSection: PETITIONS_SECTION,
       fromUserId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
       to: 'Test Petitionsclerk2',
     });
-    expect(
-      applicationContext.getPersistenceGateway().markMessageThreadRepliedTo,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().markMessageThreadRepliedTo.mock
-        .calls[0][0],
-    ).toMatchObject({
+    expect(markMessageThreadRepliedTo).toHaveBeenCalled();
+    expect(markMessageThreadRepliedTo.mock.calls[0][0]).toMatchObject({
       parentMessageId: messageData.parentMessageId,
     });
   });

@@ -15,6 +15,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { pick } from 'lodash';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -218,8 +219,7 @@ export const fileExternalDocument = async (
         });
 
         for (let workItem of workItems) {
-          await applicationContext.getPersistenceGateway().saveWorkItem({
-            applicationContext,
+          await saveWorkItem({
             workItem: workItem.validate().toRawObject(),
           });
         }

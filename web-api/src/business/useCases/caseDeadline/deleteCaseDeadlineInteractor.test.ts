@@ -1,3 +1,5 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { AUTOMATIC_BLOCKED_REASONS } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE_WITHOUT_PENDING } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';

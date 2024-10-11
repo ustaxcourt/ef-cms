@@ -51,7 +51,6 @@ import { createCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { createDocketNumber } from '@web-api/persistence/dynamo/cases/docketNumberGenerator';
 import { createMockDocumentClient } from './createMockDocumentClient';
 import { deleteRecord } from '@web-api/persistence/elasticsearch/deleteRecord';
-import { deleteWorkItem } from '@web-api/persistence/dynamo/workitems/deleteWorkItem';
 import { documentUrlTranslator } from '@web-api/utilities/documentUrlTranslator';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { filterEmptyStrings } from '@shared/business/utilities/filterEmptyStrings';
@@ -90,7 +89,6 @@ import {
   getWorkQueueFilters,
 } from '@shared/business/utilities/getWorkQueueFilters';
 import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
-import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionPersistence } from '@web-api/persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
 import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFakeFile, testPdfDoc } from './getFakeFile';
 import { getFormattedPartiesNameAndTitle } from '@shared/business/utilities/getFormattedPartiesNameAndTitle';
@@ -101,13 +99,10 @@ import { getTextByCount } from '@shared/business/utilities/getTextByCount';
 import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 import { getUserById as getUserByIdPersistence } from '@web-api/persistence/dynamo/users/getUserById';
 import { getUserIdForNote } from '@web-api/business/useCaseHelper/getUserIdForNote';
-import { getWorkItemById as getWorkItemByIdPersistence } from '@web-api/persistence/dynamo/workitems/getWorkItemById';
 import { incrementCounter } from '@web-api/persistence/dynamo/helpers/incrementCounter';
-import { putWorkItemInOutbox } from '@web-api/persistence/dynamo/workitems/putWorkItemInOutbox';
 import { removeCounselFromRemovedPetitioner } from '@web-api/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
 import { removeItem } from '@web-client/persistence/localStorage/removeItem';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
-import { saveWorkItem } from '@web-api/persistence/dynamo/workitems/saveWorkItem';
 import { sealCaseInteractor } from '@shared/business/useCases/sealCaseInteractor';
 import { sealDocketEntryInteractor } from '@web-api/business/useCases/docketEntry/sealDocketEntryInteractor';
 import { serveCaseDocument } from '@shared/business/utilities/serveCaseDocument';
@@ -476,7 +471,6 @@ export const createTestApplicationContext = () => {
     deleteKeyCount: jest.fn(),
     deleteLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
     deleteRecord: jest.fn().mockImplementation(deleteRecord),
-    deleteWorkItem: jest.fn(deleteWorkItem),
     fetchPendingItems: jest.fn(),
     getAllWebSocketConnections: jest
       .fn()
@@ -494,11 +488,7 @@ export const createTestApplicationContext = () => {
     getDispatchNotification: jest.fn(),
     getDocketNumbersByStatusAndByJudge: jest.fn(),
     getDocument: jest.fn().mockResolvedValue(testPdfDoc),
-    getDocumentQCInboxForSection: jest.fn(),
     getDocumentQCInboxForUser: jest.fn(),
-    getDocumentQCServedForSection: jest
-      .fn()
-      .mockImplementation(getDocumentQCInboxForSectionPersistence),
     getDownloadPolicyUrl: jest
       .fn()
       .mockReturnValue({ url: 'http://example.com/' }),
@@ -512,7 +502,6 @@ export const createTestApplicationContext = () => {
     getItem: jest.fn().mockImplementation(getItem),
     getLimiterByKey: jest.fn(),
     getMaintenanceMode: jest.fn(),
-    getMessagesByDocketNumber: jest.fn(),
     getPractitionerDocuments: jest.fn(),
     getReconciliationReport: jest.fn(),
     getRecord: jest.fn(),
@@ -521,18 +510,15 @@ export const createTestApplicationContext = () => {
     getTrialSessionProcessingStatus: jest.fn(),
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getUserCaseMappingsByDocketNumber: jest.fn().mockReturnValue([]),
-    getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     getWorkItemsByDocketNumber: jest.fn().mockReturnValue([]),
     incrementCounter,
     incrementKeyCount: jest.fn(),
     isEmailAvailable: jest.fn(),
     isFileExists: jest.fn(),
     persistUser: jest.fn(),
-    putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
     removeItem: jest.fn().mockImplementation(removeItem),
     saveDispatchNotification: jest.fn(),
     saveDocumentFromLambda: jest.fn(),
-    saveWorkItem: jest.fn().mockImplementation(saveWorkItem),
     setExpiresAt: jest.fn(),
     setItem: jest.fn().mockImplementation(setItem),
     setPriorityOnAllWorkItems: jest.fn(),

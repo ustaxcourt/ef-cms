@@ -1,3 +1,6 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CONTACT_TYPES,
   PARTY_TYPES,
@@ -16,8 +19,11 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
 import { saveCaseDetailInternalEditInteractor } from './saveCaseDetailInternalEditInteractor';
+import { saveWorkItem as saveWorkItemMock } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 describe('updateCase', () => {
+  const saveWorkItem = saveWorkItemMock as jest.Mock;
+
   const mockCase = {
     ...MOCK_CASE,
     docketEntries: [
@@ -145,13 +151,8 @@ describe('updateCase', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-        .workItem,
-    ).toMatchObject({
+    expect(saveWorkItem).toHaveBeenCalled();
+    expect(saveWorkItem.mock.calls[0][0].workItem).toMatchObject({
       assigneeId: mockPetitionsClerkUser.userId,
       assigneeName: petitionsClerkUser.name,
       caseIsInProgress: true,
@@ -176,9 +177,7 @@ describe('updateCase', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).not.toHaveBeenCalled();
+    expect(saveWorkItem).not.toHaveBeenCalled();
   });
 
   it('should fail if the primary or secondary contact is empty', async () => {

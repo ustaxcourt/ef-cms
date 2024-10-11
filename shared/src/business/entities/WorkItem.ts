@@ -7,31 +7,31 @@ import { getUniqueId } from '@shared/sharedAppContext';
 import { pick } from 'lodash';
 
 export class WorkItem extends JoiValidationEntity {
-  public assigneeId: string;
-  public assigneeName: string;
+  public assigneeId?: string;
+  public assigneeName?: string;
   public associatedJudge: string;
-  public associatedJudgeId: string;
-  public caseIsInProgress: boolean;
+  public associatedJudgeId?: string;
+  public caseIsInProgress?: boolean;
   public caseStatus: string;
-  public caseTitle: string;
-  public completedAt: string;
-  public completedBy: string;
-  public completedByUserId: string;
-  public completedMessage: string;
+  public caseTitle?: string;
+  public completedAt?: string;
+  public completedBy?: string;
+  public completedByUserId?: string;
+  public completedMessage?: string;
   public createdAt: string;
   public docketEntry: any;
   public docketNumber: string;
-  public docketNumberWithSuffix: string;
+  public docketNumberWithSuffix?: string;
   public hideFromPendingMessages?: boolean;
-  public highPriority: boolean;
+  public highPriority?: boolean;
   public inProgress?: boolean;
-  public isInitializeCase: boolean;
+  public isInitializeCase?: boolean;
   public isRead?: boolean;
   public leadDocketNumber?: string;
   public section: string;
   public sentBy: string;
-  public sentBySection: string;
-  public sentByUserId: string;
+  public sentBySection?: string;
+  public sentByUserId?: string;
   public trialDate?: string;
   public trialLocation?: string;
   public updatedAt: string;
@@ -83,12 +83,13 @@ export class WorkItem extends JoiValidationEntity {
       : rawWorkItem.leadDocketNumber;
     this.docketNumberWithSuffix = caseEntity
       ? caseEntity.docketNumberWithSuffix
-      : rawWorkItem.docketNumberWithSuffix;
+      : `${rawWorkItem.docketNumber}${
+          rawWorkItem.docketNumberSuffix ? rawWorkItem.docketNumberSuffix : ''
+        }`;
     this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
     this.highPriority =
       rawWorkItem.highPriority ||
-      caseEntity?.status === CASE_STATUS_TYPES.calendared ||
-      rawWorkItem.caseStatus === CASE_STATUS_TYPES.calendared;
+      caseEntity?.status === CASE_STATUS_TYPES.calendared;
     this.inProgress = rawWorkItem.inProgress;
     this.isInitializeCase = rawWorkItem.isInitializeCase;
     this.isRead = rawWorkItem.isRead;
@@ -146,9 +147,7 @@ export class WorkItem extends JoiValidationEntity {
     this.completedBy = user.name;
     this.completedByUserId = user.userId;
     this.completedMessage = message;
-
-    delete this.inProgress;
-
+    this.inProgress = false;
     return this;
   }
 

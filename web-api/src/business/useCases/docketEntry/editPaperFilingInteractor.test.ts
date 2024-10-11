@@ -1,3 +1,5 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   DOCKET_SECTION,
   DOCUMENT_SERVED_MESSAGES,
@@ -13,6 +15,7 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 describe('editPaperFilingInteractor', () => {
   let caseRecord;
@@ -202,9 +205,7 @@ describe('editPaperFilingInteractor', () => {
         expect(
           applicationContext.getPersistenceGateway().getCaseByDocketNumber,
         ).toHaveBeenCalled();
-        expect(
-          applicationContext.getPersistenceGateway().saveWorkItem,
-        ).toHaveBeenCalled();
+        expect(saveWorkItem).toHaveBeenCalled();
         expect(updatedDocketEntry.numberOfPages).toEqual(2);
       });
 
@@ -230,9 +231,7 @@ describe('editPaperFilingInteractor', () => {
         expect(
           applicationContext.getPersistenceGateway().getCaseByDocketNumber,
         ).toHaveBeenCalled();
-        expect(
-          applicationContext.getPersistenceGateway().saveWorkItem,
-        ).toHaveBeenCalled();
+        expect(saveWorkItem).toHaveBeenCalled();
         expect(
           applicationContext.getPersistenceGateway().updateCase,
         ).toHaveBeenCalled();

@@ -13,6 +13,7 @@ import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '../../../../../shared/src/b
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { chunk, flatten, partition, uniq } from 'lodash';
+import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 
 const CHUNK_SIZE = 50;
 
@@ -236,11 +237,9 @@ const setManuallyAddedCaseAsCalendared = async (
   caseEntity.setAsCalendared(trialSessionEntity);
 
   await Promise.all([
-    applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
-      applicationContext,
+    setPriorityOnAllWorkItems({
       docketNumber: caseEntity.docketNumber,
       highPriority: true,
-      trialDate: caseEntity.trialDate,
     }),
     applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
@@ -268,11 +267,9 @@ const setTrialSessionCalendarForEligibleCase = async (
   trialSessionEntity.addCaseToCalendar(caseEntity);
 
   await Promise.all([
-    applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
-      applicationContext,
+    setPriorityOnAllWorkItems({
       docketNumber: caseEntity.docketNumber,
       highPriority: true,
-      trialDate: caseEntity.trialDate,
     }),
     applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,

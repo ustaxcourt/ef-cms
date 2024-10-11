@@ -1,3 +1,5 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   MOCK_CASE,
   MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,

@@ -1,3 +1,5 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { MOCK_CASE } from '../../test/mockCase';
 import { ROLES } from '../entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';

@@ -1,3 +1,5 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
@@ -18,8 +20,10 @@ import {
   mockDocketClerkUser,
   mockIrsPractitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { saveWorkItem as saveWorkItemMock } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 describe('fileExternalDocumentInteractor', () => {
+  const saveWorkItem = saveWorkItemMock as jest.Mock;
   const mockDocketEntryId = applicationContext.getUniqueId();
 
   let caseRecord;
@@ -154,9 +158,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).not.toHaveBeenCalled();
+    expect(saveWorkItem).not.toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).not.toHaveBeenCalled();
@@ -184,9 +186,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(saveWorkItem).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -302,9 +302,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalledTimes(5);
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalledTimes(4);
+    expect(saveWorkItem).toHaveBeenCalledTimes(4);
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalledTimes(2);
@@ -315,30 +313,6 @@ describe('fileExternalDocumentInteractor', () => {
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalledTimes(2);
     expect(updatedCase!.docketEntries[4].servedAt).toBeDefined();
-  });
-
-  it('should use original case caption to create case title when creating work item', async () => {
-    await fileExternalDocumentInteractor(
-      applicationContext,
-      {
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'Memorandum in Support',
-          documentType: 'Memorandum in Support',
-          eventCode: 'A',
-          filedBy: 'Test Petitioner',
-          primaryDocumentId: mockDocketEntryId,
-        },
-      },
-      mockIrsPractitionerUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-        .workItem,
-    ).toMatchObject({
-      caseTitle: caseRecord.caseCaption,
-    });
   });
 
   it('should set secondary document and secondary supporting documents to lodged', async () => {
@@ -437,9 +411,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(saveWorkItem).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -470,12 +442,8 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0],
-    ).toMatchObject({
+    expect(saveWorkItem).toHaveBeenCalled();
+    expect(saveWorkItem.mock.calls[0][0]).toMatchObject({
       workItem: { highPriority: true, trialDate: '2019-03-01T21:40:46.415Z' },
     });
   });
@@ -498,12 +466,8 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0],
-    ).toMatchObject({
+    expect(saveWorkItem).toHaveBeenCalled();
+    expect(saveWorkItem.mock.calls[0][0]).toMatchObject({
       workItem: { highPriority: false },
     });
   });

@@ -1,3 +1,6 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
@@ -12,10 +15,12 @@ import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { User } from '../../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { fileCourtIssuedOrderInteractor } from './fileCourtIssuedOrderInteractor';
+import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 
 describe('fileCourtIssuedOrderInteractor', () => {
   const mockUserId = applicationContext.getUniqueId();
@@ -340,27 +345,25 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should add order document to most recent message if a parentMessageId is passed in', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getMessageThreadByParentId.mockReturnValue([
-        {
-          caseStatus: caseRecord.status,
-          caseTitle: PARTY_TYPES.petitioner,
-          createdAt: '2019-03-01T21:40:46.415Z',
-          docketNumber: caseRecord.docketNumber,
-          docketNumberWithSuffix: caseRecord.docketNumber,
-          from: 'Test Petitionsclerk',
-          fromSection: PETITIONS_SECTION,
-          fromUserId: '4791e892-14ee-4ab1-8468-0c942ec379d2',
-          message: 'hey there',
-          messageId: 'a10d6855-f3ee-4c11-861c-c7f11cba4dff',
-          parentMessageId: '31687a1e-3640-42cd-8e7e-a8e6df39ce9a',
-          subject: 'hello',
-          to: 'Test Petitionsclerk2',
-          toSection: PETITIONS_SECTION,
-          toUserId: '449b916e-3362-4a5d-bf56-b2b94ba29c12',
-        },
-      ]);
+    (getMessageThreadByParentId as jest.Mock).mockReturnValue([
+      {
+        caseStatus: caseRecord.status,
+        caseTitle: PARTY_TYPES.petitioner,
+        createdAt: '2019-03-01T21:40:46.415Z',
+        docketNumber: caseRecord.docketNumber,
+        docketNumberWithSuffix: caseRecord.docketNumber,
+        from: 'Test Petitionsclerk',
+        fromSection: PETITIONS_SECTION,
+        fromUserId: '4791e892-14ee-4ab1-8468-0c942ec379d2',
+        message: 'hey there',
+        messageId: 'a10d6855-f3ee-4c11-861c-c7f11cba4dff',
+        parentMessageId: '31687a1e-3640-42cd-8e7e-a8e6df39ce9a',
+        subject: 'hello',
+        to: 'Test Petitionsclerk2',
+        toSection: PETITIONS_SECTION,
+        toUserId: '449b916e-3362-4a5d-bf56-b2b94ba29c12',
+      },
+    ]);
 
     await fileCourtIssuedOrderInteractor(
       applicationContext,
@@ -380,12 +383,9 @@ describe('fileCourtIssuedOrderInteractor', () => {
       mockDocketClerkUser,
     );
 
+    expect(updateMessage).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateMessage,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateMessage.mock.calls[0][0]
-        .message.attachments,
+      (updateMessage as jest.Mock).mock.calls[0][0].message.attachments,
     ).toEqual([
       {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

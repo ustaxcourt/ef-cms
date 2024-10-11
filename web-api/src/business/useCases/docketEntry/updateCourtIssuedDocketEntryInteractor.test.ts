@@ -1,3 +1,5 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
@@ -11,6 +13,7 @@ import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 import { updateCourtIssuedDocketEntryInteractor } from './updateCourtIssuedDocketEntryInteractor';
 
 describe('updateCourtIssuedDocketEntryInteractor', () => {
@@ -123,9 +126,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(saveWorkItem).toHaveBeenCalled();
   });
 
   it('should not update non-editable fields on the document', async () => {

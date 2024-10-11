@@ -1,3 +1,5 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
@@ -5,11 +7,15 @@ import {
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
+import { WorkItem } from '@shared/business/entities/WorkItem';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { completeWorkItemInteractor } from './completeWorkItemInteractor';
+import { getWorkItemById as getWorkItemByIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('completeWorkItemInteractor', () => {
+  const getWorkItemById = getWorkItemByIdMock as jest.Mock;
+
   let mockLock;
 
   const mockRequest = {
@@ -45,7 +51,6 @@ describe('completeWorkItemInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
-    applicationContext.getPersistenceGateway().putWorkItemInOutbox = jest.fn();
   });
 
   beforeEach(() => {
@@ -53,9 +58,7 @@ describe('completeWorkItemInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-    applicationContext
-      .getPersistenceGateway()
-      .getWorkItemById.mockReturnValue(mockWorkItem);
+    getWorkItemById.mockReturnValue(new WorkItem(mockWorkItem));
   });
 
   it('throws a ServiceUnavailableError if a Case is currently locked', async () => {
@@ -87,19 +90,6 @@ describe('completeWorkItemInteractor', () => {
       identifier: `case|${MOCK_CASE.docketNumber}`,
       ttl: 30,
     });
-  });
-
-  it('resolves and calls updateCaseAndAssociations', async () => {
-    await expect(
-      completeWorkItemInteractor(
-        applicationContext,
-        mockRequest,
-        mockDocketClerkUser,
-      ),
-    ).resolves.not.toThrow();
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalled();
   });
 
   it('removes the lock when it is finished', async () => {

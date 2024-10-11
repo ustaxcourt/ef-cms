@@ -1,5 +1,8 @@
+import {
+  IRS_SYSTEM_SECTION,
+  ROLES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { OutboxItem } from '../../../../../shared/src/business/entities/OutboxItem';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -8,9 +11,10 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
-  calculateISODate,
+  calculateDate,
   createISODateAtStartOfDayEST,
 } from '../../../../../shared/src/business/utilities/DateHandler';
+import { getDocumentQCServedForSection } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForSection';
 
 /**
  *
@@ -31,19 +35,14 @@ export const getDocumentQCServedForSectionInteractor = async (
   }
 
   const afterDate = await calculateAfterDate(applicationContext);
-  const workItems = await applicationContext
-    .getPersistenceGateway()
-    .getDocumentQCServedForSection({
-      afterDate,
-      applicationContext,
-      section,
-    });
+  const workItems = await getDocumentQCServedForSection({
+    afterDate,
+    sections: [section, IRS_SYSTEM_SECTION],
+  });
 
-  const filteredWorkItems = workItems
-    .filter(workItem =>
-      authorizedUser.role === ROLES.petitionsClerk ? !!workItem.section : true,
-    )
-    .map(workItem => new OutboxItem(workItem, { applicationContext }));
+  const filteredWorkItems = workItems.filter(workItem =>
+    authorizedUser.role === ROLES.petitionsClerk ? !!workItem.section : true,
+  );
 
   return OutboxItem.validateRawCollection(filteredWorkItems, {
     applicationContext,
@@ -66,7 +65,7 @@ export const calculateAfterDate = async applicationContext => {
   daysToRetrieve = Math.abs(daysToRetrieve);
 
   const startOfDay = createISODateAtStartOfDayEST();
-  const afterDate = calculateISODate({
+  const afterDate = calculateDate({
     dateString: startOfDay,
     howMuch: daysToRetrieve * -1,
     units: 'days',

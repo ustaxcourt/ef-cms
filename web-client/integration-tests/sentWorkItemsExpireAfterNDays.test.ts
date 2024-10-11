@@ -8,10 +8,10 @@ import {
   uploadPetition,
 } from './helpers';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 describe('verify old sent work items do not show up in the outbox', () => {
   const cerebralTest = setupTest();
-
   let workItemNMinus1Days;
   let workItemNDays;
   let workItemNPlus1Days;
@@ -63,6 +63,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
     workItemNPlus1Days = {
       assigneeId: mockUser.userId,
       assigneeName: 'Test petitionsclerk1',
+      associatedJudge: 'Chief Judge',
       caseStatus: CASE_STATUS_TYPES.new,
       completedAt: CREATED_N_PLUS_1_DAYS_AGO,
       completedBy: 'Test Petitionsclerk',
@@ -98,23 +99,9 @@ describe('verify old sent work items do not show up in the outbox', () => {
       workItemId: `${workItemIdNMinus1}`,
     };
 
-    await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
-      applicationContext,
-      authorizedUser: mockUser,
-      workItem: workItemNPlus1Days,
-    });
-
-    await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
-      applicationContext,
-      authorizedUser: mockUser,
-      workItem: workItemNDays,
-    });
-
-    await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
-      applicationContext,
-      authorizedUser: mockUser,
-      workItem: workItemNMinus1Days,
-    });
+    await saveWorkItem({ workItem: workItemNPlus1Days });
+    await saveWorkItem({ workItem: workItemNDays });
+    await saveWorkItem({ workItem: workItemNMinus1Days });
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');

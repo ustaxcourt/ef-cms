@@ -1,3 +1,5 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
@@ -17,6 +19,7 @@ import {
   getContactPrimary,
   getContactSecondary,
 } from '../../../../shared/src/business/entities/cases/Case';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 jest.mock('@shared/business/utilities/DateHandler', () => {
   const originalModule = jest.requireActual(
@@ -108,9 +111,7 @@ describe('createCaseInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().createCaseAndAssociations,
     ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).not.toHaveBeenCalled();
+    expect(saveWorkItem).not.toHaveBeenCalled();
   });
 
   it('should create a case (with a case status history) successfully as a petitioner', async () => {
@@ -145,9 +146,7 @@ describe('createCaseInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(saveWorkItem).toHaveBeenCalled();
   });
 
   it('should create a case (with a case status history) successfully as a private practitioner', async () => {
@@ -185,9 +184,7 @@ describe('createCaseInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(saveWorkItem).toHaveBeenCalled();
   });
 
   it('should match the current user id to the contactId when the user is petitioner', async () => {
@@ -308,9 +305,7 @@ describe('createCaseInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().createCaseAndAssociations,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(saveWorkItem).toHaveBeenCalled();
   });
 
   it('should create a case successfully with an "Attachment to Petition" document', async () => {
@@ -477,9 +472,7 @@ describe('createCaseInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().createCaseAndAssociations,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(saveWorkItem).toHaveBeenCalled();
   });
 
   it('should set serviceIndicators for each petitioner on the case', async () => {

@@ -8,6 +8,11 @@ import { PrivatePractitioner } from '../../../../../shared/src/business/entities
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
+import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
+import { upsertCase } from '@web-api/persistence/postgres/cases/upsertCase';
 import diff from 'diff-arrays-of-objects';
 
 /**
@@ -67,16 +72,9 @@ const updateCaseDocketEntries = ({
   );
 };
 
-/**
- * Identifies case messages which have been updated and issues persistence calls
- * @param {object} args the arguments for updating the case
- * @param {object} args.applicationContext the application context
- * @param {object} args.caseToUpdate the case with its updated document data
- * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
- * @returns {Array<function>} the persistence functions required to complete this action
- */
 const updateCaseMessages = async ({
-  applicationContext,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  applicationContext, // cannot remove till remaining RELATED_CASE_OPERATIONS functions no longer use applicationContext
   caseToUpdate,
   oldCase,
 }) => {
@@ -89,32 +87,24 @@ const updateCaseMessages = async ({
     return [];
   }
 
-  const caseMessages = await applicationContext
-    .getPersistenceGateway()
-    .getMessagesByDocketNumber({
-      applicationContext,
-      docketNumber: caseToUpdate.docketNumber,
-    });
+  const caseMessages = await getMessagesByDocketNumber({
+    docketNumber: caseToUpdate.docketNumber,
+  });
 
   if (!caseMessages) {
     return [];
   }
 
   caseMessages.forEach(message => {
-    message.caseStatus = caseToUpdate.status;
-    message.caseTitle = Case.getCaseTitle(caseToUpdate.caseCaption);
     message.docketNumberSuffix = caseToUpdate.docketNumberSuffix;
   });
 
-  const validMessages = Message.validateRawCollection(caseMessages, {
-    applicationContext,
-  });
+  const validMessages = Message.validateRawCollection(caseMessages);
 
   return validMessages.map(
     message =>
-      function updateCaseMessages_cb() {
-        return applicationContext.getPersistenceGateway().updateMessage({
-          applicationContext,
+      async function updateCaseMessages_cb() {
+        return await updateMessage({
           message,
         });
       },
@@ -342,41 +332,22 @@ const updatePrivatePractitioners = ({
  * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
  * @returns {Array<function>} the persistence functions required to complete this action
  */
-const updateCaseWorkItems = async ({
-  applicationContext,
-  caseToUpdate,
-  oldCase,
-}) => {
+const updateCaseWorkItems = async ({ caseToUpdate, oldCase }) => {
   const workItemsRequireUpdate =
-    oldCase.associatedJudge !== caseToUpdate.associatedJudge ||
-    oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
-    oldCase.caseCaption !== caseToUpdate.caseCaption ||
-    oldCase.status !== caseToUpdate.status ||
-    oldCase.trialDate !== caseToUpdate.trialDate ||
-    oldCase.trialLocation !== caseToUpdate.trialLocation ||
-    oldCase.leadDocketNumber !== caseToUpdate.leadDocketNumber;
+    oldCase.associatedJudge !== caseToUpdate.associatedJudge;
 
-  if (!workItemsRequireUpdate) {
+  const workItems = await getWorkItemsByDocketNumber({
+    docketNumber: caseToUpdate.docketNumber,
+  });
+
+  if (!workItems || !workItemsRequireUpdate) {
     return [];
   }
 
-  const rawWorkItems = await applicationContext
-    .getPersistenceGateway()
-    .getWorkItemsByDocketNumber({
-      applicationContext,
-      docketNumber: caseToUpdate.docketNumber,
-    });
-
-  const updatedWorkItems = rawWorkItems.map(rawWorkItem => ({
+  const updatedWorkItems = workItems.map(rawWorkItem => ({
     ...rawWorkItem,
     associatedJudge: caseToUpdate.associatedJudge,
     associatedJudgeId: caseToUpdate.associatedJudgeId,
-    caseStatus: caseToUpdate.status,
-    caseTitle: Case.getCaseTitle(caseToUpdate.caseCaption),
-    docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
-    leadDocketNumber: caseToUpdate.leadDocketNumber,
-    trialDate: caseToUpdate.trialDate || null,
-    trialLocation: caseToUpdate.trialLocation || null,
   }));
 
   const validWorkItems = WorkItem.validateRawCollection(updatedWorkItems);
@@ -384,8 +355,7 @@ const updateCaseWorkItems = async ({
   return validWorkItems.map(
     validWorkItem =>
       function () {
-        return applicationContext.getPersistenceGateway().saveWorkItem({
-          applicationContext,
+        return saveWorkItem({
           workItem: validWorkItem,
         });
       },
@@ -501,6 +471,8 @@ export const updateCaseAndAssociations = async ({
   });
 
   await Promise.all(persistenceRequests);
+
+  await upsertCase({ rawCase: validRawCaseEntity });
 
   return applicationContext.getPersistenceGateway().updateCase({
     applicationContext,

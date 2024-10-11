@@ -5,6 +5,10 @@ import {
   UnknownAuthUser,
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
+import { getDocumentQCInboxForSection } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForSection';
+import { getDocumentQCInboxForUser } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import { getSectionInboxMessages } from '@web-api/persistence/postgres/messages/getSectionInboxMessages';
+import { getUserInboxMessages } from '@web-api/persistence/postgres/messages/getUserInboxMessages';
 import { isEmpty } from 'lodash';
 
 const getJudgeUser = async (
@@ -91,20 +95,18 @@ export const getNotificationsInteractor = async (
     documentQCIndividualInbox,
     documentQCSectionInbox,
   ] = await Promise.all([
-    applicationContext.getPersistenceGateway().getUserInboxMessages({
+    getUserInboxMessages({
       applicationContext,
       userId,
     }),
-    applicationContext.getPersistenceGateway().getSectionInboxMessages({
+    getSectionInboxMessages({
       applicationContext,
       section,
     }),
-    applicationContext.getPersistenceGateway().getDocumentQCInboxForUser({
-      applicationContext,
+    getDocumentQCInboxForUser({
       userId,
     }),
-    applicationContext.getPersistenceGateway().getDocumentQCInboxForSection({
-      applicationContext,
+    getDocumentQCInboxForSection({
       judgeUserName: judgeUser ? judgeUser.name : null,
       section: sectionToDisplay,
     }),

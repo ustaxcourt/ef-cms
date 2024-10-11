@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,

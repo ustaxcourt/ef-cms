@@ -1,4 +1,5 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   DOCKET_SECTION,
   ROLES,
@@ -16,6 +17,7 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -157,38 +159,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
-  });
-
-  it('should call putWorkItemInUsersOutbox with correct leadDocketNumber when documentType is unservable', async () => {
-    await fileCourtIssuedDocketEntryInteractor(
-      applicationContext,
-      {
-        docketNumbers: [],
-        documentMeta: {
-          docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-          documentTitle: 'Hearing Exhibits for [anything]',
-          documentType: 'Hearing Exhibits',
-          eventCode: 'HE',
-          generatedDocumentTitle: 'Hearing Exhibits for meeeeeee',
-        },
-        subjectDocketNumber: caseRecord.docketNumber,
-      } as any,
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
-        .calls[0][0].workItem.leadDocketNumber,
-    ).toEqual('109-19');
+    expect(saveWorkItem).toHaveBeenCalled();
   });
 
   it('should call updateCase with the docket entry set as pending if the document is a tracked document', async () => {
@@ -285,34 +256,6 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       );
 
     expect(updatedDocketEntry).toMatchObject({ draftOrderState: null });
-  });
-
-  it('should use original case caption to create case title when creating work item', async () => {
-    await fileCourtIssuedDocketEntryInteractor(
-      applicationContext,
-      {
-        docketNumbers: [],
-        documentMeta: {
-          date: '2019-03-01T21:40:46.415Z',
-          docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-          documentTitle: 'Order',
-          documentType: 'Order',
-          eventCode: 'O',
-          freeText: 'Dogs',
-          generatedDocumentTitle: 'Transcript of Dogs on 03-01-19',
-          serviceStamp: 'Served',
-        },
-        subjectDocketNumber: caseRecord.docketNumber,
-      } as any,
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-        .workItem,
-    ).toMatchObject({
-      caseTitle: Case.getCaseTitle(caseRecord.caseCaption),
-    });
   });
 
   it('should add docketEntry to caseEntity when not already on caseEntity', async () => {

@@ -1,4 +1,7 @@
 /* eslint-disable max-lines */
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
@@ -510,29 +513,6 @@ describe('updatePetitionerInformationInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).not.toHaveBeenCalled();
-  });
-
-  it('should use original case caption to create case title when creating work item', async () => {
-    await updatePetitionerInformationInteractor(
-      applicationContext,
-      {
-        docketNumber: MOCK_CASE.docketNumber,
-        updatedPetitionerData: {
-          ...mockPetitioners[0],
-          address1: 'changed address',
-          contactId: mockPetitioners[0].contactId,
-          name: 'Test Person22222',
-        },
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-        .workItem,
-    ).toMatchObject({
-      caseTitle: 'Test Petitioner',
-    });
   });
 
   it('should not generated a docket entry if case older than 6 months', async () => {
