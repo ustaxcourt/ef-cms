@@ -12,11 +12,13 @@ import React, { useRef } from 'react';
 export const TrialSessionsTable = connect(
   {
     setTrialSessionsFiltersSequence: sequences.setTrialSessionsFiltersSequence,
+    specialTrialSessionNotes: state.trialSessionWorkingCopy.sessionNotes,
     trialSessionsHelper: state.trialSessionsHelper,
     trialSessionsPage: state.trialSessionsPage,
   },
   function TrialSessionsTable({
     setTrialSessionsFiltersSequence,
+    specialTrialSessionNotes,
     trialSessionsHelper,
     trialSessionsPage,
   }) {
@@ -93,7 +95,7 @@ export const TrialSessionsTable = connect(
                         <td colSpan={100}>
                           <div className="special-session">
                             <span className="text-semibold">
-                              Special Session Notes.
+                              Special Session Notes: {specialTrialSessionNotes}
                             </span>
                           </div>
                         </td>
