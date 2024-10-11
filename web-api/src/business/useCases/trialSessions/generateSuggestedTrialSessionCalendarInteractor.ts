@@ -123,19 +123,10 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   // past two terms.
 
   console.time('10275: Compile cities from last two term time');
-  const previousTwoTerms = getPreviousTwoTerms(termStartDate);
-
-  const citiesFromLastTwoTerms = sessions
-    .filter(session => {
-      const termString = `${session.term}, ${session.termYear}`;
-      return (
-        previousTwoTerms.includes(termString) &&
-        session.sessionType !== SESSION_TYPES.special
-      );
-    })
-    .map(relevantSession => {
-      return relevantSession.trialLocation!;
-    });
+  const citiesFromLastTwoTerms = getCitiesFromLastTwoTerms({
+    sessions,
+    termStartDate,
+  });
   console.timeEnd('10275: Compile cities from last two term time');
 
   console.time('10275: Generate prospectiveSessionsByCity time');
@@ -242,6 +233,23 @@ const SESSION_TERMS_FOR_GENERATOR = {
   fall: [9, 10, 11, 12],
   spring: [4, 5, 6, 7, 8],
   winter: [1, 2, 3],
+};
+
+export const getCitiesFromLastTwoTerms = ({ sessions, termStartDate }) => {
+  const previousTwoTerms = getPreviousTwoTerms(termStartDate);
+  console.log(previousTwoTerms);
+  return sessions
+    .filter(session => {
+      const termString = `${session.term.toLowerCase()}, ${session.termYear}`;
+      console.log('termString', termString);
+      return (
+        previousTwoTerms.includes(termString) &&
+        session.sessionType !== SESSION_TYPES.special
+      );
+    })
+    .map(relevantSession => {
+      return relevantSession.trialLocation!;
+    });
 };
 
 function getCurrentTermByMonth(currentMonth: string) {
