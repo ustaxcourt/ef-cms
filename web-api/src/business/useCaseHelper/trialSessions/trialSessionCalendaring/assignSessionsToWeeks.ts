@@ -25,12 +25,15 @@ export type ScheduledTrialSession = {
 };
 
 export type SessionCountByWeek = Record<string, number>;
+export type RemainingCaseCountByCity = Record<string, number>;
 
 export type TrialSessionsByCity = Record<string, ScheduledTrialSession[]>;
 
 export const assignSessionsToWeeks = ({
   calendaringConfig,
   prospectiveSessionsByCity,
+  regularCaseCountByCity,
+  smallCaseCountByCity,
   specialSessions,
   weeksToLoop,
 }: {
@@ -38,9 +41,13 @@ export const assignSessionsToWeeks = ({
   prospectiveSessionsByCity: ProspectiveSessionsByCity;
   weeksToLoop: string[];
   calendaringConfig: CalendaringConfig;
+  smallCaseCountByCity: Record<string, number>;
+  regularCaseCountByCity: Record<string, number>;
 }): {
   sessionCountPerWeek: SessionCountByWeek;
   scheduledTrialSessionsByCity: TrialSessionsByCity;
+  remainingRegularCaseCountByCity: RemainingCaseCountByCity;
+  remainingSmallCaseCountByCity: RemainingCaseCountByCity;
 } => {
   const sessionCountPerWeek: Record<string, number> = {}; // weekOf -> session count
   const sessionCountPerCity: Record<string, number> = {}; // trialLocation -> session count
@@ -176,12 +183,15 @@ export const assignSessionsToWeeks = ({
     }
 
     addScheduledTrialSession({
+      calendaringConfig,
       city: trialLocation,
+      regularCaseCountByCity,
       scheduledTrialSessionsByCity,
       sessionCountPerCity,
       sessionCountPerWeek,
       sessionScheduledPerCityPerWeek,
       sessionType: SESSION_TYPES.special,
+      smallCaseCountByCity,
       weekOfString: sessionWeekOf,
     });
   });
@@ -213,10 +223,13 @@ export const assignSessionsToWeeks = ({
 
         addScheduledTrialSession({
           ...prospectiveSession,
+          calendaringConfig,
+          regularCaseCountByCity,
           scheduledTrialSessionsByCity,
           sessionCountPerCity,
           sessionCountPerWeek,
           sessionScheduledPerCityPerWeek,
+          smallCaseCountByCity,
           weekOfString,
         });
 
@@ -231,18 +244,23 @@ export const assignSessionsToWeeks = ({
   }
 
   return {
+    remainingRegularCaseCountByCity: regularCaseCountByCity,
+    remainingSmallCaseCountByCity: smallCaseCountByCity,
     scheduledTrialSessionsByCity,
     sessionCountPerWeek,
   };
 };
 
 function addScheduledTrialSession({
+  calendaringConfig,
   city,
+  regularCaseCountByCity,
   scheduledTrialSessionsByCity,
   sessionCountPerCity,
   sessionCountPerWeek,
   sessionScheduledPerCityPerWeek,
   sessionType,
+  smallCaseCountByCity,
   weekOfString,
 }: {
   city: string;
@@ -252,12 +270,29 @@ function addScheduledTrialSession({
   sessionScheduledPerCityPerWeek: Record<string, Set<string>>;
   sessionType: TrialSessionTypes;
   weekOfString: string;
+  smallCaseCountByCity: RemainingCaseCountByCity;
+  regularCaseCountByCity: RemainingCaseCountByCity;
+  calendaringConfig: CalendaringConfig;
 }) {
   scheduledTrialSessionsByCity[city].push({
     city,
     sessionType,
     weekOf: weekOfString,
   });
+
+  // eslint-disable-next-line spellcheck/spell-checker
+  // Decrement by the max count for that session type. If that's less than 0, then we scheduled
+  // a session that was more than the min and less than the max, so just set it to 0
+  if (sessionType === SESSION_TYPES.regular) {
+    regularCaseCountByCity[city] -= calendaringConfig.regularCaseMaxQuantity;
+    if (regularCaseCountByCity[city] < 0) regularCaseCountByCity[city] = 0;
+  } else if (sessionType === SESSION_TYPES.small) {
+    smallCaseCountByCity[city] -= calendaringConfig.smallCaseMaxQuantity;
+    if (smallCaseCountByCity[city] < 0) smallCaseCountByCity[city] = 0;
+  } else if (sessionType === SESSION_TYPES.hybrid) {
+    regularCaseCountByCity[city] = 0;
+    smallCaseCountByCity[city] = 0;
+  }
 
   sessionCountPerWeek[weekOfString]++;
   sessionCountPerCity[city]++;
