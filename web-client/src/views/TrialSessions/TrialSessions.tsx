@@ -69,7 +69,10 @@ export const TrialSessions = connect(
             headingLevel="2"
             id="trial-sessions-tabs"
             onSelect={tabName => {
-              resetTrialSessionsFiltersSequence({ currentTab: tabName });
+              if (trialSessionsHelper.currentTab === tabName) return;
+              resetTrialSessionsFiltersSequence({
+                currentTab: tabName,
+              });
             }}
           >
             {trialSessionsHelper.showNewTrialSession && (
