@@ -117,13 +117,13 @@ export const IRSNotice = connect<IrsNoticeType, typeof irsNoticeDependencies>(
           formGroupClassNames={''}
           id="date-of-notice"
           label="Date of notice"
+          onBlur={() => validateFormData()}
           onChange={e => {
             formatAndUpdateDateFromDatePickerSequence({
               key: 'irsNoticeDate',
               toFormat: constants.DATE_FORMATS.ISO,
               value: e.target.value,
             });
-            validateFormData();
           }}
         />
       );
