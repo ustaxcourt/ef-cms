@@ -1,3 +1,4 @@
+import { CasesByCity } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 import {
   FORMATS,
   formatDateString,
@@ -10,6 +11,8 @@ import {
 import ExcelJS from 'exceljs';
 
 export const writeTrialSessionDataToExcel = async ({
+  initialRegularCasesByCity,
+  initialSmallCasesByCity,
   sessionCountPerWeek,
   sortedScheduledTrialSessionsByCity,
   weeks,
@@ -17,6 +20,8 @@ export const writeTrialSessionDataToExcel = async ({
   sortedScheduledTrialSessionsByCity: TrialSessionsByCity;
   weeks: string[];
   sessionCountPerWeek: SessionCountByWeek;
+  initialRegularCasesByCity: CasesByCity;
+  initialSmallCasesByCity: CasesByCity;
 }) => {
   const workbook = new ExcelJS.Workbook();
   const worksheetOptions = { properties: { outlineLevelCol: 2 } };
@@ -54,6 +59,16 @@ export const writeTrialSessionDataToExcel = async ({
     });
   }
 
+  columns.push({
+    header: 'Small Cases',
+    key: 'initialSmallCaseCount',
+  });
+
+  columns.push({
+    header: 'Regular Cases',
+    key: 'initialRegularCaseCount',
+  });
+
   worksheet.columns = columns;
 
   for (const cityStateString in trialSessionCalendar) {
@@ -63,7 +78,14 @@ export const writeTrialSessionDataToExcel = async ({
     } else {
       city = cityStateString;
     }
-    const values = { city, ...trialSessionCalendar[cityStateString] };
+    const values = {
+      city,
+      ...trialSessionCalendar[cityStateString],
+      initialRegularCaseCount:
+        initialRegularCasesByCity[cityStateString]?.length || 0,
+      initialSmallCaseCount:
+        initialSmallCasesByCity[cityStateString]?.length || 0,
+    };
     worksheet.addRow(values);
   }
 

@@ -24,31 +24,31 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { assignSessionsToWeeks } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
+// import mockCases from '@shared/test/mockEligibleCases.json';
+// import mockSpecialSessions from '@shared/test/mockSpecialTrialSessions.json';
 
-// Maximum of 6 sessions per week overall.
 const MAX_SESSIONS_PER_WEEK = 6;
-
-// Maximum of 5 total sessions per location during a term.
 const MAX_SESSIONS_PER_LOCATION = 5;
 
-// Regular Cases:
-// Minimum of 40 cases to create a session.
-// Maximum of 100 cases per session.
 const REGULAR_CASE_MINIMUM_QUANTITY = 40;
 const REGULAR_CASE_MAX_QUANTITY = 100;
 
-// Small Cases:
-// Minimum of 40 cases to create a session.
-// Maximum of 125 cases per session.
 const SMALL_CASE_MINIMUM_QUANTITY = 40;
 const SMALL_CASE_MAX_QUANTITY = 125;
 
-// Hybrid Sessions:
-// If neither Small nor Regular categories alone meet the session minimum,
-// combine them to reach a minimum of 50 cases.
-// Maximum of 100 cases per hybrid session.
 const HYBRID_CASE_MINIMUM_QUANTITY = 50;
 const HYBRID_CASE_MAX_QUANTITY = 100;
+
+const calendaringConfig = {
+  hybridCaseMaxQuantity: HYBRID_CASE_MAX_QUANTITY,
+  hybridCaseMinimumQuantity: HYBRID_CASE_MINIMUM_QUANTITY,
+  maxSessionsPerLocation: MAX_SESSIONS_PER_LOCATION,
+  maxSessionsPerWeek: MAX_SESSIONS_PER_WEEK,
+  regularCaseMaxQuantity: REGULAR_CASE_MAX_QUANTITY,
+  regularCaseMinimumQuantity: REGULAR_CASE_MINIMUM_QUANTITY,
+  smallCaseMaxQuantity: SMALL_CASE_MAX_QUANTITY,
+  smallCaseMinimumQuantity: SMALL_CASE_MINIMUM_QUANTITY,
+};
 
 export const WASHINGTON_DC_STRING = 'Washington, District of Columbia';
 export const WASHINGTON_DC_NORTH_STRING =
@@ -75,29 +75,12 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     throw new UnauthorizedError('Unauthorized to generate term');
   }
 
-  //
-  // Maximum of 6 sessions per week
-  // Maximum of 5 sessions total per location
-  // Regular: 40 regular cases minimum to create a session and a maximum of 100 per session
-  // Small: 40 small cases minimum to create a session and a maximum of 125 per session
-  // Hybrid: After Small and Regular sessions are created, if small and regular cases can be added together to meet a minimum of 50, create a hybrid session. Maximum will be 100 cases per session
-  // Special sessions already created will be automatically included
-  // If there has been no trial in the last two terms for a location, then add a session if there are any cases. (ignore the minimum rule)
-  //
-  const calendaringConfig = {
-    hybridCaseMaxQuantity: HYBRID_CASE_MAX_QUANTITY,
-    hybridCaseMinimumQuantity: HYBRID_CASE_MINIMUM_QUANTITY,
-    maxSessionsPerLocation: MAX_SESSIONS_PER_LOCATION,
-    maxSessionsPerWeek: MAX_SESSIONS_PER_WEEK,
-    regularCaseMaxQuantity: REGULAR_CASE_MAX_QUANTITY,
-    regularCaseMinimumQuantity: REGULAR_CASE_MINIMUM_QUANTITY,
-    smallCaseMaxQuantity: SMALL_CASE_MAX_QUANTITY,
-    smallCaseMinimumQuantity: SMALL_CASE_MINIMUM_QUANTITY,
-  };
   console.time('10275: Get ready for trial cases time');
   const cases = await applicationContext
     .getPersistenceGateway()
     .getSuggestedCalendarCases({ applicationContext });
+
+  // const cases = mockCases;
 
   console.timeEnd('10275: Get ready for trial cases time');
 
@@ -105,6 +88,8 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   const sessions = await applicationContext
     .getPersistenceGateway()
     .getTrialSessions({ applicationContext });
+
+  // const sessions = mockSpecialSessions;
 
   console.timeEnd('10275: Get trial sessions time');
   // Note (10275): storing trial session data differently would make for a more
@@ -140,9 +125,6 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     cases,
     citiesFromLastTwoTerms,
   });
-
-  console.log('initialRegularCasesByCity!!!!', initialRegularCasesByCity);
-  console.log('initialSmallCasesByCity!!!!', initialSmallCasesByCity);
 
   console.timeEnd('10275: Generate prospectiveSessionsByCity time');
 
@@ -182,6 +164,8 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   console.time('10275: writeTrialSessionDataToExcel');
   const bufferArray = await writeTrialSessionDataToExcel({
+    initialRegularCasesByCity,
+    initialSmallCasesByCity,
     sessionCountPerWeek,
     sortedScheduledTrialSessionsByCity,
     weeks: weeksToLoop,
