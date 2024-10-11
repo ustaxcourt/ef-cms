@@ -14,18 +14,16 @@ export class EmailConfirmationForm extends JoiValidationEntity {
   }
 
   static VALIDATION_RULES = joi.object({
-    confirmEmail: JoiValidationConstants.EMAIL.required()
+    confirmEmail: joi
+      .when('email', {
+        is: JoiValidationConstants.EMAIL,
+        otherwise: JoiValidationConstants.EMAIL.required(),
+        then: joi.valid(joi.ref('email')).required(),
+      })
       .messages({
+        'any.only': 'Email addresses do not match',
         'any.required': 'Enter a valid email address',
         'string.email': 'Enter email address in format: yourname@example.com',
-      })
-      .when('email', {
-        is: joi.exist(),
-        then: JoiValidationConstants.EMAIL.valid(joi.ref('email')).messages({
-          'any.only': 'Email addresses do not match',
-          'any.required': 'Enter a valid email address',
-          'string.email': 'Enter email address in format: yourname@example.com',
-        }),
       }),
     email: JoiValidationConstants.EMAIL.required().messages({
       'any.required': 'Enter a valid email address',
