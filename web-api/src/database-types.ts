@@ -5,6 +5,7 @@ export interface Database {
   dwCase: CaseTable;
   dwCaseCorrespondence: CaseCorrespondenceTable;
   dwCaseDeadline: CaseDeadlineTable;
+  dwCaseWorksheet: CaseWorksheetTable;
 }
 
 export interface MessageTable {
@@ -80,3 +81,15 @@ export interface CaseDeadlineTable {
 export type CaseDeadlineKysely = Selectable<CaseDeadlineTable>;
 export type NewCaseDeadlineKysely = Insertable<CaseDeadlineTable>;
 export type UpdateCaseDeadlineKysely = Updateable<CaseDeadlineTable>;
+
+export interface CaseWorksheetTable {
+  docketNumber: string;
+  finalBriefDueDate?: Date;
+  primaryIssue?: string;
+  statusOfMatter?: string;
+  judgeUserId?: string;
+}
+
+export type CaseWorksheetKysely = Selectable<CaseWorksheetTable>;
+export type NewCaseWorksheetKysely = Insertable<CaseWorksheetTable>;
+export type UpdateCaseWorksheetKysely = Updateable<CaseWorksheetTable>;

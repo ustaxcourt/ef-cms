@@ -24,9 +24,19 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('createdAt', 'timestamptz', col => col.notNull())
     .addColumn('deadlineDate', 'timestamptz', col => col.notNull())
     .execute();
+
+  await db.schema
+    .createTable('dwCaseWorksheet')
+    .addColumn('docketNumber', 'varchar', col => col.primaryKey())
+    .addColumn('statusOfMatter', 'varchar')
+    .addColumn('primaryIssue', 'varchar')
+    .addColumn('judgeUserId', 'varchar')
+    .addColumn('finalBriefDueDate', 'timestamptz')
+    .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
   await db.schema.dropTable('dwCaseCorrespondence').execute();
   await db.schema.dropTable('dwCaseDeadline').execute();
+  await db.schema.dropTable('dwCaseWorksheet').execute();
 }

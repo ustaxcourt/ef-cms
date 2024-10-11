@@ -8,6 +8,7 @@ import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWo
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { SubmittedCAVTableFields } from '@web-api/persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/postgres/caseWorksheet/getCaseWorksheetsByDocketNumber';
 
 export type GetCasesByStatusAndByJudgeRequest = {
   statuses: string[];
@@ -71,10 +72,7 @@ const getCases = async (
       },
     });
 
-  const completeCaseRecords = await attachCaseWorkSheets(
-    applicationContext,
-    allCaseRecords,
-  );
+  const completeCaseRecords = await attachCaseWorkSheets(allCaseRecords);
 
   return completeCaseRecords;
 };
@@ -95,16 +93,10 @@ const calculateNumberOfConsolidatedCases = async (
     });
 };
 
-async function attachCaseWorkSheets(
-  applicationContext: ServerApplicationContext,
-  cases: SubmittedCAVTableFields[],
-) {
-  const caseWorksheets = await applicationContext
-    .getPersistenceGateway()
-    .getCaseWorksheetsByDocketNumber({
-      applicationContext,
-      docketNumbers: cases.map(c => c.docketNumber),
-    });
+async function attachCaseWorkSheets(cases: SubmittedCAVTableFields[]) {
+  const caseWorksheets = await getCaseWorksheetsByDocketNumber({
+    docketNumbers: cases.map(c => c.docketNumber),
+  });
   const caseWorksheetMap: Map<string, RawCaseWorksheet> = new Map();
   caseWorksheets.forEach(caseWorksheet =>
     caseWorksheetMap.set(caseWorksheet.docketNumber, caseWorksheet),

@@ -30728,14 +30728,7 @@
     "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Petitionsclerk"
   },
-  {
-    "sk": "case-worksheet|400-22",
-    "pk": "case|400-22",
-    "docketNumber": "400-22",
-    "entityName": "CaseWorksheet",
-    "gsi1pk": "judge-case-worksheet|dabbad00-18d0-43ec-bafb-654e83405416",
-    "primaryIssue": "Trumpet!\nThe trumpet!\nMambo Number 5!"
-  },
+ 
   {
     "associatedJudge": "Colvin",
     "isSealed": false,

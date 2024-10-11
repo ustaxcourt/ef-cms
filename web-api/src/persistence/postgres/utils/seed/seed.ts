@@ -1,4 +1,5 @@
 import { caseDeadlines } from '@web-api/persistence/postgres/utils/seed/fixtures/caseDeadlines';
+import { caseWorksheets } from '@web-api/persistence/postgres/utils/seed/fixtures/caseWorksheets';
 import { correspondence } from '@web-api/persistence/postgres/utils/seed/fixtures/correspodence';
 import { getDbWriter } from '../../../../database';
 import { messages } from './fixtures/messages';
@@ -28,7 +29,20 @@ export const seed = async () => {
       .execute(),
   );
 
-  await Promise.all([insertMessages, insertCaseDeadline, insertCorrespondence]);
+  const insertCaseWorksheet = getDbWriter(writer =>
+    writer
+      .insertInto('dwCaseWorksheet')
+      .values(caseWorksheets)
+      .onConflict(oc => oc.column('docketNumber').doNothing()) // ensure doesn't fail if exists
+      .execute(),
+  );
+
+  await Promise.all([
+    insertMessages,
+    insertCaseDeadline,
+    insertCorrespondence,
+    insertCaseWorksheet,
+  ]);
 };
 
 seed().catch;
