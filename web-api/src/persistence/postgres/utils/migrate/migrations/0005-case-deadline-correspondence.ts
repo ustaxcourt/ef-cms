@@ -5,6 +5,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     .createTable('dwCaseCorrespondence')
     .addColumn('correspondenceId', 'varchar', col => col.primaryKey())
     .addColumn('documentTitle', 'varchar', col => col.notNull())
+    .addColumn('docketNumber', 'varchar', col => col.notNull())
+    .addColumn('numberOfPages', 'int8')
     .addColumn('filedBy', 'varchar')
     .addColumn('userId', 'varchar', col => col.notNull())
     .addColumn('archived', 'boolean')

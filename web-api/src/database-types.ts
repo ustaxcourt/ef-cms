@@ -53,10 +53,12 @@ export type UpdateCaseKysely = Updateable<CaseTable>;
 export interface CaseCorrespondenceTable {
   archived?: boolean;
   correspondenceId: string;
+  numberOfPages?: number;
   documentTitle: string;
   filedBy?: string;
-  filingDate: string;
+  filingDate: Date;
   userId: string;
+  docketNumber: string;
 }
 
 export type CaseCorrespondenceKysely = Selectable<CaseCorrespondenceTable>;
