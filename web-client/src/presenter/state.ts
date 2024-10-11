@@ -668,14 +668,6 @@ export const baseState = {
   documentToEdit: {} as any,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
   draftDocumentViewerDocketEntryId: null,
-  emailConfirmation: {
-    confirmEmailErrorMessage: '',
-    emailErrorMessage: '',
-    inFocusConfirmEmail: false,
-    inFocusEmail: false,
-    isDirtyConfirmEmail: false,
-    isDirtyEmail: false,
-  },
   featureFlags: undefined as unknown as { [key: string]: string },
   fileUploadProgress: {
     isHavingSystemIssues: false,

@@ -519,7 +519,6 @@ import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntr
 import { updateDocketEntryMetaDocumentFormValueSequence } from './sequences/updateDocketEntryMetaDocumentFormValueSequence';
 import { updateDocketEntryWorksheetSequence } from '@web-client/presenter/sequences/updateDocketEntryWorksheetSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
-import { updateEmailConfirmationFormSequence } from './sequences/updateEmailConfirmationFormSequence';
 import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFileDocumentWizardFormValueSequence';
 import { updateFilePetitionSequence } from './sequences/updateFilePetitionSequence';
 import { updateFilingTypeSequence } from './sequences/updateFilingTypeSequence';
@@ -585,6 +584,7 @@ import { validateDocketEntryWorksheetSequence } from '@web-client/presenter/sequ
 import { validateDocumentSequence } from './sequences/validateDocumentSequence';
 import { validateEditPetitionerCounselSequence } from './sequences/CaseAssociation/validateEditPetitionerCounselSequence';
 import { validateEditRespondentCounselSequence } from './sequences/CaseAssociation/validateEditRespondentCounselSequence';
+import { validateEmailConfirmationFormSequence } from './sequences/validateEmailConfirmationFormSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
 import { validateFilePetitionStep2Sequence } from '@web-client/presenter/sequences/validateFilePetitionStep2Sequence';
 import { validateFilePetitionStep5Sequence } from '@web-client/presenter/sequences/validateFilePetitionStep5Sequence';
@@ -1448,7 +1448,6 @@ export const presenterSequences = {
     updateDocketEntryWorksheetSequence as unknown as Function,
   updateDocketNumberSearchFormSequence:
     updateDocketNumberSearchFormSequence as unknown as Function,
-  updateEmailConfirmationFormSequence,
   updateFileDocumentWizardFormValueSequence:
     updateFileDocumentWizardFormValueSequence as unknown as Function,
   updateFilePetitionSequence,
@@ -1560,6 +1559,7 @@ export const presenterSequences = {
     validateEditPetitionerCounselSequence as unknown as Function,
   validateEditRespondentCounselSequence:
     validateEditRespondentCounselSequence as unknown as Function,
+  validateEmailConfirmationFormSequence,
   validateExternalDocumentInformationSequence:
     validateExternalDocumentInformationSequence as unknown as Function,
   validateFilePetitionStep2Sequence,

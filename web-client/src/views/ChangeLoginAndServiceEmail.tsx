@@ -10,29 +10,30 @@ import React from 'react';
 
 export const ChangeLoginAndServiceEmail = connect(
   {
-    emailConfirmationFormHelper: state.emailConfirmationFormHelper,
+    // emailConfirmationFormHelper: state.emailConfirmationFormHelper,
     form: state.form,
     navigateToPathSequence: sequences.navigateToPathSequence,
     showModal: state.modal.showModal,
     submitChangeLoginAndServiceEmailSequence:
       sequences.submitChangeLoginAndServiceEmailSequence,
-    updateEmailConfirmationFormSequence:
-      sequences.updateEmailConfirmationFormSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     user: state.user,
     validateChangeLoginAndServiceEmailSequence:
       sequences.validateChangeLoginAndServiceEmailSequence,
+    validateEmailConfirmationFormSequence:
+      sequences.validateEmailConfirmationFormSequence,
     validationErrors: state.validationErrors,
   },
   function ChangeLoginAndServiceEmail({
-    emailConfirmationFormHelper,
+    // emailConfirmationFormHelper,
     form,
     navigateToPathSequence,
     showModal,
     submitChangeLoginAndServiceEmailSequence,
-    updateEmailConfirmationFormSequence,
     updateFormValueSequence,
     user,
+    validateEmailConfirmationFormSequence,
+    validationErrors,
   }) {
     return (
       <React.Fragment>
@@ -62,12 +63,7 @@ export const ChangeLoginAndServiceEmail = connect(
             </div>
             <div>
               <h4>Change Login & Service Email</h4>
-              <FormGroup
-                errorText={
-                  emailConfirmationFormHelper.showEmailErrorMessage &&
-                  emailConfirmationFormHelper.emailErrorMessage
-                }
-              >
+              <FormGroup errorText={validationErrors?.email}>
                 <label className="usa-label" htmlFor="email">
                   New email address
                 </label>
@@ -79,10 +75,10 @@ export const ChangeLoginAndServiceEmail = connect(
                   name="email"
                   type="text"
                   value={form.email || ''}
-                  onBlur={() => {
-                    updateEmailConfirmationFormSequence({
-                      field: 'email',
-                      inFocus: false,
+                  onBlur={e => {
+                    validateEmailConfirmationFormSequence({
+                      field: e.target.name,
+                      showValidation: true,
                     });
                   }}
                   onChange={e =>
@@ -91,20 +87,15 @@ export const ChangeLoginAndServiceEmail = connect(
                       value: e.target.value,
                     })
                   }
-                  onFocus={() =>
-                    updateEmailConfirmationFormSequence({
-                      field: 'email',
-                      inFocus: true,
+                  onFocus={e =>
+                    validateEmailConfirmationFormSequence({
+                      field: e.target.name,
+                      showValidation: false,
                     })
                   }
                 />
               </FormGroup>
-              <FormGroup
-                errorText={
-                  emailConfirmationFormHelper.showConfirmEmailErrorMessage &&
-                  emailConfirmationFormHelper.confirmEmailErrorMessage
-                }
-              >
+              <FormGroup errorText={validationErrors?.confirmEmail}>
                 <label className="usa-label" htmlFor="confirm-email">
                   Re-enter new email address
                 </label>
@@ -116,24 +107,24 @@ export const ChangeLoginAndServiceEmail = connect(
                   name="confirmEmail"
                   type="text"
                   value={form.confirmEmail || ''}
-                  onBlur={() => {
-                    updateEmailConfirmationFormSequence({
-                      field: 'confirmEmail',
-                      inFocus: false,
+                  onBlur={e => {
+                    validateEmailConfirmationFormSequence({
+                      field: e.target.name,
+                      showValidation: true,
                     });
                   }}
-                  onChange={e =>
+                  onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
                       value: e.target.value,
-                    })
-                  }
-                  onFocus={() =>
-                    updateEmailConfirmationFormSequence({
-                      field: 'confirmEmail',
-                      inFocus: true,
-                    })
-                  }
+                    });
+                  }}
+                  onFocus={e => {
+                    validateEmailConfirmationFormSequence({
+                      field: e.target.name,
+                      showValidation: false,
+                    });
+                  }}
                 />
               </FormGroup>
             </div>
