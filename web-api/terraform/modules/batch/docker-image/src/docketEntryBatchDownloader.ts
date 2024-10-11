@@ -4,14 +4,15 @@ import {
   ApiGatewayManagementApiClient,
   PostToConnectionCommand,
 } from '@aws-sdk/client-apigatewaymanagementapi';
-import { GetObjectCommand, PutObjectCommand, S3 } from '@aws-sdk/client-s3';
+import { GetObjectCommand, S3 } from '@aws-sdk/client-s3';
 import { NodeHttpHandler } from '@smithy/node-http-handler';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { writeFile } from 'fs/promises';
+// import { writeFile } from 'fs/promises';
+import { zipDocuments } from 'web-api/src/persistence/s3/zipDocuments.ts';
 //DO NOT USE ARCHIVER
-import archiver from 'archiver';
-import fs from 'fs';
-import path from 'path';
+// import archiver from 'archiver';
+// import fs from 'fs';
+// import path from 'path';
 
 type DocketEntryDownloadInfo = {
   key: string;
@@ -42,7 +43,7 @@ const {
 
 const S3_REGION = 'us-east-1';
 const TEMP_S3_BUCKET = `${EFCMS_DOMAIN}-temp-documents-${STAGE}-${S3_REGION}`;
-const S3_BUCKET = `${EFCMS_DOMAIN}-documents-${STAGE}-${S3_REGION}`;
+// const S3_BUCKET = `${EFCMS_DOMAIN}-documents-${STAGE}-${S3_REGION}`;
 const storageClient = new S3({
   endpoint: `https://s3.${S3_REGION}.amazonaws.com`,
   forcePathStyle: true,
@@ -74,57 +75,57 @@ function streamToBuffer(stream: any) {
   });
 }
 
-async function downloadFile(
-  docketEntry: DocketEntryDownloadInfo,
-  s3Client: S3,
-  DIRECTORY: string,
-) {
-  const { filePathInZip, key, useTempBucket } = docketEntry;
-  const BUCKET_NAME = useTempBucket ? TEMP_S3_BUCKET : S3_BUCKET;
-  const command = new GetObjectCommand({
-    Bucket: BUCKET_NAME,
-    Key: key,
-  });
+// async function downloadFile(
+//   docketEntry: DocketEntryDownloadInfo,
+//   s3Client: S3,
+//   DIRECTORY: string,
+// ) {
+//   const { filePathInZip, key, useTempBucket } = docketEntry;
+//   const BUCKET_NAME = useTempBucket ? TEMP_S3_BUCKET : S3_BUCKET;
+//   const command = new GetObjectCommand({
+//     Bucket: BUCKET_NAME,
+//     Key: key,
+//   });
 
-  const data = await s3Client.send(command);
-  if (!data.Body) throw new Error(`Unable to get document (${key})`);
+//   const data = await s3Client.send(command);
+//   if (!data.Body) throw new Error(`Unable to get document (${key})`);
 
-  const bodyContents: any = await streamToBuffer(data.Body);
-  const FILE_PATH = path.join(DIRECTORY, `${filePathInZip}`);
-  //use fs/primse???? remove fs import
-  fs.mkdirSync(path.dirname(FILE_PATH), { recursive: true });
-  await writeFile(FILE_PATH, bodyContents);
-}
+//   const bodyContents: any = await streamToBuffer(data.Body);
+//   const FILE_PATH = path.join(DIRECTORY, `${filePathInZip}`);
+//   //use fs/primse???? remove fs import
+//   fs.mkdirSync(path.dirname(FILE_PATH), { recursive: true });
+//   await writeFile(FILE_PATH, bodyContents);
+// }
 
-function zipFolder(
-  sourceFolderPath: string,
-  outZipPath: string,
-): Promise<void> {
-  const output = fs.createWriteStream(outZipPath);
-  const archive = archiver('zip', { zlib: { level: 9 } });
+// function zipFolder(
+//   sourceFolderPath: string,
+//   outZipPath: string,
+// ): Promise<void> {
+//   const output = fs.createWriteStream(outZipPath);
+//   const archive = archiver('zip', { zlib: { level: 9 } });
 
-  return new Promise((resolve, reject) => {
-    output.on('close', () => resolve());
-    archive.on('error', (err: Error) => reject(err));
-    archive.pipe(output);
-    archive.directory(sourceFolderPath, false);
-    void archive.finalize();
-  });
-}
+//   return new Promise((resolve, reject) => {
+//     output.on('close', () => resolve());
+//     archive.on('error', (err: Error) => reject(err));
+//     archive.pipe(output);
+//     archive.directory(sourceFolderPath, false);
+//     void archive.finalize();
+//   });
+// }
 
-async function uploadZipFile(s3Client: S3, filePath: string) {
-  const fileStream = fs.createReadStream(filePath);
-  const fileName = path.basename(filePath);
+// async function uploadZipFile(s3Client: S3, filePath: string) {
+//   const fileStream = fs.createReadStream(filePath);
+//   const fileName = path.basename(filePath);
 
-  const uploadParams = {
-    Body: fileStream,
-    Bucket: TEMP_S3_BUCKET,
-    ContentType: 'application/zip',
-    Key: fileName,
-  };
+//   const uploadParams = {
+//     Body: fileStream,
+//     Bucket: TEMP_S3_BUCKET,
+//     ContentType: 'application/zip',
+//     Key: fileName,
+//   };
 
-  await s3Client.send(new PutObjectCommand(uploadParams));
-}
+//   await s3Client.send(new PutObjectCommand(uploadParams));
+// }
 
 async function getDocketEntriesFromS3(
   documentsReference: string,
@@ -150,6 +151,24 @@ async function getDocketEntriesFromS3(
   return docketEntries;
 }
 
+const onProgress = async ({
+  filesCompleted,
+  totalFiles,
+}: {
+  filesCompleted: number;
+  totalFiles: number;
+}) => {
+  const WS_MESSAGE = new PostToConnectionCommand({
+    ConnectionId: connectionId,
+    Data: JSON.stringify({
+      action: 'batch_download_progress',
+      filesCompleted,
+      totalFiles,
+    }),
+  });
+  await wsClient.send(WS_MESSAGE).catch(console.error);
+};
+
 export async function app({
   connectionId,
   documentsReference,
@@ -157,44 +176,19 @@ export async function app({
   wsClient,
   zipName,
 }: DocketEntriesZipperParameter) {
-  const docketEntries: DocketEntryDownloadInfo[] = await getDocketEntriesFromS3(
+  console.log('LOADING DOCUMENTS TO DOWNLOAD FROM S3');
+
+  const documents: DocketEntryDownloadInfo[] = await getDocketEntriesFromS3(
     documentsReference,
     s3Client,
   );
-
-  const DIRECTORY = path.join(__dirname, `${Date.now()}/`);
-  if (!fs.existsSync(DIRECTORY)) fs.mkdirSync(DIRECTORY);
-
-  let counter = 0;
-  const BATCH_SIZE = 10;
-  console.log('STARTING TO DOWNLOAD THE FILES');
-  for (let i = 0; i < docketEntries.length; i += BATCH_SIZE) {
-    const batch = docketEntries.slice(i, i + BATCH_SIZE);
-    await Promise.all(
-      batch.map(async docketEntry => {
-        await downloadFile(docketEntry, s3Client, DIRECTORY);
-        counter += 1;
-        const WS_MESSAGE = new PostToConnectionCommand({
-          ConnectionId: connectionId,
-          Data: JSON.stringify({
-            action: 'batch_download_progress',
-            filesCompleted: counter,
-            totalFiles: docketEntries.length,
-          }),
-        });
-
-        await wsClient.send(WS_MESSAGE).catch(console.error);
-      }),
-    );
-  }
-  console.log('DOWNLOADED ALL THE FILES');
-
-  console.log('GOING TO ZIP THE FOLDER');
-  const ZIP_PATH = path.join(__dirname, zipName);
-  await zipFolder(DIRECTORY, ZIP_PATH);
-  console.log('UPLOADING THE ZIP FILE TO S3');
-  await uploadZipFile(s3Client, ZIP_PATH);
-  console.log('FETCHING THE DOWNLOAD LINK FOR THE ZIP FILE IN S3');
+  console.log('ZIPPING DOCUMENTS');
+  await zipDocuments({
+    applicationContext,
+    documents,
+    onProgress,
+    outputZipName: zipName,
+  });
 
   const command = new GetObjectCommand({
     Bucket: TEMP_S3_BUCKET,
@@ -202,6 +196,7 @@ export async function app({
   });
 
   const url = await getSignedUrl(s3Client, command, { expiresIn: 120 });
+
   const WS_MESSAGE = new PostToConnectionCommand({
     ConnectionId: connectionId,
     Data: JSON.stringify({
@@ -209,10 +204,9 @@ export async function app({
       url,
     }),
   });
-
-  console.log('SENDING LINK TO USER');
   await wsClient.send(WS_MESSAGE).catch(console.error);
-  console.log('COMPLETE');
+
+  console.log('Zip and upload complete, link sent to client.');
 }
 
 app({
