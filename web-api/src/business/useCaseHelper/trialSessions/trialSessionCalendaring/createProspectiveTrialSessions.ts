@@ -4,6 +4,7 @@ import {
   SESSION_TYPES,
   TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
+import { cloneDeep } from 'lodash';
 
 export type EligibleCase = Pick<
   RawCase,
@@ -44,16 +45,14 @@ export const createProspectiveTrialSessions = ({
   prospectiveSessionsByCity: ProspectiveSessionsByCity;
   initialSmallCasesByCity: CasesByCity;
   initialRegularCasesByCity: CasesByCity;
-  remainingSmallCasesByCity: CasesByCity;
-  remainingRegularCasesByCity: CasesByCity;
 } => {
   const prospectiveSessionsByCity: ProspectiveSessionsByCity = {};
 
   const regularCasesByCity = getCasesByCity(cases, PROCEDURE_TYPES_MAP.regular);
   const smallCasesByCity = getCasesByCity(cases, PROCEDURE_TYPES_MAP.small);
 
-  const initialRegularCasesByCity = { ...regularCasesByCity };
-  const initialSmallCasesByCity = { ...smallCasesByCity };
+  const initialRegularCasesByCity = cloneDeep(regularCasesByCity);
+  const initialSmallCasesByCity = cloneDeep(smallCasesByCity);
 
   Object.keys(regularCasesByCity).forEach(city => {
     prospectiveSessionsByCity[city] = [];
@@ -187,8 +186,6 @@ export const createProspectiveTrialSessions = ({
     initialRegularCasesByCity,
     initialSmallCasesByCity,
     prospectiveSessionsByCity,
-    remainingRegularCasesByCity: regularCasesByCity,
-    remainingSmallCasesByCity: smallCasesByCity,
   };
 };
 
