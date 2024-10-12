@@ -23,6 +23,7 @@ export const TrialSessionsTable = connect(
     trialSessionsPage,
   }) {
     const paginatorTop = useRef(null);
+    console.log('trialSessionsHelper: ', trialSessionsHelper);
 
     return (
       <>
@@ -89,18 +90,28 @@ export const TrialSessionsTable = connect(
                   );
                 }
                 if (isTrialSessionRow(row)) {
-                  const additionalRow =
-                    row.sessionType === 'Special' ? (
-                      <tr className="special-sessions-row">
-                        <td colSpan={100}>
-                          <div className="special-session">
-                            <span className="text-semibold">
-                              Special Session Notes: {specialTrialSessionNotes}
-                            </span>
-                          </div>
-                        </td>
-                      </tr>
-                    ) : null;
+                  const isSpecialSession = row.sessionType === 'Special';
+                  console.log('row: ', row);
+                  const { trialSessionId } = row;
+                  console.log('trialSessionId: ', trialSessionId);
+                  let sessionNotes = null;
+                  if (isSpecialSession) {
+                    console.log(
+                      'specialTrialSessionNotes: ',
+                      specialTrialSessionNotes,
+                    );
+                  }
+                  const additionalRow = isSpecialSession ? (
+                    <tr className="special-sessions-row">
+                      <td colSpan={100}>
+                        <div className="special-session">
+                          <span className="text-semibold">
+                            Special Session Notes: {sessionNotes}
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : null;
                   return (
                     <tbody key={row.trialSessionId}>
                       <React.Fragment>

@@ -44,6 +44,11 @@ export const TrialSessionWorkingCopy = connect(
     trialSessionWorkingCopyHelper,
     updateUserCaseNoteOnWorkingCopySequence,
   }) {
+    console.log('Inside of trial session working copy');
+    console.log(
+      'Formatted Trial Session Details: ',
+      formattedTrialSessionDetails,
+    );
     return (
       <>
         <TrialSessionDetailHeader />
