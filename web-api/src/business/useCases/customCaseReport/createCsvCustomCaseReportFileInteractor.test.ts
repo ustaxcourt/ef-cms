@@ -9,7 +9,7 @@ jest.mock('@web-api/business/useCaseHelper/saveFileAndGenerateUrl');
 jest.mock(
   '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor',
 );
-import '@web-api/notifications/notificationClient/notificationClient.mocks.jest';
+import '@web-api/notifications/notificationClient/notificationGateway.mocks.jest';
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,

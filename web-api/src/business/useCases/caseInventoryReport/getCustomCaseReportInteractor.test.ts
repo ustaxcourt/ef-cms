@@ -1,4 +1,4 @@
-import '@web-api/persistence/elasticsearch/mocks.jest';
+jest.mock('@web-api/persistence/elasticsearch/getCasesByFilters');
 import {
   GetCustomCaseReportRequest,
   getCustomCaseReportInteractor,
@@ -9,9 +9,8 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 
-const getCasesByFilters = getCasesByFiltersMock as jest.Mock;
-
 describe('getCustomCaseReportInteractor', () => {
+  const getCasesByFilters = jest.mocked(getCasesByFiltersMock);
   let params: GetCustomCaseReportRequest;
   beforeEach(() => {
     params = {
@@ -71,6 +70,7 @@ describe('getCustomCaseReportInteractor', () => {
   it('should fetch cases from persistence with the user selected filters', async () => {
     getCasesByFilters.mockResolvedValue({
       foundCases: [],
+      lastCaseId: { pk: 'case|102-20', receivedAt: 0 },
       totalCount: 0,
     });
 
