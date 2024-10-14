@@ -911,8 +911,8 @@ export type PractitionerDetail = {
   practitionerType?: string;
   middleName?: string;
   contact?: Partial<UserContact>;
-  openCaseInfo?: PractitionerCaseInfo; // Only for internal users
-  closedCaseInfo?: PractitionerCaseInfo; // Only for internal users
+  openCaseInfo?: PractitionerAllCasesInfo; // Only for internal users
+  closedCaseInfo?: PractitionerAllCasesInfo; // Only for internal users
   email?: string;
   pendingEmail?: string;
   additionalPhone?: string;
@@ -920,12 +920,13 @@ export type PractitionerDetail = {
   hasEAccess?: boolean;
 };
 
-export type PractitionerCaseInfo = {
+export type PractitionerAllCasesInfo = {
   allCases: PractitionerCaseDetail[];
   currentPage: number;
 };
 
 export type PractitionerCaseDetail = {
+  docketNumber: string;
   docketNumberWithSuffix: string;
   caseTitle: string;
   inConsolidatedGroup: boolean;

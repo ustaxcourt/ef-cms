@@ -1,4 +1,5 @@
 import { Case, isClosed } from '../entities/cases/Case';
+import { PractitionerCaseDetail } from '@web-client/presenter/state';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -6,6 +7,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { formatCase } from '@shared/business/utilities/getFormattedCaseDetail';
 import { partition } from 'lodash';
 
 export const getPractitionerCasesInteractor = async (
@@ -30,12 +32,34 @@ export const getPractitionerCasesInteractor = async (
     .getPersistenceGateway()
     .getCasesByDocketNumbers({ applicationContext, docketNumbers });
 
-  cases.forEach(
-    aCase => (aCase.caseTitle = Case.getCaseTitle(aCase.caseCaption)),
-  );
+  const caseDetails: PractitionerCaseDetail[] = cases.map(c => {
+    const formattedCase = formatCase(applicationContext, c, authorizedUser);
+
+    const {
+      caseTitle,
+      consolidatedIconTooltipText,
+      docketNumber,
+      docketNumberWithSuffix,
+      inConsolidatedGroup,
+      isLeadCase,
+      isSealed,
+      status,
+    } = formattedCase;
+
+    return {
+      caseTitle,
+      consolidatedIconTooltipText,
+      docketNumber,
+      docketNumberWithSuffix,
+      inConsolidatedGroup,
+      isLeadCase,
+      isSealed,
+      status,
+    };
+  });
 
   const [closedCases, openCases] = partition(
-    Case.sortByDocketNumber(cases).reverse(),
+    Case.sortByDocketNumber(caseDetails).reverse(),
     theCase => isClosed(theCase),
   );
 

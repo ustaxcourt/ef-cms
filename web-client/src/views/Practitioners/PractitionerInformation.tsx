@@ -91,6 +91,7 @@ export const PractitionerInformation = connect(
             bind="currentViewMetadata.tab"
             className="classic-horizontal-header3 tab-border"
             defaultActiveTab="practitioner-details"
+            marginBottom={false}
             onSelect={tabName => {
               onPractitionerInformationTabSelectSequence({
                 tabName,
@@ -127,23 +128,27 @@ export const PractitionerInformation = connect(
               tabName="practitioner-open-cases"
               title={`Open Cases (${numOpenCases})`}
             >
-              {openPagesPaginator()}
-              <PractitionerCaseList
-                caseType={'open'}
-                cases={practitionerInformationHelper.openCasesToDisplay}
-              />
-              {openPagesPaginator()}
+              <div className="tab-content-with-top-margin">
+                {openPagesPaginator()}
+                <PractitionerCaseList
+                  caseType={'open'}
+                  cases={practitionerInformationHelper.openCasesToDisplay}
+                />
+                {openPagesPaginator()}
+              </div>
             </Tab>
             <Tab
               tabName="practitioner-closed-cases"
               title={`Closed Cases (${numClosedCases})`}
             >
-              {closedPagesPaginator()}
-              <PractitionerCaseList
-                caseType={'closed'}
-                cases={practitionerInformationHelper.closedCasesToDisplay}
-              />
-              {closedPagesPaginator()}
+              <div className="tab-content-with-top-margin">
+                {closedPagesPaginator()}
+                <PractitionerCaseList
+                  caseType={'closed'}
+                  cases={practitionerInformationHelper.closedCasesToDisplay}
+                />
+                {closedPagesPaginator()}
+              </div>
             </Tab>
           </Tabs>
         </section>
