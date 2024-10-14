@@ -7,7 +7,7 @@ import { IrsPractitioner } from '../IrsPractitioner';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { PrivatePractitioner } from '../PrivatePractitioner';
-import { setPretrialMemorandumFiler } from '../../utilities/getFormattedTrialSessionDetails';
+import { setPretrialMemorandumFiler } from '../../utilities/trialSession/getFormattedTrialSessionDetails';
 import joi from 'joi';
 
 export class CalendaredCase extends JoiValidationEntity {

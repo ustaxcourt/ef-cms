@@ -1,7 +1,7 @@
 import { NotFoundError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { compact } from 'lodash';
-import { compareCasesByDocketNumberFactory } from '../../../../../shared/src/business/utilities/getFormattedTrialSessionDetails';
+import { compareCasesByDocketNumberFactory } from '../../../../../shared/src/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
 import { saveFileAndGenerateUrl } from '../../useCaseHelper/saveFileAndGenerateUrl';
 

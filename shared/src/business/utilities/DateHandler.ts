@@ -233,7 +233,7 @@ export const createISODateStringFromObject = options => {
  * @returns {string} a formatted date string
  */
 export const formatDateString = (
-  dateString: string,
+  dateString: string | undefined,
   formatArg: TimeFormatNames | TimeFormats = FORMATS.ISO,
 ): string => {
   if (!dateString) return '';
@@ -607,8 +607,6 @@ export const isValidReconciliationDate = dateString => {
   const dateInputValid = isValidISODate(dateString);
   const todayDate = formatNow(FORMATS.YYYYMMDD);
   const dateLessthanOrEqualToToday = dateString <= todayDate;
-  // console.log(`dateInputValid: ${dateInputValid}`);
-  // console.log(`dateLessthanOrEqualToToday: ${dateLessthanOrEqualToToday}`);
   return dateInputValid && dateLessthanOrEqualToToday;
 };
 

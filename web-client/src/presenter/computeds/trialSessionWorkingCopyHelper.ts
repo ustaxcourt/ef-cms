@@ -2,7 +2,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import {
   FormattedTrialSessionCase,
   compareCasesByDocketNumber,
-} from '@shared/business/utilities/getFormattedTrialSessionDetails';
+} from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { Get } from 'cerebral';
 import { TRIAL_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { TrialSessionState } from '@web-client/presenter/state/trialSessionState';

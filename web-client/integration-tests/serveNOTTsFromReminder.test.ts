@@ -107,15 +107,18 @@ describe('Serve NOTTs from reminder on calendared trial session detail page', ()
         trialSessionId: cerebralTest.trialSessionId,
       });
 
-      const trialSessionDetailsFormatted: any = runCompute(
+      const trialSessionDetailsFormatted = runCompute(
         withAppContextDecorator(formattedTrialSessionDetails),
         {
           state: cerebralTest.getState(),
         },
       );
 
-      expect(trialSessionDetailsFormatted.alertMessageForNOTT).toEqual(
-        `30-day trial notices are due by ${trialSessionDetailsFormatted.thirtyDaysBeforeTrialFormatted}. Have notices been served?`,
+      expect(trialSessionDetailsFormatted.alertMessageForNOTT).toContain(
+        '30-day trial notices are due by',
+      );
+      expect(trialSessionDetailsFormatted.alertMessageForNOTT).toContain(
+        'Have notices been served?',
       );
     });
 

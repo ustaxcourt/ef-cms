@@ -1,10 +1,6 @@
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import {
-  irsCalendarAdminInfoOnChange,
-  onInputChange,
-} from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -182,25 +178,34 @@ export const SessionAssignmentsForm = connect(
 
               <SelectSearch
                 aria-label="irs-calendar-administrator-info-search-label"
+                data-testid="irs-calendar-administrator-info-search"
                 id="irs-calendar-administrator-info-search"
+                isClearable={true}
+                isMulti={false}
                 name="irsCalendarAdministratorInfoSearch "
                 options={
                   getAllIrsPractitionersForSelectHelper.irsPractitionersContactInfo
                 }
                 placeholder="- Enter name -"
-                onChange={(inputValue, { action }) => {
-                  irsCalendarAdminInfoOnChange({
-                    action,
-                    inputValue,
-                    updateTrialSessionFormDataSequence,
-                  });
-                  return true;
+                onChange={inputValue => {
+                  if (!inputValue) {
+                    updateTrialSessionFormDataSequence({
+                      key: 'irsCalendarAdministratorInfo',
+                      value: {},
+                    });
+                    return;
+                  }
+                  ['name', 'email', 'phone'].forEach(key =>
+                    updateTrialSessionFormDataSequence({
+                      key: `irsCalendarAdministratorInfo.${key}`,
+                      value: inputValue[key],
+                    }),
+                  );
                 }}
-                onInputChange={(inputText, { action }) => {
-                  onInputChange({
-                    action,
-                    inputText,
-                    updateSequence: updateScreenMetadataSequence,
+                onInputChange={inputText => {
+                  updateScreenMetadataSequence({
+                    key: 'searchText',
+                    value: inputText,
                   });
                 }}
               />
