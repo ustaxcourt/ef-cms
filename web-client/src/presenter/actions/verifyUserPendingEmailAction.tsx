@@ -5,11 +5,7 @@ const expiredTokenAlertError = {
   message: (
     <>
       Enter your old email address and password below, then log in to be sent a
-      new verification email.{' '}
-      <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
-        {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
-      </a>
-      .
+      new verification email.
     </>
   ),
   title: 'Verification email link expired',
