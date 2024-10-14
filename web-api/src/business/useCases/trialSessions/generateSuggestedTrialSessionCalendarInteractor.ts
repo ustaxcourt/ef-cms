@@ -17,6 +17,7 @@ import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
   SUGGESTED_TRIAL_SESSION_MESSAGES,
+  TRIAL_CITY_STRINGS,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
@@ -129,21 +130,27 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   console.time('10275: assignSessionsToWeeks time');
 
-  const regularCaseCountByCity = Object.keys(initialRegularCasesByCity).reduce(
-    (acc, city) => {
+  const regularCaseCountByCity = TRIAL_CITY_STRINGS.reduce((acc, city) => {
+    if (city === WASHINGTON_DC_STRING) {
+      // We only schedule non-special sessions at DC South, so we only need to
+      // worry about case counts for South.
+      acc[WASHINGTON_DC_SOUTH_STRING] =
+        initialRegularCasesByCity[city]?.length || 0;
+    } else {
       acc[city] = initialRegularCasesByCity[city]?.length || 0;
-      return acc;
-    },
-    {},
-  );
+    }
+    return acc;
+  }, {});
 
-  const smallCaseCountByCity = Object.keys(initialSmallCasesByCity).reduce(
-    (acc, city) => {
+  const smallCaseCountByCity = TRIAL_CITY_STRINGS.reduce((acc, city) => {
+    if (city === WASHINGTON_DC_STRING) {
+      acc[WASHINGTON_DC_SOUTH_STRING] =
+        initialSmallCasesByCity[city]?.length || 0;
+    } else {
       acc[city] = initialSmallCasesByCity[city]?.length || 0;
-      return acc;
-    },
-    {},
-  );
+    }
+    return acc;
+  }, {});
 
   const {
     remainingRegularCaseCountByCity,
