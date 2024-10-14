@@ -25,11 +25,13 @@ export const TrialSessions = connect(
     resetTrialSessionsFiltersSequence:
       sequences.resetTrialSessionsFiltersSequence,
     trialSessionsHelper: state.trialSessionsHelper,
+    trialSessionsPageFilters: state.trialSessionsPage.filters,
   },
   function TrialSessions({
     openTrialSessionPlanningModalSequence,
     resetTrialSessionsFiltersSequence,
     trialSessionsHelper,
+    trialSessionsPageFilters,
   }) {
     return (
       <>
@@ -64,12 +66,11 @@ export const TrialSessions = connect(
             )}
           </div>
           <Tabs
-            bind="trialSessionsPage.filters.currentTab"
             defaultActiveTab={'calendared'}
             headingLevel="2"
             id="trial-sessions-tabs"
+            value={trialSessionsPageFilters.currentTab}
             onSelect={tabName => {
-              if (trialSessionsHelper.currentTab === tabName) return;
               resetTrialSessionsFiltersSequence({
                 currentTab: tabName,
               });
