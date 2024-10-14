@@ -26,7 +26,6 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const trialSessionsHelper = (
   get: Get,
 ): {
-  currentTab: 'calendared' | 'new';
   isResetFiltersDisabled: boolean;
   showNewTrialSession: boolean;
   showNoticeIssued: boolean;
@@ -123,7 +122,6 @@ export const trialSessionsHelper = (
   });
 
   return {
-    currentTab: filters.currentTab,
     endDateErrorMessage,
     isResetFiltersDisabled: !userHasSelectedAFilter,
     sessionTypeOptions,
