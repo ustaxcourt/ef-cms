@@ -1,17 +1,22 @@
-// @ts-nocheck
 import { Agent } from 'https';
 import {
   ApiGatewayManagementApiClient,
   PostToConnectionCommand,
 } from '@aws-sdk/client-apigatewaymanagementapi';
-import { GetObjectCommand, PutObjectCommand, S3 } from '@aws-sdk/client-s3';
+import { GetObjectCommand, S3 } from '@aws-sdk/client-s3';
 import { NodeHttpHandler } from '@smithy/node-http-handler';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { writeFile } from 'fs/promises';
-//DO NOT USE ARCHIVER
-import archiver from 'archiver';
-import fs from 'fs';
-import path from 'path';
+
+import { AsyncZipDeflate, Zip } from 'fflate';
+import { PassThrough, Writable } from 'stream';
+import { Upload } from '@aws-sdk/lib-storage';
+
+type ProgressData = {
+  connectionId: string;
+  filesCompleted: number;
+  totalFiles: number;
+  wsClient: any;
+};
 
 type DocketEntryDownloadInfo = {
   key: string;
@@ -74,58 +79,6 @@ function streamToBuffer(stream: any) {
   });
 }
 
-async function downloadFile(
-  docketEntry: DocketEntryDownloadInfo,
-  s3Client: S3,
-  DIRECTORY: string,
-) {
-  const { filePathInZip, key, useTempBucket } = docketEntry;
-  const BUCKET_NAME = useTempBucket ? TEMP_S3_BUCKET : S3_BUCKET;
-  const command = new GetObjectCommand({
-    Bucket: BUCKET_NAME,
-    Key: key,
-  });
-
-  const data = await s3Client.send(command);
-  if (!data.Body) throw new Error(`Unable to get document (${key})`);
-
-  const bodyContents: any = await streamToBuffer(data.Body);
-  const FILE_PATH = path.join(DIRECTORY, `${filePathInZip}`);
-  //use fs/primse???? remove fs import
-  fs.mkdirSync(path.dirname(FILE_PATH), { recursive: true });
-  await writeFile(FILE_PATH, bodyContents);
-}
-
-function zipFolder(
-  sourceFolderPath: string,
-  outZipPath: string,
-): Promise<void> {
-  const output = fs.createWriteStream(outZipPath);
-  const archive = archiver('zip', { zlib: { level: 9 } });
-
-  return new Promise((resolve, reject) => {
-    output.on('close', () => resolve());
-    archive.on('error', (err: Error) => reject(err));
-    archive.pipe(output);
-    archive.directory(sourceFolderPath, false);
-    void archive.finalize();
-  });
-}
-
-async function uploadZipFile(s3Client: S3, filePath: string) {
-  const fileStream = fs.createReadStream(filePath);
-  const fileName = path.basename(filePath);
-
-  const uploadParams = {
-    Body: fileStream,
-    Bucket: TEMP_S3_BUCKET,
-    ContentType: 'application/zip',
-    Key: fileName,
-  };
-
-  await s3Client.send(new PutObjectCommand(uploadParams));
-}
-
 async function getDocketEntriesFromS3(
   documentsReference: string,
   s3Client: S3,
@@ -150,6 +103,28 @@ async function getDocketEntriesFromS3(
   return docketEntries;
 }
 
+const onProgress = async ({
+  connectionId,
+  filesCompleted,
+  totalFiles,
+  wsClient,
+}: {
+  connectionId: string;
+  filesCompleted: number;
+  totalFiles: number;
+  wsClient: any;
+}) => {
+  const WS_MESSAGE = new PostToConnectionCommand({
+    ConnectionId: connectionId,
+    Data: JSON.stringify({
+      action: 'batch_download_progress',
+      filesCompleted,
+      totalFiles,
+    }),
+  });
+  await wsClient.send(WS_MESSAGE).catch(console.error);
+};
+
 export async function app({
   connectionId,
   documentsReference,
@@ -157,44 +132,20 @@ export async function app({
   wsClient,
   zipName,
 }: DocketEntriesZipperParameter) {
-  const docketEntries: DocketEntryDownloadInfo[] = await getDocketEntriesFromS3(
+  console.log('LOADING DOCUMENTS TO DOWNLOAD FROM S3');
+
+  const documents: DocketEntryDownloadInfo[] = await getDocketEntriesFromS3(
     documentsReference,
     s3Client,
   );
-
-  const DIRECTORY = path.join(__dirname, `${Date.now()}/`);
-  if (!fs.existsSync(DIRECTORY)) fs.mkdirSync(DIRECTORY);
-
-  let counter = 0;
-  const BATCH_SIZE = 10;
-  console.log('STARTING TO DOWNLOAD THE FILES');
-  for (let i = 0; i < docketEntries.length; i += BATCH_SIZE) {
-    const batch = docketEntries.slice(i, i + BATCH_SIZE);
-    await Promise.all(
-      batch.map(async docketEntry => {
-        await downloadFile(docketEntry, s3Client, DIRECTORY);
-        counter += 1;
-        const WS_MESSAGE = new PostToConnectionCommand({
-          ConnectionId: connectionId,
-          Data: JSON.stringify({
-            action: 'batch_download_progress',
-            filesCompleted: counter,
-            totalFiles: docketEntries.length,
-          }),
-        });
-
-        await wsClient.send(WS_MESSAGE).catch(console.error);
-      }),
-    );
-  }
-  console.log('DOWNLOADED ALL THE FILES');
-
-  console.log('GOING TO ZIP THE FOLDER');
-  const ZIP_PATH = path.join(__dirname, zipName);
-  await zipFolder(DIRECTORY, ZIP_PATH);
-  console.log('UPLOADING THE ZIP FILE TO S3');
-  await uploadZipFile(s3Client, ZIP_PATH);
-  console.log('FETCHING THE DOWNLOAD LINK FOR THE ZIP FILE IN S3');
+  console.log('ZIPPING DOCUMENTS');
+  await zipDocuments({
+    connectionId,
+    documents,
+    onProgress,
+    outputZipName: zipName,
+    wsClient,
+  });
 
   const command = new GetObjectCommand({
     Bucket: TEMP_S3_BUCKET,
@@ -202,6 +153,7 @@ export async function app({
   });
 
   const url = await getSignedUrl(s3Client, command, { expiresIn: 120 });
+
   const WS_MESSAGE = new PostToConnectionCommand({
     ConnectionId: connectionId,
     Data: JSON.stringify({
@@ -209,10 +161,9 @@ export async function app({
       url,
     }),
   });
-
-  console.log('SENDING LINK TO USER');
   await wsClient.send(WS_MESSAGE).catch(console.error);
-  console.log('COMPLETE');
+
+  console.log('Zip and upload complete, link sent to client.');
 }
 
 app({
@@ -222,3 +173,103 @@ app({
   wsClient: notificationClient,
   zipName: ZIP_FILE_NAME!,
 }).catch(console.error);
+
+export async function zipDocuments({
+  connectionId,
+  documents,
+  // onProgress,
+  outputZipName,
+  // storageClient,
+  wsClient,
+}: {
+  wsClient: any;
+  connectionId: string;
+  onProgress?: (params: ProgressData) => Promise<void> | void;
+  documents: {
+    key: string;
+    filePathInZip: string;
+    useTempBucket: boolean;
+  }[];
+  outputZipName: string;
+}): Promise<void> {
+  const passThrough = new PassThrough({ highWaterMark: 1024 * 1024 * 100 });
+
+  const upload = new Upload({
+    client: storageClient,
+    params: {
+      Body: passThrough,
+      Bucket: TEMP_S3_BUCKET,
+      Key: outputZipName,
+    },
+  });
+
+  const writable = new Writable({
+    write(chunk, encoding, callback) {
+      callback();
+    },
+  });
+
+  passThrough.pipe(writable);
+
+  // Start the upload process
+  const uploadPromise = upload.done();
+
+  const zip = new Zip((err, data, final) => {
+    if (err) {
+      console.log('Error creating zip stream');
+      throw err;
+    }
+
+    passThrough.write(data);
+
+    if (final) {
+      passThrough.end();
+    }
+  });
+
+  for (let index = 0; index < documents.length; index++) {
+    const document = documents[index];
+
+    const response = await storageClient.getObject({
+      Bucket: document.useTempBucket ? TEMP_S3_BUCKET : S3_BUCKET,
+      Key: document.key,
+    });
+    if (!response.Body) {
+      throw new Error(
+        `Unable to get document (${document.key}) from persistence.`,
+      );
+    }
+
+    // Transform s3 getobject into a stream of data that can be piped into the zip processor
+    const bodyStream: ReadableStream<Uint8Array> =
+      response.Body.transformToWebStream();
+    const reader = bodyStream.getReader();
+    const compressedPdfStream = new AsyncZipDeflate(document.filePathInZip);
+    zip.add(compressedPdfStream);
+
+    let continueReading = true;
+    while (continueReading) {
+      const unzippedChunk = await reader.read();
+      const nextChunk = unzippedChunk.value || new Uint8Array();
+      continueReading = !unzippedChunk.done;
+      compressedPdfStream.push(nextChunk, unzippedChunk.done);
+      while (passThrough.readableLength > 1024 * 1024 * 10) {
+        // Wait for the buffer to be drained, before downloading more files
+        await new Promise(resolve => setTimeout(resolve, 10));
+      }
+    }
+    reader.releaseLock();
+
+    if (onProgress) {
+      await onProgress({
+        connectionId,
+        filesCompleted: index + 1,
+        totalFiles: documents.length,
+        wsClient,
+      });
+    }
+  }
+
+  zip.end();
+  await uploadPromise;
+}
