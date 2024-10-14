@@ -101,8 +101,9 @@ export const writeTrialSessionDataToExcel = async ({
       initialSmallCaseCount:
         initialSmallCasesByCity[cityStateString]?.length || 0,
       remainingRegularCaseCount:
-        remainingRegularCaseCountByCity[cityStateString],
-      remainingSmallCaseCount: remainingSmallCaseCountByCity[cityStateString],
+        remainingRegularCaseCountByCity[cityStateString] || 0,
+      remainingSmallCaseCount:
+        remainingSmallCaseCountByCity[cityStateString] || 0,
     };
     worksheet.addRow(values);
   }
@@ -146,7 +147,7 @@ export const writeTrialSessionDataToExcel = async ({
           };
           break;
         default:
-          if (cell.value) {
+          if (cell.value && typeof cell.value === 'string') {
             cell.fill = {
               fgColor: { argb: 'ff989ca3' },
               pattern: 'solid',

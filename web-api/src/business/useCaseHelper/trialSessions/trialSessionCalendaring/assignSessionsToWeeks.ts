@@ -112,18 +112,6 @@ export const assignSessionsToWeeks = ({
       return aNotVisited === bNotVisited ? 0 : aNotVisited ? -1 : 1;
     })
     .reduce((obj, key) => {
-      if (key === WASHINGTON_DC_STRING) {
-        obj[WASHINGTON_DC_SOUTH_STRING] = [];
-
-        for (const prospectiveSession of prospectiveSessionsByCity[key]) {
-          obj[WASHINGTON_DC_SOUTH_STRING].push({
-            ...prospectiveSession,
-            city: WASHINGTON_DC_SOUTH_STRING,
-          });
-        }
-
-        return obj;
-      }
       obj[key] = prospectiveSessionsByCity[key];
       return obj;
     }, {});
