@@ -2,6 +2,8 @@ import { addPrintableDocketRecordCheckAction } from '@web-client/presenter/actio
 import { batchDownloadDocketEntriesAction } from '@web-client/presenter/actions/batchDownloadDocketEntriesAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { generateDocketRecordPdfUrlAction } from '@web-client/presenter/actions/generateDocketRecordPdfUrlAction';
+import { resetBatchDownloadProgressAction } from '@web-client/presenter/actions/BatchDownload/resetBatchDownloadProgressAction';
+import { setBatchDownloadProgressAction } from '@web-client/presenter/actions/BatchDownload/setBatchDownloadProgressAction';
 import { setShowModalAction } from '../actions/setShowModalAction';
 
 export const batchDownloadDocketEntriesSequence = [
@@ -11,9 +13,10 @@ export const batchDownloadDocketEntriesSequence = [
     no: [],
     yes: [generateDocketRecordPdfUrlAction],
   },
+  setBatchDownloadProgressAction,
   batchDownloadDocketEntriesAction,
   {
-    error: [setShowModalAction],
+    error: [resetBatchDownloadProgressAction, setShowModalAction],
     success: [],
   },
 ] as unknown as (props: {
