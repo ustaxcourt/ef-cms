@@ -28,6 +28,7 @@ export const TrialSessions = connect(
       sequences.resetTrialSessionsFiltersSequence,
     showModal: state.modal.showModal,
     trialSessionsHelper: state.trialSessionsHelper,
+    trialSessionsPageFilters: state.trialSessionsPage.filters,
   },
   function TrialSessions({
     openCreateTermModalSequence,
@@ -35,6 +36,7 @@ export const TrialSessions = connect(
     resetTrialSessionsFiltersSequence,
     showModal,
     trialSessionsHelper,
+    trialSessionsPageFilters,
   }) {
     return (
       <>
@@ -83,12 +85,17 @@ export const TrialSessions = connect(
             )}
           </div>
           <Tabs
-            bind="trialSessionsPage.filters.currentTab"
             defaultActiveTab={'calendared'}
             headingLevel="2"
             id="trial-sessions-tabs"
+            value={trialSessionsPageFilters.currentTab}
             onSelect={tabName => {
-              resetTrialSessionsFiltersSequence({ currentTab: tabName });
+              if (tabName === trialSessionsPageFilters.currentTab) {
+                return;
+              }
+              resetTrialSessionsFiltersSequence({
+                currentTab: tabName,
+              });
             }}
           >
             {trialSessionsHelper.showNewTrialSession && (
@@ -399,6 +406,7 @@ const TrialSessionFilters = connect(
         </div>
         <Button
           link
+          data-testid="trial-session-reset-filter-button"
           disabled={trialSessionsHelper.isResetFiltersDisabled}
           tooltip="Reset Filters"
           onClick={() =>

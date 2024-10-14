@@ -5,7 +5,7 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 describe('resetTrialSessionsFiltersAction', () => {
   it('should reset the trialSessions filters', async () => {
     const result = await runAction(resetTrialSessionsFiltersAction, {
-      state: {},
+      state: { trialSessionsPage: { filters: { currentTab: 'new' } } },
     });
 
     expect(result.state.trialSessionsPage.filters).toEqual(
