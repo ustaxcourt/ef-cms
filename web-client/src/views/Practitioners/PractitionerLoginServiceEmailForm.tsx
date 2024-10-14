@@ -10,7 +10,6 @@ type PractitionerLoginServiceEmailFormProps = {
 
 const practitionerLoginServiceEmailFormDependencies = {
   createPractitionerUserHelper: state.createPractitionerUserHelper,
-  emailConfirmationFormHelper: state.emailConfirmationFormHelper,
   form: state.form,
   updateFormValueSequence: sequences.updateFormValueSequence,
   validateEmailConfirmationFormSequence:

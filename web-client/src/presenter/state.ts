@@ -65,7 +65,6 @@ import { draftDocumentViewerHelper } from './computeds/draftDocumentViewerHelper
 import { editDocketEntryMetaHelper } from './computeds/editDocketEntryMetaHelper';
 import { editPetitionerInformationHelper } from './computeds/editPetitionerInformationHelper';
 import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
-import { emailConfirmationFormHelper } from '@web-client/presenter/computeds/emailConfirmationFormHelper';
 import { emptyUserState } from '@web-client/presenter/state/userState';
 import { externalConsolidatedCaseGroupHelper } from './computeds/externalConsolidatedCaseGroupHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
@@ -321,10 +320,6 @@ export const computeds = {
   editStatisticFormHelper: editStatisticFormHelper as unknown as ReturnType<
     typeof editStatisticFormHelper
   >,
-  emailConfirmationFormHelper:
-    emailConfirmationFormHelper as unknown as ReturnType<
-      typeof emailConfirmationFormHelper
-    >,
   externalConsolidatedCaseGroupHelper:
     externalConsolidatedCaseGroupHelper as unknown as ReturnType<
       typeof externalConsolidatedCaseGroupHelper
