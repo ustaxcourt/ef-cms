@@ -71,6 +71,9 @@ export const TrialSessions = connect(
             id="trial-sessions-tabs"
             value={trialSessionsPageFilters.currentTab}
             onSelect={tabName => {
+              if (tabName === trialSessionsPageFilters.currentTab) {
+                return;
+              }
               resetTrialSessionsFiltersSequence({
                 currentTab: tabName,
               });

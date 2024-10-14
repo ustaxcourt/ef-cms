@@ -4,14 +4,9 @@ import { initialTrialSessionPageState } from '@web-client/presenter/state/trialS
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const resetTrialSessionsFiltersAction = ({
-  get,
   props,
   store,
 }: ActionProps<ResetTrialSessionsFiltersSequence>) => {
-  if (props?.currentTab === get(state.trialSessionsPage.filters.currentTab)) {
-    return;
-  }
-
   store.set(
     state.trialSessionsPage.filters,
     cloneDeep(initialTrialSessionPageState.filters),
