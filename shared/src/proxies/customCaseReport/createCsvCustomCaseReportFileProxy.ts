@@ -4,7 +4,7 @@ import { post } from '../requests';
 
 export const createCsvCustomCaseReportFileInteractor = (
   data: CustomCaseReportCsvRequest,
-) => {
+): Promise<void> => {
   return post({
     applicationContext,
     body: data,
