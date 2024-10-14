@@ -26,6 +26,9 @@ import { assignSessionsToWeeks } from '@web-api/business/useCaseHelper/trialSess
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
 
+// import mockCases from '@shared/test/mockCasesReadyForTrial.json';
+// import mockSessions from '@shared/test/mockTrialSessions.json';
+
 const MAX_SESSIONS_PER_WEEK = 6;
 const MAX_SESSIONS_PER_LOCATION = 5;
 
@@ -129,6 +132,14 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   });
 
   console.time('10275: assignSessionsToWeeks time');
+
+  initialRegularCasesByCity[WASHINGTON_DC_SOUTH_STRING] =
+    initialRegularCasesByCity[WASHINGTON_DC_STRING];
+  delete initialRegularCasesByCity[WASHINGTON_DC_STRING];
+
+  initialSmallCasesByCity[WASHINGTON_DC_SOUTH_STRING] =
+    initialSmallCasesByCity[WASHINGTON_DC_STRING];
+  delete initialSmallCasesByCity[WASHINGTON_DC_STRING];
 
   const regularCaseCountByCity = TRIAL_CITY_STRINGS.reduce((acc, city) => {
     if (city === WASHINGTON_DC_STRING) {
@@ -255,11 +266,9 @@ const SESSION_TERMS_FOR_GENERATOR = {
 
 export const getCitiesFromLastTwoTerms = ({ sessions, termStartDate }) => {
   const previousTwoTerms = getPreviousTwoTerms(termStartDate);
-  console.log(previousTwoTerms);
   return sessions
     .filter(session => {
       const termString = `${session.term.toLowerCase()}, ${session.termYear}`;
-      console.log('termString', termString);
       return (
         previousTwoTerms.includes(termString) &&
         session.sessionType !== SESSION_TYPES.special

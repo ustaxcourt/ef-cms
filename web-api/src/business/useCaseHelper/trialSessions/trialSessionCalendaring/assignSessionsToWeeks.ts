@@ -52,6 +52,7 @@ export const assignSessionsToWeeks = ({
   const sessionCountPerWeek: Record<string, number> = {}; // weekOf -> session count
   const sessionCountPerCity: Record<string, number> = {}; // trialLocation -> session count
   const sessionScheduledPerCityPerWeek: Record<string, Set<string>> = {}; // weekOf -> Set of cities
+  const reservedWeekOfLocationIntersection: Record<string, string[]> = {};
   //   -- Prioritize overridden and special sessions that have already been scheduled
   // -- Max 1 per location per week.
   // -- Max x per week across all locations
@@ -112,6 +113,18 @@ export const assignSessionsToWeeks = ({
       return aNotVisited === bNotVisited ? 0 : aNotVisited ? -1 : 1;
     })
     .reduce((obj, key) => {
+      if (key === WASHINGTON_DC_STRING) {
+        obj[WASHINGTON_DC_SOUTH_STRING] = [];
+
+        for (const prospectiveSession of prospectiveSessionsByCity[key]) {
+          obj[WASHINGTON_DC_SOUTH_STRING].push({
+            ...prospectiveSession,
+            city: WASHINGTON_DC_SOUTH_STRING,
+          });
+        }
+
+        return obj;
+      }
       obj[key] = prospectiveSessionsByCity[key];
       return obj;
     }, {});
@@ -182,6 +195,15 @@ export const assignSessionsToWeeks = ({
       smallCaseCountByCity,
       weekOfString: sessionWeekOf,
     });
+
+    // given the sessionWeekOf, find the next week somehow and add it as a key
+    // to reservedWeekOfLocationIntersection, then push the trialLocation value
+    // to the array keyed to the city
+    const nextWeekOfString =
+      weeksToLoop[weeksToLoop.indexOf(sessionWeekOf) + 1];
+    if (!reservedWeekOfLocationIntersection[nextWeekOfString])
+      reservedWeekOfLocationIntersection[nextWeekOfString] = [];
+    reservedWeekOfLocationIntersection[nextWeekOfString].push(trialLocation);
   });
 
   for (const currentWeek of weeksToLoop) {
@@ -193,6 +215,14 @@ export const assignSessionsToWeeks = ({
       if (
         sessionCountPerCity[city] >= calendaringConfig.maxSessionsPerLocation
       ) {
+        continue;
+      }
+
+      if (
+        reservedWeekOfLocationIntersection[weekOfString] &&
+        reservedWeekOfLocationIntersection[weekOfString].includes(city)
+      ) {
+        // This week at this location is reserved, move on
         continue;
       }
 

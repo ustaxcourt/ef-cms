@@ -4,10 +4,6 @@ import {
   SESSION_TYPES,
   TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
-import {
-  WASHINGTON_DC_SOUTH_STRING,
-  WASHINGTON_DC_STRING,
-} from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
 import { cloneDeep } from 'lodash';
 
 export type EligibleCase = Pick<
@@ -209,16 +205,10 @@ function getCasesByCity(
         // );
         return acc;
       } else {
-        if (currentCase.preferredTrialCity === WASHINGTON_DC_STRING) {
-          if (!acc[WASHINGTON_DC_SOUTH_STRING])
-            acc[WASHINGTON_DC_SOUTH_STRING] = [];
-          acc[WASHINGTON_DC_SOUTH_STRING].push(currentCase);
-        } else {
-          if (!acc[currentCase.preferredTrialCity!]) {
-            acc[currentCase.preferredTrialCity!] = [];
-          }
-          acc[currentCase.preferredTrialCity!].push(currentCase);
+        if (!acc[currentCase.preferredTrialCity!]) {
+          acc[currentCase.preferredTrialCity!] = [];
         }
+        acc[currentCase.preferredTrialCity!].push(currentCase);
         return acc;
       }
     }, {});
