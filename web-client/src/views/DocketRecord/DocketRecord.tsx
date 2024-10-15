@@ -228,6 +228,12 @@ export const DocketRecord = connect(
                 )}
               </tbody>
             </table>
+            {!formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord
+              .length && (
+              <p className="margin-bottom-10">
+                There are no documents of that type.
+              </p>
+            )}
           </div>
         </NonPhone>
 
@@ -268,6 +274,12 @@ export const DocketRecord = connect(
               )}
             </tbody>
           </table>
+          {!formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord
+            .length && (
+            <p className="margin-bottom-10">
+              There are no documents of that type.
+            </p>
+          )}
         </Phone>
 
         {showModal == 'DocketRecordOverlay' && <DocketRecordOverlay />}
