@@ -160,19 +160,38 @@ export const writeTrialSessionDataToExcel = async ({
   });
 
   worksheet.insertRow(1, [null, 'Week Of']);
-  const countPerWeekRow = worksheet.addRow({
-    city: 'No. of Sessions',
-    ...sessionCountPerWeek,
+  // const countPerWeekRow = worksheet.addRow({
+  //   city: 'No. of Sessions',
+  //   // ...sessionCountPerWeek,
+  // });
+
+  // Get a column, use the length of that column to generate (at least for one column) a formula that can be written in excel script that uses counta
+  // to start at the second cell to the column lenght - 1
+  const countColumnLength = Object.keys(trialSessionCalendar).length; // number of cells in a column that we care about
+  // count(B3:BX)
+
+  const formula = `counta(B3:B${countColumnLength + 2})`;
+
+  worksheet.getCell(`B${countColumnLength + 3}`).value = {
+    formula,
+    result: 0,
+  };
+
+  const counterRow = worksheet.getRow(countColumnLength + 2);
+
+  counterRow.eachCell(cell => {
+    console.log('cell.$col$row zzz', cell.$col$row);
+    const test = cell.$col$row.split('$');
   });
 
-  countPerWeekRow.eachCell(cell => {
-    cell.border = {
-      bottom: { style: 'thin' },
-      left: { style: 'thin' },
-      right: { style: 'thin' },
-      top: { style: 'thin' },
-    };
-  });
+  // countPerWeekRow.eachCell(cell => {
+  //   cell.border = {
+  //     bottom: { style: 'thin' },
+  //     left: { style: 'thin' },
+  //     right: { style: 'thin' },
+  //     top: { style: 'thin' },
+  //   };
+  // });
 
   const cityTitleCell = worksheet.getCell('A2');
 
