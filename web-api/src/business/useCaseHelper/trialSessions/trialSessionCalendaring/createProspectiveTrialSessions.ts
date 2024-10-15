@@ -1,15 +1,8 @@
+import { CasesByCity } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
 import {
-  PROCEDURE_TYPES_MAP,
-  REGULAR_TRIAL_CITY_STRINGS,
   SESSION_TYPES,
   TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
-import { cloneDeep } from 'lodash';
-
-export type EligibleCase = Pick<
-  RawCase,
-  'preferredTrialCity' | 'procedureType' | 'docketNumber'
->;
 
 export type ProspectiveSessionsByCity = Record<
   string,
@@ -31,28 +24,20 @@ export type CalendaringConfig = {
   hybridCaseMinimumQuantity: number;
 };
 
-export type CasesByCity = Record<string, EligibleCase[]>;
-
 export const createProspectiveTrialSessions = ({
   calendaringConfig,
-  cases,
   citiesFromLastTwoTerms,
+  regularCasesByCity,
+  smallCasesByCity,
 }: {
-  cases: EligibleCase[];
   calendaringConfig: CalendaringConfig;
   citiesFromLastTwoTerms: string[];
+  regularCasesByCity: CasesByCity;
+  smallCasesByCity: CasesByCity;
 }): {
   prospectiveSessionsByCity: ProspectiveSessionsByCity;
-  initialSmallCasesByCity: CasesByCity;
-  initialRegularCasesByCity: CasesByCity;
 } => {
   const prospectiveSessionsByCity: ProspectiveSessionsByCity = {};
-
-  const regularCasesByCity = getCasesByCity(cases, PROCEDURE_TYPES_MAP.regular);
-  const smallCasesByCity = getCasesByCity(cases, PROCEDURE_TYPES_MAP.small);
-
-  const initialRegularCasesByCity = cloneDeep(regularCasesByCity);
-  const initialSmallCasesByCity = cloneDeep(smallCasesByCity);
 
   Object.keys(regularCasesByCity).forEach(city => {
     prospectiveSessionsByCity[city] = [];
@@ -60,9 +45,6 @@ export const createProspectiveTrialSessions = ({
   Object.keys(smallCasesByCity).forEach(city => {
     prospectiveSessionsByCity[city] = [];
   });
-
-  // const remainingRegularCasesByCity = {};
-  // const remainingSmallCasesByCity = {};
 
   for (const city in prospectiveSessionsByCity) {
     let regularCaseSliceSize;
@@ -113,9 +95,6 @@ export const createProspectiveTrialSessions = ({
     // Handle Hybrid Sessions
     const remainingRegularCases = regularCasesByCity[city] || [];
     const remainingSmallCases = smallCasesByCity[city] || [];
-
-    // remainingRegularCasesByCity[city] = [...remainingRegularCases];
-    // remainingSmallCasesByCity[city] = [...remainingSmallCases];
 
     if (
       remainingRegularCases?.length + remainingSmallCases.length >=
@@ -183,36 +162,9 @@ export const createProspectiveTrialSessions = ({
   });
 
   return {
-    initialRegularCasesByCity,
-    initialSmallCasesByCity,
     prospectiveSessionsByCity,
   };
 };
-
-function getCasesByCity(
-  cases: EligibleCase[],
-  type: TrialSessionTypes,
-): CasesByCity {
-  return cases
-    .filter(c => c.procedureType === type)
-    .reduce((acc, currentCase) => {
-      if (
-        type === SESSION_TYPES.regular &&
-        !REGULAR_TRIAL_CITY_STRINGS.includes(currentCase.preferredTrialCity!)
-      ) {
-        // throw new Error(
-        //   `Case ${currentCase.docketNumber} cannot be scheduled in ${currentCase.preferredTrialCity} because the session type does not match the trial city`,
-        // );
-        return acc;
-      } else {
-        if (!acc[currentCase.preferredTrialCity!]) {
-          acc[currentCase.preferredTrialCity!] = [];
-        }
-        acc[currentCase.preferredTrialCity!].push(currentCase);
-        return acc;
-      }
-    }, {});
-}
 
 function addProspectiveTrialSession({
   city,

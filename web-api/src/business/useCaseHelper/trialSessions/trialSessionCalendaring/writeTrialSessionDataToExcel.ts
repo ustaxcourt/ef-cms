@@ -1,4 +1,4 @@
-import { CasesByCity } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
+import { CaseCountByCity } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
 import {
   FORMATS,
   formatDateString,
@@ -12,8 +12,8 @@ import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import ExcelJS from 'exceljs';
 
 export const writeTrialSessionDataToExcel = async ({
-  initialRegularCasesByCity,
-  initialSmallCasesByCity,
+  initialRegularCaseCountsByCity,
+  initialSmallCaseCountsByCity,
   remainingRegularCaseCountByCity,
   remainingSmallCaseCountByCity,
   sessionCountPerWeek,
@@ -23,8 +23,8 @@ export const writeTrialSessionDataToExcel = async ({
   sortedScheduledTrialSessionsByCity: TrialSessionsByCity;
   weeks: string[];
   sessionCountPerWeek: SessionCountByWeek;
-  initialRegularCasesByCity: CasesByCity;
-  initialSmallCasesByCity: CasesByCity;
+  initialRegularCaseCountsByCity: CaseCountByCity;
+  initialSmallCaseCountsByCity: CaseCountByCity;
   remainingRegularCaseCountByCity: RemainingCaseCountByCity;
   remainingSmallCaseCountByCity: RemainingCaseCountByCity;
 }) => {
@@ -97,9 +97,8 @@ export const writeTrialSessionDataToExcel = async ({
       city,
       ...trialSessionCalendar[cityStateString],
       initialRegularCaseCount:
-        initialRegularCasesByCity[cityStateString]?.length || 0,
-      initialSmallCaseCount:
-        initialSmallCasesByCity[cityStateString]?.length || 0,
+        initialRegularCaseCountsByCity[cityStateString] || 0,
+      initialSmallCaseCount: initialSmallCaseCountsByCity[cityStateString] || 0,
       remainingRegularCaseCount:
         remainingRegularCaseCountByCity[cityStateString] || 0,
       remainingSmallCaseCount:
