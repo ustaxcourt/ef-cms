@@ -26,9 +26,6 @@ import { assignSessionsToWeeks } from '@web-api/business/useCaseHelper/trialSess
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
 
-import mockCases from '@shared/test/mockCasesReadyForTrial.json';
-import mockSessions from '@shared/test/mockTrialSessions.json';
-
 const MAX_SESSIONS_PER_WEEK = 6;
 const MAX_SESSIONS_PER_LOCATION = 5;
 
@@ -78,17 +75,15 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   }
 
   console.time('10275: Get ready for trial cases time');
-  // const cases = await applicationContext
-  //   .getPersistenceGateway()
-  //   .getSuggestedCalendarCases({ applicationContext });
-  const cases = mockCases;
+  const cases = await applicationContext
+    .getPersistenceGateway()
+    .getSuggestedCalendarCases({ applicationContext });
   console.timeEnd('10275: Get ready for trial cases time');
 
   console.time('10275: Get trial sessions time');
-  // const sessions = await applicationContext
-  //   .getPersistenceGateway()
-  //   .getTrialSessions({ applicationContext });
-  const sessions = mockSessions;
+  const sessions = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessions({ applicationContext });
 
   console.timeEnd('10275: Get trial sessions time');
   // Note (10275): storing trial session data differently would make for a more
