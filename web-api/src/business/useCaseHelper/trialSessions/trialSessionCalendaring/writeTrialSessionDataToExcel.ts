@@ -160,28 +160,34 @@ export const writeTrialSessionDataToExcel = async ({
   });
 
   worksheet.insertRow(1, [null, 'Week Of']);
-  // const countPerWeekRow = worksheet.addRow({
-  //   city: 'No. of Sessions',
-  //   // ...sessionCountPerWeek,
-  // });
 
   // Get a column, use the length of that column to generate (at least for one column) a formula that can be written in excel script that uses counta
   // to start at the second cell to the column lenght - 1
   const countColumnLength = Object.keys(trialSessionCalendar).length; // number of cells in a column that we care about
   // count(B3:BX)
 
-  const formula = `counta(B3:B${countColumnLength + 2})`;
+  // const formula = `counta(B3:B${countColumnLength + 2})`;
 
-  worksheet.getCell(`B${countColumnLength + 3}`).value = {
-    formula,
-    result: 0,
-  };
+  // worksheet.getCell(`B${countColumnLength + 3}`).value = {
+  //   formula,
+  //   result: 0,
+  // };
 
-  const counterRow = worksheet.getRow(countColumnLength + 2);
+  const counterRow = worksheet.addRow({
+    city: 'No. of Sessions',
+    //
+  });
 
-  counterRow.eachCell(cell => {
+  // const counterRow = worksheet.addRow(countColumnLength + 3);
+
+  counterRow.eachCell({ includeEmpty: true }, cell => {
     console.log('cell.$col$row zzz', cell.$col$row);
-    const test = cell.$col$row.split('$');
+    const cellLetter = cell.$col$row.split('$')[1];
+    const formula = `counta(${cellLetter}3:${cellLetter}${countColumnLength + 2})`;
+    cell.value = {
+      formula,
+      result: 0,
+    };
   });
 
   // countPerWeekRow.eachCell(cell => {
