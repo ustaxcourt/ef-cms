@@ -124,19 +124,22 @@ export async function app({
   );
   console.log('ZIPPING DOCUMENTS');
 
+  const guid = Date.now();
+  const UNIQUE_ZIP_NAME = `${guid}/${zipName}`;
+
   await zipDocuments({
     connectionId,
     documents,
-    outputZipName: zipName,
+    outputZipName: UNIQUE_ZIP_NAME,
     wsClient,
   });
 
   const command = new GetObjectCommand({
-    Bucket: TEMP_S3_BUCKET,
-    Key: zipName,
+    Bucket: ZIP_TEMP_S3_BUCKET,
+    Key: UNIQUE_ZIP_NAME,
   });
 
-  const url = await getSignedUrl(s3Client, command, { expiresIn: 120 });
+  const url = await getSignedUrl(zipStorageClient, command, { expiresIn: 120 });
 
   const WS_MESSAGE = new PostToConnectionCommand({
     ConnectionId: connectionId,
