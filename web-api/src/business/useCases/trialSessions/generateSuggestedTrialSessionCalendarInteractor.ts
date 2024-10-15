@@ -17,13 +17,13 @@ import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
   SUGGESTED_TRIAL_SESSION_MESSAGES,
-  TRIAL_CITY_STRINGS,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { assignSessionsToWeeks } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
+import { getDataForCalendaring } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
 import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
 
 const MAX_SESSIONS_PER_WEEK = 6;
@@ -110,14 +110,19 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   console.timeEnd('10275: Compile cities from last two term time');
 
   console.time('10275: Generate prospectiveSessionsByCity time');
+
   const {
-    initialRegularCasesByCity,
-    initialSmallCasesByCity,
-    prospectiveSessionsByCity,
-  } = createProspectiveTrialSessions({
+    initialRegularCaseCountsByCity,
+    initialSmallCaseCountsByCity,
+    regularCasesByCity,
+    smallCasesByCity,
+  } = getDataForCalendaring({ cases, citiesFromLastTwoTerms });
+
+  const { prospectiveSessionsByCity } = createProspectiveTrialSessions({
     calendaringConfig,
-    cases,
     citiesFromLastTwoTerms,
+    regularCasesByCity,
+    smallCasesByCity,
   });
 
   console.timeEnd('10275: Generate prospectiveSessionsByCity time');
@@ -129,36 +134,6 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   console.time('10275: assignSessionsToWeeks time');
 
-  initialRegularCasesByCity[WASHINGTON_DC_SOUTH_STRING] =
-    initialRegularCasesByCity[WASHINGTON_DC_STRING];
-  delete initialRegularCasesByCity[WASHINGTON_DC_STRING];
-
-  initialSmallCasesByCity[WASHINGTON_DC_SOUTH_STRING] =
-    initialSmallCasesByCity[WASHINGTON_DC_STRING];
-  delete initialSmallCasesByCity[WASHINGTON_DC_STRING];
-
-  const regularCaseCountByCity = TRIAL_CITY_STRINGS.reduce((acc, city) => {
-    if (city === WASHINGTON_DC_STRING) {
-      // We only schedule non-special sessions at DC South, so we only need to
-      // worry about case counts for South.
-      acc[WASHINGTON_DC_SOUTH_STRING] =
-        initialRegularCasesByCity[city]?.length || 0;
-    } else {
-      acc[city] = initialRegularCasesByCity[city]?.length || 0;
-    }
-    return acc;
-  }, {});
-
-  const smallCaseCountByCity = TRIAL_CITY_STRINGS.reduce((acc, city) => {
-    if (city === WASHINGTON_DC_STRING) {
-      acc[WASHINGTON_DC_SOUTH_STRING] =
-        initialSmallCasesByCity[city]?.length || 0;
-    } else {
-      acc[city] = initialSmallCasesByCity[city]?.length || 0;
-    }
-    return acc;
-  }, {});
-
   const {
     remainingRegularCaseCountByCity,
     remainingSmallCaseCountByCity,
@@ -167,8 +142,8 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   } = assignSessionsToWeeks({
     calendaringConfig,
     prospectiveSessionsByCity,
-    regularCaseCountByCity,
-    smallCaseCountByCity,
+    regularCaseCountByCity: initialRegularCaseCountsByCity,
+    smallCaseCountByCity: initialSmallCaseCountsByCity,
     specialSessions,
     weeksToLoop,
   });
@@ -195,8 +170,8 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   console.time('10275: writeTrialSessionDataToExcel');
   const bufferArray = await writeTrialSessionDataToExcel({
-    initialRegularCasesByCity,
-    initialSmallCasesByCity,
+    initialRegularCaseCountsByCity,
+    initialSmallCaseCountsByCity,
     remainingRegularCaseCountByCity,
     remainingSmallCaseCountByCity,
     sessionCountPerWeek,

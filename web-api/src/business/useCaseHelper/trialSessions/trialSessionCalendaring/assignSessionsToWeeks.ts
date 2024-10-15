@@ -17,6 +17,7 @@ import {
   WASHINGTON_DC_SOUTH_STRING,
   WASHINGTON_DC_STRING,
 } from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
+import { cloneDeep } from 'lodash';
 
 export type ScheduledTrialSession = {
   city: string;
@@ -53,6 +54,11 @@ export const assignSessionsToWeeks = ({
   const sessionCountPerCity: Record<string, number> = {}; // trialLocation -> session count
   const sessionScheduledPerCityPerWeek: Record<string, Set<string>> = {}; // weekOf -> Set of cities
   const reservedWeekOfLocationIntersection: Record<string, string[]> = {};
+  const remainingRegularCaseCountByCity: RemainingCaseCountByCity = cloneDeep(
+    regularCaseCountByCity,
+  );
+  const remainingSmallCaseCountByCity: RemainingCaseCountByCity =
+    cloneDeep(smallCaseCountByCity);
   //   -- Prioritize overridden and special sessions that have already been scheduled
   // -- Max 1 per location per week.
   // -- Max x per week across all locations
@@ -186,13 +192,13 @@ export const assignSessionsToWeeks = ({
     addScheduledTrialSession({
       calendaringConfig,
       city: trialLocation,
-      regularCaseCountByCity,
+      regularCaseCountByCity: remainingRegularCaseCountByCity,
       scheduledTrialSessionsByCity,
       sessionCountPerCity,
       sessionCountPerWeek,
       sessionScheduledPerCityPerWeek,
       sessionType: SESSION_TYPES.special,
-      smallCaseCountByCity,
+      smallCaseCountByCity: remainingSmallCaseCountByCity,
       weekOfString: sessionWeekOf,
     });
 
@@ -242,12 +248,12 @@ export const assignSessionsToWeeks = ({
         addScheduledTrialSession({
           ...prospectiveSession,
           calendaringConfig,
-          regularCaseCountByCity,
+          regularCaseCountByCity: remainingRegularCaseCountByCity,
           scheduledTrialSessionsByCity,
           sessionCountPerCity,
           sessionCountPerWeek,
           sessionScheduledPerCityPerWeek,
-          smallCaseCountByCity,
+          smallCaseCountByCity: remainingSmallCaseCountByCity,
           weekOfString,
         });
 
@@ -262,8 +268,8 @@ export const assignSessionsToWeeks = ({
   }
 
   return {
-    remainingRegularCaseCountByCity: regularCaseCountByCity,
-    remainingSmallCaseCountByCity: smallCaseCountByCity,
+    remainingRegularCaseCountByCity,
+    remainingSmallCaseCountByCity,
     scheduledTrialSessionsByCity,
     sessionCountPerWeek,
   };
