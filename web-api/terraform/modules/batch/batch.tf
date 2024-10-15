@@ -158,11 +158,11 @@ resource "aws_batch_job_definition" "example_aws_batch_job_definition" {
     resourceRequirements = [
       {
         type  = "VCPU"
-        value = "4"
+        value = "1"
       },
       {
         type  = "MEMORY"
-        value = "8192"
+        value = "2048"
       }
     ]
 
