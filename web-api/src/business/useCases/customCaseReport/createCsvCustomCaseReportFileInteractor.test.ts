@@ -49,20 +49,22 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
   beforeEach(() => {
     getNotificationGateway().sendNotificationToUser.mockReturnValue(null);
 
-    getCustomCaseReportInteractor.mockReturnValue({
+    getCustomCaseReportInteractor.mockResolvedValue({
       foundCases: [
         {
           associatedJudge: 'associatedJudge',
-          calendaringHighPriority: 'calendaringHighPriority',
           caseCaption: 'caseCaption',
-          caseType: 'caseType',
+          caseType: CASE_TYPES_MAP.cdp,
           docketNumber: 'docketNumber',
           highPriority: true,
           preferredTrialCity: 'preferredTrialCity',
+          procedureType: '',
           receivedAt: 'receivedAt',
-          status: 'status',
+          status: CASE_STATUS_TYPES.assignedCase,
         },
       ],
+      lastCaseId: { pk: '', receivedAt: 0 },
+      totalCount: 20,
     });
 
     formatNow.mockReturnValue('TEST_DATE');
@@ -105,7 +107,7 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
 
     const saveFileAndGenerateUrlCalls = saveFileAndGenerateUrl.mock.calls;
     const csvStringBuffer = Buffer.from(
-      'Docket No.,Date Created,Case Title,Case Status,Case Type,Judge,Requested Place of Trial,Calendaring High Priority\ndocketNumber,Invalid DateTime,caseCaption,status,caseType,associatedJudge,preferredTrialCity,yes\n',
+      `Docket No.,Date Created,Case Title,Case Status,Case Type,Judge,Requested Place of Trial,Calendaring High Priority\ndocketNumber,Invalid DateTime,caseCaption,${CASE_STATUS_TYPES.assignedCase},${CASE_TYPES_MAP.cdp},associatedJudge,preferredTrialCity,yes\n`,
     );
     const bomBuffer = Buffer.from([239, 187, 191]);
 
