@@ -86,6 +86,7 @@ export const combineISOandEasternTime = (
 
 /**
  *
+ * DO NOT USE THIS FUNCTION OUTSIDE OF THIS FILE. We do not want luxon to leak into the rest of the code.
  * @param {string} dateString a string representing a date
  * @param {string} inputFormat optional parameter containing hints on how to parse dateString
  * @returns {luxon} a luxon object
@@ -124,6 +125,22 @@ export const calculateISODate = ({
   return prepareDateFromString(dateString)
     .plus({ [units]: howMuch })
     .toISO()!;
+};
+
+export const calculateDate = ({
+  dateString = undefined,
+  howMuch = 0,
+  units = 'days',
+}: {
+  dateString?: string;
+  howMuch?: number;
+  units?: string;
+}): Date => {
+  if (!howMuch) return prepareDateFromString(dateString).toJSDate();
+
+  return prepareDateFromString(dateString)
+    .plus({ [units]: howMuch })
+    .toJSDate();
 };
 
 /**
@@ -234,7 +251,7 @@ export const createISODateStringFromObject = options => {
  * @returns {string} a formatted date string
  */
 export const formatDateString = (
-  dateString: string,
+  dateString: string | undefined,
   formatArg: TimeFormatNames | TimeFormats = FORMATS.ISO,
 ): string => {
   if (!dateString) return '';

@@ -1,4 +1,4 @@
-import { compareCasesByDocketNumber } from '@shared/business/utilities/getFormattedTrialSessionDetails';
+import { compareCasesByDocketNumber } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setCaseAction = ({

@@ -198,6 +198,30 @@ jobs:
           name: 'Deploy - Pending Color Switch'
           command: npm run pending-color-switch
 
+  docker-image-zipper:
+    docker:
+      - image: cimg/node:20.14
+    resource_class: xlarge
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Install AWS CLI
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+      - setup_remote_docker:
+          version: docker23
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Deploy ECR Images
+          command: |
+            npm run deploy:zipper
+
   migrate:
     docker:
       - image: *efcms-docker-image
@@ -234,6 +258,12 @@ jobs:
             if [ "$MIGRATE_FLAG" == "true" ]; then
               npm run start:migration -- $ENV
             fi
+      - run:
+          name: Run Postgres Migration
+          command: |
+            OUTPUT_ONLY=true npm run deploy:allColors $ENV
+            POSTGRES_HOST=$(cat ./web-api/terraform/applyables/allColors/output.json | jq -r '.rds_host_name.value')
+            POSTGRES_HOST=$POSTGRES_HOST POSTGRES_USER=$POSTGRES_USER NODE_ENV=production npm run migration:postgres
       - run:
           name: Enable Check Migration Status Cron
           command: |
@@ -882,10 +912,14 @@ workflows:
     jobs:
       - deploy:
           <<: *only-deployed-lower-environments
-      - migrate:
+      - docker-image-zipper:
           <<: *only-deployed-lower-environments
           requires:
             - deploy
+      - migrate:
+          <<: *only-deployed-lower-environments
+          requires:
+            - docker-image-zipper
       - wait-for-migration:
           <<: *only-deployed-lower-environments
           type: approval
