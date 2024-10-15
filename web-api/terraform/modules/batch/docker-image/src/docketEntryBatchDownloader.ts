@@ -11,13 +11,6 @@ import { AsyncZipDeflate, Zip } from 'fflate';
 import { PassThrough, Writable } from 'stream';
 import { Upload } from '@aws-sdk/lib-storage';
 
-type ProgressData = {
-  connectionId: string;
-  filesCompleted: number;
-  totalFiles: number;
-  wsClient: any;
-};
-
 type DocketEntryDownloadInfo = {
   key: string;
   filePathInZip: string;
@@ -53,6 +46,19 @@ const storageClient = new S3({
   forcePathStyle: true,
   maxAttempts: 3,
   region: S3_REGION,
+  requestHandler: new NodeHttpHandler({
+    connectionTimeout: 3000,
+    httpsAgent: new Agent({ keepAlive: true, maxSockets: 75 }),
+    requestTimeout: 30000,
+  }),
+});
+
+const ZIP_TEMP_S3_BUCKET = `${EFCMS_DOMAIN}-temp-documents-${STAGE}-${AWS_REGION}`;
+const zipStorageClient = new S3({
+  endpoint: `https://s3.${AWS_REGION}.amazonaws.com`,
+  forcePathStyle: true,
+  maxAttempts: 3,
+  region: AWS_REGION,
   requestHandler: new NodeHttpHandler({
     connectionTimeout: 3000,
     httpsAgent: new Agent({ keepAlive: true, maxSockets: 75 }),
@@ -103,28 +109,6 @@ async function getDocketEntriesFromS3(
   return docketEntries;
 }
 
-const onProgress = async ({
-  connectionId,
-  filesCompleted,
-  totalFiles,
-  wsClient,
-}: {
-  connectionId: string;
-  filesCompleted: number;
-  totalFiles: number;
-  wsClient: any;
-}) => {
-  const WS_MESSAGE = new PostToConnectionCommand({
-    ConnectionId: connectionId,
-    Data: JSON.stringify({
-      action: 'batch_download_progress',
-      filesCompleted,
-      totalFiles,
-    }),
-  });
-  await wsClient.send(WS_MESSAGE).catch(console.error);
-};
-
 export async function app({
   connectionId,
   documentsReference,
@@ -139,10 +123,10 @@ export async function app({
     s3Client,
   );
   console.log('ZIPPING DOCUMENTS');
+
   await zipDocuments({
     connectionId,
     documents,
-    onProgress,
     outputZipName: zipName,
     wsClient,
   });
@@ -177,14 +161,11 @@ app({
 export async function zipDocuments({
   connectionId,
   documents,
-  // onProgress,
   outputZipName,
-  // storageClient,
   wsClient,
 }: {
   wsClient: any;
   connectionId: string;
-  onProgress?: (params: ProgressData) => Promise<void> | void;
   documents: {
     key: string;
     filePathInZip: string;
@@ -195,10 +176,10 @@ export async function zipDocuments({
   const passThrough = new PassThrough({ highWaterMark: 1024 * 1024 * 100 });
 
   const upload = new Upload({
-    client: storageClient,
+    client: zipStorageClient,
     params: {
       Body: passThrough,
-      Bucket: TEMP_S3_BUCKET,
+      Bucket: ZIP_TEMP_S3_BUCKET,
       Key: outputZipName,
     },
   });
@@ -260,14 +241,15 @@ export async function zipDocuments({
     }
     reader.releaseLock();
 
-    if (onProgress) {
-      await onProgress({
-        connectionId,
+    const WS_MESSAGE = new PostToConnectionCommand({
+      ConnectionId: connectionId,
+      Data: JSON.stringify({
+        action: 'batch_download_progress',
         filesCompleted: index + 1,
         totalFiles: documents.length,
-        wsClient,
-      });
-    }
+      }),
+    });
+    await wsClient.send(WS_MESSAGE).catch(console.error);
   }
 
   zip.end();
