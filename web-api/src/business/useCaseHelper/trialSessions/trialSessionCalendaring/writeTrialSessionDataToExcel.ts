@@ -1,15 +1,21 @@
+import { CasesByCity } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 import {
   FORMATS,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
-import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import {
+  RemainingCaseCountByCity,
   SessionCountByWeek,
   TrialSessionsByCity,
 } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
+import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import ExcelJS from 'exceljs';
 
 export const writeTrialSessionDataToExcel = async ({
+  initialRegularCasesByCity,
+  initialSmallCasesByCity,
+  remainingRegularCaseCountByCity,
+  remainingSmallCaseCountByCity,
   sessionCountPerWeek,
   sortedScheduledTrialSessionsByCity,
   weeks,
@@ -17,6 +23,10 @@ export const writeTrialSessionDataToExcel = async ({
   sortedScheduledTrialSessionsByCity: TrialSessionsByCity;
   weeks: string[];
   sessionCountPerWeek: SessionCountByWeek;
+  initialRegularCasesByCity: CasesByCity;
+  initialSmallCasesByCity: CasesByCity;
+  remainingRegularCaseCountByCity: RemainingCaseCountByCity;
+  remainingSmallCaseCountByCity: RemainingCaseCountByCity;
 }) => {
   const workbook = new ExcelJS.Workbook();
   const worksheetOptions = { properties: { outlineLevelCol: 2 } };
@@ -54,11 +64,47 @@ export const writeTrialSessionDataToExcel = async ({
     });
   }
 
+  columns.push({
+    header: 'Small Cases',
+    key: 'initialSmallCaseCount',
+  });
+
+  columns.push({
+    header: 'Regular Cases',
+    key: 'initialRegularCaseCount',
+  });
+
+  columns.push({
+    header: 'Small Cases Remaining',
+    key: 'remainingSmallCaseCount',
+  });
+
+  columns.push({
+    header: 'Regular Cases Remaining',
+    key: 'remainingRegularCaseCount',
+  });
+
   worksheet.columns = columns;
 
   for (const cityStateString in trialSessionCalendar) {
-    const city = cityStateString.split(',')[0];
-    const values = { city, ...trialSessionCalendar[cityStateString] };
+    let city;
+    if (!cityStateString.toLowerCase().startsWith('portland')) {
+      city = cityStateString.split(',')[0];
+    } else {
+      city = cityStateString;
+    }
+    const values = {
+      city,
+      ...trialSessionCalendar[cityStateString],
+      initialRegularCaseCount:
+        initialRegularCasesByCity[cityStateString]?.length || 0,
+      initialSmallCaseCount:
+        initialSmallCasesByCity[cityStateString]?.length || 0,
+      remainingRegularCaseCount:
+        remainingRegularCaseCountByCity[cityStateString] || 0,
+      remainingSmallCaseCount:
+        remainingSmallCaseCountByCity[cityStateString] || 0,
+    };
     worksheet.addRow(values);
   }
 
@@ -101,7 +147,7 @@ export const writeTrialSessionDataToExcel = async ({
           };
           break;
         default:
-          if (cell.value) {
+          if (cell.value && typeof cell.value === 'string') {
             cell.fill = {
               fgColor: { argb: 'ff989ca3' },
               pattern: 'solid',
@@ -114,17 +160,30 @@ export const writeTrialSessionDataToExcel = async ({
   });
 
   worksheet.insertRow(1, [null, 'Week Of']);
-  const countPerWeekRow = worksheet.addRow({
+
+  const counterRow = worksheet.addRow({
     city: 'No. of Sessions',
     ...sessionCountPerWeek,
   });
 
-  countPerWeekRow.border = {
-    bottom: { style: 'thin' },
-    left: { style: 'thin' },
-    right: { style: 'thin' },
-    top: { style: 'thin' },
-  };
+  const countColumnLength = Object.keys(trialSessionCalendar).length; // number of cells in a column that we care about
+
+  counterRow.eachCell(cell => {
+    cell.border = {
+      bottom: { style: 'thin' },
+      left: { style: 'thin' },
+      right: { style: 'thin' },
+      top: { style: 'thin' },
+    };
+
+    const cellLetter = cell.$col$row.split('$')[1];
+    if (cellLetter === 'A') return;
+    const formula = `counta(${cellLetter}3:${cellLetter}${countColumnLength + 2})`;
+    cell.value = {
+      formula,
+      result: 0,
+    };
+  });
 
   const cityTitleCell = worksheet.getCell('A2');
 

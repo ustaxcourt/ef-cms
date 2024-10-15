@@ -33,6 +33,10 @@ describe('writeTrialSessionDataToExcel', () => {
     }
 
     await writeTrialSessionDataToExcel({
+      initialRegularCasesByCity: {},
+      initialSmallCasesByCity: {},
+      remainingRegularCaseCountByCity: {},
+      remainingSmallCaseCountByCity: {},
       sessionCountPerWeek: mockSessionCountPerWeek,
       sortedScheduledTrialSessionsByCity: mockScheduledTrialSessionsByCity,
       weeks,
@@ -61,6 +65,10 @@ describe('writeTrialSessionDataToExcel', () => {
     }
 
     await writeTrialSessionDataToExcel({
+      initialRegularCasesByCity: {},
+      initialSmallCasesByCity: {},
+      remainingRegularCaseCountByCity: {},
+      remainingSmallCaseCountByCity: {},
       sessionCountPerWeek: mockSessionCountPerWeek,
       sortedScheduledTrialSessionsByCity: mockScheduledTrialSessionsByCity,
       weeks,

@@ -27,7 +27,7 @@ const defaultMockCalendaringConfig = {
   smallCaseMinimumQuantity: 4,
 };
 
-const mockEndDate = '2019-10-10T04:00:00.000Z';
+const mockEndDate = '2019-12-10T04:00:00.000Z';
 const mockStartDate = '2019-08-22T04:00:00.000Z';
 const mockWeeksToLoop = getWeeksInRange({
   endDate: mockEndDate,
@@ -79,6 +79,8 @@ describe('assignSessionsToWeeks', () => {
       assignSessionsToWeeks({
         calendaringConfig: defaultMockCalendaringConfig,
         prospectiveSessionsByCity: mockSessions,
+        regularCaseCountByCity: {},
+        smallCaseCountByCity: {},
         specialSessions: [],
         weeksToLoop: mockWeeksToLoop,
       });
@@ -107,11 +109,51 @@ describe('assignSessionsToWeeks', () => {
       assignSessionsToWeeks({
         calendaringConfig: defaultMockCalendaringConfig,
         prospectiveSessionsByCity: mockSessions,
+        regularCaseCountByCity: {},
+        smallCaseCountByCity: {},
         specialSessions: [],
         weeksToLoop: mockWeeksToLoop,
       });
 
     expect(Object.values(scheduledTrialSessionsByCity)[0].length).toEqual(
+      defaultMockCalendaringConfig.maxSessionsPerLocation,
+    );
+
+    Object.values(sessionCountPerWeek).forEach(countForWeek => {
+      expect(countForWeek).toBeLessThanOrEqual(1);
+    });
+  });
+
+  it('should assign no more than the max number of sessions per location when passed more than the max for a given location, including special sessions', () => {
+    const mockSpecialSessions = [
+      {
+        ...MOCK_TRIAL_REGULAR,
+        sessionType: SESSION_TYPES.special,
+        startDate: '2019-11-22T04:00:00.000Z',
+        trialLocation: TRIAL_CITY_STRINGS[0],
+        trialSessionId: getUniqueId(),
+      },
+      {
+        ...MOCK_TRIAL_REGULAR,
+        sessionType: SESSION_TYPES.special,
+        startDate: '2019-11-29T04:00:00.000Z',
+        trialLocation: TRIAL_CITY_STRINGS[0],
+        trialSessionId: getUniqueId(),
+      },
+    ];
+    const mockSessions = getMockTrialSessionsForSingleCity();
+
+    const { scheduledTrialSessionsByCity, sessionCountPerWeek } =
+      assignSessionsToWeeks({
+        calendaringConfig: defaultMockCalendaringConfig,
+        prospectiveSessionsByCity: mockSessions,
+        regularCaseCountByCity: {},
+        smallCaseCountByCity: {},
+        specialSessions: mockSpecialSessions,
+        weeksToLoop: mockWeeksToLoop,
+      });
+
+    expect(scheduledTrialSessionsByCity[TRIAL_CITY_STRINGS[0]].length).toEqual(
       defaultMockCalendaringConfig.maxSessionsPerLocation,
     );
 
@@ -163,6 +205,8 @@ describe('assignSessionsToWeeks', () => {
     const { scheduledTrialSessionsByCity } = assignSessionsToWeeks({
       calendaringConfig: defaultMockCalendaringConfig,
       prospectiveSessionsByCity: mockSessions,
+      regularCaseCountByCity: {},
+      smallCaseCountByCity: {},
       specialSessions: mockSpecialSessions,
       weeksToLoop: mockWeeksToLoop,
     });
@@ -221,6 +265,8 @@ describe('assignSessionsToWeeks', () => {
       assignSessionsToWeeks({
         calendaringConfig: defaultMockCalendaringConfig,
         prospectiveSessionsByCity: mockSessions,
+        regularCaseCountByCity: {},
+        smallCaseCountByCity: {},
         specialSessions: mockSpecialSessions,
         weeksToLoop: mockWeeksToLoop,
       });
@@ -284,6 +330,8 @@ describe('assignSessionsToWeeks', () => {
       assignSessionsToWeeks({
         calendaringConfig: defaultMockCalendaringConfig,
         prospectiveSessionsByCity: mockSessions,
+        regularCaseCountByCity: {},
+        smallCaseCountByCity: {},
         specialSessions: mockSpecialSessions,
         weeksToLoop: mockWeeksToLoop,
       });
@@ -316,6 +364,8 @@ describe('assignSessionsToWeeks', () => {
       assignSessionsToWeeks({
         calendaringConfig: defaultMockCalendaringConfig,
         prospectiveSessionsByCity: mockSessions,
+        regularCaseCountByCity: {},
+        smallCaseCountByCity: {},
         specialSessions: mockSpecialSessions,
         weeksToLoop: mockWeeksToLoop,
       });
@@ -361,11 +411,13 @@ describe('assignSessionsToWeeks', () => {
       assignSessionsToWeeks({
         calendaringConfig: defaultMockCalendaringConfig,
         prospectiveSessionsByCity: mockSessions,
+        regularCaseCountByCity: {},
+        smallCaseCountByCity: {},
         specialSessions: mockSpecialSessions,
         weeksToLoop: mockWeeksToLoop,
       });
     }).toThrow(
-      'There must only be no more than two special trial sessions per week in Washington, DC.',
+      'There must be no more than two special trial sessions per week in Washington, DC.',
     );
   });
 
@@ -394,6 +446,8 @@ describe('assignSessionsToWeeks', () => {
       assignSessionsToWeeks({
         calendaringConfig: defaultMockCalendaringConfig,
         prospectiveSessionsByCity: mockSessions,
+        regularCaseCountByCity: {},
+        smallCaseCountByCity: {},
         specialSessions: mockSpecialSessions,
         weeksToLoop: mockWeeksToLoop,
       });
@@ -431,6 +485,8 @@ describe('assignSessionsToWeeks', () => {
       assignSessionsToWeeks({
         calendaringConfig: defaultMockCalendaringConfig,
         prospectiveSessionsByCity: mockSessions,
+        regularCaseCountByCity: {},
+        smallCaseCountByCity: {},
         specialSessions: [],
         weeksToLoop: mockWeeksToLoop,
       });
@@ -469,6 +525,8 @@ describe('assignSessionsToWeeks', () => {
       assignSessionsToWeeks({
         calendaringConfig: defaultMockCalendaringConfig,
         prospectiveSessionsByCity: {},
+        regularCaseCountByCity: {},
+        smallCaseCountByCity: {},
         specialSessions: [],
         weeksToLoop: mockWeeksToLoop,
       });
@@ -480,5 +538,48 @@ describe('assignSessionsToWeeks', () => {
     Object.values(sessionCountPerWeek).forEach(countForWeek => {
       expect(countForWeek).toEqual(0);
     });
+  });
+
+  it('should not schedule a non-special session on the week after a scheduled special session', () => {
+    const mockSpecialSessions = [
+      {
+        ...MOCK_TRIAL_REGULAR,
+        sessionType: SESSION_TYPES.special,
+        startDate: '2019-08-24T04:00:00.000Z',
+        trialLocation: TRIAL_CITY_STRINGS[0],
+        trialSessionId: getUniqueId(),
+      },
+    ];
+
+    const mockProspectiveSessionsByCity = {
+      [TRIAL_CITY_STRINGS[0]]: [
+        {
+          city: `${TRIAL_CITY_STRINGS[0]}`,
+          cityWasNotVisitedInLastTwoTerms: false,
+          sessionType: SESSION_TYPES.regular,
+        },
+      ],
+    };
+
+    const { scheduledTrialSessionsByCity, sessionCountPerWeek } =
+      assignSessionsToWeeks({
+        calendaringConfig: defaultMockCalendaringConfig,
+        prospectiveSessionsByCity: mockProspectiveSessionsByCity,
+        regularCaseCountByCity: {},
+        smallCaseCountByCity: {},
+        specialSessions: mockSpecialSessions,
+        weeksToLoop: mockWeeksToLoop,
+      });
+
+    const secondWeek = mockWeeksToLoop[1];
+
+    const sessionScheduledForSecondWeek = scheduledTrialSessionsByCity[
+      TRIAL_CITY_STRINGS[0]
+    ].filter(
+      scheduledTrialSession => scheduledTrialSession.weekOf === secondWeek,
+    );
+
+    expect(sessionScheduledForSecondWeek.length).toBe(0);
+    expect(sessionCountPerWeek[secondWeek]).toBe(0);
   });
 });

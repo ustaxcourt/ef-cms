@@ -4,6 +4,7 @@ import {
   SESSION_TYPES,
   TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
+import { cloneDeep } from 'lodash';
 
 export type EligibleCase = Pick<
   RawCase,
@@ -40,11 +41,18 @@ export const createProspectiveTrialSessions = ({
   cases: EligibleCase[];
   calendaringConfig: CalendaringConfig;
   citiesFromLastTwoTerms: string[];
-}): ProspectiveSessionsByCity => {
+}): {
+  prospectiveSessionsByCity: ProspectiveSessionsByCity;
+  initialSmallCasesByCity: CasesByCity;
+  initialRegularCasesByCity: CasesByCity;
+} => {
   const prospectiveSessionsByCity: ProspectiveSessionsByCity = {};
 
   const regularCasesByCity = getCasesByCity(cases, PROCEDURE_TYPES_MAP.regular);
   const smallCasesByCity = getCasesByCity(cases, PROCEDURE_TYPES_MAP.small);
+
+  const initialRegularCasesByCity = cloneDeep(regularCasesByCity);
+  const initialSmallCasesByCity = cloneDeep(smallCasesByCity);
 
   Object.keys(regularCasesByCity).forEach(city => {
     prospectiveSessionsByCity[city] = [];
@@ -52,6 +60,9 @@ export const createProspectiveTrialSessions = ({
   Object.keys(smallCasesByCity).forEach(city => {
     prospectiveSessionsByCity[city] = [];
   });
+
+  // const remainingRegularCasesByCity = {};
+  // const remainingSmallCasesByCity = {};
 
   for (const city in prospectiveSessionsByCity) {
     let regularCaseSliceSize;
@@ -102,6 +113,9 @@ export const createProspectiveTrialSessions = ({
     // Handle Hybrid Sessions
     const remainingRegularCases = regularCasesByCity[city] || [];
     const remainingSmallCases = smallCasesByCity[city] || [];
+
+    // remainingRegularCasesByCity[city] = [...remainingRegularCases];
+    // remainingSmallCasesByCity[city] = [...remainingSmallCases];
 
     if (
       remainingRegularCases?.length + remainingSmallCases.length >=
@@ -168,7 +182,11 @@ export const createProspectiveTrialSessions = ({
     );
   });
 
-  return prospectiveSessionsByCity;
+  return {
+    initialRegularCasesByCity,
+    initialSmallCasesByCity,
+    prospectiveSessionsByCity,
+  };
 };
 
 function getCasesByCity(

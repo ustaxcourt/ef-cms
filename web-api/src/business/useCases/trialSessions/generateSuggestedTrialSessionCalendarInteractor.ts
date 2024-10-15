@@ -17,6 +17,7 @@ import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
   SUGGESTED_TRIAL_SESSION_MESSAGES,
+  TRIAL_CITY_STRINGS,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
@@ -25,30 +26,28 @@ import { assignSessionsToWeeks } from '@web-api/business/useCaseHelper/trialSess
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
 
-// Maximum of 6 sessions per week overall.
 const MAX_SESSIONS_PER_WEEK = 6;
-
-// Maximum of 5 total sessions per location during a term.
 const MAX_SESSIONS_PER_LOCATION = 5;
 
-// Regular Cases:
-// Minimum of 40 cases to create a session.
-// Maximum of 100 cases per session.
 const REGULAR_CASE_MINIMUM_QUANTITY = 40;
 const REGULAR_CASE_MAX_QUANTITY = 100;
 
-// Small Cases:
-// Minimum of 40 cases to create a session.
-// Maximum of 125 cases per session.
 const SMALL_CASE_MINIMUM_QUANTITY = 40;
 const SMALL_CASE_MAX_QUANTITY = 125;
 
-// Hybrid Sessions:
-// If neither Small nor Regular categories alone meet the session minimum,
-// combine them to reach a minimum of 50 cases.
-// Maximum of 100 cases per hybrid session.
 const HYBRID_CASE_MINIMUM_QUANTITY = 50;
 const HYBRID_CASE_MAX_QUANTITY = 100;
+
+const calendaringConfig = {
+  hybridCaseMaxQuantity: HYBRID_CASE_MAX_QUANTITY,
+  hybridCaseMinimumQuantity: HYBRID_CASE_MINIMUM_QUANTITY,
+  maxSessionsPerLocation: MAX_SESSIONS_PER_LOCATION,
+  maxSessionsPerWeek: MAX_SESSIONS_PER_WEEK,
+  regularCaseMaxQuantity: REGULAR_CASE_MAX_QUANTITY,
+  regularCaseMinimumQuantity: REGULAR_CASE_MINIMUM_QUANTITY,
+  smallCaseMaxQuantity: SMALL_CASE_MAX_QUANTITY,
+  smallCaseMinimumQuantity: SMALL_CASE_MINIMUM_QUANTITY,
+};
 
 export const WASHINGTON_DC_STRING = 'Washington, District of Columbia';
 export const WASHINGTON_DC_NORTH_STRING =
@@ -75,36 +74,17 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     throw new UnauthorizedError('Unauthorized to generate term');
   }
 
-  //
-  // Maximum of 6 sessions per week
-  // Maximum of 5 sessions total per location
-  // Regular: 40 regular cases minimum to create a session and a maximum of 100 per session
-  // Small: 40 small cases minimum to create a session and a maximum of 125 per session
-  // Hybrid: After Small and Regular sessions are created, if small and regular cases can be added together to meet a minimum of 50, create a hybrid session. Maximum will be 100 cases per session
-  // Special sessions already created will be automatically included
-  // If there has been no trial in the last two terms for a location, then add a session if there are any cases. (ignore the minimum rule)
-  //
-  const calendaringConfig = {
-    hybridCaseMaxQuantity: HYBRID_CASE_MAX_QUANTITY,
-    hybridCaseMinimumQuantity: HYBRID_CASE_MINIMUM_QUANTITY,
-    maxSessionsPerLocation: MAX_SESSIONS_PER_LOCATION,
-    maxSessionsPerWeek: MAX_SESSIONS_PER_WEEK,
-    regularCaseMaxQuantity: REGULAR_CASE_MAX_QUANTITY,
-    regularCaseMinimumQuantity: REGULAR_CASE_MINIMUM_QUANTITY,
-    smallCaseMaxQuantity: SMALL_CASE_MAX_QUANTITY,
-    smallCaseMinimumQuantity: SMALL_CASE_MINIMUM_QUANTITY,
-  };
   console.time('10275: Get ready for trial cases time');
   const cases = await applicationContext
     .getPersistenceGateway()
     .getSuggestedCalendarCases({ applicationContext });
-
   console.timeEnd('10275: Get ready for trial cases time');
 
   console.time('10275: Get trial sessions time');
   const sessions = await applicationContext
     .getPersistenceGateway()
     .getTrialSessions({ applicationContext });
+
   console.timeEnd('10275: Get trial sessions time');
   // Note (10275): storing trial session data differently would make for a more
   // efficient process of determining which sessions are special, calendared,
@@ -123,23 +103,18 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   // past two terms.
 
   console.time('10275: Compile cities from last two term time');
-  const previousTwoTerms = getPreviousTwoTerms(termStartDate);
-
-  const citiesFromLastTwoTerms = sessions
-    .filter(session => {
-      const termString = `${session.term}, ${session.termYear}`;
-      return (
-        previousTwoTerms.includes(termString) &&
-        session.sessionType !== SESSION_TYPES.special
-      );
-    })
-    .map(relevantSession => {
-      return relevantSession.trialLocation!;
-    });
+  const citiesFromLastTwoTerms = getCitiesFromLastTwoTerms({
+    sessions,
+    termStartDate,
+  });
   console.timeEnd('10275: Compile cities from last two term time');
 
   console.time('10275: Generate prospectiveSessionsByCity time');
-  const prospectiveSessionsByCity = createProspectiveTrialSessions({
+  const {
+    initialRegularCasesByCity,
+    initialSmallCasesByCity,
+    prospectiveSessionsByCity,
+  } = createProspectiveTrialSessions({
     calendaringConfig,
     cases,
     citiesFromLastTwoTerms,
@@ -154,13 +129,50 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   console.time('10275: assignSessionsToWeeks time');
 
-  const { scheduledTrialSessionsByCity, sessionCountPerWeek } =
-    assignSessionsToWeeks({
-      calendaringConfig,
-      prospectiveSessionsByCity,
-      specialSessions,
-      weeksToLoop,
-    });
+  initialRegularCasesByCity[WASHINGTON_DC_SOUTH_STRING] =
+    initialRegularCasesByCity[WASHINGTON_DC_STRING];
+  delete initialRegularCasesByCity[WASHINGTON_DC_STRING];
+
+  initialSmallCasesByCity[WASHINGTON_DC_SOUTH_STRING] =
+    initialSmallCasesByCity[WASHINGTON_DC_STRING];
+  delete initialSmallCasesByCity[WASHINGTON_DC_STRING];
+
+  const regularCaseCountByCity = TRIAL_CITY_STRINGS.reduce((acc, city) => {
+    if (city === WASHINGTON_DC_STRING) {
+      // We only schedule non-special sessions at DC South, so we only need to
+      // worry about case counts for South.
+      acc[WASHINGTON_DC_SOUTH_STRING] =
+        initialRegularCasesByCity[city]?.length || 0;
+    } else {
+      acc[city] = initialRegularCasesByCity[city]?.length || 0;
+    }
+    return acc;
+  }, {});
+
+  const smallCaseCountByCity = TRIAL_CITY_STRINGS.reduce((acc, city) => {
+    if (city === WASHINGTON_DC_STRING) {
+      acc[WASHINGTON_DC_SOUTH_STRING] =
+        initialSmallCasesByCity[city]?.length || 0;
+    } else {
+      acc[city] = initialSmallCasesByCity[city]?.length || 0;
+    }
+    return acc;
+  }, {});
+
+  const {
+    remainingRegularCaseCountByCity,
+    remainingSmallCaseCountByCity,
+    scheduledTrialSessionsByCity,
+    sessionCountPerWeek,
+  } = assignSessionsToWeeks({
+    calendaringConfig,
+    prospectiveSessionsByCity,
+    regularCaseCountByCity,
+    smallCaseCountByCity,
+    specialSessions,
+    weeksToLoop,
+  });
+
   console.timeEnd('10275: assignSessionsToWeeks time');
 
   if (Object.keys(scheduledTrialSessionsByCity).length < 1) {
@@ -183,6 +195,10 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   console.time('10275: writeTrialSessionDataToExcel');
   const bufferArray = await writeTrialSessionDataToExcel({
+    initialRegularCasesByCity,
+    initialSmallCasesByCity,
+    remainingRegularCaseCountByCity,
+    remainingSmallCaseCountByCity,
     sessionCountPerWeek,
     sortedScheduledTrialSessionsByCity,
     weeks: weeksToLoop,
@@ -242,6 +258,21 @@ const SESSION_TERMS_FOR_GENERATOR = {
   fall: [9, 10, 11, 12],
   spring: [4, 5, 6, 7, 8],
   winter: [1, 2, 3],
+};
+
+export const getCitiesFromLastTwoTerms = ({ sessions, termStartDate }) => {
+  const previousTwoTerms = getPreviousTwoTerms(termStartDate);
+  return sessions
+    .filter(session => {
+      const termString = `${session.term.toLowerCase()}, ${session.termYear}`;
+      return (
+        previousTwoTerms.includes(termString) &&
+        session.sessionType !== SESSION_TYPES.special
+      );
+    })
+    .map(relevantSession => {
+      return relevantSession.trialLocation!;
+    });
 };
 
 function getCurrentTermByMonth(currentMonth: string) {

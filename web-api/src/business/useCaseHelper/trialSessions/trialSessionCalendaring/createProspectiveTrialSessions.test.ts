@@ -41,13 +41,13 @@ describe('createProspectiveTrialSessions', () => {
         });
       }
 
-      const result = createProspectiveTrialSessions({
+      const { prospectiveSessionsByCity } = createProspectiveTrialSessions({
         calendaringConfig: defaultMockCalendaringConfig,
         cases: mockCases,
         citiesFromLastTwoTerms: TRIAL_CITY_STRINGS,
       });
 
-      expect(result[mockRegularCityString].length).toEqual(
+      expect(prospectiveSessionsByCity[mockRegularCityString].length).toEqual(
         defaultMockCalendaringConfig.maxSessionsPerLocation,
       );
     },
@@ -83,20 +83,31 @@ describe('createProspectiveTrialSessions', () => {
         });
       }
 
-      const result = createProspectiveTrialSessions({
+      const {
+        initialRegularCasesByCity,
+        initialSmallCasesByCity,
+        prospectiveSessionsByCity,
+      } = createProspectiveTrialSessions({
         calendaringConfig: defaultMockCalendaringConfig,
         cases: mockCases,
         citiesFromLastTwoTerms: TRIAL_CITY_STRINGS,
       });
 
-      expect(result[mockRegularCityString][0].sessionType).toEqual(
-        SESSION_TYPES.small,
+      expect(
+        prospectiveSessionsByCity[mockRegularCityString][0].sessionType,
+      ).toEqual(SESSION_TYPES.small);
+      expect(
+        prospectiveSessionsByCity[mockRegularCityString][1].sessionType,
+      ).toEqual(SESSION_TYPES.regular);
+      expect(
+        prospectiveSessionsByCity[mockRegularCityString][2].sessionType,
+      ).toEqual(SESSION_TYPES.hybrid);
+
+      expect(initialRegularCasesByCity[mockRegularCityString].length).toEqual(
+        Math.ceil(totalNumberOfRegularMockCases),
       );
-      expect(result[mockRegularCityString][1].sessionType).toEqual(
-        SESSION_TYPES.regular,
-      );
-      expect(result[mockRegularCityString][2].sessionType).toEqual(
-        SESSION_TYPES.hybrid,
+      expect(initialSmallCasesByCity[mockRegularCityString].length).toEqual(
+        Math.ceil(totalNumberOfSmallMockCases),
       );
     },
   );
@@ -140,21 +151,21 @@ describe('createProspectiveTrialSessions', () => {
         });
       }
 
-      const result = createProspectiveTrialSessions({
+      const { prospectiveSessionsByCity } = createProspectiveTrialSessions({
         calendaringConfig: mockCalendaringConfig,
         cases: mockCases,
         citiesFromLastTwoTerms: TRIAL_CITY_STRINGS,
       });
 
-      expect(result[mockRegularCityString][0].sessionType).toEqual(
-        SESSION_TYPES.regular,
-      );
-      expect(result[mockRegularCityString][1].sessionType).toEqual(
-        SESSION_TYPES.small,
-      );
-      expect(result[mockRegularCityString][2].sessionType).toEqual(
-        SESSION_TYPES.hybrid,
-      );
+      expect(
+        prospectiveSessionsByCity[mockRegularCityString][0].sessionType,
+      ).toEqual(SESSION_TYPES.regular);
+      expect(
+        prospectiveSessionsByCity[mockRegularCityString][1].sessionType,
+      ).toEqual(SESSION_TYPES.small);
+      expect(
+        prospectiveSessionsByCity[mockRegularCityString][2].sessionType,
+      ).toEqual(SESSION_TYPES.hybrid);
     },
   );
 
@@ -207,28 +218,31 @@ describe('createProspectiveTrialSessions', () => {
       procedureType: PROCEDURE_TYPES_MAP.regular,
     });
 
-    const result = createProspectiveTrialSessions({
+    const { prospectiveSessionsByCity } = createProspectiveTrialSessions({
       calendaringConfig: defaultMockCalendaringConfig,
       cases: mockCases,
       citiesFromLastTwoTerms: mockTrialCitiesFromLastTwoTerms,
     });
 
-    const includedLocations = Object.keys(result);
+    const includedLocations = Object.keys(prospectiveSessionsByCity);
 
-    expect(result[mockRegularCityString].length).toEqual(
+    expect(prospectiveSessionsByCity[mockRegularCityString].length).toEqual(
       defaultMockCalendaringConfig.maxSessionsPerLocation,
     );
     expect(includedLocations).toEqual([
       mockRegularCityString,
       mockLowVolumeCityString,
     ]);
-    expect(result[mockLowVolumeCityString].length).toEqual(1);
-    expect(
-      result[mockLowVolumeCityString][0].cityWasNotVisitedInLastTwoTerms,
-    ).toEqual(true);
-    expect(result[mockLowVolumeCityString][0].sessionType).toEqual(
-      SESSION_TYPES.regular,
+    expect(prospectiveSessionsByCity[mockLowVolumeCityString].length).toEqual(
+      1,
     );
+    expect(
+      prospectiveSessionsByCity[mockLowVolumeCityString][0]
+        .cityWasNotVisitedInLastTwoTerms,
+    ).toEqual(true);
+    expect(
+      prospectiveSessionsByCity[mockLowVolumeCityString][0].sessionType,
+    ).toEqual(SESSION_TYPES.regular);
   });
 
   it('should ignore small case minimums and schedule a session for a location that has not been visited in the previous two terms', () => {
@@ -260,28 +274,31 @@ describe('createProspectiveTrialSessions', () => {
       procedureType: PROCEDURE_TYPES_MAP.small,
     });
 
-    const result = createProspectiveTrialSessions({
+    const { prospectiveSessionsByCity } = createProspectiveTrialSessions({
       calendaringConfig: defaultMockCalendaringConfig,
       cases: mockCases,
       citiesFromLastTwoTerms: mockTrialCitiesFromLastTwoTerms,
     });
 
-    const includedLocations = Object.keys(result);
+    const includedLocations = Object.keys(prospectiveSessionsByCity);
 
-    expect(result[mockRegularCityString].length).toEqual(
+    expect(prospectiveSessionsByCity[mockRegularCityString].length).toEqual(
       defaultMockCalendaringConfig.maxSessionsPerLocation,
     );
     expect(includedLocations).toEqual([
       mockRegularCityString,
       mockLowVolumeCityString,
     ]);
-    expect(result[mockLowVolumeCityString].length).toEqual(1);
-    expect(
-      result[mockLowVolumeCityString][0].cityWasNotVisitedInLastTwoTerms,
-    ).toEqual(true);
-    expect(result[mockLowVolumeCityString][0].sessionType).toEqual(
-      SESSION_TYPES.small,
+    expect(prospectiveSessionsByCity[mockLowVolumeCityString].length).toEqual(
+      1,
     );
+    expect(
+      prospectiveSessionsByCity[mockLowVolumeCityString][0]
+        .cityWasNotVisitedInLastTwoTerms,
+    ).toEqual(true);
+    expect(
+      prospectiveSessionsByCity[mockLowVolumeCityString][0].sessionType,
+    ).toEqual(SESSION_TYPES.small);
   });
 
   it('should ignore hybrid case minimums and schedule a session for a location that has not been visited in the previous two terms', () => {
@@ -320,27 +337,30 @@ describe('createProspectiveTrialSessions', () => {
       procedureType: PROCEDURE_TYPES_MAP.regular,
     });
 
-    const result = createProspectiveTrialSessions({
+    const { prospectiveSessionsByCity } = createProspectiveTrialSessions({
       calendaringConfig: defaultMockCalendaringConfig,
       cases: mockCases,
       citiesFromLastTwoTerms: mockTrialCitiesFromLastTwoTerms,
     });
 
-    const includedLocations = Object.keys(result);
+    const includedLocations = Object.keys(prospectiveSessionsByCity);
 
-    expect(result[mockRegularCityString].length).toEqual(
+    expect(prospectiveSessionsByCity[mockRegularCityString].length).toEqual(
       defaultMockCalendaringConfig.maxSessionsPerLocation,
     );
     expect(includedLocations).toEqual([
       mockLowVolumeCityString,
       mockRegularCityString,
     ]);
-    expect(result[mockLowVolumeCityString].length).toEqual(1);
-    expect(
-      result[mockLowVolumeCityString][0].cityWasNotVisitedInLastTwoTerms,
-    ).toEqual(true);
-    expect(result[mockLowVolumeCityString][0].sessionType).toEqual(
-      SESSION_TYPES.hybrid,
+    expect(prospectiveSessionsByCity[mockLowVolumeCityString].length).toEqual(
+      1,
     );
+    expect(
+      prospectiveSessionsByCity[mockLowVolumeCityString][0]
+        .cityWasNotVisitedInLastTwoTerms,
+    ).toEqual(true);
+    expect(
+      prospectiveSessionsByCity[mockLowVolumeCityString][0].sessionType,
+    ).toEqual(SESSION_TYPES.hybrid);
   });
 });
