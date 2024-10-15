@@ -5,13 +5,15 @@ import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/j
 import {
   IDLE_LOGOUT_STATES,
   IdleLogoutStateType,
+  PRACTICE_TYPE,
+  SERVICE_INDICATOR_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
 import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
 import { JudgeChambersInfo } from '@web-client/presenter/actions/getJudgesChambersAction';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawMessage } from '@shared/business/entities/Message';
-import { RawUser } from '@shared/business/entities/User';
+import { RawUser, UserContact } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 import { TroubleshootingLinkInfo } from '@web-client/presenter/sequences/showFileUploadErrorModalSequence';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
@@ -87,7 +89,6 @@ import { formattedMessageDetail } from './computeds/formattedMessageDetail';
 import { formattedMessages } from './computeds/formattedMessages';
 import { formattedPendingItemsHelper } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
-import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getAllIrsPractitionersForSelectHelper } from '@web-client/presenter/computeds/TrialSession/getAllIrsPractitionersForSelectHelper';
 import { getConstants } from '../getConstants';
@@ -96,6 +97,7 @@ import { headerHelper } from './computeds/headerHelper';
 import { initialBlockedCaseReportFilter } from '@web-client/presenter/state/blockedCasesReportState';
 import { initialCustomCaseReportState } from './customCaseReportState';
 import { initialPendingReportsState } from '@web-client/presenter/state/pendingReportState';
+import { initialTrialSessionPageState } from '@web-client/presenter/state/trialSessionsPageState';
 import { initialTrialSessionState } from '@web-client/presenter/state/trialSessionState';
 import { initialTrialSessionWorkingCopyState } from '@web-client/presenter/state/trialSessionWorkingCopyState';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
@@ -151,6 +153,7 @@ import { trialSessionsSummaryHelper } from './computeds/trialSessionsSummaryHelp
 import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
 import { userContactEditHelper } from './computeds/userContactEditHelper';
 import { userContactEditProgressHelper } from './computeds/userContactEditProgressHelper';
+import { validateEmailFormHelper } from '@web-client/presenter/computeds/validateEmailFormHelper';
 import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 
@@ -382,9 +385,6 @@ export const computeds = {
     formattedTrialSessionDetails as unknown as ReturnType<
       typeof formattedTrialSessionDetails
     >,
-  formattedTrialSessions: formattedTrialSessions as unknown as ReturnType<
-    typeof formattedTrialSessions
-  >,
   formattedWorkQueue: formattedWorkQueue as unknown as ReturnType<
     typeof formattedWorkQueue
   >,
@@ -561,6 +561,9 @@ export const computeds = {
     userContactEditProgressHelper as unknown as ReturnType<
       typeof userContactEditProgressHelper
     >,
+  validateEmailFormHelper: validateEmailFormHelper as unknown as ReturnType<
+    typeof validateEmailFormHelper
+  >,
   viewCounselHelper: viewCounselHelper as unknown as ReturnType<
     typeof viewCounselHelper
   >,
@@ -792,7 +795,7 @@ export const baseState = {
     stinFileUrl: undefined,
     taxYear: undefined,
   },
-  practitionerDetail: {},
+  practitionerDetail: {} as PractitionerDetail,
   previewPdfFile: null,
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses
@@ -847,6 +850,8 @@ export const baseState = {
     name: '',
   },
   trialSessionWorkingCopy: cloneDeep(initialTrialSessionWorkingCopyState),
+  trialSessions: [] as any[], // Sometimes trialSessions, sometimes TrialSessionInfoDTO, sometimes ad-hoc trial sessions
+  trialSessionsPage: cloneDeep(initialTrialSessionPageState),
   user: cloneDeep(emptyUserState),
   userContactEditProgress: {} as { inProgress?: boolean },
   users: [] as RawUser[],
@@ -887,4 +892,47 @@ export type ViewerDocument = {
   eventCode?: string;
   filingDate?: string;
   index?: number;
+};
+
+export type PracticeType = (typeof PRACTICE_TYPE)[keyof typeof PRACTICE_TYPE];
+export type ServiceIndicatorType =
+  (typeof SERVICE_INDICATOR_TYPES)[keyof typeof SERVICE_INDICATOR_TYPES];
+
+export type PractitionerDetail = {
+  admissionsDate: string;
+  admissionStatus: string;
+  barNumber: string;
+  name: string;
+  practiceType: PracticeType;
+  serviceIndicator?: ServiceIndicatorType;
+  userId: string;
+  birthYear?: string;
+  originalBarState?: string;
+  practitionerType?: string;
+  middleName?: string;
+  contact?: Partial<UserContact>;
+  openCaseInfo?: PractitionerAllCasesInfo; // Only for internal users
+  closedCaseInfo?: PractitionerAllCasesInfo; // Only for internal users
+  email?: string;
+  pendingEmail?: string;
+  additionalPhone?: string;
+  firmName?: string;
+  hasEAccess?: boolean;
+};
+
+export type PractitionerAllCasesInfo = {
+  allCases: PractitionerCaseDetail[];
+  currentPage: number;
+};
+
+export type PractitionerCaseDetail = {
+  docketNumber: string;
+  docketNumberWithSuffix: string;
+  caseTitle: string;
+  inConsolidatedGroup: boolean;
+  isLeadCase: boolean;
+  isSealed: boolean;
+  status: string;
+  sealedToTooltip?: string;
+  consolidatedIconTooltipText?: string;
 };

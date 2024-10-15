@@ -10,7 +10,7 @@ export function retry(cb: () => Cypress.Chainable<boolean>, maxAttempts = 5) {
       }
     });
   } else {
-    throw new Error('cypress failed to run a successful retry block');
+    throw new Error('cypress failed to successfully run a retry block');
   }
 }
 

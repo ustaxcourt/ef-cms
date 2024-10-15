@@ -2,9 +2,10 @@ import { caseExistsAction } from '../actions/caseExistsAction';
 import { clearSearchResultsAction } from '../actions/AdvancedSearch/clearSearchResultsAction';
 import { clearSearchTermAction } from '../actions/clearSearchTermAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setDocketNumberFromAdvancedSearchAction } from '../actions/AdvancedSearch/setDocketNumberFromAdvancedSearchAction';
 import { setNoMatchesCaseSearchAction } from '../actions/AdvancedSearch/setNoMatchesCaseSearchAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
+import { setValidationAlertErrorsAction } from '@web-client/presenter/actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -17,8 +18,9 @@ export const submitCaseDocketNumberSearchSequence = [
   validateCaseDocketNumberSearchAction,
   {
     error: [
-      setAlertErrorAction,
       setValidationErrorsAction,
+      setScrollToErrorNotificationAction,
+      setValidationAlertErrorsAction,
       clearSearchResultsAction,
     ],
     success: showProgressSequenceDecorator([
