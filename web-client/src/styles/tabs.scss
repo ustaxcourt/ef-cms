@@ -38,6 +38,7 @@
         position: relative;
         top: 2px;
         padding: 0;
+        padding-bottom: 5px;
         border: none;
         margin-right: 45px;
         background: none;
@@ -237,9 +238,8 @@
       font-size: 17px;
     }
   }
+}
 
-  /* little screens */
-  @media only screen and (max-width: $medium-screen) {
-    margin-bottom: 0 !important;
-  }
+.tab-content-with-top-margin {
+  margin-top: 2.5rem;
 }

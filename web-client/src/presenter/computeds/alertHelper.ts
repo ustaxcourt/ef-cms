@@ -15,7 +15,6 @@ export const alertHelper = (get: Get): any => {
 
   return {
     messagesDeduped: uniq(alertError.messages).filter(Boolean),
-    preventAutoScroll: false,
     responseCode: alertError.responseCode,
     showErrorAlert:
       !!alertError.title || !!alertError.message || !!alertError.messages,

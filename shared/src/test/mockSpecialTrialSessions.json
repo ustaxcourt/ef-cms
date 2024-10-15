@@ -1,0 +1,1354 @@
+[
+  {
+    "isStartDateWithinNOTTReminderRange": true,
+    "hasNOTTBeenServed": false,
+    "maxCases": "10",
+    "trialLocation": "Washington, District of Columbia",
+    "isCalendared": true,
+    "sessionType": "Special",
+    "proceedingType": "Remote",
+    "startDate": "2024-09-18T00:00:00.000-04:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|0007c0df-e912-400e-949d-13ceb88d6a9e",
+    "termYear": "2024",
+    "createdAt": "2024-07-23T16:09:31.477Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": true,
+    "startTime": "22:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {},
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "08/20/24",
+    "sessionScope": "Location-based",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "101-24"
+      }
+    ],
+    "trialSessionId": "0007c0df-e912-400e-949d-13ceb88d6a9e",
+    "pk": "trial-session|0007c0df-e912-400e-949d-13ceb88d6a9e",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": null,
+    "judge": {
+      "name": "Pouros",
+      "userId": "3f831385-bb17-4b10-bc4e-687ea9940207"
+    },
+    "trialClerk": {
+      "name": "Dillon Miller",
+      "userId": "2039d24e-e3a0-490c-b948-89526e02704e"
+    }
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": true,
+    "hasNOTTBeenServed": false,
+    "maxCases": "100",
+    "trialLocation": "Chicago, Illinois",
+    "trialClerk": {
+      "name": "Sarai Keeling",
+      "userId": "ca6654f6-47e3-4857-991c-37ad3950041e"
+    },
+    "state": "IL",
+    "city": "Chicago",
+    "isCalendared": true,
+    "chambersPhoneNumber": "(202) 521-0690",
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "startDate": "2024-09-25T00:00:00.000-04:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|058d4e26-550e-4792-a230-fdb44b9a4af8",
+    "postalCode": "60604",
+    "termYear": "2024",
+    "address1": "230 S. Dearborn Street",
+    "address2": "Room 3908, 39th Floor",
+    "createdAt": "2024-04-09T14:05:24.752Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": true,
+    "startTime": "10:00",
+    "isClosed": false,
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "08/27/24",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Feeney",
+      "userId": "72192aee-e13a-45e0-b2b7-74b91ffc4d17"
+    },
+    "courthouseName": "Kluczynski Federal Building",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "102-24"
+      }
+    ],
+    "trialSessionId": "058d4e26-550e-4792-a230-fdb44b9a4af8",
+    "pk": "trial-session|058d4e26-550e-4792-a230-fdb44b9a4af8",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": "2024-09-27T00:00:00.000-04:00"
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": false,
+    "hasNOTTBeenServed": false,
+    "maxCases": "20",
+    "trialLocation": "Richmond, Virginia",
+    "trialClerk": {
+      "name": "Aracely McLaughlin",
+      "userId": "b737a380-8c6a-4d54-9587-68a29431f4e2"
+    },
+    "state": "VA",
+    "city": "Charlottesville",
+    "isCalendared": true,
+    "chambersPhoneNumber": "(202) 521-0850",
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "startDate": "2024-11-25T00:00:00.000-05:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|1168dcf1-a0c6-4f21-a40e-6087536daec1",
+    "postalCode": "22902",
+    "termYear": "2024",
+    "address1": "255 W. Main Street",
+    "createdAt": "2024-05-15T18:07:21.115Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": false,
+    "startTime": "10:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {},
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "10/27/24",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Zieme",
+      "userId": "2b65d2de-1b35-4ae1-bcbd-b07782b66eaf"
+    },
+    "courthouseName": "United States Courthouse and Federal Building (Charlottesville, Virginia)",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "103-24"
+      }
+    ],
+    "trialSessionId": "1168dcf1-a0c6-4f21-a40e-6087536daec1",
+    "pk": "trial-session|1168dcf1-a0c6-4f21-a40e-6087536daec1",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": "2024-11-26T00:00:00.000-05:00"
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": true,
+    "hasNOTTBeenServed": false,
+    "maxCases": "10",
+    "trialLocation": "Washington, District of Columbia",
+    "trialClerk": {
+      "name": "Casimir Dibbert",
+      "userId": "cfeaac3d-0feb-4447-871c-45d34429ea90"
+    },
+    "isCalendared": true,
+    "sessionType": "Special",
+    "proceedingType": "Remote",
+    "notes": "Hearing on resp. motion for judgment on the pleadings",
+    "startDate": "2024-10-09T00:00:00.000-04:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|1833586c-cc8e-4160-9bde-9ccca77d2048",
+    "termYear": "2024",
+    "createdAt": "2024-07-23T16:13:25.388Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": true,
+    "startTime": "14:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {},
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "09/10/24",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Runolfsdottir",
+      "userId": "4abd06f6-a477-4bbc-a077-41c4a2a7d9aa"
+    },
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "104-24"
+      }
+    ],
+    "trialSessionId": "1833586c-cc8e-4160-9bde-9ccca77d2048",
+    "pk": "trial-session|1833586c-cc8e-4160-9bde-9ccca77d2048",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": null
+  },
+  {
+    "hasNOTTBeenServed": false,
+    "maxCases": "1",
+    "trialLocation": "Jacksonville, Florida",
+    "trialClerk": {
+      "name": "Ward Gottlieb",
+      "userId": "fc7fee59-31f1-4e9c-935f-af547e4e0e4b"
+    },
+    "state": "AZ",
+    "city": "Tucson",
+    "isCalendared": true,
+    "chambersPhoneNumber": "(202) 521-0760",
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "startDate": "2024-09-20T00:00:00.000-04:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|1e1d9479-0b94-45e8-9855-d110772d8f99",
+    "postalCode": "85748",
+    "termYear": "2024",
+    "address1": "123 Main St.",
+    "createdAt": "2024-09-19T13:45:28.483Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": false,
+    "startTime": "10:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {
+      "name": "Richard L. Parker",
+      "phone": "202-307-3684",
+      "email": "3a4d5c8fcfe0faceaffaa06c133bd153@ef-cms.ustaxcourt.gov"
+    },
+    "entityName": "TrialSession",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Padberg",
+      "userId": "f81b3a29-aefe-4594-8e96-0cb4dc522940"
+    },
+    "courthouseName": "Ye Olde Courthouse",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "105-24"
+      }
+    ],
+    "trialSessionId": "1e1d9479-0b94-45e8-9855-d110772d8f99",
+    "pk": "trial-session|1e1d9479-0b94-45e8-9855-d110772d8f99",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": "2024-09-27T00:00:00.000-04:00"
+  },
+  {
+    "hasNOTTBeenServed": false,
+    "maxCases": "15",
+    "trialLocation": "New Orleans, Louisiana",
+    "trialClerk": {
+      "name": "Carole Gutkowski",
+      "userId": "541d27d3-2401-4ba4-86df-ec4d0461a363"
+    },
+    "state": "LA",
+    "city": "New Orleans",
+    "isCalendared": true,
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "notes": "Two-Week Special Session Starting Monday, October 7, 2024",
+    "startDate": "2024-10-07T04:00:00.000Z",
+    "sessionStatus": "Open",
+    "sk": "trial-session|268da71f-e45d-423f-861c-52b361923f4d",
+    "postalCode": "70130",
+    "termYear": "2024",
+    "address1": "423 Canal Street",
+    "address2": "Room 212",
+    "createdAt": "2023-03-21T19:15:53.793Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": true,
+    "startTime": "10:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {
+      "name": "Scott Thomas Welch",
+      "phone": "504-558-1597",
+      "email": "fdewfew"
+    },
+    "entityName": "TrialSession",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Wilkinson",
+      "userId": "509a9f32-49e2-4084-acbe-ece189a62b8a"
+    },
+    "courthouseName": "U.S. Custom House",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "106-24"
+      }
+    ],
+    "trialSessionId": "268da71f-e45d-423f-861c-52b361923f4d",
+    "pk": "trial-session|268da71f-e45d-423f-861c-52b361923f4d",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": null
+  },
+  {
+    "hasNOTTBeenServed": false,
+    "paperServicePdfs": [],
+    "maxCases": "5",
+    "trialLocation": "San Diego, California",
+    "createdAt": "2024-09-13T17:55:54.487Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": false,
+    "isClosed": false,
+    "startTime": "10:00",
+    "entityName": "TrialSession",
+    "isCalendared": true,
+    "proceedingType": "Remote",
+    "sessionType": "Special",
+    "sessionScope": "Location-based",
+    "startDate": "2024-09-16T00:00:00.000-04:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|270b79ef-5e1b-42a9-8fcb-bf06d8ed65f0",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "107-24"
+      }
+    ],
+    "trialSessionId": "270b79ef-5e1b-42a9-8fcb-bf06d8ed65f0",
+    "pk": "trial-session|270b79ef-5e1b-42a9-8fcb-bf06d8ed65f0",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": null,
+    "termYear": "2024",
+    "judge": {
+      "name": "Renner",
+      "userId": "caeed358-0917-45cf-b675-a94066b957f9"
+    },
+    "trialClerk": {
+      "name": "Nathan Frami",
+      "userId": "69afc83f-576e-462d-9279-1eb795c17165"
+    }
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": true,
+    "hasNOTTBeenServed": false,
+    "maxCases": "100",
+    "trialLocation": "Atlanta, Georgia",
+    "trialClerk": {
+      "name": "Novella Schultz",
+      "userId": "1138a301-0c22-4232-bf3e-4b68a527aa7e"
+    },
+    "state": "GA",
+    "city": "Atlanta ",
+    "isCalendared": true,
+    "chambersPhoneNumber": "(202) 521-0670",
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "notes": "Seven-day Special Session",
+    "startDate": "2024-10-07T00:00:00.000-04:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|2a80a555-b801-4a92-8a59-3b0383496213",
+    "postalCode": "30303",
+    "termYear": "2024",
+    "address1": "75 Ted Turner Drive, SW",
+    "address2": "Room 1136, 11th Floor",
+    "createdAt": "2024-02-14T17:40:51.631Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": true,
+    "startTime": "10:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {},
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "09/08/24",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Lind-Luettgen",
+      "userId": "993b46fe-191a-4ddd-a27b-ed4b8e633a74"
+    },
+    "courthouseName": "Russell Federal Building and Courthouse ",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "108-24"
+      }
+    ],
+    "trialSessionId": "2a80a555-b801-4a92-8a59-3b0383496213",
+    "pk": "trial-session|2a80a555-b801-4a92-8a59-3b0383496213",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": "2024-10-15T00:00:00.000-04:00"
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": false,
+    "hasNOTTBeenServed": false,
+    "maxCases": "100",
+    "trialLocation": "San Francisco, California",
+    "trialClerk": {
+      "name": "Lisandro Balistreri",
+      "userId": "db7b082f-5ea4-4426-9ab2-3a0c83046ab2"
+    },
+    "state": "CA",
+    "city": "San Francisco",
+    "isCalendared": true,
+    "chambersPhoneNumber": "(202) 521-0785",
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "startDate": "2024-12-09T00:00:00.000-05:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|2c34be26-a6c3-4dde-ae89-069393893238",
+    "postalCode": "94102",
+    "termYear": "2024",
+    "address1": "Room 2-1408",
+    "address2": "450 Golden Gate Avenue",
+    "createdAt": "2024-07-25T14:34:16.114Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": false,
+    "startTime": "10:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {},
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "11/10/24",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Dare",
+      "userId": "49c59df4-293c-4a4a-9232-46b1f985fab8"
+    },
+    "courthouseName": "Burton Federal Bldg. & U.S. Courthouse",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "109-24"
+      }
+    ],
+    "trialSessionId": "2c34be26-a6c3-4dde-ae89-069393893238",
+    "pk": "trial-session|2c34be26-a6c3-4dde-ae89-069393893238",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": "2024-12-13T00:00:00.000-05:00"
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": true,
+    "hasNOTTBeenServed": false,
+    "maxCases": "25",
+    "trialLocation": "Tampa, Florida",
+    "trialClerk": {
+      "name": "Cleo Hodkiewicz",
+      "userId": "338a9cc4-d2a1-4c89-b73c-fa86e435ddc9"
+    },
+    "state": "FL",
+    "city": "Tampa",
+    "isCalendared": true,
+    "chambersPhoneNumber": "(202) 521-0690",
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "startDate": "2024-09-17T00:00:00.000-04:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|5545d8f6-ee99-4cda-b7c9-af54c16912b3",
+    "postalCode": "33602",
+    "termYear": "2024",
+    "address1": "501 East Polk Street",
+    "address2": "Courtroom #1201",
+    "createdAt": "2024-05-13T17:27:14.309Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": true,
+    "startTime": "10:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {},
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "08/19/24",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Williamson",
+      "userId": "1ad68b94-bfa1-4213-a77e-aff743c55b49"
+    },
+    "courthouseName": "Timberlake Federal  Annex",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "110-24"
+      }
+    ],
+    "trialSessionId": "5545d8f6-ee99-4cda-b7c9-af54c16912b3",
+    "pk": "trial-session|5545d8f6-ee99-4cda-b7c9-af54c16912b3",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": null
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": false,
+    "hasNOTTBeenServed": false,
+    "maxCases": "25",
+    "trialLocation": "Atlanta, Georgia",
+    "trialClerk": {
+      "name": "Orie Block",
+      "userId": "38ad046f-d886-4ca4-9717-38e9d6fddfb6"
+    },
+    "state": "GA",
+    "city": "Atlanta",
+    "isCalendared": true,
+    "chambersPhoneNumber": "(202) 521-0714",
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "notes": "Yet another conservation easement case. If a second week is required I'll be in Atlanta the next week on a regular calendar ",
+    "startDate": "2024-10-21T00:00:00.000-04:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|6168bb24-54a9-40f9-aff8-c826519b2e63",
+    "postalCode": "30303",
+    "termYear": "2024",
+    "address1": "Room 1136",
+    "address2": "75 Ted Turner Drive, S.W.",
+    "createdAt": "2024-03-20T15:35:20.776Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": false,
+    "startTime": "10:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {},
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "09/22/24",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Okuneva",
+      "userId": "3d3c1fc8-ea67-4fcf-af20-acb7a671b533"
+    },
+    "courthouseName": "Russell Federal Building and Courthouse",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "111-24"
+      }
+    ],
+    "trialSessionId": "6168bb24-54a9-40f9-aff8-c826519b2e63",
+    "pk": "trial-session|6168bb24-54a9-40f9-aff8-c826519b2e63",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": null
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": false,
+    "hasNOTTBeenServed": false,
+    "maxCases": "50",
+    "trialLocation": "Atlanta, Georgia",
+    "trialClerk": {
+      "name": "Rick Corwin",
+      "userId": "f8f6134d-6d4c-4112-a514-aa3d8d64e70b"
+    },
+    "state": "GA",
+    "city": "Atlanta",
+    "isCalendared": true,
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "startDate": "2024-12-02T00:00:00.000-05:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|624cc026-c60d-44bf-8750-9406c9ffa4ae",
+    "postalCode": "30303",
+    "termYear": "2024",
+    "address1": "Room 1136",
+    "address2": "75 Ted Turner Drive S.W. ",
+    "createdAt": "2023-11-30T17:54:16.857Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": false,
+    "startTime": "09:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {},
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "11/03/24",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Collier",
+      "userId": "ac922ce0-dc23-4e95-abed-2617a95fedcc"
+    },
+    "courthouseName": "Russel Federal Building & Courthouse",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "112-24"
+      }
+    ],
+    "trialSessionId": "624cc026-c60d-44bf-8750-9406c9ffa4ae",
+    "pk": "trial-session|624cc026-c60d-44bf-8750-9406c9ffa4ae",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": null
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": true,
+    "hasNOTTBeenServed": false,
+    "maxCases": "100",
+    "trialLocation": "Washington, District of Columbia",
+    "isCalendared": true,
+    "chambersPhoneNumber": "(202) 521-0649",
+    "sessionType": "Special",
+    "proceedingType": "Remote",
+    "notes": "Remote Special Trial Session for 1-Day",
+    "startDate": "2024-10-07T00:00:00.000-04:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|632def1b-b648-4b47-9cb0-492c17fe1d08",
+    "termYear": "2024",
+    "createdAt": "2024-08-30T17:27:51.750Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": true,
+    "startTime": "10:00",
+    "isClosed": false,
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "09/08/24",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Wolff-Rau",
+      "userId": "24989ef4-5518-4cfb-81a6-c8ff6f701f4a"
+    },
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "113-24"
+      }
+    ],
+    "trialSessionId": "632def1b-b648-4b47-9cb0-492c17fe1d08",
+    "pk": "trial-session|632def1b-b648-4b47-9cb0-492c17fe1d08",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": null,
+    "trialClerk": {
+      "name": "Ebba Skiles",
+      "userId": "59a7f98f-2033-43ed-a6c0-2ffc4e463412"
+    }
+  },
+  {
+    "hasNOTTBeenServed": false,
+    "paperServicePdfs": [],
+    "maxCases": "9",
+    "trialLocation": "Denver, Colorado",
+    "createdAt": "2024-09-13T19:20:27.957Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": false,
+    "isClosed": false,
+    "startTime": "10:00",
+    "entityName": "TrialSession",
+    "isCalendared": true,
+    "proceedingType": "Remote",
+    "sessionType": "Special",
+    "sessionScope": "Location-based",
+    "startDate": "2024-09-23T00:00:00.000-04:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|671ee324-0e6c-41a7-8096-984b2d25570d",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "114-24"
+      }
+    ],
+    "trialSessionId": "671ee324-0e6c-41a7-8096-984b2d25570d",
+    "pk": "trial-session|671ee324-0e6c-41a7-8096-984b2d25570d",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": null,
+    "termYear": "2024",
+    "judge": {
+      "name": "Dare",
+      "userId": "41ba4e7d-030e-4cf6-a7fe-120f7582d238"
+    },
+    "trialClerk": {
+      "name": "Tad Wolf",
+      "userId": "e9b94c4d-8158-4ed7-b226-ce72412d4646"
+    }
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": true,
+    "hasNOTTBeenServed": false,
+    "maxCases": "100",
+    "trialLocation": "Dallas, Texas",
+    "trialClerk": {
+      "name": "Lysanne Weber",
+      "userId": "7d562129-0ca5-4fb7-a4d5-290f9d8efd77"
+    },
+    "state": "TX",
+    "city": "Dallas",
+    "isCalendared": true,
+    "chambersPhoneNumber": "(202) 521-0649",
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "notes": "One-week Special Trial Session.  Trial is expected to last 3-4 days starting on September 16th.\nThe Commissioner disallowed a non-cash charitable deduction of $57,214,617 for the donation of real property. It is unclear whether this case is a syndicated conservation donation. ",
+    "startDate": "2024-09-16T00:00:00.000-04:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|7ec22872-1547-45f5-8416-1b804fffd86f",
+    "postalCode": "75142",
+    "termYear": "2024",
+    "address1": "Room 726",
+    "address2": "1100 Commerce Street",
+    "createdAt": "2024-02-12T13:49:39.167Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": true,
+    "startTime": "10:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {},
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "08/18/24",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Morissette",
+      "userId": "20e0b9f3-6822-453a-a56e-f9d33bcfac46"
+    },
+    "courthouseName": "Earle Cabell Federal Building & U.S. Courthouse ",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "115-24"
+      }
+    ],
+    "trialSessionId": "7ec22872-1547-45f5-8416-1b804fffd86f",
+    "pk": "trial-session|7ec22872-1547-45f5-8416-1b804fffd86f",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": "2024-09-20T00:00:00.000-04:00"
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": false,
+    "hasNOTTBeenServed": false,
+    "maxCases": "15",
+    "trialLocation": "New Orleans, Louisiana",
+    "trialClerk": {
+      "name": "Verna Lowe",
+      "userId": "a6524256-e520-43a9-93cd-cc4ade182e8f"
+    },
+    "state": "LA",
+    "city": "New Orleans",
+    "isCalendared": true,
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "notes": "First two- Weeks of the Special Session will start Monday, September 9, 2024-September 20, 2024. The last 2 weeks of the Special Session will reconvene on October 7 through October 18, 2024.",
+    "startDate": "2024-09-09T04:00:00.000Z",
+    "courtReporter": "Jennifer Lindeman",
+    "sessionStatus": "Open",
+    "sk": "trial-session|7f29a0a7-7020-4a7b-9492-26a94c1d78ac",
+    "postalCode": "70130",
+    "termYear": "2024",
+    "address1": "423 Canal Street",
+    "address2": "Room 212",
+    "createdAt": "2023-03-21T19:13:22.923Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": true,
+    "startTime": "10:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {},
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "08/11/24",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Wehner",
+      "userId": "39368d6b-4d7a-4bd1-a12a-a698cc404e0a"
+    },
+    "courthouseName": "U.S. Custom House",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "116-24"
+      }
+    ],
+    "trialSessionId": "7f29a0a7-7020-4a7b-9492-26a94c1d78ac",
+    "pk": "trial-session|7f29a0a7-7020-4a7b-9492-26a94c1d78ac",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": null
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": true,
+    "hasNOTTBeenServed": false,
+    "maxCases": "25",
+    "trialLocation": "Atlanta, Georgia",
+    "trialClerk": {
+      "name": "Jennings Haley",
+      "userId": "dd297b4f-9c91-4737-b401-78d2576030ee"
+    },
+    "state": "GA",
+    "city": "Atlanta",
+    "isCalendared": true,
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "startDate": "2024-09-23T04:00:00.000Z",
+    "sessionStatus": "Open",
+    "sk": "trial-session|85e540b9-8068-4fc6-8afc-ee5da8314994",
+    "postalCode": "30303",
+    "termYear": "2024",
+    "address1": "75 Ted Turner Drive, S.W., Room 1136",
+    "createdAt": "2023-04-18T16:07:29.704Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": true,
+    "startTime": "10:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {},
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "08/25/24",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Baumbach",
+      "userId": "ea928464-1a25-4a8a-87e8-2b3eca3e19d4"
+    },
+    "courthouseName": "Russell Federal Building & Courthouse",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "117-24"
+      }
+    ],
+    "trialSessionId": "85e540b9-8068-4fc6-8afc-ee5da8314994",
+    "pk": "trial-session|85e540b9-8068-4fc6-8afc-ee5da8314994",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": "2024-10-04T04:00:00.000Z"
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": false,
+    "hasNOTTBeenServed": false,
+    "maxCases": "100",
+    "trialLocation": "Jacksonville, Florida",
+    "trialClerk": {
+      "name": "Adam Boehm",
+      "userId": "a68f276a-7675-46e2-83fd-d3cd01ab33fa"
+    },
+    "state": "FL",
+    "city": "Jacksonville",
+    "isCalendared": true,
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "startDate": "2024-09-09T04:00:00.000Z",
+    "courtReporter": "Cassidy Holland",
+    "sessionStatus": "Open",
+    "sk": "trial-session|9e63d602-c161-4540-aa2a-9137357a536c",
+    "postalCode": "32202",
+    "termYear": "2024",
+    "address1": "300 North Hogan Street",
+    "address2": "Room 6A",
+    "createdAt": "2023-07-26T14:36:41.884Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": true,
+    "startTime": "10:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {},
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "08/11/24",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Cruickshank",
+      "userId": "9d054ecd-0236-452d-8b5d-a75d7f385f97"
+    },
+    "courthouseName": "United States Courthouse",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "118-24"
+      }
+    ],
+    "trialSessionId": "9e63d602-c161-4540-aa2a-9137357a536c",
+    "pk": "trial-session|9e63d602-c161-4540-aa2a-9137357a536c",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": "2024-09-13T04:00:00.000Z"
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": false,
+    "hasNOTTBeenServed": false,
+    "maxCases": "25",
+    "trialLocation": "New York City, New York",
+    "trialClerk": {
+      "name": "Maci Koepp",
+      "userId": "547ece01-139a-4dae-a5e0-7cf703a2a0e9"
+    },
+    "state": "NY",
+    "city": "New York",
+    "isCalendared": true,
+    "chambersPhoneNumber": "(202) 521-0670",
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "startDate": "2024-11-12T00:00:00.000-05:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|a745ee91-4f80-4a32-946b-20f03c0d90b2",
+    "postalCode": "10004",
+    "termYear": "2024",
+    "address1": "1 Bowling Green",
+    "address2": "Courtroom 610",
+    "createdAt": "2024-05-22T16:04:19.718Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": false,
+    "startTime": "10:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {},
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "10/14/24",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Kirlin",
+      "userId": "1a0854dc-46b3-4164-9417-20a82d9515ac"
+    },
+    "courthouseName": "Alexander Hamilton U.S. Custom House",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "119-24"
+      }
+    ],
+    "trialSessionId": "a745ee91-4f80-4a32-946b-20f03c0d90b2",
+    "pk": "trial-session|a745ee91-4f80-4a32-946b-20f03c0d90b2",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": "2024-11-14T00:00:00.000-05:00"
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": false,
+    "hasNOTTBeenServed": false,
+    "maxCases": "100",
+    "trialLocation": "Los Angeles, California",
+    "trialClerk": {
+      "name": "Kole Walker",
+      "userId": "8d68679f-9e47-45f9-a32c-37bf5a31cdbb"
+    },
+    "state": "CA",
+    "city": "Los Angeles",
+    "isCalendared": true,
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "notes": "The case is set for a two-week special session, beginning on November 4th thru 15th.\nTaxpayer reported long-term capital gains, charitable contributions and other items that flowed through to him from the five S corporations from a bargain sale/donation of his for-profit colleges. Taxpayer elected out of installment method on the sale, which was denied by respondent, and is now in dispute. ",
+    "startDate": "2024-11-04T05:00:00.000Z",
+    "sessionStatus": "Open",
+    "sk": "trial-session|a844051e-d161-49ee-8c7e-fb7881deebb0",
+    "postalCode": "90012",
+    "termYear": "2024",
+    "address1": "Courtroom #1167",
+    "address2": "255 E. Temple Street",
+    "createdAt": "2023-10-11T17:42:37.197Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": false,
+    "startTime": "10:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {},
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "10/06/24",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Wyman",
+      "userId": "d7221e0b-bbce-4a53-bff5-b99581316247"
+    },
+    "courthouseName": "Edward R. Roybal Center & Federal Building",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "120-24"
+      }
+    ],
+    "trialSessionId": "a844051e-d161-49ee-8c7e-fb7881deebb0",
+    "pk": "trial-session|a844051e-d161-49ee-8c7e-fb7881deebb0",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": "2024-11-15T05:00:00.000Z"
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": true,
+    "hasNOTTBeenServed": false,
+    "maxCases": "25",
+    "trialLocation": "Washington, District of Columbia",
+    "trialClerk": {
+      "name": "Isabel Casper",
+      "userId": "fd50c6f4-04ac-48a4-87b3-f713cc836e41"
+    },
+    "state": "DC",
+    "city": "Washington",
+    "isCalendared": true,
+    "chambersPhoneNumber": "(202) 521-0736",
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "startDate": "2024-09-26T00:00:00.000-04:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|acdb70ae-07aa-483f-9703-e5284a9c01d1",
+    "postalCode": "20217",
+    "termYear": "2024",
+    "address1": "400 Second Street, N.W",
+    "createdAt": "2024-08-14T11:58:15.208Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": true,
+    "startTime": "13:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {},
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "08/28/24",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Botsford",
+      "userId": "26dde641-2917-4eac-ba51-bb68cc0f089e"
+    },
+    "courthouseName": "United States Tax Court",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "121-24"
+      }
+    ],
+    "trialSessionId": "acdb70ae-07aa-483f-9703-e5284a9c01d1",
+    "pk": "trial-session|acdb70ae-07aa-483f-9703-e5284a9c01d1",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": null
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": false,
+    "hasNOTTBeenServed": false,
+    "maxCases": "25",
+    "trialLocation": "Washington, District of Columbia",
+    "trialClerk": {
+      "name": "Damon Feest",
+      "userId": "e5bbd629-6935-4a1e-a153-b7deb4cf682b"
+    },
+    "isCalendared": true,
+    "chambersPhoneNumber": "(202) 521-0853",
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "startDate": "2024-10-21T00:00:00.000-04:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|aeeca01f-230d-42ef-892c-cbda6d03887c",
+    "termYear": "2024",
+    "createdAt": "2024-04-15T19:21:40.439Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": false,
+    "startTime": "10:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {},
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "09/22/24",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Senger-Turcotte",
+      "userId": "b9d051a1-303d-4979-bcd5-d10f1fff0a6e"
+    },
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "122-24"
+      }
+    ],
+    "trialSessionId": "aeeca01f-230d-42ef-892c-cbda6d03887c",
+    "pk": "trial-session|aeeca01f-230d-42ef-892c-cbda6d03887c",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": "2024-10-23T00:00:00.000-04:00"
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": false,
+    "hasNOTTBeenServed": false,
+    "maxCases": "25",
+    "trialLocation": "Dallas, Texas",
+    "trialClerk": {
+      "name": "Ana Turcotte",
+      "userId": "be23853c-5559-4de1-a4cb-010bc3e2feea"
+    },
+    "state": "TX",
+    "city": "Dallas",
+    "isCalendared": true,
+    "chambersPhoneNumber": "(202) 521-0824",
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "notes": "Accounting issue.  Two week special should take only 8 days. Continued multiple times.",
+    "startDate": "2024-12-02T00:00:00.000-05:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|b49e6773-d2ba-49ee-bef0-214d96a2d8ad",
+    "postalCode": "75242",
+    "termYear": "2024",
+    "address1": "1100 Commerce Street",
+    "address2": "Room 726, 7th Floor",
+    "createdAt": "2024-04-24T12:56:57.190Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": false,
+    "startTime": "10:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {},
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "11/03/24",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Davis",
+      "userId": "759edd2f-6de7-49e0-8a57-f424377ac789"
+    },
+    "courthouseName": "Earle Cabell Federal Building and U.S. Courthouse",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "123-24"
+      }
+    ],
+    "trialSessionId": "b49e6773-d2ba-49ee-bef0-214d96a2d8ad",
+    "pk": "trial-session|b49e6773-d2ba-49ee-bef0-214d96a2d8ad",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": "2024-12-13T00:00:00.000-05:00"
+  },
+  {
+    "hasNOTTBeenServed": false,
+    "paperServicePdfs": [],
+    "maxCases": "22",
+    "trialLocation": "Hartford, Connecticut",
+    "createdAt": "2024-09-12T14:59:21.120Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": false,
+    "isClosed": false,
+    "startTime": "10:00",
+    "entityName": "TrialSession",
+    "isCalendared": true,
+    "proceedingType": "Remote",
+    "sessionType": "Special",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Reynolds",
+      "userId": "00152dc6-51f2-4cdb-8cbc-4218aa41084a"
+    },
+    "startDate": "2024-12-02T00:00:00.000-05:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|bbd5222b-4ee3-4470-872e-5ebccbc07953",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "124-24"
+      }
+    ],
+    "trialSessionId": "bbd5222b-4ee3-4470-872e-5ebccbc07953",
+    "pk": "trial-session|bbd5222b-4ee3-4470-872e-5ebccbc07953",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": null,
+    "termYear": "2024",
+    "trialClerk": {
+      "name": "Ansley Wuckert",
+      "userId": "c4dc08e4-6956-463c-8e32-9d13b70f3bda"
+    }
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": false,
+    "hasNOTTBeenServed": false,
+    "maxCases": "100",
+    "trialLocation": "Seattle, Washington",
+    "trialClerk": {
+      "name": "Nestor Hettinger",
+      "userId": "817ee72a-0926-4723-b145-6c622ae42d38"
+    },
+    "isCalendared": true,
+    "chambersPhoneNumber": "(202) 521-0785",
+    "sessionType": "Special",
+    "proceedingType": "Remote",
+    "notes": "Phase 3 of trial at a two-day remote special session ",
+    "startDate": "2024-10-21T00:00:00.000-04:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|ca3584e8-c33d-430d-88d2-0e0ce7b1b6f7",
+    "termYear": "2024",
+    "createdAt": "2024-04-16T14:28:27.734Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": false,
+    "startTime": "10:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {},
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "09/22/24",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Gibson",
+      "userId": "b1d44106-e6ff-4d24-ac85-7f02b40a0f6f"
+    },
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "125-24"
+      }
+    ],
+    "trialSessionId": "ca3584e8-c33d-430d-88d2-0e0ce7b1b6f7",
+    "pk": "trial-session|ca3584e8-c33d-430d-88d2-0e0ce7b1b6f7",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": null
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": false,
+    "hasNOTTBeenServed": false,
+    "maxCases": "100",
+    "trialLocation": "Washington, District of Columbia",
+    "trialClerk": {
+      "name": "Ramiro Jerde",
+      "userId": "eca1abc9-a24e-49e3-a640-0cb3f2448945"
+    },
+    "state": "DC",
+    "city": "Washington",
+    "isCalendared": true,
+    "chambersPhoneNumber": "(202) 521-0736",
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "notes": "10:00 a.m., on Monday, November 4, through Friday, November 22, 2024;\n10:00 a.m., on Monday, December 2, through Friday, December 20, 2024; and\n10:00 a.m., on Monday, January 6, through Friday, January 17, 2025.\n",
+    "startDate": "2024-11-04T00:00:00.000-05:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|d8a30445-b33c-4bd8-8f1f-5ea07c4c03a0",
+    "postalCode": "20017",
+    "termYear": "2024",
+    "address1": "Center Courtroom ",
+    "createdAt": "2024-05-24T12:56:40.284Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": false,
+    "startTime": "10:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {},
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "10/06/24",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Johnson",
+      "userId": "2713b41f-5ce5-4d28-bcac-0f05a636d3d6"
+    },
+    "courthouseName": "400 2nd St., N.W.",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "126-24"
+      }
+    ],
+    "trialSessionId": "d8a30445-b33c-4bd8-8f1f-5ea07c4c03a0",
+    "pk": "trial-session|d8a30445-b33c-4bd8-8f1f-5ea07c4c03a0",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": "2024-11-22T00:00:00.000-05:00"
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": false,
+    "hasNOTTBeenServed": false,
+    "maxCases": "100",
+    "trialLocation": "Washington, District of Columbia",
+    "trialClerk": {
+      "name": "Amparo Little",
+      "userId": "e980b20c-9c68-44a0-8472-2b5b22680971"
+    },
+    "state": "DC",
+    "city": "Washington",
+    "isCalendared": true,
+    "chambersPhoneNumber": "(202) 521-0649",
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "startDate": "2024-10-15T00:00:00.000-04:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|eddc3bbe-b238-4e66-a3be-8a9294ac9de9",
+    "postalCode": "20217",
+    "termYear": "2024",
+    "address1": "South Courtroom",
+    "address2": "400 Second Street N.W.",
+    "createdAt": "2024-02-29T13:59:28.376Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": false,
+    "startTime": "10:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {},
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "09/16/24",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Gerhold",
+      "userId": "bb973550-b1ae-4ea6-a771-5805abdb5149"
+    },
+    "courthouseName": "United States Tax Court",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "127-24"
+      }
+    ],
+    "trialSessionId": "eddc3bbe-b238-4e66-a3be-8a9294ac9de9",
+    "pk": "trial-session|eddc3bbe-b238-4e66-a3be-8a9294ac9de9",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": null
+  },
+  {
+    "hasNOTTBeenServed": false,
+    "isStartDateWithinNOTTReminderRange": false,
+    "paperServicePdfs": [],
+    "maxCases": "50",
+    "trialLocation": "Denver, Colorado",
+    "createdAt": "2024-09-10T17:42:15.177Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": false,
+    "isClosed": false,
+    "startTime": "10:00",
+    "entityName": "TrialSession",
+    "isCalendared": true,
+    "proceedingType": "In Person",
+    "sessionType": "Special",
+    "sessionScope": "Location-based",
+    "startDate": "2024-09-16T00:00:00.000-04:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|f2365d46-b2e7-4807-8855-c27fc74f87d5",
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "128-24"
+      }
+    ],
+    "trialSessionId": "f2365d46-b2e7-4807-8855-c27fc74f87d5",
+    "pk": "trial-session|f2365d46-b2e7-4807-8855-c27fc74f87d5",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": null,
+    "termYear": "2024",
+    "judge": {
+      "name": "Johnson",
+      "userId": "b71bd903-783b-427a-9db2-45638bd98fc1"
+    },
+    "trialClerk": {
+      "name": "Naomie Murazik",
+      "userId": "0722aaec-86f0-4cf0-a1ed-828c2628a11f"
+    }
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": true,
+    "hasNOTTBeenServed": false,
+    "maxCases": "10",
+    "trialLocation": "Washington, District of Columbia",
+    "trialClerk": {
+      "name": "Verda Erdman",
+      "userId": "eae883b1-a20b-451c-8bb0-12fc0c252f25"
+    },
+    "isCalendared": true,
+    "chambersPhoneNumber": "(202) 521-0823",
+    "sessionType": "Special",
+    "proceedingType": "Remote",
+    "startDate": "2024-09-18T00:00:00.000-04:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|f5782029-b7ce-42b3-8bd3-2688c759a018",
+    "termYear": "2024",
+    "createdAt": "2024-07-22T21:19:27.385Z",
+    "term": "Fall",
+    "dismissedAlertForNOTT": true,
+    "startTime": "10:00",
+    "isClosed": false,
+    "irsCalendarAdministratorInfo": {},
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "08/20/24",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Johnston",
+      "userId": "2dc079dd-0bf7-4029-9269-3ddce719f794"
+    },
+    "caseOrder": [
+      {
+        "calendarNotes": "This is a case note.",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-09T14:06:21.318Z",
+        "docketNumber": "129-24"
+      }
+    ],
+    "trialSessionId": "f5782029-b7ce-42b3-8bd3-2688c759a018",
+    "pk": "trial-session|f5782029-b7ce-42b3-8bd3-2688c759a018",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": null
+  }
+]

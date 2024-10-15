@@ -43,7 +43,6 @@ export const AddEditCalendarNoteModal = connect(
           <BindedTextarea
             aria-label="note"
             bind="modal.note"
-            className="resize-vertical-only"
             id="calendar-note"
             onBlur={() => validateTrialSessionNoteSequence()}
           />
