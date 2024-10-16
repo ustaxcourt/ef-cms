@@ -226,7 +226,7 @@ export const PrimaryDocumentForm = connect(
             <textarea
               aria-describedby="additional-info-label"
               autoCapitalize="none"
-              className="usa-textarea height-8"
+              className="usa-textarea height-8 textarea-resize-vertical"
               data-testid="additional-info-1-textarea"
               id="additional-info"
               name="additionalInfo"
@@ -278,7 +278,7 @@ export const PrimaryDocumentForm = connect(
             <textarea
               aria-describedby="additional-info2-label"
               autoCapitalize="none"
-              className="usa-textarea height-8"
+              className="usa-textarea height-8 textarea-resize-vertical"
               id="additional-info2"
               name="additionalInfo2"
               value={form.additionalInfo2 || ''}

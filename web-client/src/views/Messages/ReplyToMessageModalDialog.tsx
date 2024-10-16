@@ -62,7 +62,7 @@ export const ReplyToMessageModalDialog = connect(
             Add message
           </label>
           <textarea
-            className="usa-textarea ustc-message-modal-text-area"
+            className="usa-textarea textarea-resize-vertical"
             id="message"
             name="form.message"
             onChange={e => {
