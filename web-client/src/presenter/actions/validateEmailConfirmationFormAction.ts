@@ -1,4 +1,5 @@
 import { EmailConfirmationForm } from '@shared/business/entities/EmailConfirmationForm';
+import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const validateEmailConfirmationFormAction = ({
@@ -28,7 +29,7 @@ export const validateEmailConfirmationFormAction = ({
   }
   errors = { ...currentValidationErrors, ...errors };
 
-  if (!errors) {
+  if (isEmpty(errors)) {
     return path.success();
   } else {
     return path.error({
