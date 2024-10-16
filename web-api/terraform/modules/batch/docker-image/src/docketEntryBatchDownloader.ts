@@ -233,6 +233,7 @@ export async function app({
     wsClient,
   });
 
+  console.log('Fetching Signed URL');
   const command = new GetObjectCommand({
     Bucket: ZIP_TEMP_S3_BUCKET,
     Key: UNIQUE_ZIP_NAME,
@@ -240,6 +241,7 @@ export async function app({
 
   const url = await getSignedUrl(zipStorageClient, command, { expiresIn: 120 });
 
+  console.log('Sending link to user');
   const WS_MESSAGE = new PostToConnectionCommand({
     ConnectionId: connectionId,
     Data: JSON.stringify({
