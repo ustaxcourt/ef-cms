@@ -109,58 +109,6 @@ async function getDocketEntriesFromS3(
   return docketEntries;
 }
 
-export async function app({
-  connectionId,
-  documentsReference,
-  s3Client,
-  wsClient,
-  zipName,
-}: DocketEntriesZipperParameter) {
-  console.log('LOADING DOCUMENTS TO DOWNLOAD FROM S3');
-
-  const documents: DocketEntryDownloadInfo[] = await getDocketEntriesFromS3(
-    documentsReference,
-    s3Client,
-  );
-  console.log('ZIPPING DOCUMENTS');
-
-  const guid = Date.now();
-  const UNIQUE_ZIP_NAME = `${guid}/${zipName}`;
-
-  await zipDocuments({
-    connectionId,
-    documents,
-    outputZipName: UNIQUE_ZIP_NAME,
-    wsClient,
-  });
-
-  const command = new GetObjectCommand({
-    Bucket: ZIP_TEMP_S3_BUCKET,
-    Key: UNIQUE_ZIP_NAME,
-  });
-
-  const url = await getSignedUrl(zipStorageClient, command, { expiresIn: 120 });
-
-  const WS_MESSAGE = new PostToConnectionCommand({
-    ConnectionId: connectionId,
-    Data: JSON.stringify({
-      action: 'batch_download_ready',
-      url,
-    }),
-  });
-  await wsClient.send(WS_MESSAGE).catch(console.error);
-
-  console.log('Zip and upload complete, link sent to client.');
-}
-
-app({
-  connectionId: WEBSOCKET_CONNECTION_ID!,
-  documentsReference: DOCKET_ENTRY_FILES_REFRENCE!,
-  s3Client: storageClient,
-  wsClient: notificationClient,
-  zipName: ZIP_FILE_NAME!,
-}).catch(console.error);
-
 export async function zipDocuments({
   connectionId,
   documents,
@@ -258,3 +206,55 @@ export async function zipDocuments({
   zip.end();
   await uploadPromise;
 }
+
+export async function app({
+  connectionId,
+  documentsReference,
+  s3Client,
+  wsClient,
+  zipName,
+}: DocketEntriesZipperParameter) {
+  console.log('LOADING DOCUMENTS TO DOWNLOAD FROM S3');
+
+  const documents: DocketEntryDownloadInfo[] = await getDocketEntriesFromS3(
+    documentsReference,
+    s3Client,
+  );
+  console.log('ZIPPING DOCUMENTS');
+
+  const guid = Date.now();
+  const UNIQUE_ZIP_NAME = `${guid}/${zipName}`;
+
+  await zipDocuments({
+    connectionId,
+    documents,
+    outputZipName: UNIQUE_ZIP_NAME,
+    wsClient,
+  });
+
+  const command = new GetObjectCommand({
+    Bucket: ZIP_TEMP_S3_BUCKET,
+    Key: UNIQUE_ZIP_NAME,
+  });
+
+  const url = await getSignedUrl(zipStorageClient, command, { expiresIn: 120 });
+
+  const WS_MESSAGE = new PostToConnectionCommand({
+    ConnectionId: connectionId,
+    Data: JSON.stringify({
+      action: 'batch_download_ready',
+      url,
+    }),
+  });
+  await wsClient.send(WS_MESSAGE).catch(console.error);
+
+  console.log('Zip and upload complete, link sent to client.');
+}
+
+app({
+  connectionId: WEBSOCKET_CONNECTION_ID!,
+  documentsReference: DOCKET_ENTRY_FILES_REFRENCE!,
+  s3Client: storageClient,
+  wsClient: notificationClient,
+  zipName: ZIP_FILE_NAME!,
+}).catch(console.error);
