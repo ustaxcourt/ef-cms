@@ -114,7 +114,7 @@ export const createProspectiveTrialSessions = ({
 
       addProspectiveTrialSession({
         city,
-        cityWasNotVisitedInLastTwoTerms: false,
+        cityWasNotVisitedInLastTwoTerms,
         prospectiveSessionsByCity,
         sessionType: SESSION_TYPES.hybrid,
       });
