@@ -68,6 +68,7 @@ export const IRSNotice = connect<IrsNoticeType, typeof irsNoticeDependencies>(
                   if (shouldStartWithBlankStatistic) {
                     refreshStatisticsSequence();
                   }
+                  validateFormData();
                 }}
               />
               <label
@@ -92,6 +93,7 @@ export const IRSNotice = connect<IrsNoticeType, typeof irsNoticeDependencies>(
                 onChange={() => {
                   setIrsNoticeFalseSequence();
                   refreshStatisticsSequence();
+                  validateFormData();
                 }}
               />
               <label
