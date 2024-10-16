@@ -232,15 +232,15 @@ export class Case extends JoiValidationEntity {
    */
   static sortByDocketNumber(cases) {
     return cases.sort((a, b) => {
-      return this.docketNumberSort(a.docketNumber, b.docketNumber);
+      return Case.docketNumberSort(a.docketNumber, b.docketNumber);
     });
   }
 
   // This will not take into account [19]95 vs [20]95
   static docketNumberSort(docketNumberA, docketNumberB) {
     return (
-      (this.getSortableDocketNumber(docketNumberA) || 0) -
-      (this.getSortableDocketNumber(docketNumberB) || 0)
+      (Case.getSortableDocketNumber(docketNumberA) || 0) -
+      (Case.getSortableDocketNumber(docketNumberB) || 0)
     );
   }
 
