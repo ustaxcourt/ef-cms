@@ -236,7 +236,6 @@ export class Case extends JoiValidationEntity {
     });
   }
 
-  // This will not take into account [19]95 vs [20]95
   static docketNumberSort(docketNumberA, docketNumberB) {
     return (
       (Case.getSortableDocketNumber(docketNumberA) || 0) -
