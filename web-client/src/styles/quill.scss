@@ -1,0 +1,155 @@
+.ql-editor {
+  min-height: 640px;
+  max-height: 640px;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 16px;
+
+  p {
+    max-width: 100%;
+  }
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='10px']::before,
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='10px']::before {
+  content: '10px';
+  font-size: 10px !important;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='12px']::before,
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='12px']::before {
+  content: '12px';
+  font-size: 12px !important;
+}
+
+/* default */
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='14px']::before,
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='14px']::before {
+  content: '14px';
+  font-size: 14px !important;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='16px']::before,
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='16px']::before,
+.ql-snow .ql-picker.ql-size .ql-picker-label:not(.ql-active)::before {
+  content: '16px';
+  font-size: 16px !important;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='18px']::before,
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='18px']::before {
+  content: '18px';
+  font-size: 18px !important;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='20px']::before,
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='20px']::before {
+  content: '20px';
+  font-size: 20px !important;
+}
+
+// Quill's default <ol> styling uses counters with names list-1, list-2, etc.
+// Unfortunately, these names conflict with CSS keywords and cause unexpected behavior.
+// Below, we have simply copied Quill's styling but overridden some names to avoid the issue.
+.ql-editor ol li {
+  counter-increment: ql-list-0 !important;
+  counter-reset: ql-list-1 ql-list-2 ql-list-3 ql-list-4 ql-list-5 ql-list-6
+    ql-list-7 ql-list-8 ql-list-9 !important;
+}
+
+.ql-editor ol li::before {
+  content: counter(ql-list-0, decimal) '. ' !important;
+}
+
+.ql-editor ol li.ql-indent-1 {
+  counter-increment: ql-list-1 !important;
+  counter-reset: ql-list-2 ql-list-3 ql-list-4 ql-list-5 ql-list-6 ql-list-7
+    ql-list-8 ql-list-9 !important;
+}
+
+.ql-editor ol li.ql-indent-1::before {
+  content: counter(ql-list-1, lower-alpha) '. ' !important;
+}
+
+.ql-editor ol li.ql-indent-2 {
+  counter-increment: ql-list-2 !important;
+  counter-reset: ql-list-3 ql-list-4 ql-list-5 ql-list-6 ql-list-7 ql-list-8
+    ql-list-9 !important;
+}
+
+.ql-editor ol li.ql-indent-2::before {
+  content: counter(ql-list-2, lower-roman) '. ' !important;
+}
+
+.ql-editor ol li.ql-indent-3 {
+  counter-increment: ql-list-3 !important;
+  counter-reset: ql-list-4 ql-list-5 ql-list-6 ql-list-7 ql-list-8 ql-list-9 !important;
+}
+
+.ql-editor ol li.ql-indent-3::before {
+  content: counter(ql-list-3, decimal) '. ' !important;
+}
+
+.ql-editor ol li.ql-indent-4 {
+  counter-increment: ql-list-4 !important;
+  counter-reset: ql-list-5 ql-list-6 ql-list-7 ql-list-8 ql-list-9 !important;
+}
+
+.ql-editor ol li.ql-indent-4::before {
+  content: counter(ql-list-4, lower-alpha) '. ' !important;
+}
+
+.ql-editor ol li.ql-indent-5 {
+  counter-increment: ql-list-5 !important;
+  counter-reset: ql-list-6 ql-list-7 ql-list-8 ql-list-9 !important;
+}
+
+.ql-editor ol li.ql-indent-5::before {
+  content: counter(ql-list-5, lower-roman) '. ' !important;
+}
+
+.ql-editor ol li.ql-indent-6 {
+  counter-increment: ql-list-6 !important;
+  counter-reset: ql-list-7 ql-list-8 ql-list-9 !important;
+}
+
+.ql-editor ol li.ql-indent-6::before {
+  content: counter(ql-list-6, decimal) '. ' !important;
+}
+
+.ql-editor ol li.ql-indent-7 {
+  counter-increment: ql-list-7 !important;
+  counter-reset: ql-list-8 ql-list-9 !important;
+}
+
+.ql-editor ol li.ql-indent-7::before {
+  content: counter(ql-list-7, lower-alpha) '. ' !important;
+}
+
+.ql-editor ol li.ql-indent-8 {
+  counter-increment: ql-list-8 !important;
+  counter-reset: ql-list-9 !important;
+}
+
+.ql-editor ol li.ql-indent-8::before {
+  content: counter(ql-list-8, lower-roman) '. ' !important;
+}
+
+.ql-editor ol li.ql-indent-9 {
+  counter-increment: ql-list-9 !important;
+}
+
+.ql-editor ol li.ql-indent-9::before {
+  content: counter(ql-list-9, decimal) '. ' !important;
+}
