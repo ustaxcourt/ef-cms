@@ -116,7 +116,7 @@ export class Contact extends JoiValidationEntity {
         then: JoiValidationConstants.EMAIL.required(),
       })
       .messages({
-        'any.required': 'Enter a valid email address for e-service',
+        'any.required': 'Enter a valid email address',
         'string.email': 'Enter email address in format: yourname@example.com',
       }),
     phone: JoiValidationConstants.STRING.max(100)
