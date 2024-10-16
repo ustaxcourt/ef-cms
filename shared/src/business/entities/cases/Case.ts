@@ -232,22 +232,16 @@ export class Case extends JoiValidationEntity {
    */
   static sortByDocketNumber(cases) {
     return cases.sort((a, b) => {
-      return Case.docketNumberSort(a.docketNumber, b.docketNumber);
+      return this.docketNumberSort(a.docketNumber, b.docketNumber);
     });
   }
 
+  // This will not take into account [19]95 vs [20]95
   static docketNumberSort(docketNumberA, docketNumberB) {
-    const aSplit = docketNumberA.split('-');
-    const bSplit = docketNumberB.split('-');
-
-    if (aSplit[1] !== bSplit[1]) {
-      // compare years if they aren't the same;
-      // compare as strings, because they *might* have suffix
-      return aSplit[1].localeCompare(bSplit[1]);
-    } else {
-      // compare index if years are the same, compare as integers
-      return +aSplit[0] - +bSplit[0];
-    }
+    return (
+      (this.getSortableDocketNumber(docketNumberA) || 0) -
+      (this.getSortableDocketNumber(docketNumberB) || 0)
+    );
   }
 
   /**
