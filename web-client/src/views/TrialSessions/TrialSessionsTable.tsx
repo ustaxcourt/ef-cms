@@ -11,19 +11,22 @@ import React, { useRef } from 'react';
 
 export const TrialSessionsTable = connect(
   {
+    sessionNotes: state.trialSessionWorkingCopy.sessionNotes,
     setTrialSessionsFiltersSequence: sequences.setTrialSessionsFiltersSequence,
     specialTrialSessionNotes: state.trialSessionWorkingCopy.sessionNotes,
     trialSessionsHelper: state.trialSessionsHelper,
     trialSessionsPage: state.trialSessionsPage,
+    workingCopy: state.trialSessionWorkingCopy,
   },
   function TrialSessionsTable({
     setTrialSessionsFiltersSequence,
     specialTrialSessionNotes,
     trialSessionsHelper,
     trialSessionsPage,
+    workingCopy,
   }) {
     const paginatorTop = useRef(null);
-    console.log('trialSessionsHelper: ', trialSessionsHelper);
+    console.log('trialSessionWorkingCopy: ', workingCopy);
 
     return (
       <>
@@ -91,22 +94,21 @@ export const TrialSessionsTable = connect(
                 }
                 if (isTrialSessionRow(row)) {
                   const isSpecialSession = row.sessionType === 'Special';
-                  console.log('row: ', row);
-                  const { trialSessionId } = row;
-                  console.log('trialSessionId: ', trialSessionId);
-                  let sessionNotes = null;
+                  // const { trialSessionId } = row;
+                  // let workingCopy;
                   if (isSpecialSession) {
-                    console.log(
-                      'specialTrialSessionNotes: ',
-                      specialTrialSessionNotes,
-                    );
+                    console.log('Was special Session');
+                    // get trialsession working copy from trialSessionId
+                    // workingCopy = gotoTrialSessionWorkingCopy({
+                    //   trialSessionId,
+                    // });
                   }
                   const additionalRow = isSpecialSession ? (
                     <tr className="special-sessions-row">
                       <td colSpan={100}>
                         <div className="special-session">
                           <span className="text-semibold">
-                            Special Session Notes: {sessionNotes}
+                            Special Session Notes: {specialTrialSessionNotes}
                           </span>
                         </div>
                       </td>
