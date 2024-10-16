@@ -138,6 +138,17 @@ export const serveThirtyDayNoticeInteractor = async (
           caseCaption: caseEntity.caseCaption,
         });
 
+        const formatCityState = ({
+          city,
+          state,
+        }: {
+          city?: string;
+          state?: string;
+        }) => {
+          const formattedString = [city, state].filter(Boolean).join(', ');
+          return formattedString;
+        };
+
         let noticePdf = await applicationContext
           .getDocumentGenerators()
           .thirtyDayNoticeOfTrial({
@@ -158,7 +169,10 @@ export const serveThirtyDayNoticeInteractor = async (
               trialLocation: {
                 address1: trialSession.address1,
                 address2: trialSession.address2,
-                cityState: trialSession.trialLocation,
+                cityState: formatCityState({
+                  city: trialSession.city,
+                  state: trialSession.state,
+                }),
                 courthouseName: trialSession.courthouseName,
                 postalCode: trialSession.postalCode,
               },
