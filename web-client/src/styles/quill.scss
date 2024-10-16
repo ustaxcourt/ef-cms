@@ -1,3 +1,9 @@
+@use '../variables' as *;
+
+.quill {
+  background: $color-white;
+}
+
 .ql-editor {
   min-height: 640px;
   max-height: 640px;
