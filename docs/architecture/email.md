@@ -4,16 +4,18 @@ All outbound emails are sent by Amazon SES using these domains:
 
 | Item | Description
 |------|-------------
-| Mail domain | `mail.efcms-{ENV}.{EFCMS_DOMAIN}`
-| From domain | `noreply.mail.efcms-{ENV}.{EFCMS_DOMAIN}`
+| Mail domain | `{EFCMS_DOMAIN}`
+| From domain | `from.{EFCMS_DOMAIN}`
+
+By default, AWS sends email with a from domain of `@amazonses.com`. By attaching the From domain above to the SES Sender identity (`noreply@{EFCMS_DOMAIN}`), the SPF email headers will reference `from.{EFCMS_DOMAIN}` instead of `@amazonses.com`. This enables the [DMARC evaluation to be aligned](https://en.wikipedia.org/wiki/DMARC#Alignment) as our DMARC configuration is using the default "relaxed" setting where the "top-level 'Organizational Domain' must match." In other words, the `From: noreply@{EFCMSDOMAIN}` is aligned with the SPF From Header of `<amazon-unique-identifier>@from.{EFCMS_DOMAIN}`.
 
 ## Security summary
 
 | Item | Description
 |------|-------------
-| SPF | SPF indicates which servers are authorized to send mail on behalf of a domain. SPF DNS records for EF-CMS use SPF’s `include` and reference Amazon SES’s domain, indicating that SES’s servers are authorized to send email. [Verify SPF DNS records](https://mxtoolbox.com/spf.aspx) for the “From domain” above.
-| DKIM | DKIM verifies email was sent from the domain that an email claims it was sent from, by using public/private key encryption to match an email signature to a public key in a DNS record. DKIM records are harder to verify since Amazon SES uses generated keys and host names based on DKIM tokens. Look up these domains [as described in Amazon SES documentation](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-authentication-dkim-easy-managing.html) and then [verify DKIM DNS records](https://mxtoolbox.com/dkim.aspx). They will be in the format of `{DKIM token}._domainkey.{Mail domain}`.
-| DMARC | DMARC provides a policy through DNS which indicates what email security mechanisms are in place, what a receiver should do if an email fails those mechanisms, and introduces a mechanism for receivers to notify the sender of security verification failures. [Verify DMARC DNS records](https://mxtoolbox.com/DMARC.aspx) for the “Mail domain” above.
+| SPF | Sender Policy Framework (SPF) indicates which servers are authorized to send mail on behalf of a domain. SPF DNS records for EF-CMS use SPF’s `include` and reference Amazon SES’s domain, indicating that SES’s servers are authorized to send email. [Verify SPF DNS records](https://mxtoolbox.com/spf.aspx) for the “From domain” above. 
+| DKIM | DomainKeys Identified Mail (DKIM) verifies email was sent from the domain that an email claims it was sent from, by using public/private key encryption to match an email signature to a public key in a DNS record. DKIM records are harder to verify since Amazon SES uses generated keys and host names based on DKIM tokens. Look up these domains [as described in Amazon SES documentation](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-authentication-dkim-easy-managing.html) and then [verify DKIM DNS records](https://mxtoolbox.com/dkim.aspx). They will be in the format of `{DKIM token}._domainkey.{Mail domain}`.
+| DMARC | Domain-based Message Authentication, Reporting, and Conformance (DMARC) provides a policy through DNS which indicates what email security mechanisms are in place, what a receiver should do if an email fails those mechanisms, and introduces a mechanism for receivers to notify the sender of security verification failures. [Verify DMARC DNS records](https://mxtoolbox.com/DMARC.aspx) for the “Mail domain” above.
 | DNSSEC | DNSSEC proves a DNS name server is authorized to provide answers for a domain by using a chain of signed records from a domain up to the top-level domain (like `.gov`). SPF, DKIM, and DMARC relies on DNS lookups, so DNSSEC enhances trust in these security mechanisms. [Verify DNSSEC DNS records](https://dnssec-analyzer.verisignlabs.com/) for the “Mail domain” above.
 
 ### Compliance with NIST 800-177
