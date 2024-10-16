@@ -1,24 +1,33 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const PractitionerLoginServiceEmailForm = connect(
-  {
-    createPractitionerUserHelper: state.createPractitionerUserHelper,
-    form: state.form,
-    updateFormValueSequence: sequences.updateFormValueSequence,
-    validateSequence: sequences[props.validateSequenceName],
-    validationErrors: state.validationErrors,
-  },
+type PractitionerLoginServiceEmailFormProps = {
+  emailFormName: string;
+};
+
+const practitionerLoginServiceEmailFormDependencies = {
+  createPractitionerUserHelper: state.createPractitionerUserHelper,
+  form: state.form,
+  updateFormValueSequence: sequences.updateFormValueSequence,
+  validateEmailConfirmationFormSequence:
+    sequences.validateEmailConfirmationFormSequence,
+  validationErrors: state.validationErrors,
+};
+
+export const PractitionerLoginServiceEmailForm = connect<
+  PractitionerLoginServiceEmailFormProps,
+  typeof practitionerLoginServiceEmailFormDependencies
+>(
+  practitionerLoginServiceEmailFormDependencies,
   function PractitionerLoginServiceEmailForm({
     createPractitionerUserHelper,
     emailFormName,
     form,
     updateFormValueSequence,
-    validateSequence,
+    validateEmailConfirmationFormSequence,
     validationErrors,
   }) {
     return (
@@ -45,7 +54,7 @@ export const PractitionerLoginServiceEmailForm = connect(
             <h4>Change Login & Service Email</h4>
             <FormGroup
               errorText={
-                validationErrors.updatedEmail || validationErrors.email
+                validationErrors?.email || validationErrors[emailFormName]
               }
             >
               <label className="usa-label" htmlFor="updatedEmail">
@@ -60,7 +69,12 @@ export const PractitionerLoginServiceEmailForm = connect(
                 name={emailFormName}
                 type="text"
                 value={form[emailFormName] || ''}
-                onBlur={() => validateSequence()}
+                onBlur={() => {
+                  validateEmailConfirmationFormSequence({
+                    // intentionally not using `emailFormName` to leverage live validation using EmailConfirmationForm entity
+                    field: 'email',
+                  });
+                }}
                 onChange={e =>
                   updateFormValueSequence({
                     key: e.target.name,
@@ -69,7 +83,7 @@ export const PractitionerLoginServiceEmailForm = connect(
                 }
               />
             </FormGroup>
-            <FormGroup errorText={validationErrors.confirmEmail}>
+            <FormGroup errorText={validationErrors?.confirmEmail}>
               <label className="usa-label" htmlFor="confirm-email">
                 Re-enter new email address
               </label>
@@ -82,7 +96,11 @@ export const PractitionerLoginServiceEmailForm = connect(
                 name="confirmEmail"
                 type="text"
                 value={form.confirmEmail || ''}
-                onBlur={() => validateSequence()}
+                onBlur={e => {
+                  validateEmailConfirmationFormSequence({
+                    field: e.target.name,
+                  });
+                }}
                 onChange={e =>
                   updateFormValueSequence({
                     key: e.target.name,

@@ -290,7 +290,6 @@ export const PractitionerForm = connect(
               ? 'updatedEmail'
               : 'email'
           }
-          validateSequenceName={validateSequenceName}
         />
 
         <div className="grid-row margin-bottom-4">
