@@ -1,13 +1,16 @@
+import {
+  CasesByCity,
+  EligibleCase,
+} from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
 import { MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING } from '../../../../../../shared/src/test/mockCase';
 import {
   PROCEDURE_TYPES_MAP,
   SESSION_TYPES,
   TRIAL_CITY_STRINGS,
+  TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
-// import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 
-// const mockSpecialSessions = [];
 const defaultMockCalendaringConfig = {
   hybridCaseMaxQuantity: 10,
   hybridCaseMinimumQuantity: 5,
@@ -20,6 +23,21 @@ const defaultMockCalendaringConfig = {
 };
 const mockRegularCityString = TRIAL_CITY_STRINGS[TRIAL_CITY_STRINGS.length - 1];
 const mockSmallCityString = TRIAL_CITY_STRINGS[0];
+
+function getMockCasesByCity(
+  cases: EligibleCase[],
+  type: TrialSessionTypes,
+): CasesByCity {
+  return cases
+    .filter(c => c.procedureType === type)
+    .reduce((acc, currentCase) => {
+      if (!acc[currentCase.preferredTrialCity!]) {
+        acc[currentCase.preferredTrialCity!] = [];
+      }
+      acc[currentCase.preferredTrialCity!].push(currentCase);
+      return acc;
+    }, {});
+}
 
 describe('createProspectiveTrialSessions', () => {
   it(
@@ -41,10 +59,20 @@ describe('createProspectiveTrialSessions', () => {
         });
       }
 
+      const mockRegularCasesByCity = getMockCasesByCity(
+        mockCases,
+        PROCEDURE_TYPES_MAP.regular,
+      );
+      const mockSmallCasesByCity = getMockCasesByCity(
+        mockCases,
+        PROCEDURE_TYPES_MAP.small,
+      );
+
       const { prospectiveSessionsByCity } = createProspectiveTrialSessions({
         calendaringConfig: defaultMockCalendaringConfig,
-        cases: mockCases,
         citiesFromLastTwoTerms: TRIAL_CITY_STRINGS,
+        regularCasesByCity: mockRegularCasesByCity,
+        smallCasesByCity: mockSmallCasesByCity,
       });
 
       expect(prospectiveSessionsByCity[mockRegularCityString].length).toEqual(
@@ -83,14 +111,20 @@ describe('createProspectiveTrialSessions', () => {
         });
       }
 
-      const {
-        initialRegularCasesByCity,
-        initialSmallCasesByCity,
-        prospectiveSessionsByCity,
-      } = createProspectiveTrialSessions({
+      const mockRegularCasesByCity = getMockCasesByCity(
+        mockCases,
+        PROCEDURE_TYPES_MAP.regular,
+      );
+      const mockSmallCasesByCity = getMockCasesByCity(
+        mockCases,
+        PROCEDURE_TYPES_MAP.small,
+      );
+
+      const { prospectiveSessionsByCity } = createProspectiveTrialSessions({
         calendaringConfig: defaultMockCalendaringConfig,
-        cases: mockCases,
         citiesFromLastTwoTerms: TRIAL_CITY_STRINGS,
+        regularCasesByCity: mockRegularCasesByCity,
+        smallCasesByCity: mockSmallCasesByCity,
       });
 
       expect(
@@ -102,13 +136,6 @@ describe('createProspectiveTrialSessions', () => {
       expect(
         prospectiveSessionsByCity[mockRegularCityString][2].sessionType,
       ).toEqual(SESSION_TYPES.hybrid);
-
-      expect(initialRegularCasesByCity[mockRegularCityString].length).toEqual(
-        Math.ceil(totalNumberOfRegularMockCases),
-      );
-      expect(initialSmallCasesByCity[mockRegularCityString].length).toEqual(
-        Math.ceil(totalNumberOfSmallMockCases),
-      );
     },
   );
 
@@ -151,10 +178,20 @@ describe('createProspectiveTrialSessions', () => {
         });
       }
 
+      const mockRegularCasesByCity = getMockCasesByCity(
+        mockCases,
+        PROCEDURE_TYPES_MAP.regular,
+      );
+      const mockSmallCasesByCity = getMockCasesByCity(
+        mockCases,
+        PROCEDURE_TYPES_MAP.small,
+      );
+
       const { prospectiveSessionsByCity } = createProspectiveTrialSessions({
         calendaringConfig: mockCalendaringConfig,
-        cases: mockCases,
         citiesFromLastTwoTerms: TRIAL_CITY_STRINGS,
+        regularCasesByCity: mockRegularCasesByCity,
+        smallCasesByCity: mockSmallCasesByCity,
       });
 
       expect(
@@ -180,11 +217,21 @@ describe('createProspectiveTrialSessions', () => {
       procedureType: PROCEDURE_TYPES_MAP.regular,
     });
 
+    const mockRegularCasesByCity = getMockCasesByCity(
+      mockCases,
+      PROCEDURE_TYPES_MAP.regular,
+    );
+    const mockSmallCasesByCity = getMockCasesByCity(
+      mockCases,
+      PROCEDURE_TYPES_MAP.small,
+    );
+
     expect(() => {
       createProspectiveTrialSessions({
         calendaringConfig: defaultMockCalendaringConfig,
-        cases: mockCases,
         citiesFromLastTwoTerms: TRIAL_CITY_STRINGS,
+        regularCasesByCity: mockRegularCasesByCity,
+        smallCasesByCity: mockSmallCasesByCity,
       });
     }).toThrow(Error);
   });
@@ -218,10 +265,20 @@ describe('createProspectiveTrialSessions', () => {
       procedureType: PROCEDURE_TYPES_MAP.regular,
     });
 
+    const mockRegularCasesByCity = getMockCasesByCity(
+      mockCases,
+      PROCEDURE_TYPES_MAP.regular,
+    );
+    const mockSmallCasesByCity = getMockCasesByCity(
+      mockCases,
+      PROCEDURE_TYPES_MAP.small,
+    );
+
     const { prospectiveSessionsByCity } = createProspectiveTrialSessions({
       calendaringConfig: defaultMockCalendaringConfig,
-      cases: mockCases,
       citiesFromLastTwoTerms: mockTrialCitiesFromLastTwoTerms,
+      regularCasesByCity: mockRegularCasesByCity,
+      smallCasesByCity: mockSmallCasesByCity,
     });
 
     const includedLocations = Object.keys(prospectiveSessionsByCity);
@@ -274,10 +331,20 @@ describe('createProspectiveTrialSessions', () => {
       procedureType: PROCEDURE_TYPES_MAP.small,
     });
 
+    const mockRegularCasesByCity = getMockCasesByCity(
+      mockCases,
+      PROCEDURE_TYPES_MAP.regular,
+    );
+    const mockSmallCasesByCity = getMockCasesByCity(
+      mockCases,
+      PROCEDURE_TYPES_MAP.small,
+    );
+
     const { prospectiveSessionsByCity } = createProspectiveTrialSessions({
       calendaringConfig: defaultMockCalendaringConfig,
-      cases: mockCases,
       citiesFromLastTwoTerms: mockTrialCitiesFromLastTwoTerms,
+      regularCasesByCity: mockRegularCasesByCity,
+      smallCasesByCity: mockSmallCasesByCity,
     });
 
     const includedLocations = Object.keys(prospectiveSessionsByCity);
@@ -337,10 +404,20 @@ describe('createProspectiveTrialSessions', () => {
       procedureType: PROCEDURE_TYPES_MAP.regular,
     });
 
+    const mockRegularCasesByCity = getMockCasesByCity(
+      mockCases,
+      PROCEDURE_TYPES_MAP.regular,
+    );
+    const mockSmallCasesByCity = getMockCasesByCity(
+      mockCases,
+      PROCEDURE_TYPES_MAP.small,
+    );
+
     const { prospectiveSessionsByCity } = createProspectiveTrialSessions({
       calendaringConfig: defaultMockCalendaringConfig,
-      cases: mockCases,
       citiesFromLastTwoTerms: mockTrialCitiesFromLastTwoTerms,
+      regularCasesByCity: mockRegularCasesByCity,
+      smallCasesByCity: mockSmallCasesByCity,
     });
 
     const includedLocations = Object.keys(prospectiveSessionsByCity);
