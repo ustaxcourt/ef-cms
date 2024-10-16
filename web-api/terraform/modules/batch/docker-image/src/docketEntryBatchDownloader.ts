@@ -160,23 +160,23 @@ export async function zipDocuments({
   });
 
   for (let index = 0; index < documents.length; index++) {
-    const document = documents[index];
+    const { filePathInZip, key, useTempBucket } = documents[index];
+    console.log(`Downloding document (${key})`);
 
     const response = await storageClient.getObject({
-      Bucket: document.useTempBucket ? TEMP_S3_BUCKET : S3_BUCKET,
-      Key: document.key,
+      Bucket: useTempBucket ? TEMP_S3_BUCKET : S3_BUCKET,
+      Key: key,
     });
+
     if (!response.Body) {
-      throw new Error(
-        `Unable to get document (${document.key}) from persistence.`,
-      );
+      throw new Error(`Unable to get document (${key}) from persistence.`);
     }
 
     // Transform s3 getobject into a stream of data that can be piped into the zip processor
     const bodyStream: ReadableStream<Uint8Array> =
       response.Body.transformToWebStream();
     const reader = bodyStream.getReader();
-    const compressedPdfStream = new AsyncZipDeflate(document.filePathInZip);
+    const compressedPdfStream = new AsyncZipDeflate(filePathInZip);
     zip.add(compressedPdfStream);
 
     let continueReading = true;
@@ -192,6 +192,7 @@ export async function zipDocuments({
     }
     reader.releaseLock();
 
+    console.log(`Download Complete (${key})`);
     const WS_MESSAGE = new PostToConnectionCommand({
       ConnectionId: connectionId,
       Data: JSON.stringify({
