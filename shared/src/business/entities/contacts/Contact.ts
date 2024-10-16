@@ -109,10 +109,14 @@ export class Contact extends JoiValidationEntity {
     name: JoiValidationConstants.STRING.max(100)
       .required()
       .messages({ '*': 'Enter name' }),
-    paperPetitionEmail: JoiValidationConstants.EMAIL.optional()
-      .allow(null)
-      .description('Email provided by the petitioner on their petition form')
+    paperPetitionEmail: joi
+      .when('hasConsentedToEService', {
+        is: true,
+        otherwise: JoiValidationConstants.EMAIL.optional(),
+        then: JoiValidationConstants.EMAIL.required(),
+      })
       .messages({
+        'any.required': 'Enter a valid email address for e-service',
         'string.email': 'Enter email address in format: yourname@example.com',
       }),
     phone: JoiValidationConstants.STRING.max(100)
