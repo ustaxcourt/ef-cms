@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,

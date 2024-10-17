@@ -41,6 +41,7 @@ const config: Config = {
     '!set-maintenance-mode-locally.ts',
     '!upload-practitioner-application-packages.ts',
     '!user/**',
+    '!postgres/**',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',

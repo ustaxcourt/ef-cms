@@ -87,6 +87,10 @@ export class Contact extends JoiValidationEntity {
       is: true,
       otherwise: joi.optional(),
       then: joi.required(),
+    }).messages({
+      'any.required': 'Enter a valid email address',
+      'string.email': 'Enter email address in format: yourname@example.com',
+      'string.empty': 'Enter a valid email address',
     }),
     hasConsentedToEService: joi
       .boolean()
@@ -105,10 +109,16 @@ export class Contact extends JoiValidationEntity {
     name: JoiValidationConstants.STRING.max(100)
       .required()
       .messages({ '*': 'Enter name' }),
-    paperPetitionEmail: JoiValidationConstants.EMAIL.optional()
-      .allow(null)
-      .description('Email provided by the petitioner on their petition form')
-      .messages({ '*': 'Enter email address in format: yourname@example.com' }),
+    paperPetitionEmail: joi
+      .when('hasConsentedToEService', {
+        is: true,
+        otherwise: JoiValidationConstants.EMAIL.optional(),
+        then: JoiValidationConstants.EMAIL.required(),
+      })
+      .messages({
+        'any.required': 'Enter a valid email address',
+        'string.email': 'Enter email address in format: yourname@example.com',
+      }),
     phone: JoiValidationConstants.STRING.max(100)
       .when('contactType', {
         is: CONTACT_TYPES.secondary,

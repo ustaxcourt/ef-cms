@@ -25,6 +25,21 @@ export const environment = {
   emailFromAddress,
   isRunningOnLambda: !!process.env.LAMBDA_TASK_ROOT,
   masterRegion: process.env.MASTER_REGION || 'us-east-1',
+  nodeEnv: process.env.NODE_ENV,
+  rds: {
+    pool: {
+      database: process.env.DATABASE_NAME || 'postgres',
+      host: process.env.POSTGRES_HOST || 'localhost',
+      idleTimeoutMillis: 1000,
+      max: 1,
+      password: process.env.POSTGRES_PASSWORD || 'example',
+      port: 5432,
+      user: process.env.POSTGRES_USER || 'postgres',
+    },
+    readHost: process.env.POSTGRES_READ_HOST!,
+    useGlobalCert:
+      process.env.NODE_ENV === 'production' || process.env.CIRCLE_BRANCH,
+  },
   region,
   s3Endpoint: isLocal
     ? 'http://0.0.0.0:9001'

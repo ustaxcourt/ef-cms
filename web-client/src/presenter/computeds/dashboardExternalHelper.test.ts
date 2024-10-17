@@ -1,5 +1,4 @@
-import { applicationContext } from '../../applicationContext';
-import { dashboardExternalHelper as dashboardExternalHelperComputed } from './dashboardExternalHelper';
+import { dashboardExternalHelper } from './dashboardExternalHelper';
 import {
   docketClerk1User,
   irsPractitionerUser,
@@ -7,14 +6,8 @@ import {
   privatePractitionerUser,
 } from '@shared/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../../withAppContext';
 
 describe('dashboardExternalHelper', () => {
-  const dashboardExternalHelper = withAppContextDecorator(
-    dashboardExternalHelperComputed,
-    applicationContext,
-  );
-
   it('should show "what to expect" but not case list when there are no open or closed cases', () => {
     const result = runCompute(dashboardExternalHelper, {
       state: {
