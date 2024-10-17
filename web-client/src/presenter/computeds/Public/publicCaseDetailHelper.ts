@@ -132,10 +132,16 @@ const filterDocketEntries = (
   }
 };
 
+export type PublicCaseDetailHelperResults = {
+  formattedDocketEntriesOnDocketRecord: any[];
+  isCaseSealed: boolean;
+  showPrintableDocketRecord: string | undefined;
+};
+
 export const publicCaseDetailHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): PublicCaseDetailHelperResults => {
   const rawCase = get(state.caseDetail);
 
   const {
