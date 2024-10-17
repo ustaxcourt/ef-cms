@@ -48,6 +48,7 @@ export const submitAddPractitionerSequence = [
           {
             emailAvailable: afterSuccess,
             emailInUse: [
+              setScrollToErrorNotificationAction,
               unsetWaitingForResponseAction,
               clearAlertsAction,
               setAlertErrorAction,
