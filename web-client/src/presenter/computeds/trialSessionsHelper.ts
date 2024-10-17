@@ -234,7 +234,6 @@ export const formatTrialSessions = ({
   trialSessions: TrialSessionInfoDTO[];
   judgeAssociatedToUser?: RawUser;
 }): (TrialSessionRow | TrialSessionWeek)[] => {
-  const specialTrialSessionNotes = null;
   const trialSessionRows: TrialSessionRow[] = trialSessions.map(
     trialSession => {
       const showAlertForNOTTReminder =
@@ -269,10 +268,6 @@ export const formatTrialSessions = ({
       */
       const userIsAssignedToSession = isJudgeUserAssigned;
 
-      if (trialSession.sessionType === 'Special') {
-        console.log('Special session in trialSessionsHelper');
-      }
-
       return {
         alertMessageForNOTT,
         formattedEstimatedEndDate,
@@ -283,7 +278,6 @@ export const formatTrialSessions = ({
         sessionStatus: trialSession.sessionStatus,
         sessionType: trialSession.sessionType,
         showAlertForNOTTReminder,
-        specialTrialSessionNotes,
         startDate: trialSession.startDate,
         swingSession: !!trialSession.swingSession,
         trialLocation: trialSession.trialLocation || '',
@@ -342,7 +336,6 @@ export type TrialSessionRow = {
   proceedingType: string;
   startDate: string; // ISO format
   sessionType: string;
-  specialTrialSessionNotes: string | null;
   judge: { name: string; userId: string };
   formattedNoticeIssuedDate: string;
   sessionStatus: string;
