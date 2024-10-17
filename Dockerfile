@@ -1,6 +1,6 @@
 # Note: node-20.14.0-chrome-125.0.* is debian 12.5 (bookworm)
 
-FROM cypress/browsers:node-20.17.0-chrome-129.0.6668.70-1-ff-130.0.1-edge-129.0.2792.52-1
+FROM cypress/browsers:node-20.18.0-chrome-129.0.6668.89-1-ff-131.0.2-edge-129.0.2792.65-1
 
 WORKDIR /home/app
 
