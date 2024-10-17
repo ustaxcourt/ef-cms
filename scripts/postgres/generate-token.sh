@@ -25,5 +25,5 @@ fi
 echo "Generated IAM Token:"
 echo "$TOKEN"
 
-# Connect to the PostgreSQL instance using psql with the generated token
-psql "host=$DB_HOST port=$DB_PORT user=$DB_USER sslmode=verify-full sslrootcert=$SSL_CERT_PATH dbname=$DB_NAME password=$TOKEN"
+# Optional - Connect to the PostgreSQL instance using psql with the generated token
+# psql "host=$DB_HOST port=$DB_PORT user=$DB_USER sslmode=verify-full sslrootcert=$SSL_CERT_PATH dbname=$DB_NAME password=$TOKEN"
