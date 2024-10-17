@@ -1,11 +1,37 @@
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { mockEntireFile } from '@shared/test/mockFactory';
+jest.mock('@shared/business/utilities/DateHandler', () =>
+  mockEntireFile({
+    keepImplementation: true,
+    module: '@shared/business/utilities/DateHandler',
+  }),
+);
+jest.mock('@web-api/business/useCaseHelper/saveFileAndGenerateUrl');
+jest.mock(
+  '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor',
+);
+import '@web-api/notifications/notificationClient/notificationGateway.mocks.jest';
+import {
+  CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
+} from '@shared/business/entities/EntityConstants';
 import { createCsvCustomCaseReportFileInteractor } from '@web-api/business/useCases/customCaseReport/createCsvCustomCaseReportFileInteractor';
+import { formatNow as formatNowMock } from '@shared/business/utilities/DateHandler';
+import { getCustomCaseReportInteractor as getCustomCaseReportInteractorMock } from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
+import { getNotificationGateway as getNotificationGatewayMock } from '@web-api/notifications/notificationClient/getNotificationGateway';
 import {
   mockDocketClerkUser,
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { saveFileAndGenerateUrl as saveFileAndGenerateUrlMock } from '@web-api/business/useCaseHelper/saveFileAndGenerateUrl';
 
 describe('createCsvCustomCaseReportFileInteractor', () => {
+  const formatNow = jest.mocked(formatNowMock);
+  const getCustomCaseReportInteractor = jest.mocked(
+    getCustomCaseReportInteractorMock,
+  );
+  const getNotificationGateway = getNotificationGatewayMock as jest.Mock;
+  const saveFileAndGenerateUrl = jest.mocked(saveFileAndGenerateUrlMock);
+
   const DEFAULT_PARAMS = {
     caseStatuses: 'caseStatuses',
     caseTypes: 'caseTypes',
@@ -21,50 +47,42 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
   } as any;
 
   beforeEach(() => {
-    applicationContext.getNotificationGateway().sendNotificationToUser = jest
-      .fn()
-      .mockReturnValue(null);
+    getNotificationGateway().sendNotificationToUser.mockReturnValue(null);
 
-    applicationContext.getUseCases().getCustomCaseReportInteractor = jest
-      .fn()
-      .mockReturnValue({
-        foundCases: [
-          {
-            associatedJudge: 'associatedJudge',
-            calendaringHighPriority: 'calendaringHighPriority',
-            caseCaption: 'caseCaption',
-            caseType: 'caseType',
-            docketNumber: 'docketNumber',
-            highPriority: true,
-            preferredTrialCity: 'preferredTrialCity',
-            receivedAt: 'receivedAt',
-            status: 'status',
-          },
-        ],
-      });
+    getCustomCaseReportInteractor.mockResolvedValue({
+      foundCases: [
+        {
+          associatedJudge: 'associatedJudge',
+          caseCaption: 'caseCaption',
+          caseType: CASE_TYPES_MAP.cdp,
+          docketNumber: 'docketNumber',
+          highPriority: true,
+          preferredTrialCity: 'preferredTrialCity',
+          procedureType: '',
+          receivedAt: 'receivedAt',
+          status: CASE_STATUS_TYPES.assignedCase,
+        },
+      ],
+      lastCaseId: { pk: '', receivedAt: 0 },
+      totalCount: 20,
+    });
 
-    applicationContext.getUtilities().formatNow = jest
-      .fn()
-      .mockReturnValue('TEST_DATE');
+    formatNow.mockReturnValue('TEST_DATE');
 
-    applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl = jest
-      .fn()
-      .mockReturnValue({
-        fileId: 'fileId',
-        url: 'url',
-      });
+    saveFileAndGenerateUrl.mockResolvedValue({
+      fileId: 'fileId',
+      url: 'url',
+    });
   });
 
   it('should send websocket message with filename and url', async () => {
     await createCsvCustomCaseReportFileInteractor(
-      applicationContext,
       DEFAULT_PARAMS,
       mockDocketClerkUser,
     );
 
     const sendNotificationCalls =
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls;
+      getNotificationGateway().sendNotificationToUser.mock.calls;
     expect(sendNotificationCalls.length).toEqual(3);
 
     expect(sendNotificationCalls[0][0].message).toEqual({
@@ -87,10 +105,9 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
       },
     });
 
-    const saveFileAndGenerateUrlCalls =
-      applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl.mock.calls;
+    const saveFileAndGenerateUrlCalls = saveFileAndGenerateUrl.mock.calls;
     const csvStringBuffer = Buffer.from(
-      'Docket No.,Date Created,Case Title,Case Status,Case Type,Judge,Requested Place of Trial,Calendaring High Priority\ndocketNumber,Invalid DateTime,caseCaption,status,caseType,associatedJudge,preferredTrialCity,yes\n',
+      `Docket No.,Date Created,Case Title,Case Status,Case Type,Judge,Requested Place of Trial,Calendaring High Priority\ndocketNumber,Invalid DateTime,caseCaption,${CASE_STATUS_TYPES.assignedCase},${CASE_TYPES_MAP.cdp},associatedJudge,preferredTrialCity,yes\n`,
     );
     const bomBuffer = Buffer.from([239, 187, 191]);
 
@@ -104,56 +121,37 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
   it('should throw an error if a user is not authorized', async () => {
     await expect(
       createCsvCustomCaseReportFileInteractor(
-        applicationContext,
         DEFAULT_PARAMS,
         mockPrivatePractitionerUser,
       ),
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('should throttle fetching data every 10th call', async () => {
-    applicationContext.setTimeout = jest
-      .fn()
-      .mockImplementation(callback => callback());
-
-    await createCsvCustomCaseReportFileInteractor(
-      applicationContext,
-      {
-        ...DEFAULT_PARAMS,
-        totalCount: 100000,
-      },
-      mockDocketClerkUser,
-    );
-    expect(applicationContext.setTimeout).toHaveBeenCalledTimes(1);
-  });
-
   it('should handle values with new lines', async () => {
-    applicationContext.getUseCases().getCustomCaseReportInteractor = jest
-      .fn()
-      .mockReturnValue({
-        foundCases: [
-          {
-            associatedJudge: 'associatedJudge',
-            calendaringHighPriority: 'calendaringHighPriority',
-            caseCaption: 'caseCaption\nextra line',
-            caseType: 'caseType',
-            docketNumber: 'docketNumber',
-            highPriority: true,
-            preferredTrialCity: 'preferredTrialCity',
-            receivedAt: 'receivedAt',
-            status: 'status',
-          },
-        ],
-      });
+    getCustomCaseReportInteractor.mockResolvedValue({
+      foundCases: [
+        {
+          associatedJudge: 'associatedJudge',
+          caseCaption: 'caseCaption\nextra line',
+          caseType: 'Deficiency',
+          docketNumber: 'docketNumber',
+          highPriority: true,
+          preferredTrialCity: 'preferredTrialCity',
+          procedureType: '',
+          receivedAt: 'receivedAt',
+          status: 'Assigned - Case',
+        },
+      ],
+      lastCaseId: { pk: 'case|101-20', receivedAt: 1928743 },
+      totalCount: 20,
+    });
 
     await createCsvCustomCaseReportFileInteractor(
-      applicationContext,
       DEFAULT_PARAMS,
       mockDocketClerkUser,
     );
 
-    const saveFileAndGenerateUrlCalls =
-      applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl.mock.calls;
+    const saveFileAndGenerateUrlCalls = saveFileAndGenerateUrl.mock.calls;
     expect(saveFileAndGenerateUrlCalls.length).toEqual(1);
 
     const csvBuffer = saveFileAndGenerateUrlCalls[0][0].file;
@@ -166,32 +164,30 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
   });
 
   it('should get case title correctly', async () => {
-    applicationContext.getUseCases().getCustomCaseReportInteractor = jest
-      .fn()
-      .mockReturnValue({
-        foundCases: [
-          {
-            associatedJudge: 'associatedJudge',
-            calendaringHighPriority: 'calendaringHighPriority',
-            caseCaption: 'caseCaption, Petitioner',
-            caseType: 'caseType',
-            docketNumber: 'docketNumber',
-            highPriority: true,
-            preferredTrialCity: 'preferredTrialCity',
-            receivedAt: 'receivedAt',
-            status: 'status',
-          },
-        ],
-      });
+    getCustomCaseReportInteractor.mockResolvedValue({
+      foundCases: [
+        {
+          associatedJudge: 'associatedJudge',
+          caseCaption: 'caseCaption, Petitioner',
+          caseType: CASE_TYPES_MAP.cdp,
+          docketNumber: 'docketNumber',
+          highPriority: true,
+          preferredTrialCity: 'preferredTrialCity',
+          procedureType: '',
+          receivedAt: 'receivedAt',
+          status: CASE_STATUS_TYPES.calendared,
+        },
+      ],
+      lastCaseId: { pk: 'case-101-23', receivedAt: 32849 },
+      totalCount: 10,
+    });
 
     await createCsvCustomCaseReportFileInteractor(
-      applicationContext,
       DEFAULT_PARAMS,
       mockDocketClerkUser,
     );
 
-    const saveFileAndGenerateUrlCalls =
-      applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl.mock.calls;
+    const saveFileAndGenerateUrlCalls = saveFileAndGenerateUrl.mock.calls;
 
     const csvBuffer = saveFileAndGenerateUrlCalls[0][0].file;
     const records = csvBuffer
@@ -200,7 +196,7 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
       .filter(x => !!x);
 
     expect(records[1]).toEqual(
-      'docketNumber,Invalid DateTime,caseCaption,status,caseType,associatedJudge,preferredTrialCity,yes',
+      `docketNumber,Invalid DateTime,caseCaption,${CASE_STATUS_TYPES.calendared},${CASE_TYPES_MAP.cdp},associatedJudge,preferredTrialCity,yes`,
     );
   });
 });
