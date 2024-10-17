@@ -132,8 +132,30 @@ const filterDocketEntries = (
   }
 };
 
+export type PublicFormattedDocketEntryInfo = {
+  index?: number;
+  isStricken?: boolean;
+  createdAtFormatted?: string;
+  eventCode: string;
+  isSealed?: boolean;
+  sealedToTooltip: string;
+  numberOfPages?: number;
+  filedBy?: string;
+  action?: string;
+  showServed: boolean;
+  showNotServed: boolean;
+  servedAtFormatted: boolean;
+  servedPartiesCode?: string;
+  showLinkToDocument: boolean;
+  descriptionDisplay: string;
+  docketEntryId: string;
+  openInSameTab: boolean;
+  showDocumentDescriptionWithoutLink: boolean;
+  signatory?: string;
+};
+
 export type PublicCaseDetailHelperResults = {
-  formattedDocketEntriesOnDocketRecord: any[];
+  formattedDocketEntriesOnDocketRecord: PublicFormattedDocketEntryInfo[];
   isCaseSealed: boolean;
   showPrintableDocketRecord: string | undefined;
 };
