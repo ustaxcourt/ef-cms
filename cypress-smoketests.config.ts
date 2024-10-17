@@ -12,10 +12,15 @@ import {
   readAllItemsInBucket,
 } from './cypress/deployed-and-local/support/email-receipt';
 import {
+  doesFileExists,
+  ensureFolderExists,
+} from './cypress/local-only/support/database';
+import {
   expireUserConfirmationCode,
   getEmailVerificationToken,
   getFeatureFlagValue,
   getNewAccountVerificationCode,
+  getRawFeatureFlagValue,
   toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
@@ -72,6 +77,12 @@ export default defineConfig({
         }) {
           return deleteAllItemsInEmailBucket({ bucketName, retries });
         },
+        doesFileExists(filePath) {
+          return doesFileExists(filePath);
+        },
+        ensureFolderExists(directory) {
+          return ensureFolderExists(directory);
+        },
         expireUserConfirmationCode(email: string) {
           return expireUserConfirmationCode(email);
         },
@@ -89,6 +100,9 @@ export default defineConfig({
         },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
+        },
+        getRawFeatureFlagValue({ flag }) {
+          return getRawFeatureFlagValue({ flag });
         },
         getUserByEmail(email: string) {
           return getUserByEmail(email);

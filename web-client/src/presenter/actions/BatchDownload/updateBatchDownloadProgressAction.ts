@@ -23,6 +23,9 @@ export const updateBatchDownloadProgressAction = ({
     case 'batch_download_csv_data':
       store.set(state.batchDownloads.title, 'Gathering Data');
       break;
+    case 'aws_batch_download_progress':
+      store.set(state.batchDownloads.title, 'Preparing Files');
+      break;
   }
 
   store.set(state.batchDownloads.zipInProgress, true);
