@@ -1,5 +1,6 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
+import { CreateTermModal } from '@web-client/views/CreateTermModal';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
@@ -12,14 +13,18 @@ import React from 'react';
 export const TrialSessions = connect(
   {
     defaultTab: state.screenMetadata.trialSessionFilters.status,
+    openCreateTermModalSequence: sequences.openCreateTermModalSequence,
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
-    showNewTrialSession: state.trialSessionsHelper.showNewTrialSession,
+    showModal: state.modal.showModal,
+    trialSessionsHelper: state.trialSessionsHelper,
   },
   function TrialSessions({
     defaultTab,
+    openCreateTermModalSequence,
     openTrialSessionPlanningModalSequence,
-    showNewTrialSession,
+    showModal,
+    trialSessionsHelper,
   }) {
     return (
       <>
@@ -35,6 +40,17 @@ export const TrialSessions = connect(
             id="trial-sessions-tabs"
           >
             <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
+              {trialSessionsHelper.showCreateTermButton && (
+                <Button
+                  link
+                  className="margin-top-1"
+                  data-testid="open-create-term-modal-button"
+                  icon={['far', 'calendar']}
+                  onClick={() => openCreateTermModalSequence()}
+                >
+                  Create Term
+                </Button>
+              )}
               <Button
                 link
                 className="margin-top-1"
@@ -44,7 +60,7 @@ export const TrialSessions = connect(
                 Trial Session Planning Report
               </Button>
             </div>
-            {showNewTrialSession && (
+            {trialSessionsHelper.showNewTrialSession && (
               <Button
                 className="tab-right-button"
                 data-testid="add-trial-session-button"
@@ -54,7 +70,7 @@ export const TrialSessions = connect(
                 Add Trial Session
               </Button>
             )}
-            {showNewTrialSession && (
+            {trialSessionsHelper.showNewTrialSession && (
               <Tab
                 data-testid="new-trial-sessions-tab"
                 id="new-trial-sessions-tab"
@@ -90,6 +106,7 @@ export const TrialSessions = connect(
             </Tab>
           </Tabs>
         </section>
+        {showModal === 'CreateTermModal' && <CreateTermModal />}
       </>
     );
   },

@@ -12,6 +12,7 @@ const joi: Root = joiImported.extend(joiDate);
 // These are specific to joi and cannot be shared with luxon
 const DATE_FORMATS = {
   ISO: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
+  MMDDYYYY: 'MM/DD/YYYY',
   YYYYMMDD: 'YYYY-MM-DD',
 };
 
@@ -21,6 +22,7 @@ const STRING = joi.string().min(1);
 export const JoiValidationConstants = Object.freeze({
   CASE_CAPTION: STRING.max(4700),
   DATE: joi.date().iso().format([DATE_FORMATS.YYYYMMDD]),
+  DATE_RANGE_PICKER_DATE: joi.date().iso().format(DATE_FORMATS.MMDDYYYY),
   DOCKET_NUMBER: STRING.regex(DOCKET_NUMBER_MATCHER),
   DOCKET_RECORD: joi
     .array()
