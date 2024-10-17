@@ -25,7 +25,9 @@ export const PractitionerDetails = connect(
             </Button>
           )}
         </div>
-        <div className="grid-row grid-gap">
+        <div
+          className={`grid-row grid-gap ${practitionerDetailHelper.showEditLink ? '' : 'margin-top-4'}`} // Maintain the spacing even if there is not edit button
+        >
           <div className="tablet:grid-col-4 margin-bottom-4">
             <div className="card height-full margin-bottom-0">
               <div className="content-wrapper">
