@@ -133,7 +133,7 @@ const filterDocketEntries = (
 };
 
 export type PublicFormattedDocketEntryInfo = {
-  index?: number;
+  index: number;
   isStricken?: boolean;
   createdAtFormatted?: string;
   eventCode: string;
@@ -152,6 +152,7 @@ export type PublicFormattedDocketEntryInfo = {
   openInSameTab: boolean;
   showDocumentDescriptionWithoutLink: boolean;
   signatory?: string;
+  hasDocument: boolean;
 };
 
 export type PublicCaseDetailHelperResults = {
