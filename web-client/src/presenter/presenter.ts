@@ -347,6 +347,7 @@ import { removeSignatureSequence } from './sequences/removeSignatureSequence';
 import { removeSupportingDocumentSequence } from './sequences/removeSupportingDocumentSequence';
 import { replyToMessageSequence } from './sequences/replyToMessageSequence';
 import { rescanBatchSequence } from './sequences/rescanBatchSequence';
+import { resendVerifyPendingUserEmailSequence } from '@web-client/presenter/sequences/resendVerifyPendingUserEmailSequence';
 import { resetCaseMenuSequence } from './sequences/resetCaseMenuSequence';
 import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordionsSequence';
 import { resetIdleTimerSequence } from './sequences/resetIdleTimerSequence';
@@ -1172,6 +1173,7 @@ export const presenterSequences = {
     removeSupportingDocumentSequence as unknown as Function,
   replyToMessageSequence: replyToMessageSequence as unknown as Function,
   rescanBatchSequence: rescanBatchSequence as unknown as Function,
+  resendVerifyPendingUserEmailSequence,
   resetCaseMenuSequence: resetCaseMenuSequence as unknown as Function,
   resetHeaderAccordionsSequence:
     resetHeaderAccordionsSequence as unknown as Function,

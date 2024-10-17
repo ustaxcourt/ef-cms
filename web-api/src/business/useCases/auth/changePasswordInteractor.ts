@@ -137,6 +137,7 @@ export const updateUserPendingEmailRecord = async (
       email: user.pendingEmail,
       pendingEmail: undefined,
       pendingEmailVerificationToken: undefined,
+      pendingEmailVerificationTokenTimestamp: undefined,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
   } else {
@@ -145,6 +146,7 @@ export const updateUserPendingEmailRecord = async (
       email: user.pendingEmail,
       pendingEmail: undefined,
       pendingEmailVerificationToken: undefined,
+      pendingEmailVerificationTokenTimestamp: undefined,
     });
   }
 

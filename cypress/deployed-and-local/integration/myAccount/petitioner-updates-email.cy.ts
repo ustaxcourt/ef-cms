@@ -9,6 +9,7 @@ import { createAPetitioner } from '../../../helpers/accountCreation/create-a-pet
 import { externalUserCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { faker } from '@faker-js/faker';
 import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
+import { loginAsPetitioner } from '../../../helpers/authentication/login-as-helpers';
 import { logout } from '../../../helpers/authentication/logout';
 import { petitionsClerkServesPetition } from '../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { v4 } from 'uuid';
@@ -139,5 +140,32 @@ describe('Petitioner Updates e-mail', () => {
         'The email address or password you entered is invalid.',
       );
     }
+  });
+
+  it('should show error alert and not update the petitioner email address when they enter the incorrect email confirmation code', () => {
+    const username = `cypress_test_account+${v4()}`;
+    const email = `${username}@example.com`;
+    const password = getCypressEnv().defaultAccountPass;
+    const name = faker.person.fullName();
+    createAPetitioner({ email, name, password });
+    verifyPetitionerAccount({ email });
+
+    const updatedUsername = `cypress_test_account+${v4()}`;
+    const updatedEmail = `${updatedUsername}@example.com`;
+    cy.login(username);
+    goToMyAccount();
+    clickChangeEmail();
+    changeEmailTo(updatedEmail);
+    clickConfirmModal();
+
+    cy.visit('/verify-email?token=hello_world');
+    cy.get('[data-testid="error-alert"]')
+      .should('be.visible')
+      .and(
+        'contain.text',
+        'Your request cannot be completed. Please try to log in. If you’re still having trouble',
+      );
+
+    loginAsPetitioner(username);
   });
 });

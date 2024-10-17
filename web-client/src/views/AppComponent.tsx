@@ -99,6 +99,7 @@ import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
 import { UserContactEditProgress } from './UserContactEditProgress';
 import { VerificationSent } from '@web-client/views/CreatePetitionerAccount/VerificationSent';
+import { VerifyNewEmailModal } from '@web-client/views/MyAccount/VerifyNewEmailModal';
 import { WebSocketErrorModal } from './WebSocketErrorModal';
 import { WorkQueue } from './WorkQueue';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -302,6 +303,7 @@ export const AppComponent = connect(
         {showModal === 'AppMaintenanceModal' && <AppMaintenanceModal />}
         {showModal === 'GenericErrorModal' && <GenericErrorModal />}
         {showModal === 'FileUploadErrorModal' && <FileUploadErrorModal />}
+        {showModal === 'VerifyNewEmailModal' && <VerifyNewEmailModal />}
       </>
     );
   },
