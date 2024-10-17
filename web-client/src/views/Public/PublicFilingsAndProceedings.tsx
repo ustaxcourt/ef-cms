@@ -1,18 +1,26 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { PublicFormattedDocketEntryInfo } from '@web-client/presenter/computeds/Public/publicCaseDetailHelper';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const PublicFilingsAndProceedings = connect(
-  {
-    caseDetail: state.caseDetail,
-    entry: props.entry,
-    openCaseDocumentDownloadUrlSequence:
-      sequences.openCaseDocumentDownloadUrlSequence,
-  },
+type PublicFilingsAndProceedingsPros = {
+  entry: PublicFormattedDocketEntryInfo;
+};
+
+const PublicFilingsAndProceedingsDeps = {
+  caseDetail: state.caseDetail,
+  openCaseDocumentDownloadUrlSequence:
+    sequences.openCaseDocumentDownloadUrlSequence,
+};
+
+export const PublicFilingsAndProceedings = connect<
+  PublicFilingsAndProceedingsPros,
+  typeof PublicFilingsAndProceedingsDeps
+>(
+  PublicFilingsAndProceedingsDeps,
   function PublicFilingsAndProceedings({
     caseDetail,
     entry,
