@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/messages/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   DOCKET_SECTION,
@@ -7,6 +8,9 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createMessageInteractor } from './createMessageInteractor';
+import { createMessage as createMessageMock } from '@web-api/persistence/postgres/messages/createMessage';
+
+const createMessage = createMessageMock as jest.Mock;
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
@@ -80,19 +84,13 @@ describe('createMessageInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createMessage,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().createMessage.mock.calls[0][0]
-        .message,
-    ).toMatchObject({
+    expect(createMessage).toHaveBeenCalled();
+    expect(createMessage.mock.calls[0][0].message).toMatchObject({
       ...messageData,
       attachments: mockAttachments,
       caseStatus: CASE_STATUS_TYPES.generalDocket,
       caseTitle: 'Roslindis Angelino',
       docketNumber: '101-20',
-      docketNumberWithSuffix: '123-45S',
       from: 'Test Petitionsclerk',
       fromSection: PETITIONS_SECTION,
       fromUserId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',

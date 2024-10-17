@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';

@@ -78,3 +78,20 @@ variable "viewer_protocol_policy" {
   default = "redirect-to-https"
 }
 
+variable "postgres_master_username" {
+  type = string
+}
+
+variable "postgres_master_password" {
+  type = string
+}
+
+variable "rds_max_capacity" {
+  type = number
+  default = 1.0
+}
+
+variable "rds_min_capacity" {
+  type = number
+  default = 0.5
+}

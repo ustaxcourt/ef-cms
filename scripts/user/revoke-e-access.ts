@@ -5,6 +5,7 @@ import { createApplicationContext } from '@web-api/applicationContext';
 import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { requireEnvVars } from '../../shared/admin-tools/util';
+import { upsertCase } from '@web-api/persistence/postgres/cases/upsertCase';
 
 const userId = process.argv[2];
 const docketNumber = process.argv[3];
@@ -48,9 +49,12 @@ requireEnvVars(['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'ENV']);
     .validate()
     .toRawObject();
 
+  await upsertCase({ rawCase: caseToUpdate });
+
   await applicationContext
     .getPersistenceGateway()
     .updateCase({ applicationContext, caseToUpdate });
+
   await applicationContext
     .getPersistenceGateway()
     .deleteUserFromCase({ applicationContext, docketNumber, userId });

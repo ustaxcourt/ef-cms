@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/messages/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
@@ -5,6 +6,7 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getCompletedMessagesForUserInteractor } from './getCompletedMessagesForUserInteractor';
+import { getCompletedUserInboxMessages } from '@web-api/persistence/postgres/messages/getCompletedUserInboxMessages';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
@@ -35,7 +37,7 @@ describe('getCompletedMessagesForUserInteractor', () => {
       completedByUserId: '21d7cd77-43e5-4713-92d4-aef69b5f72fd',
       createdAt: '2019-03-01T21:40:46.415Z',
       docketNumber: '123-45',
-      docketNumberWithSuffix: '123-45S',
+      docketNumberWithSuffix: '123-45',
       entityName: 'MessageResult',
       from: 'Test Petitionsclerk2',
       fromSection: PETITIONS_SECTION,
@@ -52,9 +54,8 @@ describe('getCompletedMessagesForUserInteractor', () => {
       toSection: PETITIONS_SECTION,
       toUserId: 'b427ca37-0df1-48ac-94bb-47aed073d6f7',
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getCompletedUserInboxMessages.mockReturnValue([messageData]);
+
+    (getCompletedUserInboxMessages as jest.Mock).mockReturnValue([messageData]);
 
     const returnedMessages = await getCompletedMessagesForUserInteractor(
       applicationContext,
@@ -64,9 +65,7 @@ describe('getCompletedMessagesForUserInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCompletedUserInboxMessages,
-    ).toHaveBeenCalled();
+    expect(getCompletedUserInboxMessages).toHaveBeenCalled();
     expect(returnedMessages).toMatchObject([omit(messageData, 'pk', 'sk')]);
   });
 });

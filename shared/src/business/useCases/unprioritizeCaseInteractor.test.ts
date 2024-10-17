@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { MOCK_LOCK } from '../../test/mockLock';

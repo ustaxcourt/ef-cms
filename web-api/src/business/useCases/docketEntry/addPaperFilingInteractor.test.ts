@@ -1,3 +1,5 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/messages/mocks.jest';
 import {
   AUTOMATIC_BLOCKED_REASONS,
   SERVICE_INDICATOR_TYPES,
