@@ -6,9 +6,8 @@ export const createCsvCustomCaseReportFileLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     return await createCsvCustomCaseReportFileInteractor(
-      applicationContext,
       JSON.parse(event.body),
       authorizedUser,
     );

@@ -65,7 +65,6 @@ import { getCaseMetadataByDocketNumber } from './persistence/dynamo/cases/getCas
 import { getCaseMetadataWithCounsel } from './persistence/dynamo/cases/getCaseMetadataWithCounsel';
 import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheetsByDocketNumber';
 import { getCasesByDocketNumbers } from './persistence/dynamo/cases/getCasesByDocketNumbers';
-import { getCasesByFilters } from './persistence/elasticsearch/getCasesByFilters';
 import { getCasesByLeadDocketNumber } from './persistence/dynamo/cases/getCasesByLeadDocketNumber';
 import { getCasesByUserId } from './persistence/elasticsearch/getCasesByUserId';
 import { getCasesClosedCountByJudge } from './persistence/elasticsearch/getCasesClosedCountByJudge';
@@ -313,7 +312,6 @@ const gatewayMethods = {
   getCaseMetadataWithCounsel,
   getCaseWorksheetsByDocketNumber,
   getCasesByDocketNumbers,
-  getCasesByFilters,
   getCasesByLeadDocketNumber,
   getCasesByUserId,
   getCasesClosedCountByJudge,
