@@ -177,7 +177,9 @@ export const writeTrialSessionDataToExcel = async ({
 
     const cellLetter = cell.$col$row.split('$')[1];
     if (cellLetter === 'A') return;
-    const formula = `counta(${cellLetter}3:${cellLetter}${countColumnLength + 2})`;
+    // Note: The formula below is tailored specifically to Microsoft Excel and
+    // Google Sheets; it will not work in Apple Numbers.
+    const formula = `SUMPRODUCT(--(LEN(TRIM(${cellLetter}3:${cellLetter}${countColumnLength + 2}))>0))`;
     cell.value = {
       formula,
       result: 0,
