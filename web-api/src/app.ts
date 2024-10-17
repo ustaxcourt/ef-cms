@@ -71,6 +71,7 @@ import { generateTrialCalendarPdfLambda } from './lambdas/trialSessions/generate
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
 import { getAllUsersByRoleLambda } from '@web-api/lambdas/users/getAllUsersByRoleLambda';
 import { getBlockedCasesLambda } from './lambdas/reports/getBlockedCasesLambda';
+import { getBulkTrialSessionCopyNotesLambda } from './lambdas/trialSessions/getBulkTrialSessionCopyNotesLambda';
 import { getCalendaredCasesForTrialSessionLambda } from './lambdas/trialSessions/getCalendaredCasesForTrialSessionLambda';
 import { getCaseDeadlinesForCaseLambda } from './lambdas/caseDeadline/getCaseDeadlinesForCaseLambda';
 import { getCaseDeadlinesLambda } from './lambdas/caseDeadline/getCaseDeadlinesLambda';
@@ -915,6 +916,10 @@ app.delete(
   app.get(
     '/trial-sessions/:trialSessionId/working-copy',
     lambdaWrapper(getTrialSessionWorkingCopyLambda),
+  );
+  app.get(
+    '/trial-sessions/bulk-copy-notes',
+    lambdaWrapper(getBulkTrialSessionCopyNotesLambda),
   );
   app.put(
     '/trial-sessions/:trialSessionId/working-copy',
