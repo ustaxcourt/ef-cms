@@ -10,6 +10,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { createMessage } from '@web-api/persistence/postgres/messages/createMessage';
 
 export type MessageType = {
   attachments: {
@@ -46,10 +47,9 @@ export const createMessageInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { caseCaption, docketNumberWithSuffix, status } =
-    await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const { caseCaption, status } = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({ applicationContext, docketNumber });
 
   const fromUser = await applicationContext
     .getPersistenceGateway()
@@ -59,31 +59,24 @@ export const createMessageInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: toUserId });
 
-  const validatedRawMessage = new Message(
-    {
-      attachments,
-      caseStatus: status,
-      caseTitle: Case.getCaseTitle(caseCaption),
-      docketNumber,
-      docketNumberWithSuffix,
-      from: fromUser.name,
-      fromSection: fromUser.section,
-      fromUserId: fromUser.userId,
-      message,
-      subject,
-      to: toUser.name,
-      toSection,
-      toUserId,
-    },
-    { applicationContext },
-  )
+  const validatedRawMessage = new Message({
+    attachments,
+    caseStatus: status,
+    caseTitle: Case.getCaseTitle(caseCaption),
+    docketNumber,
+    from: fromUser.name,
+    fromSection: fromUser.section,
+    fromUserId: fromUser.userId,
+    message,
+    subject,
+    to: toUser.name,
+    toSection,
+    toUserId,
+  })
     .validate()
     .toRawObject();
 
-  await applicationContext.getPersistenceGateway().createMessage({
-    applicationContext,
-    message: validatedRawMessage,
-  });
+  await createMessage({ message: validatedRawMessage });
 
   return validatedRawMessage;
 };

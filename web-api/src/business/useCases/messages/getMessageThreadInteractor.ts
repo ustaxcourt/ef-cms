@@ -6,6 +6,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 
 export const getMessageThreadInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -16,14 +17,9 @@ export const getMessageThreadInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const messages = await applicationContext
-    .getPersistenceGateway()
-    .getMessageThreadByParentId({
-      applicationContext,
-      parentMessageId,
-    });
-
-  return Message.validateRawCollection(messages, {
-    applicationContext,
+  const messages = await getMessageThreadByParentId({
+    parentMessageId,
   });
+
+  return Message.validateRawCollection(messages);
 };

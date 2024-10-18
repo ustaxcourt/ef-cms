@@ -12,6 +12,7 @@ resource "null_resource" "esbuild_lambda" {
   }
 }
 
+
 data "archive_file" "lambda_function_zip" {
   depends_on  = [null_resource.esbuild_lambda]
   type        = "zip"
@@ -38,4 +39,7 @@ resource "aws_lambda_function" "lambda_function" {
   environment {
     variables = var.use_source_maps ? merge(var.environment, { NODE_OPTIONS = "--enable-source-maps" }) : var.environment
   }
+
 }
+
+

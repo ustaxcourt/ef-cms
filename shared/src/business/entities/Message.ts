@@ -2,6 +2,7 @@ import { CASE_STATUS_TYPES } from './EntityConstants';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { createISODateString } from '../utilities/DateHandler';
+import { getUniqueId } from '@shared/sharedAppContext';
 import joi from 'joi';
 
 export class Message extends JoiValidationEntity {
@@ -33,12 +34,8 @@ export class Message extends JoiValidationEntity {
   public toSection: string;
   public toUserId: string;
 
-  constructor(rawMessage, { applicationContext }) {
+  constructor(rawMessage) {
     super('Message');
-
-    if (!applicationContext) {
-      throw new TypeError('applicationContext must be defined');
-    }
 
     this.attachments = (rawMessage.attachments || []).map(attachment => ({
       documentId: attachment.documentId,
@@ -53,7 +50,9 @@ export class Message extends JoiValidationEntity {
     this.createdAt = rawMessage.createdAt || createISODateString();
     this.leadDocketNumber = rawMessage.leadDocketNumber;
     this.docketNumber = rawMessage.docketNumber;
-    this.docketNumberWithSuffix = rawMessage.docketNumberWithSuffix;
+    this.docketNumberWithSuffix = `${rawMessage.docketNumber}${
+      rawMessage.docketNumberSuffix ? rawMessage.docketNumberSuffix : ''
+    }`;
     this.from = rawMessage.from;
     this.fromSection = rawMessage.fromSection;
     this.fromUserId = rawMessage.fromUserId;
@@ -61,7 +60,7 @@ export class Message extends JoiValidationEntity {
     this.isRead = rawMessage.isRead || false;
     this.isRepliedTo = rawMessage.isRepliedTo || false;
     this.message = rawMessage.message;
-    this.messageId = rawMessage.messageId || applicationContext.getUniqueId();
+    this.messageId = rawMessage.messageId || getUniqueId();
     this.parentMessageId = rawMessage.parentMessageId || this.messageId;
     this.subject = rawMessage.subject?.trim();
     this.to = rawMessage.to;

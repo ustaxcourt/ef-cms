@@ -98,6 +98,19 @@ export TF_VAR_is_dynamsoft_enabled=$IS_DYNAMSOFT_ENABLED
 export TF_VAR_dynamsoft_s3_zip_path=$DYNAMSOFT_S3_ZIP_PATH
 export TF_VAR_dynamsoft_url=$DYNAMSOFT_URL
 export TF_VAR_dynamsoft_product_keys=$DYNAMSOFT_PRODUCT_KEYS
+export TF_VAR_postgres_master_username="${POSTGRES_MASTER_USERNAME}"
+export TF_VAR_postgres_master_password="${POSTGRES_MASTER_PASSWORD}"
+export TF_VAR_restoring_aws_account_id=$PROD_ENV_ACCOUNT_ID
+
+if [[ -n "${RDS_MIN_CAPACITY}" ]]
+then
+  export TF_VAR_rds_min_capacity=$RDS_MIN_CAPACITY
+fi
+
+if [[ -n "${RDS_MAX_CAPACITY}" ]]
+then
+  export TF_VAR_rds_max_capacity=$RDS_MAX_CAPACITY
+fi
 
 if [[ -n "${CW_VIEWER_PROTOCOL_POLICY}" ]]
 then
@@ -105,5 +118,10 @@ then
 fi
 
 terraform init -upgrade -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
-terraform plan -out execution-plan
-terraform apply -auto-approve execution-plan
+
+if [ -z "${OUTPUT_ONLY}" ]; then 
+  terraform plan -out execution-plan
+  terraform apply -auto-approve execution-plan
+else 
+  terraform output -json > output.json
+fi

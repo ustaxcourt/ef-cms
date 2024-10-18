@@ -1,0 +1,16 @@
+version: '3.9'
+services:
+  dawson-db:
+    image: postgres
+    restart: always
+    container_name: dawson-db
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: example
+      PGDATA: /data/postgres
+    volumes:
+      - dawson-db:/data/postgres
+
+volumes:
+  dawson-db:
