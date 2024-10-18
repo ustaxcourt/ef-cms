@@ -5,88 +5,69 @@ import { execSync } from 'child_process';
 import { requireEnvVars } from 'shared/admin-tools/util';
 
 async function main() {
-  // const REGION = 'us-east-1';
-  // const sourceEnv = process.env.ENV!;
-  // const targetEnv = process.env.TARGET_ENV!;
-  // const targetAccessKeyId = process.env.TARGET_AWS_ACCESS_KEY_ID!;
-  // const targetSecretAccessKey = process.env.TARGET_AWS_SECRET_ACCESS_KEY!;
-  // const targetAccountId = process.env.TARGET_AWS_ACCOUNT_ID!;
-  // const targetSessionToken = process.env.TARGET_AWS_SESSION_TOKEN!;
+  const sourceEnv = process.env.ENV!;
+  const targetEnv = process.env.TARGET_ENV!;
+  const targetAccountId = process.env.TARGET_ACCOUNT_ID!;
+  const targetRoleArn =
+    process.env.TARGET_ROLE_ARN ??
+    'arn:aws:iam::515554424717:role/db_test_cody_zach_delete_me';
 
-  // requireEnvVars([
-  //   'ENV',
-  //   'TARGET_ENV',
-  //   'TARGET_AWS_ACCESS_KEY_ID',
-  //   'TARGET_AWS_SECRET_ACCESS_KEY',
-  //   'TARGET_AWS_ACCOUNT_ID',
-  //   'TARGET_AWS_SESSION_TOKEN',
-  // ]);
+  requireEnvVars(['ENV', 'TARGET_ENV', 'TARGET_ACCOUNT_ID', 'TARGET_ROLE_ARN']);
 
-  const stsClient = new STSClient({ region: 'us-east-1' });
-  const command = new AssumeRoleCommand({
-    RoleArn: 'arn:aws:iam::515554424717:role/db_test_cody_zach_delete_me',
-    RoleSessionName: 'DB_Restore_Cross_Account_Session',
+  const { targetAccessKeyId, targetSecretAccessKey, targetSessionToken } =
+    await getTargetAccountCredentials({ targetRoleArn });
+
+  const sourceRdsClient = new RDSClient({ region: 'us-east-1' });
+  const targetRdsClient = new RDSClient({
+    credentials: {
+      accessKeyId: targetAccessKeyId,
+      accountId: targetAccountId,
+      secretAccessKey: targetSecretAccessKey,
+      sessionToken: targetSessionToken,
+    },
+    region: 'us-east-1',
   });
-  const data = await stsClient.send(command);
-  console.log(
-    'Temporary Credentials:',
-    JSON.stringify(data.Credentials, null, 2),
-  );
 
-  // You can now use data.Credentials to make calls to services in the target account
-  // const { AccessKeyId, SecretAccessKey, SessionToken } = data.Credentials;
+  const {
+    dbName: sourceDbname,
+    host: sourceHost,
+    port: sourcePort,
+    username: sourceUsername,
+  } = await describeRDSInstance({
+    environment: sourceEnv,
+    rdsClient: sourceRdsClient,
+  });
 
-  // const sourceRdsClient = new RDSClient({ region: REGION });
-  // const targetRdsClient = new RDSClient({
-  //   credentials: {
-  //     accessKeyId: targetAccessKeyId,
-  //     accountId: targetAccountId,
-  //     secretAccessKey: targetSecretAccessKey,
-  //     sessionToken: targetSessionToken,
-  //   },
-  //   region: REGION,
-  // });
+  const {
+    dbName: targetDbname,
+    host: targetHost,
+    port: targetPort,
+    username: targetUsername,
+  } = await describeRDSInstance({
+    environment: targetEnv,
+    rdsClient: targetRdsClient,
+  });
 
-  // const {
-  //   dbName: sourceDbname,
-  //   host: sourceHost,
-  //   port: sourcePort,
-  //   username: sourceUsername,
-  // } = await describeRDSInstance({
-  //   environment: sourceEnv,
-  //   rdsClient: sourceRdsClient,
-  // });
+  const backUpFileName = 'dawson.dump';
+  await createDbBackup({
+    backUpFileName,
+    dbName: sourceDbname,
+    host: sourceHost,
+    port: sourcePort,
+    username: sourceUsername,
+  });
 
-  // const {
-  //   dbName: targetDbname,
-  //   host: targetHost,
-  //   port: targetPort,
-  //   username: targetUsername,
-  // } = await describeRDSInstance({
-  //   environment: targetEnv,
-  //   rdsClient: targetRdsClient,
-  // });
-
-  // const backUpFileName = 'dawson.dump';
-  // await createDbBackup({
-  //   backUpFileName,
-  //   dbName: sourceDbname,
-  //   host: sourceHost,
-  //   port: sourcePort,
-  //   username: sourceUsername,
-  // });
-
-  // await restoreFromBackup({
-  //   backUpFileName,
-  //   dbName: targetDbname,
-  //   host: targetHost,
-  //   port: targetPort,
-  //   targetAccessKeyId,
-  //   targetAccountId,
-  //   targetSecretAccessKey,
-  //   targetSessionToken,
-  //   username: targetUsername,
-  // });
+  await restoreFromBackup({
+    backUpFileName,
+    dbName: targetDbname,
+    host: targetHost,
+    port: targetPort,
+    targetAccessKeyId,
+    targetAccountId,
+    targetSecretAccessKey,
+    targetSessionToken,
+    username: targetUsername,
+  });
 }
 void main();
 
@@ -102,10 +83,6 @@ async function describeRDSInstance({
     DBClusterIdentifier: clusterIdentifier,
   });
   const describeResponse = await rdsClient.send(command);
-  console.log(
-    'RDS Instance Details:',
-    JSON.stringify(describeResponse, null, 2),
-  );
 
   const dbCluster = describeResponse.DBClusters?.[0];
 
@@ -220,4 +197,31 @@ async function restoreFromBackup({
   ].join(' ');
   const restoreOutput = execSync(restoreCommand, { encoding: 'utf-8' });
   console.log(restoreOutput);
+}
+
+async function getTargetAccountCredentials({
+  targetRoleArn,
+}: {
+  targetRoleArn: string;
+}) {
+  const stsClient = new STSClient({ region: 'us-east-1' });
+  const command = new AssumeRoleCommand({
+    RoleArn: targetRoleArn,
+    RoleSessionName: 'DB_Restore_Cross_Account_Session',
+  });
+  const data = await stsClient.send(command);
+
+  const targetAccessKeyId = data.Credentials?.AccessKeyId;
+  const targetSecretAccessKey = data.Credentials?.SecretAccessKey;
+  const targetSessionToken = data.Credentials?.SessionToken;
+
+  if (!targetAccessKeyId || !targetSecretAccessKey || !targetSessionToken) {
+    throw new Error('Could not get credentials of target role');
+  }
+
+  return {
+    targetAccessKeyId,
+    targetSecretAccessKey,
+    targetSessionToken,
+  };
 }
