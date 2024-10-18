@@ -26,7 +26,8 @@ async function main() {
     !targetPort ||
     !targetAccessKeyId ||
     !targetSecretAccessKey ||
-    !targetAccountId
+    !targetAccountId ||
+    !targetSessionToken
   ) {
     throw new Error('Missing environment variables');
   }
