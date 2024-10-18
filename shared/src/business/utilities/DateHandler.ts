@@ -85,6 +85,7 @@ export const combineISOandEasternTime = (
 
 /**
  *
+ * DO NOT USE THIS FUNCTION OUTSIDE OF THIS FILE. We do not want luxon to leak into the rest of the code.
  * @param {string} dateString a string representing a date
  * @param {string} inputFormat optional parameter containing hints on how to parse dateString
  * @returns {luxon} a luxon object
@@ -233,7 +234,7 @@ export const createISODateStringFromObject = options => {
  * @returns {string} a formatted date string
  */
 export const formatDateString = (
-  dateString: string,
+  dateString: string | undefined,
   formatArg: TimeFormatNames | TimeFormats = FORMATS.ISO,
 ): string => {
   if (!dateString) return '';
@@ -607,8 +608,6 @@ export const isValidReconciliationDate = dateString => {
   const dateInputValid = isValidISODate(dateString);
   const todayDate = formatNow(FORMATS.YYYYMMDD);
   const dateLessthanOrEqualToToday = dateString <= todayDate;
-  // console.log(`dateInputValid: ${dateInputValid}`);
-  // console.log(`dateLessthanOrEqualToToday: ${dateLessthanOrEqualToToday}`);
   return dateInputValid && dateLessthanOrEqualToToday;
 };
 

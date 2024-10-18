@@ -28,7 +28,7 @@ export const FilingPartiesForm = connect(
             </label>
             <textarea
               aria-describedby="filed-by-label"
-              className="usa-textarea height-8"
+              className="usa-textarea height-8 textarea-resize-vertical"
               id="filed-by"
               name="filedBy"
               value={form.filedBy || ''}

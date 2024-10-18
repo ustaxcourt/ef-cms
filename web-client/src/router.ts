@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-import { forEach, set } from 'lodash';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
 import qs from 'qs';
 import route from 'riot-route';
@@ -1130,14 +1129,9 @@ const router = {
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
         () => {
-          const trialSessionFilter = {};
-          forEach(route.query(), (value, key) => {
-            set(trialSessionFilter, key, value);
-          });
+          const queryParams = route.query();
           setPageTitle('Trial sessions');
-          return app.getSequence('gotoTrialSessionsSequence')({
-            query: trialSessionFilter,
-          });
+          return app.getSequence('gotoTrialSessionsSequence')(queryParams);
         },
       ),
     );

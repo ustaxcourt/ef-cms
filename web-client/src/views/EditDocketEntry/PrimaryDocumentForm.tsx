@@ -4,13 +4,9 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Inclusions } from '../PaperFiling/Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from '../PaperFiling/SecondaryDocumentForm';
-import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import {
-  docketEntryOnChange,
-  onInputChange,
-  reactSelectValue,
-} from '../../ustc-ui/Utils/documentTypeSelectHelper';
+import { reactSelectValue } from '../../ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
@@ -98,7 +94,9 @@ export const PrimaryDocumentForm = connect(
 
             <SelectSearch
               aria-describedby="document-type-label"
+              data-testid="primary-document-type-search"
               id="document-type"
+              isClearable={true}
               name="eventCode"
               options={internalTypesHelper.internalDocumentTypesForSelectSorted}
               value={reactSelectValue({
@@ -106,21 +104,19 @@ export const PrimaryDocumentForm = connect(
                   internalTypesHelper.internalDocumentTypesForSelectWithLegacySorted,
                 selectedEventCode: form.eventCode,
               })}
-              onChange={(inputValue, { action, name: inputName }) => {
-                docketEntryOnChange({
-                  action,
-                  inputName,
-                  inputValue,
-                  updateSequence: updateDocketEntryFormValueSequence,
-                  validateSequence: validateDocketEntrySequence,
+              onChange={inputValue => {
+                const value = inputValue?.value || '';
+                updateDocketEntryFormValueSequence({
+                  key: 'eventCode',
+                  value,
                 });
+                validateDocketEntrySequence();
                 return true;
               }}
-              onInputChange={(inputText, { action }) => {
-                onInputChange({
-                  action,
-                  inputText,
-                  updateSequence: updateScreenMetadataSequence,
+              onInputChange={inputText => {
+                updateScreenMetadataSequence({
+                  key: 'searchText',
+                  value: inputText,
                 });
               }}
             />
@@ -144,7 +140,9 @@ export const PrimaryDocumentForm = connect(
               </label>
               <SelectSearch
                 aria-describedby="secondary-document-type-label"
+                data-testid="secondary-document-type-search"
                 id="secondary-document-type"
+                isClearable={true}
                 name="secondaryDocument.eventCode"
                 options={
                   internalTypesHelper.internalDocumentTypesForSelectSorted
@@ -155,21 +153,18 @@ export const PrimaryDocumentForm = connect(
                   selectedEventCode:
                     form.secondaryDocument && form.secondaryDocument.eventCode,
                 })}
-                onChange={(inputValue, { action, name: inputName }) => {
-                  docketEntryOnChange({
-                    action,
-                    inputName,
-                    inputValue,
-                    updateSequence: updateDocketEntryFormValueSequence,
-                    validateSequence: validateDocketEntrySequence,
+                onChange={inputValue => {
+                  const value = inputValue?.value || '';
+                  updateDocketEntryFormValueSequence({
+                    key: 'secondaryDocument.eventCode',
+                    value,
                   });
-                  return true;
+                  validateDocketEntrySequence();
                 }}
-                onInputChange={(inputText, { action }) => {
-                  onInputChange({
-                    action,
-                    inputText,
-                    updateSequence: updateScreenMetadataSequence,
+                onInputChange={inputText => {
+                  updateScreenMetadataSequence({
+                    key: 'searchText',
+                    value: inputText,
                   });
                 }}
               />
@@ -196,7 +191,7 @@ export const PrimaryDocumentForm = connect(
             <textarea
               aria-describedby="additional-info-label"
               autoCapitalize="none"
-              className="usa-textarea height-8"
+              className="usa-textarea height-8 textarea-resize-vertical"
               id="additional-info"
               name="additionalInfo"
               value={form.additionalInfo || ''}
@@ -242,7 +237,7 @@ export const PrimaryDocumentForm = connect(
             <textarea
               aria-describedby="additional-info2-label"
               autoCapitalize="none"
-              className="usa-textarea height-8"
+              className="usa-textarea height-8 textarea-resize-vertical"
               id="additional-info2"
               name="additionalInfo2"
               value={form.additionalInfo2 || ''}

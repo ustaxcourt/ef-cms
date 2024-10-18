@@ -67,7 +67,7 @@ export const LocationInformationForm = connect(
                         <label
                           aria-label={value}
                           className="smaller-padding-right usa-radio__label"
-                          data-testid={`${key}-proceeding-label`}
+                          data-testid={`${value}-proceeding-label`}
                           htmlFor={`${key}-proceeding`}
                           id={`${key}-proceeding-label`}
                         >

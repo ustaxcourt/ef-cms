@@ -1,5 +1,5 @@
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
-import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import React from 'react';
 
 export const Forms = () => (
@@ -145,6 +145,7 @@ export const Forms = () => (
           </label>
           <SelectSearch
             id="options-searchable"
+            isClearable={true}
             options={[
               { label: 'Bananas (BA)', value: 'BA' },
               { label: 'Craps (C)', value: 'C' },

@@ -360,7 +360,9 @@ table,
   }
 }
 
-table.trial-sessions {
+.trial-sessions {
+  margin: 0;
+
   tr.trial-date {
     td {
       background-color: $color-primary-alt-lightest;
