@@ -135,6 +135,7 @@ module "rds" {
   min_capacity             = var.rds_min_capacity
   max_capacity             = var.rds_max_capacity
   delete_protection        = true
+  restoring_aws_account_id = var.restoring_aws_account_id
 
   providers = {
     aws           = aws.us-east-1

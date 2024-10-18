@@ -29,11 +29,16 @@ variable "kms_key_id_replica" {
 }
 
 variable "max_capacity" {
-  type = number
+  type    = number
   default = 1.0
 }
 
 variable "min_capacity" {
-  type = number
+  type    = number
   default = 0.5
 }
+
+variable "restoring_aws_account_id" {
+  type = string
+}
+
