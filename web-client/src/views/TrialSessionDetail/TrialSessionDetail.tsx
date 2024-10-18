@@ -82,6 +82,7 @@ export const TrialSessionDetail = connect(
               {trialSessionDetailsHelper.showSetCalendarButton && (
                 <Button
                   className="tab-right-button ustc-ui-tabs ustc-ui-tabs--right-button-container"
+                  data-testId="set-calendar-button"
                   icon="calendar-check"
                   id="set-calendar-button"
                   onClick={() => openSetCalendarModalSequence()}
