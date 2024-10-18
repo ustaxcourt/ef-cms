@@ -1,5 +1,0 @@
-
-variable "environment" {
-  type = string
-}
-
