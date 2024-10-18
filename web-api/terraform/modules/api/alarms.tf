@@ -5,7 +5,7 @@ resource "aws_cloudwatch_log_metric_filter" "pdf_parse_error_filter" {
   pattern        = "\"Failed to parse PDF\""
 
   metric_transformation {
-    name      = "PDFParseErrors"
+    name      = "PDFParseErrors_${var.environment}_${var.current_color}"
     namespace = "EFCMS"
     value     = "1"
   }
