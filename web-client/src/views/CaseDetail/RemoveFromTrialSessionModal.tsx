@@ -46,7 +46,7 @@ export const RemoveFromTrialSessionModal = connect(
               </legend>
               <textarea
                 aria-label="remove from trial session"
-                className="usa-textarea"
+                className="usa-textarea textarea-resize-vertical"
                 data-testid="remove-from-trial-session-disposition-textarea"
                 id="disposition"
                 maxLength={120}
