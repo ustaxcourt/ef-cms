@@ -3,16 +3,22 @@ import {
   CaseInventory,
   CustomCaseReportFilters,
   CustomCaseReportSearchAfter,
-  GetCustomCaseReportResponse,
+  getCustomCaseReportInteractor,
 } from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
-import { FORMATS } from '@shared/business/utilities/DateHandler';
+import {
+  FORMATS,
+  formatDateString,
+  formatNow,
+} from '@shared/business/utilities/DateHandler';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { applicationContext } from '@web-api/applicationContext';
+import { getNotificationGateway } from '@web-api/notifications/notificationClient/getNotificationGateway';
+import { saveFileAndGenerateUrl } from '@web-api/business/useCaseHelper/saveFileAndGenerateUrl';
 import { stringify } from 'csv-stringify/sync';
 
 export type CustomCaseReportCsvRequest = CustomCaseReportFilters & {
@@ -21,7 +27,6 @@ export type CustomCaseReportCsvRequest = CustomCaseReportFilters & {
 };
 
 export const createCsvCustomCaseReportFileInteractor = async (
-  applicationContext: ServerApplicationContext,
   {
     caseStatuses,
     caseTypes,
@@ -51,7 +56,7 @@ export const createCsvCustomCaseReportFileInteractor = async (
   const WAIT_TIME = 1500;
   const cases: CaseInventory[] = [];
 
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
+  await getNotificationGateway().sendNotificationToUser({
     applicationContext,
     clientConnectionId,
     message: {
@@ -64,35 +69,33 @@ export const createCsvCustomCaseReportFileInteractor = async (
 
   for (let index = 0; index < loops; index++) {
     if (index && index % 10 === 0) {
+      // Need to throttle every 10th call
       await new Promise(resolve => {
-        applicationContext.setTimeout(() => resolve(null), WAIT_TIME);
+        setTimeout(() => resolve(null), WAIT_TIME);
       });
     }
 
-    const iterationData: GetCustomCaseReportResponse = await applicationContext
-      .getUseCases()
-      .getCustomCaseReportInteractor(
-        applicationContext,
-        {
-          caseStatuses,
-          caseTypes,
-          endDate,
-          filingMethod,
-          highPriority,
-          judges,
-          pageSize,
-          preferredTrialCities,
-          procedureType,
-          searchAfter,
-          startDate,
-        },
-        authorizedUser,
-      );
+    const iterationData = await getCustomCaseReportInteractor(
+      {
+        caseStatuses,
+        caseTypes,
+        endDate,
+        filingMethod,
+        highPriority,
+        judges,
+        pageSize,
+        preferredTrialCities,
+        procedureType,
+        searchAfter,
+        startDate,
+      },
+      authorizedUser,
+    );
 
     cases.push(...iterationData.foundCases);
     searchAfter = iterationData.lastCaseId;
 
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
+    await getNotificationGateway().sendNotificationToUser({
       applicationContext,
       clientConnectionId,
       message: {
@@ -108,29 +111,23 @@ export const createCsvCustomCaseReportFileInteractor = async (
     ...aCase,
     calendaringHighPriority: aCase.highPriority ? 'yes' : '',
     caseCaption: Case.getCaseTitle(aCase.caseCaption),
-    receivedAt: applicationContext
-      .getUtilities()
-      .formatDateString(aCase.receivedAt, FORMATS.MMDDYY),
+    receivedAt: formatDateString(aCase.receivedAt, FORMATS.MMDDYY),
   }));
 
   const csvString = getCsvString(formattedCases);
   const csvBuffer = Buffer.from(csvString);
 
-  const today = applicationContext
-    .getUtilities()
-    .formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
+  const today = formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
   const fileName = 'Custom Case Report - ' + today;
 
-  const fileInfo = await applicationContext
-    .getUseCaseHelpers()
-    .saveFileAndGenerateUrl({
-      applicationContext,
-      contentType: 'text/csv',
-      file: csvBuffer,
-      useTempBucket: true,
-    });
+  const fileInfo = await saveFileAndGenerateUrl({
+    applicationContext,
+    contentType: 'text/csv',
+    file: csvBuffer,
+    useTempBucket: true,
+  });
 
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
+  await getNotificationGateway().sendNotificationToUser({
     applicationContext,
     clientConnectionId,
     message: {

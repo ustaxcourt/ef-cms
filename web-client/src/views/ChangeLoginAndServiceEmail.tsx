@@ -2,7 +2,6 @@ import { BigHeader } from './BigHeader';
 import { Button } from '../ustc-ui/Button/Button';
 import { ErrorNotification } from './ErrorNotification';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
-import { VerifyNewEmailModal } from './MyAccount/VerifyNewEmailModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -12,23 +11,23 @@ export const ChangeLoginAndServiceEmail = connect(
   {
     form: state.form,
     navigateToPathSequence: sequences.navigateToPathSequence,
-    showModal: state.modal.showModal,
     submitChangeLoginAndServiceEmailSequence:
       sequences.submitChangeLoginAndServiceEmailSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     user: state.user,
     validateChangeLoginAndServiceEmailSequence:
       sequences.validateChangeLoginAndServiceEmailSequence,
+    validateEmailConfirmationFormSequence:
+      sequences.validateEmailConfirmationFormSequence,
     validationErrors: state.validationErrors,
   },
   function ChangeLoginAndServiceEmail({
     form,
     navigateToPathSequence,
-    showModal,
     submitChangeLoginAndServiceEmailSequence,
     updateFormValueSequence,
     user,
-    validateChangeLoginAndServiceEmailSequence,
+    validateEmailConfirmationFormSequence,
     validationErrors,
   }) {
     return (
@@ -36,12 +35,10 @@ export const ChangeLoginAndServiceEmail = connect(
         <BigHeader text={'Change Login & Service Email Address'} />
         <section className="usa-section grid-container">
           <ErrorNotification />
-
           <p>
             This is the email you will use to log in to the system and where you
             will receive service.
           </p>
-
           <div className="blue-container margin-bottom-5">
             <div className="grid-row margin-bottom-6">
               <div className="desktop:grid-col-3">
@@ -61,7 +58,7 @@ export const ChangeLoginAndServiceEmail = connect(
             </div>
             <div>
               <h4>Change Login & Service Email</h4>
-              <FormGroup errorText={validationErrors.email}>
+              <FormGroup errorText={validationErrors?.email}>
                 <label className="usa-label" htmlFor="email">
                   New email address
                 </label>
@@ -73,7 +70,11 @@ export const ChangeLoginAndServiceEmail = connect(
                   name="email"
                   type="text"
                   value={form.email || ''}
-                  onBlur={() => validateChangeLoginAndServiceEmailSequence()}
+                  onBlur={e => {
+                    validateEmailConfirmationFormSequence({
+                      field: e.target.name,
+                    });
+                  }}
                   onChange={e =>
                     updateFormValueSequence({
                       key: e.target.name,
@@ -82,7 +83,7 @@ export const ChangeLoginAndServiceEmail = connect(
                   }
                 />
               </FormGroup>
-              <FormGroup errorText={validationErrors.confirmEmail}>
+              <FormGroup errorText={validationErrors?.confirmEmail}>
                 <label className="usa-label" htmlFor="confirm-email">
                   Re-enter new email address
                 </label>
@@ -94,13 +95,17 @@ export const ChangeLoginAndServiceEmail = connect(
                   name="confirmEmail"
                   type="text"
                   value={form.confirmEmail || ''}
-                  onBlur={() => validateChangeLoginAndServiceEmailSequence()}
-                  onChange={e =>
+                  onBlur={e => {
+                    validateEmailConfirmationFormSequence({
+                      field: e.target.name,
+                    });
+                  }}
+                  onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
                       value: e.target.value,
-                    })
-                  }
+                    });
+                  }}
                 />
               </FormGroup>
             </div>
@@ -122,8 +127,6 @@ export const ChangeLoginAndServiceEmail = connect(
             </div>
           </div>
         </section>
-
-        {showModal === 'VerifyNewEmailModal' && <VerifyNewEmailModal />}
       </React.Fragment>
     );
   },

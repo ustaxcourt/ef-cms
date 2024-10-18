@@ -1,4 +1,7 @@
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import { OpenPractitionerCaseListPdfModal } from './OpenPractitionerCaseListPdfModal';
+import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
+import { PractitionerCaseList } from './PractitionerCaseList';
 import { PractitionerDetails } from './PractitionerDetails';
 import { PractitionerDocumentation } from './PractitionerDocumentation';
 import { PractitionerUserHeader } from './PractitionerUserHeader';
@@ -11,17 +14,63 @@ import React from 'react';
 
 export const PractitionerInformation = connect(
   {
+    gotoPrintPractitionerCasesSequence:
+      sequences.gotoPrintPractitionerCasesSequence,
     onPractitionerInformationTabSelectSequence:
       sequences.onPractitionerInformationTabSelectSequence,
-    showDocumentationTab:
-      state.practitionerInformationHelper.showDocumentationTab,
+    practitionerDetailHelper: state.practitionerDetailHelper,
+    practitionerInformationHelper: state.practitionerInformationHelper,
+    setPractitionerClosedCasesPageSequence:
+      sequences.setPractitionerClosedCasesPageSequence,
+    setPractitionerOpenCasesPageSequence:
+      sequences.setPractitionerOpenCasesPageSequence,
     showModal: state.modal.showModal,
   },
   function PractitionerInformation({
+    gotoPrintPractitionerCasesSequence,
     onPractitionerInformationTabSelectSequence,
-    showDocumentationTab,
+    practitionerInformationHelper,
+    setPractitionerClosedCasesPageSequence,
+    setPractitionerOpenCasesPageSequence,
     showModal,
   }) {
+    const numOpenCases = practitionerInformationHelper.openCasesTotal || 0;
+    const numClosedCases = practitionerInformationHelper.closedCasesTotal || 0;
+
+    const openPagesPaginator = () => {
+      return (
+        practitionerInformationHelper.showOpenCasesPagination && (
+          <Paginator
+            currentPageIndex={practitionerInformationHelper.openCasesPageNumber}
+            totalPages={practitionerInformationHelper.totalOpenCasesPages}
+            onPageChange={selectedPage => {
+              setPractitionerOpenCasesPageSequence({
+                pageNumber: selectedPage,
+              });
+            }}
+          />
+        )
+      );
+    };
+
+    const closedPagesPaginator = () => {
+      return (
+        practitionerInformationHelper.showClosedCasesPagination && (
+          <Paginator
+            currentPageIndex={
+              practitionerInformationHelper.closedCasesPageNumber
+            }
+            totalPages={practitionerInformationHelper.totalClosedCasesPages}
+            onPageChange={selectedPage => {
+              setPractitionerClosedCasesPageSequence({
+                pageNumber: selectedPage,
+              });
+            }}
+          />
+        )
+      );
+    };
+
     return (
       <React.Fragment>
         <PractitionerUserHeader />
@@ -47,14 +96,58 @@ export const PractitionerInformation = connect(
               });
             }}
           >
+            {practitionerInformationHelper.showPrintCaseListLink && (
+              <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
+                <Button
+                  link
+                  className="margin-top-1"
+                  data-testid="print-practitioner-case-list"
+                  icon="print"
+                  overrideMargin={true}
+                  onClick={() => {
+                    gotoPrintPractitionerCasesSequence({
+                      userId: practitionerInformationHelper.userId,
+                    });
+                  }}
+                >
+                  Print case list
+                </Button>
+              </div>
+            )}
             <Tab tabName="practitioner-details" title={'Details'}>
               <PractitionerDetails />
             </Tab>
-            {showDocumentationTab && (
+            {practitionerInformationHelper.showDocumentationTab && (
               <Tab tabName="practitioner-documentation" title={'Documentation'}>
                 <PractitionerDocumentation />
               </Tab>
             )}
+            <Tab
+              tabName="practitioner-open-cases"
+              title={`Open Cases (${numOpenCases})`}
+            >
+              <div className="tab-content-with-top-margin">
+                {openPagesPaginator()}
+                <PractitionerCaseList
+                  caseType={'open'}
+                  cases={practitionerInformationHelper.openCasesToDisplay}
+                />
+                {openPagesPaginator()}
+              </div>
+            </Tab>
+            <Tab
+              tabName="practitioner-closed-cases"
+              title={`Closed Cases (${numClosedCases})`}
+            >
+              <div className="tab-content-with-top-margin">
+                {closedPagesPaginator()}
+                <PractitionerCaseList
+                  caseType={'closed'}
+                  cases={practitionerInformationHelper.closedCasesToDisplay}
+                />
+                {closedPagesPaginator()}
+              </div>
+            </Tab>
           </Tabs>
         </section>
 

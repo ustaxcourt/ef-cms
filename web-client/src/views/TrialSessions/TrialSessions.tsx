@@ -1,5 +1,6 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
+import { CreateTermModal } from '@web-client/views/CreateTermModal';
 import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
@@ -20,16 +21,20 @@ import React from 'react';
 
 export const TrialSessions = connect(
   {
+    openCreateTermModalSequence: sequences.openCreateTermModalSequence,
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
     resetTrialSessionsFiltersSequence:
       sequences.resetTrialSessionsFiltersSequence,
+    showModal: state.modal.showModal,
     trialSessionsHelper: state.trialSessionsHelper,
     trialSessionsPageFilters: state.trialSessionsPage.filters,
   },
   function TrialSessions({
+    openCreateTermModalSequence,
     openTrialSessionPlanningModalSequence,
     resetTrialSessionsFiltersSequence,
+    showModal,
     trialSessionsHelper,
     trialSessionsPageFilters,
   }) {
@@ -41,10 +46,24 @@ export const TrialSessions = connect(
           <ErrorNotification />
           <div className="display-flex flex-justify-end flex-align-center flex-wrap gap-205">
             <div>
+              {trialSessionsHelper.showCreateTermButton && (
+                <Button
+                  link
+                  noMargin
+                  className="margin-right-0 padding-0"
+                  data-testid="open-create-term-modal-button"
+                  icon={['far', 'calendar']}
+                  onClick={() => openCreateTermModalSequence()}
+                >
+                  Create Term
+                </Button>
+              )}
+            </div>
+            <div>
               <Button
                 link
                 noMargin
-                className="margin-right-0"
+                className="margin-right-0 padding-0"
                 icon="print"
                 onClick={() => openTrialSessionPlanningModalSequence()}
               >
@@ -103,6 +122,7 @@ export const TrialSessions = connect(
             </Tab>
           </Tabs>
         </section>
+        {showModal === 'CreateTermModal' && <CreateTermModal />}
       </>
     );
   },

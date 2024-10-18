@@ -237,17 +237,10 @@ export class Case extends JoiValidationEntity {
   }
 
   static docketNumberSort(docketNumberA, docketNumberB) {
-    const aSplit = docketNumberA.split('-');
-    const bSplit = docketNumberB.split('-');
-
-    if (aSplit[1] !== bSplit[1]) {
-      // compare years if they aren't the same;
-      // compare as strings, because they *might* have suffix
-      return aSplit[1].localeCompare(bSplit[1]);
-    } else {
-      // compare index if years are the same, compare as integers
-      return +aSplit[0] - +bSplit[0];
-    }
+    return (
+      (Case.getSortableDocketNumber(docketNumberA) || 0) -
+      (Case.getSortableDocketNumber(docketNumberB) || 0)
+    );
   }
 
   /**
@@ -534,7 +527,7 @@ export class Case extends JoiValidationEntity {
     mailingDate: JoiValidationConstants.STRING.max(25)
       .when('isPaper', {
         is: true,
-        otherwise: joi.allow(null).optional(),
+        otherwise: joi.optional().allow(null),
         then: joi.required(),
       })
       .description('Date that petition was mailed to the court.')
@@ -617,7 +610,7 @@ export class Case extends JoiValidationEntity {
       'petitionPaymentStatus',
       {
         is: PAYMENT_STATUS.WAIVED,
-        otherwise: joi.allow(null).optional(),
+        otherwise: joi.optional().allow(null),
         then: JoiValidationConstants.ISO_DATE.max('now').required(),
       },
     )

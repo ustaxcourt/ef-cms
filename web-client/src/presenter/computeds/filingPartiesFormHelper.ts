@@ -15,11 +15,9 @@ export const filingPartiesFormHelper = (
   const { AMENDMENT_EVENT_CODES, AMICUS_BRIEF_EVENT_CODE, PARTY_TYPES } =
     applicationContext.getConstants();
 
-  const partyValidationError =
+  const partyValidationCheckboxError =
     validationErrors &&
-    (validationErrors.filers ||
-      validationErrors.partyIrsPractitioner ||
-      validationErrors.otherFilingParty);
+    (validationErrors.filers || validationErrors.partyIrsPractitioner);
 
   const isServed = DocketEntry.isServed(form);
 
@@ -40,7 +38,7 @@ export const filingPartiesFormHelper = (
   return {
     isServed,
     noMargin: isObjectionType,
-    partyValidationError,
+    partyValidationCheckboxError,
     showFilingPartiesAsCheckboxes,
     showSecondaryParty,
   };
