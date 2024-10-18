@@ -1,8 +1,11 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { ClientApplicationContext } from '@web-client/applicationContext';
+import {
+  EXTERNAL_OBJECTION_DOCUMENT_TYPES,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
 import { GENERATION_TYPES } from '@web-client/getConstants';
 import { Get } from 'cerebral';
-import { ROLES } from '@shared/business/entities/EntityConstants';
 import { getFilerParties } from './getFilerParties';
 import { getSupportingDocumentTypeList } from './addDocketEntryHelper';
 import { showGenerationType } from '@web-client/presenter/actions/setDefaultGenerationTypeAction';
@@ -67,7 +70,6 @@ export const fileDocumentHelper = (
 
   const { primaryDocument, secondaryDocument } = getPrimarySecondaryDocuments({
     AMENDMENT_EVENT_CODES,
-    CATEGORY_MAP,
     form,
   });
   secondaryDocument.certificateOfServiceDateFormatted =
@@ -194,32 +196,25 @@ const getShowSecondaryProperties = ({ caseDetail, form, PARTY_TYPES }) => {
   };
 };
 
-const getPrimarySecondaryDocuments = ({
-  AMENDMENT_EVENT_CODES,
-  CATEGORY_MAP,
-  form,
-}) => {
-  const objectionDocumentTypes = [
-    ...CATEGORY_MAP['Motion'].map(entry => entry.documentType),
-    'Motion to Withdraw Counsel (filed by petitioner)',
-    'Motion to Withdraw as Counsel',
-    'Application to Take Deposition',
-  ];
-
+const getPrimarySecondaryDocuments = ({ AMENDMENT_EVENT_CODES, form }) => {
   const primarySecondaryDocuments = {
     primaryDocument: {
       showObjection:
-        objectionDocumentTypes.includes(form.documentType) ||
+        EXTERNAL_OBJECTION_DOCUMENT_TYPES.includes(form.documentType) ||
         (AMENDMENT_EVENT_CODES.includes(form.eventCode) &&
-          objectionDocumentTypes.includes(form.previousDocument?.documentType)),
+          EXTERNAL_OBJECTION_DOCUMENT_TYPES.includes(
+            form.previousDocument?.documentType,
+          )),
     },
     secondaryDocument: {
       showObjection:
         form.secondaryDocument &&
         form.secondaryDocumentFile &&
-        (objectionDocumentTypes.includes(form.secondaryDocument.documentType) ||
+        (EXTERNAL_OBJECTION_DOCUMENT_TYPES.has(
+          form.secondaryDocument.documentType,
+        ) ||
           (AMENDMENT_EVENT_CODES.includes(form.secondaryDocument.eventCode) &&
-            objectionDocumentTypes.includes(
+            EXTERNAL_OBJECTION_DOCUMENT_TYPES.has(
               form.secondaryDocument.previousDocument?.documentType,
             ))),
     },

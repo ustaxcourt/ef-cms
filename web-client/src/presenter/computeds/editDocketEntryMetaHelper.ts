@@ -4,6 +4,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { INTERNAL_OBJECTION_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
 export const editDocketEntryMetaHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -15,15 +16,6 @@ export const editDocketEntryMetaHelper = (
 
   const { AMENDMENT_EVENT_CODES, INTERNAL_CATEGORY_MAP } =
     applicationContext.getConstants();
-
-  const objectionDocumentTypes = [
-    ...INTERNAL_CATEGORY_MAP['Motion'].map(entry => {
-      return entry.documentType;
-    }),
-    'Motion to Withdraw Counsel (filed by petitioner)',
-    'Motion to Withdraw as Counsel',
-    'Application to Take Deposition',
-  ];
 
   let categoryInformation;
   find(
@@ -49,13 +41,17 @@ export const editDocketEntryMetaHelper = (
     .getUtilities()
     .formatDateString(strickenAt, 'MMDDYYYY');
 
+  const showObjection =
+    INTERNAL_OBJECTION_DOCUMENT_TYPES.has(form.documentType) ||
+    (AMENDMENT_EVENT_CODES.includes(form.eventCode) &&
+      INTERNAL_OBJECTION_DOCUMENT_TYPES.has(
+        form.previousDocument?.documentType,
+      ));
+
   return {
     isStricken,
     primary: optionsForCategory,
-    showObjection:
-      objectionDocumentTypes.includes(form.documentType) ||
-      (AMENDMENT_EVENT_CODES.includes(form.eventCode) &&
-        objectionDocumentTypes.includes(form.previousDocument?.documentType)),
+    showObjection,
     strickenAtFormatted,
     strickenBy,
   };
