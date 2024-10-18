@@ -40,9 +40,6 @@ export async function createLock({
     });
 }
 
-/**
- *
- */
 export async function removeLock({
   applicationContext,
   identifiers,

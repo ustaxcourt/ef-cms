@@ -1,3 +1,4 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { batchDelete, query } from '../../dynamodbClientService';
 
 /**
@@ -12,7 +13,7 @@ export const deleteCaseTrialSortMappingRecords = async ({
   applicationContext,
   docketNumber,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   docketNumber: string;
 }) => {
   const records = await query({
