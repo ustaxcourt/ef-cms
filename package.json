@@ -46,7 +46,7 @@
     "@joi/date": "2.1.1",
     "@opensearch-project/opensearch": "2.12.0",
     "@sparticuz/chromium": "127.0.0",
-    "@uswds/uswds": "3.9.0",
+    "@uswds/uswds": "3.7.1",
     "aws-lambda": "1.0.7",
     "aws-xray-sdk": "3.10.1",
     "axios": "1.7.7",
