@@ -1,11 +1,4 @@
 import { find } from 'lodash';
-import { formattedTrialSessions as formattedTrialSessionsComputed } from '../../src/presenter/computeds/formattedTrialSessions';
-import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../../src/withAppContext';
-
-const formattedTrialSessions = withAppContextDecorator(
-  formattedTrialSessionsComputed,
-);
 
 export const docketClerkViewsTrialSessionList = (
   cerebralTest,
@@ -15,12 +8,11 @@ export const docketClerkViewsTrialSessionList = (
     await cerebralTest.runSequence('gotoTrialSessionsSequence');
     expect(cerebralTest.getState('currentPage')).toEqual('TrialSessions');
 
-    const formatted = runCompute(formattedTrialSessions, {
-      state: cerebralTest.getState(),
-    });
-    expect(formatted.formattedSessions.length).toBeGreaterThan(0);
+    const { trialSessions } = cerebralTest.getState().trialSessionsPage;
 
-    const trialSession = find(formatted.sessionsByTerm, {
+    expect(trialSessions.length).toBeGreaterThan(0);
+
+    const trialSession = find(trialSessions, {
       trialSessionId: cerebralTest.lastCreatedTrialSessionId,
     });
 

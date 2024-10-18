@@ -1,13 +1,13 @@
+import { createTrialSession } from '../../../../helpers/trialSession/create-trial-session';
 import { faker } from '@faker-js/faker';
 import { loginAsPetitionsClerk1 } from '../../../../helpers/authentication/login-as-helpers';
-import { petitionsClerkCreatesTrialSession } from '../../../../helpers/trialSession/petitionsclerk-creates-trial-session';
 
 faker.seed(faker.number.int());
 
 describe('trial sessions', () => {
   it('verify the auto fill functionality for chambers phone number works when selecting a judge', () => {
     loginAsPetitionsClerk1();
-    petitionsClerkCreatesTrialSession().then(trialSessionId => {
+    createTrialSession().then(({ trialSessionId }) => {
       cy.get('[data-testid=new-trial-sessions-tab]').click();
       cy.get(`[data-testid=trial-location-link-${trialSessionId}]`).click();
 
