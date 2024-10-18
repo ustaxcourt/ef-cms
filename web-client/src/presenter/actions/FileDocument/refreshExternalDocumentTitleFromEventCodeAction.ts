@@ -32,7 +32,7 @@ export const refreshExternalDocumentTitleFromEventCodeAction = ({
 
     const categoryInformation =
       internalAndExternalFilingEventForCategory.find(eventCodeMatches);
-    store.set(state.form.documentTitle, categoryInformation.documentTitle);
+    store.set(state.form.documentTitle, categoryInformation?.documentTitle);
   }
 
   const secondaryDocument = get(state.form.secondaryDocument);
@@ -52,7 +52,7 @@ export const refreshExternalDocumentTitleFromEventCodeAction = ({
 
     store.set(
       state.form.secondaryDocument.documentTitle,
-      categoryInformation.documentTitle,
+      categoryInformation?.documentTitle,
     );
   }
 };
