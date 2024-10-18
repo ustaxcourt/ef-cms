@@ -5,7 +5,7 @@ import { petitionsClerkCreatesTrialSession } from '../../../../helpers/trialSess
 faker.seed(faker.number.int());
 
 describe('trial sessions', () => {
-  it('verify the auto fill functionality for chambers phone number works when selectin a judge', () => {
+  it('verify the auto fill functionality for chambers phone number works when selecting a judge', () => {
     loginAsPetitionsClerk1();
     petitionsClerkCreatesTrialSession().then(trialSessionId => {
       cy.get('[data-testid=new-trial-sessions-tab]').click();

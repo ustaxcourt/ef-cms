@@ -45,7 +45,7 @@ export const EditCaseDetails = connect(
               <h4 className="margin-bottom-2">IRS Notice/Case</h4>
               <IRSNotice
                 shouldStartWithBlankStatistic={false}
-                validationName="validateCaseDetailsSequence"
+                validationSequence={validateCaseDetailsSequence}
               />
 
               <ProcedureType
