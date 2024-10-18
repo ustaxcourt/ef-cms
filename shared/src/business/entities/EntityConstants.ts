@@ -8,10 +8,26 @@ import internalFilingEventsJson from '../../tools/internalFilingEvents.json';
 
 export const DEBOUNCE_TIME_MILLISECONDS = 500;
 
+interface FilingEvent {
+  documentTitle: string;
+  documentType: string;
+  category: string;
+  eventCode: string;
+  scenario: string;
+  labelPreviousDocument: string;
+  labelFreeText: string;
+  labelFreeText2?: string;
+  ordinalField: string;
+}
+
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
 // a number (100 to 99999) followed by a - and a 2 digit year
-export const DOCUMENT_INTERNAL_CATEGORIES_MAP = internalFilingEventsJson;
-export const DOCUMENT_EXTERNAL_CATEGORIES_MAP = externalFilingEventsJson;
+export const DOCUMENT_INTERNAL_CATEGORIES_MAP: {
+  [key: string]: FilingEvent[];
+} = internalFilingEventsJson;
+export const DOCUMENT_EXTERNAL_CATEGORIES_MAP: {
+  [key: string]: FilingEvent[];
+} = externalFilingEventsJson;
 export const COURT_ISSUED_EVENT_CODES = courtIssuedEventCodesJson;
 
 export const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
@@ -547,7 +563,7 @@ export const CONTACT_CHANGE_DOCUMENT_TYPES = flatten(
   .filter((d: Record<string, any>) => d.isContactChange)
   .map(d => d.documentType);
 
-export const TRACKED_DOCUMENT_TYPES = {
+const TRACKED_DOCUMENT_TYPES = {
   application: {
     category: 'Application',
   },
@@ -563,6 +579,30 @@ export const TRACKED_DOCUMENT_TYPES = {
     eventCode: 'PSDE',
   },
 };
+
+const isTrackedDocumentCategory = doc =>
+  [
+    TRACKED_DOCUMENT_TYPES.application.category,
+    TRACKED_DOCUMENT_TYPES.motion.category,
+  ].includes(doc.category);
+
+const getTrackedEventCodes = documentsArray =>
+  documentsArray.filter(isTrackedDocumentCategory).map(doc => doc.eventCode);
+
+const EXTERNAL_TRACKED_DOCUMENT_EVENT_CODES = getTrackedEventCodes(
+  EXTERNAL_DOCUMENTS_ARRAY,
+);
+const INTERNAL_TRACKED_DOCUMENT_EVENT_CODES = getTrackedEventCodes(
+  INTERNAL_DOCUMENTS_ARRAY,
+);
+export const TRACKED_DOCUMENT_TYPES_EVENT_CODES = union(
+  EXTERNAL_TRACKED_DOCUMENT_EVENT_CODES,
+  INTERNAL_TRACKED_DOCUMENT_EVENT_CODES,
+  [
+    TRACKED_DOCUMENT_TYPES.proposedStipulatedDecision.eventCode,
+    TRACKED_DOCUMENT_TYPES.orderToShowCause.eventCode,
+  ],
+);
 
 export const SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES = flatten([
   ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
@@ -591,28 +631,6 @@ export const STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST = uniq(
   [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
     .filter((doc: Record<string, any>) => doc.allowStatusReportOrder)
     .map(x => x.eventCode),
-);
-
-export const EXTERNAL_TRACKED_DOCUMENT_EVENT_CODES =
-  EXTERNAL_DOCUMENTS_ARRAY.filter(
-    doc =>
-      doc.category === TRACKED_DOCUMENT_TYPES.application.category ||
-      doc.category === TRACKED_DOCUMENT_TYPES.motion.category,
-  ).map(x => x.eventCode);
-export const INTERNAL_TRACKED_DOCUMENT_EVENT_CODES =
-  INTERNAL_DOCUMENTS_ARRAY.filter(
-    doc =>
-      doc.category === TRACKED_DOCUMENT_TYPES.application.category ||
-      doc.category === TRACKED_DOCUMENT_TYPES.motion.category,
-  ).map(x => x.eventCode);
-
-export const TRACKED_DOCUMENT_TYPES_EVENT_CODES = union(
-  EXTERNAL_TRACKED_DOCUMENT_EVENT_CODES,
-  INTERNAL_TRACKED_DOCUMENT_EVENT_CODES,
-  [
-    TRACKED_DOCUMENT_TYPES.proposedStipulatedDecision.eventCode,
-    TRACKED_DOCUMENT_TYPES.orderToShowCause.eventCode,
-  ],
 );
 
 export const DOCKET_RECORD_FILTER_OPTIONS = {

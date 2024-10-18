@@ -66,11 +66,11 @@ export class SecondaryDocumentInformationFactory extends JoiValidationEntity {
         this.category === 'Motion' ||
         includes(
           [
-            'Motion to Withdraw Counsel',
-            'Motion to Withdraw As Counsel',
-            'Application to Take Deposition',
+            'motion to withdraw counsel',
+            'motion to withdraw as counsel',
+            'application to take deposition',
           ],
-          this.documentType,
+          this.documentType.toLowerCase(),
         )
       ) {
         makeRequired('objections');
