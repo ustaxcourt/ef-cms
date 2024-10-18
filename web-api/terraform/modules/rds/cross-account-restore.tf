@@ -1,5 +1,5 @@
 resource "aws_iam_role" "cross_account_restore_role" {
-  name = "cross_account_restore_role_${environment}"
+  name = "cross_account_restore_role_${var.environment}"
 
   assume_role_policy = <<EOF
 {

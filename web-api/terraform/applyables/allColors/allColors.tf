@@ -142,9 +142,3 @@ module "rds" {
     aws.us-west-1 = aws.us-west-1
   }
 }
-
-
-module "rds_users" {
-  source      = "../../modules/rds-users"
-  environment = var.environment
-}
