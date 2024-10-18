@@ -31,7 +31,7 @@ export const InPersonProceedingForm = connect(
           <input
             autoCapitalize="none"
             className="usa-input"
-            data-testid="courthouse-name"
+            data-testid="trial-session-courthouse-name"
             id="courthouse-name"
             name="courthouseName"
             type="text"
@@ -52,6 +52,7 @@ export const InPersonProceedingForm = connect(
           <input
             autoCapitalize="none"
             className="usa-input"
+            data-testid="trial-session-address-1-input"
             id="address1"
             name="address1"
             type="text"
@@ -94,7 +95,7 @@ export const InPersonProceedingForm = connect(
               <input
                 autoCapitalize="none"
                 className="usa-input usa-input--inline"
-                data-testid="city"
+                data-testid="trial-session-city-input"
                 id="city"
                 name="city"
                 type="text"
@@ -113,7 +114,7 @@ export const InPersonProceedingForm = connect(
               </label>
               <select
                 className="usa-select"
-                data-testid="state"
+                data-testid="trial-session-state-select"
                 id="state"
                 name="state"
                 value={form.state || ''}
@@ -155,7 +156,7 @@ export const InPersonProceedingForm = connect(
             aria-label="zip code"
             autoCapitalize="none"
             className="usa-input max-width-200 usa-input--medium"
-            data-testid="postal-code"
+            data-testid="trial-session-postal-code-input"
             id="postal-code"
             name="postalCode"
             type="text"
