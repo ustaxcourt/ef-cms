@@ -10,7 +10,6 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
-import { omit } from 'lodash';
 
 describe('getTrialSessionsInteractor', () => {
   it('should throw an unauthorized error when the user does not have permission to view trial sessions', async () => {
@@ -19,19 +18,7 @@ describe('getTrialSessionsInteractor', () => {
     ).rejects.toThrow(new UnauthorizedError('Unauthorized'));
   });
 
-  it('should throw an error when the entity returned from persistence is invalid', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessions.mockResolvedValue([
-        omit(MOCK_TRIAL_INPERSON, 'maxCases'),
-      ]);
-
-    await expect(
-      getTrialSessionsInteractor(applicationContext, mockPetitionsClerkUser),
-    ).rejects.toThrow('The TrialSession entity was invalid.');
-  });
-
-  it('should return a list of validated trial sessions', async () => {
+  it('should return a list of trial sessions', async () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessions.mockResolvedValue([
