@@ -50,6 +50,7 @@ import { downloadPolicyUrlLambda } from './lambdas/documents/downloadPolicyUrlLa
 import { editPaperFilingLambda } from './lambdas/documents/editPaperFilingLambda';
 import { editPractitionerDocumentLambda } from './lambdas/practitioners/editPractitionerDocumentLambda';
 import { exportPendingReportLambda } from '@web-api/lambdas/pendingItems/exportPendingReportLambda';
+import { expressLogger } from './logger';
 import { fetchPendingItemsLambda } from './lambdas/pendingItems/fetchPendingItemsLambda';
 import { fileAndServeCourtIssuedDocumentLambda } from './lambdas/cases/fileAndServeCourtIssuedDocumentLambda';
 import { fileCorrespondenceDocumentLambda } from './lambdas/correspondence/fileCorrespondenceDocumentLambda';
@@ -128,7 +129,7 @@ import { getUsersPendingEmailLambda } from './lambdas/users/getUsersPendingEmail
 import { getWorkItemLambda } from './lambdas/workitems/getWorkItemLambda';
 import { ipLimiter } from './middleware/ipLimiter';
 import { lambdaWrapper } from './lambdaWrapper';
-import { logger } from './logger';
+import { logErrorLambda } from '@web-api/lambdas/errors/logErrorLambda';
 import { loginLambda } from '@web-api/lambdas/auth/loginLambda';
 import { opinionAdvancedSearchLambda } from './lambdas/documents/opinionAdvancedSearchLambda';
 import { orderAdvancedSearchLambda } from './lambdas/documents/orderAdvancedSearchLambda';
@@ -277,7 +278,7 @@ app.use((req, res, next) => {
 
   next();
 });
-app.use(logger());
+app.use(expressLogger);
 
 /**
  * Important note: order of routes DOES matter!
@@ -1089,6 +1090,7 @@ app.delete(
 {
   app.get('/system/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
   app.get('/system/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
+  app.post('/logError', lambdaWrapper(logErrorLambda));
 }
 
 /**

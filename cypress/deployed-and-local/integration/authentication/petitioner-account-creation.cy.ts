@@ -3,7 +3,7 @@ import {
   generatePassword,
 } from '../../../helpers/authentication/generate-password';
 import { createAPetitioner } from '../../../helpers/accountCreation/create-a-petitioner';
-import { petitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
+import { externalUserCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { v4 } from 'uuid';
 import { verifyPasswordRequirements } from '../../../helpers/authentication/verify-password-requirements';
 import { verifyPetitionerAccount } from '../../../helpers/authentication/verify-petitioner-account';
@@ -140,7 +140,7 @@ describe('Petitioner Account Creation', () => {
 
       cy.get('[data-testid="account-menu-button"]');
 
-      petitionerCreatesElectronicCase();
+      externalUserCreatesElectronicCase();
     });
 
     it('should create an account using a mixed case email address, and then allow the user to login using any case email address', () => {

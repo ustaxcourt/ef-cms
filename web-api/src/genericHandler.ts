@@ -8,6 +8,7 @@ import {
   getUserFromAuthHeader,
   handle,
 } from './middleware/apiGatewayHelper';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 
 export const dataSecurityFilter = (
   data,
@@ -85,7 +86,8 @@ export const genericHandler = (
   return handle(awsEvent, async () => {
     const user = getUserFromAuthHeader(awsEvent);
     const clientConnectionId = getConnectionIdFromEvent(awsEvent);
-    const applicationContext = createApplicationContext(user, awsEvent.logger);
+    const applicationContext = createApplicationContext();
+    getLogger().addUser({ user });
 
     delete awsEvent.logger;
 

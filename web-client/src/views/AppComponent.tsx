@@ -52,7 +52,9 @@ import { ErrorView } from './Error';
 import { ErrorView500 } from './ErrorView500';
 import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
+import { FilePetition } from './StartCaseUpdated/FilePetition';
 import { FilePetitionSuccess } from './StartCase/FilePetitionSuccess';
+import { FileUploadErrorModal } from '@web-client/views/FileUploadErrorModal';
 import { Footer } from './Footer';
 import { ForgotPassword } from '@web-client/views/Login/ForgotPassword';
 import { GenericErrorModal } from './GenericErrorModal';
@@ -85,7 +87,6 @@ import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { SignOrder } from './SignOrder';
 import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
 import { StartCaseInternal } from './StartCaseInternal/StartCaseInternal';
-import { StartCaseWizard } from './StartCase/StartCaseWizard';
 import { StatusReportOrder } from './StatusReportOrder';
 import { StyleGuide } from './StyleGuide/StyleGuide';
 import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
@@ -93,7 +94,6 @@ import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
 import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
-import { UpdatedFilePetition } from './StartCaseUpdated/UpdatedFilePetition';
 import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCourtIssuedDocument';
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
@@ -156,6 +156,7 @@ const pages = {
   ErrorView,
   ErrorView500,
   FileDocumentWizard,
+  FilePetition,
   FilePetitionSuccess,
   ForgotPassword,
   IdleLogout,
@@ -185,14 +186,12 @@ const pages = {
   SignOrder,
   SimplePdfPreviewPage,
   StartCaseInternal,
-  StartCaseWizard,
   StatusReportOrder,
   StyleGuide,
   TrialSessionDetail,
   TrialSessionPlanningReport,
   TrialSessionWorkingCopy,
   TrialSessions,
-  UpdatedFilePetition,
   UploadCourtIssuedDocument,
   UserContactEdit,
   UserContactEditProgress,
@@ -302,6 +301,7 @@ export const AppComponent = connect(
         {showModal === 'WebSocketErrorModal' && <WebSocketErrorModal />}
         {showModal === 'AppMaintenanceModal' && <AppMaintenanceModal />}
         {showModal === 'GenericErrorModal' && <GenericErrorModal />}
+        {showModal === 'FileUploadErrorModal' && <FileUploadErrorModal />}
       </>
     );
   },
