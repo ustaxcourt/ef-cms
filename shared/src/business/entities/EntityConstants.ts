@@ -557,6 +557,20 @@ export const OBJECTIONS_OPTIONS_MAP = {
 };
 export const OBJECTIONS_OPTIONS = [...Object.values(OBJECTIONS_OPTIONS_MAP)];
 
+export const INTERNAL_OBJECTION_DOCUMENT_TYPES = new Set([
+  ...DOCUMENT_INTERNAL_CATEGORIES_MAP['Motion'].map(entry => {
+    return entry.documentType;
+  }),
+  'Application to Take Deposition',
+]);
+
+export const EXTERNAL_OBJECTION_DOCUMENT_TYPES = new Set([
+  ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Motion'].map(entry => {
+    return entry.documentType;
+  }),
+  'Application to Take Deposition',
+]);
+
 export const CONTACT_CHANGE_DOCUMENT_TYPES = flatten(
   Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
 )

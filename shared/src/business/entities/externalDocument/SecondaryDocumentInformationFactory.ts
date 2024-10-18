@@ -1,6 +1,6 @@
+import { EXTERNAL_OBJECTION_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { includes } from 'lodash';
 import { makeRequiredHelper } from './externalDocumentHelpers';
 import joi from 'joi';
 
@@ -62,17 +62,7 @@ export class SecondaryDocumentInformationFactory extends JoiValidationEntity {
         makeRequired('certificateOfServiceDate');
       }
 
-      if (
-        this.category === 'Motion' ||
-        includes(
-          [
-            'motion to withdraw counsel',
-            'motion to withdraw as counsel',
-            'application to take deposition',
-          ],
-          this.documentType.toLowerCase(),
-        )
-      ) {
+      if (EXTERNAL_OBJECTION_DOCUMENT_TYPES.has(this.documentType)) {
         makeRequired('objections');
       }
     }
