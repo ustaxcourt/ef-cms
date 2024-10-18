@@ -203,7 +203,7 @@ async function restoreFromBackup({
   });
   const targetPassword = await targetSigner.getAuthToken();
 
-  await new Promise((resolve, reject) => {
+  await new Promise(resolve => {
     const result = spawn(
       'pg_restore',
       [
@@ -237,13 +237,14 @@ async function restoreFromBackup({
     });
 
     result.on('close', code => {
-      if (!code) {
+      if (code) {
+        console.log(
+          `DB ${dbName} may have been restored with errors. Check output for errors. Exit code: ${code}`,
+        );
+      } else {
         console.log(`Successfully restored DB ${dbName}`);
-        resolve(undefined);
       }
-      reject(
-        new Error(`Failed to restore DB ${dbName} with exit code: ${code}`),
-      );
+      resolve(undefined);
     });
   });
 }
