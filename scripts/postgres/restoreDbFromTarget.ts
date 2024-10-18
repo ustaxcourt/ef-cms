@@ -8,9 +8,7 @@ async function main() {
   const sourceEnv = process.env.ENV!;
   const targetEnv = process.env.TARGET_ENV!;
   const targetAccountId = process.env.TARGET_ACCOUNT_ID!;
-  const targetRoleArn =
-    process.env.TARGET_ROLE_ARN ??
-    'arn:aws:iam::515554424717:role/db_test_cody_zach_delete_me';
+  const targetRoleArn = process.env.TARGET_ROLE_ARN!;
 
   requireEnvVars(['ENV', 'TARGET_ENV', 'TARGET_ACCOUNT_ID', 'TARGET_ROLE_ARN']);
 
