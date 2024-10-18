@@ -23,7 +23,8 @@ export class ChangePasswordForm extends JoiValidationEntity {
       .messages({ '*': 'Passwords must match' }),
     email: JoiValidationConstants.EMAIL.required()
       .messages({
-        '*': 'Enter a valid email address',
+        'any.required': 'Enter a valid email address',
+        'string.email': 'Enter email address in format: yourname@example.com',
         'string.max': 'Email address must contain fewer than 100 characters',
       })
       .description('Email of user'),

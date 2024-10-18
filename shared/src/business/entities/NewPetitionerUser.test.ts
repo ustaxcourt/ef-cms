@@ -17,7 +17,19 @@ describe('NewPetitionerUser', () => {
   });
 
   describe('Email', () => {
-    it('should return error message for email', () => {
+    it('should return an error message for email when no email is provided', () => {
+      const formEntity = new NewPetitionerUser({
+        ...validEntity,
+        email: undefined,
+      });
+
+      expect(formEntity.isValid()).toBeFalsy();
+      expect(formEntity.getValidationErrors()).toEqual({
+        email: 'Enter a valid email address',
+      });
+    });
+
+    it('should return an error message for email when an invalid email format is provided', () => {
       const formEntity = new NewPetitionerUser({
         ...validEntity,
         email: 'hello',
@@ -25,7 +37,20 @@ describe('NewPetitionerUser', () => {
 
       expect(formEntity.isValid()).toBeFalsy();
       expect(formEntity.getValidationErrors()).toEqual({
-        email: 'Enter a valid email address',
+        email: 'Enter email address in format: yourname@example.com',
+      });
+    });
+
+    it('should return an error message for email when an email address exceeding the maximum number of characters is provided', () => {
+      const formEntity = new NewPetitionerUser({
+        ...validEntity,
+        email:
+          'horatio_says_tis_but_our_fantasy_and_will_not_let_belief_take_hold_of_him_touching_this_dreaded_sight_twice_seen_of_us@denmarkemailservice.com',
+      });
+
+      expect(formEntity.isValid()).toBeFalsy();
+      expect(formEntity.getValidationErrors()).toEqual({
+        email: 'Email address must contain fewer than 100 characters',
       });
     });
   });
