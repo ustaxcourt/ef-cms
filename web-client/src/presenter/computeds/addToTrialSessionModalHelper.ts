@@ -9,26 +9,39 @@ export const formatTrialSessionDisplayOptions = (
     trialSession.startDateFormatted = applicationContext
       .getUtilities()
       .formatDateString(trialSession.startDate, 'MMDDYY');
-    switch (trialSession.sessionType) {
-      case 'Regular':
-      case 'Small':
-      case 'Hybrid':
-        trialSession.sessionTypeFormatted = trialSession.sessionType.charAt(0);
-        break;
-      case 'Hybrid-S':
-        trialSession.sessionTypeFormatted = 'HS';
-        break;
-      case 'Special':
-        trialSession.sessionTypeFormatted = 'SP';
-        break;
-      case 'Motion/Hearing':
-        trialSession.sessionTypeFormatted = 'M/H';
-        break;
-    }
-    trialSession.optionText = `${trialSession.trialLocation} ${trialSession.startDateFormatted} (${trialSession.sessionTypeFormatted})`;
+    trialSession.optionText = trialSessionOptionText(trialSession);
 
     return trialSession;
   });
+};
+
+export const trialSessionOptionText = (trialSession: {
+  trialLocation?: string;
+  startDate: string;
+  sessionType: string;
+}): string => {
+  const startDateFormatted = formatDateString(
+    trialSession.startDate,
+    FORMATS.MMDDYY,
+  );
+  let sessionTypeFormatted: string = '';
+  switch (trialSession.sessionType) {
+    case 'Regular':
+    case 'Small':
+    case 'Hybrid':
+      sessionTypeFormatted = trialSession.sessionType.charAt(0);
+      break;
+    case 'Hybrid-S':
+      sessionTypeFormatted = 'HS';
+      break;
+    case 'Special':
+      sessionTypeFormatted = 'SP';
+      break;
+    case 'Motion/Hearing':
+      sessionTypeFormatted = 'M/H';
+      break;
+  }
+  return `${trialSession.trialLocation} ${startDateFormatted} (${sessionTypeFormatted})`;
 };
 
 export const trialSessionsModalHelper = ({
@@ -129,6 +142,10 @@ export const trialSessionsModalHelper = ({
 };
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
+import {
+  FORMATS,
+  formatDateString,
+} from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 export const addToTrialSessionModalHelper = (
   get: Get,

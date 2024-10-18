@@ -1,4 +1,7 @@
-import { addToTrialSessionModalHelper as addToTrialSessionModalHelperComputed } from './addToTrialSessionModalHelper';
+import {
+  addToTrialSessionModalHelper as addToTrialSessionModalHelperComputed,
+  trialSessionOptionText,
+} from './addToTrialSessionModalHelper';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -67,270 +70,337 @@ describe('addToTrialSessionModalHelper', () => {
     },
   ];
 
-  it('should not return trialSessionsFormatted or trialSessionsFormattedByState if modal state does not contain trialSessions', () => {
-    const result = runCompute(addToTrialSessionModalHelper, {
-      state: {
-        caseDetail: {
-          hearings: [],
-        },
-        form: {},
-        modal: {},
-      },
+  describe('trialSessionOptionText', () => {
+    const trialSession = {
+      startDate: '2024-09-27T05:00:00.000Z',
+      trialLocation: 'Birmingham, Alabama',
+    };
+    it('should return correct trial session option text for Regular trial session types', () => {
+      const optionText = trialSessionOptionText({
+        ...trialSession,
+        sessionType: 'Regular',
+      });
+      expect(optionText).toEqual(`${trialSession.trialLocation} 09/27/24 (R)`);
     });
-
-    expect(result.showSessionNotSetAlert).toBeFalsy();
-    expect(result.trialSessionsFormatted).toBeFalsy();
-    expect(result.trialSessionsFormattedByState).toBeFalsy();
-  });
-
-  it('should filter out hearings that case is already scheduled for', () => {
-    const result = runCompute(addToTrialSessionModalHelper, {
-      state: {
-        caseDetail: {
-          hearings: [
-            {
-              trialSessionId: '6',
-            },
-          ],
-          preferredTrialCity: 'Birmingham, Alabama',
-        },
-        form: {},
-        modal: {
-          showAllLocations: true,
-          trialSessions: [
-            ...trialSessions,
-            {
-              trialLocation: 'Nashville, Tennessee',
-              trialSessionId: '6',
-            },
-          ],
-        },
-      },
+    it('should return correct trial session option text for Small trial session types', () => {
+      const optionText = trialSessionOptionText({
+        ...trialSession,
+        sessionType: 'Small',
+      });
+      expect(optionText).toEqual(`${trialSession.trialLocation} 09/27/24 (S)`);
     });
-
-    expect(result.trialSessionsFormattedByState).toMatchObject({
-      Alabama: [
-        {
-          trialSessionId: '3',
-        },
-        {
-          trialSessionId: '1',
-        },
-        {
-          trialSessionId: '2',
-        },
-        {
-          trialSessionId: '5',
-        },
-      ],
-      Idaho: [
-        {
-          trialSessionId: '4',
-        },
-      ],
-      Remote: [
-        {
-          trialSessionId: '7',
-        },
-      ],
+    it('should return correct trial session option text for Hybrid trial session types', () => {
+      const optionText = trialSessionOptionText({
+        ...trialSession,
+        sessionType: 'Hybrid',
+      });
+      expect(optionText).toEqual(`${trialSession.trialLocation} 09/27/24 (H)`);
     });
-
-    expect(result.trialSessionStatesSorted.includes('Tennessee')).toBeFalsy();
-  });
-
-  it('should filter out trial sessions that are closed', () => {
-    const result = runCompute(addToTrialSessionModalHelper, {
-      state: {
-        caseDetail: { hearings: [], preferredTrialCity: 'Birmingham, Alabama' },
-        form: {},
-        modal: {
-          showAllLocations: true,
-          trialSessions: [
-            ...trialSessions,
-            {
-              trialLocation: 'Nashville, Tennessee',
-              trialSessionId: '6',
-            },
-          ],
-        },
-      },
+    it('should return correct trial session option text for Hybrid-S trial session types', () => {
+      const optionText = trialSessionOptionText({
+        ...trialSession,
+        sessionType: 'Hybrid-S',
+      });
+      expect(optionText).toEqual(`${trialSession.trialLocation} 09/27/24 (HS)`);
     });
-
-    expect(result.showSessionNotSetAlert).toBeFalsy();
-    expect(result.trialSessionsFormatted).toBeFalsy();
-    expect(result.trialSessionsFormattedByState).toMatchObject({
-      Alabama: [
-        {
-          trialSessionId: '3',
-        },
-        {
-          trialSessionId: '1',
-        },
-        {
-          trialSessionId: '2',
-        },
-        {
-          trialSessionId: '5',
-        },
-      ],
-      Idaho: [
-        {
-          trialSessionId: '4',
-        },
-      ],
-      Remote: [
-        {
-          trialSessionId: '7',
-        },
-      ],
+    it('should return correct trial session option text for Special trial session types', () => {
+      const optionText = trialSessionOptionText({
+        ...trialSession,
+        sessionType: 'Special',
+      });
+      expect(optionText).toEqual(`${trialSession.trialLocation} 09/27/24 (SP)`);
+    });
+    it('should return correct trial session option text for Motion/Hearing trial session types', () => {
+      const optionText = trialSessionOptionText({
+        ...trialSession,
+        sessionType: 'Motion/Hearing',
+      });
+      expect(optionText).toEqual(
+        `${trialSession.trialLocation} 09/27/24 (M/H)`,
+      );
     });
   });
-
-  it('should filter trialSessions by preferredTrialCity if state.modal.showAllLocations is false', () => {
-    const result = runCompute(addToTrialSessionModalHelper, {
-      state: {
-        caseDetail: { hearings: [], preferredTrialCity: 'Birmingham, Alabama' },
-        form: {},
-        modal: {
-          showAllLocations: false,
-          trialSessions,
+  describe('trialSessionsModalHelper', () => {
+    it('should not return trialSessionsFormatted or trialSessionsFormattedByState if modal state does not contain trialSessions', () => {
+      const result = runCompute(addToTrialSessionModalHelper, {
+        state: {
+          caseDetail: {
+            hearings: [],
+          },
+          form: {},
+          modal: {},
         },
-      },
+      });
+
+      expect(result.showSessionNotSetAlert).toBeFalsy();
+      expect(result.trialSessionsFormatted).toBeFalsy();
+      expect(result.trialSessionsFormattedByState).toBeFalsy();
     });
 
-    expect(result.showSessionNotSetAlert).toBeFalsy();
-    expect(result.trialSessionsFormattedByState).toBeFalsy();
-    expect(result.trialSessionsFormatted.length).toEqual(2);
-    expect(result.trialSessionsFormatted).toMatchObject([
-      { trialLocation: 'Birmingham, Alabama' },
-      { trialLocation: 'Birmingham, Alabama' },
-    ]);
-  });
-
-  it('should format optionText for each trial session and group by state (or "Remote"), then sort by location and then by date when showAllLocations is true', () => {
-    const result = runCompute(addToTrialSessionModalHelper, {
-      state: {
-        caseDetail: { hearings: [], preferredTrialCity: 'Birmingham, Alabama' },
-        form: {},
-        modal: {
-          showAllLocations: true,
-          trialSessions,
+    it('should filter out hearings that case is already scheduled for', () => {
+      const result = runCompute(addToTrialSessionModalHelper, {
+        state: {
+          caseDetail: {
+            hearings: [
+              {
+                trialSessionId: '6',
+              },
+            ],
+            preferredTrialCity: 'Birmingham, Alabama',
+          },
+          form: {},
+          modal: {
+            showAllLocations: true,
+            trialSessions: [
+              ...trialSessions,
+              {
+                trialLocation: 'Nashville, Tennessee',
+                trialSessionId: '6',
+              },
+            ],
+          },
         },
-      },
+      });
+
+      expect(result.trialSessionsFormattedByState).toMatchObject({
+        Alabama: [
+          {
+            trialSessionId: '3',
+          },
+          {
+            trialSessionId: '1',
+          },
+          {
+            trialSessionId: '2',
+          },
+          {
+            trialSessionId: '5',
+          },
+        ],
+        Idaho: [
+          {
+            trialSessionId: '4',
+          },
+        ],
+        Remote: [
+          {
+            trialSessionId: '7',
+          },
+        ],
+      });
+
+      expect(result.trialSessionStatesSorted.includes('Tennessee')).toBeFalsy();
     });
 
-    expect(result.showSessionNotSetAlert).toBeFalsy();
-    expect(result.trialSessionsFormatted).toBeFalsy();
-    expect(result.trialSessionsFormattedByState).toMatchObject({
-      Alabama: [
+    it('should filter out trial sessions that are closed', () => {
+      const result = runCompute(addToTrialSessionModalHelper, {
+        state: {
+          caseDetail: {
+            hearings: [],
+            preferredTrialCity: 'Birmingham, Alabama',
+          },
+          form: {},
+          modal: {
+            showAllLocations: true,
+            trialSessions: [
+              ...trialSessions,
+              {
+                trialLocation: 'Nashville, Tennessee',
+                trialSessionId: '6',
+              },
+            ],
+          },
+        },
+      });
+
+      expect(result.showSessionNotSetAlert).toBeFalsy();
+      expect(result.trialSessionsFormatted).toBeFalsy();
+      expect(result.trialSessionsFormattedByState).toMatchObject({
+        Alabama: [
+          {
+            trialSessionId: '3',
+          },
+          {
+            trialSessionId: '1',
+          },
+          {
+            trialSessionId: '2',
+          },
+          {
+            trialSessionId: '5',
+          },
+        ],
+        Idaho: [
+          {
+            trialSessionId: '4',
+          },
+        ],
+        Remote: [
+          {
+            trialSessionId: '7',
+          },
+        ],
+      });
+    });
+
+    it('should filter trialSessions by preferredTrialCity if state.modal.showAllLocations is false', () => {
+      const result = runCompute(addToTrialSessionModalHelper, {
+        state: {
+          caseDetail: {
+            hearings: [],
+            preferredTrialCity: 'Birmingham, Alabama',
+          },
+          form: {},
+          modal: {
+            showAllLocations: false,
+            trialSessions,
+          },
+        },
+      });
+
+      expect(result.showSessionNotSetAlert).toBeFalsy();
+      expect(result.trialSessionsFormattedByState).toBeFalsy();
+      expect(result.trialSessionsFormatted.length).toEqual(2);
+      expect(result.trialSessionsFormatted).toMatchObject([
+        { trialLocation: 'Birmingham, Alabama' },
+        { trialLocation: 'Birmingham, Alabama' },
+      ]);
+    });
+
+    it('should format optionText for each trial session and group by state (or "Remote"), then sort by location and then by date when showAllLocations is true', () => {
+      const result = runCompute(addToTrialSessionModalHelper, {
+        state: {
+          caseDetail: {
+            hearings: [],
+            preferredTrialCity: 'Birmingham, Alabama',
+          },
+          form: {},
+          modal: {
+            showAllLocations: true,
+            trialSessions,
+          },
+        },
+      });
+
+      expect(result.showSessionNotSetAlert).toBeFalsy();
+      expect(result.trialSessionsFormatted).toBeFalsy();
+      expect(result.trialSessionsFormattedByState).toMatchObject({
+        Alabama: [
+          {
+            optionText: 'Birmingham, Alabama 01/01/19 (SP)',
+            trialLocationState: US_STATES.AL,
+            trialSessionId: '3',
+          },
+          {
+            optionText: 'Birmingham, Alabama 03/01/19 (R)',
+            trialSessionId: '1',
+          },
+          {
+            optionText: 'Mobile, Alabama 02/01/18 (H)',
+            trialSessionId: '2',
+          },
+          {
+            optionText: 'Mobile, Alabama 12/01/18 (M/H)',
+            trialSessionId: '5',
+          },
+        ],
+        Idaho: [
+          {
+            optionText: 'Boise, Idaho 05/01/19 (S)',
+            trialSessionId: '4',
+          },
+        ],
+        Remote: [
+          {
+            optionText: 'Standalone Remote 03/01/22 (R)',
+            trialSessionId: '7',
+          },
+        ],
+        Washington: [
+          {
+            optionText: 'Spokane, Washington 01/02/18 (HS)',
+            trialSessionId: '8',
+          },
+        ],
+      });
+    });
+
+    it('should sort states alphabetically, "Remote" at the top', () => {
+      const result = runCompute(addToTrialSessionModalHelper, {
+        state: {
+          caseDetail: { hearings: [], preferredTrialCity: 'Juneau, Alaska' },
+          form: {},
+          modal: {
+            showAllLocations: true,
+            trialSessions,
+          },
+        },
+      });
+
+      expect(result.trialSessionStatesSorted).toEqual([
+        'Remote',
+        US_STATES.AL,
+        US_STATES.ID,
+        US_STATES.WA,
+      ]);
+    });
+
+    it('should format optionText for each trial session and sort by date when showAllLocations is false', () => {
+      const result = runCompute(addToTrialSessionModalHelper, {
+        state: {
+          caseDetail: {
+            hearings: [],
+            preferredTrialCity: 'Birmingham, Alabama',
+          },
+          form: {},
+          modal: {
+            showAllLocations: false,
+            trialSessions,
+          },
+        },
+      });
+
+      expect(result.showSessionNotSetAlert).toBeFalsy();
+      expect(result.trialSessionsFormattedByState).toBeFalsy();
+      expect(result.trialSessionsFormatted.length).toEqual(2);
+      expect(result.trialSessionsFormatted).toMatchObject([
         {
           optionText: 'Birmingham, Alabama 01/01/19 (SP)',
-          trialLocationState: US_STATES.AL,
           trialSessionId: '3',
         },
         {
           optionText: 'Birmingham, Alabama 03/01/19 (R)',
           trialSessionId: '1',
         },
-        {
-          optionText: 'Mobile, Alabama 02/01/18 (H)',
-          trialSessionId: '2',
-        },
-        {
-          optionText: 'Mobile, Alabama 12/01/18 (M/H)',
-          trialSessionId: '5',
-        },
-      ],
-      Idaho: [
-        {
-          optionText: 'Boise, Idaho 05/01/19 (S)',
-          trialSessionId: '4',
-        },
-      ],
-      Remote: [
-        {
-          optionText: 'Standalone Remote 03/01/22 (R)',
-          trialSessionId: '7',
-        },
-      ],
-      Washington: [
-        {
-          optionText: 'Spokane, Washington 01/02/18 (HS)',
-          trialSessionId: '8',
-        },
-      ],
-    });
-  });
-
-  it('should sort states alphabetically, "Remote" at the top', () => {
-    const result = runCompute(addToTrialSessionModalHelper, {
-      state: {
-        caseDetail: { hearings: [], preferredTrialCity: 'Juneau, Alaska' },
-        form: {},
-        modal: {
-          showAllLocations: true,
-          trialSessions,
-        },
-      },
+      ]);
     });
 
-    expect(result.trialSessionStatesSorted).toEqual([
-      'Remote',
-      US_STATES.AL,
-      US_STATES.ID,
-      US_STATES.WA,
-    ]);
-  });
-
-  it('should format optionText for each trial session and sort by date when showAllLocations is false', () => {
-    const result = runCompute(addToTrialSessionModalHelper, {
-      state: {
-        caseDetail: { hearings: [], preferredTrialCity: 'Birmingham, Alabama' },
-        form: {},
-        modal: {
-          showAllLocations: false,
-          trialSessions,
+    it('should show a "session not set" alert if the selected trial session has yet to be calendared', () => {
+      const result = runCompute(addToTrialSessionModalHelper, {
+        state: {
+          caseDetail: {
+            hearings: [],
+            preferredTrialCity: 'Birmingham, Alabama',
+          },
+          form: {},
+          modal: {
+            showAllLocations: false,
+            trialSessionId: '6',
+            trialSessions: [
+              ...trialSessions,
+              {
+                isCalendared: false,
+                sessionType: 'Small',
+                startDate: '2019-05-01T21:40:46.415Z',
+                trialLocation: 'Boise, Idaho',
+                trialSessionId: '6',
+              },
+            ],
+          },
         },
-      },
+      });
+
+      expect(result.showSessionNotSetAlert).toBeTruthy();
     });
-
-    expect(result.showSessionNotSetAlert).toBeFalsy();
-    expect(result.trialSessionsFormattedByState).toBeFalsy();
-    expect(result.trialSessionsFormatted.length).toEqual(2);
-    expect(result.trialSessionsFormatted).toMatchObject([
-      {
-        optionText: 'Birmingham, Alabama 01/01/19 (SP)',
-        trialSessionId: '3',
-      },
-      {
-        optionText: 'Birmingham, Alabama 03/01/19 (R)',
-        trialSessionId: '1',
-      },
-    ]);
-  });
-
-  it('should show a "session not set" alert if the selected trial session has yet to be calendared', () => {
-    const result = runCompute(addToTrialSessionModalHelper, {
-      state: {
-        caseDetail: { hearings: [], preferredTrialCity: 'Birmingham, Alabama' },
-        form: {},
-        modal: {
-          showAllLocations: false,
-          trialSessionId: '6',
-          trialSessions: [
-            ...trialSessions,
-            {
-              isCalendared: false,
-              sessionType: 'Small',
-              startDate: '2019-05-01T21:40:46.415Z',
-              trialLocation: 'Boise, Idaho',
-              trialSessionId: '6',
-            },
-          ],
-        },
-      },
-    });
-
-    expect(result.showSessionNotSetAlert).toBeTruthy();
   });
 });

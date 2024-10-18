@@ -42,7 +42,7 @@ export const BlockFromTrialModal = connect(
               </legend>
               <textarea
                 aria-label="block from trial"
-                className="usa-textarea"
+                className="usa-textarea textarea-resize-vertical"
                 data-testid="blocked-from-trial-reason-textarea"
                 id="reason"
                 maxLength={120}
