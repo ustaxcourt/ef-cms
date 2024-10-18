@@ -1,8 +1,8 @@
 import { AssumeRoleCommand, STSClient } from '@aws-sdk/client-sts';
 import { DescribeDBClustersCommand, RDSClient } from '@aws-sdk/client-rds';
 import { Signer } from '@aws-sdk/rds-signer';
-import { execSync } from 'child_process';
 import { requireEnvVars } from 'shared/admin-tools/util';
+import { spawn } from 'child_process';
 
 async function main() {
   const sourceEnv = process.env.ENV!;
@@ -128,22 +128,44 @@ async function createDbBackup({
   });
 
   const sourcePassword = await sourceSigner.getAuthToken();
-  const dumpCommand = [
-    `PGPASSWORD="${sourcePassword}"`,
-    'pg_dump',
-    '--no-privileges',
-    '--no-owner',
-    `--host=${host}`,
-    `--username=${username}`,
-    `--port=${port}`,
-    `--dbname=${dbName}`,
-    `--file=${backUpFileName}`,
-    '--format=c',
-    '--verbose',
-  ].join(' ');
 
-  const pgDumpOutput = execSync(dumpCommand, { encoding: 'utf-8' });
-  console.log(pgDumpOutput);
+  await new Promise((resolve, reject) => {
+    const result = spawn(
+      'pg_dump',
+      [
+        '--no-privileges',
+        '--no-owner',
+        `--host=${host}`,
+        `--username=${username}`,
+        `--port=${port}`,
+        `--dbname=${dbName}`,
+        `--file=${backUpFileName}`,
+        '--format=c',
+        '--verbose',
+      ],
+      { env: { ...process.env, PGPASSWORD: sourcePassword }, stdio: 'pipe' },
+    );
+
+    result.stdout.on('data', data => {
+      console.log(data.toString('utf-8'));
+    });
+
+    result.stderr.on('data', data => {
+      console.error(data.toString('utf-8'));
+    });
+
+    result.on('close', code => {
+      if (!code) {
+        console.log(`Successfully created DB backup of ${dbName}`);
+        resolve(undefined);
+      }
+      reject(
+        new Error(
+          `Failed to create DB backup of ${dbName} with exit code: ${code}`,
+        ),
+      );
+    });
+  });
 }
 
 async function restoreFromBackup({
@@ -181,22 +203,49 @@ async function restoreFromBackup({
   });
   const targetPassword = await targetSigner.getAuthToken();
 
-  const restoreCommand = [
-    `PGPASSWORD="${targetPassword}"`,
-    'pg_restore',
-    `--host ${host}`,
-    `--username ${username}`,
-    `--dbname ${dbName}`,
-    `--port=${port}`,
-    '--format=c',
-    '--verbose',
-    '--clean',
-    '--no-privileges',
-    '--no-owner',
-    `${backUpFileName}`,
-  ].join(' ');
-  const restoreOutput = execSync(restoreCommand, { encoding: 'utf-8' });
-  console.log(restoreOutput);
+  await new Promise((resolve, reject) => {
+    const result = spawn(
+      'pg_restore',
+      [
+        `--host=${host}`,
+        `--username=${username}`,
+        `--dbname=${dbName}`,
+        `--port=${port}`,
+        '--format=c',
+        '--verbose',
+        '--clean',
+        '--no-privileges',
+        '--no-owner',
+        `${backUpFileName}`,
+      ],
+      {
+        env: {
+          ...process.env,
+          PGPASSWORD: targetPassword,
+        },
+
+        stdio: 'pipe',
+      },
+    );
+
+    result.stdout.on('data', data => {
+      console.log(data.toString('utf-8'));
+    });
+
+    result.stderr.on('data', data => {
+      console.error(data.toString('utf-8'));
+    });
+
+    result.on('close', code => {
+      if (!code) {
+        console.log(`Successfully restored DB ${dbName}`);
+        resolve(undefined);
+      }
+      reject(
+        new Error(`Failed to restore DB ${dbName} with exit code: ${code}`),
+      );
+    });
+  });
 }
 
 async function getTargetAccountCredentials({
