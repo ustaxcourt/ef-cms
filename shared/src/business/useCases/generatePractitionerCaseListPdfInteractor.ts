@@ -1,12 +1,6 @@
-import { Case, isClosed } from '../entities/cases/Case';
-import {
-  ROLE_PERMISSIONS,
-  isAuthorized,
-} from '../../authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { partition } from 'lodash';
 
 /**
  * generatePractitionerCaseListPdfInteractor
@@ -21,12 +15,6 @@ export const generatePractitionerCaseListPdfInteractor = async (
   { userId }: { userId: string },
   authorizedUser: UnknownAuthUser,
 ) => {
-  if (
-    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_PRACTITIONER_CASE_LIST)
-  ) {
-    throw new UnauthorizedError('Unauthorized to view practitioners cases');
-  }
-
   const practitionerUser = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId });
@@ -35,27 +23,15 @@ export const generatePractitionerCaseListPdfInteractor = async (
     throw new UnauthorizedError('Practitioner not found');
   }
 
-  const { barNumber, name } = practitionerUser;
-
-  const docketNumbers = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByUser({
+  const { closedCases, openCases } = await applicationContext
+    .getUseCases()
+    .getPractitionerCasesInteractor(
       applicationContext,
-      userId,
-    });
+      { userId },
+      authorizedUser,
+    );
 
-  const cases = await applicationContext
-    .getPersistenceGateway()
-    .getCasesByDocketNumbers({ applicationContext, docketNumbers });
-
-  cases.forEach(
-    aCase => (aCase.caseTitle = Case.getCaseTitle(aCase.caseCaption)),
-  );
-
-  const [closedCases, openCases] = partition(
-    Case.sortByDocketNumber(cases).reverse(),
-    theCase => isClosed(theCase),
-  );
+  const { barNumber, name } = practitionerUser;
 
   const pdf = await applicationContext
     .getDocumentGenerators()
