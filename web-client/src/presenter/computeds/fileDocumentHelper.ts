@@ -200,9 +200,9 @@ const getPrimarySecondaryDocuments = ({ AMENDMENT_EVENT_CODES, form }) => {
   const primarySecondaryDocuments = {
     primaryDocument: {
       showObjection:
-        EXTERNAL_OBJECTION_DOCUMENT_TYPES.includes(form.documentType) ||
+        EXTERNAL_OBJECTION_DOCUMENT_TYPES.has(form.documentType) ||
         (AMENDMENT_EVENT_CODES.includes(form.eventCode) &&
-          EXTERNAL_OBJECTION_DOCUMENT_TYPES.includes(
+          EXTERNAL_OBJECTION_DOCUMENT_TYPES.has(
             form.previousDocument?.documentType,
           )),
     },
