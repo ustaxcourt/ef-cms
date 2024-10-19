@@ -562,7 +562,7 @@ export const OBJECTIONS_OPTIONS_MAP = {
 };
 export const OBJECTIONS_OPTIONS = [...Object.values(OBJECTIONS_OPTIONS_MAP)];
 
-export const INTERNAL_DOCUMENTS_REQUIRING_OBJECTION = new Set([
+export const INTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION = new Set([
   ...DOCUMENT_INTERNAL_CATEGORIES_MAP['Motion'].map(entry => {
     return entry.documentType;
   }),
