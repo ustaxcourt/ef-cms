@@ -487,8 +487,6 @@ export const MOTION_EVENT_CODES = [
   ...DOCUMENT_INTERNAL_CATEGORIES_MAP['Motion'].map(entry => {
     return entry.eventCode;
   }),
-  'M116',
-  'M112',
 ];
 
 export const SIMULTANEOUS_DOCUMENT_EVENT_CODES = [
@@ -564,19 +562,27 @@ export const OBJECTIONS_OPTIONS_MAP = {
 };
 export const OBJECTIONS_OPTIONS = [...Object.values(OBJECTIONS_OPTIONS_MAP)];
 
-export const INTERNAL_OBJECTION_DOCUMENT_TYPES = new Set([
+export const INTERNAL_DOCUMENTS_REQUIRING_OBJECTION = new Set([
   ...DOCUMENT_INTERNAL_CATEGORIES_MAP['Motion'].map(entry => {
     return entry.documentType;
   }),
   'Application to Take Deposition',
 ]);
 
-export const EXTERNAL_OBJECTION_DOCUMENT_TYPES = new Set([
-  ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Motion'].map(entry => {
-    return entry.documentType;
-  }),
-  'Application to Take Deposition',
-]);
+const EXTERNAL_DOCUMENTS_REQUIRING_OBJECTION = [
+  ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Motion'],
+  DOCUMENT_EXTERNAL_CATEGORIES_MAP['Application'].find(
+    doc => doc.eventCode === 'APLD',
+  ),
+];
+
+export const EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION = new Set(
+  EXTERNAL_DOCUMENTS_REQUIRING_OBJECTION.map(doc => doc?.documentType),
+);
+
+export const EXTERNAL_DOCUMENT_CODES_REQUIRING_OBJECTION = new Set(
+  EXTERNAL_DOCUMENTS_REQUIRING_OBJECTION.map(doc => doc?.eventCode),
+);
 
 export const CONTACT_CHANGE_DOCUMENT_TYPES = flatten(
   Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
