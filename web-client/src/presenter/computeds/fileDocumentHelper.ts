@@ -1,7 +1,7 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import {
-  EXTERNAL_OBJECTION_DOCUMENT_TYPES,
+  EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
 import { GENERATION_TYPES } from '@web-client/getConstants';
@@ -200,9 +200,9 @@ const getPrimarySecondaryDocuments = ({ AMENDMENT_EVENT_CODES, form }) => {
   const primarySecondaryDocuments = {
     primaryDocument: {
       showObjection:
-        EXTERNAL_OBJECTION_DOCUMENT_TYPES.has(form.documentType) ||
+        EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION.has(form.documentType) ||
         (AMENDMENT_EVENT_CODES.includes(form.eventCode) &&
-          EXTERNAL_OBJECTION_DOCUMENT_TYPES.has(
+          EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION.has(
             form.previousDocument?.documentType,
           )),
     },
@@ -210,11 +210,11 @@ const getPrimarySecondaryDocuments = ({ AMENDMENT_EVENT_CODES, form }) => {
       showObjection:
         form.secondaryDocument &&
         form.secondaryDocumentFile &&
-        (EXTERNAL_OBJECTION_DOCUMENT_TYPES.has(
+        (EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION.has(
           form.secondaryDocument.documentType,
         ) ||
           (AMENDMENT_EVENT_CODES.includes(form.secondaryDocument.eventCode) &&
-            EXTERNAL_OBJECTION_DOCUMENT_TYPES.has(
+            EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION.has(
               form.secondaryDocument.previousDocument?.documentType,
             ))),
     },

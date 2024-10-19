@@ -4,7 +4,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import { INTERNAL_OBJECTION_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
+import { INTERNAL_DOCUMENTS_REQUIRING_OBJECTION } from '@shared/business/entities/EntityConstants';
 export const editDocketEntryMetaHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -42,9 +42,9 @@ export const editDocketEntryMetaHelper = (
     .formatDateString(strickenAt, 'MMDDYYYY');
 
   const showObjection =
-    INTERNAL_OBJECTION_DOCUMENT_TYPES.has(form.documentType) ||
+    INTERNAL_DOCUMENTS_REQUIRING_OBJECTION.has(form.documentType) ||
     (AMENDMENT_EVENT_CODES.includes(form.eventCode) &&
-      INTERNAL_OBJECTION_DOCUMENT_TYPES.has(
+      INTERNAL_DOCUMENTS_REQUIRING_OBJECTION.has(
         form.previousDocument?.documentType,
       ));
 

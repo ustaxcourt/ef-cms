@@ -1,4 +1,4 @@
-import { EXTERNAL_OBJECTION_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
+import { EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION } from '@shared/business/entities/EntityConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { makeRequiredHelper } from './externalDocumentHelpers';
@@ -62,7 +62,7 @@ export class SecondaryDocumentInformationFactory extends JoiValidationEntity {
         makeRequired('certificateOfServiceDate');
       }
 
-      if (EXTERNAL_OBJECTION_DOCUMENT_TYPES.has(this.documentType)) {
+      if (EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION.has(this.documentType)) {
         makeRequired('objections');
       }
     }
