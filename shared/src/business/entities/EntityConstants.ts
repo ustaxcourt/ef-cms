@@ -573,15 +573,15 @@ const EXTERNAL_DOCUMENTS_REQUIRING_OBJECTION = [
   ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Motion'],
   DOCUMENT_EXTERNAL_CATEGORIES_MAP['Application'].find(
     doc => doc.eventCode === 'APLD',
-  ),
+  )!,
 ];
 
 export const EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION = new Set(
-  EXTERNAL_DOCUMENTS_REQUIRING_OBJECTION.map(doc => doc?.documentType),
+  EXTERNAL_DOCUMENTS_REQUIRING_OBJECTION.map(doc => doc.documentType),
 );
 
 export const EXTERNAL_DOCUMENT_CODES_REQUIRING_OBJECTION = new Set(
-  EXTERNAL_DOCUMENTS_REQUIRING_OBJECTION.map(doc => doc?.eventCode),
+  EXTERNAL_DOCUMENTS_REQUIRING_OBJECTION.map(doc => doc.eventCode),
 );
 
 export const CONTACT_CHANGE_DOCUMENT_TYPES = flatten(
