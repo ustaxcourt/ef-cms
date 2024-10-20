@@ -28,7 +28,7 @@ export const CompleteMessageModalDialog = connect(
             Add comment <span className="usa-hint">(optional)</span>
           </label>
           <textarea
-            className="usa-textarea"
+            className="usa-textarea textarea-resize-vertical"
             data-testid="complete-message-body"
             id="message"
             name="form.message"
