@@ -4,6 +4,15 @@ import { Signer } from '@aws-sdk/rds-signer';
 import { requireEnvVars } from 'shared/admin-tools/util';
 import { spawn } from 'child_process';
 
+// eslint-disable-next-line spellcheck/spell-checker
+/*
+This script can copy the contents of one database and overwrite the contents of another in a different account.
+This script REQUIRES that it be run from the AWS account that is creating the backup, and it will assume a role in the target account.
+So if you wanted to restore Test environment from prod, use the environment switcher to point to prod, then fill out all TARGET environment variables with test info.
+
+ENV=test TARGET_ENV=exp3 TARGET_ACCOUNT_ID=xxxxxxxxxx TARGET_ROLE_ARN='arn:aws:iam::xxxxxxxxxx:role/cross_account_restore_role_exp3' npx ts-node --transpile-only scripts/postgres/restoreDbFromTarget.ts
+*/
+
 async function main() {
   const sourceEnv = process.env.ENV!;
   const targetEnv = process.env.TARGET_ENV!;
