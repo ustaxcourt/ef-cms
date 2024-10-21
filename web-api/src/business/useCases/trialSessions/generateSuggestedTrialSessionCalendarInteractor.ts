@@ -78,6 +78,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   const cases = await applicationContext
     .getPersistenceGateway()
     .getSuggestedCalendarCases({ applicationContext });
+
   console.timeEnd('10275: Get ready for trial cases time');
 
   console.time('10275: Get trial sessions time');
@@ -112,6 +113,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   console.time('10275: Generate prospectiveSessionsByCity time');
 
   const {
+    incorrectSizeRegularCases,
     initialRegularCaseCountsByCity,
     initialSmallCaseCountsByCity,
     regularCasesByCity,
@@ -180,9 +182,12 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   });
   console.timeEnd('10275: writeTrialSessionDataToExcel');
   console.timeEnd('10275: Total interactor time');
+
+  const message = generateSuccessMessage({ incorrectSizeRegularCases });
+
   return {
     bufferArray,
-    message: SUGGESTED_TRIAL_SESSION_MESSAGES.success,
+    message,
   };
 };
 
@@ -248,6 +253,21 @@ export const getCitiesFromLastTwoTerms = ({ sessions, termStartDate }) => {
     .map(relevantSession => {
       return relevantSession.trialLocation!;
     });
+};
+
+const generateSuccessMessage = ({ incorrectSizeRegularCases }) => {
+  let successMessage = SUGGESTED_TRIAL_SESSION_MESSAGES.success;
+  if (incorrectSizeRegularCases.length > 0) {
+    const docketNumbers: string[] = [];
+    incorrectSizeRegularCases.forEach(incorrectSizeRegularCase => {
+      docketNumbers.push(incorrectSizeRegularCase.docketNumber);
+    });
+    successMessage =
+      successMessage +
+      ` The following cases have a procedure type the does not match their preferred trial location's procedure type: ${docketNumbers.join(', ')}`;
+  }
+
+  return successMessage;
 };
 
 function getCurrentTermByMonth(currentMonth: string) {
