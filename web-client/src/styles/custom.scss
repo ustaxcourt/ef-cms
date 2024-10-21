@@ -1931,6 +1931,13 @@ button.change-scanner-button {
   text-align: right;
 }
 
+.trial-sessions-filters {
+  .usa-fieldset,
+  .usa-form-group {
+    margin-bottom: 0;
+  }
+}
+
 #app-footer {
   width: 100%;
 
@@ -2226,10 +2233,6 @@ button.change-scanner-button {
   width: 49%;
 }
 
-.resize-vertical-only {
-  resize: vertical;
-}
-
 .max-width-unset {
   max-width: unset;
 }
@@ -2400,6 +2403,10 @@ button.change-scanner-button {
 
 .stepper-line-height {
   line-height: 18px;
+}
+
+.visibility-hidden {
+  visibility: hidden;
 }
 
 .bg-gray {
