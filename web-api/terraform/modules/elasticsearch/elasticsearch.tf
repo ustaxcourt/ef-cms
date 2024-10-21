@@ -38,6 +38,10 @@ resource "aws_opensearch_domain" "efcms-search" {
   domain_name           = var.domain_name
   engine_version        = "OpenSearch_2.11"
 
+  depends_on = [
+    aws_cloudwatch_log_resource_policy.allow_elasticsearch_to_write_logs
+  ]
+
   cluster_config {
     instance_type  = var.es_instance_type
     instance_count = var.es_instance_count == "" ? "1" : var.es_instance_count
