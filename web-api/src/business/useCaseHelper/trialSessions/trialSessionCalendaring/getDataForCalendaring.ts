@@ -1,7 +1,6 @@
 import {
   PROCEDURE_TYPES_MAP,
   REGULAR_TRIAL_CITY_STRINGS,
-  SESSION_TYPES,
   TRIAL_CITY_STRINGS,
   TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
@@ -29,37 +28,42 @@ export const getDataForCalendaring = ({
   initialRegularCaseCountsByCity: CaseCountByCity;
   smallCasesByCity: CasesByCity;
   regularCasesByCity: CasesByCity;
+  incorrectSizeRegularCases: EligibleCase[];
 } => {
-  const regularCasesByCity = getCasesByCity(cases, PROCEDURE_TYPES_MAP.regular);
-  const smallCasesByCity = getCasesByCity(cases, PROCEDURE_TYPES_MAP.small);
+  let {
+    caseCountsByCity: initialRegularCaseCountsByCity,
+    casesByCity: regularCasesByCity,
+    incorrectSizeCases: incorrectSizeRegularCases,
+  } = getCasesByCity(cases, PROCEDURE_TYPES_MAP.regular);
 
-  const initialRegularCaseCountsByCity = TRIAL_CITY_STRINGS.reduce(
-    (acc, city) => {
-      if (city === WASHINGTON_DC_STRING) {
-        // We only schedule non-special sessions at DC South, so we only need to
-        // worry about case counts for South.
-        acc[WASHINGTON_DC_SOUTH_STRING] = regularCasesByCity[city]?.length || 0;
-      } else {
-        acc[city] = regularCasesByCity[city]?.length || 0;
-      }
-      return acc;
-    },
-    {},
-  );
+  let {
+    caseCountsByCity: initialSmallCaseCountsByCity,
+    casesByCity: smallCasesByCity,
+  } = getCasesByCity(cases, PROCEDURE_TYPES_MAP.small);
 
-  const initialSmallCaseCountsByCity = TRIAL_CITY_STRINGS.reduce(
-    (acc, city) => {
-      if (city === WASHINGTON_DC_STRING) {
-        acc[WASHINGTON_DC_SOUTH_STRING] = smallCasesByCity[city]?.length || 0;
-      } else {
-        acc[city] = smallCasesByCity[city]?.length || 0;
-      }
-      return acc;
-    },
-    {},
-  );
+  initialRegularCaseCountsByCity = TRIAL_CITY_STRINGS.reduce((acc, city) => {
+    if (city === WASHINGTON_DC_STRING) {
+      // We only schedule non-special sessions at DC South, so we only need to
+      // worry about case counts for South.
+      acc[WASHINGTON_DC_SOUTH_STRING] =
+        initialRegularCaseCountsByCity[city] || 0;
+    } else {
+      acc[city] = initialRegularCaseCountsByCity[city] || 0;
+    }
+    return acc;
+  }, {});
+
+  initialSmallCaseCountsByCity = TRIAL_CITY_STRINGS.reduce((acc, city) => {
+    if (city === WASHINGTON_DC_STRING) {
+      acc[WASHINGTON_DC_SOUTH_STRING] = initialSmallCaseCountsByCity[city] || 0;
+    } else {
+      acc[city] = initialSmallCaseCountsByCity[city] || 0;
+    }
+    return acc;
+  }, {});
 
   return {
+    incorrectSizeRegularCases,
     initialRegularCaseCountsByCity,
     initialSmallCaseCountsByCity,
     regularCasesByCity,
@@ -70,26 +74,37 @@ export const getDataForCalendaring = ({
 function getCasesByCity(
   cases: EligibleCase[],
   type: TrialSessionTypes,
-): CasesByCity {
-  return cases
+): {
+  casesByCity: CasesByCity;
+  incorrectSizeCases: EligibleCase[];
+  caseCountsByCity: CaseCountByCity;
+} {
+  const incorrectSizeCases: EligibleCase[] = [];
+  const caseCountsByCity: CaseCountByCity = {};
+
+  const casesByCity = cases
     .filter(c => c.procedureType === type)
     .reduce((acc, currentCase) => {
       if (
-        type === SESSION_TYPES.regular &&
+        type === PROCEDURE_TYPES_MAP.regular &&
         !REGULAR_TRIAL_CITY_STRINGS.includes(currentCase.preferredTrialCity!)
       ) {
-        // TODO 10275: consider adding all "error condition" cases to collection
-        // also, consider adding cases to accumulated obj here (for counting) and filter when scheduling instead
-        // throw new Error(
-        //   `Case ${currentCase.docketNumber} cannot be scheduled in ${currentCase.preferredTrialCity} because the session type does not match the trial city`,
-        // );
-        return acc;
+        incorrectSizeCases.push(currentCase);
       } else {
         if (!acc[currentCase.preferredTrialCity!]) {
           acc[currentCase.preferredTrialCity!] = [];
         }
         acc[currentCase.preferredTrialCity!].push(currentCase);
-        return acc;
       }
+
+      if (!caseCountsByCity[currentCase.preferredTrialCity!]) {
+        caseCountsByCity[currentCase.preferredTrialCity!] = 0;
+      }
+
+      caseCountsByCity[currentCase.preferredTrialCity!]++;
+
+      return acc;
     }, {});
+
+  return { caseCountsByCity, casesByCity, incorrectSizeCases };
 }
