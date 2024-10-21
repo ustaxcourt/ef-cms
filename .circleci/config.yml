@@ -29,6 +29,10 @@ parameters:
     default: test
     type: string
 
+  lower_env_account_id:
+    default: ''
+    type: string
+
   run_sync_s3_to_lower_env:
     default: false
     type: boolean
@@ -825,6 +829,32 @@ jobs:
           name: Enable Check Glue Job Run State Cron
           command: |
             ./scripts/glue/enable-glue-cron.sh
+
+  restore-postgres:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    environment:
+      LOWER_ENV: << pipeline.parameters.lower_env >>
+      LOWER_ENV_ACCOUNT_ID: << pipeline.parameters.lower_env_account_id >>
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            if [[ -z "$LOWER_ENV" ]]; then
+              echo "Error: no lower environment was provided"
+              exit 1
+            fi
+      - run:
+          name: Deploy Check Glue Job Run State Cron Lambda
+          command: |
+            TARGET_ENV=$LOWER_ENV TARGET_ACCOUNT_ID="${LOWER_ENV_ACCOUNT_ID}" TARGET_ROLE_ARN="arn:aws:iam::${LOWER_ENV_ACCOUNT_ID}:role/cross_account_restore_role_${LOWER_ENV}" npx ts-node --transpileOnly scripts/postgres/restoreDbFromTarget.ts
 
   finish-glue-job:
     docker:
