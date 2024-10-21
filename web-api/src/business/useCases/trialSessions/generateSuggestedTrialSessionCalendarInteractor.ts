@@ -262,6 +262,13 @@ const generateSuccessMessage = ({ incorrectSizeRegularCases }) => {
     incorrectSizeRegularCases.forEach(incorrectSizeRegularCase => {
       docketNumbers.push(incorrectSizeRegularCase.docketNumber);
     });
+
+    docketNumbers.sort((a, b) => {
+      return (
+        Case.getSortableDocketNumber(a)! - Case.getSortableDocketNumber(b)!
+      );
+    });
+
     successMessage =
       successMessage +
       ` The following cases have a procedure type the does not match their preferred trial location's procedure type: ${docketNumbers.join(', ')}`;
