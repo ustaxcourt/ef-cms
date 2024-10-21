@@ -16,7 +16,7 @@ import { combineTwoPdfs } from '../../shared/src/business/utilities/documentGene
 import {
   compareCasesByDocketNumber,
   getFormattedTrialSessionDetails,
-} from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
+} from '../../shared/src/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import {
   compareISODateStrings,
   compareStrings,
