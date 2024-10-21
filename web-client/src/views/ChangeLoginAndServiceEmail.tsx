@@ -2,7 +2,6 @@ import { BigHeader } from './BigHeader';
 import { Button } from '../ustc-ui/Button/Button';
 import { ErrorNotification } from './ErrorNotification';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
-import { VerifyNewEmailModal } from './MyAccount/VerifyNewEmailModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -24,7 +23,6 @@ export const ChangeLoginAndServiceEmail = connect(
   function ChangeLoginAndServiceEmail({
     form,
     navigateToPathSequence,
-    showModal,
     submitChangeLoginAndServiceEmailSequence,
     updateFormValueSequence,
     user,
@@ -122,8 +120,6 @@ export const ChangeLoginAndServiceEmail = connect(
             </div>
           </div>
         </section>
-
-        {showModal === 'VerifyNewEmailModal' && <VerifyNewEmailModal />}
       </React.Fragment>
     );
   },
