@@ -23,20 +23,28 @@ import { validUser } from '../../../../../shared/src/test/mockUsers';
 describe('Verify User Pending Email', () => {
   const TOKEN = '41189629-abe1-46d7-b7a4-9d3834f919cb';
   const TOKEN_TIMESTAMP_VALID = createISODateString();
+  const TOKEN_TIMESTAMP_ALMOST_INVALID = DateTime.now()
+    .setZone('utc')
+    .minus({ hours: TOKEN_EXPIRATION_TIME_HOURS - 1 })
+    .toISO()!;
+
   const TOKEN_TIMESTAMP_EXPIRED: string = DateTime.now()
     .setZone('utc')
     .minus({ hours: TOKEN_EXPIRATION_TIME_HOURS + 1 })
     .toISO()!;
 
   describe('userTokenHasExpired', () => {
-    it('should return true if no token', () => {
+    it('should return true when no token', () => {
       expect(userTokenHasExpired(undefined)).toBe(true);
     });
-    it('should return true if token is outside the expiration window', () => {
+    it('should return true when token is outside the expiration window', () => {
       expect(userTokenHasExpired(TOKEN_TIMESTAMP_EXPIRED)).toBe(true);
     });
-    it('should return false if token is within expiration window', () => {
+    it('should return false when token is fresh', () => {
       expect(userTokenHasExpired(TOKEN_TIMESTAMP_VALID)).toBe(false);
+    });
+    it('should return false whem token is almost but not yet expired', () => {
+      expect(userTokenHasExpired(TOKEN_TIMESTAMP_ALMOST_INVALID)).toBe(false);
     });
   });
 
