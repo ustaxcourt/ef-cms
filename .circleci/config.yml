@@ -879,7 +879,7 @@ only-prod: &only-prod
   filters:
     branches:
       only:
-        - experimental4
+        - prod
 
 only-test: &only-test
   filters:
