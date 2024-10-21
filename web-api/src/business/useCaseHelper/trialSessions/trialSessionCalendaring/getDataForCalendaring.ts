@@ -78,6 +78,8 @@ function getCasesByCity(
         type === SESSION_TYPES.regular &&
         !REGULAR_TRIAL_CITY_STRINGS.includes(currentCase.preferredTrialCity!)
       ) {
+        // TODO 10275: consider adding all "error condition" cases to collection
+        // also, consider adding cases to accumulated obj here (for counting) and filter when scheduling instead
         // throw new Error(
         //   `Case ${currentCase.docketNumber} cannot be scheduled in ${currentCase.preferredTrialCity} because the session type does not match the trial city`,
         // );
