@@ -11,8 +11,8 @@ export function PractitionerCaseIcons({
     <div className="multi-filing-type-icon">
       {formattedCase.isSealed && (
         <Icon
-          aria-label={formattedCase.sealedToTooltip}
-          className="sealed-docket-entry"
+          aria-label="sealed"
+          className="sealed-case-entry"
           icon="lock"
           title={formattedCase.sealedToTooltip}
         />
