@@ -14,7 +14,7 @@ export function PractitionerCaseIcons({
           aria-label="sealed"
           className="sealed-case-entry"
           icon="lock"
-          title={formattedCase.sealedToTooltip}
+          title="sealed"
         />
       )}
       {formattedCase.inConsolidatedGroup && (
