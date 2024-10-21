@@ -1069,9 +1069,14 @@ workflows:
           type: approval
           requires:
             - start-glue-job
+      - restore-postgres:
+          <<: *only-prod
+          requires:
+            - start-glue-job
       - finish-glue-job:
           <<: *only-prod
           requires:
+            - restore-postgres
             - wait-for-glue-job
 
   sync-s3-to-lower-env:
