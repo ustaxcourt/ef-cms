@@ -27,7 +27,9 @@ const computeds = {
     typeof practitionerSearchHelper
   >,
   publicCaseDetailHeaderHelper,
-  publicCaseDetailHelper,
+  publicCaseDetailHelper: publicCaseDetailHelper as unknown as ReturnType<
+    typeof publicCaseDetailHelper
+  >,
   templateHelper,
   todaysOpinionsHelper,
   todaysOrdersHelper,
@@ -46,6 +48,7 @@ export const baseState = {
     showUsaBannerDetails: false,
   },
   currentPage: 'Interstitial',
+  featureFlags: undefined as unknown as { [key: string]: string },
   form: {} as Record<string, any>,
   header: {
     searchTerm: '',

@@ -13,6 +13,8 @@ export const PublicDocketRecord = connect(
     publicCaseDetailHelper: state.publicCaseDetailHelper,
   },
   function ({ publicCaseDetailHelper }) {
+    const noDocumentsMessage = 'There are no documents of that type.';
+
     return (
       <>
         <PublicDocketRecordHeader />
@@ -102,6 +104,10 @@ export const PublicDocketRecord = connect(
                 )}
               </tbody>
             </table>
+            {!publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord
+              .length && (
+              <p className="margin-bottom-10">{noDocumentsMessage}</p>
+            )}
           </div>
         </NonPhone>
 
@@ -142,6 +148,8 @@ export const PublicDocketRecord = connect(
               )}
             </tbody>
           </table>
+          {!publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord
+            .length && <p className="margin-bottom-10">{noDocumentsMessage}</p>}
         </Phone>
       </>
     );
