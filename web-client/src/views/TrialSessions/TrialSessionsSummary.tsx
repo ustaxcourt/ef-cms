@@ -24,7 +24,7 @@ export const TrialSessionsSummary = connect(
             link
             className="margin-left-205"
             data-testid="view-all-trial-sessions-button"
-            href={`/trial-sessions?judge[userId]=${trialSessionsSummaryHelper.judgeUserId}`}
+            href={`/trial-sessions?judgeId=${trialSessionsSummaryHelper.judgeUserId}`}
           >
             View All
           </Button>
