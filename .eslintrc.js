@@ -354,6 +354,7 @@ module.exports = {
           'noopener',
           'noreferrer',
           'overline',
+          'paginator',
           'panuthos',
           'panuthos',
           'param',

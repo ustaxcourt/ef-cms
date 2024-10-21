@@ -9,6 +9,7 @@ export const generatePetitionPdfInteractor = (
   {
     caseCaptionExtension,
     caseTitle,
+    contactCounsel,
     contactPrimary,
     contactSecondary,
     hasIrsNotice,
@@ -33,6 +34,7 @@ export const generatePetitionPdfInteractor = (
     body: {
       caseCaptionExtension,
       caseTitle,
+      contactCounsel,
       contactPrimary,
       contactSecondary,
       hasIrsNotice,

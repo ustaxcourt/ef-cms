@@ -23,6 +23,7 @@ type ContactSecondary = {
   handleChange: OnChangeHandler;
   handleChangeCountryType: OnChangeCountryTypeHandler;
   registerRef?: Function;
+  showElectronicServiceConsent?: boolean;
   showSameAsPrimaryCheckbox: boolean;
   useSameAsPrimary: boolean;
 };
@@ -48,6 +49,7 @@ export const ContactSecondaryUpdated = connect<
     nameLabel,
     registerRef,
     resetSecondaryAddressSequence,
+    showElectronicServiceConsent = true,
     showSameAsPrimaryCheckbox,
     useSameAsPrimary,
     validationErrors = {} as {
@@ -184,6 +186,7 @@ export const ContactSecondaryUpdated = connect<
               }}
             />
           </FormGroup>
+
           <FormGroup
             errorMessageId="email-error-message"
             errorText={
@@ -219,19 +222,23 @@ export const ContactSecondaryUpdated = connect<
               }}
             />
           </FormGroup>
-          <ElectronicServiceConsentCheckbox
-            bind="form"
-            contactType="contactSecondary"
-          />
-          {addressInfo.hasConsentedToEService && (
-            <WarningNotificationComponent
-              alertWarning={{
-                message:
-                  'No paper service will be made to the mailing address after the Court verifies the email address.',
-              }}
-              dismissible={false}
-              scrollToTop={false}
-            />
+          {showElectronicServiceConsent && (
+            <>
+              <ElectronicServiceConsentCheckbox
+                bind="form"
+                contactType="contactSecondary"
+              />
+              {addressInfo.hasConsentedToEService && (
+                <WarningNotificationComponent
+                  alertWarning={{
+                    message:
+                      'No paper service will be made to the mailing address after the Court verifies the email address.',
+                  }}
+                  dismissible={false}
+                  scrollToTop={false}
+                />
+              )}
+            </>
           )}
         </div>
       </>

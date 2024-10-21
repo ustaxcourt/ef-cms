@@ -91,9 +91,6 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   ENTITY_LOCKING_FEATURE_FLAG: {
     key: 'entity-locking-feature-flag',
   },
-  UPDATED_PETITION_FLOW: {
-    key: 'updated-petition-flow',
-  },
   USE_CHANGE_OF_ADDRESS_LAMBDA: {
     disabledMessage:
       'A flag to know when to use the change of address lambda for processing.',
@@ -1068,7 +1065,11 @@ export const FILING_TYPES = {
     'A business',
     'Other',
   ],
-};
+} as const;
+
+export type FilingType =
+  | (typeof FILING_TYPES)['petitioner'][number]
+  | (typeof FILING_TYPES)['privatePractitioner'][number];
 
 export const ANSWER_CUTOFF_AMOUNT_IN_DAYS = 45;
 
@@ -1728,4 +1729,10 @@ export const STATUS_REPORT_ORDER_OPTIONS = {
     retained: 'retained',
     restored: 'restoredToGeneralDocket',
   },
+};
+
+export const TROUBLESHOOTING_INFO = {
+  APP_SUPPORT_EMAIL: 'dawson.support@ustaxcourt.gov',
+  FILE_UPLOAD_TROUBLESHOOTING_LINK:
+    'https://ustaxcourt.gov/dawson_faqs_case_management.html#FileUpload',
 };

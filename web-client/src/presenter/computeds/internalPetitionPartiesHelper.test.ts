@@ -1,6 +1,8 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
+  FILING_TYPES,
   PARTY_TYPES,
+  ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
@@ -419,29 +421,7 @@ describe('internalPetitionPartiesHelper', () => {
       user: docketClerk1User,
     };
 
-    it('should be false when the current user is an external user', () => {
-      const result = runCompute(internalPetitionPartiesHelper, {
-        state: { ...baseState, user: petitionerUser },
-      });
-
-      expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(false);
-    });
-
-    it('should be true when the current user is a petitions clerk user', () => {
-      const result = runCompute(internalPetitionPartiesHelper, {
-        state: {
-          ...baseState,
-          form: {
-            isPaper: true,
-          },
-          user: petitionsClerkUser,
-        },
-      });
-
-      expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(true);
-    });
-
-    it('should be false when the e-consent feature flag is disabled', () => {
+    it('should not show email and consent fields when the e-consent feature flag is disabled', () => {
       const result = runCompute(internalPetitionPartiesHelper, {
         state: {
           ...baseState,
@@ -456,14 +436,18 @@ describe('internalPetitionPartiesHelper', () => {
       expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(false);
     });
 
-    it('should be true when the e-consent feature flag is enabled, it is a paper petition and the current user is internal', () => {
+    it('should not show email and consent fields for external user', () => {
+      const result = runCompute(internalPetitionPartiesHelper, {
+        state: { ...baseState, user: petitionerUser },
+      });
+
+      expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(false);
+    });
+
+    it('should show email and consent fields for an internal user with paper filing', () => {
       const result = runCompute(internalPetitionPartiesHelper, {
         state: {
           ...baseState,
-          featureFlags: {
-            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
-              true,
-          },
           form: {
             isPaper: true,
           },
@@ -474,7 +458,7 @@ describe('internalPetitionPartiesHelper', () => {
       expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(true);
     });
 
-    it('should be false when the e-consent feature flag is enabled, and it is NOT a paper petition', () => {
+    it('should not show email and consent fields for an internal user with an electronic filing', () => {
       const result = runCompute(internalPetitionPartiesHelper, {
         state: {
           ...baseState,
@@ -490,6 +474,62 @@ describe('internalPetitionPartiesHelper', () => {
       });
 
       expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(false);
+    });
+
+    it('should show email and consent fields when petition was filed electronically by a private practitioner', () => {
+      const result = runCompute(internalPetitionPartiesHelper, {
+        state: {
+          ...baseState,
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              true,
+          },
+          form: {
+            isPaper: false,
+            privatePractitioners: [{ role: ROLES.privatePractitioner }],
+          },
+          user: petitionsClerkUser,
+        },
+      });
+
+      expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(true);
+    });
+  });
+
+  describe('showSecondaryContactEmailFieldAndConsentBox', () => {
+    it('should display secondary contact email field when petition is filed by a petitioner', () => {
+      const result = runCompute(internalPetitionPartiesHelper, {
+        state: {
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              true,
+          },
+          form: {
+            filingType: FILING_TYPES.petitioner[1],
+            isPaper: false,
+          },
+          user: petitionsClerkUser,
+        },
+      });
+
+      expect(result.showSecondaryContactEmailFieldAndConsentBox).toEqual(true);
+    });
+    it('should display secondary contact email field when petition is filed by a private practitioner', () => {
+      const result = runCompute(internalPetitionPartiesHelper, {
+        state: {
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              true,
+          },
+          form: {
+            filingType: FILING_TYPES.privatePractitioner[1],
+            isPaper: false,
+          },
+          user: petitionsClerkUser,
+        },
+      });
+
+      expect(result.showSecondaryContactEmailFieldAndConsentBox).toEqual(true);
     });
   });
 });

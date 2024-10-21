@@ -1,4 +1,3 @@
-import { PARTY_TYPES } from '@shared/business/entities/EntityConstants';
 import { showContactsHelperUpdated } from '@web-client/presenter/computeds/showContactsHelperUpdated';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -12,12 +11,14 @@ export const setDefaultContactStateAction = ({
   value: string;
 }>) => {
   const partyType = get(state.form.partyType);
+  const filingType = get(state.form.filingType);
+  const isSpouseDeceased = get(state.form.isSpouseDeceased);
 
-  const { showContactSecondary } = showContactsHelperUpdated(
+  const { showContactSecondary } = showContactsHelperUpdated({
+    filingType,
+    isSpouseDeceased,
     partyType,
-    PARTY_TYPES,
-    props,
-  );
+  });
 
   const { COUNTRY_TYPES } = applicationContext.getConstants();
 

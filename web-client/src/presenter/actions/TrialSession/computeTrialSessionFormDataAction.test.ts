@@ -1,5 +1,6 @@
 import { applicationContextForClient } from '@web-client/test/createClientTestApplicationContext';
 import { computeTrialSessionFormDataAction } from './computeTrialSessionFormDataAction';
+import { getTestJudgesChambers } from '@shared/test/mockJudgesChambers';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -313,7 +314,7 @@ describe('computeTrialSessionFormDataAction', () => {
         key: 'judgeId',
         value: { name: 'Test Judge', section: 'buchsChambers', userId: '123' },
       },
-      state: { form },
+      state: { form, judgesChambers: Object.values(getTestJudgesChambers()) },
     });
     expect(result.state.form.judgeId).toEqual('123');
     expect(result.state.form.judge).toEqual({
@@ -332,7 +333,7 @@ describe('computeTrialSessionFormDataAction', () => {
         key: 'judgeId',
         value: { name: 'Test Judge', section: 'buchsChambers', userId: '123' },
       },
-      state: { form },
+      state: { form, judgesChambers: Object.values(getTestJudgesChambers()) },
     });
 
     expect(result.state.form.chambersPhoneNumber).toEqual('(202) 521-0810');
