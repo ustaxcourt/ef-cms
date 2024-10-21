@@ -6,7 +6,27 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '../../../errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import {
+  calculateDifferenceInHours,
+  createISODateString,
+} from '@shared/business/utilities/DateHandler';
 import { updateUserPendingEmailRecord } from '@web-api/business/useCases/auth/changePasswordInteractor';
+
+export const TOKEN_EXPIRATION_TIME_HOURS = 24;
+
+export const userTokenHasExpired = (
+  tokenExpirationTimestamp?: string,
+): boolean => {
+  if (!tokenExpirationTimestamp) {
+    return true;
+  }
+  return (
+    calculateDifferenceInHours(
+      createISODateString(),
+      tokenExpirationTimestamp,
+    ) > 1
+  );
+};
 
 export const verifyUserPendingEmailInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -30,6 +50,13 @@ export const verifyUserPendingEmailInteractor = async (
       { email: authorizedUser.email },
     );
     throw new UnauthorizedError('Tokens do not match');
+  }
+
+  if (userTokenHasExpired(user.pendingEmailVerificationTokenTimestamp)) {
+    applicationContext.logger.info('Pending email verification link expired', {
+      email: authorizedUser.email,
+    });
+    throw new UnauthorizedError('Link has expired');
   }
 
   const isEmailAvailable = await applicationContext
