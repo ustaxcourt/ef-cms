@@ -6,6 +6,7 @@ import { navigateToPractitionerDetailAction } from '../actions/navigateToPractit
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
@@ -32,7 +33,11 @@ export const submitAddPractitionerSequence = [
   startShowValidationAction,
   validateAddPractitionerAction,
   {
-    error: [setValidationErrorsAction, setValidationAlertErrorsAction],
+    error: [
+      setValidationErrorsAction,
+      setScrollToErrorNotificationAction,
+      setValidationAlertErrorsAction,
+    ],
     success: [
       setWaitingForResponseAction,
       hasUpdatedEmailFactoryAction('email'),
@@ -43,6 +48,7 @@ export const submitAddPractitionerSequence = [
           {
             emailAvailable: afterSuccess,
             emailInUse: [
+              setScrollToErrorNotificationAction,
               unsetWaitingForResponseAction,
               clearAlertsAction,
               setAlertErrorAction,
