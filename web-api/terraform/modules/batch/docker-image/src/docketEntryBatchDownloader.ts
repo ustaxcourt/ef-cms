@@ -201,7 +201,7 @@ export async function zipDocuments({
         totalFiles: documents.length,
       }),
     });
-    await wsClient.send(WS_MESSAGE).catch(console.error);
+    await wsClient.send(WS_MESSAGE);
   }
 
   zip.end();
@@ -249,7 +249,7 @@ export async function app({
       url,
     }),
   });
-  await wsClient.send(WS_MESSAGE).catch(console.error);
+  await wsClient.send(WS_MESSAGE);
 
   console.log('Zip and upload complete, link sent to client.');
 }
