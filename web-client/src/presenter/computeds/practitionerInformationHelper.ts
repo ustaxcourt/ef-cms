@@ -5,25 +5,17 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 import { Get } from 'cerebral';
 import { PractitionerCaseDetail } from '@web-client/presenter/state';
-import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
 
 const PAGE_SIZE = 100;
 
 const getPagesToDisplay = ({
-  applicationContext,
   cases,
   pageNumber,
 }: {
   pageNumber: number;
   cases: PractitionerCaseDetail[];
-  applicationContext: ClientApplicationContext;
 }) => {
-  return cases
-    .slice(pageNumber * PAGE_SIZE, (pageNumber + 1) * PAGE_SIZE)
-    .map(c => {
-      c.sealedToTooltip = getSealedDocketEntryTooltip(applicationContext, c);
-      return c;
-    });
+  return cases.slice(pageNumber * PAGE_SIZE, (pageNumber + 1) * PAGE_SIZE);
 };
 
 export const practitionerInformationHelper = (
@@ -64,13 +56,11 @@ export const practitionerInformationHelper = (
   const showClosedCasesPagination = totalClosedCasesPages > 1;
 
   const openCasesToDisplay = getPagesToDisplay({
-    applicationContext,
     cases: practitionerDetail.openCaseInfo?.allCases || [],
     pageNumber: practitionerDetail.openCaseInfo?.currentPage || 0,
   });
 
   const closedCasesToDisplay = getPagesToDisplay({
-    applicationContext,
     cases: practitionerDetail.closedCaseInfo?.allCases || [],
     pageNumber: practitionerDetail.closedCaseInfo?.currentPage || 0,
   });

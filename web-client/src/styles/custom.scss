@@ -1396,7 +1396,6 @@ hr.lighter {
   }
 }
 
-
 .all-columns-view {
   column-count: 4;
 
@@ -1860,7 +1859,8 @@ button.change-scanner-button {
   margin-right: 4px;
 }
 
-.sealed-docket-entry {
+.sealed-docket-entry,
+.sealed-case-entry {
   color: color($theme-color-secondary-dark);
 }
 
