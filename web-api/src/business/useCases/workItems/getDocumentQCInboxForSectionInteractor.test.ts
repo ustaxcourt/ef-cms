@@ -1,6 +1,7 @@
 import { DOCKET_SECTION } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getDocumentQCInboxForSectionInteractor } from './getDocumentQCInboxForSectionInteractor';
+import { getTestJudgesChambers } from '@shared/test/mockJudgesChambers';
 import {
   mockDocketClerkUser,
   mockJudgeUser,
@@ -55,8 +56,7 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
       applicationContext,
       {
         judgeUserName: 'Ashford',
-        section: applicationContext.getPersistenceGateway().getJudgesChambers()
-          .ASHFORDS_CHAMBERS_SECTION.section,
+        section: getTestJudgesChambers().ASHFORDS_CHAMBERS_SECTION.section,
       },
       mockJudgeUser,
     );

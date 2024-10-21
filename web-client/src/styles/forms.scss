@@ -15,6 +15,7 @@
     }
 
     max-width: 65rem;
+    flex: 1;
 
     ol {
       padding-inline-start: 15px;
@@ -22,25 +23,32 @@
 
     .fact-or-reason {
       textarea {
-        display: inline-block;
-        width: 55rem;
-        max-width: 80vw;
         height: 4rem;
-        vertical-align: top;
-
-        // mobile screens
-        @media only screen and (max-width: ($medium-screen - 1px)) {
-          max-width: 90vw;
-        }
       }
     }
 
-    .reason-button {
-      @media only screen and (max-width: ($medium-screen - 1px)) {
-        margin-left: 0;
-      }
+    .fact-or-reason-text-area-wrapper {
+      display: flex;
+      align-items: center;
 
-      margin-left: 1rem;
+      @media only screen and (max-width: ($medium-screen - 1px)) {
+        flex-direction: column;
+        align-items: flex-end;
+      }
+    }
+
+    .fact-or-reason-button-wrapper {
+      width: 40px;
+      margin-left: 10px;
+
+      @media only screen and (max-width: ($medium-screen - 1px)) {
+        margin-right: 35px;
+      }
+    }
+
+    .fact-reason-character-label {
+      width: 2ch;
+      text-align: left;
     }
 
     .usa-form-group {
@@ -122,6 +130,14 @@ legend {
     max-width: 580px;
     margin-top: 0;
   }
+}
+
+.textarea-resize-vertical {
+  min-height: calc(
+    1em + 24px
+  ); // Don't allow resizing smaller than the line of text
+
+  resize: vertical;
 }
 
 input[type='email'],
@@ -724,22 +740,11 @@ label.ustc-upload {
   margin-left: -1.25rem;
 }
 
-.status-report-order-form-group textarea,
-.ustc-message-modal-text-area {
-  resize: vertical;
-}
-
+.add-another-irs-notice-button,
 .add-another-reason-button,
 .add-another-fact-button {
   @media only screen and (max-width: $medium-screen - 1px) {
     text-align: left !important;
-  }
-}
-
-.remove-fact-reason-button {
-  @media only screen and (max-width: $medium-screen - 1px) {
-    padding-right: 1rem !important;
-    text-align: right !important;
   }
 }
 

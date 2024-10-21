@@ -1,25 +1,28 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { TrialCityOptions } from '../TrialCityOptions';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const TrialCity = connect(
-  {
-    label: props.label,
-    onBlur: props.onBlur,
-    onChange: props.onChange,
-    procedureType: props.procedureType,
-    showDefaultOption: props.showDefaultOption,
-    showHint: props.showHint,
-    showRegularTrialCitiesHint: props.showRegularTrialCitiesHint,
-    showSmallTrialCitiesHint: props.showSmallTrialCitiesHint,
-    trialCitiesByState: props.trialCitiesByState,
-    validationErrors: state.validationErrors,
-    value: props.value,
-  },
+type TrialCityType = {
+  label: string;
+  onBlur: () => void;
+  onChange: (event: any) => void;
+  procedureType: string;
+  showDefaultOption: boolean;
+  showHint?: boolean;
+  showRegularTrialCitiesHint?: boolean;
+  showSmallTrialCitiesHint?: boolean;
+  value: string;
+};
+
+const trialCityDependencies = {
+  validationErrors: state.validationErrors,
+};
+
+export const TrialCity = connect<TrialCityType, typeof trialCityDependencies>(
+  trialCityDependencies,
   function TrialCity({
     label,
     onBlur,

@@ -30,11 +30,10 @@ import { CreatePetitionerAccount } from '@web-client/views/CreatePetitionerAccou
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
 import { CustomCaseReport } from './CustomCaseReport/CustomCaseReport';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
+import { DashboardExternalUser } from './Dashboards/DashboardExternalUser';
 import { DashboardInactive } from './Dashboards/DashboardInactive';
 import { DashboardIrsSuperuser } from './Dashboards/DashboardIrsSuperuser';
 import { DashboardJudge } from './Dashboards/DashboardJudge';
-import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
-import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
 import { DashboardRespondent } from './Dashboards/DashboardRespondent';
 import { DocketEntryQc } from './DocketEntryQc';
 import { DownloadDocketEntriesModal } from '@web-client/views/DownloadDocketEntriesModal';
@@ -53,7 +52,9 @@ import { ErrorView } from './Error';
 import { ErrorView500 } from './ErrorView500';
 import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
+import { FilePetition } from './StartCaseUpdated/FilePetition';
 import { FilePetitionSuccess } from './StartCase/FilePetitionSuccess';
+import { FileUploadErrorModal } from '@web-client/views/FileUploadErrorModal';
 import { Footer } from './Footer';
 import { ForgotPassword } from '@web-client/views/Login/ForgotPassword';
 import { GenericErrorModal } from './GenericErrorModal';
@@ -86,7 +87,6 @@ import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { SignOrder } from './SignOrder';
 import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
 import { StartCaseInternal } from './StartCaseInternal/StartCaseInternal';
-import { StartCaseWizard } from './StartCase/StartCaseWizard';
 import { StatusReportOrder } from './StatusReportOrder';
 import { StyleGuide } from './StyleGuide/StyleGuide';
 import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
@@ -94,7 +94,6 @@ import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
 import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
-import { UpdatedFilePetition } from './StartCaseUpdated/UpdatedFilePetition';
 import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCourtIssuedDocument';
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
@@ -137,11 +136,10 @@ const pages = {
   CreatePractitionerUser,
   CustomCaseReport,
   DashboardChambers,
+  DashboardExternalUser,
   DashboardInactive,
   DashboardIrsSuperuser,
   DashboardJudge,
-  DashboardPetitioner,
-  DashboardPractitioner,
   DashboardRespondent,
   DocketEntryQc,
   EditCaseDetails,
@@ -158,6 +156,7 @@ const pages = {
   ErrorView,
   ErrorView500,
   FileDocumentWizard,
+  FilePetition,
   FilePetitionSuccess,
   ForgotPassword,
   IdleLogout,
@@ -187,14 +186,12 @@ const pages = {
   SignOrder,
   SimplePdfPreviewPage,
   StartCaseInternal,
-  StartCaseWizard,
   StatusReportOrder,
   StyleGuide,
   TrialSessionDetail,
   TrialSessionPlanningReport,
   TrialSessionWorkingCopy,
   TrialSessions,
-  UpdatedFilePetition,
   UploadCourtIssuedDocument,
   UserContactEdit,
   UserContactEditProgress,
@@ -304,6 +301,7 @@ export const AppComponent = connect(
         {showModal === 'WebSocketErrorModal' && <WebSocketErrorModal />}
         {showModal === 'AppMaintenanceModal' && <AppMaintenanceModal />}
         {showModal === 'GenericErrorModal' && <GenericErrorModal />}
+        {showModal === 'FileUploadErrorModal' && <FileUploadErrorModal />}
       </>
     );
   },

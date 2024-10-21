@@ -1,7 +1,6 @@
-import { fillInAndSubmitForm } from '../../../support/pages/start-a-case';
+import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import {
   getCaseList,
-  getStartCaseButton,
   navigateTo as navigateToDashboard,
 } from '../../../support/pages/dashboard-practitioner';
 
@@ -10,8 +9,7 @@ describe('Start a case as a practitioner', () => {
     navigateToDashboard('privatePractitioner');
 
     getCaseList().then(cases => {
-      getStartCaseButton().click();
-      fillInAndSubmitForm();
+      externalUserCreatesElectronicCase();
       getCaseList().should('exist');
       getCaseList().should('have.length', cases.length + 1);
     });

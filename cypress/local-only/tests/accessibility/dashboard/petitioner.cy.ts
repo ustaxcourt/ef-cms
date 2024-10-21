@@ -14,7 +14,7 @@ describe('Dashboard - Petitioner Accessibility', () => {
 
   it('should be free of a11y issues when viewing payment options', () => {
     loginAsPetitioner();
-    cy.get('.payment-options').click();
+    cy.get('[data-testid="other-options"]').click();
     cy.get('a.usa-link--external').should('exist');
 
     checkA11y();

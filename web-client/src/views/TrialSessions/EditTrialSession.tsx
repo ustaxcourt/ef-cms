@@ -65,7 +65,7 @@ export const EditTrialSession = connect(
                   <span className="usa-hint">(optional)</span>
                 </label>
                 <textarea
-                  className="usa-textarea"
+                  className="usa-textarea textarea-resize-vertical"
                   id="notes"
                   maxLength={400}
                   name="notes"

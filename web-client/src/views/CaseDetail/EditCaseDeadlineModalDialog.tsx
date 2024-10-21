@@ -60,7 +60,7 @@ export const EditCaseDeadlineModalDialog = connect(
               What is this deadline for?
             </label>
             <textarea
-              className="usa-textarea"
+              className="usa-textarea textarea-resize-vertical"
               id="description"
               maxLength={120}
               name="description"
