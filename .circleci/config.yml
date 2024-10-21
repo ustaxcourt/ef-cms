@@ -29,10 +29,6 @@ parameters:
     default: test
     type: string
 
-  lower_env_account_id:
-    default: ''
-    type: string
-
   run_sync_s3_to_lower_env:
     default: false
     type: boolean
@@ -839,7 +835,6 @@ jobs:
     resource_class: medium+
     environment:
       LOWER_ENV: << pipeline.parameters.lower_env >>
-      LOWER_ENV_ACCOUNT_ID: << pipeline.parameters.lower_env_account_id >>
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -884,7 +879,7 @@ only-prod: &only-prod
   filters:
     branches:
       only:
-        - prod
+        - experimental4
 
 only-test: &only-test
   filters:
