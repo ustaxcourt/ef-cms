@@ -1,13 +1,9 @@
 import { CourtIssuedNonstandardForm } from '../CourtIssuedDocketEntry/CourtIssuedNonstandardForm';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import {
-  courtIssuedDocketEntryOnChange,
-  onInputChange,
-  reactSelectValue,
-} from '../../ustc-ui/Utils/documentTypeSelectHelper';
+import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -64,28 +60,33 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
           {addCourtIssuedDocketEntryHelper.showDocumentTypeDropdown && (
             <SelectSearch
               aria-labelledby="document-type-label"
+              data-testid="add-court-issued-document-type-search"
               id="document-type"
+              isClearable={true}
               name="eventCode"
               options={addCourtIssuedDocketEntryHelper.documentTypes}
               value={reactSelectValue({
                 documentTypes: addCourtIssuedDocketEntryHelper.documentTypes,
                 selectedEventCode: form.eventCode,
               })}
-              onChange={(inputValue, { action, name }) => {
-                courtIssuedDocketEntryOnChange({
-                  action,
-                  inputValue,
-                  name,
-                  updateSequence: updateCourtIssuedDocketEntryFormValueSequence,
-                  validateSequence: validateCourtIssuedDocketEntrySequence,
-                });
-                return true;
+              onChange={inputValue => {
+                [
+                  'documentType',
+                  'documentTitle',
+                  'eventCode',
+                  'scenario',
+                ].forEach(key =>
+                  updateCourtIssuedDocketEntryFormValueSequence({
+                    key,
+                    value: inputValue ? inputValue[key] : '',
+                  }),
+                );
+                validateCourtIssuedDocketEntrySequence();
               }}
-              onInputChange={(inputText, { action }) => {
-                onInputChange({
-                  action,
-                  inputText,
-                  updateSequence: updateCourtIssuedDocketEntryFormValueSequence,
+              onInputChange={inputText => {
+                updateCourtIssuedDocketEntryFormValueSequence({
+                  key: 'searchText',
+                  value: inputText,
                 });
               }}
             />
