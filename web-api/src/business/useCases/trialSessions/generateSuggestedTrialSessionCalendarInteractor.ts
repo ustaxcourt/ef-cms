@@ -1,3 +1,4 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   FORMATS,
   deconstructDate,
@@ -21,10 +22,17 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { assignSessionsToWeeks } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 import { getDataForCalendaring } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
 import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
+
+import { CalendarGenerator } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/CalendarGenerator';
+import {
+  maxSessionsPerLocationConstraint,
+  maxSessionsPerWeekConstraint,
+  oneSessionPerLocationPerWeekConstraint,
+  reservedWeekOfAtLocationConstraint,
+} from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/constraints';
 
 const MAX_SESSIONS_PER_WEEK = 6;
 const MAX_SESSIONS_PER_LOCATION = 5;
@@ -116,15 +124,13 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     incorrectSizeRegularCases,
     initialRegularCaseCountsByCity,
     initialSmallCaseCountsByCity,
-    regularCasesByCity,
-    smallCasesByCity,
   } = getDataForCalendaring({ cases, citiesFromLastTwoTerms });
 
   const { prospectiveSessionsByCity } = createProspectiveTrialSessions({
     calendaringConfig,
     citiesFromLastTwoTerms,
-    regularCasesByCity,
-    smallCasesByCity,
+    regularCaseCountsByCity: initialRegularCaseCountsByCity,
+    smallCaseCountsByCity: initialSmallCaseCountsByCity,
   });
 
   console.timeEnd('10275: Generate prospectiveSessionsByCity time');
@@ -136,19 +142,29 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   console.time('10275: assignSessionsToWeeks time');
 
+  const constraints = [
+    maxSessionsPerWeekConstraint,
+    maxSessionsPerLocationConstraint,
+    oneSessionPerLocationPerWeekConstraint,
+    reservedWeekOfAtLocationConstraint,
+  ];
+
+  const calendarGenerator = new CalendarGenerator(
+    calendaringConfig,
+    constraints,
+    prospectiveSessionsByCity,
+    weeksToLoop,
+    specialSessions,
+    initialSmallCaseCountsByCity,
+    initialRegularCaseCountsByCity,
+  );
+
   const {
     remainingRegularCaseCountByCity,
     remainingSmallCaseCountByCity,
     scheduledTrialSessionsByCity,
     sessionCountPerWeek,
-  } = assignSessionsToWeeks({
-    calendaringConfig,
-    prospectiveSessionsByCity,
-    regularCaseCountByCity: initialRegularCaseCountsByCity,
-    smallCaseCountByCity: initialSmallCaseCountsByCity,
-    specialSessions,
-    weeksToLoop,
-  });
+  } = calendarGenerator.generateCalendar();
 
   console.timeEnd('10275: assignSessionsToWeeks time');
 

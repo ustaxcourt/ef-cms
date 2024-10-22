@@ -14,8 +14,6 @@ export type EligibleCase = Pick<
   'preferredTrialCity' | 'procedureType' | 'docketNumber'
 >;
 
-export type CasesByCity = Record<string, EligibleCase[]>;
-
 export type CaseCountByCity = Record<string, number>;
 
 export const getDataForCalendaring = ({
@@ -26,20 +24,17 @@ export const getDataForCalendaring = ({
 }): {
   initialSmallCaseCountsByCity: CaseCountByCity;
   initialRegularCaseCountsByCity: CaseCountByCity;
-  smallCasesByCity: CasesByCity;
-  regularCasesByCity: CasesByCity;
   incorrectSizeRegularCases: EligibleCase[];
 } => {
   let {
     caseCountsByCity: initialRegularCaseCountsByCity,
-    casesByCity: regularCasesByCity,
     incorrectSizeCases: incorrectSizeRegularCases,
   } = getCasesByCity(cases, PROCEDURE_TYPES_MAP.regular);
 
-  let {
-    caseCountsByCity: initialSmallCaseCountsByCity,
-    casesByCity: smallCasesByCity,
-  } = getCasesByCity(cases, PROCEDURE_TYPES_MAP.small);
+  let { caseCountsByCity: initialSmallCaseCountsByCity } = getCasesByCity(
+    cases,
+    PROCEDURE_TYPES_MAP.small,
+  );
 
   initialRegularCaseCountsByCity = TRIAL_CITY_STRINGS.reduce((acc, city) => {
     if (city === WASHINGTON_DC_STRING) {
@@ -66,8 +61,6 @@ export const getDataForCalendaring = ({
     incorrectSizeRegularCases,
     initialRegularCaseCountsByCity,
     initialSmallCaseCountsByCity,
-    regularCasesByCity,
-    smallCasesByCity,
   };
 };
 
@@ -75,26 +68,20 @@ function getCasesByCity(
   cases: EligibleCase[],
   type: TrialSessionTypes,
 ): {
-  casesByCity: CasesByCity;
   incorrectSizeCases: EligibleCase[];
   caseCountsByCity: CaseCountByCity;
 } {
   const incorrectSizeCases: EligibleCase[] = [];
   const caseCountsByCity: CaseCountByCity = {};
 
-  const casesByCity = cases
+  cases
     .filter(c => c.procedureType === type)
-    .reduce((acc, currentCase) => {
+    .forEach(currentCase => {
       if (
         type === PROCEDURE_TYPES_MAP.regular &&
         !REGULAR_TRIAL_CITY_STRINGS.includes(currentCase.preferredTrialCity!)
       ) {
         incorrectSizeCases.push(currentCase);
-      } else {
-        if (!acc[currentCase.preferredTrialCity!]) {
-          acc[currentCase.preferredTrialCity!] = [];
-        }
-        acc[currentCase.preferredTrialCity!].push(currentCase);
       }
 
       if (!caseCountsByCity[currentCase.preferredTrialCity!]) {
@@ -102,9 +89,7 @@ function getCasesByCity(
       }
 
       caseCountsByCity[currentCase.preferredTrialCity!]++;
+    });
 
-      return acc;
-    }, {});
-
-  return { caseCountsByCity, casesByCity, incorrectSizeCases };
+  return { caseCountsByCity, incorrectSizeCases };
 }
