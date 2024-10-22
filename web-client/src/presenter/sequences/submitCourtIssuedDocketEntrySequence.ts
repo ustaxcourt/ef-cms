@@ -8,9 +8,9 @@ import { getDocketNumbersForConsolidatedServiceAction } from '../actions/getDock
 import { isCoversheetNeededAction } from '../actions/DocketEntry/isCoversheetNeededAction';
 import { isEditingDocketEntryAction } from '../actions/CourtIssuedDocketEntry/isEditingDocketEntryAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldSaveToConsolidatedGroupAction } from '../actions/shouldSaveToConsolidatedGroupAction';
@@ -28,8 +28,8 @@ export const submitCourtIssuedDocketEntrySequence = [
   validateCourtIssuedDocketEntryAction,
   {
     error: [
-      setAlertErrorAction,
       setValidationErrorsAction,
+      setScrollToErrorNotificationAction,
       setValidationAlertErrorsAction,
     ],
     success: showProgressSequenceDecorator([

@@ -28,7 +28,10 @@ describe('DOJ Practitioners - Represent A Party', () => {
       loginAsPrivatePractitioner();
       externalUserSearchesDocketNumber(docketNumber);
       cy.get('[data-testid="request-represent-a-party-button"]').click();
-      selectTypeaheadInput('document-type', 'Entry of Appearance');
+      selectTypeaheadInput(
+        'case-association-document-type-search',
+        'Entry of Appearance',
+      );
       cy.get(`[data-testid="filer-${primaryFilerName}, Petitioner"]`).click();
       cy.get(`[data-testid="filer-${secondaryFilerName}, Petitioner"]`).click();
       cy.get('[data-testid="auto-generation"]').should('exist');
