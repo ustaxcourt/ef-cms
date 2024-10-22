@@ -10,6 +10,7 @@ import { practitionerSearchHelper } from '@web-client/presenter/computeds/Advanc
 import { publicAlertHelper } from './computeds/Public/publicAlertHelper';
 import { publicCaseDetailHeaderHelper } from './computeds/Public/publicCaseDetailHeaderHelper';
 import { publicCaseDetailHelper } from './computeds/Public/publicCaseDetailHelper';
+import { publicTrialSessionsHelper } from '@web-client/presenter/computeds/Public/publicTrialSessionsHelper';
 import { templateHelper } from './computeds/templateHelper';
 import { todaysOpinionsHelper } from './computeds/Public/todaysOpinionsHelper';
 import { todaysOrdersHelper } from './computeds/Public/todaysOrdersHelper';
@@ -29,6 +30,9 @@ const computeds = {
   publicCaseDetailHeaderHelper,
   publicCaseDetailHelper: publicCaseDetailHelper as unknown as ReturnType<
     typeof publicCaseDetailHelper
+  >,
+  publicTrialSessionsHelper: publicTrialSessionsHelper as unknown as ReturnType<
+    typeof publicTrialSessionsHelper
   >,
   templateHelper,
   todaysOpinionsHelper,
