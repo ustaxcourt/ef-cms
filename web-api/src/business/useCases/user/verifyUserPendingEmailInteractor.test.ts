@@ -45,7 +45,7 @@ describe('Verify User Pending Email', () => {
     it('should return false when token is fresh', () => {
       expect(userTokenHasExpired(TOKEN_TIMESTAMP_VALID)).toBe(false);
     });
-    it('should return false whem token is almost but not yet expired', () => {
+    it('should return false when token is almost but not yet expired', () => {
       expect(userTokenHasExpired(TOKEN_TIMESTAMP_ALMOST_INVALID)).toBe(false);
     });
   });
