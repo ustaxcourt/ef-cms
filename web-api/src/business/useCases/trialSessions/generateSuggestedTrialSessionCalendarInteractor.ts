@@ -24,7 +24,10 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { assignSessionsToWeeks } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
-import { getDataForCalendaring } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
+import {
+  getDataForCalendaring,
+  isCorrectlySizedCase,
+} from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
 import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
 
 const MAX_SESSIONS_PER_WEEK = 6;
@@ -115,7 +118,6 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   console.time('10275: Generate prospectiveSessionsByCity time');
 
   const {
-    incorrectSizeRegularCases,
     initialRegularCaseCountsByCity,
     initialSmallCaseCountsByCity,
     regularCasesByCity,
@@ -184,6 +186,10 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   });
   console.timeEnd('10275: writeTrialSessionDataToExcel');
   console.timeEnd('10275: Total interactor time');
+
+  const incorrectSizeRegularCases = cases.filter(c => {
+    return !isCorrectlySizedCase(c);
+  });
 
   const message = generateSuccessMessage({ incorrectSizeRegularCases });
 

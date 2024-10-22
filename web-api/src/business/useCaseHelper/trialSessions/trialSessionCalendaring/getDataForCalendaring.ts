@@ -28,12 +28,10 @@ export const getDataForCalendaring = ({
   initialRegularCaseCountsByCity: CaseCountByCity;
   smallCasesByCity: CasesByCity;
   regularCasesByCity: CasesByCity;
-  incorrectSizeRegularCases: EligibleCase[];
 } => {
   let {
     caseCountsByCity: initialRegularCaseCountsByCity,
     casesByCity: regularCasesByCity,
-    incorrectSizeCases: incorrectSizeRegularCases,
   } = getCasesByCity(cases, PROCEDURE_TYPES_MAP.regular);
 
   let {
@@ -63,7 +61,6 @@ export const getDataForCalendaring = ({
   }, {});
 
   return {
-    incorrectSizeRegularCases,
     initialRegularCaseCountsByCity,
     initialSmallCaseCountsByCity,
     regularCasesByCity,
@@ -76,21 +73,14 @@ function getCasesByCity(
   type: TrialSessionTypes,
 ): {
   casesByCity: CasesByCity;
-  incorrectSizeCases: EligibleCase[];
   caseCountsByCity: CaseCountByCity;
 } {
-  const incorrectSizeCases: EligibleCase[] = [];
   const caseCountsByCity: CaseCountByCity = {};
 
   const casesByCity = cases
     .filter(c => c.procedureType === type)
     .reduce((acc, currentCase) => {
-      if (
-        type === PROCEDURE_TYPES_MAP.regular &&
-        !REGULAR_TRIAL_CITY_STRINGS.includes(currentCase.preferredTrialCity!)
-      ) {
-        incorrectSizeCases.push(currentCase);
-      } else {
+      if (isCorrectlySizedCase(currentCase)) {
         if (!acc[currentCase.preferredTrialCity!]) {
           acc[currentCase.preferredTrialCity!] = [];
         }
@@ -106,5 +96,12 @@ function getCasesByCity(
       return acc;
     }, {});
 
-  return { caseCountsByCity, casesByCity, incorrectSizeCases };
+  return { caseCountsByCity, casesByCity };
+}
+
+export function isCorrectlySizedCase(aCase): boolean {
+  return (
+    aCase.procedureType !== PROCEDURE_TYPES_MAP.regular ||
+    REGULAR_TRIAL_CITY_STRINGS.includes(aCase.preferredTrialCity!)
+  );
 }

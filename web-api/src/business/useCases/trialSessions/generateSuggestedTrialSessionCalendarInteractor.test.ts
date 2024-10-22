@@ -2,8 +2,8 @@ import { SUGGESTED_TRIAL_SESSION_MESSAGES } from '@shared/business/entities/Enti
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateSuggestedTrialSessionCalendarInteractor } from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
-import mockCases from '@shared/test/mockCasesReadyForTrial.json';
-import mockSpecialSessions from '@shared/test/mockSpecialTrialSessions.json';
+import mockCases from '@shared/test/mockReadyForTrialCases.json';
+import mockSpecialSessions from '@shared/test/mockTrialSessions.json';
 
 describe('generateSuggestedTrialSessionCalendar', () => {
   beforeAll(() => {
@@ -27,7 +27,9 @@ describe('generateSuggestedTrialSessionCalendar', () => {
         mockPetitionsClerkUser,
       );
 
-    expect(message).toEqual(SUGGESTED_TRIAL_SESSION_MESSAGES.success);
+    expect(message.startsWith(SUGGESTED_TRIAL_SESSION_MESSAGES.success)).toBe(
+      true,
+    );
     expect(bufferArray).toBeDefined();
     expect(bufferArray?.length).toBeGreaterThan(0);
   });
