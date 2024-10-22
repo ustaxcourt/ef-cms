@@ -30,6 +30,7 @@ RUN apt-get install -y \
   ghostscript \
   chromium \
   openssh-client \
+  postgresql-client \
   sudo
 
 # These are needed to prevent node canvas from failing during node-gyp build steps
