@@ -55,7 +55,7 @@ export const EditPetitionerInformationInternal = connect(
   }) {
     const type = 'contact';
     const bind = 'form';
-    const onBlur = 'validatePetitionerSequence';
+    const onBlur = () => validatePetitionerSequence();
 
     return (
       <>
@@ -155,6 +155,7 @@ export const EditPetitionerInformationInternal = connect(
               bind={bind}
               clearTypeOnCountryChange={true}
               type={type}
+              onBlur={onBlur}
               onChange="updateFormValueSequence"
             />
             {form.contact.countryType === COUNTRY_TYPES.DOMESTIC ? (
@@ -266,11 +267,7 @@ export const EditPetitionerInformationInternal = connect(
               !form.contact.currentEmail && (
                 <>
                   <h4>Add Login & Service Email</h4>
-                  <FormGroup
-                    errorText={
-                      validationErrors.contact && validationErrors.contact.email
-                    }
-                  >
+                  <FormGroup errorText={validationErrors?.contact?.email}>
                     <label className="usa-label" htmlFor="updatedEmail">
                       New email address
                     </label>
@@ -292,10 +289,7 @@ export const EditPetitionerInformationInternal = connect(
                     />
                   </FormGroup>
                   <FormGroup
-                    errorText={
-                      validationErrors.contact &&
-                      validationErrors.contact.confirmEmail
-                    }
+                    errorText={validationErrors?.contact?.confirmEmail}
                   >
                     <label className="usa-label" htmlFor="confirm-email">
                       Re-enter new email address

@@ -1,10 +1,12 @@
+import { attachFile } from '../../../../helpers/file/upload-file';
+import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import {
   loginAsDocketClerk1,
   loginAsPetitioner,
 } from '../../../../helpers/authentication/login-as-helpers';
 import { logout } from '../../../../helpers/authentication/logout';
-import { petitionerCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
+import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/select-typeahead-input';
 
 /**
  * Given a case
@@ -14,7 +16,7 @@ import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/pet
 describe('Docket clerk QC-ing a paper filing', () => {
   it('should see the document title was updated when they change the event code while QC-ing', () => {
     loginAsPetitioner();
-    petitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
       logout();
 
@@ -38,11 +40,9 @@ describe('Docket clerk QC-ing a paper filing', () => {
         '.usa-date-picker__wrapper > [data-testid="date-received-picker"]',
       ).type('01/01/2018');
 
-      cy.get('[data-testid="primary-document-type-search"]').type('M115');
-      cy.get('#react-select-2-option-0').click();
+      selectTypeaheadInput('primary-document-type-search', 'M115');
 
-      cy.get('[data-testid="secondary-document-type-search"]').type('APPW');
-      cy.get('#react-select-3-option-0').click();
+      selectTypeaheadInput('secondary-document-type-search', 'APPW');
 
       cy.get('[data-testid="additional-info-1-textarea"]').type(
         'Test Secondary Additional Info',
@@ -55,9 +55,11 @@ describe('Docket clerk QC-ing a paper filing', () => {
       cy.get('[data-testid="objections-No"').click();
 
       cy.get('[data-testid="upload-pdf-button"]').click();
-      cy.get('input#primaryDocumentFile-file').attachFile(
-        '../../helpers/file/sample.pdf',
-      );
+      attachFile({
+        filePath: '../../helpers/file/sample.pdf',
+        selector: 'input#primaryDocumentFile-file',
+        selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+      });
 
       cy.get('[data-testid="save-for-later"]').click();
       cy.get('[data-testid="success-alert"]').contains(
@@ -72,8 +74,7 @@ describe('Docket clerk QC-ing a paper filing', () => {
         `[data-testid="${docketNumber}-qc-item-row"] [data-testid="qc-link"]`,
       ).click();
 
-      cy.get('#react-select-5-input').type('A');
-      cy.get('#react-select-5-option-0').click();
+      selectTypeaheadInput('secondary-document-type-search', 'Answer');
       cy.get('[data-testid="save-and-serve"]').click();
 
       cy.get('[data-testid="confirm-initiate-service-modal"]').contains(

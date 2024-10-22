@@ -122,10 +122,16 @@ export class Practitioner extends User {
       .description('The firm name for the practitioner.'),
     firstName: JoiValidationConstants.STRING.max(100)
       .required()
-      .description('The first name of the practitioner.'),
+      .description('The first name of the practitioner.')
+      .messages({
+        '*': 'Enter first name',
+      }),
     lastName: JoiValidationConstants.STRING.max(100)
       .required()
-      .description('The last name of the practitioner.'),
+      .description('The last name of the practitioner.')
+      .messages({
+        '*': 'Enter last name',
+      }),
     middleName: JoiValidationConstants.STRING.max(100)
       .optional()
       .allow(null)

@@ -58,3 +58,5 @@ aws dynamodb put-item \
   --region us-east-1 \
   --table-name "$SOURCE_TABLE" \
   --item "$ITEM"
+
+echo "CompletionMarker will be processed by streams-${ENV}-${DEPLOYING_COLOR} to approve the ${JOB_NAME} job in workflow ${CIRCLE_WORKFLOW_ID}."

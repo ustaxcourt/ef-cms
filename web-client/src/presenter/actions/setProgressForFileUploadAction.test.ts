@@ -1,3 +1,4 @@
+import { FileUploadProgressType } from '@shared/business/entities/EntityConstants';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setProgressForFileUploadAction } from './setProgressForFileUploadAction';
 
@@ -72,24 +73,37 @@ describe('setProgressForFileUploadAction', () => {
         },
       },
     });
-    results.output.fileUploadProgressMap.attachmentToPetition.uploadProgress({
+
+    const atpResults = results.output.fileUploadProgressMap
+      .attachmentToPetition as FileUploadProgressType;
+    const petitionResults = results.output.fileUploadProgressMap
+      .petition as FileUploadProgressType;
+    const stinResults = results.output.fileUploadProgressMap
+      .stin as FileUploadProgressType;
+    const waiverOfFilingFeeResults = results.output.fileUploadProgressMap
+      .waiverOfFilingFee as FileUploadProgressType;
+    const trialResults = results.output.fileUploadProgressMap
+      .trial as FileUploadProgressType;
+
+    atpResults.uploadProgress({
       isDone: true,
       total: 1,
     });
-    results.output.fileUploadProgressMap.petition.uploadProgress({
+
+    petitionResults.uploadProgress({
       isDone: true,
       total: 2,
     });
-    results.output.fileUploadProgressMap.stin.uploadProgress({
+    stinResults.uploadProgress({
       isDone: true,
       total: 3,
     });
 
-    results.output.fileUploadProgressMap.waiverOfFilingFee.uploadProgress({
+    waiverOfFilingFeeResults.uploadProgress({
       loaded: 0,
       total: 5,
     });
-    results.output.fileUploadProgressMap.trial.uploadProgress({
+    trialResults.uploadProgress({
       isHavingSystemIssues: true,
       loaded: 0,
       total: 4,
@@ -102,7 +116,7 @@ describe('setProgressForFileUploadAction', () => {
       timeRemaining: 0,
     });
 
-    results.output.fileUploadProgressMap.trial.uploadProgress({
+    trialResults.uploadProgress({
       isDone: true,
       isHavingSystemIssues: false,
       total: 4,
@@ -114,7 +128,7 @@ describe('setProgressForFileUploadAction', () => {
       timeRemaining: 0,
     });
 
-    results.output.fileUploadProgressMap.waiverOfFilingFee.uploadProgress({
+    waiverOfFilingFeeResults.uploadProgress({
       isDone: true,
       isHavingSystemIssues: false,
       total: 5,

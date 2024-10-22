@@ -5,7 +5,9 @@ import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/nav
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCasePropFromStateAction } from '../actions/setCasePropFromStateAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
+import { setValidationErrorsAction } from '@web-client/presenter/actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { submitEditRespondentCounselAction } from '../actions/CaseAssociation/submitEditRespondentCounselAction';
@@ -15,7 +17,11 @@ export const submitEditRespondentCounselSequence = [
   startShowValidationAction,
   validateEditRespondentCounselAction,
   {
-    error: [setValidationAlertErrorsAction],
+    error: [
+      setValidationErrorsAction,
+      setScrollToErrorNotificationAction,
+      setValidationAlertErrorsAction,
+    ],
     success: showProgressSequenceDecorator([
       submitEditRespondentCounselAction,
       {

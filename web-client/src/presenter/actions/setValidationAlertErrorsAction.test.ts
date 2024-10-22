@@ -17,6 +17,7 @@ describe('setValidationAlertErrors', () => {
     });
     expect(state.alertError).toMatchObject({
       messages: ['Some issue occurred'],
+      scrollToErrorNotification: false,
     });
   });
 
@@ -138,6 +139,25 @@ describe('setValidationAlertErrors', () => {
     });
     expect(state.alertError).toMatchObject({
       messages: ['second nested', 'first nested'],
+    });
+  });
+
+  it('should set state.alertError to true when scrollToErrorNotification is true', async () => {
+    const { state } = await runAction(setValidationAlertErrorsAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        errors: {
+          irsNoticeDate: 'Some issue occurred',
+        },
+        scrollToErrorNotification: true,
+      },
+      state: {},
+    });
+    expect(state.alertError).toMatchObject({
+      messages: ['Some issue occurred'],
+      scrollToErrorNotification: true,
     });
   });
 });

@@ -2,7 +2,6 @@ import { BigHeader } from './../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseInformation } from './CaseInformation';
 import { ErrorNotification } from './../ErrorNotification';
-import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormCancelModalDialog } from './../FormCancelModalDialog';
 import { IRSNotice } from '../IRSNotice';
@@ -21,7 +20,7 @@ export const StartCaseInternal = connect(
     documentSelectedForScan: state.currentViewMetadata.documentSelectedForScan,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
-    startCaseHelper: state.startCaseHelper,
+    startCaseInternalHelper: state.startCaseInternalHelper,
     submitPetitionFromPaperSequence: sequences.submitPetitionFromPaperSequence,
     validatePetitionFromPaperSequence:
       sequences.validatePetitionFromPaperSequence,
@@ -31,7 +30,7 @@ export const StartCaseInternal = connect(
     documentSelectedForScan,
     formCancelToggleCancelSequence,
     showModal,
-    startCaseHelper,
+    startCaseInternalHelper,
     submitPetitionFromPaperSequence,
     validatePetitionFromPaperSequence,
   }) {
@@ -75,14 +74,16 @@ export const StartCaseInternal = connect(
                     title="IRS Notice"
                   >
                     <div className="blue-container">
-                      <IRSNotice validationName="validateCaseDetailSequence" />
+                      <IRSNotice
+                        validateFormData={validatePetitionFromPaperSequence}
+                      />
                     </div>
                   </Tab>
                 </Tabs>
               </div>
               <div className="grid-col-7">
                 <ScanBatchPreviewer
-                  documentTabs={startCaseHelper.documentTabs}
+                  documentTabs={startCaseInternalHelper.documentTabs}
                   documentType={documentSelectedForScan}
                   title="Add Document(s)"
                   validateSequence={validatePetitionFromPaperSequence}
@@ -115,12 +116,6 @@ export const StartCaseInternal = connect(
             </div>
           </div>
         </section>
-
-        {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal
-            confirmSequence={submitPetitionFromPaperSequence}
-          />
-        )}
       </>
     );
   },

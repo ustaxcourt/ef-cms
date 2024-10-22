@@ -18,11 +18,9 @@ export const filingPartiesFormHelper = (
     PARTY_TYPES,
   } = applicationContext.getConstants();
 
-  const partyValidationError =
+  const partyValidationCheckboxError =
     validationErrors &&
-    (validationErrors.filers ||
-      validationErrors.partyIrsPractitioner ||
-      validationErrors.otherFilingParty);
+    (validationErrors.filers || validationErrors.partyIrsPractitioner);
 
   const objectionDocumentTypes = [
     ...INTERNAL_CATEGORY_MAP['Motion'].map(entry => {
@@ -48,7 +46,7 @@ export const filingPartiesFormHelper = (
       objectionDocumentTypes.includes(form.documentType) ||
       (AMENDMENT_EVENT_CODES.includes(form.eventCode) &&
         objectionDocumentTypes.includes(form.previousDocument?.documentType)),
-    partyValidationError,
+    partyValidationCheckboxError,
     showFilingPartiesAsCheckboxes,
     showSecondaryParty,
   };
