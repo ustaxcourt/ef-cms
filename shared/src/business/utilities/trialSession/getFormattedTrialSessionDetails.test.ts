@@ -1,8 +1,8 @@
-import { DOCKET_NUMBER_SUFFIXES } from '../entities/EntityConstants';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { DOCKET_NUMBER_SUFFIXES } from '../../entities/EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { TrialSessionState } from '@web-client/presenter/state/trialSessionState';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   formatCaseForTrialSession,
   getFormattedTrialSessionDetails,
@@ -19,9 +19,11 @@ describe('getFormattedTrialSessionDetails', () => {
   beforeEach(() => {
     TRIAL_SESSION = {
       ...MOCK_TRIAL_REGULAR,
+      calendaredCases: [],
       caseOrder: [],
       city: 'Hartford',
       courtReporter: 'Test Court Reporter',
+      eligibleCases: [],
       estimatedEndDate: '2040-11-25T15:00:00.000Z',
       irsCalendarAdministrator: 'Test Calendar Admin',
       postalCode: '12345',

@@ -27,6 +27,7 @@ export interface UserContact {
 
 export class User extends JoiValidationEntity {
   public pendingEmailVerificationToken?: string;
+  public pendingEmailVerificationTokenTimestamp?: string;
   public email?: string;
   public name: string;
   public pendingEmail?: string;
@@ -47,6 +48,8 @@ export class User extends JoiValidationEntity {
     if (!filtered) {
       this.pendingEmailVerificationToken =
         rawUser.pendingEmailVerificationToken;
+      this.pendingEmailVerificationTokenTimestamp =
+        rawUser.pendingEmailVerificationTokenTimestamp;
     }
 
     this.email = rawUser.email;

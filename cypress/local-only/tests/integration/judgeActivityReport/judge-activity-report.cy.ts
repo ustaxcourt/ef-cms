@@ -25,7 +25,7 @@ describe('Verify the activity report', () => {
         '.usa-date-picker__wrapper > [data-testid="deadlineStart-date-start-input"]',
       ).type('abc');
       cy.get(
-        '.usa-date-picker__wrapper > [data-testid="deadlineEnd-date-end-input}"]',
+        '.usa-date-picker__wrapper > [data-testid="deadlineEnd-date-end-input"]',
       ).type('123');
       cy.get('[data-testid="view-statistics-button"]').click();
       cy.get('[data-testid="error-alert"]').should('be.visible');
@@ -52,7 +52,7 @@ describe('Verify the activity report', () => {
         '.usa-date-picker__wrapper > [data-testid="deadlineStart-date-start-input"]',
       ).type('01/01/2013');
       cy.get(
-        '.usa-date-picker__wrapper > [data-testid="deadlineEnd-date-end-input}"]',
+        '.usa-date-picker__wrapper > [data-testid="deadlineEnd-date-end-input"]',
       ).type('01/01/2024');
       cy.get('[data-testid="view-statistics-button"]').click();
       cy.get('[data-testid="activity-report-header"]').should(

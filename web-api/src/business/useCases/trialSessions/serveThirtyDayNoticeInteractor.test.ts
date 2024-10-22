@@ -135,7 +135,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
         trialLocation: {
           address1: trialSession.address1!,
           address2: trialSession.address2!,
-          cityState: trialSession.trialLocation,
+          cityState: `${trialSession.city}, ${trialSession.state}`,
           courthouseName: trialSession.courthouseName!,
           postalCode: trialSession.postalCode!,
         },
