@@ -2,9 +2,9 @@ import {
   PROCEDURE_TYPES_MAP,
   REGULAR_TRIAL_CITY_STRINGS,
   TRIAL_CITY_STRINGS,
-  TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
 import {
+  WASHINGTON_DC_NORTH_STRING,
   WASHINGTON_DC_SOUTH_STRING,
   WASHINGTON_DC_STRING,
 } from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
@@ -14,82 +14,83 @@ export type EligibleCase = Pick<
   'preferredTrialCity' | 'procedureType' | 'docketNumber'
 >;
 
-export type CaseCountByCity = Record<string, number>;
+export type CaseCountsByProcedureTypeByCity = Record<
+  string,
+  { [PROCEDURE_TYPES_MAP.regular]: number; [PROCEDURE_TYPES_MAP.small]: number }
+>;
 
 export const getDataForCalendaring = ({
   cases,
 }: {
   cases: EligibleCase[];
-  citiesFromLastTwoTerms: string[];
 }): {
-  initialSmallCaseCountsByCity: CaseCountByCity;
-  initialRegularCaseCountsByCity: CaseCountByCity;
+  caseCountsByProcedureTypeByCity: CaseCountsByProcedureTypeByCity;
   incorrectSizeRegularCases: EligibleCase[];
 } => {
   let {
-    caseCountsByCity: initialRegularCaseCountsByCity,
+    caseCountsByProcedureTypeByCity,
     incorrectSizeCases: incorrectSizeRegularCases,
-  } = getCasesByCity(cases, PROCEDURE_TYPES_MAP.regular);
-
-  let { caseCountsByCity: initialSmallCaseCountsByCity } = getCasesByCity(
-    cases,
-    PROCEDURE_TYPES_MAP.small,
-  );
-
-  initialRegularCaseCountsByCity = TRIAL_CITY_STRINGS.reduce((acc, city) => {
-    if (city === WASHINGTON_DC_STRING) {
-      // We only schedule non-special sessions at DC South, so we only need to
-      // worry about case counts for South.
-      acc[WASHINGTON_DC_SOUTH_STRING] =
-        initialRegularCaseCountsByCity[city] || 0;
-    } else {
-      acc[city] = initialRegularCaseCountsByCity[city] || 0;
-    }
-    return acc;
-  }, {});
-
-  initialSmallCaseCountsByCity = TRIAL_CITY_STRINGS.reduce((acc, city) => {
-    if (city === WASHINGTON_DC_STRING) {
-      acc[WASHINGTON_DC_SOUTH_STRING] = initialSmallCaseCountsByCity[city] || 0;
-    } else {
-      acc[city] = initialSmallCaseCountsByCity[city] || 0;
-    }
-    return acc;
-  }, {});
+  } = getCasesByCityAndIncorrectlySizedCases(cases);
 
   return {
+    caseCountsByProcedureTypeByCity,
     incorrectSizeRegularCases,
-    initialRegularCaseCountsByCity,
-    initialSmallCaseCountsByCity,
   };
 };
 
-function getCasesByCity(
+const getCasesByCityAndIncorrectlySizedCases = (
   cases: EligibleCase[],
-  type: TrialSessionTypes,
 ): {
   incorrectSizeCases: EligibleCase[];
-  caseCountsByCity: CaseCountByCity;
-} {
+  caseCountsByProcedureTypeByCity: CaseCountsByProcedureTypeByCity;
+} => {
   const incorrectSizeCases: EligibleCase[] = [];
-  const caseCountsByCity: CaseCountByCity = {};
+  const caseCountsByProcedureTypeByCity: CaseCountsByProcedureTypeByCity =
+    initializeCaseCountsByProcedureTypeByCity();
 
-  cases
-    .filter(c => c.procedureType === type)
-    .forEach(currentCase => {
-      if (
-        type === PROCEDURE_TYPES_MAP.regular &&
-        !REGULAR_TRIAL_CITY_STRINGS.includes(currentCase.preferredTrialCity!)
-      ) {
-        incorrectSizeCases.push(currentCase);
-      }
+  cases.forEach(currentCase => {
+    if (!isCorrectlySizedCity(currentCase)) {
+      incorrectSizeCases.push(currentCase);
+    }
 
-      if (!caseCountsByCity[currentCase.preferredTrialCity!]) {
-        caseCountsByCity[currentCase.preferredTrialCity!] = 0;
-      }
+    caseCountsByProcedureTypeByCity[currentCase.preferredTrialCity!][
+      currentCase.procedureType
+    ]++;
+  });
 
-      caseCountsByCity[currentCase.preferredTrialCity!]++;
-    });
+  handleWashingtonDC(caseCountsByProcedureTypeByCity);
 
-  return { caseCountsByCity, incorrectSizeCases };
-}
+  return { caseCountsByProcedureTypeByCity, incorrectSizeCases };
+};
+
+const isCorrectlySizedCity = (aCase): boolean => {
+  return (
+    aCase.procedureType !== PROCEDURE_TYPES_MAP.regular ||
+    REGULAR_TRIAL_CITY_STRINGS.includes(aCase.preferredTrialCity!)
+  );
+};
+
+const initializeCaseCountsByProcedureTypeByCity =
+  (): CaseCountsByProcedureTypeByCity => {
+    return TRIAL_CITY_STRINGS.reduce((acc, city) => {
+      acc[city] = {
+        [PROCEDURE_TYPES_MAP.regular]: 0,
+        [PROCEDURE_TYPES_MAP.small]: 0,
+      };
+      return acc;
+    }, {});
+  };
+
+const handleWashingtonDC = (
+  caseCountsByProcedureTypeByCity: CaseCountsByProcedureTypeByCity,
+) => {
+  // Since we only assign non-special sessions to DC South,
+  // we can use DC counts of non-special sessions at South.
+  caseCountsByProcedureTypeByCity[WASHINGTON_DC_NORTH_STRING] = {
+    [PROCEDURE_TYPES_MAP.regular]: 0,
+    [PROCEDURE_TYPES_MAP.small]: 0,
+  };
+  caseCountsByProcedureTypeByCity[WASHINGTON_DC_SOUTH_STRING] =
+    caseCountsByProcedureTypeByCity[WASHINGTON_DC_STRING];
+  delete caseCountsByProcedureTypeByCity[WASHINGTON_DC_STRING];
+};

@@ -120,17 +120,13 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   console.time('10275: Generate prospectiveSessionsByCity time');
 
-  const {
-    incorrectSizeRegularCases,
-    initialRegularCaseCountsByCity,
-    initialSmallCaseCountsByCity,
-  } = getDataForCalendaring({ cases, citiesFromLastTwoTerms });
+  const { caseCountsByProcedureTypeByCity, incorrectSizeRegularCases } =
+    getDataForCalendaring({ cases });
 
   const { prospectiveSessionsByCity } = createProspectiveTrialSessions({
     calendaringConfig,
+    caseCountsByProcedureTypeByCity,
     citiesFromLastTwoTerms,
-    regularCaseCountsByCity: initialRegularCaseCountsByCity,
-    smallCaseCountsByCity: initialSmallCaseCountsByCity,
   });
 
   console.timeEnd('10275: Generate prospectiveSessionsByCity time');
@@ -155,13 +151,11 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     prospectiveSessionsByCity,
     weeksToLoop,
     specialSessions,
-    initialSmallCaseCountsByCity,
-    initialRegularCaseCountsByCity,
+    caseCountsByProcedureTypeByCity,
   );
 
   const {
-    remainingRegularCaseCountByCity,
-    remainingSmallCaseCountByCity,
+    remainingCaseCountsByProcedureTypeByCity,
     scheduledTrialSessionsByCity,
     sessionCountPerWeek,
   } = calendarGenerator.generateCalendar();
@@ -188,10 +182,8 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   console.time('10275: writeTrialSessionDataToExcel');
   const bufferArray = await writeTrialSessionDataToExcel({
-    initialRegularCaseCountsByCity,
-    initialSmallCaseCountsByCity,
-    remainingRegularCaseCountByCity,
-    remainingSmallCaseCountByCity,
+    caseCountsByProcedureTypeByCity,
+    remainingCaseCountsByProcedureTypeByCity,
     sessionCountPerWeek,
     sortedScheduledTrialSessionsByCity,
     weeks: weeksToLoop,

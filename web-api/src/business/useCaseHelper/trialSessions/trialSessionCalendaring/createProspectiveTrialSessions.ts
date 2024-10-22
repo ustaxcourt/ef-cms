@@ -1,4 +1,6 @@
+import { CaseCountsByProcedureTypeByCity } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
 import {
+  PROCEDURE_TYPES_MAP,
   SESSION_TYPES,
   TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
@@ -25,23 +27,18 @@ export type CalendaringConfig = {
 
 export const createProspectiveTrialSessions = ({
   calendaringConfig,
+  caseCountsByProcedureTypeByCity,
   citiesFromLastTwoTerms,
-  regularCaseCountsByCity,
-  smallCaseCountsByCity,
 }: {
   calendaringConfig: CalendaringConfig;
   citiesFromLastTwoTerms: string[];
-  regularCaseCountsByCity: Record<string, number>;
-  smallCaseCountsByCity: Record<string, number>;
+  caseCountsByProcedureTypeByCity: CaseCountsByProcedureTypeByCity;
 }): {
   prospectiveSessionsByCity: ProspectiveSessionsByCity;
 } => {
   const prospectiveSessionsByCity: ProspectiveSessionsByCity = {};
 
-  const cities = new Set([
-    ...Object.keys(regularCaseCountsByCity),
-    ...Object.keys(smallCaseCountsByCity),
-  ]);
+  const cities = new Set(Object.keys(caseCountsByProcedureTypeByCity));
 
   cities.forEach(city => {
     prospectiveSessionsByCity[city] = [];
@@ -51,8 +48,10 @@ export const createProspectiveTrialSessions = ({
     const cityWasNotVisitedInLastTwoTerms =
       !citiesFromLastTwoTerms.includes(city);
 
-    let remainingRegularCaseCount = regularCaseCountsByCity[city] || 0;
-    let remainingSmallCaseCount = smallCaseCountsByCity[city] || 0;
+    let remainingRegularCaseCount =
+      caseCountsByProcedureTypeByCity[city][PROCEDURE_TYPES_MAP.regular];
+    let remainingSmallCaseCount =
+      caseCountsByProcedureTypeByCity[city][PROCEDURE_TYPES_MAP.small];
 
     // One of these arrays will continue to decrease in size until it is smaller than the other, at which point prioritization below will flip.
     // For now, we are okay with this

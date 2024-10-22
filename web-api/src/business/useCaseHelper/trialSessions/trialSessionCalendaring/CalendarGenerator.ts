@@ -2,22 +2,24 @@ import {
   CalendaringConfig,
   ProspectiveSessionsByCity,
 } from './createProspectiveTrialSessions';
+import { CaseCountsByProcedureTypeByCity } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
 import { Constraint } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/constraints';
 import {
   FORMATS,
   createDateAtStartOfWeekEST,
 } from '@shared/business/utilities/DateHandler';
-import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
-  RemainingCaseCountByCity,
-  SessionCountByWeek,
-  TrialSessionsByCity,
-} from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
-import {
+  PROCEDURE_TYPES_MAP,
   SESSION_TYPES,
   TRIAL_CITY_STRINGS,
   TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import {
+  ScheduledTrialSession,
+  SessionCountByWeek,
+  TrialSessionsByCity,
+} from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import {
   WASHINGTON_DC_NORTH_STRING,
   WASHINGTON_DC_SOUTH_STRING,
@@ -35,8 +37,7 @@ export type CalendarState = {
 
 export class CalendarGenerator {
   private calendarState: CalendarState;
-  private remainingRegularCaseCountByCity: RemainingCaseCountByCity;
-  private remainingSmallCaseCountByCity: RemainingCaseCountByCity;
+  private remainingCaseCountsByProcedureTypeByCity: CaseCountsByProcedureTypeByCity;
 
   constructor(
     private calendaringConfig: CalendaringConfig,
@@ -44,11 +45,12 @@ export class CalendarGenerator {
     private prospectiveSessionsByCity: ProspectiveSessionsByCity,
     private weeksToLoop: string[],
     private specialSessions: RawTrialSession[],
-    smallCaseCountByCity: Record<string, number>,
-    regularCaseCountByCity: Record<string, number>,
+    caseCountsByProcedureTypeByCity: CaseCountsByProcedureTypeByCity,
   ) {
-    this.remainingRegularCaseCountByCity = cloneDeep(regularCaseCountByCity);
-    this.remainingSmallCaseCountByCity = cloneDeep(smallCaseCountByCity);
+    this.remainingCaseCountsByProcedureTypeByCity = cloneDeep(
+      caseCountsByProcedureTypeByCity,
+    );
+
     this.calendarState = {
       reservedWeekOfLocationIntersection: {},
       scheduledTrialSessionsByCity: {},
@@ -85,8 +87,7 @@ export class CalendarGenerator {
   public generateCalendar = (): {
     sessionCountPerWeek: SessionCountByWeek;
     scheduledTrialSessionsByCity: TrialSessionsByCity;
-    remainingRegularCaseCountByCity: RemainingCaseCountByCity;
-    remainingSmallCaseCountByCity: RemainingCaseCountByCity;
+    remainingCaseCountsByProcedureTypeByCity: CaseCountsByProcedureTypeByCity;
   } => {
     // check special sessions
     const specialSessionsByLocation = this.specialSessions.reduce(
@@ -263,8 +264,8 @@ export class CalendarGenerator {
     }
 
     return {
-      remainingRegularCaseCountByCity: this.remainingRegularCaseCountByCity,
-      remainingSmallCaseCountByCity: this.remainingSmallCaseCountByCity,
+      remainingCaseCountsByProcedureTypeByCity:
+        this.remainingCaseCountsByProcedureTypeByCity,
       scheduledTrialSessionsByCity:
         this.calendarState.scheduledTrialSessionsByCity,
       sessionCountPerWeek: this.calendarState.sessionCountPerWeek,
@@ -280,32 +281,59 @@ export class CalendarGenerator {
     sessionType: TrialSessionTypes;
     weekOf: string;
   }) => {
-    this.calendarState.scheduledTrialSessionsByCity[city].push({
+    const sessionToSchedule: ScheduledTrialSession = {
       city,
       sessionType,
       weekOf,
-    });
+    };
 
-    // eslint-disable-next-line spellcheck/spell-checker
-    // Decrement by the max count for that session type. If that's less than 0, then we scheduled
-    // a session that was more than the min and less than the max, so just set it to 0
-    if (sessionType === SESSION_TYPES.regular) {
-      this.remainingRegularCaseCountByCity[city] -=
-        this.calendaringConfig.regularCaseMaxQuantity;
-      if (this.remainingRegularCaseCountByCity[city] < 0)
-        this.remainingRegularCaseCountByCity[city] = 0;
-    } else if (sessionType === SESSION_TYPES.small) {
-      this.remainingSmallCaseCountByCity[city] -=
-        this.calendaringConfig.smallCaseMaxQuantity;
-      if (this.remainingSmallCaseCountByCity[city] < 0)
-        this.remainingSmallCaseCountByCity[city] = 0;
-    } else if (sessionType === SESSION_TYPES.hybrid) {
-      this.remainingRegularCaseCountByCity[city] = 0;
-      this.remainingSmallCaseCountByCity[city] = 0;
-    }
+    this.calendarState.scheduledTrialSessionsByCity[city].push(
+      sessionToSchedule,
+    );
+
+    this.decrementRemainingCaseCounters(sessionToSchedule);
 
     this.calendarState.sessionCountPerWeek[weekOf]++;
     this.calendarState.sessionCountPerCity[city]++;
     this.calendarState.sessionScheduledPerCityPerWeek[weekOf].add(city); // Mark this city as scheduled for the current week
+  };
+
+  private decrementRemainingCaseCounters = (session: ScheduledTrialSession) => {
+    const { city, sessionType } = session;
+    // eslint-disable-next-line spellcheck/spell-checker
+    // Decrement by the max count for that session type. If that's less than 0, then we scheduled
+    // a session that was more than the min and less than the max, so just set it to 0
+    if (sessionType === SESSION_TYPES.regular) {
+      this.remainingCaseCountsByProcedureTypeByCity[city][
+        PROCEDURE_TYPES_MAP.regular
+      ] -= this.calendaringConfig.regularCaseMaxQuantity;
+      if (
+        this.remainingCaseCountsByProcedureTypeByCity[city][
+          PROCEDURE_TYPES_MAP.regular
+        ] < 0
+      )
+        this.remainingCaseCountsByProcedureTypeByCity[city][
+          PROCEDURE_TYPES_MAP.regular
+        ] = 0;
+    } else if (sessionType === SESSION_TYPES.small) {
+      this.remainingCaseCountsByProcedureTypeByCity[city][
+        PROCEDURE_TYPES_MAP.small
+      ] -= this.calendaringConfig.smallCaseMaxQuantity;
+      if (
+        this.remainingCaseCountsByProcedureTypeByCity[city][
+          PROCEDURE_TYPES_MAP.small
+        ] < 0
+      )
+        this.remainingCaseCountsByProcedureTypeByCity[city][
+          PROCEDURE_TYPES_MAP.small
+        ] = 0;
+    } else if (sessionType === SESSION_TYPES.hybrid) {
+      this.remainingCaseCountsByProcedureTypeByCity[city][
+        PROCEDURE_TYPES_MAP.regular
+      ] = 0;
+      this.remainingCaseCountsByProcedureTypeByCity[city][
+        PROCEDURE_TYPES_MAP.small
+      ] = 0;
+    }
   };
 }

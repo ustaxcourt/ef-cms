@@ -1,21 +1,21 @@
-import { CaseCountByCity } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
+import { CaseCountsByProcedureTypeByCity } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
 import {
   FORMATS,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
 import {
-  RemainingCaseCountByCity,
+  PROCEDURE_TYPES_MAP,
+  SESSION_TYPES,
+} from '@shared/business/entities/EntityConstants';
+import {
   SessionCountByWeek,
   TrialSessionsByCity,
 } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
-import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import ExcelJS from 'exceljs';
 
 export const writeTrialSessionDataToExcel = async ({
-  initialRegularCaseCountsByCity,
-  initialSmallCaseCountsByCity,
-  remainingRegularCaseCountByCity,
-  remainingSmallCaseCountByCity,
+  caseCountsByProcedureTypeByCity,
+  remainingCaseCountsByProcedureTypeByCity,
   sessionCountPerWeek,
   sortedScheduledTrialSessionsByCity,
   weeks,
@@ -23,10 +23,8 @@ export const writeTrialSessionDataToExcel = async ({
   sortedScheduledTrialSessionsByCity: TrialSessionsByCity;
   weeks: string[];
   sessionCountPerWeek: SessionCountByWeek;
-  initialRegularCaseCountsByCity: CaseCountByCity;
-  initialSmallCaseCountsByCity: CaseCountByCity;
-  remainingRegularCaseCountByCity: RemainingCaseCountByCity;
-  remainingSmallCaseCountByCity: RemainingCaseCountByCity;
+  caseCountsByProcedureTypeByCity: CaseCountsByProcedureTypeByCity;
+  remainingCaseCountsByProcedureTypeByCity: CaseCountsByProcedureTypeByCity;
 }) => {
   const workbook = new ExcelJS.Workbook();
   const worksheetOptions = { properties: { outlineLevelCol: 2 } };
@@ -93,17 +91,28 @@ export const writeTrialSessionDataToExcel = async ({
     } else {
       city = cityStateString;
     }
+
     const values = {
       city,
       ...trialSessionCalendar[cityStateString],
       initialRegularCaseCount:
-        initialRegularCaseCountsByCity[cityStateString] || 0,
-      initialSmallCaseCount: initialSmallCaseCountsByCity[cityStateString] || 0,
+        caseCountsByProcedureTypeByCity[cityStateString][
+          PROCEDURE_TYPES_MAP.regular
+        ],
+      initialSmallCaseCount:
+        caseCountsByProcedureTypeByCity[cityStateString][
+          PROCEDURE_TYPES_MAP.small
+        ],
       remainingRegularCaseCount:
-        remainingRegularCaseCountByCity[cityStateString] || 0,
+        remainingCaseCountsByProcedureTypeByCity[cityStateString][
+          PROCEDURE_TYPES_MAP.regular
+        ],
       remainingSmallCaseCount:
-        remainingSmallCaseCountByCity[cityStateString] || 0,
+        remainingCaseCountsByProcedureTypeByCity[cityStateString][
+          PROCEDURE_TYPES_MAP.small
+        ],
     };
+
     worksheet.addRow(values);
   }
 
