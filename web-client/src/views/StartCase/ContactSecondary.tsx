@@ -171,7 +171,11 @@ export const ContactSecondary = connect(
           {(contactsHelper.showPaperPetitionEmailFieldAndConsentBox ||
             contactsHelper.showSecondaryContactEmailFieldAndConsentBox) && (
             <>
-              <PaperPetitionEmail bind={bind} contactType="contactSecondary" />
+              <PaperPetitionEmail
+                bind={bind}
+                contactType="contactSecondary"
+                onBlur={onBlur}
+              />
               <EConsent bind={bind} contactType="contactSecondary" />
             </>
           )}
