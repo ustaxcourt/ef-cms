@@ -10,16 +10,17 @@ This script can copy the contents of one database and overwrite the contents of 
 This script REQUIRES that it be run from the AWS account that is creating the backup, and it will assume a role in the target account.
 So if you wanted to restore Test environment from prod, use the environment switcher to point to prod, then fill out all TARGET environment variables with test info.
 
-ENV=test TARGET_ENV=exp3 TARGET_ACCOUNT_ID=xxxxxxxxxx TARGET_ROLE_ARN='arn:aws:iam::xxxxxxxxxx:role/cross_account_restore_role_exp3' npx ts-node --transpile-only scripts/postgres/restoreDbFromTarget.ts
+ENV=test TARGET_ENV=exp3 TARGET_ACCOUNT_ID=xxxxxxxxxx npx ts-node --transpile-only scripts/postgres/restoreDbFromSource.ts
 */
 
 async function main() {
   const sourceEnv = process.env.ENV!;
   const targetEnv = process.env.TARGET_ENV!;
   const targetAccountId = process.env.TARGET_ACCOUNT_ID!;
-  const targetRoleArn = process.env.TARGET_ROLE_ARN!;
 
-  requireEnvVars(['ENV', 'TARGET_ENV', 'TARGET_ACCOUNT_ID', 'TARGET_ROLE_ARN']);
+  requireEnvVars(['ENV', 'TARGET_ENV', 'TARGET_ACCOUNT_ID']);
+
+  const targetRoleArn = `arn:aws:iam::${targetAccountId}:role/cross_account_restore_role_${targetEnv}`;
 
   const { targetAccessKeyId, targetSecretAccessKey, targetSessionToken } =
     await getTargetAccountCredentials({ targetRoleArn });

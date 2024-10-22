@@ -849,7 +849,7 @@ jobs:
       - run:
           name: Deploy Check Glue Job Run State Cron Lambda
           command: |
-            TARGET_ENV=$LOWER_ENV TARGET_ACCOUNT_ID="${LOWER_ENV_ACCOUNT_ID}" TARGET_ROLE_ARN="arn:aws:iam::${LOWER_ENV_ACCOUNT_ID}:role/cross_account_restore_role_${LOWER_ENV}" npx ts-node --transpileOnly scripts/postgres/restoreDbFromTarget.ts
+            TARGET_ENV=$LOWER_ENV TARGET_ACCOUNT_ID="${LOWER_ENV_ACCOUNT_ID}" npx ts-node --transpileOnly scripts/postgres/restoreDbFromSource.ts
 
   finish-glue-job:
     docker:
