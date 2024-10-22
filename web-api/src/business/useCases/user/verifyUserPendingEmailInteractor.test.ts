@@ -23,14 +23,16 @@ import { validUser } from '../../../../../shared/src/test/mockUsers';
 describe('Verify User Pending Email', () => {
   const TOKEN = '41189629-abe1-46d7-b7a4-9d3834f919cb';
   const TOKEN_TIMESTAMP_VALID = createISODateString();
+  // .001 hours = 3.6 seconds. This gives us a reasonable degree of accuracy
+  // around expiration boundaries without creating a flaky test.
   const TOKEN_TIMESTAMP_ALMOST_INVALID = DateTime.now()
     .setZone('utc')
-    .minus({ hours: TOKEN_EXPIRATION_TIME_HOURS - 1 })
+    .minus({ hours: TOKEN_EXPIRATION_TIME_HOURS - 0.001 })
     .toISO()!;
 
   const TOKEN_TIMESTAMP_EXPIRED: string = DateTime.now()
     .setZone('utc')
-    .minus({ hours: TOKEN_EXPIRATION_TIME_HOURS + 1 })
+    .minus({ hours: TOKEN_EXPIRATION_TIME_HOURS + 0.001 })
     .toISO()!;
 
   describe('userTokenHasExpired', () => {
