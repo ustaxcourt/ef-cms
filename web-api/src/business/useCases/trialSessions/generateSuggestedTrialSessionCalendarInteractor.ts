@@ -1,3 +1,4 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   FORMATS,
   deconstructDate,
@@ -25,6 +26,8 @@ import { assignSessionsToWeeks } from '@web-api/business/useCaseHelper/trialSess
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 import { getDataForCalendaring } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
 import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
+import mockCases from '@shared/test/mockReadyForTrialCases.json';
+import mockSessions from '@shared/test/mockTrialSessions.json';
 
 const MAX_SESSIONS_PER_WEEK = 6;
 const MAX_SESSIONS_PER_LOCATION = 5;
@@ -74,24 +77,27 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     throw new UnauthorizedError('Unauthorized to generate term');
   }
 
-  console.time('10275: Get ready for trial cases time');
-  const cases = await applicationContext
-    .getPersistenceGateway()
-    .getSuggestedCalendarCases({ applicationContext });
+  // console.time('10275: Get ready for trial cases time');
+  // // const cases = await applicationContext
+  // //   .getPersistenceGateway()
+  // //   .getSuggestedCalendarCases({ applicationContext });
 
-  console.timeEnd('10275: Get ready for trial cases time');
+  // console.timeEnd('10275: Get ready for trial cases time');
 
-  console.time('10275: Get trial sessions time');
-  const sessions = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessions({ applicationContext });
+  // console.time('10275: Get trial sessions time');
+  // // const sessions = await applicationContext
+  // //   .getPersistenceGateway()
+  // //   .getTrialSessions({ applicationContext });
 
-  console.timeEnd('10275: Get trial sessions time');
-  // Note (10275): storing trial session data differently would make for a more
-  // efficient process of determining which sessions are special, calendared,
-  // and not closed.
+  // console.timeEnd('10275: Get trial sessions time');
+  // // Note (10275): storing trial session data differently would make for a more
+  // // efficient process of determining which sessions are special, calendared,
+  // // and not closed.
 
-  console.time('10275: Filter trial sessions time');
+  // console.time('10275: Filter trial sessions time');
+
+  const sessions = mockSessions;
+  const cases = mockCases;
   const specialSessions = getSpecialSessionsInTerm({
     sessions,
     termEndDate,
@@ -271,7 +277,7 @@ const generateSuccessMessage = ({ incorrectSizeRegularCases }) => {
 
     successMessage =
       successMessage +
-      ` The following cases have a procedure type the does not match their preferred trial location's procedure type: ${docketNumbers.join(', ')}`;
+      ` The following cases have a procedure type that does not match their preferred trial location's procedure type: ${docketNumbers.join(', ')}`;
   }
 
   return successMessage;
