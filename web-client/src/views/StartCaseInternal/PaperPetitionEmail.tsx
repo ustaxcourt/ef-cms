@@ -10,6 +10,7 @@ export const PaperPetitionEmail = connect(
     bind: props.bind,
     contactType: props.contactType,
     data: state[props.bind],
+    onBlur: props.onBlur,
     updateFormValueAndSecondaryContactInfoSequence:
       sequences.updateFormValueAndSecondaryContactInfoSequence,
     validationErrors: state.validationErrors,
@@ -17,7 +18,7 @@ export const PaperPetitionEmail = connect(
   function PaperPetitionEmail({
     contactType,
     data,
-    onBlurSequence,
+    onBlur,
     updateFormValueAndSecondaryContactInfoSequence,
     validationErrors = {},
   }) {
@@ -42,7 +43,7 @@ export const PaperPetitionEmail = connect(
             type="email"
             value={data[contactType].paperPetitionEmail || ''}
             onBlur={() => {
-              onBlurSequence();
+              onBlur();
             }}
             onChange={e => {
               updateFormValueAndSecondaryContactInfoSequence({
