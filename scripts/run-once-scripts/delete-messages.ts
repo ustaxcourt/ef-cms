@@ -1,31 +1,33 @@
+/**
+ * HOW TO RUN
+ *
+ * TABLE_NAME=testing npx ts-node --transpileOnly scripts/postgres/delete-messages.ts
+ */
+
 import {
   BatchWriteCommand,
   DynamoDBDocumentClient,
   ScanCommand,
 } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient, ScanCommandInput } from '@aws-sdk/client-dynamodb';
-import { requireEnvVars } from 'shared/admin-tools/util';
+import { requireEnvVars } from '../../shared/admin-tools/util';
 
-// Ensure required environment variables are set
 requireEnvVars(['TABLE_NAME']);
 
-// Table name configured via environment variable
 const tableNameInput = process.env.TABLE_NAME!;
 
-// Set up DynamoDB client with AWS SDK v3
 const dynamoDbClient = new DynamoDBClient({ region: 'us-east-1' });
 const dynamoDbDocClient = DynamoDBDocumentClient.from(dynamoDbClient);
 
-let totalItemsDeleted = 0; // Counter for tracking total deleted items
+let totalItemsDeleted = 0;
 
 async function main() {
   // Set up scan parameters
   const scanParams: ScanCommandInput = {
     TableName: tableNameInput,
-    TotalSegments: 10, // Enable parallel scans with 10 segments
+    TotalSegments: 10,
   };
 
-  // Run scans concurrently across segments
   await Promise.all(
     Array.from({ length: 10 }).map((_, segment) =>
       runSegmentScan({ ...scanParams, Segment: segment }, dynamoDbDocClient),
@@ -42,7 +44,6 @@ async function runSegmentScan(
   const result = await client.send(new ScanCommand(params));
   const items = result.Items ?? [];
 
-  // Filter the items that match the condition and prepare for batch delete
   const itemsToDelete = items
     .filter(item => {
       const { pk, sk } = item as { pk: string; sk: string };
@@ -59,7 +60,6 @@ async function runSegmentScan(
 
   await batchDeleteItems(itemsToDelete, client);
 
-  // Continue scanning if there's more data
   if (result.LastEvaluatedKey) {
     params.ExclusiveStartKey = result.LastEvaluatedKey;
     await runSegmentScan(params, client);
@@ -70,8 +70,8 @@ async function batchDeleteItems(
   itemsToDelete: { DeleteRequest: { Key: { pk: string; sk: string } } }[],
   client: DynamoDBDocumentClient,
 ) {
-  // DynamoDB batch write supports a maximum of 25 items per request
   const BATCH_SIZE = 25;
+  const RETRY_DELAY_MS = 5000; // Set the delay between retries (in milliseconds)
 
   for (let i = 0; i < itemsToDelete.length; i += BATCH_SIZE) {
     const batch = itemsToDelete.slice(i, i + BATCH_SIZE);
@@ -105,6 +105,9 @@ async function batchDeleteItems(
           );
           batchWriteParams.RequestItems[tableNameInput] = unprocessedItems;
           retryCount++;
+
+          // Add delay before the next retry
+          await new Promise(resolve => setTimeout(resolve, RETRY_DELAY_MS));
         }
       }
 
