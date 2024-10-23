@@ -145,8 +145,8 @@ export const PublicTrialSessionsFilters = connect(
               <div className="margin-bottom-1">
                 <label
                   className="usa-label"
-                  htmlFor="session-type-filter"
-                  id="session-type-filter-label"
+                  htmlFor="location-filter"
+                  id="location-filter-label"
                 >
                   Location{' '}
                   <span className="optional-light-text">(optional)</span>
