@@ -26,114 +26,119 @@ export const MessagesSectionCompleted = connect(
   }) {
     return (
       <>
-        <TableFilters
-          filters={[
-            {
-              isSelected: screenMetadata.completedBy,
-              key: 'completedBy',
-              label: 'Completed By',
-              options: formattedMessages.completedByUsers,
-              useInlineSelect: false,
-            },
-          ]}
-          onSelect={updateScreenMetadataSequence}
-        ></TableFilters>
+        <div className="overflow-x-auto">
+          <TableFilters
+            filters={[
+              {
+                isSelected: screenMetadata.completedBy,
+                key: 'completedBy',
+                label: 'Completed By',
+                options: formattedMessages.completedByUsers,
+                useInlineSelect: false,
+              },
+            ]}
+            onSelect={updateScreenMetadataSequence}
+          ></TableFilters>
 
-        <table className="usa-table ustc-table subsection">
-          <thead>
-            <tr>
-              <th aria-hidden="true" className="consolidated-case-column"></th>
-              <th aria-label="Docket Number" className="small" colSpan={2}>
-                <SortableColumn
-                  ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                  currentlySortedField={tableSort.sortField}
-                  currentlySortedOrder={tableSort.sortOrder}
-                  data-testid="message-section-docket-number-header-button"
-                  defaultSortOrder={constants.DESCENDING}
-                  descText={constants.CHRONOLOGICALLY_DESCENDING}
-                  hasRows={formattedMessages.hasMessages}
-                  sortField="docketNumber"
-                  title="Docket No."
-                  onClickSequence={sortTableSequence}
-                />
-              </th>
-              <th className="medium">
-                <SortableColumn
-                  ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                  currentlySortedField={tableSort.sortField}
-                  currentlySortedOrder={tableSort.sortOrder}
-                  data-testid="message-section-completed-at-header-button"
-                  defaultSortOrder={constants.ASCENDING}
-                  descText={constants.CHRONOLOGICALLY_DESCENDING}
-                  hasRows={formattedMessages.hasMessages}
-                  sortField="completedAt"
-                  title="Completed"
-                  onClickSequence={sortTableSequence}
-                />
-              </th>
-              <th>
-                <SortableColumn
-                  ascText={constants.ALPHABETICALLY_ASCENDING}
-                  currentlySortedField={tableSort.sortField}
-                  currentlySortedOrder={tableSort.sortOrder}
-                  data-testid="message-section-subject-header-button"
-                  defaultSortOrder={constants.ASCENDING}
-                  descText={constants.ALPHABETICALLY_DESCENDING}
-                  hasRows={formattedMessages.hasMessages}
-                  sortField="subject"
-                  title="Last Message"
-                  onClickSequence={sortTableSequence}
-                />
-              </th>
-              <th>
-                <SortableColumn
-                  ascText={constants.ALPHABETICALLY_ASCENDING}
-                  currentlySortedField={tableSort.sortField}
-                  currentlySortedOrder={tableSort.sortOrder}
-                  data-testid="message-section-comment-header-button"
-                  defaultSortOrder={constants.ASCENDING}
-                  descText={constants.ALPHABETICALLY_DESCENDING}
-                  hasRows={formattedMessages.hasMessages}
-                  sortField="completedMessage"
-                  title="Comment"
-                  onClickSequence={sortTableSequence}
-                />
-              </th>
-              <th>
-                <SortableColumn
-                  ascText={constants.ALPHABETICALLY_ASCENDING}
-                  currentlySortedField={tableSort.sortField}
-                  currentlySortedOrder={tableSort.sortOrder}
-                  data-testid="message-section-completed-by-header-button"
-                  defaultSortOrder={constants.ASCENDING}
-                  descText={constants.ALPHABETICALLY_DESCENDING}
-                  hasRows={formattedMessages.hasMessages}
-                  sortField="completedBy"
-                  title="Completed By"
-                  onClickSequence={sortTableSequence}
-                />
-              </th>
-              <th>
-                <SortableColumn
-                  ascText={constants.ALPHABETICALLY_ASCENDING}
-                  currentlySortedField={tableSort.sortField}
-                  currentlySortedOrder={tableSort.sortOrder}
-                  data-testid="message-section-completed-by-section-header-button"
-                  defaultSortOrder={constants.ASCENDING}
-                  descText={constants.ALPHABETICALLY_DESCENDING}
-                  hasRows={formattedMessages.hasMessages}
-                  sortField="completedBySection"
-                  title="Section"
-                  onClickSequence={sortTableSequence}
-                />
-              </th>
-            </tr>
-          </thead>
-          {formattedMessages.completedMessages.map(message => (
-            <CompletedMessageRow key={message.messageId} message={message} />
-          ))}
-        </table>
-        {!formattedMessages.hasMessages && <div>There are no messages.</div>}
+          <table className="usa-table ustc-table subsection">
+            <thead>
+              <tr>
+                <th
+                  aria-hidden="true"
+                  className="consolidated-case-column"
+                ></th>
+                <th aria-label="Docket Number" colSpan={2}>
+                  <SortableColumn
+                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                    currentlySortedField={tableSort.sortField}
+                    currentlySortedOrder={tableSort.sortOrder}
+                    data-testid="message-section-docket-number-header-button"
+                    defaultSortOrder={constants.DESCENDING}
+                    descText={constants.CHRONOLOGICALLY_DESCENDING}
+                    hasRows={formattedMessages.hasMessages}
+                    sortField="docketNumber"
+                    title="Docket No."
+                    onClickSequence={sortTableSequence}
+                  />
+                </th>
+                <th className="medium">
+                  <SortableColumn
+                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                    currentlySortedField={tableSort.sortField}
+                    currentlySortedOrder={tableSort.sortOrder}
+                    data-testid="message-section-completed-at-header-button"
+                    defaultSortOrder={constants.ASCENDING}
+                    descText={constants.CHRONOLOGICALLY_DESCENDING}
+                    hasRows={formattedMessages.hasMessages}
+                    sortField="completedAt"
+                    title="Completed"
+                    onClickSequence={sortTableSequence}
+                  />
+                </th>
+                <th>
+                  <SortableColumn
+                    ascText={constants.ALPHABETICALLY_ASCENDING}
+                    currentlySortedField={tableSort.sortField}
+                    currentlySortedOrder={tableSort.sortOrder}
+                    data-testid="message-section-subject-header-button"
+                    defaultSortOrder={constants.ASCENDING}
+                    descText={constants.ALPHABETICALLY_DESCENDING}
+                    hasRows={formattedMessages.hasMessages}
+                    sortField="subject"
+                    title="Last Message"
+                    onClickSequence={sortTableSequence}
+                  />
+                </th>
+                <th>
+                  <SortableColumn
+                    ascText={constants.ALPHABETICALLY_ASCENDING}
+                    currentlySortedField={tableSort.sortField}
+                    currentlySortedOrder={tableSort.sortOrder}
+                    data-testid="message-section-comment-header-button"
+                    defaultSortOrder={constants.ASCENDING}
+                    descText={constants.ALPHABETICALLY_DESCENDING}
+                    hasRows={formattedMessages.hasMessages}
+                    sortField="completedMessage"
+                    title="Comment"
+                    onClickSequence={sortTableSequence}
+                  />
+                </th>
+                <th>
+                  <SortableColumn
+                    ascText={constants.ALPHABETICALLY_ASCENDING}
+                    currentlySortedField={tableSort.sortField}
+                    currentlySortedOrder={tableSort.sortOrder}
+                    data-testid="message-section-completed-by-header-button"
+                    defaultSortOrder={constants.ASCENDING}
+                    descText={constants.ALPHABETICALLY_DESCENDING}
+                    hasRows={formattedMessages.hasMessages}
+                    sortField="completedBy"
+                    title="Completed By"
+                    onClickSequence={sortTableSequence}
+                  />
+                </th>
+                <th>
+                  <SortableColumn
+                    ascText={constants.ALPHABETICALLY_ASCENDING}
+                    currentlySortedField={tableSort.sortField}
+                    currentlySortedOrder={tableSort.sortOrder}
+                    data-testid="message-section-completed-by-section-header-button"
+                    defaultSortOrder={constants.ASCENDING}
+                    descText={constants.ALPHABETICALLY_DESCENDING}
+                    hasRows={formattedMessages.hasMessages}
+                    sortField="completedBySection"
+                    title="Section"
+                    onClickSequence={sortTableSequence}
+                  />
+                </th>
+              </tr>
+            </thead>
+            {formattedMessages.completedMessages.map(message => (
+              <CompletedMessageRow key={message.messageId} message={message} />
+            ))}
+          </table>
+          {!formattedMessages.hasMessages && <div>There are no messages.</div>}
+        </div>
       </>
     );
   },
@@ -155,14 +160,14 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
           />
         </td>
         <td
-          className="message-queue-row small"
+          className="message-queue-row"
           colSpan={2}
           data-testid="section-message-completed-docket-number-cell"
         >
           {message.docketNumberWithSuffix}
         </td>
         <td
-          className="message-queue-row small"
+          className="message-queue-row"
           data-testid="section-message-completed-completed-at-cell"
         >
           <span className="no-wrap">{message.completedAtFormatted}</span>
