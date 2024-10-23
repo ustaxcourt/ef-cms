@@ -66,6 +66,7 @@ import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrial
 import { clearSelectedWorkItemsSequence } from './sequences/clearSelectedWorkItemsSequence';
 import { clearStatusReportOrderFormSequence } from './sequences/StatusReportOrder/clearStatusReportOrderFormSequence';
 import { clearViewerDocumentToDisplaySequence } from './sequences/clearViewerDocumentToDisplaySequence';
+import { cloneDeep } from 'lodash';
 import { closeModalAndNavigateBackSequence } from './sequences/closeModalAndNavigateBackSequence';
 import { closeModalAndNavigateSequence } from './sequences/closeModalAndNavigateSequence';
 import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeModalAndNavigateToMaintenanceSequence';
@@ -347,11 +348,13 @@ import { removeSignatureSequence } from './sequences/removeSignatureSequence';
 import { removeSupportingDocumentSequence } from './sequences/removeSupportingDocumentSequence';
 import { replyToMessageSequence } from './sequences/replyToMessageSequence';
 import { rescanBatchSequence } from './sequences/rescanBatchSequence';
+import { resendVerifyPendingUserEmailSequence } from '@web-client/presenter/sequences/resendVerifyPendingUserEmailSequence';
 import { resetCaseMenuSequence } from './sequences/resetCaseMenuSequence';
 import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordionsSequence';
 import { resetIdleTimerSequence } from './sequences/resetIdleTimerSequence';
 import { resetPasswordSequence } from '@web-client/presenter/sequences/Login/resetPasswordSequence';
 import { resetSecondaryAddressSequence } from './sequences/resetSecondaryAddressSequence';
+import { resetTrialSessionsFiltersSequence } from '@web-client/presenter/sequences/resetTrialSessionsFiltersSequence';
 import { retryAsyncRequestSequence } from './sequences/retryAsyncRequestSequence';
 import { reviewCaseAssociationRequestSequence } from './sequences/reviewCaseAssociationRequestSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
@@ -408,6 +411,7 @@ import { setSelectedDocumentsForDownloadSequence } from './sequences/setSelected
 import { setSelectedMessagesSequence } from './sequences/setSelectedMessagesSequence';
 import { setTrialSessionCalendarErrorSequence } from '@web-client/presenter/sequences/setTrialSessionCalendarErrorSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
+import { setTrialSessionsFiltersSequence } from '@web-client/presenter/sequences/setTrialSessionsFiltersSequence';
 import { setViewerCorrespondenceToDisplaySequence } from './sequences/setViewerCorrespondenceToDisplaySequence';
 import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumentToDisplaySequence';
 import { setViewerDraftDocumentToDisplaySequence } from './sequences/setViewerDraftDocumentToDisplaySequence';
@@ -943,7 +947,7 @@ export const presenterSequences = {
     gotoTrialSessionPlanningReportSequence as unknown as Function,
   gotoTrialSessionWorkingCopySequence:
     gotoTrialSessionWorkingCopySequence as unknown as Function,
-  gotoTrialSessionsSequence: gotoTrialSessionsSequence as unknown as Function,
+  gotoTrialSessionsSequence,
   gotoUploadCorrespondenceDocumentSequence:
     gotoUploadCorrespondenceDocumentSequence as unknown as Function,
   gotoUploadCourtIssuedDocumentSequence:
@@ -1172,12 +1176,14 @@ export const presenterSequences = {
     removeSupportingDocumentSequence as unknown as Function,
   replyToMessageSequence: replyToMessageSequence as unknown as Function,
   rescanBatchSequence: rescanBatchSequence as unknown as Function,
+  resendVerifyPendingUserEmailSequence,
   resetCaseMenuSequence: resetCaseMenuSequence as unknown as Function,
   resetHeaderAccordionsSequence:
     resetHeaderAccordionsSequence as unknown as Function,
   resetIdleTimerSequence: resetIdleTimerSequence as unknown as Function,
   resetPasswordSequence,
   resetSecondaryAddressSequence,
+  resetTrialSessionsFiltersSequence,
   retryAsyncRequestSequence: retryAsyncRequestSequence as unknown as Function,
   reviewCaseAssociationRequestSequence:
     reviewCaseAssociationRequestSequence as unknown as Function,
@@ -1261,6 +1267,7 @@ export const presenterSequences = {
   setSelectedMessagesSequence,
   setTrialSessionCalendarErrorSequence,
   setTrialSessionCalendarSequence,
+  setTrialSessionsFiltersSequence,
   setViewerCorrespondenceToDisplaySequence:
     setViewerCorrespondenceToDisplaySequence as unknown as Function,
   setViewerDocumentToDisplaySequence:
@@ -1621,7 +1628,7 @@ export const presenter = {
   ],
   providers: {} as { applicationContext: ClientApplicationContext; router: {} },
   sequences: presenterSequences,
-  state: initialState,
+  state: cloneDeep(initialState),
 };
 
 export type Sequences = typeof presenterSequences;

@@ -171,7 +171,7 @@ export const CreateMessageModalDialog = connect<
             Add message
           </label>
           <textarea
-            className="usa-textarea ustc-message-modal-text-area"
+            className="usa-textarea textarea-resize-vertical"
             data-testid="message-body"
             id="message"
             name="message"
