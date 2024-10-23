@@ -6,7 +6,6 @@ associate an irs practitioner onto a case,case|${CASE_ID},irsPractitioner|${USER
 associate a private practitioner onto a case,case|${CASE_ID},privatePractitioner|${USER_ID},leadCase|${LEAD_CASE_ID}
 associate docket entry on a case,case|${CASE_ID},docket-entry|${DOCKET_ENTRY_ID},
 add correspondence to a case,case|${CASE_ID},correspondence|${CORRESPONDENCE_ID},
-associate message onto a case,case|${CASE_ID},message|${MESSAGE_ID},message|${MESSAGE_ID}
 add a hearing to a case,case|${CASE_ID},hearing|${TRIAL_SESSION_ID},
 a work item on a case,case|${CASE_ID},work-item|${WORK_ITEM_ID},work-item|${WORK_ITEM_ID},assigneeId|${ASSIGNEE_ID}
 docket number generator counter,docketNumberCounter-${YEAR},docketNumberCounter-${YEAR},
