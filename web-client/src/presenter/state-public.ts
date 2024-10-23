@@ -1,4 +1,5 @@
 import { PUBLIC_DOCKET_RECORD_FILTER_OPTIONS } from '../../../shared/src/business/entities/EntityConstants';
+import { RawUser } from '@shared/business/entities/User';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByNameHelper';
@@ -62,12 +63,14 @@ export const baseState = {
   },
   isPublic: true,
   isTerminalUser: false,
+  judges: [] as RawUser[],
   modal: {},
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses
     waitingForResponse: false,
     waitingForResponseRequests: 0,
   },
+  publicTrialSessionData: {} as { [key: string]: any },
   sessionMetadata: {
     docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
     docketRecordSort: {},
