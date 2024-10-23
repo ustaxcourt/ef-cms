@@ -20,7 +20,7 @@ export const PublicDocketRecord = connect(
         <PublicDocketRecordHeader />
 
         <NonPhone>
-          <div style={{ overflowX: 'scroll', width: '100%' }}>
+          <div className="width-full overflow-x-auto">
             <table
               aria-label="docket record"
               className="usa-table ustc-table usa-table--stacked"
