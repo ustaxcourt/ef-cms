@@ -26,12 +26,6 @@ describe('processMessageEntries', () => {
           messageId: {
             S: 'a73c3ff5-2daf-4bbd-91d1-e8e7543346e0',
           },
-          pk: {
-            S: 'case|123-45',
-          },
-          sk: {
-            S: 'message|229f79aa-22d1-426e-98e2-5d9f2af472b6',
-          },
         },
       },
     };

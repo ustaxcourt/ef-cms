@@ -1,10 +1,11 @@
 import { NewMessageKysely } from '@web-api/database-types';
+import { calculateDate } from '@shared/business/utilities/DateHandler';
 
 /* eslint-disable @miovision/disallow-date/no-new-date */
 export const messages: NewMessageKysely[] = [
   {
     attachments: JSON.stringify([]),
-    createdAt: new Date('2020-06-05T18:02:25.280Z'),
+    createdAt: calculateDate({ dateString: '2020-06-05T18:02:25.280Z' }),
     docketNumber: '105-20',
     from: 'Test Petitionsclerk',
     fromSection: 'petitions',
@@ -26,7 +27,7 @@ export const messages: NewMessageKysely[] = [
         documentId: '4796a931-14fb-43e6-948f-d2b67ce4c1cb',
       },
     ]),
-    createdAt: new Date('2023-06-02T21:15:50.105Z'),
+    createdAt: calculateDate({ dateString: '2023-06-02T21:15:50.105Z' }),
     docketNumber: '103-20',
     from: 'Test Admissions Clerk',
     fromSection: 'admissions',
@@ -48,7 +49,7 @@ export const messages: NewMessageKysely[] = [
         documentId: '8ed9bad9-db58-43c8-b03f-c2e3ad92995f',
       },
     ]),
-    createdAt: new Date('2020-08-18T18:07:36.333Z'),
+    createdAt: calculateDate({ dateString: '2020-08-18T18:07:36.333Z' }),
     docketNumber: '104-19',
     from: 'Test Docketclerk',
     fromSection: 'docket',
@@ -63,5 +64,71 @@ export const messages: NewMessageKysely[] = [
     to: 'Test Docketclerk',
     toSection: 'docket',
     toUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+  },
+  {
+    attachments: JSON.stringify([
+      {
+        documentId: '61967538-5261-4bb9-b3b6-8072a536d007',
+      },
+    ]),
+    createdAt: calculateDate({ dateString: '2024-07-10T21:38:18.175Z' }),
+    docketNumber: '107-19',
+    from: 'Colvin',
+    fromSection: 'colvinsChambers',
+    fromUserId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+    isCompleted: false,
+    isRead: false,
+    isRepliedTo: false,
+    message: 'Test',
+    messageId: '32484c7f-4606-49fc-89f1-27ba1d5596be',
+    parentMessageId: '32484c7f-4606-49fc-89f1-27ba1d5596be',
+    subject: 'Test Status Report Order (Signed)',
+    to: 'Colvin',
+    toSection: 'colvinsChambers',
+    toUserId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+  },
+  {
+    attachments: JSON.stringify([
+      {
+        documentId: '49acedbf-978d-476c-aae9-42bb75595dd3',
+      },
+    ]),
+    createdAt: calculateDate({ dateString: '2024-07-10T21:37:51.875Z' }),
+    docketNumber: '107-19',
+    from: 'Colvin',
+    fromSection: 'colvinsChambers',
+    fromUserId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+    isCompleted: false,
+    isRead: false,
+    isRepliedTo: false,
+    message: 'Test',
+    messageId: '34483b5b-29de-4ad4-8caa-59f71ad6d906',
+    parentMessageId: '34483b5b-29de-4ad4-8caa-59f71ad6d906',
+    subject: 'Test Status Report Order (Unsigned)',
+    to: 'Colvin',
+    toSection: 'colvinsChambers',
+    toUserId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+  },
+  {
+    attachments: JSON.stringify([
+      {
+        documentId: '178af2d2-fab1-445a-a729-d3da63517a0a',
+      },
+    ]),
+    createdAt: calculateDate({ dateString: '2024-07-10T21:35:24.000Z' }),
+    docketNumber: '107-19',
+    from: 'Colvin',
+    fromSection: 'colvinsChambers',
+    fromUserId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+    isCompleted: false,
+    isRead: false,
+    isRepliedTo: false,
+    message: 'Test',
+    messageId: '73d4365b-8b3a-4b01-9ca3-7087f7a6d4b5',
+    parentMessageId: '73d4365b-8b3a-4b01-9ca3-7087f7a6d4b5',
+    subject: 'Status Report',
+    to: 'Colvin',
+    toSection: 'colvinsChambers',
+    toUserId: 'dabbad00-18d0-43ec-bafb-654e83405416',
   },
 ];
