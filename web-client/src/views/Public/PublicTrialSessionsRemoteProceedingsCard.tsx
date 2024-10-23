@@ -12,7 +12,7 @@ export const PublicTrialSessionsRemoteProceedingsCard = connect(
             <h2>Remote Proceedings</h2>
           </div>
           <div className="card-content ">
-            <div className="padding-left-2 margin-bottom-2">
+            <div className="padding-left-2 margin-bottom-9">
               <Button
                 className="padding-bottom-0 text-left"
                 link="https://www.ustaxcourt.gov/remote_proceedings.html"
