@@ -71,4 +71,33 @@ describe('verifyUserPendingEmailAction', () => {
       },
     });
   });
+
+  it('should return an error message when the token has expired', async () => {
+    applicationContext
+      .getUseCases()
+      .verifyUserPendingEmailInteractor.mockRejectedValue(
+        new Error('Link has expired'),
+      );
+
+    await runAction(verifyUserPendingEmailAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        token: mockToken,
+      },
+    });
+
+    expect(errorMock).toHaveBeenCalledWith({
+      alertError: {
+        message: (
+          <>
+            Enter your old email address and password below, then log in to be
+            sent a new verification email.
+          </>
+        ),
+        title: 'Verification email link expired',
+      },
+    });
+  });
 });
