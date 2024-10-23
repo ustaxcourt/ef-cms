@@ -2,7 +2,7 @@ import {
   ALL_DOCUMENT_TYPES,
   ALL_EVENT_CODES,
   AMENDMENT_EVENT_CODES,
-  DOCUMENT_EXTERNAL_CATEGORIES_MAP,
+  EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION,
 } from '../EntityConstants';
 import { ExternalDocumentBase } from '@shared/business/entities/externalDocument/ExternalDocumentBase';
 import { GENERATION_TYPES } from '@web-client/getConstants';
@@ -193,19 +193,12 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
       makeRequired('certificateOfServiceDate');
     }
 
-    const objectionDocumentTypes = [
-      ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Motion'].map(entry => {
-        return entry.documentType;
-      }),
-      'Motion to Withdraw Counsel (filed by petitioner)',
-      'Motion to Withdraw as Counsel',
-      'Application to Take Deposition',
-    ];
-
     if (
-      objectionDocumentTypes.includes(this.documentType) ||
+      EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION.has(this.documentType) ||
       (AMENDMENT_EVENT_CODES.includes(this.eventCode!) &&
-        objectionDocumentTypes.includes(this.previousDocument?.documentType!))
+        EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION.has(
+          this.previousDocument?.documentType!,
+        ))
     ) {
       makeRequired('objections');
     }

@@ -1,6 +1,6 @@
+import { EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION } from '@shared/business/entities/EntityConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { includes } from 'lodash';
 import { makeRequiredHelper } from './externalDocumentHelpers';
 import joi from 'joi';
 
@@ -62,17 +62,7 @@ export class SecondaryDocumentInformationFactory extends JoiValidationEntity {
         makeRequired('certificateOfServiceDate');
       }
 
-      if (
-        this.category === 'Motion' ||
-        includes(
-          [
-            'Motion to Withdraw Counsel',
-            'Motion to Withdraw As Counsel',
-            'Application to Take Deposition',
-          ],
-          this.documentType,
-        )
-      ) {
+      if (EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION.has(this.documentType)) {
         makeRequired('objections');
       }
     }

@@ -32,15 +32,15 @@ export const setSupportingDocumentScenarioAction = ({
 
         store.set(
           state.form.supportingDocuments[i].scenario,
-          categoryInformation.scenario,
+          categoryInformation?.scenario,
         );
         store.set(
           state.form.supportingDocuments[i].documentTitle,
-          categoryInformation.documentTitle,
+          categoryInformation?.documentTitle,
         );
         store.set(
           state.form.supportingDocuments[i].eventCode,
-          categoryInformation.eventCode,
+          categoryInformation?.eventCode,
         );
       }
     }
@@ -65,15 +65,15 @@ export const setSupportingDocumentScenarioAction = ({
 
         store.set(
           state.form.secondarySupportingDocuments[i].scenario,
-          categoryInformation.scenario,
+          categoryInformation?.scenario,
         );
         store.set(
           state.form.secondarySupportingDocuments[i].documentTitle,
-          categoryInformation.documentTitle,
+          categoryInformation?.documentTitle,
         );
         store.set(
           state.form.secondarySupportingDocuments[i].eventCode,
-          categoryInformation.eventCode,
+          categoryInformation?.eventCode,
         );
       }
     }

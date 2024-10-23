@@ -3,6 +3,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { INTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION } from '@shared/business/entities/EntityConstants';
 export const filingPartiesFormHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -11,25 +12,12 @@ export const filingPartiesFormHelper = (
   const validationErrors = get(state.validationErrors);
   const form = get(state.form);
 
-  const {
-    AMENDMENT_EVENT_CODES,
-    AMICUS_BRIEF_EVENT_CODE,
-    INTERNAL_CATEGORY_MAP,
-    PARTY_TYPES,
-  } = applicationContext.getConstants();
+  const { AMENDMENT_EVENT_CODES, AMICUS_BRIEF_EVENT_CODE, PARTY_TYPES } =
+    applicationContext.getConstants();
 
   const partyValidationCheckboxError =
     validationErrors &&
     (validationErrors.filers || validationErrors.partyIrsPractitioner);
-
-  const objectionDocumentTypes = [
-    ...INTERNAL_CATEGORY_MAP['Motion'].map(entry => {
-      return entry.documentType;
-    }),
-    'Motion to Withdraw Counsel (filed by petitioner)',
-    'Motion to Withdraw as Counsel',
-    'Application to Take Deposition',
-  ];
 
   const isServed = DocketEntry.isServed(form);
 
@@ -40,12 +28,16 @@ export const filingPartiesFormHelper = (
   const showFilingPartiesAsCheckboxes =
     form.eventCode !== AMICUS_BRIEF_EVENT_CODE;
 
+  const isObjectionType =
+    INTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION.has(form.documentType) ||
+    (AMENDMENT_EVENT_CODES.includes(form.eventCode) &&
+      INTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION.has(
+        form.previousDocument?.documentType,
+      ));
+
   return {
     isServed,
-    noMargin:
-      objectionDocumentTypes.includes(form.documentType) ||
-      (AMENDMENT_EVENT_CODES.includes(form.eventCode) &&
-        objectionDocumentTypes.includes(form.previousDocument?.documentType)),
+    noMargin: isObjectionType,
     partyValidationCheckboxError,
     showFilingPartiesAsCheckboxes,
     showSecondaryParty,
