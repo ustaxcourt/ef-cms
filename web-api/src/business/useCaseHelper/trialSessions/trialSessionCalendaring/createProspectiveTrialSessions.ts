@@ -40,21 +40,25 @@ export const createProspectiveTrialSessions = ({
     const cityWasNotVisitedInLastTwoTerms =
       !citiesFromLastTwoTerms.includes(city);
 
-    if (
-      caseCountsAndSessionsByCity[city].remainingRegularCases >=
-      caseCountsAndSessionsByCity[city].remainingSmallCases
-    ) {
+    let remainingCaseCounts = {
+      regular: caseCountsAndSessionsByCity[city].remainingRegularCases,
+      small: caseCountsAndSessionsByCity[city].remainingSmallCases,
+    };
+
+    if (remainingCaseCounts.regular >= remainingCaseCounts.small) {
       scheduleRegularCases({
         calendaringConfig,
         caseCountsAndSessionsByCity,
         city,
         cityWasNotVisitedInLastTwoTerms,
+        remainingCaseCounts,
       });
       scheduleSmallCases({
         calendaringConfig,
         caseCountsAndSessionsByCity,
         city,
         cityWasNotVisitedInLastTwoTerms,
+        remainingCaseCounts,
       });
     } else {
       scheduleSmallCases({
@@ -62,19 +66,20 @@ export const createProspectiveTrialSessions = ({
         caseCountsAndSessionsByCity,
         city,
         cityWasNotVisitedInLastTwoTerms,
+        remainingCaseCounts,
       });
       scheduleRegularCases({
         calendaringConfig,
         caseCountsAndSessionsByCity,
         city,
         cityWasNotVisitedInLastTwoTerms,
+        remainingCaseCounts,
       });
     }
 
     // Handle Hybrid Sessions
     if (
-      caseCountsAndSessionsByCity[city].remainingRegularCases +
-        caseCountsAndSessionsByCity[city].remainingSmallCases >=
+      remainingCaseCounts.regular + remainingCaseCounts.small >=
       calendaringConfig.hybridCaseMinimumQuantity
     ) {
       addProspectiveTrialSession({
@@ -92,8 +97,8 @@ export const createProspectiveTrialSessions = ({
       // This comment applies to the if statement's condition, as well as to
       // the setting of regularCasesByCity[city] and smallCasesByCity[city] to
       // empty arrays below.
-      caseCountsAndSessionsByCity[city].remainingRegularCases = 0;
-      caseCountsAndSessionsByCity[city].remainingSmallCases = 0;
+      remainingCaseCounts.regular = 0;
+      remainingCaseCounts.small = 0;
     }
 
     // Are there any cities that have not been visited in the last two terms
@@ -108,13 +113,10 @@ export const createProspectiveTrialSessions = ({
     if (
       cityWasNotVisitedInLastTwoTerms &&
       caseCountsAndSessionsByCity[city].sessions.length === 0 &&
-      (caseCountsAndSessionsByCity[city].remainingRegularCases > 0 ||
-        caseCountsAndSessionsByCity[city].remainingSmallCases > 0)
+      (remainingCaseCounts.regular > 0 || remainingCaseCounts.small > 0)
     ) {
-      const containsRegularCase =
-        caseCountsAndSessionsByCity[city].remainingRegularCases > 0;
-      const containsSmallCase =
-        caseCountsAndSessionsByCity[city].remainingSmallCases > 0;
+      const containsRegularCase = remainingCaseCounts.regular > 0;
+      const containsSmallCase = remainingCaseCounts.small > 0;
       const lowVolumeSessionType =
         containsRegularCase && containsSmallCase
           ? SESSION_TYPES.hybrid
@@ -129,34 +131,14 @@ export const createProspectiveTrialSessions = ({
         sessionType: lowVolumeSessionType,
       });
 
-      caseCountsAndSessionsByCity[city].remainingRegularCases = 0;
-      caseCountsAndSessionsByCity[city].remainingSmallCases = 0;
+      remainingCaseCounts.regular = 0;
+      remainingCaseCounts.small = 0;
     }
-
-    // Limit sessions per location
-    // TODO 10275: is this still necessary? we shouldn't be scheduling more than one session, since we've failed to meet the small, regular, AND hybrid mins
-    caseCountsAndSessionsByCity[city].sessions = caseCountsAndSessionsByCity[
-      city
-    ].sessions.slice(0, calendaringConfig.maxSessionsPerLocation);
   }
-
-  resetRemainingCaseCounters(caseCountsAndSessionsByCity);
 
   return {
     caseCountsAndSessionsByCity,
   };
-};
-
-const resetRemainingCaseCounters = (
-  caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity,
-) => {
-  for (const city in caseCountsAndSessionsByCity) {
-    caseCountsAndSessionsByCity[city].remainingRegularCases =
-      caseCountsAndSessionsByCity[city].initialRegularCases;
-
-    caseCountsAndSessionsByCity[city].remainingSmallCases =
-      caseCountsAndSessionsByCity[city].initialSmallCases;
-  }
 };
 
 function scheduleRegularCases({
@@ -164,15 +146,16 @@ function scheduleRegularCases({
   caseCountsAndSessionsByCity,
   city,
   cityWasNotVisitedInLastTwoTerms,
+  remainingCaseCounts,
 }: {
   calendaringConfig: CalendaringConfig;
   city: string;
   cityWasNotVisitedInLastTwoTerms: boolean;
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
+  remainingCaseCounts: { small: number; regular: number };
 }): void {
   while (
-    caseCountsAndSessionsByCity[city].remainingRegularCases >=
-    calendaringConfig.regularCaseMinimumQuantity
+    remainingCaseCounts.regular >= calendaringConfig.regularCaseMinimumQuantity
   ) {
     addProspectiveTrialSession({
       caseCountsAndSessionsByCity,
@@ -182,14 +165,12 @@ function scheduleRegularCases({
     });
 
     if (
-      caseCountsAndSessionsByCity[city].remainingRegularCases -
-        calendaringConfig.regularCaseMaxQuantity >
+      remainingCaseCounts.regular - calendaringConfig.regularCaseMaxQuantity >
       0
     ) {
-      caseCountsAndSessionsByCity[city].remainingRegularCases -=
-        calendaringConfig.regularCaseMaxQuantity;
+      remainingCaseCounts.regular -= calendaringConfig.regularCaseMaxQuantity;
     } else {
-      caseCountsAndSessionsByCity[city].remainingRegularCases = 0;
+      remainingCaseCounts.regular = 0;
     }
   }
 }
@@ -199,15 +180,16 @@ function scheduleSmallCases({
   caseCountsAndSessionsByCity,
   city,
   cityWasNotVisitedInLastTwoTerms,
+  remainingCaseCounts,
 }: {
   calendaringConfig: CalendaringConfig;
   city: string;
   cityWasNotVisitedInLastTwoTerms: boolean;
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
+  remainingCaseCounts: { small: number; regular: number };
 }): void {
   while (
-    caseCountsAndSessionsByCity[city].remainingSmallCases >=
-    calendaringConfig.smallCaseMinimumQuantity
+    remainingCaseCounts.small >= calendaringConfig.smallCaseMinimumQuantity
   ) {
     addProspectiveTrialSession({
       caseCountsAndSessionsByCity,
@@ -216,14 +198,12 @@ function scheduleSmallCases({
       sessionType: SESSION_TYPES.small,
     });
     if (
-      caseCountsAndSessionsByCity[city].remainingSmallCases -
-        calendaringConfig.smallCaseMaxQuantity >
+      remainingCaseCounts.small - calendaringConfig.smallCaseMaxQuantity >
       0
     ) {
-      caseCountsAndSessionsByCity[city].remainingSmallCases -=
-        calendaringConfig.regularCaseMaxQuantity;
+      remainingCaseCounts.small -= calendaringConfig.regularCaseMaxQuantity;
     } else {
-      caseCountsAndSessionsByCity[city].remainingSmallCases = 0;
+      remainingCaseCounts.small = 0;
     }
   }
 }
