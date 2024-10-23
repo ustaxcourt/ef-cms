@@ -60,7 +60,6 @@ describe('UpdateUserEmail', () => {
 
       expect(updateUserEmailEntity.isValid()).toBeFalsy();
       expect(updateUserEmailEntity.getFormattedValidationErrors()).toEqual({
-        confirmEmail: 'Email addresses do not match',
         email: 'Enter email address in format: yourname@example.com',
       });
     });
@@ -73,7 +72,7 @@ describe('UpdateUserEmail', () => {
 
       expect(updateUserEmailEntity.isValid()).toBeFalsy();
       expect(updateUserEmailEntity.getFormattedValidationErrors()).toEqual({
-        confirmEmail: 'Enter email address in format: yourname@example.com',
+        confirmEmail: 'Email addresses do not match',
       });
     });
 
