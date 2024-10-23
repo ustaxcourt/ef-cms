@@ -120,14 +120,14 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   console.time('10275: Generate prospectiveSessionsByCity time');
 
-  const { caseCountsByProcedureTypeByCity, incorrectSizeRegularCases } =
+  let { caseCountsAndSessionsByCity, incorrectSizeRegularCases } =
     getDataForCalendaring({ cases });
 
-  const { prospectiveSessionsByCity } = createProspectiveTrialSessions({
+  ({ caseCountsAndSessionsByCity } = createProspectiveTrialSessions({
     calendaringConfig,
-    caseCountsByProcedureTypeByCity,
+    caseCountsAndSessionsByCity,
     citiesFromLastTwoTerms,
-  });
+  }));
 
   console.timeEnd('10275: Generate prospectiveSessionsByCity time');
 
@@ -148,17 +148,19 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   const calendarGenerator = new CalendarGenerator(
     calendaringConfig,
     constraints,
-    prospectiveSessionsByCity,
+    caseCountsAndSessionsByCity,
     weeksToLoop,
     specialSessions,
-    caseCountsByProcedureTypeByCity,
   );
 
-  const {
-    remainingCaseCountsByProcedureTypeByCity,
+  // scheduledTrialSessionsByCity could be replaced with caseCountsAndSessionsByCity with a few tweaks
+
+  let scheduledTrialSessionsByCity, sessionCountPerWeek;
+  ({
+    caseCountsAndSessionsByCity,
     scheduledTrialSessionsByCity,
     sessionCountPerWeek,
-  } = calendarGenerator.generateCalendar();
+  } = calendarGenerator.generateCalendar());
 
   console.timeEnd('10275: assignSessionsToWeeks time');
 
@@ -182,8 +184,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   console.time('10275: writeTrialSessionDataToExcel');
   const bufferArray = await writeTrialSessionDataToExcel({
-    caseCountsByProcedureTypeByCity,
-    remainingCaseCountsByProcedureTypeByCity,
+    caseCountsAndSessionsByCity,
     sessionCountPerWeek,
     sortedScheduledTrialSessionsByCity,
     weeks: weeksToLoop,

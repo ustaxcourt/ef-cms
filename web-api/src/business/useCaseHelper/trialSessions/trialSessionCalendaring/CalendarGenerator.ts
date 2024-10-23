@@ -1,20 +1,16 @@
-import {
-  CalendaringConfig,
-  ProspectiveSessionsByCity,
-} from './createProspectiveTrialSessions';
-import { CaseCountsByProcedureTypeByCity } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
+import { CalendaringConfig } from './createProspectiveTrialSessions';
+import { CaseCountsAndSessionsByCity } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
 import { Constraint } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/constraints';
 import {
   FORMATS,
   createDateAtStartOfWeekEST,
 } from '@shared/business/utilities/DateHandler';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
-  PROCEDURE_TYPES_MAP,
   SESSION_TYPES,
   TRIAL_CITY_STRINGS,
   TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
-import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
   ScheduledTrialSession,
   SessionCountByWeek,
@@ -25,7 +21,6 @@ import {
   WASHINGTON_DC_SOUTH_STRING,
   WASHINGTON_DC_STRING,
 } from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
-import { cloneDeep } from 'lodash';
 
 export type CalendarState = {
   sessionCountPerWeek: Record<string, number>;
@@ -37,20 +32,14 @@ export type CalendarState = {
 
 export class CalendarGenerator {
   private calendarState: CalendarState;
-  private remainingCaseCountsByProcedureTypeByCity: CaseCountsByProcedureTypeByCity;
 
   constructor(
     private calendaringConfig: CalendaringConfig,
     private constraints: Constraint[],
-    private prospectiveSessionsByCity: ProspectiveSessionsByCity,
+    private caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity,
     private weeksToLoop: string[],
     private specialSessions: RawTrialSession[],
-    caseCountsByProcedureTypeByCity: CaseCountsByProcedureTypeByCity,
   ) {
-    this.remainingCaseCountsByProcedureTypeByCity = cloneDeep(
-      caseCountsByProcedureTypeByCity,
-    );
-
     this.calendarState = {
       reservedWeekOfLocationIntersection: {},
       scheduledTrialSessionsByCity: {},
@@ -87,7 +76,7 @@ export class CalendarGenerator {
   public generateCalendar = (): {
     sessionCountPerWeek: SessionCountByWeek;
     scheduledTrialSessionsByCity: TrialSessionsByCity;
-    remainingCaseCountsByProcedureTypeByCity: CaseCountsByProcedureTypeByCity;
+    caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
   } => {
     // check special sessions
     const specialSessionsByLocation = this.specialSessions.reduce(
@@ -114,14 +103,14 @@ export class CalendarGenerator {
 
     // TODO 10275: test this (and be sure it works)
     const sortedProspectiveSessionsByCity: TrialSessionsByCity = Object.keys(
-      this.prospectiveSessionsByCity,
+      this.caseCountsAndSessionsByCity,
     )
       .sort((a, b) => {
         const aNotVisited =
-          this.prospectiveSessionsByCity[a][0]
+          this.caseCountsAndSessionsByCity[a].sessions[0]
             ?.cityWasNotVisitedInLastTwoTerms || false;
         const bNotVisited =
-          this.prospectiveSessionsByCity[b][0]
+          this.caseCountsAndSessionsByCity[b].sessions[0]
             ?.cityWasNotVisitedInLastTwoTerms || false;
 
         return aNotVisited === bNotVisited ? 0 : aNotVisited ? -1 : 1;
@@ -130,10 +119,9 @@ export class CalendarGenerator {
         if (key === WASHINGTON_DC_STRING) {
           obj[WASHINGTON_DC_SOUTH_STRING] = [];
 
-          for (const prospectiveSession of this.prospectiveSessionsByCity[
-            key
-          ]) {
-            obj[WASHINGTON_DC_SOUTH_STRING].push({
+          for (const prospectiveSession of this.caseCountsAndSessionsByCity[key]
+            .sessions) {
+            obj[WASHINGTON_DC_SOUTH_STRING].sessions.push({
               ...prospectiveSession,
               city: WASHINGTON_DC_SOUTH_STRING,
             });
@@ -141,7 +129,7 @@ export class CalendarGenerator {
 
           return obj;
         }
-        obj[key] = this.prospectiveSessionsByCity[key];
+        obj[key] = this.caseCountsAndSessionsByCity[key].sessions;
         return obj;
       }, {});
 
@@ -264,8 +252,7 @@ export class CalendarGenerator {
     }
 
     return {
-      remainingCaseCountsByProcedureTypeByCity:
-        this.remainingCaseCountsByProcedureTypeByCity,
+      caseCountsAndSessionsByCity: this.caseCountsAndSessionsByCity,
       scheduledTrialSessionsByCity:
         this.calendarState.scheduledTrialSessionsByCity,
       sessionCountPerWeek: this.calendarState.sessionCountPerWeek,
@@ -304,36 +291,18 @@ export class CalendarGenerator {
     // Decrement by the max count for that session type. If that's less than 0, then we scheduled
     // a session that was more than the min and less than the max, so just set it to 0
     if (sessionType === SESSION_TYPES.regular) {
-      this.remainingCaseCountsByProcedureTypeByCity[city][
-        PROCEDURE_TYPES_MAP.regular
-      ] -= this.calendaringConfig.regularCaseMaxQuantity;
-      if (
-        this.remainingCaseCountsByProcedureTypeByCity[city][
-          PROCEDURE_TYPES_MAP.regular
-        ] < 0
-      )
-        this.remainingCaseCountsByProcedureTypeByCity[city][
-          PROCEDURE_TYPES_MAP.regular
-        ] = 0;
+      this.caseCountsAndSessionsByCity[city].remainingRegularCases -=
+        this.calendaringConfig.regularCaseMaxQuantity;
+      if (this.caseCountsAndSessionsByCity[city].remainingRegularCases < 0)
+        this.caseCountsAndSessionsByCity[city].remainingRegularCases = 0;
     } else if (sessionType === SESSION_TYPES.small) {
-      this.remainingCaseCountsByProcedureTypeByCity[city][
-        PROCEDURE_TYPES_MAP.small
-      ] -= this.calendaringConfig.smallCaseMaxQuantity;
-      if (
-        this.remainingCaseCountsByProcedureTypeByCity[city][
-          PROCEDURE_TYPES_MAP.small
-        ] < 0
-      )
-        this.remainingCaseCountsByProcedureTypeByCity[city][
-          PROCEDURE_TYPES_MAP.small
-        ] = 0;
+      this.caseCountsAndSessionsByCity[city].remainingSmallCases -=
+        this.calendaringConfig.smallCaseMaxQuantity;
+      if (this.caseCountsAndSessionsByCity[city].remainingSmallCases < 0)
+        this.caseCountsAndSessionsByCity[city].remainingSmallCases = 0;
     } else if (sessionType === SESSION_TYPES.hybrid) {
-      this.remainingCaseCountsByProcedureTypeByCity[city][
-        PROCEDURE_TYPES_MAP.regular
-      ] = 0;
-      this.remainingCaseCountsByProcedureTypeByCity[city][
-        PROCEDURE_TYPES_MAP.small
-      ] = 0;
+      this.caseCountsAndSessionsByCity[city].remainingRegularCases = 0;
+      this.caseCountsAndSessionsByCity[city].remainingSmallCases = 0;
     }
   };
 }

@@ -3,6 +3,7 @@ import {
   REGULAR_TRIAL_CITY_STRINGS,
   TRIAL_CITY_STRINGS,
 } from '@shared/business/entities/EntityConstants';
+import { ProspectiveSession } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 import {
   WASHINGTON_DC_NORTH_STRING,
   WASHINGTON_DC_SOUTH_STRING,
@@ -14,9 +15,16 @@ export type EligibleCase = Pick<
   'preferredTrialCity' | 'procedureType' | 'docketNumber'
 >;
 
-export type CaseCountsByProcedureTypeByCity = Record<
+// (export type GodObject)
+export type CaseCountsAndSessionsByCity = Record<
   string,
-  { [PROCEDURE_TYPES_MAP.regular]: number; [PROCEDURE_TYPES_MAP.small]: number }
+  {
+    initialSmallCases: number;
+    initialRegularCases: number;
+    remainingSmallCases: number;
+    remainingRegularCases: number;
+    sessions: ProspectiveSession[];
+  }
 >;
 
 export const getDataForCalendaring = ({
@@ -24,16 +32,16 @@ export const getDataForCalendaring = ({
 }: {
   cases: EligibleCase[];
 }): {
-  caseCountsByProcedureTypeByCity: CaseCountsByProcedureTypeByCity;
+  caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
   incorrectSizeRegularCases: EligibleCase[];
 } => {
   let {
-    caseCountsByProcedureTypeByCity,
+    caseCountsAndSessionsByCity,
     incorrectSizeCases: incorrectSizeRegularCases,
   } = getCasesByCityAndIncorrectlySizedCases(cases);
 
   return {
-    caseCountsByProcedureTypeByCity,
+    caseCountsAndSessionsByCity,
     incorrectSizeRegularCases,
   };
 };
@@ -42,25 +50,28 @@ const getCasesByCityAndIncorrectlySizedCases = (
   cases: EligibleCase[],
 ): {
   incorrectSizeCases: EligibleCase[];
-  caseCountsByProcedureTypeByCity: CaseCountsByProcedureTypeByCity;
+  caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
 } => {
   const incorrectSizeCases: EligibleCase[] = [];
-  const caseCountsByProcedureTypeByCity: CaseCountsByProcedureTypeByCity =
-    initializeCaseCountsByProcedureTypeByCity();
+  const caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity =
+    initializeCaseCountsAndSessionsByCity();
 
   cases.forEach(currentCase => {
     if (!isCorrectlySizedCity(currentCase)) {
       incorrectSizeCases.push(currentCase);
     }
 
-    caseCountsByProcedureTypeByCity[currentCase.preferredTrialCity!][
-      currentCase.procedureType
+    caseCountsAndSessionsByCity[currentCase.preferredTrialCity!][
+      `initial${currentCase.procedureType}Cases`
+    ]++;
+    caseCountsAndSessionsByCity[currentCase.preferredTrialCity!][
+      `remaining${currentCase.procedureType}Cases`
     ]++;
   });
 
-  handleWashingtonDC(caseCountsByProcedureTypeByCity);
+  handleWashingtonDC(caseCountsAndSessionsByCity);
 
-  return { caseCountsByProcedureTypeByCity, incorrectSizeCases };
+  return { caseCountsAndSessionsByCity, incorrectSizeCases };
 };
 
 const isCorrectlySizedCity = (aCase): boolean => {
@@ -70,27 +81,33 @@ const isCorrectlySizedCity = (aCase): boolean => {
   );
 };
 
-const initializeCaseCountsByProcedureTypeByCity =
-  (): CaseCountsByProcedureTypeByCity => {
+const initializeCaseCountsAndSessionsByCity =
+  (): CaseCountsAndSessionsByCity => {
     return TRIAL_CITY_STRINGS.reduce((acc, city) => {
       acc[city] = {
-        [PROCEDURE_TYPES_MAP.regular]: 0,
-        [PROCEDURE_TYPES_MAP.small]: 0,
+        initialRegularCases: 0,
+        initialSmallCases: 0,
+        remainingRegularCases: 0,
+        remainingSmallCases: 0,
+        sessions: [],
       };
       return acc;
     }, {});
   };
 
 const handleWashingtonDC = (
-  caseCountsByProcedureTypeByCity: CaseCountsByProcedureTypeByCity,
+  caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity,
 ) => {
   // Since we only assign non-special sessions to DC South,
   // we can use DC counts of non-special sessions at South.
-  caseCountsByProcedureTypeByCity[WASHINGTON_DC_NORTH_STRING] = {
-    [PROCEDURE_TYPES_MAP.regular]: 0,
-    [PROCEDURE_TYPES_MAP.small]: 0,
+  caseCountsAndSessionsByCity[WASHINGTON_DC_NORTH_STRING] = {
+    initialRegularCases: 0,
+    initialSmallCases: 0,
+    remainingRegularCases: 0,
+    remainingSmallCases: 0,
+    sessions: [],
   };
-  caseCountsByProcedureTypeByCity[WASHINGTON_DC_SOUTH_STRING] =
-    caseCountsByProcedureTypeByCity[WASHINGTON_DC_STRING];
-  delete caseCountsByProcedureTypeByCity[WASHINGTON_DC_STRING];
+  caseCountsAndSessionsByCity[WASHINGTON_DC_SOUTH_STRING] =
+    caseCountsAndSessionsByCity[WASHINGTON_DC_STRING];
+  delete caseCountsAndSessionsByCity[WASHINGTON_DC_STRING];
 };
