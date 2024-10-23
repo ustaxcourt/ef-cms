@@ -12,6 +12,20 @@ resource "aws_iam_role" "cross_account_restore_role" {
             },
             "Action": "sts:AssumeRole",
             "Condition": {}
+        },
+        {
+          "Effect": "Allow",
+          "Principal": {
+            "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/dawson_dev"
+          },
+          "Action": "sts:AssumeRole"
+        },
+        {
+          "Effect": "Allow",
+          "Principal": {
+            "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/CircleCI"
+          },
+          "Action": "sts:AssumeRole"
         }
     ]
 }
