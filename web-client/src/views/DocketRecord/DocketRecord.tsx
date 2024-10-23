@@ -36,6 +36,8 @@ export const DocketRecord = connect(
   }) {
     const selectAllCheckboxRef = useRef<HTMLInputElement>(null);
 
+    const noDocumentsMessage = 'There are no documents of that type.';
+
     useEffect(() => {
       if (!docketRecordHelper.showBatchDownloadControls) return;
       if (!selectAllCheckboxRef.current) return;
@@ -228,6 +230,10 @@ export const DocketRecord = connect(
                 )}
               </tbody>
             </table>
+            {!formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord
+              .length && (
+              <p className="margin-bottom-10">{noDocumentsMessage}</p>
+            )}
           </div>
         </NonPhone>
 
@@ -268,6 +274,8 @@ export const DocketRecord = connect(
               )}
             </tbody>
           </table>
+          {!formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord
+            .length && <p className="margin-bottom-10">{noDocumentsMessage}</p>}
         </Phone>
 
         {showModal == 'DocketRecordOverlay' && <DocketRecordOverlay />}
