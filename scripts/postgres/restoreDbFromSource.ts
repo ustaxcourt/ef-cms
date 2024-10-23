@@ -20,7 +20,7 @@ async function main() {
 
   requireEnvVars(['ENV', 'TARGET_ENV', 'TARGET_ACCOUNT_ID']);
 
-  const targetRoleArn = `arn:aws:iam::${targetAccountId}:role/cross_account_restore_role_${targetEnv}`;
+  const targetRoleArn = `arn:aws:iam::${targetAccountId}:role/restore_role_${targetEnv}`;
 
   const { targetAccessKeyId, targetSecretAccessKey, targetSessionToken } =
     await getTargetAccountCredentials({ targetRoleArn });
@@ -265,7 +265,7 @@ async function getTargetAccountCredentials({
   const stsClient = new STSClient({ region: 'us-east-1' });
   const command = new AssumeRoleCommand({
     RoleArn: targetRoleArn,
-    RoleSessionName: 'DB_Restore_Cross_Account_Session',
+    RoleSessionName: 'DB_Restore_Session',
   });
   const data = await stsClient.send(command);
 

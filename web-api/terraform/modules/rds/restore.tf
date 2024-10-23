@@ -1,5 +1,5 @@
-resource "aws_iam_role" "cross_account_restore_role" {
-  name = "cross_account_restore_role_${var.environment}"
+resource "aws_iam_role" "restore_role" {
+  name = "restore_role_${var.environment}"
 
   assume_role_policy = <<EOF
 {
@@ -33,8 +33,8 @@ EOF
 }
 
 resource "aws_iam_role_policy" "rds_restore_policy" {
-  name = "cross_account_restore_${var.environment}"
-  role = aws_iam_role.cross_account_restore_role.id
+  name = "restore_${var.environment}"
+  role = aws_iam_role.restore_role.id
 
   policy = jsonencode({
     Version = "2012-10-17",
