@@ -2,7 +2,7 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { useState } from 'react';
 
 type PractitionerLoginServiceEmailFormProps = {
   emailFormName: string;
@@ -12,8 +12,7 @@ const practitionerLoginServiceEmailFormDependencies = {
   createPractitionerUserHelper: state.createPractitionerUserHelper,
   form: state.form,
   updateFormValueSequence: sequences.updateFormValueSequence,
-  validateEmailConfirmationFormSequence:
-    sequences.validateEmailConfirmationFormSequence,
+  validateEmailFormHelper: state.validateEmailFormHelper,
   validationErrors: state.validationErrors,
 };
 
@@ -27,9 +26,11 @@ export const PractitionerLoginServiceEmailForm = connect<
     emailFormName,
     form,
     updateFormValueSequence,
-    validateEmailConfirmationFormSequence,
-    validationErrors,
+    validateEmailFormHelper,
   }) {
+    const [inFocusEmail, setInFocusEmail] = useState(true);
+    const [inFocusConfirmEmail, setInFocusConfirmEmail] = useState(true);
+
     return (
       <div className="margin-bottom-4">
         <h2>Login & Service Email</h2>
@@ -54,7 +55,7 @@ export const PractitionerLoginServiceEmailForm = connect<
             <h4>Change Login & Service Email</h4>
             <FormGroup
               errorText={
-                validationErrors?.email || validationErrors[emailFormName]
+                !inFocusEmail && validateEmailFormHelper.emailErrorMessage
               }
             >
               <label className="usa-label" htmlFor="updatedEmail">
@@ -70,10 +71,7 @@ export const PractitionerLoginServiceEmailForm = connect<
                 type="text"
                 value={form[emailFormName] || ''}
                 onBlur={() => {
-                  validateEmailConfirmationFormSequence({
-                    // intentionally not using `emailFormName` to leverage live validation using EmailConfirmationForm entity
-                    field: 'email',
-                  });
+                  setInFocusEmail(false);
                 }}
                 onChange={e =>
                   updateFormValueSequence({
@@ -81,9 +79,15 @@ export const PractitionerLoginServiceEmailForm = connect<
                     value: e.target.value,
                   })
                 }
+                onFocus={() => setInFocusEmail(true)}
               />
             </FormGroup>
-            <FormGroup errorText={validationErrors?.confirmEmail}>
+            <FormGroup
+              errorText={
+                !inFocusConfirmEmail &&
+                validateEmailFormHelper.confirmEmailErrorMessage
+              }
+            >
               <label className="usa-label" htmlFor="confirm-email">
                 Re-enter new email address
               </label>
@@ -96,17 +100,14 @@ export const PractitionerLoginServiceEmailForm = connect<
                 name="confirmEmail"
                 type="text"
                 value={form.confirmEmail || ''}
-                onBlur={e => {
-                  validateEmailConfirmationFormSequence({
-                    field: e.target.name,
-                  });
-                }}
+                onBlur={() => setInFocusConfirmEmail(false)}
                 onChange={e =>
                   updateFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   })
                 }
+                onFocus={() => setInFocusConfirmEmail(true)}
               />
             </FormGroup>
           </div>

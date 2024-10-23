@@ -593,7 +593,6 @@ import { validateDocketEntryWorksheetSequence } from '@web-client/presenter/sequ
 import { validateDocumentSequence } from './sequences/validateDocumentSequence';
 import { validateEditPetitionerCounselSequence } from './sequences/CaseAssociation/validateEditPetitionerCounselSequence';
 import { validateEditRespondentCounselSequence } from './sequences/CaseAssociation/validateEditRespondentCounselSequence';
-import { validateEmailConfirmationFormSequence } from './sequences/validateEmailConfirmationFormSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
 import { validateFilePetitionStep2Sequence } from '@web-client/presenter/sequences/validateFilePetitionStep2Sequence';
 import { validateFilePetitionStep5Sequence } from '@web-client/presenter/sequences/validateFilePetitionStep5Sequence';
@@ -1579,7 +1578,6 @@ export const presenterSequences = {
     validateEditPetitionerCounselSequence as unknown as Function,
   validateEditRespondentCounselSequence:
     validateEditRespondentCounselSequence as unknown as Function,
-  validateEmailConfirmationFormSequence,
   validateExternalDocumentInformationSequence:
     validateExternalDocumentInformationSequence as unknown as Function,
   validateFilePetitionStep2Sequence,

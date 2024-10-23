@@ -5,20 +5,20 @@ import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { useState } from 'react';
 
 export const ChangeLoginAndServiceEmail = connect(
   {
     form: state.form,
     navigateToPathSequence: sequences.navigateToPathSequence,
+    showModal: state.modal.showModal,
     submitChangeLoginAndServiceEmailSequence:
       sequences.submitChangeLoginAndServiceEmailSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     user: state.user,
     validateChangeLoginAndServiceEmailSequence:
       sequences.validateChangeLoginAndServiceEmailSequence,
-    validateEmailConfirmationFormSequence:
-      sequences.validateEmailConfirmationFormSequence,
+    validateEmailFormHelper: state.validateEmailFormHelper,
     validationErrors: state.validationErrors,
   },
   function ChangeLoginAndServiceEmail({
@@ -27,9 +27,11 @@ export const ChangeLoginAndServiceEmail = connect(
     submitChangeLoginAndServiceEmailSequence,
     updateFormValueSequence,
     user,
-    validateEmailConfirmationFormSequence,
-    validationErrors,
+    validateEmailFormHelper,
   }) {
+    const [inFocusEmail, setInFocusEmail] = useState(true);
+    const [inFocusConfirmEmail, setInFocusConfirmEmail] = useState(true);
+
     return (
       <React.Fragment>
         <BigHeader text={'Change Login & Service Email Address'} />
@@ -58,7 +60,11 @@ export const ChangeLoginAndServiceEmail = connect(
             </div>
             <div>
               <h4>Change Login & Service Email</h4>
-              <FormGroup errorText={validationErrors?.email}>
+              <FormGroup
+                errorText={
+                  !inFocusEmail && validateEmailFormHelper.emailErrorMessage
+                }
+              >
                 <label className="usa-label" htmlFor="email">
                   New email address
                 </label>
@@ -70,10 +76,8 @@ export const ChangeLoginAndServiceEmail = connect(
                   name="email"
                   type="text"
                   value={form.email || ''}
-                  onBlur={e => {
-                    validateEmailConfirmationFormSequence({
-                      field: e.target.name,
-                    });
+                  onBlur={() => {
+                    setInFocusEmail(false);
                   }}
                   onChange={e =>
                     updateFormValueSequence({
@@ -81,9 +85,15 @@ export const ChangeLoginAndServiceEmail = connect(
                       value: e.target.value,
                     })
                   }
+                  onFocus={() => setInFocusEmail(true)}
                 />
               </FormGroup>
-              <FormGroup errorText={validationErrors?.confirmEmail}>
+              <FormGroup
+                errorText={
+                  !inFocusConfirmEmail &&
+                  validateEmailFormHelper.confirmEmailErrorMessage
+                }
+              >
                 <label className="usa-label" htmlFor="confirm-email">
                   Re-enter new email address
                 </label>
@@ -95,17 +105,14 @@ export const ChangeLoginAndServiceEmail = connect(
                   name="confirmEmail"
                   type="text"
                   value={form.confirmEmail || ''}
-                  onBlur={e => {
-                    validateEmailConfirmationFormSequence({
-                      field: e.target.name,
-                    });
-                  }}
-                  onChange={e => {
+                  onBlur={() => setInFocusConfirmEmail(false)}
+                  onChange={e =>
                     updateFormValueSequence({
                       key: e.target.name,
                       value: e.target.value,
-                    });
-                  }}
+                    })
+                  }
+                  onFocus={() => setInFocusConfirmEmail(true)}
                 />
               </FormGroup>
             </div>
