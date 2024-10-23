@@ -20,13 +20,41 @@ export type PublicTrialSessionsHelperResults = {
       userId: string;
     };
   }[];
+  filtersHaveBeenModified: boolean;
 };
+
+function areAnyFiltersModified(
+  proceedingType: string,
+  judges: { [key: string]: string },
+  locations: { [key: string]: string },
+  sessionTypes: { [key: string]: string },
+): boolean {
+  const proceedingTypeModified = proceedingType !== 'All';
+  const judgesModified = Object.values(judges).filter(j => !!j).length;
+  const locationsModified = Object.values(locations).filter(l => !!l).length;
+  const sessionTypesModified = Object.values(sessionTypes).filter(
+    st => !!st,
+  ).length;
+
+  return (
+    !!proceedingTypeModified ||
+    !!judgesModified ||
+    !!locationsModified ||
+    !!sessionTypesModified
+  );
+}
 
 export const publicTrialSessionsHelper = (
   get: Get,
 ): PublicTrialSessionsHelperResults => {
   const fetchedTrialSessions = get(state['FetchedTrialSessions']);
   const trialSessionJudges = get(state.judges) || [];
+  const {
+    judges = {},
+    locations = {},
+    proceedingType = 'All',
+    sessionTypes = {},
+  } = get(state.publicTrialSessionData);
 
   const fetchedDateString = fetchedTrialSessions.toFormat(
     "MM/dd/yy hh:mm a 'Eastern'",
@@ -46,8 +74,16 @@ export const publicTrialSessionsHelper = (
     }),
   );
 
+  const filtersHaveBeenModified = areAnyFiltersModified(
+    proceedingType,
+    judges,
+    locations,
+    sessionTypes,
+  );
+
   return {
     fetchedDateString,
+    filtersHaveBeenModified,
     sessionTypeOptions,
     trialCitiesByState,
     trialSessionJudgeOptions,

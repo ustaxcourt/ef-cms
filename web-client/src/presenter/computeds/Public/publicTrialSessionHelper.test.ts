@@ -16,6 +16,7 @@ describe('publicTrialSessionsHelper', () => {
     const { fetchedDateString } = runCompute(publicTrialSessionsHelper, {
       state: {
         FetchedTrialSessions: TEST_TIME,
+        publicTrialSessionData: {},
       },
     });
 
@@ -26,6 +27,7 @@ describe('publicTrialSessionsHelper', () => {
     const { sessionTypeOptions } = runCompute(publicTrialSessionsHelper, {
       state: {
         FetchedTrialSessions: TEST_TIME,
+        publicTrialSessionData: {},
       },
     });
 
@@ -61,6 +63,7 @@ describe('publicTrialSessionsHelper', () => {
     const { trialCitiesByState } = runCompute(publicTrialSessionsHelper, {
       state: {
         FetchedTrialSessions: TEST_TIME,
+        publicTrialSessionData: {},
       },
     });
 
@@ -77,6 +80,7 @@ describe('publicTrialSessionsHelper', () => {
           { name: 'TEST_JUDGE_3', userId: '3' },
           { name: 'TEST_JUDGE_4', userId: '4' },
         ],
+        publicTrialSessionData: {},
       },
     });
 
@@ -110,5 +114,91 @@ describe('publicTrialSessionsHelper', () => {
         },
       },
     ]);
+  });
+
+  describe('filtersHaveBeenModified', () => {
+    it('should return "false" if there is no filters modified', () => {
+      const { filtersHaveBeenModified } = runCompute(
+        publicTrialSessionsHelper,
+        {
+          state: {
+            FetchedTrialSessions: TEST_TIME,
+            publicTrialSessionData: {},
+          },
+        },
+      );
+
+      expect(filtersHaveBeenModified).toEqual(false);
+    });
+
+    it('should return "true" when the "proceedingTypes" is not default', () => {
+      const { filtersHaveBeenModified } = runCompute(
+        publicTrialSessionsHelper,
+        {
+          state: {
+            FetchedTrialSessions: TEST_TIME,
+            publicTrialSessionData: {
+              proceedingType: 'SOME_OPTION',
+            },
+          },
+        },
+      );
+
+      expect(filtersHaveBeenModified).toEqual(true);
+    });
+
+    it('should return "true" when the "judges" is not default', () => {
+      const { filtersHaveBeenModified } = runCompute(
+        publicTrialSessionsHelper,
+        {
+          state: {
+            FetchedTrialSessions: TEST_TIME,
+            publicTrialSessionData: {
+              judges: {
+                TEST_JUDGE: 'TEST_JUDGE',
+              },
+            },
+          },
+        },
+      );
+
+      expect(filtersHaveBeenModified).toEqual(true);
+    });
+
+    it('should return "true" when the "locations" is not default', () => {
+      const { filtersHaveBeenModified } = runCompute(
+        publicTrialSessionsHelper,
+        {
+          state: {
+            FetchedTrialSessions: TEST_TIME,
+            publicTrialSessionData: {
+              locations: {
+                TEST_LOCATION: 'TEST_LOCATION',
+              },
+            },
+          },
+        },
+      );
+
+      expect(filtersHaveBeenModified).toEqual(true);
+    });
+
+    it('should return "true" when the "sessionTypes" is not default', () => {
+      const { filtersHaveBeenModified } = runCompute(
+        publicTrialSessionsHelper,
+        {
+          state: {
+            FetchedTrialSessions: TEST_TIME,
+            publicTrialSessionData: {
+              sessionTypes: {
+                TEST_SESSION_TYPE: 'TEST_SESSION_TYPE',
+              },
+            },
+          },
+        },
+      );
+
+      expect(filtersHaveBeenModified).toEqual(true);
+    });
   });
 });
