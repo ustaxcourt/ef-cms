@@ -206,6 +206,7 @@ import { getPdfFromUrl } from '@web-client/persistence/s3/getPdfFromUrl';
 import { getPdfFromUrlInteractor } from '../../shared/src/business/useCases/document/getPdfFromUrlInteractor';
 import { getPendingMotionDocketEntriesForCurrentJudgeInteractor } from '@shared/proxies/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeProxy';
 import { getPractitionerByBarNumberInteractor } from '../../shared/src/proxies/users/getPractitionerByBarNumberProxy';
+import { getPractitionerCasesInteractor } from '@shared/proxies/practitioners/getPractitionerCasesProxy';
 import { getPractitionerDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getPractitionerDocumentDownloadUrlProxy';
 import { getPractitionerDocumentInteractor } from '../../shared/src/proxies/getPractitionerDocumentProxy';
 import { getPractitionerDocumentsInteractor } from '../../shared/src/proxies/practitioners/getPractitionerDocumentsProxy';
@@ -474,6 +475,7 @@ const allUseCases = {
   getPdfFromUrlInteractor,
   getPendingMotionDocketEntriesForCurrentJudgeInteractor,
   getPractitionerByBarNumberInteractor,
+  getPractitionerCasesInteractor,
   getPractitionerDocumentDownloadUrlInteractor,
   getPractitionerDocumentInteractor,
   getPractitionerDocumentsInteractor,

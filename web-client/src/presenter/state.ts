@@ -5,13 +5,15 @@ import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/j
 import {
   IDLE_LOGOUT_STATES,
   IdleLogoutStateType,
+  PRACTICE_TYPE,
+  SERVICE_INDICATOR_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
 import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
 import { JudgeChambersInfo } from '@web-client/presenter/actions/getJudgesChambersAction';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawMessage } from '@shared/business/entities/Message';
-import { RawUser } from '@shared/business/entities/User';
+import { RawUser, UserContact } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 import { TroubleshootingLinkInfo } from '@web-client/presenter/sequences/showFileUploadErrorModalSequence';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
@@ -789,7 +791,7 @@ export const baseState = {
     stinFileUrl: undefined,
     taxYear: undefined,
   },
-  practitionerDetail: {},
+  practitionerDetail: {} as PractitionerDetail,
   previewPdfFile: null,
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses
@@ -886,4 +888,47 @@ export type ViewerDocument = {
   eventCode?: string;
   filingDate?: string;
   index?: number;
+};
+
+export type PracticeType = (typeof PRACTICE_TYPE)[keyof typeof PRACTICE_TYPE];
+export type ServiceIndicatorType =
+  (typeof SERVICE_INDICATOR_TYPES)[keyof typeof SERVICE_INDICATOR_TYPES];
+
+export type PractitionerDetail = {
+  admissionsDate: string;
+  admissionStatus: string;
+  barNumber: string;
+  name: string;
+  practiceType: PracticeType;
+  serviceIndicator?: ServiceIndicatorType;
+  userId: string;
+  birthYear?: string;
+  originalBarState?: string;
+  practitionerType?: string;
+  middleName?: string;
+  contact?: Partial<UserContact>;
+  openCaseInfo?: PractitionerAllCasesInfo; // Only for internal users
+  closedCaseInfo?: PractitionerAllCasesInfo; // Only for internal users
+  email?: string;
+  pendingEmail?: string;
+  additionalPhone?: string;
+  firmName?: string;
+  hasEAccess?: boolean;
+};
+
+export type PractitionerAllCasesInfo = {
+  allCases: PractitionerCaseDetail[];
+  currentPage: number;
+};
+
+export type PractitionerCaseDetail = {
+  docketNumber: string;
+  docketNumberWithSuffix: string;
+  caseTitle: string;
+  inConsolidatedGroup: boolean;
+  isLeadCase: boolean;
+  isSealed: boolean;
+  status: string;
+  sealedToTooltip?: string;
+  consolidatedIconTooltipText?: string;
 };
