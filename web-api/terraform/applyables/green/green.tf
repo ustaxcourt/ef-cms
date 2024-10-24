@@ -88,6 +88,51 @@ module "lambda_role_green" {
   dns_domain  = var.dns_domain
 }
 
+module "ecr-green-east" {
+  source     = "../../modules/elastic-container-registry"
+	environment            = var.environment
+	region                 = "us-east-1"
+	color                  = "green"
+	providers = {
+    aws = aws.us-east-1
+  }
+}
+
+module "ecr-green-west" {
+  source     = "../../modules/elastic-container-registry"
+	environment            = var.environment
+	region                 = "us-west-1"
+	color                  = "green"
+	providers = {
+    aws = aws.us-west-1
+  }
+}
+
+module "zip_batch_east" {
+  source            = "../../modules/batch"
+  environment       = var.environment
+  dns_domain        = var.dns_domain
+  region            = "us-east-1"
+  current_color     = "green"
+
+  providers = {
+    aws           = aws.us-east-1
+  }
+}
+
+module "zip_batch_west" {
+  source            = "../../modules/batch"
+  environment       = var.environment
+  dns_domain        = var.dns_domain
+  region            = "us-west-1"
+  current_color     = "green"
+
+  providers = {
+    aws           = aws.us-west-1
+  }
+}
+
+
 module "api-east-green" {
   lambda_role_arn     = module.lambda_role_green.role_arn
   source              = "../../modules/api"

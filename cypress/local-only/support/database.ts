@@ -36,3 +36,9 @@ export const ensureFolderExists = (directory: string) => {
   fs.mkdirSync(directory);
   return null;
 };
+
+export const doesFileExists = (fileName: string): boolean => {
+  const downloadsFolder = 'cypress/downloads';
+  const fileLocation = `${downloadsFolder}/${fileName}`;
+  return fs.existsSync(fileLocation);
+};

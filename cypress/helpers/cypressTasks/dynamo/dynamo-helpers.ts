@@ -94,6 +94,23 @@ export const getFeatureFlagValue = async ({
   return !!result?.Item?.current;
 };
 
+export const getRawFeatureFlagValue = async ({
+  flag,
+}: {
+  flag: string;
+}): Promise<boolean> => {
+  const dynamoClient = await getDocumentClient();
+  const result = await dynamoClient.get({
+    Key: {
+      pk: flag,
+      sk: flag,
+    },
+    TableName: getCypressEnv().dynamoDbDeployTableName,
+  });
+
+  return result?.Item?.current;
+};
+
 export const getEmailVerificationToken = async ({
   email,
 }: {
