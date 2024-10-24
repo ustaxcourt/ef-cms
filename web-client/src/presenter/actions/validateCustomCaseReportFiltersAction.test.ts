@@ -2,7 +2,6 @@ import {
   CustomCaseReportState,
   initialCustomCaseReportState,
 } from '../customCaseReportState';
-import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { validateCustomCaseReportFiltersAction } from './validateCustomCaseReportFiltersAction';
@@ -10,8 +9,6 @@ import { validateCustomCaseReportFiltersAction } from './validateCustomCaseRepor
 describe('validateCustomCaseReportFiltersAction', () => {
   const mockSuccessPath = jest.fn();
   const mockErrorPath = jest.fn();
-
-  presenter.providers.applicationContext = applicationContext;
 
   presenter.providers.path = {
     error: mockErrorPath,
