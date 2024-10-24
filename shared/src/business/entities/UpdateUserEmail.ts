@@ -2,15 +2,15 @@ import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import joi from 'joi';
 
-export class EmailConfirmationForm extends JoiValidationEntity {
+export class UpdateUserEmail extends JoiValidationEntity {
   public confirmEmail: string;
   public email: string;
 
-  constructor(rawEmail: { email: string; confirmEmail: string }) {
-    super('EmailForm');
+  constructor(rawUpdateUserEmail: { email: string; confirmEmail: string }) {
+    super('UpdateUserEmail');
 
-    this.email = rawEmail.email;
-    this.confirmEmail = rawEmail.confirmEmail;
+    this.email = rawUpdateUserEmail.email;
+    this.confirmEmail = rawUpdateUserEmail.confirmEmail;
   }
 
   static VALIDATION_RULES = joi.object({
@@ -32,8 +32,8 @@ export class EmailConfirmationForm extends JoiValidationEntity {
   });
 
   getValidationRules() {
-    return EmailConfirmationForm.VALIDATION_RULES;
+    return UpdateUserEmail.VALIDATION_RULES;
   }
 }
 
-export type RawEmailConfirmationForm = ExcludeMethods<EmailConfirmationForm>;
+export type RawUpdateUserEmail = ExcludeMethods<UpdateUserEmail>;

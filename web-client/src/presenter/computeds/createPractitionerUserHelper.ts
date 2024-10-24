@@ -1,6 +1,6 @@
-import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
+import { Get } from 'cerebral';
 export const createPractitionerUserHelper = (get: Get): any => {
   const { barNumber, originalEmail, practiceType } = get(state.form);
 
