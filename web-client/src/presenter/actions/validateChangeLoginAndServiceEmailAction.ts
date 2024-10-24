@@ -13,11 +13,13 @@ export const validateChangeLoginAndServiceEmailAction = ({
   get,
   path,
 }: ActionProps) => {
-  const updateUserEmailForm = get(state.form);
+  const form = get(state.form);
 
   const errors = applicationContext
     .getUseCases()
-    .validateUpdateUserEmailInteractor({ updateUserEmailForm });
+    .validateUpdateUserEmailInteractor({
+      updateUserEmail: form,
+    });
 
   if (!errors) {
     return path.success();

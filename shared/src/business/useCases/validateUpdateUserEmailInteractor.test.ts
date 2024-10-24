@@ -3,7 +3,7 @@ import { validateUpdateUserEmailInteractor } from './validateUpdateUserEmailInte
 describe('validateUpdateUserEmailInteractor', () => {
   it('should NOT return validation errors when the updated email request is valid', () => {
     const errors = validateUpdateUserEmailInteractor({
-      updateUserEmailForm: {
+      updateUserEmail: {
         confirmEmail: 'test@example.com',
         email: 'test@example.com',
       },
@@ -14,7 +14,7 @@ describe('validateUpdateUserEmailInteractor', () => {
 
   it('should return validation errors when the updated user email form is missing data', () => {
     const errors = validateUpdateUserEmailInteractor({
-      updateUserEmailForm: {
+      updateUserEmail: {
         confirmEmail: undefined, // this is a required property
         email: 'abc', // not a valid email
       } as any,

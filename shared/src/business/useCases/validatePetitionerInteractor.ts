@@ -1,7 +1,7 @@
 import { CONTACT_TYPES } from '../entities/EntityConstants';
-import { EmailConfirmationForm } from '../entities/EmailConfirmationForm';
 import { Petitioner } from '../entities/contacts/Petitioner';
 import { RawContact } from '../entities/contacts/Contact';
+import { UpdateUserEmail } from '../entities/UpdateUserEmail';
 import { isEmpty } from 'lodash';
 
 /**
@@ -29,9 +29,9 @@ export const validatePetitionerInteractor = (
 
   let updateUserEmailErrors;
   if (contactInfo.updatedEmail || contactInfo.confirmEmail) {
-    updateUserEmailErrors = new EmailConfirmationForm({
-      confirmEmail: contactInfo.confirmEmail as string,
-      email: contactInfo.updatedEmail as string,
+    updateUserEmailErrors = new UpdateUserEmail({
+      ...contactInfo,
+      email: contactInfo.updatedEmail,
     }).getFormattedValidationErrors();
   }
 
