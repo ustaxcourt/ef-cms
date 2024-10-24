@@ -219,7 +219,6 @@ const MessageInboxRow = React.memo(function MessageInboxRow({ message }) {
           <div className="message-document-title">
             <Button
               link
-              section-message-inbox-subject-cell
               className="padding-0"
               data-testid="section-message-inbox-subject-cell"
               href={message.messageDetailLink}
