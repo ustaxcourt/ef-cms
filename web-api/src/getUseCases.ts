@@ -113,6 +113,7 @@ import { getOutboxMessagesForUserInteractor } from './business/useCases/messages
 import { getPaperServicePdfUrlInteractor } from '@shared/business/useCases/getPaperServicePdfUrlInteractor';
 import { getPendingMotionDocketEntriesForCurrentJudgeInteractor } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { getPractitionerByBarNumberInteractor } from './business/useCases/practitioner/getPractitionerByBarNumberInteractor';
+import { getPractitionerCasesInteractor } from '@shared/business/useCases/getPractitionerCasesInteractor';
 import { getPractitionerDocumentDownloadUrlInteractor } from './business/useCases/practitioner/getPractitionerDocumentDownloadUrlInteractor';
 import { getPractitionerDocumentInteractor } from './business/useCases/practitioner/getPractitionerDocumentInteractor';
 import { getPractitionerDocumentsInteractor } from './business/useCases/practitioner/getPractitionerDocumentsInteractor';
@@ -326,6 +327,7 @@ const useCases = {
   getPaperServicePdfUrlInteractor,
   getPendingMotionDocketEntriesForCurrentJudgeInteractor,
   getPractitionerByBarNumberInteractor,
+  getPractitionerCasesInteractor,
   getPractitionerDocumentDownloadUrlInteractor,
   getPractitionerDocumentInteractor,
   getPractitionerDocumentsInteractor,
