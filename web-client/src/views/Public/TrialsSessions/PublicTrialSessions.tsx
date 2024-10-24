@@ -1,6 +1,7 @@
 import { BigHeader } from '@web-client/views/BigHeader';
 import { PublicTrialSessionsFilters } from '@web-client/views/Public/TrialsSessions/PublicTrialSessionsFilters';
 import { PublicTrialSessionsRemoteProceedingsCard } from '@web-client/views/Public/TrialsSessions/PublicTrialSessionsRemoteProceedingsCard';
+import { PublicTrialSessionsTable } from '@web-client/views/Public/TrialsSessions/PublicTrialSessionsTable';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 
@@ -17,7 +18,9 @@ export const PublicTrialSessions = connect({}, function () {
             <PublicTrialSessionsRemoteProceedingsCard></PublicTrialSessionsRemoteProceedingsCard>
           </div>
         </div>
-        <div className="grid-row bg-primary padding-top-1"></div>
+        <div className="grid-row padding-top-1">
+          <PublicTrialSessionsTable></PublicTrialSessionsTable>
+        </div>
       </section>
     </>
   );

@@ -1,6 +1,10 @@
 import { Get } from 'cerebral';
 import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
-import { formatTrialSessions } from '@web-client/presenter/computeds/trialSessionsHelper';
+import {
+  TrialSessionRow,
+  TrialSessionWeek,
+  formatTrialSessions,
+} from '@web-client/presenter/computeds/trialSessionsHelper';
 import { getTrialCitiesGroupedByState } from '@shared/business/utilities/trialSession/trialCitiesGroupedByState';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
@@ -22,6 +26,8 @@ export type PublicTrialSessionsHelperResults = {
     };
   }[];
   filtersHaveBeenModified: boolean;
+  trialSessionsCount: number;
+  trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
 };
 
 function areAnyFiltersModified(
@@ -96,14 +102,14 @@ export const publicTrialSessionsHelper = (
     .filter(
       ts =>
         !Object.entries(sessionTypes).length || sessionTypes[ts.sessionType!],
-    );
+    )
+    .sort((sessionA, sessionB) => {
+      return sessionA.startDate.localeCompare(sessionB.startDate);
+    });
 
-  console.log(
-    'filteredTrialSessions',
-    formatTrialSessions({
-      trialSessions: filteredTrialSessions,
-    }),
-  );
+  const trialSessionRows = formatTrialSessions({
+    trialSessions: filteredTrialSessions,
+  });
 
   return {
     fetchedDateString,
@@ -111,5 +117,7 @@ export const publicTrialSessionsHelper = (
     sessionTypeOptions,
     trialCitiesByState,
     trialSessionJudgeOptions,
+    trialSessionRows,
+    trialSessionsCount: filteredTrialSessions.length,
   };
 };

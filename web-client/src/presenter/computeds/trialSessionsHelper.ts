@@ -314,7 +314,7 @@ export const thirtyDaysBeforeTrial = (startDate?: string): string => {
   return formatDateString(thirtyDaysBeforeTrialIso, FORMATS.MMDDYY);
 };
 
-type TrialSessionRow = {
+export type TrialSessionRow = {
   trialSessionId: string;
   showAlertForNOTTReminder: boolean;
   alertMessageForNOTT: string;
@@ -334,7 +334,7 @@ export function isTrialSessionRow(item: any): item is TrialSessionRow {
   return !!item?.trialSessionId;
 }
 
-type TrialSessionWeek = {
+export type TrialSessionWeek = {
   sessionWeekStartDate: string;
   formattedSessionWeekStartDate: string;
 };
