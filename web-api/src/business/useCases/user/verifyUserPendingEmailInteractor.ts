@@ -24,7 +24,7 @@ export const userTokenHasExpired = (
     calculateDifferenceInHours(
       createISODateString(),
       tokenExpirationTimestamp,
-    ) > 1
+    ) > TOKEN_EXPIRATION_TIME_HOURS
   );
 };
 
