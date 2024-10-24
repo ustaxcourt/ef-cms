@@ -13,7 +13,7 @@ import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEnti
 import { formatPhoneNumber } from '../utilities/formatPhoneNumber';
 import joi from 'joi';
 
-export interface UserContact {
+export type UserContact = {
   address1: string;
   address2?: string;
   address3?: string;
@@ -23,7 +23,7 @@ export interface UserContact {
   phone: string;
   postalCode: string;
   state: string;
-}
+};
 
 export class User extends JoiValidationEntity {
   public pendingEmailVerificationToken?: string;
