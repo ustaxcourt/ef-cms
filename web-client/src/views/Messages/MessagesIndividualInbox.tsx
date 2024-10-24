@@ -1,64 +1,30 @@
 import {
+  COLUMN_NAMES,
   MessageColumnData,
+  getColumnData,
+} from '@web-client/views/Messages/MessageColumns';
+import {
   MessageFilterData,
   MessageList,
 } from '@web-client/views/Messages/MessageList';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-const columns: MessageColumnData[] = [
-  {
-    columnName: 'Docket No.',
-    dataTestId: 'message-individual-docket-number',
-    iconClassName: 'consolidated-case-column',
-    sortField: 'docketNumber',
-  },
-  {
-    columnName: 'Received',
-    dataTestId: 'message-individual-received',
-    sortField: 'createdAt',
-  },
-  {
-    columnName: 'Message',
-    dataTestId: 'message-individual-subject',
-    iconClassName: 'message-unread-column',
-    sortField: 'subject',
-  },
-  {
-    columnName: 'Case Title',
-    dataTestId: 'message-individual-case-title',
-    sortField: 'caseTitle',
-  },
-  {
-    columnName: 'Case Status',
-    dataTestId: 'message-individual-case-status',
-    sortField: 'caseStatus',
-  },
-  {
-    columnName: 'From',
-    dataTestId: 'message-individual-from',
-    sortField: 'from',
-  },
-  {
-    columnName: 'Section',
-    dataTestId: 'message-individual-section',
-    sortField: 'fromSectionFormatted',
-  },
-];
+const columns: MessageColumnData[] = getColumnData([
+  COLUMN_NAMES.DOCKET_NUMBER,
+  COLUMN_NAMES.RECEIVED,
+  COLUMN_NAMES.MESSAGE,
+  COLUMN_NAMES.CASE_TITLE,
+  COLUMN_NAMES.CASE_STATUS,
+  COLUMN_NAMES.FROM,
+  COLUMN_NAMES.SECTION,
+]);
 
 export const MessagesIndividualInbox = connect(
   {
-    batchCompleteMessageSequence: sequences.batchCompleteMessageSequence,
-    constants: state.constants,
     formattedMessages: state.formattedMessages,
-    messagesIndividualInboxHelper: state.messagesIndividualInboxHelper,
     screenMetadata: state.screenMetadata,
-    setSelectedMessagesSequence: sequences.setSelectedMessagesSequence,
-    sortTableSequence: sequences.sortTableSequence,
-    tableSort: state.tableSort,
-    updateMessageFilterSequence: sequences.updateMessageFilterSequence,
   },
   function MessagesIndividualInbox({ formattedMessages, screenMetadata }) {
     const filters: MessageFilterData[] = [
