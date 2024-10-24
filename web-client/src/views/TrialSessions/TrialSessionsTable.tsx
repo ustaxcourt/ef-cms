@@ -11,22 +11,16 @@ import React, { useRef } from 'react';
 
 export const TrialSessionsTable = connect(
   {
-    sessionNotes: state.trialSessionWorkingCopy.sessionNotes,
     setTrialSessionsFiltersSequence: sequences.setTrialSessionsFiltersSequence,
-    specialTrialSessionNotes: state.trialSessionWorkingCopy.sessionNotes,
     trialSessionsHelper: state.trialSessionsHelper,
     trialSessionsPage: state.trialSessionsPage,
-    workingCopy: state.trialSessionWorkingCopy,
   },
   function TrialSessionsTable({
     setTrialSessionsFiltersSequence,
-    specialTrialSessionNotes,
     trialSessionsHelper,
     trialSessionsPage,
-    workingCopy,
   }) {
     const paginatorTop = useRef(null);
-    console.log('trialSessionWorkingCopy: ', workingCopy);
 
     return (
       <>
@@ -93,27 +87,24 @@ export const TrialSessionsTable = connect(
                   );
                 }
                 if (isTrialSessionRow(row)) {
-                  const isSpecialSession = row.sessionType === 'Special';
-                  // const { trialSessionId } = row;
-                  // let workingCopy;
-                  if (isSpecialSession) {
-                    console.log('Was special Session');
-                    // get trialsession working copy from trialSessionId
-                    // workingCopy = gotoTrialSessionWorkingCopy({
-                    //   trialSessionId,
-                    // });
-                  }
-                  const additionalRow = isSpecialSession ? (
-                    <tr className="special-sessions-row">
-                      <td colSpan={100}>
-                        <div className="special-session">
-                          <span className="text-semibold">
-                            Special Session Notes: {specialTrialSessionNotes}
-                          </span>
-                        </div>
-                      </td>
-                    </tr>
-                  ) : null;
+                  const additionalRow =
+                    row.sessionType === 'Special' ? (
+                      <tr className="special-sessions-row">
+                        <td colSpan={100}>
+                          <div className="special-session">
+                            <span className="text-semibold">
+                              Special Session Notes:{' '}
+                              {
+                                trialSessionsPage
+                                  .specialTrialSessionCopyNotesObject[
+                                  row.trialSessionId
+                                ]
+                              }
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                    ) : null;
                   return (
                     <tbody key={row.trialSessionId}>
                       <React.Fragment>
