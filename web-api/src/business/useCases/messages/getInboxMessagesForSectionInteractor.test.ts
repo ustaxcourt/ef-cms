@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/messages/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   DOCKET_SECTION,
@@ -6,11 +7,11 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getInboxMessagesForSectionInteractor } from './getInboxMessagesForSectionInteractor';
+import { getSectionInboxMessages } from '@web-api/persistence/postgres/messages/getSectionInboxMessages';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
-import { omit } from 'lodash';
 
 describe('getInboxMessagesForSectionInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
@@ -32,7 +33,7 @@ describe('getInboxMessagesForSectionInteractor', () => {
       caseTitle: 'Bill Burr',
       createdAt: '2019-03-01T21:40:46.415Z',
       docketNumber: '123-45',
-      docketNumberWithSuffix: '123-45S',
+      docketNumberWithSuffix: '123-45',
       entityName: 'MessageResult',
       from: 'Test Petitionsclerk2',
       fromSection: PETITIONS_SECTION,
@@ -41,8 +42,6 @@ describe('getInboxMessagesForSectionInteractor', () => {
       message: "How's it going?",
       messageId: '9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
       parentMessageId: '9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
-      pk: 'case|9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
-      sk: 'message|9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
       subject: 'Hey!',
       to: 'Test Petitionsclerk',
       toSection: PETITIONS_SECTION,
@@ -50,9 +49,8 @@ describe('getInboxMessagesForSectionInteractor', () => {
       trialDate: '2028-03-01T21:40:46.415Z',
       trialLocation: 'El Paso, Texas',
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getSectionInboxMessages.mockReturnValue([messageData]);
+
+    (getSectionInboxMessages as jest.Mock).mockReturnValue([messageData]);
 
     const returnedMessages = await getInboxMessagesForSectionInteractor(
       applicationContext,
@@ -62,9 +60,7 @@ describe('getInboxMessagesForSectionInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getSectionInboxMessages,
-    ).toHaveBeenCalled();
-    expect(returnedMessages).toMatchObject([omit(messageData, 'pk', 'sk')]);
+    expect(getSectionInboxMessages).toHaveBeenCalled();
+    expect(returnedMessages).toMatchObject([messageData]);
   });
 });

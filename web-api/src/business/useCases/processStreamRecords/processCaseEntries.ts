@@ -1,5 +1,6 @@
 import { flattenDeep } from 'lodash';
 import { marshall } from '@aws-sdk/util-dynamodb';
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import type {
   AttributeValueWithName,
   IDynamoDBRecord,
@@ -15,6 +16,8 @@ export const processCaseEntries = async ({
 }) => {
   if (!caseEntityRecords.length) return;
 
+  const casesToUpsert: RawCase[] = [];
+
   const indexCaseEntry = async caseRecord => {
     const caseNewImage = caseRecord.dynamodb.NewImage;
     const caseRecords: IDynamoDBRecord[] = [];
@@ -27,6 +30,8 @@ export const processCaseEntries = async ({
       });
 
     const marshalledCase = marshall(caseMetadataWithCounsel);
+
+    casesToUpsert.push(caseMetadataWithCounsel);
 
     caseRecords.push({
       dynamodb: {
@@ -111,6 +116,8 @@ export const processCaseEntries = async ({
       applicationContext,
       records: flattenDeep(indexRecords),
     });
+
+  await upsertCases(casesToUpsert);
 
   if (failedRecords.length > 0) {
     applicationContext.logger.error(

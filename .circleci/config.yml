@@ -235,6 +235,12 @@ jobs:
               npm run start:migration -- $ENV
             fi
       - run:
+          name: Run Postgres Migration
+          command: |
+            OUTPUT_ONLY=true npm run deploy:allColors $ENV
+            POSTGRES_HOST=$(cat ./web-api/terraform/applyables/allColors/output.json | jq -r '.rds_host_name.value')
+            POSTGRES_HOST=$POSTGRES_HOST POSTGRES_USER=$POSTGRES_USER NODE_ENV=production npm run migration:postgres
+      - run:
           name: Enable Check Migration Status Cron
           command: |
             ./scripts/migration/enable-migration-cron.sh
@@ -820,6 +826,31 @@ jobs:
           command: |
             ./scripts/glue/enable-glue-cron.sh
 
+  restore-postgres:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    environment:
+      LOWER_ENV: << pipeline.parameters.lower_env >>
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            if [[ -z "$LOWER_ENV" ]]; then
+              echo "Error: no lower environment was provided"
+              exit 1
+            fi
+      - run:
+          name: Deploy Check Glue Job Run State Cron Lambda
+          command: |
+            TARGET_ENV=$LOWER_ENV TARGET_ACCOUNT_ID="${LOWER_ENV_ACCOUNT_ID}" npx ts-node --transpileOnly scripts/postgres/restoreDbFromSource.ts
+
   finish-glue-job:
     docker:
       - image: *efcms-docker-image
@@ -1063,9 +1094,14 @@ workflows:
           type: approval
           requires:
             - start-glue-job
+      - restore-postgres:
+          <<: *only-prod
+          requires:
+            - start-glue-job
       - finish-glue-job:
           <<: *only-prod
           requires:
+            - restore-postgres
             - wait-for-glue-job
 
   sync-s3-to-lower-env:
