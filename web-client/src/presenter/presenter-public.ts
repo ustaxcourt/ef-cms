@@ -34,6 +34,7 @@ import { persistFormsOnReloadSequence } from './sequences/persistFormsOnReloadSe
 import { redirectToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/redirectToCreatePetitionerAccountSequence';
 import { redirectToDashboardSequence } from '@web-client/presenter/sequences/redirectToDashboardSequence';
 import { redirectToLoginSequence } from '@web-client/presenter/sequences/Public/redirectToLoginSequence';
+import { resetPublicTrialSessionDataSequence } from '@web-client/presenter/sequences/resetPublicTrialSessionDataSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
@@ -107,6 +108,7 @@ export const presenterSequences = {
   redirectToCreatePetitionerAccountSequence,
   redirectToDashboardSequence,
   redirectToLoginSequence,
+  resetPublicTrialSessionDataSequence,
   showMoreResultsSequence,
   sortTodaysOrdersSequence,
   submitLoginSequence,
