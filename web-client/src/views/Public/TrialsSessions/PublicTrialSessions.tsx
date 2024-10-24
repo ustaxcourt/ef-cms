@@ -1,6 +1,6 @@
 import { BigHeader } from '@web-client/views/BigHeader';
-import { PublicTrialSessionsFilters } from '@web-client/views/Public/PublicTrialSessionsFilters';
-import { PublicTrialSessionsRemoteProceedingsCard } from '@web-client/views/Public/PublicTrialSessionsRemoteProceedingsCard';
+import { PublicTrialSessionsFilters } from '@web-client/views/Public/TrialsSessions/PublicTrialSessionsFilters';
+import { PublicTrialSessionsRemoteProceedingsCard } from '@web-client/views/Public/TrialsSessions/PublicTrialSessionsRemoteProceedingsCard';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 

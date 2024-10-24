@@ -11,7 +11,7 @@ import { Privacy } from './Privacy';
 import { PublicCaseDetail } from './Public/PublicCaseDetail';
 import { PublicPrintableDocketRecord } from './Public/PublicPrintableDocketRecord';
 import { PublicSearch } from './Public/PublicSearch';
-import { PublicTrialSessions } from '@web-client/views/Public/PublicTrialSessions';
+import { PublicTrialSessions } from '@web-client/views/Public/TrialsSessions/PublicTrialSessions';
 import { TodaysOpinions } from './Public/TodaysOpinions';
 import { TodaysOrders } from './Public/TodaysOrders';
 import { UsaBanner } from './UsaBanner';
