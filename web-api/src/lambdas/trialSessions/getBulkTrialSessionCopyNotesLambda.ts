@@ -14,12 +14,11 @@ export const getBulkTrialSessionCopyNotesLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { trialSessionIds } = JSON.parse(event.body || '{}');
-
+    const { specialTrialSessions } = JSON.parse(event.body || '{}');
     return await getBulkTrialSessionCopyNotesInteractor(
       applicationContext,
       {
-        trialSessionIds,
+        specialTrialSessions,
       },
       authorizedUser,
     );

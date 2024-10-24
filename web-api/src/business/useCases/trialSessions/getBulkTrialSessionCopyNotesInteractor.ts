@@ -6,6 +6,10 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
+interface SpecialTrialSession {
+  userId: string;
+  trialSessionId: string;
+}
 /**
  * Primary use case for getting multiple special trial session copy notes
  *
@@ -14,26 +18,23 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
  * @param {object} providers.specialTrialSessions array of special trial session & judge ids
  * @param authorizedUser
  */
-export const getBulkTrialSessionCopyNotesInteractor = async (
+export const getBulkTrialSessionCopyNotesInteractor = (
   applicationContext: ServerApplicationContext,
-  {
-    specialTrialSessions,
-  }: { specialTrialSessions: { trialSessionId: string; judgeId: string }[] },
+  { specialTrialSessions }: { specialTrialSessions: SpecialTrialSession[] },
   authorizedUser: UnknownAuthUser,
 ) => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  // Add error checking here
   const specialTrialSessionNotes = specialTrialSessions.map(
-    async ({ judgeId, trialSessionId }) => {
+    async ({ trialSessionId, userId }) => {
       return await applicationContext
         .getPersistenceGateway()
         .getTrialSessionWorkingCopy({
           applicationContext,
           trialSessionId,
-          userId: judgeId,
+          userId,
         })
         .then(trialSessionWorkingCopy => ({
           sessionNotes: trialSessionWorkingCopy?.sessionNotes || '',
@@ -41,5 +42,6 @@ export const getBulkTrialSessionCopyNotesInteractor = async (
         }));
     },
   );
-  return specialTrialSessionNotes;
+
+  return Promise.all(specialTrialSessionNotes);
 };
