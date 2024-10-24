@@ -923,7 +923,7 @@ app.delete(
     '/trial-sessions/:trialSessionId/working-copy',
     lambdaWrapper(getTrialSessionWorkingCopyLambda),
   );
-  app.get(
+  app.post(
     '/trial-sessions/bulk-copy-notes',
     lambdaWrapper(getBulkTrialSessionCopyNotesLambda),
   );
