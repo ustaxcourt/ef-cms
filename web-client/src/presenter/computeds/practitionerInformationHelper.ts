@@ -6,7 +6,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import { Get } from 'cerebral';
 import { PractitionerCaseDetail } from '@web-client/presenter/state';
 
-const PAGE_SIZE = 100;
+export const PAGE_SIZE = 100;
 
 const getPagesToDisplay = ({
   cases,
