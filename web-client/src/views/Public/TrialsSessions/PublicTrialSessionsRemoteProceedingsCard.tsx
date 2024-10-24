@@ -14,14 +14,18 @@ export const PublicTrialSessionsRemoteProceedingsCard = connect(
           <div className="card-content ">
             <div className="padding-left-2 margin-bottom-9">
               <Button
+                link
                 className="padding-bottom-0 text-left"
-                link="https://www.ustaxcourt.gov/remote_proceedings.html"
+                href="https://www.ustaxcourt.gov/remote_proceedings.html"
+                target="_blank"
               >
                 Public Access to Remote Proceedings
               </Button>
               <Button
+                link
                 className="text-left"
-                link="https://www.ustaxcourt.gov/zoomgov.html"
+                href="https://www.ustaxcourt.gov/zoomgov.html"
+                target="_blank"
               >
                 Zoomgov Proceedings Resources
               </Button>
