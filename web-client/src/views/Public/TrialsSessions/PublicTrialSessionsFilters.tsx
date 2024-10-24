@@ -135,7 +135,6 @@ export const PublicTrialSessionsFilters = connect(
                         root: ROOT,
                         value: undefined,
                       });
-                      console.log('sessionType', sessionTypeLabel);
                     }}
                   />
                 ))}
