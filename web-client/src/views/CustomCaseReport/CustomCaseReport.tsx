@@ -30,6 +30,7 @@ export const CustomCaseReport = connect(
     setCustomCaseReportFiltersSequence:
       sequences.setCustomCaseReportFiltersSequence,
     totalCases: state.customCaseReport.totalCases,
+    validateForm: sequences.validateCustomCaseReportSequence,
     validationErrors: state.validationErrors,
   },
   function CustomCaseReport({
@@ -40,6 +41,7 @@ export const CustomCaseReport = connect(
     getCustomCaseReportSequence,
     setCustomCaseReportFiltersSequence,
     totalCases,
+    validateForm,
     validationErrors,
   }) {
     const [hasRunCustomCaseReport, setHasRunCustomCaseReport] = useState(false);
@@ -229,11 +231,13 @@ export const CustomCaseReport = connect(
                 setCustomCaseReportFiltersSequence({
                   endDate: e.target.value,
                 });
+                validateForm({ selectedPage: 0 });
               }}
               onChangeStart={e => {
                 setCustomCaseReportFiltersSequence({
                   startDate: e.target.value,
                 });
+                validateForm({ selectedPage: 0 });
               }}
             />
           </div>

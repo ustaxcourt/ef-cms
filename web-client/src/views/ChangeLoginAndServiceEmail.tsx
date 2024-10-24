@@ -11,7 +11,6 @@ export const ChangeLoginAndServiceEmail = connect(
   {
     form: state.form,
     navigateToPathSequence: sequences.navigateToPathSequence,
-    showModal: state.modal.showModal,
     submitChangeLoginAndServiceEmailSequence:
       sequences.submitChangeLoginAndServiceEmailSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,

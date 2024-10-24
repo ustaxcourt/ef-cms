@@ -1,7 +1,8 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { getCustomCaseReportAction } from '../actions/CaseInventoryReport/getCustomCaseReportAction';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
+import { setValidationAlertErrorsAction } from '@web-client/presenter/actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -14,7 +15,11 @@ export const getCustomCaseReportSequence = [
   startShowValidationAction,
   validateCustomCaseReportFiltersAction,
   {
-    error: [setAlertErrorAction, setValidationErrorsAction],
+    error: [
+      setValidationErrorsAction,
+      setScrollToErrorNotificationAction,
+      setValidationAlertErrorsAction,
+    ],
     success: [
       stopShowValidationAction,
       clearErrorAlertsAction,
