@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon';
+import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { publicTrialSessionsHelper } from '@web-client/presenter/computeds/Public/publicTrialSessionsHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 
@@ -199,6 +200,289 @@ describe('publicTrialSessionsHelper', () => {
       );
 
       expect(filtersHaveBeenModified).toEqual(true);
+    });
+  });
+
+  describe('trialSessionRows', () => {
+    function createTrialSessionObject(overrides: {
+      [key: string]: any;
+    }): TrialSessionInfoDTO {
+      return {
+        isCalendared: true,
+        judge: {
+          name: 'Ashford',
+          userId: 'dabbad01-18d0-43ec-bafb-654e83405416',
+        },
+        proceedingType: 'In Person',
+        sessionScope: 'Standalone Remote',
+        sessionStatus: 'Open',
+        sessionType: 'Regular',
+        startDate: '2020-11-25T05:00:00.000Z',
+        term: 'Fall',
+        termYear: '2020',
+        trialLocation: 'Birmingham, Alabama',
+        ...overrides,
+      };
+    }
+
+    it('should return all the trialSessions if there are no filter', () => {
+      const TEST_TRIAL_SESSIONS: TrialSessionInfoDTO[] = [
+        createTrialSessionObject({ proceedingType: 'Remote' }),
+        createTrialSessionObject({ sessionType: 'Small' }),
+        createTrialSessionObject({ trialLocation: 'Mobile, Alabama' }),
+        createTrialSessionObject({
+          judge: {
+            name: 'Buch',
+            userId: 'dabbad01-18d0-43ec-bafb-654e83405416',
+          },
+        }),
+      ];
+
+      const { trialSessionsCount } = runCompute(publicTrialSessionsHelper, {
+        state: {
+          FetchedTrialSessions: TEST_TIME,
+          publicTrialSessionData: {},
+          trialSessionsPage: {
+            trialSessions: TEST_TRIAL_SESSIONS,
+          },
+        },
+      });
+
+      expect(trialSessionsCount).toEqual(4);
+    });
+
+    it('should return all the trialSessions that meet the proceedingType filter', () => {
+      const TEST_PROCEEDING_TYPE = 'TEST_PROCEEDING_TYPE';
+      const TEST_TRIAL_SESSIONS: TrialSessionInfoDTO[] = [
+        createTrialSessionObject({ proceedingType: TEST_PROCEEDING_TYPE }),
+        createTrialSessionObject({ sessionType: 'Small' }),
+        createTrialSessionObject({ trialLocation: 'Mobile, Alabama' }),
+        createTrialSessionObject({
+          judge: {
+            name: 'Buch',
+            userId: 'dabbad01-18d0-43ec-bafb-654e83405416',
+          },
+        }),
+      ];
+
+      const { trialSessionRows, trialSessionsCount } = runCompute(
+        publicTrialSessionsHelper,
+        {
+          state: {
+            FetchedTrialSessions: TEST_TIME,
+            publicTrialSessionData: {
+              proceedingType: TEST_PROCEEDING_TYPE,
+            },
+            trialSessionsPage: {
+              trialSessions: TEST_TRIAL_SESSIONS,
+            },
+          },
+        },
+      );
+
+      expect(trialSessionsCount).toEqual(1);
+      expect(trialSessionRows).toEqual([
+        {
+          formattedSessionWeekStartDate: 'November 23, 2020',
+          sessionWeekStartDate: '2020-11-23T05:00:00.000+00:00',
+        },
+        {
+          alertMessageForNOTT: '',
+          formattedEstimatedEndDate: '',
+          formattedNoticeIssuedDate: '',
+          formattedStartDate: '11/25/20',
+          judge: {
+            name: 'Ashford',
+            userId: 'dabbad01-18d0-43ec-bafb-654e83405416',
+          },
+          proceedingType: 'TEST_PROCEEDING_TYPE',
+          sessionStatus: 'Open',
+          sessionType: 'Regular',
+          showAlertForNOTTReminder: false,
+          startDate: '2020-11-25T05:00:00.000Z',
+          swingSession: false,
+          trialLocation: 'Birmingham, Alabama',
+          trialSessionId: '',
+          userIsAssignedToSession: false,
+        },
+      ]);
+    });
+
+    it('should return all the trialSessions that meet the judge filter', () => {
+      const TEST_JUDGE_NAME = 'TEST_JUDGE_NAME';
+      const TEST_TRIAL_SESSIONS: TrialSessionInfoDTO[] = [
+        createTrialSessionObject({ proceedingType: 'Remote' }),
+        createTrialSessionObject({ sessionType: 'Small' }),
+        createTrialSessionObject({ trialLocation: 'Mobile, Alabama' }),
+        createTrialSessionObject({
+          judge: {
+            name: TEST_JUDGE_NAME,
+            userId: 'dabbad01-18d0-43ec-bafb-654e83405416',
+          },
+        }),
+      ];
+
+      const { trialSessionRows, trialSessionsCount } = runCompute(
+        publicTrialSessionsHelper,
+        {
+          state: {
+            FetchedTrialSessions: TEST_TIME,
+            publicTrialSessionData: {
+              judges: {
+                [TEST_JUDGE_NAME]: TEST_JUDGE_NAME,
+              },
+            },
+            trialSessionsPage: {
+              trialSessions: TEST_TRIAL_SESSIONS,
+            },
+          },
+        },
+      );
+
+      expect(trialSessionsCount).toEqual(1);
+      expect(trialSessionRows).toEqual([
+        {
+          formattedSessionWeekStartDate: 'November 23, 2020',
+          sessionWeekStartDate: '2020-11-23T05:00:00.000+00:00',
+        },
+        {
+          alertMessageForNOTT: '',
+          formattedEstimatedEndDate: '',
+          formattedNoticeIssuedDate: '',
+          formattedStartDate: '11/25/20',
+          judge: {
+            name: TEST_JUDGE_NAME,
+            userId: 'dabbad01-18d0-43ec-bafb-654e83405416',
+          },
+          proceedingType: 'In Person',
+          sessionStatus: 'Open',
+          sessionType: 'Regular',
+          showAlertForNOTTReminder: false,
+          startDate: '2020-11-25T05:00:00.000Z',
+          swingSession: false,
+          trialLocation: 'Birmingham, Alabama',
+          trialSessionId: '',
+          userIsAssignedToSession: false,
+        },
+      ]);
+    });
+
+    it('should return all the trialSessions that meet the location filter', () => {
+      const TEST_LOCATION = 'TEST_LOCATION';
+      const TEST_TRIAL_SESSIONS: TrialSessionInfoDTO[] = [
+        createTrialSessionObject({ proceedingType: 'Remote' }),
+        createTrialSessionObject({ sessionType: 'Small' }),
+        createTrialSessionObject({ trialLocation: TEST_LOCATION }),
+        createTrialSessionObject({
+          judge: {
+            name: 'Buch',
+            userId: 'dabbad01-18d0-43ec-bafb-654e83405416',
+          },
+        }),
+      ];
+
+      const { trialSessionRows, trialSessionsCount } = runCompute(
+        publicTrialSessionsHelper,
+        {
+          state: {
+            FetchedTrialSessions: TEST_TIME,
+            publicTrialSessionData: {
+              locations: {
+                [TEST_LOCATION]: TEST_LOCATION,
+              },
+            },
+            trialSessionsPage: {
+              trialSessions: TEST_TRIAL_SESSIONS,
+            },
+          },
+        },
+      );
+
+      expect(trialSessionsCount).toEqual(1);
+      expect(trialSessionRows).toEqual([
+        {
+          formattedSessionWeekStartDate: 'November 23, 2020',
+          sessionWeekStartDate: '2020-11-23T05:00:00.000+00:00',
+        },
+        {
+          alertMessageForNOTT: '',
+          formattedEstimatedEndDate: '',
+          formattedNoticeIssuedDate: '',
+          formattedStartDate: '11/25/20',
+          judge: {
+            name: 'Ashford',
+            userId: 'dabbad01-18d0-43ec-bafb-654e83405416',
+          },
+          proceedingType: 'In Person',
+          sessionStatus: 'Open',
+          sessionType: 'Regular',
+          showAlertForNOTTReminder: false,
+          startDate: '2020-11-25T05:00:00.000Z',
+          swingSession: false,
+          trialLocation: TEST_LOCATION,
+          trialSessionId: '',
+          userIsAssignedToSession: false,
+        },
+      ]);
+    });
+
+    it('should return all the trialSessions that meet the sessionType filter', () => {
+      const TEST_SESSION_TYPE = 'TEST_SESSION_TYPE';
+      const TEST_TRIAL_SESSIONS: TrialSessionInfoDTO[] = [
+        createTrialSessionObject({ proceedingType: 'Remote' }),
+        createTrialSessionObject({ sessionType: TEST_SESSION_TYPE }),
+        createTrialSessionObject({ trialLocation: 'Mobile, Alabama' }),
+        createTrialSessionObject({
+          judge: {
+            name: 'Buch',
+            userId: 'dabbad01-18d0-43ec-bafb-654e83405416',
+          },
+        }),
+      ];
+
+      const { trialSessionRows, trialSessionsCount } = runCompute(
+        publicTrialSessionsHelper,
+        {
+          state: {
+            FetchedTrialSessions: TEST_TIME,
+            publicTrialSessionData: {
+              sessionTypes: {
+                [TEST_SESSION_TYPE]: TEST_SESSION_TYPE,
+              },
+            },
+            trialSessionsPage: {
+              trialSessions: TEST_TRIAL_SESSIONS,
+            },
+          },
+        },
+      );
+
+      expect(trialSessionsCount).toEqual(1);
+      expect(trialSessionRows).toEqual([
+        {
+          formattedSessionWeekStartDate: 'November 23, 2020',
+          sessionWeekStartDate: '2020-11-23T05:00:00.000+00:00',
+        },
+        {
+          alertMessageForNOTT: '',
+          formattedEstimatedEndDate: '',
+          formattedNoticeIssuedDate: '',
+          formattedStartDate: '11/25/20',
+          judge: {
+            name: 'Ashford',
+            userId: 'dabbad01-18d0-43ec-bafb-654e83405416',
+          },
+          proceedingType: 'In Person',
+          sessionStatus: 'Open',
+          sessionType: TEST_SESSION_TYPE,
+          showAlertForNOTTReminder: false,
+          startDate: '2020-11-25T05:00:00.000Z',
+          swingSession: false,
+          trialLocation: 'Birmingham, Alabama',
+          trialSessionId: '',
+          userIsAssignedToSession: false,
+        },
+      ]);
     });
   });
 });

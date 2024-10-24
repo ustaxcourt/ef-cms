@@ -64,7 +64,6 @@ export const publicTrialSessionsHelper = (
   } = get(state.publicTrialSessionData);
 
   const trialSessions = get(state.trialSessionsPage.trialSessions) || [];
-  console.log('sessionTypes', sessionTypes);
 
   const fetchedDateString = fetchedTrialSessions.toFormat(
     "MM/dd/yy hh:mm a 'Eastern'",
