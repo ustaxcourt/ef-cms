@@ -153,6 +153,7 @@ import { generateTrialCalendarPdfInteractor } from '../../shared/src/proxies/tri
 import { getAllFeatureFlagsInteractor } from '../../shared/src/proxies/featureFlag/getAllFeatureFlagsProxy';
 import { getAllUsersByRoleInteractor } from '@shared/proxies/users/getAllUsersByRoleProxy';
 import { getBlockedCasesInteractor } from '../../shared/src/proxies/reports/getBlockedCasesProxy';
+import { getBulkSpecialTrialSessionCopyNotesInteractor } from '@shared/proxies/trialSessions/getBulkSpecialTrialSessionCopyNotesProxy';
 import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
 import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesForCaseProxy';
 import { getCaseDeadlinesInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesProxy';
@@ -441,6 +442,7 @@ const allUseCases = {
   getAllFeatureFlagsInteractor,
   getAllUsersByRoleInteractor,
   getBlockedCasesInteractor,
+  getBulkSpecialTrialSessionCopyNotesInteractor,
   getCalendaredCasesForTrialSessionInteractor,
   getCaseDeadlinesForCaseInteractor,
   getCaseDeadlinesInteractor,
