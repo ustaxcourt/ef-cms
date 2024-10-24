@@ -1,5 +1,6 @@
 import { PUBLIC_DOCKET_RECORD_FILTER_OPTIONS } from '../../../shared/src/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
+import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByNameHelper';
@@ -81,6 +82,9 @@ export const baseState = {
   todaysOrders: {
     results: [],
     totalCount: 0,
+  },
+  trialSessionsPage: { trialSessions: [] } as {
+    trialSessions: TrialSessionInfoDTO[];
   },
   user: {},
   validationErrors: {},

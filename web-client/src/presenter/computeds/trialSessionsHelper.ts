@@ -121,6 +121,8 @@ export const trialSessionsHelper = (
     trialSessions: trialSessionPage,
   });
 
+  console.log('trialSessionRows', trialSessionRows);
+
   return {
     endDateErrorMessage,
     isResetFiltersDisabled: !userHasSelectedAFilter,
@@ -215,7 +217,7 @@ const filterAndSortTrialSessions = ({
     });
 };
 
-const formatTrialSessions = ({
+export const formatTrialSessions = ({
   judgeAssociatedToUser,
   trialSessions,
 }: {

@@ -1,5 +1,6 @@
 import { Get } from 'cerebral';
 import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
+import { formatTrialSessions } from '@web-client/presenter/computeds/trialSessionsHelper';
 import { getTrialCitiesGroupedByState } from '@shared/business/utilities/trialSession/trialCitiesGroupedByState';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
@@ -56,6 +57,9 @@ export const publicTrialSessionsHelper = (
     sessionTypes = {},
   } = get(state.publicTrialSessionData);
 
+  const trialSessions = get(state.trialSessionsPage.trialSessions) || [];
+  console.log('sessionTypes', sessionTypes);
+
   const fetchedDateString = fetchedTrialSessions.toFormat(
     "MM/dd/yy hh:mm a 'Eastern'",
   );
@@ -79,6 +83,26 @@ export const publicTrialSessionsHelper = (
     judges,
     locations,
     sessionTypes,
+  );
+
+  const filteredTrialSessions = trialSessions
+    .filter(
+      ts => proceedingType === 'All' || ts.proceedingType === proceedingType,
+    )
+    .filter(ts => !Object.entries(judges).length || judges[ts.judge?.name!])
+    .filter(
+      ts => !Object.entries(locations).length || locations[ts.trialLocation!],
+    )
+    .filter(
+      ts =>
+        !Object.entries(sessionTypes).length || sessionTypes[ts.sessionType!],
+    );
+
+  console.log(
+    'filteredTrialSessions',
+    formatTrialSessions({
+      trialSessions: filteredTrialSessions,
+    }),
   );
 
   return {
