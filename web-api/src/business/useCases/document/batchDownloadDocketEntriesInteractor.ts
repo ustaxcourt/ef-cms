@@ -126,11 +126,6 @@ const batchDownloadDocketEntriesHelper = async (
     });
   }
 
-  //add integration test in CI CD
-  //test script
-  //queue job
-  //wait until download link is sent through web socket
-
   const featureFlags = await applicationContext
     .getUseCases()
     .getAllFeatureFlagsInteractor(applicationContext);
@@ -162,7 +157,6 @@ const batchDownloadDocketEntriesHelper = async (
         authorizedUser.userId,
       );
 
-    //TEST: Provide fake progress bar to trick user (AWS BATCH takes around 50 sec to boot up VM)
     const FAKE_NUMBER = 45;
     for (let index = 0; index < FAKE_NUMBER; index++) {
       await applicationContext.getNotificationGateway().sendNotificationToUser({
