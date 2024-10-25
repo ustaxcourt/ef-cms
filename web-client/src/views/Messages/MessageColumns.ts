@@ -1,7 +1,13 @@
+import {
+  ALPHABETICALLY_ASCENDING,
+  ALPHABETICALLY_DESCENDING,
+  CHRONOLOGICALLY_ASCENDING,
+  CHRONOLOGICALLY_DESCENDING,
+} from '@shared/business/entities/EntityConstants';
+
 export type MessageColumnData = {
   columnName: string;
   sortFieldInfo: SortFieldInfo;
-  sortType?: 'string' | 'date';
   headerClassName?: string;
   headerIconClassName?: string;
 };
@@ -9,29 +15,36 @@ export type MessageColumnData = {
 type SortFieldInfo = {
   sortField: string; // What we are actually sorting by (e.g., a timestamp)
   displayField?: string; // What we are displaying (e.g., a formatted timestamp)
+  sortType: 'string' | 'date';
 };
 
 // The fields that messages can be sorted by.
 export const SORT_FIELDS: Record<string, SortFieldInfo> = {
-  CASE_STATUS: { sortField: 'caseStatus' },
-  CASE_TITLE: { sortField: 'caseTitle' },
+  CASE_STATUS: { sortField: 'caseStatus', sortType: 'string' },
+  CASE_TITLE: { sortField: 'caseTitle', sortType: 'string' },
   COMPLETED_AT: {
     displayField: 'completedAtFormatted',
     sortField: 'completedAt',
+    sortType: 'date',
   },
-  COMPLETED_BY: { sortField: 'completedBy' },
-  COMPLETED_BY_SECTION: { sortField: 'completedBySection' },
-  COMPLETED_MESSAGE: { sortField: 'completedMessage' },
-  CREATED_AT: { displayField: 'createdAtFormatted', sortField: 'createdAt' },
+  COMPLETED_BY: { sortField: 'completedBy', sortType: 'date' },
+  COMPLETED_BY_SECTION: { sortField: 'completedBySection', sortType: 'string' },
+  COMPLETED_MESSAGE: { sortField: 'completedMessage', sortType: 'string' },
+  CREATED_AT: {
+    displayField: 'createdAtFormatted',
+    sortField: 'createdAt',
+    sortType: 'date',
+  },
   DOCKET_NUMBER: {
     displayField: 'docketNumberWithSuffix',
     sortField: 'docketNumber',
+    sortType: 'string',
   },
-  FROM: { sortField: 'from' },
-  FROM_SECTION: { sortField: 'fromSectionFormatted' },
-  SUBJECT: { sortField: 'subject' },
-  TO: { sortField: 'to' },
-  TO_SECTION: { sortField: 'toSection' },
+  FROM: { sortField: 'from', sortType: 'string' },
+  FROM_SECTION: { sortField: 'fromSectionFormatted', sortType: 'string' },
+  SUBJECT: { sortField: 'subject', sortType: 'string' },
+  TO: { sortField: 'to', sortType: 'string' },
+  TO_SECTION: { sortField: 'toSection', sortType: 'string' },
 };
 
 // The columns we have available for any message queue.
@@ -99,4 +112,18 @@ export const SORTABLE_COLUMNS: Record<string, MessageColumnData> = {
     columnName: 'Section',
     sortFieldInfo: SORT_FIELDS.TO_SECTION,
   },
+};
+
+export const getAscendingTextForSortType = (sortType: 'string' | 'date') => {
+  if (sortType === 'date') {
+    return CHRONOLOGICALLY_ASCENDING;
+  }
+  return ALPHABETICALLY_ASCENDING;
+};
+
+export const getDescendingTextForSortType = (sortType: 'string' | 'date') => {
+  if (sortType === 'date') {
+    return CHRONOLOGICALLY_DESCENDING;
+  }
+  return ALPHABETICALLY_DESCENDING;
 };
