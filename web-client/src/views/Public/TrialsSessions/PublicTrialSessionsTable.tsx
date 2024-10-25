@@ -33,7 +33,7 @@ export const PublicTrialSessionsTable = connect<
   }) {
     return (
       <>
-        <div className="grid-row margin-bottom-2 flex-align-center">
+        <div className="width-full grid-row margin-bottom-2 flex-align-center">
           <div className="grid-col">
             <Paginator
               currentPageIndex={pageNumber}
