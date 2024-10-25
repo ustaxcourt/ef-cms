@@ -37,10 +37,10 @@ import { faArrowAltCircleLeft as faArrowAltCircleLeftRegular } from '@fortawesom
 import { faExclamation } from '@fortawesome/free-solid-svg-icons/faExclamation';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
+import { faLink } from '@fortawesome/free-solid-svg-icons/faLink';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-regular-svg-icons/faTimesCircle';
 import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
-
 import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter-public';
@@ -68,6 +68,7 @@ const appPublic = {
       faFileAltSolid,
       faLock,
       faLongArrowAltUp,
+      faLink,
       faTimes,
       faPrint,
       faFilePdf,
