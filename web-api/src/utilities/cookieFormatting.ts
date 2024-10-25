@@ -32,6 +32,8 @@ export const deleteCookieString = (
   });
 };
 
-export const parseCookieString = (cookieString: string) => {
-  return parse(cookieString);
+export const parseCookieString = (
+  cookieString: string,
+): Record<string, string> => {
+  return parse(cookieString) as Record<string, string>;
 };
