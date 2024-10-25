@@ -2,7 +2,10 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { ErrorNotification } from '../ErrorNotification';
 import { Icon } from '../../ustc-ui/Icon/Icon';
-import { MessageColumnData } from '@web-client/views/Messages/MessageColumns';
+import {
+  MessageColumnData,
+  SORT_FIELDS,
+} from '@web-client/views/Messages/MessageColumns';
 import { SortableColumn } from '../../ustc-ui/Table/SortableColumn';
 import { SuccessNotification } from '../SuccessNotification';
 import { TableFilters } from '../../ustc-ui/Table/TableFilters';
@@ -58,78 +61,78 @@ export const MessageList = connect<
   }) {
     const selectAllCheckboxRef = useRef<HTMLInputElement>(null);
 
-    const getOneCell = (message: any, data: MessageColumnData) => {
-      if (data.sortField === 'docketNumber') {
-        return (
-          <>
-            <td className="consolidated-case-column">
-              <ConsolidatedCaseIcon
-                consolidatedIconTooltipText={
-                  message.consolidatedIconTooltipText
-                }
-                inConsolidatedGroup={message.inConsolidatedGroup}
-                showLeadCaseIcon={message.isLeadCase}
-              />
-            </td>
-            <td
-              className="message-queue-row small"
-              colSpan={2}
-              data-testid="individual-message-inbox-docket-number-cell"
-            >
-              {message.docketNumberWithSuffix}
-            </td>
-          </>
-        );
-      }
-      if (data.sortField === 'subject') {
-        return (
-          <>
-            <td className="message-unread-column">
-              {!message.isRead && (
-                <Icon
-                  aria-label="unread message"
-                  className="fa-icon-blue"
-                  icon="envelope"
-                  size="1x"
-                />
-              )}
-            </td>
-            <td className="message-queue-row message-subject">
-              <div className="message-document-title">
-                <Button
-                  link
-                  className={classNames(
-                    'padding-0',
-                    message.isRead ? '' : 'text-bold',
-                  )}
-                  data-testid="individual-message-inbox-subject-cell"
-                  href={message.messageDetailLink}
-                >
-                  {message.subject}
-                </Button>
-              </div>
-
-              <div className="message-document-detail">{message.message}</div>
-            </td>
-          </>
-        );
-      }
-      if (data.sortField === 'createdAt') {
-        return (
-          <td
-            className="message-queue-row no-wrap"
-            data-testid={`${data.dataTestId}-cell`}
-          >
-            {message[data.sortFieldDisplay || data.sortField]}
+    const getMessageDocketNumberCell = (message: any) => {
+      return (
+        <>
+          <td className="consolidated-case-column">
+            <ConsolidatedCaseIcon
+              consolidatedIconTooltipText={message.consolidatedIconTooltipText}
+              inConsolidatedGroup={message.inConsolidatedGroup}
+              showLeadCaseIcon={message.isLeadCase}
+            />
           </td>
-        );
+          <td
+            className="message-queue-rowl"
+            colSpan={2}
+            data-testid="individual-message-inbox-docket-number-cell"
+          >
+            {message.docketNumberWithSuffix}
+          </td>
+        </>
+      );
+    };
+
+    const getMessageSubjectCell = (message: any) => {
+      return (
+        <>
+          <td className="message-unread-column">
+            {!message.isRead && (
+              <Icon
+                aria-label="unread message"
+                className="fa-icon-blue"
+                icon="envelope"
+                size="1x"
+              />
+            )}
+          </td>
+          <td className="message-queue-row message-subject">
+            <div className="message-document-title">
+              <Button
+                link
+                className={classNames(
+                  'padding-0',
+                  message.isRead ? '' : 'text-bold',
+                )}
+                data-testid="individual-message-inbox-subject-cell"
+                href={message.messageDetailLink}
+              >
+                {message.subject}
+              </Button>
+            </div>
+
+            <div className="message-document-detail">{message.message}</div>
+          </td>
+        </>
+      );
+    };
+
+    const getOneCell = (message: any, data: MessageColumnData) => {
+      if (data.sortFieldInfo === SORT_FIELDS.DOCKET_NUMBER) {
+        return getMessageDocketNumberCell(message);
+      }
+      if (data.sortFieldInfo === SORT_FIELDS.SUBJECT) {
+        return getMessageSubjectCell(message);
       }
       return (
         <td
-          className="message-queue-row"
+          className={`message-queue-row ${data.sortFieldInfo === SORT_FIELDS.CREATED_AT && 'no-wrap'}`}
           data-testid={`${data.dataTestId}-cell`}
         >
-          {message[data.sortFieldDisplay || data.sortField]}
+          {
+            message[
+              data.sortFieldInfo.displayField || data.sortFieldInfo.sortField
+            ]
+          }
         </td>
       );
     };
@@ -225,14 +228,14 @@ export const MessageList = connect<
                 {messageColumns.map((data, index) => {
                   return (
                     <>
-                      {data.iconClassName && (
-                        <th className={data.iconClassName}></th>
+                      {data.headerIconClassName && (
+                        <th className={data.headerIconClassName}></th>
                       )}
                       <th
                         aria-label={data.columnName}
-                        className={data.className}
+                        className={data.headerClassName}
                         colSpan={index === 0 ? 2 : undefined}
-                        key={data.sortField}
+                        key={data.sortFieldInfo.sortField}
                         // TODO: probably should use aria-sort, but USWDS has default styles for this we may not want
                       >
                         <SortableColumn
@@ -251,7 +254,7 @@ export const MessageList = connect<
                               : constants.ALPHABETICALLY_DESCENDING
                           }
                           hasRows={formattedMessages.hasMessages}
-                          sortField={data.sortField}
+                          sortField={data.sortFieldInfo.sortField}
                           title={data.columnName}
                           onClickSequence={sortTableSequence}
                         />

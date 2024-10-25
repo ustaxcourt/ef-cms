@@ -1,19 +1,18 @@
 import {
-  COLUMN_NAMES,
   MessageColumnData,
-  getColumnData,
+  SORTABLE_COLUMNS,
 } from '@web-client/views/Messages/MessageColumns';
 import { MessageList } from '@web-client/views/Messages/MessageList';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 
-const columns: MessageColumnData[] = getColumnData([
-  COLUMN_NAMES.DOCKET_NUMBER,
-  COLUMN_NAMES.COMPLETED,
-  COLUMN_NAMES.LAST_MESSAGE,
-  COLUMN_NAMES.COMMENT,
-  COLUMN_NAMES.CASE_TITLE,
-]);
+const columns: MessageColumnData[] = [
+  SORTABLE_COLUMNS.DOCKET_NUMBER,
+  SORTABLE_COLUMNS.COMPLETED_AT,
+  SORTABLE_COLUMNS.LAST_MESSAGE,
+  SORTABLE_COLUMNS.COMMENT,
+  SORTABLE_COLUMNS.CASE_TITLE,
+];
 
 export const MessagesIndividualCompleted = connect(
   {},
