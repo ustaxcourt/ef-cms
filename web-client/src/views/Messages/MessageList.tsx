@@ -74,9 +74,9 @@ export const MessageList = connect<
             />
           </td>
           <td
-            className="message-queue-rowl"
+            className="message-queue-row"
             colSpan={2}
-            data-testid="individual-message-inbox-docket-number-cell"
+            data-testid={`${id}-docketNumber-cell`}
           >
             {message.docketNumberWithSuffix}
           </td>
@@ -105,7 +105,7 @@ export const MessageList = connect<
                   'padding-0',
                   message.isRead ? '' : 'text-bold',
                 )}
-                data-testid="individual-message-inbox-subject-cell"
+                data-testid={`${id}-subject-cell`}
                 href={message.messageDetailLink}
               >
                 {message.subject}
@@ -128,7 +128,7 @@ export const MessageList = connect<
       return (
         <td
           className={`message-queue-row ${data.sortFieldInfo === SORT_FIELDS.CREATED_AT && 'no-wrap'}`}
-          data-testid={`${data.dataTestId}-cell`}
+          data-testid={`${id}-${data.sortFieldInfo.sortField}-cell`}
         >
           {
             message[
@@ -170,13 +170,14 @@ export const MessageList = connect<
         )}
         <div className="overflow-x-auto" id={id}>
           <div className="grid-row grid-gap">
-            <div className="desktop:grid-col-8 tablet:grid-col-12 display-flex flex-align-center">
-              <TableFilters
-                filters={messageFilters}
-                onSelect={updateMessageFilterSequence}
-              ></TableFilters>
-            </div>
-
+            {messageFilters.length > 0 && (
+              <div className="desktop:grid-col-8 tablet:grid-col-12 display-flex flex-align-center">
+                <TableFilters
+                  filters={messageFilters}
+                  onSelect={updateMessageFilterSequence}
+                ></TableFilters>
+              </div>
+            )}
             {selectable && (
               <div className="desktop:grid-col-4 tablet:grid-col-12 tablet:margin-top-2 text-right">
                 <Button
@@ -248,8 +249,12 @@ export const MessageList = connect<
                           }
                           currentlySortedField={tableSort.sortField}
                           currentlySortedOrder={tableSort.sortOrder}
-                          data-testid={`${data.dataTestId}-header-button`}
-                          defaultSortOrder={constants.DESCENDING}
+                          data-testid={`${id}-${data.sortFieldInfo.sortField}-header-button`}
+                          defaultSortOrder={
+                            data.sortFieldInfo === SORT_FIELDS.DOCKET_NUMBER
+                              ? constants.DESCENDING
+                              : constants.ASCENDING
+                          }
                           descText={
                             data.sortType === 'date'
                               ? constants.CHRONOLOGICALLY_DESCENDING
