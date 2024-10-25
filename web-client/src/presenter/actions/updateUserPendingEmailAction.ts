@@ -9,8 +9,9 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const updateUserPendingEmailAction = async ({
   applicationContext,
   get,
-}: ActionProps) => {
-  const { email: pendingEmail } = get(state.form);
+  props,
+}: ActionProps<{ pendingEmail?: string }>) => {
+  const pendingEmail = props.pendingEmail || get(state.form.email);
 
   const updatedUser = await applicationContext
     .getUseCases()
