@@ -71,7 +71,13 @@ export const baseState = {
     waitingForResponse: false,
     waitingForResponseRequests: 0,
   },
-  publicTrialSessionData: {} as { [key: string]: any },
+  publicTrialSessionData: {} as {
+    judges?: { [key: string]: string };
+    locations?: { [key: string]: string };
+    sessionTypes?: { [key: string]: string };
+    pageNumber?: number;
+    proceedingType?: string;
+  },
   sessionMetadata: {
     docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
     docketRecordSort: {},
