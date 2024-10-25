@@ -90,11 +90,6 @@ export const PublicTrialSessionsFilters = connect<
 
     return (
       <>
-        <div>
-          Information on this page is current as of{' '}
-          {publicTrialSessionsHelper.fetchedDateString}
-        </div>
-
         <FormGroup>
           <fieldset
             className="usa-fieldset margin-top-2"
