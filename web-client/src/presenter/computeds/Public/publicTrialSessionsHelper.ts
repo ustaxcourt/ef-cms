@@ -26,6 +26,7 @@ export type PublicTrialSessionsHelperResults = {
     };
   }[];
   filtersHaveBeenModified: boolean;
+  totalPages: number;
   trialSessionsCount: number;
   trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
 };
@@ -51,6 +52,8 @@ function areAnyFiltersModified(
   );
 }
 
+const PAGE_SIZE = 100;
+
 export const publicTrialSessionsHelper = (
   get: Get,
 ): PublicTrialSessionsHelperResults => {
@@ -59,12 +62,12 @@ export const publicTrialSessionsHelper = (
   const {
     judges = {},
     locations = {},
+    pageNumber = 0,
     proceedingType = 'All',
     sessionTypes = {},
   } = get(state.publicTrialSessionData);
 
   const trialSessions = get(state.trialSessionsPage.trialSessions) || [];
-
   const fetchedDateString = fetchedTrialSessions.toFormat(
     "MM/dd/yy hh:mm a 'Eastern'",
   );
@@ -106,17 +109,23 @@ export const publicTrialSessionsHelper = (
       return sessionA.startDate.localeCompare(sessionB.startDate);
     });
 
+  const paginatedTrialSessions = filteredTrialSessions.slice(
+    pageNumber * PAGE_SIZE,
+    pageNumber * PAGE_SIZE + PAGE_SIZE,
+  );
+
   const trialSessionRows = formatTrialSessions({
-    trialSessions: filteredTrialSessions,
+    trialSessions: paginatedTrialSessions,
   });
 
   return {
     fetchedDateString,
     filtersHaveBeenModified,
     sessionTypeOptions,
+    totalPages: Math.ceil(filteredTrialSessions.length / PAGE_SIZE),
     trialCitiesByState,
     trialSessionJudgeOptions,
     trialSessionRows,
-    trialSessionsCount: filteredTrialSessions.length,
+    trialSessionsCount: paginatedTrialSessions.length,
   };
 };
