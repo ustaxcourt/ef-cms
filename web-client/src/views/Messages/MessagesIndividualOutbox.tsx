@@ -45,6 +45,7 @@ export const MessagesIndividualOutbox = connect(
     ];
     return (
       <MessageList
+        id="messages-individual-outbox"
         messageColumns={columns}
         messageFilters={filters}
         selectable={false}
