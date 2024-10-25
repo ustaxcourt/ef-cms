@@ -7,13 +7,17 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 
+const ROOT = 'publicTrialSessionData';
+
 export const PublicTrialSessions = connect(
   {
+    publicTrialSessionData: state[ROOT],
     publicTrialSessionsHelper: state.publicTrialSessionsHelper,
     resetPublicTrialSessionDataSequence:
       sequences.resetPublicTrialSessionDataSequence,
   },
   function ({
+    publicTrialSessionData,
     publicTrialSessionsHelper,
     resetPublicTrialSessionDataSequence,
   }) {
@@ -23,7 +27,9 @@ export const PublicTrialSessions = connect(
         <section className="usa-section grid-container">
           <div className="grid-row">
             <div className="tablet:grid-col-8 grid-col-12 padding-top-2">
-              <PublicTrialSessionsFilters></PublicTrialSessionsFilters>
+              <PublicTrialSessionsFilters
+                ROOT={ROOT}
+              ></PublicTrialSessionsFilters>
             </div>
             <div className="tablet:grid-col-4 grid-col-12 padding-top-1">
               <PublicTrialSessionsRemoteProceedingsCard></PublicTrialSessionsRemoteProceedingsCard>
@@ -39,7 +45,11 @@ export const PublicTrialSessions = connect(
             </Button>
           </div>
           <div className="grid-row padding-top-1">
-            <PublicTrialSessionsTable></PublicTrialSessionsTable>
+            <PublicTrialSessionsTable
+              ROOT={ROOT}
+              pageNumber={publicTrialSessionData.pageNumber || 0}
+              totalPages={publicTrialSessionsHelper.totalPages}
+            ></PublicTrialSessionsTable>
           </div>
         </section>
       </>

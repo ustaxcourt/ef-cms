@@ -2,23 +2,34 @@ import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
+import { props as cerebralProps } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app-public.cerebral';
+import { sequences, state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 
-const ROOT = 'publicTrialSessionData';
-const props = {
-  publicTrialSessionData: state[ROOT],
+type PublicTrialSessionsFiltersProps = {
+  ROOT: string;
+};
+
+const props = cerebralProps as unknown as PublicTrialSessionsFiltersProps;
+
+const PublicTrialSessionsFiltersDeps = {
+  displayProgressSpinnerSequence: sequences.displayProgressSpinnerSequence,
+  publicTrialSessionData: state[props.ROOT],
   publicTrialSessionsHelper: state.publicTrialSessionsHelper,
   updateFormValueSequence: sequences.updateFormValueSequence,
 };
 
-export const PublicTrialSessionsFilters = connect(
-  props,
+export const PublicTrialSessionsFilters = connect<
+  PublicTrialSessionsFiltersProps,
+  typeof PublicTrialSessionsFiltersDeps
+>(
+  PublicTrialSessionsFiltersDeps,
   function ({
+    displayProgressSpinnerSequence,
     publicTrialSessionData,
     publicTrialSessionsHelper,
+    ROOT,
     updateFormValueSequence,
   }) {
     const PROCEEDING_TYPES = Object.entries({
@@ -33,6 +44,18 @@ export const PublicTrialSessionsFilters = connect(
       sessionTypes = {},
     } = publicTrialSessionData;
 
+    const publicTrialsSessionUpdateFormValueSequence = (
+      ...args: Parameters<typeof updateFormValueSequence>
+    ) => {
+      displayProgressSpinnerSequence({ timeInSeconds: 0.25 });
+      updateFormValueSequence(...args);
+      updateFormValueSequence({
+        key: 'pageNumber',
+        root: ROOT,
+        value: 0,
+      });
+    };
+
     function proceedingTypeRadioOption(key: string, value: string) {
       return (
         <div className="usa-radio usa-radio__inline" key={key}>
@@ -45,7 +68,7 @@ export const PublicTrialSessionsFilters = connect(
             type="radio"
             value={value}
             onChange={e => {
-              updateFormValueSequence({
+              publicTrialsSessionUpdateFormValueSequence({
                 key: e.target.name,
                 root: ROOT,
                 value: e.target.value,
@@ -111,7 +134,7 @@ export const PublicTrialSessionsFilters = connect(
                   }}
                   onChange={sessionType => {
                     if (sessionType) {
-                      updateFormValueSequence({
+                      publicTrialsSessionUpdateFormValueSequence({
                         key: `sessionTypes.${sessionType.value}`,
                         root: ROOT,
                         value: sessionType.label,
@@ -130,7 +153,7 @@ export const PublicTrialSessionsFilters = connect(
                     key={sessionTypeLabel}
                     text={sessionTypeLabel}
                     onRemove={() => {
-                      updateFormValueSequence({
+                      publicTrialsSessionUpdateFormValueSequence({
                         key: `sessionTypes.${sessionTypeKey}`,
                         root: ROOT,
                         value: undefined,
@@ -163,7 +186,7 @@ export const PublicTrialSessionsFilters = connect(
                   }}
                   onChange={location => {
                     if (location) {
-                      updateFormValueSequence({
+                      publicTrialsSessionUpdateFormValueSequence({
                         key: `locations.${location.value}`,
                         root: ROOT,
                         value: location.label,
@@ -182,7 +205,7 @@ export const PublicTrialSessionsFilters = connect(
                     key={locationLabel}
                     text={locationLabel}
                     onRemove={() => {
-                      updateFormValueSequence({
+                      publicTrialsSessionUpdateFormValueSequence({
                         key: `locations.${locationKey}`,
                         root: ROOT,
                         value: undefined,
@@ -214,7 +237,7 @@ export const PublicTrialSessionsFilters = connect(
                   }}
                   onChange={judgeInfo => {
                     if (judgeInfo) {
-                      updateFormValueSequence({
+                      publicTrialsSessionUpdateFormValueSequence({
                         key: `judges.${judgeInfo.value.name}`,
                         root: ROOT,
                         value: judgeInfo.value.name,
@@ -230,7 +253,7 @@ export const PublicTrialSessionsFilters = connect(
                       key={judgeKey}
                       text={judgeLabel}
                       onRemove={() => {
-                        updateFormValueSequence({
+                        publicTrialsSessionUpdateFormValueSequence({
                           key: `judges.${judgeKey}`,
                           root: ROOT,
                           value: undefined,

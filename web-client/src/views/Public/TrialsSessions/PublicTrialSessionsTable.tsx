@@ -1,21 +1,54 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import {
   isTrialSessionRow,
   isTrialSessionWeek,
 } from '@web-client/presenter/computeds/trialSessionsHelper';
-import { state } from '@web-client/presenter/app-public.cerebral';
+import { sequences, state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 
-const props = {
-  publicTrialSessionsHelper: state.publicTrialSessionsHelper,
+type PublicTrialSessionsTableProps = {
+  pageNumber: number;
+  totalPages: number;
+  ROOT: string;
 };
 
-export const PublicTrialSessionsTable = connect(
-  props,
-  function ({ publicTrialSessionsHelper }) {
+const PublicTrialSessionsTableDeps = {
+  publicTrialSessionsHelper: state.publicTrialSessionsHelper,
+  updateFormValueSequence: sequences.updateFormValueSequence,
+};
+
+export const PublicTrialSessionsTable = connect<
+  PublicTrialSessionsTableProps,
+  typeof PublicTrialSessionsTableDeps
+>(
+  PublicTrialSessionsTableDeps,
+  function ({
+    pageNumber,
+    publicTrialSessionsHelper,
+    ROOT,
+    totalPages,
+    updateFormValueSequence,
+  }) {
     return (
       <>
+        <div className="grid-row margin-bottom-2 flex-align-center">
+          <div className="grid-col">
+            <Paginator
+              currentPageIndex={pageNumber}
+              totalPages={totalPages}
+              onPageChange={selectedPage => {
+                updateFormValueSequence({
+                  key: 'pageNumber',
+                  root: ROOT,
+                  value: selectedPage,
+                });
+              }}
+            />
+            <div className="grid-col-2"></div>
+          </div>
+        </div>
         <div className="grid-row margin-bottom-2 width-full flex-align-center"></div>
         <div className="width-full text-right">
           <span className="text-bold">Count:</span>{' '}
