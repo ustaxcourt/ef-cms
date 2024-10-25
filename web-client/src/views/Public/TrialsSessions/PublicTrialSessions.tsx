@@ -1,3 +1,7 @@
+import {
+  Accordion,
+  AccordionItem,
+} from '@web-client/ustc-ui/Accordion/Accordion';
 import { BigHeader } from '@web-client/views/BigHeader';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
@@ -50,7 +54,11 @@ export const PublicTrialSessions = connect(
           publicTrialSessionsHelper,
           resetPublicTrialSessionDataSequence,
         })}
-        {MobilePublicTrialsSessions()}
+        {MobilePublicTrialsSessions({
+          publicTrialSessionData,
+          publicTrialSessionsHelper,
+          resetPublicTrialSessionDataSequence,
+        })}
       </>
     );
   },
@@ -66,6 +74,10 @@ function NonMobilePublicTrialsSessions({
       <section className="usa-section grid-container">
         <div className="grid-row">
           <div className="tablet:grid-col-8 grid-col-12 padding-top-2">
+            <div>
+              Information on this page is current as of{' '}
+              {publicTrialSessionsHelper.fetchedDateString}
+            </div>
             <PublicTrialSessionsFilters
               ROOT={ROOT}
             ></PublicTrialSessionsFilters>
@@ -94,14 +106,38 @@ function NonMobilePublicTrialsSessions({
     </NonMobile>
   );
 }
-function MobilePublicTrialsSessions() {
+function MobilePublicTrialsSessions({
+  publicTrialSessionData,
+  publicTrialSessionsHelper,
+  resetPublicTrialSessionDataSequence,
+}: TrialsSessionsUiParams) {
+  console.log('publicTrialSessionData', publicTrialSessionData);
   return (
     <Mobile>
       <section className="usa-section grid-container">
-        John is testing mobile
+        <div>
+          Information on this page is current as of{' '}
+          {publicTrialSessionsHelper.fetchedDateString}
+        </div>
+        <div className="padding-top-3">
+          <PublicTrialSessionsRemoteProceedingsCard></PublicTrialSessionsRemoteProceedingsCard>
+        </div>
+
+        <Accordion>
+          <AccordionItem contentClassName="bg-gray" title="Filters">
+            <PublicTrialSessionsFilters
+              ROOT={ROOT}
+            ></PublicTrialSessionsFilters>
+            <Button
+              link
+              disabled={!publicTrialSessionsHelper.filtersHaveBeenModified}
+              onClick={() => resetPublicTrialSessionDataSequence()}
+            >
+              Reset Filters
+            </Button>
+          </AccordionItem>
+        </Accordion>
       </section>
     </Mobile>
   );
 }
-
-PublicTrialSessions.displayName = 'PublicTrialSessions';
