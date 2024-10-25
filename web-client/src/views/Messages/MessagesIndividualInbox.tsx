@@ -49,6 +49,7 @@ export const MessagesIndividualInbox = connect(
 
     return (
       <MessageList
+        id="messages-individual-inbox"
         messageColumns={columns}
         messageFilters={filters}
         selectable={true}
