@@ -1,7 +1,6 @@
 import {
-  COLUMN_NAMES,
   MessageColumnData,
-  getColumnData,
+  SORTABLE_COLUMNS,
 } from '@web-client/views/Messages/MessageColumns';
 import {
   MessageFilterData,
@@ -11,15 +10,15 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-const columns: MessageColumnData[] = getColumnData([
-  COLUMN_NAMES.DOCKET_NUMBER,
-  COLUMN_NAMES.RECEIVED,
-  COLUMN_NAMES.MESSAGE,
-  COLUMN_NAMES.CASE_TITLE,
-  COLUMN_NAMES.CASE_STATUS,
-  COLUMN_NAMES.FROM,
-  COLUMN_NAMES.SECTION,
-]);
+const columns: MessageColumnData[] = [
+  SORTABLE_COLUMNS.DOCKET_NUMBER,
+  SORTABLE_COLUMNS.RECEIVED,
+  SORTABLE_COLUMNS.MESSAGE,
+  SORTABLE_COLUMNS.CASE_TITLE,
+  SORTABLE_COLUMNS.CASE_STATUS,
+  SORTABLE_COLUMNS.FROM,
+  SORTABLE_COLUMNS.FROM_SECTION,
+];
 
 export const MessagesIndividualInbox = connect(
   {
