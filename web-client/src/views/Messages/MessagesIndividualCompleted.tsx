@@ -19,6 +19,7 @@ export const MessagesIndividualCompleted = connect(
   function MessagesIndividualCompleted() {
     return (
       <MessageList
+        id="messages-individual-completed"
         messageColumns={columns}
         messageFilters={[]}
         selectable={false}

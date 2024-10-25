@@ -52,6 +52,7 @@ export const MessagesSectionOutbox = connect(
     ];
     return (
       <MessageList
+        id="messages-section-outbox"
         messageColumns={columns}
         messageFilters={filters}
         selectable={false}

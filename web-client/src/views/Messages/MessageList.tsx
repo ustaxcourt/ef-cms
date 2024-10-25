@@ -23,6 +23,7 @@ export interface MessageFilterData {
 }
 
 type MessageListProps = {
+  id: string;
   selectable: boolean;
   messageColumns: MessageColumnData[];
   messageFilters: MessageFilterData[];
@@ -49,6 +50,7 @@ export const MessageList = connect<
     batchCompleteMessageSequence,
     constants,
     formattedMessages,
+    id,
     messageColumns,
     messageFilters,
     messagesIndividualInboxHelper,
@@ -166,7 +168,7 @@ export const MessageList = connect<
             </div>
           </div>
         )}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" id={id}>
           <div className="grid-row grid-gap">
             <div className="desktop:grid-col-8 tablet:grid-col-12 display-flex flex-align-center">
               <TableFilters

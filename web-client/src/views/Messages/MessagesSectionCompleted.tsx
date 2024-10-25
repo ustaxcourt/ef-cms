@@ -33,6 +33,7 @@ export const MessagesSectionCompleted = connect(
     ];
     return (
       <MessageList
+        id="messages-section-completed"
         messageColumns={columns}
         messageFilters={filters}
         selectable={false}
