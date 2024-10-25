@@ -264,7 +264,7 @@ describe('Messages', () => {
           });
         });
 
-        it('individual outbox createdAt column when defaulted to sort ascending', () => {
+        it('individual outbox sent column when defaulted to sort ascending', () => {
           cy.get('[data-testid="messages-outbox-tab"]').click();
           cy.get(
             '[data-testid="messages-individual-outbox-createdAt-header-button"]',
@@ -412,7 +412,7 @@ describe('Messages', () => {
           });
         });
 
-        it('section completed completedAt column when defaulted to sort ascending', () => {
+        it('section completed completed at column when defaulted to sort ascending', () => {
           cy.get('[data-testid="switch-to-section-messages-button"]').click();
           cy.get(
             '[data-testid="messages-section-inbox-subject-header-button"]',
@@ -494,7 +494,7 @@ describe('Messages', () => {
           });
         });
 
-        it('section outbox created-at column when defaulted to sort ascending', () => {
+        it('section outbox sent column when defaulted to sort ascending', () => {
           loginAsPetitionsClerk();
           cy.get('[data-testid="switch-to-section-messages-button"]').click();
           cy.get(
