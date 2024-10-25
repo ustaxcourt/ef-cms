@@ -1,101 +1,118 @@
 export interface MessageColumnData {
   columnName: string;
-  sortField: string;
-  sortFieldDisplay?: string;
+  sortFieldInfo: SortFieldInfo;
   sortType?: 'string' | 'date';
-  className?: string;
+  headerClassName?: string;
   dataTestId?: string;
-  iconClassName?: string;
+  headerIconClassName?: string;
 }
 
-export const COLUMN_NAMES = {
-  CASE_STATUS: 'Case Status',
-  CASE_TITLE: 'Case Title',
-  COMMENT: 'Comment',
-  COMPLETED: 'Completed',
-  DOCKET_NUMBER: 'Docket No.',
-  FROM: 'From',
-  LAST_MESSAGE: 'Last Message',
-  MESSAGE: 'Message',
-  RECEIVED: 'Received',
-  SECTION: 'Section',
-  SENT: 'Sent',
-  TO: 'To',
+type SortFieldInfo = {
+  sortField: string; // What we are actually sorting by (e.g., a timestamp)
+  displayField?: string; // What we are displaying (e.g., a formatted timestamp)
 };
 
-const getOneColumnData = (columnName: string) => {
-  return columns.find(column => column.columnName === columnName)!;
-};
-
-export const getColumnData = (columnNames: string[]) => {
-  return columnNames.map(field => getOneColumnData(field));
-};
-
-export const columns: MessageColumnData[] = [
-  {
-    columnName: COLUMN_NAMES.DOCKET_NUMBER,
-    dataTestId: 'message-individual-docket-number',
-    iconClassName: 'consolidated-case-column',
+// The fields that messages can be sorted by.
+export const SORT_FIELDS: Record<string, SortFieldInfo> = {
+  CASE_STATUS: { sortField: 'caseStatus' },
+  CASE_TITLE: { sortField: 'caseTitle' },
+  COMPLETED_AT: {
+    displayField: 'completedAtFormatted',
+    sortField: 'completedAt',
+  },
+  COMPLETED_BY: { sortField: 'completedBy' },
+  COMPLETED_BY_SECTION: { sortField: 'completedBySection' },
+  COMPLETED_MESSAGE: { sortField: 'completedMessage' },
+  CREATED_AT: { displayField: 'createdAtFormatted', sortField: 'createdAt' },
+  DOCKET_NUMBER: {
+    displayField: 'docketNumberWithSuffix',
     sortField: 'docketNumber',
   },
-  {
-    columnName: COLUMN_NAMES.RECEIVED,
-    dataTestId: 'message-individual-received',
-    sortField: 'createdAt',
-    sortFieldDisplay: 'createdAtFormatted',
-  },
-  {
-    columnName: COLUMN_NAMES.SENT,
-    dataTestId: 'message-individual-received',
-    sortField: 'createdAt',
-    sortFieldDisplay: 'createdAtFormatted',
-  },
-  {
-    columnName: COLUMN_NAMES.COMPLETED,
-    dataTestId: 'message-individual-received',
-    sortField: 'completedAt',
-    sortFieldDisplay: 'completedAtFormatted',
-  },
-  {
-    columnName: COLUMN_NAMES.LAST_MESSAGE,
-    dataTestId: 'message-individual-subject',
-    iconClassName: 'message-unread-column',
-    sortField: 'subject',
-  },
-  {
-    columnName: COLUMN_NAMES.MESSAGE,
-    dataTestId: 'message-individual-subject',
-    iconClassName: 'message-unread-column',
-    sortField: 'subject',
-  },
-  {
-    columnName: COLUMN_NAMES.CASE_TITLE,
-    dataTestId: 'message-individual-case-title',
-    sortField: 'caseTitle',
-  },
-  {
-    columnName: COLUMN_NAMES.CASE_STATUS,
+  FROM: { sortField: 'from' },
+  FROM_SECTION: { sortField: 'fromSectionFormatted' },
+  SUBJECT: { sortField: 'subject' },
+  TO: { sortField: 'to' },
+  TO_SECTION: { sortField: 'toSection' },
+};
+
+// The columns we have available for any message queue.
+export const SORTABLE_COLUMNS: Record<string, MessageColumnData> = {
+  CASE_STATUS: {
+    columnName: 'Case Status',
     dataTestId: 'message-individual-case-status',
-    sortField: 'caseStatus',
+    sortFieldInfo: SORT_FIELDS.CASE_STATUS,
   },
-  {
-    columnName: COLUMN_NAMES.TO,
-    dataTestId: 'message-individual-from',
-    sortField: 'to',
+  CASE_TITLE: {
+    columnName: 'Case Title',
+    dataTestId: 'message-individual-case-title',
+    sortFieldInfo: SORT_FIELDS.CASE_TITLE,
   },
-  {
-    columnName: COLUMN_NAMES.FROM,
-    dataTestId: 'message-individual-from',
-    sortField: 'from',
-  },
-  {
-    columnName: COLUMN_NAMES.SECTION,
-    dataTestId: 'message-individual-section',
-    sortField: 'fromSectionFormatted',
-  },
-  {
-    columnName: COLUMN_NAMES.COMMENT,
+  COMMENT: {
+    columnName: 'Comment',
     dataTestId: 'message-individual-comment',
-    sortField: 'completedMessage',
+    sortFieldInfo: SORT_FIELDS.COMPLETED_MESSAGE,
   },
-];
+  COMPLETED_AT: {
+    columnName: 'Completed',
+    dataTestId: 'message-individual-completed',
+    sortFieldInfo: SORT_FIELDS.COMPLETED_AT,
+  },
+  COMPLETED_BY: {
+    columnName: 'Completed By',
+    dataTestId: 'message-individual-completed',
+    sortFieldInfo: SORT_FIELDS.COMPLETED_BY,
+  },
+  COMPLETED_BY_SECTION: {
+    columnName: 'Section',
+    dataTestId: 'message-individual-completed',
+    sortFieldInfo: SORT_FIELDS.COMPLETED_BY_SECTION,
+  },
+  DOCKET_NUMBER: {
+    columnName: 'Docket No.',
+    dataTestId: 'message-individual-docket-number',
+    headerIconClassName: 'consolidated-case-column',
+    sortFieldInfo: SORT_FIELDS.DOCKET_NUMBER,
+  },
+  FROM: {
+    columnName: 'From',
+    dataTestId: 'message-individual-from',
+    sortFieldInfo: SORT_FIELDS.FROM,
+  },
+  FROM_SECTION: {
+    columnName: 'Section',
+    dataTestId: 'message-individual-section',
+    sortFieldInfo: SORT_FIELDS.FROM_SECTION,
+  },
+  LAST_MESSAGE: {
+    columnName: 'Last Message',
+    dataTestId: 'message-individual-subject',
+    headerIconClassName: 'message-unread-column',
+    sortFieldInfo: SORT_FIELDS.SUBJECT,
+  },
+  MESSAGE: {
+    columnName: 'Message',
+    dataTestId: 'message-individual-subject',
+    headerIconClassName: 'message-unread-column',
+    sortFieldInfo: SORT_FIELDS.SUBJECT,
+  },
+  RECEIVED: {
+    columnName: 'Received',
+    dataTestId: 'message-individual-received',
+    sortFieldInfo: SORT_FIELDS.CREATED_AT,
+  },
+  SENT: {
+    columnName: 'Sent',
+    dataTestId: 'message-individual-sent',
+    sortFieldInfo: SORT_FIELDS.CREATED_AT,
+  },
+  TO: {
+    columnName: 'To',
+    dataTestId: 'message-individual-from',
+    sortFieldInfo: SORT_FIELDS.TO,
+  },
+  TO_SECTION: {
+    columnName: 'Section',
+    dataTestId: 'message-section-to-section',
+    sortFieldInfo: SORT_FIELDS.TO_SECTION,
+  },
+};
