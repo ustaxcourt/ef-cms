@@ -19,7 +19,7 @@ ITEM=$(cat <<-END
         "S": "aws-batch-zipper-minimum-count"
     },
     "current": {
-        "N": "0"
+        "N": "50"
     }
 }
 END
