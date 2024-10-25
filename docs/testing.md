@@ -250,7 +250,7 @@ This will run the linter, Shellcheck, audit, build, test, Cypress, Cerebral test
 
 Since our system generates a lot of PDFs, we have a set of tests that verify the PDFs didn't change using a checksum of the first exported image of the PDFs.  Since all of these PDFs share a single .scss file, there is risk involved when trying to update a single PDF to accidentally change the styles of other PDFs.  Therefore, we have a set of tests that verify that the PDFs are not changing.
 
-All of the expected output images are found in the `./shared/test-pdf-expected-images` directory.  In order to update these, you will need to run the following command:
+All of the expected output images are found in the `./shared/test-pdf-expected-images` directory.  If you want to run PDF tests locally, you will need to run the following command:
 
 ```
 docker build --platform=linux/amd64 -t efcms -f Dockerfile . && \
@@ -258,7 +258,7 @@ docker build --platform=linux/amd64 -t efcms-local -f Dockerfile-local . && \
 docker run --platform=linux/amd64 -it --rm -v `pwd`/shared/test-output:/home/app/shared/test-output efcms-local sh -c "npm run test:document-generation"
 ```
 
-After inspecting the failed pdfs, override the existing the pdfs by running the following command:
+If you want to replace the expected output images with the images created during a local test run, you should carefully inspect the failed PDFs before using the command below to replace the existing the pdfs:
 ```cp -r shared/test-output/*.png shared/test-pdf-expected-images/```
 
 ### M1 Users
