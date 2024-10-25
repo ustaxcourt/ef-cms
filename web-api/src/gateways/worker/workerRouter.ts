@@ -42,7 +42,6 @@ export const workerRouter = async (
           message.authorizedUser,
         );
       break;
-
     default:
       throw new Error(
         `No matching router found for message: ${JSON.stringify(message)}`,
