@@ -2,7 +2,7 @@ import {
   MessageColumnData,
   SORTABLE_COLUMNS,
 } from '@web-client/views/Messages/MessageColumns';
-import { MessageList } from '@web-client/views/Messages/MessageList';
+import { MessagesTable } from '@web-client/views/Messages/MessageTable';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -51,7 +51,7 @@ export const MessagesSectionOutbox = connect(
       },
     ];
     return (
-      <MessageList
+      <MessagesTable
         id="messages-section-outbox"
         messageColumns={columns}
         messageFilters={filters}
