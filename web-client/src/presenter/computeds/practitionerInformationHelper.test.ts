@@ -1,17 +1,18 @@
 import {
+  PAGE_SIZE,
+  practitionerInformationHelper as practitionerInformationHelperComputed,
+} from './practitionerInformationHelper';
+import {
   PRACTICE_TYPE,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
 import { PractitionerDetail } from '@web-client/presenter/state';
 import { applicationContext } from '../../applicationContext';
-import { practitionerInformationHelper as practitionerInformationHelperComputed } from './practitionerInformationHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { v4 } from 'uuid';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('practitionerInformationHelper', () => {
-  const pageSize = 100; // This should match the page size in practitionerInformationHelper
-
   // Helper function to make a lot of cases in order to test pagination
   const getFakeCase = () => {
     return {
@@ -113,9 +114,9 @@ describe('practitionerInformationHelper', () => {
   it.each([
     [0, 0],
     [1, 1],
-    [pageSize, 1],
-    [pageSize + 1, 2],
-    [pageSize * 2 + 1, 3],
+    [PAGE_SIZE, 1],
+    [PAGE_SIZE + 1, 2],
+    [PAGE_SIZE * 2 + 1, 3],
   ])(
     'should calculate correct total number of open case pagination pages for %s total cases',
     (input, output) => {
@@ -141,9 +142,9 @@ describe('practitionerInformationHelper', () => {
   it.each([
     [0, 0],
     [1, 1],
-    [pageSize, 1],
-    [pageSize + 1, 2],
-    [pageSize * 2 + 1, 3],
+    [PAGE_SIZE, 1],
+    [PAGE_SIZE + 1, 2],
+    [PAGE_SIZE * 2 + 1, 3],
   ])(
     'should calculate correct total number of closed case pagination pages for %s total cases',
     (input, output) => {
@@ -167,7 +168,7 @@ describe('practitionerInformationHelper', () => {
   );
 
   it('should set showOpenCasesPagination to true when there is more than 1 open case page', () => {
-    const numOpenCases = pageSize + 1;
+    const numOpenCases = PAGE_SIZE + 1;
     const { showOpenCasesPagination } = runCompute(
       practitionerInformationHelper,
       {
@@ -185,7 +186,7 @@ describe('practitionerInformationHelper', () => {
   });
 
   it('should set showClosedCasesPagination to true when there is more than 1 open case page', () => {
-    const numClosedCases = pageSize + 1;
+    const numClosedCases = PAGE_SIZE + 1;
     const { showClosedCasesPagination } = runCompute(
       practitionerInformationHelper,
       {
@@ -239,14 +240,14 @@ describe('practitionerInformationHelper', () => {
   });
 
   it('should get correct open cases to display', () => {
-    const numOpenCases = pageSize + 1;
+    const numOpenCases = PAGE_SIZE + 1;
     const mockedPractitionerDetail = getMockedPractitionerDetail({
       numOpenCases,
     });
 
     const expectedDocketNumbers = [
       mockedPractitionerDetail
-        .openCaseInfo!.allCases.slice(0, pageSize)
+        .openCaseInfo!.allCases.slice(0, PAGE_SIZE)
         .map(x => x.docketNumberWithSuffix),
       mockedPractitionerDetail
         .openCaseInfo!.allCases.slice(-1)
@@ -277,14 +278,14 @@ describe('practitionerInformationHelper', () => {
   });
 
   it('should get correct closed cases to display', () => {
-    const numClosedCases = pageSize + 1;
+    const numClosedCases = PAGE_SIZE + 1;
     const mockedPractitionerDetail = getMockedPractitionerDetail({
       numClosedCases,
     });
 
     const expectedDocketNumbers = [
       mockedPractitionerDetail
-        .closedCaseInfo!.allCases.slice(0, pageSize)
+        .closedCaseInfo!.allCases.slice(0, PAGE_SIZE)
         .map(x => x.docketNumberWithSuffix),
       mockedPractitionerDetail
         .closedCaseInfo!.allCases.slice(-1)
