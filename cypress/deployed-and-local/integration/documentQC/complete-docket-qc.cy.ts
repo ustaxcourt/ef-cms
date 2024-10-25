@@ -212,7 +212,7 @@ function assertMessageRecordCountForDocketNumberAndSubject(
   count: number,
   inboxType: string,
 ) {
-  cy.get(`[data-testid="${inboxType}-message-inbox-docket-number-cell"]`).then(
+  cy.get(`[data-testid="messages-${inboxType}-inbox-docketNumber-cell"]`).then(
     $elements => {
       const parentElements = $elements.map((index, element) =>
         Cypress.$(element).parent(),
@@ -238,7 +238,7 @@ function assertMessageRecordCountForDocketNumberAndSubjectEscapeHatch(
 ) {
   return cy.get('body').then(body => {
     const $elements = body.find(
-      `[data-testid="${inboxType}-message-inbox-docket-number-cell"]`,
+      `[data-testid="messages-${inboxType}-inbox-docketNumber-cell"]`,
     );
 
     const parentElements = $elements.map((index, element) =>

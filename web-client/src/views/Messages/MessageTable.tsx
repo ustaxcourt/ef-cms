@@ -46,12 +46,12 @@ const MessageListCerebralDependencies = {
   updateMessageFilterSequence: sequences.updateMessageFilterSequence,
 };
 
-export const MessageList = connect<
+export const MessagesTable = connect<
   MessageListProps,
   typeof MessageListCerebralDependencies
 >(
   MessageListCerebralDependencies,
-  function MessageList({
+  function MessagesTable({
     batchCompleteMessageSequence,
     formattedMessages,
     id,
@@ -192,8 +192,6 @@ export const MessageList = connect<
     );
   },
 );
-
-MessageList.displayName = 'MessageList';
 
 const MessageColumnHeader = ({
   columnData,

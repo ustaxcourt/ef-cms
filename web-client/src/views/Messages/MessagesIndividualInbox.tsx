@@ -4,8 +4,8 @@ import {
 } from '@web-client/views/Messages/MessageColumns';
 import {
   MessageFilterData,
-  MessageList,
-} from '@web-client/views/Messages/MessageList';
+  MessagesTable,
+} from '@web-client/views/Messages/MessageTable';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -48,7 +48,7 @@ export const MessagesIndividualInbox = connect(
     ];
 
     return (
-      <MessageList
+      <MessagesTable
         id="messages-individual-inbox"
         messageColumns={columns}
         messageFilters={filters}
