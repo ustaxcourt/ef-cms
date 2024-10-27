@@ -6,7 +6,7 @@ import {
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } from '../entities/EntityConstants';
-import { Case } from '../entities/cases/Case';
+import { Case, isSealedCase } from '../entities/cases/Case';
 import { DocketEntry } from '../entities/DocketEntry';
 import {
   FORMATS,
@@ -332,6 +332,8 @@ export const formatCase = (
   result.caseTitle = applicationContext.getCaseTitle(
     caseDetail.caseCaption || '',
   );
+
+  result.isSealed = isSealedCase(caseDetail);
 
   formatTrialSessionScheduling({ applicationContext, formattedCase: result });
 
