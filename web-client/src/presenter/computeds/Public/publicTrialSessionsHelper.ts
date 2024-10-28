@@ -4,6 +4,7 @@ import {
   TrialSessionRow,
   TrialSessionWeek,
   formatTrialSessions,
+  isTrialSessionWeek,
 } from '@web-client/presenter/computeds/trialSessionsHelper';
 import { getTrialCitiesGroupedByState } from '@shared/business/utilities/trialSession/trialCitiesGroupedByState';
 import { state } from '@web-client/presenter/app-public.cerebral';
@@ -29,6 +30,10 @@ export type PublicTrialSessionsHelperResults = {
   totalPages: number;
   trialSessionsCount: number;
   trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
+  groupedTrialsSessions: {
+    header: TrialSessionWeek;
+    rows: TrialSessionRow[];
+  }[];
 };
 
 function areAnyFiltersModified(
@@ -50,6 +55,30 @@ function areAnyFiltersModified(
     !!locationsModified ||
     !!sessionTypesModified
   );
+}
+
+function groupTrialSessions(
+  trialSessions: (TrialSessionRow | TrialSessionWeek)[],
+): { header: TrialSessionWeek; rows: TrialSessionRow[] }[] {
+  const groupedTrialSessions: {
+    header: TrialSessionWeek;
+    rows: TrialSessionRow[];
+  }[] = [];
+
+  let counter = -1;
+  trialSessions.forEach(tsRow => {
+    if (isTrialSessionWeek(tsRow)) {
+      groupedTrialSessions.push({
+        header: tsRow,
+        rows: [] as TrialSessionRow[],
+      });
+      counter += 1;
+    } else {
+      groupedTrialSessions[counter].rows.push(tsRow);
+    }
+  });
+
+  return groupedTrialSessions;
 }
 
 const PAGE_SIZE = 100;
@@ -118,9 +147,12 @@ export const publicTrialSessionsHelper = (
     trialSessions: paginatedTrialSessions,
   });
 
+  const groupedTrialsSessions = groupTrialSessions(trialSessionRows);
+
   return {
     fetchedDateString,
     filtersHaveBeenModified,
+    groupedTrialsSessions,
     sessionTypeOptions,
     totalPages: Math.ceil(filteredTrialSessions.length / PAGE_SIZE),
     trialCitiesByState,

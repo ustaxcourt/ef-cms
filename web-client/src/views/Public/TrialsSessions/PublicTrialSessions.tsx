@@ -5,6 +5,7 @@ import {
 import { BigHeader } from '@web-client/views/BigHeader';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
+import { PublicMobileTrialSessionsTable } from '@web-client/views/Public/TrialsSessions/PublicMobileTrialSessionsTable';
 import { PublicTrialSessionsFilters } from '@web-client/views/Public/TrialsSessions/PublicTrialSessionsFilters';
 import { PublicTrialSessionsHelperResults } from '@web-client/presenter/computeds/Public/publicTrialSessionsHelper';
 import { PublicTrialSessionsRemoteProceedingsCard } from '@web-client/views/Public/TrialsSessions/PublicTrialSessionsRemoteProceedingsCard';
@@ -78,12 +79,10 @@ function NonMobilePublicTrialsSessions({
               Information on this page is current as of{' '}
               {publicTrialSessionsHelper.fetchedDateString}
             </div>
-            <PublicTrialSessionsFilters
-              ROOT={ROOT}
-            ></PublicTrialSessionsFilters>
+            <PublicTrialSessionsFilters ROOT={ROOT} />
           </div>
           <div className="tablet:grid-col-4 grid-col-12 padding-top-1">
-            <PublicTrialSessionsRemoteProceedingsCard></PublicTrialSessionsRemoteProceedingsCard>
+            <PublicTrialSessionsRemoteProceedingsCard />
           </div>
         </div>
         <div className="grid-row">
@@ -100,7 +99,7 @@ function NonMobilePublicTrialsSessions({
             ROOT={ROOT}
             pageNumber={publicTrialSessionData.pageNumber || 0}
             totalPages={publicTrialSessionsHelper.totalPages}
-          ></PublicTrialSessionsTable>
+          />
         </div>
       </section>
     </NonMobile>
@@ -120,14 +119,12 @@ function MobilePublicTrialsSessions({
           {publicTrialSessionsHelper.fetchedDateString}
         </div>
         <div className="padding-top-3">
-          <PublicTrialSessionsRemoteProceedingsCard></PublicTrialSessionsRemoteProceedingsCard>
+          <PublicTrialSessionsRemoteProceedingsCard />
         </div>
 
         <Accordion>
           <AccordionItem contentClassName="bg-gray" title="Filters">
-            <PublicTrialSessionsFilters
-              ROOT={ROOT}
-            ></PublicTrialSessionsFilters>
+            <PublicTrialSessionsFilters ROOT={ROOT} />
             <Button
               link
               disabled={!publicTrialSessionsHelper.filtersHaveBeenModified}
@@ -137,6 +134,12 @@ function MobilePublicTrialsSessions({
             </Button>
           </AccordionItem>
         </Accordion>
+
+        <PublicMobileTrialSessionsTable
+          ROOT={ROOT}
+          pageNumber={publicTrialSessionData.pageNumber || 0}
+          totalPages={publicTrialSessionsHelper.totalPages}
+        />
       </section>
     </Mobile>
   );
