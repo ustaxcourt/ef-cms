@@ -23,16 +23,15 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
+import { generateCalendar } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/CalendarGenerator';
 import { getDataForCalendaring } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
-import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
-
-import { CalendarGenerator } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/CalendarGenerator';
 import {
   maxSessionsPerLocationConstraint,
   maxSessionsPerWeekConstraint,
   oneSessionPerLocationPerWeekConstraint,
   reservedWeekOfAtLocationConstraint,
 } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/constraints';
+import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
 
 const MAX_SESSIONS_PER_WEEK = 6;
 const MAX_SESSIONS_PER_LOCATION = 5;
@@ -145,14 +144,6 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     reservedWeekOfAtLocationConstraint,
   ];
 
-  const calendarGenerator = new CalendarGenerator(
-    calendaringConfig,
-    constraints,
-    caseCountsAndSessionsByCity,
-    weeksToLoop,
-    specialSessions,
-  );
-
   // scheduledTrialSessionsByCity could be replaced with caseCountsAndSessionsByCity with a few tweaks
 
   let scheduledTrialSessionsByCity, sessionCountPerWeek;
@@ -160,7 +151,13 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     caseCountsAndSessionsByCity,
     scheduledTrialSessionsByCity,
     sessionCountPerWeek,
-  } = calendarGenerator.generateCalendar());
+  } = generateCalendar({
+    calendaringConfig,
+    caseCountsAndSessionsByCity,
+    constraints,
+    specialSessions,
+    weeksToLoop,
+  }));
 
   console.timeEnd('10275: assignSessionsToWeeks time');
 
