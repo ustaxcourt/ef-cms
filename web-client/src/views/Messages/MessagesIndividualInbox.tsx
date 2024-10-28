@@ -53,6 +53,7 @@ export const MessagesIndividualInbox = connect(
         messageColumns={columns}
         messageFilters={filters}
         selectable={true}
+        showUnreadIcon={true}
       />
     );
   },
