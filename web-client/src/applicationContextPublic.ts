@@ -72,6 +72,8 @@ import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseP
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
 import { getPublicPractitionerByBarNumberInteractor } from '@shared/proxies/public/getPublicPractitionerByBarNumberProxy';
 import { getPublicPractitionersByNameInteractor } from '@shared/proxies/public/getPublicPractitionersByNameProxy';
+import { getPublicTrialSessionsInteractor } from '@shared/proxies/trialSessions/getPublicTrialSessionsProxy';
+import { getPublicUsersInSectionInteractor } from '@shared/proxies/users/getPublicUsersInSectionProxy';
 import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
 import { getTodaysOpinionsInteractor } from '../../shared/src/proxies/public/getTodaysOpinionsProxy';
 import { getTodaysOrdersInteractor } from '../../shared/src/proxies/public/getTodaysOrdersProxy';
@@ -115,6 +117,8 @@ const allUseCases = {
   getPublicJudgesInteractor,
   getTodaysOpinionsInteractor,
   getTodaysOrdersInteractor,
+  getTrialSessionsInteractor: getPublicTrialSessionsInteractor,
+  getUsersInSectionInteractor: getPublicUsersInSectionInteractor,
   opinionPublicSearchInteractor,
   orderPublicSearchInteractor,
   removeItemInteractor,
