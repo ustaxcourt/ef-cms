@@ -2,7 +2,7 @@ import {
   MessageColumnData,
   SORTABLE_COLUMNS,
 } from '@web-client/views/Messages/MessageColumns';
-import { MessagesTable } from '@web-client/views/Messages/MessageTable';
+import { MessageTable } from '@web-client/views/Messages/MessageTable';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -32,7 +32,7 @@ export const MessagesSectionCompleted = connect(
       },
     ];
     return (
-      <MessagesTable
+      <MessageTable
         id="messages-section-completed"
         messageColumns={columns}
         messageFilters={filters}

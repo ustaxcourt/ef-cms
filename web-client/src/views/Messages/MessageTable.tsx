@@ -33,7 +33,6 @@ type MessageListProps = {
   selectable: boolean;
   messageColumns: MessageColumnData[];
   messageFilters: MessageFilterData[];
-  showUnreadIcon?: boolean;
 };
 
 const MessageListCerebralDependencies = {
@@ -47,12 +46,12 @@ const MessageListCerebralDependencies = {
   updateMessageFilterSequence: sequences.updateMessageFilterSequence,
 };
 
-export const MessagesTable = connect<
+export const MessageTable = connect<
   MessageListProps,
   typeof MessageListCerebralDependencies
 >(
   MessageListCerebralDependencies,
-  function MessagesTable({
+  function MessageTable({
     batchCompleteMessageSequence,
     formattedMessages,
     id,
@@ -62,7 +61,6 @@ export const MessagesTable = connect<
     screenMetadata,
     selectable,
     setSelectedMessagesSequence,
-    showUnreadIcon = false,
     sortTableSequence,
     tableSort,
     updateMessageFilterSequence,
@@ -168,7 +166,6 @@ export const MessagesTable = connect<
                       formattedMessages={formattedMessages}
                       key={columnData.sortFieldInfo.sortField}
                       messageListId={id}
-                      showUnreadIcon={showUnreadIcon}
                       tableSort={tableSort}
                       onSort={sortTableSequence}
                     />
@@ -184,7 +181,6 @@ export const MessagesTable = connect<
                   message={message}
                   messageListId={id}
                   selectable={selectable}
-                  showUnreadIcon={showUnreadIcon}
                   onSelect={setSelectedMessagesSequence}
                 />
               );
@@ -202,14 +198,12 @@ const MessageColumnHeader = ({
   formattedMessages,
   messageListId,
   onSort,
-  showUnreadIcon,
   tableSort,
 }: {
   messageListId: string;
   columnData: MessageColumnData;
   tableSort: any;
   formattedMessages: any;
-  showUnreadIcon: boolean;
   onSort: ({
     sortField,
     sortOrder,
@@ -218,23 +212,16 @@ const MessageColumnHeader = ({
     sortOrder: 'asc' | 'desc';
   }) => void;
 }) => {
-  let columnNeedsIcon = false;
-  if (columnData.headerIconClassName) {
-    if (columnData.sortFieldInfo === SORT_FIELDS.SUBJECT) {
-      columnNeedsIcon = !!showUnreadIcon;
-    } else {
-      columnNeedsIcon = true;
-    }
-  }
-  console.log(columnNeedsIcon, columnData.headerIconClassName);
   return (
     <>
-      {columnNeedsIcon && <th className={columnData.headerIconClassName}></th>}
+      {columnData.headerIconClassName && (
+        <th className={columnData.headerIconClassName}></th>
+      )}
       <th
         aria-label={columnData.columnName}
         className={columnData.headerClassName}
         colSpan={
-          columnData.sortFieldInfo === SORT_FIELDS.DOCKET_NUMBER ? 2 : undefined
+          columnData.sortFieldInfo === SORT_FIELDS.DOCKET_NUMBER ? 2 : undefined // Takes into account the consolidated case icon
         }
         // TODO: probably should use aria-sort, but USWDS has default styles for this we may not want
       >
@@ -269,14 +256,12 @@ const MessageRow = ({
   messageListId,
   onSelect,
   selectable,
-  showUnreadIcon,
 }: {
   message: any;
   messageListId: string;
   selectable: boolean;
   onSelect: (messages: any) => void;
   columns: MessageColumnData[];
-  showUnreadIcon: boolean;
 }) => {
   return (
     <tbody>
@@ -306,7 +291,6 @@ const MessageRow = ({
             columnData,
             message,
             messageListId,
-            showUnreadIcon,
           });
         })}
       </tr>
@@ -318,19 +302,17 @@ const getOneCell = ({
   columnData,
   message,
   messageListId,
-  showUnreadIcon,
 }: {
   messageListId: string;
   message: any;
   columnData: MessageColumnData;
-  showUnreadIcon: boolean;
 }) => {
   // If the cell requires special handling (e.g., an icon, formatting, etc.), do that
   if (columnData.sortFieldInfo === SORT_FIELDS.DOCKET_NUMBER) {
     return getMessageDocketNumberCell({ message, messageListId });
   }
   if (columnData.sortFieldInfo === SORT_FIELDS.SUBJECT) {
-    return getMessageSubjectCell({ message, messageListId, showUnreadIcon });
+    return getMessageSubjectCell({ columnData, message, messageListId });
   }
   // Otherwise, return a generic cell
   return (
@@ -376,35 +358,35 @@ const getMessageDocketNumberCell = ({
 };
 
 const getMessageSubjectCell = ({
+  columnData,
   message,
   messageListId,
-  showUnreadIcon,
 }: {
   messageListId: string;
   message: any;
-  showUnreadIcon: boolean;
+  columnData: MessageColumnData;
 }) => {
-  console.log('showUnreadIcon', showUnreadIcon);
+  const hasIconRow = !!columnData.headerIconClassName;
+  const boldText = !message.isRead && hasIconRow;
   return (
     <>
-      {!message.isRead && showUnreadIcon && (
+      {hasIconRow && (
         <td className="message-unread-column">
-          <Icon
-            aria-label="unread message"
-            className="fa-icon-blue"
-            icon="envelope"
-            size="1x"
-          />
+          {!message.isRead && (
+            <Icon
+              aria-label="unread message"
+              className="fa-icon-blue"
+              icon="envelope"
+              size="1x"
+            />
+          )}
         </td>
       )}
       <td className="message-queue-row message-subject">
         <div className="message-document-title">
           <Button
             link
-            className={classNames(
-              'padding-0',
-              !message.isRead && showUnreadIcon ? 'text-bold' : '',
-            )}
+            className={classNames('padding-0', boldText ? 'text-bold' : '')}
             data-testid={`${messageListId}-subject-cell`}
             href={message.messageDetailLink}
           >
