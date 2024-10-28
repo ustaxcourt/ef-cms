@@ -366,11 +366,11 @@ const getMessageSubjectCell = ({
   message: any;
   columnData: MessageColumnData;
 }) => {
-  const hasIconRow = !!columnData.headerIconClassName;
-  const boldText = !message.isRead && hasIconRow;
+  const hasIconColumn = !!columnData.headerIconClassName;
+  const boldText = !message.isRead && hasIconColumn;
   return (
     <>
-      {hasIconRow && (
+      {hasIconColumn && (
         <td className="message-unread-column">
           {!message.isRead && (
             <Icon
