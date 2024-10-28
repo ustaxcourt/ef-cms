@@ -42,10 +42,17 @@ export const PublicMobileTrialSessionsTable = connect<
                 <th data-label="Document title" scope="row">
                   {tsGroup.header.formattedSessionWeekStartDate}
                 </th>
-                {tsGroup.rows.map(tsRow => {
+                {tsGroup.rows.map((tsRow, index) => {
                   return (
                     <>
-                      <td key={tsRow.formattedStartDate}>
+                      <td
+                        className={
+                          index !== tsGroup.rows.length - 1
+                            ? 'border-bottom-1px margin-bottom-1'
+                            : undefined
+                        }
+                        key={tsRow.formattedStartDate}
+                      >
                         <PublicMobileTrialSessionsDataRow
                           judgeName={tsRow.judge.name}
                           proceedingType={tsRow.proceedingType}
