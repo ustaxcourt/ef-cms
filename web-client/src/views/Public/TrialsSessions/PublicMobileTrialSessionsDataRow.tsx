@@ -21,40 +21,25 @@ export const PublicMobileTrialSessionsDataRow = function ({
     <>
       <div className="padding-bottom-1 grid-row">
         <div className="grid-col-6 padding-bottom-1">
-          <div className="padding-bottom-2">
-            <div>
-              <b>Start Date</b>
-            </div>
-            <div>{startDate}</div>
-          </div>
-          <div className="padding-bottom-2">
-            <div>
-              <b>Proceeding Type</b>
-            </div>
-            <div>{proceedingType}</div>
-          </div>
-          <div>
-            <div>
-              <b>Judge</b>
-            </div>
-            <div>{judgeName}</div>
-          </div>
+          <div className="text-semibold">Start Date</div>
+          <div className="padding-bottom-2">{startDate}</div>
+
+          <div className="text-semibold">Proceeding Type</div>
+          <div className="padding-bottom-2">{proceedingType}</div>
+
+          <div className="text-semibold">Judge</div>
+          <div>{judgeName}</div>
         </div>
         <div className="grid-col-6 padding-bottom-1">
+          <div className="text-semibold">Location</div>
           <div className="padding-bottom-2">
-            <div>
-              <b>Start Date</b>
-            </div>
             <a href={`/trial-session-detail/${trialSessionId}`}>
               {trialLocation}
             </a>
           </div>
-          <div>
-            <div>
-              <b>Session Type</b>
-            </div>
-            <div>{sessionType}</div>
-          </div>
+
+          <div className="text-semibold">Session Type</div>
+          <div>{sessionType}</div>
         </div>
       </div>
     </>
