@@ -6,6 +6,7 @@ import { BigHeader } from '@web-client/views/BigHeader';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
+import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 import { PublicMobileTrialSessionsTable } from '@web-client/views/Public/TrialsSessions/PublicMobileTrialSessionsTable';
 import { PublicTrialSessionsFilters } from '@web-client/views/Public/TrialsSessions/PublicTrialSessionsFilters';
 import { PublicTrialSessionsHelperResults } from '@web-client/presenter/computeds/Public/publicTrialSessionsHelper';
@@ -41,10 +42,12 @@ type TrialsSessionsUiParams = {
     pageNumber?: number;
     proceedingType?: string;
   };
+  displayProgressSpinnerSequence?: (props: { timeInSeconds: number }) => void;
 };
 
 export const PublicTrialSessions = connect(
   {
+    displayProgressSpinnerSequence: sequences.displayProgressSpinnerSequence,
     publicTrialSessionData: state[ROOT],
     publicTrialSessionsHelper: state.publicTrialSessionsHelper,
     resetPublicTrialSessionDataSequence:
@@ -52,6 +55,7 @@ export const PublicTrialSessions = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   function ({
+    displayProgressSpinnerSequence,
     publicTrialSessionData,
     publicTrialSessionsHelper,
     resetPublicTrialSessionDataSequence,
@@ -68,6 +72,7 @@ export const PublicTrialSessions = connect(
           updateFormValueSequence,
         })}
         {MobilePublicTrialsSessions({
+          displayProgressSpinnerSequence,
           publicTrialSessionData,
           publicTrialSessionsHelper,
           resetPublicTrialSessionDataSequence,
@@ -121,12 +126,33 @@ function NonMobilePublicTrialsSessions({
     </NonMobile>
   );
 }
+
 function MobilePublicTrialsSessions({
+  displayProgressSpinnerSequence,
   publicTrialSessionData,
   publicTrialSessionsHelper,
   resetPublicTrialSessionDataSequence,
   updateFormValueSequence,
 }: TrialsSessionsUiParams) {
+  const {
+    judges = {},
+    locations = {},
+    sessionTypes = {},
+  } = publicTrialSessionData;
+
+  const publicTrialsSessionUpdateFormValueSequence = (
+    ...args: Parameters<typeof updateFormValueSequence>
+  ) => {
+    if (displayProgressSpinnerSequence)
+      displayProgressSpinnerSequence({ timeInSeconds: 0.25 });
+    updateFormValueSequence(...args);
+    updateFormValueSequence({
+      key: 'pageNumber',
+      root: ROOT,
+      value: 0,
+    });
+  };
+
   return (
     <Mobile>
       <section className="usa-section grid-container">
@@ -151,6 +177,61 @@ function MobilePublicTrialsSessions({
           </AccordionItem>
         </Accordion>
 
+        <div className="padding-top-2">
+          {Object.entries(
+            sessionTypes as {
+              [key: string]: string;
+            },
+          ).map(([sessionTypeKey, sessionTypeLabel]) => (
+            <PillButton
+              key={sessionTypeLabel}
+              text={sessionTypeLabel}
+              onRemove={() => {
+                publicTrialsSessionUpdateFormValueSequence({
+                  key: `sessionTypes.${sessionTypeKey}`,
+                  root: ROOT,
+                  value: undefined,
+                });
+              }}
+            />
+          ))}
+
+          {Object.entries(
+            locations as {
+              [key: string]: string;
+            },
+          ).map(([sessionTypeKey, sessionTypeLabel]) => (
+            <PillButton
+              key={sessionTypeLabel}
+              text={sessionTypeLabel}
+              onRemove={() => {
+                publicTrialsSessionUpdateFormValueSequence({
+                  key: `locations.${sessionTypeKey}`,
+                  root: ROOT,
+                  value: undefined,
+                });
+              }}
+            />
+          ))}
+
+          {Object.entries(
+            judges as {
+              [key: string]: string;
+            },
+          ).map(([sessionTypeKey, sessionTypeLabel]) => (
+            <PillButton
+              key={sessionTypeLabel}
+              text={sessionTypeLabel}
+              onRemove={() => {
+                publicTrialsSessionUpdateFormValueSequence({
+                  key: `judges.${sessionTypeKey}`,
+                  root: ROOT,
+                  value: undefined,
+                });
+              }}
+            />
+          ))}
+        </div>
         <TablePagination
           pageNumber={publicTrialSessionData.pageNumber || 0}
           totalPages={publicTrialSessionsHelper.totalPages}

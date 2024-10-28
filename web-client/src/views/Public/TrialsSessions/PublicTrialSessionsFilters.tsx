@@ -1,4 +1,5 @@
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
+import { NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
@@ -138,7 +139,7 @@ export const PublicTrialSessionsFilters = connect<
                   }}
                 />
               </div>
-              <div>
+              <NonMobile>
                 {Object.entries(
                   sessionTypes as {
                     [key: string]: string;
@@ -156,7 +157,7 @@ export const PublicTrialSessionsFilters = connect<
                     }}
                   />
                 ))}
-              </div>
+              </NonMobile>
             </div>
             <div className="tablet:grid-col-4 grid-col-12 padding-right-2">
               <div className="margin-bottom-1">
@@ -190,7 +191,7 @@ export const PublicTrialSessionsFilters = connect<
                   }}
                 />
               </div>
-              <div>
+              <NonMobile>
                 {Object.entries(
                   locations as {
                     [key: string]: string;
@@ -208,7 +209,7 @@ export const PublicTrialSessionsFilters = connect<
                     }}
                   />
                 ))}
-              </div>
+              </NonMobile>
             </div>
             <div className="tablet:grid-col-4 grid-col-12 padding-right-2">
               <div className="margin-bottom-1">
@@ -241,7 +242,7 @@ export const PublicTrialSessionsFilters = connect<
                   }}
                 />
               </div>
-              <div>
+              <NonMobile>
                 {Object.entries(judges as { [key: string]: string }).map(
                   ([judgeKey, judgeLabel]) => (
                     <PillButton
@@ -257,7 +258,7 @@ export const PublicTrialSessionsFilters = connect<
                     />
                   ),
                 )}
-              </div>
+              </NonMobile>
             </div>
           </div>
         </div>
