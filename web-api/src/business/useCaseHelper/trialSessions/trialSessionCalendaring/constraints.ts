@@ -1,4 +1,4 @@
-import { CalendarState } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/CalendarGenerator';
+import { CalendarState } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/generateCalendar';
 import { CalendaringConfig } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 import { ScheduledTrialSession } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 
