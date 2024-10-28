@@ -165,7 +165,7 @@ function MobilePublicTrialsSessions({
         </div>
 
         <Accordion>
-          <AccordionItem contentClassName="bg-gray" title="Filters">
+          <AccordionItem title="Filters">
             <PublicTrialSessionsFilters ROOT={ROOT} />
             <Button
               link
