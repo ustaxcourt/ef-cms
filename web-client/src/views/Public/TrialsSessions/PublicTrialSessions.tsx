@@ -12,8 +12,9 @@ import { PublicTrialSessionsHelperResults } from '@web-client/presenter/computed
 import { PublicTrialSessionsRemoteProceedingsCard } from '@web-client/views/Public/TrialsSessions/PublicTrialSessionsRemoteProceedingsCard';
 import { PublicTrialSessionsTable } from '@web-client/views/Public/TrialsSessions/PublicTrialSessionsTable';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { sequences, state } from '@web-client/presenter/app-public.cerebral';
-import React from 'react';
+import React, { useRef } from 'react';
 
 const ROOT = 'publicTrialSessionData';
 
@@ -108,24 +109,13 @@ function NonMobilePublicTrialsSessions({
           </Button>
         </div>
         <div className="grid-row padding-top-1">
-          <div className="width-full grid-row margin-bottom-2 flex-align-center">
-            <div className="grid-col">
-              <Paginator
-                currentPageIndex={publicTrialSessionData.pageNumber || 0}
-                totalPages={publicTrialSessionsHelper.totalPages}
-                onPageChange={selectedPage => {
-                  updateFormValueSequence({
-                    key: 'pageNumber',
-                    root: ROOT,
-                    value: selectedPage,
-                  });
-                }}
-              />
-              <div className="grid-col-2"></div>
-            </div>
-          </div>
-
-          <PublicTrialSessionsTable />
+          <TablePagination
+            pageNumber={publicTrialSessionData.pageNumber || 0}
+            totalPages={publicTrialSessionsHelper.totalPages}
+            updateFormValueSequence={updateFormValueSequence}
+          >
+            <PublicTrialSessionsTable />
+          </TablePagination>
         </div>
       </section>
     </NonMobile>
@@ -161,25 +151,63 @@ function MobilePublicTrialsSessions({
           </AccordionItem>
         </Accordion>
 
-        <div className="width-full grid-row margin-bottom-2 padding-top-3 flex-align-center">
-          <div className="grid-col">
-            <Paginator
-              currentPageIndex={publicTrialSessionData.pageNumber || 0}
-              totalPages={publicTrialSessionsHelper.totalPages}
-              onPageChange={selectedPage => {
-                updateFormValueSequence({
-                  key: 'pageNumber',
-                  root: ROOT,
-                  value: selectedPage,
-                });
-              }}
-            />
-            <div className="grid-col-2"></div>
-          </div>
-        </div>
-
-        <PublicMobileTrialSessionsTable />
+        <TablePagination
+          pageNumber={publicTrialSessionData.pageNumber || 0}
+          totalPages={publicTrialSessionsHelper.totalPages}
+          updateFormValueSequence={updateFormValueSequence}
+        >
+          <PublicMobileTrialSessionsTable />
+        </TablePagination>
       </section>
     </Mobile>
+  );
+}
+
+function TablePagination({
+  children,
+  pageNumber,
+  totalPages,
+  updateFormValueSequence,
+}) {
+  const paginatorTop = useRef(null);
+  return (
+    <>
+      <div className="width-full grid-row margin-bottom-2 padding-top-3 flex-align-center">
+        <div className="grid-col" ref={paginatorTop}>
+          <Paginator
+            currentPageIndex={pageNumber}
+            totalPages={totalPages}
+            onPageChange={selectedPage => {
+              updateFormValueSequence({
+                key: 'pageNumber',
+                root: ROOT,
+                value: selectedPage,
+              });
+              focusPaginatorTop(paginatorTop);
+            }}
+          />
+          <div className="grid-col-2"></div>
+        </div>
+      </div>
+
+      {children}
+      <div className="width-full grid-row margin-bottom-2 padding-top-3 flex-align-center">
+        <div className="grid-col">
+          <Paginator
+            currentPageIndex={pageNumber}
+            totalPages={totalPages}
+            onPageChange={selectedPage => {
+              updateFormValueSequence({
+                key: 'pageNumber',
+                root: ROOT,
+                value: selectedPage,
+              });
+              focusPaginatorTop(paginatorTop);
+            }}
+          />
+          <div className="grid-col-2"></div>
+        </div>
+      </div>
+    </>
   );
 }
