@@ -15,7 +15,7 @@ import { PublicTrialSessionsTable } from '@web-client/views/Public/TrialsSession
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { sequences, state } from '@web-client/presenter/app-public.cerebral';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 const ROOT = 'publicTrialSessionData';
 
@@ -140,6 +140,8 @@ function MobilePublicTrialsSessions({
     sessionTypes = {},
   } = publicTrialSessionData;
 
+  const [isOpen, setIsOpen] = useState(false);
+
   const publicTrialsSessionUpdateFormValueSequence = (
     ...args: Parameters<typeof updateFormValueSequence>
   ) => {
@@ -164,8 +166,14 @@ function MobilePublicTrialsSessions({
           <PublicTrialSessionsRemoteProceedingsCard />
         </div>
 
-        <Accordion>
-          <AccordionItem title="Filters">
+        <Accordion onClick={() => setIsOpen(!isOpen)}>
+          <AccordionItem contentClassName="display-none" title="Filters">
+            {''}
+          </AccordionItem>
+        </Accordion>
+
+        {isOpen && (
+          <>
             <PublicTrialSessionsFilters ROOT={ROOT} />
             <Button
               link
@@ -174,8 +182,8 @@ function MobilePublicTrialsSessions({
             >
               Reset Filters
             </Button>
-          </AccordionItem>
-        </Accordion>
+          </>
+        )}
 
         <div className="padding-top-2">
           {Object.entries(
