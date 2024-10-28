@@ -4,14 +4,23 @@ import {
   TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
 
-export type ProspectiveSessionsByCity = Record<string, ProspectiveSession[]>;
+export type ProspectiveSessionsByCity = Record<
+  string,
+  ProspectiveTrialSession[]
+>;
 
-export type ProspectiveSession = {
+export type ProspectiveTrialSession = {
   city: string;
   sessionType: TrialSessionTypes;
   cityWasNotVisitedInLastTwoTerms: boolean;
   // potentially add
   // caseCount: number;
+};
+
+export type ScheduledTrialSession = {
+  city: string;
+  sessionType: TrialSessionTypes;
+  weekOf: string;
 };
 
 export type CalendaringConfig = {

@@ -3,7 +3,7 @@ import {
   REGULAR_TRIAL_CITY_STRINGS,
   TRIAL_CITY_STRINGS,
 } from '@shared/business/entities/EntityConstants';
-import { ProspectiveSession } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
+import { ProspectiveTrialSession } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 import {
   WASHINGTON_DC_NORTH_STRING,
   WASHINGTON_DC_SOUTH_STRING,
@@ -15,7 +15,6 @@ export type EligibleCase = Pick<
   'preferredTrialCity' | 'procedureType' | 'docketNumber'
 >;
 
-// (export type GodObject)
 export type CaseCountsAndSessionsByCity = Record<
   string,
   {
@@ -23,7 +22,7 @@ export type CaseCountsAndSessionsByCity = Record<
     initialRegularCases: number;
     remainingSmallCases: number;
     remainingRegularCases: number;
-    sessions: ProspectiveSession[];
+    sessions: ProspectiveTrialSession[];
   }
 >;
 

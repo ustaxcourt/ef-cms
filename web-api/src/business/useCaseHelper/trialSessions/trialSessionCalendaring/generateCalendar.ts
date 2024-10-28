@@ -1,4 +1,7 @@
-import { CalendaringConfig } from './createProspectiveTrialSessions';
+import {
+  CalendaringConfig,
+  ScheduledTrialSession,
+} from './createProspectiveTrialSessions';
 import { CaseCountsAndSessionsByCity } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
 import { Constraint } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/constraints';
 import {
@@ -9,10 +12,8 @@ import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSe
 import {
   SESSION_TYPES,
   TRIAL_CITY_STRINGS,
-  TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
 import {
-  ScheduledTrialSession,
   SessionCountByWeek,
   TrialSessionsByCity,
 } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
@@ -47,33 +48,7 @@ export const generateCalendar = ({
   scheduledTrialSessionsByCity: TrialSessionsByCity;
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
 } => {
-  const calendarState: CalendarState = {
-    reservedWeekOfLocationIntersection: {},
-    scheduledTrialSessionsByCity: {},
-    sessionCountPerCity: {},
-    sessionCountPerWeek: {},
-    sessionScheduledPerCityPerWeek: {},
-  };
-
-  // Initialize session counts
-  weeksToLoop.forEach(week => {
-    calendarState.sessionCountPerWeek[week] = 0;
-    calendarState.sessionScheduledPerCityPerWeek[week] = new Set();
-  });
-
-  TRIAL_CITY_STRINGS.forEach(cityStringKey => {
-    if (cityStringKey === WASHINGTON_DC_STRING) {
-      calendarState.sessionCountPerCity[WASHINGTON_DC_NORTH_STRING] = 0;
-      calendarState.scheduledTrialSessionsByCity[WASHINGTON_DC_NORTH_STRING] =
-        [];
-      calendarState.sessionCountPerCity[WASHINGTON_DC_SOUTH_STRING] = 0;
-      calendarState.scheduledTrialSessionsByCity[WASHINGTON_DC_SOUTH_STRING] =
-        [];
-    } else {
-      calendarState.sessionCountPerCity[cityStringKey] = 0;
-      calendarState.scheduledTrialSessionsByCity[cityStringKey] = [];
-    }
-  });
+  const calendarState = setupCalendarState(weeksToLoop);
 
   // check special sessions
   const specialSessionsByLocation = specialSessions.reduce((acc, session) => {
@@ -190,9 +165,11 @@ export const generateCalendar = ({
       calendarState,
       calendaringConfig,
       caseCountsAndSessionsByCity,
-      city: trialLocation,
-      sessionType: SESSION_TYPES.special,
-      weekOf: sessionWeekOf,
+      session: {
+        city: trialLocation,
+        sessionType: SESSION_TYPES.special,
+        weekOf: sessionWeekOf,
+      },
     });
 
     // given the sessionWeekOf, find the next week somehow and add it as a key
@@ -227,10 +204,10 @@ export const generateCalendar = ({
 
         if (canScheduleSession) {
           addScheduledTrialSession({
-            ...proposedSession,
             calendarState,
             calendaringConfig,
             caseCountsAndSessionsByCity,
+            session: proposedSession,
           });
 
           const index =
@@ -255,34 +232,26 @@ const addScheduledTrialSession = ({
   calendaringConfig,
   calendarState,
   caseCountsAndSessionsByCity,
-  city,
-  sessionType,
-  weekOf,
+  session,
 }: {
-  city: string;
-  sessionType: TrialSessionTypes;
-  weekOf: string;
+  session: ScheduledTrialSession;
   calendarState: CalendarState;
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
   calendaringConfig: CalendaringConfig;
 }) => {
-  const sessionToSchedule: ScheduledTrialSession = {
-    city,
-    sessionType,
-    weekOf,
-  };
-
-  calendarState.scheduledTrialSessionsByCity[city].push(sessionToSchedule);
+  calendarState.scheduledTrialSessionsByCity[session.city].push(session);
 
   decrementRemainingCaseCounters(
-    sessionToSchedule,
+    session,
     caseCountsAndSessionsByCity,
     calendaringConfig,
   );
 
-  calendarState.sessionCountPerWeek[weekOf]++;
-  calendarState.sessionCountPerCity[city]++;
-  calendarState.sessionScheduledPerCityPerWeek[weekOf].add(city); // Mark this city as scheduled for the current week
+  calendarState.sessionCountPerWeek[session.weekOf]++;
+  calendarState.sessionCountPerCity[session.city]++;
+  calendarState.sessionScheduledPerCityPerWeek[session.weekOf].add(
+    session.city,
+  ); // Mark this city as scheduled for the current week
 };
 
 const decrementRemainingCaseCounters = (
@@ -308,4 +277,36 @@ const decrementRemainingCaseCounters = (
     caseCountsAndSessionsByCity[city].remainingRegularCases = 0;
     caseCountsAndSessionsByCity[city].remainingSmallCases = 0;
   }
+};
+
+const setupCalendarState = (weeksToLoop: string[]): CalendarState => {
+  const calendarState: CalendarState = {
+    reservedWeekOfLocationIntersection: {},
+    scheduledTrialSessionsByCity: {},
+    sessionCountPerCity: {},
+    sessionCountPerWeek: {},
+    sessionScheduledPerCityPerWeek: {},
+  };
+
+  // Initialize session counts
+  weeksToLoop.forEach(week => {
+    calendarState.sessionCountPerWeek[week] = 0;
+    calendarState.sessionScheduledPerCityPerWeek[week] = new Set();
+  });
+
+  TRIAL_CITY_STRINGS.forEach(cityStringKey => {
+    if (cityStringKey === WASHINGTON_DC_STRING) {
+      calendarState.sessionCountPerCity[WASHINGTON_DC_NORTH_STRING] = 0;
+      calendarState.scheduledTrialSessionsByCity[WASHINGTON_DC_NORTH_STRING] =
+        [];
+      calendarState.sessionCountPerCity[WASHINGTON_DC_SOUTH_STRING] = 0;
+      calendarState.scheduledTrialSessionsByCity[WASHINGTON_DC_SOUTH_STRING] =
+        [];
+    } else {
+      calendarState.sessionCountPerCity[cityStringKey] = 0;
+      calendarState.scheduledTrialSessionsByCity[cityStringKey] = [];
+    }
+  });
+
+  return calendarState;
 };
