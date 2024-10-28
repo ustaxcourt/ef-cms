@@ -87,8 +87,8 @@ export const SORTABLE_COLUMNS: Record<string, MessageColumnData> = {
     sortFieldInfo: SORT_FIELDS.FROM_SECTION,
   },
   LAST_MESSAGE: {
+    // For completed message threads
     columnName: 'Last Message',
-    headerIconClassName: 'message-unread-column',
     sortFieldInfo: SORT_FIELDS.SUBJECT,
   },
   MESSAGE: {
