@@ -4,7 +4,7 @@ import {
 } from '@web-client/views/Messages/MessageColumns';
 import {
   MessageFilterData,
-  MessagesTable,
+  MessageTable,
 } from '@web-client/views/Messages/MessageTable';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -13,7 +13,7 @@ import React from 'react';
 const columns: MessageColumnData[] = [
   SORTABLE_COLUMNS.DOCKET_NUMBER,
   SORTABLE_COLUMNS.RECEIVED,
-  SORTABLE_COLUMNS.MESSAGE,
+  SORTABLE_COLUMNS.MESSAGE_WITH_UNREAD_ICON,
   SORTABLE_COLUMNS.CASE_TITLE,
   SORTABLE_COLUMNS.CASE_STATUS,
   SORTABLE_COLUMNS.FROM,
@@ -48,12 +48,11 @@ export const MessagesIndividualInbox = connect(
     ];
 
     return (
-      <MessagesTable
+      <MessageTable
         id="messages-individual-inbox"
         messageColumns={columns}
         messageFilters={filters}
         selectable={true}
-        showUnreadIcon={true}
       />
     );
   },

@@ -93,6 +93,10 @@ export const SORTABLE_COLUMNS: Record<string, MessageColumnData> = {
   },
   MESSAGE: {
     columnName: 'Message',
+    sortFieldInfo: SORT_FIELDS.SUBJECT,
+  },
+  MESSAGE_WITH_UNREAD_ICON: {
+    columnName: 'Message',
     headerIconClassName: 'message-unread-column',
     sortFieldInfo: SORT_FIELDS.SUBJECT,
   },

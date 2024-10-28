@@ -2,7 +2,7 @@ import {
   MessageColumnData,
   SORTABLE_COLUMNS,
 } from '@web-client/views/Messages/MessageColumns';
-import { MessagesTable } from '@web-client/views/Messages/MessageTable';
+import { MessageTable } from '@web-client/views/Messages/MessageTable';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 
@@ -18,7 +18,7 @@ export const MessagesIndividualCompleted = connect(
   {},
   function MessagesIndividualCompleted() {
     return (
-      <MessagesTable
+      <MessageTable
         id="messages-individual-completed"
         messageColumns={columns}
         messageFilters={[]}
