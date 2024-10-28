@@ -1,6 +1,7 @@
 import {
   CalendaringConfig,
   ProspectiveSessionsByCity,
+  ScheduledTrialSession,
 } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 import {
   FORMATS,
@@ -18,12 +19,6 @@ import {
   WASHINGTON_DC_STRING,
 } from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
 import { cloneDeep } from 'lodash';
-
-export type ScheduledTrialSession = {
-  city: string;
-  sessionType: TrialSessionTypes;
-  weekOf: string;
-};
 
 export type SessionCountByWeek = Record<string, number>;
 export type RemainingCaseCountByCity = Record<string, number>;
