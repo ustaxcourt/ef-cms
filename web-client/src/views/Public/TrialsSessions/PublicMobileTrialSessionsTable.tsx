@@ -48,7 +48,7 @@ export const PublicMobileTrialSessionsTable = connect<
                       <td
                         className={
                           index !== tsGroup.rows.length - 1
-                            ? 'border-bottom-1px margin-bottom-1'
+                            ? 'double-border'
                             : undefined
                         }
                         key={tsRow.formattedStartDate}
