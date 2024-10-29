@@ -264,18 +264,21 @@ resource "aws_iam_policy" "ci_cd_policy" {
           "kms:*"
         ],
        "Resource": [
-          "arn:aws:kms:us-east-1:${data.aws_caller_identity.current.account_id}:key/*",
-          "arn:aws:kms:us-west-1:${data.aws_caller_identity.current.account_id}:key/*"
+          "*"
        ]
     }, 
     {
       "Sid": "IAM",
       "Effect": "Allow",
       "Action": [
-          "iam:GetUser"
+          "iam:GetUser",
+          "iam:CreateUser",
+          "iam:CreatePolicy",
+          "iam:AttachUserPolicy"
         ],
        "Resource": [
-          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/*"
+          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/*",
+          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/*"
         ]
     }, 
     {
@@ -430,6 +433,7 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/wait_for_workflow_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/strip_basepath_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/header_security_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/restore_role_*"
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/batch_instance_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/job_definition_iam_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/batch_role_*",
