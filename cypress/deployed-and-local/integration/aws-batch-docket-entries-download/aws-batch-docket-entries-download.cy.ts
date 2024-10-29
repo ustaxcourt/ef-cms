@@ -71,7 +71,7 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
         cy.get('@ZIP_NAME').then(ZIP_NAME => {
           function checkFileExists(attempt: number = 0) {
             const maxRetries = 5;
-            cy.task('doesFileExists', ZIP_NAME).then(fileExists => {
+            cy.task('fileExists', ZIP_NAME).then(fileExists => {
               if (fileExists) {
                 cy.task<string[]>('unzipFile', {
                   fileName: ZIP_NAME,
