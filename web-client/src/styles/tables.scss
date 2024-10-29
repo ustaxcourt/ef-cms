@@ -134,6 +134,8 @@ table,
 
     &.message-queue-row {
       padding-top: 14px;
+      overflow-wrap: break-word;
+      word-break: break-word; // fallback
     }
 
     &.message-queue-case-title {
