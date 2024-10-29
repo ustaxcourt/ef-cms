@@ -126,7 +126,7 @@ export const createProspectiveTrialSessions = ({
     // So, add one session, determining the type based on the procedure type of the associated cases.
     if (
       cityWasNotVisitedInLastTwoTerms &&
-      caseCountsAndSessionsByCity[city].sessions.length === 0 &&
+      caseCountsAndSessionsByCity[city].prospectiveSessions.length === 0 &&
       (remainingCaseCounts.regular > 0 || remainingCaseCounts.small > 0)
     ) {
       const containsRegularCase = remainingCaseCounts.regular > 0;
@@ -207,7 +207,7 @@ function addProspectiveTrialSession({
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
   sessionType: TrialSessionTypes;
 }): void {
-  caseCountsAndSessionsByCity[city].sessions.push({
+  caseCountsAndSessionsByCity[city].prospectiveSessions.push({
     city,
     cityWasNotVisitedInLastTwoTerms,
     sessionType,

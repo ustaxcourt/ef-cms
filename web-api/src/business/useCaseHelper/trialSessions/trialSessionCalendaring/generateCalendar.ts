@@ -27,7 +27,6 @@ export type CalendarState = {
   sessionCountPerWeek: Record<string, number>;
   sessionScheduledPerCityPerWeek: Record<string, Set<string>>;
   reservedWeekOfLocationIntersection: Record<string, string[]>;
-  scheduledTrialSessionsByCity: TrialSessionsByCity;
   sessionCountPerCity: Record<string, number>;
 };
 
@@ -45,62 +44,27 @@ export const generateCalendar = ({
   calendaringConfig: CalendaringConfig;
 }): {
   sessionCountPerWeek: SessionCountByWeek;
-  scheduledTrialSessionsByCity: TrialSessionsByCity;
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
 } => {
   const calendarState = setupCalendarState(weeksToLoop);
 
-  // check special sessions
-  // const specialSessionsByLocation = specialSessions.reduce((acc, session) => {
-  //   if (!acc[session.trialLocation!]) {
-  //     acc[session.trialLocation!] = [];
-  //   }
-  //   acc[session.trialLocation!].push(session);
-  //   return acc;
-  // }, {});
-
-  // for (const location in specialSessionsByLocation) {
-  //   if (
-  //     specialSessionsByLocation[location].length >
-  //     calendaringConfig.maxSessionsPerLocation
-  //   ) {
-  //     throw new Error(
-  //       `Special session count exceeds the max sessions per location for ${location}`,
-  //     );
-  //   }
-  // }
-
   // TODO 10275: test this (and be sure it works)
-  const sortedProspectiveSessionsByCity: TrialSessionsByCity = Object.keys(
-    caseCountsAndSessionsByCity,
-  )
-    .sort((a, b) => {
-      const aNotVisited =
-        caseCountsAndSessionsByCity[a].sessions[0]
-          ?.cityWasNotVisitedInLastTwoTerms || false;
-      const bNotVisited =
-        caseCountsAndSessionsByCity[b].sessions[0]
-          ?.cityWasNotVisitedInLastTwoTerms || false;
+  const sortedCaseCountsAndProspectiveSessionsByCity: TrialSessionsByCity =
+    Object.keys(caseCountsAndSessionsByCity)
+      .sort((a, b) => {
+        const aNotVisited =
+          caseCountsAndSessionsByCity[a].prospectiveSessions[0]
+            ?.cityWasNotVisitedInLastTwoTerms || false;
+        const bNotVisited =
+          caseCountsAndSessionsByCity[b].prospectiveSessions[0]
+            ?.cityWasNotVisitedInLastTwoTerms || false;
 
-      return aNotVisited === bNotVisited ? 0 : aNotVisited ? -1 : 1;
-    })
-    .reduce((obj, key) => {
-      if (key === WASHINGTON_DC_STRING) {
-        obj[WASHINGTON_DC_SOUTH_STRING] = [];
-
-        for (const prospectiveSession of caseCountsAndSessionsByCity[key]
-          .sessions) {
-          obj[WASHINGTON_DC_SOUTH_STRING].sessions.push({
-            ...prospectiveSession,
-            city: WASHINGTON_DC_SOUTH_STRING,
-          });
-        }
-
+        return aNotVisited === bNotVisited ? 0 : aNotVisited ? -1 : 1;
+      })
+      .reduce((obj, key) => {
+        obj[key] = caseCountsAndSessionsByCity[key].prospectiveSessions;
         return obj;
-      }
-      obj[key] = caseCountsAndSessionsByCity[key].sessions;
-      return obj;
-    }, {});
+      }, {});
 
   // special sessions handled ahead of all reg, small
 
@@ -143,7 +107,7 @@ export const generateCalendar = ({
     }
 
     if (
-      calendarState.scheduledTrialSessionsByCity[trialLocation].length >
+      caseCountsAndSessionsByCity[trialLocation].scheduledSessions.length >
       calendaringConfig.maxSessionsPerLocation
     ) {
       throw new Error(
@@ -195,8 +159,10 @@ export const generateCalendar = ({
 
   for (const currentWeek of weeksToLoop) {
     const weekOfString = currentWeek;
-    for (const city in sortedProspectiveSessionsByCity) {
-      for (const prospectiveSession of sortedProspectiveSessionsByCity[city]) {
+    for (const city in sortedCaseCountsAndProspectiveSessionsByCity) {
+      for (const prospectiveSession of sortedCaseCountsAndProspectiveSessionsByCity[
+        city
+      ]) {
         const proposedSession = {
           city: prospectiveSession.city,
           sessionType: prospectiveSession.sessionType,
@@ -220,10 +186,12 @@ export const generateCalendar = ({
           });
 
           const index =
-            sortedProspectiveSessionsByCity[city].indexOf(prospectiveSession);
+            sortedCaseCountsAndProspectiveSessionsByCity[city].indexOf(
+              prospectiveSession,
+            );
 
           if (index !== -1) {
-            sortedProspectiveSessionsByCity[city].splice(index, 1);
+            sortedCaseCountsAndProspectiveSessionsByCity[city].splice(index, 1);
           }
         }
       }
@@ -232,7 +200,6 @@ export const generateCalendar = ({
 
   return {
     caseCountsAndSessionsByCity,
-    scheduledTrialSessionsByCity: calendarState.scheduledTrialSessionsByCity,
     sessionCountPerWeek: calendarState.sessionCountPerWeek,
   };
 };
@@ -248,7 +215,7 @@ const addScheduledTrialSession = ({
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
   calendaringConfig: CalendaringConfig;
 }) => {
-  calendarState.scheduledTrialSessionsByCity[session.city].push(session);
+  caseCountsAndSessionsByCity[session.city].scheduledSessions.push(session);
 
   decrementRemainingCaseCounters(
     session,
@@ -291,7 +258,6 @@ const decrementRemainingCaseCounters = (
 const setupCalendarState = (weeksToLoop: string[]): CalendarState => {
   const calendarState: CalendarState = {
     reservedWeekOfLocationIntersection: {},
-    scheduledTrialSessionsByCity: {},
     sessionCountPerCity: {},
     sessionCountPerWeek: {},
     sessionScheduledPerCityPerWeek: {},
@@ -306,14 +272,9 @@ const setupCalendarState = (weeksToLoop: string[]): CalendarState => {
   TRIAL_CITY_STRINGS.forEach(cityStringKey => {
     if (cityStringKey === WASHINGTON_DC_STRING) {
       calendarState.sessionCountPerCity[WASHINGTON_DC_NORTH_STRING] = 0;
-      calendarState.scheduledTrialSessionsByCity[WASHINGTON_DC_NORTH_STRING] =
-        [];
       calendarState.sessionCountPerCity[WASHINGTON_DC_SOUTH_STRING] = 0;
-      calendarState.scheduledTrialSessionsByCity[WASHINGTON_DC_SOUTH_STRING] =
-        [];
     } else {
       calendarState.sessionCountPerCity[cityStringKey] = 0;
-      calendarState.scheduledTrialSessionsByCity[cityStringKey] = [];
     }
   });
 

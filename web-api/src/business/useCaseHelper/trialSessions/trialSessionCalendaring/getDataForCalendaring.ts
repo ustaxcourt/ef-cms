@@ -3,7 +3,10 @@ import {
   REGULAR_TRIAL_CITY_STRINGS,
   TRIAL_CITY_STRINGS,
 } from '@shared/business/entities/EntityConstants';
-import { ProspectiveTrialSession } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
+import {
+  ProspectiveTrialSession,
+  ScheduledTrialSession,
+} from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 import {
   WASHINGTON_DC_NORTH_STRING,
   WASHINGTON_DC_SOUTH_STRING,
@@ -22,7 +25,8 @@ export type CaseCountsAndSessionsByCity = Record<
     initialRegularCases: number;
     remainingSmallCases: number;
     remainingRegularCases: number;
-    sessions: ProspectiveTrialSession[];
+    prospectiveSessions: ProspectiveTrialSession[];
+    scheduledSessions: ScheduledTrialSession[];
   }
 >;
 
@@ -86,9 +90,10 @@ const initializeCaseCountsAndSessionsByCity =
       acc[city] = {
         initialRegularCases: 0,
         initialSmallCases: 0,
+        prospectiveSessions: [],
         remainingRegularCases: 0,
         remainingSmallCases: 0,
-        sessions: [],
+        scheduledSessions: [],
       };
       return acc;
     }, {});
@@ -102,9 +107,10 @@ const handleWashingtonDC = (
   caseCountsAndSessionsByCity[WASHINGTON_DC_NORTH_STRING] = {
     initialRegularCases: 0,
     initialSmallCases: 0,
+    prospectiveSessions: [],
     remainingRegularCases: 0,
     remainingSmallCases: 0,
-    sessions: [],
+    scheduledSessions: [],
   };
   caseCountsAndSessionsByCity[WASHINGTON_DC_SOUTH_STRING] =
     caseCountsAndSessionsByCity[WASHINGTON_DC_STRING];

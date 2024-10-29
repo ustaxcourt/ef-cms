@@ -4,19 +4,14 @@ import {
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
 import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
-import {
-  SessionCountByWeek,
-  TrialSessionsByCity,
-} from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
+import { SessionCountByWeek } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import ExcelJS from 'exceljs';
 
 export const writeTrialSessionDataToExcel = async ({
   caseCountsAndSessionsByCity,
   sessionCountPerWeek,
-  sortedScheduledTrialSessionsByCity,
   weeks,
 }: {
-  sortedScheduledTrialSessionsByCity: TrialSessionsByCity;
   weeks: string[];
   sessionCountPerWeek: SessionCountByWeek;
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
@@ -31,8 +26,10 @@ export const writeTrialSessionDataToExcel = async ({
     return acc;
   }, {});
 
-  for (const city in sortedScheduledTrialSessionsByCity) {
-    const weekOfsForCity = sortedScheduledTrialSessionsByCity[city].reduce(
+  for (const city in caseCountsAndSessionsByCity) {
+    const weekOfsForCity = caseCountsAndSessionsByCity[
+      city
+    ].scheduledSessions.reduce(
       (acc, session) => {
         acc[session.weekOf] = session.sessionType;
         return acc;
