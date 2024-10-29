@@ -19,7 +19,7 @@
     "@aws-sdk/lib-storage": "3.662.0",
     "@aws-sdk/node-http-handler": "3.374.0",
     "@aws-sdk/s3-request-presigner": "3.657.0",
-    "fflate": "^0.8.2",
-    "stream": "^0.0.3"
+    "fflate": "0.8.2",
+    "stream": "0.0.3"
   }
 }
