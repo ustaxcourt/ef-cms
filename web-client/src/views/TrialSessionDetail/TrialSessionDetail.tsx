@@ -48,6 +48,7 @@ export const TrialSessionDetail = connect(
     showThirtyDayNoticeModalSequence,
     trialSessionDetailsHelper,
   }) {
+    console.log('TrialSessionDetail');
     return (
       <>
         <TrialSessionDetailHeader />

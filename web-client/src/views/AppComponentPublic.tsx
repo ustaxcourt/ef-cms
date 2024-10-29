@@ -11,6 +11,7 @@ import { Privacy } from './Privacy';
 import { PublicCaseDetail } from './Public/PublicCaseDetail';
 import { PublicPrintableDocketRecord } from './Public/PublicPrintableDocketRecord';
 import { PublicSearch } from './Public/PublicSearch';
+import { PublicTrialSessionDetail } from '@web-client/views/Public/TrialSessions/PublicTrialSessionDetail';
 import { TodaysOpinions } from './Public/TodaysOpinions';
 import { TodaysOrders } from './Public/TodaysOrders';
 import { UsaBanner } from './UsaBanner';
@@ -30,6 +31,7 @@ const pages = {
   PublicCaseDetail,
   PublicPrintableDocketRecord,
   PublicSearch,
+  PublicTrialSessionDetail,
   TodaysOpinions,
   TodaysOrders,
 };
