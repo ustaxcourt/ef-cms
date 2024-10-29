@@ -12,8 +12,8 @@ import {
   readAllItemsInBucket,
 } from './cypress/deployed-and-local/support/email-receipt';
 import {
-  doesFileExists,
   ensureFolderExists,
+  fileExists,
 } from './cypress/local-only/support/database';
 import {
   expireUserConfirmationCode,
@@ -77,14 +77,14 @@ export default defineConfig({
         }) {
           return deleteAllItemsInEmailBucket({ bucketName, retries });
         },
-        doesFileExists(filePath) {
-          return doesFileExists(filePath);
-        },
         ensureFolderExists(directory) {
           return ensureFolderExists(directory);
         },
         expireUserConfirmationCode(email: string) {
           return expireUserConfirmationCode(email);
+        },
+        fileExists(filePath) {
+          return fileExists(filePath);
         },
         getEmailVerificationToken({ email }) {
           return getEmailVerificationToken({ email });
