@@ -7,7 +7,7 @@ export const PublicTrialSessionsRemoteProceedingsCard = connect(
   function () {
     return (
       <>
-        <div className="card">
+        <div className="card" data-testid="remote-proceedings-card">
           <div className="card-header padding-left-2 padding-top-2 border-bottom-1px border-base-lighter">
             <h2>Remote Proceedings</h2>
           </div>

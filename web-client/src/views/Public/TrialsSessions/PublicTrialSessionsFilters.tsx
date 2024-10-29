@@ -94,7 +94,7 @@ export const PublicTrialSessionsFilters = connect<
         <FormGroup>
           <fieldset
             className="usa-fieldset margin-top-2"
-            data-testid="trial-session-proceeding-type"
+            data-testid="proceeding-type-filter"
           >
             <legend className="usa-legend" id="proceeding-type-legend">
               Proceeding type
@@ -107,7 +107,10 @@ export const PublicTrialSessionsFilters = connect<
 
         <div className="tablet:grid-col grid-col-12">
           <div className="grid-row">
-            <div className="tablet:grid-col-4 grid-col-12 padding-right-2">
+            <div
+              className="tablet:grid-col-4 grid-col-12 padding-right-2"
+              data-testid="session-type-filter"
+            >
               <div className="margin-bottom-1">
                 <label
                   className="usa-label"
@@ -159,7 +162,10 @@ export const PublicTrialSessionsFilters = connect<
                 ))}
               </NonMobile>
             </div>
-            <div className="tablet:grid-col-4 grid-col-12 padding-right-2">
+            <div
+              className="tablet:grid-col-4 grid-col-12 padding-right-2"
+              data-testid="location-filter"
+            >
               <div className="margin-bottom-1">
                 <label
                   className="usa-label"
@@ -211,7 +217,10 @@ export const PublicTrialSessionsFilters = connect<
                 ))}
               </NonMobile>
             </div>
-            <div className="tablet:grid-col-4 grid-col-12 padding-right-2">
+            <div
+              className="tablet:grid-col-4 grid-col-12 padding-right-2"
+              data-testid="judge-filter"
+            >
               <div className="margin-bottom-1">
                 <label
                   className="usa-label"
