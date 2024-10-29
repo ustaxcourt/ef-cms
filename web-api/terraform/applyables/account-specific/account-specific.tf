@@ -84,3 +84,17 @@ module "route53-zone" {
 module "email-monitoring" {
   source = "../../modules/email-monitoring"
 }
+
+module "default_vpc_east" {
+  source = "../../modules/default-vpc"
+  providers = {
+    aws = aws.us-east-1
+  }
+}
+
+module "default_vpc_west" {
+  source = "../../modules/default-vpc"
+  providers = {
+    aws = aws.us-west-1
+  }
+}
