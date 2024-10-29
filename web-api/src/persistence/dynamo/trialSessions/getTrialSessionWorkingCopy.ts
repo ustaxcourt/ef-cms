@@ -1,5 +1,5 @@
+import { batchGet } from '../../dynamodbClientService';
 import { get } from '../../dynamodbClientService';
-
 /**
  * getTrialSessionWorkingCopy
  *
@@ -25,3 +25,16 @@ export const getTrialSessionWorkingCopy = ({
     },
     applicationContext,
   });
+
+export const getBulkTrialSessionWorkingCopies = ({
+  applicationContext,
+  specialTrialSessions,
+}: {
+  applicationContext: IApplicationContext;
+  specialTrialSessions: Array<{ pk: string; sk: string }>;
+}) => {
+  return batchGet({
+    applicationContext,
+    keys: specialTrialSessions,
+  });
+};
