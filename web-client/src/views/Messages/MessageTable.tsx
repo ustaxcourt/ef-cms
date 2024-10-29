@@ -142,19 +142,26 @@ export const MessageTable = connect<
             </div>
           </div>
         )}
-        <div className="overflow-x-auto" id={id}>
-          <div className="grid-row grid-gap">
-            {messageFilters.length > 0 && (
-              <div className="desktop:grid-col-8 tablet:grid-col-12 display-flex flex-align-center">
-                <TableFilters
-                  filters={messageFilters}
-                  onSelect={updateMessageFilterSequence}
-                ></TableFilters>
-              </div>
-            )}
-            {selectable && getCompleteAllButton()}
-          </div>
 
+        <div className="grid-row grid-gap">
+          {messageFilters.length > 0 && (
+            <div
+              className={
+                selectable
+                  ? 'desktop:grid-col-8 tablet:grid-col-12 display-flex flex-align-center' // To take into account the Complete All button
+                  : undefined
+              }
+            >
+              <TableFilters
+                filters={messageFilters}
+                onSelect={updateMessageFilterSequence}
+              ></TableFilters>
+            </div>
+          )}
+          {selectable && getCompleteAllButton()}
+        </div>
+
+        <div className="overflow-x-auto overflow-y-hidden" id={id}>
           <table className="usa-table ustc-table subsection">
             <thead>
               <tr>
