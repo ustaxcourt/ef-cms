@@ -1,3 +1,4 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { batchDelete, get } from '../../dynamodbClientService';
 
 /**
@@ -12,7 +13,7 @@ export const deleteUserConnection = async ({
   applicationContext,
   connectionId,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   connectionId: string;
 }) => {
   const connection = await get({

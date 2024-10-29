@@ -78,6 +78,9 @@ export class Petitioner extends JoiValidationEntity {
       is: true,
       otherwise: joi.optional(),
       then: joi.required(),
+    }).messages({
+      'any.required': 'Enter a valid email address',
+      'string.email': 'Enter email address in format: yourname@example.com',
     }),
     hasConsentedToEService: joi
       .boolean()
@@ -97,9 +100,11 @@ export class Petitioner extends JoiValidationEntity {
       '*': 'Enter name',
       'string.max': 'Limit is 100 characters. Enter 100 or fewer characters.',
     }),
-    paperPetitionEmail: JoiValidationConstants.EMAIL.optional().description(
-      'Email provided by the petitioner on a paper petition',
-    ),
+    paperPetitionEmail: JoiValidationConstants.EMAIL.optional()
+      .description('Email provided by the petitioner on a paper petition')
+      .messages({
+        'string.email': 'Enter email address in format: yourname@example.com',
+      }),
     sealedAndUnavailable: joi.boolean().optional(),
     serviceIndicator: JoiValidationConstants.STRING.valid(
       ...Object.values(SERVICE_INDICATOR_TYPES),

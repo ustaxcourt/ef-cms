@@ -1,3 +1,4 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { batchDelete, query } from '../../dynamodbClientService';
 
 /**
@@ -12,7 +13,7 @@ export const deleteByGsi = async ({
   applicationContext,
   gsi,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   gsi: string;
 }) => {
   const items = await query({

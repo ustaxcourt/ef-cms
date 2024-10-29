@@ -1,13 +1,17 @@
+import '@web-api/persistence/postgres/userCaseNotes/mocks.jest';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { deleteUserCaseNoteInteractor } from './deleteUserCaseNoteInteractor';
+import { deleteUserCaseNote as deleteUserCaseNoteMock } from '@web-api/persistence/postgres/userCaseNotes/deleteUserCaseNote';
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
 
 describe('deleteUserCaseNoteInteractor', () => {
+  const deleteUserCaseNote = deleteUserCaseNoteMock as jest.Mock;
+
   it('throws an error if the user is not valid or authorized', async () => {
     let user = {} as UnknownAuthUser;
 
@@ -33,7 +37,7 @@ describe('deleteUserCaseNoteInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(mockUser);
-    applicationContext.getPersistenceGateway().deleteUserCaseNote = v => v;
+    deleteUserCaseNote.mockImplementation(v => v);
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue({
@@ -60,7 +64,6 @@ describe('deleteUserCaseNoteInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(mockUser);
-    applicationContext.getPersistenceGateway().deleteUserCaseNote = jest.fn();
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(null);
@@ -72,9 +75,8 @@ describe('deleteUserCaseNoteInteractor', () => {
       omit(mockUser, 'section'),
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserCaseNote.mock
-        .calls[0][0].userId,
-    ).toEqual(mockJudgeUser.userId);
+    expect(deleteUserCaseNote.mock.calls[0][0].userId).toEqual(
+      mockJudgeUser.userId,
+    );
   });
 });

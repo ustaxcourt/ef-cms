@@ -22,7 +22,7 @@ type CaseTypeSelectType = {
   onChangePreValidation?: Function;
   refProp?: (element: any) => void;
   validationError?: { [key: string]: string | undefined };
-  validationSequence?: Function;
+  validateFormData?: Function;
   value?: string;
 };
 
@@ -47,9 +47,9 @@ export const CaseTypeSelect = connect<
     onChange,
     onChangePreValidation,
     refProp,
+    validateFormData,
     validationError,
     validationErrors,
-    validationSequence,
     value,
   }) {
     return (
@@ -71,7 +71,7 @@ export const CaseTypeSelect = connect<
               name={name || 'caseType'}
               ref={refProp}
               value={value}
-              onBlur={onBlur}
+              onBlur={onBlur ? () => onBlur() : undefined}
               onChange={e => {
                 onChange({
                   key: e.target.name,
@@ -79,7 +79,7 @@ export const CaseTypeSelect = connect<
                   value: e.target.value,
                 });
                 if (onChangePreValidation) onChangePreValidation();
-                if (validationSequence) validationSequence();
+                if (validateFormData) validateFormData();
               }}
             >
               {allowDefaultOption && <option value="">-- Select --</option>}

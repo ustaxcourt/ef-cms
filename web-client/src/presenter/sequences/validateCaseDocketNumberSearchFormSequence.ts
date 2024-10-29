@@ -1,4 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { setValidationAlertErrorsAction } from '@web-client/presenter/actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validateCaseDocketNumberSearchAction } from '../actions/AdvancedSearch/validateCaseDocketNumberSearchAction';
@@ -10,7 +11,7 @@ export const validateCaseDocketNumberSearchFormSequence = [
     validate: [
       validateCaseDocketNumberSearchAction,
       {
-        error: [setValidationErrorsAction],
+        error: [setValidationErrorsAction, setValidationAlertErrorsAction],
         success: [clearAlertsAction],
       },
     ],

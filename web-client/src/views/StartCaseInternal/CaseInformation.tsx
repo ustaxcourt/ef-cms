@@ -179,9 +179,9 @@ export const CaseInformation = connect(
         </FormGroup>
         <PetitionPaymentForm
           bind="form"
-          updateSequence={updatePetitionPaymentFormValueSequence}
-          validateSequence={validatePetitionFromPaperSequence}
+          validateFormData={validatePetitionFromPaperSequence}
           validationErrorsBind="validationErrors"
+          onUpdate={updatePetitionPaymentFormValueSequence}
         />
         {startCaseInternalHelper.showOrderForFilingFee && (
           <div className="order-checkbox">

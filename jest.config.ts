@@ -22,6 +22,7 @@ const config: Config = {
   },
   transformIgnorePatterns: ['/node_modules/(?!uuid)'],
   verbose: false,
+  watchPathIgnorePatterns: ['node_modules'],
 };
 
 // eslint-disable-next-line import/no-default-export

@@ -5,6 +5,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { deleteUserCaseNote } from '@web-api/persistence/postgres/userCaseNotes/deleteUserCaseNote';
 
 /**
  * deleteUserCaseNoteInteractor
@@ -31,8 +32,7 @@ export const deleteUserCaseNoteInteractor = async (
       userIdMakingRequest: authorizedUser.userId,
     });
 
-  return await applicationContext.getPersistenceGateway().deleteUserCaseNote({
-    applicationContext,
+  return await deleteUserCaseNote({
     docketNumber,
     userId,
   });

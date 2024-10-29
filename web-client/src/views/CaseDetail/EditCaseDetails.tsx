@@ -45,7 +45,7 @@ export const EditCaseDetails = connect(
               <h4 className="margin-bottom-2">IRS Notice/Case</h4>
               <IRSNotice
                 shouldStartWithBlankStatistic={false}
-                validationSequence={validateCaseDetailsSequence}
+                validateFormData={validateCaseDetailsSequence}
               />
 
               <ProcedureType
@@ -87,9 +87,9 @@ export const EditCaseDetails = connect(
 
             <PetitionPaymentForm
               bind="form"
-              updateSequence={updateFormValueSequence}
-              validateSequence={validateCaseDetailsSequence}
+              validateFormData={validateCaseDetailsSequence}
               validationErrorsBind="validationErrors"
+              onUpdate={updateFormValueSequence}
             />
           </div>
 

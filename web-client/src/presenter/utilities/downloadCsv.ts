@@ -12,4 +12,6 @@ export const downloadCsv = ({
   a.setAttribute('href', url);
   a.setAttribute('download', fileName);
   a.click();
+  a.remove();
+  window.URL.revokeObjectURL(url);
 };

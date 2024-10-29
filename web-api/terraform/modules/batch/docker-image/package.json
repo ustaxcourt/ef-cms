@@ -1,0 +1,25 @@
+{
+  "name": "docker-image",
+  "version": "1.0.0",
+  "main": "docketEntryBatchDownloader.js",
+  "scripts": {
+    "deploy": "./deploy-to-ecr.sh us-east-1 && ./deploy-to-ecr.sh us-west-1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "22.5.5"
+  },
+  "dependencies": {
+    "@aws-sdk/client-apigatewaymanagementapi": "3.650.0",
+    "@aws-sdk/client-s3": "3.670.0",
+    "@aws-sdk/client-sqs": "3.670.0",
+    "@aws-sdk/lib-storage": "3.662.0",
+    "@aws-sdk/node-http-handler": "3.374.0",
+    "@aws-sdk/s3-request-presigner": "3.657.0",
+    "fflate": "^0.8.2",
+    "stream": "^0.0.3"
+  }
+}

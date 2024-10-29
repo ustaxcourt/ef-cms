@@ -527,7 +527,7 @@ export class Case extends JoiValidationEntity {
     mailingDate: JoiValidationConstants.STRING.max(25)
       .when('isPaper', {
         is: true,
-        otherwise: joi.allow(null).optional(),
+        otherwise: joi.optional().allow(null),
         then: joi.required(),
       })
       .description('Date that petition was mailed to the court.')
@@ -610,7 +610,7 @@ export class Case extends JoiValidationEntity {
       'petitionPaymentStatus',
       {
         is: PAYMENT_STATUS.WAIVED,
-        otherwise: joi.allow(null).optional(),
+        otherwise: joi.optional().allow(null),
         then: JoiValidationConstants.ISO_DATE.max('now').required(),
       },
     )

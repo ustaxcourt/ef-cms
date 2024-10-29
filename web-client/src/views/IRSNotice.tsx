@@ -10,7 +10,7 @@ import React from 'react';
 
 type IrsNoticeType = {
   shouldStartWithBlankStatistic?: boolean;
-  validationSequence: Function;
+  validateFormData: Function;
 };
 const irsNoticeDependencies = {
   caseDetailEditHelper: state.caseDetailEditHelper,
@@ -39,8 +39,8 @@ export const IRSNotice = connect<IrsNoticeType, typeof irsNoticeDependencies>(
     showModal,
     statisticsFormHelper,
     updateFormValueSequence,
+    validateFormData,
     validationErrors,
-    validationSequence,
   }) {
     const renderIrsNoticeRadios = () => {
       return (
@@ -68,6 +68,7 @@ export const IRSNotice = connect<IrsNoticeType, typeof irsNoticeDependencies>(
                   if (shouldStartWithBlankStatistic) {
                     refreshStatisticsSequence();
                   }
+                  validateFormData();
                 }}
               />
               <label
@@ -92,6 +93,7 @@ export const IRSNotice = connect<IrsNoticeType, typeof irsNoticeDependencies>(
                 onChange={() => {
                   setIrsNoticeFalseSequence();
                   refreshStatisticsSequence();
+                  validateFormData();
                 }}
               />
               <label
@@ -117,13 +119,13 @@ export const IRSNotice = connect<IrsNoticeType, typeof irsNoticeDependencies>(
           formGroupClassNames={''}
           id="date-of-notice"
           label="Date of notice"
+          onBlur={() => validateFormData()}
           onChange={e => {
             formatAndUpdateDateFromDatePickerSequence({
               key: 'irsNoticeDate',
               toFormat: constants.DATE_FORMATS.ISO,
               value: e.target.value,
             });
-            validationSequence();
           }}
         />
       );
@@ -137,7 +139,7 @@ export const IRSNotice = connect<IrsNoticeType, typeof irsNoticeDependencies>(
           allowDefaultOption={true}
           caseTypes={constants.CASE_TYPES}
           legend="Type of case"
-          validationSequence={validationSequence}
+          validateFormData={validateFormData}
           value={form.caseType}
           onChange={updateFormValueSequence}
           onChangePreValidation={refreshStatisticsSequence}

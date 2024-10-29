@@ -113,7 +113,7 @@ export class Practitioner extends User {
     }).messages({
       'any.only': 'Email addresses do not match',
       'any.required': 'Enter a valid email address',
-      'string.email': 'Enter a valid email address',
+      'string.email': 'Enter email address in format: yourname@example.com',
     }),
     entityName: JoiValidationConstants.STRING.valid('Practitioner').required(),
     firmName: JoiValidationConstants.STRING.max(100)
@@ -122,10 +122,16 @@ export class Practitioner extends User {
       .description('The firm name for the practitioner.'),
     firstName: JoiValidationConstants.STRING.max(100)
       .required()
-      .description('The first name of the practitioner.'),
+      .description('The first name of the practitioner.')
+      .messages({
+        '*': 'Enter first name',
+      }),
     lastName: JoiValidationConstants.STRING.max(100)
       .required()
-      .description('The last name of the practitioner.'),
+      .description('The last name of the practitioner.')
+      .messages({
+        '*': 'Enter last name',
+      }),
     middleName: JoiValidationConstants.STRING.max(100)
       .optional()
       .allow(null)
@@ -183,7 +189,10 @@ export class Practitioner extends User {
         otherwise: JoiValidationConstants.EMAIL.optional().allow(null),
         then: JoiValidationConstants.EMAIL.required(),
       })
-      .messages({ '*': 'Enter a valid email address' }),
+      .messages({
+        'any.required': 'Enter a valid email address',
+        'string.email': 'Enter email address in format: yourname@example.com',
+      }),
   };
 
   getValidationRules() {

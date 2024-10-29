@@ -29,6 +29,7 @@ export const PaperFiling = connect(
     paperDocketEntryHelper: state.paperDocketEntryHelper,
     showModal: state.modal.showModal,
     submitPaperFilingSequence: sequences.submitPaperFilingSequence,
+    validateDocketEntrySequence: sequences.validateDocketEntrySequence,
   },
   function PaperFiling({
     closeModalAndReturnToCaseDetailSequence,
@@ -40,6 +41,7 @@ export const PaperFiling = connect(
     paperDocketEntryHelper,
     showModal,
     submitPaperFilingSequence,
+    validateDocketEntrySequence,
   }) {
     return (
       <>
@@ -132,6 +134,7 @@ export const PaperFiling = connect(
               <ScanBatchPreviewer
                 documentType="primaryDocumentFile"
                 title="Add Document"
+                validateSequence={validateDocketEntrySequence}
               />
             </div>
           </div>

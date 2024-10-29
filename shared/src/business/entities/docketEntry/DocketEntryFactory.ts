@@ -3,7 +3,7 @@ import {
   ALL_EVENT_CODES,
   AMENDMENT_EVENT_CODES,
   AMICUS_BRIEF_EVENT_CODE,
-  DOCUMENT_EXTERNAL_CATEGORIES_MAP,
+  EXTERNAL_DOCUMENT_CODES_REQUIRING_OBJECTION,
   MAX_FILE_SIZE_MB,
 } from '../EntityConstants';
 import { DOCKET_ENTRY_VALIDATION_RULE_KEYS } from '@shared/business/entities/EntityValidationConstants';
@@ -97,15 +97,6 @@ export class DocketEntryFactory extends JoiValidationEntity {
   }
 
   getValidationRules() {
-    const eFiledObjectionRequiredEventCodes = [
-      ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Motion'].map(entry => {
-        return entry.eventCode;
-      }),
-      'M116',
-      'M112',
-      'APLD',
-    ];
-
     let schema = joi.object().keys({
       addToCoversheet: DOCKET_ENTRY_VALIDATION_RULE_KEYS.addToCoversheet,
       additionalInfo: DOCKET_ENTRY_VALIDATION_RULE_KEYS.additionalInfo,
@@ -133,12 +124,14 @@ export class DocketEntryFactory extends JoiValidationEntity {
       objections: JoiValidationConstants.STRING.when('isPaper', {
         is: true,
         otherwise: joi.when('eventCode', {
-          is: joi.exist().valid(...eFiledObjectionRequiredEventCodes),
+          is: joi.exist().valid(...EXTERNAL_DOCUMENT_CODES_REQUIRING_OBJECTION),
           otherwise: joi.when('eventCode', {
             is: joi.exist().valid(...AMENDMENT_EVENT_CODES),
             otherwise: joi.optional(),
             then: joi.when('previousDocument.eventCode', {
-              is: joi.exist().valid(...eFiledObjectionRequiredEventCodes),
+              is: joi
+                .exist()
+                .valid(...EXTERNAL_DOCUMENT_CODES_REQUIRING_OBJECTION),
               otherwise: joi.optional(),
               then: joi.required(),
             }),

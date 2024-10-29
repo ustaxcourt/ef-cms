@@ -7,7 +7,9 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCasePropFromStateAction } from '../actions/setCasePropFromStateAction';
 import { setRepresentingFromRepresentingMapActionFactory } from '../actions/setRepresentingFromRepresentingMapActionFactory';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
+import { setValidationErrorsAction } from '@web-client/presenter/actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -19,7 +21,11 @@ export const submitEditPetitionerCounselSequence = [
   setRepresentingFromRepresentingMapActionFactory('form'),
   validateEditPetitionerCounselAction,
   {
-    error: [setValidationAlertErrorsAction],
+    error: [
+      setValidationErrorsAction,
+      setScrollToErrorNotificationAction,
+      setValidationAlertErrorsAction,
+    ],
     success: showProgressSequenceDecorator([
       clearAlertsAction,
       stopShowValidationAction,

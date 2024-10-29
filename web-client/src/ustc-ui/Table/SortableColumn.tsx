@@ -62,27 +62,34 @@ export const SortableColumn = ({
       }}
     >
       <span
-        className={classNames('margin-right-105', {
+        className={classNames('margin-right-1', {
           sortActive: isActive,
         })}
       >
         {title}
       </span>
-      {isLoading && (
-        <FontAwesomeIcon
-          className="fa-spin spinner"
-          icon="sync"
-          size="sm"
-          title="sorting results"
-        />
-      )}
-      {!isLoading &&
-        getFontAwesomeIcon({
-          ascText,
-          descText,
-          direction: currentlySortedOrder,
-          isActiveColumn: isActive,
-        })}
+      <span className="text-no-wrap">
+        {/* We use a non-breaking space to force the icon to wrap with the text, not independently */}
+        &nbsp;
+        {/* We fix the icon width so that switching from double arrow to smaller single arrow icon does not affect line-breaking behavior */}
+        <span className="display-inline-block width-205">
+          {isLoading && (
+            <FontAwesomeIcon
+              className="fa-spin spinner"
+              icon="sync"
+              size="sm"
+              title="sorting results"
+            />
+          )}
+          {!isLoading &&
+            getFontAwesomeIcon({
+              ascText,
+              descText,
+              direction: currentlySortedOrder,
+              isActiveColumn: isActive,
+            })}
+        </span>
+      </span>
     </Button>
   );
 };

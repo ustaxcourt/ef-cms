@@ -1,5 +1,5 @@
 import { PROCEDURE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
-import { attachSamplePdfFile } from '../file/upload-file';
+import { attachFile, attachSamplePdfFile } from '../file/upload-file';
 
 export function externalUserCreatesElectronicCase(
   primaryFilerName: string = 'John',
@@ -245,5 +245,14 @@ export function petitionerAttemptsToUploadCorruptPdf() {
   cy.get('[data-testid="modal-dialog-header"]').should(
     'contain.text',
     'Your Request Was Not Completed',
+  );
+
+  attachFile({
+    filePath: '../../helpers/file/corrupt-pdf.pdf',
+    selector: '[data-testid="stin-file"]',
+  });
+
+  cy.get('[data-testid="file-upload-error-modal"]').contains(
+    'The file is corrupted or in an unsupported PDF format. Ensure that the file is not corrupted and/or is in a supported PDF format and try again.',
   );
 }

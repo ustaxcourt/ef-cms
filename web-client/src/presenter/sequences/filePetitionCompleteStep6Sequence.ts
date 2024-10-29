@@ -10,6 +10,7 @@ import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertError
 import { setAlertSuccessAction } from '@web-client/presenter/actions/setAlertSuccessAction';
 import { setCaseAction } from '@web-client/presenter/actions/setCaseAction';
 import { setProgressForFileUploadAction } from '@web-client/presenter/actions/setProgressForFileUploadAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '@web-client/presenter/actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '@web-client/presenter/actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '@web-client/presenter/actions/setWaitingForResponseAction';
@@ -30,8 +31,8 @@ export const filePetitionCompleteStep6Sequence = debounceSequenceDecorator(
     {
       error: [
         unsetWaitingForResponseAction,
-        setAlertErrorAction,
         setValidationErrorsAction,
+        setScrollToErrorNotificationAction,
         setValidationAlertErrorsAction,
       ],
       success: [

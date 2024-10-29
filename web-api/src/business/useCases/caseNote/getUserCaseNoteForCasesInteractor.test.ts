@@ -1,8 +1,11 @@
+import '@web-api/persistence/postgres/userCaseNotes/mocks.jest';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserCaseNoteForCasesInteractor } from './getUserCaseNoteForCasesInteractor';
+import { getUserCaseNoteForCases as getUserCaseNoteForCasesMock } from '@web-api/persistence/postgres/userCaseNotes/getUserCaseNoteForCases';
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
 
@@ -21,15 +24,15 @@ describe('getUserCaseNoteForCasesInteractor', () => {
     section: 'colvinChambers',
   } as UnknownAuthUser;
 
+  const getUserCaseNoteForCases = getUserCaseNoteForCasesMock as jest.Mock;
+
   beforeEach(() => {
     mockCurrentUser = mockJudge;
     mockNote = MOCK_NOTE;
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockImplementation(() => mockCurrentUser);
-    applicationContext
-      .getPersistenceGateway()
-      .getUserCaseNoteForCases.mockResolvedValue([mockNote]);
+    getUserCaseNoteForCases.mockResolvedValue([new UserCaseNote(mockNote)]);
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(mockJudge);
@@ -52,9 +55,9 @@ describe('getUserCaseNoteForCasesInteractor', () => {
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserCaseNoteForCases.mockResolvedValue([omit(MOCK_NOTE, 'userId')]);
+    getUserCaseNoteForCases.mockResolvedValue([
+      new UserCaseNote([omit(MOCK_NOTE, 'userId')]),
+    ]);
 
     await expect(
       getUserCaseNoteForCasesInteractor(
@@ -100,9 +103,8 @@ describe('getUserCaseNoteForCasesInteractor', () => {
       omit(mockUser, 'section'),
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getUserCaseNoteForCases.mock
-        .calls[0][0].userId,
-    ).toEqual(userIdToExpect);
+    expect(getUserCaseNoteForCases.mock.calls[0][0].userId).toEqual(
+      userIdToExpect,
+    );
   });
 });
