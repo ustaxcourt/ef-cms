@@ -107,6 +107,7 @@ function NonMobilePublicTrialsSessions({
         <div className="grid-row">
           <Button
             link
+            data-testid="trial-sessions-reset-filters-button"
             disabled={!publicTrialSessionsHelper.filtersHaveBeenModified}
             onClick={() => resetPublicTrialSessionDataSequence()}
           >
@@ -177,6 +178,7 @@ function MobilePublicTrialsSessions({
             <PublicTrialSessionsFilters ROOT={ROOT} />
             <Button
               link
+              data-testid="trial-sessions-reset-filters-button"
               disabled={!publicTrialSessionsHelper.filtersHaveBeenModified}
               onClick={() => resetPublicTrialSessionDataSequence()}
             >
