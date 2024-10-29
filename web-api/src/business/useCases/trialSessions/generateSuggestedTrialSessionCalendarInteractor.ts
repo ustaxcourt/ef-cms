@@ -146,12 +146,8 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   // scheduledTrialSessionsByCity could be replaced with caseCountsAndSessionsByCity with a few tweaks
 
-  let scheduledTrialSessionsByCity, sessionCountPerWeek;
-  ({
-    caseCountsAndSessionsByCity,
-    scheduledTrialSessionsByCity,
-    sessionCountPerWeek,
-  } = generateCalendar({
+  let sessionCountPerWeek;
+  ({ caseCountsAndSessionsByCity, sessionCountPerWeek } = generateCalendar({
     calendaringConfig,
     caseCountsAndSessionsByCity,
     constraints,
@@ -161,29 +157,21 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   console.timeEnd('10275: assignSessionsToWeeks time');
 
-  if (Object.keys(scheduledTrialSessionsByCity).length < 1) {
-    return {
-      bufferArray: undefined,
-      message: SUGGESTED_TRIAL_SESSION_MESSAGES.invalid,
-    };
-  }
+  Object.values(caseCountsAndSessionsByCity).forEach(cityObject => {
+    if (cityObject.scheduledSessions.length < 1) {
+      return {
+        bufferArray: undefined,
+        message: SUGGESTED_TRIAL_SESSION_MESSAGES.invalid,
+      };
+    }
+  });
 
-  const sortedScheduledTrialSessionsByCity = Object.keys(
-    scheduledTrialSessionsByCity,
-  )
-    .sort((a, b) => {
-      return a.localeCompare(b);
-    })
-    .reduce((obj, key) => {
-      obj[key] = scheduledTrialSessionsByCity[key];
-      return obj;
-    }, {});
+  sortObjectByKey(caseCountsAndSessionsByCity);
 
   console.time('10275: writeTrialSessionDataToExcel');
   const bufferArray = await writeTrialSessionDataToExcel({
     caseCountsAndSessionsByCity,
     sessionCountPerWeek,
-    sortedScheduledTrialSessionsByCity,
     weeks: weeksToLoop,
   });
   console.timeEnd('10275: writeTrialSessionDataToExcel');
@@ -290,3 +278,20 @@ function getCurrentTermByMonth(currentMonth: string) {
   );
   return term ? term[0] : 'Unknown term';
 }
+
+// TODO 10275: consider moving to helper
+export const sortObjectByKey = obj => {
+  const sortedKeys = Object.keys(obj).sort();
+
+  const tempObj = {};
+
+  for (const key of sortedKeys) {
+    tempObj[key] = obj[key];
+  }
+
+  for (const key in obj) {
+    delete obj[key];
+  }
+
+  Object.assign(obj, tempObj);
+};

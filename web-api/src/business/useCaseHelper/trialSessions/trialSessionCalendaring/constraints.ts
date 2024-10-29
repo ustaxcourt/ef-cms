@@ -1,6 +1,8 @@
 import { CalendarState } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/generateCalendar';
-import { CalendaringConfig } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
-import { ScheduledTrialSession } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
+import {
+  CalendaringConfig,
+  ScheduledTrialSession,
+} from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 
 export type Constraint = ({
   calendaringConfig,
