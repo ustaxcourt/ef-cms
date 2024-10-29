@@ -51,24 +51,24 @@ export const generateCalendar = ({
   const calendarState = setupCalendarState(weeksToLoop);
 
   // check special sessions
-  const specialSessionsByLocation = specialSessions.reduce((acc, session) => {
-    if (!acc[session.trialLocation!]) {
-      acc[session.trialLocation!] = [];
-    }
-    acc[session.trialLocation!].push(session);
-    return acc;
-  }, {});
+  // const specialSessionsByLocation = specialSessions.reduce((acc, session) => {
+  //   if (!acc[session.trialLocation!]) {
+  //     acc[session.trialLocation!] = [];
+  //   }
+  //   acc[session.trialLocation!].push(session);
+  //   return acc;
+  // }, {});
 
-  for (const location in specialSessionsByLocation) {
-    if (
-      specialSessionsByLocation[location].length >
-      calendaringConfig.maxSessionsPerLocation
-    ) {
-      throw new Error(
-        `Special session count exceeds the max sessions per location for ${location}`,
-      );
-    }
-  }
+  // for (const location in specialSessionsByLocation) {
+  //   if (
+  //     specialSessionsByLocation[location].length >
+  //     calendaringConfig.maxSessionsPerLocation
+  //   ) {
+  //     throw new Error(
+  //       `Special session count exceeds the max sessions per location for ${location}`,
+  //     );
+  //   }
+  // }
 
   // TODO 10275: test this (and be sure it works)
   const sortedProspectiveSessionsByCity: TrialSessionsByCity = Object.keys(
@@ -111,26 +111,7 @@ export const generateCalendar = ({
     );
     let trialLocation = session.trialLocation!;
 
-    if (
-      calendarState.sessionCountPerWeek[sessionWeekOf] >=
-      calendaringConfig.maxSessionsPerWeek
-    ) {
-      throw new Error(
-        `Specials sessions for week of ${sessionWeekOf} exceed maximum sessions allowed per week`,
-      );
-    }
-
-    if (
-      calendarState.sessionScheduledPerCityPerWeek[sessionWeekOf].has(
-        trialLocation,
-      )
-    ) {
-      throw new Error(
-        'There must only be one special trial session per location per week.',
-      );
-    }
-
-    if (session.trialLocation === WASHINGTON_DC_STRING) {
+    if (trialLocation === WASHINGTON_DC_STRING) {
       if (
         calendarState.sessionCountPerCity[WASHINGTON_DC_NORTH_STRING] >=
           calendaringConfig.maxSessionsPerLocation ||
@@ -159,6 +140,34 @@ export const generateCalendar = ({
       } else {
         trialLocation = WASHINGTON_DC_NORTH_STRING;
       }
+    }
+
+    if (
+      calendarState.scheduledTrialSessionsByCity[trialLocation].length >
+      calendaringConfig.maxSessionsPerLocation
+    ) {
+      throw new Error(
+        `Special session count exceeds the max sessions per location for ${location}`,
+      );
+    }
+
+    if (
+      calendarState.sessionCountPerWeek[sessionWeekOf] >=
+      calendaringConfig.maxSessionsPerWeek
+    ) {
+      throw new Error(
+        `Specials sessions for week of ${sessionWeekOf} exceed maximum sessions allowed per week`,
+      );
+    }
+
+    if (
+      calendarState.sessionScheduledPerCityPerWeek[sessionWeekOf].has(
+        trialLocation,
+      )
+    ) {
+      throw new Error(
+        'There must only be one special trial session per location per week.',
+      );
     }
 
     addScheduledTrialSession({
