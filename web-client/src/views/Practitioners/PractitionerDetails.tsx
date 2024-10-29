@@ -1,21 +1,15 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const PractitionerDetails = connect(
   {
-    gotoPrintPractitionerCasesSequence:
-      sequences.gotoPrintPractitionerCasesSequence,
     practitionerDetailHelper: state.practitionerDetailHelper,
     showModal: state.modal.showModal,
   },
-  function PractitionerDetails({
-    gotoPrintPractitionerCasesSequence,
-    practitionerDetailHelper,
-  }) {
+  function PractitionerDetails({ practitionerDetailHelper }) {
     return (
       <React.Fragment>
         <div className="display-flex flex-justify-end">
@@ -30,24 +24,10 @@ export const PractitionerDetails = connect(
               Edit
             </Button>
           )}
-          {practitionerDetailHelper.showPrintCaseListLink && (
-            <Button
-              link
-              className="push-right margin-bottom-1"
-              data-testid="print-practitioner-case-list"
-              icon="print"
-              overrideMargin={true}
-              onClick={() => {
-                gotoPrintPractitionerCasesSequence({
-                  userId: practitionerDetailHelper.userId,
-                });
-              }}
-            >
-              Print case list
-            </Button>
-          )}
         </div>
-        <div className="grid-row grid-gap">
+        <div
+          className={`grid-row grid-gap ${practitionerDetailHelper.showEditLink ? '' : 'margin-top-5'}`} // Maintain the spacing even if there is no edit button
+        >
           <div className="tablet:grid-col-4 margin-bottom-4">
             <div className="card height-full margin-bottom-0">
               <div className="content-wrapper">
