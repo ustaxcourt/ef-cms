@@ -18,7 +18,7 @@ interface SpecialTrialSession {
  * @param {object} providers.specialTrialSessions array of special trial session & judge ids
  * @param authorizedUser
  */
-export const getBulkTrialSessionCopyNotesInteractor = (
+export const getBulkTrialSessionCopyNotesInteractor = async (
   applicationContext: ServerApplicationContext,
   { specialTrialSessions }: { specialTrialSessions: SpecialTrialSession[] },
   authorizedUser: UnknownAuthUser,
@@ -27,21 +27,15 @@ export const getBulkTrialSessionCopyNotesInteractor = (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const specialTrialSessionNotes = specialTrialSessions.map(
-    async ({ trialSessionId, userId }) => {
-      return await applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionWorkingCopy({
-          applicationContext,
-          trialSessionId,
-          userId,
-        })
-        .then(trialSessionWorkingCopy => ({
-          sessionNotes: trialSessionWorkingCopy?.sessionNotes || '',
-          trialSessionId,
-        }));
-    },
-  );
+  const keys = specialTrialSessions.map(t => ({
+    pk: `trial-session-working-copy|${t.trialSessionId}`,
+    sk: `user|${t.userId}`,
+  }));
 
-  return Promise.all(specialTrialSessionNotes);
+  return await applicationContext
+    .getPersistenceGateway()
+    .getBulkTrialSessionWorkingCopies({
+      applicationContext,
+      specialTrialSessions: keys,
+    });
 };
