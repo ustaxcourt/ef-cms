@@ -15,6 +15,8 @@ You can prepare an environment for a migration with the following two steps:
 1. Use the [environment switcher](docs/additional-resources/environment-switcher.md) to point to the environment where you're running a migration.
 2. Run `./setup-for-blue-green-migration.sh --force`.
 
+If you run the script above, you do not have to complete any of the manual preparation steps described below.
+
 ## Manual Preparation Steps
 
 The application kicks off a migration automatically if it detects migrations that need to be run in the codebase that haven't yet been run upon that environment. In order to force a migration, perform the following manual steps. You might do this if you were doing a package update that might impact the migration and wanted to test it fully.
