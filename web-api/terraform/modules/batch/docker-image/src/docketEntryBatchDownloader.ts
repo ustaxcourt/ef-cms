@@ -75,7 +75,6 @@ const notificationClient = new ApiGatewayManagementApiClient({
   }),
 });
 
-//TYPE THIS INSTEAD OF ANY
 function streamToBuffer(stream: any) {
   return new Promise((resolve, reject) => {
     const chunks: any[] = [];
