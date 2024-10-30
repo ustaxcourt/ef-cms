@@ -1,6 +1,6 @@
 import { ClientPublicApplicationContext } from '@web-client/applicationContextPublic';
 import { Get } from 'cerebral';
-import { compact } from 'lodash';
+import { compact, some } from 'lodash';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
 export const publicTrialSessionDetailHelper = (
@@ -15,6 +15,7 @@ export const publicTrialSessionDetailHelper = (
     formattedStartDateFull: string;
     sessionStatus: string;
     formattedCityStateZip: string;
+    hasCourthouseInformation: boolean;
   };
 } => {
   const trialSession = get(state.trialSessionDetailsPage.trialSession);
@@ -40,12 +41,20 @@ export const publicTrialSessionDetailHelper = (
     trialSession.postalCode,
   ]).join(' ');
 
+  const hasCourthouseInformation = some([
+    trialSession.courthouseName,
+    trialSession.address1,
+    trialSession.address2,
+    formattedCityStateZip,
+  ]);
+
   const formattedTrialSession = {
     formattedCityStateZip,
     formattedEstimatedEndDate,
     formattedStartDate,
     formattedStartDateFull,
     formattedTerm,
+    hasCourthouseInformation,
     sessionStatus: trialSession.sessionStatus,
     // TODO 10461: remove as needed
     trialLocation: trialSession.trialLocation,
