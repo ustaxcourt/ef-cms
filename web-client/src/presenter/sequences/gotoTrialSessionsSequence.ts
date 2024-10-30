@@ -14,7 +14,7 @@ import { setTrialSessionsFiltersAction } from '@web-client/presenter/actions/Tri
 import { setTrialSessionsPageAction } from '@web-client/presenter/actions/TrialSession/setTrialSessionsPageAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
-import { transformTrialSessionQueryParamsAction } from '@web-client/presenter/actions/TrialSession/transformTrialSessionQueryParamsAction';
+import { trialSessionQueryParamsAction } from '@web-client/presenter/actions/TrialSession/trialSessionQueryParamsAction';
 
 export const gotoTrialSessionsSequence =
   startWebSocketConnectionSequenceDecorator([
@@ -31,7 +31,7 @@ export const gotoTrialSessionsSequence =
         setAllAndCurrentJudgesAction,
       ],
     ]),
-    transformTrialSessionQueryParamsAction,
+    trialSessionQueryParamsAction,
     setTrialSessionsFiltersAction,
     setupCurrentPageAction('TrialSessions'),
   ]) as unknown as (props: ActionProps<Partial<TrialSessionsFilters>>) => void;
