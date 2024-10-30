@@ -98,7 +98,7 @@ export const getRawFeatureFlagValue = async ({
   flag,
 }: {
   flag: string;
-}): Promise<boolean> => {
+}): Promise<boolean | undefined> => {
   const dynamoClient = await getDocumentClient();
   const result = await dynamoClient.get({
     Key: {
