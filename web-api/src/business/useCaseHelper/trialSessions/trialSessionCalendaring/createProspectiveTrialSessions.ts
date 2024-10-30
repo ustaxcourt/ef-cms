@@ -10,7 +10,7 @@ export type ProspectiveSessionsByCity = Record<
 >;
 
 export type ProspectiveTrialSession = {
-  city: string;
+  trialLocation: string;
   sessionType: TrialSessionTypes;
   cityWasNotVisitedInLastTwoTerms: boolean;
   // potentially add
@@ -18,7 +18,7 @@ export type ProspectiveTrialSession = {
 };
 
 export type ScheduledTrialSession = {
-  city: string;
+  trialLocation: string;
   sessionType: TrialSessionTypes;
   weekOf: string;
 };
@@ -78,17 +78,17 @@ export const createProspectiveTrialSessions = ({
 
     scheduleCases({
       caseCountsAndSessionsByCity,
-      city,
       cityWasNotVisitedInLastTwoTerms,
       remainingCaseCounts,
       schedulingConfig: primarySessionConfig,
+      trialLocation: city,
     });
     scheduleCases({
       caseCountsAndSessionsByCity,
-      city,
       cityWasNotVisitedInLastTwoTerms,
       remainingCaseCounts,
       schedulingConfig: secondarySessionConfig,
+      trialLocation: city,
     });
 
     // Handle Hybrid Sessions
@@ -98,9 +98,9 @@ export const createProspectiveTrialSessions = ({
     ) {
       addProspectiveTrialSession({
         caseCountsAndSessionsByCity,
-        city,
         cityWasNotVisitedInLastTwoTerms,
         sessionType: SESSION_TYPES.hybrid,
+        trialLocation: city,
       });
       // Since the min of reg cases is 40, and the min of small cases is 40,
       // and the sum of these two values is below the hybrid case max of 100,
@@ -140,9 +140,9 @@ export const createProspectiveTrialSessions = ({
 
       addProspectiveTrialSession({
         caseCountsAndSessionsByCity,
-        city,
         cityWasNotVisitedInLastTwoTerms,
         sessionType: lowVolumeSessionType,
+        trialLocation: city,
       });
 
       remainingCaseCounts.regular = 0;
@@ -157,17 +157,17 @@ export const createProspectiveTrialSessions = ({
 
 function scheduleCases({
   caseCountsAndSessionsByCity,
-  city,
   cityWasNotVisitedInLastTwoTerms,
   remainingCaseCounts,
   schedulingConfig,
+  trialLocation,
 }: {
   schedulingConfig: {
     min: number;
     max: number;
     sessionType: TrialSessionTypes;
   };
-  city: string;
+  trialLocation: string;
   cityWasNotVisitedInLastTwoTerms: boolean;
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
   remainingCaseCounts: { small: number; regular: number };
@@ -178,9 +178,9 @@ function scheduleCases({
   ) {
     addProspectiveTrialSession({
       caseCountsAndSessionsByCity,
-      city,
       cityWasNotVisitedInLastTwoTerms,
       sessionType: schedulingConfig.sessionType,
+      trialLocation,
     });
 
     if (
@@ -198,18 +198,18 @@ function scheduleCases({
 
 function addProspectiveTrialSession({
   caseCountsAndSessionsByCity,
-  city,
   cityWasNotVisitedInLastTwoTerms,
   sessionType,
+  trialLocation,
 }: {
-  city: string;
   cityWasNotVisitedInLastTwoTerms: boolean;
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
   sessionType: TrialSessionTypes;
+  trialLocation: string;
 }): void {
-  caseCountsAndSessionsByCity[city].prospectiveSessions.push({
-    city,
+  caseCountsAndSessionsByCity[trialLocation].prospectiveSessions.push({
     cityWasNotVisitedInLastTwoTerms,
     sessionType,
+    trialLocation,
   });
 }
