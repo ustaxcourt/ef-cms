@@ -87,7 +87,6 @@ export const TrialSessionInformation = connect(
     TRIAL_SESSION_PROCEEDING_TYPES,
     trialSessionHeaderHelper,
   }) {
-    console.log('TrialSessionInformation');
     return (
       <>
         <div className="grid-container padding-x-0">
