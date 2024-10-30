@@ -43,10 +43,12 @@ export const AppComponentPublic = connect(
     currentPage: state.currentPage,
   },
   function AppComponentPublic({ currentPage }) {
-    const focusMain = e => {
-      e && e.preventDefault();
+    const focusMain = (e?: React.MouseEvent) => {
+      e && e?.preventDefault();
       const header = window.document.querySelector('#main-content h1');
-      if (header) header.focus();
+      if (header instanceof HTMLElement) {
+        header.focus();
+      }
       return;
     };
 
