@@ -1,5 +1,9 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import {
+  EligibleCase,
+  getDataForCalendaring,
+} from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
+import {
   FORMATS,
   deconstructDate,
   formatDateString,
@@ -24,12 +28,12 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 import { generateCalendar } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/generateCalendar';
-import { getDataForCalendaring } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
 import {
   maxSessionsPerLocationConstraint,
   maxSessionsPerWeekConstraint,
   oneSessionPerLocationPerWeekConstraint,
   reservedWeekOfAtLocationConstraint,
+  washingtonDcSpecialConstraint,
 } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/constraints';
 import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
 
@@ -138,6 +142,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   console.time('10275: assignSessionsToWeeks time');
 
   const constraints = [
+    washingtonDcSpecialConstraint, // TODO 10275: write tests to confirm whether or not this washington DC constraint needs to be at the beginning of this array
     maxSessionsPerWeekConstraint,
     maxSessionsPerLocationConstraint,
     oneSessionPerLocationPerWeekConstraint,
@@ -234,7 +239,13 @@ const SESSION_TERMS_FOR_GENERATOR = {
   winter: [1, 2, 3],
 };
 
-export const getCitiesFromLastTwoTerms = ({ sessions, termStartDate }) => {
+export const getCitiesFromLastTwoTerms = ({
+  sessions,
+  termStartDate,
+}: {
+  sessions: RawTrialSession[];
+  termStartDate: string;
+}): string[] => {
   const previousTwoTerms = getPreviousTwoTerms(termStartDate);
   return sessions
     .filter(session => {
@@ -249,7 +260,11 @@ export const getCitiesFromLastTwoTerms = ({ sessions, termStartDate }) => {
     });
 };
 
-const generateSuccessMessage = ({ incorrectSizeRegularCases }) => {
+const generateSuccessMessage = ({
+  incorrectSizeRegularCases,
+}: {
+  incorrectSizeRegularCases: EligibleCase[];
+}): string => {
   let successMessage = SUGGESTED_TRIAL_SESSION_MESSAGES.success;
   if (incorrectSizeRegularCases.length > 0) {
     const docketNumbers: string[] = [];
@@ -271,13 +286,13 @@ const generateSuccessMessage = ({ incorrectSizeRegularCases }) => {
   return successMessage;
 };
 
-function getCurrentTermByMonth(currentMonth: string) {
+const getCurrentTermByMonth = (currentMonth: string): string => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const term = Object.entries(SESSION_TERMS_FOR_GENERATOR).find(([_, months]) =>
     months.includes(parseInt(currentMonth)),
   );
   return term ? term[0] : 'Unknown term';
-}
+};
 
 // TODO 10275: consider moving to helper
 export const sortObjectByKey = obj => {

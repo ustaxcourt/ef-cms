@@ -3,7 +3,10 @@ import {
   ScheduledTrialSession,
 } from './createProspectiveTrialSessions';
 import { CaseCountsAndSessionsByCity } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
-import { Constraint } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/constraints';
+import {
+  Constraint,
+  checkConstraints,
+} from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/constraints';
 import {
   FORMATS,
   createDateAtStartOfWeekEST,
@@ -68,12 +71,13 @@ export const generateCalendar = ({
 
   // special sessions handled ahead of all reg, small
 
-  specialSessions.forEach(session => {
+  specialSessions.forEach(specialSession => {
     const sessionWeekOf = createDateAtStartOfWeekEST(
-      session.startDate,
+      specialSession.startDate,
       FORMATS.YYYYMMDD,
     );
-    let trialLocation = session.trialLocation!;
+
+    let trialLocation = specialSession.trialLocation!;
 
     if (trialLocation === WASHINGTON_DC_STRING) {
       if (
@@ -83,66 +87,35 @@ export const generateCalendar = ({
           WASHINGTON_DC_NORTH_STRING,
         )
       ) {
-        if (
-          calendarState.sessionCountPerCity[WASHINGTON_DC_SOUTH_STRING] >=
-          calendaringConfig.maxSessionsPerLocation
-        ) {
-          throw new Error(
-            `Special sessions in ${WASHINGTON_DC_STRING} exceed the maximum allowed`,
-          );
-        } else if (
-          calendarState.sessionScheduledPerCityPerWeek[sessionWeekOf].has(
-            WASHINGTON_DC_SOUTH_STRING,
-          )
-        ) {
-          throw new Error(
-            'There must be no more than two special trial sessions per week in Washington, DC.',
-          );
-        } else {
-          trialLocation = WASHINGTON_DC_SOUTH_STRING;
-        }
+        trialLocation = WASHINGTON_DC_SOUTH_STRING;
       } else {
         trialLocation = WASHINGTON_DC_NORTH_STRING;
       }
     }
 
-    if (
-      caseCountsAndSessionsByCity[trialLocation].scheduledSessions.length >
-      calendaringConfig.maxSessionsPerLocation
-    ) {
-      throw new Error(
-        `Special session count exceeds the max sessions per location for ${location}`,
-      );
-    }
+    const session = {
+      sessionType: SESSION_TYPES.special,
+      trialLocation,
+      weekOf: sessionWeekOf,
+    };
 
-    if (
-      calendarState.sessionCountPerWeek[sessionWeekOf] >=
-      calendaringConfig.maxSessionsPerWeek
-    ) {
-      throw new Error(
-        `Specials sessions for week of ${sessionWeekOf} exceed maximum sessions allowed per week`,
-      );
-    }
-
-    if (
-      calendarState.sessionScheduledPerCityPerWeek[sessionWeekOf].has(
-        trialLocation,
-      )
-    ) {
-      throw new Error(
-        'There must only be one special trial session per location per week.',
-      );
+    // eslint-disable-next-line no-useless-catch
+    try {
+      checkConstraints({
+        calendarState,
+        calendaringConfig,
+        constraints,
+        session,
+      });
+    } catch (e) {
+      throw e;
     }
 
     addScheduledTrialSession({
       calendarState,
       calendaringConfig,
       caseCountsAndSessionsByCity,
-      session: {
-        city: trialLocation,
-        sessionType: SESSION_TYPES.special,
-        weekOf: sessionWeekOf,
-      },
+      session,
     });
 
     // given the sessionWeekOf, find the next week somehow and add it as a key
@@ -163,26 +136,25 @@ export const generateCalendar = ({
       for (const prospectiveSession of sortedCaseCountsAndProspectiveSessionsByCity[
         city
       ]) {
-        const proposedSession = {
-          city: prospectiveSession.city,
+        const session = {
           sessionType: prospectiveSession.sessionType,
+          trialLocation: prospectiveSession.trialLocation,
           weekOf: weekOfString,
         };
-        // ensure every constraint passes, then schedule
-        const canScheduleSession = constraints.every(constraint =>
-          constraint({
-            calendarState,
-            calendaringConfig,
-            proposedSession,
-          }),
-        );
+
+        const canScheduleSession = checkConstraints({
+          calendarState,
+          calendaringConfig,
+          constraints,
+          session,
+        });
 
         if (canScheduleSession) {
           addScheduledTrialSession({
             calendarState,
             calendaringConfig,
             caseCountsAndSessionsByCity,
-            session: proposedSession,
+            session,
           });
 
           const index =
@@ -215,7 +187,9 @@ const addScheduledTrialSession = ({
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
   calendaringConfig: CalendaringConfig;
 }) => {
-  caseCountsAndSessionsByCity[session.city].scheduledSessions.push(session);
+  caseCountsAndSessionsByCity[session.trialLocation].scheduledSessions.push(
+    session,
+  );
 
   decrementRemainingCaseCounters(
     session,
@@ -224,9 +198,9 @@ const addScheduledTrialSession = ({
   );
 
   calendarState.sessionCountPerWeek[session.weekOf]++;
-  calendarState.sessionCountPerCity[session.city]++;
+  calendarState.sessionCountPerCity[session.trialLocation]++;
   calendarState.sessionScheduledPerCityPerWeek[session.weekOf].add(
-    session.city,
+    session.trialLocation,
   ); // Mark this city as scheduled for the current week
 };
 
@@ -235,23 +209,23 @@ const decrementRemainingCaseCounters = (
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity,
   calendaringConfig: CalendaringConfig,
 ) => {
-  const { city, sessionType } = session;
+  const { sessionType, trialLocation } = session;
   // eslint-disable-next-line spellcheck/spell-checker
   // Decrement by the max count for that session type. If that's less than 0, then we scheduled
   // a session that was more than the min and less than the max, so just set it to 0
   if (sessionType === SESSION_TYPES.regular) {
-    caseCountsAndSessionsByCity[city].remainingRegularCases -=
+    caseCountsAndSessionsByCity[trialLocation].remainingRegularCases -=
       calendaringConfig.regularCaseMaxQuantity;
-    if (caseCountsAndSessionsByCity[city].remainingRegularCases < 0)
-      caseCountsAndSessionsByCity[city].remainingRegularCases = 0;
+    if (caseCountsAndSessionsByCity[trialLocation].remainingRegularCases < 0)
+      caseCountsAndSessionsByCity[trialLocation].remainingRegularCases = 0;
   } else if (sessionType === SESSION_TYPES.small) {
-    caseCountsAndSessionsByCity[city].remainingSmallCases -=
+    caseCountsAndSessionsByCity[trialLocation].remainingSmallCases -=
       calendaringConfig.smallCaseMaxQuantity;
-    if (caseCountsAndSessionsByCity[city].remainingSmallCases < 0)
-      caseCountsAndSessionsByCity[city].remainingSmallCases = 0;
+    if (caseCountsAndSessionsByCity[trialLocation].remainingSmallCases < 0)
+      caseCountsAndSessionsByCity[trialLocation].remainingSmallCases = 0;
   } else if (sessionType === SESSION_TYPES.hybrid) {
-    caseCountsAndSessionsByCity[city].remainingRegularCases = 0;
-    caseCountsAndSessionsByCity[city].remainingSmallCases = 0;
+    caseCountsAndSessionsByCity[trialLocation].remainingRegularCases = 0;
+    caseCountsAndSessionsByCity[trialLocation].remainingSmallCases = 0;
   }
 };
 
