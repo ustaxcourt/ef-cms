@@ -94,10 +94,9 @@ function NonMobilePublicTrialsSessions({
       <section className="usa-section grid-container">
         <div className="grid-row">
           <div className="tablet:grid-col-8 grid-col-12 padding-top-2">
-            <div>
-              Information on this page is current as of{' '}
-              {publicTrialSessionsHelper.fetchedDateString}
-            </div>
+            <FetchedTimeMessage
+              fetchedDateString={publicTrialSessionsHelper.fetchedDateString}
+            ></FetchedTimeMessage>
             <PublicTrialSessionsFilters ROOT={ROOT} />
           </div>
           <div className="tablet:grid-col-4 grid-col-12 padding-top-1">
@@ -159,10 +158,9 @@ function MobilePublicTrialsSessions({
   return (
     <Mobile>
       <section className="usa-section grid-container">
-        <div>
-          Information on this page is current as of{' '}
-          {publicTrialSessionsHelper.fetchedDateString}
-        </div>
+        <FetchedTimeMessage
+          fetchedDateString={publicTrialSessionsHelper.fetchedDateString}
+        ></FetchedTimeMessage>
         <div className="padding-top-3">
           <PublicTrialSessionsRemoteProceedingsCard />
         </div>
@@ -251,6 +249,14 @@ function MobilePublicTrialsSessions({
         </TablePagination>
       </section>
     </Mobile>
+  );
+}
+
+function FetchedTimeMessage({ fetchedDateString }) {
+  return (
+    <>
+      <div>Information on this page is current as of {fetchedDateString}.</div>
+    </>
   );
 }
 
