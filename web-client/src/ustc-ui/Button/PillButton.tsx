@@ -3,12 +3,17 @@ import React from 'react';
 
 interface PillButtonProps {
   text: string;
+  'data-testid'?: string;
   onRemove: () => void;
 }
 
-export const PillButton = ({ onRemove, text }: PillButtonProps) => {
+export const PillButton = ({
+  'data-testid': dataTestId,
+  onRemove,
+  text,
+}: PillButtonProps) => {
   return (
-    <span className="blue-pill">
+    <span className="blue-pill" data-testid={dataTestId}>
       {text}
       <button
         aria-label={`remove ${text} selection`}

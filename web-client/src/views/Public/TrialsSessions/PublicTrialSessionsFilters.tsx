@@ -112,17 +112,13 @@ export const PublicTrialSessionsFilters = connect<
               data-testid="session-type-filter"
             >
               <div className="margin-bottom-1">
-                <label
-                  className="usa-label"
-                  htmlFor="session-type-filter"
-                  id="session-type-filter-label"
-                >
+                <label className="usa-label" htmlFor="session-type-filter">
                   Session type{' '}
                   <span className="optional-light-text">(optional)</span>
                 </label>
                 <SelectSearch
                   aria-labelledby="session-type-filter-label"
-                  data-testid="trial-session-type-filter-search"
+                  data-testid="session-type-filter-select"
                   inputId="session-type-filter"
                   name="sessionType"
                   options={publicTrialSessionsHelper.sessionTypeOptions}
@@ -149,6 +145,7 @@ export const PublicTrialSessionsFilters = connect<
                   },
                 ).map(([sessionTypeKey, sessionTypeLabel]) => (
                   <PillButton
+                    data-testid={`session-${sessionTypeLabel}-pill-button`}
                     key={sessionTypeLabel}
                     text={sessionTypeLabel}
                     onRemove={() => {
@@ -177,7 +174,7 @@ export const PublicTrialSessionsFilters = connect<
                 </label>
                 <SelectSearch
                   aria-labelledby="location-filter-label"
-                  data-testid="trial-session-location-filter-search"
+                  data-testid="location-filter-search"
                   inputId="location-filter"
                   name="location"
                   options={publicTrialSessionsHelper.trialCitiesByState}
@@ -204,6 +201,7 @@ export const PublicTrialSessionsFilters = connect<
                   },
                 ).map(([locationKey, locationLabel]) => (
                   <PillButton
+                    data-testid={`location-${locationLabel}-pill-button`}
                     key={locationLabel}
                     text={locationLabel}
                     onRemove={() => {
@@ -231,7 +229,7 @@ export const PublicTrialSessionsFilters = connect<
                 </label>
                 <SelectSearch
                   aria-labelledby="judges-filter-label"
-                  data-testid="trial-session-judge-filter-search"
+                  data-testid="judge-filter-search"
                   inputId="judges-filter"
                   name="judges"
                   options={publicTrialSessionsHelper.trialSessionJudgeOptions}
@@ -255,6 +253,7 @@ export const PublicTrialSessionsFilters = connect<
                 {Object.entries(judges as { [key: string]: string }).map(
                   ([judgeKey, judgeLabel]) => (
                     <PillButton
+                      data-testid={`judge-${judgeLabel}-pill-button`}
                       key={judgeKey}
                       text={judgeLabel}
                       onRemove={() => {
