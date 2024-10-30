@@ -48,10 +48,11 @@ export const TrialSessionDetail = connect(
     showThirtyDayNoticeModalSequence,
     trialSessionDetailsHelper,
   }) {
-    console.log('TrialSessionDetail');
     return (
       <>
-        <TrialSessionDetailHeader />
+        <TrialSessionDetailHeader
+          formattedTrialSessionDetails={formattedTrialSessionDetails}
+        />
 
         <section className="usa-section grid-container">
           <SuccessNotification />

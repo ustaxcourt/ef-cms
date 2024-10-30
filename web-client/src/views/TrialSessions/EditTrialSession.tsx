@@ -16,6 +16,7 @@ export const EditTrialSession = connect(
       sequences.closeModalAndNavigateBackSequence,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     showModal: state.modal.showModal,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
@@ -24,6 +25,7 @@ export const EditTrialSession = connect(
   function EditTrialSession({
     closeModalAndNavigateBackSequence,
     form,
+    formattedTrialSessionDetails,
     formCancelToggleCancelSequence,
     showModal,
     updateTrialSessionFormDataSequence,
@@ -31,7 +33,9 @@ export const EditTrialSession = connect(
   }) {
     return (
       <>
-        <TrialSessionDetailHeader />
+        <TrialSessionDetailHeader
+          formattedTrialSessionDetails={formattedTrialSessionDetails}
+        />
 
         <section className="usa-section grid-container DocumentDetail">
           <h1 id="edit-trial-session-header">Edit Trial Session</h1>

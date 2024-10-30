@@ -1,10 +1,10 @@
 import { getPublicTrialSessionDetailsAction } from '@web-client/presenter/actions/TrialSession/getPublicTrialSessionDetailsAction';
-import { setTrialSessionDetailsAction } from '@web-client/presenter/actions/TrialSession/setTrialSessionDetailsAction';
+import { setPublicTrialSessionDetailAction } from '@web-client/presenter/actions/Public/setPublicTrialSessionDetailAction';
 import { setupCurrentPageAction } from '@web-client/presenter/actions/setupCurrentPageAction';
 
 export const gotoPublicTrialSessionDetailSequence = [
   setupCurrentPageAction('Interstitial'),
   getPublicTrialSessionDetailsAction,
-  setTrialSessionDetailsAction,
+  setPublicTrialSessionDetailAction,
   setupCurrentPageAction('PublicTrialSessionDetail'),
 ] as unknown as (props: { trialSessionId: string }) => void;

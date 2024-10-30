@@ -3,7 +3,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_SCOPE_TYPES } from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 
-type PublicTrialSessionDetails = {
+export type PublicTrialSessionDetails = {
   openCases: any[];
   isRemote: boolean;
   isSwingSession: boolean;
@@ -14,6 +14,7 @@ type PublicTrialSessionDetails = {
   estimatedEndDate?: string;
   term: string;
   sessionStatus: string;
+  termYear: string;
 };
 
 export const getPublicTrialSessionDetailsInteractor = async (
@@ -58,6 +59,7 @@ export const getPublicTrialSessionDetailsInteractor = async (
     swingSessionId: fullTrialSessionEntity.swingSessionId,
     swingSessionLocation: '',
     term: fullTrialSessionEntity.term,
+    termYear: fullTrialSessionEntity.termYear,
     trialLocation: fullTrialSessionEntity.trialLocation,
   };
 

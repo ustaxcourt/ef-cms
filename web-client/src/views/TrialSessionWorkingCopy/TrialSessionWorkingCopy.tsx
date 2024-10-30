@@ -46,7 +46,9 @@ export const TrialSessionWorkingCopy = connect(
   }) {
     return (
       <>
-        <TrialSessionDetailHeader />
+        <TrialSessionDetailHeader
+          formattedTrialSessionDetails={formattedTrialSessionDetails}
+        />
         <section className="usa-section grid-container">
           <div className="grid-row">
             <div className="grid-col-8">
