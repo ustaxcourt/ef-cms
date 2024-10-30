@@ -108,11 +108,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     termEndDate,
     termStartDate,
   });
-
   console.timeEnd('10275: Filter trial sessions time');
-  // Note (10275): storing trial session data differently would make for a more
-  // efficient process of determining which cities were not visited within the
-  // past two terms.
 
   console.time('10275: Compile cities from last two term time');
   const citiesFromLastTwoTerms = getCitiesFromLastTwoTerms({
@@ -139,7 +135,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     startDate: termStartDate,
   });
 
-  console.time('10275: assignSessionsToWeeks time');
+  console.time('10275: generateCalendar time');
 
   const constraints = [
     washingtonDcSpecialConstraint, // TODO 10275: write tests to confirm whether or not this washington DC constraint needs to be at the beginning of this array
@@ -148,8 +144,6 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     oneSessionPerLocationPerWeekConstraint,
     reservedWeekOfAtLocationConstraint,
   ];
-
-  // scheduledTrialSessionsByCity could be replaced with caseCountsAndSessionsByCity with a few tweaks
 
   let sessionCountPerWeek;
   ({ caseCountsAndSessionsByCity, sessionCountPerWeek } = generateCalendar({
@@ -160,7 +154,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     weeksToLoop,
   }));
 
-  console.timeEnd('10275: assignSessionsToWeeks time');
+  console.timeEnd('10275: generateCalendar time');
 
   Object.values(caseCountsAndSessionsByCity).forEach(cityObject => {
     if (cityObject.scheduledSessions.length < 1) {
@@ -182,11 +176,9 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   console.timeEnd('10275: writeTrialSessionDataToExcel');
   console.timeEnd('10275: Total interactor time');
 
-  const message = generateSuccessMessage({ incorrectSizeRegularCases });
-
   return {
     bufferArray,
-    message,
+    message: generateSuccessMessage({ incorrectSizeRegularCases }),
   };
 };
 
