@@ -48,45 +48,56 @@ export const PublicTrialSessionInformation = connect(
     return (
       <>
         <h1>Session Information</h1>
-        <div className="card padding-205 maxw-mobile-lg">
-          <h3 className="underlined">Details</h3>
-          <div className="display-flex flex-wrap gap-3">
-            <div>
-              <span className="label">Courthouse location</span>
-              <div className="padding-05"></div>
-              <div>
-                <span>{trialSession.courthouseName}</span>
-                <span className="address-line">{trialSession.address1}</span>
-                <span className="address-line">{trialSession.address2}</span>
-                <span className="address-line">
-                  {
-                    publicTrialSessionDetailHelper.formattedTrialSession
-                      .formattedCityStateZip
-                  }
-                </span>
-              </div>
+        {(trialSession.isSwingSession ||
+          publicTrialSessionDetailHelper.formattedTrialSession
+            .hasCourthouseInformation) && (
+          <div className="card padding-205 maxw-mobile-lg">
+            <h3 className="underlined">Details</h3>
+            <div className="display-flex flex-wrap gap-3">
+              {publicTrialSessionDetailHelper.formattedTrialSession
+                .hasCourthouseInformation && (
+                <div>
+                  <span className="label">Courthouse location</span>
+                  <div className="padding-05"></div>
+                  <div>
+                    <span>{trialSession.courthouseName}</span>
+                    <span className="address-line">
+                      {trialSession.address1}
+                    </span>
+                    <span className="address-line">
+                      {trialSession.address2}
+                    </span>
+                    <span className="address-line">
+                      {
+                        publicTrialSessionDetailHelper.formattedTrialSession
+                          .formattedCityStateZip
+                      }
+                    </span>
+                  </div>
+                </div>
+              )}
+              {trialSession.isSwingSession && (
+                <div>
+                  <span className="label">Swing session</span>
+                  <div className="padding-05"></div>
+                  <span className="display-flex gap-1 flex-align-center">
+                    <FontAwesomeIcon
+                      className="fa-icon-blue"
+                      icon="link"
+                      size="sm"
+                      title="swing session"
+                    />
+                    <a
+                      href={`/trial-session-detail/${trialSession.swingSessionId}`}
+                    >
+                      {trialSession.swingSessionLocation}
+                    </a>
+                  </span>
+                </div>
+              )}
             </div>
-            {trialSession.isSwingSession && (
-              <div>
-                <span className="label">Swing session</span>
-                <div className="padding-05"></div>
-                <span className="display-flex gap-1 flex-align-center">
-                  <FontAwesomeIcon
-                    className="fa-icon-blue"
-                    icon="link"
-                    size="sm"
-                    title="swing session"
-                  />
-                  <a
-                    href={`/trial-session-detail/${trialSession.swingSessionId}`}
-                  >
-                    {trialSession.swingSessionLocation}
-                  </a>
-                </span>
-              </div>
-            )}
           </div>
-        </div>
+        )}
       </>
     );
   },
