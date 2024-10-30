@@ -1,12 +1,24 @@
 #!/bin/bash
 
+# Generates a temporary auth token for the given environment's RDS cluster
+
+# Usage
+#   ENV=dev ./scripts/postgres/generate-token.sh --rw
+
+./check-env-variables.sh \
+  "ENV" \
+  "AWS_SECRET_ACCESS_KEY" \
+  "AWS_ACCESS_KEY_ID"
+
+[ "$1" = "--rw" ] && ENDPOINT="Endpoint" || ENDPOINT="ReaderEndpoint"
+
+CLUSTER_DESCRIPTION=$(aws rds describe-db-clusters --db-cluster-identifier "${ENV}-dawson-cluster" | jq -r ".DBClusters[0]")
+
 # Set variables
-REGION="us-east-1"                      # e.g., us-east-1
-DB_HOST="tf-20240909164102989400000001.ctjufrxxikdr.us-east-1.rds.amazonaws.com"  # e.g., mydb.cluster-abcdefghijkl.us-east-1.rds.amazonaws.com
-DB_PORT=5432                             # Change this if using a different port, e.g., 5432 for PostgreSQL
-DB_USER="exp3_dawson"                         # Database user
-DB_NAME="exp3_dawson"                    # Database name
-SSL_CERT_PATH="global-bundle.pem"     # Path to SSL certificate bundle
+REGION="us-east-1"
+DB_HOST=$(jq -r ".${ENDPOINT}" <<< "$CLUSTER_DESCRIPTION")
+DB_PORT=$(jq -r ".Port" <<< "$CLUSTER_DESCRIPTION")
+DB_USER="${ENV}_developers"
 
 # Generate the IAM authentication token
 TOKEN=$(aws rds generate-db-auth-token \
@@ -24,6 +36,3 @@ fi
 # Output the generated token (optional)
 echo "Generated IAM Token:"
 echo "$TOKEN"
-
-# Optional - Connect to the PostgreSQL instance using psql with the generated token
-# psql "host=$DB_HOST port=$DB_PORT user=$DB_USER sslmode=verify-full sslrootcert=$SSL_CERT_PATH dbname=$DB_NAME password=$TOKEN"
