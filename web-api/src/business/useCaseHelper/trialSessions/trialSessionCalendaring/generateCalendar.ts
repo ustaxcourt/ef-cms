@@ -16,14 +16,12 @@ import {
   SESSION_TYPES,
   TRIAL_CITY_STRINGS,
 } from '@shared/business/entities/EntityConstants';
-import {
-  SessionCountByWeek,
-  TrialSessionsByCity,
-} from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
+import { SessionCountByWeek } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import {
   WASHINGTON_DC_NORTH_STRING,
   WASHINGTON_DC_SOUTH_STRING,
   WASHINGTON_DC_STRING,
+  sortObjectByKey,
 } from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
 
 export type CalendarState = {
@@ -51,23 +49,16 @@ export const generateCalendar = ({
 } => {
   const calendarState = setupCalendarState(weeksToLoop);
 
-  // TODO 10275: test this (and be sure it works)
-  const sortedCaseCountsAndProspectiveSessionsByCity: TrialSessionsByCity =
-    Object.keys(caseCountsAndSessionsByCity)
-      .sort((a, b) => {
-        const aNotVisited =
-          caseCountsAndSessionsByCity[a].prospectiveSessions[0]
-            ?.cityWasNotVisitedInLastTwoTerms || false;
-        const bNotVisited =
-          caseCountsAndSessionsByCity[b].prospectiveSessions[0]
-            ?.cityWasNotVisitedInLastTwoTerms || false;
+  sortObjectByKey(caseCountsAndSessionsByCity, (a, b) => {
+    const aNotVisited =
+      caseCountsAndSessionsByCity[a].prospectiveSessions[0]
+        ?.cityWasNotVisitedInLastTwoTerms || false;
+    const bNotVisited =
+      caseCountsAndSessionsByCity[b].prospectiveSessions[0]
+        ?.cityWasNotVisitedInLastTwoTerms || false;
 
-        return aNotVisited === bNotVisited ? 0 : aNotVisited ? -1 : 1;
-      })
-      .reduce((obj, key) => {
-        obj[key] = caseCountsAndSessionsByCity[key].prospectiveSessions;
-        return obj;
-      }, {});
+    return aNotVisited === bNotVisited ? 0 : aNotVisited ? -1 : 1;
+  });
 
   // special sessions handled ahead of all reg, small
   specialSessions.forEach(specialSession => {
@@ -76,9 +67,9 @@ export const generateCalendar = ({
       FORMATS.YYYYMMDD,
     );
 
-    const session = {
+    const session: ScheduledTrialSession = {
       sessionType: SESSION_TYPES.special,
-      trialLocation: getTrialLocation({
+      trialLocation: getTrialLocationForSpecialSession({
         calendarState,
         calendaringConfig,
         originalLocation: specialSession.trialLocation!,
@@ -115,11 +106,10 @@ export const generateCalendar = ({
 
   for (const currentWeek of weeksToLoop) {
     const weekOfString = currentWeek;
-    for (const city in sortedCaseCountsAndProspectiveSessionsByCity) {
-      for (const prospectiveSession of sortedCaseCountsAndProspectiveSessionsByCity[
-        city
-      ]) {
-        const session = {
+    for (const city in caseCountsAndSessionsByCity) {
+      for (const prospectiveSession of caseCountsAndSessionsByCity[city]
+        .prospectiveSessions) {
+        const session: ScheduledTrialSession = {
           sessionType: prospectiveSession.sessionType,
           trialLocation: prospectiveSession.trialLocation,
           weekOf: weekOfString,
@@ -141,12 +131,15 @@ export const generateCalendar = ({
           });
 
           const index =
-            sortedCaseCountsAndProspectiveSessionsByCity[city].indexOf(
+            caseCountsAndSessionsByCity[city].prospectiveSessions.indexOf(
               prospectiveSession,
             );
 
           if (index !== -1) {
-            sortedCaseCountsAndProspectiveSessionsByCity[city].splice(index, 1);
+            caseCountsAndSessionsByCity[city].prospectiveSessions.splice(
+              index,
+              1,
+            );
           }
         }
       }
@@ -169,6 +162,7 @@ const reserveWeekAfterSpecialSession = ({
   session: ScheduledTrialSession;
 }): void => {
   const nextWeekOfString = weeksToLoop[weeksToLoop.indexOf(session.weekOf) + 1];
+
   if (!calendarState.reservedWeekOfLocationIntersection[nextWeekOfString])
     calendarState.reservedWeekOfLocationIntersection[nextWeekOfString] = [];
   calendarState.reservedWeekOfLocationIntersection[nextWeekOfString].push(
@@ -191,6 +185,7 @@ const addScheduledTrialSession = ({
     session,
   );
 
+  // "intentionally" ignores special sessions
   decrementRemainingCaseCounters(
     session,
     caseCountsAndSessionsByCity,
@@ -255,7 +250,7 @@ const setupCalendarState = (weeksToLoop: string[]): CalendarState => {
   return calendarState;
 };
 
-const getTrialLocation = ({
+const getTrialLocationForSpecialSession = ({
   calendaringConfig,
   calendarState,
   originalLocation,

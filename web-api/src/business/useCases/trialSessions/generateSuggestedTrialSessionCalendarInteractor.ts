@@ -165,7 +165,9 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     }
   });
 
-  sortObjectByKey(caseCountsAndSessionsByCity);
+  sortObjectByKey(caseCountsAndSessionsByCity, (a, b) => {
+    return a.localeCompare(b);
+  });
 
   console.time('10275: writeTrialSessionDataToExcel');
   const bufferArray = await writeTrialSessionDataToExcel({
@@ -287,8 +289,8 @@ const getCurrentTermByMonth = (currentMonth: string): string => {
 };
 
 // TODO 10275: consider moving to helper
-export const sortObjectByKey = obj => {
-  const sortedKeys = Object.keys(obj).sort();
+export const sortObjectByKey = (obj, sortFunction) => {
+  const sortedKeys = Object.keys(obj).sort(sortFunction);
 
   const tempObj = {};
 
