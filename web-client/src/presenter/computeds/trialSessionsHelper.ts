@@ -11,6 +11,7 @@ import { RawUser } from '@shared/business/entities/User';
 import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
+  TRIAL_SESSION_SCOPE_TYPES,
   TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
@@ -96,6 +97,15 @@ export const trialSessionsHelper = (
   }
 
   const states = getTrialCitiesGroupedByState();
+  states.push({
+    label: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+    options: [
+      {
+        label: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+        value: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      },
+    ],
+  });
 
   const { endDateErrorMessage, startDateErrorMessage } =
     validateTrialSessionDateRange({
