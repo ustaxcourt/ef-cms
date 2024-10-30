@@ -70,32 +70,20 @@ export const generateCalendar = ({
       }, {});
 
   // special sessions handled ahead of all reg, small
-
   specialSessions.forEach(specialSession => {
     const sessionWeekOf = createDateAtStartOfWeekEST(
       specialSession.startDate,
       FORMATS.YYYYMMDD,
     );
 
-    let trialLocation = specialSession.trialLocation!;
-
-    if (trialLocation === WASHINGTON_DC_STRING) {
-      if (
-        calendarState.sessionCountPerCity[WASHINGTON_DC_NORTH_STRING] >=
-          calendaringConfig.maxSessionsPerLocation ||
-        calendarState.sessionScheduledPerCityPerWeek[sessionWeekOf].has(
-          WASHINGTON_DC_NORTH_STRING,
-        )
-      ) {
-        trialLocation = WASHINGTON_DC_SOUTH_STRING;
-      } else {
-        trialLocation = WASHINGTON_DC_NORTH_STRING;
-      }
-    }
-
     const session = {
       sessionType: SESSION_TYPES.special,
-      trialLocation,
+      trialLocation: getTrialLocation({
+        calendarState,
+        calendaringConfig,
+        originalLocation: specialSession.trialLocation!,
+        sessionWeekOf,
+      }),
       weekOf: sessionWeekOf,
     };
 
@@ -118,16 +106,11 @@ export const generateCalendar = ({
       session,
     });
 
-    // given the sessionWeekOf, find the next week somehow and add it as a key
-    // to reservedWeekOfLocationIntersection, then push the trialLocation value
-    // to the array keyed to the city
-    const nextWeekOfString =
-      weeksToLoop[weeksToLoop.indexOf(sessionWeekOf) + 1];
-    if (!calendarState.reservedWeekOfLocationIntersection[nextWeekOfString])
-      calendarState.reservedWeekOfLocationIntersection[nextWeekOfString] = [];
-    calendarState.reservedWeekOfLocationIntersection[nextWeekOfString].push(
-      trialLocation,
-    );
+    reserveWeekAfterSpecialSession({
+      calendarState,
+      session,
+      weeksToLoop,
+    });
   });
 
   for (const currentWeek of weeksToLoop) {
@@ -174,6 +157,23 @@ export const generateCalendar = ({
     caseCountsAndSessionsByCity,
     sessionCountPerWeek: calendarState.sessionCountPerWeek,
   };
+};
+
+const reserveWeekAfterSpecialSession = ({
+  calendarState,
+  session,
+  weeksToLoop,
+}: {
+  weeksToLoop: string[];
+  calendarState: CalendarState;
+  session: ScheduledTrialSession;
+}): void => {
+  const nextWeekOfString = weeksToLoop[weeksToLoop.indexOf(session.weekOf) + 1];
+  if (!calendarState.reservedWeekOfLocationIntersection[nextWeekOfString])
+    calendarState.reservedWeekOfLocationIntersection[nextWeekOfString] = [];
+  calendarState.reservedWeekOfLocationIntersection[nextWeekOfString].push(
+    session.trialLocation,
+  );
 };
 
 const addScheduledTrialSession = ({
@@ -253,4 +253,34 @@ const setupCalendarState = (weeksToLoop: string[]): CalendarState => {
   });
 
   return calendarState;
+};
+
+const getTrialLocation = ({
+  calendaringConfig,
+  calendarState,
+  originalLocation,
+  sessionWeekOf,
+}: {
+  calendaringConfig: CalendaringConfig;
+  calendarState: CalendarState;
+  sessionWeekOf: string;
+  originalLocation: string;
+}): string => {
+  let resultTrialLocation = originalLocation;
+
+  if (originalLocation === WASHINGTON_DC_STRING) {
+    if (
+      calendarState.sessionCountPerCity[WASHINGTON_DC_NORTH_STRING] >=
+        calendaringConfig.maxSessionsPerLocation ||
+      calendarState.sessionScheduledPerCityPerWeek[sessionWeekOf].has(
+        WASHINGTON_DC_NORTH_STRING,
+      )
+    ) {
+      resultTrialLocation = WASHINGTON_DC_SOUTH_STRING;
+    } else {
+      resultTrialLocation = WASHINGTON_DC_NORTH_STRING;
+    }
+  }
+
+  return resultTrialLocation;
 };
