@@ -276,7 +276,7 @@ function TablePagination({
   if (totalPages <= 1) return children;
   return (
     <>
-      <div className="width-full grid-row margin-bottom-2 padding-top-3 flex-align-center">
+      <div className="width-full grid-row margin-bottom-1 padding-top-1 flex-align-center">
         <div className="grid-col" ref={paginatorTop}>
           <Paginator
             currentPageIndex={pageNumber}
