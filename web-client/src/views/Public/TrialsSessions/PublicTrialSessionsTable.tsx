@@ -21,10 +21,8 @@ export const PublicTrialSessionsTable = connect<
     <>
       <div className="grid-row margin-bottom-2 width-full flex-align-center"></div>
       <div className="width-full text-right">
-        <span className="text-bold">Count:</span>{' '}
-        <span className="text-semibold">
-          {publicTrialSessionsHelper.trialSessionsCount}
-        </span>
+        <span className="text-semibold">Count:</span>{' '}
+        <span>{publicTrialSessionsHelper.trialSessionsCount}</span>
       </div>
       <div className="padding-1"></div>
       <table
