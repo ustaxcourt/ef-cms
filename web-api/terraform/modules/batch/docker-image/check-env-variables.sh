@@ -1,13 +1,21 @@
 #!/bin/bash -e
 
 # shellcheck disable=SC1091
-source "./suppress-output.sh"
 
 {
   [[ -n $ZSH_VERSION && $ZSH_EVAL_CONTEXT =~ :file$ ]] ||
   [[ -n $BASH_VERSION ]] && (return 0 2>/dev/null);
 } && sourced=1 || sourced=0
 [[ $sourced -eq 0 ]] && exit="exit" || exit="return"
+
+function should_suppress_output() {
+  for param in "$@"; do
+    if [[ "$param" == "--quiet" ]] || [[ "$param" == "-q" ]]; then
+      QUIET=1
+    fi
+  done
+  [[ "$QUIET" -eq 1 ]] && echo 1 || echo 0
+}
 
 quiet=$(should_suppress_output "$@")
 
