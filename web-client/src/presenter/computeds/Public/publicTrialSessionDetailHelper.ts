@@ -1,5 +1,6 @@
 import { ClientPublicApplicationContext } from '@web-client/applicationContextPublic';
 import { Get } from 'cerebral';
+import { compact } from 'lodash';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
 export const publicTrialSessionDetailHelper = (
@@ -13,6 +14,7 @@ export const publicTrialSessionDetailHelper = (
     formattedStartDate: string;
     formattedStartDateFull: string;
     sessionStatus: string;
+    formattedCityStateZip: string;
   };
 } => {
   const trialSession = get(state.trialSessionDetailsPage.trialSession);
@@ -32,12 +34,20 @@ export const publicTrialSessionDetailHelper = (
     .getUtilities()
     .formatDateString(trialSession.startDate, 'MONTH_DAY_YEAR');
 
+  const formattedCityStateZip = compact([
+    trialSession.city ? `${trialSession.city},` : undefined,
+    trialSession.state,
+    trialSession.postalCode,
+  ]).join(' ');
+
   const formattedTrialSession = {
+    formattedCityStateZip,
     formattedEstimatedEndDate,
     formattedStartDate,
     formattedStartDateFull,
     formattedTerm,
-    sessionStatus: trialSession.sessionStatus, // TODO 10461: remove as needed
+    sessionStatus: trialSession.sessionStatus,
+    // TODO 10461: remove as needed
     trialLocation: trialSession.trialLocation,
   };
 

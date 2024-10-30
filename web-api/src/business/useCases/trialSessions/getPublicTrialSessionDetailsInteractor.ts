@@ -3,18 +3,27 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_SCOPE_TYPES } from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 
-export type PublicTrialSessionDetails = {
+export type PublicTrialSessionDetails = Pick<
+  TrialSession,
+  | 'swingSessionId'
+  | 'trialLocation'
+  | 'startDate'
+  | 'estimatedEndDate'
+  | 'term'
+  | 'sessionStatus'
+  | 'termYear'
+  | 'sessionType'
+  | 'courthouseName'
+  | 'address1'
+  | 'address2'
+  | 'city'
+  | 'state'
+  | 'postalCode'
+> & {
   openCases: any[];
   isRemote: boolean;
   isSwingSession: boolean;
-  swingSessionId?: string;
-  swingSessionLocation?: string; // The location of the related swing session, if there is one
-  trialLocation?: string; // The location of this particular session
-  startDate: string;
-  estimatedEndDate?: string;
-  term: string;
-  sessionStatus: string;
-  termYear: string;
+  swingSessionLocation?: string;
 };
 
 export const getPublicTrialSessionDetailsInteractor = async (
@@ -48,14 +57,21 @@ export const getPublicTrialSessionDetailsInteractor = async (
     });
 
   const publicTrialSessionData: PublicTrialSessionDetails = {
+    address1: fullTrialSessionEntity.address1,
+    address2: fullTrialSessionEntity.address2,
+    city: fullTrialSessionEntity.city,
+    courthouseName: fullTrialSessionEntity.courthouseName,
     estimatedEndDate: fullTrialSessionEntity.estimatedEndDate,
     isRemote:
       fullTrialSessionEntity.sessionScope ===
       TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
     isSwingSession: !!fullTrialSessionEntity.swingSession,
     openCases: allCases.filter(c => !c.removedFromTrial),
+    postalCode: fullTrialSessionEntity.postalCode,
     sessionStatus: fullTrialSessionEntity.sessionStatus,
+    sessionType: fullTrialSessionEntity.sessionType,
     startDate: fullTrialSessionEntity.startDate,
+    state: fullTrialSessionEntity.state,
     swingSessionId: fullTrialSessionEntity.swingSessionId,
     swingSessionLocation: '',
     term: fullTrialSessionEntity.term,
