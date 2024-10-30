@@ -945,8 +945,7 @@ export const presenterSequences = {
     gotoStartCaseWizardSequence as unknown as Function,
   gotoStatusReportOrderSequence,
   gotoStyleGuideSequence: gotoStyleGuideSequence as unknown as Function,
-  gotoTrialSessionDetailSequence:
-    gotoTrialSessionDetailSequence as unknown as Function,
+  gotoTrialSessionDetailSequence,
   gotoTrialSessionPlanningReportSequence:
     gotoTrialSessionPlanningReportSequence as unknown as Function,
   gotoTrialSessionWorkingCopySequence:
