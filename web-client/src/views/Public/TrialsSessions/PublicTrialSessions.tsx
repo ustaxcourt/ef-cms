@@ -42,7 +42,7 @@ type TrialsSessionsUiParams = {
     pageNumber?: number;
     proceedingType?: string;
   };
-  displayProgressSpinnerSequence?: (props: { timeInSeconds: number }) => void;
+  displayProgressSpinnerSequence: (props: { timeInSeconds: number }) => void;
 };
 
 export const PublicTrialSessions = connect(
@@ -66,6 +66,7 @@ export const PublicTrialSessions = connect(
         <BigHeader text="Scheduled Trial Sessions" />
 
         {NonMobilePublicTrialsSessions({
+          displayProgressSpinnerSequence,
           publicTrialSessionData,
           publicTrialSessionsHelper,
           resetPublicTrialSessionDataSequence,
@@ -84,6 +85,7 @@ export const PublicTrialSessions = connect(
 );
 
 function NonMobilePublicTrialsSessions({
+  displayProgressSpinnerSequence,
   publicTrialSessionData,
   publicTrialSessionsHelper,
   resetPublicTrialSessionDataSequence,
@@ -108,7 +110,10 @@ function NonMobilePublicTrialsSessions({
             link
             data-testid="trial-sessions-reset-filters-button"
             disabled={!publicTrialSessionsHelper.filtersHaveBeenModified}
-            onClick={() => resetPublicTrialSessionDataSequence()}
+            onClick={() => {
+              resetPublicTrialSessionDataSequence();
+              displayProgressSpinnerSequence({ timeInSeconds: 0.25 });
+            }}
           >
             Reset Filters
           </Button>
@@ -178,7 +183,10 @@ function MobilePublicTrialsSessions({
               link
               data-testid="trial-sessions-reset-filters-button"
               disabled={!publicTrialSessionsHelper.filtersHaveBeenModified}
-              onClick={() => resetPublicTrialSessionDataSequence()}
+              onClick={() => {
+                resetPublicTrialSessionDataSequence();
+                displayProgressSpinnerSequence({ timeInSeconds: 0.25 });
+              }}
             >
               Reset Filters
             </Button>
