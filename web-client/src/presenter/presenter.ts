@@ -348,6 +348,7 @@ import { removeSignatureSequence } from './sequences/removeSignatureSequence';
 import { removeSupportingDocumentSequence } from './sequences/removeSupportingDocumentSequence';
 import { replyToMessageSequence } from './sequences/replyToMessageSequence';
 import { rescanBatchSequence } from './sequences/rescanBatchSequence';
+import { resendVerifyPendingUserEmailSequence } from '@web-client/presenter/sequences/resendVerifyPendingUserEmailSequence';
 import { resetCaseMenuSequence } from './sequences/resetCaseMenuSequence';
 import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordionsSequence';
 import { resetIdleTimerSequence } from './sequences/resetIdleTimerSequence';
@@ -404,6 +405,8 @@ import { setPDFStampDataSequence } from './sequences/setPDFStampDataSequence';
 import { setPdfPreviewUrlSequence } from './sequences/setPdfPreviewUrlSequence';
 import { setPendingReportSelectedJudgeSequence } from './sequences/Pending/setPendingReportSelectedJudgeSequence';
 import { setPetitionTypeSequence } from '@web-client/presenter/sequences/setPetitionTypeSequence';
+import { setPractitionerClosedCasesPageSequence } from '@web-client/presenter/sequences/setPractitionerClosedCasesPageSequence';
+import { setPractitionerOpenCasesPageSequence } from '@web-client/presenter/sequences/setPractitionerOpenCasesPageSequence';
 import { setSelectedAddressOnFormSequence } from './sequences/setSelectedAddressOnFormSequence';
 import { setSelectedBatchIndexSequence } from './sequences/setSelectedBatchIndexSequence';
 import { setSelectedDocumentsForDownloadSequence } from './sequences/setSelectedDocumentsForDownloadSequence';
@@ -1177,6 +1180,7 @@ export const presenterSequences = {
     removeSupportingDocumentSequence as unknown as Function,
   replyToMessageSequence: replyToMessageSequence as unknown as Function,
   rescanBatchSequence: rescanBatchSequence as unknown as Function,
+  resendVerifyPendingUserEmailSequence,
   resetCaseMenuSequence: resetCaseMenuSequence as unknown as Function,
   resetHeaderAccordionsSequence:
     resetHeaderAccordionsSequence as unknown as Function,
@@ -1259,6 +1263,8 @@ export const presenterSequences = {
   setPendingReportSelectedJudgeSequence:
     setPendingReportSelectedJudgeSequence as unknown as Function,
   setPetitionTypeSequence,
+  setPractitionerClosedCasesPageSequence,
+  setPractitionerOpenCasesPageSequence,
   setSelectedAddressOnFormSequence:
     setSelectedAddressOnFormSequence as unknown as Function,
   setSelectedBatchIndexSequence:
