@@ -265,6 +265,7 @@ function TablePagination({
   updateFormValueSequence,
 }) {
   const paginatorTop = useRef(null);
+  if (totalPages <= 1) return children;
   return (
     <>
       <div className="width-full grid-row margin-bottom-2 padding-top-3 flex-align-center">
