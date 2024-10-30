@@ -254,9 +254,7 @@ function MobilePublicTrialsSessions({
 
 function FetchedTimeMessage({ fetchedDateString }) {
   return (
-    <>
-      <div>Information on this page is current as of {fetchedDateString}.</div>
-    </>
+    <div>Information on this page is current as of {fetchedDateString}.</div>
   );
 }
 
