@@ -108,7 +108,7 @@ export const PublicTrialSessionsFilters = connect<
         <div className="tablet:grid-col grid-col-12">
           <div className="grid-row">
             <div
-              className="tablet:grid-col-4 grid-col-12 padding-right-2"
+              className="tablet:grid-col-4 grid-col-12 tablet:padding-right-2"
               data-testid="session-type-filter"
             >
               <div className="margin-bottom-1">
@@ -160,7 +160,7 @@ export const PublicTrialSessionsFilters = connect<
               </NonMobile>
             </div>
             <div
-              className="tablet:grid-col-4 grid-col-12 padding-right-2"
+              className="tablet:grid-col-4 grid-col-12 tablet:padding-right-2"
               data-testid="location-filter"
             >
               <div className="margin-bottom-1">
@@ -216,7 +216,7 @@ export const PublicTrialSessionsFilters = connect<
               </NonMobile>
             </div>
             <div
-              className="tablet:grid-col-4 grid-col-12 padding-right-2"
+              className="tablet:grid-col-4 grid-col-12 tablet:padding-right-2"
               data-testid="judge-filter"
             >
               <div className="margin-bottom-1">
