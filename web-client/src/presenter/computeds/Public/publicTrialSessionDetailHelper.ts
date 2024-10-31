@@ -18,6 +18,7 @@ type TrialSessionPublicCase = {
   isLeadCase: boolean;
   consolidatedIconTooltipText: string;
   caseTitle: string;
+  docketNumber: string;
   docketNumberWithSuffix?: string;
 };
 
@@ -161,6 +162,7 @@ const formatPublicCase = (
   return {
     caseTitle,
     consolidatedIconTooltipText,
+    docketNumber: calendaredCase.docketNumber,
     docketNumberWithSuffix: calendaredCase.docketNumberWithSuffix,
     inConsolidatedGroup,
     irsPractitioners,
