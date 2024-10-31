@@ -3,13 +3,9 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { SpecialTrialSession } from '@shared/business/entities/trialSessions/SpeciailTrialSessions';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-
-interface SpecialTrialSession {
-  userId: string;
-  trialSessionId: string;
-}
 
 export const getBulkTrialSessionCopyNotesInteractor = async (
   applicationContext: ServerApplicationContext,
