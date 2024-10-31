@@ -1,4 +1,6 @@
-#!/bin/bash -e
+#!/bin/zsh
+
+[[ "$#" -gt 2 ]] && echo "Unexpected parameter" && exit 1
 
 for param in "$@"; do
   if [[ "$param" == "--rw" ]]; then
@@ -9,18 +11,15 @@ for param in "$@"; do
 done
 
 [[ -z "$env" ]] && [[ -n "$ENV" ]] && env="$ENV"
-[[ -z "$env" ]] && exit 1
+[[ -z "$env" ]] && echo "Missing environment parameter" && exit 1
 
 ROOT_DIR="$(readlink -f "$(dirname "$(readlink -f "$0")")/../..")"
-pushd "$ROOT_DIR"
+cd "$ROOT_DIR" || { echo "Unable to switch to the ef-cms directory"; exit 1; }
 
 # shellcheck disable=SC1091
-source "./scripts/env/set-env.zsh" --quiet "$env"
-# shellcheck disable=SC1091
-source "./scripts/postgres/generate-token.sh" --quiet "$RW"
+source "./scripts/env/set-env.zsh" "$env" --quiet
+source "./scripts/postgres/generate-token.sh" "$RW" --quiet
 
-popd
-
-[[ -z "$DB_TOKEN" ]] && exit 1
+[[ -z "$DB_TOKEN" ]] && echo "Unable to generate IAM token" && exit 1
 
 echo "$DB_TOKEN"
