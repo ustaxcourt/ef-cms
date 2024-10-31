@@ -228,7 +228,11 @@ export const ContactPrimary = connect(
                 contactType="contactPrimary"
                 onBlur={onBlur}
               />
-              <EConsent bind={bind} contactType="contactPrimary" />
+              <EConsent
+                bind={bind}
+                contactType="contactPrimary"
+                onBlur={onBlur}
+              />
             </>
           )}
 
