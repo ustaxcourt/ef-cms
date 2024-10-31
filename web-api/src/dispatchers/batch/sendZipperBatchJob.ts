@@ -18,7 +18,6 @@ export const sendZipperBatchJob = async (
   ).filter(connection => {
     return connection.clientConnectionId === clientConnectionId;
   });
-  //check if connection was fetched or handle not found
   const { connectionId } = currentConnection;
 
   const { currentColor, efcmsDomain, region, stage } =

@@ -1,4 +1,8 @@
 import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
+import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { NotFoundError } from '../../../errors/errors';
 import { ProgressData } from '@web-api/persistence/s3/zipDocuments';
@@ -8,7 +12,6 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { generateValidDocketEntryFilename } from '@web-api/business/useCases/trialSessions/batchDownloadTrialSessionInteractor';
 
 export type DownloadDocketEntryRequestType = {
@@ -126,11 +129,6 @@ const batchDownloadDocketEntriesHelper = async (
     });
   }
 
-  //add integration test in CI CD
-  //test script
-  //queue job
-  //wait until download link is sent through web socket
-
   const featureFlags = await applicationContext
     .getUseCases()
     .getAllFeatureFlagsInteractor(applicationContext);
@@ -162,21 +160,11 @@ const batchDownloadDocketEntriesHelper = async (
         authorizedUser.userId,
       );
 
-    //TEST: Provide fake progress bar to trick user (AWS BATCH takes around 50 sec to boot up VM)
-    const FAKE_NUMBER = 45;
-    for (let index = 0; index < FAKE_NUMBER; index++) {
-      await applicationContext.getNotificationGateway().sendNotificationToUser({
-        applicationContext,
-        clientConnectionId,
-        message: {
-          action: 'aws_batch_download_progress',
-          filesCompleted: index,
-          totalFiles: FAKE_NUMBER,
-        },
-        userId: authorizedUser.userId,
-      });
-      await new Promise(resolve => setTimeout(() => resolve(null), 1000));
-    }
+    await displayFakeProgressBarUntilBatchBootsUp(
+      applicationContext,
+      clientConnectionId,
+      authorizedUser,
+    );
 
     return;
   }
@@ -231,3 +219,24 @@ const batchDownloadDocketEntriesHelper = async (
     userId: authorizedUser.userId,
   });
 };
+
+async function displayFakeProgressBarUntilBatchBootsUp(
+  applicationContext: ServerApplicationContext,
+  clientConnectionId: string,
+  authorizedUser: AuthUser,
+) {
+  const FAKE_NUMBER = 45;
+  for (let index = 0; index < FAKE_NUMBER; index++) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'aws_batch_download_progress',
+        filesCompleted: index,
+        totalFiles: FAKE_NUMBER,
+      },
+      userId: authorizedUser.userId,
+    });
+    await new Promise(resolve => setTimeout(() => resolve(null), 1000));
+  }
+}

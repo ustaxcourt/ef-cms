@@ -75,7 +75,6 @@ const notificationClient = new ApiGatewayManagementApiClient({
   }),
 });
 
-//TYPE THIS INSTEAD OF ANY
 function streamToBuffer(stream: any) {
   return new Promise((resolve, reject) => {
     const chunks: any[] = [];
@@ -201,7 +200,7 @@ export async function zipDocuments({
         totalFiles: documents.length,
       }),
     });
-    await wsClient.send(WS_MESSAGE).catch(console.error);
+    await wsClient.send(WS_MESSAGE);
   }
 
   zip.end();
@@ -239,7 +238,10 @@ export async function app({
     Key: UNIQUE_ZIP_NAME,
   });
 
-  const url = await getSignedUrl(zipStorageClient, command, { expiresIn: 120 });
+  const EXPIRATION_TIME_IN_MINUTES = 10 * 60;
+  const url = await getSignedUrl(zipStorageClient, command, {
+    expiresIn: EXPIRATION_TIME_IN_MINUTES,
+  });
 
   console.log('Sending link to user');
   const WS_MESSAGE = new PostToConnectionCommand({
@@ -249,7 +251,7 @@ export async function app({
       url,
     }),
   });
-  await wsClient.send(WS_MESSAGE).catch(console.error);
+  await wsClient.send(WS_MESSAGE);
 
   console.log('Zip and upload complete, link sent to client.');
 }
