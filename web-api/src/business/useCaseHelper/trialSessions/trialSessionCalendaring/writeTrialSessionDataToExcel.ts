@@ -7,6 +7,8 @@ import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { SessionCountByWeek } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import ExcelJS from 'exceljs';
 
+type ColumnObject = { header: string; key: string };
+
 export const writeTrialSessionDataToExcel = async ({
   caseCountsAndSessionsByCity,
   sessionCountPerWeek,
@@ -22,114 +24,22 @@ export const writeTrialSessionDataToExcel = async ({
 
   const rowsByCity = getRowsByCity({ caseCountsAndSessionsByCity, weeks });
 
-  let columns: any[] = [
-    {
-      header: 'City',
-      key: 'city',
-    },
-  ];
-
-  for (const week of weeks) {
-    columns.push({
-      header: formatDateString(week, FORMATS.MD),
-      key: week,
-    });
-  }
-
-  columns.push({
-    header: 'Small Cases',
-    key: 'initialSmallCaseCount',
-  });
-
-  columns.push({
-    header: 'Regular Cases',
-    key: 'initialRegularCaseCount',
-  });
-
-  columns.push({
-    header: 'Small Cases Remaining',
-    key: 'remainingSmallCaseCount',
-  });
-
-  columns.push({
-    header: 'Regular Cases Remaining',
-    key: 'remainingRegularCaseCount',
-  });
-
-  worksheet.columns = columns;
+  worksheet.columns = getColumns({ weeks });
 
   for (const cityStateString in rowsByCity) {
-    let city;
-    if (!cityStateString.toLowerCase().startsWith('portland')) {
-      city = cityStateString.split(',')[0];
-    } else {
-      city = cityStateString;
-    }
-
-    const values = {
-      city,
-      ...rowsByCity[cityStateString],
-      initialRegularCaseCount:
-        caseCountsAndSessionsByCity[cityStateString].initialRegularCases,
-      initialSmallCaseCount:
-        caseCountsAndSessionsByCity[cityStateString].initialSmallCases,
-      remainingRegularCaseCount:
-        caseCountsAndSessionsByCity[cityStateString].remainingRegularCases,
-      remainingSmallCaseCount:
-        caseCountsAndSessionsByCity[cityStateString].remainingSmallCases,
-    };
-
-    worksheet.addRow(values);
+    const populatedRow = populateRow({
+      caseCountsAndSessionsByCity,
+      cityStateString,
+      row: rowsByCity[cityStateString],
+    });
+    worksheet.addRow(populatedRow);
   }
 
   worksheet.eachRow(row => {
     row.eachCell({ includeEmpty: true }, cell => {
-      cell.border = {
-        bottom: { style: 'thin' },
-        left: { style: 'thin' },
-        right: { style: 'thin' },
-        top: { style: 'thin' },
-      };
-
-      switch (cell.value) {
-        case SESSION_TYPES.hybrid:
-          cell.fill = {
-            fgColor: { argb: 'ffFDB8AE' },
-            pattern: 'solid',
-            type: 'pattern',
-          };
-          break;
-        case SESSION_TYPES.small:
-          cell.fill = {
-            fgColor: { argb: 'ff97D4EA' },
-            pattern: 'solid',
-            type: 'pattern',
-          };
-          break;
-        case SESSION_TYPES.regular:
-          cell.fill = {
-            fgColor: { argb: 'ffb4d0b9' },
-            pattern: 'solid',
-            type: 'pattern',
-          };
-          break;
-        case SESSION_TYPES.special:
-          cell.fill = {
-            fgColor: { argb: 'ffD0C3E9' },
-            pattern: 'solid',
-            type: 'pattern',
-          };
-          break;
-        default:
-          if (cell.value && typeof cell.value === 'string') {
-            cell.fill = {
-              fgColor: { argb: 'ff989ca3' },
-              pattern: 'solid',
-              type: 'pattern',
-            };
-          }
-          break;
-      }
+      const { border, fill } = getSessionCellStyling(cell.value);
+      cell.border = border;
+      cell.fill = fill;
     });
   });
 
@@ -184,7 +94,7 @@ const getRowsByCity = ({
 }: {
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
   weeks: string[];
-}): {} => {
+}): Record<string, object> => {
   let rowsByCity;
   let allWeekOfSlots = weeks.reduce((acc, weekOfString) => {
     acc[weekOfString] = '';
@@ -203,4 +113,123 @@ const getRowsByCity = ({
     rowsByCity[city] = cityRow;
   }
   return rowsByCity;
+};
+
+const getColumns = ({ weeks }: { weeks: string[] }): ColumnObject[] => {
+  let columns: ColumnObject[] = [
+    {
+      header: 'City',
+      key: 'city',
+    },
+  ];
+
+  for (const week of weeks) {
+    columns.push({
+      header: formatDateString(week, FORMATS.MD),
+      key: week,
+    });
+  }
+
+  columns.push({
+    header: 'Small Cases',
+    key: 'initialSmallCaseCount',
+  });
+
+  columns.push({
+    header: 'Regular Cases',
+    key: 'initialRegularCaseCount',
+  });
+
+  columns.push({
+    header: 'Small Cases Remaining',
+    key: 'remainingSmallCaseCount',
+  });
+
+  columns.push({
+    header: 'Regular Cases Remaining',
+    key: 'remainingRegularCaseCount',
+  });
+  return columns;
+};
+
+const populateRow = ({
+  caseCountsAndSessionsByCity,
+  cityStateString,
+  row,
+}: {
+  caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
+  cityStateString: string;
+  row: object;
+}): {} => {
+  let city;
+  if (!cityStateString.toLowerCase().startsWith('portland')) {
+    city = cityStateString.split(',')[0];
+  } else {
+    city = cityStateString;
+  }
+
+  return {
+    city,
+    ...row,
+    initialRegularCaseCount:
+      caseCountsAndSessionsByCity[cityStateString].initialRegularCases,
+    initialSmallCaseCount:
+      caseCountsAndSessionsByCity[cityStateString].initialSmallCases,
+    remainingRegularCaseCount:
+      caseCountsAndSessionsByCity[cityStateString].remainingRegularCases,
+    remainingSmallCaseCount:
+      caseCountsAndSessionsByCity[cityStateString].remainingSmallCases,
+  };
+};
+
+const getSessionCellStyling = (
+  cellValue,
+): { border: object; fill: ExcelJS.Fill } => {
+  const border = {
+    bottom: { style: 'thin' },
+    left: { style: 'thin' },
+    right: { style: 'thin' },
+    top: { style: 'thin' },
+  };
+  let fill;
+  switch (cellValue) {
+    case SESSION_TYPES.hybrid:
+      fill = {
+        fgColor: { argb: 'ffFDB8AE' },
+        pattern: 'solid',
+        type: 'pattern',
+      };
+      break;
+    case SESSION_TYPES.small:
+      fill = {
+        fgColor: { argb: 'ff97D4EA' },
+        pattern: 'solid',
+        type: 'pattern',
+      };
+      break;
+    case SESSION_TYPES.regular:
+      fill = {
+        fgColor: { argb: 'ffb4d0b9' },
+        pattern: 'solid',
+        type: 'pattern',
+      };
+      break;
+    case SESSION_TYPES.special:
+      fill = {
+        fgColor: { argb: 'ffD0C3E9' },
+        pattern: 'solid',
+        type: 'pattern',
+      };
+      break;
+    default:
+      if (cellValue && typeof cellValue === 'string') {
+        fill = {
+          fgColor: { argb: 'ff989ca3' },
+          pattern: 'solid',
+          type: 'pattern',
+        };
+      }
+      break;
+  }
+  return { border, fill };
 };
