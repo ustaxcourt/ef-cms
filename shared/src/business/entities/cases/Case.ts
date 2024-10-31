@@ -2103,7 +2103,7 @@ export const caseHasServedDocketEntries = rawCase => {
 };
 
 export const isInConsolidatedGroup = (caseInfo: {
-  leadDocketNumber: string;
+  leadDocketNumber?: string;
 }) => {
   return !!caseInfo.leadDocketNumber;
 };

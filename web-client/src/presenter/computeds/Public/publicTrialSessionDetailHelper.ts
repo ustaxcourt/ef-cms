@@ -1,3 +1,4 @@
+import { CalendaredCase } from '@shared/business/entities/cases/CalendaredCase';
 import {
   Case,
   isInConsolidatedGroup,
@@ -9,76 +10,15 @@ import { Get } from 'cerebral';
 import { compact, some } from 'lodash';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
-// 10461 TODO: copied almost verbatim from getFormattedCaseDetail, should be exported
-// but conflicts with a different export of the same name in partiesInformationHelper
-const formatCounsel = ({ caseDetail, counsel }) => {
-  let formattedName = counsel.name;
-
-  if (counsel.barNumber) {
-    formattedName += ` (${counsel.barNumber})`;
-  }
-  counsel.formattedName = formattedName;
-
-  if (counsel.representing) {
-    counsel.representingFormatted = [];
-
-    caseDetail.petitioners.forEach(p => {
-      if (counsel.representing.includes(p.contactId)) {
-        counsel.representingFormatted.push({
-          name: p.name,
-          secondaryName: p.secondaryName,
-          title: p.title,
-        });
-      }
-    });
-  }
-
-  return counsel;
-};
-
-// 10461 TODO: can we extend getFormattedCaseDetail
-const formatPublicCase = (publicCase: any) => {
-  /*
-    consolidatedIconToolTipText X
-    inConsolidatedGroup X
-    isLeadCase X
-    shouldIndent?!!
-    docketNumber X
-    respondent.name
-    privatePractitioners .name
-    irsPractitioners .name
-    caseTitle X
-  */
-  publicCase.isLeadCase = isLeadCase(publicCase);
-  publicCase.inConsolidatedGroup = isInConsolidatedGroup(publicCase);
-
-  // 10461 TODO: copied almost verbatim from getFormattedCaseDetail, should be extracted into something more reusable
-  let consolidatedIconTooltipText;
-
-  if (publicCase.inConsolidatedGroup) {
-    if (publicCase.isLeadCase) {
-      consolidatedIconTooltipText = 'Lead case';
-    } else {
-      consolidatedIconTooltipText = 'Consolidated case';
-    }
-  }
-
-  publicCase.consolidatedIconTooltipText = consolidatedIconTooltipText;
-  publicCase.caseTitle = Case.getCaseTitle(publicCase.caseCaption);
-  if (publicCase.irsPractitioners) {
-    publicCase.irsPractitioners = publicCase.irsPractitioners.map(counsel => {
-      return formatCounsel({ caseDetail: publicCase, counsel });
-    });
-  }
-
-  if (publicCase.privatePractitioners) {
-    publicCase.privatePractitioners = publicCase.privatePractitioners.map(
-      counsel => {
-        return formatCounsel({ caseDetail: publicCase, counsel });
-      },
-    );
-  }
-  return publicCase;
+type TrialSessionPublicCase = {
+  isSealed: boolean; // TODO
+  privatePractitioners: any[];
+  irsPractitioners: any[];
+  inConsolidatedGroup: boolean;
+  isLeadCase: boolean;
+  consolidatedIconTooltipText: string;
+  caseTitle: string;
+  docketNumberWithSuffix?: string;
 };
 
 export const publicTrialSessionDetailHelper = (
@@ -128,9 +68,11 @@ export const publicTrialSessionDetailHelper = (
     formattedCityStateZip,
   ]);
 
+  console.log(trialSession.calendaredCases);
+
   // 10461 TODO: Are they already sorted?
   const formattedCases = Case.sortByDocketNumber(
-    trialSession.openCases.map(c => formatPublicCase(c)),
+    trialSession.calendaredCases.map(c => formatPublicCase(c)),
   );
 
   console.log('formattedCases', formattedCases);
@@ -145,12 +87,85 @@ export const publicTrialSessionDetailHelper = (
     hasCourthouseInformation,
 
     sessionStatus: trialSession.sessionStatus,
-    // TODO 10461: remove as needed
+    // 10461 TODO: remove as needed
     trialLocation: trialSession.trialLocation,
   };
 
   return {
     formattedNow: formatNow(FORMATS.CURRENT_AS_OF),
     formattedTrialSession,
+  };
+};
+
+// 10461 TODO: copied almost verbatim from getFormattedCaseDetail, should be exported
+// but conflicts with a different export of the same name in partiesInformationHelper
+const formatCounsel = ({ caseDetail, counsel }) => {
+  let formattedName = counsel.name;
+
+  if (counsel.barNumber) {
+    formattedName += ` (${counsel.barNumber})`;
+  }
+  counsel.formattedName = formattedName;
+
+  if (counsel.representing) {
+    counsel.representingFormatted = [];
+
+    caseDetail.petitioners?.forEach(p => {
+      if (counsel.representing.includes(p.contactId)) {
+        counsel.representingFormatted.push({
+          name: p.name,
+          secondaryName: p.secondaryName,
+          title: p.title,
+        });
+      }
+    });
+  }
+
+  return counsel;
+};
+
+// 10461 TODO: can we extend getFormattedCaseDetail
+const formatPublicCase = (
+  calendaredCase: ExcludeMethods<CalendaredCase>,
+): TrialSessionPublicCase => {
+  const { isSealed } = calendaredCase;
+  const inConsolidatedGroup = isInConsolidatedGroup(calendaredCase);
+  const isTheLeadCase = isLeadCase(calendaredCase);
+  const caseTitle = Case.getCaseTitle(calendaredCase.caseCaption);
+  let consolidatedIconTooltipText;
+
+  if (inConsolidatedGroup) {
+    if (isTheLeadCase) {
+      consolidatedIconTooltipText = 'Lead case in a consolidated group';
+    } else {
+      consolidatedIconTooltipText = 'Member case in a consolidated group';
+    }
+  }
+
+  let irsPractitioners;
+
+  if (calendaredCase.irsPractitioners) {
+    irsPractitioners = calendaredCase.irsPractitioners.map(counsel => {
+      return formatCounsel({ caseDetail: calendaredCase, counsel });
+    });
+  }
+
+  let privatePractitioners;
+
+  if (calendaredCase.privatePractitioners) {
+    privatePractitioners = calendaredCase.privatePractitioners.map(counsel => {
+      return formatCounsel({ caseDetail: calendaredCase, counsel });
+    });
+  }
+
+  return {
+    caseTitle,
+    consolidatedIconTooltipText,
+    docketNumberWithSuffix: calendaredCase.docketNumberWithSuffix,
+    inConsolidatedGroup,
+    irsPractitioners,
+    isLeadCase: isTheLeadCase,
+    isSealed,
+    privatePractitioners,
   };
 };

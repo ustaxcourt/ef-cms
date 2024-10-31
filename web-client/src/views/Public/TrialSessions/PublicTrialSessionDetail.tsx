@@ -3,6 +3,7 @@ import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
 import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { SuccessNotification } from '@web-client/views/SuccessNotification';
 import { TrialSessionDetailHeader } from '@web-client/views/TrialSessionDetail/TrialSessionDetailHeader';
@@ -161,23 +162,38 @@ function NonMobileOpenCases({ openCases }) {
           </tr>
         </thead>
         {openCases?.map(item => (
-          <tbody key={item.docketNumber}>
+          <tbody key={item.docketNumberWithSuffix}>
             <tr className="eligible-cases-row">
               <td>
-                <span
-                  className={classNames({
-                    'margin-left-2':
-                      item.inConsolidatedGroup && !item.isLeadCase,
-                  })}
-                >
-                  <ConsolidatedCaseIcon
-                    consolidatedIconTooltipText={
-                      item.consolidatedIconTooltipText
+                <div className="multi-filing-type-icon">
+                  <div
+                    className={
+                      item.isSealed ? 'visibility-visible' : 'visibility-hidden'
                     }
-                    inConsolidatedGroup={item.inConsolidatedGroup}
-                    showLeadCaseIcon={item.isLeadCase}
-                  />
-                </span>
+                  >
+                    <Icon
+                      aria-hidden={!item.isSealed}
+                      aria-label="sealed"
+                      className="sealed-case-entry"
+                      icon="lock"
+                      title="sealed"
+                    />
+                  </div>
+                  <span
+                    className={classNames({
+                      'margin-left-2':
+                        item.inConsolidatedGroup && !item.isLeadCase,
+                    })}
+                  >
+                    <ConsolidatedCaseIcon
+                      consolidatedIconTooltipText={
+                        item.consolidatedIconTooltipText
+                      }
+                      inConsolidatedGroup={item.inConsolidatedGroup}
+                      showLeadCaseIcon={item.isLeadCase}
+                    />
+                  </span>
+                </div>
               </td>
               <td>
                 <span
