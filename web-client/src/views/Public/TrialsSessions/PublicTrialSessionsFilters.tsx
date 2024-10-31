@@ -105,10 +105,10 @@ export const PublicTrialSessionsFilters = connect<
           </fieldset>
         </FormGroup>
 
-        <div className="tablet:grid-col grid-col-12">
+        <div className="desktop:grid-col grid-col-12">
           <div className="grid-row">
             <div
-              className="tablet:grid-col-4 grid-col-12 tablet:padding-right-2"
+              className="desktop:grid-col-4 grid-col-12 tablet:padding-right-2"
               data-testid="session-type-filter"
             >
               <div className="margin-bottom-1">
@@ -160,7 +160,7 @@ export const PublicTrialSessionsFilters = connect<
               </NonMobile>
             </div>
             <div
-              className="tablet:grid-col-4 grid-col-12 tablet:padding-right-2"
+              className="desktop:grid-col-4 grid-col-12 tablet:padding-right-2"
               data-testid="location-filter"
             >
               <div className="margin-bottom-1">
@@ -216,7 +216,7 @@ export const PublicTrialSessionsFilters = connect<
               </NonMobile>
             </div>
             <div
-              className="tablet:grid-col-4 grid-col-12 tablet:padding-right-2"
+              className="desktop:grid-col-4 grid-col-12 tablet:padding-right-2"
               data-testid="judge-filter"
             >
               <div className="margin-bottom-1">
