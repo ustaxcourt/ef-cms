@@ -20,25 +20,7 @@ export const writeTrialSessionDataToExcel = async ({
   const worksheetOptions = { properties: { outlineLevelCol: 2 } };
   const worksheet = workbook.addWorksheet('sheetInProgress', worksheetOptions);
 
-  const trialSessionCalendar = {};
-  let allWeekOfSlots = weeks.reduce((acc, weekOfString) => {
-    acc[weekOfString] = '';
-    return acc;
-  }, {});
-
-  for (const city in caseCountsAndSessionsByCity) {
-    const weekOfsForCity = caseCountsAndSessionsByCity[
-      city
-    ].scheduledSessions.reduce(
-      (acc, session) => {
-        acc[session.weekOf] = session.sessionType;
-        return acc;
-      },
-      { ...allWeekOfSlots },
-    );
-
-    trialSessionCalendar[city] = weekOfsForCity;
-  }
+  const rowsByCity = getRowsByCity({ caseCountsAndSessionsByCity, weeks });
 
   let columns: any[] = [
     {
@@ -76,7 +58,7 @@ export const writeTrialSessionDataToExcel = async ({
 
   worksheet.columns = columns;
 
-  for (const cityStateString in trialSessionCalendar) {
+  for (const cityStateString in rowsByCity) {
     let city;
     if (!cityStateString.toLowerCase().startsWith('portland')) {
       city = cityStateString.split(',')[0];
@@ -86,7 +68,7 @@ export const writeTrialSessionDataToExcel = async ({
 
     const values = {
       city,
-      ...trialSessionCalendar[cityStateString],
+      ...rowsByCity[cityStateString],
       initialRegularCaseCount:
         caseCountsAndSessionsByCity[cityStateString].initialRegularCases,
       initialSmallCaseCount:
@@ -158,7 +140,7 @@ export const writeTrialSessionDataToExcel = async ({
     ...sessionCountPerWeek,
   });
 
-  const countColumnLength = Object.keys(trialSessionCalendar).length; // number of cells in a column that we care about
+  const countColumnLength = Object.keys(rowsByCity).length; // number of cells in a column that we care about
 
   counterRow.eachCell(cell => {
     cell.border = {
@@ -194,4 +176,31 @@ export const writeTrialSessionDataToExcel = async ({
   };
 
   return (await workbook.xlsx.writeBuffer()) as unknown as Buffer;
+};
+
+const getRowsByCity = ({
+  caseCountsAndSessionsByCity,
+  weeks,
+}: {
+  caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
+  weeks: string[];
+}): {} => {
+  let rowsByCity;
+  let allWeekOfSlots = weeks.reduce((acc, weekOfString) => {
+    acc[weekOfString] = '';
+    return acc;
+  }, {});
+
+  for (const city in caseCountsAndSessionsByCity) {
+    const cityRow = caseCountsAndSessionsByCity[city].scheduledSessions.reduce(
+      (acc, session) => {
+        acc[session.weekOf] = session.sessionType;
+        return acc;
+      },
+      { ...allWeekOfSlots },
+    );
+
+    rowsByCity[city] = cityRow;
+  }
+  return rowsByCity;
 };
