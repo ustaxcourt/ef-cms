@@ -230,7 +230,7 @@ export class Case extends JoiValidationEntity {
    * @param {Array} cases the cases to check for lead case computation
    * @returns {Case} the lead Case entity
    */
-  static sortByDocketNumber(cases) {
+  static sortByDocketNumber<T>(cases: (T & { docketNumber: string })[]): T[] {
     return cases.sort((a, b) => {
       return Case.docketNumberSort(a.docketNumber, b.docketNumber);
     });

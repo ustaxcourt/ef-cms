@@ -1,4 +1,3 @@
-import { CalendaredCase } from '@shared/business/entities/cases/CalendaredCase';
 import {
   Case,
   isInConsolidatedGroup,
@@ -10,10 +9,10 @@ import { Get } from 'cerebral';
 import { compact, some } from 'lodash';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
-type TrialSessionPublicCase = {
+export type TrialSessionPublicCase = {
   isSealed: boolean; // TODO
-  privatePractitioners: any[];
-  irsPractitioners: any[];
+  privatePractitioners: { name?: string }[];
+  irsPractitioners: { name?: string }[];
   inConsolidatedGroup: boolean;
   isLeadCase: boolean;
   consolidatedIconTooltipText: string;
@@ -36,7 +35,7 @@ export const publicTrialSessionDetailHelper = (
     sessionStatus: string;
     formattedCityStateZip: string;
     hasCourthouseInformation: boolean;
-    formattedCases: any[];
+    formattedCases: TrialSessionPublicCase[];
   };
 } => {
   const trialSession = get(state.trialSessionDetailsPage.trialSession);
@@ -98,36 +97,9 @@ export const publicTrialSessionDetailHelper = (
   };
 };
 
-// 10461 TODO: copied almost verbatim from getFormattedCaseDetail, should be exported
-// but conflicts with a different export of the same name in partiesInformationHelper
-const formatCounsel = ({ caseDetail, counsel }) => {
-  let formattedName = counsel.name;
-
-  if (counsel.barNumber) {
-    formattedName += ` (${counsel.barNumber})`;
-  }
-  counsel.formattedName = formattedName;
-
-  if (counsel.representing) {
-    counsel.representingFormatted = [];
-
-    caseDetail.petitioners?.forEach(p => {
-      if (counsel.representing.includes(p.contactId)) {
-        counsel.representingFormatted.push({
-          name: p.name,
-          secondaryName: p.secondaryName,
-          title: p.title,
-        });
-      }
-    });
-  }
-
-  return counsel;
-};
-
 // 10461 TODO: can we extend getFormattedCaseDetail
 const formatPublicCase = (
-  calendaredCase: ExcludeMethods<CalendaredCase>,
+  calendaredCase: RawPublicCase,
 ): TrialSessionPublicCase => {
   const { isSealed } = calendaredCase;
   const inConsolidatedGroup = isInConsolidatedGroup(calendaredCase);
@@ -143,31 +115,15 @@ const formatPublicCase = (
     }
   }
 
-  let irsPractitioners;
-
-  if (calendaredCase.irsPractitioners) {
-    irsPractitioners = calendaredCase.irsPractitioners.map(counsel => {
-      return formatCounsel({ caseDetail: calendaredCase, counsel });
-    });
-  }
-
-  let privatePractitioners;
-
-  if (calendaredCase.privatePractitioners) {
-    privatePractitioners = calendaredCase.privatePractitioners.map(counsel => {
-      return formatCounsel({ caseDetail: calendaredCase, counsel });
-    });
-  }
-
   return {
     caseTitle,
     consolidatedIconTooltipText,
     docketNumber: calendaredCase.docketNumber,
     docketNumberWithSuffix: calendaredCase.docketNumberWithSuffix,
     inConsolidatedGroup,
-    irsPractitioners,
+    irsPractitioners: calendaredCase.irsPractitioners,
     isLeadCase: isTheLeadCase,
     isSealed,
-    privatePractitioners,
+    privatePractitioners: calendaredCase.privatePractitioners,
   };
 };

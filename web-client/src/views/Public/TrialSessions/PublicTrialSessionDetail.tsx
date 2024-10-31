@@ -7,6 +7,7 @@ import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { SuccessNotification } from '@web-client/views/SuccessNotification';
 import { TrialSessionDetailHeader } from '@web-client/views/TrialSessionDetail/TrialSessionDetailHeader';
+import { TrialSessionPublicCase } from '@web-client/presenter/computeds/Public/publicTrialSessionDetailHelper';
 import { WarningNotification } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app-public.cerebral';
@@ -33,7 +34,6 @@ export const PublicTrialSessionDetail = connect(
           <WarningNotification />
 
           <PublicTrialSessionInformation />
-          {/* TODO: Open cases */}
         </section>
       </>
     );
@@ -42,7 +42,7 @@ export const PublicTrialSessionDetail = connect(
 
 PublicTrialSessionDetail.displayName = 'TrialSessionDetail';
 
-export const PublicTrialSessionInformation = connect(
+const PublicTrialSessionInformation = connect(
   {
     publicTrialSessionDetailHelper: state.publicTrialSessionDetailHelper,
     trialSession: state.trialSessionDetailsPage.trialSession,
@@ -136,10 +136,11 @@ export const PublicTrialSessionInformation = connect(
   },
 );
 
-PublicTrialSessionInformation.displayName = 'PublicTrialSessionInformation';
-
-function NonMobileOpenCases({ openCases }) {
-  console.log('openCases', openCases);
+function NonMobileOpenCases({
+  openCases,
+}: {
+  openCases: TrialSessionPublicCase[];
+}) {
   return (
     <React.Fragment>
       <div className="text-semibold push-right margin-bottom-2">
@@ -208,12 +209,12 @@ function NonMobileOpenCases({ openCases }) {
               <td>{item.caseTitle}</td>
               <td>
                 {item.privatePractitioners?.map(practitioner => (
-                  <div key={practitioner.userId}>{practitioner.name}</div>
+                  <div key={practitioner.name}>{practitioner.name}</div>
                 ))}
               </td>
               <td>
                 {item.irsPractitioners?.map(respondent => (
-                  <div key={respondent.userId}>{respondent.name}</div>
+                  <div key={respondent.name}>{respondent.name}</div>
                 ))}
               </td>
             </tr>
@@ -225,7 +226,11 @@ function NonMobileOpenCases({ openCases }) {
   );
 }
 
-function MobileOpenCases({ openCases }) {
+function MobileOpenCases({
+  openCases,
+}: {
+  openCases: TrialSessionPublicCase[];
+}) {
   return (
     <React.Fragment>
       <div className="grid-row margin-bottom-2 width-full flex-align-center"></div>
@@ -279,13 +284,13 @@ function MobileOpenCases({ openCases }) {
                         {item.caseTitle}
                       </div>
                       {item.privatePractitioners?.map(practitioner => (
-                        <div key={practitioner.userId}>
+                        <div key={practitioner.name}>
                           <span className="label">Petitioner Counsel</span>
                           <div>{practitioner.name}</div>
                         </div>
                       ))}
                       {item.irsPractitioners?.map(respondent => (
-                        <div key={respondent.userId}>
+                        <div key={respondent.name}>
                           <span className="label">Respondent Counsel</span>
                           <div>{respondent.name}</div>
                         </div>

@@ -1,5 +1,5 @@
-import { CalendaredCase } from '@shared/business/entities/cases/CalendaredCase';
 import { NotFoundError } from '@web-api/errors/errors';
+import { PublicCase } from '@shared/business/entities/cases/PublicCase';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_SCOPE_TYPES } from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
@@ -21,7 +21,7 @@ export type PublicTrialSessionDetails = Pick<
   | 'state'
   | 'postalCode'
 > & {
-  calendaredCases: ExcludeMethods<CalendaredCase>[];
+  calendaredCases: RawPublicCase[];
   isRemote: boolean;
   isSwingSession: boolean;
   swingSessionLocation?: string;
@@ -58,7 +58,7 @@ export const getPublicTrialSessionDetailsInteractor = async (
     });
 
   const casesWithMinimalRequiredInformation = cases.map(aCase => {
-    return new CalendaredCase(aCase).validate().toRawObject();
+    return new PublicCase(aCase, { authorizedUser: undefined }).toRawObject();
   });
 
   const publicTrialSessionData: PublicTrialSessionDetails = {
