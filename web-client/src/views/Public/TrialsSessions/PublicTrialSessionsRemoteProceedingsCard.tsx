@@ -8,9 +8,10 @@ export const PublicTrialSessionsRemoteProceedingsCard = connect(
     return (
       <>
         <div className="card" data-testid="remote-proceedings-card">
-          <div className="card-header padding-left-2 padding-top-2 border-bottom-1px border-base-lighter">
+          <div className="card-header padding-left-2 padding-top-2">
             <h2>Remote Proceedings</h2>
           </div>
+          <div className="margin-left-2 margin-right-2 border-bottom-1px border-base-lighter"></div>
           <div className="card-content ">
             <div className="padding-left-2 margin-bottom-3">
               <Button
