@@ -1,5 +1,6 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import {
+  CaseCountsAndSessionsByCity,
   EligibleCase,
   getDataForCalendaring,
 } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
@@ -36,6 +37,8 @@ import {
   washingtonDcSpecialConstraint,
 } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/constraints';
 import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
+import mockCases from '@shared/test/mockReadyForTrialCases.json';
+import mockSessions from '@shared/test/mockTrialSessions.json';
 
 const MAX_SESSIONS_PER_WEEK = 6;
 const MAX_SESSIONS_PER_LOCATION = 5;
@@ -86,16 +89,18 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   }
 
   console.time('10275: Get ready for trial cases time');
-  const cases = await applicationContext
-    .getPersistenceGateway()
-    .getSuggestedCalendarCases({ applicationContext });
+  // const cases = await applicationContext
+  //   .getPersistenceGateway()
+  //   .getSuggestedCalendarCases({ applicationContext });
+  const cases = mockCases;
 
   console.timeEnd('10275: Get ready for trial cases time');
 
   console.time('10275: Get trial sessions time');
-  const sessions = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessions({ applicationContext });
+  // const sessions = await applicationContext
+  //   .getPersistenceGateway()
+  //   .getTrialSessions({ applicationContext });
+  const sessions = mockSessions;
 
   console.timeEnd('10275: Get trial sessions time');
   // Note (10275): storing trial session data differently would make for a more
@@ -156,14 +161,13 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   console.timeEnd('10275: generateCalendar time');
 
-  Object.values(caseCountsAndSessionsByCity).forEach(cityObject => {
-    if (cityObject.scheduledSessions.length < 1) {
-      return {
-        bufferArray: undefined,
-        message: SUGGESTED_TRIAL_SESSION_MESSAGES.invalid,
-      };
-    }
-  });
+  // TODO 10275: idk if this works, probably does tho? Test it.
+  if (calendarIsEmpty(caseCountsAndSessionsByCity)) {
+    return {
+      bufferArray: undefined,
+      message: SUGGESTED_TRIAL_SESSION_MESSAGES.invalid,
+    };
+  }
 
   sortObjectByKey(caseCountsAndSessionsByCity, (a, b) => {
     return a.localeCompare(b);
@@ -278,6 +282,14 @@ const generateSuccessMessage = ({
   }
 
   return successMessage;
+};
+
+const calendarIsEmpty = (
+  caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity,
+) => {
+  return Object.values(caseCountsAndSessionsByCity).every(cityObject => {
+    return cityObject.scheduledSessions.length < 1;
+  });
 };
 
 const getCurrentTermByMonth = (currentMonth: string): string => {
