@@ -1,0 +1,10 @@
+Todo
+- return necessary info from helper function only. Not just regurgitate state.
+- Update the trial session bonus call when getting swing session
+- Look at recursive swing session interactor call
+- Ensure only open (or whatever is public-facing) sessions are able to be navigated to
+- Ensure consistency in naming SessionDetail vs. SessionDetails
+- Ensure public actions/sequences are in the Public directories
+
+Questions
+- Is the session time important to display to the public?
