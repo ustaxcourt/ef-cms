@@ -23,18 +23,18 @@ export const checkConstraints = ({
   calendaringConfig,
   calendarState,
   constraints,
-  session,
+  scheduledTrialSession,
 }: {
   calendaringConfig: CalendaringConfig;
   calendarState: CalendarState;
-  session: ScheduledTrialSession;
+  scheduledTrialSession: ScheduledTrialSession;
   constraints: Constraint[];
 }): boolean => {
   return constraints.every(c =>
     c({
       calendarState,
       calendaringConfig,
-      session,
+      session: scheduledTrialSession,
     }),
   );
 };

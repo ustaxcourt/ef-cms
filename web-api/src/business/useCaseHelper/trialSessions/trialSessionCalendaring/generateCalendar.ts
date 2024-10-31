@@ -1,5 +1,6 @@
 import {
   CalendaringConfig,
+  ProspectiveTrialSession,
   ScheduledTrialSession,
 } from './createProspectiveTrialSessions';
 import { CaseCountsAndSessionsByCity } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
@@ -67,7 +68,7 @@ export const generateCalendar = ({
       FORMATS.YYYYMMDD,
     );
 
-    const session: ScheduledTrialSession = {
+    const scheduledTrialSession: ScheduledTrialSession = {
       sessionType: SESSION_TYPES.special,
       trialLocation: getTrialLocationForSpecialSession({
         calendarState,
@@ -84,22 +85,16 @@ export const generateCalendar = ({
         calendarState,
         calendaringConfig,
         constraints,
-        session,
+        scheduledTrialSession,
       });
     } catch (e) {
       throw e;
     }
 
-    addScheduledTrialSession({
+    addSpecialScheduledTrialSession({
       calendarState,
-      calendaringConfig,
       caseCountsAndSessionsByCity,
-      session,
-    });
-
-    reserveWeekAfterSpecialSession({
-      calendarState,
-      session,
+      scheduledTrialSession,
       weeksToLoop,
     });
   });
@@ -109,7 +104,7 @@ export const generateCalendar = ({
     for (const city in caseCountsAndSessionsByCity) {
       for (const prospectiveSession of caseCountsAndSessionsByCity[city]
         .prospectiveSessions) {
-        const session: ScheduledTrialSession = {
+        const scheduledTrialSession: ScheduledTrialSession = {
           sessionType: prospectiveSession.sessionType,
           trialLocation: prospectiveSession.trialLocation,
           weekOf: weekOfString,
@@ -119,28 +114,17 @@ export const generateCalendar = ({
           calendarState,
           calendaringConfig,
           constraints,
-          session,
+          scheduledTrialSession,
         });
 
         if (canScheduleSession) {
-          addScheduledTrialSession({
+          addNonSpecialTrialSession({
             calendarState,
             calendaringConfig,
             caseCountsAndSessionsByCity,
-            session,
+            prospectiveSession,
+            scheduledTrialSession,
           });
-
-          const index =
-            caseCountsAndSessionsByCity[city].prospectiveSessions.indexOf(
-              prospectiveSession,
-            );
-
-          if (index !== -1) {
-            caseCountsAndSessionsByCity[city].prospectiveSessions.splice(
-              index,
-              1,
-            );
-          }
         }
       }
     }
@@ -171,32 +155,22 @@ const reserveWeekAfterSpecialSession = ({
 };
 
 const addScheduledTrialSession = ({
-  calendaringConfig,
   calendarState,
   caseCountsAndSessionsByCity,
-  session,
+  scheduledTrialSession,
 }: {
-  session: ScheduledTrialSession;
+  scheduledTrialSession: ScheduledTrialSession;
   calendarState: CalendarState;
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
-  calendaringConfig: CalendaringConfig;
 }) => {
-  caseCountsAndSessionsByCity[session.trialLocation].scheduledSessions.push(
-    session,
-  );
-
-  // "intentionally" ignores special sessions
-  decrementRemainingCaseCounters(
-    session,
-    caseCountsAndSessionsByCity,
-    calendaringConfig,
-  );
-
-  calendarState.sessionCountPerWeek[session.weekOf]++;
-  calendarState.sessionCountPerCity[session.trialLocation]++;
-  calendarState.sessionScheduledPerCityPerWeek[session.weekOf].add(
-    session.trialLocation,
-  ); // Mark this city as scheduled for the current week
+  caseCountsAndSessionsByCity[
+    scheduledTrialSession.trialLocation
+  ].scheduledSessions.push(scheduledTrialSession);
+  calendarState.sessionCountPerWeek[scheduledTrialSession.weekOf]++;
+  calendarState.sessionCountPerCity[scheduledTrialSession.trialLocation]++;
+  calendarState.sessionScheduledPerCityPerWeek[
+    scheduledTrialSession.weekOf
+  ].add(scheduledTrialSession.trialLocation); // Mark this city as scheduled for the current week
 };
 
 const decrementRemainingCaseCounters = (
@@ -278,4 +252,63 @@ const getTrialLocationForSpecialSession = ({
   }
 
   return resultTrialLocation;
+};
+
+const addSpecialScheduledTrialSession = ({
+  calendarState,
+  caseCountsAndSessionsByCity,
+  scheduledTrialSession,
+  weeksToLoop,
+}: {
+  scheduledTrialSession: ScheduledTrialSession;
+  weeksToLoop: string[];
+  calendarState: CalendarState;
+  caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
+}) => {
+  addScheduledTrialSession({
+    calendarState,
+    caseCountsAndSessionsByCity,
+    scheduledTrialSession,
+  });
+  reserveWeekAfterSpecialSession({
+    calendarState,
+    session: scheduledTrialSession,
+    weeksToLoop,
+  });
+};
+
+const addNonSpecialTrialSession = ({
+  calendaringConfig,
+  calendarState,
+  caseCountsAndSessionsByCity,
+  prospectiveSession,
+  scheduledTrialSession,
+}: {
+  prospectiveSession: ProspectiveTrialSession;
+  scheduledTrialSession: ScheduledTrialSession;
+  calendarState: CalendarState;
+  caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
+  calendaringConfig: CalendaringConfig;
+}) => {
+  addScheduledTrialSession({
+    calendarState,
+    caseCountsAndSessionsByCity,
+    scheduledTrialSession,
+  });
+
+  decrementRemainingCaseCounters(
+    scheduledTrialSession,
+    caseCountsAndSessionsByCity,
+    calendaringConfig,
+  );
+  const index =
+    caseCountsAndSessionsByCity[
+      prospectiveSession.trialLocation
+    ].prospectiveSessions.indexOf(prospectiveSession);
+
+  if (index !== -1) {
+    caseCountsAndSessionsByCity[
+      prospectiveSession.trialLocation
+    ].prospectiveSessions.splice(index, 1);
+  }
 };
