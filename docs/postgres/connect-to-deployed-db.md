@@ -1,8 +1,8 @@
 # Connecting to a Deployed Postgres Database from TablePlus
 
-Note: all commands should be run from the root of the `ef-cms` directory.
+Note: run all commands from the root of the `ef-cms` directory.
 
-### Creating a new connection in TablePlus
+## Creating a new connection in TablePlus
 
 1. Use the [environment switcher](../additional-resources/environment-switcher.md) to point to the deployed environment:
    ```bash
@@ -21,8 +21,9 @@ Note: all commands should be run from the root of the `ef-cms` directory.
    1. Populate the host, port, username, password, and database fields using the values from the `generate-token.sh` output from step 2
    1. Select "SSL mode preferred"
    1. Select "CA Cert..." and choose the `global-bundle.pem` file in the root of the repo
+1. The token generated above is temporary. After it expires, you will need to run `generate-token.sh` again to retrieve a new token, or follow the optional steps below to configure TablePlus to retrieve tokens automatically.
 
-### (Optional) Configure an existing connection to automatically retrieve new tokens:
+## (Optional) Configuring an existing connection to automatically retrieve tokens
 
 1. Determine the exact full path to the `get-token-for-tableplus.zsh` script:
    ```bash
