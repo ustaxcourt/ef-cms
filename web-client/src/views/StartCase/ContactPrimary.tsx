@@ -14,7 +14,6 @@ const props = cerebralProps as unknown as {
   contactsHelper: string;
   bind: string;
   onBlur: () => void;
-  onBlur: () => void;
   onChange: string;
   parentView: string;
 };
@@ -99,7 +98,6 @@ export const ContactPrimary = connect(
           name="contactPrimary.title"
           type="text"
           value={data.contactPrimary.title || ''}
-          onBlur={onBlur}
           onBlur={onBlur}
           onChange={e => {
             onChangeSequence({
