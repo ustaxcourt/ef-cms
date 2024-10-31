@@ -1,3 +1,4 @@
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SuccessNotification } from '@web-client/views/SuccessNotification';
@@ -47,6 +48,14 @@ export const PublicTrialSessionInformation = connect(
   }) {
     return (
       <>
+        <Button
+          link
+          className="margin-bottom-3"
+          href="/trial-sessions"
+          icon={['fa', 'arrow-alt-circle-left']}
+        >
+          Back to scheduled trial sessions
+        </Button>
         <h1>Session Information</h1>
         {(trialSession.isSwingSession ||
           publicTrialSessionDetailHelper.formattedTrialSession
