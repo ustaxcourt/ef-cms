@@ -10,14 +10,7 @@ interface SpecialTrialSession {
   userId: string;
   trialSessionId: string;
 }
-/**
- * Primary use case for getting multiple special trial session copy notes
- *
- * @param {object} applicationContext
- * @param {object} providers the providers object
- * @param {object} providers.specialTrialSessions array of special trial session & judge ids
- * @param authorizedUser
- */
+
 export const getBulkTrialSessionCopyNotesInteractor = async (
   applicationContext: ServerApplicationContext,
   { specialTrialSessions }: { specialTrialSessions: SpecialTrialSession[] },
