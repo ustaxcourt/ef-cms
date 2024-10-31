@@ -37,7 +37,7 @@ export const writeTrialSessionDataToExcel = async ({
 
   worksheet.eachRow(row => {
     row.eachCell({ includeEmpty: true }, cell => {
-      const { border, fill } = getSessionCellStyling(cell.value);
+      const { border, fill } = getSessionCellData(cell.value);
       cell.border = border;
       cell.fill = fill;
     });
@@ -53,22 +53,11 @@ export const writeTrialSessionDataToExcel = async ({
   const countColumnLength = Object.keys(rowsByCity).length; // number of cells in a column that we care about
 
   counterRow.eachCell(cell => {
-    cell.border = {
-      bottom: { style: 'thin' },
-      left: { style: 'thin' },
-      right: { style: 'thin' },
-      top: { style: 'thin' },
-    };
-
     const cellLetter = cell.$col$row.split('$')[1];
-    if (cellLetter === 'A') return;
-    // Note: The formula below is tailored specifically to Microsoft Excel and
-    // Google Sheets; it will not work in Apple Numbers.
-    const formula = `SUMPRODUCT(--(LEN(TRIM(${cellLetter}3:${cellLetter}${countColumnLength + 2}))>0))`;
-    cell.value = {
-      formula,
-      result: 0,
-    };
+    const { border, value } = getCounterCellData(cellLetter, countColumnLength);
+
+    cell.border = border;
+    cell.value = value;
   });
 
   const cityTitleCell = worksheet.getCell('A2');
@@ -182,7 +171,7 @@ const populateRow = ({
   };
 };
 
-const getSessionCellStyling = (
+const getSessionCellData = (
   cellValue,
 ): { border: object; fill: ExcelJS.Fill } => {
   const border = {
@@ -232,4 +221,28 @@ const getSessionCellStyling = (
       break;
   }
   return { border, fill };
+};
+
+const getCounterCellData = (
+  cellLetter,
+  countColumnLength,
+): { border: object; value: ExcelJS.CellValue } => {
+  const border = {
+    bottom: { style: 'thin' },
+    left: { style: 'thin' },
+    right: { style: 'thin' },
+    top: { style: 'thin' },
+  };
+  let value;
+
+  if (cellLetter !== 'A') {
+    // Note: The formula below is tailored specifically to Microsoft Excel and
+    // Google Sheets; it will not work in Apple Numbers.
+    const formula = `SUMPRODUCT(--(LEN(TRIM(${cellLetter}3:${cellLetter}${countColumnLength + 2}))>0))`;
+    value = {
+      formula,
+      result: 0,
+    };
+  }
+  return { border, value };
 };
