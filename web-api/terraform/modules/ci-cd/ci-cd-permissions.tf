@@ -174,6 +174,16 @@ resource "aws_iam_policy" "ci_cd_policy" {
       ]
     },
     {
+      "Sid": "RdsConnect",
+      "Effect": "Allow",
+      "Action": [
+        "rds-db:connect"
+      ],
+      "Resource": [
+        "*"
+      ]
+    },
+    {
       "Sid": "DynamoGranular",
       "Effect": "Allow",
       "Action": [
@@ -230,6 +240,47 @@ resource "aws_iam_policy" "ci_cd_policy" {
         "arn:aws:secretsmanager:*:*:secret:*_deploy*"
       ]
     },
+    {
+      "Sid": "RDS",
+      "Effect": "Allow",
+      "Action": [
+          "rds:*"
+        ],
+       "Resource": [
+          "arn:aws:rds:*:${data.aws_caller_identity.current.account_id}:global-cluster:*",
+          "arn:aws:rds:*:${data.aws_caller_identity.current.account_id}:cluster:*",
+          "arn:aws:rds:us-east-1:${data.aws_caller_identity.current.account_id}:pg:postgres",
+          "arn:aws:rds:us-east-1:${data.aws_caller_identity.current.account_id}:db:*",
+          "arn:aws:rds:us-east-1:${data.aws_caller_identity.current.account_id}:subgrp:*",
+          "arn:aws:rds:us-west-1:${data.aws_caller_identity.current.account_id}:pg:postgres",
+          "arn:aws:rds:us-west-1:${data.aws_caller_identity.current.account_id}:db:*",
+          "arn:aws:rds:us-west-1:${data.aws_caller_identity.current.account_id}:subgrp:*"
+       ]
+    },  
+    {
+      "Sid": "KMS",
+      "Effect": "Allow",
+      "Action": [
+          "kms:*"
+        ],
+       "Resource": [
+          "*"
+       ]
+    }, 
+    {
+      "Sid": "IAM",
+      "Effect": "Allow",
+      "Action": [
+          "iam:GetUser",
+          "iam:CreateUser",
+          "iam:CreatePolicy",
+          "iam:AttachUserPolicy"
+        ],
+       "Resource": [
+          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/*",
+          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/*"
+        ]
+    }, 
     {
       "Action": [
         "ecs:CreateCluster",
@@ -332,6 +383,7 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
       "Sid": "IamGranular",
       "Effect": "Allow",
       "Action": [
+        "iam:GetUser",
         "iam:GetRole",
         "iam:PassRole",
         "iam:GetRolePolicy",
@@ -352,9 +404,12 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "iam:ListRolePolicies",
         "iam:PutRolePolicy",
         "iam:CreateInstanceProfile",
-        "iam:CreateRole"
+        "iam:CreateRole",
+        "iam:ListEntitiesForPolicy"
       ],
       "Resource": [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/dynamsoft_role-*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/api_gateway_cloudwatch_global",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/es_kibana_role",
@@ -378,6 +433,7 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/wait_for_workflow_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/strip_basepath_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/header_security_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/restore_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/batch_instance_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/job_definition_iam_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/batch_role_*",

@@ -7,7 +7,7 @@ import { respondentModifiesContactInfo } from '../../../../helpers/myAccount/res
 const BAR_NUMBER = 'WN7777';
 const USER = 'irspractitioner2';
 
-describe('a repondent modifies their address', () => {
+describe('a respondent modifies their address', () => {
   it('should generate a notice of change address for all cases associated with the respondent', function () {
     loginAsPetitioner();
     externalUserCreatesElectronicCase().then(docketNumber => {
