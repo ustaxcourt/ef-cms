@@ -31,12 +31,12 @@ export const PublicTrialSessionsTable = connect<
       >
         <thead>
           <tr>
-            <th className="width-card">Start Date</th>
+            <th className="width-mobile">Start Date</th>
             <th className="icon-column" />
             <th className="width-mobile">Location</th>
-            <th className="width-card-lg">Proceeding Type</th>
-            <th className="width-card">Session Type</th>
-            <th className="width-card">Judge</th>
+            <th className="width-mobile">Proceeding Type</th>
+            <th className="width-mobile">Session Type</th>
+            <th className="width-mobile">Judge</th>
           </tr>
         </thead>
         {publicTrialSessionsHelper.trialSessionRows.map(row => {
