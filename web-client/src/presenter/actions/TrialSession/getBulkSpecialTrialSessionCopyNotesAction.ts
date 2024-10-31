@@ -1,4 +1,7 @@
-import { SpecialTrialSession } from '@shared/business/entities/trialSessions/SpeciailTrialSessions';
+import {
+  SpecialTrialSession,
+  TrialSessionWorkingCopyNotes,
+} from '@shared/business/entities/trialSessions/SpeciailTrialSessions';
 const getSpecialTrialSessions = trialSessions =>
   trialSessions
     .filter(trialSession => trialSession.sessionType === 'Special')
@@ -13,10 +16,11 @@ export const getBulkSpecialTrialSessionCopyNotesAction = async ({
   trialSessions: SpecialTrialSession[];
 }>) => {
   const specialTrialSessions = getSpecialTrialSessions(props.trialSessions);
-  const specialTrialSessionCopyNotes = await applicationContext
-    .getUseCases()
-    .getBulkSpecialTrialSessionCopyNotesInteractor(applicationContext, {
-      specialTrialSessions,
-    });
+  const specialTrialSessionCopyNotes: Array<TrialSessionWorkingCopyNotes> =
+    await applicationContext
+      .getUseCases()
+      .getBulkSpecialTrialSessionCopyNotesInteractor(applicationContext, {
+        specialTrialSessions,
+      });
   return { specialTrialSessionCopyNotes };
 };

@@ -1,4 +1,5 @@
 import { TDynamoRecord } from '../dynamoTypes';
+import { TrialSessionWorkingCopyNotes } from '@shared/business/entities/trialSessions/SpeciailTrialSessions';
 import { batchGet } from '../../dynamodbClientService';
 import { get } from '../../dynamodbClientService';
 
@@ -27,11 +28,6 @@ interface TrialSessionWorkingCopy {
   sessionNotes: string;
   userId: string;
   caseMetadata: object;
-  trialSessionId: string;
-}
-
-interface TrialSessionWorkingCopyNotes {
-  sessionNotes: string;
   trialSessionId: string;
 }
 
