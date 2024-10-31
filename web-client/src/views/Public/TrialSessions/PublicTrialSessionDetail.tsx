@@ -61,6 +61,9 @@ export const PublicTrialSessionInformation = connect(
           Back to scheduled trial sessions
         </Button>
         <h1>Session Information</h1>
+        <div className="margin-bottom-205">
+          {`Information on this page is current as of ${publicTrialSessionDetailHelper.formattedNow}`}
+        </div>
         {(trialSession.isSwingSession ||
           publicTrialSessionDetailHelper.formattedTrialSession
             .hasCourthouseInformation) && (
