@@ -97,7 +97,7 @@ export const trialSessionsHelper = (
   }
 
   const states = getTrialCitiesGroupedByState();
-  states.push({
+  states.unshift({
     label: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
     options: [
       {
