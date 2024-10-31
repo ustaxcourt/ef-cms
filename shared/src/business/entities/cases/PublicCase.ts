@@ -4,7 +4,7 @@ import { IrsPractitioner } from '../IrsPractitioner';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { PrivatePractitioner } from '../PrivatePractitioner';
-import { PublicContact } from './PublicContact';
+import { PublicContact, RawPublicContact } from './PublicContact';
 import { PublicDocketEntry } from './PublicDocketEntry';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { compareStrings } from '../../utilities/sortFunctions';
@@ -28,9 +28,9 @@ export class PublicCase extends JoiValidationEntity {
   public partyType: string;
   public receivedAt: string;
   public isSealed: boolean;
-  public petitioners: any[] | undefined;
-  public irsPractitioners?: any[];
-  public privatePractitioners?: any[];
+  public petitioners: RawPublicContact[];
+  public irsPractitioners: RawPublicContact[] | IrsPractitioner[];
+  public privatePractitioners: RawPublicContact[] | PrivatePractitioner[];
   public consolidatedCases?: ConsolidatedCaseSummary[];
 
   private _score?: string;
@@ -67,6 +67,10 @@ export class PublicCase extends JoiValidationEntity {
 
     this.isSealed = isSealedCase(rawCase);
 
+    this.petitioners = [];
+    this.irsPractitioners = [];
+    this.privatePractitioners = [];
+
     if (authorizedUser?.role === ROLES.irsPractitioner && !this.isSealed) {
       this.petitioners = rawCase.petitioners;
 
@@ -82,11 +86,15 @@ export class PublicCase extends JoiValidationEntity {
         consolidatedCase => new ConsolidatedCaseSummary(consolidatedCase),
       );
     } else if (!this.isSealed) {
-      this.petitioners = [];
-      rawCase.petitioners.map(petitioner => {
-        const publicPetitionerContact = new PublicContact(petitioner);
-        this.petitioners?.push(publicPetitionerContact);
-      });
+      this.petitioners = rawCase.petitioners.map(petitioner =>
+        new PublicContact(petitioner).toRawObject(),
+      );
+      this.irsPractitioners = rawCase.irsPractitioners.map(irsP =>
+        new PublicContact(irsP).toRawObject(),
+      );
+      this.privatePractitioners = rawCase.privatePractitioners.map(privateP =>
+        new PublicContact(privateP).toRawObject(),
+      );
     }
 
     // rawCase.docketEntries is not returned in elasticsearch queries due to _source definition
