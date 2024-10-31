@@ -17,6 +17,8 @@ import {
 import { faArrowAltCircleLeft as faArrowAltCircleLeftSolid } from '@fortawesome/free-solid-svg-icons/faArrowAltCircleLeft';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons/faCheckCircle';
 import { faChevronUp } from '@fortawesome/free-solid-svg-icons/faChevronUp';
+import { faCopy } from '@fortawesome/free-regular-svg-icons/faCopy';
+import { faCopy as faCopySolid } from '@fortawesome/free-solid-svg-icons/faCopy';
 import { faEnvelope as faEnvelopeSolid } from '@fortawesome/free-solid-svg-icons/faEnvelope';
 import { faFileAlt as faFileAltSolid } from '@fortawesome/free-solid-svg-icons/faFileAlt';
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons/faFilePdf';
@@ -86,6 +88,8 @@ const appPublic = {
       faArrowAltCircleLeftSolid,
       faArrowAltCircleLeftRegular,
       faUser,
+      faCopy,
+      faCopySolid,
     );
 
     presenter.providers.applicationContext = applicationContext;

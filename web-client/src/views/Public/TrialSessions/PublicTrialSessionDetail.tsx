@@ -1,12 +1,16 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
+import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
+import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
 import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { SuccessNotification } from '@web-client/views/SuccessNotification';
 import { TrialSessionDetailHeader } from '@web-client/views/TrialSessionDetail/TrialSessionDetailHeader';
 import { WarningNotification } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const PublicTrialSessionDetail = connect(
   {
@@ -107,9 +111,106 @@ export const PublicTrialSessionInformation = connect(
             </div>
           </div>
         )}
+        <NonMobile>
+          <NonMobileOpenCases
+            openCases={
+              publicTrialSessionDetailHelper.formattedTrialSession
+                .formattedCases
+            }
+          />
+        </NonMobile>
+        <Mobile>
+          <MobileOpenCases
+            openCases={
+              publicTrialSessionDetailHelper.formattedTrialSession
+                .formattedCases
+            }
+          />
+        </Mobile>
       </>
     );
   },
 );
 
 PublicTrialSessionInformation.displayName = 'PublicTrialSessionInformation';
+
+function NonMobileOpenCases({ openCases }) {
+  console.log('openCases', openCases);
+  return (
+    <React.Fragment>
+      <div className="text-semibold push-right margin-bottom-2">
+        Count: {openCases.length}
+      </div>
+      <table
+        className="usa-table ustc-table trial-sessions subsection"
+        id="public-open-cases"
+      >
+        <thead>
+          <tr>
+            <th
+              aria-label="consolidated group indicator"
+              className="consolidated-indicators"
+            ></th>
+            <th aria-label="docket number">Docket No.</th>
+            <th>Case Title</th>
+            <th>Petitioner Counsel</th>
+            <th>Respondent Counsel</th>
+          </tr>
+        </thead>
+        {openCases?.map(item => (
+          <tbody key={item.docketNumber}>
+            <tr className="eligible-cases-row">
+              <td>
+                <span
+                  className={classNames({
+                    'margin-left-2':
+                      item.inConsolidatedGroup && !item.isLeadCase,
+                  })}
+                >
+                  <ConsolidatedCaseIcon
+                    consolidatedIconTooltipText={
+                      item.consolidatedIconTooltipText
+                    }
+                    inConsolidatedGroup={item.inConsolidatedGroup}
+                    showLeadCaseIcon={item.isLeadCase}
+                  />
+                </span>
+              </td>
+              <td>
+                <span
+                  className={classNames({
+                    'margin-left-2':
+                      item.inConsolidatedGroup && !item.isLeadCase,
+                  })}
+                >
+                  <CaseLink formattedCase={item} />
+                </span>
+              </td>
+              <td>{item.caseTitle}</td>
+              <td>
+                {item.privatePractitioners?.map(practitioner => (
+                  <div key={practitioner.userId}>{practitioner.name}</div>
+                ))}
+              </td>
+              <td>
+                {item.irsPractitioners?.map(respondent => (
+                  <div key={respondent.userId}>{respondent.name}</div>
+                ))}
+              </td>
+            </tr>
+          </tbody>
+        ))}
+      </table>
+      {openCases.length === 0 && <p>There are no open cases.</p>}
+    </React.Fragment>
+  );
+}
+
+function MobileOpenCases({ openCases }) {
+  return (
+    <React.Fragment>
+      Mobile: Do stuff here
+      {openCases.length === 0 && <p>There are no open cases.</p>}
+    </React.Fragment>
+  );
+}
