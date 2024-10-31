@@ -95,7 +95,7 @@ const getRowsByCity = ({
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
   weeks: string[];
 }): Record<string, object> => {
-  let rowsByCity;
+  let rowsByCity = {};
   let allWeekOfSlots = weeks.reduce((acc, weekOfString) => {
     acc[weekOfString] = '';
     return acc;
