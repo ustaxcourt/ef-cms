@@ -1,3 +1,4 @@
+import { SpecialTrialSession } from '@shared/business/entities/trialSessions/SpeciailTrialSessions';
 import { post } from '../requests';
 
 export const getBulkSpecialTrialSessionCopyNotesInteractor = (
@@ -5,7 +6,7 @@ export const getBulkSpecialTrialSessionCopyNotesInteractor = (
   {
     specialTrialSessions,
   }: {
-    specialTrialSessions: Array<{ userId: string; trialSessionId: string }>;
+    specialTrialSessions: Array<SpecialTrialSession>;
   },
 ) =>
   post({
