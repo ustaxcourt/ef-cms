@@ -30,11 +30,9 @@ export type PublicTrialSessionDetails = Pick<
 export const getPublicTrialSessionDetailsInteractor = async (
   applicationContext: ServerApplicationContext,
   {
-    addSwingSessionDetails = true,
     trialSessionId,
   }: { trialSessionId: string; addSwingSessionDetails: boolean },
 ): Promise<PublicTrialSessionDetails> => {
-  console.log('getPublicTrialSessionDetailsInteractor', trialSessionId);
   const trialSessionDetails = await applicationContext
     .getPersistenceGateway()
     .getTrialSessionById({
@@ -49,6 +47,17 @@ export const getPublicTrialSessionDetailsInteractor = async (
   const fullTrialSessionEntity = new TrialSession(
     trialSessionDetails,
   ).validate();
+
+  let swingSessionLocation: string | undefined;
+  if (fullTrialSessionEntity.swingSessionId) {
+    const swingSessionDetails = await applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById({
+        applicationContext,
+        trialSessionId: fullTrialSessionEntity.swingSessionId,
+      });
+    swingSessionLocation = swingSessionDetails?.trialLocation;
+  }
 
   const cases = await applicationContext
     .getPersistenceGateway()
@@ -78,29 +87,11 @@ export const getPublicTrialSessionDetailsInteractor = async (
     startDate: fullTrialSessionEntity.startDate,
     state: fullTrialSessionEntity.state,
     swingSessionId: fullTrialSessionEntity.swingSessionId,
-    swingSessionLocation: '',
+    swingSessionLocation,
     term: fullTrialSessionEntity.term,
     termYear: fullTrialSessionEntity.termYear,
     trialLocation: fullTrialSessionEntity.trialLocation,
   };
-
-  // Get the details associated with this session's related swing session, if applicable
-  if (
-    fullTrialSessionEntity.swingSession &&
-    fullTrialSessionEntity.swingSessionId &&
-    addSwingSessionDetails
-  ) {
-    const relatedSwingSession = await getPublicTrialSessionDetailsInteractor(
-      applicationContext,
-      {
-        addSwingSessionDetails: false, // Avoid infinite recursion
-        trialSessionId: fullTrialSessionEntity.swingSessionId,
-      },
-    );
-    // Set swing session details here
-    publicTrialSessionData.swingSessionLocation =
-      relatedSwingSession.trialLocation;
-  }
 
   return publicTrialSessionData;
 };

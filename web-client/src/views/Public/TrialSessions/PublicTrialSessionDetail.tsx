@@ -7,7 +7,7 @@ import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { SuccessNotification } from '@web-client/views/SuccessNotification';
 import { TrialSessionDetailHeader } from '@web-client/views/TrialSessionDetail/TrialSessionDetailHeader';
-import { TrialSessionPublicCase } from '@web-client/presenter/computeds/Public/publicTrialSessionDetailHelper';
+import { TrialSessionPublicCaseRow } from '@web-client/presenter/computeds/Public/publicTrialSessionDetailHelper';
 import { WarningNotification } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app-public.cerebral';
@@ -139,7 +139,7 @@ const PublicTrialSessionInformation = connect(
 function NonMobileOpenCases({
   openCases,
 }: {
-  openCases: TrialSessionPublicCase[];
+  openCases: TrialSessionPublicCaseRow[];
 }) {
   return (
     <React.Fragment>
@@ -229,7 +229,7 @@ function NonMobileOpenCases({
 function MobileOpenCases({
   openCases,
 }: {
-  openCases: TrialSessionPublicCase[];
+  openCases: TrialSessionPublicCaseRow[];
 }) {
   return (
     <React.Fragment>

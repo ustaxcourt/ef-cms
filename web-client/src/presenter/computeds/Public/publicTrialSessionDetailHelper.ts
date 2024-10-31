@@ -9,7 +9,7 @@ import { Get } from 'cerebral';
 import { compact, some } from 'lodash';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
-export type TrialSessionPublicCase = {
+export type TrialSessionPublicCaseRow = {
   isSealed: boolean; // TODO
   privatePractitioners: { name?: string }[];
   irsPractitioners: { name?: string }[];
@@ -35,7 +35,7 @@ export const publicTrialSessionDetailHelper = (
     sessionStatus: string;
     formattedCityStateZip: string;
     hasCourthouseInformation: boolean;
-    formattedCases: TrialSessionPublicCase[];
+    formattedCases: TrialSessionPublicCaseRow[];
   };
 } => {
   const trialSession = get(state.trialSessionDetailsPage.trialSession);
@@ -68,14 +68,9 @@ export const publicTrialSessionDetailHelper = (
     formattedCityStateZip,
   ]);
 
-  console.log(trialSession.calendaredCases);
-
-  // 10461 TODO: Are they already sorted?
   const formattedCases = Case.sortByDocketNumber(
     trialSession.calendaredCases.map(c => formatPublicCase(c)),
   );
-
-  console.log('formattedCases', formattedCases);
 
   const formattedTrialSession = {
     formattedCases,
@@ -97,10 +92,9 @@ export const publicTrialSessionDetailHelper = (
   };
 };
 
-// 10461 TODO: can we extend getFormattedCaseDetail
 const formatPublicCase = (
   calendaredCase: RawPublicCase,
-): TrialSessionPublicCase => {
+): TrialSessionPublicCaseRow => {
   const { isSealed } = calendaredCase;
   const inConsolidatedGroup = isInConsolidatedGroup(calendaredCase);
   const isTheLeadCase = isLeadCase(calendaredCase);
