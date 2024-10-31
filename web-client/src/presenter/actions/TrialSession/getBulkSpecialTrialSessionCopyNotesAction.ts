@@ -1,3 +1,4 @@
+import { SpecialTrialSession } from '@shared/business/entities/trialSessions/SpeciailTrialSessions';
 const getSpecialTrialSessions = trialSessions =>
   trialSessions
     .filter(trialSession => trialSession.sessionType === 'Special')
@@ -5,10 +6,6 @@ const getSpecialTrialSessions = trialSessions =>
       trialSessionId: trialSession.trialSessionId,
       userId: trialSession.judge?.userId,
     }));
-interface SpecialTrialSession {
-  userId: string;
-  trialSessionId: string;
-}
 export const getBulkSpecialTrialSessionCopyNotesAction = async ({
   applicationContext,
   props,
