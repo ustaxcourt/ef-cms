@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
 type PublicMobileTrialSessionsDataRowProps = {
@@ -6,6 +7,7 @@ type PublicMobileTrialSessionsDataRowProps = {
   judgeName: string;
   proceedingType: string;
   sessionType: string;
+  swingSession: boolean;
   trialLocation: string;
 };
 
@@ -14,6 +16,7 @@ export const PublicMobileTrialSessionsDataRow = function ({
   proceedingType,
   sessionType,
   startDate,
+  swingSession,
   trialLocation,
   // trialSessionId,
 }: PublicMobileTrialSessionsDataRowProps) {
@@ -33,6 +36,16 @@ export const PublicMobileTrialSessionsDataRow = function ({
         <div className="grid-col-6 padding-bottom-1">
           <div className="text-semibold">Location</div>
           <div className="padding-bottom-2">
+            {swingSession && (
+              <span className="padding-right-1">
+                <FontAwesomeIcon
+                  className="fa-icon-blue"
+                  icon="link"
+                  size="sm"
+                  title="Swing session: will be held in two cities"
+                />
+              </span>
+            )}
             {/* TODO: ENABLE ONCE 10461 IS COMPLETE */}
             {/* <a href={`/trial-session-detail/${trialSessionId}`}> */}
             {trialLocation}
