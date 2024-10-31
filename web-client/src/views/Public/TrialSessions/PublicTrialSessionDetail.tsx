@@ -228,7 +228,76 @@ function NonMobileOpenCases({ openCases }) {
 function MobileOpenCases({ openCases }) {
   return (
     <React.Fragment>
-      Mobile: Do stuff here
+      <div className="grid-row margin-bottom-2 width-full flex-align-center"></div>
+      <div className="width-full text-right">
+        <span className="text-bold">Count:</span>{' '}
+        <span className="text-semibold">{openCases.length}</span>
+      </div>
+      <div className="padding-1"></div>
+      <table className="usa-table usa-table--stacked-header usa-table--borderless">
+        <thead>
+          <tr>
+            <th scope="col">Case</th>
+            <th scope="col">Case Information</th>
+          </tr>
+        </thead>
+        <tbody>
+          {openCases.map(item => {
+            return (
+              <tr className="padding-0" key={item.docketNumberWithSuffix}>
+                <td>
+                  <div>
+                    <span className="margin-right-3">
+                      <ConsolidatedCaseIcon
+                        consolidatedIconTooltipText={
+                          item.consolidatedIconTooltipText
+                        }
+                        inConsolidatedGroup={item.inConsolidatedGroup}
+                        showLeadCaseIcon={item.isLeadCase}
+                      />
+                    </span>
+                    <CaseLink formattedCase={item}></CaseLink>
+                    <div className="text-right">
+                      <Icon
+                        aria-hidden={!item.isSealed}
+                        aria-label="sealed"
+                        className="sealed-case-entry"
+                        icon="lock"
+                        title="sealed"
+                      />
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div
+                    className="padding-bottom-3"
+                    key={item.docketNumberWithSuffix}
+                  >
+                    <div className="display-flex flex-column gap-3">
+                      <div>
+                        <span className="label">Case Title</span>
+                        {item.caseTitle}
+                      </div>
+                      {item.privatePractitioners?.map(practitioner => (
+                        <div key={practitioner.userId}>
+                          <span className="label">Petitioner Counsel</span>
+                          <div>{practitioner.name}</div>
+                        </div>
+                      ))}
+                      {item.irsPractitioners?.map(respondent => (
+                        <div key={respondent.userId}>
+                          <span className="label">Respondent Counsel</span>
+                          <div>{respondent.name}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
       {openCases.length === 0 && <p>There are no open cases.</p>}
     </React.Fragment>
   );
