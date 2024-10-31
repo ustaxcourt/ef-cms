@@ -78,7 +78,7 @@ export const PublicTrialSessionsTable = connect<
                         className="fa-icon-blue"
                         icon="link"
                         size="sm"
-                        title="swing session"
+                        title="Swing session: will be held in two cities"
                       />
                     )}
                   </td>
