@@ -39,11 +39,17 @@ describe('sortByDocketNumber', () => {
         docketNumber: '120-19',
       },
       {
+        docketNumber: '120-95',
+      },
+      {
         docketNumber: '120-18',
       },
     ]);
 
     expect(result).toEqual([
+      {
+        docketNumber: '120-95',
+      },
       {
         docketNumber: '110-18',
       },

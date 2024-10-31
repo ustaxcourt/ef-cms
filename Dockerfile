@@ -30,6 +30,7 @@ RUN apt-get install -y \
   ghostscript \
   chromium \
   openssh-client \
+  postgresql-client \
   sudo
 
 # These are needed to prevent node canvas from failing during node-gyp build steps
@@ -37,7 +38,7 @@ RUN apt-get install -y build-essential
 RUN apt-get install -y libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.18.8.zip" -o "awscliv2.zip" && \
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.18.13.zip" -o "awscliv2.zip" && \
   unzip awscliv2.zip && \
   ./aws/install && \
   rm -rf awscliv2.zip

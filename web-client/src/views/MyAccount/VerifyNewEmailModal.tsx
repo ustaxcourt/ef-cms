@@ -9,7 +9,7 @@ export const VerifyNewEmailModal = connect(
     cancelSequence: sequences.clearModalSequence,
     closeVerifyEmailModalAndNavigateToMyAccountSequence:
       sequences.closeVerifyEmailModalAndNavigateToMyAccountSequence,
-    email: state.form.email,
+    email: state.user.pendingEmail,
     navigateToPathSequence: sequences.navigateToPathSequence,
   },
   function VerifyNewEmailModal({
