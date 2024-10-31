@@ -58,6 +58,7 @@ export const PublicMobileTrialSessionsTable = connect<
                           proceedingType={tsRow.proceedingType}
                           sessionType={tsRow.sessionType}
                           startDate={tsRow.formattedStartDate}
+                          swingSession={tsRow.swingSession}
                           trialLocation={tsRow.trialLocation}
                           trialSessionId={tsRow.trialSessionId}
                         />
