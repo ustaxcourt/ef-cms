@@ -4,7 +4,6 @@ import {
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
 import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
-import { SessionCountByWeek } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import ExcelJS from 'exceljs';
 
 type ColumnObject = { header: string; key: string };
@@ -17,7 +16,7 @@ export const writeTrialSessionDataToExcel = async ({
   weeks,
 }: {
   weeks: string[];
-  sessionCountPerWeek: SessionCountByWeek;
+  sessionCountPerWeek: Record<string, number>;
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
 }) => {
   const workbook = new ExcelJS.Workbook();

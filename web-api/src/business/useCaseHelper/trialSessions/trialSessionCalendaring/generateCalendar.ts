@@ -17,7 +17,6 @@ import {
   SESSION_TYPES,
   TRIAL_CITY_STRINGS,
 } from '@shared/business/entities/EntityConstants';
-import { SessionCountByWeek } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import {
   WASHINGTON_DC_NORTH_STRING,
   WASHINGTON_DC_SOUTH_STRING,
@@ -45,7 +44,7 @@ export const generateCalendar = ({
   constraints: Constraint[];
   calendaringConfig: CalendaringConfig;
 }): {
-  sessionCountPerWeek: SessionCountByWeek;
+  sessionCountPerWeek: Record<string, number>;
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
 } => {
   const calendarState = setupCalendarState(weeksToLoop);
