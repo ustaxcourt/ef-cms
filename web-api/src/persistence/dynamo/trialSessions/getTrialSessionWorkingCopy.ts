@@ -1,14 +1,40 @@
+import { TDynamoRecord } from '../dynamoTypes';
 import { batchGet } from '../../dynamodbClientService';
 import { get } from '../../dynamodbClientService';
-/**
- * getTrialSessionWorkingCopy
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.trialSessionId the id of the trial session
- * @param {string} providers.userId the id of the user
- * @returns {Promise} the promise of the call to persistence
- */
+
+interface TrialSessionWorkingCopy {
+  entityName: string;
+  sortOrder: string;
+  sk: string;
+  filters: {
+    definiteTrial: boolean;
+    probableTrial: boolean;
+    motionToDismiss: boolean;
+    settled: boolean;
+    dismissed: boolean;
+    basisReached: boolean;
+    continued: boolean;
+    submittedCAV: boolean;
+    showAll: boolean;
+    probableSettlement: boolean;
+    setForTrial: boolean;
+    recall: boolean;
+    rule122: boolean;
+    statusUnassigned: boolean;
+  };
+  sort: string;
+  pk: string;
+  sessionNotes: string;
+  userId: string;
+  caseMetadata: object;
+  trialSessionId: string;
+}
+
+interface TrialSessionWorkingCopyNotes {
+  sessionNotes: string;
+  trialSessionId: string;
+}
+
 export const getTrialSessionWorkingCopy = ({
   applicationContext,
   trialSessionId,
@@ -17,7 +43,7 @@ export const getTrialSessionWorkingCopy = ({
   applicationContext: IApplicationContext;
   trialSessionId: string;
   userId: string;
-}) =>
+}): TrialSessionWorkingCopy =>
   get({
     Key: {
       pk: `trial-session-working-copy|${trialSessionId}`,
@@ -26,15 +52,19 @@ export const getTrialSessionWorkingCopy = ({
     applicationContext,
   });
 
-export const getBulkTrialSessionWorkingCopies = ({
+export const getBulkTrialSessionWorkingCopies = async ({
   applicationContext,
   specialTrialSessions,
 }: {
   applicationContext: IApplicationContext;
   specialTrialSessions: Array<{ pk: string; sk: string }>;
-}) => {
-  return batchGet({
+}): Promise<Array<TrialSessionWorkingCopyNotes>> => {
+  const records: TDynamoRecord[] = await batchGet({
     applicationContext,
     keys: specialTrialSessions,
   });
+  return records.map(record => ({
+    sessionNotes: record.sessionNotes,
+    trialSessionId: record.trialSessionId,
+  }));
 };
