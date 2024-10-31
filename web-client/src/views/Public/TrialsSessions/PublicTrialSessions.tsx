@@ -4,7 +4,7 @@ import {
 } from '@web-client/ustc-ui/Accordion/Accordion';
 import { BigHeader } from '@web-client/views/BigHeader';
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
+import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 import { PublicMobileTrialSessionsTable } from '@web-client/views/Public/TrialsSessions/PublicMobileTrialSessionsTable';
@@ -92,7 +92,7 @@ function NonMobilePublicTrialsSessions({
   updateFormValueSequence,
 }: TrialsSessionsUiParams) {
   return (
-    <NonMobile>
+    <NonPhone>
       <section className="usa-section grid-container">
         <div className="grid-row">
           <div className="tablet:grid-col-8 grid-col-12 padding-top-2">
@@ -128,7 +128,7 @@ function NonMobilePublicTrialsSessions({
           </TablePagination>
         </div>
       </section>
-    </NonMobile>
+    </NonPhone>
   );
 }
 
@@ -161,7 +161,7 @@ function MobilePublicTrialsSessions({
   };
 
   return (
-    <Mobile>
+    <Phone>
       <section className="usa-section grid-container">
         <FetchedTimeMessage
           fetchedDateString={publicTrialSessionsHelper.fetchedDateString}
@@ -256,7 +256,7 @@ function MobilePublicTrialsSessions({
           <PublicMobileTrialSessionsTable />
         </TablePagination>
       </section>
-    </Mobile>
+    </Phone>
   );
 }
 
