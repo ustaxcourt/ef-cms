@@ -1,3 +1,4 @@
+import { CalendaredCase } from '@shared/business/entities/cases/CalendaredCase';
 import { NotFoundError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_SCOPE_TYPES } from '@shared/business/entities/EntityConstants';
@@ -20,7 +21,7 @@ export type PublicTrialSessionDetails = Pick<
   | 'state'
   | 'postalCode'
 > & {
-  openCases: any[];
+  calendaredCases: ExcludeMethods<CalendaredCase>[];
   isRemote: boolean;
   isSwingSession: boolean;
   swingSessionLocation?: string;
@@ -49,16 +50,21 @@ export const getPublicTrialSessionDetailsInteractor = async (
     trialSessionDetails,
   ).validate();
 
-  const allCases = await applicationContext
+  const cases = await applicationContext
     .getPersistenceGateway()
-    .getCasesByDocketNumbers({
+    .getCalendaredCasesForTrialSession({
       applicationContext,
-      docketNumbers: fullTrialSessionEntity.caseOrder.map(c => c.docketNumber),
+      trialSessionId,
     });
+
+  const casesWithMinimalRequiredInformation = cases.map(aCase => {
+    return new CalendaredCase(aCase).validate().toRawObject();
+  });
 
   const publicTrialSessionData: PublicTrialSessionDetails = {
     address1: fullTrialSessionEntity.address1,
     address2: fullTrialSessionEntity.address2,
+    calendaredCases: casesWithMinimalRequiredInformation,
     city: fullTrialSessionEntity.city,
     courthouseName: fullTrialSessionEntity.courthouseName,
     estimatedEndDate: fullTrialSessionEntity.estimatedEndDate,
@@ -66,7 +72,6 @@ export const getPublicTrialSessionDetailsInteractor = async (
       fullTrialSessionEntity.sessionScope ===
       TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
     isSwingSession: !!fullTrialSessionEntity.swingSession,
-    openCases: allCases.filter(c => !c.removedFromTrial),
     postalCode: fullTrialSessionEntity.postalCode,
     sessionStatus: fullTrialSessionEntity.sessionStatus,
     sessionType: fullTrialSessionEntity.sessionType,
