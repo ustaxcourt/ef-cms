@@ -237,17 +237,10 @@ export class Case extends JoiValidationEntity {
   }
 
   static docketNumberSort(docketNumberA, docketNumberB) {
-    const aSplit = docketNumberA.split('-');
-    const bSplit = docketNumberB.split('-');
-
-    if (aSplit[1] !== bSplit[1]) {
-      // compare years if they aren't the same;
-      // compare as strings, because they *might* have suffix
-      return aSplit[1].localeCompare(bSplit[1]);
-    } else {
-      // compare index if years are the same, compare as integers
-      return +aSplit[0] - +bSplit[0];
-    }
+    return (
+      (Case.getSortableDocketNumber(docketNumberA) || 0) -
+      (Case.getSortableDocketNumber(docketNumberB) || 0)
+    );
   }
 
   /**

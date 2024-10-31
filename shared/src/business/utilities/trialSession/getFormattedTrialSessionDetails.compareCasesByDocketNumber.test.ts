@@ -1,4 +1,3 @@
-import { applicationContext } from '../test/createTestApplicationContext';
 import {
   compareCasesByDocketNumber,
   compareCasesByDocketNumberFactory,
@@ -58,7 +57,6 @@ describe('getFormattedTrialSessionDetails.compareCasesByDocketNumberFactory', ()
   it('101-19 should come before 102-19', () => {
     const result = compareCasesByDocketNumberFactory({
       allCases: [],
-      applicationContext,
     })(
       {
         docketNumber: '101-19',
@@ -79,7 +77,6 @@ describe('getFormattedTrialSessionDetails.compareCasesByDocketNumberFactory', ()
   it('190-07 should come before 102-19', () => {
     const result = compareCasesByDocketNumberFactory({
       allCases: [],
-      applicationContext,
     })(
       {
         docketNumber: '190-07',
@@ -94,7 +91,6 @@ describe('getFormattedTrialSessionDetails.compareCasesByDocketNumberFactory', ()
   it('102-19 should equal 102-19', () => {
     const result = compareCasesByDocketNumberFactory({
       allCases: [],
-      applicationContext,
     })(
       {
         docketNumber: '102-19',
@@ -115,7 +111,6 @@ describe('getFormattedTrialSessionDetails.compareCasesByDocketNumberFactory', ()
   it('103-19 should come after 102-19', () => {
     const result = compareCasesByDocketNumberFactory({
       allCases: [],
-      applicationContext,
     })(
       {
         docketNumber: '103-19',
@@ -163,7 +158,6 @@ describe('getFormattedTrialSessionDetails.compareCasesByDocketNumberFactory', ()
             leadDocketNumber: '101-20',
           },
         ],
-        applicationContext,
       }),
     );
 
@@ -207,7 +201,6 @@ describe('getFormattedTrialSessionDetails.compareCasesByDocketNumberFactory', ()
     cases.sort(
       compareCasesByDocketNumberFactory({
         allCases: [],
-        applicationContext,
       }),
     );
 

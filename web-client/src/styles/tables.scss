@@ -296,6 +296,16 @@ table,
       display: none;
     }
 
+    .multi-filing-type-icon {
+      display: flex;
+      width: fit-content;
+      padding-right: 0;
+      padding-left: 0;
+      margin-top: 4px;
+      margin-right: 0;
+      gap: 1rem;
+    }
+
     tr.in-progress {
       td {
         background: $color-yellow;
@@ -360,7 +370,9 @@ table,
   }
 }
 
-table.trial-sessions {
+.trial-sessions {
+  margin: 0;
+
   tr.trial-date {
     td {
       background-color: $color-primary-alt-lightest;

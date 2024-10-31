@@ -108,6 +108,7 @@ import { getOutboxMessagesForUserLambda } from './lambdas/messages/getOutboxMess
 import { getPaperServicePdfUrlLambda } from '@web-api/lambdas/trialSessions/getPaperServicePdfUrlLambda';
 import { getPendingMotionDocketEntriesForCurrentJudgeLambda } from '@web-api/lambdas/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeLambda';
 import { getPractitionerByBarNumberLambda } from './lambdas/practitioners/getPractitionerByBarNumberLambda';
+import { getPractitionerCasesLambda } from '@web-api/lambdas/cases/getPractitionerCasesLambda';
 import { getPractitionerDocumentDownloadUrlLambda } from './lambdas/practitioners/getPractitionerDocumentDownloadUrlLambda';
 import { getPractitionerDocumentLambda } from './lambdas/practitioners/getPractitionerDocumentLambda';
 import { getPractitionerDocumentsLambda } from './lambdas/practitioners/getPractitionerDocumentsLambda';
@@ -804,6 +805,10 @@ app.delete(
   app.get(
     '/practitioners/:userId/printable-case-list',
     lambdaWrapper(generatePractitionerCaseListPdfLambda),
+  );
+  app.get(
+    '/practitioners/:userId/case-list',
+    lambdaWrapper(getPractitionerCasesLambda),
   );
   app.get('/practitioners', lambdaWrapper(getPractitionersByNameLambda));
   app.post('/practitioners', lambdaWrapper(createPractitionerUserLambda));

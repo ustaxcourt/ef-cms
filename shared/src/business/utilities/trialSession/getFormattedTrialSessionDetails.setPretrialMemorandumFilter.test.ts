@@ -1,6 +1,6 @@
-import { MOCK_CASE } from '../../test/mockCase';
-import { PARTIES_CODES } from '../entities/EntityConstants';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { PARTIES_CODES } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { setPretrialMemorandumFiler } from './getFormattedTrialSessionDetails';
 
 describe('getFormattedTrialSessionDetails', () => {
@@ -35,7 +35,6 @@ describe('getFormattedTrialSessionDetails', () => {
       };
 
       const result = setPretrialMemorandumFiler({
-        applicationContext,
         caseItem: mockCase,
       });
 
@@ -55,7 +54,6 @@ describe('getFormattedTrialSessionDetails', () => {
       };
 
       const result = setPretrialMemorandumFiler({
-        applicationContext,
         caseItem: mockCase,
       });
 
@@ -75,7 +73,6 @@ describe('getFormattedTrialSessionDetails', () => {
       };
 
       const result = setPretrialMemorandumFiler({
-        applicationContext,
         caseItem: mockCase,
       });
 
@@ -100,7 +97,6 @@ describe('getFormattedTrialSessionDetails', () => {
       };
 
       const result = setPretrialMemorandumFiler({
-        applicationContext,
         caseItem: mockCase,
       });
 
@@ -126,7 +122,6 @@ describe('getFormattedTrialSessionDetails', () => {
       };
 
       const result = setPretrialMemorandumFiler({
-        applicationContext,
         caseItem: mockCase,
       });
 
@@ -139,7 +134,6 @@ describe('getFormattedTrialSessionDetails', () => {
         .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
       const result = setPretrialMemorandumFiler({
-        applicationContext,
         caseItem: MOCK_CASE,
       });
 
@@ -158,7 +152,6 @@ describe('getFormattedTrialSessionDetails', () => {
       };
 
       const result = setPretrialMemorandumFiler({
-        applicationContext,
         caseItem: MOCK_CASE,
       });
 
