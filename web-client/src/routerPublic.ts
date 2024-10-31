@@ -84,7 +84,7 @@ const router = {
       return app.getSequence('redirectToLoginSequence')();
     });
 
-    route('/trial-sessions/*', trialSessionId => {
+    route('/trial-session-detail/*', trialSessionId => {
       setPageTitle('Trial session information');
       return app.getSequence('gotoPublicTrialSessionDetailSequence')({
         trialSessionId,
