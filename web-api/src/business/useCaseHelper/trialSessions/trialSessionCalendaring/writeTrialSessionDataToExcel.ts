@@ -9,6 +9,8 @@ import ExcelJS from 'exceljs';
 
 type ColumnObject = { header: string; key: string };
 
+const CITY_TITLE_CELL_LOCATION = 'A2';
+
 export const writeTrialSessionDataToExcel = async ({
   caseCountsAndSessionsByCity,
   sessionCountPerWeek,
@@ -60,7 +62,7 @@ export const writeTrialSessionDataToExcel = async ({
     cell.value = value;
   });
 
-  const cityTitleCell = worksheet.getCell('A2');
+  const cityTitleCell = worksheet.getCell(CITY_TITLE_CELL_LOCATION);
 
   cityTitleCell.border = {
     bottom: undefined,
