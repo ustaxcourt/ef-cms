@@ -32,6 +32,14 @@ resource "aws_iam_policy" "ci_cd_policy" {
       "Resource": "*"
     },
     {
+      "Sid": "Batch",
+      "Effect": "Allow",
+      "Action": [
+        "batch:*"
+      ],
+      "Resource": "*"
+    },
+    {
       "Sid": "SQS",
       "Effect": "Allow",
       "Action": [
@@ -328,8 +336,12 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "iam:PassRole",
         "iam:GetRolePolicy",
         "iam:GetInstanceProfile",
+        "iam:DetachRolePolicy",
+        "iam:RemoveRoleFromInstanceProfile",
         "iam:GetPolicy",
+        "iam:AttachRolePolicy",
         "iam:GetPolicyVersion",
+        "iam:DeleteInstanceProfile",
         "iam:ListPolicyVersions",
         "iam:ListInstanceProfilesForRole",
         "iam:AddRoleToInstanceProfile",
@@ -339,6 +351,7 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "iam:DeleteRole",
         "iam:ListRolePolicies",
         "iam:PutRolePolicy",
+        "iam:CreateInstanceProfile",
         "iam:CreateRole"
       ],
       "Resource": [
@@ -365,7 +378,11 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/wait_for_workflow_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/strip_basepath_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/header_security_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_*"
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/batch_instance_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/job_definition_iam_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/batch_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/batch_instance_profile_*"
       ]
     }
   ]
