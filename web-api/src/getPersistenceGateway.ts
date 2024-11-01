@@ -284,7 +284,7 @@ const gatewayMethods = {
   getAllUsersByRole,
   getAllWebSocketConnections,
   getBlockedCases,
-  getBulkTrialSessionWorkingCopies,
+  getBulkTrialSessionWorkingCopyNotes: getBulkTrialSessionWorkingCopies,
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,
   getCaseDeadlinesByDateRange,
