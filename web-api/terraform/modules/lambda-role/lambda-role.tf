@@ -53,6 +53,15 @@ resource "aws_iam_role_policy" "lambda_policy" {
         },
         {
             "Action": [
+                "batch:SubmitJob"
+            ],
+            "Resource": [
+                "*"
+            ],
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
                 "lambda:InvokeFunction"
             ],
             "Resource": [
