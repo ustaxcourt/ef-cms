@@ -8,11 +8,11 @@ import { filterEmptyStatisticsAction } from '../actions/StartCaseInternal/filter
 import { getPetitionIdAction } from '../actions/getPetitionIdAction';
 import { navigateToReviewSavedPetitionAction } from '../actions/CaseDetailEdit/navigateToReviewSavedPetitionAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setProgressForFileUploadAction } from '@web-client/presenter/actions/setProgressForFileUploadAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -34,8 +34,8 @@ export const submitPetitionFromPaperSequence = [
       validatePetitionFromPaperAction,
       {
         error: [
-          setAlertErrorAction,
           setValidationErrorsAction,
+          setScrollToErrorNotificationAction,
           setValidationAlertErrorsAction,
         ],
         success: [
