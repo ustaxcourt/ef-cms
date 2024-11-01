@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   DOCKET_SECTION,
   DOCUMENT_SERVED_MESSAGES,
