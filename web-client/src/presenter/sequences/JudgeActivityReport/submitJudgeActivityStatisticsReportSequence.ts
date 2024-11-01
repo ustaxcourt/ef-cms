@@ -4,9 +4,9 @@ import { getCasesClosedByJudgeAction } from '../../actions/JudgeActivityReport/g
 import { getJudgeActivityReportCountsAction } from '../../actions/JudgeActivityReport/getJudgeActivityReportCountsAction';
 import { getTrialSessionsForJudgeActivityReportAction } from '../../actions/JudgeActivityReport/getTrialSessionsForJudgeActivityReportAction';
 import { parallel } from 'cerebral';
-import { setAlertErrorAction } from '../../actions/setAlertErrorAction';
 import { setHasUserSubmittedFormAction } from '@web-client/presenter/actions/JudgeActivityReport/setHasUserSubmittedFormAction';
 import { setJudgeActivityReportDataAction } from '@web-client/presenter/actions/JudgeActivityReport/setJudgeActivityReportDataAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '../../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '@web-client/presenter/utilities/showProgressSequenceDecorator';
@@ -21,8 +21,8 @@ export const submitJudgeActivityStatisticsReportSequence =
     validateJudgeActivityStatisticsReportSearchAction,
     {
       error: [
-        setAlertErrorAction,
         setValidationErrorsAction,
+        setScrollToErrorNotificationAction,
         setValidationAlertErrorsAction,
       ],
       success: [

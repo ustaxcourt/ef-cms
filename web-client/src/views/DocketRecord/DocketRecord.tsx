@@ -55,7 +55,7 @@ export const DocketRecord = connect(
         <DocketRecordHeader />
 
         <NonPhone>
-          <div style={{ overflowX: 'scroll', width: '100%' }}>
+          <div className="width-full overflow-x-auto">
             <table
               aria-label="docket record"
               className="usa-table ustc-table usa-table--stacked"
