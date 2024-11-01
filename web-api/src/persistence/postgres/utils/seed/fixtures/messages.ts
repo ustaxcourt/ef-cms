@@ -1,7 +1,6 @@
 import { NewMessageKysely } from '@web-api/database-types';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 
-/* eslint-disable @miovision/disallow-date/no-new-date */
 export const messages: NewMessageKysely[] = [
   {
     attachments: JSON.stringify([]),
