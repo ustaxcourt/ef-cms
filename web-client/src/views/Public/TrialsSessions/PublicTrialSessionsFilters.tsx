@@ -111,7 +111,7 @@ export const PublicTrialSessionsFilters = connect<
               className="desktop:grid-col-4 grid-col-12 tablet:padding-right-2"
               data-testid="session-type-filter"
             >
-              <div className="margin-bottom-1">
+              <div className="margin-bottom-4">
                 <label className="usa-label" htmlFor="session-type-filter">
                   Session type{' '}
                   <span className="optional-light-text">(optional)</span>
@@ -163,7 +163,7 @@ export const PublicTrialSessionsFilters = connect<
               className="desktop:grid-col-4 grid-col-12 tablet:padding-right-2"
               data-testid="location-filter"
             >
-              <div className="margin-bottom-1">
+              <div className="margin-bottom-4">
                 <label
                   className="usa-label"
                   htmlFor="location-filter"
@@ -219,7 +219,7 @@ export const PublicTrialSessionsFilters = connect<
               className="desktop:grid-col-4 grid-col-12 tablet:padding-right-2"
               data-testid="judge-filter"
             >
-              <div className="margin-bottom-1">
+              <div className="margin-bottom-4">
                 <label
                   className="usa-label"
                   htmlFor="judges-filter"
