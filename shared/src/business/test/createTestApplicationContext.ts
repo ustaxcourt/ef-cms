@@ -512,7 +512,6 @@ export const createTestApplicationContext = () => {
     getItem: jest.fn().mockImplementation(getItem),
     getLimiterByKey: jest.fn(),
     getMaintenanceMode: jest.fn(),
-    getMessagesByDocketNumber: jest.fn(),
     getPractitionerDocuments: jest.fn(),
     getReconciliationReport: jest.fn(),
     getRecord: jest.fn(),

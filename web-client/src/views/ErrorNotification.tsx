@@ -15,9 +15,9 @@ export const ErrorNotification = connect(
     alertError?: {
       title?: string;
       message?: string;
+      scrollToErrorNotification?: boolean;
     };
     alertHelper: {
-      preventAutoScroll?: boolean;
       showErrorAlert?: boolean;
       showSingleMessage?: boolean;
       showMultipleMessages?: boolean;
@@ -29,7 +29,7 @@ export const ErrorNotification = connect(
 
     useEffect(() => {
       const notification = notificationRef.current;
-      if (notification && !alertHelper.preventAutoScroll) {
+      if (notification && alertError?.scrollToErrorNotification) {
         window.scrollTo(0, 0);
       }
     });
