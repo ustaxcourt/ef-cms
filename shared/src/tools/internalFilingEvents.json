@@ -157,27 +157,6 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Motion to Withdraw as Counsel",
-      "documentType": "Motion to Withdraw as Counsel",
-      "category": "Appearance and Representation",
-      "eventCode": "M112",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Motion to Withdraw Counsel",
-      "documentType": "Motion to Withdraw Counsel (filed by petitioner)",
-      "category": "Appearance and Representation",
-      "eventCode": "M116",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "labelFreeText2": "",
-      "ordinalField": ""
-    },
-    {
       "documentTitle": "Substitution of Counsel",
       "documentType": "Substitution of Counsel",
       "category": "Appearance and Representation",
@@ -2183,6 +2162,17 @@
       "allowStamp": true
     },
     {
+      "documentTitle": "Motion to Withdraw as Counsel",
+      "documentType": "Motion to Withdraw as Counsel",
+      "category": "Motion",
+      "eventCode": "M112",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "Motion to Withdraw or Modify the Deemed Admitted Admissions Pursuant to Rule 90(f)",
       "documentType": "Motion to Withdraw or Modify the Deemed Admitted Admissions Pursuant to Rule 90(f)",
       "category": "Motion",
@@ -2193,6 +2183,17 @@
       "labelFreeText2": "",
       "ordinalField": "",
       "allowStamp": true
+    },
+    {
+      "documentTitle": "Motion to Withdraw Counsel",
+      "documentType": "Motion to Withdraw Counsel (filed by petitioner)",
+      "category": "Motion",
+      "eventCode": "M116",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
     }
   ],
   "Notice": [

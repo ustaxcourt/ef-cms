@@ -6,6 +6,8 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailShowEditPetitionFalseAction } from '../actions/setCaseDetailShowEditPetitionFalseAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
+import { setValidationAlertErrorsAction } from '@web-client/presenter/actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -17,7 +19,11 @@ export const updateCaseDetailsSequence = [
   startShowValidationAction,
   validateCaseDetailsAction,
   {
-    error: [setAlertErrorAction, setValidationErrorsAction],
+    error: [
+      setValidationErrorsAction,
+      setScrollToErrorNotificationAction,
+      setValidationAlertErrorsAction,
+    ],
     success: [
       setupCurrentPageAction('Interstitial'),
       setCaseTypeAction,
