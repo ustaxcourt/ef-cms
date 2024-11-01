@@ -3,9 +3,9 @@ import { generateCaseAssociationTitleAction } from '../actions/CaseAssociationRe
 import { generateEntryOfAppearancePdfAction } from '@web-client/presenter/actions/CaseAssociationRequest/generateEntryOfAppearancePdfAction';
 import { generateTitleForSupportingDocumentsAction } from '../actions/FileDocument/generateTitleForSupportingDocumentsAction';
 import { navigateToReviewCaseAssociationRequestAction } from '../actions/navigateToReviewCaseAssociationRequestAction';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setPdfPreviewUrlAction } from '@web-client/presenter/actions/CourtIssuedOrder/setPdfPreviewUrlAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setSupportingDocumentScenarioAction } from '../actions/FileDocument/setSupportingDocumentScenarioAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -23,8 +23,8 @@ export const reviewCaseAssociationRequestSequence =
     validateCaseAssociationRequestAction,
     {
       error: [
-        setAlertErrorAction,
         setValidationErrorsAction,
+        setScrollToErrorNotificationAction,
         setValidationAlertErrorsAction,
       ],
       success: [

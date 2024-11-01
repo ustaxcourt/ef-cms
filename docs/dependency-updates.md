@@ -10,9 +10,10 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 
 ### Do the following for all package.json files
 
-note: we have 2 package.json files, be sure to update both
+note: we have 3 package.json files, be sure to update them all
   - ./package.json
   - ./web-api/runtimes/puppeteer/package.json
+  - ./web-api/terraform/modules/batch/docker-image/package.json
 
 1. `npm outdated`: Informs us of minor and major version updates that we need to update manually. For major updates, there are often breaking API changes that require refactoring.
 
