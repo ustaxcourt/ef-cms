@@ -89,7 +89,7 @@ export const TrialSessions = connect(
             headingLevel="2"
             id="trial-sessions-tabs"
             value={trialSessionsPageFilters.currentTab}
-            onSelect={tabName => {
+            onSelect={(tabName: 'calendared' | 'new') => {
               if (tabName === trialSessionsPageFilters.currentTab) {
                 return;
               }
