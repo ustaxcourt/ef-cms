@@ -3,7 +3,8 @@ import { clearSearchResultsAction } from '../../actions/AdvancedSearch/clearSear
 import { clearSearchTermAction } from '../../actions/clearSearchTermAction';
 import { defaultCaseSearchDatesAction } from '@web-client/presenter/actions/AdvancedSearch/defaultCaseSearchDatesAction';
 import { setAdvancedSearchResultsAction } from '../../actions/AdvancedSearch/setAdvancedSearchResultsAction';
-import { setAlertErrorAction } from '../../actions/setAlertErrorAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
+import { setValidationAlertErrorsAction } from '@web-client/presenter/actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '@web-client/presenter/actions/startShowValidationAction';
@@ -16,10 +17,11 @@ export const submitPublicCaseAdvancedSearchSequence = [
   validateCaseAdvancedSearchAction,
   {
     error: [
-      setAlertErrorAction,
-      setValidationErrorsAction,
-      clearSearchResultsAction,
       startShowValidationAction,
+      setValidationErrorsAction,
+      setScrollToErrorNotificationAction,
+      setValidationAlertErrorsAction,
+      clearSearchResultsAction,
     ],
     success: showProgressSequenceDecorator([
       clearAlertsAction,

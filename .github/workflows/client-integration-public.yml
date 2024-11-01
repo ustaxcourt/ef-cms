@@ -15,6 +15,18 @@ jobs:
     env:
       CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
       CI_NODE_INDEX: ${{ matrix.ci_node_index }}
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: example
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -41,6 +53,10 @@ jobs:
           comment_on_pr: false
       - name: Install Node Dependencies
         run: npm ci
+      - name: Setup Postgres
+        run: |
+          npm run migration:postgres
+          npm run seed:postgres
       - name: Web Client - Integration Tests Public
         run: |
           mkdir -p /tmp/web-client
