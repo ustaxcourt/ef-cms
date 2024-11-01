@@ -26,7 +26,7 @@ export const getBulkTrialSessionCopyNotesInteractor = async (
 
   return await applicationContext
     .getPersistenceGateway()
-    .getBulkTrialSessionWorkingCopies({
+    .getBulkTrialSessionWorkingCopyNotes({
       applicationContext,
       specialTrialSessions: keys,
     });
