@@ -335,14 +335,9 @@ export const AUTHORIZATION_MAP = {
 export const isAuthorized = (
   user: UnknownAuthUser,
   action: RolePermission,
-  owner?: string,
 ): user is AuthUser => {
   if (!isAuthUser(user)) {
     return false;
-  }
-
-  if (user.userId === owner) {
-    return true;
   }
 
   const userRole = user.role;
