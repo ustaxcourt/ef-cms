@@ -264,6 +264,8 @@ const generateSuccessMessage = ({
   incorrectSizeRegularCases: EligibleCase[];
 }): string => {
   let successMessage = SUGGESTED_TRIAL_SESSION_MESSAGES.success;
+
+  // TODO 10275: pending court feedback, consider moving this to a modal or the xlsx sheet
   if (incorrectSizeRegularCases.length > 0) {
     const docketNumbers: string[] = [];
     incorrectSizeRegularCases.forEach(incorrectSizeRegularCase => {
@@ -276,9 +278,10 @@ const generateSuccessMessage = ({
       );
     });
 
+    // TODO 10275: consider using a single line success message if there are no incorrectSizeRegularCases (ie no successMessage, only the existing title)
     successMessage =
       successMessage +
-      ` The following cases have a procedure type the does not match their preferred trial location's procedure type: ${docketNumbers.join(', ')}`;
+      ` The following cases have a procedure type that does not match their preferred trial location's procedure type: ${docketNumbers.join(', ')}`;
   }
 
   return successMessage;
