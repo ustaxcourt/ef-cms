@@ -87,7 +87,7 @@ describe('getClientId', () => {
 });
 ```
 
-The example above is used specifically when we want to use a majority of the original implementation of the module, but maybe just mock out a few functions on the module.  
+The example above is used specifically when we want to use a majority of the original implementation of the module, but maybe just mock out a few functions on the module.
 
 !> jest.mock is a bit confusing - a good rule of thumb is to write your implementation in such a way that won't require you to jest.mock a lot of things.
 
@@ -125,7 +125,7 @@ describe('admissions clerk practitioner journey', () => {
 });
 ```
 
-?> Try to keep the journey functions small and reusable by other tests in the future if needed. 
+?> Try to keep the journey functions small and reusable by other tests in the future if needed.
 
 ## Cypress Tests
 
@@ -178,7 +178,7 @@ The scripts containing the word `public` run tests against the public client.
 
 #### Local
 
-Many of the Cypress tests may be run against the locally running resources. 
+Many of the Cypress tests may be run against the locally running resources.
 
 ?> NOTE:\
 ?> This is not needed for `integration` tests because they only run against locally running resources.
@@ -192,7 +192,7 @@ Rather than running using the pre-defined NPM scripts, you may want to try a  di
 ```
 
 ?> NOTE:\
-?> Not all options are compatible and no guarantee exists that any particular run of this shell script will represent a valid test. Care should be taken to ensure the options chosen are valid before defining a new NPM script intended to be run by CI. 
+?> Not all options are compatible and no guarantee exists that any particular run of this shell script will represent a valid test. Care should be taken to ensure the options chosen are valid before defining a new NPM script intended to be run by CI.
 
 ## Testing Matrix
 
@@ -246,12 +246,11 @@ If needed, you can run all the tests locally by running the following:
 
 This will run the linter, Shellcheck, audit, build, test, Cypress, Cerebral tests, etc. over all the components.
 
-
 ## PDF Testing
 
 Since our system generates a lot of PDFs, we have a set of tests that verify the PDFs didn't change using a checksum of the first exported image of the PDFs.  Since all of these PDFs share a single .scss file, there is risk involved when trying to update a single PDF to accidentally change the styles of other PDFs.  Therefore, we have a set of tests that verify that the PDFs are not changing.
 
-All of the expected output images are found in the `./shared/test-pdf-expected-images` directory.  In order to update these, you will need to run the following command:
+All of the expected output images are found in the `./shared/test-pdf-expected-images` directory.  If you want to run PDF tests locally, you will need to run the following command:
 
 ```
 docker build --platform=linux/amd64 -t efcms -f Dockerfile . && \
@@ -259,16 +258,16 @@ docker build --platform=linux/amd64 -t efcms-local -f Dockerfile-local . && \
 docker run --platform=linux/amd64 -it --rm -v `pwd`/shared/test-output:/home/app/shared/test-output efcms-local sh -c "npm run test:document-generation"
 ```
 
-After inspecting the failed pdfs, override the existing the pdfs by running the following command:
+If you want to replace the expected output images with the images created during a local test run, you should carefully inspect the failed PDFs before using the command below to replace the existing the pdfs:
 ```cp -r shared/test-output/*.png shared/test-pdf-expected-images/```
 
 ### M1 Users
-Before running the commands above: 
+Before running the commands above:
 - turn on the setting for Rosetta emulation in Docker Desktop (don't forget to apply and restart)
 - add the line `export DOCKER_DEFAULT_PLATFORM=linux/amd64` to your `.zshrc`
 
 
-If you're getting errors, try running `docker system prune -af` and run the commands again. 
+If you're getting errors, try running `docker system prune -af` and run the commands again.
 
 ## Client Integration Testing
 If you want to be able to run `build-client-integration` tests within a Docker container locally for debugging purposes without deploying, you could use these commands.

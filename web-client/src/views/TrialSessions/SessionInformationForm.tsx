@@ -57,9 +57,7 @@ export const SessionInformationForm = connect<
                     name="sessionScope"
                     type="radio"
                     value={value}
-                    onBlur={() => {
-                      validateTrialSessionSequence();
-                    }}
+                    onBlur={() => validateTrialSessionSequence()}
                     onChange={e => {
                       updateTrialSessionFormDataSequence({
                         key: e.target.name,
