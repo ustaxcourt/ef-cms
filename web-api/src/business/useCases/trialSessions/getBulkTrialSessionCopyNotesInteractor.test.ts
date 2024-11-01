@@ -1,10 +1,7 @@
-import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getBulkTrialSessionCopyNotesInteractor } from './getBulkTrialSessionCopyNotesInteractor';
-import { mockJudgeUser } from '@shared/test/mockAuthUsers';
-import { omit } from 'lodash';
+import { mockAdminUser, mockJudgeUser } from '@shared/test/mockAuthUsers';
 
 const MOCK_WORKING_COPY_NOTES = [
   {
@@ -16,12 +13,6 @@ const MOCK_WORKING_COPY_NOTES = [
     trialSessionId: '456',
   },
 ];
-const mockUnknownUser: AuthUser = {
-  email: 'someEmail@flexion.com',
-  name: 'Nora Scott',
-  role: ROLES.admissionsClerk,
-  userId: 'e796d8cd-2e85-4d79-b4e1-281b59cacd5f',
-};
 describe('getBulkTrialSessionCopyNotesInteractor', () => {
   beforeEach(() => {
     applicationContext
@@ -31,12 +22,11 @@ describe('getBulkTrialSessionCopyNotesInteractor', () => {
       );
   });
   it('should throw an error if the user is unauthorized', async () => {
-    const mockUnauthorizedUser = omit(mockUnknownUser, 'role');
     await expect(
       getBulkTrialSessionCopyNotesInteractor(
         applicationContext,
         { specialTrialSessions: [] },
-        mockUnauthorizedUser,
+        mockAdminUser,
       ),
     ).rejects.toThrow(UnauthorizedError);
   });
