@@ -4,13 +4,13 @@ import { filterEmptyStatisticsAction } from '../actions/StartCaseInternal/filter
 import { getPetitionIdAction } from '../actions/getPetitionIdAction';
 import { navigateToReviewSavedPetitionAction } from '../actions/CaseDetailEdit/navigateToReviewSavedPetitionAction';
 import { saveCaseDetailInternalEditAction } from '../actions/saveCaseDetailInternalEditAction';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseOnFormAction } from '../actions/setCaseOnFormAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
 import { setContactsOnFormAction } from '../actions/setContactsOnFormAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setProgressForFileUploadAction } from '@web-client/presenter/actions/setProgressForFileUploadAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
@@ -28,8 +28,8 @@ export const saveSavedCaseForLaterSequence = showProgressSequenceDecorator([
   validateCaseDetailAction,
   {
     error: [
-      setAlertErrorAction,
       setValidationErrorsAction,
+      setScrollToErrorNotificationAction,
       setValidationAlertErrorsAction,
     ],
     success: [

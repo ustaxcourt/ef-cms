@@ -41,7 +41,9 @@ export const FilingPartiesForm = connect(
             />
           </FormGroup>
         ) : (
-          <FormGroup errorText={filingPartiesFormHelper.partyValidationError}>
+          <FormGroup
+            errorText={filingPartiesFormHelper.partyValidationCheckboxError}
+          >
             <fieldset
               aria-labelledby="filed-by-legend"
               className={classNames(
@@ -117,6 +119,7 @@ export const FilingPartiesForm = connect(
                           key: e.target.name,
                           value: e.target.checked,
                         });
+                        validateSequence();
                       }}
                     />
                     <label
@@ -144,6 +147,7 @@ export const FilingPartiesForm = connect(
                           name="otherFilingParty"
                           type="text"
                           value={form.otherFilingParty || ''}
+                          onBlur={() => validateSequence()}
                           onChange={e => {
                             updateSequence({
                               key: e.target.name,
