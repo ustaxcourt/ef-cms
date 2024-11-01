@@ -134,6 +134,8 @@ table,
 
     &.message-queue-row {
       padding-top: 14px;
+      overflow-wrap: break-word;
+      word-break: break-word; // fallback
     }
 
     &.message-queue-case-title {
@@ -294,6 +296,16 @@ table,
 
     .filing-type-icon-mobile {
       display: none;
+    }
+
+    .multi-filing-type-icon {
+      display: flex;
+      width: fit-content;
+      padding-right: 0;
+      padding-left: 0;
+      margin-top: 4px;
+      margin-right: 0;
+      gap: 1rem;
     }
 
     tr.in-progress {
