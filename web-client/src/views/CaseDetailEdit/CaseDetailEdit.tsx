@@ -48,7 +48,7 @@ export const CaseDetailEdit = connect(
             title="IRS Notice"
           >
             <div className="blue-container">
-              <IRSNotice validationSequence={validateCaseDetailSequence} />
+              <IRSNotice validateFormData={validateCaseDetailSequence} />
             </div>
           </Tab>
         </Tabs>
