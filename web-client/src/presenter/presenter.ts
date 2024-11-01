@@ -405,6 +405,8 @@ import { setPDFStampDataSequence } from './sequences/setPDFStampDataSequence';
 import { setPdfPreviewUrlSequence } from './sequences/setPdfPreviewUrlSequence';
 import { setPendingReportSelectedJudgeSequence } from './sequences/Pending/setPendingReportSelectedJudgeSequence';
 import { setPetitionTypeSequence } from '@web-client/presenter/sequences/setPetitionTypeSequence';
+import { setPractitionerClosedCasesPageSequence } from '@web-client/presenter/sequences/setPractitionerClosedCasesPageSequence';
+import { setPractitionerOpenCasesPageSequence } from '@web-client/presenter/sequences/setPractitionerOpenCasesPageSequence';
 import { setSelectedAddressOnFormSequence } from './sequences/setSelectedAddressOnFormSequence';
 import { setSelectedBatchIndexSequence } from './sequences/setSelectedBatchIndexSequence';
 import { setSelectedDocumentsForDownloadSequence } from './sequences/setSelectedDocumentsForDownloadSequence';
@@ -583,6 +585,7 @@ import { validateChangeLoginAndServiceEmailSequence } from './sequences/validate
 import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCourtIssuedDocketEntrySequence';
 import { validateCourtOrderSequence } from './sequences/validateCourtOrderSequence';
 import { validateCreateMessageInModalSequence } from './sequences/validateCreateMessageInModalSequence';
+import { validateCustomCaseReportSequence } from '@web-client/presenter/sequences/validateCustomCaseReportSequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
 import { validateDocketEntryWorksheetSequence } from '@web-client/presenter/sequences/validateDocketEntryWorksheetSequence';
 import { validateDocumentSequence } from './sequences/validateDocumentSequence';
@@ -604,6 +607,7 @@ import { validateRemoveFromTrialSessionSequence } from './sequences/validateRemo
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateSetForHearingSequence } from './sequences/validateSetForHearingSequence';
 import { validateStampSequence } from './sequences/validateStampSequence';
+import { validateStatusReportOrderSequence } from '@web-client/presenter/sequences/StatusReportOrder/validateStatusReportOrderSequence';
 import { validateTrialSessionHearingNoteSequence } from './sequences/validateTrialSessionHearingNoteSequence';
 import { validateTrialSessionNoteSequence } from './sequences/validateTrialSessionNoteSequence';
 import { validateTrialSessionPlanningSequence } from './sequences/validateTrialSessionPlanningSequence';
@@ -1259,6 +1263,8 @@ export const presenterSequences = {
   setPendingReportSelectedJudgeSequence:
     setPendingReportSelectedJudgeSequence as unknown as Function,
   setPetitionTypeSequence,
+  setPractitionerClosedCasesPageSequence,
+  setPractitionerOpenCasesPageSequence,
   setSelectedAddressOnFormSequence:
     setSelectedAddressOnFormSequence as unknown as Function,
   setSelectedBatchIndexSequence:
@@ -1556,6 +1562,7 @@ export const presenterSequences = {
   validateCourtOrderSequence,
   validateCreateMessageInModalSequence:
     validateCreateMessageInModalSequence as unknown as Function,
+  validateCustomCaseReportSequence,
   validateDocketEntrySequence:
     validateDocketEntrySequence as unknown as Function,
   validateDocketEntryWorksheetSequence:
@@ -1592,6 +1599,7 @@ export const presenterSequences = {
   validateSetForHearingSequence:
     validateSetForHearingSequence as unknown as Function,
   validateStampSequence: validateStampSequence as unknown as Function,
+  validateStatusReportOrderSequence,
   validateTrialSessionHearingNoteSequence:
     validateTrialSessionHearingNoteSequence as unknown as Function,
   validateTrialSessionNoteSequence:

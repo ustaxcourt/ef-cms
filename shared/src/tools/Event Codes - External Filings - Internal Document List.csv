@@ -179,7 +179,7 @@ Motion to Take Judicial Notice,Motion to Take Judicial Notice,Motion,TRUE,TRUE,T
 Motion to Vacate,Motion to Vacate,Motion,TRUE,TRUE,TRUE,M120,Standard,,,,,
 Motion to Vacate or Revise Pursuant to Rule 162,Motion to Vacate or Revise Pursuant to Rule 162,Motion,TRUE,TRUE,TRUE,M110,Standard,,,,,
 Motion to Withdraw,Motion to Withdraw,Motion,TRUE,TRUE,TRUE,M111,Standard,,,,,
-Motion to Withdraw Counsel,Motion to Withdraw Counsel (filed by petitioner) ,Appearance and Representation,FALSE,TRUE,TRUE,M116,Standard,,,,,
+Motion to Withdraw Counsel,Motion to Withdraw Counsel (filed by petitioner),Motion,FALSE,TRUE,TRUE,M116,Standard,,,,,
 Motion to Withdraw or Modify the Deemed Admitted Admissions Pursuant to Rule 90(f),Motion to Withdraw or Modify the Deemed Admitted Admissions Pursuant to Rule 90(f),Motion,TRUE,TRUE,TRUE,M113,Standard,,,,,
 No Objection to [Document Name],No Objection,"Response, Opposition or Objection",TRUE,TRUE,TRUE,NOB,Nonstandard A,,Which document are you not objecting to?,,,
 Notice [anything],Notice ,Notice,,,,NOT,Nonstandard B,,,What is this notice for?,,

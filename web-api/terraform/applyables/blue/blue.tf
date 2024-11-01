@@ -18,7 +18,7 @@ terraform {
   }
 
   required_providers {
-    aws = "5.72.1"
+    aws = "5.73"
   }
 }
 
@@ -86,6 +86,50 @@ module "lambda_role_blue" {
   role_name   = "lambda_role_${var.environment}_blue"
   environment = var.environment
   dns_domain  = var.dns_domain
+}
+
+module "ecr-blue-east" {
+  source     = "../../modules/elastic-container-registry"
+	environment            = var.environment
+	region                 = "us-east-1"
+	color                  = "blue"
+	providers = {
+    aws = aws.us-east-1
+  }
+}
+
+module "ecr-blue-west" {
+  source     = "../../modules/elastic-container-registry"
+	environment            = var.environment
+	region                 = "us-west-1"
+	color                  = "blue"
+	providers = {
+    aws = aws.us-west-1
+  }
+}
+
+module "zip_batch_east" {
+  source            = "../../modules/batch"
+  environment       = var.environment
+  dns_domain        = var.dns_domain
+  region            = "us-east-1"
+  current_color     = "blue"
+
+  providers = {
+    aws           = aws.us-east-1
+  }
+}
+
+module "zip_batch_west" {
+  source            = "../../modules/batch"
+  environment       = var.environment
+  dns_domain        = var.dns_domain
+  region            = "us-west-1"
+  current_color     = "blue"
+
+  providers = {
+    aws           = aws.us-west-1
+  }
 }
 
 module "api-east-blue" {
