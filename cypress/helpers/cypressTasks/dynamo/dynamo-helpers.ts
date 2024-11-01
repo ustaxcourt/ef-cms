@@ -70,7 +70,7 @@ export const toggleFeatureFlag = async ({
       pk: flag,
       sk: flag,
     },
-    TableName: getCypressEnv().dynamoDbTableName,
+    TableName: getCypressEnv().dynamoDbDeployTableName,
     UpdateExpression: 'SET #value = :value',
   });
 
