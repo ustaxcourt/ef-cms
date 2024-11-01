@@ -172,12 +172,17 @@ const scheduleCases = ({
     remainingCaseCounts[schedulingConfig.sessionType.toLowerCase()] >=
     schedulingConfig.min
   ) {
-    addProspectiveTrialSession({
-      caseCountsAndSessionsByCity,
-      cityWasNotVisitedInLastTwoTerms,
-      sessionType: schedulingConfig.sessionType,
-      trialLocation,
-    });
+    if (
+      caseCountsAndSessionsByCity[trialLocation].prospectiveSessions.length <
+      schedulingConfig.max
+    ) {
+      addProspectiveTrialSession({
+        caseCountsAndSessionsByCity,
+        cityWasNotVisitedInLastTwoTerms,
+        sessionType: schedulingConfig.sessionType,
+        trialLocation,
+      });
+    }
 
     if (
       remainingCaseCounts[schedulingConfig.sessionType.toLowerCase()] -
