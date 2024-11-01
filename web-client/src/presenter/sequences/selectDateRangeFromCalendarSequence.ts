@@ -1,5 +1,4 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
@@ -14,11 +13,7 @@ export const selectDateRangeFromCalendarSequence = [
     validate: [
       validateSearchDeadlinesAction,
       {
-        error: [
-          setAlertErrorAction,
-          setValidationErrorsAction,
-          setValidationAlertErrorsAction,
-        ],
+        error: [setValidationErrorsAction, setValidationAlertErrorsAction],
         success: [clearAlertsAction],
       },
     ],
