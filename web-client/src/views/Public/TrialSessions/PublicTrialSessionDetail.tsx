@@ -1,14 +1,11 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
-import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
-import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
-import { SuccessNotification } from '@web-client/views/SuccessNotification';
+import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
 import { TrialSessionDetailHeader } from '@web-client/views/TrialSessionDetail/TrialSessionDetailHeader';
 import { TrialSessionPublicCaseRow } from '@web-client/presenter/computeds/Public/publicTrialSessionDetailHelper';
-import { WarningNotification } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
@@ -27,12 +24,7 @@ export const PublicTrialSessionDetail = connect(
             publicTrialSessionDetailHelper.formattedTrialSession
           }
         />
-
         <section className="usa-section grid-container">
-          <SuccessNotification />
-          <ErrorNotification />
-          <WarningNotification />
-
           <PublicTrialSessionInformation />
         </section>
       </>
@@ -55,7 +47,7 @@ const PublicTrialSessionInformation = connect(
       <>
         <Button
           link
-          className="margin-bottom-3"
+          className="margin-bottom-1 text-left"
           href="/trial-sessions"
           icon={['fa', 'arrow-alt-circle-left']}
         >
@@ -63,14 +55,14 @@ const PublicTrialSessionInformation = connect(
         </Button>
         <h1>Session Information</h1>
         <div className="margin-bottom-205">
-          {`Information on this page is current as of ${publicTrialSessionDetailHelper.formattedNow}`}
+          {`Information on this page is current as of ${publicTrialSessionDetailHelper.formattedNow}.`}
         </div>
         {(trialSession.isSwingSession ||
           publicTrialSessionDetailHelper.formattedTrialSession
             .hasCourthouseInformation) && (
           <div className="card padding-205 maxw-mobile-lg">
             <h3 className="underlined">Details</h3>
-            <div className="display-flex flex-wrap gap-3">
+            <div className="display-flex flex-wrap gap-5">
               {publicTrialSessionDetailHelper.formattedTrialSession
                 .hasCourthouseInformation && (
                 <div>
@@ -98,12 +90,14 @@ const PublicTrialSessionInformation = connect(
                   <span className="label">Swing session</span>
                   <div className="padding-05"></div>
                   <span className="display-flex gap-1 flex-align-center">
-                    <FontAwesomeIcon
-                      className="fa-icon-blue"
-                      icon="link"
-                      size="sm"
-                      title="swing session"
-                    />
+                    <NonPhone>
+                      <FontAwesomeIcon
+                        className="fa-icon-blue"
+                        icon="link"
+                        size="sm"
+                        title="swing session"
+                      />
+                    </NonPhone>
                     <a
                       href={`/trial-session-detail/${trialSession.swingSessionId}`}
                     >
@@ -115,22 +109,22 @@ const PublicTrialSessionInformation = connect(
             </div>
           </div>
         )}
-        <NonMobile>
+        <NonPhone>
           <NonMobileOpenCases
             openCases={
               publicTrialSessionDetailHelper.formattedTrialSession
                 .formattedCases
             }
           />
-        </NonMobile>
-        <Mobile>
+        </NonPhone>
+        <Phone>
           <MobileOpenCases
             openCases={
               publicTrialSessionDetailHelper.formattedTrialSession
                 .formattedCases
             }
           />
-        </Mobile>
+        </Phone>
       </>
     );
   },
@@ -162,18 +156,20 @@ function NonMobileOpenCases({
             <th>Respondent Counsel</th>
           </tr>
         </thead>
-        {openCases?.map(item => (
-          <tbody key={item.docketNumberWithSuffix}>
+        {openCases?.map(publicCase => (
+          <tbody key={publicCase.docketNumberWithSuffix}>
             <tr className="eligible-cases-row">
               <td>
                 <div className="multi-filing-type-icon">
                   <div
                     className={
-                      item.isSealed ? 'visibility-visible' : 'visibility-hidden'
+                      publicCase.isSealed
+                        ? 'visibility-visible'
+                        : 'visibility-hidden'
                     }
                   >
                     <Icon
-                      aria-hidden={!item.isSealed}
+                      aria-hidden={!publicCase.isSealed}
                       aria-label="sealed"
                       className="sealed-case-entry"
                       icon="lock"
@@ -183,15 +179,16 @@ function NonMobileOpenCases({
                   <span
                     className={classNames({
                       'margin-left-2':
-                        item.inConsolidatedGroup && !item.isLeadCase,
+                        publicCase.inConsolidatedGroup &&
+                        !publicCase.isLeadCase,
                     })}
                   >
                     <ConsolidatedCaseIcon
                       consolidatedIconTooltipText={
-                        item.consolidatedIconTooltipText
+                        publicCase.consolidatedIconTooltipText
                       }
-                      inConsolidatedGroup={item.inConsolidatedGroup}
-                      showLeadCaseIcon={item.isLeadCase}
+                      inConsolidatedGroup={publicCase.inConsolidatedGroup}
+                      showLeadCaseIcon={publicCase.isLeadCase}
                     />
                   </span>
                 </div>
@@ -200,20 +197,20 @@ function NonMobileOpenCases({
                 <span
                   className={classNames({
                     'margin-left-2':
-                      item.inConsolidatedGroup && !item.isLeadCase,
+                      publicCase.inConsolidatedGroup && !publicCase.isLeadCase,
                   })}
                 >
-                  <CaseLink formattedCase={item} />
+                  <CaseLink formattedCase={publicCase} />
                 </span>
               </td>
-              <td>{item.caseTitle}</td>
+              <td>{publicCase.caseTitle}</td>
               <td>
-                {item.privatePractitioners?.map(practitioner => (
+                {publicCase.privatePractitioners?.map(practitioner => (
                   <div key={practitioner.name}>{practitioner.name}</div>
                 ))}
               </td>
               <td>
-                {item.irsPractitioners?.map(respondent => (
+                {publicCase.irsPractitioners?.map(respondent => (
                   <div key={respondent.name}>{respondent.name}</div>
                 ))}
               </td>
@@ -247,49 +244,51 @@ function MobileOpenCases({
           </tr>
         </thead>
         <tbody>
-          {openCases.map(item => {
+          {openCases.map(publicCase => {
             return (
-              <tr className="padding-0" key={item.docketNumberWithSuffix}>
+              <tr className="padding-0" key={publicCase.docketNumberWithSuffix}>
                 <td>
-                  <div>
+                  <div style={{ alignItems: 'center', display: 'flex' }}>
                     <span className="margin-right-3">
                       <ConsolidatedCaseIcon
                         consolidatedIconTooltipText={
-                          item.consolidatedIconTooltipText
+                          publicCase.consolidatedIconTooltipText
                         }
-                        inConsolidatedGroup={item.inConsolidatedGroup}
-                        showLeadCaseIcon={item.isLeadCase}
+                        inConsolidatedGroup={publicCase.inConsolidatedGroup}
+                        showLeadCaseIcon={publicCase.isLeadCase}
                       />
                     </span>
-                    <CaseLink formattedCase={item}></CaseLink>
-                    <div className="text-right">
-                      <Icon
-                        aria-hidden={!item.isSealed}
-                        aria-label="sealed"
-                        className="sealed-case-entry"
-                        icon="lock"
-                        title="sealed"
-                      />
-                    </div>
+                    <CaseLink formattedCase={publicCase} />
+                    {publicCase.isSealed && (
+                      <span className="text-right margin-left-auto">
+                        <Icon
+                          aria-hidden={!publicCase.isSealed}
+                          aria-label="sealed"
+                          className="sealed-case-entry"
+                          icon="lock"
+                          title="sealed"
+                        />
+                      </span>
+                    )}
                   </div>
                 </td>
                 <td>
                   <div
                     className="padding-bottom-3"
-                    key={item.docketNumberWithSuffix}
+                    key={publicCase.docketNumberWithSuffix}
                   >
                     <div className="display-flex flex-column gap-3">
                       <div>
                         <span className="label">Case Title</span>
-                        {item.caseTitle}
+                        {publicCase.caseTitle}
                       </div>
-                      {item.privatePractitioners?.map(practitioner => (
+                      {publicCase.privatePractitioners?.map(practitioner => (
                         <div key={practitioner.name}>
                           <span className="label">Petitioner Counsel</span>
                           <div>{practitioner.name}</div>
                         </div>
                       ))}
-                      {item.irsPractitioners?.map(respondent => (
+                      {publicCase.irsPractitioners?.map(respondent => (
                         <div key={respondent.name}>
                           <span className="label">Respondent Counsel</span>
                           <div>{respondent.name}</div>
