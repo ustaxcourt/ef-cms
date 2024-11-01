@@ -11,6 +11,8 @@ import { ReplyMessageType } from '@web-api/business/useCases/messages/createMess
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { createMessage } from '@web-api/persistence/postgres/messages/createMessage';
+import { markMessageThreadRepliedTo } from '@web-api/persistence/postgres/messages/markMessageThreadRepliedTo';
 
 export const replyToMessage = async (
   applicationContext: ServerApplicationContext,
@@ -29,8 +31,7 @@ export const replyToMessage = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  await applicationContext.getPersistenceGateway().markMessageThreadRepliedTo({
-    applicationContext,
+  await markMessageThreadRepliedTo({
     parentMessageId,
   });
 
@@ -47,30 +48,26 @@ export const replyToMessage = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: toUserId });
 
-  const validatedRawMessage = new Message(
-    {
-      attachments,
-      caseStatus: status,
-      caseTitle: Case.getCaseTitle(caseCaption),
-      docketNumber,
-      docketNumberWithSuffix,
-      from: fromUser.name,
-      fromSection: fromUser.section,
-      fromUserId: fromUser.userId,
-      message,
-      parentMessageId,
-      subject,
-      to: toUser.name,
-      toSection,
-      toUserId,
-    },
-    { applicationContext },
-  )
+  const validatedRawMessage = new Message({
+    attachments,
+    caseStatus: status,
+    caseTitle: Case.getCaseTitle(caseCaption),
+    docketNumber,
+    docketNumberWithSuffix,
+    from: fromUser.name,
+    fromSection: fromUser.section,
+    fromUserId: fromUser.userId,
+    message,
+    parentMessageId,
+    subject,
+    to: toUser.name,
+    toSection,
+    toUserId,
+  })
     .validate()
     .toRawObject();
 
-  await applicationContext.getPersistenceGateway().createMessage({
-    applicationContext,
+  await createMessage({
     message: validatedRawMessage,
   });
 
