@@ -3,6 +3,11 @@ export interface SpecialTrialSession {
   trialSessionId: string;
 }
 
+export interface SpecialTrialSessionKey {
+  pk: string;
+  sk: string;
+}
+
 export interface TrialSessionWorkingCopyNotes {
   sessionNotes: string;
   trialSessionId: string;
