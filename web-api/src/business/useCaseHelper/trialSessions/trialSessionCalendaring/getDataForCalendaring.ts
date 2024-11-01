@@ -38,23 +38,6 @@ export const getDataForCalendaring = ({
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
   incorrectSizeRegularCases: EligibleCase[];
 } => {
-  let {
-    caseCountsAndSessionsByCity,
-    incorrectSizeCases: incorrectSizeRegularCases,
-  } = getCasesByCityAndIncorrectlySizedCases(cases);
-
-  return {
-    caseCountsAndSessionsByCity,
-    incorrectSizeRegularCases,
-  };
-};
-
-const getCasesByCityAndIncorrectlySizedCases = (
-  cases: EligibleCase[],
-): {
-  incorrectSizeCases: EligibleCase[];
-  caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
-} => {
   const incorrectSizeCases: EligibleCase[] = [];
   const caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity =
     initializeCaseCountsAndSessionsByCity();
@@ -74,10 +57,13 @@ const getCasesByCityAndIncorrectlySizedCases = (
 
   handleWashingtonDC(caseCountsAndSessionsByCity);
 
-  return { caseCountsAndSessionsByCity, incorrectSizeCases };
+  return {
+    caseCountsAndSessionsByCity,
+    incorrectSizeRegularCases: incorrectSizeCases,
+  };
 };
 
-const isCorrectlySizedCity = (aCase): boolean => {
+const isCorrectlySizedCity = (aCase: EligibleCase): boolean => {
   return (
     aCase.procedureType !== PROCEDURE_TYPES_MAP.regular ||
     REGULAR_TRIAL_CITY_STRINGS.includes(aCase.preferredTrialCity!)
@@ -101,7 +87,7 @@ const initializeCaseCountsAndSessionsByCity =
 
 const handleWashingtonDC = (
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity,
-) => {
+): void => {
   // Since we only assign non-special sessions to DC South,
   // we can use DC counts of non-special sessions at South.
   caseCountsAndSessionsByCity[WASHINGTON_DC_NORTH_STRING] = {
