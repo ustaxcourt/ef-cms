@@ -17,9 +17,9 @@ YELLOW='\033[1;33m'
 NC='\033[0m'
 
 # verify expected env variables are set
-for EXPECTED_ENV_VAR in "$@"
-do
-  if [[ "$EXPECTED_ENV_VAR" != "--quiet" ]] && [[ "$EXPECTED_ENV_VAR" != "-q" ]]; then
+for EXPECTED_ENV_VAR in "$@"; do
+  EXPECTED_ENV_VAR=$(xargs echo -n <<< "$EXPECTED_ENV_VAR")
+  if [[ -n "$EXPECTED_ENV_VAR" ]] && [[ "$EXPECTED_ENV_VAR" != "--quiet" ]] && [[ "$EXPECTED_ENV_VAR" != "-q" ]]; then
     # shellcheck disable=SC2296
     if {
       [[ -n $BASH_VERSION ]] && [[ -z "${!EXPECTED_ENV_VAR}" ]];
@@ -41,14 +41,16 @@ fi
 if [[ $quiet -eq 0 ]]; then
   printf "\n%bVerify these env variables seem correct:%b\n" "${GREEN}" "${NC}"
   # # print all expected env variables
-  for EXPECTED_ENV_VAR in "$@"
-  do
-    if [[ ${EXPECTED_ENV_VAR} == *"AWS"* ]] || [[ ${EXPECTED_ENV_VAR} == *"PASS"* ]]; then
-      echo "- $EXPECTED_ENV_VAR=*******"
-    else
-      # shellcheck disable=SC2296
-      [[ -n $BASH_VERSION ]] && value="${!EXPECTED_ENV_VAR}" || value="${(P)EXPECTED_ENV_VAR}"
-      echo "- $EXPECTED_ENV_VAR=${value}"
+  for EXPECTED_ENV_VAR in "$@"; do
+    EXPECTED_ENV_VAR=$(xargs echo -n <<< "$EXPECTED_ENV_VAR")
+    if [[ -n "$EXPECTED_ENV_VAR" ]] && [[ "$EXPECTED_ENV_VAR" != "--quiet" ]] && [[ "$EXPECTED_ENV_VAR" != "-q" ]]; then
+      if [[ ${EXPECTED_ENV_VAR} == *"AWS"* ]] || [[ ${EXPECTED_ENV_VAR} == *"PASS"* ]]; then
+        echo "- $EXPECTED_ENV_VAR=*******"
+      else
+        # shellcheck disable=SC2296
+        [[ -n $BASH_VERSION ]] && value="${!EXPECTED_ENV_VAR}" || value="${(P)EXPECTED_ENV_VAR}"
+        echo "- $EXPECTED_ENV_VAR=${value}"
+      fi
     fi
   done
 

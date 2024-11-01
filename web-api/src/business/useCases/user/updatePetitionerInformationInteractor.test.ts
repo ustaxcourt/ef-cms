@@ -1,4 +1,6 @@
 /* eslint-disable max-lines */
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/messages/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,

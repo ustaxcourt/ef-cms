@@ -4,12 +4,12 @@ import { completeMotionStampingAction } from '../actions/completeMotionStampingA
 import { followRedirectAction } from '../actions/followRedirectAction';
 import { getDraftDocumentTitleFromStampDataAction } from '../actions/StampMotion/getDraftDocumentTitleFromStampDataAction';
 import { navigateToDraftDocumentsAction } from '../actions/navigateToDraftDocumentsAction';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setDefaultDraftDocumentIdAction } from '../actions/setDefaultDraftDocumentIdAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setSuccessfulStampFromDocumentTitleAction } from '../actions/StampMotion/setSuccessfulStampFromDocumentTitleAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -22,8 +22,8 @@ export const submitStampMotionSequence = showProgressSequenceDecorator([
   validateStampAction,
   {
     error: [
-      setAlertErrorAction,
       setValidationErrorsAction,
+      setScrollToErrorNotificationAction,
       setValidationAlertErrorsAction,
     ],
     success: [

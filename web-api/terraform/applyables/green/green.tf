@@ -78,6 +78,10 @@ resource "terraform_data" "locals" {
     STAGE                              = var.environment
     USER_POOL_ID                       = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_id
     USER_POOL_IRS_ID                   = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_irs_id
+    POSTGRES_HOST                      = data.terraform_remote_state.remote.outputs.rds_host_name
+    POSTGRES_READ_HOST                 = data.terraform_remote_state.remote.outputs.rds_host_name_west
+    POSTGRES_USER                      = data.terraform_remote_state.remote.outputs.postgres_user
+    DATABASE_NAME                      = data.terraform_remote_state.remote.outputs.database_name
   }
 }
 
@@ -86,7 +90,53 @@ module "lambda_role_green" {
   role_name   = "lambda_role_${var.environment}_green"
   environment = var.environment
   dns_domain  = var.dns_domain
+  postgres_user = data.terraform_remote_state.remote.outputs.postgres_user
 }
+
+module "ecr-green-east" {
+  source     = "../../modules/elastic-container-registry"
+	environment            = var.environment
+	region                 = "us-east-1"
+	color                  = "green"
+	providers = {
+    aws = aws.us-east-1
+  }
+}
+
+module "ecr-green-west" {
+  source     = "../../modules/elastic-container-registry"
+	environment            = var.environment
+	region                 = "us-west-1"
+	color                  = "green"
+	providers = {
+    aws = aws.us-west-1
+  }
+}
+
+module "zip_batch_east" {
+  source            = "../../modules/batch"
+  environment       = var.environment
+  dns_domain        = var.dns_domain
+  region            = "us-east-1"
+  current_color     = "green"
+
+  providers = {
+    aws           = aws.us-east-1
+  }
+}
+
+module "zip_batch_west" {
+  source            = "../../modules/batch"
+  environment       = var.environment
+  dns_domain        = var.dns_domain
+  region            = "us-west-1"
+  current_color     = "green"
+
+  providers = {
+    aws           = aws.us-west-1
+  }
+}
+
 
 module "api-east-green" {
   lambda_role_arn     = module.lambda_role_green.role_arn

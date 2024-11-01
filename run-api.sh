@@ -39,6 +39,8 @@ if [ "${exitCode}" != 0 ]; then
   echo "Failed to seed data!". 1>&2 && exit 1
 fi
 
+npm run migration:postgres
+npm run seed:postgres
 
 if [[ -z "${RUN_DIR}" ]]; then
   RUN_DIR="src"
