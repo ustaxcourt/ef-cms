@@ -142,6 +142,7 @@ function NonMobileOpenCases({
       </div>
       <table
         className="usa-table ustc-table trial-sessions subsection"
+        data-testid="public-open-cases"
         id="public-open-cases"
       >
         <thead>
@@ -158,7 +159,10 @@ function NonMobileOpenCases({
         </thead>
         {openCases?.map(publicCase => (
           <tbody key={publicCase.docketNumberWithSuffix}>
-            <tr className="eligible-cases-row">
+            <tr
+              className="eligible-cases-row"
+              data-testid={`trial-session-detail-row-${publicCase.docketNumberWithSuffix}`}
+            >
               <td>
                 <div className="multi-filing-type-icon">
                   <div

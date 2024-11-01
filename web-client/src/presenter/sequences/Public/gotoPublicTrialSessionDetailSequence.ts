@@ -1,5 +1,5 @@
-import { getPublicTrialSessionDetailsAction } from '@web-client/presenter/actions/TrialSession/getPublicTrialSessionDetailsAction';
-import { setPublicTrialSessionDetailAction } from '@web-client/presenter/actions/Public/setPublicTrialSessionDetailAction';
+import { getPublicTrialSessionDetailsAction } from '@web-client/presenter/actions/Public/TrialSessions/getPublicTrialSessionDetailsAction';
+import { setPublicTrialSessionDetailAction } from '@web-client/presenter/actions/Public/TrialSessions/setPublicTrialSessionDetailAction';
 import { setupCurrentPageAction } from '@web-client/presenter/actions/setupCurrentPageAction';
 
 export const gotoPublicTrialSessionDetailSequence = [
