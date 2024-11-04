@@ -1,4 +1,3 @@
-import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -10,11 +9,12 @@ import {
   TrialSessionWorkingCopyNotes,
 } from '@shared/business/entities/trialSessions/SpeciailTrialSessions';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const getBulkTrialSessionCopyNotesInteractor = async (
   applicationContext: ServerApplicationContext,
   { specialTrialSessions }: { specialTrialSessions: SpecialTrialSession[] },
-  authorizedUser: AuthUser,
+  authorizedUser: UnknownAuthUser,
 ): Promise<Array<TrialSessionWorkingCopyNotes>> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
