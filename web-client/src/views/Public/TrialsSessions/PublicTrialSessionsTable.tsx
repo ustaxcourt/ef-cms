@@ -32,7 +32,7 @@ export const PublicTrialSessionsTable = connect<
         <thead>
           <tr>
             <th className="width-mobile">Start Date</th>
-            <th className="icon-column" />
+            <th aria-label="Swing session icon" className="icon-column" />
             <th className="width-mobile">Location</th>
             <th className="width-mobile">Proceeding Type</th>
             <th className="width-mobile">Session Type</th>
@@ -75,6 +75,7 @@ export const PublicTrialSessionsTable = connect<
                   <td>
                     {row.swingSession && (
                       <FontAwesomeIcon
+                        aria-label="Swing session: will be held in two cities"
                         className="fa-icon-blue"
                         icon="link"
                         size="sm"
