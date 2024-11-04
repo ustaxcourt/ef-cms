@@ -133,7 +133,9 @@ export const EligibleCases = connect(
                       <input
                         aria-label="qc complete"
                         checked={
-                          item.qcCompleteForTrial[trialSessionId] === true
+                          trialSessionId
+                            ? item.qcCompleteForTrial[trialSessionId] === true
+                            : false
                         }
                         className="usa-checkbox__input"
                         data-testid={`qc-complete-${item.docketNumber}`}
@@ -143,8 +145,9 @@ export const EligibleCases = connect(
                         onChange={() => {
                           updateQcCompleteForTrialSequence({
                             docketNumber: item.docketNumber,
-                            qcCompleteForTrial:
-                              !item.qcCompleteForTrial[trialSessionId],
+                            qcCompleteForTrial: trialSessionId
+                              ? !item.qcCompleteForTrial[trialSessionId]
+                              : false,
                           });
                         }}
                       />
