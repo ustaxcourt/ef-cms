@@ -23,6 +23,9 @@ export const PublicMobileTrialSessionsTable = connect<
           {publicTrialSessionsHelper.trialSessionsCount}
         </span>
       </div>
+      {publicTrialSessionsHelper.trialSessionRows.length === 0 && (
+        <p>There are no trial sessions for the selected filters.</p>
+      )}
       <div className="padding-1"></div>
 
       <table className="usa-table usa-table--stacked-header usa-table--borderless">
@@ -58,6 +61,7 @@ export const PublicMobileTrialSessionsTable = connect<
                           proceedingType={tsRow.proceedingType}
                           sessionType={tsRow.sessionType}
                           startDate={tsRow.formattedStartDate}
+                          swingSession={tsRow.swingSession}
                           trialLocation={tsRow.trialLocation}
                           trialSessionId={tsRow.trialSessionId}
                         />

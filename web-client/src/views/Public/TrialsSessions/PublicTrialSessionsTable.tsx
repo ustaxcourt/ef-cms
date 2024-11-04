@@ -21,10 +21,8 @@ export const PublicTrialSessionsTable = connect<
     <>
       <div className="grid-row margin-bottom-2 width-full flex-align-center"></div>
       <div className="width-full text-right">
-        <span className="text-bold">Count:</span>{' '}
-        <span className="text-semibold">
-          {publicTrialSessionsHelper.trialSessionsCount}
-        </span>
+        <span className="text-semibold">Count:</span>{' '}
+        <span>{publicTrialSessionsHelper.trialSessionsCount}</span>
       </div>
       <div className="padding-1"></div>
       <table
@@ -33,12 +31,12 @@ export const PublicTrialSessionsTable = connect<
       >
         <thead>
           <tr>
-            <th className="width-card">Start Date</th>
-            <th className="icon-column" />
+            <th className="width-mobile">Start Date</th>
+            <th aria-label="Swing session icon" className="icon-column" />
             <th className="width-mobile">Location</th>
-            <th className="width-card-lg">Proceeding Type</th>
-            <th className="width-card">Session Type</th>
-            <th className="width-card">Judge</th>
+            <th className="width-mobile">Proceeding Type</th>
+            <th className="width-mobile">Session Type</th>
+            <th className="width-mobile">Judge</th>
           </tr>
         </thead>
         {publicTrialSessionsHelper.trialSessionRows.map(row => {
@@ -77,10 +75,11 @@ export const PublicTrialSessionsTable = connect<
                   <td>
                     {row.swingSession && (
                       <FontAwesomeIcon
+                        aria-label="Swing session: will be held in two cities"
                         className="fa-icon-blue"
                         icon="link"
                         size="sm"
-                        title="swing session"
+                        title="Swing session: will be held in two cities"
                       />
                     )}
                   </td>

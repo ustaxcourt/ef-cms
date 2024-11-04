@@ -158,6 +158,6 @@ export const publicTrialSessionsHelper = (
     trialCitiesByState,
     trialSessionJudgeOptions,
     trialSessionRows,
-    trialSessionsCount: paginatedTrialSessions.length,
+    trialSessionsCount: filteredTrialSessions.length,
   };
 };

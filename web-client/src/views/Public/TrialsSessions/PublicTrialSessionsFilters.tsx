@@ -59,7 +59,7 @@ export const PublicTrialSessionsFilters = connect<
 
     function proceedingTypeRadioOption(key: string, value: string) {
       return (
-        <div className="usa-radio usa-radio__inline" key={key}>
+        <div className="usa-radio usa-radio__inline padding-right-1" key={key}>
           <input
             aria-describedby="proceeding-type-legend"
             checked={proceedingType === value}
@@ -94,7 +94,7 @@ export const PublicTrialSessionsFilters = connect<
         <FormGroup>
           <fieldset
             className="usa-fieldset margin-top-2"
-            data-testid="trial-session-proceeding-type"
+            data-testid="proceeding-type-filter"
           >
             <legend className="usa-legend" id="proceeding-type-legend">
               Proceeding type
@@ -105,21 +105,20 @@ export const PublicTrialSessionsFilters = connect<
           </fieldset>
         </FormGroup>
 
-        <div className="tablet:grid-col grid-col-12">
+        <div className="desktop:grid-col grid-col-12">
           <div className="grid-row">
-            <div className="tablet:grid-col-4 grid-col-12 padding-right-2">
-              <div className="margin-bottom-1">
-                <label
-                  className="usa-label"
-                  htmlFor="session-type-filter"
-                  id="session-type-filter-label"
-                >
+            <div
+              className="desktop:grid-col-4 grid-col-12 tablet:padding-right-2"
+              data-testid="session-type-filter"
+            >
+              <div className="margin-bottom-4">
+                <label className="usa-label" htmlFor="session-type-filter">
                   Session type{' '}
                   <span className="optional-light-text">(optional)</span>
                 </label>
                 <SelectSearch
                   aria-labelledby="session-type-filter-label"
-                  data-testid="trial-session-type-filter-search"
+                  data-testid="session-type-filter-select"
                   inputId="session-type-filter"
                   name="sessionType"
                   options={publicTrialSessionsHelper.sessionTypeOptions}
@@ -146,6 +145,7 @@ export const PublicTrialSessionsFilters = connect<
                   },
                 ).map(([sessionTypeKey, sessionTypeLabel]) => (
                   <PillButton
+                    data-testid={`session-${sessionTypeLabel}-pill-button`}
                     key={sessionTypeLabel}
                     text={sessionTypeLabel}
                     onRemove={() => {
@@ -159,8 +159,11 @@ export const PublicTrialSessionsFilters = connect<
                 ))}
               </NonMobile>
             </div>
-            <div className="tablet:grid-col-4 grid-col-12 padding-right-2">
-              <div className="margin-bottom-1">
+            <div
+              className="desktop:grid-col-4 grid-col-12 tablet:padding-right-2"
+              data-testid="location-filter"
+            >
+              <div className="margin-bottom-4">
                 <label
                   className="usa-label"
                   htmlFor="location-filter"
@@ -171,7 +174,7 @@ export const PublicTrialSessionsFilters = connect<
                 </label>
                 <SelectSearch
                   aria-labelledby="location-filter-label"
-                  data-testid="trial-session-location-filter-search"
+                  data-testid="location-filter-search"
                   inputId="location-filter"
                   name="location"
                   options={publicTrialSessionsHelper.trialCitiesByState}
@@ -198,6 +201,7 @@ export const PublicTrialSessionsFilters = connect<
                   },
                 ).map(([locationKey, locationLabel]) => (
                   <PillButton
+                    data-testid={`location-${locationLabel}-pill-button`}
                     key={locationLabel}
                     text={locationLabel}
                     onRemove={() => {
@@ -211,7 +215,10 @@ export const PublicTrialSessionsFilters = connect<
                 ))}
               </NonMobile>
             </div>
-            <div className="tablet:grid-col-4 grid-col-12 padding-right-2">
+            <div
+              className="desktop:grid-col-4 grid-col-12 tablet:padding-right-2"
+              data-testid="judge-filter"
+            >
               <div className="margin-bottom-1">
                 <label
                   className="usa-label"
@@ -222,7 +229,7 @@ export const PublicTrialSessionsFilters = connect<
                 </label>
                 <SelectSearch
                   aria-labelledby="judges-filter-label"
-                  data-testid="trial-session-judge-filter-search"
+                  data-testid="judge-filter-search"
                   inputId="judges-filter"
                   name="judges"
                   options={publicTrialSessionsHelper.trialSessionJudgeOptions}
@@ -246,6 +253,7 @@ export const PublicTrialSessionsFilters = connect<
                 {Object.entries(judges as { [key: string]: string }).map(
                   ([judgeKey, judgeLabel]) => (
                     <PillButton
+                      data-testid={`judge-${judgeLabel}-pill-button`}
                       key={judgeKey}
                       text={judgeLabel}
                       onRemove={() => {

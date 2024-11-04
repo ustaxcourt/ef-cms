@@ -4,7 +4,7 @@ import {
 } from '@web-client/ustc-ui/Accordion/Accordion';
 import { BigHeader } from '@web-client/views/BigHeader';
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
+import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 import { PublicMobileTrialSessionsTable } from '@web-client/views/Public/TrialsSessions/PublicMobileTrialSessionsTable';
@@ -42,7 +42,7 @@ type TrialsSessionsUiParams = {
     pageNumber?: number;
     proceedingType?: string;
   };
-  displayProgressSpinnerSequence?: (props: { timeInSeconds: number }) => void;
+  displayProgressSpinnerSequence: (props: { timeInSeconds: number }) => void;
 };
 
 export const PublicTrialSessions = connect(
@@ -66,6 +66,7 @@ export const PublicTrialSessions = connect(
         <BigHeader text="Scheduled Trial Sessions" />
 
         {NonMobilePublicTrialsSessions({
+          displayProgressSpinnerSequence,
           publicTrialSessionData,
           publicTrialSessionsHelper,
           resetPublicTrialSessionDataSequence,
@@ -84,20 +85,20 @@ export const PublicTrialSessions = connect(
 );
 
 function NonMobilePublicTrialsSessions({
+  displayProgressSpinnerSequence,
   publicTrialSessionData,
   publicTrialSessionsHelper,
   resetPublicTrialSessionDataSequence,
   updateFormValueSequence,
 }: TrialsSessionsUiParams) {
   return (
-    <NonMobile>
+    <NonPhone>
       <section className="usa-section grid-container">
         <div className="grid-row">
           <div className="tablet:grid-col-8 grid-col-12 padding-top-2">
-            <div>
-              Information on this page is current as of{' '}
-              {publicTrialSessionsHelper.fetchedDateString}
-            </div>
+            <FetchedTimeMessage
+              fetchedDateString={publicTrialSessionsHelper.fetchedDateString}
+            ></FetchedTimeMessage>
             <PublicTrialSessionsFilters ROOT={ROOT} />
           </div>
           <div className="tablet:grid-col-4 grid-col-12 padding-top-1">
@@ -107,8 +108,12 @@ function NonMobilePublicTrialsSessions({
         <div className="grid-row">
           <Button
             link
+            data-testid="trial-sessions-reset-filters-button"
             disabled={!publicTrialSessionsHelper.filtersHaveBeenModified}
-            onClick={() => resetPublicTrialSessionDataSequence()}
+            onClick={() => {
+              resetPublicTrialSessionDataSequence();
+              displayProgressSpinnerSequence({ timeInSeconds: 0.25 });
+            }}
           >
             Reset Filters
           </Button>
@@ -123,7 +128,7 @@ function NonMobilePublicTrialsSessions({
           </TablePagination>
         </div>
       </section>
-    </NonMobile>
+    </NonPhone>
   );
 }
 
@@ -156,12 +161,11 @@ function MobilePublicTrialsSessions({
   };
 
   return (
-    <Mobile>
+    <Phone>
       <section className="usa-section grid-container">
-        <div>
-          Information on this page is current as of{' '}
-          {publicTrialSessionsHelper.fetchedDateString}
-        </div>
+        <FetchedTimeMessage
+          fetchedDateString={publicTrialSessionsHelper.fetchedDateString}
+        ></FetchedTimeMessage>
         <div className="padding-top-3">
           <PublicTrialSessionsRemoteProceedingsCard />
         </div>
@@ -177,8 +181,12 @@ function MobilePublicTrialsSessions({
             <PublicTrialSessionsFilters ROOT={ROOT} />
             <Button
               link
+              data-testid="trial-sessions-reset-filters-button"
               disabled={!publicTrialSessionsHelper.filtersHaveBeenModified}
-              onClick={() => resetPublicTrialSessionDataSequence()}
+              onClick={() => {
+                resetPublicTrialSessionDataSequence();
+                displayProgressSpinnerSequence({ timeInSeconds: 0.25 });
+              }}
             >
               Reset Filters
             </Button>
@@ -248,7 +256,13 @@ function MobilePublicTrialsSessions({
           <PublicMobileTrialSessionsTable />
         </TablePagination>
       </section>
-    </Mobile>
+    </Phone>
+  );
+}
+
+function FetchedTimeMessage({ fetchedDateString }) {
+  return (
+    <div>Information on this page is current as of {fetchedDateString}.</div>
   );
 }
 
@@ -259,9 +273,10 @@ function TablePagination({
   updateFormValueSequence,
 }) {
   const paginatorTop = useRef(null);
+  if (totalPages <= 1) return children;
   return (
     <>
-      <div className="width-full grid-row margin-bottom-2 padding-top-3 flex-align-center">
+      <div className="width-full grid-row margin-bottom-1 padding-top-1 flex-align-center">
         <div className="grid-col" ref={paginatorTop}>
           <Paginator
             currentPageIndex={pageNumber}
