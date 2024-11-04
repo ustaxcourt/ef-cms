@@ -323,6 +323,13 @@ resource "aws_iam_policy" "ci_cd_policy" {
         "arn:aws:glue:us-east-1:${data.aws_caller_identity.current.account_id}:job/*"
       ],
       "Effect": "Allow"
+    },
+    {
+      "Action": "sts:AssumeRole",
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:iam::${var.lower_env_account_id}:role/restore_role_*"
+      ]
     }
   ]
 }
