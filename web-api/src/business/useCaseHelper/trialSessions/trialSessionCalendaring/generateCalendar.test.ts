@@ -7,6 +7,12 @@ import {
   SESSION_TYPES,
   TRIAL_CITY_STRINGS,
 } from '@shared/business/entities/EntityConstants';
+import {
+  WASHINGTON_DC_NORTH_STRING,
+  WASHINGTON_DC_SOUTH_STRING,
+  WASHINGTON_DC_STRING,
+} from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
+import { cloneDeep } from 'lodash';
 import { generateCalendar } from './generateCalendar';
 
 const mockRegularCityString = TRIAL_CITY_STRINGS[TRIAL_CITY_STRINGS.length - 1];
@@ -32,9 +38,10 @@ const getMockCalendaringConfig = (overrides = {}): CalendaringConfig => ({
 
 const getMockCaseCountsAndSessionsByCity = (
   overrides = {},
+  city = mockRegularCityString,
 ): CaseCountsAndSessionsByCity => {
   return {
-    [mockRegularCityString]: {
+    [city]: {
       initialRegularCases: 0,
       initialSmallCases: 0,
       prospectiveSessions: [],
@@ -113,14 +120,14 @@ describe('generateCalendar', () => {
 
   it('should schedule a regular session when it meets all constraints', () => {
     // Arrange
-    const mockRegularTrialSession = {
-      ...mockTrialSession,
+    const mockProspectiveRegularTrialSession = {
+      cityWasNotVisitedInLastTwoTerms: false,
       sessionType: SESSION_TYPES.regular,
       trialLocation: mockRegularCityString,
     };
     const mockCalendaringConfig = getMockCalendaringConfig();
     const mockCaseCountsAndSessionsByCity = getMockCaseCountsAndSessionsByCity({
-      prospectiveSessions: [mockRegularTrialSession],
+      prospectiveSessions: [mockProspectiveRegularTrialSession],
     });
 
     // Act
@@ -143,14 +150,14 @@ describe('generateCalendar', () => {
 
   it('should not schedule a regular session when it fails a constraint', () => {
     // Arrange
-    const mockRegularTrialSession = {
-      ...mockTrialSession,
+    const mockProspectiveRegularTrialSession = {
+      cityWasNotVisitedInLastTwoTerms: false,
       sessionType: SESSION_TYPES.regular,
       trialLocation: mockRegularCityString,
     };
     const mockCalendaringConfig = getMockCalendaringConfig();
     const mockCaseCountsAndSessionsByCity = getMockCaseCountsAndSessionsByCity({
-      prospectiveSessions: [mockRegularTrialSession],
+      prospectiveSessions: [mockProspectiveRegularTrialSession],
     });
 
     // Act
@@ -169,5 +176,207 @@ describe('generateCalendar', () => {
         .length,
     ).toEqual(0);
     expect(sessionCountPerWeek[mockWeekString]).toEqual(0);
+  });
+
+  it('should proritize cities that have not been visited in the past two terms', () => {
+    // Arrange
+    const mockProspectiveRegularTrialSession = {
+      cityWasNotVisitedInLastTwoTerms: false,
+      sessionType: SESSION_TYPES.regular,
+      trialLocation: mockRegularCityString,
+    };
+    const mockCalendaringConfig = getMockCalendaringConfig();
+    const mockCaseCountsAndSessionsByCity = getMockCaseCountsAndSessionsByCity({
+      prospectiveSessions: [mockProspectiveRegularTrialSession],
+    });
+
+    const mockCityNotVisitedLastTwoTerms = 'mock city, usa';
+    const mockSecondWeek = '3000-03-10';
+    const mockProspectiveRegularTrialSessionNotVisitedLastTwoTerms = {
+      cityWasNotVisitedInLastTwoTerms: true,
+      sessionType: SESSION_TYPES.regular,
+      trialLocation: mockCityNotVisitedLastTwoTerms,
+    };
+    mockCaseCountsAndSessionsByCity[mockCityNotVisitedLastTwoTerms] = {
+      initialRegularCases: 0,
+      initialSmallCases: 0,
+      prospectiveSessions: [
+        mockProspectiveRegularTrialSessionNotVisitedLastTwoTerms,
+      ],
+      remainingRegularCases: 0,
+      remainingSmallCases: 0,
+      scheduledSessions: [],
+    };
+
+    // Act
+    const { caseCountsAndSessionsByCity } = generateCalendar({
+      calendaringConfig: mockCalendaringConfig,
+      caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
+      constraints: [createMockConstraint(true)],
+      specialSessions: [],
+      weeksToLoop: [...mockWeeksToLoop, mockSecondWeek],
+    });
+
+    // Assert
+    expect(Object.keys(caseCountsAndSessionsByCity)[0]).toEqual(
+      mockCityNotVisitedLastTwoTerms,
+    );
+    expect(Object.keys(caseCountsAndSessionsByCity)[1]).toEqual(
+      mockRegularCityString,
+    );
+  });
+
+  it('should keep count of scheduled trial sessions for regular and small cases', () => {
+    // Arrange
+    const mockProspectiveRegularTrialSession = {
+      cityWasNotVisitedInLastTwoTerms: false,
+      sessionType: SESSION_TYPES.regular,
+      trialLocation: mockRegularCityString,
+    };
+    const mockProspectiveSmallTrialSession = {
+      cityWasNotVisitedInLastTwoTerms: false,
+      sessionType: SESSION_TYPES.small,
+      trialLocation: mockRegularCityString,
+    };
+    const mockCalendaringConfig = getMockCalendaringConfig();
+    const mockCaseCountsAndSessionsByCity = getMockCaseCountsAndSessionsByCity({
+      initialRegularCases: 1,
+      initialSmallCases: 1,
+      prospectiveSessions: [
+        mockProspectiveRegularTrialSession,
+        mockProspectiveSmallTrialSession,
+      ],
+      remainingRegularCases: 1,
+
+      remainingSmallCases: 1,
+    });
+    const mockSecondWeek = '3000-03-10';
+
+    // Act
+    const { caseCountsAndSessionsByCity } = generateCalendar({
+      calendaringConfig: mockCalendaringConfig,
+      caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
+      constraints: [createMockConstraint(true)],
+      specialSessions: [],
+      weeksToLoop: [...mockWeeksToLoop, mockSecondWeek],
+    });
+
+    // Assert
+    expect(
+      caseCountsAndSessionsByCity[mockRegularCityString].remainingRegularCases,
+    ).toEqual(0);
+    expect(
+      caseCountsAndSessionsByCity[mockRegularCityString].remainingSmallCases,
+    ).toEqual(0);
+  });
+
+  it('should keep count of scheduled trial sessions for hybrid cases', () => {
+    // Arrange
+    const mockProspectiveRegularTrialSession = {
+      cityWasNotVisitedInLastTwoTerms: false,
+      sessionType: SESSION_TYPES.hybrid,
+      trialLocation: mockRegularCityString,
+    };
+    const mockCalendaringConfig = getMockCalendaringConfig();
+    const mockCaseCountsAndSessionsByCity = getMockCaseCountsAndSessionsByCity({
+      initialRegularCases: 1,
+      initialSmallCases: 1,
+      prospectiveSessions: [mockProspectiveRegularTrialSession],
+      remainingRegularCases: 1,
+
+      remainingSmallCases: 1,
+    });
+    const mockSecondWeek = '3000-03-10';
+
+    // Act
+    const { caseCountsAndSessionsByCity } = generateCalendar({
+      calendaringConfig: mockCalendaringConfig,
+      caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
+      constraints: [createMockConstraint(true)],
+      specialSessions: [],
+      weeksToLoop: [...mockWeeksToLoop, mockSecondWeek],
+    });
+
+    // Assert
+    expect(
+      caseCountsAndSessionsByCity[mockRegularCityString].remainingRegularCases,
+    ).toEqual(0);
+    expect(
+      caseCountsAndSessionsByCity[mockRegularCityString].remainingSmallCases,
+    ).toEqual(0);
+  });
+
+  it('should use the correct trial location for special sessions when Washington DC, North is available', () => {
+    // Arrange
+    const mockCalendaringConfig = getMockCalendaringConfig({
+      maxSessionsPerLocationConstraint: 1,
+    });
+    const mockCaseCountsAndSessionsByCity = getMockCaseCountsAndSessionsByCity(
+      {},
+      WASHINGTON_DC_NORTH_STRING,
+    );
+    const mockSpecialTrialSession = {
+      ...mockTrialSession,
+      sessionType: SESSION_TYPES.special,
+      trialLocation: WASHINGTON_DC_STRING,
+    };
+
+    // Act
+    const { caseCountsAndSessionsByCity } = generateCalendar({
+      calendaringConfig: mockCalendaringConfig,
+      caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
+      constraints: [createMockConstraint(true)],
+      specialSessions: [mockSpecialTrialSession],
+      weeksToLoop: mockWeeksToLoop,
+    });
+    console.log(caseCountsAndSessionsByCity[WASHINGTON_DC_NORTH_STRING]);
+    // Assert
+    expect(
+      caseCountsAndSessionsByCity[WASHINGTON_DC_NORTH_STRING]
+        .scheduledSessions[0].trialLocation,
+    ).toEqual(WASHINGTON_DC_NORTH_STRING);
+  });
+
+  it('should use the correct trial location for special sessions when Washington DC, North is not available', () => {
+    // Arrange
+    const mockCalendaringConfig = getMockCalendaringConfig({
+      maxSessionsPerLocation: 1,
+    });
+    const mockCaseCountsAndSessionsByCity = getMockCaseCountsAndSessionsByCity(
+      {},
+      WASHINGTON_DC_NORTH_STRING,
+    );
+    mockCaseCountsAndSessionsByCity[WASHINGTON_DC_SOUTH_STRING] = {
+      initialRegularCases: 1,
+      initialSmallCases: 1,
+      prospectiveSessions: [],
+      remainingRegularCases: 1,
+      remainingSmallCases: 1,
+      scheduledSessions: [],
+    };
+    const mockSpecialTrialSession = {
+      ...mockTrialSession,
+      sessionType: SESSION_TYPES.special,
+      trialLocation: WASHINGTON_DC_STRING,
+    };
+
+    // Act
+    const { caseCountsAndSessionsByCity } = generateCalendar({
+      calendaringConfig: mockCalendaringConfig,
+      caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
+      constraints: [createMockConstraint(true)],
+      specialSessions: Array.from({ length: 2 }, () =>
+        cloneDeep(mockSpecialTrialSession),
+      ),
+      weeksToLoop: mockWeeksToLoop,
+    });
+
+    console.log(caseCountsAndSessionsByCity);
+
+    // Assert
+    expect(
+      caseCountsAndSessionsByCity[WASHINGTON_DC_SOUTH_STRING]
+        .scheduledSessions[0].trialLocation,
+    ).toEqual(WASHINGTON_DC_SOUTH_STRING);
   });
 });
