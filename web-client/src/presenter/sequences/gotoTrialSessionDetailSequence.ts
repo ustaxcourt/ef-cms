@@ -43,4 +43,4 @@ export const gotoTrialSessionDetailSequence =
       [getUsersInSectionAction({}), setUsersByKeyAction('sectionUsers')],
     ]),
     setupCurrentPageAction('TrialSessionDetail'),
-  ]) as unknown as (props: { trialSessionId: string }) => void;
+  ]) as unknown as (props: { trialSessionId?: string }) => void;
