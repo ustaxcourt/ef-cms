@@ -10,9 +10,9 @@ import { compact, some } from 'lodash';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
 export type TrialSessionPublicCaseRow = {
-  isSealed: boolean; // TODO
-  privatePractitioners: { name?: string }[];
-  irsPractitioners: { name?: string }[];
+  isSealed: boolean;
+  privatePractitioners?: { name?: string }[];
+  irsPractitioners?: { name?: string }[];
   inConsolidatedGroup: boolean;
   isLeadCase: boolean;
   consolidatedIconTooltipText: string;
@@ -21,7 +21,7 @@ export type TrialSessionPublicCaseRow = {
   docketNumberWithSuffix?: string;
 };
 
-export const publicTrialSessionDetailHelper = (
+export const publicTrialSessionDetailsHelper = (
   get: Get,
   applicationContext: ClientPublicApplicationContext,
 ): {

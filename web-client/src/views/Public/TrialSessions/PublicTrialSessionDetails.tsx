@@ -5,24 +5,26 @@ import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseI
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
-import { TrialSessionDetailHeader } from '@web-client/views/TrialSessionDetail/TrialSessionDetailHeader';
-import { TrialSessionPublicCaseRow } from '@web-client/presenter/computeds/Public/publicTrialSessionDetailHelper';
+import { TrialSessionDetailsHeader } from '@web-client/views/TrialSessionDetails/TrialSessionDetailsHeader';
+import { TrialSessionPublicCaseRow } from '@web-client/presenter/computeds/Public/publicTrialSessionDetailsHelper';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const PublicTrialSessionDetail = connect(
+export const PublicTrialSessionDetails = connect(
   {
-    publicTrialSessionDetailHelper: state.publicTrialSessionDetailHelper,
+    publicTrialSessionDetailsHelper: state.publicTrialSessionDetailsHelper,
     trialSession: state.trialSessionDetailsPage.trialSession,
   },
-  function PublicTrialSessionDetail({ publicTrialSessionDetailHelper }) {
+  function PublicTrialSessionDetails({
+    publicTrialSessionDetailsHelper: publicTrialSessionDetailsHelper,
+  }) {
     return (
       <>
-        <TrialSessionDetailHeader
+        <TrialSessionDetailsHeader
           formattedTrialSessionDetails={
-            publicTrialSessionDetailHelper.formattedTrialSession
+            publicTrialSessionDetailsHelper.formattedTrialSession
           }
         />
         <section className="usa-section grid-container">
@@ -33,15 +35,15 @@ export const PublicTrialSessionDetail = connect(
   },
 );
 
-PublicTrialSessionDetail.displayName = 'TrialSessionDetail';
+PublicTrialSessionDetails.displayName = 'PublicTrialSessionDetails';
 
 const PublicTrialSessionInformation = connect(
   {
-    publicTrialSessionDetailHelper: state.publicTrialSessionDetailHelper,
+    publicTrialSessionDetailsHelper: state.publicTrialSessionDetailsHelper,
     trialSession: state.trialSessionDetailsPage.trialSession,
   },
   function PublicTrialSessionInformation({
-    publicTrialSessionDetailHelper,
+    publicTrialSessionDetailsHelper,
     trialSession,
   }) {
     return (
@@ -56,15 +58,15 @@ const PublicTrialSessionInformation = connect(
         </Button>
         <h1>Session Information</h1>
         <div className="margin-bottom-205">
-          {`Information on this page is current as of ${publicTrialSessionDetailHelper.formattedNow}.`}
+          {`Information on this page is current as of ${publicTrialSessionDetailsHelper.formattedNow}.`}
         </div>
         {(trialSession.isSwingSession ||
-          publicTrialSessionDetailHelper.formattedTrialSession
+          publicTrialSessionDetailsHelper.formattedTrialSession
             .hasCourthouseInformation) && (
           <div className="card padding-205 maxw-mobile-lg">
             <h3 className="underlined">Details</h3>
             <div className="display-flex flex-wrap gap-5">
-              {publicTrialSessionDetailHelper.formattedTrialSession
+              {publicTrialSessionDetailsHelper.formattedTrialSession
                 .hasCourthouseInformation && (
                 <div>
                   <span className="label">Courthouse location</span>
@@ -79,7 +81,7 @@ const PublicTrialSessionInformation = connect(
                     </span>
                     <span className="address-line">
                       {
-                        publicTrialSessionDetailHelper.formattedTrialSession
+                        publicTrialSessionDetailsHelper.formattedTrialSession
                           .formattedCityStateZip
                       }
                     </span>
@@ -114,7 +116,7 @@ const PublicTrialSessionInformation = connect(
         <NonPhone>
           <NonMobileOpenCases
             openCases={
-              publicTrialSessionDetailHelper.formattedTrialSession
+              publicTrialSessionDetailsHelper.formattedTrialSession
                 .formattedCases
             }
           />
@@ -122,7 +124,7 @@ const PublicTrialSessionInformation = connect(
         <Phone>
           <MobileOpenCases
             openCases={
-              publicTrialSessionDetailHelper.formattedTrialSession
+              publicTrialSessionDetailsHelper.formattedTrialSession
                 .formattedCases
             }
           />
@@ -258,15 +260,15 @@ function MobileOpenCases({
                         {publicCase.caseTitle}
                       </div>
                       {publicCase.privatePractitioners?.map(practitioner => (
-                        <div key={practitioner.name}>
+                        <div key={practitioner?.name}>
                           <span className="label">Petitioner Counsel</span>
-                          <div>{practitioner.name}</div>
+                          <div>{practitioner?.name}</div>
                         </div>
                       ))}
                       {publicCase.irsPractitioners?.map(respondent => (
-                        <div key={respondent.name}>
+                        <div key={respondent?.name}>
                           <span className="label">Respondent Counsel</span>
-                          <div>{respondent.name}</div>
+                          <div>{respondent?.name}</div>
                         </div>
                       ))}
                     </div>
