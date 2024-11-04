@@ -55,7 +55,7 @@ export const PrintableTrialCalendar = connect(
               });
             }}
           >
-            <FontAwesomeIcon icon={['fa', 'arrow-alt-circle-left']} />
+            <FontAwesomeIcon icon={['fas', 'arrow-alt-circle-left']} />
             Back to Session Information
           </Button>
           <PdfPreview />

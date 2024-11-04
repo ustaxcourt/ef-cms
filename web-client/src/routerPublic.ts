@@ -86,7 +86,7 @@ const router = {
 
     route('/trial-session-detail/*', trialSessionId => {
       setPageTitle('Trial session information');
-      return app.getSequence('gotoPublicTrialSessionDetailSequence')({
+      return app.getSequence('gotoPublicTrialSessionDetailsSequence')({
         trialSessionId,
       });
     });
