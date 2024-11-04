@@ -16,6 +16,7 @@ import { cloneDeep } from 'lodash';
 import { generateCalendar } from './generateCalendar';
 
 const mockRegularCityString = TRIAL_CITY_STRINGS[TRIAL_CITY_STRINGS.length - 1];
+const mockSpecialCityString = TRIAL_CITY_STRINGS[0];
 const mockWeekString = '3000-03-03';
 const mockWeeksToLoop = [mockWeekString];
 const mockTrialSession: RawTrialSession = {
@@ -226,7 +227,7 @@ describe('generateCalendar', () => {
     );
   });
 
-  it('should keep count of scheduled trial sessions for regular and small cases', () => {
+  it('should keep count of scheduled trial sessions for regular cases', () => {
     // Arrange
     const mockProspectiveRegularTrialSession = {
       cityWasNotVisitedInLastTwoTerms: false,
@@ -235,20 +236,22 @@ describe('generateCalendar', () => {
     };
     const mockProspectiveSmallTrialSession = {
       cityWasNotVisitedInLastTwoTerms: false,
-      sessionType: SESSION_TYPES.small,
+      sessionType: SESSION_TYPES.regular,
       trialLocation: mockRegularCityString,
     };
-    const mockCalendaringConfig = getMockCalendaringConfig();
+    const mockCalendaringConfig = getMockCalendaringConfig({
+      regularCaseMaxQuantity: 1,
+    });
     const mockCaseCountsAndSessionsByCity = getMockCaseCountsAndSessionsByCity({
       initialRegularCases: 1,
-      initialSmallCases: 1,
+      initialSmallCases: 0,
       prospectiveSessions: [
         mockProspectiveRegularTrialSession,
         mockProspectiveSmallTrialSession,
       ],
       remainingRegularCases: 1,
 
-      remainingSmallCases: 1,
+      remainingSmallCases: 0,
     });
     const mockSecondWeek = '3000-03-10';
 
@@ -265,12 +268,55 @@ describe('generateCalendar', () => {
     expect(
       caseCountsAndSessionsByCity[mockRegularCityString].remainingRegularCases,
     ).toEqual(0);
+  });
+
+  it('should keep count of scheduled trial sessions for small cases', () => {
+    // Arrange
+    const mockProspectiveRegularTrialSession = {
+      cityWasNotVisitedInLastTwoTerms: false,
+      sessionType: SESSION_TYPES.small,
+      trialLocation: mockSpecialCityString,
+    };
+    const mockProspectiveSmallTrialSession = {
+      cityWasNotVisitedInLastTwoTerms: false,
+      sessionType: SESSION_TYPES.small,
+      trialLocation: mockSpecialCityString,
+    };
+    const mockCalendaringConfig = getMockCalendaringConfig({
+      smallCaseMaxQuantity: 1,
+    });
+    const mockCaseCountsAndSessionsByCity = getMockCaseCountsAndSessionsByCity(
+      {
+        initialRegularCases: 0,
+        initialSmallCases: 1,
+        prospectiveSessions: [
+          mockProspectiveRegularTrialSession,
+          mockProspectiveSmallTrialSession,
+        ],
+        remainingRegularCases: 0,
+
+        remainingSmallCases: 1,
+      },
+      mockSpecialCityString,
+    );
+    const mockSecondWeek = '3000-03-10';
+
+    // Act
+    const { caseCountsAndSessionsByCity } = generateCalendar({
+      calendaringConfig: mockCalendaringConfig,
+      caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
+      constraints: [createMockConstraint(true)],
+      specialSessions: [],
+      weeksToLoop: [...mockWeeksToLoop, mockSecondWeek],
+    });
+
+    // Assert
     expect(
-      caseCountsAndSessionsByCity[mockRegularCityString].remainingSmallCases,
+      caseCountsAndSessionsByCity[mockSpecialCityString].remainingSmallCases,
     ).toEqual(0);
   });
 
-  it('should keep count of scheduled trial sessions for hybrid cases', () => {
+  it('should handle case counts for hybrid sessions', () => {
     // Arrange
     const mockProspectiveRegularTrialSession = {
       cityWasNotVisitedInLastTwoTerms: false,
