@@ -329,7 +329,7 @@ describe('generateCalendar', () => {
       specialSessions: [mockSpecialTrialSession],
       weeksToLoop: mockWeeksToLoop,
     });
-    console.log(caseCountsAndSessionsByCity[WASHINGTON_DC_NORTH_STRING]);
+
     // Assert
     expect(
       caseCountsAndSessionsByCity[WASHINGTON_DC_NORTH_STRING]
@@ -370,8 +370,6 @@ describe('generateCalendar', () => {
       ),
       weeksToLoop: mockWeeksToLoop,
     });
-
-    console.log(caseCountsAndSessionsByCity);
 
     // Assert
     expect(
