@@ -91,6 +91,11 @@ const router = {
       });
     });
 
+    route('/trial-sessions', () => {
+      setPageTitle('Trial sessions');
+      return app.getSequence('gotoPublicTrialSessionsSequence')();
+    });
+
     route('..', () => {
       setPageTitle('Error');
       return app.getSequence('notFoundErrorSequence')({

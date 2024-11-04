@@ -9,6 +9,7 @@ import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequen
 import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeModalAndNavigateToMaintenanceSequence';
 import { confirmSignUpSequence } from '@web-client/presenter/sequences/Login/confirmSignUpSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
+import { displayProgressSpinnerSequence } from '@web-client/presenter/sequences/displayProgressSpinnerSequence';
 import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
 import { gotoContactSequence } from './sequences/gotoContactSequence';
 import { gotoHealthCheckSequence } from './sequences/gotoHealthCheckSequence';
@@ -19,6 +20,7 @@ import { gotoPublicEmailVerificationInstructionsSequence } from './sequences/got
 import { gotoPublicPrintableDocketRecordSequence } from './sequences/Public/gotoPublicPrintableDocketRecordSequence';
 import { gotoPublicSearchSequence } from './sequences/Public/gotoPublicSearchSequence';
 import { gotoPublicTrialSessionDetailSequence } from '@web-client/presenter/sequences/Public/gotoPublicTrialSessionDetailSequence';
+import { gotoPublicTrialSessionsSequence } from '@web-client/presenter/sequences/Public/gotoPublicTrialSessionsSequence';
 import { gotoTodaysOpinionsSequence } from './sequences/Public/gotoTodaysOpinionsSequence';
 import { gotoTodaysOrdersSequence } from './sequences/Public/gotoTodaysOrdersSequence';
 import { initialPublicState } from './state-public';
@@ -34,6 +36,7 @@ import { persistFormsOnReloadSequence } from './sequences/persistFormsOnReloadSe
 import { redirectToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/redirectToCreatePetitionerAccountSequence';
 import { redirectToDashboardSequence } from '@web-client/presenter/sequences/redirectToDashboardSequence';
 import { redirectToLoginSequence } from '@web-client/presenter/sequences/Public/redirectToLoginSequence';
+import { resetPublicTrialSessionDataSequence } from '@web-client/presenter/sequences/resetPublicTrialSessionDataSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
@@ -71,6 +74,7 @@ export const presenterSequences = {
   closeModalAndNavigateToMaintenanceSequence,
   confirmSignUpSequence,
   dismissModalSequence,
+  displayProgressSpinnerSequence,
   goToCreatePetitionerAccountSequence,
   gotoContactSequence: showMaintenancePageDecorator(gotoContactSequence),
   gotoHealthCheckSequence: showMaintenancePageDecorator(
@@ -89,6 +93,7 @@ export const presenterSequences = {
     gotoPublicSearchSequence,
   ),
   gotoPublicTrialSessionDetailSequence,
+  gotoPublicTrialSessionsSequence,
   gotoTodaysOpinionsSequence: showMaintenancePageDecorator(
     gotoTodaysOpinionsSequence,
   ),
@@ -107,6 +112,7 @@ export const presenterSequences = {
   redirectToCreatePetitionerAccountSequence,
   redirectToDashboardSequence,
   redirectToLoginSequence,
+  resetPublicTrialSessionDataSequence,
   showMoreResultsSequence,
   sortTodaysOrdersSequence,
   submitLoginSequence,

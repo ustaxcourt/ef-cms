@@ -1,5 +1,7 @@
 import { PUBLIC_DOCKET_RECORD_FILTER_OPTIONS } from '../../../shared/src/business/entities/EntityConstants';
 import { PublicTrialSessionDetails } from '@web-api/business/useCases/trialSessions/getPublicTrialSessionDetailsInteractor';
+import { RawUser } from '@shared/business/entities/User';
+import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByNameHelper';
@@ -12,6 +14,7 @@ import { publicAlertHelper } from './computeds/Public/publicAlertHelper';
 import { publicCaseDetailHeaderHelper } from './computeds/Public/publicCaseDetailHeaderHelper';
 import { publicCaseDetailHelper } from './computeds/Public/publicCaseDetailHelper';
 import { publicTrialSessionDetailHelper } from '@web-client/presenter/computeds/Public/publicTrialSessionDetailHelper';
+import { publicTrialSessionsHelper } from '@web-client/presenter/computeds/Public/publicTrialSessionsHelper';
 import { templateHelper } from './computeds/templateHelper';
 import { todaysOpinionsHelper } from './computeds/Public/todaysOpinionsHelper';
 import { todaysOrdersHelper } from './computeds/Public/todaysOrdersHelper';
@@ -36,6 +39,9 @@ const computeds = {
     publicTrialSessionDetailHelper as unknown as ReturnType<
       typeof publicTrialSessionDetailHelper
     >,
+  publicTrialSessionsHelper: publicTrialSessionsHelper as unknown as ReturnType<
+    typeof publicTrialSessionsHelper
+  >,
   templateHelper,
   todaysOpinionsHelper,
   todaysOrdersHelper,
@@ -64,11 +70,19 @@ export const baseState = {
   },
   isPublic: true,
   isTerminalUser: false,
+  judges: [] as RawUser[],
   modal: {},
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses
     waitingForResponse: false,
     waitingForResponseRequests: 0,
+  },
+  publicTrialSessionData: {} as {
+    judges?: { [key: string]: string };
+    locations?: { [key: string]: string };
+    sessionTypes?: { [key: string]: string };
+    pageNumber?: number;
+    proceedingType?: string;
   },
   sessionMetadata: {
     docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
@@ -83,7 +97,10 @@ export const baseState = {
   },
   trialSessionDetailsPage: {
     trialSession: {} as PublicTrialSessionDetails,
-  }, // TODO: 10461 TYPE THIS
+  },
+  trialSessionsPage: { trialSessions: [] } as {
+    trialSessions: TrialSessionInfoDTO[];
+  },
   user: {},
   validationErrors: {},
 };
