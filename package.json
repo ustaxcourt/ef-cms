@@ -304,7 +304,7 @@
     "esbuild-sass-plugin": "3.3.1",
     "esbuild-serve": "1.0.1",
     "esbuild-visualizer": "0.6.0",
-    "eslint": "9.13.0",
+    "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-cypress": "4.1.0",
     "eslint-plugin-import": "2.31.0",
