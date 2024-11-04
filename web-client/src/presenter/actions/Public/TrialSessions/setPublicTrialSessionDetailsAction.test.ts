@@ -4,9 +4,9 @@ import {
   SESSION_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { runAction } from 'cerebral/test';
-import { setPublicTrialSessionDetailAction } from '@web-client/presenter/actions/Public/TrialSessions/setPublicTrialSessionDetailAction';
+import { setPublicTrialSessionDetailsAction } from '@web-client/presenter/actions/Public/TrialSessions/setPublicTrialSessionDetailsAction';
 
-describe('setPublicTrialSessionDetailAction', () => {
+describe('setPublicTrialSessionDetailsAction', () => {
   it('should set the public trial session details', async () => {
     const mockSession = {
       address1: '123 Sesame Street',
@@ -24,7 +24,7 @@ describe('setPublicTrialSessionDetailAction', () => {
       termYear: 'Fall 2024',
       trialLocation: 'Atlantis, MO',
     } as PublicTrialSessionDetails;
-    const { state } = await runAction(setPublicTrialSessionDetailAction, {
+    const { state } = await runAction(setPublicTrialSessionDetailsAction, {
       props: {
         trialSession: mockSession,
       },

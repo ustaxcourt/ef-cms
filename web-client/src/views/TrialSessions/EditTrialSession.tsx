@@ -4,7 +4,7 @@ import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { LocationInformationForm } from './LocationInformationForm';
 import { SessionAssignmentsForm } from './SessionAssignmentsForm';
 import { SessionInformationForm } from './SessionInformationForm';
-import { TrialSessionDetailHeader } from '../TrialSessionDetail/TrialSessionDetailHeader';
+import { TrialSessionDetailsHeader } from '../TrialSessionDetails/TrialSessionDetailsHeader';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -33,7 +33,7 @@ export const EditTrialSession = connect(
   }) {
     return (
       <>
-        <TrialSessionDetailHeader
+        <TrialSessionDetailsHeader
           formattedTrialSessionDetails={formattedTrialSessionDetails}
         />
 

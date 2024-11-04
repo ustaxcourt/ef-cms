@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const TrialSessionDetailHeader = ({
+export const TrialSessionDetailsHeader = ({
   formattedTrialSessionDetails,
 }: {
   formattedTrialSessionDetails: {
@@ -37,4 +37,4 @@ export const TrialSessionDetailHeader = ({
   );
 };
 
-TrialSessionDetailHeader.displayName = 'TrialSessionDetailHeader';
+TrialSessionDetailsHeader.displayName = 'TrialSessionDetailsHeader';
