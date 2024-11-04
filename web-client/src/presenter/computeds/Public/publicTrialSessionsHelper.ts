@@ -111,7 +111,7 @@ export const publicTrialSessionsHelper = (
   const trialSessionJudgeOptions = trialSessionJudges.map(
     trialSessionJudge => ({
       label: trialSessionJudge.name,
-      value: { name: trialSessionJudge.name, userId: trialSessionJudge.userId },
+      value: trialSessionJudge.name,
     }),
   );
 
