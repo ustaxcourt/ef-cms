@@ -6,7 +6,6 @@ import { JoiValidationEntity } from '../JoiValidationEntity';
 import { PrivatePractitioner } from '../PrivatePractitioner';
 import { PublicContact } from './PublicContact';
 import { PublicDocketEntry } from './PublicDocketEntry';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { compareStrings } from '../../utilities/sortFunctions';
 import { isSealedCase } from './Case';
 import joi from 'joi';
@@ -35,14 +34,7 @@ export class PublicCase extends JoiValidationEntity {
 
   private _score?: string;
 
-  constructor(
-    rawCase: any,
-    {
-      authorizedUser,
-    }: {
-      authorizedUser: UnknownAuthUser;
-    },
-  ) {
+  constructor(rawCase: any) {
     super('PublicCase');
 
     this.entityName = 'PublicCase';

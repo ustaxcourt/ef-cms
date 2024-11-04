@@ -1,0 +1,4 @@
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
+
+// An entity for case details for a case a user does not have access to
+export class RestrictedCase extends JoiValidationEntity {}

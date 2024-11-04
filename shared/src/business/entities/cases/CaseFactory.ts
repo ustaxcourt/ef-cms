@@ -26,9 +26,7 @@ export function CaseFactory({
 
   // Handling users who are not logged in
   if (!userIsLoggedIn) {
-    return caseIsSealed
-      ? new NoLookyLookyCase(rawCase)
-      : new PublicCase(rawCase);
+    return caseIsSealed ? new RestrictedCase(rawCase) : new PublicCase(rawCase);
   }
 
   // User is logged in and has full permissions to view cases (e.g., an internal court user or IRS Superuser)
@@ -57,9 +55,7 @@ export function CaseFactory({
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.GET_ALL_CASES) &&
     !userIsAssociatedWithCase
   ) {
-    return caseIsSealed
-      ? new NoLookyLookyCase(rawCase)
-      : new PublicCase(rawCase);
+    return caseIsSealed ? new RestrictedCase(rawCase) : new PublicCase(rawCase);
   }
 
   return new PublicCase(rawCase);
