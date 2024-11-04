@@ -77,6 +77,7 @@ export const TrialSessionDetails = connect(
           <TrialSessionInformation />
 
           {!formattedTrialSessionDetails.isCalendared && (
+            /* @ts-ignore: Tabs needs to be refactored to avoid type errors */
             <Tabs
               bind="trialSessionDetailsTab.caseList"
               defaultActiveTab="EligibleCases"
@@ -114,6 +115,7 @@ export const TrialSessionDetails = connect(
                       >
                         Filter by
                       </label>
+                      {/* @ts-ignore: BindedSelect needs to be refactored to avoid type errors */}
                       <BindedSelect
                         aria-describedby="hybrid-session-filter-label"
                         aria-label="hybrid session filter"
@@ -141,6 +143,7 @@ export const TrialSessionDetails = connect(
 
           {formattedTrialSessionDetails.showOpenCases && (
             <div>
+              {/* @ts-ignore: Tabs needs to be refactored to avoid type errors */}
               <Tabs
                 bind="trialSessionDetailsTab.calendaredCaseList"
                 defaultActiveTab="OpenCases"
@@ -179,6 +182,7 @@ export const TrialSessionDetails = connect(
           )}
 
           {formattedTrialSessionDetails.showOnlyClosedCases && (
+            /* @ts-ignore: Tabs needs to be refactored to avoid type errors */
             <Tabs
               bind="trialSessionDetailsTab.calendaredCaseList"
               defaultActiveTab="InactiveCases"

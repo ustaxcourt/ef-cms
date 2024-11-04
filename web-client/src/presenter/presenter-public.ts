@@ -88,7 +88,7 @@ export const presenterSequences = {
   gotoPublicSearchSequence: showMaintenancePageDecorator(
     gotoPublicSearchSequence,
   ),
-  gotoPublicTrialSessionDetailSequence: gotoPublicTrialSessionDetailsSequence,
+  gotoPublicTrialSessionDetailsSequence,
   gotoTodaysOpinionsSequence: showMaintenancePageDecorator(
     gotoTodaysOpinionsSequence,
   ),
