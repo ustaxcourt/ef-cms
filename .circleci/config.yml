@@ -667,20 +667,20 @@ jobs:
             fi
             echo "export SOURCE_BUCKET=${PROD_DOCUMENTS_BUCKET_NAME}" >> $BASH_ENV
             echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
-#      - run:
-#          name: Disable Wait for Workflow Cron
-#          command: |
-#            ./scripts/wait-for-workflow/disable-wait-for-workflow-cron.sh
-#      - run:
-#          name: Destroy Wait for Workflow Lambda
-#          command: |
-#            export APPROVAL_JOB_NAME=wait-for-deployment-workflow
-#            export CIRCLE_PIPELINE_ID=noop
-#            npm run destroy:wait-for-workflow-cron -- $ENV
-#      - run:
-#          name: Disable Dynamodb Streams
-#          command: |
-#            ./scripts/migration/toggle-streams.sh --off
+      - run:
+          name: Disable Wait for Workflow Cron
+          command: |
+            ./scripts/wait-for-workflow/disable-wait-for-workflow-cron.sh
+      - run:
+          name: Destroy Wait for Workflow Lambda
+          command: |
+            export APPROVAL_JOB_NAME=wait-for-deployment-workflow
+            export CIRCLE_PIPELINE_ID=noop
+            npm run destroy:wait-for-workflow-cron -- $ENV
+      - run:
+          name: Disable Dynamodb Streams
+          command: |
+            ./scripts/migration/toggle-streams.sh --off
       - run:
           name: Kick off the glue-to-lower-env workflow
           command: |
@@ -693,28 +693,28 @@ jobs:
                 \"run_glue_to_lower_env\":true, \
                 \"lower_env\":\"${ENV}\"}}" | jq -r '.id')
             echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
-#      - run:
-#          name: Deploy Wait for Workflow Cron Lambda
-#          command: |
-#            export APPROVAL_JOB_NAME=wait-for-glue-workflow
-#            npm run deploy:wait-for-workflow-cron -- $ENV
-#      - run:
-#          name: Enable Wait for Workflow Cron
-#          command: |
-#            ./scripts/wait-for-workflow/enable-wait-for-workflow-cron.sh
-#      - run:
-#          name: Kick off the sync-s3-to-lower-env workflow
-#          command: |
-#            curl --request POST \
-#              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
-#              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
-#              --header "content-type: application/json" \
-#              --data "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{ \
-#                \"run_build_and_deploy\":false, \
-#                \"run_sync_s3_to_lower_env\":true, \
-#                \"referrer\":\"${CIRCLE_WORKFLOW_ID}\", \
-#                \"source_bucket\":\"${SOURCE_BUCKET}\", \
-#                \"destination_bucket\":\"${DESTINATION_BUCKET}\"}}"
+      - run:
+          name: Deploy Wait for Workflow Cron Lambda
+          command: |
+            export APPROVAL_JOB_NAME=wait-for-glue-workflow
+            npm run deploy:wait-for-workflow-cron -- $ENV
+      - run:
+          name: Enable Wait for Workflow Cron
+          command: |
+            ./scripts/wait-for-workflow/enable-wait-for-workflow-cron.sh
+      - run:
+          name: Kick off the sync-s3-to-lower-env workflow
+          command: |
+            curl --request POST \
+              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
+              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
+              --header "content-type: application/json" \
+              --data "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{ \
+                \"run_build_and_deploy\":false, \
+                \"run_sync_s3_to_lower_env\":true, \
+                \"referrer\":\"${CIRCLE_WORKFLOW_ID}\", \
+                \"source_bucket\":\"${SOURCE_BUCKET}\", \
+                \"destination_bucket\":\"${DESTINATION_BUCKET}\"}}"
 
   index-glued-data:
     docker:
@@ -875,12 +875,7 @@ jobs:
       - run:
           name: Deploy Check Glue Job Run State Cron Lambda
           command: |
-            #TARGET_ENV=$LOWER_ENV TARGET_ACCOUNT_ID="${LOWER_ENV_ACCOUNT_ID}" npx ts-node --transpileOnly scripts/postgres/restoreDbFromSource.ts
-            echo "Target Env: ${LOWER_ENV}"
-            echo "Target Env ID: ${LOWER_ENV_ACCOUNT_ID}"
-            export ROLE_ARN="arn:aws:iam::${LOWER_ENV_ACCOUNT_ID}:role/restore_role_${LOWER_ENV}"
-            aws sts assume-role --role-arn ${ROLE_ARN} --role-session-name postgres-restore-session
-            aws sts get-caller-identity
+            TARGET_ENV=$LOWER_ENV TARGET_ACCOUNT_ID="${LOWER_ENV_ACCOUNT_ID}" npx ts-node --transpileOnly scripts/postgres/restoreDbFromSource.ts
 
   finish-glue-job:
     docker:
@@ -1083,65 +1078,65 @@ workflows:
         - equal: [glue-to-test-schedule, << pipeline.schedule.name >>]
         - << pipeline.parameters.run_glue_to_test >>
     jobs:
-#      - delete-existing-data:
-#          <<: *only-test
-#      - redeploy-environment:
-#          <<: *only-test
-#          requires:
-#            - delete-existing-data
-#      - wait-for-deployment-workflow:
-#          <<: *only-test
-#          type: approval
-#          requires:
-#            - redeploy-environment
+      - delete-existing-data:
+          <<: *only-test
+      - redeploy-environment:
+          <<: *only-test
+          requires:
+            - delete-existing-data
+      - wait-for-deployment-workflow:
+          <<: *only-test
+          type: approval
+          requires:
+            - redeploy-environment
       - initiate-glue-job:
           <<: *only-test
-#          requires:
-#            - wait-for-deployment-workflow
-#      - wait-for-glue-workflow:
-#          <<: *only-test
-#          type: approval
-#          requires:
-#            - initiate-glue-job
-#      - wait-for-s3-sync-workflow:
-#          <<: *only-test
-#          type: approval
-#          requires:
-#            - initiate-glue-job
-#      - index-glued-data:
-#          <<: *only-test
-#          requires:
-#            - wait-for-glue-workflow
-#            - wait-for-s3-sync-workflow
-#      - wait-for-glued-data-to-index:
-#          <<: *only-test
-#          type: approval
-#          requires:
-#            - index-glued-data
-#      - cleanup-glue-job:
-#          <<: *only-test
-#          requires:
-#            - wait-for-glued-data-to-index
+          requires:
+            - wait-for-deployment-workflow
+      - wait-for-glue-workflow:
+          <<: *only-test
+          type: approval
+          requires:
+            - initiate-glue-job
+      - wait-for-s3-sync-workflow:
+          <<: *only-test
+          type: approval
+          requires:
+            - initiate-glue-job
+      - index-glued-data:
+          <<: *only-test
+          requires:
+            - wait-for-glue-workflow
+            - wait-for-s3-sync-workflow
+      - wait-for-glued-data-to-index:
+          <<: *only-test
+          type: approval
+          requires:
+            - index-glued-data
+      - cleanup-glue-job:
+          <<: *only-test
+          requires:
+            - wait-for-glued-data-to-index
 
   glue-to-lower-env:
     when: << pipeline.parameters.run_glue_to_lower_env >>
     jobs:
-#      - start-glue-job:
-#          <<: *only-prod
-#      - wait-for-glue-job:
-#          <<: *only-prod
-#          type: approval
-#          requires:
-#            - start-glue-job
+      - start-glue-job:
+          <<: *only-prod
+      - wait-for-glue-job:
+          <<: *only-prod
+          type: approval
+          requires:
+            - start-glue-job
       - restore-postgres:
           <<: *only-prod
-#          requires:
-#            - start-glue-job
-#      - finish-glue-job:
-#          <<: *only-prod
-#          requires:
-#            - restore-postgres
-#            - wait-for-glue-job
+          requires:
+            - start-glue-job
+      - finish-glue-job:
+          <<: *only-prod
+          requires:
+            - restore-postgres
+            - wait-for-glue-job
 
   sync-s3-to-lower-env:
     when: << pipeline.parameters.run_sync_s3_to_lower_env >>
