@@ -1,4 +1,5 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
+import { CaseIcons } from '@web-client/ustc-ui/Icon/CaseIcons';
 import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -91,6 +92,7 @@ const PublicTrialSessionInformation = connect(
                   <div className="padding-05"></div>
                   <span className="display-flex gap-1 flex-align-center">
                     <NonPhone>
+                      {/* We don't show the swing session icon in mobile because it is not clear without hover tooltip */}
                       <FontAwesomeIcon
                         className="fa-icon-blue"
                         icon="link"
@@ -164,38 +166,7 @@ function NonMobileOpenCases({
               data-testid={`trial-session-detail-row-${publicCase.docketNumberWithSuffix}`}
             >
               <td>
-                <div className="multi-filing-type-icon">
-                  <div
-                    className={
-                      publicCase.isSealed
-                        ? 'visibility-visible'
-                        : 'visibility-hidden'
-                    }
-                  >
-                    <Icon
-                      aria-hidden={!publicCase.isSealed}
-                      aria-label="sealed"
-                      className="sealed-case-entry"
-                      icon="lock"
-                      title="sealed"
-                    />
-                  </div>
-                  <span
-                    className={classNames({
-                      'margin-left-2':
-                        publicCase.inConsolidatedGroup &&
-                        !publicCase.isLeadCase,
-                    })}
-                  >
-                    <ConsolidatedCaseIcon
-                      consolidatedIconTooltipText={
-                        publicCase.consolidatedIconTooltipText
-                      }
-                      inConsolidatedGroup={publicCase.inConsolidatedGroup}
-                      showLeadCaseIcon={publicCase.isLeadCase}
-                    />
-                  </span>
-                </div>
+                <CaseIcons formattedCase={publicCase} />
               </td>
               <td>
                 <span
