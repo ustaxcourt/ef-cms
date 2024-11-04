@@ -1,6 +1,7 @@
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import { NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
+import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
+import { Select } from '@web-client/ustc-ui/Select/Selects';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
 import { props as cerebralProps } from 'cerebral';
@@ -116,29 +117,51 @@ export const PublicTrialSessionsFilters = connect<
                   Session type{' '}
                   <span className="optional-light-text">(optional)</span>
                 </label>
-                <SelectSearch
-                  aria-labelledby="session-type-filter-label"
-                  data-testid="session-type-filter-select"
-                  inputId="session-type-filter"
-                  name="sessionType"
-                  options={publicTrialSessionsHelper.sessionTypeOptions}
-                  placeholder="- Select one or more -"
-                  value={{
-                    label: '- Select one or more -',
-                    value: '',
-                  }}
-                  onChange={sessionType => {
-                    if (sessionType) {
-                      publicTrialsSessionUpdateFormValueSequence({
-                        key: `sessionTypes.${sessionType.value}`,
-                        root: ROOT,
-                        value: sessionType.label,
-                      });
-                    }
-                  }}
-                />
+                <NonPhone>
+                  <SelectSearch
+                    aria-labelledby="session-type-filter-label"
+                    data-testid="session-type-filter-select"
+                    inputId="session-type-filter"
+                    name="sessionType"
+                    options={publicTrialSessionsHelper.sessionTypeOptions}
+                    placeholder="- Select one or more -"
+                    value={{
+                      label: '- Select one or more -',
+                      value: '',
+                    }}
+                    onChange={sessionType => {
+                      if (sessionType) {
+                        publicTrialsSessionUpdateFormValueSequence({
+                          key: `sessionTypes.${sessionType.value}`,
+                          root: ROOT,
+                          value: sessionType.label,
+                        });
+                      }
+                    }}
+                  />{' '}
+                </NonPhone>
+                <Phone>
+                  <Select
+                    defaultValue={{
+                      label: '- Select one or more -',
+                      value: '',
+                    }}
+                    name="sessionType"
+                    options={publicTrialSessionsHelper.sessionTypeOptions}
+                    value={'- Select one or more -'}
+                    onChange={sessiontype => {
+                      if (sessiontype) {
+                        publicTrialsSessionUpdateFormValueSequence({
+                          key: `sessionTypes.${sessiontype}`,
+                          root: ROOT,
+                          value: sessiontype,
+                        });
+                      }
+                    }}
+                  />
+                </Phone>
               </div>
-              <NonMobile>
+              <NonPhone>
                 {Object.entries(
                   sessionTypes as {
                     [key: string]: string;
@@ -157,7 +180,7 @@ export const PublicTrialSessionsFilters = connect<
                     }}
                   />
                 ))}
-              </NonMobile>
+              </NonPhone>
             </div>
             <div
               className="desktop:grid-col-4 grid-col-12 tablet:padding-right-2"
@@ -172,29 +195,51 @@ export const PublicTrialSessionsFilters = connect<
                   Location{' '}
                   <span className="optional-light-text">(optional)</span>
                 </label>
-                <SelectSearch
-                  aria-labelledby="location-filter-label"
-                  data-testid="location-filter-search"
-                  inputId="location-filter"
-                  name="location"
-                  options={publicTrialSessionsHelper.trialCitiesByState}
-                  placeholder="- Select one or more -"
-                  value={{
-                    label: '- Select one or more -',
-                    value: '',
-                  }}
-                  onChange={location => {
-                    if (location) {
-                      publicTrialsSessionUpdateFormValueSequence({
-                        key: `locations.${location.value}`,
-                        root: ROOT,
-                        value: location.label,
-                      });
-                    }
-                  }}
-                />
+                <NonPhone>
+                  <SelectSearch
+                    aria-labelledby="location-filter-label"
+                    data-testid="location-filter-search"
+                    inputId="location-filter"
+                    name="location"
+                    options={publicTrialSessionsHelper.trialCitiesByState}
+                    placeholder="- Select one or more -"
+                    value={{
+                      label: '- Select one or more -',
+                      value: '',
+                    }}
+                    onChange={location => {
+                      if (location) {
+                        publicTrialsSessionUpdateFormValueSequence({
+                          key: `locations.${location.value}`,
+                          root: ROOT,
+                          value: location.label,
+                        });
+                      }
+                    }}
+                  />
+                </NonPhone>
+                <Phone>
+                  <Select
+                    defaultValue={{
+                      label: '- Select one or more -',
+                      value: '',
+                    }}
+                    name="locations"
+                    options={publicTrialSessionsHelper.trialCitiesByState}
+                    value={locations}
+                    onChange={location => {
+                      if (location) {
+                        publicTrialsSessionUpdateFormValueSequence({
+                          key: `locations.${location}`,
+                          root: ROOT,
+                          value: location,
+                        });
+                      }
+                    }}
+                  />
+                </Phone>
               </div>
-              <NonMobile>
+              <NonPhone>
                 {Object.entries(
                   locations as {
                     [key: string]: string;
@@ -213,7 +258,7 @@ export const PublicTrialSessionsFilters = connect<
                     }}
                   />
                 ))}
-              </NonMobile>
+              </NonPhone>
             </div>
             <div
               className="desktop:grid-col-4 grid-col-12 tablet:padding-right-2"
@@ -227,29 +272,51 @@ export const PublicTrialSessionsFilters = connect<
                 >
                   Judge <span className="optional-light-text">(optional)</span>
                 </label>
-                <SelectSearch
-                  aria-labelledby="judges-filter-label"
-                  data-testid="judge-filter-search"
-                  inputId="judges-filter"
-                  name="judges"
-                  options={publicTrialSessionsHelper.trialSessionJudgeOptions}
-                  placeholder="- Select one or more -"
-                  value={{
-                    label: '- Select one or more -',
-                    value: { name: '', userId: '' },
-                  }}
-                  onChange={judgeInfo => {
-                    if (judgeInfo) {
-                      publicTrialsSessionUpdateFormValueSequence({
-                        key: `judges.${judgeInfo.value.name}`,
-                        root: ROOT,
-                        value: judgeInfo.value.name,
-                      });
-                    }
-                  }}
-                />
+                <NonPhone>
+                  <SelectSearch
+                    aria-labelledby="judges-filter-label"
+                    data-testid="judge-filter-search"
+                    inputId="judges-filter"
+                    name="judges"
+                    options={publicTrialSessionsHelper.trialSessionJudgeOptions}
+                    placeholder="- Select one or more -"
+                    value={{
+                      label: '- Select one or more -',
+                      value: { name: '', userId: '' },
+                    }}
+                    onChange={judgeInfo => {
+                      if (judgeInfo) {
+                        publicTrialsSessionUpdateFormValueSequence({
+                          key: `judges.${judgeInfo.value.name}`,
+                          root: ROOT,
+                          value: judgeInfo.value.name,
+                        });
+                      }
+                    }}
+                  />
+                </NonPhone>
+                <Phone>
+                  <Select
+                    defaultValue={{
+                      label: '- Select one or more -',
+                      value: '',
+                    }}
+                    name="judges"
+                    options={publicTrialSessionsHelper.trialSessionJudgeOptions}
+                    value={judges}
+                    onChange={judgeName => {
+                      if (judgeName) {
+                        publicTrialsSessionUpdateFormValueSequence({
+                          key: `judges.${judgeName}`,
+                          root: ROOT,
+                          value: judgeName,
+                        });
+                      }
+                    }}
+                  />
+                </Phone>
               </div>
-              <NonMobile>
+              <NonPhone>
                 {Object.entries(judges as { [key: string]: string }).map(
                   ([judgeKey, judgeLabel]) => (
                     <PillButton
@@ -266,7 +333,7 @@ export const PublicTrialSessionsFilters = connect<
                     />
                   ),
                 )}
-              </NonMobile>
+              </NonPhone>
             </div>
           </div>
         </div>
