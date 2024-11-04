@@ -78,6 +78,7 @@ export const baseState = {
   showPassword: false,
   todaysOpinions: [],
   todaysOrders: {
+    page: 1,
     results: [],
     totalCount: 0,
   },

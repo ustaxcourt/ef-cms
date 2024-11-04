@@ -1277,8 +1277,8 @@ export class Case extends JoiValidationEntity {
   removeRepresentingFromPractitioners(petitionerContactId) {
     this.privatePractitioners?.forEach(practitioner => {
       const representingArrayIndex =
-        practitioner.representing.indexOf(petitionerContactId);
-      if (representingArrayIndex >= 0) {
+        practitioner.representing?.indexOf(petitionerContactId);
+      if (representingArrayIndex && representingArrayIndex >= 0) {
         practitioner.representing.splice(representingArrayIndex, 1);
       }
     });
@@ -1895,7 +1895,7 @@ export class Case extends JoiValidationEntity {
 
   static isPetitionerRepresented(rawCase, userId: string): boolean {
     return !!rawCase.privatePractitioners?.find(practitioner =>
-      practitioner.representing.find(id => id === userId),
+      practitioner.representing?.find(id => id === userId),
     );
   }
 
@@ -2103,7 +2103,7 @@ export const caseHasServedDocketEntries = rawCase => {
 };
 
 export const isInConsolidatedGroup = (caseInfo: {
-  leadDocketNumber?: string;
+  leadDocketNumber: string;
 }) => {
   return !!caseInfo.leadDocketNumber;
 };
@@ -2209,7 +2209,7 @@ export const getPractitionersRepresenting = function (
   petitionerContactId: string,
 ) {
   return rawCase.privatePractitioners?.filter(practitioner =>
-    practitioner.representing.includes(petitionerContactId),
+    practitioner.representing?.includes(petitionerContactId),
   );
 };
 

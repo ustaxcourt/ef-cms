@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { generatePublicDocketRecordPdfUrlAction } from './generatePublicDocketRecordPdfUrlAction';
 import { presenter } from '../../presenter-public';
-import { runAction } from '@web-client/presenter/test.cerebral';
+import { runPublicAction } from '@web-client/presenter/test.cerebral';
 
 describe('generatePublicDocketRecordPdfUrlAction', () => {
   beforeAll(() => {
@@ -14,16 +14,19 @@ describe('generatePublicDocketRecordPdfUrlAction', () => {
       .getUseCases()
       .generatePublicDocketRecordPdfInteractor.mockReturnValue(mockPdf);
 
-    const result = await runAction(generatePublicDocketRecordPdfUrlAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        caseDetail: {
-          docketNumber: '123-45',
+    const result = await runPublicAction(
+      generatePublicDocketRecordPdfUrlAction,
+      {
+        modules: {
+          presenter,
+        },
+        state: {
+          caseDetail: {
+            docketNumber: '123-45',
+          },
         },
       },
-    });
+    );
 
     expect(result.output).toMatchObject({
       pdfUrl: mockPdf.url,
