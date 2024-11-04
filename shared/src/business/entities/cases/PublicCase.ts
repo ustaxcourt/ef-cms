@@ -28,9 +28,9 @@ export class PublicCase extends JoiValidationEntity {
   public partyType: string;
   public receivedAt: string;
   public isSealed: boolean;
-  public petitioners: RawPublicContact[];
-  public irsPractitioners: RawPublicContact[] | IrsPractitioner[];
-  public privatePractitioners: RawPublicContact[] | PrivatePractitioner[];
+  public petitioners?: RawPublicContact[];
+  public irsPractitioners?: RawPublicContact[] | IrsPractitioner[];
+  public privatePractitioners?: RawPublicContact[] | PrivatePractitioner[];
   public consolidatedCases?: ConsolidatedCaseSummary[];
 
   private _score?: string;

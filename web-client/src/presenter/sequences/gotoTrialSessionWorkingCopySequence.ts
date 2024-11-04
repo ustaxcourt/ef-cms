@@ -28,7 +28,7 @@ const { USER_ROLES } = getConstants();
 const checkUserAssociationAndProceed = [
   isUserAssociatedWithTrialSessionAction,
   {
-    no: [...gotoTrialSessionDetailSequence],
+    no: [gotoTrialSessionDetailSequence],
     yes: [
       getTrialSessionWorkingCopyAction,
       setTrialSessionWorkingCopyAction,
