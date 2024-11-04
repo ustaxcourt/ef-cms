@@ -996,10 +996,14 @@ workflows:
     jobs:
       - deploy:
           <<: *only-prod
-      - migrate:
+      - docker-image-zipper:
           <<: *only-prod
           requires:
             - deploy
+      - migrate:
+          <<: *only-prod
+          requires:
+            - docker-image-zipper
       - wait-for-migration:
           <<: *only-prod
           type: approval
