@@ -29,9 +29,7 @@ export type PublicTrialSessionDetails = Pick<
 
 export const getPublicTrialSessionDetailsInteractor = async (
   applicationContext: ServerApplicationContext,
-  {
-    trialSessionId,
-  }: { trialSessionId: string; addSwingSessionDetails: boolean },
+  { trialSessionId }: { trialSessionId: string },
 ): Promise<PublicTrialSessionDetails> => {
   const trialSessionDetails = await applicationContext
     .getPersistenceGateway()
