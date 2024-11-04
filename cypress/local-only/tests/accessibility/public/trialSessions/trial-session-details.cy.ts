@@ -1,6 +1,6 @@
 import { checkA11y } from '../../../../support/generalCommands/checkA11y';
 
-describe('Trial Session Detail - Public Accessibility', () => {
+describe('Trial Session Details - Public Accessibility', () => {
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
   });

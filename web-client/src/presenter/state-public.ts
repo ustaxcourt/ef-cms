@@ -11,7 +11,7 @@ import { practitionerSearchHelper } from '@web-client/presenter/computeds/Advanc
 import { publicAlertHelper } from './computeds/Public/publicAlertHelper';
 import { publicCaseDetailHeaderHelper } from './computeds/Public/publicCaseDetailHeaderHelper';
 import { publicCaseDetailHelper } from './computeds/Public/publicCaseDetailHelper';
-import { publicTrialSessionDetailHelper } from '@web-client/presenter/computeds/Public/publicTrialSessionDetailHelper';
+import { publicTrialSessionDetailsHelper } from '@web-client/presenter/computeds/Public/publicTrialSessionDetailsHelper';
 import { templateHelper } from './computeds/templateHelper';
 import { todaysOpinionsHelper } from './computeds/Public/todaysOpinionsHelper';
 import { todaysOrdersHelper } from './computeds/Public/todaysOrdersHelper';
@@ -32,9 +32,9 @@ const computeds = {
   publicCaseDetailHelper: publicCaseDetailHelper as unknown as ReturnType<
     typeof publicCaseDetailHelper
   >,
-  publicTrialSessionDetailHelper:
-    publicTrialSessionDetailHelper as unknown as ReturnType<
-      typeof publicTrialSessionDetailHelper
+  publicTrialSessionDetailsHelper:
+    publicTrialSessionDetailsHelper as unknown as ReturnType<
+      typeof publicTrialSessionDetailsHelper
     >,
   templateHelper,
   todaysOpinionsHelper,
@@ -83,7 +83,7 @@ export const baseState = {
   },
   trialSessionDetailsPage: {
     trialSession: {} as PublicTrialSessionDetails,
-  }, // TODO: 10461 TYPE THIS
+  },
   user: {},
   validationErrors: {},
 };

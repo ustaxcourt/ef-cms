@@ -18,7 +18,7 @@ import { gotoPublicCaseDetailSequence } from './sequences/Public/gotoPublicCaseD
 import { gotoPublicEmailVerificationInstructionsSequence } from './sequences/gotoPublicEmailVerificationInstructionsSequence';
 import { gotoPublicPrintableDocketRecordSequence } from './sequences/Public/gotoPublicPrintableDocketRecordSequence';
 import { gotoPublicSearchSequence } from './sequences/Public/gotoPublicSearchSequence';
-import { gotoPublicTrialSessionDetailSequence } from '@web-client/presenter/sequences/Public/gotoPublicTrialSessionDetailSequence';
+import { gotoPublicTrialSessionDetailsSequence } from '@web-client/presenter/sequences/Public/gotoPublicTrialSessionDetailsSequence';
 import { gotoTodaysOpinionsSequence } from './sequences/Public/gotoTodaysOpinionsSequence';
 import { gotoTodaysOrdersSequence } from './sequences/Public/gotoTodaysOrdersSequence';
 import { initialPublicState } from './state-public';
@@ -88,7 +88,7 @@ export const presenterSequences = {
   gotoPublicSearchSequence: showMaintenancePageDecorator(
     gotoPublicSearchSequence,
   ),
-  gotoPublicTrialSessionDetailSequence,
+  gotoPublicTrialSessionDetailSequence: gotoPublicTrialSessionDetailsSequence,
   gotoTodaysOpinionsSequence: showMaintenancePageDecorator(
     gotoTodaysOpinionsSequence,
   ),
