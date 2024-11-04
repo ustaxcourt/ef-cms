@@ -1,4 +1,4 @@
-import { runAction } from '@web-client/presenter/test.cerebral';
+import { runPublicAction } from '@web-client/presenter/test.cerebral';
 import { setTodaysOpinionsAction } from './setTodaysOpinionsAction';
 
 describe('setTodaysOpinionsAction', () => {
@@ -14,7 +14,7 @@ describe('setTodaysOpinionsAction', () => {
       },
     ];
 
-    const { state } = await runAction(setTodaysOpinionsAction, {
+    const { state } = await runPublicAction(setTodaysOpinionsAction, {
       props: {
         todaysOpinions: mockTodaysOpinions,
       },

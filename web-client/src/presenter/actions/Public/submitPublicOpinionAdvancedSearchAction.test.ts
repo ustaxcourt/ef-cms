@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-public';
-import { runAction } from '@web-client/presenter/test.cerebral';
+import { runPublicAction } from '@web-client/presenter/test.cerebral';
 import { submitPublicOpinionAdvancedSearchAction } from './submitPublicOpinionAdvancedSearchAction';
 
 describe('submitPublicOpinionAdvancedSearchAction', () => {
@@ -9,7 +9,7 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
   });
 
   it('gets the public opinion information', async () => {
-    await runAction(submitPublicOpinionAdvancedSearchAction, {
+    await runPublicAction(submitPublicOpinionAdvancedSearchAction, {
       modules: {
         presenter,
       },
@@ -37,7 +37,7 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
   });
 
   it('should remove the docketNumberSuffix when a docket number is present', async () => {
-    await runAction(submitPublicOpinionAdvancedSearchAction, {
+    await runPublicAction(submitPublicOpinionAdvancedSearchAction, {
       modules: {
         presenter,
       },
@@ -83,20 +83,23 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
         throw e;
       });
 
-    const { state } = await runAction(submitPublicOpinionAdvancedSearchAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        advancedSearchForm: {
-          opinionSearch: {
-            docketNumber: '105-20L',
-            keyword: 'a',
-            opinionTypes: {},
+    const { state } = await runPublicAction(
+      submitPublicOpinionAdvancedSearchAction,
+      {
+        modules: {
+          presenter,
+        },
+        state: {
+          advancedSearchForm: {
+            opinionSearch: {
+              docketNumber: '105-20L',
+              keyword: 'a',
+              opinionTypes: {},
+            },
           },
         },
       },
-    });
+    );
 
     expect(state.alertError).toEqual({
       message: 'Please wait 1 minute before trying your search again.',
@@ -105,7 +108,7 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
   });
 
   it('should filter out opinion types that are not selected for search', async () => {
-    await runAction(submitPublicOpinionAdvancedSearchAction, {
+    await runPublicAction(submitPublicOpinionAdvancedSearchAction, {
       modules: {
         presenter,
       },
@@ -147,7 +150,7 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
       });
 
     await expect(() =>
-      runAction(submitPublicOpinionAdvancedSearchAction, {
+      runPublicAction(submitPublicOpinionAdvancedSearchAction, {
         modules: {
           presenter,
         },

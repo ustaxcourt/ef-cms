@@ -1,6 +1,6 @@
 import { navigateToPublicSiteAction } from './navigateToPublicSiteAction';
 import { presenter } from '../../presenter-public';
-import { runAction } from '@web-client/presenter/test.cerebral';
+import { runPublicAction } from '@web-client/presenter/test.cerebral';
 
 let externalRouteMock;
 const publicSiteUrlMock = 'example.com';
@@ -18,7 +18,7 @@ describe('navigateToPublicSiteAction', () => {
   });
 
   it('Routes to the public site url', async () => {
-    await runAction(navigateToPublicSiteAction, {
+    await runPublicAction(navigateToPublicSiteAction, {
       modules: {
         presenter,
       },

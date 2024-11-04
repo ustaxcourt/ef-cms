@@ -1,4 +1,4 @@
-import { runAction } from '@web-client/presenter/test.cerebral';
+import { runPublicAction } from '@web-client/presenter/test.cerebral';
 import { setTodaysOrdersAction } from './setTodaysOrdersAction';
 
 describe('setTodaysOrdersAction', () => {
@@ -24,7 +24,7 @@ describe('setTodaysOrdersAction', () => {
       },
     ];
 
-    const { state } = await runAction(setTodaysOrdersAction, {
+    const { state } = await runPublicAction(setTodaysOrdersAction, {
       props: {
         todaysOrders: mockTodaysOrdersFromProps,
         totalCount: 17,
@@ -41,7 +41,7 @@ describe('setTodaysOrdersAction', () => {
   });
 
   it('should set state.todaysOrders.totalCount from props.todaysOrders.totalCount', async () => {
-    const { state } = await runAction(setTodaysOrdersAction, {
+    const { state } = await runPublicAction(setTodaysOrdersAction, {
       props: {
         todaysOrders: [],
         totalCount: 17,
@@ -55,7 +55,7 @@ describe('setTodaysOrdersAction', () => {
   });
 
   it('should default state.todaysOrders.page to 1', async () => {
-    const { state } = await runAction(setTodaysOrdersAction, {
+    const { state } = await runPublicAction(setTodaysOrdersAction, {
       props: {
         todaysOrders: [],
       },
@@ -68,7 +68,7 @@ describe('setTodaysOrdersAction', () => {
   });
 
   it('should set state.todaysOrders.page to the value in state + 1', async () => {
-    const { state } = await runAction(setTodaysOrdersAction, {
+    const { state } = await runPublicAction(setTodaysOrdersAction, {
       props: {
         todaysOrders: [{ some: 'result' }],
       },
@@ -82,7 +82,7 @@ describe('setTodaysOrdersAction', () => {
   });
 
   it('should set state.todaysOrders.results to the props.todaysOrders if page is 1', async () => {
-    const { state } = await runAction(setTodaysOrdersAction, {
+    const { state } = await runPublicAction(setTodaysOrdersAction, {
       props: {
         todaysOrders: [{ some: 'result' }],
       },

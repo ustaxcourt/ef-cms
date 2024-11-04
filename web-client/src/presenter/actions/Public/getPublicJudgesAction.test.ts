@@ -2,7 +2,7 @@ import { ROLES } from '../../../../../shared/src/business/entities/EntityConstan
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getPublicJudgesAction } from './getPublicJudgesAction';
 import { presenter } from '../../presenter-public';
-import { runAction } from '@web-client/presenter/test.cerebral';
+import { runPublicAction } from '@web-client/presenter/test.cerebral';
 
 describe('getPublicJudgesAction', () => {
   beforeAll(() => {
@@ -24,7 +24,7 @@ describe('getPublicJudgesAction', () => {
       .getUseCases()
       .getPublicJudgesInteractor.mockReturnValue(mockJudges);
 
-    const result = await runAction(getPublicJudgesAction, {
+    const result = await runPublicAction(getPublicJudgesAction, {
       modules: {
         presenter,
       },

@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getTodaysOpinionsAction } from './getTodaysOpinionsAction';
 import { presenter } from '../../presenter-public';
-import { runAction } from '@web-client/presenter/test.cerebral';
+import { runPublicAction } from '@web-client/presenter/test.cerebral';
 
 describe('getTodaysOpinionsAction', () => {
   beforeAll(() => {
@@ -23,7 +23,7 @@ describe('getTodaysOpinionsAction', () => {
       .getUseCases()
       .getTodaysOpinionsInteractor.mockReturnValue(mockTodaysOpinions);
 
-    const result = await runAction(getTodaysOpinionsAction, {
+    const result = await runPublicAction(getTodaysOpinionsAction, {
       modules: {
         presenter,
       },

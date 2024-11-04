@@ -87,7 +87,7 @@ export const publicTrialSessionDetailsHelper = (
   };
 
   return {
-    formattedNow: formatNow(FORMATS.CURRENT_AS_OF),
+    formattedNow: formatNow(FORMATS.CURRENT_AS_OF_TIMESTAMP),
     formattedTrialSession,
   };
 };

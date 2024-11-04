@@ -1,6 +1,6 @@
 import { applicationContextForClient } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-public';
-import { runAction } from '@web-client/presenter/test.cerebral';
+import { runPublicAction } from '@web-client/presenter/test.cerebral';
 import { submitPublicCaseAdvancedSearchAction } from './submitPublicCaseAdvancedSearchAction';
 
 describe('submitPublicCaseAdvancedSearchAction', () => {
@@ -14,7 +14,7 @@ describe('submitPublicCaseAdvancedSearchAction', () => {
   });
 
   it('gets the public case information', async () => {
-    await runAction(submitPublicCaseAdvancedSearchAction, {
+    await runPublicAction(submitPublicCaseAdvancedSearchAction, {
       modules: {
         presenter,
       },
