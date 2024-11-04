@@ -875,12 +875,7 @@ jobs:
       - run:
           name: Deploy Check Glue Job Run State Cron Lambda
           command: |
-            #TARGET_ENV=$LOWER_ENV TARGET_ACCOUNT_ID="${LOWER_ENV_ACCOUNT_ID}" npx ts-node --transpileOnly scripts/postgres/restoreDbFromSource.ts
-            echo "Target Env: ${LOWER_ENV}"
-            echo "Target Env ID: ${LOWER_ENV_ACCOUNT_ID}"
-            export ROLE_ARN="arn:aws:iam::${LOWER_ENV_ACCOUNT_ID}:role/restore_role_${LOWER_ENV}"
-            aws sts assume-role --role-arn ${ROLE_ARN} --role-session-name postgres-restore-session
-            aws sts get-caller-identity
+            TARGET_ENV=$LOWER_ENV TARGET_ACCOUNT_ID="${LOWER_ENV_ACCOUNT_ID}" npx ts-node --transpileOnly scripts/postgres/restoreDbFromSource.ts
 
   finish-glue-job:
     docker:
@@ -1083,65 +1078,65 @@ workflows:
         - equal: [glue-to-test-schedule, << pipeline.schedule.name >>]
         - << pipeline.parameters.run_glue_to_test >>
     jobs:
-#      - delete-existing-data:
-#          <<: *only-test
-#      - redeploy-environment:
-#          <<: *only-test
-#          requires:
-#            - delete-existing-data
-#      - wait-for-deployment-workflow:
-#          <<: *only-test
-#          type: approval
-#          requires:
-#            - redeploy-environment
+      - delete-existing-data:
+          <<: *only-test
+      - redeploy-environment:
+          <<: *only-test
+          requires:
+            - delete-existing-data
+      - wait-for-deployment-workflow:
+          <<: *only-test
+          type: approval
+          requires:
+            - redeploy-environment
       - initiate-glue-job:
           <<: *only-test
-#          requires:
-#            - wait-for-deployment-workflow
+          requires:
+            - wait-for-deployment-workflow
       - wait-for-glue-workflow:
           <<: *only-test
           type: approval
           requires:
             - initiate-glue-job
-#      - wait-for-s3-sync-workflow:
-#          <<: *only-test
-#          type: approval
-#          requires:
-#            - initiate-glue-job
-#      - index-glued-data:
-#          <<: *only-test
-#          requires:
-#            - wait-for-glue-workflow
-#            - wait-for-s3-sync-workflow
-#      - wait-for-glued-data-to-index:
-#          <<: *only-test
-#          type: approval
-#          requires:
-#            - index-glued-data
-#      - cleanup-glue-job:
-#          <<: *only-test
-#          requires:
-#            - wait-for-glued-data-to-index
+      - wait-for-s3-sync-workflow:
+          <<: *only-test
+          type: approval
+          requires:
+            - initiate-glue-job
+      - index-glued-data:
+          <<: *only-test
+          requires:
+            - wait-for-glue-workflow
+            - wait-for-s3-sync-workflow
+      - wait-for-glued-data-to-index:
+          <<: *only-test
+          type: approval
+          requires:
+            - index-glued-data
+      - cleanup-glue-job:
+          <<: *only-test
+          requires:
+            - wait-for-glued-data-to-index
 
   glue-to-lower-env:
     when: << pipeline.parameters.run_glue_to_lower_env >>
     jobs:
-#      - start-glue-job:
-#          <<: *only-prod
-#      - wait-for-glue-job:
-#          <<: *only-prod
-#          type: approval
-#          requires:
-#            - start-glue-job
+      - start-glue-job:
+          <<: *only-prod
+      - wait-for-glue-job:
+          <<: *only-prod
+          type: approval
+          requires:
+            - start-glue-job
       - restore-postgres:
           <<: *only-prod
-#          requires:
-#            - start-glue-job
-#      - finish-glue-job:
-#          <<: *only-prod
-#          requires:
-#            - restore-postgres
-#            - wait-for-glue-job
+          requires:
+            - start-glue-job
+      - finish-glue-job:
+          <<: *only-prod
+          requires:
+            - restore-postgres
+            - wait-for-glue-job
 
   sync-s3-to-lower-env:
     when: << pipeline.parameters.run_sync_s3_to_lower_env >>
