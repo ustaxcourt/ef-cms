@@ -66,9 +66,11 @@ export const getPublicTrialSessionDetailsInteractor = async (
       trialSessionId,
     });
 
-  const casesWithMinimalRequiredInformation = cases.map(aCase => {
-    return formatPublicCase({ rawCaseRecord: aCase });
-  });
+  const casesWithMinimalRequiredInformation = cases
+    .filter(aCase => !aCase.removedFromTrial)
+    .map(aCase => {
+      return formatPublicCase({ rawCaseRecord: aCase });
+    });
 
   const publicTrialSessionData: PublicTrialSessionDetails = {
     address1: fullTrialSessionEntity.address1,

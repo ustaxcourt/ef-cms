@@ -4,12 +4,9 @@ Todo
 - Look at recursive swing session interactor call
 - Ensure only open (or whatever is public-facing) sessions are able to be navigated to
 - Ensure consistency in naming SessionDetail vs. SessionDetails
-- Ensure public actions/sequences are in the Public directories
 - Public TrialSessionDetail NonMobileOpenCases is very very similar to OpenCases.tsx ...
-- Create a formatPublicDocketEntry function--in other words, mimic getFormattedCaseDetails for public as well--and use that both in publicTrialSessionDetailHelper and the existing publicCaseDetailHelper
 - Improve types, removing any when worth the effort
 - Eastern is in the Figma, but we have no FORMAT for that. Do we use Eastern elsewhere, or ET?
-- Add Sealed icon to internal trial session case list
 
 Questions
 - Is the session time important to display to the public?
