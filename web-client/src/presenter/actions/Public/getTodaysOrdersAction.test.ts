@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getTodaysOrdersAction } from './getTodaysOrdersAction';
 import { presenter } from '../../presenter-public';
-import { runAction } from '@web-client/presenter/test.cerebral';
+import { runPublicAction } from '@web-client/presenter/test.cerebral';
 
 describe('getTodaysOrdersAction', () => {
   beforeAll(() => {
@@ -25,7 +25,7 @@ describe('getTodaysOrdersAction', () => {
       totalCount: mockTotalCount,
     });
 
-    const result = await runAction(getTodaysOrdersAction, {
+    const result = await runPublicAction(getTodaysOrdersAction, {
       modules: {
         presenter,
       },
@@ -36,7 +36,7 @@ describe('getTodaysOrdersAction', () => {
   });
 
   it('should use default values for page and sortOrder if not provided', async () => {
-    await runAction(getTodaysOrdersAction, {
+    await runPublicAction(getTodaysOrdersAction, {
       modules: {
         presenter,
       },

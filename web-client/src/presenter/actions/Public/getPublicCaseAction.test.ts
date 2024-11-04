@@ -1,7 +1,7 @@
 import { applicationContextForClient } from '@web-client/test/createClientTestApplicationContext';
 import { getPublicCaseAction } from './getPublicCaseAction';
 import { presenter } from '../../presenter-public';
-import { runAction } from '@web-client/presenter/test.cerebral';
+import { runPublicAction } from '@web-client/presenter/test.cerebral';
 
 describe('getPublicCaseAction', () => {
   beforeAll(() => {
@@ -9,7 +9,7 @@ describe('getPublicCaseAction', () => {
   });
 
   it('gets the public case information', async () => {
-    await runAction(getPublicCaseAction, {
+    await runPublicAction(getPublicCaseAction, {
       modules: {
         presenter,
       },

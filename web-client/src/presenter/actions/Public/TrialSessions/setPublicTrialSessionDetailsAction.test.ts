@@ -3,7 +3,7 @@ import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
 } from '@shared/business/entities/EntityConstants';
-import { runAction } from 'cerebral/test';
+import { runPublicAction } from '@web-client/presenter/test.cerebral';
 import { setPublicTrialSessionDetailsAction } from '@web-client/presenter/actions/Public/TrialSessions/setPublicTrialSessionDetailsAction';
 
 describe('setPublicTrialSessionDetailsAction', () => {
@@ -24,14 +24,17 @@ describe('setPublicTrialSessionDetailsAction', () => {
       termYear: 'Fall 2024',
       trialLocation: 'Atlantis, MO',
     } as PublicTrialSessionDetails;
-    const { state } = await runAction(setPublicTrialSessionDetailsAction, {
-      props: {
-        trialSession: mockSession,
+    const { state } = await runPublicAction(
+      setPublicTrialSessionDetailsAction,
+      {
+        props: {
+          trialSession: mockSession,
+        },
+        state: {
+          trialSessionDetailsPage: {},
+        },
       },
-      state: {
-        trialSessionDetailsPage: {},
-      },
-    });
+    );
 
     expect(state.trialSessionDetailsPage.trialSession).toMatchObject(
       mockSession,
