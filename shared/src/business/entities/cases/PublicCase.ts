@@ -66,10 +66,7 @@ export class PublicCase extends JoiValidationEntity {
     this._score = rawCase['_score'];
 
     this.isSealed = isSealedCase(rawCase);
-
-    this.petitioners = [];
-    this.irsPractitioners = [];
-    this.privatePractitioners = [];
+    this.leadDocketNumber = rawCase.leadDocketNumber;
 
     if (authorizedUser?.role === ROLES.irsPractitioner && !this.isSealed) {
       this.petitioners = rawCase.petitioners;
@@ -81,18 +78,17 @@ export class PublicCase extends JoiValidationEntity {
         practitioner => new PrivatePractitioner(practitioner),
       );
 
-      this.leadDocketNumber = rawCase.leadDocketNumber;
       this.consolidatedCases = (rawCase.consolidatedCases || []).map(
         consolidatedCase => new ConsolidatedCaseSummary(consolidatedCase),
       );
     } else if (!this.isSealed) {
-      this.petitioners = rawCase.petitioners.map(petitioner =>
+      this.petitioners = rawCase.petitioners?.map(petitioner =>
         new PublicContact(petitioner).toRawObject(),
       );
-      this.irsPractitioners = rawCase.irsPractitioners.map(irsP =>
+      this.irsPractitioners = rawCase.irsPractitioners?.map(irsP =>
         new PublicContact(irsP).toRawObject(),
       );
-      this.privatePractitioners = rawCase.privatePractitioners.map(privateP =>
+      this.privatePractitioners = rawCase.privatePractitioners?.map(privateP =>
         new PublicContact(privateP).toRawObject(),
       );
     }

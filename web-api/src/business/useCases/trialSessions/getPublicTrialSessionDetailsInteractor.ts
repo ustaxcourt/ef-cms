@@ -1,8 +1,8 @@
 import { NotFoundError } from '@web-api/errors/errors';
-import { PublicCase } from '@shared/business/entities/cases/PublicCase';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_SCOPE_TYPES } from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { formatPublicCase } from '@web-api/business/useCaseHelper/consolidatedCases/formatPublicCase';
 
 export type PublicTrialSessionDetails = Pick<
   TrialSession,
@@ -67,7 +67,7 @@ export const getPublicTrialSessionDetailsInteractor = async (
     });
 
   const casesWithMinimalRequiredInformation = cases.map(aCase => {
-    return new PublicCase(aCase, { authorizedUser: undefined }).toRawObject();
+    return formatPublicCase({ rawCaseRecord: aCase });
   });
 
   const publicTrialSessionData: PublicTrialSessionDetails = {

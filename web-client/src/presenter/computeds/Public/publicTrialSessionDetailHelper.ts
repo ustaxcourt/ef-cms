@@ -98,7 +98,9 @@ const formatPublicCase = (
   const { isSealed } = calendaredCase;
   const inConsolidatedGroup = isInConsolidatedGroup(calendaredCase);
   const isTheLeadCase = isLeadCase(calendaredCase);
-  const caseTitle = Case.getCaseTitle(calendaredCase.caseCaption);
+  const caseTitle = isSealed
+    ? 'Sealed'
+    : Case.getCaseTitle(calendaredCase.caseCaption);
   let consolidatedIconTooltipText;
 
   if (inConsolidatedGroup) {
