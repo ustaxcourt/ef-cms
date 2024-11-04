@@ -21,10 +21,7 @@ export type PublicTrialSessionsHelperResults = {
   }[];
   trialSessionJudgeOptions: {
     label: string;
-    value: {
-      name: string;
-      userId: string;
-    };
+    value: string;
   }[];
   filtersHaveBeenModified: boolean;
   totalPages: number;
