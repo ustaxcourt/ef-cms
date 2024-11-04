@@ -433,12 +433,12 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/wait_for_workflow_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/strip_basepath_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/header_security_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/restore_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/batch_instance_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/job_definition_iam_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/batch_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/batch_instance_profile_*"
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/batch_instance_profile_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/restore_role_*"
       ]
     }
   ]

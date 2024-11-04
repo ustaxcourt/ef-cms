@@ -1,14 +1,41 @@
-1. Use environment switcher to point at environment
-2. Modify generate-token.sh with environment variables
-  - DB_HOST=""  # e.g., mydb.cluster-abcdefghijkl.us-east-1.rds.amazonaws.com. This can be found in aws console
-  - DB_USER="${env}_developers"                         # Database user
-  - DB_NAME="${env}_dawson"                    # Database name
-3. run generate-token.sh
-4. Connect to DB using Tables Plus
-  - Host/socket is DB_HOST from step 2
-  - User is DB_User from step 2
-  - password is token generated in step 3
-  - database is DB_NAME from step 2
-  - SSL mode preferred
-  - For SSL keys and select "CA Cert..." and choose the global-bundle.pem file in the root of the ef-cms repo
-  - connect
+# Connecting to a Deployed Postgres Database from TablePlus
+
+Note: run all commands from the root of the `ef-cms` directory.
+
+## Creating a new connection in TablePlus
+
+1. Use the [environment switcher](../additional-resources/environment-switcher.md) to point to the deployed environment:
+   ```bash
+   . scripts/env/set-env.zsh ustc-dev
+   ```
+1. Run `generate-token.sh` to determine the connection details and generate a temporary access token:
+   - To generate a token for the read-only endpoint:
+      ```bash
+      scripts/postgres/generate-token.sh
+      ```
+   - To generate a token for the writeable endpoint:
+      ```bash
+      scripts/postgres/generate-token.sh --rw
+      ```
+1. Add a new connection in TablePlus:
+   1. Populate the host, port, username, password, and database fields using the values from the `generate-token.sh` output from step 2
+   1. Select "SSL mode preferred"
+   1. Select "CA Cert..." and choose the `global-bundle.pem` file in the root of the repo
+1. The token generated above is temporary. After it expires, you will need to run `generate-token.sh` again to retrieve a new token, or follow the optional steps below to configure TablePlus to retrieve tokens automatically.
+
+## (Optional) Configuring an existing connection to automatically retrieve tokens
+
+1. Determine the exact full path to the `get-token-for-tableplus.zsh` script:
+   ```bash
+   readlink -f scripts/postgres/get-token-for-tableplus.zsh
+   ```
+1. Determine which arguments to pass in:
+   1. The first argument is the environment string that you pass into the environment switcher when switching to the deployed environment (eg. `ustc-dev`)
+   1. If this connection is to the writeable endpoint, you will also need to pass in the `--rw` flag
+1. Edit the connection in TablePlus:
+   1. Clear out the value in the password field
+   1. Select "Command Line" in the dropdown next to the password field
+   1. Populate the password field with the exact full path to the `get-token-for-tableplus.zsh` script and include the parameters you determined:
+      ```bash
+      /path/to/get-token-for-tableplus.zsh ustc-dev --rw
+      ```

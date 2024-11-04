@@ -70,7 +70,7 @@ export const toggleFeatureFlag = async ({
       pk: flag,
       sk: flag,
     },
-    TableName: getCypressEnv().dynamoDbTableName,
+    TableName: getCypressEnv().dynamoDbDeployTableName,
     UpdateExpression: 'SET #value = :value',
   });
 
@@ -108,7 +108,7 @@ export const getRawFeatureFlagValue = async ({
     TableName: getCypressEnv().dynamoDbDeployTableName,
   });
 
-  return result?.Item?.current;
+  return result?.Item?.current || null;
 };
 
 export const getEmailVerificationToken = async ({
