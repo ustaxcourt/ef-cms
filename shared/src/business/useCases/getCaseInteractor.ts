@@ -131,6 +131,10 @@ export const getCaseInteractor = async (
     throw error;
   }
 
+  // Authorized to get case:
+  // • either you do not lack permissions to get a case (unnecessary check!)
+  // • or you are the petitioner on the case
+  // • or you are directly associated with some member case
   let isAuthorizedToGetCase = isAuthorized(
     authorizedUser,
     ROLE_PERMISSIONS.GET_CASE,
@@ -151,6 +155,10 @@ export const getCaseInteractor = async (
     }
   }
 
+  // Associated with case if:
+  // • You are a practitioner on the case
+  // • You are the petitioner on the case
+  // • The petition is served, and you are an IRS Superuser
   let isAssociatedWithCase = isAssociatedUser({
     caseRaw: caseRecord,
     user: authorizedUser,
@@ -172,6 +180,9 @@ export const getCaseInteractor = async (
 
   caseRecord.isSealed = isSealedCase;
 
+  // If this is a sealed case:
+  // If you are authorized or associated with the case (or an IRS Superuser, with VIEW_SEALED_CASE), you get the full Case
+  // Otherwise, you get a Public Case
   if (isSealedCase) {
     caseDetailRaw = await getSealedCase({
       authorizedUser,
@@ -187,6 +198,8 @@ export const getCaseInteractor = async (
         .validate()
         .toRawObject();
     } else {
+      // If you are authorized to get a case and associated, you get a full case
+      // Otherwise, you get a public case
       caseDetailRaw = await getCaseForExternalUser({
         authorizedUser,
         caseRecord,

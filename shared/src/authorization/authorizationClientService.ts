@@ -242,6 +242,7 @@ const irsPractitionerPermissions: RolePermission[] = [
 
 const irsSuperuserPermissions: RolePermission[] = [
   ROLE_PERMISSIONS.ADVANCED_SEARCH,
+  ROLE_PERMISSIONS.GET_ALL_CASES,
   ROLE_PERMISSIONS.GET_CASE,
   ROLE_PERMISSIONS.GET_JUDGES,
   ROLE_PERMISSIONS.GET_USER_PENDING_EMAIL_STATUS,

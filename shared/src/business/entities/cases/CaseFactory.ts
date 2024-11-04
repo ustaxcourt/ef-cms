@@ -21,60 +21,46 @@ export function CaseFactory({
   rawCase: RawCase;
   authorizedUser: UnknownAuthUser;
 }) {
-  const isAuthorizedUser = isAuthUser(authorizedUser);
-  // has permission (whether sealed or not), is public, does not have permission (sealed and not associated with the case)
+  const userIsLoggedIn = isAuthUser(authorizedUser);
+  const caseIsSealed = isSealedCase(rawCase);
 
-  if (!isAuthorizedUser) {
-    return handleNonAuthUser(rawCase);
+  // Handling users who are not logged in
+  if (!userIsLoggedIn) {
+    return caseIsSealed
+      ? new NoLookyLookyCase(rawCase)
+      : new PublicCase(rawCase);
   }
 
-  const isSealed = isSealedCase(rawCase);
-  const isDirectlyAssociated = userIsDirectlyAssociated({
-    aCase: rawCase,
-    userId: authorizedUser.userId,
-  });
-  const isIndirectlyAssociated = isUserPartOfGroup({
-    consolidatedCases: rawCase.consolidatedCases || [],
-    userId: authorizedUser.userId,
-  });
-
-  // Logged in user with permission to see some cases, including this one
-  if (isDirectlyAssociated || isIndirectlyAssociated) {
-    return new Case(rawCase, { authorizedUser });
-  }
-
-  // Logged in user with full case permissions
+  // User is logged in and has full permissions to view cases (e.g., an internal court user or IRS Superuser)
   if (isAuthorized(authorizedUser, ROLE_PERMISSIONS.GET_ALL_CASES)) {
     return new Case(rawCase, { authorizedUser });
   }
 
-  // Logged in non-internal, non-associated user tries to view non-sealed case
+  const userIsDirectlyAssociatedWithCase = userIsDirectlyAssociated({
+    aCase: rawCase,
+    userId: authorizedUser.userId,
+  });
+  const userIsIndirectlyAssociatedWithCase = isUserPartOfGroup({
+    consolidatedCases: rawCase.consolidatedCases || [],
+    userId: authorizedUser.userId,
+  });
+  const userIsAssociatedWithCase =
+    userIsDirectlyAssociatedWithCase || userIsIndirectlyAssociatedWithCase;
+
+  // User is logged in and associated with the case (e.g., a practitioner or petitioner on the case)
+  if (userIsAssociatedWithCase) {
+    return new Case(rawCase, { authorizedUser });
+  }
+
+  // User is logged in but neither has permissions to view all cases nor is associated with the case
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.GET_ALL_CASES) &&
-    !isDirectlyAssociated &&
-    !isIndirectlyAssociated
+    !userIsAssociatedWithCase
   ) {
-    return new PublicCase(rawCase);
+    return caseIsSealed
+      ? new NoLookyLookyCase(rawCase)
+      : new PublicCase(rawCase);
   }
 
-  // Logged in non-internal, non-associated user tries to view sealed case
-  if (
-    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.GET_ALL_CASES) &&
-    !isDirectlyAssociated &&
-    !isIndirectlyAssociated &&
-    isSealed
-  ) {
-    return new NoLookyLookyCase(rawCase);
-  }
-
-  return new PublicCase(rawCase);
-}
-
-function handleNonAuthUser(rawCase: RawCase) {
-  const isSealed = isSealedCase(rawCase);
-  // Public user viewing sealed case
-  if (isSealed) {
-    return new NoLookyLookyCase(rawCase);
-  }
   return new PublicCase(rawCase);
 }
