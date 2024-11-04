@@ -2,13 +2,14 @@ import { CaseCountsAndSessionsByCity } from './getDataForCalendaring';
 import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { writeTrialSessionDataToExcel } from './writeTrialSessionDataToExcel';
 
+const cityWithSpecialSession = 'Portland, OR';
 const cities = [
   'cityA, AB',
   'cityB, AB',
   'cityC, AB',
   'cityD, AB',
   'cityE, AB',
-  'Portland, OR',
+  cityWithSpecialSession,
 ];
 const weeks = ['09/01', '09/08', '09/15', '09/45', '09/89', '09/37'];
 const mockSessionCountPerWeek = {
@@ -38,7 +39,7 @@ describe('writeTrialSessionDataToExcel', () => {
         }
 
         const sessionType =
-          city === 'Portland, OR'
+          city === cityWithSpecialSession
             ? SESSION_TYPES.special
             : SESSION_TYPES[Object.keys(SESSION_TYPES)[randomType]];
 
