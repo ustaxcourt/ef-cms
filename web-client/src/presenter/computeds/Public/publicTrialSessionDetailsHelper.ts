@@ -9,16 +9,37 @@ import { Get } from 'cerebral';
 import { compact, some } from 'lodash';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
+export type FormattedPublicTrialSession = {
+  formattedTerm: string;
+  formattedStartDate: string;
+  formattedStartDateFull: string;
+  formattedEstimatedEndDate: string;
+  sessionStatus: string;
+
+  hasCourthouseInformation: boolean;
+  formattedCityStateZip: string;
+  trialLocation?: string;
+  courthouseName?: string;
+  address1?: string;
+  address2?: string;
+
+  isSwingSession: boolean;
+  swingSessionLocation?: string;
+  swingSessionId?: string;
+
+  formattedCases: TrialSessionPublicCaseRow[];
+};
+
 export type TrialSessionPublicCaseRow = {
-  isSealed: boolean;
-  privatePractitioners?: { name?: string }[];
-  irsPractitioners?: { name?: string }[];
-  inConsolidatedGroup: boolean;
-  isLeadCase: boolean;
-  consolidatedIconTooltipText: string;
   caseTitle: string;
+  consolidatedIconTooltipText: string;
   docketNumber: string;
   docketNumberWithSuffix?: string;
+  inConsolidatedGroup: boolean;
+  irsPractitioners?: { name?: string }[];
+  isLeadCase: boolean;
+  isSealed: boolean;
+  privatePractitioners?: { name?: string }[];
 };
 
 export const publicTrialSessionDetailsHelper = (
@@ -26,17 +47,7 @@ export const publicTrialSessionDetailsHelper = (
   applicationContext: ClientPublicApplicationContext,
 ): {
   formattedNow: string;
-  formattedTrialSession: {
-    trialLocation?: string;
-    formattedTerm: string;
-    formattedEstimatedEndDate: string;
-    formattedStartDate: string;
-    formattedStartDateFull: string;
-    sessionStatus: string;
-    formattedCityStateZip: string;
-    hasCourthouseInformation: boolean;
-    formattedCases: TrialSessionPublicCaseRow[];
-  };
+  formattedTrialSession: FormattedPublicTrialSession;
 } => {
   const trialSession = get(state.trialSessionDetailsPage.trialSession);
 
@@ -73,6 +84,9 @@ export const publicTrialSessionDetailsHelper = (
   );
 
   const formattedTrialSession = {
+    address1: trialSession.address1,
+    address2: trialSession.address2,
+    courthouseName: trialSession.courthouseName,
     formattedCases,
     formattedCityStateZip,
     formattedEstimatedEndDate,
@@ -80,9 +94,10 @@ export const publicTrialSessionDetailsHelper = (
     formattedStartDateFull,
     formattedTerm,
     hasCourthouseInformation,
-
+    isSwingSession: trialSession.isSwingSession,
     sessionStatus: trialSession.sessionStatus,
-    // 10461 TODO: remove as needed
+    swingSessionId: trialSession.swingSessionId,
+    swingSessionLocation: trialSession.swingSessionLocation,
     trialLocation: trialSession.trialLocation,
   };
 
