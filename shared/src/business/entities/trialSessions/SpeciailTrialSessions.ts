@@ -1,14 +1,14 @@
-export interface SpecialTrialSession {
+export type SpecialTrialSession = {
   userId: string;
   trialSessionId: string;
-}
+};
 
-export interface SpecialTrialSessionKey {
+export type SpecialTrialSessionKey = {
   pk: string;
   sk: string;
-}
+};
 
-export interface TrialSessionWorkingCopyNotes {
+export type TrialSessionWorkingCopyNotes = {
   sessionNotes: string;
   trialSessionId: string;
-}
+};
