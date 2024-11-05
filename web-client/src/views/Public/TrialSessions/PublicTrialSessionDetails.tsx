@@ -15,7 +15,6 @@ import classNames from 'classnames';
 export const PublicTrialSessionDetails = connect(
   {
     publicTrialSessionDetailsHelper: state.publicTrialSessionDetailsHelper,
-    trialSession: state.trialSessionDetailsPage.trialSession,
   },
   function PublicTrialSessionDetails({
     publicTrialSessionDetailsHelper: publicTrialSessionDetailsHelper,
@@ -40,12 +39,8 @@ PublicTrialSessionDetails.displayName = 'PublicTrialSessionDetails';
 const PublicTrialSessionInformation = connect(
   {
     publicTrialSessionDetailsHelper: state.publicTrialSessionDetailsHelper,
-    trialSession: state.trialSessionDetailsPage.trialSession,
   },
-  function PublicTrialSessionInformation({
-    publicTrialSessionDetailsHelper,
-    trialSession,
-  }) {
+  function PublicTrialSessionInformation({ publicTrialSessionDetailsHelper }) {
     return (
       <>
         <Button
@@ -60,7 +55,8 @@ const PublicTrialSessionInformation = connect(
         <div className="margin-bottom-205">
           {`Information on this page is current as of ${publicTrialSessionDetailsHelper.formattedNow}.`}
         </div>
-        {(trialSession.isSwingSession ||
+        {(publicTrialSessionDetailsHelper.formattedTrialSession
+          .isSwingSession ||
           publicTrialSessionDetailsHelper.formattedTrialSession
             .hasCourthouseInformation) && (
           <div className="card padding-205 maxw-mobile-lg">
@@ -72,12 +68,23 @@ const PublicTrialSessionInformation = connect(
                   <span className="label">Courthouse location</span>
                   <div className="padding-05"></div>
                   <div>
-                    <span>{trialSession.courthouseName}</span>
-                    <span className="address-line">
-                      {trialSession.address1}
+                    <span>
+                      {
+                        publicTrialSessionDetailsHelper.formattedTrialSession
+                          .courthouseName
+                      }
                     </span>
                     <span className="address-line">
-                      {trialSession.address2}
+                      {
+                        publicTrialSessionDetailsHelper.formattedTrialSession
+                          .address1
+                      }
+                    </span>
+                    <span className="address-line">
+                      {
+                        publicTrialSessionDetailsHelper.formattedTrialSession
+                          .address2
+                      }
                     </span>
                     <span className="address-line">
                       {
@@ -88,7 +95,8 @@ const PublicTrialSessionInformation = connect(
                   </div>
                 </div>
               )}
-              {trialSession.isSwingSession && (
+              {publicTrialSessionDetailsHelper.formattedTrialSession
+                .isSwingSession && (
                 <div>
                   <span className="label">Swing session</span>
                   <div className="padding-05"></div>
@@ -103,9 +111,12 @@ const PublicTrialSessionInformation = connect(
                       />
                     </NonPhone>
                     <a
-                      href={`/trial-session-detail/${trialSession.swingSessionId}`}
+                      href={`/trial-session-detail/${publicTrialSessionDetailsHelper.formattedTrialSession.swingSessionId}`}
                     >
-                      {trialSession.swingSessionLocation}
+                      {
+                        publicTrialSessionDetailsHelper.formattedTrialSession
+                          .swingSessionLocation
+                      }
                     </a>
                   </span>
                 </div>
