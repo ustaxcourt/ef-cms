@@ -17,7 +17,7 @@ describe('getBulkSpecialTrialSessionCopyNotesAction', () => {
   });
 
   it('call the use case to get the bulk special trial session copy notes', async () => {
-    await runAction(getBulkSpecialTrialSessionCopyNotesAction, {
+    const result = await runAction(getBulkSpecialTrialSessionCopyNotesAction, {
       modules: {
         presenter,
       },
@@ -30,6 +30,13 @@ describe('getBulkSpecialTrialSessionCopyNotesAction', () => {
             sessionType: 'Special',
             trialSessionId: '123',
           },
+          {
+            judge: {
+              userId: 'xyz',
+            },
+            sessionType: 'Hybrid',
+            trialSessionId: '369',
+          },
         ],
       },
       state: {},
@@ -38,6 +45,14 @@ describe('getBulkSpecialTrialSessionCopyNotesAction', () => {
     expect(
       applicationContext.getUseCases()
         .getBulkSpecialTrialSessionCopyNotesInteractor,
-    ).toHaveBeenCalled();
+    ).toHaveBeenCalledWith(expect.anything(), {
+      specialTrialSessions: [{ trialSessionId: '123', userId: 'abc' }],
+    });
+
+    expect(result.output).toEqual({
+      specialTrialSessionCopyNotes: [
+        { sessionNotes: 'notes', trialSessionId: '123' },
+      ],
+    });
   });
 });
