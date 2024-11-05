@@ -1,4 +1,4 @@
-import { selectTypeaheadInput } from '../../../helpers/components/typeAhead/select-typeahead-input';
+import { selectTypeaheadInput } from '../../../../../helpers/components/typeAhead/select-typeahead-input';
 
 describe('Public Trial Sessions', () => {
   beforeEach(() => {
