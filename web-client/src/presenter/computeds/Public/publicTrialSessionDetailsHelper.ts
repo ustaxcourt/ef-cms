@@ -60,7 +60,7 @@ export const publicTrialSessionDetailsHelper = (
 
   const formattedEstimatedEndDate = applicationContext
     .getUtilities()
-    .formatDateString(trialSession.estimatedEndDate!, 'MMDDYY');
+    .formatDateString(trialSession.estimatedEndDate, 'MMDDYY');
 
   const formattedStartDateFull = applicationContext
     .getUtilities()

@@ -104,8 +104,6 @@ describe('PublicCase', () => {
       { authorizedUser: undefined },
     );
 
-    console.log(entity.toRawObject());
-
     expect(entity.toRawObject()).toEqual({
       canAllowDocumentService: true,
       canAllowPrintableDocketRecord: false,
