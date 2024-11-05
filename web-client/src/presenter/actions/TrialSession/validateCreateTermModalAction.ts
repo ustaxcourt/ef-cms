@@ -1,4 +1,4 @@
-import { GenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GeneratedSuggestedTermForm';
+import { GenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
