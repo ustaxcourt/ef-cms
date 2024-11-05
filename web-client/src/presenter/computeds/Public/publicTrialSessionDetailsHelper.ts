@@ -51,6 +51,8 @@ export const publicTrialSessionDetailsHelper = (
 } => {
   const trialSession = get(state.trialSessionDetailsPage.trialSession);
 
+  console.log(trialSession);
+
   const twoDigitTermYear = trialSession.termYear.slice(2);
   const formattedTerm = `${trialSession.term} ${twoDigitTermYear}`;
 
