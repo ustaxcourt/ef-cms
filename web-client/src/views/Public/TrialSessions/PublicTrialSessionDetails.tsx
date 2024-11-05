@@ -67,7 +67,10 @@ const PublicTrialSessionInformation = ({
       </div>
       {(formattedTrialSession.isSwingSession ||
         formattedTrialSession.hasCourthouseInformation) && (
-        <div className="card padding-205 maxw-mobile-lg">
+        <div
+          className="card padding-205 maxw-mobile-lg"
+          data-testid="public-trial-session-details-box"
+        >
           <h3 className="underlined">Details</h3>
           <div className="display-flex flex-wrap gap-5">
             {formattedTrialSession.hasCourthouseInformation && (
