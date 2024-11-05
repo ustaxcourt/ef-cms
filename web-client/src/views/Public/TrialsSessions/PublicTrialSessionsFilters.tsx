@@ -46,11 +46,9 @@ export const PublicTrialSessionsFilters = connect<
       sessionTypes = {},
     } = publicTrialSessionData;
 
-    const publicTrialsSessionUpdateFormValueSequence = (
-      ...args: Parameters<typeof updateFormValueSequence>
-    ) => {
+    const handleUpdateFormValue = (key: string, value: string | undefined) => {
       displayProgressSpinnerSequence({ timeInSeconds: 0.25 });
-      updateFormValueSequence(...args);
+      updateFormValueSequence({ key, root: ROOT, value });
       updateFormValueSequence({
         key: 'pageNumber',
         root: ROOT,
@@ -70,11 +68,7 @@ export const PublicTrialSessionsFilters = connect<
             type="radio"
             value={value}
             onChange={e => {
-              publicTrialsSessionUpdateFormValueSequence({
-                key: e.target.name,
-                root: ROOT,
-                value: e.target.value,
-              });
+              handleUpdateFormValue(e.target.name, e.target.value);
             }}
           />
           <label
@@ -112,228 +106,37 @@ export const PublicTrialSessionsFilters = connect<
               className="desktop:grid-col-4 grid-col-12 tablet:padding-right-2"
               data-testid="session-type-filter"
             >
-              <div className="margin-bottom-4">
-                <label className="usa-label" htmlFor="session-type-filter">
-                  Session type{' '}
-                  <span className="optional-light-text">(optional)</span>
-                </label>
-                <NonPhone>
-                  <SelectSearch
-                    aria-labelledby="session-type-filter-label"
-                    data-testid="session-type-filter-select"
-                    inputId="session-type-filter"
-                    name="sessionType"
-                    options={publicTrialSessionsHelper.sessionTypeOptions}
-                    placeholder="- Select one or more -"
-                    value={{
-                      label: '- Select one or more -',
-                      value: '',
-                    }}
-                    onChange={sessionType => {
-                      if (sessionType) {
-                        publicTrialsSessionUpdateFormValueSequence({
-                          key: `sessionTypes.${sessionType.value}`,
-                          root: ROOT,
-                          value: sessionType.label,
-                        });
-                      }
-                    }}
-                  />{' '}
-                </NonPhone>
-                <Phone>
-                  <Select
-                    defaultValue={{
-                      label: '- Select one or more -',
-                      value: '',
-                    }}
-                    name="sessionType"
-                    options={publicTrialSessionsHelper.sessionTypeOptions}
-                    value={'- Select one or more -'}
-                    onChange={sessiontype => {
-                      if (sessiontype) {
-                        publicTrialsSessionUpdateFormValueSequence({
-                          key: `sessionTypes.${sessiontype}`,
-                          root: ROOT,
-                          value: sessiontype,
-                        });
-                      }
-                    }}
-                  />
-                </Phone>
-              </div>
-              <NonPhone>
-                {Object.entries(
-                  sessionTypes as {
-                    [key: string]: string;
-                  },
-                ).map(([sessionTypeKey, sessionTypeLabel]) => (
-                  <PillButton
-                    data-testid={`session-${sessionTypeLabel}-pill-button`}
-                    key={sessionTypeLabel}
-                    text={sessionTypeLabel}
-                    onRemove={() => {
-                      publicTrialsSessionUpdateFormValueSequence({
-                        key: `sessionTypes.${sessionTypeKey}`,
-                        root: ROOT,
-                        value: undefined,
-                      });
-                    }}
-                  />
-                ))}
-              </NonPhone>
+              <FilterSelect
+                label="Session type"
+                name="sessionTypes"
+                options={publicTrialSessionsHelper.sessionTypeOptions}
+                selectedValues={sessionTypes}
+                onChange={handleUpdateFormValue}
+              />
             </div>
             <div
               className="desktop:grid-col-4 grid-col-12 tablet:padding-right-2"
               data-testid="location-filter"
             >
-              <div className="margin-bottom-4">
-                <label
-                  className="usa-label"
-                  htmlFor="location-filter"
-                  id="location-filter-label"
-                >
-                  Location{' '}
-                  <span className="optional-light-text">(optional)</span>
-                </label>
-                <NonPhone>
-                  <SelectSearch
-                    aria-labelledby="location-filter-label"
-                    data-testid="location-filter-search"
-                    inputId="location-filter"
-                    name="location"
-                    options={publicTrialSessionsHelper.trialCitiesByState}
-                    placeholder="- Select one or more -"
-                    value={{
-                      label: '- Select one or more -',
-                      value: '',
-                    }}
-                    onChange={location => {
-                      if (location) {
-                        publicTrialsSessionUpdateFormValueSequence({
-                          key: `locations.${location.value}`,
-                          root: ROOT,
-                          value: location.label,
-                        });
-                      }
-                    }}
-                  />
-                </NonPhone>
-                <Phone>
-                  <Select
-                    defaultValue={{
-                      label: '- Select one or more -',
-                      value: '',
-                    }}
-                    name="locations"
-                    options={publicTrialSessionsHelper.trialCitiesByState}
-                    value={locations}
-                    onChange={location => {
-                      if (location) {
-                        publicTrialsSessionUpdateFormValueSequence({
-                          key: `locations.${location}`,
-                          root: ROOT,
-                          value: location,
-                        });
-                      }
-                    }}
-                  />
-                </Phone>
-              </div>
-              <NonPhone>
-                {Object.entries(
-                  locations as {
-                    [key: string]: string;
-                  },
-                ).map(([locationKey, locationLabel]) => (
-                  <PillButton
-                    data-testid={`location-${locationLabel}-pill-button`}
-                    key={locationLabel}
-                    text={locationLabel}
-                    onRemove={() => {
-                      publicTrialsSessionUpdateFormValueSequence({
-                        key: `locations.${locationKey}`,
-                        root: ROOT,
-                        value: undefined,
-                      });
-                    }}
-                  />
-                ))}
-              </NonPhone>
+              <FilterSelect
+                label="Location"
+                name="locations"
+                options={publicTrialSessionsHelper.trialCitiesByState}
+                selectedValues={locations}
+                onChange={handleUpdateFormValue}
+              />
             </div>
             <div
               className="desktop:grid-col-4 grid-col-12 tablet:padding-right-2"
               data-testid="judge-filter"
             >
-              <div className="margin-bottom-1">
-                <label
-                  className="usa-label"
-                  htmlFor="judges-filter"
-                  id="judges-filter-label"
-                >
-                  Judge <span className="optional-light-text">(optional)</span>
-                </label>
-                <NonPhone>
-                  <SelectSearch
-                    aria-labelledby="judges-filter-label"
-                    data-testid="judge-filter-search"
-                    inputId="judges-filter"
-                    name="judges"
-                    options={publicTrialSessionsHelper.trialSessionJudgeOptions}
-                    placeholder="- Select one or more -"
-                    value={{
-                      label: '- Select one or more -',
-                      value: '',
-                    }}
-                    onChange={judgeInfo => {
-                      if (judgeInfo) {
-                        publicTrialsSessionUpdateFormValueSequence({
-                          key: `judges.${judgeInfo.value}`,
-                          root: ROOT,
-                          value: judgeInfo.value,
-                        });
-                      }
-                    }}
-                  />
-                </NonPhone>
-                <Phone>
-                  <Select
-                    defaultValue={{
-                      label: '- Select one or more -',
-                      value: '',
-                    }}
-                    name="judges"
-                    options={publicTrialSessionsHelper.trialSessionJudgeOptions}
-                    value={judges}
-                    onChange={judgeName => {
-                      if (judgeName) {
-                        publicTrialsSessionUpdateFormValueSequence({
-                          key: `judges.${judgeName}`,
-                          root: ROOT,
-                          value: judgeName,
-                        });
-                      }
-                    }}
-                  />
-                </Phone>
-              </div>
-              <NonPhone>
-                {Object.entries(judges as { [key: string]: string }).map(
-                  ([judgeKey, judgeLabel]) => (
-                    <PillButton
-                      data-testid={`judge-${judgeLabel}-pill-button`}
-                      key={judgeKey}
-                      text={judgeLabel}
-                      onRemove={() => {
-                        publicTrialsSessionUpdateFormValueSequence({
-                          key: `judges.${judgeKey}`,
-                          root: ROOT,
-                          value: undefined,
-                        });
-                      }}
-                    />
-                  ),
-                )}
-              </NonPhone>
+              <FilterSelect
+                label="Judge"
+                name="judges"
+                options={publicTrialSessionsHelper.trialSessionJudgeOptions}
+                selectedValues={judges}
+                onChange={handleUpdateFormValue}
+              />
             </div>
           </div>
         </div>
@@ -341,3 +144,62 @@ export const PublicTrialSessionsFilters = connect<
     );
   },
 );
+
+function FilterSelect({ label, name, onChange, options, selectedValues }) {
+  return (
+    <>
+      <div className="margin-bottom-4">
+        <label className="usa-label" htmlFor={`${name}-filter`}>
+          {label} <span className="optional-light-text">(optional)</span>
+        </label>
+        <NonPhone>
+          <SelectSearch
+            aria-labelledby={`${name}-filter-label`}
+            data-testid={`${name}-filter-select`}
+            inputId={`${name}-filter`}
+            name={name}
+            options={options}
+            placeholder="- Select one or more -"
+            value={{
+              label: '- Select one or more -',
+              value: '',
+            }}
+            onChange={option =>
+              option && onChange(`${name}.${option.value}`, option.label)
+            }
+          />{' '}
+        </NonPhone>
+        <Phone>
+          <Select
+            defaultValue={{
+              label: '- Select one or more -',
+              value: '',
+            }}
+            name={name}
+            options={options}
+            value={'- Select one or more -'}
+            onChange={value => {
+              value && onChange(`${name}.${value}`, value);
+            }}
+          />
+        </Phone>
+      </div>
+      <NonPhone>
+        {Object.entries(
+          selectedValues as {
+            [key: string]: string;
+          },
+        ).map(([optionKey, optionLabel]) => (
+          <PillButton
+            data-testid={`${name}-${optionLabel}-pill-button`}
+            key={optionLabel}
+            text={optionLabel}
+            onRemove={() => {
+              onChange(`${name}.${optionKey}`, undefined);
+            }}
+          />
+        ))}
+      </NonPhone>
+    </>
+  );
+}
