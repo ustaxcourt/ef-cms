@@ -9,27 +9,29 @@ import { setPublicTrialSessionDetailsAction } from '@web-client/presenter/action
 
 describe('setPublicTrialSessionDetailsAction', () => {
   it('should set the public trial session details', async () => {
-    const mockSession = {
-      address1: '123 Sesame Street',
-      address2: '',
-      city: 'Of Blinding Lights',
-      courthouseName: 'George',
-      estimatedEndDate: '',
-      postalCode: '12345',
+    const mockTrialSession: PublicTrialSessionDetails = {
+      address1: '123 Main St',
+      calendaredCases: [],
+      city: 'San Francisco',
+      estimatedEndDate: '2020-11-29T05:00:00.000Z',
+      isRemote: false,
+      isSwingSession: true,
+      postalCode: '94535',
       sessionStatus: SESSION_STATUS_TYPES.open,
       sessionType: SESSION_TYPES.regular,
-      startDate: '',
-      state: 'Missouri',
-      swingSessionId: '',
+      startDate: '2020-11-27T05:00:00.000Z',
+      state: 'CA',
+      swingSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
+      swingSessionLocation: 'Dallas, Texas',
       term: 'Fall',
-      termYear: 'Fall 2024',
-      trialLocation: 'Atlantis, MO',
-    } as PublicTrialSessionDetails;
+      termYear: '2020',
+      trialLocation: 'Houston, Texas',
+    };
     const { state } = await runAction<void, PublicClientState>(
       setPublicTrialSessionDetailsAction,
       {
         props: {
-          trialSession: mockSession,
+          trialSession: mockTrialSession,
         },
         state: {
           trialSessionDetailsPage: {},
@@ -38,7 +40,7 @@ describe('setPublicTrialSessionDetailsAction', () => {
     );
 
     expect(state.trialSessionDetailsPage.trialSession).toMatchObject(
-      mockSession,
+      mockTrialSession,
     );
   });
 });
