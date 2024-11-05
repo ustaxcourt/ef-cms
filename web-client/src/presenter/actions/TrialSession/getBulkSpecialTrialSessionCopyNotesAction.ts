@@ -1,10 +1,11 @@
+import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import {
   SpecialTrialSession,
   TrialSessionWorkingCopyNotes,
 } from '@shared/business/entities/trialSessions/SpeciailTrialSessions';
 const getSpecialTrialSessions = trialSessions =>
   trialSessions
-    .filter(trialSession => trialSession.sessionType === 'Special')
+    .filter(trialSession => trialSession.sessionType === SESSION_TYPES.special)
     .map(trialSession => ({
       trialSessionId: trialSession.trialSessionId,
       userId: trialSession.judge?.userId,
