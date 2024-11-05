@@ -132,7 +132,7 @@ describe('publicTrialSessionDetailsHelper', () => {
       expectedFormattedTrialSession,
     );
     expect(result.formattedNow).toMatch(
-      /^\d{2}\/\d{2}\/\d{2} \d{2}:\d{2} (am|pm) Eastern$/,
+      /^\d{2}\/\d{2}\/\d{2} ([1-9]|1[0-2]):\d{2} (am|pm) Eastern$/,
     );
   });
 });
