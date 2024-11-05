@@ -150,8 +150,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     reservedWeekOfAtLocationConstraint,
   ];
 
-  let sessionCountPerWeek;
-  ({ caseCountsAndSessionsByCity, sessionCountPerWeek } = generateCalendar({
+  ({ caseCountsAndSessionsByCity } = generateCalendar({
     calendaringConfig,
     caseCountsAndSessionsByCity,
     constraints,
@@ -176,7 +175,6 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   console.time('10275: writeTrialSessionDataToExcel');
   const bufferArray = await writeTrialSessionDataToExcel({
     caseCountsAndSessionsByCity,
-    sessionCountPerWeek,
     weeks: weeksToLoop,
   });
   console.timeEnd('10275: writeTrialSessionDataToExcel');

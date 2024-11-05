@@ -12,11 +12,9 @@ const CITY_TITLE_CELL_LOCATION = 'A2';
 
 export const writeTrialSessionDataToExcel = async ({
   caseCountsAndSessionsByCity,
-  sessionCountPerWeek,
   weeks,
 }: {
   weeks: string[];
-  sessionCountPerWeek: Record<string, number>;
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
 }) => {
   const workbook = new ExcelJS.Workbook();
@@ -46,9 +44,14 @@ export const writeTrialSessionDataToExcel = async ({
 
   worksheet.insertRow(1, [null, 'Week Of']);
 
+  const emptyCounterRow = weeks.reduce((acc, week) => {
+    acc[week] = 0;
+    return acc;
+  }, {});
+
   const counterRow = worksheet.addRow({
     city: 'No. of Sessions',
-    ...sessionCountPerWeek,
+    ...emptyCounterRow,
   });
 
   const countColumnLength = Object.keys(rowsByCity).length; // number of cells in a column that we care about
