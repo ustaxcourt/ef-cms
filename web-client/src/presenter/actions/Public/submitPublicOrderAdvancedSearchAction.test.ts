@@ -1,6 +1,7 @@
+import { PublicClientState } from '@web-client/presenter/state-public';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-public';
-import { runPublicAction } from '@web-client/presenter/test.cerebral';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { submitPublicOrderAdvancedSearchAction } from './submitPublicOrderAdvancedSearchAction';
 
 describe('submitPublicOrderAdvancedSearchAction', () => {
@@ -9,18 +10,21 @@ describe('submitPublicOrderAdvancedSearchAction', () => {
   });
 
   it('gets the public order information', async () => {
-    await runPublicAction(submitPublicOrderAdvancedSearchAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        advancedSearchForm: {
-          orderSearch: {
-            keyword: 'a',
+    await runAction<{ searchResults: any }, PublicClientState>(
+      submitPublicOrderAdvancedSearchAction,
+      {
+        modules: {
+          presenter,
+        },
+        state: {
+          advancedSearchForm: {
+            orderSearch: {
+              keyword: 'a',
+            },
           },
         },
       },
-    });
+    );
 
     expect(
       applicationContext.getUseCases().orderPublicSearchInteractor,
@@ -36,7 +40,7 @@ describe('submitPublicOrderAdvancedSearchAction', () => {
   });
 
   it('should remove the docketNumberSuffix when a docket number is present', async () => {
-    await runPublicAction(submitPublicOrderAdvancedSearchAction, {
+    await runAction(submitPublicOrderAdvancedSearchAction, {
       modules: {
         presenter,
       },
@@ -81,22 +85,22 @@ describe('submitPublicOrderAdvancedSearchAction', () => {
         throw e;
       });
 
-    const { state } = await runPublicAction(
-      submitPublicOrderAdvancedSearchAction,
-      {
-        modules: {
-          presenter,
-        },
-        state: {
-          advancedSearchForm: {
-            orderSearch: {
-              docketNumber: '105-20L',
-              keyword: 'a',
-            },
+    const { state } = await runAction<
+      { searchResults: any },
+      PublicClientState
+    >(submitPublicOrderAdvancedSearchAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        advancedSearchForm: {
+          orderSearch: {
+            docketNumber: '105-20L',
+            keyword: 'a',
           },
         },
       },
-    );
+    });
 
     expect(state.alertError).toEqual({
       message: 'Please wait 1 minute before trying your search again.',
