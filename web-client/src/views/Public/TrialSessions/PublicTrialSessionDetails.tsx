@@ -3,10 +3,13 @@ import { CaseIcons } from '@web-client/ustc-ui/Icon/CaseIcons';
 import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  FormattedPublicTrialSession,
+  TrialSessionPublicCaseRow,
+} from '@web-client/presenter/computeds/Public/publicTrialSessionDetailsHelper';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
 import { TrialSessionDetailsHeader } from '@web-client/views/TrialSessionDetails/TrialSessionDetailsHeader';
-import { TrialSessionPublicCaseRow } from '@web-client/presenter/computeds/Public/publicTrialSessionDetailsHelper';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
@@ -27,7 +30,12 @@ export const PublicTrialSessionDetails = connect(
           }
         />
         <section className="usa-section grid-container">
-          <PublicTrialSessionInformation />
+          <PublicTrialSessionInformation
+            formattedNow={publicTrialSessionDetailsHelper.formattedNow}
+            formattedTrialSession={
+              publicTrialSessionDetailsHelper.formattedTrialSession
+            }
+          />
         </section>
       </>
     );
@@ -36,114 +44,82 @@ export const PublicTrialSessionDetails = connect(
 
 PublicTrialSessionDetails.displayName = 'PublicTrialSessionDetails';
 
-const PublicTrialSessionInformation = connect(
-  {
-    publicTrialSessionDetailsHelper: state.publicTrialSessionDetailsHelper,
-  },
-  function PublicTrialSessionInformation({ publicTrialSessionDetailsHelper }) {
-    return (
-      <>
-        <Button
-          link
-          className="margin-bottom-1 text-left"
-          href="/trial-sessions"
-          icon={['fa', 'arrow-alt-circle-left']}
-        >
-          Back to scheduled trial sessions
-        </Button>
-        <h1>Session Information</h1>
-        <div className="margin-bottom-205">
-          {`Information on this page is current as of ${publicTrialSessionDetailsHelper.formattedNow}.`}
-        </div>
-        {(publicTrialSessionDetailsHelper.formattedTrialSession
-          .isSwingSession ||
-          publicTrialSessionDetailsHelper.formattedTrialSession
-            .hasCourthouseInformation) && (
-          <div className="card padding-205 maxw-mobile-lg">
-            <h3 className="underlined">Details</h3>
-            <div className="display-flex flex-wrap gap-5">
-              {publicTrialSessionDetailsHelper.formattedTrialSession
-                .hasCourthouseInformation && (
-                <div>
-                  <span className="label">Courthouse location</span>
-                  <div className="padding-05"></div>
-                  <div>
-                    <span>
-                      {
-                        publicTrialSessionDetailsHelper.formattedTrialSession
-                          .courthouseName
-                      }
-                    </span>
-                    <span className="address-line">
-                      {
-                        publicTrialSessionDetailsHelper.formattedTrialSession
-                          .address1
-                      }
-                    </span>
-                    <span className="address-line">
-                      {
-                        publicTrialSessionDetailsHelper.formattedTrialSession
-                          .address2
-                      }
-                    </span>
-                    <span className="address-line">
-                      {
-                        publicTrialSessionDetailsHelper.formattedTrialSession
-                          .formattedCityStateZip
-                      }
-                    </span>
-                  </div>
-                </div>
-              )}
-              {publicTrialSessionDetailsHelper.formattedTrialSession
-                .isSwingSession && (
-                <div>
-                  <span className="label">Swing session</span>
-                  <div className="padding-05"></div>
-                  <span className="display-flex gap-1 flex-align-center">
-                    <NonPhone>
-                      {/* We don't show the swing session icon in mobile because it is not clear without hover tooltip */}
-                      <FontAwesomeIcon
-                        className="fa-icon-blue"
-                        icon="link"
-                        size="sm"
-                        title="swing session"
-                      />
-                    </NonPhone>
-                    <a
-                      href={`/trial-session-detail/${publicTrialSessionDetailsHelper.formattedTrialSession.swingSessionId}`}
-                    >
-                      {
-                        publicTrialSessionDetailsHelper.formattedTrialSession
-                          .swingSessionLocation
-                      }
-                    </a>
-                  </span>
-                </div>
-              )}
-            </div>
+const PublicTrialSessionInformation = ({
+  formattedNow,
+  formattedTrialSession,
+}: {
+  formattedTrialSession: FormattedPublicTrialSession;
+  formattedNow: string;
+}) => {
+  return (
+    <>
+      <Button
+        link
+        className="margin-bottom-1 text-left"
+        href="/trial-sessions"
+        icon={['fa', 'arrow-alt-circle-left']}
+      >
+        Back to scheduled trial sessions
+      </Button>
+      <h1>Session Information</h1>
+      <div className="margin-bottom-205">
+        {`Information on this page is current as of ${formattedNow}.`}
+      </div>
+      {(formattedTrialSession.isSwingSession ||
+        formattedTrialSession.hasCourthouseInformation) && (
+        <div className="card padding-205 maxw-mobile-lg">
+          <h3 className="underlined">Details</h3>
+          <div className="display-flex flex-wrap gap-5">
+            {formattedTrialSession.hasCourthouseInformation && (
+              <div>
+                <span className="label">Courthouse location</span>
+                <div className="padding-05"></div>
+                <span>{formattedTrialSession.courthouseName}</span>
+                <span className="address-line">
+                  {formattedTrialSession.address1}
+                </span>
+                <span className="address-line">
+                  {formattedTrialSession.address2}
+                </span>
+                <span className="address-line">
+                  {formattedTrialSession.formattedCityStateZip}
+                </span>
+              </div>
+            )}
+            {formattedTrialSession.isSwingSession && (
+              <div>
+                <span className="label">Swing session</span>
+                <div className="padding-05"></div>
+                <span className="display-flex gap-1 flex-align-center">
+                  <NonPhone>
+                    {/* We don't show the swing session icon in mobile because it is not clear without hover tooltip */}
+                    <FontAwesomeIcon
+                      className="fa-icon-blue"
+                      icon="link"
+                      size="sm"
+                      title="swing session"
+                    />
+                  </NonPhone>
+                  <a
+                    href={`/trial-session-detail/${formattedTrialSession.swingSessionId}`}
+                  >
+                    {formattedTrialSession.swingSessionLocation}
+                  </a>
+                </span>
+              </div>
+            )}
           </div>
-        )}
-        <NonPhone>
-          <NonMobileOpenCases
-            openCases={
-              publicTrialSessionDetailsHelper.formattedTrialSession
-                .formattedCases
-            }
-          />
-        </NonPhone>
-        <Phone>
-          <MobileOpenCases
-            openCases={
-              publicTrialSessionDetailsHelper.formattedTrialSession
-                .formattedCases
-            }
-          />
-        </Phone>
-      </>
-    );
-  },
-);
+        </div>
+      )}
+      <NonPhone>
+        <NonMobileOpenCases openCases={formattedTrialSession.formattedCases} />
+      </NonPhone>
+      <Phone>
+        <MobileOpenCases openCases={formattedTrialSession.formattedCases} />
+      </Phone>
+    </>
+  );
+};
 
 function NonMobileOpenCases({
   openCases,
@@ -172,11 +148,12 @@ function NonMobileOpenCases({
             <th>Respondent Counsel</th>
           </tr>
         </thead>
-        {openCases?.map(publicCase => (
-          <tbody key={publicCase.docketNumberWithSuffix}>
+        <tbody>
+          {openCases?.map(publicCase => (
             <tr
               className="eligible-cases-row"
               data-testid={`trial-session-detail-row-${publicCase.docketNumberWithSuffix}`}
+              key={publicCase.docketNumberWithSuffix}
             >
               <td>
                 <CaseIcons formattedCase={publicCase} />
@@ -203,8 +180,8 @@ function NonMobileOpenCases({
                 ))}
               </td>
             </tr>
-          </tbody>
-        ))}
+          ))}
+        </tbody>
       </table>
       {openCases.length === 0 && <p>There are no open cases.</p>}
     </React.Fragment>
