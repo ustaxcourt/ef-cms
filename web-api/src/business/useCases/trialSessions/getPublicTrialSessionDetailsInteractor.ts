@@ -1,6 +1,5 @@
 import { NotFoundError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TRIAL_SESSION_SCOPE_TYPES } from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { formatPublicCase } from '@web-api/business/useCaseHelper/consolidatedCases/formatPublicCase';
 
@@ -22,7 +21,6 @@ export type PublicTrialSessionDetails = Pick<
   | 'postalCode'
 > & {
   calendaredCases: RawPublicCase[];
-  isRemote: boolean;
   isSwingSession: boolean;
   swingSessionLocation?: string;
 };
@@ -77,9 +75,6 @@ export const getPublicTrialSessionDetailsInteractor = async (
     city: fullTrialSessionEntity.city,
     courthouseName: fullTrialSessionEntity.courthouseName,
     estimatedEndDate: fullTrialSessionEntity.estimatedEndDate,
-    isRemote:
-      fullTrialSessionEntity.sessionScope ===
-      TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
     isSwingSession: !!fullTrialSessionEntity.swingSession,
     postalCode: fullTrialSessionEntity.postalCode,
     sessionStatus: fullTrialSessionEntity.sessionStatus,
