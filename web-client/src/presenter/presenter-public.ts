@@ -149,7 +149,10 @@ export const presenter = {
     [NotFoundError, notFoundErrorSequence], //404
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
-  providers: {},
+  providers: {
+    applicationContext: {} as any,
+    router: {} as any,
+  },
   sequences: presenterSequences,
   state: initialPublicState,
 };
