@@ -96,17 +96,15 @@ export const TrialSessionsTable = connect(
                       <td></td>
                       <td colSpan={6}>
                         <div className="special-session">
-                          <span>
-                            <span className="text-semibold">
-                              Special Session Notes:{' '}
-                            </span>
-                            {
-                              trialSessionsPage
-                                .specialTrialSessionCopyNotesObject[
-                                row.trialSessionId
-                              ]
-                            }
+                          <span className="text-semibold">
+                            Special Session Notes:{' '}
                           </span>
+                          {
+                            trialSessionsPage
+                              .specialTrialSessionCopyNotesObject[
+                              row.trialSessionId
+                            ]
+                          }
                         </div>
                       </td>
                     </tr>
