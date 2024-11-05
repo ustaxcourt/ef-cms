@@ -19,7 +19,6 @@ describe('getPublicTrialSessionDetailsAction', () => {
       calendaredCases: [],
       city: 'San Francisco',
       estimatedEndDate: '2020-11-29T05:00:00.000Z',
-      isRemote: false,
       isSwingSession: true,
       postalCode: '94535',
       sessionStatus: SESSION_STATUS_TYPES.open,
