@@ -44,7 +44,6 @@ export const generateCalendar = ({
   constraints: Constraint[];
   calendaringConfig: CalendaringConfig;
 }): {
-  sessionCountPerWeek: Record<string, number>;
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
 } => {
   const calendarState = setupCalendarState(weeksToLoop);
@@ -131,7 +130,6 @@ export const generateCalendar = ({
 
   return {
     caseCountsAndSessionsByCity,
-    sessionCountPerWeek: calendarState.sessionCountPerWeek,
   };
 };
 

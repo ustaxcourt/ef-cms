@@ -79,21 +79,19 @@ describe('generateCalendar', () => {
     };
 
     // Act
-    const { caseCountsAndSessionsByCity, sessionCountPerWeek } =
-      generateCalendar({
-        calendaringConfig: mockCalendaringConfig,
-        caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
-        constraints: [createMockConstraint(true)],
-        specialSessions: [mockSpecialTrialSession],
-        weeksToLoop: mockWeeksToLoop,
-      });
+    const { caseCountsAndSessionsByCity } = generateCalendar({
+      calendaringConfig: mockCalendaringConfig,
+      caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
+      constraints: [createMockConstraint(true)],
+      specialSessions: [mockSpecialTrialSession],
+      weeksToLoop: mockWeeksToLoop,
+    });
 
     // Assert
     expect(
       caseCountsAndSessionsByCity[mockRegularCityString].scheduledSessions
         .length,
     ).toEqual(1);
-    expect(sessionCountPerWeek[mockWeekString]).toEqual(1);
   });
 
   it('should not schedule a special session when it fails a constraint', () => {
@@ -132,21 +130,19 @@ describe('generateCalendar', () => {
     });
 
     // Act
-    const { caseCountsAndSessionsByCity, sessionCountPerWeek } =
-      generateCalendar({
-        calendaringConfig: mockCalendaringConfig,
-        caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
-        constraints: [createMockConstraint(true)],
-        specialSessions: [],
-        weeksToLoop: mockWeeksToLoop,
-      });
+    const { caseCountsAndSessionsByCity } = generateCalendar({
+      calendaringConfig: mockCalendaringConfig,
+      caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
+      constraints: [createMockConstraint(true)],
+      specialSessions: [],
+      weeksToLoop: mockWeeksToLoop,
+    });
 
     // Assert
     expect(
       caseCountsAndSessionsByCity[mockRegularCityString].scheduledSessions
         .length,
     ).toEqual(1);
-    expect(sessionCountPerWeek[mockWeekString]).toEqual(1);
   });
 
   it('should not schedule a regular session when it fails a constraint', () => {
@@ -162,21 +158,19 @@ describe('generateCalendar', () => {
     });
 
     // Act
-    const { caseCountsAndSessionsByCity, sessionCountPerWeek } =
-      generateCalendar({
-        calendaringConfig: mockCalendaringConfig,
-        caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
-        constraints: [createMockConstraint(false)],
-        specialSessions: [],
-        weeksToLoop: mockWeeksToLoop,
-      });
+    const { caseCountsAndSessionsByCity } = generateCalendar({
+      calendaringConfig: mockCalendaringConfig,
+      caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
+      constraints: [createMockConstraint(false)],
+      specialSessions: [],
+      weeksToLoop: mockWeeksToLoop,
+    });
 
     // Assert
     expect(
       caseCountsAndSessionsByCity[mockRegularCityString].scheduledSessions
         .length,
     ).toEqual(0);
-    expect(sessionCountPerWeek[mockWeekString]).toEqual(0);
   });
 
   it('should proritize cities that have not been visited in the past two terms', () => {
