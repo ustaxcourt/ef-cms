@@ -10,6 +10,7 @@ export function CaseIcons({ formattedCase }: { formattedCase: any }) {
         className={
           formattedCase.isSealed ? 'visibility-visible' : 'visibility-hidden'
         }
+        data-testid="case-sealed-icon"
       >
         <Icon
           aria-hidden={!formattedCase.isSealed}
