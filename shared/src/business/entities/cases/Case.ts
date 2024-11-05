@@ -2208,7 +2208,6 @@ export const getPractitionersRepresenting = function (
   rawCase: RawCase,
   petitionerContactId: string,
 ) {
-  console.log(rawCase.privatePractitioners);
   return rawCase.privatePractitioners?.filter(practitioner =>
     practitioner.representing?.includes(petitionerContactId),
   );
