@@ -1,9 +1,10 @@
+import { PublicClientState } from '@web-client/presenter/state-public';
 import { PublicTrialSessionDetails } from '@web-api/business/useCases/trialSessions/getPublicTrialSessionDetailsInteractor';
 import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
 } from '@shared/business/entities/EntityConstants';
-import { runPublicAction } from '@web-client/presenter/test.cerebral';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { setPublicTrialSessionDetailsAction } from '@web-client/presenter/actions/Public/TrialSessions/setPublicTrialSessionDetailsAction';
 
 describe('setPublicTrialSessionDetailsAction', () => {
@@ -24,7 +25,7 @@ describe('setPublicTrialSessionDetailsAction', () => {
       termYear: 'Fall 2024',
       trialLocation: 'Atlantis, MO',
     } as PublicTrialSessionDetails;
-    const { state } = await runPublicAction(
+    const { state } = await runAction<void, PublicClientState>(
       setPublicTrialSessionDetailsAction,
       {
         props: {
