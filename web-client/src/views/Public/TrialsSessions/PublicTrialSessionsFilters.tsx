@@ -282,14 +282,14 @@ export const PublicTrialSessionsFilters = connect<
                     placeholder="- Select one or more -"
                     value={{
                       label: '- Select one or more -',
-                      value: { name: '', userId: '' },
+                      value: '',
                     }}
                     onChange={judgeInfo => {
                       if (judgeInfo) {
                         publicTrialsSessionUpdateFormValueSequence({
-                          key: `judges.${judgeInfo.value.name}`,
+                          key: `judges.${judgeInfo.value}`,
                           root: ROOT,
-                          value: judgeInfo.value.name,
+                          value: judgeInfo.value,
                         });
                       }
                     }}
