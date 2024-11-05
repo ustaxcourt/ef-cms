@@ -8,7 +8,7 @@ export class GenerateSuggestedTermForm extends JoiValidationEntity {
   public termName: string;
 
   constructor(rawProps) {
-    super('GenerateSuggestTermForm');
+    super('GenerateSuggestedTermForm');
     this.termStartDate = rawProps.termStartDate;
     this.termEndDate = rawProps.termEndDate;
     this.termName = rawProps.termName;
@@ -18,12 +18,15 @@ export class GenerateSuggestedTermForm extends JoiValidationEntity {
     return {
       termEndDate: JoiValidationConstants.DATE_RANGE_PICKER_DATE.min(
         joi.ref('termStartDate'),
-      ).messages({
-        '*': 'Enter date in format MM/DD/YYYY.',
-        'date.min':
-          'End date cannot be prior to start date. Enter a valid end date.',
-      }),
+      )
+        .required()
+        .messages({
+          '*': 'Enter date in format MM/DD/YYYY.',
+          'date.min':
+            'End date cannot be prior to start date. Enter a valid end date.',
+        }),
       termName: JoiValidationConstants.STRING.min(1)
+        .required()
         .max(100)
         .description('The name of the term being created.')
         .messages({
@@ -32,10 +35,12 @@ export class GenerateSuggestedTermForm extends JoiValidationEntity {
         }),
       termStartDate: JoiValidationConstants.DATE_RANGE_PICKER_DATE.greater(
         'now',
-      ).messages({
-        '*': 'Enter date in format MM/DD/YYYY.',
-        'date.min': 'Start date cannot be in the past. Enter a valid date.',
-      }),
+      )
+        .required()
+        .messages({
+          '*': 'Enter date in format MM/DD/YYYY.',
+          'date.min': 'Start date cannot be in the past. Enter a valid date.',
+        }),
     };
   }
 }
