@@ -1,4 +1,4 @@
-import { selectTypeaheadInput } from '../../../helpers/components/typeAhead/select-typeahead-input';
+import { selectTypeaheadInput } from '../../../../../helpers/components/typeAhead/select-typeahead-input';
 
 describe('Public Trial Sessions', () => {
   beforeEach(() => {
@@ -35,32 +35,34 @@ describe('Public Trial Sessions', () => {
 
   it('should display Pill Button for every dropdown filter selected', () => {
     const SESSION_TYPE = 'Regular';
-    selectTypeaheadInput('session-type-filter-select', SESSION_TYPE);
-    cy.get(`[data-testid="session-${SESSION_TYPE}-pill-button"]`);
+    selectTypeaheadInput('sessionTypes-filter-select', SESSION_TYPE);
+    cy.get(`[data-testid="sessionTypes-${SESSION_TYPE}-pill-button"]`);
 
     const LOCATION = 'Mobile, Alabama';
-    selectTypeaheadInput('location-filter-search', LOCATION);
-    cy.get(`[data-testid="location-${LOCATION}-pill-button"]`);
+    selectTypeaheadInput('locations-filter-select', LOCATION);
+    cy.get(`[data-testid="locations-${LOCATION}-pill-button"]`);
 
     const JUDGE = 'Buch';
-    selectTypeaheadInput('judge-filter-search', JUDGE);
-    cy.get(`[data-testid="judge-${JUDGE}-pill-button"]`);
+    selectTypeaheadInput('judges-filter-select', JUDGE);
+    cy.get(`[data-testid="judges-${JUDGE}-pill-button"]`);
 
-    cy.get(`[data-testid="session-${SESSION_TYPE}-pill-button"]`)
+    cy.get(`[data-testid="sessionTypes-${SESSION_TYPE}-pill-button"]`)
       .find('button')
       .click();
-    cy.get(`[data-testid="session-${SESSION_TYPE}-pill-button"]`).should(
+    cy.get(`[data-testid="sessionTypes-${SESSION_TYPE}-pill-button"]`).should(
       'not.exist',
     );
 
-    cy.get(`[data-testid="location-${LOCATION}-pill-button"]`)
+    cy.get(`[data-testid="locations-${LOCATION}-pill-button"]`)
       .find('button')
       .click();
-    cy.get(`[data-testid="location-${LOCATION}-pill-button"]`).should(
+    cy.get(`[data-testid="locations-${LOCATION}-pill-button"]`).should(
       'not.exist',
     );
 
-    cy.get(`[data-testid="judge-${JUDGE}-pill-button"]`).find('button').click();
-    cy.get(`[data-testid="judge-${JUDGE}-pill-button"]`).should('not.exist');
+    cy.get(`[data-testid="judges-${JUDGE}-pill-button"]`)
+      .find('button')
+      .click();
+    cy.get(`[data-testid="judges-${JUDGE}-pill-button"]`).should('not.exist');
   });
 });

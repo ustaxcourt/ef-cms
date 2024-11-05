@@ -88,31 +88,19 @@ describe('publicTrialSessionsHelper', () => {
     expect(trialSessionJudgeOptions).toEqual([
       {
         label: 'TEST_JUDGE_1',
-        value: {
-          name: 'TEST_JUDGE_1',
-          userId: '1',
-        },
+        value: 'TEST_JUDGE_1',
       },
       {
         label: 'TEST_JUDGE_2',
-        value: {
-          name: 'TEST_JUDGE_2',
-          userId: '2',
-        },
+        value: 'TEST_JUDGE_2',
       },
       {
         label: 'TEST_JUDGE_3',
-        value: {
-          name: 'TEST_JUDGE_3',
-          userId: '3',
-        },
+        value: 'TEST_JUDGE_3',
       },
       {
         label: 'TEST_JUDGE_4',
-        value: {
-          name: 'TEST_JUDGE_4',
-          userId: '4',
-        },
+        value: 'TEST_JUDGE_4',
       },
     ]);
   });

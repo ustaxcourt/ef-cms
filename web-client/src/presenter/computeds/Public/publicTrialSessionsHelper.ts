@@ -21,10 +21,7 @@ export type PublicTrialSessionsHelperResults = {
   }[];
   trialSessionJudgeOptions: {
     label: string;
-    value: {
-      name: string;
-      userId: string;
-    };
+    value: string;
   }[];
   filtersHaveBeenModified: boolean;
   totalPages: number;
@@ -111,7 +108,7 @@ export const publicTrialSessionsHelper = (
   const trialSessionJudgeOptions = trialSessionJudges.map(
     trialSessionJudge => ({
       label: trialSessionJudge.name,
-      value: { name: trialSessionJudge.name, userId: trialSessionJudge.userId },
+      value: trialSessionJudge.name,
     }),
   );
 
