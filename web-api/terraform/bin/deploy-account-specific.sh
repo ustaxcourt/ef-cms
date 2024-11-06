@@ -27,9 +27,10 @@ if [ -n "${LOG_GROUP_ENVIRONMENTS}" ]; then
 fi
 export TF_VAR_dawson_dev_trusted_role_arns="${DAWSON_DEV_TRUSTED_ROLE_ARNS}"
 export TF_VAR_log_snapshot_bucket_name="${LOG_SNAPSHOT_BUCKET_NAME}"
+export TF_VAR_lower_env_account_id="$LOWER_ENV_ACCOUNT_ID"
 
 ../../../../scripts/verify-terraform-version.sh
- 
+
 npm run build:assets
 
 terraform init -upgrade -backend=true \
