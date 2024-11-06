@@ -16,8 +16,8 @@ jest.mock(
 );
 
 jest.mock(
-  '@web-api/persistence/postgres/userCaseNotes/updateUserCaseNote.ts',
-  () => mockFactory('updateUserCaseNote'),
+  '@web-api/persistence/postgres/userCaseNotes/upsertUserCaseNote.ts',
+  () => mockFactory('upsertUserCaseNote'),
 );
 
 jest.mock(
