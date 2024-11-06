@@ -17,7 +17,6 @@ export const ContactSecondary = connect(
     contactsHelper: state[props.contactsHelper],
     data: state[props.bind],
     onBlur: props.onBlur,
-    onBlurSequence: sequences[props.onBlur],
     onChange: props.onChange,
     onChangeSequence: sequences[props.onChange],
     parentView: props.parentView,
@@ -33,7 +32,6 @@ export const ContactSecondary = connect(
     contactsHelper,
     data,
     onBlur,
-    onBlurSequence,
     onChange,
     onChangeSequence,
     parentView,
@@ -70,9 +68,7 @@ export const ContactSecondary = connect(
               name="contactSecondary.name"
               type="text"
               value={data.contactSecondary.name || ''}
-              onBlur={() => {
-                onBlurSequence();
-              }}
+              onBlur={onBlur}
               onChange={e => {
                 onChangeSequence({
                   key: e.target.name,
@@ -137,9 +133,7 @@ export const ContactSecondary = connect(
                 name="contactSecondary.inCareOf"
                 type="text"
                 value={data.contactSecondary.inCareOf || ''}
-                onBlur={() => {
-                  onBlurSequence();
-                }}
+                onBlur={onBlur}
                 onChange={e => {
                   onChangeSequence({
                     key: e.target.name,
@@ -203,9 +197,7 @@ export const ContactSecondary = connect(
                 name="contactSecondary.phone"
                 type="text"
                 value={data.contactSecondary.phone || ''}
-                onBlur={() => {
-                  onBlurSequence();
-                }}
+                onBlur={onBlur}
                 onChange={e => {
                   onChangeSequence({
                     key: e.target.name,

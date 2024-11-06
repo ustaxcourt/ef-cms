@@ -1,6 +1,5 @@
 import { broadcastLogoutAction } from '../actions/broadcastLogoutAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { clearLoginFormAction } from '../actions/clearLoginFormAction';
 import { clearLogoutTypeAction } from '@web-client/presenter/actions/clearLogoutTypeAction';
 import { clearMaintenanceModeAction } from '../actions/clearMaintenanceModeAction';
 import { clearUserAction } from '../actions/clearUserAction';
@@ -17,7 +16,6 @@ export const signOutSequence = [
   clearAlertsAction,
   clearUserAction,
   clearMaintenanceModeAction,
-  clearLoginFormAction,
   clearLogoutTypeAction,
   resetIdleTimerAction,
 ];

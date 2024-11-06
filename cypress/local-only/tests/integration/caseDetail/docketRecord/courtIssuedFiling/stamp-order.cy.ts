@@ -2,6 +2,7 @@ import { attachFile } from '../../../../../../helpers/file/upload-file';
 import { loginAsPetitioner } from '../../../../../../helpers/authentication/login-as-helpers';
 import { petitionerCreatesElectronicCaseWithSpouse } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../../../helpers/documentQC/petitionsclerk-serves-petition';
+import { selectTypeaheadInput } from '../../../../../../helpers/components/typeAhead/select-typeahead-input';
 
 describe('Judge`s chambers stamps an order', () => {
   it('should create an order, serve it, and apply a stamp to it', () => {
@@ -15,10 +16,10 @@ describe('Judge`s chambers stamps an order', () => {
       cy.get('[data-testid="case-detail-menu-button"]').click();
       cy.get('[data-testid="menu-button-add-paper-filing"]').click();
       cy.get('input#date-received-picker').type('11/01/2023');
-      cy.get(
-        '#document-type .select-react-element__input-container input',
-      ).type('Motion for Continuance');
-      cy.get('#react-select-2-option-0').click({ force: true });
+      selectTypeaheadInput(
+        'primary-document-type-search',
+        'Motion for Continuance',
+      );
       cy.get('[data-testid="filed-by-option"]').contains('Petitioner').click();
       cy.get('[data-testid="upload-pdf-button"]').click();
       attachFile({

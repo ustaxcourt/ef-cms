@@ -2,11 +2,11 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeSubmitTrialSessionDataAction } from '../actions/TrialSession/computeSubmitTrialSessionDataAction';
 import { createTrialSessionAction } from '../actions/TrialSession/createTrialSessionAction';
 import { getCreateTrialSessionAlertSuccessAction } from '../actions/TrialSession/getCreateTrialSessionAlertSuccessAction';
-import { navigateToTrialSessionsAction } from '../actions/TrialSession/navigateToTrialSessionsAction';
-import { setActiveTrialSessionsTabAction } from '@web-client/presenter/actions/TrialSession/setActiveTrialSessionsTabAction';
+import { navigateToNewTrialSessionsAction } from '@web-client/presenter/actions/TrialSession/navigateToNewTrialSessionsAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
@@ -21,8 +21,8 @@ export const submitTrialSessionSequence = [
   validateTrialSessionAction,
   {
     error: [
-      setAlertErrorAction,
       setValidationErrorsAction,
+      setScrollToErrorNotificationAction,
       setValidationAlertErrorsAction,
     ],
     success: showProgressSequenceDecorator([
@@ -34,8 +34,7 @@ export const submitTrialSessionSequence = [
           setSaveAlertsForNavigationAction,
           getCreateTrialSessionAlertSuccessAction,
           setAlertSuccessAction,
-          setActiveTrialSessionsTabAction,
-          navigateToTrialSessionsAction,
+          navigateToNewTrialSessionsAction,
         ],
       },
     ]),

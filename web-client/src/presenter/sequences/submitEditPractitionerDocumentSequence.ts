@@ -4,9 +4,9 @@ import { computeCategoryNameAction } from '../actions/computeCategoryNameAction'
 import { editPractitionerDocumentAction } from '../actions/editPractitionerDocumentAction';
 import { getEditPractitionerDocumentAlertSuccessAction } from '../actions/Practitioners/getEditPractitionerDocumentAlertSuccessAction';
 import { navigateToPractitionerDocumentsPageAction } from '../actions/navigateToPractitionerDocumentsPageAction';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
@@ -19,8 +19,8 @@ export const submitEditPractitionerDocumentSequence = [
   validateAddPractitionerDocumentFormAction,
   {
     error: [
-      setAlertErrorAction,
       setValidationErrorsAction,
+      setScrollToErrorNotificationAction,
       setValidationAlertErrorsAction,
     ],
     success: [
