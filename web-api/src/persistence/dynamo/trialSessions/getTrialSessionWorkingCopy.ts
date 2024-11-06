@@ -3,7 +3,7 @@ import { TrialSessionWorkingCopyNotes } from '@shared/business/entities/trialSes
 import { batchGet } from '../../dynamodbClientService';
 import { get } from '../../dynamodbClientService';
 
-interface TrialSessionWorkingCopy {
+type TrialSessionWorkingCopy = {
   entityName: string;
   sortOrder: string;
   sk: string;
@@ -29,7 +29,7 @@ interface TrialSessionWorkingCopy {
   userId: string;
   caseMetadata: object;
   trialSessionId: string;
-}
+};
 
 export const getTrialSessionWorkingCopy = ({
   applicationContext,

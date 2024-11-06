@@ -19,7 +19,7 @@ const filters: TrialSessionsFilters = {
 
 export const initialTrialSessionPageState = {
   filters,
-  specialTrialSessionCopyNotesObject: {},
+  specialTrialSessionCopyNotesObject: {} as { trialSessionId: string },
   trialSessions: [] as TrialSessionInfoDTO[],
 };
 

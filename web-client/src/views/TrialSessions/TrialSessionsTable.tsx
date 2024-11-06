@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
+import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import {
@@ -87,24 +88,23 @@ export const TrialSessionsTable = connect(
                   );
                 }
                 if (isTrialSessionRow(row)) {
-                  const additionalRow = row.sessionType === 'Special' && (
+                  const additionalRow = row.sessionType ===
+                    SESSION_TYPES.special && (
                     <tr className="special-sessions-row">
                       <td></td>
                       <td></td>
                       <td></td>
                       <td colSpan={6}>
                         <div className="special-session">
-                          <span>
-                            <span className="text-semibold">
-                              Special Session Notes:{' '}
-                            </span>
-                            {
-                              trialSessionsPage
-                                .specialTrialSessionCopyNotesObject[
-                                row.trialSessionId
-                              ]
-                            }
+                          <span className="text-semibold">
+                            Special Session Notes:{' '}
                           </span>
+                          {
+                            trialSessionsPage
+                              .specialTrialSessionCopyNotesObject[
+                              row.trialSessionId
+                            ]
+                          }
                         </div>
                       </td>
                     </tr>
