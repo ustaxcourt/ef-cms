@@ -39,6 +39,6 @@ export async function up(db: Kysely<any>): Promise<void> {
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
-  await db.schema.dropTable('message').execute();
-  await db.schema.dropTable('case').execute();
+  await db.schema.dropTable('dwCase').execute();
+  await db.schema.dropTable('dwMessage').execute();
 }

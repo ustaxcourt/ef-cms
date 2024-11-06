@@ -106,7 +106,7 @@ export const CaseInfo = connect(
             Case caption
           </label>
           <textarea
-            className="usa-textarea"
+            className="usa-textarea textarea-resize-vertical"
             id="case-caption"
             name="caseCaption"
             value={form.caseCaption}
@@ -222,9 +222,9 @@ export const CaseInfo = connect(
 
         <PetitionPaymentForm
           bind="form"
-          updateSequence={updatePetitionPaymentFormValueSequence}
-          validateSequence={validateCaseDetailSequence}
+          validateFormData={validateCaseDetailSequence}
           validationErrorsBind="validationErrors"
+          onUpdate={updatePetitionPaymentFormValueSequence}
         />
 
         {caseDetailEditHelper.showOrderForFilingFee && (
