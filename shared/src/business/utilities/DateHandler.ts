@@ -2,6 +2,7 @@ import { DateTime, DurationLike, Interval } from 'luxon';
 import fedHolidays from '@18f/us-federal-holidays';
 
 export const FORMATS = {
+  CURRENT_AS_OF_TIMESTAMP: "MM/dd/yy h:mm a 'Eastern'",
   DATE_TIME: 'MM/dd/yy hh:mm a',
   DATE_TIME_TZ: "MM/dd/yy h:mm a 'ET'",
   DAY_OF_WEEK: 'c',
@@ -266,6 +267,7 @@ export const formatDateString = (
     .toFormat(formatString);
 
   const formatWithAMPM = [
+    FORMATS.CURRENT_AS_OF_TIMESTAMP,
     FORMATS.DATE_TIME,
     FORMATS.DATE_TIME_TZ,
     FORMATS.TIME,

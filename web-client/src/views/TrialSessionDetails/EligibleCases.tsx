@@ -1,5 +1,5 @@
+import { CaseIcons } from '@web-client/ustc-ui/Icon/CaseIcons';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -78,19 +78,7 @@ export const EligibleCases = connect(
             <tbody key={item.docketNumber}>
               <tr className="eligible-cases-row">
                 <td>
-                  <span
-                    className={classNames({
-                      'margin-left-2': item.shouldIndent,
-                    })}
-                  >
-                    <ConsolidatedCaseIcon
-                      consolidatedIconTooltipText={
-                        item.consolidatedIconTooltipText
-                      }
-                      inConsolidatedGroup={item.inConsolidatedGroup}
-                      showLeadCaseIcon={item.isLeadCase}
-                    />
-                  </span>
+                  <CaseIcons formattedCase={item} />
                 </td>
                 <td>
                   <span
@@ -133,7 +121,9 @@ export const EligibleCases = connect(
                       <input
                         aria-label="qc complete"
                         checked={
-                          item.qcCompleteForTrial[trialSessionId] === true
+                          trialSessionId
+                            ? item.qcCompleteForTrial[trialSessionId] === true
+                            : false
                         }
                         className="usa-checkbox__input"
                         data-testid={`qc-complete-${item.docketNumber}`}
@@ -143,8 +133,9 @@ export const EligibleCases = connect(
                         onChange={() => {
                           updateQcCompleteForTrialSequence({
                             docketNumber: item.docketNumber,
-                            qcCompleteForTrial:
-                              !item.qcCompleteForTrial[trialSessionId],
+                            qcCompleteForTrial: trialSessionId
+                              ? !item.qcCompleteForTrial[trialSessionId]
+                              : false,
                           });
                         }}
                       />
