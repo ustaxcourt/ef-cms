@@ -223,8 +223,16 @@ export const ContactPrimary = connect(
 
           {contactsHelper.showPaperPetitionEmailFieldAndConsentBox && (
             <>
-              <PaperPetitionEmail bind={bind} contactType="contactPrimary" />
-              <EConsent bind={bind} contactType="contactPrimary" />
+              <PaperPetitionEmail
+                bind={bind}
+                contactType="contactPrimary"
+                onBlur={onBlur}
+              />
+              <EConsent
+                bind={bind}
+                contactType="contactPrimary"
+                onBlur={onBlur}
+              />
             </>
           )}
 

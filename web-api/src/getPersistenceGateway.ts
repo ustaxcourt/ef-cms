@@ -63,7 +63,6 @@ import { getCaseMetadataByDocketNumber } from './persistence/dynamo/cases/getCas
 import { getCaseMetadataWithCounsel } from './persistence/dynamo/cases/getCaseMetadataWithCounsel';
 import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheetsByDocketNumber';
 import { getCasesByDocketNumbers } from './persistence/dynamo/cases/getCasesByDocketNumbers';
-import { getCasesByFilters } from './persistence/elasticsearch/getCasesByFilters';
 import { getCasesByLeadDocketNumber } from './persistence/dynamo/cases/getCasesByLeadDocketNumber';
 import { getCasesByUserId } from './persistence/elasticsearch/getCasesByUserId';
 import { getCasesClosedCountByJudge } from './persistence/elasticsearch/getCasesClosedCountByJudge';
@@ -105,6 +104,7 @@ import { getReconciliationReport } from './persistence/elasticsearch/getReconcil
 import { getRequestResults } from '@web-api/persistence/dynamo/polling/getRequestResults';
 import { getSesStatus } from './persistence/ses/getSesStatus';
 import { getStoredApplicationHealth } from '@web-api/persistence/dynamo/deployTable/getStoredApplicationHealth';
+import { getSuggestedCalendarCases } from './persistence/elasticsearch/getSuggestedCalendarCases';
 import { getTableStatus } from './persistence/dynamo/getTableStatus';
 import { getTrialSessionById } from './persistence/dynamo/trialSessions/getTrialSessionById';
 import { getTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/getTrialSessionJobStatusForCase';
@@ -290,7 +290,6 @@ const gatewayMethods = {
   getCaseMetadataWithCounsel,
   getCaseWorksheetsByDocketNumber,
   getCasesByDocketNumbers,
-  getCasesByFilters,
   getCasesByLeadDocketNumber,
   getCasesByUserId,
   getCasesClosedCountByJudge,
@@ -332,6 +331,7 @@ const gatewayMethods = {
   getRequestResults,
   getSesStatus,
   getStoredApplicationHealth,
+  getSuggestedCalendarCases,
   getTableStatus,
   getTrialSessionById,
   getTrialSessionJobStatusForCase,
