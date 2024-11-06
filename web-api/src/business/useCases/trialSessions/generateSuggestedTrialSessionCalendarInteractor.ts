@@ -1,3 +1,9 @@
+import { Case } from '@shared/business/entities/cases/Case';
+import {
+  CaseCountsAndSessionsByCity,
+  EligibleCase,
+  getDataForCalendaring,
+} from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
 import {
   FORMATS,
   deconstructDate,
@@ -17,13 +23,19 @@ import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
   SUGGESTED_TRIAL_SESSION_MESSAGES,
-  TRIAL_CITY_STRINGS,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { assignSessionsToWeeks } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/assignSessionsToWeeks';
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
+import { generateCalendar } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/generateCalendar';
+import {
+  maxSessionsPerLocationConstraint,
+  maxSessionsPerWeekConstraint,
+  oneSessionPerLocationPerWeekConstraint,
+  reservedWeekOfAtLocationConstraint,
+  washingtonDcSpecialConstraint,
+} from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/constraints';
 import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
 
 const MAX_SESSIONS_PER_WEEK = 6;
@@ -78,6 +90,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   const cases = await applicationContext
     .getPersistenceGateway()
     .getSuggestedCalendarCases({ applicationContext });
+
   console.timeEnd('10275: Get ready for trial cases time');
 
   console.time('10275: Get trial sessions time');
@@ -96,11 +109,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     termEndDate,
     termStartDate,
   });
-
   console.timeEnd('10275: Filter trial sessions time');
-  // Note (10275): storing trial session data differently would make for a more
-  // efficient process of determining which cities were not visited within the
-  // past two terms.
 
   console.time('10275: Compile cities from last two term time');
   const citiesFromLastTwoTerms = getCitiesFromLastTwoTerms({
@@ -110,15 +119,15 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   console.timeEnd('10275: Compile cities from last two term time');
 
   console.time('10275: Generate prospectiveSessionsByCity time');
-  const {
-    initialRegularCasesByCity,
-    initialSmallCasesByCity,
-    prospectiveSessionsByCity,
-  } = createProspectiveTrialSessions({
+
+  let { caseCountsAndSessionsByCity, incorrectSizeRegularCases } =
+    getDataForCalendaring({ cases });
+
+  ({ caseCountsAndSessionsByCity } = createProspectiveTrialSessions({
     calendaringConfig,
-    cases,
+    caseCountsAndSessionsByCity,
     citiesFromLastTwoTerms,
-  });
+  }));
 
   console.timeEnd('10275: Generate prospectiveSessionsByCity time');
 
@@ -127,87 +136,49 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     startDate: termStartDate,
   });
 
-  console.time('10275: assignSessionsToWeeks time');
+  console.time('10275: generateCalendar time');
 
-  initialRegularCasesByCity[WASHINGTON_DC_SOUTH_STRING] =
-    initialRegularCasesByCity[WASHINGTON_DC_STRING];
-  delete initialRegularCasesByCity[WASHINGTON_DC_STRING];
+  const constraints = [
+    washingtonDcSpecialConstraint, // TODO 10275: write tests to confirm whether or not this washington DC constraint needs to be at the beginning of this array
+    maxSessionsPerWeekConstraint,
+    maxSessionsPerLocationConstraint,
+    oneSessionPerLocationPerWeekConstraint,
+    reservedWeekOfAtLocationConstraint,
+  ];
 
-  initialSmallCasesByCity[WASHINGTON_DC_SOUTH_STRING] =
-    initialSmallCasesByCity[WASHINGTON_DC_STRING];
-  delete initialSmallCasesByCity[WASHINGTON_DC_STRING];
-
-  const regularCaseCountByCity = TRIAL_CITY_STRINGS.reduce((acc, city) => {
-    if (city === WASHINGTON_DC_STRING) {
-      // We only schedule non-special sessions at DC South, so we only need to
-      // worry about case counts for South.
-      acc[WASHINGTON_DC_SOUTH_STRING] =
-        initialRegularCasesByCity[city]?.length || 0;
-    } else {
-      acc[city] = initialRegularCasesByCity[city]?.length || 0;
-    }
-    return acc;
-  }, {});
-
-  const smallCaseCountByCity = TRIAL_CITY_STRINGS.reduce((acc, city) => {
-    if (city === WASHINGTON_DC_STRING) {
-      acc[WASHINGTON_DC_SOUTH_STRING] =
-        initialSmallCasesByCity[city]?.length || 0;
-    } else {
-      acc[city] = initialSmallCasesByCity[city]?.length || 0;
-    }
-    return acc;
-  }, {});
-
-  const {
-    remainingRegularCaseCountByCity,
-    remainingSmallCaseCountByCity,
-    scheduledTrialSessionsByCity,
-    sessionCountPerWeek,
-  } = assignSessionsToWeeks({
+  ({ caseCountsAndSessionsByCity } = generateCalendar({
     calendaringConfig,
-    prospectiveSessionsByCity,
-    regularCaseCountByCity,
-    smallCaseCountByCity,
+    caseCountsAndSessionsByCity,
+    constraints,
     specialSessions,
     weeksToLoop,
-  });
+  }));
 
-  console.timeEnd('10275: assignSessionsToWeeks time');
+  console.timeEnd('10275: generateCalendar time');
 
-  if (Object.keys(scheduledTrialSessionsByCity).length < 1) {
+  // TODO 10275: idk if this works, probably does tho? Test it.
+  if (calendarIsEmpty(caseCountsAndSessionsByCity)) {
     return {
       bufferArray: undefined,
       message: SUGGESTED_TRIAL_SESSION_MESSAGES.invalid,
     };
   }
 
-  const sortedScheduledTrialSessionsByCity = Object.keys(
-    scheduledTrialSessionsByCity,
-  )
-    .sort((a, b) => {
-      return a.localeCompare(b);
-    })
-    .reduce((obj, key) => {
-      obj[key] = scheduledTrialSessionsByCity[key];
-      return obj;
-    }, {});
+  sortObjectByKey(caseCountsAndSessionsByCity, (a, b) => {
+    return a.localeCompare(b);
+  });
 
   console.time('10275: writeTrialSessionDataToExcel');
   const bufferArray = await writeTrialSessionDataToExcel({
-    initialRegularCasesByCity,
-    initialSmallCasesByCity,
-    remainingRegularCaseCountByCity,
-    remainingSmallCaseCountByCity,
-    sessionCountPerWeek,
-    sortedScheduledTrialSessionsByCity,
+    caseCountsAndSessionsByCity,
     weeks: weeksToLoop,
   });
   console.timeEnd('10275: writeTrialSessionDataToExcel');
   console.timeEnd('10275: Total interactor time');
+
   return {
     bufferArray,
-    message: SUGGESTED_TRIAL_SESSION_MESSAGES.success,
+    message: generateSuccessMessage({ incorrectSizeRegularCases }),
   };
 };
 
@@ -260,7 +231,13 @@ const SESSION_TERMS_FOR_GENERATOR = {
   winter: [1, 2, 3],
 };
 
-export const getCitiesFromLastTwoTerms = ({ sessions, termStartDate }) => {
+export const getCitiesFromLastTwoTerms = ({
+  sessions,
+  termStartDate,
+}: {
+  sessions: RawTrialSession[];
+  termStartDate: string;
+}): string[] => {
   const previousTwoTerms = getPreviousTwoTerms(termStartDate);
   return sessions
     .filter(session => {
@@ -275,10 +252,64 @@ export const getCitiesFromLastTwoTerms = ({ sessions, termStartDate }) => {
     });
 };
 
-function getCurrentTermByMonth(currentMonth: string) {
+const generateSuccessMessage = ({
+  incorrectSizeRegularCases,
+}: {
+  incorrectSizeRegularCases: EligibleCase[];
+}): string => {
+  let successMessage = SUGGESTED_TRIAL_SESSION_MESSAGES.success;
+
+  // TODO 10275: pending court feedback, consider moving this to a modal or the xlsx sheet
+  if (incorrectSizeRegularCases.length > 0) {
+    const docketNumbers: string[] = [];
+    incorrectSizeRegularCases.forEach(incorrectSizeRegularCase => {
+      docketNumbers.push(incorrectSizeRegularCase.docketNumber);
+    });
+
+    docketNumbers.sort((a, b) => {
+      return (
+        Case.getSortableDocketNumber(a)! - Case.getSortableDocketNumber(b)!
+      );
+    });
+
+    // TODO 10275: consider using a single line success message if there are no incorrectSizeRegularCases (ie no successMessage, only the existing title)
+    successMessage =
+      successMessage +
+      ` The following cases have a procedure type that does not match their preferred trial location's procedure type: ${docketNumbers.join(', ')}`;
+  }
+
+  return successMessage;
+};
+
+const calendarIsEmpty = (
+  caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity,
+) => {
+  return Object.values(caseCountsAndSessionsByCity).every(cityObject => {
+    return cityObject.scheduledSessions.length < 1;
+  });
+};
+
+const getCurrentTermByMonth = (currentMonth: string): string => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const term = Object.entries(SESSION_TERMS_FOR_GENERATOR).find(([_, months]) =>
     months.includes(parseInt(currentMonth)),
   );
   return term ? term[0] : 'Unknown term';
-}
+};
+
+// TODO 10275: consider moving to helper
+export const sortObjectByKey = (obj, sortFunction) => {
+  const sortedKeys = Object.keys(obj).sort(sortFunction);
+
+  const tempObj = {};
+
+  for (const key of sortedKeys) {
+    tempObj[key] = obj[key];
+  }
+
+  for (const key in obj) {
+    delete obj[key];
+  }
+
+  Object.assign(obj, tempObj);
+};
