@@ -43,7 +43,7 @@ export const PublicMobileTrialSessionsTable = connect<
                 key={tsGroup.header.sessionWeekStartDate}
               >
                 <th data-label="Document title" scope="row">
-                  {tsGroup.header.formattedSessionWeekStartDate}
+                  Week of {tsGroup.header.formattedSessionWeekStartDate}
                 </th>
                 {tsGroup.rows.map((tsRow, index) => {
                   return (
