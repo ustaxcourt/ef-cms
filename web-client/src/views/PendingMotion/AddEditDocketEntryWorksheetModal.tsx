@@ -113,7 +113,6 @@ export const AddEditDocketEntryWorksheetModal = connect(
           <BindedTextarea
             aria-labelledby="primary-issue-label"
             bind="form.primaryIssue"
-            className="resize-vertical-only"
             id="primary-issue"
           />
         </FormGroup>

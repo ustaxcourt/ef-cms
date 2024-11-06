@@ -80,7 +80,7 @@ export const CaseInformation = connect(
             Case caption
           </label>
           <textarea
-            className="usa-textarea"
+            className="usa-textarea textarea-resize-vertical"
             id="case-caption"
             name="caseCaption"
             value={form.caseCaption}
@@ -179,9 +179,9 @@ export const CaseInformation = connect(
         </FormGroup>
         <PetitionPaymentForm
           bind="form"
-          updateSequence={updatePetitionPaymentFormValueSequence}
-          validateSequence={validatePetitionFromPaperSequence}
+          validateFormData={validatePetitionFromPaperSequence}
           validationErrorsBind="validationErrors"
+          onUpdate={updatePetitionPaymentFormValueSequence}
         />
         {startCaseInternalHelper.showOrderForFilingFee && (
           <div className="order-checkbox">

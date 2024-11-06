@@ -38,7 +38,11 @@ export const BindedTextarea = connect(
     ];
     const textAreaProps = {
       ...componentProps,
-      className: classNames('usa-textarea', className),
+      className: classNames(
+        'usa-textarea',
+        'textarea-resize-vertical',
+        className,
+      ),
       onChange: e => setText(e.target.value),
       value: textValue || '',
     };

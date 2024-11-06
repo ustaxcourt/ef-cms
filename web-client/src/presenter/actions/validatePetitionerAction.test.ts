@@ -40,7 +40,7 @@ describe('validatePetitionerAction', () => {
       },
     });
 
-    expect(result.state.validationErrors.contact).toEqual(null);
+    expect(result.state.validationErrors).toBeUndefined();
     expect(successStub.mock.calls.length).toEqual(1);
   });
 

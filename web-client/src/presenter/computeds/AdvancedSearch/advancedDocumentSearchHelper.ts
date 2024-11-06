@@ -39,7 +39,9 @@ export const advancedDocumentSearchHelper = (
   });
 
   if (advancedSearchTab === ADVANCED_SEARCH_TABS.OPINION) {
-    documentTypeVerbiage = `${documentTypeVerbiage} Type`;
+    documentTypeVerbiage = `${documentTypeVerbiage} Type` as Capitalize<
+      Lowercase<string>
+    >;
   }
 
   if (searchResults) {
