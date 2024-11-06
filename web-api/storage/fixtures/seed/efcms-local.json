@@ -13502,14 +13502,6 @@
     "completedBy": "Test Petitionsclerk1"
   },
   {
-    "sk": "case-deadline|08855730-3047-4ca6-a9e7-16ff64c9dcaa",
-    "pk": "case|104-19"
-  },
-  {
-    "sk": "case-deadline|ff22fe63-4117-42ee-a66c-8cfd2062a057",
-    "pk": "case|104-19"
-  },
-  {
     "associatedJudge": "Chief Judge",
     "procedureType": "Regular",
     "irsNoticeDate": null,
@@ -19564,10 +19556,6 @@
     "updatedAt": "2023-08-08T17:32:21.464Z"
   },
   {
-    "sk": "case-deadline|0f5a666d-63c5-4378-9cd6-0b2ae141280f",
-    "pk": "case|106-19"
-  },
-  {
     "associatedJudge": "Chief Judge",
     "procedureType": "Regular",
     "isPaper": false,
@@ -20208,10 +20196,6 @@
     "docketNumber": "106-23",
     "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405417",
     "completedBy": "Test Petitionsclerk1"
-  },
-  {
-    "sk": "case-deadline|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
-    "pk": "case|107-19"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -21068,10 +21052,6 @@
     "docketNumber": "108-19",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Petitionsclerk"
-  },
-  {
-    "sk": "case-deadline|95b46eae-70f0-45df-91de-febdc610fed9",
-    "pk": "case|109-19"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -24395,10 +24375,6 @@
     "completedBy": "Test Petitionsclerk"
   },
   {
-    "sk": "case-deadline|ad1ddb24-f3c4-47b4-b10e-76d1d050b2ab",
-    "pk": "case|1338-20"
-  },
-  {
     "associatedJudge": "Chief Judge",
     "isSealed": false,
     "procedureType": "Regular",
@@ -24812,10 +24788,6 @@
     "pk": "case|151-12",
     "servedAt": "2019-08-25T05:00:00.000Z",
     "docketNumber": "101-18"
-  },
-  {
-    "sk": "case-deadline|e7aeadd8-b0d0-4826-af31-22c0d8c6c173",
-    "pk": "case|152-12"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -30641,7 +30613,7 @@
     "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Petitionsclerk"
   },
- 
+
   {
     "associatedJudge": "Colvin",
     "isSealed": false,
