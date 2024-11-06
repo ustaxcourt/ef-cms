@@ -5,7 +5,7 @@ import {
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getDbWriter } from '@web-api/database';
 
-export const updateCaseWorksheet = async ({
+export const upsertCaseWorksheet = async ({
   caseWorksheet,
   judgeUserId,
 }: {

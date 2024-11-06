@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
-import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
+import '@web-api/persistence/postgres/correspondence/mocks.jest';
 jest.mock('@shared/business/entities/Message.ts');
 jest.mock('@shared/business/entities/CaseDeadline');
 jest.mock('@web-api/persistence/postgres/messages/getMessagesByDocketNumber');
@@ -18,15 +19,25 @@ import { MOCK_WORK_ITEM } from '../../../../../shared/src/test/mockWorkItem';
 import { Message } from '../../../../../shared/src/business/entities/Message';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
+import { createCaseDeadline as createCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/createCaseDeadline';
 import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getMessagesByDocketNumber as getMessagesByDocketNumberMock } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseAndAssociations } from './updateCaseAndAssociations';
 import { updateMessage as updateMessageMock } from '@web-api/persistence/postgres/messages/updateMessage';
+import { upsertCaseCorrespondence as upsertCaseCorrespondenceMock } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondence';
 import { v4 as uuidv4 } from 'uuid';
 
 const getMessagesByDocketNumber = getMessagesByDocketNumberMock as jest.Mock;
 const updateMessage = updateMessageMock as jest.Mock;
+
+const createCaseDeadline = createCaseDeadlineMock as jest.Mock;
+
+const getCaseDeadlinesByDocketNumber =
+  getCaseDeadlinesByDocketNumberMock as jest.Mock;
+
+const upsertCaseCorrespondence = upsertCaseCorrespondenceMock as jest.Mock;
 
 describe('updateCaseAndAssociations', () => {
   let updateCaseMock = jest.fn();
@@ -74,6 +85,10 @@ describe('updateCaseAndAssociations', () => {
       .updateCase.mockImplementation(updateCaseMock);
   });
 
+  beforeEach(() => {
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
+  });
+
   it('gets the old case before passing it to updateCase persistence method', async () => {
     const caseToUpdate = {
       ...validMockCase,
@@ -119,11 +134,9 @@ describe('updateCaseAndAssociations', () => {
   });
 
   it('does not attempt to make any update calls to persistence if any queries to persistence fail', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockRejectedValueOnce(
-        new Error('query problem'),
-      );
+    getCaseDeadlinesByDocketNumber.mockRejectedValue(
+      new Error('query problem'),
+    );
 
     await expect(
       updateCaseAndAssociations({
@@ -601,9 +614,7 @@ describe('updateCaseAndAssociations', () => {
         caseToUpdate,
       });
 
-      expect(
-        applicationContext.getPersistenceGateway().updateCaseCorrespondence,
-      ).toHaveBeenCalledTimes(4);
+      expect(upsertCaseCorrespondence).toHaveBeenCalledTimes(4);
     });
   });
 
@@ -919,21 +930,14 @@ describe('updateCaseAndAssociations', () => {
   });
 
   describe('case deadlines', () => {
-    const mockDeadline = new CaseDeadline(
-      {},
-      {
-        applicationContext,
-      },
-    );
+    const mockDeadline = new CaseDeadline({});
     beforeAll(() => {
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValue(validMockCase);
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseDeadlinesByDocketNumber.mockReturnValue([
-          { ...mockDeadline, pk: 'abc|987', sk: 'user-case|123' },
-        ]);
+      getCaseDeadlinesByDocketNumber.mockReturnValue([
+        { ...mockDeadline, pk: 'abc|987', sk: 'user-case|123' },
+      ]);
     });
 
     it('should not fetch or persist any case deadline data if associated judge is unchanged', async () => {
@@ -945,10 +949,7 @@ describe('updateCaseAndAssociations', () => {
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: updatedCase,
       });
-      expect(
-        applicationContext.getPersistenceGateway()
-          .getCaseDeadlinesByDocketNumber,
-      ).not.toHaveBeenCalled();
+      expect(getCaseDeadlinesByDocketNumber).not.toHaveBeenCalled();
       expect(
         applicationContext.getPersistenceGateway().createCaseDeadline,
       ).not.toHaveBeenCalled();
@@ -965,15 +966,9 @@ describe('updateCaseAndAssociations', () => {
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: updatedCase,
       });
-      expect(
-        applicationContext.getPersistenceGateway()
-          .getCaseDeadlinesByDocketNumber,
-      ).toHaveBeenCalled();
+      expect(getCaseDeadlinesByDocketNumber).toHaveBeenCalled();
       expect(CaseDeadline.validateRawCollection).toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().createCaseDeadline,
-      ).toHaveBeenCalledWith({
-        applicationContext,
+      expect(createCaseDeadline).toHaveBeenCalledWith({
         caseDeadline: { some: 'deadline' },
       });
     });
