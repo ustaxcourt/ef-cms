@@ -113,12 +113,12 @@ export class WorkItem extends JoiValidationEntity {
     sentBySection,
     sentByUserId,
   }: {
-    assigneeId: string;
-    assigneeName: string;
+    assigneeId?: string;
+    assigneeName?: string;
     section: string;
     sentBy: string;
-    sentBySection: string;
-    sentByUserId: string;
+    sentBySection?: string;
+    sentByUserId?: string;
   }): WorkItem {
     Object.assign(this, {
       assigneeId,

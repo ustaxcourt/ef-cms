@@ -623,7 +623,6 @@ export const serveCaseToIrs = async (
     await Promise.all(generatedDocuments);
 
     await createPetitionWorkItems({
-      applicationContext,
       caseEntity,
       user: authorizedUser,
     });
