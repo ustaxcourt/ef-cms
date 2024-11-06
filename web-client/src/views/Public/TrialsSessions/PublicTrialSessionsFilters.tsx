@@ -148,7 +148,7 @@ export const PublicTrialSessionsFilters = connect<
 function FilterSelect({ label, name, onChange, options, selectedValues }) {
   return (
     <>
-      <div className="margin-bottom-4">
+      <div className="margin-bottom-2">
         <label className="usa-label" htmlFor={`${name}-filter`}>
           {label} <span className="optional-light-text">(optional)</span>
         </label>
@@ -185,20 +185,22 @@ function FilterSelect({ label, name, onChange, options, selectedValues }) {
         </Phone>
       </div>
       <NonPhone>
-        {Object.entries(
-          selectedValues as {
-            [key: string]: string;
-          },
-        ).map(([optionKey, optionLabel]) => (
-          <PillButton
-            data-testid={`${name}-${optionLabel}-pill-button`}
-            key={optionLabel}
-            text={optionLabel}
-            onRemove={() => {
-              onChange(`${name}.${optionKey}`, undefined);
-            }}
-          />
-        ))}
+        <div className="margin-bottom-1">
+          {Object.entries(
+            selectedValues as {
+              [key: string]: string;
+            },
+          ).map(([optionKey, optionLabel]) => (
+            <PillButton
+              data-testid={`${name}-${optionLabel}-pill-button`}
+              key={optionLabel}
+              text={optionLabel}
+              onRemove={() => {
+                onChange(`${name}.${optionKey}`, undefined);
+              }}
+            />
+          ))}
+        </div>
       </NonPhone>
     </>
   );
