@@ -154,7 +154,7 @@ export const ForwardMessageModalDialog = connect(
             Add message
           </label>
           <textarea
-            className="usa-textarea ustc-message-modal-text-area"
+            className="usa-textarea textarea-resize-vertical"
             id="message"
             name="message"
             onChange={e => {
