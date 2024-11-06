@@ -44,6 +44,7 @@ module "api-gateway-global-logging-permissions" {
 
 module "ci-cd" {
   source = "../../modules/ci-cd"
+  lower_env_account_id = var.lower_env_account_id
 }
 
 module "kibana" {

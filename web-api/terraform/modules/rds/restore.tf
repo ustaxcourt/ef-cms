@@ -3,31 +3,21 @@ resource "aws_iam_role" "restore_role" {
 
   assume_role_policy = <<EOF
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "arn:aws:iam::${var.restoring_aws_account_id}:root"
-            },
-            "Action": "sts:AssumeRole",
-            "Condition": {}
-        },
-        {
-          "Effect": "Allow",
-          "Principal": {
-            "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/dawson_dev"
-          },
-          "Action": "sts:AssumeRole"
-        },
-        {
-          "Effect": "Allow",
-          "Principal": {
-            "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/CircleCI"
-          },
-          "Action": "sts:AssumeRole"
-        }
-    ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": [
+          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/dawson_dev",
+          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/CircleCI",
+          "arn:aws:iam::${var.restoring_aws_account_id}:role/dawson_dev",
+          "arn:aws:iam::${var.restoring_aws_account_id}:user/CircleCI"
+        ]
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
 }
 EOF
 }
