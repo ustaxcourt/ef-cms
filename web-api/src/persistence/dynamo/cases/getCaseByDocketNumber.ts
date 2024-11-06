@@ -22,7 +22,7 @@ export const getCaseByDocketNumber = async ({
   docketNumber: string;
   includeConsolidatedCases?: boolean;
 }): Promise<RawCase> => {
-  const [caseItems, correspodenceItems] = await Promise.all([
+  const [caseItems, correspondenceItems] = await Promise.all([
     queryFull({
       ExpressionAttributeNames: {
         '#pk': 'pk',
@@ -63,10 +63,10 @@ export const getCaseByDocketNumber = async ({
   return purgeDynamoKeys({
     ...aggregateCaseItems([
       ...caseItems,
-      ...correspodenceItems.map(correspodenceItem => ({
-        ...correspodenceItem,
+      ...correspondenceItems.map(correspondenceItem => ({
+        ...correspondenceItem,
         pk: `case|${docketNumber}`,
-        sk: `correspondence|${correspodenceItem.correspondenceId}`,
+        sk: `correspondence|${correspondenceItem.correspondenceId}`,
       })),
     ]),
     consolidatedCases,
