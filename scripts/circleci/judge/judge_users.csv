@@ -1,5 +1,6 @@
 name,judgeTitle,judgeFullName,email,role,section,isSeniorJudge,judgePhoneNumber
 Aarons,Judge,Aarons,legacy.judge.aarons@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
+Arbeit,Judge,Jeffrey S. Arbeit,judge.arbeit@example.com,judge,arbeitsChambers,false,(202) 521-4718
 Armen,Special Trial Judge,Armen,legacy.judge.armen@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
 Ashford,Judge,Tamara W. Ashford,judge.ashford@example.com,judge,ashfordsChambers,false,(202) 521-0822
 Beghe,Judge,Beghe,legacy.judge.beghe@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
@@ -23,13 +24,14 @@ Fay,Judge,Fay,legacy.judge.fay@example.com,legacyJudge,legacyJudgesChambers,fals
 Featherston,Judge,Featherston,legacy.judge.featherston@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
 Foley,Chief Judge,Maurice B. Foley,judge.foley@example.com,judge,foleysChambers,false,(202) 521-0681
 Fried,Special Trial Judge,Zachary S. Fried,stjudge.fried@example.com,judge,friedsChambers,false,(202) 521-0867
-Gale,Judge,Joseph H. Gale,judge.gale@example.com,judge,galesChambers,true,(202) 521-0688
+Gale,Judge,Joseph H. Gale,legacy.judge.gale@example.com,legacyJudge,legacyJudgesChambers,false,(202) 521-0688
 Galloway,Special Trial Judge,Galloway,legacy.judge.galloway@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
 Gerber,Judge,Gerber,legacy.judge.gerber@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
 Goeke,Judge,Joseph Robert Goeke,judge.goeke@example.com,judge,goekesChambers,true,(202) 521-0690
 Goffe,Judge,Goffe,legacy.judge.goffe@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
 Goldberg,Special Trial Judge,Goldberg,legacy.judge.goldberg@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
 Greaves,Judge,Travis A. Greaves,judge.greaves@example.com,judge,greavesChambers,false,(202) 521-0736
+Guider,Judge,Benjamin A. Guider III,judge.guider@example.com,judge,guidersChambers,false,(202) 521-0885
 Gussis,Special Trial Judge,Gussis,legacy.judge.gussis@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
 Gustafson,Judge,David Gustafson,judge.gustafson@example.com,judge,gustafsonsChambers,true,(202) 521-0850
 Guy,Special Trial Judge,"Daniel A. Guy, Jr.",stjudge.guy@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
@@ -77,7 +79,7 @@ Vandervort,Special Trial Judge,Vandervort,legacy.judge.vandervort@example.com,le
 Vasquez,Judge,Juan F. Vasquez,judge.vasquez@example.com,judge,vasquezsChambers,true,(202) 521-0778
 Way,Judge,Kashi Way,judge.way@example.com,judge,waysChambers,false,(123) 123-1234
 Weiler,Judge,Christian N. Weiler,judge.weiler@example.com,judge,weilersChambers,false,(202) 521-0649
-Wells,Judge,Thomas B. Wells,judge.wells@example.com,judge,wellsChambers,false,(123) 123-1234
+Wells,Judge,Thomas B. Wells,legacy.judge.wells@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
 Whalen,Judge,Whalen,legacy.judge.whalen@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
 Wherry,Judge,Wherry,legacy.judge.wherry@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
 Whitaker,Judge,Whitaker,legacy.judge.whitaker@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
