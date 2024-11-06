@@ -58,6 +58,8 @@ export const TrialSessions = connect(
                   Create Term
                 </Button>
               )}
+            </div>
+            <div>
               <Button
                 link
                 noMargin
