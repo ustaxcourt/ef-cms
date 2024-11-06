@@ -13,8 +13,6 @@ export type ProspectiveTrialSession = {
   trialLocation: string;
   sessionType: TrialSessionTypes;
   cityWasNotVisitedInLastTwoTerms: boolean;
-  // potentially add
-  // caseCount: number;
 };
 
 export type ScheduledTrialSession = {
