@@ -14,7 +14,7 @@ describe('Contact', () => {
       );
 
       expect(contact.getFormattedValidationErrors()!.email).toEqual(
-        '"email" is required',
+        'Enter a valid email address',
       );
     });
 
