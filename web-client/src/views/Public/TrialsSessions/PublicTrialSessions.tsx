@@ -4,7 +4,12 @@ import {
 } from '@web-client/ustc-ui/Accordion/Accordion';
 import { BigHeader } from '@web-client/views/BigHeader';
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
+import {
+  Mobile,
+  NonMobile,
+  NonPhone,
+  Phone,
+} from '@web-client/ustc-ui/Responsive/Responsive';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 import { PublicMobileTrialSessionsTable } from '@web-client/views/Public/TrialsSessions/PublicMobileTrialSessionsTable';
@@ -99,11 +104,18 @@ function NonMobilePublicTrialsSessions({
             <FetchedTimeMessage
               fetchedDateString={publicTrialSessionsHelper.fetchedDateString}
             ></FetchedTimeMessage>
+            <Mobile>
+              <div className="tablet:grid-col-4 grid-col-12 padding-top-1">
+                <PublicTrialSessionsRemoteProceedingsCard />
+              </div>
+            </Mobile>
             <PublicTrialSessionsFilters ROOT={ROOT} />
           </div>
-          <div className="tablet:grid-col-4 grid-col-12 padding-top-1">
-            <PublicTrialSessionsRemoteProceedingsCard />
-          </div>
+          <NonMobile>
+            <div className="tablet:grid-col-4 grid-col-12 padding-top-1">
+              <PublicTrialSessionsRemoteProceedingsCard />
+            </div>
+          </NonMobile>
         </div>
         <div className="grid-row">
           <Button
