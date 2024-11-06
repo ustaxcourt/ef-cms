@@ -1,26 +1,26 @@
 import * as excelModule from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
 import * as generateCalendarModule from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/generateCalendar';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
-  generateSuggestedTrialSessionCalendarInteractor,
-  WASHINGTON_DC_NORTH_STRING,
-  WASHINGTON_DC_SOUTH_STRING,
-  WASHINGTON_DC_STRING,
-} from './generateSuggestedTrialSessionCalendarInteractor';
-import {
-  mockPetitionsClerkUser,
-  mockPrivatePractitionerUser,
-} from '@shared/test/mockAuthUsers';
+  CalendaringConfig,
+  ScheduledTrialSession,
+} from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
+import { CaseCountsAndSessionsByCity } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
 import {
   SESSION_TYPES,
   SUGGESTED_TRIAL_SESSION_MESSAGES,
   TRIAL_CITY_STRINGS,
 } from '@shared/business/entities/EntityConstants';
-import { CaseCountsAndSessionsByCity } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
 import {
-  CalendaringConfig,
-  ScheduledTrialSession,
-} from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
+  WASHINGTON_DC_NORTH_STRING,
+  WASHINGTON_DC_SOUTH_STRING,
+  WASHINGTON_DC_STRING,
+  generateSuggestedTrialSessionCalendarInteractor,
+} from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import {
+  mockPetitionsClerkUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 import mockCases from '@shared/test/mockReadyForTrialCases.json';
 import mockSpecialSessions from '@shared/test/mockTrialSessions.json';
 
