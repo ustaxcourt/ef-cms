@@ -38,7 +38,7 @@ describe('updateUserCaseNoteInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockImplementation(() => mockUser);
-    upsertUserCaseNote.mockImplementation(v => v.caseNoteToUpdate);
+    upsertUserCaseNote.mockImplementation(v => v.caseNoteToUpsert);
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue({
@@ -82,7 +82,7 @@ describe('updateUserCaseNoteInteractor', () => {
       omit(mockUser, 'section'),
     );
 
-    expect(upsertUserCaseNote.mock.calls[0][0].caseNoteToUpdate.userId).toEqual(
+    expect(upsertUserCaseNote.mock.calls[0][0].caseNoteToUpsert.userId).toEqual(
       userIdToExpect,
     );
   });
