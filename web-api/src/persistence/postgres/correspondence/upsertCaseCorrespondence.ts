@@ -2,7 +2,7 @@ import { RawCorrespondence } from '@shared/business/entities/Correspondence';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getDbWriter } from '@web-api/database';
 
-export const updateCaseCorrespondence = async ({
+export const upsertCaseCorrespondence = async ({
   correspondence,
   docketNumber,
 }: {

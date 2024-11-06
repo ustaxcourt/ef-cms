@@ -49,7 +49,7 @@ describe('getCaseByDocketNumber', () => {
   });
 
   it('should return case and its associated data', async () => {
-    (getCaseCorrespondenceByDocketNumber as jest.Mock).mockResolvedValue([
+    getCaseCorrespondenceByDocketNumber.mockResolvedValue([
       caseCorrespondenceEntity({
         archived: false,
         correspondenceId: 'abc-124',

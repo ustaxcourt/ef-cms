@@ -7,7 +7,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { updateCaseCorrespondence } from '@web-api/persistence/postgres/correspondence/updateCaseCorrespondence';
+import { upsertCaseCorrespondence } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondence';
 
 /**
  * fileCorrespondenceDocumentInteractor
@@ -59,7 +59,7 @@ export const fileCorrespondenceDocumentInteractor = async (
   caseEntity.fileCorrespondence(correspondenceEntity);
 
   if (caseEntity.validate()) {
-    await updateCaseCorrespondence({
+    await upsertCaseCorrespondence({
       correspondence: correspondenceEntity.validate().toRawObject(),
       docketNumber,
     });

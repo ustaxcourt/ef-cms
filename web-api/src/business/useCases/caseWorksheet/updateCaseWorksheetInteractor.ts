@@ -9,7 +9,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { updateCaseWorksheet } from '@web-api/persistence/postgres/caseWorksheet/updateCaseWorksheet';
+import { upsertCaseWorksheet } from '@web-api/persistence/postgres/caseWorksheet/upsertCaseWorksheet';
 
 export const updateCaseWorksheetInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -32,7 +32,7 @@ export const updateCaseWorksheetInteractor = async (
 
   const rawCaseWorksheet = caseWorksheetEntity.toRawObject();
 
-  await updateCaseWorksheet({
+  await upsertCaseWorksheet({
     caseWorksheet: rawCaseWorksheet,
     judgeUserId: judgeUser.userId,
   });

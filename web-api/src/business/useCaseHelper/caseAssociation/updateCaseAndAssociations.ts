@@ -11,9 +11,9 @@ import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { createCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/createCaseDeadline';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
-import { updateCaseCorrespondence } from '@web-api/persistence/postgres/correspondence/updateCaseCorrespondence';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { upsertCase } from '@web-api/persistence/postgres/cases/upsertCase';
+import { upsertCaseCorrespondence } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondence';
 import diff from 'diff-arrays-of-objects';
 
 /**
@@ -153,7 +153,7 @@ const updateCorrespondence = ({
   return validCorrespondence.map(
     correspondence =>
       function updateCorrespondence_cb() {
-        return updateCaseCorrespondence({
+        return upsertCaseCorrespondence({
           correspondence,
           docketNumber: caseToUpdate.docketNumber,
         });
