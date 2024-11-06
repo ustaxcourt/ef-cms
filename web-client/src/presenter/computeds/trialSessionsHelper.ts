@@ -44,7 +44,6 @@ export const trialSessionsHelper = (
   }[];
   trialSessionsCount: number;
   endDateErrorMessage?: string;
-  showCreateTermButton: boolean;
   startDateErrorMessage?: string;
   totalPages: number;
 } => {
