@@ -236,7 +236,6 @@ export const generateAndServeDocketEntry = async ({
 
   if (shouldCreateWorkItem) {
     await createWorkItemForChange({
-      applicationContext,
       caseEntity,
       changeOfAddressDocketEntry,
       user,

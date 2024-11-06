@@ -63,7 +63,6 @@ export const fileAndServeDocumentOnOneCase = async ({
   const workItemToUpdate = docketEntryEntity.workItem;
 
   await completeWorkItem({
-    applicationContext,
     docketEntryEntity,
     leadDocketNumber: caseEntity.leadDocketNumber,
     user,
