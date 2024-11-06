@@ -13,12 +13,14 @@ export const PublicDocketRecord = connect(
     publicCaseDetailHelper: state.publicCaseDetailHelper,
   },
   function ({ publicCaseDetailHelper }) {
+    const noDocumentsMessage = 'There are no documents of that type.';
+
     return (
       <>
         <PublicDocketRecordHeader />
 
         <NonPhone>
-          <div style={{ overflowX: 'scroll', width: '100%' }}>
+          <div className="width-full overflow-x-auto">
             <table
               aria-label="docket record"
               className="usa-table ustc-table usa-table--stacked"
@@ -102,6 +104,10 @@ export const PublicDocketRecord = connect(
                 )}
               </tbody>
             </table>
+            {!publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord
+              .length && (
+              <p className="margin-bottom-10">{noDocumentsMessage}</p>
+            )}
           </div>
         </NonPhone>
 
@@ -142,6 +148,8 @@ export const PublicDocketRecord = connect(
               )}
             </tbody>
           </table>
+          {!publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord
+            .length && <p className="margin-bottom-10">{noDocumentsMessage}</p>}
         </Phone>
       </>
     );

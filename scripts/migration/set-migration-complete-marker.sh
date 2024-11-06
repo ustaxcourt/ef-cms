@@ -3,14 +3,14 @@
 # Writes a record that will indicate to the streams lambda that migration writes have finished indexing
 
 # Usage
-#   ./scripts/migration/set-migration-complete-marker.sh
+#   COLOR="$DEPLOYING_COLOR" ./scripts/migration/set-migration-complete-marker.sh
 
 ./check-env-variables.sh \
   "AWS_ACCESS_KEY_ID" \
   "AWS_SECRET_ACCESS_KEY" \
   "CIRCLE_MACHINE_USER_TOKEN" \
   "CIRCLE_WORKFLOW_ID" \
-  "DEPLOYING_COLOR" \
+  "COLOR" \
   "ENV" \
   "JOB_NAME" \
   "SOURCE_TABLE"
@@ -39,7 +39,7 @@ ITEM=$(cat <<-END
         "S": "${ENV}"
     },
     "deployingColor": {
-        "S": "${DEPLOYING_COLOR}"
+        "S": "${COLOR}"
     },
     "jobName": {
         "S": "${JOB_NAME}"
@@ -58,3 +58,5 @@ aws dynamodb put-item \
   --region us-east-1 \
   --table-name "$SOURCE_TABLE" \
   --item "$ITEM"
+
+echo "CompletionMarker will be processed by streams-${ENV}-${COLOR} to approve the ${JOB_NAME} job in workflow ${CIRCLE_WORKFLOW_ID}."

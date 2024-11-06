@@ -2,6 +2,7 @@
 
 import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsPrivatePractitioner } from '../../../../helpers/authentication/login-as-helpers';
+import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/select-typeahead-input';
 
 describe('Request Case Access Page - Private Practitioner Accessibility', () => {
   beforeEach(() => {
@@ -21,9 +22,9 @@ describe('Request Case Access Page - Private Practitioner Accessibility', () => 
 
     cy.visit('/case-detail/102-19/case-association-request');
     cy.get('[data-testid="request-access-submit-document"]').should('exist');
-    cy.get('[data-testid="document-type"]').click();
-    cy.get('[data-testid="document-type"]').type(
-      'Motion to Substitute Parties and Change Caption{enter}',
+    selectTypeaheadInput(
+      'case-association-document-type-search',
+      'Motion to Substitute Parties and Change Caption',
     );
     cy.get('#add-supporting-document-button').click();
     cy.get('#supporting-document-0').select('Affidavit in Support');

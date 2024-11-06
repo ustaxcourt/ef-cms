@@ -3,7 +3,7 @@ import {
   CASE_TYPES,
   CHIEF_JUDGE,
   CUSTOM_CASE_REPORT_PAGE_SIZE,
-  TRIAL_CITIES,
+  CaseType,
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import {
@@ -13,17 +13,15 @@ import {
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
-import { InputOption } from '@web-client/ustc-ui/Utils/types';
-import { sortBy } from 'lodash';
+import { getTrialCitiesGroupedByState } from '@shared/business/utilities/trialSession/trialCitiesGroupedByState';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const customCaseReportHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): {
-  activeTrialCities: InputOption[];
-  caseStatuses: InputOption[];
-  caseTypes: InputOption[];
+  caseStatuses: { label: string; value: string }[];
+  caseTypes: { label: string; value: CaseType }[];
   cases: (CaseInventory & {
     inConsolidatedGroup: boolean;
     consolidatedIconTooltipText: string;
@@ -31,11 +29,16 @@ export const customCaseReportHelper = (
     isLeadCase: boolean;
   })[];
   clearFiltersIsDisabled: boolean;
-  judges: InputOption[];
+  judges: { label: string; value: string }[];
   pageCount: number;
-  searchableTrialCities: InputOption[];
   today: string;
-  trialCitiesByState: InputOption[];
+  trialCitiesByState: {
+    label: string;
+    options: {
+      label: string;
+      value: string;
+    }[];
+  }[];
 } => {
   const caseStatuses = Object.values(CASE_STATUS_TYPES).map(status => ({
     label: status,
@@ -91,43 +94,16 @@ export const customCaseReportHelper = (
 
   const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
 
-  const trialCities = sortBy(TRIAL_CITIES.ALL, ['state', 'city']);
-
-  const searchableTrialCities: InputOption[] = [];
-
-  const states: InputOption[] = trialCities.reduce(
-    (listOfStates: InputOption[], cityStatePair) => {
-      const existingState = listOfStates.find(
-        trialState => trialState.label === cityStatePair.state,
-      );
-      const cityOption: InputOption = {
-        label: `${cityStatePair.city}, ${cityStatePair.state}`,
-        value: `${cityStatePair.city}, ${cityStatePair.state}`,
-      };
-      if (existingState) {
-        existingState.options?.push(cityOption);
-      } else {
-        listOfStates.push({
-          label: cityStatePair.state,
-          options: [cityOption],
-        });
-      }
-      searchableTrialCities.push(cityOption);
-      return listOfStates;
-    },
-    [],
-  );
+  const trialCitiesByState = getTrialCitiesGroupedByState();
 
   return {
-    activeTrialCities: states,
     caseStatuses,
     caseTypes,
     cases: reportData,
     clearFiltersIsDisabled,
     judges,
     pageCount,
-    searchableTrialCities,
     today,
-    trialCitiesByState: states,
+    trialCitiesByState,
   };
 };
