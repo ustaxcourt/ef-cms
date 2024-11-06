@@ -1,3 +1,4 @@
+import { ASCENDING } from '@shared/business/entities/EntityConstants';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordHeader } from './DocketRecordHeader';
 import { DocketRecordOverlay } from './DocketRecordOverlay';
@@ -5,8 +6,13 @@ import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
 import { SealDocketEntryModal } from './SealDocketEntryModal';
+import { SortableColumn } from '@web-client/ustc-ui/Table/SortableColumn';
 import { UnsealDocketEntryModal } from './UnsealDocketEntryModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import {
+  getAscendingTextForSortType,
+  getDescendingTextForSortType,
+} from '@web-client/views/Messages/MessageColumns'; // pull out to shared place
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
@@ -84,13 +90,22 @@ export const DocketRecord = connect(
                       />
                     </th>
                   )}
-                  <th className="center-column hide-on-mobile">
+                  {columns.map(column => {
+                    return (
+                      <SortableHeader
+                        sortField={column.sortFieldInfo.sortField}
+                        sortType={column.sortFieldInfo.sortType}
+                        title={column.columnName}
+                      />
+                    );
+                  })}
+                  {/* <th className="center-column hide-on-mobile">
                     <span>
                       <span className="usa-sr-only">Number</span>
                       <span aria-hidden="true">No.</span>
                     </span>
                   </th>
-                  <th>Filed Date</th>
+                  <FilingDateSortableHeader />
                   <th className="center-column hide-on-mobile">Event</th>
                   <th aria-hidden="true" className="icon-column" />
                   <th>Filings and Proceedings</th>
@@ -98,7 +113,7 @@ export const DocketRecord = connect(
                   <th className="hide-on-mobile">Filed By</th>
                   <th className="hide-on-mobile">Action</th>
                   <th>Served</th>
-                  <th className="center-column hide-on-mobile">Parties</th>
+                  <th className="center-column hide-on-mobile">Parties</th> */}
                   {docketRecordHelper.showEditOrSealDocketRecordEntry && (
                     <th>&nbsp;</th>
                   )}
@@ -287,3 +302,88 @@ export const DocketRecord = connect(
 );
 
 DocketRecord.displayName = 'DocketRecord';
+
+function SortableHeader({ sortField, sortType, title }) {
+  return (
+    <th>
+      <SortableColumn
+        ascText={getAscendingTextForSortType(sortType)}
+        currentlySortedOrder="asc"
+        defaultSortOrder={ASCENDING}
+        descText={getDescendingTextForSortType(sortType)}
+        hasRows={true}
+        // currentlySortedField=""
+        // currentlySortedOrder=""
+        sortField={sortField}
+        title={title}
+        onClickSequence={() => console.log('clicked sort')}
+      />
+    </th>
+  );
+}
+
+const columns = [
+  {
+    columnName: 'No.',
+    sortFieldInfo: {
+      sortField: 'index',
+      sortType: 'number',
+    },
+  },
+  {
+    columnName: 'FiledDate',
+    sortFieldInfo: {
+      sortField: 'createdAtFormatted',
+      sortType: 'string',
+    },
+  },
+  {
+    columnName: 'Event',
+    sortFieldInfo: {
+      sortField: 'eventCode',
+      sortType: 'string',
+    },
+  },
+  {
+    columnName: 'Filings and Proceedings',
+    sortFieldInfo: {
+      sortField: 'descriptionDisplay',
+      sortType: 'string',
+    },
+  },
+  {
+    columnName: 'Pages',
+    sortFieldInfo: {
+      sortField: 'numberOfPages',
+      sortType: 'string',
+    },
+  },
+  {
+    columnName: 'Filed By',
+    sortFieldInfo: {
+      sortField: 'filedBy',
+      sortType: 'string',
+    },
+  },
+  {
+    columnName: 'Action',
+    sortFieldInfo: {
+      sortField: 'action',
+      sortType: 'string',
+    },
+  },
+  {
+    columnName: 'Served',
+    sortFieldInfo: {
+      sortField: '', // either showNotServed or showServed
+      sortType: 'string', // either a date or string
+    },
+  },
+  {
+    columnName: 'Parties',
+    sortFieldInfo: {
+      sortField: 'servedPartiesCode',
+      sortType: 'string',
+    },
+  },
+];
