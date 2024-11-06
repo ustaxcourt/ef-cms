@@ -1,3 +1,4 @@
+import { PublicClientState } from '@web-client/presenter/state-public';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getPublicJudgesAction } from './getPublicJudgesAction';
@@ -24,11 +25,14 @@ describe('getPublicJudgesAction', () => {
       .getUseCases()
       .getPublicJudgesInteractor.mockReturnValue(mockJudges);
 
-    const result = await runAction(getPublicJudgesAction, {
-      modules: {
-        presenter,
+    const result = await runAction<{ users: any[] }, PublicClientState>(
+      getPublicJudgesAction,
+      {
+        modules: {
+          presenter,
+        },
       },
-    });
+    );
 
     expect(result.output.users).toMatchObject(mockJudges);
   });

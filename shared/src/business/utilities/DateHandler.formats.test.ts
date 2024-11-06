@@ -7,12 +7,14 @@ describe('DateHandler', () => {
     const mockTimeValue = 1530518207007; // '2018-07-02T07:56:47.007Z'
 
     const FORMATS_EXPECTED_OUTPUT = {
+      CURRENT_AS_OF_TIMESTAMP: '07/02/18 3:56 am Eastern',
       DATE_TIME: '07/02/18 03:56 am',
       DATE_TIME_TZ: '07/02/18 3:56 am ET',
       DAY_OF_WEEK: '1',
       FILENAME_DATE: 'July_2_2018',
       ISO: '2018-07-02T03:56:47.007-04:00',
       LOG_TIMESTAMP: '2018/07/02 03:56:47.007 ET',
+      MD: '7/2',
       MDYY: '7/2/18',
       MDYYYY: '7/2/2018',
       MDYYYY_DASHED: '7-2-2018',

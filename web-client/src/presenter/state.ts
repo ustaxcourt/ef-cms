@@ -697,7 +697,7 @@ export const baseState = {
   judges: [] as RawUser[],
   judgesChambers: [] as JudgeChambersInfo[],
   lastIdleAction: undefined,
-  legacyAndCurrentJudges: [],
+  legacyAndCurrentJudges: [] as RawUser[],
   login: {} as any,
   logoutType: '',
   maintenanceMode: false,
@@ -842,11 +842,13 @@ export const baseState = {
   todaysDate: '',
   token: '',
   trialSession: cloneDeep(initialTrialSessionState),
+  trialSessionDetailsTab: {} as { caseList: any[]; calendaredCaseList: any[] },
   trialSessionJudge: {
     name: '',
   },
   trialSessionWorkingCopy: cloneDeep(initialTrialSessionWorkingCopyState),
-  trialSessions: [] as any[], // Sometimes trialSessions, sometimes TrialSessionInfoDTO, sometimes ad-hoc trial sessions
+  trialSessions: [] as any[],
+  // Sometimes trialSessions, sometimes TrialSessionInfoDTO, sometimes ad-hoc trial sessions
   trialSessionsPage: cloneDeep(initialTrialSessionPageState),
   user: cloneDeep(emptyUserState),
   userContactEditProgress: {} as { inProgress?: boolean },
