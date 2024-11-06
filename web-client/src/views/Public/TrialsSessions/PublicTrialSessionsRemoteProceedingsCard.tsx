@@ -18,7 +18,6 @@ export const PublicTrialSessionsRemoteProceedingsCard = connect(
                 link
                 className="padding-bottom-0 text-left"
                 href="https://www.ustaxcourt.gov/remote_proceedings.html"
-                target="_blank"
               >
                 Public Access to Remote Proceedings
               </Button>
@@ -26,7 +25,6 @@ export const PublicTrialSessionsRemoteProceedingsCard = connect(
                 link
                 className="text-left"
                 href="https://www.ustaxcourt.gov/zoomgov.html"
-                target="_blank"
               >
                 Zoomgov Proceedings Resources
               </Button>
