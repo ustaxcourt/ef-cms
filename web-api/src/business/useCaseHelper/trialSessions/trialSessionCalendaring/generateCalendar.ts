@@ -77,17 +77,12 @@ export const generateCalendar = ({
       weekOf: sessionWeekOf,
     };
 
-    // eslint-disable-next-line no-useless-catch
-    try {
-      checkConstraints({
-        calendarState,
-        calendaringConfig,
-        constraints,
-        scheduledTrialSession,
-      });
-    } catch (e) {
-      throw e;
-    }
+    checkConstraints({
+      calendarState,
+      calendaringConfig,
+      constraints,
+      scheduledTrialSession,
+    });
 
     addSpecialScheduledTrialSession({
       calendarState,
