@@ -12,10 +12,10 @@ jest.mock(
 
 jest.mock(
   '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDateRange',
-  () => mockFactory('getCaseDeadlinesByDateRange'),
+  () => mockFactory('getCaseDeadlinesByDateRange', []),
 );
 
 jest.mock(
   '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber',
-  () => mockFactory('getCaseDeadlinesByDocketNumber'),
+  () => mockFactory('getCaseDeadlinesByDocketNumber', []),
 );
