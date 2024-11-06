@@ -11,6 +11,7 @@ import { RawUser } from '@shared/business/entities/User';
 import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
+  TRIAL_SESSION_SCOPE_TYPES,
   TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
@@ -36,6 +37,7 @@ export const trialSessionsHelper = (
   }[];
   trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
   sessionTypeOptions: { label: string; value: TrialSessionTypes }[];
+  showCreateTermButton: boolean;
   trialCitiesByState: {
     label: string;
     options: { label: string; value: string }[];
@@ -97,6 +99,15 @@ export const trialSessionsHelper = (
   }
 
   const states = getTrialCitiesGroupedByState();
+  states.unshift({
+    label: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+    options: [
+      {
+        label: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+        value: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      },
+    ],
+  });
 
   const { endDateErrorMessage, startDateErrorMessage } =
     validateTrialSessionDateRange({
@@ -217,7 +228,7 @@ const filterAndSortTrialSessions = ({
     });
 };
 
-const formatTrialSessions = ({
+export const formatTrialSessions = ({
   judgeAssociatedToUser,
   trialSessions,
 }: {
@@ -314,7 +325,7 @@ export const thirtyDaysBeforeTrial = (startDate?: string): string => {
   return formatDateString(thirtyDaysBeforeTrialIso, FORMATS.MMDDYY);
 };
 
-type TrialSessionRow = {
+export type TrialSessionRow = {
   trialSessionId: string;
   showAlertForNOTTReminder: boolean;
   alertMessageForNOTT: string;
@@ -334,7 +345,7 @@ export function isTrialSessionRow(item: any): item is TrialSessionRow {
   return !!item?.trialSessionId;
 }
 
-type TrialSessionWeek = {
+export type TrialSessionWeek = {
   sessionWeekStartDate: string;
   formattedSessionWeekStartDate: string;
 };

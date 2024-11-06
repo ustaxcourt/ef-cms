@@ -37,3 +37,7 @@ variable "dawson_dev_trusted_role_arns" {
 variable "log_snapshot_bucket_name" {
   type = string
 }
+
+variable "lower_env_account_id" {
+  type = string
+}
