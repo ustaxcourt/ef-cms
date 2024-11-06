@@ -1,9 +1,6 @@
-import { TDynamoRecord } from '../dynamoTypes';
-import { TrialSessionWorkingCopyNotes } from '@shared/business/entities/trialSessions/SpeciailTrialSessions';
-import { batchGet } from '../../dynamodbClientService';
 import { get } from '../../dynamodbClientService';
 
-interface TrialSessionWorkingCopy {
+type TrialSessionWorkingCopy = {
   entityName: string;
   sortOrder: string;
   sk: string;
@@ -29,7 +26,7 @@ interface TrialSessionWorkingCopy {
   userId: string;
   caseMetadata: object;
   trialSessionId: string;
-}
+};
 
 export const getTrialSessionWorkingCopy = ({
   applicationContext,
@@ -47,20 +44,3 @@ export const getTrialSessionWorkingCopy = ({
     },
     applicationContext,
   });
-
-export const getBulkTrialSessionWorkingCopies = async ({
-  applicationContext,
-  specialTrialSessions,
-}: {
-  applicationContext: IApplicationContext;
-  specialTrialSessions: Array<{ pk: string; sk: string }>;
-}): Promise<Array<TrialSessionWorkingCopyNotes>> => {
-  const records: TDynamoRecord[] = await batchGet({
-    applicationContext,
-    keys: specialTrialSessions,
-  });
-  return records.map(record => ({
-    sessionNotes: record.sessionNotes,
-    trialSessionId: record.trialSessionId,
-  }));
-};

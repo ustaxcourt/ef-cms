@@ -55,10 +55,7 @@ import { getAllPendingMotionDocketEntriesForJudge } from '@web-api/persistence/e
 import { getAllUsersByRole } from '@web-api/persistence/elasticsearch/users/getAllUsersByRole';
 import { getAllWebSocketConnections } from './persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getBlockedCases } from './persistence/elasticsearch/getBlockedCases';
-import {
-  getBulkTrialSessionWorkingCopies,
-  getTrialSessionWorkingCopy,
-} from './persistence/dynamo/trialSessions/getTrialSessionWorkingCopy';
+import { getBulkTrialSessionWorkingCopies } from './persistence/dynamo/trialSessions/getBulkTrialSessionWorkingCopies';
 import { getCalendaredCasesForTrialSession } from './persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession';
 import { getCaseByDocketNumber } from './persistence/dynamo/cases/getCaseByDocketNumber';
 import { getCaseDeadlinesByDateRange } from './persistence/elasticsearch/caseDeadlines/getCaseDeadlinesByDateRange';
@@ -114,6 +111,7 @@ import { getTableStatus } from './persistence/dynamo/getTableStatus';
 import { getTrialSessionById } from './persistence/dynamo/trialSessions/getTrialSessionById';
 import { getTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/getTrialSessionJobStatusForCase';
 import { getTrialSessionProcessingStatus } from './persistence/dynamo/trialSessions/getTrialSessionProcessingStatus';
+import { getTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/getTrialSessionWorkingCopy';
 import { getTrialSessions } from './persistence/dynamo/trialSessions/getTrialSessions';
 import { getUploadPolicy } from './persistence/s3/getUploadPolicy';
 import { getUserByEmail } from './persistence/dynamo/users/getUserByEmail';
