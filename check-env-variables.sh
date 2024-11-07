@@ -2,6 +2,8 @@
 
 # shellcheck disable=SC1091
 source "./scripts/helpers/suppress-output.sh"
+# shellcheck disable=SC1091
+source "./scripts/helpers/prior-confirmation.sh"
 
 {
   [[ -n $ZSH_VERSION && $ZSH_EVAL_CONTEXT =~ :file$ ]] ||
@@ -10,6 +12,7 @@ source "./scripts/helpers/suppress-output.sh"
 [[ $sourced -eq 0 ]] && exit="exit" || exit="return"
 
 quiet=$(should_suppress_output "$@")
+yes=$(has_prior_confirmation "$@")
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -19,7 +22,13 @@ NC='\033[0m'
 # verify expected env variables are set
 for EXPECTED_ENV_VAR in "$@"; do
   EXPECTED_ENV_VAR=$(xargs echo -n <<< "$EXPECTED_ENV_VAR")
-  if [[ -n "$EXPECTED_ENV_VAR" ]] && [[ "$EXPECTED_ENV_VAR" != "--quiet" ]] && [[ "$EXPECTED_ENV_VAR" != "-q" ]]; then
+  if {
+    [[ -n "$EXPECTED_ENV_VAR" ]] &&
+    [[ "$EXPECTED_ENV_VAR" != "--quiet" ]] &&
+    [[ "$EXPECTED_ENV_VAR" != "-q" ]] &&
+    [[ "$EXPECTED_ENV_VAR" != "--yes" ]] &&
+    [[ "$EXPECTED_ENV_VAR" != "-y" ]]
+  }; then
     # shellcheck disable=SC2296
     if {
       [[ -n $BASH_VERSION ]] && [[ -z "${!EXPECTED_ENV_VAR}" ]];
@@ -43,7 +52,13 @@ if [[ $quiet -eq 0 ]]; then
   # # print all expected env variables
   for EXPECTED_ENV_VAR in "$@"; do
     EXPECTED_ENV_VAR=$(xargs echo -n <<< "$EXPECTED_ENV_VAR")
-    if [[ -n "$EXPECTED_ENV_VAR" ]] && [[ "$EXPECTED_ENV_VAR" != "--quiet" ]] && [[ "$EXPECTED_ENV_VAR" != "-q" ]]; then
+    if {
+     [[ -n "$EXPECTED_ENV_VAR" ]] &&
+     [[ "$EXPECTED_ENV_VAR" != "--quiet" ]] &&
+     [[ "$EXPECTED_ENV_VAR" != "-q" ]] &&
+     [[ "$EXPECTED_ENV_VAR" != "--yes" ]] &&
+     [[ "$EXPECTED_ENV_VAR" != "-y" ]]
+    }; then
       if [[ ${EXPECTED_ENV_VAR} == *"AWS"* ]] || [[ ${EXPECTED_ENV_VAR} == *"PASS"* ]]; then
         echo "- $EXPECTED_ENV_VAR=*******"
       else
@@ -54,7 +69,7 @@ if [[ $quiet -eq 0 ]]; then
     fi
   done
 
-  if [[ -z "${CI}" ]] && { [[ -n $BASH_VERSION ]] || [[ $sourced -eq 0 ]]; }; then
+  if { [[ -z "${CI}" ]] && [[ $yes -eq 0 ]]; } && { [[ -n $BASH_VERSION ]] || [[ $sourced -eq 0 ]]; }; then
     printf  "%bAre you sure you want to continue? (press y to confirm)%b\n\n" "${YELLOW}" "${NC}"
     read -p "continue? (press y to confirm)" -n 1 -r
 

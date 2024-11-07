@@ -2,12 +2,21 @@
 
 # Returns the read-write endpoint for a given environment's RDS cluster
 
+# Parameters
+#   --yes    Presumes prior confirmation when checking environment variables
+
 # Usage
-#   ENV=dev ./scripts/postgres/get-read-write-endpoint.sh
+#   ENV=dev ./scripts/postgres/get-read-write-endpoint.sh --yes
 
 ( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 
-./check-env-variables.sh \
+# shellcheck disable=SC1091
+source "./scripts/helpers/prior-confirmation.sh"
+
+confirmed=$(has_prior_confirmation "$@")
+{ [[ "$confirmed" -eq 1 ]] || [[ -n "$CI" ]]; } && QUIET="--quiet"
+
+./check-env-variables.sh "$QUIET" \
   "ENV" \
   "AWS_SECRET_ACCESS_KEY" \
   "AWS_ACCESS_KEY_ID"
