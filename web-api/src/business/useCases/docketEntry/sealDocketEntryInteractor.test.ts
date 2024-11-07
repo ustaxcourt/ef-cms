@@ -40,6 +40,9 @@ describe('sealDocketEntryInteractor', () => {
   });
 
   it('should throw an error when the docket entry is not found', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
     await expect(
       sealDocketEntryInteractor(
         applicationContext,

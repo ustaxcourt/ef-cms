@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import { AUTOMATIC_BLOCKED_REASONS } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE_WITHOUT_PENDING } from '../../../../../shared/src/test/mockCase';
@@ -8,7 +9,13 @@ import {
 } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { deleteCaseDeadlineInteractor } from './deleteCaseDeadlineInteractor';
+import { deleteCaseDeadline as deleteCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
+import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
+
+const getCaseDeadlinesByDocketNumber =
+  getCaseDeadlinesByDocketNumberMock as jest.Mock;
+const deleteCaseDeadline = deleteCaseDeadlineMock as jest.Mock;
 
 describe('deleteCaseDeadlineInteractor', () => {
   let user;
@@ -26,9 +33,7 @@ describe('deleteCaseDeadlineInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockImplementation(() => mockDeadlines);
+    getCaseDeadlinesByDocketNumber.mockImplementation(() => mockDeadlines);
   });
 
   beforeEach(() => {
@@ -106,12 +111,8 @@ describe('deleteCaseDeadlineInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().deleteCaseDeadline.mock
-        .calls[0][0],
-    ).toMatchObject({
+    expect(deleteCaseDeadline.mock.calls[0][0]).toMatchObject({
       caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      docketNumber: '123-20',
     });
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
@@ -139,12 +140,8 @@ describe('deleteCaseDeadlineInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().deleteCaseDeadline.mock
-        .calls[0][0],
-    ).toMatchObject({
+    expect(deleteCaseDeadline.mock.calls[0][0]).toMatchObject({
       caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      docketNumber: '123-20',
     });
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]

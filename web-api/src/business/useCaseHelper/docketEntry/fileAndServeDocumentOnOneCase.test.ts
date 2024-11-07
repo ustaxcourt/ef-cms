@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import {
   AUTOMATIC_BLOCKED_REASONS,
   COURT_ISSUED_EVENT_CODES,
@@ -40,7 +41,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
         {
           docketEntryId: mockDocketEntryId,
           docketNumber: MOCK_CASE.docketNumber,
-          documentType: eventCodeMap.documentType,
+          documentType: eventCodeMap?.documentType,
           eventCode,
           filedByRole: ROLES.judge,
           signedAt: createISODateString(),

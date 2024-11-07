@@ -16,7 +16,11 @@ import { docketClerkUser, judgeUser } from './mockUsers';
 
 export const MOCK_CASE: RawCase = {
   archivedDocketEntries: [],
+  associatedJudge: 'Ashford',
+  associatedJudgeId: '190ad132-18d0-43ec-bafb-15468e405481',
+  canAllowPrintableDocketRecord: false,
   caseCaption: 'Test Petitioner, Petitioner',
+  caseStatusHistory: [],
   caseType: CASE_TYPES_MAP.other,
   consolidatedCases: [],
   correspondence: [],

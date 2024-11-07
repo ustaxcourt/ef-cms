@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/correspondence/mocks.jest';
 import { Correspondence } from '../../../../../shared/src/business/entities/Correspondence';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
@@ -7,6 +8,9 @@ import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { archiveCorrespondenceDocumentInteractor } from './archiveCorrespondenceDocumentInteractor';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { upsertCaseCorrespondence as upsertCaseCorrespondenceMock } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondence';
+
+const upsertCaseCorrespondence = upsertCaseCorrespondenceMock as jest.Mock;
 
 describe('archiveCorrespondenceDocumentInteractor', () => {
   let mockUserId = '2474e5c0-f741-4120-befa-b77378ac8bf0';
@@ -80,10 +84,7 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCaseCorrespondence.mock
-        .calls[0][0],
-    ).toMatchObject({
+    expect(upsertCaseCorrespondence.mock.calls[0][0]).toMatchObject({
       correspondence: {
         ...mockCorrespondence,
         archived: true,
