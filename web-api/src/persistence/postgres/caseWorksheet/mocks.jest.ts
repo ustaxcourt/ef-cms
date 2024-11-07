@@ -1,11 +1,11 @@
 import { mockFactory } from '@shared/test/mockFactory';
 
 jest.mock(
-  '@web-api/persistence/postgres/caseWorkSheet/getCaseWorksheetsByDocketNumber',
+  '@web-api/persistence/postgres/caseWorksheet/getCaseWorksheetsByDocketNumber',
   () => mockFactory('getCaseWorksheetsByDocketNumber'),
 );
 
 jest.mock(
-  '@web-api/persistence/postgres/caseWorkSheet/upsertCaseWorksheet',
+  '@web-api/persistence/postgres/caseWorksheet/upsertCaseWorksheet',
   () => mockFactory('upsertCaseWorksheet'),
 );

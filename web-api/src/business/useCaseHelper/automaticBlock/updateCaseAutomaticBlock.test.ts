@@ -50,11 +50,7 @@ describe('updateCaseAutomaticBlock', () => {
   });
 
   it('sets the case to automaticBlocked and calls deleteCaseTrialSortMappingRecords if it has deadlines', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockReturnValue([
-        { deadline: 'something' },
-      ]);
+    getCaseDeadlinesByDocketNumber.mockReturnValue([{ deadline: 'something' }]);
 
     const caseEntity = new Case(MOCK_CASE_WITHOUT_PENDING, {
       authorizedUser: mockDocketClerkUser,
