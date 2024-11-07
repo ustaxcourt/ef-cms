@@ -10,11 +10,9 @@ import { compact, some } from 'lodash';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
 export type FormattedPublicTrialSession = {
-  formattedTerm: string;
   formattedStartDate: string;
   formattedStartDateFull: string;
   formattedEstimatedEndDate: string;
-  sessionStatus: string;
 
   hasCourthouseInformation: boolean;
   formattedCityStateZip: string;
@@ -50,9 +48,6 @@ export const publicTrialSessionDetailsHelper = (
   formattedTrialSession: FormattedPublicTrialSession;
 } => {
   const trialSession = get(state.trialSessionDetailsPage.trialSession);
-
-  const twoDigitTermYear = trialSession.termYear.slice(2);
-  const formattedTerm = `${trialSession.term} ${twoDigitTermYear}`;
 
   const formattedStartDate = applicationContext
     .getUtilities()
@@ -92,10 +87,8 @@ export const publicTrialSessionDetailsHelper = (
     formattedEstimatedEndDate,
     formattedStartDate,
     formattedStartDateFull,
-    formattedTerm,
     hasCourthouseInformation,
-    isSwingSession: trialSession.isSwingSession,
-    sessionStatus: trialSession.sessionStatus,
+    isSwingSession: !!trialSession.swingSessionId,
     swingSessionId: trialSession.swingSessionId,
     swingSessionLocation: trialSession.swingSessionLocation,
     trialLocation: trialSession.trialLocation,

@@ -48,15 +48,10 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
       calendaredCases: [],
       city: 'Atlantis',
       courthouseName: 'a courthouse',
-      isSwingSession: false,
       postalCode: '11111',
-      sessionStatus: SESSION_STATUS_TYPES.open,
-      sessionType: 'Regular',
       startDate: '2025-12-01T00:00:00.000Z',
       state: 'AL',
       swingSessionId: undefined,
-      term: 'Fall',
-      termYear: '2025',
       trialLocation: 'Birmingham, Alabama',
     };
 

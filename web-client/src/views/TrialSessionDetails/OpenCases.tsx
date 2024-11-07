@@ -14,8 +14,9 @@ export const OpenCases = connect(
   function OpenCases({ openCases }) {
     return (
       <React.Fragment>
-        <div className="text-semibold push-right margin-bottom-2">
-          Count: {openCases.length}
+        <div className="text-right margin-bottom-2">
+          <span className="text-semibold">Count: </span>
+          {openCases.length}
         </div>
         <table
           aria-describedby="open-cases-tab"
@@ -25,7 +26,7 @@ export const OpenCases = connect(
           <thead>
             <tr>
               <th
-                aria-label="consolidated group indicator"
+                aria-label="Icons for consolidated and/or sealed cases"
                 className="consolidated-indicators"
               ></th>
               <th aria-label="docket number">Docket No.</th>

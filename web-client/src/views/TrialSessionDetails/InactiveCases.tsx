@@ -12,8 +12,9 @@ export const InactiveCases = connect(
   function InactiveCases({ inactiveCases }) {
     return (
       <React.Fragment>
-        <div className="text-semibold push-right margin-bottom-2">
-          Count: {inactiveCases.length}
+        <div className="text-right margin-bottom-2">
+          <span className="text-semibold">Count: </span>
+          {inactiveCases.length}
         </div>
         <table
           aria-describedby="inactive-cases-tab"
@@ -23,7 +24,7 @@ export const InactiveCases = connect(
           <thead>
             <tr>
               <th
-                aria-label="consolidated group indicator"
+                aria-label="Icons for consolidated and/or sealed cases"
                 className="consolidated-indicators"
               ></th>
               <th aria-label="Docket Number">Docket No.</th>

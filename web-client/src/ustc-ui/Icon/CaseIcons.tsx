@@ -14,10 +14,10 @@ export function CaseIcons({ formattedCase }: { formattedCase: any }) {
       >
         <Icon
           aria-hidden={!formattedCase.isSealed}
-          aria-label="sealed"
+          aria-label="Sealed"
           className="sealed-case-entry"
           icon="lock"
-          title="sealed"
+          title="Sealed"
         />
       </div>
       <span
