@@ -17,7 +17,7 @@ GENERATE_TOKEN_PARAMS=("--quiet")
 
 for param in "$@"; do
   [[ "$param" == "--rw" ]] && GENERATE_TOKEN_PARAMS+=("--rw")
-  [[ "$param" == "--yes" ]] && CHECK_ENV_PARAMS+=("--yes")
+  { [[ "$param" == "--yes" ]] || [[ "$param" == "-y" ]]; } && CHECK_ENV_PARAMS+=("--yes")
 done
 
 ./check-env-variables.sh "${CHECK_ENV_PARAMS[@]}"
