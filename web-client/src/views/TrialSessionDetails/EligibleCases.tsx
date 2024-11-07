@@ -61,7 +61,7 @@ export const EligibleCases = connect(
         >
           <thead>
             <tr>
-              <th aria-label="consolidated group indicator"></th>
+              <th aria-label="Icons for consolidated and/or sealed cases"></th>
               <th aria-label="Docket Number">Docket No.</th>
               <th aria-label="manually added indicator"></th>
               <th>Case Title</th>

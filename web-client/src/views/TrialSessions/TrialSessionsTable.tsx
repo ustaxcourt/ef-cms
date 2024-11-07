@@ -42,10 +42,8 @@ export const TrialSessionsTable = connect(
         <div className="overflow-x-auto">
           <div className="minw-tablet-lg ">
             <div className="text-right">
-              <span className="text-bold">Count:</span>{' '}
-              <span className="text-semibold">
-                {trialSessionsHelper.trialSessionsCount}
-              </span>
+              <span className="text-semibold">Count: </span>
+              {trialSessionsHelper.trialSessionsCount}
             </div>
             <div className="padding-1"></div>
             <table

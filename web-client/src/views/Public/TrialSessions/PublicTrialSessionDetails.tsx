@@ -61,14 +61,14 @@ const PublicTrialSessionInformation = ({
       >
         Back to scheduled trial sessions
       </Button>
-      <h1>Session Information</h1>
+      <h2 className="h1-size">Session Information</h2>
       <div className="margin-bottom-205">
         {`Information on this page is current as of ${formattedNow}.`}
       </div>
       {(formattedTrialSession.isSwingSession ||
         formattedTrialSession.hasCourthouseInformation) && (
         <div
-          className="card padding-205 maxw-mobile-lg"
+          className="card padding-205 maxw-mobile-lg trial-session-public-card"
           data-testid="public-trial-session-details-box"
         >
           <h3 className="underlined">Details</h3>
@@ -77,16 +77,10 @@ const PublicTrialSessionInformation = ({
               <div>
                 <span className="label">Courthouse location</span>
                 <div className="padding-05"></div>
-                <span>{formattedTrialSession.courthouseName}</span>
-                <span className="address-line">
-                  {formattedTrialSession.address1}
-                </span>
-                <span className="address-line">
-                  {formattedTrialSession.address2}
-                </span>
-                <span className="address-line">
-                  {formattedTrialSession.formattedCityStateZip}
-                </span>
+                <div>{formattedTrialSession.courthouseName}</div>
+                <div>{formattedTrialSession.address1}</div>
+                <div>{formattedTrialSession.address2}</div>
+                <div>{formattedTrialSession.formattedCityStateZip}</div>
               </div>
             )}
             {formattedTrialSession.isSwingSession && (
@@ -95,12 +89,12 @@ const PublicTrialSessionInformation = ({
                 <div className="padding-05"></div>
                 <span className="display-flex gap-1 flex-align-center">
                   <NonPhone>
-                    {/* We don't show the swing session icon in mobile because it is not clear without hover tooltip */}
                     <FontAwesomeIcon
+                      aria-label="Swing session: will be held in two cities"
                       className="fa-icon-blue"
                       icon="link"
                       size="sm"
-                      title="swing session"
+                      title="Swing session: will be held in two cities"
                     />
                   </NonPhone>
                   <a
@@ -131,61 +125,65 @@ function NonMobileOpenCases({
 }) {
   return (
     <React.Fragment>
-      <div className="text-semibold push-right margin-bottom-2">
-        Count: {openCases.length}
+      <div className="text-right margin-bottom-2">
+        <span className="text-semibold">Count: </span>
+        {openCases.length}
       </div>
-      <table
-        className="usa-table ustc-table trial-sessions subsection"
-        data-testid="public-open-cases"
-        id="public-open-cases"
-      >
-        <thead>
-          <tr>
-            <th
-              aria-label="consolidated group indicator"
-              className="consolidated-indicators"
-            ></th>
-            <th aria-label="docket number">Docket No.</th>
-            <th>Case Title</th>
-            <th>Petitioner Counsel</th>
-            <th>Respondent Counsel</th>
-          </tr>
-        </thead>
-        <tbody>
-          {openCases?.map(publicCase => (
-            <tr
-              className="eligible-cases-row"
-              data-testid={`trial-session-detail-row-${publicCase.docketNumberWithSuffix}`}
-              key={publicCase.docketNumberWithSuffix}
-            >
-              <td>
-                <CaseIcons formattedCase={publicCase} />
-              </td>
-              <td>
-                <span
-                  className={classNames({
-                    'margin-left-2':
-                      publicCase.inConsolidatedGroup && !publicCase.isLeadCase,
-                  })}
-                >
-                  <CaseLink formattedCase={publicCase} />
-                </span>
-              </td>
-              <td>{publicCase.caseTitle}</td>
-              <td>
-                {publicCase.privatePractitioners?.map(practitioner => (
-                  <div key={practitioner.name}>{practitioner.name}</div>
-                ))}
-              </td>
-              <td>
-                {publicCase.irsPractitioners?.map(respondent => (
-                  <div key={respondent.name}>{respondent.name}</div>
-                ))}
-              </td>
+      <div className="overflow-x-auto overflow-y-hidden">
+        <table
+          className="usa-table ustc-table trial-sessions subsection"
+          data-testid="public-open-cases"
+          id="public-open-cases"
+        >
+          <thead>
+            <tr>
+              <th
+                aria-label="Icons for consolidated and/or sealed cases"
+                className="consolidated-indicators"
+              ></th>
+              <th aria-label="docket number">Docket No.</th>
+              <th>Case Title</th>
+              <th>Petitioner Counsel</th>
+              <th>Respondent Counsel</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {openCases?.map(publicCase => (
+              <tr
+                className="eligible-cases-row"
+                data-testid={`trial-session-detail-row-${publicCase.docketNumberWithSuffix}`}
+                key={publicCase.docketNumberWithSuffix}
+              >
+                <td>
+                  <CaseIcons formattedCase={publicCase} />
+                </td>
+                <td>
+                  <span
+                    className={classNames({
+                      'margin-left-2':
+                        publicCase.inConsolidatedGroup &&
+                        !publicCase.isLeadCase,
+                    })}
+                  >
+                    <CaseLink formattedCase={publicCase} />
+                  </span>
+                </td>
+                <td>{publicCase.caseTitle}</td>
+                <td>
+                  {publicCase.privatePractitioners?.map(practitioner => (
+                    <div key={practitioner.name}>{practitioner.name}</div>
+                  ))}
+                </td>
+                <td>
+                  {publicCase.irsPractitioners?.map(respondent => (
+                    <div key={respondent.name}>{respondent.name}</div>
+                  ))}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       {openCases.length === 0 && <p>There are no open cases.</p>}
     </React.Fragment>
   );
@@ -199,9 +197,9 @@ function MobileOpenCases({
   return (
     <React.Fragment>
       <div className="grid-row margin-bottom-2 width-full flex-align-center"></div>
-      <div className="width-full text-right">
-        <span className="text-bold">Count:</span>{' '}
-        <span className="text-semibold">{openCases.length}</span>
+      <div className="text-right margin-bottom-2">
+        <span className="text-semibold">Count: </span>
+        {openCases.length}
       </div>
       <div className="padding-1"></div>
       <table className="usa-table usa-table--stacked-header usa-table--borderless">
