@@ -7,8 +7,8 @@
 #   --yes   Presumes prior confirmation when checking environment variables
 
 # Usage examples
-#   ENV=dev ./scripts/postgres/connect.sh
-#   ENV=dev ./scripts/postgres/connect.sh --rw --yes
+#   ./scripts/postgres/connect.sh
+#   DB_USER="${ENV}_dawson" ./scripts/postgres/connect.sh --rw --yes
 
 ( ! command -v psql > /dev/null ) && echo "psql must be installed on your machine." && exit 1
 
