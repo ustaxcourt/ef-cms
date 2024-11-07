@@ -4,20 +4,26 @@
 
 # Parameters
 #   --rw    Connects to the cluster's writeable endpoint
+#   --yes   Presumes prior confirmation when checking environment variables
 
 # Usage examples
 #   ENV=dev ./scripts/postgres/connect.sh
-#   ENV=dev ./scripts/postgres/connect.sh --rw
+#   ENV=dev ./scripts/postgres/connect.sh --rw --yes
 
 ( ! command -v psql > /dev/null ) && echo "psql must be installed on your machine." && exit 1
 
+CHECK_ENV_PARAMS=("ENV" "AWS_ACCESS_KEY_ID" "AWS_SECRET_ACCESS_KEY")
+GENERATE_TOKEN_PARAMS=("--quiet")
+
 for param in "$@"; do
-  if [[ "$param" == "--rw" ]]; then
-    RW="--rw"
-  fi
+  [[ "$param" == "--rw" ]] && GENERATE_TOKEN_PARAMS+=("--rw")
+  [[ "$param" == "--yes" ]] && CHECK_ENV_PARAMS+=("--yes")
 done
 
-source "./scripts/postgres/generate-token.sh" "$RW" --quiet
+./check-env-variables.sh "${CHECK_ENV_PARAMS[@]}"
+
+# shellcheck disable=SC1091
+source "./scripts/postgres/generate-token.sh" "${GENERATE_TOKEN_PARAMS[@]}"
 
 {
   [[ -z "$DB_HOST" ]] ||
