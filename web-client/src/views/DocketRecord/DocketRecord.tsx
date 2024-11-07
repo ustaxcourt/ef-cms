@@ -30,6 +30,8 @@ export const DocketRecord = connect(
     setSelectedDocumentsForDownloadSequence:
       sequences.setSelectedDocumentsForDownloadSequence,
     showModal: state.modal.showModal,
+    sortTableSequence: sequences.sortTableSequence,
+    tableSort: state.tableSort,
   },
 
   function DocketRecord({
@@ -39,6 +41,8 @@ export const DocketRecord = connect(
     openUnsealDocketEntryModalSequence,
     setSelectedDocumentsForDownloadSequence,
     showModal,
+    sortTableSequence,
+    tableSort,
   }) {
     const selectAllCheckboxRef = useRef<HTMLInputElement>(null);
 
@@ -93,9 +97,12 @@ export const DocketRecord = connect(
                   {columns.map(column => {
                     return (
                       <SortableHeader
+                        key={column.columnName}
                         sortField={column.sortFieldInfo.sortField}
                         sortType={column.sortFieldInfo.sortType}
+                        tableSort={tableSort}
                         title={column.columnName}
+                        onClickSequence={sortTableSequence}
                       />
                     );
                   })}
@@ -303,20 +310,25 @@ export const DocketRecord = connect(
 
 DocketRecord.displayName = 'DocketRecord';
 
-function SortableHeader({ sortField, sortType, title }) {
+function SortableHeader({
+  onClickSequence,
+  sortField,
+  sortType,
+  tableSort,
+  title,
+}) {
   return (
     <th>
       <SortableColumn
         ascText={getAscendingTextForSortType(sortType)}
-        currentlySortedOrder="asc"
+        currentlySortedField={tableSort.sortField}
+        currentlySortedOrder={tableSort.sortOrder}
         defaultSortOrder={ASCENDING}
         descText={getDescendingTextForSortType(sortType)}
         hasRows={true}
-        // currentlySortedField=""
-        // currentlySortedOrder=""
         sortField={sortField}
         title={title}
-        onClickSequence={() => console.log('clicked sort')}
+        onClickSequence={onClickSequence}
       />
     </th>
   );
