@@ -26,12 +26,8 @@ source "./scripts/helpers/prior-confirmation.sh"
 
 succinct=0
 for param in "$@"; do
-  if [[ "$param" == "--rw" ]]; then
-    RW=1
-  fi
-  if [[ "$param" == "--succinct" ]]; then
-    succinct=1
-  fi
+  [[ "$param" == "--rw" ]] && RW=1
+  [[ "$param" == "--succinct" ]] && succinct=1
 done
 
 CHECK_PARAMS=("ENV" "AWS_ACCESS_KEY_ID" "AWS_SECRET_ACCESS_KEY")
@@ -68,8 +64,7 @@ if [[ "$sshhh" -eq 0 ]]; then
   if [[ "$succinct" -eq 1 ]]; then
     echo "$TOKEN"
   else
-    echo -e "\n"
-    echo -e "############ Temporary postgres credentials ############\n"
+    echo -e "\n\n############ Temporary postgres credentials ############\n"
     echo "Host/Socket:"
     echo -e "${DB_HOST}\n"
     echo "Port:"
