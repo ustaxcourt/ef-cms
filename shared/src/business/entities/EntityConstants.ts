@@ -1639,10 +1639,15 @@ export const DOCKET_ENTRY_SEALED_TO_TYPES = {
 export const ASCENDING: 'asc' = 'asc';
 export const DESCENDING: 'desc' = 'desc';
 
-export const CHRONOLOGICALLY_ASCENDING = 'Oldest to newest';
-export const CHRONOLOGICALLY_DESCENDING = 'Newest to oldest';
-export const ALPHABETICALLY_ASCENDING = 'In A-Z ascending order';
-export const ALPHABETICALLY_DESCENDING = 'In Z-A descending order';
+export const SORT_ASCENDING_TEXT = {
+  date: 'Oldest to newest',
+  string: 'In A-Z ascending order',
+};
+
+export const SORT_DESCENDING_TEXT = {
+  date: 'Newest to oldest',
+  string: 'In Z-A descending order',
+};
 
 export const PRACTITIONER_DOCUMENT_TYPES_MAP = {
   APPLICATION_PACKAGE: 'Application Package',
