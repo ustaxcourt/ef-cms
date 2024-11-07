@@ -19,10 +19,10 @@ source "./scripts/helpers/suppress-output.sh"
 source "./scripts/helpers/prior-confirmation.sh"
 
 {
-  [[ -n $ZSH_VERSION && $ZSH_EVAL_CONTEXT =~ :file$ ]] ||
-  [[ -n $BASH_VERSION ]] && (return 0 2>/dev/null);
+  [[ -n "$ZSH_VERSION" && "$ZSH_EVAL_CONTEXT" =~ :file$ ]] ||
+  [[ -n "$BASH_VERSION" ]] && (return 0 2>/dev/null);
 } && sourced=1 || sourced=0
-[[ $sourced -eq 0 ]] && exit="exit" || exit="return"
+[[ "$sourced" -eq 0 ]] && exit="exit" || exit="return"
 
 succinct=0
 for param in "$@"; do
@@ -34,16 +34,15 @@ for param in "$@"; do
   fi
 done
 
+CHECK_PARAMS=("ENV" "AWS_ACCESS_KEY_ID" "AWS_SECRET_ACCESS_KEY")
+
 sshhh=$(should_suppress_output "$@")
-{ [[ "$sshhh" -eq 1 ]] || [[ "$succinct" -eq 1 ]]; } && QUIET="--quiet"
+{ [[ "$sshhh" -eq 1 ]] || [[ "$succinct" -eq 1 ]]; } && CHECK_PARAMS+=("--quiet")
 
 confirmed=$(has_prior_confirmation "$@")
-[[ "$sshhh" -eq 0 ]] && [[ "$succinct" -eq 0 ]] && [[ "$confirmed" -eq 1 ]] && YES="--yes"
+[[ "$sshhh" -eq 0 ]] && [[ "$succinct" -eq 0 ]] && [[ "$confirmed" -eq 1 ]] && CHECK_PARAMS+=("--yes")
 
-./check-env-variables.sh "${QUIET}${YES}" \
-  "ENV" \
-  "AWS_SECRET_ACCESS_KEY" \
-  "AWS_ACCESS_KEY_ID"
+./check-env-variables.sh "${CHECK_PARAMS[@]}"
 
 [[ "$RW" -eq 1 ]] && ENDPOINT="Endpoint" || ENDPOINT="ReaderEndpoint"
 
