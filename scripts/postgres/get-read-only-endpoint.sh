@@ -13,12 +13,11 @@
 # shellcheck disable=SC1091
 source "./scripts/helpers/prior-confirmation.sh"
 
-confirmed=$(has_prior_confirmation "$@")
-{ [[ "$confirmed" -eq 1 ]] || [[ -n "$CI" ]]; } && QUIET="--quiet"
+CHECK_PARAMS=("ENV" "AWS_ACCESS_KEY_ID" "AWS_SECRET_ACCESS_KEY")
 
-./check-env-variables.sh "$QUIET" \
-  "ENV" \
-  "AWS_SECRET_ACCESS_KEY" \
-  "AWS_ACCESS_KEY_ID"
+confirmed=$(has_prior_confirmation "$@")
+{ [[ "$confirmed" -eq 1 ]] || [[ -n "$CI" ]]; } && CHECK_PARAMS+=("--quiet")
+
+./check-env-variables.sh "${CHECK_PARAMS[@]}"
 
 aws rds describe-db-clusters --db-cluster-identifier "${ENV}-dawson-cluster" | jq -r ".DBClusters[0].ReaderEndpoint"
