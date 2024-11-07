@@ -8,6 +8,9 @@ import { unsealDocketEntryInteractor } from './unsealDocketEntryInteractor';
 
 describe('unsealDocketEntryInteractor', () => {
   const answerDocketEntryId = 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
+  applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
   it('should only allow docket clerks to unseal a docket entry', async () => {
     await expect(
@@ -36,9 +39,6 @@ describe('unsealDocketEntryInteractor', () => {
   });
 
   it('should mark the docket entry as unsealed and save', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
     const unsealedDocketEntry = await unsealDocketEntryInteractor(
       applicationContext,
       {

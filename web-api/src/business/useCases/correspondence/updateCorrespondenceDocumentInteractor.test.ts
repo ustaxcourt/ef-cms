@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/correspondence/mocks.jest';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -13,6 +14,9 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { updateCorrespondenceDocumentInteractor } from './updateCorrespondenceDocumentInteractor';
+import { upsertCaseCorrespondence as upsertCaseCorrespondenceMock } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondence';
+
+const upsertCaseCorrespondence = upsertCaseCorrespondenceMock as jest.Mock;
 
 describe('updateCorrespondenceDocumentInteractor', () => {
   const mockDocketEntryId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
@@ -95,10 +99,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCaseCorrespondence.mock
-        .calls[0][0],
-    ).toMatchObject({
+    expect(upsertCaseCorrespondence.mock.calls[0][0]).toMatchObject({
       correspondence: {
         ...mockCorrespondence,
         documentTitle: 'A title that has been updated',

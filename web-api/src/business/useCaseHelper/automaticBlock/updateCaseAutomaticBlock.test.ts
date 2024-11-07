@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
@@ -10,8 +11,12 @@ import {
 import { PENDING_DOCKET_ENTRY } from '../../../../../shared/src/test/mockDocketEntry';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
+import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseAutomaticBlock } from './updateCaseAutomaticBlock';
+
+const getCaseDeadlinesByDocketNumber =
+  getCaseDeadlinesByDocketNumberMock as jest.Mock;
 
 describe('updateCaseAutomaticBlock', () => {
   let mockCase;
@@ -22,9 +27,7 @@ describe('updateCaseAutomaticBlock', () => {
   });
 
   it('sets the case to automaticBlocked and calls deleteCaseTrialSortMappingRecords if it has pending documents', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockReturnValue([]);
+    getCaseDeadlinesByDocketNumber.mockReturnValue([]);
     mockCase.docketEntries = [PENDING_DOCKET_ENTRY];
 
     const caseEntity = new Case(mockCase, {
@@ -73,11 +76,7 @@ describe('updateCaseAutomaticBlock', () => {
   });
 
   it('does not set the case to automaticBlocked or call deleteCaseTrialSortMappingRecords if it already has a trial date', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockReturnValue([
-        { deadline: 'something' },
-      ]);
+    getCaseDeadlinesByDocketNumber.mockReturnValue([{ deadline: 'something' }]);
 
     const caseEntity = new Case(
       {
@@ -102,11 +101,7 @@ describe('updateCaseAutomaticBlock', () => {
   });
 
   it('does not set the case to automaticBlocked or call deleteCaseTrialSortMappingRecords when the case is marked as high priority', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockReturnValue([
-        { deadline: 'something' },
-      ]);
+    getCaseDeadlinesByDocketNumber.mockReturnValue([{ deadline: 'something' }]);
     const caseEntity = new Case(
       {
         ...MOCK_CASE_WITHOUT_PENDING,
@@ -130,9 +125,7 @@ describe('updateCaseAutomaticBlock', () => {
   });
 
   it('sets the case to not automaticBlocked but does not call createCaseTrialSortMappingRecords if the case does not have deadlines or pending items and the case is not generalDocketReadyForTrial status', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockReturnValue([]);
+    getCaseDeadlinesByDocketNumber.mockReturnValue([]);
 
     const caseEntity = new Case(MOCK_CASE_WITHOUT_PENDING, {
       authorizedUser: mockDocketClerkUser,
@@ -154,9 +147,7 @@ describe('updateCaseAutomaticBlock', () => {
   });
 
   it('sets the case to not automaticBlocked and calls createCaseTrialSortMappingRecords if the case does not have deadlines or pending items and the case is generalDocketReadyForTrial status', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockReturnValue([]);
+    getCaseDeadlinesByDocketNumber.mockReturnValue([]);
 
     const caseEntity = new Case(
       {
@@ -184,9 +175,7 @@ describe('updateCaseAutomaticBlock', () => {
   });
 
   it('does not call createCaseTrialSortMappingRecords if the case has no trial city', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockReturnValue([]);
+    getCaseDeadlinesByDocketNumber.mockReturnValue([]);
 
     const caseEntity = new Case(
       {

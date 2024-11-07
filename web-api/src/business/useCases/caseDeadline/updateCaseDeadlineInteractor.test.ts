@@ -1,7 +1,12 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { createCaseDeadline as createCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/createCaseDeadline';
+import { deleteCaseDeadline as deleteCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseDeadlineInteractor } from './updateCaseDeadlineInteractor';
+
+const createCaseDeadline = createCaseDeadlineMock as jest.Mock;
+const deleteCaseDeadline = deleteCaseDeadlineMock as jest.Mock;
 
 describe('updateCaseDeadlineInteractor', () => {
   const CASE_DEADLINE_ID = '6805d1ab-18d0-43ec-bafb-654e83405416';
@@ -18,7 +23,6 @@ describe('updateCaseDeadlineInteractor', () => {
   it('throws an error if the user is not valid or authorized', async () => {
     await expect(
       updateCaseDeadlineInteractor(
-        applicationContext,
         {
           caseDeadline: mockCaseDeadline,
         },
@@ -28,27 +32,17 @@ describe('updateCaseDeadlineInteractor', () => {
   });
 
   it('updates a case deadline', async () => {
-    applicationContext.environment.stage = 'local';
-
     const caseDeadline = await updateCaseDeadlineInteractor(
-      applicationContext,
       {
         caseDeadline: mockCaseDeadline,
       },
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().deleteCaseDeadline.mock
-        .calls[0][0],
-    ).toMatchObject({
+    expect(deleteCaseDeadline.mock.calls[0][0]).toMatchObject({
       caseDeadlineId: CASE_DEADLINE_ID,
-      docketNumber: '123-20',
     });
-    expect(
-      applicationContext.getPersistenceGateway().createCaseDeadline.mock
-        .calls[0][0],
-    ).toMatchObject({
+    expect(createCaseDeadline.mock.calls[0][0]).toMatchObject({
       caseDeadline: mockCaseDeadline,
     });
     expect(caseDeadline).toBeDefined();

@@ -30,6 +30,8 @@ export const archiveCorrespondenceDocument = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
+  console.log(caseToUpdate);
+
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
   const correspondenceToArchiveEntity = caseEntity.correspondence.find(
     c => c.correspondenceId === correspondenceId,

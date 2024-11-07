@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/correspondence/mocks.jest';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -13,6 +14,9 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { upsertCaseCorrespondence as upsertCaseCorrespondenceMock } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondence';
+
+const upsertCaseCorrespondence = upsertCaseCorrespondenceMock as jest.Mock;
 
 describe('fileCorrespondenceDocumentInteractor', () => {
   const mockCase = {
@@ -119,10 +123,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       },
       docketClerkUser,
     );
-    expect(
-      applicationContext.getPersistenceGateway().updateCaseCorrespondence.mock
-        .calls[0][0],
-    ).toMatchObject({
+    expect(upsertCaseCorrespondence.mock.calls[0][0]).toMatchObject({
       correspondence: {
         correspondenceId: mockCorrespondenceId,
         documentTitle: mockDocumentTitle,
