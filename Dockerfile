@@ -1,6 +1,6 @@
 # Note: node-20.14.0-chrome-125.0.* is debian 12.5 (bookworm)
 
-FROM cypress/browsers:node-20.18.0-chrome-129.0.6668.89-1-ff-131.0.2-edge-129.0.2792.65-1
+FROM cypress/browsers:node-20.18.0-chrome-130.0.6723.69-1-ff-131.0.3-edge-130.0.2849.52-1
 
 WORKDIR /home/app
 
@@ -30,6 +30,7 @@ RUN apt-get install -y \
   ghostscript \
   chromium \
   openssh-client \
+  postgresql-client \
   sudo
 
 # These are needed to prevent node canvas from failing during node-gyp build steps
@@ -37,7 +38,7 @@ RUN apt-get install -y build-essential
 RUN apt-get install -y libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.18.13.zip" -o "awscliv2.zip" && \
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.18.18.zip" -o "awscliv2.zip" && \
   unzip awscliv2.zip && \
   ./aws/install && \
   rm -rf awscliv2.zip
