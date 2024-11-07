@@ -1,4 +1,7 @@
 /* eslint-disable max-lines */
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/correspondence/mocks.jest';
 import {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
@@ -126,7 +129,9 @@ describe('Case entity', () => {
   });
 
   it('defaults the orders to false', () => {
-    const myCase = new Case(MOCK_CASE, { authorizedUser: mockDocketClerkUser });
+    const myCase = new Case(MOCK_CASE, {
+      authorizedUser: mockDocketClerkUser,
+    });
 
     expect(myCase).toMatchObject({
       isSealed: false,

@@ -85,7 +85,7 @@ export class Case extends JoiValidationEntity {
   public blocked?: boolean;
   public blockedDate?: string;
   public blockedReason?: string;
-  public caseStatusHistory: CaseStatusChange[];
+  public caseStatusHistory?: CaseStatusChange[];
   public caseNote?: string;
   public damages?: number;
   public highPriority?: boolean;
@@ -134,7 +134,7 @@ export class Case extends JoiValidationEntity {
   public noticeOfTrialDate?: string;
   public docketNumberWithSuffix?: string;
   public canAllowDocumentService?: boolean;
-  public canAllowPrintableDocketRecord!: boolean;
+  public canAllowPrintableDocketRecord?: boolean;
   public canDojPractitionersRepresentParty?: boolean;
   public archivedDocketEntries?: RawDocketEntry[];
   public docketEntries: any[];
@@ -1493,7 +1493,7 @@ export class Case extends JoiValidationEntity {
     const date = createISODateString();
 
     this.status = updatedCaseStatus;
-    this.caseStatusHistory.push({
+    this.caseStatusHistory?.push({
       changedBy,
       date,
       updatedCaseStatus,
@@ -2144,11 +2144,11 @@ export const shouldGenerateNoticesForCase = rawCase => {
 
 /**
  *  determines whether or not we should show the printable docket record
- * @param {Object} rawCase  the case we are using to determine whether we should show the printable docket record
+ * @param {Object} rawCase the case we are using to determine whether we should show the printable docket record
  * @returns {Boolean} whether or not we should show the printable docket record
  */
 export const canAllowPrintableDocketRecord = rawCase => {
-  if (typeof rawCase.canAllowPrintableDocketRecord !== 'undefined') {
+  if (rawCase.canAllowPrintableDocketRecord !== undefined) {
     return rawCase.canAllowPrintableDocketRecord;
   }
   return rawCase.status !== CASE_STATUS_TYPES.new;
