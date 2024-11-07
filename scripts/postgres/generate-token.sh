@@ -9,9 +9,9 @@
 #   --succinct    Outputs only the generated token (not compatible with --quiet)
 
 # Usage examples
-#   ENV=dev ./scripts/postgres/generate-token.sh
-#   ENV=dev ./scripts/postgres/generate-token.sh --rw --succinct
-#   ENV=dev DB_USER=test_dawson ./scripts/postgres/generate-token.sh --rw
+#   ./scripts/postgres/generate-token.sh
+#   ./scripts/postgres/generate-token.sh --rw --succinct
+#   DB_USER="${ENV}_dawson" ./scripts/postgres/generate-token.sh --rw
 
 # shellcheck disable=SC1091
 source "./scripts/helpers/suppress-output.sh"
