@@ -9,7 +9,9 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { orderBy, some } from 'lodash';
+import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const fileCourtIssuedOrder = async (
@@ -102,18 +104,13 @@ export const fileCourtIssuedOrder = async (
   });
 
   if (documentMetadata.parentMessageId) {
-    const messages = await applicationContext
-      .getPersistenceGateway()
-      .getMessageThreadByParentId({
-        applicationContext,
-        parentMessageId: documentMetadata.parentMessageId,
-      });
+    const messages = await getMessageThreadByParentId({
+      parentMessageId: documentMetadata.parentMessageId,
+    });
 
     const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
 
-    const messageEntity = new Message(mostRecentMessage, {
-      applicationContext,
-    }).validate();
+    const messageEntity = new Message(mostRecentMessage).validate();
 
     const isAttached = some(
       messageEntity.attachments,
@@ -127,8 +124,7 @@ export const fileCourtIssuedOrder = async (
       });
     }
 
-    await applicationContext.getPersistenceGateway().updateMessage({
-      applicationContext,
+    await updateMessage({
       message: messageEntity.validate().toRawObject(),
     });
   }

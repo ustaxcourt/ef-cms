@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/messages/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
@@ -5,11 +6,11 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getOutboxMessagesForUserInteractor } from './getOutboxMessagesForUserInteractor';
+import { getUserOutboxMessages } from '@web-api/persistence/postgres/messages/getUserOutboxMessages';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
-import { omit } from 'lodash';
 
 describe('getOutboxMessagesForUserInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
@@ -31,7 +32,7 @@ describe('getOutboxMessagesForUserInteractor', () => {
       caseTitle: 'Bill Burr',
       createdAt: '2019-03-01T21:40:46.415Z',
       docketNumber: '123-45',
-      docketNumberWithSuffix: '123-45S',
+      docketNumberWithSuffix: '123-45',
       entityName: 'MessageResult',
       from: 'Test Petitionsclerk2',
       fromSection: PETITIONS_SECTION,
@@ -40,8 +41,6 @@ describe('getOutboxMessagesForUserInteractor', () => {
       message: "How's it going?",
       messageId: '9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
       parentMessageId: '9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
-      pk: 'case|9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
-      sk: 'message|9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
       subject: 'Hey!',
       to: 'Test Petitionsclerk',
       toSection: PETITIONS_SECTION,
@@ -49,9 +48,8 @@ describe('getOutboxMessagesForUserInteractor', () => {
       trialDate: '2028-03-01T21:40:46.415Z',
       trialLocation: 'El Paso, Texas',
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getUserOutboxMessages.mockReturnValue([messageData]);
+
+    (getUserOutboxMessages as jest.Mock).mockReturnValue([messageData]);
 
     const returnedMessages = await getOutboxMessagesForUserInteractor(
       applicationContext,
@@ -61,9 +59,7 @@ describe('getOutboxMessagesForUserInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getUserOutboxMessages,
-    ).toHaveBeenCalled();
-    expect(returnedMessages).toMatchObject([omit(messageData, 'pk', 'sk')]);
+    expect(getUserOutboxMessages).toHaveBeenCalled();
+    expect(returnedMessages).toMatchObject([messageData]);
   });
 });
