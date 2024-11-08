@@ -42,7 +42,7 @@ export function caseWorksheetEntity(caseWorksheet) {
   return new CaseWorksheet(
     transformNullToUndefined({
       ...caseWorksheet,
-      filingDate: caseWorksheet.finalBriefDueDate.toISOString(),
+      filingDate: caseWorksheet.finalBriefDueDate?.toISOString(),
     }),
   );
 }
