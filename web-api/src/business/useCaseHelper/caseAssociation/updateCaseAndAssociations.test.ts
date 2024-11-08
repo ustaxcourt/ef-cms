@@ -966,7 +966,7 @@ describe('updateCaseAndAssociations', () => {
       expect(getCaseDeadlinesByDocketNumber).toHaveBeenCalled();
       expect(CaseDeadline.validateRawCollection).toHaveBeenCalled();
       expect(upsertCaseDeadline).toHaveBeenCalledWith({
-        caseDeadline: { some: 'deadline' },
+        caseDeadlineToUpsert: { some: 'deadline' },
       });
     });
   });
