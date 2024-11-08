@@ -14,72 +14,75 @@ export const OpenCases = connect(
   function OpenCases({ openCases }) {
     return (
       <React.Fragment>
-        <div className="text-semibold push-right margin-bottom-2">
-          Count: {openCases.length}
-        </div>
-        <table
-          aria-describedby="open-cases-tab"
-          className="usa-table ustc-table trial-sessions subsection"
-          id="open-cases"
-        >
-          <thead>
-            <tr>
-              <th
-                aria-label="consolidated group indicator"
-                className="consolidated-indicators"
-              ></th>
-              <th aria-label="docket number">Docket No.</th>
-              <th aria-label="manually added indicator"></th>
-              <th>Case Title</th>
-              <th>Petitioner Counsel</th>
-              <th>Respondent Counsel</th>
-              <th>Calendar Notes</th>
-            </tr>
-          </thead>
-          {openCases.map(item => (
-            <tbody key={item.docketNumber}>
-              <tr className="eligible-cases-row">
-                <td>
-                  <CaseIcons formattedCase={item} />
-                </td>
-                <td>
-                  <span
-                    className={classNames({
-                      'margin-left-2': item.shouldIndent,
-                    })}
-                  >
-                    <CaseLink formattedCase={item} />
-                  </span>
-                </td>
-                <td>
-                  {item.isManuallyAdded && (
-                    <span aria-label="manually added indicator">
-                      <FontAwesomeIcon
-                        className="mini-success"
-                        icon="calendar-plus"
-                        title="Manually added"
-                      />
-                    </span>
-                  )}
-                </td>
-                <td>{item.caseTitle}</td>
-                <td>
-                  {item.privatePractitioners.map(practitioner => (
-                    <div key={practitioner.userId}>{practitioner.name}</div>
-                  ))}
-                </td>
-                <td>
-                  {item.irsPractitioners.map(respondent => (
-                    <div key={respondent.userId}>{respondent.name}</div>
-                  ))}
-                </td>
-                <td>
-                  <PreformattedText text={item.calendarNotes} />
-                </td>
+        <div className="overflow-x-auto overflow-y-hidden">
+          <div className="push-right margin-bottom-2">
+            <span className="text-semibold">Count: </span>
+            {openCases.length}
+          </div>
+          <table
+            aria-describedby="open-cases-tab"
+            className="usa-table ustc-table trial-sessions subsection"
+            id="open-cases"
+          >
+            <thead>
+              <tr>
+                <th
+                  aria-label="Icons for consolidated and/or sealed cases"
+                  className="consolidated-indicators"
+                ></th>
+                <th aria-label="docket number">Docket No.</th>
+                <th aria-label="manually added indicator"></th>
+                <th>Case Title</th>
+                <th>Petitioner Counsel</th>
+                <th>Respondent Counsel</th>
+                <th>Calendar Notes</th>
               </tr>
-            </tbody>
-          ))}
-        </table>
+            </thead>
+            {openCases.map(item => (
+              <tbody key={item.docketNumber}>
+                <tr className="eligible-cases-row">
+                  <td>
+                    <CaseIcons formattedCase={item} />
+                  </td>
+                  <td>
+                    <span
+                      className={classNames({
+                        'margin-left-2': item.shouldIndent,
+                      })}
+                    >
+                      <CaseLink formattedCase={item} />
+                    </span>
+                  </td>
+                  <td>
+                    {item.isManuallyAdded && (
+                      <span aria-label="manually added indicator">
+                        <FontAwesomeIcon
+                          className="mini-success"
+                          icon="calendar-plus"
+                          title="Manually added"
+                        />
+                      </span>
+                    )}
+                  </td>
+                  <td>{item.caseTitle}</td>
+                  <td>
+                    {item.privatePractitioners.map(practitioner => (
+                      <div key={practitioner.userId}>{practitioner.name}</div>
+                    ))}
+                  </td>
+                  <td>
+                    {item.irsPractitioners.map(respondent => (
+                      <div key={respondent.userId}>{respondent.name}</div>
+                    ))}
+                  </td>
+                  <td>
+                    <PreformattedText text={item.calendarNotes} />
+                  </td>
+                </tr>
+              </tbody>
+            ))}
+          </table>
+        </div>
         {openCases.length === 0 && <p>There are no open cases.</p>}
       </React.Fragment>
     );

@@ -13,63 +13,66 @@ export const AllCases = connect(
   function AllCases({ allCases }) {
     return (
       <React.Fragment>
-        <div className="text-semibold push-right margin-bottom-2">
-          Count: {allCases.length}
-        </div>
-        <table
-          aria-describedby="all-cases-tab"
-          className="usa-table ustc-table trial-sessions subsection"
-          id="all-cases"
-        >
-          <thead>
-            <tr>
-              <th
-                aria-label="consolidated group indicator"
-                className="consolidated-indicators"
-              ></th>
-              <th aria-label="Docket Number">Docket No.</th>
-              <th aria-label="manually added indicator"></th>
-              <th>Case Title</th>
-              <th>Case Status</th>
-              <th>Disposition</th>
-              <th>Disposition Date</th>
-            </tr>
-          </thead>
-          {allCases.map(item => (
-            <tbody key={item.docketNumber}>
-              <tr className="eligible-cases-row">
-                <td>
-                  <CaseIcons formattedCase={item} />
-                </td>
-                <td>
-                  <span
-                    className={classNames({
-                      'margin-left-2': item.shouldIndent,
-                    })}
-                  >
-                    <CaseLink formattedCase={item} />
-                  </span>
-                </td>
-
-                <td>
-                  {item.isManuallyAdded && (
-                    <span aria-label="manually added indicator">
-                      <FontAwesomeIcon
-                        className="mini-success"
-                        icon="calendar-plus"
-                        title="Manually added"
-                      />
-                    </span>
-                  )}
-                </td>
-                <td>{item.caseTitle}</td>
-                <td>{item.status}</td>
-                <td>{item.disposition}</td>
-                <td>{item.removedFromTrialDateFormatted}</td>
+        <div className="overflow-x-auto overflow-y-hidden">
+          <div className="push-right margin-bottom-2">
+            <span className="text-semibold">Count: </span>
+            {allCases.length}
+          </div>
+          <table
+            aria-describedby="all-cases-tab"
+            className="usa-table ustc-table trial-sessions subsection"
+            id="all-cases"
+          >
+            <thead>
+              <tr>
+                <th
+                  aria-label="Icons for consolidated and/or sealed cases"
+                  className="consolidated-indicators"
+                ></th>
+                <th aria-label="Docket Number">Docket No.</th>
+                <th aria-label="manually added indicator"></th>
+                <th>Case Title</th>
+                <th>Case Status</th>
+                <th>Disposition</th>
+                <th>Disposition Date</th>
               </tr>
-            </tbody>
-          ))}
-        </table>
+            </thead>
+            {allCases.map(item => (
+              <tbody key={item.docketNumber}>
+                <tr className="eligible-cases-row">
+                  <td>
+                    <CaseIcons formattedCase={item} />
+                  </td>
+                  <td>
+                    <span
+                      className={classNames({
+                        'margin-left-2': item.shouldIndent,
+                      })}
+                    >
+                      <CaseLink formattedCase={item} />
+                    </span>
+                  </td>
+
+                  <td>
+                    {item.isManuallyAdded && (
+                      <span aria-label="manually added indicator">
+                        <FontAwesomeIcon
+                          className="mini-success"
+                          icon="calendar-plus"
+                          title="Manually added"
+                        />
+                      </span>
+                    )}
+                  </td>
+                  <td>{item.caseTitle}</td>
+                  <td>{item.status}</td>
+                  <td>{item.disposition}</td>
+                  <td>{item.removedFromTrialDateFormatted}</td>
+                </tr>
+              </tbody>
+            ))}
+          </table>
+        </div>
         {allCases.length === 0 && <p>There are no cases.</p>}
       </React.Fragment>
     );

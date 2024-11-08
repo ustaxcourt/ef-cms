@@ -9,10 +9,6 @@ export type PublicTrialSessionDetails = Pick<
   | 'trialLocation'
   | 'startDate'
   | 'estimatedEndDate'
-  | 'term'
-  | 'sessionStatus'
-  | 'termYear'
-  | 'sessionType'
   | 'courthouseName'
   | 'address1'
   | 'address2'
@@ -21,7 +17,6 @@ export type PublicTrialSessionDetails = Pick<
   | 'postalCode'
 > & {
   calendaredCases: RawPublicCase[];
-  isSwingSession: boolean;
   swingSessionLocation?: string;
 };
 
@@ -75,16 +70,11 @@ export const getPublicTrialSessionDetailsInteractor = async (
     city: fullTrialSessionEntity.city,
     courthouseName: fullTrialSessionEntity.courthouseName,
     estimatedEndDate: fullTrialSessionEntity.estimatedEndDate,
-    isSwingSession: !!fullTrialSessionEntity.swingSession,
     postalCode: fullTrialSessionEntity.postalCode,
-    sessionStatus: fullTrialSessionEntity.sessionStatus,
-    sessionType: fullTrialSessionEntity.sessionType,
     startDate: fullTrialSessionEntity.startDate,
     state: fullTrialSessionEntity.state,
     swingSessionId: fullTrialSessionEntity.swingSessionId,
     swingSessionLocation,
-    term: fullTrialSessionEntity.term,
-    termYear: fullTrialSessionEntity.termYear,
     trialLocation: fullTrialSessionEntity.trialLocation,
   };
 
