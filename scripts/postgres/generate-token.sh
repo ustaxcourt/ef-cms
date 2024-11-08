@@ -13,10 +13,7 @@
 #   ./scripts/postgres/generate-token.sh --rw --succinct
 #   DB_USER="${ENV}_dawson" ./scripts/postgres/generate-token.sh --rw
 
-# shellcheck disable=SC1091
-source "./scripts/helpers/suppress-output.sh"
-# shellcheck disable=SC1091
-source "./scripts/helpers/prior-confirmation.sh"
+( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 
 {
   [[ -n "$ZSH_VERSION" && "$ZSH_EVAL_CONTEXT" =~ :file$ ]] ||
@@ -24,23 +21,27 @@ source "./scripts/helpers/prior-confirmation.sh"
 } && sourced=1 || sourced=0
 [[ "$sourced" -eq 0 ]] && exit="exit" || exit="return"
 
+rw=0
 succinct=0
+sshhh=0
+confirmed=0
 for param in "$@"; do
-  [[ "$param" == "--rw" ]] && RW=1
-  [[ "$param" == "--succinct" ]] && succinct=1
+  { [[ "$param" == "--rw" ]] || [[ "$param" == "-w" ]]; } && rw=1
+  { [[ "$param" == "--succinct" ]] || [[ "$param" == "-t" ]]; } && succinct=1
+  { [[ "$param" == "--quiet" ]] || [[ "$param" == "-q" ]]; } && sshhh=1
+  { [[ "$param" == "--yes" ]] || [[ "$param" == "-y" ]]; } && confirmed=1
 done
+
+[[ "$sourced" -eq 0 ]] && [[ "$sshhh" -eq 1 ]] && $exit 1
 
 CHECK_PARAMS=("ENV" "AWS_ACCESS_KEY_ID" "AWS_SECRET_ACCESS_KEY")
 
-sshhh=$(should_suppress_output "$@")
 { [[ "$sshhh" -eq 1 ]] || [[ "$succinct" -eq 1 ]]; } && CHECK_PARAMS+=("--quiet")
-
-confirmed=$(has_prior_confirmation "$@")
 [[ "$sshhh" -eq 0 ]] && [[ "$succinct" -eq 0 ]] && [[ "$confirmed" -eq 1 ]] && CHECK_PARAMS+=("--yes")
 
 ./check-env-variables.sh "${CHECK_PARAMS[@]}"
 
-[[ "$RW" -eq 1 ]] && ENDPOINT="Endpoint" || ENDPOINT="ReaderEndpoint"
+[[ "$rw" -eq 1 ]] && ENDPOINT="Endpoint" || ENDPOINT="ReaderEndpoint"
 
 DESCRIPTION=$(aws rds describe-db-clusters --db-cluster-identifier "${ENV}-dawson-cluster" | jq -r ".DBClusters[0]")
 REGION="us-east-1"
