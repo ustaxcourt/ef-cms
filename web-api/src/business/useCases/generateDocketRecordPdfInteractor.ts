@@ -10,17 +10,20 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseCaptionMeta } from '../../../../shared/src/business/utilities/getCaseCaptionMeta';
+import { sortDocketEntryTable } from '@web-client/presenter/computeds/formattedDocketEntries';
 
 export const generateDocketRecordPdfInteractor = async (
   applicationContext: ServerApplicationContext,
   {
     docketNumber,
     docketRecordSort,
+    docketRecordTableSort,
     includePartyDetail = false,
     isIndirectlyAssociated = false,
   }: {
     docketNumber: string;
     docketRecordSort?: string;
+    docketRecordTableSort?: { sortField: string; sortOrder: string };
     includePartyDetail: boolean;
     isIndirectlyAssociated?: boolean;
   },
@@ -71,15 +74,22 @@ export const generateDocketRecordPdfInteractor = async (
   } else {
     caseEntity = new Case(caseSource, { authorizedUser });
   }
-
   const formattedCaseDetail = applicationContext
     .getUtilities()
     .getFormattedCaseDetail({
       applicationContext,
       authorizedUser,
       caseDetail: caseEntity,
-      docketRecordSort,
+      docketRecordSort, // pass undefined or just run the sort?
     });
+
+  const sortedDocketEntries = sortDocketEntryTable(
+    formattedCaseDetail.docketEntries,
+    docketRecordTableSort && docketRecordTableSort.sortField,
+    docketRecordTableSort && docketRecordTableSort.sortOrder,
+  );
+
+  formattedCaseDetail.formattedDocketEntries = sortedDocketEntries;
 
   formattedCaseDetail.petitioners.forEach(petitioner => {
     petitioner.counselDetails = [];

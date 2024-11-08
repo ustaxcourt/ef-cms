@@ -257,7 +257,7 @@ export const formattedDocketEntries = (
       };
     });
 
-  docketEntriesFormatted = sortDocketEntries(
+  docketEntriesFormatted = sortDocketEntryTable(
     docketEntriesFormatted,
     docketRecordSortField,
     docketRecordSortOrder,
@@ -311,7 +311,7 @@ export const formattedDocketEntries = (
   return result;
 };
 
-function sortDocketEntries(
+export function sortDocketEntryTable(
   docketEntries: (RawDocketEntry & {
     createdAtFormatted: string | undefined;
   })[] = [],
