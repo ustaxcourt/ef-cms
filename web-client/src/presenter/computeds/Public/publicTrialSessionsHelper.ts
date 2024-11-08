@@ -1,5 +1,8 @@
 import { Get } from 'cerebral';
-import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  SESSION_TYPES,
+  TRIAL_SESSION_SCOPE_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import {
   TrialSessionRow,
   TrialSessionWeek,
@@ -103,7 +106,19 @@ export const publicTrialSessionsHelper = (
     value: sessionType,
   }));
 
-  const trialCitiesByState = getTrialCitiesGroupedByState();
+  const standaloneRemoteOption = {
+    label: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+    options: [
+      {
+        label: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+        value: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      },
+    ],
+  };
+  const trialCitiesByState = [
+    standaloneRemoteOption,
+    ...getTrialCitiesGroupedByState(),
+  ];
 
   const trialSessionJudgeOptions = trialSessionJudges.map(
     trialSessionJudge => ({
