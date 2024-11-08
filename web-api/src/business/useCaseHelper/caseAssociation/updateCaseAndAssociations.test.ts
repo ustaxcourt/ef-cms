@@ -20,7 +20,6 @@ import { MOCK_WORK_ITEM } from '../../../../../shared/src/test/mockWorkItem';
 import { Message } from '../../../../../shared/src/business/entities/Message';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
-import { createCaseDeadline as createCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/createCaseDeadline';
 import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getMessagesByDocketNumber as getMessagesByDocketNumberMock } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
@@ -28,12 +27,13 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseAndAssociations } from './updateCaseAndAssociations';
 import { updateMessage as updateMessageMock } from '@web-api/persistence/postgres/messages/updateMessage';
 import { upsertCaseCorrespondence as upsertCaseCorrespondenceMock } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondence';
+import { upsertCaseDeadline as upsertCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadline';
 import { v4 as uuidv4 } from 'uuid';
 
 const getMessagesByDocketNumber = getMessagesByDocketNumberMock as jest.Mock;
 const updateMessage = updateMessageMock as jest.Mock;
 
-const createCaseDeadline = createCaseDeadlineMock as jest.Mock;
+const upsertCaseDeadline = upsertCaseDeadlineMock as jest.Mock;
 
 const getCaseDeadlinesByDocketNumber =
   getCaseDeadlinesByDocketNumberMock as jest.Mock;
@@ -198,9 +198,7 @@ describe('updateCaseAndAssociations', () => {
     ).not.toHaveBeenCalled();
 
     // updateCaseDeadlines
-    expect(
-      applicationContext.getPersistenceGateway().createCaseDeadline,
-    ).not.toHaveBeenCalled();
+    expect(upsertCaseDeadline).not.toHaveBeenCalled();
 
     // update the case itself, final persistence call
     expect(
@@ -951,9 +949,7 @@ describe('updateCaseAndAssociations', () => {
         caseToUpdate: updatedCase,
       });
       expect(getCaseDeadlinesByDocketNumber).not.toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().createCaseDeadline,
-      ).not.toHaveBeenCalled();
+      expect(upsertCaseDeadline).not.toHaveBeenCalled();
     });
 
     it('should fetch and persist case deadline data when associated judge has changed', async () => {
@@ -969,7 +965,7 @@ describe('updateCaseAndAssociations', () => {
       });
       expect(getCaseDeadlinesByDocketNumber).toHaveBeenCalled();
       expect(CaseDeadline.validateRawCollection).toHaveBeenCalled();
-      expect(createCaseDeadline).toHaveBeenCalledWith({
+      expect(upsertCaseDeadline).toHaveBeenCalledWith({
         caseDeadline: { some: 'deadline' },
       });
     });

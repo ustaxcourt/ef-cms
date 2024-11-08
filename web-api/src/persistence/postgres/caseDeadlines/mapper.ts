@@ -18,29 +18,11 @@ function pickFields(deadline): NewCaseDeadlineKysely {
   };
 }
 
-// export function toKyselyUpdateMessage(
-//   message: RawMessage,
-// ): UpdateMessageKysely {
-//   return pickFields(message);
-// }
-
-// export function toKyselyUpdateMessages(
-//   messages: RawMessage[],
-// ): UpdateMessageKysely[] {
-//   return messages.map(pickFields);
-// }
-
 export function toKyselyNewCaseDeadline(
   deadline: RawCaseDeadline,
 ): NewCaseDeadlineKysely {
   return pickFields(deadline);
 }
-
-// export function toKyselyNewMessages(
-//   messages: RawMessage[],
-// ): NewMessageKysely[] {
-//   return messages.map(pickFields);
-// }
 
 export function caseDeadlineEntity(caseDeadline) {
   return new CaseDeadline(

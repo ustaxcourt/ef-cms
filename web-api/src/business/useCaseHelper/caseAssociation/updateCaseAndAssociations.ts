@@ -8,12 +8,12 @@ import { PrivatePractitioner } from '../../../../../shared/src/business/entities
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
-import { createCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/createCaseDeadline';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { upsertCase } from '@web-api/persistence/postgres/cases/upsertCase';
 import { upsertCaseCorrespondence } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondence';
+import { upsertCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadline';
 import diff from 'diff-arrays-of-objects';
 
 /**
@@ -392,7 +392,6 @@ const updateCaseDeadlines = async ({
   if (oldCase.associatedJudge === caseToUpdate.associatedJudge) {
     return [];
   }
-
   const deadlines = await getCaseDeadlinesByDocketNumber({
     docketNumber: caseToUpdate.docketNumber,
   });
@@ -406,8 +405,8 @@ const updateCaseDeadlines = async ({
   return validCaseDeadlines.map(
     caseDeadline =>
       function updateCaseDeadlines_cb() {
-        return createCaseDeadline({
-          caseDeadline,
+        return upsertCaseDeadline({
+          caseDeadlineToUpsert: caseDeadline,
         });
       },
   );
@@ -429,6 +428,7 @@ export const updateCaseAndAssociations = async ({
   authorizedUser: UnknownAuthUser;
   caseToUpdate: any;
 }): Promise<RawCase> => {
+  console.log('updateCaseAndAssociations');
   const caseEntity: Case = caseToUpdate.validate
     ? caseToUpdate
     : new Case(caseToUpdate, {
