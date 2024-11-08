@@ -5,7 +5,6 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { deleteCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { upsertCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadline';
 
 export const updateCaseDeadlineInteractor = async (
@@ -19,10 +18,6 @@ export const updateCaseDeadlineInteractor = async (
   const caseDeadlineToUpdate = new CaseDeadline(caseDeadline)
     .validate()
     .toRawObject();
-
-  await deleteCaseDeadline({
-    caseDeadlineId: caseDeadlineToUpdate.caseDeadlineId,
-  });
 
   await upsertCaseDeadline({
     caseDeadlineToUpsert: caseDeadlineToUpdate,

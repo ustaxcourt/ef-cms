@@ -2,6 +2,7 @@
  * @jest-environment node
  */
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/correspondence/mocks.jest';
 
 import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
