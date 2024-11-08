@@ -33,8 +33,7 @@
    ```
 1. Determine the cluster's writeable endpoint:
    ```bash
-   scripts/postgres/get-read-write-endpoint.sh
-   export DB_HOST="<endpoint>"
+   source scripts/postgres/get-host.sh --rw --quiet
    ```
 1. Create the database users:
    ```bash
