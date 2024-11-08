@@ -43,8 +43,9 @@ CHECK_PARAMS=("ENV" "AWS_ACCESS_KEY_ID" "AWS_SECRET_ACCESS_KEY")
 
 [[ "$rw" -eq 1 ]] && ENDPOINT="Endpoint" || ENDPOINT="ReaderEndpoint"
 
-DESCRIPTION=$(aws rds describe-db-clusters --db-cluster-identifier "${ENV}-dawson-cluster" | jq -r ".DBClusters[0]")
 REGION="us-east-1"
+DESCRIPTION=$(aws rds describe-db-clusters \
+    --db-cluster-identifier "${ENV}-dawson-cluster" --region "$REGION" | jq -r ".DBClusters[0]")
 DB_HOST=$(jq -r ".${ENDPOINT}" <<< "$DESCRIPTION")
 DB_PORT=$(jq -r ".Port" <<< "$DESCRIPTION")
 [[ -z "$DB_USER" ]] && DB_USER="${ENV}_developers"
