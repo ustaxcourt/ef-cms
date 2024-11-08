@@ -1,11 +1,11 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { createCaseDeadline as createCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/createCaseDeadline';
 import { deleteCaseDeadline as deleteCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseDeadlineInteractor } from './updateCaseDeadlineInteractor';
+import { upsertCaseDeadline as upsertCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadline';
 
-const createCaseDeadline = createCaseDeadlineMock as jest.Mock;
+const upsertCaseDeadline = upsertCaseDeadlineMock as jest.Mock;
 const deleteCaseDeadline = deleteCaseDeadlineMock as jest.Mock;
 
 describe('updateCaseDeadlineInteractor', () => {
@@ -42,7 +42,7 @@ describe('updateCaseDeadlineInteractor', () => {
     expect(deleteCaseDeadline.mock.calls[0][0]).toMatchObject({
       caseDeadlineId: CASE_DEADLINE_ID,
     });
-    expect(createCaseDeadline.mock.calls[0][0]).toMatchObject({
+    expect(upsertCaseDeadline.mock.calls[0][0]).toMatchObject({
       caseDeadline: mockCaseDeadline,
     });
     expect(caseDeadline).toBeDefined();

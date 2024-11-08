@@ -5,8 +5,8 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { createCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/createCaseDeadline';
 import { deleteCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
+import { upsertCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadline';
 
 export const updateCaseDeadlineInteractor = async (
   { caseDeadline }: { caseDeadline: CaseDeadline },
@@ -24,8 +24,8 @@ export const updateCaseDeadlineInteractor = async (
     caseDeadlineId: caseDeadlineToUpdate.caseDeadlineId,
   });
 
-  await createCaseDeadline({
-    caseDeadline: caseDeadlineToUpdate,
+  await upsertCaseDeadline({
+    caseDeadlineToUpsert: caseDeadlineToUpdate,
   });
 
   return caseDeadlineToUpdate;

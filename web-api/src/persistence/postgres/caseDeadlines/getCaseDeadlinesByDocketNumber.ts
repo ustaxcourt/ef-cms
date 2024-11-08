@@ -16,5 +16,5 @@ export const getCaseDeadlinesByDocketNumber = async ({
       .execute(),
   );
 
-  return caseDeadlines.map(message => caseDeadlineEntity(message));
+  return caseDeadlines.map(caseDeadline => caseDeadlineEntity(caseDeadline));
 };
