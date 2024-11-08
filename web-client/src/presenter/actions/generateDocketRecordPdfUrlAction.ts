@@ -15,6 +15,10 @@ export const generateDocketRecordPdfUrlAction = async ({
   const docketRecordSort = get(
     state.sessionMetadata.docketRecordSort[caseDetail.docketNumber],
   );
+
+  const docketRecordSortField = get(state.tableSort.sortField);
+  const docketRecordSortOrder = get(state.tableSort.sortOrder);
+
   const { isAssociated } = props;
 
   let includePartyDetail = false;
@@ -29,6 +33,10 @@ export const generateDocketRecordPdfUrlAction = async ({
     .generateDocketRecordPdfInteractor(applicationContext, {
       docketNumber: caseDetail.docketNumber,
       docketRecordSort,
+      docketRecordTableSort: {
+        sortField: docketRecordSortField,
+        sortOrder: docketRecordSortOrder,
+      },
       includePartyDetail,
       isIndirectlyAssociated,
     });

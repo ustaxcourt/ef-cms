@@ -62,16 +62,6 @@ export const DocketRecord = connect(
       formattedDocketEntriesHelper.someDocumentsSelectedForDownload,
     ]);
 
-    // const tempFunction = (option: {
-    //   sortField: string;
-    //   sortOrder: 'asc' | 'desc';
-    // }) => {
-    //   //call both sequence here
-    //   sortTableSequence(option);
-    //   const getOtherKey = undefined
-
-    // };
-
     return (
       <>
         <DocketRecordHeader />
