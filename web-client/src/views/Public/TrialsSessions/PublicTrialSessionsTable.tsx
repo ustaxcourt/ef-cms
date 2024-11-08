@@ -84,10 +84,9 @@ export const PublicTrialSessionsTable = connect<
                     )}
                   </td>
                   <td data-testid={`trial-location-link-${row.trialSessionId}`}>
-                    {/* TODO: ENABLE ONCE 10461 IS COMPLETE */}
-                    {/* <a href={`/trial-session-detail/${row.trialSessionId}`}> */}
-                    {row.trialLocation}
-                    {/* </a> */}
+                    <a href={`/trial-session-detail/${row.trialSessionId}`}>
+                      {row.trialLocation}
+                    </a>
                   </td>
                   <td>{row.proceedingType}</td>
                   <td>{row.sessionType}</td>

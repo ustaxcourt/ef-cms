@@ -230,7 +230,7 @@ export class Case extends JoiValidationEntity {
    * @param {Array} cases the cases to check for lead case computation
    * @returns {Case} the lead Case entity
    */
-  static sortByDocketNumber(cases) {
+  static sortByDocketNumber<T>(cases: (T & { docketNumber: string })[]): T[] {
     return cases.sort((a, b) => {
       return Case.docketNumberSort(a.docketNumber, b.docketNumber);
     });
@@ -1277,7 +1277,7 @@ export class Case extends JoiValidationEntity {
   removeRepresentingFromPractitioners(petitionerContactId) {
     this.privatePractitioners?.forEach(practitioner => {
       const representingArrayIndex =
-        practitioner.representing.indexOf(petitionerContactId);
+        practitioner.representing?.indexOf(petitionerContactId);
       if (representingArrayIndex >= 0) {
         practitioner.representing.splice(representingArrayIndex, 1);
       }
@@ -1895,7 +1895,7 @@ export class Case extends JoiValidationEntity {
 
   static isPetitionerRepresented(rawCase, userId: string): boolean {
     return !!rawCase.privatePractitioners?.find(practitioner =>
-      practitioner.representing.find(id => id === userId),
+      practitioner.representing?.find(id => id === userId),
     );
   }
 
@@ -2103,7 +2103,7 @@ export const caseHasServedDocketEntries = rawCase => {
 };
 
 export const isInConsolidatedGroup = (caseInfo: {
-  leadDocketNumber: string;
+  leadDocketNumber?: string;
 }) => {
   return !!caseInfo.leadDocketNumber;
 };
@@ -2209,7 +2209,7 @@ export const getPractitionersRepresenting = function (
   petitionerContactId: string,
 ) {
   return rawCase.privatePractitioners?.filter(practitioner =>
-    practitioner.representing.includes(petitionerContactId),
+    practitioner.representing?.includes(petitionerContactId),
   );
 };
 
