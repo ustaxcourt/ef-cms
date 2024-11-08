@@ -113,21 +113,21 @@ export const washingtonDcSpecialConstraint: Constraint = ({
     return true;
 
   if (
-    calendarState.sessionCountPerCity[WASHINGTON_DC_SOUTH_STRING] >=
-    calendaringConfig.maxSessionsPerLocation
-  ) {
-    throw new Error(
-      `Special sessions in ${WASHINGTON_DC_STRING} exceed the maximum allowed`,
-    );
-  }
-
-  if (
     calendarState.sessionScheduledPerCityPerWeek[session.weekOf].has(
       WASHINGTON_DC_SOUTH_STRING,
     )
   ) {
     throw new Error(
       'There must be no more than two special trial sessions per week in Washington, DC.',
+    );
+  }
+
+  if (
+    calendarState.sessionCountPerCity[WASHINGTON_DC_SOUTH_STRING] >=
+    calendaringConfig.maxSessionsPerLocation
+  ) {
+    throw new Error(
+      `Special sessions in ${WASHINGTON_DC_STRING} exceed the maximum allowed`,
     );
   }
 

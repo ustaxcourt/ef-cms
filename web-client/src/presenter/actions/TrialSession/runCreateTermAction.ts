@@ -1,3 +1,5 @@
+import { MESSAGE_TYPES } from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
+
 export const runCreateTermAction = async ({
   applicationContext,
   path,
@@ -5,37 +7,21 @@ export const runCreateTermAction = async ({
 }: ActionProps) => {
   const { termEndDate, termName, termStartDate } = props;
 
-  try {
-    const { bufferArray, message } = await applicationContext
-      .getUseCases()
-      .generateSuggestedTrialSessionCalendarInteractor(applicationContext, {
-        termEndDate,
-        termStartDate,
-      });
-
-    if (bufferArray?.data) {
-      return path.success({
-        alertSuccess: {
-          message,
-          title: 'Successfully generated suggested term.',
-        },
-        bufferArray,
-        termName,
-      });
-    } else {
-      return path.error({
-        alertError: {
-          message,
-          title: 'Create term error.',
-        },
-      });
-    }
-  } catch (error: any) {
-    return path.error({
-      alertError: {
-        message: error.message,
-        title: 'Create term error.',
-      },
+  const { bufferArray, message } = await applicationContext
+    .getUseCases()
+    .generateSuggestedTrialSessionCalendarInteractor(applicationContext, {
+      termEndDate,
+      termStartDate,
     });
+
+  switch (message.type) {
+    case MESSAGE_TYPES.error:
+      return path.error({
+        alertError: message,
+      });
+    case MESSAGE_TYPES.warning:
+      return path.warning({ alertWarning: message, bufferArray, termName });
+    case MESSAGE_TYPES.success:
+      return path.success({ alertSuccess: message, bufferArray, termName });
   }
 };

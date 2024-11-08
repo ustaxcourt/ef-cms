@@ -97,7 +97,9 @@ const getRowsByCity = ({
   for (const city in caseCountsAndSessionsByCity) {
     const cityRow = caseCountsAndSessionsByCity[city].scheduledSessions.reduce(
       (acc, session) => {
-        acc[session.weekOf] = session.sessionType;
+        acc[session.weekOf] = session.ignoresConstraints
+          ? 'Special*'
+          : session.sessionType;
         return acc;
       },
       { ...allWeekOfSlots },
@@ -185,6 +187,7 @@ const getSessionCellData = (
     top: { style: 'thin' },
   };
   let fill;
+
   switch (cellValue) {
     case SESSION_TYPES.hybrid:
       fill = {
@@ -210,6 +213,13 @@ const getSessionCellData = (
     case SESSION_TYPES.special:
       fill = {
         fgColor: { argb: 'ffD0C3E9' },
+        pattern: 'solid',
+        type: 'pattern',
+      };
+      break;
+    case 'Special*':
+      fill = {
+        fgColor: { argb: 'ffFF0000' },
         pattern: 'solid',
         type: 'pattern',
       };
