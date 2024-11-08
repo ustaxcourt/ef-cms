@@ -13,7 +13,7 @@ export const InactiveCases = connect(
     return (
       <React.Fragment>
         <div className="overflow-x-auto overflow-y-hidden">
-          <div className="push-right margin-bottom-2">
+          <div className="text-right margin-bottom-2">
             <span className="text-semibold">Count: </span>
             {inactiveCases.length}
           </div>
