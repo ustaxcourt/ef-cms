@@ -143,7 +143,7 @@ export const DocketRecord = connect(
                   <SortableHeader
                     className="hide-on-mobile"
                     sortField="action"
-                    sortType=""
+                    sortType="string"
                     tableSort={tableSort}
                     title="Action"
                     onSort={sortTableSequence}
