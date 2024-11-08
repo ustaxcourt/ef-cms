@@ -117,12 +117,12 @@ export const petitionsClerkViewsDeadlineReport = (
     expect(deadlines).toMatchObject([
       {
         associatedJudge: 'Buch',
-        deadlineDate: `${options.year}-01-${options.day}T00:00:00.000-05:00`,
+        deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[0],
       },
       {
         associatedJudge: 'Buch',
-        deadlineDate: `${options.year}-02-${options.day}T00:00:00.000-05:00`,
+        deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[0],
       },
     ]);
