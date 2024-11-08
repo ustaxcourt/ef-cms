@@ -42,7 +42,8 @@ CHECK_PARAMS=("ENV" "AWS_ACCESS_KEY_ID" "AWS_SECRET_ACCESS_KEY")
 
 [[ "$rw" -eq 1 ]] && ep="Endpoint" || ep="ReaderEndpoint"
 
-ENDPOINT=$(aws rds describe-db-clusters --db-cluster-identifier "${ENV}-dawson-cluster" | jq -r ".DBClusters[0].${ep}")
+ENDPOINT=$(aws rds describe-db-clusters \
+    --db-cluster-identifier "${ENV}-dawson-cluster" --region us-east-1 | jq -r ".DBClusters[0].${ep}")
 
 if [[ -z "$ENDPOINT" ]]; then
     [[ "$sshhh" -eq 0 ]] && echo -e "\nError: Unable to determine ${ep}."

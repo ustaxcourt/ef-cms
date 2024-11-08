@@ -53,7 +53,8 @@ case $CIRCLE_BRANCH in
     ;;
 esac
 
-ENV=$ENV ./scripts/load-environment-from-secrets.sh
+export ENV="$ENV"
+./scripts/load-environment-from-secrets.sh
 
 cp .env .env.sh
 sed -i 's/^/export /g' .env.sh
@@ -66,7 +67,7 @@ cat .env.sh >> "${BASH_ENV}"
   echo "export MIGRATE_FLAG=$(./scripts/migration/get-migrate-flag.sh $ENV)"
   echo "export SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh $ENV)"
   echo "export SOURCE_ELASTICSEARCH=$(./scripts/elasticsearch/get-source-elasticsearch.sh $ENV)"
-  echo "export DB_HOST=$(ENV=$ENV ./scripts/postgres/get-host.sh -w -h)"
+  echo "export DB_HOST=$(./scripts/postgres/get-host.sh -w -h)"
   echo "export DB_NAME=${DATABASE_NAME}"
   echo "export DB_USER=${POSTGRES_USER}"
 } >> "${BASH_ENV}"
