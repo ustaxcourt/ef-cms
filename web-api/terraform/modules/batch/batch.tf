@@ -88,7 +88,8 @@ resource "aws_iam_role_policy" "batch_service_role_policy" {
         },
         {
             "Action": [
-                "ecs:DeleteCluster"
+                "ecs:DeleteCluster",
+                "ecs:DescribeClusters"
             ],
             "Resource": [
                 "arn:aws:ecs:us-east-1:${data.aws_caller_identity.current.account_id}:cluster/compute_environment_*",
