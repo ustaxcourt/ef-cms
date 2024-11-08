@@ -80,7 +80,7 @@ export const generateDocketRecordPdfInteractor = async (
       applicationContext,
       authorizedUser,
       caseDetail: caseEntity,
-      docketRecordSort, // pass undefined or just run the sort?
+      docketRecordSort,
     });
 
   const sortedDocketEntries = sortDocketEntryTable(
