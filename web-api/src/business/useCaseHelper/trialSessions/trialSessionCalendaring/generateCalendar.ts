@@ -45,6 +45,7 @@ export const generateCalendar = ({
   calendaringConfig: CalendaringConfig;
 }): {
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
+  userMessages: string[];
 } => {
   const calendarState = setupCalendarState(weeksToLoop);
 
@@ -59,38 +60,94 @@ export const generateCalendar = ({
     return aNotVisited === bNotVisited ? 0 : aNotVisited ? -1 : 1;
   });
 
+  let userMessages = [];
   // special sessions handled ahead of all reg, small
-  specialSessions.forEach(specialSession => {
-    const sessionWeekOf = createDateAtStartOfWeekEST(
-      specialSession.startDate,
-      FORMATS.YYYYMMDD,
-    );
+  specialSessions
+    .sort((a, b) => {
+      // eslint-disable-next-line @miovision/disallow-date/no-new-date
+      return +new Date(a.startDate) - +new Date(b.startDate);
+    })
+    .forEach(specialSession => {
+      const sessionWeekOf = createDateAtStartOfWeekEST(
+        specialSession.startDate,
+        FORMATS.YYYYMMDD,
+      );
 
-    const scheduledTrialSession: ScheduledTrialSession = {
-      sessionType: SESSION_TYPES.special,
-      trialLocation: getTrialLocationForSpecialSession({
+      const scheduledTrialSession: ScheduledTrialSession = {
+        sessionType: SESSION_TYPES.special,
+        trialLocation: getTrialLocationForSpecialSession({
+          calendarState,
+          calendaringConfig,
+          originalLocation: specialSession.trialLocation!,
+          sessionWeekOf,
+        }),
+        weekOf: sessionWeekOf,
+      };
+
+      try {
+        checkConstraints({
+          calendarState,
+          calendaringConfig,
+          constraints,
+          scheduledTrialSession,
+        });
+      } catch (e) {
+        const errorMessage = e.message;
+        userMessages.push(errorMessage);
+        if (
+          errorMessage ===
+          'There must be no more than two special trial sessions per week in Washington, DC.'
+        ) {
+          // find the previously scheduled thing for that week, mark as rebellious
+          const previouslyScheduledSession = caseCountsAndSessionsByCity[
+            scheduledTrialSession.trialLocation
+          ].scheduledSessions.find(session => {
+            return session.weekOf === scheduledTrialSession.weekOf;
+          });
+
+          if (previouslyScheduledSession) {
+            previouslyScheduledSession.ignoresConstraints = true;
+          }
+
+          return;
+        } else if (
+          errorMessage ===
+          'There must only be one special trial session per location per week.'
+        ) {
+          // THIS IS A BIG Q -- do we do this for non-DC specials, too, even
+          // though courtroom space is actually limited?
+          // find the previously scheduled thing for that week, mark as rebellious
+          // const previouslyScheduledSession = caseCountsAndSessionsByCity[
+          //   scheduledTrialSession.trialLocation
+          // ].scheduledSessions.find(session => {
+          //   return session.weekOf === scheduledTrialSession.weekOf;
+          // });
+
+          // if (previouslyScheduledSession) {
+          //   previouslyScheduledSession.ignoresConstraints = true;
+          // }
+
+          // return;
+
+          // schedule it, but mark rebellious.
+          scheduledTrialSession.ignoresConstraints = true;
+        } else {
+          // schedule it, but mark rebellious.
+          scheduledTrialSession.ignoresConstraints = true;
+        }
+
+        // message thing (array? object?)
+        // as we get errors, push to messages array (object?)
+        // based on which type of error we get, pass 'markAsRebel' flag to scheduling function.
+      }
+
+      addSpecialScheduledTrialSession({
         calendarState,
-        calendaringConfig,
-        originalLocation: specialSession.trialLocation!,
-        sessionWeekOf,
-      }),
-      weekOf: sessionWeekOf,
-    };
-
-    checkConstraints({
-      calendarState,
-      calendaringConfig,
-      constraints,
-      scheduledTrialSession,
+        caseCountsAndSessionsByCity,
+        scheduledTrialSession,
+        weeksToLoop,
+      });
     });
-
-    addSpecialScheduledTrialSession({
-      calendarState,
-      caseCountsAndSessionsByCity,
-      scheduledTrialSession,
-      weeksToLoop,
-    });
-  });
 
   for (const currentWeek of weeksToLoop) {
     const weekOfString = currentWeek;
@@ -125,6 +182,7 @@ export const generateCalendar = ({
 
   return {
     caseCountsAndSessionsByCity,
+    userMessages,
   };
 };
 
