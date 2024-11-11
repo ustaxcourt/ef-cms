@@ -5,8 +5,11 @@ import classNames from 'classnames';
 
 export function CaseIcons({ formattedCase }: { formattedCase: any }) {
   return (
-    <div className="multi-filing-type-icon">
-      <div
+    <div
+      className="multi-filing-type-icon"
+      style={{ display: 'flex', flexWrap: 'nowrap', gap: '1rem' }} // USWDS overwrites these styles at certain breakpoints even with !important
+    >
+      <span
         className={
           formattedCase.isSealed ? 'visibility-visible' : 'visibility-hidden'
         }
@@ -19,7 +22,7 @@ export function CaseIcons({ formattedCase }: { formattedCase: any }) {
           icon="lock"
           title="Sealed"
         />
-      </div>
+      </span>
       <span
         className={classNames({
           'margin-left-2':
