@@ -1,7 +1,5 @@
-import { Case } from '@shared/business/entities/cases/Case';
 import {
   CaseCountsAndSessionsByCity,
-  EligibleCase,
   getDataForCalendaring,
 } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
 import {
@@ -195,6 +193,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   console.time('10275: writeTrialSessionDataToExcel');
   const bufferArray = await writeTrialSessionDataToExcel({
     caseCountsAndSessionsByCity,
+    incorrectSizeRegularCases,
     weeks: weeksToLoop,
   });
   console.timeEnd('10275: writeTrialSessionDataToExcel');
@@ -293,7 +292,7 @@ const generateMessage = ({
 
   userMessages.forEach(userMessage => {
     message.message = message.message + ' ' + userMessage;
-    });
+  });
   message.title = SUGGESTED_TRIAL_SESSION_TITLES.warning;
   message.type = MESSAGE_TYPES.warning;
   message.message = message.message.trim();

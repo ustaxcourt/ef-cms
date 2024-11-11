@@ -827,6 +827,18 @@ describe('DateHandler', () => {
       expect(result).toEqual('2025-05-05');
     });
 
-    // TODO do the same as above but on Monday at midnight eastern
+    it('should return a valid date at the start of the week of the date passed in when said date is a Monday in Eastern time (with offset)', () => {
+      const dateString = '2024-11-18T00:00:00.000-05:00';
+      const result = createDateAtStartOfWeekEST(dateString, FORMATS.YYYYMMDD);
+
+      expect(result).toEqual('2024-11-18');
+    });
+
+    it('should return a valid date at the start of the week of the date passed in when said date a Monday is UTC', () => {
+      const dateString = '2024-11-18T05:00:00.000Z';
+      const result = createDateAtStartOfWeekEST(dateString, FORMATS.YYYYMMDD);
+
+      expect(result).toEqual('2024-11-18');
+    });
   });
 });

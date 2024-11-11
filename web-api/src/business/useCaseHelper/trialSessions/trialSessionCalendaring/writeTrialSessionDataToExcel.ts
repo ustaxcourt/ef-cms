@@ -1,4 +1,7 @@
-import { CaseCountsAndSessionsByCity } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
+import {
+  CaseCountsAndSessionsByCity,
+  EligibleCase,
+} from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
 import {
   FORMATS,
   formatDateString,
@@ -12,10 +15,12 @@ const CITY_TITLE_CELL_LOCATION = 'A2';
 
 export const writeTrialSessionDataToExcel = async ({
   caseCountsAndSessionsByCity,
+  incorrectSizeRegularCases,
   weeks,
 }: {
   weeks: string[];
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
+  incorrectSizeRegularCases: EligibleCase[];
 }) => {
   const workbook = new ExcelJS.Workbook();
   const worksheetOptions = { properties: { outlineLevelCol: 2 } };
