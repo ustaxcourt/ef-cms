@@ -1,8 +1,8 @@
+import { clearDocketRecordTableSortAction } from '@web-client/presenter/actions/clearDocketRecordTableSortAction';
 import { clearDocumentsSelectedForDownload } from '@web-client/presenter/actions/clearDocumentsSelectedForDownload';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
-import { clearSortTableFiltersAction } from '@web-client/presenter/actions/clearSortTableFiltersAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { fetchUserNotificationsSequence } from './fetchUserNotificationsSequence';
 import { getCaseAction } from '../actions/getCaseAction';
@@ -80,7 +80,7 @@ export const gotoCaseDetailSequence = [
   clearDocumentsSelectedForDownload,
   clearFormAction,
   clearModalAction,
-  clearSortTableFiltersAction,
+  clearDocketRecordTableSortAction,
   closeMobileMenuAction,
   setDefaultCaseDetailTabAction,
   setIsPrimaryTabAction,
