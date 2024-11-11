@@ -124,10 +124,11 @@ function NonMobileOpenCases({
 }) {
   return (
     <React.Fragment>
-      <div className="text-right margin-bottom-2">
+      <div className="text-right">
         <span className="text-semibold">Count: </span>
         {openCases.length}
       </div>
+      <div className="padding-1"></div>
       <div className="overflow-x-auto overflow-y-hidden">
         <table
           className="usa-table ustc-table trial-sessions subsection"
