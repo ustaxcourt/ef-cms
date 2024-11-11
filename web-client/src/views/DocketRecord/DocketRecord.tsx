@@ -1,5 +1,6 @@
 import {
   ASCENDING,
+  KEYS,
   SORT_ASCENDING_TEXT,
   SORT_DESCENDING_TEXT,
 } from '@shared/business/entities/EntityConstants';
@@ -31,8 +32,7 @@ export const DocketRecord = connect(
       sequences.setSelectedDocumentsForDownloadSequence,
     showModal: state.modal.showModal,
     sortTableSequence: sequences.sortTableSequence,
-    tableSort: state.tableSort,
-    // updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
+    tableSort: state[KEYS.DOCKET_RECORD_TABLE_SORT],
   },
 
   function DocketRecord({
@@ -44,7 +44,6 @@ export const DocketRecord = connect(
     showModal,
     sortTableSequence,
     tableSort,
-    // updateSessionMetadataSequence,
   }) {
     const selectAllCheckboxRef = useRef<HTMLInputElement>(null);
 
@@ -362,7 +361,11 @@ function SortableHeader({
   title,
 }: {
   className?: string;
-  onSort: (sort: { sortField: string; sortOrder: 'asc' | 'desc' }) => void;
+  onSort: (sort: {
+    sortField: string;
+    sortOrder: 'asc' | 'desc';
+    root: string;
+  }) => void;
   screenReaderTitle?: string;
   sortField: string;
   sortType?: 'string' | 'date';
@@ -386,7 +389,12 @@ function SortableHeader({
         screenReaderTitle={screenReaderTitle}
         sortField={sortField}
         title={title}
-        onClickSequence={onSort}
+        onClickSequence={sortTableInfo =>
+          onSort({
+            ...sortTableInfo,
+            root: KEYS.DOCKET_RECORD_TABLE_SORT,
+          })
+        }
       />
     </th>
   );

@@ -6,6 +6,10 @@ import courtIssuedEventCodesJson from '../../tools/courtIssuedEventCodes.json';
 import externalFilingEventsJson from '../../tools/externalFilingEvents.json';
 import internalFilingEventsJson from '../../tools/internalFilingEvents.json';
 
+export const KEYS = {
+  DOCKET_RECORD_TABLE_SORT: 'DOCKET_RECORD_TABLE_SORT',
+};
+
 export const DEBOUNCE_TIME_MILLISECONDS = 500;
 
 interface FilingEvent {
