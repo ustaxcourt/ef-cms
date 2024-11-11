@@ -11,7 +11,6 @@ export const setTableSortConfigurationAction = ({
   const { root, sortField, sortOrder } = props;
 
   const ROOT = root || 'tableSort';
-  console.log('ROOT', ROOT);
   store.set(state[ROOT].sortField, sortField);
   store.set(state[ROOT].sortOrder, sortOrder);
 };
