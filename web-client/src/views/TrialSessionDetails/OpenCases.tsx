@@ -14,11 +14,11 @@ export const OpenCases = connect(
   function OpenCases({ openCases }) {
     return (
       <React.Fragment>
+        <div className="text-right margin-bottom-2">
+          <span className="text-semibold">Count: </span>
+          {openCases.length}
+        </div>
         <div className="overflow-x-auto overflow-y-hidden">
-          <div className="text-right margin-bottom-2">
-            <span className="text-semibold">Count: </span>
-            {openCases.length}
-          </div>
           <table
             aria-describedby="open-cases-tab"
             className="usa-table ustc-table trial-sessions subsection"

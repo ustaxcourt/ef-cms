@@ -12,11 +12,11 @@ export const InactiveCases = connect(
   function InactiveCases({ inactiveCases }) {
     return (
       <React.Fragment>
+        <div className="text-right margin-bottom-2">
+          <span className="text-semibold">Count: </span>
+          {inactiveCases.length}
+        </div>
         <div className="overflow-x-auto overflow-y-hidden">
-          <div className="text-right margin-bottom-2">
-            <span className="text-semibold">Count: </span>
-            {inactiveCases.length}
-          </div>
           <table
             aria-describedby="inactive-cases-tab"
             className="usa-table ustc-table trial-sessions subsection"
