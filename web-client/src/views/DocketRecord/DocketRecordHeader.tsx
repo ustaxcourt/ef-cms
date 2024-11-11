@@ -13,6 +13,7 @@ export const DocketRecordMobileHeader = ({
   filterOptions,
   gotoPrintableDocketRecordSequence,
   sessionMetadata,
+  sortTableSequence,
   updateSessionMetadataSequence,
 }: {
   docketNumber: string;
@@ -21,7 +22,14 @@ export const DocketRecordMobileHeader = ({
     docketNumber: string;
   }) => void;
   sessionMetadata: any;
-  updateSessionMetadataSequence: () => void;
+  updateSessionMetadataSequence: (props: {
+    label: string;
+    value: string;
+  }) => void;
+  sortTableSequence: (props: {
+    sortField: string;
+    sortOrder: 'asc' | 'desc';
+  }) => void;
 }) => {
   return (
     <div className="grid-container padding-0 docket-record-header">
@@ -39,7 +47,10 @@ export const DocketRecordMobileHeader = ({
           <DocketRecordSort
             name={`docketRecordSort.${docketNumber}`}
             value={sessionMetadata.docketRecordSort[docketNumber]}
-            onChange={updateSessionMetadataSequence}
+            onChange={option => {
+              sortTableSequence(SORTING_CONVERSION_DICTIONARY[option.value]);
+              updateSessionMetadataSequence(option);
+            }}
           />
         </div>
       </div>
@@ -90,32 +101,12 @@ export const DocketRecordMobileHeader = ({
 };
 
 export const NonMobileHeaderControls = ({
-  docketNumber,
   filterOptions,
-  sessionMetadata,
-  updateSessionMetadataSequence,
 }: {
-  docketNumber: string;
   filterOptions: Record<string, string>;
-  sessionMetadata: any;
-  updateSessionMetadataSequence: () => void;
 }) => {
   return (
     <>
-      <label
-        className="dropdown-label-serif margin-right-3 margin-bottom-0"
-        htmlFor="docket-record-sort"
-        id="docket-record-sort-label"
-      >
-        Sort by
-      </label>
-      <div className="margin-right-3">
-        <DocketRecordSort
-          name={`docketRecordSort.${docketNumber}`}
-          value={sessionMetadata.docketRecordSort[docketNumber]}
-          onChange={updateSessionMetadataSequence}
-        />
-      </div>
       <label
         className="dropdown-label-serif margin-right-3 margin-bottom-0"
         htmlFor="document-filter-by"
@@ -154,6 +145,7 @@ export const DocketRecordHeader = connect(
       sequences.openDownloadDocketEntriesModalSequence,
     sessionMetadata: state.sessionMetadata,
     showModal: state.modal.showModal,
+    sortTableSequence: sequences.sortTableSequence,
     toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
     updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
   },
@@ -166,6 +158,7 @@ export const DocketRecordHeader = connect(
     openDownloadDocketEntriesModalSequence,
     sessionMetadata,
     showModal,
+    sortTableSequence,
     updateSessionMetadataSequence,
   }) {
     return (
@@ -176,12 +169,7 @@ export const DocketRecordHeader = connect(
               <div className="grid-row grid-gap margin-bottom-2">
                 <div className="desktop:grid-col-8 tablet:grid-col-12 display-flex flex-align-center">
                   <NonMobileHeaderControls
-                    docketNumber={formattedCaseDetail.docketNumber}
                     filterOptions={DOCKET_RECORD_FILTER_OPTIONS}
-                    sessionMetadata={sessionMetadata}
-                    updateSessionMetadataSequence={
-                      updateSessionMetadataSequence
-                    }
                   />
                 </div>
                 <div className="desktop:grid-col-4 tablet:grid-col-12 tablet:margin-top-2 text-right">
@@ -227,6 +215,7 @@ export const DocketRecordHeader = connect(
                 gotoPrintableDocketRecordSequence
               }
               sessionMetadata={sessionMetadata}
+              sortTableSequence={sortTableSequence}
               updateSessionMetadataSequence={updateSessionMetadataSequence}
             />
           </Mobile>
@@ -240,3 +229,22 @@ export const DocketRecordHeader = connect(
 );
 
 DocketRecordHeader.displayName = 'DocketRecordHeader';
+
+const SORTING_CONVERSION_DICTIONARY = {
+  byDate: {
+    sortField: 'sortingFilingDate',
+    sortOrder: 'asc',
+  },
+  byDateDesc: {
+    sortField: 'sortingFilingDate',
+    sortOrder: 'desc',
+  },
+  byIndex: {
+    sortField: 'index',
+    sortOrder: 'asc',
+  },
+  byIndexDesc: {
+    sortField: 'index',
+    sortOrder: 'desc',
+  },
+};
