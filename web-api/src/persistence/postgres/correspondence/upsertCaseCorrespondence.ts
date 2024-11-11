@@ -13,7 +13,6 @@ export const upsertCaseCorrespondence = async ({
     archived: correspondence.archived,
     correspondenceId: correspondence.correspondenceId,
     docketNumber,
-    // numberOfPages: correspondence.numberOfPages,
     documentTitle: correspondence.documentTitle,
     filedBy: correspondence.filedBy,
     filingDate: calculateDate({ dateString: correspondence.filingDate }),

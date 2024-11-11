@@ -9,7 +9,6 @@ export const correspondence: NewCaseCorrespondenceKysely[] = [
     documentTitle: 'Internal Memo',
     filedBy: 'Test Petitionsclerk',
     filingDate: new Date('2019-08-14T20:35:52.915Z'),
-    numberOfPages: 1,
     userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
   },
 ];
