@@ -50,7 +50,7 @@ export const maxSessionsPerWeekConstraint: Constraint = ({
 
   if (!meetsConstraint && session.sessionType === SESSION_TYPES.special) {
     throw new Error(
-      `Specials sessions for week of ${session.weekOf} exceed maximum sessions allowed per week`,
+      `Specials sessions for week of ${session.weekOf} exceed maximum sessions allowed per week.`,
     );
   }
 
@@ -68,7 +68,7 @@ export const maxSessionsPerLocationConstraint: Constraint = ({
 
   if (!meetsConstraint && session.sessionType === SESSION_TYPES.special) {
     throw new Error(
-      `Special session count exceeds the max sessions per location for ${session.trialLocation}`,
+      `Special session count exceeds the max sessions per location for ${session.trialLocation}.`,
     );
   }
 
@@ -127,7 +127,7 @@ export const washingtonDcSpecialConstraint: Constraint = ({
     calendaringConfig.maxSessionsPerLocation
   ) {
     throw new Error(
-      `Special sessions in ${WASHINGTON_DC_STRING} exceed the maximum allowed`,
+      `Special sessions in ${WASHINGTON_DC_STRING} exceed the maximum allowed.`,
     );
   }
 
