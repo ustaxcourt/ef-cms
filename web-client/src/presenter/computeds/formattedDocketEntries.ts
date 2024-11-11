@@ -318,8 +318,13 @@ export function sortDocketEntryTable(
   docketRecordSortField,
   docketRecordSortOrder,
 ) {
-  if (!docketRecordSortField || !docketRecordSortOrder) return docketEntries;
-  const sortedDocketEntries = sortBy(docketEntries, [docketRecordSortField]);
+  if (!docketRecordSortField || !docketRecordSortOrder)
+    return sortBy(docketEntries, ['sortingFilingDate', 'index']);
+
+  const sortedDocketEntries = sortBy(docketEntries, [
+    docketRecordSortField,
+    'index',
+  ]);
 
   if (docketRecordSortOrder === 'desc') {
     return sortedDocketEntries.reverse();
