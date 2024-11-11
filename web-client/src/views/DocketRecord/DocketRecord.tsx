@@ -379,6 +379,7 @@ function SortableHeader({
         className={className}
         currentlySortedField={tableSort.sortField}
         currentlySortedOrder={tableSort.sortOrder}
+        data-testid={`${sortField}-sortable-button`}
         defaultSortOrder={ASCENDING}
         descText={SORT_DESCENDING_TEXT[sortType!]}
         hasRows={true}

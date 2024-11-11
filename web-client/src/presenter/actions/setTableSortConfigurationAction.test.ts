@@ -22,4 +22,22 @@ describe('setTableSortConfigurationAction', () => {
       sortOrder: ASCENDING,
     });
   });
+
+  it('should set the field to sort and the sort order in the correct root', async () => {
+    const TEST_ROOT = 'TEST_ROOT';
+    const { state } = await runAction(setTableSortConfigurationAction, {
+      props: { root: TEST_ROOT, sortField: 'createdAt', sortOrder: ASCENDING },
+      state: {
+        tableSort: {
+          sortField: 'recievedAt',
+          sortOrder: DESCENDING,
+        },
+      },
+    });
+
+    expect(state[TEST_ROOT]).toEqual({
+      sortField: 'createdAt',
+      sortOrder: ASCENDING,
+    });
+  });
 });
