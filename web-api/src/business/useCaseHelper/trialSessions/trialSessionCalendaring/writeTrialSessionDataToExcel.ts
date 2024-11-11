@@ -1,3 +1,4 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   CaseCountsAndSessionsByCity,
   EligibleCase,
@@ -24,7 +25,10 @@ export const writeTrialSessionDataToExcel = async ({
 }) => {
   const workbook = new ExcelJS.Workbook();
   const worksheetOptions = { properties: { outlineLevelCol: 2 } };
-  const worksheet = workbook.addWorksheet('sheetInProgress', worksheetOptions);
+  const worksheet = workbook.addWorksheet(
+    'Suggested Session Calendar',
+    worksheetOptions,
+  );
 
   const rowsByCity = getRowsByCity({ caseCountsAndSessionsByCity, weeks });
 
@@ -83,6 +87,24 @@ export const writeTrialSessionDataToExcel = async ({
     type: 'pattern',
   };
 
+  if (incorrectSizeRegularCases.length > 0) {
+    const incorrectlySizedCasesTab = workbook.addWorksheet(
+      'Incorrectly Sized Cases',
+      { properties: { tabColor: { argb: 'FFC0000' } } },
+    );
+
+    incorrectlySizedCasesTab.columns = [
+      {
+        header: 'City',
+        key: 'city',
+      },
+      { header: 'Docket Numbers' },
+    ];
+
+    getIncorrectlySizedCasesRows(incorrectSizeRegularCases).forEach(row => {
+      incorrectlySizedCasesTab.addRow(row);
+    });
+  }
   return (await workbook.xlsx.writeBuffer()) as unknown as Buffer;
 };
 
@@ -161,12 +183,7 @@ const populateRow = ({
   cityStateString: string;
   row: object;
 }): {} => {
-  let city;
-  if (!cityStateString.toLowerCase().startsWith('portland')) {
-    city = cityStateString.split(',')[0];
-  } else {
-    city = cityStateString;
-  }
+  const city = formatCityName(cityStateString);
 
   return {
     city,
@@ -264,4 +281,44 @@ const getCounterCellData = (
     };
   }
   return { border, value };
+};
+
+const formatCityName = (cityString: string): string => {
+  let cityName;
+  if (!cityString.toLowerCase().startsWith('portland')) {
+    cityName = cityString.split(',')[0];
+  } else {
+    cityName = cityString;
+  }
+
+  return cityName;
+};
+
+const getIncorrectlySizedCasesRows = (
+  incorrectSizeRegularCases: EligibleCase[],
+): string[][] => {
+  const incorrectlySizedCasesByCity = incorrectSizeRegularCases
+    .sort((a, b) => {
+      return a.preferredTrialCity!.localeCompare(b.preferredTrialCity!);
+    })
+    .reduce((acc, theCase) => {
+      const docketNumbers = acc[theCase.preferredTrialCity!] || [];
+      docketNumbers.push(theCase.docketNumber);
+      acc[theCase.preferredTrialCity!] = docketNumbers;
+      return acc;
+    }, {});
+
+  const rows: string[][] = [];
+  for (const location in incorrectlySizedCasesByCity) {
+    const city = formatCityName(location);
+    rows.push([
+      city,
+      ...incorrectlySizedCasesByCity[location].sort((a, b) => {
+        return (
+          Case.getSortableDocketNumber(a)! - Case.getSortableDocketNumber(b)!
+        );
+      }),
+    ]);
+  }
+  return rows;
 };
