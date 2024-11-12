@@ -43,7 +43,7 @@ export const TrialSessions = connect(
       <>
         <BigHeader text="Trial Sessions" />
         <section className="usa-section grid-container">
-          <SuccessNotification />
+          <SuccessNotification className="margin-bottom-2" />
           <WarningNotification />
           <ErrorNotification />
           <div className="display-flex flex-justify-end flex-align-center flex-wrap gap-205">

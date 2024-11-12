@@ -80,7 +80,7 @@ type MessageType = (typeof MESSAGE_TYPES)[keyof typeof MESSAGE_TYPES];
 
 export type CalendarGeneratorMessage = {
   message: string;
-  title: string;
+  title?: string;
   type: MessageType;
 };
 
@@ -280,23 +280,25 @@ const generateMessage = ({
 }: {
   userMessages: string[];
 }): CalendarGeneratorMessage => {
-  let message: CalendarGeneratorMessage = {
-    message: SUGGESTED_TRIAL_SESSION_TITLES.success,
-    title: undefined,
-    type: MESSAGE_TYPES.success,
-  };
-
   if (userMessages.length === 0) {
-    return message;
-  }
+    return {
+      message: SUGGESTED_TRIAL_SESSION_TITLES.success,
+      title: undefined,
+      type: MESSAGE_TYPES.success,
+    };
+  } else {
+    let messageString = '';
+    userMessages.forEach(userMessage => {
+      messageString = messageString + ' ' + userMessage;
+    });
+    messageString = messageString.trim();
 
-  userMessages.forEach(userMessage => {
-    message.message = message.message + ' ' + userMessage;
-  });
-  message.title = SUGGESTED_TRIAL_SESSION_TITLES.warning;
-  message.type = MESSAGE_TYPES.warning;
-  message.message = message.message.trim();
-  return message;
+    return {
+      message: messageString,
+      title: SUGGESTED_TRIAL_SESSION_TITLES.warning,
+      type: MESSAGE_TYPES.warning,
+    };
+  }
 };
 
 const calendarIsEmpty = (
