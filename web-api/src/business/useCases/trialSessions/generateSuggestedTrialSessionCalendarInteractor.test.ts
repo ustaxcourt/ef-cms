@@ -7,7 +7,7 @@ import {
 import { CaseCountsAndSessionsByCity } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
 import {
   SESSION_TYPES,
-  SUGGESTED_TRIAL_SESSION_MESSAGES,
+  SUGGESTED_TRIAL_SESSION_TITLES,
   TRIAL_CITY_STRINGS,
 } from '@shared/business/entities/EntityConstants';
 import {
@@ -49,9 +49,7 @@ describe('generateSuggestedTrialSessionCalendar', () => {
       );
 
     // Assert
-    expect(message.startsWith(SUGGESTED_TRIAL_SESSION_MESSAGES.success)).toBe(
-      true,
-    );
+    expect(message.message).toEqual(SUGGESTED_TRIAL_SESSION_TITLES.success);
     expect(bufferArray).toBeDefined();
     expect(bufferArray?.length).toBeGreaterThan(0);
   });
@@ -159,9 +157,7 @@ describe('generateSuggestedTrialSessionCalendar', () => {
       );
 
     // Assert
-    expect(message.startsWith(SUGGESTED_TRIAL_SESSION_MESSAGES.invalid)).toBe(
-      true,
-    );
+    expect(message.title).toEqual(SUGGESTED_TRIAL_SESSION_TITLES.invalid);
     expect(bufferArray).toBeUndefined();
   });
 });
