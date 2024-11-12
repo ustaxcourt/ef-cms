@@ -1,7 +1,5 @@
-import { Case } from '@shared/business/entities/cases/Case';
 import {
   CaseCountsAndSessionsByCity,
-  EligibleCase,
   getDataForCalendaring,
 } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
 import {
@@ -22,7 +20,7 @@ import {
 import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
-  SUGGESTED_TRIAL_SESSION_MESSAGES,
+  SUGGESTED_TRIAL_SESSION_TITLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
@@ -71,6 +69,21 @@ export const WASHINGTON_DC_SOUTH_STRING =
 
 export type TrialSessionReadyForCalendaring = TrialSession & { weekOf: string };
 
+// TODO 10275: more specific name?
+export const MESSAGE_TYPES = {
+  error: 'ERROR',
+  success: 'SUCCESS',
+  warning: 'WARNING',
+};
+
+type MessageType = (typeof MESSAGE_TYPES)[keyof typeof MESSAGE_TYPES];
+
+export type CalendarGeneratorMessage = {
+  message: string;
+  title?: string;
+  type: MessageType;
+};
+
 export const generateSuggestedTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
   {
@@ -78,7 +91,10 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     termStartDate,
   }: { termEndDate: string; termStartDate: string },
   authorizedUser: UnknownAuthUser,
-): Promise<{ message: string; bufferArray: Buffer | undefined }> => {
+): Promise<{
+  message: CalendarGeneratorMessage;
+  bufferArray: Buffer | undefined;
+}> => {
   console.time('10275: Total interactor time');
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.SET_TRIAL_SESSION_CALENDAR)
@@ -122,6 +138,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   let { caseCountsAndSessionsByCity, incorrectSizeRegularCases } =
     getDataForCalendaring({ cases });
+  let userMessages: string[];
 
   ({ caseCountsAndSessionsByCity } = createProspectiveTrialSessions({
     calendaringConfig,
@@ -146,7 +163,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     reservedWeekOfAtLocationConstraint,
   ];
 
-  ({ caseCountsAndSessionsByCity } = generateCalendar({
+  ({ caseCountsAndSessionsByCity, userMessages } = generateCalendar({
     calendaringConfig,
     caseCountsAndSessionsByCity,
     constraints,
@@ -160,7 +177,12 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   if (calendarIsEmpty(caseCountsAndSessionsByCity)) {
     return {
       bufferArray: undefined,
-      message: SUGGESTED_TRIAL_SESSION_MESSAGES.invalid,
+      message: {
+        message:
+          'There are no trial sessions to schedule within the dates provided.',
+        title: SUGGESTED_TRIAL_SESSION_TITLES.invalid,
+        type: MESSAGE_TYPES.error,
+      },
     };
   }
 
@@ -171,6 +193,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   console.time('10275: writeTrialSessionDataToExcel');
   const bufferArray = await writeTrialSessionDataToExcel({
     caseCountsAndSessionsByCity,
+    incorrectSizeRegularCases,
     weeks: weeksToLoop,
   });
   console.timeEnd('10275: writeTrialSessionDataToExcel');
@@ -178,7 +201,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   return {
     bufferArray,
-    message: generateSuccessMessage({ incorrectSizeRegularCases }),
+    message: generateMessage({ userMessages }),
   };
 };
 
@@ -252,33 +275,30 @@ export const getCitiesFromLastTwoTerms = ({
     });
 };
 
-const generateSuccessMessage = ({
-  incorrectSizeRegularCases,
+const generateMessage = ({
+  userMessages,
 }: {
-  incorrectSizeRegularCases: EligibleCase[];
-}): string => {
-  let successMessage = SUGGESTED_TRIAL_SESSION_MESSAGES.success;
-
-  // TODO 10275: pending court feedback, consider moving this to a modal or the xlsx sheet
-  if (incorrectSizeRegularCases.length > 0) {
-    const docketNumbers: string[] = [];
-    incorrectSizeRegularCases.forEach(incorrectSizeRegularCase => {
-      docketNumbers.push(incorrectSizeRegularCase.docketNumber);
+  userMessages: string[];
+}): CalendarGeneratorMessage => {
+  if (userMessages.length === 0) {
+    return {
+      message: SUGGESTED_TRIAL_SESSION_TITLES.success,
+      title: undefined,
+      type: MESSAGE_TYPES.success,
+    };
+  } else {
+    let messageString = '';
+    userMessages.forEach(userMessage => {
+      messageString = messageString + ' ' + userMessage;
     });
+    messageString = messageString.trim();
 
-    docketNumbers.sort((a, b) => {
-      return (
-        Case.getSortableDocketNumber(a)! - Case.getSortableDocketNumber(b)!
-      );
-    });
-
-    // TODO 10275: consider using a single line success message if there are no incorrectSizeRegularCases (ie no successMessage, only the existing title)
-    successMessage =
-      successMessage +
-      ` The following cases have a procedure type that does not match their preferred trial location's procedure type: ${docketNumbers.join(', ')}`;
+    return {
+      message: messageString,
+      title: SUGGESTED_TRIAL_SESSION_TITLES.warning,
+      type: MESSAGE_TYPES.warning,
+    };
   }
-
-  return successMessage;
 };
 
 const calendarIsEmpty = (

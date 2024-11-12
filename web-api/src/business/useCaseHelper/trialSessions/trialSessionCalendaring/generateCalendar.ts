@@ -45,6 +45,7 @@ export const generateCalendar = ({
   calendaringConfig: CalendaringConfig;
 }): {
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
+  userMessages: string[];
 } => {
   const calendarState = setupCalendarState(weeksToLoop);
 
@@ -59,38 +60,52 @@ export const generateCalendar = ({
     return aNotVisited === bNotVisited ? 0 : aNotVisited ? -1 : 1;
   });
 
+  let userMessages: string[] = [];
   // special sessions handled ahead of all reg, small
-  specialSessions.forEach(specialSession => {
-    const sessionWeekOf = createDateAtStartOfWeekEST(
-      specialSession.startDate,
-      FORMATS.YYYYMMDD,
-    );
+  specialSessions
+    .sort((a, b) => {
+      // eslint-disable-next-line @miovision/disallow-date/no-new-date
+      return +new Date(a.startDate) - +new Date(b.startDate);
+    })
+    .forEach(specialSession => {
+      const sessionWeekOf = createDateAtStartOfWeekEST(
+        specialSession.startDate,
+        FORMATS.YYYYMMDD,
+      );
 
-    const scheduledTrialSession: ScheduledTrialSession = {
-      sessionType: SESSION_TYPES.special,
-      trialLocation: getTrialLocationForSpecialSession({
+      const scheduledTrialSession: ScheduledTrialSession = {
+        sessionType: SESSION_TYPES.special,
+        trialLocation: getTrialLocationForSpecialSession({
+          calendarState,
+          calendaringConfig,
+          originalLocation: specialSession.trialLocation!,
+          sessionWeekOf,
+        }),
+        weekOf: sessionWeekOf,
+      };
+
+      const messages = checkConstraints({
         calendarState,
         calendaringConfig,
-        originalLocation: specialSession.trialLocation!,
-        sessionWeekOf,
-      }),
-      weekOf: sessionWeekOf,
-    };
+        constraints,
+        scheduledTrialSession,
+      }).filter(r => {
+        return typeof r === 'string';
+      });
 
-    checkConstraints({
-      calendarState,
-      calendaringConfig,
-      constraints,
-      scheduledTrialSession,
-    });
+      if (messages.length) {
+        scheduledTrialSession.ignoresConstraints = true;
+      }
 
-    addSpecialScheduledTrialSession({
-      calendarState,
-      caseCountsAndSessionsByCity,
-      scheduledTrialSession,
-      weeksToLoop,
+      userMessages.push(...messages);
+
+      addSpecialScheduledTrialSession({
+        calendarState,
+        caseCountsAndSessionsByCity,
+        scheduledTrialSession,
+        weeksToLoop,
+      });
     });
-  });
 
   for (const currentWeek of weeksToLoop) {
     const weekOfString = currentWeek;
@@ -108,6 +123,8 @@ export const generateCalendar = ({
           calendaringConfig,
           constraints,
           scheduledTrialSession,
+        }).every(r => {
+          return r === true;
         });
 
         if (canScheduleSession) {
@@ -125,6 +142,7 @@ export const generateCalendar = ({
 
   return {
     caseCountsAndSessionsByCity,
+    userMessages,
   };
 };
 

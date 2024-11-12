@@ -211,9 +211,10 @@ export const CLOSED_CASE_STATUSES = [
   CASE_STATUS_TYPES.closed,
   CASE_STATUS_TYPES.closedDismissed,
 ];
-export const SUGGESTED_TRIAL_SESSION_MESSAGES = {
-  invalid: 'There are no trial sessions to schedule within the dates provided.',
-  success: 'Trial session calendar generated.',
+export const SUGGESTED_TRIAL_SESSION_TITLES = {
+  invalid: 'Create term error.',
+  success: 'Successfully generated suggested term.',
+  warning: 'Successfully generated suggested term with warnings.',
 };
 
 export const DOCUMENT_RELATIONSHIPS = {

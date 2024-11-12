@@ -19,6 +19,7 @@ export type ScheduledTrialSession = {
   trialLocation: string;
   sessionType: TrialSessionTypes;
   weekOf: string;
+  ignoresConstraints?: boolean;
 };
 
 export type CalendaringConfig = {

@@ -175977,6 +175977,96 @@
     "estimatedEndDate": "2025-04-11T00:00:00.000-04:00"
   },
   {
+    "isStartDateWithinNOTTReminderRange": false,
+    "hasNOTTBeenServed": false,
+    "maxCases": "20",
+    "trialLocation": "Atlanta, Georgia",
+    "state": "GA",
+    "city": "Atlanta",
+    "isCalendared": true,
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "startDate": "2025-03-11T00:00:00.000-04:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|6d9b557f-3861-42ae-96de-f387539a4d60",
+    "postalCode": "30303",
+    "termYear": "2025",
+    "address1": "Room 1136",
+    "address2": "75 Ted Turner Drive, S.W.",
+    "createdAt": "2024-05-28T19:31:18.374Z",
+    "term": "Winter",
+    "dismissedAlertForNOTT": false,
+    "startTime": "10:00",
+    "isClosed": false,
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "03/01/25",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Lauber",
+      "userId": "f23f6914-1431-452a-9db3-1fd733a890f0"
+    },
+    "courthouseName": "Russell Federal Building and Courthouse",
+    "caseOrder": [
+      {
+        "disposition": "Status was changed to Closed",
+        "removedFromTrial": true,
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-05-28T19:31:58.545Z",
+        "docketNumber": "10896-17",
+        "removedFromTrialDate": "2024-09-11T15:53:23.633Z"
+      }
+    ],
+    "trialSessionId": "6d9b557f-3861-42ae-96de-f387539a4d60",
+    "pk": "trial-session|6d9b557f-3861-42ae-96de-f387539a4d60",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": "2025-04-11T00:00:00.000-04:00"
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": false,
+    "hasNOTTBeenServed": false,
+    "maxCases": "20",
+    "trialLocation": "Atlanta, Georgia",
+    "state": "GA",
+    "city": "Atlanta",
+    "isCalendared": true,
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "startDate": "2025-03-03T00:00:00.000-05:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|7d9b557f-3861-42ae-96de-f387539a4d60",
+    "postalCode": "30303",
+    "termYear": "2025",
+    "address1": "Room 1136",
+    "address2": "75 Ted Turner Drive, S.W.",
+    "createdAt": "2024-05-28T19:31:18.374Z",
+    "term": "Winter",
+    "dismissedAlertForNOTT": false,
+    "startTime": "10:00",
+    "isClosed": false,
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "03/01/25",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Lauber",
+      "userId": "f23f6914-1431-452a-9db3-1fd733a890f0"
+    },
+    "courthouseName": "Russell Federal Building and Courthouse",
+    "caseOrder": [
+      {
+        "disposition": "Status was changed to Closed",
+        "removedFromTrial": true,
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-05-28T19:31:58.545Z",
+        "docketNumber": "10896-17",
+        "removedFromTrialDate": "2024-09-11T15:53:23.633Z"
+      }
+    ],
+    "trialSessionId": "7d9b557f-3861-42ae-96de-f387539a4d60",
+    "pk": "trial-session|7d9b557f-3861-42ae-96de-f387539a4d60",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": "2025-04-11T00:00:00.000-04:00"
+  },
+  {
     "trialLocation": "Standalone Remote",
     "createdAt": "2022-01-10T14:24:52.792Z",
     "term": "Spring",
@@ -177098,6 +177188,57 @@
     ],
     "trialSessionId": "5e640cd7-e8d7-4e6e-a720-3a3d3f9f25e4",
     "pk": "trial-session|5e640cd7-e8d7-4e6e-a720-3a3d3f9f25e4",
+    "gsi1pk": "trial-session-catalog",
+    "estimatedEndDate": null
+  },
+  {
+    "isStartDateWithinNOTTReminderRange": false,
+    "hasNOTTBeenServed": false,
+    "maxCases": "100",
+    "trialLocation": "Washington, District of Columbia",
+    "state": "DC",
+    "city": "Washington",
+    "isCalendared": true,
+    "chambersPhoneNumber": "(202) 521-0853",
+    "sessionType": "Special",
+    "proceedingType": "In Person",
+    "notes": "Set for 2 weeks through February 21, 2025",
+    "startDate": "2025-02-10T00:00:00.000-05:00",
+    "sessionStatus": "Open",
+    "sk": "trial-session|4e640cd7-e8d7-4e6e-a720-3a3d3f9f25e4",
+    "postalCode": "20217",
+    "termYear": "2025",
+    "address1": "400 2nd Street Northwest",
+    "address2": "South Courtroom",
+    "createdAt": "2024-04-16T19:15:32.165Z",
+    "term": "Winter",
+    "dismissedAlertForNOTT": false,
+    "startTime": "10:00",
+    "isClosed": false,
+    "entityName": "TrialSession",
+    "thirtyDaysBeforeTrialFormatted": "01/12/25",
+    "sessionScope": "Location-based",
+    "judge": {
+      "name": "Morrison",
+      "userId": "17bca6f3-0116-4081-898c-988fe729444b"
+    },
+    "courthouseName": "United States Tax Court",
+    "caseOrder": [
+      {
+        "calendarNotes": "Special for 2 weeks through February 21, 2025",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-16T19:19:09.462Z",
+        "docketNumber": "27904-10"
+      },
+      {
+        "calendarNotes": "Special for 2 weeks through February 21, 2025",
+        "isManuallyAdded": true,
+        "addedToSessionAt": "2024-04-16T19:20:58.346Z",
+        "docketNumber": "27905-10"
+      }
+    ],
+    "trialSessionId": "4e640cd7-e8d7-4e6e-a720-3a3d3f9f25e4",
+    "pk": "trial-session|4e640cd7-e8d7-4e6e-a720-3a3d3f9f25e4",
     "gsi1pk": "trial-session-catalog",
     "estimatedEndDate": null
   },

@@ -1,3 +1,5 @@
+import { MESSAGE_TYPES } from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
+import { SUGGESTED_TRIAL_SESSION_TITLES } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -6,18 +8,21 @@ import { runCreateTermAction } from './runCreateTermAction';
 describe('runCreateTermAction', () => {
   let successStub;
   let errorStub;
+  let warningStub;
   let mockBufferData;
   let mockExcelJSBuffer;
 
   beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
+    warningStub = jest.fn();
 
     presenter.providers.applicationContext = applicationContext;
 
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
+      warning: warningStub,
     };
 
     mockBufferData = new Uint8Array([65, 66, 67]);
@@ -25,32 +30,46 @@ describe('runCreateTermAction', () => {
   });
 
   it('should call the success path when a trial session calendar is generated without any errors', async () => {
+    const mockMessage = {
+      message: SUGGESTED_TRIAL_SESSION_TITLES.success,
+      type: MESSAGE_TYPES.success,
+    };
+
     applicationContext
       .getUseCases()
       .generateSuggestedTrialSessionCalendarInteractor.mockReturnValue({
         bufferArray: mockExcelJSBuffer,
-        message: 'Test',
+        message: mockMessage,
       });
 
     await runAction(runCreateTermAction, {
       modules: { presenter },
       props: {
         termEndDate: '03/31/2050',
-        termName: 'test term',
+        termName: 'Test term',
         termStartDate: '01/01/2050',
       },
     });
 
-    expect(successStub).toHaveBeenCalled();
+    expect(successStub).toHaveBeenCalledWith({
+      alertSuccess: mockMessage,
+      bufferArray: mockExcelJSBuffer,
+      termName: 'Test term',
+    });
   });
 
   it('should call the error path when there is no data in the ExcelJS Buffer instance returned by the interactor', async () => {
-    const errorMessage = 'Test error';
+    const mockMessage = {
+      message:
+        'There are no trial sessions to schedule within the dates provided.',
+      title: SUGGESTED_TRIAL_SESSION_TITLES.invalid,
+      type: MESSAGE_TYPES.error,
+    };
     applicationContext
       .getUseCases()
       .generateSuggestedTrialSessionCalendarInteractor.mockReturnValue({
         bufferArray: { data: undefined },
-        message: errorMessage,
+        message: mockMessage,
       });
 
     await runAction(runCreateTermAction, {
@@ -63,37 +82,36 @@ describe('runCreateTermAction', () => {
     });
 
     expect(errorStub).toHaveBeenCalledWith({
-      alertError: {
-        message: errorMessage,
-        title: 'Create term error.',
-      },
+      alertError: mockMessage,
     });
   });
 
-  it('should call the error path when the interactor throws an error', async () => {
-    const errorMessage = 'Test error';
+  it('should call the warning path when the interactor returns a warning', async () => {
+    const mockMessage = {
+      message: 'You broke some constraints',
+      title: SUGGESTED_TRIAL_SESSION_TITLES.warning,
+      type: MESSAGE_TYPES.warning,
+    };
     applicationContext
       .getUseCases()
-      .generateSuggestedTrialSessionCalendarInteractor.mockImplementation(
-        () => {
-          throw new Error(errorMessage);
-        },
-      );
+      .generateSuggestedTrialSessionCalendarInteractor.mockReturnValue({
+        bufferArray: mockExcelJSBuffer,
+        message: mockMessage,
+      });
 
     await runAction(runCreateTermAction, {
       modules: { presenter },
       props: {
         termEndDate: '03/31/2050',
-        termName: 'test term',
+        termName: 'Test term with warnings',
         termStartDate: '01/01/2050',
       },
     });
 
-    expect(errorStub).toHaveBeenCalledWith({
-      alertError: {
-        message: errorMessage,
-        title: 'Create term error.',
-      },
+    expect(warningStub).toHaveBeenCalledWith({
+      alertWarning: mockMessage,
+      bufferArray: mockExcelJSBuffer,
+      termName: 'Test term with warnings',
     });
   });
 });

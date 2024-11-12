@@ -14,6 +14,7 @@ import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { TrialSessionsTable } from './TrialSessionsTable';
+import { WarningNotification } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -42,7 +43,8 @@ export const TrialSessions = connect(
       <>
         <BigHeader text="Trial Sessions" />
         <section className="usa-section grid-container">
-          <SuccessNotification />
+          <SuccessNotification className="margin-bottom-2" />
+          <WarningNotification />
           <ErrorNotification />
           <div className="display-flex flex-justify-end flex-align-center flex-wrap gap-205">
             <div>

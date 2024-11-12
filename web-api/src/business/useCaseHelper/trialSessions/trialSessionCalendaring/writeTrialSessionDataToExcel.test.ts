@@ -45,6 +45,7 @@ describe('writeTrialSessionDataToExcel', () => {
 
     await writeTrialSessionDataToExcel({
       caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
+      incorrectSizeRegularCases: [],
       weeks,
     });
   });
@@ -79,7 +80,10 @@ describe('writeTrialSessionDataToExcel', () => {
 
     await writeTrialSessionDataToExcel({
       caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
+      incorrectSizeRegularCases: [],
       weeks,
     });
   });
+
+  // 10275 TODO: consider writing tests that open xlsx file, inspects worksheets and so on
 });

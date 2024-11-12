@@ -189,12 +189,12 @@ export const createDateAtStartOfWeekEST = (
   dateString: string,
   format: TimeFormats,
 ): string => {
-  const dtObj = DateTime.fromISO(dateString, { zone: USTC_TZ });
+  const dtObj = DateTime.fromISO(dateString, { setZone: true });
 
   const dateOutput = dtObj
+    .setZone(USTC_TZ)
     .startOf('week')
     .startOf('day')
-    .setZone('utc')
     .toFormat(format);
 
   return dateOutput;
