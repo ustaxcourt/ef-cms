@@ -1,12 +1,25 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { FormattedCase } from '@shared/business/utilities/getFormattedCaseDetail';
+import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { without } from 'lodash';
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const caseInventoryReportHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): {
+  caseStatuses: string[];
+  formattedReportData: FormattedCase[];
+  judges: string[];
+  nextPageSize: number;
+  resultCount: number;
+  showResultsTable: boolean;
+  showSelectFilterMessage: boolean;
+  showNoResultsMessage: boolean;
+  showLoadMoreButton: boolean;
+  showJudgeColumn: boolean;
+  showStatusColumn: boolean;
+} => {
   const {
     CASE_INVENTORY_PAGE_SIZE,
     CHIEF_JUDGE,

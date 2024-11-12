@@ -10,25 +10,10 @@ import {
   isInConsolidatedGroup,
   isLeadCase,
 } from '@shared/business/entities/cases/Case';
-import React, { useRef, useState } from 'react';
+import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
+import React, { useRef } from 'react';
 
 const ITEMS_PER_PAGE = 100;
-
-export function useClientSidePaginator<T>(fullDataSet: T[], pageSize) {
-  const [activePage, setActivePage] = useState(0);
-  const totalPages = Math.ceil(fullDataSet.length / pageSize);
-  const entriesInPage = fullDataSet.slice(
-    activePage * pageSize,
-    activePage * pageSize + pageSize,
-  );
-
-  return {
-    activePage,
-    pageRecords: entriesInPage,
-    setActivePage,
-    totalPages,
-  };
-}
 
 export function ColdCaseReportList({ entries }: { entries: ColdCaseEntry[] }) {
   const paginatorTop = useRef(null);
