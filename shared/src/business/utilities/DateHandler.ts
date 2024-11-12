@@ -188,8 +188,6 @@ export const createDateAtStartOfWeekEST = (
   dateString: string,
   format: TimeFormats,
 ): string => {
-  // does the date use an offset?
-  //   is the offset eastern standard/daylight
   const dtObj = DateTime.fromISO(dateString, { setZone: true });
 
   const dateOutput = dtObj
