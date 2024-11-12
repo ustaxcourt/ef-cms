@@ -13,7 +13,6 @@ import { TrialSessionDetailsHeader } from '@web-client/views/TrialSessionDetails
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const PublicTrialSessionDetails = connect(
   {
@@ -125,10 +124,11 @@ function NonMobileOpenCases({
 }) {
   return (
     <React.Fragment>
-      <div className="text-right margin-bottom-2">
+      <div className="text-right">
         <span className="text-semibold">Count: </span>
         {openCases.length}
       </div>
+      <div className="padding-1"></div>
       <div className="overflow-x-auto overflow-y-hidden">
         <table
           className="usa-table ustc-table trial-sessions subsection"
@@ -158,15 +158,7 @@ function NonMobileOpenCases({
                   <CaseIcons formattedCase={publicCase} />
                 </td>
                 <td>
-                  <span
-                    className={classNames({
-                      'margin-left-2':
-                        publicCase.inConsolidatedGroup &&
-                        !publicCase.isLeadCase,
-                    })}
-                  >
-                    <CaseLink formattedCase={publicCase} />
-                  </span>
+                  <CaseLink formattedCase={publicCase} />
                 </td>
                 <td>{publicCase.caseTitle}</td>
                 <td>
@@ -196,8 +188,7 @@ function MobileOpenCases({
 }) {
   return (
     <React.Fragment>
-      <div className="grid-row margin-bottom-2 width-full flex-align-center"></div>
-      <div className="text-right margin-bottom-2">
+      <div className="text-right">
         <span className="text-semibold">Count: </span>
         {openCases.length}
       </div>
@@ -215,15 +206,17 @@ function MobileOpenCases({
               <tr className="padding-0" key={publicCase.docketNumberWithSuffix}>
                 <td>
                   <div style={{ alignItems: 'center', display: 'flex' }}>
-                    <span className="margin-right-3">
-                      <ConsolidatedCaseIcon
-                        consolidatedIconTooltipText={
-                          publicCase.consolidatedIconTooltipText
-                        }
-                        inConsolidatedGroup={publicCase.inConsolidatedGroup}
-                        showLeadCaseIcon={publicCase.isLeadCase}
-                      />
-                    </span>
+                    {publicCase.inConsolidatedGroup && (
+                      <span className="margin-right-105">
+                        <ConsolidatedCaseIcon
+                          consolidatedIconTooltipText={
+                            publicCase.consolidatedIconTooltipText
+                          }
+                          inConsolidatedGroup={publicCase.inConsolidatedGroup}
+                          showLeadCaseIcon={publicCase.isLeadCase}
+                        />
+                      </span>
+                    )}
                     <CaseLink formattedCase={publicCase} />
                     {publicCase.isSealed && (
                       <span className="text-right margin-left-auto">
@@ -243,23 +236,29 @@ function MobileOpenCases({
                     className="padding-bottom-3"
                     key={publicCase.docketNumberWithSuffix}
                   >
-                    <div className="display-flex flex-column gap-3">
+                    <div className="display-flex gap-3">
                       <div>
                         <span className="label">Case Title</span>
                         {publicCase.caseTitle}
                       </div>
-                      {publicCase.privatePractitioners?.map(practitioner => (
-                        <div key={practitioner?.name}>
-                          <span className="label">Petitioner Counsel</span>
-                          <div>{practitioner?.name}</div>
-                        </div>
-                      ))}
-                      {publicCase.irsPractitioners?.map(respondent => (
-                        <div key={respondent?.name}>
-                          <span className="label">Respondent Counsel</span>
-                          <div>{respondent?.name}</div>
-                        </div>
-                      ))}
+                      {publicCase.privatePractitioners &&
+                        publicCase.privatePractitioners.length > 0 && (
+                          <div>
+                            <span className="label">Petitioner Counsel</span>
+                            {publicCase.privatePractitioners?.map(counsel => (
+                              <div key={counsel.name}>{counsel.name}</div>
+                            ))}
+                          </div>
+                        )}
+                      {publicCase.irsPractitioners &&
+                        publicCase.irsPractitioners.length > 0 && (
+                          <div>
+                            <span className="label">Respondent Counsel</span>
+                            {publicCase.irsPractitioners?.map(counsel => (
+                              <div key={counsel.name}>{counsel.name}</div>
+                            ))}
+                          </div>
+                        )}
                     </div>
                   </div>
                 </td>

@@ -13,11 +13,12 @@ export const AllCases = connect(
   function AllCases({ allCases }) {
     return (
       <React.Fragment>
+        <div className="text-right">
+          <span className="text-semibold">Count: </span>
+          {allCases.length}
+        </div>
+        <div className="padding-1"></div>
         <div className="overflow-x-auto overflow-y-hidden">
-          <div className="push-right margin-bottom-2">
-            <span className="text-semibold">Count: </span>
-            {allCases.length}
-          </div>
           <table
             aria-describedby="all-cases-tab"
             className="usa-table ustc-table trial-sessions subsection"
