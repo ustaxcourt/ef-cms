@@ -1,6 +1,10 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getLogger } from 'aws-xray-sdk';
 import { partitionRecords } from './processStreamUtilities';
+import { processCaseCorrespondenceEntries } from '@web-api/business/useCases/processStreamRecords/processCaseCorrespondenceEntries';
+import { processCaseDeadlineEntries } from '@web-api/business/useCases/processStreamRecords/processCaseDeadlineEntries';
 import { processCaseEntries } from './processCaseEntries';
+import { processCaseWorksheetEntries } from '@web-api/business/useCases/processStreamRecords/processCaseWorksheetEntries';
 import { processCompletionMarkers } from './processCompletionMarkers';
 import { processDocketEntries } from './processDocketEntries';
 import { processMessageEntries } from './processMessageEntries';
@@ -15,7 +19,10 @@ export const processStreamRecordsInteractor = async (
   { recordsToProcess }: { recordsToProcess: DynamoDBRecord[] },
 ): Promise<void> => {
   const {
+    caseCorrespondenceRecords,
+    caseDeadlineRecords,
     caseEntityRecords,
+    caseWorksheetRecords,
     completionMarkers,
     docketEntryRecords,
     messageRecords,
@@ -90,6 +97,33 @@ export const processStreamRecordsInteractor = async (
     await processCompletionMarkers({
       applicationContext,
       completionMarkers,
+    });
+
+    await processCaseDeadlineEntries({
+      caseDeadlineRecords,
+    }).catch(err => {
+      getLogger().error('failed to process case deadline records', {
+        err,
+      });
+      throw err;
+    });
+
+    await processCaseWorksheetEntries({
+      caseWorksheetRecords,
+    }).catch(err => {
+      getLogger().error('failed to process case correspondence records', {
+        err,
+      });
+      throw err;
+    });
+
+    await processCaseCorrespondenceEntries({
+      caseCorrespondenceRecords,
+    }).catch(err => {
+      getLogger().error('failed to process case correspondence records', {
+        err,
+      });
+      throw err;
     });
 
     await processOtherEntries({ applicationContext, otherRecords }).catch(

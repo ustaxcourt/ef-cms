@@ -912,7 +912,13 @@ export class Case extends JoiValidationEntity {
   assignCorrespondences({ rawCase }) {
     if (Array.isArray(rawCase.correspondence)) {
       this.correspondence = rawCase.correspondence
-        .map(correspondence => new Correspondence(correspondence))
+        .map(
+          correspondence =>
+            new Correspondence({
+              ...correspondence,
+              docketNumber: rawCase.docketNumber,
+            }),
+        )
         .sort((a, b) => compareStrings(a.filingDate, b.filingDate));
     } else {
       this.correspondence = [];
@@ -920,7 +926,11 @@ export class Case extends JoiValidationEntity {
 
     if (Array.isArray(rawCase.archivedCorrespondences)) {
       this.archivedCorrespondences = rawCase.archivedCorrespondences.map(
-        correspondence => new Correspondence(correspondence),
+        correspondence =>
+          new Correspondence({
+            ...correspondence,
+            docketNumber: rawCase.docketNumber,
+          }),
       );
     } else {
       this.archivedCorrespondences = [];
