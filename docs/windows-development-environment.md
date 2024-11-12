@@ -51,7 +51,7 @@ __Ready to begin? Let's go!__
 1. Create a new `.zshrc` config file
    ```bash
    rm ~/.zshrc
-   nano ~/.zsrch
+   nano ~/.zshrc
    ```
 1. Paste in the following
    ```
@@ -133,11 +133,14 @@ __Ready to begin? Let's go!__
      python3-dev \
      python3-pip \
      sudo \
-     terraform-switcher \
      wget \
      zip
    ```
 1. Install NVM by following the [NVM installation instructions](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating)
+1. Source the `.zshrc` config file to enable the NVM configuration that was automatically appended during installation
+   ```bash
+   source ~/.zshrc
+   ```
 1. Install NodeJS via `nvm`
    1. To find out which version of NodeJS to install, check the `FROM` line of the [Dockerfile](../Dockerfile) and look for `node-<version>`
    1. Use `nvm` to install NodeJS, replacing `<version>` with the actual version you determined
@@ -146,17 +149,19 @@ __Ready to begin? Let's go!__
       nvm use <version>
       ```
    1. **Note:** You will be responsible for keeping your local installation of NodeJS in sync with DAWSON's by repeating the previous step when necessary 
-1. Install Terraform via `terraform-switcher`
+1. Install `tfswitch` by following the [tfswitch installation instructions](https://github.com/warrensbox/terraform-switcher#linux)
+1. Install Terraform via `tfswitch`
    1. To find out which version of Terraform to install, check the [verify-terraform-version](../scripts/verify-terraform-version.sh) script
-   1. Use `terraform-switcher` to install Terraform, replacing `<version>` with the actual version you determined
+   1. Use `tfswitch` to install Terraform, replacing `<version>` with the actual version you determined
       ```bash
-      terraform-switcher <version>
+      tfswitch <version>
       ```
    1. **Note:** You will be responsible for keeping your local installation of Terraform in sync with DAWSON's by repeating the previous step when necessary
 1. Configure `git`
    1. Configure `git` to use your github user (be sure to use the email address you use with github)
       ```bash
-      # TODO: git config email (& github username?) & global merge setting
+      git config --global user.name "First Last"
+      git config --global user.email "first.last@ustaxcourt.gov"
       ```
    1. Generate an SSH key (press `Enter` to select all the defaults when asked)
       ```bash
@@ -188,9 +193,10 @@ __Ready to begin? Let's go!__
    ```bash
    source ~/.zshrc
    ```
-1. Follow the [environment switcher setup instructions](./additional-resources/environment-switcher.md) to set up AWS SSO and configure your environment switcher to be able to point to deployed DAWSON environments 
 1. Open the `ef-cms` directory in VSCode (this step will only work if you've already installed the [WSL plugin](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl) for VSCode and restarted the Linux container after doing so)
    ```bash
+   cd ~/git/ustaxcourt/ef-cms
    code .
    ```
+1. Follow the [environment switcher setup instructions](./additional-resources/environment-switcher.md) to set up AWS SSO and configure your environment switcher to be able to point to deployed DAWSON environments
 1. Follow the instructions for [Connecting to a Deployed Postgres Database](./postgres/connect-to-deployed-db.md) to configure TablePlus to connect to the deployed postgres databases
