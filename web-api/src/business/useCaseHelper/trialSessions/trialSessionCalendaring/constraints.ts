@@ -17,7 +17,7 @@ export type Constraint = ({
   calendarState: CalendarState;
   session: ScheduledTrialSession;
   calendaringConfig: CalendaringConfig;
-}) => boolean;
+}) => boolean | string;
 
 export const checkConstraints = ({
   calendaringConfig,
@@ -29,8 +29,8 @@ export const checkConstraints = ({
   calendarState: CalendarState;
   scheduledTrialSession: ScheduledTrialSession;
   constraints: Constraint[];
-}): boolean => {
-  return constraints.every(c =>
+}): (boolean | string)[] => {
+  return constraints.map(c =>
     c({
       calendarState,
       calendaringConfig,
@@ -49,9 +49,9 @@ export const maxSessionsPerWeekConstraint: Constraint = ({
     calendaringConfig.maxSessionsPerWeek;
 
   if (!meetsConstraint && session.sessionType === SESSION_TYPES.special) {
-    throw new Error(
-      `Specials sessions for week of ${session.weekOf} exceed maximum sessions allowed per week.`,
-    );
+    // throw new Error(
+    return `Specials sessions for week of ${session.weekOf} exceed maximum sessions allowed per week.`;
+    // );
   }
 
   return meetsConstraint;
@@ -67,9 +67,9 @@ export const maxSessionsPerLocationConstraint: Constraint = ({
     calendaringConfig.maxSessionsPerLocation;
 
   if (!meetsConstraint && session.sessionType === SESSION_TYPES.special) {
-    throw new Error(
-      `Special session count exceeds the max sessions per location for ${session.trialLocation}.`,
-    );
+    // throw new Error(
+    return `Special session count exceeds the max sessions per location for ${session.trialLocation}.`;
+    // );
   }
 
   return meetsConstraint;
@@ -84,9 +84,9 @@ export const oneSessionPerLocationPerWeekConstraint: Constraint = ({
   ].has(session.trialLocation);
 
   if (!meetsConstraint && session.sessionType === SESSION_TYPES.special) {
-    throw new Error(
-      'There must only be one special trial session per location per week.',
-    );
+    // throw new Error(
+    return 'There must only be one special trial session per location per week.';
+    // );
   }
 
   return meetsConstraint;
@@ -117,18 +117,18 @@ export const washingtonDcSpecialConstraint: Constraint = ({
       WASHINGTON_DC_SOUTH_STRING,
     )
   ) {
-    throw new Error(
-      'There must be no more than two special trial sessions per week in Washington, DC.',
-    );
+    // throw new Error(
+    return 'There must be no more than two special trial sessions per week in Washington, DC.';
+    // );
   }
 
   if (
     calendarState.sessionCountPerCity[WASHINGTON_DC_SOUTH_STRING] >=
     calendaringConfig.maxSessionsPerLocation
   ) {
-    throw new Error(
-      `Special sessions in ${WASHINGTON_DC_STRING} exceed the maximum allowed.`,
-    );
+    // throw new Error(
+    return `Special sessions in ${WASHINGTON_DC_STRING} exceed the maximum allowed.`;
+    // );
   }
 
   return true;

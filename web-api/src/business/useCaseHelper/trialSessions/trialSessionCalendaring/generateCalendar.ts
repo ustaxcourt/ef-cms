@@ -60,7 +60,7 @@ export const generateCalendar = ({
     return aNotVisited === bNotVisited ? 0 : aNotVisited ? -1 : 1;
   });
 
-  let userMessages = [];
+  let userMessages: string[] = [];
   // special sessions handled ahead of all reg, small
   specialSessions
     .sort((a, b) => {
@@ -84,62 +84,20 @@ export const generateCalendar = ({
         weekOf: sessionWeekOf,
       };
 
-      try {
-        checkConstraints({
-          calendarState,
-          calendaringConfig,
-          constraints,
-          scheduledTrialSession,
-        });
-      } catch (e) {
-        const errorMessage = e.message;
-        userMessages.push(errorMessage);
-        if (
-          errorMessage ===
-          'There must be no more than two special trial sessions per week in Washington, DC.'
-        ) {
-          // find the previously scheduled thing for that week, mark as rebellious
-          const previouslyScheduledSession = caseCountsAndSessionsByCity[
-            scheduledTrialSession.trialLocation
-          ].scheduledSessions.find(session => {
-            return session.weekOf === scheduledTrialSession.weekOf;
-          });
+      const messages = checkConstraints({
+        calendarState,
+        calendaringConfig,
+        constraints,
+        scheduledTrialSession,
+      }).filter(r => {
+        return typeof r === 'string';
+      });
 
-          if (previouslyScheduledSession) {
-            previouslyScheduledSession.ignoresConstraints = true;
-          }
-
-          return;
-        } else if (
-          errorMessage ===
-          'There must only be one special trial session per location per week.'
-        ) {
-          // THIS IS A BIG Q -- do we do this for non-DC specials, too, even
-          // though courtroom space is actually limited?
-          // find the previously scheduled thing for that week, mark as rebellious
-          // const previouslyScheduledSession = caseCountsAndSessionsByCity[
-          //   scheduledTrialSession.trialLocation
-          // ].scheduledSessions.find(session => {
-          //   return session.weekOf === scheduledTrialSession.weekOf;
-          // });
-
-          // if (previouslyScheduledSession) {
-          //   previouslyScheduledSession.ignoresConstraints = true;
-          // }
-
-          // return;
-
-          // schedule it, but mark rebellious.
-          scheduledTrialSession.ignoresConstraints = true;
-        } else {
-          // schedule it, but mark rebellious.
-          scheduledTrialSession.ignoresConstraints = true;
-        }
-
-        // message thing (array? object?)
-        // as we get errors, push to messages array (object?)
-        // based on which type of error we get, pass 'markAsRebel' flag to scheduling function.
+      if (messages.length) {
+        scheduledTrialSession.ignoresConstraints = true;
       }
+
+      userMessages.push(...messages);
 
       addSpecialScheduledTrialSession({
         calendarState,
@@ -165,6 +123,8 @@ export const generateCalendar = ({
           calendaringConfig,
           constraints,
           scheduledTrialSession,
+        }).every(r => {
+          return r === true;
         });
 
         if (canScheduleSession) {
