@@ -210,7 +210,7 @@ export const CLOSED_CASE_STATUSES = [
 export const SUGGESTED_TRIAL_SESSION_TITLES = {
   invalid: 'Create term error.',
   success: 'Successfully generated suggested term.',
-  warning: 'Successfully generated suggested term with warnings:',
+  warning: 'Successfully generated suggested term with warnings.',
 };
 
 export const DOCUMENT_RELATIONSHIPS = {
