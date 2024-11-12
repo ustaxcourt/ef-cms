@@ -4,6 +4,10 @@ import {
   ScheduledTrialSession,
 } from './createProspectiveTrialSessions';
 import {
+  FORMATS,
+  formatDateString,
+} from '@shared/business/utilities/DateHandler';
+import {
   SESSION_TYPES,
   TRIAL_CITY_STRINGS,
 } from '@shared/business/entities/EntityConstants';
@@ -39,13 +43,13 @@ const getMockCalendarState = (overrides = {}): CalendarState => {
   return {
     reservedWeekOfLocationIntersection: {},
     sessionCountPerCity: {
-      mockRegularCityString: 0,
+      [mockRegularCityString]: 0,
     },
     sessionCountPerWeek: {
-      mockWeekString: 0,
+      [mockWeekString]: 0,
     },
     sessionScheduledPerCityPerWeek: {
-      mockWeekString: new Set(),
+      [mockWeekString]: new Set(),
     },
     ...overrides,
   };
@@ -76,7 +80,7 @@ describe('constraints', () => {
       });
 
       // Assert
-      expect(result).toBe(true);
+      expect(result).toEqual([true]);
     });
 
     it('should return false when a regular session does not meet the provided constraints', () => {
@@ -102,7 +106,7 @@ describe('constraints', () => {
       });
 
       // Assert
-      expect(result).toBe(false);
+      expect(result).toEqual([false]);
     });
   });
 
@@ -157,7 +161,7 @@ describe('constraints', () => {
       expect(result).toBe(false);
     });
 
-    it('should throw an error when a special session does not meet the constraint', () => {
+    it('should return a message when a special session does not meet the constraint', () => {
       // Arrange
       const mockCalendaringConfig = getMockCalendaringConfig();
       const mockCalendarState = getMockCalendarState({
@@ -170,16 +174,18 @@ describe('constraints', () => {
         trialLocation: mockRegularCityString,
         weekOf: mockWeekString,
       };
+      const dateString = formatDateString(mockSession.weekOf, FORMATS.MD);
 
-      // Act and Assert
-      expect(() =>
-        maxSessionsPerWeekConstraint({
-          calendarState: mockCalendarState,
-          calendaringConfig: mockCalendaringConfig,
-          session: mockSession,
-        }),
-      ).toThrow(
-        `Specials sessions for week of ${mockSession.weekOf} exceed maximum sessions allowed per week`,
+      // Act
+      const result = maxSessionsPerWeekConstraint({
+        calendarState: mockCalendarState,
+        calendaringConfig: mockCalendaringConfig,
+        session: mockSession,
+      });
+
+      // Assert
+      expect(result).toEqual(
+        `Special sessions for week of ${dateString} exceed maximum sessions allowed per week (${mockSession.trialLocation}). \n`,
       );
     });
   });
@@ -235,7 +241,7 @@ describe('constraints', () => {
       expect(result).toBe(false);
     });
 
-    it('should throw an error when a special session does not meet the constraint', () => {
+    it('should return a message when a special session does not meet the constraint', () => {
       // Arrange
       const mockCalendaringConfig = getMockCalendaringConfig();
       const mockCalendarState = getMockCalendarState({
@@ -248,16 +254,18 @@ describe('constraints', () => {
         trialLocation: mockRegularCityString,
         weekOf: mockWeekString,
       };
+      const dateString = formatDateString(mockSession.weekOf, FORMATS.MD);
 
-      // Act and Assert
-      expect(() =>
-        maxSessionsPerLocationConstraint({
-          calendarState: mockCalendarState,
-          calendaringConfig: mockCalendaringConfig,
-          session: mockSession,
-        }),
-      ).toThrow(
-        `Special session count exceeds the max sessions per location for ${mockSession.trialLocation}`,
+      // Act
+      const result = maxSessionsPerLocationConstraint({
+        calendarState: mockCalendarState,
+        calendaringConfig: mockCalendaringConfig,
+        session: mockSession,
+      });
+
+      // Assert
+      expect(result).toEqual(
+        `Special session count exceeds the max sessions per location for ${mockSession.trialLocation} (${dateString}). \n`,
       );
     });
   });
@@ -313,7 +321,7 @@ describe('constraints', () => {
       expect(result).toBe(false);
     });
 
-    it('should throw an error when a special session does not meet the constraint', () => {
+    it('should return a message when a special session does not meet the constraint', () => {
       // Arrange
       const mockCalendaringConfig = getMockCalendaringConfig();
       const mockCalendarState = getMockCalendarState({
@@ -326,16 +334,18 @@ describe('constraints', () => {
         trialLocation: mockRegularCityString,
         weekOf: mockWeekString,
       };
+      const dateString = formatDateString(mockSession.weekOf, FORMATS.MD);
 
-      // Act and Assert
-      expect(() =>
-        oneSessionPerLocationPerWeekConstraint({
-          calendarState: mockCalendarState,
-          calendaringConfig: mockCalendaringConfig,
-          session: mockSession,
-        }),
-      ).toThrow(
-        'There must only be one special trial session per location per week.',
+      // Act
+      const result = oneSessionPerLocationPerWeekConstraint({
+        calendarState: mockCalendarState,
+        calendaringConfig: mockCalendaringConfig,
+        session: mockSession,
+      });
+
+      // Assert
+      expect(result).toEqual(
+        `There must only be one special trial session per location per week (${mockSession.trialLocation}, ${dateString}). \n`,
       );
     });
   });
@@ -436,8 +446,8 @@ describe('constraints', () => {
     });
 
     it(
-      'should throw an error when a special session does not meet the ' +
-        'constraint for the maximum number of special sessions in Washington,' +
+      'should return a message when a special session does not meet the ' +
+        'constraint for the maximum number of special sessions in Washington, ' +
         'DC South',
       () => {
         // Arrange
@@ -453,21 +463,24 @@ describe('constraints', () => {
           weekOf: mockWeekString,
         };
 
-        // Act and Assert
-        expect(() =>
-          washingtonDcSpecialConstraint({
-            calendarState: mockCalendarState,
-            calendaringConfig: mockCalendaringConfig,
-            session: mockSession,
-          }),
-        ).toThrow(
-          `Special sessions in ${WASHINGTON_DC_STRING} exceed the maximum allowed`,
+        // Act
+        const result = washingtonDcSpecialConstraint({
+          calendarState: mockCalendarState,
+          calendaringConfig: mockCalendaringConfig,
+          session: mockSession,
+        });
+
+        console.log(result);
+
+        // Assert
+        expect(result).toEqual(
+          `Special sessions in ${WASHINGTON_DC_STRING} exceed the maximum allowed. \n`,
         );
       },
     );
 
     it(
-      'should throw an error when there are already two special sessions ' +
+      'should return a message when there are already two special sessions ' +
         'scheduled for the same week in Washington, DC',
       () => {
         // Arrange
@@ -482,16 +495,18 @@ describe('constraints', () => {
           trialLocation: WASHINGTON_DC_SOUTH_STRING,
           weekOf: mockWeekString,
         };
+        const dateString = formatDateString(mockSession.weekOf, FORMATS.MD);
 
-        // Act and Assert
-        expect(() =>
-          washingtonDcSpecialConstraint({
-            calendarState: mockCalendarState,
-            calendaringConfig: mockCalendaringConfig,
-            session: mockSession,
-          }),
-        ).toThrow(
-          'There must be no more than two special trial sessions per week in Washington, DC.',
+        // Act
+        const result = washingtonDcSpecialConstraint({
+          calendarState: mockCalendarState,
+          calendaringConfig: mockCalendaringConfig,
+          session: mockSession,
+        });
+
+        // Assert
+        expect(result).toEqual(
+          `There must be no more than two special trial sessions per week in Washington, DC (${dateString}). \n`,
         );
       },
     );
