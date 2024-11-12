@@ -26,7 +26,7 @@ import { getMessagesByDocketNumber as getMessagesByDocketNumberMock } from '@web
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseAndAssociations } from './updateCaseAndAssociations';
 import { updateMessage as updateMessageMock } from '@web-api/persistence/postgres/messages/updateMessage';
-import { upsertCaseCorrespondence as upsertCaseCorrespondenceMock } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondence';
+import { upsertCaseCorrespondences as upsertCaseCorrespondencesMock } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondences';
 import { upsertCaseDeadline as upsertCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadline';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -38,7 +38,7 @@ const upsertCaseDeadline = upsertCaseDeadlineMock as jest.Mock;
 const getCaseDeadlinesByDocketNumber =
   getCaseDeadlinesByDocketNumberMock as jest.Mock;
 
-const upsertCaseCorrespondence = upsertCaseCorrespondenceMock as jest.Mock;
+const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
 
 describe('updateCaseAndAssociations', () => {
   let updateCaseMock = jest.fn();
@@ -51,6 +51,7 @@ describe('updateCaseAndAssociations', () => {
         archivedCorrespondences: [
           {
             correspondenceId: '95a84f02-23e6-4fff-9770-41f655f972a3',
+            docketNumber: MOCK_CASE.docketNumber,
             documentTitle: 'Inverted Yield Curve',
             filedByRole: docketClerkUser.role,
             userId: docketClerkUser.userId,
@@ -59,6 +60,7 @@ describe('updateCaseAndAssociations', () => {
         correspondence: [
           {
             correspondenceId: 'b7a6b14a-e4bd-4a20-9b6a-83674b36a162',
+            docketNumber: MOCK_CASE.docketNumber,
             documentTitle: 'Deflationary Spending',
             filedByRole: docketClerkUser.role,
             userId: docketClerkUser.userId,
@@ -586,10 +588,12 @@ describe('updateCaseAndAssociations', () => {
         archivedCorrespondences: [
           {
             ...validMockCase.archivedCorrespondences[0],
+            docketNumber: validMockCase.docketNumber,
             documentTitle: 'Updated Archived Correspondence',
           },
           {
             correspondenceId: applicationContext.getUniqueId(),
+            docketNumber: validMockCase.docketNumber,
             documentTitle: 'New Archived Correspondence',
             userId: applicationContext.getUniqueId(),
           },
@@ -597,10 +601,12 @@ describe('updateCaseAndAssociations', () => {
         correspondence: [
           {
             ...validMockCase.correspondence[0],
+            docketNumber: validMockCase.docketNumber,
             documentTitle: 'Updated Correspondence',
           },
           {
             correspondenceId: applicationContext.getUniqueId(),
+            docketNumber: validMockCase.docketNumber,
             documentTitle: 'New Correspondence',
             userId: applicationContext.getUniqueId(),
           },
@@ -613,7 +619,7 @@ describe('updateCaseAndAssociations', () => {
         caseToUpdate,
       });
 
-      expect(upsertCaseCorrespondence).toHaveBeenCalledTimes(4);
+      expect(upsertCaseCorrespondences).toHaveBeenCalledTimes(4);
     });
   });
 

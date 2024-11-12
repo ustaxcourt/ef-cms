@@ -6,6 +6,6 @@ jest.mock(
 );
 
 jest.mock(
-  '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondence',
-  () => mockFactory('upsertCaseCorrespondence'),
+  '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondences',
+  () => mockFactory('upsertCaseCorrespondences'),
 );

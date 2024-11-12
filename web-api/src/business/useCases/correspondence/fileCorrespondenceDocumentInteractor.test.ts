@@ -14,9 +14,9 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { upsertCaseCorrespondence as upsertCaseCorrespondenceMock } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondence';
+import { upsertCaseCorrespondences as upsertCaseCorrespondencesMock } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondences';
 
-const upsertCaseCorrespondence = upsertCaseCorrespondenceMock as jest.Mock;
+const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
 
 describe('fileCorrespondenceDocumentInteractor', () => {
   const mockCase = {
@@ -123,15 +123,15 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       },
       docketClerkUser,
     );
-    expect(upsertCaseCorrespondence.mock.calls[0][0]).toMatchObject({
+    expect(upsertCaseCorrespondences.mock.calls[0][0]).toMatchObject({
       correspondence: {
         correspondenceId: mockCorrespondenceId,
+        docketNumber: mockCase.docketNumber,
         documentTitle: mockDocumentTitle,
         filedBy: docketClerkUser.name,
         filingDate: mockFilingDate,
         userId: docketClerkUser.userId,
       },
-      docketNumber: mockCase.docketNumber,
     });
   });
 
@@ -157,6 +157,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       correspondence: [
         {
           correspondenceId: mockCorrespondenceId,
+          docketNumber: mockCase.docketNumber,
           documentTitle: mockDocumentTitle,
           filedBy: docketClerkUser.name,
           filingDate: mockFilingDate,

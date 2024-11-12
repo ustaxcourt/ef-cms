@@ -8,9 +8,9 @@ import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { archiveCorrespondenceDocumentInteractor } from './archiveCorrespondenceDocumentInteractor';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
-import { upsertCaseCorrespondence as upsertCaseCorrespondenceMock } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondence';
+import { upsertCaseCorrespondences as upsertCaseCorrespondencesMock } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondences';
 
-const upsertCaseCorrespondence = upsertCaseCorrespondenceMock as jest.Mock;
+const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
 
 describe('archiveCorrespondenceDocumentInteractor', () => {
   let mockUserId = '2474e5c0-f741-4120-befa-b77378ac8bf0';
@@ -28,6 +28,7 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
     mockLock = undefined;
     mockCorrespondence = new Correspondence({
       correspondenceId: mockCorrespondenceId,
+      docketNumber: '101-23',
       documentTitle: 'My Correspondence',
       filedBy: 'Docket clerk',
       userId: mockUserId,
@@ -84,13 +85,9 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(upsertCaseCorrespondence.mock.calls[0][0]).toMatchObject({
-      correspondence: {
-        ...mockCorrespondence,
-        archived: true,
-      },
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    expect(upsertCaseCorrespondences.mock.calls[0][0]).toMatchObject([
+      { ...mockCorrespondence, archived: true },
+    ]);
   });
 
   it('should update the case to reflect the archived correspondence', async () => {

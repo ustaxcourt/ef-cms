@@ -1,0 +1,7 @@
+I've put docketNumber on Correspondence because:
+  it makes the stream processing more efficient
+  it's just a sensible thing to do. 
+Make sure things work correctly after this change
+
+
+

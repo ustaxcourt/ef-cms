@@ -7,7 +7,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { upsertCaseCorrespondence } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondence';
+import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondences';
 
 export const updateCorrespondenceDocumentInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -35,6 +35,7 @@ export const updateCorrespondenceDocumentInteractor = async (
 
   const updatedCorrespondenceEntity = new Correspondence({
     ...currentCorrespondenceDocument,
+    docketNumber: caseToUpdate.docketNumber,
     documentTitle: documentMetadata.documentTitle,
   });
 
@@ -42,10 +43,9 @@ export const updateCorrespondenceDocumentInteractor = async (
 
   const caseEntityRaw = caseEntity.validate().toRawObject();
 
-  await upsertCaseCorrespondence({
-    correspondence: updatedCorrespondenceEntity.validate().toRawObject(),
-    docketNumber,
-  });
+  await upsertCaseCorrespondences([
+    updatedCorrespondenceEntity.validate().toRawObject(),
+  ]);
 
   return caseEntityRaw;
 };
