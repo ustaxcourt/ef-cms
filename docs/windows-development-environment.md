@@ -26,6 +26,7 @@ __Tips before you begin__
 - The linux terminal is not a text editor - clicking with your mouse will not move the cursor. Use the arrow keys to move the cursor.
 - To copy highlighted text from the terminal: `CTRL`+`SHIFT`+`C`
 - To paste text from your clipboard in the terminal: `CTRL`+`SHIFT`+`V`
+- Unless instructed otherwise, always enter commands one line at a time. In the event of an error, it is much easier to determine where the error occurred when you issue commands one at a time.
 
 __Ready to begin? Let's go!__
 
@@ -89,6 +90,15 @@ __Ready to begin? Let's go!__
    export PATH
    ```
 1. Save the file by pressing `CTRL` + `X`, then pressing `y`, then pressing `Enter`
+1. Create some private `bin` directories
+   ```bash
+   mkdir -p ~/bin
+   mkdir -p ~/.local/bin
+   ```
+1. Source the `.zshrc` config file to apply the configuration
+   ```bash
+   source ~/.zshrc
+   ```
 1. Install software (paste the following as a single command)
    ```bash
    sudo apt-get install \
@@ -133,13 +143,19 @@ __Ready to begin? Let's go!__
       nvm install <version>
       nvm use <version>
       ```
+   1. You will be responsible for keeping your local installation of NodeJS in sync with the version DAWSON uses by repeating the previous step when necessary 
 1. Install Terraform via `terraform-switcher`
    1. To find out which version of Terraform to install, check the [verify-terraform-version](../scripts/verify-terraform-version.sh) script
    1. Use `terraform-switcher` to install Terraform, replacing `<version>` with the actual version you determined
       ```bash
       terraform-switcher <version>
       ```
+   1. You will be responsible for keeping your local installation of Terraform in sync with the version DAWSON uses by repeating the previous step when necessary
 1. Configure `git`
+   1. Configure `git` to use your github user (be sure to use the email address you use with github)
+      ```bash
+      # TODO: git config email (& github username?) & global merge setting
+      ```
    1. Generate an SSH key (press `Enter` to select all the defaults when asked)
       ```bash
       ssh-keygen -b 4096
@@ -150,7 +166,7 @@ __Ready to begin? Let's go!__
       ```
    1. Select the public key and copy it to your clipboard with `CTRL`+`SHIFT`+`C`
    1. In your browser, navigate to [https://github.com/settings/keys](https://github.com/settings/keys)
-   1. Click the "New SSH Key" button
+   1. Log in (if necessary) and click the "New SSH Key" button
    1. Paste the contents of your public key into the "Key" text area
    1. The "Name" field should be automatically populated from the name embedded in your key, but if it wasn't, give this SSH key a name
    1. Click the "Add SSH Key" button
@@ -158,7 +174,7 @@ __Ready to begin? Let's go!__
       ```bash
       ssh -T git@github.com
       ```
-1. Check out the `ef-cms` and `ustc-devops` repositories
+1. Clone the `ef-cms` and `ustc-devops` repositories
    ```bash
    cd ~
    mkdir -p git/ustaxcourt
