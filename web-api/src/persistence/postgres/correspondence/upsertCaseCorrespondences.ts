@@ -7,8 +7,13 @@ export const upsertCaseCorrespondences = async (
 ) => {
   const correspondencesToUpsert = correspondences.map(correspondence => {
     return {
-      ...correspondence,
+      archived: correspondence.archived,
+      correspondenceId: correspondence.correspondenceId,
+      docketNumber: correspondence.docketNumber,
+      documentTitle: correspondence.documentTitle,
+      filedBy: correspondence.filedBy,
       filingDate: calculateDate({ dateString: correspondence.filingDate }),
+      userId: correspondence.userId,
     };
   });
   await getDbWriter(writer =>
@@ -16,7 +21,16 @@ export const upsertCaseCorrespondences = async (
       .insertInto('dwCaseCorrespondence')
       .values(correspondencesToUpsert)
       .onConflict(oc =>
-        oc.column('correspondenceId').doUpdateSet(correspondencesToUpsert),
+        oc.column('correspondenceId').doUpdateSet(c => {
+          return {
+            archived: c.ref('excluded.archived'),
+            docketNumber: c.ref('excluded.docketNumber'),
+            documentTitle: c.ref('excluded.documentTitle'),
+            filedBy: c.ref('excluded.filedBy'),
+            filingDate: c.ref('excluded.filingDate'),
+            userId: c.ref('excluded.userId'),
+          };
+        }),
       )
       .execute(),
   );

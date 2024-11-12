@@ -3,19 +3,19 @@ import { getLogger } from 'aws-xray-sdk';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondences';
 
-export const processCorrespondences = async ({
-  correspondenceRecords,
+export const processCaseCorrespondenceEntries = async ({
+  caseCorrespondenceRecords,
 }: {
-  correspondenceRecords: any[];
+  caseCorrespondenceRecords: any[];
 }) => {
-  if (!correspondenceRecords.length) return;
+  if (!caseCorrespondenceRecords.length) return;
 
   getLogger().debug(
-    `going to index ${correspondenceRecords.length} correspondence records`,
+    `going to index ${caseCorrespondenceRecords.length} correspondence records`,
   );
 
   await upsertCaseCorrespondences(
-    correspondenceRecords.map(record => {
+    caseCorrespondenceRecords.map(record => {
       return unmarshall(record.dynamodb.NewImage) as RawCorrespondence;
     }),
   );

@@ -48,15 +48,39 @@ export const partitionRecords = (
       record.dynamodb.NewImage.entityName.S === 'Message',
   );
 
-  const [completionMarkers, otherRecords] = partition(
+  const [completionMarkers, nonCompletionMarkerRecords] = partition(
     nonMessageRecords,
     record =>
       record.dynamodb?.NewImage?.entityName &&
       record.dynamodb.NewImage.entityName.S === 'CompletionMarker',
   );
 
+  const [caseDeadlines, nonCaseDeadlines] = partition(
+    nonCompletionMarkerRecords,
+    record =>
+      record.dynamodb?.NewImage?.entityName &&
+      record.dynamodb.NewImage.entityName.S === 'CaseDeadline',
+  );
+
+  const [caseWorksheets, nonCaseWorksheets] = partition(
+    nonCaseDeadlines,
+    record =>
+      record.dynamodb?.NewImage?.entityName &&
+      record.dynamodb.NewImage.entityName.S === 'CaseWorksheet',
+  );
+
+  const [caseCorrespondenceRecords, otherRecords] = partition(
+    nonCaseWorksheets,
+    record =>
+      record.dynamodb?.NewImage?.entityName &&
+      record.dynamodb.NewImage.entityName.S == 'Correspondence',
+  );
+
   return {
+    caseCorrespondenceRecords,
+    caseDeadlines,
     caseEntityRecords,
+    caseWorksheets,
     completionMarkers,
     docketEntryRecords,
     messageRecords,
