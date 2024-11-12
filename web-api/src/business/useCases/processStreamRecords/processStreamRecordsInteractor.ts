@@ -66,7 +66,6 @@ export const processStreamRecordsInteractor = async (
     );
 
     await processMessageEntries({
-      applicationContext,
       messageRecords,
     }).catch(err => {
       applicationContext.logger.error('failed to process message records', {

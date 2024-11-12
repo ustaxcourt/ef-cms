@@ -12,7 +12,7 @@ import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/ca
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { upsertCase } from '@web-api/persistence/postgres/cases/upsertCase';
-import { upsertCaseCorrespondence } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondence';
+import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondences';
 import { upsertCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadline';
 import diff from 'diff-arrays-of-objects';
 
@@ -153,10 +153,7 @@ const updateCorrespondence = ({
   return validCorrespondence.map(
     correspondence =>
       function updateCorrespondence_cb() {
-        return upsertCaseCorrespondence({
-          correspondence,
-          docketNumber: caseToUpdate.docketNumber,
-        });
+        return upsertCaseCorrespondences([correspondence]);
       },
   );
 };

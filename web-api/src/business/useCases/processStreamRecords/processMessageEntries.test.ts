@@ -1,5 +1,4 @@
 import '@web-api/persistence/postgres/messages/mocks.jest';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { processMessageEntries } from './processMessageEntries';
 import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 
@@ -31,7 +30,6 @@ describe('processMessageEntries', () => {
     };
 
     await processMessageEntries({
-      applicationContext,
       messageRecords: [mockRepliedToMessageRecord],
     });
 

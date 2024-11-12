@@ -6,7 +6,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { upsertCaseCorrespondence } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondence';
+import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondences';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const archiveCorrespondenceDocument = async (
@@ -30,8 +30,6 @@ export const archiveCorrespondenceDocument = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  console.log(caseToUpdate);
-
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
   const correspondenceToArchiveEntity = caseEntity.correspondence.find(
     c => c.correspondenceId === correspondenceId,
@@ -39,10 +37,9 @@ export const archiveCorrespondenceDocument = async (
 
   caseEntity.archiveCorrespondence(correspondenceToArchiveEntity);
 
-  await upsertCaseCorrespondence({
-    correspondence: correspondenceToArchiveEntity.validate().toRawObject(),
-    docketNumber,
-  });
+  await upsertCaseCorrespondences([
+    correspondenceToArchiveEntity.validate().toRawObject(),
+  ]);
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
