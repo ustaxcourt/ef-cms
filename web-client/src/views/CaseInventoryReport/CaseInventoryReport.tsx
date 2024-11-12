@@ -2,16 +2,19 @@ import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
+import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
+import React, { useRef } from 'react';
+
+const ITEMS_PER_PAGE = 100;
 
 export const CaseInventoryReport = connect(
   {
     caseInventoryReportHelper: state.caseInventoryReportHelper,
-    caseInventoryReportLoadMoreSequence:
-      sequences.caseInventoryReportLoadMoreSequence,
     getCaseInventoryReportSequence: sequences.getCaseInventoryReportSequence,
     gotoPrintableCaseInventoryReportSequence:
       sequences.gotoPrintableCaseInventoryReportSequence,
@@ -19,11 +22,18 @@ export const CaseInventoryReport = connect(
   },
   function CaseInventoryReport({
     caseInventoryReportHelper,
-    caseInventoryReportLoadMoreSequence,
     getCaseInventoryReportSequence,
     gotoPrintableCaseInventoryReportSequence,
     screenMetadata,
   }) {
+    const paginatorTop = useRef(null);
+
+    const { activePage, pageRecords, setActivePage, totalPages } =
+      useClientSidePaginator(
+        caseInventoryReportHelper.formattedReportData,
+        ITEMS_PER_PAGE,
+      );
+
     return (
       <>
         <BigHeader text="Reports" />
@@ -129,39 +139,40 @@ export const CaseInventoryReport = connect(
                       </tr>
                     </thead>
                     <tbody>
-                      {caseInventoryReportHelper.formattedReportData.map(
-                        row => (
-                          <tr key={row.docketNumber}>
-                            <td className="width-205">
-                              <ConsolidatedCaseIcon
-                                consolidatedIconTooltipText={
-                                  row.consolidatedIconTooltipText
-                                }
-                                inConsolidatedGroup={row.inConsolidatedGroup}
-                                showLeadCaseIcon={row.isLeadCase}
-                              />
-                            </td>
-                            <td>
-                              <CaseLink formattedCase={row} />
-                            </td>
-                            <td>{row.caseTitle}</td>
-                            {caseInventoryReportHelper.showJudgeColumn && (
-                              <td>{row.associatedJudge}</td>
-                            )}
-                            {caseInventoryReportHelper.showStatusColumn && (
-                              <td>{row.status}</td>
-                            )}
-                          </tr>
-                        ),
-                      )}
+                      {pageRecords.map(row => (
+                        <tr key={row.docketNumber}>
+                          <td className="width-205">
+                            <ConsolidatedCaseIcon
+                              consolidatedIconTooltipText={
+                                row.consolidatedIconTooltipText
+                              }
+                              inConsolidatedGroup={row.inConsolidatedGroup}
+                              showLeadCaseIcon={row.isLeadCase}
+                            />
+                          </td>
+                          <td>
+                            <CaseLink formattedCase={row} />
+                          </td>
+                          <td>{row.caseTitle}</td>
+                          {caseInventoryReportHelper.showJudgeColumn && (
+                            <td>{row.associatedJudge}</td>
+                          )}
+                          {caseInventoryReportHelper.showStatusColumn && (
+                            <td>{row.status}</td>
+                          )}
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
-                  {caseInventoryReportHelper.showLoadMoreButton && (
-                    <Button
-                      onClick={() => caseInventoryReportLoadMoreSequence()}
-                    >
-                      Load More
-                    </Button>
+                  {totalPages > 1 && (
+                    <Paginator
+                      currentPageIndex={activePage}
+                      totalPages={totalPages}
+                      onPageChange={pageChange => {
+                        setActivePage(pageChange);
+                        focusPaginatorTop(paginatorTop);
+                      }}
+                    />
                   )}
                 </div>
               </div>

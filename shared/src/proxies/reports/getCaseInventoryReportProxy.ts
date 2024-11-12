@@ -13,7 +13,10 @@ import { get } from '../requests';
 export const getCaseInventoryReportInteractor = (
   applicationContext,
   { associatedJudge, page = 1, status },
-) => {
+): Promise<{
+  foundCases: RawCase[];
+  totalCount: number;
+}> => {
   const { CASE_INVENTORY_PAGE_SIZE } = applicationContext.getConstants();
   const from = (page - 1) * CASE_INVENTORY_PAGE_SIZE;
 
