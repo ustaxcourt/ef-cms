@@ -236,7 +236,7 @@ function MobileOpenCases({
                     className="padding-bottom-3"
                     key={publicCase.docketNumberWithSuffix}
                   >
-                    <div className="display-flex gap-3">
+                    <div className="display-flex flex-column gap-3">
                       <div>
                         <span className="label">Case Title</span>
                         {publicCase.caseTitle}
@@ -245,18 +245,22 @@ function MobileOpenCases({
                         publicCase.privatePractitioners.length > 0 && (
                           <div>
                             <span className="label">Petitioner Counsel</span>
-                            {publicCase.privatePractitioners?.map(counsel => (
-                              <div key={counsel.name}>{counsel.name}</div>
-                            ))}
+                            <div className="display-flex flex-column gap-1">
+                              {publicCase.privatePractitioners?.map(counsel => (
+                                <div key={counsel.name}>{counsel.name}</div>
+                              ))}
+                            </div>
                           </div>
                         )}
                       {publicCase.irsPractitioners &&
                         publicCase.irsPractitioners.length > 0 && (
                           <div>
                             <span className="label">Respondent Counsel</span>
-                            {publicCase.irsPractitioners?.map(counsel => (
-                              <div key={counsel.name}>{counsel.name}</div>
-                            ))}
+                            <div className="display-flex flex-column gap-1">
+                              {publicCase.irsPractitioners?.map(counsel => (
+                                <div key={counsel.name}>{counsel.name}</div>
+                              ))}
+                            </div>
                           </div>
                         )}
                     </div>
