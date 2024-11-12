@@ -200,7 +200,10 @@ export const DocketRecord = connect(
                             )}
                           </td>
                         )}
-                        <td className="center-column hide-on-mobile">
+                        <td
+                          className="center-column hide-on-mobile"
+                          data-testid={`docket-entry-index-${entry.index}`}
+                        >
                           {entry.index}
                         </td>
                         <td>
@@ -209,13 +212,14 @@ export const DocketRecord = connect(
                               entry.isStricken && 'stricken-docket-record',
                               'no-wrap',
                             )}
+                            data-testid={`docket-entry-filedDate-${entry.index}`}
                           >
                             {entry.createdAtFormatted}
                           </span>
                         </td>
                         <td
                           className="center-column hide-on-mobile"
-                          data-testid={`docket-entry-index-${entry.index}-eventCode`}
+                          data-testid={`docket-entry-eventCode-${entry.index}`}
                         >
                           {entry.eventCode}
                         </td>
@@ -227,14 +231,29 @@ export const DocketRecord = connect(
                             />
                           ))}
                         </td>
-                        <td>
+                        <td
+                          data-testid={`docket-entry-filingsAndProceedings-${entry.index}`}
+                        >
                           <FilingsAndProceedings entry={entry} />
                         </td>
-                        <td className="hide-on-mobile number-of-pages">
+                        <td
+                          className="hide-on-mobile number-of-pages"
+                          data-testid="docket-entry-numberOfPages"
+                        >
                           {entry.numberOfPages}
                         </td>
-                        <td className="hide-on-mobile">{entry.filedBy}</td>
-                        <td className="hide-on-mobile">{entry.action}</td>
+                        <td
+                          className="hide-on-mobile"
+                          data-testid="docket-entry-filedBy"
+                        >
+                          {entry.filedBy}
+                        </td>
+                        <td
+                          className="hide-on-mobile"
+                          data-testid="docket-entry-action"
+                        >
+                          {entry.action}
+                        </td>
                         <td data-testid="docket-record-cell-not-served">
                           {entry.showNotServed && (
                             <span className="text-semibold not-served">
@@ -247,7 +266,7 @@ export const DocketRecord = connect(
                         </td>
                         <td
                           className="center-column hide-on-mobile"
-                          data-testid={`docket-entry-index-${entry.index}-servedPartiesCode`}
+                          data-testid={`docket-entry-servedPartiesCode-${entry.index}`}
                         >
                           {entry.showServed && entry.servedPartiesCode}
                         </td>
