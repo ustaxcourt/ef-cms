@@ -3,7 +3,7 @@ import {
   createISODateString,
   getBusinessDateInFuture,
 } from '../../../../../shared/src/business/utilities/DateHandler';
-import { SUGGESTED_TRIAL_SESSION_MESSAGES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { SUGGESTED_TRIAL_SESSION_TITLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { loginAsPetitionsClerk1 } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Run the suggested trial session calendar generator', () => {
@@ -33,7 +33,7 @@ describe('Run the suggested trial session calendar generator', () => {
     cy.get('[data-testid="modal-button-confirm"]').click();
     cy.get('[data-testid="success-alert"]').should(
       'contain.text',
-      SUGGESTED_TRIAL_SESSION_MESSAGES.success,
+      SUGGESTED_TRIAL_SESSION_TITLES.success,
     );
   });
 });
