@@ -108,6 +108,8 @@ __Ready to begin? Let's go!__
      chromium \
      chromium-driver \
      curl \
+     docker.io \
+     docker-compose \
      gh \
      ghostscript \
      git \
@@ -143,14 +145,14 @@ __Ready to begin? Let's go!__
       nvm install <version>
       nvm use <version>
       ```
-   1. You will be responsible for keeping your local installation of NodeJS in sync with the version DAWSON uses by repeating the previous step when necessary 
+   1. **Note:** You will be responsible for keeping your local installation of NodeJS in sync with DAWSON's by repeating the previous step when necessary 
 1. Install Terraform via `terraform-switcher`
    1. To find out which version of Terraform to install, check the [verify-terraform-version](../scripts/verify-terraform-version.sh) script
    1. Use `terraform-switcher` to install Terraform, replacing `<version>` with the actual version you determined
       ```bash
       terraform-switcher <version>
       ```
-   1. You will be responsible for keeping your local installation of Terraform in sync with the version DAWSON uses by repeating the previous step when necessary
+   1. **Note:** You will be responsible for keeping your local installation of Terraform in sync with DAWSON's by repeating the previous step when necessary
 1. Configure `git`
    1. Configure `git` to use your github user (be sure to use the email address you use with github)
       ```bash
