@@ -32,7 +32,18 @@ describe('Docket record sort', () => {
   });
 
   beforeEach(() => {
+    cy.reload(true);
     cy.keepAliases();
+  });
+
+  it('should display docket entries in default sort order', () => {
+    getColumnTextFields('docket-entry-filedDate').then(columnTextFields => {
+      const sortedColumnsTextFieldsAsc = [...columnTextFields].sort(
+        sortColumnsAsc,
+      );
+
+      expect(columnTextFields).to.deep.equal(sortedColumnsTextFieldsAsc);
+    });
   });
 
   [
