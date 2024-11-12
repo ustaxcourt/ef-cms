@@ -1,6 +1,7 @@
 import { clearModalAction } from '@web-client/presenter/actions/clearModalAction';
 import { clearModalStateAction } from '@web-client/presenter/actions/clearModalStateAction';
 import { downloadXlsxAction } from '@web-client/presenter/actions/downloadXlsxAction';
+import { formatAlertWarningForTermGeneratorAction } from '@web-client/presenter/actions/TrialSession/formatAlertWarningForTermGeneratorAction';
 import { formatCreateTermDatesAction } from '@web-client/presenter/actions/TrialSession/formatCreateTermDatesAction';
 import { runCreateTermAction } from '@web-client/presenter/actions/TrialSession/runCreateTermAction';
 import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertErrorAction';
@@ -29,6 +30,7 @@ export const submitCreateTermModalSequence = [
         ],
         warning: [
           downloadXlsxAction,
+          formatAlertWarningForTermGeneratorAction,
           setAlertWarningAction,
           clearModalStateAction,
         ],

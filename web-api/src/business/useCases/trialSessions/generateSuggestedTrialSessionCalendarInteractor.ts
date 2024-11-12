@@ -280,9 +280,9 @@ const generateMessage = ({
 }: {
   userMessages: string[];
 }): CalendarGeneratorMessage => {
-  let message = {
-    message: '',
-    title: SUGGESTED_TRIAL_SESSION_TITLES.success,
+  let message: CalendarGeneratorMessage = {
+    message: SUGGESTED_TRIAL_SESSION_TITLES.success,
+    title: undefined,
     type: MESSAGE_TYPES.success,
   };
 

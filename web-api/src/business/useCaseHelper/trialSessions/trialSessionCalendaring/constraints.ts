@@ -3,6 +3,10 @@ import {
   CalendaringConfig,
   ScheduledTrialSession,
 } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
+import {
+  FORMATS,
+  formatDateString,
+} from '@shared/business/utilities/DateHandler';
 import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import {
   WASHINGTON_DC_SOUTH_STRING,
@@ -39,6 +43,15 @@ export const checkConstraints = ({
   );
 };
 
+export const reservedWeekOfAtLocationConstraint: Constraint = ({
+  calendarState,
+  session,
+}) => {
+  return !calendarState.reservedWeekOfLocationIntersection[
+    session.weekOf
+  ]?.includes(session.trialLocation);
+};
+
 export const maxSessionsPerWeekConstraint: Constraint = ({
   calendaringConfig,
   calendarState,
@@ -49,9 +62,30 @@ export const maxSessionsPerWeekConstraint: Constraint = ({
     calendaringConfig.maxSessionsPerWeek;
 
   if (!meetsConstraint && session.sessionType === SESSION_TYPES.special) {
-    // throw new Error(
-    return `Specials sessions for week of ${session.weekOf} exceed maximum sessions allowed per week.`;
-    // );
+    return `Special sessions for week of ${formatDateString(session.weekOf, FORMATS.MD)} exceed maximum sessions allowed per week (${session.trialLocation}). \n`;
+  }
+
+  return meetsConstraint;
+};
+
+export const oneSessionPerLocationPerWeekConstraint: Constraint = ({
+  calendarState,
+  session,
+}) => {
+  // this condition is handled by washingtonDcSpecialConstraint
+  if (
+    session.sessionType === SESSION_TYPES.special &&
+    session.trialLocation === WASHINGTON_DC_SOUTH_STRING
+  ) {
+    return true;
+  }
+
+  const meetsConstraint = !calendarState.sessionScheduledPerCityPerWeek[
+    session.weekOf
+  ].has(session.trialLocation);
+
+  if (!meetsConstraint && session.sessionType === SESSION_TYPES.special) {
+    return `There must only be one special trial session per location per week (${session.trialLocation}, ${formatDateString(session.weekOf, FORMATS.MD)}). \n`;
   }
 
   return meetsConstraint;
@@ -62,43 +96,23 @@ export const maxSessionsPerLocationConstraint: Constraint = ({
   calendarState,
   session,
 }) => {
+  // this condition is handled by washingtonDcSpecialConstraint
+  if (
+    session.sessionType === SESSION_TYPES.special &&
+    session.trialLocation === WASHINGTON_DC_SOUTH_STRING
+  ) {
+    return true;
+  }
+
   const meetsConstraint =
     calendarState.sessionCountPerCity[session.trialLocation] <
     calendaringConfig.maxSessionsPerLocation;
 
   if (!meetsConstraint && session.sessionType === SESSION_TYPES.special) {
-    // throw new Error(
-    return `Special session count exceeds the max sessions per location for ${session.trialLocation}.`;
-    // );
+    return `Special session count exceeds the max sessions per location for ${session.trialLocation} (${formatDateString(session.weekOf, FORMATS.MD)}). \n`;
   }
 
   return meetsConstraint;
-};
-
-export const oneSessionPerLocationPerWeekConstraint: Constraint = ({
-  calendarState,
-  session,
-}) => {
-  const meetsConstraint = !calendarState.sessionScheduledPerCityPerWeek[
-    session.weekOf
-  ].has(session.trialLocation);
-
-  if (!meetsConstraint && session.sessionType === SESSION_TYPES.special) {
-    // throw new Error(
-    return 'There must only be one special trial session per location per week.';
-    // );
-  }
-
-  return meetsConstraint;
-};
-
-export const reservedWeekOfAtLocationConstraint: Constraint = ({
-  calendarState,
-  session,
-}) => {
-  return !calendarState.reservedWeekOfLocationIntersection[
-    session.weekOf
-  ]?.includes(session.trialLocation);
 };
 
 export const washingtonDcSpecialConstraint: Constraint = ({
@@ -109,26 +123,23 @@ export const washingtonDcSpecialConstraint: Constraint = ({
   if (
     session.sessionType !== SESSION_TYPES.special ||
     session.trialLocation !== WASHINGTON_DC_SOUTH_STRING
-  )
+  ) {
     return true;
+  }
 
   if (
     calendarState.sessionScheduledPerCityPerWeek[session.weekOf].has(
       WASHINGTON_DC_SOUTH_STRING,
     )
   ) {
-    // throw new Error(
-    return 'There must be no more than two special trial sessions per week in Washington, DC.';
-    // );
+    return `There must be no more than two special trial sessions per week in Washington, DC (${formatDateString(session.weekOf, FORMATS.MD)}). \n`;
   }
 
   if (
     calendarState.sessionCountPerCity[WASHINGTON_DC_SOUTH_STRING] >=
     calendaringConfig.maxSessionsPerLocation
   ) {
-    // throw new Error(
-    return `Special sessions in ${WASHINGTON_DC_STRING} exceed the maximum allowed.`;
-    // );
+    return `Special sessions in ${WASHINGTON_DC_STRING} exceed the maximum allowed. \n`;
   }
 
   return true;
