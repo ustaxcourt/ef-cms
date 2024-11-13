@@ -3,12 +3,23 @@ import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { without } from 'lodash';
 
+export type FormattedReportEntry = {
+  docketNumber: string;
+  caseTitle: string;
+  consolidatedIconTooltipText: string;
+  inConsolidatedGroup: boolean;
+  isLeadCase: boolean;
+  associatedJudge?: string;
+  status: string;
+  [key: string]: unknown;
+};
+
 export const caseInventoryReportHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): {
   caseStatuses: string[];
-  formattedReportData: Record<string, unknown>[];
+  formattedReportData: FormattedReportEntry[];
   judges: string[];
   nextPageSize: number;
   resultCount: number;
