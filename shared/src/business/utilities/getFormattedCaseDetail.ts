@@ -39,33 +39,7 @@ export const computeIsNotServedDocument = ({ formattedEntry }) => {
   );
 };
 
-export type FormattedDocketEntry = RawDocketEntry & {
-  servedAtFormatted: string;
-  signedAtFormatted: string;
-  signedAtFormattedTZ: string;
-  certificateOfServiceDateFormatted?: string;
-  showLegacySealed: boolean;
-  showServedAt: boolean;
-  isStatusServed: boolean;
-  isPetition: boolean;
-  isCourtIssuedDocument: boolean;
-  qcWorkItemsCompleted: boolean;
-  isUnservable: boolean;
-  isInProgress: boolean;
-  isNotServedDocument: boolean;
-  isTranscript: boolean;
-  isStipDecision: boolean;
-  qcWorkItemsUntouched: boolean;
-  qcNeeded: boolean;
-  createdAtFormatted: string;
-  filingsAndProceedings: string;
-  descriptionDisplay: string;
-};
-
-export const formatDocketEntry = (
-  applicationContext,
-  docketEntry,
-): FormattedDocketEntry => {
+export const formatDocketEntry = (applicationContext, docketEntry) => {
   const formattedEntry = cloneDeep(docketEntry);
 
   formattedEntry.servedAtFormatted = formatDateString(
@@ -283,43 +257,13 @@ const getEditUrl = (docketEntry: RawDocketEntry): string => {
     : `/case-detail/${docketEntry.docketNumber}/edit-order/${docketEntry.docketEntryId}`;
 };
 
-type FormattedUnsortedDocketEntry = RawDocketEntry & {
-  editUrl: string;
-  signUrl: string;
-  signedAtFormatted: string;
-  signedAtFormattedTZ: string;
-};
-
-export type FormattedCase = RawCase & {
-  draftDocumentsUnsorted?: FormattedUnsortedDocketEntry[];
-  draftDocuments?: FormattedUnsortedDocketEntry[];
-  formattedDocketEntries?: FormattedDocketEntry[];
-  pendingItemsDocketEntries?: FormattedDocketEntry[];
-  createdAtFormatted: string;
-  receivedAtFormatted: string;
-  irsNoticeDateFormatted: string;
-  shouldShowIrsNoticeDate: boolean;
-  caseTitle: string;
-  isSealed: boolean;
-  isLeadCase: boolean;
-  isConsolidatedSubCase: boolean;
-  inConsolidatedGroup: boolean;
-  consolidatedIconTooltipText: string;
-  filingFee: string;
-  canConsolidate: boolean;
-  canUnconsolidate: boolean;
-  irsSendDate: string;
-  showPrintConfirmationLink: boolean;
-  consolidatedCases?: FormattedCase[];
-};
-
 export const formatCase = (
   applicationContext,
   caseDetail,
   authorizedUser: UnknownAuthUser,
-): FormattedCase => {
+) => {
   if (isEmpty(caseDetail)) {
-    return {} as FormattedCase;
+    return {};
   }
   const result = cloneDeep(caseDetail);
 
@@ -431,7 +375,7 @@ export const formatCase = (
   const caseEntity = new Case(caseDetail, {
     authorizedUser,
   });
-  result.canConsolidate = caseEntity.canConsolidate();
+  result.canConsolidate = caseEntity.canConsolidate(caseEntity);
   result.canUnconsolidate = !!caseEntity.leadDocketNumber;
   result.irsSendDate = caseEntity.getIrsSendDate();
   result.showPrintConfirmationLink =
