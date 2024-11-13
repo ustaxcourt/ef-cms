@@ -697,7 +697,7 @@ export const baseState = {
   judges: [] as RawUser[],
   judgesChambers: [] as JudgeChambersInfo[],
   lastIdleAction: undefined,
-  legacyAndCurrentJudges: [],
+  legacyAndCurrentJudges: [] as RawUser[],
   login: {} as any,
   logoutType: '',
   maintenanceMode: false,

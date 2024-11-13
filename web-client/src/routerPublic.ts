@@ -84,6 +84,11 @@ const router = {
       return app.getSequence('redirectToLoginSequence')();
     });
 
+    route('/trial-sessions', () => {
+      setPageTitle('Trial sessions');
+      return app.getSequence('gotoPublicTrialSessionsSequence')();
+    });
+
     route('/trial-session-detail/*', trialSessionId => {
       setPageTitle('Trial session information');
       return app.getSequence('gotoPublicTrialSessionDetailsSequence')({

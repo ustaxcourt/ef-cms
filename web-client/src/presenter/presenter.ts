@@ -113,6 +113,7 @@ import { dismissAddEditCaseWorksheetModalSequence } from '@web-client/presenter/
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { dismissThirtyDayTrialAlertSequence } from './sequences/dismissThirtyDayTrialAlertSequence';
+import { displayProgressSpinnerSequence } from '@web-client/presenter/sequences/displayProgressSpinnerSequence';
 import { downloadCsvFileSequence } from '@web-client/presenter/sequences/downloadCsvFileSequence';
 import { editCorrespondenceDocumentSequence } from './sequences/editCorrespondenceDocumentSequence';
 import { editUnsignedDraftDocumentSequence } from '@web-client/presenter/sequences/editUnsignedDraftDocumentSequence';
@@ -786,6 +787,7 @@ export const presenterSequences = {
   dismissModalSequence: dismissModalSequence as unknown as Function,
   dismissThirtyDayTrialAlertSequence:
     dismissThirtyDayTrialAlertSequence as unknown as Function,
+  displayProgressSpinnerSequence,
   downloadCsvFileSequence: downloadCsvFileSequence as unknown as Function,
   editCorrespondenceDocumentSequence:
     editCorrespondenceDocumentSequence as unknown as Function,

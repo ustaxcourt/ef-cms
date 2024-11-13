@@ -44,6 +44,7 @@ async function main() {
   } = await describeRDSInstance({
     environment: sourceEnv,
     rdsClient: sourceRdsClient,
+    useWriter: false,
   });
 
   const {
@@ -54,6 +55,7 @@ async function main() {
   } = await describeRDSInstance({
     environment: targetEnv,
     rdsClient: targetRdsClient,
+    useWriter: true,
   });
 
   const backUpFileName = 'dawson.dump';
@@ -82,9 +84,11 @@ void main();
 async function describeRDSInstance({
   environment,
   rdsClient,
+  useWriter = false,
 }: {
   rdsClient: RDSClient;
   environment: string;
+  useWriter: boolean;
 }) {
   const clusterIdentifier = `${environment}-dawson-cluster`;
   const command = new DescribeDBClustersCommand({
@@ -98,10 +102,10 @@ async function describeRDSInstance({
     throw new Error('Source cluster was not defined but expected');
   }
 
-  const host = dbCluster.ReaderEndpoint;
+  const host = useWriter ? dbCluster.Endpoint : dbCluster.ReaderEndpoint;
   const port = dbCluster.Port;
   const dbName = dbCluster.DatabaseName;
-  const username = `${environment}_developers`;
+  const username = `${environment}_dawson`;
 
   if (!host || !port || !dbName) {
     throw new Error('Source configuration was not found');
