@@ -1,4 +1,7 @@
-import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
+import {
+  CaseWorksheet,
+  RawCaseWorksheet,
+} from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { getJudgeForCurrentUserAction } from '@web-client/presenter/actions/getJudgeForCurrentUserAction';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -18,14 +21,13 @@ export const updateCaseWorksheetAction = async ({
   const updatedWorksheet = await applicationContext
     .getUseCases()
     .updateCaseWorksheetInteractor(applicationContext, {
-      worksheet: {
+      worksheet: new CaseWorksheet({
         docketNumber,
-        entityName: 'CaseWorksheet',
         finalBriefDueDate,
         judgeUserId: judgeUser.userId,
         primaryIssue,
         statusOfMatter,
-      },
+      }).toRawObject(),
     });
 
   return { updatedWorksheet };
