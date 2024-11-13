@@ -243,6 +243,39 @@ export class Case extends JoiValidationEntity {
     );
   }
 
+  static sortByDocketNumberAndGroupConsolidatedCases<
+    T extends { leadDocketNumber?: string; docketNumber: string },
+  >(cases: T[]): T[] {
+    let nonMemberCases: T[] = [];
+    let memberCases: { [key: string]: T[] } = {};
+
+    // Group cases into 1) lead or non-member cases and 2) non-lead, member cases
+    for (const c of cases) {
+      if (c.leadDocketNumber && c.leadDocketNumber !== c.docketNumber) {
+        (memberCases[c.leadDocketNumber] ||= []).push(c);
+      } else {
+        nonMemberCases.push(c);
+      }
+    }
+
+    // Sort the lead/non-member cases
+    Case.sortByDocketNumber(nonMemberCases);
+
+    // Then, sort and interpolate the non-lead, member cases
+    const interpolatedCases: T[] = [];
+    for (const caseItem of nonMemberCases) {
+      interpolatedCases.push(caseItem);
+
+      // Append and sort member cases inline if leadDocketNumber exists
+      if (caseItem.leadDocketNumber && memberCases[caseItem.leadDocketNumber]) {
+        interpolatedCases.push(
+          ...Case.sortByDocketNumber(memberCases[caseItem.leadDocketNumber]),
+        );
+      }
+    }
+    return interpolatedCases;
+  }
+
   /**
    * return the lead case for the given set of cases based on createdAt
    * (does NOT evaluate leadDocketNumber)
