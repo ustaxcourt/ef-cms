@@ -267,9 +267,9 @@ export class Case extends JoiValidationEntity {
       interpolatedCases.push(caseItem);
 
       // Append and sort member cases inline if leadDocketNumber exists
-      if (caseItem.leadDocketNumber && memberCases[caseItem.leadDocketNumber]) {
+      if (memberCases[caseItem.docketNumber]) {
         interpolatedCases.push(
-          ...Case.sortByDocketNumber(memberCases[caseItem.leadDocketNumber]),
+          ...Case.sortByDocketNumber(memberCases[caseItem.docketNumber]),
         );
       }
     }
