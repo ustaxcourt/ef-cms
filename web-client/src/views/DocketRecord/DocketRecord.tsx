@@ -96,6 +96,7 @@ export const DocketRecord = connect(
                     </th>
                   )}
                   <SortableHeader
+                    hideOnMobile={true}
                     screenReaderTitle="Number"
                     sortField="index"
                     tableSort={tableSort}
@@ -110,6 +111,7 @@ export const DocketRecord = connect(
                     onSort={sortTableSequence}
                   />
                   <SortableHeader
+                    hideOnMobile={true}
                     sortField="eventCode"
                     sortType="string"
                     tableSort={tableSort}
@@ -126,6 +128,7 @@ export const DocketRecord = connect(
                   />
                   <SortableHeader
                     className="hide-on-mobile"
+                    hideOnMobile={true}
                     sortField="numberOfPages"
                     tableSort={tableSort}
                     title="Pages"
@@ -133,6 +136,7 @@ export const DocketRecord = connect(
                   />
                   <SortableHeader
                     className="hide-on-mobile"
+                    hideOnMobile={true}
                     sortField="filedBy"
                     sortType="string"
                     tableSort={tableSort}
@@ -141,6 +145,7 @@ export const DocketRecord = connect(
                   />
                   <SortableHeader
                     className="hide-on-mobile"
+                    hideOnMobile={true}
                     sortField="action"
                     sortType="string"
                     tableSort={tableSort}
@@ -156,6 +161,7 @@ export const DocketRecord = connect(
                   />
                   <SortableHeader
                     className="center-column hide-on-mobile"
+                    hideOnMobile={true}
                     sortField="servedPartiesCode"
                     sortType="string"
                     tableSort={tableSort}
@@ -372,6 +378,7 @@ DocketRecord.displayName = 'DocketRecord';
 
 function SortableHeader({
   className,
+  hideOnMobile,
   onSort,
   screenReaderTitle,
   sortField,
@@ -393,9 +400,10 @@ function SortableHeader({
     sortOrder: 'asc' | 'desc';
   };
   title: string;
+  hideOnMobile?: boolean;
 }) {
   return (
-    <th>
+    <th className={hideOnMobile ? 'hide-on-mobile' : ''}>
       <SortableColumn
         ascText={SORT_ASCENDING_TEXT[sortType!]}
         className={className}
