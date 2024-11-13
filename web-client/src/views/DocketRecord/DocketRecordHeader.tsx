@@ -1,7 +1,7 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordSort } from './DocketRecordSort';
-import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
+import { NonPhone, Phone } from '../../ustc-ui/Responsive/Responsive';
 import { OpenPrintableDocketRecordModal } from './OpenPrintableDocketRecordModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -164,7 +164,7 @@ export const DocketRecordHeader = connect(
     return (
       <React.Fragment>
         <div className="grid-container padding-0 docket-record-header">
-          <NonMobile>
+          <NonPhone>
             <div className="grid-container padding-0 docket-record-header">
               <div className="grid-row grid-gap margin-bottom-2">
                 <div className="desktop:grid-col-8 tablet:grid-col-12 display-flex flex-align-center">
@@ -205,9 +205,9 @@ export const DocketRecordHeader = connect(
                 </div>
               </div>
             </div>
-          </NonMobile>
+          </NonPhone>
 
-          <Mobile>
+          <Phone>
             <DocketRecordMobileHeader
               docketNumber={formattedCaseDetail.docketNumber}
               filterOptions={DOCKET_RECORD_FILTER_OPTIONS}
@@ -218,7 +218,7 @@ export const DocketRecordHeader = connect(
               sortTableSequence={sortTableSequence}
               updateSessionMetadataSequence={updateSessionMetadataSequence}
             />
-          </Mobile>
+          </Phone>
         </div>
         {showModal === 'OpenPrintableDocketRecordModal' && (
           <OpenPrintableDocketRecordModal />
