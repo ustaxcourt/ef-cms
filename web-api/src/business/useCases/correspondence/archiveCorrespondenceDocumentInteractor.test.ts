@@ -28,7 +28,7 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
     mockLock = undefined;
     mockCorrespondence = new Correspondence({
       correspondenceId: mockCorrespondenceId,
-      docketNumber: '101-23',
+      docketNumber: MOCK_CASE.docketNumber,
       documentTitle: 'My Correspondence',
       filedBy: 'Docket clerk',
       userId: mockUserId,
