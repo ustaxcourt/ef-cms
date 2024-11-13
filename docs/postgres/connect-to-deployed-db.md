@@ -1,8 +1,24 @@
-# Connecting to a Deployed Postgres Database from TablePlus
+# Connecting to a Deployed Postgres Database
 
 Note: run all commands from the root of the `ef-cms` directory.
 
-## Creating a new connection in TablePlus
+## CLI: `psql`
+
+1. Use the [environment switcher](../additional-resources/environment-switcher.md) to point to the deployed environment:
+   ```bash
+   . scripts/env/set-env.zsh ustc-dev
+   ```
+1. Run `connect.sh` to automatically generate a temporary access token and use it to connect:
+   - To connect to the read-only endpoint:
+      ```bash
+      scripts/postgres/connect.sh
+      ```
+   - To connect to the writeable endpoint:
+      ```bash
+      scripts/postgres/connect.sh --rw
+      ```
+
+## GUI: TablePlus
 
 1. Use the [environment switcher](../additional-resources/environment-switcher.md) to point to the deployed environment:
    ```bash
@@ -19,11 +35,14 @@ Note: run all commands from the root of the `ef-cms` directory.
       ```
 1. Add a new connection in TablePlus:
    1. Populate the host, port, username, password, and database fields using the values from the `generate-token.sh` output from step 2
-   1. Select "SSL mode preferred"
+   1. Select "SSL mode preferred" (even if it is preselected)
    1. Select "CA Cert..." and choose the `global-bundle.pem` file in the root of the repo
-1. The token generated above is temporary. After it expires, you will need to run `generate-token.sh` again to retrieve a new token, or follow the optional steps below to configure TablePlus to retrieve tokens automatically.
+1. The token generated above is temporary. After it expires, you will need to run `generate-token.sh` again to retrieve a new token. Try passing in the `--succinct` flag this time:
+   ```bash
+   scripts/postgres/generate-token.sh --succinct # --rw
+   ```
 
-## (Optional) Configuring an existing connection to automatically retrieve tokens
+### (Optional) Configuring an existing connection to automatically retrieve tokens
 
 1. Determine the exact full path to the `get-token-for-tableplus.zsh` script:
    ```bash
