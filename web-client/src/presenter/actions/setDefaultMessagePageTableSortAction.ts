@@ -2,25 +2,18 @@ import { getConstants } from '../../getConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 const { ASCENDING, DESCENDING } = getConstants();
 
-/**
- * sets the default sort based on the section picked.
- * @param {object} providers the providers object
- * @param {Function} providers.get the cerebral get function
- * @param {object} providers.props the props passed to the sequence
- * @param {object} providers.store the cerebral store object
- */
 export const setDefaultMessagePageTableSortAction = ({
   props,
   store,
-}: ActionProps) => {
-  // different tables require different default sorting
-  if (props.box === 'inbox') {
+}: ActionProps<{ box: string }>) => {
+  const { box } = props;
+  if (box === 'inbox') {
     store.set(state.tableSort.sortField, 'createdAt');
     store.set(state.tableSort.sortOrder, ASCENDING);
-  } else if (props.box === 'outbox') {
+  } else if (box === 'outbox') {
     store.set(state.tableSort.sortField, 'createdAt');
     store.set(state.tableSort.sortOrder, DESCENDING);
-  } else if (props.box === 'completed') {
+  } else if (box === 'completed') {
     store.set(state.tableSort.sortField, 'completedAt');
     store.set(state.tableSort.sortOrder, DESCENDING);
   }
