@@ -123,8 +123,8 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       },
       docketClerkUser,
     );
-    expect(upsertCaseCorrespondences.mock.calls[0][0]).toMatchObject({
-      correspondence: {
+    expect(upsertCaseCorrespondences.mock.calls[0][0]).toMatchObject([
+      {
         correspondenceId: mockCorrespondenceId,
         docketNumber: mockCase.docketNumber,
         documentTitle: mockDocumentTitle,
@@ -132,7 +132,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
         filingDate: mockFilingDate,
         userId: docketClerkUser.userId,
       },
-    });
+    ]);
   });
 
   it('should return an updated raw case object', async () => {

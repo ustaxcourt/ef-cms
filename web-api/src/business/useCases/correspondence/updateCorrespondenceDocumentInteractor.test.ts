@@ -102,13 +102,12 @@ describe('updateCorrespondenceDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(upsertCaseCorrespondences.mock.calls[0][0]).toMatchObject({
-      correspondence: {
+    expect(upsertCaseCorrespondences.mock.calls[0][0]).toMatchObject([
+      {
         ...mockCorrespondence,
         documentTitle: 'A title that has been updated',
       },
-      docketNumber: mockCase.docketNumber,
-    });
+    ]);
   });
 
   it('should return an updated raw case object', async () => {
