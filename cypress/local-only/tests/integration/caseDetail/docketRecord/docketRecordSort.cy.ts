@@ -54,6 +54,7 @@ describe('Docket record sort', () => {
     },
     {
       columnId: 'docket-entry-filedDate',
+      defaultSort: true,
       fieldName: 'date',
       sortButtonId: 'sortingFilingDate-sortable-button',
     },
@@ -94,8 +95,9 @@ describe('Docket record sort', () => {
     },
   ].forEach(testInfo => {
     it(`should display docket entries in correct order when sorting by ${testInfo.fieldName} ascending and descending`, () => {
-      cy.get(`[data-testid="${testInfo.sortButtonId}"]`).click();
-
+      if (!testInfo.defaultSort) {
+        cy.get(`[data-testid="${testInfo.sortButtonId}"]`).click();
+      }
       getColumnTextFields(testInfo.columnId).then(columnTextFields => {
         const sortedColumnsTextFieldsAsc = [...columnTextFields].sort(
           sortColumnsAsc,
