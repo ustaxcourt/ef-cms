@@ -13,7 +13,6 @@ import { TrialSessionDetailsHeader } from '@web-client/views/TrialSessionDetails
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const PublicTrialSessionDetails = connect(
   {
@@ -159,15 +158,7 @@ function NonMobileOpenCases({
                   <CaseIcons formattedCase={publicCase} />
                 </td>
                 <td>
-                  <span
-                    className={classNames({
-                      'margin-left-2':
-                        publicCase.inConsolidatedGroup &&
-                        !publicCase.isLeadCase,
-                    })}
-                  >
-                    <CaseLink formattedCase={publicCase} />
-                  </span>
+                  <CaseLink formattedCase={publicCase} />
                 </td>
                 <td>{publicCase.caseTitle}</td>
                 <td>

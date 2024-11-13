@@ -182,7 +182,7 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
 }
 
 /**
- * Trial sessions
+ * Trial Sessions
  */
 {
   app.get(
@@ -193,7 +193,6 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
     '/public-api/sections/:section/users',
     lambdaWrapper(getUsersInSectionLambda),
   );
-
   app.get(
     '/public-api/trial-sessions/:trialSessionId',
     lambdaWrapper(getPublicTrialSessionDetailsLambda),
