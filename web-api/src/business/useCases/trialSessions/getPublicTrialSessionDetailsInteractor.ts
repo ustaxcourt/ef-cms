@@ -8,7 +8,6 @@ export type PublicTrialSessionDetails = Pick<
   | 'swingSessionId'
   | 'trialLocation'
   | 'startDate'
-  | 'estimatedEndDate'
   | 'courthouseName'
   | 'address1'
   | 'address2'
@@ -69,7 +68,6 @@ export const getPublicTrialSessionDetailsInteractor = async (
     calendaredCases: casesWithMinimalRequiredInformation,
     city: fullTrialSessionEntity.city,
     courthouseName: fullTrialSessionEntity.courthouseName,
-    estimatedEndDate: fullTrialSessionEntity.estimatedEndDate,
     postalCode: fullTrialSessionEntity.postalCode,
     startDate: fullTrialSessionEntity.startDate,
     state: fullTrialSessionEntity.state,

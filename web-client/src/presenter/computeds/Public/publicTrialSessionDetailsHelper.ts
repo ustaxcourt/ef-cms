@@ -12,7 +12,6 @@ import { state } from '@web-client/presenter/app-public.cerebral';
 export type FormattedPublicTrialSession = {
   formattedStartDate: string;
   formattedStartDateFull: string;
-  formattedEstimatedEndDate: string;
 
   hasCourthouseInformation: boolean;
   formattedCityStateZip: string;
@@ -53,10 +52,6 @@ export const publicTrialSessionDetailsHelper = (
     .getUtilities()
     .formatDateString(trialSession.startDate, 'MMDDYY');
 
-  const formattedEstimatedEndDate = applicationContext
-    .getUtilities()
-    .formatDateString(trialSession.estimatedEndDate, 'MMDDYY');
-
   const formattedStartDateFull = applicationContext
     .getUtilities()
     .formatDateString(trialSession.startDate, 'MONTH_DAY_YEAR');
@@ -84,7 +79,6 @@ export const publicTrialSessionDetailsHelper = (
     courthouseName: trialSession.courthouseName,
     formattedCases,
     formattedCityStateZip,
-    formattedEstimatedEndDate,
     formattedStartDate,
     formattedStartDateFull,
     hasCourthouseInformation,
