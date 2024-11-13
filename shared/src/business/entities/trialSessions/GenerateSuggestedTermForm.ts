@@ -22,6 +22,7 @@ export class GenerateSuggestedTermForm extends JoiValidationEntity {
         .required()
         .messages({
           '*': 'Enter date in format MM/DD/YYYY.',
+          'any.ref': 'Enter a start date',
           'date.min':
             'End date cannot be prior to start date. Enter a valid end date.',
         }),
@@ -39,7 +40,8 @@ export class GenerateSuggestedTermForm extends JoiValidationEntity {
         .required()
         .messages({
           '*': 'Enter date in format MM/DD/YYYY.',
-          'date.min': 'Start date cannot be in the past. Enter a valid date.',
+          'date.greater':
+            'Start date cannot be in the past. Enter a valid date.',
         }),
     };
   }
