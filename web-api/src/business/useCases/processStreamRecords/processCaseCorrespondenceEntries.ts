@@ -1,7 +1,7 @@
 import { RawCorrespondence } from '@shared/business/entities/Correspondence';
 import { getLogger } from 'aws-xray-sdk';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
-import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondences';
+import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 
 export const processCaseCorrespondenceEntries = async ({
   caseCorrespondenceRecords,

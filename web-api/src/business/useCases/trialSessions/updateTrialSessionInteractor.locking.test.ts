@@ -1,4 +1,4 @@
-import '@web-api/persistence/postgres/correspondence/mocks.jest';
+import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { MOCK_TRIAL_INPERSON } from '../../../../../shared/src/test/mockTrial';

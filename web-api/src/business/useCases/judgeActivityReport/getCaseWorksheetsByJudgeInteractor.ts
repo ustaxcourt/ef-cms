@@ -8,7 +8,7 @@ import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWo
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { SubmittedCAVTableFields } from '@web-api/persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/postgres/caseWorksheet/getCaseWorksheetsByDocketNumber';
+import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/postgres/caseWorksheets/getCaseWorksheetsByDocketNumber';
 
 export type GetCasesByStatusAndByJudgeRequest = {
   statuses: string[];

@@ -1,5 +1,5 @@
+import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import '@web-api/persistence/postgres/correspondence/mocks.jest';
 import { Correspondence } from '../../../../../shared/src/business/entities/Correspondence';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
@@ -8,7 +8,7 @@ import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { archiveCorrespondenceDocumentInteractor } from './archiveCorrespondenceDocumentInteractor';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
-import { upsertCaseCorrespondences as upsertCaseCorrespondencesMock } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondences';
+import { upsertCaseCorrespondences as upsertCaseCorrespondencesMock } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 
 const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
 

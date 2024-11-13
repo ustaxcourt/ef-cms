@@ -7,7 +7,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondences';
+import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 
 export const updateCorrespondenceDocumentInteractor = async (
   applicationContext: ServerApplicationContext,

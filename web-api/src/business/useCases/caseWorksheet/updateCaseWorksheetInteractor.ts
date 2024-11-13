@@ -8,7 +8,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { upsertCaseWorksheets } from '@web-api/persistence/postgres/caseWorksheet/upsertCaseWorksheets';
+import { upsertCaseWorksheets } from '@web-api/persistence/postgres/caseWorksheets/upsertCaseWorksheets';
 
 export const updateCaseWorksheetInteractor = async (
   {

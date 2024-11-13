@@ -1,4 +1,4 @@
-import '@web-api/persistence/postgres/correspondence/mocks.jest';
+import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -14,7 +14,7 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { upsertCaseCorrespondences as upsertCaseCorrespondencesMock } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondences';
+import { upsertCaseCorrespondences as upsertCaseCorrespondencesMock } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 
 const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
 

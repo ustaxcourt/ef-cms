@@ -1,15 +1,15 @@
-import '@web-api/persistence/postgres/caseWorksheet/mocks.jest';
+import '@web-api/persistence/postgres/caseWorksheets/mocks.jest';
 import { InvalidEntityError, UnauthorizedError } from '@web-api/errors/errors';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getCaseWorksheetsByDocketNumber as getCaseWorksheetsByDocketNumberMock } from '@web-api/persistence/postgres/caseWorksheet/getCaseWorksheetsByDocketNumber';
+import { getCaseWorksheetsByDocketNumber as getCaseWorksheetsByDocketNumberMock } from '@web-api/persistence/postgres/caseWorksheets/getCaseWorksheetsByDocketNumber';
 import { judgeColvin } from '@shared/test/mockUsers';
 import {
   mockChambersUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { updateCaseWorksheetInteractor } from './updateCaseWorksheetInteractor';
-import { upsertCaseWorksheets as upsertCaseWorksheetsMock } from '@web-api/persistence/postgres/caseWorksheet/upsertCaseWorksheets';
+import { upsertCaseWorksheets as upsertCaseWorksheetsMock } from '@web-api/persistence/postgres/caseWorksheets/upsertCaseWorksheets';
 
 const getCaseWorksheetsByDocketNumber =
   getCaseWorksheetsByDocketNumberMock as jest.Mock;

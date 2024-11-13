@@ -1,4 +1,4 @@
-import '@web-api/persistence/postgres/correspondence/mocks.jest';
+import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import { MOCK_CASE_WITH_TRIAL_SESSION } from '../../../../shared/src/test/mockCase';
 import { getCaseLambda } from './getCaseLambda';
 import { createTestApplicationContext as mockCreateTestApplicationContext } from '@shared/business/test/createTestApplicationContext';

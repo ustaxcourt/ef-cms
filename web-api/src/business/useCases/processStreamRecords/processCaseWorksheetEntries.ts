@@ -1,7 +1,7 @@
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { getLogger } from 'aws-xray-sdk';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
-import { upsertCaseWorksheets } from '@web-api/persistence/postgres/caseWorksheet/upsertCaseWorksheets';
+import { upsertCaseWorksheets } from '@web-api/persistence/postgres/caseWorksheets/upsertCaseWorksheets';
 
 export const processCaseWorksheetEntries = async ({
   caseWorksheetRecords,
