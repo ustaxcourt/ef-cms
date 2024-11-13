@@ -37,6 +37,7 @@ export class CaseWorksheet extends JoiValidationEntity {
       .messages({
         '*': 'Enter a valid due date',
       }),
+    judgeUserId: JoiValidationConstants.UUID.required(),
     primaryIssue: JoiValidationConstants.STRING.allow('').optional(),
     statusOfMatter: JoiValidationConstants.STRING.valid(
       ...CaseWorksheet.STATUS_OF_MATTER_OPTIONS,
