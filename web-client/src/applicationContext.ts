@@ -90,7 +90,6 @@ import { createCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadl
 import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCaseFromPaperProxy';
 import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
-import { createCsvCustomCaseReportFileInteractor } from '@shared/proxies/customCaseReport/createCsvCustomCaseReportFileProxy';
 import { createJudgeUserInteractor } from '../../shared/src/proxies/judges/createJudgeUserProxy';
 import { createMessageInteractor } from '../../shared/src/proxies/messages/createMessageProxy';
 import { createPractitionerDocumentInteractor } from '../../shared/src/proxies/practitioners/createPractitionerDocumentProxy';
@@ -170,7 +169,6 @@ import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/
 import { getConstants } from './getConstants';
 import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@shared/proxies/reports/getCountOfCaseDocumentsFiledByJudgesProxy';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
-import { getCustomCaseReportInteractor } from '../../shared/src/proxies/reports/getCustomCaseReportProxy';
 import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
 import {
   getDocQcSectionForUser,
@@ -397,7 +395,6 @@ const allUseCases = {
   createCaseFromPaperInteractor,
   createCaseInteractor,
   createCourtIssuedOrderPdfFromHtmlInteractor,
-  createCsvCustomCaseReportFileInteractor,
   createJudgeUserInteractor,
   createMessageInteractor,
   createPractitionerDocumentInteractor,
@@ -454,7 +451,6 @@ const allUseCases = {
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
   getCountOfCaseDocumentsFiledByJudgesInteractor,
-  getCustomCaseReportInteractor,
   getDocumentContentsForDocketEntryInteractor,
   getDocumentDownloadUrlInteractor,
   getDocumentQCInboxForSectionInteractor,

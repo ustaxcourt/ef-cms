@@ -412,7 +412,8 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "iam:PutRolePolicy",
         "iam:CreateInstanceProfile",
         "iam:CreateRole",
-        "iam:ListEntitiesForPolicy"
+        "iam:ListEntitiesForPolicy",
+        "iam:UpdateAssumeRolePolicy"
       ],
       "Resource": [
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/*",
