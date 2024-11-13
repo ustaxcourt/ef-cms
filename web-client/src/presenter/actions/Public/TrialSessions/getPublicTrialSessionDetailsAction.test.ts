@@ -14,7 +14,6 @@ describe('getPublicTrialSessionDetailsAction', () => {
       address1: '123 Main St',
       calendaredCases: [],
       city: 'San Francisco',
-      estimatedEndDate: '2020-11-29T05:00:00.000Z',
       postalCode: '94535',
       startDate: '2020-11-27T05:00:00.000Z',
       state: 'CA',
