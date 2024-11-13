@@ -5,11 +5,16 @@ import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
+import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
+import React, { useRef } from 'react';
+
+const ITEMS_PER_PAGE = 100;
 
 export const CaseDeadlines = connect(
   {
@@ -18,7 +23,6 @@ export const CaseDeadlines = connect(
     filterCaseDeadlinesByJudgeSequence:
       sequences.filterCaseDeadlinesByJudgeSequence,
     judgeFilter: state.screenMetadata.caseDeadlinesFilter.judge,
-    loadMoreCaseDeadlinesSequence: sequences.loadMoreCaseDeadlinesSequence,
     screenMetadata: state.screenMetadata,
     selectDateRangeFromCalendarSequence:
       sequences.selectDateRangeFromCalendarSequence,
@@ -30,12 +34,18 @@ export const CaseDeadlines = connect(
     caseDeadlineReport,
     caseDeadlineReportHelper,
     filterCaseDeadlinesByJudgeSequence,
-    loadMoreCaseDeadlinesSequence,
     screenMetadata,
     selectDateRangeFromCalendarSequence,
     updateDateRangeForDeadlinesSequence,
     validationErrors,
   }) {
+    const paginatorTop = useRef(null);
+
+    const { activePage, pageRecords, setActivePage, totalPages } =
+      useClientSidePaginator(
+        caseDeadlineReportHelper.formattedCaseDeadlines,
+        ITEMS_PER_PAGE,
+      );
     return (
       <>
         <BigHeader text="Reports" />
@@ -121,7 +131,7 @@ export const CaseDeadlines = connect(
                   </BindedSelect>
                 </div>
               )}
-              {caseDeadlineReportHelper.caseDeadlines.length > 0 && (
+              {caseDeadlineReportHelper.formattedCaseDeadlines.length > 0 && (
                 <table className="usa-table subsection ustc-table deadlines">
                   <thead>
                     <tr>
@@ -137,47 +147,45 @@ export const CaseDeadlines = connect(
                     </tr>
                   </thead>
                   <tbody>
-                    {caseDeadlineReportHelper.caseDeadlines.map(item => (
-                      <tr key={item.caseDeadlineId}>
+                    {pageRecords.map(row => (
+                      <tr key={row.caseDeadlineId}>
                         <td className="smaller-column">
-                          {item.formattedDeadline}
+                          {row.formattedDeadline}
                         </td>
                         <td className="consolidated-case-column">
                           <ConsolidatedCaseIcon
                             consolidatedIconTooltipText={
-                              item.consolidatedIconTooltipText
+                              row.consolidatedIconTooltipText
                             }
-                            inConsolidatedGroup={item.inConsolidatedGroup}
-                            showLeadCaseIcon={item.inLeadCase}
+                            inConsolidatedGroup={row.inConsolidatedGroup}
+                            showLeadCaseIcon={row.inLeadCase}
                           />
                         </td>
                         <td className="smaller-column">
-                          <CaseLink formattedCase={item} />
+                          <CaseLink formattedCase={row} />
                         </td>
-                        <td>{item.caseTitle}</td>
-                        <td className="padding-extra">{item.description}</td>
+                        <td>{row.caseTitle}</td>
+                        <td className="padding-extra">{row.description}</td>
                         <td className="no-wrap">
-                          {item.associatedJudgeFormatted}
+                          {row.associatedJudgeFormatted}
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               )}
+              {totalPages > 1 && (
+                <Paginator
+                  currentPageIndex={activePage}
+                  totalPages={totalPages}
+                  onPageChange={pageChange => {
+                    setActivePage(pageChange);
+                    focusPaginatorTop(paginatorTop);
+                  }}
+                />
+              )}
               {caseDeadlineReportHelper.showNoDeadlines && (
                 <p>There are no deadlines for the selected date(s).</p>
-              )}
-              {caseDeadlineReportHelper.showLoadMoreButton && (
-                <Button
-                  secondary
-                  className="margin-bottom-20"
-                  id="load-more-deadlines-button"
-                  onClick={() => {
-                    loadMoreCaseDeadlinesSequence();
-                  }}
-                >
-                  Load More
-                </Button>
               )}
             </div>
           </div>
