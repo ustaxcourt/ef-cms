@@ -11,7 +11,7 @@ export const processCaseWorksheetEntries = async ({
   if (!caseWorksheetRecords.length) return;
 
   getLogger().debug(
-    `going to index ${caseWorksheetRecords.length} case worksheet records`,
+    `going to upsert ${caseWorksheetRecords.length} case worksheet records`,
   );
 
   await upsertCaseWorksheets(

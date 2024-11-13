@@ -11,7 +11,7 @@ export const processCaseDeadlineEntries = async ({
   if (!caseDeadlineRecords.length) return;
 
   getLogger().debug(
-    `going to index ${caseDeadlineRecords.length} case deadline records`,
+    `going to upsert ${caseDeadlineRecords.length} case deadline records`,
   );
 
   await upsertCaseDeadlines(

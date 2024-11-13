@@ -7,7 +7,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { upsertCaseDeadline as upsertDeadline } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadline';
+import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const createCaseDeadline = async (
@@ -33,9 +33,7 @@ export const createCaseDeadline = async (
     associatedJudgeId: caseEntity.associatedJudgeId,
   });
 
-  await upsertDeadline({
-    caseDeadlineToUpsert: newCaseDeadline.validate().toRawObject(),
-  });
+  await upsertCaseDeadlines([newCaseDeadline.validate().toRawObject()]);
 
   caseEntity = await applicationContext
     .getUseCaseHelpers()

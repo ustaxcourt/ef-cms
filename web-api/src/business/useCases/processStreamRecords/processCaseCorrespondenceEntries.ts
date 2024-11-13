@@ -11,7 +11,7 @@ export const processCaseCorrespondenceEntries = async ({
   if (!caseCorrespondenceRecords.length) return;
 
   getLogger().debug(
-    `going to index ${caseCorrespondenceRecords.length} correspondence records`,
+    `going to upsert ${caseCorrespondenceRecords.length} correspondence records`,
   );
 
   await upsertCaseCorrespondences(

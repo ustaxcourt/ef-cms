@@ -1,20 +1,14 @@
-I've put docketNumber on Correspondence because:
-  it makes the stream processing more efficient
-  it's just a sensible thing to do. 
-Make sure things work correctly after this change
+check Correspondence works now with docketNumber (added to the entity) and update validation?
 
 --
 
 Is docketNumber in Case assignCorrespondences necessary? Were there some old cases, maybe, onto which we directly stored correspondences?
 
---
-
-get rid of upsertCaseDeadline (singular) and just use upsertCaseDeadlines (plural)
 
 --
 
-get rid of upsertCaseWorksheet (singular) and just use upsertCaseWorksheets (plural)
+check CaseWorksheet works now with judgeUserId (added to the entity) and update validation?
 
 --
 
-check CaseWorksheet works now with judgeUserId
+entityName: "CaseWorksheet" in updateCaseWorksheetAction is silly
