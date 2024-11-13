@@ -377,12 +377,14 @@ describe('formatCaseForTrialSession', () => {
     entityName: 'Case';
     status: 'New';
     docketNumberSuffix?: string;
+    isSealed: boolean;
   };
 
   beforeEach(() => {
     caseItem = {
       docketNumber: '101-20',
       entityName: 'Case',
+      isSealed: false,
       status: 'New',
     };
   });
