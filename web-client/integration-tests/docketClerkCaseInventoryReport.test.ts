@@ -48,9 +48,7 @@ describe('case inventory report journey', () => {
       state: cerebralTest.getState(),
     });
 
-    const legacyJudge = helper.judges.find(
-      judge => judge.role === 'legacyJudge',
-    );
+    const legacyJudge = helper.judges.find(judge => judge === 'legacyJudge');
 
     expect(legacyJudge).toBeFalsy();
 

@@ -1,5 +1,4 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { FormattedCase } from '@shared/business/utilities/getFormattedCaseDetail';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { without } from 'lodash';
@@ -9,7 +8,7 @@ export const caseInventoryReportHelper = (
   applicationContext: ClientApplicationContext,
 ): {
   caseStatuses: string[];
-  formattedReportData: FormattedCase[];
+  formattedReportData: Record<string, unknown>[];
   judges: string[];
   nextPageSize: number;
   resultCount: number;

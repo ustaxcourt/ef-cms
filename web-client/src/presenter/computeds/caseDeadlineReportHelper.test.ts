@@ -39,7 +39,7 @@ describe('caseDeadlineReportHelper', () => {
       },
     });
     expect(result.totalCount).toEqual(0);
-    expect(result.caseDeadlines).toEqual([]);
+    expect(result.formattedCaseDeadlines).toEqual([]);
     expect(result.formattedFilterDateHeader).toBeTruthy();
     expect(result.showLoadMoreButton).toBeFalsy();
   });
@@ -86,12 +86,18 @@ describe('caseDeadlineReportHelper', () => {
     expect(
       applicationContext.getUtilities().getJudgeLastName,
     ).toHaveBeenCalled();
-    expect(result.caseDeadlines[0].associatedJudgeFormatted).toEqual('Hale');
-    expect(result.caseDeadlines[1].associatedJudgeFormatted).toEqual(
+    expect(result.formattedCaseDeadlines[0].associatedJudgeFormatted).toEqual(
+      'Hale',
+    );
+    expect(result.formattedCaseDeadlines[1].associatedJudgeFormatted).toEqual(
       'Brandeis',
     );
-    expect(result.caseDeadlines[2].associatedJudgeFormatted).toEqual('Rummy');
-    expect(result.caseDeadlines[3].associatedJudgeFormatted).toEqual('Barney');
+    expect(result.formattedCaseDeadlines[2].associatedJudgeFormatted).toEqual(
+      'Rummy',
+    );
+    expect(result.formattedCaseDeadlines[3].associatedJudgeFormatted).toEqual(
+      'Barney',
+    );
   });
 
   it('should format the caseDeadline with consolidated cases with correct icons and tool tips', () => {
@@ -125,19 +131,21 @@ describe('caseDeadlineReportHelper', () => {
       },
     });
 
-    expect(result.caseDeadlines[0].inConsolidatedGroup).toEqual(true);
-    expect(result.caseDeadlines[0].inLeadCase).toEqual(true);
-    expect(result.caseDeadlines[0].consolidatedIconTooltipText).toEqual(
-      'Lead case',
-    );
-    expect(result.caseDeadlines[1].inConsolidatedGroup).toEqual(true);
-    expect(result.caseDeadlines[1].inLeadCase).toEqual(false);
-    expect(result.caseDeadlines[1].consolidatedIconTooltipText).toEqual(
-      'Consolidated case',
-    );
-    expect(result.caseDeadlines[2].inConsolidatedGroup).toEqual(false);
-    expect(result.caseDeadlines[2].inLeadCase).toEqual(false);
-    expect(result.caseDeadlines[2].consolidatedIconTooltipText).toBeUndefined();
+    expect(result.formattedCaseDeadlines[0].inConsolidatedGroup).toEqual(true);
+    expect(result.formattedCaseDeadlines[0].inLeadCase).toEqual(true);
+    expect(
+      result.formattedCaseDeadlines[0].consolidatedIconTooltipText,
+    ).toEqual('Lead case');
+    expect(result.formattedCaseDeadlines[1].inConsolidatedGroup).toEqual(true);
+    expect(result.formattedCaseDeadlines[1].inLeadCase).toEqual(false);
+    expect(
+      result.formattedCaseDeadlines[1].consolidatedIconTooltipText,
+    ).toEqual('Consolidated case');
+    expect(result.formattedCaseDeadlines[2].inConsolidatedGroup).toEqual(false);
+    expect(result.formattedCaseDeadlines[2].inLeadCase).toEqual(false);
+    expect(
+      result.formattedCaseDeadlines[2].consolidatedIconTooltipText,
+    ).toBeUndefined();
   });
 
   describe('showLoadMoreButton', () => {

@@ -1,6 +1,5 @@
 /* eslint-disable max-lines */
 import { Contact } from '@shared/business/useCases/generatePetitionPdfInteractor';
-import { FormattedCase } from '@shared/business/utilities/getFormattedCaseDetail';
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import {
@@ -619,7 +618,7 @@ export const baseState = {
   caseDeadlines: [] as RawCaseDeadline[],
   caseDetail: {} as RawCase,
   caseInventoryReportData: {
-    foundCases: [] as FormattedCase[],
+    foundCases: [],
     totalCount: 0,
   },
   clientConnectionId: '',
