@@ -17,7 +17,6 @@ export const upsertCaseDeadlines = async (
           return {
             associatedJudge: cd.ref('excluded.associatedJudge'),
             associatedJudgeId: cd.ref('excluded.associatedJudgeId'),
-            caseDeadlineId: cd.ref('excluded.caseDeadlineId'),
             createdAt: cd.ref('excluded.createdAt'),
             deadlineDate: cd.ref('excluded.deadlineDate'),
             description: cd.ref('excluded.description'),

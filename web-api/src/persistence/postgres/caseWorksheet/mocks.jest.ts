@@ -6,6 +6,6 @@ jest.mock(
 );
 
 jest.mock(
-  '@web-api/persistence/postgres/caseWorksheet/upsertCaseWorksheet',
-  () => mockFactory('upsertCaseWorksheet'),
+  '@web-api/persistence/postgres/caseWorksheet/upsertCaseWorksheets',
+  () => mockFactory('upsertCaseWorksheets'),
 );

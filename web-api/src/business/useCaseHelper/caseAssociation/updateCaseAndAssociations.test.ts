@@ -27,13 +27,13 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseAndAssociations } from './updateCaseAndAssociations';
 import { updateMessage as updateMessageMock } from '@web-api/persistence/postgres/messages/updateMessage';
 import { upsertCaseCorrespondences as upsertCaseCorrespondencesMock } from '@web-api/persistence/postgres/correspondence/upsertCaseCorrespondences';
-import { upsertCaseDeadline as upsertCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadline';
+import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import { v4 as uuidv4 } from 'uuid';
 
 const getMessagesByDocketNumber = getMessagesByDocketNumberMock as jest.Mock;
 const updateMessage = updateMessageMock as jest.Mock;
 
-const upsertCaseDeadline = upsertCaseDeadlineMock as jest.Mock;
+const upsertCaseDeadlines = upsertCaseDeadlinesMock as jest.Mock;
 
 const getCaseDeadlinesByDocketNumber =
   getCaseDeadlinesByDocketNumberMock as jest.Mock;
@@ -200,7 +200,7 @@ describe('updateCaseAndAssociations', () => {
     ).not.toHaveBeenCalled();
 
     // updateCaseDeadlines
-    expect(upsertCaseDeadline).not.toHaveBeenCalled();
+    expect(upsertCaseDeadlines).not.toHaveBeenCalled();
 
     // update the case itself, final persistence call
     expect(
@@ -955,7 +955,7 @@ describe('updateCaseAndAssociations', () => {
         caseToUpdate: updatedCase,
       });
       expect(getCaseDeadlinesByDocketNumber).not.toHaveBeenCalled();
-      expect(upsertCaseDeadline).not.toHaveBeenCalled();
+      expect(upsertCaseDeadlines).not.toHaveBeenCalled();
     });
 
     it('should fetch and persist case deadline data when associated judge has changed', async () => {
@@ -971,9 +971,7 @@ describe('updateCaseAndAssociations', () => {
       });
       expect(getCaseDeadlinesByDocketNumber).toHaveBeenCalled();
       expect(CaseDeadline.validateRawCollection).toHaveBeenCalled();
-      expect(upsertCaseDeadline).toHaveBeenCalledWith({
-        caseDeadlineToUpsert: { some: 'deadline' },
-      });
+      expect(upsertCaseDeadlines).toHaveBeenCalledWith([{ some: 'deadline' }]);
     });
   });
 });

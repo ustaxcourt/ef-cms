@@ -3,9 +3,9 @@ import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseDeadlineInteractor } from './updateCaseDeadlineInteractor';
-import { upsertCaseDeadline as upsertCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadline';
+import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 
-const upsertCaseDeadline = upsertCaseDeadlineMock as jest.Mock;
+const upsertCaseDeadlines = upsertCaseDeadlinesMock as jest.Mock;
 
 describe('updateCaseDeadlineInteractor', () => {
   const CASE_DEADLINE_ID = '6805d1ab-18d0-43ec-bafb-654e83405416';
@@ -38,9 +38,9 @@ describe('updateCaseDeadlineInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(upsertCaseDeadline.mock.calls[0][0]).toMatchObject({
-      caseDeadlineToUpsert: mockCaseDeadline,
-    });
+    expect(upsertCaseDeadlines.mock.calls[0][0]).toMatchObject([
+      mockCaseDeadline,
+    ]);
     expect(caseDeadline).toBeDefined();
   });
 });

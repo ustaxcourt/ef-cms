@@ -2,7 +2,6 @@ import '@web-api/persistence/postgres/caseWorksheet/mocks.jest';
 import { InvalidEntityError, UnauthorizedError } from '@web-api/errors/errors';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseWorksheetsByDocketNumber as getCaseWorksheetsByDocketNumberMock } from '@web-api/persistence/postgres/caseWorksheet/getCaseWorksheetsByDocketNumber';
 import { judgeColvin } from '@shared/test/mockUsers';
 import {
@@ -10,29 +9,23 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { updateCaseWorksheetInteractor } from './updateCaseWorksheetInteractor';
-import { upsertCaseWorksheet as upsertCaseWorksheetMock } from '@web-api/persistence/postgres/caseWorksheet/upsertCaseWorksheet';
+import { upsertCaseWorksheets as upsertCaseWorksheetsMock } from '@web-api/persistence/postgres/caseWorksheet/upsertCaseWorksheets';
 
 const getCaseWorksheetsByDocketNumber =
   getCaseWorksheetsByDocketNumberMock as jest.Mock;
-const upsertCaseWorksheet = upsertCaseWorksheetMock as jest.Mock;
+const upsertCaseWorksheets = upsertCaseWorksheetsMock as jest.Mock;
 
 describe('updateCaseWorksheetInteractor', () => {
   const mockCaseWorksheet: RawCaseWorksheet = {
     docketNumber: '101-23',
     entityName: 'CaseWorksheet',
+    judgeUserId: judgeColvin.userId,
     primaryIssue: 'Don`t go chasin waterfalls',
   };
-
-  beforeAll(() => {
-    applicationContext
-      .getUseCaseHelpers()
-      .getJudgeForUserHelper.mockReturnValue(judgeColvin);
-  });
 
   it('should throw an error when the user does not have access to the case worksheet feature', async () => {
     await expect(
       updateCaseWorksheetInteractor(
-        applicationContext,
         {
           worksheet: mockCaseWorksheet,
         },
@@ -42,13 +35,8 @@ describe('updateCaseWorksheetInteractor', () => {
   });
 
   it('should throw an error when the updated case worksheet is invalid', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(judgeColvin);
-
     await expect(
       updateCaseWorksheetInteractor(
-        applicationContext,
         {
           worksheet: {
             ...mockCaseWorksheet,
@@ -62,13 +50,9 @@ describe('updateCaseWorksheetInteractor', () => {
 
   it('should persist and return the updated case worksheet when the updates are valid', async () => {
     const mockFinalBriefDueDate = '2023-08-29';
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(judgeColvin);
     getCaseWorksheetsByDocketNumber.mockResolvedValue([mockCaseWorksheet]);
 
     const result = await updateCaseWorksheetInteractor(
-      applicationContext,
       {
         worksheet: {
           ...mockCaseWorksheet,
@@ -82,13 +66,9 @@ describe('updateCaseWorksheetInteractor', () => {
       ...mockCaseWorksheet,
       finalBriefDueDate: mockFinalBriefDueDate,
     };
-    expect(
-      applicationContext.getUseCaseHelpers().getJudgeInSectionHelper,
-    ).not.toHaveBeenCalled();
-    expect(upsertCaseWorksheet).toHaveBeenCalledWith({
-      caseWorksheet: expectedUpdatedCaseWorksheet,
-      judgeUserId: judgeColvin.userId,
-    });
+    expect(upsertCaseWorksheets).toHaveBeenCalledWith([
+      expectedUpdatedCaseWorksheet,
+    ]);
     expect(result).toEqual(expectedUpdatedCaseWorksheet);
   });
 
@@ -97,7 +77,6 @@ describe('updateCaseWorksheetInteractor', () => {
     getCaseWorksheetsByDocketNumber.mockResolvedValue([mockCaseWorksheet]);
 
     const result = await updateCaseWorksheetInteractor(
-      applicationContext,
       {
         worksheet: {
           ...mockCaseWorksheet,
@@ -111,16 +90,9 @@ describe('updateCaseWorksheetInteractor', () => {
       ...mockCaseWorksheet,
       finalBriefDueDate: mockFinalBriefDueDate,
     };
-    expect(
-      applicationContext.getUseCaseHelpers().getJudgeForUserHelper.mock
-        .calls[0][1],
-    ).toEqual({
-      user: mockChambersUser,
-    });
-    expect(upsertCaseWorksheet).toHaveBeenCalledWith({
-      caseWorksheet: expectedUpdatedCaseWorksheet,
-      judgeUserId: judgeColvin.userId,
-    });
+    expect(upsertCaseWorksheets).toHaveBeenCalledWith([
+      expectedUpdatedCaseWorksheet,
+    ]);
     expect(result).toEqual(expectedUpdatedCaseWorksheet);
   });
 });
