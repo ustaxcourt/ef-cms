@@ -23,7 +23,6 @@ export const caseDeadlineReportHelper = (
   formattedFilterDateHeader;
   judges: string[];
   showJudgeSelect: boolean;
-  showLoadMoreButton: boolean;
   showNoDeadlines: boolean;
   totalCount: number;
 } => {
@@ -32,7 +31,6 @@ export const caseDeadlineReportHelper = (
   const caseDeadlines = get(state.caseDeadlineReport.caseDeadlines) || [];
   const totalCount = get(state.caseDeadlineReport.totalCount) || 0;
   const judgeFilter = get(state.caseDeadlineReport.judgeFilter);
-  const showLoadMoreButton = caseDeadlines.length < totalCount;
   const showJudgeSelect = caseDeadlines.length > 0 || !!judgeFilter;
   const showNoDeadlines = caseDeadlines.length === 0;
   const judges = (get(state.judges) || [])
@@ -96,7 +94,6 @@ export const caseDeadlineReportHelper = (
     formattedFilterDateHeader,
     judges,
     showJudgeSelect,
-    showLoadMoreButton,
     showNoDeadlines,
     totalCount,
   };

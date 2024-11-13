@@ -41,7 +41,6 @@ describe('caseDeadlineReportHelper', () => {
     expect(result.totalCount).toEqual(0);
     expect(result.formattedCaseDeadlines).toEqual([]);
     expect(result.formattedFilterDateHeader).toBeTruthy();
-    expect(result.showLoadMoreButton).toBeFalsy();
   });
 
   it('should use only the formatted startDate in header if start and end date are on the same day in ET', () => {
@@ -146,37 +145,6 @@ describe('caseDeadlineReportHelper', () => {
     expect(
       result.formattedCaseDeadlines[2].consolidatedIconTooltipText,
     ).toBeUndefined();
-  });
-
-  describe('showLoadMoreButton', () => {
-    it('should return showLoadMoreButton true when caseDeadlines length is less than totalCount', () => {
-      const result = runCompute(caseDeadlineReportHelper, {
-        state: {
-          caseDeadlineReport: { caseDeadlines, totalCount: 20 },
-          screenMetadata: {
-            filterEndDate: '2019-08-23T04:00:00.000Z',
-            filterStartDate: '2019-08-21T04:00:00.000Z',
-          },
-        },
-      });
-      expect(result.showLoadMoreButton).toBeTruthy();
-    });
-
-    it('should return showLoadMoreButton false when caseDeadlines length is equal to totalCount', () => {
-      const result = runCompute(caseDeadlineReportHelper, {
-        state: {
-          caseDeadlineReport: {
-            caseDeadlines,
-            totalCount: caseDeadlines.length,
-          },
-          screenMetadata: {
-            filterEndDate: '2019-08-23T04:00:00.000Z',
-            filterStartDate: '2019-08-21T04:00:00.000Z',
-          },
-        },
-      });
-      expect(result.showLoadMoreButton).toBeFalsy();
-    });
   });
 
   describe('showJudgeSelect', () => {

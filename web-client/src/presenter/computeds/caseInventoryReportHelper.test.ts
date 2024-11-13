@@ -175,38 +175,6 @@ describe('caseInventoryReportHelper', () => {
     expect(result.nextPageSize).toEqual(0);
   });
 
-  it('should show the load more button when there are more results to load', () => {
-    const result = runCompute(caseInventoryReportHelper, {
-      state: {
-        caseInventoryReportData: {
-          foundCases: [],
-          totalCount: 200,
-        },
-        screenMetadata: {
-          page: 1,
-        },
-      },
-    });
-
-    expect(result.showLoadMoreButton).toBeTruthy();
-  });
-
-  it('should NOT show the load more button when there are NO MORE results to load', () => {
-    const result = runCompute(caseInventoryReportHelper, {
-      state: {
-        caseInventoryReportData: {
-          foundCases: [],
-          totalCount: testCaseInventoryPageSize,
-        },
-        screenMetadata: {
-          page: 1,
-        },
-      },
-    });
-
-    expect(result.showLoadMoreButton).toBeFalsy();
-  });
-
   it('should show the no results message if a filter is selected but totalCount is 0', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {

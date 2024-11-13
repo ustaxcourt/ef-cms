@@ -26,7 +26,6 @@ export const caseInventoryReportHelper = (
   showResultsTable: boolean;
   showSelectFilterMessage: boolean;
   showNoResultsMessage: boolean;
-  showLoadMoreButton: boolean;
   showJudgeColumn: boolean;
   showStatusColumn: boolean;
 } => {
@@ -74,7 +73,6 @@ export const caseInventoryReportHelper = (
   }
 
   const notDisplayedCount = resultCount - displayedCount;
-  const showLoadMoreButton = displayedCount < resultCount;
 
   let nextPageSize = CASE_INVENTORY_PAGE_SIZE;
 
@@ -89,7 +87,6 @@ export const caseInventoryReportHelper = (
     nextPageSize,
     resultCount,
     showJudgeColumn: !associatedJudge,
-    showLoadMoreButton,
     showNoResultsMessage,
     showResultsTable,
     showSelectFilterMessage,

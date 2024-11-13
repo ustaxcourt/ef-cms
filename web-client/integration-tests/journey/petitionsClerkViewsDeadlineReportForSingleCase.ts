@@ -49,13 +49,9 @@ export const petitionsClerkViewsDeadlineReportForSingleCase = (
 
     expect(deadlinesForThisCase[0].deadlineDate).toBeDefined();
 
-    let helper = runCompute(caseDeadlineReportHelper, {
+    runCompute(caseDeadlineReportHelper, {
       state: cerebralTest.getState(),
     });
-
-    expect(helper.showLoadMoreButton).toBeTruthy();
-
-    await cerebralTest.runSequence('loadMoreCaseDeadlinesSequence');
 
     deadlines = cerebralTest.getState('caseDeadlineReport.caseDeadlines');
 
@@ -64,11 +60,5 @@ export const petitionsClerkViewsDeadlineReportForSingleCase = (
     );
 
     expect(deadlinesForThisCase.length).toEqual(2);
-
-    helper = runCompute(caseDeadlineReportHelper, {
-      state: cerebralTest.getState(),
-    });
-
-    expect(helper.showLoadMoreButton).toBeFalsy();
   });
 };
