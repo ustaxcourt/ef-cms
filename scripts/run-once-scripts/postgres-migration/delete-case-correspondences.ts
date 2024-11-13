@@ -53,7 +53,9 @@ async function main() {
       dynamoDbDocClient,
       tableNameInput,
     );
-    console.log(`Total case correspondences deleted: ${totalItemsDeleted}`);
+    console.log(
+      `Total case correspondences deleted so far: ${totalItemsDeleted}`,
+    );
     offset += caseCorrespondencePageSize;
     caseCorrespondencesToDelete = await getCaseCorrespondencesToDelete(offset);
   }

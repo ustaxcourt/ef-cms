@@ -52,7 +52,7 @@ async function main() {
       dynamoDbDocClient,
       tableNameInput,
     );
-    console.log(`Total case deadlines deleted: ${totalItemsDeleted}`);
+    console.log(`Total case deadlines deleted so far: ${totalItemsDeleted}`);
     offset += caseDeadlinePageSize;
     caseDeadlinesToDelete = await getCaseDeadlinesToDelete(offset);
   }
