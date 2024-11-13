@@ -23,17 +23,19 @@
 
 __Tips before you begin__
 
-- The linux terminal is not a text editor - clicking with your mouse will not move the cursor. Use the arrow keys to move the cursor.
 - To copy highlighted text from the terminal: `CTRL`+`SHIFT`+`C`
 - To paste text from your clipboard in the terminal: `CTRL`+`SHIFT`+`V`
-- Unless instructed otherwise, always enter commands one line at a time. In the event of an error, it is much easier to determine where the error occurred when you issue commands one at a time.
 
 __Ready to begin? Let's go!__
 
 1. Start the Debian WSL container and enter the shell
+1. Sync the list of available packages
+   ```bash
+   sudo apt update
+   ```
 1. Upgrade all existing software
    ```bash
-   sudo apt update && sudo apt full-upgrade
+   sudo apt full-upgrade
    ```
 1. Install `zsh`
    ```bash
@@ -48,13 +50,13 @@ __Ready to begin? Let's go!__
    exit
    ```
 1. Launch Debian again and enter the shell, which will now be a `zsh` session
-1. Create a new `.zshrc` config file
+1. Delete the automatically generated config file
    ```bash
    rm ~/.zshrc
-   nano ~/.zshrc
    ```
-1. Paste in the following
-   ```
+1. Create a new `.zshrc` config file (paste the following as a single command)
+   ```bash
+   cat > ~/.zshrc << EOF
    # set the default language
    export LANG=en_US.UTF-8
    
@@ -88,11 +90,14 @@ __Ready to begin? Let's go!__
    export CIRCLE_PERSONAL_TOKEN=""
    
    export PATH
+   EOF
    ```
-1. Save the file by pressing `CTRL` + `X`, then pressing `y`, then pressing `Enter`
-1. Create some private `bin` directories
+1. Create a private `bin` directory in the home directory
    ```bash
    mkdir -p ~/bin
+   ```
+1. Create a private `bin` directory in `~/.local`
+   ```bash
    mkdir -p ~/.local/bin
    ```
 1. Source the `.zshrc` config file to apply the configuration
@@ -143,12 +148,15 @@ __Ready to begin? Let's go!__
    ```
 1. Install NodeJS via `nvm`
    1. To find out which version of NodeJS to install, check the `FROM` line of the [Dockerfile](../Dockerfile) and look for `node-<version>`
-   1. Use `nvm` to install NodeJS, replacing `<version>` with the actual version you determined
+   1. Install NodeJS, replacing `<version>` with the actual version you determined
       ```bash
       nvm install <version>
+      ```
+   1. Set the local version of NodeJS to the version you just installed
+      ```bash
       nvm use <version>
       ```
-   1. **Note:** You will be responsible for keeping your local installation of NodeJS in sync with DAWSON's by repeating the previous step when necessary 
+   1. **Note:** You will be responsible for keeping your local installation of NodeJS in sync with DAWSON's by repeating the previous two steps when necessary 
 1. Install `tfswitch` by following the [tfswitch installation instructions](https://github.com/warrensbox/terraform-switcher#linux)
 1. Install Terraform via `tfswitch`
    1. To find out which version of Terraform to install, check the [verify-terraform-version](../scripts/verify-terraform-version.sh) script
@@ -160,7 +168,6 @@ __Ready to begin? Let's go!__
 1. Configure `git`
    1. Configure `git` to use your github user (be sure to use the email address you use with github)
       ```bash
-      git config --global user.name "First Last"
       git config --global user.email "first.last@ustaxcourt.gov"
       ```
    1. Generate an SSH key (press `Enter` to select all the defaults when asked)
@@ -181,22 +188,30 @@ __Ready to begin? Let's go!__
       ```bash
       ssh -T git@github.com
       ```
-1. Clone the `ef-cms` and `ustc-devops` repositories
-   ```bash
-   cd ~
-   mkdir -p git/ustaxcourt
-   cd git/ustaxcourt
-   git clone -b staging git@github.com:ustaxcourt/ef-cms.git
-   git clone git@github.com:ustaxcourt/ustc-devops.git
-   ```
+1. Prepare your `git` directory structure
+   1. Create the directories
+      ```bash
+      mkdir -p ~/git/ustaxcourt
+      ```
+   1. Enter the directory you created for `ustaxcourt` repositories
+      ```bash
+      cd ~/git/ustaxcourt
+      ```
+   1. Clone the `ef-cms` repository
+      ```bash
+      git clone -b staging git@github.com:ustaxcourt/ef-cms.git
+      ```
+   1. Clone the `ustc-devops` repository
+      ```bash
+      git clone git@github.com:ustaxcourt/ustc-devops.git
+      ```
 1. Source the `.zshrc` config file to enable the `ustc-devops` aliases
    ```bash
    source ~/.zshrc
    ```
 1. Open the `ef-cms` directory in VSCode (this step will only work if you've already installed the [WSL plugin](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl) for VSCode and restarted the Linux container after doing so)
    ```bash
-   cd ~/git/ustaxcourt/ef-cms
-   code .
+   code ~/git/ustaxcourt/ef-cms
    ```
 1. Follow the [environment switcher setup instructions](./additional-resources/environment-switcher.md) to set up AWS SSO and configure your environment switcher to be able to point to deployed DAWSON environments
 1. Follow the instructions for [Connecting to a Deployed Postgres Database](./postgres/connect-to-deployed-db.md) to configure TablePlus to connect to the deployed postgres databases
