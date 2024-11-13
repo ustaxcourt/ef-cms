@@ -58,7 +58,7 @@ export const Address = connect(
               className="usa-label"
               htmlFor={`${type}.postalCode`}
             >
-              Zip code
+              ZIP code
             </label>
             <input
               aria-label="zip code"
@@ -139,7 +139,7 @@ export const Address = connect(
                   className="usa-label"
                   htmlFor={`${type}.postalCode`}
                 >
-                  Zip code
+                  ZIP code
                 </label>
                 <input
                   aria-label="zip code"
