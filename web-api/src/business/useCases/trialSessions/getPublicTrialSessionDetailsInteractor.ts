@@ -59,7 +59,13 @@ export const getPublicTrialSessionDetailsInteractor = async (
   const casesWithMinimalRequiredInformation = cases
     .filter(aCase => !aCase.removedFromTrial)
     .map(aCase => {
-      return formatPublicCase({ rawCaseRecord: aCase });
+      // No need to see docket entries
+      const caseWithEmptyDocketEntries = {
+        ...aCase,
+        docketEntries: [],
+      };
+
+      return formatPublicCase({ rawCaseRecord: caseWithEmptyDocketEntries });
     });
 
   const publicTrialSessionData: PublicTrialSessionDetails = {
