@@ -1,17 +1,20 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
-import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
+import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
+import React, { useRef } from 'react';
+
+const ITEMS_PER_PAGE = 100;
 
 export const PendingReportList = connect(
   {
     formattedPendingItemsHelper: state.formattedPendingItemsHelper,
     hasPendingItemsResults: state.pendingReports.hasPendingItemsResults,
-    loadMorePendingItemsSequence: sequences.loadMorePendingItemsSequence,
     pendingItemsTotal: state.pendingReports.pendingItemsTotal,
     pendingReportListHelper: state.pendingReportListHelper,
     setPendingReportSelectedJudgeSequence:
@@ -20,11 +23,15 @@ export const PendingReportList = connect(
   function PendingReportList({
     formattedPendingItemsHelper,
     hasPendingItemsResults,
-    loadMorePendingItemsSequence,
     pendingItemsTotal,
     pendingReportListHelper,
     setPendingReportSelectedJudgeSequence,
   }) {
+    const paginatorTop = useRef(null);
+
+    const { activePage, pageRecords, setActivePage, totalPages } =
+      useClientSidePaginator(formattedPendingItemsHelper.items, ITEMS_PER_PAGE);
+
     return (
       <>
         <div className="grid-row margin-bottom-2">
@@ -87,7 +94,7 @@ export const PendingReportList = connect(
               <th>Judge</th>
             </tr>
           </thead>
-          {formattedPendingItemsHelper.items.map(item => (
+          {pageRecords.map(item => (
             <tbody
               key={`pending-item-${item.formattedFiledDate}-${item.caseTitle}`}
             >
@@ -124,17 +131,15 @@ export const PendingReportList = connect(
           <p>Select a judge to view their pending items.</p>
         )}
 
-        {pendingReportListHelper.showLoadMore && (
-          <Button
-            secondary
-            className="margin-bottom-20"
-            data-testid="load-more-pending-report-data"
-            onClick={() => {
-              loadMorePendingItemsSequence();
+        {totalPages > 1 && (
+          <Paginator
+            currentPageIndex={activePage}
+            totalPages={totalPages}
+            onPageChange={pageChange => {
+              setActivePage(pageChange);
+              focusPaginatorTop(paginatorTop);
             }}
-          >
-            Load More
-          </Button>
+          />
         )}
       </>
     );
