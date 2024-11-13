@@ -52,7 +52,7 @@ async function main() {
       dynamoDbDocClient,
       tableNameInput,
     );
-    console.log(`Total case worksheets deleted: ${totalItemsDeleted}`);
+    console.log(`Total case worksheets deleted so far: ${totalItemsDeleted}`);
     offset += caseWorksheetPageSize;
     caseWorksheetsToDelete = await getCaseWorksheetsToDelete(offset);
   }
