@@ -9,7 +9,10 @@ const { ASCENDING, DESCENDING } = getConstants();
  * @param {object} providers.props the props passed to the sequence
  * @param {object} providers.store the cerebral store object
  */
-export const setDefaultTableSortAction = ({ props, store }: ActionProps) => {
+export const setDefaultMessagePageTableSortAction = ({
+  props,
+  store,
+}: ActionProps) => {
   // different tables require different default sorting
   if (props.box === 'inbox') {
     store.set(state.tableSort.sortField, 'createdAt');
