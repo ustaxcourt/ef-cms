@@ -1,4 +1,3 @@
-import { clearDocketRecordTableSortAction } from '@web-client/presenter/actions/clearDocketRecordTableSortAction';
 import { clearDocumentsSelectedForDownload } from '@web-client/presenter/actions/clearDocumentsSelectedForDownload';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
@@ -21,6 +20,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
 import { setCaseDetailPageTabUnfrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabUnfrozenAction';
 import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTabAction';
+import { setDefaultDocketEntriesTableSortAction } from '@web-client/presenter/actions/setDefaultDocketEntriesTableSortAction';
 import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
 import { setDefaultEditDocumentEntryPointAction } from '../actions/setDefaultEditDocumentEntryPointAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
@@ -80,7 +80,7 @@ export const gotoCaseDetailSequence = [
   clearDocumentsSelectedForDownload,
   clearFormAction,
   clearModalAction,
-  clearDocketRecordTableSortAction,
+  setDefaultDocketEntriesTableSortAction,
   closeMobileMenuAction,
   setDefaultCaseDetailTabAction,
   setIsPrimaryTabAction,
