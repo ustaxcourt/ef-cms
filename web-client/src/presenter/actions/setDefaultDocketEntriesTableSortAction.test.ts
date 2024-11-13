@@ -12,7 +12,9 @@ describe('clearDocketRecordTableSortAction', () => {
       },
     });
 
-    expect(state['DOCKET_RECORD_TABLE_SORT'].sortField).toEqual(undefined);
-    expect(state['DOCKET_RECORD_TABLE_SORT'].sortOrder).toEqual(undefined);
+    expect(state['DOCKET_RECORD_TABLE_SORT'].sortField).toEqual(
+      'sortingFilingDate',
+    );
+    expect(state['DOCKET_RECORD_TABLE_SORT'].sortOrder).toEqual('asc');
   });
 });
