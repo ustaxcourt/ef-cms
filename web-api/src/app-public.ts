@@ -84,6 +84,8 @@ import { getPublicCaseLambda } from './lambdas/public-api/getPublicCaseLambda';
 import { getPublicDocumentDownloadUrlLambda } from './lambdas/public-api/getPublicDocumentDownloadUrlLambda';
 import { getPublicJudgesLambda } from './lambdas/public-api/getPublicJudgesLambda';
 import { getPublicTrialSessionDetailsLambda } from '@web-api/lambdas/public-api/getPublicTrialSessionDetailsLambda';
+import { getPublicTrialSessionsLambda } from '@web-api/lambdas/trialSessions/getPublicTrialSessionsLambda';
+import { getUsersInSectionLambda } from '@web-api/lambdas/users/getUsersInSectionLambda';
 import { ipLimiter } from './middleware/ipLimiter';
 import { opinionPublicSearchLambda } from './lambdas/public-api/opinionPublicSearchLambda';
 import { orderPublicSearchLambda } from './lambdas/public-api/orderPublicSearchLambda';
@@ -183,15 +185,15 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
  * Trial sessions
  */
 {
-  // TODO: merge these in
-  // app.get(
-  //   '/public-api/trial-sessions',
-  //   lambdaWrapper(getPublicTrialSessionsLambda),
-  // );
-  // app.get(
-  //   '/public-api/sections/:section/users',
-  //   lambdaWrapper(getUsersInSectionLambda),
-  // );
+  app.get(
+    '/public-api/trial-sessions',
+    lambdaWrapper(getPublicTrialSessionsLambda),
+  );
+  app.get(
+    '/public-api/sections/:section/users',
+    lambdaWrapper(getUsersInSectionLambda),
+  );
+
   app.get(
     '/public-api/trial-sessions/:trialSessionId',
     lambdaWrapper(getPublicTrialSessionDetailsLambda),
