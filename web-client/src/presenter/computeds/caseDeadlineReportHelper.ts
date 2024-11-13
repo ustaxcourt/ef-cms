@@ -1,27 +1,47 @@
-import { state } from '@web-client/presenter/app.cerebral';
-
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
+import { state } from '@web-client/presenter/app.cerebral';
+
 export const caseDeadlineReportHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): {
+  formattedCaseDeadlines: (RawCaseDeadline & {
+    caseCaption: string;
+    docketNumber: string;
+    docketNumberSuffix: string;
+    docketNumberWithSuffix: string;
+    leadDocketNumber: string;
+    associatedJudgeFormatted: string;
+    caseTitle: string;
+    consolidatedIconTooltipText: string;
+    formattedDeadline: string;
+    inConsolidatedGroup: boolean;
+    inLeadCase: boolean;
+  })[];
+  formattedFilterDateHeader;
+  judges: string[];
+  showJudgeSelect: boolean;
+  showLoadMoreButton: boolean;
+  showNoDeadlines: boolean;
+  totalCount: number;
+} => {
   const { CHIEF_JUDGE, DATE_FORMATS } = applicationContext.getConstants();
 
-  let caseDeadlines = get(state.caseDeadlineReport.caseDeadlines) || [];
+  const caseDeadlines = get(state.caseDeadlineReport.caseDeadlines) || [];
   const totalCount = get(state.caseDeadlineReport.totalCount) || 0;
   const judgeFilter = get(state.caseDeadlineReport.judgeFilter);
   const showLoadMoreButton = caseDeadlines.length < totalCount;
-
-  const showJudgeSelect = caseDeadlines.length > 0 || judgeFilter;
+  const showJudgeSelect = caseDeadlines.length > 0 || !!judgeFilter;
   const showNoDeadlines = caseDeadlines.length === 0;
-
-  let filterStartDate = get(state.screenMetadata.filterStartDate);
-  let filterEndDate = get(state.screenMetadata.filterEndDate);
   const judges = (get(state.judges) || [])
     .map(i => applicationContext.getUtilities().formatJudgeName(i.name))
     .concat(CHIEF_JUDGE)
     .sort();
+
+  let filterStartDate = get(state.screenMetadata.filterStartDate);
+  let filterEndDate = get(state.screenMetadata.filterEndDate);
 
   filterStartDate = applicationContext
     .getUtilities()
@@ -34,11 +54,8 @@ export const caseDeadlineReportHelper = (
   let formattedFilterDateHeader = applicationContext
     .getUtilities()
     .formatDateString(filterStartDate, DATE_FORMATS.MONTH_DAY_YEAR);
-  if (filterEndDate && !filterStartDate.hasSame(filterEndDate, 'day')) {
-    filterEndDate = applicationContext
-      .getUtilities()
-      .prepareDateFromString(filterEndDate);
 
+  if (filterEndDate && !filterStartDate.hasSame(filterEndDate, 'day')) {
     formattedFilterDateHeader +=
       ' – ' +
       applicationContext
@@ -46,7 +63,7 @@ export const caseDeadlineReportHelper = (
         .formatDateString(filterEndDate, DATE_FORMATS.MONTH_DAY_YEAR);
   }
 
-  caseDeadlines = caseDeadlines.map(d => {
+  const formattedCaseDeadlines = caseDeadlines.map(d => {
     const inConsolidatedGroup = !!d.leadDocketNumber;
     const inLeadCase = d.leadDocketNumber === d.docketNumber;
     let consolidatedIconTooltipText;
@@ -75,7 +92,7 @@ export const caseDeadlineReportHelper = (
   });
 
   return {
-    caseDeadlines,
+    formattedCaseDeadlines,
     formattedFilterDateHeader,
     judges,
     showJudgeSelect,
