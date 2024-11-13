@@ -1,4 +1,4 @@
-import '@web-api/persistence/postgres/correspondence/mocks.jest';
+import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_PETITION } from '@shared/test/mockDocketEntry';
 import { getDocumentDownloadUrlLambda } from './getDocumentDownloadUrlLambda';

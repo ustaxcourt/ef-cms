@@ -2,8 +2,6 @@ import '@web-api/persistence/postgres/messages/mocks.jest';
 import { processMessageEntries } from './processMessageEntries';
 import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 
-jest.mock('@web-api/persistence/postgres/messages/upsertMessages');
-
 describe('processMessageEntries', () => {
   beforeEach(() => {
     (upsertMessages as jest.Mock).mockResolvedValue(undefined);

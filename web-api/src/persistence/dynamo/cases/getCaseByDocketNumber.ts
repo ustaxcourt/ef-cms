@@ -9,7 +9,7 @@ import {
   aggregateConsolidatedCaseItems,
   isCaseItem,
 } from '../helpers/aggregateCaseItems';
-import { getCaseCorrespondenceByDocketNumber } from '@web-api/persistence/postgres/correspondence/getCaseCorrespondenceByDocketNumber';
+import { getCaseCorrespondenceByDocketNumber } from '@web-api/persistence/postgres/caseCorrespondences/getCaseCorrespondenceByDocketNumber';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { queryFull } from '../../dynamodbClientService';
 

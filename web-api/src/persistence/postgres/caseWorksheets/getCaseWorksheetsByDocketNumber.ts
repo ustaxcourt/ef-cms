@@ -1,5 +1,5 @@
 import { CaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
-import { caseWorksheetEntity } from '@web-api/persistence/postgres/caseWorksheet/mapper';
+import { caseWorksheetEntity } from '@web-api/persistence/postgres/caseWorksheets/mapper';
 import { getDbReader } from '@web-api/database';
 import { isEmpty } from 'lodash';
 

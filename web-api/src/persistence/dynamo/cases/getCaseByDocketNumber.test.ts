@@ -1,13 +1,13 @@
-import '@web-api/persistence/postgres/correspondence/mocks.jest';
+import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
-import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/correspondence/mapper';
+import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
 import { getCaseByDocketNumber } from './getCaseByDocketNumber';
-import { getCaseCorrespondenceByDocketNumber as getCaseCorrespondenceByDocketNumberMock } from '@web-api/persistence/postgres/correspondence/getCaseCorrespondenceByDocketNumber';
+import { getCaseCorrespondenceByDocketNumber as getCaseCorrespondenceByDocketNumberMock } from '@web-api/persistence/postgres/caseCorrespondences/getCaseCorrespondenceByDocketNumber';
 
 const getCaseCorrespondenceByDocketNumber =
   getCaseCorrespondenceByDocketNumberMock as jest.Mock;

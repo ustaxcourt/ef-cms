@@ -1,4 +1,4 @@
-import '@web-api/persistence/postgres/caseWorksheet/mocks.jest';
+import '@web-api/persistence/postgres/caseWorksheets/mocks.jest';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import {
   GetCasesByStatusAndByJudgeRequest,
@@ -12,7 +12,7 @@ import {
 import { MOCK_CASE_WORKSHEET } from '@shared/test/mockCaseWorksheet';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { getCaseWorksheetsByDocketNumber as getCaseWorksheetsByDocketNumberMock } from '@web-api/persistence/postgres/caseWorksheet/getCaseWorksheetsByDocketNumber';
+import { getCaseWorksheetsByDocketNumber as getCaseWorksheetsByDocketNumberMock } from '@web-api/persistence/postgres/caseWorksheets/getCaseWorksheetsByDocketNumber';
 import { judgeUser } from '@shared/test/mockUsers';
 import {
   mockJudgeUser,
