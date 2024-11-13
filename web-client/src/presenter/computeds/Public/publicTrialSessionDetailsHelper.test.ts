@@ -13,8 +13,12 @@ describe('publicTrialSessionDetailsHelper', () => {
 
   const MOCK_SEALED_CASE = cloneDeep(MOCK_CASE);
   MOCK_SEALED_CASE.isSealed = true;
+  MOCK_SEALED_CASE.docketNumber = '101-23';
+  MOCK_SEALED_CASE.docketNumberWithSuffix = '101-23';
 
   const MOCK_LEAD_CASE = cloneDeep(MOCK_CASE);
+  MOCK_LEAD_CASE.docketNumber = '100-23';
+  MOCK_LEAD_CASE.docketNumberWithSuffix = MOCK_LEAD_CASE.docketNumber;
   MOCK_LEAD_CASE.leadDocketNumber = MOCK_LEAD_CASE.docketNumber;
 
   const MOCK_CONSOLIDATED_CASE = cloneDeep(MOCK_CASE);
@@ -60,8 +64,8 @@ describe('publicTrialSessionDetailsHelper', () => {
     const expectedMockCaseFormatted = {
       caseTitle: 'Test Petitioner',
       consolidatedIconTooltipText: undefined,
-      docketNumber: '101-18',
-      docketNumberWithSuffix: '101-18',
+      docketNumber: MOCK_CASE.docketNumber,
+      docketNumberWithSuffix: MOCK_CASE.docketNumberWithSuffix,
       inConsolidatedGroup: false,
       irsPractitioners: [],
       isLeadCase: false,
@@ -72,8 +76,8 @@ describe('publicTrialSessionDetailsHelper', () => {
     const expectedSealedCaseFormatted = {
       caseTitle: 'Sealed',
       consolidatedIconTooltipText: undefined,
-      docketNumber: '101-18',
-      docketNumberWithSuffix: '101-18',
+      docketNumber: MOCK_SEALED_CASE.docketNumber,
+      docketNumberWithSuffix: MOCK_SEALED_CASE.docketNumberWithSuffix,
       inConsolidatedGroup: false,
       irsPractitioners: [],
       isLeadCase: false,
@@ -84,8 +88,8 @@ describe('publicTrialSessionDetailsHelper', () => {
     const expectedLeadCaseFormatted = {
       caseTitle: 'Test Petitioner',
       consolidatedIconTooltipText: 'Lead case in a consolidated group',
-      docketNumber: '101-18',
-      docketNumberWithSuffix: '101-18',
+      docketNumber: MOCK_LEAD_CASE.docketNumber,
+      docketNumberWithSuffix: MOCK_LEAD_CASE.docketNumberWithSuffix,
       inConsolidatedGroup: true,
       irsPractitioners: [],
       isLeadCase: true,
@@ -96,8 +100,8 @@ describe('publicTrialSessionDetailsHelper', () => {
     const expectedConsolidatedCaseFormatted = {
       caseTitle: 'Test Petitioner',
       consolidatedIconTooltipText: 'Member case in a consolidated group',
-      docketNumber: '102-23',
-      docketNumberWithSuffix: '102-23L',
+      docketNumber: MOCK_CONSOLIDATED_CASE.docketNumber,
+      docketNumberWithSuffix: MOCK_CONSOLIDATED_CASE.docketNumberWithSuffix,
       inConsolidatedGroup: true,
       irsPractitioners: [],
       isLeadCase: false,
@@ -111,9 +115,9 @@ describe('publicTrialSessionDetailsHelper', () => {
       courthouseName: undefined,
       formattedCases: [
         expectedMockCaseFormatted,
-        expectedSealedCaseFormatted,
         expectedLeadCaseFormatted,
-        expectedConsolidatedCaseFormatted,
+        expectedConsolidatedCaseFormatted, // Should be sorted next to its lead case even though its docket number is after the sealed case
+        expectedSealedCaseFormatted,
       ],
       formattedCityStateZip: 'San Francisco, CA 94535',
       formattedEstimatedEndDate: '11/29/20',
