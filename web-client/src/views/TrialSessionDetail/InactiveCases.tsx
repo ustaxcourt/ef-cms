@@ -23,7 +23,7 @@ export const InactiveCases = connect(
           <thead>
             <tr>
               <th
-                aria-label="consolidated group indicator"
+                aria-label="Consolidated group indicator"
                 className="consolidated-indicators"
               ></th>
               <th aria-label="Docket Number">Docket No.</th>

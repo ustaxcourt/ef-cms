@@ -28,7 +28,7 @@ export const AllCases = connect(
                 className="consolidated-indicators"
               ></th>
               <th aria-label="Docket Number">Docket No.</th>
-              <th aria-label="manually added indicator"></th>
+              <th aria-label="Manually added indicator"></th>
               <th>Case Title</th>
               <th>Case Status</th>
               <th>Disposition</th>
@@ -65,7 +65,7 @@ export const AllCases = connect(
 
                 <td>
                   {item.isManuallyAdded && (
-                    <span aria-label="manually added indicator">
+                    <span aria-label="Manually added indicator">
                       <FontAwesomeIcon
                         className="mini-success"
                         icon="calendar-plus"

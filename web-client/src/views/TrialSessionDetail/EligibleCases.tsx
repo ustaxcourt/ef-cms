@@ -61,9 +61,9 @@ export const EligibleCases = connect(
         >
           <thead>
             <tr>
-              <th aria-label="consolidated group indicator"></th>
+              <th aria-label="Consolidated group indicator"></th>
               <th aria-label="Docket Number">Docket No.</th>
-              <th aria-label="manually added indicator"></th>
+              <th aria-label="Manually added indicator"></th>
               <th>Case Title</th>
               <th>Petitioner Counsel</th>
               <th>Respondent Counsel</th>
@@ -103,7 +103,7 @@ export const EligibleCases = connect(
                 </td>
                 <td>
                   {item.isManuallyAdded && (
-                    <span aria-label="manually added indicator">
+                    <span aria-label="Manually added indicator">
                       <FontAwesomeIcon
                         className="mini-success"
                         icon="calendar-plus"
