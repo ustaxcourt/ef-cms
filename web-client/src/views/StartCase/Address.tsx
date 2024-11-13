@@ -61,7 +61,7 @@ export const Address = connect(
               ZIP code
             </label>
             <input
-              aria-label="zip code"
+              aria-label="ZIP code"
               autoCapitalize="none"
               className="usa-input"
               data-testid={`${type}.postalCode`}
@@ -142,7 +142,7 @@ export const Address = connect(
                   ZIP code
                 </label>
                 <input
-                  aria-label="zip code"
+                  aria-label="ZIP code"
                   autoCapitalize="none"
                   className="usa-input"
                   data-testid={`${type}.postalCode`}
