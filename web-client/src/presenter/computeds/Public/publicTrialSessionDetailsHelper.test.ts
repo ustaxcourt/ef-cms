@@ -120,7 +120,6 @@ describe('publicTrialSessionDetailsHelper', () => {
         expectedSealedCaseFormatted,
       ],
       formattedCityStateZip: 'San Francisco, CA 94535',
-      formattedEstimatedEndDate: '11/29/20',
       formattedStartDate: '11/27/20',
       formattedStartDateFull: 'November 27, 2020',
       hasCourthouseInformation: true,
