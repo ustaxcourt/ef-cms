@@ -334,6 +334,9 @@ describe('generateDocketRecordPdfInteractor', () => {
     it('should pass in entries sorted by the provided property and orderType "des"', async () => {
       caseDetail.docketEntries = [
         {
+          attachments: 'TEST_attachments',
+          createdAt: '2019-08-25T05:00:00.000Z',
+          documentTitle: 'TEST_D',
           eventCode: 'D',
           isOnDocketRecord: true,
         },
@@ -360,7 +363,12 @@ describe('generateDocketRecordPdfInteractor', () => {
         data: { entries },
       } = docketRecordCalls[0][0];
       expect(entries).toMatchObject([
-        { eventCode: 'D' },
+        {
+          createdAtFormatted: '11/13/24',
+          descriptionDisplay: 'TEST_D (Attachment(s))',
+          eventCode: 'D',
+          filingsAndProceedings: '(Attachment(s))',
+        },
         { eventCode: 'C' },
         { eventCode: 'B' },
         {
