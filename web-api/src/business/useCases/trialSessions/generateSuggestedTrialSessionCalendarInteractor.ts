@@ -194,6 +194,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   const bufferArray = await writeTrialSessionDataToExcel({
     caseCountsAndSessionsByCity,
     incorrectSizeRegularCases,
+    userMessages,
     weeks: weeksToLoop,
   });
   console.timeEnd('10275: writeTrialSessionDataToExcel');
