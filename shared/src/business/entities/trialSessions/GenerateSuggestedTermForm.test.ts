@@ -50,5 +50,19 @@ describe('GenerateSuggestTermForm', () => {
         termStartDate: 'Start date cannot be in the past. Enter a valid date.',
       });
     });
+
+    it('should fail validation when term name is longer than 100 characters', () => {
+      const formEntity = new GenerateSuggestedTermForm({
+        termEndDate: '03/31/2050',
+        termName:
+          'I woke up this morning and shot an elephant in my pajamas; how he got in my pajamas I`ll never know.',
+        termStartDate: '01/01/2050',
+      });
+
+      expect(formEntity.isValid()).toBeFalsy();
+      expect(formEntity.getFormattedValidationErrors()).toEqual({
+        termStartDate: 'Start date cannot be in the past. Enter a valid date.',
+      });
+    });
   });
 });
