@@ -4,6 +4,7 @@ import {
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import {
   MOCK_PRACTITIONER,
   petitionerUser,
@@ -364,7 +365,7 @@ describe('generateDocketRecordPdfInteractor', () => {
       } = docketRecordCalls[0][0];
       expect(entries).toMatchObject([
         {
-          createdAtFormatted: '11/13/24',
+          createdAtFormatted: formatNow(FORMATS.MMDDYY),
           descriptionDisplay: 'TEST_D (Attachment(s))',
           eventCode: 'D',
           filingsAndProceedings: '(Attachment(s))',
