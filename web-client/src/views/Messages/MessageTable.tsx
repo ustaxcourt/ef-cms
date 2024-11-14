@@ -1,6 +1,8 @@
 import {
   ASCENDING,
   DESCENDING,
+  SORT_ASCENDING_TEXT,
+  SORT_DESCENDING_TEXT,
 } from '@shared/business/entities/EntityConstants';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
@@ -9,8 +11,6 @@ import { Icon } from '../../ustc-ui/Icon/Icon';
 import {
   MessageColumnData,
   SORT_FIELDS,
-  getAscendingTextForSortType,
-  getDescendingTextForSortType,
 } from '@web-client/views/Messages/MessageColumns';
 import { SortableColumn } from '../../ustc-ui/Table/SortableColumn';
 import { SuccessNotification } from '../SuccessNotification';
@@ -180,18 +180,20 @@ export const MessageTable = connect<
                 })}
               </tr>
             </thead>
-            {formattedMessages.messages.map(message => {
-              return (
-                <MessageRow
-                  columns={messageColumns}
-                  key={message.messageId}
-                  message={message}
-                  messageListId={id}
-                  selectable={selectable}
-                  onSelect={setSelectedMessagesSequence}
-                />
-              );
-            })}
+            <tbody>
+              {formattedMessages.messages.map(message => {
+                return (
+                  <MessageRow
+                    columns={messageColumns}
+                    key={message.messageId}
+                    message={message}
+                    messageListId={id}
+                    selectable={selectable}
+                    onSelect={setSelectedMessagesSequence}
+                  />
+                );
+              })}
+            </tbody>
           </table>
           {!formattedMessages.hasMessages && <div>There are no messages.</div>}
         </div>
@@ -233,9 +235,7 @@ const MessageColumnHeader = ({
         // TODO: probably should use aria-sort, but USWDS has default styles for this we may not want
       >
         <SortableColumn
-          ascText={getAscendingTextForSortType(
-            columnData.sortFieldInfo.sortType,
-          )}
+          ascText={SORT_ASCENDING_TEXT[columnData.sortFieldInfo.sortType]}
           currentlySortedField={tableSort.sortField}
           currentlySortedOrder={tableSort.sortOrder}
           data-testid={`${messageListId}-${columnData.sortFieldInfo.sortField}-header-button`}
@@ -244,9 +244,7 @@ const MessageColumnHeader = ({
               ? DESCENDING
               : ASCENDING
           }
-          descText={getDescendingTextForSortType(
-            columnData.sortFieldInfo.sortType,
-          )}
+          descText={SORT_DESCENDING_TEXT[columnData.sortFieldInfo.sortType]}
           hasRows={formattedMessages.hasMessages}
           sortField={columnData.sortFieldInfo.sortField}
           title={columnData.columnName}
@@ -271,37 +269,35 @@ const MessageRow = ({
   columns: MessageColumnData[];
 }) => {
   return (
-    <tbody>
-      <tr>
-        {selectable && (
-          <td>
-            <input
-              aria-label={`${message.caseTitle}-${message.subject}-checkbox`}
-              checked={message.isSelected}
-              id={`${message.caseTitle}-message-checkbox`}
-              type="checkbox"
-              onChange={() => {
-                onSelect({
-                  messages: [
-                    {
-                      messageId: message.messageId,
-                      parentMessageId: message.parentMessageId,
-                    },
-                  ],
-                });
-              }}
-            />
-          </td>
-        )}
-        {columns.map(columnData => {
-          return getOneCell({
-            columnData,
-            message,
-            messageListId,
-          });
-        })}
-      </tr>
-    </tbody>
+    <tr>
+      {selectable && (
+        <td>
+          <input
+            aria-label={`${message.caseTitle}-${message.subject}-checkbox`}
+            checked={message.isSelected}
+            id={`${message.caseTitle}-message-checkbox`}
+            type="checkbox"
+            onChange={() => {
+              onSelect({
+                messages: [
+                  {
+                    messageId: message.messageId,
+                    parentMessageId: message.parentMessageId,
+                  },
+                ],
+              });
+            }}
+          />
+        </td>
+      )}
+      {columns.map(columnData => {
+        return getOneCell({
+          columnData,
+          message,
+          messageListId,
+        });
+      })}
+    </tr>
   );
 };
 
