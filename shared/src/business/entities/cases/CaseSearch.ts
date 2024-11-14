@@ -33,11 +33,7 @@ export class CaseSearch extends JoiValidationEntity {
       COUNTRY_TYPES.DOMESTIC,
       COUNTRY_TYPES.INTERNATIONAL,
     ).optional(),
-    endDate: joi
-      .date()
-      .iso()
-      .format(CaseSearch.JOI_VALID_DATE_SEARCH_FORMAT)
-      .max('now')
+    endDate: JoiValidationConstants.DATE_RANGE_PICKER_DATE.max('now')
       .allow(null)
       .optional()
       .when('startDate', {
@@ -63,11 +59,7 @@ export class CaseSearch extends JoiValidationEntity {
       ...Object.keys(US_STATES),
       ...Object.keys(US_STATES_OTHER),
     ).optional(),
-    startDate: joi
-      .date()
-      .iso()
-      .format(CaseSearch.JOI_VALID_DATE_SEARCH_FORMAT)
-      .max('now')
+    startDate: JoiValidationConstants.DATE_RANGE_PICKER_DATE.max('now')
       .description(
         'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
       )
