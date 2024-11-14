@@ -127,8 +127,6 @@ else
   export CYPRESS_MIGRATE=$CYPRESS_MIGRATE
 fi	
 
-echo "${RUN_SPECIFIC_TEST}"
-
 if [ -n "${OPEN}" ]; then
   ./node_modules/.bin/cypress open --browser "${BROWSER}" -C "${CONFIG_FILE}"
 else
