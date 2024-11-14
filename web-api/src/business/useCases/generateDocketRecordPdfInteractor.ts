@@ -84,7 +84,7 @@ export const generateDocketRecordPdfInteractor = async (
     });
 
   const sortedDocketEntries = sortDocketEntryTable(
-    formattedCaseDetail.docketEntries,
+    formattedCaseDetail.formattedDocketEntries,
     docketRecordTableSort && docketRecordTableSort.sortField,
     docketRecordTableSort && docketRecordTableSort.sortOrder,
   );

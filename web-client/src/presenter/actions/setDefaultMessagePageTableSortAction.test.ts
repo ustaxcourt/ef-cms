@@ -2,17 +2,17 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { getConstants } from '../../getConstants';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { setDefaultTableSortAction } from './setDefaultTableSortAction';
+import { setDefaultMessagePageTableSortAction } from './setDefaultMessagePageTableSortAction';
 
 const { ASCENDING, DESCENDING } = getConstants();
 
-describe('setDefaultTableSortAction', () => {
+describe('setDefaultMessagePageTableSortAction', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 
   it('should keep the default values of tableSort for internal users with invalid box value', async () => {
-    const { state } = await runAction(setDefaultTableSortAction, {
+    const { state } = await runAction(setDefaultMessagePageTableSortAction, {
       modules: {
         presenter,
       },
@@ -35,7 +35,7 @@ describe('setDefaultTableSortAction', () => {
   });
 
   it('the inbox should be sorted by createdAt ascending for internal users', async () => {
-    const { state } = await runAction(setDefaultTableSortAction, {
+    const { state } = await runAction(setDefaultMessagePageTableSortAction, {
       modules: {
         presenter,
       },
@@ -54,7 +54,7 @@ describe('setDefaultTableSortAction', () => {
   });
 
   it('the outbox should be sorted by createdAt DESCENDING for internal users', async () => {
-    const { state } = await runAction(setDefaultTableSortAction, {
+    const { state } = await runAction(setDefaultMessagePageTableSortAction, {
       modules: {
         presenter,
       },
@@ -73,7 +73,7 @@ describe('setDefaultTableSortAction', () => {
   });
 
   it('the completed should be sorted by createdAt DESCENDING for internal users', async () => {
-    const { state } = await runAction(setDefaultTableSortAction, {
+    const { state } = await runAction(setDefaultMessagePageTableSortAction, {
       modules: {
         presenter,
       },
