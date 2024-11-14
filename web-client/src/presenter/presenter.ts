@@ -234,6 +234,7 @@ import { loadDefaultDraftViewerDocumentToDisplaySequence } from './sequences/Doc
 import { loadDefaultViewerCorrespondenceSequence } from './sequences/loadDefaultViewerCorrespondenceSequence';
 import { loadMoreCaseDeadlinesSequence } from './sequences/loadMoreCaseDeadlinesSequence';
 import { loadMorePendingItemsSequence } from './sequences/loadMorePendingItemsSequence';
+import { loadPdfForTabSequence } from './sequences/PDFPreviewTab/loadPdfForTabSequence';
 import { loadPdfSequence } from './sequences/PDFPreviewModal/loadPdfSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCaseDetailFromPaperServiceSequence } from './sequences/navigateToCaseDetailFromPaperServiceSequence';
@@ -976,6 +977,7 @@ export const presenterSequences = {
     loadMoreCaseDeadlinesSequence as unknown as Function,
   loadMorePendingItemsSequence:
     loadMorePendingItemsSequence as unknown as Function,
+  loadPdfForTabSequence: loadPdfForTabSequence as unknown as Function,
   loadPdfSequence: loadPdfSequence as unknown as Function,
   navigateBackSequence: navigateBackSequence as unknown as Function,
   navigateToCaseDetailFromPaperServiceSequence:
