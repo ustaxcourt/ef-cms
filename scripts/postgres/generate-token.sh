@@ -2,38 +2,53 @@
 
 # Generates a temporary auth token for the given environment's RDS cluster
 
-# Usage
-#   ENV=dev ./scripts/postgres/generate-token.sh --rw
+# Parameters
+#   --rw          Generates a token for the writeable endpoint
+#   --yes         Presumes prior confirmation when checking environment variables
+#   --quiet       Exports values to environment variables and produces no output
+#   --succinct    Outputs only the generated token (not compatible with --quiet)
 
-# shellcheck disable=SC1091
-source "./scripts/helpers/suppress-output.sh"
+# Usage examples
+#   ./scripts/postgres/generate-token.sh
+#   ./scripts/postgres/generate-token.sh --rw --succinct
+#   DB_USER="${ENV}_dawson" ./scripts/postgres/generate-token.sh --rw
+
+( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 
 {
-  [[ -n $ZSH_VERSION && $ZSH_EVAL_CONTEXT =~ :file$ ]] ||
-  [[ -n $BASH_VERSION ]] && (return 0 2>/dev/null);
+  [[ -n "$ZSH_VERSION" && "$ZSH_EVAL_CONTEXT" =~ :file$ ]] ||
+  [[ -n "$BASH_VERSION" ]] && (return 0 2>/dev/null);
 } && sourced=1 || sourced=0
-[[ $sourced -eq 0 ]] && exit="exit" || exit="return"
+[[ "$sourced" -eq 0 ]] && exit="exit" || exit="return"
 
-sshhh=$(should_suppress_output "$@")
-[[ "$sshhh" -eq 1 ]] && QUIET="--quiet"
-
-./check-env-variables.sh "$QUIET" \
-  "ENV" \
-  "AWS_SECRET_ACCESS_KEY" \
-  "AWS_ACCESS_KEY_ID"
-
+rw=0
+succinct=0
+sshhh=0
+confirmed=0
 for param in "$@"; do
-  if [[ "$param" == "--rw" ]]; then
-    RW=1
-  fi
+  { [[ "$param" == "--rw" ]] || [[ "$param" == "-w" ]]; } && rw=1
+  { [[ "$param" == "--succinct" ]] || [[ "$param" == "-t" ]]; } && succinct=1
+  { [[ "$param" == "--quiet" ]] || [[ "$param" == "-q" ]]; } && sshhh=1
+  { [[ "$param" == "--yes" ]] || [[ "$param" == "-y" ]]; } && confirmed=1
 done
-[[ "$RW" -eq 1 ]] && ENDPOINT="Endpoint" || ENDPOINT="ReaderEndpoint"
 
-DESCRIPTION=$(aws rds describe-db-clusters --db-cluster-identifier "${ENV}-dawson-cluster" | jq -r ".DBClusters[0]")
+[[ "$sourced" -eq 0 ]] && [[ "$sshhh" -eq 1 ]] && $exit 1
+
+CHECK_PARAMS=("ENV" "AWS_ACCESS_KEY_ID" "AWS_SECRET_ACCESS_KEY")
+
+{ [[ "$sshhh" -eq 1 ]] || [[ "$succinct" -eq 1 ]]; } && CHECK_PARAMS+=("--quiet")
+[[ "$sshhh" -eq 0 ]] && [[ "$succinct" -eq 0 ]] && [[ "$confirmed" -eq 1 ]] && CHECK_PARAMS+=("--yes")
+
+./check-env-variables.sh "${CHECK_PARAMS[@]}"
+
+[[ "$rw" -eq 1 ]] && ENDPOINT="Endpoint" || ENDPOINT="ReaderEndpoint"
+
 REGION="us-east-1"
+DESCRIPTION=$(aws rds describe-db-clusters \
+    --db-cluster-identifier "${ENV}-dawson-cluster" --region "$REGION" | jq -r ".DBClusters[0]")
 DB_HOST=$(jq -r ".${ENDPOINT}" <<< "$DESCRIPTION")
 DB_PORT=$(jq -r ".Port" <<< "$DESCRIPTION")
-DB_USER="${ENV}_developers"
+[[ -z "$DB_USER" ]] && DB_USER="${ENV}_developers"
 DB_NAME="${ENV}_dawson"
 
 TOKEN=$(aws rds generate-db-auth-token \
@@ -48,18 +63,21 @@ if [[ -z "$TOKEN" ]]; then
 fi
 
 if [[ "$sshhh" -eq 0 ]]; then
-  echo -e "\n"
-  echo -e "############ Temporary postgres credentials ############\n"
-  echo "Host/Socket:"
-  echo -e "${DB_HOST}\n"
-  echo "Port:"
-  echo -e "${DB_PORT}\n"
-  echo "User:"
-  echo -e "${DB_USER}\n"
-  echo "Password:"
-  echo -e "${TOKEN}\n"
-  echo "Database:"
-  echo -e "${DB_NAME}\n"
+  if [[ "$succinct" -eq 1 ]]; then
+    echo "$TOKEN"
+  else
+    echo -e "\n\n############ Temporary postgres credentials ############\n"
+    echo "Host/Socket:"
+    echo -e "${DB_HOST}\n"
+    echo "Port:"
+    echo -e "${DB_PORT}\n"
+    echo "User:"
+    echo -e "${DB_USER}\n"
+    echo "Password:"
+    echo -e "${TOKEN}\n"
+    echo "Database:"
+    echo -e "${DB_NAME}\n"
+  fi
 else
   export DB_HOST="$DB_HOST"
   export DB_PORT="$DB_PORT"
