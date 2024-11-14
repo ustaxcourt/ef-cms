@@ -26,13 +26,12 @@ export class GenerateSuggestedTermForm extends JoiValidationEntity {
           'date.min':
             'End date cannot be prior to start date. Enter a valid end date.',
         }),
-      termName: JoiValidationConstants.STRING.min(1)
-        .required()
+      termName: JoiValidationConstants.STRING.required()
         .max(100)
         .description('The name of the term being created.')
         .messages({
           '*': 'Enter a term name',
-          'termName.max': 'Term name must be 100 characters or fewer',
+          'string.max': 'Term name must be 100 characters or fewer.',
         }),
       termStartDate: JoiValidationConstants.DATE_RANGE_PICKER_DATE.greater(
         'now',
