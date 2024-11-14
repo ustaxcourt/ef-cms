@@ -10,6 +10,7 @@ import {
   castToISO,
   checkDate,
   combineISOandEasternTime,
+  createDateAtStartOfWeekEST,
   createEndOfDayISO,
   createISODateAtStartOfDayEST,
   createStartOfDayISO,
@@ -20,8 +21,8 @@ import {
   getBusinessDateInFuture,
   getDateFormat,
   getMonthDayYearInETObj,
+  isDateWithinGivenInterval,
   isStringISOFormatted,
-  isTodayWithinGivenInterval,
   isValidDateString,
   normalizeIsoDateRange,
   prepareDateFromString,
@@ -707,18 +708,12 @@ describe('DateHandler', () => {
     });
   });
 
-  describe('isTodayWithinGivenInterval', () => {
+  describe('isDateWithinGivenInterval', () => {
     it('should return false when the current date does not fall within the specified date time range', () => {
-      const mockPastStartDate = prepareDateFromString(
-        '10/10/2020',
-        FORMATS.MMDDYY,
-      );
-      const mockPastEndDate = prepareDateFromString(
-        '12/12/2020',
-        FORMATS.MMDDYY,
-      );
+      const mockPastStartDate = '2020-10-10T00:00:00.000Z';
+      const mockPastEndDate = '2020-12-12T00:00:00.000Z';
 
-      const result = isTodayWithinGivenInterval({
+      const result = isDateWithinGivenInterval({
         intervalEndDate: mockPastEndDate,
         intervalStartDate: mockPastStartDate,
       });
@@ -727,15 +722,19 @@ describe('DateHandler', () => {
     });
 
     it('should return true when the current date falls within the specified date time range', () => {
-      const mockPastStartDate = prepareDateFromString().minus({
-        ['days']: 2,
-      });
+      const mockPastStartDate = prepareDateFromString()
+        .minus({
+          ['days']: 2,
+        })
+        .toISO()!;
 
-      const mockPastEndDate = prepareDateFromString().plus({
-        ['days']: 2,
-      });
+      const mockPastEndDate = prepareDateFromString()
+        .plus({
+          ['days']: 2,
+        })
+        .toISO()!;
 
-      const result = isTodayWithinGivenInterval({
+      const result = isDateWithinGivenInterval({
         intervalEndDate: mockPastEndDate,
         intervalStartDate: mockPastStartDate,
       });
@@ -810,6 +809,36 @@ describe('DateHandler', () => {
       const dt2 = dt.plus({ days: 1 });
       const diff = calculateDifferenceInHours(dt2.toISO()!, dt.toISO()!);
       expect(diff).toBe(23);
+    });
+  });
+
+  describe('createDateAtStartOfWeekEST', () => {
+    it('should return a valid date at the start of the week of the date passed in when said date is in Eastern time (with offset)', () => {
+      const dateString = '2025-05-07T00:00:00.000-04:00';
+      const result = createDateAtStartOfWeekEST(dateString, FORMATS.YYYYMMDD);
+
+      expect(result).toEqual('2025-05-05');
+    });
+
+    it('should return a valid date at the start of the week of the date passed in when said date is UTC', () => {
+      const dateString = '2025-05-07T04:00:00.000Z';
+      const result = createDateAtStartOfWeekEST(dateString, FORMATS.YYYYMMDD);
+
+      expect(result).toEqual('2025-05-05');
+    });
+
+    it('should return a valid date at the start of the week of the date passed in when said date is a Monday in Eastern time (with offset)', () => {
+      const dateString = '2024-11-18T00:00:00.000-05:00';
+      const result = createDateAtStartOfWeekEST(dateString, FORMATS.YYYYMMDD);
+
+      expect(result).toEqual('2024-11-18');
+    });
+
+    it('should return a valid date at the start of the week of the date passed in when said date a Monday is UTC', () => {
+      const dateString = '2024-11-18T05:00:00.000Z';
+      const result = createDateAtStartOfWeekEST(dateString, FORMATS.YYYYMMDD);
+
+      expect(result).toEqual('2024-11-18');
     });
   });
 });
