@@ -55,13 +55,13 @@ describe('GenerateSuggestTermForm', () => {
       const formEntity = new GenerateSuggestedTermForm({
         termEndDate: '03/31/2050',
         termName:
-          'I woke up this morning and shot an elephant in my pajamas; how he got in my pajamas I`ll never know.',
+          'I woke up this morning and shot an elephant in my pajamas; how he got in my pajamas I`ll never know. Here are some more characters to make this string particularly long.',
         termStartDate: '01/01/2050',
       });
 
       expect(formEntity.isValid()).toBeFalsy();
       expect(formEntity.getFormattedValidationErrors()).toEqual({
-        termStartDate: 'Start date cannot be in the past. Enter a valid date.',
+        termName: 'Term name must be 100 characters or fewer.',
       });
     });
   });
