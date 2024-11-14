@@ -1,3 +1,4 @@
+import { clearDocketRecordTableSortAction } from '@web-client/presenter/actions/clearDocketRecordTableSortAction';
 import { clearDocumentsSelectedForDownload } from '@web-client/presenter/actions/clearDocumentsSelectedForDownload';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
@@ -79,6 +80,7 @@ export const gotoCaseDetailSequence = [
   clearDocumentsSelectedForDownload,
   clearFormAction,
   clearModalAction,
+  clearDocketRecordTableSortAction,
   closeMobileMenuAction,
   setDefaultCaseDetailTabAction,
   setIsPrimaryTabAction,

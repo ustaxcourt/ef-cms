@@ -7,19 +7,22 @@ import classNames from 'classnames';
 const { ASCENDING, DESCENDING } = getConstants();
 
 export const SortableColumn = ({
-  ascText = 'in ascending order',
+  ascText = 'In ascending order',
+  className,
   currentlySortedField,
   currentlySortedOrder,
   defaultSortOrder = 'desc',
-  descText = 'in descending order',
+  descText = 'In descending order',
   hasRows,
   onClickSequence,
+  screenReaderTitle,
   sortField,
   title,
   ...props
 }: {
   ascText: string;
   defaultSortOrder?: 'asc' | 'desc';
+  className?: string;
   currentlySortedField: string;
   descText: string;
   hasRows: boolean;
@@ -27,6 +30,7 @@ export const SortableColumn = ({
     sortField: string;
     sortOrder: 'asc' | 'desc';
   }) => void;
+  screenReaderTitle?: string;
   sortField: string;
   title: string;
   currentlySortedOrder: 'asc' | 'desc';
@@ -40,6 +44,7 @@ export const SortableColumn = ({
   } else {
     sortOrder = defaultSortOrder;
   }
+  <span className="usa-sr-only">Number</span>;
 
   return (
     <Button
@@ -61,10 +66,18 @@ export const SortableColumn = ({
         }
       }}
     >
+      {screenReaderTitle && (
+        <span className="usa-sr-only">{screenReaderTitle}</span>
+      )}
       <span
-        className={classNames('margin-right-1', {
-          sortActive: isActive,
-        })}
+        aria-hidden={!!screenReaderTitle}
+        className={classNames(
+          'margin-right-1',
+          {
+            sortActive: isActive,
+          },
+          className,
+        )}
       >
         {title}
       </span>
