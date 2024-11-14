@@ -62,7 +62,7 @@ export const maxSessionsPerWeekConstraint: Constraint = ({
     calendaringConfig.maxSessionsPerWeek;
 
   if (!meetsConstraint && session.sessionType === SESSION_TYPES.special) {
-    return `Special sessions for week of ${formatDateString(session.weekOf, FORMATS.MD)} exceed maximum sessions allowed per week (${session.trialLocation}). \n`;
+    return `More special sessions than maximum allowed per week: ${formatDateString(session.weekOf, FORMATS.MD)} \n`; //(${session.trialLocation}).
   }
 
   return meetsConstraint;
@@ -85,7 +85,7 @@ export const oneSessionPerLocationPerWeekConstraint: Constraint = ({
   ].has(session.trialLocation);
 
   if (!meetsConstraint && session.sessionType === SESSION_TYPES.special) {
-    return `There must only be one special trial session per location per week (${session.trialLocation}, ${formatDateString(session.weekOf, FORMATS.MD)}). \n`;
+    return `More than one special trial per week scheduled: ${session.trialLocation}, ${formatDateString(session.weekOf, FORMATS.MD)}. \n`;
   }
 
   return meetsConstraint;
@@ -109,7 +109,7 @@ export const maxSessionsPerLocationConstraint: Constraint = ({
     calendaringConfig.maxSessionsPerLocation;
 
   if (!meetsConstraint && session.sessionType === SESSION_TYPES.special) {
-    return `Special session count exceeds the max sessions per location for ${session.trialLocation} (${formatDateString(session.weekOf, FORMATS.MD)}). \n`;
+    return `More special sessions than maximum allowed per location scheduled: ${session.trialLocation}. \n`; //(${formatDateString(session.weekOf, FORMATS.MD)})
   }
 
   return meetsConstraint;
@@ -132,14 +132,14 @@ export const washingtonDcSpecialConstraint: Constraint = ({
       WASHINGTON_DC_SOUTH_STRING,
     )
   ) {
-    return `There must be no more than two special trial sessions per week in Washington, DC (${formatDateString(session.weekOf, FORMATS.MD)}). \n`;
+    return `More than two special trial sessions per week: ${WASHINGTON_DC_STRING} ${formatDateString(session.weekOf, FORMATS.MD)}. \n`;
   }
 
   if (
     calendarState.sessionCountPerCity[WASHINGTON_DC_SOUTH_STRING] >=
     calendaringConfig.maxSessionsPerLocation
   ) {
-    return `Special sessions in ${WASHINGTON_DC_STRING} exceed the maximum allowed. \n`;
+    return `More special sessions than maximum allowed per location scheduled: ${WASHINGTON_DC_STRING}. \n`;
   }
 
   return true;

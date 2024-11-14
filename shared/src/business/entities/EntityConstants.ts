@@ -208,7 +208,7 @@ export const CLOSED_CASE_STATUSES = [
   CASE_STATUS_TYPES.closedDismissed,
 ];
 export const SUGGESTED_TRIAL_SESSION_TITLES = {
-  invalid: 'Create term error.',
+  invalid: 'Unable to generate suggested term.',
   success: 'Successfully generated suggested term.',
   warning: 'Successfully generated suggested term with warnings.',
 };

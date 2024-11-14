@@ -121,6 +121,7 @@ export const writeTrialSessionDataToExcel = async ({
       {
         header: 'Warnings',
         key: 'warning',
+        width: 75,
       },
     ];
 
@@ -241,7 +242,7 @@ const getCellStyle = (
   switch (cellValue) {
     case SESSION_TYPES.hybrid:
       fill = {
-        fgColor: { argb: 'ffFDB8AE' },
+        fgColor: { argb: 'fffee685' },
         pattern: 'solid',
         type: 'pattern',
       };
@@ -262,7 +263,7 @@ const getCellStyle = (
       break;
     case SESSION_TYPES.special:
       fill = {
-        fgColor: { argb: 'ffD0C3E9' },
+        fgColor: { argb: 'ffffbe2e' },
         pattern: 'solid',
         type: 'pattern',
       };
