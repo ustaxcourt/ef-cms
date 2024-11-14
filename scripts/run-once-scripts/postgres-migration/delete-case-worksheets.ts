@@ -1,7 +1,7 @@
 /**
  * HOW TO RUN
  *
- * TABLE_NAME=testing npx ts-node --transpileOnly scripts/postgres/delete-case-worksheets.ts
+ * TABLE_NAME=testing npx ts-node --transpileOnly scripts/run-once-scripts/postgres-migration/delete-case-worksheets.ts
  */
 
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
