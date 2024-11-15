@@ -1,7 +1,10 @@
 // usage:
 // npx ts-node --transpile-only scripts/reports/stale-cases.ts
 
-import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  CaseStatus,
+} from '@shared/business/entities/EntityConstants';
 import {
   ServerApplicationContext,
   createApplicationContext,
@@ -11,6 +14,7 @@ import {
   calculateDifferenceInDays,
   createISODateString,
 } from '@shared/business/utilities/DateHandler';
+import { compareStrings } from '@shared/business/utilities/sortFunctions';
 import {
   search,
   searchAll,
@@ -28,7 +32,16 @@ const excludedCaseStatuses = [
   CASE_STATUS_TYPES.onAppeal,
 ];
 
-const staleCases = {};
+type StaleCase = {
+  caption: string;
+  deAge: number;
+  deRcvdAt: string;
+  docketNumber: string;
+  judge: string;
+  status: CaseStatus;
+};
+
+const staleCases: StaleCase[] = [];
 
 const getAllCasesNotInExcludedStatus = async ({
   applicationContext,
@@ -116,18 +129,19 @@ const isCaseStale = async ({
   const deRcvdAt = mostRecentDocketEntry?.receivedAt;
   const deAge = deRcvdAt ? calculateDifferenceInDays(todayISO, deRcvdAt) : 0;
   if (deAge >= YEAR_IN_DAYS) {
-    const judge = aCase.associatedJudge
-      ?.replace('Chief Special Trial ', '')
-      .replace('Special Trial ', '')
-      .replace('Judge ', '');
-    staleCases[aCase.docketNumber] = {
-      caption: aCase.caseCaption,
+    const judge =
+      aCase.associatedJudge
+        ?.replace('Chief Special Trial ', '')
+        .replace('Special Trial ', '')
+        .replace('Judge ', '') ?? '';
+    staleCases.push({
+      caption: aCase.caseCaption.replace(/\r\n|\r|\n/g, ' '),
       deAge,
       deRcvdAt: deRcvdAt!.split('T')[0],
       docketNumber: aCase.docketNumber,
       judge,
       status: aCase.status,
-    };
+    });
     console.log(
       `Docket number ${aCase.docketNumber} is stale! Most recent document is` +
         ` ${deAge} days old, last filed on ${deRcvdAt!.split('T')[0]}`,
@@ -151,17 +165,18 @@ const isCaseStale = async ({
       await isCaseStale({ aCase, applicationContext }),
   );
   await queue.addAll(funcs);
-
-  console.log(`Found ${Object.keys(staleCases).length} stale cases.`);
+  console.log(`Found ${staleCases.length} stale cases.`);
 
   console.log(`Writing CSV to ${OUTPUT_FILENAME}...`);
+  const sortedStaleCases = staleCases
+    .sort((a, b) => b.deAge - a.deAge)
+    .sort((a, b) => compareStrings(a.judge, b.judge));
   let output =
-    '"Docket Number","Caption","Status","Judge","Last Filed","Age in Days"';
-  for (const docketNumber in staleCases) {
+    '"Judge","Docket Number","Caption","Status","Last Filed","Age in Days"';
+  for (const sc of sortedStaleCases) {
     output +=
-      `\n"${docketNumber}","${staleCases[docketNumber].caption}",` +
-      `"${staleCases[docketNumber].status}","${staleCases[docketNumber].judge}",` +
-      `"${staleCases[docketNumber].deRcvdAt}","${staleCases[docketNumber].deAge}"`;
+      `\n"${sc.judge}","${sc.docketNumber}","${sc.caption}","${sc.status}",` +
+      `"${sc.deRcvdAt}","${sc.deAge}"`;
   }
   appendFileSync(OUTPUT_FILENAME, output);
 })();
