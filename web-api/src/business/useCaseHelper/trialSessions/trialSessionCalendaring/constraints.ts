@@ -62,7 +62,7 @@ export const maxSessionsPerWeekConstraint: Constraint = ({
     calendaringConfig.maxSessionsPerWeek;
 
   if (!meetsConstraint && session.sessionType === SESSION_TYPES.special) {
-    return `More special sessions than maximum allowed per week: ${formatDateString(session.weekOf, FORMATS.MD)} \n`; //(${session.trialLocation}).
+    return `More special sessions than maximum allowed per week: ${formatDateString(session.weekOf, FORMATS.MD)} \n`;
   }
 
   return meetsConstraint;
@@ -109,7 +109,7 @@ export const maxSessionsPerLocationConstraint: Constraint = ({
     calendaringConfig.maxSessionsPerLocation;
 
   if (!meetsConstraint && session.sessionType === SESSION_TYPES.special) {
-    return `More special sessions than maximum allowed per location scheduled: ${session.trialLocation}. \n`; //(${formatDateString(session.weekOf, FORMATS.MD)})
+    return `More special sessions than maximum allowed per location scheduled: ${session.trialLocation}. \n`;
   }
 
   return meetsConstraint;

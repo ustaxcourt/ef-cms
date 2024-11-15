@@ -46,6 +46,7 @@ describe('writeTrialSessionDataToExcel', () => {
     await writeTrialSessionDataToExcel({
       caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
       incorrectSizeRegularCases: [],
+      userMessages: [],
       weeks,
     });
   });
@@ -81,6 +82,7 @@ describe('writeTrialSessionDataToExcel', () => {
     await writeTrialSessionDataToExcel({
       caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
       incorrectSizeRegularCases: [],
+      userMessages: [],
       weeks,
     });
   });

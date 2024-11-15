@@ -93,6 +93,13 @@ export const generateCalendar = ({
         return typeof r === 'string';
       });
 
+      /**
+       * Any given item in the messages array represents an ignored constraint.
+       * For business reasons, not all constraints trigger a formatting change
+       * in the resulting spreadsheet: therefore, only two specific categories
+       * of ignored constraints will cause the session to have ignoresConstraints
+       * set to true.
+       */
       messages.forEach(message => {
         if (
           message.startsWith(

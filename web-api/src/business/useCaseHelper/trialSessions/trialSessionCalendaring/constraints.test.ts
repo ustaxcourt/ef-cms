@@ -185,7 +185,7 @@ describe('constraints', () => {
 
       // Assert
       expect(result).toEqual(
-        `Special sessions for week of ${dateString} exceed maximum sessions allowed per week (${mockSession.trialLocation}). \n`,
+        `More special sessions than maximum allowed per week: ${dateString} \n`,
       );
     });
   });
@@ -254,7 +254,6 @@ describe('constraints', () => {
         trialLocation: mockRegularCityString,
         weekOf: mockWeekString,
       };
-      const dateString = formatDateString(mockSession.weekOf, FORMATS.MD);
 
       // Act
       const result = maxSessionsPerLocationConstraint({
@@ -265,7 +264,7 @@ describe('constraints', () => {
 
       // Assert
       expect(result).toEqual(
-        `Special session count exceeds the max sessions per location for ${mockSession.trialLocation} (${dateString}). \n`,
+        `More special sessions than maximum allowed per location scheduled: ${mockSession.trialLocation}. \n`,
       );
     });
   });
@@ -345,7 +344,7 @@ describe('constraints', () => {
 
       // Assert
       expect(result).toEqual(
-        `There must only be one special trial session per location per week (${mockSession.trialLocation}, ${dateString}). \n`,
+        `More than one special trial per week scheduled: ${mockSession.trialLocation}, ${dateString}. \n`,
       );
     });
   });
@@ -470,11 +469,9 @@ describe('constraints', () => {
           session: mockSession,
         });
 
-        console.log(result);
-
         // Assert
         expect(result).toEqual(
-          `Special sessions in ${WASHINGTON_DC_STRING} exceed the maximum allowed. \n`,
+          `More special sessions than maximum allowed per location scheduled: ${WASHINGTON_DC_STRING}. \n`,
         );
       },
     );
@@ -506,7 +503,7 @@ describe('constraints', () => {
 
         // Assert
         expect(result).toEqual(
-          `There must be no more than two special trial sessions per week in Washington, DC (${dateString}). \n`,
+          `More than two special trial sessions per week: ${WASHINGTON_DC_STRING} ${dateString}. \n`,
         );
       },
     );
