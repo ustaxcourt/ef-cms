@@ -22,7 +22,13 @@
     }
 
     .header-welcome-public {
+      padding-bottom: .5rem;
+      margin-top: auto;
+      margin-bottom: auto;
       margin-left: 10px;
+      font-family: "Noto Serif", serif;
+      font-size: 26px;
+      font-weight: 700;
       line-height: 2em;
 
       @media only screen and (max-width: $medium-screen) {
