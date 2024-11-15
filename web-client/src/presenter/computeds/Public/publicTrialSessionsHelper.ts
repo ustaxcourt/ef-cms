@@ -1,5 +1,6 @@
 import { Get } from 'cerebral';
 import {
+  PUBLIC_TRIAL_SESSIONS_DATA_KEY,
   SESSION_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '@shared/business/entities/EntityConstants';
@@ -92,7 +93,7 @@ export const publicTrialSessionsHelper = (
     pageNumber = 0,
     proceedingType = 'All',
     sessionTypes = {},
-  } = get(state.publicTrialSessionData);
+  } = get(state[PUBLIC_TRIAL_SESSIONS_DATA_KEY]);
 
   const trialSessions = get(state.trialSessionsPage.trialSessions) || [];
   const sessionTypeOptions = Object.values(SESSION_TYPES).map(sessionType => ({
