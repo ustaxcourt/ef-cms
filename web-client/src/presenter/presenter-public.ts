@@ -19,6 +19,7 @@ import { gotoPublicCaseDetailSequence } from './sequences/Public/gotoPublicCaseD
 import { gotoPublicEmailVerificationInstructionsSequence } from './sequences/gotoPublicEmailVerificationInstructionsSequence';
 import { gotoPublicPrintableDocketRecordSequence } from './sequences/Public/gotoPublicPrintableDocketRecordSequence';
 import { gotoPublicSearchSequence } from './sequences/Public/gotoPublicSearchSequence';
+import { gotoPublicTrialSessionDetailsSequence } from '@web-client/presenter/sequences/Public/gotoPublicTrialSessionDetailsSequence';
 import { gotoPublicTrialSessionsSequence } from '@web-client/presenter/sequences/Public/gotoPublicTrialSessionsSequence';
 import { gotoTodaysOpinionsSequence } from './sequences/Public/gotoTodaysOpinionsSequence';
 import { gotoTodaysOrdersSequence } from './sequences/Public/gotoTodaysOrdersSequence';
@@ -91,6 +92,7 @@ export const presenterSequences = {
   gotoPublicSearchSequence: showMaintenancePageDecorator(
     gotoPublicSearchSequence,
   ),
+  gotoPublicTrialSessionDetailsSequence,
   gotoPublicTrialSessionsSequence,
   gotoTodaysOpinionsSequence: showMaintenancePageDecorator(
     gotoTodaysOpinionsSequence,
@@ -147,7 +149,10 @@ export const presenter = {
     [NotFoundError, notFoundErrorSequence], //404
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
-  providers: {},
+  providers: {
+    applicationContext: {} as any,
+    router: {} as any,
+  },
   sequences: presenterSequences,
   state: initialPublicState,
 };
