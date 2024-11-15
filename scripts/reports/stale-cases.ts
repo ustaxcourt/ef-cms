@@ -9,7 +9,7 @@ import {
   ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
-import { appendFileSync } from 'fs';
+import { appendFileSync, existsSync, unlinkSync } from 'fs';
 import {
   calculateDifferenceInDays,
   createISODateString,
@@ -177,6 +177,9 @@ const isCaseStale = async ({
     output +=
       `\n"${sc.judge}","${sc.docketNumber}","${sc.caption}","${sc.status}",` +
       `"${sc.deRcvdAt}","${sc.deAge}"`;
+  }
+  if (existsSync(OUTPUT_FILENAME)) {
+    unlinkSync(OUTPUT_FILENAME);
   }
   appendFileSync(OUTPUT_FILENAME, output);
 })();
