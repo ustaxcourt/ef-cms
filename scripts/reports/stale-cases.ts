@@ -146,7 +146,8 @@ const isCaseStale = async ({
   );
   const queue = new PQueue({ concurrency: CHUNK_SIZE });
   const funcs = casesNotClosedOrOnAppeal.map(
-    (aCase: RawCase) => () => isCaseStale({ aCase, applicationContext }),
+    (aCase: RawCase) => async () =>
+      await isCaseStale({ aCase, applicationContext }),
   );
   await queue.addAll(funcs);
 
