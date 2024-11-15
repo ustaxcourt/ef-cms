@@ -89,6 +89,13 @@ const router = {
       return app.getSequence('gotoPublicTrialSessionsSequence')();
     });
 
+    route('/trial-session-detail/*', trialSessionId => {
+      setPageTitle('Trial session information');
+      return app.getSequence('gotoPublicTrialSessionDetailsSequence')({
+        trialSessionId,
+      });
+    });
+
     route('..', () => {
       setPageTitle('Error');
       return app.getSequence('notFoundErrorSequence')({

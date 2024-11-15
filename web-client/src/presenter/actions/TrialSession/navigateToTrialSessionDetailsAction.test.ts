@@ -1,4 +1,4 @@
-import { navigateToTrialSessionDetailAction } from './navigateToTrialSessionDetailAction';
+import { navigateToTrialSessionDetailsAction } from './navigateToTrialSessionDetailsAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -8,9 +8,9 @@ presenter.providers.router = {
   route: routeMock,
 };
 
-describe('navigateToTrialSessionDetailAction', () => {
+describe('navigateToTrialSessionDetailsAction', () => {
   it('should go to the trials session detail route using state.trialSession.trialSessionId', async () => {
-    await runAction(navigateToTrialSessionDetailAction, {
+    await runAction(navigateToTrialSessionDetailsAction, {
       modules: {
         presenter,
       },
