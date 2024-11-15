@@ -24,9 +24,9 @@ export class GenerateSuggestedTermForm extends JoiValidationEntity {
         .messages({
           '*': 'Enter date in format MM/DD/YYYY.',
           'any.ref': 'Enter a start date',
-          'date.greater':
-            'End date must be after today. Enter a valid end date.',
-          'date.min': 'Start date cannot be in the past. Enter a valid date.',
+          'date.greater': 'End date cannot be in the past. Enter a valid date.',
+          'date.min':
+            'End date cannot be prior to start date. Enter a valid end date.',
         }),
       termName: JoiValidationConstants.STRING.required()
         .max(100)
