@@ -26,7 +26,7 @@ import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginato
 import { sequences, state } from '@web-client/presenter/app-public.cerebral';
 import React, { useRef, useState } from 'react';
 
-type TrialsSessionsUiParams = {
+type TrialSessionsUiParams = {
   fetchedTrialSessionsTimestamp: string;
   publicTrialSessionsHelper: PublicTrialSessionsHelperResults;
   resetPublicTrialSessionsDataSequence: () => void;
@@ -75,7 +75,7 @@ export const PublicTrialSessions = connect(
       <>
         <BigHeader text="Scheduled Trial Sessions" />
 
-        {NonMobilePublicTrialsSessions({
+        {NonMobilePublicTrialSessions({
           displayProgressSpinnerSequence,
           fetchedTrialSessionsTimestamp,
           publicTrialSessionsData,
@@ -83,7 +83,7 @@ export const PublicTrialSessions = connect(
           resetPublicTrialSessionsDataSequence,
           updateFormValueSequence,
         })}
-        {MobilePublicTrialsSessions({
+        {MobilePublicTrialSessions({
           displayProgressSpinnerSequence,
           fetchedTrialSessionsTimestamp,
           publicTrialSessionsData,
@@ -96,14 +96,14 @@ export const PublicTrialSessions = connect(
   },
 );
 
-function NonMobilePublicTrialsSessions({
+function NonMobilePublicTrialSessions({
   displayProgressSpinnerSequence,
   fetchedTrialSessionsTimestamp,
   publicTrialSessionsData,
   publicTrialSessionsHelper,
   resetPublicTrialSessionsDataSequence,
   updateFormValueSequence,
-}: TrialsSessionsUiParams) {
+}: TrialSessionsUiParams) {
   return (
     <NonPhone>
       <section className="usa-section grid-container">
@@ -152,14 +152,14 @@ function NonMobilePublicTrialsSessions({
   );
 }
 
-function MobilePublicTrialsSessions({
+function MobilePublicTrialSessions({
   displayProgressSpinnerSequence,
   fetchedTrialSessionsTimestamp,
   publicTrialSessionsData,
   publicTrialSessionsHelper,
   resetPublicTrialSessionsDataSequence,
   updateFormValueSequence,
-}: TrialsSessionsUiParams) {
+}: TrialSessionsUiParams) {
   const {
     judges = {},
     locations = {},
@@ -168,7 +168,7 @@ function MobilePublicTrialsSessions({
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const publicTrialsSessionUpdateFormValueSequence = (
+  const publicTrialSessionUpdateFormValueSequence = (
     ...args: Parameters<typeof updateFormValueSequence>
   ) => {
     if (displayProgressSpinnerSequence)
@@ -224,7 +224,7 @@ function MobilePublicTrialsSessions({
               key={sessionTypeLabel}
               text={sessionTypeLabel}
               onRemove={() => {
-                publicTrialsSessionUpdateFormValueSequence({
+                publicTrialSessionUpdateFormValueSequence({
                   key: `sessionTypes.${sessionTypeKey}`,
                   root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
                   value: undefined,
@@ -242,7 +242,7 @@ function MobilePublicTrialsSessions({
               key={sessionTypeLabel}
               text={sessionTypeLabel}
               onRemove={() => {
-                publicTrialsSessionUpdateFormValueSequence({
+                publicTrialSessionUpdateFormValueSequence({
                   key: `locations.${sessionTypeKey}`,
                   root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
                   value: undefined,
@@ -260,7 +260,7 @@ function MobilePublicTrialsSessions({
               key={sessionTypeLabel}
               text={sessionTypeLabel}
               onRemove={() => {
-                publicTrialsSessionUpdateFormValueSequence({
+                publicTrialSessionUpdateFormValueSequence({
                   key: `judges.${sessionTypeKey}`,
                   root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
                   value: undefined,
