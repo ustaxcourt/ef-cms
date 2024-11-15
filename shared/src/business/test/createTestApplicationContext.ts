@@ -37,11 +37,6 @@ import { calculateDaysElapsedSinceLastStatusChange } from '@shared/business/util
 import { caseStatusWithTrialInformation } from '@shared/business/utilities/caseStatusWithTrialInformation';
 import { combineTwoPdfs } from '@shared/business/utilities/documentGenerators/combineTwoPdfs';
 import {
-  compareCasesByDocketNumber,
-  formatCaseForTrialSession,
-  getFormattedTrialSessionDetails,
-} from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
-import {
   compareISODateStrings,
   compareStrings,
 } from '@shared/business/utilities/sortFunctions';
@@ -62,6 +57,10 @@ import {
   getFormattedCaseDetail,
   sortDocketEntries,
 } from '@shared/business/utilities/getFormattedCaseDetail';
+import {
+  formatCaseForTrialSession,
+  getFormattedTrialSessionDetails,
+} from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { formatDollars } from '@shared/business/utilities/formatDollars';
 import {
   formatJudgeName,
@@ -207,9 +206,6 @@ export const createTestApplicationContext = () => {
       .mockImplementation(caseStatusWithTrialInformation),
     checkDate: jest.fn().mockImplementation(DateHandler.checkDate),
     combineTwoPdfs: jest.fn().mockImplementation(combineTwoPdfs),
-    compareCasesByDocketNumber: jest
-      .fn()
-      .mockImplementation(compareCasesByDocketNumber),
     compareISODateStrings: jest.fn().mockImplementation(compareISODateStrings),
     compareStrings: jest.fn().mockImplementation(compareStrings),
     copyPagesAndAppendToTargetPdf: jest

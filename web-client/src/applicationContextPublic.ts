@@ -42,7 +42,6 @@ import {
 } from '../../shared/src/sharedAppContext';
 import { User } from '../../shared/src/business/entities/User';
 import { casePublicSearchInteractor } from '../../shared/src/proxies/casePublicSearchProxy';
-import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { confirmSignUpInteractor } from '@shared/proxies/auth/confirmSignUpProxy';
 import {
   createISODateString,
@@ -216,7 +215,6 @@ const applicationContextPublic = {
   getUseCases: () => allUseCases,
   getUtilities: () => {
     return {
-      compareCasesByDocketNumber,
       createISODateString,
       formatDateString,
       formatDocketEntry,

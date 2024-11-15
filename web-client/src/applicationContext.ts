@@ -74,11 +74,6 @@ import { changePasswordInteractor } from '@shared/proxies/auth/changePasswordPro
 import { checkEmailAvailabilityInteractor } from '../../shared/src/proxies/users/checkEmailAvailabilityProxy';
 import { closeTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/closeTrialSessionProxy';
 import {
-  compareCasesByDocketNumber,
-  formatCaseForTrialSession,
-  getFormattedTrialSessionDetails,
-} from '../../shared/src/business/utilities/trialSession/getFormattedTrialSessionDetails';
-import {
   compareISODateStrings,
   compareStrings,
 } from '../../shared/src/business/utilities/sortFunctions';
@@ -125,6 +120,10 @@ import {
   getFormattedCaseDetail,
   sortDocketEntries,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
+import {
+  formatCaseForTrialSession,
+  getFormattedTrialSessionDetails,
+} from '../../shared/src/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { formatDollars } from '../../shared/src/business/utilities/formatDollars';
 import {
   formatJudgeName,
@@ -720,7 +719,6 @@ const applicationContext = {
       caseHasServedPetition,
       caseStatusWithTrialInformation,
       checkDate,
-      compareCasesByDocketNumber,
       compareISODateStrings,
       compareStrings,
       createEndOfDayISO,

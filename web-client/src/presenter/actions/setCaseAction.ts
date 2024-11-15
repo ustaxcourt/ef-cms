@@ -1,4 +1,4 @@
-import { compareCasesByDocketNumber } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
+import { Case } from '@shared/business/entities/cases/Case';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setCaseAction = ({
@@ -6,9 +6,8 @@ export const setCaseAction = ({
   store,
 }: ActionProps<{ caseDetail: RawCase }>) => {
   const unsortedConsolidatedCases = props.caseDetail.consolidatedCases || [];
-  props.caseDetail.consolidatedCases = unsortedConsolidatedCases.sort(
-    compareCasesByDocketNumber,
-  );
+  props.caseDetail.consolidatedCases =
+    Case.sortByDocketNumberAndGroupConsolidatedCases(unsortedConsolidatedCases);
 
   store.set(state.caseDetail, props.caseDetail);
 };

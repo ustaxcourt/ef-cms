@@ -1,6 +1,7 @@
 import { state } from '@web-client/presenter/app.cerebral';
 import { without } from 'lodash';
 
+import { Case } from '@shared/business/entities/cases/Case';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 export const caseInventoryReportHelper = (
@@ -37,9 +38,9 @@ export const caseInventoryReportHelper = (
   const reportData = get(state.caseInventoryReportData.foundCases) || [];
   const user = get(state.user);
 
-  const formattedReportData = reportData
-    .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
-    .map(item => formatCase(applicationContext, item, user));
+  const formattedReportData = Case.sortByDocketNumberAndGroupConsolidatedCases(
+    reportData,
+  ).map(item => formatCase(applicationContext, item, user));
 
   let displayedCount =
     resultCount < CASE_INVENTORY_PAGE_SIZE

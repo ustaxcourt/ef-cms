@@ -14,10 +14,6 @@ import {
 import { caseStatusWithTrialInformation } from '@shared/business/utilities/caseStatusWithTrialInformation';
 import { combineTwoPdfs } from '../../shared/src/business/utilities/documentGenerators/combineTwoPdfs';
 import {
-  compareCasesByDocketNumber,
-  getFormattedTrialSessionDetails,
-} from '../../shared/src/business/utilities/trialSession/getFormattedTrialSessionDetails';
-import {
   compareISODateStrings,
   compareStrings,
 } from '../../shared/src/business/utilities/sortFunctions';
@@ -39,6 +35,7 @@ import {
 import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFormattedCaseDetail } from '../../shared/src/business/utilities/getFormattedCaseDetail';
+import { getFormattedTrialSessionDetails } from '../../shared/src/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import {
   isLeadCase,
@@ -58,7 +55,6 @@ const utilities = {
   calculateISODate,
   caseStatusWithTrialInformation,
   combineTwoPdfs,
-  compareCasesByDocketNumber,
   compareISODateStrings,
   compareStrings,
   copyPagesAndAppendToTargetPdf,

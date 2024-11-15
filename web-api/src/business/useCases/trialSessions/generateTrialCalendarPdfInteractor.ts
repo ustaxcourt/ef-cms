@@ -1,7 +1,7 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { compact } from 'lodash';
-import { compareCasesByDocketNumberFactory } from '../../../../../shared/src/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
 import { saveFileAndGenerateUrl } from '../../useCaseHelper/saveFileAndGenerateUrl';
 
@@ -93,9 +93,8 @@ const formatCases = ({ applicationContext, calendaredCases }) => {
   const openCases = calendaredCases.filter(
     calendaredCase => !calendaredCase.removedFromTrial,
   );
-  return openCases
-    .sort(compareCasesByDocketNumberFactory({ allCases: openCases }))
-    .map(openCase => {
+  return Case.sortByDocketNumberAndGroupConsolidatedCases(openCases).map(
+    openCase => {
       const { inConsolidatedGroup, isLeadCase, shouldIndent } =
         applicationContext
           .getUtilities()
@@ -113,7 +112,8 @@ const formatCases = ({ applicationContext, calendaredCases }) => {
         respondentCounsel: openCase.irsPractitioners.map(getPractitionerName),
         shouldIndent,
       };
-    });
+    },
+  );
 };
 
 const getPractitionerName = practitioner => {

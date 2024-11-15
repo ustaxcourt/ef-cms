@@ -1,3 +1,4 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -27,8 +28,7 @@ export const generateCaseInventoryReportPdf = async ({
   applicationContext.logger.info('generateCaseInventoryReportPdf - start');
 
   const { setConsolidationFlagsForDisplay } = applicationContext.getUtilities();
-  const formattedCases = cases
-    .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
+  const formattedCases = Case.sortByDocketNumberAndGroupConsolidatedCases(cases)
     .map(caseItem => setConsolidationFlagsForDisplay(caseItem, []))
     .map(caseItem => ({
       ...caseItem,
