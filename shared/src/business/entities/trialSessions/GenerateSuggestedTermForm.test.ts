@@ -64,5 +64,18 @@ describe('GenerateSuggestTermForm', () => {
         termName: 'Term name must be 100 characters or fewer.',
       });
     });
+
+    it('should fail validation when end date is in the past', () => {
+      const formEntity = new GenerateSuggestedTermForm({
+        termEndDate: yesterdayFormatted,
+        termName: 'Test Term',
+        termStartDate: '01/01/2050',
+      });
+
+      expect(formEntity.isValid()).toBeFalsy();
+      expect(formEntity.getFormattedValidationErrors()).toEqual({
+        termEndDate: 'End date cannot be in the past. Enter a valid date.',
+      });
+    });
   });
 });
