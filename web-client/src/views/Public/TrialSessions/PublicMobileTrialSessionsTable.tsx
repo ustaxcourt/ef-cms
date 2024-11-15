@@ -1,4 +1,4 @@
-import { PublicMobileTrialSessionsDataRow } from '@web-client/views/Public/TrialsSessions/PublicMobileTrialSessionsDataRow';
+import { PublicMobileTrialSessionsDataRow } from '@web-client/views/Public/TrialSessions/PublicMobileTrialSessionsDataRow';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
