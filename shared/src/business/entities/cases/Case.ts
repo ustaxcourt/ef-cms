@@ -249,9 +249,16 @@ export class Case extends JoiValidationEntity {
     let nonMemberCases: T[] = [];
     let memberCases: { [key: string]: T[] } = {};
 
-    // Group cases into 1) lead or non-member cases and 2) non-lead, member cases
+    // Create a set of docket numbers for quick lookup
+    const docketNumbers = new Set(cases.map(c => c.docketNumber));
+
+    // Group cases into 1) lead or non-member cases and 2) valid non-lead, member cases
     for (const c of cases) {
-      if (c.leadDocketNumber && c.leadDocketNumber !== c.docketNumber) {
+      if (
+        c.leadDocketNumber &&
+        c.leadDocketNumber !== c.docketNumber &&
+        docketNumbers.has(c.leadDocketNumber) // Check if the lead case exists; if not, treat as a lead/non-member case
+      ) {
         (memberCases[c.leadDocketNumber] ||= []).push(c);
       } else {
         nonMemberCases.push(c);
@@ -273,6 +280,7 @@ export class Case extends JoiValidationEntity {
         );
       }
     }
+
     return interpolatedCases;
   }
 
