@@ -1,4 +1,4 @@
-import { Case } from './Case';
+import { Case } from '../../entities/cases/Case';
 
 describe('sortByDocketNumber', () => {
   it('Should return the cases as an array sorted by docket number for cases filed in the same year', () => {

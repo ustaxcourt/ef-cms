@@ -55,7 +55,6 @@ import {
   formatCase,
   formatDocketEntry,
   getFormattedCaseDetail,
-  sortDocketEntries,
 } from '@shared/business/utilities/getFormattedCaseDetail';
 import {
   formatCaseForTrialSession,
@@ -116,6 +115,7 @@ import { setNoticesForCalendaredTrialSessionInteractor } from '@shared/proxies/t
 import { setPdfFormFields } from '@web-api/business/useCaseHelper/pdf/setPdfFormFields';
 import { setServiceIndicatorsForCase } from '@shared/business/utilities/setServiceIndicatorsForCase';
 import { setupPdfDocument } from '@shared/business/utilities/setupPdfDocument';
+import { sortDocketEntries } from '@shared/business/utilities/sorting/docketEntrySorting';
 import { unsealDocketEntryInteractor } from '@web-api/business/useCases/docketEntry/unsealDocketEntryInteractor';
 import { updateCase } from '@web-api/persistence/dynamo/cases/updateCase';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';

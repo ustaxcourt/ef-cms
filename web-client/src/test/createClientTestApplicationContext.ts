@@ -48,7 +48,6 @@ import {
   formatCase,
   formatDocketEntry,
   getFormattedCaseDetail,
-  sortDocketEntries,
 } from '@shared/business/utilities/getFormattedCaseDetail';
 import {
   formatCaseForTrialSession,
@@ -101,6 +100,7 @@ import { setItem } from '@web-client/persistence/localStorage/setItem';
 import { setNoticesForCalendaredTrialSessionInteractor } from '@shared/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
 import { setServiceIndicatorsForCase } from '@shared/business/utilities/setServiceIndicatorsForCase';
 import { setupPdfDocument } from '@shared/business/utilities/setupPdfDocument';
+import { sortDocketEntries } from '@shared/business/utilities/sorting/docketEntrySorting';
 import { unsealDocketEntryInteractor } from '@shared/proxies/editDocketEntry/unsealDocketEntryProxy';
 import { updateCase } from '@web-api/persistence/dynamo/cases/updateCase';
 import { updateCaseCorrespondence } from '@web-api/persistence/dynamo/correspondence/updateCaseCorrespondence';

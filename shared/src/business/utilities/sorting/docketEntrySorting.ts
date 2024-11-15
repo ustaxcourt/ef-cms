@@ -1,77 +1,76 @@
-import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { calculateDifferenceInDays } from '@shared/business/utilities/DateHandler';
 
-type DocketEntrySortFields = 'index' | 'filingDate';
+export const DOCKET_ENTRY_SORT_FIELDS = {
+  filingDate: 'filingDate',
+  index: 'index',
+} as const;
 
-export const sortDocketEntries = (
-  docketEntries: (RawDocketEntry & {
-    createdAtFormatted: string | undefined;
-  })[] = [],
-  sortByField?: DocketEntrySortFields,
-  ascending: boolean = true,
-) => {
-  // Get the comparison function we want to use, reverse if descending, and sort.
-  let comparator = getDocketEntryComparator(sortByField);
-  if (!ascending) {
-    comparator = (a, b) => -1 * getDocketEntryComparator(sortByField)(a, b);
-  }
-  return docketEntries.sort(comparator);
+export type DocketEntrySortField =
+  (typeof DOCKET_ENTRY_SORT_FIELDS)[keyof typeof DOCKET_ENTRY_SORT_FIELDS];
+
+type Comparator<T> = (a: T, b: T) => number;
+
+type SortableDocketEntry = RawDocketEntry & { createdAtFormatted?: string };
+
+export const sortDocketEntries = ({
+  ascending = true,
+  docketEntries = [],
+  sortByField = DOCKET_ENTRY_SORT_FIELDS.filingDate,
+}: {
+  docketEntries: SortableDocketEntry[];
+  sortByField?: DocketEntrySortField;
+  ascending?: boolean;
+}): (RawDocketEntry & { createdAtFormatted?: string })[] => {
+  // Get the comparison function to use, then sort using it
+  const comparator = createDocketEntryComparator(sortByField, ascending);
+  return docketEntries.sort(comparator); // Copy array to avoid mutating input
 };
 
-const getDocketEntryComparator = (
-  fieldToSortBy: DocketEntrySortFields = 'filingDate',
-): ((a: DocketEntry, b: DocketEntry) => number) => {
-  const fieldToComparatorMapping: Record<
-    DocketEntrySortFields,
-    (a: DocketEntry, b: DocketEntry) => number
+const createDocketEntryComparator = (
+  fieldToSortBy: DocketEntrySortField,
+  ascending: boolean,
+): ((a: SortableDocketEntry, b: SortableDocketEntry) => number) => {
+  const fieldComparators: Record<
+    DocketEntrySortField,
+    Comparator<SortableDocketEntry>
   > = {
-    filingDate: byDocketEntryFilingDateComparator,
-    index: byDocketEntryIndexComparator,
+    filingDate: compareByFilingDate,
+    index: compareByIndex,
   };
 
-  const baseComparator = fieldToComparatorMapping[fieldToSortBy];
-  if (!baseComparator) {
+  const fieldToSortByComparator = fieldComparators[fieldToSortBy];
+  if (!fieldToSortByComparator) {
     throw new Error(`Unsupported fieldToSortBy: ${fieldToSortBy}`);
   }
 
-  return (a: DocketEntry, b: DocketEntry) => {
-    const undefinedComparison = byCreatedAtExistsComparator(a, b);
-    if (undefinedComparison !== 0) {
-      return undefinedComparison;
+  return (a, b) => {
+    // We group all entries without createdAtFormatted together, so do that comparison first.
+    // If it doesn't apply, continue to compare using the fieldToSortBy.
+    let comparisonResult = compareByCreatedAtExists(a, b);
+    if (comparisonResult === 0) {
+      comparisonResult = fieldToSortByComparator(a, b);
     }
 
-    return baseComparator(a, b);
+    return ascending ? comparisonResult : -1 * comparisonResult;
   };
 };
 
-const byDocketEntryFilingDateComparator = (a: DocketEntry, b: DocketEntry) => {
-  const compared = calculateDifferenceInDays(a.filingDate, b.filingDate);
-  if (compared === 0) {
-    return byDocketEntryIndexComparator(a, b);
-  }
-  return compared;
+const compareByFilingDate: Comparator<SortableDocketEntry> = (a, b) => {
+  const dateComparison = calculateDifferenceInDays(a.filingDate, b.filingDate);
+  return dateComparison !== 0 ? dateComparison : compareByIndex(a, b);
 };
 
-const byDocketEntryIndexComparator = (a, b) => {
-  if (!a.index && !b.index) {
-    return 0;
-  } else if (!a.index) {
-    return 1;
-  } else if (!b.index) {
-    return -1;
-  }
+const compareByIndex: Comparator<SortableDocketEntry> = (a, b) => {
+  if (a.index === undefined && b.index === undefined) return 0;
+  if (a.index === undefined) return 1;
+  if (b.index === undefined) return -1;
   return a.index - b.index;
 };
 
-const byCreatedAtExistsComparator = (
-  a: { createdAtFormatted: string },
-  b: { createdAtFormatted: string },
-): number => {
-  if (a.createdAtFormatted && !b.createdAtFormatted) {
-    return -1;
-  }
-  if (!a.createdAtFormatted && b.createdAtFormatted) {
-    return 1;
-  }
+const compareByCreatedAtExists: Comparator<{
+  createdAtFormatted?: string;
+}> = (a, b) => {
+  if (a.createdAtFormatted && !b.createdAtFormatted) return 1;
+  if (!a.createdAtFormatted && b.createdAtFormatted) return -1;
   return 0;
 };

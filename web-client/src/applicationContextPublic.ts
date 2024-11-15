@@ -49,10 +49,7 @@ import {
   formatNow,
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
-import {
-  formatDocketEntry,
-  sortDocketEntries,
-} from '../../shared/src/business/utilities/getFormattedCaseDetail';
+import { formatDocketEntry } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { generatePublicDocketRecordPdfInteractor } from '../../shared/src/proxies/public/generatePublicDocketRecordPdfProxy';
 import { getAllFeatureFlagsInteractor } from '../../shared/src/proxies/featureFlag/getAllFeatureFlagsProxy';
 import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/proxies/public/getCaseForPublicDocketNumberSearchProxy';
@@ -85,6 +82,7 @@ import { removeItemInteractor } from '../../shared/src/business/useCases/removeI
 import { setItem } from './persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
 import { signUpUserInteractor } from '../../shared/src/proxies/signUpUserProxy';
+import { sortDocketEntries } from '@shared/business/utilities/sorting/docketEntrySorting';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
 import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOpinionAdvancedSearchInteractor';

@@ -7,10 +7,14 @@ import {
   TRANSCRIPT_EVENT_CODE,
 } from '../entities/EntityConstants';
 import { Case, isSealedCase } from '../entities/cases/Case';
+import {
+  DOCKET_ENTRY_SORT_FIELDS,
+  DocketEntrySortField,
+  sortDocketEntries,
+} from '@shared/business/utilities/sorting/docketEntrySorting';
 import { DocketEntry } from '../entities/DocketEntry';
 import {
   FORMATS,
-  calculateDifferenceInDays,
   combineISOandEasternTime,
   formatDateString,
 } from './DateHandler';
@@ -288,7 +292,10 @@ export const formatCase = (
       formatDocketEntry(applicationContext, d),
     );
     // establish an initial sort by ascending index
-    result.formattedDocketEntries.sort(byIndexSortFunction);
+    result.formattedDocketEntries = sortDocketEntries({
+      docketEntries: result.formattedDocketEntries,
+      sortByField: DOCKET_ENTRY_SORT_FIELDS.index,
+    });
     result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
       entry => applicationContext.getUtilities().isPending(entry),
     );
@@ -392,37 +399,6 @@ export const formatCase = (
   return result;
 };
 
-const byIndexSortFunction = (a, b) => {
-  if (!a.index && !b.index) {
-    return 0;
-  } else if (!a.index) {
-    return 1;
-  } else if (!b.index) {
-    return -1;
-  }
-  return a.index - b.index;
-};
-
-const getDocketRecordSortFunc = sortByString => {
-  const byDate = (a, b) => {
-    const compared = calculateDifferenceInDays(a.filingDate, b.filingDate);
-    if (compared === 0) {
-      return byIndexSortFunction(a, b);
-    }
-    return compared;
-  };
-
-  switch (sortByString) {
-    case 'byIndex': // fall-through
-    case 'byIndexDesc':
-      return byIndexSortFunction;
-    case 'byDate': // fall through, is the default sort method
-    case 'byDateDesc':
-    default:
-      return byDate;
-  }
-};
-
 const formatCounsel = ({ caseDetail, counsel }) => {
   let formattedName = counsel.name;
 
@@ -448,46 +424,16 @@ const formatCounsel = ({ caseDetail, counsel }) => {
   return counsel;
 };
 
-// sort items that do not display a filingDate (based on createdAtFormatted) at the bottom
-export const sortUndefined = (
-  a: { createdAtFormatted: string },
-  b: { createdAtFormatted: string },
-) => {
-  if (a.createdAtFormatted && !b.createdAtFormatted) {
-    return -1;
-  }
-
-  if (!a.createdAtFormatted && b.createdAtFormatted) {
-    return 1;
-  }
-};
-
-export const sortDocketEntries = (
-  docketEntries: (RawDocketEntry & {
-    createdAtFormatted: string | undefined;
-  })[] = [],
-  sortByString = '',
-) => {
-  const sortFunc = getDocketRecordSortFunc(sortByString);
-  const isReversed = sortByString.includes('Desc');
-  docketEntries.sort(sortFunc);
-  if (isReversed) {
-    // reversing AFTER the sort keeps sorting stable
-    return docketEntries.reverse().sort(sortUndefined);
-  }
-  return docketEntries.sort(sortUndefined);
-};
-
 // Used by both front and backend
 export const getFormattedCaseDetail = ({
   applicationContext,
   authorizedUser,
   caseDetail,
-  docketRecordSort,
+  docketRecordSort: docketEntryFieldToSortBy,
 }: {
   applicationContext: IApplicationContext;
   caseDetail: RawCase;
-  docketRecordSort?: string;
+  docketRecordSort?: DocketEntrySortField;
   authorizedUser: UnknownAuthUser;
 }) => {
   const result = {
@@ -496,11 +442,11 @@ export const getFormattedCaseDetail = ({
       .setServiceIndicatorsForCase(caseDetail),
     ...formatCase(applicationContext, caseDetail, authorizedUser),
   };
-  result.formattedDocketEntries = sortDocketEntries(
-    result.formattedDocketEntries,
-    docketRecordSort,
-  );
-  result.docketRecordSort = docketRecordSort;
+  result.formattedDocketEntries = sortDocketEntries({
+    docketEntries: result.formattedDocketEntries,
+    sortByField: docketEntryFieldToSortBy,
+  });
+  result.docketRecordSort = docketEntryFieldToSortBy;
 
   return result;
 };

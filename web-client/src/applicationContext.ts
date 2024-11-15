@@ -118,7 +118,6 @@ import {
   formatDocketEntry,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
-  sortDocketEntries,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import {
   formatCaseForTrialSession,
@@ -275,6 +274,7 @@ import { setWorkItemAsReadInteractor } from '../../shared/src/proxies/workitems/
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
 import { signUpUserInteractor } from '../../shared/src/proxies/signUpUserProxy';
 import { sleep } from '@shared/tools/helpers';
+import { sortDocketEntries } from '@shared/business/utilities/sorting/docketEntrySorting';
 import { startPollingForResultsInteractor } from '@shared/proxies/polling/startPollingForResultsProxy';
 import { strikeDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/strikeDocketEntryProxy';
 import { submitCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
