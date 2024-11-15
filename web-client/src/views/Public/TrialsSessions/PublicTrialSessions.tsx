@@ -117,7 +117,19 @@ function NonMobilePublicTrialSessions({
                 <PublicTrialSessionsRemoteProceedingsCard />
               </div>
             </Mobile>
-            <PublicTrialSessionsFilters ROOT={PUBLIC_TRIAL_SESSIONS_DATA_KEY} />
+            <PublicTrialSessionsFilters
+              displayProgressSpinnerSequence={displayProgressSpinnerSequence}
+              judges={publicTrialSessionsData.judges || {}}
+              locations={publicTrialSessionsData.locations || {}}
+              proceedingType={publicTrialSessionsData.proceedingType || 'All'}
+              sessionTypeOptions={publicTrialSessionsHelper.sessionTypeOptions}
+              sessionTypes={publicTrialSessionsData.sessionTypes || {}}
+              trialCitiesByState={publicTrialSessionsHelper.trialCitiesByState}
+              trialSessionJudgeOptions={
+                publicTrialSessionsHelper.trialSessionJudgeOptions
+              }
+              updateFormValueSequence={updateFormValueSequence}
+            />
           </div>
           <NonMobile>
             <div className="tablet:grid-col-4 grid-col-12 padding-top-1">
@@ -199,7 +211,19 @@ function MobilePublicTrialSessions({
 
         {isOpen && (
           <>
-            <PublicTrialSessionsFilters ROOT={PUBLIC_TRIAL_SESSIONS_DATA_KEY} />
+            <PublicTrialSessionsFilters
+              displayProgressSpinnerSequence={displayProgressSpinnerSequence}
+              judges={publicTrialSessionsData.judges || {}}
+              locations={publicTrialSessionsData.locations || {}}
+              proceedingType={publicTrialSessionsData.proceedingType || 'All'}
+              sessionTypeOptions={publicTrialSessionsHelper.sessionTypeOptions}
+              sessionTypes={publicTrialSessionsData.sessionTypes || {}}
+              trialCitiesByState={publicTrialSessionsHelper.trialCitiesByState}
+              trialSessionJudgeOptions={
+                publicTrialSessionsHelper.trialSessionJudgeOptions
+              }
+              updateFormValueSequence={updateFormValueSequence}
+            />
             <Button
               link
               data-testid="trial-sessions-reset-filters-button"
