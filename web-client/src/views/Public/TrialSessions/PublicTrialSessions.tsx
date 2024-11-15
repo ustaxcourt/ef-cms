@@ -4,6 +4,7 @@ import {
 } from '@web-client/ustc-ui/Accordion/Accordion';
 import { BigHeader } from '@web-client/views/BigHeader';
 import { Button } from '@web-client/ustc-ui/Button/Button';
+import { FETCHED_TRIAL_SESSIONS_TIMESTAMP_KEY } from '@shared/business/entities/EntityConstants';
 import {
   Mobile,
   NonMobile,
@@ -25,6 +26,7 @@ import React, { useRef, useState } from 'react';
 const ROOT = 'publicTrialSessionData';
 
 type TrialsSessionsUiParams = {
+  fetchedTrialSessionsTimestamp: string;
   publicTrialSessionsHelper: PublicTrialSessionsHelperResults;
   resetPublicTrialSessionDataSequence: () => void;
   updateFormValueSequence: (props: {
@@ -53,6 +55,7 @@ type TrialsSessionsUiParams = {
 export const PublicTrialSessions = connect(
   {
     displayProgressSpinnerSequence: sequences.displayProgressSpinnerSequence,
+    fetchedTrialSessionsTimestamp: state[FETCHED_TRIAL_SESSIONS_TIMESTAMP_KEY],
     publicTrialSessionData: state[ROOT],
     publicTrialSessionsHelper: state.publicTrialSessionsHelper,
     resetPublicTrialSessionDataSequence:
@@ -61,6 +64,7 @@ export const PublicTrialSessions = connect(
   },
   function ({
     displayProgressSpinnerSequence,
+    fetchedTrialSessionsTimestamp,
     publicTrialSessionData,
     publicTrialSessionsHelper,
     resetPublicTrialSessionDataSequence,
@@ -72,6 +76,7 @@ export const PublicTrialSessions = connect(
 
         {NonMobilePublicTrialsSessions({
           displayProgressSpinnerSequence,
+          fetchedTrialSessionsTimestamp,
           publicTrialSessionData,
           publicTrialSessionsHelper,
           resetPublicTrialSessionDataSequence,
@@ -79,6 +84,7 @@ export const PublicTrialSessions = connect(
         })}
         {MobilePublicTrialsSessions({
           displayProgressSpinnerSequence,
+          fetchedTrialSessionsTimestamp,
           publicTrialSessionData,
           publicTrialSessionsHelper,
           resetPublicTrialSessionDataSequence,
@@ -91,6 +97,7 @@ export const PublicTrialSessions = connect(
 
 function NonMobilePublicTrialsSessions({
   displayProgressSpinnerSequence,
+  fetchedTrialSessionsTimestamp,
   publicTrialSessionData,
   publicTrialSessionsHelper,
   resetPublicTrialSessionDataSequence,
@@ -102,7 +109,7 @@ function NonMobilePublicTrialsSessions({
         <div className="grid-row">
           <div className="tablet:grid-col-8 grid-col-12 padding-top-2">
             <FetchedTimeMessage
-              fetchedDateString={publicTrialSessionsHelper.fetchedDateString}
+              fetchedDateString={fetchedTrialSessionsTimestamp}
             ></FetchedTimeMessage>
             <Mobile>
               <div className="tablet:grid-col-4 grid-col-12 padding-top-1">
@@ -146,6 +153,7 @@ function NonMobilePublicTrialsSessions({
 
 function MobilePublicTrialsSessions({
   displayProgressSpinnerSequence,
+  fetchedTrialSessionsTimestamp,
   publicTrialSessionData,
   publicTrialSessionsHelper,
   resetPublicTrialSessionDataSequence,
@@ -176,7 +184,7 @@ function MobilePublicTrialsSessions({
     <Phone>
       <section className="usa-section grid-container">
         <FetchedTimeMessage
-          fetchedDateString={publicTrialSessionsHelper.fetchedDateString}
+          fetchedDateString={fetchedTrialSessionsTimestamp}
         ></FetchedTimeMessage>
         <div className="padding-top-3">
           <PublicTrialSessionsRemoteProceedingsCard />

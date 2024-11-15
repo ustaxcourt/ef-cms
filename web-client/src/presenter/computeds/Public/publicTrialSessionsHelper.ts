@@ -13,7 +13,6 @@ import { getTrialCitiesGroupedByState } from '@shared/business/utilities/trialSe
 import { state } from '@web-client/presenter/app-public.cerebral';
 
 export type PublicTrialSessionsHelperResults = {
-  fetchedDateString: string;
   sessionTypeOptions: {
     label: string;
     value: string;
@@ -86,7 +85,6 @@ const PAGE_SIZE = 100;
 export const publicTrialSessionsHelper = (
   get: Get,
 ): PublicTrialSessionsHelperResults => {
-  const fetchedTrialSessions = get(state['FetchedTrialSessions']);
   const trialSessionJudges = get(state.judges) || [];
   const {
     judges = {},
@@ -97,10 +95,6 @@ export const publicTrialSessionsHelper = (
   } = get(state.publicTrialSessionData);
 
   const trialSessions = get(state.trialSessionsPage.trialSessions) || [];
-  const fetchedDateString = fetchedTrialSessions.toFormat(
-    "MM/dd/yy hh:mm a 'Eastern'",
-  );
-
   const sessionTypeOptions = Object.values(SESSION_TYPES).map(sessionType => ({
     label: sessionType,
     value: sessionType,
@@ -162,7 +156,6 @@ export const publicTrialSessionsHelper = (
   const groupedTrialsSessions = groupTrialSessions(trialSessionRows);
 
   return {
-    fetchedDateString,
     filtersHaveBeenModified,
     groupedTrialsSessions,
     sessionTypeOptions,
