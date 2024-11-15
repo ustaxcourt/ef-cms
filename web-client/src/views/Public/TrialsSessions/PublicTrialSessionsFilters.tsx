@@ -17,7 +17,7 @@ const props = cerebralProps as unknown as PublicTrialSessionsFiltersProps;
 
 const PublicTrialSessionsFiltersDeps = {
   displayProgressSpinnerSequence: sequences.displayProgressSpinnerSequence,
-  publicTrialSessionData: state[props.ROOT],
+  publicTrialSessionsData: state[props.ROOT],
   publicTrialSessionsHelper: state.publicTrialSessionsHelper,
   updateFormValueSequence: sequences.updateFormValueSequence,
 };
@@ -29,7 +29,7 @@ export const PublicTrialSessionsFilters = connect<
   PublicTrialSessionsFiltersDeps,
   function ({
     displayProgressSpinnerSequence,
-    publicTrialSessionData,
+    publicTrialSessionsData,
     publicTrialSessionsHelper,
     ROOT,
     updateFormValueSequence,
@@ -44,7 +44,7 @@ export const PublicTrialSessionsFilters = connect<
       locations = {},
       proceedingType = 'All',
       sessionTypes = {},
-    } = publicTrialSessionData;
+    } = publicTrialSessionsData;
 
     const handleUpdateFormValue = (key: string, value: string | undefined) => {
       displayProgressSpinnerSequence({ timeInSeconds: 0.25 });
