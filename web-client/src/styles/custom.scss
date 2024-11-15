@@ -2358,3 +2358,8 @@ button.change-scanner-button {
   // This has higher importance than uwds padding-0
   padding: 0;
 }
+
+.double-border {
+  border-bottom: 1px solid !important;
+  margin-bottom: 5px !important;
+}
