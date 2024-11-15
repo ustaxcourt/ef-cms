@@ -105,6 +105,7 @@ export const ModalDialog = ({
       <FocusLock>
         <dialog
           open
+          aria-label={title}
           aria-modal="true"
           className="modal-screen"
           data-testid={dataTestId}
