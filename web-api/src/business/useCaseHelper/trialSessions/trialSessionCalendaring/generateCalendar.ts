@@ -93,9 +93,16 @@ export const generateCalendar = ({
         return typeof r === 'string';
       });
 
-      if (messages.length) {
-        scheduledTrialSession.ignoresConstraints = true;
-      }
+      messages.forEach(message => {
+        if (
+          message.startsWith(
+            'More than one special trial per week scheduled:',
+          ) ||
+          message.startsWith('More than two special trial sessions per week:')
+        ) {
+          scheduledTrialSession.ignoresConstraints = true;
+        }
+      });
 
       userMessages.push(...messages);
 
@@ -142,7 +149,7 @@ export const generateCalendar = ({
 
   return {
     caseCountsAndSessionsByCity,
-    userMessages,
+    userMessages: [...new Set(userMessages)],
   };
 };
 
