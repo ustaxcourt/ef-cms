@@ -10,18 +10,20 @@ import {
 import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import ExcelJS from 'exceljs';
 
-type ColumnObject = { header: string; key: string };
+type ColumnObject = { header: string; key: string; width?: number };
 
 const CITY_TITLE_CELL_LOCATION = 'A2';
 
 export const writeTrialSessionDataToExcel = async ({
   caseCountsAndSessionsByCity,
   incorrectSizeRegularCases,
+  userMessages,
   weeks,
 }: {
   weeks: string[];
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
   incorrectSizeRegularCases: EligibleCase[];
+  userMessages: string[];
 }) => {
   const workbook = new ExcelJS.Workbook();
   const worksheetOptions = { properties: { outlineLevelCol: 2 } };
@@ -45,9 +47,11 @@ export const writeTrialSessionDataToExcel = async ({
 
   worksheet.eachRow(row => {
     row.eachCell({ includeEmpty: true }, cell => {
-      const { border, fill } = getSessionCellData(cell.value);
+      const { alignment, border, fill, font } = getCellStyle(cell.value);
+      cell.alignment = alignment;
       cell.border = border;
       cell.fill = fill;
+      cell.font = font;
     });
   });
 
@@ -67,8 +71,11 @@ export const writeTrialSessionDataToExcel = async ({
 
   counterRow.eachCell(cell => {
     const cellLetter = cell.$col$row.split('$')[1];
-    const { border, value } = getCounterCellData(cellLetter, countColumnLength);
-
+    const { alignment, border, value } = getCounterCellData(
+      cellLetter,
+      countColumnLength,
+    );
+    cell.alignment = alignment;
     cell.border = border;
     cell.value = value;
   });
@@ -90,7 +97,6 @@ export const writeTrialSessionDataToExcel = async ({
   if (incorrectSizeRegularCases.length > 0) {
     const incorrectlySizedCasesTab = workbook.addWorksheet(
       'Incorrectly Sized Cases',
-      { properties: { tabColor: { argb: 'FFC0000' } } },
     );
 
     incorrectlySizedCasesTab.columns = [
@@ -103,6 +109,24 @@ export const writeTrialSessionDataToExcel = async ({
 
     getIncorrectlySizedCasesRows(incorrectSizeRegularCases).forEach(row => {
       incorrectlySizedCasesTab.addRow(row);
+    });
+  }
+
+  if (userMessages.length > 0) {
+    const warningsTab = workbook.addWorksheet('Warnings', {
+      properties: { tabColor: { argb: 'ffb50909' } },
+    });
+
+    warningsTab.columns = [
+      {
+        header: 'Warnings',
+        key: 'warning',
+        width: 75,
+      },
+    ];
+
+    userMessages.forEach(message => {
+      warningsTab.addRow([message]);
     });
   }
   return (await workbook.xlsx.writeBuffer()) as unknown as Buffer;
@@ -142,6 +166,7 @@ const getColumns = ({ weeks }: { weeks: string[] }): ColumnObject[] => {
     {
       header: 'City',
       key: 'city',
+      width: 17,
     },
   ];
 
@@ -149,28 +174,30 @@ const getColumns = ({ weeks }: { weeks: string[] }): ColumnObject[] => {
     columns.push({
       header: formatDateString(week, FORMATS.MD),
       key: week,
+      width: 8,
     });
   }
 
-  columns.push({
-    header: 'Small Cases',
-    key: 'initialSmallCaseCount',
-  });
+  columns = [
+    ...columns,
+    { header: 'Small Cases', key: 'initialSmallCaseCount', width: 10 },
+    {
+      header: 'Regular Cases',
+      key: 'initialRegularCaseCount',
+      width: 12,
+    },
+    {
+      header: 'Small Cases Remaining',
+      key: 'remainingSmallCaseCount',
+      width: 19,
+    },
+    {
+      header: 'Regular Cases Remaining',
+      key: 'remainingRegularCaseCount',
+      width: 20,
+    },
+  ];
 
-  columns.push({
-    header: 'Regular Cases',
-    key: 'initialRegularCaseCount',
-  });
-
-  columns.push({
-    header: 'Small Cases Remaining',
-    key: 'remainingSmallCaseCount',
-  });
-
-  columns.push({
-    header: 'Regular Cases Remaining',
-    key: 'remainingRegularCaseCount',
-  });
   return columns;
 };
 
@@ -199,9 +226,9 @@ const populateRow = ({
   };
 };
 
-const getSessionCellData = (
+const getCellStyle = (
   cellValue,
-): { border: object; fill: ExcelJS.Fill } => {
+): { border: object; fill: ExcelJS.Fill; font: object; alignment: object } => {
   const border = {
     bottom: { style: 'thin' },
     left: { style: 'thin' },
@@ -209,11 +236,13 @@ const getSessionCellData = (
     top: { style: 'thin' },
   };
   let fill;
+  let font = { color: { argb: 'ff000000' } };
+  let alignment = { horizontal: 'left', vertical: 'middle' };
 
   switch (cellValue) {
     case SESSION_TYPES.hybrid:
       fill = {
-        fgColor: { argb: 'ffFDB8AE' },
+        fgColor: { argb: 'fffee685' },
         pattern: 'solid',
         type: 'pattern',
       };
@@ -234,35 +263,37 @@ const getSessionCellData = (
       break;
     case SESSION_TYPES.special:
       fill = {
-        fgColor: { argb: 'ffD0C3E9' },
+        fgColor: { argb: 'ffffbe2e' },
         pattern: 'solid',
         type: 'pattern',
       };
       break;
     case 'Special*':
       fill = {
-        fgColor: { argb: 'ffFF0000' },
+        fgColor: { argb: 'ffb50909' },
         pattern: 'solid',
         type: 'pattern',
       };
+      font = { color: { argb: 'ffffffff' } };
       break;
     default:
       if (cellValue && typeof cellValue === 'string') {
         fill = {
-          fgColor: { argb: 'ff989ca3' },
+          fgColor: { argb: 'ffdcdee0' },
           pattern: 'solid',
           type: 'pattern',
         };
       }
       break;
   }
-  return { border, fill };
+  return { alignment, border, fill, font };
 };
 
 const getCounterCellData = (
   cellLetter,
   countColumnLength,
-): { border: object; value: ExcelJS.CellValue } => {
+): { alignment: object; border: object; value: ExcelJS.CellValue } => {
+  let alignment = { horizontal: 'left', vertical: 'middle' };
   const border = {
     bottom: { style: 'thin' },
     left: { style: 'thin' },
@@ -280,7 +311,7 @@ const getCounterCellData = (
       result: 0,
     };
   }
-  return { border, value };
+  return { alignment, border, value };
 };
 
 const formatCityName = (cityString: string): string => {

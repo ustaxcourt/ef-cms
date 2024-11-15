@@ -93,9 +93,23 @@ export const generateCalendar = ({
         return typeof r === 'string';
       });
 
-      if (messages.length) {
-        scheduledTrialSession.ignoresConstraints = true;
-      }
+      /**
+       * Any given item in the messages array represents an ignored constraint.
+       * For business reasons, not all constraints trigger a formatting change
+       * in the resulting spreadsheet: therefore, only two specific categories
+       * of ignored constraints will cause the session to have ignoresConstraints
+       * set to true.
+       */
+      messages.forEach(message => {
+        if (
+          message.startsWith(
+            'More than one special trial per week scheduled:',
+          ) ||
+          message.startsWith('More than two special trial sessions per week:')
+        ) {
+          scheduledTrialSession.ignoresConstraints = true;
+        }
+      });
 
       userMessages.push(...messages);
 
@@ -142,7 +156,7 @@ export const generateCalendar = ({
 
   return {
     caseCountsAndSessionsByCity,
-    userMessages,
+    userMessages: [...new Set(userMessages)],
   };
 };
 
