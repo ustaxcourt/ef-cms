@@ -43,18 +43,16 @@ function areAnyFiltersModified(
   sessionTypes: { [key: string]: string },
 ): boolean {
   const proceedingTypeModified = proceedingType !== 'All';
-  const judgesModified = Object.values(judges).filter(j => !!j).length;
-  const locationsModified = Object.values(locations).filter(l => !!l).length;
-  const sessionTypesModified = Object.values(sessionTypes).filter(
-    st => !!st,
-  ).length;
+  const judgesModified = Object.values(judges).some(Boolean);
+  const locationsModified = Object.values(locations).some(Boolean);
+  const sessionTypesModified = Object.values(sessionTypes).some(Boolean);
 
-  return (
-    !!proceedingTypeModified ||
-    !!judgesModified ||
-    !!locationsModified ||
-    !!sessionTypesModified
-  );
+  return [
+    proceedingTypeModified,
+    judgesModified,
+    locationsModified,
+    sessionTypesModified,
+  ].some(Boolean);
 }
 
 function groupTrialSessions(
