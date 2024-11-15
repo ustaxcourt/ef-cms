@@ -348,12 +348,13 @@ jobs:
             ./scripts/reindex/disable-reindex-cron.sh
 
   smoketests:
+    parallelism: 6
     docker:
       - image: *efcms-docker-image
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
+    resource_class: large
     steps:
       - git-shallow-clone/checkout
       - npm-and-cypress-install
@@ -366,7 +367,7 @@ jobs:
             ./scripts/env/env-for-circle.sh
       - run:
           name: 'Cypress Smoke Tests'
-          command: npm run cypress:smoketests
+          command: find cypress/deployed-and-local/integration -type f -name "*.cy.ts" | circleci tests run --split-by=timings --command 'paste -sd, - | xargs -I {} ./scripts/run-cypress.sh -s -t {}'
       - store_artifacts:
           path: /root/project/cypress/deployed-and-local/videos/
 
@@ -936,12 +937,10 @@ workflows:
           <<: *only-deployed-lower-environments
       - docker-image-zipper:
           <<: *only-deployed-lower-environments
-          requires:
-            - deploy
       - migrate:
           <<: *only-deployed-lower-environments
           requires:
-            - docker-image-zipper
+            - deploy
       - wait-for-migration:
           <<: *only-deployed-lower-environments
           type: approval
