@@ -20,14 +20,15 @@ import PQueue from 'p-queue';
 const todayISO = createISODateString();
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 const OUTPUT_FILENAME = `${OUTPUT_DIR}/stale-cases_${todayISO.split('T')[0]}.csv`;
-const CHUNK_SIZE = 50;
-const staleCases = {};
-
+const CONCURRENCY = 50;
+const YEAR_IN_DAYS = 365;
 const excludedCaseStatuses = [
   CASE_STATUS_TYPES.closed,
   CASE_STATUS_TYPES.closedDismissed,
   CASE_STATUS_TYPES.onAppeal,
 ];
+
+const staleCases = {};
 
 const getAllCasesNotInExcludedStatus = async ({
   applicationContext,
@@ -114,7 +115,7 @@ const isCaseStale = async ({
   });
   const deRcvdAt = mostRecentDocketEntry?.receivedAt;
   const deAge = deRcvdAt ? calculateDifferenceInDays(todayISO, deRcvdAt) : 0;
-  if (deAge > 364) {
+  if (deAge >= YEAR_IN_DAYS) {
     const judge = aCase.associatedJudge
       ?.replace('Chief Special Trial ', '')
       .replace('Special Trial ', '')
@@ -144,7 +145,7 @@ const isCaseStale = async ({
   console.log(
     `Found ${casesNotClosedOrOnAppeal.length} cases not closed or on appeal.`,
   );
-  const queue = new PQueue({ concurrency: CHUNK_SIZE });
+  const queue = new PQueue({ concurrency: CONCURRENCY });
   const funcs = casesNotClosedOrOnAppeal.map(
     (aCase: RawCase) => async () =>
       await isCaseStale({ aCase, applicationContext }),
@@ -155,8 +156,7 @@ const isCaseStale = async ({
 
   console.log(`Writing CSV to ${OUTPUT_FILENAME}...`);
   let output =
-    '"Docket Number","Case Caption","Case Status","Judge",' +
-    '"Last Document Filed On","Last Document Filed Age in Days"';
+    '"Docket Number","Caption","Status","Judge","Last Filed","Age in Days"';
   for (const docketNumber in staleCases) {
     output +=
       `\n"${docketNumber}","${staleCases[docketNumber].caption}",` +
