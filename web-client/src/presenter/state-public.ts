@@ -1,5 +1,7 @@
-import { PUBLIC_DOCKET_RECORD_FILTER_OPTIONS } from '../../../shared/src/business/entities/EntityConstants';
-import { PublicTrialSessionDetails } from '@web-api/business/useCases/trialSessions/getPublicTrialSessionDetailsInteractor';
+import {
+  PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
+  PUBLIC_TRIAL_SESSIONS_DATA_KEY,
+} from '../../../shared/src/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
@@ -48,6 +50,13 @@ const computeds = {
 };
 
 export const baseState = {
+  [PUBLIC_TRIAL_SESSIONS_DATA_KEY]: {} as {
+    judges?: { [key: string]: string };
+    locations?: { [key: string]: string };
+    sessionTypes?: { [key: string]: string };
+    pageNumber?: number;
+    proceedingType?: string;
+  },
   advancedSearchForm: {},
   advancedSearchTab: 'case',
   alertError: null,
@@ -76,13 +85,6 @@ export const baseState = {
     // used for the spinner that shows when waiting for network responses
     waitingForResponse: false,
     waitingForResponseRequests: 0,
-  },
-  publicTrialSessionData: {} as {
-    judges?: { [key: string]: string };
-    locations?: { [key: string]: string };
-    sessionTypes?: { [key: string]: string };
-    pageNumber?: number;
-    proceedingType?: string;
   },
   sessionMetadata: {
     docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,

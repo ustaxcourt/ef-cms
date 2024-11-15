@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon';
+import { PUBLIC_TRIAL_SESSIONS_DATA_KEY } from '@shared/business/entities/EntityConstants';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { publicTrialSessionsHelper } from '@web-client/presenter/computeds/Public/publicTrialSessionsHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -13,22 +14,11 @@ describe('publicTrialSessionsHelper', () => {
     year: 2024,
   });
 
-  it('should generate the correct "fetchedDateString" string', () => {
-    const { fetchedDateString } = runCompute(publicTrialSessionsHelper, {
-      state: {
-        FetchedTrialSessions: TEST_TIME,
-        publicTrialSessionData: {},
-      },
-    });
-
-    expect(fetchedDateString).toBe('10/22/24 12:00 AM Eastern');
-  });
-
-  it('should return the "sessiontTypeOptions" value correctly', () => {
+  it('should return the "sessionTypeOptions" value correctly', () => {
     const { sessionTypeOptions } = runCompute(publicTrialSessionsHelper, {
       state: {
         FetchedTrialSessions: TEST_TIME,
-        publicTrialSessionData: {},
+        [PUBLIC_TRIAL_SESSIONS_DATA_KEY]: {},
       },
     });
 
@@ -64,7 +54,7 @@ describe('publicTrialSessionsHelper', () => {
     const { trialCitiesByState } = runCompute(publicTrialSessionsHelper, {
       state: {
         FetchedTrialSessions: TEST_TIME,
-        publicTrialSessionData: {},
+        [PUBLIC_TRIAL_SESSIONS_DATA_KEY]: {},
       },
     });
 
@@ -75,13 +65,13 @@ describe('publicTrialSessionsHelper', () => {
     const { trialSessionJudgeOptions } = runCompute(publicTrialSessionsHelper, {
       state: {
         FetchedTrialSessions: TEST_TIME,
+        [PUBLIC_TRIAL_SESSIONS_DATA_KEY]: {},
         judges: [
           { name: 'TEST_JUDGE_1', userId: '1' },
           { name: 'TEST_JUDGE_2', userId: '2' },
           { name: 'TEST_JUDGE_3', userId: '3' },
           { name: 'TEST_JUDGE_4', userId: '4' },
         ],
-        publicTrialSessionData: {},
       },
     });
 
@@ -112,7 +102,7 @@ describe('publicTrialSessionsHelper', () => {
         {
           state: {
             FetchedTrialSessions: TEST_TIME,
-            publicTrialSessionData: {},
+            [PUBLIC_TRIAL_SESSIONS_DATA_KEY]: {},
           },
         },
       );
@@ -126,7 +116,7 @@ describe('publicTrialSessionsHelper', () => {
         {
           state: {
             FetchedTrialSessions: TEST_TIME,
-            publicTrialSessionData: {
+            [PUBLIC_TRIAL_SESSIONS_DATA_KEY]: {
               proceedingType: 'SOME_OPTION',
             },
           },
@@ -142,7 +132,7 @@ describe('publicTrialSessionsHelper', () => {
         {
           state: {
             FetchedTrialSessions: TEST_TIME,
-            publicTrialSessionData: {
+            [PUBLIC_TRIAL_SESSIONS_DATA_KEY]: {
               judges: {
                 TEST_JUDGE: 'TEST_JUDGE',
               },
@@ -160,7 +150,7 @@ describe('publicTrialSessionsHelper', () => {
         {
           state: {
             FetchedTrialSessions: TEST_TIME,
-            publicTrialSessionData: {
+            [PUBLIC_TRIAL_SESSIONS_DATA_KEY]: {
               locations: {
                 TEST_LOCATION: 'TEST_LOCATION',
               },
@@ -178,7 +168,7 @@ describe('publicTrialSessionsHelper', () => {
         {
           state: {
             FetchedTrialSessions: TEST_TIME,
-            publicTrialSessionData: {
+            [PUBLIC_TRIAL_SESSIONS_DATA_KEY]: {
               sessionTypes: {
                 TEST_SESSION_TYPE: 'TEST_SESSION_TYPE',
               },
@@ -229,7 +219,7 @@ describe('publicTrialSessionsHelper', () => {
       const { trialSessionsCount } = runCompute(publicTrialSessionsHelper, {
         state: {
           FetchedTrialSessions: TEST_TIME,
-          publicTrialSessionData: {},
+          [PUBLIC_TRIAL_SESSIONS_DATA_KEY]: {},
           trialSessionsPage: {
             trialSessions: TEST_TRIAL_SESSIONS,
           },
@@ -258,7 +248,7 @@ describe('publicTrialSessionsHelper', () => {
         {
           state: {
             FetchedTrialSessions: TEST_TIME,
-            publicTrialSessionData: {
+            [PUBLIC_TRIAL_SESSIONS_DATA_KEY]: {
               proceedingType: TEST_PROCEEDING_TYPE,
             },
             trialSessionsPage: {
@@ -315,7 +305,7 @@ describe('publicTrialSessionsHelper', () => {
         {
           state: {
             FetchedTrialSessions: TEST_TIME,
-            publicTrialSessionData: {
+            [PUBLIC_TRIAL_SESSIONS_DATA_KEY]: {
               judges: {
                 [TEST_JUDGE_NAME]: TEST_JUDGE_NAME,
               },
@@ -374,7 +364,7 @@ describe('publicTrialSessionsHelper', () => {
         {
           state: {
             FetchedTrialSessions: TEST_TIME,
-            publicTrialSessionData: {
+            [PUBLIC_TRIAL_SESSIONS_DATA_KEY]: {
               locations: {
                 [TEST_LOCATION]: TEST_LOCATION,
               },
@@ -433,7 +423,7 @@ describe('publicTrialSessionsHelper', () => {
         {
           state: {
             FetchedTrialSessions: TEST_TIME,
-            publicTrialSessionData: {
+            [PUBLIC_TRIAL_SESSIONS_DATA_KEY]: {
               sessionTypes: {
                 [TEST_SESSION_TYPE]: TEST_SESSION_TYPE,
               },
