@@ -16,18 +16,18 @@ export const setAddEditSessionNoteModalStateAction = ({
   const currentUser = get(state.user);
   const { USER_ROLES } = applicationContext.getConstants();
   const notes = get(state.trialSessionWorkingCopy.sessionNotes);
-  const trialSessionDetail = get(state.trialSession);
+  const trialSessionDetails = get(state.trialSession);
 
   const startDate = applicationContext
     .getUtilities()
-    .formatDateString(trialSessionDetail.startDate, 'MMDDYY');
+    .formatDateString(trialSessionDetails.startDate, 'MMDDYY');
 
   const notesLabel =
     currentUser.role === USER_ROLES.trialClerk ? 'User notes' : 'Judge’s notes';
 
   store.set(
     state.modal.heading,
-    `${startDate}: ${trialSessionDetail.trialLocation}`,
+    `${startDate}: ${trialSessionDetails.trialLocation}`,
   );
   store.set(state.modal.notes, notes);
   store.set(state.modal.notesLabel, notesLabel);

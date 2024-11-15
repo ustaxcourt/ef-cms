@@ -18,7 +18,7 @@ export const PublicMobileTrialSessionsDataRow = function ({
   startDate,
   swingSession,
   trialLocation,
-  // trialSessionId,
+  trialSessionId,
 }: PublicMobileTrialSessionsDataRowProps) {
   return (
     <>
@@ -46,10 +46,9 @@ export const PublicMobileTrialSessionsDataRow = function ({
                 />
               </span>
             )}
-            {/* TODO: ENABLE ONCE 10461 IS COMPLETE */}
-            {/* <a href={`/trial-session-detail/${trialSessionId}`}> */}
-            {trialLocation}
-            {/* </a> */}
+            <a href={`/trial-session-detail/${trialSessionId}`}>
+              {trialLocation}
+            </a>
           </div>
 
           <div className="text-semibold">Session Type</div>

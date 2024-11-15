@@ -1,9 +1,9 @@
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { setDefaultTrialSessionDetailTabAction } from './setDefaultTrialSessionDetailTabAction';
+import { setDefaultTrialSessionDetailsTabAction } from './setDefaultTrialSessionDetailsTabAction';
 
-describe('setDefaultTrialSessionDetailTabAction', () => {
+describe('setDefaultTrialSessionDetailsTabAction', () => {
   it('sets default trial session detail tab', async () => {
-    const result = await runAction(setDefaultTrialSessionDetailTabAction, {
+    const result = await runAction(setDefaultTrialSessionDetailsTabAction, {
       state: {
         trialSessionDetailsTab: {
           calendaredCaseList: 'hi',
