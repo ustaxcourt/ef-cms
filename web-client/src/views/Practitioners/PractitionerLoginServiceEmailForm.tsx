@@ -5,14 +5,23 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const PractitionerLoginServiceEmailForm = connect(
-  {
-    createPractitionerUserHelper: state.createPractitionerUserHelper,
-    form: state.form,
-    updateFormValueSequence: sequences.updateFormValueSequence,
-    validateSequence: sequences[props.validateSequenceName],
-    validationErrors: state.validationErrors,
-  },
+type PractitionerLoginServiceEmailFormProps = {
+  emailFormName: string;
+};
+
+const practitionerLoginServiceEmailFormDependencies = {
+  createPractitionerUserHelper: state.createPractitionerUserHelper,
+  form: state.form,
+  updateFormValueSequence: sequences.updateFormValueSequence,
+  validateSequence: sequences[props.validateSequenceName],
+  validationErrors: state.validationErrors,
+};
+
+export const PractitionerLoginServiceEmailForm = connect<
+  PractitionerLoginServiceEmailFormProps,
+  typeof practitionerLoginServiceEmailFormDependencies
+>(
+  practitionerLoginServiceEmailFormDependencies,
   function PractitionerLoginServiceEmailForm({
     createPractitionerUserHelper,
     emailFormName,
