@@ -92,7 +92,7 @@ export const TrialSessionInformation = connect(
         <div className="grid-container padding-x-0">
           <div className="grid-row">
             <div className="grid-col-auto">
-              <h1>
+              <h2 className="h1-size">
                 Session Information
                 {trialSessionHeaderHelper.showSwitchToWorkingCopy && (
                   <a
@@ -113,7 +113,7 @@ export const TrialSessionInformation = connect(
                     Edit
                   </Button>
                 )}
-              </h1>
+              </h2>
             </div>
             <div className="grid-col-fill display-flex flex-justify-end">
               {formattedTrialSessionDetails.canDelete && (

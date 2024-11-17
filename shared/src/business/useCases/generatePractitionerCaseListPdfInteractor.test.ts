@@ -1,5 +1,6 @@
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { generatePractitionerCaseListPdfInteractor } from './generatePractitionerCaseListPdfInteractor';
 import {
@@ -19,7 +20,7 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
     applicationContext
       .getUseCases()
       .getPractitionerCasesInteractor.mockImplementation(() => {
-        throw new Error('Unauthorized');
+        throw new UnauthorizedError('Unauthorized to view practitioners cases');
       });
     await expect(
       generatePractitionerCaseListPdfInteractor(
@@ -29,7 +30,7 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
         },
         mockPetitionerUser,
       ),
-    ).rejects.toThrow('Unauthorized');
+    ).rejects.toThrow('Unauthorized to view practitioners cases');
   });
 
   it('looks up the practitioner by the given userId', async () => {
