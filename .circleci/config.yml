@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.16
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.17
 
 parameters:
   run_build_and_deploy:
@@ -261,9 +261,7 @@ jobs:
       - run:
           name: Run Postgres Migration
           command: |
-            OUTPUT_ONLY=true npm run deploy:allColors $ENV
-            POSTGRES_HOST=$(cat ./web-api/terraform/applyables/allColors/output.json | jq -r '.rds_host_name.value')
-            POSTGRES_HOST=$POSTGRES_HOST POSTGRES_USER=$POSTGRES_USER NODE_ENV=production npm run migration:postgres
+            NODE_ENV=production npm run migration:postgres
       - run:
           name: Enable Check Migration Status Cron
           command: |
@@ -350,12 +348,13 @@ jobs:
             ./scripts/reindex/disable-reindex-cron.sh
 
   smoketests:
+    parallelism: 6
     docker:
       - image: *efcms-docker-image
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
+    resource_class: large
     steps:
       - git-shallow-clone/checkout
       - npm-and-cypress-install
@@ -368,7 +367,7 @@ jobs:
             ./scripts/env/env-for-circle.sh
       - run:
           name: 'Cypress Smoke Tests'
-          command: npm run cypress:smoketests
+          command: find cypress/deployed-and-local/integration -type f -name "*.cy.ts" | circleci tests run --split-by=timings --command 'paste -sd, - | xargs -I {} ./scripts/run-cypress.sh -s -t {}'
       - store_artifacts:
           path: /root/project/cypress/deployed-and-local/videos/
 
@@ -870,7 +869,7 @@ jobs:
               exit 1
             fi
       - run:
-          name: Deploy Check Glue Job Run State Cron Lambda
+          name: Restore Postgres
           command: |
             TARGET_ENV=$LOWER_ENV TARGET_ACCOUNT_ID="${LOWER_ENV_ACCOUNT_ID}" npx ts-node --transpileOnly scripts/postgres/restoreDbFromSource.ts
 
@@ -938,12 +937,10 @@ workflows:
           <<: *only-deployed-lower-environments
       - docker-image-zipper:
           <<: *only-deployed-lower-environments
-          requires:
-            - deploy
       - migrate:
           <<: *only-deployed-lower-environments
           requires:
-            - docker-image-zipper
+            - deploy
       - wait-for-migration:
           <<: *only-deployed-lower-environments
           type: approval

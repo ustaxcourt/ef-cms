@@ -23,7 +23,7 @@ export const getUsersInSectionInteractor = async (
     rolePermission = ROLE_PERMISSIONS.GET_USERS_IN_SECTION;
   }
 
-  if (!isAuthorized(authorizedUser, rolePermission)) {
+  if (!!authorizedUser && !isAuthorized(authorizedUser, rolePermission)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
