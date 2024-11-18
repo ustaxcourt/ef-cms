@@ -5,6 +5,7 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { UserCaseNote } from '../../../../../shared/src/business/entities/notes/UserCaseNote';
+import { upsertUserCaseNote } from '@web-api/persistence/postgres/userCaseNotes/upsertUserCaseNote';
 
 export const updateUserCaseNoteInteractor = async (
   applicationContext,
@@ -27,14 +28,11 @@ export const updateUserCaseNoteInteractor = async (
     docketNumber,
     notes,
     userId,
+  }).validate();
+
+  await upsertUserCaseNote({
+    caseNoteToUpsert: caseNoteEntity,
   });
 
-  const caseNoteToUpdate = caseNoteEntity.validate().toRawObject();
-
-  await applicationContext.getPersistenceGateway().updateUserCaseNote({
-    applicationContext,
-    caseNoteToUpdate,
-  });
-
-  return caseNoteToUpdate;
+  return caseNoteEntity;
 };

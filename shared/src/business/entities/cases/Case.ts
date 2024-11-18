@@ -280,7 +280,6 @@ export class Case extends JoiValidationEntity {
         );
       }
     }
-
     return interpolatedCases;
   }
 
