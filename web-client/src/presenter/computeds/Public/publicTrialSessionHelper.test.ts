@@ -242,7 +242,7 @@ describe('publicTrialSessionsHelper', () => {
       expect(trialSessionRows).toEqual([
         {
           formattedSessionWeekStartDate: 'November 23, 2020',
-          sessionWeekStartDate: '2020-11-23T05:00:00.000+00:00',
+          sessionWeekStartDate: '2020-11-23T00:00:00.000-05:00',
         },
         {
           alertMessageForNOTT: '',
@@ -300,7 +300,7 @@ describe('publicTrialSessionsHelper', () => {
       expect(trialSessionRows).toEqual([
         {
           formattedSessionWeekStartDate: 'November 23, 2020',
-          sessionWeekStartDate: '2020-11-23T05:00:00.000+00:00',
+          sessionWeekStartDate: '2020-11-23T00:00:00.000-05:00',
         },
         {
           alertMessageForNOTT: '',
@@ -358,7 +358,7 @@ describe('publicTrialSessionsHelper', () => {
       expect(trialSessionRows).toEqual([
         {
           formattedSessionWeekStartDate: 'November 23, 2020',
-          sessionWeekStartDate: '2020-11-23T05:00:00.000+00:00',
+          sessionWeekStartDate: '2020-11-23T00:00:00.000-05:00',
         },
         {
           alertMessageForNOTT: '',
@@ -416,7 +416,7 @@ describe('publicTrialSessionsHelper', () => {
       expect(trialSessionRows).toEqual([
         {
           formattedSessionWeekStartDate: 'November 23, 2020',
-          sessionWeekStartDate: '2020-11-23T05:00:00.000+00:00',
+          sessionWeekStartDate: '2020-11-23T00:00:00.000-05:00',
         },
         {
           alertMessageForNOTT: '',

@@ -1,3 +1,9 @@
+import {
+  ASCENDING,
+  KEYS,
+  SORT_ASCENDING_TEXT,
+  SORT_DESCENDING_TEXT,
+} from '@shared/business/entities/EntityConstants';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordHeader } from './DocketRecordHeader';
 import { DocketRecordOverlay } from './DocketRecordOverlay';
@@ -5,6 +11,7 @@ import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
 import { SealDocketEntryModal } from './SealDocketEntryModal';
+import { SortableColumn } from '@web-client/ustc-ui/Table/SortableColumn';
 import { UnsealDocketEntryModal } from './UnsealDocketEntryModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -24,6 +31,8 @@ export const DocketRecord = connect(
     setSelectedDocumentsForDownloadSequence:
       sequences.setSelectedDocumentsForDownloadSequence,
     showModal: state.modal.showModal,
+    sortTableSequence: sequences.sortTableSequence,
+    tableSort: state[KEYS.DOCKET_RECORD_TABLE_SORT],
   },
 
   function DocketRecord({
@@ -33,6 +42,8 @@ export const DocketRecord = connect(
     openUnsealDocketEntryModalSequence,
     setSelectedDocumentsForDownloadSequence,
     showModal,
+    sortTableSequence,
+    tableSort,
   }) {
     const selectAllCheckboxRef = useRef<HTMLInputElement>(null);
 
@@ -84,21 +95,79 @@ export const DocketRecord = connect(
                       />
                     </th>
                   )}
-                  <th className="center-column hide-on-mobile">
-                    <span>
-                      <span className="usa-sr-only">Number</span>
-                      <span aria-hidden="true">No.</span>
-                    </span>
-                  </th>
-                  <th>Filed Date</th>
-                  <th className="center-column hide-on-mobile">Event</th>
+                  <SortableHeader
+                    hideOnMobile={true}
+                    screenReaderTitle="Number"
+                    sortField="index"
+                    tableSort={tableSort}
+                    title="No."
+                    onSort={sortTableSequence}
+                  />
+                  <SortableHeader
+                    sortField="sortingFilingDate"
+                    sortType="date"
+                    tableSort={tableSort}
+                    title="Filed Date"
+                    onSort={sortTableSequence}
+                  />
+                  <SortableHeader
+                    hideOnMobile={true}
+                    sortField="eventCode"
+                    sortType="string"
+                    tableSort={tableSort}
+                    title="Event"
+                    onSort={sortTableSequence}
+                  />
                   <th aria-hidden="true" className="icon-column" />
-                  <th>Filings and Proceedings</th>
-                  <th className="hide-on-mobile">Pages</th>
-                  <th className="hide-on-mobile">Filed By</th>
-                  <th className="hide-on-mobile">Action</th>
-                  <th>Served</th>
-                  <th className="center-column hide-on-mobile">Parties</th>
+                  <SortableHeader
+                    sortField="descriptionDisplay"
+                    sortType="string"
+                    tableSort={tableSort}
+                    title="Filings and Proceedings"
+                    onSort={sortTableSequence}
+                  />
+                  <SortableHeader
+                    className="hide-on-mobile"
+                    hideOnMobile={true}
+                    sortField="numberOfPages"
+                    tableSort={tableSort}
+                    title="Pages"
+                    onSort={sortTableSequence}
+                  />
+                  <SortableHeader
+                    className="hide-on-mobile"
+                    hideOnMobile={true}
+                    sortField="filedBy"
+                    sortType="string"
+                    tableSort={tableSort}
+                    title="Filed By"
+                    onSort={sortTableSequence}
+                  />
+                  <SortableHeader
+                    className="hide-on-mobile"
+                    hideOnMobile={true}
+                    sortField="action"
+                    sortType="string"
+                    tableSort={tableSort}
+                    title="Action"
+                    onSort={sortTableSequence}
+                  />
+                  <SortableHeader
+                    sortField="servedAt"
+                    sortType="date"
+                    tableSort={tableSort}
+                    title="Served"
+                    onSort={sortTableSequence}
+                  />
+                  <SortableHeader
+                    className="center-column hide-on-mobile"
+                    hideOnMobile={true}
+                    sortField="servedPartiesCode"
+                    sortType="string"
+                    tableSort={tableSort}
+                    title="Parties"
+                    onSort={sortTableSequence}
+                  />
                   {docketRecordHelper.showEditOrSealDocketRecordEntry && (
                     <th>&nbsp;</th>
                   )}
@@ -137,7 +206,10 @@ export const DocketRecord = connect(
                             )}
                           </td>
                         )}
-                        <td className="center-column hide-on-mobile">
+                        <td
+                          className="center-column hide-on-mobile"
+                          data-testid={`docket-entry-index-${entry.index}`}
+                        >
                           {entry.index}
                         </td>
                         <td>
@@ -146,13 +218,14 @@ export const DocketRecord = connect(
                               entry.isStricken && 'stricken-docket-record',
                               'no-wrap',
                             )}
+                            data-testid={`docket-entry-filedDate-${entry.index}`}
                           >
                             {entry.createdAtFormatted}
                           </span>
                         </td>
                         <td
                           className="center-column hide-on-mobile"
-                          data-testid={`docket-entry-index-${entry.index}-eventCode`}
+                          data-testid={`docket-entry-eventCode-${entry.index}`}
                         >
                           {entry.eventCode}
                         </td>
@@ -164,14 +237,29 @@ export const DocketRecord = connect(
                             />
                           ))}
                         </td>
-                        <td>
+                        <td
+                          data-testid={`docket-entry-filingsAndProceedings-${entry.index}`}
+                        >
                           <FilingsAndProceedings entry={entry} />
                         </td>
-                        <td className="hide-on-mobile number-of-pages">
+                        <td
+                          className="hide-on-mobile number-of-pages"
+                          data-testid="docket-entry-numberOfPages"
+                        >
                           {entry.numberOfPages}
                         </td>
-                        <td className="hide-on-mobile">{entry.filedBy}</td>
-                        <td className="hide-on-mobile">{entry.action}</td>
+                        <td
+                          className="hide-on-mobile"
+                          data-testid="docket-entry-filedBy"
+                        >
+                          {entry.filedBy}
+                        </td>
+                        <td
+                          className="hide-on-mobile"
+                          data-testid="docket-entry-action"
+                        >
+                          {entry.action}
+                        </td>
                         <td data-testid="docket-record-cell-not-served">
                           {entry.showNotServed && (
                             <span className="text-semibold not-served">
@@ -184,7 +272,7 @@ export const DocketRecord = connect(
                         </td>
                         <td
                           className="center-column hide-on-mobile"
-                          data-testid={`docket-entry-index-${entry.index}-servedPartiesCode`}
+                          data-testid={`docket-entry-servedPartiesCode-${entry.index}`}
                         >
                           {entry.showServed && entry.servedPartiesCode}
                         </td>
@@ -287,3 +375,54 @@ export const DocketRecord = connect(
 );
 
 DocketRecord.displayName = 'DocketRecord';
+
+function SortableHeader({
+  className,
+  hideOnMobile,
+  onSort,
+  screenReaderTitle,
+  sortField,
+  sortType,
+  tableSort,
+  title,
+}: {
+  className?: string;
+  onSort: (sort: {
+    sortField: string;
+    sortOrder: 'asc' | 'desc';
+    root: string;
+  }) => void;
+  screenReaderTitle?: string;
+  sortField: string;
+  sortType?: 'string' | 'date';
+  tableSort: {
+    sortField: string;
+    sortOrder: 'asc' | 'desc';
+  };
+  title: string;
+  hideOnMobile?: boolean;
+}) {
+  return (
+    <th className={hideOnMobile ? 'hide-on-mobile' : ''}>
+      <SortableColumn
+        ascText={SORT_ASCENDING_TEXT[sortType!]}
+        className={className}
+        currentlySortedField={tableSort.sortField}
+        currentlySortedOrder={tableSort.sortOrder}
+        data-testid={`${sortField}-sortable-button`}
+        defaultSortOrder={ASCENDING}
+        descText={SORT_DESCENDING_TEXT[sortType!]}
+        hasRows={true}
+        screenReaderTitle={screenReaderTitle}
+        sortField={sortField}
+        title={title}
+        onClickSequence={sortTableInfo =>
+          onSort({
+            ...sortTableInfo,
+            root: KEYS.DOCKET_RECORD_TABLE_SORT,
+          })
+        }
+      />
+    </th>
+  );
+}

@@ -387,7 +387,7 @@ describe('filePetitionHelper', () => {
           user: petitionerUser,
         },
       });
-      expect(result.primaryContactNameLabel).toEqual('Full Name');
+      expect(result.primaryContactNameLabel).toEqual('Full name');
     });
     it('should return the correct primary contact name label when filing as a private practitioner', () => {
       const result = runCompute(filePetitionHelper, {
