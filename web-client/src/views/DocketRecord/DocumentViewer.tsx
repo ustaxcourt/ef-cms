@@ -99,7 +99,7 @@ export const DocumentViewer = connect(
                               <FontAwesomeIcon
                                 className="top-neg-2px fa-icon-red float-right position-relative"
                                 icon={['fa', 'star']}
-                                title="is untouched"
+                                title="Is untouched"
                               />
                             )}
                           </div>

@@ -1,3 +1,5 @@
+import { CasePublicSearchResultsType } from '@web-api/persistence/elasticsearch/casePublicSearch';
+import { PublicClientState } from '@web-client/presenter/state-public';
 import { applicationContextForClient } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-public';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -14,7 +16,10 @@ describe('submitPublicCaseAdvancedSearchAction', () => {
   });
 
   it('gets the public case information', async () => {
-    await runAction(submitPublicCaseAdvancedSearchAction, {
+    await runAction<
+      { searchResults: CasePublicSearchResultsType },
+      PublicClientState
+    >(submitPublicCaseAdvancedSearchAction, {
       modules: {
         presenter,
       },

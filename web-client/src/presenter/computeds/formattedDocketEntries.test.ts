@@ -1009,7 +1009,7 @@ describe('formattedDocketEntries', () => {
       expect(result).toEqual([
         {
           icon: ['fas', 'file-alt'],
-          title: 'is paper',
+          title: 'Is paper',
         },
       ]);
     });
@@ -1028,7 +1028,7 @@ describe('formattedDocketEntries', () => {
       expect(result).toEqual([
         {
           icon: ['fas', 'thumbtack'],
-          title: 'in progress',
+          title: 'In progress',
         },
       ]);
     });
@@ -1046,7 +1046,7 @@ describe('formattedDocketEntries', () => {
       expect(result).toEqual([
         {
           icon: ['fa', 'star'],
-          title: 'is untouched',
+          title: 'Is untouched',
         },
       ]);
     });
@@ -1064,7 +1064,7 @@ describe('formattedDocketEntries', () => {
         {
           className: 'fa-spin spinner',
           icon: ['fa-spin', 'spinner'],
-          title: 'is loading',
+          title: 'Is loading',
         },
       ]);
     });

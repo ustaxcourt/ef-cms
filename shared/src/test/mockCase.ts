@@ -5,6 +5,7 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
+  PROCEDURE_TYPES_MAP,
   SERVICE_INDICATOR_TYPES,
 } from '../business/entities/EntityConstants';
 import {
@@ -512,4 +513,12 @@ export const MOCK_CAV_CONSOLIDATED_MEMBER_CASE = {
   ],
   sortableDocketNumber: 2019000110,
   status: CASE_STATUS_TYPES.cav,
+};
+
+export const MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING: RawCase = {
+  ...MOCK_SUBMITTED_CASE,
+  leadDocketNumber: undefined,
+  preferredTrialCity: 'Washington, District of Columbia',
+  procedureType: PROCEDURE_TYPES_MAP.regular,
+  status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
 };
