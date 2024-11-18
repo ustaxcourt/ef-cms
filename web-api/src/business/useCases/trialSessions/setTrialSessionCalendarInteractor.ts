@@ -2,15 +2,15 @@ import {
   AuthUser,
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '../../../../../shared/src/business/entities/EntityConstants';
-import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '@shared/business/entities/EntityConstants';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { flatten, partition, uniq } from 'lodash';
 import PQueue from 'p-queue';
