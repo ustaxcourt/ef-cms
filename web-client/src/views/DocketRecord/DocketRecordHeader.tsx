@@ -15,7 +15,6 @@ export const DocketRecordMobileHeader = ({
   gotoPrintableDocketRecordSequence,
   sessionMetadata,
   sortTableSequence,
-  updateSessionMetadataSequence,
 }: {
   docketNumber: string;
   filterOptions: Record<string, string>;
@@ -23,10 +22,6 @@ export const DocketRecordMobileHeader = ({
     docketNumber: string;
   }) => void;
   sessionMetadata: any;
-  updateSessionMetadataSequence: (props: {
-    label: string;
-    value: string;
-  }) => void;
   sortTableSequence: (props: {
     sortField: string;
     sortOrder: 'asc' | 'desc';
@@ -54,7 +49,6 @@ export const DocketRecordMobileHeader = ({
                 ...SORTING_CONVERSION_DICTIONARY[option.value],
                 root: KEYS.DOCKET_RECORD_TABLE_SORT,
               });
-              updateSessionMetadataSequence(option);
             }}
           />
         </div>
@@ -152,7 +146,6 @@ export const DocketRecordHeader = connect(
     showModal: state.modal.showModal,
     sortTableSequence: sequences.sortTableSequence,
     toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
-    updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
   },
   function DocketRecordHeader({
     DOCKET_RECORD_FILTER_OPTIONS,
@@ -164,7 +157,6 @@ export const DocketRecordHeader = connect(
     sessionMetadata,
     showModal,
     sortTableSequence,
-    updateSessionMetadataSequence,
   }) {
     return (
       <React.Fragment>
@@ -221,7 +213,6 @@ export const DocketRecordHeader = connect(
               }
               sessionMetadata={sessionMetadata}
               sortTableSequence={sortTableSequence}
-              updateSessionMetadataSequence={updateSessionMetadataSequence}
             />
           </Phone>
         </div>
