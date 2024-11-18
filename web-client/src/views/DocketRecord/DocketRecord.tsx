@@ -101,24 +101,14 @@ export const DocketRecord = connect(
                     sortField="index"
                     tableSort={tableSort}
                     title="No."
-                    onSort={sortTableInfo =>
-                      sortTableSequence({
-                        ...sortTableInfo,
-                        root: KEYS.DOCKET_RECORD_TABLE_SORT,
-                      })
-                    }
+                    onSort={sortTableSequence}
                   />
                   <SortableHeader
                     sortField="sortingFilingDate"
                     sortType="date"
                     tableSort={tableSort}
                     title="Filed Date"
-                    onSort={sortTableInfo =>
-                      sortTableSequence({
-                        ...sortTableInfo,
-                        root: KEYS.DOCKET_RECORD_TABLE_SORT,
-                      })
-                    }
+                    onSort={sortTableSequence}
                   />
                   <SortableHeader
                     hideOnMobile={true}
@@ -126,12 +116,7 @@ export const DocketRecord = connect(
                     sortType="string"
                     tableSort={tableSort}
                     title="Event"
-                    onSort={sortTableInfo =>
-                      sortTableSequence({
-                        ...sortTableInfo,
-                        root: KEYS.DOCKET_RECORD_TABLE_SORT,
-                      })
-                    }
+                    onSort={sortTableSequence}
                   />
                   <th aria-hidden="true" className="icon-column" />
                   <SortableHeader
@@ -139,12 +124,7 @@ export const DocketRecord = connect(
                     sortType="string"
                     tableSort={tableSort}
                     title="Filings and Proceedings"
-                    onSort={sortTableInfo =>
-                      sortTableSequence({
-                        ...sortTableInfo,
-                        root: KEYS.DOCKET_RECORD_TABLE_SORT,
-                      })
-                    }
+                    onSort={sortTableSequence}
                   />
                   <SortableHeader
                     className="hide-on-mobile"
@@ -152,12 +132,7 @@ export const DocketRecord = connect(
                     sortField="numberOfPages"
                     tableSort={tableSort}
                     title="Pages"
-                    onSort={sortTableInfo =>
-                      sortTableSequence({
-                        ...sortTableInfo,
-                        root: KEYS.DOCKET_RECORD_TABLE_SORT,
-                      })
-                    }
+                    onSort={sortTableSequence}
                   />
                   <SortableHeader
                     className="hide-on-mobile"
@@ -166,12 +141,7 @@ export const DocketRecord = connect(
                     sortType="string"
                     tableSort={tableSort}
                     title="Filed By"
-                    onSort={sortTableInfo =>
-                      sortTableSequence({
-                        ...sortTableInfo,
-                        root: KEYS.DOCKET_RECORD_TABLE_SORT,
-                      })
-                    }
+                    onSort={sortTableSequence}
                   />
                   <SortableHeader
                     className="hide-on-mobile"
@@ -180,24 +150,14 @@ export const DocketRecord = connect(
                     sortType="string"
                     tableSort={tableSort}
                     title="Action"
-                    onSort={sortTableInfo =>
-                      sortTableSequence({
-                        ...sortTableInfo,
-                        root: KEYS.DOCKET_RECORD_TABLE_SORT,
-                      })
-                    }
+                    onSort={sortTableSequence}
                   />
                   <SortableHeader
                     sortField="servedAt"
                     sortType="date"
                     tableSort={tableSort}
                     title="Served"
-                    onSort={sortTableInfo =>
-                      sortTableSequence({
-                        ...sortTableInfo,
-                        root: KEYS.DOCKET_RECORD_TABLE_SORT,
-                      })
-                    }
+                    onSort={sortTableSequence}
                   />
                   <SortableHeader
                     className="center-column hide-on-mobile"
@@ -206,12 +166,7 @@ export const DocketRecord = connect(
                     sortType="string"
                     tableSort={tableSort}
                     title="Parties"
-                    onSort={sortTableInfo =>
-                      sortTableSequence({
-                        ...sortTableInfo,
-                        root: KEYS.DOCKET_RECORD_TABLE_SORT,
-                      })
-                    }
+                    onSort={sortTableSequence}
                   />
                   {docketRecordHelper.showEditOrSealDocketRecordEntry && (
                     <th>&nbsp;</th>
@@ -461,7 +416,12 @@ export function SortableHeader({
         screenReaderTitle={screenReaderTitle}
         sortField={sortField}
         title={title}
-        onClickSequence={onSort}
+        onClickSequence={sortTableInfo =>
+          onSort({
+            ...sortTableInfo,
+            root: KEYS.DOCKET_RECORD_TABLE_SORT,
+          })
+        }
       />
     </th>
   );
