@@ -57,11 +57,13 @@ export const SortableColumn = ({
           // we invoke the click sequence AFTER the next animation frame to give
           // the browser time to display the spinner in the header before it tries to fetch
           // and re-render the 3000 messages in the message table.
-          requestAnimationFrame(() => {
-            onClickSequence({
+          requestAnimationFrame(async () => {
+            await onClickSequence({
               sortField,
               sortOrder,
-            }).then(() => setIsLoading(false));
+            });
+
+            setIsLoading(false);
           });
         }
       }}

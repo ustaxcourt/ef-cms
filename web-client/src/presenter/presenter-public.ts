@@ -36,6 +36,7 @@ import { redirectToLoginSequence } from '@web-client/presenter/sequences/Public/
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
+import { sortTableSequence } from '@web-client/presenter/sequences/sortTableSequence';
 import { sortTodaysOrdersSequence } from './sequences/Public/sortTodaysOrdersSequence';
 import { submitLoginSequence } from '@web-client/presenter/sequences/Login/submitLoginSequence';
 import { submitPractitionerBarNumberSearchSequence } from '@web-client/presenter/sequences/submitPractitionerBarNumberSearchSequence';
@@ -106,6 +107,7 @@ export const presenterSequences = {
   redirectToDashboardSequence,
   redirectToLoginSequence,
   showMoreResultsSequence,
+  sortTableSequence,
   sortTodaysOrdersSequence,
   submitLoginSequence,
   submitPractitionerBarNumberSearchSequence,

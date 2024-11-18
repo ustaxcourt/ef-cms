@@ -316,15 +316,14 @@ export const formattedDocketEntries = (
   return result;
 };
 
-export function sortDocketEntryTable(
-  docketEntries: (RawDocketEntry & {
-    createdAtFormatted: string | undefined;
-  })[] = [],
-  docketRecordSortField,
-  docketRecordSortOrder,
-) {
-  if (!docketRecordSortField || !docketRecordSortOrder)
+export function sortDocketEntryTable<T>(
+  docketEntries: T[] = [],
+  docketRecordSortField: keyof T | undefined,
+  docketRecordSortOrder: 'asc' | 'desc' | undefined,
+): T[] {
+  if (!docketRecordSortField || !docketRecordSortOrder) {
     return sortBy(docketEntries, ['sortingFilingDate', 'index']);
+  }
 
   const sortedDocketEntries = sortBy(docketEntries, [
     docketRecordSortField,
