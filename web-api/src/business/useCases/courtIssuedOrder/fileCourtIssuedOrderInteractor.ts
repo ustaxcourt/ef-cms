@@ -40,11 +40,11 @@ export const fileCourtIssuedOrder = async (
     });
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
+  console.log('********documentMetadata', documentMetadata);
   if (['O', 'NOT'].includes(documentMetadata.eventCode)) {
-    documentMetadata.freeText = documentMetadata.documentTitle;
+    documentMetadata.freeText = 'testing text';
     if (documentMetadata.draftOrderState) {
-      documentMetadata.draftOrderState.freeText =
-        documentMetadata.documentTitle;
+      documentMetadata.draftOrderState.freeText = 'testing order status';
     }
   }
 
@@ -138,3 +138,25 @@ export const fileCourtIssuedOrderInteractor = withLocking(
     identifiers: [`case|${documentMetadata.docketNumber}`],
   }),
 );
+
+// function generateFreeText(
+//   orderType: string,
+//   dueDate: string,
+//   strickenFromTrialSessions: boolean,
+//   jurisdiction: string,
+// ) {
+//   if (orderType === 'statusReport') {
+//     return `Parties by ${dueDate} shall file a status report.`;
+//   }
+//   if (orderType === 'statusReportStipulatedDecision') {
+//     return `Parties by ${dueDate} shall file a status report or proposed stipulated decision.`;
+//   }
+//   if (strickenFromTrialSessions) {
+//     if (jurisdiction === 'retained') {
+//       return 'Case is stricken from the current trial session.';
+//     }
+//     if (jurisdiction === 'restoredToGeneralDocket') {
+//       return 'Case is stricken from the current trial session. Case is no longer jurisdiction retained and is restored to the general docket.';
+//     }
+//   }
+// }
