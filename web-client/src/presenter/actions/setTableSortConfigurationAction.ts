@@ -6,7 +6,11 @@ export const setTableSortConfigurationAction = ({
 }: ActionProps<{
   sortField: string;
   sortOrder: 'asc' | 'desc';
+  root?: string;
 }>) => {
-  store.set(state.tableSort.sortField, props.sortField);
-  store.set(state.tableSort.sortOrder, props.sortOrder);
+  const { root, sortField, sortOrder } = props;
+
+  const ROOT = root || 'tableSort';
+  store.set(state[ROOT].sortField, sortField);
+  store.set(state[ROOT].sortOrder, sortOrder);
 };

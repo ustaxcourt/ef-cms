@@ -273,7 +273,7 @@ export class Case extends JoiValidationEntity {
     for (const caseItem of nonMemberCases) {
       interpolatedCases.push(caseItem);
 
-      // Append and sort member cases inline if applicable
+      // Append and sort member cases inline if leadDocketNumber exists
       if (memberCases[caseItem.docketNumber]) {
         interpolatedCases.push(
           ...Case.sortByDocketNumber(memberCases[caseItem.docketNumber]),
