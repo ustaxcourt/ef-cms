@@ -378,7 +378,7 @@ describe('formattedTrialSessionDetails', () => {
       });
     });
 
-    it('should be false when trial session start date is in the future, it is NOT closed, the user is a judge role', () => {
+    it('should  NOT allow judge to edit trial session info page', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         sessionStatus: SESSION_STATUS_GROUPS.open,
