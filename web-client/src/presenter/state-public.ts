@@ -2,6 +2,7 @@ import {
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   PUBLIC_TRIAL_SESSIONS_DATA_KEY,
 } from '../../../shared/src/business/entities/EntityConstants';
+import { PublicTrialSessionDetails } from '@web-api/business/useCases/trialSessions/getPublicTrialSessionDetailsInteractor';
 import { RawUser } from '@shared/business/entities/User';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
