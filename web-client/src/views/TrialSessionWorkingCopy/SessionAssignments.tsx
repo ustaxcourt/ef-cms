@@ -9,8 +9,8 @@ export const SessionAssignments = connect(
   },
   function SessionAssignments({ formattedTrialSessionDetails }) {
     return (
-      <div className="card trial-session-card">
-        <div className="content-wrapper">
+      <div className="card trial-session-card height-full">
+        <div className="content-wrapper height-full">
           <h3 className="underlined">Assignments</h3>
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
