@@ -1,6 +1,6 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const navigateToTrialSessionDetailAction = async ({
+export const navigateToTrialSessionDetailsAction = async ({
   get,
   router,
 }: ActionProps) => {

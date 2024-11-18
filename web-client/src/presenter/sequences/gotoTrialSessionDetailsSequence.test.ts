@@ -2,7 +2,7 @@ import { CerebralTest } from 'cerebral/test';
 import { MOCK_TRIAL_INPERSON } from '../../../../shared/src/test/mockTrial';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { gotoTrialSessionDetailSequence } from '../sequences/gotoTrialSessionDetailSequence';
+import { gotoTrialSessionDetailsSequence } from './gotoTrialSessionDetailsSequence';
 import { presenter } from '../presenter-mock';
 
 describe('gotoTrialSessionDetailSequence', () => {
@@ -13,7 +13,7 @@ describe('gotoTrialSessionDetailSequence', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.sequences = {
-      gotoTrialSessionDetailSequence,
+      gotoTrialSessionDetailSequence: gotoTrialSessionDetailsSequence,
     };
     cerebralTest = CerebralTest(presenter);
     //set token to take 'isLoggedIn' path
