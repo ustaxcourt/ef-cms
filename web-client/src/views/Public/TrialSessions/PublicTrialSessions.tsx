@@ -16,11 +16,11 @@ import {
 } from '@web-client/ustc-ui/Responsive/Responsive';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
-import { PublicMobileTrialSessionsTable } from '@web-client/views/Public/TrialsSessions/PublicMobileTrialSessionsTable';
-import { PublicTrialSessionsFilters } from '@web-client/views/Public/TrialsSessions/PublicTrialSessionsFilters';
+import { PublicMobileTrialSessionsTable } from '@web-client/views/Public/TrialSessions/PublicMobileTrialSessionsTable';
+import { PublicTrialSessionsFilters } from '@web-client/views/Public/TrialSessions/PublicTrialSessionsFilters';
 import { PublicTrialSessionsHelperResults } from '@web-client/presenter/computeds/Public/publicTrialSessionsHelper';
-import { PublicTrialSessionsRemoteProceedingsCard } from '@web-client/views/Public/TrialsSessions/PublicTrialSessionsRemoteProceedingsCard';
-import { PublicTrialSessionsTable } from '@web-client/views/Public/TrialsSessions/PublicTrialSessionsTable';
+import { PublicTrialSessionsRemoteProceedingsCard } from '@web-client/views/Public/TrialSessions/PublicTrialSessionsRemoteProceedingsCard';
+import { PublicTrialSessionsTable } from '@web-client/views/Public/TrialSessions/PublicTrialSessionsTable';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { sequences, state } from '@web-client/presenter/app-public.cerebral';

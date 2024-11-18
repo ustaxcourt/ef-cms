@@ -1,3 +1,4 @@
+import { PublicClientState } from '@web-client/presenter/state-public';
 import { applicationContextForClient } from '@web-client/test/createClientTestApplicationContext';
 import { getPublicCaseAction } from './getPublicCaseAction';
 import { presenter } from '../../presenter-public';
@@ -9,14 +10,17 @@ describe('getPublicCaseAction', () => {
   });
 
   it('gets the public case information', async () => {
-    await runAction(getPublicCaseAction, {
-      modules: {
-        presenter,
+    await runAction<{ caseDetail: any }, PublicClientState>(
+      getPublicCaseAction,
+      {
+        modules: {
+          presenter,
+        },
+        props: {
+          docketNumber: '123-20',
+        },
       },
-      props: {
-        docketNumber: '123-20',
-      },
-    });
+    );
 
     expect(
       applicationContextForClient.getUseCases().getCaseInteractor,

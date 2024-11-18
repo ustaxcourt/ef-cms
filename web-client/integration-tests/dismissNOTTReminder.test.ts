@@ -165,7 +165,7 @@ describe('Dismiss NOTT reminder on calendared trial session within 30-35 day ran
       await cerebralTest.runSequence('dismissThirtyDayTrialAlertSequence');
 
       expect(cerebralTest.getState('currentPage')).toEqual(
-        'TrialSessionDetail',
+        'TrialSessionDetails',
       );
 
       const trialSessionDetailsFormatted: any = runCompute(

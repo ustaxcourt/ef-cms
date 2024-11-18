@@ -1,3 +1,4 @@
+import { PublicClientState } from '@web-client/presenter/state-public';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getTodaysOrdersAction } from './getTodaysOrdersAction';
 import { presenter } from '../../presenter-public';
@@ -25,7 +26,10 @@ describe('getTodaysOrdersAction', () => {
       totalCount: mockTotalCount,
     });
 
-    const result = await runAction(getTodaysOrdersAction, {
+    const result = await runAction<
+      { todaysOrders: any; totalCount: any },
+      PublicClientState
+    >(getTodaysOrdersAction, {
       modules: {
         presenter,
       },
@@ -36,12 +40,15 @@ describe('getTodaysOrdersAction', () => {
   });
 
   it('should use default values for page and sortOrder if not provided', async () => {
-    await runAction(getTodaysOrdersAction, {
-      modules: {
-        presenter,
+    await runAction<{ todaysOrders: any; totalCount: any }, PublicClientState>(
+      getTodaysOrdersAction,
+      {
+        modules: {
+          presenter,
+        },
+        state: {},
       },
-      state: {},
-    });
+    );
 
     const todaysOrdersSort =
       applicationContext.getConstants().TODAYS_ORDERS_SORTS.FILING_DATE_DESC;
