@@ -1,9 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { KEYS } from '@shared/business/entities/EntityConstants';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
 import { PublicDocketRecordHeader } from './PublicDocketRecordHeader';
 import { PublicFilingsAndProceedings } from './PublicFilingsAndProceedings';
+import { SortableHeader } from '@web-client/views/DocketRecord/DocketRecord';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { state } from '@web-client/presenter/app-public.cerebral';
+import { sequences, state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -11,10 +13,11 @@ export const PublicDocketRecord = connect(
   {
     docketNumber: state.caseDetail.docketNumber,
     publicCaseDetailHelper: state.publicCaseDetailHelper,
+    sortTableSequence: sequences.sortTableSequence,
+    tableSort: state[KEYS.DOCKET_RECORD_TABLE_SORT],
   },
-  function ({ publicCaseDetailHelper }) {
+  function ({ publicCaseDetailHelper, sortTableSequence, tableSort }) {
     const noDocumentsMessage = 'There are no documents of that type.';
-
     return (
       <>
         <PublicDocketRecordHeader />
@@ -29,21 +32,124 @@ export const PublicDocketRecord = connect(
             >
               <thead>
                 <tr>
-                  <th className="center-column hide-on-mobile">
-                    <span>
-                      <span className="usa-sr-only">Number</span>
-                      <span aria-hidden="true">No.</span>
-                    </span>
-                  </th>
-                  <th>Filed Date</th>
-                  <th className="center-column hide-on-mobile">Event</th>
+                  <SortableHeader
+                    hideOnMobile={true}
+                    screenReaderTitle="Number"
+                    sortField="index"
+                    tableSort={tableSort}
+                    title="No."
+                    onSort={sortTableInfo =>
+                      sortTableSequence({
+                        ...sortTableInfo,
+                        root: KEYS.DOCKET_RECORD_TABLE_SORT,
+                      })
+                    }
+                  />
+                  <SortableHeader
+                    sortField="sortingFilingDate"
+                    sortType="date"
+                    tableSort={tableSort}
+                    title="Filed Date"
+                    onSort={sortTableInfo =>
+                      sortTableSequence({
+                        ...sortTableInfo,
+                        root: KEYS.DOCKET_RECORD_TABLE_SORT,
+                      })
+                    }
+                  />
+                  <SortableHeader
+                    hideOnMobile={true}
+                    sortField="eventCode"
+                    sortType="string"
+                    tableSort={tableSort}
+                    title="Event"
+                    onSort={sortTableInfo =>
+                      sortTableSequence({
+                        ...sortTableInfo,
+                        root: KEYS.DOCKET_RECORD_TABLE_SORT,
+                      })
+                    }
+                  />
                   <th aria-hidden="true" className="icon-column" />
-                  <th>Filings and Proceedings</th>
-                  <th className="hide-on-mobile">Pages</th>
-                  <th className="hide-on-mobile">Filed By</th>
-                  <th className="hide-on-mobile">Action</th>
-                  <th>Served</th>
-                  <th className="center-column hide-on-mobile">Parties</th>
+                  <SortableHeader
+                    sortField="descriptionDisplay"
+                    sortType="string"
+                    tableSort={tableSort}
+                    title="Filings and Proceedings"
+                    onSort={sortTableInfo =>
+                      sortTableSequence({
+                        ...sortTableInfo,
+                        root: KEYS.DOCKET_RECORD_TABLE_SORT,
+                      })
+                    }
+                  />
+                  <SortableHeader
+                    className="hide-on-mobile"
+                    hideOnMobile={true}
+                    sortField="numberOfPages"
+                    tableSort={tableSort}
+                    title="Pages"
+                    onSort={sortTableInfo =>
+                      sortTableSequence({
+                        ...sortTableInfo,
+                        root: KEYS.DOCKET_RECORD_TABLE_SORT,
+                      })
+                    }
+                  />
+                  <SortableHeader
+                    className="hide-on-mobile"
+                    hideOnMobile={true}
+                    sortField="filedBy"
+                    sortType="string"
+                    tableSort={tableSort}
+                    title="Filed By"
+                    onSort={sortTableInfo =>
+                      sortTableSequence({
+                        ...sortTableInfo,
+                        root: KEYS.DOCKET_RECORD_TABLE_SORT,
+                      })
+                    }
+                  />
+                  <SortableHeader
+                    className="hide-on-mobile"
+                    hideOnMobile={true}
+                    sortField="action"
+                    sortType="string"
+                    tableSort={tableSort}
+                    title="Action"
+                    onSort={sortTableInfo =>
+                      sortTableSequence({
+                        ...sortTableInfo,
+                        root: KEYS.DOCKET_RECORD_TABLE_SORT,
+                      })
+                    }
+                  />
+                  <SortableHeader
+                    sortField="servedAt"
+                    sortType="date"
+                    tableSort={tableSort}
+                    title="Served"
+                    onSort={sortTableInfo =>
+                      sortTableSequence({
+                        ...sortTableInfo,
+                        root: KEYS.DOCKET_RECORD_TABLE_SORT,
+                      })
+                    }
+                  />
+                  <SortableHeader
+                    className="center-column hide-on-mobile"
+                    hideOnMobile={true}
+                    sortField="servedPartiesCode"
+                    sortType="string"
+                    tableSort={tableSort}
+                    title="Parties"
+                    onSort={sortTableInfo =>
+                      sortTableSequence({
+                        ...sortTableInfo,
+                        root: KEYS.DOCKET_RECORD_TABLE_SORT,
+                      })
+                    }
+                  />
                 </tr>
               </thead>
               <tbody>
