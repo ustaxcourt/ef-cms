@@ -80,7 +80,6 @@ export const PublicDocketRecordHeader = connect(
             }
             sessionMetadata={sessionMetadata}
             sortTableSequence={sortTableSequence}
-            updateSessionMetadataSequence={updateSessionMetadataSequence}
           />
         </Mobile>
 
