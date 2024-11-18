@@ -79,20 +79,27 @@ describe('writeTrialSessionDataToExcel', () => {
   });
 
   it('generates an XLSX file with only one worksheet when no warnings or incorrectly sized cases are passed', async () => {
+    // Arrange
+    const caseCountsAndSessionsByCity = {
+      cityA: {
+        initialRegularCases: 0,
+        initialSmallCases: 0,
+        prospectiveSessions: [],
+        remainingRegularCases: 0,
+        remainingSmallCases: 0,
+        scheduledSessions: [],
+      },
+    } as CaseCountsAndSessionsByCity;
+    const incorrectSizeRegularCases = [];
+    const userMessages = [];
+    const weeks = ['01/01'];
+
+    // Act
     const buffer = await writeTrialSessionDataToExcel({
-      caseCountsAndSessionsByCity: {
-        cityA: {
-          initialRegularCases: 0,
-          initialSmallCases: 0,
-          prospectiveSessions: [],
-          remainingRegularCases: 0,
-          remainingSmallCases: 0,
-          scheduledSessions: [],
-        },
-      } as CaseCountsAndSessionsByCity,
-      incorrectSizeRegularCases: [],
-      userMessages: [],
-      weeks: ['01/01'],
+      caseCountsAndSessionsByCity,
+      incorrectSizeRegularCases,
+      userMessages,
+      weeks,
     });
 
     const actualWorkbook = new ExcelJS.Workbook();
@@ -103,6 +110,7 @@ describe('writeTrialSessionDataToExcel', () => {
     );
     const warningsWorksheet = actualWorkbook.getWorksheet('Warnings');
 
+    // Assert
     expect(incorrectlySizedCasesWorksheet).toBeFalsy();
     expect(warningsWorksheet).toBeFalsy();
   });
