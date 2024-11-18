@@ -1,7 +1,7 @@
-import { Case } from '@shared/business/entities/cases/Case';
 import { CaseStatus } from '@shared/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { sortByDocketNumberAndGroupConsolidatedCases } from '@shared/business/utilities/sorting/caseSorting';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const blockedCasesReportHelper = (
@@ -17,7 +17,7 @@ export const blockedCasesReportHelper = (
   );
 
   const blockedCasesFormatted: BlockedFormattedCase[] =
-    Case.sortByDocketNumberAndGroupConsolidatedCases(blockedCases)
+    sortByDocketNumberAndGroupConsolidatedCases(blockedCases)
       .map(blockedCase => {
         const blockedCaseWithConsolidatedProperties = applicationContext
           .getUtilities()

@@ -7,6 +7,7 @@ import { ClientPublicApplicationContext } from '@web-client/applicationContextPu
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { compact, some } from 'lodash';
+import { sortByDocketNumberAndGroupConsolidatedCases } from '@shared/business/utilities/sorting/caseSorting';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
 export type FormattedPublicTrialSession = {
@@ -69,7 +70,7 @@ export const publicTrialSessionDetailsHelper = (
     formattedCityStateZip,
   ]);
 
-  const formattedCases = Case.sortByDocketNumberAndGroupConsolidatedCases(
+  const formattedCases = sortByDocketNumberAndGroupConsolidatedCases(
     trialSession.calendaredCases,
   ).map(c => formatPublicCase(c));
 

@@ -1,4 +1,3 @@
-import { Case, isClosed } from '../entities/cases/Case';
 import { PractitionerCaseDetail } from '@web-client/presenter/state';
 import {
   ROLE_PERMISSIONS,
@@ -8,7 +7,9 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { formatCase } from '@shared/business/utilities/getFormattedCaseDetail';
+import { isClosed } from '../entities/cases/Case';
 import { partition } from 'lodash';
+import { sortByDocketNumber } from '@shared/business/utilities/sorting/caseSorting';
 
 export const getPractitionerCasesInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -59,7 +60,7 @@ export const getPractitionerCasesInteractor = async (
   });
 
   const [closedCases, openCases] = partition(
-    Case.sortByDocketNumber(caseDetails).reverse(),
+    sortByDocketNumber(caseDetails).reverse(),
     theCase => isClosed(theCase),
   );
 

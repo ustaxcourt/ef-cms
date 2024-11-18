@@ -2,7 +2,6 @@ import {
   CalendaredCaseItemType,
   TrialSessionState,
 } from '@web-client/presenter/state/trialSessionState';
-import { Case } from '@shared/business/entities/cases/Case';
 import {
   DOCKET_NUMBER_SUFFIXES,
   PARTIES_CODES,
@@ -11,6 +10,7 @@ import { FORMATS } from '../DateHandler';
 import { RawEligibleCase } from '../../entities/cases/EligibleCase';
 import { RawIrsCalendarAdministratorInfo } from '@shared/business/entities/trialSessions/IrsCalendarAdministratorInfo';
 import { compact, partition } from 'lodash';
+import { sortByDocketNumberAndGroupConsolidatedCases } from '@shared/business/utilities/sorting/caseSorting';
 
 export const setPretrialMemorandumFiler = ({ caseItem }): string => {
   if (caseItem.PMTServedPartiesCode !== undefined) {
@@ -154,7 +154,7 @@ export const getFormattedTrialSessionDetails = ({
     item => item.removedFromTrial === true,
   );
 
-  const openCasesFormatted = Case.sortByDocketNumberAndGroupConsolidatedCases(
+  const openCasesFormatted = sortByDocketNumberAndGroupConsolidatedCases(
     openCases.map(caseItem =>
       applicationContext
         .getUtilities()
@@ -162,16 +162,15 @@ export const getFormattedTrialSessionDetails = ({
     ),
   );
 
-  const inactiveCasesFormatted =
-    Case.sortByDocketNumberAndGroupConsolidatedCases(
-      inactiveCases.map(caseItem =>
-        applicationContext
-          .getUtilities()
-          .setConsolidationFlagsForDisplay(caseItem, inactiveCases),
-      ),
-    );
+  const inactiveCasesFormatted = sortByDocketNumberAndGroupConsolidatedCases(
+    inactiveCases.map(caseItem =>
+      applicationContext
+        .getUtilities()
+        .setConsolidationFlagsForDisplay(caseItem, inactiveCases),
+    ),
+  );
 
-  const allCasesFormatted = Case.sortByDocketNumberAndGroupConsolidatedCases(
+  const allCasesFormatted = sortByDocketNumberAndGroupConsolidatedCases(
     allCases.map(caseItem =>
       applicationContext
         .getUtilities()

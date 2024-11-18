@@ -1,4 +1,3 @@
-import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -6,6 +5,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { sortByDocketNumberAndGroupConsolidatedCases } from '@shared/business/utilities/sorting/caseSorting';
 
 export const generateCaseInventoryReportPdf = async ({
   applicationContext,
@@ -28,7 +28,7 @@ export const generateCaseInventoryReportPdf = async ({
   applicationContext.logger.info('generateCaseInventoryReportPdf - start');
 
   const { setConsolidationFlagsForDisplay } = applicationContext.getUtilities();
-  const formattedCases = Case.sortByDocketNumberAndGroupConsolidatedCases(cases)
+  const formattedCases = sortByDocketNumberAndGroupConsolidatedCases(cases)
     .map(caseItem => setConsolidationFlagsForDisplay(caseItem, []))
     .map(caseItem => ({
       ...caseItem,

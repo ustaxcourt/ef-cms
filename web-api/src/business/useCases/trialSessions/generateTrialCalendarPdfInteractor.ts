@@ -1,9 +1,9 @@
-import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { compact } from 'lodash';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
 import { saveFileAndGenerateUrl } from '../../useCaseHelper/saveFileAndGenerateUrl';
+import { sortByDocketNumberAndGroupConsolidatedCases } from '@shared/business/utilities/sorting/caseSorting';
 
 export const generateTrialCalendarPdfInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -93,7 +93,7 @@ const formatCases = ({ applicationContext, calendaredCases }) => {
   const openCases = calendaredCases.filter(
     calendaredCase => !calendaredCase.removedFromTrial,
   );
-  return Case.sortByDocketNumberAndGroupConsolidatedCases(openCases).map(
+  return sortByDocketNumberAndGroupConsolidatedCases(openCases).map(
     openCase => {
       const { inConsolidatedGroup, isLeadCase, shouldIndent } =
         applicationContext

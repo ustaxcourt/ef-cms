@@ -1,9 +1,3 @@
-import {
-  Case,
-  isClosed,
-  isLeadCase,
-  userIsDirectlyAssociated,
-} from '../entities/cases/Case';
 import { PaymentStatusTypes } from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import {
@@ -11,7 +5,13 @@ import {
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { compareISODateStrings } from '../utilities/sortFunctions';
+import {
+  isClosed,
+  isLeadCase,
+  userIsDirectlyAssociated,
+} from '../entities/cases/Case';
 import { partition, uniqBy } from 'lodash';
+import { sortByDocketNumber } from '@shared/business/utilities/sorting/caseSorting';
 
 interface UserCaseDTO {
   caseCaption: string;
@@ -145,7 +145,7 @@ async function fetchConsolidatedGroupsAndNest({
     return {
       ...aCase,
       consolidatedCases: aCase.consolidatedCases.length
-        ? Case.sortByDocketNumber(aCase.consolidatedCases)
+        ? sortByDocketNumber(aCase.consolidatedCases)
         : undefined,
     };
   });

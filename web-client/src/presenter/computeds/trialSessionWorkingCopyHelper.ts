@@ -1,15 +1,12 @@
-import {
-  Case,
-  isClosed,
-  isLeadCase,
-} from '@shared/business/entities/cases/Case';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { FormattedTrialSessionCase } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { Get } from 'cerebral';
 import { TRIAL_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { TrialSessionState } from '@web-client/presenter/state/trialSessionState';
 import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
+import { isClosed, isLeadCase } from '@shared/business/entities/cases/Case';
 import { partition, pickBy } from 'lodash';
+import { sortByDocketNumber } from '@shared/business/utilities/sorting/caseSorting';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export type TrialSessionWorkingCopyCase = FormattedTrialSessionCase & {
@@ -39,7 +36,7 @@ export const trialSessionWorkingCopyHelper = (
   //get an array of strings of the trial statuses that are set to true
   const enabledTrialStatusFilters = Object.keys(pickBy(filters));
 
-  const formattedCases = Case.sortByDocketNumber(
+  const formattedCases = sortByDocketNumber(
     (trialSession.calendaredCases || [])
       .slice()
       .filter(isOpenCaseInATrial)

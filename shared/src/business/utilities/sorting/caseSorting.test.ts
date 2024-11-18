@@ -1,8 +1,11 @@
-import { Case } from '../../entities/cases/Case';
+import {
+  sortByDocketNumber,
+  sortByDocketNumberAndGroupConsolidatedCases,
+} from '@shared/business/utilities/sorting/caseSorting';
 
 describe('sortByDocketNumber', () => {
   it('Should return the cases as an array sorted by docket number for cases filed in the same year', () => {
-    const result = Case.sortByDocketNumber([
+    const result = sortByDocketNumber([
       {
         docketNumber: '910-19',
       },
@@ -28,7 +31,7 @@ describe('sortByDocketNumber', () => {
   });
 
   it('Should return the cases as an array sorted by docket number for cases filed in different years', () => {
-    const result = Case.sortByDocketNumber([
+    const result = sortByDocketNumber([
       {
         docketNumber: '100-19',
       },
@@ -68,7 +71,7 @@ describe('sortByDocketNumber', () => {
 
 describe('sortByDocketNumberAndGroupConsolidatedCases', () => {
   it('should return the cases sorted properly, with a consolidated case appearing after its lead cases', () => {
-    const result = Case.sortByDocketNumberAndGroupConsolidatedCases([
+    const result = sortByDocketNumberAndGroupConsolidatedCases([
       {
         docketNumber: '100-19',
       },
@@ -98,7 +101,7 @@ describe('sortByDocketNumberAndGroupConsolidatedCases', () => {
     ]);
   });
   it('should return the cases sorted properly, when cases contains a consolidated grouping and the lead case is missing', () => {
-    const cases = Case.sortByDocketNumberAndGroupConsolidatedCases([
+    const cases = sortByDocketNumberAndGroupConsolidatedCases([
       {
         docketNumber: '102-20',
         leadDocketNumber: '101-20',
@@ -131,7 +134,7 @@ describe('sortByDocketNumberAndGroupConsolidatedCases', () => {
     ]);
   });
   it('should return the cases sorted properly, with multiple consolidated cases appearing (in sorted order) after their lead cases', () => {
-    const cases = Case.sortByDocketNumberAndGroupConsolidatedCases([
+    const cases = sortByDocketNumberAndGroupConsolidatedCases([
       {
         docketNumber: '101-20',
         leadDocketNumber: '101-20',

@@ -2,7 +2,6 @@ import {
   CLERK_OF_THE_COURT_CONFIGURATION,
   NOTICE_EVENT_CODE,
 } from '@shared/business/entities/EntityConstants';
-import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -11,6 +10,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
+import { sortByDocketNumber } from '@shared/business/utilities/sorting/caseSorting';
 
 export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -65,9 +65,11 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   const orderPdf = await applicationContext.getDocumentGenerators().order({
     applicationContext,
     data: {
-      addedDocketNumbers: addedDocketNumbers.sort((a, b) =>
-        Case.docketNumberSort(a, b),
-      ),
+      addedDocketNumbers: sortByDocketNumber<{ docketNumber: string }>(
+        addedDocketNumbers.map(d => {
+          return { docketNumber: d };
+        }),
+      ).map(d => d.docketNumber),
       caseCaptionExtension,
       caseTitle,
       docketNumberWithSuffix,

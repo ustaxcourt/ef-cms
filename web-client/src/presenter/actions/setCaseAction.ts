@@ -1,4 +1,4 @@
-import { Case } from '@shared/business/entities/cases/Case';
+import { sortByDocketNumberAndGroupConsolidatedCases } from '@shared/business/utilities/sorting/caseSorting';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setCaseAction = ({
@@ -7,7 +7,7 @@ export const setCaseAction = ({
 }: ActionProps<{ caseDetail: RawCase }>) => {
   const unsortedConsolidatedCases = props.caseDetail.consolidatedCases || [];
   props.caseDetail.consolidatedCases =
-    Case.sortByDocketNumberAndGroupConsolidatedCases(unsortedConsolidatedCases);
+    sortByDocketNumberAndGroupConsolidatedCases(unsortedConsolidatedCases);
 
   store.set(state.caseDetail, props.caseDetail);
 };
