@@ -23,20 +23,21 @@ export const SessionNotes = connect(
           <div className="card height-full">
             <div className="content-wrapper">
               {!sessionNotes && (
-                <Button
-                  link
-                  className="float-right"
-                  icon="plus-circle"
-                  onClick={() => {
-                    openAddEditSessionNoteModalSequence();
-                  }}
-                >
-                  Add Note
-                </Button>
+                <div className="float-right">
+                  <Button
+                    link
+                    icon="plus-circle"
+                    onClick={() => {
+                      openAddEditSessionNoteModalSequence();
+                    }}
+                  >
+                    Add Note
+                  </Button>
+                </div>
               )}
               {sessionNotes && (
                 <>
-                  <div className="float-right margin-top-1">
+                  <div className="float-right margin-top-1 action-button-wrapper">
                     <Button
                       link
                       className="padding-0 margin-right-0"
