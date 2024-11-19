@@ -4,12 +4,6 @@ import { getCaseInteractor } from '@shared/business/useCases/getCaseInteractor';
 import { marshallCase } from './marshallers/marshallCase';
 import { v2ApiWrapper } from './v2ApiWrapper';
 
-/**
- * used for fetching a single case and returning it in v1 api format
- *
- * @param {object} event the AWS event object
- * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
- */
 export const getCaseLambda = (event, authorizedUser: UnknownAuthUser) =>
   genericHandler(event, ({ applicationContext }) =>
     v2ApiWrapper(async () => {
@@ -20,6 +14,10 @@ export const getCaseLambda = (event, authorizedUser: UnknownAuthUser) =>
         },
         authorizedUser,
       );
+      caseObject.docketEntries =
+        caseObject.docketEntries?.filter(
+          (de: RawDocketEntry) => !!de.servedAt,
+        ) ?? [];
 
       return marshallCase(caseObject);
     }),
