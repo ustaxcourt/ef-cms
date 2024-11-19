@@ -4,6 +4,7 @@ import {
   AMICUS_BRIEF_EVENT_CODE,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  KEYS,
   PARTIES_CODES,
   POLICY_DATE_IMPACTED_EVENTCODES,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
@@ -145,8 +146,8 @@ describe('publicCaseDetailHelper', () => {
       },
       sessionMetadata: {
         docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
-        docketRecordSort: {},
       },
+      [KEYS.DOCKET_RECORD_TABLE_SORT]: {},
     };
   });
 
@@ -213,6 +214,14 @@ describe('publicCaseDetailHelper', () => {
 
       const result = runCompute(publicCaseDetailHelper, { state });
 
+      console.log(
+        'result.formattedDocketEntriesOnDocketRecord',
+        result.formattedDocketEntriesOnDocketRecord.map(res => ({
+          createdAtFormatted: res.createdAtFormatted,
+          index: res.index,
+        })),
+      );
+
       expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
         {
           createdAtFormatted: '10/21/18',
@@ -254,7 +263,10 @@ describe('publicCaseDetailHelper', () => {
     });
 
     it('should be sorted newer to older when sort order is byDateDesc', () => {
-      state.sessionMetadata.docketRecordSort = { '123-45': 'byDateDesc' };
+      state[KEYS.DOCKET_RECORD_TABLE_SORT] = {
+        sortField: 'sortingFilingDate',
+        sortOrder: 'desc',
+      };
       state.caseDetail.docketEntries = [
         {
           ...baseDocketEntry,
@@ -315,6 +327,15 @@ describe('publicCaseDetailHelper', () => {
       ];
 
       const result = runCompute(publicCaseDetailHelper, { state });
+
+      console.log(
+        'result',
+        result.formattedDocketEntriesOnDocketRecord.map(res => ({
+          createdAtFormatted: res.createdAtFormatted,
+          index: res.index,
+          sortingFilingDate: res.sortingFilingDate,
+        })),
+      );
 
       expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
         {
@@ -386,9 +407,9 @@ describe('publicCaseDetailHelper', () => {
           const result = runCompute(publicCaseDetailHelper, {
             state: {
               caseDetail,
+              [KEYS.DOCKET_RECORD_TABLE_SORT]: {},
               sessionMetadata: {
                 docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.orders,
-                docketRecordSort: {},
               },
             },
           });
@@ -403,9 +424,9 @@ describe('publicCaseDetailHelper', () => {
           const result = runCompute(publicCaseDetailHelper, {
             state: {
               caseDetail,
+              [KEYS.DOCKET_RECORD_TABLE_SORT]: {},
               sessionMetadata: {
                 docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.motions,
-                docketRecordSort: {},
               },
             },
           });
@@ -420,6 +441,7 @@ describe('publicCaseDetailHelper', () => {
           const result = runCompute(publicCaseDetailHelper, {
             state: {
               caseDetail,
+              [KEYS.DOCKET_RECORD_TABLE_SORT]: {},
               sessionMetadata: {
                 docketRecordFilter:
                   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
@@ -1420,10 +1442,10 @@ describe('publicCaseDetailHelper', () => {
             canAllowPrintableDocketRecord: true,
             docketEntries: [],
           },
+          [KEYS.DOCKET_RECORD_TABLE_SORT]: {},
           sessionMetadata: {
             docketRecordFilter:
               PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
-            docketRecordSort: {},
           },
         },
       });
@@ -1437,10 +1459,10 @@ describe('publicCaseDetailHelper', () => {
             canAllowPrintableDocketRecord: false,
             docketEntries: [],
           },
+          [KEYS.DOCKET_RECORD_TABLE_SORT]: {},
           sessionMetadata: {
             docketRecordFilter:
               PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
-            docketRecordSort: {},
           },
         },
       });
@@ -1479,9 +1501,9 @@ describe('formatDocketEntryOnDocketRecord', () => {
     mockCase = cloneDeep(MOCK_CASE);
     state = {
       caseDetail: mockCase,
+      [KEYS.DOCKET_RECORD_TABLE_SORT]: {},
       sessionMetadata: {
         docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
-        docketRecordSort: {},
       },
     };
   });
