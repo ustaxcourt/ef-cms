@@ -1,3 +1,8 @@
+import {
+  SESSION_STATUS_TYPES,
+  SESSION_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { cloneDeep } from 'lodash';
 import { initialTrialSessionPageState } from '@web-client/presenter/state/trialSessionsPageState';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -65,29 +70,29 @@ describe('setTrialSessionsFiltersAction', () => {
 
       const result = await runAction(setTrialSessionsFiltersAction, {
         props: {
-          proceedingType: 'Remote',
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
         },
         state: { trialSessionsPage: trialSessionsPageState },
       });
 
       expect(result.state.trialSessionsPage.filters.proceedingType).toEqual(
-        'Remote',
+        TRIAL_SESSION_PROCEEDING_TYPES.remote,
       );
     });
   });
   describe('sessionStatus', () => {
     it('should set the sessionStatus filter to Closed', async () => {
-      trialSessionsPageState.filters.sessionStatus = 'Open';
+      trialSessionsPageState.filters.sessionStatus = SESSION_STATUS_TYPES.open;
 
       const result = await runAction(setTrialSessionsFiltersAction, {
         props: {
-          sessionStatus: 'Closed',
+          sessionStatus: SESSION_STATUS_TYPES.closed,
         },
         state: { trialSessionsPage: trialSessionsPageState },
       });
 
       expect(result.state.trialSessionsPage.filters.sessionStatus).toEqual(
-        'Closed',
+        SESSION_STATUS_TYPES.closed,
       );
     });
   });
@@ -97,24 +102,27 @@ describe('setTrialSessionsFiltersAction', () => {
 
       const result = await runAction(setTrialSessionsFiltersAction, {
         props: {
-          sessionTypes: { action: 'add', sessionType: 'Regular' },
+          sessionTypes: { action: 'add', sessionType: SESSION_TYPES.regular },
         },
         state: { trialSessionsPage: trialSessionsPageState },
       });
 
       expect(result.state.trialSessionsPage.filters.sessionTypes).toEqual({
-        Regular: 'Regular',
+        Regular: SESSION_TYPES.regular,
       });
     });
 
     it('should remove a sessionType from the current set of filters', async () => {
       trialSessionsPageState.filters.sessionTypes = {
-        Regular: 'Regular',
+        Regular: SESSION_TYPES.regular,
       };
 
       const result = await runAction(setTrialSessionsFiltersAction, {
         props: {
-          sessionTypes: { action: 'remove', sessionType: 'Regular' },
+          sessionTypes: {
+            action: 'remove',
+            sessionType: SESSION_TYPES.regular,
+          },
         },
         state: { trialSessionsPage: trialSessionsPageState },
       });

@@ -1,4 +1,8 @@
 import { MOCK_CASE } from '@shared/test/mockCase';
+import {
+  SESSION_STATUS_TYPES,
+  SESSION_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { applicationContextPublic } from '../../../applicationContextPublic';
 import { cloneDeep } from 'lodash';
 import { publicTrialSessionDetailsHelper as publicTrialSessionDetailsHelperComputed } from '@web-client/presenter/computeds/Public/publicTrialSessionDetailsHelper';
@@ -44,8 +48,8 @@ describe('publicTrialSessionDetailsHelper', () => {
           isRemote: false,
           isSwingSession: true,
           postalCode: '94535',
-          sessionStatus: 'Open',
-          sessionType: 'Regular',
+          sessionStatus: SESSION_STATUS_TYPES.open,
+          sessionType: SESSION_TYPES.regular,
           startDate: '2020-11-27T05:00:00.000Z',
           state: 'CA',
           swingSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
