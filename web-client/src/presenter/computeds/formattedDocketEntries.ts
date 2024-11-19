@@ -317,7 +317,7 @@ export const formattedDocketEntries = (
 };
 
 export function sortDocketEntryTable<T>(
-  docketEntries: T[] = [],
+  docketEntries: (T & { sortingFilingDate: string | undefined })[] = [],
   docketRecordSortField: keyof T | undefined,
   docketRecordSortOrder: 'asc' | 'desc' | undefined,
 ): T[] {
@@ -340,12 +340,8 @@ export function sortDocketEntryTable<T>(
 function sortUndefined(
   a: { sortingFilingDate: string | undefined },
   b: { sortingFilingDate: string | undefined },
-) {
-  if (a.sortingFilingDate && !b.sortingFilingDate) {
-    return -1;
-  }
-
-  if (!a.sortingFilingDate && b.sortingFilingDate) {
-    return 1;
-  }
+): number {
+  if (a.sortingFilingDate && !b.sortingFilingDate) return -1;
+  if (!a.sortingFilingDate && b.sortingFilingDate) return 1;
+  return 0;
 }
