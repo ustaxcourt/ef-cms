@@ -49,6 +49,10 @@ const getSealedCase = ({
     }
   }
 
+  if (!User.isInternalUser(authorizedUser.role)) {
+    caseRecord.docketEntries = caseRecord.docketEntries.filter(d => !d.isDraft);
+  }
+
   if (isAuthorizedToViewSealedCase || isAssociatedWithCase) {
     return new Case(caseRecord, { authorizedUser }).validate().toRawObject();
   } else {
@@ -68,6 +72,7 @@ const getCaseForExternalUser = ({
   isAssociatedWithCase,
   isAuthorizedToGetCase,
 }) => {
+  caseRecord.docketEntries = caseRecord.docketEntries.filter(d => !d.isDraft);
   if (isAuthorizedToGetCase && isAssociatedWithCase) {
     return new Case(caseRecord, { authorizedUser }).validate().toRawObject();
   } else {
