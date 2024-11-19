@@ -40,15 +40,13 @@ export const TrialSessionsTable = connect(
             <div className="grid-col-2"></div>
           </div>
         </div>
+        <div className="text-right">
+          <span className="text-semibold">Count: </span>
+          {trialSessionsHelper.trialSessionsCount}
+        </div>
+        <div className="padding-1"></div>
         <div className="overflow-x-auto">
-          <div className="minw-tablet-lg ">
-            <div className="text-right">
-              <span className="text-bold">Count:</span>{' '}
-              <span className="text-semibold">
-                {trialSessionsHelper.trialSessionsCount}
-              </span>
-            </div>
-            <div className="padding-1"></div>
+          <div className="minw-tablet-lg">
             <table
               aria-describedby="trial-sessions-filter-label locationFilter proceedingFilter sessionFilter judgeFilter"
               aria-label={`${trialSessionsPage.filters.currentTab} trial sessions`}
