@@ -23,7 +23,7 @@ export const generateDocketRecordPdfInteractor = async (
   }: {
     docketNumber: string;
     docketRecordSort?: string;
-    docketRecordTableSort?: { sortField: string; sortOrder: string };
+    docketRecordTableSort?: { sortField: string; sortOrder: 'asc' | 'desc' };
     includePartyDetail: boolean;
     isIndirectlyAssociated?: boolean;
   },
