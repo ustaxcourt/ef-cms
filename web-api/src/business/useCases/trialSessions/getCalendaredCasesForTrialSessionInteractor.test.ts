@@ -111,7 +111,6 @@ const removedFields = [
   'correspondence',
   'archivedCorrespondences',
   'hearings',
-  'isSealed',
   'createdAt',
   'filingType',
   'hasVerifiedIrsNotice',
