@@ -331,8 +331,21 @@ export function sortDocketEntryTable<T>(
   ]);
 
   if (docketRecordSortOrder === 'desc') {
-    return sortedDocketEntries.reverse();
+    return sortedDocketEntries.reverse().sort(sortUndefined);
   }
 
-  return sortedDocketEntries;
+  return sortedDocketEntries.sort(sortUndefined);
+}
+
+function sortUndefined(
+  a: { sortingFilingDate: string | undefined },
+  b: { sortingFilingDate: string | undefined },
+) {
+  if (a.sortingFilingDate && !b.sortingFilingDate) {
+    return -1;
+  }
+
+  if (!a.sortingFilingDate && b.sortingFilingDate) {
+    return 1;
+  }
 }
