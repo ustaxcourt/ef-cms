@@ -214,14 +214,6 @@ describe('publicCaseDetailHelper', () => {
 
       const result = runCompute(publicCaseDetailHelper, { state });
 
-      console.log(
-        'result.formattedDocketEntriesOnDocketRecord',
-        result.formattedDocketEntriesOnDocketRecord.map(res => ({
-          createdAtFormatted: res.createdAtFormatted,
-          index: res.index,
-        })),
-      );
-
       expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
         {
           createdAtFormatted: '10/21/18',
@@ -327,15 +319,6 @@ describe('publicCaseDetailHelper', () => {
       ];
 
       const result = runCompute(publicCaseDetailHelper, { state });
-
-      console.log(
-        'result',
-        result.formattedDocketEntriesOnDocketRecord.map(res => ({
-          createdAtFormatted: res.createdAtFormatted,
-          index: res.index,
-          sortingFilingDate: res.sortingFilingDate,
-        })),
-      );
 
       expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
         {
