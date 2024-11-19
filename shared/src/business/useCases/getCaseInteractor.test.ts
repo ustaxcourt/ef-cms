@@ -9,6 +9,7 @@ import {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } from '../../test/mockCase';
+import { MOCK_DRAFT_DOCKET_ENTRY } from '@shared/test/mockDocketEntry';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { decorateForCaseStatus, getCaseInteractor } from './getCaseInteractor';
@@ -132,6 +133,65 @@ describe('getCaseInteractor', () => {
     );
 
     expect(result.docketNumber).toEqual('101-00');
+  });
+
+  it('should filter out draft docket entries when the currentUser is an external user associated with an unsealed case', async () => {
+    const expectedDocketEntries = testCase.docketEntries;
+    const unfilteredDocketEntries = [
+      ...testCase.docketEntries,
+      MOCK_DRAFT_DOCKET_ENTRY,
+    ];
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValue({
+        ...testCase,
+        docketEntries: unfilteredDocketEntries,
+      });
+
+    const result = await getCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: testCase.docketNumber,
+      },
+      {
+        email: mockCaseContactPrimary.email,
+        name: mockCaseContactPrimary.name,
+        role: ROLES.petitioner,
+        userId: mockCaseContactPrimary.contactId,
+      },
+    );
+
+    expect(result.docketEntries).toMatchObject(expectedDocketEntries);
+  });
+
+  it('should filter out draft docket entries when the currentUser is an external user associated with a sealed case', async () => {
+    const expectedDocketEntries = testCase.docketEntries;
+    const unfilteredDocketEntries = [
+      ...testCase.docketEntries,
+      MOCK_DRAFT_DOCKET_ENTRY,
+    ];
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValue({
+        ...testCase,
+        docketEntries: unfilteredDocketEntries,
+        isSealed: true,
+      });
+
+    const result = await getCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: testCase.docketNumber,
+      },
+      {
+        email: mockCaseContactPrimary.email,
+        name: mockCaseContactPrimary.name,
+        role: ROLES.petitioner,
+        userId: mockCaseContactPrimary.contactId,
+      },
+    );
+
+    expect(result.docketEntries).toMatchObject(expectedDocketEntries);
   });
 
   it('should return the case when the currentUser is an irs superuser even if the case has sealed documents', async () => {

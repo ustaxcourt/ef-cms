@@ -295,6 +295,26 @@ export const STANDING_PRETRIAL_ORDER_ENTRY: RawDocketEntry = {
   userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
 };
 
+export const MOCK_DRAFT_DOCKET_ENTRY: RawDocketEntry = {
+  createdAt: '2023-08-15T16:47:51.688Z',
+  docketEntryId: 'a6ea55fe-1716-47bb-b2c5-8112fea11d14',
+  docketNumber: '101-00',
+  documentTitle: 'Mock Draft Docket Entry',
+  documentType: 'Answer',
+  entityName: 'DocketEntry',
+  eventCode: 'A',
+  filedBy: 'Test Petitioner',
+  filedByRole: ROLES.petitioner,
+  filers: [],
+  filingDate: '2023-08-15T16:48:20.679Z',
+  isDraft: true,
+  isOnDocketRecord: false,
+  processingStatus: 'complete',
+  receivedAt: '2023-08-15T04:00:00.000Z',
+  stampData: {},
+  userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+};
+
 export const MOCK_DOCUMENTS: RawDocketEntry[] = [
   MOCK_PETITION,
   MOCK_STIN,
