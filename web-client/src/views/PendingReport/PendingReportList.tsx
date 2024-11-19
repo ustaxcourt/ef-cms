@@ -67,14 +67,28 @@ export const PendingReportList = connect(
               </BindedSelect>
             </div>
           </div>
-          {hasPendingItemsResults && (
-            <div className="grid-col-4 text-right margin-top-1">
-              <span className="text-semibold" data-testid="display-data-count">
-                Count: {pendingItemsTotal}
-              </span>
-            </div>
+        </div>
+
+        <div ref={paginatorTop}>
+          {totalPages > 1 && (
+            <Paginator
+              currentPageIndex={activePage}
+              totalPages={totalPages}
+              onPageChange={pageChange => {
+                setActivePage(pageChange);
+                focusPaginatorTop(paginatorTop);
+              }}
+            />
           )}
         </div>
+
+        {hasPendingItemsResults && (
+          <div className="text-right margin-bottom-2">
+            <span className="text-semibold" data-testid="display-data-count">
+              Count: {pendingItemsTotal}
+            </span>
+          </div>
+        )}
 
         <table
           aria-describedby="judgeFilter"
