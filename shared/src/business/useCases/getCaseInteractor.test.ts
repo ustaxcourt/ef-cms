@@ -9,7 +9,6 @@ import {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } from '../../test/mockCase';
-import { MOCK_DRAFT_DOCKET_ENTRY } from '@shared/test/mockDocketEntry';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { decorateForCaseStatus, getCaseInteractor } from './getCaseInteractor';
@@ -135,18 +134,13 @@ describe('getCaseInteractor', () => {
     expect(result.docketNumber).toEqual('101-00');
   });
 
-  it('should filter out draft docket entries when the currentUser is an external user associated with an unsealed case', async () => {
-    const expectedDocketEntries = testCase.docketEntries;
-    const unfilteredDocketEntries = [
-      ...testCase.docketEntries,
-      MOCK_DRAFT_DOCKET_ENTRY,
-    ];
+  it('should filter out docket entries that are not on the docket record when the currentUser is an external user associated with an unsealed case', async () => {
+    const expectedDocketEntries = testCase.docketEntries.filter(
+      de => de.isOnDocketRecord,
+    );
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue({
-        ...testCase,
-        docketEntries: unfilteredDocketEntries,
-      });
+      .getCaseByDocketNumber.mockResolvedValue(testCase);
 
     const result = await getCaseInteractor(
       applicationContext,
@@ -164,17 +158,14 @@ describe('getCaseInteractor', () => {
     expect(result.docketEntries).toMatchObject(expectedDocketEntries);
   });
 
-  it('should filter out draft docket entries when the currentUser is an external user associated with a sealed case', async () => {
-    const expectedDocketEntries = testCase.docketEntries;
-    const unfilteredDocketEntries = [
-      ...testCase.docketEntries,
-      MOCK_DRAFT_DOCKET_ENTRY,
-    ];
+  it('should filter out docket entries that are not on the docket record when the currentUser is an external user associated with a sealed case', async () => {
+    const expectedDocketEntries = testCase.docketEntries.filter(
+      de => de.isOnDocketRecord,
+    );
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue({
         ...testCase,
-        docketEntries: unfilteredDocketEntries,
         isSealed: true,
       });
 
