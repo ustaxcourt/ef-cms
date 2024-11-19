@@ -94,11 +94,6 @@ export const CaseDeadlines = connect(
                 <div className="grid-col-6">
                   <h2>{caseDeadlineReportHelper.formattedFilterDateHeader}</h2>
                 </div>
-                <div className="grid-col-6 text-right margin-top-1">
-                  <span className="text-semibold">
-                    Count: {caseDeadlineReportHelper.totalCount}
-                  </span>
-                </div>
               </div>
               {caseDeadlineReportHelper.showJudgeSelect && (
                 <div className="padding-bottom-4">
@@ -131,6 +126,25 @@ export const CaseDeadlines = connect(
                   </BindedSelect>
                 </div>
               )}
+              <div ref={paginatorTop}>
+                {totalPages > 1 && (
+                  <Paginator
+                    currentPageIndex={activePage}
+                    totalPages={totalPages}
+                    onPageChange={pageChange => {
+                      setActivePage(pageChange);
+                      focusPaginatorTop(paginatorTop);
+                    }}
+                  />
+                )}
+              </div>
+              <div className="margin-bottom-2">
+                <div className="text-right">
+                  <span className="text-semibold">
+                    Count: {caseDeadlineReportHelper.totalCount}
+                  </span>
+                </div>
+              </div>
               {caseDeadlineReportHelper.formattedCaseDeadlines.length > 0 && (
                 <table className="usa-table subsection ustc-table deadlines">
                   <thead>

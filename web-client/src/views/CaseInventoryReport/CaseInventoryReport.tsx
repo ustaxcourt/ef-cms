@@ -51,7 +51,7 @@ export const CaseInventoryReport = connect(
             </Button>
           </div>
 
-          <div className="padding-top-3 padding-bottom-1">
+          <div className="padding-top-3 padding-bottom-1 margin-bottom-2">
             <label
               className="dropdown-label-serif margin-right-3"
               htmlFor="inline-select"
@@ -105,13 +105,25 @@ export const CaseInventoryReport = connect(
 
           {caseInventoryReportHelper.showResultsTable && (
             <>
+              <div ref={paginatorTop}>
+                {totalPages > 1 && (
+                  <Paginator
+                    currentPageIndex={activePage}
+                    totalPages={totalPages}
+                    onPageChange={pageChange => {
+                      setActivePage(pageChange);
+                      focusPaginatorTop(paginatorTop);
+                    }}
+                  />
+                )}
+              </div>
+
               <div className="grid-row grid-gap margin-top-1">
                 <div className="grid-col-12 text-align-right">
                   <span className="text-semibold">Count:</span>{' '}
                   {caseInventoryReportHelper.resultCount}
                 </div>
               </div>
-
               <div className="grid-row grid-gap margin-top-1">
                 <div className="grid-col-12">
                   <table
