@@ -254,7 +254,7 @@ describe('publicCaseDetailHelper', () => {
       ]);
     });
 
-    it('should be sorted newer to older when sort order is byDateDesc', () => {
+    it('should be sorted newer to older when sort order is by date desc', () => {
       state[KEYS.DOCKET_RECORD_TABLE_SORT] = {
         sortField: 'sortingFilingDate',
         sortOrder: 'desc',
