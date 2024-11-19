@@ -54,15 +54,15 @@ describe('Case journey', () => {
 
   loginAs(cerebralTest, 'irspractitioner@example.com');
   respondentViewsDashboard(cerebralTest);
-  const documentCountPreStipDecision = 6;
+  const documentsOnRecordCount = 5;
   respondentAddsAnswer(cerebralTest, fakeFile, {
-    documentCount: documentCountPreStipDecision,
+    documentCount: documentsOnRecordCount,
   });
   respondentAddsStipulatedDecision(cerebralTest, fakeFile, {
-    documentCount: documentCountPreStipDecision + 1,
+    documentCount: documentsOnRecordCount + 1,
   });
   respondentAddsMotionWithBrief(cerebralTest, fakeFile, {
-    documentCount: documentCountPreStipDecision + 3,
+    documentCount: documentsOnRecordCount + 3,
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
