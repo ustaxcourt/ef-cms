@@ -52,11 +52,12 @@ export const PendingReportList = connect(
                 data-testid="dropdown-select-judge"
                 id="judgeFilter"
                 name="judge"
-                onChange={judge =>
+                onChange={judge => {
                   setPendingReportSelectedJudgeSequence({
                     judge,
-                  })
-                }
+                  });
+                  setActivePage(0);
+                }}
               >
                 <option value="">-Judge-</option>
                 {formattedPendingItemsHelper.judges.map(judge => (
@@ -110,7 +111,7 @@ export const PendingReportList = connect(
           </thead>
           {pageRecords.map(item => (
             <tbody
-              key={`pending-item-${item.formattedFiledDate}-${item.caseTitle}`}
+              key={`pending-item-${item.formattedFiledDate}-${item.caseTitle}-${item.key}`}
             >
               <tr className="pending-item-row">
                 <td>
