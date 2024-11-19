@@ -36,6 +36,7 @@ export const formatDocketEntryOnDocketRecord = (
   const isCourtIssued = DocketEntry.isCourtIssued(entry);
 
   let createdAtFormatted;
+  let sortingFilingDate;
   if (
     isCourtIssued &&
     !DocketEntry.isServed(entry) &&
@@ -47,10 +48,16 @@ export const formatDocketEntryOnDocketRecord = (
     createdAtFormatted = applicationContext
       .getUtilities()
       .formatDateString(entry.filingDate, 'MMDDYY');
+    sortingFilingDate = applicationContext
+      .getUtilities()
+      .formatDateString(entry.filingDate, 'YYYYMMDD_NUMERIC');
   } else {
     createdAtFormatted = applicationContext
       .getUtilities()
       .formatDateString(entry.createdAt, 'MMDDYY');
+    sortingFilingDate = applicationContext
+      .getUtilities()
+      .formatDateString(entry.createdAt, 'YYYYMMDD_NUMERIC');
   }
 
   if (entry.lodged) {
@@ -112,6 +119,7 @@ export const formatDocketEntryOnDocketRecord = (
     showNotServed: computeIsNotServedDocument({ formattedEntry: entry }),
     showServed: DocketEntry.isServed(entry),
     signatory: entry.signatory,
+    sortingFilingDate,
   };
 };
 
