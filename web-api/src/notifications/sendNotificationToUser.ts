@@ -1,3 +1,4 @@
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 type MessageCompletionErrorNotification = {
@@ -14,9 +15,17 @@ type ContactUpdateProgressNotification = {
   totalCases?: number;
 };
 
+type ContactUpdateCompleteNotification = {
+  action:
+    | 'user_contact_full_update_complete'
+    | 'admin_contact_full_update_complete';
+  user?: RawPractitioner;
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
-  | ContactUpdateProgressNotification;
+  | ContactUpdateProgressNotification
+  | ContactUpdateCompleteNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
