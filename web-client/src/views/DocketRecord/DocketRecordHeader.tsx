@@ -1,6 +1,7 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordSort } from './DocketRecordSort';
+import { KEYS } from '@shared/business/entities/EntityConstants';
 import { NonPhone, Phone } from '../../ustc-ui/Responsive/Responsive';
 import { OpenPrintableDocketRecordModal } from './OpenPrintableDocketRecordModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -14,7 +15,6 @@ export const DocketRecordMobileHeader = ({
   gotoPrintableDocketRecordSequence,
   sessionMetadata,
   sortTableSequence,
-  updateSessionMetadataSequence,
 }: {
   docketNumber: string;
   filterOptions: Record<string, string>;
@@ -22,13 +22,10 @@ export const DocketRecordMobileHeader = ({
     docketNumber: string;
   }) => void;
   sessionMetadata: any;
-  updateSessionMetadataSequence: (props: {
-    label: string;
-    value: string;
-  }) => void;
   sortTableSequence: (props: {
     sortField: string;
     sortOrder: 'asc' | 'desc';
+    root?: string;
   }) => void;
 }) => {
   return (
@@ -48,8 +45,10 @@ export const DocketRecordMobileHeader = ({
             name={`docketRecordSort.${docketNumber}`}
             value={sessionMetadata.docketRecordSort[docketNumber]}
             onChange={option => {
-              sortTableSequence(SORTING_CONVERSION_DICTIONARY[option.value]);
-              updateSessionMetadataSequence(option);
+              sortTableSequence({
+                ...SORTING_CONVERSION_DICTIONARY[option.value],
+                root: KEYS.DOCKET_RECORD_TABLE_SORT,
+              });
             }}
           />
         </div>
@@ -147,7 +146,6 @@ export const DocketRecordHeader = connect(
     showModal: state.modal.showModal,
     sortTableSequence: sequences.sortTableSequence,
     toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
-    updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
   },
   function DocketRecordHeader({
     DOCKET_RECORD_FILTER_OPTIONS,
@@ -159,7 +157,6 @@ export const DocketRecordHeader = connect(
     sessionMetadata,
     showModal,
     sortTableSequence,
-    updateSessionMetadataSequence,
   }) {
     return (
       <React.Fragment>
@@ -216,7 +213,6 @@ export const DocketRecordHeader = connect(
               }
               sessionMetadata={sessionMetadata}
               sortTableSequence={sortTableSequence}
-              updateSessionMetadataSequence={updateSessionMetadataSequence}
             />
           </Phone>
         </div>

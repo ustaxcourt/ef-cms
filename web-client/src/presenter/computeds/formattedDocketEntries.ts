@@ -316,15 +316,14 @@ export const formattedDocketEntries = (
   return result;
 };
 
-export function sortDocketEntryTable(
-  docketEntries: (RawDocketEntry & {
-    createdAtFormatted: string | undefined;
-  })[] = [],
-  docketRecordSortField,
-  docketRecordSortOrder,
-) {
-  if (!docketRecordSortField || !docketRecordSortOrder)
+export function sortDocketEntryTable<T>(
+  docketEntries: (T & { sortingFilingDate: string | undefined })[] = [],
+  docketRecordSortField: keyof T | undefined,
+  docketRecordSortOrder: 'asc' | 'desc' | undefined,
+): T[] {
+  if (!docketRecordSortField || !docketRecordSortOrder) {
     return sortBy(docketEntries, ['sortingFilingDate', 'index']);
+  }
 
   const sortedDocketEntries = sortBy(docketEntries, [
     docketRecordSortField,
@@ -332,8 +331,17 @@ export function sortDocketEntryTable(
   ]);
 
   if (docketRecordSortOrder === 'desc') {
-    return sortedDocketEntries.reverse();
+    return sortedDocketEntries.reverse().sort(sortUndefined);
   }
 
-  return sortedDocketEntries;
+  return sortedDocketEntries.sort(sortUndefined);
+}
+
+function sortUndefined(
+  a: { sortingFilingDate: string | undefined },
+  b: { sortingFilingDate: string | undefined },
+): number {
+  if (a.sortingFilingDate && !b.sortingFilingDate) return -1;
+  if (!a.sortingFilingDate && b.sortingFilingDate) return 1;
+  return 0;
 }

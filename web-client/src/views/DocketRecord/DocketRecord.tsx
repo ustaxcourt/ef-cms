@@ -376,7 +376,7 @@ export const DocketRecord = connect(
 
 DocketRecord.displayName = 'DocketRecord';
 
-function SortableHeader({
+export function SortableHeader({
   className,
   hideOnMobile,
   onSort,
@@ -390,7 +390,7 @@ function SortableHeader({
   onSort: (sort: {
     sortField: string;
     sortOrder: 'asc' | 'desc';
-    root: string;
+    root?: string;
   }) => void;
   screenReaderTitle?: string;
   sortField: string;
