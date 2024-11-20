@@ -1,5 +1,5 @@
 import { TDynamoRecord } from '../dynamoTypes';
-import { TrialSessionWorkingCopyNotes } from '@shared/business/entities/trialSessions/SpeciailTrialSessions';
+import { TrialSessionWorkingCopyNotes } from '@shared/business/entities/trialSessions/SpecialTrialSessions';
 import { batchGet } from '../../dynamodbClientService';
 
 export const getBulkTrialSessionWorkingCopies = async ({

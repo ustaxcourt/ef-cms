@@ -1,7 +1,7 @@
 import {
   SpecialTrialSession,
   TrialSessionWorkingCopyNotes,
-} from '@shared/business/entities/trialSessions/SpeciailTrialSessions';
+} from '@shared/business/entities/trialSessions/SpecialTrialSessions';
 import { post } from '../requests';
 
 export const getBulkSpecialTrialSessionCopyNotesInteractor = (

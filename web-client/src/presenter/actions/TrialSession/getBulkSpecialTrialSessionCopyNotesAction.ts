@@ -2,7 +2,7 @@ import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import {
   SpecialTrialSession,
   TrialSessionWorkingCopyNotes,
-} from '@shared/business/entities/trialSessions/SpeciailTrialSessions';
+} from '@shared/business/entities/trialSessions/SpecialTrialSessions';
 const getSpecialTrialSessions = trialSessions =>
   trialSessions
     .filter(trialSession => trialSession.sessionType === SESSION_TYPES.special)
