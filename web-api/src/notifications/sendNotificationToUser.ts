@@ -22,10 +22,16 @@ type ContactUpdateCompleteNotification = {
   user?: RawPractitioner;
 };
 
+type ServeDocumentErrorNotification = {
+  action: 'serve_document_error';
+  error: string;
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
-  | ContactUpdateCompleteNotification;
+  | ContactUpdateCompleteNotification
+  | ServeDocumentErrorNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
