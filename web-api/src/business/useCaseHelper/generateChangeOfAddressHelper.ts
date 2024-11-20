@@ -143,10 +143,15 @@ export const generateChangeOfAddressHelper = async ({
       });
     }
 
+    const CONTACT_UPDATE_COMPLTET_ACTION:
+      | 'user_contact_full_update_complete'
+      | 'admin_contact_full_update_complete' =
+      `${websocketMessagePrefix}_contact_full_update_complete`;
+
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
-        action: `${websocketMessagePrefix}_contact_full_update_complete`,
+        action: CONTACT_UPDATE_COMPLTET_ACTION,
         user,
       },
       userId: requestUserId || user.userId,
