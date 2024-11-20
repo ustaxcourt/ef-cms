@@ -116,9 +116,7 @@ export const upsertCases = async (rawCases: RawCase[]) => {
     judgeUserId: rawCase.judgeUserId,
     leadDocketNumber: rawCase.leadDocketNumber,
     litigationCosts: rawCase.litigationCosts,
-    mailingDate: rawCase.mailingDate
-      ? calculateDate({ dateString: rawCase.mailingDate })
-      : undefined,
+    mailingDate: rawCase.mailingDate,
     noticeOfAttachments: rawCase.noticeOfAttachments,
     noticeOfTrialDate: rawCase.noticeOfTrialDate
       ? calculateDate({ dateString: rawCase.noticeOfTrialDate })

@@ -9,3 +9,5 @@ Continue moving seed data:
 Figure out which fields we can get rid of
 
 How do we handle mailingDate? It looks like it can maybe remain a string.
+
+Refactor to use a case factory. See https://github.com/ustaxcourt/ef-cms/pull/5557/files for one idea.
