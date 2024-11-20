@@ -166,9 +166,9 @@ describe('petitions clerk sets a remote trial session calendar', () => {
     await waitForExpectedItem({
       cerebralTest,
       currentItem: 'currentPage',
-      expectedItem: 'TrialSessionDetail',
+      expectedItem: 'TrialSessionDetails',
     });
-    expect(cerebralTest.getState('currentPage')).toBe('TrialSessionDetail');
+    expect(cerebralTest.getState('currentPage')).toBe('TrialSessionDetails');
   });
 
   it('Petitions clerk verifies NOIP docket entries for open cases', async () => {
