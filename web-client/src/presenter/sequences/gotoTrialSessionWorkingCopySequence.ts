@@ -7,7 +7,7 @@ import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSe
 import { getTrialSessionWorkingCopyAction } from '../actions/TrialSession/getTrialSessionWorkingCopyAction';
 import { getUserCaseNoteForCasesAction } from '../actions/TrialSession/getUserCaseNoteForCasesAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
-import { gotoTrialSessionDetailSequence } from './gotoTrialSessionDetailSequence';
+import { gotoTrialSessionDetailsSequence } from './gotoTrialSessionDetailsSequence';
 import { isTrialSessionCalendaredAction } from '../actions/TrialSession/isTrialSessionCalendaredAction';
 import { isUserAssociatedWithTrialSessionAction } from '../actions/TrialSession/isUserAssociatedWithTrialSessionAction';
 import { mergeCaseOrderIntoCalendaredCasesAction } from '../actions/TrialSession/mergeCaseOrderIntoCalendaredCasesAction';
@@ -28,7 +28,7 @@ const { USER_ROLES } = getConstants();
 const checkUserAssociationAndProceed = [
   isUserAssociatedWithTrialSessionAction,
   {
-    no: [...gotoTrialSessionDetailSequence],
+    no: [gotoTrialSessionDetailsSequence],
     yes: [
       getTrialSessionWorkingCopyAction,
       setTrialSessionWorkingCopyAction,
@@ -70,7 +70,7 @@ export const gotoTrialSessionWorkingCopySequence =
           USER_ROLES.docketClerk,
           USER_ROLES.petitionsClerk,
         ],
-        gotoTrialSessionDetailSequence,
+        gotoTrialSessionDetailsSequence,
       ),
       chambers: [
         getUsersInSectionAction({}),
