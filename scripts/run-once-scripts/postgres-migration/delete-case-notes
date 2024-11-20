@@ -24,7 +24,7 @@ const getCaseNotesToDelete = async (offset: number) => {
     reader
       .selectFrom('dwUserCaseNote')
       .select(['docketNumber', 'userId'])
-      .orderBy('docketNumber')
+      .orderBy('userId')
       .limit(caseUserNotesPageSize)
       .offset(offset)
       .execute(),
@@ -39,11 +39,11 @@ async function main() {
   let caseNotesToDelete = await getCaseNotesToDelete(offset);
 
   while (!isEmpty(caseNotesToDelete)) {
-    const dynamoItemsToDelete = caseNotesToDelete.map(cd => ({
+    const dynamoItemsToDelete = caseNotesToDelete.map(c => ({
       DeleteRequest: {
         Key: {
-          pk: `user-case-note|${cd.docketNumber}`,
-          sk: `user${cd.userId}`,
+          pk: `user-case-note|${c.docketNumber}`,
+          sk: `user|${c.userId}`,
         },
       },
     }));
