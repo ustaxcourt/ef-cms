@@ -1,6 +1,7 @@
 /* eslint-disable complexity */
 import {
   ALLOWLIST_FEATURE_FLAGS,
+  KEYS,
   PUBLIC_DOCKET_RECORD_FILTER,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   ROLES,
@@ -12,6 +13,7 @@ import {
   computeIsNotServedDocument,
   getFilingsAndProceedings,
 } from '../../../../../shared/src/business/utilities/getFormattedCaseDetail';
+import { sortDocketEntryTable } from '@web-client/presenter/computeds/formattedDocketEntries';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
 export const formatDocketEntryOnDocketRecord = (
@@ -34,6 +36,7 @@ export const formatDocketEntryOnDocketRecord = (
   const isCourtIssued = DocketEntry.isCourtIssued(entry);
 
   let createdAtFormatted;
+  let sortingFilingDate;
   if (
     isCourtIssued &&
     !DocketEntry.isServed(entry) &&
@@ -45,10 +48,16 @@ export const formatDocketEntryOnDocketRecord = (
     createdAtFormatted = applicationContext
       .getUtilities()
       .formatDateString(entry.filingDate, 'MMDDYY');
+    sortingFilingDate = applicationContext
+      .getUtilities()
+      .formatDateString(entry.filingDate, 'YYYYMMDD_NUMERIC');
   } else {
     createdAtFormatted = applicationContext
       .getUtilities()
       .formatDateString(entry.createdAt, 'MMDDYY');
+    sortingFilingDate = applicationContext
+      .getUtilities()
+      .formatDateString(entry.createdAt, 'YYYYMMDD_NUMERIC');
   }
 
   if (entry.lodged) {
@@ -110,6 +119,7 @@ export const formatDocketEntryOnDocketRecord = (
     showNotServed: computeIsNotServedDocument({ formattedEntry: entry }),
     showServed: DocketEntry.isServed(entry),
     signatory: entry.signatory,
+    sortingFilingDate,
   };
 };
 
@@ -167,14 +177,10 @@ export const publicCaseDetailHelper = (
 ): PublicCaseDetailHelperResults => {
   const rawCase = get(state.caseDetail);
 
-  const {
-    canAllowPrintableDocketRecord,
-    docketEntries,
-    docketNumber,
-    isSealed,
-  } = rawCase;
+  const { canAllowPrintableDocketRecord, docketEntries, isSealed } = rawCase;
 
   const isTerminalUser = get(state.isTerminalUser);
+  const { sortField, sortOrder } = get(state[KEYS.DOCKET_RECORD_TABLE_SORT]);
 
   const { docketRecordFilter } = get(state.sessionMetadata);
 
@@ -184,7 +190,7 @@ export const publicCaseDetailHelper = (
     ],
   );
 
-  let formattedDocketEntriesOnDocketRecord = docketEntries.map(entry => {
+  const formattedDocketEntriesOnDocketRecord = docketEntries.map(entry => {
     return formatDocketEntryOnDocketRecord(applicationContext, {
       entry,
       isTerminalUser,
@@ -193,20 +199,21 @@ export const publicCaseDetailHelper = (
     });
   });
 
-  const { docketRecordSort } = get(state.sessionMetadata);
-  const sortOrder = docketRecordSort[docketNumber];
-
-  const sortedFormattedDocketRecords = applicationContext
-    .getUtilities()
-    .sortDocketEntries(formattedDocketEntriesOnDocketRecord as any, sortOrder);
-
-  formattedDocketEntriesOnDocketRecord = filterDocketEntries(
-    sortedFormattedDocketRecords,
+  const filteredFormattedDocketEntriesOnDocketRecord = filterDocketEntries(
+    formattedDocketEntriesOnDocketRecord,
     docketRecordFilter,
   );
 
+  const sortedAndFilteredFormattedDocketEntriesOnDocketRecord =
+    sortDocketEntryTable<PublicFormattedDocketEntryInfo>(
+      filteredFormattedDocketEntriesOnDocketRecord,
+      sortField,
+      sortOrder,
+    );
+
   return {
-    formattedDocketEntriesOnDocketRecord,
+    formattedDocketEntriesOnDocketRecord:
+      sortedAndFilteredFormattedDocketEntriesOnDocketRecord,
     isCaseSealed: !!isSealed,
     showPrintableDocketRecord: canAllowPrintableDocketRecord,
   };

@@ -1,6 +1,9 @@
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  SESSION_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '@shared/business/entities/EntityConstants';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { createTrialSessionAndWorkingCopy } from './createTrialSessionAndWorkingCopy';
 
 const DATE = '2018-11-21T20:49:28.192Z';
@@ -10,7 +13,7 @@ const trialSessionMetadata = {
   judge: { name: 'Buch', userId: 'd90e7b8c-c8a1-4b96-9b30-70bd47b63df0' },
   maxCases: 100,
   proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-  sessionType: 'Hybrid',
+  sessionType: SESSION_TYPES.hybrid,
   startDate: DATE,
   term: 'Fall',
   termYear: '2018',
