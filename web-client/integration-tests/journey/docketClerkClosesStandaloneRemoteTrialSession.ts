@@ -5,7 +5,7 @@ export const docketClerkClosesStandaloneRemoteTrialSession = cerebralTest => {
     await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
       trialSessionId: cerebralTest.lastCreatedTrialSessionId,
     });
-    expect(cerebralTest.getState('currentPage')).toEqual('TrialSessionDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('TrialSessionDetails');
 
     await cerebralTest.runSequence('closeTrialSessionSequence');
 
