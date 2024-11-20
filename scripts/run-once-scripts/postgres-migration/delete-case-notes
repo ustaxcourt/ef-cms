@@ -1,0 +1,62 @@
+/**
+ * HOW TO RUN
+ *
+ * TABLE_NAME=testing npx ts-node --transpileOnly scripts/run-once-scripts/postgres-migration/delete-case-notes.ts
+ */
+
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { requireEnvVars } from '../../../shared/admin-tools/util';
+import { getDbReader } from '../../../web-api/src/database';
+import { isEmpty } from 'lodash';
+import { batchDeleteDynamoItems } from './batch-delete-dynamo-items';
+
+const caseUserNotesPageSize = 10000;
+const dynamoDbClient = new DynamoDBClient({ region: 'us-east-1' });
+const dynamoDbDocClient = DynamoDBDocumentClient.from(dynamoDbClient);
+
+requireEnvVars(['TABLE_NAME']);
+
+const tableNameInput = process.env.TABLE_NAME!;
+
+const getCaseNotesToDelete = async (offset: number) => {
+  const caseNotes = await getDbReader(reader =>
+    reader
+      .selectFrom('dwUserCaseNote')
+      .select(['docketNumber', 'userId'])
+      .orderBy('docketNumber')
+      .limit(caseUserNotesPageSize)
+      .offset(offset)
+      .execute(),
+  );
+  return caseNotes;
+};
+
+let totalItemsDeleted = 0;
+
+async function main() {
+  let offset = 0;
+  let caseNotesToDelete = await getCaseNotesToDelete(offset);
+
+  while (!isEmpty(caseNotesToDelete)) {
+    const dynamoItemsToDelete = caseNotesToDelete.map(cd => ({
+      DeleteRequest: {
+        Key: {
+          pk: `user-case-note|${cd.docketNumber}`,
+          sk: `user${cd.userId}`,
+        },
+      },
+    }));
+    totalItemsDeleted += await batchDeleteDynamoItems(
+      dynamoItemsToDelete,
+      dynamoDbDocClient,
+      tableNameInput,
+    );
+    console.log(`Total case notes deleted so far: ${totalItemsDeleted}`);
+    offset += caseUserNotesPageSize;
+    caseNotesToDelete = await getCaseNotesToDelete(offset);
+  }
+  console.log('Done deleting case notes from Dynamo');
+}
+
+main().catch(console.error);
