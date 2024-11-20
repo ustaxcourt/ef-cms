@@ -1,6 +1,7 @@
 import { PendingItem } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
 
 export type PendingItemFormatted = {
+  docketEntryId: string;
   docketNumber: string;
   caseTitle: string;
   formattedFiledDate: string;
@@ -12,7 +13,6 @@ export type PendingItemFormatted = {
   consolidatedIconTooltipText: string;
   shouldIndent: boolean;
   isLeadCase: boolean;
-  key: string;
   docketNumberWithSuffix: string;
 };
 
@@ -47,13 +47,12 @@ export const formatPendingItem = (
 
   const documentLink = `/case-detail/${item.docketNumber}/document-view?docketEntryId=${item.docketEntryId}`;
 
-  const key = applicationContext.getUniqueId();
-
   return {
     associatedJudgeFormatted,
     caseTitle,
     consolidatedIconTooltipText:
       pendingItemWithConsolidatedFlags.consolidatedIconTooltipText,
+    docketEntryId: item.docketEntryId,
     docketNumber: item.docketNumber,
     docketNumberWithSuffix:
       pendingItemWithConsolidatedFlags.docketNumberWithSuffix!,
@@ -63,7 +62,6 @@ export const formatPendingItem = (
     formattedStatus,
     inConsolidatedGroup: pendingItemWithConsolidatedFlags.inConsolidatedGroup,
     isLeadCase: pendingItemWithConsolidatedFlags.isLeadCase,
-    key,
     shouldIndent: pendingItemWithConsolidatedFlags.shouldIndent,
   };
 };

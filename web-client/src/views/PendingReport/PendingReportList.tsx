@@ -109,11 +109,12 @@ export const PendingReportList = connect(
               <th>Judge</th>
             </tr>
           </thead>
-          {pageRecords.map(item => (
-            <tbody
-              key={`pending-item-${item.formattedFiledDate}-${item.caseTitle}-${item.key}`}
-            >
-              <tr className="pending-item-row">
+          <tbody>
+            {pageRecords.map(item => (
+              <tr
+                className="pending-item-row"
+                key={`pending-item-${item.formattedFiledDate}-${item.caseTitle}-${item.docketEntryId}`}
+              >
                 <td>
                   <ConsolidatedCaseIcon
                     consolidatedIconTooltipText={
@@ -134,8 +135,8 @@ export const PendingReportList = connect(
                 <td>{item.formattedStatus}</td>
                 <td>{item.associatedJudgeFormatted}</td>
               </tr>
-            </tbody>
-          ))}
+            ))}
+          </tbody>
         </table>
 
         {pendingReportListHelper.showNoPendingItems && (
