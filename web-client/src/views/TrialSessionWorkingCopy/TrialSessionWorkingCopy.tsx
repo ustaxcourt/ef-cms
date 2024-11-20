@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SessionAssignments } from './SessionAssignments';
 import { SessionNotes } from './SessionNotes';
 import { SuccessNotification } from '../SuccessNotification';
-import { TrialSessionDetailHeader } from '../TrialSessionDetail/TrialSessionDetailHeader';
+import { TrialSessionDetailsHeader } from '../TrialSessionDetails/TrialSessionDetailsHeader';
 import { WorkingCopySessionList } from './WorkingCopySessionList';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -46,7 +46,9 @@ export const TrialSessionWorkingCopy = connect(
   }) {
     return (
       <>
-        <TrialSessionDetailHeader />
+        <TrialSessionDetailsHeader
+          formattedTrialSessionDetails={formattedTrialSessionDetails}
+        />
         <section className="usa-section grid-container">
           <div className="grid-row">
             <div className="grid-col-8">

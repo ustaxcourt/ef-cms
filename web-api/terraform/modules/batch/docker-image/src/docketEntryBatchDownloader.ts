@@ -238,9 +238,9 @@ export async function app({
     Key: UNIQUE_ZIP_NAME,
   });
 
-  const EXPIRATION_TIME_IN_MINUTES = 10 * 60;
+  const EXPIRATION_TIME_IN_SECONDS = 10 * 60;
   const url = await getSignedUrl(zipStorageClient, command, {
-    expiresIn: EXPIRATION_TIME_IN_MINUTES,
+    expiresIn: EXPIRATION_TIME_IN_SECONDS,
   });
 
   console.log('Sending link to user');
