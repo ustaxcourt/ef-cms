@@ -54,6 +54,11 @@ export const STANDING_PRETRIAL_EVENT_CODES = ['SPOS', 'SPTO'];
 
 export const CLERK_OF_THE_COURT_CONFIGURATION = 'clerk-of-court-configuration';
 
+export const FETCHED_TRIAL_SESSIONS_TIMESTAMP_KEY =
+  'FetchedTrialSessionsTimestamp';
+
+export const PUBLIC_TRIAL_SESSIONS_DATA_KEY = 'publicTrialSessionsData';
+
 export const LEGACY_DOCUMENT_TYPES = [
   {
     documentType: 'Designation of Counsel to Receive Service',

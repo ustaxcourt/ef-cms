@@ -1,7 +1,5 @@
-import {
-  FORMATS,
-  formatNow,
-} from '../../../../shared/src/business/utilities/DateHandler';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
+import { SESSION_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import {
   formatSession,
@@ -27,7 +25,7 @@ describe('formattedDashboardTrialSessions', () => {
       {
         isCalendared: true,
         judge: { name: '1', userId: '1' },
-        sessionStatus: 'Open',
+        sessionStatus: SESSION_STATUS_TYPES.open,
         startDate: '2017-11-25T15:00:00.000Z',
         swingSession: true,
         trialLocation: 'Hartford, Connecticut',
@@ -35,7 +33,7 @@ describe('formattedDashboardTrialSessions', () => {
       {
         isCalendared: true,
         judge: { name: '2', userId: '1' },
-        sessionStatus: 'Open',
+        sessionStatus: SESSION_STATUS_TYPES.open,
         startDate: `${nextYear}-02-17T15:00:00.000Z`,
         swingSession: true,
         trialLocation: 'Knoxville, TN',
@@ -43,7 +41,7 @@ describe('formattedDashboardTrialSessions', () => {
       {
         isCalendared: true,
         judge: { name: '3', userId: '1' },
-        sessionStatus: 'Closed',
+        sessionStatus: SESSION_STATUS_TYPES.closed,
         startDate: '2017-11-27T15:00:00.000Z',
         swingSession: true,
         trialLocation: 'Jacksonville, FL',
@@ -51,7 +49,7 @@ describe('formattedDashboardTrialSessions', () => {
       {
         isCalendared: true,
         judge: { name: '3', userId: '1' },
-        sessionStatus: 'New',
+        sessionStatus: SESSION_STATUS_TYPES.new,
         startDate: '2017-11-27T15:00:00.000Z',
         swingSession: true,
         trialLocation: 'Jacksonville, FL',
