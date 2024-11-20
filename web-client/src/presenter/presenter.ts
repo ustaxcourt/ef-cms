@@ -112,6 +112,7 @@ import { dismissAddEditCaseWorksheetModalSequence } from '@web-client/presenter/
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { dismissThirtyDayTrialAlertSequence } from './sequences/dismissThirtyDayTrialAlertSequence';
+import { displayProgressSpinnerSequence } from '@web-client/presenter/sequences/displayProgressSpinnerSequence';
 import { downloadCsvFileSequence } from '@web-client/presenter/sequences/downloadCsvFileSequence';
 import { editCorrespondenceDocumentSequence } from './sequences/editCorrespondenceDocumentSequence';
 import { editUnsignedDraftDocumentSequence } from '@web-client/presenter/sequences/editUnsignedDraftDocumentSequence';
@@ -213,7 +214,7 @@ import { gotoSignOrderSequence } from './sequences/gotoSignOrderSequence';
 import { gotoStartCaseWizardSequence } from './sequences/gotoStartCaseWizardSequence';
 import { gotoStatusReportOrderSequence } from './sequences/StatusReportOrder/gotoStatusReportOrderSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
-import { gotoTrialSessionDetailSequence } from './sequences/gotoTrialSessionDetailSequence';
+import { gotoTrialSessionDetailsSequence } from './sequences/gotoTrialSessionDetailsSequence';
 import { gotoTrialSessionPlanningReportSequence } from './sequences/gotoTrialSessionPlanningReportSequence';
 import { gotoTrialSessionWorkingCopySequence } from './sequences/gotoTrialSessionWorkingCopySequence';
 import { gotoTrialSessionsSequence } from './sequences/gotoTrialSessionsSequence';
@@ -781,6 +782,7 @@ export const presenterSequences = {
   dismissModalSequence: dismissModalSequence as unknown as Function,
   dismissThirtyDayTrialAlertSequence:
     dismissThirtyDayTrialAlertSequence as unknown as Function,
+  displayProgressSpinnerSequence,
   downloadCsvFileSequence: downloadCsvFileSequence as unknown as Function,
   editCorrespondenceDocumentSequence:
     editCorrespondenceDocumentSequence as unknown as Function,
@@ -940,8 +942,7 @@ export const presenterSequences = {
     gotoStartCaseWizardSequence as unknown as Function,
   gotoStatusReportOrderSequence,
   gotoStyleGuideSequence: gotoStyleGuideSequence as unknown as Function,
-  gotoTrialSessionDetailSequence:
-    gotoTrialSessionDetailSequence as unknown as Function,
+  gotoTrialSessionDetailSequence: gotoTrialSessionDetailsSequence,
   gotoTrialSessionPlanningReportSequence:
     gotoTrialSessionPlanningReportSequence as unknown as Function,
   gotoTrialSessionWorkingCopySequence:
