@@ -5,7 +5,7 @@
  */
 
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
-import { DynamoDBClient, ScanCommandInput } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { requireEnvVars } from '../../../shared/admin-tools/util';
 import { getDbReader } from '../../../web-api/src/database';
 import { isEmpty } from 'lodash';
