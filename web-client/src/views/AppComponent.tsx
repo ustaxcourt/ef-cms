@@ -77,7 +77,7 @@ import { PrintPaperService } from './PrintPaperService';
 import { PrintPaperTrialNotices } from './PrintPaperTrialNotices';
 import { PrintableCaseInventoryReport } from './CaseInventoryReport/PrintableCaseInventoryReport';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
-import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
+import { PrintableTrialCalendar } from './TrialSessionDetails/PrintableTrialCalendar';
 import { PrintableTrialSessionWorkingCopyModal } from './TrialSessionWorkingCopy/PrintableTrialSessionWorkingCopyModal';
 import { PrintableTrialSessionWorkingCopyPreviewPage } from './TrialSessionWorkingCopy/PrintableTrialSessionWorkingCopyPreviewPage';
 import { Privacy } from './Privacy';
@@ -89,7 +89,7 @@ import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
 import { StartCaseInternal } from './StartCaseInternal/StartCaseInternal';
 import { StatusReportOrder } from './StatusReportOrder';
 import { StyleGuide } from './StyleGuide/StyleGuide';
-import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
+import { TrialSessionDetails } from './TrialSessionDetails/TrialSessionDetails';
 import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
 import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
@@ -189,7 +189,7 @@ const pages = {
   StartCaseInternal,
   StatusReportOrder,
   StyleGuide,
-  TrialSessionDetail,
+  TrialSessionDetails,
   TrialSessionPlanningReport,
   TrialSessionWorkingCopy,
   TrialSessions,

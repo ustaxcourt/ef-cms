@@ -2,7 +2,7 @@ import { AllCases } from './AllCases';
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
-import { DeleteTrialSessionModal } from '@web-client/views/TrialSessionDetail/DeleteTrialSessionModal';
+import { DeleteTrialSessionModal } from '@web-client/views/TrialSessionDetails/DeleteTrialSessionModal';
 import { DismissThirtyDayNoticeModal } from './DismissThirtyDayNoticeModal';
 import { EligibleCases } from './EligibleCases';
 import { ErrorNotification } from '../ErrorNotification';
@@ -15,7 +15,7 @@ import { ServeThirtyDayNoticeModal } from './ServeThirtyDayNoticeModal';
 import { SetCalendarModalDialog } from './SetCalendarModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
-import { TrialSessionDetailHeader } from './TrialSessionDetailHeader';
+import { TrialSessionDetailsHeader } from './TrialSessionDetailsHeader';
 import { TrialSessionInformation } from './TrialSessionInformation';
 import {
   WarningNotification,
@@ -26,7 +26,7 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const TrialSessionDetail = connect(
+export const TrialSessionDetails = connect(
   {
     clearModalSequence: sequences.clearModalSequence,
     closeTrialSessionSequence: sequences.closeTrialSessionSequence,
@@ -38,7 +38,7 @@ export const TrialSessionDetail = connect(
       sequences.showThirtyDayNoticeModalSequence,
     trialSessionDetailsHelper: state.trialSessionDetailsHelper,
   },
-  function TrialSessionDetail({
+  function TrialSessionDetails({
     clearModalSequence,
     closeTrialSessionSequence,
     formattedTrialSessionDetails,
@@ -50,7 +50,9 @@ export const TrialSessionDetail = connect(
   }) {
     return (
       <>
-        <TrialSessionDetailHeader />
+        <TrialSessionDetailsHeader
+          formattedTrialSessionDetails={formattedTrialSessionDetails}
+        />
 
         <section className="usa-section grid-container">
           <SuccessNotification />
@@ -75,6 +77,7 @@ export const TrialSessionDetail = connect(
           <TrialSessionInformation />
 
           {!formattedTrialSessionDetails.isCalendared && (
+            /* @ts-ignore: Tabs needs to be refactored to avoid type errors */
             <Tabs
               bind="trialSessionDetailsTab.caseList"
               defaultActiveTab="EligibleCases"
@@ -112,6 +115,7 @@ export const TrialSessionDetail = connect(
                       >
                         Filter by
                       </label>
+                      {/* @ts-ignore: BindedSelect needs to be refactored to avoid type errors */}
                       <BindedSelect
                         aria-describedby="hybrid-session-filter-label"
                         aria-label="hybrid session filter"
@@ -139,6 +143,7 @@ export const TrialSessionDetail = connect(
 
           {formattedTrialSessionDetails.showOpenCases && (
             <div>
+              {/* @ts-ignore: Tabs needs to be refactored to avoid type errors */}
               <Tabs
                 bind="trialSessionDetailsTab.calendaredCaseList"
                 defaultActiveTab="OpenCases"
@@ -177,6 +182,7 @@ export const TrialSessionDetail = connect(
           )}
 
           {formattedTrialSessionDetails.showOnlyClosedCases && (
+            /* @ts-ignore: Tabs needs to be refactored to avoid type errors */
             <Tabs
               bind="trialSessionDetailsTab.calendaredCaseList"
               defaultActiveTab="InactiveCases"
@@ -234,4 +240,4 @@ export const TrialSessionDetail = connect(
   },
 );
 
-TrialSessionDetail.displayName = 'TrialSessionDetail';
+TrialSessionDetails.displayName = 'TrialSessionDetails';
