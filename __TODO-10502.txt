@@ -1,0 +1,11 @@
+Continue moving seed data:
+• Cut a case from efcms-local.json (search for "sk": "case|", ignoring the first 23, which are mapping records) and paste in removed-from-efcms.json. This is mostly for record-keeping. We can delete this file when we are done.
+• Paste into cases (cases.ts), in order by docket number. Add the docket number itself to SEEDED_DOCKET_NUMBERS.
+• Cut the petitioners out from the case. Paste them into petitionerToCaseMappings. Also paste them into petitionerUsers (unless it is a duplicate).
+• Remove the unnecessary fields in petitionerUsers. Remove the unnecessary fields in petitionerToCaseMappings, and add the docket number from SEEDED_DOCKET_NUMBERS.
+• Fix the entry in cases, using constant when possible (see examples)
+• If files get too big, break apart in a reasonable way
+
+Figure out which fields we can get rid of
+
+How do we handle mailingDate? It looks like it can maybe remain a string.

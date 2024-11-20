@@ -1,5 +1,10 @@
+import { cases } from '@web-api/persistence/postgres/utils/seed/fixtures/cases';
 import { getDbWriter } from '../../../../database';
 import { messages } from './fixtures/messages';
+import {
+  petitionerToCaseMappings,
+  petitionerUsers,
+} from '@web-api/persistence/postgres/utils/seed/fixtures/users/petitioners';
 import { workItems } from './fixtures/workItems';
 
 export const seed = async () => {
@@ -16,6 +21,33 @@ export const seed = async () => {
       .insertInto('dwWorkItem')
       .values(workItems)
       .onConflict(oc => oc.column('workItemId').doNothing()) // ensure doesn't fail if exists
+      .execute(),
+  );
+
+  // Seed the cases
+  await getDbWriter(writer =>
+    writer
+      .insertInto('dwCase')
+      .values(cases)
+      .onConflict(oc => oc.column('docketNumber').doNothing())
+      .execute(),
+  );
+
+  // Seed the petitioners
+  await getDbWriter(writer =>
+    writer
+      .insertInto('dwUser')
+      .values(petitionerUsers)
+      .onConflict(oc => oc.column('contactId').doNothing())
+      .execute(),
+  );
+
+  // Attach petitioners to cases
+  await getDbWriter(writer =>
+    writer
+      .insertInto('dwUserCase')
+      .values(petitionerToCaseMappings)
+      .onConflict(oc => oc.column('contactId').doNothing())
       .execute(),
   );
 };

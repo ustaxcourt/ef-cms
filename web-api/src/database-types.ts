@@ -53,7 +53,7 @@ export interface CaseTable {
   blockedDate?: Date;
   blockedReason?: string;
   canAllowDocumentService?: boolean;
-  canAllowPrintableDocketRecord: boolean;
+  canAllowPrintableDocketRecord?: boolean;
   canDojPractitionersRepresentParty?: boolean;
   caption: string;
   caseNote?: string;
@@ -77,7 +77,7 @@ export interface CaseTable {
   judgeUserId?: string;
   leadDocketNumber?: string;
   litigationCosts?: number;
-  mailingDate?: Date; // maybe--this might be a string for display
+  mailingDate?: string; // this seems like a display field more than an actual date
   noticeOfAttachments?: boolean;
   noticeOfTrialDate?: Date;
   orderDesignatingPlaceOfTrial?: boolean;
@@ -173,3 +173,11 @@ export interface UserCaseTable {
   serviceIndicator?: string;
   title?: string;
 }
+
+export type UserKysely = Selectable<UserTable>;
+export type NewUserKysely = Insertable<UserTable>;
+export type UpdateUserKysely = Updateable<UserTable>;
+
+export type UserCaseKysely = Selectable<UserCaseTable>;
+export type NewUserCaseKysely = Insertable<UserCaseTable>;
+export type UpdateUserCaseKysely = Updateable<UserCaseTable>;
