@@ -277,6 +277,29 @@ describe('trialSessionsHelper', () => {
     });
   });
 
+  describe('trialCitiesByState', () => {
+    it('should include "Standalone Remote"', () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          judges: [judgeUser],
+          permissions: getUserPermissions(docketClerk1User),
+          trialSessionsPage: trialSessionsPageState,
+        },
+      });
+
+      const hasStandaloneRemote = result.trialCitiesByState.some(
+        state =>
+          state.label === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote &&
+          state.options.some(
+            option =>
+              option.value === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+          ),
+      );
+
+      expect(hasStandaloneRemote).toBeTruthy();
+    });
+  });
+
   describe('trialSessionRows', () => {
     describe('filters', () => {
       it('should not filter when there are validation errors', () => {
