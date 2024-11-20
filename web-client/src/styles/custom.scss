@@ -2367,3 +2367,22 @@ button.change-scanner-button {
   border-bottom: 1px solid !important;
   margin-bottom: 5px !important;
 }
+
+.actions-buttons {
+  @media only screen and (max-width: ($medium-screen - 1)) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+.session-card {
+  @media only screen and (max-width: ($medium-screen - 1)) {
+    width: 100%;
+
+    .action-button-wrapper {
+      display: inline-flex;
+      margin: 0;
+    }
+  }
+}
