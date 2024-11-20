@@ -1,5 +1,23 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
+type MessageCompletionErrorNotification = {
+  action: 'message_completion_error';
+  alertError: {
+    message: string;
+    title: string;
+  };
+};
+
+type ContactUpdateProgressNotification = {
+  action: 'user_contact_update_progress' | 'admin_contact_update_progress';
+  completedCases?: number;
+  totalCases?: number;
+};
+
+type NotificationMessage =
+  | MessageCompletionErrorNotification
+  | ContactUpdateProgressNotification;
+
 export const sendNotificationToUser = async ({
   applicationContext,
   clientConnectionId,
@@ -8,7 +26,7 @@ export const sendNotificationToUser = async ({
 }: {
   applicationContext: ServerApplicationContext;
   clientConnectionId?: string;
-  message: any;
+  message: NotificationMessage;
   userId: string;
 }) => {
   let connections = await applicationContext

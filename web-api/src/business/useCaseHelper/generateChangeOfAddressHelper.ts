@@ -47,7 +47,7 @@ export const generateChangeOfAddressHelper = async ({
   jobId: string;
   user: RawPractitioner;
   requestUserId?: string;
-  websocketMessagePrefix: string;
+  websocketMessagePrefix: 'user' | 'admin';
 }) => {
   try {
     const newData = contactInfo;
@@ -107,10 +107,15 @@ export const generateChangeOfAddressHelper = async ({
     applicationContext.logger.error(error);
   }
 
+  const NOTIFICATION_ACTION:
+    | 'user_contact_update_progress'
+    | 'admin_contact_update_progress' =
+    `${websocketMessagePrefix}_contact_update_progress`;
+
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
-      action: `${websocketMessagePrefix}_contact_update_progress`,
+      action: NOTIFICATION_ACTION,
     },
     userId: requestUserId || user.userId,
   });
