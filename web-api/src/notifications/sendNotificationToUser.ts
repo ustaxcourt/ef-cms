@@ -42,13 +42,20 @@ type RetryAsyncRequestNotification = {
   requestToRetry: string;
 };
 
+type BatchDownloadCsvDataNotification = {
+  action: 'batch_download_csv_data';
+  filesCompleted: number;
+  totalFiles: number;
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
   | ContactUpdateCompleteNotification
   | ServeDocumentErrorNotification
   | ServeDocumentCompleteNotification
-  | RetryAsyncRequestNotification;
+  | RetryAsyncRequestNotification
+  | BatchDownloadCsvDataNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
