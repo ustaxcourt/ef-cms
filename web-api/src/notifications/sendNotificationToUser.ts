@@ -127,6 +127,13 @@ type PaperServiceUpdatedNotification = {
   pdfsAppended: number;
 };
 
+type SetTrialCalendarPaperServiceCompleteNotification = {
+  action: 'set_trial_calendar_paper_service_complete';
+  fileId: string;
+  hasPaper: boolean;
+  pdfUrl: string;
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
@@ -148,7 +155,8 @@ type NotificationMessage =
   | BatchDownloadDocketGeneratedNotification
   | NoticeGenerationUpdatedNotification
   | PaperServiceStartedNotification
-  | PaperServiceUpdatedNotification;
+  | PaperServiceUpdatedNotification
+  | SetTrialCalendarPaperServiceCompleteNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
