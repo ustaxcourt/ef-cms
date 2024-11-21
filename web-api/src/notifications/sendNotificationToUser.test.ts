@@ -1,5 +1,8 @@
+import {
+  NotificationMessage,
+  sendNotificationToUser,
+} from './sendNotificationToUser';
 import { applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-import { sendNotificationToUser } from './sendNotificationToUser';
 
 describe('sendNotificationToUser', () => {
   const connections = [
@@ -28,7 +31,13 @@ describe('sendNotificationToUser', () => {
       sk: 'sk-04',
     },
   ];
-  const mockMessage = 'hello, computer';
+  const mockMessage: NotificationMessage = {
+    action: 'download_csv_file',
+    csvInfo: {
+      fileName: 'TEST NAME',
+      url: 'SOME URL',
+    },
+  };
 
   const send = jest.fn().mockResolvedValue('ok');
 
