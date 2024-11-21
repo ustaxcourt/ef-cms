@@ -83,6 +83,12 @@ type BatchDownloadReadyNotification = {
   url: string;
 };
 
+type AwsBatchDownloadProgressNotification = {
+  action: 'aws_batch_download_progress';
+  filesCompleted: number;
+  totalFiles: number;
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
@@ -95,7 +101,8 @@ type NotificationMessage =
   | SaveDocketEntryForLaterCompleteNotification
   | BatchDownloadErrorNotification
   | BatchDownloadProgressNotification
-  | BatchDownloadReadyNotification;
+  | BatchDownloadReadyNotification
+  | AwsBatchDownloadProgressNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
