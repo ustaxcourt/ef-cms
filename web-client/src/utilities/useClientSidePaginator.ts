@@ -7,21 +7,31 @@ type PaginationResult<T> = {
   totalPages: number;
 };
 
-export function useClientSidePaginator<T>(
+export function getPaginationResult<T>(
   fullDataSet: T[],
-  pageSize,
-): PaginationResult<T> {
-  const [activePage, setActivePage] = useState(0);
+  pageSize: number,
+  activePage: number,
+) {
   const totalPages = Math.ceil(fullDataSet.length / pageSize);
-  const entriesInPage = fullDataSet.slice(
+  const pageRecords = fullDataSet.slice(
     activePage * pageSize,
     activePage * pageSize + pageSize,
   );
 
-  return {
+  return { pageRecords, totalPages };
+}
+
+export function useClientSidePaginator<T>(
+  fullDataSet: T[],
+  pageSize: number,
+): PaginationResult<T> {
+  const [activePage, setActivePage] = useState(0);
+
+  const { pageRecords, totalPages } = getPaginationResult(
+    fullDataSet,
+    pageSize,
     activePage,
-    pageRecords: entriesInPage,
-    setActivePage,
-    totalPages,
-  };
+  );
+
+  return { activePage, pageRecords, setActivePage, totalPages };
 }
