@@ -353,6 +353,7 @@
     "ts-node": "10.9.2",
     "tsconfig-paths": "4.2.0",
     "typescript": "5.6.3",
+    "us-census-geocoder": "1.1.0",
     "utf8": "3.0.0"
   }
 }
