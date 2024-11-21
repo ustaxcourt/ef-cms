@@ -27,11 +27,21 @@ type ServeDocumentErrorNotification = {
   error: string;
 };
 
+type ServeDocumentCompleteNotification = {
+  action: 'serve_document_complete';
+  alertSuccess: {
+    message: string;
+    overwritable: boolean;
+  };
+  pdfUrl?: string;
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
   | ContactUpdateCompleteNotification
-  | ServeDocumentErrorNotification;
+  | ServeDocumentErrorNotification
+  | ServeDocumentCompleteNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
