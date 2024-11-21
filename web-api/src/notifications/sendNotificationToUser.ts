@@ -1,5 +1,6 @@
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 
 type MessageCompletionErrorNotification = {
   action: 'message_completion_error';
@@ -19,7 +20,7 @@ type ContactUpdateCompleteNotification = {
   action:
     | 'user_contact_full_update_complete'
     | 'admin_contact_full_update_complete';
-  user?: RawPractitioner;
+  user?: RawPractitioner | UserRecord;
 };
 
 type ServeDocumentErrorNotification = {
@@ -171,6 +172,10 @@ type UpdateTrialSessionCompleteNotification = {
   trialSessionId?: string;
 };
 
+type UserContactInitialUpdateCompleteNotification = {
+  action: 'user_contact_initial_update_complete';
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
@@ -199,7 +204,8 @@ type NotificationMessage =
   | NoticeGenerationStartNotification
   | SetTrialSessionCalendarCompleteNotification
   | SetTrialSessionCalendarErrorNotification
-  | UpdateTrialSessionCompleteNotification;
+  | UpdateTrialSessionCompleteNotification
+  | UserContactInitialUpdateCompleteNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
