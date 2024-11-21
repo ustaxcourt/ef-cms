@@ -166,10 +166,10 @@ function generateFreeText(
     strickenFromTrialSessions: boolean;
     jurisdiction: string;
   },
-  user: {
-    judgeTitle?: string;
-    name: string;
-  },
+  // user: {
+  //   judgeTitle?: string;
+  //   name: string;
+  // },
 ) {
   const {
     documentTitle,
@@ -183,11 +183,15 @@ function generateFreeText(
   const formattedDueDate = formatDateString(dueDate, FORMATS.MMDDYYYY);
   if (eventCode === 'OJR') {
     return [
-      `Order that jurisdiction is retained by ${user.judgeTitle} ${user.name}.`,
+      // `Order that jurisdiction is retained by ${user.judgeTitle} ${user.name}.`,
       orderType === 'statusReport' &&
-        `Parties by ${formattedDueDate} shall file a status report.`,
+        `. Parties by ${formattedDueDate} shall file a status report.`,
       orderType === 'statusReportStipulatedDecision' &&
-        `Parties by ${formattedDueDate} shall file a status report or proposed stipulated decision.`,
+        `. Parties by ${formattedDueDate} shall file a status report or proposed stipulated decision.`,
+      orderType !== 'statusReportStipulatedDecision' &&
+        orderType !== 'statusReport' &&
+        strickenFromTrialSessions &&
+        '. ',
       strickenFromTrialSessions &&
         'Case is stricken from the current trial session.',
     ]
