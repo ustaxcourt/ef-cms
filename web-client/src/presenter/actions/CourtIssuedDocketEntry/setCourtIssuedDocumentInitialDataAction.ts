@@ -17,6 +17,7 @@ export const setCourtIssuedDocumentInitialDataAction = ({
   store,
 }: ActionProps) => {
   const { docketEntries } = get(state.caseDetail);
+  const judges = get(state.judges);
 
   const docketEntry = docketEntries.find(
     item => item.docketEntryId === props.docketEntryId,
@@ -34,6 +35,12 @@ export const setCourtIssuedDocumentInitialDataAction = ({
       store.set(state.form.attachments, false);
     }
 
+    if (docketEntry.eventCode === 'OJR' && docketEntry.signedByUserId) {
+      const signingJudge = judges.find(judge => {
+        return judge.userId === docketEntry.signedByUserId;
+      });
+      store.set(state.form.judge, signingJudge.name);
+    }
     if (docketEntry.freeText) {
       store.set(state.form.freeText, docketEntry.freeText);
     }

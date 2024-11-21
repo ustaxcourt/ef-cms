@@ -4,6 +4,10 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import {
+  FORMATS,
+  formatDateString,
+} from '@shared/business/utilities/DateHandler';
 import { Message } from '../../../../../shared/src/business/entities/Message';
 import {
   ROLE_PERMISSIONS,
@@ -43,24 +47,23 @@ export const fileCourtIssuedOrder = async (
     });
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
-  console.log('********documentMetadata', documentMetadata);
-  console.log('********documentMetadata', documentMetadata);
-  console.log('********user', user);
-
-  if (['O', 'NOT'].includes(documentMetadata.eventCode)) {
-    const freeText = generateFreeText(documentMetadata);
-    documentMetadata.freeText = freeText;
-    if (documentMetadata.draftOrderState) {
-      documentMetadata.draftOrderState.freeText = freeText;
-    }
-  }
-
-  if (isDocumentTypeOJR(documentMetadata)) {
+  if (
+    documentMetadata.strickenFromTrialSessions &&
+    documentMetadata.jurisdiction === 'retained'
+  ) {
     const ojrEventCode = COURT_ISSUED_EVENT_CODES.find(
       e => e.eventCode === 'OJR',
     );
     documentMetadata.documentType = ojrEventCode?.documentType;
     documentMetadata.eventCode = 'OJR';
+  }
+
+  if (['O', 'NOT', 'OJR'].includes(documentMetadata.eventCode)) {
+    const freeText = generateFreeText(documentMetadata, user);
+    documentMetadata.freeText = freeText;
+    if (documentMetadata.draftOrderState) {
+      documentMetadata.draftOrderState.freeText = freeText;
+    }
   }
 
   if (documentMetadata.documentContents) {
@@ -154,44 +157,58 @@ export const fileCourtIssuedOrderInteractor = withLocking(
   }),
 );
 
-function generateFreeText(documentMetaData: {
-  orderType: string;
-  documentTitle: string;
-  dueDate: string;
-  strickenFromTrialSessions: boolean;
-  jurisdiction: string;
-}) {
-  if (
-    documentMetaData.orderType === 'statusReport' &&
-    documentMetaData.strickenFromTrialSessions &&
-    documentMetaData.jurisdiction === 'restoredToGeneralDocket'
-  ) {
-    return `Order parties by ${documentMetaData.dueDate} shall file a status report. Case is stricken from the current trial session. Case is no longer jurisdiction retained and is restored to the general docket.`;
+function generateFreeText(
+  documentMetadata: {
+    orderType: string;
+    documentTitle: string;
+    dueDate: string;
+    eventCode: string;
+    strickenFromTrialSessions: boolean;
+    jurisdiction: string;
+  },
+  user: {
+    judgeTitle?: string;
+    name: string;
+  },
+) {
+  const {
+    documentTitle,
+    dueDate,
+    eventCode,
+    jurisdiction,
+    orderType,
+    strickenFromTrialSessions,
+  } = documentMetadata;
+
+  const formattedDueDate = formatDateString(dueDate, FORMATS.MMDDYYYY);
+  if (eventCode === 'OJR') {
+    return [
+      `Order that jurisdiction is retained by ${user.judgeTitle} ${user.name}.`,
+      orderType === 'statusReport' &&
+        `Parties by ${formattedDueDate} shall file a status report.`, // dont necessarily have a due date
+      orderType === 'statusReportStipulatedDecision' &&
+        `Parties by ${formattedDueDate} shall file a status report or proposed stipulated decision.`,
+      strickenFromTrialSessions &&
+        'Case is stricken from the current trial session.',
+    ]
+      .filter(Boolean)
+      .join(' ');
   }
 
-  if (isDocumentTypeOJR(documentMetaData)) {
-    return 'Order that jurisdiction is retained by Judge [JUDGE NAME]. Parties by [DATE INPUT] shall file a status report. Case is stricken from the current trial session.';
+  if (eventCode === 'O') {
+    return [
+      'Order',
+      orderType === 'statusReport' &&
+        `Parties by ${formattedDueDate} shall file a status report.`,
+      orderType === 'statusReportStipulatedDecision' &&
+        `Parties by ${formattedDueDate} shall file a status report or proposed stipulated decision.`,
+      strickenFromTrialSessions &&
+        'Case is stricken from the current trial session.',
+      jurisdiction === 'restoredToGeneralDocket' &&
+        'Case is no longer jurisdiction retained and is restored to the general docket.',
+    ]
+      .filter(Boolean)
+      .join(' ');
   }
-
-  if (documentMetaData.orderType === 'statusReport') {
-    return `Parties by ${documentMetaData.dueDate} shall file a status report.`;
-  }
-  if (documentMetaData.orderType === 'statusReportStipulatedDecision') {
-    return `Parties by ${documentMetaData.dueDate} shall file a status report or proposed stipulated decision.`;
-  }
-
-  return documentMetaData.documentTitle; // do we want to default here?
-}
-
-function isDocumentTypeOJR(documentMetaData: {
-  orderType: string;
-  documentTitle: string;
-  dueDate: string;
-  strickenFromTrialSessions: boolean;
-  jurisdiction: string;
-}) {
-  return (
-    documentMetaData.strickenFromTrialSessions &&
-    documentMetaData.jurisdiction === 'retained'
-  );
+  return documentTitle;
 }
