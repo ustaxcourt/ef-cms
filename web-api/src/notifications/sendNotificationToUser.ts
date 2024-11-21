@@ -141,6 +141,13 @@ type ThirtyDayNoticePaperServiceCompleteNotification = {
   hasPaper?: boolean;
 };
 
+type NoticeGenerationCompleteNotification = {
+  action: 'notice_generation_complete';
+  hasPaper: boolean;
+  trialNoticePdfsKeys: string[];
+  trialSessionId: string;
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
@@ -164,7 +171,8 @@ type NotificationMessage =
   | PaperServiceStartedNotification
   | PaperServiceUpdatedNotification
   | SetTrialCalendarPaperServiceCompleteNotification
-  | ThirtyDayNoticePaperServiceCompleteNotification;
+  | ThirtyDayNoticePaperServiceCompleteNotification
+  | NoticeGenerationCompleteNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
