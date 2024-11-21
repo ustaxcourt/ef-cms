@@ -19,6 +19,7 @@ const props = {
   publicCaseDetailHelper: state.publicCaseDetailHelper,
   sessionMetadata: state.sessionMetadata,
   showModal: state.modal.showModal,
+  sortTableSequence: sequences.sortTableSequence,
   updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
 };
 
@@ -31,6 +32,7 @@ export const PublicDocketRecordHeader = connect(
     publicCaseDetailHelper,
     sessionMetadata,
     showModal,
+    sortTableSequence,
     updateSessionMetadataSequence,
   }: typeof props & {
     publicCaseDetailHelper: ReturnType<typeof state.publicCaseDetailHelper>;
@@ -77,7 +79,7 @@ export const PublicDocketRecordHeader = connect(
               gotoPublicPrintableDocketRecordSequence
             }
             sessionMetadata={sessionMetadata}
-            updateSessionMetadataSequence={updateSessionMetadataSequence}
+            sortTableSequence={sortTableSequence}
           />
         </Mobile>
 
