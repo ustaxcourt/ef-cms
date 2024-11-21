@@ -69,7 +69,5 @@ export const getCaseInventoryReport = async ({
     searchParameters,
   });
 
-  console.log('zzz', JSON.stringify(results[0], null, 2));
-
   return { foundCases: results };
 };
