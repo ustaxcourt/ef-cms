@@ -29,7 +29,8 @@ export const gotoMessagesSequence = startWebSocketConnectionSequenceDecorator([
   setSectionForMessageBoxAction,
   resetSelectedMessageAction,
   parallel([
-    [fetchUserNotificationsSequence, setMessageCountsAction],
+    fetchUserNotificationsSequence,
+    [setMessageCountsAction],
     [
       chooseMessageBoxAction,
       {

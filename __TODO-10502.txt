@@ -11,3 +11,11 @@ Figure out which fields we can get rid of
 How do we handle mailingDate? It looks like it can maybe remain a string.
 
 Refactor to use a case factory. See https://github.com/ustaxcourt/ef-cms/pull/5557/files for one idea.
+
+In getDocumentQCInboxForUser, I had to add to falsy checks that can probably be removed once all the seed data is there.
+
+Get sealCaseInteractor to work -- timezone issue
+
+Associate the right things with a case efficiently in getCaseByDocketNumber
+-- also, maybe we should pass flags (or something like that, but better) to determine which subsets of data we need
+-- I doubt every call to getCaseByDocketNumber actually needs all of the docketEntries, petitioners, etc.
