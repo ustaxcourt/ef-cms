@@ -122,6 +122,11 @@ type PaperServiceStartedNotification = {
   totalPdfs: number;
 };
 
+type PaperServiceUpdatedNotification = {
+  action: 'paper_service_updated';
+  pdfsAppended: number;
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
@@ -142,7 +147,8 @@ type NotificationMessage =
   | ServeToIrsErrorNotification
   | BatchDownloadDocketGeneratedNotification
   | NoticeGenerationUpdatedNotification
-  | PaperServiceStartedNotification;
+  | PaperServiceStartedNotification
+  | PaperServiceUpdatedNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
