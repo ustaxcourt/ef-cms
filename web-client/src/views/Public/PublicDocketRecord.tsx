@@ -12,15 +12,24 @@ import classNames from 'classnames';
 export const PublicDocketRecord = connect(
   {
     docketNumber: state.caseDetail.docketNumber,
+    docketRecordTableSortData: state[KEYS.DOCKET_RECORD_TABLE_SORT] as {
+      sortField: string;
+      sortOrder: 'asc' | 'desc';
+    },
     publicCaseDetailHelper: state.publicCaseDetailHelper,
     sortTableSequence: sequences.sortTableSequence,
-    tableSort: state[KEYS.DOCKET_RECORD_TABLE_SORT],
   },
-  function ({ publicCaseDetailHelper, sortTableSequence, tableSort }) {
+  function ({
+    docketRecordTableSortData,
+    publicCaseDetailHelper,
+    sortTableSequence,
+  }) {
     const noDocumentsMessage = 'There are no documents of that type.';
     return (
       <>
-        <PublicDocketRecordHeader />
+        <PublicDocketRecordHeader
+          docketRecordTableSortData={docketRecordTableSortData}
+        />
 
         <NonPhone>
           <div className="width-full overflow-x-auto">
@@ -36,14 +45,14 @@ export const PublicDocketRecord = connect(
                     hideOnMobile={true}
                     screenReaderTitle="Number"
                     sortField="index"
-                    tableSort={tableSort}
+                    tableSort={docketRecordTableSortData}
                     title="No."
                     onSort={sortTableSequence}
                   />
                   <SortableHeader
                     sortField="sortingFilingDate"
                     sortType="date"
-                    tableSort={tableSort}
+                    tableSort={docketRecordTableSortData}
                     title="Filed Date"
                     onSort={sortTableSequence}
                   />
@@ -51,7 +60,7 @@ export const PublicDocketRecord = connect(
                     hideOnMobile={true}
                     sortField="eventCode"
                     sortType="string"
-                    tableSort={tableSort}
+                    tableSort={docketRecordTableSortData}
                     title="Event"
                     onSort={sortTableSequence}
                   />
@@ -59,7 +68,7 @@ export const PublicDocketRecord = connect(
                   <SortableHeader
                     sortField="descriptionDisplay"
                     sortType="string"
-                    tableSort={tableSort}
+                    tableSort={docketRecordTableSortData}
                     title="Filings and Proceedings"
                     onSort={sortTableSequence}
                   />
@@ -67,7 +76,7 @@ export const PublicDocketRecord = connect(
                     className="hide-on-mobile"
                     hideOnMobile={true}
                     sortField="numberOfPages"
-                    tableSort={tableSort}
+                    tableSort={docketRecordTableSortData}
                     title="Pages"
                     onSort={sortTableSequence}
                   />
@@ -76,7 +85,7 @@ export const PublicDocketRecord = connect(
                     hideOnMobile={true}
                     sortField="filedBy"
                     sortType="string"
-                    tableSort={tableSort}
+                    tableSort={docketRecordTableSortData}
                     title="Filed By"
                     onSort={sortTableSequence}
                   />
@@ -85,14 +94,14 @@ export const PublicDocketRecord = connect(
                     hideOnMobile={true}
                     sortField="action"
                     sortType="string"
-                    tableSort={tableSort}
+                    tableSort={docketRecordTableSortData}
                     title="Action"
                     onSort={sortTableSequence}
                   />
                   <SortableHeader
                     sortField="servedAt"
                     sortType="date"
-                    tableSort={tableSort}
+                    tableSort={docketRecordTableSortData}
                     title="Served"
                     onSort={sortTableSequence}
                   />
@@ -101,7 +110,7 @@ export const PublicDocketRecord = connect(
                     hideOnMobile={true}
                     sortField="servedPartiesCode"
                     sortType="string"
-                    tableSort={tableSort}
+                    tableSort={docketRecordTableSortData}
                     title="Parties"
                     onSort={sortTableSequence}
                   />
