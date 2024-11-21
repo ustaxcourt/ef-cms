@@ -67,6 +67,11 @@ type SaveDocketEntryForLaterCompleteNotification = {
   docketEntryId: string;
 };
 
+type BatchDownloadErrorNotification = {
+  action: 'batch_download_error';
+  error: any;
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
@@ -76,7 +81,8 @@ type NotificationMessage =
   | RetryAsyncRequestNotification
   | BatchDownloadCsvDataNotification
   | DownloadCsvFileNotification
-  | SaveDocketEntryForLaterCompleteNotification;
+  | SaveDocketEntryForLaterCompleteNotification
+  | BatchDownloadErrorNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
