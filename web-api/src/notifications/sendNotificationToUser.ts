@@ -176,6 +176,11 @@ type UserContactInitialUpdateCompleteNotification = {
   action: 'user_contact_initial_update_complete';
 };
 
+type UserContactUpdateErrorNotification = {
+  action: 'user_contact_update_error';
+  error: string;
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
@@ -205,7 +210,8 @@ type NotificationMessage =
   | SetTrialSessionCalendarCompleteNotification
   | SetTrialSessionCalendarErrorNotification
   | UpdateTrialSessionCompleteNotification
-  | UserContactInitialUpdateCompleteNotification;
+  | UserContactInitialUpdateCompleteNotification
+  | UserContactUpdateErrorNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
