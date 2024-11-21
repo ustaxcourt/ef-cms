@@ -107,6 +107,12 @@ type ServeToIrsErrorNotification = {
   action: 'serve_to_irs_error';
 };
 
+type BatchDownloadDocketGeneratedNotification = {
+  action: 'batch_download_docket_generated';
+  filesCompleted: number;
+  totalFiles: number;
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
@@ -124,7 +130,8 @@ type NotificationMessage =
   | MessageCompletionSucessNotification
   | AdminContactInitialUpdateCompleteNotification
   | ServeToIrsCompleteNotification
-  | ServeToIrsErrorNotification;
+  | ServeToIrsErrorNotification
+  | BatchDownloadDocketGeneratedNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
