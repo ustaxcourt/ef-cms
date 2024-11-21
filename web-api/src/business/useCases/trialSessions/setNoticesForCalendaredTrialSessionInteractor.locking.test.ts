@@ -1,9 +1,9 @@
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
-import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
+import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
   handleLockError,

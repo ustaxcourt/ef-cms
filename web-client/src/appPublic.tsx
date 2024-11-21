@@ -36,10 +36,12 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 import { GlobalModalWrapper } from '@web-client/views/GlobalModalWrapper';
 import { createRoot } from 'react-dom/client';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftRegular } from '@fortawesome/free-regular-svg-icons/faArrowAltCircleLeft';
+import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons/faExchangeAlt';
 import { faExclamation } from '@fortawesome/free-solid-svg-icons/faExclamation';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
 import { faLink } from '@fortawesome/free-solid-svg-icons/faLink';
+import { faLongArrowAltDown } from '@fortawesome/free-solid-svg-icons/faLongArrowAltDown';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-regular-svg-icons/faTimesCircle';
 import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
@@ -67,6 +69,7 @@ const appPublic = {
     });
 
     library.add(
+      faExchangeAlt,
       faFileAltSolid,
       faLock,
       faLongArrowAltUp,
@@ -85,6 +88,7 @@ const appPublic = {
       faExclamationCircle,
       faExclamationTriangle,
       faChevronUp,
+      faLongArrowAltDown,
       faEnvelopeSolid,
       faPhone,
       faTimesCircleRegular,

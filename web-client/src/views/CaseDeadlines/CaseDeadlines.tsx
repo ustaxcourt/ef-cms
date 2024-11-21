@@ -155,7 +155,7 @@ export const CaseDeadlines = connect(
                         aria-hidden="true"
                         className="consolidated-case-column"
                       ></th>
-                      <th aria-label="docket number">Docket No.</th>
+                      <th aria-label="Docket number">Docket No.</th>
                       <th>Case Title</th>
                       <th>Description</th>
                       <th>Judge</th>
