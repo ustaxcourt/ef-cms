@@ -113,6 +113,10 @@ type BatchDownloadDocketGeneratedNotification = {
   totalFiles: number;
 };
 
+type NoticeGenerationUpdatedNotification = {
+  action: 'notice_generation_updated';
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
@@ -131,7 +135,8 @@ type NotificationMessage =
   | AdminContactInitialUpdateCompleteNotification
   | ServeToIrsCompleteNotification
   | ServeToIrsErrorNotification
-  | BatchDownloadDocketGeneratedNotification;
+  | BatchDownloadDocketGeneratedNotification
+  | NoticeGenerationUpdatedNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
