@@ -79,10 +79,10 @@ const gatherLocationsToGeocode = ({
       city: aCase.petitioners[0].city,
       id: aCase.petitioners[0].contactId,
       state: aCase.petitioners[0].state,
-      zip: aCase.petitioners[0].postalCode.split('-')[0],
+      zip: aCase.petitioners[0].postalCode,
     };
   }
-  console.log(`Need to geocode ${Object.keys(locations).length} zip codes.`);
+  console.log(`Need to geocode ${Object.keys(locations).length} addresses.`);
   return Object.values(locations);
 };
 
