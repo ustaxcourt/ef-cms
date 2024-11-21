@@ -10,7 +10,14 @@ import { sequences } from '@web-client/presenter/app-public.cerebral';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 
-const props = {
+type PublicDocketRecordHeaderProps = {
+  docketRecordTableSortData: {
+    sortField: string;
+    sortOrder: 'asc' | 'desc';
+  };
+};
+
+const PublicDocketRecordHeaderDep = {
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS:
     state.constants.PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   docketNumber: state.caseDetail.docketNumber,
@@ -23,10 +30,14 @@ const props = {
   updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
 };
 
-export const PublicDocketRecordHeader = connect(
-  props,
+export const PublicDocketRecordHeader = connect<
+  PublicDocketRecordHeaderProps,
+  typeof PublicDocketRecordHeaderDep
+>(
+  PublicDocketRecordHeaderDep,
   function ({
     docketNumber,
+    docketRecordTableSortData,
     gotoPublicPrintableDocketRecordSequence,
     PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
     publicCaseDetailHelper,
@@ -34,8 +45,6 @@ export const PublicDocketRecordHeader = connect(
     showModal,
     sortTableSequence,
     updateSessionMetadataSequence,
-  }: typeof props & {
-    publicCaseDetailHelper: ReturnType<typeof state.publicCaseDetailHelper>;
   }) {
     return (
       <React.Fragment>
@@ -74,11 +83,11 @@ export const PublicDocketRecordHeader = connect(
         <Mobile>
           <DocketRecordMobileHeader
             docketNumber={docketNumber}
+            docketRecordTableSortData={docketRecordTableSortData}
             filterOptions={PUBLIC_DOCKET_RECORD_FILTER_OPTIONS}
             gotoPrintableDocketRecordSequence={
               gotoPublicPrintableDocketRecordSequence
             }
-            sessionMetadata={sessionMetadata}
             sortTableSequence={sortTableSequence}
           />
         </Mobile>

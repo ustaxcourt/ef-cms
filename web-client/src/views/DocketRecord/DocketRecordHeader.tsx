@@ -11,9 +11,9 @@ import React from 'react';
 
 export const DocketRecordMobileHeader = ({
   docketNumber,
+  docketRecordTableSortData,
   filterOptions,
   gotoPrintableDocketRecordSequence,
-  sessionMetadata,
   sortTableSequence,
 }: {
   docketNumber: string;
@@ -21,13 +21,24 @@ export const DocketRecordMobileHeader = ({
   gotoPrintableDocketRecordSequence: (options: {
     docketNumber: string;
   }) => void;
-  sessionMetadata: any;
+  docketRecordTableSortData: {
+    sortField: string;
+    sortOrder: 'asc' | 'desc';
+  };
   sortTableSequence: (props: {
     sortField: string;
     sortOrder: 'asc' | 'desc';
     root?: string;
   }) => void;
 }) => {
+  const { sortField, sortOrder } = docketRecordTableSortData;
+  const CURRENTLY_SELECTED_KEY = Object.entries(SORTING_CONVERSION_DICTIONARY)
+    .filter(entries => {
+      const value = entries[1];
+      return value.sortField === sortField && value.sortOrder === sortOrder;
+    })
+    .map(([key]) => key);
+
   return (
     <div className="grid-container padding-0 docket-record-header">
       <div className="grid-row">
@@ -43,7 +54,7 @@ export const DocketRecordMobileHeader = ({
         <div className="grid-col-fill">
           <DocketRecordSort
             name={`docketRecordSort.${docketNumber}`}
-            value={sessionMetadata.docketRecordSort[docketNumber]}
+            value={CURRENTLY_SELECTED_KEY}
             onChange={option => {
               sortTableSequence({
                 ...SORTING_CONVERSION_DICTIONARY[option.value],
