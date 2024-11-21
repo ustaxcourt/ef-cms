@@ -181,7 +181,7 @@ type UserContactUpdateErrorNotification = {
   error: string;
 };
 
-type NotificationMessage =
+export type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
   | ContactUpdateCompleteNotification
