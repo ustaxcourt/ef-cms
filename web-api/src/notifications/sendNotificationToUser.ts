@@ -148,6 +148,11 @@ type NoticeGenerationCompleteNotification = {
   trialSessionId: string;
 };
 
+type NoticeGenerationStartNotification = {
+  action: 'notice_generation_start';
+  totalCases: number;
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
@@ -172,7 +177,8 @@ type NotificationMessage =
   | PaperServiceUpdatedNotification
   | SetTrialCalendarPaperServiceCompleteNotification
   | ThirtyDayNoticePaperServiceCompleteNotification
-  | NoticeGenerationCompleteNotification;
+  | NoticeGenerationCompleteNotification
+  | NoticeGenerationStartNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
