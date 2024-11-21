@@ -3,8 +3,11 @@ import {
   MOCK_ELIGIBLE_CASE,
   MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
 } from '../../../../../shared/src/test/mockCase';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  SESSION_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { getEligibleCasesForTrialSessionInteractor } from './getEligibleCasesForTrialSessionInteractor';
 import {
@@ -18,7 +21,7 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
   const MOCK_TRIAL = {
     maxCases: 100,
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-    sessionType: 'Regular',
+    sessionType: SESSION_TYPES.regular,
     startDate: '2025-12-01T00:00:00.000Z',
     term: 'Fall',
     termYear: '2025',

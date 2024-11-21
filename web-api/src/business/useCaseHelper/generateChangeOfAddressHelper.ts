@@ -63,7 +63,7 @@ export const generateChangeOfAddressHelper = async ({
     });
 
     const practitionerName = updatedName || user.name;
-    const practitionerObject = caseEntity.privatePractitioners
+    const practitionerObject = (caseEntity.privatePractitioners || [])
       .concat(caseEntity.irsPractitioners)
       .find(practitioner => practitioner.userId === user.userId);
 
@@ -131,12 +131,19 @@ export const generateChangeOfAddressHelper = async ({
       `"change-of-address-job|${jobId}" job finished`,
     );
 
-    if (websocketMessagePrefix === 'user') {
-      const userEntity = new Practitioner({
-        ...user,
-        isUpdatingInformation: false,
-      });
+    const liveUser = await applicationContext
+      .getPersistenceGateway()
+      .getUserById({ applicationContext, userId: user.userId });
 
+    const userEntity = new Practitioner({
+      ...liveUser,
+      contactInfo,
+      isUpdatingInformation: false,
+    });
+
+    const resultsUser: RawPractitioner = userEntity.validate().toRawObject();
+
+    if (websocketMessagePrefix === 'user') {
       await applicationContext.getPersistenceGateway().updateUser({
         applicationContext,
         user: userEntity.validate().toRawObject(),
@@ -152,7 +159,7 @@ export const generateChangeOfAddressHelper = async ({
       applicationContext,
       message: {
         action: CONTACT_UPDATE_COMPLTET_ACTION,
-        user,
+        user: resultsUser,
       },
       userId: requestUserId || user.userId,
     });
