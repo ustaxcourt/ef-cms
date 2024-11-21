@@ -1,6 +1,7 @@
 import { BigHeader } from '../BigHeader';
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
+import { CASE_DEADLINES_REPORT_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
@@ -13,8 +14,6 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
 import React, { useRef } from 'react';
-
-const ITEMS_PER_PAGE = 100;
 
 export const CaseDeadlines = connect(
   {
@@ -44,8 +43,9 @@ export const CaseDeadlines = connect(
     const { activePage, pageRecords, setActivePage, totalPages } =
       useClientSidePaginator(
         caseDeadlineReportHelper.formattedCaseDeadlines,
-        ITEMS_PER_PAGE,
+        CASE_DEADLINES_REPORT_PAGE_SIZE,
       );
+
     return (
       <>
         <BigHeader text="Reports" />
