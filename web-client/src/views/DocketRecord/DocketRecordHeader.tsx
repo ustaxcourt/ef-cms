@@ -11,9 +11,9 @@ import React from 'react';
 
 export const DocketRecordMobileHeader = ({
   docketNumber,
+  docketRecordTableSortData,
   filterOptions,
   gotoPrintableDocketRecordSequence,
-  sessionMetadata,
   sortTableSequence,
 }: {
   docketNumber: string;
@@ -21,13 +21,24 @@ export const DocketRecordMobileHeader = ({
   gotoPrintableDocketRecordSequence: (options: {
     docketNumber: string;
   }) => void;
-  sessionMetadata: any;
+  docketRecordTableSortData: {
+    sortField: string;
+    sortOrder: 'asc' | 'desc';
+  };
   sortTableSequence: (props: {
     sortField: string;
     sortOrder: 'asc' | 'desc';
     root?: string;
   }) => void;
 }) => {
+  const { sortField, sortOrder } = docketRecordTableSortData;
+  const CURRENTLY_SELECTED_KEY = Object.entries(SORTING_CONVERSION_DICTIONARY)
+    .filter(entries => {
+      const value = entries[1];
+      return value.sortField === sortField && value.sortOrder === sortOrder;
+    })
+    .map(([key]) => key);
+
   return (
     <div className="grid-container padding-0 docket-record-header">
       <div className="grid-row">
@@ -43,7 +54,7 @@ export const DocketRecordMobileHeader = ({
         <div className="grid-col-fill">
           <DocketRecordSort
             name={`docketRecordSort.${docketNumber}`}
-            value={sessionMetadata.docketRecordSort[docketNumber]}
+            value={CURRENTLY_SELECTED_KEY}
             onChange={option => {
               sortTableSequence({
                 ...SORTING_CONVERSION_DICTIONARY[option.value],
@@ -132,29 +143,40 @@ export const NonMobileHeaderControls = ({
   );
 };
 
-export const DocketRecordHeader = connect(
-  {
-    DOCKET_RECORD_FILTER_OPTIONS: state.constants.DOCKET_RECORD_FILTER_OPTIONS,
-    docketRecordHelper: state.docketRecordHelper,
-    formattedCaseDetail: state.formattedCaseDetail,
-    formattedDocketEntriesHelper: state.formattedDocketEntries,
-    gotoPrintableDocketRecordSequence:
-      sequences.gotoPrintableDocketRecordSequence,
-    openDownloadDocketEntriesModalSequence:
-      sequences.openDownloadDocketEntriesModalSequence,
-    sessionMetadata: state.sessionMetadata,
-    showModal: state.modal.showModal,
-    sortTableSequence: sequences.sortTableSequence,
-    toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
-  },
+type DocketRecordHeaderProps = {
+  docketRecordTableSortData: {
+    sortField: string;
+    sortOrder: 'asc' | 'desc';
+  };
+};
+
+const DocketRecordHeaderDeps = {
+  DOCKET_RECORD_FILTER_OPTIONS: state.constants.DOCKET_RECORD_FILTER_OPTIONS,
+  docketRecordHelper: state.docketRecordHelper,
+  formattedCaseDetail: state.formattedCaseDetail,
+  formattedDocketEntriesHelper: state.formattedDocketEntries,
+  gotoPrintableDocketRecordSequence:
+    sequences.gotoPrintableDocketRecordSequence,
+  openDownloadDocketEntriesModalSequence:
+    sequences.openDownloadDocketEntriesModalSequence,
+  showModal: state.modal.showModal,
+  sortTableSequence: sequences.sortTableSequence,
+  toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
+};
+
+export const DocketRecordHeader = connect<
+  DocketRecordHeaderProps,
+  typeof DocketRecordHeaderDeps
+>(
+  DocketRecordHeaderDeps,
   function DocketRecordHeader({
     DOCKET_RECORD_FILTER_OPTIONS,
     docketRecordHelper,
+    docketRecordTableSortData,
     formattedCaseDetail,
     formattedDocketEntriesHelper,
     gotoPrintableDocketRecordSequence,
     openDownloadDocketEntriesModalSequence,
-    sessionMetadata,
     showModal,
     sortTableSequence,
   }) {
@@ -207,11 +229,11 @@ export const DocketRecordHeader = connect(
           <Phone>
             <DocketRecordMobileHeader
               docketNumber={formattedCaseDetail.docketNumber}
+              docketRecordTableSortData={docketRecordTableSortData}
               filterOptions={DOCKET_RECORD_FILTER_OPTIONS}
               gotoPrintableDocketRecordSequence={
                 gotoPrintableDocketRecordSequence
               }
-              sessionMetadata={sessionMetadata}
               sortTableSequence={sortTableSequence}
             />
           </Phone>

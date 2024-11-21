@@ -69,6 +69,7 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
+  constants: {} as { [key: string]: any },
   currentPage: 'Interstitial',
   featureFlags: undefined as unknown as { [key: string]: string },
   form: {} as Record<string, any>,
