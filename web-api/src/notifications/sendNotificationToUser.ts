@@ -134,6 +134,13 @@ type SetTrialCalendarPaperServiceCompleteNotification = {
   pdfUrl: string;
 };
 
+type ThirtyDayNoticePaperServiceCompleteNotification = {
+  action: 'thirty_day_notice_paper_service_complete';
+  pdfUrl?: string;
+  fileId?: string;
+  hasPaper?: boolean;
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
@@ -156,7 +163,8 @@ type NotificationMessage =
   | NoticeGenerationUpdatedNotification
   | PaperServiceStartedNotification
   | PaperServiceUpdatedNotification
-  | SetTrialCalendarPaperServiceCompleteNotification;
+  | SetTrialCalendarPaperServiceCompleteNotification
+  | ThirtyDayNoticePaperServiceCompleteNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
