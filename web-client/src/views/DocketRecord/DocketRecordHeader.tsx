@@ -143,29 +143,40 @@ export const NonMobileHeaderControls = ({
   );
 };
 
-export const DocketRecordHeader = connect(
-  {
-    DOCKET_RECORD_FILTER_OPTIONS: state.constants.DOCKET_RECORD_FILTER_OPTIONS,
-    docketRecordHelper: state.docketRecordHelper,
-    formattedCaseDetail: state.formattedCaseDetail,
-    formattedDocketEntriesHelper: state.formattedDocketEntries,
-    gotoPrintableDocketRecordSequence:
-      sequences.gotoPrintableDocketRecordSequence,
-    openDownloadDocketEntriesModalSequence:
-      sequences.openDownloadDocketEntriesModalSequence,
-    sessionMetadata: state.sessionMetadata,
-    showModal: state.modal.showModal,
-    sortTableSequence: sequences.sortTableSequence,
-    toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
-  },
+type DocketRecordHeaderProps = {
+  docketRecordTableSortData: {
+    sortField: string;
+    sortOrder: 'asc' | 'desc';
+  };
+};
+
+const DocketRecordHeaderDeps = {
+  DOCKET_RECORD_FILTER_OPTIONS: state.constants.DOCKET_RECORD_FILTER_OPTIONS,
+  docketRecordHelper: state.docketRecordHelper,
+  formattedCaseDetail: state.formattedCaseDetail,
+  formattedDocketEntriesHelper: state.formattedDocketEntries,
+  gotoPrintableDocketRecordSequence:
+    sequences.gotoPrintableDocketRecordSequence,
+  openDownloadDocketEntriesModalSequence:
+    sequences.openDownloadDocketEntriesModalSequence,
+  showModal: state.modal.showModal,
+  sortTableSequence: sequences.sortTableSequence,
+  toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
+};
+
+export const DocketRecordHeader = connect<
+  DocketRecordHeaderProps,
+  typeof DocketRecordHeaderDeps
+>(
+  DocketRecordHeaderDeps,
   function DocketRecordHeader({
     DOCKET_RECORD_FILTER_OPTIONS,
     docketRecordHelper,
+    docketRecordTableSortData,
     formattedCaseDetail,
     formattedDocketEntriesHelper,
     gotoPrintableDocketRecordSequence,
     openDownloadDocketEntriesModalSequence,
-    sessionMetadata,
     showModal,
     sortTableSequence,
   }) {
@@ -218,11 +229,11 @@ export const DocketRecordHeader = connect(
           <Phone>
             <DocketRecordMobileHeader
               docketNumber={formattedCaseDetail.docketNumber}
+              docketRecordTableSortData={docketRecordTableSortData}
               filterOptions={DOCKET_RECORD_FILTER_OPTIONS}
               gotoPrintableDocketRecordSequence={
                 gotoPrintableDocketRecordSequence
               }
-              sessionMetadata={sessionMetadata}
               sortTableSequence={sortTableSequence}
             />
           </Phone>
