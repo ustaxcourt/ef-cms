@@ -12,7 +12,7 @@ import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/message
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
-import { upsertCase } from '@web-api/persistence/postgres/cases/upsertCase';
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import diff from 'diff-arrays-of-objects';
 
 /**
@@ -472,7 +472,7 @@ export const updateCaseAndAssociations = async ({
 
   await Promise.all(persistenceRequests);
 
-  await upsertCase({ rawCase: validRawCaseEntity });
+  await upsertCases([validRawCaseEntity]);
 
   return applicationContext.getPersistenceGateway().updateCase({
     applicationContext,

@@ -40,11 +40,11 @@ export function workItemEntity(workItem) {
     transformNullToUndefined({
       ...workItem,
       caseStatus: workItem.status,
-      caseTitle: Case.getCaseTitle(workItem.caption),
+      caseTitle: Case.getCaseTitle(workItem.caption || ''),
       completedAt: workItem.completedAt?.toISOString(),
-      createdAt: workItem.createdAt.toISOString(),
+      createdAt: workItem.createdAt?.toISOString(),
       trialDate: workItem.trialDate?.toISOString(),
-      updatedAt: workItem.createdAt.toISOString(),
+      updatedAt: workItem.createdAt?.toISOString(),
     }),
   );
 }
