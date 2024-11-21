@@ -126,12 +126,19 @@ export const generateChangeOfAddressHelper = async ({
       `"change-of-address-job|${jobId}" job finished`,
     );
 
+    let resultsUser: RawPractitioner = user;
     if (websocketMessagePrefix === 'user') {
+      const liveUser = await applicationContext
+        .getPersistenceGateway()
+        .getUserById({ applicationContext, userId: user.userId });
+
       const userEntity = new Practitioner({
-        ...user,
+        ...liveUser,
+        contactInfo,
         isUpdatingInformation: false,
       });
 
+      resultsUser = userEntity.validate().toRawObject();
       await applicationContext.getPersistenceGateway().updateUser({
         applicationContext,
         user: userEntity.validate().toRawObject(),
@@ -142,7 +149,7 @@ export const generateChangeOfAddressHelper = async ({
       applicationContext,
       message: {
         action: `${websocketMessagePrefix}_contact_full_update_complete`,
-        user,
+        user: resultsUser,
       },
       userId: requestUserId || user.userId,
     });
