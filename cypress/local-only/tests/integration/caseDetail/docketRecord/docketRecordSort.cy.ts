@@ -116,6 +116,23 @@ describe('Docket record sort', () => {
       });
     });
   });
+
+  describe('Mobile View', () => {
+    beforeEach(() => {
+      cy.viewport('iphone-5');
+    });
+    it('should update the dropdown value when user selects an option', () => {
+      cy.get('[data-testid="docket-record-sort-select"]').should(
+        'have.value',
+        'byDate',
+      );
+      cy.get('[data-testid="docket-record-sort-select"]').select('byIndexDesc');
+      cy.get('[data-testid="docket-record-sort-select"]').should(
+        'have.value',
+        'byIndexDesc',
+      );
+    });
+  });
 });
 
 const getColumnTextFields = (dataTestId: string) => {
