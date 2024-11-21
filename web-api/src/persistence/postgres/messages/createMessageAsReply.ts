@@ -23,7 +23,7 @@ export const createMessageAsReply = async ({
             .set({
               isRepliedTo: true,
             })
-            .where('messageId', '=', parentMessageId)
+            .where('parentMessageId', '=', parentMessageId)
             .execute();
         }
 
@@ -31,9 +31,9 @@ export const createMessageAsReply = async ({
           .insertInto('dwMessage')
           .values(toKyselyNewMessage(newMessage))
           .returningAll()
-          .executeTakeFirstOrThrow(
-            () => new Error('could not create a message'),
-          );
+          .executeTakeFirstOrThrow(() => {
+            throw new Error('could not create a message');
+          });
       }),
   );
 
