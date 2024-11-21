@@ -98,6 +98,11 @@ type AdminContactInitialUpdateCompleteNotification = {
   action: 'admin_contact_initial_update_complete';
 };
 
+type ServeToIrsComplteNotification = {
+  action: 'serve_to_irs_complete';
+  pdfUrl: string;
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
@@ -113,7 +118,8 @@ type NotificationMessage =
   | BatchDownloadReadyNotification
   | AwsBatchDownloadProgressNotification
   | MessageCompletionSucessNotification
-  | AdminContactInitialUpdateCompleteNotification;
+  | AdminContactInitialUpdateCompleteNotification
+  | ServeToIrsComplteNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
