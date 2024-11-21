@@ -36,12 +36,19 @@ type ServeDocumentCompleteNotification = {
   pdfUrl?: string;
 };
 
+type RetryAsyncRequestNotification = {
+  action: 'retry_async_request';
+  originalRequest: any;
+  requestToRetry: string;
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
   | ContactUpdateCompleteNotification
   | ServeDocumentErrorNotification
-  | ServeDocumentCompleteNotification;
+  | ServeDocumentCompleteNotification
+  | RetryAsyncRequestNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
