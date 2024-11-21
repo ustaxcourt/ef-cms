@@ -72,6 +72,12 @@ type BatchDownloadErrorNotification = {
   error: any;
 };
 
+type BatchDownloadProgressNotification = {
+  action: 'batch_download_progress';
+  filesCompleted: number;
+  totalFiles: number;
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
@@ -82,7 +88,8 @@ type NotificationMessage =
   | BatchDownloadCsvDataNotification
   | DownloadCsvFileNotification
   | SaveDocketEntryForLaterCompleteNotification
-  | BatchDownloadErrorNotification;
+  | BatchDownloadErrorNotification
+  | BatchDownloadProgressNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
