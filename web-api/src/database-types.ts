@@ -7,6 +7,7 @@ export interface Database {
   dwUser: UserTable;
   dwUserCase: UserCaseTable;
   dwCaseStatusUpdate: CaseStatusUpdateTable;
+  dwCaseStatistics: CaseStatisticsTable;
 }
 
 export interface MessageTable {
@@ -104,7 +105,7 @@ export interface CaseTable {
   trialLocation?: string;
   trialSessionId?: string;
   trialTime?: string;
-  useSameAsPrimary?: string;
+  useSameAsPrimary?: boolean;
 }
 
 export type CaseKysely = Selectable<CaseTable>;
@@ -192,3 +193,17 @@ export interface CaseStatusUpdateTable {
 export type CaseStatusUpdateKysely = Selectable<CaseStatusUpdateTable>;
 export type NewCaseStatusUpdateKysely = Insertable<CaseStatusUpdateTable>;
 export type UpdateCaseStatusUpdateKysely = Updateable<CaseStatusUpdateTable>;
+
+export interface CaseStatisticsTable {
+  docketNumber: string;
+  irsDeficiencyAmount: number;
+  irsTotalPenalties: number;
+  statisticId: string;
+  year: number;
+  yearOrPeriod: string;
+  // TODO 10502: finish filling out
+}
+
+export type CaseStatisticsKysely = Selectable<CaseStatisticsTable>;
+export type NewCaseStatisticsKysely = Insertable<CaseStatisticsTable>;
+export type UpdateCaseStatisticsKysely = Updateable<CaseStatisticsTable>;

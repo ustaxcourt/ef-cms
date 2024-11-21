@@ -59,7 +59,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('statistics', 'jsonb')
     .addColumn('trialSessionId', 'varchar')
     .addColumn('trialTime', 'varchar')
-    .addColumn('useSameAsPrimary', 'varchar')
+    .addColumn('useSameAsPrimary', 'boolean')
     .execute();
 }
 
