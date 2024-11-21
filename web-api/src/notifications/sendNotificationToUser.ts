@@ -117,6 +117,11 @@ type NoticeGenerationUpdatedNotification = {
   action: 'notice_generation_updated';
 };
 
+type PaperServiceStartedNotification = {
+  action: 'paper_service_started';
+  totalPdfs: number;
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
@@ -136,7 +141,8 @@ type NotificationMessage =
   | ServeToIrsCompleteNotification
   | ServeToIrsErrorNotification
   | BatchDownloadDocketGeneratedNotification
-  | NoticeGenerationUpdatedNotification;
+  | NoticeGenerationUpdatedNotification
+  | PaperServiceStartedNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
