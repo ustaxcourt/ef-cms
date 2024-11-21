@@ -14,7 +14,7 @@ export const caseStatusHistoryHelper = (
   applicationContext: ClientApplicationContext,
 ): any => {
   const caseStatusHistory = get(state.caseDetail.caseStatusHistory);
-
+  console.log('WOOT', caseStatusHistory);
   return {
     formattedCaseStatusHistory: caseStatusHistory.map(history => ({
       ...history,

@@ -33,9 +33,19 @@ export const getCaseByDocketNumber = async ({
       .execute(),
   );
 
+  const caseHistory = await getDbReader(reader =>
+    reader
+      .selectFrom('dwCaseStatusUpdate')
+      .where('docketNumber', '=', docketNumber)
+      .orderBy('date asc')
+      .selectAll()
+      .execute(),
+  );
+
   console.log('getCaseByDocketNumber');
-  console.log(caseResult);
-  console.log(petitioners);
+  // console.log(caseResult);
+  // console.log(petitioners);
+  // console.log(caseHistory);
 
   const docketEntries = await getDocketEntryOnCase({
     applicationContext,
@@ -48,7 +58,14 @@ export const getCaseByDocketNumber = async ({
         authorizedUser,
         rawCase: transformNullToUndefined({
           ...caseResult,
-          caseCaption: caseResult.caption, // TODO, this is a hack
+          caseCaption: caseResult.caption,
+          caseStatusHistory: caseHistory.map(d => {
+            return {
+              ...d,
+              date: d.date.toISOString(),
+            };
+          }),
+          // TODO, this is a hack
           docketEntries,
           petitioners:
             transformNullToUndefined(petitioners).map(x => {

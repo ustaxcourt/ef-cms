@@ -1,11 +1,10 @@
 import { caseStatusUpdates } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/caseStatusUpdates';
-import { cases } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases';
+import { cases100_104 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases100_104';
+import { cases105_109 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases105_109';
 import { getDbWriter } from '../../../../database';
 import { messages } from './fixtures/messages';
-import {
-  petitionerToCaseMappings,
-  petitionerUsers,
-} from '@web-api/persistence/postgres/utils/seed/fixtures/users/petitioners';
+import { petitionerToCaseMappings } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/petitionerToCaseMappings';
+import { petitionerUsers } from '@web-api/persistence/postgres/utils/seed/fixtures/users/petitioners';
 import { workItems } from './fixtures/workItems';
 
 export const seed = async () => {
@@ -25,16 +24,25 @@ export const seed = async () => {
       .execute(),
   );
 
-  // Seed the cases
+  // Seed the cases 100-104
   await getDbWriter(writer =>
     writer
       .insertInto('dwCase')
-      .values(cases)
+      .values(cases100_104)
       .onConflict(oc => oc.column('docketNumber').doNothing())
       .execute(),
   );
 
-  // Seed the case status updates
+  // Seed the cases 105-109
+  await getDbWriter(writer =>
+    writer
+      .insertInto('dwCase')
+      .values(cases105_109)
+      .onConflict(oc => oc.column('docketNumber').doNothing())
+      .execute(),
+  );
+
+  // Attach the case status updates to their respective cases
   await getDbWriter(writer =>
     writer
       .insertInto('dwCaseStatusUpdate')
@@ -52,7 +60,7 @@ export const seed = async () => {
       .execute(),
   );
 
-  // Attach petitioners to cases
+  // Attach petitioners to their respective cases
   await getDbWriter(writer =>
     writer
       .insertInto('dwUserCase')

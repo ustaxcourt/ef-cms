@@ -16,6 +16,11 @@ In getDocumentQCInboxForUser, I had to add to falsy checks that can probably be 
 
 Get sealCaseInteractor to work -- timezone issue
 
+Fix duplicate contact ids in petitioners.ts seed data
+
+Finish Statistics table stuff: add migration, make sure all of the right fields are there, and seed
+
 Associate the right things with a case efficiently in getCaseByDocketNumber
+-- need respondent counsel, consolidated cases, case status history ...
 -- also, maybe we should pass flags (or something like that, but better) to determine which subsets of data we need
 -- I doubt every call to getCaseByDocketNumber actually needs all of the docketEntries, petitioners, etc.
