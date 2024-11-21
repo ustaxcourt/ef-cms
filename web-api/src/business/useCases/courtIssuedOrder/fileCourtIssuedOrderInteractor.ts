@@ -185,7 +185,7 @@ function generateFreeText(
     return [
       `Order that jurisdiction is retained by ${user.judgeTitle} ${user.name}.`,
       orderType === 'statusReport' &&
-        `Parties by ${formattedDueDate} shall file a status report.`, // dont necessarily have a due date
+        `Parties by ${formattedDueDate} shall file a status report.`,
       orderType === 'statusReportStipulatedDecision' &&
         `Parties by ${formattedDueDate} shall file a status report or proposed stipulated decision.`,
       strickenFromTrialSessions &&
@@ -199,9 +199,9 @@ function generateFreeText(
     return [
       'Order',
       orderType === 'statusReport' &&
-        `Parties by ${formattedDueDate} shall file a status report.`,
+        `parties by ${formattedDueDate} shall file a status report.`,
       orderType === 'statusReportStipulatedDecision' &&
-        `Parties by ${formattedDueDate} shall file a status report or proposed stipulated decision.`,
+        `parties by ${formattedDueDate} shall file a status report or proposed stipulated decision.`,
       strickenFromTrialSessions &&
         'Case is stricken from the current trial session.',
       jurisdiction === 'restoredToGeneralDocket' &&
