@@ -44,9 +44,9 @@ const getCasesByYear = async ({
                 },
               },
               // In some instances, a paper case can be assigned a docket number
-              // with a year that matches the neither the case's receivedAt date
-              // nor createdAt date. For the purposes of this report, the year
-              // we want is encoded in the sortableDocketNumber.
+              // with a year that matches neither the case's receivedAt date nor
+              // createdAt date. For the purposes of this report, the year we
+              // care about is encoded in the sortableDocketNumber.
               {
                 range: {
                   'sortableDocketNumber.N': {
@@ -93,6 +93,7 @@ const geocodeLocations = async ({
   geocoder: Geocoder;
   locations: locationType[];
 }): Promise<void> => {
+  console.log(`Batch: geocoding ${locations.length} addresses.`);
   for (const location of locations) {
     geocoder.add(location.id, location);
   }
@@ -112,6 +113,9 @@ const geocodeAllCases = async ({
 }): Promise<void> => {
   const allLocations = gatherLocationsToGeocode({ cases });
   const locationChunks = chunk(allLocations, 10000);
+  // We experience throttling if we try to submit simultaneous requests to the
+  // US Census Bureau API using Promise.all() or priority queues. Thus, the
+  // inefficiency of the following is intentional(ly courteous).
   const geocoder = new Geocoder();
   for (const locations of locationChunks) {
     await geocodeLocations({ geocoder, locations });
