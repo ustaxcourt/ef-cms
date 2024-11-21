@@ -1,6 +1,7 @@
 // usage:
-// npx ts-node --transpile-only scripts/reports/geocoded-cases-by-year.ts
-// npx ts-node --transpile-only scripts/reports/geocoded-cases-by-year.ts 2023
+// npx ts-node --transpile-only scripts/reports/geocoded-cases.ts
+// npx ts-node --transpile-only scripts/reports/geocoded-cases.ts 2023
+// npx ts-node --transpile-only scripts/reports/geocoded-cases.ts 2017 2023
 
 import { DateTime } from 'luxon';
 import { Geocoder } from 'us-census-geocoder';
@@ -13,9 +14,15 @@ import { generateCsv } from '../helpers/generate-csv';
 import { prepareDateFromString } from '@shared/business/utilities/DateHandler';
 import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 
-const year = process.argv[2] || `${DateTime.now().toObject().year}`;
+const beginYear = process.argv[2] || `${DateTime.now().toObject().year}`;
+const endYear =
+  process.argv[3] && Number(process.argv[3]) > Number(beginYear)
+    ? process.argv[3]
+    : beginYear;
+
+const timeframe = endYear !== beginYear ? `${beginYear}-${endYear}` : beginYear;
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
-const OUTPUT_FILENAME = `${OUTPUT_DIR}/geocoded-cases-${year}.csv`;
+const OUTPUT_FILENAME = `${OUTPUT_DIR}/geocoded-cases_${timeframe}.csv`;
 
 type locationType = {
   address: string;
@@ -26,7 +33,7 @@ type locationType = {
 };
 const geocodedLocations: { [k: string]: { lat: number; lon: number } } = {};
 
-const getCasesByYear = async ({
+const getCasesInTimeframe = async ({
   applicationContext,
 }: {
   applicationContext: ServerApplicationContext;
@@ -50,8 +57,8 @@ const getCasesByYear = async ({
               {
                 range: {
                   'sortableDocketNumber.N': {
-                    gte: Number(`${year}000000`),
-                    lt: Number(`${Number(year) + 1}000000`),
+                    gte: Number(`${beginYear}000000`),
+                    lt: Number(`${Number(endYear) + 1}000000`),
                   },
                 },
               },
@@ -63,7 +70,7 @@ const getCasesByYear = async ({
       index: 'efcms-case',
     },
   });
-  console.log(`Retrieved ${results.length} cases for ${year}.`);
+  console.log(`Retrieved ${results.length} cases for ${timeframe}.`);
   return results;
 };
 
@@ -189,7 +196,7 @@ const outputCsv = ({ cases }: { cases: RawCase[] }): void => {
         ? 'Represented'
         : 'Not Represented',
     suffix: c.docketNumberSuffix ? c.docketNumberSuffix : 'None',
-    year,
+    year: `${c.sortableDocketNumber}`.slice(0, 5),
   }));
   generateCsv({ columns, filename: OUTPUT_FILENAME, rows });
   console.log(`Generated ${OUTPUT_FILENAME}`);
@@ -198,7 +205,7 @@ const outputCsv = ({ cases }: { cases: RawCase[] }): void => {
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
-  const cases = await getCasesByYear({ applicationContext });
+  const cases = await getCasesInTimeframe({ applicationContext });
   await geocodeAllCases({ cases });
   outputCsv({ cases });
 })();
