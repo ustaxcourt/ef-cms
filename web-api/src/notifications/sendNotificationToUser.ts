@@ -89,6 +89,15 @@ type AwsBatchDownloadProgressNotification = {
   totalFiles: number;
 };
 
+type MessageCompletionSucessNotification = {
+  action: 'message_completion_success';
+  completedMessageIds: string[];
+};
+
+type AdminContactInitialUpdateCompleteNotification = {
+  action: 'admin_contact_initial_update_complete';
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
@@ -102,7 +111,9 @@ type NotificationMessage =
   | BatchDownloadErrorNotification
   | BatchDownloadProgressNotification
   | BatchDownloadReadyNotification
-  | AwsBatchDownloadProgressNotification;
+  | AwsBatchDownloadProgressNotification
+  | MessageCompletionSucessNotification
+  | AdminContactInitialUpdateCompleteNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
