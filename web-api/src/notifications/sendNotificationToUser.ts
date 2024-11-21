@@ -48,6 +48,14 @@ type BatchDownloadCsvDataNotification = {
   totalFiles: number;
 };
 
+type DownloadCsvFileNotification = {
+  action: 'download_csv_file';
+  csvInfo: {
+    fileName: string;
+    url: string;
+  };
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
@@ -55,7 +63,8 @@ type NotificationMessage =
   | ServeDocumentErrorNotification
   | ServeDocumentCompleteNotification
   | RetryAsyncRequestNotification
-  | BatchDownloadCsvDataNotification;
+  | BatchDownloadCsvDataNotification
+  | DownloadCsvFileNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
