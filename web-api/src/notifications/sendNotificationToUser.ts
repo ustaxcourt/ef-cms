@@ -143,9 +143,9 @@ type ThirtyDayNoticePaperServiceCompleteNotification = {
 
 type NoticeGenerationCompleteNotification = {
   action: 'notice_generation_complete';
-  hasPaper: boolean;
+  hasPaper?: boolean;
   trialNoticePdfsKeys: string[];
-  trialSessionId: string;
+  trialSessionId?: string;
 };
 
 type NoticeGenerationStartNotification = {
