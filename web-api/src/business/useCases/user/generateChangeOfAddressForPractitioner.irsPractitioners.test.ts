@@ -80,6 +80,10 @@ describe('generateChangeOfAddress', () => {
         eventCode: 'NCA',
         title: 'Notice of Change of Address',
       });
+
+    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+      ...mockIrsPractitioner,
+    });
   });
 
   it('should run a change of address when address1 changes for an irs practitioner', async () => {
