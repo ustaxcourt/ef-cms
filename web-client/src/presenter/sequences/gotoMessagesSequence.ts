@@ -12,7 +12,7 @@ import { getOutboxMessagesForUserAction } from '../actions/getOutboxMessagesForU
 import { parallel } from 'cerebral';
 import { resetCacheKeyAction } from '../actions/resetCacheKeyAction';
 import { resetSelectedMessageAction } from '@web-client/presenter/actions/Messages/resetSelectedMessageAction';
-import { setDefaultTableSortAction } from '../actions/setDefaultTableSortAction';
+import { setDefaultMessagePageTableSortAction } from '../actions/setDefaultMessagePageTableSortAction';
 import { setMessageCountsAction } from '../actions/setMessageCountsAction';
 import { setMessagesAction } from '../actions/setMessagesAction';
 import { setSectionForMessageBoxAction } from '../actions/setSectionForMessageBoxAction';
@@ -25,7 +25,7 @@ export const gotoMessagesSequence = startWebSocketConnectionSequenceDecorator([
   closeMobileMenuAction,
   clearScreenMetadataAction,
   clearErrorAlertsAction,
-  setDefaultTableSortAction,
+  setDefaultMessagePageTableSortAction,
   setSectionForMessageBoxAction,
   resetSelectedMessageAction,
   parallel([
