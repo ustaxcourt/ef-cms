@@ -612,8 +612,6 @@ export const baseState = {
       leadDocketNumber: string;
     })[];
     judgeFilter: string;
-    totalCount: number;
-    page: number;
   },
   caseDeadlines: [] as RawCaseDeadline[],
   caseDetail: {} as RawCase,

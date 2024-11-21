@@ -38,7 +38,6 @@ describe('caseDeadlineReportHelper', () => {
         caseDeadlineReport: {},
       },
     });
-    expect(result.totalCount).toEqual(0);
     expect(result.formattedCaseDeadlines).toEqual([]);
     expect(result.formattedFilterDateHeader).toBeTruthy();
   });
@@ -151,7 +150,7 @@ describe('caseDeadlineReportHelper', () => {
     it('should return showJudgeSelect true when caseDeadlines length is greater than 0', () => {
       const result = runCompute(caseDeadlineReportHelper, {
         state: {
-          caseDeadlineReport: { caseDeadlines, totalCount: 20 },
+          caseDeadlineReport: { caseDeadlines },
           screenMetadata: {
             filterEndDate: '2019-08-23T04:00:00.000Z',
             filterStartDate: '2019-08-21T04:00:00.000Z',
@@ -167,7 +166,6 @@ describe('caseDeadlineReportHelper', () => {
           caseDeadlineReport: {
             caseDeadlines: [],
             judgeFilter: 'Carluzzo',
-            totalCount: 0,
           },
           screenMetadata: {
             filterEndDate: '2019-08-23T04:00:00.000Z',
@@ -183,7 +181,6 @@ describe('caseDeadlineReportHelper', () => {
         state: {
           caseDeadlineReport: {
             caseDeadlines: [],
-            totalCount: 0,
           },
           screenMetadata: {
             filterEndDate: '2019-08-23T04:00:00.000Z',
@@ -201,7 +198,6 @@ describe('caseDeadlineReportHelper', () => {
         state: {
           caseDeadlineReport: {
             caseDeadlines: [],
-            totalCount: 0,
           },
           screenMetadata: {
             filterEndDate: '2019-08-23T04:00:00.000Z',
@@ -215,7 +211,7 @@ describe('caseDeadlineReportHelper', () => {
     it('should return showNoDeadlines false when caseDeadlines length is greater than 0', () => {
       const result = runCompute(caseDeadlineReportHelper, {
         state: {
-          caseDeadlineReport: { caseDeadlines, totalCount: 20 },
+          caseDeadlineReport: { caseDeadlines },
           screenMetadata: {
             filterEndDate: '2019-08-23T04:00:00.000Z',
             filterStartDate: '2019-08-21T04:00:00.000Z',

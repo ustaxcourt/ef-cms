@@ -24,12 +24,10 @@ export const caseDeadlineReportHelper = (
   judges: string[];
   showJudgeSelect: boolean;
   showNoDeadlines: boolean;
-  totalCount: number;
 } => {
   const { CHIEF_JUDGE, DATE_FORMATS } = applicationContext.getConstants();
 
   const caseDeadlines = get(state.caseDeadlineReport.caseDeadlines) || [];
-  const totalCount = get(state.caseDeadlineReport.totalCount) || 0;
   const judgeFilter = get(state.caseDeadlineReport.judgeFilter);
   const showJudgeSelect = caseDeadlines.length > 0 || !!judgeFilter;
   const showNoDeadlines = caseDeadlines.length === 0;
@@ -95,6 +93,5 @@ export const caseDeadlineReportHelper = (
     judges,
     showJudgeSelect,
     showNoDeadlines,
-    totalCount,
   };
 };

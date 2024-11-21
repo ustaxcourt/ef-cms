@@ -1559,7 +1559,6 @@ export const CASE_SEARCH_MIN_YEAR = 1986;
 export const CASE_SEARCH_PAGE_SIZE = 25; // number of results returned for each page when searching for a case
 export const CASE_INVENTORY_PAGE_SIZE = 25; // number of results returned for each page in the case inventory report
 export const CASE_LIST_PAGE_SIZE = 20; // number of results returned for each page for the external user dashboard case list
-export const DEADLINE_REPORT_PAGE_SIZE = 100; // number of results returned for each page for the case deadline report
 export const TODAYS_ORDERS_PAGE_SIZE = 100; // number of results returned for each page for the today's orders page
 export const PRACTITIONER_SEARCH_PAGE_SIZE = 100; // number of results returned for each page for the practitioner search page
 

@@ -141,7 +141,8 @@ export const CaseDeadlines = connect(
               <div className="margin-bottom-2">
                 <div className="text-right">
                   <span className="text-semibold">
-                    Count: {caseDeadlineReportHelper.totalCount}
+                    Count:{' '}
+                    {caseDeadlineReportHelper.formattedCaseDeadlines.length}
                   </span>
                 </div>
               </div>

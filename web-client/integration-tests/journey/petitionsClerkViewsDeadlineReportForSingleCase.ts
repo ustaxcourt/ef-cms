@@ -2,13 +2,6 @@ import {
   FORMATS,
   prepareDateFromString,
 } from '../../../shared/src/business/utilities/DateHandler';
-import { caseDeadlineReportHelper as caseDeadlineReportHelperComputed } from '../../src/presenter/computeds/caseDeadlineReportHelper';
-import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../../src/withAppContext';
-
-const caseDeadlineReportHelper = withAppContextDecorator(
-  caseDeadlineReportHelperComputed,
-);
 
 export const petitionsClerkViewsDeadlineReportForSingleCase = (
   cerebralTest,
@@ -45,20 +38,8 @@ export const petitionsClerkViewsDeadlineReportForSingleCase = (
       d => d.docketNumber === cerebralTest.docketNumber,
     );
 
-    expect(deadlinesForThisCase.length).toEqual(1);
-
-    expect(deadlinesForThisCase[0].deadlineDate).toBeDefined();
-
-    runCompute(caseDeadlineReportHelper, {
-      state: cerebralTest.getState(),
-    });
-
-    deadlines = cerebralTest.getState('caseDeadlineReport.caseDeadlines');
-
-    deadlinesForThisCase = deadlines.filter(
-      d => d.docketNumber === cerebralTest.docketNumber,
-    );
-
     expect(deadlinesForThisCase.length).toEqual(2);
+    expect(deadlinesForThisCase[0].deadlineDate).toBeDefined();
+    expect(deadlinesForThisCase[1].deadlineDate).toBeDefined();
   });
 };
