@@ -36,7 +36,6 @@ const MOCK_ROWS = [
     type: 'Assassin',
   },
   {
-    alliance: 'Empire',
     name: 'MSE-6',
     restrained: true,
     type: 'Mouse',
@@ -49,7 +48,7 @@ const MOCK_CONTENTS =
   '\n"R2-D2","Astromech","Rebellion"' +
   '\n"C1-10P","Astromech","Rebellion"' +
   '\n"IG-88","Assassin","Empire"' +
-  '\n"MSE-6","Mouse","Empire"';
+  '\n"MSE-6","Mouse",""';
 
 describe('generateCsv', () => {
   beforeEach(() => {
