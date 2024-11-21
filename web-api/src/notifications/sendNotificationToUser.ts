@@ -153,6 +153,11 @@ type NoticeGenerationStartNotification = {
   totalCases: number;
 };
 
+type SetTrialSessionCalendarCompleteNotification = {
+  action: 'set_trial_session_calendar_complete';
+  trialSessionId: string;
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
@@ -178,7 +183,8 @@ type NotificationMessage =
   | SetTrialCalendarPaperServiceCompleteNotification
   | ThirtyDayNoticePaperServiceCompleteNotification
   | NoticeGenerationCompleteNotification
-  | NoticeGenerationStartNotification;
+  | NoticeGenerationStartNotification
+  | SetTrialSessionCalendarCompleteNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
