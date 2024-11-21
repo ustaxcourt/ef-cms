@@ -58,12 +58,13 @@ type DownloadCsvFileNotification = {
   };
 };
 
-type SaveDocketEntryForLaterNotification = {
+type SaveDocketEntryForLaterCompleteNotification = {
   action: 'save_docket_entry_for_later_complete';
-  csvInfo: {
-    fileName: string;
-    url: string;
+  alertSuccess: {
+    message: string;
+    overwritable: boolean;
   };
+  docketEntryId: string;
 };
 
 type NotificationMessage =
@@ -74,7 +75,8 @@ type NotificationMessage =
   | ServeDocumentCompleteNotification
   | RetryAsyncRequestNotification
   | BatchDownloadCsvDataNotification
-  | DownloadCsvFileNotification;
+  | DownloadCsvFileNotification
+  | SaveDocketEntryForLaterCompleteNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
