@@ -163,6 +163,14 @@ type SetTrialSessionCalendarErrorNotification = {
   message: string;
 };
 
+type UpdateTrialSessionCompleteNotification = {
+  action: 'update_trial_session_complete';
+  fileId?: string;
+  hasPaper?: boolean;
+  pdfUrl?: string;
+  trialSessionId?: string;
+};
+
 type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
@@ -190,7 +198,8 @@ type NotificationMessage =
   | NoticeGenerationCompleteNotification
   | NoticeGenerationStartNotification
   | SetTrialSessionCalendarCompleteNotification
-  | SetTrialSessionCalendarErrorNotification;
+  | SetTrialSessionCalendarErrorNotification
+  | UpdateTrialSessionCompleteNotification;
 
 export const sendNotificationToUser = async ({
   applicationContext,
