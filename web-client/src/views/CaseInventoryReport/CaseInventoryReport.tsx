@@ -118,7 +118,7 @@ export const CaseInventoryReport = connect(
                             Consolidated Case Indicator
                           </span>
                         </th>
-                        <th aria-label="docket number">Docket No.</th>
+                        <th aria-label="Docket number">Docket No.</th>
                         <th>Case Title</th>
                         {caseInventoryReportHelper.showJudgeColumn && (
                           <th>Judge</th>

@@ -1,4 +1,10 @@
-import { PUBLIC_DOCKET_RECORD_FILTER_OPTIONS } from '../../../shared/src/business/entities/EntityConstants';
+import {
+  PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
+  PUBLIC_TRIAL_SESSIONS_DATA_KEY,
+} from '../../../shared/src/business/entities/EntityConstants';
+import { PublicTrialSessionDetails } from '@web-api/business/useCases/trialSessions/getPublicTrialSessionDetailsInteractor';
+import { RawUser } from '@shared/business/entities/User';
+import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByNameHelper';
@@ -10,6 +16,8 @@ import { practitionerSearchHelper } from '@web-client/presenter/computeds/Advanc
 import { publicAlertHelper } from './computeds/Public/publicAlertHelper';
 import { publicCaseDetailHeaderHelper } from './computeds/Public/publicCaseDetailHeaderHelper';
 import { publicCaseDetailHelper } from './computeds/Public/publicCaseDetailHelper';
+import { publicTrialSessionDetailsHelper } from '@web-client/presenter/computeds/Public/publicTrialSessionDetailsHelper';
+import { publicTrialSessionsHelper } from '@web-client/presenter/computeds/Public/publicTrialSessionsHelper';
 import { templateHelper } from './computeds/templateHelper';
 import { todaysOpinionsHelper } from './computeds/Public/todaysOpinionsHelper';
 import { todaysOrdersHelper } from './computeds/Public/todaysOrdersHelper';
@@ -30,12 +38,26 @@ const computeds = {
   publicCaseDetailHelper: publicCaseDetailHelper as unknown as ReturnType<
     typeof publicCaseDetailHelper
   >,
+  publicTrialSessionDetailsHelper:
+    publicTrialSessionDetailsHelper as unknown as ReturnType<
+      typeof publicTrialSessionDetailsHelper
+    >,
+  publicTrialSessionsHelper: publicTrialSessionsHelper as unknown as ReturnType<
+    typeof publicTrialSessionsHelper
+  >,
   templateHelper,
   todaysOpinionsHelper,
   todaysOrdersHelper,
 };
 
 export const baseState = {
+  [PUBLIC_TRIAL_SESSIONS_DATA_KEY]: {} as {
+    judges?: { [key: string]: string };
+    locations?: { [key: string]: string };
+    sessionTypes?: { [key: string]: string };
+    pageNumber?: number;
+    proceedingType?: string;
+  },
   advancedSearchForm: {},
   advancedSearchTab: 'case',
   alertError: null,
@@ -59,6 +81,7 @@ export const baseState = {
   },
   isPublic: true,
   isTerminalUser: false,
+  judges: [] as RawUser[],
   modal: {},
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses
@@ -73,8 +96,15 @@ export const baseState = {
   showPassword: false,
   todaysOpinions: [],
   todaysOrders: {
+    page: 1,
     results: [],
     totalCount: 0,
+  },
+  trialSessionDetailsPage: {
+    trialSession: {} as PublicTrialSessionDetails,
+  },
+  trialSessionsPage: { trialSessions: [] } as {
+    trialSessions: TrialSessionInfoDTO[];
   },
   user: {},
   validationErrors: {},
