@@ -1,8 +1,6 @@
-import {
-  NotificationMessage,
-  sendNotificationToUser,
-} from './sendNotificationToUser';
+import { NotificationMessage } from '@web-api/notifications/sendNotificationToUserTypes';
 import { applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { sendNotificationToUser } from './sendNotificationToUser';
 
 describe('sendNotificationToUser', () => {
   const connections = [
