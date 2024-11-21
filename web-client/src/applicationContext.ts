@@ -373,6 +373,11 @@ const clientSupportsES2022 = (() => {
       return false;
     }
 
+    // Check Array.prototype.at
+    if (!Array.prototype.at) {
+      return false;
+    }
+
     // Check private fields
     class TestPrivateFields {
       #privateField: boolean;
