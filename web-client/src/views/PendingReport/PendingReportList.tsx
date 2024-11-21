@@ -1,6 +1,7 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
+import { PENDING_REPORT_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
@@ -8,8 +9,6 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
 import React, { useRef } from 'react';
-
-const ITEMS_PER_PAGE = 100;
 
 export const PendingReportList = connect(
   {
@@ -30,7 +29,10 @@ export const PendingReportList = connect(
     const paginatorTop = useRef(null);
 
     const { activePage, pageRecords, setActivePage, totalPages } =
-      useClientSidePaginator(formattedPendingItemsHelper.items, ITEMS_PER_PAGE);
+      useClientSidePaginator(
+        formattedPendingItemsHelper.items,
+        PENDING_REPORT_PAGE_SIZE,
+      );
 
     return (
       <>

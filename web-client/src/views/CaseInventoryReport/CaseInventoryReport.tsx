@@ -1,5 +1,6 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
+import { CASE_INVENTORY_REPORT_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
@@ -9,8 +10,6 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
 import React, { useRef } from 'react';
-
-const ITEMS_PER_PAGE = 100;
 
 export const CaseInventoryReport = connect(
   {
@@ -31,7 +30,7 @@ export const CaseInventoryReport = connect(
     const { activePage, pageRecords, setActivePage, totalPages } =
       useClientSidePaginator(
         caseInventoryReportHelper.formattedReportData,
-        ITEMS_PER_PAGE,
+        CASE_INVENTORY_REPORT_PAGE_SIZE,
       );
 
     return (

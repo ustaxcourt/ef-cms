@@ -1,4 +1,5 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
+import { COLD_CASE_REPORT_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ColdCaseEntry } from '@web-api/business/useCases/reports/coldCaseReportInteractor';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
@@ -13,13 +14,11 @@ import {
 import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
 import React, { useRef } from 'react';
 
-const ITEMS_PER_PAGE = 100;
-
 export function ColdCaseReportList({ entries }: { entries: ColdCaseEntry[] }) {
   const paginatorTop = useRef(null);
 
   const { activePage, pageRecords, setActivePage, totalPages } =
-    useClientSidePaginator(entries, ITEMS_PER_PAGE);
+    useClientSidePaginator(entries, COLD_CASE_REPORT_PAGE_SIZE);
 
   function exportColdCaseCsv() {
     const today = formatNow(FORMATS.MMDDYYYY);
