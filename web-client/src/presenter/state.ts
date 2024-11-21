@@ -617,7 +617,6 @@ export const baseState = {
   caseDetail: {} as RawCase,
   caseInventoryReportData: {
     foundCases: [],
-    totalCount: 0,
   },
   clientConnectionId: '',
   clientNeedsToRefresh: false,

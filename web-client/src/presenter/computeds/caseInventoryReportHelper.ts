@@ -21,7 +21,6 @@ export const caseInventoryReportHelper = (
   caseStatuses: string[];
   formattedReportData: FormattedReportEntry[];
   judges: string[];
-  nextPageSize: number;
   resultCount: number;
   showResultsTable: boolean;
   showSelectFilterMessage: boolean;
@@ -29,12 +28,8 @@ export const caseInventoryReportHelper = (
   showJudgeColumn: boolean;
   showStatusColumn: boolean;
 } => {
-  const {
-    CASE_INVENTORY_PAGE_SIZE,
-    CHIEF_JUDGE,
-    CLOSED_CASE_STATUSES,
-    STATUS_TYPES,
-  } = applicationContext.getConstants();
+  const { CHIEF_JUDGE, CLOSED_CASE_STATUSES, STATUS_TYPES } =
+    applicationContext.getConstants();
   const { formatCase } = applicationContext.getUtilities();
 
   const judges = (get(state.judges) || [])
@@ -42,19 +37,7 @@ export const caseInventoryReportHelper = (
     .concat(CHIEF_JUDGE)
     .sort();
 
-  const { associatedJudge, page, status } = get(state.screenMetadata);
-
-  let showResultsTable = false;
-  let showSelectFilterMessage = false;
-  let showNoResultsMessage = false;
-  const resultCount = get(state.caseInventoryReportData.totalCount);
-  if (resultCount) {
-    showResultsTable = true;
-  } else if (!associatedJudge && !status) {
-    showSelectFilterMessage = true;
-  } else {
-    showNoResultsMessage = true;
-  }
+  const { associatedJudge, status } = get(state.screenMetadata);
 
   const reportData = get(state.caseInventoryReportData.foundCases) || [];
   const user = get(state.user);
@@ -63,28 +46,24 @@ export const caseInventoryReportHelper = (
     .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
     .map(item => formatCase(applicationContext, item, user));
 
-  let displayedCount =
-    resultCount < CASE_INVENTORY_PAGE_SIZE
-      ? resultCount
-      : (page || 1) * CASE_INVENTORY_PAGE_SIZE;
+  const resultCount = formattedReportData.length;
 
-  if (displayedCount > resultCount) {
-    displayedCount = resultCount;
-  }
+  let showResultsTable = false;
+  let showSelectFilterMessage = false;
+  let showNoResultsMessage = false;
 
-  const notDisplayedCount = resultCount - displayedCount;
-
-  let nextPageSize = CASE_INVENTORY_PAGE_SIZE;
-
-  if (notDisplayedCount < CASE_INVENTORY_PAGE_SIZE) {
-    nextPageSize = notDisplayedCount;
+  if (resultCount) {
+    showResultsTable = true;
+  } else if (!associatedJudge && !status) {
+    showSelectFilterMessage = true;
+  } else {
+    showNoResultsMessage = true;
   }
 
   return {
     caseStatuses: without(Object.values(STATUS_TYPES), ...CLOSED_CASE_STATUSES),
     formattedReportData,
     judges,
-    nextPageSize,
     resultCount,
     showJudgeColumn: !associatedJudge,
     showNoResultsMessage,
