@@ -33,6 +33,8 @@ type ServeDocumentCompleteNotification = {
     message: string;
     overwritable: boolean;
   };
+  generateCoversheet?: boolean;
+  docketEntryId?: string;
   pdfUrl?: string;
 };
 
@@ -50,6 +52,14 @@ type BatchDownloadCsvDataNotification = {
 
 type DownloadCsvFileNotification = {
   action: 'download_csv_file';
+  csvInfo: {
+    fileName: string;
+    url: string;
+  };
+};
+
+type SaveDocketEntryForLaterNotification = {
+  action: 'save_docket_entry_for_later_complete';
   csvInfo: {
     fileName: string;
     url: string;
