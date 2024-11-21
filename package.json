@@ -354,6 +354,7 @@
     "tsconfig-paths": "4.2.0",
     "typescript": "5.6.3",
     "us-census-geocoder": "1.1.0",
+    "us-state-converter": "1.0.8",
     "utf8": "3.0.0"
   }
 }
