@@ -9,6 +9,7 @@ import {
   ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
+import { appendFileSync, existsSync, readFileSync, unlinkSync } from 'fs';
 import { chunk, pick } from 'lodash';
 import { generateCsv } from '../helpers/generate-csv';
 import { prepareDateFromString } from '@shared/business/utilities/DateHandler';
@@ -19,8 +20,9 @@ const endYear =
   process.argv[3] && Number(process.argv[3]) > Number(beginYear)
     ? process.argv[3]
     : beginYear;
-
 const timeframe = endYear !== beginYear ? `${beginYear}-${endYear}` : beginYear;
+
+const GEOCODED_LOCATIONS_JSON = './scripts/helpers/geocoded-locations.json';
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 const OUTPUT_FILENAME = `${OUTPUT_DIR}/geocoded-cases_${timeframe}.csv`;
 
@@ -31,7 +33,8 @@ type locationType = {
   state: string;
   zip: string;
 };
-const geocodedLocations: { [k: string]: { lat: number; lon: number } } = {};
+const geocodedLocations: { [k: string]: { lat: number; lon: number } } =
+  JSON.parse(readFileSync(GEOCODED_LOCATIONS_JSON, 'utf-8'));
 
 const getCasesInTimeframe = async ({
   applicationContext,
@@ -74,21 +77,45 @@ const getCasesInTimeframe = async ({
   return results;
 };
 
+const getLocationKey = (petitioner: TPetitioner): string | undefined => {
+  if (petitioner.state && petitioner.city) {
+    const state = petitioner.state.replace(/[^A-Za-z]/g, '').toLowerCase();
+    const city = petitioner.city.replace(/[^A-Za-z]/g, '').toLowerCase();
+    if (state.length > 0 && city.length > 0) {
+      return `${state}_${city}`;
+    }
+  }
+};
+
 const gatherLocationsToGeocode = ({
   cases,
 }: {
   cases: RawCase[];
 }): locationType[] => {
   const locations: { [k: string]: locationType } = {};
+  let alreadyGeocoded = 0;
   for (const aCase of cases) {
-    locations[aCase.petitioners[0].contactId] = {
-      address: concatAddress(aCase.petitioners[0]),
-      city: aCase.petitioners[0].city,
-      id: aCase.petitioners[0].contactId,
-      state: aCase.petitioners[0].state,
-      zip: aCase.petitioners[0].postalCode,
-    };
+    if (aCase.petitioners[0].countryType === 'international') {
+      continue;
+    }
+    const key = getLocationKey(aCase.petitioners[0]);
+    if (!key) {
+      console.error('Could not determine location key: ', aCase.petitioners[0]);
+      continue;
+    }
+    if (key in geocodedLocations) {
+      alreadyGeocoded++;
+    } else {
+      locations[key] = {
+        address: concatAddress(aCase.petitioners[0]),
+        city: aCase.petitioners[0].city,
+        id: key,
+        state: aCase.petitioners[0].state,
+        zip: aCase.petitioners[0].postalCode,
+      };
+    }
   }
+  console.log(`Already geocoded ${alreadyGeocoded} addresses.`);
   console.log(`Need to geocode ${Object.keys(locations).length} addresses.`);
   return Object.values(locations);
 };
@@ -127,9 +154,7 @@ const geocodeAllCases = async ({
   for (const locations of locationChunks) {
     await geocodeLocations({ geocoder, locations });
   }
-  console.log(
-    `Successfully geocoded ${Object.keys(geocodedLocations).length} addresses.`,
-  );
+  updateGeocodedLocationsFile();
 };
 
 const concatAddress = (petitioner: TPetitioner): string => {
@@ -141,6 +166,13 @@ const concatAddress = (petitioner: TPetitioner): string => {
     address += `, ${petitioner.address3}`;
   }
   return address;
+};
+
+const updateGeocodedLocationsFile = () => {
+  if (existsSync(GEOCODED_LOCATIONS_JSON)) {
+    unlinkSync(GEOCODED_LOCATIONS_JSON);
+  }
+  appendFileSync(GEOCODED_LOCATIONS_JSON, JSON.stringify(geocodedLocations));
 };
 
 const outputCsv = ({ cases }: { cases: RawCase[] }): void => {
@@ -187,8 +219,8 @@ const outputCsv = ({ cases }: { cases: RawCase[] }): void => {
       c.petitioners[0].countryType === 'domestic'
         ? 'USA'
         : c.petitioners[0].countryType,
-    lat: geocodedLocations[c.petitioners[0].contactId]?.lat ?? '',
-    lon: geocodedLocations[c.petitioners[0].contactId]?.lon ?? '',
+    lat: geocodedLocations[getLocationKey(c.petitioners[0])!]?.lat ?? '',
+    lon: geocodedLocations[getLocationKey(c.petitioners[0])!]?.lon ?? '',
     month: c.receivedAt ? prepareDateFromString(c.receivedAt).monthLong : '',
     paper: c.isPaper ? 'Paper' : 'Electronic',
     represented:
