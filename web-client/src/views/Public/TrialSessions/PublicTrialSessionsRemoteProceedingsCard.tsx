@@ -12,7 +12,7 @@ export const PublicTrialSessionsRemoteProceedingsCard = connect(
             <h2>Remote Proceedings</h2>
           </div>
           <div className="margin-left-2 margin-right-2 border-bottom-1px border-base-lighter"></div>
-          <div className="card-content ">
+          <div className="card-content">
             <div className="padding-left-2 margin-bottom-3">
               <div>
                 <Button
