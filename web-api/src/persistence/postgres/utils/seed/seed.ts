@@ -1,4 +1,5 @@
-import { cases } from '@web-api/persistence/postgres/utils/seed/fixtures/cases';
+import { caseStatusUpdates } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/caseStatusUpdates';
+import { cases } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases';
 import { getDbWriter } from '../../../../database';
 import { messages } from './fixtures/messages';
 import {
@@ -33,6 +34,15 @@ export const seed = async () => {
       .execute(),
   );
 
+  // Seed the case status updates
+  await getDbWriter(writer =>
+    writer
+      .insertInto('dwCaseStatusUpdate')
+      .values(caseStatusUpdates)
+      .onConflict(oc => oc.columns(['docketNumber', 'date']).doNothing())
+      .execute(),
+  );
+
   // Seed the petitioners
   await getDbWriter(writer =>
     writer
@@ -47,7 +57,7 @@ export const seed = async () => {
     writer
       .insertInto('dwUserCase')
       .values(petitionerToCaseMappings)
-      .onConflict(oc => oc.column('contactId').doNothing())
+      .onConflict(oc => oc.columns(['contactId', 'docketNumber']).doNothing())
       .execute(),
   );
 };
