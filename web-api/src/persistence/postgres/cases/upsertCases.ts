@@ -101,7 +101,7 @@ export const upsertCases = async (rawCases: RawCase[]) => {
     docketNumber: rawCase.docketNumber,
     docketNumberSuffix: rawCase.docketNumberSuffix,
     filingType: rawCase.filingType,
-    hasPendingItem: rawCase.hasPendingItems,
+    hasPendingItems: rawCase.hasPendingItems,
     hasVerifiedIrsNotice: rawCase.hasVerifiedIrsNotice,
     hearings: rawCase.hearings,
     highPriority: rawCase.highPriority,

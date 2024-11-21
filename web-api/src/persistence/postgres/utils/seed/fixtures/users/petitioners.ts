@@ -1,5 +1,6 @@
 import { NewUserCaseKysely, NewUserKysely } from '@web-api/database-types';
-import { SEEDED_DOCKET_NUMBERS } from '@web-api/persistence/postgres/utils/seed/fixtures/cases';
+import { SEEDED_DOCKET_NUMBERS } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases';
+import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 
 // If this file gets too big, we can separate into petitionerUsers and petitionerToCaseMappings
 export const petitionerUsers: NewUserKysely[] = [
@@ -129,6 +130,18 @@ export const petitionerUsers: NewUserKysely[] = [
     postalCode: '69565',
     state: 'NC',
   },
+  {
+    address1: '46 Fabien Court',
+    address2: 'Sed quia quidem volu',
+    address3: 'Unde impedit omnis',
+    city: 'Ratione optio error',
+    contactId: '5da54af1-1969-4011-8275-a949084b7928',
+    countryType: 'domestic',
+    name: 'Dacey Cox',
+    phone: '+1 (673) 134-1903',
+    postalCode: '55357',
+    state: 'NM',
+  },
 ];
 
 export const petitionerToCaseMappings: NewUserCaseKysely[] = [
@@ -140,7 +153,7 @@ export const petitionerToCaseMappings: NewUserCaseKysely[] = [
     docketNumber: SEEDED_DOCKET_NUMBERS['100-22'],
     isAddressSealed: false,
     sealedAndUnavailable: false,
-    serviceIndicator: 'Electronic',
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
   },
   // 101-20
   {
@@ -150,7 +163,7 @@ export const petitionerToCaseMappings: NewUserCaseKysely[] = [
     docketNumber: SEEDED_DOCKET_NUMBERS['101-20'],
     isAddressSealed: false,
     sealedAndUnavailable: false,
-    serviceIndicator: 'None',
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
   },
   {
     additionalName: 'Rachael Ray',
@@ -160,7 +173,7 @@ export const petitionerToCaseMappings: NewUserCaseKysely[] = [
     isAddressSealed: false,
     sealedAndUnavailable: false,
     secondaryName: 'Rumplestiltskin Ray',
-    serviceIndicator: 'None',
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
     title: 'Petitioner',
   },
   {
@@ -170,7 +183,7 @@ export const petitionerToCaseMappings: NewUserCaseKysely[] = [
     docketNumber: SEEDED_DOCKET_NUMBERS['101-20'],
     isAddressSealed: false,
     sealedAndUnavailable: false,
-    serviceIndicator: 'None',
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
     title: 'Petitioner',
   },
   {
@@ -180,7 +193,7 @@ export const petitionerToCaseMappings: NewUserCaseKysely[] = [
     docketNumber: SEEDED_DOCKET_NUMBERS['101-20'],
     isAddressSealed: false,
     sealedAndUnavailable: false,
-    serviceIndicator: 'None',
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
     title: 'Petitioner',
   },
   {
@@ -190,7 +203,7 @@ export const petitionerToCaseMappings: NewUserCaseKysely[] = [
     docketNumber: SEEDED_DOCKET_NUMBERS['101-20'],
     isAddressSealed: false,
     sealedAndUnavailable: false,
-    serviceIndicator: 'None',
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
     title: 'Petitioner',
   },
   {
@@ -200,7 +213,7 @@ export const petitionerToCaseMappings: NewUserCaseKysely[] = [
     docketNumber: SEEDED_DOCKET_NUMBERS['101-20'],
     isAddressSealed: false,
     sealedAndUnavailable: false,
-    serviceIndicator: 'None',
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
     title: 'Petitioner',
   },
   {
@@ -210,7 +223,7 @@ export const petitionerToCaseMappings: NewUserCaseKysely[] = [
     docketNumber: SEEDED_DOCKET_NUMBERS['101-20'],
     isAddressSealed: false,
     sealedAndUnavailable: false,
-    serviceIndicator: 'None',
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
     title: 'Petitioner',
   },
   {
@@ -220,18 +233,8 @@ export const petitionerToCaseMappings: NewUserCaseKysely[] = [
     docketNumber: SEEDED_DOCKET_NUMBERS['101-20'],
     isAddressSealed: false,
     sealedAndUnavailable: false,
-    serviceIndicator: 'None',
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
     title: 'Petitioner',
-  },
-  // 101-21
-  {
-    additionalName: '',
-    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-    contactType: 'primary',
-    docketNumber: SEEDED_DOCKET_NUMBERS['101-21'],
-    isAddressSealed: false,
-    sealedAndUnavailable: false,
-    serviceIndicator: 'Electronic',
   },
   // 101-11
   {
@@ -241,6 +244,27 @@ export const petitionerToCaseMappings: NewUserCaseKysely[] = [
     docketNumber: SEEDED_DOCKET_NUMBERS['101-11'],
     isAddressSealed: false,
     sealedAndUnavailable: false,
-    serviceIndicator: 'Paper',
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+  },
+  // 101-21
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS['101-21'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+  },
+  // 102-67
+  {
+    additionalName: '',
+    contactId: '5da54af1-1969-4011-8275-a949084b7928',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS['102-67'],
+    isAddressSealed: false,
+    paperPetitionEmail: 'gacugowy@mailinator.com',
+    sealedAndUnavailable: false,
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
   },
 ];

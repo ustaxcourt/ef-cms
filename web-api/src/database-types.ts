@@ -6,6 +6,7 @@ export interface Database {
   dwWorkItem: WorkItemTable;
   dwUser: UserTable;
   dwUserCase: UserCaseTable;
+  dwCaseStatusUpdate: CaseStatusUpdateTable;
 }
 
 export interface MessageTable {
@@ -40,7 +41,6 @@ export type UpdateMessageKysely = Updateable<MessageTable>;
 export interface CaseTable {
   // archivedCorrespondences?: any[];
   // archivedDocketEntries?: RawDocketEntry[];
-  // caseStatusHistory: CaseStatusChange[]; ?
   // consolidatedCases: RawConsolidatedCaseSummary[] = []
   // irsPractitioners?: any[];
   // privatePractitioners?: any[];
@@ -66,7 +66,7 @@ export interface CaseTable {
   filingType?: string;
   hasPendingItems?: boolean;
   hasVerifiedIrsNotice?: boolean;
-  hearings: any[];
+  hearings?: any[];
   highPriority?: boolean;
   highPriorityReason?: string;
   initialCaption?: string;
@@ -181,3 +181,14 @@ export type UpdateUserKysely = Updateable<UserTable>;
 export type UserCaseKysely = Selectable<UserCaseTable>;
 export type NewUserCaseKysely = Insertable<UserCaseTable>;
 export type UpdateUserCaseKysely = Updateable<UserCaseTable>;
+
+export interface CaseStatusUpdateTable {
+  changedBy: string; // TODO: This should almost certainly be a foreign key to a user (with a user for System), but it isn't set up that way. Probably best to wait until Users are migrated over?
+  date: Date;
+  docketNumber: string;
+  updatedCaseStatus: string;
+}
+
+export type CaseStatusUpdateKysely = Selectable<CaseStatusUpdateTable>;
+export type NewCaseStatusUpdateKysely = Insertable<CaseStatusUpdateTable>;
+export type UpdateCaseStatusUpdateKysely = Updateable<CaseStatusUpdateTable>;

@@ -55,7 +55,7 @@ import { getAllUsersByRole } from '@web-api/persistence/elasticsearch/users/getA
 import { getAllWebSocketConnections } from './persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getBlockedCases } from './persistence/elasticsearch/getBlockedCases';
 import { getCalendaredCasesForTrialSession } from './persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession';
-import { getCaseByDocketNumber } from './persistence/dynamo/cases/getCaseByDocketNumber';
+import { getCaseByDocketNumber } from './persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseDeadlinesByDateRange } from './persistence/elasticsearch/caseDeadlines/getCaseDeadlinesByDateRange';
 import { getCaseDeadlinesByDocketNumber } from './persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getCaseInventoryReport } from './persistence/elasticsearch/getCaseInventoryReport';

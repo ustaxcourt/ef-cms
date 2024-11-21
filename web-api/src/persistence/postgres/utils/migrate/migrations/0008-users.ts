@@ -7,7 +7,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('address2', 'varchar')
     .addColumn('address3', 'varchar')
     .addColumn('city', 'varchar', col => col.notNull())
-    .addColumn('contactId', 'varchar', col => col.notNull())
+    .addColumn('contactId', 'varchar', col => col.primaryKey())
     .addColumn('country', 'varchar')
     .addColumn('countryType', 'varchar', col => col.notNull())
     .addColumn('email', 'varchar')
@@ -33,6 +33,10 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('secondaryName', 'varchar')
     .addColumn('serviceIndicator', 'varchar')
     .addColumn('title', 'varchar')
+    .addPrimaryKeyConstraint('pk_user_case_mapping', [
+      'docketNumber',
+      'contactId',
+    ])
     .execute();
 }
 
