@@ -31,23 +31,23 @@ export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
   } else if (formattedResult.isPaper) {
     iconsToDisplay.push({
       icon: ['fas', 'file-alt'],
-      title: 'is paper',
+      title: 'Is paper',
     });
   } else if (formattedResult.isInProgress) {
     iconsToDisplay.push({
       icon: ['fas', 'thumbtack'],
-      title: 'in progress',
+      title: 'In progress',
     });
   } else if (formattedResult.qcNeeded) {
     iconsToDisplay.push({
       icon: ['fa', 'star'],
-      title: 'is untouched',
+      title: 'Is untouched',
     });
   } else if (formattedResult.showLoadingIcon) {
     iconsToDisplay.push({
       className: 'fa-spin spinner',
       icon: ['fa-spin', 'spinner'],
-      title: 'is loading',
+      title: 'Is loading',
     });
   }
 

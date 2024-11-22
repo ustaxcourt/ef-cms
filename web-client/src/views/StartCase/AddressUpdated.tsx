@@ -89,10 +89,10 @@ export const AddressUpdated = connect<
               className="usa-label"
               htmlFor={`${type}.postalCode`}
             >
-              Zip code
+              ZIP code
             </label>
             <input
-              aria-label="zip code"
+              aria-label="ZIP code"
               autoCapitalize="none"
               className="usa-input"
               data-testid={`${type}.postalCode`}
@@ -170,10 +170,10 @@ export const AddressUpdated = connect<
                   className="usa-label"
                   htmlFor={`${type}.postalCode`}
                 >
-                  Zip code
+                  ZIP code
                 </label>
                 <input
-                  aria-label="zip code"
+                  aria-label="ZIP code"
                   autoCapitalize="none"
                   className="usa-input"
                   data-testid={`${type}.postalCode`}

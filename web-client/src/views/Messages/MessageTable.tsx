@@ -377,7 +377,7 @@ const getMessageSubjectCell = ({
         <td className="message-unread-column">
           {!message.isRead && (
             <Icon
-              aria-label="unread message"
+              aria-label="Unread message"
               className="fa-icon-blue"
               icon="envelope"
               size="1x"
