@@ -1,6 +1,7 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { NewCaseStatusUpdateKysely } from '@web-api/database-types';
 import { SEEDED_DOCKET_NUMBERS_100_104 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases100_104';
+import { SEEDED_DOCKET_NUMBERS_105_109 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases105_109';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 
 export const caseStatusUpdates: NewCaseStatusUpdateKysely[] = [
@@ -80,5 +81,18 @@ export const caseStatusUpdates: NewCaseStatusUpdateKysely[] = [
     date: calculateDate({ dateString: '2023-04-03T15:55:58.398Z' }),
     docketNumber: SEEDED_DOCKET_NUMBERS_100_104['104-67'],
     updatedCaseStatus: 'General Docket - At Issue (Ready for Trial)',
+  },
+  // 105-23
+  {
+    changedBy: 'Petitioner',
+    date: calculateDate({ dateString: '2023-07-26T17:03:31.707Z' }),
+    docketNumber: SEEDED_DOCKET_NUMBERS_105_109['105-23'],
+    updatedCaseStatus: 'New',
+  },
+  {
+    changedBy: 'System',
+    date: calculateDate({ dateString: '2023-07-26T17:04:05.684Z' }),
+    docketNumber: SEEDED_DOCKET_NUMBERS_105_109['105-23'],
+    updatedCaseStatus: 'General Docket - Not at Issue',
   },
 ];
