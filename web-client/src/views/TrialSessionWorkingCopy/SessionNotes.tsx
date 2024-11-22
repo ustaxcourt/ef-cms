@@ -19,54 +19,52 @@ export const SessionNotes = connect(
   }) {
     return (
       <>
-        <div className="case-notes">
-          <div className="card">
+        <div className="case-notes height-full">
+          <div className="card height-full">
             <div className="content-wrapper">
               {!sessionNotes && (
-                <Button
-                  link
-                  className="float-right"
-                  icon="plus-circle"
-                  onClick={() => {
-                    openAddEditSessionNoteModalSequence();
-                  }}
-                >
-                  Add Note
-                </Button>
+                <div className="float-right">
+                  <Button
+                    link
+                    icon="plus-circle"
+                    onClick={() => {
+                      openAddEditSessionNoteModalSequence();
+                    }}
+                  >
+                    Add Note
+                  </Button>
+                </div>
               )}
-              <h3 className="display-inline">Session Notes</h3>
               {sessionNotes && (
                 <>
-                  <div>
-                    <PreformattedText text={sessionNotes} />
-                  </div>
-                  <div className="grid-row">
-                    <div className="tablet:grid-col-6">
-                      <Button
-                        link
-                        icon="edit"
-                        onClick={() => {
-                          openAddEditSessionNoteModalSequence();
-                        }}
-                      >
-                        Edit Note
-                      </Button>
-                    </div>
-                    <div className="tablet:grid-col-6 text-align-right">
-                      <Button
-                        link
-                        className="red-warning"
-                        icon="trash"
-                        onClick={() => {
-                          openDeleteSessionNoteConfirmModalSequence();
-                        }}
-                      >
-                        Delete Note
-                      </Button>
-                    </div>
+                  <div className="float-right margin-top-1 action-button-wrapper">
+                    <Button
+                      link
+                      className="padding-0 margin-right-0"
+                      icon="edit"
+                      onClick={() => {
+                        openAddEditSessionNoteModalSequence();
+                      }}
+                    >
+                      Edit Note
+                    </Button>
+                    <Button
+                      link
+                      className="red-warning padding-0 margin-left-205 margin-right-0"
+                      icon="trash"
+                      onClick={() => {
+                        openDeleteSessionNoteConfirmModalSequence();
+                      }}
+                    >
+                      Delete Note
+                    </Button>
                   </div>
                 </>
               )}
+              <h3 className="underlined">Session Notes</h3>
+              <div className="margin-top-1 margin-bottom-4">
+                <PreformattedText text={sessionNotes} />
+              </div>
             </div>
           </div>
         </div>
