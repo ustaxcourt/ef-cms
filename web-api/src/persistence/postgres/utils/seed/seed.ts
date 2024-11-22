@@ -1,6 +1,15 @@
 import { caseStatusUpdates } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/caseStatusUpdates';
 import { cases100_104 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases100_104';
 import { cases105_109 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases105_109';
+import { cases110_129 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases110_129';
+import { cases130_309 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases130_309';
+import { cases310_399 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases310_399';
+import { cases400_409 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases400_409';
+import { cases410_419 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases410_419';
+import { cases420_429 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases420_429';
+import { cases430_439 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases430_439';
+import { cases440_449 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases440_449';
+import { cases450_plus } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases450_plus';
 import { getDbWriter } from '../../../../database';
 import { messages } from './fixtures/messages';
 import { petitionerToCaseMappings } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/petitionerToCaseMappings';
@@ -24,20 +33,24 @@ export const seed = async () => {
       .execute(),
   );
 
-  // Seed the cases 100-104
+  // Seed the cases
+  const cases = [
+    ...cases100_104,
+    ...cases105_109,
+    ...cases110_129,
+    ...cases130_309,
+    ...cases310_399,
+    ...cases400_409,
+    ...cases410_419,
+    ...cases420_429,
+    ...cases430_439,
+    ...cases440_449,
+    ...cases450_plus,
+  ];
   await getDbWriter(writer =>
     writer
       .insertInto('dwCase')
-      .values(cases100_104)
-      .onConflict(oc => oc.column('docketNumber').doNothing())
-      .execute(),
-  );
-
-  // Seed the cases 105-109
-  await getDbWriter(writer =>
-    writer
-      .insertInto('dwCase')
-      .values(cases105_109)
+      .values(cases)
       .onConflict(oc => oc.column('docketNumber').doNothing())
       .execute(),
   );
