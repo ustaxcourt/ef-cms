@@ -1,3 +1,4 @@
+import { PublicClientState } from '@web-client/presenter/state-public';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-public';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -9,19 +10,22 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
   });
 
   it('gets the public opinion information', async () => {
-    await runAction(submitPublicOpinionAdvancedSearchAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        advancedSearchForm: {
-          opinionSearch: {
-            keyword: 'a',
-            opinionTypes: {},
+    await runAction<{ searchResults: any }, PublicClientState>(
+      submitPublicOpinionAdvancedSearchAction,
+      {
+        modules: {
+          presenter,
+        },
+        state: {
+          advancedSearchForm: {
+            opinionSearch: {
+              keyword: 'a',
+              opinionTypes: {},
+            },
           },
         },
       },
-    });
+    );
 
     expect(
       applicationContext.getUseCases().opinionPublicSearchInteractor,
@@ -37,20 +41,23 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
   });
 
   it('should remove the docketNumberSuffix when a docket number is present', async () => {
-    await runAction(submitPublicOpinionAdvancedSearchAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        advancedSearchForm: {
-          opinionSearch: {
-            docketNumber: '105-20L',
-            keyword: 'a',
-            opinionTypes: {},
+    await runAction<{ searchResults: any }, PublicClientState>(
+      submitPublicOpinionAdvancedSearchAction,
+      {
+        modules: {
+          presenter,
+        },
+        state: {
+          advancedSearchForm: {
+            opinionSearch: {
+              docketNumber: '105-20L',
+              keyword: 'a',
+              opinionTypes: {},
+            },
           },
         },
       },
-    });
+    );
 
     expect(
       applicationContext.getUseCases().opinionPublicSearchInteractor.mock.calls
@@ -83,7 +90,10 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
         throw e;
       });
 
-    const { state } = await runAction(submitPublicOpinionAdvancedSearchAction, {
+    const { state } = await runAction<
+      { searchResults: any },
+      PublicClientState
+    >(submitPublicOpinionAdvancedSearchAction, {
       modules: {
         presenter,
       },
@@ -105,23 +115,26 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
   });
 
   it('should filter out opinion types that are not selected for search', async () => {
-    await runAction(submitPublicOpinionAdvancedSearchAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        advancedSearchForm: {
-          opinionSearch: {
-            opinionTypes: {
-              Avocado: false,
-              Banana: false,
-              Cucumber: true,
+    await runAction<{ searchResults: any }, PublicClientState>(
+      submitPublicOpinionAdvancedSearchAction,
+      {
+        modules: {
+          presenter,
+        },
+        state: {
+          advancedSearchForm: {
+            opinionSearch: {
+              opinionTypes: {
+                Avocado: false,
+                Banana: false,
+                Cucumber: true,
+              },
             },
           },
+          form: {},
         },
-        form: {},
       },
-    });
+    );
 
     expect(
       applicationContext.getUseCases().opinionPublicSearchInteractor.mock
@@ -147,20 +160,23 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
       });
 
     await expect(() =>
-      runAction(submitPublicOpinionAdvancedSearchAction, {
-        modules: {
-          presenter,
-        },
-        state: {
-          advancedSearchForm: {
-            opinionSearch: {
-              docketNumber: '105-20L',
-              keyword: 'a',
-              opinionTypes: {},
+      runAction<{ searchResults: any }, PublicClientState>(
+        submitPublicOpinionAdvancedSearchAction,
+        {
+          modules: {
+            presenter,
+          },
+          state: {
+            advancedSearchForm: {
+              opinionSearch: {
+                docketNumber: '105-20L',
+                keyword: 'a',
+                opinionTypes: {},
+              },
             },
           },
         },
-      }),
+      ),
     ).rejects.toThrow('bad request');
   });
 });

@@ -180,18 +180,20 @@ export const MessageTable = connect<
                 })}
               </tr>
             </thead>
-            {formattedMessages.messages.map(message => {
-              return (
-                <MessageRow
-                  columns={messageColumns}
-                  key={message.messageId}
-                  message={message}
-                  messageListId={id}
-                  selectable={selectable}
-                  onSelect={setSelectedMessagesSequence}
-                />
-              );
-            })}
+            <tbody>
+              {formattedMessages.messages.map(message => {
+                return (
+                  <MessageRow
+                    columns={messageColumns}
+                    key={message.messageId}
+                    message={message}
+                    messageListId={id}
+                    selectable={selectable}
+                    onSelect={setSelectedMessagesSequence}
+                  />
+                );
+              })}
+            </tbody>
           </table>
           {!formattedMessages.hasMessages && <div>There are no messages.</div>}
         </div>
@@ -267,37 +269,35 @@ const MessageRow = ({
   columns: MessageColumnData[];
 }) => {
   return (
-    <tbody>
-      <tr>
-        {selectable && (
-          <td>
-            <input
-              aria-label={`${message.caseTitle}-${message.subject}-checkbox`}
-              checked={message.isSelected}
-              id={`${message.caseTitle}-message-checkbox`}
-              type="checkbox"
-              onChange={() => {
-                onSelect({
-                  messages: [
-                    {
-                      messageId: message.messageId,
-                      parentMessageId: message.parentMessageId,
-                    },
-                  ],
-                });
-              }}
-            />
-          </td>
-        )}
-        {columns.map(columnData => {
-          return getOneCell({
-            columnData,
-            message,
-            messageListId,
-          });
-        })}
-      </tr>
-    </tbody>
+    <tr>
+      {selectable && (
+        <td>
+          <input
+            aria-label={`${message.caseTitle}-${message.subject}-checkbox`}
+            checked={message.isSelected}
+            id={`${message.caseTitle}-message-checkbox`}
+            type="checkbox"
+            onChange={() => {
+              onSelect({
+                messages: [
+                  {
+                    messageId: message.messageId,
+                    parentMessageId: message.parentMessageId,
+                  },
+                ],
+              });
+            }}
+          />
+        </td>
+      )}
+      {columns.map(columnData => {
+        return getOneCell({
+          columnData,
+          message,
+          messageListId,
+        });
+      })}
+    </tr>
   );
 };
 
