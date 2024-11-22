@@ -9,7 +9,7 @@ export const TrialSessionPlanningReportView = connect(
     return (
       <>
         <BigHeader text="Trial Session Planning Report" />
-        <div className="grid-container print-docket-record">
+        <div className="grid-container">
           <Button
             link
             className="margin-bottom-3"
