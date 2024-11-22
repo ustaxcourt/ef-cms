@@ -22,6 +22,9 @@ note: we have 3 package.json files, be sure to update them all
    > **Why am I seeing a medium severity for `quill`?**
    > Quill is used as our rich text editor for open text submissions. It currently has a potential XSS vulnerability if used incorrectly. This vulnerability can be avoided by using getContents/setContents in combination with the quill delta. Currently we are not at risk for how we are using Quill and this vulnerability is actively being disputed: https://github.com/quilljs/quill/issues/3364
 
+   > **Why am I seeing a hight severity for `cross-spawn`?**
+   > We use pdf2pic to generate pdf to images which depends on gm (GraphicsMagick and ImageMagick for node). This issue has existed for over two weeks as of 11/22/2024. Our risk factor for this issue should be low. It doesn't appear that we can force gm from 4.0.0 to 6.0.6 or 7.0.5.
+
 3. Check if there are updates to either of the following in the main `Dockerfile`. Changing the `Dockerfile` requires publishing a new ECR image which is used as the docker image in CircleCI.
 
     - `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
