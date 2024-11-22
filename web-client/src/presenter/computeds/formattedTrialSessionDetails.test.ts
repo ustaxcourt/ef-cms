@@ -14,6 +14,7 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import {
   colvinsChambersUser,
   docketClerkUser,
+  judgeUser,
   trialClerkUser,
 } from '../../../../shared/src/test/mockUsers';
 import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from './formattedTrialSessionDetails';
@@ -369,6 +370,25 @@ describe('formattedTrialSessionDetails', () => {
         state: {
           trialSession: {},
           user: colvinsChambersUser,
+        },
+      });
+
+      expect(result).toMatchObject({
+        canEdit: false,
+      });
+    });
+
+    it('should  NOT allow judge to edit trial session info page', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        sessionStatus: SESSION_STATUS_GROUPS.open,
+        startDate: FUTURE_DATE,
+      };
+
+      const result: any = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {},
+          user: judgeUser,
         },
       });
 
