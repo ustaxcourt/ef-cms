@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import { NewCaseKysely } from '@web-api/database-types';
+import { calculateDate } from '@shared/business/utilities/DateHandler';
 
 export const SEEDED_DOCKET_NUMBERS_440_449 = {
   '440-22': '440-22',
@@ -28,7 +29,7 @@ export const cases440_449: NewCaseKysely[] = [
     associatedJudge: 'Colvin',
     associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     automaticBlocked: false,
-    caseCaption:
+    caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
     caseStatusHistory: [
       {
@@ -38,10 +39,8 @@ export const cases440_449: NewCaseKysely[] = [
       },
     ],
     caseType: 'Partnership (Section 6226)',
-    createdAt: '2021-10-29T13:41:06.778Z',
+    createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '440-22',
-    docketNumberWithSuffix: '440-22',
-    entityName: 'Case',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption:
@@ -61,11 +60,9 @@ export const cases440_449: NewCaseKysely[] = [
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
     petitioners: [],
-    pk: 'case|440-22',
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
-    receivedAt: '2011-10-11T04:00:00.000Z',
-    sk: 'case|440-22',
+    receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2022000140,
     statistics: [],
     status: 'Submitted',
@@ -74,7 +71,7 @@ export const cases440_449: NewCaseKysely[] = [
     associatedJudge: 'Colvin',
     associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     automaticBlocked: false,
-    caseCaption:
+    caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
     caseStatusHistory: [
       {
@@ -84,10 +81,8 @@ export const cases440_449: NewCaseKysely[] = [
       },
     ],
     caseType: 'Partnership (Section 6226)',
-    createdAt: '2021-10-29T13:41:06.778Z',
+    createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '440-23',
-    docketNumberWithSuffix: '440-23',
-    entityName: 'Case',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption:
@@ -107,11 +102,9 @@ export const cases440_449: NewCaseKysely[] = [
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
     petitioners: [],
-    pk: 'case|440-23',
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
-    receivedAt: '2011-10-11T04:00:00.000Z',
-    sk: 'case|440-23',
+    receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000140,
     statistics: [],
     status: 'CAV',
@@ -120,7 +113,7 @@ export const cases440_449: NewCaseKysely[] = [
     associatedJudge: 'Colvin',
     associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     automaticBlocked: false,
-    caseCaption:
+    caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
     caseStatusHistory: [
       {
@@ -130,10 +123,8 @@ export const cases440_449: NewCaseKysely[] = [
       },
     ],
     caseType: 'Partnership (Section 6226)',
-    createdAt: '2021-10-29T13:41:06.778Z',
+    createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '441-22',
-    docketNumberWithSuffix: '441-22',
-    entityName: 'Case',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption:
@@ -153,11 +144,9 @@ export const cases440_449: NewCaseKysely[] = [
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
     petitioners: [],
-    pk: 'case|441-22',
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
-    receivedAt: '2011-10-11T04:00:00.000Z',
-    sk: 'case|441-22',
+    receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2022000141,
     statistics: [],
     status: 'Submitted',
@@ -166,7 +155,7 @@ export const cases440_449: NewCaseKysely[] = [
     associatedJudge: 'Colvin',
     associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     automaticBlocked: false,
-    caseCaption:
+    caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
     caseStatusHistory: [
       {
@@ -176,10 +165,8 @@ export const cases440_449: NewCaseKysely[] = [
       },
     ],
     caseType: 'Partnership (Section 6226)',
-    createdAt: '2021-10-29T13:41:06.778Z',
+    createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '441-23',
-    docketNumberWithSuffix: '441-23',
-    entityName: 'Case',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption:
@@ -199,11 +186,9 @@ export const cases440_449: NewCaseKysely[] = [
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
     petitioners: [],
-    pk: 'case|441-23',
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
-    receivedAt: '2011-10-11T04:00:00.000Z',
-    sk: 'case|441-23',
+    receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000141,
     statistics: [],
     status: 'CAV',
@@ -212,7 +197,7 @@ export const cases440_449: NewCaseKysely[] = [
     associatedJudge: 'Colvin',
     associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     automaticBlocked: false,
-    caseCaption:
+    caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
     caseStatusHistory: [
       {
@@ -222,10 +207,8 @@ export const cases440_449: NewCaseKysely[] = [
       },
     ],
     caseType: 'Partnership (Section 6226)',
-    createdAt: '2021-10-29T13:41:06.778Z',
+    createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '442-22',
-    docketNumberWithSuffix: '442-22',
-    entityName: 'Case',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption:
@@ -245,11 +228,9 @@ export const cases440_449: NewCaseKysely[] = [
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
     petitioners: [],
-    pk: 'case|442-22',
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
-    receivedAt: '2011-10-11T04:00:00.000Z',
-    sk: 'case|442-22',
+    receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2022000142,
     statistics: [],
     status: 'Submitted',
@@ -258,7 +239,7 @@ export const cases440_449: NewCaseKysely[] = [
     associatedJudge: 'Colvin',
     associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     automaticBlocked: false,
-    caseCaption:
+    caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
     caseStatusHistory: [
       {
@@ -268,10 +249,8 @@ export const cases440_449: NewCaseKysely[] = [
       },
     ],
     caseType: 'Partnership (Section 6226)',
-    createdAt: '2021-10-29T13:41:06.778Z',
+    createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '442-23',
-    docketNumberWithSuffix: '442-23',
-    entityName: 'Case',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption:
@@ -291,11 +270,9 @@ export const cases440_449: NewCaseKysely[] = [
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
     petitioners: [],
-    pk: 'case|442-23',
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
-    receivedAt: '2011-10-11T04:00:00.000Z',
-    sk: 'case|442-23',
+    receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000142,
     statistics: [],
     status: 'CAV',
@@ -304,7 +281,7 @@ export const cases440_449: NewCaseKysely[] = [
     associatedJudge: 'Colvin',
     associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     automaticBlocked: false,
-    caseCaption:
+    caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
     caseStatusHistory: [
       {
@@ -314,10 +291,8 @@ export const cases440_449: NewCaseKysely[] = [
       },
     ],
     caseType: 'Partnership (Section 6226)',
-    createdAt: '2021-10-29T13:41:06.778Z',
+    createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '443-22',
-    docketNumberWithSuffix: '443-22',
-    entityName: 'Case',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption:
@@ -337,11 +312,9 @@ export const cases440_449: NewCaseKysely[] = [
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
     petitioners: [],
-    pk: 'case|443-22',
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
-    receivedAt: '2011-10-11T04:00:00.000Z',
-    sk: 'case|443-22',
+    receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2022000143,
     statistics: [],
     status: 'Submitted',
@@ -350,7 +323,7 @@ export const cases440_449: NewCaseKysely[] = [
     associatedJudge: 'Colvin',
     associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     automaticBlocked: false,
-    caseCaption:
+    caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
     caseStatusHistory: [
       {
@@ -360,10 +333,8 @@ export const cases440_449: NewCaseKysely[] = [
       },
     ],
     caseType: 'Partnership (Section 6226)',
-    createdAt: '2021-10-29T13:41:06.778Z',
+    createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '443-23',
-    docketNumberWithSuffix: '443-23',
-    entityName: 'Case',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption:
@@ -383,11 +354,9 @@ export const cases440_449: NewCaseKysely[] = [
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
     petitioners: [],
-    pk: 'case|443-23',
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
-    receivedAt: '2011-10-11T04:00:00.000Z',
-    sk: 'case|443-23',
+    receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000143,
     statistics: [],
     status: 'CAV',
@@ -396,7 +365,7 @@ export const cases440_449: NewCaseKysely[] = [
     associatedJudge: 'Colvin',
     associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     automaticBlocked: false,
-    caseCaption:
+    caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
     caseStatusHistory: [
       {
@@ -406,10 +375,8 @@ export const cases440_449: NewCaseKysely[] = [
       },
     ],
     caseType: 'Partnership (Section 6226)',
-    createdAt: '2021-10-29T13:41:06.778Z',
+    createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '444-22',
-    docketNumberWithSuffix: '444-22',
-    entityName: 'Case',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption:
@@ -429,11 +396,9 @@ export const cases440_449: NewCaseKysely[] = [
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
     petitioners: [],
-    pk: 'case|444-22',
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
-    receivedAt: '2011-10-11T04:00:00.000Z',
-    sk: 'case|444-22',
+    receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2022000144,
     statistics: [],
     status: 'Submitted',
@@ -442,7 +407,7 @@ export const cases440_449: NewCaseKysely[] = [
     associatedJudge: 'Colvin',
     associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     automaticBlocked: false,
-    caseCaption:
+    caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
     caseStatusHistory: [
       {
@@ -452,10 +417,8 @@ export const cases440_449: NewCaseKysely[] = [
       },
     ],
     caseType: 'Partnership (Section 6226)',
-    createdAt: '2021-10-29T13:41:06.778Z',
+    createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '444-23',
-    docketNumberWithSuffix: '444-23',
-    entityName: 'Case',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption:
@@ -475,11 +438,9 @@ export const cases440_449: NewCaseKysely[] = [
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
     petitioners: [],
-    pk: 'case|444-23',
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
-    receivedAt: '2011-10-11T04:00:00.000Z',
-    sk: 'case|444-23',
+    receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000144,
     statistics: [],
     status: 'CAV',
@@ -488,7 +449,7 @@ export const cases440_449: NewCaseKysely[] = [
     associatedJudge: 'Colvin',
     associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     automaticBlocked: false,
-    caseCaption:
+    caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
     caseStatusHistory: [
       {
@@ -498,10 +459,8 @@ export const cases440_449: NewCaseKysely[] = [
       },
     ],
     caseType: 'Partnership (Section 6226)',
-    createdAt: '2021-10-29T13:41:06.778Z',
+    createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '445-22',
-    docketNumberWithSuffix: '445-22',
-    entityName: 'Case',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption:
@@ -521,11 +480,9 @@ export const cases440_449: NewCaseKysely[] = [
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
     petitioners: [],
-    pk: 'case|445-22',
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
-    receivedAt: '2011-10-11T04:00:00.000Z',
-    sk: 'case|445-22',
+    receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2022000145,
     statistics: [],
     status: 'Submitted',
@@ -534,7 +491,7 @@ export const cases440_449: NewCaseKysely[] = [
     associatedJudge: 'Colvin',
     associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     automaticBlocked: false,
-    caseCaption:
+    caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
     caseStatusHistory: [
       {
@@ -544,10 +501,8 @@ export const cases440_449: NewCaseKysely[] = [
       },
     ],
     caseType: 'Partnership (Section 6226)',
-    createdAt: '2021-10-29T13:41:06.778Z',
+    createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '445-23',
-    docketNumberWithSuffix: '445-23',
-    entityName: 'Case',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption:
@@ -567,11 +522,9 @@ export const cases440_449: NewCaseKysely[] = [
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
     petitioners: [],
-    pk: 'case|445-23',
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
-    receivedAt: '2011-10-11T04:00:00.000Z',
-    sk: 'case|445-23',
+    receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000145,
     statistics: [],
     status: 'CAV',
@@ -580,7 +533,7 @@ export const cases440_449: NewCaseKysely[] = [
     associatedJudge: 'Colvin',
     associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     automaticBlocked: false,
-    caseCaption:
+    caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
     caseStatusHistory: [
       {
@@ -590,10 +543,8 @@ export const cases440_449: NewCaseKysely[] = [
       },
     ],
     caseType: 'Partnership (Section 6226)',
-    createdAt: '2021-10-29T13:41:06.778Z',
+    createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '446-22',
-    docketNumberWithSuffix: '446-22',
-    entityName: 'Case',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption:
@@ -613,11 +564,9 @@ export const cases440_449: NewCaseKysely[] = [
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
     petitioners: [],
-    pk: 'case|446-22',
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
-    receivedAt: '2011-10-11T04:00:00.000Z',
-    sk: 'case|446-22',
+    receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2022000146,
     statistics: [],
     status: 'Submitted',
@@ -626,7 +575,7 @@ export const cases440_449: NewCaseKysely[] = [
     associatedJudge: 'Colvin',
     associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     automaticBlocked: false,
-    caseCaption:
+    caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
     caseStatusHistory: [
       {
@@ -636,10 +585,8 @@ export const cases440_449: NewCaseKysely[] = [
       },
     ],
     caseType: 'Partnership (Section 6226)',
-    createdAt: '2021-10-29T13:41:06.778Z',
+    createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '446-23',
-    docketNumberWithSuffix: '446-23',
-    entityName: 'Case',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption:
@@ -659,11 +606,9 @@ export const cases440_449: NewCaseKysely[] = [
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
     petitioners: [],
-    pk: 'case|446-23',
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
-    receivedAt: '2011-10-11T04:00:00.000Z',
-    sk: 'case|446-23',
+    receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000146,
     statistics: [],
     status: 'CAV',
@@ -672,7 +617,7 @@ export const cases440_449: NewCaseKysely[] = [
     associatedJudge: 'Colvin',
     associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     automaticBlocked: false,
-    caseCaption:
+    caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
     caseStatusHistory: [
       {
@@ -682,10 +627,8 @@ export const cases440_449: NewCaseKysely[] = [
       },
     ],
     caseType: 'Partnership (Section 6226)',
-    createdAt: '2021-10-29T13:41:06.778Z',
+    createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '447-23',
-    docketNumberWithSuffix: '447-23',
-    entityName: 'Case',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption:
@@ -705,11 +648,9 @@ export const cases440_449: NewCaseKysely[] = [
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
     petitioners: [],
-    pk: 'case|447-23',
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
-    receivedAt: '2011-10-11T04:00:00.000Z',
-    sk: 'case|447-23',
+    receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000147,
     statistics: [],
     status: 'CAV',
@@ -718,7 +659,7 @@ export const cases440_449: NewCaseKysely[] = [
     associatedJudge: 'Colvin',
     associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     automaticBlocked: false,
-    caseCaption:
+    caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
     caseStatusHistory: [
       {
@@ -728,10 +669,8 @@ export const cases440_449: NewCaseKysely[] = [
       },
     ],
     caseType: 'Partnership (Section 6226)',
-    createdAt: '2021-10-29T13:41:06.778Z',
+    createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '448-23',
-    docketNumberWithSuffix: '448-23',
-    entityName: 'Case',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption:
@@ -751,11 +690,9 @@ export const cases440_449: NewCaseKysely[] = [
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
     petitioners: [],
-    pk: 'case|448-23',
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
-    receivedAt: '2011-10-11T04:00:00.000Z',
-    sk: 'case|448-23',
+    receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000148,
     statistics: [],
     status: 'CAV',
@@ -764,7 +701,7 @@ export const cases440_449: NewCaseKysely[] = [
     associatedJudge: 'Colvin',
     associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     automaticBlocked: false,
-    caseCaption:
+    caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
     caseStatusHistory: [
       {
@@ -774,10 +711,8 @@ export const cases440_449: NewCaseKysely[] = [
       },
     ],
     caseType: 'Partnership (Section 6226)',
-    createdAt: '2021-10-29T13:41:06.778Z',
+    createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '449-23',
-    docketNumberWithSuffix: '449-23',
-    entityName: 'Case',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption:
@@ -797,11 +732,9 @@ export const cases440_449: NewCaseKysely[] = [
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
     petitioners: [],
-    pk: 'case|449-23',
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
-    receivedAt: '2011-10-11T04:00:00.000Z',
-    sk: 'case|449-23',
+    receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000149,
     statistics: [],
     status: 'CAV',

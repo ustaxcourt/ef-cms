@@ -8,6 +8,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { NewUserCaseKysely } from '@web-api/database-types';
 import { SEEDED_DOCKET_NUMBERS_100_104 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases100_104';
+import { SEEDED_DOCKET_NUMBERS_105_109 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases105_109';
 
 export const petitionerToCaseMappings: NewUserCaseKysely[] = [
   // 100-22
@@ -336,5 +337,26 @@ export const petitionerToCaseMappings: NewUserCaseKysely[] = [
     paperPetitionEmail: 'juvek@mailinator.com',
     sealedAndUnavailable: false,
     serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+  },
+  // 105-19
+  {
+    additionalName: '',
+    contactId: '28cae029-bae2-4eef-ac54-878fbbab65e3',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_105_109['105-19'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+  },
+  // 105-20
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_105_109['105-20'],
+    hasEAccess: true,
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
   },
 ];
