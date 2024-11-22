@@ -1,20 +1,7 @@
-import { NotificationMessage } from '@web-api/notifications/sendNotificationToUserTypes';
+import { SocketRouterNotificationMessage } from '@web-api/notifications/sendNotificationToUserTypes';
 
 /* eslint-disable complexity */
 const noop = () => {};
-
-type MaintenanceModeEngaged = {
-  action: 'maintenance_mode_engaged';
-};
-
-type MaintenanceModeDisengaged = {
-  action: 'maintenance_mode_disengaged';
-};
-
-type SocketRouterNotificationMessage =
-  | NotificationMessage
-  | MaintenanceModeEngaged
-  | MaintenanceModeDisengaged;
 
 export const socketRouter = (app, onMessageCallbackFn?) => {
   return async event => {
