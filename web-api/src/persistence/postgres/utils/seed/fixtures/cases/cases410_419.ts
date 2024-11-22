@@ -32,13 +32,6 @@ export const cases410_419: NewCaseKysely[] = [
     automaticBlocked: false,
     caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
-    caseStatusHistory: [
-      {
-        changedBy: 'Docketclerk',
-        date: '2022-12-21T19:03:01.908Z',
-        updatedCaseStatus: 'Submitted',
-      },
-    ],
     caseType: 'Partnership (Section 6226)',
     createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '410-22',
@@ -62,7 +55,6 @@ export const cases410_419: NewCaseKysely[] = [
     orderToShowCause: false,
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
-    petitioners: [],
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
     qcCompleteForTrial: {},
@@ -77,13 +69,6 @@ export const cases410_419: NewCaseKysely[] = [
     automaticBlocked: false,
     caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
-    caseStatusHistory: [
-      {
-        changedBy: 'Docketclerk',
-        date: '2022-12-21T19:03:01.908Z',
-        updatedCaseStatus: 'CAV',
-      },
-    ],
     caseType: 'Partnership (Section 6226)',
     createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '410-23',
@@ -105,7 +90,6 @@ export const cases410_419: NewCaseKysely[] = [
     orderToShowCause: false,
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
-    petitioners: [],
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
@@ -123,13 +107,6 @@ export const cases410_419: NewCaseKysely[] = [
     automaticBlockedReason: 'Pending Item',
     caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
-    caseStatusHistory: [
-      {
-        changedBy: 'Docketclerk',
-        date: '2022-12-21T19:03:01.908Z',
-        updatedCaseStatus: 'Submitted',
-      },
-    ],
     caseType: 'Partnership (Section 6226)',
     createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '411-22',
@@ -153,7 +130,6 @@ export const cases410_419: NewCaseKysely[] = [
     orderToShowCause: false,
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
-    petitioners: [],
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
     qcCompleteForTrial: {},
@@ -168,13 +144,6 @@ export const cases410_419: NewCaseKysely[] = [
     automaticBlocked: false,
     caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
-    caseStatusHistory: [
-      {
-        changedBy: 'Docketclerk',
-        date: '2022-12-21T19:03:01.908Z',
-        updatedCaseStatus: 'CAV',
-      },
-    ],
     caseType: 'Partnership (Section 6226)',
     createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '411-23',
@@ -196,7 +165,6 @@ export const cases410_419: NewCaseKysely[] = [
     orderToShowCause: false,
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
-    petitioners: [],
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
@@ -210,13 +178,6 @@ export const cases410_419: NewCaseKysely[] = [
     automaticBlocked: false,
     caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
-    caseStatusHistory: [
-      {
-        changedBy: 'Docketclerk',
-        date: '2022-12-21T19:03:01.908Z',
-        updatedCaseStatus: 'Submitted',
-      },
-    ],
     caseType: 'Partnership (Section 6226)',
     createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '412-22',
@@ -240,7 +201,6 @@ export const cases410_419: NewCaseKysely[] = [
     orderToShowCause: false,
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
-    petitioners: [],
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
     qcCompleteForTrial: {},
@@ -255,13 +215,6 @@ export const cases410_419: NewCaseKysely[] = [
     automaticBlocked: false,
     caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
-    caseStatusHistory: [
-      {
-        changedBy: 'Docketclerk',
-        date: '2022-12-21T19:03:01.908Z',
-        updatedCaseStatus: 'CAV',
-      },
-    ],
     caseType: 'Partnership (Section 6226)',
     createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '412-23',
@@ -283,7 +236,6 @@ export const cases410_419: NewCaseKysely[] = [
     orderToShowCause: false,
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
-    petitioners: [],
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
@@ -301,13 +253,6 @@ export const cases410_419: NewCaseKysely[] = [
     automaticBlockedReason: 'Pending Item',
     caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
-    caseStatusHistory: [
-      {
-        changedBy: 'Docketclerk',
-        date: '2022-12-21T19:03:01.908Z',
-        updatedCaseStatus: 'Submitted',
-      },
-    ],
     caseType: 'Partnership (Section 6226)',
     createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '413-22',
@@ -331,7 +276,6 @@ export const cases410_419: NewCaseKysely[] = [
     orderToShowCause: false,
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
-    petitioners: [],
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
     qcCompleteForTrial: {},
@@ -346,13 +290,6 @@ export const cases410_419: NewCaseKysely[] = [
     automaticBlocked: false,
     caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
-    caseStatusHistory: [
-      {
-        changedBy: 'Docketclerk',
-        date: '2022-12-21T19:03:01.908Z',
-        updatedCaseStatus: 'CAV',
-      },
-    ],
     caseType: 'Partnership (Section 6226)',
     createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '413-23',
@@ -374,7 +311,6 @@ export const cases410_419: NewCaseKysely[] = [
     orderToShowCause: false,
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
-    petitioners: [],
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
@@ -388,13 +324,6 @@ export const cases410_419: NewCaseKysely[] = [
     automaticBlocked: false,
     caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
-    caseStatusHistory: [
-      {
-        changedBy: 'Docketclerk',
-        date: '2022-12-21T19:03:01.908Z',
-        updatedCaseStatus: 'Submitted',
-      },
-    ],
     caseType: 'Partnership (Section 6226)',
     createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '414-22',
@@ -416,7 +345,6 @@ export const cases410_419: NewCaseKysely[] = [
     orderToShowCause: false,
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
-    petitioners: [],
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
@@ -430,13 +358,6 @@ export const cases410_419: NewCaseKysely[] = [
     automaticBlocked: false,
     caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
-    caseStatusHistory: [
-      {
-        changedBy: 'Docketclerk',
-        date: '2022-12-21T19:03:01.908Z',
-        updatedCaseStatus: 'CAV',
-      },
-    ],
     caseType: 'Partnership (Section 6226)',
     createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '414-23',
@@ -458,7 +379,6 @@ export const cases410_419: NewCaseKysely[] = [
     orderToShowCause: false,
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
-    petitioners: [],
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
@@ -472,13 +392,6 @@ export const cases410_419: NewCaseKysely[] = [
     automaticBlocked: false,
     caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
-    caseStatusHistory: [
-      {
-        changedBy: 'Docketclerk',
-        date: '2022-12-21T19:03:01.908Z',
-        updatedCaseStatus: 'Submitted',
-      },
-    ],
     caseType: 'Partnership (Section 6226)',
     createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '415-22',
@@ -500,7 +413,6 @@ export const cases410_419: NewCaseKysely[] = [
     orderToShowCause: false,
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
-    petitioners: [],
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
@@ -514,13 +426,6 @@ export const cases410_419: NewCaseKysely[] = [
     automaticBlocked: false,
     caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
-    caseStatusHistory: [
-      {
-        changedBy: 'Docketclerk',
-        date: '2022-12-21T19:03:01.908Z',
-        updatedCaseStatus: 'CAV',
-      },
-    ],
     caseType: 'Partnership (Section 6226)',
     createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '415-23',
@@ -542,7 +447,6 @@ export const cases410_419: NewCaseKysely[] = [
     orderToShowCause: false,
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
-    petitioners: [],
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
@@ -556,13 +460,6 @@ export const cases410_419: NewCaseKysely[] = [
     automaticBlocked: false,
     caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
-    caseStatusHistory: [
-      {
-        changedBy: 'Docketclerk',
-        date: '2022-12-21T19:03:01.908Z',
-        updatedCaseStatus: 'Submitted',
-      },
-    ],
     caseType: 'Partnership (Section 6226)',
     createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '416-22',
@@ -584,7 +481,6 @@ export const cases410_419: NewCaseKysely[] = [
     orderToShowCause: false,
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
-    petitioners: [],
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
@@ -598,13 +494,6 @@ export const cases410_419: NewCaseKysely[] = [
     automaticBlocked: false,
     caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
-    caseStatusHistory: [
-      {
-        changedBy: 'Docketclerk',
-        date: '2022-12-21T19:03:01.908Z',
-        updatedCaseStatus: 'CAV',
-      },
-    ],
     caseType: 'Partnership (Section 6226)',
     createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '416-23',
@@ -626,7 +515,6 @@ export const cases410_419: NewCaseKysely[] = [
     orderToShowCause: false,
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
-    petitioners: [],
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
@@ -640,13 +528,6 @@ export const cases410_419: NewCaseKysely[] = [
     automaticBlocked: false,
     caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
-    caseStatusHistory: [
-      {
-        changedBy: 'Docketclerk',
-        date: '2022-12-21T19:03:01.908Z',
-        updatedCaseStatus: 'Submitted',
-      },
-    ],
     caseType: 'Partnership (Section 6226)',
     createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '417-22',
@@ -668,7 +549,6 @@ export const cases410_419: NewCaseKysely[] = [
     orderToShowCause: false,
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
-    petitioners: [],
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
@@ -682,13 +562,6 @@ export const cases410_419: NewCaseKysely[] = [
     automaticBlocked: false,
     caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
-    caseStatusHistory: [
-      {
-        changedBy: 'Docketclerk',
-        date: '2022-12-21T19:03:01.908Z',
-        updatedCaseStatus: 'CAV',
-      },
-    ],
     caseType: 'Partnership (Section 6226)',
     createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '417-23',
@@ -710,7 +583,6 @@ export const cases410_419: NewCaseKysely[] = [
     orderToShowCause: false,
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
-    petitioners: [],
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
@@ -724,13 +596,6 @@ export const cases410_419: NewCaseKysely[] = [
     automaticBlocked: false,
     caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
-    caseStatusHistory: [
-      {
-        changedBy: 'Docketclerk',
-        date: '2022-12-21T19:03:01.908Z',
-        updatedCaseStatus: 'Submitted',
-      },
-    ],
     caseType: 'Partnership (Section 6226)',
     createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '418-22',
@@ -752,7 +617,6 @@ export const cases410_419: NewCaseKysely[] = [
     orderToShowCause: false,
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
-    petitioners: [],
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
@@ -766,13 +630,6 @@ export const cases410_419: NewCaseKysely[] = [
     automaticBlocked: false,
     caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
-    caseStatusHistory: [
-      {
-        changedBy: 'Docketclerk',
-        date: '2022-12-21T19:03:01.908Z',
-        updatedCaseStatus: 'CAV',
-      },
-    ],
     caseType: 'Partnership (Section 6226)',
     createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '418-23',
@@ -794,7 +651,6 @@ export const cases410_419: NewCaseKysely[] = [
     orderToShowCause: false,
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
-    petitioners: [],
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
@@ -808,13 +664,6 @@ export const cases410_419: NewCaseKysely[] = [
     automaticBlocked: false,
     caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
-    caseStatusHistory: [
-      {
-        changedBy: 'Docketclerk',
-        date: '2022-12-21T19:03:01.908Z',
-        updatedCaseStatus: 'Submitted',
-      },
-    ],
     caseType: 'Partnership (Section 6226)',
     createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '419-22',
@@ -836,7 +685,6 @@ export const cases410_419: NewCaseKysely[] = [
     orderToShowCause: false,
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
-    petitioners: [],
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
@@ -850,13 +698,6 @@ export const cases410_419: NewCaseKysely[] = [
     automaticBlocked: false,
     caption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
-    caseStatusHistory: [
-      {
-        changedBy: 'Docketclerk',
-        date: '2022-12-21T19:03:01.908Z',
-        updatedCaseStatus: 'CAV',
-      },
-    ],
     caseType: 'Partnership (Section 6226)',
     createdAt: calculateDate({ dateString: '2021-10-29T13:41:06.778Z' }),
     docketNumber: '419-23',
@@ -878,7 +719,6 @@ export const cases410_419: NewCaseKysely[] = [
     orderToShowCause: false,
     partyType: 'Surviving spouse',
     petitionPaymentStatus: 'Not paid',
-    petitioners: [],
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
