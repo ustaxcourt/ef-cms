@@ -137,7 +137,7 @@ export const FilingsAndProceedings = connect<
                 <span className="filing-type-icon-mobile">
                   <FontAwesomeIcon
                     icon={['fas', 'file-alt']}
-                    title="is paper"
+                    title="Is paper"
                   />
                 </span>
               )}
