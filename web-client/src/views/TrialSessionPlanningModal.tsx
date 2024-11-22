@@ -9,7 +9,7 @@ import classNames from 'classnames';
 export const TrialSessionPlanningModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
-    confirmSequence: sequences.runTrialSessionPlanningReportSequence,
+    confirmSequence: sequences.navigateToTrialSessionPlanningReportSequence,
     trialYears: state.modal.trialYears,
     updateModalValueSequence: sequences.updateModalValueSequence,
     validateTrialSessionPlanningSequence:
