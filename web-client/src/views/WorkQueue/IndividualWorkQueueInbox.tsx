@@ -72,7 +72,7 @@ export const IndividualWorkQueueInbox = connect(
                   <td className="message-queue-row has-icon padding-right-0">
                     {item.showUnreadStatusIcon && (
                       <Icon
-                        aria-label="unread message"
+                        aria-label="Unread message"
                         className="iconStatusUnread"
                         icon={['fas', 'envelope']}
                         size="lg"
@@ -80,7 +80,7 @@ export const IndividualWorkQueueInbox = connect(
                     )}
                     {item.showHighPriorityIcon && (
                       <Icon
-                        aria-label="high priority"
+                        aria-label="High priority"
                         className="iconHighPriority"
                         icon={['fas', 'exclamation-circle']}
                         size="lg"
