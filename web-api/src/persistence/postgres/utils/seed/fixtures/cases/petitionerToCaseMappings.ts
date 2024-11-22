@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import {
   BRETT_OSBORNE,
   LUKSA_LUCIA,
@@ -9,6 +10,10 @@ import {
 import { NewUserCaseKysely } from '@web-api/database-types';
 import { SEEDED_DOCKET_NUMBERS_100_104 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases100_104';
 import { SEEDED_DOCKET_NUMBERS_105_109 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases105_109';
+import { SEEDED_DOCKET_NUMBERS_110_129 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases110_129';
+import { SEEDED_DOCKET_NUMBERS_130_309 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases130_309';
+import { SEEDED_DOCKET_NUMBERS_310_399 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases310_399';
+import { SEEDED_DOCKET_NUMBERS_450_plus } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases450_plus';
 
 export const petitionerToCaseMappings: NewUserCaseKysely[] = [
   // 100-22
@@ -358,5 +363,577 @@ export const petitionerToCaseMappings: NewUserCaseKysely[] = [
     isAddressSealed: false,
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
+  },
+  // 105-23
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405418',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_105_109['105-23'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+  },
+  {
+    additionalName: '',
+    contactId: '29425430-3b75-456d-9e25-6f906b8f11d1',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_105_109['105-23'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+  },
+  // 105-67
+  {
+    additionalName: 'Magee Schmidt',
+    contactId: 'bc936c44-ff22-478b-a9e9-971f250d599c',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_105_109['105-67'],
+    hasConsentedToEService: true,
+    isAddressSealed: false,
+    paperPetitionEmail: 'petitioner1@example.com',
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+  },
+  // 106-19
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_105_109['106-19'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+  },
+  // 106-23
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405417',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_105_109['106-23'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Electronic',
+  },
+  // 107-19
+  {
+    additionalName: 'Wayne Obrien',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_105_109['107-19'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+  },
+  {
+    additionalName: '',
+    contactId: '89d7d182-46da-4b96-b29b-260d15249c25',
+    contactType: 'intervenor',
+    docketNumber: SEEDED_DOCKET_NUMBERS_105_109['107-19'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+    title: 'Intervenor',
+  },
+  {
+    additionalName: '',
+    contactId: '277ca24a-7be3-49e9-80d3-529a19a1a841',
+    contactType: 'participant',
+    docketNumber: SEEDED_DOCKET_NUMBERS_105_109['107-19'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+    title: 'Partner Other Than Tax Matters Partner',
+  },
+  // 108-19
+  {
+    additionalName: 'Leslie Bullock',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_105_109['108-19'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+  },
+  {
+    additionalName: '',
+    contactId: '89d7d182-46da-4b96-b29b-260d15249c25',
+    contactType: 'intervenor',
+    docketNumber: SEEDED_DOCKET_NUMBERS_105_109['108-19'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+    title: 'Intervenor',
+  },
+  {
+    additionalName: '',
+    contactId: '277ca24a-7be3-49e9-80d3-529a19a1a841',
+    contactType: 'participant',
+    docketNumber: SEEDED_DOCKET_NUMBERS_105_109['108-19'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+    title: 'Partner Other Than Tax Matters Partner',
+  },
+  {
+    additionalName: 'Coralie Carpenter',
+    contactId: '9a45147f-7859-4dcd-8a00-fecb72dee4b1',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_105_109['108-19'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    secondaryName: 'Leslie Bullock',
+    serviceIndicator: 'None',
+    title: 'Trust',
+  },
+  {
+    additionalName: 'Riya Carpenter',
+    contactId: '8b1cc7b5-ecee-4d5d-b065-f39911a16e4f',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_105_109['108-19'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    secondaryName: 'Leslie Bullock',
+    serviceIndicator: 'None',
+    title: 'Trust',
+  },
+  {
+    additionalName: 'Chinju Carpenter',
+    contactId: 'f6a1e0df-f893-4b2b-ab47-ac1c874da34d',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_105_109['108-19'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    secondaryName: 'Leslie Bullock',
+    serviceIndicator: 'None',
+    title: 'Trust',
+  },
+  // 109-19
+  {
+    additionalName: '',
+    contactId: 'b9a124ae-c9f7-4a52-9a51-e537081c08e1',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_105_109['109-19'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+  },
+  // 110-19
+  {
+    additionalName: '',
+    contactId: '6ddeb6c3-9666-4f6b-94fb-dbc625a0ffb6',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_110_129['110-19'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+  },
+  // 111-19
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_110_129['111-19'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+  },
+  // 112-19
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_110_129['112-19'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+  },
+  // 113-19
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_110_129['113-19'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+  },
+  // 117-20
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_110_129['117-20'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+  },
+  // 120-20
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_110_129['120-20'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+  },
+  // 121-20
+  {
+    additionalName: '',
+    contactId: '1566ea80-1d95-42bc-b006-7fc55c698dea',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_110_129['121-20'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+  },
+  // 122-20
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_110_129['122-20'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+  },
+  // 123-20
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_110_129['123-20'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+  },
+  // 124-20
+  {
+    additionalName: '',
+    contactId: 'd2fadb14-b0bb-4019-b6b1-cb51cb1cb92f',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_110_129['124-20'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    secondaryName: 'Natalya Chaouche',
+    serviceIndicator: 'Paper',
+  },
+  // 125-20
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_110_129['125-20'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+  },
+  // 126-20
+  {
+    additionalName: '',
+    contactId: '8d6d7ebb-6863-41c8-acc4-b014935efafb',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_110_129['126-20'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+  },
+  // 127-20
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_110_129['127-20'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+  },
+  // 128-20
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_110_129['128-20'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+  },
+  // 129-20
+  {
+    additionalName: '',
+    contactId: '05b98fff-e4ca-4114-b8ec-7218effc982e',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_110_129['129-20'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Paper',
+  },
+  // 150-12
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_130_309['150-12'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+    title: 'Executor',
+  },
+  // 151-12
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_130_309['151-12'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+    title: 'Executor',
+  },
+  // 152-12
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_130_309['152-12'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+    title: 'Executor',
+  },
+  // 301-21
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_130_309['301-21'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+  },
+  // 302-21
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_130_309['302-21'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Electronic',
+  },
+  // 303-21
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_130_309['303-21'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Electronic',
+  },
+  // 304-21
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_130_309['304-21'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Electronic',
+  },
+  // 305-21
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_130_309['305-21'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Electronic',
+  },
+  // 306-21
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_130_309['306-21'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Electronic',
+  },
+  // 307-21
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_130_309['307-21'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Electronic',
+  },
+  // 308-21
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_130_309['308-21'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Electronic',
+  },
+  // 309-21
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_130_309['309-21'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Electronic',
+  },
+  // 310-21
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_310_399['310-21'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Electronic',
+  },
+  // 311-21
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_310_399['311-21'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Electronic',
+  },
+  // 312-21
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_310_399['312-21'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Electronic',
+  },
+  // 313-21
+  {
+    additionalName: '',
+    contactId: '6206bb45-fa32-4391-8ec3-e48b0359dcf2',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_310_399['313-21'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Paper',
+  },
+  // 314-21
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_310_399['314-21'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Electronic',
+  },
+  // 315-21
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_310_399['315-21'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Electronic',
+  },
+  //316-21
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_310_399['316-21'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Electronic',
+  },
+  // 317-21
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_310_399['317-21'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Electronic',
+  },
+  // 318-21
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_310_399['318-21'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Electronic',
+  },
+  // 319-21
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_310_399['319-21'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Electronic',
+  },
+  // 320-21
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_310_399['320-21'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Electronic',
+  },
+  // 1338-20
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'petitioner',
+    docketNumber: SEEDED_DOCKET_NUMBERS_450_plus['1338-20'],
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'None',
+    title: 'Executor',
+  },
+  // 69312-87
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    contactType: 'primary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_450_plus['69312-87'],
+    hasEAccess: true,
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Electronic',
+    title: 'Executor',
+  },
+  {
+    additionalName: '',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405417',
+    contactType: 'secondary',
+    docketNumber: SEEDED_DOCKET_NUMBERS_450_plus['69312-87'],
+    hasEAccess: true,
+    isAddressSealed: false,
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Electronic',
+    title: 'Executor',
   },
 ];
