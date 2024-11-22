@@ -59,7 +59,7 @@ export const fileCourtIssuedOrder = async (
   }
 
   if (['O', 'NOT', 'OJR'].includes(documentMetadata.eventCode)) {
-    const freeText = generateFreeText(documentMetadata, user);
+    const freeText = generateFreeText(documentMetadata);
     documentMetadata.freeText = freeText;
     if (documentMetadata.draftOrderState) {
       documentMetadata.draftOrderState.freeText = freeText;
@@ -157,20 +157,14 @@ export const fileCourtIssuedOrderInteractor = withLocking(
   }),
 );
 
-function generateFreeText(
-  documentMetadata: {
-    orderType: string;
-    documentTitle: string;
-    dueDate: string;
-    eventCode: string;
-    strickenFromTrialSessions: boolean;
-    jurisdiction: string;
-  },
-  // user: {
-  //   judgeTitle?: string;
-  //   name: string;
-  // },
-) {
+function generateFreeText(documentMetadata: {
+  orderType: string;
+  documentTitle: string;
+  dueDate: string;
+  eventCode: string;
+  strickenFromTrialSessions: boolean;
+  jurisdiction: string;
+}) {
   const {
     documentTitle,
     dueDate,
@@ -183,7 +177,6 @@ function generateFreeText(
   const formattedDueDate = formatDateString(dueDate, FORMATS.MMDDYYYY);
   if (eventCode === 'OJR') {
     return [
-      // `Order that jurisdiction is retained by ${user.judgeTitle} ${user.name}.`,
       orderType === 'statusReport' &&
         `. Parties by ${formattedDueDate} shall file a status report.`,
       orderType === 'statusReportStipulatedDecision' &&
