@@ -1,3 +1,4 @@
+import { caseStatistics } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/caseStatistics';
 import { caseStatusUpdates } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/caseStatusUpdates';
 import { cases100_104 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases100_104';
 import { cases105_109 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases105_109';
@@ -61,6 +62,15 @@ export const seed = async () => {
       .insertInto('dwCaseStatusUpdate')
       .values(caseStatusUpdates)
       .onConflict(oc => oc.columns(['docketNumber', 'date']).doNothing())
+      .execute(),
+  );
+
+  // Attach the case statistics to their respective cases
+  await getDbWriter(writer =>
+    writer
+      .insertInto('dwCaseStatistic')
+      .values(caseStatistics)
+      .onConflict(oc => oc.column('statisticId').doNothing())
       .execute(),
   );
 

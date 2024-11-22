@@ -1,8 +1,8 @@
-import { CaseStatisticsKysely } from '@web-api/database-types';
+import { CaseStatisticKysely } from '@web-api/database-types';
 import { SEEDED_DOCKET_NUMBERS_105_109 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases105_109';
 import { SEEDED_DOCKET_NUMBERS_310_399 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases310_399';
 
-export const caseStatistics: CaseStatisticsKysely[] = [
+export const caseStatistics: CaseStatisticKysely[] = [
   // 105-20
   {
     docketNumber: SEEDED_DOCKET_NUMBERS_105_109['105-20'],
