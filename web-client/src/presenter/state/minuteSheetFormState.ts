@@ -1,7 +1,7 @@
 type MotionFormFields = {
   date: string;
   type: string; // motionTypeOptions
-  filedBy: string; // motionFiledByOptions
+  filedBy: MotionFiledByOption;
   status: string; // motionStatusOptions
   note: string;
   oralMotion: boolean;
@@ -27,7 +27,7 @@ type CaseMetadataEntry = {
   date: string;
   note: string;
   transcriptOrdered?: boolean;
-  trialHearingType?: string; // trialHearingOptions
+  trialHearingType?: TrialHearingOption;
 };
 
 type PartyFormFields = {
@@ -79,7 +79,7 @@ export const initialMinuteSheetFormState = {
     statusReportOrdered: {
       date: '',
       dateDue: '',
-      orderedFor: '', // statusReportOrderedForOptions
+      orderedFor: '' as StatusReportOrderedForOption,
       note: '',
     },
     stipulatedDecisionOrdered: {
@@ -117,29 +117,35 @@ export const initialMinuteSheetFormState = {
   exhibits: [] as ExhibitFormFields[],
 };
 
-const trialHearingOptions = [
-  'Trial',
-  'Hearing',
-  'Partial Trial',
-  'Further Trial',
-  'Further Hearing',
-];
+const TRIAL_HEARING_OPTIONS = {
+  trial: 'Trial',
+  hearing: 'Hearing',
+  partialTrial: 'Partial Trial',
+  furtherTrial: 'Further Trial',
+  furtherHearing: 'Further Hearing',
+};
+type TrialHearingOption =
+  (typeof TRIAL_HEARING_OPTIONS)[keyof typeof TRIAL_HEARING_OPTIONS];
 
-const statusReportOrderedForOptions = [
-  'Petitioner',
-  'Respondent',
-  'Petitioner and Respondent',
-  'Joint',
-  'Other',
-];
+const STATUS_REPORT_ORDERED_FOR_OPTIONS = {
+  petitioner: 'Petitioner',
+  respondent: 'Respondent',
+  petitionerAndRespondent: 'Petitioner and Respondent',
+  joint: 'Joint',
+  other: 'Other',
+};
+type StatusReportOrderedForOption =
+  (typeof STATUS_REPORT_ORDERED_FOR_OPTIONS)[keyof typeof STATUS_REPORT_ORDERED_FOR_OPTIONS];
 
-const motionFiledByOptions = [
-  'Petitioner',
-  'Respondent',
-  'Joint',
-  'Third Party',
-  'Intervenor',
-];
+const MOTION_FILED_BY_OPTIONS = {
+  petitioner: 'Petitioner',
+  respondent: 'Respondent',
+  joint: 'Joint',
+  thirdParty: 'Third Party',
+  intervenor: 'Intervenor',
+};
+type MotionFiledByOption =
+  (typeof MOTION_FILED_BY_OPTIONS)[keyof typeof MOTION_FILED_BY_OPTIONS];
 
 const motionStatusOptions = [
   // 10419 TODO: can we derive these options from an existing constant? Same
