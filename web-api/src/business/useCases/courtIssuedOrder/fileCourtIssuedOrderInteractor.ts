@@ -184,7 +184,7 @@ function generateFreeText(documentMetadata: {
       orderType !== 'statusReportStipulatedDecision' &&
         orderType !== 'statusReport' &&
         strickenFromTrialSessions &&
-        '. ',
+        '.',
       strickenFromTrialSessions &&
         'Case is stricken from the current trial session.',
     ]
