@@ -594,7 +594,7 @@ export const caseStatusUpdates: NewCaseStatusUpdateKysely[] = [
   {
     changedBy: 'Docketclerk',
     date: calculateDate({ dateString: '2022-12-21T19:03:01.908Z' }),
-    docketNumber: SEEDED_DOCKET_NUMBERS_430_439['432-23'],
+    docketNumber: SEEDED_DOCKET_NUMBERS_430_439['433-23'],
     updatedCaseStatus: 'CAV',
   },
   // 434-22

@@ -42,6 +42,18 @@ export const getCaseByDocketNumber = async ({
       .execute(),
   );
 
+  const caseStatistics = await getDbReader(reader =>
+    reader
+      .selectFrom('dwCaseStatistic')
+      .where('docketNumber', '=', docketNumber)
+      .selectAll()
+      .execute(),
+  );
+
+  // 10502 TODO: Get work items and other aggregated things that getCaseByDocketNumber is doing in dynamo
+
+  console.log('caseStatistics', caseStatistics);
+
   console.log('getCaseByDocketNumber');
   // console.log(caseResult);
   // console.log(petitioners);
@@ -53,7 +65,7 @@ export const getCaseByDocketNumber = async ({
   });
 
   return caseResult
-    ? // TODO 10502: Use CaseFactory
+    ? // 10502 TODO: Use CaseFactory
       CaseFactory({
         authorizedUser,
         rawCase: transformNullToUndefined({
@@ -67,6 +79,7 @@ export const getCaseByDocketNumber = async ({
           }),
           // TODO, this is a hack
           docketEntries,
+
           petitioners:
             transformNullToUndefined(petitioners).map(x => {
               // 10502 TODO: hack to get petitioner validation ok
@@ -74,8 +87,10 @@ export const getCaseByDocketNumber = async ({
               x.title = 'a';
               x.email = 'a@test.x';
               x.additionalName = x.additionalName || 'TEST';
+              x.paperPetitionEmail = 'a@test.x';
               return new Petitioner(x).validate().toRawObject();
             }) || [],
+          statistics: caseStatistics,
         }),
       })
     : undefined;

@@ -37,6 +37,12 @@ export async function up(db: Kysely<any>): Promise<void> {
       'docketNumber',
       'contactId',
     ])
+    .addForeignKeyConstraint(
+      'user_case_to_case_fk',
+      ['docketNumber'],
+      'dwCase',
+      ['docketNumber'],
+    )
     .execute();
 }
 

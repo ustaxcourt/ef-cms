@@ -41,7 +41,7 @@ export const petitionerToCaseMappings: NewUserCaseKysely[] = [
     additionalName: '',
     contactId: BRETT_OSBORNE.contactId,
     contactType: 'primary',
-    docketNumber: SEEDED_DOCKET_NUMBERS_100_104['100-19'],
+    docketNumber: SEEDED_DOCKET_NUMBERS_100_104['101-19'],
     isAddressSealed: false,
     sealedAndUnavailable: false,
     serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,

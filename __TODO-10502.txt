@@ -1,10 +1,8 @@
-Continue moving seed data:
-• Cut a case from efcms-local.json (search for "sk": "case|", ignoring the first 23, which are mapping records) and paste in removed-from-efcms.json. This is mostly for record-keeping. We can delete this file when we are done.
-• Paste into cases (cases.ts), in order by docket number. Add the docket number itself to SEEDED_DOCKET_NUMBERS.
-• Cut the petitioners out from the case. Paste them into petitionerToCaseMappings. Also paste them into petitionerUsers (unless it is a duplicate).
-• Remove the unnecessary fields in petitionerUsers. Remove the unnecessary fields in petitionerToCaseMappings, and add the docket number from SEEDED_DOCKET_NUMBERS.
-• Fix the entry in cases, using constant when possible (see examples)
-• If files get too big, break apart in a reasonable way
+Current summary:
+• All case (and directly related, i.e., stored on the case) seed data has been moved, but petitioners could be refactored to avoid duplicates
+• The app runs with the fake data, although case is still missing some stuff. getCaseByDocketNumber (postgres version) needs to be worked on.
+
+Some TODOs are marked with "10502 TODO", so search for this (without the quotes) as needed.
 
 Figure out which fields we can get rid of
 
@@ -17,8 +15,6 @@ In getDocumentQCInboxForUser, I had to add to falsy checks that can probably be 
 Get sealCaseInteractor to work -- timezone issue
 
 Fix duplicate contact ids in petitioners.ts seed data
-
-Finish Statistics table stuff: add migration, make sure all of the right fields are there, and seed
 
 Associate the right things with a case efficiently in getCaseByDocketNumber
 -- need respondent counsel, consolidated cases, case status history ...
