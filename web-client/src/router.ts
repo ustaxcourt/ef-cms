@@ -1109,6 +1109,20 @@ const router = {
     );
 
     registerRoute(
+      '/trial-session-planning-report/*/*',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
+        (trialTerm, trialYear) => {
+          setPageTitle('Trial session planning report');
+          return app.getSequence('gotoTrialSessionPlanningReportViewSequence')({
+            trialTerm,
+            trialYear,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
       '/trial-session-planning-report',
       ifHasAccess({ app }, () => {
         setPageTitle('Trial session planning report');
