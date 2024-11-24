@@ -104,11 +104,11 @@ export const TrialSessionWorkingCopy = connect(
           <SuccessNotification />
           <ErrorNotification />
 
-          <div className="grid-row  grid-gap">
-            <div className="grid-col-6">
+          <div className="grid-row  grid-gap actions-buttons">
+            <div className="grid-col-6 session-card">
               <SessionAssignments />
             </div>
-            <div className="grid-col-6">
+            <div className="grid-col-6 session-card">
               <SessionNotes />
             </div>
           </div>
