@@ -70,11 +70,25 @@ describe('createAccountHelper', () => {
   });
 
   describe('email', () => {
-    it('should return the error message when "email" fails validation', () => {
+    it('should return the correct error message when an invalid email address is provided', () => {
       const result = runCompute(createAccountHelper, {
         state: {
           form: {
             email: 'NOT A REAL EMAIL',
+          },
+        },
+      });
+
+      expect(result).toMatchObject({
+        email: 'Enter email address in format: yourname@example.com',
+      });
+    });
+
+    it('should return the correct error message when no email address is provided', () => {
+      const result = runCompute(createAccountHelper, {
+        state: {
+          form: {
+            email: undefined,
           },
         },
       });

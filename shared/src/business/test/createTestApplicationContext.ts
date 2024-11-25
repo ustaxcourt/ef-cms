@@ -481,7 +481,6 @@ export const createTestApplicationContext = () => {
     getCaseDeadlinesByDocketNumber: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByDocketNumber),
-    getCasesByFilters: jest.fn(),
     getConfigurationItemValue: jest
       .fn()
       .mockImplementation(getConfigurationItemValue),
