@@ -1,5 +1,5 @@
 import { ClientPublicApplicationContext } from '@web-client/applicationContextPublic';
-import { KEYS } from '@shared/business/entities/EntityConstants';
+import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app-public.cerebral';
 /**
  * invokes the generate public docket record endpoint to get back the pdf url
@@ -13,10 +13,10 @@ export const generatePublicDocketRecordPdfUrlAction = async ({
 }: ActionProps<{}, ClientPublicApplicationContext>) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const docketRecordSortField = get(
-    state[KEYS.DOCKET_RECORD_TABLE_SORT].sortField,
+    state[STATE_KEYS.DOCKET_RECORD_TABLE_SORT].sortField,
   );
   const docketRecordSortOrder = get(
-    state[KEYS.DOCKET_RECORD_TABLE_SORT].sortOrder,
+    state[STATE_KEYS.DOCKET_RECORD_TABLE_SORT].sortOrder,
   );
 
   const { url } = await applicationContext
