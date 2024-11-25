@@ -9,13 +9,17 @@ export const getCaseInventoryReportInteractor = async (
   applicationContext,
   {
     associatedJudge,
+    from,
+    pageSize,
     status,
   }: {
     associatedJudge?: string;
+    from?: string;
+    pageSize?: number;
     status?: string;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<{ foundCases: RawCase[] }> => {
+): Promise<{ foundCases: RawCase[]; totalCount: number }> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_INVENTORY_REPORT)) {
     throw new UnauthorizedError('Unauthorized for case inventory report');
   }
@@ -29,6 +33,8 @@ export const getCaseInventoryReportInteractor = async (
     .getCaseInventoryReport({
       applicationContext,
       associatedJudge,
+      from,
+      pageSize,
       status,
     });
 };
