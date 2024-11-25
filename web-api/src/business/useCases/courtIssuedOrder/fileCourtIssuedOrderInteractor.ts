@@ -192,7 +192,7 @@ function generateFreeText(documentMetadata: {
       .join(' ');
   }
 
-  if (eventCode === 'O') {
+  if (eventCode === 'O' && (orderType || jurisdiction)) {
     return [
       'Order',
       orderType === 'statusReport' &&
