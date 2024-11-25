@@ -1,18 +1,58 @@
 type MotionFormFields = {
   date: string;
-  type: string; // motionTypeOptions
+  type: MotionTypeOption; // motionTypeOptions
   filedBy: MotionFiledByOption;
-  status: string; // motionStatusOptions
+  status: MotionStatusOption; // motionStatusOptions
   note: string;
   oralMotion: boolean;
 };
 
 type ActionFilingFormFields = {
   date: string;
-  documentType: string; // actionDocumentTypeOptions
-  filedBy: string; // actionFiledByOptions
-  status: string; // actionStatusOptions
+  documentType: ActionDocumentTypeOption; // actionDocumentTypeOptions
+  filedBy: ActionFiledByOption; // actionFiledByOptions
+  status: ActionStatusOption; // actionStatusOptions
   note: string;
+};
+
+type BaseBriefFormFields = {
+  dueDate: string;
+  note: string;
+};
+
+type BriefFormFieldsWithPartyType = BaseBriefFormFields & {
+  partyType: 'Petitioner' | 'Respondent';
+};
+
+type SeriatimBriefFormFields = {
+  opening: BriefFormFieldsWithPartyType;
+  answering: BriefFormFieldsWithPartyType;
+  reply: BriefFormFieldsWithPartyType;
+  surreply: BriefFormFieldsWithPartyType;
+};
+
+type SeriatimMemorandumBriefFormFields = SeriatimBriefFormFields;
+
+type SimultaneousBriefFormFields = {
+  opening: BaseBriefFormFields;
+  answering: BaseBriefFormFields;
+  reply: BaseBriefFormFields;
+  surreply: BaseBriefFormFields;
+};
+
+type SimultaneousMemorandumFormFields = {
+  opening: BaseBriefFormFields;
+  answering: BaseBriefFormFields;
+  surreply: BaseBriefFormFields;
+};
+
+type SimultaneousMemorandaOfLawFormFields = {
+  memoranda: BaseBriefFormFields;
+  answering: BaseBriefFormFields;
+};
+
+type SimultaneousSupplementalFormFields = {
+  simultaneousSupplemental: BaseBriefFormFields;
 };
 
 type ExhibitFormFields = {
@@ -94,12 +134,17 @@ export type MinuteSheetFormState = {
     // schemas/shapes. We will need to figure out how to handle this section
     // of the form, given that there's a fair amount of overlap between these
     // five shapes.
-    briefDetails: {};
+    briefDetails:
+      | SeriatimMemorandumBriefFormFields
+      | SimultaneousMemorandumFormFields
+      | SimultaneousMemorandaOfLawFormFields
+      | SimultaneousSupplementalFormFields
+      | SimultaneousBriefFormFields;
   };
 
   witnesses: {
-    petitionerWitnesses: any[];
-    respondentWitnesses: any[];
+    petitionerWitnesses: string[];
+    respondentWitnesses: string[];
   };
 
   exhibits: ExhibitFormFields[];
@@ -212,74 +257,94 @@ const MOTION_FILED_BY_OPTIONS = {
 type MotionFiledByOption =
   (typeof MOTION_FILED_BY_OPTIONS)[keyof typeof MOTION_FILED_BY_OPTIONS];
 
-const motionStatusOptions = [
+const MOTION_STATUS_OPTIONS = {
   // 10419 TODO: can we derive these options from an existing constant? Same
   // question applies broadly speaking for these option constants.
-  // See Order
-  // CAV
-  // Denied
-  // Granted
-  // Filed
-  // Lodged
-  // Objection
-  // No Objection
-];
+  seeOrder: 'See Order',
+  cav: 'CAV',
+  denied: 'Denied',
+  granted: 'Granted',
+  filed: 'Filed',
+  lodged: 'Lodged',
+  objection: 'Objection',
+  noObjection: 'No Objection',
+} as const;
+export type MotionStatusOption =
+  (typeof MOTION_STATUS_OPTIONS)[keyof typeof MOTION_STATUS_OPTIONS];
 
-const motionTypeOptions = [
-  //   Motion to Dismiss - Lack of Prosecution
-  // Motion to Dismiss - Lack of Jurisdiction
-  // Motion to Dismiss - Failure to Properly Prosecute
-  // Motion to Dismiss
-  // Motion for Continuance
-  // Motion for General Continuance
-];
+const MOTION_TYPE_OPTIONS = {
+  motionToDismissLackOfProsecution: 'Motion to Dismiss - Lack of Prosecution',
+  motionToDismissLackOfJurisdiction: 'Motion to Dismiss - Lack of Jurisdiction',
+  motionToDismissFailureToProperlyProsecute:
+    'Motion to Dismiss - Failure to Properly Prosecute',
+  motionToDismiss: 'Motion to Dismiss',
+  motionForContinuance: 'Motion for Continuance',
+  motionForGeneralContinuance: 'Motion for General Continuance',
+} as const;
+export type MotionTypeOption =
+  (typeof MOTION_TYPE_OPTIONS)[keyof typeof MOTION_TYPE_OPTIONS];
 
-const actionDocumentTypeOptions = [
-  //   Entry of Appearance
-  // Limited Entry of Appearance
-  // Order to Show Cause
-  // Filing
-  // Motion
-  // Notice
-  // Order
-  // Other
-];
+const ACTION_DOCUMENT_TYPE_OPTIONS = {
+  entryOfAppearance: 'Entry of Appearance',
+  limitedEntryOfAppearance: 'Limited Entry of Appearance',
+  orderToShowCause: 'Order to Show Cause',
+  filing: 'Filing',
+  motion: 'Motion',
+  notice: 'Notice',
+  order: 'Order',
+  other: 'Other',
+} as const;
 
-const actionFiledByOptions = [
-  //   Petitioner
-  // Respondent
-  // Petitioner and Respondent
-  // Joint
-  // Other
-];
+export type ActionDocumentTypeOption =
+  (typeof ACTION_DOCUMENT_TYPE_OPTIONS)[keyof typeof ACTION_DOCUMENT_TYPE_OPTIONS];
 
-const actionStatusOptions = [
-  // See Order
-  // CAV
-  // Denied
-  // Granted
-  // Filed
-  // Lodged
-  // Objection
-  // No Objection
-];
+const ACTION_FILED_BY_OPTIONS = {
+  petitioner: 'Petitioner',
+  respondent: 'Respondent',
+  petitionerAndRespondent: 'Petitioner and Respondent',
+  joint: 'Joint',
+  other: 'Other',
+} as const;
 
-const briefTypeOptions = [
-  // Seriatim brief
-  // Seriatim memorandum brief
-  // Simultaneous brief
-  // Simultaneous Memoranda of law
-  // Simultaneous memorandum brief
-  // Simultaneous Supplemental Brief
-];
+export type ActionFiledByOption =
+  (typeof ACTION_FILED_BY_OPTIONS)[keyof typeof ACTION_FILED_BY_OPTIONS];
 
-const exhibitStatusOptions = [
-  //   Admitted
-  // Not admitted
-  // Withdrawn
-  // Not offered
-  // Reserved
-  // Identification only
-  // Demonstrative
-  // Other - see note
-];
+const ACTION_STATUS_OPTIONS = {
+  seeOrder: 'See Order',
+  cav: 'CAV',
+  denied: 'Denied',
+  granted: 'Granted',
+  filed: 'Filed',
+  lodged: 'Lodged',
+  objection: 'Objection',
+  noObjection: 'No Objection',
+} as const;
+
+export type ActionStatusOption =
+  (typeof ACTION_STATUS_OPTIONS)[keyof typeof ACTION_STATUS_OPTIONS];
+
+const BRIEF_TYPE_OPTIONS = {
+  seriatim: 'Seriatim brief',
+  seriatimMemorandum: 'Seriatim memorandum brief',
+  simultaneous: 'Simultaneous brief',
+  simultaneousMemoranda: 'Simultaneous Memoranda of law',
+  simultaneousmemorandum: 'Simultaneous memorandum brief',
+  simultaneousSupplemental: 'Simultaneous Supplemental Brief',
+} as const;
+
+type BriefTypeOption =
+  (typeof BRIEF_TYPE_OPTIONS)[keyof typeof BRIEF_TYPE_OPTIONS];
+
+const EXHIBIT_STATUS_OPTIONS = {
+  admitted: 'Admitted',
+  notAdmitted: 'Not admitted',
+  withdrawn: 'Withdrawn',
+  notOffered: 'Not offered',
+  reserved: 'Reserved',
+  identificationOnly: 'Identification only',
+  demonstrative: 'Demonstrative',
+  otherSeeNote: 'Other - see note',
+} as const;
+
+export type ExhibitStatusOption =
+  (typeof EXHIBIT_STATUS_OPTIONS)[keyof typeof EXHIBIT_STATUS_OPTIONS];
