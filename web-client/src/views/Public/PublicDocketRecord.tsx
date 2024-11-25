@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { KEYS } from '@shared/business/entities/EntityConstants';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
 import { PublicDocketRecordHeader } from './PublicDocketRecordHeader';
 import { PublicFilingsAndProceedings } from './PublicFilingsAndProceedings';
-import { SortableHeader } from '@web-client/views/DocketRecord/DocketRecord';
+import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
+import { SortableDocketRecordHeader } from '@web-client/views/DocketRecord/DocketRecord';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
@@ -12,10 +12,7 @@ import classNames from 'classnames';
 export const PublicDocketRecord = connect(
   {
     docketNumber: state.caseDetail.docketNumber,
-    docketRecordTableSortData: state[KEYS.DOCKET_RECORD_TABLE_SORT] as {
-      sortField: string;
-      sortOrder: 'asc' | 'desc';
-    },
+    docketRecordTableSortData: state[STATE_KEYS.DOCKET_RECORD_TABLE_SORT],
     publicCaseDetailHelper: state.publicCaseDetailHelper,
     sortTableSequence: sequences.sortTableSequence,
   },
@@ -41,7 +38,7 @@ export const PublicDocketRecord = connect(
             >
               <thead>
                 <tr>
-                  <SortableHeader
+                  <SortableDocketRecordHeader
                     hideOnMobile={true}
                     screenReaderTitle="Number"
                     sortField="index"
@@ -49,14 +46,14 @@ export const PublicDocketRecord = connect(
                     title="No."
                     onSort={sortTableSequence}
                   />
-                  <SortableHeader
+                  <SortableDocketRecordHeader
                     sortField="sortingFilingDate"
                     sortType="date"
                     tableSort={docketRecordTableSortData}
                     title="Filed Date"
                     onSort={sortTableSequence}
                   />
-                  <SortableHeader
+                  <SortableDocketRecordHeader
                     hideOnMobile={true}
                     sortField="eventCode"
                     sortType="string"
@@ -65,14 +62,14 @@ export const PublicDocketRecord = connect(
                     onSort={sortTableSequence}
                   />
                   <th aria-hidden="true" className="icon-column" />
-                  <SortableHeader
+                  <SortableDocketRecordHeader
                     sortField="descriptionDisplay"
                     sortType="string"
                     tableSort={docketRecordTableSortData}
                     title="Filings and Proceedings"
                     onSort={sortTableSequence}
                   />
-                  <SortableHeader
+                  <SortableDocketRecordHeader
                     className="hide-on-mobile"
                     hideOnMobile={true}
                     sortField="numberOfPages"
@@ -80,7 +77,7 @@ export const PublicDocketRecord = connect(
                     title="Pages"
                     onSort={sortTableSequence}
                   />
-                  <SortableHeader
+                  <SortableDocketRecordHeader
                     className="hide-on-mobile"
                     hideOnMobile={true}
                     sortField="filedBy"
@@ -89,7 +86,7 @@ export const PublicDocketRecord = connect(
                     title="Filed By"
                     onSort={sortTableSequence}
                   />
-                  <SortableHeader
+                  <SortableDocketRecordHeader
                     className="hide-on-mobile"
                     hideOnMobile={true}
                     sortField="action"
@@ -98,14 +95,14 @@ export const PublicDocketRecord = connect(
                     title="Action"
                     onSort={sortTableSequence}
                   />
-                  <SortableHeader
+                  <SortableDocketRecordHeader
                     sortField="servedAt"
                     sortType="date"
                     tableSort={docketRecordTableSortData}
                     title="Served"
                     onSort={sortTableSequence}
                   />
-                  <SortableHeader
+                  <SortableDocketRecordHeader
                     className="center-column hide-on-mobile"
                     hideOnMobile={true}
                     sortField="servedPartiesCode"

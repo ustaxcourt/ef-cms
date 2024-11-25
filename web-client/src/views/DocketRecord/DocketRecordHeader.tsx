@@ -1,9 +1,9 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordSort } from './DocketRecordSort';
-import { KEYS } from '@shared/business/entities/EntityConstants';
 import { NonPhone, Phone } from '../../ustc-ui/Responsive/Responsive';
 import { OpenPrintableDocketRecordModal } from './OpenPrintableDocketRecordModal';
+import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -28,7 +28,7 @@ export const DocketRecordMobileHeader = ({
   sortTableSequence: (props: {
     sortField: string;
     sortOrder: 'asc' | 'desc';
-    root?: string;
+    stateKey?: string;
   }) => void;
 }) => {
   const { sortField, sortOrder } = docketRecordTableSortData;
@@ -58,7 +58,7 @@ export const DocketRecordMobileHeader = ({
             onChange={option => {
               sortTableSequence({
                 ...SORTING_CONVERSION_DICTIONARY[option.value],
-                root: KEYS.DOCKET_RECORD_TABLE_SORT,
+                stateKey: STATE_KEYS.DOCKET_RECORD_TABLE_SORT,
               });
             }}
           />

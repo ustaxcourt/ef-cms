@@ -4,8 +4,8 @@ import {
   ALLOWLIST_FEATURE_FLAGS,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_RECORD_FILTER_OPTIONS,
-  KEYS,
   ROLES,
+  STATE_KEYS,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
@@ -1171,7 +1171,7 @@ describe('formattedDocketEntries', () => {
             ...MOCK_CASE,
             docketEntries: TEST_DOCKET_ENTRIES,
           },
-          [KEYS.DOCKET_RECORD_TABLE_SORT]: {
+          [STATE_KEYS.DOCKET_RECORD_TABLE_SORT]: {
             sortField: 'testProp',
             sortOrder: 'desc',
           },

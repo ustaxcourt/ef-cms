@@ -33,6 +33,10 @@ export const gotoTrialSessionsSequence =
         setAllAndCurrentJudgesAction,
       ],
     ]),
+    [
+      getBulkSpecialTrialSessionCopyNotesAction,
+      setBulkSpecialTrialSessionCopyNotesAction,
+    ],
     trialSessionQueryParamsAction,
     setTrialSessionsFiltersAction,
     [

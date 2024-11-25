@@ -4,11 +4,11 @@ import {
   AMICUS_BRIEF_EVENT_CODE,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  KEYS,
   PARTIES_CODES,
   POLICY_DATE_IMPACTED_EVENTCODES,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   ROLES,
+  STATE_KEYS,
   STIPULATED_DECISION_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
@@ -147,7 +147,7 @@ describe('publicCaseDetailHelper', () => {
       sessionMetadata: {
         docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
       },
-      [KEYS.DOCKET_RECORD_TABLE_SORT]: {},
+      [STATE_KEYS.DOCKET_RECORD_TABLE_SORT]: {},
     };
   });
 
@@ -255,7 +255,7 @@ describe('publicCaseDetailHelper', () => {
     });
 
     it('should be sorted newer to older when sort order is by date desc', () => {
-      state[KEYS.DOCKET_RECORD_TABLE_SORT] = {
+      state[STATE_KEYS.DOCKET_RECORD_TABLE_SORT] = {
         sortField: 'sortingFilingDate',
         sortOrder: 'desc',
       };
@@ -390,7 +390,7 @@ describe('publicCaseDetailHelper', () => {
           const result = runCompute(publicCaseDetailHelper, {
             state: {
               caseDetail,
-              [KEYS.DOCKET_RECORD_TABLE_SORT]: {},
+              [STATE_KEYS.DOCKET_RECORD_TABLE_SORT]: {},
               sessionMetadata: {
                 docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.orders,
               },
@@ -407,7 +407,7 @@ describe('publicCaseDetailHelper', () => {
           const result = runCompute(publicCaseDetailHelper, {
             state: {
               caseDetail,
-              [KEYS.DOCKET_RECORD_TABLE_SORT]: {},
+              [STATE_KEYS.DOCKET_RECORD_TABLE_SORT]: {},
               sessionMetadata: {
                 docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.motions,
               },
@@ -424,7 +424,7 @@ describe('publicCaseDetailHelper', () => {
           const result = runCompute(publicCaseDetailHelper, {
             state: {
               caseDetail,
-              [KEYS.DOCKET_RECORD_TABLE_SORT]: {},
+              [STATE_KEYS.DOCKET_RECORD_TABLE_SORT]: {},
               sessionMetadata: {
                 docketRecordFilter:
                   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
@@ -1425,7 +1425,7 @@ describe('publicCaseDetailHelper', () => {
             canAllowPrintableDocketRecord: true,
             docketEntries: [],
           },
-          [KEYS.DOCKET_RECORD_TABLE_SORT]: {},
+          [STATE_KEYS.DOCKET_RECORD_TABLE_SORT]: {},
           sessionMetadata: {
             docketRecordFilter:
               PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
@@ -1442,7 +1442,7 @@ describe('publicCaseDetailHelper', () => {
             canAllowPrintableDocketRecord: false,
             docketEntries: [],
           },
-          [KEYS.DOCKET_RECORD_TABLE_SORT]: {},
+          [STATE_KEYS.DOCKET_RECORD_TABLE_SORT]: {},
           sessionMetadata: {
             docketRecordFilter:
               PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
@@ -1484,7 +1484,7 @@ describe('formatDocketEntryOnDocketRecord', () => {
     mockCase = cloneDeep(MOCK_CASE);
     state = {
       caseDetail: mockCase,
-      [KEYS.DOCKET_RECORD_TABLE_SORT]: {},
+      [STATE_KEYS.DOCKET_RECORD_TABLE_SORT]: {},
       sessionMetadata: {
         docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
       },

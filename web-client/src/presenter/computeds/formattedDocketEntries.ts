@@ -2,7 +2,7 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
-import { KEYS } from '@shared/business/entities/EntityConstants';
+import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
 import { computeIsNotServedDocument } from '@shared/business/utilities/getFormattedCaseDetail';
 import { sortBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -215,10 +215,10 @@ export const formattedDocketEntries = (
   }
 
   const docketRecordSortField = get(
-    state[KEYS.DOCKET_RECORD_TABLE_SORT].sortField,
+    state[STATE_KEYS.DOCKET_RECORD_TABLE_SORT].sortField,
   );
   const docketRecordSortOrder = get(
-    state[KEYS.DOCKET_RECORD_TABLE_SORT].sortOrder,
+    state[STATE_KEYS.DOCKET_RECORD_TABLE_SORT].sortOrder,
   );
 
   const DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE = get(
@@ -318,7 +318,7 @@ export const formattedDocketEntries = (
 
 export function sortDocketEntryTable<T>(
   docketEntries: (T & { sortingFilingDate: string | undefined })[] = [],
-  docketRecordSortField: keyof T | undefined,
+  docketRecordSortField: string | undefined,
   docketRecordSortOrder: 'asc' | 'desc' | undefined,
 ): T[] {
   if (!docketRecordSortField || !docketRecordSortOrder) {

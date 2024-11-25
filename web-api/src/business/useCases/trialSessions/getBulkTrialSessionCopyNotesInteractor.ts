@@ -7,7 +7,7 @@ import {
   SpecialTrialSession,
   SpecialTrialSessionKey,
   TrialSessionWorkingCopyNotes,
-} from '@shared/business/entities/trialSessions/SpeciailTrialSessions';
+} from '@shared/business/entities/trialSessions/SpecialTrialSessions';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
