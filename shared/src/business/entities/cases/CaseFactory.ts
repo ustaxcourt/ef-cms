@@ -1,73 +1,111 @@
-// @ts-nocheck Comment out when ready
-
+import {
+  AuthUser,
+  UnknownAuthUser,
+  isAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import {
   Case,
   isSealedCase,
   isUserPartOfGroup,
   userIsDirectlyAssociated,
 } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { PublicCase } from '@shared/business/entities/cases/PublicCase';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { RestrictedCase } from '@shared/business/entities/cases/RestrictedCase';
-import {
-  UnknownAuthUser,
-  isAuthUser,
-} from '@shared/business/entities/authUser/AuthUser';
 
 export function CaseFactory({
+  rawCase,
+  user,
+}: {
+  rawCase: any;
+  user: UnknownAuthUser;
+}): Case | PublicCase | RestrictedCase {
+  // TODO: Return type of narrower Case which FullCase, PublicCase, and RestrictedCase extend? Or union type?
+  const userIsLoggedIn = isAuthUser(user);
+  const caseIsSealed = isSealedCase(rawCase);
+
+  if (!userIsLoggedIn) {
+    return caseIsSealed
+      ? new RestrictedCase(rawCase)
+      : new PublicCase(rawCase, { authorizedUser: user });
+  }
+
+  if (isAuthorized(user, ROLE_PERMISSIONS.GET_ALL_CASES)) {
+    return new Case(rawCase, { authorizedUser: user });
+  }
+
+  // Petitioners and practitioners on a case have full rad access to the case
+  if (
+    userIsAssociatedWithCase({
+      authorizedUser: user as AuthUser,
+      rawCase,
+    })
+  ) {
+    return new Case(rawCase, { authorizedUser: user });
+  }
+
+  // IRS super users have full read access to all cases with served petitions
+  if (
+    userIsIrsSuperuserAndCasePetitionIsServed({
+      authorizedUser: user as AuthUser,
+      rawCase,
+    })
+  ) {
+    return new Case(rawCase, { authorizedUser: user });
+  }
+
+  // User is logged in but neither has permissions to view all cases nor is associated with the case
+  if (
+    !isAuthorized(user, ROLE_PERMISSIONS.GET_ALL_CASES) &&
+    !userIsAssociatedWithCase
+  ) {
+    return caseIsSealed
+      ? new RestrictedCase(rawCase)
+      : new PublicCase(rawCase, { authorizedUser: user });
+  }
+
+  return new PublicCase(rawCase, { authorizedUser: user });
+}
+
+const userIsAssociatedWithCase = ({
   authorizedUser,
   rawCase,
 }: {
   rawCase: any;
-  authorizedUser: UnknownAuthUser;
-}): Case {
-  // TODO: Return type of narrower Case which FullCase, PublicCase, and RestrictedCase extend? Or union type?
-  // TODO: Actually implement
-  return new Case(rawCase, { authorizedUser });
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const implementWhenReady = (rawCase, authorizedUser) => {
-  // This should basically be right, but confirm for IRS superuser
-  const userIsLoggedIn = isAuthUser(authorizedUser);
-  const caseIsSealed = isSealedCase(rawCase);
-
-  // Handling users who are not logged in
-  if (!userIsLoggedIn) {
-    return caseIsSealed ? new RestrictedCase(rawCase) : new PublicCase(rawCase);
-  }
-
-  // User is logged in and has full permissions to view cases (e.g., an internal court user or IRS Superuser)
-  if (isAuthorized(authorizedUser, ROLE_PERMISSIONS.GET_ALL_CASES)) {
-    return new Case(rawCase, { authorizedUser });
-  }
-
+  authorizedUser: AuthUser;
+}) => {
   const userIsDirectlyAssociatedWithCase = userIsDirectlyAssociated({
     aCase: rawCase,
     userId: authorizedUser.userId,
   });
   const userIsIndirectlyAssociatedWithCase = isUserPartOfGroup({
     consolidatedCases: rawCase.consolidatedCases || [],
-    userId: authorizedUser.userId,
+    userId: (authorizedUser as AuthUser).userId,
   });
-  const userIsAssociatedWithCase =
-    userIsDirectlyAssociatedWithCase || userIsIndirectlyAssociatedWithCase;
+  return userIsDirectlyAssociatedWithCase || userIsIndirectlyAssociatedWithCase;
+};
 
-  // User is logged in and associated with the case (e.g., a practitioner or petitioner on the case)
-  if (userIsAssociatedWithCase) {
-    return new Case(rawCase, { authorizedUser });
-  }
+const userIsIrsSuperuserAndCasePetitionIsServed = ({
+  authorizedUser,
+  rawCase,
+}: {
+  authorizedUser: AuthUser;
+  rawCase: any;
+}) => {
+  const userIsIrsSuperUser = authorizedUser.role === ROLES.irsSuperuser;
+  const petitionIsServed = casePetitionIsServed(rawCase);
+  return userIsIrsSuperUser && petitionIsServed;
+};
 
-  // User is logged in but neither has permissions to view all cases nor is associated with the case
-  if (
-    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.GET_ALL_CASES) &&
-    !userIsAssociatedWithCase
-  ) {
-    return caseIsSealed ? new RestrictedCase(rawCase) : new PublicCase(rawCase);
-  }
+const casePetitionIsServed = (rawCase: any) => {
+  const petitionDocketEntry = (rawCase.docketEntries || []).find(
+    doc => doc.documentType === 'Petition',
+  );
 
-  return new PublicCase(rawCase);
+  return petitionDocketEntry && DocketEntry.isServed(petitionDocketEntry);
 };
