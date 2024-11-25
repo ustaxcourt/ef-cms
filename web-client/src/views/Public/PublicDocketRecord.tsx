@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { KEYS } from '@shared/business/entities/EntityConstants';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
 import { PublicDocketRecordHeader } from './PublicDocketRecordHeader';
 import { PublicFilingsAndProceedings } from './PublicFilingsAndProceedings';
+import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
 import { SortableDocketRecordHeader } from '@web-client/views/DocketRecord/DocketRecord';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app-public.cerebral';
@@ -12,7 +12,7 @@ import classNames from 'classnames';
 export const PublicDocketRecord = connect(
   {
     docketNumber: state.caseDetail.docketNumber,
-    docketRecordTableSortData: state[KEYS.DOCKET_RECORD_TABLE_SORT],
+    docketRecordTableSortData: state[STATE_KEYS.DOCKET_RECORD_TABLE_SORT],
     publicCaseDetailHelper: state.publicCaseDetailHelper,
     sortTableSequence: sequences.sortTableSequence,
   },

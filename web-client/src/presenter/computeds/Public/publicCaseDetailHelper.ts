@@ -1,10 +1,10 @@
 /* eslint-disable complexity */
 import {
   ALLOWLIST_FEATURE_FLAGS,
-  KEYS,
   PUBLIC_DOCKET_RECORD_FILTER,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   ROLES,
+  STATE_KEYS,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
@@ -180,7 +180,9 @@ export const publicCaseDetailHelper = (
   const { canAllowPrintableDocketRecord, docketEntries, isSealed } = rawCase;
 
   const isTerminalUser = get(state.isTerminalUser);
-  const { sortField, sortOrder } = get(state[KEYS.DOCKET_RECORD_TABLE_SORT]);
+  const { sortField, sortOrder } = get(
+    state[STATE_KEYS.DOCKET_RECORD_TABLE_SORT],
+  );
 
   const { docketRecordFilter } = get(state.sessionMetadata);
 

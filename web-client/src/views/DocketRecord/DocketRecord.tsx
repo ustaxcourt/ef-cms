@@ -1,8 +1,8 @@
 import {
   ASCENDING,
-  KEYS,
   SORT_ASCENDING_TEXT,
   SORT_DESCENDING_TEXT,
+  STATE_KEYS,
 } from '@shared/business/entities/EntityConstants';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordHeader } from './DocketRecordHeader';
@@ -23,7 +23,7 @@ export const DocketRecord = connect(
   {
     caseDetail: state.caseDetail,
     docketRecordHelper: state.docketRecordHelper,
-    docketRecordTableSortData: state[KEYS.DOCKET_RECORD_TABLE_SORT],
+    docketRecordTableSortData: state[STATE_KEYS.DOCKET_RECORD_TABLE_SORT],
     formattedDocketEntriesHelper: state.formattedDocketEntries,
     openSealDocketEntryModalSequence:
       sequences.openSealDocketEntryModalSequence,
@@ -392,7 +392,7 @@ export function SortableDocketRecordHeader({
   onSort: (sort: {
     sortField: string;
     sortOrder: 'asc' | 'desc';
-    root?: string;
+    stateKey?: string;
   }) => void;
   screenReaderTitle?: string;
   sortField: string;
@@ -421,7 +421,7 @@ export function SortableDocketRecordHeader({
         onClickSequence={sortTableInfo =>
           onSort({
             ...sortTableInfo,
-            root: KEYS.DOCKET_RECORD_TABLE_SORT,
+            stateKey: STATE_KEYS.DOCKET_RECORD_TABLE_SORT,
           })
         }
       />

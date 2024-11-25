@@ -1,7 +1,7 @@
 import {
-  KEYS,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   PUBLIC_TRIAL_SESSIONS_DATA_KEY,
+  STATE_KEYS,
 } from '../../../shared/src/business/entities/EntityConstants';
 import { PublicTrialSessionDetails } from '@web-api/business/useCases/trialSessions/getPublicTrialSessionDetailsInteractor';
 import { RawUser } from '@shared/business/entities/User';
@@ -52,7 +52,7 @@ const computeds = {
 };
 
 export const baseState = {
-  [KEYS.DOCKET_RECORD_TABLE_SORT]: {} as {
+  [STATE_KEYS.DOCKET_RECORD_TABLE_SORT]: {} as {
     sortField: string;
     sortOrder: 'asc' | 'desc';
   },
