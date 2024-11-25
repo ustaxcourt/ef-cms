@@ -53,15 +53,16 @@ export const WarningNotificationComponent =
             ref={notificationRef}
             role="alert"
           >
-            <div
-              className={classNames(
-                'usa-alert__body',
-                alertWarning.dismissText && 'padding-right-6',
-              )}
-            >
+            <div className="usa-alert__body">
               <div className="grid-container padding-x-0">
                 <div className="grid-row">
-                  <div className="tablet:grid-col-10">
+                  <div
+                    className={classNames(
+                      dismissible
+                        ? 'tablet:grid-col-10 grid-col-8'
+                        : 'tablet:grid-col-12 grid-col-10',
+                    )}
+                  >
                     {alertWarning.title && (
                       <p
                         className="usa-alert__heading padding-top-0"
@@ -91,8 +92,8 @@ export const WarningNotificationComponent =
                       </Button>
                     )}
                   </div>
-                  <div className="tablet:grid-col-2 usa-alert__action">
-                    {dismissible && (
+                  {dismissible && (
+                    <div className="tablet:grid-col-2 grid-col-4 usa-alert__action">
                       <Button
                         link
                         className="no-underline padding-0"
@@ -102,8 +103,8 @@ export const WarningNotificationComponent =
                       >
                         {alertWarning.dismissText || 'Clear'}
                       </Button>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

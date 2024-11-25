@@ -14,7 +14,6 @@ describe('pendingReportListHelper', () => {
       pendingReports: {
         hasPendingItemsResults: true,
         pendingItems: [],
-        pendingItemsPage: 0,
         pendingItemsTotal: 1000,
         selectedJudge: 'Buch',
       },
@@ -31,7 +30,6 @@ describe('pendingReportListHelper', () => {
       pendingReports: {
         hasPendingItemsResults: true,
         pendingItems: [{}],
-        pendingItemsPage: 0,
         pendingItemsTotal: 1,
         selectedJudge: 'Buch',
       },
@@ -48,7 +46,6 @@ describe('pendingReportListHelper', () => {
       pendingReports: {
         hasPendingItemsResults: false,
         pendingItems: [{}],
-        pendingItemsPage: 0,
         pendingItemsTotal: 0,
         selectedJudge: 'Buch',
       },
@@ -65,7 +62,6 @@ describe('pendingReportListHelper', () => {
       pendingReports: {
         hasPendingItemsResults: true,
         pendingItems: [{}],
-        pendingItemsPage: 0,
         pendingItemsTotal: 1,
         selectedJudge: 'Buch',
       },
@@ -82,7 +78,6 @@ describe('pendingReportListHelper', () => {
       pendingReports: {
         hasPendingItemsResults: true,
         pendingItems: [{}],
-        pendingItemsPage: 0,
         pendingItemsTotal: 1,
         selectedJudge: undefined,
       },
@@ -99,7 +94,6 @@ describe('pendingReportListHelper', () => {
       pendingReports: {
         hasPendingItemsResults: true,
         pendingItems: [{}],
-        pendingItemsPage: 0,
         pendingItemsTotal: 1,
         selectedJudge: 'Buch',
       },

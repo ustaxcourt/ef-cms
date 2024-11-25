@@ -47,7 +47,7 @@ export const generateChangeOfAddressHelper = async ({
   jobId: string;
   user: RawPractitioner;
   requestUserId?: string;
-  websocketMessagePrefix: string;
+  websocketMessagePrefix: 'user' | 'admin';
 }) => {
   try {
     const newData = contactInfo;
@@ -63,7 +63,7 @@ export const generateChangeOfAddressHelper = async ({
     });
 
     const practitionerName = updatedName || user.name;
-    const practitionerObject = caseEntity.privatePractitioners
+    const practitionerObject = (caseEntity.privatePractitioners || [])
       .concat(caseEntity.irsPractitioners)
       .find(practitioner => practitioner.userId === user.userId);
 
@@ -107,10 +107,15 @@ export const generateChangeOfAddressHelper = async ({
     applicationContext.logger.error(error);
   }
 
+  const NOTIFICATION_ACTION:
+    | 'user_contact_update_progress'
+    | 'admin_contact_update_progress' =
+    `${websocketMessagePrefix}_contact_update_progress`;
+
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
-      action: `${websocketMessagePrefix}_contact_update_progress`,
+      action: NOTIFICATION_ACTION,
     },
     userId: requestUserId || user.userId,
   });
@@ -126,23 +131,35 @@ export const generateChangeOfAddressHelper = async ({
       `"change-of-address-job|${jobId}" job finished`,
     );
 
-    if (websocketMessagePrefix === 'user') {
-      const userEntity = new Practitioner({
-        ...user,
-        isUpdatingInformation: false,
-      });
+    const liveUser = await applicationContext
+      .getPersistenceGateway()
+      .getUserById({ applicationContext, userId: user.userId });
 
+    const userEntity = new Practitioner({
+      ...liveUser,
+      contactInfo,
+      isUpdatingInformation: false,
+    });
+
+    const resultsUser: RawPractitioner = userEntity.validate().toRawObject();
+
+    if (websocketMessagePrefix === 'user') {
       await applicationContext.getPersistenceGateway().updateUser({
         applicationContext,
         user: userEntity.validate().toRawObject(),
       });
     }
 
+    const CONTACT_UPDATE_COMPLETE_ACTION:
+      | 'user_contact_full_update_complete'
+      | 'admin_contact_full_update_complete' =
+      `${websocketMessagePrefix}_contact_full_update_complete`;
+
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
-        action: `${websocketMessagePrefix}_contact_full_update_complete`,
-        user,
+        action: CONTACT_UPDATE_COMPLETE_ACTION,
+        user: resultsUser,
       },
       userId: requestUserId || user.userId,
     });
