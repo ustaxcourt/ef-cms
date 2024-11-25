@@ -377,5 +377,39 @@ describe('generateDocketRecordPdfInteractor', () => {
         },
       ]);
     });
+
+    it('should default numberOfPages to 0 to correctly sort the docket entries', async () => {
+      caseDetail.docketEntries = [
+        { index: 1, isOnDocketRecord: true, numberOfPages: 1 },
+        { index: 2, isOnDocketRecord: true, numberOfPages: 3 },
+        { index: 3, isOnDocketRecord: true, numberOfPages: undefined },
+      ];
+
+      await generateDocketRecordPdfInteractor(
+        applicationContext,
+        {
+          docketNumber: caseDetail.docketNumber,
+          docketRecordTableSort: {
+            sortField: 'numberOfPages',
+            sortOrder: 'asc',
+          },
+          isIndirectlyAssociated: true,
+        } as any,
+        mockPetitionerUser,
+      );
+
+      const docketRecordCalls =
+        applicationContext.getDocumentGenerators().docketRecord.mock.calls;
+      expect(docketRecordCalls.length).toEqual(1);
+
+      const {
+        data: { entries },
+      } = docketRecordCalls[0][0];
+      expect(entries).toMatchObject([
+        { index: 3, isOnDocketRecord: true, numberOfPages: 0 },
+        { index: 1, isOnDocketRecord: true, numberOfPages: 1 },
+        { index: 2, isOnDocketRecord: true, numberOfPages: 3 },
+      ]);
+    });
   });
 });

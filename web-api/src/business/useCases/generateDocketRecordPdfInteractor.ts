@@ -83,6 +83,12 @@ export const generateDocketRecordPdfInteractor = async (
       docketRecordSort,
     });
 
+  formattedCaseDetail.formattedDocketEntries =
+    formattedCaseDetail.formattedDocketEntries.map(docketEntry => ({
+      ...docketEntry,
+      numberOfPages: docketEntry.numberOfPages || 0,
+    }));
+
   const sortedDocketEntries = sortDocketEntryTable(
     formattedCaseDetail.formattedDocketEntries,
     docketRecordTableSort && docketRecordTableSort.sortField,
