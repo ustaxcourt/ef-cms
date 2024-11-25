@@ -6,6 +6,7 @@ const allFeatureFlags = {};
 
 export const getAllFeatureFlagsInteractor = async (
   applicationContext: ServerApplicationContext,
+  hardReload: boolean = false,
 ) => {
   const allowlistFeatures = Object.values(ALLOWLIST_FEATURE_FLAGS).map(
     (flag: any) => flag.key,
@@ -14,6 +15,7 @@ export const getAllFeatureFlagsInteractor = async (
   // we use ENV so that we emulate a fresh lambda invocation each time.
   // caching the feature flags locally causes integration tests to fail.
   if (
+    hardReload ||
     isEmpty(allFeatureFlags) ||
     applicationContext.environment.stage === 'local'
   ) {

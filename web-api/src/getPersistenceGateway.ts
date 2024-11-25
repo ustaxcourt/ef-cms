@@ -54,6 +54,7 @@ import { getAllPendingMotionDocketEntriesForJudge } from '@web-api/persistence/e
 import { getAllUsersByRole } from '@web-api/persistence/elasticsearch/users/getAllUsersByRole';
 import { getAllWebSocketConnections } from './persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getBlockedCases } from './persistence/elasticsearch/getBlockedCases';
+import { getBulkTrialSessionWorkingCopies } from './persistence/dynamo/trialSessions/getBulkTrialSessionWorkingCopies';
 import { getCalendaredCasesForTrialSession } from './persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession';
 import { getCaseByDocketNumber } from './persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseDeadlinesByDateRange } from './persistence/elasticsearch/caseDeadlines/getCaseDeadlinesByDateRange';
@@ -63,7 +64,6 @@ import { getCaseMetadataByDocketNumber } from './persistence/dynamo/cases/getCas
 import { getCaseMetadataWithCounsel } from './persistence/dynamo/cases/getCaseMetadataWithCounsel';
 import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheetsByDocketNumber';
 import { getCasesByDocketNumbers } from './persistence/dynamo/cases/getCasesByDocketNumbers';
-import { getCasesByFilters } from './persistence/elasticsearch/getCasesByFilters';
 import { getCasesByLeadDocketNumber } from './persistence/dynamo/cases/getCasesByLeadDocketNumber';
 import { getCasesByUserId } from './persistence/elasticsearch/getCasesByUserId';
 import { getCasesClosedCountByJudge } from './persistence/elasticsearch/getCasesClosedCountByJudge';
@@ -268,6 +268,7 @@ const gatewayMethods = {
   getAllUsersByRole,
   getAllWebSocketConnections,
   getBlockedCases,
+  getBulkTrialSessionWorkingCopyNotes: getBulkTrialSessionWorkingCopies,
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,
   getCaseDeadlinesByDateRange,
@@ -277,7 +278,6 @@ const gatewayMethods = {
   getCaseMetadataWithCounsel,
   getCaseWorksheetsByDocketNumber,
   getCasesByDocketNumbers,
-  getCasesByFilters,
   getCasesByLeadDocketNumber,
   getCasesByUserId,
   getCasesClosedCountByJudge,
