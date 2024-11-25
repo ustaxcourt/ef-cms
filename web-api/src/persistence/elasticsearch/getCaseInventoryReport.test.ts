@@ -8,6 +8,7 @@ import { marshall } from '@aws-sdk/util-dynamodb';
 
 describe('getCaseInventoryReport', () => {
   const searchSpy = jest.fn();
+  const CASE_INVENTORY_MAX_PAGE_SIZE = 10;
 
   const mockDataOne = {
     associatedJudge: CHIEF_JUDGE,
@@ -30,6 +31,9 @@ describe('getCaseInventoryReport', () => {
   ];
 
   beforeEach(() => {
+    applicationContext.getConstants.mockReturnValue({
+      CASE_INVENTORY_MAX_PAGE_SIZE,
+    });
     applicationContext.getSearchClient.mockReturnValue({
       search: searchSpy,
     });
@@ -51,6 +55,7 @@ describe('getCaseInventoryReport', () => {
               _source: marshall(mockDataTwo),
             },
           ],
+          total: { value: '2' },
         },
       },
     });
@@ -83,6 +88,7 @@ describe('getCaseInventoryReport', () => {
           status: CASE_STATUS_TYPES.calendared,
         },
       ],
+      totalCount: '2',
     });
   });
 
@@ -95,6 +101,7 @@ describe('getCaseInventoryReport', () => {
               _source: marshall(mockDataOne),
             },
           ],
+          total: { value: '1' },
         },
       },
     });
@@ -122,6 +129,7 @@ describe('getCaseInventoryReport', () => {
           status: CASE_STATUS_TYPES.new,
         },
       ],
+      totalCount: '1',
     });
   });
 
@@ -137,6 +145,7 @@ describe('getCaseInventoryReport', () => {
               _source: marshall(mockDataTwo),
             },
           ],
+          total: { value: '2' },
         },
       },
     });
@@ -173,7 +182,65 @@ describe('getCaseInventoryReport', () => {
           status: CASE_STATUS_TYPES.calendared,
         },
       ],
+      totalCount: '2',
     });
+  });
+
+  it('calls the search function with a default page size if one is not provided', async () => {
+    await getCaseInventoryReport({
+      applicationContext,
+      associatedJudge: CHIEF_JUDGE,
+      status: CASE_STATUS_TYPES.new,
+    });
+
+    expect(searchSpy.mock.calls[0][0].body.size).toEqual(
+      CASE_INVENTORY_MAX_PAGE_SIZE,
+    );
+  });
+
+  it('calls the search function with the given page size', async () => {
+    await getCaseInventoryReport({
+      applicationContext,
+      associatedJudge: CHIEF_JUDGE,
+      pageSize: 3,
+      status: CASE_STATUS_TYPES.new,
+    });
+
+    expect(searchSpy.mock.calls[0][0].body.size).toEqual(3);
+  });
+
+  it('calls the search function with max page size if the given page size exceeds the max page size', async () => {
+    await getCaseInventoryReport({
+      applicationContext,
+      associatedJudge: CHIEF_JUDGE,
+      pageSize: 11,
+      status: CASE_STATUS_TYPES.new,
+    });
+
+    expect(searchSpy.mock.calls[0][0].body.size).toEqual(
+      CASE_INVENTORY_MAX_PAGE_SIZE,
+    );
+  });
+
+  it('calls the search function with a default starting index (`from` param) of 0 if one is not provided', async () => {
+    await getCaseInventoryReport({
+      applicationContext,
+      associatedJudge: CHIEF_JUDGE,
+      status: CASE_STATUS_TYPES.new,
+    });
+
+    expect(searchSpy.mock.calls[0][0].body.from).toEqual(0);
+  });
+
+  it('calls the search function with the given starting index (`from` param)', async () => {
+    await getCaseInventoryReport({
+      applicationContext,
+      associatedJudge: CHIEF_JUDGE,
+      from: 11,
+      status: CASE_STATUS_TYPES.new,
+    });
+
+    expect(searchSpy.mock.calls[0][0].body.from).toEqual(11);
   });
 
   it('returns an empty array when no hits are returned from the search client', async () => {
@@ -182,6 +249,7 @@ describe('getCaseInventoryReport', () => {
         hits: {
           hits: [],
         },
+        total: { value: '0' },
       },
     });
 
@@ -195,7 +263,7 @@ describe('getCaseInventoryReport', () => {
         match_phrase: { 'associatedJudge.S': CHIEF_JUDGE },
       },
     ]);
-    expect(results).toEqual({ foundCases: [] });
+    expect(results).toEqual({ foundCases: [], totalCount: 0 });
     expect(searchSpy.mock.calls[0][0].body._source).toEqual([
       'associatedJudge',
       'caseCaption',
