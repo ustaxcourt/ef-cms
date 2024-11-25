@@ -28,7 +28,7 @@ export const DocketRecordMobileHeader = ({
   sortTableSequence: (props: {
     sortField: string;
     sortOrder: 'asc' | 'desc';
-    root?: string;
+    stateKey?: string;
   }) => void;
 }) => {
   const { sortField, sortOrder } = docketRecordTableSortData;
@@ -58,7 +58,7 @@ export const DocketRecordMobileHeader = ({
             onChange={option => {
               sortTableSequence({
                 ...SORTING_CONVERSION_DICTIONARY[option.value],
-                root: STATE_KEYS.DOCKET_RECORD_TABLE_SORT,
+                stateKey: STATE_KEYS.DOCKET_RECORD_TABLE_SORT,
               });
             }}
           />
