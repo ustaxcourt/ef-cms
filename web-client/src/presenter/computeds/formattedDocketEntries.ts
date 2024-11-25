@@ -318,7 +318,7 @@ export const formattedDocketEntries = (
 
 export function sortDocketEntryTable<T>(
   docketEntries: (T & { sortingFilingDate: string | undefined })[] = [],
-  docketRecordSortField: keyof T | undefined,
+  docketRecordSortField: string | undefined,
   docketRecordSortOrder: 'asc' | 'desc' | undefined,
 ): T[] {
   if (!docketRecordSortField || !docketRecordSortOrder) {
