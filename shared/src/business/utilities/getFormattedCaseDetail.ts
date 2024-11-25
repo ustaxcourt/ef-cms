@@ -381,7 +381,7 @@ export const formatCase = (
   const caseEntity = new Case(caseDetail, {
     authorizedUser,
   });
-  result.canConsolidate = caseEntity.canConsolidate();
+  result.canConsolidate = caseEntity.canConsolidate(caseEntity);
   result.canUnconsolidate = !!caseEntity.leadDocketNumber;
   result.irsSendDate = caseEntity.getIrsSendDate();
   result.showPrintConfirmationLink =

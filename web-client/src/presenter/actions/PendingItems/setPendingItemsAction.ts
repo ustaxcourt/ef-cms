@@ -12,5 +12,5 @@ export const setPendingItemsAction = ({
   ];
   store.set(state.pendingReports.pendingItems, pendingItems);
   store.set(state.pendingReports.hasPendingItemsResults, !!pendingItems.length);
-  store.set(state.pendingReports.pendingItemsTotal, props.total);
+  store.set(state.pendingReports.pendingItemsTotal, pendingItems.length);
 };

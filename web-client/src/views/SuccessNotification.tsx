@@ -6,6 +6,7 @@ import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
 type SuccessNotificationProps = {
+  className?: string;
   isDismissible?: boolean;
 };
 
@@ -31,10 +32,12 @@ export const SuccessNotification = connect<
   successNotificationDeps,
   function SuccessNotification({
     alertSuccess,
+    className,
     dismissAlertSequence = sequences.dismissAlertSequence,
     isDismissible = true,
   }: {
     alertSuccess?: AlertSuccess;
+    className?: string;
     dismissAlertSequence?: Function;
     isDismissible?: boolean;
   }) {
@@ -56,6 +59,7 @@ export const SuccessNotification = connect<
             className={classNames(
               'usa-alert',
               'usa-alert--success',
+              `${className}`,
               isMessageOnly && 'usa-alert-success-message-only',
             )}
             data-metadata={`${alertSuccess.metaData}`}
