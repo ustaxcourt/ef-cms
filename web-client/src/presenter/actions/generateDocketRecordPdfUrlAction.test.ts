@@ -1,4 +1,4 @@
-import { KEYS } from '@shared/business/entities/EntityConstants';
+import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { generateDocketRecordPdfUrlAction } from './generateDocketRecordPdfUrlAction';
 import { presenter } from '../presenter-mock';
@@ -122,7 +122,7 @@ describe('generateDocketRecordPdfUrlAction', () => {
         caseDetail: {
           docketNumber: '123-45',
         },
-        [KEYS.DOCKET_RECORD_TABLE_SORT]: {
+        [STATE_KEYS.DOCKET_RECORD_TABLE_SORT]: {
           sortField: 'sortField_test',
           sortOrder: 'sortOrder_test',
         },
