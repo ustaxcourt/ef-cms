@@ -846,6 +846,10 @@ export const baseState = {
   trialSessionJudge: {
     name: '',
   },
+  trialSessionPlanningReportData: {} as {
+    trialTerm: string;
+    trialYear: number;
+  },
   trialSessionWorkingCopy: cloneDeep(initialTrialSessionWorkingCopyState),
   trialSessions: [] as any[],
   // Sometimes trialSessions, sometimes TrialSessionInfoDTO, sometimes ad-hoc trial sessions
