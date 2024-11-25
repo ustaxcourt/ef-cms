@@ -11,7 +11,7 @@ describe('setTableSortConfigurationAction', () => {
       props: { sortField: 'createdAt', sortOrder: ASCENDING },
       state: {
         tableSort: {
-          sortField: 'recievedAt',
+          sortField: 'receivedAt',
           sortOrder: DESCENDING,
         },
       },
