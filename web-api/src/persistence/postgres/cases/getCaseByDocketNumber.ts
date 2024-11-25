@@ -77,8 +77,11 @@ export const getCaseByDocketNumber = async ({
               date: d.date.toISOString(),
             };
           }),
+
+          createdAt: caseResult.createdAt?.toISOString(),
           // TODO, this is a hack
           docketEntries,
+          petitionPaymentDate: caseResult.petitionPaymentDate?.toISOString(),
 
           petitioners:
             transformNullToUndefined(petitioners).map(x => {
@@ -90,6 +93,7 @@ export const getCaseByDocketNumber = async ({
               x.paperPetitionEmail = 'a@test.x';
               return new Petitioner(x).validate().toRawObject();
             }) || [],
+          receivedAt: caseResult.receivedAt?.toISOString(),
           statistics: caseStatistics,
         }),
       })
