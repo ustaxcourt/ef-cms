@@ -37,7 +37,75 @@ type PartyFormFields = {
   // is "Counsel", "Pro se", "Intervenor", or "Participant"?
 };
 
-export const initialMinuteSheetFormState = {
+export type MinuteSheetFormState = {
+  trialSessionMetadata: {
+    judge: string;
+    trialClerk: string;
+    courtReporter: string;
+    remoteSession: boolean;
+  };
+
+  caseMetadata: {
+    called: CaseMetadataEntry;
+    notCalled: CaseMetadataEntry;
+    recalled: CaseMetadataEntry[];
+    pretrialConference: CaseMetadataEntry;
+    trialHearing: CaseMetadataEntry;
+  };
+
+  parties: {
+    noAppreance: boolean;
+    petitioners: PartyFormFields[];
+    respondents: PartyFormFields[];
+  };
+
+  // 10419 TODO: Could this be lumped in with orders below
+  jurisdictionRetained: {
+    continued: boolean;
+    date: string;
+    note: string;
+  };
+
+  orders: {
+    statusReportOrdered: {
+      date: string;
+      note: string;
+      dueDate: string;
+      orderedFor?: StatusReportOrderedForOption;
+    };
+    stipulatedDecisionOrdered: {
+      date: string;
+      note: string;
+      dueDate: string;
+    };
+  };
+
+  motions: MotionFormFields[];
+  actionsAndFilings: ActionFilingFormFields[];
+
+  trialBrief: {
+    dateSubmitted: string;
+    totalTrialHours: number;
+    dateBenchOpinionRendered: string;
+    transcriptOrdered: boolean;
+    note: string;
+    briefType: string;
+    // 10419 TODO: the `briefDetails` property can have one of five distinct
+    // schemas/shapes. We will need to figure out how to handle this section
+    // of the form, given that there's a fair amount of overlap between these
+    // five shapes.
+    briefDetails: {};
+  };
+
+  witnesses: {
+    petitionerWitnesses: any[];
+    respondentWitnesses: any[];
+  };
+
+  exhibits: ExhibitFormFields[];
+};
+
+export const initialMinuteSheetFormState: MinuteSheetFormState = {
   // 10419 TODO: What is a good conceptual name for this section of the form?
   trialSessionMetadata: {
     judge: '',
@@ -48,27 +116,30 @@ export const initialMinuteSheetFormState = {
 
   caseMetadata: {
     called: {
-      //
-    }, // as CaseMetadataEntry
+      date: '',
+      note: '',
+    },
     notCalled: {
-      //
-    }, // as CaseMetadataEntry
-    recalled: [] as CaseMetadataEntry[],
+      date: '',
+      note: '',
+    },
+    recalled: [],
     pretrialConference: {
-      //
-    }, // as CaseMetadataEntry
+      date: '',
+      note: '',
+    },
     trialHearing: {
-      //
-    }, // as CaseMetadataEntry
+      date: '',
+      note: '',
+    },
   },
 
   parties: {
     noAppreance: false, // this keys to a checkbox that removes all prepopulated petitioners when checked
-    petitioners: [] as PartyFormFields[],
-    respondents: [] as PartyFormFields[],
+    petitioners: [],
+    respondents: [],
   },
 
-  // 10419 TODO: Could this be lumped in with orders below
   jurisdictionRetained: {
     continued: false,
     date: '',
@@ -78,20 +149,20 @@ export const initialMinuteSheetFormState = {
   orders: {
     statusReportOrdered: {
       date: '',
-      dateDue: '',
-      orderedFor: '' as StatusReportOrderedForOption,
+      dueDate: '',
+      orderedFor: undefined,
       note: '',
     },
     stipulatedDecisionOrdered: {
       date: '',
-      dateDue: '',
+      dueDate: '',
       note: '',
     },
   },
 
-  motions: [] as MotionFormFields[],
+  motions: [],
 
-  actionsAndFilings: [] as ActionFilingFormFields[],
+  actionsAndFilings: [],
 
   trialBrief: {
     dateSubmitted: '',
@@ -100,21 +171,15 @@ export const initialMinuteSheetFormState = {
     transcriptOrdered: false,
     note: '',
     briefType: '',
-    // 10419 TODO: the `briefDetails` property can have one of five distinct
-    // schemas/shapes. We will need to figure out how to handle this section
-    // of the form, given that there's a fair amount of overlap between these
-    // five shapes.
-    briefDetails: {
-      //
-    },
+    briefDetails: {},
   },
 
   witnesses: {
-    petitioners: [], // just an array of strings, each of which is a name
-    respondents: [], // just an array of strings, each of which is a name
+    petitionerWitnesses: [], // just an array of strings, each of which is a name
+    respondentWitnesses: [], // just an array of strings, each of which is a name
   },
 
-  exhibits: [] as ExhibitFormFields[],
+  exhibits: [],
 };
 
 const TRIAL_HEARING_OPTIONS = {
