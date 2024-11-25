@@ -1,4 +1,4 @@
-import { Case } from '../entities/cases/Case';
+import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -6,6 +6,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -24,27 +25,29 @@ export const sealCase = async (
     throw new UnauthorizedError('Unauthorized for sealing cases');
   }
 
-  const oldCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const caseToUpdate = await getCaseByDocketNumber({
+    applicationContext,
+    authorizedUser,
+    docketNumber,
+  });
 
-  const newCase = new Case(oldCase, { authorizedUser });
-
-  newCase.setAsSealed();
+  caseToUpdate?.setAsSealed();
 
   const updatedCase = await applicationContext
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
       authorizedUser,
-      caseToUpdate: newCase,
+      caseToUpdate,
     });
 
   await applicationContext
     .getDispatchers()
     .sendNotificationOfSealing(applicationContext, { docketNumber });
 
-  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
+  return CaseFactory({ rawCase: updatedCase, user: authorizedUser })
+    .validate()
+    .toRawObject();
 };
 
 export const sealCaseInteractor = withLocking(

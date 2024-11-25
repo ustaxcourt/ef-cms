@@ -4,8 +4,7 @@ export interface Database {
   dwCase: CaseTable;
   dwMessage: MessageTable;
   dwWorkItem: WorkItemTable;
-  dwUser: UserTable;
-  dwUserCase: UserCaseTable;
+  dwPetitionerOnCase: PetitionerOnCaseTable;
   dwCaseStatusUpdate: CaseStatusUpdateTable;
   dwCaseStatistic: CaseStatisticTable;
 }
@@ -142,7 +141,23 @@ export type WorkItemKysely = Selectable<WorkItemTable>;
 export type NewWorkItemKysely = Insertable<WorkItemTable>;
 export type UpdateWorkItemKysely = Updateable<WorkItemTable>;
 
-export interface UserTable {
+export interface PetitionerOnCaseTable {
+  // Once user table is created, maybe an optional foreign key to that?
+  additionalName?: string;
+  contactType: string;
+  docketNumber: string;
+  hasConsentedToEService?: boolean;
+  hasEAccess?: boolean;
+  inCareOf?: string;
+  isAddressSealed: boolean;
+  paperPetitionEmail?: string;
+  placeOfLegalResidence?: string;
+  sealedAndUnavailable?: boolean;
+  secondaryName?: string; // how is this different from additional name?
+  serviceIndicator?: string;
+  title?: string;
+
+  // Maybe break this out into a contact table down the road
   address1: string;
   address2?: string;
   address3?: string;
@@ -157,31 +172,9 @@ export interface UserTable {
   state: string;
 }
 
-export interface UserCaseTable {
-  // caseUserId: string;
-  additionalName: string;
-  contactId: string;
-  contactType: string;
-  docketNumber: string;
-  hasConsentedToEService?: boolean;
-  hasEAccess?: boolean;
-  inCareOf?: string;
-  isAddressSealed: boolean;
-  paperPetitionEmail?: string;
-  placeOfLegalResidence?: string;
-  sealedAndUnavailable?: boolean;
-  secondaryName?: string; // how is this different from additional name?
-  serviceIndicator?: string;
-  title?: string;
-}
-
-export type UserKysely = Selectable<UserTable>;
-export type NewUserKysely = Insertable<UserTable>;
-export type UpdateUserKysely = Updateable<UserTable>;
-
-export type UserCaseKysely = Selectable<UserCaseTable>;
-export type NewUserCaseKysely = Insertable<UserCaseTable>;
-export type UpdateUserCaseKysely = Updateable<UserCaseTable>;
+export type PetitionerOnCaseKysely = Selectable<PetitionerOnCaseTable>;
+export type NewUPetitionerOnCaseKysely = Insertable<PetitionerOnCaseTable>;
+export type UpdatePetitionerOnCaseKysely = Updateable<PetitionerOnCaseTable>;
 
 export interface CaseStatusUpdateTable {
   changedBy: string; // TODO: This should almost certainly be a foreign key to a user (with a user for System), but it isn't set up that way. Probably best to wait until Users are migrated over?

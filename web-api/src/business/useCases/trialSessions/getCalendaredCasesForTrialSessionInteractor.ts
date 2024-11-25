@@ -23,6 +23,8 @@ export const getCalendaredCasesForTrialSessionInteractor = async (
       trialSessionId,
     });
 
+  console.log('cases?', cases);
+
   const casesWithMinimalRequiredInformation = cases.map(aCase => {
     return new CalendaredCase(aCase).validate().toRawObject();
   });

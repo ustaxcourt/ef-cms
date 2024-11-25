@@ -1,5 +1,6 @@
-import { Case } from '../entities/cases/Case';
 import { NotFoundError } from '@web-api/errors/errors';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 /**
  * getCaseExistsInteractor
@@ -12,23 +13,20 @@ import { NotFoundError } from '@web-api/errors/errors';
  * @returns {boolean} whether case exists for requested docket number
  */
 export const getCaseExistsInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
 ) => {
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: Case.formatDocketNumber(docketNumber),
-    });
+  const caseRecord = await getCaseByDocketNumber({
+    applicationContext,
+    authorizedUser: undefined,
+    docketNumber,
+  });
 
-  const exists = Boolean(caseRecord.docketNumber && caseRecord.entityName);
-
-  if (!exists) {
+  if (!caseRecord) {
     const error = new NotFoundError(`Case ${docketNumber} was not found.`);
     error.skipLogging = true;
     throw error;
   }
 
-  return exists;
+  return !!caseRecord;
 };

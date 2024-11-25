@@ -119,7 +119,6 @@ import { getPractitionerDocumentInteractor } from './business/useCases/practitio
 import { getPractitionerDocumentsInteractor } from './business/useCases/practitioner/getPractitionerDocumentsInteractor';
 import { getPractitionersByNameInteractor } from './business/useCases/practitioner/getPractitionersByNameInteractor';
 import { getPrivatePractitionersBySearchKeyInteractor } from './business/useCases/user/getPrivatePractitionersBySearchKeyInteractor';
-import { getPublicCaseInteractor } from './business/useCases/public/getPublicCaseInteractor';
 import { getPublicDownloadPolicyUrlInteractor } from './business/useCases/public/getPublicDownloadPolicyUrlInteractor';
 import { getReconciliationReportInteractor } from '../../shared/src/business/useCases/getReconciliationReportInteractor';
 import { getTodaysOpinionsInteractor } from './business/useCases/public/getTodaysOpinionsInteractor';
@@ -333,7 +332,6 @@ const useCases = {
   getPractitionerDocumentsInteractor,
   getPractitionersByNameInteractor,
   getPrivatePractitionersBySearchKeyInteractor,
-  getPublicCaseInteractor,
   getPublicDownloadPolicyUrlInteractor,
   getReconciliationReportInteractor,
   getTodaysOpinionsInteractor,

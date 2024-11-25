@@ -1,6 +1,5 @@
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '@shared/business/entities/cases/Case';
-import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
 import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getDbReader } from '@web-api/database';
@@ -26,9 +25,8 @@ export const getCaseByDocketNumber = async ({
 
   const petitioners = await getDbReader(reader =>
     reader
-      .selectFrom('dwUserCase as uc')
+      .selectFrom('dwPetitionerOnCase')
       .where('docketNumber', '=', docketNumber)
-      .leftJoin('dwUser as u', 'u.contactId', 'uc.contactId')
       .selectAll()
       .execute(),
   );
@@ -55,7 +53,7 @@ export const getCaseByDocketNumber = async ({
   console.log('caseStatistics', caseStatistics);
 
   console.log('getCaseByDocketNumber');
-  // console.log(caseResult);
+  console.log(caseResult);
   // console.log(petitioners);
   // console.log(caseHistory);
 
@@ -64,11 +62,11 @@ export const getCaseByDocketNumber = async ({
     docketNumber,
   });
 
+  // TODO, this is a hack
   return caseResult
     ? // 10502 TODO: Use CaseFactory
-      CaseFactory({
-        authorizedUser,
-        rawCase: transformNullToUndefined({
+      new Case(
+        transformNullToUndefined({
           ...caseResult,
           caseCaption: caseResult.caption,
           caseStatusHistory: caseHistory.map(d => {
@@ -77,12 +75,10 @@ export const getCaseByDocketNumber = async ({
               date: d.date.toISOString(),
             };
           }),
-
           createdAt: caseResult.createdAt?.toISOString(),
-          // TODO, this is a hack
           docketEntries,
+          hearings: caseResult.hearings || [],
           petitionPaymentDate: caseResult.petitionPaymentDate?.toISOString(),
-
           petitioners:
             transformNullToUndefined(petitioners).map(x => {
               // 10502 TODO: hack to get petitioner validation ok
@@ -93,9 +89,12 @@ export const getCaseByDocketNumber = async ({
               x.paperPetitionEmail = 'a@test.x';
               return new Petitioner(x).validate().toRawObject();
             }) || [],
+
           receivedAt: caseResult.receivedAt?.toISOString(),
           statistics: caseStatistics,
+          trialDate: caseResult.trialDate?.toISOString(),
         }),
-      })
+        { authorizedUser },
+      )
     : undefined;
 };

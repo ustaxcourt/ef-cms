@@ -32,6 +32,8 @@ export const getTrialSessionsOnCaseAction = async ({
     );
   }
 
+  console.log('CASE DETAIL', caseDetail);
+
   trialSessions = [
     ...trialSessions,
     ...(await Promise.all(

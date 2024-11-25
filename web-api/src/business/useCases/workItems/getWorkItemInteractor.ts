@@ -1,10 +1,13 @@
+import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 
@@ -30,10 +33,10 @@ export const getWorkItemInteractor = async (
   }
 
   if (
-    !isAuthorized(
-      authorizedUser,
-      ROLE_PERMISSIONS.WORKITEM,
-      workItem.assigneeId,
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM) &&
+    !(
+      authorizedUser &&
+      workItem.assigneeId == (authorizedUser as AuthUser).userId
     )
   ) {
     throw new UnauthorizedError('Unauthorized');
