@@ -83,6 +83,7 @@ export const CaseDeadlines = connect(
                   data-testid="submit-case-deadlines-report-button"
                   onClick={() => {
                     updateDateRangeForDeadlinesSequence();
+                    setActivePage(0);
                   }}
                 >
                   Show Deadlines
