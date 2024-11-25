@@ -60,8 +60,8 @@ import {
   formatNow,
   getDateFormat,
   getMonthDayYearInETObj,
+  isDateWithinGivenInterval,
   isStringISOFormatted,
-  isTodayWithinGivenInterval,
   isValidDateString,
   prepareDateFromString,
   validateDateAndCreateISO,
@@ -106,6 +106,7 @@ import { deleteTrialSessionInteractor } from '../../shared/src/proxies/trialSess
 import { deleteUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteUserCaseNoteProxy';
 import { dismissNOTTReminderForTrialInteractor } from '../../shared/src/proxies/trialSessions/dismissNOTTReminderForTrialProxy';
 import { downloadCsv } from '@web-client/presenter/utilities/downloadCsv';
+import { downloadXlsx } from '@web-client/presenter/utilities/downloadXlsx';
 import { editPaperFilingInteractor } from '../../shared/src/proxies/documents/editPaperFilingProxy';
 import { editPractitionerDocumentInteractor } from '../../shared/src/proxies/practitioners/editPractitionerDocumentProxy';
 import { exportPendingReportInteractor } from '@shared/proxies/pendingItems/exportPendingReportProxy';
@@ -148,10 +149,12 @@ import { generatePrintableFilingReceiptInteractor } from '../../shared/src/proxi
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
 import { generatePrintableTrialSessionCopyReportInteractor } from '../../shared/src/proxies/trialSessions/generatePrintableTrialSessionCopyReportProxy';
 import { generateSignedDocumentInteractor } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
+import { generateSuggestedTrialSessionCalendarInteractor } from '@shared/proxies/trialSessions/generateSuggestedTrialSessionCalendarProxy';
 import { generateTrialCalendarPdfInteractor } from '../../shared/src/proxies/trialSessions/generateTrialCalendarPdfProxy';
 import { getAllFeatureFlagsInteractor } from '../../shared/src/proxies/featureFlag/getAllFeatureFlagsProxy';
 import { getAllUsersByRoleInteractor } from '@shared/proxies/users/getAllUsersByRoleProxy';
 import { getBlockedCasesInteractor } from '../../shared/src/proxies/reports/getBlockedCasesProxy';
+import { getBulkSpecialTrialSessionCopyNotesInteractor } from '@shared/proxies/trialSessions/getBulkSpecialTrialSessionCopyNotesProxy';
 import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
 import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesForCaseProxy';
 import { getCaseDeadlinesInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesProxy';
@@ -362,6 +365,39 @@ const reduce = ImageBlobReduce({
 
 let user;
 let broadcastChannel;
+const clientSupportsES2022 = (() => {
+  try {
+    // Check Object.hasOwn (introduced in ES2022)
+    // @ts-ignore
+    if (typeof Object.hasOwn !== 'function') {
+      return false;
+    }
+
+    // Check Array.prototype.at
+    if (!Array.prototype.at) {
+      return false;
+    }
+
+    // Check private fields
+    class TestPrivateFields {
+      #privateField: boolean;
+      constructor() {
+        this.#privateField = true;
+      }
+      hasPrivateField() {
+        return this.#privateField;
+      }
+    }
+    const instance = new TestPrivateFields();
+    if (!instance.hasPrivateField()) {
+      return false;
+    }
+
+    return true;
+  } catch (e) {
+    return false; // Any failure indicates lack of support
+  }
+})();
 
 let forceRefreshCallback: () => {};
 
@@ -434,10 +470,12 @@ const allUseCases = {
   generatePrintablePendingReportInteractor,
   generatePrintableTrialSessionCopyReportInteractor,
   generateSignedDocumentInteractor,
+  generateSuggestedTrialSessionCalendarInteractor,
   generateTrialCalendarPdfInteractor,
   getAllFeatureFlagsInteractor,
   getAllUsersByRoleInteractor,
   getBlockedCasesInteractor,
+  getBulkSpecialTrialSessionCopyNotesInteractor,
   getCalendaredCasesForTrialSessionInteractor,
   getCaseDeadlinesForCaseInteractor,
   getCaseDeadlinesInteractor,
@@ -669,9 +707,19 @@ const applicationContext = {
     },
   }),
   getPdfJs: async () => {
-    const pdfjsLib = (await import('pdfjs-dist')).default;
-    const pdfjsWorker = (await import('pdfjs-dist/build/pdf.worker.entry'))
-      .default;
+    const pdfjsLib = (
+      await import(
+        clientSupportsES2022 ? 'pdfjs-dist' : 'pdfjs-dist/legacy/build/pdf'
+      )
+    ).default;
+    const pdfjsWorker = (
+      await import(
+        clientSupportsES2022
+          ? 'pdfjs-dist/build/pdf.worker.entry'
+          : 'pdfjs-dist/legacy/build/pdf.worker.entry'
+      )
+    ).default;
+
     pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
     return pdfjsLib;
   },
@@ -729,6 +777,7 @@ const applicationContext = {
       dateStringsCompared,
       deconstructDate,
       downloadCsv,
+      downloadXlsx,
       filterEmptyStrings,
       formatAttachments,
       formatCase,
@@ -774,6 +823,7 @@ const applicationContext = {
       hasPartyWithServiceType,
       isClosed,
       isCourtIssued: DocketEntry.isCourtIssued,
+      isDateWithinGivenInterval,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       isLeadCase,
@@ -781,7 +831,6 @@ const applicationContext = {
       isPendingOnCreation: DocketEntry.isPendingOnCreation,
       isSealedCase,
       isStringISOFormatted,
-      isTodayWithinGivenInterval,
       isUserPartOfGroup,
       isValidDateString,
       openUrlInNewTab,

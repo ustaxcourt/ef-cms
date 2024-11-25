@@ -4,6 +4,7 @@ import {
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
+  SESSION_TYPES,
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { applicationContext } from '../test/createTestApplicationContext';
@@ -199,7 +200,7 @@ describe('getCaseDeadlinesInteractor', () => {
               maxCases: '100',
               postalCode: '20217',
               // missing proceedingType; should throw an error!
-              sessionType: 'Special',
+              sessionType: SESSION_TYPES.special,
               startDate: '2021-01-27T05:00:00.000Z',
               startTime: '13:00',
               state: 'DC',

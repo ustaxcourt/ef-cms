@@ -1,23 +1,35 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { KEYS } from '@shared/business/entities/EntityConstants';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
 import { PublicDocketRecordHeader } from './PublicDocketRecordHeader';
 import { PublicFilingsAndProceedings } from './PublicFilingsAndProceedings';
+import { SortableHeader } from '@web-client/views/DocketRecord/DocketRecord';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { state } from '@web-client/presenter/app-public.cerebral';
+import { sequences, state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
 export const PublicDocketRecord = connect(
   {
     docketNumber: state.caseDetail.docketNumber,
+    docketRecordTableSortData: state[KEYS.DOCKET_RECORD_TABLE_SORT] as {
+      sortField: string;
+      sortOrder: 'asc' | 'desc';
+    },
     publicCaseDetailHelper: state.publicCaseDetailHelper,
+    sortTableSequence: sequences.sortTableSequence,
   },
-  function ({ publicCaseDetailHelper }) {
+  function ({
+    docketRecordTableSortData,
+    publicCaseDetailHelper,
+    sortTableSequence,
+  }) {
     const noDocumentsMessage = 'There are no documents of that type.';
-
     return (
       <>
-        <PublicDocketRecordHeader />
+        <PublicDocketRecordHeader
+          docketRecordTableSortData={docketRecordTableSortData}
+        />
 
         <NonPhone>
           <div className="width-full overflow-x-auto">
@@ -29,21 +41,79 @@ export const PublicDocketRecord = connect(
             >
               <thead>
                 <tr>
-                  <th className="center-column hide-on-mobile">
-                    <span>
-                      <span className="usa-sr-only">Number</span>
-                      <span aria-hidden="true">No.</span>
-                    </span>
-                  </th>
-                  <th>Filed Date</th>
-                  <th className="center-column hide-on-mobile">Event</th>
+                  <SortableHeader
+                    hideOnMobile={true}
+                    screenReaderTitle="Number"
+                    sortField="index"
+                    tableSort={docketRecordTableSortData}
+                    title="No."
+                    onSort={sortTableSequence}
+                  />
+                  <SortableHeader
+                    sortField="sortingFilingDate"
+                    sortType="date"
+                    tableSort={docketRecordTableSortData}
+                    title="Filed Date"
+                    onSort={sortTableSequence}
+                  />
+                  <SortableHeader
+                    hideOnMobile={true}
+                    sortField="eventCode"
+                    sortType="string"
+                    tableSort={docketRecordTableSortData}
+                    title="Event"
+                    onSort={sortTableSequence}
+                  />
                   <th aria-hidden="true" className="icon-column" />
-                  <th>Filings and Proceedings</th>
-                  <th className="hide-on-mobile">Pages</th>
-                  <th className="hide-on-mobile">Filed By</th>
-                  <th className="hide-on-mobile">Action</th>
-                  <th>Served</th>
-                  <th className="center-column hide-on-mobile">Parties</th>
+                  <SortableHeader
+                    sortField="descriptionDisplay"
+                    sortType="string"
+                    tableSort={docketRecordTableSortData}
+                    title="Filings and Proceedings"
+                    onSort={sortTableSequence}
+                  />
+                  <SortableHeader
+                    className="hide-on-mobile"
+                    hideOnMobile={true}
+                    sortField="numberOfPages"
+                    tableSort={docketRecordTableSortData}
+                    title="Pages"
+                    onSort={sortTableSequence}
+                  />
+                  <SortableHeader
+                    className="hide-on-mobile"
+                    hideOnMobile={true}
+                    sortField="filedBy"
+                    sortType="string"
+                    tableSort={docketRecordTableSortData}
+                    title="Filed By"
+                    onSort={sortTableSequence}
+                  />
+                  <SortableHeader
+                    className="hide-on-mobile"
+                    hideOnMobile={true}
+                    sortField="action"
+                    sortType="string"
+                    tableSort={docketRecordTableSortData}
+                    title="Action"
+                    onSort={sortTableSequence}
+                  />
+                  <SortableHeader
+                    sortField="servedAt"
+                    sortType="date"
+                    tableSort={docketRecordTableSortData}
+                    title="Served"
+                    onSort={sortTableSequence}
+                  />
+                  <SortableHeader
+                    className="center-column hide-on-mobile"
+                    hideOnMobile={true}
+                    sortField="servedPartiesCode"
+                    sortType="string"
+                    tableSort={docketRecordTableSortData}
+                    title="Parties"
+                    onSort={sortTableSequence}
+                  />
                 </tr>
               </thead>
               <tbody>
