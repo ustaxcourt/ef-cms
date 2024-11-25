@@ -123,7 +123,7 @@ const TRIAL_HEARING_OPTIONS = {
   partialTrial: 'Partial Trial',
   furtherTrial: 'Further Trial',
   furtherHearing: 'Further Hearing',
-};
+} as const;
 type TrialHearingOption =
   (typeof TRIAL_HEARING_OPTIONS)[keyof typeof TRIAL_HEARING_OPTIONS];
 
@@ -133,7 +133,7 @@ const STATUS_REPORT_ORDERED_FOR_OPTIONS = {
   petitionerAndRespondent: 'Petitioner and Respondent',
   joint: 'Joint',
   other: 'Other',
-};
+} as const;
 type StatusReportOrderedForOption =
   (typeof STATUS_REPORT_ORDERED_FOR_OPTIONS)[keyof typeof STATUS_REPORT_ORDERED_FOR_OPTIONS];
 
@@ -143,7 +143,7 @@ const MOTION_FILED_BY_OPTIONS = {
   joint: 'Joint',
   thirdParty: 'Third Party',
   intervenor: 'Intervenor',
-};
+} as const;
 type MotionFiledByOption =
   (typeof MOTION_FILED_BY_OPTIONS)[keyof typeof MOTION_FILED_BY_OPTIONS];
 
