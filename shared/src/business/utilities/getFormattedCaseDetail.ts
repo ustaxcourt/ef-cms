@@ -18,6 +18,17 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { cloneDeep, isEmpty, sortBy } from 'lodash';
 import { isMiscellaneousDocketEntry } from '@shared/business/utilities/isMiscellaneousDocketEntry';
 
+export type FormattedCaseInventoryReportEntry = {
+  docketNumber: string;
+  caseTitle: string;
+  consolidatedIconTooltipText: string;
+  inConsolidatedGroup: boolean;
+  isLeadCase: boolean;
+  associatedJudge?: string;
+  status: string;
+  [key: string]: unknown;
+};
+
 const computeIsInProgress = ({ formattedEntry }) => {
   return (
     (!formattedEntry.isCourtIssuedDocument &&

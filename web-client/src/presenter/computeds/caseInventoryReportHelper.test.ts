@@ -10,9 +10,19 @@ import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('caseInventoryReportHelper', () => {
+  const testCaseInventoryPageSize = 25;
+
+  const mockConstants = {
+    ...applicationContext.getConstants(),
+    CASE_INVENTORY_PAGE_SIZE: testCaseInventoryPageSize,
+  };
+
   const caseInventoryReportHelper = withAppContextDecorator(
     caseInventoryReportHelperComputed,
-    { ...applicationContext },
+    {
+      ...applicationContext,
+      getConstants: () => mockConstants,
+    },
   );
 
   it('should return all judges from state along with Chief Judge sorted alphabetically', () => {
@@ -104,12 +114,50 @@ describe('caseInventoryReportHelper', () => {
     ]);
   });
 
-  it('should show the no results message if a filter is selected but totalCount is 0', () => {
+  it('should return the pageCount as a calculation of the number of total results over the case inventory report page size constant', () => {
+    let result = runCompute(caseInventoryReportHelper, {
+      state: {
+        caseInventoryReportData: {
+          foundCases: [],
+          foundCasesCount: testCaseInventoryPageSize * 3, // three pages of data
+        },
+        screenMetadata: {},
+      },
+    });
+
+    expect(result.pageCount).toEqual(3);
+
+    result = runCompute(caseInventoryReportHelper, {
+      state: {
+        caseInventoryReportData: {
+          foundCases: [],
+          foundCasesCount: testCaseInventoryPageSize + 1,
+        },
+        screenMetadata: {},
+      },
+    });
+
+    expect(result.pageCount).toEqual(2);
+
+    result = runCompute(caseInventoryReportHelper, {
+      state: {
+        caseInventoryReportData: {
+          foundCases: [],
+          foundCasesCount: 0,
+        },
+        screenMetadata: {},
+      },
+    });
+
+    expect(result.pageCount).toEqual(0);
+  });
+
+  it('should show the no results message if a filter is selected but foundCasesCount is 0', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
           foundCases: [],
-          totalCount: 0,
+          foundCasesCount: 0,
         },
         screenMetadata: {
           associatedJudge: CHIEF_JUDGE,
@@ -123,11 +171,12 @@ describe('caseInventoryReportHelper', () => {
     expect(result.showResultsTable).toBeFalsy();
   });
 
-  it('should show the select a filter message if a filter is not selected', () => {
+  it('should show the select a filter message if foundCasesCount is 0 and a filter is not selected', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
           foundCases: [],
+          foundCasesCount: 0,
         },
         screenMetadata: {},
       },
@@ -138,15 +187,14 @@ describe('caseInventoryReportHelper', () => {
     expect(result.showResultsTable).toBeFalsy();
   });
 
-  it('should show the results table if there are found cases', () => {
+  it('should show the results table if foundCasesCount is not 0', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
           foundCases: [{ correspondence: [], docketNumber: '123-20' }],
+          foundCasesCount: 1,
         },
-        screenMetadata: {
-          associatedJudge: CHIEF_JUDGE,
-        },
+        screenMetadata: {},
       },
     });
 

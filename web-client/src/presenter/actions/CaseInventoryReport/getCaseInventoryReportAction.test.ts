@@ -21,6 +21,9 @@ describe('getCaseInventoryReportAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        selectedPage: 0,
+      },
       state: {
         screenMetadata: {
           associatedJudge: CHIEF_JUDGE,
@@ -45,6 +48,9 @@ describe('getCaseInventoryReportAction', () => {
     const result = await runAction(getCaseInventoryReportAction, {
       modules: {
         presenter,
+      },
+      props: {
+        selectedPage: 0,
       },
       state: {
         caseInventoryReportData: { foundCases: [{ docketNumber: '123-20' }] },
