@@ -37,11 +37,11 @@ export const getCaseInventoryReport = async ({
     'leadDocketNumber',
     'status',
   ];
-  const { CASE_INVENTORY_MAX_PAGE_SIZE } = applicationContext.getConstants();
+  const { CASE_INVENTORY_PAGE_SIZE } = applicationContext.getConstants();
   const size =
-    pageSize && pageSize <= CASE_INVENTORY_MAX_PAGE_SIZE
+    pageSize && pageSize <= CASE_INVENTORY_PAGE_SIZE
       ? pageSize
-      : CASE_INVENTORY_MAX_PAGE_SIZE;
+      : CASE_INVENTORY_PAGE_SIZE;
 
   const searchParameters = {
     body: {

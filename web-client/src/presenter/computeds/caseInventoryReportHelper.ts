@@ -1,35 +1,28 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
+import { FormattedCaseInventoryReportEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { without } from 'lodash';
-
-export type FormattedReportEntry = {
-  docketNumber: string;
-  caseTitle: string;
-  consolidatedIconTooltipText: string;
-  inConsolidatedGroup: boolean;
-  isLeadCase: boolean;
-  associatedJudge?: string;
-  status: string;
-  [key: string]: unknown;
-};
-
 export const caseInventoryReportHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): {
   caseStatuses: string[];
-  formattedReportData: FormattedReportEntry[];
+  formattedReportData: FormattedCaseInventoryReportEntry[];
   judges: string[];
-  resultCount: number;
+  pageCount: number;
   showResultsTable: boolean;
   showSelectFilterMessage: boolean;
   showNoResultsMessage: boolean;
   showJudgeColumn: boolean;
   showStatusColumn: boolean;
 } => {
-  const { CHIEF_JUDGE, CLOSED_CASE_STATUSES, STATUS_TYPES } =
-    applicationContext.getConstants();
+  const {
+    CASE_INVENTORY_PAGE_SIZE,
+    CHIEF_JUDGE,
+    CLOSED_CASE_STATUSES,
+    STATUS_TYPES,
+  } = applicationContext.getConstants();
   const { formatCase } = applicationContext.getUtilities();
 
   const judges = (get(state.judges) || [])
@@ -46,13 +39,14 @@ export const caseInventoryReportHelper = (
     .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
     .map(item => formatCase(applicationContext, item, user));
 
-  const resultCount = formattedReportData.length;
+  const foundCasesCount = get(state.caseInventoryReportData.foundCasesCount);
+  const pageCount = Math.ceil(foundCasesCount / CASE_INVENTORY_PAGE_SIZE);
 
   let showResultsTable = false;
   let showSelectFilterMessage = false;
   let showNoResultsMessage = false;
 
-  if (resultCount) {
+  if (foundCasesCount) {
     showResultsTable = true;
   } else if (!associatedJudge && !status) {
     showSelectFilterMessage = true;
@@ -64,7 +58,7 @@ export const caseInventoryReportHelper = (
     caseStatuses: without(Object.values(STATUS_TYPES), ...CLOSED_CASE_STATUSES),
     formattedReportData,
     judges,
-    resultCount,
+    pageCount,
     showJudgeColumn: !associatedJudge,
     showNoResultsMessage,
     showResultsTable,
