@@ -90,6 +90,7 @@ import { StartCaseInternal } from './StartCaseInternal/StartCaseInternal';
 import { StatusReportOrder } from './StatusReportOrder';
 import { StyleGuide } from './StyleGuide/StyleGuide';
 import { TrialSessionDetails } from './TrialSessionDetails/TrialSessionDetails';
+import { TrialSessionMinutesPage } from '@web-client/views/TrialSessionMinutes/TrialSessionMinutesPage';
 import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
 import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
@@ -190,6 +191,7 @@ const pages = {
   StatusReportOrder,
   StyleGuide,
   TrialSessionDetails,
+  TrialSessionMinutesPage,
   TrialSessionPlanningReport,
   TrialSessionWorkingCopy,
   TrialSessions,

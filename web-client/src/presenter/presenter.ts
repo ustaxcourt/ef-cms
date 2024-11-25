@@ -144,6 +144,7 @@ import { goToApplyStampSequence } from './sequences/gotoApplyStampSequence';
 import { goToChangePasswordSequence } from '@web-client/presenter/sequences/Login/goToChangePasswordSequence';
 import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
 import { goToForgotPasswordSequence } from '@web-client/presenter/sequences/Login/goToForgotPasswordSequence';
+import { goToTrialSessionMinutesSequence } from '@web-client/presenter/sequences/TrialSessionMinutes/goToTrialSessionMinutesSequence';
 import { goToVerificationSentSequence } from '@web-client/presenter/sequences/goToVerificationSentSequence';
 import { gotoAccessibilityStatementSequence } from './sequences/gotoAccessibilityStatementSequence';
 import { gotoAddCourtIssuedDocketEntrySequence } from './sequences/gotoAddCourtIssuedDocketEntrySequence';
@@ -855,6 +856,7 @@ export const presenterSequences = {
     gotoCaseAssociationRequestSequence as unknown as Function,
   gotoCaseDeadlineReportSequence:
     gotoCaseDeadlineReportSequence as unknown as Function,
+  goToTrialSessionMinutesSequence,
   gotoCaseDetailSequence: gotoCaseDetailSequence as unknown as Function,
   gotoCaseInventoryReportSequence:
     gotoCaseInventoryReportSequence as unknown as Function,
