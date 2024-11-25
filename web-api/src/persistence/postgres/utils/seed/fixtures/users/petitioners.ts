@@ -29,7 +29,6 @@ export const LUKSA_LUCIA: NewUserKysely = {
   state: '',
 };
 
-// If this file gets too big, we can separate into petitionerUsers and petitionerToCaseMappings
 export const petitionerUsers: NewUserKysely[] = [
   BRETT_OSBORNE,
   LUKSA_LUCIA,
