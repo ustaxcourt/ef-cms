@@ -97,7 +97,7 @@ export const DocketRecord = connect(
                       />
                     </th>
                   )}
-                  <SortableHeader
+                  <SortableDocketRecordHeader
                     hideOnMobile={true}
                     screenReaderTitle="Number"
                     sortField="index"
@@ -105,14 +105,14 @@ export const DocketRecord = connect(
                     title="No."
                     onSort={sortTableSequence}
                   />
-                  <SortableHeader
+                  <SortableDocketRecordHeader
                     sortField="sortingFilingDate"
                     sortType="date"
                     tableSort={docketRecordTableSortData}
                     title="Filed Date"
                     onSort={sortTableSequence}
                   />
-                  <SortableHeader
+                  <SortableDocketRecordHeader
                     hideOnMobile={true}
                     sortField="eventCode"
                     sortType="string"
@@ -121,14 +121,14 @@ export const DocketRecord = connect(
                     onSort={sortTableSequence}
                   />
                   <th aria-hidden="true" className="icon-column" />
-                  <SortableHeader
+                  <SortableDocketRecordHeader
                     sortField="descriptionDisplay"
                     sortType="string"
                     tableSort={docketRecordTableSortData}
                     title="Filings and Proceedings"
                     onSort={sortTableSequence}
                   />
-                  <SortableHeader
+                  <SortableDocketRecordHeader
                     className="hide-on-mobile"
                     hideOnMobile={true}
                     sortField="numberOfPages"
@@ -136,7 +136,7 @@ export const DocketRecord = connect(
                     title="Pages"
                     onSort={sortTableSequence}
                   />
-                  <SortableHeader
+                  <SortableDocketRecordHeader
                     className="hide-on-mobile"
                     hideOnMobile={true}
                     sortField="filedBy"
@@ -145,7 +145,7 @@ export const DocketRecord = connect(
                     title="Filed By"
                     onSort={sortTableSequence}
                   />
-                  <SortableHeader
+                  <SortableDocketRecordHeader
                     className="hide-on-mobile"
                     hideOnMobile={true}
                     sortField="action"
@@ -154,14 +154,14 @@ export const DocketRecord = connect(
                     title="Action"
                     onSort={sortTableSequence}
                   />
-                  <SortableHeader
+                  <SortableDocketRecordHeader
                     sortField="servedAt"
                     sortType="date"
                     tableSort={docketRecordTableSortData}
                     title="Served"
                     onSort={sortTableSequence}
                   />
-                  <SortableHeader
+                  <SortableDocketRecordHeader
                     className="center-column hide-on-mobile"
                     hideOnMobile={true}
                     sortField="servedPartiesCode"
@@ -378,7 +378,7 @@ export const DocketRecord = connect(
 
 DocketRecord.displayName = 'DocketRecord';
 
-export function SortableHeader({
+export function SortableDocketRecordHeader({
   className,
   hideOnMobile,
   onSort,
