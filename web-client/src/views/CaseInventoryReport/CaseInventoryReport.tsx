@@ -64,12 +64,13 @@ export const CaseInventoryReport = connect(
               className="usa-select select-left width-card-lg inline-select"
               name="associatedJudge"
               value={screenMetadata.associatedJudge}
-              onChange={e =>
+              onChange={e => {
                 getCaseInventoryReportSequence({
                   key: e.target.name,
                   value: e.target.value,
-                })
-              }
+                });
+                setActivePage(0);
+              }}
             >
               <option value="">- Judge -</option>
               {caseInventoryReportHelper.judges.map(judge => (
@@ -84,12 +85,13 @@ export const CaseInventoryReport = connect(
               className="usa-select select-left width-card-lg inline-select margin-left-1pt5rem"
               name="status"
               value={screenMetadata.status}
-              onChange={e =>
+              onChange={e => {
                 getCaseInventoryReportSequence({
                   key: e.target.name,
                   value: e.target.value,
-                })
-              }
+                });
+                setActivePage(0);
+              }}
             >
               <option value="">- Status -</option>
               {caseInventoryReportHelper.caseStatuses.map(status => {
