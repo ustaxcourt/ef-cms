@@ -1,5 +1,6 @@
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { CaseDeadline } from '../../../../../shared/src/business/entities/CaseDeadline';
+import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
 import { Correspondence } from '../../../../../shared/src/business/entities/Correspondence';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { IrsPractitioner } from '../../../../../shared/src/business/entities/IrsPractitioner';
@@ -8,6 +9,7 @@ import { PrivatePractitioner } from '../../../../../shared/src/business/entities
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
@@ -421,23 +423,24 @@ export const updateCaseAndAssociations = async ({
   authorizedUser: UnknownAuthUser;
   caseToUpdate: any;
 }): Promise<RawCase> => {
-  const caseEntity: Case = caseToUpdate.validate
+  const newCaseEntity: Case = caseToUpdate.validate
     ? caseToUpdate
-    : new Case(caseToUpdate, {
-        authorizedUser,
+    : CaseFactory({
+        rawCase: caseToUpdate,
+        user: authorizedUser,
       });
 
-  const oldCaseEntity = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: caseToUpdate.docketNumber,
-    });
-
-  const validRawCaseEntity = caseEntity.validate().toRawObject();
-
-  const validRawOldCaseEntity = new Case(oldCaseEntity, {
+  const oldCaseEntity = await getCaseByDocketNumber({
+    applicationContext,
     authorizedUser,
+    docketNumber: caseToUpdate.docketNumber,
+  });
+
+  const validNewRawCaseEntity = newCaseEntity.validate().toRawObject();
+
+  const validRawOldCaseEntity = CaseFactory({
+    rawCase: oldCaseEntity,
+    user: authorizedUser,
   })
     .validate()
     .toRawObject();
@@ -457,7 +460,7 @@ export const updateCaseAndAssociations = async ({
     fn({
       applicationContext,
       authorizedUser,
-      caseToUpdate: validRawCaseEntity,
+      caseToUpdate: validNewRawCaseEntity,
       oldCase: validRawOldCaseEntity,
     }),
   );
@@ -472,10 +475,10 @@ export const updateCaseAndAssociations = async ({
 
   await Promise.all(persistenceRequests);
 
-  await upsertCases([validRawCaseEntity]);
+  await upsertCases([validNewRawCaseEntity]);
 
   return applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
-    caseToUpdate: validRawCaseEntity,
+    caseToUpdate: validNewRawCaseEntity,
   });
 };

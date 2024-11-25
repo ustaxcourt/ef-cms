@@ -14,7 +14,6 @@ import { cases450_plus } from '@web-api/persistence/postgres/utils/seed/fixtures
 import { getDbWriter } from '../../../../database';
 import { messages } from './fixtures/messages';
 import { petitionerToCaseMappings } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/petitionerToCaseMappings';
-import { petitionerUsers } from '@web-api/persistence/postgres/utils/seed/fixtures/users/petitioners';
 import { workItems } from './fixtures/workItems';
 
 export const seed = async () => {
@@ -74,19 +73,10 @@ export const seed = async () => {
       .execute(),
   );
 
-  // Seed the petitioners
-  await getDbWriter(writer =>
-    writer
-      .insertInto('dwUser')
-      .values(petitionerUsers)
-      .onConflict(oc => oc.column('contactId').doNothing())
-      .execute(),
-  );
-
   // Attach petitioners to their respective cases
   await getDbWriter(writer =>
     writer
-      .insertInto('dwUserCase')
+      .insertInto('dwPetitionerOnCase')
       .values(petitionerToCaseMappings)
       .onConflict(oc => oc.columns(['contactId', 'docketNumber']).doNothing())
       .execute(),

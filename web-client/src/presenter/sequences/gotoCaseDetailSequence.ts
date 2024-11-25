@@ -82,8 +82,14 @@ export const gotoCaseDetailSequence = [
   closeMobileMenuAction,
   setDefaultCaseDetailTabAction,
   setIsPrimaryTabAction,
+  () => {
+    console.log('GETTING CASE');
+  },
   getCaseAction,
   setCaseAction,
+  () => {
+    console.log('SET THE CASE');
+  },
   setDefaultDocketRecordSortAction,
   setDefaultEditDocumentEntryPointAction,
   runPathForUserRoleAction,

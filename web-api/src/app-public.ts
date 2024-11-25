@@ -75,12 +75,12 @@ import { generatePublicDocketRecordPdfLambda } from './lambdas/public-api/genera
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
 import { getCachedHealthCheckLambda } from '@web-api/lambdas/health/getCachedHealthCheckLambda';
 import { getCaseForPublicDocketSearchLambda } from './lambdas/public-api/getCaseForPublicDocketSearchLambda';
+import { getCaseLambda } from '@web-api/lambdas/cases/getCaseLambda';
 import { getHealthCheckLambda } from './lambdas/health/getHealthCheckLambda';
 import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceModeLambda';
 import { getPractitionerByBarNumberLambda } from '@web-api/lambdas/practitioners/getPractitionerByBarNumberLambda';
 import { getPractitionersByNameLambda } from '@web-api/lambdas/practitioners/getPractitionersByNameLambda';
 import { getPublicCaseExistsLambda } from './lambdas/public-api/getPublicCaseExistsLambda';
-import { getPublicCaseLambda } from './lambdas/public-api/getPublicCaseLambda';
 import { getPublicDocumentDownloadUrlLambda } from './lambdas/public-api/getPublicDocumentDownloadUrlLambda';
 import { getPublicJudgesLambda } from './lambdas/public-api/getPublicJudgesLambda';
 import { getPublicTrialSessionDetailsLambda } from '@web-api/lambdas/public-api/getPublicTrialSessionDetailsLambda';
@@ -98,10 +98,7 @@ import { todaysOrdersLambda } from './lambdas/public-api/todaysOrdersLambda';
     '/public-api/cases/:docketNumber',
     lambdaWrapper(getPublicCaseExistsLambda),
   );
-  app.get(
-    '/public-api/cases/:docketNumber',
-    lambdaWrapper(getPublicCaseLambda),
-  );
+  app.get('/public-api/cases/:docketNumber', lambdaWrapper(getCaseLambda));
   app.get(
     '/public-api/:docketNumber/:key/public-document-download-url',
     lambdaWrapper(getPublicDocumentDownloadUrlLambda),
