@@ -5,6 +5,7 @@ import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/j
 import {
   IDLE_LOGOUT_STATES,
   IdleLogoutStateType,
+  KEYS,
   PRACTICE_TYPE,
   SERVICE_INDICATOR_TYPES,
 } from '@shared/business/entities/EntityConstants';
@@ -569,6 +570,10 @@ export const computeds = {
 };
 
 export const baseState = {
+  [KEYS.DOCKET_RECORD_TABLE_SORT]: {} as {
+    sortField: string;
+    sortOrder: 'asc' | 'desc';
+  },
   advancedSearchForm: {} as any,
   // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
