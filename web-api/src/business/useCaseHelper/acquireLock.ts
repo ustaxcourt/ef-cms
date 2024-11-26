@@ -143,8 +143,8 @@ export function withLocking<InteractorInput, InteractorOutput>(
     applicationContext: any,
     options: any,
   ) =>
-    | Promise<{ identifiers: string[]; ttl?: number }>
-    | { identifiers: string[]; ttl?: number },
+    | Promise<{ identifiers: string[]; ttl?: number; retries?: number }>
+    | { identifiers: string[]; ttl?: number; retries?: number },
   onLockError?: TOnLockError,
 ): (
   applicationContext: any,
@@ -156,7 +156,10 @@ export function withLocking<InteractorInput, InteractorOutput>(
     options: InteractorInput,
     authorizedUser: UnknownAuthUser,
   ) {
-    const { identifiers, ttl } = await getLockInfo(applicationContext, options);
+    const { identifiers, retries, ttl } = await getLockInfo(
+      applicationContext,
+      options,
+    );
 
     await acquireLock({
       applicationContext,
@@ -164,6 +167,7 @@ export function withLocking<InteractorInput, InteractorOutput>(
       identifiers,
       onLockError,
       options,
+      retries,
       ttl,
     });
 
