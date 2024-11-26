@@ -4,6 +4,7 @@ import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getDbReader } from '@web-api/database';
 import { getDocketEntryOnCase } from '@web-api/persistence/dynamo/cases/getDocketEntryOnCase';
+import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export const getCaseByDocketNumber = async ({
@@ -15,7 +16,7 @@ export const getCaseByDocketNumber = async ({
   authorizedUser?: AuthUser;
   applicationContext: ServerApplicationContext;
 }): Promise<Case | undefined> => {
-  const caseResult = await getDbReader(reader =>
+  const dbCase = await getDbReader(reader =>
     reader
       .selectFrom('dwCase as c')
       .where('docketNumber', '=', docketNumber)
@@ -23,15 +24,21 @@ export const getCaseByDocketNumber = async ({
       .executeTakeFirst(),
   );
 
-  const petitioners = await getDbReader(reader =>
+  const dbPetitionersOnCase = await getDbReader(reader =>
     reader
       .selectFrom('dwPetitionerOnCase')
       .where('docketNumber', '=', docketNumber)
       .selectAll()
       .execute(),
   );
+  const petitionersOnCase =
+    dbPetitionersOnCase.map(x => {
+      return new Petitioner(transformNullToUndefined(x))
+        .validate()
+        .toRawObject();
+    }) || [];
 
-  const caseHistory = await getDbReader(reader =>
+  const dbCaseStatusHistory = await getDbReader(reader =>
     reader
       .selectFrom('dwCaseStatusUpdate')
       .where('docketNumber', '=', docketNumber)
@@ -39,8 +46,11 @@ export const getCaseByDocketNumber = async ({
       .selectAll()
       .execute(),
   );
+  const caseStatusHistory = dbCaseStatusHistory.map(update => {
+    return { ...update, date: update.date.toISOString() };
+  });
 
-  const caseStatistics = await getDbReader(reader =>
+  const dbCaseStatistics = await getDbReader(reader =>
     reader
       .selectFrom('dwCaseStatistic')
       .where('docketNumber', '=', docketNumber)
@@ -48,51 +58,44 @@ export const getCaseByDocketNumber = async ({
       .execute(),
   );
 
-  // 10502 TODO: Get work items and other aggregated things that getCaseByDocketNumber is doing in dynamo
-
-  console.log('caseStatistics', caseStatistics);
-
-  console.log('getCaseByDocketNumber');
-  console.log(caseResult);
-  // console.log(petitioners);
-  // console.log(caseHistory);
-
-  const docketEntries = await getDocketEntryOnCase({
+  const dbDocketEntries = await getDocketEntryOnCase({
     applicationContext,
     docketNumber,
   });
+  const workItems = await getWorkItemsByDocketNumber({ docketNumber });
 
-  // TODO, this is a hack
-  return caseResult
-    ? // 10502 TODO: Use CaseFactory
-      new Case(
+  // "JOIN" docket entries and work items. Once docket entries are in postgres, this can
+  // be done in a single query rather than in an O(n^2) loop.
+  for (let item of workItems) {
+    for (let entry of dbDocketEntries) {
+      if (item.docketEntry.docketEntryId === entry.docketEntryId) {
+        entry.workItem = item;
+      }
+    }
+  }
+
+  // 10502 TODO: Still need other case items to be attached to the case. See aggregateCaseItems.
+
+  // console.log('getCaseByDocketNumber');
+  // console.log('caseStatistics', caseStatistics);
+  // console.log(caseResult);
+  // console.log(petitioners);
+  // console.log(caseHistory);
+
+  return dbCase
+    ? new Case(
         transformNullToUndefined({
-          ...caseResult,
-          caseCaption: caseResult.caption,
-          caseStatusHistory: caseHistory.map(d => {
-            return {
-              ...d,
-              date: d.date.toISOString(),
-            };
-          }),
-          createdAt: caseResult.createdAt?.toISOString(),
-          docketEntries,
-          hearings: caseResult.hearings || [],
-          petitionPaymentDate: caseResult.petitionPaymentDate?.toISOString(),
-          petitioners:
-            transformNullToUndefined(petitioners).map(x => {
-              // 10502 TODO: hack to get petitioner validation ok
-              x.inCareOf = 'a';
-              x.title = 'a';
-              x.email = 'a@test.x';
-              x.additionalName = x.additionalName || 'TEST';
-              x.paperPetitionEmail = 'a@test.x';
-              return new Petitioner(x).validate().toRawObject();
-            }) || [],
-
-          receivedAt: caseResult.receivedAt?.toISOString(),
-          statistics: caseStatistics,
-          trialDate: caseResult.trialDate?.toISOString(),
+          ...dbCase,
+          caseCaption: dbCase.caption,
+          caseStatusHistory,
+          createdAt: dbCase.createdAt?.toISOString(),
+          docketEntries: dbDocketEntries,
+          hearings: dbCase.hearings || [],
+          petitionPaymentDate: dbCase.petitionPaymentDate?.toISOString(),
+          petitioners: petitionersOnCase,
+          receivedAt: dbCase.receivedAt?.toISOString(),
+          statistics: dbCaseStatistics,
+          trialDate: dbCase.trialDate?.toISOString(),
         }),
         { authorizedUser },
       )
