@@ -1,3 +1,4 @@
+import { CaseMetadataFieldset } from '@web-client/views/TrialSessionMinutes/CaseMetadataFieldset';
 import { MinuteSheetFormState } from '@web-client/presenter/state/minuteSheetFormState';
 import { TrialSessionMetadataFieldset } from '@web-client/views/TrialSessionMinutes/SessionMetadataFieldset';
 import React from 'react';
@@ -31,7 +32,11 @@ export const TrialSessionMinutesForm = ({
       />
 
       <hr />
-      <div>Case Metadata Section</div>
+      <CaseMetadataFieldset
+        caseMetadataFormState={trialSessionMinutesFormState.caseMetadata}
+        onBlurHandler={autosaveHandler}
+        onChangeHandler={onChangeHandler}
+      />
       <hr />
       <div>Parties Section</div>
       <hr />
