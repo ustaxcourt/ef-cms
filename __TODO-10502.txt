@@ -1,22 +1,27 @@
 Current summary:
-• All case (and directly related, i.e., stored on the case) seed data has been moved, but petitioners could be refactored to avoid duplicates
+• All case (and directly related, i.e., stored on the case) seed data has been moved.
+• After talking with Jim L., it became apparent that petitioners on a case are almost entirely distinct from users. We may want an optional foreign key to a (forthcoming) user table, but the user table should really only be login/role info for petitioners. Their contact info on any particular case can be different from their "user" contact info or the contact info on a separate case.
 • The app runs with the fake data, although case is still missing some stuff. getCaseByDocketNumber (postgres version) needs to be worked on.
 
 Some TODOs are marked with "10502 TODO", so search for this (without the quotes) as needed.
 
-Figure out which fields we can get rid of
+Figure out if there are fields we can get rid of on database types to make things simpler
 
-How do we handle mailingDate? It looks like it can maybe remain a string.
+How do we handle mailingDate (always in DD/MM/YYYY format)? It looks like it can maybe remain a string?
 
-Refactor to use a case factory. See https://github.com/ustaxcourt/ef-cms/pull/5557/files for one idea.
+Continue to use CaseFactory, typing it correctly. I think the pattern should be:
+• getting a case from persistence deserializes the data into a full case object (currently our Case entity)
+• From there, we can use CaseFactory to construct the appropriate entity (e.g., PublicCase)
+• Some of the logic currently on CaseFactory for "cleaning up" a case for a given user might be better to move to the constructors (or maybe a base Case constructor that is extended) instead
+• The idea: CaseFactory/constructors should take care of the permissions, obfuscation of data, etc. Currently, that logic is often in interactors, which means making a new interactor can be dangerous. (What if a dev forgets to obfuscate sealed case details to X user? Etc.)
+
+Is there a reason not to use Date types on our entities instead of strings? In any case, probably best to postpone to avoid even bigger refactor.
 
 In getDocumentQCInboxForUser, I had to add to falsy checks that can probably be removed once all the seed data is there.
 
-Get sealCaseInteractor to work -- timezone issue
-
-Fix duplicate contact ids in petitioners.ts seed data
+sealCaseInteractor and unsealCaseInteractor were re-creating cases *I think* unnecessarily. I changed that as an experiment with CaseFactory.
 
 Associate the right things with a case efficiently in getCaseByDocketNumber
--- need respondent counsel, consolidated cases, case status history ...
--- also, maybe we should pass flags (or something like that, but better) to determine which subsets of data we need
--- I doubt every call to getCaseByDocketNumber actually needs all of the docketEntries, petitioners, etc.
+-- Still need respondent counsel, consolidated cases ...
+-- Also, maybe we should pass flags (or something like that, but better) to determine which subsets of data we need since I doubt every call to getCaseByDocketNumber actually needs all of the docketEntries, petitioners, etc.
+-- Currently, I make separate database calls to get data associated with a case. It would be more efficient to hit the DB once with the query we need.

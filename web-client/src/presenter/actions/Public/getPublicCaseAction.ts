@@ -10,6 +10,7 @@ export const getPublicCaseAction = async ({
   applicationContext,
   props,
 }: ActionProps) => {
+  console.log('getPublicCaseAction!');
   const caseDetail = await applicationContext
     .getUseCases()
     .getCaseInteractor(applicationContext, {

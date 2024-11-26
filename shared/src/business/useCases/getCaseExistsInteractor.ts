@@ -16,6 +16,8 @@ export const getCaseExistsInteractor = async (
   applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
 ) => {
+  console.log('getCaseExistsInteractor!!!!!');
+
   const caseRecord = await getCaseByDocketNumber({
     applicationContext,
     authorizedUser: undefined,
