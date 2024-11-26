@@ -1,15 +1,26 @@
 import { BigHeader } from '@web-client/views/BigHeader';
 import { Button } from '@web-client/ustc-ui/Button/Button';
+import { CityInfo } from '@web-client/presenter/computeds/trialSessionPlanningReportViewHelper';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { state as cerebralState } from '@web-client/presenter/app.cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const TrialSessionPlanningReportView = connect(
   {
-    trialSessionPlanningReportData: state.trialSessionPlanningReportData,
+    trialSessionPlanningReportData:
+      cerebralState.trialSessionPlanningReportData,
+    trialSessionPlanningReportViewHelper:
+      cerebralState.trialSessionPlanningReportViewHelper,
   },
-  function TrialSessionPlanningReportView({ trialSessionPlanningReportData }) {
+  function TrialSessionPlanningReportView({
+    trialSessionPlanningReportData,
+    trialSessionPlanningReportViewHelper,
+  }) {
     const { trialTerm, trialYear } = trialSessionPlanningReportData;
+    const { citiesNotCalendaredInTwoPreviousTerms } =
+      trialSessionPlanningReportViewHelper;
+
     return (
       <>
         <BigHeader text="Trial Session Planning Report" />
@@ -27,6 +38,10 @@ export const TrialSessionPlanningReportView = connect(
           trialTerm={trialTerm}
           trialYear={trialYear}
         />
+
+        <CitiesNotCalendaredInPastTwoTerms
+          cities={citiesNotCalendaredInTwoPreviousTerms}
+        ></CitiesNotCalendaredInPastTwoTerms>
       </>
     );
   },
@@ -64,6 +79,60 @@ function TrialSessionPlanningReportHeader({
           Print
         </Button>
       </div>
+    </div>
+  );
+}
+
+type CitiesNotCalendaredInPastTwoTermsParams = {
+  cities: CityInfo[][];
+};
+
+function CitiesNotCalendaredInPastTwoTerms({
+  cities,
+}: CitiesNotCalendaredInPastTwoTermsParams) {
+  return (
+    <div className="grid-container margin-top-5">
+      <div className="border-1px border-gray-30">
+        <div
+          className="bg-yellow padding-top-2 padding-bottom-2 padding-left-3 border-bottom-1px border-gray-30"
+          style={{
+            fontWeight: 600,
+          }}
+        >
+          <FontAwesomeIcon
+            className="fa-icon-blue-vivid margin-right-2"
+            icon="info-circle"
+            size="lg"
+          />
+          Cities not calendared in two previous terms:
+        </div>
+        <div className="grid-row margin-top-3 margin-bottom-3 margin-left-10 margin-right-10">
+          {cities
+            .filter(cg => !!cg.length)
+            .map(cityGroup => (
+              <div
+                className="grid-col-3"
+                key={`column-${cityGroup[0].city},${cityGroup[0].state}`}
+              >
+                {cityGroup.map(({ city, state: locationState }) => (
+                  <CityInformation
+                    city={city}
+                    key={`${city},${locationState}`}
+                    state={locationState}
+                  />
+                ))}
+              </div>
+            ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CityInformation({ city, state: locationState }: CityInfo) {
+  return (
+    <div className="padding-bottom-1 margin-right-1">
+      {city}, {locationState}
     </div>
   );
 }
