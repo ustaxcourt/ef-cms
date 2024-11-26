@@ -139,7 +139,8 @@ export type MinuteSheetFormState = {
       | SimultaneousMemorandumFormFields
       | SimultaneousMemorandaOfLawFormFields
       | SimultaneousSupplementalFormFields
-      | SimultaneousBriefFormFields;
+      | SimultaneousBriefFormFields
+      | {};
   };
 
   witnesses: {
