@@ -37,7 +37,7 @@ export function CaseFactory({
   const caseIsSealed = isSealedCase(rawCase);
   rawCase.isSealed = caseIsSealed;
 
-  // TODO 10502: Should this be moved to the constructors? If so, probably on a root class that is extended.
+  // 10502 TODO: Should this be moved to the constructors? If so, probably on a root class that is extended.
   rawCase = caseContactAddressSealedFormatter(rawCase, user);
   rawCase = decorateForCaseStatus(rawCase);
 
@@ -51,7 +51,7 @@ export function CaseFactory({
     return new Case(rawCase, { authorizedUser: user });
   }
 
-  // TODO 10502: Should this be on the Case constructor?
+  // 10502 TODO: Should this be on the Case constructor?
   // Users who cannot get all case data should not see entries that are not on the record, like drafts,
   // EXCEPT the IRS superuser, who can see only the non-docket STIN document
   filterDocketEntriesNotOnDocketRecord({ authorizedUser: user, rawCase });
@@ -89,7 +89,7 @@ export function CaseFactory({
   return new PublicCase(rawCase, { authorizedUser: user });
 }
 
-// TODO 10502: Move onto constructors?
+// 10502 TODO: Move onto constructors?
 export const decorateForCaseStatus = (caseRecord: RawCase) => {
   caseRecord.canAllowDocumentService =
     canAllowDocumentServiceForCase(caseRecord);
