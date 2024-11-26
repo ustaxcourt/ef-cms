@@ -23,17 +23,47 @@ export const TrialSessionPlanningReportView = connect(
             Back to Trial Sessions
           </Button>
         </div>
-        <div className="grid-container grid-row">
-          <div className="h1-size grid-col-2">
-            {trialTerm} {trialYear}
-          </div>
-          <div className="bg-secondary grid-col-10">
-            {trialTerm} {trialYear}
-          </div>
-        </div>
+        <TrialSessionPlanningReportHeader
+          trialTerm={trialTerm}
+          trialYear={trialYear}
+        />
       </>
     );
   },
 );
 
 TrialSessionPlanningReportView.displayName = 'TrialSessionPlanningReport';
+
+type TrialSessionPlanningReportHeaderParams = {
+  trialTerm: string;
+  trialYear: number;
+};
+
+function TrialSessionPlanningReportHeader({
+  trialTerm,
+  trialYear,
+}: TrialSessionPlanningReportHeaderParams) {
+  return (
+    <div className="grid-container display-flex height-6">
+      <div
+        className="flex-auto border-bottom-2px border-primary"
+        style={{
+          fontFamily: 'Noto Serif JP',
+          fontSize: '32px',
+        }}
+      >
+        {trialTerm} {trialYear}
+      </div>
+      <div className="flex-fill text-right height-6 border-bottom-1px border-gray-10">
+        <Button
+          link
+          className="margin-bottom-3"
+          href="/trial-sessions"
+          icon="print"
+        >
+          Print
+        </Button>
+      </div>
+    </div>
+  );
+}
