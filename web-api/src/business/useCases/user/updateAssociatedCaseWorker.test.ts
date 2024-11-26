@@ -69,6 +69,12 @@ const mockCase = {
 };
 
 describe('updateAssociatedCaseWorker', () => {
+  beforeEach(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(mockPractitioner);
+  });
+
   it('should log an error when the practitioner is not found on one of their associated cases by userId', async () => {
     applicationContext
       .getPersistenceGateway()
@@ -204,6 +210,10 @@ describe('updateAssociatedCaseWorker', () => {
     });
 
     it('should call generateAndServeDocketEntry with verified petitioner for servedParties', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getUserById.mockReturnValue(mockPetitioner);
+
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValue({
@@ -369,6 +379,7 @@ describe('updateAssociatedCaseWorker', () => {
     });
   });
 });
+
 describe('updatePetitionerCases', () => {
   const UPDATED_EMAIL = 'hello@example.com';
   const mockPetitionerUser2 = {
