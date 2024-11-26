@@ -10,10 +10,16 @@ Figure out if there are fields we can get rid of on database types to make thing
 How do we handle mailingDate (always in DD/MM/YYYY format)? It looks like it can maybe remain a string?
 
 Continue to use CaseFactory, typing it correctly. I think the pattern should be:
-• getting a case from persistence deserializes the data into a full case object (currently our Case entity)
-• From there, we can use CaseFactory to construct the appropriate entity (e.g., PublicCase)
-• Some of the logic currently on CaseFactory for "cleaning up" a case for a given user might be better to move to the constructors (or maybe a base Case constructor that is extended) instead
-• The idea: CaseFactory/constructors should take care of the permissions, obfuscation of data, etc. Currently, that logic is often in interactors, which means making a new interactor can be dangerous. (What if a dev forgets to obfuscate sealed case details to X user? Etc.)
+• We force developers to construct via CaseFactory, e.g., CaseFactory.getCase() (generic), CaseFactory.getFullCase (Case) CaseFactory.getPublicCase (PublicCase), etc.
+• PublicCase, Case, etc. entities should be constructed (at least for business logic--we currently use Case as both a representation of our database as well as a business object) from _create static helpers.
+
+So: CaseFactory.getFullCase(data, user) [which will check that the user actually has permissions for a Case and throw an error otherwise] -> cleans up data -> calls Case._create(data)
+
+This design is meant to solve a couple of issues:
+1) Make sure we are always getting a "safe" subset of data for a user. We have been relying on getCaseInteractor, random formatters, etc. to do this, which is dangerous. We should enforce one way of cleaning up a case regardless of which interactor etc.--hence the factory.
+2) There is one place that determines the permissions of what is and is not seen--the factory.
+3) Ideally, we could do the data obfuscation/clean up in each constructor. However, that requires passing user into each constructor, which makes the class harder to reason about, and it means we have multiple places/duplicate logic for cleaning up certain type-independent data obfuscation. That is why I have chosen to put this shared logic in the factory itself.
+4) Ultimately, this allows a developer to know that they are constructing the right type, getting a narrow type when they know what they want (e.g., a PublicCase from .getPublicCase) or a broad type when they don't (.getCase).
 
 Is there a reason not to use Date types on our entities instead of strings? In any case, probably best to postpone to avoid even bigger refactor.
 
