@@ -1,5 +1,6 @@
 import { getCaseAction } from '@web-client/presenter/actions/getCaseAction';
 import { getTrialSessionDetailsAction } from '../../actions/TrialSession/getTrialSessionDetailsAction';
+import { initializeTrialSessionMinutesSheetFormAction } from '@web-client/presenter/actions/TrialSessionMinutes/initializeTrialSessionMinutesSheetFormAction';
 import { parallel } from 'cerebral/factories';
 import { setCaseAction } from '@web-client/presenter/actions/setCaseAction';
 import { setTrialSessionDetailsAction } from '../../actions/TrialSession/setTrialSessionDetailsAction';
@@ -10,15 +11,15 @@ export const goToTrialSessionMinutesSequence = [
   setupCurrentPageAction('Interstitial'),
   setTrialSessionIdAction,
   parallel([
-    [
-      getTrialSessionDetailsAction,
-      setTrialSessionDetailsAction,
-      getCaseAction,
-      setCaseAction,
-    ],
+    [getTrialSessionDetailsAction, setTrialSessionDetailsAction],
+    [getCaseAction, setCaseAction],
   ]),
+  initializeTrialSessionMinutesSheetFormAction,
   setupCurrentPageAction('TrialSessionMinutesPage'),
-] as unknown as (props: {
+] as unknown as ({
+  docketNumber,
+  trialSessionId,
+}: {
   trialSessionId: string;
   docketNumber: string;
 }) => void;

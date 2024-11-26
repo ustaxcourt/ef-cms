@@ -5,6 +5,7 @@ import {
 import {
   DOCKET_NUMBER_SUFFIXES,
   PARTIES_CODES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
 import { FORMATS } from '../DateHandler';
 import { RawEligibleCase } from '../../entities/cases/EligibleCase';
@@ -168,6 +169,7 @@ export type FormattedTrialSessionDetailsType = TrialSessionState & {
   formattedTerm: string;
   formattedTrialClerk: string;
   inactiveCases: any;
+  isRemoteSession: boolean;
   noLocationEntered: boolean;
   openCases: any;
   showSwingSession: boolean;
@@ -300,6 +302,9 @@ export const getFormattedTrialSessionDetails = ({
     .replace(/\s/g, '_')
     .replace(/,/g, '');
 
+  const isRemoteSession =
+    trialSession.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.remote;
+
   return {
     ...trialSession,
     allCases: allCasesFormatted,
@@ -317,6 +322,7 @@ export const getFormattedTrialSessionDetails = ({
     formattedTerm,
     formattedTrialClerk,
     inactiveCases: inactiveCasesFormatted,
+    isRemoteSession,
     noLocationEntered,
     openCases: openCasesFormatted,
     showSwingSession,

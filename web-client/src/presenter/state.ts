@@ -96,6 +96,7 @@ import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTy
 import { headerHelper } from './computeds/headerHelper';
 import { initialBlockedCaseReportFilter } from '@web-client/presenter/state/blockedCasesReportState';
 import { initialCustomCaseReportState } from './customCaseReportState';
+import { initialMinuteSheetFormState } from '@web-client/presenter/state/minuteSheetFormState';
 import { initialPendingReportsState } from '@web-client/presenter/state/pendingReportState';
 import { initialTrialSessionPageState } from '@web-client/presenter/state/trialSessionsPageState';
 import { initialTrialSessionState } from '@web-client/presenter/state/trialSessionState';
@@ -710,6 +711,7 @@ export const baseState = {
     selectedMessages: new Map() as Map<string, string>,
   },
   messagesSectionCount: 0,
+  minuteSheetForm: cloneDeep(initialMinuteSheetFormState),
   modal: {
     contactSupportMessage: undefined, // the "contact support" message sans email address
     docketEntry: undefined,

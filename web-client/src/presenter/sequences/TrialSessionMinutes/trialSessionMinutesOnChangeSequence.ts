@@ -1,5 +1,13 @@
+import { updateTrialSessionMinutesFormAction } from '@web-client/presenter/actions/TrialSessionMinutes/updateTrialSessionMinutesFormAction';
+
 export const trialSessionMinutesOnChangeSequence = [
-  ({ props }) => {
-    console.log(props);
-  },
-] as unknown as (props: { event: any }) => void;
+  updateTrialSessionMinutesFormAction,
+] as unknown as ({
+  name,
+  section,
+  value,
+}: {
+  name: string;
+  section: string;
+  value: string | boolean;
+}) => void;

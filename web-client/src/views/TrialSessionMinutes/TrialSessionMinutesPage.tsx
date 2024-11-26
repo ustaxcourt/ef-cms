@@ -10,8 +10,16 @@ export const TrialSessionMinutesPage = connect(
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     trialSessionMinutesOnChangeSequence:
       sequences.trialSessionMinutesOnChangeSequence,
+    trialSessionMinutesAutosaveSequence:
+      sequences.trialSessionMinutesAutosaveSequence,
+    trialSessionMinutesForm: state.minuteSheetForm,
   },
-  ({ formattedTrialSessionDetails, trialSessionMinutesOnChangeSequence }) => {
+  ({
+    formattedTrialSessionDetails,
+    trialSessionMinutesAutosaveSequence,
+    trialSessionMinutesForm,
+    trialSessionMinutesOnChangeSequence,
+  }) => {
     return (
       <>
         <CaseDetailHeader hideActionButtons />
@@ -21,10 +29,9 @@ export const TrialSessionMinutesPage = connect(
             {formattedTrialSessionDetails.formattedStartDate}
           </h1>
           <TrialSessionMinutesForm
-            formattedTrialSessionDetails={formattedTrialSessionDetails}
-            trialSessionMinutesOnChangeSequence={
-              trialSessionMinutesOnChangeSequence
-            }
+            autosaveHandler={trialSessionMinutesAutosaveSequence}
+            trialSessionMinutesFormState={trialSessionMinutesForm}
+            onChangeHandler={trialSessionMinutesOnChangeSequence}
           />
         </div>
       </>

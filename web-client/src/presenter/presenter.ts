@@ -497,6 +497,7 @@ import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetai
 import { toggleUseContactPrimaryAddressSequence } from './sequences/toggleUseContactPrimaryAddressSequence';
 import { toggleUseExistingAddressSequence } from './sequences/toggleUseExistingAddressSequence';
 import { toggleWorkingCopySortSequence } from './sequences/toggleWorkingCopySortSequence';
+import { trialSessionMinutesAutosaveSequence } from '@web-client/presenter/sequences/TrialSessionMinutes/trialSessionMinutesAutosaveSequence';
 import { trialSessionMinutesOnChangeSequence } from '@web-client/presenter/sequences/TrialSessionMinutes/trialSessionMinutesOnChangeSequence';
 import { unauthorizedErrorSequence } from './sequences/unauthorizedErrorSequence';
 import { unblockCaseFromTrialSequence } from './sequences/unblockCaseFromTrialSequence';
@@ -1414,6 +1415,7 @@ export const presenterSequences = {
   toggleUseExistingAddressSequence:
     toggleUseExistingAddressSequence as unknown as Function,
   toggleWorkingCopySortSequence,
+  trialSessionMinutesAutosaveSequence,
   trialSessionMinutesOnChangeSequence,
   unauthorizedErrorSequence: unauthorizedErrorSequence as unknown as Function,
   unblockCaseFromTrialSequence:

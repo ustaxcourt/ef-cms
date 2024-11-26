@@ -1,7 +1,6 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { FormattedTrialSessionDetailsType } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { Get } from 'cerebral';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { isEmpty, isEqual } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -33,7 +32,6 @@ export const formattedTrialSessionDetails = (
   let disableHybridFilter = false;
   let canDelete = false;
   let canEdit = false;
-  let isRemoteSession = false;
 
   let alertMessageForNOTT: string | undefined;
   let chambersPhoneNumber: string | undefined;
@@ -82,10 +80,6 @@ export const formattedTrialSessionDetails = (
   isHybridSession = Object.values(HYBRID_SESSION_TYPES).includes(
     formattedTrialSession.sessionType,
   );
-
-  isRemoteSession =
-    formattedTrialSession.proceedingType ===
-    TRIAL_SESSION_PROCEEDING_TYPES.remote;
 
   disableHybridFilter =
     (formattedTrialSession.eligibleCases ?? []).length === 0;
@@ -143,7 +137,6 @@ export const formattedTrialSessionDetails = (
     chambersPhoneNumber,
     disableHybridFilter,
     isHybridSession,
-    isRemoteSession,
     showAlertForNOTTReminder,
     showOnlyClosedCases,
     showOpenCases,
