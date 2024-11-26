@@ -8,6 +8,7 @@ describe('setCourtIssuedDocumentInitialDataAction', () => {
   const docketEntryIds = [
     'ddfd978d-6be6-4877-b004-2b5735a41fee',
     '11597d22-0874-4c5e-ac98-a843d1472baf',
+    '22597d22-0874-4c5e-ac98-a843d1472baf',
   ];
 
   beforeAll(() => {
@@ -21,6 +22,11 @@ describe('setCourtIssuedDocumentInitialDataAction', () => {
       docketEntryId: docketEntryIds[1],
       eventCode: 'O',
       freeText: 'something',
+    });
+    MOCK_CASE.docketEntries.push({
+      docketEntryId: docketEntryIds[2],
+      eventCode: 'OJR',
+      signedByUserId: '4497d22-0874-4c5e-ac98-a843d1472baf',
     });
   });
 
@@ -107,5 +113,43 @@ describe('setCourtIssuedDocumentInitialDataAction', () => {
     });
 
     expect(result.state.form).toEqual({});
+  });
+
+  it('should set the judge name when eventcode is OJR and docketEntry was signed by the judge', async () => {
+    const result = await runAction(setCourtIssuedDocumentInitialDataAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        docketEntryId: '22597d22-0874-4c5e-ac98-a843d1472baf',
+      },
+      state: {
+        caseDetail: MOCK_CASE,
+        form: {},
+        judges: [
+          { name: 'Colvin', userId: '4497d22-0874-4c5e-ac98-a843d1472baf' },
+        ],
+      },
+    });
+    expect(result.state.form.judge).toEqual('Colvin');
+  });
+
+  it('should not set the judge name when eventcode is OJR and docketEntry was signed by a non judge user', async () => {
+    const result = await runAction(setCourtIssuedDocumentInitialDataAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        docketEntryId: '22597d22-0874-4c5e-ac98-a843d1472baf',
+      },
+      state: {
+        caseDetail: MOCK_CASE,
+        form: {},
+        judges: [
+          { name: 'Cohen', userId: '3297d22-0874-4c5e-ac98-a843d1472baf' },
+        ],
+      },
+    });
+    expect(result.state.form.judge).toEqual(undefined);
   });
 });
