@@ -51,6 +51,10 @@ jest.mock(
   () => mockFactory('markMessageThreadRepliedTo'),
 );
 
+jest.mock('@web-api/persistence/postgres/messages/createMessageAsReply', () =>
+  mockFactory('createMessageAsReply'),
+);
+
 jest.mock('@web-api/persistence/postgres/messages/setMessageAsRead', () =>
   mockFactory('setMessageAsRead'),
 );

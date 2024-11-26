@@ -111,10 +111,16 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
     formattedEntry.createdAtFormatted = applicationContext
       .getUtilities()
       .formatDateString(formattedEntry.filingDate, 'MMDDYY');
+    formattedEntry.sortingFilingDate = applicationContext
+      .getUtilities()
+      .formatDateString(formattedEntry.filingDate, 'YYYYMMDD_NUMERIC');
   } else {
     formattedEntry.createdAtFormatted = applicationContext
       .getUtilities()
       .formatDateString(formattedEntry.createdAt, 'MMDDYY');
+    formattedEntry.sortingFilingDate = applicationContext
+      .getUtilities()
+      .formatDateString(formattedEntry.createdAt, 'YYYYMMDD_NUMERIC');
   }
 
   formattedEntry.filingsAndProceedings =
@@ -375,7 +381,7 @@ export const formatCase = (
   const caseEntity = new Case(caseDetail, {
     authorizedUser,
   });
-  result.canConsolidate = caseEntity.canConsolidate();
+  result.canConsolidate = caseEntity.canConsolidate(caseEntity);
   result.canUnconsolidate = !!caseEntity.leadDocketNumber;
   result.irsSendDate = caseEntity.getIrsSendDate();
   result.showPrintConfirmationLink =
