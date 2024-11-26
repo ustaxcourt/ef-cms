@@ -46,17 +46,17 @@ describe('should default status report order descriptions', () => {
       'have.value',
       `. Parties by ${today} shall file a status report. Case is stricken from the current trial session.`,
     );
-    cy.get('#judge-label').click();
+    cy.get('[data-testid="judge-select"]').should('have.value', 'Colvin');
     cy.get('[data-testid="docket-entry-preview-text"]').should(
       'have.text',
-      `Docket entry preview: Order that jurisdiction is retained by Colvin. Parties by ${today} shall file a status report. Case is stricken from the current trial session.`,
+      `Docket entry preview: Order that jurisdiction is retained by Judge Colvin. Parties by ${today} shall file a status report. Case is stricken from the current trial session.`,
     );
   });
 });
 
 function judgeCreatesAndSavesStatusReportOrder(
   today: string,
-  jurisdictionRetain: boolean = false,
+  jurisdictionRetained: boolean = false,
 ) {
   loginAsColvin();
   cy.visit(`/case-detail/${docketNumber}`);
@@ -66,9 +66,8 @@ function judgeCreatesAndSavesStatusReportOrder(
   cy.get('[data-testid="order-type-status-report"]').check({ force: true });
   cy.get('#status-report-due-date-picker').type(today);
 
-  if (jurisdictionRetain) {
+  if (jurisdictionRetained) {
     cy.get('#stricken-from-trial-sessions-label').click();
-
     cy.get(
       '#jurisdiction-form-group > :nth-child(2) > .usa-radio__label',
     ).click();
