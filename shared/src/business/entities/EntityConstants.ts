@@ -8,6 +8,11 @@ import internalFilingEventsJson from '../../tools/internalFilingEvents.json';
 
 export const DEBOUNCE_TIME_MILLISECONDS = 500;
 
+export const STATE_KEYS = {
+  DOCKET_RECORD_TABLE_SORT:
+    'DOCKET_RECORD_TABLE_SORT' as 'DOCKET_RECORD_TABLE_SORT',
+};
+
 interface FilingEvent {
   documentTitle: string;
   documentType: string;
@@ -49,6 +54,11 @@ export const AMENDMENT_EVENT_CODES = ['AMAT', 'ADMT'];
 export const STANDING_PRETRIAL_EVENT_CODES = ['SPOS', 'SPTO'];
 
 export const CLERK_OF_THE_COURT_CONFIGURATION = 'clerk-of-court-configuration';
+
+export const FETCHED_TRIAL_SESSIONS_TIMESTAMP_KEY =
+  'FetchedTrialSessionsTimestamp';
+
+export const PUBLIC_TRIAL_SESSIONS_DATA_KEY = 'publicTrialSessionsData';
 
 export const LEGACY_DOCUMENT_TYPES = [
   {
@@ -207,6 +217,11 @@ export const CLOSED_CASE_STATUSES = [
   CASE_STATUS_TYPES.closed,
   CASE_STATUS_TYPES.closedDismissed,
 ];
+export const SUGGESTED_TRIAL_SESSION_TITLES = {
+  invalid: 'Unable to generate suggested term.',
+  success: 'Successfully generated suggested term.',
+  warning: 'Successfully generated suggested term with warnings.',
+};
 
 export const DOCUMENT_RELATIONSHIPS = {
   PRIMARY: 'primaryDocument',
@@ -1379,11 +1394,22 @@ export const TRIAL_CITY_STRINGS = SMALL_CITIES.map(
   trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
 );
 
+export const REGULAR_TRIAL_CITY_STRINGS = COMMON_CITIES.map(
+  trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
+);
+
 export const LEGACY_TRIAL_CITY_STRINGS = LEGACY_TRIAL_CITIES.map(
   trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
 );
 
 export const SESSION_TERMS = ['Winter', 'Fall', 'Spring', 'Summer'];
+
+export const SESSION_TERMS_BY_MONTH = {
+  fall: [9, 10, 11, 12],
+  spring: [4, 5, 6],
+  summer: [7, 8],
+  winter: [1, 2, 3],
+};
 
 export const SESSION_TYPES = {
   regular: 'Regular',
@@ -1555,13 +1581,14 @@ export const ADMISSIONS_STATUS_OPTIONS = [
 
 export const DEFAULT_PROCEDURE_TYPE = PROCEDURE_TYPES[0];
 
-export const CASE_SEARCH_MIN_YEAR = 1986;
 export const CASE_SEARCH_PAGE_SIZE = 25; // number of results returned for each page when searching for a case
-export const CASE_INVENTORY_PAGE_SIZE = 25; // number of results returned for each page in the case inventory report
 export const CASE_LIST_PAGE_SIZE = 20; // number of results returned for each page for the external user dashboard case list
-export const DEADLINE_REPORT_PAGE_SIZE = 100; // number of results returned for each page for the case deadline report
 export const TODAYS_ORDERS_PAGE_SIZE = 100; // number of results returned for each page for the today's orders page
 export const PRACTITIONER_SEARCH_PAGE_SIZE = 100; // number of results returned for each page for the practitioner search page
+export const CASE_INVENTORY_REPORT_PAGE_SIZE = 25; // number of results displayed for each page in the case inventory report
+export const PENDING_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the pending report
+export const COLD_CASE_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the cold case report
+export const CASE_DEADLINES_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the case deadlines report
 
 // TODO: event codes need to be reorganized
 export const ALL_EVENT_CODES = flatten([
