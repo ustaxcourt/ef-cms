@@ -65,6 +65,7 @@ describe('generateChangeOfAddress', () => {
         ({ caseToUpdate }) => caseToUpdate,
       );
   });
+
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
@@ -84,6 +85,10 @@ describe('generateChangeOfAddress', () => {
     applicationContext
       .getPersistenceGateway()
       .setChangeOfAddressCaseAsDone.mockReturnValue({ remaining: 0 });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(mockPrivatePractitioner);
   });
 
   it('should run a change of address when address1 changes for a private practitioner', async () => {

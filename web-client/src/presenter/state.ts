@@ -8,6 +8,7 @@ import {
   IdleLogoutStateType,
   PRACTICE_TYPE,
   SERVICE_INDICATOR_TYPES,
+  STATE_KEYS,
 } from '@shared/business/entities/EntityConstants';
 import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
 import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
@@ -570,6 +571,10 @@ export const computeds = {
 };
 
 export const baseState = {
+  [STATE_KEYS.DOCKET_RECORD_TABLE_SORT]: {} as {
+    sortField: string;
+    sortOrder: 'asc' | 'desc';
+  },
   advancedSearchForm: {} as any,
   // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',

@@ -1,4 +1,4 @@
-import { CASE_STATUS_TYPES } from '../EntityConstants';
+import { CASE_STATUS_TYPES, SESSION_TYPES } from '../EntityConstants';
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { TrialSession } from '../trialSessions/TrialSession';
@@ -18,7 +18,7 @@ describe('removeFromTrialWithAssociatedJudge', () => {
       isCalendared: true,
       judge: { name: 'Judge Buch', userId: 'buch_id' },
       maxCases: 100,
-      sessionType: 'Regular',
+      sessionType: SESSION_TYPES.regular,
       startDate: '2025-03-01T00:00:00.000Z',
       term: 'Fall',
       termYear: '2025',
@@ -60,7 +60,7 @@ describe('removeFromTrialWithAssociatedJudge', () => {
       isCalendared: true,
       judge: { name: 'Judge Buch', userId: 'buch-id' },
       maxCases: 100,
-      sessionType: 'Regular',
+      sessionType: SESSION_TYPES.regular,
       startDate: '2025-03-01T00:00:00.000Z',
       term: 'Fall',
       termYear: '2025',
