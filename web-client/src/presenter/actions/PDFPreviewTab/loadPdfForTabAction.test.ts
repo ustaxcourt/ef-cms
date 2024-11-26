@@ -1,10 +1,12 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { loadPdfAction } from './loadPdfAction';
+import { loadPdfForTabAction } from '../PDFPreviewTab/loadPdfForTabAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
 
-describe('loadPdfAction', () => {
+describe('loadPdfForTabAction', () => {
+  let originalWindowOpen;
+
   const fakeFile = testPdfDoc;
   const b64File = `data:application/pdf;base64,${Buffer.from(
     String.fromCharCode(...fakeFile),
@@ -47,42 +49,38 @@ describe('loadPdfAction', () => {
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
-      createObjectURL: jest.fn(),
+      createObjectURL: jest.fn().mockReturnValue('some url'),
     };
+    originalWindowOpen = window.open;
+    window.open = jest.fn();
+  });
+
+  afterAll(() => {
+    window.open = originalWindowOpen;
+  });
+
+  it('should call window.open with correcturl for pdf file', async () => {
+    await runAction(loadPdfForTabAction, {
+      modules: {
+        presenter,
+      },
+      props: { file: fakeFile },
+    });
+
+    expect(window.open).toHaveBeenCalledWith('some url', '_blank');
   });
 
   it('should detect binary (not base64-encoded) pdf data and read it successfully', async () => {
-    const result = await runAction(loadPdfAction, {
+    await runAction(loadPdfForTabAction, {
       modules: {
         presenter,
       },
       props: {
         file: fakeFile,
       },
-      state: {
-        pdfPreviewModal: {},
-      },
     });
 
     expect(mocks.readAsArrayBufferMock).toHaveBeenCalled();
-    expect(result.state.modal.pdfPreviewModal.error).toBeUndefined();
-  });
-
-  it('should detect base64-encoded pdf data and read it successfully', async () => {
-    const result = await runAction(loadPdfAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        file: b64File,
-      },
-      state: {
-        pdfPreviewModal: {},
-      },
-    });
-
-    expect(mocks.readAsDataURLMock).toHaveBeenCalled();
-    expect(result.state.modal.pdfPreviewModal.error).toBeUndefined();
   });
 
   it('should return an error when given an invalid pdf', async () => {
@@ -90,14 +88,13 @@ describe('loadPdfAction', () => {
       throw new Error('bad pdf data');
     });
     await expect(
-      runAction(loadPdfAction, {
+      runAction(loadPdfForTabAction, {
         modules: {
           presenter,
         },
         props: {
           file: 'data:binary/pdf,INVALID-BYTES',
         },
-        state: { pdfPreviewModal: {} },
       }),
     ).rejects.toThrow('bad pdf data');
   });
@@ -112,36 +109,14 @@ describe('loadPdfAction', () => {
     });
 
     await expect(
-      runAction(loadPdfAction, {
+      runAction(loadPdfForTabAction, {
         modules: {
           presenter,
         },
         props: {
           file: 'this my file',
         },
-        state: {
-          pdfPreviewModal: {},
-        },
       }),
     ).rejects.toThrow('An error called via reader.onerror.');
-  });
-
-  it('sets the pdfPreviewUrl on state from the given file', async () => {
-    presenter.providers.router.createObjectURL.mockReturnValue('fakePdfUri');
-
-    const result = await runAction(loadPdfAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        file: b64File,
-      },
-      state: {
-        modal: { pdfPreviewModal: { error: 'Some Error' } },
-      },
-    });
-
-    expect(result.state.modal.pdfPreviewModal.error).toBeUndefined();
-    expect(result.state.pdfPreviewUrl).toEqual('fakePdfUri');
   });
 });
