@@ -136,6 +136,9 @@ export const socketRouter = (app, onMessageCallbackFn?) => {
       case 'download_csv_file':
         await app.getSequence('downloadCsvFileSequence')(message);
         break;
+      case 'update_user_information_in_state':
+        await app.getSequence('updateUserInformationSequence')();
+        break;
     }
 
     (onMessageCallbackFn || noop)(message);
