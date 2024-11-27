@@ -97,14 +97,6 @@ const updateUserContactInformationHelper = async (
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
-      action: 'update_user_information_in_state',
-    },
-    userId: user.userId,
-  });
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
       action: 'user_contact_initial_update_complete',
     },
     userId: user.userId,
@@ -135,14 +127,6 @@ const updateUserContactInformationHelper = async (
       userId: user.userId,
     });
   }
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'update_user_information_in_state',
-    },
-    userId: user.userId,
-  });
 };
 
 /**
@@ -214,6 +198,13 @@ export const determineEntitiesToLock = async (
   applicationContext: ServerApplicationContext,
   { userId }: { userId: string },
 ) => {
+  await applicationContext
+    .getPersistenceGateway()
+    .getUserByIdOnceAllUpdatesComplete({
+      applicationContext,
+      userId,
+    });
+
   const cases = await applicationContext
     .getPersistenceGateway()
     .getCasesForUser({
