@@ -21,7 +21,6 @@ export const LoginAndServiceEmailAddress = connect(
               link
               className="text-left"
               data-testid="change-email-button"
-              disabled={user.isUpdatingInformation}
               icon="edit"
               onClick={() =>
                 navigateToPathSequence({

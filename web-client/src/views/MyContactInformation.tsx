@@ -23,7 +23,6 @@ export const MyContactInformation = connect(
               link
               className="text-left"
               data-testid="edit-contact-info"
-              disabled={user.isUpdatingInformation}
               icon="edit"
               onClick={() => {
                 canEditContactInformationSequence();
