@@ -9,9 +9,9 @@ export const getCasesByEmailTotal = async ({
   applicationContext,
   email,
 }: GetCasesByEmailParams) => {
+  console.log('es method: getCasesByEmailTotal', email);
   const searchParameters = {
     body: {
-      index: 'efcms-case',
       query: {
         bool: {
           must: [
@@ -29,6 +29,7 @@ export const getCasesByEmailTotal = async ({
         },
       },
     },
+    index: 'efcms-case',
   };
 
   const { total } = await search({
