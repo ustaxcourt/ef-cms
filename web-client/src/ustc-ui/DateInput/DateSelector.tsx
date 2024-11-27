@@ -11,6 +11,7 @@ export const DateSelector = ({
   hintText = undefined,
   id,
   label,
+  labelPosition = 'top',
   maxDate,
   minDate,
   onBlur,
@@ -29,6 +30,7 @@ export const DateSelector = ({
   hintText?: string;
   id: string;
   label?: string;
+  labelPosition?: 'top' | 'left';
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   showDateHint?: boolean;
@@ -36,6 +38,18 @@ export const DateSelector = ({
   const datePickerId = `#${id}-picker.usa-date-picker__external-input`;
   const formGroupInputRef = useRef<HTMLInputElement>(null);
   const defaultMinDate = '0000-01-01';
+  formGroupClassNames =
+    labelPosition === 'left'
+      ? `${formGroupClassNames} display-flex align-items-center`
+      : `${formGroupClassNames}`;
+  const labelClassNames =
+    labelPosition === 'left'
+      ? 'margin-right-2 margin-bottom-0 display-inline-block'
+      : 'usa-label';
+  const pickerClassNames =
+    labelPosition === 'left'
+      ? 'usa-date-picker display-inline-block left-labeled'
+      : 'usa-date-picker';
 
   useEffect(() => {
     if (formGroupInputRef.current) {
@@ -86,7 +100,7 @@ export const DateSelector = ({
       formGroupRef={formGroupInputRef}
     >
       <label
-        className="usa-label"
+        className={labelClassNames}
         htmlFor={`${id}-picker`}
         id={`${id}-date-picker-label`}
       >
@@ -102,7 +116,7 @@ export const DateSelector = ({
         </div>
       )}
       <div
-        className="usa-date-picker"
+        className={pickerClassNames}
         data-default-value={defaultValue}
         data-max-date={maxDate}
         data-min-date={minDate ?? defaultMinDate}

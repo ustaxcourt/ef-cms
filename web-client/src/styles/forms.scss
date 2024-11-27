@@ -3,6 +3,10 @@
 
 .usa-form-group,
 .usa-fieldset {
+  &.maxw-full {
+    max-width: 100%;
+  }
+
   max-width: 40rem;
   margin-top: 0;
   margin-bottom: 35px;
@@ -685,6 +689,10 @@ label.ustc-upload {
 
 .usa-date-picker {
   min-width: 250px;
+
+  &.left-labeled {
+    min-width: 0;
+  }
 
   * {
     animation: none;
