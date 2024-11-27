@@ -83,6 +83,9 @@ export const efcmsCaseMappings = {
     'petitioners.L.M.countryType.S': {
       type: 'keyword',
     },
+    'petitioners.L.M.email.S': {
+      type: 'keyword',
+    },
     'petitioners.L.M.name.S': {
       type: 'text',
     },

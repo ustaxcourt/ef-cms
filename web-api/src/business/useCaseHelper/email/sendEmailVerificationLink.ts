@@ -13,7 +13,9 @@ export const sendEmailVerificationLink = async ({
   pendingEmail,
   pendingEmailVerificationToken,
 }) => {
-  const verificationLink = `https://app.${process.env.EFCMS_DOMAIN}/verify-email?token=${pendingEmailVerificationToken}`;
+  const verificationLink = `http://localhost:1234/verify-email?token=${pendingEmailVerificationToken}`;
+
+  console.log('*****verificationLink', verificationLink);
 
   const templateHtml = `<div>
   <div>

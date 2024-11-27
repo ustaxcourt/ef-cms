@@ -94,6 +94,8 @@ const updateUserContactInformationHelper = async (
     user: userEntity.validate().toRawObject(),
   });
 
+  await applicationContext.getUtilities().sleep(20000);
+
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
