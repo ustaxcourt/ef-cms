@@ -97,6 +97,14 @@ const updateUserContactInformationHelper = async (
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
+      action: 'update_user_information_in_state',
+    },
+    userId: user.userId,
+  });
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
       action: 'user_contact_initial_update_complete',
     },
     userId: user.userId,
@@ -112,7 +120,7 @@ const updateUserContactInformationHelper = async (
   });
 
   if (isArray(results) && !results.length) {
-    userEntity.setIsUpdatingInformation(undefined);
+    userEntity.setIsUpdatingInformation(false);
     await applicationContext.getPersistenceGateway().updateUser({
       applicationContext,
       user: userEntity.validate().toRawObject(),
@@ -127,6 +135,14 @@ const updateUserContactInformationHelper = async (
       userId: user.userId,
     });
   }
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'update_user_information_in_state',
+    },
+    userId: user.userId,
+  });
 };
 
 /**
