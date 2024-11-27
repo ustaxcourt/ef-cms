@@ -33,9 +33,12 @@ export const verifyUserPendingEmailInteractor = async (
   { token }: { token: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
+  console.log('******* verifyUserPendingEmailInteractor');
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EMAIL_MANAGEMENT)) {
     throw new UnauthorizedError('Unauthorized to manage emails.');
   }
+
+  console.log('******* gonna fetch user');
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -43,6 +46,8 @@ export const verifyUserPendingEmailInteractor = async (
       applicationContext,
       userId: authorizedUser.userId,
     });
+
+  console.log('******* got user', user);
 
   if (
     !user.pendingEmailVerificationToken ||
@@ -73,9 +78,11 @@ export const verifyUserPendingEmailInteractor = async (
     throw new Error('Email is not available');
   }
 
+  console.log('*** updating flag');
   const { updatedUser } = await updateUserPendingEmailRecord(
     applicationContext,
     {
+      setIsUpdatingInformation: true,
       user,
     },
   );
@@ -94,4 +101,47 @@ export const verifyUserPendingEmailInteractor = async (
       type: MESSAGE_TYPES.QUEUE_UPDATE_ASSOCIATED_CASES,
     },
   });
+
+  try {
+    const expectedUpdatedCaseCount = (
+      await applicationContext.getPersistenceGateway().getDocketNumbersByUser({
+        applicationContext,
+        userId: user.userId,
+      })
+    ).length;
+
+    let checkCount = true;
+    while (checkCount) {
+      await applicationContext.getUtilities().sleep(1500);
+      const actualUpdatedCaseCount = await applicationContext
+        .getPersistenceGateway()
+        .getCasesByEmailTotal({
+          applicationContext,
+          email: updatedUser.email!,
+        });
+
+      console.log(
+        'does ccount match',
+        actualUpdatedCaseCount === expectedUpdatedCaseCount,
+        expectedUpdatedCaseCount,
+        actualUpdatedCaseCount,
+      );
+      if (actualUpdatedCaseCount === expectedUpdatedCaseCount)
+        checkCount = false;
+    }
+
+    console.log('*** update complete toggling flag to FALSE');
+    updatedUser.isUpdatingInformation = false;
+    await applicationContext.getPersistenceGateway().updateUser({
+      applicationContext,
+      user: updatedUser,
+    });
+  } catch (e) {
+    console.log('ERROR IN THE NEW CODE', e);
+    updatedUser.isUpdatingInformation = false;
+    await applicationContext.getPersistenceGateway().updateUser({
+      applicationContext,
+      user: updatedUser,
+    });
+  }
 };
