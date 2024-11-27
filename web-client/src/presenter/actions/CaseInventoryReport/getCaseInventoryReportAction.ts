@@ -12,24 +12,19 @@ export const getCaseInventoryReportAction = async ({
   get,
   store,
 }: ActionProps) => {
-  const { associatedJudge, page, status } = get(state.screenMetadata);
+  const { associatedJudge, status } = get(state.screenMetadata);
 
   if (associatedJudge || status) {
     const reportData = await applicationContext
       .getUseCases()
       .getCaseInventoryReportInteractor(applicationContext, {
         associatedJudge,
-        page,
         status,
       });
-    const currentData = get(state.caseInventoryReportData) || {};
 
-    const results = {
-      foundCases: (currentData.foundCases || []).concat(reportData.foundCases),
-      totalCount: reportData.totalCount,
-    };
-
-    store.set(state.caseInventoryReportData, results);
+    store.set(state.caseInventoryReportData, {
+      foundCases: reportData.foundCases,
+    });
   } else {
     store.unset(state.caseInventoryReportData);
   }

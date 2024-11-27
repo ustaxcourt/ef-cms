@@ -1,10 +1,25 @@
+import { NotificationMessage } from '@web-api/notifications/sendNotificationToUserTypes';
+
 /* eslint-disable complexity */
 const noop = () => {};
+
+type MaintenanceModeEngaged = {
+  action: 'maintenance_mode_engaged';
+};
+
+type MaintenanceModeDisengaged = {
+  action: 'maintenance_mode_disengaged';
+};
+
+type SocketRouterNotificationMessage =
+  | NotificationMessage
+  | MaintenanceModeEngaged
+  | MaintenanceModeDisengaged;
 
 export const socketRouter = (app, onMessageCallbackFn?) => {
   return async event => {
     const message = JSON.parse(event.data);
-    const { action } = message;
+    const { action } = message as SocketRouterNotificationMessage;
 
     switch (action) {
       case 'paper_service_started':

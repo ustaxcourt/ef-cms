@@ -1,5 +1,8 @@
 import { CerebralTest } from 'cerebral/test';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  SESSION_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { gotoTrialSessionWorkingCopySequence } from '../sequences/gotoTrialSessionWorkingCopySequence';
 import { judgeUser } from '@shared/test/mockUsers';
@@ -15,7 +18,7 @@ describe('gotoTrialSessionWorkingCopySequence', () => {
     },
     maxCases: 100,
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-    sessionType: 'Regular',
+    sessionType: SESSION_TYPES.regular,
     startDate: '2025-03-01T00:00:00.000Z',
     term: 'Fall',
     termYear: '2025',

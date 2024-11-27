@@ -5,6 +5,7 @@ export function DocketRecordSort({ name, onChange, value }) {
     <select
       aria-label="docket record sort direction"
       className="usa-select margin-top-0 sort"
+      data-testid="docket-record-sort-select"
       id="docket-record-sort"
       name={name}
       role="listbox"
