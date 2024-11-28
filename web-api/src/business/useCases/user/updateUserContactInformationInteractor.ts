@@ -207,7 +207,6 @@ export const determineEntitiesToLock = async (
 
   return {
     identifiers: cases?.map(item => `case|${item.docketNumber}`),
-    retries: 10,
     ttl: 900,
   };
 };
