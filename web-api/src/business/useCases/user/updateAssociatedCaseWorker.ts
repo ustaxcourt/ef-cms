@@ -22,19 +22,12 @@ export const updateAssociatedCaseWorker = async (
     waitTime: 5000,
   });
 
-  const liveUser = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({
-      applicationContext,
-      userId: user.userId,
-    });
-
   if (user.role === ROLES.petitioner) {
     await updatePetitionerCase({
       applicationContext,
       authorizedUser,
       docketNumber,
-      user: liveUser,
+      user,
     });
   }
   if (
@@ -46,7 +39,7 @@ export const updateAssociatedCaseWorker = async (
       applicationContext,
       authorizedUser,
       docketNumber,
-      user: liveUser,
+      user,
     });
   }
 
