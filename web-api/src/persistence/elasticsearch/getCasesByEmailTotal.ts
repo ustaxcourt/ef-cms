@@ -14,10 +14,23 @@ export const getCasesByEmailTotal = async ({
     body: {
       query: {
         bool: {
+          minimum_should_match: 1,
           must: [
             {
               term: {
                 'entityName.S': 'Case',
+              },
+            },
+          ],
+          should: [
+            {
+              term: {
+                'privatePractitioners.L.M.email.S': email,
+              },
+            },
+            {
+              term: {
+                'irsPractitioners.L.M.email.S': email,
               },
             },
             {
@@ -32,10 +45,10 @@ export const getCasesByEmailTotal = async ({
     index: 'efcms-case',
   };
 
-  const { total } = await search({
+  const result = await search({
     applicationContext,
     searchParameters,
   });
 
-  return total;
+  return result.total;
 };
