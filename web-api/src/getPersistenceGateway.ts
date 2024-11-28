@@ -115,6 +115,9 @@ import { getTrialSessions } from './persistence/dynamo/trialSessions/getTrialSes
 import { getUploadPolicy } from './persistence/s3/getUploadPolicy';
 import { getUserByEmail } from './persistence/dynamo/users/getUserByEmail';
 import { getUserById } from './persistence/dynamo/users/getUserById';
+import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/dynamo/users/getUserByIdOnceAllUpdatesComplete';
+import { getUserCaseNote } from '@web-api/persistence/postgres/userCaseNotes/getUserCaseNote';
+import { getUserCaseNoteForCases } from '@web-api/persistence/postgres/userCaseNotes/getUserCaseNoteForCases';
 import { getUsersById } from './persistence/dynamo/users/getUsersById';
 import { getUsersBySearchKey } from './persistence/dynamo/users/getUsersBySearchKey';
 import { getUsersInSection } from './persistence/dynamo/users/getUsersInSection';
@@ -343,6 +346,9 @@ const gatewayMethods = {
   getUploadPolicy,
   getUserByEmail,
   getUserById,
+  getUserByIdOnceAllUpdatesComplete,
+  getUserCaseNote,
+  getUserCaseNoteForCases,
   getUsersById,
   getUsersBySearchKey,
   getUsersInSection,
