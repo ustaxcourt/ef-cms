@@ -15,15 +15,11 @@ export const getCaseDeadlinesInteractor = async (
   applicationContext: IApplicationContext,
   {
     endDate,
-    from,
     judge,
-    pageSize,
     startDate,
   }: {
     endDate: string;
-    from: number;
     judge: string;
-    pageSize: number;
     startDate;
   },
   authorizedUser: UnknownAuthUser,
@@ -32,22 +28,18 @@ export const getCaseDeadlinesInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { foundDeadlines, totalCount } = await applicationContext
+  const { foundDeadlines } = await applicationContext
     .getPersistenceGateway()
     .getCaseDeadlinesByDateRange({
       applicationContext,
       endDate,
-      from,
       judge,
-      pageSize,
       startDate,
     });
 
   const validatedCaseDeadlines = CaseDeadline.validateRawCollection(
     foundDeadlines,
-    {
-      applicationContext,
-    },
+    { applicationContext },
   );
 
   const caseMap = await getCasesByDocketNumbers({
@@ -69,7 +61,7 @@ export const getCaseDeadlinesInteractor = async (
       ]),
     }));
 
-  return { deadlines: afterCaseMapping, totalCount };
+  return { deadlines: afterCaseMapping };
 };
 
 const getCasesByDocketNumbers = async ({

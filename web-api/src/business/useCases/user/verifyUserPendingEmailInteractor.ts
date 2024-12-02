@@ -39,7 +39,10 @@ export const verifyUserPendingEmailInteractor = async (
 
   const user = await applicationContext
     .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+    .getUserByIdOnceAllUpdatesComplete({
+      applicationContext,
+      userId: authorizedUser.userId,
+    });
 
   if (
     !user.pendingEmailVerificationToken ||

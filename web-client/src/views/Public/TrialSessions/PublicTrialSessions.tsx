@@ -5,6 +5,10 @@ import {
 import { BigHeader } from '@web-client/views/BigHeader';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import {
+  FETCHED_TRIAL_SESSIONS_TIMESTAMP_KEY,
+  PUBLIC_TRIAL_SESSIONS_DATA_KEY,
+} from '@shared/business/entities/EntityConstants';
+import {
   Mobile,
   NonMobile,
   NonPhone,
@@ -22,11 +26,10 @@ import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginato
 import { sequences, state } from '@web-client/presenter/app-public.cerebral';
 import React, { useRef, useState } from 'react';
 
-const ROOT = 'publicTrialSessionData';
-
-type TrialsSessionsUiParams = {
+type TrialSessionsUiParams = {
+  fetchedTrialSessionsTimestamp: string;
   publicTrialSessionsHelper: PublicTrialSessionsHelperResults;
-  resetPublicTrialSessionDataSequence: () => void;
+  resetPublicTrialSessionsDataSequence: () => void;
   updateFormValueSequence: (props: {
     index?: number;
     root?: string;
@@ -34,7 +37,7 @@ type TrialsSessionsUiParams = {
     value: any;
     allowEmptyString?: boolean;
   }) => void;
-  publicTrialSessionData: {
+  publicTrialSessionsData: {
     judges?: {
       [key: string]: string;
     };
@@ -53,35 +56,39 @@ type TrialsSessionsUiParams = {
 export const PublicTrialSessions = connect(
   {
     displayProgressSpinnerSequence: sequences.displayProgressSpinnerSequence,
-    publicTrialSessionData: state[ROOT],
+    fetchedTrialSessionsTimestamp: state[FETCHED_TRIAL_SESSIONS_TIMESTAMP_KEY],
+    publicTrialSessionsData: state[PUBLIC_TRIAL_SESSIONS_DATA_KEY],
     publicTrialSessionsHelper: state.publicTrialSessionsHelper,
-    resetPublicTrialSessionDataSequence:
-      sequences.resetPublicTrialSessionDataSequence,
+    resetPublicTrialSessionsDataSequence:
+      sequences.resetPublicTrialSessionsDataSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   function ({
     displayProgressSpinnerSequence,
-    publicTrialSessionData,
+    fetchedTrialSessionsTimestamp,
+    publicTrialSessionsData,
     publicTrialSessionsHelper,
-    resetPublicTrialSessionDataSequence,
+    resetPublicTrialSessionsDataSequence,
     updateFormValueSequence,
   }) {
     return (
       <>
         <BigHeader text="Scheduled Trial Sessions" />
 
-        {NonMobilePublicTrialsSessions({
+        {NonMobilePublicTrialSessions({
           displayProgressSpinnerSequence,
-          publicTrialSessionData,
+          fetchedTrialSessionsTimestamp,
+          publicTrialSessionsData,
           publicTrialSessionsHelper,
-          resetPublicTrialSessionDataSequence,
+          resetPublicTrialSessionsDataSequence,
           updateFormValueSequence,
         })}
-        {MobilePublicTrialsSessions({
+        {MobilePublicTrialSessions({
           displayProgressSpinnerSequence,
-          publicTrialSessionData,
+          fetchedTrialSessionsTimestamp,
+          publicTrialSessionsData,
           publicTrialSessionsHelper,
-          resetPublicTrialSessionDataSequence,
+          resetPublicTrialSessionsDataSequence,
           updateFormValueSequence,
         })}
       </>
@@ -89,27 +96,40 @@ export const PublicTrialSessions = connect(
   },
 );
 
-function NonMobilePublicTrialsSessions({
+function NonMobilePublicTrialSessions({
   displayProgressSpinnerSequence,
-  publicTrialSessionData,
+  fetchedTrialSessionsTimestamp,
+  publicTrialSessionsData,
   publicTrialSessionsHelper,
-  resetPublicTrialSessionDataSequence,
+  resetPublicTrialSessionsDataSequence,
   updateFormValueSequence,
-}: TrialsSessionsUiParams) {
+}: TrialSessionsUiParams) {
   return (
     <NonPhone>
       <section className="usa-section grid-container">
         <div className="grid-row">
           <div className="tablet:grid-col-8 grid-col-12 padding-top-2">
             <FetchedTimeMessage
-              fetchedDateString={publicTrialSessionsHelper.fetchedDateString}
+              fetchedDateString={fetchedTrialSessionsTimestamp}
             ></FetchedTimeMessage>
             <Mobile>
               <div className="tablet:grid-col-4 grid-col-12 padding-top-1">
                 <PublicTrialSessionsRemoteProceedingsCard />
               </div>
             </Mobile>
-            <PublicTrialSessionsFilters ROOT={ROOT} />
+            <PublicTrialSessionsFilters
+              displayProgressSpinnerSequence={displayProgressSpinnerSequence}
+              judges={publicTrialSessionsData.judges || {}}
+              locations={publicTrialSessionsData.locations || {}}
+              proceedingType={publicTrialSessionsData.proceedingType || 'All'}
+              sessionTypeOptions={publicTrialSessionsHelper.sessionTypeOptions}
+              sessionTypes={publicTrialSessionsData.sessionTypes || {}}
+              trialCitiesByState={publicTrialSessionsHelper.trialCitiesByState}
+              trialSessionJudgeOptions={
+                publicTrialSessionsHelper.trialSessionJudgeOptions
+              }
+              updateFormValueSequence={updateFormValueSequence}
+            />
           </div>
           <NonMobile>
             <div className="tablet:grid-col-4 grid-col-12 padding-top-1">
@@ -123,7 +143,7 @@ function NonMobilePublicTrialsSessions({
             data-testid="trial-sessions-reset-filters-button"
             disabled={!publicTrialSessionsHelper.filtersHaveBeenModified}
             onClick={() => {
-              resetPublicTrialSessionDataSequence();
+              resetPublicTrialSessionsDataSequence();
               displayProgressSpinnerSequence({ timeInSeconds: 0.25 });
             }}
           >
@@ -132,7 +152,7 @@ function NonMobilePublicTrialsSessions({
         </div>
         <div className="grid-row padding-top-1">
           <TablePagination
-            pageNumber={publicTrialSessionData.pageNumber || 0}
+            pageNumber={publicTrialSessionsData.pageNumber || 0}
             totalPages={publicTrialSessionsHelper.totalPages}
             updateFormValueSequence={updateFormValueSequence}
           >
@@ -144,22 +164,23 @@ function NonMobilePublicTrialsSessions({
   );
 }
 
-function MobilePublicTrialsSessions({
+function MobilePublicTrialSessions({
   displayProgressSpinnerSequence,
-  publicTrialSessionData,
+  fetchedTrialSessionsTimestamp,
+  publicTrialSessionsData,
   publicTrialSessionsHelper,
-  resetPublicTrialSessionDataSequence,
+  resetPublicTrialSessionsDataSequence,
   updateFormValueSequence,
-}: TrialsSessionsUiParams) {
+}: TrialSessionsUiParams) {
   const {
     judges = {},
     locations = {},
     sessionTypes = {},
-  } = publicTrialSessionData;
+  } = publicTrialSessionsData;
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const publicTrialsSessionUpdateFormValueSequence = (
+  const publicTrialSessionUpdateFormValueSequence = (
     ...args: Parameters<typeof updateFormValueSequence>
   ) => {
     if (displayProgressSpinnerSequence)
@@ -167,7 +188,7 @@ function MobilePublicTrialsSessions({
     updateFormValueSequence(...args);
     updateFormValueSequence({
       key: 'pageNumber',
-      root: ROOT,
+      root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
       value: 0,
     });
   };
@@ -176,7 +197,7 @@ function MobilePublicTrialsSessions({
     <Phone>
       <section className="usa-section grid-container">
         <FetchedTimeMessage
-          fetchedDateString={publicTrialSessionsHelper.fetchedDateString}
+          fetchedDateString={fetchedTrialSessionsTimestamp}
         ></FetchedTimeMessage>
         <div className="padding-top-3">
           <PublicTrialSessionsRemoteProceedingsCard />
@@ -190,13 +211,25 @@ function MobilePublicTrialsSessions({
 
         {isOpen && (
           <>
-            <PublicTrialSessionsFilters ROOT={ROOT} />
+            <PublicTrialSessionsFilters
+              displayProgressSpinnerSequence={displayProgressSpinnerSequence}
+              judges={publicTrialSessionsData.judges || {}}
+              locations={publicTrialSessionsData.locations || {}}
+              proceedingType={publicTrialSessionsData.proceedingType || 'All'}
+              sessionTypeOptions={publicTrialSessionsHelper.sessionTypeOptions}
+              sessionTypes={publicTrialSessionsData.sessionTypes || {}}
+              trialCitiesByState={publicTrialSessionsHelper.trialCitiesByState}
+              trialSessionJudgeOptions={
+                publicTrialSessionsHelper.trialSessionJudgeOptions
+              }
+              updateFormValueSequence={updateFormValueSequence}
+            />
             <Button
               link
               data-testid="trial-sessions-reset-filters-button"
               disabled={!publicTrialSessionsHelper.filtersHaveBeenModified}
               onClick={() => {
-                resetPublicTrialSessionDataSequence();
+                resetPublicTrialSessionsDataSequence();
                 displayProgressSpinnerSequence({ timeInSeconds: 0.25 });
               }}
             >
@@ -215,9 +248,9 @@ function MobilePublicTrialsSessions({
               key={sessionTypeLabel}
               text={sessionTypeLabel}
               onRemove={() => {
-                publicTrialsSessionUpdateFormValueSequence({
+                publicTrialSessionUpdateFormValueSequence({
                   key: `sessionTypes.${sessionTypeKey}`,
-                  root: ROOT,
+                  root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
                   value: undefined,
                 });
               }}
@@ -233,9 +266,9 @@ function MobilePublicTrialsSessions({
               key={sessionTypeLabel}
               text={sessionTypeLabel}
               onRemove={() => {
-                publicTrialsSessionUpdateFormValueSequence({
+                publicTrialSessionUpdateFormValueSequence({
                   key: `locations.${sessionTypeKey}`,
-                  root: ROOT,
+                  root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
                   value: undefined,
                 });
               }}
@@ -251,9 +284,9 @@ function MobilePublicTrialsSessions({
               key={sessionTypeLabel}
               text={sessionTypeLabel}
               onRemove={() => {
-                publicTrialsSessionUpdateFormValueSequence({
+                publicTrialSessionUpdateFormValueSequence({
                   key: `judges.${sessionTypeKey}`,
-                  root: ROOT,
+                  root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
                   value: undefined,
                 });
               }}
@@ -261,7 +294,7 @@ function MobilePublicTrialsSessions({
           ))}
         </div>
         <TablePagination
-          pageNumber={publicTrialSessionData.pageNumber || 0}
+          pageNumber={publicTrialSessionsData.pageNumber || 0}
           totalPages={publicTrialSessionsHelper.totalPages}
           updateFormValueSequence={updateFormValueSequence}
         >
@@ -296,7 +329,7 @@ function TablePagination({
             onPageChange={selectedPage => {
               updateFormValueSequence({
                 key: 'pageNumber',
-                root: ROOT,
+                root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
                 value: selectedPage,
               });
               focusPaginatorTop(paginatorTop);
@@ -315,7 +348,7 @@ function TablePagination({
             onPageChange={selectedPage => {
               updateFormValueSequence({
                 key: 'pageNumber',
-                root: ROOT,
+                root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
                 value: selectedPage,
               });
               focusPaginatorTop(paginatorTop);
