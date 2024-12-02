@@ -151,6 +151,7 @@ import { templateHelper } from './computeds/templateHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
+import { trialSessionPlanningReportViewHelper } from '@web-client/presenter/computeds/trialSessionPlanningReportViewHelper';
 import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCopyHelper';
 import { trialSessionsHelper } from './computeds/trialSessionsHelper';
 import { trialSessionsSummaryHelper } from './computeds/trialSessionsSummaryHelper';
@@ -543,6 +544,10 @@ export const computeds = {
   trialSessionHeaderHelper: trialSessionHeaderHelper as unknown as ReturnType<
     typeof trialSessionHeaderHelper
   >,
+  trialSessionPlanningReportViewHelper:
+    trialSessionPlanningReportViewHelper as unknown as ReturnType<
+      typeof trialSessionPlanningReportViewHelper
+    >,
   trialSessionWorkingCopyHelper:
     trialSessionWorkingCopyHelper as unknown as ReturnType<
       typeof trialSessionWorkingCopyHelper
