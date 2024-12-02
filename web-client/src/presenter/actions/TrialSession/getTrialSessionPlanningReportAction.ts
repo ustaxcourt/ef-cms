@@ -4,13 +4,13 @@ export const getTrialSessionPlanningReportAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const { term, year } = get(state.modal);
+  const { trialTerm, trialYear } = get(state.trialSessionPlanningReportData);
 
   const { previousTerms, trialLocationData } = await applicationContext
     .getUseCases()
     .getTrialSessionPlanningReportDataInteractor(applicationContext, {
-      term,
-      year,
+      term: trialTerm,
+      year: trialYear,
     });
 
   return {

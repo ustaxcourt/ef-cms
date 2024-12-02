@@ -30,7 +30,7 @@ export type TrialLocationData = {
 
 export const getTrialSessionPlanningReportDataInteractor = async (
   applicationContext: ServerApplicationContext,
-  { term, year }: { term: string; year: string },
+  { term, year }: { term: string; year: number },
   authorizedUser: UnknownAuthUser,
 ): Promise<{
   previousTerms: PreviousTerm[];
