@@ -1,4 +1,4 @@
-import { TrialLocationData } from '@web-api/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
+import { TrialLocationData } from '@web-api/business/useCases/trialSessions/getTrialSessionPlanningReportDataInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export type TrialLocationDataFormatted = TrialLocationData & {
