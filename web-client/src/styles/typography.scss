@@ -208,9 +208,9 @@ a:hover {
   font-weight: bold;
 }
 
-h1,
-.heading-2 {
-  @media only screen and (max-width: $medium-screen) {
-    font-size: 1.125em
+.no-wrap-text {
+  @media only screen and (max-width: $small-screen) {
+    white-space: normal;
+    word-wrap: break-word;
   }
 }
