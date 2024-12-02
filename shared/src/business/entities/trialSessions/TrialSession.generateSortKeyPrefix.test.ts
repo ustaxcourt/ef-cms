@@ -1,4 +1,5 @@
 import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
+import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { TrialSession } from './TrialSession';
 
 describe('TrialSession entity', () => {
@@ -14,7 +15,7 @@ describe('TrialSession entity', () => {
     it('should generate correct sort key prefix for a small trial session', () => {
       const trialSession = new TrialSession({
         ...MOCK_TRIAL_REGULAR,
-        sessionType: 'Small',
+        sessionType: SESSION_TYPES.small,
       });
 
       expect(trialSession.generateSortKeyPrefix()).toEqual(
@@ -25,7 +26,7 @@ describe('TrialSession entity', () => {
     it('should generate correct sort key prefix for a hybrid trial session', () => {
       const trialSession = new TrialSession({
         ...MOCK_TRIAL_REGULAR,
-        sessionType: 'Hybrid',
+        sessionType: SESSION_TYPES.hybrid,
       });
 
       expect(trialSession.generateSortKeyPrefix()).toEqual(
