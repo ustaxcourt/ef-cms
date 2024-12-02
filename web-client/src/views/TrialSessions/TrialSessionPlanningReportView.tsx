@@ -9,6 +9,10 @@ export const TrialSessionPlanningReportView = connect(
     trialSessionPlanningReportData: state.trialSessionPlanningReportData,
   },
   function TrialSessionPlanningReportView({ trialSessionPlanningReportData }) {
+    console.log(
+      'trialSessionPlanningReportData',
+      trialSessionPlanningReportData,
+    );
     const { trialTerm, trialYear } = trialSessionPlanningReportData;
     return (
       <>
@@ -26,6 +30,10 @@ export const TrialSessionPlanningReportView = connect(
         <TrialSessionPlanningReportHeader
           trialTerm={trialTerm}
           trialYear={trialYear}
+        />
+        <TrialSessionPlanningReportTable
+          locationData={trialSessionPlanningReportData.trialLocationData}
+          previousTerms={trialSessionPlanningReportData.previousTerms}
         />
       </>
     );
@@ -65,5 +73,53 @@ function TrialSessionPlanningReportHeader({
         </Button>
       </div>
     </div>
+  );
+}
+
+function TrialSessionPlanningReportTable({ locationData, previousTerms }) {
+  return (
+    <>
+      <table>
+        <thead>
+          <tr>
+            <th>Location</th>
+            <th>All</th>
+            <th>Small</th>
+            <th>Regular</th>
+            {previousTerms.map((term, index) => {
+              return <th key={`th-${index}`}>{term.termDisplay}</th>;
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          {locationData &&
+            locationData.map((trialLocation, idx) => {
+              return (
+                <tr key={`row-${idx}`}>
+                  <td>{trialLocation.trialCityState}</td>
+                  <td>{trialLocation.allCaseCount}</td>
+                  <td>{trialLocation.smallCaseCount}</td>
+                  <td>{trialLocation.regularCaseCount}</td>
+                  {trialLocation.previousTermsData &&
+                    trialLocation.previousTermsData.map((prevTerm, index) => {
+                      const hasData =
+                        Array.isArray(prevTerm) && prevTerm.length > 0;
+
+                      return (
+                        <td key={`${idx}-${index}`}>
+                          {hasData &&
+                            prevTerm.map(data => (
+                              <div key={`datum-${idx}`}>{data}</div>
+                            ))}
+                          {!hasData && <div className="calendar-icon" />}
+                        </td>
+                      );
+                    })}
+                </tr>
+              );
+            })}
+        </tbody>
+      </table>
+    </>
   );
 }
