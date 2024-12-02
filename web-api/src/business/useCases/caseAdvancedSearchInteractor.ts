@@ -25,7 +25,7 @@ export type CaseAdvancedSearchParamsRequestType = {
   startDate?: string;
 };
 
-export type CaseAdvancedSearchResult = {
+export type CaseSearchResult = {
   petitionerNames: string[];
   docketNumberWithSuffix: string;
   docketNumber: string;
@@ -44,7 +44,7 @@ export const caseAdvancedSearchInteractor = async (
     startDate,
   }: CaseAdvancedSearchParamsRequestType,
   authorizedUser: UnknownAuthUser,
-): Promise<CaseAdvancedSearchResult[]> => {
+): Promise<CaseSearchResult[]> => {
   let searchStartDate;
   let searchEndDate;
 
