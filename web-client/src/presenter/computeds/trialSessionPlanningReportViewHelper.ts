@@ -1,10 +1,15 @@
-import { PreviousTerm } from '@web-api/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
+import { TrialLocationData } from '@web-api/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
+
+export type TrialLocationDataFormatted = TrialLocationData & {
+  hasNotBeenCalendared: boolean;
+};
 
 type TrialSessionPlanningReportViewHelperResults = {
   citiesNotCalendaredInTwoPreviousTerms: string[][];
   trialSessionPlanningReportHeader: string;
-  previousTermsFormatted: PreviousTerm & { termDisplayFormatted }[];
+  previousTermsFormatted: { termDisplayFormatted }[];
+  trialLocationDataFormatted: TrialLocationDataFormatted[];
 };
 
 function formatCities(allCities: string[]): string[][] {
@@ -56,8 +61,16 @@ export const trialSessionPlanningReportViewHelper = (
 
   const previousTermsFormatted = previousTerms.map(prevTerm => {
     return {
-      ...prevTerm,
       termDisplayFormatted: `${formatTerm(prevTerm.term)} '${prevTerm.year.toString().slice(-2)}`,
+    };
+  });
+
+  const trialLocationDataFormatted = trialLocationData.map(locationData => {
+    return {
+      ...locationData,
+      hasNotBeenCalendared: ALL_CITIES_NOT_CALENDARED.includes(
+        locationData.trialCityState,
+      ),
     };
   });
 
@@ -66,6 +79,7 @@ export const trialSessionPlanningReportViewHelper = (
       ALL_CITIES_NOT_CALENDARED,
     ),
     previousTermsFormatted,
+    trialLocationDataFormatted,
     trialSessionPlanningReportHeader,
   };
 };

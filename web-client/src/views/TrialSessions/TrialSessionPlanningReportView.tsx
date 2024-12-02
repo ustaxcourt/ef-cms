@@ -1,10 +1,7 @@
 import { BigHeader } from '@web-client/views/BigHeader';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  PreviousTerm,
-  TrialLocationData,
-} from '@web-api/business/useCases/trialSessions/getTrialSessionPlanningReportDataInteractor';
+import { TrialLocationDataFormatted } from '@web-client/presenter/computeds/trialSessionPlanningReportViewHelper';
 import { state as cerebralState } from '@web-client/presenter/app.cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
@@ -17,7 +14,6 @@ export const TrialSessionPlanningReportView = connect(
       cerebralState.trialSessionPlanningReportViewHelper,
   },
   function TrialSessionPlanningReportView({
-    trialSessionPlanningReportData,
     trialSessionPlanningReportViewHelper,
   }) {
     const {
@@ -47,7 +43,9 @@ export const TrialSessionPlanningReportView = connect(
         ></CitiesNotCalendaredInPastTwoTerms>
 
         <TrialSessionPlanningReportTable
-          locationData={trialSessionPlanningReportData.trialLocationData}
+          locationData={
+            trialSessionPlanningReportViewHelper.trialLocationDataFormatted
+          }
           previousTerms={
             trialSessionPlanningReportViewHelper.previousTermsFormatted
           }
@@ -92,8 +90,8 @@ function TrialSessionPlanningReportHeader({
 }
 
 type TrialSessionPlanningReportTableParams = {
-  locationData: TrialLocationData[];
-  previousTerms: PreviousTerm & { termDisplayFormatted }[];
+  locationData: TrialLocationDataFormatted[];
+  previousTerms: { termDisplayFormatted }[];
 };
 
 function TrialSessionPlanningReportTable({
@@ -113,14 +111,27 @@ function TrialSessionPlanningReportTable({
             {previousTerms.map((term, index) => {
               return <th key={`th-${index}`}>{term.termDisplayFormatted}</th>;
             })}
+            <th>Special</th>
+            <th>Blocked</th>
           </tr>
         </thead>
         <tbody>
           {locationData &&
             locationData.map((trialLocation, idx) => {
               return (
-                <tr key={`row-${idx}`}>
-                  <td>icon here</td>
+                <tr
+                  className={trialLocation.hasNotBeenCalendared && 'bg-yellow'}
+                  key={`row-${idx}`}
+                >
+                  <td>
+                    {trialLocation.hasNotBeenCalendared && (
+                      <FontAwesomeIcon
+                        className="fa-icon-blue-vivid margin-right-2"
+                        icon="info-circle"
+                        size="lg"
+                      />
+                    )}
+                  </td>
                   <td>{trialLocation.trialCityState}</td>
                   <td>{trialLocation.allCaseCount}</td>
                   <td>{trialLocation.smallCaseCount}</td>
@@ -132,14 +143,18 @@ function TrialSessionPlanningReportTable({
 
                       return (
                         <td key={`${idx}-${index}`}>
-                          {hasData &&
+                          {hasData ? (
                             prevTerm.map(data => (
                               <div key={`datum-${idx}`}>{data}</div>
-                            ))}
-                          {!hasData && <div className="calendar-icon" />}
+                            ))
+                          ) : (
+                            <FontAwesomeIcon icon="calendar-times" size="lg" />
+                          )}
                         </td>
                       );
                     })}
+                  <td></td>
+                  <td></td>
                 </tr>
               );
             })}
