@@ -74,8 +74,8 @@ export const SearchResults = connect(
                       <td className="center-column">{idx + 1}</td>
                       <NonMobile>
                         <td>
-                          {result.petitioners.map(p => (
-                            <div key={p.contactId}>{p.name}</div>
+                          {result.petitionerNames.map(p => (
+                            <div key={p.name}>{p.name}</div>
                           ))}
                         </td>
                       </NonMobile>
@@ -86,9 +86,13 @@ export const SearchResults = connect(
                         <td>{result.formattedFiledDate}</td>
                         <td>{result.caseTitle}</td>
                         <td>
-                          {result.petitionerFullStateNames.map(p => (
-                            <div key={p.contactId}>{p.state}</div>
-                          ))}
+                          {result.petitionerStateNames.map(
+                            (stateName, index) => (
+                              // No need to have a better key here since the data does not need to re-render
+                              // eslint-disable-next-line react/no-array-index-key
+                              <div key={index}>{stateName}</div>
+                            ),
+                          )}
                         </td>
                       </NonMobile>
                       <Mobile>
