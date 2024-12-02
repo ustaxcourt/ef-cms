@@ -11,6 +11,7 @@ describe('getCaseInventoryReportAction', () => {
       .getUseCases()
       .getCaseInventoryReportInteractor.mockReturnValue({
         foundCases: [{ docketNumber: '123-20' }],
+        totalCount: 1,
       });
 
     presenter.providers.applicationContext = applicationContext;
@@ -40,7 +41,8 @@ describe('getCaseInventoryReportAction', () => {
       status: STATUS_TYPES.new,
     });
     expect(result.state.caseInventoryReportData).toEqual({
-      foundCases: [{ docketNumber: '123-20' }],
+      foundCasesForCurrentPage: [{ docketNumber: '123-20' }],
+      foundCasesTotalCount: 1,
     });
   });
 
@@ -53,7 +55,10 @@ describe('getCaseInventoryReportAction', () => {
         selectedPage: 0,
       },
       state: {
-        caseInventoryReportData: { foundCases: [{ docketNumber: '123-20' }] },
+        caseInventoryReportData: {
+          foundCasesForCurrentPage: [{ docketNumber: '123-20' }],
+          foundCasesTotalCount: 1,
+        },
         screenMetadata: {},
       },
     });

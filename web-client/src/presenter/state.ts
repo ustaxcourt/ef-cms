@@ -622,8 +622,8 @@ export const baseState = {
   caseDeadlines: [] as RawCaseDeadline[],
   caseDetail: {} as RawCase,
   caseInventoryReportData: {
-    foundCases: [] as FormattedCaseInventoryReportEntry[],
-    foundCasesCount: 0,
+    foundCasesForCurrentPage: [] as FormattedCaseInventoryReportEntry[],
+    foundCasesTotalCount: 0,
   },
   clientConnectionId: '',
   clientNeedsToRefresh: false,
