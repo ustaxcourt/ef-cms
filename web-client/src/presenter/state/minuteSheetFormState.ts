@@ -93,11 +93,12 @@ export type MinuteSheetFormState = {
     trialHearing: CaseMetadataEntry;
   };
 
-  parties: {
-    noAppreance: boolean;
+  petitioners: {
+    noAppearance: boolean;
     petitioners: PartyFormFields[];
-    respondents: PartyFormFields[];
   };
+
+  respondents: PartyFormFields[];
 
   // 10419 TODO: Could this be lumped in with orders below
   jurisdictionRetained: {
@@ -198,11 +199,22 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
     },
   },
 
-  parties: {
-    noAppreance: false, // this keys to a checkbox that removes all prepopulated petitioners when checked
-    petitioners: [],
-    respondents: [],
+  petitioners: {
+    noAppearance: false,
+    petitioners: [
+      {
+        name: '',
+        datesOfAppearance: '',
+      },
+    ],
   },
+
+  respondents: [
+    {
+      name: '',
+      datesOfAppearance: '',
+    },
+  ],
 
   trialBrief: {
     briefDetails: {},

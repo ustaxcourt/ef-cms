@@ -30,7 +30,7 @@ export const DateSelector = ({
   hintText?: string;
   id: string;
   label?: string;
-  labelPosition?: 'top' | 'left';
+  labelPosition?: 'top' | 'left' | 'hidden';
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   showDateHint?: boolean;
@@ -45,7 +45,10 @@ export const DateSelector = ({
   const labelClassNames =
     labelPosition === 'left'
       ? 'margin-right-2 margin-bottom-0 display-inline-block'
-      : 'usa-label';
+      : // TODO 10419 this is not REALLY hidden at the moment, only wiping styles. rethink
+        labelPosition === 'hidden'
+        ? ''
+        : 'usa-label';
   const pickerClassNames =
     labelPosition === 'left'
       ? 'usa-date-picker display-inline-block left-labeled'
