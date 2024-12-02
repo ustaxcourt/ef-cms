@@ -1,8 +1,10 @@
+import { PreviousTerm } from '@web-api/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 type TrialSessionPlanningReportViewHelperResults = {
   citiesNotCalendaredInTwoPreviousTerms: string[][];
   trialSessionPlanningReportHeader: string;
+  previousTermsFormatted: PreviousTerm & { termDisplayFormatted }[];
 };
 
 function formatCities(allCities: string[]): string[][] {
@@ -36,7 +38,7 @@ function formatTerm(trialTerm: string): string {
 export const trialSessionPlanningReportViewHelper = (
   get,
 ): TrialSessionPlanningReportViewHelperResults => {
-  const { trialLocationData, trialTerm, trialYear } = get(
+  const { previousTerms, trialLocationData, trialTerm, trialYear } = get(
     state.trialSessionPlanningReportData,
   );
 
@@ -52,10 +54,18 @@ export const trialSessionPlanningReportViewHelper = (
 
   const trialSessionPlanningReportHeader = `${formatTerm(trialTerm)} ${trialYear}`;
 
+  const previousTermsFormatted = previousTerms.map(prevTerm => {
+    return {
+      ...prevTerm,
+      termDisplayFormatted: `${formatTerm(prevTerm.term)} '${prevTerm.year.toString().slice(-2)}`,
+    };
+  });
+
   return {
     citiesNotCalendaredInTwoPreviousTerms: formatCities(
       ALL_CITIES_NOT_CALENDARED,
     ),
+    previousTermsFormatted,
     trialSessionPlanningReportHeader,
   };
 };
