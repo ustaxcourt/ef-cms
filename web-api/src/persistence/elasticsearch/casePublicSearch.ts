@@ -1,6 +1,6 @@
 import {
   CaseAdvancedSearchParamsRequestType,
-  CaseAdvancedSearchResult,
+  CaseSearchResult,
 } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import {
   MAX_SEARCH_RESULTS,
@@ -15,7 +15,7 @@ export const casePublicSearch = async ({
 }: {
   applicationContext: IApplicationContext;
   searchTerms: CaseAdvancedSearchParamsRequestType;
-}): Promise<{ results: CaseAdvancedSearchResult }> => {
+}): Promise<{ results: CaseSearchResult[] }> => {
   const { commonQuery, exactMatchesQuery } =
     aggregateCommonQueryParams(searchTerms);
 
