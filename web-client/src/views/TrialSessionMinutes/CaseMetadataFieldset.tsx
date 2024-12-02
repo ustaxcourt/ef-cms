@@ -1,7 +1,10 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import { MinuteSheetFormState } from '@web-client/presenter/state/minuteSheetFormState';
+import {
+  MinuteSheetFormState,
+  TRIAL_HEARING_OPTIONS,
+} from '@web-client/presenter/state/minuteSheetFormState';
 import React from 'react';
 
 export const CaseMetadataFieldset = ({
@@ -238,7 +241,6 @@ export const CaseMetadataFieldset = ({
                     type="checkbox"
                     onBlur={() => onBlurHandler()}
                     onChange={e => {
-                      console.log(`Row index: ${rowIndex}`);
                       onChangeHandler({
                         name: 'recalled',
                         section: 'caseMetadata',
@@ -253,7 +255,7 @@ export const CaseMetadataFieldset = ({
                   />
                   <label
                     className="usa-checkbox__label margin-0"
-                    htmlFor="reCalledTranscriptOrdered"
+                    htmlFor={`reCalledTranscriptOrdered${rowIndex}`}
                   >
                     Transcript ordered
                   </label>
@@ -390,11 +392,10 @@ export const CaseMetadataFieldset = ({
             >
               Type
             </label>
-            <input
-              className="usa-input display-inline-block"
+            <select
+              className="usa-select display-inline-block"
               id="trialHearingType"
               name="trialHearingType"
-              type="text"
               value={caseMetadataFormState.trialHearing.trialHearingType}
               onBlur={() => onBlurHandler()}
               onChange={e => {
@@ -407,7 +408,16 @@ export const CaseMetadataFieldset = ({
                   },
                 });
               }}
-            />
+            >
+              <option value="">- Select -</option>
+              {Object.keys(TRIAL_HEARING_OPTIONS).map(optionKey => {
+                return (
+                  <option key={optionKey} value={optionKey}>
+                    {TRIAL_HEARING_OPTIONS[optionKey]}
+                  </option>
+                );
+              })}
+            </select>
           </FormGroup>
         </div>
         <div className="grid-col-3">

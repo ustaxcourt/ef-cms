@@ -629,7 +629,7 @@ export const presenterSequences = {
     addCaseToTrialSessionSequence as unknown as Function,
   addFactOrReasonSequence,
   addPenaltyInputSequence: addPenaltyInputSequence as unknown as Function,
-  addRecalledRowSequence: addRecalledRowSequence as unknown as Function,
+  addRecalledRowSequence,
   addStatisticToFormSequence: addStatisticToFormSequence as unknown as Function,
   addSupportingDocumentToFormSequence:
     addSupportingDocumentToFormSequence as unknown as Function,

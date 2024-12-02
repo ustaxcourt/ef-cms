@@ -228,7 +228,7 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
   },
 };
 
-const TRIAL_HEARING_OPTIONS = {
+export const TRIAL_HEARING_OPTIONS = {
   furtherHearing: 'Further Hearing',
   furtherTrial: 'Further Trial',
   hearing: 'Hearing',
@@ -238,7 +238,7 @@ const TRIAL_HEARING_OPTIONS = {
 type TrialHearingOption =
   (typeof TRIAL_HEARING_OPTIONS)[keyof typeof TRIAL_HEARING_OPTIONS];
 
-const STATUS_REPORT_ORDERED_FOR_OPTIONS = {
+export const STATUS_REPORT_ORDERED_FOR_OPTIONS = {
   joint: 'Joint',
   other: 'Other',
   petitioner: 'Petitioner',
@@ -248,7 +248,7 @@ const STATUS_REPORT_ORDERED_FOR_OPTIONS = {
 type StatusReportOrderedForOption =
   (typeof STATUS_REPORT_ORDERED_FOR_OPTIONS)[keyof typeof STATUS_REPORT_ORDERED_FOR_OPTIONS];
 
-const MOTION_FILED_BY_OPTIONS = {
+export const MOTION_FILED_BY_OPTIONS = {
   intervenor: 'Intervenor',
   joint: 'Joint',
   petitioner: 'Petitioner',
@@ -258,7 +258,7 @@ const MOTION_FILED_BY_OPTIONS = {
 type MotionFiledByOption =
   (typeof MOTION_FILED_BY_OPTIONS)[keyof typeof MOTION_FILED_BY_OPTIONS];
 
-const MOTION_STATUS_OPTIONS = {
+export const MOTION_STATUS_OPTIONS = {
   cav: 'CAV',
 
   denied: 'Denied',
@@ -279,7 +279,7 @@ const MOTION_STATUS_OPTIONS = {
 export type MotionStatusOption =
   (typeof MOTION_STATUS_OPTIONS)[keyof typeof MOTION_STATUS_OPTIONS];
 
-const MOTION_TYPE_OPTIONS = {
+export const MOTION_TYPE_OPTIONS = {
   motionForContinuance: 'Motion for Continuance',
   motionForGeneralContinuance: 'Motion for General Continuance',
   motionToDismiss: 'Motion to Dismiss',
@@ -291,7 +291,7 @@ const MOTION_TYPE_OPTIONS = {
 export type MotionTypeOption =
   (typeof MOTION_TYPE_OPTIONS)[keyof typeof MOTION_TYPE_OPTIONS];
 
-const ACTION_DOCUMENT_TYPE_OPTIONS = {
+export const ACTION_DOCUMENT_TYPE_OPTIONS = {
   entryOfAppearance: 'Entry of Appearance',
   filing: 'Filing',
   limitedEntryOfAppearance: 'Limited Entry of Appearance',
@@ -305,7 +305,7 @@ const ACTION_DOCUMENT_TYPE_OPTIONS = {
 export type ActionDocumentTypeOption =
   (typeof ACTION_DOCUMENT_TYPE_OPTIONS)[keyof typeof ACTION_DOCUMENT_TYPE_OPTIONS];
 
-const ACTION_FILED_BY_OPTIONS = {
+export const ACTION_FILED_BY_OPTIONS = {
   joint: 'Joint',
   other: 'Other',
   petitioner: 'Petitioner',
@@ -316,7 +316,7 @@ const ACTION_FILED_BY_OPTIONS = {
 export type ActionFiledByOption =
   (typeof ACTION_FILED_BY_OPTIONS)[keyof typeof ACTION_FILED_BY_OPTIONS];
 
-const ACTION_STATUS_OPTIONS = {
+export const ACTION_STATUS_OPTIONS = {
   cav: 'CAV',
   denied: 'Denied',
   filed: 'Filed',
@@ -330,7 +330,7 @@ const ACTION_STATUS_OPTIONS = {
 export type ActionStatusOption =
   (typeof ACTION_STATUS_OPTIONS)[keyof typeof ACTION_STATUS_OPTIONS];
 
-const BRIEF_TYPE_OPTIONS = {
+export const BRIEF_TYPE_OPTIONS = {
   seriatim: 'Seriatim brief',
   seriatimMemorandum: 'Seriatim memorandum brief',
   simultaneous: 'Simultaneous brief',
@@ -339,10 +339,10 @@ const BRIEF_TYPE_OPTIONS = {
   simultaneousmemorandum: 'Simultaneous memorandum brief',
 } as const;
 
-type BriefTypeOption =
+export type BriefTypeOption =
   (typeof BRIEF_TYPE_OPTIONS)[keyof typeof BRIEF_TYPE_OPTIONS];
 
-const EXHIBIT_STATUS_OPTIONS = {
+export const EXHIBIT_STATUS_OPTIONS = {
   admitted: 'Admitted',
   demonstrative: 'Demonstrative',
   identificationOnly: 'Identification only',
