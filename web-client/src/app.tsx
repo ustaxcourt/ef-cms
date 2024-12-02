@@ -40,6 +40,7 @@ import { faCalculator } from '@fortawesome/free-solid-svg-icons/faCalculator';
 import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons/faCalendarAlt';
 import { faCalendarCheck } from '@fortawesome/free-solid-svg-icons/faCalendarCheck';
 import { faCalendarPlus } from '@fortawesome/free-solid-svg-icons/faCalendarPlus';
+import { faCalendarTimes } from '@fortawesome/free-solid-svg-icons/faCalendarTimes';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons/faCaretDown';
 import { faCaretLeft } from '@fortawesome/free-solid-svg-icons/faCaretLeft';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons/faCaretRight';
@@ -157,6 +158,7 @@ const app = {
       faTimes,
       faCalendarCheck,
       faCalendarPlus,
+      faCalendarTimes,
       faCaretDown,
       faCaretLeft,
       faCaretRight,
