@@ -16,7 +16,7 @@ import { capitalize, invert } from 'lodash';
 export type PreviousTerm = {
   term: string;
   termDisplay: string;
-  year: string;
+  year: number;
 };
 
 export type TrialLocationData = {
@@ -26,6 +26,7 @@ export type TrialLocationData = {
   smallCaseCount: number;
   stateAbbreviation: string;
   trialCityState: string;
+  blockedCount: number;
 };
 
 export const getTrialSessionPlanningReportDataInteractor = async (
@@ -59,14 +60,14 @@ const getTrialSessionPlanningReportData = async ({
 }: {
   applicationContext: ServerApplicationContext;
   term: string;
-  year: string;
+  year: number;
 }): Promise<{
   previousTerms: PreviousTerm[];
   trialLocationData: TrialLocationData[];
 }> => {
   const previousTerms: PreviousTerm[] = [];
   let currentTerm: string = term;
-  let currentYear: string = year;
+  let currentYear: number = year;
   for (let i = 0; i < 3; i++) {
     const previous = getPreviousTerm(currentTerm, currentYear);
     previousTerms.push(previous);
@@ -101,7 +102,7 @@ const getTrialSessionPlanningReportData = async ({
 
 const getPreviousTerm = (
   currentTerm: string,
-  currentYear: string,
+  currentYear: number,
 ): PreviousTerm => {
   const terms = [
     `fall ${+currentYear - 1}`,
@@ -117,7 +118,7 @@ const getPreviousTerm = (
   return {
     term,
     termDisplay,
-    year,
+    year: Number(year),
   };
 };
 
@@ -144,12 +145,20 @@ const getTrialLocation = async (
       procedureType: 'Small',
       trialCity: trialCityStateStripped,
     });
+
   const eligibleCasesRegular = await applicationContext
     .getPersistenceGateway()
     .getEligibleCasesForTrialCity({
       applicationContext,
       procedureType: 'Regular',
       trialCity: trialCityStateStripped,
+    });
+
+  const blockedCasesResult = await applicationContext
+    .getPersistenceGateway()
+    .getBlockedCases({
+      applicationContext,
+      trialLocation: trialCityState,
     });
 
   const smallCaseCount = eligibleCasesSmall.length;
@@ -161,7 +170,7 @@ const getTrialLocation = async (
     const previousTermSessions = allTrialSessions.filter(
       trialSession =>
         trialSession.term.toLowerCase() === previousTerm.term.toLowerCase() &&
-        trialSession.termYear === previousTerm.year &&
+        Number(trialSession.termYear) === previousTerm.year &&
         trialSession.trialLocation === trialCityState,
     );
 
@@ -196,6 +205,7 @@ const getTrialLocation = async (
 
   return {
     allCaseCount,
+    blockedCount: blockedCasesResult.length,
     previousTermsData,
     regularCaseCount,
     smallCaseCount,
