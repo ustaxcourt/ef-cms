@@ -168,7 +168,10 @@ export const CaseDetailHeader = connect<
                         size="1x"
                       />
                     )}
-                    <CaseLink formattedCase={formattedCaseDetail}>
+                    <CaseLink
+                      className="no-wrap-text"
+                      formattedCase={formattedCaseDetail}
+                    >
                       Docket Number:{' '}
                       {formattedCaseDetail.docketNumberWithSuffix}
                     </CaseLink>
