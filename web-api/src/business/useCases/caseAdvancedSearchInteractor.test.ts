@@ -246,7 +246,7 @@ describe('caseAdvancedSearchInteractor', () => {
     ]);
   });
 
-  it('BUG: should return only unnecessary advanced search case data', async () => {
+  it('BUG: should return only necessary advanced search case data', async () => {
     applicationContext
       .getPersistenceGateway()
       .caseAdvancedSearch.mockResolvedValue([MOCK_CASE_SEARCH_RESULT]);
