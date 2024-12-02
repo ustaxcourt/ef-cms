@@ -74,11 +74,11 @@ describe('caseInventoryReportHelper', () => {
     });
   });
 
-  it('should sort and format cases from caseInventoryReportData.foundCases', () => {
+  it('should sort and format cases from caseInventoryReportData.foundCasesForCurrentPage', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
-          foundCases: [
+          foundCasesForCurrentPage: [
             {
               correspondence: [],
               docketNumber: '123-20',
@@ -96,6 +96,7 @@ describe('caseInventoryReportHelper', () => {
               docketNumberWithSuffix: '135-19',
             },
           ],
+          foundCasesTotalCount: '3',
         },
         screenMetadata: {},
       },
@@ -118,8 +119,7 @@ describe('caseInventoryReportHelper', () => {
     let result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
-          foundCases: [],
-          foundCasesCount: testCaseInventoryPageSize * 3, // three pages of data
+          foundCasesTotalCount: testCaseInventoryPageSize * 3, // three pages of data
         },
         screenMetadata: {},
       },
@@ -130,8 +130,7 @@ describe('caseInventoryReportHelper', () => {
     result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
-          foundCases: [],
-          foundCasesCount: testCaseInventoryPageSize + 1,
+          foundCasesTotalCount: testCaseInventoryPageSize + 1,
         },
         screenMetadata: {},
       },
@@ -142,8 +141,7 @@ describe('caseInventoryReportHelper', () => {
     result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
-          foundCases: [],
-          foundCasesCount: 0,
+          foundCasesTotalCount: 0,
         },
         screenMetadata: {},
       },
@@ -152,12 +150,12 @@ describe('caseInventoryReportHelper', () => {
     expect(result.pageCount).toEqual(0);
   });
 
-  it('should show the no results message if a filter is selected but foundCasesCount is 0', () => {
+  it('should show the no results message if a filter is selected but foundCasesTotalCount is 0', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
-          foundCases: [],
-          foundCasesCount: 0,
+          foundCasesForCurrentPage: [],
+          foundCasesTotalCount: 0,
         },
         screenMetadata: {
           associatedJudge: CHIEF_JUDGE,
@@ -171,12 +169,12 @@ describe('caseInventoryReportHelper', () => {
     expect(result.showResultsTable).toBeFalsy();
   });
 
-  it('should show the select a filter message if foundCasesCount is 0 and a filter is not selected', () => {
+  it('should show the select a filter message if foundCasesTotalCount is 0 and a filter is not selected', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
-          foundCases: [],
-          foundCasesCount: 0,
+          foundCasesForCurrentPage: [],
+          foundCasesTotalCount: 0,
         },
         screenMetadata: {},
       },
@@ -187,12 +185,18 @@ describe('caseInventoryReportHelper', () => {
     expect(result.showResultsTable).toBeFalsy();
   });
 
-  it('should show the results table if foundCasesCount is not 0', () => {
+  it('should show the results table if foundCasesTotalCount is not 0', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
-          foundCases: [{ correspondence: [], docketNumber: '123-20' }],
-          foundCasesCount: 1,
+          foundCasesForCurrentPage: [
+            {
+              correspondence: [],
+              docketNumber: '123-20',
+              docketNumberWithSuffix: '123-20',
+            },
+          ],
+          foundCasesTotalCount: 1,
         },
         screenMetadata: {},
       },

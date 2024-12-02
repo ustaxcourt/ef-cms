@@ -12,8 +12,9 @@ import React, { useRef, useState } from 'react';
 export const CaseInventoryReport = connect(
   {
     caseInventoryReportHelper: state.caseInventoryReportHelper,
-    foundCases: state.caseInventoryReportData.foundCases,
-    foundCasesCount: state.caseInventoryReportData.foundCasesCount,
+    foundCasesForCurrentPage:
+      state.caseInventoryReportData.foundCasesForCurrentPage,
+    foundCasesTotalCount: state.caseInventoryReportData.foundCasesTotalCount,
     getCaseInventoryReportSequence: sequences.getCaseInventoryReportSequence,
     gotoPrintableCaseInventoryReportSequence:
       sequences.gotoPrintableCaseInventoryReportSequence,
@@ -21,8 +22,8 @@ export const CaseInventoryReport = connect(
   },
   function CaseInventoryReport({
     caseInventoryReportHelper,
-    foundCases,
-    foundCasesCount,
+    foundCasesForCurrentPage,
+    foundCasesTotalCount,
     getCaseInventoryReportSequence,
     gotoPrintableCaseInventoryReportSequence,
     screenMetadata,
@@ -126,7 +127,7 @@ export const CaseInventoryReport = connect(
               <div className="grid-row grid-gap margin-top-1">
                 <div className="grid-col-12 text-align-right">
                   <span className="text-semibold">Count:</span>{' '}
-                  {foundCasesCount}
+                  {foundCasesTotalCount}
                 </div>
               </div>
               <div className="grid-row grid-gap margin-top-1">
@@ -156,7 +157,7 @@ export const CaseInventoryReport = connect(
                       </tr>
                     </thead>
                     <tbody>
-                      {foundCases.map(row => (
+                      {foundCasesForCurrentPage.map(row => (
                         <tr key={row.docketNumber}>
                           <td className="width-205">
                             <ConsolidatedCaseIcon
