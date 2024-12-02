@@ -23,22 +23,66 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { RestrictedCase } from '@shared/business/entities/cases/RestrictedCase';
-import { caseContactAddressSealedFormatter } from '@shared/business/utilities/caseFilter';
+import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
 
-export function CaseFactory({
+function assertInstanceOf<T>(
+  instance: any,
+  constructor: { new (...args: any[]): T },
+  errorMessage: string,
+): asserts instance is T {
+  if (!(instance instanceof constructor)) {
+    throw new Error(errorMessage);
+  }
+}
+
+export class CaseFactory {
+  private static getCaseOfType<T>({
+    constructor,
+    rawCase,
+    user,
+  }: {
+    constructor: { new (...args: any[]): T };
+    rawCase: any;
+    user: UnknownAuthUser;
+  }) {
+    const theCase = constructCaseForUser({ rawCase, user });
+    assertInstanceOf(
+      theCase,
+      constructor,
+      `Requested ${constructor.name} from CaseFactory, but user does not have access`,
+    );
+    return theCase as T;
+  }
+
+  // If you are sure you should be working with the full case details, call this
+  static getFullCase({
+    rawCase,
+    user,
+  }: {
+    rawCase: any;
+    user: UnknownAuthUser;
+  }) {
+    return this.getCaseOfType<Case>({ constructor: Case, rawCase, user });
+  }
+
+  static getCase({ rawCase, user }: { rawCase: any; user: UnknownAuthUser }) {
+    return constructCaseForUser({ rawCase, user });
+  }
+}
+
+// A centralized function to format and construct a case given a user and rawCase data.
+function constructCaseForUser({
   rawCase,
   user,
 }: {
   rawCase: any;
   user: UnknownAuthUser;
 }): Case | PublicCase | RestrictedCase {
-  // TODO: Return type of narrower Case which FullCase, PublicCase, and RestrictedCase extend? Or union type?
   const userIsLoggedIn = isAuthUser(user);
   const caseIsSealed = isSealedCase(rawCase);
   rawCase.isSealed = caseIsSealed;
 
-  // 10502 TODO: Should this be moved to the constructors? If so, probably on a root class that is extended.
-  rawCase = caseContactAddressSealedFormatter(rawCase, user);
+  rawCase = formatSealedAddresses(rawCase, user);
   rawCase = decorateForCaseStatus(rawCase);
 
   if (!userIsLoggedIn) {
@@ -47,11 +91,10 @@ export function CaseFactory({
       : new PublicCase(rawCase, { authorizedUser: user });
   }
 
-  if (isAuthorized(user, ROLE_PERMISSIONS.GET_ALL_CASES)) {
+  if (isAuthorized(user, ROLE_PERMISSIONS.GET_ALL_CASE_DATA)) {
     return new Case(rawCase, { authorizedUser: user });
   }
 
-  // 10502 TODO: Should this be on the Case constructor?
   // Users who cannot get all case data should not see entries that are not on the record, like drafts,
   // EXCEPT the IRS superuser, who can see only the non-docket STIN document
   filterDocketEntriesNotOnDocketRecord({ authorizedUser: user, rawCase });
@@ -78,7 +121,7 @@ export function CaseFactory({
 
   // User is logged in but neither has permissions to view all cases nor is associated with the case
   if (
-    !isAuthorized(user, ROLE_PERMISSIONS.GET_ALL_CASES) &&
+    !isAuthorized(user, ROLE_PERMISSIONS.GET_ALL_CASE_DATA) &&
     !userIsAssociatedWithCase
   ) {
     return caseIsSealed
@@ -86,6 +129,7 @@ export function CaseFactory({
       : new PublicCase(rawCase, { authorizedUser: user });
   }
 
+  // By default, return a PublicCase
   return new PublicCase(rawCase, { authorizedUser: user });
 }
 

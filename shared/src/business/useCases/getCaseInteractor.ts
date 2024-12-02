@@ -34,5 +34,5 @@ export const getCaseInteractor = async (
     throw error;
   }
 
-  return CaseFactory({ rawCase: caseRecord, user: authorizedUser });
+  return CaseFactory.getCase({ rawCase: caseRecord, user: authorizedUser });
 };

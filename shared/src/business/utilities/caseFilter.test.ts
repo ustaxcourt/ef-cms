@@ -3,10 +3,7 @@ import {
   COUNTRY_TYPES,
   ROLES,
 } from '../entities/EntityConstants';
-import {
-  caseContactAddressSealedFormatter,
-  caseSearchFilter,
-} from './caseFilter';
+import { caseSearchFilter, formatSealedAddresses } from './caseFilter';
 import {
   mockIrsPractitionerUser,
   mockIrsSuperuser,
@@ -47,7 +44,7 @@ describe('caseFilter', () => {
         { ...createContactInfo(), contactType: CONTACT_TYPES.secondary },
       ];
 
-      const result = caseContactAddressSealedFormatter(caseDetail, {
+      const result = formatSealedAddresses(caseDetail, {
         role: ROLES.petitioner,
       });
 
