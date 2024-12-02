@@ -1,13 +1,16 @@
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { MinuteSheetFormState } from '@web-client/presenter/state/minuteSheetFormState';
 import React from 'react';
 
 export const CaseMetadataFieldset = ({
+  addRecalledRowHandler,
   caseMetadataFormState,
   onBlurHandler,
   onChangeHandler,
 }: {
+  addRecalledRowHandler: () => void;
   onChangeHandler: ({
     name,
     section,
@@ -15,7 +18,7 @@ export const CaseMetadataFieldset = ({
   }: {
     name: string;
     section: string;
-    value: string | boolean;
+    value: string | boolean | object;
   }) => void;
   onBlurHandler: () => void;
   caseMetadataFormState: MinuteSheetFormState['caseMetadata'];
@@ -35,9 +38,12 @@ export const CaseMetadataFieldset = ({
             labelPosition="left"
             onChange={e =>
               onChangeHandler({
-                name: e.target.name,
-                value: e.target.value,
+                name: 'called',
                 section: 'caseMetadata',
+                value: {
+                  ...caseMetadataFormState.called,
+                  date: e.target.value,
+                },
               })
             }
           />
@@ -59,9 +65,12 @@ export const CaseMetadataFieldset = ({
               onBlur={() => onBlurHandler()}
               onChange={e =>
                 onChangeHandler({
-                  name: e.target.name,
-                  value: e.target.value,
+                  name: 'called',
                   section: 'caseMetadata',
+                  value: {
+                    ...caseMetadataFormState.called,
+                    note: e.target.value,
+                  },
                 })
               }
             />
@@ -78,13 +87,16 @@ export const CaseMetadataFieldset = ({
                 name="calledTranscriptOrdered"
                 type="checkbox"
                 onBlur={() => onBlurHandler()}
-                onChange={e => {
+                onChange={e =>
                   onChangeHandler({
-                    name: e.target.name,
-                    value: e.target.checked,
+                    name: 'called',
                     section: 'caseMetadata',
-                  });
-                }}
+                    value: {
+                      ...caseMetadataFormState.called,
+                      transcriptOrdered: e.target.checked,
+                    },
+                  })
+                }
               />
               <label
                 className="usa-checkbox__label margin-0"
@@ -109,9 +121,12 @@ export const CaseMetadataFieldset = ({
             labelPosition="left"
             onChange={e =>
               onChangeHandler({
-                name: e.target.name,
-                value: e.target.value,
+                name: 'notCalled',
                 section: 'caseMetadata',
+                value: {
+                  ...caseMetadataFormState.notCalled,
+                  date: e.target.value,
+                },
               })
             }
           />
@@ -133,9 +148,12 @@ export const CaseMetadataFieldset = ({
               onBlur={() => onBlurHandler()}
               onChange={e =>
                 onChangeHandler({
-                  name: e.target.name,
-                  value: e.target.value,
+                  name: 'notCalled',
                   section: 'caseMetadata',
+                  value: {
+                    ...caseMetadataFormState.notCalled,
+                    note: e.target.value,
+                  },
                 })
               }
             />
@@ -143,80 +161,118 @@ export const CaseMetadataFieldset = ({
         </div>
         <div className="grid-col-2"></div>
       </div>
-      <div className="grid-row grid-gap align-items-center margin-bottom-1">
-        {/* TODO 10419 Need to update onChange handling to support recalled being a nested structure, multiple rows. */}
-        <div className="grid-col-fill">
-          <span className="usa-label margin-bottom-0">Re-called</span>
-        </div>
-        <div className="grid-col-auto">
-          <DateSelector
-            defaultValue={undefined}
-            formGroupClassNames="margin-bottom-0"
-            id="reCalledDate"
-            label="Date(s)"
-            labelPosition="left"
-            onChange={e =>
-              onChangeHandler({
-                name: e.target.name,
-                value: e.target.value,
-                section: 'caseMetadata',
-              })
-            }
-          />
-        </div>
-        <div className="grid-col-6">
-          <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
-            <label
-              className="margin-right-2 margin-bottom-0 display-inline-block"
-              htmlFor="reCalledNote"
-            >
-              Note
-            </label>
-            <input
-              className="usa-input display-inline-block maxw-full"
-              id="reCalledNote"
-              name="reCalledNote"
-              type="text"
-              value={caseMetadataFormState.recalled[0]?.note}
-              onBlur={() => onBlurHandler()}
-              onChange={e =>
-                onChangeHandler({
-                  name: e.target.name,
-                  value: e.target.value,
-                  section: 'caseMetadata',
-                })
-              }
-            />
-          </FormGroup>
-        </div>
-        <div className="grid-col-2">
-          <FormGroup className="margin-bottom-0 display-flex align-items-center">
-            <div className="usa-checkbox">
-              <input
-                aria-describedby="representing-legend"
-                checked={caseMetadataFormState.recalled[0]?.transcriptOrdered}
-                className="usa-checkbox__input"
-                id="reCalledTranscriptOrdered"
-                name="reCalledTranscriptOrdered"
-                type="checkbox"
-                onBlur={() => onBlurHandler()}
-                onChange={e => {
-                  onChangeHandler({
-                    name: e.target.name,
-                    value: e.target.checked,
-                    section: 'caseMetadata',
-                  });
-                }}
-              />
-              <label
-                className="usa-checkbox__label margin-0"
-                htmlFor="reCalledTranscriptOrdered"
-              >
-                Transcript ordered
-              </label>
+
+      {caseMetadataFormState.recalled.map((row, rowIndex) => {
+        return (
+          <div
+            className="grid-row grid-gap align-items-center margin-bottom-1"
+            key={`recalled-row-${rowIndex}`}
+          >
+            <div className="grid-col-fill">
+              {rowIndex === 0 && (
+                <span className="usa-label margin-bottom-0">Re-called</span>
+              )}
             </div>
-          </FormGroup>
-        </div>
+            <div className="grid-col-auto">
+              <DateSelector
+                defaultValue={undefined}
+                formGroupClassNames="margin-bottom-0"
+                id="reCalledDate"
+                label="Date(s)"
+                labelPosition="left"
+                onChange={e =>
+                  onChangeHandler({
+                    name: 'recalled',
+                    section: 'caseMetadata',
+                    value: caseMetadataFormState.recalled.map((item, index) =>
+                      index === rowIndex
+                        ? { ...item, date: e.target.value }
+                        : item,
+                    ),
+                  })
+                }
+              />
+            </div>
+            <div className="grid-col-6">
+              <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
+                <label
+                  className="margin-right-2 margin-bottom-0 display-inline-block"
+                  htmlFor="reCalledNote"
+                >
+                  Note
+                </label>
+                <input
+                  className="usa-input display-inline-block maxw-full"
+                  id="reCalledNote"
+                  name="reCalledNote"
+                  type="text"
+                  value={caseMetadataFormState.recalled[rowIndex]?.note}
+                  onBlur={() => onBlurHandler()}
+                  onChange={e =>
+                    onChangeHandler({
+                      name: 'recalled',
+                      section: 'caseMetadata',
+                      value: caseMetadataFormState.recalled.map(
+                        (item, index) =>
+                          index === rowIndex
+                            ? { ...item, note: e.target.value }
+                            : item,
+                      ),
+                    })
+                  }
+                />
+              </FormGroup>
+            </div>
+            <div className="grid-col-2">
+              <FormGroup className="margin-bottom-0 display-flex align-items-center">
+                <div className="usa-checkbox">
+                  <input
+                    aria-describedby="representing-legend"
+                    checked={
+                      caseMetadataFormState.recalled[rowIndex]
+                        ?.transcriptOrdered
+                    }
+                    className="usa-checkbox__input"
+                    id={`reCalledTranscriptOrdered${rowIndex}`}
+                    name={`reCalledTranscriptOrdered${rowIndex}`}
+                    type="checkbox"
+                    onBlur={() => onBlurHandler()}
+                    onChange={e => {
+                      console.log(`Row index: ${rowIndex}`);
+                      onChangeHandler({
+                        name: 'recalled',
+                        section: 'caseMetadata',
+                        value: caseMetadataFormState.recalled.map(
+                          (item, index) =>
+                            index === rowIndex
+                              ? { ...item, transcriptOrdered: e.target.checked }
+                              : item,
+                        ),
+                      });
+                    }}
+                  />
+                  <label
+                    className="usa-checkbox__label margin-0"
+                    htmlFor="reCalledTranscriptOrdered"
+                  >
+                    Transcript ordered
+                  </label>
+                </div>
+              </FormGroup>
+            </div>
+          </div>
+        );
+      })}
+      <div className="grid-row grid-gap align-items-center margin-bottom-1">
+        <Button
+          secondary={true}
+          onClick={e => {
+            e.preventDefault();
+            addRecalledRowHandler();
+          }}
+        >
+          Add Recall
+        </Button>
       </div>
       <div className="grid-row grid-gap align-items-center margin-bottom-1">
         <div className="grid-col-fill">
@@ -231,9 +287,12 @@ export const CaseMetadataFieldset = ({
             labelPosition="left"
             onChange={e =>
               onChangeHandler({
-                name: e.target.name,
-                value: e.target.value,
+                name: 'pretrialConference',
                 section: 'caseMetadata',
+                value: {
+                  ...caseMetadataFormState.pretrialConference,
+                  date: e.target.value,
+                },
               })
             }
           />
@@ -255,9 +314,12 @@ export const CaseMetadataFieldset = ({
               onBlur={() => onBlurHandler()}
               onChange={e =>
                 onChangeHandler({
-                  name: e.target.name,
-                  value: e.target.value,
+                  name: 'pretrialConference',
                   section: 'caseMetadata',
+                  value: {
+                    ...caseMetadataFormState.pretrialConference,
+                    note: e.target.value,
+                  },
                 })
               }
             />
@@ -278,9 +340,12 @@ export const CaseMetadataFieldset = ({
                 onBlur={() => onBlurHandler()}
                 onChange={e => {
                   onChangeHandler({
-                    name: e.target.name,
-                    value: e.target.checked,
+                    name: 'pretrialConference',
                     section: 'caseMetadata',
+                    value: {
+                      ...caseMetadataFormState.pretrialConference,
+                      transcriptOrdered: e.target.checked,
+                    },
                   });
                 }}
               />
@@ -305,13 +370,16 @@ export const CaseMetadataFieldset = ({
             id="trialHearingDate"
             label="Date(s)"
             labelPosition="left"
-            onChange={e =>
+            onChange={e => {
               onChangeHandler({
-                name: e.target.name,
-                value: e.target.value,
+                name: 'trialHearing',
                 section: 'caseMetadata',
-              })
-            }
+                value: {
+                  ...caseMetadataFormState.trialHearing,
+                  date: e.target.value,
+                },
+              });
+            }}
           />
         </div>
         <div className="grid-col-3">
@@ -329,13 +397,16 @@ export const CaseMetadataFieldset = ({
               type="text"
               value={caseMetadataFormState.trialHearing.trialHearingType}
               onBlur={() => onBlurHandler()}
-              onChange={e =>
+              onChange={e => {
                 onChangeHandler({
-                  name: e.target.name,
-                  value: e.target.value,
+                  name: 'trialHearing',
                   section: 'caseMetadata',
-                })
-              }
+                  value: {
+                    ...caseMetadataFormState.trialHearing,
+                    trialHearingType: e.target.value,
+                  },
+                });
+              }}
             />
           </FormGroup>
         </div>
@@ -354,13 +425,16 @@ export const CaseMetadataFieldset = ({
               type="text"
               value={caseMetadataFormState.trialHearing.note}
               onBlur={() => onBlurHandler()}
-              onChange={e =>
+              onChange={e => {
                 onChangeHandler({
-                  name: e.target.name,
-                  value: e.target.value,
+                  name: 'trialHearing',
                   section: 'caseMetadata',
-                })
-              }
+                  value: {
+                    ...caseMetadataFormState.trialHearing,
+                    note: e.target.value,
+                  },
+                });
+              }}
             />
           </FormGroup>
         </div>
@@ -377,9 +451,12 @@ export const CaseMetadataFieldset = ({
                 onBlur={() => onBlurHandler()}
                 onChange={e => {
                   onChangeHandler({
-                    name: e.target.name,
-                    value: e.target.checked,
+                    name: 'trialHearing',
                     section: 'caseMetadata',
+                    value: {
+                      ...caseMetadataFormState.trialHearing,
+                      transcriptOrdered: e.target.checked,
+                    },
                   });
                 }}
               />

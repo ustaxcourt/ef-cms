@@ -16,9 +16,9 @@ export const initializeTrialSessionMinutesSheetFormAction = ({
 
   console.log('Case Detail: ', caseDetail);
   store.set(state.minuteSheetForm.trialSessionMetadata, {
-    judge: formattedTrialSession.judge!.name,
-    trialClerk: formattedTrialSession.trialClerk!.name,
     courtReporter: formattedTrialSession.courtReporter,
+    judge: formattedTrialSession.judge!.name,
     remoteSession: formattedTrialSession.isRemoteSession,
+    trialClerk: formattedTrialSession.trialClerk!.name,
   });
 };

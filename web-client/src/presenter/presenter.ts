@@ -11,6 +11,7 @@ import { addAnotherIrsNoticeToFormSequence } from '@web-client/presenter/sequenc
 import { addCaseToTrialSessionSequence } from './sequences/addCaseToTrialSessionSequence';
 import { addFactOrReasonSequence } from '@web-client/presenter/sequences/addFactOrReasonSequence';
 import { addPenaltyInputSequence } from './sequences/addPenaltyInputSequence';
+import { addRecalledRowSequence } from './sequences/TrialSessionMinutes/addRecalledRowSequence';
 import { addStatisticToFormSequence } from './sequences/addStatisticToFormSequence';
 import { addSupportingDocumentToFormSequence } from './sequences/addSupportingDocumentToFormSequence';
 import { adminContactUpdateCompleteSequence } from './sequences/adminContactUpdateCompleteSequence';
@@ -628,6 +629,7 @@ export const presenterSequences = {
     addCaseToTrialSessionSequence as unknown as Function,
   addFactOrReasonSequence,
   addPenaltyInputSequence: addPenaltyInputSequence as unknown as Function,
+  addRecalledRowSequence: addRecalledRowSequence as unknown as Function,
   addStatisticToFormSequence: addStatisticToFormSequence as unknown as Function,
   addSupportingDocumentToFormSequence:
     addSupportingDocumentToFormSequence as unknown as Function,
@@ -840,6 +842,7 @@ export const presenterSequences = {
     gotoAddCourtIssuedDocketEntrySequence as unknown as Function,
   gotoAddDeficiencyStatisticsSequence:
     gotoAddDeficiencyStatisticsSequence as unknown as Function,
+  goToTrialSessionMinutesSequence,
   gotoAddOtherStatisticsSequence:
     gotoAddOtherStatisticsSequence as unknown as Function,
   gotoAddPaperFilingSequence: gotoAddPaperFilingSequence as unknown as Function,
@@ -858,7 +861,6 @@ export const presenterSequences = {
     gotoCaseAssociationRequestSequence as unknown as Function,
   gotoCaseDeadlineReportSequence:
     gotoCaseDeadlineReportSequence as unknown as Function,
-  goToTrialSessionMinutesSequence,
   gotoCaseDetailSequence: gotoCaseDetailSequence as unknown as Function,
   gotoCaseInventoryReportSequence:
     gotoCaseInventoryReportSequence as unknown as Function,

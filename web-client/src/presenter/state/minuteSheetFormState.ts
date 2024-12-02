@@ -152,13 +152,7 @@ export type MinuteSheetFormState = {
 };
 
 export const initialMinuteSheetFormState: MinuteSheetFormState = {
-  // 10419 TODO: What is a good conceptual name for this section of the form?
-  trialSessionMetadata: {
-    judge: '',
-    trialClerk: '',
-    courtReporter: '',
-    remoteSession: false,
-  },
+  actionsAndFilings: [],
 
   caseMetadata: {
     called: {
@@ -169,13 +163,37 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
       date: '',
       note: '',
     },
-    recalled: [],
     pretrialConference: {
       date: '',
       note: '',
     },
+    recalled: [{ date: '', note: '', transcriptOrdered: false }],
     trialHearing: {
       date: '',
+      note: '',
+    },
+  },
+
+  exhibits: [],
+
+  jurisdictionRetained: {
+    continued: false,
+    date: '',
+    note: '',
+  },
+
+  motions: [],
+
+  orders: {
+    statusReportOrdered: {
+      date: '',
+      dueDate: '',
+      note: '',
+      orderedFor: undefined,
+    },
+    stipulatedDecisionOrdered: {
+      date: '',
+      dueDate: '',
       note: '',
     },
   },
@@ -186,113 +204,101 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
     respondents: [],
   },
 
-  jurisdictionRetained: {
-    continued: false,
-    date: '',
-    note: '',
-  },
-
-  orders: {
-    statusReportOrdered: {
-      date: '',
-      dueDate: '',
-      orderedFor: undefined,
-      note: '',
-    },
-    stipulatedDecisionOrdered: {
-      date: '',
-      dueDate: '',
-      note: '',
-    },
-  },
-
-  motions: [],
-
-  actionsAndFilings: [],
-
   trialBrief: {
-    dateSubmitted: '',
-    totalTrialHours: 0,
-    dateBenchOpinionRendered: '',
-    transcriptOrdered: false,
-    note: '',
-    briefType: '',
     briefDetails: {},
+    briefType: '',
+    dateBenchOpinionRendered: '',
+    dateSubmitted: '',
+    note: '',
+    totalTrialHours: 0,
+    transcriptOrdered: false,
+  },
+
+  // 10419 TODO: What is a good conceptual name for this section of the form?
+  trialSessionMetadata: {
+    courtReporter: '',
+    judge: '',
+    remoteSession: false,
+    trialClerk: '',
   },
 
   witnesses: {
     petitionerWitnesses: [], // just an array of strings, each of which is a name
     respondentWitnesses: [], // just an array of strings, each of which is a name
   },
-
-  exhibits: [],
 };
 
 const TRIAL_HEARING_OPTIONS = {
-  trial: 'Trial',
+  furtherHearing: 'Further Hearing',
+  furtherTrial: 'Further Trial',
   hearing: 'Hearing',
   partialTrial: 'Partial Trial',
-  furtherTrial: 'Further Trial',
-  furtherHearing: 'Further Hearing',
+  trial: 'Trial',
 } as const;
 type TrialHearingOption =
   (typeof TRIAL_HEARING_OPTIONS)[keyof typeof TRIAL_HEARING_OPTIONS];
 
 const STATUS_REPORT_ORDERED_FOR_OPTIONS = {
-  petitioner: 'Petitioner',
-  respondent: 'Respondent',
-  petitionerAndRespondent: 'Petitioner and Respondent',
   joint: 'Joint',
   other: 'Other',
+  petitioner: 'Petitioner',
+  petitionerAndRespondent: 'Petitioner and Respondent',
+  respondent: 'Respondent',
 } as const;
 type StatusReportOrderedForOption =
   (typeof STATUS_REPORT_ORDERED_FOR_OPTIONS)[keyof typeof STATUS_REPORT_ORDERED_FOR_OPTIONS];
 
 const MOTION_FILED_BY_OPTIONS = {
+  intervenor: 'Intervenor',
+  joint: 'Joint',
   petitioner: 'Petitioner',
   respondent: 'Respondent',
-  joint: 'Joint',
   thirdParty: 'Third Party',
-  intervenor: 'Intervenor',
 } as const;
 type MotionFiledByOption =
   (typeof MOTION_FILED_BY_OPTIONS)[keyof typeof MOTION_FILED_BY_OPTIONS];
 
 const MOTION_STATUS_OPTIONS = {
+  cav: 'CAV',
+
+  denied: 'Denied',
+
+  filed: 'Filed',
+
+  granted: 'Granted',
+
+  lodged: 'Lodged',
+
+  noObjection: 'No Objection',
+
+  objection: 'Objection',
   // 10419 TODO: can we derive these options from an existing constant? Same
   // question applies broadly speaking for these option constants.
   seeOrder: 'See Order',
-  cav: 'CAV',
-  denied: 'Denied',
-  granted: 'Granted',
-  filed: 'Filed',
-  lodged: 'Lodged',
-  objection: 'Objection',
-  noObjection: 'No Objection',
 } as const;
 export type MotionStatusOption =
   (typeof MOTION_STATUS_OPTIONS)[keyof typeof MOTION_STATUS_OPTIONS];
 
 const MOTION_TYPE_OPTIONS = {
-  motionToDismissLackOfProsecution: 'Motion to Dismiss - Lack of Prosecution',
-  motionToDismissLackOfJurisdiction: 'Motion to Dismiss - Lack of Jurisdiction',
-  motionToDismissFailureToProperlyProsecute:
-    'Motion to Dismiss - Failure to Properly Prosecute',
-  motionToDismiss: 'Motion to Dismiss',
   motionForContinuance: 'Motion for Continuance',
   motionForGeneralContinuance: 'Motion for General Continuance',
+  motionToDismiss: 'Motion to Dismiss',
+  motionToDismissFailureToProperlyProsecute:
+    'Motion to Dismiss - Failure to Properly Prosecute',
+  motionToDismissLackOfJurisdiction: 'Motion to Dismiss - Lack of Jurisdiction',
+  motionToDismissLackOfProsecution: 'Motion to Dismiss - Lack of Prosecution',
 } as const;
 export type MotionTypeOption =
   (typeof MOTION_TYPE_OPTIONS)[keyof typeof MOTION_TYPE_OPTIONS];
 
 const ACTION_DOCUMENT_TYPE_OPTIONS = {
   entryOfAppearance: 'Entry of Appearance',
-  limitedEntryOfAppearance: 'Limited Entry of Appearance',
-  orderToShowCause: 'Order to Show Cause',
   filing: 'Filing',
+  limitedEntryOfAppearance: 'Limited Entry of Appearance',
   motion: 'Motion',
   notice: 'Notice',
   order: 'Order',
+  orderToShowCause: 'Order to Show Cause',
   other: 'Other',
 } as const;
 
@@ -300,25 +306,25 @@ export type ActionDocumentTypeOption =
   (typeof ACTION_DOCUMENT_TYPE_OPTIONS)[keyof typeof ACTION_DOCUMENT_TYPE_OPTIONS];
 
 const ACTION_FILED_BY_OPTIONS = {
-  petitioner: 'Petitioner',
-  respondent: 'Respondent',
-  petitionerAndRespondent: 'Petitioner and Respondent',
   joint: 'Joint',
   other: 'Other',
+  petitioner: 'Petitioner',
+  petitionerAndRespondent: 'Petitioner and Respondent',
+  respondent: 'Respondent',
 } as const;
 
 export type ActionFiledByOption =
   (typeof ACTION_FILED_BY_OPTIONS)[keyof typeof ACTION_FILED_BY_OPTIONS];
 
 const ACTION_STATUS_OPTIONS = {
-  seeOrder: 'See Order',
   cav: 'CAV',
   denied: 'Denied',
-  granted: 'Granted',
   filed: 'Filed',
+  granted: 'Granted',
   lodged: 'Lodged',
-  objection: 'Objection',
   noObjection: 'No Objection',
+  objection: 'Objection',
+  seeOrder: 'See Order',
 } as const;
 
 export type ActionStatusOption =
@@ -329,8 +335,8 @@ const BRIEF_TYPE_OPTIONS = {
   seriatimMemorandum: 'Seriatim memorandum brief',
   simultaneous: 'Simultaneous brief',
   simultaneousMemoranda: 'Simultaneous Memoranda of law',
-  simultaneousmemorandum: 'Simultaneous memorandum brief',
   simultaneousSupplemental: 'Simultaneous Supplemental Brief',
+  simultaneousmemorandum: 'Simultaneous memorandum brief',
 } as const;
 
 type BriefTypeOption =
@@ -338,13 +344,13 @@ type BriefTypeOption =
 
 const EXHIBIT_STATUS_OPTIONS = {
   admitted: 'Admitted',
-  notAdmitted: 'Not admitted',
-  withdrawn: 'Withdrawn',
-  notOffered: 'Not offered',
-  reserved: 'Reserved',
-  identificationOnly: 'Identification only',
   demonstrative: 'Demonstrative',
+  identificationOnly: 'Identification only',
+  notAdmitted: 'Not admitted',
+  notOffered: 'Not offered',
   otherSeeNote: 'Other - see note',
+  reserved: 'Reserved',
+  withdrawn: 'Withdrawn',
 } as const;
 
 export type ExhibitStatusOption =

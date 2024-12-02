@@ -9,5 +9,5 @@ export const trialSessionMinutesOnChangeSequence = [
 }: {
   name: string;
   section: string;
-  value: string | boolean;
+  value: string | boolean | object;
 }) => void;

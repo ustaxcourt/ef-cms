@@ -37,8 +37,8 @@ export const TrialSessionMetadataFieldset = ({
               onChange={e =>
                 onChangeHandler({
                   name: e.target.name,
-                  value: e.target.value,
                   section: 'trialSessionMetadata',
+                  value: e.target.value,
                 })
               }
             />
@@ -62,8 +62,8 @@ export const TrialSessionMetadataFieldset = ({
               onChange={e =>
                 onChangeHandler({
                   name: e.target.name,
-                  value: e.target.value,
                   section: 'trialSessionMetadata',
+                  value: e.target.value,
                 })
               }
             />
@@ -86,8 +86,8 @@ export const TrialSessionMetadataFieldset = ({
               onChange={e =>
                 onChangeHandler({
                   name: e.target.name,
-                  value: e.target.value,
                   section: 'trialSessionMetadata',
+                  value: e.target.value,
                 })
               }
             />
@@ -107,8 +107,8 @@ export const TrialSessionMetadataFieldset = ({
                 onChange={e => {
                   onChangeHandler({
                     name: e.target.name,
-                    value: e.target.checked,
                     section: 'trialSessionMetadata',
+                    value: e.target.checked,
                   });
                 }}
               />
