@@ -1,12 +1,15 @@
-import { RawTrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
-import { TRIAL_SESSION_SCOPE_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import {
+  SESSION_TYPES,
+  TRIAL_SESSION_SCOPE_TYPES,
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { createTrialSessionInteractor } from './createTrialSessionInteractor';
 import { mockDocketClerkUser, mockJudgeUser } from '@shared/test/mockAuthUsers';
 
 const MOCK_TRIAL = {
   maxCases: 100,
-  sessionType: 'Regular',
+  sessionType: SESSION_TYPES.regular,
   startDate: '2025-12-01T00:00:00.000Z',
   term: 'Fall',
   termYear: '2025',
@@ -74,7 +77,7 @@ describe('createTrialSessionInteractor', () => {
       {
         trialSession: {
           ...MOCK_TRIAL,
-          sessionType: 'Motion/Hearing',
+          sessionType: SESSION_TYPES.motionHearing,
         } as RawTrialSession,
       },
       mockDocketClerkUser,
@@ -105,7 +108,7 @@ describe('createTrialSessionInteractor', () => {
       {
         trialSession: {
           ...MOCK_TRIAL,
-          sessionType: 'Special',
+          sessionType: SESSION_TYPES.special,
         } as RawTrialSession,
       },
       mockDocketClerkUser,
