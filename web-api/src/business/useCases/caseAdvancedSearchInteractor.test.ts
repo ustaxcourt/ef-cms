@@ -12,7 +12,6 @@ export const MOCK_CASE_SEARCH_RESULT = {
   docketNumber: '101-20',
   docketNumberWithSuffix: '101-20L',
   fakeField: 'Hide this',
-  filedDate: '2023-01-24T22:34:48.100Z',
   irsPractitioners: [
     {
       address: 'Hide this',
@@ -30,6 +29,7 @@ export const MOCK_CASE_SEARCH_RESULT = {
   privatePractitioners: [
     { address: 'Hide this', name: 'TestPrivatePractitioner' },
   ],
+  receivedAt: '2023-01-24T22:34:48.100Z',
 };
 
 describe('caseAdvancedSearchInteractor', () => {
@@ -265,11 +265,11 @@ describe('caseAdvancedSearchInteractor', () => {
         caseCaption: MOCK_CASE_SEARCH_RESULT.caseCaption,
         docketNumber: MOCK_CASE_SEARCH_RESULT.docketNumber,
         docketNumberWithSuffix: MOCK_CASE_SEARCH_RESULT.docketNumberWithSuffix,
-        filedDate: MOCK_CASE_SEARCH_RESULT.filedDate,
         petitionerNames: MOCK_CASE_SEARCH_RESULT.petitioners.map(p => p.name),
         petitionerStateNames: MOCK_CASE_SEARCH_RESULT.petitioners.map(
           p => p.state,
         ),
+        receivedAt: MOCK_CASE_SEARCH_RESULT.receivedAt,
       },
     ]);
   });

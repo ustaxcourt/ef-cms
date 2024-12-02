@@ -76,11 +76,11 @@ export const casePublicSearch = async ({
         caseCaption: c.caseCaption,
         docketNumber: c.docketNumber,
         docketNumberWithSuffix: c.docketNumberWithSuffix,
-        filedDate: c.filedDate,
         petitionerNames: c.petitioners?.map(p => p.name),
         petitionerStateNames: c.petitioners?.map(
           p => US_STATES[p.state] || p.state,
         ),
+        receivedAt: c.receivedAt,
       };
     }),
   };
