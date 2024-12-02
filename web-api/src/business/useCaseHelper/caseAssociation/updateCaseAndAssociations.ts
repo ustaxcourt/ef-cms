@@ -425,7 +425,7 @@ export const updateCaseAndAssociations = async ({
 }): Promise<RawCase> => {
   const newCaseEntity: Case = caseToUpdate.validate
     ? caseToUpdate
-    : CaseFactory({
+    : CaseFactory.getFullCase({
         rawCase: caseToUpdate,
         user: authorizedUser,
       });
@@ -438,7 +438,7 @@ export const updateCaseAndAssociations = async ({
 
   const validNewRawCaseEntity = newCaseEntity.validate().toRawObject();
 
-  const validRawOldCaseEntity = CaseFactory({
+  const validRawOldCaseEntity = CaseFactory.getFullCase({
     rawCase: oldCaseEntity,
     user: authorizedUser,
   })

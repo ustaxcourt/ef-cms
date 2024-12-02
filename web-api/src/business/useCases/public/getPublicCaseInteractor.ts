@@ -1,6 +1,8 @@
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
 import { NotFoundError } from '@web-api/errors/errors';
+import { PublicCase } from '@shared/business/entities/cases/PublicCase';
+import { RestrictedCase } from '@shared/business/entities/cases/RestrictedCase';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 /**
@@ -28,5 +30,7 @@ export const getPublicCaseInteractor = async (
     throw error;
   }
 
-  return CaseFactory({ rawCase: rawCaseRecord, user: undefined });
+  return CaseFactory.getCase({ rawCase: rawCaseRecord, user: undefined }) as
+    | PublicCase
+    | RestrictedCase;
 };

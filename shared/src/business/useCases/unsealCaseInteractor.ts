@@ -41,7 +41,7 @@ export const unsealCase = async (
       caseToUpdate,
     });
 
-  return CaseFactory({ rawCase: updatedCase, user: authorizedUser })
+  return CaseFactory.getFullCase({ rawCase: updatedCase, user: authorizedUser })
     .validate()
     .toRawObject();
 };

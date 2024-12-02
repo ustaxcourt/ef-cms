@@ -45,7 +45,7 @@ export const sealCase = async (
     .getDispatchers()
     .sendNotificationOfSealing(applicationContext, { docketNumber });
 
-  return CaseFactory({ rawCase: updatedCase, user: authorizedUser })
+  return CaseFactory.getFullCase({ rawCase: updatedCase, user: authorizedUser })
     .validate()
     .toRawObject();
 };
