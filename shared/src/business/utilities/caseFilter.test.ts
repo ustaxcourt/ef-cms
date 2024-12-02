@@ -1,11 +1,10 @@
 import {
   CONTACT_TYPES,
-  DOCKET_NUMBER_SUFFIXES,
+  COUNTRY_TYPES,
   ROLES,
 } from '../entities/EntityConstants';
 import {
   caseContactAddressSealedFormatter,
-  caseSealedFormatter,
   caseSearchFilter,
 } from './caseFilter';
 import {
@@ -16,40 +15,29 @@ import {
 } from '@shared/test/mockAuthUsers';
 
 describe('caseFilter', () => {
-  it('should format sealed cases to preserve ONLY attributes appearing in a whitelist', () => {
-    const result = caseSealedFormatter({
-      baz: 'quux',
-      docketNumber: '102-20',
-      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-      foo: 'bar',
-      isPaper: true,
-      sealedDate: '2020-01-02T03:04:05.007Z',
-    });
-
-    expect(result).toEqual({
-      docketNumber: '102-20',
-      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-      isPaper: true,
-      sealedDate: '2020-01-02T03:04:05.007Z',
-    });
-  });
-
   describe('caseContactAddressSealedFormatter', () => {
     it('returns contact info with ONLY the whitelisted attributes present', () => {
       const createContactInfo = () => ({
         additionalName: 'Bob',
+        address1: '123 Sesame Street',
         bananas: '8-foot bunch',
         city: 'Los Angeles',
         contactId: '42-universe-everything',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        entityName: 'Petitioner',
         inCareOf: 'Friendship is Magic',
         isAddressSealed: true,
         name: 'Joe Dirt',
+        phone: 'N/A',
+        postalCode: '11111',
+        sealedAndUnavailable: false,
         secondaryName: 'Cheeseburgers',
         serviceIndicator: 'Electronic',
+        state: 'IL',
         title: 'Emperor',
         transmission: 'manual',
       });
-      const caseDetail = {};
+      const caseDetail = {} as Partial<RawCase>;
       caseDetail.petitioners = [
         { ...createContactInfo(), contactType: CONTACT_TYPES.primary },
         { ...createContactInfo(), contactType: CONTACT_TYPES.otherFiler },

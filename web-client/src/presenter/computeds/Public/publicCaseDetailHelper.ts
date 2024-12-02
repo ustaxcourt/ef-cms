@@ -184,7 +184,7 @@ export const publicCaseDetailHelper = (
     ],
   );
 
-  let formattedDocketEntriesOnDocketRecord = docketEntries.map(entry => {
+  let formattedDocketEntriesOnDocketRecord = docketEntries?.map(entry => {
     return formatDocketEntryOnDocketRecord(applicationContext, {
       entry,
       isTerminalUser,

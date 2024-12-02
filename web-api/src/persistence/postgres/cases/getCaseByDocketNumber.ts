@@ -86,14 +86,21 @@ export const getCaseByDocketNumber = async ({
     ? new Case(
         transformNullToUndefined({
           ...dbCase,
+          blockedDate: dbCase.blockedDate?.toISOString(),
           caseCaption: dbCase.caption,
           caseStatusHistory,
+          closedDate: dbCase.closedDate?.toISOString(),
           createdAt: dbCase.createdAt?.toISOString(),
           docketEntries: dbDocketEntries,
           hearings: dbCase.hearings || [],
+          irsNoticeDate: dbCase.irsNoticeDate?.toISOString(),
+          noticeOfTrialDate: dbCase.noticeOfTrialDate?.toISOString(),
           petitionPaymentDate: dbCase.petitionPaymentDate?.toISOString(),
+          petitionPaymentWaivedDate:
+            dbCase.petitionPaymentWaivedDate?.toISOString(),
           petitioners: petitionersOnCase,
           receivedAt: dbCase.receivedAt?.toISOString(),
+          sealedDate: dbCase.sealedDate?.toISOString(),
           statistics: dbCaseStatistics,
           trialDate: dbCase.trialDate?.toISOString(),
         }),

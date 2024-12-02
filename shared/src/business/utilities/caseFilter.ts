@@ -6,17 +6,6 @@ import {
 import { cloneDeep, pick } from 'lodash';
 import { isAssociatedUser, isSealedCase } from '../entities/cases/Case';
 
-const CASE_ATTRIBUTE_ALLOWLIST = [
-  'docketNumber',
-  'docketNumberSuffix',
-  'isPaper',
-  'isSealed',
-  'sealedDate',
-  'leadDocketNumber',
-] as const;
-
-type CaseAttributeAllowlistKeys = (typeof CASE_ATTRIBUTE_ALLOWLIST)[number];
-
 const CASE_CONTACT_ATTRIBUTE_ALLOWLIST = [
   'additionalName',
   'contactId',
@@ -29,12 +18,6 @@ const CASE_CONTACT_ATTRIBUTE_ALLOWLIST = [
   'serviceIndicator',
   'title',
 ];
-
-export type SealedCase = Record<CaseAttributeAllowlistKeys, any>;
-
-export const caseSealedFormatter = caseRaw => {
-  return pick(caseRaw, CASE_ATTRIBUTE_ALLOWLIST) as SealedCase;
-};
 
 /**
  * caseContactAddressSealedFormatter
