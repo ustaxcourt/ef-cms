@@ -7,7 +7,7 @@ import { get } from '../requests';
 
 export const getTrialSessionPlanningReportDataInteractor = (
   applicationContext: ClientApplicationContext,
-  queryParams: { term: string; year: string },
+  queryParams: { term: string; year: number },
 ): Promise<{
   previousTerms: PreviousTerm[];
   trialLocationData: TrialLocationData[];

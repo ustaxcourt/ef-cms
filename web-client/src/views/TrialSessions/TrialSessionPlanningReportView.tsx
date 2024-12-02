@@ -17,9 +17,10 @@ export const TrialSessionPlanningReportView = connect(
     trialSessionPlanningReportData,
     trialSessionPlanningReportViewHelper,
   }) {
-    const { trialTerm, trialYear } = trialSessionPlanningReportData;
-    const { citiesNotCalendaredInTwoPreviousTerms } =
-      trialSessionPlanningReportViewHelper;
+    const {
+      citiesNotCalendaredInTwoPreviousTerms,
+      trialSessionPlanningReportHeader,
+    } = trialSessionPlanningReportViewHelper;
 
     return (
       <>
@@ -35,8 +36,7 @@ export const TrialSessionPlanningReportView = connect(
           </Button>
         </div>
         <TrialSessionPlanningReportHeader
-          trialTerm={trialTerm}
-          trialYear={trialYear}
+          trialSessionPlanningReportHeader={trialSessionPlanningReportHeader}
         />
 
         <CitiesNotCalendaredInPastTwoTerms
@@ -55,13 +55,11 @@ export const TrialSessionPlanningReportView = connect(
 TrialSessionPlanningReportView.displayName = 'TrialSessionPlanningReport';
 
 type TrialSessionPlanningReportHeaderParams = {
-  trialTerm: string;
-  trialYear: number;
+  trialSessionPlanningReportHeader: string;
 };
 
 function TrialSessionPlanningReportHeader({
-  trialTerm,
-  trialYear,
+  trialSessionPlanningReportHeader,
 }: TrialSessionPlanningReportHeaderParams) {
   return (
     <div className="grid-container display-flex height-6">
@@ -72,7 +70,7 @@ function TrialSessionPlanningReportHeader({
           fontSize: '32px',
         }}
       >
-        {trialTerm} {trialYear}
+        {trialSessionPlanningReportHeader}
       </div>
       <div className="flex-fill text-right height-6 border-bottom-1px border-gray-10">
         <Button

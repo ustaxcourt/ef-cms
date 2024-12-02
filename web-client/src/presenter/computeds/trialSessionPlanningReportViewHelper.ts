@@ -1,5 +1,8 @@
+import { state } from '@web-client/presenter/app.cerebral';
+
 type TrialSessionPlanningReportViewHelperResults = {
   citiesNotCalendaredInTwoPreviousTerms: CityInfo[][];
+  trialSessionPlanningReportHeader: string;
 };
 
 export type CityInfo = { city: string; state: string };
@@ -26,23 +29,31 @@ function formatCities(allCities: CityInfo[]): CityInfo[][] {
   return results;
 }
 
-export const trialSessionPlanningReportViewHelper =
-  (): TrialSessionPlanningReportViewHelperResults => {
-    const ALL_CITIES_NOT_CALENDARED = Array.from(
-      { length: 20 },
-      (_, index) => ({
-        city: `${index}_TEST_CITY`,
-        state: 'TEST_STATE',
-      }),
-    ).sort((a, b) => {
-      if (a.city < b.city) return -1;
-      if (a.city > b.city) return 1;
-      return 0;
-    });
+function formatTerm(trialTerm: string): string {
+  if (!trialTerm) return '';
+  const lowercased = trialTerm.toLowerCase().trim();
+  return lowercased.charAt(0).toUpperCase() + lowercased.slice(1);
+}
 
-    return {
-      citiesNotCalendaredInTwoPreviousTerms: formatCities(
-        ALL_CITIES_NOT_CALENDARED,
-      ),
-    };
+export const trialSessionPlanningReportViewHelper = (
+  get,
+): TrialSessionPlanningReportViewHelperResults => {
+  const ALL_CITIES_NOT_CALENDARED = Array.from({ length: 20 }, (_, index) => ({
+    city: `${index}_TEST_CITY`,
+    state: 'TEST_STATE',
+  })).sort((a, b) => {
+    if (a.city < b.city) return -1;
+    if (a.city > b.city) return 1;
+    return 0;
+  });
+
+  const { trialTerm, trialYear } = get(state.trialSessionPlanningReportData);
+  const trialSessionPlanningReportHeader = `${formatTerm(trialTerm)} ${trialYear}`;
+
+  return {
+    citiesNotCalendaredInTwoPreviousTerms: formatCities(
+      ALL_CITIES_NOT_CALENDARED,
+    ),
+    trialSessionPlanningReportHeader,
   };
+};
