@@ -11,6 +11,10 @@ import {
 import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
 import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
 import { JudgeChambersInfo } from '@web-client/presenter/actions/getJudgesChambersAction';
+import {
+  PreviousTerm,
+  TrialLocationData,
+} from '@web-api/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawMessage } from '@shared/business/entities/Message';
 import { RawUser, UserContact } from '@shared/business/entities/User';
@@ -849,6 +853,8 @@ export const baseState = {
   trialSessionPlanningReportData: {} as {
     trialTerm: string;
     trialYear: number;
+    previousTerms: PreviousTerm[];
+    trialLocationData: TrialLocationData[];
   },
   trialSessionWorkingCopy: cloneDeep(initialTrialSessionWorkingCopyState),
   trialSessions: [] as any[],
