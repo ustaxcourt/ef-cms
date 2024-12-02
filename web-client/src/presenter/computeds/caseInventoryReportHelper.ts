@@ -32,21 +32,24 @@ export const caseInventoryReportHelper = (
 
   const { associatedJudge, status } = get(state.screenMetadata);
 
-  const reportData = get(state.caseInventoryReportData.foundCases) || [];
+  const reportData =
+    get(state.caseInventoryReportData.foundCasesForCurrentPage) || [];
   const user = get(state.user);
 
   const formattedReportData = reportData
     .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
     .map(item => formatCase(applicationContext, item, user));
 
-  const foundCasesCount = get(state.caseInventoryReportData.foundCasesCount);
-  const pageCount = Math.ceil(foundCasesCount / CASE_INVENTORY_PAGE_SIZE);
+  const foundCasesTotalCount = get(
+    state.caseInventoryReportData.foundCasesTotalCount,
+  );
+  const pageCount = Math.ceil(foundCasesTotalCount / CASE_INVENTORY_PAGE_SIZE);
 
   let showResultsTable = false;
   let showSelectFilterMessage = false;
   let showNoResultsMessage = false;
 
-  if (foundCasesCount) {
+  if (foundCasesTotalCount) {
     showResultsTable = true;
   } else if (!associatedJudge && !status) {
     showSelectFilterMessage = true;

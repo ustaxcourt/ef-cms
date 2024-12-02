@@ -58,7 +58,7 @@ describe('case inventory report journey', () => {
     });
     await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
     initialCaseInventoryCounts.new = cerebralTest.getState(
-      'caseInventoryReportData.foundCasesCount',
+      'caseInventoryReportData.foundCasesTotalCount',
     );
 
     // New, Judge Colvin
@@ -68,7 +68,7 @@ describe('case inventory report journey', () => {
     });
     await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
     initialCaseInventoryCounts.newColvin = cerebralTest.getState(
-      'caseInventoryReportData.foundCasesCount',
+      'caseInventoryReportData.foundCasesTotalCount',
     );
 
     // Calendared, Judge Colvin
@@ -78,7 +78,7 @@ describe('case inventory report journey', () => {
     });
     await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
     initialCaseInventoryCounts.calendaredColvin = cerebralTest.getState(
-      'caseInventoryReportData.foundCasesCount',
+      'caseInventoryReportData.foundCasesTotalCount',
     );
 
     // Calendared
@@ -88,7 +88,7 @@ describe('case inventory report journey', () => {
     });
     await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
     initialCaseInventoryCounts.calendared = cerebralTest.getState(
-      'caseInventoryReportData.foundCasesCount',
+      'caseInventoryReportData.foundCasesTotalCount',
     );
 
     // Judge Colvin
@@ -102,7 +102,7 @@ describe('case inventory report journey', () => {
     });
     await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
     initialCaseInventoryCounts.colvin = cerebralTest.getState(
-      'caseInventoryReportData.foundCasesCount',
+      'caseInventoryReportData.foundCasesTotalCount',
     );
   });
 
@@ -151,7 +151,7 @@ describe('case inventory report journey', () => {
     });
     await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
     expect(
-      cerebralTest.getState('caseInventoryReportData.foundCasesCount'),
+      cerebralTest.getState('caseInventoryReportData.foundCasesTotalCount'),
     ).toEqual(initialCaseInventoryCounts.new! + 1);
   });
 
@@ -162,7 +162,7 @@ describe('case inventory report journey', () => {
     });
     await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
     expect(
-      cerebralTest.getState('caseInventoryReportData.foundCasesCount'),
+      cerebralTest.getState('caseInventoryReportData.foundCasesTotalCount'),
     ).toEqual(initialCaseInventoryCounts.newColvin);
   });
 
@@ -173,7 +173,7 @@ describe('case inventory report journey', () => {
     });
     await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
     expect(
-      cerebralTest.getState('caseInventoryReportData.foundCasesCount'),
+      cerebralTest.getState('caseInventoryReportData.foundCasesTotalCount'),
     ).toEqual(initialCaseInventoryCounts.calendaredColvin! + 1);
   });
 
@@ -184,7 +184,7 @@ describe('case inventory report journey', () => {
     });
     await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
     expect(
-      cerebralTest.getState('caseInventoryReportData.foundCasesCount'),
+      cerebralTest.getState('caseInventoryReportData.foundCasesTotalCount'),
     ).toEqual(initialCaseInventoryCounts.calendared! + 1);
   });
 
@@ -199,7 +199,7 @@ describe('case inventory report journey', () => {
     });
     await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
     expect(
-      cerebralTest.getState('caseInventoryReportData.foundCasesCount'),
+      cerebralTest.getState('caseInventoryReportData.foundCasesTotalCount'),
     ).toEqual(initialCaseInventoryCounts.colvin! + 1);
   });
 
