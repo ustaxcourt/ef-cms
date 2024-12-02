@@ -35,6 +35,20 @@ describe('Verify User Pending Email', () => {
     .minus({ hours: TOKEN_EXPIRATION_TIME_HOURS + 0.001 })
     .toISO()!;
 
+  beforeEach(() => {
+    const TOTAL_CASE_COUNT = 100;
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByUser.mockResolvedValue(
+        Array(TOTAL_CASE_COUNT).fill(undefined),
+      );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByEmailTotal.mockReturnValue(TOTAL_CASE_COUNT);
+  });
+
   describe('userTokenHasExpired', () => {
     it('should return true when no token', () => {
       expect(userTokenHasExpired(undefined)).toBe(true);
@@ -108,10 +122,6 @@ describe('Verify User Pending Email', () => {
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValue(mockCase);
-
-      applicationContext
-        .getPersistenceGateway()
-        .getDocketNumbersByUser.mockReturnValue([mockCase.docketNumber]);
     });
 
     it('should throw unauthorized error when user does not have permission to verify emails', async () => {
