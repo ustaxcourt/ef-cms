@@ -3,6 +3,7 @@ import { casePublicSearch } from './casePublicSearch';
 jest.mock('./searchClient');
 import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import { MAX_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE_SEARCH_RESULT } from '@web-api/business/useCases/caseAdvancedSearchInteractor.test';
 import { search } from './searchClient';
 
 jest.mock(
@@ -22,7 +23,10 @@ describe('casePublicSearch', () => {
     petitionerName: 'test person',
   };
 
-  search.mockReturnValue({ results: ['some', 'matches'], total: 0 });
+  search.mockReturnValue({
+    results: [MOCK_CASE_SEARCH_RESULT],
+    total: 0,
+  });
 
   const mustNotClause = [
     {
@@ -65,5 +69,25 @@ describe('casePublicSearch', () => {
     expect(search.mock.calls[0][0].searchParameters.body.query).toEqual(
       expectedQuery,
     );
+  });
+
+  it('BUG: should return only necessary public search case data', async () => {
+    const { results } = await casePublicSearch({
+      applicationContext,
+      searchTerms,
+    });
+    expect(Object.keys(results[0])).toHaveLength(6);
+    expect(results).toMatchObject([
+      {
+        caseCaption: MOCK_CASE_SEARCH_RESULT.caseCaption,
+        docketNumber: MOCK_CASE_SEARCH_RESULT.docketNumber,
+        docketNumberWithSuffix: MOCK_CASE_SEARCH_RESULT.docketNumberWithSuffix,
+        filedDate: MOCK_CASE_SEARCH_RESULT.filedDate,
+        petitionerNames: MOCK_CASE_SEARCH_RESULT.petitioners.map(p => p.name),
+        petitionerStateNames: MOCK_CASE_SEARCH_RESULT.petitioners.map(
+          p => p.state,
+        ),
+      },
+    ]);
   });
 });
