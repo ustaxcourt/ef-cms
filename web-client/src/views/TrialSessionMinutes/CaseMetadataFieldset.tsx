@@ -21,12 +21,12 @@ export const CaseMetadataFieldset = ({
   caseMetadataFormState: MinuteSheetFormState['caseMetadata'];
 }) => {
   return (
-    <fieldset className="border-0 grid-container padding-0">
+    <fieldset className="border-0">
       <div className="grid-row grid-gap align-items-center margin-bottom-1">
-        <div className="grid-col-2">
+        <div className="grid-col">
           <span className="usa-label margin-bottom-0">Called</span>
         </div>
-        <div className="grid-col-2">
+        <div className="grid-col-auto">
           <DateSelector
             defaultValue={undefined}
             formGroupClassNames="margin-bottom-0"
@@ -97,10 +97,10 @@ export const CaseMetadataFieldset = ({
         </div>
       </div>
       <div className="grid-row grid-gap align-items-center margin-bottom-1">
-        <div className="grid-col-2">
+        <div className="grid-col-fill">
           <span className="usa-label margin-bottom-0">Not Called</span>
         </div>
-        <div className="grid-col-2">
+        <div className="grid-col-auto">
           <DateSelector
             defaultValue={undefined}
             formGroupClassNames="margin-bottom-0"
@@ -145,10 +145,10 @@ export const CaseMetadataFieldset = ({
       </div>
       <div className="grid-row grid-gap align-items-center margin-bottom-1">
         {/* TODO 10419 Need to update onChange handling to support recalled being a nested structure, multiple rows. */}
-        <div className="grid-col-2">
+        <div className="grid-col-fill">
           <span className="usa-label margin-bottom-0">Re-called</span>
         </div>
-        <div className="grid-col-2">
+        <div className="grid-col-auto">
           <DateSelector
             defaultValue={undefined}
             formGroupClassNames="margin-bottom-0"
@@ -219,10 +219,10 @@ export const CaseMetadataFieldset = ({
         </div>
       </div>
       <div className="grid-row grid-gap align-items-center margin-bottom-1">
-        <div className="grid-col-2">
+        <div className="grid-col-fill">
           <span className="usa-label margin-bottom-0">Pretrial conference</span>
         </div>
-        <div className="grid-col-2">
+        <div className="grid-col-auto">
           <DateSelector
             defaultValue={undefined}
             formGroupClassNames="margin-bottom-0"
@@ -295,10 +295,10 @@ export const CaseMetadataFieldset = ({
         </div>
       </div>
       <div className="grid-row grid-gap align-items-center">
-        <div className="grid-col-2">
+        <div className="grid-col-fill">
           <span className="usa-label margin-bottom-0">Trial/Hearing</span>
         </div>
-        <div className="grid-col-2">
+        <div className="grid-col-auto">
           <DateSelector
             defaultValue={undefined}
             formGroupClassNames="margin-bottom-0"
