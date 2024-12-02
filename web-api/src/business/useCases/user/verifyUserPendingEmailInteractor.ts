@@ -33,12 +33,9 @@ export const verifyUserPendingEmailInteractor = async (
   { token }: { token: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  console.log('******* verifyUserPendingEmailInteractor');
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EMAIL_MANAGEMENT)) {
     throw new UnauthorizedError('Unauthorized to manage emails.');
   }
-
-  console.log('******* gonna fetch user');
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -46,8 +43,6 @@ export const verifyUserPendingEmailInteractor = async (
       applicationContext,
       userId: authorizedUser.userId,
     });
-
-  console.log('******* got user', user);
 
   if (
     !user.pendingEmailVerificationToken ||
@@ -78,7 +73,6 @@ export const verifyUserPendingEmailInteractor = async (
     throw new Error('Email is not available');
   }
 
-  console.log('*** updating flag');
   const { updatedUser } = await updateUserPendingEmailRecord(
     applicationContext,
     {
@@ -120,24 +114,16 @@ export const verifyUserPendingEmailInteractor = async (
           email: updatedUser.email!,
         });
 
-      console.log(
-        'does ccount match',
-        actualUpdatedCaseCount === expectedUpdatedCaseCount,
-        expectedUpdatedCaseCount,
-        actualUpdatedCaseCount,
-      );
       if (actualUpdatedCaseCount === expectedUpdatedCaseCount)
         checkCount = false;
     }
 
-    console.log('*** update complete toggling flag to FALSE');
     updatedUser.isUpdatingInformation = false;
     await applicationContext.getPersistenceGateway().updateUser({
       applicationContext,
       user: updatedUser,
     });
   } catch (e) {
-    console.log('ERROR IN THE NEW CODE', e);
     updatedUser.isUpdatingInformation = false;
     await applicationContext.getPersistenceGateway().updateUser({
       applicationContext,

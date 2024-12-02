@@ -9,7 +9,6 @@ export const getCasesByEmailTotal = async ({
   applicationContext,
   email,
 }: GetCasesByEmailParams) => {
-  console.log('es method: getCasesByEmailTotal', email);
   const searchParameters = {
     body: {
       query: {
