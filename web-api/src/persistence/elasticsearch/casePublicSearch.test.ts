@@ -82,11 +82,11 @@ describe('casePublicSearch', () => {
         caseCaption: MOCK_CASE_SEARCH_RESULT.caseCaption,
         docketNumber: MOCK_CASE_SEARCH_RESULT.docketNumber,
         docketNumberWithSuffix: MOCK_CASE_SEARCH_RESULT.docketNumberWithSuffix,
-        filedDate: MOCK_CASE_SEARCH_RESULT.filedDate,
         petitionerNames: MOCK_CASE_SEARCH_RESULT.petitioners.map(p => p.name),
         petitionerStateNames: MOCK_CASE_SEARCH_RESULT.petitioners.map(
           p => p.state,
         ),
+        receivedAt: MOCK_CASE_SEARCH_RESULT.receivedAt,
       },
     ]);
   });

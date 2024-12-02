@@ -29,7 +29,7 @@ export type CaseSearchResult = {
   petitionerNames: string[];
   docketNumberWithSuffix: string;
   docketNumber: string;
-  filedDate: string;
+  receivedAt: string;
   caseCaption: string;
   petitionerStateNames?: string[];
 };
@@ -95,11 +95,11 @@ export const caseAdvancedSearchInteractor = async (
       caseCaption: filteredCase.caseCaption,
       docketNumber: filteredCase.docketNumber,
       docketNumberWithSuffix: filteredCase.docketNumberWithSuffix,
-      filedDate: filteredCase.filedDate,
       petitionerNames: filteredCase.petitioners?.map(p => p.name),
       petitionerStateNames: filteredCase.petitioners?.map(
         p => US_STATES[p.state] || p.state,
       ),
+      receivedAt: filteredCase.receivedAt,
     };
   });
 };
