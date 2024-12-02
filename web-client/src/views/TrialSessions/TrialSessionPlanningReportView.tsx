@@ -1,6 +1,10 @@
 import { BigHeader } from '@web-client/views/BigHeader';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  PreviousTerm,
+  TrialLocationData,
+} from '@web-api/business/useCases/trialSessions/getTrialSessionPlanningReportDataInteractor';
 import { state as cerebralState } from '@web-client/presenter/app.cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
@@ -44,7 +48,9 @@ export const TrialSessionPlanningReportView = connect(
 
         <TrialSessionPlanningReportTable
           locationData={trialSessionPlanningReportData.trialLocationData}
-          previousTerms={trialSessionPlanningReportData.previousTerms}
+          previousTerms={
+            trialSessionPlanningReportViewHelper.previousTermsFormatted
+          }
         />
       </>
     );
@@ -85,18 +91,27 @@ function TrialSessionPlanningReportHeader({
   );
 }
 
-function TrialSessionPlanningReportTable({ locationData, previousTerms }) {
+type TrialSessionPlanningReportTableParams = {
+  locationData: TrialLocationData[];
+  previousTerms: PreviousTerm & { termDisplayFormatted }[];
+};
+
+function TrialSessionPlanningReportTable({
+  locationData,
+  previousTerms,
+}: TrialSessionPlanningReportTableParams) {
   return (
-    <>
-      <table>
+    <div className="grid-container padding-top-3">
+      <table className="usa-table ustc-table">
         <thead>
           <tr>
+            <th></th>
             <th>Location</th>
             <th>All</th>
             <th>Small</th>
             <th>Regular</th>
             {previousTerms.map((term, index) => {
-              return <th key={`th-${index}`}>{term.termDisplay}</th>;
+              return <th key={`th-${index}`}>{term.termDisplayFormatted}</th>;
             })}
           </tr>
         </thead>
@@ -105,6 +120,7 @@ function TrialSessionPlanningReportTable({ locationData, previousTerms }) {
             locationData.map((trialLocation, idx) => {
               return (
                 <tr key={`row-${idx}`}>
+                  <td>icon here</td>
                   <td>{trialLocation.trialCityState}</td>
                   <td>{trialLocation.allCaseCount}</td>
                   <td>{trialLocation.smallCaseCount}</td>
@@ -129,7 +145,7 @@ function TrialSessionPlanningReportTable({ locationData, previousTerms }) {
             })}
         </tbody>
       </table>
-    </>
+    </div>
   );
 }
 
