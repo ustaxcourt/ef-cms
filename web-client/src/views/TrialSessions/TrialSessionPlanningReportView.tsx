@@ -1,6 +1,5 @@
 import { BigHeader } from '@web-client/views/BigHeader';
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { CityInfo } from '@web-client/presenter/computeds/trialSessionPlanningReportViewHelper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { state as cerebralState } from '@web-client/presenter/app.cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -135,7 +134,7 @@ function TrialSessionPlanningReportTable({ locationData, previousTerms }) {
 }
 
 type CitiesNotCalendaredInPastTwoTermsParams = {
-  cities: CityInfo[][];
+  cities: string[][];
 };
 
 function CitiesNotCalendaredInPastTwoTerms({
@@ -161,29 +160,19 @@ function CitiesNotCalendaredInPastTwoTerms({
           {cities
             .filter(cg => !!cg.length)
             .map(cityGroup => (
-              <div
-                className="grid-col-3"
-                key={`column-${cityGroup[0].city},${cityGroup[0].state}`}
-              >
-                {cityGroup.map(({ city, state: locationState }) => (
-                  <CityInformation
-                    city={city}
-                    key={`${city},${locationState}`}
-                    state={locationState}
-                  />
+              <div className="grid-col-3" key={`column-${cityGroup[0]}`}>
+                {cityGroup.map(trialCityState => (
+                  <div
+                    className="padding-bottom-1 margin-right-1"
+                    key={trialCityState}
+                  >
+                    {trialCityState}
+                  </div>
                 ))}
               </div>
             ))}
         </div>
       </div>
-    </div>
-  );
-}
-
-function CityInformation({ city, state: locationState }: CityInfo) {
-  return (
-    <div className="padding-bottom-1 margin-right-1">
-      {city}, {locationState}
     </div>
   );
 }

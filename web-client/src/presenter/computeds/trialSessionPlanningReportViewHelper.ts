@@ -1,19 +1,17 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
 type TrialSessionPlanningReportViewHelperResults = {
-  citiesNotCalendaredInTwoPreviousTerms: CityInfo[][];
+  citiesNotCalendaredInTwoPreviousTerms: string[][];
   trialSessionPlanningReportHeader: string;
 };
 
-export type CityInfo = { city: string; state: string };
-
-function formatCities(allCities: CityInfo[]): CityInfo[][] {
+function formatCities(allCities: string[]): string[][] {
   const NUMBER_OF_COLUMNS = 4;
   const equalParts = Math.floor(allCities.length / NUMBER_OF_COLUMNS);
   const remainderCount = allCities.length % NUMBER_OF_COLUMNS;
   const results = Array.from(
     { length: NUMBER_OF_COLUMNS },
-    () => [] as CityInfo[],
+    () => [] as string[],
   );
 
   for (let index = 0; index < NUMBER_OF_COLUMNS; index++) {
@@ -38,16 +36,20 @@ function formatTerm(trialTerm: string): string {
 export const trialSessionPlanningReportViewHelper = (
   get,
 ): TrialSessionPlanningReportViewHelperResults => {
-  const ALL_CITIES_NOT_CALENDARED = Array.from({ length: 20 }, (_, index) => ({
-    city: `${index}_TEST_CITY`,
-    state: 'TEST_STATE',
-  })).sort((a, b) => {
-    if (a.city < b.city) return -1;
-    if (a.city > b.city) return 1;
-    return 0;
-  });
+  const { trialLocationData, trialTerm, trialYear } = get(
+    state.trialSessionPlanningReportData,
+  );
 
-  const { trialTerm, trialYear } = get(state.trialSessionPlanningReportData);
+  const ALL_CITIES_NOT_CALENDARED: string[] = trialLocationData
+    .filter(locationData => {
+      return (
+        !locationData.previousTermsData[1].length &&
+        !locationData.previousTermsData[2].length
+      );
+    })
+    .map(locationData => locationData.trialCityState)
+    .sort();
+
   const trialSessionPlanningReportHeader = `${formatTerm(trialTerm)} ${trialYear}`;
 
   return {
