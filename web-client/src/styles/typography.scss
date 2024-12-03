@@ -207,10 +207,3 @@ a:hover {
   font-size: 17px;
   font-weight: bold;
 }
-
-.no-wrap-text {
-  @media only screen and (max-width: $small-screen) {
-    white-space: normal;
-    word-wrap: break-word;
-  }
-}
