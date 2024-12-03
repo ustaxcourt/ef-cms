@@ -40,7 +40,7 @@ export const verifyUserPendingEmailInteractor = async (
         clientConnectionId,
         message: {
           action: 'set_verify_email_notification',
-          message: 'Something wrong with user',
+          message: 'Unauthorized to manage emails',
         },
         userId: (authorizedUser as UnknownAuthUser)?.userId!,
       });
