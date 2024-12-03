@@ -14,6 +14,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '../../errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../shared/src/business/entities/WorkItem';
+import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { replaceBracketed } from '../../../../shared/src/business/utilities/replaceBracketed';
 import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
@@ -95,11 +96,10 @@ export const createCaseFromPaperInteractor = async (
     authorizedUser,
   }).validate();
 
-  const docketNumber =
-    await applicationContext.docketNumberGenerator.createDocketNumber({
-      applicationContext,
-      receivedAt: petitionMetadata.receivedAt,
-    });
+  const docketNumber = generateDocketNumber({
+    applicationContext,
+    receivedAt: petitionMetadata.receivedAt,
+  });
 
   const caseToAdd = new Case(
     {
@@ -183,18 +183,13 @@ export const createCaseFromPaperInteractor = async (
   if (requestForPlaceOfTrialFileId) {
     let { documentTitle } = INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial;
 
-    if (caseToAdd.preferredTrialCity) {
-      documentTitle = replaceBracketed(
-        documentTitle,
-        caseToAdd.preferredTrialCity,
-      );
-    }
-
     const requestForPlaceOfTrialDocketEntryEntity = new DocketEntry(
       {
         createdAt: caseToAdd.receivedAt,
         docketEntryId: requestForPlaceOfTrialFileId,
-        documentTitle,
+        documentTitle: caseToAdd.preferredTrialCity
+          ? replaceBracketed(documentTitle, caseToAdd.preferredTrialCity)
+          : documentTitle,
         documentType:
           INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,

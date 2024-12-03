@@ -4,7 +4,7 @@ import { DocketEntry } from '../../../../../shared/src/business/entities/DocketE
 import { IrsPractitioner } from '../../../../../shared/src/business/entities/IrsPractitioner';
 import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
+import { createCase } from '@web-api/persistence/postgres/cases/createCase';
 
 /**
  * createCaseDocketEntries
@@ -127,11 +127,9 @@ export const createCaseAndAssociations = async ({
   } = validRawCaseEntity;
 
   const requests = [
-    applicationContext.getPersistenceGateway().createCase({
-      applicationContext,
+    createCase({
       caseToCreate,
     }),
-    upsertCases([caseToCreate]),
     ...createCaseDocketEntries({
       applicationContext,
       authorizedUser,

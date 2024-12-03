@@ -117,6 +117,7 @@ export const processCaseEntries = async ({
       records: flattenDeep(indexRecords),
     });
 
+  // 10502 TODO: make sure all the case data we need is upserted
   await upsertCases(casesToUpsert);
 
   if (failedRecords.length > 0) {
