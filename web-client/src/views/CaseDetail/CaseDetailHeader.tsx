@@ -169,7 +169,7 @@ export const CaseDetailHeader = connect<
                       />
                     )}
                     <CaseLink
-                      className="no-wrap-text"
+                      className="mobile-text-wrap"
                       formattedCase={formattedCaseDetail}
                     >
                       Docket Number:{' '}
