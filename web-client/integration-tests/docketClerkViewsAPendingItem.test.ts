@@ -55,10 +55,7 @@ describe('docket clerk interacts with pending items', () => {
       state: cerebralTest.getState(),
     });
 
-    await docketClerkLoadsPendingReportOnChiefJudgeSelection({
-      cerebralTest,
-      shouldLoadMore: true,
-    });
+    await docketClerkLoadsPendingReportOnChiefJudgeSelection({ cerebralTest });
 
     pendingItemsCount = (
       cerebralTest.getState('pendingReports.pendingItems') || []
@@ -74,10 +71,7 @@ describe('docket clerk interacts with pending items', () => {
     });
 
     expect(formatted.pendingItemsDocketEntries.length).toEqual(0);
-    await docketClerkLoadsPendingReportOnChiefJudgeSelection({
-      cerebralTest,
-      shouldLoadMore: true,
-    });
+    await docketClerkLoadsPendingReportOnChiefJudgeSelection({ cerebralTest });
 
     const currentPendingItemsCount = (
       cerebralTest.getState('pendingReports.pendingItems') || []
@@ -114,10 +108,7 @@ describe('docket clerk interacts with pending items', () => {
 
     expect(formatted.pendingItemsDocketEntries.length).toEqual(1);
 
-    await docketClerkLoadsPendingReportOnChiefJudgeSelection({
-      cerebralTest,
-      shouldLoadMore: true,
-    });
+    await docketClerkLoadsPendingReportOnChiefJudgeSelection({ cerebralTest });
 
     const currentPendingItemsCount = (
       cerebralTest.getState('pendingReports.pendingItems') || []
@@ -163,10 +154,7 @@ describe('docket clerk interacts with pending items', () => {
   docketClerkAddsPaperFiledPendingDocketEntryAndServes(cerebralTest, 'EVID');
 
   it('docket clerk views a pending report item and confirms the correct receivedAt date format', async () => {
-    await docketClerkLoadsPendingReportOnChiefJudgeSelection({
-      cerebralTest,
-      shouldLoadMore: true,
-    });
+    await docketClerkLoadsPendingReportOnChiefJudgeSelection({ cerebralTest });
 
     const caseReceivedAtDate = cerebralTest.getState('caseDetail.receivedAt');
     pendingItems = cerebralTest.getState('pendingReports.pendingItems');
@@ -207,10 +195,7 @@ describe('docket clerk interacts with pending items', () => {
   });
 
   it('docket clerk checks that pendingItems are sorted chronologically by receivedAt dates', async () => {
-    await docketClerkLoadsPendingReportOnChiefJudgeSelection({
-      cerebralTest,
-      shouldLoadMore: true,
-    });
+    await docketClerkLoadsPendingReportOnChiefJudgeSelection({ cerebralTest });
 
     pendingItems = cerebralTest.getState('pendingReports.pendingItems');
     const sortedReceivedAtDates =

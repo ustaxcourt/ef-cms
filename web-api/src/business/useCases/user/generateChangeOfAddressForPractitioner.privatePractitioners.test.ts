@@ -67,6 +67,7 @@ describe('generateChangeOfAddress', () => {
         ({ caseToUpdate }) => caseToUpdate,
       );
   });
+
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()

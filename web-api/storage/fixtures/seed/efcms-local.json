@@ -16842,7 +16842,7 @@
     "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
-    "preferredTrialCity": null,
+    "preferredTrialCity": "Washington, District of Columbia",
     "initialCaption": "Test Petitioner, Petitioner",
     "hasPendingItems": false,
     "orderForAmendedPetitionAndFilingFee": false,
@@ -16899,7 +16899,7 @@
     "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
-    "preferredTrialCity": "Washington, District of Columbia, 1613493436635",
+    "preferredTrialCity": "Washington, District of Columbia",
     "initialCaption": "Case is ready for trial",
     "hasPendingItems": true,
     "orderForAmendedPetitionAndFilingFee": false,
@@ -17078,7 +17078,7 @@
     "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
-    "preferredTrialCity": "Washington, District of Columbia, 1613493436635",
+    "preferredTrialCity": "Washington, District of Columbia",
     "initialCaption": "Case is ready for trial and blocked",
     "hasPendingItems": true,
     "orderForAmendedPetitionAndFilingFee": false,
@@ -17261,7 +17261,7 @@
     "orderForCds": false,
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
-    "preferredTrialCity": "Washington, District of Columbia, 1613493436635",
+    "preferredTrialCity": "Washington, District of Columbia",
     "initialCaption": "Case is ready for trial with deadline",
     "hasPendingItems": true,
     "orderForAmendedPetitionAndFilingFee": false,
@@ -34398,5 +34398,13 @@
     "pk": "user|f0a1e52a-876f-4c03-853c-f66e407e5a1e",
     "userId": "f0a1e52a-876f-4c03-853c-f66e407e5a1e",
     "email": "trialclerk@example.com"
+  },
+  {
+    "pk": "user-case-note|107-19",
+    "sk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "107-19",
+    "entityName": "UserCaseNote",
+    "notes": "Test",
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
   }
 ]
