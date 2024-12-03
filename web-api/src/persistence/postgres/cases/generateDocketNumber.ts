@@ -63,7 +63,7 @@ export const generateDocketNumber = async ({
       const existingCase = await getCaseByDocketNumber({
         applicationContext,
         authorizedUser: undefined,
-        docketNumber,
+        docketNumber: nextDocketNumber,
       });
       if (!existingCase) {
         return nextDocketNumber;

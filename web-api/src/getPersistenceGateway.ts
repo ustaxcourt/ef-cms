@@ -59,10 +59,8 @@ import { getCaseByDocketNumber } from './persistence/postgres/cases/getCaseByDoc
 import { getCaseDeadlinesByDateRange } from './persistence/elasticsearch/caseDeadlines/getCaseDeadlinesByDateRange';
 import { getCaseDeadlinesByDocketNumber } from './persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getCaseInventoryReport } from './persistence/elasticsearch/getCaseInventoryReport';
-import { getCaseMetadataByDocketNumber } from './persistence/dynamo/cases/getCaseMetadataByDocketNumber';
 import { getCaseMetadataWithCounsel } from './persistence/dynamo/cases/getCaseMetadataWithCounsel';
 import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheetsByDocketNumber';
-import { getCasesByDocketNumbers } from './persistence/dynamo/cases/getCasesByDocketNumbers';
 import { getCasesByLeadDocketNumber } from './persistence/dynamo/cases/getCasesByLeadDocketNumber';
 import { getCasesByUserId } from './persistence/elasticsearch/getCasesByUserId';
 import { getCasesClosedCountByJudge } from './persistence/elasticsearch/getCasesClosedCountByJudge';
@@ -74,7 +72,6 @@ import { getCasesMetadataByLeadDocketNumber } from './persistence/dynamo/cases/g
 import { getClientId } from './persistence/cognito/getClientId';
 import { getColdCases } from './persistence/elasticsearch/reports/getColdCases';
 import { getConfigurationItemValue } from './persistence/dynamo/deployTable/getConfigurationItemValue';
-import { getConsolidatedCasesCount } from '@web-api/persistence/dynamo/cases/getConsolidatedCasesCount';
 import { getCountOfConsolidatedCases } from '@web-api/persistence/elasticsearch/getCountOfConsolidatedCases';
 import { getDeployTableStatus } from './persistence/dynamo/getDeployTableStatus';
 import { getDispatchNotification } from './persistence/dynamo/notifications/getDispatchNotification';
@@ -270,10 +267,8 @@ const gatewayMethods = {
   getCaseDeadlinesByDateRange,
   getCaseDeadlinesByDocketNumber,
   getCaseInventoryReport,
-  getCaseMetadataByDocketNumber,
   getCaseMetadataWithCounsel,
   getCaseWorksheetsByDocketNumber,
-  getCasesByDocketNumbers,
   getCasesByLeadDocketNumber,
   getCasesByUserId,
   getCasesClosedCountByJudge,
@@ -282,7 +277,6 @@ const gatewayMethods = {
   getClientId,
   getColdCases,
   getConfigurationItemValue,
-  getConsolidatedCasesCount,
   getCountOfConsolidatedCases,
   getDeployTableStatus,
   getDispatchNotification,

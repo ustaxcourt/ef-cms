@@ -96,7 +96,7 @@ export const createCaseFromPaperInteractor = async (
     authorizedUser,
   }).validate();
 
-  const docketNumber = generateDocketNumber({
+  const docketNumber = await generateDocketNumber({
     applicationContext,
     receivedAt: petitionMetadata.receivedAt,
   });

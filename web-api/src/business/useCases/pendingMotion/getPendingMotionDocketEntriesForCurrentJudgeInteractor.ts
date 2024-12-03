@@ -11,6 +11,8 @@ import {
   calculateDifferenceInDays,
   prepareDateFromString,
 } from '@shared/business/utilities/DateHandler';
+import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
+import { getConsolidatedCasesCount } from '@web-api/persistence/postgres/cases/getConsolidatedCasesCount';
 import { isLeadCase } from '@shared/business/entities/cases/Case';
 import { partition } from 'lodash';
 
@@ -192,20 +194,20 @@ async function getCaseMetadata(
   applicationContext: ServerApplicationContext,
   docketEntry: RawDocketEntry,
 ): Promise<RawCase & { consolidatedCaseCount: number }> {
-  const caseMetadata: RawCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseMetadataByDocketNumber({
-      applicationContext,
-      docketNumber: docketEntry.docketNumber,
-    });
+  const caseMetadata = await getCaseMetadataByDocketNumber({
+    docketNumber: docketEntry.docketNumber,
+  });
+
+  if (!caseMetadata) {
+    throw new Error(
+      `no case metadata found for docket number ${docketEntry.docketNumber}`,
+    );
+  }
 
   const consolidatedCaseCount = caseMetadata.leadDocketNumber
-    ? await applicationContext
-        .getPersistenceGateway()
-        .getConsolidatedCasesCount({
-          applicationContext,
-          leadDocketNumber: caseMetadata.leadDocketNumber,
-        })
+    ? await getConsolidatedCasesCount({
+        leadDocketNumber: caseMetadata.leadDocketNumber,
+      })
     : 1;
 
   return {
