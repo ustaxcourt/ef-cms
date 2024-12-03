@@ -153,7 +153,7 @@ export const InPersonProceedingForm = connect(
             ZIP code <span className="usa-hint">(optional)</span>
           </label>
           <input
-            aria-label="zip code"
+            aria-label="ZIP code"
             autoCapitalize="none"
             className="usa-input max-width-200 usa-input--medium"
             data-testid="trial-session-postal-code-input"
