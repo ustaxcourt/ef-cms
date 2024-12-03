@@ -1,18 +1,33 @@
 import { type ParseArgsConfig, parseArgs } from 'node:util';
 
 export type ScriptConfig = {
-  description: string;
-  parameters: { [key: string]: ScriptParameter };
+  description?: string;
+  parameters: {
+    /**
+     * If the `long` and `position` properties are not defined in the
+     * `ScriptParameter` object, the parameter is called by its key
+     * prefixed with two dashes (e.g. `--year`). This key will also be
+     * used when retrieving a parsed value with `parseArguments`.
+     */
+    [key: string]: ScriptParameter;
+  };
 };
 
 export type ScriptParameter = {
   commaDelimited?: boolean;
   description?: string;
   default?: string | boolean | string[];
+  /**
+   * Only necessary if you want to call the parameter (e.g. `--event-code`)
+   * differently from how want you get it back (e.g. `eventCode`).
+   */
   long?: string;
   multiple?: boolean;
   position?: number;
   required?: boolean;
+  /**
+   * Optionally call the parameter prefixed with a single dash (e.g. `-t`).
+   */
   short?: string;
   transform?: 'number' | 'toLowerCase' | 'toUpperCase';
   type: 'string' | 'boolean';
@@ -155,7 +170,9 @@ const usage = (sc: ScriptConfig, warning?: string): void => {
   if (warning) {
     console.log(`${warning}\n`);
   }
-  console.log(`${sc.description}\n`);
+  if (sc.description?.length) {
+    console.log(`${sc.description}\n`);
+  }
   console.log(`Usage: ${example}\n`);
   console.log('Options:', sc.parameters);
 };
@@ -184,6 +201,7 @@ const buildParseArgsConfigObject = (parameters: {
     const paramConfig = parameters[varName];
     const { multiple, short, type } = paramConfig;
     const defaultValue = type === 'boolean' ? false : paramConfig.default;
+    // parseArgs doesn't distinguish longName from varName like we do
     const param = paramConfig.long?.length ? paramConfig.long : varName;
     if (
       'position' in paramConfig &&
@@ -241,7 +259,7 @@ const rawParseArgs = (
   };
 
   // the arguments were cached at the time we imported node:util
-  // to facilitate testing we'll explicitly set them in the config object
+  // to facilitate testing we'll set them now in case they've changed
   config.args = process.argv.slice(2);
 
   try {
@@ -331,6 +349,7 @@ const parseAndTransformValues = (
   const parsedParameters = {};
   for (const varName in sc.parameters) {
     const paramConfig = sc.parameters[varName];
+    // parseArgs doesn't distinguish longName from varName like we do
     const longName = paramConfig.long?.length ? paramConfig.long : varName;
     let value:
       | string
@@ -373,11 +392,6 @@ const validateParsedValues = (
   };
   const { optionalPositionals, requiredParameters, requiredPositionals } =
     collateArguments(sc.parameters);
-  if (optionalPositionals.length && requiredParameters.length) {
-    showErrorAndExit(
-      'invalid parameters: optional positionals are not compatible with required parameters',
-    );
-  }
   const allPositionals = [...requiredPositionals, ...optionalPositionals];
   if (allPositionals.length) {
     const positionsReversed = [...requiredPositionals, ...optionalPositionals]

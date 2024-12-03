@@ -143,27 +143,27 @@ describe('parseArguments', () => {
   });
   describe('parameter validation', () => {
     it('does not allow a boolean parameter to be defaulted to true', () => {
-      const mockInvalidScriptConfig = cloneDeep(mockScriptConfig);
-      mockInvalidScriptConfig.parameters.fiscal.required = true;
-      const { fiscal } = parseArguments(mockInvalidScriptConfig);
+      const itsScriptConfig = cloneDeep(mockScriptConfig);
+      itsScriptConfig.parameters.fiscal.required = true;
+      const { fiscal } = parseArguments(itsScriptConfig);
       expect(fiscal).toBeFalsy();
       expect(mockExit).not.toHaveBeenCalled();
     });
     it('positionals that precede a required positional will also be required', () => {
-      const mockInvalidScriptConfig = cloneDeep(mockScriptConfig);
-      mockInvalidScriptConfig.parameters.eventCode.required = false;
-      mockInvalidScriptConfig.parameters.judge = {
+      const itsScriptConfig = cloneDeep(mockScriptConfig);
+      itsScriptConfig.parameters.eventCode.required = false;
+      itsScriptConfig.parameters.judge = {
         position: 1,
         required: false,
         type: 'string',
       };
-      mockInvalidScriptConfig.parameters.status = {
+      itsScriptConfig.parameters.status = {
         position: 2,
         required: true,
         type: 'string',
       };
       try {
-        parseArguments(mockInvalidScriptConfig);
+        parseArguments(itsScriptConfig);
       } catch (err: any) {
         expect(err.toString()).toEqual('Error: caught process.exit');
       }
@@ -173,38 +173,25 @@ describe('parseArguments', () => {
       );
       expect(mockExit).toHaveBeenCalledWith(1);
     });
-    it('does not allow required parameters if there are optional positionals', () => {
-      const mockInvalidScriptConfig = cloneDeep(mockScriptConfig);
-      mockInvalidScriptConfig.parameters.year = {
-        required: true,
-        short: 'y',
-        type: 'string',
-      };
-      mockInvalidScriptConfig.parameters.judge = {
+    it('does not allow positionals that are not sequential', () => {
+      const itsScriptConfig = cloneDeep(mockScriptConfig);
+      itsScriptConfig.parameters.fiscal = {
         position: 1,
         required: false,
         type: 'string',
       };
-      try {
-        parseArguments(mockInvalidScriptConfig);
-      } catch (err: any) {
-        expect(err.toString()).toEqual('Error: caught process.exit');
-      }
-      expect(mockConsoleLog).toHaveBeenNthCalledWith(
-        1,
-        'invalid parameters: optional positionals are not compatible with required parameters\n',
-      );
-      expect(mockExit).toHaveBeenCalledWith(1);
-    });
-    it('exits if positionals are not sequential', () => {
-      const mockInvalidScriptConfig = cloneDeep(mockScriptConfig);
-      mockInvalidScriptConfig.parameters.judge = {
+      itsScriptConfig.parameters.year = {
+        position: 2,
+        required: false,
+        type: 'string',
+      };
+      itsScriptConfig.parameters.judge = {
         position: 5,
         required: false,
         type: 'string',
       };
       try {
-        parseArguments(mockInvalidScriptConfig);
+        parseArguments(itsScriptConfig);
       } catch (err: any) {
         expect(err.toString()).toEqual('Error: caught process.exit');
       }
@@ -214,16 +201,26 @@ describe('parseArguments', () => {
       );
       expect(mockExit).toHaveBeenCalledWith(1);
     });
-    it('exists if positions do not start at 0', () => {
-      const mockInvalidScriptConfig = cloneDeep(mockScriptConfig);
-      mockInvalidScriptConfig.parameters.eventCode.position = 22;
-      mockInvalidScriptConfig.parameters.judge = {
+    it('does not allow positionals that do not start at 0', () => {
+      const itsScriptConfig = cloneDeep(mockScriptConfig);
+      itsScriptConfig.parameters.eventCode.position = 20;
+      itsScriptConfig.parameters.fiscal = {
+        position: 21,
+        required: false,
+        type: 'string',
+      };
+      itsScriptConfig.parameters.year = {
+        position: 22,
+        required: false,
+        type: 'string',
+      };
+      itsScriptConfig.parameters.judge = {
         position: 23,
         required: false,
         type: 'string',
       };
       try {
-        parseArguments(mockInvalidScriptConfig);
+        parseArguments(itsScriptConfig);
       } catch (err: any) {
         expect(err.toString()).toEqual('Error: caught process.exit');
       }
@@ -234,14 +231,14 @@ describe('parseArguments', () => {
       expect(mockExit).toHaveBeenCalledWith(1);
     });
     it('exits if required positionals were not provided', () => {
-      const mockReqPosScrConf = cloneDeep(mockScriptConfig);
-      mockReqPosScrConf.parameters.judge = {
+      const itsScriptConfig = cloneDeep(mockScriptConfig);
+      itsScriptConfig.parameters.judge = {
         position: 1,
         required: true,
         type: 'string',
       };
       try {
-        parseArguments(mockReqPosScrConf);
+        parseArguments(itsScriptConfig);
       } catch (err: any) {
         expect(err.toString()).toEqual('Error: caught process.exit');
       }
@@ -252,14 +249,14 @@ describe('parseArguments', () => {
       expect(mockExit).toHaveBeenCalledWith(1);
     });
     it('exits if required parameters were not provided', () => {
-      const mockReqParamScrConf = cloneDeep(mockScriptConfig);
-      mockReqParamScrConf.parameters.judge = {
+      const itsScriptConfig = cloneDeep(mockScriptConfig);
+      itsScriptConfig.parameters.judge = {
         required: true,
         short: 'j',
         type: 'string',
       };
       try {
-        parseArguments(mockReqParamScrConf);
+        parseArguments(itsScriptConfig);
       } catch (err: any) {
         expect(err.toString()).toEqual('Error: caught process.exit');
       }
@@ -273,11 +270,11 @@ describe('parseArguments', () => {
   describe('value transformation', () => {
     describe('number', () => {
       it('transforms a string into a number', () => {
-        const mockYearAsNotMultipleScriptConfig = cloneDeep(mockScriptConfig);
-        mockYearAsNotMultipleScriptConfig.parameters.year.default = '2024';
-        mockYearAsNotMultipleScriptConfig.parameters.year.multiple = false;
+        const itsScriptConfig = cloneDeep(mockScriptConfig);
+        itsScriptConfig.parameters.year.default = '2024';
+        itsScriptConfig.parameters.year.multiple = false;
         process.argv.push(...['-y', '2018']);
-        const { year } = parseArguments(mockYearAsNotMultipleScriptConfig);
+        const { year } = parseArguments(itsScriptConfig);
         expect(year).toEqual(2018);
       });
       it('transforms an array of strings into an array of numbers', () => {
@@ -285,36 +282,38 @@ describe('parseArguments', () => {
         const { year } = parseArguments(mockScriptConfig);
         expect(year).toEqual([2020, 2024]);
       });
-      it('transforms a string containing comma-delimited integers and integer ranges into a sorted array of unique integers', () => {
-        process.argv.push(...['-y', '8,12,3-5,1,7-9']);
-        const { year } = parseArguments(mockScriptConfig);
-        expect(year).toEqual([1, 3, 4, 5, 7, 8, 9, 12]);
-      });
+      it(
+        'transforms a string containing comma-delimited integers and integer ' +
+          'ranges into a sorted array of unique integers',
+        () => {
+          process.argv.push(...['-y', '8,12,3-5,1,7-9']);
+          const { year } = parseArguments(mockScriptConfig);
+          expect(year).toEqual([1, 3, 4, 5, 7, 8, 9, 12]);
+        },
+      );
     });
     describe('toLowerCase', () => {
       it('transforms a string to lower case', () => {
-        const mockToLowerCaseScriptConfig = cloneDeep(mockScriptConfig);
-        mockToLowerCaseScriptConfig.parameters.eventCode.transform =
-          'toLowerCase';
+        const itsScriptConfig = cloneDeep(mockScriptConfig);
+        itsScriptConfig.parameters.eventCode.transform = 'toLowerCase';
         process.argv = ['ts-node', 'some-script.ts', 'FEEW'];
-        const { eventCode } = parseArguments(mockToLowerCaseScriptConfig);
+        const { eventCode } = parseArguments(itsScriptConfig);
         expect(eventCode).toEqual('feew');
       });
     });
     describe('toUpperCase', () => {
       it('transforms a string to upper case', () => {
-        const mockToUpperCaseScriptConfig = cloneDeep(mockScriptConfig);
-        mockToUpperCaseScriptConfig.parameters.eventCode.transform =
-          'toUpperCase';
-        const { eventCode } = parseArguments(mockToUpperCaseScriptConfig);
+        const itsScriptConfig = cloneDeep(mockScriptConfig);
+        itsScriptConfig.parameters.eventCode.transform = 'toUpperCase';
+        const { eventCode } = parseArguments(itsScriptConfig);
         expect(eventCode).toEqual('NOA');
       });
       it('transforms a comma-delimited string into an array of upper case strings', () => {
-        const mockCdToUcScriptConfig = cloneDeep(mockScriptConfig);
-        mockCdToUcScriptConfig.parameters.eventCode.commaDelimited = true;
-        mockCdToUcScriptConfig.parameters.eventCode.transform = 'toUpperCase';
+        const itsScriptConfig = cloneDeep(mockScriptConfig);
+        itsScriptConfig.parameters.eventCode.commaDelimited = true;
+        itsScriptConfig.parameters.eventCode.transform = 'toUpperCase';
         process.argv = ['ts-node', 'some-script.ts', 'm071,m074'];
-        const { eventCode } = parseArguments(mockCdToUcScriptConfig);
+        const { eventCode } = parseArguments(itsScriptConfig);
         expect(eventCode).toEqual(['M071', 'M074']);
       });
     });
@@ -322,55 +321,62 @@ describe('parseArguments', () => {
   describe('ScriptParameter properties', () => {
     describe('commaDelimited', () => {
       it('splits a comma-delimited string into an array of strings', () => {
-        const mockCommaDelimitedScriptConfig = cloneDeep(mockScriptConfig);
-        mockCommaDelimitedScriptConfig.parameters.eventCode.commaDelimited =
-          true;
+        const itsScriptConfig = cloneDeep(mockScriptConfig);
+        itsScriptConfig.parameters.eventCode.commaDelimited = true;
         process.argv = ['ts-node', 'some-script.ts', 'M071,M074,FEEW'];
-        const { eventCode } = parseArguments(mockCommaDelimitedScriptConfig);
+        const { eventCode } = parseArguments(itsScriptConfig);
         expect(eventCode).toEqual(['M071', 'M074', 'FEEW']);
       });
     });
     describe('long', () => {
       it("allows a parameter's long form to differ from its resulting parsed key", () => {
-        const mockLongFormParamScriptConfig = cloneDeep(mockScriptConfig);
-        mockLongFormParamScriptConfig.parameters.eventCode = {
+        const itsScriptConfig = cloneDeep(mockScriptConfig);
+        itsScriptConfig.parameters.eventCode = {
           long: 'event-code',
           short: 'c',
           type: 'string',
         };
         process.argv = ['ts-node', 'some-script.ts', '--event-code', 'NOA'];
-        const { eventCode } = parseArguments(mockLongFormParamScriptConfig);
+        const { eventCode } = parseArguments(itsScriptConfig);
         expect(eventCode).toEqual('NOA');
       });
     });
     describe('multiple', () => {
-      it('compiles a single flat array containing all members when multiple sets of comma-delimited values are provided', () => {
-        const mockMultipleScriptConfig = cloneDeep(mockScriptConfig);
-        mockMultipleScriptConfig.parameters.eventCode = {
-          commaDelimited: true,
-          long: 'event-code',
-          multiple: true,
-          short: 'c',
-          type: 'string',
-        };
-        process.argv = [
-          'ts-node',
-          'some-script.ts',
-          '--event-code',
-          'M01,M02',
-          '--event-code',
-          'M042',
-          '-c',
-          'M071,M074',
-        ];
-        const { eventCode } = parseArguments(mockMultipleScriptConfig);
-        expect(eventCode).toEqual(['M01', 'M02', 'M042', 'M071', 'M074']);
-      });
-      it('compiles a single flat array containing all members when multiple sets of integer ranges are provided', () => {
-        process.argv.push(...['-y', '2018,2020', '-y', '2022-2024']);
-        const { year } = parseArguments(mockScriptConfig);
-        expect(year).toEqual([2018, 2020, 2022, 2023, 2024]);
-      });
+      it(
+        'compiles a single flat array containing all members when multiple ' +
+          'sets of comma-delimited values are provided',
+        () => {
+          const itsScriptConfig = cloneDeep(mockScriptConfig);
+          itsScriptConfig.parameters.eventCode = {
+            commaDelimited: true,
+            long: 'event-code',
+            multiple: true,
+            short: 'c',
+            type: 'string',
+          };
+          process.argv = [
+            'ts-node',
+            'some-script.ts',
+            '--event-code',
+            'M01,M02',
+            '--event-code',
+            'M042',
+            '-c',
+            'M071,M074',
+          ];
+          const { eventCode } = parseArguments(itsScriptConfig);
+          expect(eventCode).toEqual(['M01', 'M02', 'M042', 'M071', 'M074']);
+        },
+      );
+      it(
+        'compiles a single flat array containing all members when multiple ' +
+          'sets of integer ranges are provided',
+        () => {
+          process.argv.push(...['-y', '2018,2020', '-y', '2022-2024']);
+          const { year } = parseArguments(mockScriptConfig);
+          expect(year).toEqual([2018, 2020, 2022, 2023, 2024]);
+        },
+      );
     });
   });
 });
