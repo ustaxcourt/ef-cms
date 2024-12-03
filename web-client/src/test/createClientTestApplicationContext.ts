@@ -433,7 +433,6 @@ const createTestApplicationContext = () => {
     getCaseDeadlinesByDocketNumber: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByDocketNumber),
-    getCasesByFilters: jest.fn(),
     getDispatchNotification: jest.fn(),
     getDocument: jest.fn(),
     getDocumentQCInboxForSection: jest.fn(),

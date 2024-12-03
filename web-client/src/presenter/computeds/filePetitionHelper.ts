@@ -49,7 +49,7 @@ export const filePetitionHelper = (
 
   const otherFilingOptions = getOtherFilingOptions(isPetitioner);
   const primaryContactNameLabel = isPetitioner
-    ? 'Full Name'
+    ? 'Full name'
     : 'Petitioner’s full name';
 
   const businessFieldNames = getBusinessFieldLabels(businessType);

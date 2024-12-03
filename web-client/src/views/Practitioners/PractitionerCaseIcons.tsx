@@ -2,6 +2,7 @@ import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import React from 'react';
 
 // This might be useful for more than just practitioners
+// It is similar to CaseIcons, but without indentation
 export function PractitionerCaseIcons({
   formattedCase,
 }: {
