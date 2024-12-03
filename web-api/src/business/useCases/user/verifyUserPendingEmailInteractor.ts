@@ -1,4 +1,3 @@
-import { Connection } from '@web-api/notifications/sendNotificationToConnection';
 import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
 import {
   ROLE_PERMISSIONS,
@@ -10,7 +9,6 @@ import {
   calculateDifferenceInHours,
   createISODateString,
 } from '@shared/business/utilities/DateHandler';
-import { getConnection } from 'web-client/integration-tests/helpers';
 import { updateUserPendingEmailRecord } from '@web-api/business/useCases/auth/changePasswordInteractor';
 
 export const TOKEN_EXPIRATION_TIME_HOURS = 24;
@@ -35,17 +33,7 @@ export const verifyUserPendingEmailInteractor = async (
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EMAIL_MANAGEMENT)) {
-    const connection: Connection = getConnection(clientConnectionId);
-    return await applicationContext
-      .getNotificationGateway()
-      .sendNotificationToConnection({
-        applicationContext,
-        connection,
-        messageStringified: JSON.stringify({
-          action: 'set_verify_email_notification',
-          message: 'Unauthorized to manage emails.',
-        }),
-      });
+    return;
   }
 
   const user = await applicationContext
