@@ -14,6 +14,7 @@ import {
 import { ReconciliationReportEntry } from '../entities/ReconciliationReportEntry';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCasesMetadataByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
 
 function isValidTime(time: string): boolean {
   return isValidDateString(time, [FORMATS.TIME_24_HOUR]);
@@ -75,7 +76,7 @@ export const getReconciliationReportInteractor = async (
       reconciliationDateStart: isoStart,
     });
 
-  await assignCaseCaptionFromPersistence(applicationContext, docketEntries);
+  await assignCaseCaptionFromPersistence(docketEntries);
 
   const report = {
     docketEntries:
@@ -97,7 +98,6 @@ export const getReconciliationReportInteractor = async (
  * @param {string} docketEntries the docketEntries to assign case captions
  */
 const assignCaseCaptionFromPersistence = async (
-  applicationContext: IApplicationContext,
   docketEntries: DocketEntryDynamoRecord,
 ) => {
   const docketNumbers = docketEntries.map(e => {
@@ -105,10 +105,13 @@ const assignCaseCaptionFromPersistence = async (
     e.docketNumber = docketNumber;
     return e.docketNumber;
   });
-  const casesDetails = await applicationContext
-    .getPersistenceGateway()
-    .getCasesByDocketNumbers({ applicationContext, docketNumbers });
+  const casesDetails = await getCasesMetadataByDocketNumbers({ docketNumbers });
 
+  if (!casesDetails) {
+    throw new Error('No cases found for the given docket numbers');
+  }
+
+  // 10502 TODO: Fix type error
   docketEntries.forEach(docketEntry => {
     docketEntry.caseCaption = casesDetails.find(
       detail => detail.docketNumber === docketEntry.docketNumber,

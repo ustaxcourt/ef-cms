@@ -9,6 +9,7 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { getCasesMetadataByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
 import { pick } from 'lodash';
 
 export const getCaseDeadlinesInteractor = async (
@@ -57,10 +58,10 @@ export const getCaseDeadlinesInteractor = async (
   });
 
   const afterCaseMapping = validatedCaseDeadlines
-    .filter(deadline => caseMap[deadline.docketNumber])
+    .filter(deadline => caseMap?.[deadline.docketNumber])
     .map(deadline => ({
       ...deadline,
-      ...pick(caseMap[deadline.docketNumber], [
+      ...pick(caseMap?.[deadline.docketNumber], [
         'caseCaption',
         'docketNumber',
         'docketNumberSuffix',
@@ -81,15 +82,12 @@ const getCasesByDocketNumbers = async ({
   docketNumbers: string[];
   authorizedUser: AuthUser;
 }) => {
-  const caseData = await applicationContext
-    .getPersistenceGateway()
-    .getCasesByDocketNumbers({
-      applicationContext,
-      docketNumbers,
-    });
+  const caseData = await getCasesMetadataByDocketNumbers({
+    docketNumbers,
+  });
 
   return caseData
-    .map(
+    ?.map(
       caseRecord =>
         new Case(caseRecord, {
           authorizedUser,

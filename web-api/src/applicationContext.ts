@@ -1,6 +1,5 @@
 /* eslint-disable max-lines */
 import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerator';
-import * as docketNumberGenerator from './persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
 import {
@@ -96,7 +95,6 @@ const entitiesByName = {
 export const createApplicationContext = (appContextUser = {}) => {
   return {
     barNumberGenerator,
-    docketNumberGenerator,
     environment,
     getBatchClient,
     getBounceAlertRecipients: () =>

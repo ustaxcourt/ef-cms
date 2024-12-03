@@ -8,6 +8,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { formatCase } from '@shared/business/utilities/getFormattedCaseDetail';
+import { getCasesMetadataByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
 import { partition } from 'lodash';
 
 export const getPractitionerCasesInteractor = async (
@@ -28,35 +29,35 @@ export const getPractitionerCasesInteractor = async (
       userId,
     });
 
-  const cases = await applicationContext
-    .getPersistenceGateway()
-    .getCasesByDocketNumbers({ applicationContext, docketNumbers });
+  const cases = await getCasesMetadataByDocketNumbers({ docketNumbers });
 
-  const caseDetails: PractitionerCaseDetail[] = cases.map(c => {
-    const formattedCase = formatCase(applicationContext, c, authorizedUser);
+  const caseDetails: PractitionerCaseDetail[] = cases
+    ? cases.map(c => {
+        const formattedCase = formatCase(applicationContext, c, authorizedUser);
 
-    const {
-      caseTitle,
-      consolidatedIconTooltipText,
-      docketNumber,
-      docketNumberWithSuffix,
-      inConsolidatedGroup,
-      isLeadCase,
-      isSealed,
-      status,
-    } = formattedCase;
+        const {
+          caseTitle,
+          consolidatedIconTooltipText,
+          docketNumber,
+          docketNumberWithSuffix,
+          inConsolidatedGroup,
+          isLeadCase,
+          isSealed,
+          status,
+        } = formattedCase;
 
-    return {
-      caseTitle,
-      consolidatedIconTooltipText,
-      docketNumber,
-      docketNumberWithSuffix,
-      inConsolidatedGroup,
-      isLeadCase,
-      isSealed,
-      status,
-    };
-  });
+        return {
+          caseTitle,
+          consolidatedIconTooltipText,
+          docketNumber,
+          docketNumberWithSuffix,
+          inConsolidatedGroup,
+          isLeadCase,
+          isSealed,
+          status,
+        };
+      })
+    : ([] as PractitionerCaseDetail[]);
 
   const [closedCases, openCases] = partition(
     Case.sortByDocketNumber(caseDetails).reverse(),

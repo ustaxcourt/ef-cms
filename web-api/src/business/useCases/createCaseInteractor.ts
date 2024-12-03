@@ -85,7 +85,7 @@ export const createCaseInteractor = async (
 
   const petitionEntity = new ElectronicPetition(petitionMetadata).validate();
 
-  const docketNumber = generateDocketNumber({ applicationContext });
+  const docketNumber = await generateDocketNumber({ applicationContext });
 
   let privatePractitioners: UserRecord[] = [];
   if (user.role === ROLES.privatePractitioner) {
