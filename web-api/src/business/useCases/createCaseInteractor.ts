@@ -17,6 +17,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { UserCase } from '../../../../shared/src/business/entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '../../../../shared/src/business/entities/WorkItem';
+import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 import { setServiceIndicatorsForCase } from '../../../../shared/src/business/utilities/setServiceIndicatorsForCase';
 
@@ -84,10 +85,7 @@ export const createCaseInteractor = async (
 
   const petitionEntity = new ElectronicPetition(petitionMetadata).validate();
 
-  const docketNumber =
-    await applicationContext.docketNumberGenerator.createDocketNumber({
-      applicationContext,
-    });
+  const docketNumber = generateDocketNumber({ applicationContext });
 
   let privatePractitioners: UserRecord[] = [];
   if (user.role === ROLES.privatePractitioner) {

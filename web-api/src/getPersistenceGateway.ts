@@ -8,7 +8,6 @@ import { bulkDeleteRecords } from './persistence/elasticsearch/bulkDeleteRecords
 import { bulkIndexRecords } from './persistence/elasticsearch/bulkIndexRecords';
 import { caseAdvancedSearch } from './persistence/elasticsearch/caseAdvancedSearch';
 import { casePublicSearch as casePublicSearchPersistence } from './persistence/elasticsearch/casePublicSearch';
-import { createCase } from './persistence/dynamo/cases/createCase';
 import { createCaseDeadline } from './persistence/dynamo/caseDeadlines/createCaseDeadline';
 import { createCaseTrialSortMappingRecords } from './persistence/dynamo/cases/createCaseTrialSortMappingRecords';
 import { createChangeOfAddressJob } from './persistence/dynamo/jobs/ChangeOfAddress/createChangeOfAddressJob';
@@ -133,7 +132,6 @@ import { setChangeOfAddressCaseAsDone } from './persistence/dynamo/jobs/ChangeOf
 import { setStoredApplicationHealth } from '@web-api/persistence/dynamo/deployTable/setStoredApplicationHealth';
 import { setTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
 import { setTrialSessionProcessingStatus } from './persistence/dynamo/trialSessions/setTrialSessionProcessingStatus';
-import { updateCase } from './persistence/dynamo/cases/updateCase';
 import { updateCaseCorrespondence } from './persistence/dynamo/correspondence/updateCaseCorrespondence';
 import { updateCaseHearing } from './persistence/dynamo/trialSessions/updateCaseHearing';
 import { updateCaseWorksheet } from '@web-api/persistence/dynamo/caseWorksheet/updateCaseWorksheet';
@@ -199,7 +197,6 @@ const gatewayMethods = {
     associateUserWithCasePending,
     bulkDeleteRecords,
     bulkIndexRecords,
-    createCase,
     createCaseDeadline,
     createCaseTrialSortMappingRecords,
     createJobStatus,
@@ -223,7 +220,6 @@ const gatewayMethods = {
     setExpiresAt,
     setTrialSessionJobStatusForCase,
     setTrialSessionProcessingStatus,
-    updateCase,
     updateCaseCorrespondence,
     updateCaseHearing,
     updateCaseWorksheet,
