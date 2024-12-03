@@ -17,7 +17,7 @@ const expiredTokenAlertError = {
   title: 'Verification email link expired',
 };
 
-const genericAlertError = {
+export const genericAlertError = {
   message: (
     <>
       Your request cannot be completed. Please try to log in. If you’re still
