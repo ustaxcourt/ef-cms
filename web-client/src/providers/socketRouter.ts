@@ -136,6 +136,9 @@ export const socketRouter = (app, onMessageCallbackFn?) => {
       case 'download_csv_file':
         await app.getSequence('downloadCsvFileSequence')(message);
         break;
+      case 'set_verify_email_notification':
+        await app.getSequence('setVerifyEmailNotificationSequence')(message);
+        break;
     }
 
     (onMessageCallbackFn || noop)(message);
