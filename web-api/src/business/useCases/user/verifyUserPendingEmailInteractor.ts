@@ -40,7 +40,6 @@ export const verifyUserPendingEmailInteractor = async (
         clientConnectionId,
         message: {
           action: 'set_verify_email_notification',
-          message: 'Something wrong with user',
         },
         userId: (authorizedUser as UnknownAuthUser)?.userId!,
       });
@@ -68,7 +67,6 @@ export const verifyUserPendingEmailInteractor = async (
         clientConnectionId,
         message: {
           action: 'set_verify_email_notification',
-          message: 'Tokens do not match',
         },
         userId: user.userId,
       });
@@ -106,7 +104,6 @@ export const verifyUserPendingEmailInteractor = async (
         clientConnectionId,
         message: {
           action: 'set_verify_email_notification',
-          message: 'Email is not available',
         },
         userId: user.userId,
       });
