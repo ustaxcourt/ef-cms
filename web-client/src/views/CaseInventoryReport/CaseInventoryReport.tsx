@@ -1,6 +1,5 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
-import { CASE_INVENTORY_REPORT_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
@@ -8,12 +7,14 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 export const CaseInventoryReport = connect(
   {
     caseInventoryReportHelper: state.caseInventoryReportHelper,
+    foundCasesForCurrentPage:
+      state.caseInventoryReportData.foundCasesForCurrentPage,
+    foundCasesTotalCount: state.caseInventoryReportData.foundCasesTotalCount,
     getCaseInventoryReportSequence: sequences.getCaseInventoryReportSequence,
     gotoPrintableCaseInventoryReportSequence:
       sequences.gotoPrintableCaseInventoryReportSequence,
@@ -21,17 +22,14 @@ export const CaseInventoryReport = connect(
   },
   function CaseInventoryReport({
     caseInventoryReportHelper,
+    foundCasesForCurrentPage,
+    foundCasesTotalCount,
     getCaseInventoryReportSequence,
     gotoPrintableCaseInventoryReportSequence,
     screenMetadata,
   }) {
     const paginatorTop = useRef(null);
-
-    const { activePage, pageRecords, setActivePage, totalPages } =
-      useClientSidePaginator(
-        caseInventoryReportHelper.formattedReportData,
-        CASE_INVENTORY_REPORT_PAGE_SIZE,
-      );
+    const [activePage, setActivePage] = useState(0);
 
     return (
       <>
@@ -65,11 +63,12 @@ export const CaseInventoryReport = connect(
               name="associatedJudge"
               value={screenMetadata.associatedJudge}
               onChange={e => {
+                setActivePage(0);
                 getCaseInventoryReportSequence({
                   key: e.target.name,
+                  selectedPage: 0,
                   value: e.target.value,
                 });
-                setActivePage(0);
               }}
             >
               <option value="">- Judge -</option>
@@ -86,11 +85,12 @@ export const CaseInventoryReport = connect(
               name="status"
               value={screenMetadata.status}
               onChange={e => {
+                setActivePage(0);
                 getCaseInventoryReportSequence({
                   key: e.target.name,
+                  selectedPage: 0,
                   value: e.target.value,
                 });
-                setActivePage(0);
               }}
             >
               <option value="">- Status -</option>
@@ -107,12 +107,17 @@ export const CaseInventoryReport = connect(
           {caseInventoryReportHelper.showResultsTable && (
             <>
               <div ref={paginatorTop}>
-                {totalPages > 1 && (
+                {caseInventoryReportHelper.pageCount > 1 && (
                   <Paginator
                     currentPageIndex={activePage}
-                    totalPages={totalPages}
-                    onPageChange={pageChange => {
+                    totalPages={caseInventoryReportHelper.pageCount}
+                    onPageChange={async pageChange => {
                       setActivePage(pageChange);
+                      await getCaseInventoryReportSequence({
+                        key: null,
+                        selectedPage: pageChange,
+                        value: null,
+                      });
                       focusPaginatorTop(paginatorTop);
                     }}
                   />
@@ -122,7 +127,7 @@ export const CaseInventoryReport = connect(
               <div className="grid-row grid-gap margin-top-1">
                 <div className="grid-col-12 text-align-right">
                   <span className="text-semibold">Count:</span>{' '}
-                  {caseInventoryReportHelper.resultCount}
+                  {foundCasesTotalCount}
                 </div>
               </div>
               <div className="grid-row grid-gap margin-top-1">
@@ -152,7 +157,7 @@ export const CaseInventoryReport = connect(
                       </tr>
                     </thead>
                     <tbody>
-                      {pageRecords.map(row => (
+                      {foundCasesForCurrentPage.map(row => (
                         <tr key={row.docketNumber}>
                           <td className="width-205">
                             <ConsolidatedCaseIcon
@@ -177,12 +182,17 @@ export const CaseInventoryReport = connect(
                       ))}
                     </tbody>
                   </table>
-                  {totalPages > 1 && (
+                  {caseInventoryReportHelper.pageCount > 1 && (
                     <Paginator
                       currentPageIndex={activePage}
-                      totalPages={totalPages}
-                      onPageChange={pageChange => {
+                      totalPages={caseInventoryReportHelper.pageCount}
+                      onPageChange={async pageChange => {
                         setActivePage(pageChange);
+                        await getCaseInventoryReportSequence({
+                          key: null,
+                          selectedPage: pageChange,
+                          value: null,
+                        });
                         focusPaginatorTop(paginatorTop);
                       }}
                     />

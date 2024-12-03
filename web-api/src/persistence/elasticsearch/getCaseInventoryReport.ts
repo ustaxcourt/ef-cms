@@ -7,18 +7,27 @@ import { search } from './searchClient';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.associatedJudge the optional judge filter
+ * * @param {number} providers.from the item index to start from
+ * @param {number} providers.pageSize the number of items to retrieve
  * @param {string} providers.status the optional status filter
  * @returns {object} the items found and the total count
  */
 export const getCaseInventoryReport = async ({
   applicationContext,
   associatedJudge,
+  from = 0,
+  pageSize,
   status,
 }: {
   applicationContext: IApplicationContext;
   associatedJudge?: string;
+  from?: number;
+  pageSize?: number;
   status?: string;
-}): Promise<{ foundCases: RawCase[] }> => {
+}): Promise<{
+  foundCases: RawCase[];
+  totalCount: number;
+}> => {
   const source = [
     'associatedJudge',
     'caseCaption',
@@ -28,10 +37,16 @@ export const getCaseInventoryReport = async ({
     'leadDocketNumber',
     'status',
   ];
+  const { CASE_INVENTORY_PAGE_SIZE } = applicationContext.getConstants();
+  const size =
+    pageSize && pageSize <= CASE_INVENTORY_PAGE_SIZE
+      ? pageSize
+      : CASE_INVENTORY_PAGE_SIZE;
 
   const searchParameters = {
     body: {
       _source: source,
+      from,
       query: {
         bool: {
           must: [] as QueryDslQueryContainer[],
@@ -45,11 +60,11 @@ export const getCaseInventoryReport = async ({
           ],
         },
       },
+      size,
       sort: [{ 'sortableDocketNumber.N': { order: 'asc' } }],
       track_total_hits: true, // to allow the count on the case inventory report UI to be accurate
     },
     index: 'efcms-case',
-    size: 10000,
   };
 
   if (associatedJudge) {
@@ -64,10 +79,10 @@ export const getCaseInventoryReport = async ({
     });
   }
 
-  const { results } = await search({
+  const { results, total } = await search({
     applicationContext,
     searchParameters,
   });
 
-  return { foundCases: results };
+  return { foundCases: results, totalCount: total };
 };

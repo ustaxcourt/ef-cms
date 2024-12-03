@@ -112,11 +112,12 @@ export const CaseDeadlines = connect(
                     name="judges"
                     placeholder="- Judge -"
                     value={caseDeadlineReport.judgeFilter}
-                    onChange={e =>
+                    onChange={e => {
                       filterCaseDeadlinesByJudgeSequence({
                         judge: e,
-                      })
-                    }
+                      });
+                      setActivePage(0);
+                    }}
                   >
                     <option value="">-Judge-</option>
                     {caseDeadlineReportHelper.judges.map(judge => (

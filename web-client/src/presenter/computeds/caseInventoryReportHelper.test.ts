@@ -10,9 +10,19 @@ import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('caseInventoryReportHelper', () => {
+  const testCaseInventoryPageSize = 25;
+
+  const mockConstants = {
+    ...applicationContext.getConstants(),
+    CASE_INVENTORY_PAGE_SIZE: testCaseInventoryPageSize,
+  };
+
   const caseInventoryReportHelper = withAppContextDecorator(
     caseInventoryReportHelperComputed,
-    { ...applicationContext },
+    {
+      ...applicationContext,
+      getConstants: () => mockConstants,
+    },
   );
 
   it('should return all judges from state along with Chief Judge sorted alphabetically', () => {
@@ -64,11 +74,11 @@ describe('caseInventoryReportHelper', () => {
     });
   });
 
-  it('should sort and format cases from caseInventoryReportData.foundCases', () => {
+  it('should sort and format cases from caseInventoryReportData.foundCasesForCurrentPage', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
-          foundCases: [
+          foundCasesForCurrentPage: [
             {
               correspondence: [],
               docketNumber: '123-20',
@@ -86,6 +96,7 @@ describe('caseInventoryReportHelper', () => {
               docketNumberWithSuffix: '135-19',
             },
           ],
+          foundCasesTotalCount: '3',
         },
         screenMetadata: {},
       },
@@ -104,12 +115,47 @@ describe('caseInventoryReportHelper', () => {
     ]);
   });
 
-  it('should show the no results message if a filter is selected but totalCount is 0', () => {
+  it('should return the pageCount as a calculation of the number of total results over the case inventory report page size constant', () => {
+    let result = runCompute(caseInventoryReportHelper, {
+      state: {
+        caseInventoryReportData: {
+          foundCasesTotalCount: testCaseInventoryPageSize * 3, // three pages of data
+        },
+        screenMetadata: {},
+      },
+    });
+
+    expect(result.pageCount).toEqual(3);
+
+    result = runCompute(caseInventoryReportHelper, {
+      state: {
+        caseInventoryReportData: {
+          foundCasesTotalCount: testCaseInventoryPageSize + 1,
+        },
+        screenMetadata: {},
+      },
+    });
+
+    expect(result.pageCount).toEqual(2);
+
+    result = runCompute(caseInventoryReportHelper, {
+      state: {
+        caseInventoryReportData: {
+          foundCasesTotalCount: 0,
+        },
+        screenMetadata: {},
+      },
+    });
+
+    expect(result.pageCount).toEqual(0);
+  });
+
+  it('should show the no results message if a filter is selected but foundCasesTotalCount is 0', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
-          foundCases: [],
-          totalCount: 0,
+          foundCasesForCurrentPage: [],
+          foundCasesTotalCount: 0,
         },
         screenMetadata: {
           associatedJudge: CHIEF_JUDGE,
@@ -123,11 +169,12 @@ describe('caseInventoryReportHelper', () => {
     expect(result.showResultsTable).toBeFalsy();
   });
 
-  it('should show the select a filter message if a filter is not selected', () => {
+  it('should show the select a filter message if foundCasesTotalCount is 0 and a filter is not selected', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
-          foundCases: [],
+          foundCasesForCurrentPage: [],
+          foundCasesTotalCount: 0,
         },
         screenMetadata: {},
       },
@@ -138,15 +185,20 @@ describe('caseInventoryReportHelper', () => {
     expect(result.showResultsTable).toBeFalsy();
   });
 
-  it('should show the results table if there are found cases', () => {
+  it('should show the results table if foundCasesTotalCount is not 0', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
-          foundCases: [{ correspondence: [], docketNumber: '123-20' }],
+          foundCasesForCurrentPage: [
+            {
+              correspondence: [],
+              docketNumber: '123-20',
+              docketNumberWithSuffix: '123-20',
+            },
+          ],
+          foundCasesTotalCount: 1,
         },
-        screenMetadata: {
-          associatedJudge: CHIEF_JUDGE,
-        },
+        screenMetadata: {},
       },
     });
 
