@@ -345,6 +345,7 @@ import { removeIrsNoticeFromFormSequence } from '@web-client/presenter/sequences
 import { removePetitionForReplacementSequence } from './sequences/removePetitionForReplacementSequence';
 import { removePetitionerAndUpdateCaptionSequence } from './sequences/removePetitionerAndUpdateCaptionSequence';
 import { removePetitionerCounselFromCaseSequence } from './sequences/removePetitionerCounselFromCaseSequence';
+import { removePetitionerRowSequence } from './sequences/TrialSessionMinutes/removePetitionerRowSequence';
 import { removeRespondentCounselFromCaseSequence } from './sequences/removeRespondentCounselFromCaseSequence';
 import { removeScannedPdfSequence } from './sequences/removeScannedPdfSequence';
 import { removeSecondarySupportingDocumentSequence } from './sequences/removeSecondarySupportingDocumentSequence';
@@ -1179,6 +1180,7 @@ export const presenterSequences = {
     removePetitionerAndUpdateCaptionSequence as unknown as Function,
   removePetitionerCounselFromCaseSequence:
     removePetitionerCounselFromCaseSequence as unknown as Function,
+  removePetitionerRowSequence,
   removeRespondentCounselFromCaseSequence:
     removeRespondentCounselFromCaseSequence as unknown as Function,
   removeScannedPdfSequence: removeScannedPdfSequence as unknown as Function,

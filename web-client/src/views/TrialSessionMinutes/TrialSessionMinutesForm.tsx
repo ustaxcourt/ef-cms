@@ -12,6 +12,7 @@ export const TrialSessionMinutesForm = connect(
   {
     addPetitionerRowSequence: sequences.addPetitionerRowSequence,
     addRecalledRowSequence: sequences.addRecalledRowSequence,
+    removePetitionerRowSequence: sequences.removePetitionerRowSequence,
     trialSessionMinutesAutosaveSequence:
       sequences.trialSessionMinutesAutosaveSequence,
     trialSessionMinutesForm: state.minuteSheetForm,
@@ -21,6 +22,7 @@ export const TrialSessionMinutesForm = connect(
   ({
     addPetitionerRowSequence,
     addRecalledRowSequence,
+    removePetitionerRowSequence,
     trialSessionMinutesAutosaveSequence,
     trialSessionMinutesForm,
     trialSessionMinutesOnChangeSequence,
@@ -48,6 +50,7 @@ export const TrialSessionMinutesForm = connect(
             <PetitionersFieldset
               addPetitionerRowHandler={addPetitionerRowSequence}
               petitionersFormState={trialSessionMinutesForm.petitioners}
+              removePetitionerRowHandler={removePetitionerRowSequence}
               onBlurHandler={trialSessionMinutesAutosaveSequence}
               onChangeHandler={trialSessionMinutesOnChangeSequence}
             />

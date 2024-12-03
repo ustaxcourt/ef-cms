@@ -8,6 +8,8 @@ export const initializeTrialSessionMinutesSheetFormAction = ({
 }: ActionProps) => {
   const { caseDetail, trialSession } = props;
 
+  console.log('caseDetail', caseDetail);
+
   const formattedTrialSession = applicationContext
     .getUtilities()
     .getFormattedTrialSessionDetails({
@@ -15,7 +17,6 @@ export const initializeTrialSessionMinutesSheetFormAction = ({
       trialSession,
     });
 
-  console.log('Case Detail: ', caseDetail);
   store.set(state.minuteSheetForm.trialSessionMetadata, {
     courtReporter: formattedTrialSession.courtReporter,
     judge: formattedTrialSession.judge!.name,
@@ -23,5 +24,8 @@ export const initializeTrialSessionMinutesSheetFormAction = ({
     trialClerk: formattedTrialSession.trialClerk!.name,
   });
   store.set(state.minuteSheetForm.caseMetadata.recalled[0].renderKey, uuidv4());
-  store.set(state.minuteSheetForm.petitioners[0].renderKey, uuidv4());
+  store.set(
+    state.minuteSheetForm.petitioners.petitioners[0].renderKey,
+    uuidv4(),
+  );
 };
