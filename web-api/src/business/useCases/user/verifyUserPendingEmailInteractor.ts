@@ -40,6 +40,7 @@ export const verifyUserPendingEmailInteractor = async (
         clientConnectionId,
         message: {
           action: 'set_verify_email_notification',
+          message: 'Unauthorized to manage emails',
         },
         userId: (authorizedUser as UnknownAuthUser)?.userId!,
       });
@@ -67,6 +68,7 @@ export const verifyUserPendingEmailInteractor = async (
         clientConnectionId,
         message: {
           action: 'set_verify_email_notification',
+          message: 'Tokens do not match',
         },
         userId: user.userId,
       });
@@ -83,6 +85,7 @@ export const verifyUserPendingEmailInteractor = async (
         clientConnectionId,
         message: {
           action: 'set_verify_email_notification',
+          message: 'Link has expired',
           messageType: 'expiredToken',
         },
         userId: user.userId,
@@ -104,6 +107,7 @@ export const verifyUserPendingEmailInteractor = async (
         clientConnectionId,
         message: {
           action: 'set_verify_email_notification',
+          message: 'Email is not available',
         },
         userId: user.userId,
       });
@@ -174,6 +178,7 @@ export const verifyUserPendingEmailInteractor = async (
       clientConnectionId,
       message: {
         action: 'set_verify_email_notification',
+        message: 'Email has been updated',
         messageType: 'success',
       },
       userId: user.userId,

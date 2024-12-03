@@ -182,7 +182,8 @@ type UserContactUpdateErrorNotification = {
 
 type SetVerifyEmailNotification = {
   action: 'set_verify_email_notification';
-  messageType?: 'expiredToken' | 'succes';
+  message: string;
+  messageType?: 'expiredToken' | 'success';
 };
 
 export type NotificationMessage =
