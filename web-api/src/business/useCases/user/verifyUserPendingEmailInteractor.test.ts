@@ -22,6 +22,7 @@ import { validUser } from '../../../../../shared/src/test/mockUsers';
 
 describe('Verify User Pending Email', () => {
   const TOKEN = '41189629-abe1-46d7-b7a4-9d3834f919cb';
+  const TEST_CLIENT_CONNECTION_ID = '41189629-TEST_CLIENT_CONNECTION_ID';
   const TOKEN_TIMESTAMP_VALID = createISODateString();
   // .001 hours = 3.6 seconds. This gives us a reasonable degree of accuracy
   // around expiration boundaries without creating a flaky test.
@@ -129,6 +130,7 @@ describe('Verify User Pending Email', () => {
         verifyUserPendingEmailInteractor(
           applicationContext,
           {
+            clientConnectionId: TEST_CLIENT_CONNECTION_ID,
             token: 'abc',
           },
           mockPetitionsClerkUser,
@@ -141,6 +143,7 @@ describe('Verify User Pending Email', () => {
         verifyUserPendingEmailInteractor(
           applicationContext,
           {
+            clientConnectionId: TEST_CLIENT_CONNECTION_ID,
             token: 'abc',
           },
           mockPrivatePractitionerUser,
@@ -160,6 +163,7 @@ describe('Verify User Pending Email', () => {
         verifyUserPendingEmailInteractor(
           applicationContext,
           {
+            clientConnectionId: TEST_CLIENT_CONNECTION_ID,
             token: undefined as any,
           },
           mockPrivatePractitionerUser,
@@ -179,6 +183,7 @@ describe('Verify User Pending Email', () => {
         verifyUserPendingEmailInteractor(
           applicationContext,
           {
+            clientConnectionId: TEST_CLIENT_CONNECTION_ID,
             token: TOKEN,
           },
           mockPrivatePractitionerUser,
@@ -198,6 +203,7 @@ describe('Verify User Pending Email', () => {
         verifyUserPendingEmailInteractor(
           applicationContext,
           {
+            clientConnectionId: TEST_CLIENT_CONNECTION_ID,
             token: TOKEN,
           },
           mockPrivatePractitionerUser,
@@ -214,6 +220,7 @@ describe('Verify User Pending Email', () => {
         verifyUserPendingEmailInteractor(
           applicationContext,
           {
+            clientConnectionId: TEST_CLIENT_CONNECTION_ID,
             token: TOKEN,
           },
           mockPrivatePractitionerUser,
@@ -225,6 +232,7 @@ describe('Verify User Pending Email', () => {
       await verifyUserPendingEmailInteractor(
         applicationContext,
         {
+          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
           token: TOKEN,
         },
         mockPrivatePractitionerUser,
@@ -244,6 +252,7 @@ describe('Verify User Pending Email', () => {
       await verifyUserPendingEmailInteractor(
         applicationContext,
         {
+          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
           token: TOKEN,
         },
         mockPrivatePractitionerUser,
@@ -264,6 +273,7 @@ describe('Verify User Pending Email', () => {
       await verifyUserPendingEmailInteractor(
         applicationContext,
         {
+          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
           token: TOKEN,
         },
         mockPrivatePractitionerUser,
@@ -290,6 +300,7 @@ describe('Verify User Pending Email', () => {
       await verifyUserPendingEmailInteractor(
         applicationContext,
         {
+          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
           token: mockPetitioner.pendingEmailVerificationToken,
         },
         mockPetitionerUser,
