@@ -16,7 +16,7 @@ terraform {
   backend "s3" {}
 
   required_providers {
-    aws = "5.73"
+    aws = "5.77.0"
     opensearch = {
       source  = "opensearch-project/opensearch"
       version = "2.2.0"
@@ -43,7 +43,7 @@ module "api-gateway-global-logging-permissions" {
 }
 
 module "ci-cd" {
-  source = "../../modules/ci-cd"
+  source               = "../../modules/ci-cd"
   lower_env_account_id = var.lower_env_account_id
 }
 

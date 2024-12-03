@@ -18,7 +18,7 @@ terraform {
   }
 
   required_providers {
-    aws = "5.73"
+    aws = "5.77.0"
   }
 }
 
@@ -86,54 +86,54 @@ resource "terraform_data" "locals" {
 }
 
 module "lambda_role_green" {
-  source      = "../../modules/lambda-role"
-  role_name   = "lambda_role_${var.environment}_green"
-  environment = var.environment
-  dns_domain  = var.dns_domain
+  source        = "../../modules/lambda-role"
+  role_name     = "lambda_role_${var.environment}_green"
+  environment   = var.environment
+  dns_domain    = var.dns_domain
   postgres_user = data.terraform_remote_state.remote.outputs.postgres_user
 }
 
 module "ecr-green-east" {
-  source     = "../../modules/elastic-container-registry"
-	environment            = var.environment
-	region                 = "us-east-1"
-	color                  = "green"
-	providers = {
+  source      = "../../modules/elastic-container-registry"
+  environment = var.environment
+  region      = "us-east-1"
+  color       = "green"
+  providers = {
     aws = aws.us-east-1
   }
 }
 
 module "ecr-green-west" {
-  source     = "../../modules/elastic-container-registry"
-	environment            = var.environment
-	region                 = "us-west-1"
-	color                  = "green"
-	providers = {
+  source      = "../../modules/elastic-container-registry"
+  environment = var.environment
+  region      = "us-west-1"
+  color       = "green"
+  providers = {
     aws = aws.us-west-1
   }
 }
 
 module "zip_batch_east" {
-  source            = "../../modules/batch"
-  environment       = var.environment
-  dns_domain        = var.dns_domain
-  region            = "us-east-1"
-  current_color     = "green"
+  source        = "../../modules/batch"
+  environment   = var.environment
+  dns_domain    = var.dns_domain
+  region        = "us-east-1"
+  current_color = "green"
 
   providers = {
-    aws           = aws.us-east-1
+    aws = aws.us-east-1
   }
 }
 
 module "zip_batch_west" {
-  source            = "../../modules/batch"
-  environment       = var.environment
-  dns_domain        = var.dns_domain
-  region            = "us-west-1"
-  current_color     = "green"
+  source        = "../../modules/batch"
+  environment   = var.environment
+  dns_domain    = var.dns_domain
+  region        = "us-west-1"
+  current_color = "green"
 
   providers = {
-    aws           = aws.us-west-1
+    aws = aws.us-west-1
   }
 }
 
