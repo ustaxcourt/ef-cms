@@ -37,6 +37,7 @@ export const trialSessionsHelper = (
   }[];
   trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
   sessionTypeOptions: { label: string; value: TrialSessionTypes }[];
+  showCreateTermButton: boolean;
   trialCitiesByState: {
     label: string;
     options: { label: string; value: string }[];
@@ -135,6 +136,7 @@ export const trialSessionsHelper = (
     endDateErrorMessage,
     isResetFiltersDisabled: !userHasSelectedAFilter,
     sessionTypeOptions,
+    showCreateTermButton: permissions.SET_TRIAL_SESSION_CALENDAR,
     showNewTrialSession: permissions.CREATE_TRIAL_SESSION,
     showNoticeIssued: filters.currentTab === 'calendared',
     showSessionStatus: filters.currentTab === 'calendared',

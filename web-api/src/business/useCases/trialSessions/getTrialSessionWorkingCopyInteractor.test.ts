@@ -1,6 +1,9 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  ROLES,
+  SESSION_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getTrialSessionWorkingCopyInteractor } from './getTrialSessionWorkingCopyInteractor';
 import {
   mockChambersUser,
@@ -34,7 +37,7 @@ describe('Get trial session working copy', () => {
           userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
         },
         maxCases: 100,
-        sessionType: 'Regular',
+        sessionType: SESSION_TYPES.regular,
         startDate: '2025-03-01T00:00:00.000Z',
         term: 'Fall',
         termYear: '2025',
@@ -169,7 +172,7 @@ describe('Get trial session working copy', () => {
             userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
           },
           maxCases: 100,
-          sessionType: 'Regular',
+          sessionType: SESSION_TYPES.regular,
           startDate: '2025-03-01T00:00:00.000Z',
           term: 'Fall',
           termYear: '2025',
@@ -190,7 +193,7 @@ describe('Get trial session working copy', () => {
             userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
           },
           maxCases: 100,
-          sessionType: 'Regular',
+          sessionType: SESSION_TYPES.regular,
           startDate: '2025-03-01T00:00:00.000Z',
           term: 'Fall',
           termYear: '2025',
