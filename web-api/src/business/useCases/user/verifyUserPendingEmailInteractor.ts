@@ -85,6 +85,7 @@ export const verifyUserPendingEmailInteractor = async (
         clientConnectionId,
         message: {
           action: 'set_verify_email_notification',
+          message: 'Link has expired',
           messageType: 'expiredToken',
         },
         userId: user.userId,
@@ -177,6 +178,7 @@ export const verifyUserPendingEmailInteractor = async (
       clientConnectionId,
       message: {
         action: 'set_verify_email_notification',
+        message: 'Email has been updated',
         messageType: 'success',
       },
       userId: user.userId,
