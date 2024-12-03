@@ -4,6 +4,7 @@ export interface Database {
   dwUserCaseNote: UserCaseNoteTable;
   dwMessage: MessageTable;
   dwCase: CaseTable;
+  dwWorkItem: WorkItemTable;
 }
 
 export interface MessageTable {
@@ -49,6 +50,35 @@ export type CaseKysely = Selectable<CaseTable>;
 export type NewCaseKysely = Insertable<CaseTable>;
 export type UpdateCaseKysely = Updateable<CaseTable>;
 
+export interface WorkItemTable {
+  assigneeId?: string;
+  assigneeName?: string;
+  associatedJudge: string;
+  associatedJudgeId?: string;
+  caseIsInProgress?: boolean;
+  completedAt?: Date;
+  completedBy?: string;
+  completedByUserId?: string;
+  completedMessage?: string;
+  createdAt: Date;
+  docketEntry: any;
+  docketNumber: string;
+  hideFromPendingMessages?: boolean;
+  highPriority?: boolean;
+  inProgress?: boolean;
+  isInitializeCase?: boolean;
+  isRead?: boolean;
+  section: string;
+  sentBy: string;
+  sentBySection?: string;
+  sentByUserId?: string;
+  updatedAt: Date;
+  workItemId: string;
+}
+
+export type WorkItemKysely = Selectable<WorkItemTable>;
+export type NewWorkItemKysely = Insertable<WorkItemTable>;
+export type UpdateWorkItemKysely = Updateable<WorkItemTable>;
 export interface UserCaseNoteTable {
   docketNumber: string;
   userId: string;
