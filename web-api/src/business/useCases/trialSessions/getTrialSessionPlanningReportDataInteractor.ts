@@ -27,6 +27,7 @@ export type TrialLocationData = {
   stateAbbreviation: string;
   trialCityState: string;
   blockedCount: number;
+  specialCount: number;
 };
 
 export const getTrialSessionPlanningReportDataInteractor = async (
@@ -41,8 +42,12 @@ export const getTrialSessionPlanningReportDataInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const specialTrialSessionCountDictionary: { [key: string]: number } =
+    await getSpecialTrialSessionCountDictionary(applicationContext);
+
   const reportData = await getTrialSessionPlanningReportData({
     applicationContext,
+    specialTrialSessionCountDictionary,
     term,
     year,
   });
@@ -53,14 +58,37 @@ export const getTrialSessionPlanningReportDataInteractor = async (
   };
 };
 
+async function getSpecialTrialSessionCountDictionary(
+  applicationContext: ServerApplicationContext,
+): Promise<{ [key: string]: number }> {
+  const TRIAL_SESSIONS = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessions({
+      applicationContext,
+    });
+
+  return TRIAL_SESSIONS.reduce(
+    (acc, trialSession) => {
+      if (trialSession.sessionType === SESSION_TYPES.special) {
+        acc[trialSession.trialLocation!] =
+          (acc[trialSession.trialLocation!] || 0) + 1;
+      }
+      return acc;
+    },
+    {} as { [key: string]: number },
+  );
+}
+
 const getTrialSessionPlanningReportData = async ({
   applicationContext,
+  specialTrialSessionCountDictionary,
   term,
   year,
 }: {
   applicationContext: ServerApplicationContext;
   term: string;
   year: number;
+  specialTrialSessionCountDictionary: { [key: string]: number };
 }): Promise<{
   previousTerms: PreviousTerm[];
   trialLocationData: TrialLocationData[];
@@ -92,6 +120,7 @@ const getTrialSessionPlanningReportData = async ({
       getTrialLocation(applicationContext, {
         allTrialSessions,
         previousTerms,
+        specialTrialSessionCountDictionary,
         trialLocation,
       }),
     ),
@@ -127,11 +156,13 @@ const getTrialLocation = async (
   {
     allTrialSessions,
     previousTerms,
+    specialTrialSessionCountDictionary,
     trialLocation,
   }: {
     trialLocation: { city: string; state: string };
     previousTerms: PreviousTerm[];
     allTrialSessions: RawTrialSession[];
+    specialTrialSessionCountDictionary: { [key: string]: number };
   },
 ): Promise<TrialLocationData> => {
   const trialCityState = `${trialLocation.city}, ${trialLocation.state}`;
@@ -209,6 +240,7 @@ const getTrialLocation = async (
     previousTermsData,
     regularCaseCount,
     smallCaseCount,
+    specialCount: specialTrialSessionCountDictionary[trialCityState] || 0,
     stateAbbreviation,
     trialCityState,
   };
