@@ -153,7 +153,7 @@ function TrialSessionPlanningReportTable({
                         </td>
                       );
                     })}
-                  <td></td>
+                  <td>{trialLocation.specialCount}</td>
                   <td>{trialLocation.blockedCount}</td>
                 </tr>
               );
