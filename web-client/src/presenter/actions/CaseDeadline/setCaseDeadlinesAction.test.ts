@@ -12,18 +12,13 @@ describe('setCaseDeadlinesAction', () => {
       modules: { presenter },
       props: {
         caseDeadlines,
-        totalCount: 3,
       },
       state: {
         caseDeadlineReport: {},
       },
     });
 
-    expect(result.state.caseDeadlineReport).toEqual({
-      caseDeadlines,
-      page: 2,
-      totalCount: 3,
-    });
+    expect(result.state.caseDeadlineReport).toEqual({ caseDeadlines });
   });
 
   it('appends props.caseDeadlines onto state.caseDeadlineReport.caseDeadlines if state.caseDeadlineReport.caseDeadlines is already set', async () => {
@@ -35,7 +30,6 @@ describe('setCaseDeadlinesAction', () => {
       modules: { presenter },
       props: {
         caseDeadlines,
-        totalCount: 3,
       },
       state: {
         caseDeadlineReport: {
@@ -47,26 +41,5 @@ describe('setCaseDeadlinesAction', () => {
     });
 
     expect(result.state.caseDeadlineReport.caseDeadlines.length).toEqual(2);
-  });
-
-  it('increments state.caseDeadlineReport.page by 1', async () => {
-    const caseDeadlines = [
-      { caseDeadlineId: '123', deadlineDate: '2018-03-01T00:00:00.000Z' },
-    ];
-
-    const result = await runAction(setCaseDeadlinesAction, {
-      modules: { presenter },
-      props: {
-        caseDeadlines,
-        totalCount: 3,
-      },
-      state: {
-        caseDeadlineReport: {
-          page: 3,
-        },
-      },
-    });
-
-    expect(result.state.caseDeadlineReport.page).toEqual(4);
   });
 });

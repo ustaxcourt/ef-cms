@@ -1,8 +1,9 @@
 import {
   SESSION_STATUS_TYPES,
+  SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { addTrialSessionInformationHelper as addTrialSessionInformationHelperComputed } from './addTrialSessionInformationHelper';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
@@ -17,10 +18,10 @@ describe('addTrialSessionInformationHelper', () => {
     trialSession1 = {
       isCalendared: true,
       judge: { name: 'howdy', userId: '1' },
-      proceedingType: 'Remote',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
       sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
-      sessionStatus: 'Open',
-      sessionType: 'Regular',
+      sessionStatus: SESSION_STATUS_TYPES.open,
+      sessionType: SESSION_TYPES.regular,
       startDate: '2022-03-01T21:00:00.000Z',
       term: 'Winter',
       termYear: '2022',
@@ -30,10 +31,10 @@ describe('addTrialSessionInformationHelper', () => {
     trialSession2 = {
       isCalendared: true,
       judge: { name: 'howdy', userId: '2' },
-      proceedingType: 'Remote',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
       sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
-      sessionStatus: 'Open',
-      sessionType: 'Regular',
+      sessionStatus: SESSION_STATUS_TYPES.open,
+      sessionType: SESSION_TYPES.regular,
       startDate: '2022-03-01T21:00:00.000Z',
       term: 'Winter',
       termYear: '2022',
