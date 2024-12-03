@@ -191,6 +191,7 @@ const updateCaseEntityAndGenerateChange = async ({
         applicationContext,
         authorizedUser,
         caseEntity,
+        docketMeta: undefined,
         documentType,
         newData,
         oldData,

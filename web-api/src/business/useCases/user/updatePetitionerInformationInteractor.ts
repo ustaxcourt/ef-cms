@@ -35,7 +35,7 @@ export const getIsUserAuthorized = ({
       updatedPetitionerData?.contactId,
     );
 
-    isRepresentingCounsel = practitioners.find(
+    isRepresentingCounsel = practitioners?.find(
       practitioner => practitioner.userId === user.userId,
     );
   }
@@ -95,6 +95,7 @@ const updateCaseEntityAndGenerateChange = async ({
         applicationContext,
         authorizedUser,
         caseEntity,
+        docketMeta: undefined,
         documentType,
         newData,
         oldData,
@@ -144,9 +145,13 @@ export const updatePetitionerInformation = async (
     throw new UnauthorizedError('Unauthorized for editing petition details');
   }
 
+  if (!oldCase) {
+    throw new Error(`Case with docket number ${docketNumber} was not found`);
+  }
+
   if (oldCase.status === CASE_STATUS_TYPES.new) {
     throw new Error(
-      `Case with docketNumber ${oldCase.docketNumber} has not been served`,
+      `Case with docket number ${docketNumber} has not been served`,
     );
   }
   const oldCaseContact = getPetitionerById(
@@ -191,17 +196,10 @@ export const updatePetitionerInformation = async (
       oldData: oldCaseContact,
     });
 
-  const caseToUpdateContacts = new Case(
-    {
-      ...oldCase,
-    },
-    { authorizedUser },
-  );
+  const caseToUpdateContacts = new Case({ ...oldCase }, { authorizedUser });
 
   caseToUpdateContacts.updatePetitioner({
-    additionalName: oldCaseContact.additionalName,
     contactId: oldCaseContact.contactId,
-    contactType: oldCaseContact.contactType,
     email: oldCaseContact.email,
     hasConsentedToEService: oldCaseContact.hasConsentedToEService,
     hasEAccess: oldCaseContact.hasEAccess,
@@ -213,9 +211,7 @@ export const updatePetitionerInformation = async (
 
   //send back through the constructor so the contacts are created with the contact constructor
   let caseEntity = new Case(
-    {
-      ...caseToUpdateContacts.toRawObject(),
-    },
+    { ...caseToUpdateContacts.toRawObject() },
     { authorizedUser },
   ).validate();
 
@@ -247,6 +243,7 @@ export const updatePetitionerInformation = async (
         applicationContext,
         authorizedUser,
         caseEntity,
+        docketMeta: undefined,
         documentType: documentTypeToGenerate,
         newData,
         oldData,

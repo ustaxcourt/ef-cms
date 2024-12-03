@@ -63,7 +63,7 @@ export const generateChangeOfAddressHelper = async ({
     });
 
     const practitionerName = updatedName || user.name;
-    const practitionerObject = caseEntity.privatePractitioners
+    const practitionerObject = (caseEntity.privatePractitioners || [])
       .concat(caseEntity.irsPractitioners)
       .find(practitioner => practitioner.userId === user.userId);
 
@@ -204,12 +204,12 @@ const prepareToGenerateAndServeDocketEntry = async ({
   const { changeOfAddressDocketEntry } = await generateAndServeDocketEntry({
     applicationContext,
     authorizedUser,
-    barNumber: user.barNumber,
     caseEntity,
     docketMeta,
     documentType,
     newData,
     oldData,
+    privatePractitionersRepresentingContact: undefined,
     servedParties,
     user,
   });
