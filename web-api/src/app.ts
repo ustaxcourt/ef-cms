@@ -1029,7 +1029,10 @@ app.delete(
     lambdaWrapper(getUserPendingEmailStatusLambda),
   );
   app.put('/users/pending-email', lambdaWrapper(updateUserPendingEmailLambda));
-  app.put('/users/verify-email', lambdaWrapper(verifyUserPendingEmailLambda));
+  app.put(
+    '/async/users/verify-email',
+    lambdaWrapper(verifyUserPendingEmailLambda, { isAsync: true }),
+  );
   app.get(
     '/users/email-availability',
     lambdaWrapper(checkEmailAvailabilityLambda),
