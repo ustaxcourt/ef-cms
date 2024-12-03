@@ -1,5 +1,11 @@
 import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+
+const successAlertMessage = {
+  message: 'Your email address is verified. You can now log in to DAWSON.',
+  title: 'Email address verified',
+};
 
 const expiredTokenAlertError = {
   message: (
@@ -25,35 +31,51 @@ const genericAlertError = {
   title: 'Unable to complete your request',
 };
 
+type VerifyEmailNotificationType = 'success' | 'expiredToken';
+
+const alertDictionary: { [key in VerifyEmailNotificationType]: any } = {
+  expiredToken: expiredTokenAlertError,
+  success: successAlertMessage,
+};
+
+const alertKeyDictionary: { [key in VerifyEmailNotificationType]: any } = {
+  expiredToken: 'alertWarning',
+  success: 'alertSuccess',
+};
+
 export const verifyUserPendingEmailAction = async ({
   applicationContext,
-  path,
+  get,
   props,
 }: ActionProps<{ token: string }>) => {
+  const clientConnectionId = get(state.clientConnectionId);
   const { token } = props;
 
-  try {
-    await applicationContext
-      .getUseCases()
-      .verifyUserPendingEmailInteractor(applicationContext, {
-        token,
-      });
+  await applicationContext
+    .getUseCases()
+    .verifyUserPendingEmailInteractor(applicationContext, {
+      clientConnectionId,
+      token,
+    });
 
-    return path.success({
-      alertSuccess: {
-        message:
-          'Your email address is verified. You can now log in to DAWSON.',
-        title: 'Email address verified',
-      },
-    });
-  } catch (e: any) {
-    if (e.message === 'Link has expired') {
-      return path.error({
-        alertError: expiredTokenAlertError,
-      });
-    }
-    return path.error({
-      alertError: genericAlertError,
-    });
-  }
+  return {
+    alertInfo: {
+      message: 'DAWSON is updating your email. Please wait.',
+      title: 'Updating email address',
+    },
+  };
+};
+
+export const setVerifyUserPendingEmailNotificationAction = ({
+  props,
+  store,
+}: ActionProps<{ messageType: VerifyEmailNotificationType }>) => {
+  const { messageType } = props;
+  store.unset(state.alertWarning);
+  store.unset(state.alertSuccess);
+  store.unset(state.alertInfo);
+
+  const KEY = alertKeyDictionary[messageType] || 'alertWarning';
+  const MESSAGE = alertDictionary[messageType] || genericAlertError;
+  store.set(state[KEY], MESSAGE);
 };
