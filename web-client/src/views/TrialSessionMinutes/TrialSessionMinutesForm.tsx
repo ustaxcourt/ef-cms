@@ -10,6 +10,7 @@ import React from 'react';
 
 export const TrialSessionMinutesForm = connect(
   {
+    addPetitionerRowSequence: sequences.addPetitionerRowSequence,
     addRecalledRowSequence: sequences.addRecalledRowSequence,
     trialSessionMinutesAutosaveSequence:
       sequences.trialSessionMinutesAutosaveSequence,
@@ -18,6 +19,7 @@ export const TrialSessionMinutesForm = connect(
       sequences.trialSessionMinutesOnChangeSequence,
   },
   ({
+    addPetitionerRowSequence,
     addRecalledRowSequence,
     trialSessionMinutesAutosaveSequence,
     trialSessionMinutesForm,
@@ -44,6 +46,7 @@ export const TrialSessionMinutesForm = connect(
         <div className="grid-row">
           <div className="grid-col-6 border-right">
             <PetitionersFieldset
+              addPetitionerRowHandler={addPetitionerRowSequence}
               petitionersFormState={trialSessionMinutesForm.petitioners}
               onBlurHandler={trialSessionMinutesAutosaveSequence}
               onChangeHandler={trialSessionMinutesOnChangeSequence}

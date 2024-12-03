@@ -1,5 +1,6 @@
 import { applicationContext } from '@web-client/applicationContext';
 import { state } from '@web-client/presenter/app.cerebral';
+import { v4 as uuidv4 } from 'uuid';
 
 export const initializeTrialSessionMinutesSheetFormAction = ({
   props,
@@ -21,4 +22,6 @@ export const initializeTrialSessionMinutesSheetFormAction = ({
     remoteSession: formattedTrialSession.isRemoteSession,
     trialClerk: formattedTrialSession.trialClerk!.name,
   });
+  store.set(state.minuteSheetForm.caseMetadata.recalled[0].renderKey, uuidv4());
+  store.set(state.minuteSheetForm.petitioners[0].renderKey, uuidv4());
 };

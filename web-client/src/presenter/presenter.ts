@@ -11,6 +11,7 @@ import { addAnotherIrsNoticeToFormSequence } from '@web-client/presenter/sequenc
 import { addCaseToTrialSessionSequence } from './sequences/addCaseToTrialSessionSequence';
 import { addFactOrReasonSequence } from '@web-client/presenter/sequences/addFactOrReasonSequence';
 import { addPenaltyInputSequence } from './sequences/addPenaltyInputSequence';
+import { addPetitionerRowSequence } from '@web-client/presenter/sequences/TrialSessionMinutes/addPetitionerRowSequence';
 import { addRecalledRowSequence } from './sequences/TrialSessionMinutes/addRecalledRowSequence';
 import { addStatisticToFormSequence } from './sequences/addStatisticToFormSequence';
 import { addSupportingDocumentToFormSequence } from './sequences/addSupportingDocumentToFormSequence';
@@ -629,6 +630,7 @@ export const presenterSequences = {
     addCaseToTrialSessionSequence as unknown as Function,
   addFactOrReasonSequence,
   addPenaltyInputSequence: addPenaltyInputSequence as unknown as Function,
+  addPetitionerRowSequence,
   addRecalledRowSequence,
   addStatisticToFormSequence: addStatisticToFormSequence as unknown as Function,
   addSupportingDocumentToFormSequence:
@@ -834,6 +836,7 @@ export const presenterSequences = {
   goToChangePasswordSequence,
   goToCreatePetitionerAccountSequence,
   goToForgotPasswordSequence,
+  goToTrialSessionMinutesSequence,
   goToVerificationSentSequence:
     goToVerificationSentSequence as unknown as Function,
   gotoAccessibilityStatementSequence:
@@ -842,7 +845,6 @@ export const presenterSequences = {
     gotoAddCourtIssuedDocketEntrySequence as unknown as Function,
   gotoAddDeficiencyStatisticsSequence:
     gotoAddDeficiencyStatisticsSequence as unknown as Function,
-  goToTrialSessionMinutesSequence,
   gotoAddOtherStatisticsSequence:
     gotoAddOtherStatisticsSequence as unknown as Function,
   gotoAddPaperFilingSequence: gotoAddPaperFilingSequence as unknown as Function,

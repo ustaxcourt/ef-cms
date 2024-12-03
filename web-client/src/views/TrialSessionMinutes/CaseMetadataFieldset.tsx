@@ -169,7 +169,7 @@ export const CaseMetadataFieldset = ({
         return (
           <div
             className="grid-row grid-gap align-items-center margin-bottom-1"
-            key={`recalled-row-${rowIndex}`}
+            key={row.renderKey}
           >
             <div className="grid-col-fill">
               {rowIndex === 0 && (

@@ -70,7 +70,14 @@ type CaseMetadataEntry = {
   trialHearingType?: TrialHearingOption;
 };
 
-type PartyFormFields = {
+type KeyedEntry = {
+  renderKey: string;
+};
+
+type KeyedCaseMetadataEntry = KeyedEntry & CaseMetadataEntry;
+
+type KeyedPartyFormFields = KeyedEntry & {
+  renderKey: string;
   name: string;
   datesOfAppearance: string;
   // 10419 TODO: should there be a type dropdown to indicate whether the party
@@ -88,17 +95,17 @@ export type MinuteSheetFormState = {
   caseMetadata: {
     called: CaseMetadataEntry;
     notCalled: CaseMetadataEntry;
-    recalled: CaseMetadataEntry[];
+    recalled: KeyedCaseMetadataEntry[];
     pretrialConference: CaseMetadataEntry;
     trialHearing: CaseMetadataEntry;
   };
 
   petitioners: {
     noAppearance: boolean;
-    petitioners: PartyFormFields[];
+    petitioners: KeyedPartyFormFields[];
   };
 
-  respondents: PartyFormFields[];
+  respondents: KeyedPartyFormFields[];
 
   // 10419 TODO: Could this be lumped in with orders below
   jurisdictionRetained: {
@@ -168,7 +175,7 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
       date: '',
       note: '',
     },
-    recalled: [{ date: '', note: '', transcriptOrdered: false }],
+    recalled: [{ date: '', note: '', renderKey: '', transcriptOrdered: false }],
     trialHearing: {
       date: '',
       note: '',
@@ -203,16 +210,18 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
     noAppearance: false,
     petitioners: [
       {
-        name: '',
         datesOfAppearance: '',
+        name: '',
+        renderKey: '',
       },
     ],
   },
 
   respondents: [
     {
-      name: '',
       datesOfAppearance: '',
+      name: '',
+      renderKey: '',
     },
   ],
 
