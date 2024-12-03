@@ -33,7 +33,17 @@ export const verifyUserPendingEmailInteractor = async (
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EMAIL_MANAGEMENT)) {
-    return;
+    return await applicationContext
+      .getNotificationGateway()
+      .sendNotificationToUser({
+        applicationContext,
+        clientConnectionId,
+        message: {
+          action: 'set_verify_email_notification',
+          message: 'Something wrong with user',
+        },
+        userId: (authorizedUser as UnknownAuthUser)?.userId!,
+      });
   }
 
   const user = await applicationContext
