@@ -2,14 +2,10 @@ import { PendingItem } from '@web-api/business/useCases/pendingItems/fetchPendin
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setPendingItemsAction = ({
-  get,
   props,
   store,
-}: ActionProps<{ pendingItems: PendingItem[]; total: number }>) => {
-  const pendingItems = [
-    ...get(state.pendingReports.pendingItems),
-    ...props.pendingItems,
-  ];
+}: ActionProps<{ pendingItems: PendingItem[] }>) => {
+  const { pendingItems } = props;
   store.set(state.pendingReports.pendingItems, pendingItems);
   store.set(state.pendingReports.hasPendingItemsResults, !!pendingItems.length);
   store.set(state.pendingReports.pendingItemsTotal, pendingItems.length);
