@@ -11,8 +11,7 @@ import { ReplyMessageType } from '@web-api/business/useCases/messages/createMess
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { createMessage } from '@web-api/persistence/postgres/messages/createMessage';
-import { markMessageThreadRepliedTo } from '@web-api/persistence/postgres/messages/markMessageThreadRepliedTo';
+import { createMessageAsReply } from '@web-api/persistence/postgres/messages/createMessageAsReply';
 
 export const replyToMessage = async (
   applicationContext: ServerApplicationContext,
@@ -30,10 +29,6 @@ export const replyToMessage = async (
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES)) {
     throw new UnauthorizedError('Unauthorized');
   }
-
-  await markMessageThreadRepliedTo({
-    parentMessageId,
-  });
 
   const { caseCaption, docketNumberWithSuffix, status } =
     await applicationContext
@@ -67,8 +62,9 @@ export const replyToMessage = async (
     .validate()
     .toRawObject();
 
-  await createMessage({
-    message: validatedRawMessage,
+  await createMessageAsReply({
+    newMessage: validatedRawMessage,
+    parentMessageId,
   });
 
   return validatedRawMessage;
