@@ -38,6 +38,9 @@ export type MessageKysely = Selectable<MessageTable>;
 export type NewMessageKysely = Insertable<MessageTable>;
 export type UpdateMessageKysely = Updateable<MessageTable>;
 
+// 10502 TODO: I have added | null to optional dates because otherwise an undefined date does not update postgres
+// (e.g., if sealedDate exists for a case in the db, it will still exist even if we update with a rawCase that has sealedDate = undefined)
+// Is there a better way to handle this?
 export interface CaseTable {
   // archivedCorrespondences?: any[];
   // archivedDocketEntries?: RawDocketEntry[];
@@ -47,10 +50,10 @@ export interface CaseTable {
   associatedJudge?: string;
   associatedJudgeId?: string;
   automaticBlocked?: boolean;
-  automaticBlockedDate?: Date; // do we need this and blockedDate?
+  automaticBlockedDate?: Date | null; // do we need this and blockedDate?
   automaticBlockedReason?: string;
   blocked?: boolean;
-  blockedDate?: Date;
+  blockedDate?: Date | null;
   blockedReason?: string;
   canAllowDocumentService?: boolean;
   canAllowPrintableDocketRecord?: boolean;
@@ -58,7 +61,7 @@ export interface CaseTable {
   caption: string;
   caseNote?: string;
   caseType: string;
-  closedDate?: Date;
+  closedDate?: Date | null;
   createdAt: Date;
   damages?: number;
   docketNumber: string;
@@ -71,7 +74,7 @@ export interface CaseTable {
   highPriorityReason?: string;
   initialCaption?: string;
   initialDocketNumberSuffix?: string;
-  irsNoticeDate?: Date;
+  irsNoticeDate?: Date | null;
   isPaper?: boolean;
   isSealed?: boolean;
   judgeUserId?: string;
@@ -79,7 +82,7 @@ export interface CaseTable {
   litigationCosts?: number;
   mailingDate?: string; // this seems like a display field more than an actual date
   noticeOfAttachments?: boolean;
-  noticeOfTrialDate?: Date;
+  noticeOfTrialDate?: Date | null;
   orderDesignatingPlaceOfTrial?: boolean;
   orderForAmendedPetition?: boolean;
   orderForAmendedPetitionAndFilingFee?: boolean;
@@ -88,19 +91,19 @@ export interface CaseTable {
   orderForRatification?: boolean;
   orderToShowCause?: boolean;
   partyType: string;
-  petitionPaymentDate?: Date;
+  petitionPaymentDate?: Date | null;
   petitionPaymentMethod?: string;
   petitionPaymentStatus: string;
-  petitionPaymentWaivedDate?: Date;
+  petitionPaymentWaivedDate?: Date | null;
   preferredTrialCity?: string;
   procedureType: string;
   qcCompleteForTrial?: Record<string, any>; // needed
   receivedAt: Date;
-  sealedDate?: Date;
+  sealedDate?: Date | null;
   sortableDocketNumber: number;
   statistics?: any[];
   status: string;
-  trialDate?: Date;
+  trialDate?: Date | null;
   trialLocation?: string;
   trialSessionId?: string;
   trialTime?: string;

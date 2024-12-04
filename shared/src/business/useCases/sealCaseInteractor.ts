@@ -1,10 +1,11 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -25,12 +26,18 @@ export const sealCase = async (
     throw new UnauthorizedError('Unauthorized for sealing cases');
   }
 
-  const caseToUpdate = await getCaseByDocketNumber({
+  const rawCaseToUpdate = await getCaseByDocketNumber({
     applicationContext,
     docketNumber,
   });
 
-  caseToUpdate?.setAsSealed(); // 10502 TODO
+  if (!rawCaseToUpdate) {
+    throw new NotFoundError(`Case ${docketNumber} was not found.`);
+  }
+
+  const caseToUpdate = new Case(rawCaseToUpdate, { authorizedUser });
+
+  caseToUpdate.setAsSealed();
 
   const updatedCase = await applicationContext
     .getUseCaseHelpers()
