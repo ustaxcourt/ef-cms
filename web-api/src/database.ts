@@ -85,21 +85,25 @@ async function createConnection<T>({
       throw new Error('token does not exist');
     }
 
-    dbInstances[dbKey] = await connect({
-      ...POOL,
-      host,
-      password: token,
-    });
+    if (!dbInstances[dbKey]) {
+      dbInstances[dbKey] = connect({
+        ...POOL,
+        host,
+        password: token,
+      });
+    }
 
     return await cb(dbInstances[dbKey]!);
   } catch (err) {
     clearToken(region);
     const token = await getToken(region, host);
-    dbInstances[dbKey] = await connect({
-      ...POOL,
-      host,
-      password: token,
-    });
+    if (!dbInstances[dbKey]) {
+      dbInstances[dbKey] = connect({
+        ...POOL,
+        host,
+        password: token,
+      });
+    }
     return await cb(dbInstances[dbKey]!);
   }
 }
