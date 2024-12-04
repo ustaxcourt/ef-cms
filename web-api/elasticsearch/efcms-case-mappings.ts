@@ -34,6 +34,12 @@ export const efcmsCaseMappings = {
     'caseCaption.S': {
       type: 'text',
     },
+    'caseStatusHistory.L.M.date.S': {
+      type: 'date',
+    },
+    'caseStatusHistory.L.M.updatedCaseStatus.S': {
+      type: 'keyword',
+    },
     'caseType.S': {
       type: 'keyword',
     },
