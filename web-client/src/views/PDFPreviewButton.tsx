@@ -10,8 +10,6 @@ import React from 'react';
 
 const pdfPreviewButtonDeps = {
   loadPdfForTabSequence: sequences.loadPdfForTabSequence,
-  openCaseDocumentDownloadUrlSequence:
-    sequences.openCaseDocumentDownloadUrlSequence,
   pdfPreviewModalHelper: state.pdfPreviewModalHelper,
   showModal: state.modal.showModal,
 };
