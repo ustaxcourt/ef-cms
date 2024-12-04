@@ -14,6 +14,16 @@ type ColumnObject = { header: string; key: string; width?: number };
 
 const CITY_TITLE_CELL_LOCATION = 'A2';
 
+const warningTabRedColor = 'ffb50909';
+const specialRedColor = 'ffb50909';
+const specialPurpleColor = 'ffffbe2e';
+const blackColor = 'ff000000';
+const whiteColor = 'ffffffff';
+const hybridYellowColor = 'fffee685';
+const smallBlueColor = 'ff97D4EA';
+const regularGreenColor = 'ffb4d0b9';
+const headerGrayColor = 'ffdcdee0';
+
 export const writeTrialSessionDataToExcel = async ({
   caseCountsAndSessionsByCity,
   incorrectSizeRegularCases,
@@ -114,7 +124,7 @@ export const writeTrialSessionDataToExcel = async ({
 
   if (userMessages.length > 0) {
     const warningsTab = workbook.addWorksheet('Warnings', {
-      properties: { tabColor: { argb: 'ffb50909' } },
+      properties: { tabColor: { argb: warningTabRedColor } },
     });
 
     warningsTab.columns = [
@@ -236,50 +246,50 @@ const getCellStyle = (
     top: { style: 'thin' },
   };
   let fill;
-  let font = { color: { argb: 'ff000000' } };
+  let font = { color: { argb: blackColor } };
   let alignment = { horizontal: 'left', vertical: 'middle' };
 
   switch (cellValue) {
     case SESSION_TYPES.hybrid:
       fill = {
-        fgColor: { argb: 'fffee685' },
+        fgColor: { argb: hybridYellowColor },
         pattern: 'solid',
         type: 'pattern',
       };
       break;
     case SESSION_TYPES.small:
       fill = {
-        fgColor: { argb: 'ff97D4EA' },
+        fgColor: { argb: smallBlueColor },
         pattern: 'solid',
         type: 'pattern',
       };
       break;
     case SESSION_TYPES.regular:
       fill = {
-        fgColor: { argb: 'ffb4d0b9' },
+        fgColor: { argb: regularGreenColor },
         pattern: 'solid',
         type: 'pattern',
       };
       break;
     case SESSION_TYPES.special:
       fill = {
-        fgColor: { argb: 'ffffbe2e' },
+        fgColor: { argb: specialPurpleColor },
         pattern: 'solid',
         type: 'pattern',
       };
       break;
     case 'Special*':
       fill = {
-        fgColor: { argb: 'ffb50909' },
+        fgColor: { argb: specialRedColor },
         pattern: 'solid',
         type: 'pattern',
       };
-      font = { color: { argb: 'ffffffff' } };
+      font = { color: { argb: whiteColor } };
       break;
     default:
       if (cellValue && typeof cellValue === 'string') {
         fill = {
-          fgColor: { argb: 'ffdcdee0' },
+          fgColor: { argb: headerGrayColor },
           pattern: 'solid',
           type: 'pattern',
         };
