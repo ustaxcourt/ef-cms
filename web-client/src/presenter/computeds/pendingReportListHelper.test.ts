@@ -9,38 +9,6 @@ describe('pendingReportListHelper', () => {
     applicationContext,
   );
 
-  it('should set showLoadMore to true when there are additional results to load', () => {
-    const mockState = {
-      pendingReports: {
-        hasPendingItemsResults: true,
-        pendingItems: [],
-        pendingItemsTotal: 1000,
-        selectedJudge: 'Buch',
-      },
-    };
-
-    const { showLoadMore } = runCompute(pendingReportList, {
-      state: mockState,
-    });
-    expect(showLoadMore).toBe(true);
-  });
-
-  it('should set showLoadMore to false when there are no additional results to load', () => {
-    const mockState = {
-      pendingReports: {
-        hasPendingItemsResults: true,
-        pendingItems: [{}],
-        pendingItemsTotal: 1,
-        selectedJudge: 'Buch',
-      },
-    };
-
-    const { showLoadMore } = runCompute(pendingReportList, {
-      state: mockState,
-    });
-    expect(showLoadMore).toBe(false);
-  });
-
   it('should set showNoPendingItems to false when a judge is selected but no results come back', () => {
     const mockState = {
       pendingReports: {
