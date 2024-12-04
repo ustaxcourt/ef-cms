@@ -11,6 +11,21 @@ const expiredTokenAlertError = {
   title: 'Verification email link expired',
 };
 
+const requestTimedOutAlertError = {
+  message: (
+    <>
+      Request timed out. This potentially means another process is currently
+      updating this user. Your request cannot be completed. Please try to log
+      in. If you’re still having trouble, contact{' '}
+      <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
+        {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
+      </a>
+      .
+    </>
+  ),
+  title: 'Request Timed Out',
+};
+
 export const genericAlertError = {
   message: (
     <>
@@ -52,8 +67,12 @@ export const verifyUserPendingEmailAction = async ({
         alertError: expiredTokenAlertError,
       });
     }
+    if (e.message === 'Endpoint request timed out') {
+      return path.error({
+        alertError: requestTimedOutAlertError,
+      });
+    }
 
-    //if timeout display new message
     return path.error({
       alertError: genericAlertError,
     });
