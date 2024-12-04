@@ -278,8 +278,7 @@ const calendarIsEmpty = (
 };
 
 const getCurrentTermByMonth = (currentMonth: string): string => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const term = Object.entries(SESSION_TERMS_FOR_GENERATOR).find(([_, months]) =>
+  const term = Object.entries(SESSION_TERMS_FOR_GENERATOR).find(([, months]) =>
     months.includes(parseInt(currentMonth)),
   );
   return term ? term[0] : 'Unknown term';
