@@ -59,16 +59,13 @@ import { getCaseByDocketNumber } from './persistence/postgres/cases/getCaseByDoc
 import { getCaseDeadlinesByDateRange } from './persistence/elasticsearch/caseDeadlines/getCaseDeadlinesByDateRange';
 import { getCaseDeadlinesByDocketNumber } from './persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getCaseInventoryReport } from './persistence/elasticsearch/getCaseInventoryReport';
-import { getCaseMetadataWithCounsel } from './persistence/dynamo/cases/getCaseMetadataWithCounsel';
 import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheetsByDocketNumber';
-import { getCasesByLeadDocketNumber } from './persistence/dynamo/cases/getCasesByLeadDocketNumber';
 import { getCasesByUserId } from './persistence/elasticsearch/getCasesByUserId';
 import { getCasesClosedCountByJudge } from './persistence/elasticsearch/getCasesClosedCountByJudge';
 import {
   getCasesForUser,
   getDocketNumbersByUser,
 } from './persistence/dynamo/users/getCasesForUser';
-import { getCasesMetadataByLeadDocketNumber } from './persistence/dynamo/cases/getCasesMetadataByLeadDocketNumber';
 import { getClientId } from './persistence/cognito/getClientId';
 import { getColdCases } from './persistence/elasticsearch/reports/getColdCases';
 import { getConfigurationItemValue } from './persistence/dynamo/deployTable/getConfigurationItemValue';
@@ -266,13 +263,10 @@ const gatewayMethods = {
   getCaseDeadlinesByDateRange,
   getCaseDeadlinesByDocketNumber,
   getCaseInventoryReport,
-  getCaseMetadataWithCounsel,
   getCaseWorksheetsByDocketNumber,
-  getCasesByLeadDocketNumber,
   getCasesByUserId,
   getCasesClosedCountByJudge,
   getCasesForUser,
-  getCasesMetadataByLeadDocketNumber,
   getClientId,
   getColdCases,
   getConfigurationItemValue,

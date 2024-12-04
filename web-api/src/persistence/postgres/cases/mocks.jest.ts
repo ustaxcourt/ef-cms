@@ -17,14 +17,24 @@ jest.mock(
   () => mockFactory('getCaseMetadataByDocketNumber'),
 );
 
-// jest.mock(
-//   '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber',
-//   () => mockFactory('getCasesByLeadDocketNumber'),
-// );
+jest.mock(
+  '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel',
+  () => mockFactory('getCaseMetadataWithCounsel'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber',
+  () => mockFactory('getCasesByLeadDocketNumber'),
+);
 
 jest.mock(
   '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers',
   () => mockFactory('getCasesMetadataByDocketNumbers'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/getCasesMetadataWithCounselByLeadDocketNumber',
+  () => mockFactory('getCasesMetadataWithCounselByLeadDocketNumber'),
 );
 
 jest.mock('@web-api/persistence/postgres/cases/getConsolidatedCasesCount', () =>

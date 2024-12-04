@@ -6,6 +6,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCasesByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -52,27 +53,25 @@ export const addConsolidatedCase = async (
 
   let allCasesToConsolidate: RawCase[] = [];
 
+  // 10502 TODO: fix type errors
+
   if (
     caseToUpdate.leadDocketNumber &&
     caseToUpdate.leadDocketNumber !== caseToConsolidateWith.leadDocketNumber
   ) {
-    allCasesToConsolidate = await applicationContext
-      .getPersistenceGateway()
-      .getCasesByLeadDocketNumber({
-        applicationContext,
-        leadDocketNumber: caseToUpdate.leadDocketNumber,
-      });
+    allCasesToConsolidate = await getCasesByLeadDocketNumber({
+      applicationContext,
+      leadDocketNumber: caseToUpdate.leadDocketNumber,
+    });
   } else {
     allCasesToConsolidate = [caseToUpdate];
   }
 
   if (caseToConsolidateWith.leadDocketNumber) {
-    const casesConsolidatedWithLeadCase = await applicationContext
-      .getPersistenceGateway()
-      .getCasesByLeadDocketNumber({
-        applicationContext,
-        leadDocketNumber: caseToConsolidateWith.leadDocketNumber,
-      });
+    const casesConsolidatedWithLeadCase = await getCasesByLeadDocketNumber({
+      applicationContext,
+      leadDocketNumber: caseToConsolidateWith.leadDocketNumber,
+    });
     allCasesToConsolidate.push(...casesConsolidatedWithLeadCase);
   } else {
     allCasesToConsolidate.push(caseToConsolidateWith);
