@@ -15,16 +15,11 @@ const expiredTokenAlertError = {
 const requestTimedOutAlertError = {
   message: (
     <>
-      Request timed out. This potentially means another process is currently
-      updating this user. Your request cannot be completed. Please try to log
-      in. If you’re still having trouble, contact{' '}
-      <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
-        {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
-      </a>
-      .
+      DAWSON is updating your other contact information. Please wait and try to
+      verify your email in a few minutes.
     </>
   ),
-  title: 'Request Timed Out',
+  title: 'DAWSON can’t verify your email right now.',
 };
 
 export const genericAlertError = {
