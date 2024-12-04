@@ -22,8 +22,8 @@ import {
   WASHINGTON_DC_NORTH_STRING,
   WASHINGTON_DC_SOUTH_STRING,
   WASHINGTON_DC_STRING,
-  sortObjectByKey,
 } from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
+import { sortObjectByKey } from '@shared/tools/helpers';
 
 export type CalendarState = {
   sessionCountPerWeek: Record<string, number>;

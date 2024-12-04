@@ -36,6 +36,7 @@ import {
   reservedWeekOfAtLocationConstraint,
   washingtonDcSpecialConstraint,
 } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/constraints';
+import { sortObjectByKey } from '@shared/tools/helpers';
 import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
 
 const MAX_SESSIONS_PER_WEEK = 6;
@@ -282,21 +283,4 @@ const getCurrentTermByMonth = (currentMonth: string): string => {
     months.includes(parseInt(currentMonth)),
   );
   return term ? term[0] : 'Unknown term';
-};
-
-// TODO 10275: consider moving to helper
-export const sortObjectByKey = (obj, sortFunction) => {
-  const sortedKeys = Object.keys(obj).sort(sortFunction);
-
-  const tempObj = {};
-
-  for (const key of sortedKeys) {
-    tempObj[key] = obj[key];
-  }
-
-  for (const key in obj) {
-    delete obj[key];
-  }
-
-  Object.assign(obj, tempObj);
 };
