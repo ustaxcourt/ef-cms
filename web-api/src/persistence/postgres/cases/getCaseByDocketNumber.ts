@@ -1,6 +1,9 @@
+import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
+import { NotFoundError } from '@web-api/errors/errors';
 import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregateCaseItems } from '@web-api/persistence/dynamo/helpers/aggregateCaseItems';
+import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 import { getCasesMetadataWithCounselByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesMetadataWithCounselByLeadDocketNumber';
 import { getDbReader } from '@web-api/database';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
@@ -17,13 +20,10 @@ export const getCaseByDocketNumber = async ({
   applicationContext: ServerApplicationContext;
   includeConsolidatedCases?: boolean;
 }): Promise<RawCase | undefined> => {
-  const dbCase = await getDbReader(reader =>
-    reader
-      .selectFrom('dwCase as c')
-      .where('docketNumber', '=', docketNumber)
-      .selectAll()
-      .executeTakeFirstOrThrow(),
-  );
+  const dbCaseMetadata = await getCaseMetadataByDocketNumber({ docketNumber });
+  if (!dbCaseMetadata) {
+    throw new NotFoundError(`Case ${docketNumber} not found`);
+  }
 
   const dbPetitionersOnCase = await getDbReader(reader =>
     reader
@@ -79,43 +79,30 @@ export const getCaseByDocketNumber = async ({
   if (includeConsolidatedCases) {
     consolidatedCases = await getCasesMetadataWithCounselByLeadDocketNumber({
       applicationContext,
-      leadDocketNumber: dbCase!.leadDocketNumber!, // 10502 TODO
+      leadDocketNumber: dbCaseMetadata!.leadDocketNumber!, // 10502 TODO
     });
   }
 
   return purgeDynamoKeys({
     ...aggregateCaseItems([
-      ...caseItems,
-      transformNullToUndefined({
-        ...dbCase,
-        blockedDate: dbCase.blockedDate?.toISOString(),
-        caseCaption: dbCase.caption,
+      {
+        ...dbCaseMetadata,
         caseStatusHistory,
-        closedDate: dbCase.closedDate?.toISOString(),
-        createdAt: dbCase.createdAt?.toISOString(),
-        hearings: dbCase.hearings || [],
-        irsNoticeDate: dbCase.irsNoticeDate?.toISOString(),
-        noticeOfTrialDate: dbCase.noticeOfTrialDate?.toISOString(),
-        petitionPaymentDate: dbCase.petitionPaymentDate?.toISOString(),
-        petitionPaymentWaivedDate:
-          dbCase.petitionPaymentWaivedDate?.toISOString(),
+        hearings: dbCaseMetadata.hearings || [],
         petitioners: petitionersOnCase,
-        pk: `case|${dbCase.docketNumber}`,
-        receivedAt: dbCase.receivedAt?.toISOString(),
-        sealedDate: dbCase.sealedDate?.toISOString(),
-        sk: `case|${dbCase.docketNumber}`,
+        pk: `case|${dbCaseMetadata.docketNumber}`,
+        sk: `case|${dbCaseMetadata.docketNumber}`,
         statistics: dbCaseStatistics,
-        trialDate: dbCase.trialDate?.toISOString(),
-      }),
+      },
+      ...caseItems,
       ...workItems.map(workItem => ({
         ...workItem,
         pk: `case|${docketNumber}`,
         sk: `work-item|${workItem.workItemId}`,
       })),
     ]),
-    ...consolidatedCases.map(caseRecord => ({
-      pk: `case|${caseRecord.docketNumber}`,
-      sk: `case|${caseRecord.docketNumber}`,
-    })),
+    consolidatedCases: consolidatedCases.map(
+      c => new ConsolidatedCaseSummary(c),
+    ),
   });
 };
