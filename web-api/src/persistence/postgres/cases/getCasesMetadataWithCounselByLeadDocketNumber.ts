@@ -1,15 +1,14 @@
-import { Case } from '@shared/business/entities/cases/Case';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { getDbReader } from '@web-api/database';
 
-export const getCasesByLeadDocketNumber = async ({
+export const getCasesMetadataWithCounselByLeadDocketNumber = async ({
   applicationContext,
   leadDocketNumber,
 }: {
   applicationContext: ServerApplicationContext;
   leadDocketNumber: string;
-}): Promise<Case[]> => {
+}): Promise<RawCase[]> => {
   const dbCases = await getDbReader(reader =>
     reader
       .selectFrom('dwCase')
@@ -20,9 +19,8 @@ export const getCasesByLeadDocketNumber = async ({
 
   const cases = await Promise.all(
     dbCases.map(({ docketNumber }) =>
-      getCaseByDocketNumber({
+      getCaseMetadataWithCounsel({
         applicationContext,
-        authorizedUser: undefined, // 10502 TODO
         docketNumber,
       }),
     ),

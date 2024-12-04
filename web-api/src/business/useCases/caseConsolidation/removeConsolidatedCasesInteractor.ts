@@ -6,6 +6,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCasesByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -41,12 +42,12 @@ export const removeConsolidatedCases = async (
 
   const { leadDocketNumber } = caseToUpdate;
 
-  const allConsolidatedCases = await applicationContext
-    .getPersistenceGateway()
-    .getCasesByLeadDocketNumber({
-      applicationContext,
-      leadDocketNumber,
-    });
+  const allConsolidatedCases = await getCasesByLeadDocketNumber({
+    applicationContext,
+    leadDocketNumber,
+  });
+
+  // 10502 TODO: fix type errors
 
   const newConsolidatedCases = allConsolidatedCases.filter(
     consolidatedCase =>

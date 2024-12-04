@@ -1,4 +1,5 @@
 import { flattenDeep } from 'lodash';
+import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { marshall } from '@aws-sdk/util-dynamodb';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import type {
@@ -6,6 +7,8 @@ import type {
   IDynamoDBRecord,
 } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
+
+// 10502 TODO: Figure out how to do process case entries correctly!
 
 export const processCaseEntries = async ({
   applicationContext,
@@ -22,12 +25,10 @@ export const processCaseEntries = async ({
     const caseNewImage = caseRecord.dynamodb.NewImage;
     const caseRecords: IDynamoDBRecord[] = [];
 
-    const caseMetadataWithCounsel = await applicationContext
-      .getPersistenceGateway()
-      .getCaseMetadataWithCounsel({
-        applicationContext,
-        docketNumber: caseNewImage.docketNumber.S,
-      });
+    const caseMetadataWithCounsel = await getCaseMetadataWithCounsel({
+      applicationContext,
+      docketNumber: caseNewImage.docketNumber.S,
+    });
 
     const marshalledCase = marshall(caseMetadataWithCounsel);
 

@@ -5,6 +5,7 @@ import {
   userIsDirectlyAssociated,
 } from '../entities/cases/Case';
 import { PaymentStatusTypes } from '@shared/business/entities/EntityConstants';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import {
   UnknownAuthUser,
@@ -12,6 +13,7 @@ import {
 } from '@shared/business/entities/authUser/AuthUser';
 import { compareISODateStrings } from '../utilities/sortFunctions';
 import { getCasesMetadataByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
+import { getCasesMetadataWithCounselByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesMetadataWithCounselByLeadDocketNumber';
 import { partition, uniqBy } from 'lodash';
 
 interface UserCaseDTO {
@@ -32,7 +34,7 @@ export type TAssociatedCase = {
 } & UserCaseDTO;
 
 export const getCasesForUserInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   authorizedUser: UnknownAuthUser,
 ): Promise<{
   openCaseList: TAssociatedCase[];
@@ -108,7 +110,7 @@ async function fetchConsolidatedGroupsAndNest({
   cases,
   userId,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   cases: TAssociatedCase[];
   userId: string;
 }): Promise<TAssociatedCase[]> {
@@ -201,7 +203,7 @@ function convertCaseToUserCaseDTO(rawCase: UserCaseDTO): UserCaseDTO {
 }
 
 async function getAllConsolidatedCases(
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   cases: TAssociatedCase[],
   userId: string,
 ): Promise<(RawCase & { isRequestingUserAssociated: boolean })[]> {
@@ -213,12 +215,10 @@ async function getAllConsolidatedCases(
   return (
     await Promise.all(
       uniqueLeadDocketNumbers.map(aCase =>
-        applicationContext
-          .getPersistenceGateway()
-          .getCasesMetadataByLeadDocketNumber({
-            applicationContext,
-            leadDocketNumber: aCase.leadDocketNumber!,
-          }),
+        getCasesMetadataWithCounselByLeadDocketNumber({
+          applicationContext,
+          leadDocketNumber: aCase.leadDocketNumber!,
+        }),
       ),
     )
   )

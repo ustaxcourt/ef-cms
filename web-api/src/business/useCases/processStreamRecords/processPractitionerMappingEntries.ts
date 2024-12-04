@@ -1,4 +1,5 @@
 import { flattenDeep } from 'lodash';
+import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { marshall } from '@aws-sdk/util-dynamodb';
 import type {
   AttributeValueWithName,
@@ -22,12 +23,10 @@ export const processPractitionerMappingEntries = async ({
         practitionerMappingRecord.dynamodb.OldImage;
       const caseRecords: IDynamoDBRecord[] = [];
 
-      const caseMetadataWithCounsel = await applicationContext
-        .getPersistenceGateway()
-        .getCaseMetadataWithCounsel({
-          applicationContext,
-          docketNumber: practitionerMappingData.pk.S.substring('case|'.length),
-        });
+      const caseMetadataWithCounsel = await getCaseMetadataWithCounsel({
+        applicationContext,
+        docketNumber: practitionerMappingData.pk.S.substring('case|'.length),
+      });
 
       const marshalledCase = marshall(caseMetadataWithCounsel);
 
