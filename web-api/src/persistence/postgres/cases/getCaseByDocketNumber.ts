@@ -65,14 +65,22 @@ export const getCaseByDocketNumber = async ({
   const workItems = await getWorkItemsByDocketNumber({ docketNumber });
 
   // "JOIN" docket entries and work items. Once docket entries are in postgres, this can
-  // be done in a single query rather than in an O(n^2) loop.
-  for (let item of workItems) {
-    for (let entry of dbDocketEntries) {
-      if (item.docketEntry.docketEntryId === entry.docketEntryId) {
-        entry.workItem = item;
+  // be done in a single query rather than in code.
+  const associateWorkItemsWithDocketEntries = () => {
+    // Construct a lookup table for O(1) to avoid O(n^2) nested for loop.
+    const lookupTable = dbDocketEntries.reduce((map, item) => {
+      map[item.docketEntryId] = item;
+      return map;
+    }, {});
+
+    for (let item of workItems) {
+      if (lookupTable[item.docketEntry.docketEntryId]) {
+        lookupTable[item.docketEntry.docketEntryId].workItem = item;
       }
     }
-  }
+  };
+
+  associateWorkItemsWithDocketEntries();
 
   // 10502 TODO: Still need other case items to be attached to the case. See aggregateCaseItems.
 

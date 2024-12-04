@@ -81,7 +81,6 @@ import { getCalendaredCasesForTrialSessionInteractor } from './business/useCases
 import { getCaseDeadlinesForCaseInteractor } from './business/useCases/caseDeadline/getCaseDeadlinesForCaseInteractor';
 import { getCaseDeadlinesInteractor } from '../../shared/src/business/useCases/getCaseDeadlinesInteractor';
 import { getCaseExistsInteractor } from '../../shared/src/business/useCases/getCaseExistsInteractor';
-import { getCaseForPublicDocketSearchInteractor } from './business/useCases/public/getCaseForPublicDocketSearchInteractor';
 import { getCaseInteractor } from '../../shared/src/business/useCases/getCaseInteractor';
 import { getCaseInventoryReportInteractor } from './business/useCases/caseInventoryReport/getCaseInventoryReportInteractor';
 import { getCaseWorksheetsByJudgeInteractor } from './business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
@@ -294,7 +293,6 @@ const useCases = {
   getCaseDeadlinesForCaseInteractor,
   getCaseDeadlinesInteractor,
   getCaseExistsInteractor,
-  getCaseForPublicDocketSearchInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
   getCaseWorksheetsByJudgeInteractor,

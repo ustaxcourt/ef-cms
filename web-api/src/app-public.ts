@@ -74,7 +74,6 @@ import { casePublicSearchLambda } from './lambdas/public-api/casePublicSearchLam
 import { generatePublicDocketRecordPdfLambda } from './lambdas/public-api/generatePublicDocketRecordPdfLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
 import { getCachedHealthCheckLambda } from '@web-api/lambdas/health/getCachedHealthCheckLambda';
-import { getCaseForPublicDocketSearchLambda } from './lambdas/public-api/getCaseForPublicDocketSearchLambda';
 import { getHealthCheckLambda } from './lambdas/health/getHealthCheckLambda';
 import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceModeLambda';
 import { getPractitionerByBarNumberLambda } from '@web-api/lambdas/practitioners/getPractitionerByBarNumberLambda';
@@ -151,10 +150,6 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
       key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
     }),
     lambdaWrapper(opinionPublicSearchLambda),
-  );
-  app.get(
-    '/public-api/docket-number-search/:docketNumber',
-    lambdaWrapper(getCaseForPublicDocketSearchLambda),
   );
   app.get(
     '/public-api/practitioners',
