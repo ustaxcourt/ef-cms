@@ -129,7 +129,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   });
 
   const constraints = [
-    washingtonDcSpecialConstraint, // TODO 10275: write tests to confirm whether or not this washington DC constraint needs to be at the beginning of this array
+    washingtonDcSpecialConstraint,
     maxSessionsPerWeekConstraint,
     maxSessionsPerLocationConstraint,
     oneSessionPerLocationPerWeekConstraint,
