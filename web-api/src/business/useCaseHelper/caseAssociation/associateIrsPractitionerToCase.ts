@@ -4,6 +4,7 @@ import { IrsPractitioner } from '../../../../../shared/src/business/entities/Irs
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 export const associateIrsPractitionerToCase = async ({
   applicationContext,
@@ -27,12 +28,10 @@ export const associateIrsPractitionerToCase = async ({
     });
 
   if (!isAssociated) {
-    const caseToUpdate = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+    const caseToUpdate = await getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
 
     const userCaseEntity = new UserCase(caseToUpdate);
 

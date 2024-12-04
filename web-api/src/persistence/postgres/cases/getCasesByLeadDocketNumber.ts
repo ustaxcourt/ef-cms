@@ -1,4 +1,3 @@
-import { Case } from '@shared/business/entities/cases/Case';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getDbReader } from '@web-api/database';
@@ -9,11 +8,11 @@ export const getCasesByLeadDocketNumber = async ({
 }: {
   applicationContext: ServerApplicationContext;
   leadDocketNumber: string;
-}): Promise<Case[]> => {
+}): Promise<RawCase[]> => {
   const dbCases = await getDbReader(reader =>
     reader
       .selectFrom('dwCase')
-      .where('leadDocketNumber', 'in', leadDocketNumber)
+      .where('leadDocketNumber', '=', leadDocketNumber)
       .selectAll()
       .execute(),
   );
@@ -22,7 +21,6 @@ export const getCasesByLeadDocketNumber = async ({
     dbCases.map(({ docketNumber }) =>
       getCaseByDocketNumber({
         applicationContext,
-        authorizedUser: undefined, // 10502 TODO
         docketNumber,
       }),
     ),

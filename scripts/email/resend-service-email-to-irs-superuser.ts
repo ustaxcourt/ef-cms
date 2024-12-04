@@ -9,20 +9,22 @@ if (!process.argv[2] || !process.argv[3]) {
 
 import { Case } from '@shared/business/entities/cases/Case';
 import { INITIAL_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
-import { createApplicationContext } from '@web-api/applicationContext';
+import {
+  ServerApplicationContext,
+  createApplicationContext,
+} from '@web-api/applicationContext';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { sendIrsSuperuserPetitionEmail } from '@web-api/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail';
 import { sendServedPartiesEmails } from '@web-api/business/useCaseHelper/service/sendServedPartiesEmails';
 
 const getCase = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
 ): Promise<Case> => {
-  const caseToBatch = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseToBatch = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   return new Case(caseToBatch, { authorizedUser: undefined });
 };

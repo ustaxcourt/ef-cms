@@ -27,11 +27,10 @@ export const unsealCase = async (
 
   const caseToUpdate = await getCaseByDocketNumber({
     applicationContext,
-    authorizedUser,
     docketNumber,
   });
 
-  caseToUpdate?.setAsUnsealed();
+  caseToUpdate?.setAsUnsealed(); // 10502 TODO
 
   const updatedCase = await applicationContext
     .getUseCaseHelpers()

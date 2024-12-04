@@ -9,6 +9,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { omit } from 'lodash';
 import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -43,12 +44,10 @@ export const fileCourtIssuedDocketEntry = async (
 
   const { docketEntryId } = documentMeta;
 
-  const subjectCaseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: subjectDocketNumber,
-    });
+  const subjectCaseToUpdate = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber: subjectDocketNumber,
+  });
 
   let subjectCaseToUpdateEntity = new Case(subjectCaseToUpdate, {
     authorizedUser,
@@ -184,12 +183,10 @@ export const fileCourtIssuedDocketEntry = async (
     }),
   );
 
-  const rawSubjectCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: subjectDocketNumber,
-    });
+  const rawSubjectCase = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber: subjectDocketNumber,
+  });
 
   const subjectCase = new Case(rawSubjectCase, {
     authorizedUser,

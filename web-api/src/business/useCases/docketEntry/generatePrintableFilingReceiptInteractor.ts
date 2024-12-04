@@ -2,6 +2,7 @@ import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 
 const getDocumentInfo = ({
@@ -56,12 +57,10 @@ export const generatePrintableFilingReceiptInteractor = async (
   },
   authorizedUser: UnknownAuthUser,
 ) => {
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseRecord = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   let caseEntity = new Case(caseRecord, {
     authorizedUser,
@@ -76,12 +75,10 @@ export const generatePrintableFilingReceiptInteractor = async (
   let consolidatedCasesDocketNumbers: string[] = [];
 
   if (fileAcrossConsolidatedGroup) {
-    const leadCase = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber: caseEntity.leadDocketNumber!,
-      });
+    const leadCase = await getCaseByDocketNumber({
+      applicationContext,
+      docketNumber: caseEntity.leadDocketNumber!,
+    });
     consolidatedCasesDocketNumbers = leadCase.consolidatedCases
       .sort((a, b) => a.sortableDocketNumber - b.sortableDocketNumber)
       .map(consolidatedCaseRecord => consolidatedCaseRecord.docketNumber);

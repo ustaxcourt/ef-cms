@@ -12,6 +12,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createMessage } from '@web-api/persistence/postgres/messages/createMessage';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { markMessageThreadRepliedTo } from '@web-api/persistence/postgres/messages/markMessageThreadRepliedTo';
 
 export const replyToMessage = async (
@@ -36,9 +37,7 @@ export const replyToMessage = async (
   });
 
   const { caseCaption, docketNumberWithSuffix, status } =
-    await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({ applicationContext, docketNumber });
+    await getCaseByDocketNumber({ applicationContext, docketNumber });
 
   const fromUser = await applicationContext
     .getPersistenceGateway()

@@ -27,6 +27,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { generateDraftDocument } from './generateDraftDocument';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 import { getClinicLetterKey } from '../../../../../shared/src/business/utilities/getClinicLetterKey';
 import { random, remove } from 'lodash';
@@ -476,12 +477,10 @@ export const serveCaseToIrs = async (
       throw new UnauthorizedError('Unauthorized');
     }
 
-    const caseToBatch = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+    const caseToBatch = await getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
 
     let caseEntity = new Case(caseToBatch, { authorizedUser });
 

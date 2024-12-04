@@ -55,7 +55,6 @@ import { getAllWebSocketConnections } from './persistence/dynamo/notifications/g
 import { getBlockedCases } from './persistence/elasticsearch/getBlockedCases';
 import { getBulkTrialSessionWorkingCopies } from './persistence/dynamo/trialSessions/getBulkTrialSessionWorkingCopies';
 import { getCalendaredCasesForTrialSession } from './persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession';
-import { getCaseByDocketNumber } from './persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseDeadlinesByDateRange } from './persistence/elasticsearch/caseDeadlines/getCaseDeadlinesByDateRange';
 import { getCaseDeadlinesByDocketNumber } from './persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getCaseInventoryReport } from './persistence/elasticsearch/getCaseInventoryReport';
@@ -259,7 +258,6 @@ const gatewayMethods = {
   getBlockedCases,
   getBulkTrialSessionWorkingCopyNotes: getBulkTrialSessionWorkingCopies,
   getCalendaredCasesForTrialSession,
-  getCaseByDocketNumber,
   getCaseDeadlinesByDateRange,
   getCaseDeadlinesByDocketNumber,
   getCaseInventoryReport,

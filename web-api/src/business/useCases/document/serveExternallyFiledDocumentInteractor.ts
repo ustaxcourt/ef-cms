@@ -12,6 +12,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const serveExternallyFiledDocument = async (
@@ -41,12 +42,10 @@ export const serveExternallyFiledDocument = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const subjectCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: subjectCaseDocketNumber,
-    });
+  const subjectCase = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber: subjectCaseDocketNumber,
+  });
 
   const subjectCaseEntity = new Case(subjectCase, { authorizedUser });
 
@@ -102,12 +101,10 @@ export const serveExternallyFiledDocument = async (
   try {
     caseEntities = await Promise.all(
       docketNumbers.map(async docketNumber => {
-        const rawCaseToUpdate = await applicationContext
-          .getPersistenceGateway()
-          .getCaseByDocketNumber({
-            applicationContext,
-            docketNumber,
-          });
+        const rawCaseToUpdate = await getCaseByDocketNumber({
+          applicationContext,
+          docketNumber,
+        });
 
         const caseEntity = new Case(rawCaseToUpdate, {
           authorizedUser,

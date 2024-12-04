@@ -6,6 +6,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCasesByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -30,9 +31,10 @@ export const removeConsolidatedCases = async (
     throw new UnauthorizedError('Unauthorized for case consolidation');
   }
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const caseToUpdate = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   if (!caseToUpdate || !caseToUpdate?.leadDocketNumber) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
@@ -91,12 +93,10 @@ export const removeConsolidatedCases = async (
   }
 
   for (let docketNumberToRemove of docketNumbersToRemove) {
-    const caseToRemove = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber: docketNumberToRemove,
-      });
+    const caseToRemove = await getCaseByDocketNumber({
+      applicationContext,
+      docketNumber: docketNumberToRemove,
+    });
 
     if (!caseToRemove) {
       throw new NotFoundError(

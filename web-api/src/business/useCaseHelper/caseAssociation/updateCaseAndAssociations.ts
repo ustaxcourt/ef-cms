@@ -432,7 +432,6 @@ export const updateCaseAndAssociations = async ({
 
   const oldCaseEntity = await getCaseByDocketNumber({
     applicationContext,
-    authorizedUser,
     docketNumber: caseToUpdate.docketNumber,
   });
 

@@ -5,6 +5,7 @@ import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 /**
  * associatePrivatePractitionerToCase
@@ -39,12 +40,10 @@ export const associatePrivatePractitionerToCase = async ({
       userId: user.userId,
     });
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseToUpdate = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   const isPrivatePractitionerOnCase = caseToUpdate.privatePractitioners?.some(
     practitioner => practitioner.userId === user.userId,

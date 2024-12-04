@@ -18,7 +18,6 @@ export const getCaseExistsInteractor = async (
 ) => {
   const caseRecord = await getCaseByDocketNumber({
     applicationContext,
-    authorizedUser: undefined,
     docketNumber,
   });
 

@@ -7,6 +7,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { Statistic } from '../../../../../shared/src/business/entities/Statistic';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -58,9 +59,10 @@ export const addDeficiencyStatistic = async (
     throw new UnauthorizedError('Unauthorized for editing statistics');
   }
 
-  const oldCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const oldCase = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   const statisticEntity = new Statistic({
     determinationDeficiencyAmount,

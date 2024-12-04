@@ -1,27 +1,28 @@
-import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { Case } from '@shared/business/entities/cases/Case';
 import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { aggregateCaseItems } from '@web-api/persistence/dynamo/helpers/aggregateCaseItems';
+import { getCasesMetadataWithCounselByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesMetadataWithCounselByLeadDocketNumber';
 import { getDbReader } from '@web-api/database';
-import { getDocketEntryOnCase } from '@web-api/persistence/dynamo/cases/getDocketEntryOnCase';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
+import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
+import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export const getCaseByDocketNumber = async ({
   applicationContext,
-  authorizedUser,
   docketNumber,
+  includeConsolidatedCases = true,
 }: {
   docketNumber: string;
-  authorizedUser?: AuthUser;
   applicationContext: ServerApplicationContext;
-}): Promise<Case | undefined> => {
+  includeConsolidatedCases?: boolean;
+}): Promise<RawCase | undefined> => {
   const dbCase = await getDbReader(reader =>
     reader
       .selectFrom('dwCase as c')
       .where('docketNumber', '=', docketNumber)
       .selectAll()
-      .executeTakeFirst(),
+      .executeTakeFirstOrThrow(),
   );
 
   const dbPetitionersOnCase = await getDbReader(reader =>
@@ -58,61 +59,63 @@ export const getCaseByDocketNumber = async ({
       .execute(),
   );
 
-  const dbDocketEntries = await getDocketEntryOnCase({
-    applicationContext,
-    docketNumber,
+  const [caseItems, workItems] = await Promise.all([
+    queryFull({
+      ExpressionAttributeNames: {
+        '#pk': 'pk',
+      },
+      ExpressionAttributeValues: {
+        ':pk': `case|${docketNumber}`,
+      },
+      KeyConditionExpression: '#pk = :pk',
+      applicationContext,
+    }),
+    getWorkItemsByDocketNumber({
+      docketNumber,
+    }),
+  ]);
+
+  let consolidatedCases: RawCase[] = [];
+  if (includeConsolidatedCases) {
+    consolidatedCases = await getCasesMetadataWithCounselByLeadDocketNumber({
+      applicationContext,
+      leadDocketNumber: dbCase!.leadDocketNumber!, // 10502 TODO
+    });
+  }
+
+  return purgeDynamoKeys({
+    ...aggregateCaseItems([
+      ...caseItems,
+      transformNullToUndefined({
+        ...dbCase,
+        blockedDate: dbCase.blockedDate?.toISOString(),
+        caseCaption: dbCase.caption,
+        caseStatusHistory,
+        closedDate: dbCase.closedDate?.toISOString(),
+        createdAt: dbCase.createdAt?.toISOString(),
+        hearings: dbCase.hearings || [],
+        irsNoticeDate: dbCase.irsNoticeDate?.toISOString(),
+        noticeOfTrialDate: dbCase.noticeOfTrialDate?.toISOString(),
+        petitionPaymentDate: dbCase.petitionPaymentDate?.toISOString(),
+        petitionPaymentWaivedDate:
+          dbCase.petitionPaymentWaivedDate?.toISOString(),
+        petitioners: petitionersOnCase,
+        pk: `case|${dbCase.docketNumber}`,
+        receivedAt: dbCase.receivedAt?.toISOString(),
+        sealedDate: dbCase.sealedDate?.toISOString(),
+        sk: `case|${dbCase.docketNumber}`,
+        statistics: dbCaseStatistics,
+        trialDate: dbCase.trialDate?.toISOString(),
+      }),
+      ...workItems.map(workItem => ({
+        ...workItem,
+        pk: `case|${docketNumber}`,
+        sk: `work-item|${workItem.workItemId}`,
+      })),
+    ]),
+    ...consolidatedCases.map(caseRecord => ({
+      pk: `case|${caseRecord.docketNumber}`,
+      sk: `case|${caseRecord.docketNumber}`,
+    })),
   });
-  const workItems = await getWorkItemsByDocketNumber({ docketNumber });
-
-  // "JOIN" docket entries and work items. Once docket entries are in postgres, this can
-  // be done in a single query rather than in code.
-  const associateWorkItemsWithDocketEntries = () => {
-    // Construct a lookup table for O(1) to avoid O(n^2) nested for loop.
-    const lookupTable = dbDocketEntries.reduce((map, item) => {
-      map[item.docketEntryId] = item;
-      return map;
-    }, {});
-
-    for (let item of workItems) {
-      if (lookupTable[item.docketEntry.docketEntryId]) {
-        lookupTable[item.docketEntry.docketEntryId].workItem = item;
-      }
-    }
-  };
-
-  associateWorkItemsWithDocketEntries();
-
-  // 10502 TODO: Still need other case items to be attached to the case. See aggregateCaseItems.
-
-  // console.log('getCaseByDocketNumber');
-  // console.log('caseStatistics', caseStatistics);
-  // console.log(caseResult);
-  // console.log(petitioners);
-  // console.log(caseHistory);
-
-  return dbCase
-    ? new Case(
-        transformNullToUndefined({
-          ...dbCase,
-          blockedDate: dbCase.blockedDate?.toISOString(),
-          caseCaption: dbCase.caption,
-          caseStatusHistory,
-          closedDate: dbCase.closedDate?.toISOString(),
-          createdAt: dbCase.createdAt?.toISOString(),
-          docketEntries: dbDocketEntries,
-          hearings: dbCase.hearings || [],
-          irsNoticeDate: dbCase.irsNoticeDate?.toISOString(),
-          noticeOfTrialDate: dbCase.noticeOfTrialDate?.toISOString(),
-          petitionPaymentDate: dbCase.petitionPaymentDate?.toISOString(),
-          petitionPaymentWaivedDate:
-            dbCase.petitionPaymentWaivedDate?.toISOString(),
-          petitioners: petitionersOnCase,
-          receivedAt: dbCase.receivedAt?.toISOString(),
-          sealedDate: dbCase.sealedDate?.toISOString(),
-          statistics: dbCaseStatistics,
-          trialDate: dbCase.trialDate?.toISOString(),
-        }),
-        { authorizedUser },
-      )
-    : undefined;
 };

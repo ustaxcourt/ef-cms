@@ -27,7 +27,7 @@ export const getCalendaredCasesForTrialSession = async ({
       getCaseByDocketNumber({
         applicationContext,
         docketNumber,
-        // includeConsolidatedCases: false,
+        includeConsolidatedCases: false,
       }),
     ),
   );

@@ -21,6 +21,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { defaults, pick } from 'lodash';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const getIsUserAuthorized = ({
@@ -131,9 +132,10 @@ export const updatePetitionerInformation = async (
     );
   }
 
-  const oldCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const oldCase = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   const hasAuthorization = getIsUserAuthorized({
     oldCase,

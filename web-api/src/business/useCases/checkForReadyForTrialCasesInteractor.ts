@@ -4,6 +4,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { createISODateString } from '../../../../shared/src/business/utilities/DateHandler';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { uniqBy } from 'lodash';
 
 /**
@@ -74,12 +75,10 @@ export const checkForReadyForTrialCasesInteractor = async (
     const { docketNumber } = caseRecord;
     await acquireLockForCase({ docketNumber });
 
-    const caseToCheck = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+    const caseToCheck = await getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
 
     if (caseToCheck) {
       const caseEntity = new Case(caseToCheck, {
