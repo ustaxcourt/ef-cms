@@ -148,7 +148,11 @@ function TrialSessionPlanningReportTable({
                               <div key={`datum-${idx}`}>{data}</div>
                             ))
                           ) : (
-                            <FontAwesomeIcon icon="calendar-times" size="lg" />
+                            <FontAwesomeIcon
+                              className="padding-1px"
+                              icon={['far', 'calendar-times']}
+                              size="lg"
+                            />
                           )}
                         </td>
                       );
