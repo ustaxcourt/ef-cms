@@ -5,6 +5,7 @@ import {
 } from '../entities/EntityConstants';
 import { DocketEntry } from '../entities/DocketEntry';
 import { Message } from '../entities/Message';
+import { NotFoundError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   UnknownAuthUser,
@@ -89,6 +90,11 @@ export const saveSignedDocumentInteractor = async (
     applicationContext,
     docketNumber,
   });
+
+  if (!caseRecord) {
+    throw new NotFoundError(`Case ${docketNumber} not found`);
+  }
+
   const caseEntity = new Case(caseRecord, { authorizedUser });
   const originalDocketEntryEntity = caseEntity.docketEntries.find(
     docketEntry => docketEntry.docketEntryId === originalDocketEntryId,

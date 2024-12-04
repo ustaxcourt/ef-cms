@@ -1,3 +1,4 @@
+import { convertDbRowToRawCase } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
@@ -15,6 +16,6 @@ export const getCasesMetadataByDocketNumbers = async ({
   );
 
   return dbCases
-    ? dbCases.map(c => transformNullToUndefined(c) as RawCase)
+    ? dbCases.map(c => transformNullToUndefined(convertDbRowToRawCase(c)))
     : undefined;
 };

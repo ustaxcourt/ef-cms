@@ -3,23 +3,7 @@ import {
   formatNow,
 } from '@shared/business/utilities/DateHandler';
 
-// 10502 TODO: Will this be needed? It seems better to be explicit about the fields we want rather than omitting fields we don't.
-export const fieldsToOmitBeforePersisting = [
-  'archivedCorrespondences',
-  'archivedDocketEntries',
-  'caseCaption',
-  'consolidatedCases',
-  'correspondence',
-  'docketEntries',
-  'hearings',
-  'irsPractitioners',
-  'privatePractitioners',
-  'entityName',
-  'petitioners',
-  'docketNumberWithSuffix',
-] as const;
-
-export const toNewKyselyCase = (rawCase: RawCase) => {
+export const convertRawCaseToDbRow = (rawCase: RawCase) => {
   return {
     associatedJudge: rawCase.associatedJudge,
     associatedJudgeId: rawCase.associatedJudgeId,
@@ -107,5 +91,23 @@ export const toNewKyselyCase = (rawCase: RawCase) => {
     trialSessionId: rawCase.trialSessionId,
     trialTime: rawCase.trialTime,
     useSameAsPrimary: rawCase.useSameAsPrimary,
+  };
+};
+
+export const convertDbRowToRawCase = (dbCase: any): RawCase => {
+  return {
+    ...dbCase,
+    blockedDate: dbCase.blockedDate?.toISOString(),
+    caseCaption: dbCase.caption,
+    closedDate: dbCase.closedDate?.toISOString(),
+    createdAt: dbCase.createdAt?.toISOString(),
+    hearings: dbCase.hearings || [],
+    irsNoticeDate: dbCase.irsNoticeDate?.toISOString(),
+    noticeOfTrialDate: dbCase.noticeOfTrialDate?.toISOString(),
+    petitionPaymentDate: dbCase.petitionPaymentDate?.toISOString(),
+    petitionPaymentWaivedDate: dbCase.petitionPaymentWaivedDate?.toISOString(),
+    receivedAt: dbCase.receivedAt?.toISOString(),
+    sealedDate: dbCase.sealedDate?.toISOString(),
+    trialDate: dbCase.trialDate?.toISOString(),
   };
 };

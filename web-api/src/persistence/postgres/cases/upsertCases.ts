@@ -1,5 +1,5 @@
+import { convertRawCaseToDbRow } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbWriter } from '@web-api/database';
-import { toNewKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 
 const allColumns = [
   'associatedJudge',
@@ -68,7 +68,7 @@ const allColumns = [
 export const upsertCases = async (rawCases: RawCase[]) => {
   if (rawCases.length === 0) return;
 
-  const casesToUpsert = rawCases.map(rawCase => toNewKyselyCase(rawCase));
+  const casesToUpsert = rawCases.map(rawCase => convertRawCaseToDbRow(rawCase));
 
   await getDbWriter(writer =>
     writer
