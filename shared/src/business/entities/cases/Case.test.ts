@@ -14,6 +14,7 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
+  SESSION_TYPES,
   UNIQUE_OTHER_FILER_TYPE,
 } from '../EntityConstants';
 import { Case, getContactPrimary } from './Case';
@@ -244,7 +245,7 @@ describe('Case entity', () => {
       const mockhearing1 = {
         createdAt: '2024-03-01T00:00:00.000Z',
         maxCases: 100,
-        sessionType: 'Regular',
+        sessionType: SESSION_TYPES.regular,
         startDate: '2025-03-01T00:00:00.000Z',
         term: 'Fall',
         termYear: '2025',

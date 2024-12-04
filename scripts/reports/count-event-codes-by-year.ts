@@ -1,6 +1,9 @@
 #!/usr/bin/env npx ts-node --transpile-only
 
-// usage: scripts/reports/count-event-codes-by-year.ts  m01,m02 feew [-y 2000-2020]
+// usage examples:
+//   scripts/reports/count-event-codes-by-year.ts NOA -f -y 2024
+//   scripts/reports/count-event-codes-by-year.ts m01,m02,FEEW -y 2000-2020
+//   scripts/reports/count-event-codes-by-year.ts M071,M074 --years 2021,2022,2024
 
 import { DateTime } from 'luxon';
 import {
@@ -15,11 +18,19 @@ import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler
 
 requireEnvVars(['ENV', 'REGION']);
 
-let positionals, values;
-
 const config = {
   allowPositionals: true,
   options: {
+    fiscal: {
+      default: false,
+      short: 'f',
+      type: 'boolean',
+    },
+    help: {
+      default: false,
+      short: 'h',
+      type: 'boolean',
+    },
     stricken: {
       default: false,
       short: 's',
@@ -39,35 +50,84 @@ const config = {
   strict: true,
 } as const;
 
-function usage(warning: string | undefined) {
+const usage = (warning?: string): void => {
   if (warning) {
     console.log(warning);
   }
-  console.log(`Usage: ${process.argv[1]} M071,m074 `);
-  console.log('Options:', JSON.stringify(config, null, 4));
-}
+  console.log(`Usage: ${process.argv[1]} M071,m074 [-f -y 2000-2022]`);
+  console.log('Options:', JSON.stringify(config, null, 2));
+};
+
+const parseArguments = (): {
+  eventCodes: string[];
+  fiscal: boolean;
+  stricken: boolean;
+  years: number[];
+} => {
+  let positionals: string[];
+  let values: {
+    [k: string]: any;
+    fiscal: boolean;
+    help: boolean;
+    stricken: boolean;
+    verbose: boolean;
+    years: string;
+  };
+  try {
+    ({ positionals, values } = parseArgs(config));
+  } catch (ex) {
+    usage(`Error: ${ex}`);
+    process.exit(1);
+  }
+  if (values.verbose) {
+    usage('Verbose output enabled');
+    console.log('positionals:', positionals);
+    console.log('values:', values);
+  }
+  if (values.help) {
+    if (!values.verbose) {
+      usage();
+    }
+    process.exit(0);
+  }
+  if (!positionals || positionals.length === 0) {
+    const errorMessage = 'invalid input: expected event codes';
+    if (values.verbose) {
+      console.log(errorMessage);
+    } else {
+      usage(errorMessage);
+    }
+    process.exit(1);
+  }
+  return {
+    eventCodes: positionals[0].split(',').map(s => s.toUpperCase()),
+    fiscal: values.fiscal,
+    stricken: values.stricken,
+    years: parseIntsArg(values.years),
+  };
+};
 
 const getCountDocketEntriesByEventCodesAndYears = async ({
   applicationContext,
   eventCodes,
+  fiscal,
   onlyNonStricken,
   years,
 }: {
   applicationContext: ServerApplicationContext;
   eventCodes: string[];
+  fiscal: boolean;
   onlyNonStricken: boolean;
   years?: number[];
 }): Promise<number> => {
   const must: {}[] = [
     {
       bool: {
-        should: eventCodes.map(eventCode => {
-          return {
-            term: {
-              'eventCode.S': eventCode,
-            },
-          };
-        }),
+        should: eventCodes.map(eventCode => ({
+          term: {
+            'eventCode.S': eventCode,
+          },
+        })),
       },
     },
   ];
@@ -85,13 +145,13 @@ const getCountDocketEntriesByEventCodesAndYears = async ({
           'receivedAt.S': {
             gte: validateDateAndCreateISO({
               day: '1',
-              month: '1',
-              year: String(years[0]),
+              month: fiscal ? '10' : '1',
+              year: fiscal ? `${years[0] - 1}` : `${years[0]}`,
             }),
             lt: validateDateAndCreateISO({
               day: '1',
-              month: '1',
-              year: String(years[0] + 1),
+              month: fiscal ? '10' : '1',
+              year: fiscal ? `${years[0]}` : `${years[0] + 1}`,
             }),
           },
         },
@@ -99,24 +159,22 @@ const getCountDocketEntriesByEventCodesAndYears = async ({
     } else {
       must.push({
         bool: {
-          should: years.map(year => {
-            return {
-              range: {
-                'receivedAt.S': {
-                  gte: validateDateAndCreateISO({
-                    day: '1',
-                    month: '1',
-                    year: String(year),
-                  }),
-                  lt: validateDateAndCreateISO({
-                    day: '1',
-                    month: '1',
-                    year: String(year + 1),
-                  }),
-                },
+          should: years.map(year => ({
+            range: {
+              'receivedAt.S': {
+                gte: validateDateAndCreateISO({
+                  day: '1',
+                  month: fiscal ? '10' : '1',
+                  year: fiscal ? `${year - 1}` : `${year}`,
+                }),
+                lt: validateDateAndCreateISO({
+                  day: '1',
+                  month: fiscal ? '10' : '1',
+                  year: fiscal ? `${year}` : `${year + 1}`,
+                }),
               },
-            };
-          }),
+            },
+          })),
         },
       });
     }
@@ -131,40 +189,22 @@ const getCountDocketEntriesByEventCodesAndYears = async ({
     },
     index: 'efcms-docket-entry',
   };
-  // console.log('Effective Query:', JSON.stringify(searchParameters, null, 4));
 
-  const results = await count({
+  return await count({
     applicationContext,
     searchParameters,
   });
-  return results;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  try {
-    ({ positionals, values } = parseArgs(config));
-  } catch (ex) {
-    usage(`Error: ${ex}`);
-    process.exit(1);
-  }
-  if (positionals.length === 0) {
-    usage('invalid input: expected event codes');
-    process.exit(1);
-  }
-  const eventCodes = positionals[0].split(',').map(s => s.toUpperCase());
-  const years: number[] = parseIntsArg(values.years);
-  const includeStricken = values.stricken;
+  const { eventCodes, fiscal, stricken, years } = parseArguments();
   const ret = await getCountDocketEntriesByEventCodesAndYears({
     applicationContext: createApplicationContext({}),
     eventCodes,
-    onlyNonStricken: !includeStricken,
+    fiscal,
+    onlyNonStricken: !stricken,
     years,
   });
-  if (values.verbose) {
-    usage('Verbose output enabled');
-    console.log(`positionals: ${positionals}`);
-    console.log(`option values: ${values}`);
-  }
   console.log(ret);
 })();

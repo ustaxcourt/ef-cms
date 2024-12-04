@@ -4,16 +4,16 @@ import '@web-api/persistence/postgres/messages/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
-import { MOCK_TRIAL_INPERSON } from '../../../../../shared/src/test/mockTrial';
-import { RawTrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
+import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
 } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import {
   mockPetitionerUser,
