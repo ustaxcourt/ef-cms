@@ -4,7 +4,7 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   calculateDifferenceInHours,
@@ -85,7 +85,7 @@ export const verifyUserPendingEmailInteractor = async (
     attributesToUpdate: {
       email: updatedUser.email,
     },
-    email: user.email,
+    email: user.email!,
   });
 
   await applicationContext.getWorkerGateway().queueWork(applicationContext, {
