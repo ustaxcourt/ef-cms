@@ -22,7 +22,6 @@ import { validUser } from '../../../../../shared/src/test/mockUsers';
 
 describe('Verify User Pending Email', () => {
   const TOKEN = '41189629-abe1-46d7-b7a4-9d3834f919cb';
-  const TEST_CLIENT_CONNECTION_ID = '41189629-TEST_CLIENT_CONNECTION_ID';
   const TOKEN_TIMESTAMP_VALID = createISODateString();
   // .001 hours = 3.6 seconds. This gives us a reasonable degree of accuracy
   // around expiration boundaries without creating a flaky test.
@@ -48,9 +47,6 @@ describe('Verify User Pending Email', () => {
     applicationContext
       .getPersistenceGateway()
       .getCasesByEmailTotal.mockReturnValue(TOTAL_CASE_COUNT);
-
-    applicationContext.getNotificationGateway().sendNotificationToUser =
-      jest.fn();
   });
 
   describe('userTokenHasExpired', () => {
@@ -129,43 +125,27 @@ describe('Verify User Pending Email', () => {
     });
 
     it('should throw unauthorized error when user does not have permission to verify emails', async () => {
-      await verifyUserPendingEmailInteractor(
-        applicationContext,
-        {
-          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
-          token: 'abc',
-        },
-        mockPetitionsClerkUser,
-      );
-      const sendNotificationToUserCalls =
-        applicationContext.getNotificationGateway().sendNotificationToUser.mock
-          .calls;
-      expect(sendNotificationToUserCalls.length).toEqual(1);
-      expect(sendNotificationToUserCalls[0][0].message).toEqual({
-        action: 'set_verify_email_notification',
-        message: 'Unauthorized to manage emails',
-      });
+      await expect(
+        verifyUserPendingEmailInteractor(
+          applicationContext,
+          {
+            token: 'abc',
+          },
+          mockPetitionsClerkUser,
+        ),
+      ).rejects.toThrow('Unauthorized to manage emails');
     });
 
     it('should throw an unauthorized error when the token passed as an argument does not match stored token on user', async () => {
-      await verifyUserPendingEmailInteractor(
-        applicationContext,
-        {
-          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
-          token: 'abc',
-        },
-        mockPrivatePractitionerUser,
-      );
-
-      const sendNotificationToUserCalls =
-        applicationContext.getNotificationGateway().sendNotificationToUser.mock
-          .calls;
-
-      expect(sendNotificationToUserCalls.length).toEqual(1);
-      expect(sendNotificationToUserCalls[0][0].message).toEqual({
-        action: 'set_verify_email_notification',
-        message: 'Tokens do not match',
-      });
+      await expect(
+        verifyUserPendingEmailInteractor(
+          applicationContext,
+          {
+            token: 'abc',
+          },
+          mockPrivatePractitionerUser,
+        ),
+      ).rejects.toThrow('Tokens do not match');
     });
 
     it('should throw an unauthorized error when the token passed as an argument and the token store on the user are both undefined', async () => {
@@ -176,24 +156,15 @@ describe('Verify User Pending Email', () => {
           pendingEmailVerificationToken: undefined,
         });
 
-      await verifyUserPendingEmailInteractor(
-        applicationContext,
-        {
-          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
-          token: undefined as any,
-        },
-        mockPrivatePractitionerUser,
-      );
-
-      const sendNotificationToUserCalls =
-        applicationContext.getNotificationGateway().sendNotificationToUser.mock
-          .calls;
-
-      expect(sendNotificationToUserCalls.length).toEqual(1);
-      expect(sendNotificationToUserCalls[0][0].message).toEqual({
-        action: 'set_verify_email_notification',
-        message: 'Tokens do not match',
-      });
+      await expect(
+        verifyUserPendingEmailInteractor(
+          applicationContext,
+          {
+            token: undefined as any,
+          },
+          mockPrivatePractitionerUser,
+        ),
+      ).rejects.toThrow('Tokens do not match');
     });
 
     it('should throw an unauthorized error when there is no token timestamp', async () => {
@@ -204,25 +175,15 @@ describe('Verify User Pending Email', () => {
           pendingEmailVerificationTokenTimestamp: undefined,
         });
 
-      await verifyUserPendingEmailInteractor(
-        applicationContext,
-        {
-          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
-          token: TOKEN,
-        },
-        mockPrivatePractitionerUser,
-      );
-
-      const sendNotificationToUserCalls =
-        applicationContext.getNotificationGateway().sendNotificationToUser.mock
-          .calls;
-
-      expect(sendNotificationToUserCalls.length).toEqual(1);
-      expect(sendNotificationToUserCalls[0][0].message).toEqual({
-        action: 'set_verify_email_notification',
-        message: 'Link has expired',
-        messageType: 'expiredToken',
-      });
+      await expect(
+        verifyUserPendingEmailInteractor(
+          applicationContext,
+          {
+            token: TOKEN,
+          },
+          mockPrivatePractitionerUser,
+        ),
+      ).rejects.toThrow('Link has expired');
     });
 
     it('should throw an unauthorized error when token timestamp is expired', async () => {
@@ -233,55 +194,37 @@ describe('Verify User Pending Email', () => {
           pendingEmailVerificationTokenTimestamp: TOKEN_TIMESTAMP_EXPIRED,
         });
 
-      await verifyUserPendingEmailInteractor(
-        applicationContext,
-        {
-          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
-          token: TOKEN,
-        },
-        mockPrivatePractitionerUser,
-      );
-
-      const sendNotificationToUserCalls =
-        applicationContext.getNotificationGateway().sendNotificationToUser.mock
-          .calls;
-
-      expect(sendNotificationToUserCalls.length).toEqual(1);
-      expect(sendNotificationToUserCalls[0][0].message).toEqual({
-        action: 'set_verify_email_notification',
-        message: 'Link has expired',
-        messageType: 'expiredToken',
-      });
+      await expect(
+        verifyUserPendingEmailInteractor(
+          applicationContext,
+          {
+            token: TOKEN,
+          },
+          mockPrivatePractitionerUser,
+        ),
+      ).rejects.toThrow('Link has expired');
     });
 
     it('should throw an error when the pendingEmail address is not available in cognito', async () => {
       applicationContext
         .getPersistenceGateway()
         .isEmailAvailable.mockReturnValue(false);
-      await verifyUserPendingEmailInteractor(
-        applicationContext,
-        {
-          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
-          token: TOKEN,
-        },
-        mockPrivatePractitionerUser,
-      );
-      const sendNotificationToUserCalls =
-        applicationContext.getNotificationGateway().sendNotificationToUser.mock
-          .calls;
 
-      expect(sendNotificationToUserCalls.length).toEqual(1);
-      expect(sendNotificationToUserCalls[0][0].message).toEqual({
-        action: 'set_verify_email_notification',
-        message: 'Email is not available',
-      });
+      await expect(
+        verifyUserPendingEmailInteractor(
+          applicationContext,
+          {
+            token: TOKEN,
+          },
+          mockPrivatePractitionerUser,
+        ),
+      ).rejects.toThrow('Email is not available');
     });
 
     it('should update the cognito email when tokens match', async () => {
       await verifyUserPendingEmailInteractor(
         applicationContext,
         {
-          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
           token: TOKEN,
         },
         mockPrivatePractitionerUser,
@@ -301,7 +244,6 @@ describe('Verify User Pending Email', () => {
       await verifyUserPendingEmailInteractor(
         applicationContext,
         {
-          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
           token: TOKEN,
         },
         mockPrivatePractitionerUser,
@@ -322,7 +264,6 @@ describe('Verify User Pending Email', () => {
       await verifyUserPendingEmailInteractor(
         applicationContext,
         {
-          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
           token: TOKEN,
         },
         mockPrivatePractitionerUser,
@@ -349,7 +290,6 @@ describe('Verify User Pending Email', () => {
       await verifyUserPendingEmailInteractor(
         applicationContext,
         {
-          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
           token: mockPetitioner.pendingEmailVerificationToken,
         },
         mockPetitionerUser,
