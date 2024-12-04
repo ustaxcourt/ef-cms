@@ -1,6 +1,7 @@
 import { PendingItem } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
 
 export type PendingItemFormatted = {
+  docketEntryId: string;
   docketNumber: string;
   caseTitle: string;
   formattedFiledDate: string;
@@ -51,6 +52,7 @@ export const formatPendingItem = (
     caseTitle,
     consolidatedIconTooltipText:
       pendingItemWithConsolidatedFlags.consolidatedIconTooltipText,
+    docketEntryId: item.docketEntryId,
     docketNumber: item.docketNumber,
     docketNumberWithSuffix:
       pendingItemWithConsolidatedFlags.docketNumberWithSuffix!,

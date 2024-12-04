@@ -39,7 +39,10 @@ export const verifyUserPendingEmailInteractor = async (
 
   const user = await applicationContext
     .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+    .getUserByIdOnceAllUpdatesComplete({
+      applicationContext,
+      userId: authorizedUser.userId,
+    });
 
   if (
     !user.pendingEmailVerificationToken ||
@@ -73,6 +76,7 @@ export const verifyUserPendingEmailInteractor = async (
   const { updatedUser } = await updateUserPendingEmailRecord(
     applicationContext,
     {
+      setIsUpdatingInformation: true,
       user,
     },
   );
@@ -91,4 +95,39 @@ export const verifyUserPendingEmailInteractor = async (
       type: MESSAGE_TYPES.QUEUE_UPDATE_ASSOCIATED_CASES,
     },
   });
+
+  try {
+    const expectedUpdatedCaseCount = (
+      await applicationContext.getPersistenceGateway().getDocketNumbersByUser({
+        applicationContext,
+        userId: user.userId,
+      })
+    ).length;
+
+    let checkCount = true;
+    while (checkCount) {
+      await applicationContext.getUtilities().sleep(1500);
+      const actualUpdatedCaseCount = await applicationContext
+        .getPersistenceGateway()
+        .getCasesByEmailTotal({
+          applicationContext,
+          email: updatedUser.email!,
+        });
+
+      if (actualUpdatedCaseCount === expectedUpdatedCaseCount)
+        checkCount = false;
+    }
+
+    updatedUser.isUpdatingInformation = false;
+    await applicationContext.getPersistenceGateway().updateUser({
+      applicationContext,
+      user: updatedUser,
+    });
+  } catch (e) {
+    updatedUser.isUpdatingInformation = false;
+    await applicationContext.getPersistenceGateway().updateUser({
+      applicationContext,
+      user: updatedUser,
+    });
+  }
 };
