@@ -3,8 +3,8 @@ import {
   PROCEDURE_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateNoticeOfChangeOfTrialJudgeInteractor } from './generateNoticeOfChangeOfTrialJudgeInteractor';
 
 describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
