@@ -1752,6 +1752,15 @@ export type CreatedCaseType = {
   };
 };
 
+export const USER_MESSAGE_TYPES = {
+  error: 'ERROR',
+  success: 'SUCCESS',
+  warning: 'WARNING',
+};
+
+export type UserMessageType =
+  (typeof USER_MESSAGE_TYPES)[keyof typeof USER_MESSAGE_TYPES];
+
 export const BROADCAST_MESSAGES = {
   appHasUpdated: 'appHasUpdated',
   userLogout: 'userLogout',
