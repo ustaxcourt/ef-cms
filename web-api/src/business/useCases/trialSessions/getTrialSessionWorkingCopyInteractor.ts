@@ -2,12 +2,12 @@ import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
-import { TrialSessionWorkingCopy } from '../../../../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { TrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { User } from '../../../../../shared/src/business/entities/User';
+import { User } from '@shared/business/entities/User';
 
 /**
  * getTrialSessionWorkingCopyInteractor
