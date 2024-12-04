@@ -694,7 +694,7 @@ export const addWeeksToDate = ({
   weeksToAdd,
 }: {
   weeksToAdd: number;
-  startDate: string;
+  startDate: IsoDateString;
 }): string => {
   const parsedDate = DateTime.fromFormat(startDate, FORMATS.ISO);
 

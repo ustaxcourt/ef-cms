@@ -1,4 +1,7 @@
-import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  PROCEDURE_TYPES_MAP,
+} from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getSuggestedCalendarCases } from './getSuggestedCalendarCases';
 jest.mock('./searchClient');
@@ -12,19 +15,19 @@ describe('getSuggestedCalendarCases', () => {
         {
           docketNumber: '22083-22',
           preferredTrialCity: 'San Francisco, California',
-          procedureType: 'Regular',
+          procedureType: PROCEDURE_TYPES_MAP.regular,
           status: 'General Docket - At Issue (Ready for Trial)',
         },
         {
           docketNumber: '16927-23',
           preferredTrialCity: 'Chicago, Illinois',
-          procedureType: 'Small',
+          procedureType: PROCEDURE_TYPES_MAP.small,
           status: 'General Docket - At Issue (Ready for Trial)',
         },
         {
           docketNumber: '9844-24',
           preferredTrialCity: 'Portland, Oregon',
-          procedureType: 'Regular',
+          procedureType: PROCEDURE_TYPES_MAP.regular,
           status: 'General Docket - At Issue (Ready for Trial)',
         },
       ],
