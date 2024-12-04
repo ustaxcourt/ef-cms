@@ -14,6 +14,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { pick } from 'lodash';
 import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -41,12 +42,10 @@ export const fileExternalDocument = async (
   const { docketNumber } = documentMetadata;
   const workItems: WorkItem[] = [];
 
-  const currentCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const currentCase = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   let currentCaseEntity = new Case(currentCase, { authorizedUser });
 
@@ -126,12 +125,10 @@ export const fileExternalDocument = async (
   const consolidatedCaseEntities: Promise<RawCase>[] =
     documentMetadataForConsolidatedCases.map(
       async individualDocumentMetadata => {
-        const caseToUpdate = await applicationContext
-          .getPersistenceGateway()
-          .getCaseByDocketNumber({
-            applicationContext,
-            docketNumber: individualDocumentMetadata.docketNumber,
-          });
+        const caseToUpdate = await getCaseByDocketNumber({
+          applicationContext,
+          docketNumber: individualDocumentMetadata.docketNumber,
+        });
 
         let caseEntity = new Case(caseToUpdate, { authorizedUser });
 

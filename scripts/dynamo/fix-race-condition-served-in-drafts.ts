@@ -7,6 +7,7 @@ import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { createApplicationContext } from '@web-api/applicationContext';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { readFileSync } from 'fs';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 
@@ -62,12 +63,10 @@ export const fixRaceConditionServedInDrafts = async (
     timestamp: string;
   },
 ) => {
-  const subjectCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const subjectCase = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
   const caseEntity = new Case(subjectCase, { authorizedUser: undefined });
 
   const servedParties = aggregatePartiesForService(caseEntity);

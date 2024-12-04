@@ -3,6 +3,7 @@ import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '../../../../shared/src/busine
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { addCoverToPdf } from './addCoverToPdf';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 /**
  * addCoversheetInteractor
@@ -35,12 +36,10 @@ export const addCoversheetInteractor = async (
   authorizedUser: UnknownAuthUser,
 ) => {
   if (!caseEntity) {
-    const caseRecord = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+    const caseRecord = await getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
 
     caseEntity = new Case(caseRecord, {
       authorizedUser,
@@ -89,12 +88,10 @@ export const addCoversheetInteractor = async (
       // in one instance, we pass in the caseEntity which we don't want to refetch
       let consolidatedCaseEntity = caseEntity;
       if (caseEntity && caseDocketNumber !== docketNumber) {
-        const caseRecord = await applicationContext
-          .getPersistenceGateway()
-          .getCaseByDocketNumber({
-            applicationContext,
-            docketNumber: caseDocketNumber,
-          });
+        const caseRecord = await getCaseByDocketNumber({
+          applicationContext,
+          docketNumber: caseDocketNumber,
+        });
         consolidatedCaseEntity = new Case(caseRecord, {
           authorizedUser,
         });

@@ -1,11 +1,13 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { batchGet, query } from '../../dynamodbClientService';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 export const getEligibleCasesForTrialSession = async ({
   applicationContext,
   limit,
   skPrefix,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   limit: number;
   skPrefix: string;
 }) => {
@@ -45,12 +47,10 @@ export const getEligibleCasesForTrialSession = async ({
 
   const aggregatedResults = await Promise.all(
     results.map(async result => {
-      const caseItems = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber: result.docketNumber,
-        });
+      const caseItems = await getCaseByDocketNumber({
+        applicationContext,
+        docketNumber: result.docketNumber,
+      });
 
       return {
         ...result,

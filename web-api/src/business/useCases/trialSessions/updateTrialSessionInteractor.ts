@@ -18,6 +18,7 @@ import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/busine
 import { TrialSessionWorkingCopy } from '../../../../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { get } from 'lodash';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const updateTrialSession = async (
@@ -234,12 +235,10 @@ const updateCasesAndSetNoticeOfChange = async ({
     currentTrialSession
       .caseOrder!.filter(c => !c.removedFromTrial)
       .map(async c => {
-        const aCase = await applicationContext
-          .getPersistenceGateway()
-          .getCaseByDocketNumber({
-            applicationContext,
-            docketNumber: c.docketNumber,
-          });
+        const aCase = await getCaseByDocketNumber({
+          applicationContext,
+          docketNumber: c.docketNumber,
+        });
         return new Case(aCase, { authorizedUser });
       }),
   );

@@ -9,6 +9,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '../../../../shared/src/business/utilities/getCaseCaptionMeta';
 
 export const generateDocketRecordPdfInteractor = async (
@@ -34,12 +35,10 @@ export const generateDocketRecordPdfInteractor = async (
       userId: authorizedUser?.userId,
     });
 
-  const caseSource = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseSource = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   let caseEntity;
 

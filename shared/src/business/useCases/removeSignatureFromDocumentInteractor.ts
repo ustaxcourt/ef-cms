@@ -4,6 +4,7 @@ import {
   UnknownAuthUser,
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 /**
  * Removes a signature from a document
@@ -24,12 +25,10 @@ export const removeSignatureFromDocumentInteractor = async (
       'User attempting to remove signature from document is not an auth user',
     );
   }
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseRecord = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
   const caseEntity = new Case(caseRecord, {
     authorizedUser,
   });

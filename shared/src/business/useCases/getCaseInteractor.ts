@@ -21,12 +21,9 @@ export const getCaseInteractor = async (
 
   const caseRecord = await getCaseByDocketNumber({
     applicationContext,
-    authorizedUser,
     docketNumber: Case.formatDocketNumber(docketNumber),
   });
-  const isValidCase = Boolean(
-    caseRecord?.docketNumber && caseRecord?.entityName,
-  );
+  const isValidCase = Boolean(caseRecord?.docketNumber);
 
   if (!isValidCase) {
     const error = new NotFoundError(`Case ${docketNumber} was not found.`);

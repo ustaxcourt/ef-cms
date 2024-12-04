@@ -5,6 +5,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 export const generatePrintablePendingReportInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -34,12 +35,10 @@ export const generatePrintablePendingReportInteractor = async (
   if (judge) {
     reportTitle = `Judge ${judge}`;
   } else if (docketNumber) {
-    const caseResult = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+    const caseResult = await getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
     reportTitle = `Docket ${caseResult.docketNumberWithSuffix}`;
   }
 

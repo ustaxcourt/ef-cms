@@ -19,6 +19,7 @@ import {
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { cloneDeep, uniq } from 'lodash';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -170,7 +171,7 @@ const multiDocketServeStrategy = async ({
 
   const consolidatedCaseRecords = await Promise.all(
     request.consolidatedGroupDocketNumbers!.map(consolidatedGroupDocketNumber =>
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber({
+      getCaseByDocketNumber({
         applicationContext,
         docketNumber: consolidatedGroupDocketNumber,
       }),
@@ -499,12 +500,10 @@ const getDocketEntryToEdit = async ({
   caseEntity: Case;
   docketEntryEntity: DocketEntry;
 }> => {
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseToUpdate = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   const caseEntity = new Case(caseToUpdate, {
     authorizedUser,

@@ -9,6 +9,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '@shared/business/entities/User';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 export const getDownloadPolicyUrlInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -19,12 +20,10 @@ export const getDownloadPolicyUrlInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseData = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseData = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   if (!caseData.docketNumber && !caseData.entityName) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);

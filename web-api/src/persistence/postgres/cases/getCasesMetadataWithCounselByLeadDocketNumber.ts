@@ -12,7 +12,7 @@ export const getCasesMetadataWithCounselByLeadDocketNumber = async ({
   const dbCases = await getDbReader(reader =>
     reader
       .selectFrom('dwCase')
-      .where('leadDocketNumber', 'in', leadDocketNumber)
+      .where('leadDocketNumber', '=', leadDocketNumber)
       .selectAll()
       .execute(),
   );

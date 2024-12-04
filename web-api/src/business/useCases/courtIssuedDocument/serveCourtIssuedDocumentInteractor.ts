@@ -9,6 +9,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const serveCourtIssuedDocument = async (
@@ -38,12 +39,10 @@ export const serveCourtIssuedDocument = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const subjectCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: subjectCaseDocketNumber,
-    });
+  const subjectCase = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber: subjectCaseDocketNumber,
+  });
 
   if (!subjectCase.docketNumber) {
     throw new NotFoundError(`Case ${subjectCaseDocketNumber} was not found.`);
@@ -108,12 +107,10 @@ export const serveCourtIssuedDocument = async (
 
   try {
     for (const docketNumber of docketNumbers) {
-      const caseToUpdate = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber,
-        });
+      const caseToUpdate = await getCaseByDocketNumber({
+        applicationContext,
+        docketNumber,
+      });
 
       caseEntities.push(new Case(caseToUpdate, { authorizedUser }));
     }

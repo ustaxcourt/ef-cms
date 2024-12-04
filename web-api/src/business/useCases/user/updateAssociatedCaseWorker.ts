@@ -7,6 +7,7 @@ import {
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 export const updateAssociatedCaseWorker = async (
   applicationContext: ServerApplicationContext,
@@ -60,12 +61,10 @@ export const updatePetitionerCase = async ({
   user: RawUser;
   authorizedUser: AuthUser;
 }): Promise<void> => {
-  const rawCaseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const rawCaseToUpdate = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   const caseToUpdate = await updateCaseEntityAndGenerateChange({
     applicationContext,
@@ -94,12 +93,10 @@ export const updatePractitionerCase = async ({
   user: any;
   authorizedUser: AuthUser;
 }): Promise<void> => {
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseToUpdate = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   const caseEntity = new Case(caseToUpdate, {
     authorizedUser,

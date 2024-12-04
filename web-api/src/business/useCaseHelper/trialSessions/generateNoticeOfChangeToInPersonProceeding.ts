@@ -5,6 +5,7 @@ import {
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { formatPhoneNumber } from '../../../../../shared/src/business/utilities/formatPhoneNumber';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 import { getJudgeWithTitle } from '../../../../../shared/src/business/utilities/getJudgeWithTitle';
 
@@ -42,12 +43,10 @@ export const generateNoticeOfChangeToInPersonProceeding = async (
     joinPhoneNumber: formatPhoneNumber(trialSessionInformation.joinPhoneNumber),
   };
 
-  const caseDetail = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseDetail = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   const { docketNumberWithSuffix } = caseDetail;
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
