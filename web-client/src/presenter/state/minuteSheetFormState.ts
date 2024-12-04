@@ -80,6 +80,7 @@ type KeyedPartyFormFields = KeyedEntry & {
   renderKey: string;
   name: string;
   datesOfAppearance: string;
+  role?: string;
   // 10419 TODO: should there be a type dropdown to indicate whether the party
   // is "Counsel", "Pro se", "Intervenor", or "Participant"?
 };
@@ -213,6 +214,7 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
         datesOfAppearance: '',
         name: '',
         renderKey: '',
+        role: '',
       },
     ],
   },

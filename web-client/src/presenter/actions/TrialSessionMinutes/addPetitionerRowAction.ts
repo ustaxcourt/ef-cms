@@ -7,6 +7,7 @@ export const addPetitionerRowAction = ({ get, store }) => {
     datesOfAppearence: '',
     name: '',
     renderKey: uuidv4(),
+    role: '',
   });
   store.set(state.minuteSheetForm.petitioners.petitioners, petitionerRows);
 };
