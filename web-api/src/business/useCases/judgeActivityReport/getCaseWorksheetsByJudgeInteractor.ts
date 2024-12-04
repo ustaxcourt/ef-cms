@@ -8,6 +8,7 @@ import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWo
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { SubmittedCAVTableFields } from '@web-api/persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getConsolidatedCasesCount } from '@web-api/persistence/postgres/cases/getConsolidatedCasesCount';
 
 export type GetCasesByStatusAndByJudgeRequest = {
   statuses: string[];
@@ -39,10 +40,8 @@ export const getCaseWorksheetsByJudgeInteractor = async (
 
   const allCaseResults = await Promise.all(
     caseRecords.map(async caseRecord => {
-      const numConsolidatedCases = await calculateNumberOfConsolidatedCases(
-        applicationContext,
-        caseRecord,
-      );
+      const numConsolidatedCases =
+        await calculateNumberOfConsolidatedCases(caseRecord);
 
       return {
         ...caseRecord,
@@ -79,20 +78,16 @@ const getCases = async (
   return completeCaseRecords;
 };
 
-const calculateNumberOfConsolidatedCases = async (
-  applicationContext: ServerApplicationContext,
-  caseInfo: { leadDocketNumber?: string },
-) => {
+const calculateNumberOfConsolidatedCases = async (caseInfo: {
+  leadDocketNumber?: string;
+}) => {
   if (!caseInfo.leadDocketNumber) {
     return 1;
   }
 
-  return await applicationContext
-    .getPersistenceGateway()
-    .getCountOfConsolidatedCases({
-      applicationContext,
-      leadDocketNumber: caseInfo.leadDocketNumber,
-    });
+  return await getConsolidatedCasesCount({
+    leadDocketNumber: caseInfo.leadDocketNumber,
+  });
 };
 
 async function attachCaseWorkSheets(
