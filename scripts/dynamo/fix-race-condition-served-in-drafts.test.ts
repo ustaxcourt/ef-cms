@@ -3,7 +3,7 @@
  */
 import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
-
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';

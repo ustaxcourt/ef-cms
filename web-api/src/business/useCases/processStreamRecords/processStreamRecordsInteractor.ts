@@ -11,6 +11,7 @@ import { processMessageEntries } from './processMessageEntries';
 import { processOtherEntries } from './processOtherEntries';
 import { processPractitionerMappingEntries } from './processPractitionerMappingEntries';
 import { processRemoveEntries } from './processRemoveEntries';
+import { processUserCaseNoteEntries } from '@web-api/business/useCases/processStreamRecords/processUserCaseNoteEntries';
 import { processWorkItemEntries } from './processWorkItemEntries';
 import type { DynamoDBRecord } from 'aws-lambda';
 
@@ -29,6 +30,7 @@ export const processStreamRecordsInteractor = async (
     otherRecords,
     practitionerMappingRecords,
     removeRecords,
+    userCaseNoteRecords,
     workItemRecords,
   } = partitionRecords(recordsToProcess);
 
@@ -78,6 +80,19 @@ export const processStreamRecordsInteractor = async (
       getLogger().error('failed to process message records', {
         err,
       });
+      throw err;
+    });
+
+    await processUserCaseNoteEntries({
+      applicationContext,
+      userCaseNoteRecords,
+    }).catch(err => {
+      applicationContext.logger.error(
+        'failed to process userCaseNote records',
+        {
+          err,
+        },
+      );
       throw err;
     });
 

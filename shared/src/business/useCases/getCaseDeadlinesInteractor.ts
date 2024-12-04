@@ -16,15 +16,11 @@ export const getCaseDeadlinesInteractor = async (
   applicationContext: IApplicationContext,
   {
     endDate,
-    from,
     judge,
-    pageSize,
     startDate,
   }: {
     endDate: string;
-    from: number;
     judge: string;
-    pageSize: number;
     startDate;
   },
   authorizedUser: UnknownAuthUser,
@@ -33,11 +29,9 @@ export const getCaseDeadlinesInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { foundDeadlines, totalCount } = await getCaseDeadlinesByDateRange({
+  const { foundDeadlines } = await getCaseDeadlinesByDateRange({
     endDate,
-    from,
     judge,
-    pageSize,
     startDate,
   });
 
@@ -63,7 +57,7 @@ export const getCaseDeadlinesInteractor = async (
       ]),
     }));
 
-  return { deadlines: afterCaseMapping, totalCount };
+  return { deadlines: afterCaseMapping };
 };
 
 const getCasesByDocketNumbers = async ({

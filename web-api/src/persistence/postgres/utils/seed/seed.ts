@@ -3,6 +3,7 @@ import { caseWorksheets } from '@web-api/persistence/postgres/utils/seed/fixture
 import { correspondence } from '@web-api/persistence/postgres/utils/seed/fixtures/correspodence';
 import { getDbWriter } from '../../../../database';
 import { messages } from './fixtures/messages';
+import { workItems } from './fixtures/workItems';
 
 export const seed = async () => {
   const insertMessages = getDbWriter(writer =>
@@ -43,6 +44,14 @@ export const seed = async () => {
     insertCorrespondence,
     insertCaseWorksheet,
   ]);
+
+  await getDbWriter(writer =>
+    writer
+      .insertInto('dwWorkItem')
+      .values(workItems)
+      .onConflict(oc => oc.column('workItemId').doNothing()) // ensure doesn't fail if exists
+      .execute(),
+  );
 };
 
 seed().catch;

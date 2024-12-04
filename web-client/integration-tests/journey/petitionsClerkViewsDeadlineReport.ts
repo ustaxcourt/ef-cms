@@ -40,20 +40,11 @@ export const petitionsClerkViewsDeadlineReport = (
 
     let deadlines = cerebralTest.getState('caseDeadlineReport.caseDeadlines');
 
-    expect(deadlines.length).toEqual(1); // the page size is overridden for integration tests to 1
+    expect(deadlines.length).toEqual(6);
 
-    let helper = runCompute(caseDeadlineReportHelper, {
+    runCompute(caseDeadlineReportHelper, {
       state: cerebralTest.getState(),
     });
-
-    expect(helper.showLoadMoreButton).toBeTruthy();
-
-    // 6 deadlines total, so click load more 5 times and then the load more button should be hidden
-    await cerebralTest.runSequence('loadMoreCaseDeadlinesSequence');
-    await cerebralTest.runSequence('loadMoreCaseDeadlinesSequence');
-    await cerebralTest.runSequence('loadMoreCaseDeadlinesSequence');
-    await cerebralTest.runSequence('loadMoreCaseDeadlinesSequence');
-    await cerebralTest.runSequence('loadMoreCaseDeadlinesSequence');
 
     deadlines = cerebralTest.getState('caseDeadlineReport.caseDeadlines');
 
@@ -93,11 +84,9 @@ export const petitionsClerkViewsDeadlineReport = (
       },
     ]);
 
-    helper = runCompute(caseDeadlineReportHelper, {
+    runCompute(caseDeadlineReportHelper, {
       state: cerebralTest.getState(),
     });
-
-    expect(helper.showLoadMoreButton).toBeFalsy();
 
     await cerebralTest.runSequence('filterCaseDeadlinesByJudgeSequence', {
       judge: 'Buch',
@@ -105,13 +94,11 @@ export const petitionsClerkViewsDeadlineReport = (
 
     deadlines = cerebralTest.getState('caseDeadlineReport.caseDeadlines');
 
-    expect(deadlines.length).toEqual(1);
-    await cerebralTest.runSequence('loadMoreCaseDeadlinesSequence');
-    helper = runCompute(caseDeadlineReportHelper, {
+    expect(deadlines.length).toEqual(2);
+
+    runCompute(caseDeadlineReportHelper, {
       state: cerebralTest.getState(),
     });
-
-    expect(helper.showLoadMoreButton).toBeFalsy();
 
     // verify filtering by judge
     expect(deadlines).toMatchObject([

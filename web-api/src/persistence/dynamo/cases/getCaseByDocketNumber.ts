@@ -10,6 +10,7 @@ import {
   isCaseItem,
 } from '../helpers/aggregateCaseItems';
 import { getCaseCorrespondenceByDocketNumber } from '@web-api/persistence/postgres/caseCorrespondences/getCaseCorrespondenceByDocketNumber';
+import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { queryFull } from '../../dynamodbClientService';
 
@@ -22,7 +23,7 @@ export const getCaseByDocketNumber = async ({
   docketNumber: string;
   includeConsolidatedCases?: boolean;
 }): Promise<RawCase> => {
-  const [caseItems, correspondenceItems] = await Promise.all([
+  const [caseItems, correspondenceItems, workItems] = await Promise.all([
     queryFull({
       ExpressionAttributeNames: {
         '#pk': 'pk',
@@ -34,6 +35,9 @@ export const getCaseByDocketNumber = async ({
       applicationContext,
     }),
     getCaseCorrespondenceByDocketNumber({
+      docketNumber,
+    }),
+    getWorkItemsByDocketNumber({
       docketNumber,
     }),
   ]);
@@ -67,6 +71,11 @@ export const getCaseByDocketNumber = async ({
         ...correspondenceItem,
         pk: `case|${docketNumber}`,
         sk: `correspondence|${correspondenceItem.correspondenceId}`,
+      })),
+      ...workItems.map(workItem => ({
+        ...workItem,
+        pk: `case|${docketNumber}`,
+        sk: `work-item|${workItem.workItemId}`,
       })),
     ]),
     consolidatedCases,

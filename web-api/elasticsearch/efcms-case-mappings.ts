@@ -64,6 +64,9 @@ export const efcmsCaseMappings = {
     'indexedTimestamp.N': {
       type: 'text',
     },
+    'irsPractitioners.L.M.email.S': {
+      type: 'keyword',
+    },
     'irsPractitioners.L.M.userId.S': {
       type: 'keyword',
     },
@@ -83,6 +86,9 @@ export const efcmsCaseMappings = {
     'petitioners.L.M.countryType.S': {
       type: 'keyword',
     },
+    'petitioners.L.M.email.S': {
+      type: 'keyword',
+    },
     'petitioners.L.M.name.S': {
       type: 'text',
     },
@@ -96,6 +102,9 @@ export const efcmsCaseMappings = {
       type: 'keyword',
     },
     'preferredTrialCity.S': {
+      type: 'keyword',
+    },
+    'privatePractitioners.L.M.email.S': {
       type: 'keyword',
     },
     'privatePractitioners.L.M.userId.S': {
