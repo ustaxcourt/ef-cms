@@ -85,7 +85,7 @@ export const verifyUserPendingEmailInteractor = async (
     attributesToUpdate: {
       email: updatedUser.email,
     },
-    email: user.email,
+    email: user.email!,
   });
 
   await applicationContext.getWorkerGateway().queueWork(applicationContext, {
