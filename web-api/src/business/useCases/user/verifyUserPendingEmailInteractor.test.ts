@@ -306,4 +306,49 @@ describe('Verify User Pending Email', () => {
       });
     });
   });
+
+  describe('verifyUserPendingEmailInteractor - Wait until User is free', () => {
+    function sleep(timeInMilliseconds: number) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve(null);
+        }, timeInMilliseconds);
+      });
+    }
+
+    it('should wait until the user record is free to run the interactor', async () => {
+      let resolver: Function;
+      let errorMessage: string;
+
+      applicationContext
+        .getPersistenceGateway()
+        .getUserByIdOnceAllUpdatesComplete.mockImplementation(() => {
+          return new Promise(resolve => (resolver = resolve));
+        });
+
+      applicationContext
+        .getPersistenceGateway()
+        .getUserById.mockResolvedValue(mockPrivatePractitionerUser);
+
+      verifyUserPendingEmailInteractor(
+        applicationContext,
+        {
+          token: 'abc',
+        },
+        mockPrivatePractitionerUser,
+      ).catch(error => {
+        errorMessage = error.message;
+      });
+
+      await sleep(50);
+      expect(errorMessage!).toEqual(undefined);
+
+      await sleep(50);
+      expect(errorMessage!).toEqual(undefined);
+
+      resolver!(mockPrivatePractitionerUser);
+      await sleep(50);
+      expect(errorMessage!).toEqual('Tokens do not match');
+    });
+  });
 });
