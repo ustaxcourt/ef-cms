@@ -1,10 +1,12 @@
+import { SocketRouterNotificationMessage } from '@web-api/notifications/sendNotificationToUserTypes';
+
 /* eslint-disable complexity */
 const noop = () => {};
 
 export const socketRouter = (app, onMessageCallbackFn?) => {
   return async event => {
     const message = JSON.parse(event.data);
-    const { action } = message;
+    const { action } = message as SocketRouterNotificationMessage;
 
     switch (action) {
       case 'paper_service_started':
