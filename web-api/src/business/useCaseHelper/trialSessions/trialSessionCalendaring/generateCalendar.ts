@@ -11,6 +11,7 @@ import {
 import {
   FORMATS,
   createDateAtStartOfWeekEST,
+  createISODateString,
 } from '@shared/business/utilities/DateHandler';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
@@ -64,8 +65,9 @@ export const generateCalendar = ({
   // special sessions handled ahead of all reg, small
   specialSessions
     .sort((a, b) => {
-      // eslint-disable-next-line @miovision/disallow-date/no-new-date
-      return +new Date(a.startDate) - +new Date(b.startDate);
+      return createISODateString(a.startDate).localeCompare(
+        createISODateString(b.startDate),
+      );
     })
     .forEach(specialSession => {
       const sessionWeekOf = createDateAtStartOfWeekEST(
