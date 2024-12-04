@@ -65,7 +65,7 @@ describe('formatPendingItem', () => {
     ];
   });
 
-  it('should return a list of formatted pending items', () => {
+  it('should return a list of formatted pending items with correct display properties', () => {
     const result = mockPendingItems.map(item =>
       formatPendingItem(item, {
         applicationContext,
@@ -95,6 +95,22 @@ describe('formatPendingItem', () => {
         formattedName: 'Affidavit of Bob in Support of Petition',
       },
     ]);
+  });
+
+  it('should return a list of formatted pending items with unique renderKey properties for each item', () => {
+    const result = mockPendingItems.map(item =>
+      formatPendingItem(item, {
+        applicationContext,
+      }),
+    );
+
+    const allPendingItemFormattedObjectsHaveRenderKey = result.every(
+      obj => typeof obj.renderKey === 'string',
+    );
+    const uniqueRenderKeys = new Set(result.map(obj => obj.renderKey));
+
+    expect(allPendingItemFormattedObjectsHaveRenderKey).toBe(true);
+    expect(uniqueRenderKeys.size).toBe(result.length);
   });
 
   it('should add consolidated properties to a pending item in a consolidated group', () => {
