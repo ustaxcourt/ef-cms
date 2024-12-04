@@ -1,7 +1,10 @@
-import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
+import {
+  SESSION_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '@shared/business/entities/EntityConstants';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { associateSwingTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/associateSwingTrialSessions';
 import {
   mockPetitionerUser,
@@ -14,7 +17,7 @@ describe('associateSwingTrialSessions', () => {
   const MOCK_TRIAL_SESSION = {
     ...MOCK_TRIAL_REGULAR,
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-    sessionType: 'Regular',
+    sessionType: SESSION_TYPES.regular,
     startDate: '3000-03-01T00:00:00.000Z',
     term: 'Fall',
     termYear: '3000',
@@ -23,7 +26,7 @@ describe('associateSwingTrialSessions', () => {
 
   const MOCK_TRIAL_SESSION_FOR_ASSOCIATION = {
     ...MOCK_TRIAL_REGULAR,
-    sessionType: 'Small',
+    sessionType: SESSION_TYPES.small,
     startDate: '3000-03-03T00:00:00.000Z',
     term: 'Fall',
     termYear: '3000',
