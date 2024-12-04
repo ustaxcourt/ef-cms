@@ -1,6 +1,6 @@
-import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
