@@ -1,13 +1,18 @@
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
+import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { MinuteSheetFormState } from '@web-client/presenter/state/minuteSheetFormState';
 import React from 'react';
 
 export const RespondentsFieldset = ({
+  addRowHandler,
   onBlurHandler,
   onChangeHandler,
+  removeRowHandler,
   respondentsFormState,
 }: {
+  addRowHandler: ({ section }: { section: string }) => void;
   onChangeHandler: ({
     name,
     section,
@@ -18,6 +23,13 @@ export const RespondentsFieldset = ({
     value: string | boolean;
   }) => void;
   onBlurHandler: () => void;
+  removeRowHandler: ({
+    renderKey,
+    section,
+  }: {
+    renderKey: string;
+    section: string;
+  }) => void;
   respondentsFormState: MinuteSheetFormState['respondents'];
 }) => {
   return (
@@ -30,48 +42,78 @@ export const RespondentsFieldset = ({
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </div>
       </div>
-      <div className="grid-row grid-gap flex-justify-end align-items-center">
-        <div className="grid-col-5">
-          <FormGroup className="margin-bottom-0">
-            <label hidden htmlFor="respondent">
-              {/* TODO 10419 this should be index of row */}
-              {'Respondent 0'}
-            </label>
-            <input
-              className="usa-input"
-              id="respondent"
-              name="respondent"
-              type="text"
-              value={respondentsFormState[0].name}
-              onBlur={() => onBlurHandler()}
-              onChange={e =>
-                onChangeHandler({
-                  name: e.target.name,
+      {respondentsFormState.map((row, rowIndex) => {
+        return (
+          <div
+            className="grid-row grid-gap flex-justify-end align-items-center"
+            key={`respondent-row-${row.renderKey}`}
+          >
+            <div className="grid-col-5">
+              <FormGroup className="margin-bottom-0">
+                <label hidden htmlFor={`respondent-${rowIndex}`}>
+                  {/* TODO 10419 this should be index of row */}
+                  {`Respondent ${rowIndex}`}
+                </label>
+                <input
+                  className="usa-input"
+                  id={`respondent-${rowIndex}`}
+                  name={`respondent-${rowIndex}`}
+                  type="text"
+                  value={respondentsFormState[rowIndex].name}
+                  onBlur={() => onBlurHandler()}
+                  onChange={e =>
+                    onChangeHandler({
+                      name: e.target.name,
+                      section: 'respondents',
+                      value: e.target.value,
+                    })
+                  }
+                />
+              </FormGroup>
+            </div>
+            <div className="grid-col-5">
+              <DateSelector
+                defaultValue={undefined}
+                formGroupClassNames="margin-bottom-0"
+                id={`respondent-date-of-appearance-${rowIndex}`}
+                labelPosition="hidden"
+                onBlur={() => onBlurHandler()}
+                onChange={e =>
+                  onChangeHandler({
+                    name: e.target.name,
+                    section: 'respondents',
+                    value: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <button
+              className="grid-col-auto"
+              onClick={e => {
+                e.preventDefault();
+                removeRowHandler({
+                  renderKey: row.renderKey,
                   section: 'respondents',
-                  value: e.target.value,
-                })
-              }
-            />
-          </FormGroup>
-        </div>
-        <div className="grid-col-5">
-          <DateSelector
-            defaultValue={undefined}
-            formGroupClassNames="margin-bottom-0"
-            id="respondent-date-of-appearance"
-            labelPosition="hidden"
-            onBlur={() => onBlurHandler()}
-            onChange={e =>
-              onChangeHandler({
-                name: e.target.name,
-                section: 'respondents',
-                value: e.target.value,
-              })
-            }
-          />
-        </div>
-        {/* TODO 10419 make this a functional button */}
-        <div className="grid-col-auto">Remove</div>
+                });
+              }}
+            >
+              <Icon className="icon-class" icon="times" size="1x" />
+            </button>
+          </div>
+        );
+      })}
+      <div className="grid-row grid-gap align-items-center margin-bottom-1">
+        <Button
+          secondary={true}
+          onClick={e => {
+            e.preventDefault();
+            addRowHandler({
+              section: 'respondents',
+            });
+          }}
+        >
+          Add Respondent
+        </Button>
       </div>
     </fieldset>
   );

@@ -10,8 +10,11 @@ import React from 'react';
 
 export const TrialSessionMinutesForm = connect(
   {
+    addMinuteSheetFormRowSequence: sequences.addMinuteSheetFormRowSequence,
     addPetitionerRowSequence: sequences.addPetitionerRowSequence,
     addRecalledRowSequence: sequences.addRecalledRowSequence,
+    removeMinuteSheetFormRowSequence:
+      sequences.removeMinuteSheetFormRowSequence,
     removePetitionerRowSequence: sequences.removePetitionerRowSequence,
     trialSessionMinutesAutosaveSequence:
       sequences.trialSessionMinutesAutosaveSequence,
@@ -20,8 +23,10 @@ export const TrialSessionMinutesForm = connect(
       sequences.trialSessionMinutesOnChangeSequence,
   },
   ({
+    addMinuteSheetFormRowSequence,
     addPetitionerRowSequence,
     addRecalledRowSequence,
+    removeMinuteSheetFormRowSequence,
     removePetitionerRowSequence,
     trialSessionMinutesAutosaveSequence,
     trialSessionMinutesForm,
@@ -57,6 +62,8 @@ export const TrialSessionMinutesForm = connect(
           </div>
           <div className="grid-col-6">
             <RespondentsFieldset
+              addRowHandler={addMinuteSheetFormRowSequence}
+              removeRowHandler={removeMinuteSheetFormRowSequence}
               respondentsFormState={trialSessionMinutesForm.respondents}
               onBlurHandler={trialSessionMinutesAutosaveSequence}
               onChangeHandler={trialSessionMinutesOnChangeSequence}

@@ -90,13 +90,13 @@ export const PetitionersFieldset = ({
             </div>
             <div className="grid-col-2">
               <FormGroup className="margin-bottom-0">
-                <label hidden htmlFor="petitionerRole">
+                <label hidden htmlFor={`petitionerRole-${rowIndex}`}>
                   {`Petitioner Role ${rowIndex}`}
                 </label>
                 <input
                   className="usa-input"
-                  id="petitionerRole"
-                  name="petitionerRole"
+                  id={`petitionerRole-${rowIndex}`}
+                  name={`petitionerRole-${rowIndex}`}
                   type="text"
                   value={petitionersFormState.petitioners[rowIndex]?.role}
                   onBlur={() => onBlurHandler()}
@@ -117,13 +117,16 @@ export const PetitionersFieldset = ({
             </div>
             <div className="grid-col-4">
               <FormGroup className="margin-bottom-0">
-                <label hidden htmlFor="petitionerDatesOfAppearance">
+                <label
+                  hidden
+                  htmlFor={`petitioner-dates-of-appearance-${rowIndex}`}
+                >
                   {`Petitioner Role ${rowIndex}`}
                 </label>
                 <input
                   className="usa-input"
-                  id="petitionerDatesOfAppearance"
-                  name="petitionerDatesOfAppearance"
+                  id={`petitioner-dates-of-appearance-${rowIndex}`}
+                  name={`petitioner-dates-of-appearance-${rowIndex}`}
                   type="text"
                   value={
                     petitionersFormState.petitioners[rowIndex]

@@ -10,6 +10,7 @@ import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
 import { addAnotherIrsNoticeToFormSequence } from '@web-client/presenter/sequences/addAnotherIrsNoticeToFormSequence';
 import { addCaseToTrialSessionSequence } from './sequences/addCaseToTrialSessionSequence';
 import { addFactOrReasonSequence } from '@web-client/presenter/sequences/addFactOrReasonSequence';
+import { addMinuteSheetFormRowSequence } from './sequences/TrialSessionMinutes/addMinuteSheetFormRowSequence';
 import { addPenaltyInputSequence } from './sequences/addPenaltyInputSequence';
 import { addPetitionerRowSequence } from '@web-client/presenter/sequences/TrialSessionMinutes/addPetitionerRowSequence';
 import { addRecalledRowSequence } from './sequences/TrialSessionMinutes/addRecalledRowSequence';
@@ -342,6 +343,7 @@ import { removeCaseDetailPendingItemSequence } from './sequences/removeCaseDetai
 import { removeCaseFromTrialSequence } from './sequences/removeCaseFromTrialSequence';
 import { removeFactOrReasonSequence } from '@web-client/presenter/sequences/removeFactOrReasonSequence';
 import { removeIrsNoticeFromFormSequence } from '@web-client/presenter/sequences/removeIrsNoticeFromFormSequence';
+import { removeMinuteSheetFormRowSequence } from './sequences/TrialSessionMinutes/removeMinuteSheetFormRowSequence';
 import { removePetitionForReplacementSequence } from './sequences/removePetitionForReplacementSequence';
 import { removePetitionerAndUpdateCaptionSequence } from './sequences/removePetitionerAndUpdateCaptionSequence';
 import { removePetitionerCounselFromCaseSequence } from './sequences/removePetitionerCounselFromCaseSequence';
@@ -630,6 +632,7 @@ export const presenterSequences = {
   addCaseToTrialSessionSequence:
     addCaseToTrialSessionSequence as unknown as Function,
   addFactOrReasonSequence,
+  addMinuteSheetFormRowSequence,
   addPenaltyInputSequence: addPenaltyInputSequence as unknown as Function,
   addPetitionerRowSequence,
   addRecalledRowSequence,
@@ -1174,6 +1177,7 @@ export const presenterSequences = {
     removeCaseFromTrialSequence as unknown as Function,
   removeFactOrReasonSequence,
   removeIrsNoticeFromFormSequence,
+  removeMinuteSheetFormRowSequence,
   removePetitionForReplacementSequence:
     removePetitionForReplacementSequence as unknown as Function,
   removePetitionerAndUpdateCaptionSequence:
