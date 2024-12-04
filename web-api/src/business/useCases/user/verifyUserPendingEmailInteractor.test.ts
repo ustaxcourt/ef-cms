@@ -326,10 +326,6 @@ describe('Verify User Pending Email', () => {
           return new Promise(resolve => (resolver = resolve));
         });
 
-      applicationContext
-        .getPersistenceGateway()
-        .getUserById.mockResolvedValue(mockPrivatePractitionerUser);
-
       verifyUserPendingEmailInteractor(
         applicationContext,
         {
