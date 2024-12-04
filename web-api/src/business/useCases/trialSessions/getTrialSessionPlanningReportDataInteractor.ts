@@ -24,9 +24,10 @@ export type TrialLocationData = {
   previousTermsData: string[][];
   regularCaseCount: number;
   smallCaseCount: number;
+  specialCaseCount: number;
   stateAbbreviation: string;
   trialCityState: string;
-  blockedCount: number;
+  blockedCaseCount: number;
 };
 
 export const getTrialSessionPlanningReportDataInteractor = async (
@@ -79,12 +80,26 @@ const getTrialSessionPlanningReportData = async ({
     return applicationContext.getUtilities().compareStrings(a.city, b.city);
   });
 
-  const allTrialSessions = (
-    await applicationContext
-      .getPersistenceGateway()
-      .getTrialSessions({ applicationContext })
-  ).filter(session =>
+  const trialSessions = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessions({ applicationContext });
+
+  const allTrialSessions = trialSessions.filter(session =>
     ['Regular', 'Small', 'Hybrid', 'Hybrid-S'].includes(session.sessionType),
+  );
+
+  const specialTrialSessions = trialSessions.filter(
+    session => session.sessionType === 'Special',
+  );
+
+  const specialTrialSessionsCounts = specialTrialSessions.reduce(
+    (allSessions, session) => {
+      const { trialLocation } = session;
+      if (!trialLocation) return allSessions;
+      allSessions[trialLocation] = (allSessions[trialLocation] || 0) + 1;
+      return allSessions;
+    },
+    {},
   );
 
   const trialLocationData: TrialLocationData[] = await Promise.all(
@@ -92,6 +107,7 @@ const getTrialSessionPlanningReportData = async ({
       getTrialLocation(applicationContext, {
         allTrialSessions,
         previousTerms,
+        specialTrialSessionsCounts,
         trialLocation,
       }),
     ),
@@ -127,11 +143,13 @@ const getTrialLocation = async (
   {
     allTrialSessions,
     previousTerms,
+    specialTrialSessionsCounts,
     trialLocation,
   }: {
     trialLocation: { city: string; state: string };
     previousTerms: PreviousTerm[];
     allTrialSessions: RawTrialSession[];
+    specialTrialSessionsCounts: { [key: string]: number };
   },
 ): Promise<TrialLocationData> => {
   const trialCityState = `${trialLocation.city}, ${trialLocation.state}`;
@@ -164,6 +182,8 @@ const getTrialLocation = async (
   const smallCaseCount = eligibleCasesSmall.length;
   const regularCaseCount = eligibleCasesRegular.length;
   const allCaseCount = smallCaseCount + regularCaseCount;
+  const blockedCaseCount = blockedCasesResult.length;
+  const specialCaseCount = specialTrialSessionsCounts[trialCityState];
 
   const previousTermsData: string[][] = [];
   previousTerms.forEach(previousTerm => {
@@ -205,10 +225,11 @@ const getTrialLocation = async (
 
   return {
     allCaseCount,
-    blockedCount: blockedCasesResult.length,
+    blockedCaseCount,
     previousTermsData,
     regularCaseCount,
     smallCaseCount,
+    specialCaseCount,
     stateAbbreviation,
     trialCityState,
   };
