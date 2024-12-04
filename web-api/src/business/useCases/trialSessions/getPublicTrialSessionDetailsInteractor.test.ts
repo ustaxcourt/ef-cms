@@ -4,6 +4,7 @@ import {
 } from '@web-api/business/useCases/trialSessions/getPublicTrialSessionDetailsInteractor';
 import {
   SESSION_STATUS_TYPES,
+  SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
@@ -20,7 +21,7 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
     postalCode: '11111',
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
     sessionStatus: SESSION_STATUS_TYPES.open,
-    sessionType: 'Regular',
+    sessionType: SESSION_TYPES.regular,
     startDate: '2025-12-01T00:00:00.000Z',
     state: 'AL',
     swingSessionId: undefined,
