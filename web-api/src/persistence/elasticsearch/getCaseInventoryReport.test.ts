@@ -8,7 +8,7 @@ import { marshall } from '@aws-sdk/util-dynamodb';
 
 describe('getCaseInventoryReport', () => {
   const searchSpy = jest.fn();
-  const CASE_INVENTORY_MAX_PAGE_SIZE = 10;
+  const CASE_INVENTORY_PAGE_SIZE = 10;
 
   const mockDataOne = {
     associatedJudge: CHIEF_JUDGE,
@@ -32,7 +32,7 @@ describe('getCaseInventoryReport', () => {
 
   beforeEach(() => {
     applicationContext.getConstants.mockReturnValue({
-      CASE_INVENTORY_MAX_PAGE_SIZE,
+      CASE_INVENTORY_PAGE_SIZE,
     });
     applicationContext.getSearchClient.mockReturnValue({
       search: searchSpy,
@@ -194,7 +194,7 @@ describe('getCaseInventoryReport', () => {
     });
 
     expect(searchSpy.mock.calls[0][0].body.size).toEqual(
-      CASE_INVENTORY_MAX_PAGE_SIZE,
+      CASE_INVENTORY_PAGE_SIZE,
     );
   });
 
@@ -218,7 +218,7 @@ describe('getCaseInventoryReport', () => {
     });
 
     expect(searchSpy.mock.calls[0][0].body.size).toEqual(
-      CASE_INVENTORY_MAX_PAGE_SIZE,
+      CASE_INVENTORY_PAGE_SIZE,
     );
   });
 

@@ -3,19 +3,19 @@ import {
   AuthUser,
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import {
   RawTrialSession,
   TrialSession,
-} from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+} from '@shared/business/entities/trialSessions/TrialSession';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { TrialSessionWorkingCopy } from '../../../../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
+import { TrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { get } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';

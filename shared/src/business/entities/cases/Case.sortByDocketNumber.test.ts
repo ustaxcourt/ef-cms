@@ -67,7 +67,7 @@ describe('sortByDocketNumber', () => {
 });
 
 describe('sortByDocketNumberAndGroupConsolidatedCases', () => {
-  it('should return the cases sorted properly, with a consolidated case appearing after its lead cases', () => {
+  it('should return the cases sorted properly, with a consolidated case appearing after its lead case', () => {
     const result = Case.sortByDocketNumberAndGroupConsolidatedCases([
       {
         docketNumber: '100-19',
