@@ -1,7 +1,7 @@
 // usage: npx ts-node --transpile-only scripts/download-all-case-documents.js "453-17"
 
 import { createApplicationContext } from '@web-api/applicationContext';
-import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import fs from 'fs';
 
 const DOCKET_NUMBER = process.argv[2];

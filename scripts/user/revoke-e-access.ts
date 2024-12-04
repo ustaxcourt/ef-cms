@@ -2,7 +2,7 @@
 
 import { Case } from '@shared/business/entities/cases/Case';
 import { createApplicationContext } from '@web-api/applicationContext';
-import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { requireEnvVars } from '../../shared/admin-tools/util';
 import { updateCase } from '@web-api/persistence/postgres/cases/updateCase';

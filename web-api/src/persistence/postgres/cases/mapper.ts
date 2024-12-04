@@ -26,12 +26,12 @@ export const toNewKyselyCase = (rawCase: RawCase) => {
     automaticBlocked: rawCase.automaticBlocked,
     automaticBlockedDate: rawCase.automaticBlockedDate
       ? calculateDate({ dateString: rawCase.automaticBlockedDate })
-      : undefined,
+      : null,
     automaticBlockedReason: rawCase.automaticBlockedReason,
     blocked: rawCase.blocked,
     blockedDate: rawCase.blockedDate
       ? calculateDate({ dateString: rawCase.blockedDate })
-      : undefined,
+      : null,
     blockedReason: rawCase.blockedReason,
     canAllowDocumentService: rawCase.canAllowDocumentService,
     canAllowPrintableDocketRecord: rawCase.canAllowPrintableDocketRecord,
@@ -42,7 +42,7 @@ export const toNewKyselyCase = (rawCase: RawCase) => {
     caseType: rawCase.caseType,
     closedDate: rawCase.closedDate
       ? calculateDate({ dateString: rawCase.closedDate })
-      : undefined,
+      : null,
     createdAt: rawCase.createdAt
       ? calculateDate({ dateString: rawCase.createdAt })
       : calculateDate({ dateString: formatNow() }), // Is this what we want?
@@ -59,7 +59,7 @@ export const toNewKyselyCase = (rawCase: RawCase) => {
     initialDocketNumberSuffix: rawCase.initialDocketNumberSuffix,
     irsNoticeDate: rawCase.irsNoticeDate
       ? calculateDate({ dateString: rawCase.irsNoticeDate })
-      : undefined,
+      : null,
     isPaper: rawCase.isPaper,
     isSealed: rawCase.isSealed,
     judgeUserId: rawCase.judgeUserId,
@@ -69,7 +69,7 @@ export const toNewKyselyCase = (rawCase: RawCase) => {
     noticeOfAttachments: rawCase.noticeOfAttachments,
     noticeOfTrialDate: rawCase.noticeOfTrialDate
       ? calculateDate({ dateString: rawCase.noticeOfTrialDate })
-      : undefined,
+      : null,
     orderDesignatingPlaceOfTrial: rawCase.orderDesignatingPlaceOfTrial,
     orderForAmendedPetition: rawCase.orderForAmendedPetition,
     orderForAmendedPetitionAndFilingFee:
@@ -81,27 +81,28 @@ export const toNewKyselyCase = (rawCase: RawCase) => {
     partyType: rawCase.partyType,
     petitionPaymentDate: rawCase.petitionPaymentDate
       ? calculateDate({ dateString: rawCase.petitionPaymentDate })
-      : undefined,
+      : null,
     petitionPaymentMethod: rawCase.petitionPaymentMethod,
     petitionPaymentStatus: rawCase.petitionPaymentStatus,
     petitionPaymentWaivedDate: rawCase.petitionPaymentWaivedDate
       ? calculateDate({ dateString: rawCase.petitionPaymentWaivedDate })
-      : undefined,
+      : null,
     preferredTrialCity: rawCase.preferredTrialCity,
     procedureType: rawCase.procedureType,
     qcCompleteForTrial: rawCase.qcCompleteForTrial,
     receivedAt: rawCase.receivedAt
       ? calculateDate({ dateString: rawCase.receivedAt })
-      : calculateDate({ dateString: formatNow() }), // Is this what we want?
+      : calculateDate({ dateString: formatNow() }),
+    // Is this what we want?
     sealedDate: rawCase.sealedDate
       ? calculateDate({ dateString: rawCase.sealedDate })
-      : undefined,
+      : null,
     sortableDocketNumber: rawCase.sortableDocketNumber,
     statistics: rawCase.statistics,
     status: rawCase.status,
     trialDate: rawCase.trialDate
       ? calculateDate({ dateString: rawCase.trialDate })
-      : undefined,
+      : null,
     trialLocation: rawCase.trialLocation,
     trialSessionId: rawCase.trialSessionId,
     trialTime: rawCase.trialTime,
