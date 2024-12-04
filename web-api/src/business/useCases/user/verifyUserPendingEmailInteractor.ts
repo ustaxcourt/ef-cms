@@ -4,6 +4,7 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   calculateDifferenceInHours,
@@ -29,21 +30,11 @@ export const userTokenHasExpired = (
 
 export const verifyUserPendingEmailInteractor = async (
   applicationContext: ServerApplicationContext,
-  { clientConnectionId, token }: { token: string; clientConnectionId: string },
+  { token }: { token: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EMAIL_MANAGEMENT)) {
-    return await applicationContext
-      .getNotificationGateway()
-      .sendNotificationToUser({
-        applicationContext,
-        clientConnectionId,
-        message: {
-          action: 'set_verify_email_notification',
-          message: 'Unauthorized to manage emails',
-        },
-        userId: (authorizedUser as UnknownAuthUser)?.userId!,
-      });
+    throw new UnauthorizedError('Unauthorized to manage emails.');
   }
 
   const user = await applicationContext
@@ -61,35 +52,14 @@ export const verifyUserPendingEmailInteractor = async (
       'Unable to verify pending email, either the user clicked the verify link twice or their verification token did not match',
       { email: authorizedUser.email },
     );
-    return await applicationContext
-      .getNotificationGateway()
-      .sendNotificationToUser({
-        applicationContext,
-        clientConnectionId,
-        message: {
-          action: 'set_verify_email_notification',
-          message: 'Tokens do not match',
-        },
-        userId: user.userId,
-      });
+    throw new UnauthorizedError('Tokens do not match');
   }
 
   if (userTokenHasExpired(user.pendingEmailVerificationTokenTimestamp)) {
     applicationContext.logger.info('Pending email verification link expired', {
       email: authorizedUser.email,
     });
-    return await applicationContext
-      .getNotificationGateway()
-      .sendNotificationToUser({
-        applicationContext,
-        clientConnectionId,
-        message: {
-          action: 'set_verify_email_notification',
-          message: 'Link has expired',
-          messageType: 'expiredToken',
-        },
-        userId: user.userId,
-      });
+    throw new UnauthorizedError('Link has expired');
   }
 
   const isEmailAvailable = await applicationContext
@@ -100,17 +70,7 @@ export const verifyUserPendingEmailInteractor = async (
     });
 
   if (!isEmailAvailable) {
-    return await applicationContext
-      .getNotificationGateway()
-      .sendNotificationToUser({
-        applicationContext,
-        clientConnectionId,
-        message: {
-          action: 'set_verify_email_notification',
-          message: 'Email is not available',
-        },
-        userId: user.userId,
-      });
+    throw new Error('Email is not available');
   }
 
   const { updatedUser } = await updateUserPendingEmailRecord(
@@ -170,17 +130,4 @@ export const verifyUserPendingEmailInteractor = async (
       user: updatedUser,
     });
   }
-
-  return await applicationContext
-    .getNotificationGateway()
-    .sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: {
-        action: 'set_verify_email_notification',
-        message: 'Email has been updated',
-        messageType: 'success',
-      },
-      userId: user.userId,
-    });
 };

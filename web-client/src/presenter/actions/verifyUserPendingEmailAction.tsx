@@ -45,27 +45,40 @@ const alertKeyDictionary: { [key in VerifyEmailNotificationType]: any } = {
 
 export const verifyUserPendingEmailAction = async ({
   applicationContext,
-  get,
+  path,
   props,
 }: ActionProps<{ token: string }>) => {
-  const clientConnectionId = get(state.clientConnectionId);
   const { token } = props;
 
-  await applicationContext
-    .getUseCases()
-    .verifyUserPendingEmailInteractor(applicationContext, {
-      clientConnectionId,
-      token,
-    });
+  try {
+    await applicationContext
+      .getUseCases()
+      .verifyUserPendingEmailInteractor(applicationContext, {
+        token,
+      });
 
-  return {
-    alertInfo: {
-      message: 'DAWSON is updating your email. Please wait.',
-      title: 'Updating email address',
-    },
-  };
+    return path.success({
+      alertSuccess: {
+        message:
+          'Your email address is verified. You can now log in to DAWSON.',
+        title: 'Email address verified',
+      },
+    });
+  } catch (e: any) {
+    if (e.message === 'Link has expired') {
+      return path.error({
+        alertError: expiredTokenAlertError,
+      });
+    }
+
+    //if timout display new message
+    return path.error({
+      alertError: genericAlertError,
+    });
+  }
 };
 
+//DELETE AND CLEAN UP SOCKET ROUTER
 export const setVerifyUserPendingEmailNotificationAction = ({
   props,
   store,
