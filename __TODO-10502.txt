@@ -27,6 +27,8 @@ In getDocumentQCInboxForUser, I had to add to falsy checks that can probably be 
 
 sealCaseInteractor and unsealCaseInteractor were re-creating cases *I think* unnecessarily. I changed that as an experiment with CaseFactory.
 
+We removed duplicative getCountOfConsolidatedCases. Make sure that everything works as expected--Chris H mentioned that consolidated cases have had several refactors, so there might be a reason this existed after all.
+
 Associate the right things with a case efficiently in getCaseByDocketNumber
 -- Still need respondent counsel, consolidated cases ...
 -- Also, maybe we should pass flags (or something like that, but better) to determine which subsets of data we need since I doubt every call to getCaseByDocketNumber actually needs all of the docketEntries, petitioners, etc.
