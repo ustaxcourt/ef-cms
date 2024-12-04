@@ -1,5 +1,7 @@
-import { MESSAGE_TYPES } from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
-import { SUGGESTED_TRIAL_SESSION_TITLES } from '@shared/business/entities/EntityConstants';
+import {
+  SUGGESTED_TRIAL_SESSION_TITLES,
+  USER_MESSAGE_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -32,7 +34,7 @@ describe('runCreateTermAction', () => {
   it('should call the success path when a trial session calendar is generated without any errors', async () => {
     const mockMessage = {
       message: SUGGESTED_TRIAL_SESSION_TITLES.success,
-      type: MESSAGE_TYPES.success,
+      type: USER_MESSAGE_TYPES.success,
     };
 
     applicationContext
@@ -63,7 +65,7 @@ describe('runCreateTermAction', () => {
       message:
         'There are no trial sessions to schedule within the dates provided.',
       title: SUGGESTED_TRIAL_SESSION_TITLES.invalid,
-      type: MESSAGE_TYPES.error,
+      type: USER_MESSAGE_TYPES.error,
     };
     applicationContext
       .getUseCases()
@@ -90,7 +92,7 @@ describe('runCreateTermAction', () => {
     const mockMessage = {
       message: 'You broke some constraints',
       title: SUGGESTED_TRIAL_SESSION_TITLES.warning,
-      type: MESSAGE_TYPES.warning,
+      type: USER_MESSAGE_TYPES.warning,
     };
     applicationContext
       .getUseCases()
