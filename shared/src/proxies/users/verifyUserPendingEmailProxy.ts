@@ -10,14 +10,13 @@ import { put } from '../requests';
  */
 export const verifyUserPendingEmailInteractor = (
   applicationContext,
-  { clientConnectionId, token }: { clientConnectionId: string; token: string },
+  { token }: { token: string },
 ): Promise<void> => {
   return put({
     applicationContext,
     body: {
-      clientConnectionId,
       token,
     },
-    endpoint: '/async/users/verify-email',
+    endpoint: '/users/verify-email',
   });
 };
