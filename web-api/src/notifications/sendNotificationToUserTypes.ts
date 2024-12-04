@@ -180,12 +180,6 @@ type UserContactUpdateErrorNotification = {
   error: string;
 };
 
-type SetVerifyEmailNotification = {
-  action: 'set_verify_email_notification';
-  message: string;
-  messageType?: 'expiredToken' | 'success';
-};
-
 export type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
@@ -216,5 +210,4 @@ export type NotificationMessage =
   | SetTrialSessionCalendarErrorNotification
   | UpdateTrialSessionCompleteNotification
   | UserContactInitialUpdateCompleteNotification
-  | UserContactUpdateErrorNotification
-  | SetVerifyEmailNotification;
+  | UserContactUpdateErrorNotification;
