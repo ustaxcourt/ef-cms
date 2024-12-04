@@ -183,7 +183,7 @@ const getTrialLocation = async (
   const regularCaseCount = eligibleCasesRegular.length;
   const allCaseCount = smallCaseCount + regularCaseCount;
   const blockedCaseCount = blockedCasesResult.length;
-  const specialCaseCount = specialTrialSessionsCounts[trialCityState];
+  const specialCaseCount = specialTrialSessionsCounts[trialCityState] || 0;
 
   const previousTermsData: string[][] = [];
   previousTerms.forEach(previousTerm => {
