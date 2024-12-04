@@ -106,6 +106,8 @@ export const DocumentViewer = connect(
                           <div className="grid-col-5">
                             <span
                               className={classNames(
+                                'mobile-text-wrap',
+                                'word-wrap-break-word',
                                 entry.isStricken && 'stricken-docket-record',
                               )}
                             >
