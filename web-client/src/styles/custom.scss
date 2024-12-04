@@ -2341,10 +2341,6 @@ button.change-scanner-button {
   line-height: 18px;
 }
 
-.visibility-hidden {
-  visibility: hidden;
-}
-
 .bg-gray {
   background-color: color($theme-color-base-lightest);
 }
@@ -2357,4 +2353,36 @@ button.change-scanner-button {
 .padding-0 {
   // This has higher importance than uwds padding-0
   padding: 0;
+}
+
+.trial-session-public-card {
+  line-height: 24px;
+}
+
+.h1-size {
+  font-size: 2em;
+}
+
+.double-border {
+  border-bottom: 1px solid !important;
+  margin-bottom: 5px !important;
+}
+
+.actions-buttons {
+  @media only screen and (max-width: ($medium-screen - 1)) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+.session-card {
+  @media only screen and (max-width: ($medium-screen - 1)) {
+    width: 100%;
+
+    .action-button-wrapper {
+      display: inline-flex;
+      margin: 0;
+    }
+  }
 }
