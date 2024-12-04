@@ -16,7 +16,7 @@ describe('setPendingItemsAction', () => {
     expect(state.pendingReports.pendingItems).toEqual(['DocketRecord']);
   });
 
-  it('sets state.pendingReports.hasPendingItemsResults to true when state.pendingReports.pendingItems contains items', async () => {
+  it('sets state.pendingReports.pendingItems to the passed in props.pendingItems and replaces any items that were previously stored in state.pendingReport.pendingItems', async () => {
     const { state } = await runAction(setPendingItemsAction, {
       props: {
         pendingItems: ['DocketRecord'],
@@ -28,7 +28,7 @@ describe('setPendingItemsAction', () => {
       },
     });
 
-    expect(state.pendingReports.hasPendingItemsResults).toBe(true);
+    expect(state.pendingReports.pendingItems).toEqual(['DocketRecord']);
   });
 
   it('sets state.pendingReports.hasPendingItemsResults to true when props.pendingItems contains items', async () => {
