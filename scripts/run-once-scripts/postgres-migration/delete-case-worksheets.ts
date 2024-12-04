@@ -10,14 +10,15 @@ import { requireEnvVars } from '../../../shared/admin-tools/util';
 import { getDbReader } from '../../../web-api/src/database';
 import { isEmpty } from 'lodash';
 import { batchDeleteDynamoItems } from './batch-delete-dynamo-items';
+import { environment } from '../../../web-api/src/environment';
 
 const caseWorksheetPageSize = 10000;
 const dynamoDbClient = new DynamoDBClient({ region: 'us-east-1' });
 const dynamoDbDocClient = DynamoDBDocumentClient.from(dynamoDbClient);
 
-requireEnvVars(['TABLE_NAME']);
-
-const tableNameInput = process.env.TABLE_NAME!;
+// We set the environment as 'production' (= "a deployed environment") to get the RDS connection to work properly
+environment.nodeEnv = 'production';
+process.env.CIRCLE_BRANCH = 'test';
 
 const getCaseWorksheetsToDelete = async (offset: number) => {
   const caseWorksheets = await getDbReader(reader =>
@@ -50,7 +51,7 @@ async function main() {
     totalItemsDeleted += await batchDeleteDynamoItems(
       dynamoItemsToDelete,
       dynamoDbDocClient,
-      tableNameInput,
+      environment.dynamoDbTableName,
     );
     console.log(`Total case worksheets deleted so far: ${totalItemsDeleted}`);
     offset += caseWorksheetPageSize;
