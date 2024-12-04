@@ -16,7 +16,7 @@ const CITY_TITLE_CELL_LOCATION = 'A2';
 
 const warningTabRedColor = 'ffb50909';
 const specialRedColor = 'ffb50909';
-const specialPurpleColor = 'ffffbe2e';
+const specialOrangeColor = 'ffffbe2e';
 const blackColor = 'ff000000';
 const whiteColor = 'ffffffff';
 const hybridYellowColor = 'fffee685';
@@ -273,7 +273,7 @@ const getCellStyle = (
       break;
     case SESSION_TYPES.special:
       fill = {
-        fgColor: { argb: specialPurpleColor },
+        fgColor: { argb: specialOrangeColor },
         pattern: 'solid',
         type: 'pattern',
       };
