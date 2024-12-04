@@ -1,4 +1,5 @@
 import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 const expiredTokenAlertError = {
@@ -44,6 +45,7 @@ export const verifyUserPendingEmailAction = async ({
   applicationContext,
   path,
   props,
+  store,
 }: ActionProps<{ token: string }>) => {
   const { token } = props;
 
@@ -53,6 +55,7 @@ export const verifyUserPendingEmailAction = async ({
       .verifyUserPendingEmailInteractor(applicationContext, {
         token,
       });
+    store.unset(state.alertInfo);
 
     return path.success({
       alertSuccess: {
@@ -62,6 +65,7 @@ export const verifyUserPendingEmailAction = async ({
       },
     });
   } catch (e: any) {
+    store.unset(state.alertInfo);
     if (e.message === 'Link has expired') {
       return path.error({
         alertError: expiredTokenAlertError,
