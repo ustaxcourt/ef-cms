@@ -157,7 +157,7 @@ function TrialSessionPlanningReportTable({
                         </td>
                       );
                     })}
-                  <td>{trialLocation.specialCaseCount || '-'}</td>
+                  <td>{trialLocation.specialCaseCount}</td>
                   <td>{trialLocation.blockedCaseCount}</td>
                 </tr>
               );
