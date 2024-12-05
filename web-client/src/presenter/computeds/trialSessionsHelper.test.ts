@@ -45,7 +45,7 @@ describe('trialSessionsHelper', () => {
       sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
       sessionStatus: SESSION_STATUS_TYPES.open,
       sessionType: SESSION_TYPES.regular,
-      startDate: '2022-03-01T21:00:00.000Z',
+      startDate: '2022-03-01T00:00:00.000-04:00',
       term: 'Winter',
       termYear: '2022',
       trialLocation: 'Boise',
@@ -58,7 +58,7 @@ describe('trialSessionsHelper', () => {
       sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
       sessionStatus: SESSION_STATUS_TYPES.open,
       sessionType: SESSION_TYPES.regular,
-      startDate: '2022-03-01T21:00:00.000Z',
+      startDate: '2022-03-01T00:00:00.000-04:00',
       term: 'Winter',
       termYear: '2022',
       trialLocation: 'Boise',
@@ -628,9 +628,9 @@ describe('trialSessionsHelper', () => {
 
     describe('formatting', () => {
       it('should format trialSessions startDate, endDate, noticeIssuedDate', () => {
-        trialSession1.noticeIssuedDate = '2020-05-03T21:00:00.000Z';
-        trialSession1.startDate = '2020-05-03T21:00:00.000Z';
-        trialSession1.estimatedEndDate = '2020-05-03T21:00:00.000Z';
+        trialSession1.noticeIssuedDate = '2020-05-03T00:00:00.000-04:00';
+        trialSession1.startDate = '2020-05-03T00:00:00.000-04:00';
+        trialSession1.estimatedEndDate = '2020-05-03T00:00:00.000-04:00';
         trialSessionsPageState.trialSessions = [trialSession1];
 
         const result = runCompute(trialSessionsHelper, {
@@ -744,8 +744,8 @@ describe('trialSessionsHelper', () => {
 
     describe('sorting', () => {
       it('should order trial sessions by start date from oldest to newest', () => {
-        trialSession1.startDate = '2022-03-01T21:00:00.000Z';
-        trialSession2.startDate = '2020-03-01T21:00:00.000Z';
+        trialSession1.startDate = '2022-03-01T00:00:00.000-04:00';
+        trialSession2.startDate = '2020-03-01T00:00:00.000-04:00';
         trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
 
         const result = runCompute(trialSessionsHelper, {
@@ -770,8 +770,8 @@ describe('trialSessionsHelper', () => {
 
     describe('trial session weeks', () => {
       it('should insert one trialSessionWeek row when two trial sessions are within the same week(week starts on Monday EST)', () => {
-        trialSession1.startDate = '2024-09-03T21:00:00.000Z'; // A Tuesday
-        trialSession2.startDate = '2024-09-05T21:00:00.000Z'; // A Thursday
+        trialSession1.startDate = '2024-09-03T00:00:00.000-04:00'; // A Tuesday
+        trialSession2.startDate = '2024-09-05T00:00:00.000-04:00'; // A Thursday
         trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
 
         const result = runCompute(trialSessionsHelper, {
@@ -787,14 +787,14 @@ describe('trialSessionsHelper', () => {
         expect(trialSessionWeeks).toEqual([
           {
             formattedSessionWeekStartDate: 'September 2, 2024',
-            sessionWeekStartDate: '2024-09-02T04:00:00.000+00:00',
+            sessionWeekStartDate: '2024-09-02T00:00:00.000-04:00',
           },
         ]);
       });
 
       it('should insert two trialSessionWeek rows when two trial sessions are not within the same week(week starts on Monday EST)', () => {
-        trialSession1.startDate = '2024-09-03T21:00:00.000Z'; // A Tuesday
-        trialSession2.startDate = '2024-09-12T21:00:00.000Z'; // A Thursday next week
+        trialSession1.startDate = '2024-09-03T00:00:00.000-04:00'; // A Tuesday
+        trialSession2.startDate = '2024-09-12T00:00:00.000-04:00'; // A Thursday next week
         trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
 
         const result = runCompute(trialSessionsHelper, {
@@ -810,11 +810,11 @@ describe('trialSessionsHelper', () => {
         expect(trialSessionWeeks).toEqual([
           {
             formattedSessionWeekStartDate: 'September 2, 2024',
-            sessionWeekStartDate: '2024-09-02T04:00:00.000+00:00',
+            sessionWeekStartDate: '2024-09-02T00:00:00.000-04:00',
           },
           {
             formattedSessionWeekStartDate: 'September 9, 2024',
-            sessionWeekStartDate: '2024-09-09T04:00:00.000+00:00',
+            sessionWeekStartDate: '2024-09-09T00:00:00.000-04:00',
           },
         ]);
       });
