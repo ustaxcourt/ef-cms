@@ -4,7 +4,7 @@ import {
   parseIntRange,
   parseInts,
   parseIntsArg,
-} from './reportUtils';
+} from './parseArguments';
 import { cloneDeep } from 'lodash';
 
 const mockScriptConfig: ScriptConfig = {
