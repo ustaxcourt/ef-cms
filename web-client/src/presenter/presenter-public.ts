@@ -40,6 +40,7 @@ import { resetPublicTrialSessionsDataSequence } from '@web-client/presenter/sequ
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
+import { sortTableSequence } from '@web-client/presenter/sequences/sortTableSequence';
 import { sortTodaysOrdersSequence } from './sequences/Public/sortTodaysOrdersSequence';
 import { submitLoginSequence } from '@web-client/presenter/sequences/Login/submitLoginSequence';
 import { submitPractitionerBarNumberSearchSequence } from '@web-client/presenter/sequences/submitPractitionerBarNumberSearchSequence';
@@ -114,6 +115,7 @@ export const presenterSequences = {
   redirectToLoginSequence,
   resetPublicTrialSessionsDataSequence,
   showMoreResultsSequence,
+  sortTableSequence,
   sortTodaysOrdersSequence,
   submitLoginSequence,
   submitPractitionerBarNumberSearchSequence,
