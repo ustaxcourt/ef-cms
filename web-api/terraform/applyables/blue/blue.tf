@@ -18,7 +18,7 @@ terraform {
   }
 
   required_providers {
-    aws = "5.75.1"
+    aws = "5.78.0"
   }
 }
 
@@ -136,7 +136,6 @@ module "zip_batch_west" {
     aws = aws.us-west-1
   }
 }
-
 
 module "api-east-blue" {
   source              = "../../modules/api"

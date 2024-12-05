@@ -99,19 +99,28 @@ export const DocumentViewer = connect(
                               <FontAwesomeIcon
                                 className="top-neg-2px fa-icon-red float-right position-relative"
                                 icon={['fa', 'star']}
-                                title="is untouched"
+                                title="Is untouched"
                               />
                             )}
                           </div>
                           <div className="grid-col-5">
                             <span
                               className={classNames(
+                                'mobile-text-wrap',
+                                'word-wrap-break-word',
                                 entry.isStricken && 'stricken-docket-record',
                               )}
                             >
                               {entry.descriptionDisplay}
                             </span>
-                            {entry.isStricken && ' (STRICKEN)'}
+                            <span
+                              className={classNames(
+                                'word-wrap-break-word',
+                                'display-block',
+                              )}
+                            >
+                              {entry.isStricken && ' (STRICKEN)'}
+                            </span>
                           </div>
                           <div className="grid-col-2 padding-left-105">
                             {entry.showNotServed && (

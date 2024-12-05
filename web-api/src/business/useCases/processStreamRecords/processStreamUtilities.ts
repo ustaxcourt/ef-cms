@@ -48,21 +48,53 @@ export const partitionRecords = (
       record.dynamodb.NewImage.entityName.S === 'Message',
   );
 
-  const [completionMarkers, otherRecords] = partition(
+  const [userCaseNoteRecords, nonUserCaseNoteRecords] = partition(
     nonMessageRecords,
+    record =>
+      record.dynamodb?.NewImage?.entityName &&
+      record.dynamodb.NewImage.entityName.S === 'UserCaseNote',
+  );
+
+  const [completionMarkers, nonCompletionMarkerRecords] = partition(
+    nonUserCaseNoteRecords,
     record =>
       record.dynamodb?.NewImage?.entityName &&
       record.dynamodb.NewImage.entityName.S === 'CompletionMarker',
   );
 
+  const [caseDeadlineRecords, nonCaseDeadlineRecords] = partition(
+    nonCompletionMarkerRecords,
+    record =>
+      record.dynamodb?.NewImage?.entityName &&
+      record.dynamodb.NewImage.entityName.S === 'CaseDeadline',
+  );
+
+  const [caseWorksheetRecords, nonCaseWorksheetRecords] = partition(
+    nonCaseDeadlineRecords,
+    record =>
+      record.dynamodb?.NewImage?.entityName &&
+      record.dynamodb.NewImage.entityName.S === 'CaseWorksheet',
+  );
+
+  const [caseCorrespondenceRecords, otherRecords] = partition(
+    nonCaseWorksheetRecords,
+    record =>
+      record.dynamodb?.NewImage?.entityName &&
+      record.dynamodb.NewImage.entityName.S == 'Correspondence',
+  );
+
   return {
+    caseCorrespondenceRecords,
+    caseDeadlineRecords,
     caseEntityRecords,
+    caseWorksheetRecords,
     completionMarkers,
     docketEntryRecords,
     messageRecords,
     otherRecords,
     practitionerMappingRecords,
     removeRecords,
+    userCaseNoteRecords,
     workItemRecords,
   };
 };

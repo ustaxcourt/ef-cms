@@ -1,4 +1,7 @@
 /* eslint-disable max-lines */
+import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
@@ -11,6 +14,7 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
+  SESSION_TYPES,
   UNIQUE_OTHER_FILER_TYPE,
 } from '../EntityConstants';
 import { Case, getContactPrimary } from './Case';
@@ -126,7 +130,9 @@ describe('Case entity', () => {
   });
 
   it('defaults the orders to false', () => {
-    const myCase = new Case(MOCK_CASE, { authorizedUser: mockDocketClerkUser });
+    const myCase = new Case(MOCK_CASE, {
+      authorizedUser: mockDocketClerkUser,
+    });
 
     expect(myCase).toMatchObject({
       isSealed: false,
@@ -239,7 +245,7 @@ describe('Case entity', () => {
       const mockhearing1 = {
         createdAt: '2024-03-01T00:00:00.000Z',
         maxCases: 100,
-        sessionType: 'Regular',
+        sessionType: SESSION_TYPES.regular,
         startDate: '2025-03-01T00:00:00.000Z',
         term: 'Fall',
         termYear: '2025',

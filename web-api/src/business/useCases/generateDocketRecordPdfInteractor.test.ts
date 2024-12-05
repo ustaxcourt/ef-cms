@@ -291,4 +291,125 @@ describe('generateDocketRecordPdfInteractor', () => {
 
     expect(result).toEqual(mockPdfUrlAndID);
   });
+
+  describe('sorting', () => {
+    it('should pass in entries sorted by the provided property and orderType "asc"', async () => {
+      caseDetail.docketEntries = [
+        {
+          eventCode: 'D',
+          isOnDocketRecord: true,
+        },
+        { eventCode: 'B', isOnDocketRecord: true },
+        { eventCode: 'C', isOnDocketRecord: true },
+        { eventCode: 'A', isOnDocketRecord: true },
+      ];
+
+      await generateDocketRecordPdfInteractor(
+        applicationContext,
+        {
+          docketNumber: caseDetail.docketNumber,
+          docketRecordTableSort: { sortField: 'eventCode', sortOrder: 'asc' },
+          isIndirectlyAssociated: true,
+        } as any,
+        mockPetitionerUser,
+      );
+
+      const docketRecordCalls =
+        applicationContext.getDocumentGenerators().docketRecord.mock.calls;
+      expect(docketRecordCalls.length).toEqual(1);
+
+      const {
+        data: { entries },
+      } = docketRecordCalls[0][0];
+      expect(entries).toMatchObject([
+        {
+          eventCode: 'A',
+        },
+        { eventCode: 'B' },
+        { eventCode: 'C' },
+        { eventCode: 'D' },
+      ]);
+    });
+
+    it('should pass in entries sorted by the provided property and orderType "des"', async () => {
+      caseDetail.docketEntries = [
+        {
+          attachments: 'TEST_attachments',
+          documentTitle: 'TEST_D',
+          eventCode: 'D',
+          filingDate: '2019-08-25T05:00:00.000Z',
+          isOnDocketRecord: true,
+          isUnservable: true,
+        },
+        { eventCode: 'B', isOnDocketRecord: true },
+        { eventCode: 'C', isOnDocketRecord: true },
+        { eventCode: 'A', isOnDocketRecord: true },
+      ];
+
+      await generateDocketRecordPdfInteractor(
+        applicationContext,
+        {
+          docketNumber: caseDetail.docketNumber,
+          docketRecordTableSort: { sortField: 'eventCode', sortOrder: 'desc' },
+          isIndirectlyAssociated: true,
+        } as any,
+        mockPetitionerUser,
+      );
+
+      const docketRecordCalls =
+        applicationContext.getDocumentGenerators().docketRecord.mock.calls;
+      expect(docketRecordCalls.length).toEqual(1);
+
+      const {
+        data: { entries },
+      } = docketRecordCalls[0][0];
+      expect(entries).toMatchObject([
+        {
+          createdAtFormatted: '08/25/19',
+          descriptionDisplay: 'TEST_D (Attachment(s))',
+          eventCode: 'D',
+          filingsAndProceedings: '(Attachment(s))',
+        },
+        { eventCode: 'C' },
+        { eventCode: 'B' },
+        {
+          eventCode: 'A',
+        },
+      ]);
+    });
+
+    it('should default numberOfPages to 0 to correctly sort the docket entries', async () => {
+      caseDetail.docketEntries = [
+        { index: 1, isOnDocketRecord: true, numberOfPages: 1 },
+        { index: 2, isOnDocketRecord: true, numberOfPages: 3 },
+        { index: 3, isOnDocketRecord: true, numberOfPages: undefined },
+      ];
+
+      await generateDocketRecordPdfInteractor(
+        applicationContext,
+        {
+          docketNumber: caseDetail.docketNumber,
+          docketRecordTableSort: {
+            sortField: 'numberOfPages',
+            sortOrder: 'asc',
+          },
+          isIndirectlyAssociated: true,
+        } as any,
+        mockPetitionerUser,
+      );
+
+      const docketRecordCalls =
+        applicationContext.getDocumentGenerators().docketRecord.mock.calls;
+      expect(docketRecordCalls.length).toEqual(1);
+
+      const {
+        data: { entries },
+      } = docketRecordCalls[0][0];
+      expect(entries).toMatchObject([
+        { index: 3, isOnDocketRecord: true, numberOfPages: 0 },
+        { index: 1, isOnDocketRecord: true, numberOfPages: 1 },
+        { index: 2, isOnDocketRecord: true, numberOfPages: 3 },
+      ]);
+    });
+  });
 });

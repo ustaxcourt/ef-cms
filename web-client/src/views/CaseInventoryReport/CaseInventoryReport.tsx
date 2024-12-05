@@ -2,16 +2,19 @@ import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
+import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { useRef, useState } from 'react';
 
 export const CaseInventoryReport = connect(
   {
     caseInventoryReportHelper: state.caseInventoryReportHelper,
-    caseInventoryReportLoadMoreSequence:
-      sequences.caseInventoryReportLoadMoreSequence,
+    foundCasesForCurrentPage:
+      state.caseInventoryReportData.foundCasesForCurrentPage,
+    foundCasesTotalCount: state.caseInventoryReportData.foundCasesTotalCount,
     getCaseInventoryReportSequence: sequences.getCaseInventoryReportSequence,
     gotoPrintableCaseInventoryReportSequence:
       sequences.gotoPrintableCaseInventoryReportSequence,
@@ -19,11 +22,15 @@ export const CaseInventoryReport = connect(
   },
   function CaseInventoryReport({
     caseInventoryReportHelper,
-    caseInventoryReportLoadMoreSequence,
+    foundCasesForCurrentPage,
+    foundCasesTotalCount,
     getCaseInventoryReportSequence,
     gotoPrintableCaseInventoryReportSequence,
     screenMetadata,
   }) {
+    const paginatorTop = useRef(null);
+    const [activePage, setActivePage] = useState(0);
+
     return (
       <>
         <BigHeader text="Reports" />
@@ -41,7 +48,7 @@ export const CaseInventoryReport = connect(
             </Button>
           </div>
 
-          <div className="padding-top-3 padding-bottom-1">
+          <div className="padding-top-3 padding-bottom-1 margin-bottom-2">
             <label
               className="dropdown-label-serif margin-right-3"
               htmlFor="inline-select"
@@ -55,12 +62,14 @@ export const CaseInventoryReport = connect(
               className="usa-select select-left width-card-lg inline-select"
               name="associatedJudge"
               value={screenMetadata.associatedJudge}
-              onChange={e =>
+              onChange={e => {
+                setActivePage(0);
                 getCaseInventoryReportSequence({
                   key: e.target.name,
+                  selectedPage: 0,
                   value: e.target.value,
-                })
-              }
+                });
+              }}
             >
               <option value="">- Judge -</option>
               {caseInventoryReportHelper.judges.map(judge => (
@@ -75,12 +84,14 @@ export const CaseInventoryReport = connect(
               className="usa-select select-left width-card-lg inline-select margin-left-1pt5rem"
               name="status"
               value={screenMetadata.status}
-              onChange={e =>
+              onChange={e => {
+                setActivePage(0);
                 getCaseInventoryReportSequence({
                   key: e.target.name,
+                  selectedPage: 0,
                   value: e.target.value,
-                })
-              }
+                });
+              }}
             >
               <option value="">- Status -</option>
               {caseInventoryReportHelper.caseStatuses.map(status => {
@@ -95,13 +106,30 @@ export const CaseInventoryReport = connect(
 
           {caseInventoryReportHelper.showResultsTable && (
             <>
+              <div ref={paginatorTop}>
+                {caseInventoryReportHelper.pageCount > 1 && (
+                  <Paginator
+                    currentPageIndex={activePage}
+                    totalPages={caseInventoryReportHelper.pageCount}
+                    onPageChange={async pageChange => {
+                      setActivePage(pageChange);
+                      await getCaseInventoryReportSequence({
+                        key: null,
+                        selectedPage: pageChange,
+                        value: null,
+                      });
+                      focusPaginatorTop(paginatorTop);
+                    }}
+                  />
+                )}
+              </div>
+
               <div className="grid-row grid-gap margin-top-1">
                 <div className="grid-col-12 text-align-right">
                   <span className="text-semibold">Count:</span>{' '}
-                  {caseInventoryReportHelper.resultCount}
+                  {foundCasesTotalCount}
                 </div>
               </div>
-
               <div className="grid-row grid-gap margin-top-1">
                 <div className="grid-col-12">
                   <table
@@ -118,7 +146,7 @@ export const CaseInventoryReport = connect(
                             Consolidated Case Indicator
                           </span>
                         </th>
-                        <th aria-label="docket number">Docket No.</th>
+                        <th aria-label="Docket number">Docket No.</th>
                         <th>Case Title</th>
                         {caseInventoryReportHelper.showJudgeColumn && (
                           <th>Judge</th>
@@ -129,39 +157,45 @@ export const CaseInventoryReport = connect(
                       </tr>
                     </thead>
                     <tbody>
-                      {caseInventoryReportHelper.formattedReportData.map(
-                        row => (
-                          <tr key={row.docketNumber}>
-                            <td className="width-205">
-                              <ConsolidatedCaseIcon
-                                consolidatedIconTooltipText={
-                                  row.consolidatedIconTooltipText
-                                }
-                                inConsolidatedGroup={row.inConsolidatedGroup}
-                                showLeadCaseIcon={row.isLeadCase}
-                              />
-                            </td>
-                            <td>
-                              <CaseLink formattedCase={row} />
-                            </td>
-                            <td>{row.caseTitle}</td>
-                            {caseInventoryReportHelper.showJudgeColumn && (
-                              <td>{row.associatedJudge}</td>
-                            )}
-                            {caseInventoryReportHelper.showStatusColumn && (
-                              <td>{row.status}</td>
-                            )}
-                          </tr>
-                        ),
-                      )}
+                      {foundCasesForCurrentPage.map(row => (
+                        <tr key={row.docketNumber}>
+                          <td className="width-205">
+                            <ConsolidatedCaseIcon
+                              consolidatedIconTooltipText={
+                                row.consolidatedIconTooltipText
+                              }
+                              inConsolidatedGroup={row.inConsolidatedGroup}
+                              showLeadCaseIcon={row.isLeadCase}
+                            />
+                          </td>
+                          <td>
+                            <CaseLink formattedCase={row} />
+                          </td>
+                          <td>{row.caseTitle}</td>
+                          {caseInventoryReportHelper.showJudgeColumn && (
+                            <td>{row.associatedJudge}</td>
+                          )}
+                          {caseInventoryReportHelper.showStatusColumn && (
+                            <td>{row.status}</td>
+                          )}
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
-                  {caseInventoryReportHelper.showLoadMoreButton && (
-                    <Button
-                      onClick={() => caseInventoryReportLoadMoreSequence()}
-                    >
-                      Load More
-                    </Button>
+                  {caseInventoryReportHelper.pageCount > 1 && (
+                    <Paginator
+                      currentPageIndex={activePage}
+                      totalPages={caseInventoryReportHelper.pageCount}
+                      onPageChange={async pageChange => {
+                        setActivePage(pageChange);
+                        await getCaseInventoryReportSequence({
+                          key: null,
+                          selectedPage: pageChange,
+                          value: null,
+                        });
+                        focusPaginatorTop(paginatorTop);
+                      }}
+                    />
                   )}
                 </div>
               </div>
