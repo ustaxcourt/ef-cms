@@ -315,9 +315,7 @@ export const updatePetitionerInformation = async (
 
   await updateCasePetitionerData({
     docketNumber: caseEntity.docketNumber,
-    petitionerData: caseEntity.getPetitionerById(
-      updatedPetitionerData.contactId,
-    ),
+    petitionerData: updatedCaseContact,
   });
 
   const updatedCase = await applicationContext
