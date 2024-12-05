@@ -1,8 +1,13 @@
+import {
+  FORMATS,
+  createDateAtStartOfWeekEST,
+} from '@shared/business/utilities/DateHandler';
 import { TrialLocationData } from '@web-api/business/useCases/trialSessions/getTrialSessionPlanningReportDataInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export type TrialLocationDataFormatted = TrialLocationData & {
   hasNotBeenCalendared: boolean;
+  lastVisitedDateFormatted: string;
 };
 
 type TrialSessionPlanningReportViewHelperResults = {
@@ -43,7 +48,12 @@ function formatTerm(trialTerm: string): string {
 export const trialSessionPlanningReportViewHelper = (
   get,
 ): TrialSessionPlanningReportViewHelperResults => {
-  const { previousTerms, trialLocationData, trialTerm, trialYear } = get(
+  const {
+    previousTerms,
+    trialLocationData,
+    trialTerm,
+    trialYear,
+  }: typeof state.trialSessionPlanningReportData = get(
     state.trialSessionPlanningReportData,
   );
 
@@ -65,14 +75,18 @@ export const trialSessionPlanningReportViewHelper = (
     };
   });
 
-  const trialLocationDataFormatted = trialLocationData.map(locationData => {
-    return {
-      ...locationData,
-      hasNotBeenCalendared: ALL_CITIES_NOT_CALENDARED.includes(
-        locationData.trialCityState,
-      ),
-    };
-  });
+  const trialLocationDataFormatted =
+    trialLocationData.map<TrialLocationDataFormatted>(locationData => {
+      return {
+        ...locationData,
+        hasNotBeenCalendared: ALL_CITIES_NOT_CALENDARED.includes(
+          locationData.trialCityState,
+        ),
+        lastVisitedDateFormatted: formatLastVisitedDate(
+          locationData.lastVisitedDate,
+        ),
+      };
+    });
 
   return {
     citiesNotCalendaredInTwoPreviousTerms: formatCities(
@@ -83,3 +97,11 @@ export const trialSessionPlanningReportViewHelper = (
     trialSessionPlanningReportHeader,
   };
 };
+function formatLastVisitedDate(lastVisitedDate: string | undefined): string {
+  if (!lastVisitedDate) return 'Never been one son';
+  const formattedSessionWeekStartDate = createDateAtStartOfWeekEST(
+    lastVisitedDate,
+    FORMATS.MMDDYYYY,
+  );
+  return `Last visited week of ${formattedSessionWeekStartDate}`;
+}
