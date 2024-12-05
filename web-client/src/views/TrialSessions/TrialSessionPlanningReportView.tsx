@@ -129,6 +129,7 @@ function TrialSessionPlanningReportTable({
                         className="fa-icon-blue-vivid margin-right-2"
                         icon="info-circle"
                         size="lg"
+                        title={trialLocation.lastVisitedDateFormatted}
                       />
                     )}
                   </td>
