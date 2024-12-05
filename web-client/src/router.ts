@@ -1142,7 +1142,9 @@ const router = {
         { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
         trialLocation => {
           setPageTitle('Trial location');
-          return app.getSequence('gotoTrialLocationSequence')(trialLocation);
+          return app.getSequence('gotoTrialLocationSequence')({
+            trialLocation,
+          });
         },
       ),
     );

@@ -4,10 +4,13 @@ export const getEligibleCasesForLocationAction = async ({
 }: ActionProps) => {
   const { trialLocation } = props;
   //TODO: consider renaming trialCity -> trialLocation on backend?
+
+  //TODO: consider edge cases like "Washington, DC"
+  const trialCity = trialLocation.replace('-', ', ');
   const eligibleCases = await applicationContext
     .getUseCases()
     .getEligibleCasesForCityInteractor(applicationContext, {
-      trialCity: trialLocation,
+      trialCity,
     });
 
   return { eligibleCases };
