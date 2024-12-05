@@ -1,6 +1,6 @@
 #!/usr/bin/env npx ts-node --transpile-only
 
-import { type ScriptConfig, parseArguments } from './reports/reportUtils';
+import { type ScriptConfig, parseArguments } from './helpers/parseArguments';
 import {
   type ServerApplicationContext,
   createApplicationContext,
