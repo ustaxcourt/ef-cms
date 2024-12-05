@@ -5,9 +5,9 @@ import {
   UnknownAuthUser,
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
-import { getEligibleForTrialCasesForCity } from '@web-api/persistence/postgres/cases/getEligibleTrialCasesForCity';
+import { getEligibleCasesForCity } from '@web-api/persistence/postgres/cases/getEligibleCasesForCity';
 
-export const getEligibleForTrialCasesForCityInteractor = async (
+export const getEligibleCasesForCityInteractor = async (
   applicationContext: ServerApplicationContext,
   { trialCity }: { trialCity: string },
   authorizedUser: UnknownAuthUser,
@@ -18,7 +18,7 @@ export const getEligibleForTrialCasesForCityInteractor = async (
     );
   }
 
-  return await getEligibleForTrialCasesForCity({
+  return await getEligibleCasesForCity({
     applicationContext,
     trialCity,
   });

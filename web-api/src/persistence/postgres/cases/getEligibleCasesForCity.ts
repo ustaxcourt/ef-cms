@@ -8,7 +8,7 @@ import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamo
 import { query } from '@web-api/persistence/dynamodbClientService';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
-export const getEligibleForTrialCasesForCity = async ({
+export const getEligibleCasesForCity = async ({
   applicationContext,
   trialCity,
 }: {
