@@ -1,3 +1,4 @@
+import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
 import {
   calculateDate,
   formatNow,
@@ -109,5 +110,12 @@ export const convertDbRowToRawCase = (dbCase: any): RawCase => {
     receivedAt: dbCase.receivedAt?.toISOString(),
     sealedDate: dbCase.sealedDate?.toISOString(),
     trialDate: dbCase.trialDate?.toISOString(),
+  };
+};
+
+export const convertDbRowToRawEligibleCase = (dbCase: any): RawEligibleCase => {
+  return {
+    ...dbCase,
+    caseCaption: dbCase.caption,
   };
 };

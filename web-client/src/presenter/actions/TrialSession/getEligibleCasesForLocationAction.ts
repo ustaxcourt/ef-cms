@@ -6,11 +6,11 @@ export const getEligibleCasesForLocationAction = async ({
   //TODO: consider renaming trialCity -> trialLocation on backend?
 
   //TODO: consider edge cases like "Washington, DC"
-  const trialCity = trialLocation.replace('-', ', ');
+
   const eligibleCases = await applicationContext
     .getUseCases()
     .getEligibleCasesForCityInteractor(applicationContext, {
-      trialCity,
+      trialCity: trialLocation,
     });
 
   return { eligibleCases };

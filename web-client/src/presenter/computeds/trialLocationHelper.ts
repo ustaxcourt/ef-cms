@@ -11,7 +11,9 @@ export const trialLocationHelper = (
   // const permissions = get(state.permissions)!;
   const { eligibleCases, location } = get(state.trialLocationPage);
 
+  const trialCityFormatted = location.replace('-', ', ');
+
   // const pageSize = 100;
 
-  return { eligibleCases, location };
+  return { eligibleCases, location: trialCityFormatted };
 };

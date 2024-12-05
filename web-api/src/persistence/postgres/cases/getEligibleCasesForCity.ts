@@ -1,8 +1,7 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { aggregateCaseItems } from '@web-api/persistence/dynamo/helpers/aggregateCaseItems';
-import { convertDbRowToRawCase } from '@web-api/persistence/postgres/cases/mapper';
+import { convertDbRowToRawEligibleCase } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { query } from '@web-api/persistence/dynamodbClientService';
@@ -64,15 +63,19 @@ export const getEligibleCasesForCity = async ({
       }),
     ]);
 
-    return purgeDynamoKeys(
-      aggregateCaseItems([c, irsPractitioners, privatePractitioners]),
-    );
+    return purgeDynamoKeys({
+      ...c,
+      irsPractitioners,
+      privatePractitioners,
+    });
   });
 
   const fullEligibleCases = await Promise.all(casePromises);
 
   const casesForReturn = fullEligibleCases.map(c => {
-    return c ? transformNullToUndefined(convertDbRowToRawCase(c)) : undefined;
+    return c
+      ? transformNullToUndefined(convertDbRowToRawEligibleCase(c))
+      : undefined;
   });
 
   return casesForReturn;
