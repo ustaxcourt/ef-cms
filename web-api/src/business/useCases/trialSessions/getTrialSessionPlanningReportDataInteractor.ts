@@ -28,6 +28,7 @@ export type TrialLocationData = {
   stateAbbreviation: string;
   trialCityState: string;
   blockedCaseCount: number;
+  lastVisitedDate?: string;
 };
 
 export const getTrialSessionPlanningReportDataInteractor = async (
@@ -84,13 +85,18 @@ const getTrialSessionPlanningReportData = async ({
     .getPersistenceGateway()
     .getTrialSessions({ applicationContext });
 
-  const allTrialSessions = trialSessions.filter(session =>
+  const tempTrialSessions = trialSessions.filter(session =>
     ['Regular', 'Small', 'Hybrid', 'Hybrid-S'].includes(session.sessionType),
   );
 
   const specialTrialSessions = trialSessions.filter(
-    session => session.sessionType === 'Special',
+    session =>
+      session.sessionType === 'Special' &&
+      Number(session.termYear) === year &&
+      session.term === term,
   );
+
+  console.log('***** specialTrialSessions', specialTrialSessions);
 
   const specialTrialSessionsCounts = specialTrialSessions.reduce(
     (allSessions, session) => {
@@ -105,9 +111,10 @@ const getTrialSessionPlanningReportData = async ({
   const trialLocationData: TrialLocationData[] = await Promise.all(
     trialCities.map(trialLocation =>
       getTrialLocation(applicationContext, {
-        allTrialSessions,
+        // allTrialSessions: trialSessions,
         previousTerms,
         specialTrialSessionsCounts,
+        tempTrialSessions,
         trialLocation,
       }),
     ),
@@ -138,17 +145,20 @@ const getPreviousTerm = (
   };
 };
 
+// TODO: rename tempTrialSessions;
 const getTrialLocation = async (
   applicationContext: ServerApplicationContext,
   {
-    allTrialSessions,
+    // allTrialSessions,
     previousTerms,
     specialTrialSessionsCounts,
+    tempTrialSessions,
     trialLocation,
   }: {
+    // allTrialSessions: RawTrialSession[];
     trialLocation: { city: string; state: string };
     previousTerms: PreviousTerm[];
-    allTrialSessions: RawTrialSession[];
+    tempTrialSessions: RawTrialSession[];
     specialTrialSessionsCounts: { [key: string]: number };
   },
 ): Promise<TrialLocationData> => {
@@ -179,15 +189,22 @@ const getTrialLocation = async (
       trialLocation: trialCityState,
     });
 
+  console.log('******blockedCasesResult', blockedCasesResult);
+
   const smallCaseCount = eligibleCasesSmall.length;
   const regularCaseCount = eligibleCasesRegular.length;
   const allCaseCount = smallCaseCount + regularCaseCount;
   const blockedCaseCount = blockedCasesResult.length;
   const specialCaseCount = specialTrialSessionsCounts[trialCityState] || 0;
 
-  const previousTermsData: string[][] = [];
+  const previousTermsDataTemp: RawTrialSession[][] = [];
+
+  // get [2] from previous terms
+  // get latest for this location
+  // display generic message
+
   previousTerms.forEach(previousTerm => {
-    const previousTermSessions = allTrialSessions.filter(
+    const previousTermSessions = tempTrialSessions.filter(
       trialSession =>
         trialSession.term.toLowerCase() === previousTerm.term.toLowerCase() &&
         Number(trialSession.termYear) === previousTerm.year &&
@@ -200,32 +217,40 @@ const getTrialLocation = async (
         .compareISODateStrings(a.startDate, b.startDate);
     });
 
-    const previousTermSessionList: string[] = [];
+    const previousTermSessionList: RawTrialSession[] = [];
     previousTermSessions.forEach(previousTermSession => {
       if (
         previousTermSession &&
         previousTermSession.sessionType &&
         previousTermSession.judge
       ) {
-        const sessionTypeChar =
-          previousTermSession.sessionType === SESSION_TYPES.hybridSmall
-            ? 'HS'
-            : previousTermSession.sessionType.charAt(0);
-        const strippedJudgeName = previousTermSession.judge.name.replace(
-          'Judge ',
-          '',
-        );
-        previousTermSessionList.push(
-          `(${sessionTypeChar}) ${strippedJudgeName}`,
-        );
+        previousTermSessionList.push(previousTermSession);
       }
     });
-    previousTermsData.push(previousTermSessionList);
+    previousTermsDataTemp.push(previousTermSessionList);
+  });
+
+  const lastVisitedDate: string | undefined = getLatestDateFromPreviousTerm(
+    previousTermsDataTemp[2],
+  );
+  // ||
+  // getLatestDateForTrialSessionLocation(allTrialSessions, trialCityState);
+
+  const previousTermsData = previousTermsDataTemp.map(prevTermArray => {
+    return prevTermArray.map(prevTerm => {
+      const sessionTypeChar =
+        prevTerm.sessionType === SESSION_TYPES.hybridSmall
+          ? 'HS'
+          : prevTerm.sessionType.charAt(0);
+      const strippedJudgeName = prevTerm.judge!.name.replace('Judge ', '');
+      return `(${sessionTypeChar}) ${strippedJudgeName}`;
+    });
   });
 
   return {
     allCaseCount,
     blockedCaseCount,
+    lastVisitedDate,
     previousTermsData,
     regularCaseCount,
     smallCaseCount,
@@ -234,3 +259,22 @@ const getTrialLocation = async (
     trialCityState,
   };
 };
+
+function getLatestDateFromPreviousTerm(
+  prevTerms: RawTrialSession[],
+): string | undefined {
+  if (prevTerms.length === 0) return undefined;
+
+  const lastTermDate = prevTerms[prevTerms.length - 1].startDate;
+  return lastTermDate;
+}
+
+// function getLatestDateForTrialSessionLocation(
+//   allTrialSessions: RawTrialSession[],
+//   location: string,
+// ): string | undefined {
+//   if (prevTerms.length === 0) return undefined;
+
+//   const lastTermDate = prevTerms[prevTerms.length - 1].startDate;
+//   return lastTermDate;
+// }
