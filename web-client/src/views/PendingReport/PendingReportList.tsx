@@ -14,6 +14,7 @@ export const PendingReportList = connect(
   {
     formattedPendingItemsHelper: state.formattedPendingItemsHelper,
     hasPendingItemsResults: state.pendingReports.hasPendingItemsResults,
+    pendingItems: state.pendingReports.pendingItems,
     pendingItemsTotal: state.pendingReports.pendingItemsTotal,
     pendingReportListHelper: state.pendingReportListHelper,
     setPendingReportSelectedJudgeSequence:
@@ -22,6 +23,7 @@ export const PendingReportList = connect(
   function PendingReportList({
     formattedPendingItemsHelper,
     hasPendingItemsResults,
+    pendingItems,
     pendingItemsTotal,
     pendingReportListHelper,
     setPendingReportSelectedJudgeSequence,
@@ -29,10 +31,7 @@ export const PendingReportList = connect(
     const paginatorTop = useRef(null);
 
     const { activePage, pageRecords, setActivePage, totalPages } =
-      useClientSidePaginator(
-        formattedPendingItemsHelper.items,
-        PENDING_REPORT_PAGE_SIZE,
-      );
+      useClientSidePaginator(pendingItems, PENDING_REPORT_PAGE_SIZE);
 
     return (
       <>
