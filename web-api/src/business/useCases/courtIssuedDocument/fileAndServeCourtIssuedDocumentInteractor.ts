@@ -61,7 +61,7 @@ export const fileAndServeCourtIssuedDocument = async (
     docketEntryId,
   });
 
-  let error;
+  let error: Error | undefined;
   if (!docketEntryToServe) {
     error = new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
   } else if (docketEntryToServe.servedAt) {
@@ -285,7 +285,7 @@ export const determineEntitiesToLock = (
 });
 
 export const handleLockError = async (
-  applicationContext,
+  applicationContext: ServerApplicationContext,
   originalRequest,
   authorizedUser: UnknownAuthUser,
 ) => {

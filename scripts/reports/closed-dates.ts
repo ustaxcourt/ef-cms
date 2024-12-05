@@ -5,7 +5,7 @@ import {
   ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
-import { appendFileSync } from 'fs';
+import { generateCsv } from '../helpers/generate-csv';
 import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
 
@@ -58,33 +58,29 @@ const getAllCasesOpenedInYear = async ({
   return results;
 };
 
-const outputCsv = ({
-  casesOpenedInYear,
-  filename,
-}: {
-  casesOpenedInYear: RawCase[];
-  filename: string;
-}): void => {
-  let output =
-    '"Docket Number","Date Created","Date Closed","Case Title",' +
-    '"Case Status","Case Type"';
-  for (const c of casesOpenedInYear) {
-    const rcvdAtHumanized = c.receivedAt.split('T')[0];
-    const closedHumanized = c.closedDate?.split('T')[0] || '';
-    output +=
-      `\n"${c.docketNumber}","${rcvdAtHumanized}","${closedHumanized}",` +
-      `"${c.caseCaption}","${c.status}","${c.caseType}"`;
-  }
-  appendFileSync(`${OUTPUT_DIR}/${filename}`, output);
-};
-
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
   const casesOpenedInYear = await getAllCasesOpenedInYear({
     applicationContext,
   });
-  const filename = `closed-dates-of-cases-opened-in-${year}.csv`;
-  outputCsv({ casesOpenedInYear, filename });
-  console.log(`Generated ${OUTPUT_DIR}/${filename}`);
+  const filename = `${OUTPUT_DIR}/closed-dates-of-cases-opened-in-${year}.csv`;
+  const columns = [
+    { header: 'Docket Number', key: 'docketNumber' },
+    { header: 'Date Created', key: 'rcvdAtHumanized' },
+    { header: 'Date Closed', key: 'closedHumanized' },
+    { header: 'Case Title', key: 'caseCaption' },
+    { header: 'Case Status', key: 'status' },
+    { header: 'Case Type', key: 'caseType' },
+  ];
+  const rows = casesOpenedInYear.map(c => ({
+    caseCaption: c.caseCaption,
+    caseType: c.caseType,
+    closedHumanized: c.closedDate?.split('T')[0] || '',
+    docketNumber: c.docketNumber,
+    rcvdAtHumanized: c.receivedAt.split('T')[0],
+    status: c.status,
+  }));
+  generateCsv({ columns, filename, rows });
+  console.log(`Generated ${filename}`);
 })();
