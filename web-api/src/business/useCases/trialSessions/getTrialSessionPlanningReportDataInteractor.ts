@@ -81,22 +81,20 @@ const getTrialSessionPlanningReportData = async ({
     return applicationContext.getUtilities().compareStrings(a.city, b.city);
   });
 
-  const trialSessions = await applicationContext
+  const allTrialSessions = await applicationContext
     .getPersistenceGateway()
     .getTrialSessions({ applicationContext });
 
-  const tempTrialSessions = trialSessions.filter(session =>
+  const tempTrialSessions = allTrialSessions.filter(session =>
     ['Regular', 'Small', 'Hybrid', 'Hybrid-S'].includes(session.sessionType),
   );
 
-  const specialTrialSessions = trialSessions.filter(
+  const specialTrialSessions = allTrialSessions.filter(
     session =>
       session.sessionType === 'Special' &&
       Number(session.termYear) === year &&
       session.term === term,
   );
-
-  console.log('***** specialTrialSessions', specialTrialSessions);
 
   const specialTrialSessionsCounts = specialTrialSessions.reduce(
     (allSessions, session) => {
@@ -111,7 +109,7 @@ const getTrialSessionPlanningReportData = async ({
   const trialLocationData: TrialLocationData[] = await Promise.all(
     trialCities.map(trialLocation =>
       getTrialLocation(applicationContext, {
-        // allTrialSessions: trialSessions,
+        allTrialSessions,
         previousTerms,
         specialTrialSessionsCounts,
         tempTrialSessions,
@@ -149,13 +147,13 @@ const getPreviousTerm = (
 const getTrialLocation = async (
   applicationContext: ServerApplicationContext,
   {
-    // allTrialSessions,
+    allTrialSessions,
     previousTerms,
     specialTrialSessionsCounts,
     tempTrialSessions,
     trialLocation,
   }: {
-    // allTrialSessions: RawTrialSession[];
+    allTrialSessions: RawTrialSession[];
     trialLocation: { city: string; state: string };
     previousTerms: PreviousTerm[];
     tempTrialSessions: RawTrialSession[];
@@ -189,8 +187,6 @@ const getTrialLocation = async (
       trialLocation: trialCityState,
     });
 
-  console.log('******blockedCasesResult', blockedCasesResult);
-
   const smallCaseCount = eligibleCasesSmall.length;
   const regularCaseCount = eligibleCasesRegular.length;
   const allCaseCount = smallCaseCount + regularCaseCount;
@@ -198,10 +194,6 @@ const getTrialLocation = async (
   const specialCaseCount = specialTrialSessionsCounts[trialCityState] || 0;
 
   const previousTermsDataTemp: RawTrialSession[][] = [];
-
-  // get [2] from previous terms
-  // get latest for this location
-  // display generic message
 
   previousTerms.forEach(previousTerm => {
     const previousTermSessions = tempTrialSessions.filter(
@@ -230,11 +222,13 @@ const getTrialLocation = async (
     previousTermsDataTemp.push(previousTermSessionList);
   });
 
-  const lastVisitedDate: string | undefined = getLatestDateFromPreviousTerm(
-    previousTermsDataTemp[2],
-  );
-  // ||
-  // getLatestDateForTrialSessionLocation(allTrialSessions, trialCityState);
+  const lastVisitedDate: string | undefined =
+    getLatestDateFromPreviousTerm(previousTermsDataTemp[2]) ||
+    getLatestDateForTrialSessionLocation({
+      allTrialSessions,
+      applicationContext,
+      trialCityState,
+    });
 
   const previousTermsData = previousTermsDataTemp.map(prevTermArray => {
     return prevTermArray.map(prevTerm => {
@@ -269,12 +263,27 @@ function getLatestDateFromPreviousTerm(
   return lastTermDate;
 }
 
-// function getLatestDateForTrialSessionLocation(
-//   allTrialSessions: RawTrialSession[],
-//   location: string,
-// ): string | undefined {
-//   if (prevTerms.length === 0) return undefined;
+function getLatestDateForTrialSessionLocation({
+  allTrialSessions,
+  applicationContext,
+  trialCityState,
+}: {
+  applicationContext: ServerApplicationContext;
+  allTrialSessions: RawTrialSession[];
+  trialCityState: string;
+}): string | undefined {
+  const allTrialSessionsForLocation = allTrialSessions.filter(
+    ts => ts.trialLocation === trialCityState,
+  );
 
-//   const lastTermDate = prevTerms[prevTerms.length - 1].startDate;
-//   return lastTermDate;
-// }
+  if (!allTrialSessionsForLocation.length) return;
+
+  allTrialSessionsForLocation.sort((a, b) => {
+    return applicationContext
+      .getUtilities()
+      .compareISODateStrings(a.startDate, b.startDate);
+  });
+
+  return allTrialSessionsForLocation[allTrialSessionsForLocation.length - 1]
+    .startDate;
+}
