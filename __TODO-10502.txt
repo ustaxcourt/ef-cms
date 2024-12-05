@@ -31,7 +31,12 @@ We removed duplicative getCountOfConsolidatedCases. Make sure that everything wo
 
 Be consistent with Case and RawCase and with returning undefined vs. throwing a not-found error in persistence methods
 
-Associate the right things with a case efficiently in getCaseByDocketNumber
--- Still need respondent counsel, consolidated cases ...
--- Also, maybe we should pass flags (or something like that, but better) to determine which subsets of data we need since I doubt every call to getCaseByDocketNumber actually needs all of the docketEntries, petitioners, etc.
--- Currently, I make separate database calls to get data associated with a case. It would be more efficient to hit the DB once with the query we need.
+I pulled out Case statistics, status history, and petitioner data into tables, which I strongly feel is better than being in json. However, this means we need to create/update/etc. properly since currently these fields are updated by re-saving the entire case into the db via, e.g., updateCaseAndAssociations.
+Currently have status history working (as an upsert :/) and statistics working (but need to add more fields to DB that weren't in seed data)
+
+Tests:
+Not working:
+• Removing (and, probably, adding) a consolidated case does not work
+• Updating petitioner information does not work
+• Removing case from trial session
+
