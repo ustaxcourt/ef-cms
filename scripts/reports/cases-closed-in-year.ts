@@ -80,7 +80,7 @@ const getAllCasesClosedInFiscalYear = async ({
 
 const wasClosedThisFiscalYear = (c: RawCase): boolean => {
   let closedThisFiscalYear = false;
-  for (const csh of c.caseStatusHistory) {
+  for (const csh of c.caseStatusHistory || []) {
     if (
       csh.date &&
       csh.date >= BEGIN &&
@@ -115,7 +115,7 @@ const outputCsv = ({
         .replace('Special Trial ', '')
         .replace('Judge ', '') || '';
     const closedDateHumanized =
-      c.caseStatusHistory
+      (c.caseStatusHistory || [])
         .reverse()
         .find(
           csh =>
