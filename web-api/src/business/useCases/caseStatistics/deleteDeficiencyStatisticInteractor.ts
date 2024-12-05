@@ -6,6 +6,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { deleteCaseStatistic } from '@web-api/persistence/postgres/cases/ statistics/deleteCaseStatistic';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -34,16 +35,11 @@ export const deleteDeficiencyStatistic = async (
 
   const newCase = new Case(oldCase, { authorizedUser });
   newCase.deleteStatistic(statisticId);
+  const validRawCase = newCase.validate().toRawObject();
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: newCase,
-    });
+  await deleteCaseStatistic({ statisticId });
 
-  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
+  return validRawCase;
 };
 
 export const deleteDeficiencyStatisticInteractor = withLocking(

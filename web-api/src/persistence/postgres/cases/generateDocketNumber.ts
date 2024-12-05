@@ -4,8 +4,7 @@ import {
   formatNow,
   getMonthDayYearInETObj,
 } from '../../../../../shared/src/business/utilities/DateHandler';
-import { ServerApplicationContext } from '@web-api/applicationContext';
-import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 import { getDbWriter } from '@web-api/database';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 
@@ -41,10 +40,8 @@ export const getNextDocketNumber = async ({ year }: { year: string }) => {
 export const MAX_ATTEMPTS = 5;
 
 export const generateDocketNumber = async ({
-  applicationContext,
   receivedAt,
 }: {
-  applicationContext: ServerApplicationContext;
   receivedAt?: string;
 }) => {
   const year = receivedAt
@@ -60,8 +57,7 @@ export const generateDocketNumber = async ({
         year,
       });
 
-      const existingCase = await getCaseByDocketNumber({
-        applicationContext,
+      const existingCase = await getCaseMetadataByDocketNumber({
         docketNumber: nextDocketNumber,
       });
       if (!existingCase) {

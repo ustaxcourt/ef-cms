@@ -14,6 +14,7 @@ import { cases450_plus } from '@web-api/persistence/postgres/utils/seed/fixtures
 import { getDbWriter } from '../../../../database';
 import { messages } from './fixtures/messages';
 import { petitionerToCaseMappings } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/petitionerToCaseMappings';
+import { statisticPenalties } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/statisticPenalties';
 import { workItems } from './fixtures/workItems';
 
 export const seed = async () => {
@@ -70,6 +71,14 @@ export const seed = async () => {
       .insertInto('dwCaseStatistic')
       .values(caseStatistics)
       .onConflict(oc => oc.column('statisticId').doNothing())
+      .execute(),
+  );
+
+  await getDbWriter(writer =>
+    writer
+      .insertInto('dwStatisticPenalty')
+      .values(statisticPenalties)
+      .onConflict(oc => oc.column('penaltyId').doNothing())
       .execute(),
   );
 

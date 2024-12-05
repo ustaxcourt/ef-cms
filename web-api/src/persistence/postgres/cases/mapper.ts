@@ -47,7 +47,7 @@ export const convertRawCaseToDbRow = (rawCase: RawCase) => {
     isPaper: rawCase.isPaper,
     isSealed: rawCase.isSealed,
     judgeUserId: rawCase.judgeUserId,
-    leadDocketNumber: rawCase.leadDocketNumber,
+    leadDocketNumber: rawCase.leadDocketNumber || null,
     litigationCosts: rawCase.litigationCosts,
     mailingDate: rawCase.mailingDate,
     noticeOfAttachments: rawCase.noticeOfAttachments,
@@ -87,9 +87,9 @@ export const convertRawCaseToDbRow = (rawCase: RawCase) => {
     trialDate: rawCase.trialDate
       ? calculateDate({ dateString: rawCase.trialDate })
       : null,
-    trialLocation: rawCase.trialLocation,
-    trialSessionId: rawCase.trialSessionId,
-    trialTime: rawCase.trialTime,
+    trialLocation: rawCase.trialLocation || null,
+    trialSessionId: rawCase.trialSessionId || null,
+    trialTime: rawCase.trialTime || null,
     useSameAsPrimary: rawCase.useSameAsPrimary,
   };
 };

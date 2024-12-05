@@ -1,5 +1,6 @@
 import { convertDbRowToRawCase } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
+import { isEmpty } from 'lodash';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export const getCasesMetadataByDocketNumbers = async ({
@@ -7,6 +8,10 @@ export const getCasesMetadataByDocketNumbers = async ({
 }: {
   docketNumbers: string[];
 }): Promise<RawCase[] | undefined> => {
+  if (isEmpty(docketNumbers)) {
+    return [];
+  }
+
   const dbCases = await getDbReader(reader =>
     reader
       .selectFrom('dwCase')
@@ -15,7 +20,5 @@ export const getCasesMetadataByDocketNumbers = async ({
       .execute(),
   );
 
-  return dbCases
-    ? dbCases.map(c => transformNullToUndefined(convertDbRowToRawCase(c)))
-    : undefined;
+  return dbCases?.map(c => transformNullToUndefined(convertDbRowToRawCase(c)));
 };

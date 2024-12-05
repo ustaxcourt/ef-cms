@@ -8,6 +8,7 @@ import { Statistic } from '../../../../../shared/src/business/entities/Statistic
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseStatistic } from '@web-api/persistence/postgres/cases/ statistics/updateCaseStatistic';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -81,16 +82,11 @@ export const updateDeficiencyStatistic = async (
 
   const newCase = new Case(oldCase, { authorizedUser });
   newCase.updateStatistic(statisticEntity, statisticId);
+  const validRawCase = newCase.validate().toRawObject();
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: newCase,
-    });
+  await updateCaseStatistic({ statistic: statisticEntity });
 
-  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
+  return validRawCase;
 };
 
 export const updateDeficiencyStatisticInteractor = withLocking(

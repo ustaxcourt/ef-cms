@@ -1,12 +1,13 @@
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { deleteCasePetitionerData } from '@web-api/persistence/postgres/cases/parties/deleteCasePetitionerData';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -40,6 +41,10 @@ export const removePetitionerAndUpdateCaption = async (
     applicationContext,
     docketNumber,
   });
+
+  if (!caseToUpdate) {
+    throw new NotFoundError(`Case ${docketNumber} not found`);
+  }
 
   let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
@@ -81,6 +86,11 @@ export const removePetitionerAndUpdateCaption = async (
       authorizedUser,
       caseToUpdate: caseEntity,
     });
+
+  await deleteCasePetitionerData({
+    contactId: petitionerContactId,
+    docketNumber,
+  });
 
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };

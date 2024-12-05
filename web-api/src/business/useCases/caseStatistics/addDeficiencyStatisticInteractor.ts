@@ -7,6 +7,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { Statistic } from '../../../../../shared/src/business/entities/Statistic';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { createCaseStatistic } from '@web-api/persistence/postgres/cases/ statistics/createCaseStatistic';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -78,15 +79,14 @@ export const addDeficiencyStatistic = async (
   const newCase = new Case(oldCase, { authorizedUser });
   newCase.addStatistic(statisticEntity);
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: newCase,
-    });
+  const validRawCase = newCase.validate().toRawObject();
 
-  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
+  await createCaseStatistic({
+    docketNumber: newCase.docketNumber,
+    statistic: statisticEntity,
+  });
+
+  return validRawCase;
 };
 
 export const addDeficiencyStatisticInteractor = withLocking(

@@ -7,6 +7,7 @@ export interface Database {
   dwPetitionerOnCase: PetitionerOnCaseTable;
   dwCaseStatusUpdate: CaseStatusUpdateTable;
   dwCaseStatistic: CaseStatisticTable;
+  dwStatisticPenalty: StatisticPenaltyTable;
 }
 
 export interface MessageTable {
@@ -75,10 +76,10 @@ export interface CaseTable {
   initialCaption?: string;
   initialDocketNumberSuffix?: string;
   irsNoticeDate?: Date | null;
-  isPaper?: boolean;
-  isSealed?: boolean;
+  isPaper?: boolean | null;
+  isSealed?: boolean | null;
   judgeUserId?: string;
-  leadDocketNumber?: string;
+  leadDocketNumber?: string | null;
   litigationCosts?: number;
   mailingDate?: string; // this seems like a display field more than an actual date
   noticeOfAttachments?: boolean;
@@ -104,9 +105,9 @@ export interface CaseTable {
   statistics?: any[];
   status: string;
   trialDate?: Date | null;
-  trialLocation?: string;
-  trialSessionId?: string;
-  trialTime?: string;
+  trialLocation?: string | null;
+  trialSessionId?: string | null;
+  trialTime?: string | null;
   useSameAsPrimary?: boolean;
 }
 
@@ -172,7 +173,7 @@ export interface PetitionerOnCaseTable {
   name: string;
   phone: string;
   postalCode: string;
-  state: string;
+  state?: string;
 }
 
 export type PetitionerOnCaseKysely = Selectable<PetitionerOnCaseTable>;
@@ -197,10 +198,22 @@ export interface CaseStatisticTable {
   statisticId: string;
   year: number;
   yearOrPeriod: string;
-  // determinationTotalPenalties?: string; // 10502: no examples in seed data
-  // lastDateOfPeriod?: string; // 10502: no examples in seed data
+  determinationTotalPenalties?: string;
+  lastDateOfPeriod?: string;
 }
 
 export type CaseStatisticKysely = Selectable<CaseStatisticTable>;
 export type NewCaseStatisticKysely = Insertable<CaseStatisticTable>;
 export type UpdateCaseStatisticKysely = Updateable<CaseStatisticTable>;
+
+export interface StatisticPenaltyTable {
+  statisticId: string;
+  name: string;
+  penaltyAmount: number;
+  penaltyId: string;
+  penaltyType: string;
+}
+
+export type StatisticPenaltyKysely = Selectable<StatisticPenaltyTable>;
+export type NewStatisticPenaltyKysely = Insertable<StatisticPenaltyTable>;
+export type UpdateStatisticPenaltyKysely = Updateable<StatisticPenaltyTable>;
