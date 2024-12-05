@@ -1,4 +1,5 @@
 import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 const expiredTokenAlertError = {
@@ -11,7 +12,17 @@ const expiredTokenAlertError = {
   title: 'Verification email link expired',
 };
 
-const genericAlertError = {
+const requestTimedOutAlertError = {
+  message: (
+    <>
+      DAWSON is updating your other contact information. Please wait and try to
+      verify your email in a few minutes.
+    </>
+  ),
+  title: 'DAWSON can’t verify your email right now.',
+};
+
+export const genericAlertError = {
   message: (
     <>
       Your request cannot be completed. Please try to log in. If you’re still
@@ -29,6 +40,7 @@ export const verifyUserPendingEmailAction = async ({
   applicationContext,
   path,
   props,
+  store,
 }: ActionProps<{ token: string }>) => {
   const { token } = props;
 
@@ -38,6 +50,7 @@ export const verifyUserPendingEmailAction = async ({
       .verifyUserPendingEmailInteractor(applicationContext, {
         token,
       });
+    store.unset(state.alertInfo);
 
     return path.success({
       alertSuccess: {
@@ -47,11 +60,18 @@ export const verifyUserPendingEmailAction = async ({
       },
     });
   } catch (e: any) {
+    store.unset(state.alertInfo);
     if (e.message === 'Link has expired') {
       return path.error({
         alertError: expiredTokenAlertError,
       });
     }
+    if (e.message === 'Endpoint request timed out') {
+      return path.error({
+        alertError: requestTimedOutAlertError,
+      });
+    }
+
     return path.error({
       alertError: genericAlertError,
     });

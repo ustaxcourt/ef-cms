@@ -218,9 +218,9 @@ export const CLOSED_CASE_STATUSES = [
   CASE_STATUS_TYPES.closedDismissed,
 ];
 export const SUGGESTED_TRIAL_SESSION_TITLES = {
-  invalid: 'Unable to generate suggested term.',
+  invalid: 'Unable to create term',
   success: 'Successfully generated suggested term.',
-  warning: 'Successfully generated suggested term with warnings.',
+  warning: 'Successfully generated suggested term with warnings',
 };
 
 export const DOCUMENT_RELATIONSHIPS = {
@@ -1767,6 +1767,15 @@ export type CreatedCaseType = {
     name: string;
   };
 };
+
+export const USER_MESSAGE_TYPES = {
+  error: 'ERROR',
+  success: 'SUCCESS',
+  warning: 'WARNING',
+};
+
+export type UserMessageType =
+  (typeof USER_MESSAGE_TYPES)[keyof typeof USER_MESSAGE_TYPES];
 
 export const BROADCAST_MESSAGES = {
   appHasUpdated: 'appHasUpdated',

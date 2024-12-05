@@ -3,7 +3,7 @@ import { downloadXlsxAction } from './downloadXlsxAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-describe('deleteAuthCookieAction', () => {
+describe('downloadXlsxAction', () => {
   beforeEach(() => {
     presenter.providers.applicationContext = applicationContext;
 

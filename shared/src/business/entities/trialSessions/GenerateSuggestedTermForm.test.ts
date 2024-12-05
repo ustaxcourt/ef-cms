@@ -1,7 +1,7 @@
 import { GenerateSuggestedTermForm } from './GenerateSuggestedTermForm';
 import { yesterdayFormatted } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 
-describe('GenerateSuggestTermForm', () => {
+describe('GenerateSuggestedTermForm', () => {
   describe('validation', () => {
     it('should pass validation when all required fields are valid', () => {
       const formEntity = new GenerateSuggestedTermForm({
