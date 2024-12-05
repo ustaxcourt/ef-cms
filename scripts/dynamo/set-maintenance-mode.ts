@@ -1,24 +1,26 @@
+#!/usr/bin/env npx ts-node --transpile-only
+
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
+import { ScriptConfig, parseArguments } from '../helpers/parseArguments';
+import { requireEnvVars } from '../../shared/admin-tools/util';
 
-// # Usage
-// #   npx ts-node set-maintenance-mode.ts true dev
-
-// # Arguments
-// #   - $1 - true to engage maintenance mode, false to disengage maintenance mode
-
-const args = process.argv.slice(2);
-const enableMaintenanceMode: boolean = args[0] === 'true';
-
+requireEnvVars(['ENV']);
 const { ENV } = process.env;
 
-if (typeof enableMaintenanceMode !== 'boolean') {
-  throw new Error('A value for enable maintenance mode is required.');
-}
-if (typeof ENV !== 'string') {
-  throw new Error('A value for env is required.');
-}
+const scriptConfig: ScriptConfig = {
+  description: 'set-maintenance-mode - Toggles Maintenance Mode',
+  parameters: {
+    toggle: {
+      position: 0,
+      required: true,
+      type: 'string',
+    },
+  },
+};
+const { toggle } = parseArguments(scriptConfig) as { toggle: string };
+const enableMaintenanceMode: boolean = toggle === 'true';
 
 async function setMaintenanceMode() {
   const dynamoClient = new DynamoDBClient({
