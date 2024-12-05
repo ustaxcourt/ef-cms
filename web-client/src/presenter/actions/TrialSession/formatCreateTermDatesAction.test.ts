@@ -9,7 +9,7 @@ describe('formatCreateTermDatesAction', () => {
   });
 
   it('should pass the term start date and the term end date to createISODateString', async () => {
-    await runAction(formatCreateTermDatesAction, {
+    const result = await runAction(formatCreateTermDatesAction, {
       modules: {
         presenter,
       },
@@ -25,5 +25,11 @@ describe('formatCreateTermDatesAction', () => {
     expect(
       applicationContext.getUtilities().createISODateString,
     ).toHaveBeenCalledTimes(2);
+
+    expect(result.output).toEqual({
+      termEndDate: '2050-03-31T04:00:00.000Z',
+      termName: 'Test Term',
+      termStartDate: '2050-01-01T05:00:00.000Z',
+    });
   });
 });

@@ -3,7 +3,7 @@ import { TRIAL_CITY_STRINGS } from '@shared/business/entities/EntityConstants';
 import { getCitiesFromLastTwoTerms } from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
 
 describe('generateSuggestedTrialSessionCalendar', () => {
-  it('should 0th and 1st trial city when they had a session in fall and spring 2024, respectively, and term start date is winter 2025', () => {
+  it('should return the 0th and 1st trial city when they had a session in fall and spring 2024, respectively, and term start date is winter 2025', () => {
     const mockStartDate = '2025-01-12T04:00:00.000Z';
     const mockSessions = [
       {

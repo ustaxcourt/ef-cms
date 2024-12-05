@@ -21,6 +21,8 @@ import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
   SUGGESTED_TRIAL_SESSION_TITLES,
+  USER_MESSAGE_TYPES,
+  UserMessageType,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
@@ -34,6 +36,7 @@ import {
   reservedWeekOfAtLocationConstraint,
   washingtonDcSpecialConstraint,
 } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/constraints';
+import { sortObjectByKey } from '@shared/tools/helpers';
 import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
 
 const MAX_SESSIONS_PER_WEEK = 6;
@@ -69,19 +72,10 @@ export const WASHINGTON_DC_SOUTH_STRING =
 
 export type TrialSessionReadyForCalendaring = TrialSession & { weekOf: string };
 
-// TODO 10275: more specific name?
-export const MESSAGE_TYPES = {
-  error: 'ERROR',
-  success: 'SUCCESS',
-  warning: 'WARNING',
-};
-
-type MessageType = (typeof MESSAGE_TYPES)[keyof typeof MESSAGE_TYPES];
-
 export type CalendarGeneratorMessage = {
   message: string;
   title?: string;
-  type: MessageType;
+  type: UserMessageType;
 };
 
 export const generateSuggestedTrialSessionCalendarInteractor = async (
@@ -95,46 +89,30 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   message: CalendarGeneratorMessage;
   bufferArray: Buffer | undefined;
 }> => {
-  console.time('10275: Total interactor time');
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.SET_TRIAL_SESSION_CALENDAR)
   ) {
     throw new UnauthorizedError('Unauthorized to generate term');
   }
 
-  console.time('10275: Get ready for trial cases time');
   const cases = await applicationContext
     .getPersistenceGateway()
     .getSuggestedCalendarCases({ applicationContext });
 
-  console.timeEnd('10275: Get ready for trial cases time');
-
-  console.time('10275: Get trial sessions time');
   const sessions = await applicationContext
     .getPersistenceGateway()
     .getTrialSessions({ applicationContext });
 
-  console.timeEnd('10275: Get trial sessions time');
-  // Note (10275): storing trial session data differently would make for a more
-  // efficient process of determining which sessions are special, calendared,
-  // and not closed.
-
-  console.time('10275: Filter trial sessions time');
   const specialSessions = getSpecialSessionsInTerm({
     sessions,
     termEndDate,
     termStartDate,
   });
-  console.timeEnd('10275: Filter trial sessions time');
 
-  console.time('10275: Compile cities from last two term time');
   const citiesFromLastTwoTerms = getCitiesFromLastTwoTerms({
     sessions,
     termStartDate,
   });
-  console.timeEnd('10275: Compile cities from last two term time');
-
-  console.time('10275: Generate prospectiveSessionsByCity time');
 
   let { caseCountsAndSessionsByCity, incorrectSizeRegularCases } =
     getDataForCalendaring({ cases });
@@ -146,17 +124,13 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     citiesFromLastTwoTerms,
   }));
 
-  console.timeEnd('10275: Generate prospectiveSessionsByCity time');
-
   const weeksToLoop = getWeeksInRange({
     endDate: termEndDate,
     startDate: termStartDate,
   });
 
-  console.time('10275: generateCalendar time');
-
   const constraints = [
-    washingtonDcSpecialConstraint, // TODO 10275: write tests to confirm whether or not this washington DC constraint needs to be at the beginning of this array
+    washingtonDcSpecialConstraint,
     maxSessionsPerWeekConstraint,
     maxSessionsPerLocationConstraint,
     oneSessionPerLocationPerWeekConstraint,
@@ -171,9 +145,6 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     weeksToLoop,
   }));
 
-  console.timeEnd('10275: generateCalendar time');
-
-  // TODO 10275: idk if this works, probably does tho? Test it.
   if (calendarIsEmpty(caseCountsAndSessionsByCity)) {
     return {
       bufferArray: undefined,
@@ -181,7 +152,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
         message:
           'There are no trial sessions to schedule within the dates provided.',
         title: SUGGESTED_TRIAL_SESSION_TITLES.invalid,
-        type: MESSAGE_TYPES.error,
+        type: USER_MESSAGE_TYPES.error,
       },
     };
   }
@@ -190,15 +161,12 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     return a.localeCompare(b);
   });
 
-  console.time('10275: writeTrialSessionDataToExcel');
   const bufferArray = await writeTrialSessionDataToExcel({
     caseCountsAndSessionsByCity,
     incorrectSizeRegularCases,
     userMessages,
     weeks: weeksToLoop,
   });
-  console.timeEnd('10275: writeTrialSessionDataToExcel');
-  console.timeEnd('10275: Total interactor time');
 
   return {
     bufferArray,
@@ -285,7 +253,7 @@ const generateMessage = ({
     return {
       message: SUGGESTED_TRIAL_SESSION_TITLES.success,
       title: undefined,
-      type: MESSAGE_TYPES.success,
+      type: USER_MESSAGE_TYPES.success,
     };
   } else {
     let messageString = '';
@@ -297,7 +265,7 @@ const generateMessage = ({
     return {
       message: messageString,
       title: SUGGESTED_TRIAL_SESSION_TITLES.warning,
-      type: MESSAGE_TYPES.warning,
+      type: USER_MESSAGE_TYPES.warning,
     };
   }
 };
@@ -311,26 +279,8 @@ const calendarIsEmpty = (
 };
 
 const getCurrentTermByMonth = (currentMonth: string): string => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const term = Object.entries(SESSION_TERMS_FOR_GENERATOR).find(([_, months]) =>
+  const term = Object.entries(SESSION_TERMS_FOR_GENERATOR).find(([, months]) =>
     months.includes(parseInt(currentMonth)),
   );
   return term ? term[0] : 'Unknown term';
-};
-
-// TODO 10275: consider moving to helper
-export const sortObjectByKey = (obj, sortFunction) => {
-  const sortedKeys = Object.keys(obj).sort(sortFunction);
-
-  const tempObj = {};
-
-  for (const key of sortedKeys) {
-    tempObj[key] = obj[key];
-  }
-
-  for (const key in obj) {
-    delete obj[key];
-  }
-
-  Object.assign(obj, tempObj);
 };

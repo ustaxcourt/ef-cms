@@ -20,4 +20,14 @@ describe('generateSuggestedTrialSessionCalendar', () => {
 
     expect(previousTwoTerms).toEqual(expect.arrayContaining(expectedResult));
   });
+
+  it('should return fall of 2019 and winter of 2020 when passed a date in spring of 2020', () => {
+    const mockStartDate = '2020-05-10T04:00:00.000Z';
+
+    const expectedResult = ['winter, 2020', 'fall, 2019'];
+
+    const previousTwoTerms = getPreviousTwoTerms(mockStartDate);
+
+    expect(previousTwoTerms).toEqual(expect.arrayContaining(expectedResult));
+  });
 });
