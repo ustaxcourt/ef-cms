@@ -9,12 +9,12 @@ import {
   ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
-import { appendFileSync, existsSync, unlinkSync } from 'fs';
 import {
   calculateDifferenceInDays,
   createISODateString,
 } from '@shared/business/utilities/DateHandler';
 import { compareStrings } from '@shared/business/utilities/sortFunctions';
+import { generateCsv } from '../helpers/generate-csv';
 import {
   search,
   searchAll,
@@ -168,18 +168,16 @@ const isCaseStale = async ({
   console.log(`Found ${staleCases.length} stale cases.`);
 
   console.log(`Writing CSV to ${OUTPUT_FILENAME}...`);
-  const sortedStaleCases = staleCases
+  const columns = [
+    { header: 'Judge', key: 'judge' },
+    { header: 'Docket Number', key: 'docketNumber' },
+    { header: 'Caption', key: 'caption' },
+    { header: 'Status', key: 'status' },
+    { header: 'Last Filed', key: 'deRcvdAt' },
+    { header: 'Age in Days', key: 'deAge' },
+  ];
+  const rows = staleCases
     .sort((a, b) => b.deAge - a.deAge)
     .sort((a, b) => compareStrings(a.judge, b.judge));
-  let output =
-    '"Judge","Docket Number","Caption","Status","Last Filed","Age in Days"';
-  for (const sc of sortedStaleCases) {
-    output +=
-      `\n"${sc.judge}","${sc.docketNumber}","${sc.caption}","${sc.status}",` +
-      `"${sc.deRcvdAt}","${sc.deAge}"`;
-  }
-  if (existsSync(OUTPUT_FILENAME)) {
-    unlinkSync(OUTPUT_FILENAME);
-  }
-  appendFileSync(OUTPUT_FILENAME, output);
+  generateCsv({ columns, filename: OUTPUT_FILENAME, rows });
 })();

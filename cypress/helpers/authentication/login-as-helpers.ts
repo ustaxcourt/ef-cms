@@ -84,7 +84,12 @@ export function loginAsDocketClerk() {
 }
 
 export function loginAsDocketClerk1() {
-  cy.login('docketclerk1');
+  login({ email: 'docketclerk1@example.com' });
+  cy.get('[data-testid="inbox-tab-content"]').should('exist');
+}
+
+export function loginAsClerkOfCourt() {
+  login({ email: 'clerkofcourt@example.com' });
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
 }
 

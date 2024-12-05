@@ -118,7 +118,7 @@ export const createCsvCustomCaseReportFileInteractor = async (
   const csvBuffer = Buffer.from(csvString);
 
   const today = formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
-  const fileName = 'Custom Case Report - ' + today;
+  const fileName: string = 'Custom Case Report - ' + today;
 
   const fileInfo = await saveFileAndGenerateUrl({
     applicationContext,
