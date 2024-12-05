@@ -1,18 +1,12 @@
 #!/usr/bin/env npx ts-node --transpile-only
 
-// usage examples:
-//   scripts/reports/event-codes-by-year.ts NOA -f -y 2024
-//   scripts/reports/event-codes-by-year.ts M071,M074 -y 2021-2022
-//   scripts/reports/event-codes-by-year.ts M071,M074 -y 2021,2022,2024
-
 import { DateTime } from 'luxon';
+import { type ScriptConfig, parseArguments } from '../helpers/parseArguments';
 import {
   ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
 import { generateCsv } from '../helpers/generate-csv';
-import { parseArgs } from 'node:util';
-import { parseIntsArg } from './reportUtils';
 import { requireEnvVars } from '../../shared/admin-tools/util';
 import {
   search,
@@ -23,85 +17,31 @@ import PQueue from 'p-queue';
 
 requireEnvVars(['ENV', 'REGION']);
 
-const config = {
-  allowPositionals: true,
-  options: {
+const scriptConfig: ScriptConfig = {
+  description:
+    'event-codes-by-year - Generate a CSV of instances of documents with the ' +
+    'given event code(s) filed within the given duration.',
+  parameters: {
+    eventCodes: {
+      commaDelimited: true,
+      position: 0,
+      required: true,
+      transform: 'toUpperCase',
+      type: 'string',
+    },
     fiscal: {
       default: false,
       short: 'f',
       type: 'boolean',
     },
-    help: {
-      default: false,
-      short: 'h',
-      type: 'boolean',
-    },
-    verbose: {
-      default: false,
-      short: 'v',
-      type: 'boolean',
-    },
     years: {
-      default: `${DateTime.now().toObject().year}`,
+      default: [`${DateTime.now().toObject().year}`],
+      multiple: true,
       short: 'y',
+      transform: 'number',
       type: 'string',
     },
   },
-  strict: true,
-} as const;
-
-const usage = (warning?: string) => {
-  if (warning) {
-    console.log(warning);
-  }
-  console.log(`Usage: ${process.argv[1]} M071,m074 [-f -y 2023,2024]`);
-  console.log('Options:', JSON.stringify(config, null, 2));
-};
-
-const parseArguments = (): {
-  eventCodes: string[];
-  fiscal: boolean;
-  years: number[];
-} => {
-  let positionals: string[];
-  let values: {
-    [k: string]: any;
-    fiscal: boolean;
-    help: boolean;
-    verbose: boolean;
-    years: string;
-  };
-  try {
-    ({ positionals, values } = parseArgs(config));
-  } catch (ex) {
-    usage(`Error: ${ex}`);
-    process.exit(1);
-  }
-  if (values.verbose) {
-    usage('Verbose output enabled');
-    console.log('positionals:', positionals);
-    console.log('values:', values);
-  }
-  if (values.help) {
-    if (!values.verbose) {
-      usage();
-    }
-    process.exit(0);
-  }
-  if (!positionals || positionals.length === 0) {
-    const errorMessage = 'invalid input: expected event codes';
-    if (values.verbose) {
-      console.log(errorMessage);
-    } else {
-      usage(errorMessage);
-    }
-    process.exit(1);
-  }
-  return {
-    eventCodes: positionals[0].split(',').map(s => s.toUpperCase()),
-    fiscal: values.fiscal,
-    years: parseIntsArg(values.years),
-  };
 };
 
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
@@ -263,7 +203,11 @@ const addRowForDocketEntry = async ({
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
-  const { eventCodes, fiscal, years } = parseArguments();
+  const { eventCodes, fiscal, years } = parseArguments(scriptConfig) as {
+    eventCodes: string[];
+    fiscal: boolean;
+    years: number[];
+  };
   const docketEntries = await getDocketEntriesByEventCodesAndYears({
     applicationContext,
     eventCodes,
