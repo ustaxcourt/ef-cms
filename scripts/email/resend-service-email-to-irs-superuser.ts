@@ -1,20 +1,43 @@
-if (!process.argv[2] || !process.argv[3]) {
-  console.log('please specify start and end timestamps in ISO-8601 format');
-  console.log('');
-  console.log(
-    '$ npx ts-node --transpile-only scripts/email/resend-service-email.ts [startTimestamp] [endTimestamp]',
-  );
-  process.exit();
-}
+#!/usr/bin/env npx ts-node --transpile-only
 
 import { Case } from '@shared/business/entities/cases/Case';
 import { INITIAL_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
-import { createApplicationContext } from '@web-api/applicationContext';
+import { ScriptConfig, parseArguments } from '../helpers/parseArguments';
+import {
+  type ServerApplicationContext,
+  createApplicationContext,
+} from '@web-api/applicationContext';
+import { requireEnvVars } from '../../shared/admin-tools/util';
 import { sendIrsSuperuserPetitionEmail } from '@web-api/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail';
 import { sendServedPartiesEmails } from '@web-api/business/useCaseHelper/service/sendServedPartiesEmails';
 
+requireEnvVars(['ENV', 'REGION']);
+
+const scriptConfig: ScriptConfig = {
+  description:
+    'resend-service-email-to-irs-superuser - Resends service email for all documents filed within the given timeframe',
+  parameters: {
+    endTimestamp: {
+      description: 'Timestamp in ISO-8601 format',
+      position: 1,
+      required: true,
+      type: 'string',
+    },
+    startTimestamp: {
+      description: 'Timestamp in ISO-8601 format',
+      position: 0,
+      required: true,
+      type: 'string',
+    },
+  },
+};
+const { endTimestamp, startTimestamp } = parseArguments(scriptConfig) as {
+  endTimestamp: string;
+  startTimestamp: string;
+};
+
 const getCase = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
 ): Promise<Case> => {
   const caseToBatch = await applicationContext
@@ -28,7 +51,7 @@ const getCase = async (
 };
 
 const resendServiceEmail = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketEntryId,
     docketNumber,
@@ -62,8 +85,8 @@ const resendServiceEmail = async (
     .getPersistenceGateway()
     .getDocketEntriesServedWithinTimeframe({
       applicationContext,
-      endTimestamp: process.argv[3],
-      startTimestamp: process.argv[2],
+      endTimestamp,
+      startTimestamp,
     });
   for (const docketEntryToReServe of docketEntriesToReServe) {
     await resendServiceEmail(applicationContext, docketEntryToReServe);
