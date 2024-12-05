@@ -37,10 +37,10 @@ const scriptConfig: ScriptConfig = {
 };
 // Example:
 //   {
-//      eventCode: [ 'M073', 'M074' ],
+//      eventCodes: [ 'M073', 'M074' ],
 //      fiscal: true,
 //      verbose: false,
-//      year: [ 2018, 2020, 2022, 2023, 2024 ]
+//      years: [ 2018, 2020, 2022, 2023, 2024 ]
 //    }
 const { eventCodes, fiscal, verbose, years } = parseArguments(scriptConfig) as {
   eventCodes: string[];
