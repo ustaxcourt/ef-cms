@@ -7,6 +7,7 @@ import {
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { ElectronicPetition } from '@shared/business/entities/cases/ElectronicPetition';
+import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -17,6 +18,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { UserCase } from '../../../../shared/src/business/entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '../../../../shared/src/business/entities/WorkItem';
+import { createCasePetitionersData } from '@web-api/persistence/postgres/cases/parties/createCasePetitionerData';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 import { setServiceIndicatorsForCase } from '../../../../shared/src/business/utilities/setServiceIndicatorsForCase';
@@ -85,7 +87,7 @@ export const createCaseInteractor = async (
 
   const petitionEntity = new ElectronicPetition(petitionMetadata).validate();
 
-  const docketNumber = await generateDocketNumber({ applicationContext });
+  const docketNumber = await generateDocketNumber({});
 
   let privatePractitioners: UserRecord[] = [];
   if (user.role === ROLES.privatePractitioner) {
@@ -282,6 +284,11 @@ export const createCaseInteractor = async (
     applicationContext,
     authorizedUser,
     caseToCreate: caseToAdd.validate().toRawObject(),
+  });
+
+  await createCasePetitionersData({
+    docketNumber: caseToAdd.docketNumber,
+    petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)), // 10502 TODO: is this correct?
   });
 
   const userCaseEntity = new UserCase(caseToAdd);

@@ -172,7 +172,7 @@ export interface PetitionerOnCaseTable {
   name: string;
   phone: string;
   postalCode: string;
-  state: string;
+  state?: string;
 }
 
 export type PetitionerOnCaseKysely = Selectable<PetitionerOnCaseTable>;

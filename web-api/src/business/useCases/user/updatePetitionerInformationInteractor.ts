@@ -7,21 +7,22 @@ import {
   CASE_STATUS_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   Case,
   getPetitionerById,
   getPractitionersRepresenting,
-} from '../../../../../shared/src/business/entities/cases/Case';
+} from '@shared/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { defaults, pick } from 'lodash';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCasePetitionerData } from '@web-api/persistence/postgres/cases/parties/updateCasePetitionerData';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const getIsUserAuthorized = ({
@@ -311,6 +312,13 @@ export const updatePetitionerInformation = async (
       });
     }
   }
+
+  await updateCasePetitionerData({
+    docketNumber: caseEntity.docketNumber,
+    petitionerData: caseEntity.getPetitionerById(
+      updatedPetitionerData.contactId,
+    ),
+  });
 
   const updatedCase = await applicationContext
     .getUseCaseHelpers()
