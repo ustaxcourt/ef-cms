@@ -35,6 +35,7 @@ export const getEligibleCasesForCity = async ({
       .execute(),
   );
 
+  // use batchGet instead of queries with Promise.all?
   const casePromises = dbCases.map(async c => {
     const [privatePractitioners, irsPractitioners] = await Promise.all([
       query({
