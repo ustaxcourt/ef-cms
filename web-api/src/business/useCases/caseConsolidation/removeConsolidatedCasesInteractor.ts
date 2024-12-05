@@ -49,8 +49,6 @@ export const removeConsolidatedCases = async (
     leadDocketNumber,
   });
 
-  // 10502 TODO: fix type errors
-
   const newConsolidatedCases = allConsolidatedCases.filter(
     consolidatedCase =>
       !docketNumbersToRemove.includes(consolidatedCase.docketNumber),

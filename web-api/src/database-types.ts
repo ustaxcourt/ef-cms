@@ -197,8 +197,11 @@ export interface CaseStatisticTable {
   statisticId: string;
   year: number;
   yearOrPeriod: string;
-  // determinationTotalPenalties?: string; // 10502: no examples in seed data
-  // lastDateOfPeriod?: string; // 10502: no examples in seed data
+
+  // 10502 todo fields
+  // determinationTotalPenalties?: string;
+  // lastDateOfPeriod?: string;
+  // penalties: any[];
 }
 
 export type CaseStatisticKysely = Selectable<CaseStatisticTable>;
