@@ -11,14 +11,12 @@ import {
 import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
 import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
 import { JudgeChambersInfo } from '@web-client/presenter/actions/getJudgesChambersAction';
-import {
-  PreviousTerm,
-  TrialLocationData,
-} from '@web-api/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
+import { PreviousTerm } from '@web-api/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawMessage } from '@shared/business/entities/Message';
 import { RawUser, UserContact } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
+import { TrialLocationData } from '@web-api/business/useCases/trialSessions/getTrialSessionPlanningReportDataInteractor';
 import { TroubleshootingLinkInfo } from '@web-client/presenter/sequences/showFileUploadErrorModalSequence';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
