@@ -8,6 +8,21 @@ export const queueEmailUpdateAssociatedCasesWorker = async (
   { user }: { user: RawUser | RawPractitioner },
   authorizedUser: AuthUser,
 ): Promise<void> => {
+  const docketNumbersAssociatedWithUser = await applicationContext
+    .getPersistenceGateway()
+    .getDocketNumbersByUser({
+      applicationContext,
+      userId: user.userId,
+    });
+  if (!docketNumbersAssociatedWithUser.length) {
+    user.isUpdatingInformation = false;
+    await applicationContext.getPersistenceGateway().updateUser({
+      applicationContext,
+      user,
+    });
+    return;
+  }
+
   await applicationContext
     .getUseCases()
     .queueUpdateAssociatedCasesWorker(
