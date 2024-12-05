@@ -13,6 +13,22 @@ export const gatherRecords = function gatherRecords(exportColumns, output) {
   };
 };
 
+export const sortObjectByKey = (obj, sortFunction) => {
+  const sortedKeys = Object.keys(obj).sort(sortFunction);
+
+  const tempObj = {};
+
+  for (const key of sortedKeys) {
+    tempObj[key] = obj[key];
+  }
+
+  for (const key in obj) {
+    delete obj[key];
+  }
+
+  Object.assign(obj, tempObj);
+};
+
 export const getCsvOptions = (csvColumns, overrides = {}) => {
   const defaultOptions = {
     columns: csvColumns,
