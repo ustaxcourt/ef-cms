@@ -6,6 +6,6 @@ export const getEligibleCasesForCityInteractor = (
 ) => {
   return get({
     applicationContext,
-    endpoint: `/trial-sessions/${trialCity}/eligible-cases`,
+    endpoint: `/cases/${trialCity}/eligible-cases`,
   });
 };
