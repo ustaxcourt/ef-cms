@@ -1,5 +1,6 @@
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import { MinuteSheetFormState } from '@web-client/presenter/state/minuteSheetFormState';
+import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+import { OnChangeHandler } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import React from 'react';
 
 export const TrialSessionMetadataFieldset = ({
@@ -7,15 +8,7 @@ export const TrialSessionMetadataFieldset = ({
   onChangeHandler,
   trialSessionMetadataFormState,
 }: {
-  onChangeHandler: ({
-    name,
-    section,
-    value,
-  }: {
-    name: string;
-    section: string;
-    value: string | boolean;
-  }) => void;
+  onChangeHandler: OnChangeHandler;
   onBlurHandler: () => void;
   trialSessionMetadataFormState: MinuteSheetFormState['trialSessionMetadata'];
 }) => {

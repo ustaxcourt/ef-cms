@@ -1,36 +1,24 @@
+import {
+  AddRowHandler,
+  OnChangeHandler,
+} from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
   MinuteSheetFormState,
   TRIAL_HEARING_OPTIONS,
-} from '@web-client/presenter/state/minuteSheetFormState';
+} from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import React from 'react';
 
 export const CaseMetadataFieldset = ({
-  addRecalledRowHandler,
+  addRowHandler,
   caseMetadataFormState,
   onBlurHandler,
   onChangeHandler,
 }: {
-  addRecalledRowHandler: ({
-    name,
-    section,
-  }: {
-    name: string;
-    section: string;
-  }) => void;
-  onChangeHandler: ({
-    name,
-    rowInfo,
-    section,
-    value,
-  }: {
-    name: string;
-    rowInfo: { key: string; nestedName?: string };
-    section: string;
-    value: string | boolean;
-  }) => void;
+  addRowHandler: AddRowHandler;
+  onChangeHandler: OnChangeHandler;
   onBlurHandler: () => void;
   caseMetadataFormState: MinuteSheetFormState['caseMetadata'];
 }) => {
@@ -276,7 +264,7 @@ export const CaseMetadataFieldset = ({
           secondary={true}
           onClick={e => {
             e.preventDefault();
-            addRecalledRowHandler({
+            addRowHandler({
               name: 'recalled',
               section: 'caseMetadata',
             });

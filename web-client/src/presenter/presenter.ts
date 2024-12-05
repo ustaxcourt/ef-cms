@@ -12,7 +12,6 @@ import { addCaseToTrialSessionSequence } from './sequences/addCaseToTrialSession
 import { addFactOrReasonSequence } from '@web-client/presenter/sequences/addFactOrReasonSequence';
 import { addMinuteSheetFormRowSequence } from './sequences/TrialSessionMinutes/addMinuteSheetFormRowSequence';
 import { addPenaltyInputSequence } from './sequences/addPenaltyInputSequence';
-import { addRecalledRowSequence } from './sequences/TrialSessionMinutes/addRecalledRowSequence';
 import { addStatisticToFormSequence } from './sequences/addStatisticToFormSequence';
 import { addSupportingDocumentToFormSequence } from './sequences/addSupportingDocumentToFormSequence';
 import { adminContactUpdateCompleteSequence } from './sequences/adminContactUpdateCompleteSequence';
@@ -501,7 +500,6 @@ import { toggleUseContactPrimaryAddressSequence } from './sequences/toggleUseCon
 import { toggleUseExistingAddressSequence } from './sequences/toggleUseExistingAddressSequence';
 import { toggleWorkingCopySortSequence } from './sequences/toggleWorkingCopySortSequence';
 import { trialSessionMinutesAutosaveSequence } from '@web-client/presenter/sequences/TrialSessionMinutes/trialSessionMinutesAutosaveSequence';
-import { trialSessionMinutesOnChangeSequence } from '@web-client/presenter/sequences/TrialSessionMinutes/trialSessionMinutesOnChangeSequence';
 import { unauthorizedErrorSequence } from './sequences/unauthorizedErrorSequence';
 import { unblockCaseFromTrialSequence } from './sequences/unblockCaseFromTrialSequence';
 import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserErrorSequence';
@@ -563,6 +561,7 @@ import { updateStatusReportOrderFormValueSequence } from './sequences/StatusRepo
 import { updateStepIndicatorSequence } from '@web-client/presenter/sequences/updateStepIndicatorSequence';
 import { updateTrialSessionCompleteSequence } from './sequences/updateTrialSessionCompleteSequence';
 import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessionFormDataSequence';
+import { updateTrialSessionMinutesFormSequence } from '@web-client/presenter/sequences/TrialSessionMinutes/updateTrialSessionMinutesFormSequence';
 import { updateTrialSessionSequence } from './sequences/updateTrialSessionSequence';
 import { updateUserCaseNoteOnWorkingCopySequence } from './sequences/updateUserCaseNoteOnWorkingCopySequence';
 import { updateWorkingCopySessionNoteSequence } from './sequences/updateWorkingCopySessionNoteSequence';
@@ -632,7 +631,6 @@ export const presenterSequences = {
   addFactOrReasonSequence,
   addMinuteSheetFormRowSequence,
   addPenaltyInputSequence: addPenaltyInputSequence as unknown as Function,
-  addRecalledRowSequence,
   addStatisticToFormSequence: addStatisticToFormSequence as unknown as Function,
   addSupportingDocumentToFormSequence:
     addSupportingDocumentToFormSequence as unknown as Function,
@@ -1422,7 +1420,6 @@ export const presenterSequences = {
     toggleUseExistingAddressSequence as unknown as Function,
   toggleWorkingCopySortSequence,
   trialSessionMinutesAutosaveSequence,
-  trialSessionMinutesOnChangeSequence,
   unauthorizedErrorSequence: unauthorizedErrorSequence as unknown as Function,
   unblockCaseFromTrialSequence:
     unblockCaseFromTrialSequence as unknown as Function,
@@ -1520,6 +1517,7 @@ export const presenterSequences = {
     updateTrialSessionCompleteSequence as unknown as Function,
   updateTrialSessionFormDataSequence:
     updateTrialSessionFormDataSequence as unknown as Function,
+  updateTrialSessionMinutesFormSequence,
   updateTrialSessionSequence: updateTrialSessionSequence as unknown as Function,
   updateUserCaseNoteOnWorkingCopySequence:
     updateUserCaseNoteOnWorkingCopySequence as unknown as Function,

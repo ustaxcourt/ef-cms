@@ -1,44 +1,26 @@
+import {
+  AddRowHandler,
+  OnChangeHandler,
+  RemoveRowHandler,
+} from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
-import { MinuteSheetFormState } from '@web-client/presenter/state/minuteSheetFormState';
+import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import React from 'react';
 
 export const PetitionersFieldset = ({
-  addPetitionerRowHandler,
+  addRowHandler,
   onBlurHandler,
   onChangeHandler,
   petitionersFormState,
-  removePetitionerRowHandler,
+  removeRowHandler,
 }: {
-  onChangeHandler: ({
-    name,
-    section,
-    value,
-  }: {
-    name: string;
-    rowInfo?: { key: string; nestedName: string };
-    section: string;
-    value: string | boolean;
-  }) => void;
+  onChangeHandler: OnChangeHandler;
   onBlurHandler: () => void;
-  addPetitionerRowHandler: ({
-    name,
-    section,
-  }: {
-    name: string;
-    section: string;
-  }) => void;
+  addRowHandler: AddRowHandler;
   petitionersFormState: MinuteSheetFormState['petitioners'];
-  removePetitionerRowHandler: ({
-    key,
-    name,
-    section,
-  }: {
-    name: string;
-    key: string;
-    section: string;
-  }) => void;
+  removeRowHandler: RemoveRowHandler;
 }) => {
   return (
     <fieldset className="border-0 grid-container padding-0">
@@ -165,7 +147,7 @@ export const PetitionersFieldset = ({
                 className="grid-col-auto"
                 onClick={e => {
                   e.preventDefault();
-                  removePetitionerRowHandler({
+                  removeRowHandler({
                     key: row.renderKey,
                     name: 'petitioners',
                     section: 'petitioners',
@@ -185,7 +167,7 @@ export const PetitionersFieldset = ({
             secondary={true}
             onClick={e => {
               e.preventDefault();
-              addPetitionerRowHandler({
+              addRowHandler({
                 name: 'petitioners',
                 section: 'petitioners',
               });

@@ -1,8 +1,13 @@
+import {
+  AddRowHandler,
+  OnChangeHandler,
+  RemoveRowHandler,
+} from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
-import { MinuteSheetFormState } from '@web-client/presenter/state/minuteSheetFormState';
+import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import React from 'react';
 
 export const RespondentsFieldset = ({
@@ -12,27 +17,10 @@ export const RespondentsFieldset = ({
   removeRowHandler,
   respondentsFormState,
 }: {
-  addRowHandler: ({ name, section }: { name: string; section: string }) => void;
-  onChangeHandler: ({
-    name,
-    section,
-    value,
-  }: {
-    name: string;
-    section: string;
-    value: string | boolean;
-    rowInfo?: { key: string; nestedName: string };
-  }) => void;
+  addRowHandler: AddRowHandler;
+  onChangeHandler: OnChangeHandler;
   onBlurHandler: () => void;
-  removeRowHandler: ({
-    key,
-    name,
-    section,
-  }: {
-    key: string;
-    name: string;
-    section: string;
-  }) => void;
+  removeRowHandler: RemoveRowHandler;
   respondentsFormState: MinuteSheetFormState['respondents'];
 }) => {
   return (
@@ -54,7 +42,6 @@ export const RespondentsFieldset = ({
             <div className="grid-col-5">
               <FormGroup className="margin-bottom-0">
                 <label hidden htmlFor={`respondent-${rowIndex}`}>
-                  {/* TODO 10419 this should be index of row */}
                   {`Respondent ${rowIndex}`}
                 </label>
                 <input
