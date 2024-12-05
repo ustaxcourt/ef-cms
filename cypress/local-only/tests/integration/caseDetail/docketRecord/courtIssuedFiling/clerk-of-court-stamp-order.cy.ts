@@ -88,7 +88,10 @@ describe('Judge`s chambers stamps an order', () => {
     createAndServePaperPetition().then(({ docketNumber }) => {
       loginAsDocketClerk1();
       goToCase(docketNumber);
-      createAndServePaperFiling('Motion to Proceed Remotely', '01/01/2022');
+      createAndServePaperFiling({
+        dateReceived: '01/01/2022',
+        documentType: 'Motion to Proceed Remotely',
+      });
       cy.get(
         '[data-testid="docket-record-table"] td:contains("Motion to Proceed Remotely")',
       )

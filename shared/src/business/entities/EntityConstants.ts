@@ -6,6 +6,11 @@ import courtIssuedEventCodesJson from '../../tools/courtIssuedEventCodes.json';
 import externalFilingEventsJson from '../../tools/externalFilingEvents.json';
 import internalFilingEventsJson from '../../tools/internalFilingEvents.json';
 
+export const STATE_KEYS = {
+  DOCKET_RECORD_TABLE_SORT:
+    'DOCKET_RECORD_TABLE_SORT' as 'DOCKET_RECORD_TABLE_SORT',
+};
+
 export const DEBOUNCE_TIME_MILLISECONDS = 500;
 
 interface FilingEvent {
@@ -1644,10 +1649,15 @@ export const DOCKET_ENTRY_SEALED_TO_TYPES = {
 export const ASCENDING: 'asc' = 'asc';
 export const DESCENDING: 'desc' = 'desc';
 
-export const CHRONOLOGICALLY_ASCENDING = 'Oldest to newest';
-export const CHRONOLOGICALLY_DESCENDING = 'Newest to oldest';
-export const ALPHABETICALLY_ASCENDING = 'In A-Z ascending order';
-export const ALPHABETICALLY_DESCENDING = 'In Z-A descending order';
+export const SORT_ASCENDING_TEXT = {
+  date: 'Oldest to newest',
+  string: 'In A-Z ascending order',
+};
+
+export const SORT_DESCENDING_TEXT = {
+  date: 'Newest to oldest',
+  string: 'In Z-A descending order',
+};
 
 export const PRACTITIONER_DOCUMENT_TYPES_MAP = {
   APPLICATION_PACKAGE: 'Application Package',
