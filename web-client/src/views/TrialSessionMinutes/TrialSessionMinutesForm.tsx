@@ -1,6 +1,7 @@
 import { CaseMetadataFieldset } from '@web-client/views/TrialSessionMinutes/CaseMetadataFieldset';
 import { PetitionersFieldset } from '@web-client/views/TrialSessionMinutes/PetitionersFieldset';
 import { RespondentsFieldset } from '@web-client/views/TrialSessionMinutes/RespondentsFieldset';
+import { TrialBriefFieldset } from './TrialBriefFieldset';
 import { TrialSessionMetadataFieldset } from '@web-client/views/TrialSessionMinutes/SessionMetadataFieldset';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -35,7 +36,6 @@ export const TrialSessionMinutesForm = connect(
           onBlurHandler={trialSessionMinutesAutosaveSequence}
           onChangeHandler={updateTrialSessionMinutesFormSequence}
         />
-
         <hr />
         <CaseMetadataFieldset
           addRowHandler={addMinuteSheetFormRowSequence}
@@ -73,7 +73,11 @@ export const TrialSessionMinutesForm = connect(
         <hr />
         <div>Actions and Filings Section</div>
         <hr />
-        <div>Trial Brief Section</div>
+        <TrialBriefFieldset
+          trialBriefFormState={trialSessionMinutesForm.trialBrief}
+          onBlurHandler={trialSessionMinutesAutosaveSequence}
+          onChangeHandler={updateTrialSessionMinutesFormSequence}
+        />
         <hr />
         <div>Witnesses Section</div>
         <hr />

@@ -90,6 +90,7 @@ type RenderKey = string;
 type KeyedPartyFormFieldsByRenderKey = Record<RenderKey, KeyedPartyFormFields>;
 
 export type MinuteSheetFormState = {
+  // 10419 TODO: rename all first-level properties by appending "Section"
   trialSessionMetadata: {
     judge: string;
     trialClerk: string;
