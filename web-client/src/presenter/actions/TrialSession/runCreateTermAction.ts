@@ -1,4 +1,4 @@
-import { MESSAGE_TYPES } from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
+import { USER_MESSAGE_TYPES } from '@shared/business/entities/EntityConstants';
 
 export const runCreateTermAction = async ({
   applicationContext,
@@ -15,13 +15,13 @@ export const runCreateTermAction = async ({
     });
 
   switch (message.type) {
-    case MESSAGE_TYPES.error:
+    case USER_MESSAGE_TYPES.error:
       return path.error({
         alertError: message,
       });
-    case MESSAGE_TYPES.warning:
+    case USER_MESSAGE_TYPES.warning:
       return path.warning({ alertWarning: message, bufferArray, termName });
-    case MESSAGE_TYPES.success:
+    case USER_MESSAGE_TYPES.success:
       return path.success({ alertSuccess: message, bufferArray, termName });
   }
 };

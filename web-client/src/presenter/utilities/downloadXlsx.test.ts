@@ -35,7 +35,7 @@ describe('downloadXlsx', () => {
     jest.restoreAllMocks();
   });
 
-  it('creates a blog and generates an object URL', () => {
+  it('should create a blob and generate an object URL', () => {
     downloadXlsx({ encodedXlsxArray, fileName });
 
     expect(createObjectURLSpy).toHaveBeenCalledTimes(1);
