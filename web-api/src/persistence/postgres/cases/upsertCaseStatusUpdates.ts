@@ -1,6 +1,7 @@
 import { CaseStatusChange } from '@shared/business/entities/cases/Case';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getDbWriter } from '@web-api/database';
+import { isEmpty } from 'lodash';
 
 export const upsertCaseStatusUpdates = async ({
   docketNumber,
@@ -9,6 +10,9 @@ export const upsertCaseStatusUpdates = async ({
   docketNumber: string;
   statusUpdates: CaseStatusChange[];
 }): Promise<void> => {
+  if (isEmpty(statusUpdates)) {
+    return;
+  }
   await getDbWriter(writer =>
     writer
       .insertInto('dwCaseStatusUpdate')

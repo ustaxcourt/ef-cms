@@ -1,7 +1,7 @@
 import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import { getDbWriter } from '@web-api/database';
 
-export const updatePetitionerData = async ({
+export const updateCasePetitionerData = async ({
   docketNumber,
   petitionerData,
 }: {
@@ -20,7 +20,6 @@ export const updatePetitionerData = async ({
         contactType: petitionerData.contactType,
         country: petitionerData.country,
         countryType: petitionerData.countryType,
-        docketNumber,
         email: petitionerData.email,
         hasConsentedToEService: petitionerData.hasConsentedToEService,
         hasEAccess: petitionerData.hasEAccess,
@@ -38,7 +37,8 @@ export const updatePetitionerData = async ({
         state: petitionerData.state,
         title: petitionerData.title,
       })
-      .where('contactId', '=', petitionerData.contactId!) // 10502 TODO: Why on earth is contactId optional?!
+      .where('contactId', '=', petitionerData.contactId!) // 10502 TODO: Why is contactId optional?!
+      .where('docketNumber', '=', docketNumber)
       .returningAll()
       .executeTakeFirst(),
   );
