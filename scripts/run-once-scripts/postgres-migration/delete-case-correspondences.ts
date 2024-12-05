@@ -16,6 +16,7 @@ const dynamoDbDocClient = DynamoDBDocumentClient.from(dynamoDbClient);
 
 // We set the environment as 'production' (= "a deployed environment") to get the RDS connection to work properly
 environment.nodeEnv = 'production';
+process.env.CIRCLE_BRANCH = 'test';
 
 const getCaseCorrespondencesToDelete = async (offset: number) => {
   const caseCorrespondences = await getDbReader(reader =>

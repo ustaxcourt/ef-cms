@@ -1,4 +1,9 @@
-import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
+import {
+  CamelCasePlugin,
+  CompiledQuery,
+  Kysely,
+  PostgresDialect,
+} from 'kysely';
 import { Database } from './database-types';
 import { Pool } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
@@ -67,7 +72,7 @@ async function getToken(region: string, host: string) {
   return tokens[region];
 }
 
-async function createConnection<T>({
+async function getConnection<T>({
   cb,
   dbKey,
   host,
@@ -79,13 +84,18 @@ async function createConnection<T>({
   host: string;
 }): Promise<T> {
   try {
+    if (dbInstances[dbKey] && (await isConnectionValid(dbInstances[dbKey]))) {
+      // If valid, use the existing connection
+      return await cb(dbInstances[dbKey]);
+    }
+
     const token = await getToken(region, host);
 
     if (!token) {
       throw new Error('token does not exist');
     }
 
-    dbInstances[dbKey] = await connect({
+    dbInstances[dbKey] = connect({
       ...POOL,
       host,
       password: token,
@@ -95,17 +105,30 @@ async function createConnection<T>({
   } catch (err) {
     clearToken(region);
     const token = await getToken(region, host);
-    dbInstances[dbKey] = await connect({
+
+    dbInstances[dbKey] = connect({
       ...POOL,
       host,
       password: token,
     });
+
     return await cb(dbInstances[dbKey]!);
   }
 }
 
+async function isConnectionValid(db: Kysely<Database>): Promise<boolean> {
+  try {
+    await db.executeQuery<{ result: 1 }>(
+      CompiledQuery.raw('select 1 as result', []),
+    );
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
 export function getDbReader<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
-  return createConnection({
+  return getConnection({
     cb,
     dbKey: 'reader',
     host:
@@ -117,7 +140,7 @@ export function getDbReader<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
 }
 
 export function getDbWriter<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
-  return createConnection({
+  return getConnection({
     cb,
     dbKey: 'writer',
     host: environment.rds.pool.host,

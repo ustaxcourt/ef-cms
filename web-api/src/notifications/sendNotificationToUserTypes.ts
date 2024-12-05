@@ -211,3 +211,16 @@ export type NotificationMessage =
   | UpdateTrialSessionCompleteNotification
   | UserContactInitialUpdateCompleteNotification
   | UserContactUpdateErrorNotification;
+
+type MaintenanceModeEngaged = {
+  action: 'maintenance_mode_engaged';
+};
+
+type MaintenanceModeDisengaged = {
+  action: 'maintenance_mode_disengaged';
+};
+
+export type SocketRouterNotificationMessage =
+  | NotificationMessage
+  | MaintenanceModeEngaged
+  | MaintenanceModeDisengaged;
