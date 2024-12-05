@@ -81,9 +81,11 @@ const getTrialSessionPlanningReportData = async ({
     return applicationContext.getUtilities().compareStrings(a.city, b.city);
   });
 
-  const allTrialSessions = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessions({ applicationContext });
+  const allTrialSessions = (
+    await applicationContext
+      .getPersistenceGateway()
+      .getTrialSessions({ applicationContext })
+  ).filter(ts => ts.isCalendared);
 
   const tempTrialSessions = allTrialSessions.filter(session =>
     ['Regular', 'Small', 'Hybrid', 'Hybrid-S'].includes(session.sessionType),
