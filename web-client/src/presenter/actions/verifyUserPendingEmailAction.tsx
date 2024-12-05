@@ -1,3 +1,4 @@
+import { GatewayTimeoutErrorTitle } from '@web-client/presenter/errors/GatewayTimeoutError';
 import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -66,7 +67,7 @@ export const verifyUserPendingEmailAction = async ({
         alertError: expiredTokenAlertError,
       });
     }
-    if (e.message === 'Endpoint request timed out') {
+    if (e.title === GatewayTimeoutErrorTitle) {
       return path.error({
         alertError: requestTimedOutAlertError,
       });
