@@ -9,10 +9,12 @@ import { requireEnvVars } from '../shared/admin-tools/util';
 
 requireEnvVars(['ENV', 'REGION']);
 
+// Example:
+//   scripts/template.ts m073,m074 --fiscal -y 2018 --year 2020,2022-2024
 const scriptConfig: ScriptConfig = {
   description: 'TypeScript Shell Script Template',
   parameters: {
-    eventCode: {
+    eventCodes: {
       commaDelimited: true,
       position: 0,
       required: true,
@@ -24,7 +26,7 @@ const scriptConfig: ScriptConfig = {
       short: 'f',
       type: 'boolean',
     },
-    year: {
+    years: {
       default: ['2024'],
       multiple: true,
       short: 'y',
@@ -33,13 +35,25 @@ const scriptConfig: ScriptConfig = {
     },
   },
 };
+// Example:
+//   {
+//      eventCode: [ 'M073', 'M074' ],
+//      fiscal: true,
+//      verbose: false,
+//      year: [ 2018, 2020, 2022, 2023, 2024 ]
+//    }
+const { eventCodes, fiscal, verbose, years } = parseArguments(scriptConfig) as {
+  eventCodes: string[];
+  fiscal: boolean;
+  verbose: boolean;
+  years: number[];
+};
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const { eventCode, fiscal, verbose, year } = parseArguments(scriptConfig);
   const applicationContext: ServerApplicationContext = createApplicationContext(
     {},
   );
-  console.log({ eventCode, fiscal, verbose, year });
+  console.log({ eventCodes, fiscal, verbose, years });
   console.log(applicationContext.environment.stage);
 })();
