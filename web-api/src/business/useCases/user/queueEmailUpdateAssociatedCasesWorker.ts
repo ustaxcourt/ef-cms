@@ -1,7 +1,39 @@
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { RawPractitioner } from '../../../../../shared/src/business/entities/Practitioner';
-import { RawUser } from '../../../../../shared/src/business/entities/User';
+import {
+  Practitioner,
+  RawPractitioner,
+} from '../../../../../shared/src/business/entities/Practitioner';
+import { ROLES } from '@shared/business/entities/EntityConstants';
+import {
+  RawUser,
+  User,
+} from '../../../../../shared/src/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+
+async function disableIsUserUpdatingFlag({
+  applicationContext,
+  user,
+}: {
+  applicationContext: ServerApplicationContext;
+  user: RawUser | RawPractitioner;
+}): Promise<void> {
+  user.isUpdatingInformation = false;
+  let userEntity;
+  if (
+    user.role === ROLES.privatePractitioner ||
+    user.role === ROLES.irsPractitioner ||
+    user.role === ROLES.inactivePractitioner
+  ) {
+    userEntity = new Practitioner(user);
+  } else {
+    userEntity = new User(user);
+  }
+
+  await applicationContext.getPersistenceGateway().updateUser({
+    applicationContext,
+    user: userEntity.validate().toRawObject(),
+  });
+}
 
 export const queueEmailUpdateAssociatedCasesWorker = async (
   applicationContext: ServerApplicationContext,
@@ -14,12 +46,9 @@ export const queueEmailUpdateAssociatedCasesWorker = async (
       applicationContext,
       userId: user.userId,
     });
+
   if (!docketNumbersAssociatedWithUser.length) {
-    user.isUpdatingInformation = false;
-    await applicationContext.getPersistenceGateway().updateUser({
-      applicationContext,
-      user,
-    });
+    await disableIsUserUpdatingFlag({ applicationContext, user });
     return;
   }
 
@@ -53,16 +82,8 @@ export const queueEmailUpdateAssociatedCasesWorker = async (
         checkCount = false;
     }
 
-    user.isUpdatingInformation = false;
-    await applicationContext.getPersistenceGateway().updateUser({
-      applicationContext,
-      user,
-    });
+    await disableIsUserUpdatingFlag({ applicationContext, user });
   } catch (e) {
-    user.isUpdatingInformation = false;
-    await applicationContext.getPersistenceGateway().updateUser({
-      applicationContext,
-      user,
-    });
+    await disableIsUserUpdatingFlag({ applicationContext, user });
   }
 };
