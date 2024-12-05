@@ -4,6 +4,9 @@ export interface Database {
   dwUserCaseNote: UserCaseNoteTable;
   dwMessage: MessageTable;
   dwCase: CaseTable;
+  dwCaseCorrespondence: CaseCorrespondenceTable;
+  dwCaseDeadline: CaseDeadlineTable;
+  dwCaseWorksheet: CaseWorksheetTable;
   dwWorkItem: WorkItemTable;
 }
 
@@ -50,6 +53,47 @@ export type CaseKysely = Selectable<CaseTable>;
 export type NewCaseKysely = Insertable<CaseTable>;
 export type UpdateCaseKysely = Updateable<CaseTable>;
 
+export interface CaseCorrespondenceTable {
+  archived?: boolean;
+  correspondenceId: string;
+  documentTitle: string;
+  filedBy?: string;
+  filingDate: Date;
+  userId: string;
+  docketNumber: string;
+}
+
+export type CaseCorrespondenceKysely = Selectable<CaseCorrespondenceTable>;
+export type NewCaseCorrespondenceKysely = Insertable<CaseCorrespondenceTable>;
+export type UpdateCaseCorrespondenceKysely =
+  Updateable<CaseCorrespondenceTable>;
+
+export interface CaseDeadlineTable {
+  associatedJudge: string;
+  associatedJudgeId?: string;
+  caseDeadlineId: string;
+  createdAt: Date;
+  deadlineDate: Date;
+  description: string;
+  docketNumber: string;
+  sortableDocketNumber: number;
+}
+
+export type CaseDeadlineKysely = Selectable<CaseDeadlineTable>;
+export type NewCaseDeadlineKysely = Insertable<CaseDeadlineTable>;
+export type UpdateCaseDeadlineKysely = Updateable<CaseDeadlineTable>;
+
+export interface CaseWorksheetTable {
+  docketNumber: string;
+  finalBriefDueDate?: Date;
+  primaryIssue?: string;
+  statusOfMatter?: string;
+  judgeUserId?: string;
+}
+
+export type CaseWorksheetKysely = Selectable<CaseWorksheetTable>;
+export type NewCaseWorksheetKysely = Insertable<CaseWorksheetTable>;
+export type UpdateCaseWorksheetKysely = Updateable<CaseWorksheetTable>;
 export interface WorkItemTable {
   assigneeId?: string;
   assigneeName?: string;

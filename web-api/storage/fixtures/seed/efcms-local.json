@@ -102,91 +102,6 @@
   },
   {
     "associatedJudge": "Chief Judge",
-    "createdAt": "2019-08-22T12:46:01.052Z",
-    "deadlineDate": "2019-08-22T04:00:00.000Z",
-    "entityName": "CaseDeadline",
-    "sk": "case-deadline|08855730-3047-4ca6-a9e7-16ff64c9dcaa",
-    "caseDeadlineId": "08855730-3047-4ca6-a9e7-16ff64c9dcaa",
-    "sortableDocketNumber": 19000104,
-    "description": "Pre-trial memorandum due",
-    "pk": "case-deadline|08855730-3047-4ca6-a9e7-16ff64c9dcaa",
-    "docketNumber": "104-19"
-  },
-  {
-    "associatedJudge": "Chief Judge",
-    "createdAt": "2019-08-22T12:49:10.949Z",
-    "deadlineDate": "2019-08-23T04:00:00.000Z",
-    "entityName": "CaseDeadline",
-    "sk": "case-deadline|0f5a666d-63c5-4378-9cd6-0b2ae141280f",
-    "caseDeadlineId": "0f5a666d-63c5-4378-9cd6-0b2ae141280f",
-    "sortableDocketNumber": 19000106,
-    "description": "This is a test deadline",
-    "pk": "case-deadline|0f5a666d-63c5-4378-9cd6-0b2ae141280f",
-    "docketNumber": "106-19"
-  },
-  {
-    "associatedJudge": "Chief Judge",
-    "createdAt": "2019-08-22T12:51:32.434Z",
-    "deadlineDate": "2019-08-22T04:00:00.000Z",
-    "entityName": "CaseDeadline",
-    "sk": "case-deadline|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
-    "caseDeadlineId": "307fd0e4-eeed-41bc-bbc3-a9555fccc231",
-    "sortableDocketNumber": 19000107,
-    "description": "Filing fee due",
-    "pk": "case-deadline|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
-    "docketNumber": "107-19"
-  },
-  {
-    "associatedJudge": "Chief Judge",
-    "createdAt": "2019-08-22T12:47:16.905Z",
-    "deadlineDate": "2019-08-25T04:00:00.000Z",
-    "entityName": "CaseDeadline",
-    "sk": "case-deadline|95b46eae-70f0-45df-91de-febdc610fed9",
-    "caseDeadlineId": "95b46eae-70f0-45df-91de-febdc610fed9",
-    "sortableDocketNumber": 19000109,
-    "description": "Final status report due to Judge Ashford",
-    "pk": "case-deadline|95b46eae-70f0-45df-91de-febdc610fed9",
-    "docketNumber": "109-19"
-  },
-  {
-    "associatedJudge": "Buch",
-    "createdAt": "2020-01-01T01:02:15.185-04:00",
-    "entityName": "CaseDeadline",
-    "deadlineDate": "2020-01-24T00:00:00.000-05:00",
-    "sk": "case-deadline|ad1ddb24-f3c4-47b4-b10e-76d1d050b2ab",
-    "caseDeadlineId": "ad1ddb24-f3c4-47b4-b10e-76d1d050b2ab",
-    "sortableDocketNumber": 20001338,
-    "description": "Due date migrated from Blackstone",
-    "pk": "case-deadline|ad1ddb24-f3c4-47b4-b10e-76d1d050b2ab",
-    "docketNumber": "1338-20",
-    "associatedJudgeId": "dabbad02-18d0-43ec-bafb-654e83405416"
-  },
-  {
-    "associatedJudge": "Chief Judge",
-    "createdAt": "2020-01-01T01:02:15.185-04:00",
-    "entityName": "CaseDeadline",
-    "deadlineDate": "2020-01-24T00:00:00.000-05:00",
-    "sk": "case-deadline|e7aeadd8-b0d0-4826-af31-22c0d8c6c173",
-    "caseDeadlineId": "e7aeadd8-b0d0-4826-af31-22c0d8c6c173",
-    "sortableDocketNumber": 12000152,
-    "description": "Due date migrated from Blackstone",
-    "pk": "case-deadline|e7aeadd8-b0d0-4826-af31-22c0d8c6c173",
-    "docketNumber": "152-12"
-  },
-  {
-    "associatedJudge": "Chief Judge",
-    "createdAt": "2019-08-22T12:47:16.905Z",
-    "deadlineDate": "2019-08-25T04:00:00.000Z",
-    "entityName": "CaseDeadline",
-    "sk": "case-deadline|ff22fe63-4117-42ee-a66c-8cfd2062a057",
-    "caseDeadlineId": "ff22fe63-4117-42ee-a66c-8cfd2062a057",
-    "sortableDocketNumber": 19000104,
-    "description": "Final status report due to Judge Ashford",
-    "pk": "case-deadline|ff22fe63-4117-42ee-a66c-8cfd2062a057",
-    "docketNumber": "104-19"
-  },
-  {
-    "associatedJudge": "Chief Judge",
     "isSealed": false,
     "procedureType": "Regular",
     "isPaper": false,
@@ -7884,16 +7799,6 @@
     "status": "New"
   },
   {
-    "numberOfPages": 1,
-    "filingDate": "2019-08-14T20:35:52.915Z",
-    "filedBy": "Test Petitionsclerk",
-    "sk": "correspondence|f1aa4aa3-c214-424c-8870-d0049c5744d7",
-    "correspondenceId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
-    "pk": "case|103-19",
-    "documentTitle": "Internal Memo",
-    "userId": "3805d1ab-18d0-43ec-bafb-654e83405416"
-  },
-  {
     "servedParties": [
       {
         "name": "Samson Workman",
@@ -9234,14 +9139,6 @@
     "pk": "case|104-18",
     "servedAt": "2020-04-14T19:59:46.672Z",
     "docketNumber": "104-18"
-  },
-  {
-    "sk": "case-deadline|08855730-3047-4ca6-a9e7-16ff64c9dcaa",
-    "pk": "case|104-19"
-  },
-  {
-    "sk": "case-deadline|ff22fe63-4117-42ee-a66c-8cfd2062a057",
-    "pk": "case|104-19"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -12847,10 +12744,6 @@
     "email": "privatePractitioner@example.com"
   },
   {
-    "sk": "case-deadline|0f5a666d-63c5-4378-9cd6-0b2ae141280f",
-    "pk": "case|106-19"
-  },
-  {
     "associatedJudge": "Chief Judge",
     "procedureType": "Regular",
     "isPaper": false,
@@ -13309,10 +13202,6 @@
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "pk": "case|106-23",
     "email": "privatePractitioner@example.com"
-  },
-  {
-    "sk": "case-deadline|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
-    "pk": "case|107-19"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -14060,10 +13949,6 @@
     "pk": "case|108-19",
     "servedAt": "2020-09-25T19:27:16.706Z",
     "docketNumber": "108-19"
-  },
-  {
-    "sk": "case-deadline|95b46eae-70f0-45df-91de-febdc610fed9",
-    "pk": "case|109-19"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -16788,10 +16673,6 @@
     "docketNumber": "129-20"
   },
   {
-    "sk": "case-deadline|ad1ddb24-f3c4-47b4-b10e-76d1d050b2ab",
-    "pk": "case|1338-20"
-  },
-  {
     "associatedJudge": "Chief Judge",
     "isSealed": false,
     "procedureType": "Regular",
@@ -17205,10 +17086,6 @@
     "pk": "case|151-12",
     "servedAt": "2019-08-25T05:00:00.000Z",
     "docketNumber": "101-18"
-  },
-  {
-    "sk": "case-deadline|e7aeadd8-b0d0-4826-af31-22c0d8c6c173",
-    "pk": "case|152-12"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -21251,14 +21128,6 @@
     "documentTitle": "Request for Place of Trial at Milwaukee, Wisconsin",
     "docketNumber": "320-21",
     "addToCoversheet": false
-  },
-  {
-    "sk": "case-worksheet|400-22",
-    "pk": "case|400-22",
-    "docketNumber": "400-22",
-    "entityName": "CaseWorksheet",
-    "gsi1pk": "judge-case-worksheet|dabbad00-18d0-43ec-bafb-654e83405416",
-    "primaryIssue": "Trumpet!\nThe trumpet!\nMambo Number 5!"
   },
   {
     "associatedJudge": "Colvin",
