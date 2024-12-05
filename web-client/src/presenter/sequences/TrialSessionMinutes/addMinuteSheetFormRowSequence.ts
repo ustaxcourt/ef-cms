@@ -2,4 +2,4 @@ import { addMinuteSheetFormRowAction } from '@web-client/presenter/actions/Trial
 
 export const addMinuteSheetFormRowSequence = [
   addMinuteSheetFormRowAction,
-] as unknown as () => void;
+] as unknown as ({ name, section }: { name: string; section: string }) => void;

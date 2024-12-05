@@ -12,7 +12,6 @@ import { addCaseToTrialSessionSequence } from './sequences/addCaseToTrialSession
 import { addFactOrReasonSequence } from '@web-client/presenter/sequences/addFactOrReasonSequence';
 import { addMinuteSheetFormRowSequence } from './sequences/TrialSessionMinutes/addMinuteSheetFormRowSequence';
 import { addPenaltyInputSequence } from './sequences/addPenaltyInputSequence';
-import { addPetitionerRowSequence } from '@web-client/presenter/sequences/TrialSessionMinutes/addPetitionerRowSequence';
 import { addRecalledRowSequence } from './sequences/TrialSessionMinutes/addRecalledRowSequence';
 import { addStatisticToFormSequence } from './sequences/addStatisticToFormSequence';
 import { addSupportingDocumentToFormSequence } from './sequences/addSupportingDocumentToFormSequence';
@@ -347,7 +346,6 @@ import { removeMinuteSheetFormRowSequence } from './sequences/TrialSessionMinute
 import { removePetitionForReplacementSequence } from './sequences/removePetitionForReplacementSequence';
 import { removePetitionerAndUpdateCaptionSequence } from './sequences/removePetitionerAndUpdateCaptionSequence';
 import { removePetitionerCounselFromCaseSequence } from './sequences/removePetitionerCounselFromCaseSequence';
-import { removePetitionerRowSequence } from './sequences/TrialSessionMinutes/removePetitionerRowSequence';
 import { removeRespondentCounselFromCaseSequence } from './sequences/removeRespondentCounselFromCaseSequence';
 import { removeScannedPdfSequence } from './sequences/removeScannedPdfSequence';
 import { removeSecondarySupportingDocumentSequence } from './sequences/removeSecondarySupportingDocumentSequence';
@@ -634,7 +632,6 @@ export const presenterSequences = {
   addFactOrReasonSequence,
   addMinuteSheetFormRowSequence,
   addPenaltyInputSequence: addPenaltyInputSequence as unknown as Function,
-  addPetitionerRowSequence,
   addRecalledRowSequence,
   addStatisticToFormSequence: addStatisticToFormSequence as unknown as Function,
   addSupportingDocumentToFormSequence:
@@ -1184,7 +1181,6 @@ export const presenterSequences = {
     removePetitionerAndUpdateCaptionSequence as unknown as Function,
   removePetitionerCounselFromCaseSequence:
     removePetitionerCounselFromCaseSequence as unknown as Function,
-  removePetitionerRowSequence,
   removeRespondentCounselFromCaseSequence:
     removeRespondentCounselFromCaseSequence as unknown as Function,
   removeScannedPdfSequence: removeScannedPdfSequence as unknown as Function,

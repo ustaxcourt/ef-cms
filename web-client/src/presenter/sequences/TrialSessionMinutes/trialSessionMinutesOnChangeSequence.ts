@@ -4,10 +4,12 @@ export const trialSessionMinutesOnChangeSequence = [
   updateTrialSessionMinutesFormAction,
 ] as unknown as ({
   name,
+  rowInfo,
   section,
   value,
 }: {
   name: string;
+  rowInfo?: { key: string; nestedName?: string };
   section: string;
-  value: string | boolean | object;
+  value: string | boolean;
 }) => void;

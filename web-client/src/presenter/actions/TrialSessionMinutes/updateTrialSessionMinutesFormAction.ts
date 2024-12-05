@@ -5,26 +5,34 @@ export const updateTrialSessionMinutesFormAction = ({
   props,
   store,
 }: ActionProps) => {
-  const { name, section, value } = props;
+  const { name, rowInfo, section, value } = props;
 
-  store.set(state.minuteSheetForm[section][name], value);
+  if (rowInfo && rowInfo.nestedName && rowInfo.key) {
+    store.set(
+      state.minuteSheetForm[section][name][rowInfo.key][rowInfo.nestedName],
+      value,
+    );
+  } else {
+    store.set(state.minuteSheetForm[section][name], value);
+  }
 
   // Handle side-effects of state changes below for the time being, with intent
   // of using a cleaner way of handling these changes.
   if (section === 'petitioners' && name === 'noAppearance') {
-    const updatedPetitionersArray = [] as any[];
+    const updatedPetitionersObject = {} as {};
 
     if (!value) {
-      updatedPetitionersArray.push({
+      const newRenderKey = uuidv4();
+      updatedPetitionersObject[newRenderKey] = {
         datesOfAppreance: '',
         name: '',
-        renderKey: uuidv4(),
-      });
+        renderKey: newRenderKey,
+      };
     }
 
     store.set(
       state.minuteSheetForm.petitioners.petitioners,
-      updatedPetitionersArray,
+      updatedPetitionersObject,
     );
   }
 };

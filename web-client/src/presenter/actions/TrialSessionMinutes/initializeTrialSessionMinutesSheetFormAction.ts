@@ -23,9 +23,33 @@ export const initializeTrialSessionMinutesSheetFormAction = ({
     remoteSession: formattedTrialSession.isRemoteSession,
     trialClerk: formattedTrialSession.trialClerk!.name,
   });
-  store.set(state.minuteSheetForm.caseMetadata.recalled[0].renderKey, uuidv4());
+
+  const recalledRowRenderKey = uuidv4();
+  const petitionerRowRenderKey = uuidv4();
+  const respondentRowRenderKey = uuidv4();
+
+  store.set(state.minuteSheetForm.caseMetadata.recalled[recalledRowRenderKey], {
+    date: '',
+    note: '',
+    renderKey: recalledRowRenderKey,
+    transcriptOrdered: false,
+  });
   store.set(
-    state.minuteSheetForm.petitioners.petitioners[0].renderKey,
-    uuidv4(),
+    state.minuteSheetForm.petitioners.petitioners[petitionerRowRenderKey],
+    {
+      datesOfAppearance: '',
+      name: '',
+      renderKey: petitionerRowRenderKey,
+      role: '',
+    },
+  );
+  store.set(
+    state.minuteSheetForm.respondents.respondents[respondentRowRenderKey],
+    {
+      datesOfAppearance: '',
+      name: '',
+      renderKey: respondentRowRenderKey,
+      role: '',
+    },
   );
 };

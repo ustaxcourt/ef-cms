@@ -12,7 +12,7 @@ export const RespondentsFieldset = ({
   removeRowHandler,
   respondentsFormState,
 }: {
-  addRowHandler: ({ section }: { section: string }) => void;
+  addRowHandler: ({ name, section }: { name: string; section: string }) => void;
   onChangeHandler: ({
     name,
     section,
@@ -21,13 +21,16 @@ export const RespondentsFieldset = ({
     name: string;
     section: string;
     value: string | boolean;
+    rowInfo?: { key: string; nestedName: string };
   }) => void;
   onBlurHandler: () => void;
   removeRowHandler: ({
-    renderKey,
+    key,
+    name,
     section,
   }: {
-    renderKey: string;
+    key: string;
+    name: string;
     section: string;
   }) => void;
   respondentsFormState: MinuteSheetFormState['respondents'];
@@ -42,7 +45,7 @@ export const RespondentsFieldset = ({
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </div>
       </div>
-      {respondentsFormState.map((row, rowIndex) => {
+      {Object.values(respondentsFormState.respondents).map((row, rowIndex) => {
         return (
           <div
             className="grid-row grid-gap flex-justify-end align-items-center"
@@ -59,11 +62,15 @@ export const RespondentsFieldset = ({
                   id={`respondent-${rowIndex}`}
                   name={`respondent-${rowIndex}`}
                   type="text"
-                  value={respondentsFormState[rowIndex].name}
+                  value={respondentsFormState.respondents[row.renderKey].name}
                   onBlur={() => onBlurHandler()}
                   onChange={e =>
                     onChangeHandler({
-                      name: e.target.name,
+                      name: 'respondents',
+                      rowInfo: {
+                        key: row.renderKey,
+                        nestedName: 'name',
+                      },
                       section: 'respondents',
                       value: e.target.value,
                     })
@@ -80,7 +87,11 @@ export const RespondentsFieldset = ({
                 onBlur={() => onBlurHandler()}
                 onChange={e =>
                   onChangeHandler({
-                    name: e.target.name,
+                    name: 'respondents',
+                    rowInfo: {
+                      key: row.renderKey,
+                      nestedName: 'datesOfAppearance',
+                    },
                     section: 'respondents',
                     value: e.target.value,
                   })
@@ -92,7 +103,8 @@ export const RespondentsFieldset = ({
               onClick={e => {
                 e.preventDefault();
                 removeRowHandler({
-                  renderKey: row.renderKey,
+                  key: row.renderKey,
+                  name: 'respondents',
                   section: 'respondents',
                 });
               }}
@@ -108,6 +120,7 @@ export const RespondentsFieldset = ({
           onClick={e => {
             e.preventDefault();
             addRowHandler({
+              name: 'respondents',
               section: 'respondents',
             });
           }}

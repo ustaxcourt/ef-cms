@@ -13,15 +13,23 @@ export const CaseMetadataFieldset = ({
   onBlurHandler,
   onChangeHandler,
 }: {
-  addRecalledRowHandler: () => void;
+  addRecalledRowHandler: ({
+    name,
+    section,
+  }: {
+    name: string;
+    section: string;
+  }) => void;
   onChangeHandler: ({
     name,
+    rowInfo,
     section,
     value,
   }: {
     name: string;
+    rowInfo: { key: string; nestedName?: string };
     section: string;
-    value: string | boolean | object;
+    value: string | boolean;
   }) => void;
   onBlurHandler: () => void;
   caseMetadataFormState: MinuteSheetFormState['caseMetadata'];
@@ -42,11 +50,11 @@ export const CaseMetadataFieldset = ({
             onChange={e =>
               onChangeHandler({
                 name: 'called',
-                section: 'caseMetadata',
-                value: {
-                  ...caseMetadataFormState.called,
-                  date: e.target.value,
+                rowInfo: {
+                  key: 'date',
                 },
+                section: 'caseMetadata',
+                value: e.target.value,
               })
             }
           />
@@ -69,11 +77,11 @@ export const CaseMetadataFieldset = ({
               onChange={e =>
                 onChangeHandler({
                   name: 'called',
-                  section: 'caseMetadata',
-                  value: {
-                    ...caseMetadataFormState.called,
-                    note: e.target.value,
+                  rowInfo: {
+                    key: 'note',
                   },
+                  section: 'caseMetadata',
+                  value: e.target.value,
                 })
               }
             />
@@ -93,11 +101,11 @@ export const CaseMetadataFieldset = ({
                 onChange={e =>
                   onChangeHandler({
                     name: 'called',
-                    section: 'caseMetadata',
-                    value: {
-                      ...caseMetadataFormState.called,
-                      transcriptOrdered: e.target.checked,
+                    rowInfo: {
+                      key: 'transcriptOrdered',
                     },
+                    section: 'caseMetadata',
+                    value: e.target.checked,
                   })
                 }
               />
@@ -125,11 +133,11 @@ export const CaseMetadataFieldset = ({
             onChange={e =>
               onChangeHandler({
                 name: 'notCalled',
-                section: 'caseMetadata',
-                value: {
-                  ...caseMetadataFormState.notCalled,
-                  date: e.target.value,
+                rowInfo: {
+                  key: 'date',
                 },
+                section: 'caseMetadata',
+                value: e.target.value,
               })
             }
           />
@@ -152,11 +160,11 @@ export const CaseMetadataFieldset = ({
               onChange={e =>
                 onChangeHandler({
                   name: 'notCalled',
-                  section: 'caseMetadata',
-                  value: {
-                    ...caseMetadataFormState.notCalled,
-                    note: e.target.value,
+                  rowInfo: {
+                    key: 'note',
                   },
+                  section: 'caseMetadata',
+                  value: e.target.value,
                 })
               }
             />
@@ -165,7 +173,7 @@ export const CaseMetadataFieldset = ({
         <div className="grid-col-2"></div>
       </div>
 
-      {caseMetadataFormState.recalled.map((row, rowIndex) => {
+      {Object.values(caseMetadataFormState.recalled).map((row, rowIndex) => {
         return (
           <div
             className="grid-row grid-gap align-items-center margin-bottom-1"
@@ -180,18 +188,18 @@ export const CaseMetadataFieldset = ({
               <DateSelector
                 defaultValue={undefined}
                 formGroupClassNames="margin-bottom-0"
-                id="reCalledDate"
+                id={`reCalledDate-${row.renderKey}`}
                 label="Date(s)"
                 labelPosition="left"
                 onChange={e =>
                   onChangeHandler({
                     name: 'recalled',
+                    rowInfo: {
+                      key: row.renderKey,
+                      nestedName: 'date',
+                    },
                     section: 'caseMetadata',
-                    value: caseMetadataFormState.recalled.map((item, index) =>
-                      index === rowIndex
-                        ? { ...item, date: e.target.value }
-                        : item,
-                    ),
+                    value: e.target.value,
                   })
                 }
               />
@@ -214,13 +222,12 @@ export const CaseMetadataFieldset = ({
                   onChange={e =>
                     onChangeHandler({
                       name: 'recalled',
+                      rowInfo: {
+                        key: row.renderKey,
+                        nestedName: 'note',
+                      },
                       section: 'caseMetadata',
-                      value: caseMetadataFormState.recalled.map(
-                        (item, index) =>
-                          index === rowIndex
-                            ? { ...item, note: e.target.value }
-                            : item,
-                      ),
+                      value: e.target.value,
                     })
                   }
                 />
@@ -243,13 +250,12 @@ export const CaseMetadataFieldset = ({
                     onChange={e => {
                       onChangeHandler({
                         name: 'recalled',
+                        rowInfo: {
+                          key: row.renderKey,
+                          nestedName: 'transcriptOrdered',
+                        },
                         section: 'caseMetadata',
-                        value: caseMetadataFormState.recalled.map(
-                          (item, index) =>
-                            index === rowIndex
-                              ? { ...item, transcriptOrdered: e.target.checked }
-                              : item,
-                        ),
+                        value: e.target.checked,
                       });
                     }}
                   />
@@ -270,7 +276,10 @@ export const CaseMetadataFieldset = ({
           secondary={true}
           onClick={e => {
             e.preventDefault();
-            addRecalledRowHandler();
+            addRecalledRowHandler({
+              name: 'recalled',
+              section: 'caseMetadata',
+            });
           }}
         >
           Add Recall
@@ -290,11 +299,11 @@ export const CaseMetadataFieldset = ({
             onChange={e =>
               onChangeHandler({
                 name: 'pretrialConference',
-                section: 'caseMetadata',
-                value: {
-                  ...caseMetadataFormState.pretrialConference,
-                  date: e.target.value,
+                rowInfo: {
+                  key: 'date',
                 },
+                section: 'caseMetadata',
+                value: e.target.value,
               })
             }
           />
@@ -317,11 +326,11 @@ export const CaseMetadataFieldset = ({
               onChange={e =>
                 onChangeHandler({
                   name: 'pretrialConference',
-                  section: 'caseMetadata',
-                  value: {
-                    ...caseMetadataFormState.pretrialConference,
-                    note: e.target.value,
+                  rowInfo: {
+                    key: 'note',
                   },
+                  section: 'caseMetadata',
+                  value: e.target.value,
                 })
               }
             />
@@ -343,11 +352,11 @@ export const CaseMetadataFieldset = ({
                 onChange={e => {
                   onChangeHandler({
                     name: 'pretrialConference',
-                    section: 'caseMetadata',
-                    value: {
-                      ...caseMetadataFormState.pretrialConference,
-                      transcriptOrdered: e.target.checked,
+                    rowInfo: {
+                      key: 'transcriptOrdered',
                     },
+                    section: 'caseMetadata',
+                    value: e.target.checked,
                   });
                 }}
               />
@@ -375,11 +384,11 @@ export const CaseMetadataFieldset = ({
             onChange={e => {
               onChangeHandler({
                 name: 'trialHearing',
-                section: 'caseMetadata',
-                value: {
-                  ...caseMetadataFormState.trialHearing,
-                  date: e.target.value,
+                rowInfo: {
+                  key: 'date',
                 },
+                section: 'caseMetadata',
+                value: e.target.value,
               });
             }}
           />
@@ -401,11 +410,11 @@ export const CaseMetadataFieldset = ({
               onChange={e => {
                 onChangeHandler({
                   name: 'trialHearing',
-                  section: 'caseMetadata',
-                  value: {
-                    ...caseMetadataFormState.trialHearing,
-                    trialHearingType: e.target.value,
+                  rowInfo: {
+                    key: 'trialSessionType',
                   },
+                  section: 'caseMetadata',
+                  value: e.target.value,
                 });
               }}
             >
@@ -438,11 +447,11 @@ export const CaseMetadataFieldset = ({
               onChange={e => {
                 onChangeHandler({
                   name: 'trialHearing',
-                  section: 'caseMetadata',
-                  value: {
-                    ...caseMetadataFormState.trialHearing,
-                    note: e.target.value,
+                  rowInfo: {
+                    key: 'note',
                   },
+                  section: 'caseMetadata',
+                  value: e.target.value,
                 });
               }}
             />
@@ -462,11 +471,11 @@ export const CaseMetadataFieldset = ({
                 onChange={e => {
                   onChangeHandler({
                     name: 'trialHearing',
-                    section: 'caseMetadata',
-                    value: {
-                      ...caseMetadataFormState.trialHearing,
-                      transcriptOrdered: e.target.checked,
+                    rowInfo: {
+                      key: 'transcriptOrdered',
                     },
+                    section: 'caseMetadata',
+                    value: e.target.checked,
                   });
                 }}
               />

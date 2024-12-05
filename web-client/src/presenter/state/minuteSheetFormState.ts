@@ -75,6 +75,7 @@ type KeyedEntry = {
 };
 
 type KeyedCaseMetadataEntry = KeyedEntry & CaseMetadataEntry;
+type KeyedCaseMetadataEntryByKey = Record<RenderKey, KeyedCaseMetadataEntry>;
 
 type KeyedPartyFormFields = KeyedEntry & {
   renderKey: string;
@@ -84,6 +85,9 @@ type KeyedPartyFormFields = KeyedEntry & {
   // 10419 TODO: should there be a type dropdown to indicate whether the party
   // is "Counsel", "Pro se", "Intervenor", or "Participant"?
 };
+
+type RenderKey = string;
+type KeyedPartyFormFieldsByRenderKey = Record<RenderKey, KeyedPartyFormFields>;
 
 export type MinuteSheetFormState = {
   trialSessionMetadata: {
@@ -96,17 +100,19 @@ export type MinuteSheetFormState = {
   caseMetadata: {
     called: CaseMetadataEntry;
     notCalled: CaseMetadataEntry;
-    recalled: KeyedCaseMetadataEntry[];
+    recalled: KeyedCaseMetadataEntryByKey;
     pretrialConference: CaseMetadataEntry;
     trialHearing: CaseMetadataEntry;
   };
 
   petitioners: {
     noAppearance: boolean;
-    petitioners: KeyedPartyFormFields[];
+    petitioners: KeyedPartyFormFieldsByRenderKey;
   };
 
-  respondents: KeyedPartyFormFields[];
+  respondents: {
+    respondents: KeyedPartyFormFieldsByRenderKey;
+  };
 
   // 10419 TODO: Could this be lumped in with orders below
   jurisdictionRetained: {
@@ -167,6 +173,7 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
     called: {
       date: '',
       note: '',
+      transcriptOrdered: false,
     },
     notCalled: {
       date: '',
@@ -175,11 +182,13 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
     pretrialConference: {
       date: '',
       note: '',
+      transcriptOrdered: false,
     },
-    recalled: [{ date: '', note: '', renderKey: '', transcriptOrdered: false }],
+    recalled: {},
     trialHearing: {
       date: '',
       note: '',
+      transcriptOrdered: false,
     },
   },
 
@@ -209,23 +218,12 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
 
   petitioners: {
     noAppearance: false,
-    petitioners: [
-      {
-        datesOfAppearance: '',
-        name: '',
-        renderKey: '',
-        role: '',
-      },
-    ],
+    petitioners: {},
   },
 
-  respondents: [
-    {
-      datesOfAppearance: '',
-      name: '',
-      renderKey: '',
-    },
-  ],
+  respondents: {
+    respondents: {},
+  },
 
   trialBrief: {
     briefDetails: {},

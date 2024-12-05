@@ -11,11 +11,8 @@ import React from 'react';
 export const TrialSessionMinutesForm = connect(
   {
     addMinuteSheetFormRowSequence: sequences.addMinuteSheetFormRowSequence,
-    addPetitionerRowSequence: sequences.addPetitionerRowSequence,
-    addRecalledRowSequence: sequences.addRecalledRowSequence,
     removeMinuteSheetFormRowSequence:
       sequences.removeMinuteSheetFormRowSequence,
-    removePetitionerRowSequence: sequences.removePetitionerRowSequence,
     trialSessionMinutesAutosaveSequence:
       sequences.trialSessionMinutesAutosaveSequence,
     trialSessionMinutesForm: state.minuteSheetForm,
@@ -24,10 +21,7 @@ export const TrialSessionMinutesForm = connect(
   },
   ({
     addMinuteSheetFormRowSequence,
-    addPetitionerRowSequence,
-    addRecalledRowSequence,
     removeMinuteSheetFormRowSequence,
-    removePetitionerRowSequence,
     trialSessionMinutesAutosaveSequence,
     trialSessionMinutesForm,
     trialSessionMinutesOnChangeSequence,
@@ -44,7 +38,7 @@ export const TrialSessionMinutesForm = connect(
 
         <hr />
         <CaseMetadataFieldset
-          addRecalledRowHandler={addRecalledRowSequence}
+          addRecalledRowHandler={addMinuteSheetFormRowSequence}
           caseMetadataFormState={trialSessionMinutesForm.caseMetadata}
           onBlurHandler={trialSessionMinutesAutosaveSequence}
           onChangeHandler={trialSessionMinutesOnChangeSequence}
@@ -53,9 +47,9 @@ export const TrialSessionMinutesForm = connect(
         <div className="grid-row">
           <div className="grid-col-6 border-right">
             <PetitionersFieldset
-              addPetitionerRowHandler={addPetitionerRowSequence}
+              addPetitionerRowHandler={addMinuteSheetFormRowSequence}
               petitionersFormState={trialSessionMinutesForm.petitioners}
-              removePetitionerRowHandler={removePetitionerRowSequence}
+              removePetitionerRowHandler={removeMinuteSheetFormRowSequence}
               onBlurHandler={trialSessionMinutesAutosaveSequence}
               onChangeHandler={trialSessionMinutesOnChangeSequence}
             />

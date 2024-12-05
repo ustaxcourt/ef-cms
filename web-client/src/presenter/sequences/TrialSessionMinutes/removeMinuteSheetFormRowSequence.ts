@@ -2,4 +2,12 @@ import { removeMinuteSheetFormRowAction } from '@web-client/presenter/actions/Tr
 
 export const removeMinuteSheetFormRowSequence = [
   removeMinuteSheetFormRowAction,
-] as unknown as () => void;
+] as unknown as ({
+  key,
+  name,
+  section,
+}: {
+  name: string;
+  key: string;
+  section: string;
+}) => void;

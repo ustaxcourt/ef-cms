@@ -17,13 +17,28 @@ export const PetitionersFieldset = ({
     value,
   }: {
     name: string;
+    rowInfo?: { key: string; nestedName: string };
     section: string;
-    value: string | boolean | object;
+    value: string | boolean;
   }) => void;
   onBlurHandler: () => void;
-  addPetitionerRowHandler: () => void;
+  addPetitionerRowHandler: ({
+    name,
+    section,
+  }: {
+    name: string;
+    section: string;
+  }) => void;
   petitionersFormState: MinuteSheetFormState['petitioners'];
-  removePetitionerRowHandler: ({ renderKey }: { renderKey: string }) => void;
+  removePetitionerRowHandler: ({
+    key,
+    name,
+    section,
+  }: {
+    name: string;
+    key: string;
+    section: string;
+  }) => void;
 }) => {
   return (
     <fieldset className="border-0 grid-container padding-0">
@@ -58,7 +73,7 @@ export const PetitionersFieldset = ({
         <div className="grid-col-2">Role</div>
         <div className="grid-col-5">Date(s) of Appearance</div>
       </div>
-      {petitionersFormState.petitioners.map((row, rowIndex) => (
+      {Object.values(petitionersFormState.petitioners).map((row, rowIndex) => (
         <div className="margin-bottom-1" key={row.renderKey}>
           <div className="grid-row grid-gap-2 flex-justify-start align-items-center">
             <div className="grid-col-5">
@@ -71,18 +86,17 @@ export const PetitionersFieldset = ({
                   id="petitioner"
                   name="petitioner"
                   type="text"
-                  value={petitionersFormState.petitioners[rowIndex]?.name}
+                  value={petitionersFormState.petitioners[row.renderKey].name}
                   onBlur={() => onBlurHandler()}
                   onChange={e =>
                     onChangeHandler({
                       name: 'petitioners',
+                      rowInfo: {
+                        key: row.renderKey,
+                        nestedName: 'name',
+                      },
                       section: 'petitioners',
-                      value: petitionersFormState.petitioners.map(
-                        (item, index) =>
-                          index === rowIndex
-                            ? { ...item, name: e.target.value }
-                            : item,
-                      ),
+                      value: e.target.value,
                     })
                   }
                 />
@@ -98,18 +112,17 @@ export const PetitionersFieldset = ({
                   id={`petitionerRole-${rowIndex}`}
                   name={`petitionerRole-${rowIndex}`}
                   type="text"
-                  value={petitionersFormState.petitioners[rowIndex]?.role}
+                  value={petitionersFormState.petitioners[row.renderKey].role}
                   onBlur={() => onBlurHandler()}
                   onChange={e =>
                     onChangeHandler({
                       name: 'petitioners',
+                      rowInfo: {
+                        key: row.renderKey,
+                        nestedName: 'role',
+                      },
                       section: 'petitioners',
-                      value: petitionersFormState.petitioners.map(
-                        (item, index) =>
-                          index === rowIndex
-                            ? { ...item, role: e.target.value }
-                            : item,
-                      ),
+                      value: e.target.value,
                     })
                   }
                 />
@@ -129,20 +142,19 @@ export const PetitionersFieldset = ({
                   name={`petitioner-dates-of-appearance-${rowIndex}`}
                   type="text"
                   value={
-                    petitionersFormState.petitioners[rowIndex]
-                      ?.datesOfAppearance
+                    petitionersFormState.petitioners[row.renderKey]
+                      .datesOfAppearance
                   }
                   onBlur={() => onBlurHandler()}
                   onChange={e =>
                     onChangeHandler({
                       name: 'petitioners',
+                      rowInfo: {
+                        key: row.renderKey,
+                        nestedName: 'datesOfAppearance',
+                      },
                       section: 'petitioners',
-                      value: petitionersFormState.petitioners.map(
-                        (item, index) =>
-                          index === rowIndex
-                            ? { ...item, datesOfAppearance: e.target.value }
-                            : item,
-                      ),
+                      value: e.target.value,
                     })
                   }
                 />
@@ -153,7 +165,11 @@ export const PetitionersFieldset = ({
                 className="grid-col-auto"
                 onClick={e => {
                   e.preventDefault();
-                  removePetitionerRowHandler({ renderKey: row.renderKey });
+                  removePetitionerRowHandler({
+                    key: row.renderKey,
+                    name: 'petitioners',
+                    section: 'petitioners',
+                  });
                 }}
               >
                 <Icon className="icon-class" icon="times" size="1x" />
@@ -169,7 +185,10 @@ export const PetitionersFieldset = ({
             secondary={true}
             onClick={e => {
               e.preventDefault();
-              addPetitionerRowHandler();
+              addPetitionerRowHandler({
+                name: 'petitioners',
+                section: 'petitioners',
+              });
             }}
           >
             Add Person
