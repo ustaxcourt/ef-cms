@@ -50,8 +50,8 @@ export const trialSessionPlanningReportViewHelper = (
   const ALL_CITIES_NOT_CALENDARED: string[] = trialLocationData
     .filter(locationData => {
       return (
-        !locationData.previousTermsData[1].length &&
-        !locationData.previousTermsData[2].length
+        !locationData.previousTermsData[0].length &&
+        !locationData.previousTermsData[1].length
       );
     })
     .map(locationData => locationData.trialCityState)
