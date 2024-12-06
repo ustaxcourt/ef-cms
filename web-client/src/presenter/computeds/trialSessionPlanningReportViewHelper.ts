@@ -98,7 +98,7 @@ export const trialSessionPlanningReportViewHelper = (
   };
 };
 function formatLastVisitedDate(lastVisitedDate: string | undefined): string {
-  if (!lastVisitedDate) return 'Never been one son';
+  if (!lastVisitedDate) return 'Never visited.';
   const formattedSessionWeekStartDate = createDateAtStartOfWeekEST(
     lastVisitedDate,
     FORMATS.MMDDYYYY,
