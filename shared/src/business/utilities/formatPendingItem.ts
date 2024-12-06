@@ -16,6 +16,7 @@ export type PendingItemFormatted = {
   isLeadCase: boolean;
   docketNumberWithSuffix: string;
   renderKey: string;
+  receivedAt: string;
 };
 
 export const formatPendingItem = (
@@ -64,6 +65,7 @@ export const formatPendingItem = (
     formattedStatus,
     inConsolidatedGroup: pendingItemWithConsolidatedFlags.inConsolidatedGroup,
     isLeadCase: pendingItemWithConsolidatedFlags.isLeadCase,
+    receivedAt: item.receivedAt,
     renderKey: uuidv4(),
     shouldIndent: pendingItemWithConsolidatedFlags.shouldIndent,
   };
