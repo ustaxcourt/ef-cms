@@ -536,5 +536,8 @@ export const parseArgumentsAndEnvironmentVariables = (
   validateParsedValues(sc, parsedParameters, !!parsedParameters.verbose);
   requireEnvironmentVariables(sc, !!parsedParameters.verbose);
   const environmentVariables = getEnvironmentVariables(sc.environment);
+  if (parsedParameters.verbose) {
+    console.log('environment variables:', environmentVariables);
+  }
   return { ...environmentVariables, ...parsedParameters };
 };
