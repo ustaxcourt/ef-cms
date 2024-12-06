@@ -51,7 +51,7 @@ type SimultaneousMemorandaOfLawFormFields = {
   answering: BaseBriefFormFields;
 };
 
-type SimultaneousSupplementalFormFields = {
+export type SimultaneousSupplementalFormFields = {
   simultaneousSupplemental: BaseBriefFormFields;
 };
 

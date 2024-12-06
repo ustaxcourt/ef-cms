@@ -2,10 +2,12 @@ import {
   BRIEF_TYPE_OPTIONS,
   MinuteSheetFormState,
   SeriatimBriefFormFields,
+  SimultaneousSupplementalFormFields,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { OnChangeHandler } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
-import { SeriatimBriefFieldset } from './SeriatimBriefFieldset';
+import { SeriatimBriefFieldset } from './BriefDetailsFieldsets/SeriatimBriefFieldset';
+import { SimultaneousSupplementalBriefFieldset } from './BriefDetailsFieldsets/SimultaneousSupplementalBriefFieldset';
 import React from 'react';
 
 export const TrialBriefFieldset = ({
@@ -19,7 +21,7 @@ export const TrialBriefFieldset = ({
 }) => {
   const renderBriefForm = (briefType: string) => {
     const briefFormMap = {
-      seriatim: (
+      [BRIEF_TYPE_OPTIONS.seriatim]: (
         <SeriatimBriefFieldset
           seriatimBriefFormState={
             trialBriefFormState.briefDetails as SeriatimBriefFormFields
@@ -28,7 +30,18 @@ export const TrialBriefFieldset = ({
           onChangeHandler={onChangeHandler}
         />
       ),
-      seriatimMemorandum: <div>Seriatim memorandum brief</div>,
+      [BRIEF_TYPE_OPTIONS.seriatimMemorandum]: (
+        <div>Seriatim memorandum brief</div>
+      ),
+      [BRIEF_TYPE_OPTIONS.simultaneousSupplemental]: (
+        <SimultaneousSupplementalBriefFieldset
+          simultaneousSupplementalBriefFormState={
+            trialBriefFormState.briefDetails as SimultaneousSupplementalFormFields
+          }
+          onBlurHandler={onBlurHandler}
+          onChangeHandler={onChangeHandler}
+        />
+      ),
     };
 
     return briefFormMap[briefType];
@@ -62,7 +75,7 @@ export const TrialBriefFieldset = ({
               <option value="">- Select -</option>
               {Object.keys(BRIEF_TYPE_OPTIONS).map(optionKey => {
                 return (
-                  <option key={optionKey} value={optionKey}>
+                  <option key={optionKey} value={BRIEF_TYPE_OPTIONS[optionKey]}>
                     {BRIEF_TYPE_OPTIONS[optionKey]}
                   </option>
                 );

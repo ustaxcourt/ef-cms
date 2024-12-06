@@ -1,3 +1,4 @@
+import { BRIEF_TYPE_OPTIONS } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { state } from '@web-client/presenter/app.cerebral';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -37,32 +38,40 @@ export const updateTrialSessionMinutesFormAction = ({
   }
 
   if (section === 'trialBrief' && name === 'briefType') {
-    const defaultBriefDetailsValues = {
-      answering: {
-        dueDate: '',
-        note: '',
-        partyType: '',
+    const defaultBriefDetailsValuesMap = {
+      [BRIEF_TYPE_OPTIONS.seriatim]: {
+        answering: {
+          dueDate: '',
+          note: '',
+          partyType: '',
+        },
+        opening: {
+          dueDate: '',
+          note: '',
+          partyType: '',
+        },
+        reply: {
+          dueDate: '',
+          note: '',
+          partyType: '',
+        },
+        surReply: {
+          dueDate: '',
+          note: '',
+          partyType: '',
+        },
       },
-      opening: {
-        dueDate: '',
-        note: '',
-        partyType: '',
-      },
-      reply: {
-        dueDate: '',
-        note: '',
-        partyType: '',
-      },
-      surReply: {
-        dueDate: '',
-        note: '',
-        partyType: '',
+      [BRIEF_TYPE_OPTIONS.simultaneousSupplemental]: {
+        simultaneousSupplemental: {
+          dueDate: '',
+          note: '',
+        },
       },
     };
 
     store.set(
       state.minuteSheetForm.trialBrief.briefDetails,
-      defaultBriefDetailsValues,
+      defaultBriefDetailsValuesMap[value],
     );
   }
 };
