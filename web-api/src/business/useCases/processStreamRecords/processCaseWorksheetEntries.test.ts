@@ -2,6 +2,8 @@ import '@web-api/persistence/postgres/caseWorksheets/mocks.jest';
 import { processCaseWorksheetEntries } from '@web-api/business/useCases/processStreamRecords/processCaseWorksheetEntries';
 import { upsertCaseWorksheets } from '@web-api/persistence/postgres/caseWorksheets/upsertCaseWorksheets';
 describe('processCaseWorksheetEntries', () => {
+  const judgeUserId = 'dabbad00-18d0-43ec-bafb-654e83405416';
+
   beforeEach(() => {
     (upsertCaseWorksheets as jest.Mock).mockResolvedValue(undefined);
   });
@@ -16,6 +18,9 @@ describe('processCaseWorksheetEntries', () => {
           entityName: {
             S: 'CaseWorksheet',
           },
+          gsi1pk: {
+            S: `judge-case-worksheet|${judgeUserId}`,
+          },
         },
       },
     };
@@ -24,6 +29,13 @@ describe('processCaseWorksheetEntries', () => {
       caseWorksheetRecords: [mockDynamoCaseWorksheets],
     });
 
-    expect(upsertCaseWorksheets).toHaveBeenCalled();
+    expect(upsertCaseWorksheets).toHaveBeenCalledWith([
+      {
+        docketNumber: '123-45',
+        entityName: 'CaseWorksheet',
+        gsi1pk: `judge-case-worksheet|${judgeUserId}`,
+        judgeUserId: `${judgeUserId}`,
+      },
+    ]);
   });
 });

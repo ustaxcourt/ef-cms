@@ -14,18 +14,18 @@ export const processCaseWorksheetEntries = async ({
     `going to upsert ${caseWorksheetRecords.length} case worksheet records`,
   );
 
-  function getJudgeUserIdFromGs1pk(gs1pk?: string): string | null {
-    if (!gs1pk) {
+  function getJudgeUserIdFromGsi1pk(gsi1pk?: string): string | null {
+    if (!gsi1pk) {
       return null;
     }
-    const parts = gs1pk.split('|');
+    const parts = gsi1pk.split('|');
     return parts.length > 1 ? parts[1] : null;
   }
 
   await upsertCaseWorksheets(
     caseWorksheetRecords.map(record => {
       const unmarshalledData = unmarshall(record.dynamodb.NewImage);
-      const judgeUserId = getJudgeUserIdFromGs1pk(unmarshalledData.gs1pk);
+      const judgeUserId = getJudgeUserIdFromGsi1pk(unmarshalledData.gsi1pk);
       return { ...unmarshalledData, judgeUserId } as RawCaseWorksheet;
     }),
   );
