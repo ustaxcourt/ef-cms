@@ -21,7 +21,10 @@ const scriptConfig: ScriptConfig = {
   description:
     'event-codes-by-year - Generate a CSV of instances of documents with the ' +
     'given event code(s) filed within the given duration.',
-  environment: { env: 'ENV' },
+  environment: {
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+    env: 'ENV',
+  },
   parameters: {
     eventCodes: {
       commaDelimited: true,

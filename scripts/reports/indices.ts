@@ -1,16 +1,27 @@
-// usage: npx ts-node --transpile-only scripts/reports/indices.ts
+#!/usr/bin/env npx ts-node --transpile-only
 
+import {
+  type ScriptConfig,
+  parseArgumentsAndEnvironmentVariables,
+} from '../helpers/parseArgumentsAndEnvironmentVariables';
 import { esAliasType } from '../../web-api/elasticsearch/elasticsearch-aliases';
 import { getClient } from '../../web-api/elasticsearch/client';
-import { requireEnvVars } from '../../shared/admin-tools/util';
 
-requireEnvVars(['ENV', 'ELASTICSEARCH_ENDPOINT']);
+const scriptConfig: ScriptConfig = {
+  description: 'indices - Lists elasticsearch indices, counts, and aliases.',
+  environment: {
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+    environmentName: 'ENV',
+  },
+};
+const { elasticsearchEndpoint, environmentName } =
+  parseArgumentsAndEnvironmentVariables(scriptConfig) as {
+    elasticsearchEndpoint: string;
+    environmentName: string;
+  };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const environmentName = process.env.ENV!;
-  const elasticsearchEndpoint = process.env.ELASTICSEARCH_ENDPOINT!;
-
   const client = await getClient({ elasticsearchEndpoint, environmentName });
   const stats = await client.indices.stats({
     index: '_all',
