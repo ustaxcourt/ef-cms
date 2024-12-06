@@ -3,14 +3,14 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
-import { ScriptConfig, parseArguments } from '../helpers/parseArguments';
-import { requireEnvVars } from '../../shared/admin-tools/util';
-
-requireEnvVars(['ENV']);
-const { ENV } = process.env;
+import {
+  type ScriptConfig,
+  parseArgumentsAndEnvironmentVariables,
+} from '../helpers/parseArgumentsAndEnvironmentVariables';
 
 const scriptConfig: ScriptConfig = {
   description: 'set-maintenance-mode - Toggles Maintenance Mode',
+  environment: { env: 'ENV' },
   parameters: {
     toggle: {
       position: 0,
@@ -19,7 +19,10 @@ const scriptConfig: ScriptConfig = {
     },
   },
 };
-const { toggle } = parseArguments(scriptConfig) as { toggle: string };
+const { env, toggle } = parseArgumentsAndEnvironmentVariables(scriptConfig) as {
+  env: string;
+  toggle: string;
+};
 const enableMaintenanceMode: boolean = toggle === 'true';
 
 async function setMaintenanceMode() {
@@ -31,7 +34,7 @@ async function setMaintenanceMode() {
   });
   const currentColorRecord = await documentClient.get({
     Key: { pk: 'current-color', sk: 'current-color' },
-    TableName: `efcms-deploy-${ENV}`,
+    TableName: `efcms-deploy-${env}`,
   });
   const activeColor: 'blue' | 'green' | undefined =
     currentColorRecord?.Item?.current;
@@ -50,11 +53,11 @@ async function setMaintenanceMode() {
   });
 
   console.log(
-    `Setting Maintenance mode to ${enableMaintenanceMode} for ${ENV}`,
+    `Setting Maintenance mode to ${enableMaintenanceMode} for ${env}`,
   );
 
   const command = new InvokeCommand({
-    FunctionName: `send_maintenance_notifications_${ENV}_${activeColor}`,
+    FunctionName: `send_maintenance_notifications_${env}_${activeColor}`,
     InvocationType: 'RequestResponse',
     Payload: Buffer.from(
       JSON.stringify({
