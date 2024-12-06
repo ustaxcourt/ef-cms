@@ -1,12 +1,6 @@
-/*
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
-*/
-// import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { connect } from '@web-client/presenter/shared.cerebral';
 // import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
-// import { trialLocationHelper } from '@web-client/presenter/computeds/trialLocationHelper';
-import { sequences, state } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React, { useRef } from 'react';
 
 export const TrialLocationTable = connect(
@@ -36,7 +30,7 @@ export const TrialLocationTable = connect(
         </div>
         <div className="text-right">
           <span className="text-semibold">Count: </span>
-          {trialLocationHelper.eligibleCases.length}
+          {trialLocationHelper.formattedEligibleCases.length}
         </div>
         <div className="padding-1"></div>
         <div className="overflow-x-auto">
@@ -56,11 +50,12 @@ export const TrialLocationTable = connect(
                   <th className="width-card">Case Type</th>
                 </tr>
               </thead>
-              {trialLocationHelper.eligibleCases.map(eligibleCase => {
+              {trialLocationHelper.formattedEligibleCases.map(eligibleCase => {
                 return (
-                  <tr>
+                  <tr key={eligibleCase.docketNumber}>
                     <td></td>
                     <td>{eligibleCase.docketNumber}</td>
+                    {/* TODO: add caseTitle to EligibleCase */}
                     <td>{eligibleCase.caseTitle}</td>
                     <td>{eligibleCase.privatePractitioners}</td>
                     <td>{eligibleCase.irsPractitioners}</td>
@@ -71,8 +66,8 @@ export const TrialLocationTable = connect(
             </table>
           </div>
         </div>
-        {trialLocationHelper.eligibleCases.length === 0 && (
-          <p>There are no trial sessions for the selected filters.</p>
+        {trialLocationHelper.formattedEligibleCases.length === 0 && (
+          <p>There are no eligible cases.</p>
         )}
         <div className="padding-1" />
 

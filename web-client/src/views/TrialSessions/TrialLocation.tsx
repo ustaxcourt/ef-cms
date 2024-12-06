@@ -1,8 +1,8 @@
 import { BigHeader } from '../BigHeader';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
+import { TrialLocationTable } from '@web-client/views/TrialSessions/TrialLocationTable';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import { TrialLocationTable } from '@web-client/views/TrialSessions/TrialLocationTable';
 import React from 'react';
 
 export const TrialLocation = connect(
@@ -33,7 +33,6 @@ export const TrialLocation = connect(
               tabName="eligibleCases"
               title="Eligible Cases"
             >
-              {' '}
               <TrialLocationTable />
             </Tab>
             <Tab

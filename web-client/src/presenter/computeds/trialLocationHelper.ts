@@ -1,28 +1,38 @@
-import {EligibleCase} from '@shared/business/entities/cases/EligibleCase';
-import {Get} from 'cerebral';
-import {state} from '@web-client/presenter/app.cerebral';
-import {caseDetailHelper} from "@web-client/presenter/computeds/caseDetailHelper";
-import {formatCase} from "@shared/business/utilities/getFormattedCaseDetail";
-import {UnknownAuthUser} from "@shared/business/entities/authUser/AuthUser";
+import { Case } from '@shared/business/entities/cases/Case';
+import { Get } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const trialLocationHelper = (
-    get: Get,
-    applicationContext,
+  get: Get,
 ): {
-    location: string;
-    eligibleCases: EligibleCase[];
+  location: string;
+  formattedEligibleCases: any[];
 } => {
-    // const permissions = get(state.permissions)!;
-    const {eligibleCases, location} = get(state.trialLocationPage);
-    const {formattedEligibleCases} = eligibleCases.map(c => {
-        formatCase,
-            caseDetail,
-            authorizedUser: get(state.user);
-    })
+  // const permissions = get(state.permissions)!;
+  const { eligibleCases, location } = get(state.trialLocationPage);
 
-    const trialCityFormatted = location.replace('-', ', ');
+  const formattedEligibleCases = eligibleCases.map(c => {
+    let privatePractitioners: string[] = [];
+    if (c.privatePractitioners) {
+      privatePractitioners = c.privatePractitioners.map(practitioner => {
+        return practitioner.name;
+      });
+    }
+    let irsPractitioners: string[] = [];
+    if (c.irsPractitioners) {
+      irsPractitioners = c.irsPractitioners.map(practitioner => {
+        return practitioner.name;
+      });
+    }
 
-    // const pageSize = 100;
+    const caseTitle = Case.getCaseTitle(c.caseCaption);
 
-    return {formattedEligibleCases, location: trialCityFormatted};
+    return { ...c, caseTitle, irsPractitioners, privatePractitioners };
+  });
+
+  const trialCityFormatted = location.replace('-', ', ');
+
+  // const pageSize = 100;
+
+  return { formattedEligibleCases, location: trialCityFormatted };
 };
