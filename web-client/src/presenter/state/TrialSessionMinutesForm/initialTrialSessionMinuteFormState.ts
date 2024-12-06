@@ -31,22 +31,22 @@ export type SeriatimBriefFormFields = {
   surreply: BriefFormFieldsWithPartyType;
 };
 
-type SeriatimMemorandumBriefFormFields = SeriatimBriefFormFields;
+export type SeriatimMemorandumFormFields = SeriatimBriefFormFields;
 
-type SimultaneousBriefFormFields = {
+export type SimultaneousBriefFormFields = {
   opening: BaseBriefFormFields;
   answering: BaseBriefFormFields;
   reply: BaseBriefFormFields;
   surreply: BaseBriefFormFields;
 };
 
-type SimultaneousMemorandumFormFields = {
+export type SimultaneousMemorandumFormFields = {
   opening: BaseBriefFormFields;
   answering: BaseBriefFormFields;
   surreply: BaseBriefFormFields;
 };
 
-type SimultaneousMemorandaOfLawFormFields = {
+export type SimultaneousMemorandaOfLawFormFields = {
   memoranda: BaseBriefFormFields;
   answering: BaseBriefFormFields;
 };
@@ -146,12 +146,9 @@ export type MinuteSheetFormState = {
     transcriptOrdered: boolean;
     note: string;
     briefType: string;
-    // 10419 TODO: the `briefDetails` property can have one of five distinct
-    // schemas/shapes. We will need to figure out how to handle this section
-    // of the form, given that there's a fair amount of overlap between these
-    // five shapes.
     briefDetails:
-      | SeriatimMemorandumBriefFormFields
+      | SeriatimBriefFormFields
+      | SeriatimMemorandumFormFields
       | SimultaneousMemorandumFormFields
       | SimultaneousMemorandaOfLawFormFields
       | SimultaneousSupplementalFormFields
@@ -353,12 +350,12 @@ export type ActionStatusOption =
   (typeof ACTION_STATUS_OPTIONS)[keyof typeof ACTION_STATUS_OPTIONS];
 
 export const BRIEF_TYPE_OPTIONS = {
-  seriatim: 'Seriatim brief',
+  seriatimBrief: 'Seriatim brief',
   seriatimMemorandum: 'Seriatim memorandum brief',
   simultaneous: 'Simultaneous brief',
   simultaneousMemoranda: 'Simultaneous Memoranda of law',
+  simultaneousMemorandum: 'Simultaneous memorandum brief',
   simultaneousSupplemental: 'Simultaneous Supplemental Brief',
-  simultaneousmemorandum: 'Simultaneous memorandum brief',
 } as const;
 
 export type BriefTypeOption =

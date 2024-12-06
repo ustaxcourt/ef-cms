@@ -39,7 +39,7 @@ export const updateTrialSessionMinutesFormAction = ({
 
   if (section === 'trialBrief' && name === 'briefType') {
     const defaultBriefDetailsValuesMap = {
-      [BRIEF_TYPE_OPTIONS.seriatim]: {
+      [BRIEF_TYPE_OPTIONS.seriatimBrief]: {
         answering: {
           dueDate: '',
           note: '',
@@ -61,8 +61,73 @@ export const updateTrialSessionMinutesFormAction = ({
           partyType: '',
         },
       },
+      [BRIEF_TYPE_OPTIONS.seriatimMemorandum]: {
+        answering: {
+          dueDate: '',
+          note: '',
+          partyType: '',
+        },
+        opening: {
+          dueDate: '',
+          note: '',
+          partyType: '',
+        },
+        reply: {
+          dueDate: '',
+          note: '',
+          partyType: '',
+        },
+        surReply: {
+          dueDate: '',
+          note: '',
+          partyType: '',
+        },
+      },
+
       [BRIEF_TYPE_OPTIONS.simultaneousSupplemental]: {
         simultaneousSupplemental: {
+          dueDate: '',
+          note: '',
+        },
+      },
+      [BRIEF_TYPE_OPTIONS.simultaneous]: {
+        answering: {
+          dueDate: '',
+          note: '',
+        },
+        opening: {
+          dueDate: '',
+          note: '',
+        },
+        reply: {
+          dueDate: '',
+          note: '',
+        },
+        surReply: {
+          dueDate: '',
+          note: '',
+        },
+      },
+      [BRIEF_TYPE_OPTIONS.simultaneousMemorandum]: {
+        answering: {
+          dueDate: '',
+          note: '',
+        },
+        opening: {
+          dueDate: '',
+          note: '',
+        },
+        surReply: {
+          dueDate: '',
+          note: '',
+        },
+      },
+      [BRIEF_TYPE_OPTIONS.simultaneousMemoranda]: {
+        answering: {
+          dueDate: '',
+          note: '',
+        },
+        memoranda: {
           dueDate: '',
           note: '',
         },

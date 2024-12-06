@@ -4,17 +4,18 @@ import { OnChangeHandler } from '@web-client/presenter/state/TrialSessionMinutes
 import {
   PARTY_TYPE_OPTIONS_MAP,
   SeriatimBriefFormFields,
+  SeriatimMemorandumFormFields,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import React from 'react';
 
-export const SeriatimBriefFieldset = ({
+export const SeriatimFieldset = ({
   onBlurHandler,
   onChangeHandler,
-  seriatimBriefFormState,
+  seriatimFormState,
 }: {
   onChangeHandler: OnChangeHandler;
   onBlurHandler: () => void;
-  seriatimBriefFormState: SeriatimBriefFormFields;
+  seriatimFormState: SeriatimBriefFormFields | SeriatimMemorandumFormFields;
 }) => {
   const rowsConfig = [
     { key: 'opening', rowLabel: 'Opening' },
@@ -44,8 +45,7 @@ export const SeriatimBriefFieldset = ({
                       <div className="usa-radio usa-radio__inline" key={key}>
                         <input
                           checked={
-                            seriatimBriefFormState[rowConfig.key].partyType ===
-                            value
+                            seriatimFormState[rowConfig.key].partyType === value
                           }
                           className="usa-radio__input"
                           id={`${key}-${rowConfig.key}PartyType`}
@@ -112,7 +112,7 @@ export const SeriatimBriefFieldset = ({
                   id={`${rowConfig.key}Note`}
                   name={`${rowConfig.key}Note`}
                   type="text"
-                  value={seriatimBriefFormState[rowConfig.key].note}
+                  value={seriatimFormState[rowConfig.key].note}
                   onBlur={() => onBlurHandler()}
                   onChange={e =>
                     onChangeHandler({
