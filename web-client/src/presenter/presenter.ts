@@ -1194,8 +1194,7 @@ export const presenterSequences = {
     reviewCaseAssociationRequestSequence as unknown as Function,
   reviewExternalDocumentInformationSequence:
     reviewExternalDocumentInformationSequence as unknown as Function,
-  runTrialSessionPlanningReportSequence:
-    runTrialSessionPlanningReportSequence as unknown as Function,
+  runTrialSessionPlanningReportSequence,
   saveCourtIssuedDocketEntrySequence:
     saveCourtIssuedDocketEntrySequence as unknown as Function,
   saveDocketEntryForLaterCompleteSequence:

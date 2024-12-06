@@ -2,18 +2,22 @@ import { BigHeader } from '@web-client/views/BigHeader';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TrialLocationDataFormatted } from '@web-client/presenter/computeds/trialSessionPlanningReportViewHelper';
-import { state as cerebralState } from '@web-client/presenter/app.cerebral';
+import {
+  state as cerebralState,
+  sequences,
+} from '@web-client/presenter/app.cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 
 export const TrialSessionPlanningReportView = connect(
   {
-    trialSessionPlanningReportData:
-      cerebralState.trialSessionPlanningReportData,
+    runTrialSessionPlanningReportSequence:
+      sequences.runTrialSessionPlanningReportSequence,
     trialSessionPlanningReportViewHelper:
       cerebralState.trialSessionPlanningReportViewHelper,
   },
   function TrialSessionPlanningReportView({
+    runTrialSessionPlanningReportSequence,
     trialSessionPlanningReportViewHelper,
   }) {
     const {
@@ -35,7 +39,10 @@ export const TrialSessionPlanningReportView = connect(
           </Button>
         </div>
         <TrialSessionPlanningReportHeader
+          printSequence={runTrialSessionPlanningReportSequence}
+          term={trialSessionPlanningReportViewHelper.trialTerm}
           trialSessionPlanningReportHeader={trialSessionPlanningReportHeader}
+          year={trialSessionPlanningReportViewHelper.trialYear}
         />
 
         <CitiesNotCalendaredInPastTwoTerms
@@ -59,10 +66,16 @@ TrialSessionPlanningReportView.displayName = 'TrialSessionPlanningReport';
 
 type TrialSessionPlanningReportHeaderParams = {
   trialSessionPlanningReportHeader: string;
+  term: string;
+  year: number;
+  printSequence: typeof sequences.runTrialSessionPlanningReportSequence;
 };
 
 function TrialSessionPlanningReportHeader({
+  printSequence,
+  term,
   trialSessionPlanningReportHeader,
+  year,
 }: TrialSessionPlanningReportHeaderParams) {
   return (
     <div className="grid-container display-flex height-6">
@@ -79,8 +92,13 @@ function TrialSessionPlanningReportHeader({
         <Button
           link
           className="margin-bottom-3"
-          href="/trial-sessions"
           icon="print"
+          onClick={() => {
+            printSequence({
+              term,
+              year,
+            });
+          }}
         >
           Print
         </Button>
@@ -91,7 +109,7 @@ function TrialSessionPlanningReportHeader({
 
 type TrialSessionPlanningReportTableParams = {
   locationData: TrialLocationDataFormatted[];
-  previousTerms: { termDisplayFormatted }[];
+  previousTerms: { termDisplayFormatted: string }[];
 };
 
 function TrialSessionPlanningReportTable({
@@ -108,8 +126,12 @@ function TrialSessionPlanningReportTable({
             <th>All</th>
             <th>Small</th>
             <th>Regular</th>
-            {previousTerms.map((term, index) => {
-              return <th key={`th-${index}`}>{term.termDisplayFormatted}</th>;
+            {previousTerms.map(term => {
+              return (
+                <th key={`th-${term.termDisplayFormatted}`}>
+                  {term.termDisplayFormatted}
+                </th>
+              );
             })}
             <th>Special</th>
             <th>Blocked</th>
@@ -117,13 +139,13 @@ function TrialSessionPlanningReportTable({
         </thead>
         <tbody>
           {locationData &&
-            locationData.map((trialLocation, idx) => {
+            locationData.map(trialLocation => {
               return (
                 <tr
                   className={
                     trialLocation.hasNotBeenCalendared ? 'bg-yellow' : undefined
                   }
-                  key={`row-${idx}`}
+                  key={`row-${trialLocation.trialCityState}`}
                 >
                   <td>
                     {trialLocation.hasNotBeenCalendared && (
@@ -139,27 +161,32 @@ function TrialSessionPlanningReportTable({
                   <td>{trialLocation.allCaseCount}</td>
                   <td>{trialLocation.smallCaseCount}</td>
                   <td>{trialLocation.regularCaseCount}</td>
-                  {trialLocation.previousTermsData &&
-                    trialLocation.previousTermsData.map((prevTerm, index) => {
-                      const hasData =
-                        Array.isArray(prevTerm) && prevTerm.length > 0;
+                  {trialLocation.previousTermsData.map(prevTerm => {
+                    const hasData =
+                      Array.isArray(prevTerm) && prevTerm.length > 0;
 
-                      return (
-                        <td key={`${idx}-${index}`}>
-                          {hasData ? (
-                            prevTerm.map(data => (
-                              <div key={`datum-${idx}`}>{data}</div>
-                            ))
-                          ) : (
-                            <FontAwesomeIcon
-                              className="padding-1px"
-                              icon={['far', 'calendar-times']}
-                              size="lg"
-                            />
-                          )}
-                        </td>
-                      );
-                    })}
+                    return (
+                      <td
+                        key={`${trialLocation.trialCityState}-previous-term-col`}
+                      >
+                        {hasData ? (
+                          prevTerm.map(data => (
+                            <div
+                              key={`${trialLocation.trialCityState}-previous-term-${data}`}
+                            >
+                              {data}
+                            </div>
+                          ))
+                        ) : (
+                          <FontAwesomeIcon
+                            className="padding-1px"
+                            icon={['far', 'calendar-times']}
+                            size="lg"
+                          />
+                        )}
+                      </td>
+                    );
+                  })}
                   <td>{trialLocation.specialCaseCount}</td>
                   <td>{trialLocation.blockedCaseCount}</td>
                 </tr>
