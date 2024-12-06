@@ -1,9 +1,11 @@
 #!/usr/bin/env npx ts-node --transpile-only
 
-// usage: npx ts-node --transpile-only scripts/reports/cases-closed-in-year.ts 2024 [-f]
-
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { DateTime } from 'luxon';
+import {
+  type ScriptConfig,
+  parseArgumentsAndEnvironmentVariables,
+} from '../helpers/parseArgumentsAndEnvironmentVariables';
 import {
   ServerApplicationContext,
   createApplicationContext,
@@ -13,10 +15,34 @@ import { pick } from 'lodash';
 import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
 
-const year = process.argv[2] || `${DateTime.now().toObject().year}`;
-const fiscal =
-  !!process.argv[3] &&
-  (process.argv[3] === '-f' || process.argv[3] === '--fiscal');
+const scriptConfig: ScriptConfig = {
+  description:
+    'cases-closed-in-year - Generates a spreadsheet of cases closed at any ' +
+    'point in the given year, even if they were later reopened.',
+  environment: {
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+    env: 'ENV',
+  },
+  parameters: {
+    fiscal: {
+      default: false,
+      short: 'f',
+      type: 'boolean',
+    },
+    year: {
+      default: `${DateTime.now().toObject().year}`,
+      position: 0,
+      type: 'string',
+    },
+  },
+};
+const { fiscal, year } = parseArgumentsAndEnvironmentVariables(
+  scriptConfig,
+) as {
+  fiscal: boolean;
+  year: string;
+};
+
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 const CLOSED_STATUSES: string[] = [
   CASE_STATUS_TYPES.closed,
@@ -75,7 +101,12 @@ const getAllCasesClosedInFiscalYear = async ({
     `Found ${results.length} cases with a "closed" status history record and` +
       ` a status history record generated in fiscal year ${year}`,
   );
-  return results.filter(c => wasClosedThisFiscalYear(c));
+  const ret = results.filter(c => wasClosedThisFiscalYear(c));
+  console.log(
+    `Filtered results to ${ret.length} cases having a "closed"` +
+      ` status history record that was generated in fiscal year ${year}`,
+  );
+  return ret;
 };
 
 const wasClosedThisFiscalYear = (c: RawCase): boolean => {
@@ -142,9 +173,5 @@ const outputCsv = ({
   const casesClosedInYear = await getAllCasesClosedInFiscalYear({
     applicationContext,
   });
-  console.log(
-    `Filtered results to ${casesClosedInYear.length} cases having a "closed"` +
-      ` status history record that was generated in fiscal year ${year}`,
-  );
   outputCsv({ casesClosedInYear });
 })();
