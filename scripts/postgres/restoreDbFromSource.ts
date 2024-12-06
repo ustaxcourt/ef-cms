@@ -1,25 +1,35 @@
+#!/usr/bin/env npx ts-node --transpile-only
+
+// This script can copy the contents of one database and overwrite the contents
+// of another in a different account. It must be run from the AWS account that
+// is creating the backup, and it will assume a role in the target account.
+
 import { AssumeRoleCommand, STSClient } from '@aws-sdk/client-sts';
 import { DescribeDBClustersCommand, RDSClient } from '@aws-sdk/client-rds';
+import {
+  type ScriptConfig,
+  parseArgumentsAndEnvironmentVariables,
+} from '../helpers/parseArgumentsAndEnvironmentVariables';
 import { Signer } from '@aws-sdk/rds-signer';
-import { requireEnvVars } from 'shared/admin-tools/util';
 import { spawn } from 'child_process';
 
-// eslint-disable-next-line spellcheck/spell-checker
-/*
-This script can copy the contents of one database and overwrite the contents of another in a different account.
-This script REQUIRES that it be run from the AWS account that is creating the backup, and it will assume a role in the target account.
-So if you wanted to restore Test environment from prod, use the environment switcher to point to prod, then fill out all TARGET environment variables with test info.
-
-ENV=test TARGET_ENV=exp3 TARGET_ACCOUNT_ID=xxxxxxxxxx npx ts-node --transpile-only scripts/postgres/restoreDbFromSource.ts
-*/
+const scriptConfig: ScriptConfig = {
+  description:
+    'restoreDbFromSource - Replaces the target database with a dump of the source database',
+  environment: {
+    sourceEnv: 'ENV',
+    targetAccountId: 'TARGET_ACCOUNT_ID',
+    targetEnv: 'TARGET_ENV',
+  },
+};
 
 async function main() {
-  const sourceEnv = process.env.ENV!;
-  const targetEnv = process.env.TARGET_ENV!;
-  const targetAccountId = process.env.TARGET_ACCOUNT_ID!;
-
-  requireEnvVars(['ENV', 'TARGET_ENV', 'TARGET_ACCOUNT_ID']);
-
+  const { sourceEnv, targetAccountId, targetEnv } =
+    parseArgumentsAndEnvironmentVariables(scriptConfig) as {
+      sourceEnv: string;
+      targetAccountId: string;
+      targetEnv: string;
+    };
   const targetRoleArn = `arn:aws:iam::${targetAccountId}:role/restore_role_${targetEnv}`;
 
   const { targetAccessKeyId, targetSecretAccessKey, targetSessionToken } =
