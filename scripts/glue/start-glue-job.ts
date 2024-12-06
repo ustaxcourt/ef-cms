@@ -1,22 +1,39 @@
-// usage: npx ts-node --transpile-only scripts/glue/start-glue-job.ts efcms-test-alpha
+#!/usr/bin/env npx ts-node --transpile-only
 
-import { requireEnvVars } from '../../shared/admin-tools/util';
-requireEnvVars(['ENV', 'SOURCE_TABLE']);
+// usage: scripts/glue/start-glue-job.ts efcms-test-alpha
 
-if (process.env.ENV !== 'prod') {
+import {
+  type ScriptConfig,
+  parseArgumentsAndEnvironmentVariables,
+} from '../helpers/parseArgumentsAndEnvironmentVariables';
+import { startGlueJob } from '../../shared/admin-tools/aws/glueHelper';
+
+const scriptConfig: ScriptConfig = {
+  description:
+    'start-glue-job - Starts a glue job into the provided dynamo database.',
+  environment: {
+    env: 'ENV',
+    sourceTable: 'SOURCE_TABLE',
+  },
+  parameters: {
+    destinationTable: {
+      position: 0,
+      required: true,
+      type: 'string',
+    },
+  },
+};
+const { destinationTable, env, sourceTable } =
+  parseArgumentsAndEnvironmentVariables(scriptConfig) as {
+    destinationTable: string;
+    env: string;
+    sourceTable: string;
+  };
+
+if (env !== 'prod') {
   console.error('Glue jobs must originate from the production environment.');
   process.exit();
 }
-
-const destinationTable = process.argv[2] || null;
-if (!destinationTable) {
-  console.error('The destination table must be passed as the first argument.');
-  process.exit();
-}
-
-const sourceTable = process.env.SOURCE_TABLE!;
-
-import { startGlueJob } from '../../shared/admin-tools/aws/glueHelper';
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
