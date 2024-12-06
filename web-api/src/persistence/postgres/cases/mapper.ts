@@ -34,6 +34,7 @@ export const convertRawCaseToDbRow = (rawCase: RawCase) => {
     damages: rawCase.damages,
     docketNumber: rawCase.docketNumber,
     docketNumberSuffix: rawCase.docketNumberSuffix,
+    docketNumberWithSuffix: rawCase.docketNumberWithSuffix,
     filingType: rawCase.filingType,
     hasPendingItems: rawCase.hasPendingItems,
     hasVerifiedIrsNotice: rawCase.hasVerifiedIrsNotice,

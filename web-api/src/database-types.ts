@@ -67,6 +67,7 @@ export interface CaseTable {
   damages?: number;
   docketNumber: string;
   docketNumberSuffix?: string;
+  docketNumberWithSuffix?: string;
   filingType?: string;
   hasPendingItems?: boolean;
   hasVerifiedIrsNotice?: boolean;

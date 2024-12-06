@@ -1,4 +1,4 @@
-import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+// import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { convertDbRowToRawEligibleCase } from '@web-api/persistence/postgres/cases/mapper';
@@ -22,15 +22,16 @@ export const getEligibleCasesForCity = async ({
         'caseType',
         'docketNumber',
         'docketNumberSuffix',
+        'docketNumberWithSuffix',
         'leadDocketNumber',
         'highPriority',
         'qcCompleteForTrial',
         'isSealed',
       ])
       .where('preferredTrialCity', '=', trialCity)
-      .where('status', '=', CASE_STATUS_TYPES.generalDocketReadyForTrial)
-      .where('blocked', '!=', true)
-      .where('automaticBlocked', '!=', true)
+      // .where('status', '=', CASE_STATUS_TYPES.generalDocketReadyForTrial)
+      // .where('blocked', '!=', true)
+      // .where('automaticBlocked', '!=', true)
       .execute(),
   );
 

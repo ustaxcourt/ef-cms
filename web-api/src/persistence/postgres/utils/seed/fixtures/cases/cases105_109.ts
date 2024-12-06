@@ -136,6 +136,7 @@ export const cases105_109: NewCaseKysely[] = [
     createdAt: calculateDate({ dateString: '2023-04-03T15:52:32.341Z' }),
     docketNumber: SEEDED_DOCKET_NUMBERS_105_109['105-67'],
     docketNumberSuffix: 'L',
+    docketNumberWithSuffix: '105-67L',
     // gsi1pk: 'leadCase|102-67',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
@@ -239,6 +240,7 @@ export const cases105_109: NewCaseKysely[] = [
     createdAt: calculateDate({ dateString: '2019-08-16T17:29:10.132Z' }),
     docketNumber: SEEDED_DOCKET_NUMBERS_105_109['107-19'],
     docketNumberSuffix: 'L',
+    docketNumberWithSuffix: '107-19L',
     filingType: 'A business',
     hasPendingItems: false,
     initialCaption:
@@ -309,6 +311,7 @@ export const cases105_109: NewCaseKysely[] = [
     createdAt: calculateDate({ dateString: '2019-03-01T21:40:46.415Z' }),
     docketNumber: SEEDED_DOCKET_NUMBERS_105_109['109-19'],
     docketNumberSuffix: 'W',
+    docketNumberWithSuffix: '109-19L',
     filingType: 'Myself',
     initialCaption: 'Brett Osborne, Petitioner',
     partyType: PARTY_TYPES.petitioner,
