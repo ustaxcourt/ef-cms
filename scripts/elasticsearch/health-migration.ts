@@ -1,14 +1,24 @@
-// usage: npx ts-node --transpile-only scripts/elasticsearch/health-migration.ts
+#!/usr/bin/env npx ts-node --transpile-only
 
 import { Client } from '@opensearch-project/opensearch';
+import {
+  type ScriptConfig,
+  parseArgumentsAndEnvironmentVariables,
+} from '../helpers/parseArgumentsAndEnvironmentVariables';
 import { esIndexType } from '../../web-api/elasticsearch/elasticsearch-indexes';
 import { getBaseAliasFromIndexName } from '../../web-api/elasticsearch/elasticsearch-aliases';
 import { getClient } from '../../web-api/elasticsearch/client';
-import { requireEnvVars } from '../../shared/admin-tools/util';
 
-requireEnvVars(['ENV']);
-
-const environmentName = process.env.ENV!;
+const scriptConfig: ScriptConfig = {
+  description:
+    'health-migration - Compare index counts of the source and destination clusters',
+  environment: {
+    environmentName: 'ENV',
+  },
+};
+const { environmentName } = parseArgumentsAndEnvironmentVariables(
+  scriptConfig,
+) as { environmentName: string };
 const esClientCache = {};
 
 const getEsClient = async ({
