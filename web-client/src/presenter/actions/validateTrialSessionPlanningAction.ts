@@ -1,5 +1,3 @@
-import { state } from '@web-client/presenter/app.cerebral';
-
 /**
  * validate the trial session planning modal
  * @param {object} providers the providers object
@@ -8,10 +6,10 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @returns {object} the next path based on if validation was successful or error
  */
 export const validateTrialSessionPlanningAction = ({
-  get,
   path,
-}: ActionProps) => {
-  const { term, year } = get(state.modal);
+  props,
+}: ActionProps<{ term: string; year: number }>) => {
+  const { term, year } = props;
 
   let errors = null;
   if (!term || !year) {

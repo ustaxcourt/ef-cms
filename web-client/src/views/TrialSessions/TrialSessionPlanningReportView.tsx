@@ -2,18 +2,22 @@ import { BigHeader } from '@web-client/views/BigHeader';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TrialLocationDataFormatted } from '@web-client/presenter/computeds/trialSessionPlanningReportViewHelper';
-import { state as cerebralState } from '@web-client/presenter/app.cerebral';
+import {
+  state as cerebralState,
+  sequences,
+} from '@web-client/presenter/app.cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 
 export const TrialSessionPlanningReportView = connect(
   {
-    trialSessionPlanningReportData:
-      cerebralState.trialSessionPlanningReportData,
+    runTrialSessionPlanningReportSequence:
+      sequences.runTrialSessionPlanningReportSequence,
     trialSessionPlanningReportViewHelper:
       cerebralState.trialSessionPlanningReportViewHelper,
   },
   function TrialSessionPlanningReportView({
+    runTrialSessionPlanningReportSequence,
     trialSessionPlanningReportViewHelper,
   }) {
     const {
@@ -35,7 +39,10 @@ export const TrialSessionPlanningReportView = connect(
           </Button>
         </div>
         <TrialSessionPlanningReportHeader
+          printSequence={runTrialSessionPlanningReportSequence}
+          term={trialSessionPlanningReportViewHelper.trialTerm}
           trialSessionPlanningReportHeader={trialSessionPlanningReportHeader}
+          year={trialSessionPlanningReportViewHelper.trialYear}
         />
 
         <CitiesNotCalendaredInPastTwoTerms
@@ -59,10 +66,16 @@ TrialSessionPlanningReportView.displayName = 'TrialSessionPlanningReport';
 
 type TrialSessionPlanningReportHeaderParams = {
   trialSessionPlanningReportHeader: string;
+  term: string;
+  year: number;
+  printSequence: typeof sequences.runTrialSessionPlanningReportSequence;
 };
 
 function TrialSessionPlanningReportHeader({
+  printSequence,
+  term,
   trialSessionPlanningReportHeader,
+  year,
 }: TrialSessionPlanningReportHeaderParams) {
   return (
     <div className="grid-container display-flex height-6">
@@ -79,8 +92,13 @@ function TrialSessionPlanningReportHeader({
         <Button
           link
           className="margin-bottom-3"
-          href="/trial-sessions"
           icon="print"
+          onClick={() => {
+            printSequence({
+              term,
+              year,
+            });
+          }}
         >
           Print
         </Button>

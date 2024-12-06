@@ -15,6 +15,8 @@ type TrialSessionPlanningReportViewHelperResults = {
   trialSessionPlanningReportHeader: string;
   previousTermsFormatted: { termDisplayFormatted: string }[];
   trialLocationDataFormatted: TrialLocationDataFormatted[];
+  trialTerm: string;
+  trialYear: number;
 };
 
 function formatCities(allCities: string[]): string[][] {
@@ -95,8 +97,11 @@ export const trialSessionPlanningReportViewHelper = (
     previousTermsFormatted,
     trialLocationDataFormatted,
     trialSessionPlanningReportHeader,
+    trialTerm,
+    trialYear,
   };
 };
+
 function formatLastVisitedDate(lastVisitedDate: string | undefined): string {
   if (!lastVisitedDate) return 'Never visited.';
   const formattedSessionWeekStartDate = createDateAtStartOfWeekEST(
