@@ -120,7 +120,9 @@ function TrialSessionPlanningReportTable({
             locationData.map((trialLocation, idx) => {
               return (
                 <tr
-                  className={trialLocation.hasNotBeenCalendared && 'bg-yellow'}
+                  className={
+                    trialLocation.hasNotBeenCalendared ? 'bg-yellow' : undefined
+                  }
                   key={`row-${idx}`}
                 >
                   <td>
