@@ -1,17 +1,27 @@
 import { type ParseArgsConfig, parseArgs } from 'node:util';
+import { missingEnvironmentVariables } from '../../shared/admin-tools/util';
 
 export type ScriptConfig = {
+  environment?: {
+    /**
+     * List of environment variables that are required to be present.
+     * The key is the property by which the parsed value will be
+     * returned and the value is the environment variable name
+     * (e.g. `env: 'ENV'`).
+     */
+    [key: string]: string;
+  };
   /**
    * The `description` will be printed to the console when errors are
    * encountered or when the `--help` or `--verbose` parameters are provided.
    */
   description?: string;
-  parameters: {
+  parameters?: {
     /**
-     * If the `long` and `position` properties are not defined in the
-     * `ScriptParameter` object, the parameter is called by its key
-     * prefixed with two dashes (e.g. `--year`). This key will also be used
-     * when retrieving this parameter's parsed value with `parseArguments`.
+     * List of required and optional parameters. If the `long` and `position`
+     * properties are not defined in the `ScriptParameter` object, the
+     * parameter is called by its key prefixed with two dashes (e.g. `--year`).
+     * The key is the property by which the parsed value will be returned.
      */
     [key: string]: ScriptParameter;
   };
@@ -25,6 +35,10 @@ export type ScriptParameter = {
    * always be an array, even if only one value was provided.
    */
   commaDelimited?: boolean;
+  /**
+   * The `description` property may be utilized to provide additional
+   * context for a parameter, such as the expected format of the value.
+   */
   description?: string;
   /**
    * If no value is provided for this parameter, `parseArguments` will
@@ -165,41 +179,43 @@ const collateArguments = (parameters: {
   };
 };
 
-const buildExample = (parameters: {
+const buildExample = (parameters?: {
   [key: string]: ScriptParameter;
 }): string => {
-  const {
-    optionalParameters,
-    optionalPositionals,
-    requiredParameters,
-    requiredPositionals,
-  } = collateArguments(parameters);
   let example = `${process.argv[1]}`;
-  if (requiredPositionals.length) {
-    example += requiredPositionals.map(p => ` <${p.long!}>`).join('');
-  }
-  if (requiredParameters.length) {
-    example += requiredParameters
-      .map(
-        p =>
-          ` ${p.short ? '-' + p.short : '--' + p.long!}${p.type !== 'boolean' ? ' <' + p.long! + '>' : ''}`,
-      )
-      .join('');
-  }
-  if (optionalPositionals.length || optionalParameters.length) {
-    example += ' [';
-    if (optionalPositionals.length) {
-      example += optionalPositionals.map(p => ` <${p.long}>`).join('');
+  if (parameters) {
+    const {
+      optionalParameters,
+      optionalPositionals,
+      requiredParameters,
+      requiredPositionals,
+    } = collateArguments(parameters);
+    if (requiredPositionals.length) {
+      example += requiredPositionals.map(p => ` <${p.long!}>`).join('');
     }
-    if (optionalParameters.length) {
-      example += optionalParameters
+    if (requiredParameters.length) {
+      example += requiredParameters
         .map(
           p =>
             ` ${p.short ? '-' + p.short : '--' + p.long!}${p.type !== 'boolean' ? ' <' + p.long! + '>' : ''}`,
         )
         .join('');
     }
-    example += ' ]';
+    if (optionalPositionals.length || optionalParameters.length) {
+      example += ' [';
+      if (optionalPositionals.length) {
+        example += optionalPositionals.map(p => ` <${p.long}>`).join('');
+      }
+      if (optionalParameters.length) {
+        example += optionalParameters
+          .map(
+            p =>
+              ` ${p.short ? '-' + p.short : '--' + p.long!}${p.type !== 'boolean' ? ' <' + p.long! + '>' : ''}`,
+          )
+          .join('');
+      }
+      example += ' ]';
+    }
   }
   return example;
 };
@@ -213,7 +229,28 @@ const usage = (sc: ScriptConfig, warning?: string): void => {
     console.log(`${sc.description}\n`);
   }
   console.log(`Usage: ${example}\n`);
-  console.log('Options:', sc.parameters);
+  if (sc.parameters) {
+    console.log('Parameters:', sc.parameters);
+  }
+  if (sc.environment) {
+    console.log(
+      '\nRequired Environment Variables:',
+      Object.values(sc.environment),
+    );
+  }
+};
+
+const showErrorAndExit = (
+  errorMessage: string,
+  sc: ScriptConfig,
+  verbose: boolean,
+): void => {
+  if (verbose) {
+    console.log(errorMessage);
+  } else {
+    usage(sc, errorMessage);
+  }
+  process.exit(1);
 };
 
 const buildParseArgsConfigObject = (parameters: {
@@ -421,43 +458,75 @@ const validateParsedValues = (
   },
   verbose: boolean,
 ): void => {
-  const showErrorAndExit = (errorMessage: string): void => {
-    if (verbose) {
-      console.log(errorMessage);
-    } else {
-      usage(sc, errorMessage);
+  if (sc.parameters) {
+    const { optionalPositionals, requiredParameters, requiredPositionals } =
+      collateArguments(sc.parameters);
+    const allPositionals = [...requiredPositionals, ...optionalPositionals];
+    if (allPositionals.length) {
+      const positionsReversed = [...requiredPositionals, ...optionalPositionals]
+        .map(p => p.position)
+        .filter(p => p || p === 0)
+        .sort((a, b) => b! - a!);
+      const uniquePositions = [...new Set(positionsReversed)];
+      if (
+        uniquePositions.length !== positionsReversed.length ||
+        positionsReversed[0] !== uniquePositions.length - 1
+      ) {
+        showErrorAndExit(
+          'invalid positionals: positions must be sequential starting at 0',
+          sc,
+          verbose,
+        );
+      }
     }
-    process.exit(1);
-  };
-  const { optionalPositionals, requiredParameters, requiredPositionals } =
-    collateArguments(sc.parameters);
-  const allPositionals = [...requiredPositionals, ...optionalPositionals];
-  if (allPositionals.length) {
-    const positionsReversed = [...requiredPositionals, ...optionalPositionals]
-      .map(p => p.position)
-      .filter(p => p || p === 0)
-      .sort((a, b) => b! - a!);
-    const uniquePositions = [...new Set(positionsReversed)];
-    if (
-      uniquePositions.length !== positionsReversed.length ||
-      positionsReversed[0] !== uniquePositions.length - 1
-    ) {
+    for (const requiredParam of [
+      ...requiredPositionals,
+      ...requiredParameters,
+    ]) {
+      const longName = requiredParam.long!;
+      if (!(longName in parsedValues) || !parsedValues[longName]) {
+        showErrorAndExit(`invalid input: expected ${longName}`, sc, verbose);
+      }
+    }
+  }
+};
+
+const requireEnvironmentVariables = (
+  sc: ScriptConfig,
+  verbose: boolean,
+): void => {
+  if (sc.environment) {
+    const missing = missingEnvironmentVariables(Object.values(sc.environment));
+    if (missing.length > 0) {
       showErrorAndExit(
-        'invalid positionals: positions must be sequential starting at 0',
+        `Missing environment variable${missing.length > 1 ? 's' : ''}: ${missing.join(', ')}`,
+        sc,
+        verbose,
       );
     }
   }
-  for (const requiredParam of [...requiredPositionals, ...requiredParameters]) {
-    const longName = requiredParam.long!;
-    if (!(longName in parsedValues) || !parsedValues[longName]) {
-      showErrorAndExit(`invalid input: expected ${longName}`);
-    }
+};
+
+const getEnvironmentVariables = (
+  environment?:
+    | {
+        [key: string]: string;
+      }
+    | undefined,
+): { [key: string]: string } => {
+  const ret: { [key: string]: string } = {};
+  for (const varName in environment) {
+    ret[varName] = process.env[environment[varName]]!;
   }
+  return ret;
 };
 
 export const parseArguments = (
   sc: ScriptConfig,
 ): { [k: string]: string | string[] | boolean | number | number[] } => {
+  if (!sc.parameters) {
+    sc.parameters = {};
+  }
   sc.parameters.verbose = { default: false, short: 'v', type: 'boolean' };
   const config = buildParseArgsConfigObject(sc.parameters);
   const { positionals, values } = rawParseArgs(config, sc);
@@ -467,5 +536,7 @@ export const parseArguments = (
     console.log('parsed arguments:', parsedParameters);
   }
   validateParsedValues(sc, parsedParameters, !!parsedParameters.verbose);
+  requireEnvironmentVariables(sc, !!parsedParameters.verbose);
+  const environmentVariables = getEnvironmentVariables(sc.environment);
   return parsedParameters;
 };
