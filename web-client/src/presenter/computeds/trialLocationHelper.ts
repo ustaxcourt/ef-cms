@@ -1,13 +1,13 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { HIGH_PRIORITY_SUFFIXES } from '@shared/business/entities/EntityConstants';
 import { Get } from 'cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { HIGH_PRIORITY_SUFFIXES } from '@shared/business/entities/EntityConstants';
 import {
   addGroupSymbol,
   compareTrialSessionEligibleCases,
-  getPriorityGroups
-} from "@web-client/presenter/computeds/formattedEligibleCasesHelper";
-import {setConsolidationFlagsForDisplay} from "@shared/business/utilities/setConsolidationFlagsForDisplay";
+  getPriorityGroups,
+} from '@web-client/presenter/computeds/formattedEligibleCasesHelper';
+import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
+import { state } from '@web-client/presenter/app.cerebral';
 
 const groupKeySymbol = Symbol('group');
 
@@ -64,5 +64,8 @@ export const trialLocationHelper = (
 
   // const pageSize = 100;
 
-  return { formattedEligibleCases: sortedEligibleCases, location: trialCityFormatted };
+  return {
+    formattedEligibleCases: sortedEligibleCases,
+    location: trialCityFormatted,
+  };
 };
