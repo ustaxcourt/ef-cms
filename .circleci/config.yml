@@ -871,7 +871,7 @@ jobs:
       - run:
           name: Restore Postgres
           command: |
-            TARGET_ENV=$LOWER_ENV TARGET_ACCOUNT_ID="${LOWER_ENV_ACCOUNT_ID}" npx ts-node --transpileOnly scripts/postgres/restoreDbFromSource.ts
+            TARGET_ENV=$LOWER_ENV TARGET_ACCOUNT_ID="${LOWER_ENV_ACCOUNT_ID}" ./scripts/postgres/restoreDbFromSource.ts
 
   finish-glue-job:
     docker:
