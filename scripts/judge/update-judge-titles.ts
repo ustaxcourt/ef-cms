@@ -1,13 +1,21 @@
+#!/usr/bin/env npx ts-node --transpile-only
+
+import {
+  type ScriptConfig,
+  parseArgumentsAndEnvironmentVariables,
+} from '../helpers/parseArgumentsAndEnvironmentVariables';
 import { User } from '@shared/business/entities/User';
-import { requireEnvVars } from '../../shared/admin-tools/util';
-requireEnvVars(['ENV', 'REGION', 'DYNAMODB_TABLE_NAME']);
 import { createApplicationContext } from '@web-api/applicationContext';
 
-/**
-How to Run:
-
-npx ts-node --transpile-only scripts/judgeUpdates/update-senior-judges.ts
-*/
+const scriptConfig: ScriptConfig = {
+  description: "update-judge-titles - Sets Judges' judgeTitle attribute",
+  environment: {
+    dynamoDbTableName: 'DYNAMODB_TABLE_NAME',
+    env: 'ENV',
+    region: 'REGION',
+  },
+};
+parseArgumentsAndEnvironmentVariables(scriptConfig);
 
 // ******************************** INPUTS ******************************
 const judgesToUpdateIds: { userId: string; judgeTitle: string }[] = [
