@@ -13,6 +13,7 @@ export const generateDocketRecordPdfInteractor = (
   {
     docketNumber,
     docketRecordSort,
+    docketRecordTableSort,
     includePartyDetail,
     isIndirectlyAssociated,
   },
@@ -22,6 +23,7 @@ export const generateDocketRecordPdfInteractor = (
     body: {
       docketNumber,
       docketRecordSort,
+      docketRecordTableSort,
       includePartyDetail,
       isIndirectlyAssociated,
     },
