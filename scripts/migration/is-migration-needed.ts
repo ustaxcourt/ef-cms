@@ -1,11 +1,23 @@
+#!/usr/bin/env npx ts-node --transpile-only
+
 import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import {
+  type ScriptConfig,
+  parseArgumentsAndEnvironmentVariables,
+} from '../helpers/parseArgumentsAndEnvironmentVariables';
 import { migrationsToRun } from '@web-api/lambdas/migration/migrationsToRun';
-import { requireEnvVars } from '../../shared/admin-tools/util';
 
-requireEnvVars(['SOURCE_TABLE']);
-
-const { SOURCE_TABLE } = process.env;
+const scriptConfig: ScriptConfig = {
+  description:
+    'is-migration-needed - Exits with a success code if a migration is needed or an error code if not',
+  environment: {
+    TableName: 'SOURCE_TABLE',
+  },
+};
+const { TableName } = parseArgumentsAndEnvironmentVariables(scriptConfig) as {
+  TableName: string;
+};
 
 const dynamodb = new DynamoDBClient({ region: 'us-east-1' });
 const docClient = DynamoDBDocument.from(dynamodb);
@@ -16,7 +28,7 @@ const hasMigrationRan = async key => {
       pk: { S: 'migration' },
       sk: { S: `migration|${key}` },
     },
-    TableName: SOURCE_TABLE,
+    TableName,
   });
   const { Item } = await docClient.send(getItemCommand);
   return !!Item;

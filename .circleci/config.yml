@@ -299,7 +299,7 @@ jobs:
           name: Track successful migrations
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
-              npx ts-node --transpile-only ./scripts/migration/track-successful-migrations.ts
+              ./scripts/migration/track-successful-migrations.ts
             fi
       - run:
           name: Set Marker to Indicate Migration is Complete
