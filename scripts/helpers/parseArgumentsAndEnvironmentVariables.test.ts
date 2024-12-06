@@ -1,14 +1,17 @@
 import {
   type ScriptConfig,
-  parseArguments,
+  parseArgumentsAndEnvironmentVariables,
   parseIntRange,
   parseInts,
   parseIntsArg,
-} from './parseArguments';
+} from './parseArgumentsAndEnvironmentVariables';
 import { cloneDeep } from 'lodash';
 
 const mockScriptConfig: ScriptConfig = {
   description: 'some script',
+  environment: {
+    env: 'ENV',
+  },
   parameters: {
     eventCode: {
       position: 0,
@@ -94,30 +97,33 @@ describe('parseIntsArg', () => {
   });
 });
 
-describe('parseArguments', () => {
+describe('parseArgumentsAndEnvironmentVariables', () => {
   const originalArgv = cloneDeep(process.argv);
+  const originalEnv = cloneDeep(process.env);
   const mockEventCode = 'noa';
   beforeEach(() => {
     process.argv = ['ts-node', 'some-script.ts', mockEventCode];
+    process.env = { ...originalEnv, ENV: 'jest' };
   });
   afterAll(() => {
     process.argv = originalArgv;
+    process.env = originalEnv;
   });
   describe('--help flag', () => {
     it('prints help output and exits before validating parameters', () => {
       process.argv = ['ts-node', 'some-script.ts', '-h'];
       try {
-        parseArguments(mockScriptConfig);
+        parseArgumentsAndEnvironmentVariables(mockScriptConfig);
       } catch (err: any) {
         expect(err.toString()).toEqual('Error: caught process.exit');
       }
-      expect(mockConsoleLog).toHaveBeenCalledTimes(3);
+      expect(mockConsoleLog).toHaveBeenCalledTimes(4);
       expect(mockExit).toHaveBeenCalledWith(0);
     });
     it('generates a usage example from provided configuration', () => {
       process.argv = ['ts-node', 'some-script.ts', '-h'];
       try {
-        parseArguments(mockScriptConfig);
+        parseArgumentsAndEnvironmentVariables(mockScriptConfig);
       } catch (err: any) {
         expect(err.toString()).toEqual('Error: caught process.exit');
       }
@@ -130,139 +136,140 @@ describe('parseArguments', () => {
   describe('--verbose flag', () => {
     it('prints verbose output after validating parameters and does not exit', () => {
       process.argv.push('-v');
-      const { eventCode, verbose } = parseArguments(mockScriptConfig);
+      const { eventCode, verbose } =
+        parseArgumentsAndEnvironmentVariables(mockScriptConfig);
       expect(eventCode).toEqual(mockEventCode); // parameters are parsed
       expect(verbose).toBeTruthy();
       expect(mockConsoleLog).toHaveBeenNthCalledWith(
         1,
         'Verbose output enabled\n',
       );
-      expect(mockConsoleLog).toHaveBeenCalledTimes(7);
+      expect(mockConsoleLog).toHaveBeenCalledTimes(8);
       expect(mockExit).not.toHaveBeenCalled();
     });
   });
   describe('parameter validation', () => {
     it('does not allow a boolean parameter to be defaulted to true', () => {
       const itsScriptConfig = cloneDeep(mockScriptConfig);
-      itsScriptConfig.parameters.fiscal.required = true;
-      const { fiscal } = parseArguments(itsScriptConfig);
+      itsScriptConfig.parameters!.fiscal.required = true;
+      const { fiscal } = parseArgumentsAndEnvironmentVariables(itsScriptConfig);
       expect(fiscal).toBeFalsy();
       expect(mockExit).not.toHaveBeenCalled();
     });
     it('positionals that precede a required positional will also be required', () => {
       const itsScriptConfig = cloneDeep(mockScriptConfig);
-      itsScriptConfig.parameters.eventCode.required = false;
-      itsScriptConfig.parameters.judge = {
+      itsScriptConfig.parameters!.eventCode.required = false;
+      itsScriptConfig.parameters!.judge = {
         position: 1,
         required: false,
         type: 'string',
       };
-      itsScriptConfig.parameters.status = {
+      itsScriptConfig.parameters!.status = {
         position: 2,
         required: true,
         type: 'string',
       };
       try {
-        parseArguments(itsScriptConfig);
+        parseArgumentsAndEnvironmentVariables(itsScriptConfig);
       } catch (err: any) {
         expect(err.toString()).toEqual('Error: caught process.exit');
       }
       expect(mockConsoleLog).toHaveBeenNthCalledWith(
         1,
-        'invalid input: expected judge\n',
+        'Invalid input: expected judge\n',
       );
       expect(mockExit).toHaveBeenCalledWith(1);
     });
     it('does not allow positionals that are not sequential', () => {
       const itsScriptConfig = cloneDeep(mockScriptConfig);
-      itsScriptConfig.parameters.fiscal = {
+      itsScriptConfig.parameters!.fiscal = {
         position: 1,
         required: false,
         type: 'string',
       };
-      itsScriptConfig.parameters.year = {
+      itsScriptConfig.parameters!.year = {
         position: 2,
         required: false,
         type: 'string',
       };
-      itsScriptConfig.parameters.judge = {
+      itsScriptConfig.parameters!.judge = {
         position: 5,
         required: false,
         type: 'string',
       };
       try {
-        parseArguments(itsScriptConfig);
+        parseArgumentsAndEnvironmentVariables(itsScriptConfig);
       } catch (err: any) {
         expect(err.toString()).toEqual('Error: caught process.exit');
       }
       expect(mockConsoleLog).toHaveBeenNthCalledWith(
         1,
-        'invalid positionals: positions must be sequential starting at 0\n',
+        'Invalid positionals: positions must be sequential starting at 0\n',
       );
       expect(mockExit).toHaveBeenCalledWith(1);
     });
     it('does not allow positionals that do not start at 0', () => {
       const itsScriptConfig = cloneDeep(mockScriptConfig);
-      itsScriptConfig.parameters.eventCode.position = 20;
-      itsScriptConfig.parameters.fiscal = {
+      itsScriptConfig.parameters!.eventCode.position = 20;
+      itsScriptConfig.parameters!.fiscal = {
         position: 21,
         required: false,
         type: 'string',
       };
-      itsScriptConfig.parameters.year = {
+      itsScriptConfig.parameters!.year = {
         position: 22,
         required: false,
         type: 'string',
       };
-      itsScriptConfig.parameters.judge = {
+      itsScriptConfig.parameters!.judge = {
         position: 23,
         required: false,
         type: 'string',
       };
       try {
-        parseArguments(itsScriptConfig);
+        parseArgumentsAndEnvironmentVariables(itsScriptConfig);
       } catch (err: any) {
         expect(err.toString()).toEqual('Error: caught process.exit');
       }
       expect(mockConsoleLog).toHaveBeenNthCalledWith(
         1,
-        'invalid positionals: positions must be sequential starting at 0\n',
+        'Invalid positionals: positions must be sequential starting at 0\n',
       );
       expect(mockExit).toHaveBeenCalledWith(1);
     });
     it('exits if required positionals were not provided', () => {
       const itsScriptConfig = cloneDeep(mockScriptConfig);
-      itsScriptConfig.parameters.judge = {
+      itsScriptConfig.parameters!.judge = {
         position: 1,
         required: true,
         type: 'string',
       };
       try {
-        parseArguments(itsScriptConfig);
+        parseArgumentsAndEnvironmentVariables(itsScriptConfig);
       } catch (err: any) {
         expect(err.toString()).toEqual('Error: caught process.exit');
       }
       expect(mockConsoleLog).toHaveBeenNthCalledWith(
         1,
-        'invalid input: expected judge\n',
+        'Invalid input: expected judge\n',
       );
       expect(mockExit).toHaveBeenCalledWith(1);
     });
     it('exits if required parameters were not provided', () => {
       const itsScriptConfig = cloneDeep(mockScriptConfig);
-      itsScriptConfig.parameters.judge = {
+      itsScriptConfig.parameters!.judge = {
         required: true,
         short: 'j',
         type: 'string',
       };
       try {
-        parseArguments(itsScriptConfig);
+        parseArgumentsAndEnvironmentVariables(itsScriptConfig);
       } catch (err: any) {
         expect(err.toString()).toEqual('Error: caught process.exit');
       }
       expect(mockConsoleLog).toHaveBeenNthCalledWith(
         1,
-        'invalid input: expected judge\n',
+        'Invalid input: expected judge\n',
       );
       expect(mockExit).toHaveBeenCalledWith(1);
     });
@@ -271,15 +278,16 @@ describe('parseArguments', () => {
     describe('number', () => {
       it('transforms a string into a number', () => {
         const itsScriptConfig = cloneDeep(mockScriptConfig);
-        itsScriptConfig.parameters.year.default = '2024';
-        itsScriptConfig.parameters.year.multiple = false;
+        itsScriptConfig.parameters!.year.default = '2024';
+        itsScriptConfig.parameters!.year.multiple = false;
         process.argv.push(...['-y', '2018']);
-        const { year } = parseArguments(itsScriptConfig);
+        const { year } = parseArgumentsAndEnvironmentVariables(itsScriptConfig);
         expect(year).toEqual(2018);
       });
       it('transforms an array of strings into an array of numbers', () => {
         process.argv.push(...['-y', '2020', '-y', '2024']);
-        const { year } = parseArguments(mockScriptConfig);
+        const { year } =
+          parseArgumentsAndEnvironmentVariables(mockScriptConfig);
         expect(year).toEqual([2020, 2024]);
       });
       it(
@@ -287,7 +295,8 @@ describe('parseArguments', () => {
           'ranges into a sorted array of unique integers',
         () => {
           process.argv.push(...['-y', '8,12,3-5,1,7-9']);
-          const { year } = parseArguments(mockScriptConfig);
+          const { year } =
+            parseArgumentsAndEnvironmentVariables(mockScriptConfig);
           expect(year).toEqual([1, 3, 4, 5, 7, 8, 9, 12]);
         },
       );
@@ -295,25 +304,28 @@ describe('parseArguments', () => {
     describe('toLowerCase', () => {
       it('transforms a string to lower case', () => {
         const itsScriptConfig = cloneDeep(mockScriptConfig);
-        itsScriptConfig.parameters.eventCode.transform = 'toLowerCase';
+        itsScriptConfig.parameters!.eventCode.transform = 'toLowerCase';
         process.argv = ['ts-node', 'some-script.ts', 'FEEW'];
-        const { eventCode } = parseArguments(itsScriptConfig);
+        const { eventCode } =
+          parseArgumentsAndEnvironmentVariables(itsScriptConfig);
         expect(eventCode).toEqual('feew');
       });
     });
     describe('toUpperCase', () => {
       it('transforms a string to upper case', () => {
         const itsScriptConfig = cloneDeep(mockScriptConfig);
-        itsScriptConfig.parameters.eventCode.transform = 'toUpperCase';
-        const { eventCode } = parseArguments(itsScriptConfig);
+        itsScriptConfig.parameters!.eventCode.transform = 'toUpperCase';
+        const { eventCode } =
+          parseArgumentsAndEnvironmentVariables(itsScriptConfig);
         expect(eventCode).toEqual('NOA');
       });
       it('transforms a comma-delimited string into an array of upper case strings', () => {
         const itsScriptConfig = cloneDeep(mockScriptConfig);
-        itsScriptConfig.parameters.eventCode.commaDelimited = true;
-        itsScriptConfig.parameters.eventCode.transform = 'toUpperCase';
+        itsScriptConfig.parameters!.eventCode.commaDelimited = true;
+        itsScriptConfig.parameters!.eventCode.transform = 'toUpperCase';
         process.argv = ['ts-node', 'some-script.ts', 'm071,m074'];
-        const { eventCode } = parseArguments(itsScriptConfig);
+        const { eventCode } =
+          parseArgumentsAndEnvironmentVariables(itsScriptConfig);
         expect(eventCode).toEqual(['M071', 'M074']);
       });
     });
@@ -322,22 +334,24 @@ describe('parseArguments', () => {
     describe('commaDelimited', () => {
       it('splits a comma-delimited string into an array of strings', () => {
         const itsScriptConfig = cloneDeep(mockScriptConfig);
-        itsScriptConfig.parameters.eventCode.commaDelimited = true;
+        itsScriptConfig.parameters!.eventCode.commaDelimited = true;
         process.argv = ['ts-node', 'some-script.ts', 'M071,M074,FEEW'];
-        const { eventCode } = parseArguments(itsScriptConfig);
+        const { eventCode } =
+          parseArgumentsAndEnvironmentVariables(itsScriptConfig);
         expect(eventCode).toEqual(['M071', 'M074', 'FEEW']);
       });
     });
     describe('long', () => {
       it("allows a parameter's long form to differ from its resulting parsed key", () => {
         const itsScriptConfig = cloneDeep(mockScriptConfig);
-        itsScriptConfig.parameters.eventCode = {
+        itsScriptConfig.parameters!.eventCode = {
           long: 'event-code',
           short: 'c',
           type: 'string',
         };
         process.argv = ['ts-node', 'some-script.ts', '--event-code', 'NOA'];
-        const { eventCode } = parseArguments(itsScriptConfig);
+        const { eventCode } =
+          parseArgumentsAndEnvironmentVariables(itsScriptConfig);
         expect(eventCode).toEqual('NOA');
       });
     });
@@ -347,7 +361,7 @@ describe('parseArguments', () => {
           'sets of comma-delimited values are provided',
         () => {
           const itsScriptConfig = cloneDeep(mockScriptConfig);
-          itsScriptConfig.parameters.eventCode = {
+          itsScriptConfig.parameters!.eventCode = {
             commaDelimited: true,
             long: 'event-code',
             multiple: true,
@@ -364,7 +378,8 @@ describe('parseArguments', () => {
             '-c',
             'M071,M074',
           ];
-          const { eventCode } = parseArguments(itsScriptConfig);
+          const { eventCode } =
+            parseArgumentsAndEnvironmentVariables(itsScriptConfig);
           expect(eventCode).toEqual(['M01', 'M02', 'M042', 'M071', 'M074']);
         },
       );
@@ -373,10 +388,32 @@ describe('parseArguments', () => {
           'sets of integer ranges are provided',
         () => {
           process.argv.push(...['-y', '2018,2020', '-y', '2022-2024']);
-          const { year } = parseArguments(mockScriptConfig);
+          const { year } =
+            parseArgumentsAndEnvironmentVariables(mockScriptConfig);
           expect(year).toEqual([2018, 2020, 2022, 2023, 2024]);
         },
       );
+    });
+  });
+  describe('Environment Variables', () => {
+    it('exits if required environment variables are not set', () => {
+      const itsScriptConfig = cloneDeep(mockScriptConfig);
+      itsScriptConfig.environment!.missing = 'MISSINGVAR';
+      itsScriptConfig.environment!.notSet = 'NOTAREALVAR';
+      try {
+        parseArgumentsAndEnvironmentVariables(itsScriptConfig);
+      } catch (err: any) {
+        expect(err.toString()).toEqual('Error: caught process.exit');
+      }
+      expect(mockConsoleLog).toHaveBeenNthCalledWith(
+        1,
+        'Missing environment variables: MISSINGVAR, NOTAREALVAR\n',
+      );
+      expect(mockExit).toHaveBeenCalledWith(1);
+    });
+    it('returns the defined environment variables', () => {
+      const { env } = parseArgumentsAndEnvironmentVariables(mockScriptConfig);
+      expect(env).toEqual('jest');
     });
   });
 });

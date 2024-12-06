@@ -473,7 +473,7 @@ const validateParsedValues = (
         positionsReversed[0] !== uniquePositions.length - 1
       ) {
         showErrorAndExit(
-          'invalid positionals: positions must be sequential starting at 0',
+          'Invalid positionals: positions must be sequential starting at 0',
           sc,
           verbose,
         );
@@ -485,7 +485,7 @@ const validateParsedValues = (
     ]) {
       const longName = requiredParam.long!;
       if (!(longName in parsedValues) || !parsedValues[longName]) {
-        showErrorAndExit(`invalid input: expected ${longName}`, sc, verbose);
+        showErrorAndExit(`Invalid input: expected ${longName}`, sc, verbose);
       }
     }
   }
@@ -507,21 +507,19 @@ const requireEnvironmentVariables = (
   }
 };
 
-const getEnvironmentVariables = (
-  environment?:
-    | {
-        [key: string]: string;
-      }
-    | undefined,
-): { [key: string]: string } => {
+const getEnvironmentVariables = (environment?: {
+  [key: string]: string;
+}): { [key: string]: string } => {
   const ret: { [key: string]: string } = {};
-  for (const varName in environment) {
-    ret[varName] = process.env[environment[varName]]!;
+  if (environment) {
+    for (const varName in environment) {
+      ret[varName] = process.env[environment[varName]]!;
+    }
   }
   return ret;
 };
 
-export const parseArguments = (
+export const parseArgumentsAndEnvironmentVariables = (
   sc: ScriptConfig,
 ): { [k: string]: string | string[] | boolean | number | number[] } => {
   if (!sc.parameters) {
@@ -538,5 +536,5 @@ export const parseArguments = (
   validateParsedValues(sc, parsedParameters, !!parsedParameters.verbose);
   requireEnvironmentVariables(sc, !!parsedParameters.verbose);
   const environmentVariables = getEnvironmentVariables(sc.environment);
-  return parsedParameters;
+  return { ...environmentVariables, ...parsedParameters };
 };
