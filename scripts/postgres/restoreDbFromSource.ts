@@ -81,7 +81,7 @@ async function main() {
 }
 void main();
 
-async function describeRDSInstance({
+export async function describeRDSInstance({
   environment,
   rdsClient,
   useWriter = false,
