@@ -1,19 +1,45 @@
-// usage: npx ts-node --transpile-only scripts/reports/petition-counts.js 2022
+#!/usr/bin/env npx ts-node --transpile-only
+
+// usage: scripts/reports/petition-counts.js 2022
 
 import { DateTime } from 'luxon';
-import { createApplicationContext } from '@web-api/applicationContext';
+import {
+  type ScriptConfig,
+  parseArgumentsAndEnvironmentVariables,
+} from '../helpers/parseArgumentsAndEnvironmentVariables';
+import {
+  ServerApplicationContext,
+  createApplicationContext,
+} from '@web-api/applicationContext';
 import {
   dateStringsCompared,
   validateDateAndCreateISO,
 } from '@shared/business/utilities/DateHandler';
 import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 
-const year = process.argv[2] || String(DateTime.now().toObject().year);
+const scriptConfig: ScriptConfig = {
+  description:
+    'petition-counts - Generates a table of petition counts in each month of the given year',
+  environment: {
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+    env: 'ENV',
+  },
+  parameters: {
+    year: {
+      default: `${DateTime.now().toObject().year}`,
+      position: 0,
+      type: 'string',
+    },
+  },
+};
+const { year } = parseArgumentsAndEnvironmentVariables(scriptConfig) as {
+  year: string;
+};
 
 const getAllPetitions = async ({
   applicationContext,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
 }): Promise<RawDocketEntry[]> => {
   const { results } = await searchAll({
     applicationContext,

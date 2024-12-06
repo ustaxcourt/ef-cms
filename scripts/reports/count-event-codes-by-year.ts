@@ -16,7 +16,10 @@ const scriptConfig: ScriptConfig = {
   description:
     'count-event-codes-by-year - Count instances of documents with the ' +
     'given event code(s) filed within the given duration.',
-  environment: { env: 'ENV' },
+  environment: {
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+    env: 'ENV',
+  },
   parameters: {
     eventCodes: {
       commaDelimited: true,
