@@ -14,7 +14,7 @@ describe('processCaseCorrespondenceEntries', () => {
       dynamodb: {
         NewImage: {
           entityName: {
-            S: 'CaseCorrespondence',
+            S: 'Correspondence',
           },
           pk: {
             S: `case|${docketNumber}`,
@@ -30,7 +30,7 @@ describe('processCaseCorrespondenceEntries', () => {
     expect(upsertCaseCorrespondences).toHaveBeenCalledWith([
       {
         docketNumber,
-        entityName: 'CaseCorrespondence',
+        entityName: 'Correspondence',
         pk: `case|${docketNumber}`,
       },
     ]);
