@@ -1,12 +1,15 @@
 import { RawTrialSession } from '../../entities/trialSessions/TrialSession';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
+import {
+  SESSION_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '../../entities/EntityConstants';
 import { canSetTrialSessionAsCalendaredInteractor } from './canSetTrialSessionAsCalendaredInteractor';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 
 const MOCK_TRIAL = {
   maxCases: 100,
   proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-  sessionType: 'Regular',
+  sessionType: SESSION_TYPES.regular,
   startDate: '2025-12-01T00:00:00.000Z',
   term: 'Fall',
   termYear: '2025',
