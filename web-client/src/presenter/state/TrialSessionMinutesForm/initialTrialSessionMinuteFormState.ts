@@ -21,10 +21,10 @@ type BaseBriefFormFields = {
 };
 
 type BriefFormFieldsWithPartyType = BaseBriefFormFields & {
-  partyType: 'Petitioner' | 'Respondent';
+  partyType: PartyTypeOptions;
 };
 
-type SeriatimBriefFormFields = {
+export type SeriatimBriefFormFields = {
   opening: BriefFormFieldsWithPartyType;
   answering: BriefFormFieldsWithPartyType;
   reply: BriefFormFieldsWithPartyType;
@@ -377,3 +377,10 @@ export const EXHIBIT_STATUS_OPTIONS = {
 
 export type ExhibitStatusOption =
   (typeof EXHIBIT_STATUS_OPTIONS)[keyof typeof EXHIBIT_STATUS_OPTIONS];
+
+export const PARTY_TYPE_OPTIONS_MAP = {
+  petitioner: 'Petitioner',
+  respondent: 'Respondent',
+} as const;
+type PartyTypeOptions =
+  (typeof PARTY_TYPE_OPTIONS_MAP)[keyof typeof PARTY_TYPE_OPTIONS_MAP];

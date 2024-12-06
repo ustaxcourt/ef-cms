@@ -35,4 +35,34 @@ export const updateTrialSessionMinutesFormAction = ({
       updatedPetitionersObject,
     );
   }
+
+  if (section === 'trialBrief' && name === 'briefType') {
+    const defaultBriefDetailsValues = {
+      answering: {
+        dueDate: '',
+        note: '',
+        partyType: '',
+      },
+      opening: {
+        dueDate: '',
+        note: '',
+        partyType: '',
+      },
+      reply: {
+        dueDate: '',
+        note: '',
+        partyType: '',
+      },
+      surReply: {
+        dueDate: '',
+        note: '',
+        partyType: '',
+      },
+    };
+
+    store.set(
+      state.minuteSheetForm.trialBrief.briefDetails,
+      defaultBriefDetailsValues,
+    );
+  }
 };

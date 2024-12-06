@@ -1,20 +1,12 @@
 import {
   BRIEF_TYPE_OPTIONS,
   MinuteSheetFormState,
+  SeriatimBriefFormFields,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { OnChangeHandler } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
+import { SeriatimBriefFieldset } from './SeriatimBriefFieldset';
 import React from 'react';
-
-const renderBriefForm = (briefType: string) => {
-  console.log(briefType);
-  const briefFormMap = {
-    seriatim: <div>Seriatim brief</div>,
-    seriatimMemorandum: <div>Seriatim memorandum brief</div>,
-  };
-
-  return briefFormMap[briefType];
-};
 
 export const TrialBriefFieldset = ({
   onBlurHandler,
@@ -25,6 +17,23 @@ export const TrialBriefFieldset = ({
   onBlurHandler: () => void;
   trialBriefFormState: MinuteSheetFormState['trialBrief'];
 }) => {
+  const renderBriefForm = (briefType: string) => {
+    const briefFormMap = {
+      seriatim: (
+        <SeriatimBriefFieldset
+          seriatimBriefFormState={
+            trialBriefFormState.briefDetails as SeriatimBriefFormFields
+          }
+          onBlurHandler={onBlurHandler}
+          onChangeHandler={onChangeHandler}
+        />
+      ),
+      seriatimMemorandum: <div>Seriatim memorandum brief</div>,
+    };
+
+    return briefFormMap[briefType];
+  };
+
   return (
     <fieldset className="border-0 grid-container padding-0">
       <div className="grid-row grid-gap">
