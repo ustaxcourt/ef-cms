@@ -147,12 +147,12 @@ export function createAndServePaperPetition(
       ];
 
       expectedDocuments.forEach(({ eventCode, index, servedTo }) => {
-        cy.get(`[data-testid="docket-entry-index-${index}-eventCode"]`).should(
+        cy.get(`[data-testid="docket-entry-eventCode-${index}"]`).should(
           'have.text',
           eventCode,
         );
         cy.get(
-          `[data-testid="docket-entry-index-${index}-servedPartiesCode"]`,
+          `[data-testid="docket-entry-servedPartiesCode-${index}"]`,
         ).should('have.text', servedTo);
       });
 
