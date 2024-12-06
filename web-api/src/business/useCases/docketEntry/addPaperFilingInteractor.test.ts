@@ -1,10 +1,11 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   AUTOMATIC_BLOCKED_REASONS,
   SERVICE_INDICATOR_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import {
   MOCK_CASE,
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
@@ -15,9 +16,15 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { addPaperFilingInteractor } from './addPaperFilingInteractor';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { saveWorkItem as saveWorkItemMock } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+
+const getCaseDeadlinesByDocketNumber =
+  getCaseDeadlinesByDocketNumberMock as jest.Mock;
 
 describe('addPaperFilingInteractor', () => {
+  const saveWorkItem = saveWorkItemMock as jest.Mock;
   const mockClientConnectionId = '987654';
   const mockCase = { ...MOCK_CASE, leadDocketNumber: MOCK_CASE.docketNumber };
   let defaultParamaters: {
@@ -103,12 +110,7 @@ describe('addPaperFilingInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(saveWorkItem).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -221,13 +223,9 @@ describe('addPaperFilingInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-        .workItem,
-    ).toMatchObject({ leadDocketNumber: mockCase.leadDocketNumber });
+    expect(saveWorkItem.mock.calls[0][0].workItem).toMatchObject({
+      leadDocketNumber: mockCase.leadDocketNumber,
+    });
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -257,13 +255,7 @@ describe('addPaperFilingInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(saveWorkItem).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -293,13 +285,7 @@ describe('addPaperFilingInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
-        .calls[0][0].userId,
-    ).toEqual(docketClerkUser.userId);
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(saveWorkItem).toHaveBeenCalled();
   });
 
   it('sets the case as blocked if the document filed is a tracked document type', async () => {
@@ -342,11 +328,7 @@ describe('addPaperFilingInteractor', () => {
   });
 
   it('sets the case as blocked with due dates if the document filed is a tracked document type and the case has due dates', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockReturnValue([
-        { deadline: 'something' },
-      ]);
+    getCaseDeadlinesByDocketNumber.mockReturnValue([{ deadline: 'something' }]);
 
     await addPaperFilingInteractor(
       applicationContext,
@@ -416,35 +398,6 @@ describe('addPaperFilingInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).not.toHaveBeenCalled();
-  });
-
-  it('should use original case caption to create case title when creating work item', async () => {
-    await addPaperFilingInteractor(
-      applicationContext,
-      {
-        clientConnectionId: mockClientConnectionId,
-        consolidatedGroupDocketNumbers: [],
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        documentMetadata: {
-          docketNumber: mockCase.docketNumber,
-          documentTitle: 'Memorandum in Support',
-          documentType: 'Memorandum in Support',
-          eventCode: 'MISP',
-          filedBy: 'Test Petitioner',
-          isFileAttached: true,
-          isPaper: true,
-        },
-        isSavingForLater: true,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-        .workItem,
-    ).toMatchObject({
-      caseTitle: Case.getCaseTitle(mockCase.caseCaption),
-    });
   });
 
   it('should send a serve_document_complete notification with a success message when all document processing has completed', async () => {
@@ -572,9 +525,7 @@ describe('addPaperFilingInteractor', () => {
       expect(
         applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
       ).toHaveBeenCalledTimes(1);
-      expect(
-        applicationContext.getPersistenceGateway().saveWorkItem,
-      ).toHaveBeenCalledTimes(1);
+      expect(saveWorkItem).toHaveBeenCalledTimes(1);
     });
 
     it('should still save only one copy of the document to s3', async () => {

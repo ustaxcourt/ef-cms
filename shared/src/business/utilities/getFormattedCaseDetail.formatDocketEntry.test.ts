@@ -310,4 +310,24 @@ describe('formatDocketEntry', () => {
       },
     );
   });
+
+  describe('sortingFilingDate', () => {
+    it('should set the property "sortingFilingDate" correctly using filingDate', () => {
+      const result = formatDocketEntry(applicationContext, {
+        createdAt: '2020-03-01T21:40:46.415Z',
+        filingDate: '2019-03-01T21:40:46.415Z',
+        isOnDocketRecord: true,
+        isUnservable: true,
+      });
+      expect(result.sortingFilingDate).toEqual('20190301');
+    });
+    it('should set the property "sortingFilingDate" correctly using createdAt', () => {
+      const result = formatDocketEntry(applicationContext, {
+        createdAt: '2020-03-01T21:40:46.415Z',
+        filingDate: '2019-03-01T21:40:46.415Z',
+        isOnDocketRecord: false,
+      });
+      expect(result.sortingFilingDate).toEqual('20200301');
+    });
+  });
 });

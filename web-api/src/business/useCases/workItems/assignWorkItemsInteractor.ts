@@ -1,12 +1,13 @@
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
-import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 
 /**
  * getWorkItem
@@ -46,14 +47,14 @@ export const assignWorkItemsInteractor = async (
       userId: assigneeId,
     });
 
-  const workItemRecord = await applicationContext
-    .getPersistenceGateway()
-    .getWorkItemById({
-      applicationContext,
-      workItemId,
-    });
+  const workItemEntity = await getWorkItemById({
+    workItemId,
+  });
 
-  const workItemEntity = new WorkItem(workItemRecord);
+  if (!workItemEntity) {
+    throw new NotFoundError(`WorkItem ${workItemId} was not found.`);
+  }
+
   const userIsCaseServices = User.isCaseServicesUser({ section: user.section });
   const userBeingAssignedIsCaseServices = User.isCaseServicesUser({
     section: userBeingAssigned.section,
@@ -77,8 +78,7 @@ export const assignWorkItemsInteractor = async (
     sentByUserId: user.userId,
   });
 
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
+  await saveWorkItem({
     workItem: workItemEntity.validate().toRawObject(),
   });
 };

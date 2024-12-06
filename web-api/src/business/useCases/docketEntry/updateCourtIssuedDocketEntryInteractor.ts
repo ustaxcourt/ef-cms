@@ -7,6 +7,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const updateCourtIssuedDocketEntry = async (
@@ -89,8 +90,7 @@ export const updateCourtIssuedDocketEntry = async (
   const rawValidWorkItem = workItem.validate().toRawObject();
 
   const saveItems = [
-    applicationContext.getPersistenceGateway().saveWorkItem({
-      applicationContext,
+    saveWorkItem({
       workItem: rawValidWorkItem,
     }),
     applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
