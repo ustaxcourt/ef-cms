@@ -1,6 +1,15 @@
 import { Case } from '@shared/business/entities/cases/Case';
+import { HIGH_PRIORITY_SUFFIXES } from '@shared/business/entities/EntityConstants';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import {
+  addGroupSymbol,
+  compareTrialSessionEligibleCases,
+  getPriorityGroups
+} from "@web-client/presenter/computeds/formattedEligibleCasesHelper";
+import {setConsolidationFlagsForDisplay} from "@shared/business/utilities/setConsolidationFlagsForDisplay";
+
+const groupKeySymbol = Symbol('group');
 
 export const trialLocationHelper = (
   get: Get,
@@ -10,7 +19,6 @@ export const trialLocationHelper = (
 } => {
   // const permissions = get(state.permissions)!;
   const { eligibleCases, location } = get(state.trialLocationPage);
-
   const formattedEligibleCases = eligibleCases.map(c => {
     let privatePractitioners: string[] = [];
     if (c.privatePractitioners) {
@@ -24,15 +32,37 @@ export const trialLocationHelper = (
         return practitioner.name;
       });
     }
-
+    const isDocketSuffixHighPriority = HIGH_PRIORITY_SUFFIXES.includes(
+      c.docketNumberSuffix!,
+    );
     const caseTitle = Case.getCaseTitle(c.caseCaption);
 
-    return { ...c, caseTitle, irsPractitioners, privatePractitioners };
+    return {
+      ...c,
+      caseTitle,
+      irsPractitioners,
+      isDocketSuffixHighPriority,
+      privatePractitioners,
+    };
   });
 
   const trialCityFormatted = location.replace('-', ', ');
 
+  const groups = getPriorityGroups(formattedEligibleCases);
+
+  const sortedEligibleCases = formattedEligibleCases
+    .map(caseItem => {
+      return addGroupSymbol(
+        setConsolidationFlagsForDisplay(
+          caseItem,
+          groups[caseItem[groupKeySymbol]],
+        ),
+        caseItem[groupKeySymbol],
+      );
+    })
+    .sort(compareTrialSessionEligibleCases(formattedCases));
+
   // const pageSize = 100;
 
-  return { formattedEligibleCases, location: trialCityFormatted };
+  return { formattedEligibleCases: sortedEligibleCases, location: trialCityFormatted };
 };

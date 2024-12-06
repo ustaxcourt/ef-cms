@@ -2,7 +2,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 const groupKeySymbol = Symbol('group');
 
-const addGroupSymbol = (object, value) => {
+export const addGroupSymbol = (object, value) => {
   Object.defineProperty(object, groupKeySymbol, {
     enumerable: false,
     value,
@@ -11,7 +11,7 @@ const addGroupSymbol = (object, value) => {
   return object;
 };
 
-const getPriorityGroups = eligibleCases => {
+export const getPriorityGroups = eligibleCases => {
   const groups = {
     default: [],
     highPriority: [],
@@ -69,7 +69,7 @@ const getFullSortString = (theCase, cases) => {
   )}-${getSortableDocketNumber(theCase.docketNumber)}`;
 };
 
-const compareTrialSessionEligibleCases = eligibleCases => {
+export const compareTrialSessionEligibleCases = eligibleCases => {
   const groups = getPriorityGroups(eligibleCases);
   return (a, b) => {
     const aSortString = getFullSortString(a, groups[a[groupKeySymbol]]);
