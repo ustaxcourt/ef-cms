@@ -311,7 +311,7 @@ jobs:
           name: Begin Reindexing
           command: |
             if [ "$MIGRATE_FLAG" == "false" ]; then
-              npx ts-node --transpile-only ./scripts/elasticsearch/reindex.ts
+              ./scripts/elasticsearch/reindex.ts
             fi
       - run:
           name: Deploy Check Reindex Status Cron Lambda
