@@ -1,9 +1,20 @@
-import { getClient } from '../../web-api/elasticsearch/client';
-import { requireEnvVars } from '../../shared/admin-tools/util';
+#!/usr/bin/env npx ts-node --transpile-only
 
-requireEnvVars(['ENV', 'SOURCE_TABLE_VERSION']);
-const environmentName = process.env.ENV!;
-const version = process.env.SOURCE_TABLE_VERSION!;
+import {
+  type ScriptConfig,
+  parseArgumentsAndEnvironmentVariables,
+} from '../helpers/parseArgumentsAndEnvironmentVariables';
+import { getClient } from '../../web-api/elasticsearch/client';
+
+const scriptConfig: ScriptConfig = {
+  environment: {
+    environmentName: 'ENV',
+    version: 'SOURCE_TABLE_VERSION',
+  },
+};
+const { environmentName, version } = parseArgumentsAndEnvironmentVariables(
+  scriptConfig,
+) as { environmentName: string; version: string };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {

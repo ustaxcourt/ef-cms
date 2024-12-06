@@ -1,9 +1,21 @@
+#!/usr/bin/env npx ts-node --transpile-only
+
+import {
+  type ScriptConfig,
+  parseArgumentsAndEnvironmentVariables,
+} from '../helpers/parseArgumentsAndEnvironmentVariables';
 import { createNewIndicesFromLocalMappings } from './create-temporary-indices-helpers';
-import { requireEnvVars } from '../../shared/admin-tools/util';
 
-requireEnvVars(['ENV']);
-
-const environmentName: string = process.env.ENV!;
+const scriptConfig: ScriptConfig = {
+  description:
+    'create-temporary-indices - Creates new indices from locally-defined mappings',
+  environment: {
+    environmentName: 'ENV',
+  },
+};
+const { environmentName } = parseArgumentsAndEnvironmentVariables(
+  scriptConfig,
+) as { environmentName: string };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
