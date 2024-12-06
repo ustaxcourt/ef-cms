@@ -1,6 +1,9 @@
 #!/usr/bin/env npx ts-node --transpile-only
 
-import { ScriptConfig, parseArguments } from './helpers/parseArguments';
+import {
+  type ScriptConfig,
+  parseArgumentsAndEnvironmentVariables,
+} from './helpers/parseArgumentsAndEnvironmentVariables';
 import { sendMaintenanceNotificationsLambda } from '@web-api/lambdas/cases/sendMaintenanceNotificationsLambda';
 
 const scriptConfig: ScriptConfig = {
@@ -13,7 +16,9 @@ const scriptConfig: ScriptConfig = {
     },
   },
 };
-const { toggle } = parseArguments(scriptConfig) as { toggle: string };
+const { toggle } = parseArgumentsAndEnvironmentVariables(scriptConfig) as {
+  toggle: string;
+};
 
 export const setMaintenanceModeLocally = async () => {
   await sendMaintenanceNotificationsLambda({

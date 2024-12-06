@@ -1,21 +1,22 @@
 #!/usr/bin/env npx ts-node --transpile-only
 
 import { DateTime } from 'luxon';
-import { type ScriptConfig, parseArguments } from '../helpers/parseArguments';
+import {
+  type ScriptConfig,
+  parseArgumentsAndEnvironmentVariables,
+} from '../helpers/parseArgumentsAndEnvironmentVariables';
 import {
   ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
 import { count } from '@web-api/persistence/elasticsearch/searchClient';
-import { requireEnvVars } from '../../shared/admin-tools/util';
 import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
-
-requireEnvVars(['ENV', 'REGION']);
 
 const scriptConfig: ScriptConfig = {
   description:
     'count-event-codes-by-year - Count instances of documents with the ' +
     'given event code(s) filed within the given duration.',
+  environment: { env: 'ENV' },
   parameters: {
     eventCodes: {
       commaDelimited: true,
@@ -135,14 +136,13 @@ const getCountDocketEntriesByEventCodesAndYears = async ({
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const { eventCodes, fiscal, stricken, years } = parseArguments(
-    scriptConfig,
-  ) as {
-    eventCodes: string[];
-    fiscal: boolean;
-    stricken: boolean;
-    years: number[];
-  };
+  const { eventCodes, fiscal, stricken, years } =
+    parseArgumentsAndEnvironmentVariables(scriptConfig) as {
+      eventCodes: string[];
+      fiscal: boolean;
+      stricken: boolean;
+      years: number[];
+    };
   const ret = await getCountDocketEntriesByEventCodesAndYears({
     applicationContext: createApplicationContext({}),
     eventCodes,

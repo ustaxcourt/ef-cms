@@ -1,13 +1,15 @@
 #!/usr/bin/env npx ts-node --transpile-only
 
 import { DateTime } from 'luxon';
-import { type ScriptConfig, parseArguments } from '../helpers/parseArguments';
+import {
+  type ScriptConfig,
+  parseArgumentsAndEnvironmentVariables,
+} from '../helpers/parseArgumentsAndEnvironmentVariables';
 import {
   ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
 import { generateCsv } from '../helpers/generate-csv';
-import { requireEnvVars } from '../../shared/admin-tools/util';
 import {
   search,
   searchAll,
@@ -15,12 +17,11 @@ import {
 import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
 import PQueue from 'p-queue';
 
-requireEnvVars(['ENV', 'REGION']);
-
 const scriptConfig: ScriptConfig = {
   description:
     'event-codes-by-year - Generate a CSV of instances of documents with the ' +
     'given event code(s) filed within the given duration.',
+  environment: { env: 'ENV' },
   parameters: {
     eventCodes: {
       commaDelimited: true,
@@ -203,7 +204,9 @@ const addRowForDocketEntry = async ({
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
-  const { eventCodes, fiscal, years } = parseArguments(scriptConfig) as {
+  const { eventCodes, fiscal, years } = parseArgumentsAndEnvironmentVariables(
+    scriptConfig,
+  ) as {
     eventCodes: string[];
     fiscal: boolean;
     years: number[];

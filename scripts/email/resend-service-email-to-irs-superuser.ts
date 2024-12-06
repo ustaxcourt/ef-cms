@@ -2,20 +2,24 @@
 
 import { Case } from '@shared/business/entities/cases/Case';
 import { INITIAL_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
-import { ScriptConfig, parseArguments } from '../helpers/parseArguments';
+import {
+  type ScriptConfig,
+  parseArgumentsAndEnvironmentVariables,
+} from '../helpers/parseArgumentsAndEnvironmentVariables';
 import {
   type ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
-import { requireEnvVars } from '../../shared/admin-tools/util';
 import { sendIrsSuperuserPetitionEmail } from '@web-api/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail';
 import { sendServedPartiesEmails } from '@web-api/business/useCaseHelper/service/sendServedPartiesEmails';
-
-requireEnvVars(['ENV', 'REGION']);
 
 const scriptConfig: ScriptConfig = {
   description:
     'resend-service-email-to-irs-superuser - Resends service email for all documents filed within the given timeframe',
+  environment: {
+    env: 'ENV',
+    region: 'REGION',
+  },
   parameters: {
     endTimestamp: {
       description: 'Timestamp in ISO-8601 format',
@@ -31,7 +35,9 @@ const scriptConfig: ScriptConfig = {
     },
   },
 };
-const { endTimestamp, startTimestamp } = parseArguments(scriptConfig) as {
+const { endTimestamp, startTimestamp } = parseArgumentsAndEnvironmentVariables(
+  scriptConfig,
+) as {
   endTimestamp: string;
   startTimestamp: string;
 };
