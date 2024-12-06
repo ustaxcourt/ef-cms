@@ -13,7 +13,7 @@ export type TrialLocationDataFormatted = TrialLocationData & {
 type TrialSessionPlanningReportViewHelperResults = {
   citiesNotCalendaredInTwoPreviousTerms: string[][];
   trialSessionPlanningReportHeader: string;
-  previousTermsFormatted: { termDisplayFormatted }[];
+  previousTermsFormatted: { termDisplayFormatted: string }[];
   trialLocationDataFormatted: TrialLocationDataFormatted[];
 };
 

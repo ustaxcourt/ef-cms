@@ -91,7 +91,7 @@ function TrialSessionPlanningReportHeader({
 
 type TrialSessionPlanningReportTableParams = {
   locationData: TrialLocationDataFormatted[];
-  previousTerms: { termDisplayFormatted }[];
+  previousTerms: { termDisplayFormatted: string }[];
 };
 
 function TrialSessionPlanningReportTable({
@@ -108,8 +108,12 @@ function TrialSessionPlanningReportTable({
             <th>All</th>
             <th>Small</th>
             <th>Regular</th>
-            {previousTerms.map((term, index) => {
-              return <th key={`th-${index}`}>{term.termDisplayFormatted}</th>;
+            {previousTerms.map(term => {
+              return (
+                <th key={`th-${term.termDisplayFormatted}`}>
+                  {term.termDisplayFormatted}
+                </th>
+              );
             })}
             <th>Special</th>
             <th>Blocked</th>
@@ -117,13 +121,13 @@ function TrialSessionPlanningReportTable({
         </thead>
         <tbody>
           {locationData &&
-            locationData.map((trialLocation, idx) => {
+            locationData.map(trialLocation => {
               return (
                 <tr
                   className={
                     trialLocation.hasNotBeenCalendared ? 'bg-yellow' : undefined
                   }
-                  key={`row-${idx}`}
+                  key={`row-${trialLocation.trialCityState}`}
                 >
                   <td>
                     {trialLocation.hasNotBeenCalendared && (
@@ -139,27 +143,32 @@ function TrialSessionPlanningReportTable({
                   <td>{trialLocation.allCaseCount}</td>
                   <td>{trialLocation.smallCaseCount}</td>
                   <td>{trialLocation.regularCaseCount}</td>
-                  {trialLocation.previousTermsData &&
-                    trialLocation.previousTermsData.map((prevTerm, index) => {
-                      const hasData =
-                        Array.isArray(prevTerm) && prevTerm.length > 0;
+                  {trialLocation.previousTermsData.map(prevTerm => {
+                    const hasData =
+                      Array.isArray(prevTerm) && prevTerm.length > 0;
 
-                      return (
-                        <td key={`${idx}-${index}`}>
-                          {hasData ? (
-                            prevTerm.map(data => (
-                              <div key={`datum-${idx}`}>{data}</div>
-                            ))
-                          ) : (
-                            <FontAwesomeIcon
-                              className="padding-1px"
-                              icon={['far', 'calendar-times']}
-                              size="lg"
-                            />
-                          )}
-                        </td>
-                      );
-                    })}
+                    return (
+                      <td
+                        key={`${trialLocation.trialCityState}-previous-term-col`}
+                      >
+                        {hasData ? (
+                          prevTerm.map(data => (
+                            <div
+                              key={`${trialLocation.trialCityState}-previous-term-${data}`}
+                            >
+                              {data}
+                            </div>
+                          ))
+                        ) : (
+                          <FontAwesomeIcon
+                            className="padding-1px"
+                            icon={['far', 'calendar-times']}
+                            size="lg"
+                          />
+                        )}
+                      </td>
+                    );
+                  })}
                   <td>{trialLocation.specialCaseCount}</td>
                   <td>{trialLocation.blockedCaseCount}</td>
                 </tr>
