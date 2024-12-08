@@ -1,0 +1,177 @@
+[
+  {
+    "_score": 5.610724,
+    "docketNumber": "2996-24",
+    "preferredTrialCity": "Portland, Maine",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "19814-23",
+    "preferredTrialCity": "Peoria, Illinois",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "5819-23",
+    "preferredTrialCity": "Syracuse, New York",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "15415-23",
+    "preferredTrialCity": "Burlington, Vermont",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "10463-24",
+    "preferredTrialCity": "Fresno, California",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "1587-22",
+    "preferredTrialCity": "Fresno, California",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "16407-21",
+    "preferredTrialCity": "Albany, New York",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "8443-23",
+    "preferredTrialCity": "Fresno, California",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "4524-22",
+    "preferredTrialCity": "Albany, New York",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "17634-23",
+    "preferredTrialCity": "Portland, Maine",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "28407-21",
+    "preferredTrialCity": "Aberdeen, South Dakota",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "5694-24",
+    "preferredTrialCity": "Fresno, California",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "13516-23",
+    "preferredTrialCity": "Fresno, California",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "10036-24",
+    "preferredTrialCity": "Fresno, California",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "16919-23",
+    "preferredTrialCity": "Fresno, California",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "1078-21",
+    "preferredTrialCity": "Syracuse, New York",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "15537-23",
+    "preferredTrialCity": "Roanoke, Virginia",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "2834-24",
+    "preferredTrialCity": "Albany, New York",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "1131-23",
+    "preferredTrialCity": "Fresno, California",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "123-21",
+    "preferredTrialCity": "Fresno, California",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "3854-22",
+    "preferredTrialCity": "Albany, New York",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "4816-24",
+    "preferredTrialCity": "Portland, Maine",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "659-24",
+    "preferredTrialCity": "Albany, New York",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "8593-24",
+    "preferredTrialCity": "Fresno, California",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "_score": 5.610724,
+    "docketNumber": "18769-23",
+    "preferredTrialCity": "Fresno, California",
+    "procedureType": "Regular",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  }
+]
