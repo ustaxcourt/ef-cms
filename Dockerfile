@@ -28,7 +28,6 @@ RUN apt-get install -y \
   jq \
   graphicsmagick \
   ghostscript \
-  chromium \
   openssh-client \
   postgresql-client \
   sudo
