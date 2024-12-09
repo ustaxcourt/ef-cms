@@ -10,8 +10,15 @@ export const updateCaseStatistic = async ({
     writer
       .updateTable('dwCaseStatistic')
       .set({
+        determinationDeficiencyAmount: statistic.determinationDeficiencyAmount
+          ? parseFloat(statistic.determinationDeficiencyAmount)
+          : null,
+        determinationTotalPenalties: statistic.determinationTotalPenalties
+          ? parseFloat(statistic.determinationTotalPenalties)
+          : null,
         irsDeficiencyAmount: parseFloat(statistic.irsDeficiencyAmount),
         irsTotalPenalties: parseFloat(statistic.irsTotalPenalties),
+        lastDateOfPeriod: statistic.lastDateOfPeriod,
         year: parseInt(statistic.year),
         yearOrPeriod: statistic.yearOrPeriod,
       })
@@ -41,7 +48,8 @@ export const updateCaseStatistic = async ({
             penaltyType: p.ref('excluded.penaltyType'),
           };
         }),
-      ),
+      )
+      .execute(),
   );
 
   return new Statistic(updatedStatistic);

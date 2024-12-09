@@ -64,6 +64,7 @@ export const getCaseByDocketNumber = async ({
   // Group penalties by statisticId
   const statisticsWithPenalties = dbCaseStatistics.reduce((acc, row) => {
     const {
+      determinationDeficiencyAmount,
       determinationTotalPenalties,
       irsDeficiencyAmount,
       irsTotalPenalties,
@@ -75,6 +76,7 @@ export const getCaseByDocketNumber = async ({
     } = row;
     if (!acc[statisticId]) {
       acc[statisticId] = {
+        determinationDeficiencyAmount,
         determinationTotalPenalties,
         irsDeficiencyAmount,
         irsTotalPenalties,

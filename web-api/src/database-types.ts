@@ -198,8 +198,9 @@ export interface CaseStatisticTable {
   statisticId: string;
   year: number;
   yearOrPeriod: string;
-  determinationTotalPenalties?: string;
-  lastDateOfPeriod?: string;
+  determinationDeficiencyAmount?: number | null;
+  determinationTotalPenalties?: number | null;
+  lastDateOfPeriod?: string | null;
 }
 
 export type CaseStatisticKysely = Selectable<CaseStatisticTable>;

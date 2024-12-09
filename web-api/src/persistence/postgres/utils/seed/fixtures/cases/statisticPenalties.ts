@@ -13,7 +13,7 @@ export const statisticPenalties: StatisticPenaltyKysely[] = [
     name: 'Marie Antoinette',
     penaltyAmount: 50,
     penaltyId: 'cb557362-50ee-4440-aaff-0a9f1bfa30ed',
-    penaltyType: PENALTY_TYPES.DETERMINATION_PENALTY_AMOUNT,
+    penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
     statisticId: 'ab557361-50ee-4440-aaff-0a9f1bfa30ed',
   },
   {
