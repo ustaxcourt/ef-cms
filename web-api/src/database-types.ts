@@ -196,11 +196,11 @@ export interface CaseStatisticTable {
   irsDeficiencyAmount: number;
   irsTotalPenalties: number;
   statisticId: string;
-  year: number;
+  year?: number | null;
   yearOrPeriod: string;
   determinationDeficiencyAmount?: number | null;
   determinationTotalPenalties?: number | null;
-  lastDateOfPeriod?: string | null;
+  lastDateOfPeriod?: Date | null;
 }
 
 export type CaseStatisticKysely = Selectable<CaseStatisticTable>;

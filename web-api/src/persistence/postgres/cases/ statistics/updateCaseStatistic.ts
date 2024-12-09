@@ -1,4 +1,5 @@
 import { Statistic } from '@shared/business/entities/Statistic';
+import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getDbWriter } from '@web-api/database';
 
 export const updateCaseStatistic = async ({
@@ -18,8 +19,10 @@ export const updateCaseStatistic = async ({
           : null,
         irsDeficiencyAmount: parseFloat(statistic.irsDeficiencyAmount),
         irsTotalPenalties: parseFloat(statistic.irsTotalPenalties),
-        lastDateOfPeriod: statistic.lastDateOfPeriod,
-        year: parseInt(statistic.year),
+        lastDateOfPeriod: statistic.lastDateOfPeriod
+          ? calculateDate({ dateString: statistic.lastDateOfPeriod })
+          : null,
+        year: statistic.year ? parseInt(statistic.year) : null,
         yearOrPeriod: statistic.yearOrPeriod,
       })
       .where('statisticId', '=', statistic.statisticId)
