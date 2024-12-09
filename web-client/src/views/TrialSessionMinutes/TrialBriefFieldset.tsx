@@ -2,11 +2,18 @@ import {
   BRIEF_TYPE_OPTIONS,
   MinuteSheetFormState,
   SeriatimBriefFormFields,
+  SeriatimMemorandumFormFields,
+  SimultaneousBriefFormFields,
+  SimultaneousMemorandaOfLawFormFields,
+  SimultaneousMemorandumFormFields,
   SimultaneousSupplementalFormFields,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { OnChangeHandler } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
-import { SeriatimBriefFieldset } from './BriefDetailsFieldsets/SeriatimBriefFieldset';
+import { SeriatimFieldset } from './BriefDetailsFieldsets/SeriatimFieldset';
+import { SimultaneousBriefFormFieldset } from './BriefDetailsFieldsets/SimultaneousBriefFormFieldset';
+import { SimultaneousMemorandaOfLawFormFieldset } from './BriefDetailsFieldsets/SimultaneousMemorandaOfLawFormFieldset';
+import { SimultaneousMemorandumFormFieldset } from './BriefDetailsFieldsets/SimultaneousMemorandumFormFieldset';
 import { SimultaneousSupplementalBriefFieldset } from './BriefDetailsFieldsets/SimultaneousSupplementalBriefFieldset';
 import React from 'react';
 
@@ -21,9 +28,10 @@ export const TrialBriefFieldset = ({
 }) => {
   const renderBriefForm = (briefType: string) => {
     const briefFormMap = {
-      [BRIEF_TYPE_OPTIONS.seriatim]: (
-        <SeriatimBriefFieldset
-          seriatimBriefFormState={
+      [BRIEF_TYPE_OPTIONS.seriatimBrief]: (
+        <SeriatimFieldset
+          key={BRIEF_TYPE_OPTIONS.seriatimBrief}
+          seriatimFormState={
             trialBriefFormState.briefDetails as SeriatimBriefFormFields
           }
           onBlurHandler={onBlurHandler}
@@ -31,12 +39,50 @@ export const TrialBriefFieldset = ({
         />
       ),
       [BRIEF_TYPE_OPTIONS.seriatimMemorandum]: (
-        <div>Seriatim memorandum brief</div>
+        <SeriatimFieldset
+          key={BRIEF_TYPE_OPTIONS.seriatimMemorandum}
+          seriatimFormState={
+            trialBriefFormState.briefDetails as SeriatimMemorandumFormFields
+          }
+          onBlurHandler={onBlurHandler}
+          onChangeHandler={onChangeHandler}
+        />
       ),
       [BRIEF_TYPE_OPTIONS.simultaneousSupplemental]: (
         <SimultaneousSupplementalBriefFieldset
+          key={BRIEF_TYPE_OPTIONS.simultaneousSupplemental}
           simultaneousSupplementalBriefFormState={
             trialBriefFormState.briefDetails as SimultaneousSupplementalFormFields
+          }
+          onBlurHandler={onBlurHandler}
+          onChangeHandler={onChangeHandler}
+        />
+      ),
+      [BRIEF_TYPE_OPTIONS.simultaneous]: (
+        <SimultaneousBriefFormFieldset
+          key={BRIEF_TYPE_OPTIONS.simultaneous}
+          simultaneousBriefFormState={
+            trialBriefFormState.briefDetails as SimultaneousBriefFormFields
+          }
+          onBlurHandler={onBlurHandler}
+          onChangeHandler={onChangeHandler}
+        />
+      ),
+      [BRIEF_TYPE_OPTIONS.simultaneousMemorandum]: (
+        <SimultaneousMemorandumFormFieldset
+          key={BRIEF_TYPE_OPTIONS.simultaneousMemorandum}
+          simultaneousMemorandumFormState={
+            trialBriefFormState.briefDetails as SimultaneousMemorandumFormFields
+          }
+          onBlurHandler={onBlurHandler}
+          onChangeHandler={onChangeHandler}
+        />
+      ),
+      [BRIEF_TYPE_OPTIONS.simultaneousMemoranda]: (
+        <SimultaneousMemorandaOfLawFormFieldset
+          key={BRIEF_TYPE_OPTIONS.simultaneousMemoranda}
+          simultaneousMemorandaOfLawFormState={
+            trialBriefFormState.briefDetails as SimultaneousMemorandaOfLawFormFields
           }
           onBlurHandler={onBlurHandler}
           onChangeHandler={onChangeHandler}
