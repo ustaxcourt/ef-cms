@@ -11,7 +11,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('yearOrPeriod', 'varchar')
     .addColumn('determinationTotalPenalties', 'decimal')
     .addColumn('determinationDeficiencyAmount', 'decimal')
-    .addColumn('lastDateOfPeriod', 'varchar')
+    .addColumn('lastDateOfPeriod', 'timestamptz')
     .addForeignKeyConstraint(
       'case_statistic_to_case_fk',
       ['docketNumber'],
