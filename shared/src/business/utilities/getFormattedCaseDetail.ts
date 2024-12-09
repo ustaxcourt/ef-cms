@@ -115,10 +115,16 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
     formattedEntry.createdAtFormatted = applicationContext
       .getUtilities()
       .formatDateString(formattedEntry.filingDate, 'MMDDYY');
+    formattedEntry.sortingFilingDate = applicationContext
+      .getUtilities()
+      .formatDateString(formattedEntry.filingDate, 'YYYYMMDD_NUMERIC');
   } else {
     formattedEntry.createdAtFormatted = applicationContext
       .getUtilities()
       .formatDateString(formattedEntry.createdAt, 'MMDDYY');
+    formattedEntry.sortingFilingDate = applicationContext
+      .getUtilities()
+      .formatDateString(formattedEntry.createdAt, 'YYYYMMDD_NUMERIC');
   }
 
   formattedEntry.filingsAndProceedings =
