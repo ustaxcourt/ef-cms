@@ -1,4 +1,5 @@
 import { CaseMetadataFieldset } from '@web-client/views/TrialSessionMinutes/CaseMetadataFieldset';
+import { JurisdictionRetainedFieldset } from '@web-client/views/TrialSessionMinutes/JurisdictionRetainedFieldset';
 import { PetitionersFieldset } from '@web-client/views/TrialSessionMinutes/PetitionersFieldset';
 import { RespondentsFieldset } from '@web-client/views/TrialSessionMinutes/RespondentsFieldset';
 import { TrialBriefFieldset } from './TrialBriefFieldset';
@@ -65,7 +66,13 @@ export const TrialSessionMinutesForm = connect(
           </div>
         </div>
         <hr />
-        <div>Jurisdiction Retained Section</div>
+        <JurisdictionRetainedFieldset
+          jurisdictionRetainedFormState={
+            trialSessionMinutesForm.jurisdictionRetained
+          }
+          onBlurHandler={trialSessionMinutesAutosaveSequence}
+          onChangeHandler={updateTrialSessionMinutesFormSequence}
+        />
         <hr />
         <div>Orders Section</div>
         <hr />
