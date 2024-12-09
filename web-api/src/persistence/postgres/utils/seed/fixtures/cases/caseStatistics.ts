@@ -5,6 +5,7 @@ import { SEEDED_DOCKET_NUMBERS_310_399 } from '@web-api/persistence/postgres/uti
 export const caseStatistics: CaseStatisticKysely[] = [
   // 105-20
   {
+    determinationDeficiencyAmount: undefined,
     determinationTotalPenalties: undefined,
     docketNumber: SEEDED_DOCKET_NUMBERS_105_109['105-20'],
     irsDeficiencyAmount: 5678,
@@ -15,6 +16,7 @@ export const caseStatistics: CaseStatisticKysely[] = [
     yearOrPeriod: 'Year',
   },
   {
+    determinationDeficiencyAmount: undefined,
     determinationTotalPenalties: undefined,
     docketNumber: SEEDED_DOCKET_NUMBERS_105_109['105-20'],
     irsDeficiencyAmount: 55,
@@ -26,6 +28,7 @@ export const caseStatistics: CaseStatisticKysely[] = [
   },
   // 320-21
   {
+    determinationDeficiencyAmount: undefined,
     determinationTotalPenalties: undefined,
     docketNumber: SEEDED_DOCKET_NUMBERS_310_399['320-21'],
     irsDeficiencyAmount: 1500.0,
