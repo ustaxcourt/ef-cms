@@ -14,9 +14,14 @@ export const setDefaultDocketRecordSortAction = ({
   store,
 }: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
-  const hasSort = get(state.sessionMetadata.docketRecordSort[docketNumber]);
+  const hasSort = get(
+    state.sessionMetadata.docketRecordSortInfoByDocketNumber[docketNumber],
+  );
 
   if (!hasSort) {
-    store.set(state.sessionMetadata.docketRecordSort[docketNumber], 'byDate');
+    store.set(
+      state.sessionMetadata.docketRecordSortInfoByDocketNumber[docketNumber],
+      'byDate',
+    );
   }
 };

@@ -1,0 +1,3 @@
+- Make DocketRecordSortInfo more agnostic (we can use this for anywhere we sort any field)
+- Figure out how update old docketRecordSort, which I have slowly been doing
+- Figure out how to avoid the different sorts we currently have going on as a result of docket number table sorting, which I started to do in generateDocketRecordPdfProxy (we were sorting the docket entries multiple times unnecessarily). It looks like we are passing along docketRecordSort and docketRecordTableSort, sometimes using one and sometimes the other (in fact, the latter was overwriting whatever we did in the former in generateDocketRecordPdfProxy). This is a code smell.

@@ -1,4 +1,4 @@
-import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
+import { DocketRecordSortInfo } from '@shared/business/utilities/sorting/docketEntrySorting';
 import { state } from '@web-client/presenter/app.cerebral';
 /**
  * get the pdf file and pdf blob url from the passed in htmlString
@@ -13,15 +13,10 @@ export const generateDocketRecordPdfUrlAction = async ({
   props,
 }: ActionProps) => {
   const caseDetail = get(state.caseDetail);
-  const docketRecordSort = get(
-    state.sessionMetadata.docketRecordSort[caseDetail.docketNumber],
-  );
-
-  const docketRecordSortField = get(
-    state[STATE_KEYS.DOCKET_RECORD_TABLE_SORT].sortField,
-  );
-  const docketRecordSortOrder = get(
-    state[STATE_KEYS.DOCKET_RECORD_TABLE_SORT].sortOrder,
+  const docketRecordSortInfo: DocketRecordSortInfo = get(
+    state.sessionMetadata.docketRecordSortInfoByDocketNumber[
+      caseDetail.docketNumber
+    ],
   );
 
   const { isAssociated } = props;
@@ -37,11 +32,7 @@ export const generateDocketRecordPdfUrlAction = async ({
     .getUseCases()
     .generateDocketRecordPdfInteractor(applicationContext, {
       docketNumber: caseDetail.docketNumber,
-      docketRecordSort,
-      docketRecordTableSort: {
-        sortField: docketRecordSortField,
-        sortOrder: docketRecordSortOrder,
-      },
+      docketRecordSortInfo,
       includePartyDetail,
       isIndirectlyAssociated,
     });

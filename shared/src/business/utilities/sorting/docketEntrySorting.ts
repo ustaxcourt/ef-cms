@@ -8,6 +8,11 @@ export const DOCKET_ENTRY_SORT_FIELDS = {
 export type DocketEntrySortField =
   (typeof DOCKET_ENTRY_SORT_FIELDS)[keyof typeof DOCKET_ENTRY_SORT_FIELDS];
 
+export type DocketRecordSortInfo = {
+  sortByField: DocketEntrySortField;
+  ascending: boolean;
+};
+
 type Comparator<T> = (a: T, b: T) => number;
 
 type SortableDocketEntry = RawDocketEntry & { createdAtFormatted?: string };

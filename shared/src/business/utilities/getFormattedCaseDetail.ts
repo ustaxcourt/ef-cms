@@ -9,7 +9,7 @@ import {
 import { Case, isSealedCase } from '../entities/cases/Case';
 import {
   DOCKET_ENTRY_SORT_FIELDS,
-  DocketEntrySortField,
+  DocketRecordSortInfo,
   sortDocketEntries,
 } from '@shared/business/utilities/sorting/docketEntrySorting';
 import { DocketEntry } from '../entities/DocketEntry';
@@ -435,11 +435,11 @@ export const getFormattedCaseDetail = ({
   applicationContext,
   authorizedUser,
   caseDetail,
-  docketRecordSort: docketEntryFieldToSortBy,
+  docketRecordSortInfo,
 }: {
   applicationContext: IApplicationContext;
   caseDetail: RawCase;
-  docketRecordSort?: DocketEntrySortField;
+  docketRecordSortInfo?: DocketRecordSortInfo;
   authorizedUser: UnknownAuthUser;
 }) => {
   const result = {
@@ -449,10 +449,11 @@ export const getFormattedCaseDetail = ({
     ...formatCase(applicationContext, caseDetail, authorizedUser),
   };
   result.formattedDocketEntries = sortDocketEntries({
+    ascending: docketRecordSortInfo?.ascending,
     docketEntries: result.formattedDocketEntries,
-    sortByField: docketEntryFieldToSortBy,
+    sortByField: docketRecordSortInfo?.sortByField,
   });
-  result.docketRecordSort = docketEntryFieldToSortBy;
+  result.docketRecordSortInfo = docketRecordSortInfo;
 
   return result;
 };

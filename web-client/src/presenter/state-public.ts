@@ -1,3 +1,4 @@
+import { DocketRecordSortInfo } from '@shared/business/utilities/sorting/docketEntrySorting';
 import {
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   PUBLIC_TRIAL_SESSIONS_DATA_KEY,
@@ -95,7 +96,10 @@ export const baseState = {
   },
   sessionMetadata: {
     docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
-    docketRecordSort: {},
+    docketRecordSortInfoByDocketNumber: [] as Record<
+      string,
+      DocketRecordSortInfo
+    >[],
     todaysOrdersSort: '',
   },
   showPassword: false,

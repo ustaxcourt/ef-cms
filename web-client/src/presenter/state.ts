@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import { Contact } from '@shared/business/useCases/generatePetitionPdfInteractor';
+import { DocketRecordSortInfo } from '@shared/business/utilities/sorting/docketEntrySorting';
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import {
@@ -824,7 +825,10 @@ export const baseState = {
   selectedWorkItems: [],
   sessionMetadata: {
     docketRecordFilter: DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
-    docketRecordSort: [],
+    docketRecordSortInfoByDocketNumber: [] as Record<
+      string,
+      DocketRecordSortInfo
+    >[],
     todaysOrdersSort: [],
   },
   setSelectedConsolidatedCasesToMultiDocketOn: false,

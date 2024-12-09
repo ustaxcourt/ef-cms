@@ -13,7 +13,10 @@ export const docketRecordHelper = (
   sortLabelTextMobile: string;
 } => {
   const permissions = get(state.permissions);
-  const { docketRecordFilter, docketRecordSort } = get(state.sessionMetadata);
+  const {
+    docketRecordFilter,
+    docketRecordSortInfoByDocketNumber: docketRecordSort,
+  } = get(state.sessionMetadata);
   const {
     canAllowPrintableDocketRecord: showPrintableDocketRecord,
     docketEntries,

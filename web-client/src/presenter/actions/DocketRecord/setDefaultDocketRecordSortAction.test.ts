@@ -10,9 +10,9 @@ describe('setDefaultDocketRecordSortAction', () => {
       },
     });
 
-    expect(result.state.sessionMetadata.docketRecordSort['123-45']).toEqual(
-      'something',
-    );
+    expect(
+      result.state.sessionMetadata.docketRecordSortInfoByDocketNumber['123-45'],
+    ).toEqual('something');
   });
 
   it('should default docketRecordSort if current docketNumber does not match sessionMetadata docketNumber', async () => {
@@ -23,8 +23,8 @@ describe('setDefaultDocketRecordSortAction', () => {
       },
     });
 
-    expect(result.state.sessionMetadata.docketRecordSort['987-65']).toEqual(
-      'byDate',
-    );
+    expect(
+      result.state.sessionMetadata.docketRecordSortInfoByDocketNumber['987-65'],
+    ).toEqual('byDate');
   });
 });

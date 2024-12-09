@@ -2,6 +2,7 @@ import {
   Case,
   getPractitionersRepresenting,
 } from '../../../../shared/src/business/entities/cases/Case';
+import { DocketRecordSortInfo } from '@shared/business/utilities/sorting/docketEntrySorting';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -10,32 +11,33 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseCaptionMeta } from '../../../../shared/src/business/utilities/getCaseCaptionMeta';
-import { sortDocketEntryTable } from '@web-client/presenter/computeds/formattedDocketEntries';
 
 export const generateDocketRecordPdfInteractor = async (
   applicationContext: ServerApplicationContext,
   {
     docketNumber,
-    docketRecordSort,
-    docketRecordTableSort,
+    docketRecordSortInfo,
     includePartyDetail = false,
     isIndirectlyAssociated = false,
   }: {
     docketNumber: string;
-    docketRecordSort?: string;
-    docketRecordTableSort?: { sortField: string; sortOrder: 'asc' | 'desc' };
+    docketRecordSortInfo?: DocketRecordSortInfo;
     includePartyDetail: boolean;
     isIndirectlyAssociated?: boolean;
   },
   authorizedUser: UnknownAuthUser,
 ) => {
-  const isDirectlyAssociated = await applicationContext
-    .getPersistenceGateway()
-    .verifyCaseForUser({
-      applicationContext,
-      docketNumber,
-      userId: authorizedUser?.userId,
-    });
+  let isDirectlyAssociated = false;
+
+  if (authorizedUser?.userId) {
+    isDirectlyAssociated = await applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser({
+        applicationContext,
+        docketNumber,
+        userId: authorizedUser?.userId,
+      });
+  }
 
   const caseSource = await applicationContext
     .getPersistenceGateway()
@@ -80,7 +82,7 @@ export const generateDocketRecordPdfInteractor = async (
       applicationContext,
       authorizedUser,
       caseDetail: caseEntity,
-      docketRecordSort,
+      docketRecordSortInfo,
     });
 
   formattedCaseDetail.formattedDocketEntries =
@@ -88,14 +90,6 @@ export const generateDocketRecordPdfInteractor = async (
       ...docketEntry,
       numberOfPages: docketEntry.numberOfPages || 0,
     }));
-
-  const sortedDocketEntries = sortDocketEntryTable(
-    formattedCaseDetail.formattedDocketEntries,
-    docketRecordTableSort && docketRecordTableSort.sortField,
-    docketRecordTableSort && docketRecordTableSort.sortOrder,
-  );
-
-  formattedCaseDetail.formattedDocketEntries = sortedDocketEntries;
 
   formattedCaseDetail.petitioners.forEach(petitioner => {
     petitioner.counselDetails = [];

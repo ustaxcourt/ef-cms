@@ -9,7 +9,9 @@ import { state } from '@web-client/presenter/app.cerebral';
  */
 export const toggleMobileDocketSortAction = ({ get, store }: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
-  const currentSort = get(state.sessionMetadata.docketRecordSort[docketNumber]);
+  const currentSort = get(
+    state.sessionMetadata.docketRecordSortInfoByDocketNumber[docketNumber],
+  );
   let newSort;
   switch (currentSort) {
     case 'byDate':
@@ -20,5 +22,8 @@ export const toggleMobileDocketSortAction = ({ get, store }: ActionProps) => {
       newSort = 'byDate';
       break;
   }
-  store.set(state.sessionMetadata.docketRecordSort[docketNumber], newSort);
+  store.set(
+    state.sessionMetadata.docketRecordSortInfoByDocketNumber[docketNumber],
+    newSort,
+  );
 };

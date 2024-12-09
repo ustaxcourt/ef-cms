@@ -210,7 +210,7 @@ export const formattedDocketEntries = (
   const { formatCase } = applicationContext.getUtilities();
   if (docketNumber) {
     docketRecordSort = get(
-      state.sessionMetadata.docketRecordSort[docketNumber],
+      state.sessionMetadata.docketRecordSortInfoByDocketNumber[docketNumber],
     );
   }
 

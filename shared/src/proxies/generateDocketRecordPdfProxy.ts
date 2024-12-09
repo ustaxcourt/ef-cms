@@ -12,8 +12,7 @@ export const generateDocketRecordPdfInteractor = (
   applicationContext,
   {
     docketNumber,
-    docketRecordSort,
-    docketRecordTableSort,
+    docketRecordSortInfo,
     includePartyDetail,
     isIndirectlyAssociated,
   },
@@ -22,8 +21,7 @@ export const generateDocketRecordPdfInteractor = (
     applicationContext,
     body: {
       docketNumber,
-      docketRecordSort,
-      docketRecordTableSort,
+      docketRecordSortInfo,
       includePartyDetail,
       isIndirectlyAssociated,
     },
