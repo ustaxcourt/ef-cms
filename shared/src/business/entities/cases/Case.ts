@@ -2049,9 +2049,7 @@ export class Case extends JoiValidationEntity {
     const statisticToUpdate = this.statistics?.find(
       statistic => statistic.statisticId === statisticId,
     );
-
     if (statisticToUpdate) Object.assign(statisticToUpdate, statisticEntity);
-
     return this;
   }
 
@@ -2060,14 +2058,10 @@ export class Case extends JoiValidationEntity {
    * @param {string} statisticId the id of the statistic to delete
    * @returns {Case} this case entity
    */
-  deleteStatistic(statisticId) {
-    const statisticIndexToDelete = this.statistics?.findIndex(
-      statistic => statistic.statisticId === statisticId,
+  deleteStatistic(statisticId: string) {
+    this.statistics = this.statistics?.filter(
+      s => !(s.statisticId === statisticId),
     );
-
-    if (statisticIndexToDelete !== -1) {
-      this.statistics!.splice(statisticIndexToDelete, 1);
-    }
 
     return this;
   }
