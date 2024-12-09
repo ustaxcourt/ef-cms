@@ -127,7 +127,7 @@ export type MinuteSheetFormState = {
       date: string;
       note: string;
       dueDate: string;
-      orderedFor?: StatusReportOrderedForOption;
+      orderedFor: StatusReportOrderedForOption | '';
     };
     stipulatedDecisionOrdered: {
       date: string;
@@ -205,7 +205,7 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
       date: '',
       dueDate: '',
       note: '',
-      orderedFor: undefined,
+      orderedFor: '',
     },
     stipulatedDecisionOrdered: {
       date: '',

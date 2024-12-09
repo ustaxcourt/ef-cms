@@ -1,0 +1,201 @@
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
+import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
+import {
+  MinuteSheetFormState,
+  STATUS_REPORT_ORDERED_FOR_OPTIONS,
+} from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+import { OnChangeHandler } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
+import React from 'react';
+
+export const OrdersFieldset = ({
+  onBlurHandler,
+  onChangeHandler,
+  ordersFormState,
+}: {
+  onChangeHandler: OnChangeHandler;
+  onBlurHandler: () => void;
+  ordersFormState: MinuteSheetFormState['orders'];
+}) => {
+  return (
+    <fieldset className="border-0 grid-container padding-0">
+      <div className="grid-row grid-gap-2 align-items-center margin-bottom-1">
+        <legend className="usa-legend grid-col-2 margin-bottom-0">
+          Status Report ordered
+        </legend>
+        <div className="grid-col-auto">
+          <DateSelector
+            defaultValue={undefined}
+            formGroupClassNames="margin-bottom-0"
+            id="statusReportOrderedDate"
+            label="Date"
+            labelPosition="left"
+            onChange={e =>
+              onChangeHandler({
+                name: 'statusReportOrdered',
+                rowInfo: {
+                  key: 'date',
+                },
+                section: 'orders',
+                value: e.target.value,
+              })
+            }
+          />
+        </div>
+        <div className="grid-col-auto">
+          <DateSelector
+            defaultValue={undefined}
+            formGroupClassNames="margin-bottom-0"
+            id="statusReportOrderedDueDate"
+            label="Date due"
+            labelPosition="left"
+            onChange={e =>
+              onChangeHandler({
+                name: 'statusReportOrdered',
+                rowInfo: {
+                  key: 'dueDate',
+                },
+                section: 'orders',
+                value: e.target.value,
+              })
+            }
+          />
+        </div>
+        <div className="grid-col-fill">
+          <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
+            <label
+              className="margin-right-2 margin-bottom-0 display-inline-block"
+              htmlFor={'statusReportOrderedFor'}
+            >
+              Ordered for
+            </label>
+            <select
+              className="usa-select display-inline-block"
+              id="statusReportOrderedFor"
+              name="statusReportOrderedFor"
+              value={ordersFormState.statusReportOrdered.orderedFor}
+              onBlur={() => onBlurHandler()}
+              onChange={e => {
+                onChangeHandler({
+                  name: 'statusReportOrdered',
+                  rowInfo: {
+                    key: 'orderedFor',
+                  },
+                  section: 'orders',
+                  value: e.target.value,
+                });
+              }}
+            >
+              <option value="">- Select -</option>
+              {Object.keys(STATUS_REPORT_ORDERED_FOR_OPTIONS).map(optionKey => {
+                return (
+                  <option key={optionKey} value={optionKey}>
+                    {STATUS_REPORT_ORDERED_FOR_OPTIONS[optionKey]}
+                  </option>
+                );
+              })}
+            </select>
+          </FormGroup>
+        </div>
+        <div className="grid-col-fill">
+          <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
+            <label
+              className="margin-right-2 margin-bottom-0 display-inline-block"
+              htmlFor={'statusReportOrderedNote'}
+            >
+              Note
+            </label>
+            <input
+              className="usa-input maxw-full"
+              id="statusReportOrderedNote"
+              name="statusReportOrderedNote"
+              type="text"
+              value={ordersFormState.statusReportOrdered.note}
+              onBlur={() => onBlurHandler()}
+              onChange={e =>
+                onChangeHandler({
+                  name: 'statusReportOrdered',
+                  rowInfo: {
+                    key: 'note',
+                  },
+                  section: 'orders',
+                  value: e.target.value,
+                })
+              }
+            />
+          </FormGroup>
+        </div>
+      </div>
+      <div className="grid-row grid-gap-2 align-items-center">
+        <legend className="usa-legend grid-col-2 margin-bottom-0">
+          Stipulated Decision ordered
+        </legend>
+        <div className="grid-col-auto">
+          <DateSelector
+            defaultValue={undefined}
+            formGroupClassNames="margin-bottom-0"
+            id="stipulatedDecisionOrderedDate"
+            label="Date"
+            labelPosition="left"
+            onChange={e =>
+              onChangeHandler({
+                name: 'stipulatedDecisionOrdered',
+                rowInfo: {
+                  key: 'date',
+                },
+                section: 'orders',
+                value: e.target.value,
+              })
+            }
+          />
+        </div>
+        <div className="grid-col-auto">
+          <DateSelector
+            defaultValue={undefined}
+            formGroupClassNames="margin-bottom-0"
+            id="stipulatedDecisionOrderedDueDate"
+            label="Date due"
+            labelPosition="left"
+            onChange={e =>
+              onChangeHandler({
+                name: 'stipulatedDecisionOrdered',
+                rowInfo: {
+                  key: 'dueDate',
+                },
+                section: 'orders',
+                value: e.target.value,
+              })
+            }
+          />
+        </div>
+        <div className="grid-col-fill">
+          <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
+            <label
+              className="margin-right-2 margin-bottom-0 display-inline-block"
+              htmlFor={'stipulatedDecisionOrderedNote'}
+            >
+              Note
+            </label>
+            <input
+              className="usa-input maxw-full"
+              id="stipulatedDecisionOrderedNote"
+              name="stipulatedDecisionOrderedNote"
+              type="text"
+              value={ordersFormState.stipulatedDecisionOrdered.note}
+              onBlur={() => onBlurHandler()}
+              onChange={e =>
+                onChangeHandler({
+                  name: 'stipulatedDecisionOrdered',
+                  rowInfo: {
+                    key: 'note',
+                  },
+                  section: 'orders',
+                  value: e.target.value,
+                })
+              }
+            />
+          </FormGroup>
+        </div>
+      </div>
+    </fieldset>
+  );
+};
