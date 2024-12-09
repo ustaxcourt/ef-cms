@@ -52,13 +52,25 @@ export const TrialSessionPlanningReport = ({
             <th>Small</th>
             <th>Regular</th>
             {previousTerms.map(getTermHeaders)}
+            <th>Special</th>
+            <th>Blocked</th>
           </tr>
         </thead>
         <tbody>
           {locationData &&
             locationData.map((trialLocation, idx) => {
               return (
-                <tr key={`row-${idx}`}>
+                <tr
+                  key={`row-${idx}`}
+                  style={{
+                    backgroundColor:
+                      getAllCitiesNotCalendaredInTwoPreviousTerms(
+                        locationData,
+                      ).includes(trialLocation.trialCityState)
+                        ? '#FFE396'
+                        : '',
+                  }}
+                >
                   <td>{trialLocation.trialCityState}</td>
                   <td>{trialLocation.allCaseCount}</td>
                   <td>{trialLocation.smallCaseCount}</td>
@@ -67,6 +79,8 @@ export const TrialSessionPlanningReport = ({
                     trialLocation.previousTermsData.map(
                       getLocationDataFactory(idx),
                     )}
+                  <td>{trialLocation.specialCaseCount}</td>
+                  <td>{trialLocation.blockedCaseCount}</td>
                 </tr>
               );
             })}
@@ -119,7 +133,7 @@ type CitiesNotCalendaredInPastTwoTermsParams = {
   locationData: TrialLocationData[];
 };
 
-export function CitiesNotCalendaredInPastTwoTerms({
+function CitiesNotCalendaredInPastTwoTerms({
   locationData,
 }: CitiesNotCalendaredInPastTwoTermsParams) {
   const cities = formatCities(
