@@ -6,7 +6,6 @@ import {
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import React from 'react';
 
@@ -24,19 +23,15 @@ export const RespondentsFieldset = ({
   respondentsFormState: MinuteSheetFormState['respondents'];
 }) => {
   return (
-    <fieldset className="border-0 grid-container padding-0">
-      <div className="grid-row grid-gap-4 flex-justify-end">
+    <fieldset className="border-0 grid-container padding-0 margin-left-4">
+      <div className="grid-row grid-gap-2 margin-bottom-1">
         <div className="grid-col-5">Respondent(s)</div>
-        <div className="grid-col-5">Date(s) of Appearance</div>
-        {/* TODO 10419 We need to get rid of this, but keeping it in for now to demonstrate the desired alignment */}
-        <div className="grid-col-auto">
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        </div>
+        <div className="grid-col-7">Date(s) of Appearance</div>
       </div>
       {Object.values(respondentsFormState.respondents).map((row, rowIndex) => {
         return (
           <div
-            className="grid-row grid-gap flex-justify-end align-items-center"
+            className="grid-row grid-gap-2 align-items-center margin-bottom-1"
             key={`respondent-row-${row.renderKey}`}
           >
             <div className="grid-col-5">
@@ -86,25 +81,31 @@ export const RespondentsFieldset = ({
                 }
               />
             </div>
-            <button
-              className="grid-col-auto"
-              onClick={e => {
-                e.preventDefault();
-                removeRowHandler({
-                  key: row.renderKey,
-                  name: 'respondents',
-                  section: 'respondents',
-                });
-              }}
-            >
-              <Icon className="icon-class" icon="times" size="1x" />
-            </button>
+            <div className="grid-col-2">
+              <Button
+                link
+                className="padding-0"
+                icon="times"
+                onClick={e => {
+                  e.preventDefault();
+                  removeRowHandler({
+                    key: row.renderKey,
+                    name: 'respondents',
+                    section: 'respondents',
+                  });
+                }}
+              >
+                Remove
+              </Button>
+            </div>
           </div>
         );
       })}
-      <div className="grid-row grid-gap align-items-center margin-bottom-1">
+      <div className="grid-row align-items-center margin-bottom-1">
         <Button
-          secondary={true}
+          link
+          className="padding-0 margin-top-1"
+          icon="plus"
           onClick={e => {
             e.preventDefault();
             addRowHandler({

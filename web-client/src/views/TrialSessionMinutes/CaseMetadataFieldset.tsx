@@ -260,18 +260,24 @@ export const CaseMetadataFieldset = ({
         );
       })}
       <div className="grid-row grid-gap align-items-center margin-bottom-1">
-        <Button
-          secondary={true}
-          onClick={e => {
-            e.preventDefault();
-            addRowHandler({
-              name: 'recalled',
-              section: 'caseMetadata',
-            });
-          }}
-        >
-          Add Recall
-        </Button>
+        <div className="grid-col-fill"></div>
+        <div className="grid-col-auto" style={{ minWidth: '350px' }}>
+          <Button
+            link
+            className="padding-0"
+            icon="plus"
+            onClick={e => {
+              e.preventDefault();
+              addRowHandler({
+                name: 'recalled',
+                section: 'caseMetadata',
+              });
+            }}
+          >
+            Add Recall
+          </Button>
+        </div>
+        <div className="grid-col-8"></div>
       </div>
       <div className="grid-row grid-gap align-items-center margin-bottom-1">
         <div className="grid-col-fill">
