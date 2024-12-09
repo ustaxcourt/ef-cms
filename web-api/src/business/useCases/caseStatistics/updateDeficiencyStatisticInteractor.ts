@@ -80,8 +80,21 @@ export const updateDeficiencyStatistic = async (
     yearOrPeriod,
   }).validate();
 
+  console.log('penalties', penalties);
+  console.log('statistic entity', statisticEntity);
+
   const newCase = new Case(oldCase, { authorizedUser });
   newCase.updateStatistic(statisticEntity, statisticId);
+
+  console.log(
+    'oldCase',
+    JSON.stringify({ ...oldCase, docketEntries: [], petitioners: [] }),
+  );
+  console.log(
+    'newCase',
+    JSON.stringify({ ...newCase, docketEntries: [], petitioners: [] }),
+  );
+
   const validRawCase = newCase.validate().toRawObject();
 
   await updateCaseStatistic({ statistic: statisticEntity });
