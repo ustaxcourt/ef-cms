@@ -2,7 +2,9 @@ import {
   FORMATS,
   createDateAtStartOfWeekEST,
 } from '@shared/business/utilities/DateHandler';
+//TODO: MAYBE MOVE TYPES TO SHARED?
 import { TrialLocationData } from '@web-api/business/useCases/trialSessions/getTrialSessionPlanningReportDataInteractor';
+import { formatCities } from '@shared/business/utilities/pdfGenerator/documentTemplates/TrialSessionPlanningReport';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export type TrialLocationDataFormatted = TrialLocationData & {
@@ -18,28 +20,6 @@ type TrialSessionPlanningReportViewHelperResults = {
   trialTerm: string;
   trialYear: number;
 };
-
-function formatCities(allCities: string[]): string[][] {
-  const NUMBER_OF_COLUMNS = 4;
-  const equalParts = Math.floor(allCities.length / NUMBER_OF_COLUMNS);
-  const remainderCount = allCities.length % NUMBER_OF_COLUMNS;
-  const results = Array.from(
-    { length: NUMBER_OF_COLUMNS },
-    () => [] as string[],
-  );
-
-  for (let index = 0; index < NUMBER_OF_COLUMNS; index++) {
-    const poppedElements = allCities.splice(0, equalParts);
-    results[index].push(...poppedElements);
-
-    if (remainderCount < 0) continue;
-    if (index >= remainderCount) continue;
-    const remainingElement = allCities.splice(0, 1);
-    results[index].push(...remainingElement);
-  }
-
-  return results;
-}
 
 function formatTerm(trialTerm: string): string {
   if (!trialTerm) return '';
