@@ -2,7 +2,7 @@
 import {
   PreviousTerm,
   TrialLocationData,
-} from '@web-api/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
+} from '@web-api/business/useCases/trialSessions/getTrialSessionPlanningReportDataInteractor';
 import { PrimaryHeader } from '../components/PrimaryHeader';
 import { ReportsHeader } from '../components/ReportsHeader';
 import React from 'react';
@@ -40,6 +40,10 @@ export const TrialSessionPlanningReport = ({
       <PrimaryHeader />
       <ReportsHeader subtitle={term} title="Trial Session Planning Report" />
 
+      <CitiesNotCalendaredInPastTwoTerms
+        locationData={locationData}
+      ></CitiesNotCalendaredInPastTwoTerms>
+
       <table>
         <thead>
           <tr>
@@ -71,3 +75,77 @@ export const TrialSessionPlanningReport = ({
     </>
   );
 };
+
+function getAllCitiesNotCalendaredInTwoPreviousTerms(
+  trialLocationData: TrialLocationData[],
+): string[] {
+  return trialLocationData
+    .filter(locationData => {
+      return (
+        !locationData.previousTermsData[0].length &&
+        !locationData.previousTermsData[1].length
+      );
+    })
+    .map(locationData => locationData.trialCityState)
+    .sort();
+}
+
+export function formatCities(
+  allCities: string[],
+  numberOfCols: number = 4,
+): string[][] {
+  const NUMBER_OF_COLUMNS = numberOfCols;
+  const equalParts = Math.floor(allCities.length / NUMBER_OF_COLUMNS);
+  const remainderCount = allCities.length % NUMBER_OF_COLUMNS;
+  const results = Array.from(
+    { length: NUMBER_OF_COLUMNS },
+    () => [] as string[],
+  );
+
+  for (let index = 0; index < NUMBER_OF_COLUMNS; index++) {
+    const poppedElements = allCities.splice(0, equalParts);
+    results[index].push(...poppedElements);
+
+    if (remainderCount < 0) continue;
+    if (index >= remainderCount) continue;
+    const remainingElement = allCities.splice(0, 1);
+    results[index].push(...remainingElement);
+  }
+
+  return results;
+}
+
+type CitiesNotCalendaredInPastTwoTermsParams = {
+  locationData: TrialLocationData[];
+};
+
+export function CitiesNotCalendaredInPastTwoTerms({
+  locationData,
+}: CitiesNotCalendaredInPastTwoTermsParams) {
+  const cities = formatCities(
+    getAllCitiesNotCalendaredInTwoPreviousTerms(locationData),
+    3,
+  );
+  return (
+    <>
+      <table style={{ marginBottom: '20px', width: '100%' }}>
+        <thead>
+          <th colSpan={4} style={{ backgroundColor: '#FFE396' }}>
+            Cities not calendared in two previous terms:
+          </th>
+        </thead>
+        <tbody>
+          <tr>
+            {cities.map((cityLocations, index) => (
+              <td key={index}>
+                {cityLocations.map(location => (
+                  <div key={location}>{location}</div>
+                ))}
+              </td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
+    </>
+  );
+}
