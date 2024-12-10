@@ -1,4 +1,5 @@
 import { CaseMetadataFieldset } from '@web-client/views/TrialSessionMinutes/CaseMetadataFieldset';
+import { ExhibitsFieldset } from './ExhibitsFieldset';
 import { JurisdictionRetainedFieldset } from '@web-client/views/TrialSessionMinutes/JurisdictionRetainedFieldset';
 import { PetitionersFieldset } from '@web-client/views/TrialSessionMinutes/PetitionersFieldset';
 import { RespondentsFieldset } from '@web-client/views/TrialSessionMinutes/RespondentsFieldset';
@@ -114,7 +115,15 @@ export const TrialSessionMinutesForm = connect(
           </div>
         </div>
         <hr />
-        <div>Exhibits Section</div>
+        <div>
+          <ExhibitsFieldset
+            addRowHandler={addMinuteSheetFormRowSequence}
+            exhibitsFormState={trialSessionMinutesForm.exhibits}
+            removeRowHandler={removeMinuteSheetFormRowSequence}
+            onBlurHandler={trialSessionMinutesAutosaveSequence}
+            onChangeHandler={updateTrialSessionMinutesFormSequence}
+          />
+        </div>
       </form>
     );
   },

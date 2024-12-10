@@ -30,8 +30,10 @@ export const WitnessesFieldset = ({
   const capitalizedWitnessType = capitalize(witnessType);
   return (
     <fieldset className="border-0 grid-container padding-0">
-      <div className="grid-row grid-gap-2 margin-bottom-1">
-        <div className="grid-col-12">{`${capitalizedWitnessType} witness(es)`}</div>
+      <div className="grid-row grid-gap-2">
+        <div className="grid-col-12">
+          <div className="usa-label margin-right-2">{`${capitalizedWitnessType} witness(es)`}</div>
+        </div>
       </div>
       {Object.values(witnessesFormState).map((row, rowIndex) => (
         <div

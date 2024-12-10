@@ -55,12 +55,6 @@ export type SimultaneousSupplementalFormFields = {
   simultaneousSupplemental: BaseBriefFormFields;
 };
 
-type ExhibitFormFields = {
-  description: string;
-  status: string;
-  note: string;
-};
-
 // 10419 TODO: consider whether optional fields are the best approach here, or
 // if we should have explicit types for each sort of "case metadata entry".
 type CaseMetadataEntry = {
@@ -95,6 +89,13 @@ type KeyedPartyFormFields = KeyedEntry & {
 
 type RenderKey = string;
 type KeyedPartyFormFieldsByRenderKey = Record<RenderKey, KeyedPartyFormFields>;
+
+type KeyedExhibitFormFields = KeyedEntry & {
+  description: string;
+  status: string;
+  note: string;
+};
+type KeyedExhibitFormFieldsByKey = Record<RenderKey, KeyedExhibitFormFields>;
 
 export type MinuteSheetFormState = {
   // 10419 TODO: rename all first-level properties by appending "Section"
@@ -168,7 +169,9 @@ export type MinuteSheetFormState = {
     respondentWitnesses: KeyedWitnessEntryByKey;
   };
 
-  exhibits: ExhibitFormFields[];
+  exhibits: {
+    exhibits: KeyedExhibitFormFieldsByKey;
+  };
 };
 
 export const initialMinuteSheetFormState: MinuteSheetFormState = {
@@ -197,7 +200,9 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
     },
   },
 
-  exhibits: [],
+  exhibits: {
+    exhibits: {},
+  },
 
   jurisdictionRetained: {
     continued: false,
