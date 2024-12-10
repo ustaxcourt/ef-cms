@@ -215,8 +215,61 @@ async function restoreFromBackup({
   });
   const targetPassword = await targetSigner.getAuthToken();
 
+  // pg_restore only drops tables in the dump, so we drop all tables before pg_restore.
+  // We could drop the whole db or the schema, but then we would have to deal with stricter permissions.
   await new Promise(resolve => {
-    const result = spawn(
+    // For each table in the public schema, we will create a SQL DROP command and then execute it.
+    const dropTableQuery = spawn(
+      'psql',
+      [
+        `--host=${host}`,
+        `--username=${username}`,
+        `--dbname=${dbName}`,
+        `--port=${port}`,
+        '--no-password',
+        `--command=DO $$ DECLARE
+          stmt text;
+        BEGIN
+          FOR stmt IN
+            SELECT 'DROP TABLE IF EXISTS "' || tablename || '" CASCADE;'
+            FROM pg_tables
+            WHERE schemaname = 'public'
+          LOOP
+            EXECUTE stmt;
+          END LOOP;
+        END
+        $$;`,
+      ],
+      {
+        env: {
+          ...process.env,
+          PGPASSWORD: targetPassword,
+        },
+      },
+    );
+
+    dropTableQuery.stdout.on('data', data => {
+      console.log(data.toString('utf-8'));
+    });
+
+    dropTableQuery.stderr.on('data', data => {
+      console.error(data.toString('utf-8'));
+    });
+
+    dropTableQuery.on('close', code => {
+      if (code) {
+        console.log(
+          `Attempted to drop all tables from DB ${dbName}. Check output for errors. Exit code: ${code}`,
+        );
+      } else {
+        console.log(`Successfully dropped all tables from DB ${dbName}.`);
+      }
+      resolve(undefined);
+    });
+  });
+
+  await new Promise(resolve => {
+    const restoreDbResult = spawn(
       'pg_restore',
       [
         `--host=${host}`,
@@ -240,15 +293,15 @@ async function restoreFromBackup({
       },
     );
 
-    result.stdout.on('data', data => {
+    restoreDbResult.stdout.on('data', data => {
       console.log(data.toString('utf-8'));
     });
 
-    result.stderr.on('data', data => {
+    restoreDbResult.stderr.on('data', data => {
       console.error(data.toString('utf-8'));
     });
 
-    result.on('close', code => {
+    restoreDbResult.on('close', code => {
       if (code) {
         console.log(
           `DB ${dbName} may have been restored with errors. Check output for errors. Exit code: ${code}`,
