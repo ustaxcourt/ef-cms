@@ -15,7 +15,6 @@ export type PendingItemFormatted = {
   isLeadCase: boolean;
   docketNumberWithSuffix: string;
   receivedAt: string;
-  renderKey: string;
 };
 
 export const formatPendingItem = (
