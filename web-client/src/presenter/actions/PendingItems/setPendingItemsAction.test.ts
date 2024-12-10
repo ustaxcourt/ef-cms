@@ -22,7 +22,7 @@ describe('setPendingItemsAction', () => {
         },
       },
     });
-    console.log(state.pendingReports);
+
     expect(state.pendingReports.pendingItems).toEqual([{}]);
   });
 
