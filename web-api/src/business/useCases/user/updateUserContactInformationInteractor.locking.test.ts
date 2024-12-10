@@ -37,6 +37,10 @@ describe('determineEntitiesToLock', () => {
     applicationContext
       .getPersistenceGateway()
       .getCasesForUser.mockReturnValue(mockCases);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getUserByIdOnceAllUpdatesComplete.mockResolvedValue(null);
   });
 
   it('should lookup the docket numbers for the specified user', async () => {
@@ -57,6 +61,42 @@ describe('determineEntitiesToLock', () => {
     mockCases.forEach(mockCase => {
       expect(identifiers).toContain(`case|${mockCase.docketNumber}`);
     });
+  });
+
+  function sleep(timeInMilliseconds: number) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(null);
+      }, timeInMilliseconds);
+    });
+  }
+
+  it('should wait until user is free before calling getCasesForUser', async () => {
+    let resolver: Function;
+
+    applicationContext
+      .getPersistenceGateway()
+      .getUserByIdOnceAllUpdatesComplete.mockImplementation(() => {
+        return new Promise(resolve => (resolver = resolve));
+      });
+
+    void determineEntitiesToLock(applicationContext, mockParams);
+
+    await sleep(50);
+    expect(
+      applicationContext.getPersistenceGateway().getCasesForUser,
+    ).not.toHaveBeenCalled();
+
+    await sleep(50);
+    expect(
+      applicationContext.getPersistenceGateway().getCasesForUser,
+    ).not.toHaveBeenCalled();
+
+    resolver!(null);
+    await sleep(50);
+    expect(
+      applicationContext.getPersistenceGateway().getCasesForUser,
+    ).toHaveBeenCalled();
   });
 });
 
@@ -106,6 +146,10 @@ describe('updateUserContactInformationInteractor', () => {
       ...MOCK_PRACTITIONER,
       entityName: 'Practitioner',
     });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getUserByIdOnceAllUpdatesComplete.mockResolvedValue(null);
 
     applicationContext
       .getPersistenceGateway()

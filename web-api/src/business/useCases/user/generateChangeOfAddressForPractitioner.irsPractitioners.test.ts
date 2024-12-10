@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
@@ -33,7 +34,6 @@ describe('generateChangeOfAddress', () => {
       postalCode: '61234',
       state: 'IL',
     },
-
     email: 'irspractitioner1@example.com',
     entityName: 'IrsPractitioner',
     firstName: 'rick',

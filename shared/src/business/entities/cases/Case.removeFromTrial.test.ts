@@ -44,7 +44,7 @@ describe('removeFromTrial', () => {
       changedBy: user,
     });
     const indexOfLastCaseHistoryItem =
-      caseToUpdate.caseStatusHistory.length - 1;
+      caseToUpdate.caseStatusHistory!.length - 1;
 
     expect(caseToUpdate.status).toEqual(
       CASE_STATUS_TYPES.generalDocketReadyForTrial,
@@ -55,7 +55,7 @@ describe('removeFromTrial', () => {
     expect(caseToUpdate.trialSessionId).toBeFalsy();
     expect(caseToUpdate.trialTime).toBeFalsy();
     expect(
-      caseToUpdate.caseStatusHistory[indexOfLastCaseHistoryItem],
+      caseToUpdate.caseStatusHistory![indexOfLastCaseHistoryItem],
     ).toMatchObject({ changedBy: user });
   });
 

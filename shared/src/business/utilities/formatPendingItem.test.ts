@@ -65,7 +65,7 @@ describe('formatPendingItem', () => {
     ];
   });
 
-  it('should return a list of formatted pending items', () => {
+  it('should return a list of formatted pending items with correct display properties', () => {
     const result = mockPendingItems.map(item =>
       formatPendingItem(item, {
         applicationContext,
