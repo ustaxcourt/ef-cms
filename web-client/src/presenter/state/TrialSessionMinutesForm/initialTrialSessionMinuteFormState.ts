@@ -1,8 +1,8 @@
 type MotionFormFields = {
   date: string;
-  type: MotionTypeOption; // motionTypeOptions
-  filedBy: MotionFiledByOption;
-  status: MotionStatusOption; // motionStatusOptions
+  type: MotionTypeOption | ''; // motionTypeOptions
+  filedBy: MotionFiledByOption | '';
+  status: MotionStatusOption | ''; // motionStatusOptions
   note: string;
   oralMotion: boolean;
 };
@@ -89,6 +89,12 @@ type KeyedPartyFormFields = KeyedEntry & {
 type RenderKey = string;
 type KeyedPartyFormFieldsByRenderKey = Record<RenderKey, KeyedPartyFormFields>;
 
+type KeyedMotionFormFields = KeyedEntry & MotionFormFields;
+type KeyedMotionFormFieldsByRenderKey = Record<
+  RenderKey,
+  KeyedMotionFormFields
+>;
+
 export type MinuteSheetFormState = {
   // 10419 TODO: rename all first-level properties by appending "Section"
   trialSessionMetadata: {
@@ -136,7 +142,10 @@ export type MinuteSheetFormState = {
     };
   };
 
-  motions: MotionFormFields[];
+  motionsSection: {
+    motions: KeyedMotionFormFieldsByRenderKey;
+  };
+
   actionsAndFilings: ActionFilingFormFields[];
 
   trialBrief: {
@@ -198,7 +207,9 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
     note: '',
   },
 
-  motions: [],
+  motionsSection: {
+    motions: {},
+  },
 
   orders: {
     statusReportOrdered: {

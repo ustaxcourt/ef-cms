@@ -13,6 +13,15 @@ const getEmptyFormRowByName = (name: string) => {
   const newRenderKey = uuidv4();
 
   const nameRowMap = {
+    motions: {
+      date: '',
+      filedBy: '',
+      note: '',
+      oralMotion: false,
+      renderKey: newRenderKey,
+      status: '',
+      type: '',
+    },
     petitioners: {
       datesOfAppearence: '',
       name: '',

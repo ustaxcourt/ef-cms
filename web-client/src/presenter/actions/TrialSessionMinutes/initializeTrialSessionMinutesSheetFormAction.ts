@@ -27,6 +27,7 @@ export const initializeTrialSessionMinutesSheetFormAction = ({
   const recalledRowRenderKey = uuidv4();
   const petitionerRowRenderKey = uuidv4();
   const respondentRowRenderKey = uuidv4();
+  const motionRowRenderKey = uuidv4();
 
   store.set(state.minuteSheetForm.caseMetadata.recalled[recalledRowRenderKey], {
     date: '',
@@ -52,4 +53,13 @@ export const initializeTrialSessionMinutesSheetFormAction = ({
       role: '',
     },
   );
+  store.set(state.minuteSheetForm.motionsSection.motions[motionRowRenderKey], {
+    date: '',
+    filedBy: '',
+    note: '',
+    oralMotion: false,
+    renderKey: motionRowRenderKey,
+    status: '',
+    type: '',
+  });
 };
