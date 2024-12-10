@@ -14,11 +14,12 @@ export type PendingItemFormatted = {
   shouldIndent: boolean;
   isLeadCase: boolean;
   docketNumberWithSuffix: string;
+  receivedAt: string;
 };
 
 export const formatPendingItem = (
   item: PendingItem,
-  { applicationContext }: { applicationContext: IApplicationContext },
+  { applicationContext },
 ): PendingItemFormatted => {
   const pendingItemWithConsolidatedFlags = applicationContext
     .getUtilities()
@@ -62,6 +63,7 @@ export const formatPendingItem = (
     formattedStatus,
     inConsolidatedGroup: pendingItemWithConsolidatedFlags.inConsolidatedGroup,
     isLeadCase: pendingItemWithConsolidatedFlags.isLeadCase,
+    receivedAt: item.receivedAt,
     shouldIndent: pendingItemWithConsolidatedFlags.shouldIndent,
   };
 };

@@ -12,16 +12,16 @@ import React, { useRef } from 'react';
 
 export const PendingReportList = connect(
   {
-    formattedPendingItemsHelper: state.formattedPendingItemsHelper,
     hasPendingItemsResults: state.pendingReports.hasPendingItemsResults,
+    pendingItems: state.pendingReports.pendingItems,
     pendingItemsTotal: state.pendingReports.pendingItemsTotal,
     pendingReportListHelper: state.pendingReportListHelper,
     setPendingReportSelectedJudgeSequence:
       sequences.setPendingReportSelectedJudgeSequence,
   },
   function PendingReportList({
-    formattedPendingItemsHelper,
     hasPendingItemsResults,
+    pendingItems,
     pendingItemsTotal,
     pendingReportListHelper,
     setPendingReportSelectedJudgeSequence,
@@ -29,10 +29,7 @@ export const PendingReportList = connect(
     const paginatorTop = useRef(null);
 
     const { activePage, pageRecords, setActivePage, totalPages } =
-      useClientSidePaginator(
-        formattedPendingItemsHelper.items,
-        PENDING_REPORT_PAGE_SIZE,
-      );
+      useClientSidePaginator(pendingItems, PENDING_REPORT_PAGE_SIZE);
 
     return (
       <>
@@ -62,7 +59,7 @@ export const PendingReportList = connect(
                 }}
               >
                 <option value="">-Judge-</option>
-                {formattedPendingItemsHelper.judges.map(judge => (
+                {pendingReportListHelper.judges.map(judge => (
                   <option key={`pending-judge-${judge}`} value={judge}>
                     {judge}
                   </option>
@@ -115,7 +112,7 @@ export const PendingReportList = connect(
             {pageRecords.map(item => (
               <tr
                 className="pending-item-row"
-                key={`pending-item-${item.formattedFiledDate}-${item.caseTitle}-${item.docketEntryId}`}
+                key={`pending-item-${item.docketNumber}-${item.docketEntryId}`}
               >
                 <td>
                   <ConsolidatedCaseIcon

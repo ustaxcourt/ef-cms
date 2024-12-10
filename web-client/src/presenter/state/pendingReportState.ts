@@ -1,9 +1,9 @@
-import { PendingItem } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
+import { PendingItemFormatted } from '@shared/business/utilities/formatPendingItem';
 
 export type PendingReports = {
   pendingItemsTotal: number;
   hasPendingItemsResults: boolean;
-  pendingItems: PendingItem[];
+  pendingItems: PendingItemFormatted[];
   selectedJudge: string;
 };
 
