@@ -210,13 +210,13 @@ export const TrialBriefFieldset = ({
       </div>
       <div className="grid-row grid-gap">
         <div className="grid-col-2">
+          <label
+            className="margin-right-2 display-inline-block"
+            htmlFor="briefType"
+          >
+            Brief type
+          </label>
           <FormGroup className="margin-bottom-0 display-flex align-items-center">
-            <label
-              className="margin-right-2 margin-bottom-0 display-inline-block"
-              htmlFor="briefType"
-            >
-              Type
-            </label>
             <select
               className="usa-select display-inline-block"
               id="briefType"
