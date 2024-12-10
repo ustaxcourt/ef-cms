@@ -1,19 +1,25 @@
 type MotionFormFields = {
   date: string;
-  type: MotionTypeOption | ''; // motionTypeOptions
+  type: MotionTypeOption | '';
   filedBy: MotionFiledByOption | '';
-  status: MotionStatusOption | ''; // motionStatusOptions
+  status: MotionStatusOption | '';
   note: string;
   oralMotion: boolean;
 };
 
 type ActionFilingFormFields = {
   date: string;
-  documentType: ActionDocumentTypeOption; // actionDocumentTypeOptions
-  filedBy: ActionFiledByOption; // actionFiledByOptions
-  status: ActionStatusOption; // actionStatusOptions
+  documentType: ActionDocumentTypeOption | '';
+  filedBy: ActionFiledByOption | '';
+  status: ActionStatusOption | '';
   note: string;
 };
+
+type KeyedActionFilingFormFields = KeyedEntry & ActionFilingFormFields;
+type KeyedActionFilingFormFieldsByRenderKey = Record<
+  RenderKey,
+  KeyedActionFilingFormFields
+>;
 
 type BaseBriefFormFields = {
   dueDate: string;
@@ -146,7 +152,9 @@ export type MinuteSheetFormState = {
     motions: KeyedMotionFormFieldsByRenderKey;
   };
 
-  actionsAndFilings: ActionFilingFormFields[];
+  actionsAndFilingsSection: {
+    actionsAndFilings: KeyedActionFilingFormFieldsByRenderKey;
+  };
 
   trialBrief: {
     dateSubmitted: string;
@@ -174,7 +182,7 @@ export type MinuteSheetFormState = {
 };
 
 export const initialMinuteSheetFormState: MinuteSheetFormState = {
-  actionsAndFilings: [],
+  actionsAndFilingsSection: { actionsAndFilings: {} },
 
   caseMetadata: {
     called: {

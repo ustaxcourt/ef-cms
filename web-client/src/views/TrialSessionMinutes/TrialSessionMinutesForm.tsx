@@ -1,3 +1,4 @@
+import { ActionsAndFilingsFieldset } from '@web-client/views/TrialSessionMinutes/ActionsAndFIlingsFieldset';
 import { CaseMetadataFieldset } from '@web-client/views/TrialSessionMinutes/CaseMetadataFieldset';
 import { JurisdictionRetainedFieldset } from '@web-client/views/TrialSessionMinutes/JurisdictionRetainedFieldset';
 import { MotionsFieldset } from '@web-client/views/TrialSessionMinutes/MotionsFieldset';
@@ -89,7 +90,15 @@ export const TrialSessionMinutesForm = connect(
           onChangeHandler={updateTrialSessionMinutesFormSequence}
         />
         <hr />
-        <div>Actions and Filings Section</div>
+        <ActionsAndFilingsFieldset
+          actionsAndFilingsFormState={
+            trialSessionMinutesForm.actionsAndFilingsSection
+          }
+          addRowHandler={addMinuteSheetFormRowSequence}
+          removeRowHandler={removeMinuteSheetFormRowSequence}
+          onBlurHandler={trialSessionMinutesAutosaveSequence}
+          onChangeHandler={updateTrialSessionMinutesFormSequence}
+        />
         <hr />
         <TrialBriefFieldset
           trialBriefFormState={trialSessionMinutesForm.trialBrief}
