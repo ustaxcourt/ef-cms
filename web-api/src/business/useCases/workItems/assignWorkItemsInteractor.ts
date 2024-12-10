@@ -7,7 +7,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
 import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 /**
  * getWorkItem
@@ -78,7 +78,7 @@ export const assignWorkItemsInteractor = async (
     sentByUserId: user.userId,
   });
 
-  await saveWorkItem({
-    workItem: workItemEntity.validate().toRawObject(),
+  await upsertWorkItems({
+    workItems: [workItemEntity.validate().toRawObject()],
   });
 };

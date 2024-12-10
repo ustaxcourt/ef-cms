@@ -22,13 +22,13 @@ import {
   mockDocketClerkUser,
   mockIrsPractitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { saveWorkItem as saveWorkItemMock } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 const getCaseDeadlinesByDocketNumber =
   getCaseDeadlinesByDocketNumberMock as jest.Mock;
 
 describe('fileExternalDocumentInteractor', () => {
-  const saveWorkItem = saveWorkItemMock as jest.Mock;
+  const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const mockDocketEntryId = applicationContext.getUniqueId();
 
   let caseRecord;
@@ -163,7 +163,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
-    expect(saveWorkItem).not.toHaveBeenCalled();
+    expect(upsertWorkItems).not.toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).not.toHaveBeenCalled();
@@ -191,7 +191,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
-    expect(saveWorkItem).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -307,7 +307,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalledTimes(5);
-    expect(saveWorkItem).toHaveBeenCalledTimes(4);
+    expect(upsertWorkItems).toHaveBeenCalledTimes(4);
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalledTimes(2);
@@ -416,7 +416,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
-    expect(saveWorkItem).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -447,9 +447,11 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(saveWorkItem).toHaveBeenCalled();
-    expect(saveWorkItem.mock.calls[0][0]).toMatchObject({
-      workItem: { highPriority: true, trialDate: '2019-03-01T21:40:46.415Z' },
+    expect(upsertWorkItems).toHaveBeenCalled();
+    expect(upsertWorkItems.mock.calls[0][0]).toMatchObject({
+      workItems: [
+        { highPriority: true, trialDate: '2019-03-01T21:40:46.415Z' },
+      ],
     });
   });
 
@@ -471,9 +473,9 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(saveWorkItem).toHaveBeenCalled();
-    expect(saveWorkItem.mock.calls[0][0]).toMatchObject({
-      workItem: { highPriority: false },
+    expect(upsertWorkItems).toHaveBeenCalled();
+    expect(upsertWorkItems.mock.calls[0][0]).toMatchObject({
+      workItems: [{ highPriority: false }],
     });
   });
 
