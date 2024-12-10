@@ -215,10 +215,10 @@ async function restoreFromBackup({
   });
   const targetPassword = await targetSigner.getAuthToken();
 
-  // pg_restore only drops tables in the dump, so we drop all tables before pg_restore.
-  // We could drop the whole db or the schema, but then we would have to deal with stricter permissions.
+  // pg_restore only drops tables that exist in the source dump, so we drop all target tables before calling pg_restore.
+  // We could drop the whole target db or the schema, but then we would have to deal with stricter permissions.
   await new Promise(resolve => {
-    // For each table in the public schema, we will create a SQL DROP command and then execute it.
+    // For each table in the target db public schema, we will create a SQL DROP command and then execute it.
     const dropTableQuery = spawn(
       'psql',
       [
