@@ -40,13 +40,13 @@ export const WitnessesFieldset = ({
           className="grid-row grid-gap-2 flex-justify-start align-items-center margin-bottom-1"
           key={`${witnessType}-witness-${row.renderKey}`}
         >
-          <div className="grid-col-10 maxw-full">
-            <FormGroup className="margin-bottom-0">
+          <div className="grid-col-10">
+            <FormGroup className="margin-bottom-0 maxw-full">
               <label hidden htmlFor={`${witnessType}`}>
                 {`${capitalizedWitnessType} Witness ${rowIndex}`}
               </label>
               <input
-                className="usa-input"
+                className="usa-input maxw-full"
                 id={`${witnessType}`}
                 name={`${witnessType}`}
                 type="text"

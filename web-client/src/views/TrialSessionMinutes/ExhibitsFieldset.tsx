@@ -38,12 +38,12 @@ export const ExhibitsFieldset = ({
           key={row.renderKey}
         >
           <div className="grid-col-5">
-            <FormGroup className="margin-bottom-0 display-flex align-items-center">
+            <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
               <label hidden htmlFor={`exhibitDescription${rowIndex}`}>
                 {`Description ${rowIndex}`}
               </label>
               <input
-                className="usa-input"
+                className="usa-input maxw-full"
                 id={`exhibitDescription${rowIndex}`}
                 name={`exhibitDescription${rowIndex}`}
                 type="text"

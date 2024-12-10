@@ -117,30 +117,32 @@ export const SeriatimFieldset = ({
               />
             </div>
             <div className="grid-col-4">
-              <label hidden htmlFor={`${rowConfig.key}Note`}>
-                Note
-              </label>
-              <FormGroup className="margin-bottom-0 display-flex align-items-center">
-                <input
-                  className="usa-input"
-                  id={`${rowConfig.key}Note`}
-                  name={`${rowConfig.key}Note`}
-                  type="text"
-                  value={seriatimFormState[rowConfig.key].note}
-                  onBlur={() => onBlurHandler()}
-                  onChange={e =>
-                    onChangeHandler({
-                      name: 'briefDetails',
-                      rowInfo: {
-                        key: rowConfig.key,
-                        nestedName: 'note',
-                      },
-                      section: 'trialBrief',
-                      value: e.target.value,
-                    })
-                  }
-                />
-              </FormGroup>
+              <div className="padding-right-4">
+                <label hidden htmlFor={`${rowConfig.key}Note`}>
+                  Note
+                </label>
+                <FormGroup className="margin-bottom-0 display-flex align-items-center">
+                  <input
+                    className="usa-input"
+                    id={`${rowConfig.key}Note`}
+                    name={`${rowConfig.key}Note`}
+                    type="text"
+                    value={seriatimFormState[rowConfig.key].note}
+                    onBlur={() => onBlurHandler()}
+                    onChange={e =>
+                      onChangeHandler({
+                        name: 'briefDetails',
+                        rowInfo: {
+                          key: rowConfig.key,
+                          nestedName: 'note',
+                        },
+                        section: 'trialBrief',
+                        value: e.target.value,
+                      })
+                    }
+                  />
+                </FormGroup>
+              </div>
             </div>
           </div>
         );

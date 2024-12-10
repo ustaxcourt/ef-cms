@@ -25,11 +25,9 @@ export const SimultaneousBriefFormFieldset = ({
       <div className="grid-row grid-gap align-items-center">
         <div className="grid-col-1"></div>
         <div className="grid-col-4">
-          {' '}
           <span className="usa-label">Date due</span>
         </div>
         <div className="grid-col-7">
-          {' '}
           <span className="usa-label">Note</span>
         </div>
       </div>
@@ -62,12 +60,12 @@ export const SimultaneousBriefFormFieldset = ({
               />
             </div>
             <div className="grid-col-7">
-              <FormGroup className="margin-bottom-0 display-flex align-items-center">
+              <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full padding-right-4">
                 <label hidden htmlFor={`${rowConfig.key}Note`}>
                   Note
                 </label>
                 <input
-                  className="usa-input"
+                  className="usa-input maxw-full"
                   id={`${rowConfig.key}Note`}
                   name={`${rowConfig.key}Note`}
                   type="text"

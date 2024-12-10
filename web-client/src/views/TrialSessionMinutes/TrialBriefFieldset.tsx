@@ -186,12 +186,12 @@ export const TrialBriefFieldset = ({
           </FormGroup>
         </div>
         <div className="grid-col-3">
-          <label className="usa-label argin-right-2" htmlFor="trialBriefNote">
+          <label className="usa-label margin-right-2" htmlFor="trialBriefNote">
             Note
           </label>
-          <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
+          <FormGroup className="margin-bottom-0 display-flex align-items-center">
             <input
-              className="usa-input display-inline-block maxw-full"
+              className="usa-input display-inline-block"
               id="trialBriefNote"
               name="trialBriefNote"
               type="text"

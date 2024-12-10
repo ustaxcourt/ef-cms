@@ -44,12 +44,12 @@ export const SimultaneousSupplementalBriefFieldset = ({
           />
         </div>
         <div className="grid-col-8">
-          <FormGroup className="margin-bottom-0 display-flex align-items-center">
+          <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
             <label hidden htmlFor="simultaneousSupplementalNote">
               Note
             </label>
             <input
-              className="usa-input"
+              className="usa-input maxw-full"
               id="simultaneousSupplementalNote"
               name="simultaneousSupplementalNote"
               type="text"
