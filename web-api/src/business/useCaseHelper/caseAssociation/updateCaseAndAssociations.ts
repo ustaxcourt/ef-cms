@@ -11,11 +11,11 @@ import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { upsertCase } from '@web-api/persistence/postgres/cases/upsertCase';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import diff from 'diff-arrays-of-objects';
 
 /**
@@ -353,8 +353,8 @@ const updateCaseWorkItems = async ({ caseToUpdate, oldCase }) => {
   return validWorkItems.map(
     validWorkItem =>
       function () {
-        return saveWorkItem({
-          workItem: validWorkItem,
+        return upsertWorkItems({
+          workItems: [validWorkItem],
         });
       },
   );
