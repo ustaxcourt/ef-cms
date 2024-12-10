@@ -1,4 +1,7 @@
+import { CHIEF_JUDGE } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
+import { cloneDeep } from 'lodash';
+import { initialPendingReportsState } from '../state/pendingReportState';
 import { pendingReportListHelper } from './pendingReportListHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -9,8 +12,9 @@ describe('pendingReportListHelper', () => {
     applicationContext,
   );
 
-  it('should set showNoPendingItems to false when a judge is selected but no results come back', () => {
+  it('should return showNoPendingItems as false when a judge is selected but no results come back', () => {
     const mockState = {
+      judges: [],
       pendingReports: {
         hasPendingItemsResults: false,
         pendingItems: [{}],
@@ -25,8 +29,9 @@ describe('pendingReportListHelper', () => {
     expect(showNoPendingItems).toBe(true);
   });
 
-  it('should set showNoPendingItems to false when results come back and a judge is selected', () => {
+  it('should return showNoPendingItems as false when results come back and a judge is selected', () => {
     const mockState = {
+      judges: [],
       pendingReports: {
         hasPendingItemsResults: true,
         pendingItems: [{}],
@@ -41,8 +46,9 @@ describe('pendingReportListHelper', () => {
     expect(showNoPendingItems).toBe(false);
   });
 
-  it('should set showSelectJudgeText to true when no judge selected', () => {
+  it('should return showSelectJudgeText as true when no judge selected', () => {
     const mockState = {
+      judges: [],
       pendingReports: {
         hasPendingItemsResults: true,
         pendingItems: [{}],
@@ -57,8 +63,9 @@ describe('pendingReportListHelper', () => {
     expect(showSelectJudgeText).toBe(true);
   });
 
-  it('should set showSelectJudgeText to false when a judge is selected', () => {
+  it('should return showSelectJudgeText as false when a judge is selected', () => {
     const mockState = {
+      judges: [],
       pendingReports: {
         hasPendingItemsResults: true,
         pendingItems: [{}],
@@ -71,5 +78,16 @@ describe('pendingReportListHelper', () => {
       state: mockState,
     });
     expect(showSelectJudgeText).toBe(false);
+  });
+
+  it('should return a formatted and sorted list of judges', () => {
+    const mockState = {
+      judges: [{ name: 'Judge A' }, { name: 'Judge B' }],
+      pendingReports: cloneDeep(initialPendingReportsState),
+    };
+
+    const { judges } = runCompute(pendingReportList, { state: mockState });
+
+    expect(judges).toEqual(['A', 'B', CHIEF_JUDGE]);
   });
 });
