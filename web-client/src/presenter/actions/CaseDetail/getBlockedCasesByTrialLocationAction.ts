@@ -9,9 +9,9 @@ import { state } from '@web-client/presenter/app.cerebral';
  */
 export const getBlockedCasesByTrialLocationAction = async ({
   applicationContext,
-  get,
+  props,
 }: ActionProps) => {
-  const trialLocation = get(state.blockedCaseReportFilter.trialLocationFilter);
+  const { trialLocation } = props;
   if (!trialLocation) return { blockedCases: [] };
 
   const blockedCases = await applicationContext

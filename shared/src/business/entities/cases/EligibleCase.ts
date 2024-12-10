@@ -9,6 +9,7 @@ import joi from 'joi';
 export class EligibleCase extends JoiValidationEntity {
   public caseCaption?: string;
   public caseType: string;
+  public caseTitle: string;
   public docketNumber: string;
   public docketNumberSuffix?: string;
   public docketNumberWithSuffix?: string;
@@ -32,6 +33,7 @@ export class EligibleCase extends JoiValidationEntity {
     this.caseType = rawProps.caseType;
     this.qcCompleteForTrial = rawProps.qcCompleteForTrial || {};
     this.isSealed = isSealedCase(rawProps);
+    this.caseTitle = rawProps.caseTitle;
 
     if (Array.isArray(rawProps.privatePractitioners)) {
       this.privatePractitioners = rawProps.privatePractitioners.map(

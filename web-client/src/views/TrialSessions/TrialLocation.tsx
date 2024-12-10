@@ -1,19 +1,29 @@
 import { BigHeader } from '../BigHeader';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
+import { TrialLocationBlockedTable } from '@web-client/views/TrialSessions/TrialLocationBlockedTable';
 import { TrialLocationTable } from '@web-client/views/TrialSessions/TrialLocationTable';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const TrialLocation = connect(
   {
     currentTab: state.trialLocationPage.currentTab,
+    getBlockedCasesByTrialLocationSequence:
+      sequences.getBlockedCasesByTrialLocationSequence,
     trialLocationHelper: state.trialLocationHelper,
   },
-  function TrialLocation({ currentTab, trialLocationHelper }) {
+  function TrialLocation({
+    currentTab,
+    getBlockedCasesByTrialLocationSequence,
+    trialLocationHelper,
+  }) {
+    // const { blockedCases, formattedEligibleCases, location } =
+    const { formattedEligibleCases, location } = trialLocationHelper;
     return (
       <>
-        <BigHeader text={trialLocationHelper.location} />
+        <BigHeader text={location} />
         <section className="usa-section grid-container">
           <Tabs
             defaultActiveTab={'eligibleCases'}
@@ -24,6 +34,9 @@ export const TrialLocation = connect(
               if (tabName === currentTab) {
                 return;
               }
+              if (tabName === 'blockCases') {
+                return getBlockedCasesByTrialLocationSequence();
+              }
             }}
           >
             <Tab
@@ -31,7 +44,7 @@ export const TrialLocation = connect(
               id="eligible-cases-sessions-tab"
               key="eligibleCases"
               tabName="eligibleCases"
-              title="Eligible Cases"
+              title={`Eligible Cases (${formattedEligibleCases.length})`}
             >
               <TrialLocationTable />
             </Tab>
@@ -40,8 +53,11 @@ export const TrialLocation = connect(
               id="blocked-cases-tab"
               key="blockedCases"
               tabName="blockedCases"
+              // title={`Blocked Cases (${blockedCases.length})`}
               title="Blocked Cases"
-            ></Tab>
+            >
+              <TrialLocationBlockedTable />
+            </Tab>
           </Tabs>
         </section>
       </>

@@ -1,14 +1,12 @@
 import { connect } from '@web-client/presenter/shared.cerebral';
-// import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useRef } from 'react';
 
-export const TrialLocationTable = connect(
+export const TrialLocationBlockedTable = connect(
   {
-    currentTab: state.trialLocationPage.currentTab,
-    trialLocationHelper: state.trialLocationHelper,
+    blockedCases: state.blockedCases,
   },
-  function TrialLocationTable({ currentTab, trialLocationHelper }) {
+  function TrialLocationBlockedTable({ blockedCases }) {
     const paginatorTop = useRef(null);
 
     return (
@@ -30,16 +28,12 @@ export const TrialLocationTable = connect(
         </div>
         <div className="text-right">
           <span className="text-semibold">Count: </span>
-          {trialLocationHelper.formattedEligibleCases.length}
+          {blockedCases.length}
         </div>
         <div className="padding-1"></div>
         <div className="overflow-x-auto">
           <div className="minw-tablet-lg">
-            <table
-              aria-label={`${currentTab}`}
-              className="usa-table ustc-table trial-sessions"
-              id={`${currentTab}`}
-            >
+            <table className="usa-table ustc-table trial-sessions">
               <thead>
                 <tr>
                   <th className="icon-column" />
@@ -50,28 +44,22 @@ export const TrialLocationTable = connect(
                   <th className="width-card">Case Type</th>
                 </tr>
               </thead>
-              {trialLocationHelper.formattedEligibleCases.map(eligibleCase => {
+              {blockedCases.map(blockedCase => {
                 return (
-                  <tr key={eligibleCase.docketNumber}>
+                  <tr key={blockedCase.docketNumber}>
                     <td></td>
-                    <td>
-                      <a className="case-link" href={eligibleCase.editLink}>
-                        {eligibleCase.docketNumberWithSuffix}
-                      </a>
-                    </td>
-                    <td>{eligibleCase.caseTitle}</td>
-                    <td>{eligibleCase.privatePractitioners}</td>
-                    <td>{eligibleCase.irsPractitioners}</td>
-                    <td>{eligibleCase.caseType}</td>
+                    <td> {blockedCase.docketNumberWithSuffix}</td>
+                    <td>{blockedCase.caseTitle}</td>
+                    <td>{blockedCase.privatePractitioners}</td>
+                    <td>{blockedCase.irsPractitioners}</td>
+                    <td>{blockedCase.caseType}</td>
                   </tr>
                 );
               })}
             </table>
           </div>
         </div>
-        {trialLocationHelper.formattedEligibleCases.length === 0 && (
-          <p>There are no eligible cases.</p>
-        )}
+        {blockedCases.length === 0 && <p>There are no eligible cases.</p>}
         <div className="padding-1" />
 
         {/*<Paginator
@@ -87,4 +75,4 @@ export const TrialLocationTable = connect(
   },
 );
 
-TrialLocationTable.displayName = 'TrialLocationTable';
+TrialLocationBlockedTable.displayName = 'TrialLocationBlockedTable';

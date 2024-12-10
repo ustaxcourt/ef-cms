@@ -44,6 +44,9 @@ const getSortableDocketNumber = docketNumber => {
 };
 
 const getFullSortString = (theCase, cases) => {
+  if (!Array.isArray(cases)) {
+    return '';
+  }
   const leadCase = cases.find(
     aCase => aCase.docketNumber === theCase.leadDocketNumber,
   );
