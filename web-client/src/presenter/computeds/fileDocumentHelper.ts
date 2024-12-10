@@ -119,6 +119,7 @@ export const fileDocumentHelper = (
     supportingDocumentTypeList,
     ...showSecondaryProperties,
     ...supportingDocumentFlags,
+    docketNumber: caseDetail.docketNumber,
   };
 
   if (form.hasSupportingDocuments) {
