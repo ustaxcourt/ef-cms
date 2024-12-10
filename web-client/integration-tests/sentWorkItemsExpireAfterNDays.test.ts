@@ -99,9 +99,9 @@ describe('verify old sent work items do not show up in the outbox', () => {
       workItemId: `${workItemIdNMinus1}`,
     };
 
-    await upsertWorkItems({ workItem: workItemNPlus1Days });
-    await upsertWorkItems({ workItem: workItemNDays });
-    await upsertWorkItems({ workItem: workItemNMinus1Days });
+    await upsertWorkItems({
+      workItems: [workItemNPlus1Days, workItemNDays, workItemNMinus1Days],
+    });
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
