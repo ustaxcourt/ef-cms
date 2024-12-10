@@ -26,6 +26,16 @@ export const SeriatimFieldset = ({
 
   return (
     <fieldset className="border-0 grid-container padding-0">
+      <div className="grid-row grid-gap align-items-center">
+        <div className="grid-col-1"></div>
+        <div className="grid-col-3"></div>
+        <div className="grid-col-4">
+          <span className="usa-label">Date due</span>
+        </div>
+        <div className="grid-col-4">
+          <span className="usa-label">Note</span>
+        </div>
+      </div>
       {rowsConfig.map(rowConfig => {
         return (
           <div
@@ -33,9 +43,7 @@ export const SeriatimFieldset = ({
             key={rowConfig.key}
           >
             <div className="grid-col-1">
-              <span className="usa-label margin-bottom-0">
-                {rowConfig.rowLabel}
-              </span>
+              <span className="margin-bottom-0">{rowConfig.rowLabel}</span>
             </div>
             <div className="grid-col-3">
               <FormGroup className="margin-bottom-0">
@@ -76,7 +84,7 @@ export const SeriatimFieldset = ({
                       </div>
                     ),
                   )}
-                </div>{' '}
+                </div>
               </FormGroup>
             </div>
             <div className="grid-col-4">
@@ -84,8 +92,7 @@ export const SeriatimFieldset = ({
                 defaultValue={undefined}
                 formGroupClassNames="margin-bottom-0"
                 id={`${rowConfig.key}DueDate`}
-                label="Date"
-                labelPosition="left"
+                labelPosition="hidden"
                 onChange={e =>
                   onChangeHandler({
                     name: 'briefDetails',
@@ -100,13 +107,10 @@ export const SeriatimFieldset = ({
               />
             </div>
             <div className="grid-col-4">
+              <label hidden htmlFor={`${rowConfig.key}Note`}>
+                Note
+              </label>
               <FormGroup className="margin-bottom-0 display-flex align-items-center">
-                <label
-                  className="margin-right-2 margin-bottom-0 display-inline-block"
-                  htmlFor={`${rowConfig.key}Note`}
-                >
-                  Note
-                </label>
                 <input
                   className="usa-input"
                   id={`${rowConfig.key}Note`}

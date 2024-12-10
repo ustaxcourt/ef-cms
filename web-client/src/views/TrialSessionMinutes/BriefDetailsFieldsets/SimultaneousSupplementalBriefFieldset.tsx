@@ -15,14 +15,21 @@ export const SimultaneousSupplementalBriefFieldset = ({
 }) => {
   return (
     <fieldset className="border-0 grid-container padding-0">
+      <div className="grid-row grid-gap align-items-center">
+        <div className="grid-col-4">
+          <span className="usa-label">Date due</span>
+        </div>
+        <div className="grid-col-8">
+          <span className="usa-label">Note</span>
+        </div>
+      </div>
       <div className="grid-row grid-gap">
         <div className="grid-col-4">
           <DateSelector
             defaultValue={undefined}
             formGroupClassNames="margin-bottom-0"
             id="simultaneousSupplementalDueDate"
-            label="Date"
-            labelPosition="left"
+            labelPosition="hidden"
             onChange={e =>
               onChangeHandler({
                 name: 'briefDetails',
@@ -38,10 +45,7 @@ export const SimultaneousSupplementalBriefFieldset = ({
         </div>
         <div className="grid-col-8">
           <FormGroup className="margin-bottom-0 display-flex align-items-center">
-            <label
-              className="margin-right-2 margin-bottom-0 display-inline-block"
-              htmlFor="simultaneousSupplementalNote"
-            >
+            <label hidden htmlFor="simultaneousSupplementalNote">
               Note
             </label>
             <input
