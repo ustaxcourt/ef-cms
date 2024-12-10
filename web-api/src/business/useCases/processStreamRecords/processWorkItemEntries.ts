@@ -1,5 +1,8 @@
+import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import { compact } from 'lodash';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { unmarshall } from '@aws-sdk/util-dynamodb';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import type { IDynamoDBRecord } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
 
@@ -13,8 +16,16 @@ export const processWorkItemEntries = async ({
   if (!workItemRecords.length) return;
 
   getLogger().debug(
-    `going to index ${workItemRecords.length} work item records`,
+    `Upserting ${workItemRecords.length} work item records into postgres`,
   );
+
+  await upsertWorkItems({
+    workItems: workItemRecords.map(record => {
+      return unmarshall(record.dynamodb.NewImage) as RawWorkItem;
+    }),
+  });
+
+  getLogger().debug(`Indexing ${workItemRecords.length} work item records`);
 
   const indexWorkItemEntry = workItemRecord => {
     const workItemNewImage = workItemRecord.dynamodb.NewImage;
