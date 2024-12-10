@@ -12,7 +12,6 @@ import React, { useRef } from 'react';
 
 export const PendingReportList = connect(
   {
-    formattedPendingItemsHelper: state.formattedPendingItemsHelper,
     hasPendingItemsResults: state.pendingReports.hasPendingItemsResults,
     pendingItems: state.pendingReports.pendingItems,
     pendingItemsTotal: state.pendingReports.pendingItemsTotal,
@@ -21,7 +20,6 @@ export const PendingReportList = connect(
       sequences.setPendingReportSelectedJudgeSequence,
   },
   function PendingReportList({
-    formattedPendingItemsHelper,
     hasPendingItemsResults,
     pendingItems,
     pendingItemsTotal,
@@ -61,7 +59,7 @@ export const PendingReportList = connect(
                 }}
               >
                 <option value="">-Judge-</option>
-                {formattedPendingItemsHelper.judges.map(judge => (
+                {pendingReportListHelper.judges.map(judge => (
                   <option key={`pending-judge-${judge}`} value={judge}>
                     {judge}
                   </option>
