@@ -114,7 +114,7 @@ export const PendingReportList = connect(
             {pageRecords.map(item => (
               <tr
                 className="pending-item-row"
-                key={`pending-item-${item.renderKey}`}
+                key={`pending-item-${item.docketNumber}-${item.docketEntryId}`}
               >
                 <td>
                   <ConsolidatedCaseIcon

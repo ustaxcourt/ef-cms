@@ -1,5 +1,4 @@
 import { PendingItem } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
-import { v4 as uuidv4 } from 'uuid';
 
 export type PendingItemFormatted = {
   docketEntryId: string;
@@ -66,7 +65,6 @@ export const formatPendingItem = (
     inConsolidatedGroup: pendingItemWithConsolidatedFlags.inConsolidatedGroup,
     isLeadCase: pendingItemWithConsolidatedFlags.isLeadCase,
     receivedAt: item.receivedAt,
-    renderKey: uuidv4(),
     shouldIndent: pendingItemWithConsolidatedFlags.shouldIndent,
   };
 };
