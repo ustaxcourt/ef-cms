@@ -11,14 +11,12 @@ export const updateCaseStatistic = async ({
     writer
       .updateTable('dwCaseStatistic')
       .set({
-        determinationDeficiencyAmount: statistic.determinationDeficiencyAmount
-          ? parseFloat(statistic.determinationDeficiencyAmount)
-          : null,
-        determinationTotalPenalties: statistic.determinationTotalPenalties
-          ? parseFloat(statistic.determinationTotalPenalties)
-          : null,
-        irsDeficiencyAmount: parseFloat(statistic.irsDeficiencyAmount),
-        irsTotalPenalties: parseFloat(statistic.irsTotalPenalties),
+        determinationDeficiencyAmount:
+          statistic.determinationDeficiencyAmount || null,
+        determinationTotalPenalties:
+          statistic.determinationTotalPenalties || null,
+        irsDeficiencyAmount: statistic.irsDeficiencyAmount,
+        irsTotalPenalties: statistic.irsTotalPenalties,
         lastDateOfPeriod: statistic.lastDateOfPeriod
           ? calculateDate({ dateString: statistic.lastDateOfPeriod })
           : null,
@@ -37,7 +35,7 @@ export const updateCaseStatistic = async ({
       .values(
         statistic.penalties.map(p => ({
           name: p.name,
-          penaltyAmount: parseFloat(p.penaltyAmount),
+          penaltyAmount: p.penaltyAmount,
           penaltyId: p.penaltyId,
           penaltyType: p.penaltyType,
           statisticId: p.statisticId,

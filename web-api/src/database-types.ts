@@ -193,13 +193,13 @@ export type UpdateCaseStatusUpdateKysely = Updateable<CaseStatusUpdateTable>;
 
 export interface CaseStatisticTable {
   docketNumber: string;
-  irsDeficiencyAmount: number;
-  irsTotalPenalties: number;
+  irsDeficiencyAmount: string;
+  irsTotalPenalties: string;
   statisticId: string;
   year?: number | null;
   yearOrPeriod: string;
-  determinationDeficiencyAmount?: number | null;
-  determinationTotalPenalties?: number | null;
+  determinationDeficiencyAmount?: string | null;
+  determinationTotalPenalties?: string | null;
   lastDateOfPeriod?: Date | null;
 }
 
@@ -210,7 +210,7 @@ export type UpdateCaseStatisticKysely = Updateable<CaseStatisticTable>;
 export interface StatisticPenaltyTable {
   statisticId: string;
   name: string;
-  penaltyAmount: number;
+  penaltyAmount: string;
   penaltyId: string;
   penaltyType: string;
 }
