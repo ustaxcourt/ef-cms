@@ -1,8 +1,9 @@
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { processWorkItemEntries } from './processWorkItemEntries';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+
 jest.mock('./processEntries');
-jest.mock('@web-api/persistence/postgres/workItems/upsertWorkItems');
 
 const mockLogger = {
   debug: jest.fn(),
