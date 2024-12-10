@@ -77,6 +77,9 @@ type KeyedEntry = {
 type KeyedCaseMetadataEntry = KeyedEntry & CaseMetadataEntry;
 type KeyedCaseMetadataEntryByKey = Record<RenderKey, KeyedCaseMetadataEntry>;
 
+type KeyedWitnessEntry = KeyedEntry & { name: string };
+type KeyedWitnessEntryByKey = Record<RenderKey, KeyedWitnessEntry>;
+
 type KeyedPartyFormFields = KeyedEntry & {
   renderKey: string;
   name: string;
@@ -157,8 +160,8 @@ export type MinuteSheetFormState = {
   };
 
   witnesses: {
-    petitionerWitnesses: string[];
-    respondentWitnesses: string[];
+    petitionerWitnesses: KeyedWitnessEntryByKey;
+    respondentWitnesses: KeyedWitnessEntryByKey;
   };
 
   exhibits: ExhibitFormFields[];
@@ -242,8 +245,8 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
   },
 
   witnesses: {
-    petitionerWitnesses: [], // just an array of strings, each of which is a name
-    respondentWitnesses: [], // just an array of strings, each of which is a name
+    petitionerWitnesses: {},
+    respondentWitnesses: {},
   },
 };
 

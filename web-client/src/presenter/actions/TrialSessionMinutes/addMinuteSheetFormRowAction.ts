@@ -6,6 +6,7 @@ export const addMinuteSheetFormRowAction = ({ get, props, store }) => {
   const rows = get(state.minuteSheetForm[section][name]);
   const newEmptyFormRow = getEmptyFormRowByName(name);
   rows[newEmptyFormRow.renderKey] = newEmptyFormRow;
+  console.log('rows', rows);
   store.set(state.minuteSheetForm[section][name], rows);
 };
 
@@ -13,6 +14,10 @@ const getEmptyFormRowByName = (name: string) => {
   const newRenderKey = uuidv4();
 
   const nameRowMap = {
+    petitionerWitnesses: {
+      name: '',
+      renderKey: newRenderKey,
+    },
     petitioners: {
       datesOfAppearence: '',
       name: '',
@@ -24,6 +29,10 @@ const getEmptyFormRowByName = (name: string) => {
       note: '',
       renderKey: newRenderKey,
       transcriptOrdered: false,
+    },
+    respondentWitnesses: {
+      name: '',
+      renderKey: newRenderKey,
     },
     respondents: {
       datesOfAppearence: '',

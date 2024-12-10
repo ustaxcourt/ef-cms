@@ -27,6 +27,8 @@ export const initializeTrialSessionMinutesSheetFormAction = ({
   const recalledRowRenderKey = uuidv4();
   const petitionerRowRenderKey = uuidv4();
   const respondentRowRenderKey = uuidv4();
+  const petitionerWitnessRowRenderKey = uuidv4();
+  const respondentWitnessRowRenderKey = uuidv4();
 
   store.set(state.minuteSheetForm.caseMetadata.recalled[recalledRowRenderKey], {
     date: '',
@@ -50,6 +52,24 @@ export const initializeTrialSessionMinutesSheetFormAction = ({
       name: '',
       renderKey: respondentRowRenderKey,
       role: '',
+    },
+  );
+  store.set(
+    state.minuteSheetForm.witnesses.petitionerWitnesses[
+      petitionerWitnessRowRenderKey
+    ],
+    {
+      name: '',
+      renderKey: petitionerWitnessRowRenderKey,
+    },
+  );
+  store.set(
+    state.minuteSheetForm.witnesses.respondentWitnesses[
+      respondentWitnessRowRenderKey
+    ],
+    {
+      name: '',
+      renderKey: respondentWitnessRowRenderKey,
     },
   );
 };
