@@ -19,7 +19,6 @@ export const TrialLocation = connect(
     getBlockedCasesByTrialLocationSequence,
     trialLocationHelper,
   }) {
-    // const { blockedCases, formattedEligibleCases, location } =
     const { formattedEligibleCases, location } = trialLocationHelper;
     return (
       <>
@@ -53,7 +52,6 @@ export const TrialLocation = connect(
               id="blocked-cases-tab"
               key="blockedCases"
               tabName="blockedCases"
-              // title={`Blocked Cases (${blockedCases.length})`}
               title="Blocked Cases"
             >
               <TrialLocationBlockedTable />

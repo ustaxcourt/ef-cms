@@ -6,7 +6,6 @@ import {
   compareTrialSessionEligibleCases,
   getPriorityGroups,
 } from '@web-client/presenter/computeds/formattedEligibleCasesHelper';
-// import { getBlockedCases } from '@web-api/persistence/elasticsearch/getBlockedCases';
 import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
 import { state } from '@web-client/presenter/app.cerebral';
 
