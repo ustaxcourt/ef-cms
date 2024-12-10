@@ -1,5 +1,5 @@
 import { getBlockedCasesByTrialLocationAction } from '../actions/CaseDetail/getBlockedCasesByTrialLocationAction';
-import { getTrialLocationAction } from '@web-client/presenter/actions/CaseDetail/getTrialLocationAction';
+import { getFormattedTrialLocationAction } from '@web-client/presenter/actions/CaseDetail/getFormattedTrialLocationAction';
 import { resetBlockedCasesFiltersAction } from '@web-client/presenter/actions/Reports/BlockedCaseReport/resetBlockedCasesFiltersAction';
 import { setBlockedCasesAction } from '../actions/CaseDetail/setBlockedCasesAction';
 import { setFormValueAction } from '../actions/setFormValueAction';
@@ -7,11 +7,9 @@ import { showProgressSequenceDecorator } from '../utilities/showProgressSequence
 
 export const getBlockedCasesByTrialLocationSequence =
   showProgressSequenceDecorator([
-    getTrialLocationAction,
-    {
-      blockedCases: [resetBlockedCasesFiltersAction, setFormValueAction],
-      trialLocation: [],
-    },
+    resetBlockedCasesFiltersAction,
+    setFormValueAction,
+    getFormattedTrialLocationAction,
     getBlockedCasesByTrialLocationAction,
     setBlockedCasesAction,
   ]);

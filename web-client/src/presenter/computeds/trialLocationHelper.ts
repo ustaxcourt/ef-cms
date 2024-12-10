@@ -16,6 +16,7 @@ export const trialLocationHelper = (
 ): {
   location: string;
   formattedEligibleCases: any[];
+  blockedCases: RawCase[];
 } => {
   // const permissions = get(state.permissions)!;
   const { eligibleCases, location } = get(state.trialLocationPage);
@@ -65,6 +66,7 @@ export const trialLocationHelper = (
   // const pageSize = 100;
 
   return {
+    blockedCases: get(state.blockedCases),
     formattedEligibleCases: sortedEligibleCases,
     location: trialCityFormatted,
   };

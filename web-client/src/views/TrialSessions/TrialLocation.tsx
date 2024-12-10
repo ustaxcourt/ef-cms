@@ -3,23 +3,17 @@ import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { TrialLocationBlockedTable } from '@web-client/views/TrialSessions/TrialLocationBlockedTable';
 import { TrialLocationTable } from '@web-client/views/TrialSessions/TrialLocationTable';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const TrialLocation = connect(
   {
     currentTab: state.trialLocationPage.currentTab,
-    getBlockedCasesByTrialLocationSequence:
-      sequences.getBlockedCasesByTrialLocationSequence,
     trialLocationHelper: state.trialLocationHelper,
   },
-  function TrialLocation({
-    currentTab,
-    getBlockedCasesByTrialLocationSequence,
-    trialLocationHelper,
-  }) {
-    const { formattedEligibleCases, location } = trialLocationHelper;
+  function TrialLocation({ currentTab, trialLocationHelper }) {
+    const { blockedCases, formattedEligibleCases, location } =
+      trialLocationHelper;
     return (
       <>
         <BigHeader text={location} />
@@ -29,12 +23,9 @@ export const TrialLocation = connect(
             headingLevel="2"
             id="trial-location-tabs"
             value={currentTab}
-            onSelect={(tabName: 'eligibleCases' | 'blockCases') => {
+            onSelect={(tabName: 'eligibleCases' | 'blockedCases') => {
               if (tabName === currentTab) {
                 return;
-              }
-              if (tabName === 'blockCases') {
-                return getBlockedCasesByTrialLocationSequence();
               }
             }}
           >
@@ -52,7 +43,7 @@ export const TrialLocation = connect(
               id="blocked-cases-tab"
               key="blockedCases"
               tabName="blockedCases"
-              title="Blocked Cases"
+              title={`Blocked Cases (${blockedCases.length})`}
             >
               <TrialLocationBlockedTable />
             </Tab>

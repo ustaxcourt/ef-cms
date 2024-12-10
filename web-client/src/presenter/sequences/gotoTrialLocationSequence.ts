@@ -1,4 +1,8 @@
+import { getBlockedCasesByTrialLocationAction } from '@web-client/presenter/actions/CaseDetail/getBlockedCasesByTrialLocationAction';
 import { getEligibleCasesForLocationAction } from '@web-client/presenter/actions/TrialSession/getEligibleCasesForLocationAction';
+import { getFormattedTrialLocationAction } from '@web-client/presenter/actions/CaseDetail/getFormattedTrialLocationAction';
+import { parallel } from 'cerebral/factories';
+import { setBlockedCasesAction } from '@web-client/presenter/actions/CaseDetail/setBlockedCasesAction';
 import { setEligibleCasesForLocationAction } from '@web-client/presenter/actions/TrialSession/setEligibleCasesForLocationAction';
 import { setLocationForTrialLocationAction } from '@web-client/presenter/actions/TrialSession/setLocationForTrialLocationAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
@@ -8,7 +12,13 @@ export const gotoTrialLocationSequence =
   startWebSocketConnectionSequenceDecorator([
     setupCurrentPageAction('Interstitial'),
     setLocationForTrialLocationAction,
-    getEligibleCasesForLocationAction,
-    setEligibleCasesForLocationAction,
+    parallel([
+      [getEligibleCasesForLocationAction, setEligibleCasesForLocationAction],
+      [
+        getFormattedTrialLocationAction,
+        getBlockedCasesByTrialLocationAction,
+        setBlockedCasesAction,
+      ],
+    ]),
     setupCurrentPageAction('TrialLocation'),
   ]) as unknown as (props: ActionProps<{ trialLocation: string }>) => void;

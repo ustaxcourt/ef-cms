@@ -4,7 +4,7 @@ import React, { useRef } from 'react';
 
 export const TrialLocationBlockedTable = connect(
   {
-    blockedCases: state.blockedCases,
+    blockedCases: state.trialLocationHelper.blockedCases,
   },
   function TrialLocationBlockedTable({ blockedCases }) {
     const paginatorTop = useRef(null);

@@ -1,5 +1,3 @@
-import { state } from '@web-client/presenter/app.cerebral';
-
 /**
  * gets blocked cases by the trial location set on the form
  * @param {object} providers the providers object
