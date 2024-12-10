@@ -26,7 +26,7 @@ import { generateNoticeOfDocketChangePdf } from '@web-api/business/useCaseHelper
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { getDocumentTitleForNoticeOfChange } from '@shared/business/utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 const completeDocketEntryQC = async (
@@ -205,7 +205,9 @@ const completeDocketEntryQC = async (
     sentByUserId: user.userId,
   });
 
-  await saveWorkItem({ workItem: workItemToUpdate.validate().toRawObject() });
+  await upsertWorkItems({
+    workItems: [workItemToUpdate.validate().toRawObject()],
+  });
 
   let servedParties = aggregatePartiesForService(caseEntity);
   let paperServicePdfUrl;

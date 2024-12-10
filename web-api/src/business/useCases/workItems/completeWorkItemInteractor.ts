@@ -6,7 +6,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -49,8 +49,8 @@ export const completeWorkItem = async (
     .validate()
     .toRawObject();
 
-  await saveWorkItem({
-    workItem: completedWorkItem,
+  await upsertWorkItems({
+    workItems: [completedWorkItem],
   });
 
   return completedWorkItem;

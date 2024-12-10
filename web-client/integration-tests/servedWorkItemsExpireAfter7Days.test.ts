@@ -9,7 +9,7 @@ import {
   uploadPetition,
 } from './helpers';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 const {
   IRS_SYSTEM_SECTION,
@@ -99,15 +99,15 @@ describe('verify old served work items do not show up in the outbox', () => {
       workItemId: `${workItemId6}`,
     };
 
-    await saveWorkItem({
+    await upsertWorkItems({
       workItem: workItem8Days,
     });
 
-    await saveWorkItem({
+    await upsertWorkItems({
       workItem: workItem7Days,
     });
 
-    await saveWorkItem({
+    await upsertWorkItems({
       workItem: workItem6Days,
     });
   });

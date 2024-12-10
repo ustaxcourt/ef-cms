@@ -10,9 +10,9 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { upsertCase } from '@web-api/persistence/postgres/cases/upsertCase';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import diff from 'diff-arrays-of-objects';
 
 /**
@@ -355,8 +355,8 @@ const updateCaseWorkItems = async ({ caseToUpdate, oldCase }) => {
   return validWorkItems.map(
     validWorkItem =>
       function () {
-        return saveWorkItem({
-          workItem: validWorkItem,
+        return upsertWorkItems({
+          workItems: [validWorkItem],
         });
       },
   );

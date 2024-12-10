@@ -17,7 +17,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const addPaperFiling = async (
@@ -234,8 +234,8 @@ export const addPaperFiling = async (
 const saveWorkItemInternal = async ({ workItem }) => {
   const workItemRaw = workItem.validate().toRawObject();
 
-  await saveWorkItem({
-    workItem: workItemRaw,
+  await upsertWorkItems({
+    workItems: [workItemRaw],
   });
 };
 
