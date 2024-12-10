@@ -13,8 +13,8 @@ import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 import { updateCourtIssuedDocketEntryInteractor } from './updateCourtIssuedDocketEntryInteractor';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 describe('updateCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -126,7 +126,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
-    expect(saveWorkItem).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalled();
   });
 
   it('should not update non-editable fields on the document', async () => {

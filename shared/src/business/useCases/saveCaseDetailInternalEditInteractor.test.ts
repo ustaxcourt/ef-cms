@@ -19,10 +19,10 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
 import { saveCaseDetailInternalEditInteractor } from './saveCaseDetailInternalEditInteractor';
-import { saveWorkItem as saveWorkItemMock } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 describe('updateCase', () => {
-  const saveWorkItem = saveWorkItemMock as jest.Mock;
+  const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
 
   const mockCase = {
     ...MOCK_CASE,
@@ -151,12 +151,14 @@ describe('updateCase', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(saveWorkItem).toHaveBeenCalled();
-    expect(saveWorkItem.mock.calls[0][0].workItem).toMatchObject({
-      assigneeId: mockPetitionsClerkUser.userId,
-      assigneeName: petitionsClerkUser.name,
-      caseIsInProgress: true,
-    });
+    expect(upsertWorkItems).toHaveBeenCalled();
+    expect(upsertWorkItems.mock.calls[0][0].workItems).toMatchObject([
+      {
+        assigneeId: mockPetitionsClerkUser.userId,
+        assigneeName: petitionsClerkUser.name,
+        caseIsInProgress: true,
+      },
+    ]);
   });
 
   it('should not update work items if the case is paper', async () => {
@@ -177,7 +179,7 @@ describe('updateCase', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(saveWorkItem).not.toHaveBeenCalled();
+    expect(upsertWorkItems).not.toHaveBeenCalled();
   });
 
   it('should fail if the primary or secondary contact is empty', async () => {

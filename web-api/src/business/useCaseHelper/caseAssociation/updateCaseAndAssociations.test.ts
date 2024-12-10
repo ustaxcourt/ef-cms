@@ -19,13 +19,13 @@ import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { getMessagesByDocketNumber as getMessagesByDocketNumberMock } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { getWorkItemsByDocketNumber as getWorkItemsByDocketNumberMock } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
-import { saveWorkItem as saveWorkItemMock } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 import { updateCaseAndAssociations } from './updateCaseAndAssociations';
 import { updateMessage as updateMessageMock } from '@web-api/persistence/postgres/messages/updateMessage';
+import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 const getMessagesByDocketNumber = getMessagesByDocketNumberMock as jest.Mock;
 const updateMessage = updateMessageMock as jest.Mock;
-const saveWorkItem = saveWorkItemMock as jest.Mock;
+const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
 const getWorkItemsByDocketNumber = getWorkItemsByDocketNumberMock as jest.Mock;
 
 describe('updateCaseAndAssociations', () => {
@@ -174,7 +174,7 @@ describe('updateCaseAndAssociations', () => {
     ).not.toHaveBeenCalled();
 
     // updateCaseWorkItems
-    expect(saveWorkItem).not.toHaveBeenCalled();
+    expect(upsertWorkItems).not.toHaveBeenCalled();
 
     // updateUserCaseMappings
     expect(
@@ -339,7 +339,7 @@ describe('updateCaseAndAssociations', () => {
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: updatedCase,
       });
-      expect(saveWorkItem).not.toHaveBeenCalled();
+      expect(upsertWorkItems).not.toHaveBeenCalled();
     });
 
     it('the associated judge has been updated', async () => {
@@ -350,9 +350,9 @@ describe('updateCaseAndAssociations', () => {
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: updatedCase,
       });
-      const { workItem } = saveWorkItem.mock.calls[0][0];
-      expect(workItem.associatedJudge).toBe('Judge Dredd');
-      expect(workItem.associatedJudgeId).toBe(
+      const { workItems } = upsertWorkItems.mock.calls[0][0];
+      expect(workItems[0].associatedJudge).toBe('Judge Dredd');
+      expect(workItems[0].associatedJudgeId).toBe(
         '2f46a889-901c-4e8b-b2bb-c3994e2c75c1',
       );
     });

@@ -1,4 +1,5 @@
 import { compact } from 'lodash';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 import type { IDynamoDBRecord } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
 
@@ -11,7 +12,7 @@ export const processWorkItemEntries = async ({
 }) => {
   if (!workItemRecords.length) return;
 
-  applicationContext.logger.debug(
+  getLogger().debug(
     `going to index ${workItemRecords.length} work item records`,
   );
 
@@ -57,7 +58,7 @@ export const processWorkItemEntries = async ({
     });
 
   if (failedRecords.length > 0) {
-    applicationContext.logger.error('the records that failed to index', {
+    getLogger().error('the records that failed to index', {
       failedRecords,
     });
     throw new Error('failed to index work item records');
