@@ -80,6 +80,10 @@ type KeyedCaseMetadataEntryByKey = Record<RenderKey, KeyedCaseMetadataEntry>;
 type KeyedWitnessEntry = KeyedEntry & { name: string };
 type KeyedWitnessEntryByKey = Record<RenderKey, KeyedWitnessEntry>;
 
+export let witnessTypeOptions: 'petitioner' | 'respondent';
+export type WitnessesRecord<T extends 'petitioner' | 'respondent'> =
+  MinuteSheetFormState['witnesses'][`${T}Witnesses`];
+
 type KeyedPartyFormFields = KeyedEntry & {
   renderKey: string;
   name: string;

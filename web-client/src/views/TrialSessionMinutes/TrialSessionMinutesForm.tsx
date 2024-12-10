@@ -1,10 +1,10 @@
 import { CaseMetadataFieldset } from '@web-client/views/TrialSessionMinutes/CaseMetadataFieldset';
 import { JurisdictionRetainedFieldset } from '@web-client/views/TrialSessionMinutes/JurisdictionRetainedFieldset';
-import { PetitionerWitnessesFieldset } from './PetitionerWitnessesFieldset';
 import { PetitionersFieldset } from '@web-client/views/TrialSessionMinutes/PetitionersFieldset';
 import { RespondentsFieldset } from '@web-client/views/TrialSessionMinutes/RespondentsFieldset';
 import { TrialBriefFieldset } from './TrialBriefFieldset';
 import { TrialSessionMetadataFieldset } from '@web-client/views/TrialSessionMinutes/SessionMetadataFieldset';
+import { WitnessesFieldset } from './WitnessesFieldset';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -89,10 +89,25 @@ export const TrialSessionMinutesForm = connect(
         <hr />
         <div className="grid-row">
           <div className="grid-col-6 border-right">
-            <PetitionerWitnessesFieldset
+            <WitnessesFieldset
               addRowHandler={addMinuteSheetFormRowSequence}
               removeRowHandler={removeMinuteSheetFormRowSequence}
-              witnessesFormState={trialSessionMinutesForm.witnesses}
+              witnessType="petitioner"
+              witnessesFormState={
+                trialSessionMinutesForm.witnesses.petitionerWitnesses
+              }
+              onBlurHandler={trialSessionMinutesAutosaveSequence}
+              onChangeHandler={updateTrialSessionMinutesFormSequence}
+            />
+          </div>
+          <div className="grid-col-6 padding-left-4">
+            <WitnessesFieldset
+              addRowHandler={addMinuteSheetFormRowSequence}
+              removeRowHandler={removeMinuteSheetFormRowSequence}
+              witnessType="respondent"
+              witnessesFormState={
+                trialSessionMinutesForm.witnesses.respondentWitnesses
+              }
               onBlurHandler={trialSessionMinutesAutosaveSequence}
               onChangeHandler={updateTrialSessionMinutesFormSequence}
             />
