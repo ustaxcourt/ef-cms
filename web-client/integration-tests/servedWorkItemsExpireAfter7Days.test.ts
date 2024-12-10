@@ -100,15 +100,7 @@ describe('verify old served work items do not show up in the outbox', () => {
     };
 
     await upsertWorkItems({
-      workItem: workItem8Days,
-    });
-
-    await upsertWorkItems({
-      workItem: workItem7Days,
-    });
-
-    await upsertWorkItems({
-      workItem: workItem6Days,
+      workItems: [workItem8Days, workItem7Days, workItem6Days],
     });
   });
 
