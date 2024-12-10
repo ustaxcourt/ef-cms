@@ -13,15 +13,11 @@ export const createCaseStatistic = async ({
     writer
       .insertInto('dwCaseStatistic')
       .values({
-        determinationDeficiencyAmount: parseFloat(
-          statistic.determinationDeficiencyAmount,
-        ),
-        determinationTotalPenalties: parseFloat(
-          statistic.determinationTotalPenalties,
-        ),
+        determinationDeficiencyAmount: statistic.determinationDeficiencyAmount,
+        determinationTotalPenalties: statistic.determinationTotalPenalties,
         docketNumber,
-        irsDeficiencyAmount: parseFloat(statistic.irsDeficiencyAmount),
-        irsTotalPenalties: parseFloat(statistic.irsTotalPenalties),
+        irsDeficiencyAmount: statistic.irsDeficiencyAmount,
+        irsTotalPenalties: statistic.irsTotalPenalties,
         lastDateOfPeriod: statistic.lastDateOfPeriod
           ? calculateDate({ dateString: statistic.lastDateOfPeriod })
           : null,
