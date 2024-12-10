@@ -15,16 +15,6 @@ export const processWorkItemEntries = async ({
 }) => {
   if (!workItemRecords.length) return;
 
-  getLogger().debug(
-    `Upserting ${workItemRecords.length} work item records into postgres`,
-  );
-
-  await upsertWorkItems({
-    workItems: workItemRecords.map(record => {
-      return unmarshall(record.dynamodb.NewImage) as RawWorkItem;
-    }),
-  });
-
   getLogger().debug(`Indexing ${workItemRecords.length} work item records`);
 
   const indexWorkItemEntry = workItemRecord => {
@@ -74,4 +64,14 @@ export const processWorkItemEntries = async ({
     });
     throw new Error('failed to index work item records');
   }
+
+  getLogger().debug(
+    `Upserting ${workItemRecords.length} work item records into postgres`,
+  );
+
+  await upsertWorkItems({
+    workItems: workItemRecords.map(record => {
+      return unmarshall(record.dynamodb.NewImage) as RawWorkItem;
+    }),
+  });
 };
