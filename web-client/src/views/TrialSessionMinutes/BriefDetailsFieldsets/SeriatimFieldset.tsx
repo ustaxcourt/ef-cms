@@ -28,7 +28,16 @@ export const SeriatimFieldset = ({
     <fieldset className="border-0 grid-container padding-0">
       <div className="grid-row grid-gap align-items-center">
         <div className="grid-col-1"></div>
-        <div className="grid-col-3"></div>
+        <div className="grid-col-3">
+          <div className="grid-row">
+            <div className="grid-col-6 text-center">
+              <span className="usa-label">Petitioner</span>
+            </div>
+            <div className="grid-col-6 text-center">
+              <span className="usa-label">Respondent</span>
+            </div>
+          </div>
+        </div>
         <div className="grid-col-4">
           <span className="usa-label">Date due</span>
         </div>
@@ -47,40 +56,41 @@ export const SeriatimFieldset = ({
             </div>
             <div className="grid-col-3">
               <FormGroup className="margin-bottom-0">
-                <div>
+                <div className="grid-row align-items-center">
                   {Object.entries(PARTY_TYPE_OPTIONS_MAP).map(
                     ([key, value]) => (
-                      <div className="usa-radio usa-radio__inline" key={key}>
-                        <input
-                          checked={
-                            seriatimFormState[rowConfig.key].partyType === value
-                          }
-                          className="usa-radio__input"
-                          id={`${key}-${rowConfig.key}PartyType`}
-                          name={`${rowConfig.key}PartyType`}
-                          type="radio"
-                          value={value}
-                          onBlur={() => onBlurHandler()}
-                          onChange={e =>
-                            onChangeHandler({
-                              name: 'briefDetails',
-                              rowInfo: {
-                                key: rowConfig.key,
-                                nestedName: 'partyType',
-                              },
-                              section: 'trialBrief',
-                              value: e.target.value,
-                            })
-                          }
-                        />
-                        <label
-                          aria-label={value}
-                          className="smaller-padding-right usa-radio__label"
-                          htmlFor={`${key}-${rowConfig.key}PartyType`}
-                          id={`${key}-party-type-label`}
-                        >
-                          {value}
-                        </label>
+                      <div className="grid-col-6 text-center" key={key}>
+                        <div className="usa-radio usa-radio__inline">
+                          <input
+                            checked={
+                              seriatimFormState[rowConfig.key].partyType ===
+                              value
+                            }
+                            className="usa-radio__input"
+                            id={`${key}-${rowConfig.key}PartyType`}
+                            name={`${rowConfig.key}PartyType`}
+                            type="radio"
+                            value={value}
+                            onBlur={() => onBlurHandler()}
+                            onChange={e =>
+                              onChangeHandler({
+                                name: 'briefDetails',
+                                rowInfo: {
+                                  key: rowConfig.key,
+                                  nestedName: 'partyType',
+                                },
+                                section: 'trialBrief',
+                                value: e.target.value,
+                              })
+                            }
+                          />
+                          <label
+                            aria-label={value}
+                            className="usa-radio__label padding-left-0"
+                            htmlFor={`${key}-${rowConfig.key}PartyType`}
+                            id={`${key}-party-type-label`}
+                          ></label>
+                        </div>
                       </div>
                     ),
                   )}
