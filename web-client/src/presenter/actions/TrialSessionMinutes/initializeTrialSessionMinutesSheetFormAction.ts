@@ -1,3 +1,7 @@
+import {
+  CONTACT_TYPES,
+  CONTACT_TYPE_TITLES,
+} from '@shared/business/entities/EntityConstants';
 import { KeyedPartyFormFieldsByRenderKey } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { applicationContext } from '@web-client/applicationContext';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -11,6 +15,13 @@ export const initializeTrialSessionMinutesSheetFormAction = ({
 
   console.log('caseDetail', caseDetail);
   console.log('trial session', trialSession);
+
+  // TODO 10419: We need to figure out how to get the formattedDocketEntries
+  // so that we can use them to prepopulate Actions & Filings
+  // const formattedCaseDetail = applicationContext.getUtilities().formatCase({
+  //   applicationContext,
+  //   caseDetail,
+  // });
 
   const formattedTrialSession = applicationContext
     .getUtilities()
@@ -130,14 +141,28 @@ const getPetitionersFromCase = (
 
   const keyedPartyFormFieldsByRenderKey = {};
 
+  const petitionersWithCounselUserIds: string[] = [];
+  caseDetail.privatePractitioners?.forEach(practitioner => {
+    petitionersWithCounselUserIds.push(...practitioner.representing);
+  });
+
   if (petitioners && petitioners.length > 0) {
     petitioners.forEach(obj => {
+      let role;
+      if (obj.contactType === CONTACT_TYPES.petitioner) {
+        role = petitionersWithCounselUserIds.includes(obj.contactId)
+          ? 'Counsel'
+          : 'Pro Se';
+      } else {
+        role = CONTACT_TYPE_TITLES[obj.contactType];
+      }
+
       const renderKey = uuidv4();
       keyedPartyFormFieldsByRenderKey[renderKey] = {
         datesOfAppearance: '',
         name: obj.name,
         renderKey,
-        role: '', // TODO figure out how to do this
+        role,
       };
     });
   } else {
