@@ -1,3 +1,4 @@
+import { KeyedPartyFormFieldsByRenderKey } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { applicationContext } from '@web-client/applicationContext';
 import { state } from '@web-client/presenter/app.cerebral';
 import { v4 as uuidv4 } from 'uuid';
@@ -9,6 +10,7 @@ export const initializeTrialSessionMinutesSheetFormAction = ({
   const { caseDetail, trialSession } = props;
 
   console.log('caseDetail', caseDetail);
+  console.log('trial session', trialSession);
 
   const formattedTrialSession = applicationContext
     .getUtilities()
@@ -25,8 +27,6 @@ export const initializeTrialSessionMinutesSheetFormAction = ({
   });
 
   const recalledRowRenderKey = uuidv4();
-  const petitionerRowRenderKey = uuidv4();
-  const respondentRowRenderKey = uuidv4();
   const motionRowRenderKey = uuidv4();
   const actionsAndFilingsRenderKey = uuidv4();
   const petitionerWitnessRowRenderKey = uuidv4();
@@ -40,22 +40,12 @@ export const initializeTrialSessionMinutesSheetFormAction = ({
     transcriptOrdered: false,
   });
   store.set(
-    state.minuteSheetForm.petitioners.petitioners[petitionerRowRenderKey],
-    {
-      datesOfAppearance: '',
-      name: '',
-      renderKey: petitionerRowRenderKey,
-      role: '',
-    },
+    state.minuteSheetForm.petitioners.petitioners,
+    getPetitionersFromCase(caseDetail),
   );
   store.set(
-    state.minuteSheetForm.respondents.respondents[respondentRowRenderKey],
-    {
-      datesOfAppearance: '',
-      name: '',
-      renderKey: respondentRowRenderKey,
-      role: '',
-    },
+    state.minuteSheetForm.respondents.respondents,
+    getRespondentsFromCase(caseDetail),
   );
   store.set(state.minuteSheetForm.motionsSection.motions[motionRowRenderKey], {
     date: '',
@@ -103,4 +93,62 @@ export const initializeTrialSessionMinutesSheetFormAction = ({
     renderKey: exhibitRowRenderKey,
     status: '',
   });
+};
+
+const getRespondentsFromCase = (
+  caseDetail: RawCase,
+): KeyedPartyFormFieldsByRenderKey => {
+  const respondents = caseDetail.irsPractitioners;
+
+  const keyedPartyFormFieldsByRenderKey = {};
+
+  if (respondents && respondents.length > 0) {
+    respondents.forEach(obj => {
+      const renderKey = uuidv4();
+      keyedPartyFormFieldsByRenderKey[renderKey] = {
+        datesOfAppearance: '',
+        name: obj.name,
+        renderKey,
+      };
+    });
+  } else {
+    const renderKey = uuidv4();
+    keyedPartyFormFieldsByRenderKey[renderKey] = {
+      datesOfAppearance: '',
+      name: '',
+      renderKey,
+    };
+  }
+
+  return keyedPartyFormFieldsByRenderKey;
+};
+
+const getPetitionersFromCase = (
+  caseDetail: RawCase,
+): KeyedPartyFormFieldsByRenderKey => {
+  const { petitioners } = caseDetail;
+
+  const keyedPartyFormFieldsByRenderKey = {};
+
+  if (petitioners && petitioners.length > 0) {
+    petitioners.forEach(obj => {
+      const renderKey = uuidv4();
+      keyedPartyFormFieldsByRenderKey[renderKey] = {
+        datesOfAppearance: '',
+        name: obj.name,
+        renderKey,
+        role: '', // TODO figure out how to do this
+      };
+    });
+  } else {
+    const renderKey = uuidv4();
+    keyedPartyFormFieldsByRenderKey[renderKey] = {
+      datesOfAppearance: '',
+      name: '',
+      renderKey,
+      role: '',
+    };
+  }
+
+  return keyedPartyFormFieldsByRenderKey;
 };

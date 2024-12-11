@@ -94,7 +94,10 @@ type KeyedPartyFormFields = KeyedEntry & {
 };
 
 type RenderKey = string;
-type KeyedPartyFormFieldsByRenderKey = Record<RenderKey, KeyedPartyFormFields>;
+export type KeyedPartyFormFieldsByRenderKey = Record<
+  RenderKey,
+  KeyedPartyFormFields
+>;
 
 type KeyedMotionFormFields = KeyedEntry & MotionFormFields;
 type KeyedMotionFormFieldsByRenderKey = Record<
