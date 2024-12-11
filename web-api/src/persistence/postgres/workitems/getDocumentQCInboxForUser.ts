@@ -10,10 +10,11 @@ export const getDocumentQCInboxForUser = async ({
   const workItems = await getDbReader(reader => {
     return reader
       .selectFrom('dwWorkItem as w')
-      .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
       .where('w.assigneeId', '=', userId)
+      .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
       .selectAll()
       .select('w.docketNumber')
+      .limit(5000)
       .execute();
   });
 
