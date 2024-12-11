@@ -1,5 +1,6 @@
 import { ActionsAndFilingsFieldset } from '@web-client/views/TrialSessionMinutes/ActionsAndFIlingsFieldset';
 import { CaseMetadataFieldset } from '@web-client/views/TrialSessionMinutes/CaseMetadataFieldset';
+import { ExhibitsFieldset } from './ExhibitsFieldset';
 import { JurisdictionRetainedFieldset } from '@web-client/views/TrialSessionMinutes/JurisdictionRetainedFieldset';
 import { MotionsFieldset } from '@web-client/views/TrialSessionMinutes/MotionsFieldset';
 import { OrdersFieldset } from '@web-client/views/TrialSessionMinutes/OrdersFieldset';
@@ -7,6 +8,7 @@ import { PetitionersFieldset } from '@web-client/views/TrialSessionMinutes/Petit
 import { RespondentsFieldset } from '@web-client/views/TrialSessionMinutes/RespondentsFieldset';
 import { TrialBriefFieldset } from './TrialBriefFieldset';
 import { TrialSessionMetadataFieldset } from '@web-client/views/TrialSessionMinutes/SessionMetadataFieldset';
+import { WitnessesFieldset } from './WitnessesFieldset';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -106,9 +108,42 @@ export const TrialSessionMinutesForm = connect(
           onChangeHandler={updateTrialSessionMinutesFormSequence}
         />
         <hr />
-        <div>Witnesses Section</div>
+        <div className="grid-row">
+          <div className="grid-col-6 border-right">
+            <WitnessesFieldset
+              addRowHandler={addMinuteSheetFormRowSequence}
+              removeRowHandler={removeMinuteSheetFormRowSequence}
+              witnessType="petitioner"
+              witnessesFormState={
+                trialSessionMinutesForm.witnesses.petitionerWitnesses
+              }
+              onBlurHandler={trialSessionMinutesAutosaveSequence}
+              onChangeHandler={updateTrialSessionMinutesFormSequence}
+            />
+          </div>
+          <div className="grid-col-6 padding-left-4">
+            <WitnessesFieldset
+              addRowHandler={addMinuteSheetFormRowSequence}
+              removeRowHandler={removeMinuteSheetFormRowSequence}
+              witnessType="respondent"
+              witnessesFormState={
+                trialSessionMinutesForm.witnesses.respondentWitnesses
+              }
+              onBlurHandler={trialSessionMinutesAutosaveSequence}
+              onChangeHandler={updateTrialSessionMinutesFormSequence}
+            />
+          </div>
+        </div>
         <hr />
-        <div>Exhibits Section</div>
+        <div>
+          <ExhibitsFieldset
+            addRowHandler={addMinuteSheetFormRowSequence}
+            exhibitsFormState={trialSessionMinutesForm.exhibits}
+            removeRowHandler={removeMinuteSheetFormRowSequence}
+            onBlurHandler={trialSessionMinutesAutosaveSequence}
+            onChangeHandler={updateTrialSessionMinutesFormSequence}
+          />
+        </div>
       </form>
     );
   },

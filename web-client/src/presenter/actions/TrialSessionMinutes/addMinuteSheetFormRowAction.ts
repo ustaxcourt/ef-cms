@@ -21,6 +21,12 @@ const getEmptyFormRowByName = (name: string) => {
       renderKey: newRenderKey,
       status: '',
     },
+    exhibits: {
+      description: '',
+      note: '',
+      renderKey: newRenderKey,
+      status: '',
+    },
     motions: {
       date: '',
       filedBy: '',
@@ -29,6 +35,10 @@ const getEmptyFormRowByName = (name: string) => {
       renderKey: newRenderKey,
       status: '',
       type: '',
+    },
+    petitionerWitnesses: {
+      name: '',
+      renderKey: newRenderKey,
     },
     petitioners: {
       datesOfAppearence: '',
@@ -41,6 +51,10 @@ const getEmptyFormRowByName = (name: string) => {
       note: '',
       renderKey: newRenderKey,
       transcriptOrdered: false,
+    },
+    respondentWitnesses: {
+      name: '',
+      renderKey: newRenderKey,
     },
     respondents: {
       datesOfAppearence: '',

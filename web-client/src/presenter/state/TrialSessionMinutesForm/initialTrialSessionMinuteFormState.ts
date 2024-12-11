@@ -61,12 +61,6 @@ export type SimultaneousSupplementalFormFields = {
   simultaneousSupplemental: BaseBriefFormFields;
 };
 
-type ExhibitFormFields = {
-  description: string;
-  status: string;
-  note: string;
-};
-
 // 10419 TODO: consider whether optional fields are the best approach here, or
 // if we should have explicit types for each sort of "case metadata entry".
 type CaseMetadataEntry = {
@@ -82,6 +76,13 @@ type KeyedEntry = {
 
 type KeyedCaseMetadataEntry = KeyedEntry & CaseMetadataEntry;
 type KeyedCaseMetadataEntryByKey = Record<RenderKey, KeyedCaseMetadataEntry>;
+
+type KeyedWitnessEntry = KeyedEntry & { name: string };
+type KeyedWitnessEntryByKey = Record<RenderKey, KeyedWitnessEntry>;
+
+export let witnessTypeOptions: 'petitioner' | 'respondent';
+export type WitnessesRecord<T extends 'petitioner' | 'respondent'> =
+  MinuteSheetFormState['witnesses'][`${T}Witnesses`];
 
 type KeyedPartyFormFields = KeyedEntry & {
   renderKey: string;
@@ -100,6 +101,13 @@ type KeyedMotionFormFieldsByRenderKey = Record<
   RenderKey,
   KeyedMotionFormFields
 >;
+
+type KeyedExhibitFormFields = KeyedEntry & {
+  description: string;
+  status: string;
+  note: string;
+};
+type KeyedExhibitFormFieldsByKey = Record<RenderKey, KeyedExhibitFormFields>;
 
 export type MinuteSheetFormState = {
   // 10419 TODO: rename all first-level properties by appending "Section"
@@ -174,11 +182,13 @@ export type MinuteSheetFormState = {
   };
 
   witnesses: {
-    petitionerWitnesses: string[];
-    respondentWitnesses: string[];
+    petitionerWitnesses: KeyedWitnessEntryByKey;
+    respondentWitnesses: KeyedWitnessEntryByKey;
   };
 
-  exhibits: ExhibitFormFields[];
+  exhibits: {
+    exhibits: KeyedExhibitFormFieldsByKey;
+  };
 };
 
 export const initialMinuteSheetFormState: MinuteSheetFormState = {
@@ -207,7 +217,9 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
     },
   },
 
-  exhibits: [],
+  exhibits: {
+    exhibits: {},
+  },
 
   jurisdictionRetained: {
     continued: false,
@@ -261,8 +273,8 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
   },
 
   witnesses: {
-    petitionerWitnesses: [], // just an array of strings, each of which is a name
-    respondentWitnesses: [], // just an array of strings, each of which is a name
+    petitionerWitnesses: {},
+    respondentWitnesses: {},
   },
 };
 

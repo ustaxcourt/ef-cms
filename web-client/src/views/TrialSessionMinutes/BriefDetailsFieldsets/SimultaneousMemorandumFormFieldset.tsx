@@ -21,6 +21,15 @@ export const SimultaneousMemorandumFormFieldset = ({
 
   return (
     <fieldset className="border-0 grid-container padding-0">
+      <div className="grid-row grid-gap align-items-center">
+        <div className="grid-col-1"></div>
+        <div className="grid-col-4">
+          <span className="usa-label">Date due</span>
+        </div>
+        <div className="grid-col-7">
+          <span className="usa-label">Note</span>
+        </div>
+      </div>
       {rowsConfig.map(rowConfig => {
         return (
           <div
@@ -28,17 +37,14 @@ export const SimultaneousMemorandumFormFieldset = ({
             key={rowConfig.key}
           >
             <div className="grid-col-1">
-              <span className="usa-label margin-bottom-0">
-                {rowConfig.rowLabel}
-              </span>
+              <span>{rowConfig.rowLabel}</span>
             </div>
             <div className="grid-col-4">
               <DateSelector
                 defaultValue={undefined}
                 formGroupClassNames="margin-bottom-0"
                 id={`${rowConfig.key}DueDate`}
-                label="Date"
-                labelPosition="left"
+                labelPosition="hidden"
                 onChange={e =>
                   onChangeHandler({
                     name: 'briefDetails',
@@ -53,15 +59,12 @@ export const SimultaneousMemorandumFormFieldset = ({
               />
             </div>
             <div className="grid-col-7">
-              <FormGroup className="margin-bottom-0 display-flex align-items-center">
-                <label
-                  className="margin-right-2 margin-bottom-0 display-inline-block"
-                  htmlFor={`${rowConfig.key}Note`}
-                >
+              <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full padding-right-4">
+                <label hidden htmlFor={`${rowConfig.key}Note`}>
                   Note
                 </label>
                 <input
-                  className="usa-input"
+                  className="usa-input maxw-full"
                   id={`${rowConfig.key}Note`}
                   name={`${rowConfig.key}Note`}
                   type="text"

@@ -26,6 +26,25 @@ export const SeriatimFieldset = ({
 
   return (
     <fieldset className="border-0 grid-container padding-0">
+      <div className="grid-row grid-gap align-items-center">
+        <div className="grid-col-1"></div>
+        <div className="grid-col-3">
+          <div className="grid-row">
+            <div className="grid-col-6 text-center">
+              <span className="usa-label">Petitioner</span>
+            </div>
+            <div className="grid-col-6 text-center">
+              <span className="usa-label">Respondent</span>
+            </div>
+          </div>
+        </div>
+        <div className="grid-col-4">
+          <span className="usa-label">Date due</span>
+        </div>
+        <div className="grid-col-4">
+          <span className="usa-label">Note</span>
+        </div>
+      </div>
       {rowsConfig.map(rowConfig => {
         return (
           <div
@@ -33,50 +52,49 @@ export const SeriatimFieldset = ({
             key={rowConfig.key}
           >
             <div className="grid-col-1">
-              <span className="usa-label margin-bottom-0">
-                {rowConfig.rowLabel}
-              </span>
+              <span className="margin-bottom-0">{rowConfig.rowLabel}</span>
             </div>
             <div className="grid-col-3">
               <FormGroup className="margin-bottom-0">
-                <div>
+                <div className="grid-row align-items-center">
                   {Object.entries(PARTY_TYPE_OPTIONS_MAP).map(
                     ([key, value]) => (
-                      <div className="usa-radio usa-radio__inline" key={key}>
-                        <input
-                          checked={
-                            seriatimFormState[rowConfig.key].partyType === value
-                          }
-                          className="usa-radio__input"
-                          id={`${key}-${rowConfig.key}PartyType`}
-                          name={`${rowConfig.key}PartyType`}
-                          type="radio"
-                          value={value}
-                          onBlur={() => onBlurHandler()}
-                          onChange={e =>
-                            onChangeHandler({
-                              name: 'briefDetails',
-                              rowInfo: {
-                                key: rowConfig.key,
-                                nestedName: 'partyType',
-                              },
-                              section: 'trialBrief',
-                              value: e.target.value,
-                            })
-                          }
-                        />
-                        <label
-                          aria-label={value}
-                          className="smaller-padding-right usa-radio__label"
-                          htmlFor={`${key}-${rowConfig.key}PartyType`}
-                          id={`${key}-party-type-label`}
-                        >
-                          {value}
-                        </label>
+                      <div className="grid-col-6 text-center" key={key}>
+                        <div className="usa-radio usa-radio__inline">
+                          <input
+                            checked={
+                              seriatimFormState[rowConfig.key].partyType ===
+                              value
+                            }
+                            className="usa-radio__input"
+                            id={`${key}-${rowConfig.key}PartyType`}
+                            name={`${rowConfig.key}PartyType`}
+                            type="radio"
+                            value={value}
+                            onBlur={() => onBlurHandler()}
+                            onChange={e =>
+                              onChangeHandler({
+                                name: 'briefDetails',
+                                rowInfo: {
+                                  key: rowConfig.key,
+                                  nestedName: 'partyType',
+                                },
+                                section: 'trialBrief',
+                                value: e.target.value,
+                              })
+                            }
+                          />
+                          <label
+                            aria-label={value}
+                            className="usa-radio__label padding-left-0"
+                            htmlFor={`${key}-${rowConfig.key}PartyType`}
+                            id={`${key}-party-type-label`}
+                          ></label>
+                        </div>
                       </div>
                     ),
                   )}
-                </div>{' '}
+                </div>
               </FormGroup>
             </div>
             <div className="grid-col-4">
@@ -84,8 +102,7 @@ export const SeriatimFieldset = ({
                 defaultValue={undefined}
                 formGroupClassNames="margin-bottom-0"
                 id={`${rowConfig.key}DueDate`}
-                label="Date"
-                labelPosition="left"
+                labelPosition="hidden"
                 onChange={e =>
                   onChangeHandler({
                     name: 'briefDetails',
@@ -100,33 +117,32 @@ export const SeriatimFieldset = ({
               />
             </div>
             <div className="grid-col-4">
-              <FormGroup className="margin-bottom-0 display-flex align-items-center">
-                <label
-                  className="margin-right-2 margin-bottom-0 display-inline-block"
-                  htmlFor={`${rowConfig.key}Note`}
-                >
+              <div className="padding-right-4">
+                <label hidden htmlFor={`${rowConfig.key}Note`}>
                   Note
                 </label>
-                <input
-                  className="usa-input"
-                  id={`${rowConfig.key}Note`}
-                  name={`${rowConfig.key}Note`}
-                  type="text"
-                  value={seriatimFormState[rowConfig.key].note}
-                  onBlur={() => onBlurHandler()}
-                  onChange={e =>
-                    onChangeHandler({
-                      name: 'briefDetails',
-                      rowInfo: {
-                        key: rowConfig.key,
-                        nestedName: 'note',
-                      },
-                      section: 'trialBrief',
-                      value: e.target.value,
-                    })
-                  }
-                />
-              </FormGroup>
+                <FormGroup className="margin-bottom-0 display-flex align-items-center">
+                  <input
+                    className="usa-input"
+                    id={`${rowConfig.key}Note`}
+                    name={`${rowConfig.key}Note`}
+                    type="text"
+                    value={seriatimFormState[rowConfig.key].note}
+                    onBlur={() => onBlurHandler()}
+                    onChange={e =>
+                      onChangeHandler({
+                        name: 'briefDetails',
+                        rowInfo: {
+                          key: rowConfig.key,
+                          nestedName: 'note',
+                        },
+                        section: 'trialBrief',
+                        value: e.target.value,
+                      })
+                    }
+                  />
+                </FormGroup>
+              </div>
             </div>
           </div>
         );

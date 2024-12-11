@@ -8,6 +8,7 @@ import {
   SimultaneousMemorandumFormFields,
   SimultaneousSupplementalFormFields,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { OnChangeHandler } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import { SeriatimFieldset } from './BriefDetailsFieldsets/SeriatimFieldset';
@@ -95,15 +96,127 @@ export const TrialBriefFieldset = ({
 
   return (
     <fieldset className="border-0 grid-container padding-0">
+      <div className="grid-row grid-gap align-items-center margin-bottom-2">
+        <div className="grid-col-auto">
+          <DateSelector
+            defaultValue={undefined}
+            formGroupClassNames="margin-bottom-0"
+            id="trialBriefDateSubmitted"
+            label="Date submitted"
+            onBlur={() => onBlurHandler()}
+            onChange={e =>
+              onChangeHandler({
+                name: 'dateSubmitted',
+                section: 'trialBrief',
+                value: e.target.value,
+              })
+            }
+          />
+        </div>
+        <div className="grid-col-2">
+          <label
+            className="usa-label margin-right-2"
+            htmlFor="trialBriefTotalTrialHours"
+          >
+            Total Trial Hours
+          </label>
+          <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
+            <input
+              className="usa-input display-inline-block maxw-full"
+              id="trialBriefTotalTrialHours"
+              name="trialBriefTotalTrialHours"
+              type="text"
+              value={trialBriefFormState.note}
+              onBlur={() => onBlurHandler()}
+              onChange={e =>
+                onChangeHandler({
+                  name: 'totalTrialHours',
+                  section: 'trialBrief',
+                  value: e.target.value,
+                })
+              }
+            />
+          </FormGroup>
+        </div>
+        <div className="grid-col-auto">
+          <DateSelector
+            defaultValue={undefined}
+            formGroupClassNames="margin-bottom-0"
+            id="dateBenchOpinionRendered"
+            label="Bench Opinion rendered"
+            onBlur={() => onBlurHandler()}
+            onChange={e =>
+              onChangeHandler({
+                name: 'dateBenchOpinionRendered',
+                section: 'trialBrief',
+                value: e.target.value,
+              })
+            }
+          />
+        </div>
+        <div className="grid-col-2">
+          <div style={{ marginBottom: '42px' }}>
+            {/* 10419 TODO this is a stopgap means of approximating consistent vertical alignment*/}
+          </div>
+          <FormGroup className="margin-bottom-0">
+            <div className="usa-checkbox">
+              <input
+                aria-describedby="representing-legend"
+                checked={trialBriefFormState.transcriptOrdered}
+                className="usa-checkbox__input"
+                id="trialBriefTranscriptOrdered"
+                name="trialBriefTranscriptOrdered"
+                type="checkbox"
+                onBlur={() => onBlurHandler()}
+                onChange={e => {
+                  onChangeHandler({
+                    name: 'transcriptOrdered',
+                    section: 'trialBrief',
+                    value: e.target.checked,
+                  });
+                }}
+              />
+              <label
+                className="usa-checkbox__label margin-bottom-0"
+                htmlFor="trialBriefTranscriptOrdered"
+              >
+                Remote Session
+              </label>
+            </div>
+          </FormGroup>
+        </div>
+        <div className="grid-col-3">
+          <label className="usa-label margin-right-2" htmlFor="trialBriefNote">
+            Note
+          </label>
+          <FormGroup className="margin-bottom-0 display-flex align-items-center">
+            <input
+              className="usa-input display-inline-block"
+              id="trialBriefNote"
+              name="trialBriefNote"
+              type="text"
+              value={trialBriefFormState.note}
+              onBlur={() => onBlurHandler()}
+              onChange={e =>
+                onChangeHandler({
+                  name: 'note',
+                  section: 'trialBrief',
+                  value: e.target.value,
+                })
+              }
+            />
+          </FormGroup>
+        </div>
+      </div>
       <div className="grid-row grid-gap">
         <div className="grid-col-2">
+          <label
+            className="margin-right-2 display-inline-block"
+            htmlFor="briefType"
+          >
+            Brief type
+          </label>
           <FormGroup className="margin-bottom-0 display-flex align-items-center">
-            <label
-              className="margin-right-2 margin-bottom-0 display-inline-block"
-              htmlFor="briefType"
-            >
-              Type
-            </label>
             <select
               className="usa-select display-inline-block"
               id="briefType"
