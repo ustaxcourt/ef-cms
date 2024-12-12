@@ -14,11 +14,17 @@ export const trialLocationHelper = (
   get: Get,
 ): {
   location: string;
-  formattedEligibleCases: any[];
+  eligibleCasesForDisplay: any[];
   blockedCases: RawCase[];
+  formattedEligibleCases: any[];
+  totalPages: number;
 } => {
-  // const permissions = get(state.permissions)!;
-  const { eligibleCases, location } = get(state.trialLocationPage);
+  const pageSize = 100;
+
+  const { eligibleCases, eligibleCasesPage, location } = get(
+    state.trialLocationPage,
+  );
+
   const formattedEligibleCases = eligibleCases.map(c => {
     let privatePractitioners: string[] = [];
     if (c.privatePractitioners) {
@@ -62,11 +68,16 @@ export const trialLocationHelper = (
     })
     .sort(compareTrialSessionEligibleCases(formattedEligibleCases));
 
-  // const pageSize = 100;
+  const eligibleCasesForDisplay = sortedEligibleCases.slice(
+    eligibleCasesPage * pageSize,
+    eligibleCasesPage * pageSize + pageSize,
+  );
 
   return {
     blockedCases: get(state.blockedCases),
-    formattedEligibleCases: sortedEligibleCases,
+    eligibleCasesForDisplay,
+    formattedEligibleCases,
     location: trialCityFormatted,
+    totalPages: Math.ceil(sortedEligibleCases.length / pageSize),
   };
 };

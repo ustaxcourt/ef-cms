@@ -2,7 +2,7 @@ import { BigHeader } from '../BigHeader';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { TrialLocationBlockedTable } from '@web-client/views/TrialSessions/TrialLocationBlockedTable';
-import { TrialLocationTable } from '@web-client/views/TrialSessions/TrialLocationTable';
+import { TrialLocationEligibleCasesTable } from '@web-client/views/TrialSessions/TrialLocationEligibleCasesTable';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -48,7 +48,7 @@ export const TrialLocation = connect(
               tabName="eligibleCases"
               title={`Eligible Cases (${formattedEligibleCases.length})`}
             >
-              <TrialLocationTable />
+              <TrialLocationEligibleCasesTable />
             </Tab>
             <Tab
               data-testid="blocked-cases-tab"

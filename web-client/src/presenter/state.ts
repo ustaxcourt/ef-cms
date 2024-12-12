@@ -847,9 +847,11 @@ export const baseState = {
   todaysDate: '',
   token: '',
   trialLocationPage: {
-    blockedCases: [],
+    blockedCases: [] as RawCase[],
+    blockedCasesPage: 0,
     currentTab: 'eligibleCases',
     eligibleCases: [] as EligibleCase[],
+    eligibleCasesPage: 0,
     location: '',
   },
   trialSession: cloneDeep(initialTrialSessionState),

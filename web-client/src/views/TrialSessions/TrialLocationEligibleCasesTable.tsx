@@ -2,32 +2,41 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 // import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { CaseIcons } from '@web-client/ustc-ui/Icon/CaseIcons';
 import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
-import { state } from '@web-client/presenter/app.cerebral';
+import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
+import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useRef } from 'react';
 import classNames from 'classnames';
 
-export const TrialLocationTable = connect(
+export const TrialLocationEligibleCasesTable = connect(
   {
-    currentTab: state.trialLocationPage.currentTab,
+    setTrialLocationPaginatorSequence:
+      sequences.setTrialLocationPaginatorSequence,
     trialLocationHelper: state.trialLocationHelper,
+    trialLocationPage: state.trialLocationPage,
   },
-  function TrialLocationTable({ currentTab, trialLocationHelper }) {
+  function TrialLocationEligibleCasesTable({
+    setTrialLocationPaginatorSequence,
+    trialLocationHelper,
+    trialLocationPage,
+  }) {
     const paginatorTop = useRef(null);
 
     return (
       <>
         <div className="grid-row margin-bottom-2 flex-align-center">
           <div className="grid-col" ref={paginatorTop}>
-            {/*<Paginator*/}
-            {/*  // currentPageIndex={trialLocationHelper.pageNumber}*/}
-            {/*  totalPages={trialLocationHelper.totalPages}*/}
-            {/*  onPageChange={selectedPage => {*/}
-            {/*    setTrialSessionsFiltersSequence({*/}
-            {/*      pageNumber: selectedPage,*/}
-            {/*    });*/}
-            {/*    focusPaginatorTop(paginatorTop);*/}
-            {/*  }}*/}
-            {/*/>*/}
+            <Paginator
+              currentPageIndex={trialLocationPage.eligibleCasesPage}
+              totalPages={trialLocationHelper.totalPages}
+              onPageChange={selectedPage => {
+                setTrialLocationPaginatorSequence({
+                  pageNumber: selectedPage,
+                  pageType: 'eligibleCasesPage',
+                });
+                focusPaginatorTop(paginatorTop);
+              }}
+            />
             <div className="grid-col-2"></div>
           </div>
         </div>
@@ -39,9 +48,9 @@ export const TrialLocationTable = connect(
         <div className="overflow-x-auto">
           <div className="minw-tablet-lg">
             <table
-              aria-label={`${currentTab}`}
+              aria-label={`${trialLocationPage.currentTab}`}
               className="usa-table ustc-table trial-sessions"
-              id={`${currentTab}`}
+              id={`${trialLocationPage.currentTab}`}
             >
               <thead>
                 <tr>
@@ -58,7 +67,7 @@ export const TrialLocationTable = connect(
                   <th className="width-card">Case Type</th>
                 </tr>
               </thead>
-              {trialLocationHelper.formattedEligibleCases.map(eligibleCase => {
+              {trialLocationHelper.eligibleCasesForDisplay.map(eligibleCase => {
                 return (
                   <tbody key={eligibleCase.docketNumber}>
                     <tr>
@@ -89,22 +98,25 @@ export const TrialLocationTable = connect(
             </table>
           </div>
         </div>
-        {trialLocationHelper.formattedEligibleCases.length === 0 && (
+        {trialLocationHelper.eligibleCasesForDisplay.length === 0 && (
           <p>There are no eligible cases.</p>
         )}
         <div className="padding-1" />
 
-        {/*<Paginator
-          currentPageIndex={trialLocationHelper.filters.pageNumber}
+        <Paginator
+          currentPageIndex={trialLocationPage.eligibleCasesPage}
           totalPages={trialLocationHelper.totalPages}
           onPageChange={selectedPage => {
-            setTrialSessionsFiltersSequence({ pageNumber: selectedPage });
+            setTrialLocationPaginatorSequence({
+              pageNumber: selectedPage,
+              pageType: 'eligibleCases',
+            });
             focusPaginatorTop(paginatorTop);
           }}
-        />*/}
+        />
       </>
     );
   },
 );
 
-TrialLocationTable.displayName = 'TrialLocationTable';
+TrialLocationEligibleCasesTable.displayName = 'TrialLocationEligibleCasesTable';
