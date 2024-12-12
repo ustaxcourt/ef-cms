@@ -98,7 +98,7 @@ export const CaseDetailInternal = connect(
           )}
           {caseDetailInternalTabs.drafts && (
             <>
-              <div className="title">
+              <div className="title" data-testid="drafts-tab-title">
                 <h1>Drafts</h1>
               </div>
               <DraftDocuments />
