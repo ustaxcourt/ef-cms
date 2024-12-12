@@ -194,31 +194,29 @@ const getPendingItemsFromCase = ({
   if (pendingItems?.length > 0) {
     pendingItems.forEach(pendingItem => {
       const renderKey = uuidv4();
-      const formattedDate = formatDateString(
-        pendingItem.createdAt,
-        FORMATS.YYYYMMDD,
-      );
-
       keyedActionFilingFormFieldsByRenderKey[renderKey] = {
-        date: formattedDate,
+        date: formatDateString(pendingItem.createdAt, FORMATS.MMDDYYYY),
         documentType: transformDocumentType(pendingItem.documentType),
         filedBy: transformFiledBy(caseDetail, pendingItem),
+        isOnDocketRecord: true,
         note: '',
         renderKey,
         status: '',
       };
     });
-  } else {
-    const renderKey = uuidv4();
-    keyedActionFilingFormFieldsByRenderKey[renderKey] = {
-      date: '',
-      documentType: '',
-      filedBy: '',
-      note: '',
-      renderKey,
-      status: '',
-    };
   }
+
+  const renderKey = uuidv4();
+  keyedActionFilingFormFieldsByRenderKey[renderKey] = {
+    date: '',
+    documentType: '',
+    filedBy: '',
+    isOnDocketRecord: false,
+    note: '',
+    renderKey,
+    status: '',
+  };
+
   return keyedActionFilingFormFieldsByRenderKey;
 };
 
@@ -237,6 +235,8 @@ const transformFiledBy = (caseDetail: RawCase, pendingItem): string => {
       practitioner => id === practitioner.userId,
     ),
   );
+
+  // 10419 TODO figure out what constitutes a "joint" filed by
 
   if (isPetitioner && isRespondent) {
     return 'petitionerAndRespondent';

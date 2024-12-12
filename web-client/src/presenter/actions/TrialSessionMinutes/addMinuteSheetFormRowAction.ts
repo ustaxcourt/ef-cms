@@ -17,6 +17,7 @@ const getEmptyFormRowByName = (name: string) => {
       date: '',
       documentType: '',
       filedBy: '',
+      isOnDocketRecord: false,
       note: '',
       renderKey: newRenderKey,
       status: '',

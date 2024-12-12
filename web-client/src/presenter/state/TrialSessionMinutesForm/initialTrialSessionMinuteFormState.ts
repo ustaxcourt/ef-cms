@@ -13,9 +13,10 @@ type ActionFilingFormFields = {
   filedBy: ActionFiledByOption | '';
   status: ActionStatusOption | '';
   note: string;
+  isOnDocketRecord: boolean;
 };
 
-type KeyedActionFilingFormFields = KeyedEntry & ActionFilingFormFields;
+export type KeyedActionFilingFormFields = KeyedEntry & ActionFilingFormFields;
 export type KeyedActionFilingFormFieldsByRenderKey = Record<
   RenderKey,
   KeyedActionFilingFormFields

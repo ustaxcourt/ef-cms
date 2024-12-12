@@ -2,6 +2,7 @@ import {
   ACTION_DOCUMENT_TYPE_OPTIONS,
   ACTION_FILED_BY_OPTIONS,
   ACTION_STATUS_OPTIONS,
+  KeyedActionFilingFormFields,
   MinuteSheetFormState,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import {
@@ -27,6 +28,162 @@ export const ActionsAndFilingsFieldset = ({
   onBlurHandler: () => void;
   actionsAndFilingsFormState: MinuteSheetFormState['actionsAndFilingsSection'];
 }) => {
+  const getFieldsByRow = (row: KeyedActionFilingFormFields) => {
+    const editableRow = (
+      <>
+        <div className="grid-col-auto">
+          <DateSelector
+            defaultValue={row.date}
+            formGroupClassNames="margin-bottom-0"
+            id={`actionsAndFilingsDate-${row.renderKey}`}
+            labelPosition="hidden"
+            onChange={e =>
+              onChangeHandler({
+                name: 'actionsAndFilings',
+                rowInfo: {
+                  key: row.renderKey,
+                  nestedName: 'date',
+                },
+                section: 'actionsAndFilingsSection',
+                value: e.target.value,
+              })
+            }
+          />
+        </div>
+        <div className="grid-col-2">
+          <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
+            <label
+              hidden
+              htmlFor={`actionsAndFilingsDocumentType-${row.renderKey}`}
+            >
+              Document Type
+            </label>
+            <select
+              className="usa-select display-inline-block"
+              id={`actionsAndFilingsDocumentType-${row.renderKey}`}
+              name={`actionsAndFilingsDocumentType-${row.renderKey}`}
+              value={row.documentType}
+              onBlur={() => onBlurHandler()}
+              onChange={e => {
+                onChangeHandler({
+                  name: 'actionsAndFilings',
+                  rowInfo: {
+                    key: row.renderKey,
+                    nestedName: 'documentType',
+                  },
+                  section: 'actionsAndFilingsSection',
+                  value: e.target.value,
+                });
+              }}
+            >
+              <option value="">- Select -</option>
+              {Object.keys(ACTION_DOCUMENT_TYPE_OPTIONS).map(optionKey => {
+                return (
+                  <option
+                    key={`${optionKey}-${row.renderKey}`}
+                    value={optionKey}
+                  >
+                    {ACTION_DOCUMENT_TYPE_OPTIONS[optionKey]}
+                  </option>
+                );
+              })}
+            </select>
+          </FormGroup>
+        </div>
+        <div className="grid-col-2">
+          <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
+            <label hidden htmlFor={`actionsAndFilingsFiledBy-${row.renderKey}`}>
+              Filed by
+            </label>
+            <select
+              className="usa-select display-inline-block"
+              id={`actionsAndFilingsFiledBy-${row.renderKey}`}
+              name={`actionsAndFilingsFiledBy-${row.renderKey}`}
+              value={row.filedBy}
+              onBlur={() => onBlurHandler()}
+              onChange={e => {
+                onChangeHandler({
+                  name: 'actionsAndFilings',
+                  rowInfo: {
+                    key: row.renderKey,
+                    nestedName: 'filedBy',
+                  },
+                  section: 'actionsAndFilingsSection',
+                  value: e.target.value,
+                });
+              }}
+            >
+              <option value="">- Select -</option>
+              {Object.keys(ACTION_FILED_BY_OPTIONS).map(optionKey => {
+                return (
+                  <option
+                    key={`${optionKey}-${row.renderKey}`}
+                    value={optionKey}
+                  >
+                    {ACTION_FILED_BY_OPTIONS[optionKey]}
+                  </option>
+                );
+              })}
+            </select>
+          </FormGroup>
+        </div>
+        <div className="grid-col-2">
+          <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
+            <label hidden htmlFor={`actionsAndFilingsStatus-${row.renderKey}`}>
+              Status
+            </label>
+            <select
+              className="usa-select display-inline-block"
+              id={`actionsAndFilingsStatus-${row.renderKey}`}
+              name={`actionsAndFilingsStatus-${row.renderKey}`}
+              value={row.status}
+              onBlur={() => onBlurHandler()}
+              onChange={e => {
+                onChangeHandler({
+                  name: 'actionsAndFilings',
+                  rowInfo: {
+                    key: row.renderKey,
+                    nestedName: 'status',
+                  },
+                  section: 'actionsAndFilingsSection',
+                  value: e.target.value,
+                });
+              }}
+            >
+              <option value="">- Select -</option>
+              {Object.keys(ACTION_STATUS_OPTIONS).map(optionKey => {
+                return (
+                  <option
+                    key={`${optionKey}-${row.renderKey}`}
+                    value={optionKey}
+                  >
+                    {ACTION_STATUS_OPTIONS[optionKey]}
+                  </option>
+                );
+              })}
+            </select>
+          </FormGroup>
+        </div>
+      </>
+    );
+    const nonEditableRow = (
+      <>
+        <div className="grid-col-auto" style={{ minWidth: '266px' }}>
+          {row.date}
+        </div>
+        <div className="grid-col-2">
+          {ACTION_DOCUMENT_TYPE_OPTIONS[row.documentType]}
+        </div>
+        <div className="grid-col-2">
+          {ACTION_FILED_BY_OPTIONS[row.filedBy]}{' '}
+        </div>
+        <div className="grid-col-2">{ACTION_STATUS_OPTIONS[row.status]}</div>
+      </>
+    );
+
+    return row.isOnDocketRecord ? nonEditableRow : editableRow;
+  };
+
   return (
     <fieldset className="border-0 padding-0">
       <div className="grid-row grid-gap-2">
@@ -44,145 +201,7 @@ export const ActionsAndFilingsFieldset = ({
             className="grid-row grid-gap-2 align-items-center margin-bottom-1"
             key={row.renderKey}
           >
-            <div className="grid-col-auto">
-              <DateSelector
-                defaultValue={row.date}
-                formGroupClassNames="margin-bottom-0"
-                id={`actionsAndFilingsDate-${row.renderKey}`}
-                labelPosition="hidden"
-                onChange={e =>
-                  onChangeHandler({
-                    name: 'actionsAndFilings',
-                    rowInfo: {
-                      key: row.renderKey,
-                      nestedName: 'date',
-                    },
-                    section: 'actionsAndFilingsSection',
-                    value: e.target.value,
-                  })
-                }
-              />
-            </div>
-            <div className="grid-col-2">
-              <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
-                <label
-                  hidden
-                  htmlFor={`actionsAndFilingsDocumentType-${row.renderKey}`}
-                >
-                  Document Type
-                </label>
-                <select
-                  className="usa-select display-inline-block"
-                  id={`actionsAndFilingsDocumentType-${row.renderKey}`}
-                  name={`actionsAndFilingsDocumentType-${row.renderKey}`}
-                  value={row.documentType}
-                  onBlur={() => onBlurHandler()}
-                  onChange={e => {
-                    onChangeHandler({
-                      name: 'actionsAndFilings',
-                      rowInfo: {
-                        key: row.renderKey,
-                        nestedName: 'documentType',
-                      },
-                      section: 'actionsAndFilingsSection',
-                      value: e.target.value,
-                    });
-                  }}
-                >
-                  <option value="">- Select -</option>
-                  {Object.keys(ACTION_DOCUMENT_TYPE_OPTIONS).map(optionKey => {
-                    return (
-                      <option
-                        key={`${optionKey}-${row.renderKey}`}
-                        value={optionKey}
-                      >
-                        {ACTION_DOCUMENT_TYPE_OPTIONS[optionKey]}
-                      </option>
-                    );
-                  })}
-                </select>
-              </FormGroup>
-            </div>
-            <div className="grid-col-2">
-              <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
-                <label
-                  hidden
-                  htmlFor={`actionsAndFilingsFiledBy-${row.renderKey}`}
-                >
-                  Filed by
-                </label>
-                <select
-                  className="usa-select display-inline-block"
-                  id={`actionsAndFilingsFiledBy-${row.renderKey}`}
-                  name={`actionsAndFilingsFiledBy-${row.renderKey}`}
-                  value={row.filedBy}
-                  onBlur={() => onBlurHandler()}
-                  onChange={e => {
-                    onChangeHandler({
-                      name: 'actionsAndFilings',
-                      rowInfo: {
-                        key: row.renderKey,
-                        nestedName: 'filedBy',
-                      },
-                      section: 'actionsAndFilingsSection',
-                      value: e.target.value,
-                    });
-                  }}
-                >
-                  <option value="">- Select -</option>
-                  {Object.keys(ACTION_FILED_BY_OPTIONS).map(optionKey => {
-                    return (
-                      <option
-                        key={`${optionKey}-${row.renderKey}`}
-                        value={optionKey}
-                      >
-                        {ACTION_FILED_BY_OPTIONS[optionKey]}
-                      </option>
-                    );
-                  })}
-                </select>
-              </FormGroup>
-            </div>
-            <div className="grid-col-2">
-              <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
-                <label
-                  hidden
-                  htmlFor={`actionsAndFilingsStatus-${row.renderKey}`}
-                >
-                  Status
-                </label>
-                <select
-                  className="usa-select display-inline-block"
-                  id={`actionsAndFilingsStatus-${row.renderKey}`}
-                  name={`actionsAndFilingsStatus-${row.renderKey}`}
-                  value={row.status}
-                  onBlur={() => onBlurHandler()}
-                  onChange={e => {
-                    onChangeHandler({
-                      name: 'actionsAndFilings',
-                      rowInfo: {
-                        key: row.renderKey,
-                        nestedName: 'status',
-                      },
-                      section: 'actionsAndFilingsSection',
-                      value: e.target.value,
-                    });
-                  }}
-                >
-                  <option value="">- Select -</option>
-                  {Object.keys(ACTION_STATUS_OPTIONS).map(optionKey => {
-                    return (
-                      <option
-                        key={`${optionKey}-${row.renderKey}`}
-                        value={optionKey}
-                      >
-                        {ACTION_STATUS_OPTIONS[optionKey]}
-                      </option>
-                    );
-                  })}
-                </select>
-              </FormGroup>
-            </div>
+            {getFieldsByRow(row)}
             <div className="grid-col-fill">
               <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
                 <label hidden htmlFor={`actionsAndFilingsNote${row.renderKey}`}>
