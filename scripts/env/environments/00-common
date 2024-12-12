@@ -5,7 +5,7 @@ REGION="${DEFAULT_REGION}"
 CURRENT_COLOR=$(./scripts/dynamo/get-current-color.sh "${ENV}")
 SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh "${ENV}")
 SOURCE_TABLE_VERSION="${SOURCE_TABLE//efcms-${ENV}-/}"
-DB_HOST=$(./scripts/postgres/get-host.sh -h -w) # -w for writeable
+DB_HOST=$(./scripts/postgres/get-host.sh -h -w)
 
 # region hard-coded; all ES domains and Cognito user pools are in us-east-1
 ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \

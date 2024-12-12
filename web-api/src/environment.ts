@@ -37,7 +37,8 @@ export const environment = {
       user: process.env.POSTGRES_USER || 'postgres',
     },
     readHost: process.env.POSTGRES_READ_HOST!,
-    useGlobalCert: true,
+    useGlobalCert:
+      process.env.NODE_ENV === 'production' || process.env.CIRCLE_BRANCH,
   },
   region,
   s3Endpoint: isLocal
