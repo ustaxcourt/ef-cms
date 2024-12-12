@@ -88,7 +88,7 @@ const getTrialSessionPlanningReportData = async ({
       .getTrialSessions({ applicationContext })
   ).filter(ts => ts.isCalendared);
 
-  const tempTrialSessions = allTrialSessions.filter(session =>
+  const filteredTrialSessions = allTrialSessions.filter(session =>
     ['Regular', 'Small', 'Hybrid', 'Hybrid-S'].includes(session.sessionType),
   );
 
@@ -113,9 +113,9 @@ const getTrialSessionPlanningReportData = async ({
     trialCities.map(trialLocation =>
       getTrialLocation(applicationContext, {
         allTrialSessions,
+        filteredTrialSessions,
         previousTerms,
         specialTrialSessionsCounts,
-        tempTrialSessions,
         trialLocation,
       }),
     ),
@@ -146,20 +146,19 @@ const getPreviousTerm = (
   };
 };
 
-// TODO: rename tempTrialSessions;
 const getTrialLocation = async (
   applicationContext: ServerApplicationContext,
   {
     allTrialSessions,
+    filteredTrialSessions,
     previousTerms,
     specialTrialSessionsCounts,
-    tempTrialSessions,
     trialLocation,
   }: {
     allTrialSessions: RawTrialSession[];
     trialLocation: { city: string; state: string };
     previousTerms: PreviousTerm[];
-    tempTrialSessions: RawTrialSession[];
+    filteredTrialSessions: RawTrialSession[];
     specialTrialSessionsCounts: { [key: string]: number };
   },
 ): Promise<TrialLocationData> => {
@@ -199,7 +198,7 @@ const getTrialLocation = async (
   const previousTermsDataTemp: RawTrialSession[][] = [];
 
   previousTerms.forEach(previousTerm => {
-    const previousTermSessions = tempTrialSessions.filter(
+    const previousTermSessions = filteredTrialSessions.filter(
       trialSession =>
         trialSession.term.toLowerCase() === previousTerm.term.toLowerCase() &&
         Number(trialSession.termYear) === previousTerm.year &&
