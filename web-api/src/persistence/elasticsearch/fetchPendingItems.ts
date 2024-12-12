@@ -11,19 +11,11 @@ export const fetchPendingItems = async ({
   applicationContext,
   docketNumber,
   judge,
-  page,
 }: {
   applicationContext: IApplicationContext;
   docketNumber?: string;
   judge?: string;
-  page?: number;
-}): Promise<{ foundDocuments: PendingItem[]; total: number }> => {
-  const { PENDING_ITEMS_PAGE_SIZE } = applicationContext.getConstants();
-
-  const size = page ? PENDING_ITEMS_PAGE_SIZE : 5000;
-
-  const from = page ? page * size : undefined;
-
+}): Promise<{ foundDocuments: PendingItem[] }> => {
   const mustFilters: QueryDslQueryContainer[] = [];
   mustFilters.push({ term: { 'entityName.S': 'DocketEntry' } });
   mustFilters.push({ term: { 'pending.BOOL': true } });
@@ -60,7 +52,6 @@ export const fetchPendingItems = async ({
   const searchParameters = {
     body: {
       _source: pendingItemDocketEntrySource,
-      from,
       query: {
         bool: {
           must: [
@@ -88,7 +79,6 @@ export const fetchPendingItems = async ({
           ],
         },
       },
-      size,
       sort: [
         {
           'receivedAt.S': {
@@ -103,12 +93,13 @@ export const fetchPendingItems = async ({
       ],
     },
     index: 'efcms-docket-entry',
+    size: 10000,
   };
 
-  const { results, total } = await search({
+  const { results } = await search({
     applicationContext,
     searchParameters,
   });
 
-  return { foundDocuments: results, total };
+  return { foundDocuments: results };
 };

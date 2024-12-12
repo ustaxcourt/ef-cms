@@ -1,5 +1,6 @@
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
+import { judgeColvin } from '@shared/test/mockUsers';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setCaseWorksheetAction } from './setCaseWorksheetAction';
 
@@ -7,6 +8,7 @@ describe('setUpdatedCaseInStateAction', () => {
   const mockCaseWorksheet: RawCaseWorksheet = {
     docketNumber: MOCK_CASE.docketNumber,
     entityName: 'CaseWorksheet',
+    judgeUserId: judgeColvin.userId,
     primaryIssue: 'Superstition ain`t the way',
   };
 

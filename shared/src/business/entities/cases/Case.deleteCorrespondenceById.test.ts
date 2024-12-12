@@ -6,6 +6,7 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('deleteCorrespondenceById', () => {
   const mockCorrespondence = new Correspondence({
+    docketNumer: '101-23',
     documentTitle: 'A correpsondence',
     filingDate: '2025-03-01T00:00:00.000Z',
     userId: MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'].userId,

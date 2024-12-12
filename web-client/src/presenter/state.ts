@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import { Contact } from '@shared/business/useCases/generatePetitionPdfInteractor';
+import { FormattedCaseInventoryReportEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import {
@@ -88,7 +89,6 @@ import { formattedDocument } from './computeds/formattedDocument';
 import { formattedEligibleCasesHelper } from './computeds/formattedEligibleCasesHelper';
 import { formattedMessageDetail } from './computeds/formattedMessageDetail';
 import { formattedMessages } from './computeds/formattedMessages';
-import { formattedPendingItemsHelper } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getAllIrsPractitionersForSelectHelper } from '@web-client/presenter/computeds/TrialSession/getAllIrsPractitionersForSelectHelper';
@@ -119,6 +119,7 @@ import { partiesInformationHelper } from './computeds/partiesInformationHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
 import { pendingMotionsHelper } from '@web-client/presenter/computeds/PendingMotions/pendingMotionsHelper';
+import { pendingReportHelper } from './computeds/pendingReportHelper';
 import { pendingReportListHelper } from './computeds/pendingReportListHelper';
 import { petitionQcHelper } from './computeds/petitionQcHelper';
 import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
@@ -377,10 +378,6 @@ export const computeds = {
   formattedOpenCases: formattedOpenCases as unknown as ReturnType<
     typeof formattedOpenCases
   >,
-  formattedPendingItemsHelper:
-    formattedPendingItemsHelper as unknown as ReturnType<
-      typeof formattedPendingItemsHelper
-    >,
   formattedTrialSessionDetails:
     formattedTrialSessionDetails as unknown as ReturnType<
       typeof formattedTrialSessionDetails
@@ -448,6 +445,9 @@ export const computeds = {
   >,
   pendingMotionsHelper: pendingMotionsHelper as unknown as ReturnType<
     typeof pendingMotionsHelper
+  >,
+  pendingReportHelper: pendingReportHelper as unknown as ReturnType<
+    typeof pendingReportHelper
   >,
   pendingReportListHelper: pendingReportListHelper as unknown as ReturnType<
     typeof pendingReportListHelper
@@ -617,11 +617,13 @@ export const baseState = {
       leadDocketNumber: string;
     })[];
     judgeFilter: string;
-    totalCount: number;
-    page: number;
   },
   caseDeadlines: [] as RawCaseDeadline[],
   caseDetail: {} as RawCase,
+  caseInventoryReportData: {
+    foundCasesForCurrentPage: [] as FormattedCaseInventoryReportEntry[],
+    foundCasesTotalCount: 0,
+  },
   clientConnectionId: '',
   clientNeedsToRefresh: false,
   closedCases: [] as TAssociatedCase[],

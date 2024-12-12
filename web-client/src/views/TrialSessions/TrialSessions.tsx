@@ -51,7 +51,8 @@ export const TrialSessions = connect(
               {trialSessionsHelper.showCreateTermButton && (
                 <Button
                   link
-                  className="margin-top-1"
+                  noMargin
+                  className="margin-right-0 padding-0"
                   data-testid="open-create-term-modal-button"
                   icon={['far', 'calendar']}
                   onClick={() => openCreateTermModalSequence()}
@@ -59,10 +60,12 @@ export const TrialSessions = connect(
                   Create Term
                 </Button>
               )}
+            </div>
+            <div>
               <Button
                 link
                 noMargin
-                className="margin-right-0"
+                className="margin-right-0 padding-0"
                 icon="print"
                 onClick={() => openTrialSessionPlanningModalSequence()}
               >

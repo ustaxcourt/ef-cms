@@ -14,7 +14,6 @@ const config: Config = {
     '!compareTypescriptErrors.ts',
     '!coverage/**',
     '!download-all-case-documents.ts',
-    '!dynamo/archive-outboxes.ts',
     '!dynamo/fix-race-condition-served-in-drafts.ts',
     '!migration/is-migration-needed.ts',
     '!migration/migrationFilesHelper.ts',
