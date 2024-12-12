@@ -8,6 +8,7 @@ import {
 } from '../../../support/statusReportOrder';
 import {
   loginAsColvin,
+  loginAsColvinChambers,
   loginAsDocketClerk,
 } from '../../../../helpers/authentication/login-as-helpers';
 import { logout } from '../../../../helpers/authentication/logout';
@@ -15,7 +16,7 @@ import { logout } from '../../../../helpers/authentication/logout';
 describe('should default status report order descriptions', () => {
   const today = formatNow(FORMATS.MMDDYYYY);
   it('should display default description when document type is an Order', () => {
-    judgeCreatesAndSavesStatusReportOrder(today);
+    judgeOrChambersCreatesStatusReportOrder(today);
     loginAsDocketClerk();
     cy.visit(`/case-detail/${docketNumber}`);
     cy.get('#tab-drafts').click();
@@ -31,8 +32,31 @@ describe('should default status report order descriptions', () => {
       `Docket entry preview: Order parties by ${today} shall file a status report.`,
     );
   });
+
   it('should set event code to OJR when case is stricken from trial session and jurisdiction is retained and display default description', () => {
-    judgeCreatesAndSavesStatusReportOrder(today, true);
+    judgeOrChambersCreatesStatusReportOrder(today, true);
+    loginAsDocketClerk();
+    cy.visit(`/case-detail/${docketNumber}`);
+    cy.get('#tab-drafts').click();
+    getLastDraftOrderElementFromDrafts().click();
+    cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
+    cy.get('.select-react-element__control').should(
+      'have.text',
+      'Order that jurisdiction is retained',
+    );
+    cy.get('[data-testid="document-description-input"]').should(
+      'have.value',
+      `. Parties by ${today} shall file a status report. Case is stricken from the current trial session.`,
+    );
+    cy.get('[data-testid="judge-select"]').should('have.value', 'Colvin');
+    cy.get('[data-testid="docket-entry-preview-text"]').should(
+      'have.text',
+      `Docket entry preview: Order that jurisdiction is retained by Judge Colvin. Parties by ${today} shall file a status report. Case is stricken from the current trial session.`,
+    );
+  });
+
+  it('should set event code to OJR when case is stricken from trial session and jurisdiction is retained and display default description', () => {
+    judgeOrChambersCreatesStatusReportOrder(today, true, true);
     loginAsDocketClerk();
     cy.visit(`/case-detail/${docketNumber}`);
     cy.get('#tab-drafts').click();
@@ -54,11 +78,16 @@ describe('should default status report order descriptions', () => {
   });
 });
 
-function judgeCreatesAndSavesStatusReportOrder(
+function judgeOrChambersCreatesStatusReportOrder(
   today: string,
   jurisdictionRetained: boolean = false,
+  chambersUser: boolean = false,
 ) {
-  loginAsColvin();
+  if (chambersUser) {
+    loginAsColvinChambers();
+  } else {
+    loginAsColvin();
+  }
   cy.visit(`/case-detail/${docketNumber}`);
   cy.get('#tab-document-view').click();
   cy.contains('Status Report').click();
