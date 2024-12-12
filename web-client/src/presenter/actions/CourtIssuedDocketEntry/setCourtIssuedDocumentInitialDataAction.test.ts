@@ -9,6 +9,7 @@ describe('setCourtIssuedDocumentInitialDataAction', () => {
     'ddfd978d-6be6-4877-b004-2b5735a41fee',
     '11597d22-0874-4c5e-ac98-a843d1472baf',
     '22597d22-0874-4c5e-ac98-a843d1472baf',
+    '43737877-0874-4c5e-ac98-dhd83838887j',
   ];
 
   beforeAll(() => {
@@ -27,6 +28,13 @@ describe('setCourtIssuedDocumentInitialDataAction', () => {
       docketEntryId: docketEntryIds[2],
       eventCode: 'OJR',
       signedByUserId: '4497d22-0874-4c5e-ac98-a843d1472baf',
+      signedJudgeName: 'John O. Colvin',
+    });
+    MOCK_CASE.docketEntries.push({
+      docketEntryId: docketEntryIds[3],
+      eventCode: 'OJR',
+      signedByUserId: 'not-colvins-id',
+      signedJudgeName: 'John O. Colvin',
     });
   });
 
@@ -121,35 +129,43 @@ describe('setCourtIssuedDocumentInitialDataAction', () => {
         presenter,
       },
       props: {
-        docketEntryId: '22597d22-0874-4c5e-ac98-a843d1472baf',
+        docketEntryId: docketEntryIds[2],
       },
       state: {
         caseDetail: MOCK_CASE,
         form: {},
         judges: [
-          { name: 'Colvin', userId: '4497d22-0874-4c5e-ac98-a843d1472baf' },
+          {
+            judgeFullName: 'John O. Colvin',
+            name: 'Colvin',
+            userId: '4497d22-0874-4c5e-ac98-a843d1472baf',
+          },
         ],
       },
     });
     expect(result.state.form.judge).toEqual('Colvin');
   });
 
-  it('should not set the judge name when eventcode is OJR and docketEntry was signed by a non judge user', async () => {
+  it('should set the judge name when eventcode is OJR and docketEntry was signed by a non judge user', async () => {
     const result = await runAction(setCourtIssuedDocumentInitialDataAction, {
       modules: {
         presenter,
       },
       props: {
-        docketEntryId: '22597d22-0874-4c5e-ac98-a843d1472baf',
+        docketEntryId: docketEntryIds[3],
       },
       state: {
         caseDetail: MOCK_CASE,
         form: {},
         judges: [
-          { name: 'Cohen', userId: '3297d22-0874-4c5e-ac98-a843d1472baf' },
+          {
+            judgeFullName: 'John O. Colvin',
+            name: 'Colvin',
+            userId: '4497d22-0874-4c5e-ac98-a843d1472baf',
+          },
         ],
       },
     });
-    expect(result.state.form.judge).toEqual(undefined);
+    expect(result.state.form.judge).toEqual('Colvin');
   });
 });
