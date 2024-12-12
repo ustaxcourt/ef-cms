@@ -1,11 +1,12 @@
 import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
 
 export interface Database {
-  dwMessage: MessageTable;
   dwCase: CaseTable;
   dwCaseCorrespondence: CaseCorrespondenceTable;
   dwCaseDeadline: CaseDeadlineTable;
   dwCaseWorksheet: CaseWorksheetTable;
+  dwMessage: MessageTable;
+  dwWorkItem: WorkItemTable;
 }
 
 export interface MessageTable {
@@ -92,3 +93,32 @@ export interface CaseWorksheetTable {
 export type CaseWorksheetKysely = Selectable<CaseWorksheetTable>;
 export type NewCaseWorksheetKysely = Insertable<CaseWorksheetTable>;
 export type UpdateCaseWorksheetKysely = Updateable<CaseWorksheetTable>;
+export interface WorkItemTable {
+  assigneeId?: string;
+  assigneeName?: string;
+  associatedJudge: string;
+  associatedJudgeId?: string;
+  caseIsInProgress?: boolean;
+  completedAt?: Date;
+  completedBy?: string;
+  completedByUserId?: string;
+  completedMessage?: string;
+  createdAt: Date;
+  docketEntry: any;
+  docketNumber: string;
+  hideFromPendingMessages?: boolean;
+  highPriority?: boolean;
+  inProgress?: boolean;
+  isInitializeCase?: boolean;
+  isRead?: boolean;
+  section: string;
+  sentBy: string;
+  sentBySection?: string;
+  sentByUserId?: string;
+  updatedAt: Date;
+  workItemId: string;
+}
+
+export type WorkItemKysely = Selectable<WorkItemTable>;
+export type NewWorkItemKysely = Insertable<WorkItemTable>;
+export type UpdateWorkItemKysely = Updateable<WorkItemTable>;
