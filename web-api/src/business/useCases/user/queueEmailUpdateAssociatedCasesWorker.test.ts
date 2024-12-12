@@ -157,4 +157,30 @@ describe('queueEmailUpdateAssociatedCasesWorker', () => {
 
     expect(getCasesByEmailTotalCalls.length).toEqual(MAX_ITERATIONS + 1);
   });
+
+  it('should resolve the interactor when the there is an error thrown in the check method', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByEmailTotal.mockImplementation(() => {
+        throw Error('TEST ERROR');
+      });
+
+    const TEST_DOCKER_NUMBERS = ['TEST_1', 'TEST_2', 'TEST_3', 'TEST_4'];
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByUser.mockReturnValue(TEST_DOCKER_NUMBERS);
+
+    await queueEmailUpdateAssociatedCasesWorker(
+      applicationContext,
+      { user: TEST_USER },
+      mockPetitionerUser,
+    );
+
+    const updateUserCalls =
+      applicationContext.getPersistenceGateway().updateUser.mock.calls;
+    expect(updateUserCalls.length).toEqual(1);
+    expect(updateUserCalls[0][0].user).toMatchObject({
+      isUpdatingInformation: false,
+    });
+  });
 });
