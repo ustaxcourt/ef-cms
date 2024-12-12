@@ -71,7 +71,7 @@ export const queueEmailUpdateAssociatedCasesWorker = async (
 
 const WAIT_TIMEOUT = 2000;
 const MAX_WAITTIME_IN_MINUTES = 14;
-const MAX_ITERATIONS = Math.floor(
+export const MAX_ITERATIONS = Math.floor(
   (MAX_WAITTIME_IN_MINUTES * 60 * 1000) / WAIT_TIMEOUT,
 );
 
