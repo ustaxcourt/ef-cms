@@ -43,15 +43,16 @@ export const getTrialSessionPlanningReportDataInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const reportData = await getTrialSessionPlanningReportData({
-    applicationContext,
-    term,
-    year,
-  });
+  const { previousTerms, trialLocationData } =
+    await getTrialSessionPlanningReportData({
+      applicationContext,
+      term,
+      year,
+    });
 
   return {
-    previousTerms: reportData.previousTerms,
-    trialLocationData: reportData.trialLocationData,
+    previousTerms,
+    trialLocationData,
   };
 };
 
