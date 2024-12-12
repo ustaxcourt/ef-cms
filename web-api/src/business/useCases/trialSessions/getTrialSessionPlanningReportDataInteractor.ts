@@ -195,7 +195,7 @@ const getTrialLocation = async (
   const blockedCaseCount = blockedCasesResult.length;
   const specialCaseCount = specialTrialSessionsCounts[trialCityState] || 0;
 
-  const previousTermsDataTemp: RawTrialSession[][] = [];
+  const previousTermsDataInformation: RawTrialSession[][] = [];
 
   previousTerms.forEach(previousTerm => {
     const previousTermSessions = filteredTrialSessions.filter(
@@ -221,18 +221,18 @@ const getTrialLocation = async (
         previousTermSessionList.push(previousTermSession);
       }
     });
-    previousTermsDataTemp.push(previousTermSessionList);
+    previousTermsDataInformation.push(previousTermSessionList);
   });
 
   const lastVisitedDate: string | undefined =
-    getLatestDateFromPreviousTerm(previousTermsDataTemp[2]) ||
+    getLatestDateFromPreviousTerm(previousTermsDataInformation[2]) ||
     getLatestDateForTrialSessionLocation({
       allTrialSessions,
       applicationContext,
       trialCityState,
     });
 
-  const previousTermsData = previousTermsDataTemp.map(prevTermArray => {
+  const previousTermsData = previousTermsDataInformation.map(prevTermArray => {
     return prevTermArray.map(prevTerm => {
       const sessionTypeChar =
         prevTerm.sessionType === SESSION_TYPES.hybridSmall
