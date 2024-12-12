@@ -21,14 +21,15 @@ describe('validateTrialSessionPlanningAction', () => {
       modules: {
         presenter,
       },
-      state: {
-        modal: {
-          term: null,
-          year: '2001',
-        },
+      props: {
+        term: null,
+        year: '2001',
       },
     });
-    expect(errorMock).toHaveBeenCalled();
+
+    const errorCalls = errorMock.mock.calls;
+    expect(errorCalls.length).toEqual(1);
+    expect(errorCalls[0][0]).toEqual({ errors: { term: 'Select a term' } });
   });
 
   it('should return the error path if modal.year is null', () => {
@@ -36,14 +37,15 @@ describe('validateTrialSessionPlanningAction', () => {
       modules: {
         presenter,
       },
-      state: {
-        modal: {
-          term: 'Winter',
-          year: null,
-        },
+      props: {
+        term: 'Winter',
+        year: null,
       },
     });
-    expect(errorMock).toHaveBeenCalled();
+
+    const errorCalls = errorMock.mock.calls;
+    expect(errorCalls.length).toEqual(1);
+    expect(errorCalls[0][0]).toEqual({ errors: { year: 'Select a year' } });
   });
 
   it('should return the error path if both modal.year and modal.term are null', () => {
@@ -51,14 +53,20 @@ describe('validateTrialSessionPlanningAction', () => {
       modules: {
         presenter,
       },
-      state: {
-        modal: {
-          term: null,
-          year: null,
-        },
+      props: {
+        term: null,
+        year: null,
       },
     });
-    expect(errorMock).toHaveBeenCalled();
+
+    const errorCalls = errorMock.mock.calls;
+    expect(errorCalls.length).toEqual(1);
+    expect(errorCalls[0][0]).toEqual({
+      errors: {
+        term: 'Select a term',
+        year: 'Select a year',
+      },
+    });
   });
 
   it('should return the success path if both modal.year and modal.term are defined', () => {
@@ -66,11 +74,9 @@ describe('validateTrialSessionPlanningAction', () => {
       modules: {
         presenter,
       },
-      state: {
-        modal: {
-          term: 'winter',
-          year: '2009',
-        },
+      props: {
+        term: 'winter',
+        year: '2009',
       },
     });
     expect(successMock).toHaveBeenCalled();
