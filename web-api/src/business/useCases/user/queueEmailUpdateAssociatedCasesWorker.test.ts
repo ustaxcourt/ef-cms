@@ -1,8 +1,11 @@
+import {
+  MAX_ITERATIONS,
+  queueEmailUpdateAssociatedCasesWorker,
+} from '@web-api/business/useCases/user/queueEmailUpdateAssociatedCasesWorker';
 import { RawUser } from '@shared/business/entities/User';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
 import { petitionerUser } from '@shared/test/mockUsers';
-import { queueEmailUpdateAssociatedCasesWorker } from '@web-api/business/useCases/user/queueEmailUpdateAssociatedCasesWorker';
 
 function sleep(timeInMilliseconds: number) {
   return new Promise(resolve => {
@@ -124,5 +127,34 @@ describe('queueEmailUpdateAssociatedCasesWorker', () => {
 
     await sleep(50);
     expect(COMPLETE_FLAG).toEqual(true);
+  });
+
+  it('should call resolve the interactor when the max number of iterations is met', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByEmailTotal.mockImplementation(() => {});
+
+    const TEST_DOCKER_NUMBERS = ['TEST_1', 'TEST_2', 'TEST_3', 'TEST_4'];
+    let COMPLETE_FLAG = false;
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByUser.mockReturnValue(TEST_DOCKER_NUMBERS);
+
+    void queueEmailUpdateAssociatedCasesWorker(
+      applicationContext,
+      { user: TEST_USER },
+      mockPetitionerUser,
+    ).then(() => {
+      COMPLETE_FLAG = true;
+    });
+
+    await sleep(100);
+    expect(COMPLETE_FLAG).toEqual(true);
+
+    const getCasesByEmailTotalCalls =
+      applicationContext.getPersistenceGateway().getCasesByEmailTotal.mock
+        .calls;
+
+    expect(getCasesByEmailTotalCalls.length).toEqual(MAX_ITERATIONS + 1);
   });
 });
