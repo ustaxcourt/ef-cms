@@ -1,6 +1,7 @@
 import { CaseStatus } from '@shared/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { formatDateString } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const blockedCasesReportHelper = (
@@ -23,10 +24,7 @@ export const blockedCasesReportHelper = (
         .setConsolidationFlagsForDisplay(blockedCase);
 
       const updatedCase = {
-        ...setFormattedBlockDates(
-          blockedCaseWithConsolidatedProperties,
-          applicationContext,
-        ),
+        ...setFormattedBlockDates(blockedCaseWithConsolidatedProperties),
         caseTitle: applicationContext.getCaseTitle(
           blockedCase.caseCaption || '',
         ),
@@ -58,9 +56,9 @@ export const blockedCasesReportHelper = (
 
 export type BlockedFormattedCase = {
   docketNumber: string;
-  inConsolidatedGroup: boolean;
-  consolidatedIconTooltipText: string;
-  isLeadCase: boolean;
+  inConsolidatedGroup?: boolean;
+  consolidatedIconTooltipText?: string;
+  isLeadCase?: boolean;
   blockedDateEarliest: string;
   caseTitle: string;
   procedureType: string;
@@ -70,14 +68,13 @@ export type BlockedFormattedCase = {
   docketNumberWithSuffix?: string;
 };
 
-const setFormattedBlockDates = (
+export const setFormattedBlockDates = (
   blockedCase: RawCase & {
-    inConsolidatedGroup: boolean;
-    consolidatedIconTooltipText: string;
-    shouldIndent: boolean;
-    isLeadCase: boolean;
+    inConsolidatedGroup?: boolean;
+    consolidatedIconTooltipText?: string;
+    shouldIndent?: boolean;
+    isLeadCase?: boolean;
   },
-  applicationContext: ClientApplicationContext,
 ): BlockedFormattedCase => {
   const blockedFormattedCase: BlockedFormattedCase = {
     ...blockedCase,
@@ -87,22 +84,26 @@ const setFormattedBlockDates = (
 
   if (blockedCase.blockedDate && blockedCase.automaticBlocked) {
     if (blockedCase.blockedDate < blockedCase.automaticBlockedDate!) {
-      blockedFormattedCase.blockedDateEarliest = applicationContext
-        .getUtilities()
-        .formatDateString(blockedCase.blockedDate, 'MMDDYY');
+      blockedFormattedCase.blockedDateEarliest = formatDateString(
+        blockedCase.blockedDate,
+        'MMDDYY',
+      );
     } else {
-      blockedFormattedCase.blockedDateEarliest = applicationContext
-        .getUtilities()
-        .formatDateString(blockedCase.automaticBlockedDate!, 'MMDDYY');
+      blockedFormattedCase.blockedDateEarliest = formatDateString(
+        blockedCase.automaticBlockedDate!,
+        'MMDDYY',
+      );
     }
   } else if (blockedCase.blocked) {
-    blockedFormattedCase.blockedDateEarliest = applicationContext
-      .getUtilities()
-      .formatDateString(blockedCase.blockedDate!, 'MMDDYY');
+    blockedFormattedCase.blockedDateEarliest = formatDateString(
+      blockedCase.blockedDate!,
+      'MMDDYY',
+    );
   } else if (blockedCase.automaticBlocked) {
-    blockedFormattedCase.blockedDateEarliest = applicationContext
-      .getUtilities()
-      .formatDateString(blockedCase.automaticBlockedDate!, 'MMDDYY');
+    blockedFormattedCase.blockedDateEarliest = formatDateString(
+      blockedCase.automaticBlockedDate!,
+      'MMDDYY',
+    );
   }
   return blockedFormattedCase;
 };

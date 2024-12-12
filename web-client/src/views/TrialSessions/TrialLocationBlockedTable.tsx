@@ -1,34 +1,44 @@
+import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useRef } from 'react';
 
 export const TrialLocationBlockedTable = connect(
   {
-    blockedCases: state.trialLocationHelper.blockedCases,
+    setTrialLocationPaginatorSequence:
+      sequences.setTrialLocationPaginatorSequence,
+    trialLocationHelper: state.trialLocationHelper,
+    trialLocationPage: state.trialLocationPage,
   },
-  function TrialLocationBlockedTable({ blockedCases }) {
+  function TrialLocationBlockedTable({
+    setTrialLocationPaginatorSequence,
+    trialLocationHelper,
+    trialLocationPage,
+  }) {
     const paginatorTop = useRef(null);
 
     return (
       <>
         <div className="grid-row margin-bottom-2 flex-align-center">
           <div className="grid-col" ref={paginatorTop}>
-            {/*<Paginator*/}
-            {/*  // currentPageIndex={trialLocationHelper.pageNumber}*/}
-            {/*  totalPages={trialLocationHelper.totalPages}*/}
-            {/*  onPageChange={selectedPage => {*/}
-            {/*    setTrialSessionsFiltersSequence({*/}
-            {/*      pageNumber: selectedPage,*/}
-            {/*    });*/}
-            {/*    focusPaginatorTop(paginatorTop);*/}
-            {/*  }}*/}
-            {/*/>*/}
+            <Paginator
+              currentPageIndex={trialLocationPage.blockedCasesPage}
+              totalPages={trialLocationHelper.totalPagesBlocked}
+              onPageChange={selectedPage => {
+                setTrialLocationPaginatorSequence({
+                  pageNumber: selectedPage,
+                  pageType: 'blockedCasesPage',
+                });
+                focusPaginatorTop(paginatorTop);
+              }}
+            />
             <div className="grid-col-2"></div>
           </div>
         </div>
         <div className="text-right">
           <span className="text-semibold">Count: </span>
-          {blockedCases.length}
+          {trialLocationHelper.formattedBlockedCases.length}
         </div>
         <div className="padding-1"></div>
         <div className="overflow-x-auto">
@@ -36,40 +46,43 @@ export const TrialLocationBlockedTable = connect(
             <table className="usa-table ustc-table trial-sessions">
               <thead>
                 <tr>
-                  <th className="icon-column" />
                   <th className="width-card">Docket No.</th>
+                  <th className="width-mobile">Date Blocked</th>
                   <th className="width-mobile">Case Title</th>
-                  <th className="width-card-lg">Petitioner Counsel</th>
-                  <th className="width-card">Respondent Counsel</th>
-                  <th className="width-card">Case Type</th>
+                  <th className="width-card-lg">Case Status</th>
+                  <th className="width-card">Reason</th>
                 </tr>
               </thead>
-              {blockedCases.map(blockedCase => {
+              {trialLocationHelper.blockedCasesForDisplay.map(blockedCase => {
                 return (
                   <tr key={blockedCase.docketNumber}>
-                    <td></td>
-                    <td> {blockedCase.docketNumberWithSuffix}</td>
+                    <td>{blockedCase.docketNumberWithSuffix}</td>
+                    <td>{blockedCase.blockedDateEarliest}</td>
                     <td>{blockedCase.caseTitle}</td>
-                    <td>{blockedCase.privatePractitioners}</td>
-                    <td>{blockedCase.irsPractitioners}</td>
-                    <td>{blockedCase.caseType}</td>
+                    <td>{blockedCase.status}</td>
+                    <td>{blockedCase.blockedReason}</td>
                   </tr>
                 );
               })}
             </table>
           </div>
         </div>
-        {blockedCases.length === 0 && <p>There are no eligible cases.</p>}
+        {trialLocationHelper.formattedBlockedCases.length === 0 && (
+          <p>There are no blocked cases.</p>
+        )}
         <div className="padding-1" />
 
-        {/*<Paginator
-          currentPageIndex={trialLocationHelper.filters.pageNumber}
-          totalPages={trialLocationHelper.totalPages}
+        <Paginator
+          currentPageIndex={trialLocationPage.blockedCasesPage}
+          totalPages={trialLocationHelper.totalPagesBlocked}
           onPageChange={selectedPage => {
-            setTrialSessionsFiltersSequence({ pageNumber: selectedPage });
+            setTrialLocationPaginatorSequence({
+              pageNumber: selectedPage,
+              pageType: 'blockedCasesPage',
+            });
             focusPaginatorTop(paginatorTop);
           }}
-        />*/}
+        />
       </>
     );
   },

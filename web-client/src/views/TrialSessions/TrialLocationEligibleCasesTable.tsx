@@ -28,7 +28,7 @@ export const TrialLocationEligibleCasesTable = connect(
           <div className="grid-col" ref={paginatorTop}>
             <Paginator
               currentPageIndex={trialLocationPage.eligibleCasesPage}
-              totalPages={trialLocationHelper.totalPages}
+              totalPages={trialLocationHelper.totalPagesEligible}
               onPageChange={selectedPage => {
                 setTrialLocationPaginatorSequence({
                   pageNumber: selectedPage,
@@ -105,7 +105,7 @@ export const TrialLocationEligibleCasesTable = connect(
 
         <Paginator
           currentPageIndex={trialLocationPage.eligibleCasesPage}
-          totalPages={trialLocationHelper.totalPages}
+          totalPages={trialLocationHelper.totalPagesEligible}
           onPageChange={selectedPage => {
             setTrialLocationPaginatorSequence({
               pageNumber: selectedPage,

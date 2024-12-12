@@ -13,7 +13,7 @@ export const TrialLocation = connect(
     trialLocationHelper: state.trialLocationHelper,
   },
   function TrialLocation({ currentTab, trialLocationHelper }) {
-    const { blockedCases, formattedEligibleCases, location } =
+    const { formattedBlockedCases, formattedEligibleCases, location } =
       trialLocationHelper;
     return (
       <>
@@ -55,7 +55,7 @@ export const TrialLocation = connect(
               id="blocked-cases-tab"
               key="blockedCases"
               tabName="blockedCases"
-              title={`Blocked Cases (${blockedCases.length})`}
+              title={`Blocked Cases (${formattedBlockedCases.length})`}
             >
               <TrialLocationBlockedTable />
             </Tab>

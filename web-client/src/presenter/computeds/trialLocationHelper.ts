@@ -7,7 +7,9 @@ import {
   getPriorityGroups,
   groupKeySymbol,
 } from '@web-client/presenter/computeds/formattedEligibleCasesHelper';
+import { compareCasesByDocketNumber } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
+import { setFormattedBlockDates } from '@web-client/presenter/computeds/blockedCasesReportHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const trialLocationHelper = (
@@ -15,15 +17,33 @@ export const trialLocationHelper = (
 ): {
   location: string;
   eligibleCasesForDisplay: any[];
-  blockedCases: RawCase[];
+  formattedBlockedCases: any[];
   formattedEligibleCases: any[];
-  totalPages: number;
+  totalPagesEligible: number;
+  blockedCasesForDisplay: any[];
+  totalPagesBlocked: number;
 } => {
-  const pageSize = 100;
+  const pageSize = 3;
 
-  const { eligibleCases, eligibleCasesPage, location } = get(
+  const { blockedCasesPage, eligibleCases, eligibleCasesPage, location } = get(
     state.trialLocationPage,
   );
+
+  const blockedCases = get(state.blockedCases);
+
+  const formattedBlockedCases = blockedCases
+    .sort(compareCasesByDocketNumber)
+    .map(blockedCase => {
+      // const blockedCaseWithConsolidatedProperties =
+      //   setConsolidationFlagsForDisplay(blockedCase);
+
+      const updatedCase = {
+        ...setFormattedBlockDates(blockedCase),
+        caseTitle: Case.getCaseTitle(blockedCase.caseCaption || ''),
+      };
+
+      return updatedCase;
+    });
 
   const formattedEligibleCases = eligibleCases.map(c => {
     let privatePractitioners: string[] = [];
@@ -73,11 +93,18 @@ export const trialLocationHelper = (
     eligibleCasesPage * pageSize + pageSize,
   );
 
+  const blockedCasesForDisplay = formattedBlockedCases.slice(
+    blockedCasesPage * pageSize,
+    blockedCasesPage * pageSize + pageSize,
+  );
+
   return {
-    blockedCases: get(state.blockedCases),
+    blockedCasesForDisplay,
     eligibleCasesForDisplay,
+    formattedBlockedCases,
     formattedEligibleCases,
     location: trialCityFormatted,
-    totalPages: Math.ceil(sortedEligibleCases.length / pageSize),
+    totalPagesBlocked: Math.ceil(formattedBlockedCases.length / pageSize),
+    totalPagesEligible: Math.ceil(sortedEligibleCases.length / pageSize),
   };
 };

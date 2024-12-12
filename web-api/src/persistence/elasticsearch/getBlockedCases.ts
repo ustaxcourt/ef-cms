@@ -1,4 +1,5 @@
 import { search } from './searchClient';
+import mockBlockedCases from '@shared/test/tempBlockedCases.json';
 
 /**
  * getBlockedCases
@@ -12,45 +13,49 @@ export const getBlockedCases = async ({
   applicationContext,
   trialLocation,
 }) => {
-  const { results } = await search({
-    applicationContext,
-    searchParameters: {
-      body: {
-        _source: [
-          'automaticBlocked',
-          'automaticBlockedDate',
-          'automaticBlockedReason',
-          'blocked',
-          'blockedDate',
-          'blockedReason',
-          'caseCaption',
-          'docketNumber',
-          'docketNumberSuffix',
-          'docketNumberWithSuffix',
-          'leadDocketNumber',
-          'status',
-          'procedureType',
-        ],
-        query: {
-          bool: {
-            must: [
-              { term: { 'preferredTrialCity.S': trialLocation } },
-              {
-                bool: {
-                  should: [
-                    { match: { 'automaticBlocked.BOOL': true } },
-                    { match: { 'blocked.BOOL': true } },
-                  ],
-                },
-              },
-            ],
-          },
-        },
-        size: 5000,
-      },
-      index: 'efcms-case',
-    },
-  });
+  // TODO: refactor to allow ability to only return specific case statuses
+
+  // const { results } = await search({
+  //   applicationContext,
+  //   searchParameters: {
+  //     body: {
+  //       _source: [
+  //         'automaticBlocked',
+  //         'automaticBlockedDate',
+  //         'automaticBlockedReason',
+  //         'blocked',
+  //         'blockedDate',
+  //         'blockedReason',
+  //         'caseCaption',
+  //         'docketNumber',
+  //         'docketNumberSuffix',
+  //         'docketNumberWithSuffix',
+  //         'leadDocketNumber',
+  //         'status',
+  //         'procedureType',
+  //       ],
+  //       query: {
+  //         bool: {
+  //           must: [
+  //             { term: { 'preferredTrialCity.S': trialLocation } },
+  //             {
+  //               bool: {
+  //                 should: [
+  //                   { match: { 'automaticBlocked.BOOL': true } },
+  //                   { match: { 'blocked.BOOL': true } },
+  //                 ],
+  //               },
+  //             },
+  //           ],
+  //         },
+  //       },
+  //       size: 5000,
+  //     },
+  //     index: 'efcms-case',
+  //   },
+  // });
+
+  const results = mockBlockedCases;
 
   return results;
 };
