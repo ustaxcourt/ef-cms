@@ -85,13 +85,11 @@ async function createConnection<T>({
       throw new Error('token does not exist');
     }
 
-    const config = {
+    dbInstances[dbKey] = await connect({
       ...POOL,
       host,
       password: token,
-    };
-
-    dbInstances[dbKey] = await connect(config);
+    });
 
     return await cb(dbInstances[dbKey]!);
   } catch (err) {
