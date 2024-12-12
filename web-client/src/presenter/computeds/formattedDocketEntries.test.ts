@@ -5,6 +5,7 @@ import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_RECORD_FILTER_OPTIONS,
   ROLES,
+  STATE_KEYS,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
@@ -1065,6 +1066,125 @@ describe('formattedDocketEntries', () => {
           icon: ['fa-spin', 'spinner'],
           title: 'Is loading',
         },
+      ]);
+    });
+  });
+
+  describe('sorting', () => {
+    it('should return the entries on docket record sorted by default sort', () => {
+      const TEST_DOCKET_ENTRIES = [
+        {
+          filingDate: '2019-02-28T21:14:39.488Z',
+          index: 5,
+          isOnDocketRecord: true,
+          testProp: 'E',
+        },
+        {
+          filingDate: '2019-02-28T21:14:39.488Z',
+          index: 2,
+          isOnDocketRecord: true,
+          testProp: 'B',
+        },
+        {
+          filingDate: '2019-02-28T21:14:39.488Z',
+          index: 3,
+          isOnDocketRecord: true,
+          testProp: 'C',
+        },
+        {
+          filingDate: '2019-02-28T21:14:39.488Z',
+          index: 1,
+          isOnDocketRecord: true,
+          testProp: 'A',
+        },
+        {
+          filingDate: '2019-02-28T21:14:39.488Z',
+          index: 4,
+          isOnDocketRecord: true,
+          testProp: 'D',
+        },
+      ];
+
+      const result = runCompute(formattedDocketEntries, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            ...MOCK_CASE,
+            docketEntries: TEST_DOCKET_ENTRIES,
+          },
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
+        { testProp: 'A' },
+        { testProp: 'B' },
+        { testProp: 'C' },
+        { testProp: 'D' },
+        { testProp: 'E' },
+      ]);
+    });
+
+    it('should return the entries on docket record sorted by provided sort field and sort order', () => {
+      const TEST_DOCKET_ENTRIES = [
+        {
+          filingDate: '2019-02-28T21:14:39.488Z',
+          index: 5,
+          isOnDocketRecord: true,
+          testProp: 'E',
+        },
+        {
+          filingDate: '2019-02-28T21:14:39.488Z',
+          index: 2,
+          isOnDocketRecord: true,
+          testProp: 'B',
+        },
+        {
+          filingDate: '2019-02-28T21:14:39.488Z',
+          index: 6,
+          isOnDocketRecord: true,
+          testProp: 'B',
+        },
+        {
+          filingDate: '2019-02-28T21:14:39.488Z',
+          index: 3,
+          isOnDocketRecord: true,
+          testProp: 'C',
+        },
+        {
+          filingDate: '2019-02-28T21:14:39.488Z',
+          index: 1,
+          isOnDocketRecord: true,
+          testProp: 'A',
+        },
+        {
+          filingDate: '2019-02-28T21:14:39.488Z',
+          index: 4,
+          isOnDocketRecord: true,
+          testProp: 'D',
+        },
+      ];
+
+      const result = runCompute(formattedDocketEntries, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            ...MOCK_CASE,
+            docketEntries: TEST_DOCKET_ENTRIES,
+          },
+          [STATE_KEYS.DOCKET_RECORD_TABLE_SORT]: {
+            sortField: 'testProp',
+            sortOrder: 'desc',
+          },
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
+        { testProp: 'E' },
+        { testProp: 'D' },
+        { testProp: 'C' },
+        { index: 6, testProp: 'B' },
+        { index: 2, testProp: 'B' },
+        { testProp: 'A' },
       ]);
     });
   });
