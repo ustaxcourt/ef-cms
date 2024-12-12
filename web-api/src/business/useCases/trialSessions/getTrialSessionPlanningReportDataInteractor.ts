@@ -196,7 +196,6 @@ const getTrialLocation = async (
   const specialCaseCount = specialTrialSessionsCounts[trialCityState] || 0;
 
   const previousTermsDataInformation: RawTrialSession[][] = [];
-
   previousTerms.forEach(previousTerm => {
     const previousTermSessions = filteredTrialSessions.filter(
       trialSession =>
@@ -270,8 +269,8 @@ function getLatestDateForTrialSessionLocation({
   applicationContext,
   trialCityState,
 }: {
-  applicationContext: ServerApplicationContext;
   allTrialSessions: RawTrialSession[];
+  applicationContext: ServerApplicationContext;
   trialCityState: string;
 }): string | undefined {
   const allTrialSessionsForLocation = allTrialSessions.filter(
