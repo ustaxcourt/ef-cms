@@ -24,16 +24,18 @@ export const getCaseByDocketNumber = async ({
   docketNumber: string;
   includeConsolidatedCases?: boolean;
 }): Promise<RawCase> => {
-  const caseItems = await queryFull({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `case|${docketNumber}`,
-    },
-    KeyConditionExpression: '#pk = :pk',
-    applicationContext,
-  });
+  const [caseItems] = await Promise.all([
+    queryFull({
+      ExpressionAttributeNames: {
+        '#pk': 'pk',
+      },
+      ExpressionAttributeValues: {
+        ':pk': `case|${docketNumber}`,
+      },
+      KeyConditionExpression: '#pk = :pk',
+      applicationContext,
+    }),
+  ]);
 
   /*
     We have roughly three options to get all data associated with a case:

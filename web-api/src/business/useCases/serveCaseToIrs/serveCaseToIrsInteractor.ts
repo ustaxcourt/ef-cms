@@ -17,7 +17,6 @@ import {
   MINUTE_ENTRIES_MAP,
   PARTIES_CODES,
   PAYMENT_STATUS,
-  PETITIONS_SECTION,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
@@ -31,6 +30,7 @@ import { generateDraftDocument } from './generateDraftDocument';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 import { getClinicLetterKey } from '../../../../../shared/src/business/utilities/getClinicLetterKey';
 import { random, remove } from 'lodash';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
@@ -95,11 +95,7 @@ const addDocketEntries = ({ caseEntity }) => {
   }
 };
 
-const createPetitionWorkItems = async ({
-  applicationContext,
-  caseEntity,
-  user,
-}) => {
+const createPetitionWorkItems = async ({ caseEntity, user }) => {
   const petitionDocument = caseEntity.docketEntries.find(
     doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
@@ -115,16 +111,8 @@ const createPetitionWorkItems = async ({
     user,
   });
 
-  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-    applicationContext,
-    section: PETITIONS_SECTION,
-    userId: user.userId,
-    workItem: initializeCaseWorkItem.validate().toRawObject(),
-  });
-
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
-    workItem: initializeCaseWorkItem.validate().toRawObject(),
+  await upsertWorkItems({
+    workItems: [initializeCaseWorkItem.validate().toRawObject()],
   });
 };
 
@@ -635,7 +623,6 @@ export const serveCaseToIrs = async (
     await Promise.all(generatedDocuments);
 
     await createPetitionWorkItems({
-      applicationContext,
       caseEntity,
       user: authorizedUser,
     });
