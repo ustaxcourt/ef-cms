@@ -46,7 +46,7 @@ export const ActionsAndFilingsFieldset = ({
           >
             <div className="grid-col-auto">
               <DateSelector
-                defaultValue={undefined}
+                defaultValue={row.date}
                 formGroupClassNames="margin-bottom-0"
                 id={`actionsAndFilingsDate-${row.renderKey}`}
                 labelPosition="hidden"

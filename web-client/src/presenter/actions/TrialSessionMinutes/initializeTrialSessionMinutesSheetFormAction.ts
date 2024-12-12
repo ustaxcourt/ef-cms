@@ -1,27 +1,31 @@
 import {
+  ACTION_DOCUMENT_TYPE_OPTIONS,
+  KeyedActionFilingFormFieldsByRenderKey,
+  KeyedPartyFormFieldsByRenderKey,
+} from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+import {
   CONTACT_TYPES,
   CONTACT_TYPE_TITLES,
 } from '@shared/business/entities/EntityConstants';
-import { KeyedPartyFormFieldsByRenderKey } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+import {
+  FORMATS,
+  formatDateString,
+} from '@shared/business/utilities/DateHandler';
 import { applicationContext } from '@web-client/applicationContext';
+import { invert } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import { v4 as uuidv4 } from 'uuid';
 
 export const initializeTrialSessionMinutesSheetFormAction = ({
+  get,
   props,
   store,
 }: ActionProps) => {
   const { caseDetail, trialSession } = props;
+  const user = get(state.user);
 
   console.log('caseDetail', caseDetail);
   console.log('trial session', trialSession);
-
-  // TODO 10419: We need to figure out how to get the formattedDocketEntries
-  // so that we can use them to prepopulate Actions & Filings
-  // const formattedCaseDetail = applicationContext.getUtilities().formatCase({
-  //   applicationContext,
-  //   caseDetail,
-  // });
 
   const formattedTrialSession = applicationContext
     .getUtilities()
@@ -39,7 +43,6 @@ export const initializeTrialSessionMinutesSheetFormAction = ({
 
   const recalledRowRenderKey = uuidv4();
   const motionRowRenderKey = uuidv4();
-  const actionsAndFilingsRenderKey = uuidv4();
   const petitionerWitnessRowRenderKey = uuidv4();
   const respondentWitnessRowRenderKey = uuidv4();
   const exhibitRowRenderKey = uuidv4();
@@ -68,17 +71,11 @@ export const initializeTrialSessionMinutesSheetFormAction = ({
     type: '',
   });
   store.set(
-    state.minuteSheetForm.actionsAndFilingsSection.actionsAndFilings[
-      actionsAndFilingsRenderKey
-    ],
-    {
-      date: '',
-      documentType: '',
-      filedBy: '',
-      note: '',
-      renderKey: actionsAndFilingsRenderKey,
-      status: '',
-    },
+    state.minuteSheetForm.actionsAndFilingsSection.actionsAndFilings,
+    getPendingItemsFromCase({
+      caseDetail,
+      user,
+    }),
   );
   store.set(
     state.minuteSheetForm.witnesses.petitionerWitnesses[
@@ -176,4 +173,78 @@ const getPetitionersFromCase = (
   }
 
   return keyedPartyFormFieldsByRenderKey;
+};
+
+const getPendingItemsFromCase = ({
+  caseDetail,
+  user,
+}: {
+  caseDetail: RawCase;
+  user;
+}): KeyedActionFilingFormFieldsByRenderKey => {
+  const formattedCaseDetail = applicationContext
+    .getUtilities()
+    .formatCase(applicationContext, caseDetail, user);
+
+  const pendingItems = formattedCaseDetail.formattedDocketEntries.filter(
+    docketEntry => applicationContext.getUtilities().isPending(docketEntry),
+  );
+
+  const keyedActionFilingFormFieldsByRenderKey = {};
+  if (pendingItems?.length > 0) {
+    pendingItems.forEach(pendingItem => {
+      const renderKey = uuidv4();
+      const formattedDate = formatDateString(
+        pendingItem.createdAt,
+        FORMATS.YYYYMMDD,
+      );
+
+      keyedActionFilingFormFieldsByRenderKey[renderKey] = {
+        date: formattedDate,
+        documentType: transformDocumentType(pendingItem.documentType),
+        filedBy: transformFiledBy(caseDetail, pendingItem),
+        note: '',
+        renderKey,
+        status: '',
+      };
+    });
+  } else {
+    const renderKey = uuidv4();
+    keyedActionFilingFormFieldsByRenderKey[renderKey] = {
+      date: '',
+      documentType: '',
+      filedBy: '',
+      note: '',
+      renderKey,
+      status: '',
+    };
+  }
+  return keyedActionFilingFormFieldsByRenderKey;
+};
+
+const transformDocumentType = (documentType: string) => {
+  const reverseLookupStructure = invert(ACTION_DOCUMENT_TYPE_OPTIONS);
+
+  return reverseLookupStructure[documentType] ?? 'other';
+};
+
+const transformFiledBy = (caseDetail: RawCase, pendingItem): string => {
+  const isPetitioner = pendingItem.filers.some(id =>
+    caseDetail.petitioners.some(petitioner => id === petitioner.contactId),
+  );
+  const isRespondent = pendingItem.filers.some(id =>
+    caseDetail.irsPractitioners?.some(
+      practitioner => id === practitioner.userId,
+    ),
+  );
+
+  if (isPetitioner && isRespondent) {
+    return 'petitionerAndRespondent';
+  } else if (isPetitioner) {
+    return 'petitioner';
+  } else if (isRespondent) {
+    return 'respondent';
+  }
+
+  return 'other';
 };

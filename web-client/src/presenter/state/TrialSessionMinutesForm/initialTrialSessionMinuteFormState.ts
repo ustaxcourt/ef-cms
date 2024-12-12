@@ -16,7 +16,7 @@ type ActionFilingFormFields = {
 };
 
 type KeyedActionFilingFormFields = KeyedEntry & ActionFilingFormFields;
-type KeyedActionFilingFormFieldsByRenderKey = Record<
+export type KeyedActionFilingFormFieldsByRenderKey = Record<
   RenderKey,
   KeyedActionFilingFormFields
 >;
