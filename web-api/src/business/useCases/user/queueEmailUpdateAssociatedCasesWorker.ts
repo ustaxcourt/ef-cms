@@ -45,12 +45,10 @@ export const queueEmailUpdateAssociatedCasesWorker = async (
     });
 
   if (!docketNumbersByUser.length) {
-    console.log('*** USER DOES NOT HAVE ANY CASES TO UPDATE');
     await disableIsUserUpdatingFlag({ applicationContext, user });
     return;
   }
 
-  console.log(`*** QUEUING WORKERS TO UPDATE (${docketNumbersByUser.length})`);
   await applicationContext
     .getUseCases()
     .queueUpdateAssociatedCasesWorker(
@@ -59,7 +57,6 @@ export const queueEmailUpdateAssociatedCasesWorker = async (
       authorizedUser,
     );
 
-  console.log('*** STARTING TO CHECK COUNT');
   await waitUntilAllExpectedCasesAreUpdatedWithEmail({
     applicationContext,
     userEmail: user.email!,
@@ -87,6 +84,8 @@ async function waitUntilAllExpectedCasesAreUpdatedWithEmail({
   iteration?: number;
   userEmail: string;
 }): Promise<void> {
+  await applicationContext.getUtilities().sleep(WAIT_TIMEOUT);
+
   const docketNumbersByUser = await applicationContext
     .getPersistenceGateway()
     .getDocketNumbersByUser({
@@ -103,12 +102,6 @@ async function waitUntilAllExpectedCasesAreUpdatedWithEmail({
     });
 
   if (actualCount >= expectedCount) return;
-
-  if (iteration % 10 === 0) {
-    console.log('*** Expected Count: ', expectedCount);
-    console.log('*** Actual Count: ', actualCount);
-  }
-
   if (iteration >= MAX_ITERATIONS) return;
   return waitUntilAllExpectedCasesAreUpdatedWithEmail({
     applicationContext,
