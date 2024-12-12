@@ -1,5 +1,5 @@
-import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { dismissNOTTReminderForTrialInteractor } from './dismissNOTTReminderForTrialInteractor';
 import {
   mockDocketClerkUser,

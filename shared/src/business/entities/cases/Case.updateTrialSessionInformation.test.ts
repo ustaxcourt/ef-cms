@@ -1,4 +1,8 @@
-import { CASE_STATUS_TYPES, CHIEF_JUDGE } from '../EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+  SESSION_TYPES,
+} from '../EntityConstants';
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { TrialSession } from '../trialSessions/TrialSession';
@@ -49,7 +53,7 @@ describe('updateTrialSessionInformation', () => {
       isCalendared: true,
       judge: { name: 'Judge Buch', userId: 'buch_id' },
       maxCases: 100,
-      sessionType: 'Regular',
+      sessionType: SESSION_TYPES.regular,
       startDate: '2025-03-01T00:00:00.000Z',
       term: 'Fall',
       termYear: '2025',
@@ -78,7 +82,7 @@ describe('updateTrialSessionInformation', () => {
       isCalendared: false,
       judge: { name: 'Judge Buch' },
       maxCases: 100,
-      sessionType: 'Regular',
+      sessionType: SESSION_TYPES.regular,
       startDate: '2025-03-01T00:00:00.000Z',
       term: 'Fall',
       termYear: '2025',

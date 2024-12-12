@@ -11,13 +11,35 @@ describe('setTableSortConfigurationAction', () => {
       props: { sortField: 'createdAt', sortOrder: ASCENDING },
       state: {
         tableSort: {
-          sortField: 'recievedAt',
+          sortField: 'receivedAt',
           sortOrder: DESCENDING,
         },
       },
     });
 
     expect(state.tableSort).toEqual({
+      sortField: 'createdAt',
+      sortOrder: ASCENDING,
+    });
+  });
+
+  it('should set the field to sort and the sort order in the correct root', async () => {
+    const STATE_KEY = 'STATE_KEY';
+    const { state } = await runAction(setTableSortConfigurationAction, {
+      props: {
+        sortField: 'createdAt',
+        sortOrder: ASCENDING,
+        stateKey: STATE_KEY,
+      },
+      state: {
+        tableSort: {
+          sortField: 'recievedAt',
+          sortOrder: DESCENDING,
+        },
+      },
+    });
+
+    expect(state[STATE_KEY]).toEqual({
       sortField: 'createdAt',
       sortOrder: ASCENDING,
     });

@@ -43,6 +43,7 @@ export const trialSessionsHelper = (
   }[];
   trialSessionsCount: number;
   endDateErrorMessage?: string;
+  showCreateTermButton: boolean;
   startDateErrorMessage?: string;
   totalPages: number;
 } => {
@@ -135,6 +136,7 @@ export const trialSessionsHelper = (
     endDateErrorMessage,
     isResetFiltersDisabled: !userHasSelectedAFilter,
     sessionTypeOptions,
+    showCreateTermButton: permissions.SET_TRIAL_SESSION_CALENDAR,
     showNewTrialSession: permissions.CREATE_TRIAL_SESSION,
     showNoticeIssued: filters.currentTab === 'calendared',
     showSessionStatus: filters.currentTab === 'calendared',
