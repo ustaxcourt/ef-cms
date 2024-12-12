@@ -53,11 +53,45 @@ export const getCaseByDocketNumber = async ({
 
   const dbCaseStatistics = await getDbReader(reader =>
     reader
-      .selectFrom('dwCaseStatistic')
+      .selectFrom('dwCaseStatistic as cs')
       .where('docketNumber', '=', docketNumber)
+      .leftJoin('dwStatisticPenalty as sp', 'sp.statisticId', 'cs.statisticId')
       .selectAll()
+      .select('cs.statisticId')
       .execute(),
   );
+
+  // Group penalties by statisticId
+  const statisticsWithPenalties = dbCaseStatistics.reduce((acc, row) => {
+    const {
+      determinationDeficiencyAmount,
+      determinationTotalPenalties,
+      irsDeficiencyAmount,
+      irsTotalPenalties,
+      lastDateOfPeriod,
+      statisticId,
+      year,
+      yearOrPeriod,
+      ...penaltyData
+    } = row;
+    if (!acc[statisticId]) {
+      acc[statisticId] = {
+        determinationDeficiencyAmount,
+        determinationTotalPenalties,
+        irsDeficiencyAmount,
+        irsTotalPenalties,
+        lastDateOfPeriod,
+        penalties: [],
+        statisticId,
+        year,
+        yearOrPeriod,
+      };
+    }
+    if (penaltyData.penaltyId) {
+      acc[statisticId].penalties.push(penaltyData);
+    }
+    return acc;
+  }, {});
 
   const [caseItems, workItems] = await Promise.all([
     queryFull({
@@ -92,7 +126,7 @@ export const getCaseByDocketNumber = async ({
         petitioners: petitionersOnCase,
         pk: `case|${dbCaseMetadata.docketNumber}`,
         sk: `case|${dbCaseMetadata.docketNumber}`,
-        statistics: dbCaseStatistics,
+        statistics: Object.values(statisticsWithPenalties),
       },
       ...caseItems,
       ...workItems.map(workItem => ({

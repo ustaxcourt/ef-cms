@@ -9,6 +9,9 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('statisticId', 'varchar', col => col.primaryKey())
     .addColumn('year', 'smallint')
     .addColumn('yearOrPeriod', 'varchar')
+    .addColumn('determinationTotalPenalties', 'decimal')
+    .addColumn('determinationDeficiencyAmount', 'decimal')
+    .addColumn('lastDateOfPeriod', 'timestamptz')
     .addForeignKeyConstraint(
       'case_statistic_to_case_fk',
       ['docketNumber'],

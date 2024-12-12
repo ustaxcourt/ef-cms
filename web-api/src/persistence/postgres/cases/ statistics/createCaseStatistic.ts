@@ -1,4 +1,5 @@
 import { Statistic } from '@shared/business/entities/Statistic';
+import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getDbWriter } from '@web-api/database';
 
 export const createCaseStatistic = async ({
@@ -12,11 +13,16 @@ export const createCaseStatistic = async ({
     writer
       .insertInto('dwCaseStatistic')
       .values({
+        determinationDeficiencyAmount: statistic.determinationDeficiencyAmount,
+        determinationTotalPenalties: statistic.determinationTotalPenalties,
         docketNumber,
-        irsDeficiencyAmount: parseFloat(statistic.irsDeficiencyAmount),
-        irsTotalPenalties: parseFloat(statistic.irsTotalPenalties),
+        irsDeficiencyAmount: statistic.irsDeficiencyAmount,
+        irsTotalPenalties: statistic.irsTotalPenalties,
+        lastDateOfPeriod: statistic.lastDateOfPeriod
+          ? calculateDate({ dateString: statistic.lastDateOfPeriod })
+          : null,
         statisticId: statistic.statisticId,
-        year: parseInt(statistic.year),
+        year: statistic.year ? parseInt(statistic.year) : null,
         yearOrPeriod: statistic.yearOrPeriod,
       })
       .execute(),
