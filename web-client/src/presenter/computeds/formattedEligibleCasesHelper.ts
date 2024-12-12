@@ -1,6 +1,6 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-const groupKeySymbol = Symbol('group');
+export const groupKeySymbol = Symbol('group');
 
 export const addGroupSymbol = (object, value) => {
   Object.defineProperty(object, groupKeySymbol, {

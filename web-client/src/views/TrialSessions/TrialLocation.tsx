@@ -1,24 +1,18 @@
 import { BigHeader } from '../BigHeader';
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { TrialLocationBlockedTable } from '@web-client/views/TrialSessions/TrialLocationBlockedTable';
 import { TrialLocationTable } from '@web-client/views/TrialSessions/TrialLocationTable';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences, state } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-import { Button } from '@web-client/ustc-ui/Button/Button';
 
 export const TrialLocation = connect(
   {
     currentTab: state.trialLocationPage.currentTab,
-    openTrialSessionPlanningModalSequence:
-      sequences.openTrialSessionPlanningModalSequence,
     trialLocationHelper: state.trialLocationHelper,
   },
-  function TrialLocation({
-    currentTab,
-    openTrialSessionPlanningModalSequence,
-    trialLocationHelper,
-  }) {
+  function TrialLocation({ currentTab, trialLocationHelper }) {
     const { blockedCases, formattedEligibleCases, location } =
       trialLocationHelper;
     return (
@@ -31,7 +25,7 @@ export const TrialLocation = connect(
               noMargin
               className="margin-right-0"
               icon="print"
-              onClick={() => openTrialSessionPlanningModalSequence()}
+              onClick={() => {}}
             >
               Back to Trial Session Planning Report
             </Button>

@@ -1,7 +1,10 @@
 import { connect } from '@web-client/presenter/shared.cerebral';
 // import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
+import { CaseIcons } from '@web-client/ustc-ui/Icon/CaseIcons';
+import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useRef } from 'react';
+import classNames from 'classnames';
 
 export const TrialLocationTable = connect(
   {
@@ -42,8 +45,13 @@ export const TrialLocationTable = connect(
             >
               <thead>
                 <tr>
-                  <th className="icon-column" />
-                  <th className="width-card">Docket No.</th>
+                  <th
+                    aria-label="Icons for consolidated cases"
+                    className="icon-column"
+                  />
+                  <th aria-label="Docket Number" className="width-card">
+                    Docket No.
+                  </th>
                   <th className="width-mobile">Case Title</th>
                   <th className="width-card-lg">Petitioner Counsel</th>
                   <th className="width-card">Respondent Counsel</th>
@@ -52,18 +60,30 @@ export const TrialLocationTable = connect(
               </thead>
               {trialLocationHelper.formattedEligibleCases.map(eligibleCase => {
                 return (
-                  <tr key={eligibleCase.docketNumber}>
-                    <td></td>
-                    <td>
-                      <a className="case-link" href={eligibleCase.editLink}>
-                        {eligibleCase.docketNumberWithSuffix}
-                      </a>
-                    </td>
-                    <td>{eligibleCase.caseTitle}</td>
-                    <td>{eligibleCase.privatePractitioners}</td>
-                    <td>{eligibleCase.irsPractitioners}</td>
-                    <td>{eligibleCase.caseType}</td>
-                  </tr>
+                  <tbody key={eligibleCase.docketNumber}>
+                    <tr>
+                      <td>
+                        {/* TODO: should highPriority cases get an icon? */}
+                        <CaseIcons
+                          formattedCase={eligibleCase}
+                          shouldIndent={eligibleCase.shouldIndent}
+                        />
+                      </td>
+                      <td>
+                        <span
+                          className={classNames({
+                            'margin-left-2': eligibleCase.shouldIndent,
+                          })}
+                        >
+                          <CaseLink formattedCase={eligibleCase} />
+                        </span>
+                      </td>
+                      <td>{eligibleCase.caseTitle}</td>
+                      <td>{eligibleCase.privatePractitioners}</td>
+                      <td>{eligibleCase.irsPractitioners}</td>
+                      <td>{eligibleCase.caseType}</td>
+                    </tr>
+                  </tbody>
                 );
               })}
             </table>

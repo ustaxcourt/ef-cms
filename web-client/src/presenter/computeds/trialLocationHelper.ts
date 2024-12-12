@@ -5,11 +5,10 @@ import {
   addGroupSymbol,
   compareTrialSessionEligibleCases,
   getPriorityGroups,
+  groupKeySymbol,
 } from '@web-client/presenter/computeds/formattedEligibleCasesHelper';
 import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
 import { state } from '@web-client/presenter/app.cerebral';
-
-const groupKeySymbol = Symbol('group');
 
 export const trialLocationHelper = (
   get: Get,
