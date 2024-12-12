@@ -2,12 +2,9 @@ import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   Practitioner,
   RawPractitioner,
-} from '../../../../../shared/src/business/entities/Practitioner';
+} from '@shared/business/entities/Practitioner';
 import { ROLES } from '@shared/business/entities/EntityConstants';
-import {
-  RawUser,
-  User,
-} from '../../../../../shared/src/business/entities/User';
+import { RawUser, User } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 async function disableIsUserUpdatingFlag({
