@@ -2,8 +2,7 @@ import {
   FORMATS,
   createDateAtStartOfWeekEST,
 } from '@shared/business/utilities/DateHandler';
-//TODO: MAYBE MOVE TYPES TO SHARED?
-import { TrialLocationData } from '@web-api/business/useCases/trialSessions/getTrialSessionPlanningReportDataInteractor';
+import { TrialLocationData } from '@shared/business/utilities/trialSessionPlanningReport/trialSessionPlanningReportDataTypes';
 import { formatCities } from '@shared/business/utilities/pdfGenerator/documentTemplates/TrialSessionPlanningReport';
 import { state } from '@web-client/presenter/app.cerebral';
 

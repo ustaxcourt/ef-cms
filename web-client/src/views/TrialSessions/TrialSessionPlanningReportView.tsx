@@ -206,7 +206,10 @@ function CitiesNotCalendaredInPastTwoTerms({
   cities,
 }: CitiesNotCalendaredInPastTwoTermsParams) {
   return (
-    <div className="grid-container margin-top-5">
+    <div
+      className="grid-container margin-top-5"
+      data-testid="cities-not-calendared-in-past-two-terms-table"
+    >
       <div className="border-1px border-gray-30">
         <div
           className="bg-yellow padding-top-2 padding-bottom-2 padding-left-3 border-bottom-1px border-gray-30"
