@@ -1,11 +1,8 @@
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
-import {
-  Practitioner,
-  RawPractitioner,
-} from '@shared/business/entities/Practitioner';
-import { ROLES } from '@shared/business/entities/EntityConstants';
-import { RawUser, User } from '@shared/business/entities/User';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
+import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UserFactory } from '@shared/business/entities/factories/UserFactory';
 
 async function disableIsUserUpdatingFlag({
   applicationContext,
@@ -14,17 +11,11 @@ async function disableIsUserUpdatingFlag({
   applicationContext: ServerApplicationContext;
   user: RawUser | RawPractitioner;
 }): Promise<void> {
+  const userFactory = new UserFactory(user);
+  const UserClass = userFactory.getClass();
+
   user.isUpdatingInformation = false;
-  let userEntity;
-  if (
-    user.role === ROLES.privatePractitioner ||
-    user.role === ROLES.irsPractitioner ||
-    user.role === ROLES.inactivePractitioner
-  ) {
-    userEntity = new Practitioner(user);
-  } else {
-    userEntity = new User(user);
-  }
+  const userEntity = new UserClass(user);
 
   await applicationContext.getPersistenceGateway().updateUser({
     applicationContext,
