@@ -47,11 +47,13 @@ export const initializeTrialSessionMinutesSheetFormAction = ({
   const respondentWitnessRowRenderKey = uuidv4();
   const exhibitRowRenderKey = uuidv4();
 
-  store.set(state.minuteSheetForm.caseMetadata.recalled[recalledRowRenderKey], {
-    date: '',
-    note: '',
-    renderKey: recalledRowRenderKey,
-    transcriptOrdered: false,
+  store.set(state.minuteSheetForm.caseMetadata.recalled, {
+    [recalledRowRenderKey]: {
+      date: '',
+      note: '',
+      renderKey: recalledRowRenderKey,
+      transcriptOrdered: false,
+    },
   });
   store.set(
     state.minuteSheetForm.petitioners.petitioners,
@@ -61,14 +63,16 @@ export const initializeTrialSessionMinutesSheetFormAction = ({
     state.minuteSheetForm.respondents.respondents,
     getRespondentsFromCase(caseDetail),
   );
-  store.set(state.minuteSheetForm.motionsSection.motions[motionRowRenderKey], {
-    date: '',
-    filedBy: '',
-    note: '',
-    oralMotion: false,
-    renderKey: motionRowRenderKey,
-    status: '',
-    type: '',
+  store.set(state.minuteSheetForm.motionsSection.motions, {
+    [motionRowRenderKey]: {
+      date: '',
+      filedBy: '',
+      note: '',
+      oralMotion: false,
+      renderKey: motionRowRenderKey,
+      status: '',
+      type: '',
+    },
   });
   store.set(
     state.minuteSheetForm.actionsAndFilingsSection.actionsAndFilings,
@@ -77,29 +81,25 @@ export const initializeTrialSessionMinutesSheetFormAction = ({
       user,
     }),
   );
-  store.set(
-    state.minuteSheetForm.witnesses.petitionerWitnesses[
-      petitionerWitnessRowRenderKey
-    ],
-    {
+  store.set(state.minuteSheetForm.witnesses.petitionerWitnesses, {
+    [petitionerWitnessRowRenderKey]: {
       name: '',
       renderKey: petitionerWitnessRowRenderKey,
     },
-  );
-  store.set(
-    state.minuteSheetForm.witnesses.respondentWitnesses[
-      respondentWitnessRowRenderKey
-    ],
-    {
+  });
+  store.set(state.minuteSheetForm.witnesses.respondentWitnesses, {
+    [respondentWitnessRowRenderKey]: {
       name: '',
       renderKey: respondentWitnessRowRenderKey,
     },
-  );
-  store.set(state.minuteSheetForm.exhibits.exhibits[exhibitRowRenderKey], {
-    description: '',
-    note: '',
-    renderKey: exhibitRowRenderKey,
-    status: '',
+  });
+  store.set(state.minuteSheetForm.exhibits.exhibits, {
+    [exhibitRowRenderKey]: {
+      description: '',
+      note: '',
+      renderKey: exhibitRowRenderKey,
+      status: '',
+    },
   });
 };
 

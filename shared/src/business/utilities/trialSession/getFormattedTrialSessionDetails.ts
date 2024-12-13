@@ -231,6 +231,41 @@ export const getFormattedTrialSessionDetails = ({
         .getUtilities()
         .setConsolidationFlagsForDisplay(caseItem, inactiveCases),
     )
+    .map(caseItem => {
+      let displayMinutesSheetFormButton = false;
+      let minutesSheetRoute;
+
+      const isEligibleForButton =
+        trialSession.isCalendared && !isClosed(caseItem);
+
+      const isLeadCase = caseItem.inConsolidatedGroup && caseItem.isLeadCase;
+
+      let caseWasRemovedFromTrialSessionAfterStartDate = false;
+
+      // 10419 TODO the comparison below needs to be an actual check of two
+      // date/time. We need to make sure we have the actual trial session
+      // start date/times in hand (there are discrepancies between the time in
+      // the ISO string that trialSession.startDate references versus the
+      // trialSession.startTime property).
+      // if (caseItem.removedFromTrialDate > trialSession.startDate) {
+      //   caseWasRemovedFromTrialSessionAfterStartDate = true;
+      // }
+
+      if (
+        isEligibleForButton &&
+        (isLeadCase || !caseItem.inConsolidatedGroup) &&
+        caseWasRemovedFromTrialSessionAfterStartDate
+      ) {
+        displayMinutesSheetFormButton = true;
+        minutesSheetRoute = `/trial-session-detail/${trialSession.trialSessionId}/case/${caseItem.docketNumber}/minutes`;
+      }
+
+      return {
+        ...caseItem,
+        displayMinutesSheetFormButton,
+        minutesSheetRoute,
+      };
+    })
     .sort(
       compareCasesByDocketNumberFactory({
         allCases: inactiveCases,
