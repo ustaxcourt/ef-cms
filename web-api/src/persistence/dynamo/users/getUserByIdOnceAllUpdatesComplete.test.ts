@@ -1,6 +1,7 @@
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/dynamo/users/getUserByIdOnceAllUpdatesComplete';
+import { sleep } from '@shared/tools/helpers';
 
 describe('getUserByIdOnceAllUpdatesComplete', () => {
   const TEST_USER_ID = 'TEST_USER_ID';
@@ -47,11 +48,3 @@ describe('getUserByIdOnceAllUpdatesComplete', () => {
     expect(COMPLETE_FLAG).toEqual(true);
   });
 });
-
-function sleep(timeInMilliseconds: number) {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve(null);
-    }, timeInMilliseconds);
-  });
-}

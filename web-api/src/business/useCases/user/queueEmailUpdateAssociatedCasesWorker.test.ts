@@ -6,14 +6,7 @@ import { RawUser } from '@shared/business/entities/User';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
 import { petitionerUser } from '@shared/test/mockUsers';
-
-function sleep(timeInMilliseconds: number) {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve(null);
-    }, timeInMilliseconds);
-  });
-}
+import { sleep } from '@shared/tools/helpers';
 
 describe('queueEmailUpdateAssociatedCasesWorker', () => {
   let TEST_USER: RawUser;
