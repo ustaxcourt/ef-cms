@@ -14,6 +14,7 @@ import { Signer } from '@aws-sdk/rds-signer';
 import path from 'path';
 import { Kysely } from 'kysely';
 import { Database } from '../../web-api/src/database-types';
+import { RawCorrespondence } from '../../shared/src/business/entities/Correspondence';
 
 requireEnvVars(['REGION', 'DB_NAME', 'DB_HOST', 'DB_USER']);
 const { DB_NAME, DB_HOST, DB_USER } = process.env;
@@ -44,12 +45,13 @@ const getDocketEntryIdsByDocketNumbers = async ({
 }: {
   applicationContext: ServerApplicationContext;
   docketNumbers: string[];
-}): Promise<Record<string, string[]>> => {
+}): Promise<any> => {
   console.log(`Fetching docket entries for each docket number...`);
 
   const priorityQueue = new PQueue({ concurrency: 50 });
 
   const docketEntryIdsByDocketNumber: Record<string, string[]> = {};
+  const correspondenceIdsByDocketNumber: Record<string, string[]> = {};
 
   const getDocketEntriesFunctions = docketNumbers.map(
     docketNumber => async () => {
@@ -66,22 +68,41 @@ const getDocketEntryIdsByDocketNumbers = async ({
         applicationContext,
       })) as RawDocketEntry[];
 
+      const correspondence = (await queryFull({
+        ExpressionAttributeNames: {
+          '#pk': 'pk',
+          '#sk': 'sk',
+        },
+        ExpressionAttributeValues: {
+          ':pk': `case|${docketNumber}`,
+          ':prefix': 'correspondence|',
+        },
+        KeyConditionExpression: '#pk = :pk AND begins_with(#sk, :prefix)',
+        applicationContext,
+      })) as RawCorrespondence[];
+
       docketEntryIdsByDocketNumber[docketNumber] = docketEntries.map(
         docketEntry => docketEntry.docketEntryId,
+      );
+
+      correspondenceIdsByDocketNumber[docketNumber] = correspondence.map(
+        correspondence => correspondence.correspondenceId,
       );
     },
   );
 
   await priorityQueue.addAll(getDocketEntriesFunctions);
-  return docketEntryIdsByDocketNumber;
+  return { docketEntryIdsByDocketNumber, correspondenceIdsByDocketNumber };
 };
 
 const removePoisonAttachmentsFromMessages = async ({
   messageFragments,
   docketEntryIdsByDocketNumber,
+  correspondenceIdsByDocketNumber,
 }: {
   messageFragments: MessageFragment[];
   docketEntryIdsByDocketNumber: Record<string, string[]>;
+  correspondenceIdsByDocketNumber: Record<string, string[]>;
 }): Promise<{
   deletedAttachmentAuditRecords: {
     messageId: string;
@@ -99,6 +120,9 @@ const removePoisonAttachmentsFromMessages = async ({
       for (const attachment of message.attachments) {
         if (
           !docketEntryIdsByDocketNumber[message.docketNumber]?.includes(
+            attachment.documentId,
+          ) &&
+          !correspondenceIdsByDocketNumber[message.docketNumber]?.includes(
             attachment.documentId,
           )
         ) {
@@ -183,15 +207,17 @@ const udpateMessagesInDb = async (
     new Set(messageFragments.map(message => message.docketNumber)),
   );
 
-  const docketEntryIdsByDocketNumber = await getDocketEntryIdsByDocketNumbers({
-    applicationContext,
-    docketNumbers,
-  });
+  const { docketEntryIdsByDocketNumber, correspondenceIdsByDocketNumber } =
+    await getDocketEntryIdsByDocketNumbers({
+      applicationContext,
+      docketNumbers,
+    });
 
   const { deletedAttachmentAuditRecords, updatedMessageFragments } =
     await removePoisonAttachmentsFromMessages({
       docketEntryIdsByDocketNumber,
       messageFragments,
+      correspondenceIdsByDocketNumber,
     });
 
   if (liveRun) {
