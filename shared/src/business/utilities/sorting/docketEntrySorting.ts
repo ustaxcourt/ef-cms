@@ -15,20 +15,26 @@ export type DocketRecordSortInfo = {
 
 type Comparator<T> = (a: T, b: T) => number;
 
-type SortableDocketEntry = RawDocketEntry & { createdAtFormatted?: string };
+// This specifies the minimum fields we need to sort by
+type SortableDocketEntry = {
+  index: number;
+  filingDate: string;
+  createdAtFormatted?: string;
+  [key: string]: unknown;
+};
 
-export const sortDocketEntries = ({
+export const sortDocketEntries = <T extends SortableDocketEntry>({
   ascending = true,
   docketEntries = [],
   sortByField = DOCKET_ENTRY_SORT_FIELDS.filingDate,
 }: {
-  docketEntries: SortableDocketEntry[];
+  docketEntries: T[];
   sortByField?: DocketEntrySortField;
   ascending?: boolean;
-}): (RawDocketEntry & { createdAtFormatted?: string })[] => {
+}): T[] => {
   // Get the comparison function to use, then sort using it
   const comparator = createDocketEntryComparator(sortByField, ascending);
-  return docketEntries.sort(comparator); // Copy array to avoid mutating input
+  return docketEntries.sort(comparator);
 };
 
 const createDocketEntryComparator = (

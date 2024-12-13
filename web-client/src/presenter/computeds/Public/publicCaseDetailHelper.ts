@@ -4,16 +4,18 @@ import {
   PUBLIC_DOCKET_RECORD_FILTER,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   ROLES,
-  STATE_KEYS,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import {
+  DocketRecordSortInfo,
+  sortDocketEntries,
+} from '@shared/business/utilities/sorting/docketEntrySorting';
 import { Get } from 'cerebral';
 import {
   computeIsNotServedDocument,
   getFilingsAndProceedings,
 } from '../../../../../shared/src/business/utilities/getFormattedCaseDetail';
-import { sortDocketEntryTable } from '@web-client/presenter/computeds/formattedDocketEntries';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
 export const formatDocketEntryOnDocketRecord = (
@@ -151,6 +153,7 @@ export type PublicFormattedDocketEntryInfo = {
   sealedToTooltip: string;
   numberOfPages?: number;
   filedBy?: string;
+  filingDate: string; // DEVEX TODO?
   action?: string;
   showServed: boolean;
   showNotServed: boolean;
@@ -180,8 +183,10 @@ export const publicCaseDetailHelper = (
   const { canAllowPrintableDocketRecord, docketEntries, isSealed } = rawCase;
 
   const isTerminalUser = get(state.isTerminalUser);
-  const { sortField, sortOrder } = get(
-    state[STATE_KEYS.DOCKET_RECORD_TABLE_SORT],
+  const docketRecordSortInfo: DocketRecordSortInfo = get(
+    state.sessionMetadata.docketRecordSortInfoByDocketNumber[
+      rawCase.docketNumber
+    ],
   );
 
   const { docketRecordFilter } = get(state.sessionMetadata);
@@ -207,11 +212,11 @@ export const publicCaseDetailHelper = (
   );
 
   const sortedAndFilteredFormattedDocketEntriesOnDocketRecord =
-    sortDocketEntryTable<PublicFormattedDocketEntryInfo>(
-      filteredFormattedDocketEntriesOnDocketRecord,
-      sortField,
-      sortOrder,
-    );
+    sortDocketEntries<PublicFormattedDocketEntryInfo>({
+      ascending: docketRecordSortInfo.ascending,
+      docketEntries: filteredFormattedDocketEntriesOnDocketRecord,
+      sortByField: docketRecordSortInfo.sortByField,
+    });
 
   return {
     formattedDocketEntriesOnDocketRecord:

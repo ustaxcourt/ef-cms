@@ -1,10 +1,12 @@
 /* eslint-disable complexity */
 import { ClientApplicationContext } from '@web-client/applicationContext';
+import {
+  DOCKET_ENTRY_SORT_FIELDS,
+  DocketRecordSortInfo,
+} from '@shared/business/utilities/sorting/docketEntrySorting';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
-import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
 import { computeIsNotServedDocument } from '@shared/business/utilities/getFormattedCaseDetail';
-import { sortBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const isSelectableForDownload = (entry: RawDocketEntry) => {
@@ -206,20 +208,16 @@ export const formattedDocketEntries = (
   const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const { docketNumber } = caseDetail;
-  let docketRecordSort;
+  let docketRecordSortInfo: DocketRecordSortInfo = {
+    ascending: true,
+    sortByField: DOCKET_ENTRY_SORT_FIELDS.index,
+  };
   const { formatCase } = applicationContext.getUtilities();
   if (docketNumber) {
-    docketRecordSort = get(
+    docketRecordSortInfo = get(
       state.sessionMetadata.docketRecordSortInfoByDocketNumber[docketNumber],
     );
   }
-
-  const docketRecordSortField = get(
-    state[STATE_KEYS.DOCKET_RECORD_TABLE_SORT].sortField,
-  );
-  const docketRecordSortOrder = get(
-    state[STATE_KEYS.DOCKET_RECORD_TABLE_SORT].sortOrder,
-  );
 
   const DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE = get(
     state.featureFlags[
@@ -261,12 +259,6 @@ export const formattedDocketEntries = (
         isSelectableForDownload: isSelectableForDownload(docketEntry),
       };
     });
-
-  docketEntriesFormatted = sortDocketEntryTable(
-    docketEntriesFormatted,
-    docketRecordSortField,
-    docketRecordSortOrder,
-  );
 
   const selectableDocumentsCount = docketEntriesFormatted.filter(entry =>
     isSelectableForDownload(entry),
@@ -312,36 +304,6 @@ export const formattedDocketEntries = (
     };
   });
 
-  result.docketRecordSort = docketRecordSort;
+  result.docketRecordSort = docketRecordSortInfo;
   return result;
 };
-
-export function sortDocketEntryTable<T>(
-  docketEntries: (T & { sortingFilingDate: string | undefined })[] = [],
-  docketRecordSortField: string | undefined,
-  docketRecordSortOrder: 'asc' | 'desc' | undefined,
-): T[] {
-  if (!docketRecordSortField || !docketRecordSortOrder) {
-    return sortBy(docketEntries, ['sortingFilingDate', 'index']);
-  }
-
-  const sortedDocketEntries = sortBy(docketEntries, [
-    docketRecordSortField,
-    'index',
-  ]);
-
-  if (docketRecordSortOrder === 'desc') {
-    return sortedDocketEntries.reverse().sort(sortUndefined);
-  }
-
-  return sortedDocketEntries.sort(sortUndefined);
-}
-
-function sortUndefined(
-  a: { sortingFilingDate: string | undefined },
-  b: { sortingFilingDate: string | undefined },
-): number {
-  if (a.sortingFilingDate && !b.sortingFilingDate) return -1;
-  if (!a.sortingFilingDate && b.sortingFilingDate) return 1;
-  return 0;
-}
