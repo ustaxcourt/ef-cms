@@ -1,7 +1,7 @@
 import {
   PreviousTerm,
   TrialLocationData,
-} from '@web-api/business/useCases/trialSessions/getTrialSessionPlanningReportDataInteractor';
+} from '@shared/business/utilities/trialSessionPlanningReport/trialSessionPlanningReportDataTypes';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 import { trialSessionPlanningReport } from './trialSessionPlanningReport';

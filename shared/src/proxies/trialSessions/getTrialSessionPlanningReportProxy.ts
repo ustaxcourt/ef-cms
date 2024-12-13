@@ -2,7 +2,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import {
   PreviousTerm,
   TrialLocationData,
-} from '@web-api/business/useCases/trialSessions/getTrialSessionPlanningReportDataInteractor';
+} from '@shared/business/utilities/trialSessionPlanningReport/trialSessionPlanningReportDataTypes';
 import { get } from '../requests';
 
 export const getTrialSessionPlanningReportDataInteractor = (

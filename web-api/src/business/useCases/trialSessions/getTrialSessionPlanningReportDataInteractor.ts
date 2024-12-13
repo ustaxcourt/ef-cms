@@ -1,4 +1,8 @@
 import {
+  PreviousTerm,
+  TrialLocationData,
+} from '@shared/business/utilities/trialSessionPlanningReport/trialSessionPlanningReportDataTypes';
+import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
@@ -12,24 +16,6 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { capitalize, invert } from 'lodash';
-
-export type PreviousTerm = {
-  term: string;
-  termDisplay: string;
-  year: number;
-};
-
-export type TrialLocationData = {
-  allCaseCount: number;
-  previousTermsData: string[][];
-  regularCaseCount: number;
-  smallCaseCount: number;
-  specialCaseCount: number;
-  stateAbbreviation: string;
-  trialCityState: string;
-  blockedCaseCount: number;
-  lastVisitedDate?: string;
-};
 
 export const getTrialSessionPlanningReportDataInteractor = async (
   applicationContext: ServerApplicationContext,
