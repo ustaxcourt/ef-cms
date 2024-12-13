@@ -36,4 +36,12 @@ async function migrateToLatest() {
   });
 }
 
-migrateToLatest().catch;
+migrateToLatest()
+  .then(() => {
+    console.log('Postgres migration completed Successfully!');
+    process.exit(0);
+  })
+  .catch(err => {
+    console.log('Migration failed.');
+    console.log(err);
+  });

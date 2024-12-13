@@ -54,4 +54,12 @@ export const seed = async () => {
   );
 };
 
-seed().catch;
+seed()
+  .then(() => {
+    console.log('Database data seeded successfully!');
+    process.exit(0);
+  })
+  .catch(err => {
+    console.log('Could not seed postgres data.');
+    console.log(err);
+  });
