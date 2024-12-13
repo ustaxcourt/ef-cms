@@ -1,14 +1,15 @@
-import {
-  Practitioner,
-  RawPractitioner,
-} from '@shared/business/entities/Practitioner';
-import { ROLES } from '@shared/business/entities/EntityConstants';
-import { RawUser, User } from '@shared/business/entities/User';
+import { Practitioner } from '@shared/business/entities/Practitioner';
+import { ROLES, Role } from '@shared/business/entities/EntityConstants';
+import { User } from '@shared/business/entities/User';
+
+type MinimalFactoryInfo = {
+  role: Role;
+};
 
 export class UserFactory {
-  private rawUser: RawUser | RawPractitioner;
+  private rawUser: MinimalFactoryInfo;
 
-  constructor(rawUser: RawUser | RawPractitioner) {
+  constructor(rawUser: MinimalFactoryInfo) {
     this.rawUser = rawUser;
   }
 
