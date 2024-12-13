@@ -1,7 +1,7 @@
 import {
   PreviousTerm,
   TrialLocationData,
-} from '@web-api/business/useCases/trialSessions/getTrialSessionPlanningReportDataInteractor';
+} from '@shared/business/utilities/trialSessionPlanningReport/trialSessionPlanningReportDataTypes';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setTrialSessionPlanningReportAction = ({

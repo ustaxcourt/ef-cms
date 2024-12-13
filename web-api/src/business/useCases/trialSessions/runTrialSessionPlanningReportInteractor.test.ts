@@ -1,7 +1,7 @@
 import {
   PreviousTerm,
   TrialLocationData,
-} from '@web-api/business/useCases/trialSessions/getTrialSessionPlanningReportDataInteractor';
+} from '../../../../../shared/src/business/utilities/trialSessionPlanningReport/trialSessionPlanningReportDataTypes';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   mockPetitionerUser,
