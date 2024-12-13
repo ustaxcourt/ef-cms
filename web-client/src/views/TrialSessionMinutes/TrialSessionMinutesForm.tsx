@@ -1,4 +1,4 @@
-import { ActionsAndFilingsFieldset } from '@web-client/views/TrialSessionMinutes/ActionsAndFIlingsFieldset';
+import { ActionsAndFilingsFieldset } from '@web-client/views/TrialSessionMinutes/ActionsAndFilingsFieldset';
 import { CaseMetadataFieldset } from '@web-client/views/TrialSessionMinutes/CaseMetadataFieldset';
 import { ExhibitsFieldset } from './ExhibitsFieldset';
 import { JurisdictionRetainedFieldset } from '@web-client/views/TrialSessionMinutes/JurisdictionRetainedFieldset';

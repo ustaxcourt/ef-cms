@@ -11,6 +11,8 @@ import { FORMATS } from '../DateHandler';
 import { RawEligibleCase } from '../../entities/cases/EligibleCase';
 import { RawIrsCalendarAdministratorInfo } from '@shared/business/entities/trialSessions/IrsCalendarAdministratorInfo';
 import { compact, partition } from 'lodash';
+import { isClosed } from '@shared/business/entities/cases/Case';
+import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
 
 export const setPretrialMemorandumFiler = ({ caseItem }): string => {
   if (caseItem.PMTServedPartiesCode !== undefined) {
@@ -197,11 +199,30 @@ export const getFormattedTrialSessionDetails = ({
   );
 
   const openCasesFormatted = openCases
-    .map(caseItem =>
-      applicationContext
-        .getUtilities()
-        .setConsolidationFlagsForDisplay(caseItem, openCases),
-    )
+    .map(caseItem => setConsolidationFlagsForDisplay(caseItem, openCases))
+    .map(caseItem => {
+      let displayMinutesSheetFormButton = false;
+      let minutesSheetRoute;
+
+      const isEligibleForButton =
+        trialSession.isCalendared && !isClosed(caseItem);
+
+      const isLeadCase = caseItem.inConsolidatedGroup && caseItem.isLeadCase;
+
+      if (
+        isEligibleForButton &&
+        (isLeadCase || !caseItem.inConsolidatedGroup)
+      ) {
+        displayMinutesSheetFormButton = true;
+        minutesSheetRoute = `/trial-session-detail/${trialSession.trialSessionId}/case/${caseItem.docketNumber}/minutes`;
+      }
+
+      return {
+        ...caseItem,
+        displayMinutesSheetFormButton,
+        minutesSheetRoute,
+      };
+    })
     .sort(compareCasesByDocketNumberFactory({ allCases: openCases }));
 
   const inactiveCasesFormatted = inactiveCases
