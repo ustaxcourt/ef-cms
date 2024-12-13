@@ -5,7 +5,7 @@ describe('setTrialSessionPlanningReportAction', () => {
   const TEST_PREVIOUS_TERMS = 'TEST_PREVIOUS_TERMS';
   const TEST_TRIAL_LOCATION_DATA = 'TEST_TRIAL_LOCATION_DATA';
 
-  it('should return the trial session planning report data', async () => {
+  it('should set data in state correctly', async () => {
     const { state } = await runAction(setTrialSessionPlanningReportAction, {
       props: {
         previousTerms: TEST_PREVIOUS_TERMS,
