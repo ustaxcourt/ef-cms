@@ -1,35 +1,74 @@
 import { type ParseArgsConfig, parseArgs } from 'node:util';
 
 export type ScriptConfig = {
+  /**
+   * The `description` will be printed to the console when errors are
+   * encountered or when the `--help` or `--verbose` parameters are provided.
+   */
   description?: string;
   parameters: {
     /**
      * If the `long` and `position` properties are not defined in the
      * `ScriptParameter` object, the parameter is called by its key
-     * prefixed with two dashes (e.g. `--year`). This key will also be
-     * used when retrieving a parsed value with `parseArguments`.
+     * prefixed with two dashes (e.g. `--year`). This key will also be used
+     * when retrieving this parameter's parsed value with `parseArguments`.
      */
     [key: string]: ScriptParameter;
   };
 };
 
 export type ScriptParameter = {
+  /**
+   * Only compatible with 'string' types, the `commaDelimited` property
+   * indicates that the provided value might be several comma-delimited
+   * values. When `true`, the value returned by `parseArguments` will
+   * always be an array, even if only one value was provided.
+   */
   commaDelimited?: boolean;
   description?: string;
+  /**
+   * If no value is provided for this parameter, `parseArguments` will
+   * return this default value.
+   */
   default?: string | boolean | string[];
   /**
-   * Only necessary if you want to call the parameter (e.g. `--event-code`)
-   * differently from how want you get it back (e.g. `eventCode`).
+   * The `long` property is only necessary if you want to call the parameter
+   * (e.g. `--event-code`) differently from how want you get it back
+   * (e.g. `eventCode`) from `parseArguments`.
    */
   long?: string;
+  /**
+   * The `multiple` property indicates that this parameter may be provided
+   * more than once. When `true`, the value returned by `parseArguments`
+   * will always be an array, even if only one value was provided.
+   */
   multiple?: boolean;
+  /**
+   * Only compatible with 'string' types, the `position` property indicates
+   * the order in which this parameter appears.
+   */
   position?: number;
+  /**
+   * Only compatible with 'string' types, the `required` property indicates
+   * that a value is required to be provided for this parameter.
+   */
   required?: boolean;
   /**
-   * Optionally call the parameter prefixed with a single dash (e.g. `-t`).
+   * The `short` property allows this parameter to optionally be called
+   * prefixed with a single dash (e.g. `-t`).
    */
   short?: string;
+  /**
+   * Only compatible with 'string' types, the `transform` property indicates
+   * how the value(s) should be transformed by `parseArguments` before they
+   * are returned.
+   */
   transform?: 'number' | 'toLowerCase' | 'toUpperCase';
+  /**
+   * The `type` property indicates to `parseArguments` how to expect to
+   * find the provided value. For 'boolean' types, the presence or absence
+   * of the parameter indicates 'true' or 'false', respectively.
+   */
   type: 'string' | 'boolean';
 };
 
