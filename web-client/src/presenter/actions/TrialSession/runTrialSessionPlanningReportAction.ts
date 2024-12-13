@@ -7,7 +7,7 @@
 export const runTrialSessionPlanningReportAction = async ({
   applicationContext,
   props,
-}: ActionProps) => {
+}: ActionProps<{ term: string; year: number }>) => {
   const { term, year } = props;
 
   const { url } = await applicationContext
@@ -17,5 +17,5 @@ export const runTrialSessionPlanningReportAction = async ({
       year,
     });
 
-  return { pdfUrl: url };
+  applicationContext.getUtilities().openUrlInNewTab({ url });
 };

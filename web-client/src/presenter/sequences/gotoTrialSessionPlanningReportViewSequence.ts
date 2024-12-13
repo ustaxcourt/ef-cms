@@ -1,3 +1,4 @@
+import { clearModalStateAction } from '@web-client/presenter/actions/clearModalStateAction';
 import { getTrialSessionPlanningReportAction } from '@web-client/presenter/actions/TrialSession/getTrialSessionPlanningReportAction';
 import { setTrialSessionPlanningReportAction } from '@web-client/presenter/actions/TrialSession/setTrialSessionPlanningReportAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
@@ -10,5 +11,6 @@ export const gotoTrialSessionPlanningReportViewSequence =
     setupTrialSessionPlanningReportViewDataAction,
     getTrialSessionPlanningReportAction,
     setTrialSessionPlanningReportAction,
+    clearModalStateAction,
     setupCurrentPageAction('TrialSessionPlanningReportView'),
   ]);
