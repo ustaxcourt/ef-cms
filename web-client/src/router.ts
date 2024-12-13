@@ -1123,14 +1123,6 @@ const router = {
     );
 
     registerRoute(
-      '/trial-session-planning-report',
-      ifHasAccess({ app }, () => {
-        setPageTitle('Trial session planning report');
-        return app.getSequence('gotoTrialSessionPlanningReportSequence')();
-      }),
-    );
-
-    registerRoute(
       '/reports/cold-case-report',
       ifHasAccess({ app }, () => {
         setPageTitle('Cold case report');
