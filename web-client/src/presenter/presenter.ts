@@ -215,7 +215,6 @@ import { gotoStartCaseWizardSequence } from './sequences/gotoStartCaseWizardSequ
 import { gotoStatusReportOrderSequence } from './sequences/StatusReportOrder/gotoStatusReportOrderSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
 import { gotoTrialSessionDetailsSequence } from './sequences/gotoTrialSessionDetailsSequence';
-import { gotoTrialSessionPlanningReportSequence } from './sequences/gotoTrialSessionPlanningReportSequence';
 import { gotoTrialSessionPlanningReportViewSequence } from '@web-client/presenter/sequences/gotoTrialSessionPlanningReportViewSequence';
 import { gotoTrialSessionWorkingCopySequence } from './sequences/gotoTrialSessionWorkingCopySequence';
 import { gotoTrialSessionsSequence } from './sequences/gotoTrialSessionsSequence';
@@ -948,8 +947,6 @@ export const presenterSequences = {
   gotoStatusReportOrderSequence,
   gotoStyleGuideSequence: gotoStyleGuideSequence as unknown as Function,
   gotoTrialSessionDetailSequence: gotoTrialSessionDetailsSequence,
-  gotoTrialSessionPlanningReportSequence:
-    gotoTrialSessionPlanningReportSequence as unknown as Function,
   gotoTrialSessionPlanningReportViewSequence,
   gotoTrialSessionWorkingCopySequence:
     gotoTrialSessionWorkingCopySequence as unknown as Function,
