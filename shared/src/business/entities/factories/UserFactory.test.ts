@@ -26,7 +26,7 @@ describe('UserFactory', () => {
       expect(classInstance).toEqual(Practitioner);
     });
 
-    it('should return "Practitioner" class type if role is "inactivePractitioner"', () => {
+    it('should return "User" class type if role is "admin"', () => {
       const TEST_USER = { role: ROLES.admin };
       const userFactory = new UserFactory(TEST_USER);
       const classInstance = userFactory.getClass();
