@@ -109,7 +109,7 @@ export const TrialLocationEligibleCasesTable = connect(
           onPageChange={selectedPage => {
             setTrialLocationPaginatorSequence({
               pageNumber: selectedPage,
-              pageType: 'eligibleCases',
+              pageType: 'eligibleCasesPage',
             });
             focusPaginatorTop(paginatorTop);
           }}

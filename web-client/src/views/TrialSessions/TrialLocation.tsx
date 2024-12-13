@@ -30,6 +30,18 @@ export const TrialLocation = connect(
               Back to Trial Session Planning Report
             </Button>
           </div>
+          <div className="float-right">
+            <Button
+              link
+              aria-label="export pending report"
+              className="margin-top-2"
+              data-testid="export-report"
+              icon="file-export"
+              onClick={() => {}}
+            >
+              Export
+            </Button>
+          </div>
           <Tabs
             defaultActiveTab={'eligibleCases'}
             headingLevel="2"
