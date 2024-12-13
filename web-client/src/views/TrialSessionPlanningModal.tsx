@@ -48,6 +48,7 @@ export const TrialSessionPlanningModal = connect(
                   'usa-select',
                   validationErrors.term && 'usa-select--error',
                 )}
+                data-testid="trial-session-planning-report-term-selector"
                 name="term"
                 onChange={e => {
                   updateModalValueSequence({
@@ -85,6 +86,7 @@ export const TrialSessionPlanningModal = connect(
                   'usa-select',
                   validationErrors.year && 'usa-select--error',
                 )}
+                data-testid="trial-session-planning-report-year-selector"
                 name="year"
                 onChange={e => {
                   updateModalValueSequence({
