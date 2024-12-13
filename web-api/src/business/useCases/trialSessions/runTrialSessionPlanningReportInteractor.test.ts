@@ -66,7 +66,7 @@ describe('run trial session planning report', () => {
         applicationContext,
         {
           term: 'winter',
-          year: '2020',
+          year: 2020,
         },
         mockPetitionerUser,
       ),
@@ -78,7 +78,7 @@ describe('run trial session planning report', () => {
       applicationContext,
       {
         term: 'winter',
-        year: '2020',
+        year: 2020,
       },
       mockPetitionsClerkUser,
     );
