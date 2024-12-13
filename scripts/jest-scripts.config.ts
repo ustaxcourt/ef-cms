@@ -39,6 +39,7 @@ const config: Config = {
     '!reports/**',
     '!run-once-scripts/**',
     '!set-maintenance-mode-locally.ts',
+    '!template.ts',
     '!upload-practitioner-application-packages.ts',
     '!user/**',
     '!postgres/**',

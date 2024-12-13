@@ -1,15 +1,12 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import {
-  MOCK_TRIAL_INPERSON,
-  MOCK_TRIAL_REMOTE,
-} from '../../../../../shared/src/test/mockTrial';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_TRIAL_INPERSON, MOCK_TRIAL_REMOTE } from '@shared/test/mockTrial';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { judgeUser, trialClerkUser } from '@shared/test/mockUsers';
 import {
