@@ -1,31 +1,17 @@
-/**
- * validate the trial session planning modal
- * @param {object} providers the providers object
- * @param {Function} providers.get the cerebral get function used for getting state.modal
- * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
- * @returns {object} the next path based on if validation was successful or error
- */
 export const validateTrialSessionPlanningAction = ({
   path,
   props,
 }: ActionProps<{ term: string; year: number }>) => {
   const { term, year } = props;
 
-  let errors = null;
   if (!term || !year) {
-    errors = {};
-    if (!term) {
-      errors.term = 'Select a term';
-    }
-
-    if (!year) {
-      errors.year = 'Select a year';
-    }
+    return path.error({
+      errors: {
+        term: !term ? 'Select a term' : undefined,
+        year: !year ? 'Select a year' : undefined,
+      },
+    });
   }
 
-  if (errors) {
-    return path.error({ errors });
-  } else {
-    return path.success();
-  }
+  return path.success();
 };

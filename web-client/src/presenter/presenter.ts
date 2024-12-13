@@ -1614,8 +1614,7 @@ export const presenterSequences = {
     validateTrialSessionHearingNoteSequence as unknown as Function,
   validateTrialSessionNoteSequence:
     validateTrialSessionNoteSequence as unknown as Function,
-  validateTrialSessionPlanningSequence:
-    validateTrialSessionPlanningSequence as unknown as Function,
+  validateTrialSessionPlanningSequence,
   validateTrialSessionSequence:
     validateTrialSessionSequence as unknown as Function,
   validateUpdateCaseModalSequence:
