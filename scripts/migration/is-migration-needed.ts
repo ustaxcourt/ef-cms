@@ -4,8 +4,8 @@ import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { migrationsToRun } from '@web-api/lambdas/migration/migrationsToRun';
 
 const scriptConfig: ScriptConfig = {
@@ -15,7 +15,7 @@ const scriptConfig: ScriptConfig = {
     TableName: 'SOURCE_TABLE',
   },
 };
-const { TableName } = parseArgumentsAndEnvironmentVariables(scriptConfig) as {
+const { TableName } = parseArgsAndEnvVars(scriptConfig) as {
   TableName: string;
 };
 

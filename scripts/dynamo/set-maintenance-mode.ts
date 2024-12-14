@@ -5,8 +5,8 @@ import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 
 const scriptConfig: ScriptConfig = {
   description: 'set-maintenance-mode - Toggles Maintenance Mode',
@@ -19,7 +19,7 @@ const scriptConfig: ScriptConfig = {
     },
   },
 };
-const { env, toggle } = parseArgumentsAndEnvironmentVariables(scriptConfig) as {
+const { env, toggle } = parseArgsAndEnvVars(scriptConfig) as {
   env: string;
   toggle: string;
 };

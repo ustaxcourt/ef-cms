@@ -4,8 +4,8 @@ import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { formatNow } from '@shared/business/utilities/DateHandler';
 import { migrationsToRun } from '@web-api/lambdas/migration/migrationsToRun';
 
@@ -16,9 +16,7 @@ const scriptConfig: ScriptConfig = {
     destinationTable: 'DESTINATION_TABLE',
   },
 };
-const { destinationTable } = parseArgumentsAndEnvironmentVariables(
-  scriptConfig,
-) as {
+const { destinationTable } = parseArgsAndEnvVars(scriptConfig) as {
   destinationTable: string;
 };
 

@@ -3,8 +3,8 @@
 import { DateTime } from 'luxon';
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import {
   ServerApplicationContext,
   createApplicationContext,
@@ -207,9 +207,7 @@ const addRowForDocketEntry = async ({
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
-  const { eventCodes, fiscal, years } = parseArgumentsAndEnvironmentVariables(
-    scriptConfig,
-  ) as {
+  const { eventCodes, fiscal, years } = parseArgsAndEnvVars(scriptConfig) as {
     eventCodes: string[];
     fiscal: boolean;
     years: number[];

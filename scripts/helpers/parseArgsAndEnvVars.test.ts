@@ -136,8 +136,7 @@ describe('parseArgumentsAndEnvironmentVariables', () => {
   describe('--verbose flag', () => {
     it('prints verbose output after validating parameters and does not exit', () => {
       process.argv.push('-v');
-      const { eventCode, verbose } =
-        parseArgsAndEnvVars(mockScriptConfig);
+      const { eventCode, verbose } = parseArgsAndEnvVars(mockScriptConfig);
       expect(eventCode).toEqual(mockEventCode); // parameters are parsed
       expect(verbose).toBeTruthy();
       expect(mockConsoleLog).toHaveBeenNthCalledWith(
@@ -286,8 +285,7 @@ describe('parseArgumentsAndEnvironmentVariables', () => {
       });
       it('transforms an array of strings into an array of numbers', () => {
         process.argv.push(...['-y', '2020', '-y', '2024']);
-        const { year } =
-          parseArgsAndEnvVars(mockScriptConfig);
+        const { year } = parseArgsAndEnvVars(mockScriptConfig);
         expect(year).toEqual([2020, 2024]);
       });
       it(
@@ -295,8 +293,7 @@ describe('parseArgumentsAndEnvironmentVariables', () => {
           'ranges into a sorted array of unique integers',
         () => {
           process.argv.push(...['-y', '8,12,3-5,1,7-9']);
-          const { year } =
-            parseArgsAndEnvVars(mockScriptConfig);
+          const { year } = parseArgsAndEnvVars(mockScriptConfig);
           expect(year).toEqual([1, 3, 4, 5, 7, 8, 9, 12]);
         },
       );
@@ -306,8 +303,7 @@ describe('parseArgumentsAndEnvironmentVariables', () => {
         const itsScriptConfig = cloneDeep(mockScriptConfig);
         itsScriptConfig.parameters!.eventCode.transform = 'toLowerCase';
         process.argv = ['ts-node', 'some-script.ts', 'FEEW'];
-        const { eventCode } =
-          parseArgsAndEnvVars(itsScriptConfig);
+        const { eventCode } = parseArgsAndEnvVars(itsScriptConfig);
         expect(eventCode).toEqual('feew');
       });
     });
@@ -315,8 +311,7 @@ describe('parseArgumentsAndEnvironmentVariables', () => {
       it('transforms a string to upper case', () => {
         const itsScriptConfig = cloneDeep(mockScriptConfig);
         itsScriptConfig.parameters!.eventCode.transform = 'toUpperCase';
-        const { eventCode } =
-          parseArgsAndEnvVars(itsScriptConfig);
+        const { eventCode } = parseArgsAndEnvVars(itsScriptConfig);
         expect(eventCode).toEqual('NOA');
       });
       it('transforms a comma-delimited string into an array of upper case strings', () => {
@@ -324,8 +319,7 @@ describe('parseArgumentsAndEnvironmentVariables', () => {
         itsScriptConfig.parameters!.eventCode.commaDelimited = true;
         itsScriptConfig.parameters!.eventCode.transform = 'toUpperCase';
         process.argv = ['ts-node', 'some-script.ts', 'm071,m074'];
-        const { eventCode } =
-          parseArgsAndEnvVars(itsScriptConfig);
+        const { eventCode } = parseArgsAndEnvVars(itsScriptConfig);
         expect(eventCode).toEqual(['M071', 'M074']);
       });
     });
@@ -336,8 +330,7 @@ describe('parseArgumentsAndEnvironmentVariables', () => {
         const itsScriptConfig = cloneDeep(mockScriptConfig);
         itsScriptConfig.parameters!.eventCode.commaDelimited = true;
         process.argv = ['ts-node', 'some-script.ts', 'M071,M074,FEEW'];
-        const { eventCode } =
-          parseArgsAndEnvVars(itsScriptConfig);
+        const { eventCode } = parseArgsAndEnvVars(itsScriptConfig);
         expect(eventCode).toEqual(['M071', 'M074', 'FEEW']);
       });
     });
@@ -350,8 +343,7 @@ describe('parseArgumentsAndEnvironmentVariables', () => {
           type: 'string',
         };
         process.argv = ['ts-node', 'some-script.ts', '--event-code', 'NOA'];
-        const { eventCode } =
-          parseArgsAndEnvVars(itsScriptConfig);
+        const { eventCode } = parseArgsAndEnvVars(itsScriptConfig);
         expect(eventCode).toEqual('NOA');
       });
     });
@@ -378,8 +370,7 @@ describe('parseArgumentsAndEnvironmentVariables', () => {
             '-c',
             'M071,M074',
           ];
-          const { eventCode } =
-            parseArgsAndEnvVars(itsScriptConfig);
+          const { eventCode } = parseArgsAndEnvVars(itsScriptConfig);
           expect(eventCode).toEqual(['M01', 'M02', 'M042', 'M071', 'M074']);
         },
       );
@@ -388,8 +379,7 @@ describe('parseArgumentsAndEnvironmentVariables', () => {
           'sets of integer ranges are provided',
         () => {
           process.argv.push(...['-y', '2018,2020', '-y', '2022-2024']);
-          const { year } =
-            parseArgsAndEnvVars(mockScriptConfig);
+          const { year } = parseArgsAndEnvVars(mockScriptConfig);
           expect(year).toEqual([2018, 2020, 2022, 2023, 2024]);
         },
       );

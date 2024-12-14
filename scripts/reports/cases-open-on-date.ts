@@ -5,8 +5,8 @@
 import { DateTime } from 'luxon';
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import {
   ServerApplicationContext,
   createApplicationContext,
@@ -37,7 +37,7 @@ const scriptConfig: ScriptConfig = {
     },
   },
 };
-const { day, month } = parseArgumentsAndEnvironmentVariables(scriptConfig) as {
+const { day, month } = parseArgsAndEnvVars(scriptConfig) as {
   day: string;
   month: string;
 };

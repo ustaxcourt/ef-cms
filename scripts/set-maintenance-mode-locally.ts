@@ -2,8 +2,8 @@
 
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from './helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from './helpers/parseArgsAndEnvVars';
 import { sendMaintenanceNotificationsLambda } from '@web-api/lambdas/cases/sendMaintenanceNotificationsLambda';
 
 const scriptConfig: ScriptConfig = {
@@ -16,9 +16,7 @@ const scriptConfig: ScriptConfig = {
     },
   },
 };
-const { toggle } = parseArgumentsAndEnvironmentVariables(scriptConfig) as {
-  toggle: string;
-};
+const { toggle } = parseArgsAndEnvVars(scriptConfig) as { toggle: string };
 
 export const setMaintenanceModeLocally = async () => {
   await sendMaintenanceNotificationsLambda({

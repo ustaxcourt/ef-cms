@@ -4,8 +4,8 @@ import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { DateTime } from 'luxon';
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import {
   ServerApplicationContext,
   createApplicationContext,
@@ -36,9 +36,7 @@ const scriptConfig: ScriptConfig = {
     },
   },
 };
-const { fiscal, year } = parseArgumentsAndEnvironmentVariables(
-  scriptConfig,
-) as {
+const { fiscal, year } = parseArgsAndEnvVars(scriptConfig) as {
   fiscal: boolean;
   year: string;
 };

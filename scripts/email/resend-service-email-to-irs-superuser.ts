@@ -4,8 +4,8 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { INITIAL_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import {
   type ServerApplicationContext,
   createApplicationContext,
@@ -35,9 +35,7 @@ const scriptConfig: ScriptConfig = {
     },
   },
 };
-const { endTimestamp, startTimestamp } = parseArgumentsAndEnvironmentVariables(
-  scriptConfig,
-) as {
+const { endTimestamp, startTimestamp } = parseArgsAndEnvVars(scriptConfig) as {
   endTimestamp: string;
   startTimestamp: string;
 };

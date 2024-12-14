@@ -4,8 +4,8 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -29,9 +29,10 @@ const scriptConfig: ScriptConfig = {
     },
   },
 };
-const { segmentArg, totalSegmentsArg } = parseArgumentsAndEnvironmentVariables(
-  scriptConfig,
-) as { segmentArg: number; totalSegmentsArg: number };
+const { segmentArg, totalSegmentsArg } = parseArgsAndEnvVars(scriptConfig) as {
+  segmentArg: number;
+  totalSegmentsArg: number;
+};
 
 const dynamodb = new DynamoDBClient({ region: 'us-east-1' });
 const documentClient = DynamoDBDocument.from(dynamodb, {

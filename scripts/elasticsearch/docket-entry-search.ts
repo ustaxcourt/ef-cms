@@ -2,8 +2,8 @@
 
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { getClient } from '../../web-api/elasticsearch/client';
 
 const scriptConfig: ScriptConfig = {
@@ -12,9 +12,10 @@ const scriptConfig: ScriptConfig = {
     version: 'SOURCE_TABLE_VERSION',
   },
 };
-const { environmentName, version } = parseArgumentsAndEnvironmentVariables(
-  scriptConfig,
-) as { environmentName: string; version: string };
+const { environmentName, version } = parseArgsAndEnvVars(scriptConfig) as {
+  environmentName: string;
+  version: string;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {

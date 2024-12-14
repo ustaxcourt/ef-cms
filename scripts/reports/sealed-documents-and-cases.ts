@@ -2,8 +2,8 @@
 
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import {
   type ServerApplicationContext,
   createApplicationContext,
@@ -20,7 +20,7 @@ const scriptConfig: ScriptConfig = {
     environmentName: 'ENV',
   },
 };
-parseArgumentsAndEnvironmentVariables(scriptConfig);
+parseArgsAndEnvVars(scriptConfig);
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 
 const loadCaseFromInitialBlackstoneMigrationDb = async ({

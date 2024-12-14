@@ -2,8 +2,8 @@
 
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { createNewIndicesFromLocalMappings } from './create-temporary-indices-helpers';
 
 const scriptConfig: ScriptConfig = {
@@ -13,9 +13,9 @@ const scriptConfig: ScriptConfig = {
     environmentName: 'ENV',
   },
 };
-const { environmentName } = parseArgumentsAndEnvironmentVariables(
-  scriptConfig,
-) as { environmentName: string };
+const { environmentName } = parseArgsAndEnvVars(scriptConfig) as {
+  environmentName: string;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {

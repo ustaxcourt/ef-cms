@@ -5,8 +5,8 @@
 import { DateTime } from 'luxon';
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import {
   type ServerApplicationContext,
   createApplicationContext,
@@ -30,9 +30,7 @@ const scriptConfig: ScriptConfig = {
     },
   },
 };
-const { year } = parseArgumentsAndEnvironmentVariables(scriptConfig) as {
-  year: string;
-};
+const { year } = parseArgsAndEnvVars(scriptConfig) as { year: string };
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 
 const getAllCasesOpenedInYear = async ({
