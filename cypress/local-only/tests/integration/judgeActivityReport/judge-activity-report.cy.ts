@@ -219,7 +219,10 @@ describe('Verify the activity report', () => {
         goToCase(docketNumber);
         updateCaseStatus('Submitted', 'Colvin');
         goToCase(docketNumber);
-        createAndServePaperFiling('Motion for a New Trial', '01/01/2022');
+        createAndServePaperFiling({
+          dateReceived: '01/01/2022',
+          documentType: 'Motion for a New Trial',
+        });
         goToCase(docketNumber);
 
         cy.get(

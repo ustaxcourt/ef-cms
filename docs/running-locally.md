@@ -126,7 +126,7 @@ This will install `node-canvas` dependencies globally. As of 12/05/2022, `node-c
 
 Make sure you are on the `ustaxcourt/staging` branch before you install the npm dependencies or try to start the services.
 
-#### Install the NPM Depedencies
+#### Install the NPM Dependencies
 
 All applications dependencies are managed via our `package.json` and `package-lock.json` files and are installed using `npm`.  You will first need to install of our dependencies by running the following:
 

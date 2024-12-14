@@ -8,6 +8,7 @@ export type WorkerMessage = {
 };
 
 export const MESSAGE_TYPES = {
+  QUEUE_EMAIL_UPDATE_ASSOCIATED_CASES: 'QUEUE_EMAIL_UPDATE_ASSOCIATED_CASES',
   QUEUE_UPDATE_ASSOCIATED_CASES: 'QUEUE_UPDATE_ASSOCIATED_CASES',
   UPDATE_ASSOCIATED_CASE: 'UPDATE_ASSOCIATED_CASE',
 } as const;
@@ -37,6 +38,15 @@ export const workerRouter = async (
       await applicationContext
         .getUseCases()
         .queueUpdateAssociatedCasesWorker(
+          applicationContext,
+          message.payload,
+          message.authorizedUser,
+        );
+      break;
+    case MESSAGE_TYPES.QUEUE_EMAIL_UPDATE_ASSOCIATED_CASES:
+      await applicationContext
+        .getUseCases()
+        .queueEmailUpdateAssociatedCasesWorker(
           applicationContext,
           message.payload,
           message.authorizedUser,
