@@ -4,7 +4,7 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   calculateDifferenceInHours,
@@ -39,7 +39,10 @@ export const verifyUserPendingEmailInteractor = async (
 
   const user = await applicationContext
     .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+    .getUserByIdOnceAllUpdatesComplete({
+      applicationContext,
+      userId: authorizedUser.userId,
+    });
 
   if (
     !user.pendingEmailVerificationToken ||
@@ -73,6 +76,7 @@ export const verifyUserPendingEmailInteractor = async (
   const { updatedUser } = await updateUserPendingEmailRecord(
     applicationContext,
     {
+      setIsUpdatingInformation: true,
       user,
     },
   );
@@ -81,14 +85,14 @@ export const verifyUserPendingEmailInteractor = async (
     attributesToUpdate: {
       email: updatedUser.email,
     },
-    email: user.email,
+    email: user.email!,
   });
 
   await applicationContext.getWorkerGateway().queueWork(applicationContext, {
     message: {
       authorizedUser,
       payload: { user: updatedUser },
-      type: MESSAGE_TYPES.QUEUE_UPDATE_ASSOCIATED_CASES,
+      type: MESSAGE_TYPES.QUEUE_EMAIL_UPDATE_ASSOCIATED_CASES,
     },
   });
 };
