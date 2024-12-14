@@ -1,3 +1,4 @@
+import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -7,7 +8,7 @@ describe('updateTrialSessionAction', () => {
   const mockPdfUrl = 'a url';
   const MOCK_TRIAL = {
     maxCases: 100,
-    sessionType: 'Regular',
+    sessionType: SESSION_TYPES.regular,
     startDate: '2019-12-01T00:00:00.000Z',
     swingSession: true,
     swingSessionId: '456',
