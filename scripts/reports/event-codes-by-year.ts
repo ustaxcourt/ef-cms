@@ -6,7 +6,7 @@ import {
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
 import {
-  ServerApplicationContext,
+  type ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
 import { generateCsv } from '../helpers/generate-csv';

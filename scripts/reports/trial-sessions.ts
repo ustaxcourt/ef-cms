@@ -1,21 +1,63 @@
-/*
-  Outputs a trial sessions report
+#!/usr/bin/env npx ts-node --transpile-only
 
-    usage:
-      $ npx ts-node --transpile-only scripts/reports/trial-sessions-by-calendar-year.ts 2023 > ~/Desktop/2023-trial-sessions.csv
-      $ npx ts-node --transpile-only scripts/reports/trial-sessions-by-calendar-year.ts 2023 --stats
- */
+// usage:
+//   scripts/reports/trial-sessions-by-calendar-year.ts 2023
+//   scripts/reports/trial-sessions-by-calendar-year.ts 2023 --stats
 
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { trialSessionsReport } from './trial-sessions-report-helpers';
 
-const year = process.argv[2] || '2023';
-const start = `${year}-01-01T05:00:00Z`;
-const end = `${Number(year) + 1}-01-01T05:00:00Z`;
-const stats = !!process.argv[3] && process.argv[3] === '--stats';
+const scriptConfig: ScriptConfig = {
+  description:
+    'trial-sessions - Generates a CSV of trial sessions within the given year.',
+  environment: {
+    env: 'ENV',
+    sourceTableVersion: 'SOURCE_TABLE_VERSION',
+  },
+  parameters: {
+    fiscal: {
+      default: false,
+      short: 'f',
+      type: 'boolean',
+    },
+    stats: {
+      default: false,
+      short: 's',
+      type: 'boolean',
+    },
+    year: {
+      position: 0,
+      required: true,
+      transform: 'number',
+      type: 'string',
+    },
+  },
+};
+const { fiscal, stats, year } = parseArgsAndEnvVars(scriptConfig) as {
+  fiscal: boolean;
+  stats: boolean;
+  year: number;
+};
+
+const OUTPUT_DIR = `${process.env.HOME}/Documents`;
+const filename = `${OUTPUT_DIR}/${fiscal ? 'fy-' : ''}${year}-trial-sessions.csv`;
+const start = fiscal
+  ? `${year - 1}-10-01T04:00:00Z`
+  : `${year}-01-01T05:00:00Z`;
+const end = fiscal ? `${year}-10-01T04:00:00Z` : `${year + 1}-01-01T05:00:00Z`;
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
-  await trialSessionsReport({ applicationContext, end, start, stats });
+  await trialSessionsReport({
+    applicationContext,
+    end,
+    filename,
+    start,
+    stats,
+  });
 })();
