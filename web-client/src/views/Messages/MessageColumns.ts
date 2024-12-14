@@ -1,10 +1,3 @@
-import {
-  ALPHABETICALLY_ASCENDING,
-  ALPHABETICALLY_DESCENDING,
-  CHRONOLOGICALLY_ASCENDING,
-  CHRONOLOGICALLY_DESCENDING,
-} from '@shared/business/entities/EntityConstants';
-
 export type MessageColumnData = {
   columnName: string;
   sortFieldInfo: SortFieldInfo;
@@ -116,18 +109,4 @@ export const SORTABLE_COLUMNS: Record<string, MessageColumnData> = {
     columnName: 'Section',
     sortFieldInfo: SORT_FIELDS.TO_SECTION,
   },
-};
-
-export const getAscendingTextForSortType = (sortType: 'string' | 'date') => {
-  if (sortType === 'date') {
-    return CHRONOLOGICALLY_ASCENDING;
-  }
-  return ALPHABETICALLY_ASCENDING;
-};
-
-export const getDescendingTextForSortType = (sortType: 'string' | 'date') => {
-  if (sortType === 'date') {
-    return CHRONOLOGICALLY_DESCENDING;
-  }
-  return ALPHABETICALLY_DESCENDING;
 };

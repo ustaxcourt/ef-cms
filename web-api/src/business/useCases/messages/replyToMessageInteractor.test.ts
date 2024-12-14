@@ -6,16 +6,14 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { createMessage as createMessageMock } from '@web-api/persistence/postgres/messages/createMessage';
-import { markMessageThreadRepliedTo as markMessageThreadRepliedToMock } from '@web-api/persistence/postgres/messages/markMessageThreadRepliedTo';
+import { createMessageAsReply as createMessageAsReplyMock } from '@web-api/persistence/postgres/messages/createMessageAsReply';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { replyToMessageInteractor } from './replyToMessageInteractor';
 
-const createMessage = createMessageMock as jest.Mock;
-const markMessageThreadRepliedTo = markMessageThreadRepliedToMock as jest.Mock;
+const createMessageAsReply = createMessageAsReplyMock as jest.Mock;
 
 describe('replyToMessageInteractor', () => {
   const mockAttachments = [
@@ -87,23 +85,10 @@ describe('replyToMessageInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(createMessage).toHaveBeenCalled();
-    expect((createMessage as jest.Mock).mock.calls[0][0].message).toMatchObject(
-      {
-        ...messageData,
-        attachments: mockAttachments,
-        caseStatus: CASE_STATUS_TYPES.generalDocket,
-        caseTitle: 'Roslindis Angelino',
-        docketNumber: '101-20',
-        from: 'Test Petitionsclerk',
-        fromSection: PETITIONS_SECTION,
-        fromUserId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
-        to: 'Test Petitionsclerk2',
-      },
-    );
-    expect(markMessageThreadRepliedTo).toHaveBeenCalled();
-    expect(createMessage).toHaveBeenCalled();
-    expect(createMessage.mock.calls[0][0].message).toMatchObject({
+    expect(createMessageAsReply).toHaveBeenCalled();
+    expect(
+      (createMessageAsReply as jest.Mock).mock.calls[0][0].newMessage,
+    ).toMatchObject({
       ...messageData,
       attachments: mockAttachments,
       caseStatus: CASE_STATUS_TYPES.generalDocket,
@@ -114,9 +99,8 @@ describe('replyToMessageInteractor', () => {
       fromUserId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
       to: 'Test Petitionsclerk2',
     });
-    expect(markMessageThreadRepliedTo).toHaveBeenCalled();
-    expect(markMessageThreadRepliedTo.mock.calls[0][0]).toMatchObject({
-      parentMessageId: messageData.parentMessageId,
-    });
+    expect(createMessageAsReply.mock.calls[0][0].parentMessageId).toEqual(
+      messageData.parentMessageId,
+    );
   });
 });
