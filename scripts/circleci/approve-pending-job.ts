@@ -2,8 +2,8 @@
 
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { approvePendingJob } from '../../shared/admin-tools/circleci/circleci-helper';
 
 const scriptConfig: ScriptConfig = {
@@ -14,9 +14,11 @@ const scriptConfig: ScriptConfig = {
     workflowId: 'CIRCLE_WORKFLOW_ID',
   },
 };
-const { apiToken, jobName, workflowId } = parseArgumentsAndEnvironmentVariables(
-  scriptConfig,
-) as { apiToken: string; jobName: string; workflowId: string };
+const { apiToken, jobName, workflowId } = parseArgsAndEnvVars(scriptConfig) as {
+  apiToken: string;
+  jobName: string;
+  workflowId: string;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {

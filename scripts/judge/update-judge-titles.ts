@@ -1,9 +1,10 @@
 #!/usr/bin/env npx ts-node --transpile-only
 
+import { JUDGE_TITLES } from '@shared/business/entities/EntityConstants';
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { User } from '@shared/business/entities/User';
 import { createApplicationContext } from '@web-api/applicationContext';
 
@@ -15,7 +16,7 @@ const scriptConfig: ScriptConfig = {
     region: 'REGION',
   },
 };
-parseArgumentsAndEnvironmentVariables(scriptConfig);
+parseArgsAndEnvVars(scriptConfig);
 
 // ******************************** INPUTS ******************************
 const judgesToUpdateIds: { userId: string; judgeTitle: string }[] = [
@@ -37,7 +38,7 @@ const judgesToUpdateIds: { userId: string; judgeTitle: string }[] = [
       .getPersistenceGateway()
       .getUserById({ applicationContext, userId });
     const userEntity = new User(userToUpdate);
-    userEntity.judgeTitle = judge.judgeTitle;
+    userEntity.judgeTitle = JUDGE_TITLES.find(jt => jt === judge.judgeTitle);
 
     await applicationContext.getPersistenceGateway().updateUser({
       applicationContext,

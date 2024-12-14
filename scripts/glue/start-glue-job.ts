@@ -4,8 +4,8 @@
 
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { startGlueJob } from '../../shared/admin-tools/aws/glueHelper';
 
 const scriptConfig: ScriptConfig = {
@@ -23,12 +23,13 @@ const scriptConfig: ScriptConfig = {
     },
   },
 };
-const { destinationTable, env, sourceTable } =
-  parseArgumentsAndEnvironmentVariables(scriptConfig) as {
-    destinationTable: string;
-    env: string;
-    sourceTable: string;
-  };
+const { destinationTable, env, sourceTable } = parseArgsAndEnvVars(
+  scriptConfig,
+) as {
+  destinationTable: string;
+  env: string;
+  sourceTable: string;
+};
 
 if (env !== 'prod') {
   console.error('Glue jobs must originate from the production environment.');

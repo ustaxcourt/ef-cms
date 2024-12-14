@@ -519,7 +519,7 @@ const getEnvironmentVariables = (environment?: {
   return ret;
 };
 
-export const parseArgumentsAndEnvironmentVariables = (
+export const parseArgsAndEnvVars = (
   sc: ScriptConfig,
 ): { [k: string]: string | string[] | boolean | number | number[] } => {
   if (!sc.parameters) {

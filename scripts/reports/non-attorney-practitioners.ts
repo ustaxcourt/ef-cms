@@ -6,8 +6,8 @@
 
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import {
   type ServerApplicationContext,
   createApplicationContext,
@@ -38,9 +38,7 @@ const scriptConfig: ScriptConfig = {
     },
   },
 };
-const { stats } = parseArgumentsAndEnvironmentVariables(scriptConfig) as {
-  stats: boolean;
-};
+const { stats } = parseArgsAndEnvVars(scriptConfig) as { stats: boolean };
 
 type tCase = {
   caseCaption: string;

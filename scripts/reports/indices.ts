@@ -2,8 +2,8 @@
 
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { esAliasType } from '../../web-api/elasticsearch/elasticsearch-aliases';
 import { getClient } from '../../web-api/elasticsearch/client';
 
@@ -14,11 +14,12 @@ const scriptConfig: ScriptConfig = {
     environmentName: 'ENV',
   },
 };
-const { elasticsearchEndpoint, environmentName } =
-  parseArgumentsAndEnvironmentVariables(scriptConfig) as {
-    elasticsearchEndpoint: string;
-    environmentName: string;
-  };
+const { elasticsearchEndpoint, environmentName } = parseArgsAndEnvVars(
+  scriptConfig,
+) as {
+  elasticsearchEndpoint: string;
+  environmentName: string;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {

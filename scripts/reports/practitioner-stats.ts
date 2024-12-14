@@ -5,8 +5,8 @@
 import { DateTime } from 'luxon';
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import {
   type ServerApplicationContext,
   createApplicationContext,
@@ -32,9 +32,7 @@ const scriptConfig: ScriptConfig = {
     },
   },
 };
-const { year } = parseArgumentsAndEnvironmentVariables(scriptConfig) as {
-  year: number;
-};
+const { year } = parseArgsAndEnvVars(scriptConfig) as { year: number };
 
 const fromDate = validateDateAndCreateISO({
   day: '1',

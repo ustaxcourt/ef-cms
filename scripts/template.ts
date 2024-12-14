@@ -2,8 +2,8 @@
 
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from './helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from './helpers/parseArgsAndEnvVars';
 import {
   type ServerApplicationContext,
   createApplicationContext,
@@ -41,20 +41,21 @@ const scriptConfig: ScriptConfig = {
 };
 // Example:
 //   {
-//      env: 'env',
+//      env: 'myenv',
 //      eventCodes: [ 'M073', 'M074' ],
 //      fiscal: true,
 //      verbose: false,
 //      years: [ 2018, 2020, 2022, 2023, 2024 ]
 //    }
-const { env, eventCodes, fiscal, verbose, years } =
-  parseArgumentsAndEnvironmentVariables(scriptConfig) as {
-    env: string;
-    eventCodes: string[];
-    fiscal: boolean;
-    verbose: boolean;
-    years: number[];
-  };
+const { env, eventCodes, fiscal, verbose, years } = parseArgsAndEnvVars(
+  scriptConfig,
+) as {
+  env: string;
+  eventCodes: string[];
+  fiscal: boolean;
+  verbose: boolean;
+  years: number[];
+};
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {

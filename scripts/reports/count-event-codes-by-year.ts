@@ -3,8 +3,8 @@
 import { DateTime } from 'luxon';
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import {
   ServerApplicationContext,
   createApplicationContext,
@@ -139,13 +139,14 @@ const getCountDocketEntriesByEventCodesAndYears = async ({
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const { eventCodes, fiscal, stricken, years } =
-    parseArgumentsAndEnvironmentVariables(scriptConfig) as {
-      eventCodes: string[];
-      fiscal: boolean;
-      stricken: boolean;
-      years: number[];
-    };
+  const { eventCodes, fiscal, stricken, years } = parseArgsAndEnvVars(
+    scriptConfig,
+  ) as {
+    eventCodes: string[];
+    fiscal: boolean;
+    stricken: boolean;
+    years: number[];
+  };
   const ret = await getCountDocketEntriesByEventCodesAndYears({
     applicationContext: createApplicationContext({}),
     eventCodes,

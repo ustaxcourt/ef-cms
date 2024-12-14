@@ -3,8 +3,8 @@
 import { Client } from '@opensearch-project/opensearch';
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { esIndexType } from '../../web-api/elasticsearch/elasticsearch-indexes';
 import { getBaseAliasFromIndexName } from '../../web-api/elasticsearch/elasticsearch-aliases';
 import { getClient } from '../../web-api/elasticsearch/client';
@@ -16,9 +16,9 @@ const scriptConfig: ScriptConfig = {
     environmentName: 'ENV',
   },
 };
-const { environmentName } = parseArgumentsAndEnvironmentVariables(
-  scriptConfig,
-) as { environmentName: string };
+const { environmentName } = parseArgsAndEnvVars(scriptConfig) as {
+  environmentName: string;
+};
 const esClientCache = {};
 
 const getEsClient = async ({

@@ -3,8 +3,8 @@
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import {
   type ServerApplicationContext,
   createApplicationContext,
@@ -22,7 +22,7 @@ const scriptConfig: ScriptConfig = {
     region: 'REGION',
   },
 };
-parseArgumentsAndEnvironmentVariables(scriptConfig);
+parseArgsAndEnvVars(scriptConfig);
 
 // WARNING: this list is subject to change! check https://www.ustaxcourt.gov/judges.html
 const seniorJudges = [

@@ -2,8 +2,8 @@
 
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import {
   type ServerApplicationContext,
   createApplicationContext,
@@ -25,9 +25,9 @@ const scriptConfig: ScriptConfig = {
     },
   },
 };
-const { practitionerId } = parseArgumentsAndEnvironmentVariables(
-  scriptConfig,
-) as { practitionerId: string };
+const { practitionerId } = parseArgsAndEnvVars(scriptConfig) as {
+  practitionerId: string;
+};
 
 const getUsersRole = async ({
   applicationContext,

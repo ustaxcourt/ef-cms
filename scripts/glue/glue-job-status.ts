@@ -2,8 +2,8 @@
 
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { getRunStateOfMostRecentJobRun } from '../../shared/admin-tools/aws/glueHelper';
 
 const scriptConfig: ScriptConfig = {
@@ -13,9 +13,7 @@ const scriptConfig: ScriptConfig = {
     env: 'ENV',
   },
 };
-const { env } = parseArgumentsAndEnvironmentVariables(scriptConfig) as {
-  env: string;
-};
+const { env } = parseArgsAndEnvVars(scriptConfig) as { env: string };
 
 if (env !== 'prod') {
   console.error('Glue jobs are performed in the production environment.');

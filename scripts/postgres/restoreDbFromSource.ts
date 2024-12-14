@@ -8,8 +8,8 @@ import { AssumeRoleCommand, STSClient } from '@aws-sdk/client-sts';
 import { DescribeDBClustersCommand, RDSClient } from '@aws-sdk/client-rds';
 import {
   type ScriptConfig,
-  parseArgumentsAndEnvironmentVariables,
-} from '../helpers/parseArgumentsAndEnvironmentVariables';
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { Signer } from '@aws-sdk/rds-signer';
 import { spawn } from 'child_process';
 
@@ -24,12 +24,9 @@ const scriptConfig: ScriptConfig = {
 };
 
 async function main() {
-  const { sourceEnv, targetAccountId, targetEnv } =
-    parseArgumentsAndEnvironmentVariables(scriptConfig) as {
-      sourceEnv: string;
-      targetAccountId: string;
-      targetEnv: string;
-    };
+  const { sourceEnv, targetAccountId, targetEnv } = parseArgsAndEnvVars(
+    scriptConfig,
+  ) as { sourceEnv: string; targetAccountId: string; targetEnv: string };
   const targetRoleArn = `arn:aws:iam::${targetAccountId}:role/restore_role_${targetEnv}`;
 
   const { targetAccessKeyId, targetSecretAccessKey, targetSessionToken } =
