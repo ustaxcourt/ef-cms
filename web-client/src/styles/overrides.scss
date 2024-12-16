@@ -403,6 +403,13 @@ td.message-select-control {
 }
 
 .usa-input.term-name-field {
-  max-width: 100%
+  max-width: 100%;
 }
 
+.usa-search {
+  margin-top: 0 !important; // USWDS added top margin as part of releases 8-10
+}
+
+.usa-nav {
+  padding-bottom: 4px !important; // USWDS added botton padding as part of releases 8-10
+}
