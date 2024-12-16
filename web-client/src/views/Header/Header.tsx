@@ -2,6 +2,7 @@ import { AccountMenu } from './AccountMenu';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DocumentQCMenu } from './DocumentQCMenu';
 import { MessagesMenu } from './MessagesMenu';
+import { NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { ReportsMenu } from './ReportsMenu';
 import { SearchBox } from './SearchBox';
 import { VerifyEmailWarningNotification } from '../VerifyEmailWarningNotification';
@@ -305,12 +306,21 @@ export const Header = connect(
                   <Button
                     iconRight
                     link
-                    className="usa-nav__close float-right margin-right-0 padding-top-0"
+                    className="usa-nav__close float-right padding-top-0"
                     icon="times-circle"
+                    overrideMargin={true}
                     onClick={() => toggleMobileMenuSequence()}
                   >
                     Close
                   </Button>
+                  {showMobileMenu && headerHelper.showSearchInHeader && (
+                    <>
+                      <SearchBox />
+                      <NonMobile>
+                        <div className="padding-105"></div>
+                      </NonMobile>
+                    </>
+                  )}
                   {headerHelper.isLoggedIn &&
                     NavigationItems(headerHelper, {
                       isDocumentQCMenuOpen: menuHelper.isDocumentQCMenuOpen,
@@ -319,7 +329,9 @@ export const Header = connect(
                       signOutUserInitiatedSequence,
                       toggleMobileMenuSequence,
                     })}
-                  {headerHelper.showSearchInHeader && <SearchBox />}
+                  {!showMobileMenu && headerHelper.showSearchInHeader && (
+                    <SearchBox />
+                  )}
                   {headerHelper.showAccountMenu && (
                     <AccountMenu isExpanded={menuHelper.isAccountMenuOpen} />
                   )}
