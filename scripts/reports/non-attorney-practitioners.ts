@@ -1,4 +1,4 @@
-#!/usr/bin/env npx ts-node --transpile-only
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 // usages:
 // scripts/reports/non-attorney-practitioners.ts > ~/Desktop/non-attorney-practitioners.csv

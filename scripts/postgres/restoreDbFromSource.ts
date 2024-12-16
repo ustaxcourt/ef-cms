@@ -1,4 +1,4 @@
-#!/usr/bin/env npx ts-node --transpile-only
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 // This script can copy the contents of one database and overwrite the contents
 // of another in a different account. It must be run from the AWS account that

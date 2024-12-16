@@ -1,4 +1,4 @@
-#!/usr/bin/env npx ts-node --transpile-only
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 // usage: scripts/reports/cases-open-on-date.ts 12 31
 

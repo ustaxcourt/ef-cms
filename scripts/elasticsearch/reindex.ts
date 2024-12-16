@@ -1,4 +1,4 @@
-#!/usr/bin/env npx ts-node --transpile-only
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import { Client } from '@opensearch-project/opensearch';
 import {
