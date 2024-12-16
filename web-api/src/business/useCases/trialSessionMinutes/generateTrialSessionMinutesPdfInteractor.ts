@@ -1,14 +1,15 @@
-import {
-  ROLE_PERMISSIONS,
-  isAuthorized,
-} from '@shared/authorization/authorizationClientService';
+// import {
+//   ROLE_PERMISSIONS,
+//   isAuthorized,
+// } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+// import { UnauthorizedError } from '@web-api/errors/errors';
+// import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const generateTrialSessionMinutesPdfInteractor = async (
   applicationContext: ServerApplicationContext,
-  authorizedUser: UnknownAuthUser,
+  { formattedMinutesSheet },
+  // authorizedUser: UnknownAuthUser,
 ): Promise<string> => {
   // 10419 TODO: add role-permissions configuration for minutes sheet
   //   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.MINUTES_SHEET)) {
@@ -18,7 +19,7 @@ export const generateTrialSessionMinutesPdfInteractor = async (
   const pdf = await applicationContext.getDocumentGenerators().minutesSheet({
     applicationContext,
     data: {
-      minutesSheetData: 'This is a test...',
+      formattedMinutesSheet,
     },
   });
 

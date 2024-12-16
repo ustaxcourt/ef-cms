@@ -9,8 +9,15 @@ export const generateTrialSessionMinutesPdfLambda = (
   genericHandler(
     event,
     async ({ applicationContext }) => {
+      const lambdaArguments = {
+        ...event.pathParameters,
+        ...JSON.parse(event.body),
+      };
       return await generateTrialSessionMinutesPdfInteractor(
         applicationContext,
+        {
+          ...lambdaArguments,
+        },
         authorizedUser,
       );
     },

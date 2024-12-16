@@ -1,3 +1,4 @@
+import { FormattedMinuteSheet } from '@web-client/presenter/actions/TrialSessionMinutes/downloadMinutesSheetFormPdfAction';
 import { MinutesSheet } from '../pdfGenerator/documentTemplates/MinutesSheet';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
@@ -10,14 +11,14 @@ export const minutesSheet = async ({
 }: {
   applicationContext: ServerApplicationContext;
   data: {
-    minutesSheetData: string;
+    formattedMinutesSheet: FormattedMinuteSheet;
   };
 }): Promise<Uint8Array> => {
-  const { minutesSheetData } = data;
+  const { formattedMinutesSheet } = data;
 
   const minutesSheetComponent = ReactDOM.renderToString(
     React.createElement(MinutesSheet, {
-      minutesSheetData,
+      formattedMinuteSheet: formattedMinutesSheet,
     }),
   );
 

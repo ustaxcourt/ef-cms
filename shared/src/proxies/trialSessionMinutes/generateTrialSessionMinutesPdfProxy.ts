@@ -1,11 +1,12 @@
-import { get } from '../requests';
+import { post } from '../requests';
 
 export const generateTrialSessionMinutesPdfInteractor = (
   applicationContext,
-  { docketNumber, trialSessionId },
+  { docketNumber, formattedMinutesSheet, trialSessionId },
 ) => {
-  return get({
+  return post({
     applicationContext,
+    body: { formattedMinutesSheet },
     endpoint: `/trial-sessions/${trialSessionId}/case/${docketNumber}/minutes`,
   });
 };

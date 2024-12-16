@@ -900,7 +900,7 @@ app.delete(
  * trial-sessions
  */
 {
-  app.get(
+  app.post(
     '/trial-sessions/:trialSessionId/case/:docketNumber/minutes',
     lambdaWrapper(generateTrialSessionMinutesPdfLambda),
   );
