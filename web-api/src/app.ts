@@ -67,10 +67,12 @@ import { generatePractitionerCaseListPdfLambda } from './lambdas/cases/generateP
 import { generatePrintableCaseInventoryReportLambda } from './lambdas/reports/generatePrintableCaseInventoryReportLambda';
 import { generatePrintableFilingReceiptLambda } from './lambdas/documents/generatePrintableFilingReceiptLambda';
 import { generatePrintablePendingReportLambda } from './lambdas/pendingItems/generatePrintablePendingReportLambda';
+import { generateSuggestedTrialSessionCalendarLambda } from '@web-api/lambdas/trialSessions/generateSuggestedTrialSessionCalendarLambda';
 import { generateTrialCalendarPdfLambda } from './lambdas/trialSessions/generateTrialCalendarPdfLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
 import { getAllUsersByRoleLambda } from '@web-api/lambdas/users/getAllUsersByRoleLambda';
 import { getBlockedCasesLambda } from './lambdas/reports/getBlockedCasesLambda';
+import { getBulkTrialSessionCopyNotesLambda } from './lambdas/trialSessions/getBulkTrialSessionCopyNotesLambda';
 import { getCalendaredCasesForTrialSessionLambda } from './lambdas/trialSessions/getCalendaredCasesForTrialSessionLambda';
 import { getCaseDeadlinesForCaseLambda } from './lambdas/caseDeadline/getCaseDeadlinesForCaseLambda';
 import { getCaseDeadlinesLambda } from './lambdas/caseDeadline/getCaseDeadlinesLambda';
@@ -921,6 +923,10 @@ app.delete(
     '/trial-sessions/:trialSessionId/working-copy',
     lambdaWrapper(getTrialSessionWorkingCopyLambda),
   );
+  app.post(
+    '/trial-sessions/bulk-copy-notes',
+    lambdaWrapper(getBulkTrialSessionCopyNotesLambda),
+  );
   app.put(
     '/trial-sessions/:trialSessionId/working-copy',
     lambdaWrapper(updateTrialSessionWorkingCopyLambda),
@@ -982,6 +988,10 @@ app.delete(
   app.post(
     '/judge-activity-report/trial-sessions',
     lambdaWrapper(getTrialSessionsForJudgeActivityReportLambda),
+  );
+  app.post(
+    '/trial-sessions/generate-term',
+    lambdaWrapper(generateSuggestedTrialSessionCalendarLambda),
   );
 }
 

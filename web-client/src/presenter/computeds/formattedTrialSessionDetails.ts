@@ -94,6 +94,7 @@ export const formattedTrialSessionDetails = (
 
     const user = get(state.user);
     const isChambersUser = user.role === USER_ROLES.chambers;
+    const isJudgeUser = user.role === USER_ROLES.judge;
     const trialDateInFuture = trialDateFormatted > nowDateFormatted;
     const docketClerkCanEditCheck = sessionType => {
       const editableSessionTypes = ['Special', 'Motion/Hearing'];
@@ -104,7 +105,8 @@ export const formattedTrialSessionDetails = (
     canEdit =
       trialDateInFuture &&
       formattedTrialSession.sessionStatus !== SESSION_STATUS_GROUPS.closed &&
-      !isChambersUser;
+      !isChambersUser &&
+      !isJudgeUser;
 
     if (user.role === USER_ROLES.docketClerk && canEdit) {
       canEdit = docketClerkCanEditCheck(formattedTrialSession.sessionType);
