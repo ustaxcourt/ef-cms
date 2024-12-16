@@ -62,7 +62,7 @@ export const TrialSessionPlanningReportView = connect(
   },
 );
 
-TrialSessionPlanningReportView.displayName = 'TrialSessionPlanningReport';
+TrialSessionPlanningReportView.displayName = 'TrialSessionPlanningReportView';
 
 type TrialSessionPlanningReportHeaderParams = {
   trialSessionPlanningReportHeader: string;
