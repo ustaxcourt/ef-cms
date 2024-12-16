@@ -1,4 +1,4 @@
-#!/usr/bin/env npx ts-node --transpile-only
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { DateTime } from 'luxon';

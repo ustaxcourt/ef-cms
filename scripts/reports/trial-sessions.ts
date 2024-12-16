@@ -1,4 +1,4 @@
-#!/usr/bin/env npx ts-node --transpile-only
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 // usage:
 //   scripts/reports/trial-sessions-by-calendar-year.ts 2023

@@ -1,4 +1,4 @@
-#!/usr/bin/env npx ts-node --transpile-only
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import { Case } from '@shared/business/entities/cases/Case';
 import { INITIAL_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
