@@ -30,8 +30,16 @@ export const trialLocationHelper = (
   );
 
   const blockedCases = get(state.blockedCases);
-
-  const formattedBlockedCases = blockedCases
+  const statusFilter = [
+    'General Docket - Not At Issue',
+    'General Docket (Ready For Trial)',
+    'Assigned - Case',
+    'Assigned - Motion',
+  ];
+  const filteredBlockedCases = blockedCases.filter(blockedCase =>
+    statusFilter.includes(blockedCase.status),
+  );
+  const formattedBlockedCases = filteredBlockedCases
     .sort(compareCasesByDocketNumber)
     .map(blockedCase => {
       // const blockedCaseWithConsolidatedProperties =

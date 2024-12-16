@@ -46,9 +46,13 @@ export const TrialLocationBlockedTable = connect(
             <table className="usa-table ustc-table trial-sessions">
               <thead>
                 <tr>
-                  <th className="width-card">Docket No.</th>
-                  <th className="width-mobile">Date Blocked</th>
-                  <th className="width-mobile">Case Title</th>
+                  <th
+                    aria-hidden="true"
+                    className="consolidated-case-column"
+                  ></th>
+                  <th className="width-10">Docket No.</th>
+                  <th className="width-10">Date Blocked</th>
+                  <th className="width-card">Case Title</th>
                   <th className="width-card-lg">Case Status</th>
                   <th className="width-card">Reason</th>
                 </tr>
@@ -56,6 +60,7 @@ export const TrialLocationBlockedTable = connect(
               {trialLocationHelper.blockedCasesForDisplay.map(blockedCase => {
                 return (
                   <tr key={blockedCase.docketNumber}>
+                    <td></td>
                     <td>{blockedCase.docketNumberWithSuffix}</td>
                     <td>{blockedCase.blockedDateEarliest}</td>
                     <td>{blockedCase.caseTitle}</td>

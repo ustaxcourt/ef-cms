@@ -61,8 +61,8 @@ export const TrialLocationEligibleCasesTable = connect(
                   <th aria-label="Docket Number" className="width-card">
                     Docket No.
                   </th>
-                  <th className="width-mobile">Case Title</th>
-                  <th className="width-card-lg">Petitioner Counsel</th>
+                  <th className="width-card-lg">Case Title</th>
+                  <th className="width-mobile">Petitioner Counsel</th>
                   <th className="width-card">Respondent Counsel</th>
                   <th className="width-card">Case Type</th>
                 </tr>
