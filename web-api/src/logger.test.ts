@@ -61,7 +61,7 @@ describe('logger', () => {
     const instance = req.locals.logger;
 
     instance.info = jest.fn();
-    instance.addContext = jest.fn();
+    jest.spyOn(instance, 'addContext');
 
     res.end();
 
