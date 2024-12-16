@@ -41,7 +41,7 @@ async function main() {
       DeleteRequest: {
         Key: {
           pk: `work-item|${c.workItemId}`,
-          sk: `case$|{c.docketNumber}`,
+          sk: `case|${c.docketNumber}`,
         },
       },
     }));
