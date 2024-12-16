@@ -1,6 +1,6 @@
 /**
  * HOW TO RUN
- * npx ts-node --transpileOnly scripts/postgres/delete-user-outboxes.ts
+ * npx ts-node --transpileOnly scripts/run-once-scripts/postgres-migration/delete-user-outboxes.ts
  */
 
 import { DynamoDBDocumentClient, ScanCommand } from '@aws-sdk/lib-dynamodb';
@@ -44,6 +44,7 @@ async function runSegmentScan(
       DeleteRequest: {
         Key: {
           pk: item.pk,
+          sk: item.sk,
         },
       },
     }));

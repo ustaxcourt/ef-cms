@@ -42,7 +42,7 @@ async function main() {
       DeleteRequest: {
         Key: {
           pk: `case|${cd.docketNumber}`,
-          sk: `correspondence${cd.correspondenceId}`,
+          sk: `correspondence|${cd.correspondenceId}`,
         },
       },
     }));
