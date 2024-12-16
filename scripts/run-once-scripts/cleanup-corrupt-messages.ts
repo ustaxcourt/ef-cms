@@ -198,7 +198,6 @@ const udpateMessagesInDb = async (
   const messageFragments = await db
     .selectFrom('dwMessage')
     .select(['attachments', 'messageId', 'docketNumber'])
-    .where('isRepliedTo', '=', false)
     .execute();
 
   // collect all unique docket numbers from messages
