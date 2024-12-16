@@ -69,6 +69,7 @@ import { generatePrintableFilingReceiptLambda } from './lambdas/documents/genera
 import { generatePrintablePendingReportLambda } from './lambdas/pendingItems/generatePrintablePendingReportLambda';
 import { generateSuggestedTrialSessionCalendarLambda } from '@web-api/lambdas/trialSessions/generateSuggestedTrialSessionCalendarLambda';
 import { generateTrialCalendarPdfLambda } from './lambdas/trialSessions/generateTrialCalendarPdfLambda';
+import { generateTrialSessionMinutesPdfLambda } from './lambdas/trialSessionMinutes/generateTrialSessionMinutesPdfLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
 import { getAllUsersByRoleLambda } from '@web-api/lambdas/users/getAllUsersByRoleLambda';
 import { getBlockedCasesLambda } from './lambdas/reports/getBlockedCasesLambda';
@@ -899,6 +900,10 @@ app.delete(
  * trial-sessions
  */
 {
+  app.get(
+    '/trial-sessions/:trialSessionId/case/:docketNumber/minutes',
+    lambdaWrapper(generateTrialSessionMinutesPdfLambda),
+  );
   app.get(
     '/trial-sessions/paper-service-pdf/:fileId',
     lambdaWrapper(getPaperServicePdfUrlLambda),

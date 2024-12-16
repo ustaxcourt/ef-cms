@@ -27,3 +27,5 @@ export type RemoveRowHandler = ({
   key: string;
   section: string;
 }) => void;
+
+export type DownloadPdfHandler = () => void;

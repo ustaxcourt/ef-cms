@@ -151,6 +151,7 @@ import { generatePrintableTrialSessionCopyReportInteractor } from '../../shared/
 import { generateSignedDocumentInteractor } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
 import { generateSuggestedTrialSessionCalendarInteractor } from '@shared/proxies/trialSessions/generateSuggestedTrialSessionCalendarProxy';
 import { generateTrialCalendarPdfInteractor } from '../../shared/src/proxies/trialSessions/generateTrialCalendarPdfProxy';
+import { generateTrialSessionMinutesPdfInteractor } from '@shared/proxies/trialSessionMinutes/generateTrialSessionMinutesPdfProxy';
 import { getAllFeatureFlagsInteractor } from '../../shared/src/proxies/featureFlag/getAllFeatureFlagsProxy';
 import { getAllUsersByRoleInteractor } from '@shared/proxies/users/getAllUsersByRoleProxy';
 import { getBlockedCasesInteractor } from '../../shared/src/proxies/reports/getBlockedCasesProxy';
@@ -472,6 +473,7 @@ const allUseCases = {
   generateSignedDocumentInteractor,
   generateSuggestedTrialSessionCalendarInteractor,
   generateTrialCalendarPdfInteractor,
+  generateTrialSessionMinutesPdfInteractor,
   getAllFeatureFlagsInteractor,
   getAllUsersByRoleInteractor,
   getBlockedCasesInteractor,
