@@ -55,6 +55,8 @@ async function runSegmentScan(
   );
   totalItemsDeleted += itemsDeletedCount;
 
+  console.log(`Items deleted so far: ${totalItemsDeleted}`);
+
   if (result.LastEvaluatedKey) {
     params.ExclusiveStartKey = result.LastEvaluatedKey;
     await runSegmentScan(params, client);

@@ -1,6 +1,6 @@
 /**
  * HOW TO RUN
- * TABLE_NAME=testing npx ts-node --transpileOnly scripts/run-once-scripts/postgres-migration/delete-case-correspondences.ts
+ * CIRCLE_BRANCH=test npx ts-node --transpileOnly scripts/run-once-scripts/postgres-migration/delete-case-correspondences.ts
  */
 
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
@@ -16,7 +16,6 @@ const dynamoDbDocClient = DynamoDBDocumentClient.from(dynamoDbClient);
 
 // We set the environment as 'production' (= "a deployed environment") to get the RDS connection to work properly
 environment.nodeEnv = 'production';
-process.env.CIRCLE_BRANCH = 'test';
 
 const getCaseCorrespondencesToDelete = async (offset: number) => {
   const caseCorrespondences = await getDbReader(reader =>

@@ -1,12 +1,11 @@
 /**
  * HOW TO RUN
  *
- * TABLE_NAME=testing npx ts-node --transpileOnly scripts/run-once-scripts/postgres-migration/delete-case-worksheets.ts
+ * CIRCLE_BRANCH=test npx ts-node --transpileOnly scripts/run-once-scripts/postgres-migration/delete-case-worksheets.ts
  */
 
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { requireEnvVars } from '../../../shared/admin-tools/util';
 import { getDbReader } from '../../../web-api/src/database';
 import { isEmpty } from 'lodash';
 import { batchDeleteDynamoItems } from './batch-delete-dynamo-items';
@@ -18,7 +17,6 @@ const dynamoDbDocClient = DynamoDBDocumentClient.from(dynamoDbClient);
 
 // We set the environment as 'production' (= "a deployed environment") to get the RDS connection to work properly
 environment.nodeEnv = 'production';
-process.env.CIRCLE_BRANCH = 'test';
 
 const getCaseWorksheetsToDelete = async (offset: number) => {
   const caseWorksheets = await getDbReader(reader =>
