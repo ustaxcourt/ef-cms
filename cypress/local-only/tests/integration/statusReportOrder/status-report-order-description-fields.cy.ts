@@ -43,7 +43,7 @@ describe('should default status report order descriptions', () => {
     cy.get('#tab-drafts').click();
     getLastDraftOrderElementFromDrafts().click();
     cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
-    cy.get('.select-react-element__control').should(
+    cy.get('[data-testid="court-issued-document-type-search"]').should(
       'have.text',
       'Order that jurisdiction is retained',
     );
@@ -65,7 +65,7 @@ describe('should default status report order descriptions', () => {
     cy.get('#tab-drafts').click();
     getLastDraftOrderElementFromDrafts().click();
     cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
-    cy.get('.select-react-element__control').should(
+    cy.get('[data-testid="court-issued-document-type-search"]').should(
       'have.text',
       'Order that jurisdiction is retained',
     );
