@@ -8,6 +8,7 @@ jest.mock('./processCaseEntries');
 jest.mock('./processCaseDeadlineEntries');
 jest.mock('./processCaseCorrespondenceEntries');
 jest.mock('./processCaseWorksheetEntries');
+jest.mock('./processUserCaseNoteEntries');
 jest.mock('./processOtherEntries');
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
@@ -22,6 +23,7 @@ import { processOtherEntries } from './processOtherEntries';
 import { processPractitionerMappingEntries } from './processPractitionerMappingEntries';
 import { processRemoveEntries } from './processRemoveEntries';
 import { processStreamRecordsInteractor } from './processStreamRecordsInteractor';
+import { processUserCaseNoteEntries } from './processUserCaseNoteEntries';
 import { processWorkItemEntries } from './processWorkItemEntries';
 
 const logger = getLogger();
@@ -38,6 +40,7 @@ describe('processStreamRecordsInteractor', () => {
     (processCaseDeadlineEntries as jest.Mock).mockResolvedValue([]);
     (processCaseWorksheetEntries as jest.Mock).mockResolvedValue([]);
     (processCaseCorrespondenceEntries as jest.Mock).mockResolvedValue([]);
+    (processUserCaseNoteEntries as jest.Mock).mockResolvedValue([]);
     (processOtherEntries as jest.Mock).mockResolvedValue([]);
 
     (partitionRecords as jest.Mock).mockReturnValue({
@@ -50,6 +53,7 @@ describe('processStreamRecordsInteractor', () => {
       otherRecords: [],
       privatePractitionerMappingRecords: [],
       removeRecords: [],
+      userCaseNoteRecords: [],
       workItemRecords: [],
     });
   });
@@ -76,6 +80,7 @@ describe('processStreamRecordsInteractor', () => {
     expect(processDocketEntries).not.toHaveBeenCalled();
     expect(processWorkItemEntries).not.toHaveBeenCalled();
     expect(processMessageEntries).not.toHaveBeenCalled();
+    expect(processUserCaseNoteEntries).not.toHaveBeenCalled();
     expect(processPractitionerMappingEntries).not.toHaveBeenCalled();
     expect(processCaseDeadlineEntries).not.toHaveBeenCalled();
     expect(processCaseWorksheetEntries).not.toHaveBeenCalled();
