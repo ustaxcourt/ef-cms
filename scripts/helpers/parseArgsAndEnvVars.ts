@@ -523,9 +523,13 @@ const checkAwsSessionExpiration = (
   sc: ScriptConfig,
   verbose: boolean,
 ): void => {
-  const { awsSessionExpiration } = getEnvironmentVariables({
+  const { awsSessionExpiration, ci } = getEnvironmentVariables({
     awsSessionExpiration: 'AWS_SESSION_EXPIRATION',
+    ci: 'CI',
   });
+  if (ci) {
+    return;
+  }
   if (!awsSessionExpiration || awsSessionExpiration.length === 0) {
     showErrorAndExit('AWS session has expired', sc, verbose);
   }

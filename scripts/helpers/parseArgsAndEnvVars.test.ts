@@ -647,5 +647,10 @@ describe('parseArgsAndEnvVars', () => {
       parseArgsAndEnvVars(itsScriptConfig);
       expect(mockExit).not.toHaveBeenCalled();
     });
+    it('does not exit if the AWS_SESSION_EXPIRATION environment variable is not set and the CI environment variable is', () => {
+      process.env = { CI: 'true', ENV: 'jest' };
+      parseArgsAndEnvVars(mockScriptConfig);
+      expect(mockExit).not.toHaveBeenCalled();
+    });
   });
 });
