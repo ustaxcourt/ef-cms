@@ -34,6 +34,7 @@ const scriptConfig: ScriptConfig = {
       type: 'string',
     },
   },
+  requireActiveAwsSession: true,
 };
 const { endTimestamp, startTimestamp } = parseArgsAndEnvVars(scriptConfig) as {
   endTimestamp: string;

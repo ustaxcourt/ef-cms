@@ -15,6 +15,7 @@ const scriptConfig: ScriptConfig = {
     env: 'ENV',
     userPoolId: 'USER_POOL_ID',
   },
+  requireActiveAwsSession: true,
 };
 parseArgsAndEnvVars(scriptConfig);
 

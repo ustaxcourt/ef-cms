@@ -1,9 +1,5 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-// usage:
-//   scripts/reports/trial-sessions-by-calendar-year.ts 2023
-//   scripts/reports/trial-sessions-by-calendar-year.ts 2023 --stats
-
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
@@ -36,6 +32,7 @@ const scriptConfig: ScriptConfig = {
       type: 'string',
     },
   },
+  requireActiveAwsSession: true,
 };
 const { fiscal, stats, year } = parseArgsAndEnvVars(scriptConfig) as {
   fiscal: boolean;

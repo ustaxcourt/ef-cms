@@ -37,6 +37,7 @@ const scriptConfig: ScriptConfig = {
       type: 'boolean',
     },
   },
+  requireActiveAwsSession: true,
 };
 const { stats } = parseArgsAndEnvVars(scriptConfig) as { stats: boolean };
 

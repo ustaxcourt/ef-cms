@@ -46,6 +46,7 @@ const scriptConfig: ScriptConfig = {
       type: 'string',
     },
   },
+  requireActiveAwsSession: true,
 };
 
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;

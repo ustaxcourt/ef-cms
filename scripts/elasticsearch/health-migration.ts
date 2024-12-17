@@ -15,6 +15,7 @@ const scriptConfig: ScriptConfig = {
   environment: {
     environmentName: 'ENV',
   },
+  requireActiveAwsSession: true,
 };
 const { environmentName } = parseArgsAndEnvVars(scriptConfig) as {
   environmentName: string;

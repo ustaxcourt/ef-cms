@@ -21,6 +21,7 @@ const scriptConfig: ScriptConfig = {
     env: 'ENV',
     region: 'REGION',
   },
+  requireActiveAwsSession: true,
 };
 parseArgsAndEnvVars(scriptConfig);
 

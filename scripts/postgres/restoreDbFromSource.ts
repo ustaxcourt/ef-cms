@@ -21,6 +21,7 @@ const scriptConfig: ScriptConfig = {
     targetAccountId: 'TARGET_ACCOUNT_ID',
     targetEnv: 'TARGET_ENV',
   },
+  requireActiveAwsSession: true,
 };
 
 async function main() {

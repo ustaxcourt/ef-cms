@@ -35,6 +35,7 @@ const scriptConfig: ScriptConfig = {
       type: 'string',
     },
   },
+  requireActiveAwsSession: true,
 };
 const { fiscal, year } = parseArgsAndEnvVars(scriptConfig) as {
   fiscal: boolean;

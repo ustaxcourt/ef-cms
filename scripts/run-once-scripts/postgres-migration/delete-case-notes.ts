@@ -18,6 +18,7 @@ const scriptConfig: ScriptConfig = {
     env: 'ENV',
     sourceTable: 'SOURCE_TABLE',
   },
+  requireActiveAwsSession: true,
 };
 parseArgsAndEnvVars(scriptConfig);
 

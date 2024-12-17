@@ -1,14 +1,50 @@
-/**
- * due to a race condition, a document that had been served, was returned to the drafts folder. this resolves that.
- */
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { readFileSync } from 'fs';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
+
+const scriptConfig: ScriptConfig = {
+  description:
+    'fix-race-condition-served-in-drafts - Resolves issue where a document that had been ' +
+    'served returned to the drafts folder.',
+  environment: { dynamoDbTableName: 'DYNAMODB_TABLE_NAME' },
+  parameters: {
+    docketEntryId: {
+      position: 1,
+      required: true,
+      type: 'string',
+    },
+    docketNumber: {
+      position: 0,
+      required: true,
+      type: 'string',
+    },
+    pathToJsonRequest: {
+      position: 3,
+      required: true,
+      type: 'string',
+    },
+    performUpdate: {
+      default: false,
+      type: 'boolean',
+    },
+    timestamp: {
+      position: 2,
+      required: true,
+      type: 'string',
+    },
+  },
+  requireActiveAwsSession: true,
+};
 
 export const getDocumentFromDynamo = async ({
   docketEntryId,
@@ -161,22 +197,21 @@ export const fixRaceConditionServedInDrafts = async (
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  if (process.argv.length < 5) {
-    console.log('Please provide required parameters');
-    console.log('');
-    console.log(
-      '$ node fix-race-condition-served-in-drafts.js <docketNumber> <docketEntryId> <timestamp> <pathToJsonRequest> [<performUpdate>]',
-    );
-    return;
-  }
+  const {
+    docketEntryId,
+    docketNumber,
+    pathToJsonRequest,
+    performUpdate,
+    timestamp,
+  } = parseArgsAndEnvVars(scriptConfig) as {
+    docketEntryId: string;
+    docketNumber: string;
+    pathToJsonRequest: string;
+    performUpdate: boolean;
+    timestamp: string;
+  };
 
-  const docketNumber = process.argv[2];
-  const docketEntryId = process.argv[3];
-  const timestamp = process.argv[4];
-  const requestJsonFile = process.argv[5];
-  const performUpdate = !!process.argv[6];
-
-  const request = JSON.parse(readFileSync(requestJsonFile, 'utf-8'));
+  const request = JSON.parse(readFileSync(pathToJsonRequest, 'utf-8'));
 
   const applicationContext = createApplicationContext({});
 

@@ -14,6 +14,7 @@ const scriptConfig: ScriptConfig = {
     elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
     environmentName: 'ENV',
   },
+  requireActiveAwsSession: true,
 };
 const { elasticsearchEndpoint, environmentName } = parseArgsAndEnvVars(
   scriptConfig,

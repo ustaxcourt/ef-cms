@@ -24,6 +24,7 @@ const scriptConfig: ScriptConfig = {
       type: 'string',
     },
   },
+  requireActiveAwsSession: true,
 };
 const { practitionerId } = parseArgsAndEnvVars(scriptConfig) as {
   practitionerId: string;

@@ -28,6 +28,7 @@ const scriptConfig: ScriptConfig = {
       type: 'string',
     },
   },
+  requireActiveAwsSession: true,
 };
 const { segmentArg, totalSegmentsArg } = parseArgsAndEnvVars(scriptConfig) as {
   segmentArg: number;

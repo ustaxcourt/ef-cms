@@ -31,6 +31,7 @@ const scriptConfig: ScriptConfig = {
       type: 'string',
     },
   },
+  requireActiveAwsSession: true,
 };
 const { year } = parseArgsAndEnvVars(scriptConfig) as { year: string };
 

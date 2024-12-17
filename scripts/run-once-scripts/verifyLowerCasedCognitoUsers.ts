@@ -26,6 +26,7 @@ const scriptConfig: ScriptConfig = {
       type: 'boolean',
     },
   },
+  requireActiveAwsSession: true,
 };
 const { dryRun } = parseArgsAndEnvVars(scriptConfig) as { dryRun: boolean };
 
