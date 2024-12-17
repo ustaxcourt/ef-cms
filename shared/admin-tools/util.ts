@@ -74,7 +74,7 @@ export const missingEnvironmentVariables = (
 // Exit if any of the provided strings are not set as environment variables
 export const requireEnvVars = (requiredEnvVars: string[]): void => {
   const missing = missingEnvironmentVariables(requiredEnvVars);
-  if (missing) {
+  if (missing.length > 0) {
     console.error(`Missing environment variable(s): ${missing.join(', ')}`);
     process.exit(1);
   }
