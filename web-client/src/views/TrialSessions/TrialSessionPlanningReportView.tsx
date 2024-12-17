@@ -82,8 +82,8 @@ function TrialSessionPlanningReportHeader({
 }: TrialSessionPlanningReportHeaderParams) {
   return (
     <div className="grid-container display-flex height-6 ">
-      <div className="flex-auto border-bottom-2px border-primary trial-session-planning-report-header">
-        {trialSessionPlanningReportHeader}
+      <div className="title">
+        <h1>{trialSessionPlanningReportHeader}</h1>
       </div>
       <div className="flex-fill text-right height-6 border-bottom-1px border-gray-10">
         <Button
@@ -147,7 +147,7 @@ function TrialSessionPlanningReportTable({
                   <td>
                     {trialLocation.hasNotBeenCalendared && (
                       <FontAwesomeIcon
-                        className="fa-icon-blue-vivid margin-right-2"
+                        className="fa-icon-blue margin-right-2"
                         icon="info-circle"
                         size="lg"
                         title={trialLocation.lastVisitedDateFormatted}
@@ -211,7 +211,7 @@ function CitiesNotCalendaredInPastTwoTerms({
       <div className="border-1px border-gray-30">
         <div className="bg-yellow padding-top-2 padding-bottom-2 padding-left-3 border-bottom-1px border-gray-30 cities-notcalendared-header">
           <FontAwesomeIcon
-            className="fa-icon-blue-vivid margin-right-2"
+            className="fa-icon-blue margin-right-2"
             icon="info-circle"
             size="lg"
           />
