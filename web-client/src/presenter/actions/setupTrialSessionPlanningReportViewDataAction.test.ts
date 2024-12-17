@@ -7,8 +7,8 @@ describe('setupTrialSessionPlanningReportViewDataAction', () => {
       setupTrialSessionPlanningReportViewDataAction,
       {
         props: {
-          trialTerm: 'TEST_TRIAL_TERM',
-          trialYear: 'TEST_TRIAL_YEAR',
+          term: 'TEST_TRIAL_TERM',
+          year: 'TEST_TRIAL_YEAR',
         },
         state: {
           trialSessionPlanningReportData: {},
