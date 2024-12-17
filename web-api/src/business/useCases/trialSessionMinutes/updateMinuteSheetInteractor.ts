@@ -1,7 +1,7 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { query } from '@web-api/persistence/dynamodbClientService';
+import { put, query } from '@web-api/persistence/dynamodbClientService';
 
-export const getMinuteSheetInteractor = async (
+export const updateMinuteSheetInteractor = async (
   applicationContext: ServerApplicationContext,
   { docketNumber, trialSessionId },
   // authorizedUser: UnknownAuthUser,
@@ -11,7 +11,7 @@ export const getMinuteSheetInteractor = async (
   //     throw new UnauthorizedError('Unauthorized');
   //   }
 
-  const results = await query({
+  const minuteSheet = await query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
     },
@@ -22,7 +22,9 @@ export const getMinuteSheetInteractor = async (
     applicationContext,
   });
 
-  console.log('getting minute sheet', `${docketNumber} - ${trialSessionId}`);
+  const updatedMinuteSheet = put({ Item: minuteSheet[0], applicationContext });
 
-  return results;
+  console.log('minute sheet updated', `${docketNumber} - ${trialSessionId}`);
+
+  return updatedMinuteSheet;
 };

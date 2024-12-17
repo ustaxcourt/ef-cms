@@ -104,6 +104,7 @@ import { getJudgeInSectionLambda } from './lambdas/users/getJudgeInSectionLambda
 import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceModeLambda';
 import { getMessageThreadLambda } from './lambdas/messages/getMessageThreadLambda';
 import { getMessagesForCaseLambda } from './lambdas/messages/getMessagesForCaseLambda';
+import { getMinuteSheetLambda } from './lambdas/trialSessionMinutes/getMinuteSheetLambda';
 import { getNotificationsLambda } from './lambdas/users/getNotificationsLambda';
 import { getOutboxMessagesForSectionLambda } from './lambdas/messages/getOutboxMessagesForSectionLambda';
 import { getOutboxMessagesForUserLambda } from './lambdas/messages/getOutboxMessagesForUserLambda';
@@ -187,6 +188,7 @@ import { updateCourtIssuedOrderToCaseLambda } from './lambdas/documents/updateCo
 import { updateDeficiencyStatisticLambda } from './lambdas/cases/updateDeficiencyStatisticLambda';
 import { updateDocketEntryMetaLambda } from './lambdas/documents/updateDocketEntryMetaLambda';
 import { updateDocketEntryWorksheetLambda } from '@web-api/lambdas/pendingMotion/updateDocketEntryWorksheetLambda';
+import { updateMinuteSheetLambda } from './lambdas/trialSessionMinutes/updateMinuteSheetLambda';
 import { updateOtherStatisticsLambda } from './lambdas/cases/updateOtherStatisticsLambda';
 import { updatePetitionerInformationLambda } from './lambdas/cases/updatePetitionerInformationLambda';
 import { updatePractitionerUserLambda } from './lambdas/practitioners/updatePractitionerUserLambda';
@@ -900,6 +902,8 @@ app.delete(
  * trial-sessions
  */
 {
+  app.get('/trial-sessions/minutes', lambdaWrapper(getMinuteSheetLambda));
+  app.put('/trial-sessions/minutes', lambdaWrapper(updateMinuteSheetLambda));
   app.post(
     '/trial-sessions/:trialSessionId/case/:docketNumber/minutes',
     lambdaWrapper(generateTrialSessionMinutesPdfLambda),

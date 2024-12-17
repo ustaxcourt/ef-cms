@@ -304,6 +304,7 @@ import { updateCourtIssuedOrderInteractor } from '../../shared/src/proxies/court
 import { updateDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/updateDeficiencyStatisticProxy';
 import { updateDocketEntryMetaInteractor } from '../../shared/src/proxies/documents/updateDocketEntryMetaProxy';
 import { updateDocketEntryWorksheetInteractor } from '@shared/proxies/pendingItems/updateDocketEntryWorksheetProxy';
+import { updateMinuteSheetInteractor } from '@shared/proxies/trialSessionMinutes/updateMinuteSheetProxy';
 import { updateOtherStatisticsInteractor } from '../../shared/src/proxies/caseStatistics/updateOtherStatisticsProxy';
 import { updatePetitionerInformationInteractor } from '../../shared/src/proxies/updatePetitionerInformationProxy';
 import { updatePractitionerUserInteractor } from '../../shared/src/proxies/practitioners/updatePractitionerUserProxy';
@@ -593,6 +594,7 @@ const allUseCases = {
   updateDeficiencyStatisticInteractor,
   updateDocketEntryMetaInteractor,
   updateDocketEntryWorksheetInteractor,
+  updateMinuteSheetInteractor,
   updateOtherStatisticsInteractor,
   updatePetitionerInformationInteractor,
   updatePractitionerUserInteractor,

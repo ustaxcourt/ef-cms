@@ -127,7 +127,7 @@ export const TrialBriefFieldset = ({
               id="trialBriefTotalTrialHours"
               name="trialBriefTotalTrialHours"
               type="text"
-              value={trialBriefFormState.note}
+              value={trialBriefFormState.totalTrialHours}
               onBlur={() => onBlurHandler()}
               onChange={e =>
                 onChangeHandler({
