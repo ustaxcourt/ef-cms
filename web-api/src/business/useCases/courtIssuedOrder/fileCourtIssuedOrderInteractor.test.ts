@@ -7,7 +7,8 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
   PETITIONS_SECTION,
-  ROLES, STATUS_REPORT_ORDER_OPTIONS,
+  ROLES,
+  STATUS_REPORT_ORDER_OPTIONS,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
