@@ -85,6 +85,42 @@ describe('assignWorkItemsInteractor', () => {
     ).rejects.toThrow();
   });
 
+  it('should throw an error when not given work item or work item id', async () => {
+    await expect(
+      assignWorkItemsInteractor(
+        applicationContext,
+        {
+          assigneeId: mockDocketClerkUser.userId,
+          assigneeName: 'Ted Docket',
+          workItem: undefined,
+          workItemId: undefined,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow();
+  });
+
+  it('should assign work item to current user when given work item', async () => {
+    await assignWorkItemsInteractor(
+      applicationContext,
+      {
+        assigneeId: mockDocketClerkUser.userId,
+        assigneeName: 'Ted Docket',
+        workItem: mockWorkItem,
+        workItemId: undefined,
+      },
+      mockDocketClerkUser,
+    );
+    await expect(upsertWorkItems.mock.calls[0][0].workItems).toMatchObject([
+      {
+        section: DOCKET_SECTION,
+        sentBy: mockDocketClerkUser.name,
+        sentBySection: DOCKET_SECTION,
+        sentByUserId: mockDocketClerkUser.userId,
+      },
+    ]);
+  });
+
   it('assigns a work item to the current user', async () => {
     await assignWorkItemsInteractor(
       applicationContext,
