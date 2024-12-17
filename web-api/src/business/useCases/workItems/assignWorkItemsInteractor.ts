@@ -3,6 +3,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
@@ -23,11 +24,13 @@ export const assignWorkItemsInteractor = async (
   {
     assigneeId,
     assigneeName,
+    workItem,
     workItemId,
   }: {
     assigneeId: string;
     assigneeName: string;
-    workItemId: string;
+    workItemId?: string;
+    workItem?: RawWorkItem;
   },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -47,12 +50,16 @@ export const assignWorkItemsInteractor = async (
       userId: assigneeId,
     });
 
-  const workItemEntity = await getWorkItemById({
-    workItemId,
-  });
-
-  if (!workItemEntity) {
-    throw new NotFoundError(`WorkItem ${workItemId} was not found.`);
+  let workItemEntity;
+  if (!workItem && workItemId) {
+    workItemEntity = await getWorkItemById({
+      workItemId,
+    });
+    if (!workItemEntity) {
+      throw new NotFoundError(`WorkItem ${workItemId} was not found.`);
+    }
+  } else {
+    workItemEntity = new WorkItem(workItem);
   }
 
   const userIsCaseServices = User.isCaseServicesUser({ section: user.section });

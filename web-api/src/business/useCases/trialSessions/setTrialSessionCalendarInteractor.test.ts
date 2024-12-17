@@ -7,8 +7,8 @@ import { MOCK_LOCK } from '@shared/test/mockLock';
 import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,

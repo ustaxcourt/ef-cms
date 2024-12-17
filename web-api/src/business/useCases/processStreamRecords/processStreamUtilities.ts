@@ -48,8 +48,15 @@ export const partitionRecords = (
       record.dynamodb.NewImage.entityName.S === 'Message',
   );
 
-  const [completionMarkers, nonCompletionMarkerRecords] = partition(
+  const [userCaseNoteRecords, nonUserCaseNoteRecords] = partition(
     nonMessageRecords,
+    record =>
+      record.dynamodb?.NewImage?.entityName &&
+      record.dynamodb.NewImage.entityName.S === 'UserCaseNote',
+  );
+
+  const [completionMarkers, nonCompletionMarkerRecords] = partition(
+    nonUserCaseNoteRecords,
     record =>
       record.dynamodb?.NewImage?.entityName &&
       record.dynamodb.NewImage.entityName.S === 'CompletionMarker',
@@ -87,6 +94,7 @@ export const partitionRecords = (
     otherRecords,
     practitionerMappingRecords,
     removeRecords,
+    userCaseNoteRecords,
     workItemRecords,
   };
 };
