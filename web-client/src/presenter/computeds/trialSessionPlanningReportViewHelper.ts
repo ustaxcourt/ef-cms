@@ -11,10 +11,16 @@ export type TrialLocationDataFormatted = TrialLocationData & {
   lastVisitedDateFormatted: string;
 };
 
+export type PreviousTermFormatted = {
+  termDisplayFormatted: string;
+  term: string;
+  year: number;
+};
+
 type TrialSessionPlanningReportViewHelperResults = {
   citiesNotCalendaredInTwoPreviousTerms: string[][];
   trialSessionPlanningReportHeader: string;
-  previousTermsFormatted: { termDisplayFormatted: string }[];
+  previousTermsFormatted: PreviousTermFormatted[];
   trialLocationDataFormatted: TrialLocationDataFormatted[];
   trialTerm: string;
   trialYear: number;
@@ -52,7 +58,9 @@ export const trialSessionPlanningReportViewHelper = (
 
   const previousTermsFormatted = previousTerms.map(prevTerm => {
     return {
-      termDisplayFormatted: `${formatTerm(prevTerm.term)} '${prevTerm.year.toString().slice(-2)}`,
+      term: prevTerm.term,
+      termDisplayFormatted: `${formatTerm(prevTerm.term)} ‘${prevTerm.year.toString().slice(-2)}`,
+      year: prevTerm.year,
     };
   });
 

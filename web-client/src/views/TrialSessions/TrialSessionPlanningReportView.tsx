@@ -1,7 +1,10 @@
 import { BigHeader } from '@web-client/views/BigHeader';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { TrialLocationDataFormatted } from '@web-client/presenter/computeds/trialSessionPlanningReportViewHelper';
+import {
+  PreviousTermFormatted,
+  TrialLocationDataFormatted,
+} from '@web-client/presenter/computeds/trialSessionPlanningReportViewHelper';
 import {
   state as cerebralState,
   sequences,
@@ -78,14 +81,8 @@ function TrialSessionPlanningReportHeader({
   year,
 }: TrialSessionPlanningReportHeaderParams) {
   return (
-    <div className="grid-container display-flex height-6">
-      <div
-        className="flex-auto border-bottom-2px border-primary"
-        style={{
-          fontFamily: 'Noto Serif JP',
-          fontSize: '32px',
-        }}
-      >
+    <div className="grid-container display-flex height-6 ">
+      <div className="flex-auto border-bottom-2px border-primary trial-session-planning-report-header">
         {trialSessionPlanningReportHeader}
       </div>
       <div className="flex-fill text-right height-6 border-bottom-1px border-gray-10">
@@ -109,7 +106,7 @@ function TrialSessionPlanningReportHeader({
 
 type TrialSessionPlanningReportTableParams = {
   locationData: TrialLocationDataFormatted[];
-  previousTerms: { termDisplayFormatted: string }[];
+  previousTerms: PreviousTermFormatted[];
 };
 
 function TrialSessionPlanningReportTable({
@@ -161,7 +158,7 @@ function TrialSessionPlanningReportTable({
                   <td>{trialLocation.allCaseCount}</td>
                   <td>{trialLocation.smallCaseCount}</td>
                   <td>{trialLocation.regularCaseCount}</td>
-                  {trialLocation.previousTermsData.map(prevTerm => {
+                  {trialLocation.previousTermsData.map((prevTerm, index) => {
                     const hasData =
                       Array.isArray(prevTerm) && prevTerm.length > 0;
 
@@ -179,6 +176,7 @@ function TrialSessionPlanningReportTable({
                           ))
                         ) : (
                           <FontAwesomeIcon
+                            aria-label={`${trialLocation.trialCityState} not scheduled for ${previousTerms[index].term} ${previousTerms[index].year}.`}
                             className="padding-1px"
                             icon={['far', 'calendar-times']}
                             size="lg"
@@ -211,12 +209,7 @@ function CitiesNotCalendaredInPastTwoTerms({
       data-testid="cities-not-calendared-in-past-two-terms-table"
     >
       <div className="border-1px border-gray-30">
-        <div
-          className="bg-yellow padding-top-2 padding-bottom-2 padding-left-3 border-bottom-1px border-gray-30"
-          style={{
-            fontWeight: 600,
-          }}
-        >
+        <div className="bg-yellow padding-top-2 padding-bottom-2 padding-left-3 border-bottom-1px border-gray-30 cities-notcalendared-header">
           <FontAwesomeIcon
             className="fa-icon-blue-vivid margin-right-2"
             icon="info-circle"
