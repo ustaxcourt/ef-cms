@@ -1,7 +1,7 @@
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getBlockedCases } from './getBlockedCases';
 jest.mock('./searchClient');
-import { search } from './searchClient';
+import { search } from '../../elasticsearch/searchClient';
 
 describe('getBlockedCases', () => {
   it('returns results when searching with a trialLocation', async () => {

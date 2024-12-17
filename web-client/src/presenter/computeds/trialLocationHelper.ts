@@ -1,6 +1,10 @@
+import {
+  CASE_STATUS_TYPES,
+  CaseStatus,
+  HIGH_PRIORITY_SUFFIXES,
+} from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import { Get } from 'cerebral';
-import { HIGH_PRIORITY_SUFFIXES } from '@shared/business/entities/EntityConstants';
 import {
   addGroupSymbol,
   compareTrialSessionEligibleCases,
@@ -30,12 +34,14 @@ export const trialLocationHelper = (
   );
 
   const blockedCases = get(state.blockedCases);
-  const statusFilter = [
-    'General Docket - Not At Issue',
-    'General Docket (Ready For Trial)',
-    'Assigned - Case',
-    'Assigned - Motion',
+
+  const statusFilter: CaseStatus[] = [
+    CASE_STATUS_TYPES.generalDocketReadyForTrial,
+    CASE_STATUS_TYPES.generalDocket,
+    CASE_STATUS_TYPES.assignedCase,
+    CASE_STATUS_TYPES.assignedMotion,
   ];
+
   const filteredBlockedCases = blockedCases.filter(blockedCase =>
     statusFilter.includes(blockedCase.status),
   );

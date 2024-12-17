@@ -1,14 +1,9 @@
-import { search } from './searchClient';
+import { convertDbRowToRawEligibleCase } from '@web-api/persistence/postgres/cases/mapper';
+import { getDbReader } from '@web-api/database';
+import { search } from '../../elasticsearch/searchClient';
+import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import mockBlockedCases from '@shared/test/tempBlockedCases.json';
 
-/**
- * getBlockedCases
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.trialLocation the preferredTrialLocation to filter the blocked cases by
- * @returns {object} the case data
- */
 export const getBlockedCases = async ({
   applicationContext,
   trialLocation,
@@ -55,7 +50,37 @@ export const getBlockedCases = async ({
   //   },
   // });
 
-  const results = mockBlockedCases;
+  const dbCases = await getDbReader(reader =>
+    reader
+      .selectFrom('dwCase')
+      .select([
+        'automaticBlocked',
+        'automaticBlockedDate',
+        'automaticBlockedReason',
+        'blocked',
+        'blockedDate',
+        'blockedReason',
+        'caption',
+        'docketNumber',
+        'docketNumberSuffix',
+        'docketNumberWithSuffix',
+        'leadDocketNumber',
+        'status',
+        'procedureType',
+      ])
+      .where('preferredTrialCity', '=', trialLocation)
+      // is this an exclusive or? it shouldn't be
+      .where(eb => eb('blocked', '=', true).or('automaticBlocked', '=', true))
+      .execute(),
+  );
 
-  return results;
+  const casesForReturn = dbCases.map(c => {
+    return c
+      ? transformNullToUndefined(convertDbRowToRawEligibleCase(c))
+      : undefined;
+  });
+
+  // const casesForReturn = mockBlockedCases;
+
+  return casesForReturn;
 };
