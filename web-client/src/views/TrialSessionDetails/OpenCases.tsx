@@ -82,10 +82,10 @@ export const OpenCases = connect(
                     <PreformattedText text={item.calendarNotes} />
                   </td>
                   <td>
-                    {item.displayMinutesSheetFormButton && (
+                    {item.displayMinuteSheetFormButton && (
                       <Button
                         link
-                        href={item.minutesSheetRoute}
+                        href={item.minuteSheetRoute}
                         icon="pencil-alt"
                       >
                         Minutes

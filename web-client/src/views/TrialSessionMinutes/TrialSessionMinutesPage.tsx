@@ -8,12 +8,12 @@ import React from 'react';
 
 export const TrialSessionMinutesPage = connect(
   {
-    downloadMinutesSheetFormPdfSequence:
-      sequences.downloadMinutesSheetFormPdfSequence,
+    downloadMinuteSheetFormPdfSequence:
+      sequences.downloadMinuteSheetFormPdfSequence,
 
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
   },
-  ({ downloadMinutesSheetFormPdfSequence, formattedTrialSessionDetails }) => {
+  ({ downloadMinuteSheetFormPdfSequence, formattedTrialSessionDetails }) => {
     return (
       <>
         <CaseDetailHeader hideActionButtons />
@@ -27,7 +27,7 @@ export const TrialSessionMinutesPage = connect(
               <Button
                 onClick={e => {
                   e.preventDefault();
-                  downloadMinutesSheetFormPdfSequence();
+                  downloadMinuteSheetFormPdfSequence();
                 }}
               >
                 Download PDF
@@ -39,7 +39,7 @@ export const TrialSessionMinutesPage = connect(
             className="margin-top-2"
             onClick={e => {
               e.preventDefault();
-              downloadMinutesSheetFormPdfSequence();
+              downloadMinuteSheetFormPdfSequence();
             }}
           >
             Download PDF

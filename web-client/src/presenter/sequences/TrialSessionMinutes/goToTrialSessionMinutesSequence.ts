@@ -1,6 +1,6 @@
 import { getCaseAction } from '@web-client/presenter/actions/getCaseAction';
 import { getTrialSessionDetailsAction } from '../../actions/TrialSession/getTrialSessionDetailsAction';
-import { initializeTrialSessionMinutesSheetFormAction } from '@web-client/presenter/actions/TrialSessionMinutes/initializeTrialSessionMinutesSheetFormAction';
+import { initializeTrialSessionMinuteSheetFormAction } from '@web-client/presenter/actions/TrialSessionMinutes/initializeTrialSessionMinuteSheetFormAction';
 import { parallel } from 'cerebral/factories';
 import { setCaseAction } from '@web-client/presenter/actions/setCaseAction';
 import { setTrialSessionDetailsAction } from '../../actions/TrialSession/setTrialSessionDetailsAction';
@@ -14,7 +14,7 @@ export const goToTrialSessionMinutesSequence = [
     [getTrialSessionDetailsAction, setTrialSessionDetailsAction],
     [getCaseAction, setCaseAction],
   ]),
-  initializeTrialSessionMinutesSheetFormAction,
+  initializeTrialSessionMinuteSheetFormAction,
   setupCurrentPageAction('TrialSessionMinutesPage'),
 ] as unknown as ({
   docketNumber,

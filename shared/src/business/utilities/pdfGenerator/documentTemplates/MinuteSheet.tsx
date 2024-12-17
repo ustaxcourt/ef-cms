@@ -1,7 +1,7 @@
-import { FormattedMinuteSheet } from '@web-client/presenter/actions/TrialSessionMinutes/downloadMinutesSheetFormPdfAction';
+import { FormattedMinuteSheet } from '@web-client/presenter/actions/TrialSessionMinutes/downloadMinuteSheetFormPdfAction';
 import React from 'react';
 
-export const MinutesSheet = ({
+export const MinuteSheet = ({
   formattedMinuteSheet,
 }: {
   formattedMinuteSheet: FormattedMinuteSheet;

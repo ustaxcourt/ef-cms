@@ -201,8 +201,8 @@ export const getFormattedTrialSessionDetails = ({
   const openCasesFormatted = openCases
     .map(caseItem => setConsolidationFlagsForDisplay(caseItem, openCases))
     .map(caseItem => {
-      let displayMinutesSheetFormButton = false;
-      let minutesSheetRoute;
+      let displayMinuteSheetFormButton = false;
+      let minuteSheetRoute;
 
       const isEligibleForButton =
         trialSession.isCalendared && !isClosed(caseItem);
@@ -213,14 +213,14 @@ export const getFormattedTrialSessionDetails = ({
         isEligibleForButton &&
         (isLeadCase || !caseItem.inConsolidatedGroup)
       ) {
-        displayMinutesSheetFormButton = true;
-        minutesSheetRoute = `/trial-session-detail/${trialSession.trialSessionId}/case/${caseItem.docketNumber}/minutes`;
+        displayMinuteSheetFormButton = true;
+        minuteSheetRoute = `/trial-session-detail/${trialSession.trialSessionId}/case/${caseItem.docketNumber}/minutes`;
       }
 
       return {
         ...caseItem,
-        displayMinutesSheetFormButton,
-        minutesSheetRoute,
+        displayMinuteSheetFormButton,
+        minuteSheetRoute,
       };
     })
     .sort(compareCasesByDocketNumberFactory({ allCases: openCases }));
@@ -232,8 +232,8 @@ export const getFormattedTrialSessionDetails = ({
         .setConsolidationFlagsForDisplay(caseItem, inactiveCases),
     )
     .map(caseItem => {
-      let displayMinutesSheetFormButton = false;
-      let minutesSheetRoute;
+      let displayMinuteSheetFormButton = false;
+      let minuteSheetRoute;
 
       const isEligibleForButton =
         trialSession.isCalendared && !isClosed(caseItem);
@@ -256,14 +256,14 @@ export const getFormattedTrialSessionDetails = ({
         (isLeadCase || !caseItem.inConsolidatedGroup) &&
         caseWasRemovedFromTrialSessionAfterStartDate
       ) {
-        displayMinutesSheetFormButton = true;
-        minutesSheetRoute = `/trial-session-detail/${trialSession.trialSessionId}/case/${caseItem.docketNumber}/minutes`;
+        displayMinuteSheetFormButton = true;
+        minuteSheetRoute = `/trial-session-detail/${trialSession.trialSessionId}/case/${caseItem.docketNumber}/minutes`;
       }
 
       return {
         ...caseItem,
-        displayMinutesSheetFormButton,
-        minutesSheetRoute,
+        displayMinuteSheetFormButton,
+        minuteSheetRoute,
       };
     })
     .sort(

@@ -8,7 +8,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const generateTrialSessionMinutesPdfInteractor = async (
   applicationContext: ServerApplicationContext,
-  { formattedMinutesSheet },
+  { formattedMinuteSheet },
   // authorizedUser: UnknownAuthUser,
 ): Promise<string> => {
   // 10419 TODO: add role-permissions configuration for minutes sheet
@@ -16,10 +16,10 @@ export const generateTrialSessionMinutesPdfInteractor = async (
   //     throw new UnauthorizedError('Unauthorized');
   //   }
 
-  const pdf = await applicationContext.getDocumentGenerators().minutesSheet({
+  const pdf = await applicationContext.getDocumentGenerators().minuteSheet({
     applicationContext,
     data: {
-      formattedMinutesSheet,
+      formattedMinuteSheet,
     },
   });
 

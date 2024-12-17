@@ -1,19 +1,19 @@
 import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const downloadMinutesSheetFormPdfAction = async ({
+export const downloadMinuteSheetFormPdfAction = async ({
   applicationContext,
   get,
 }) => {
   const minuteSheetFormState = get(state.minuteSheetForm);
 
-  const formattedMinutesSheet = formatMinuteSheet(minuteSheetFormState);
+  const formattedMinuteSheet = formatMinuteSheet(minuteSheetFormState);
 
   const pdfUrl = await applicationContext
     .getUseCases()
     .generateTrialSessionMinutesPdfInteractor(applicationContext, {
       docketNumber: 'docketNumber',
-      formattedMinutesSheet,
+      formattedMinuteSheet,
       trialSessionId: 'trialSessionId',
     });
 

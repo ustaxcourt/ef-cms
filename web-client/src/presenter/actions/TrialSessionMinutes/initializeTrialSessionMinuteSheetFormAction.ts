@@ -16,7 +16,7 @@ import { invert } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import { v4 as uuidv4 } from 'uuid';
 
-export const initializeTrialSessionMinutesSheetFormAction = ({
+export const initializeTrialSessionMinuteSheetFormAction = ({
   get,
   props,
   store,
