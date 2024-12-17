@@ -52,7 +52,7 @@ export const trialSessionPlanningReportViewHelper = (
 
   const previousTermsFormatted = previousTerms.map(prevTerm => {
     return {
-      termDisplayFormatted: `${formatTerm(prevTerm.term)} '${prevTerm.year.toString().slice(-2)}`,
+      termDisplayFormatted: `${formatTerm(prevTerm.term)} ‘${prevTerm.year.toString().slice(-2)}`,
     };
   });
 
