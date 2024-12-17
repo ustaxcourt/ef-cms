@@ -66,6 +66,7 @@ export const TrialSessions = connect(
                 link
                 noMargin
                 className="margin-right-0 padding-0"
+                data-testid="trial-session-planning-report-button"
                 icon="print"
                 onClick={() => openTrialSessionPlanningModalSequence()}
               >

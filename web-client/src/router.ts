@@ -1109,11 +1109,17 @@ const router = {
     );
 
     registerRoute(
-      '/trial-session-planning-report',
-      ifHasAccess({ app }, () => {
-        setPageTitle('Trial session planning report');
-        return app.getSequence('gotoTrialSessionPlanningReportSequence')();
-      }),
+      '/trial-session-planning-report/*/*',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
+        (term, year) => {
+          setPageTitle('Trial session planning report');
+          return app.getSequence('gotoTrialSessionPlanningReportViewSequence')({
+            term,
+            year,
+          });
+        },
+      ),
     );
 
     registerRoute(
