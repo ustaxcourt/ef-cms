@@ -15,7 +15,6 @@ export const createCaseFromPaperAction = async ({
   const user = get(state.user);
   const petitionMetadata: CreatedCaseType = get(state.form);
   const { fileUploadProgressMap } = props;
-  let caseDetail: RawCase;
 
   const attachmentToPetitionUploadProgress =
     fileUploadProgressMap.attachmentToPetition
@@ -48,7 +47,7 @@ export const createCaseFromPaperAction = async ({
       user,
     );
 
-    caseDetail = await applicationContext
+    const { caseDetail, workItem } = await applicationContext
       .getUseCases()
       .createCaseFromPaperInteractor(applicationContext, {
         applicationForWaiverOfFilingFeeFileId,
@@ -59,11 +58,12 @@ export const createCaseFromPaperAction = async ({
         requestForPlaceOfTrialFileId,
         stinFileId,
       });
+
+    return path.success({
+      caseDetail,
+      workItem,
+    });
   } catch (err) {
     return path.error();
   }
-
-  return path.success({
-    caseDetail,
-  });
 };
