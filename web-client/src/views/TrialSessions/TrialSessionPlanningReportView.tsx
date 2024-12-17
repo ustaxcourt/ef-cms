@@ -209,7 +209,7 @@ function CitiesNotCalendaredInPastTwoTerms({
       data-testid="cities-not-calendared-in-past-two-terms-table"
     >
       <div className="border-1px border-gray-30">
-        <div className="bg-yellow padding-top-2 padding-bottom-2 padding-left-3 border-bottom-1px border-gray-30 cities-notcalendared-header">
+        <div className="bg-yellow padding-top-2 padding-bottom-2 padding-left-3 border-bottom-1px border-gray-30 cities-not-calendared-header">
           <FontAwesomeIcon
             className="fa-icon-blue margin-right-2"
             icon="info-circle"
