@@ -1,4 +1,6 @@
+import { checkForExistingMinuteSheetAction } from '@web-client/presenter/actions/TrialSessionMinutes/checkForExistingMinuteSheetAction';
 import { getCaseAction } from '@web-client/presenter/actions/getCaseAction';
+import { getExistingMinuteSheetFormAction } from '@web-client/presenter/actions/TrialSessionMinutes/getExistingMinuteSheetFormAction';
 import { getTrialSessionDetailsAction } from '../../actions/TrialSession/getTrialSessionDetailsAction';
 import { initializeTrialSessionMinuteSheetFormAction } from '@web-client/presenter/actions/TrialSessionMinutes/initializeTrialSessionMinuteSheetFormAction';
 import { parallel } from 'cerebral/factories';
@@ -14,7 +16,11 @@ export const goToTrialSessionMinutesSequence = [
     [getTrialSessionDetailsAction, setTrialSessionDetailsAction],
     [getCaseAction, setCaseAction],
   ]),
-  initializeTrialSessionMinuteSheetFormAction,
+  checkForExistingMinuteSheetAction,
+  {
+    no: [initializeTrialSessionMinuteSheetFormAction],
+    yes: [getExistingMinuteSheetFormAction],
+  },
   setupCurrentPageAction('TrialSessionMinutesPage'),
 ] as unknown as ({
   docketNumber,

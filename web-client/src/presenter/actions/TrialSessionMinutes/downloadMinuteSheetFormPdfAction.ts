@@ -1,3 +1,4 @@
+import { FormattedMinuteSheet } from '@web-api/business/useCases/trialSessionMinutes/generateTrialSessionMinutesPdfInteractor';
 import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -18,13 +19,6 @@ export const downloadMinuteSheetFormPdfAction = async ({
     });
 
   await applicationContext.getUtilities().openUrlInNewTab({ url: pdfUrl });
-};
-
-export type FormattedMinuteSheet = {
-  judge: string;
-  trialClerk: string;
-  courtReporter: string;
-  remoteSession: boolean;
 };
 
 const formatMinuteSheet = (
