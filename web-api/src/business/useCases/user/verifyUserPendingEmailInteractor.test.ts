@@ -35,6 +35,20 @@ describe('Verify User Pending Email', () => {
     .minus({ hours: TOKEN_EXPIRATION_TIME_HOURS + 0.001 })
     .toISO()!;
 
+  beforeEach(() => {
+    const TOTAL_CASE_COUNT = 100;
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByUser.mockResolvedValue(
+        Array(TOTAL_CASE_COUNT).fill(undefined),
+      );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByEmailTotal.mockReturnValue(TOTAL_CASE_COUNT);
+  });
+
   describe('userTokenHasExpired', () => {
     it('should return true when no token', () => {
       expect(userTokenHasExpired(undefined)).toBe(true);
@@ -99,7 +113,7 @@ describe('Verify User Pending Email', () => {
     beforeEach(() => {
       applicationContext
         .getPersistenceGateway()
-        .getUserById.mockReturnValue(mockPractitioner);
+        .getUserByIdOnceAllUpdatesComplete.mockReturnValue(mockPractitioner);
 
       applicationContext
         .getPersistenceGateway()
@@ -108,10 +122,6 @@ describe('Verify User Pending Email', () => {
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValue(mockCase);
-
-      applicationContext
-        .getPersistenceGateway()
-        .getDocketNumbersByUser.mockReturnValue([mockCase.docketNumber]);
     });
 
     it('should throw unauthorized error when user does not have permission to verify emails', async () => {
@@ -139,10 +149,12 @@ describe('Verify User Pending Email', () => {
     });
 
     it('should throw an unauthorized error when the token passed as an argument and the token store on the user are both undefined', async () => {
-      applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
-        ...mockPractitioner,
-        pendingEmailVerificationToken: undefined,
-      });
+      applicationContext
+        .getPersistenceGateway()
+        .getUserByIdOnceAllUpdatesComplete.mockReturnValue({
+          ...mockPractitioner,
+          pendingEmailVerificationToken: undefined,
+        });
 
       await expect(
         verifyUserPendingEmailInteractor(
@@ -156,10 +168,12 @@ describe('Verify User Pending Email', () => {
     });
 
     it('should throw an unauthorized error when there is no token timestamp', async () => {
-      applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
-        ...mockPractitioner,
-        pendingEmailVerificationTokenTimestamp: undefined,
-      });
+      applicationContext
+        .getPersistenceGateway()
+        .getUserByIdOnceAllUpdatesComplete.mockReturnValue({
+          ...mockPractitioner,
+          pendingEmailVerificationTokenTimestamp: undefined,
+        });
 
       await expect(
         verifyUserPendingEmailInteractor(
@@ -173,10 +187,12 @@ describe('Verify User Pending Email', () => {
     });
 
     it('should throw an unauthorized error when token timestamp is expired', async () => {
-      applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
-        ...mockPractitioner,
-        pendingEmailVerificationTokenTimestamp: TOKEN_TIMESTAMP_EXPIRED,
-      });
+      applicationContext
+        .getPersistenceGateway()
+        .getUserByIdOnceAllUpdatesComplete.mockReturnValue({
+          ...mockPractitioner,
+          pendingEmailVerificationTokenTimestamp: TOKEN_TIMESTAMP_EXPIRED,
+        });
 
       await expect(
         verifyUserPendingEmailInteractor(
@@ -269,7 +285,7 @@ describe('Verify User Pending Email', () => {
     it('should call updateUser with email set to pendingEmail and pending fields set to undefined', async () => {
       applicationContext
         .getPersistenceGateway()
-        .getUserById.mockReturnValue(mockPetitioner);
+        .getUserByIdOnceAllUpdatesComplete.mockReturnValue(mockPetitioner);
 
       await verifyUserPendingEmailInteractor(
         applicationContext,
@@ -288,6 +304,47 @@ describe('Verify User Pending Email', () => {
         pendingEmailVerificationToken: undefined,
         pendingEmailVerificationTokenTimestamp: undefined,
       });
+    });
+  });
+
+  describe('verifyUserPendingEmailInteractor - Wait until User is free', () => {
+    function sleep(timeInMilliseconds: number) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve(null);
+        }, timeInMilliseconds);
+      });
+    }
+
+    it('should wait until the user record is free to run the interactor', async () => {
+      let resolver: Function;
+      let errorMessage: string;
+
+      applicationContext
+        .getPersistenceGateway()
+        .getUserByIdOnceAllUpdatesComplete.mockImplementation(() => {
+          return new Promise(resolve => (resolver = resolve));
+        });
+
+      verifyUserPendingEmailInteractor(
+        applicationContext,
+        {
+          token: 'abc',
+        },
+        mockPrivatePractitionerUser,
+      ).catch(error => {
+        errorMessage = error.message;
+      });
+
+      await sleep(50);
+      expect(errorMessage!).toEqual(undefined);
+
+      await sleep(50);
+      expect(errorMessage!).toEqual(undefined);
+
+      resolver!(mockPrivatePractitionerUser);
+      await sleep(50);
+      expect(errorMessage!).toEqual('Tokens do not match');
     });
   });
 });
