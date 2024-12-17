@@ -22,7 +22,7 @@ describe('should default status report order descriptions', () => {
     cy.get('#tab-drafts').click();
     getLastDraftOrderElementFromDrafts().click();
     cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
-    cy.get('.select-react-element__control').should('have.text', 'Order');
+    cy.get('[data-testid="court-issued-document-type-search"]').should('have.text', 'Order');
     cy.get('[data-testid="document-description-input"]').should(
       'have.value',
       `Order parties by ${today} shall file a status report.`,

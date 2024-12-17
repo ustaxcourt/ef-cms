@@ -1,6 +1,7 @@
 import {
   COURT_ISSUED_EVENT_CODES,
   DOCUMENT_RELATIONSHIPS,
+  EVENT_CODES_THAT_ALLOW_FREE_TEXT,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
@@ -58,7 +59,7 @@ export const fileCourtIssuedOrder = async (
     documentMetadata.eventCode = 'OJR';
   }
 
-  if (['O', 'NOT', 'OJR'].includes(documentMetadata.eventCode)) {
+  if (EVENT_CODES_THAT_ALLOW_FREE_TEXT.includes(documentMetadata.eventCode)) {
     const freeText = generateFreeText(documentMetadata);
     documentMetadata.freeText = freeText;
     if (documentMetadata.draftOrderState) {
