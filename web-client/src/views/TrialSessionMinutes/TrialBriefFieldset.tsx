@@ -1,5 +1,6 @@
 import {
   BRIEF_TYPE_OPTIONS,
+  MINUTE_SHEET_FORM_SECTION_MAP,
   MinuteSheetFormState,
   SeriatimBriefFormFields,
   SeriatimMemorandumFormFields,
@@ -25,7 +26,7 @@ export const TrialBriefFieldset = ({
 }: {
   onChangeHandler: OnChangeHandler;
   onBlurHandler: () => void;
-  trialBriefFormState: MinuteSheetFormState['trialBrief'];
+  trialBriefFormState: MinuteSheetFormState['trialBriefSection'];
 }) => {
   const renderBriefForm = (briefType: string) => {
     const briefFormMap = {
@@ -107,7 +108,7 @@ export const TrialBriefFieldset = ({
             onChange={e =>
               onChangeHandler({
                 name: 'dateSubmitted',
-                section: 'trialBrief',
+                section: MINUTE_SHEET_FORM_SECTION_MAP.trialBriefSection,
                 value: e.target.value,
               })
             }
@@ -131,7 +132,7 @@ export const TrialBriefFieldset = ({
               onChange={e =>
                 onChangeHandler({
                   name: 'totalTrialHours',
-                  section: 'trialBrief',
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.trialBriefSection,
                   value: e.target.value,
                 })
               }
@@ -148,7 +149,7 @@ export const TrialBriefFieldset = ({
             onChange={e =>
               onChangeHandler({
                 name: 'dateBenchOpinionRendered',
-                section: 'trialBrief',
+                section: MINUTE_SHEET_FORM_SECTION_MAP.trialBriefSection,
                 value: e.target.value,
               })
             }
@@ -171,7 +172,7 @@ export const TrialBriefFieldset = ({
                 onChange={e => {
                   onChangeHandler({
                     name: 'transcriptOrdered',
-                    section: 'trialBrief',
+                    section: MINUTE_SHEET_FORM_SECTION_MAP.trialBriefSection,
                     value: e.target.checked,
                   });
                 }}
@@ -200,7 +201,7 @@ export const TrialBriefFieldset = ({
               onChange={e =>
                 onChangeHandler({
                   name: 'note',
-                  section: 'trialBrief',
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.trialBriefSection,
                   value: e.target.value,
                 })
               }
@@ -226,7 +227,7 @@ export const TrialBriefFieldset = ({
               onChange={e => {
                 onChangeHandler({
                   name: 'briefType',
-                  section: 'trialBrief',
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.trialBriefSection,
                   value: e.target.value,
                 });
               }}

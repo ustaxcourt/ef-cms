@@ -1,5 +1,8 @@
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+import {
+  MINUTE_SHEET_FORM_SECTION_MAP,
+  MinuteSheetFormState,
+} from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { OnChangeHandler } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import React from 'react';
 
@@ -10,7 +13,7 @@ export const TrialSessionMetadataFieldset = ({
 }: {
   onChangeHandler: OnChangeHandler;
   onBlurHandler: () => void;
-  trialSessionMetadataFormState: MinuteSheetFormState['trialSessionMetadata'];
+  trialSessionMetadataFormState: MinuteSheetFormState['trialSessionMetadataSection'];
 }) => {
   return (
     <fieldset className="border-0 grid-container padding-0">
@@ -30,7 +33,8 @@ export const TrialSessionMetadataFieldset = ({
               onChange={e =>
                 onChangeHandler({
                   name: e.target.name,
-                  section: 'trialSessionMetadata',
+                  section:
+                    MINUTE_SHEET_FORM_SECTION_MAP.trialSessionMetadataSection,
                   value: e.target.value,
                 })
               }
@@ -55,7 +59,8 @@ export const TrialSessionMetadataFieldset = ({
               onChange={e =>
                 onChangeHandler({
                   name: e.target.name,
-                  section: 'trialSessionMetadata',
+                  section:
+                    MINUTE_SHEET_FORM_SECTION_MAP.trialSessionMetadataSection,
                   value: e.target.value,
                 })
               }
@@ -79,7 +84,8 @@ export const TrialSessionMetadataFieldset = ({
               onChange={e =>
                 onChangeHandler({
                   name: e.target.name,
-                  section: 'trialSessionMetadata',
+                  section:
+                    MINUTE_SHEET_FORM_SECTION_MAP.trialSessionMetadataSection,
                   value: e.target.value,
                 })
               }
@@ -100,7 +106,8 @@ export const TrialSessionMetadataFieldset = ({
                 onChange={e => {
                   onChangeHandler({
                     name: e.target.name,
-                    section: 'trialSessionMetadata',
+                    section:
+                      MINUTE_SHEET_FORM_SECTION_MAP.trialSessionMetadataSection,
                     value: e.target.checked,
                   });
                 }}

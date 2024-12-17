@@ -6,7 +6,10 @@ import {
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+import {
+  MINUTE_SHEET_FORM_SECTION_MAP,
+  MinuteSheetFormState,
+} from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import React from 'react';
 
 export const RespondentsFieldset = ({
@@ -20,7 +23,7 @@ export const RespondentsFieldset = ({
   onChangeHandler: OnChangeHandler;
   onBlurHandler: () => void;
   removeRowHandler: RemoveRowHandler;
-  respondentsFormState: MinuteSheetFormState['respondents'];
+  respondentsFormState: MinuteSheetFormState['respondentsSection'];
 }) => {
   return (
     <fieldset className="border-0 grid-container padding-0 margin-left-4">
@@ -54,7 +57,7 @@ export const RespondentsFieldset = ({
                         key: row.renderKey,
                         nestedName: 'name',
                       },
-                      section: 'respondents',
+                      section: MINUTE_SHEET_FORM_SECTION_MAP.respondentsSection,
                       value: e.target.value,
                     })
                   }
@@ -75,7 +78,7 @@ export const RespondentsFieldset = ({
                       key: row.renderKey,
                       nestedName: 'datesOfAppearance',
                     },
-                    section: 'respondents',
+                    section: MINUTE_SHEET_FORM_SECTION_MAP.respondentsSection,
                     value: e.target.value,
                   })
                 }
@@ -91,7 +94,7 @@ export const RespondentsFieldset = ({
                   removeRowHandler({
                     key: row.renderKey,
                     name: 'respondents',
-                    section: 'respondents',
+                    section: MINUTE_SHEET_FORM_SECTION_MAP.respondentsSection,
                   });
                 }}
               >
@@ -110,7 +113,7 @@ export const RespondentsFieldset = ({
             e.preventDefault();
             addRowHandler({
               name: 'respondents',
-              section: 'respondents',
+              section: MINUTE_SHEET_FORM_SECTION_MAP.respondentsSection,
             });
           }}
         >

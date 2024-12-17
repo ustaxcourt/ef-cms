@@ -8,6 +8,7 @@ import { setCaseAction } from '@web-client/presenter/actions/setCaseAction';
 import { setTrialSessionDetailsAction } from '../../actions/TrialSession/setTrialSessionDetailsAction';
 import { setTrialSessionIdAction } from '../../actions/TrialSession/setTrialSessionIdAction';
 import { setupCurrentPageAction } from '../../actions/setupCurrentPageAction';
+import { takeMinuteSheetFormSnapshotAction } from '@web-client/presenter/actions/TrialSessionMinutes/takeMinuteSheetFormSnapshotAction';
 
 export const goToTrialSessionMinutesSequence = [
   setupCurrentPageAction('Interstitial'),
@@ -21,6 +22,7 @@ export const goToTrialSessionMinutesSequence = [
     no: [initializeTrialSessionMinuteSheetFormAction],
     yes: [getExistingMinuteSheetFormAction],
   },
+  takeMinuteSheetFormSnapshotAction,
   setupCurrentPageAction('TrialSessionMinutesPage'),
 ] as unknown as ({
   docketNumber,

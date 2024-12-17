@@ -3,6 +3,7 @@ import {
   ACTION_FILED_BY_OPTIONS,
   ACTION_STATUS_OPTIONS,
   KeyedActionFilingFormFields,
+  MINUTE_SHEET_FORM_SECTION_MAP,
   MinuteSheetFormState,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import {
@@ -44,7 +45,7 @@ export const ActionsAndFilingsFieldset = ({
                   key: row.renderKey,
                   nestedName: 'date',
                 },
-                section: 'actionsAndFilingsSection',
+                section: MINUTE_SHEET_FORM_SECTION_MAP.actionsAndFilingsSection,
                 value: e.target.value,
               })
             }
@@ -71,7 +72,8 @@ export const ActionsAndFilingsFieldset = ({
                     key: row.renderKey,
                     nestedName: 'documentType',
                   },
-                  section: 'actionsAndFilingsSection',
+                  section:
+                    MINUTE_SHEET_FORM_SECTION_MAP.actionsAndFilingsSection,
                   value: e.target.value,
                 });
               }}
@@ -108,7 +110,8 @@ export const ActionsAndFilingsFieldset = ({
                     key: row.renderKey,
                     nestedName: 'filedBy',
                   },
-                  section: 'actionsAndFilingsSection',
+                  section:
+                    MINUTE_SHEET_FORM_SECTION_MAP.actionsAndFilingsSection,
                   value: e.target.value,
                 });
               }}
@@ -145,7 +148,8 @@ export const ActionsAndFilingsFieldset = ({
                     key: row.renderKey,
                     nestedName: 'status',
                   },
-                  section: 'actionsAndFilingsSection',
+                  section:
+                    MINUTE_SHEET_FORM_SECTION_MAP.actionsAndFilingsSection,
                   value: e.target.value,
                 });
               }}
@@ -221,7 +225,8 @@ export const ActionsAndFilingsFieldset = ({
                         key: row.renderKey,
                         nestedName: 'note',
                       },
-                      section: 'actionsAndFilingsSection',
+                      section:
+                        MINUTE_SHEET_FORM_SECTION_MAP.actionsAndFilingsSection,
                       value: e.target.value,
                     })
                   }
@@ -238,7 +243,8 @@ export const ActionsAndFilingsFieldset = ({
                   removeRowHandler({
                     key: row.renderKey,
                     name: 'actionsAndFilings',
-                    section: 'actionsAndFilingsSection',
+                    section:
+                      MINUTE_SHEET_FORM_SECTION_MAP.actionsAndFilingsSection,
                   });
                 }}
               >
@@ -258,7 +264,7 @@ export const ActionsAndFilingsFieldset = ({
               e.preventDefault();
               addRowHandler({
                 name: 'actionsAndFilings',
-                section: 'actionsAndFilingsSection',
+                section: MINUTE_SHEET_FORM_SECTION_MAP.actionsAndFilingsSection,
               });
             }}
           >

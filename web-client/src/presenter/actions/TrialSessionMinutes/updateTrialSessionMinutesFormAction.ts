@@ -14,12 +14,13 @@ export const updateTrialSessionMinutesFormAction = ({
       value,
     );
   } else {
+    console.log('section', section);
     store.set(state.minuteSheetForm[section][name], value);
   }
 
   // Handle side-effects of state changes below for the time being, with intent
   // of using a cleaner way of handling these changes.
-  if (section === 'petitioners' && name === 'noAppearance') {
+  if (section === 'petitionersSection' && name === 'noAppearance') {
     const updatedPetitionersObject = {} as {};
 
     if (!value) {
@@ -37,7 +38,7 @@ export const updateTrialSessionMinutesFormAction = ({
     );
   }
 
-  if (section === 'trialBrief' && name === 'briefType') {
+  if (section === 'trialBriefSection' && name === 'briefType') {
     const defaultBriefDetailsValuesMap = {
       [BRIEF_TYPE_OPTIONS.seriatimBrief]: {
         answering: {

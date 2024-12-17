@@ -717,6 +717,7 @@ export const baseState = {
   },
   messagesSectionCount: 0,
   minuteSheetForm: cloneDeep(initialMinuteSheetFormState),
+  minuteSheetFormSnapshot: '',
   modal: {
     contactSupportMessage: undefined, // the "contact support" message sans email address
     docketEntry: undefined,

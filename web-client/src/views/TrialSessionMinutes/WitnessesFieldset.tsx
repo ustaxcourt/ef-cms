@@ -6,6 +6,7 @@ import {
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
+  MINUTE_SHEET_FORM_SECTION_MAP,
   WitnessesRecord,
   witnessTypeOptions,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
@@ -59,7 +60,7 @@ export const WitnessesFieldset = ({
                       key: row.renderKey,
                       nestedName: 'name',
                     },
-                    section: 'witnesses',
+                    section: MINUTE_SHEET_FORM_SECTION_MAP.witnessesSection,
                     value: e.target.value,
                   })
                 }
@@ -76,7 +77,7 @@ export const WitnessesFieldset = ({
                 removeRowHandler({
                   key: row.renderKey,
                   name: `${witnessType}Witnesses`,
-                  section: 'witnesses',
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.witnessesSection,
                 });
               }}
             >
@@ -95,7 +96,7 @@ export const WitnessesFieldset = ({
             e.preventDefault();
             addRowHandler({
               name: `${witnessType}Witnesses`,
-              section: 'witnesses',
+              section: MINUTE_SHEET_FORM_SECTION_MAP.witnessesSection,
             });
           }}
         >

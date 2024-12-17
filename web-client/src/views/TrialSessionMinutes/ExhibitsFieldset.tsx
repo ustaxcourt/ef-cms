@@ -6,6 +6,7 @@ import {
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import {
   EXHIBIT_STATUS_OPTIONS,
+  MINUTE_SHEET_FORM_SECTION_MAP,
   MinuteSheetFormState,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
@@ -21,7 +22,7 @@ export const ExhibitsFieldset = ({
   onChangeHandler: OnChangeHandler;
   onBlurHandler: () => void;
   addRowHandler: AddRowHandler;
-  exhibitsFormState: MinuteSheetFormState['exhibits'];
+  exhibitsFormState: MinuteSheetFormState['exhibitsSection'];
   removeRowHandler: RemoveRowHandler;
 }) => {
   return (
@@ -56,7 +57,7 @@ export const ExhibitsFieldset = ({
                       key: row.renderKey,
                       nestedName: 'description',
                     },
-                    section: 'exhibits',
+                    section: MINUTE_SHEET_FORM_SECTION_MAP.exhibitsSection,
                     value: e.target.value,
                   })
                 }
@@ -84,7 +85,7 @@ export const ExhibitsFieldset = ({
                       key: row.renderKey,
                       nestedName: 'status',
                     },
-                    section: 'exhibits',
+                    section: MINUTE_SHEET_FORM_SECTION_MAP.exhibitsSection,
                     value: e.target.value,
                   });
                 }}
@@ -122,7 +123,7 @@ export const ExhibitsFieldset = ({
                       key: row.renderKey,
                       nestedName: 'note',
                     },
-                    section: 'exhibits',
+                    section: MINUTE_SHEET_FORM_SECTION_MAP.exhibitsSection,
                     value: e.target.value,
                   })
                 }
@@ -139,7 +140,7 @@ export const ExhibitsFieldset = ({
                 removeRowHandler({
                   key: row.renderKey,
                   name: 'exhibits',
-                  section: 'exhibits',
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.exhibitsSection,
                 });
               }}
             >
@@ -158,7 +159,7 @@ export const ExhibitsFieldset = ({
             e.preventDefault();
             addRowHandler({
               name: 'exhibits',
-              section: 'exhibits',
+              section: MINUTE_SHEET_FORM_SECTION_MAP.exhibitsSection,
             });
           }}
         >

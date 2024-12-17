@@ -5,7 +5,10 @@ import {
 } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+import {
+  MINUTE_SHEET_FORM_SECTION_MAP,
+  MinuteSheetFormState,
+} from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import React from 'react';
 
 export const PetitionersFieldset = ({
@@ -18,7 +21,7 @@ export const PetitionersFieldset = ({
   onChangeHandler: OnChangeHandler;
   onBlurHandler: () => void;
   addRowHandler: AddRowHandler;
-  petitionersFormState: MinuteSheetFormState['petitioners'];
+  petitionersFormState: MinuteSheetFormState['petitionersSection'];
   removeRowHandler: RemoveRowHandler;
 }) => {
   return (
@@ -38,7 +41,7 @@ export const PetitionersFieldset = ({
               onChange={e =>
                 onChangeHandler({
                   name: 'noAppearance',
-                  section: 'petitioners',
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.petitionersSection,
                   value: e.target.checked,
                 })
               }
@@ -79,7 +82,7 @@ export const PetitionersFieldset = ({
                       key: row.renderKey,
                       nestedName: 'name',
                     },
-                    section: 'petitioners',
+                    section: MINUTE_SHEET_FORM_SECTION_MAP.petitionersSection,
                     value: e.target.value,
                   })
                 }
@@ -105,7 +108,7 @@ export const PetitionersFieldset = ({
                       key: row.renderKey,
                       nestedName: 'role',
                     },
-                    section: 'petitioners',
+                    section: MINUTE_SHEET_FORM_SECTION_MAP.petitionersSection,
                     value: e.target.value,
                   })
                 }
@@ -137,7 +140,7 @@ export const PetitionersFieldset = ({
                       key: row.renderKey,
                       nestedName: 'datesOfAppearance',
                     },
-                    section: 'petitioners',
+                    section: MINUTE_SHEET_FORM_SECTION_MAP.petitionersSection,
                     value: e.target.value,
                   })
                 }
@@ -154,7 +157,7 @@ export const PetitionersFieldset = ({
                 removeRowHandler({
                   key: row.renderKey,
                   name: 'petitioners',
-                  section: 'petitioners',
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.petitionersSection,
                 });
               }}
             >
@@ -174,7 +177,7 @@ export const PetitionersFieldset = ({
               e.preventDefault();
               addRowHandler({
                 name: 'petitioners',
-                section: 'petitioners',
+                section: MINUTE_SHEET_FORM_SECTION_MAP.petitionersSection,
               });
             }}
           >

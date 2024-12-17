@@ -6,6 +6,7 @@ import { Button } from '@web-client/ustc-ui/Button/Button';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
+  MINUTE_SHEET_FORM_SECTION_MAP,
   MOTION_FILED_BY_OPTIONS,
   MOTION_STATUS_OPTIONS,
   MOTION_TYPE_OPTIONS,
@@ -44,7 +45,7 @@ export const MotionsFieldset = ({
                         key: row.renderKey,
                         nestedName: 'date',
                       },
-                      section: 'motionsSection',
+                      section: MINUTE_SHEET_FORM_SECTION_MAP.motionsSection,
                       value: e.target.value,
                     })
                   }
@@ -71,7 +72,7 @@ export const MotionsFieldset = ({
                           key: row.renderKey,
                           nestedName: 'type',
                         },
-                        section: 'motionsSection',
+                        section: MINUTE_SHEET_FORM_SECTION_MAP.motionsSection,
                         value: e.target.value,
                       });
                     }}
@@ -107,7 +108,7 @@ export const MotionsFieldset = ({
                             key: row.renderKey,
                             nestedName: 'oralMotion',
                           },
-                          section: 'motionsSection',
+                          section: MINUTE_SHEET_FORM_SECTION_MAP.motionsSection,
                           value: e.target.checked,
                         });
                       }}
@@ -144,7 +145,7 @@ export const MotionsFieldset = ({
                           key: row.renderKey,
                           nestedName: 'filedBy',
                         },
-                        section: 'motionsSection',
+                        section: MINUTE_SHEET_FORM_SECTION_MAP.motionsSection,
                         value: e.target.value,
                       });
                     }}
@@ -184,7 +185,7 @@ export const MotionsFieldset = ({
                           key: row.renderKey,
                           nestedName: 'status',
                         },
-                        section: 'motionsSection',
+                        section: MINUTE_SHEET_FORM_SECTION_MAP.motionsSection,
                         value: e.target.value,
                       });
                     }}
@@ -225,7 +226,7 @@ export const MotionsFieldset = ({
                           key: row.renderKey,
                           nestedName: 'note',
                         },
-                        section: 'motionsSection',
+                        section: MINUTE_SHEET_FORM_SECTION_MAP.motionsSection,
                         value: e.target.value,
                       })
                     }
@@ -246,7 +247,7 @@ export const MotionsFieldset = ({
               e.preventDefault();
               addRowHandler({
                 name: 'motions',
-                section: 'motionsSection',
+                section: MINUTE_SHEET_FORM_SECTION_MAP.motionsSection,
               });
             }}
           >

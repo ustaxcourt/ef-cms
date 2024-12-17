@@ -1,5 +1,5 @@
+import { trialSessionMinutesAutosaveAction } from '@web-client/presenter/actions/TrialSessionMinutes/trialSessionMinutesAutosaveAction';
+
 export const trialSessionMinutesAutosaveSequence = [
-  () => {
-    console.log('Autosaving...');
-  },
+  trialSessionMinutesAutosaveAction,
 ] as unknown as () => void;

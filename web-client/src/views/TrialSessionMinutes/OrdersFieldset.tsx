@@ -1,6 +1,7 @@
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
+  MINUTE_SHEET_FORM_SECTION_MAP,
   MinuteSheetFormState,
   STATUS_REPORT_ORDERED_FOR_OPTIONS,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
@@ -14,7 +15,7 @@ export const OrdersFieldset = ({
 }: {
   onChangeHandler: OnChangeHandler;
   onBlurHandler: () => void;
-  ordersFormState: MinuteSheetFormState['orders'];
+  ordersFormState: MinuteSheetFormState['ordersSection'];
 }) => {
   return (
     <fieldset className="border-0 grid-container padding-0">
@@ -35,7 +36,7 @@ export const OrdersFieldset = ({
                 rowInfo: {
                   key: 'date',
                 },
-                section: 'orders',
+                section: MINUTE_SHEET_FORM_SECTION_MAP.ordersSection,
                 value: e.target.value,
               })
             }
@@ -54,7 +55,7 @@ export const OrdersFieldset = ({
                 rowInfo: {
                   key: 'dueDate',
                 },
-                section: 'orders',
+                section: MINUTE_SHEET_FORM_SECTION_MAP.ordersSection,
                 value: e.target.value,
               })
             }
@@ -80,7 +81,7 @@ export const OrdersFieldset = ({
                   rowInfo: {
                     key: 'orderedFor',
                   },
-                  section: 'orders',
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.ordersSection,
                   value: e.target.value,
                 });
               }}
@@ -117,7 +118,7 @@ export const OrdersFieldset = ({
                   rowInfo: {
                     key: 'note',
                   },
-                  section: 'orders',
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.ordersSection,
                   value: e.target.value,
                 })
               }
@@ -142,7 +143,7 @@ export const OrdersFieldset = ({
                 rowInfo: {
                   key: 'date',
                 },
-                section: 'orders',
+                section: MINUTE_SHEET_FORM_SECTION_MAP.ordersSection,
                 value: e.target.value,
               })
             }
@@ -161,7 +162,7 @@ export const OrdersFieldset = ({
                 rowInfo: {
                   key: 'dueDate',
                 },
-                section: 'orders',
+                section: MINUTE_SHEET_FORM_SECTION_MAP.ordersSection,
                 value: e.target.value,
               })
             }
@@ -188,7 +189,7 @@ export const OrdersFieldset = ({
                   rowInfo: {
                     key: 'note',
                   },
-                  section: 'orders',
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.ordersSection,
                   value: e.target.value,
                 })
               }

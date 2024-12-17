@@ -6,6 +6,7 @@ import { Button } from '@web-client/ustc-ui/Button/Button';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
+  MINUTE_SHEET_FORM_SECTION_MAP,
   MinuteSheetFormState,
   TRIAL_HEARING_OPTIONS,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
@@ -20,7 +21,7 @@ export const CaseMetadataFieldset = ({
   addRowHandler: AddRowHandler;
   onChangeHandler: OnChangeHandler;
   onBlurHandler: () => void;
-  caseMetadataFormState: MinuteSheetFormState['caseMetadata'];
+  caseMetadataFormState: MinuteSheetFormState['caseMetadataSection'];
 }) => {
   return (
     <fieldset className="border-0 padding-0">
@@ -41,7 +42,7 @@ export const CaseMetadataFieldset = ({
                 rowInfo: {
                   key: 'date',
                 },
-                section: 'caseMetadata',
+                section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
                 value: e.target.value,
               })
             }
@@ -68,7 +69,7 @@ export const CaseMetadataFieldset = ({
                   rowInfo: {
                     key: 'note',
                   },
-                  section: 'caseMetadata',
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
                   value: e.target.value,
                 })
               }
@@ -92,7 +93,7 @@ export const CaseMetadataFieldset = ({
                     rowInfo: {
                       key: 'transcriptOrdered',
                     },
-                    section: 'caseMetadata',
+                    section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
                     value: e.target.checked,
                   })
                 }
@@ -124,7 +125,7 @@ export const CaseMetadataFieldset = ({
                 rowInfo: {
                   key: 'date',
                 },
-                section: 'caseMetadata',
+                section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
                 value: e.target.value,
               })
             }
@@ -151,7 +152,7 @@ export const CaseMetadataFieldset = ({
                   rowInfo: {
                     key: 'note',
                   },
-                  section: 'caseMetadata',
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
                   value: e.target.value,
                 })
               }
@@ -186,7 +187,7 @@ export const CaseMetadataFieldset = ({
                       key: row.renderKey,
                       nestedName: 'date',
                     },
-                    section: 'caseMetadata',
+                    section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
                     value: e.target.value,
                   })
                 }
@@ -214,7 +215,8 @@ export const CaseMetadataFieldset = ({
                         key: row.renderKey,
                         nestedName: 'note',
                       },
-                      section: 'caseMetadata',
+                      section:
+                        MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
                       value: e.target.value,
                     })
                   }
@@ -242,7 +244,8 @@ export const CaseMetadataFieldset = ({
                           key: row.renderKey,
                           nestedName: 'transcriptOrdered',
                         },
-                        section: 'caseMetadata',
+                        section:
+                          MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
                         value: e.target.checked,
                       });
                     }}
@@ -270,7 +273,7 @@ export const CaseMetadataFieldset = ({
               e.preventDefault();
               addRowHandler({
                 name: 'recalled',
-                section: 'caseMetadata',
+                section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
               });
             }}
           >
@@ -296,7 +299,7 @@ export const CaseMetadataFieldset = ({
                 rowInfo: {
                   key: 'date',
                 },
-                section: 'caseMetadata',
+                section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
                 value: e.target.value,
               })
             }
@@ -323,7 +326,7 @@ export const CaseMetadataFieldset = ({
                   rowInfo: {
                     key: 'note',
                   },
-                  section: 'caseMetadata',
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
                   value: e.target.value,
                 })
               }
@@ -349,7 +352,7 @@ export const CaseMetadataFieldset = ({
                     rowInfo: {
                       key: 'transcriptOrdered',
                     },
-                    section: 'caseMetadata',
+                    section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
                     value: e.target.checked,
                   });
                 }}
@@ -381,7 +384,7 @@ export const CaseMetadataFieldset = ({
                 rowInfo: {
                   key: 'date',
                 },
-                section: 'caseMetadata',
+                section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
                 value: e.target.value,
               });
             }}
@@ -407,7 +410,7 @@ export const CaseMetadataFieldset = ({
                   rowInfo: {
                     key: 'trialSessionType',
                   },
-                  section: 'caseMetadata',
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
                   value: e.target.value,
                 });
               }}
@@ -444,7 +447,7 @@ export const CaseMetadataFieldset = ({
                   rowInfo: {
                     key: 'note',
                   },
-                  section: 'caseMetadata',
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
                   value: e.target.value,
                 });
               }}
@@ -468,7 +471,7 @@ export const CaseMetadataFieldset = ({
                     rowInfo: {
                       key: 'transcriptOrdered',
                     },
-                    section: 'caseMetadata',
+                    section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
                     value: e.target.checked,
                   });
                 }}

@@ -1,3 +1,17 @@
+export const MINUTE_SHEET_FORM_SECTION_MAP = {
+  actionsAndFilingsSection: 'actionsAndFilingsSection',
+  caseMetadataSection: 'caseMetadataSection',
+  exhibitsSection: 'exhibitsSection',
+  jurisdictionRetainedSection: 'jurisdictionRetainedSection',
+  motionsSection: 'motionsSection',
+  ordersSection: 'ordersSection',
+  petitionersSection: 'petitionersSection',
+  respondentsSection: 'respondentsSection',
+  trialBriefSection: 'trialBriefSection',
+  trialSessionMetadataSection: 'trialSessionMetadataSection',
+  witnessesSection: 'witnessesSection',
+} as const;
+
 type MotionFormFields = {
   date: string;
   type: MotionTypeOption | '';
@@ -83,7 +97,7 @@ type KeyedWitnessEntryByKey = Record<RenderKey, KeyedWitnessEntry>;
 
 export let witnessTypeOptions: 'petitioner' | 'respondent';
 export type WitnessesRecord<T extends 'petitioner' | 'respondent'> =
-  MinuteSheetFormState['witnesses'][`${T}Witnesses`];
+  MinuteSheetFormState['witnessesSection'][`${T}Witnesses`];
 
 type KeyedPartyFormFields = KeyedEntry & {
   renderKey: string;

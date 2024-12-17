@@ -1,6 +1,9 @@
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+import {
+  MINUTE_SHEET_FORM_SECTION_MAP,
+  MinuteSheetFormState,
+} from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { OnChangeHandler } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import React from 'react';
 
@@ -11,7 +14,7 @@ export const JurisdictionRetainedFieldset = ({
 }: {
   onChangeHandler: OnChangeHandler;
   onBlurHandler: () => void;
-  jurisdictionRetainedFormState: MinuteSheetFormState['jurisdictionRetained'];
+  jurisdictionRetainedFormState: MinuteSheetFormState['jurisdictionRetainedSection'];
 }) => {
   return (
     <fieldset className="border-0 grid-container padding-0">
@@ -33,7 +36,8 @@ export const JurisdictionRetainedFieldset = ({
                 onChange={e => {
                   onChangeHandler({
                     name: 'continued',
-                    section: 'jurisdictionRetained',
+                    section:
+                      MINUTE_SHEET_FORM_SECTION_MAP.jurisdictionRetainedSection,
                     value: e.target.checked,
                   });
                 }}
@@ -57,7 +61,8 @@ export const JurisdictionRetainedFieldset = ({
             onChange={e =>
               onChangeHandler({
                 name: 'date',
-                section: 'jurisdictionRetained',
+                section:
+                  MINUTE_SHEET_FORM_SECTION_MAP.jurisdictionRetainedSection,
                 value: e.target.value,
               })
             }
@@ -81,7 +86,8 @@ export const JurisdictionRetainedFieldset = ({
               onChange={e =>
                 onChangeHandler({
                   name: 'note',
-                  section: 'jurisdictionRetained',
+                  section:
+                    MINUTE_SHEET_FORM_SECTION_MAP.jurisdictionRetainedSection,
                   value: e.target.value,
                 })
               }
