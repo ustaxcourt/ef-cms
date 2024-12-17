@@ -55,7 +55,7 @@ describe('should default status report order descriptions', () => {
     );
   });
 
-  it('should set event code to OJR when case is stricken from trial session and jurisdiction is retained and display default description', () => {
+  it('should continue to handle OJR and set correct signing judge when status order report is signed by chambers user', () => {
     judgeOrChambersCreatesStatusReportOrder(today, true, true);
     loginAsDocketClerk();
     cy.visit(`/case-detail/${docketNumber}`);
