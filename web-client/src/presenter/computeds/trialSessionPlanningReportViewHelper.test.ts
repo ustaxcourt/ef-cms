@@ -123,9 +123,21 @@ describe('trialSessionPlanningReportViewHelper', () => {
       );
 
       expect(previousTermsFormatted).toEqual([
-        { termDisplayFormatted: "Test_term_2 '24" },
-        { termDisplayFormatted: "Test_term_0 '24" },
-        { termDisplayFormatted: "Test_term_1 '24" },
+        {
+          term: 'TEST_TERM_2',
+          termDisplayFormatted: 'Test_term_2 ‘24',
+          year: 2024,
+        },
+        {
+          term: 'TEST_TERM_0',
+          termDisplayFormatted: 'Test_term_0 ‘24',
+          year: 2024,
+        },
+        {
+          term: 'TEST_TERM_1',
+          termDisplayFormatted: 'Test_term_1 ‘24',
+          year: 2024,
+        },
       ]);
     });
   });
