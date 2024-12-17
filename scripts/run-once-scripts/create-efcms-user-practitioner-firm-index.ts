@@ -1,4 +1,10 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
+
 import { Client } from '@opensearch-project/opensearch';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { areAllReindexTasksFinished } from '../elasticsearch/check-reindex-complete';
 import { efcmsUserMappings } from '../../web-api/elasticsearch/efcms-user-mappings';
 import {
@@ -6,16 +12,27 @@ import {
   settings,
 } from '../../web-api/elasticsearch/elasticsearch-settings';
 import { getClient } from '../../web-api/elasticsearch/client';
-import {
-  getSourceTableInfo,
-  requireEnvVars,
-} from '../../shared/admin-tools/util';
 
-requireEnvVars(['ENV', 'SOURCE_TABLE', 'OVERRIDE_ES_NUMBER_OF_REPLICAS']);
+const scriptConfig: ScriptConfig = {
+  description:
+    'create-efcms-user-practitioner-firm-index - Creates a temporary ' +
+    'efcms-user-practitioner-firm OpenSearch index based on the existing ' +
+    'efcms-user index.',
+  environment: {
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+    environmentName: 'ENV',
+    overrideEsNumberOfReplicas: 'OVERRIDE_ES_NUMBER_OF_REPLICAS',
+  },
+};
+const { elasticsearchEndpoint, environmentName, overrideEsNumberOfReplicas } =
+  parseArgsAndEnvVars(scriptConfig) as {
+    elasticsearchEndpoint: string;
+    environmentName: string;
+    overrideEsNumberOfReplicas: string;
+  };
 
-const environmentName: string = process.env.ENV!;
 const overriddenNumberOfReplicasIfNonProd: number = Number(
-  process.env.OVERRIDE_ES_NUMBER_OF_REPLICAS!,
+  overrideEsNumberOfReplicas,
 );
 const index: string = 'efcms-user-practitioner-firm';
 const efcmsUserPractitionerFirmMappings = {
@@ -33,8 +50,10 @@ const esSettings: esSettingsType = settings({
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const { version } = await getSourceTableInfo();
-  const client: Client = await getClient({ environmentName, version });
+  const client: Client = await getClient({
+    elasticsearchEndpoint,
+    environmentName,
+  });
 
   const { body: indexExists } = await client.indices.exists({ index });
 

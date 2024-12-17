@@ -1,14 +1,30 @@
-// usage: npx ts-node --transpile-only scripts/run-once-scripts/find-petitioners-missing-cases.ts
+#!/usr/bin/env -S npx ts-node --transpile-only
 
-import '../../types/IApplicationContext';
-import { createApplicationContext } from '../../web-api/src/applicationContext';
-import { searchAll } from '../../web-api/src/persistence/elasticsearch/searchClient';
-import type { RawPractitioner } from '../../shared/src/business/entities/Practitioner';
+import { type RawPractitioner } from '@shared/business/entities/Practitioner';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import {
+  type ServerApplicationContext,
+  createApplicationContext,
+} from '@web-api/applicationContext';
+import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
+
+const scriptConfig: ScriptConfig = {
+  description:
+    'find-cases-linked-to-practitioners - Identifies cases in which a practitioner appears as a petitioner.',
+  environment: {
+    dynamoDbTableName: 'DYNAMODB_TABLE_NAME',
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+  },
+};
+parseArgsAndEnvVars(scriptConfig);
 
 const getOpenCases = async ({
   applicationContext,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
 }): Promise<RawCase[]> => {
   const { results } = await searchAll({
     applicationContext,
@@ -32,32 +48,11 @@ const getOpenCases = async ({
   return results as unknown as RawCase[];
 };
 
-// const isPractitionerInCognito = async email => {
-//   try {
-//     const user = await cognito
-//       .adminGetUser({
-//         UserPoolId: cognitoPoolId,
-//         Username: email,
-//       })
-//       .promise();
-//     if (
-//       user.UserAttributes.find(attribute => attribute.Name === 'custom:role')
-//         .Value === 'privatePractitioner'
-//     ) {
-//       return true;
-//     } else {
-//       return false;
-//     }
-//   } catch (err) {
-//     return false;
-//   }
-// };
-
 const getPrivatePractitionersOnCase = async ({
   applicationContext,
   docketNumber,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   docketNumber: string;
 }): Promise<RawPractitioner[]> => {
   let privatePractitioners: RawPractitioner[] = [];
@@ -110,14 +105,6 @@ const getPrivatePractitionersOnCase = async ({
           `found a practitioner on case ${openCase.docketNumber} that matches contactPrimary.email of ${email}`,
         );
       }
-      // const isEmailActuallyAPractitionerEmail = await isPractitionerInCognito(
-      //   email,
-      // );
-      // if (isEmailActuallyAPractitionerEmail) {
-      //   console.log(
-      //     `case of ${openCase.docketNumber} is bad: ${email} should be removed from contactPrimary`,
-      //   );
-      // }
     }
   }
 })();

@@ -1,11 +1,25 @@
-import { createApplicationContext } from '@web-api/applicationContext';
-import { getSpecialSessionsInTerm } from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
-import { requireEnvVars } from '../../shared/admin-tools/util';
-import fs from 'fs';
-import { faker } from '@faker-js/faker';
-import { v4 as uuidv4 } from 'uuid';
+#!/usr/bin/env -S npx ts-node --transpile-only
 
-requireEnvVars(['ENV']);
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import { createApplicationContext } from '@web-api/applicationContext';
+import { faker } from '@faker-js/faker';
+import { getSpecialSessionsInTerm } from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
+import { v4 as uuidv4 } from 'uuid';
+import fs from 'fs';
+
+const scriptConfig: ScriptConfig = {
+  description:
+    'temp-get-special-trial-sessions - Fetches test data for special trial sessions.',
+  environment: {
+    dynamoDbTableName: 'DYNAMODB_TABLE_NAME',
+    env: 'ENV',
+  },
+};
+parseArgsAndEnvVars(scriptConfig);
+
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext();
@@ -25,6 +39,14 @@ requireEnvVars(['ENV']);
     counter++;
     return {
       ...session,
+      caseOrder: [
+        {
+          addedToSessionAt: '2024-04-09T14:06:21.318Z',
+          calendarNotes: 'This is a case note.',
+          docketNumber: `${counter}-24`,
+          isManuallyAdded: true,
+        },
+      ],
       judge: {
         name: faker.person.lastName(),
         userId: uuidv4(),
@@ -33,14 +55,6 @@ requireEnvVars(['ENV']);
         name: `${faker.person.firstName()} ${faker.person.lastName()}`,
         userId: uuidv4(),
       },
-      caseOrder: [
-        {
-          calendarNotes: 'This is a case note.',
-          isManuallyAdded: true,
-          addedToSessionAt: '2024-04-09T14:06:21.318Z',
-          docketNumber: `${counter}-24`,
-        },
-      ],
     };
   });
 
