@@ -1,9 +1,9 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { judgeColvin } from '@shared/test/mockUsers';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setCourtIssuedDocumentInitialDataAction } from './setCourtIssuedDocumentInitialDataAction';
-import {judgeColvin} from "@shared/test/mockUsers";
 
 describe('setCourtIssuedDocumentInitialDataAction', () => {
   const docketEntryIds = [
