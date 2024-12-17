@@ -37,7 +37,10 @@ export const TrialSessionPlanningModal = connect(
         title="Run Trial Session Planning Report"
       >
         <div className="margin-bottom-4">
-          <FormGroup errorText={validationErrors.term}>
+          <FormGroup
+            errorMessageId="trial-session-planning-report-modal-term-error"
+            errorText={validationErrors.term}
+          >
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="display-block" id="trial-term">
                 What trial term are you planning for?
@@ -75,7 +78,10 @@ export const TrialSessionPlanningModal = connect(
             </fieldset>
           </FormGroup>
 
-          <FormGroup errorText={validationErrors.year}>
+          <FormGroup
+            errorMessageId="trial-session-planning-report-modal-year-error"
+            errorText={validationErrors.year}
+          >
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="display-block" id="trial-year">
                 Select year
