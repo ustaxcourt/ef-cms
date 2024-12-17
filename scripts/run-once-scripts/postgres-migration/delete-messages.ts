@@ -21,6 +21,7 @@ const scriptConfig: ScriptConfig = {
     env: 'ENV',
     tableNameInput: 'TABLE_NAME',
   },
+  requireActiveAwsSession: true,
 };
 const { tableNameInput } = parseArgsAndEnvVars(scriptConfig) as {
   tableNameInput: string;

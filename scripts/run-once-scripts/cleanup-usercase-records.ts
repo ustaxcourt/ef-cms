@@ -27,6 +27,7 @@ const scriptConfig: ScriptConfig = {
     dynamoDbTableName: 'DYNAMODB_TABLE_NAME',
     env: 'ENV',
   },
+  requireActiveAwsSession: true,
 };
 parseArgsAndEnvVars(scriptConfig);
 

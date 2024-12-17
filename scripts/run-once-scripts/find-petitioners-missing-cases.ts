@@ -19,6 +19,7 @@ const scriptConfig: ScriptConfig = {
     dynamoDbTableName: 'DYNAMODB_TABLE_NAME',
     elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
   },
+  requireActiveAwsSession: true,
 };
 parseArgsAndEnvVars(scriptConfig);
 const CHUNK_SIZE = 100;

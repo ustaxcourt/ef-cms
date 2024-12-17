@@ -1,7 +1,5 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-// usage: scripts/reports/stale-cases.ts
-
 import {
   CASE_STATUS_TYPES,
   CaseStatus,
@@ -33,6 +31,7 @@ const scriptConfig: ScriptConfig = {
     elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
     environmentName: 'ENV',
   },
+  requireActiveAwsSession: true,
 };
 parseArgsAndEnvVars(scriptConfig);
 

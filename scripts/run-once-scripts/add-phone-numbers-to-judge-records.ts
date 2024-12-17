@@ -23,6 +23,7 @@ const scriptConfig: ScriptConfig = {
   description:
     'add-phone-numbers-to-judge-records - Sets the judgePhoneNumber property for Judge user entities.',
   environment: { env: 'ENV' },
+  requireActiveAwsSession: true,
 };
 parseArgsAndEnvVars(scriptConfig);
 

@@ -18,6 +18,7 @@ const scriptConfig: ScriptConfig = {
       type: 'string',
     },
   },
+  requireActiveAwsSession: true,
 };
 const { env, toggle } = parseArgsAndEnvVars(scriptConfig) as {
   env: string;

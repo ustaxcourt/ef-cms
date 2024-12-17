@@ -19,6 +19,7 @@ const scriptConfig: ScriptConfig = {
     elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
     environmentName: 'ENV',
   },
+  requireActiveAwsSession: true,
 };
 parseArgsAndEnvVars(scriptConfig);
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;

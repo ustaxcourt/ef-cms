@@ -14,6 +14,7 @@ const scriptConfig: ScriptConfig = {
   environment: {
     TableName: 'SOURCE_TABLE',
   },
+  requireActiveAwsSession: true,
 };
 const { TableName } = parseArgsAndEnvVars(scriptConfig) as {
   TableName: string;

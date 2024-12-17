@@ -36,6 +36,7 @@ const scriptConfig: ScriptConfig = {
       type: 'string',
     },
   },
+  requireActiveAwsSession: true,
 };
 const { day, month } = parseArgsAndEnvVars(scriptConfig) as {
   day: string;

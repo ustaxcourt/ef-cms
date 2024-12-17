@@ -29,6 +29,7 @@ const scriptConfig: ScriptConfig = {
       type: 'string',
     },
   },
+  requireActiveAwsSession: true,
 };
 const { year } = parseArgsAndEnvVars(scriptConfig) as { year: string };
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;

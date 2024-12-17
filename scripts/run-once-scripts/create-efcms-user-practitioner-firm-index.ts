@@ -23,6 +23,7 @@ const scriptConfig: ScriptConfig = {
     environmentName: 'ENV',
     overrideEsNumberOfReplicas: 'OVERRIDE_ES_NUMBER_OF_REPLICAS',
   },
+  requireActiveAwsSession: true,
 };
 const { elasticsearchEndpoint, environmentName, overrideEsNumberOfReplicas } =
   parseArgsAndEnvVars(scriptConfig) as {

@@ -1,7 +1,5 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-// usage: scripts/glue/start-glue-job.ts efcms-test-alpha
-
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
@@ -22,6 +20,7 @@ const scriptConfig: ScriptConfig = {
       type: 'string',
     },
   },
+  requireActiveAwsSession: true,
 };
 const { destinationTable, env, sourceTable } = parseArgsAndEnvVars(
   scriptConfig,

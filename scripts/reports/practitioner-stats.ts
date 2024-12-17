@@ -1,7 +1,5 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-// usage: scripts/reports/practitioner-stats.ts 2022
-
 import { DateTime } from 'luxon';
 import {
   type ScriptConfig,
@@ -31,6 +29,7 @@ const scriptConfig: ScriptConfig = {
       type: 'string',
     },
   },
+  requireActiveAwsSession: true,
 };
 const { year } = parseArgsAndEnvVars(scriptConfig) as { year: number };
 

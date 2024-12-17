@@ -32,10 +32,10 @@ const scriptConfig: ScriptConfig = {
       description:
         'If true, will proceed with removing the attachments from the impacted messages.',
       long: 'live-run',
-      required: false,
       type: 'boolean',
     },
   },
+  requireActiveAwsSession: true,
 };
 const { database, host, liveRun, user } = parseArgsAndEnvVars(scriptConfig) as {
   database: string;
