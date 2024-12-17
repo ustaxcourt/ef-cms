@@ -359,13 +359,9 @@ const splitValueIntoArrayOfStrings = (
     value = [`${value}`];
   }
   for (const aVal of value) {
-    if (typeof aVal === 'string') {
-      if (commaDelimited) {
-        strings.push(...aVal.split(','));
-      } else {
-        strings.push(aVal);
-      }
-    } else if (typeof aVal === 'number') {
+    if (commaDelimited) {
+      strings.push(...`${aVal}`.split(','));
+    } else {
       strings.push(`${aVal}`);
     }
   }
