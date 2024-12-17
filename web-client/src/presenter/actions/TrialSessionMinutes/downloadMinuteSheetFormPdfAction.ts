@@ -31,9 +31,11 @@ const formatMinuteSheet = (
   minuteSheetFormState: MinuteSheetFormState,
 ): FormattedMinuteSheet => {
   return {
-    courtReporter: minuteSheetFormState.trialSessionMetadata.courtReporter,
-    judge: minuteSheetFormState.trialSessionMetadata.judge,
-    remoteSession: minuteSheetFormState.trialSessionMetadata.remoteSession,
-    trialClerk: minuteSheetFormState.trialSessionMetadata.trialClerk,
+    courtReporter:
+      minuteSheetFormState.trialSessionMetadataSection.courtReporter,
+    judge: minuteSheetFormState.trialSessionMetadataSection.judge,
+    remoteSession:
+      minuteSheetFormState.trialSessionMetadataSection.remoteSession,
+    trialClerk: minuteSheetFormState.trialSessionMetadataSection.trialClerk,
   };
 };
