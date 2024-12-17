@@ -13,4 +13,10 @@ export const gotoTrialSessionPlanningReportViewSequence =
     setTrialSessionPlanningReportAction,
     clearModalStateAction,
     setupCurrentPageAction('TrialSessionPlanningReportView'),
-  ]);
+  ]) as unknown as ({
+    trialTerm,
+    trialYear,
+  }: {
+    trialTerm: string;
+    trialYear: number;
+  }) => void;
