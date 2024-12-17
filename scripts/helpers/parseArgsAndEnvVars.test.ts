@@ -7,7 +7,7 @@ import {
 } from './parseArgsAndEnvVars';
 import { cloneDeep } from 'lodash';
 
-const mockScriptConfig: ScriptConfig = {
+const ogScriptConfig: ScriptConfig = {
   description: 'some script',
   environment: {
     env: 'ENV',
@@ -32,6 +32,7 @@ const mockScriptConfig: ScriptConfig = {
     },
   },
 };
+const mockScriptConfig = cloneDeep(ogScriptConfig);
 
 const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {
   // prevent upstream from continuing by throwing an error
@@ -132,6 +133,86 @@ describe('parseArgsAndEnvVars', () => {
         'Usage: some-script.ts <eventCode> [ -f -y <year> -v ]\n',
       );
     });
+    it('generates a usage example with required and optional parameters in long and short form', () => {
+      const itsScriptConfig = cloneDeep(mockScriptConfig);
+      delete itsScriptConfig.description;
+      delete itsScriptConfig.environment;
+      delete itsScriptConfig.parameters!.fiscal.short;
+      delete itsScriptConfig.parameters!.year.short;
+      itsScriptConfig.parameters!.year.required = true;
+      itsScriptConfig.parameters!.judge = {
+        required: true,
+        short: 'j',
+        type: 'string',
+      };
+      process.argv = ['ts-node', 'some-script.ts', '-h'];
+      try {
+        parseArgsAndEnvVars(itsScriptConfig);
+      } catch (err: any) {
+        expect(err.toString()).toEqual('Error: caught process.exit');
+      }
+      expect(mockConsoleLog).toHaveBeenNthCalledWith(
+        1,
+        'Usage: some-script.ts <eventCode> --year <year> -j <judge> [ --fiscal -v ]\n',
+      );
+    });
+    it('generates a usage example with optional positionals and no optional parameters', () => {
+      const itsScriptConfig = cloneDeep(ogScriptConfig);
+      delete itsScriptConfig.description;
+      delete itsScriptConfig.environment;
+      delete itsScriptConfig.parameters!.fiscal;
+      delete itsScriptConfig.parameters!.year;
+      itsScriptConfig.parameters!.veryCool = {
+        position: 1,
+        short: 'v', // this tricks it into not adding the verbose param
+        type: 'string',
+      };
+      process.argv = ['ts-node', 'some-script.ts', '-h'];
+      try {
+        parseArgsAndEnvVars(itsScriptConfig);
+      } catch (err: any) {
+        expect(err.toString()).toEqual('Error: caught process.exit');
+      }
+      expect(mockConsoleLog).toHaveBeenNthCalledWith(
+        1,
+        'Usage: some-script.ts <eventCode> [ <veryCool> ]\n',
+      );
+    });
+    it('generates a usage example with no optional parameters', () => {
+      const itsScriptConfig = cloneDeep(ogScriptConfig);
+      delete itsScriptConfig.description;
+      delete itsScriptConfig.environment;
+      delete itsScriptConfig.parameters!.fiscal;
+      delete itsScriptConfig.parameters!.year;
+      itsScriptConfig.parameters!.veryCool = {
+        required: true,
+        short: 'v',
+        type: 'string',
+      };
+      process.argv = ['ts-node', 'some-script.ts', '-h'];
+      try {
+        parseArgsAndEnvVars(itsScriptConfig);
+      } catch (err: any) {
+        expect(err.toString()).toEqual('Error: caught process.exit');
+      }
+      expect(mockConsoleLog).toHaveBeenNthCalledWith(
+        1,
+        'Usage: some-script.ts <eventCode> -v <veryCool>\n',
+      );
+    });
+    it('does not add the help flag if another flag uses -h', () => {
+      const itsScriptConfig = cloneDeep(ogScriptConfig);
+      itsScriptConfig.parameters!.hostname = {
+        required: true,
+        short: 'h',
+        type: 'string',
+      };
+      process.argv.push('-h');
+      process.argv.push('jest');
+      const result = parseArgsAndEnvVars(itsScriptConfig);
+      expect(result.hostname).toEqual('jest');
+      expect(mockConsoleLog).not.toHaveBeenCalled();
+    });
   });
   describe('--verbose flag', () => {
     it('prints verbose output after validating parameters and does not exit', () => {
@@ -160,6 +241,35 @@ describe('parseArgsAndEnvVars', () => {
       );
       expect(usageCalls.length).toEqual(1);
     });
+    it('does not add the verbose flag if another flag uses -v', () => {
+      const itsScriptConfig = cloneDeep(ogScriptConfig);
+      itsScriptConfig.parameters!.veryCool = {
+        default: false,
+        short: 'v',
+        type: 'boolean',
+      };
+      process.argv.push('-v');
+      const result = parseArgsAndEnvVars(itsScriptConfig);
+      expect(result.veryCool).toBeTruthy();
+      const shortArgs = Object.keys(result);
+      expect(shortArgs).not.toContain('verbose');
+      expect(shortArgs).toContain('veryCool');
+    });
+    it('prints verbose help output if both the verbose and help flags are set', () => {
+      process.argv.push('-v');
+      process.argv.push('-h');
+      try {
+        parseArgsAndEnvVars(mockScriptConfig);
+      } catch (err: any) {
+        expect(err.toString()).toEqual('Error: caught process.exit');
+      }
+      expect(mockConsoleLog).toHaveBeenNthCalledWith(
+        1,
+        'Verbose output enabled\n',
+      );
+      expect(mockConsoleLog).toHaveBeenCalledTimes(7);
+      expect(mockExit).toHaveBeenCalledWith(0);
+    });
   });
   describe('parameter validation', () => {
     it('can be called without any parameters', () => {
@@ -171,7 +281,7 @@ describe('parseArgsAndEnvVars', () => {
     });
     it('throws if positionals are provided when no positionals are defined', () => {
       const itsScriptConfig = cloneDeep(mockScriptConfig);
-      delete itsScriptConfig.parameters!.eventCode;
+      delete itsScriptConfig.parameters;
       process.argv.push('anotherPositional');
       try {
         parseArgsAndEnvVars(itsScriptConfig);
@@ -418,7 +528,21 @@ describe('parseArgsAndEnvVars', () => {
     });
   });
   describe('Environment Variables', () => {
-    it('exits if required environment variables are not set', () => {
+    it('exits if a required environment variable is not set', () => {
+      const itsScriptConfig = cloneDeep(mockScriptConfig);
+      itsScriptConfig.environment!.missing = 'MISSINGVAR';
+      try {
+        parseArgsAndEnvVars(itsScriptConfig);
+      } catch (err: any) {
+        expect(err.toString()).toEqual('Error: caught process.exit');
+      }
+      expect(mockConsoleLog).toHaveBeenNthCalledWith(
+        1,
+        'Missing environment variable: MISSINGVAR\n',
+      );
+      expect(mockExit).toHaveBeenCalledWith(1);
+    });
+    it('exits if multiple required environment variables are not set', () => {
       const itsScriptConfig = cloneDeep(mockScriptConfig);
       itsScriptConfig.environment!.missing = 'MISSINGVAR';
       itsScriptConfig.environment!.notSet = 'NOTAREALVAR';
@@ -436,6 +560,12 @@ describe('parseArgsAndEnvVars', () => {
     it('returns the defined environment variables', () => {
       const { env } = parseArgsAndEnvVars(mockScriptConfig);
       expect(env).toEqual('jest');
+    });
+    it('can be called without any environment variables', () => {
+      const itsScriptConfig = cloneDeep(mockScriptConfig);
+      delete itsScriptConfig.environment;
+      parseArgsAndEnvVars(itsScriptConfig);
+      expect(mockExit).not.toHaveBeenCalled();
     });
   });
 });

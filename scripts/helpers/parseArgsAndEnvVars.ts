@@ -154,7 +154,7 @@ const collateArguments = (parameters: {
   const reverseSortedRequiredPositionals: ScriptParameter[] = [];
   const reverseSortedOptionalPositionals: ScriptParameter[] = [];
   const reverseSortedPositionals = allPositionals.sort(
-    (a, b) => (b.position || 0) - (a.position || 0),
+    (a, b) => b.position! - a.position!,
   );
   let requiredOverride = false;
   for (const positional of reverseSortedPositionals) {
@@ -166,10 +166,10 @@ const collateArguments = (parameters: {
     }
   }
   const requiredPositionals = reverseSortedRequiredPositionals
-    .sort((a, b) => (a.position || 0) - (b.position || 0))
+    .sort((a, b) => a.position! - b.position!)
     .map(p => ({ ...p, required: true }));
   const optionalPositionals = reverseSortedOptionalPositionals.sort(
-    (a, b) => (a.position || 0) - (b.position || 0),
+    (a, b) => a.position! - b.position!,
   );
   return {
     optionalParameters,
@@ -179,49 +179,44 @@ const collateArguments = (parameters: {
   };
 };
 
-const buildExample = (parameters?: {
+const buildExample = (parameters: {
   [key: string]: ScriptParameter;
 }): string => {
   let example = `${process.argv[1]}`;
-  if (parameters) {
-    const {
-      optionalParameters,
-      optionalPositionals,
-      requiredParameters,
-      requiredPositionals,
-    } = collateArguments(parameters);
-    if (requiredPositionals.length) {
-      example += requiredPositionals.map(p => ` <${p.long!}>`).join('');
+  const {
+    optionalParameters,
+    optionalPositionals,
+    requiredParameters,
+    requiredPositionals,
+  } = collateArguments(parameters);
+  if (requiredPositionals.length) {
+    example += requiredPositionals.map(p => ` <${p.long!}>`).join('');
+  }
+  if (requiredParameters.length) {
+    example += requiredParameters
+      .map(p => ` ${p.short ? '-' + p.short : '--' + p.long!} <${p.long!}>`)
+      .join('');
+  }
+  if (optionalPositionals.length || optionalParameters.length) {
+    example += ' [';
+    if (optionalPositionals.length) {
+      example += optionalPositionals.map(p => ` <${p.long}>`).join('');
     }
-    if (requiredParameters.length) {
-      example += requiredParameters
+    if (optionalParameters.length) {
+      example += optionalParameters
         .map(
           p =>
             ` ${p.short ? '-' + p.short : '--' + p.long!}${p.type !== 'boolean' ? ' <' + p.long! + '>' : ''}`,
         )
         .join('');
     }
-    if (optionalPositionals.length || optionalParameters.length) {
-      example += ' [';
-      if (optionalPositionals.length) {
-        example += optionalPositionals.map(p => ` <${p.long}>`).join('');
-      }
-      if (optionalParameters.length) {
-        example += optionalParameters
-          .map(
-            p =>
-              ` ${p.short ? '-' + p.short : '--' + p.long!}${p.type !== 'boolean' ? ' <' + p.long! + '>' : ''}`,
-          )
-          .join('');
-      }
-      example += ' ]';
-    }
+    example += ' ]';
   }
   return example;
 };
 
 const usage = (sc: ScriptConfig, warning?: string): void => {
-  const example = buildExample(sc.parameters);
+  const example = buildExample(sc.parameters!);
   if (warning) {
     console.log(`${warning}\n`);
   }
@@ -229,9 +224,7 @@ const usage = (sc: ScriptConfig, warning?: string): void => {
     console.log(`${sc.description}\n`);
   }
   console.log(`Usage: ${example}\n`);
-  if (sc.parameters) {
-    console.log('Parameters:', sc.parameters);
-  }
+  console.log('Parameters:', sc.parameters);
   if (sc.environment) {
     console.log(
       '\nRequired Environment Variables:',
@@ -256,18 +249,14 @@ const showErrorAndExit = (
 const buildParseArgsConfigObject = (parameters: {
   [key: string]: ScriptParameter;
 }): ParseArgsConfig => {
-  const options = {
+  const options = {} as const;
+  const defaultOptions = {
     help: {
       default: false,
       short: 'h',
       type: 'boolean',
     },
-    verbose: {
-      default: false,
-      short: 'v',
-      type: 'boolean',
-    },
-  } as const;
+  };
   const argConfig = {
     allowPositionals: false,
     options,
@@ -297,6 +286,10 @@ const buildParseArgsConfigObject = (parameters: {
     }
     options[param] = { ...paramOptions } as const;
   }
+  if (!Object.values(parameters).find(p => p.short && p.short === 'h')) {
+    options['help'] = { ...defaultOptions.help } as const;
+  }
+
   return { ...argConfig } as const as ParseArgsConfig;
 };
 
@@ -352,10 +345,7 @@ const splitValueIntoArrayOfStrings = (
   commaDelimited: boolean | undefined,
 ): string[] => {
   const strings: string[] = [];
-  if (typeof value === 'string') {
-    value = [value];
-  }
-  if (typeof value === 'number') {
+  if (typeof value === 'string' || typeof value === 'number') {
     value = [`${value}`];
   }
   for (const aVal of value) {
@@ -454,35 +444,30 @@ const validateParsedValues = (
   },
   verbose: boolean,
 ): void => {
-  if (sc.parameters) {
-    const { optionalPositionals, requiredParameters, requiredPositionals } =
-      collateArguments(sc.parameters);
-    const allPositionals = [...requiredPositionals, ...optionalPositionals];
-    if (allPositionals.length) {
-      const positionsReversed = [...requiredPositionals, ...optionalPositionals]
-        .map(p => p.position)
-        .filter(p => p || p === 0)
-        .sort((a, b) => b! - a!);
-      const uniquePositions = [...new Set(positionsReversed)];
-      if (
-        uniquePositions.length !== positionsReversed.length ||
-        positionsReversed[0] !== uniquePositions.length - 1
-      ) {
-        showErrorAndExit(
-          'Invalid positionals: positions must be sequential starting at 0',
-          sc,
-          verbose,
-        );
-      }
+  const { optionalPositionals, requiredParameters, requiredPositionals } =
+    collateArguments(sc.parameters!);
+  const allPositionals = [...requiredPositionals, ...optionalPositionals];
+  if (allPositionals.length) {
+    const positionsReversed = [...requiredPositionals, ...optionalPositionals]
+      .map(p => p.position)
+      .filter(p => p || p === 0)
+      .sort((a, b) => b! - a!);
+    const uniquePositions = [...new Set(positionsReversed)];
+    if (
+      uniquePositions.length !== positionsReversed.length ||
+      positionsReversed[0] !== uniquePositions.length - 1
+    ) {
+      showErrorAndExit(
+        'Invalid positionals: positions must be sequential starting at 0',
+        sc,
+        verbose,
+      );
     }
-    for (const requiredParam of [
-      ...requiredPositionals,
-      ...requiredParameters,
-    ]) {
-      const longName = requiredParam.long!;
-      if (!(longName in parsedValues) || !parsedValues[longName]) {
-        showErrorAndExit(`Invalid input: expected ${longName}`, sc, verbose);
-      }
+  }
+  for (const requiredParam of [...requiredPositionals, ...requiredParameters]) {
+    const longName = requiredParam.long!;
+    if (!(longName in parsedValues) || !parsedValues[longName]) {
+      showErrorAndExit(`Invalid input: expected ${longName}`, sc, verbose);
     }
   }
 };
