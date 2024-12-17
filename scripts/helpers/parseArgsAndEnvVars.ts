@@ -525,7 +525,9 @@ export const parseArgsAndEnvVars = (
   if (!sc.parameters) {
     sc.parameters = {};
   }
-  sc.parameters.verbose = { default: false, short: 'v', type: 'boolean' };
+  if (!Object.values(sc.parameters).find(p => p.short && p.short === 'v')) {
+    sc.parameters.verbose = { default: false, short: 'v', type: 'boolean' };
+  }
   const config = buildParseArgsConfigObject(sc.parameters);
   const { positionals, values } = rawParseArgs(config, sc);
   showHelpAndVerbose(sc, positionals, values);
