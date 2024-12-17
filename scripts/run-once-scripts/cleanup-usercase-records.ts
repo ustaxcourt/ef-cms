@@ -1,22 +1,34 @@
-/**
- * To run: npx ts-node --transpile-only scripts/run-once-scripts/cleanup-usercase-records.ts
- */
+#!/usr/bin/env -S npx ts-node --transpile-only
+
 import {
   BatchWriteCommandOutput,
   DynamoDBDocument,
 } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import {
-  IServerApplicationContext,
-  createApplicationContext,
-} from '../../web-api/src/applicationContext';
-import {
   PutRequest,
   TDynamoRecord,
-} from '../../web-api/src/persistence/dynamo/dynamoTypes';
-import { UserCase } from '../../shared/src/business/entities/UserCase';
+} from '@web-api/persistence/dynamo/dynamoTypes';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import {
+  type ServerApplicationContext,
+  createApplicationContext,
+} from '@web-api/applicationContext';
+import { UserCase } from '@shared/business/entities/UserCase';
 import { chunk, isEmpty } from 'lodash';
-import { filterEmptyStrings } from '../../shared/src/business/utilities/filterEmptyStrings';
+import { filterEmptyStrings } from '@shared/business/utilities/filterEmptyStrings';
+
+const scriptConfig: ScriptConfig = {
+  description: 'cleanup-usercase-records - Cleans UserCase entities.',
+  environment: {
+    dynamoDbTableName: 'DYNAMODB_TABLE_NAME',
+    env: 'ENV',
+  },
+};
+parseArgsAndEnvVars(scriptConfig);
 
 const dynamodb = new DynamoDBClient({ maxAttempts: 0, region: 'us-east-1' });
 const documentClient = DynamoDBDocument.from(dynamodb, {
@@ -60,9 +72,9 @@ const documentClient = DynamoDBDocument.from(dynamodb, {
 })();
 
 async function getAllExternalUsers(
-  applicationContext: IServerApplicationContext,
+  applicationContext: ServerApplicationContext,
 ) {
-  const users = [];
+  const users: TDynamoRecord[] = [];
   let role: string = '';
   let pk: string = '';
 
@@ -111,15 +123,19 @@ async function getAllExternalUsers(
 }
 
 async function getUserCaseRecords(
-  applicationContext: IServerApplicationContext,
+  applicationContext: ServerApplicationContext,
   userId: string,
 ): Promise<TDynamoRecord[]> {
-  const userCases = await applicationContext
+  const userCases: TDynamoRecord[] = [];
+  const results = await applicationContext
     .getPersistenceGateway()
     .getCasesForUser({
       applicationContext,
       userId,
     });
+  for (const user of results) {
+    userCases.push(user as unknown as TDynamoRecord);
+  }
 
   return userCases;
 }
@@ -145,7 +161,7 @@ function cleanupUserCaseRecords(
 }
 
 async function updateUserCaseRecords(
-  applicationContext: IServerApplicationContext,
+  applicationContext: ServerApplicationContext,
   migratedRecords: TDynamoRecord[],
 ): Promise<void> {
   const putRequests: PutRequest[] = migratedRecords.map(userCaseRecord => {
@@ -157,7 +173,7 @@ async function updateUserCaseRecords(
 }
 
 async function batchWrite(
-  applicationContext: IServerApplicationContext,
+  applicationContext: ServerApplicationContext,
   commands: PutRequest[],
 ): Promise<void> {
   commands.forEach(command => filterEmptyStrings(command));
@@ -177,11 +193,12 @@ async function batchWrite(
 }
 
 async function writeChunk(
-  applicationContext: IServerApplicationContext,
+  applicationContext: ServerApplicationContext,
   commandChunk: PutRequest[],
   attempt: number,
 ) {
-  let result: BatchWriteCommandOutput;
+  let result: BatchWriteCommandOutput =
+    {} as unknown as BatchWriteCommandOutput;
   try {
     result = await documentClient.batchWrite({
       RequestItems: {
@@ -217,6 +234,7 @@ async function writeChunk(
 
     return writeChunk(
       applicationContext,
+      // @ts-ignore
       result.UnprocessedItems[applicationContext.environment.dynamoDbTableName],
       attempt + 1,
     );

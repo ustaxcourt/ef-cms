@@ -1,19 +1,37 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
+
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { UserType } from '@aws-sdk/client-cognito-identity-provider';
-import { createApplicationContext } from '../../web-api/src/applicationContext';
-import { environment } from '../../web-api/src/environment';
+import { createApplicationContext } from '@web-api/applicationContext';
+import { environment } from '@web-api/environment';
+
+const scriptConfig: ScriptConfig = {
+  description:
+    'cognito-info - Looks for cognito users missing required custom attributes.',
+  environment: {
+    env: 'ENV',
+    userPoolId: 'USER_POOL_ID',
+  },
+};
+parseArgsAndEnvVars(scriptConfig);
 
 async function main() {
   const applicationContext = createApplicationContext({});
   const cognito = applicationContext.getCognito();
 
   const expectedAttributes = ['custom:userId', 'name', 'email', 'custom:role'];
-  const piiFields: (string | undefined)[] = [/*'name', 'email'*/];
+  const piiFields: (string | undefined)[] = [
+    /*'name', 'email'*/
+  ];
   const usersMissingAttributes: UserType[] = [];
   const missingFieldSummary = {
-    ['custom:userId']: 0,
-    name: 0,
-    email: 0,
     ['custom:role']: 0,
+    ['custom:userId']: 0,
+    email: 0,
+    name: 0,
   };
 
   let PaginationToken: string | undefined;

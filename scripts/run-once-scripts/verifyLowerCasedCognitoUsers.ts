@@ -1,15 +1,36 @@
 import {
-  ListUsersCommandOutput,
+  type ListUsersCommandOutput,
   UserStatusType,
 } from '@aws-sdk/client-cognito-identity-provider';
 import {
-  ServerApplicationContext,
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import {
+  type ServerApplicationContext,
   createApplicationContext,
-} from '../../web-api/src/applicationContext';
+} from '@web-api/applicationContext';
 
-const dryRun = false;
+const scriptConfig: ScriptConfig = {
+  description:
+    'verifyLowerCasedCognitoUsers - Identifies cognito users with erroneously unverified email addresses.',
+  environment: {
+    env: 'ENV',
+    userPoolId: 'USER_POOL_ID',
+  },
+  parameters: {
+    dryRun: {
+      default: false,
+      long: 'dry',
+      short: 'd',
+      type: 'boolean',
+    },
+  },
+};
+const { dryRun } = parseArgsAndEnvVars(scriptConfig) as { dryRun: boolean };
 
-async function main() {
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+(async () => {
   const applicationContext = createApplicationContext({});
   const start = Date.now();
 
@@ -40,10 +61,7 @@ async function main() {
     console.error('Error updating users:', error);
   }
   console.log('Time to run: ', (Date.now() - start) / 1000, 's');
-}
-
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-main();
+})();
 
 async function verifyLowerCasedEmails(
   data: ListUsersCommandOutput,
@@ -54,10 +72,13 @@ async function verifyLowerCasedEmails(
       const emailIsUnverified =
         user.Attributes?.find(attr => attr.Name === 'email_verified')?.Value ===
         'false';
-      const userIsConfirmedOrForceChange = [
-        UserStatusType.CONFIRMED,
-        UserStatusType.FORCE_CHANGE_PASSWORD,
-      ].includes(user.UserStatus);
+      const userStatusType =
+        user.UserStatus && user.UserStatus in UserStatusType
+          ? UserStatusType[user.UserStatus]
+          : UserStatusType.UNKNOWN;
+      const userIsConfirmedOrForceChange =
+        userStatusType === UserStatusType.CONFIRMED ||
+        userStatusType === UserStatusType.FORCE_CHANGE_PASSWORD;
 
       return emailIsUnverified && userIsConfirmedOrForceChange;
     }) || [];

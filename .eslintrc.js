@@ -367,6 +367,7 @@ module.exports = {
           'polyfill',
           'opensearch',
           'postfix',
+          'postgres',
           'prepends',
           'pughs',
           'px',
