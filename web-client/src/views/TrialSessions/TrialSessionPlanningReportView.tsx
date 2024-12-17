@@ -1,7 +1,10 @@
 import { BigHeader } from '@web-client/views/BigHeader';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { TrialLocationDataFormatted } from '@web-client/presenter/computeds/trialSessionPlanningReportViewHelper';
+import {
+  PreviousTermFormatted,
+  TrialLocationDataFormatted,
+} from '@web-client/presenter/computeds/trialSessionPlanningReportViewHelper';
 import {
   state as cerebralState,
   sequences,
@@ -109,7 +112,7 @@ function TrialSessionPlanningReportHeader({
 
 type TrialSessionPlanningReportTableParams = {
   locationData: TrialLocationDataFormatted[];
-  previousTerms: { termDisplayFormatted: string }[];
+  previousTerms: PreviousTermFormatted[];
 };
 
 function TrialSessionPlanningReportTable({
@@ -161,7 +164,7 @@ function TrialSessionPlanningReportTable({
                   <td>{trialLocation.allCaseCount}</td>
                   <td>{trialLocation.smallCaseCount}</td>
                   <td>{trialLocation.regularCaseCount}</td>
-                  {trialLocation.previousTermsData.map(prevTerm => {
+                  {trialLocation.previousTermsData.map((prevTerm, index) => {
                     const hasData =
                       Array.isArray(prevTerm) && prevTerm.length > 0;
 
@@ -179,6 +182,7 @@ function TrialSessionPlanningReportTable({
                           ))
                         ) : (
                           <FontAwesomeIcon
+                            aria-label={`${trialLocation.trialCityState} not scheduled for ${previousTerms[index].term} ${previousTerms[index].year}.`}
                             className="padding-1px"
                             icon={['far', 'calendar-times']}
                             size="lg"
