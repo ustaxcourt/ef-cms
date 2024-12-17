@@ -7,7 +7,7 @@ import { OrdersFieldset } from '@web-client/views/TrialSessionMinutes/OrdersFiel
 import { PetitionersFieldset } from '@web-client/views/TrialSessionMinutes/PetitionersFieldset';
 import { RespondentsFieldset } from '@web-client/views/TrialSessionMinutes/RespondentsFieldset';
 import { TrialBriefFieldset } from './TrialBriefFieldset';
-import { TrialSessionMetadataFieldset } from '@web-client/views/TrialSessionMinutes/SessionMetadataFieldset';
+import { TrialSessionMetadataFieldset } from '@web-client/views/TrialSessionMinutes/TrialSessionMetadataFieldset';
 import { WitnessesFieldset } from './WitnessesFieldset';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';

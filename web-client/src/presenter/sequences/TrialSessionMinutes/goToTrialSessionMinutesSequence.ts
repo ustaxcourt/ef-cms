@@ -4,11 +4,11 @@ import { getExistingMinuteSheetFormAction } from '@web-client/presenter/actions/
 import { getTrialSessionDetailsAction } from '../../actions/TrialSession/getTrialSessionDetailsAction';
 import { initializeTrialSessionMinuteSheetFormAction } from '@web-client/presenter/actions/TrialSessionMinutes/initializeTrialSessionMinuteSheetFormAction';
 import { parallel } from 'cerebral/factories';
+import { saveMinuteSheetFormSnapshotAction } from '@web-client/presenter/actions/TrialSessionMinutes/saveMinuteSheetFormSnapshotAction';
 import { setCaseAction } from '@web-client/presenter/actions/setCaseAction';
 import { setTrialSessionDetailsAction } from '../../actions/TrialSession/setTrialSessionDetailsAction';
 import { setTrialSessionIdAction } from '../../actions/TrialSession/setTrialSessionIdAction';
 import { setupCurrentPageAction } from '../../actions/setupCurrentPageAction';
-import { takeMinuteSheetFormSnapshotAction } from '@web-client/presenter/actions/TrialSessionMinutes/takeMinuteSheetFormSnapshotAction';
 
 export const goToTrialSessionMinutesSequence = [
   setupCurrentPageAction('Interstitial'),
@@ -22,7 +22,7 @@ export const goToTrialSessionMinutesSequence = [
     no: [initializeTrialSessionMinuteSheetFormAction],
     yes: [getExistingMinuteSheetFormAction],
   },
-  takeMinuteSheetFormSnapshotAction,
+  saveMinuteSheetFormSnapshotAction,
   setupCurrentPageAction('TrialSessionMinutesPage'),
 ] as unknown as ({
   docketNumber,
