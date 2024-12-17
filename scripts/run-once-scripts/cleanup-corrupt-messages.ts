@@ -1,4 +1,4 @@
-#!/usr/bin/env npx ts-node --transpile-only
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import { Database } from '@web-api/database-types';
 import { Kysely } from 'kysely';
@@ -19,7 +19,8 @@ import fs from 'fs';
 import path from 'path';
 
 const scriptConfig: ScriptConfig = {
-  description: 'cleanup-corrupt-messages - Deletes some shit idk',
+  description:
+    'cleanup-corrupt-messages - Cleans up attachments on corrupt messages.',
   environment: {
     database: 'DB_NAME',
     host: 'DB_HOST',
@@ -222,7 +223,7 @@ const udpateMessagesInDb = async (
     });
 
   const { deletedAttachmentAuditRecords, updatedMessageFragments } =
-    await removePoisonAttachmentsFromMessages({
+    removePoisonAttachmentsFromMessages({
       correspondenceIdsByDocketNumber,
       docketEntryIdsByDocketNumber,
       messageFragments,

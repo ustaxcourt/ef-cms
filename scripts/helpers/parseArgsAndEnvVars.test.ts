@@ -97,7 +97,7 @@ describe('parseIntsArg', () => {
   });
 });
 
-describe('parseArgumentsAndEnvironmentVariables', () => {
+describe('parseArgsAndEnvVars', () => {
   const originalArgv = cloneDeep(process.argv);
   const originalEnv = cloneDeep(process.env);
   const mockEventCode = 'noa';
@@ -143,8 +143,12 @@ describe('parseArgumentsAndEnvironmentVariables', () => {
         1,
         'Verbose output enabled\n',
       );
-      expect(mockConsoleLog).toHaveBeenCalledTimes(8);
+      expect(mockConsoleLog).toHaveBeenCalledTimes(9);
       expect(mockExit).not.toHaveBeenCalled();
+    });
+    it('only calls usage once if the verbose flag was provided and there was an error', () => {
+      process.argv.push('invalidPositional');
+      process.argv.push('-v');
     });
   });
   describe('parameter validation', () => {
