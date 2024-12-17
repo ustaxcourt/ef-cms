@@ -115,14 +115,14 @@ type KeyedExhibitFormFieldsByKey = Record<RenderKey, KeyedExhibitFormFields>;
 
 export type MinuteSheetFormState = {
   // 10419 TODO: rename all first-level properties by appending "Section"
-  trialSessionMetadata: {
+  trialSessionMetadataSection: {
     judge: string;
     trialClerk: string;
     courtReporter: string;
     remoteSession: boolean;
   };
 
-  caseMetadata: {
+  caseMetadataSection: {
     called: CaseMetadataEntry;
     notCalled: CaseMetadataEntry;
     recalled: KeyedCaseMetadataEntryByKey;
@@ -130,23 +130,23 @@ export type MinuteSheetFormState = {
     trialHearing: CaseMetadataEntry;
   };
 
-  petitioners: {
+  petitionersSection: {
     noAppearance: boolean;
     petitioners: KeyedPartyFormFieldsByRenderKey;
   };
 
-  respondents: {
+  respondentsSection: {
     respondents: KeyedPartyFormFieldsByRenderKey;
   };
 
   // 10419 TODO: Could this be lumped in with orders below
-  jurisdictionRetained: {
+  jurisdictionRetainedSection: {
     continued: boolean;
     date: string;
     note: string;
   };
 
-  orders: {
+  ordersSection: {
     statusReportOrdered: {
       date: string;
       note: string;
@@ -168,7 +168,7 @@ export type MinuteSheetFormState = {
     actionsAndFilings: KeyedActionFilingFormFieldsByRenderKey;
   };
 
-  trialBrief: {
+  trialBriefSection: {
     dateSubmitted: string;
     totalTrialHours: number;
     dateBenchOpinionRendered: string;
@@ -185,12 +185,12 @@ export type MinuteSheetFormState = {
       | {};
   };
 
-  witnesses: {
+  witnessesSection: {
     petitionerWitnesses: KeyedWitnessEntryByKey;
     respondentWitnesses: KeyedWitnessEntryByKey;
   };
 
-  exhibits: {
+  exhibitsSection: {
     exhibits: KeyedExhibitFormFieldsByKey;
   };
 };
@@ -198,7 +198,7 @@ export type MinuteSheetFormState = {
 export const initialMinuteSheetFormState: MinuteSheetFormState = {
   actionsAndFilingsSection: { actionsAndFilings: {} },
 
-  caseMetadata: {
+  caseMetadataSection: {
     called: {
       date: '',
       note: '',
@@ -221,11 +221,11 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
     },
   },
 
-  exhibits: {
+  exhibitsSection: {
     exhibits: {},
   },
 
-  jurisdictionRetained: {
+  jurisdictionRetainedSection: {
     continued: false,
     date: '',
     note: '',
@@ -235,7 +235,7 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
     motions: {},
   },
 
-  orders: {
+  ordersSection: {
     statusReportOrdered: {
       date: '',
       dueDate: '',
@@ -249,16 +249,16 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
     },
   },
 
-  petitioners: {
+  petitionersSection: {
     noAppearance: false,
     petitioners: {},
   },
 
-  respondents: {
+  respondentsSection: {
     respondents: {},
   },
 
-  trialBrief: {
+  trialBriefSection: {
     briefDetails: {},
     briefType: '',
     dateBenchOpinionRendered: '',
@@ -268,15 +268,14 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
     transcriptOrdered: false,
   },
 
-  // 10419 TODO: What is a good conceptual name for this section of the form?
-  trialSessionMetadata: {
+  trialSessionMetadataSection: {
     courtReporter: '',
     judge: '',
     remoteSession: false,
     trialClerk: '',
   },
 
-  witnesses: {
+  witnessesSection: {
     petitionerWitnesses: {},
     respondentWitnesses: {},
   },

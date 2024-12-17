@@ -32,7 +32,7 @@ export const updateTrialSessionMinutesFormAction = ({
     }
 
     store.set(
-      state.minuteSheetForm.petitioners.petitioners,
+      state.minuteSheetForm.petitionersSection.petitioners,
       updatedPetitionersObject,
     );
   }
@@ -135,7 +135,7 @@ export const updateTrialSessionMinutesFormAction = ({
     };
 
     store.set(
-      state.minuteSheetForm.trialBrief.briefDetails,
+      state.minuteSheetForm.trialBriefSection.briefDetails,
       defaultBriefDetailsValuesMap[value],
     );
   }

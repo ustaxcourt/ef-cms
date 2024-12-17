@@ -34,7 +34,7 @@ export const initializeTrialSessionMinuteSheetFormAction = ({
       trialSession,
     });
 
-  store.set(state.minuteSheetForm.trialSessionMetadata, {
+  store.set(state.minuteSheetForm.trialSessionMetadataSection, {
     courtReporter: formattedTrialSession.courtReporter,
     judge: formattedTrialSession.judge!.name,
     remoteSession: formattedTrialSession.isRemoteSession,
@@ -47,7 +47,7 @@ export const initializeTrialSessionMinuteSheetFormAction = ({
   const respondentWitnessRowRenderKey = uuidv4();
   const exhibitRowRenderKey = uuidv4();
 
-  store.set(state.minuteSheetForm.caseMetadata.recalled, {
+  store.set(state.minuteSheetForm.caseMetadataSection.recalled, {
     [recalledRowRenderKey]: {
       date: '',
       note: '',
@@ -56,11 +56,11 @@ export const initializeTrialSessionMinuteSheetFormAction = ({
     },
   });
   store.set(
-    state.minuteSheetForm.petitioners.petitioners,
+    state.minuteSheetForm.petitionersSection.petitioners,
     getPetitionersFromCase(caseDetail),
   );
   store.set(
-    state.minuteSheetForm.respondents.respondents,
+    state.minuteSheetForm.respondentsSection.respondents,
     getRespondentsFromCase(caseDetail),
   );
   store.set(state.minuteSheetForm.motionsSection.motions, {
@@ -81,19 +81,19 @@ export const initializeTrialSessionMinuteSheetFormAction = ({
       user,
     }),
   );
-  store.set(state.minuteSheetForm.witnesses.petitionerWitnesses, {
+  store.set(state.minuteSheetForm.witnessesSection.petitionerWitnesses, {
     [petitionerWitnessRowRenderKey]: {
       name: '',
       renderKey: petitionerWitnessRowRenderKey,
     },
   });
-  store.set(state.minuteSheetForm.witnesses.respondentWitnesses, {
+  store.set(state.minuteSheetForm.witnessesSection.respondentWitnesses, {
     [respondentWitnessRowRenderKey]: {
       name: '',
       renderKey: respondentWitnessRowRenderKey,
     },
   });
-  store.set(state.minuteSheetForm.exhibits.exhibits, {
+  store.set(state.minuteSheetForm.exhibitsSection.exhibits, {
     [exhibitRowRenderKey]: {
       description: '',
       note: '',

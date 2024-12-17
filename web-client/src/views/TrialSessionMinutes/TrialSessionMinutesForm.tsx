@@ -37,7 +37,7 @@ export const TrialSessionMinutesForm = connect(
       <form>
         <TrialSessionMetadataFieldset
           trialSessionMetadataFormState={
-            trialSessionMinutesForm.trialSessionMetadata
+            trialSessionMinutesForm.trialSessionMetadataSection
           }
           onBlurHandler={trialSessionMinutesAutosaveSequence}
           onChangeHandler={updateTrialSessionMinutesFormSequence}
@@ -45,7 +45,7 @@ export const TrialSessionMinutesForm = connect(
         <hr />
         <CaseMetadataFieldset
           addRowHandler={addMinuteSheetFormRowSequence}
-          caseMetadataFormState={trialSessionMinutesForm.caseMetadata}
+          caseMetadataFormState={trialSessionMinutesForm.caseMetadataSection}
           onBlurHandler={trialSessionMinutesAutosaveSequence}
           onChangeHandler={updateTrialSessionMinutesFormSequence}
         />
@@ -54,7 +54,7 @@ export const TrialSessionMinutesForm = connect(
           <div className="grid-col-6 border-right">
             <PetitionersFieldset
               addRowHandler={addMinuteSheetFormRowSequence}
-              petitionersFormState={trialSessionMinutesForm.petitioners}
+              petitionersFormState={trialSessionMinutesForm.petitionersSection}
               removeRowHandler={removeMinuteSheetFormRowSequence}
               onBlurHandler={trialSessionMinutesAutosaveSequence}
               onChangeHandler={updateTrialSessionMinutesFormSequence}
@@ -64,7 +64,7 @@ export const TrialSessionMinutesForm = connect(
             <RespondentsFieldset
               addRowHandler={addMinuteSheetFormRowSequence}
               removeRowHandler={removeMinuteSheetFormRowSequence}
-              respondentsFormState={trialSessionMinutesForm.respondents}
+              respondentsFormState={trialSessionMinutesForm.respondentsSection}
               onBlurHandler={trialSessionMinutesAutosaveSequence}
               onChangeHandler={updateTrialSessionMinutesFormSequence}
             />
@@ -73,14 +73,14 @@ export const TrialSessionMinutesForm = connect(
         <hr />
         <JurisdictionRetainedFieldset
           jurisdictionRetainedFormState={
-            trialSessionMinutesForm.jurisdictionRetained
+            trialSessionMinutesForm.jurisdictionRetainedSection
           }
           onBlurHandler={trialSessionMinutesAutosaveSequence}
           onChangeHandler={updateTrialSessionMinutesFormSequence}
         />
         <hr />
         <OrdersFieldset
-          ordersFormState={trialSessionMinutesForm.orders}
+          ordersFormState={trialSessionMinutesForm.ordersSection}
           onBlurHandler={trialSessionMinutesAutosaveSequence}
           onChangeHandler={updateTrialSessionMinutesFormSequence}
         />
@@ -103,7 +103,7 @@ export const TrialSessionMinutesForm = connect(
         />
         <hr />
         <TrialBriefFieldset
-          trialBriefFormState={trialSessionMinutesForm.trialBrief}
+          trialBriefFormState={trialSessionMinutesForm.trialBriefSection}
           onBlurHandler={trialSessionMinutesAutosaveSequence}
           onChangeHandler={updateTrialSessionMinutesFormSequence}
         />
@@ -115,7 +115,7 @@ export const TrialSessionMinutesForm = connect(
               removeRowHandler={removeMinuteSheetFormRowSequence}
               witnessType="petitioner"
               witnessesFormState={
-                trialSessionMinutesForm.witnesses.petitionerWitnesses
+                trialSessionMinutesForm.witnessesSection.petitionerWitnesses
               }
               onBlurHandler={trialSessionMinutesAutosaveSequence}
               onChangeHandler={updateTrialSessionMinutesFormSequence}
@@ -127,7 +127,7 @@ export const TrialSessionMinutesForm = connect(
               removeRowHandler={removeMinuteSheetFormRowSequence}
               witnessType="respondent"
               witnessesFormState={
-                trialSessionMinutesForm.witnesses.respondentWitnesses
+                trialSessionMinutesForm.witnessesSection.respondentWitnesses
               }
               onBlurHandler={trialSessionMinutesAutosaveSequence}
               onChangeHandler={updateTrialSessionMinutesFormSequence}
@@ -138,7 +138,7 @@ export const TrialSessionMinutesForm = connect(
         <div>
           <ExhibitsFieldset
             addRowHandler={addMinuteSheetFormRowSequence}
-            exhibitsFormState={trialSessionMinutesForm.exhibits}
+            exhibitsFormState={trialSessionMinutesForm.exhibitsSection}
             removeRowHandler={removeMinuteSheetFormRowSequence}
             onBlurHandler={trialSessionMinutesAutosaveSequence}
             onChangeHandler={updateTrialSessionMinutesFormSequence}
