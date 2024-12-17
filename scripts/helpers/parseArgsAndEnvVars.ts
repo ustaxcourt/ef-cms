@@ -1,5 +1,11 @@
+import {
+  FORMATS,
+  formatDateString,
+  formatNow,
+} from '@shared/business/utilities/DateHandler';
 import { type ParseArgsConfig, parseArgs } from 'node:util';
 import { missingEnvironmentVariables } from '../../shared/admin-tools/util';
+import path from 'node:path';
 
 export type ScriptConfig = {
   environment?: {
@@ -25,6 +31,11 @@ export type ScriptConfig = {
      */
     [key: string]: ScriptParameter;
   };
+  /**
+   * The `requireActiveAwsSession` property indicates whether the AWS session
+   * token should be currently active.
+   */
+  requireActiveAwsSession?: boolean;
 };
 
 export type ScriptParameter = {
@@ -179,10 +190,15 @@ const collateArguments = (parameters: {
   };
 };
 
+const getRelativePath = (scriptFullPath: string): string => {
+  const repoRootDir = path.dirname(__filename).replace('/scripts/helpers', '');
+  return scriptFullPath.replace(repoRootDir, '.');
+};
+
 const buildExample = (parameters: {
   [key: string]: ScriptParameter;
 }): string => {
-  let example = `${process.argv[1]}`;
+  let example = getRelativePath(process.argv[1]);
   const {
     optionalParameters,
     optionalPositionals,
@@ -230,6 +246,9 @@ const usage = (sc: ScriptConfig, warning?: string): void => {
       '\nRequired Environment Variables:',
       Object.values(sc.environment),
     );
+  }
+  if (sc.requireActiveAwsSession) {
+    console.log('\nActive AWS session required.');
   }
 };
 
@@ -500,6 +519,32 @@ const getEnvironmentVariables = (environment?: {
   return ret;
 };
 
+const checkAwsSessionExpiration = (
+  sc: ScriptConfig,
+  verbose: boolean,
+): void => {
+  const { awsSessionExpiration } = getEnvironmentVariables({
+    awsSessionExpiration: 'AWS_SESSION_EXPIRATION',
+  });
+  if (!awsSessionExpiration || awsSessionExpiration.length === 0) {
+    showErrorAndExit('AWS session has expired', sc, verbose);
+  }
+  const awsSessionExpirationSeconds = Number(
+    formatDateString(awsSessionExpiration, FORMATS.UNIX_TIMESTAMP_SECONDS),
+  );
+  const now = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
+  if (awsSessionExpirationSeconds < now) {
+    showErrorAndExit(
+      `AWS session expired ${awsSessionExpiration}`,
+      sc,
+      verbose,
+    );
+  }
+  if (verbose) {
+    console.log(`AWS session will expire ${awsSessionExpiration}`);
+  }
+};
+
 export const parseArgsAndEnvVars = (
   sc: ScriptConfig,
 ): { [k: string]: string | string[] | boolean | number | number[] } => {
@@ -509,18 +554,27 @@ export const parseArgsAndEnvVars = (
   if (!Object.values(sc.parameters).find(p => p.short && p.short === 'v')) {
     sc.parameters.verbose = { default: false, short: 'v', type: 'boolean' };
   }
+
   const config = buildParseArgsConfigObject(sc.parameters);
   const { positionals, values } = rawParseArgs(config, sc);
+
   showHelpAndVerbose(sc, positionals, values);
+
   const parsedParameters = parseAndTransformValues(sc, positionals, values);
   if (parsedParameters.verbose) {
     console.log('parsed arguments:', parsedParameters);
   }
   validateParsedValues(sc, parsedParameters, !!parsedParameters.verbose);
+
   requireEnvironmentVariables(sc, !!parsedParameters.verbose);
   const environmentVariables = getEnvironmentVariables(sc.environment);
   if (parsedParameters.verbose) {
     console.log('environment variables:', environmentVariables);
   }
+
+  if (sc.requireActiveAwsSession) {
+    checkAwsSessionExpiration(sc, !!parsedParameters.verbose);
+  }
+
   return { ...environmentVariables, ...parsedParameters };
 };

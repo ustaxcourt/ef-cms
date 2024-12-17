@@ -1,4 +1,9 @@
 import {
+  FORMATS,
+  formatNow,
+  getBusinessDateInFuture,
+} from '@shared/business/utilities/DateHandler';
+import {
   type ScriptConfig,
   parseArgsAndEnvVars,
   parseIntRange,
@@ -31,6 +36,7 @@ const ogScriptConfig: ScriptConfig = {
       type: 'string',
     },
   },
+  requireActiveAwsSession: true,
 };
 const mockScriptConfig = cloneDeep(ogScriptConfig);
 
@@ -102,9 +108,17 @@ describe('parseArgsAndEnvVars', () => {
   const originalArgv = cloneDeep(process.argv);
   const originalEnv = cloneDeep(process.env);
   const mockEventCode = 'noa';
+  const mockAwsSessionExpiration = getBusinessDateInFuture({
+    numberOfDays: 1,
+    outputFormat: FORMATS.ISO,
+    startDate: formatNow(FORMATS.ISO),
+  });
   beforeEach(() => {
     process.argv = ['ts-node', 'some-script.ts', mockEventCode];
-    process.env = { ...originalEnv, ENV: 'jest' };
+    process.env = {
+      AWS_SESSION_EXPIRATION: mockAwsSessionExpiration,
+      ENV: 'jest',
+    };
   });
   afterAll(() => {
     process.argv = originalArgv;
@@ -118,7 +132,7 @@ describe('parseArgsAndEnvVars', () => {
       } catch (err: any) {
         expect(err.toString()).toEqual('Error: caught process.exit');
       }
-      expect(mockConsoleLog).toHaveBeenCalledTimes(4);
+      expect(mockConsoleLog).toHaveBeenCalledTimes(5);
       expect(mockExit).toHaveBeenCalledWith(0);
     });
     it('generates a usage example from provided configuration', () => {
@@ -213,6 +227,32 @@ describe('parseArgsAndEnvVars', () => {
       expect(result.hostname).toEqual('jest');
       expect(mockConsoleLog).not.toHaveBeenCalled();
     });
+    it('tells the user when an active AWS session is required', () => {
+      process.argv = ['ts-node', 'some-script.ts', '-h'];
+      try {
+        parseArgsAndEnvVars(mockScriptConfig);
+      } catch (err: any) {
+        expect(err.toString()).toEqual('Error: caught process.exit');
+      }
+      expect(mockConsoleLog).toHaveBeenNthCalledWith(
+        5,
+        '\nActive AWS session required.',
+      );
+    });
+    it('does not tell the user an active AWS session is required when it is not required', () => {
+      process.argv = ['ts-node', 'some-script.ts', '-h'];
+      process.env = { ENV: 'jest' };
+      const itsScriptConfig = cloneDeep(mockScriptConfig);
+      delete itsScriptConfig.requireActiveAwsSession;
+      try {
+        parseArgsAndEnvVars(itsScriptConfig);
+      } catch (err: any) {
+        expect(err.toString()).toEqual('Error: caught process.exit');
+      }
+      expect(mockConsoleLog).not.toHaveBeenCalledWith(
+        '\nActive AWS session required.',
+      );
+    });
   });
   describe('--verbose flag', () => {
     it('prints verbose output after validating parameters and does not exit', () => {
@@ -224,7 +264,7 @@ describe('parseArgsAndEnvVars', () => {
         1,
         'Verbose output enabled\n',
       );
-      expect(mockConsoleLog).toHaveBeenCalledTimes(9);
+      expect(mockConsoleLog).toHaveBeenCalledTimes(11);
       expect(mockExit).not.toHaveBeenCalled();
     });
     it('only calls usage once if the verbose flag was provided and there was an error', () => {
@@ -267,7 +307,7 @@ describe('parseArgsAndEnvVars', () => {
         1,
         'Verbose output enabled\n',
       );
-      expect(mockConsoleLog).toHaveBeenCalledTimes(7);
+      expect(mockConsoleLog).toHaveBeenCalledTimes(8);
       expect(mockExit).toHaveBeenCalledWith(0);
     });
   });
@@ -564,6 +604,46 @@ describe('parseArgsAndEnvVars', () => {
     it('can be called without any environment variables', () => {
       const itsScriptConfig = cloneDeep(mockScriptConfig);
       delete itsScriptConfig.environment;
+      parseArgsAndEnvVars(itsScriptConfig);
+      expect(mockExit).not.toHaveBeenCalled();
+    });
+  });
+  describe('AWS Session Expiration', () => {
+    it('exits if the AWS_SESSION_EXPIRATION environment variable is not set', () => {
+      process.env = { ENV: 'jest' };
+      try {
+        parseArgsAndEnvVars(mockScriptConfig);
+      } catch (err: any) {
+        expect(err.toString()).toEqual('Error: caught process.exit');
+      }
+      expect(mockConsoleLog).toHaveBeenNthCalledWith(
+        1,
+        'AWS session has expired\n',
+      );
+      expect(mockExit).toHaveBeenCalledWith(1);
+    });
+    it('exits if the AWS_SESSION_EXPIRATION value is in the past', () => {
+      const awsSessionExpiration = '2020-01-01T00:00:00+00:00';
+      process.env.AWS_SESSION_EXPIRATION = awsSessionExpiration;
+      try {
+        parseArgsAndEnvVars(mockScriptConfig);
+      } catch (err: any) {
+        expect(err.toString()).toEqual('Error: caught process.exit');
+      }
+      expect(mockConsoleLog).toHaveBeenNthCalledWith(
+        1,
+        `AWS session expired ${awsSessionExpiration}\n`,
+      );
+      expect(mockExit).toHaveBeenCalledWith(1);
+    });
+    it('does not exit if the AWS_SESSION_EXPIRATION value is in the future', () => {
+      parseArgsAndEnvVars(mockScriptConfig);
+      expect(mockExit).not.toHaveBeenCalled();
+    });
+    it('does not exit if the AWS_SESSION_EXPIRATION environment variable is not set and requireActiveAwsSession is false', () => {
+      process.env = { ENV: 'jest' };
+      const itsScriptConfig = cloneDeep(mockScriptConfig);
+      delete itsScriptConfig.requireActiveAwsSession;
       parseArgsAndEnvVars(itsScriptConfig);
       expect(mockExit).not.toHaveBeenCalled();
     });
