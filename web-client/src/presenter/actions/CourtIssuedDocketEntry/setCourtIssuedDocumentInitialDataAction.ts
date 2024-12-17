@@ -38,8 +38,13 @@ export const setCourtIssuedDocumentInitialDataAction = ({
 
     if (docketEntry.eventCode === 'OJR') {
       const signingJudge = judges.find(judge => {
-        return judge.userId === docketEntry.signedByUserId;
+        return (
+          judge.judgeFullName &&
+          docketEntry.signedJudgeName &&
+          judge.judgeFullName === docketEntry.signedJudgeName
+        );
       });
+
       if (signingJudge) {
         store.set(state.form.judge, signingJudge.name);
       }

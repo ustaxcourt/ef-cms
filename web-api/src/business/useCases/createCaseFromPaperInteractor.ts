@@ -15,7 +15,7 @@ import { UnauthorizedError } from '../../errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../shared/src/business/entities/WorkItem';
 import { replaceBracketed } from '../../../../shared/src/business/utilities/replaceBracketed';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd,
@@ -290,8 +290,8 @@ export const createCaseFromPaperInteractor = async (
       authorizedUser,
       caseToCreate: caseToAdd.validate().toRawObject(),
     }),
-    saveWorkItem({
-      workItem: newWorkItem.validate().toRawObject(),
+    upsertWorkItems({
+      workItems: [newWorkItem.validate().toRawObject()],
     }),
   ]);
 

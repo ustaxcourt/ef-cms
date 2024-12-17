@@ -1,30 +1,17 @@
-import { state } from '@web-client/presenter/app.cerebral';
-
-/**
- * loads the pdf for being used in preview modal
- *
- * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store object
- * @param {Function} providers.props the cerebral props object
- * @returns {Promise} promise which resolves if it successfully loads the pdf
- */
-export const loadPdfAction = ({
+export const loadPdfForTabAction = ({
   applicationContext,
   props,
   router,
-  store,
 }: ActionProps) => {
   const { file } = props;
   const isBase64Encoded = typeof file === 'string' && file.startsWith('data');
 
-  store.set(state.modal.pdfPreviewModal, {});
-
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
     const reader = applicationContext.getFileReaderInstance();
 
     reader.onload = () => {
-      let binaryFile;
-      if (isBase64Encoded) {
+      let binaryFile: string | ArrayBuffer | null;
+      if (isBase64Encoded && reader.result === 'string') {
         const base64File = reader.result.replace(/[^,]+,/, '');
         binaryFile = atob(base64File);
       } else {
@@ -33,23 +20,22 @@ export const loadPdfAction = ({
 
       try {
         const pdfDataUri = router.createObjectURL(
+          // @ts-ignore
           new Blob([binaryFile], { type: 'application/pdf' }),
         );
-        store.set(state.pdfPreviewUrl, pdfDataUri);
-        store.unset(state.modal.pdfPreviewModal.error);
+        window.open(pdfDataUri, '_blank');
         resolve();
       } catch (err) {
-        store.set(state.modal.pdfPreviewModal.error, err);
         reject(err);
       }
     };
 
     reader.onerror = function (err) {
-      store.set(state.modal.pdfPreviewModal.error, err);
       reject(err);
     };
 
     if (isBase64Encoded) {
+      // @ts-ignore
       reader.readAsDataURL(file);
     } else {
       reader.readAsArrayBuffer(file);

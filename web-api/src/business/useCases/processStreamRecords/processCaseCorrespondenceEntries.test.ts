@@ -3,6 +3,8 @@ import { processCaseCorrespondenceEntries } from '@web-api/business/useCases/pro
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 
 describe('processCaseCorrespondenceEntries', () => {
+  const docketNumber = '103-19';
+
   beforeEach(() => {
     (upsertCaseCorrespondences as jest.Mock).mockResolvedValue(undefined);
   });
@@ -11,11 +13,11 @@ describe('processCaseCorrespondenceEntries', () => {
     const mockDynamoCaseCorrespondence = {
       dynamodb: {
         NewImage: {
-          docketNumber: {
-            S: '123-45',
-          },
           entityName: {
-            S: 'CaseCorrespondence',
+            S: 'Correspondence',
+          },
+          pk: {
+            S: `case|${docketNumber}`,
           },
         },
       },
@@ -25,6 +27,12 @@ describe('processCaseCorrespondenceEntries', () => {
       caseCorrespondenceRecords: [mockDynamoCaseCorrespondence],
     });
 
-    expect(upsertCaseCorrespondences).toHaveBeenCalled();
+    expect(upsertCaseCorrespondences).toHaveBeenCalledWith([
+      {
+        docketNumber,
+        entityName: 'Correspondence',
+        pk: `case|${docketNumber}`,
+      },
+    ]);
   });
 });
