@@ -147,11 +147,39 @@ describe('parseArgsAndEnvVars', () => {
       expect(mockExit).not.toHaveBeenCalled();
     });
     it('only calls usage once if the verbose flag was provided and there was an error', () => {
-      process.argv.push('invalidPositional');
+      const itsScriptConfig = cloneDeep(mockScriptConfig);
+      itsScriptConfig.parameters!.eventCode.position = 2;
       process.argv.push('-v');
+      try {
+        parseArgsAndEnvVars(itsScriptConfig);
+      } catch (err: any) {
+        expect(err.toString()).toEqual('Error: caught process.exit');
+      }
+      const usageCalls = mockConsoleLog.mock.calls.filter(c =>
+        c[0].includes('Usage'),
+      );
+      expect(usageCalls.length).toEqual(1);
     });
   });
   describe('parameter validation', () => {
+    it('can be called without any parameters', () => {
+      const itsScriptConfig = cloneDeep(mockScriptConfig);
+      delete itsScriptConfig.parameters;
+      process.argv = ['ts-node', 'some-script.ts'];
+      parseArgsAndEnvVars(itsScriptConfig);
+      expect(mockExit).not.toHaveBeenCalled();
+    });
+    it('throws if positionals are provided when no positionals are defined', () => {
+      const itsScriptConfig = cloneDeep(mockScriptConfig);
+      delete itsScriptConfig.parameters!.eventCode;
+      process.argv.push('anotherPositional');
+      try {
+        parseArgsAndEnvVars(itsScriptConfig);
+      } catch (err: any) {
+        expect(err.toString()).toEqual('Error: caught process.exit');
+      }
+      expect(mockExit).toHaveBeenCalled();
+    });
     it('does not allow a boolean parameter to be defaulted to true', () => {
       const itsScriptConfig = cloneDeep(mockScriptConfig);
       itsScriptConfig.parameters!.fiscal.required = true;
