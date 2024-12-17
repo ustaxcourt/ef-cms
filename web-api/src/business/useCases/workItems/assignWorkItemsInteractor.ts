@@ -58,8 +58,9 @@ export const assignWorkItemsInteractor = async (
     if (!workItemEntity) {
       throw new NotFoundError(`WorkItem ${workItemId} was not found.`);
     }
+  } else {
+    workItemEntity = new WorkItem(workItem);
   }
-  workItemEntity = new WorkItem(workItem);
 
   const userIsCaseServices = User.isCaseServicesUser({ section: user.section });
   const userBeingAssignedIsCaseServices = User.isCaseServicesUser({
