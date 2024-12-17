@@ -3,6 +3,7 @@ import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
 export interface Database {
   dwCase: CaseTable;
   dwMessage: MessageTable;
+  dwUserCaseNote: UserCaseNoteTable;
   dwWorkItem: WorkItemTable;
 }
 
@@ -78,3 +79,12 @@ export interface WorkItemTable {
 export type WorkItemKysely = Selectable<WorkItemTable>;
 export type NewWorkItemKysely = Insertable<WorkItemTable>;
 export type UpdateWorkItemKysely = Updateable<WorkItemTable>;
+export interface UserCaseNoteTable {
+  docketNumber: string;
+  userId: string;
+  notes?: string;
+}
+
+export type UserCaseNoteKysely = Selectable<UserCaseNoteTable>;
+export type NewUserCaseNoteKysely = Insertable<UserCaseNoteTable>;
+export type UpdateUserCaseNoteKysely = Updateable<UserCaseNoteTable>;
