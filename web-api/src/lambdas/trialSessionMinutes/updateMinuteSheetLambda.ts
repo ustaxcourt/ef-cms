@@ -11,9 +11,7 @@ export const updateMinuteSheetLambda = (
     async ({ applicationContext }) => {
       return await updateMinuteSheetInteractor(
         applicationContext,
-        {
-          minuteSheet: JSON.parse(event.body),
-        },
+        JSON.parse(event.body),
         authorizedUser,
       );
     },

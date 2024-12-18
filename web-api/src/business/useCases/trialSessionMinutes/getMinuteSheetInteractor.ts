@@ -24,5 +24,5 @@ export const getMinuteSheetInteractor = async (
 
   console.log('getting minute sheet', `${docketNumber} - ${trialSessionId}`);
 
-  return results;
+  return results[0];
 };

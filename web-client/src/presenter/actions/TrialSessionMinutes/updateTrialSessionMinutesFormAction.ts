@@ -13,6 +13,8 @@ export const updateTrialSessionMinutesFormAction = ({
       state.minuteSheetForm[section][name][rowInfo.key][rowInfo.nestedName],
       value,
     );
+  } else if (rowInfo && rowInfo.key && !rowInfo.nestedName) {
+    store.set(state.minuteSheetForm[section][name][rowInfo.key], value);
   } else {
     console.log('section', section);
     store.set(state.minuteSheetForm[section][name], value);

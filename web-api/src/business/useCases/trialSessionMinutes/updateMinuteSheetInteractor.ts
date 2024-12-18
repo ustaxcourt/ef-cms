@@ -1,9 +1,10 @@
+import { FormattedMinuteSheet } from '@web-api/business/useCases/trialSessionMinutes/generateTrialSessionMinutesPdfInteractor';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { put, query } from '@web-api/persistence/dynamodbClientService';
 
 export const updateMinuteSheetInteractor = async (
   applicationContext: ServerApplicationContext,
-  { minuteSheet },
+  { docketNumber, minuteSheet, trialSessionId }: MinuteSheetUpdateBody,
   // authorizedUser: UnknownAuthUser,
 ): Promise<any> => {
   // 10419 TODO: add role-permissions configuration for minutes sheet
@@ -21,10 +22,26 @@ export const updateMinuteSheetInteractor = async (
   //   KeyConditionExpression: '#pk = :pk',
   //   applicationContext,
   // });
+  // console.log('Docket Number: ', docketNumber);
+  // console.log('TrialSessionId: ', trialSessionId);
+  // console.log('minuteSheet: ', minuteSheet);
 
-  // const updatedMinuteSheet = put({ Item: minuteSheet[0], applicationContext });
+  console.log('*************** minute sheet before save', minuteSheet);
+  const serializedMinuteSheet = JSON.stringify(minuteSheet);
+  const updatedMinuteSheet = await put({
+    Item: {
+      minuteSheet: serializedMinuteSheet,
+      pk: `${trialSessionId}|${docketNumber}`,
+      sk: `${trialSessionId}|${docketNumber}`,
+    },
+    applicationContext,
+  });
 
-  console.log('********** minute sheet updated', `${minuteSheet}`);
+  return updatedMinuteSheet;
+};
 
-  // return updatedMinuteSheet;
+export type MinuteSheetUpdateBody = {
+  docketNumber: string;
+  trialSessionId: string;
+  minuteSheet: FormattedMinuteSheet;
 };

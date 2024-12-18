@@ -5,19 +5,18 @@ export const checkForExistingMinuteSheetAction = async ({
 }) => {
   const { caseDetail, trialSession } = props;
 
-  // const minuteSheet = await applicationContext
-  //   .getUseCases()
-  //   .getMinuteSheetInteractor(applicationContext, {
-  //     docketNumber: caseDetail.docketNumber,
-  //     trialSessionId: trialSession.trialSessionId,
-  //   });
+  const minuteSheet = await applicationContext
+    .getUseCases()
+    .getMinuteSheetInteractor(applicationContext, {
+      docketNumber: caseDetail.docketNumber,
+      trialSessionId: trialSession.trialSessionId,
+    });
 
-  // const isExistingMinuteSheet = !!minuteSheet;
+  const isExistingMinuteSheet = !!minuteSheet;
 
-  // if (isExistingMinuteSheet) {
-  //   console.log('its a yes');
-  //   return path.yes();
-  // }
+  if (isExistingMinuteSheet) {
+    return path.yes({ minuteSheet });
+  }
 
   return path.no();
 };

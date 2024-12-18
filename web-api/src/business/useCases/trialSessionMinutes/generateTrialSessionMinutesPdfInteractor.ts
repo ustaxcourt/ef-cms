@@ -46,6 +46,6 @@ export const generateTrialSessionMinutesPdfInteractor = async (
 export type FormattedMinuteSheet = {
   courtReporter: string;
   judge: string;
-  remoteSession: string;
+  remoteSession: boolean;
   trialClerk: string;
 };

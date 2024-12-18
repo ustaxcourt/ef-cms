@@ -4,6 +4,11 @@ import {
 } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
+import {
+  FORMATS,
+  createISODateString,
+  formatDateString,
+} from '@shared/business/utilities/DateHandler';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
   MINUTE_SHEET_FORM_SECTION_MAP,
@@ -175,7 +180,7 @@ export const CaseMetadataFieldset = ({
             </div>
             <div className="grid-col-auto">
               <DateSelector
-                defaultValue={undefined}
+                defaultValue={row.date}
                 formGroupClassNames="margin-bottom-0"
                 id={`reCalledDate-${row.renderKey}`}
                 label="Date(s)"
@@ -206,7 +211,7 @@ export const CaseMetadataFieldset = ({
                   id="reCalledNote"
                   name="reCalledNote"
                   type="text"
-                  value={caseMetadataFormState.recalled[rowIndex]?.note}
+                  value={caseMetadataFormState.recalled[row.renderKey].note}
                   onBlur={() => onBlurHandler()}
                   onChange={e =>
                     onChangeHandler({
@@ -229,7 +234,7 @@ export const CaseMetadataFieldset = ({
                   <input
                     aria-describedby="representing-legend"
                     checked={
-                      caseMetadataFormState.recalled[rowIndex]
+                      caseMetadataFormState.recalled[row.renderKey]
                         ?.transcriptOrdered
                     }
                     className="usa-checkbox__input"
@@ -373,7 +378,13 @@ export const CaseMetadataFieldset = ({
         </div>
         <div className="grid-col-auto">
           <DateSelector
-            defaultValue={undefined}
+            defaultValue={formatDateString(
+              createISODateString(
+                caseMetadataFormState.trialHearing.date,
+                FORMATS.MMDDYYYY,
+              ),
+              FORMATS.YYYYMMDD,
+            )}
             formGroupClassNames="margin-bottom-0"
             id="trialHearingDate"
             label="Date(s)"
@@ -408,7 +419,7 @@ export const CaseMetadataFieldset = ({
                 onChangeHandler({
                   name: 'trialHearing',
                   rowInfo: {
-                    key: 'trialSessionType',
+                    key: 'trialHearingType',
                   },
                   section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
                   value: e.target.value,
