@@ -81,14 +81,13 @@ function TrialSessionPlanningReportHeader({
   year,
 }: TrialSessionPlanningReportHeaderParams) {
   return (
-    <div className="grid-container display-flex height-6 ">
-      <div className="title">
-        <h1>{trialSessionPlanningReportHeader}</h1>
-      </div>
-      <div className="flex-fill text-right height-6 border-bottom-1px border-gray-10">
+    <div className="grid-container display-flex">
+      <h1 className="padding-bottom-2 margin-bottom-0 h1-underline-border">
+        {trialSessionPlanningReportHeader}
+      </h1>
+      <div className="flex-fill text-right border-bottom-1px border-gray-10">
         <Button
           link
-          className="margin-bottom-3"
           icon="print"
           onClick={() => {
             printSequence({
