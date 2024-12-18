@@ -52,6 +52,8 @@ export const customCaseReportHelper = (
 
   const cases = get(state.customCaseReport.cases);
 
+  console.log('cases', cases);
+
   const formatDate = isoDateString =>
     applicationContext
       .getUtilities()
@@ -67,6 +69,8 @@ export const customCaseReportHelper = (
 
     return consolidatedEntry;
   });
+
+  console.log('reportData', reportData);
 
   const populatedFilters: CustomCaseReportFilters = get(
     state.customCaseReport.filters,
