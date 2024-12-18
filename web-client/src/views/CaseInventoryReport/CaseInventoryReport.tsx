@@ -12,8 +12,6 @@ import React, { useRef, useState } from 'react';
 export const CaseInventoryReport = connect(
   {
     caseInventoryReportHelper: state.caseInventoryReportHelper,
-    foundCasesForCurrentPage:
-      state.caseInventoryReportData.foundCasesForCurrentPage,
     foundCasesTotalCount: state.caseInventoryReportData.foundCasesTotalCount,
     getCaseInventoryReportSequence: sequences.getCaseInventoryReportSequence,
     gotoPrintableCaseInventoryReportSequence:
@@ -22,7 +20,6 @@ export const CaseInventoryReport = connect(
   },
   function CaseInventoryReport({
     caseInventoryReportHelper,
-    foundCasesForCurrentPage,
     foundCasesTotalCount,
     getCaseInventoryReportSequence,
     gotoPrintableCaseInventoryReportSequence,
@@ -157,29 +154,31 @@ export const CaseInventoryReport = connect(
                       </tr>
                     </thead>
                     <tbody>
-                      {foundCasesForCurrentPage.map(row => (
-                        <tr key={row.docketNumber}>
-                          <td className="width-205">
-                            <ConsolidatedCaseIcon
-                              consolidatedIconTooltipText={
-                                row.consolidatedIconTooltipText
-                              }
-                              inConsolidatedGroup={row.inConsolidatedGroup}
-                              showLeadCaseIcon={row.isLeadCase}
-                            />
-                          </td>
-                          <td>
-                            <CaseLink formattedCase={row} />
-                          </td>
-                          <td>{row.caseTitle}</td>
-                          {caseInventoryReportHelper.showJudgeColumn && (
-                            <td>{row.associatedJudge}</td>
-                          )}
-                          {caseInventoryReportHelper.showStatusColumn && (
-                            <td>{row.status}</td>
-                          )}
-                        </tr>
-                      ))}
+                      {caseInventoryReportHelper.formattedReportData.map(
+                        row => (
+                          <tr key={row.docketNumber}>
+                            <td className="width-205">
+                              <ConsolidatedCaseIcon
+                                consolidatedIconTooltipText={
+                                  row.consolidatedIconTooltipText
+                                }
+                                inConsolidatedGroup={row.inConsolidatedGroup}
+                                showLeadCaseIcon={row.isLeadCase}
+                              />
+                            </td>
+                            <td>
+                              <CaseLink formattedCase={row} />
+                            </td>
+                            <td>{row.caseTitle}</td>
+                            {caseInventoryReportHelper.showJudgeColumn && (
+                              <td>{row.associatedJudge}</td>
+                            )}
+                            {caseInventoryReportHelper.showStatusColumn && (
+                              <td>{row.status}</td>
+                            )}
+                          </tr>
+                        ),
+                      )}
                     </tbody>
                   </table>
                   {caseInventoryReportHelper.pageCount > 1 && (
