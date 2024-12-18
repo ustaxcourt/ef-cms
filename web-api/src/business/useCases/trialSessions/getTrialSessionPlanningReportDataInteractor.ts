@@ -82,7 +82,7 @@ const getTrialSessionPlanningReportData = async ({
     session =>
       session.sessionType === 'Special' &&
       Number(session.termYear) === year &&
-      session.term === term,
+      session.term.toLocaleLowerCase() === term.toLocaleLowerCase(),
   );
 
   const specialTrialSessionsCounts = specialTrialSessions.reduce(
