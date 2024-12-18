@@ -5,10 +5,13 @@ import { isEmpty } from 'lodash';
 export const calculateDaysElapsedSinceLastStatusChange = (
   applicationContext: IApplicationContext,
   individualCase: {
-    caseStatusHistory: CaseStatusChange[];
+    caseStatusHistory?: CaseStatusChange[];
   },
 ): { daysElapsedSinceLastStatusChange: number; statusDate: string } => {
-  if (isEmpty(individualCase.caseStatusHistory)) {
+  if (
+    !individualCase.caseStatusHistory || // Redundant, but helps typescript not complain later
+    isEmpty(individualCase.caseStatusHistory)
+  ) {
     return { daysElapsedSinceLastStatusChange: 0, statusDate: '' };
   }
 
