@@ -82,8 +82,8 @@ function TrialSessionPlanningReportHeader({
 }: TrialSessionPlanningReportHeaderParams) {
   return (
     <div className="grid-container display-flex height-6 ">
-      <div className="flex-auto border-bottom-2px border-primary trial-session-planning-report-header">
-        {trialSessionPlanningReportHeader}
+      <div className="title">
+        <h1>{trialSessionPlanningReportHeader}</h1>
       </div>
       <div className="flex-fill text-right height-6 border-bottom-1px border-gray-10">
         <Button
@@ -140,14 +140,16 @@ function TrialSessionPlanningReportTable({
               return (
                 <tr
                   className={
-                    trialLocation.hasNotBeenCalendared ? 'bg-yellow' : undefined
+                    trialLocation.hasNotBeenCalendared
+                      ? 'cities-not-calendated-yellow-background'
+                      : undefined
                   }
                   key={`row-${trialLocation.trialCityState}`}
                 >
                   <td>
                     {trialLocation.hasNotBeenCalendared && (
                       <FontAwesomeIcon
-                        className="fa-icon-blue-vivid margin-right-2"
+                        className="fa-icon-blue margin-right-2"
                         icon="info-circle"
                         size="lg"
                         title={trialLocation.lastVisitedDateFormatted}
@@ -209,9 +211,9 @@ function CitiesNotCalendaredInPastTwoTerms({
       data-testid="cities-not-calendared-in-past-two-terms-table"
     >
       <div className="border-1px border-gray-30">
-        <div className="bg-yellow padding-top-2 padding-bottom-2 padding-left-3 border-bottom-1px border-gray-30 cities-notcalendared-header">
+        <div className="cities-not-calendated-yellow-background padding-top-2 padding-bottom-2 padding-left-3 border-bottom-1px border-gray-30 cities-not-calendared-header">
           <FontAwesomeIcon
-            className="fa-icon-blue-vivid margin-right-2"
+            className="fa-icon-blue margin-right-2"
             icon="info-circle"
             size="lg"
           />
