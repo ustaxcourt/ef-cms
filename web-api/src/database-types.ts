@@ -85,7 +85,7 @@ export type UpdateCaseDeadlineKysely = Updateable<CaseDeadlineTable>;
 
 export interface CaseWorksheetTable {
   docketNumber: string;
-  finalBriefDueDate?: Date;
+  finalBriefDueDate?: Date | null;
   primaryIssue?: string;
   statusOfMatter?: string;
   judgeUserId?: string;
