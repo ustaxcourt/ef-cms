@@ -23,6 +23,14 @@ export const TrialLocation = connect(
   }) {
     const { formattedBlockedCases, formattedEligibleCases, location } =
       trialLocationHelper;
+    const isExportDisabled =
+      (currentTab === 'eligibleCases' && formattedEligibleCases.length === 0) ||
+      (currentTab === 'blockedCases' && formattedBlockedCases.length === 0);
+    const handleTabSelect = tabName => {
+      if (tabName !== currentTab) {
+        setCurrentTabSequence({ currentTab: tabName });
+      }
+    };
     return (
       <>
         <BigHeader text={location} />
@@ -43,8 +51,9 @@ export const TrialLocation = connect(
           <Button
             link
             aria-label="export trial location data as csv"
-            className="margin-top-2"
+            className="margin-top-2 position-relative z-100 float-right"
             data-testid="export-report"
+            disabled={isExportDisabled}
             icon="file-export"
             onClick={() => {
               exportTrialLocationToCsvSequence({
@@ -55,19 +64,12 @@ export const TrialLocation = connect(
           >
             Export
           </Button>
-
           <Tabs
             defaultActiveTab={'eligibleCases'}
             headingLevel="2"
             id="trial-location-tabs"
             value={currentTab}
-            onSelect={(tabName: 'eligibleCases' | 'blockedCases') => {
-              if (tabName === currentTab) {
-                return;
-              } else {
-                return setCurrentTabSequence({ currentTab });
-              }
-            }}
+            onSelect={handleTabSelect}
           >
             <Tab
               data-testid="eligible-cases-sessions-tab"
