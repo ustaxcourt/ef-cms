@@ -153,7 +153,7 @@ describe('getTrialSessionPlanningReportDataInteractor', () => {
       getTrialSessionPlanningReportDataInteractor(
         applicationContext,
         {
-          term: 'winter',
+          term: 'WINTER',
           year: 2024,
         },
         mockPetitionerUser,
