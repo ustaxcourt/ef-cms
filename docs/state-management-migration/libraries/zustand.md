@@ -5,19 +5,22 @@
 Q: Is the library easy to use in isolation from both React components and
 business logic?
 
-A: tk
+A: Sort of. Although it does not require wrapping components in providers or
+using custom hooks, the `create` function that creates a Zustand store does
+rely on the native `useState` hook.
 
 ## 2. Conceptual Simplicity
 
 Q: Does the library introduce as few novel abstractions as possible?
 
-A: tk
+A: Yes. Its API is tiny: you create a store using the `create` function, and
+then you call `getState` and `setState` on that store.
 
 ## 3. Boilerplate Volume
 
 Q: Does the library require a great deal of boilerplate code?
 
-A: tk
+A: No.
 
 ## Sketch: A Very Dumb Component
 
