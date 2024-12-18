@@ -11,7 +11,9 @@ export const upsertCaseWorksheets = async (
   const caseWorksheetsToUpsert = caseWorksheets.map(cw => {
     return {
       docketNumber: cw.docketNumber,
-      finalBriefDueDate: calculateDate({ dateString: cw.finalBriefDueDate }),
+      finalBriefDueDate: cw.finalBriefDueDate
+        ? calculateDate({ dateString: cw.finalBriefDueDate })
+        : null,
       judgeUserId: cw.judgeUserId,
       primaryIssue: cw.primaryIssue,
       statusOfMatter: cw.statusOfMatter,
