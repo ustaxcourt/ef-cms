@@ -5,13 +5,13 @@ import {
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
   SESSION_TYPES,
   TRIAL_CITIES,
   US_STATES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -82,7 +82,7 @@ const getTrialSessionPlanningReportData = async ({
     session =>
       session.sessionType === 'Special' &&
       Number(session.termYear) === year &&
-      session.term === term,
+      session.term.toLocaleLowerCase() === term.toLocaleLowerCase(),
   );
 
   const specialTrialSessionsCounts = specialTrialSessions.reduce(
