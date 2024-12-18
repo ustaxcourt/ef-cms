@@ -62,14 +62,16 @@ export const trialLocationHelper = (
   const formattedEligibleCases = eligibleCases.map(c => {
     let privatePractitioners: string[] = [];
     if (c.privatePractitioners) {
-      privatePractitioners = c.privatePractitioners.map(practitioner => {
-        return practitioner.name;
+      privatePractitioners = '';
+      c.privatePractitioners.forEach(practitioner => {
+        return (privatePractitioners += ` ${practitioner.name}`);
       });
     }
     let irsPractitioners: string[] = [];
     if (c.irsPractitioners) {
-      irsPractitioners = c.irsPractitioners.map(practitioner => {
-        return practitioner.name;
+      irsPractitioners = '';
+      c.irsPractitioners.forEach(practitioner => {
+        return (irsPractitioners += ` ${practitioner.name}`);
       });
     }
     const isDocketSuffixHighPriority = HIGH_PRIORITY_SUFFIXES.includes(

@@ -14,6 +14,7 @@ import React, { useRef, useState } from 'react';
 
 const ITEMS_PER_PAGE = 100;
 
+//TODO: use this
 export function useClientSidePaginator<T>(fullDataSet: T[], pageSize) {
   const [activePage, setActivePage] = useState(0);
   const totalPages = Math.ceil(fullDataSet.length / pageSize);

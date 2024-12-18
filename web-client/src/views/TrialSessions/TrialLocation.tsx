@@ -4,15 +4,23 @@ import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { TrialLocationBlockedTable } from '@web-client/views/TrialSessions/TrialLocationBlockedTable';
 import { TrialLocationEligibleCasesTable } from '@web-client/views/TrialSessions/TrialLocationEligibleCasesTable';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const TrialLocation = connect(
   {
     currentTab: state.trialLocationPage.currentTab,
+    exportTrialLocationToCsvSequence:
+      sequences.exportTrialLocationToCsvSequence,
+    setCurrentTabSequence: sequences.setCurrentTabSequence,
     trialLocationHelper: state.trialLocationHelper,
   },
-  function TrialLocation({ currentTab, trialLocationHelper }) {
+  function TrialLocation({
+    currentTab,
+    exportTrialLocationToCsvSequence,
+    setCurrentTabSequence,
+    trialLocationHelper,
+  }) {
     const { formattedBlockedCases, formattedEligibleCases, location } =
       trialLocationHelper;
     return (
@@ -30,18 +38,24 @@ export const TrialLocation = connect(
               Back to Trial Session Planning Report
             </Button>
           </div>
-          <div className="float-right">
-            <Button
-              link
-              aria-label="export pending report"
-              className="margin-top-2"
-              data-testid="export-report"
-              icon="file-export"
-              onClick={() => {}}
-            >
-              Export
-            </Button>
-          </div>
+
+          {/* disable if no cases for export */}
+          <Button
+            link
+            aria-label="export trial location data as csv"
+            className="margin-top-2"
+            data-testid="export-report"
+            icon="file-export"
+            onClick={() => {
+              exportTrialLocationToCsvSequence({
+                blockedCases: trialLocationHelper.formattedBlockedCases,
+                eligibleCases: trialLocationHelper.formattedEligibleCases,
+              });
+            }}
+          >
+            Export
+          </Button>
+
           <Tabs
             defaultActiveTab={'eligibleCases'}
             headingLevel="2"
@@ -50,6 +64,8 @@ export const TrialLocation = connect(
             onSelect={(tabName: 'eligibleCases' | 'blockedCases') => {
               if (tabName === currentTab) {
                 return;
+              } else {
+                return setCurrentTabSequence({ currentTab });
               }
             }}
           >
