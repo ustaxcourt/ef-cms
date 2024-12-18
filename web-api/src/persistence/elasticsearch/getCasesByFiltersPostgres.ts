@@ -50,7 +50,7 @@ export const getCasesByFiltersPostgres = async ({
       query = query.where('isPaper', 'is', false);
     }
     if (params.procedureType !== 'All') {
-      query = query.where('procedureType', 'in', params.procedureType);
+      query = query.where('procedureType', '=', params.procedureType);
     }
     if (params.highPriority) {
       query = query.where('highPriority', 'is', true);
@@ -91,13 +91,20 @@ export const getCasesByFiltersPostgres = async ({
         'status',
         'highPriority',
       ])
-      .offset(params.page * params.pageSize)
+      .offset((params.page - 1) * params.pageSize)
       .limit(params.pageSize)
       .execute();
   });
 
+  console.log(
+    'foundCases results',
+    results.map(r => transformNullToUndefined(r)) as CaseInventory[],
+  );
+
   return {
-    foundCases: transformNullToUndefined(results) as CaseInventory[],
+    foundCases: results.map(r =>
+      transformNullToUndefined(r),
+    ) as CaseInventory[],
     totalCount: results.length,
   };
 };
