@@ -157,7 +157,7 @@ describe('getTrialSessionPlanningReportDataInteractor', () => {
         applicationContext,
         {
           term: 'WINTER',
-          year: 2024,
+          year: '2024',
         },
         mockPetitionerUser,
       ),
@@ -170,7 +170,7 @@ describe('getTrialSessionPlanningReportDataInteractor', () => {
         applicationContext,
         {
           term: 'winter',
-          year: 2024,
+          year: '2024',
         },
         mockPetitionsClerkUser,
       );
@@ -196,9 +196,9 @@ describe('getTrialSessionPlanningReportDataInteractor', () => {
     });
 
     expect(previousTerms).toEqual([
-      { term: 'fall', termDisplay: 'Fall 2023', year: 2023 },
-      { term: 'spring', termDisplay: 'Spring 2023', year: 2023 },
-      { term: 'winter', termDisplay: 'Winter 2023', year: 2023 },
+      { term: 'fall', termDisplay: 'Fall 2023', year: '2023' },
+      { term: 'spring', termDisplay: 'Spring 2023', year: '2023' },
+      { term: 'winter', termDisplay: 'Winter 2023', year: '2023' },
     ]);
   });
 
@@ -208,7 +208,7 @@ describe('getTrialSessionPlanningReportDataInteractor', () => {
         applicationContext,
         {
           term: 'winter',
-          year: 2024,
+          year: '2024',
         },
         mockPetitionsClerkUser,
       );
