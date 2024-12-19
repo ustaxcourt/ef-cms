@@ -14,7 +14,7 @@ export type TrialLocationDataFormatted = TrialLocationData & {
 export type PreviousTermFormatted = {
   termDisplayFormatted: string;
   term: string;
-  year: number;
+  year: string;
 };
 
 type TrialSessionPlanningReportViewHelperResults = {
@@ -23,7 +23,7 @@ type TrialSessionPlanningReportViewHelperResults = {
   previousTermsFormatted: PreviousTermFormatted[];
   trialLocationDataFormatted: TrialLocationDataFormatted[];
   trialTerm: string;
-  trialYear: number;
+  trialYear: string;
 };
 
 function formatTerm(trialTerm: string): string {

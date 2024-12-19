@@ -1116,7 +1116,7 @@ const router = {
           setPageTitle('Trial session planning report');
           return app.getSequence('gotoTrialSessionPlanningReportViewSequence')({
             term: term.toLocaleLowerCase(),
-            year: Number(year),
+            year,
           });
         },
       ),

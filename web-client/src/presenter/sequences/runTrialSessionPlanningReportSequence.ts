@@ -15,4 +15,4 @@ export const runTrialSessionPlanningReportSequence = [
       runTrialSessionPlanningReportAction,
     ]),
   },
-] as unknown as (props: { term: string; year: number }) => void;
+] as unknown as (props: { term: string; year: string }) => void;
