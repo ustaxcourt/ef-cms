@@ -35,7 +35,6 @@ export const getCasesClosedByJudgeInteractor = async (
   return await applicationContext
     .getPersistenceGateway()
     .getCasesClosedCountByJudge({
-      applicationContext,
       endDate: searchEntity.endDate,
       judges: searchEntity.judges,
       startDate: searchEntity.startDate,

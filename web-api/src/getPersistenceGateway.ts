@@ -60,7 +60,7 @@ import { getCaseDeadlinesByDocketNumber } from './persistence/dynamo/caseDeadlin
 import { getCaseInventoryReport } from './persistence/elasticsearch/getCaseInventoryReport';
 import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheetsByDocketNumber';
 import { getCasesByUserId } from './persistence/elasticsearch/getCasesByUserId';
-import { getCasesClosedCountByJudge } from './persistence/elasticsearch/getCasesClosedCountByJudge';
+import { getCasesClosedCountByJudge } from './persistence/postgres/reports/caseSearch/getCasesClosedCountByJudge';
 import {
   getCasesForUser,
   getDocketNumbersByUser,

@@ -1,10 +1,10 @@
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { getCasesClosedCountByJudge } from './getCasesClosedCountByJudge';
+import { applicationContext } from '../../../../../../shared/src/business/test/createTestApplicationContext';
+import { getCasesClosedCountByJudge } from '../../../elasticsearch/getCasesClosedCountByJudge';
 jest.mock('./searchClient');
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { casesClosedResults } from '@web-api/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor.test';
 import { judgeUser } from '@shared/test/mockUsers';
-import { search } from './searchClient';
+import { search } from '../../../elasticsearch/searchClient';
 
 describe('getCasesClosedCountByJudge', () => {
   const mockEndDate = '03/21/2020';
