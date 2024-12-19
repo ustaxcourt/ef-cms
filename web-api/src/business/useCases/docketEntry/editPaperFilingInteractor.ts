@@ -536,7 +536,7 @@ export const determineEntitiesToLock = (
 });
 
 export const handleLockError = async (
-  applicationContext,
+  applicationContext: ServerApplicationContext,
   originalRequest,
   authorizedUser: UnknownAuthUser,
 ) => {

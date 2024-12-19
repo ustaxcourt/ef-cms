@@ -16,8 +16,7 @@ export const getCustomCaseReportAction = async ({
 }: ActionProps<{ selectedPage: number }>) => {
   const filterValues = get(state.customCaseReport.filters);
   const currentJudges = get(state.judges);
-  const lastIdsOfPages = get(state.customCaseReport.lastIdsOfPages);
-  const searchAfter = lastIdsOfPages[props.selectedPage];
+  const page = props.selectedPage;
 
   if (!filterValues.highPriority) {
     delete filterValues.highPriority;
@@ -58,15 +57,10 @@ export const getCustomCaseReportAction = async ({
     ...filterValues,
     endDate: formattedEndDate,
     judges: judgesIds!,
+    page,
     pageSize: CUSTOM_CASE_REPORT_PAGE_SIZE,
-    searchAfter,
     startDate: formattedStartDate,
   });
-
-  store.set(
-    state.customCaseReport.lastIdsOfPages[props.selectedPage + 1],
-    reportData.lastCaseId,
-  );
 
   store.set(state.customCaseReport.cases, reportData.foundCases);
   store.set(state.customCaseReport.totalCases, reportData.totalCount);

@@ -148,7 +148,7 @@ export const judgeColvin: RawUser = {
   name: 'Colvin',
   role: ROLES.judge,
   section: COLVINS_CHAMBERS_SECTION,
-  userId: 'd17b07dc-6455-447e-bea3-f91d12ac5a6a',
+  userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
 };
 
 export const petitionerUser: RawUser = {

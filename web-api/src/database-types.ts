@@ -2,12 +2,13 @@ import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
 
 export interface Database {
   dwCase: CaseTable;
-  dwMessage: MessageTable;
-  dwWorkItem: WorkItemTable;
-  dwPetitionerOnCase: PetitionerOnCaseTable;
-  dwCaseStatusUpdate: CaseStatusUpdateTable;
   dwCaseStatistic: CaseStatisticTable;
+  dwCaseStatusUpdate: CaseStatusUpdateTable;
+  dwMessage: MessageTable;
+  dwPetitionerOnCase: PetitionerOnCaseTable;
   dwStatisticPenalty: StatisticPenaltyTable;
+  dwUserCaseNote: UserCaseNoteTable;
+  dwWorkItem: WorkItemTable;
 }
 
 export interface MessageTable {
@@ -219,3 +220,12 @@ export interface StatisticPenaltyTable {
 export type StatisticPenaltyKysely = Selectable<StatisticPenaltyTable>;
 export type NewStatisticPenaltyKysely = Insertable<StatisticPenaltyTable>;
 export type UpdateStatisticPenaltyKysely = Updateable<StatisticPenaltyTable>;
+export interface UserCaseNoteTable {
+  docketNumber: string;
+  userId: string;
+  notes?: string;
+}
+
+export type UserCaseNoteKysely = Selectable<UserCaseNoteTable>;
+export type NewUserCaseNoteKysely = Insertable<UserCaseNoteTable>;
+export type UpdateUserCaseNoteKysely = Updateable<UserCaseNoteTable>;
