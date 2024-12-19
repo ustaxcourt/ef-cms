@@ -43,7 +43,7 @@ import {
   compareStrings,
 } from '@shared/business/utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
-import { createCase } from '@web-api/persistence/dynamo/cases/createCase';
+import { createCase } from '@web-api/persistence/postgres/cases/createCase';
 import { createMockDocumentClient } from '@shared/business/test/createMockDocumentClient';
 import { deleteRecord } from '@web-api/persistence/elasticsearch/deleteRecord';
 import { filterEmptyStrings } from '@shared/business/utilities/filterEmptyStrings';
@@ -99,7 +99,7 @@ import { setNoticesForCalendaredTrialSessionInteractor } from '@shared/proxies/t
 import { setServiceIndicatorsForCase } from '@shared/business/utilities/setServiceIndicatorsForCase';
 import { setupPdfDocument } from '@shared/business/utilities/setupPdfDocument';
 import { unsealDocketEntryInteractor } from '@shared/proxies/editDocketEntry/unsealDocketEntryProxy';
-import { updateCase } from '@web-api/persistence/dynamo/cases/updateCase';
+import { updateCase } from '@web-api/persistence/postgres/cases/updateCase';
 import { updateCaseCorrespondence } from '@web-api/persistence/dynamo/correspondence/updateCaseCorrespondence';
 import { updateDocketEntry } from '@web-api/persistence/dynamo/documents/updateDocketEntry';
 import { updateUserRecords } from '@web-api/persistence/dynamo/users/createNewPractitionerUser';
