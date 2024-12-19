@@ -5,4 +5,5 @@ export const sortTableSequence = [
 ] as unknown as (props: {
   sortField: string;
   sortOrder: 'asc' | 'desc';
+  stateKey?: string;
 }) => void;

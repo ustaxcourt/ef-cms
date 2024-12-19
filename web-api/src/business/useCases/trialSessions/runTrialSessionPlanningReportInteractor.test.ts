@@ -1,5 +1,8 @@
-import { TRIAL_CITIES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  SESSION_TYPES,
+  TRIAL_CITIES,
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
@@ -45,7 +48,7 @@ describe('run trial session planning report', () => {
     let mockTrialSessions = [
       {
         judge: { name: 'Judge Colvin' },
-        sessionType: 'Regular',
+        sessionType: SESSION_TYPES.regular,
         startDate: '2019-05-01T21:40:46.415Z',
         term: 'spring',
         termYear: '2019',
@@ -54,7 +57,7 @@ describe('run trial session planning report', () => {
       },
       {
         judge: { name: 'Judge Buch' },
-        sessionType: 'Small',
+        sessionType: SESSION_TYPES.small,
         startDate: '2019-04-01T21:40:46.415Z',
         term: 'spring',
         termYear: '2019',
@@ -63,7 +66,7 @@ describe('run trial session planning report', () => {
       },
       {
         //judge is missing, so this one should not show up in the list
-        sessionType: 'Small',
+        sessionType: SESSION_TYPES.small,
         startDate: '2019-06-01T21:40:46.415Z',
         term: 'spring',
         termYear: '2019',
@@ -72,7 +75,7 @@ describe('run trial session planning report', () => {
       },
       {
         judge: { name: 'Judge Ashford' },
-        sessionType: 'Small',
+        sessionType: SESSION_TYPES.small,
         startDate: '2019-09-01T21:40:46.415Z',
         term: 'fall',
         termYear: '2019',
@@ -81,7 +84,7 @@ describe('run trial session planning report', () => {
       },
       {
         judge: { name: 'Judge Ashford' },
-        sessionType: 'Special',
+        sessionType: SESSION_TYPES.special,
         startDate: '2019-10-01T21:40:46.415Z',
         term: 'fall',
         termYear: '2019',
@@ -90,7 +93,7 @@ describe('run trial session planning report', () => {
       },
       {
         judge: { name: 'Judge Ashford' },
-        sessionType: 'Hybrid-S',
+        sessionType: SESSION_TYPES.hybridSmall,
         startDate: '2019-11-11T21:40:40.415Z',
         term: 'fall',
         termYear: '2019',
