@@ -23,4 +23,4 @@ export const gotoTrialSessionPlanningReportViewSequence =
         setupCurrentPageAction('TrialSessionPlanningReportView'),
       ],
     },
-  ]) as unknown as ({ term, year }: { term: string; year: number }) => void;
+  ]) as unknown as ({ term, year }: { term: string; year: string }) => void;

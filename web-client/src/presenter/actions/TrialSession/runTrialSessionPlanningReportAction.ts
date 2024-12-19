@@ -1,7 +1,7 @@
 export const runTrialSessionPlanningReportAction = async ({
   applicationContext,
   props,
-}: ActionProps<{ term: string; year: number }>) => {
+}: ActionProps<{ term: string; year: string }>) => {
   const { term, year } = props;
 
   const { url } = await applicationContext

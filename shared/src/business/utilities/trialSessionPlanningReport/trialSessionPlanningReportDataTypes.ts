@@ -1,7 +1,7 @@
 export type PreviousTerm = {
   term: string;
   termDisplay: string;
-  year: number;
+  year: string;
 };
 
 export type TrialLocationData = {

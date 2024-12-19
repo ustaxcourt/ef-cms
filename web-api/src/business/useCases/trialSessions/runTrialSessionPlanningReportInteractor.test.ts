@@ -13,9 +13,9 @@ describe('run trial session planning report', () => {
   const mockPdfUrl = 'www.example.com';
 
   const PREVIOUS_TERMS_MOCK: PreviousTerm[] = [
-    { term: 'winter', termDisplay: 'Winter 2020', year: 2020 },
-    { term: 'fall', termDisplay: 'Fall 2019', year: 2019 },
-    { term: 'spring', termDisplay: 'Spring 2019', year: 2019 },
+    { term: 'winter', termDisplay: 'Winter 2020', year: '2020' },
+    { term: 'fall', termDisplay: 'Fall 2019', year: '2019' },
+    { term: 'spring', termDisplay: 'Spring 2019', year: '2019' },
   ];
 
   const TRIAL_LOCATION_DATA_MOCK: TrialLocationData[] = [
@@ -66,7 +66,7 @@ describe('run trial session planning report', () => {
         applicationContext,
         {
           term: 'winter',
-          year: 2020,
+          year: '2020',
         },
         mockPetitionerUser,
       ),
@@ -78,7 +78,7 @@ describe('run trial session planning report', () => {
       applicationContext,
       {
         term: 'winter',
-        year: 2020,
+        year: '2020',
       },
       mockPetitionsClerkUser,
     );
@@ -90,7 +90,7 @@ describe('run trial session planning report', () => {
     expect(getTrialSessionPlanningReportDataInteractorCalls.length).toEqual(1);
     expect(getTrialSessionPlanningReportDataInteractorCalls[0][1]).toEqual({
       term: 'winter',
-      year: 2020,
+      year: '2020',
     });
 
     const trialSessionPlanningReportCalls =

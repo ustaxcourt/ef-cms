@@ -1112,10 +1112,10 @@ const router = {
       '/trial-session-planning-report/*/*',
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
-        (term, year) => {
+        (term: string, year: string) => {
           setPageTitle('Trial session planning report');
           return app.getSequence('gotoTrialSessionPlanningReportViewSequence')({
-            term,
+            term: term.toLocaleLowerCase(),
             year,
           });
         },

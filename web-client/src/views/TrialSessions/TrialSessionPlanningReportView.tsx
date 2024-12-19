@@ -70,7 +70,7 @@ TrialSessionPlanningReportView.displayName = 'TrialSessionPlanningReportView';
 type TrialSessionPlanningReportHeaderParams = {
   trialSessionPlanningReportHeader: string;
   term: string;
-  year: number;
+  year: string;
   printSequence: typeof sequences.runTrialSessionPlanningReportSequence;
 };
 
