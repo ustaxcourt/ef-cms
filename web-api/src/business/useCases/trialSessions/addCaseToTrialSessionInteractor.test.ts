@@ -1,5 +1,7 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
@@ -14,8 +16,11 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { setPriorityOnAllWorkItems as setPriorityOnAllWorkItemsMock } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 
 describe('addCaseToTrialSessionInteractor', () => {
+  const setPriorityOnAllWorkItems = setPriorityOnAllWorkItemsMock as jest.Mock;
+
   let mockTrialSession;
   let mockCase;
   let mockLock;
@@ -160,12 +165,8 @@ describe('addCaseToTrialSessionInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems.mock
-        .calls[0][0],
-    ).toMatchObject({
+    expect(setPriorityOnAllWorkItems.mock.calls[0][0]).toMatchObject({
       highPriority: true,
-      trialDate: '2025-12-01T00:00:00.000Z',
     });
   });
 
@@ -186,9 +187,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems,
-    ).not.toHaveBeenCalled();
+    expect(setPriorityOnAllWorkItems).not.toHaveBeenCalled();
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {

@@ -11,7 +11,6 @@ describe('setPendingReportSelectedJudgeAction', () => {
     expect(state.pendingReports).toEqual({
       hasPendingItemsResults: false,
       pendingItems: [],
-      pendingItemsPage: 0,
       selectedJudge: 'Buch',
     });
   });
