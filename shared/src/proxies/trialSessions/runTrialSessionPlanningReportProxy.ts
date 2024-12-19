@@ -3,7 +3,7 @@ import { post } from '../requests';
 
 export const runTrialSessionPlanningReportInteractor = (
   applicationContext: ClientApplicationContext,
-  { term, year }: { term: string; year: number },
+  { term, year }: { term: string; year: string },
 ): Promise<{
   fileId: string;
   url: string;
