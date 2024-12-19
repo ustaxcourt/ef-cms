@@ -9,7 +9,7 @@ import { capitalize } from 'lodash';
 
 export const runTrialSessionPlanningReportInteractor = async (
   applicationContext: ServerApplicationContext,
-  { term, year }: { term: string; year: number },
+  { term, year }: { term: string; year: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<{
   fileId: string;

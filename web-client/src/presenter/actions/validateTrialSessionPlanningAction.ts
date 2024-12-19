@@ -5,7 +5,7 @@ export const validateTrialSessionPlanningAction = ({
   get,
   path,
   props,
-}: ActionProps<{ term: string; year: number }>) => {
+}: ActionProps<{ term: string; year: string }>) => {
   const { term, year } = props;
   const validYears = get(state.modal.trialYears).map(validYear =>
     Number(validYear),

@@ -864,7 +864,7 @@ export const baseState = {
   },
   trialSessionPlanningReportData: {} as {
     trialTerm: string;
-    trialYear: number;
+    trialYear: string;
     previousTerms: PreviousTerm[];
     trialLocationData: TrialLocationData[];
   },
