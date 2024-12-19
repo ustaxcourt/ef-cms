@@ -2,7 +2,7 @@ import { CHIEF_JUDGE } from '@shared/business/entities/EntityConstants';
 import {
   CaseInventory,
   GetCustomCaseReportRequest,
-} from '../../business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
+} from '../../../../business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getDbReader } from '@web-api/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';

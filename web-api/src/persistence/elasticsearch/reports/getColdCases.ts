@@ -1,4 +1,7 @@
-import { COLD_CASE_LOOKBACK_IN_DAYS } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  COLD_CASE_LOOKBACK_IN_DAYS,
+} from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import { ColdCaseEntry } from '@web-api/business/useCases/reports/coldCaseReportInteractor';
 import {
@@ -7,12 +10,30 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { formatResults, searchRaw } from '../searchClient';
+// import { getDbReader } from '@web-api/database';
 
 export async function getColdCases({
   applicationContext,
 }: {
   applicationContext: ServerApplicationContext;
 }) {
+  // 10502 TODO: We need to get a minimum viable docket entry (docket number, filingDate, pending, etc.) into postgres
+
+  // const generalDocketCases = await getDbReader(reader =>
+  //   reader
+  //     .selectFrom('dwCase')
+  //     .where('status', '=', CASE_STATUS_TYPES.generalDocket)
+  //     .select([
+  //       'caseType',
+  //       'createdAt',
+  //       'docketNumber',
+  //       'docketNumberSuffix',
+  //       'leadDocketNumber',
+  //       'preferredTrialCity',
+  //     ])
+  //     .execute(),
+  // );
+
   const searchParameters = {
     body: {
       _source: [
@@ -29,7 +50,7 @@ export async function getColdCases({
           filter: [
             {
               term: {
-                'status.S': 'General Docket - Not at Issue',
+                'status.S': CASE_STATUS_TYPES.generalDocket,
               },
             },
             {

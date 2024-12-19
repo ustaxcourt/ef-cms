@@ -4,7 +4,7 @@ import {
   CASE_TYPES_MAP,
   CHIEF_JUDGE,
   CUSTOM_CASE_REPORT_PAGE_SIZE,
-} from '../../../../shared/src/business/entities/EntityConstants';
+} from '../../../../../../shared/src/business/entities/EntityConstants';
 import {
   CustomCaseReportFilters,
   GetCustomCaseReportRequest,
@@ -12,8 +12,8 @@ import {
 import {
   emptyResults,
   mockCaseSearchResult,
-} from './searchClient.test.constants';
-import { formatResults } from './searchClient';
+} from '../../../elasticsearch/searchClient.test.constants';
+import { formatResults } from '../../../elasticsearch/searchClient';
 import { getCasesByFilters } from './getCasesByFilters';
 import { getSearchClient as mockGetSearchClient } from '@web-api/persistence/elasticsearch/searchClient/getSearchClient';
 
