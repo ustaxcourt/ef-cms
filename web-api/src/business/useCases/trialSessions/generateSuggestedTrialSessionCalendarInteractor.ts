@@ -29,6 +29,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 import { generateCalendar } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/generateCalendar';
+import { getSuggestedCalendarCases } from '@web-api/persistence/postgres/reports/caseSearch/getSuggestedCalendarCases';
 import {
   maxSessionsPerLocationConstraint,
   maxSessionsPerWeekConstraint,
@@ -95,9 +96,9 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     throw new UnauthorizedError('Unauthorized to generate term');
   }
 
-  const cases = await applicationContext
-    .getPersistenceGateway()
-    .getSuggestedCalendarCases({ applicationContext });
+  const cases = await getSuggestedCalendarCases();
+
+  console.log('cases!', cases);
 
   const sessions = await applicationContext
     .getPersistenceGateway()

@@ -1,50 +1,18 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
-import { search } from '@web-api/persistence/elasticsearch/searchClient';
+import { getDbReader } from '@web-api/database';
 
-export const getSuggestedCalendarCases = async ({ applicationContext }) => {
-  const { results } = await search({
-    applicationContext,
-    searchParameters: {
-      body: {
-        _source: [
-          'docketNumber',
-          'preferredTrialCity',
-          'procedureType',
-          'status',
-        ],
-        query: {
-          bool: {
-            must: [
-              {
-                term: {
-                  'status.S': CASE_STATUS_TYPES.generalDocketReadyForTrial,
-                },
-              },
-              {
-                exists: {
-                  field: 'preferredTrialCity',
-                },
-              },
-            ],
-            must_not: [
-              {
-                term: {
-                  'blocked.BOOL': true,
-                },
-              },
-              {
-                term: {
-                  'automaticBlocked.BOOL': true,
-                },
-              },
-            ],
-          },
-        },
-        size: 10000,
-      },
-      index: 'efcms-case',
-    },
+export const getSuggestedCalendarCases = async () => {
+  return await getDbReader(async reader => {
+    const results = await reader
+      .selectFrom('dwCase')
+      .where('status', '=', CASE_STATUS_TYPES.generalDocketReadyForTrial)
+      .where('preferredTrialCity', 'is not', null)
+      .where('blocked', 'is not', true)
+      .where('automaticBlocked', 'is not', true)
+      .select(['procedureType', 'preferredTrialCity', 'docketNumber', 'status'])
+      .limit(10000)
+      .execute();
+
+    return results;
   });
-
-  return results;
 };
