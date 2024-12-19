@@ -40,17 +40,17 @@ describe('trialSessionPlanningReport', () => {
             {
               term: 'fall',
               termDisplay: 'Fall 2019',
-              year: 2019,
+              year: '2019',
             },
             {
               term: 'spring',
               termDisplay: 'Spring 2019',
-              year: 2019,
+              year: '2019',
             },
             {
               term: 'winter',
               termDisplay: 'Winter 2019',
-              year: 2019,
+              year: '2019',
             },
           ] as PreviousTerm[],
           term: 'Winter 2020',
