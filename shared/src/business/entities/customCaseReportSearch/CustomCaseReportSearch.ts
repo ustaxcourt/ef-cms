@@ -49,7 +49,7 @@ export class CustomCaseReportSearch extends JoiValidationEntity {
     this.pageSize = rawProps.pageSize;
     this.preferredTrialCities = rawProps.preferredTrialCities;
     this.procedureType = rawProps.procedureType;
-    this.page = rawProps.page || 1;
+    this.page = rawProps.page || 0;
     this.startDate = rawProps.startDate;
   }
 

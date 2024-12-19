@@ -3,9 +3,9 @@ import {
   CaseInventory,
   GetCustomCaseReportRequest,
 } from '../../business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
-import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
-import { formatResults } from './searchClient';
-import { getSearchClient } from '@web-api/persistence/elasticsearch/searchClient/getSearchClient';
+import { calculateDate } from '@shared/business/utilities/DateHandler';
+import { getDbReader } from '@web-api/database';
+import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export const getCasesByFilters = async ({
   params,
@@ -14,153 +14,92 @@ export const getCasesByFilters = async ({
 }): Promise<{
   totalCount: number;
   foundCases: CaseInventory[];
-  lastCaseId: { receivedAt: number; pk: string };
 }> => {
-  const source = [
-    'associatedJudge',
-    'isPaper',
-    'procedureType',
-    'caseCaption',
-    'caseType',
-    'docketNumber',
-    'leadDocketNumber',
-    'preferredTrialCity',
-    'receivedAt',
-    'status',
-    'highPriority',
-  ];
-
-  const mustClause: QueryDslQueryContainer[] = [];
-
-  const createDateFilter = {
-    range: {
-      'receivedAt.S': {
-        gte: params.startDate,
-        lt: params.endDate,
-      },
-    },
-  };
-  mustClause.push(createDateFilter);
-
-  if (params.caseStatuses.length) {
-    const caseStatusesFilters = {
-      terms: {
-        'status.S': params.caseStatuses,
-      },
-    };
-    mustClause.push(caseStatusesFilters);
-  }
-
-  if (params.caseTypes.length) {
-    const caseTypeFilters = {
-      terms: {
-        'caseType.S': params.caseTypes,
-      },
-    };
-    mustClause.push(caseTypeFilters);
-  }
-
-  if (params.preferredTrialCities.length) {
-    const preferredTrialCityFilters = {
-      terms: {
-        'preferredTrialCity.S': params.preferredTrialCities,
-      },
-    };
-    mustClause.push(preferredTrialCityFilters);
-  }
-
-  if (params.judges?.length) {
-    if (params.judges.includes(CHIEF_JUDGE)) {
-      const shouldArray: Object[] = [];
-
-      const associatedJudgeFilter = {
-        term: {
-          'associatedJudge.S.raw': CHIEF_JUDGE,
-        },
-      };
-      shouldArray.push(associatedJudgeFilter);
-
-      const judgesIds = params.judges.filter(judge => judge !== CHIEF_JUDGE);
-      shouldArray.push({
-        terms: {
-          'associatedJudgeId.S': judgesIds,
-        },
-      });
-      const shouldObject: QueryDslQueryContainer = {
-        bool: {
-          should: shouldArray,
-        },
-      };
-      mustClause.push(shouldObject);
-    } else {
-      mustClause.push({
-        terms: {
-          'associatedJudgeId.S': params.judges,
-        },
-      });
+  const { count, results } = await getDbReader(async reader => {
+    let query = reader.selectFrom('dwCase');
+    if (params.startDate && params.endDate) {
+      query = query
+        .where(
+          'receivedAt',
+          '>=',
+          calculateDate({ dateString: params.startDate }),
+        )
+        .where(
+          'receivedAt',
+          '<=',
+          calculateDate({ dateString: params.endDate }),
+        );
     }
-  }
+    if (params.caseStatuses.length) {
+      query = query.where('status', 'in', params.caseStatuses);
+    }
+    if (params.caseTypes.length) {
+      query = query.where('caseType', 'in', params.caseTypes);
+    }
+    if (params.preferredTrialCities.length) {
+      query = query.where(
+        'preferredTrialCity',
+        'in',
+        params.preferredTrialCities,
+      );
+    }
+    if (params.filingMethod === 'paper') {
+      query = query.where('isPaper', 'is', true);
+    } else if (params.filingMethod !== 'all') {
+      query = query.where('isPaper', 'is', false);
+    }
+    if (params.procedureType !== 'All') {
+      query = query.where('procedureType', '=', params.procedureType);
+    }
+    if (params.highPriority) {
+      query = query.where('highPriority', 'is', true);
+    }
+    if (params.judges.length) {
+      if (params.judges.includes(CHIEF_JUDGE)) {
+        query = query.where(eb =>
+          eb.or([
+            eb('associatedJudge', '=', CHIEF_JUDGE),
+            eb('associatedJudgeId', 'in', params.judges),
+          ]),
+        );
+      } else {
+        query = query.where('associatedJudgeId', 'in', params.judges);
+      }
+    }
 
-  if (params.filingMethod !== 'all') {
-    const filingMethodFilter = {
-      match: {
-        'isPaper.BOOL': params.filingMethod === 'paper',
-      },
-    };
-    mustClause.push(filingMethodFilter);
-  }
+    // Get the total results
+    const totalCount = await query
+      .select(({ fn }) => fn.count<number>('docketNumber').as('value'))
+      .execute();
 
-  if (params.procedureType !== 'All') {
-    const procedureTypeFilter = {
-      terms: {
-        'procedureType.S': [params.procedureType],
-      },
-    };
-    mustClause.push(procedureTypeFilter);
-  }
-
-  if (params.highPriority) {
-    const procedureTypeFilter = {
-      match: {
-        'highPriority.BOOL': true,
-      },
-    };
-    mustClause.push(procedureTypeFilter);
-  }
-
-  const searchResults = await getSearchClient().search({
-    _source: source,
-    body: {
-      query: {
-        bool: {
-          must: mustClause,
-        },
-      },
-      search_after:
-        params.searchAfter.receivedAt && params.searchAfter.pk
-          ? [params.searchAfter.receivedAt, params.searchAfter.pk]
-          : undefined,
-      sort: [{ 'receivedAt.S': 'asc' }, { 'pk.S': 'asc' }],
-    },
-    index: 'efcms-case',
-    size: params.pageSize,
-    track_total_hits: true,
+    // Then order and paginate
+    query = query.orderBy('receivedAt', 'asc');
+    query = query.orderBy('docketNumber', 'asc'); // for stable sort
+    const filteredResults = await query
+      .select([
+        'associatedJudge',
+        'isPaper',
+        'procedureType',
+        'caption',
+        'caseType',
+        'docketNumber',
+        'leadDocketNumber',
+        'preferredTrialCity',
+        'receivedAt',
+        'status',
+        'highPriority',
+      ])
+      .offset(params.page * params.pageSize)
+      .limit(params.pageSize)
+      .execute();
+    return { count: totalCount[0].value, results: filteredResults };
   });
 
-  const { results, total }: { results: CaseInventory[]; total: number } =
-    formatResults(searchResults.body);
-
-  const matchingCases: any[] = searchResults.body.hits.hits;
-  const lastCase = matchingCases?.[matchingCases.length - 1];
-
-  const lastCaseId = {
-    pk: (lastCase?.sort[1] as string) || '',
-    receivedAt: (lastCase?.sort[0] as number) || 0,
-  };
-
+  // 10502 TODO: rename caseCaption to caption? How to handle this gracefully?
   return {
-    foundCases: results,
-    lastCaseId,
-    totalCount: total,
+    foundCases: results.map(r =>
+      transformNullToUndefined({ ...r, caseCaption: r.caption }),
+    ) as CaseInventory[],
+    totalCount: count,
   };
 };
