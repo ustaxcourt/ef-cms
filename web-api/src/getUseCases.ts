@@ -15,7 +15,6 @@ import { associatePrivatePractitionerWithCaseInteractor } from './business/useCa
 import { batchDownloadDocketEntriesInteractor } from '@web-api/business/useCases/document/batchDownloadDocketEntriesInteractor';
 import { batchDownloadTrialSessionInteractor } from './business/useCases/trialSessions/batchDownloadTrialSessionInteractor';
 import { blockCaseFromTrialInteractor } from './business/useCases/blockCaseFromTrialInteractor';
-import { caseAdvancedSearchInteractor } from './business/useCases/caseAdvancedSearchInteractor';
 import { casePublicSearchInteractor } from './business/useCases/public/casePublicSearchInteractor';
 import { changePasswordInteractor } from '@web-api/business/useCases/auth/changePasswordInteractor';
 import { checkEmailAvailabilityInteractor } from './business/useCases/user/checkEmailAvailabilityInteractor';
@@ -228,7 +227,6 @@ const useCases = {
   batchDownloadDocketEntriesInteractor,
   batchDownloadTrialSessionInteractor,
   blockCaseFromTrialInteractor,
-  caseAdvancedSearchInteractor,
   casePublicSearchInteractor,
   changePasswordInteractor,
   checkEmailAvailabilityInteractor,

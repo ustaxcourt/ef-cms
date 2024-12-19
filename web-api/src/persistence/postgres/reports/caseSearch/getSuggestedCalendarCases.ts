@@ -1,5 +1,5 @@
-import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { search } from './searchClient';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { search } from '@web-api/persistence/elasticsearch/searchClient';
 
 export const getSuggestedCalendarCases = async ({ applicationContext }) => {
   const { results } = await search({

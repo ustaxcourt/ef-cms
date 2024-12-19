@@ -8,9 +8,9 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { caseAdvancedSearch } from '@web-api/persistence/postgres/reports/caseSearch/caseAdvancedSearch';
 import { caseSearchFilter } from '../../../../shared/src/business/utilities/caseFilter';
 import {
   createEndOfDayISO,
@@ -35,7 +35,6 @@ export type CaseSearchResult = {
 };
 
 export const caseAdvancedSearchInteractor = async (
-  applicationContext: ServerApplicationContext,
   {
     countryType,
     endDate,
@@ -72,23 +71,31 @@ export const caseAdvancedSearchInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let foundCases = await applicationContext
-    .getPersistenceGateway()
-    .caseAdvancedSearch({
-      applicationContext,
-      searchTerms: {
-        countryType,
-        endDate: searchEndDate,
-        petitionerName,
-        petitionerState,
-        startDate: searchStartDate,
-      },
-    });
+  let foundCases = await caseAdvancedSearch({
+    searchTerms: {
+      countryType,
+      endDate: searchEndDate,
+      petitionerName,
+      petitionerState,
+      startDate: searchStartDate,
+    },
+  });
+
+  // console.log(
+  //   foundCases.map(p => {
+  //     return {
+  //       docketNumber: p.docketNumber,
+  //       petitioners: JSON.stringify(p.petitioners),
+  //     };
+  //   }),
+  // );
 
   const filteredCases = caseSearchFilter(foundCases, authorizedUser).slice(
     0,
     MAX_SEARCH_RESULTS,
   );
+
+  console.log('filteredCases', filteredCases);
 
   return filteredCases.map(filteredCase => {
     return {
