@@ -1,14 +1,14 @@
 import {
   FORMATS,
   formatDateString,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import { FormattedTrialInfoType } from '@web-api/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
-import { RawTrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TRIAL_SESSION_SCOPE_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { formatPhoneNumber } from '../../../../../shared/src/business/utilities/formatPhoneNumber';
+import { TRIAL_SESSION_SCOPE_TYPES } from '@shared/business/entities/EntityConstants';
+import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
+import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 
 export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
   applicationContext: ServerApplicationContext,

@@ -1,18 +1,18 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+} from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   RawTrialSession,
   TrialSession,
-} from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+} from '@shared/business/entities/trialSessions/TrialSession';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
-import { copyPagesAndAppendToTargetPdf } from '../../../../../shared/src/business/utilities/copyPagesAndAppendToTargetPdf';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { shouldAppendClinicLetter } from '../../../../../shared/src/business/utilities/shouldAppendClinicLetter';
+import { shouldAppendClinicLetter } from '@shared/business/utilities/shouldAppendClinicLetter';
 
 /**
  * serves a notice of trial session and standing pretrial document on electronic

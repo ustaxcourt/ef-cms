@@ -6,6 +6,11 @@ import courtIssuedEventCodesJson from '../../tools/courtIssuedEventCodes.json';
 import externalFilingEventsJson from '../../tools/externalFilingEvents.json';
 import internalFilingEventsJson from '../../tools/internalFilingEvents.json';
 
+export const STATE_KEYS = {
+  DOCKET_RECORD_TABLE_SORT:
+    'DOCKET_RECORD_TABLE_SORT' as 'DOCKET_RECORD_TABLE_SORT',
+};
+
 export const DEBOUNCE_TIME_MILLISECONDS = 500;
 
 interface FilingEvent {
@@ -49,6 +54,11 @@ export const AMENDMENT_EVENT_CODES = ['AMAT', 'ADMT'];
 export const STANDING_PRETRIAL_EVENT_CODES = ['SPOS', 'SPTO'];
 
 export const CLERK_OF_THE_COURT_CONFIGURATION = 'clerk-of-court-configuration';
+
+export const FETCHED_TRIAL_SESSIONS_TIMESTAMP_KEY =
+  'FetchedTrialSessionsTimestamp';
+
+export const PUBLIC_TRIAL_SESSIONS_DATA_KEY = 'publicTrialSessionsData';
 
 export const LEGACY_DOCUMENT_TYPES = [
   {
@@ -207,6 +217,11 @@ export const CLOSED_CASE_STATUSES = [
   CASE_STATUS_TYPES.closed,
   CASE_STATUS_TYPES.closedDismissed,
 ];
+export const SUGGESTED_TRIAL_SESSION_TITLES = {
+  invalid: 'Unable to create term',
+  success: 'Successfully generated suggested term.',
+  warning: 'Successfully generated suggested term with warnings',
+};
 
 export const DOCUMENT_RELATIONSHIPS = {
   PRIMARY: 'primaryDocument',
@@ -1379,11 +1394,22 @@ export const TRIAL_CITY_STRINGS = SMALL_CITIES.map(
   trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
 );
 
+export const REGULAR_TRIAL_CITY_STRINGS = COMMON_CITIES.map(
+  trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
+);
+
 export const LEGACY_TRIAL_CITY_STRINGS = LEGACY_TRIAL_CITIES.map(
   trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
 );
 
 export const SESSION_TERMS = ['Winter', 'Fall', 'Spring', 'Summer'];
+
+export const SESSION_TERMS_BY_MONTH = {
+  fall: [9, 10, 11, 12],
+  spring: [4, 5, 6],
+  summer: [7, 8],
+  winter: [1, 2, 3],
+};
 
 export const SESSION_TYPES = {
   regular: 'Regular',
@@ -1639,10 +1665,15 @@ export const DOCKET_ENTRY_SEALED_TO_TYPES = {
 export const ASCENDING: 'asc' = 'asc';
 export const DESCENDING: 'desc' = 'desc';
 
-export const CHRONOLOGICALLY_ASCENDING = 'Oldest to newest';
-export const CHRONOLOGICALLY_DESCENDING = 'Newest to oldest';
-export const ALPHABETICALLY_ASCENDING = 'In A-Z ascending order';
-export const ALPHABETICALLY_DESCENDING = 'In Z-A descending order';
+export const SORT_ASCENDING_TEXT = {
+  date: 'Oldest to newest',
+  string: 'In A-Z ascending order',
+};
+
+export const SORT_DESCENDING_TEXT = {
+  date: 'Newest to oldest',
+  string: 'In Z-A descending order',
+};
 
 export const PRACTITIONER_DOCUMENT_TYPES_MAP = {
   APPLICATION_PACKAGE: 'Application Package',
@@ -1735,6 +1766,15 @@ export type CreatedCaseType = {
     name: string;
   };
 };
+
+export const USER_MESSAGE_TYPES = {
+  error: 'ERROR',
+  success: 'SUCCESS',
+  warning: 'WARNING',
+};
+
+export type UserMessageType =
+  (typeof USER_MESSAGE_TYPES)[keyof typeof USER_MESSAGE_TYPES];
 
 export const BROADCAST_MESSAGES = {
   appHasUpdated: 'appHasUpdated',
