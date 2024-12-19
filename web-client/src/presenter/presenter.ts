@@ -232,6 +232,8 @@ import { leaveCaseForLaterServiceSequence } from './sequences/leaveCaseForLaterS
 import { loadDefaultDocketViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDocketViewerDocumentToDisplaySequence';
 import { loadDefaultDraftViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDraftViewerDocumentToDisplaySequence';
 import { loadDefaultViewerCorrespondenceSequence } from './sequences/loadDefaultViewerCorrespondenceSequence';
+import { loadMoreCaseDeadlinesSequence } from './sequences/loadMoreCaseDeadlinesSequence';
+import { loadMorePendingItemsSequence } from './sequences/loadMorePendingItemsSequence';
 import { loadPdfForTabSequence } from './sequences/PDFPreviewTab/loadPdfForTabSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCaseDetailFromPaperServiceSequence } from './sequences/navigateToCaseDetailFromPaperServiceSequence';
@@ -971,6 +973,10 @@ export const presenterSequences = {
     loadDefaultDraftViewerDocumentToDisplaySequence as unknown as Function,
   loadDefaultViewerCorrespondenceSequence:
     loadDefaultViewerCorrespondenceSequence as unknown as Function,
+  loadMoreCaseDeadlinesSequence:
+    loadMoreCaseDeadlinesSequence as unknown as Function,
+  loadMorePendingItemsSequence:
+    loadMorePendingItemsSequence as unknown as Function,
   loadPdfForTabSequence: loadPdfForTabSequence as unknown as Function,
   navigateBackSequence: navigateBackSequence as unknown as Function,
   navigateToCaseDetailFromPaperServiceSequence:
