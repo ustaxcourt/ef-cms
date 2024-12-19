@@ -2,6 +2,8 @@ import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getDbReader } from '@web-api/database';
 import { sql } from 'kysely';
 
+// 10502 TODO: Make sure this is efficient! And add full-text indices!
+
 type CaseAdvancedSearchTerms = {
   petitionerName?: string;
   petitionerState?: string;
@@ -19,9 +21,11 @@ type CaseAdvancedSearchResultItem = {
   isSealed?: boolean;
   receivedAt: string;
   sealedDate?: string;
+  partyType: string;
   petitioners: {
     contactId: string;
     countryType: string;
+    contactType: string;
     name: string;
     state?: string;
   }[];
@@ -73,7 +77,7 @@ export const caseAdvancedSearch = async ({
             to_tsquery('english', ${petitionerNameSearchString})
           ) +
           ts_rank_cd(
-            setweight(to_tsvector('english', c.caption), 'C'),
+            setweight(to_tsvector('english', c.caption), 'D'),
             to_tsquery('english', ${petitionerNameSearchString})
           )`,
             'desc',
@@ -138,10 +142,12 @@ export const caseAdvancedSearch = async ({
         'case.docketNumber',
         'case.docketNumberSuffix',
         'case.isSealed',
+        'case.partyType',
         'case.receivedAt',
         'case.sealedDate',
         'case.status',
         'petitioner.contactId',
+        'petitioner.contactType',
         'petitioner.countryType',
         'petitioner.name',
         'petitioner.state',
@@ -169,6 +175,7 @@ export const caseAdvancedSearch = async ({
       if (result.contactId) {
         caseMap.get(result.docketNumber)!.petitioners.push({
           contactId: result.contactId,
+          contactType: result.contactType,
           country: result.countryType,
           name: result.name,
           state: result.state,
@@ -180,10 +187,12 @@ export const caseAdvancedSearch = async ({
         docketNumber: result.docketNumber,
         docketNumberWithSuffix: result.docketNumber + result.docketNumberSuffix,
         isSealed: result.isSealed || undefined,
+        partyType: result.partyType,
         petitioners: result.contactId
           ? [
               {
                 contactId: result.contactId,
+                contactType: result.contactType,
                 country: result.countryType,
                 name: result.name,
                 state: result.state,
