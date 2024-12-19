@@ -19,7 +19,7 @@ import { capitalize, invert } from 'lodash';
 
 export const getTrialSessionPlanningReportDataInteractor = async (
   applicationContext: ServerApplicationContext,
-  { term, year }: { term: string; year: number },
+  { term, year }: { term: string; year: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<{
   previousTerms: PreviousTerm[];
@@ -49,14 +49,14 @@ const getTrialSessionPlanningReportData = async ({
 }: {
   applicationContext: ServerApplicationContext;
   term: string;
-  year: number;
+  year: string;
 }): Promise<{
   previousTerms: PreviousTerm[];
   trialLocationData: TrialLocationData[];
 }> => {
   const previousTerms: PreviousTerm[] = [];
   let currentTerm: string = term;
-  let currentYear: number = year;
+  let currentYear: string = year;
   for (let i = 0; i < 3; i++) {
     const previous = getPreviousTerm(currentTerm, currentYear);
     previousTerms.push(previous);
@@ -81,7 +81,7 @@ const getTrialSessionPlanningReportData = async ({
   const specialTrialSessions = allTrialSessions.filter(
     session =>
       session.sessionType === 'Special' &&
-      Number(session.termYear) === year &&
+      session.termYear === year &&
       session.term.toLocaleLowerCase() === term.toLocaleLowerCase(),
   );
 
@@ -112,7 +112,7 @@ const getTrialSessionPlanningReportData = async ({
 
 const getPreviousTerm = (
   currentTerm: string,
-  currentYear: number,
+  currentYear: string,
 ): PreviousTerm => {
   const terms = [
     `fall ${+currentYear - 1}`,
@@ -128,7 +128,7 @@ const getPreviousTerm = (
   return {
     term,
     termDisplay,
-    year: Number(year),
+    year,
   };
 };
 
@@ -186,7 +186,7 @@ const getTrialLocation = async (
     const previousTermSessions = filteredTrialSessions.filter(
       trialSession =>
         trialSession.term.toLowerCase() === previousTerm.term.toLowerCase() &&
-        Number(trialSession.termYear) === previousTerm.year &&
+        trialSession.termYear === previousTerm.year &&
         trialSession.trialLocation === trialCityState,
     );
 
