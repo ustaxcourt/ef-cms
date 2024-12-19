@@ -1408,7 +1408,19 @@ export const LEGACY_TRIAL_CITY_STRINGS = LEGACY_TRIAL_CITIES.map(
   trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
 );
 
-export const SESSION_TERMS = ['Winter', 'Fall', 'Spring', 'Summer'];
+export const SESSION_TERMS_DICT = {
+  WINTER: 'Winter',
+  FALL: 'Fall',
+  SPRING: 'Spring',
+  SUMMER: 'Summer',
+} as const;
+
+export const SESSION_TERMS = [
+  SESSION_TERMS_DICT.WINTER,
+  SESSION_TERMS_DICT.FALL,
+  SESSION_TERMS_DICT.SPRING,
+  SESSION_TERMS_DICT.SUMMER,
+];
 
 export const SESSION_TERMS_BY_MONTH = {
   fall: [9, 10, 11, 12],
