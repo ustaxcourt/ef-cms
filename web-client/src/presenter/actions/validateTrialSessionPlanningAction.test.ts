@@ -45,7 +45,7 @@ describe('validateTrialSessionPlanningAction', () => {
         presenter,
       },
       props: {
-        term: 'Winter',
+        term: 'winter',
         year: null,
       },
       state: {
