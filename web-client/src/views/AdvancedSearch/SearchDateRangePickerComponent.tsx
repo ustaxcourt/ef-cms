@@ -17,12 +17,12 @@ export const SearchDateRangePickerComponent = connect(
     validateSequence,
     validationErrors,
   }) {
-    const dateRangePickerRef = useRef();
-    const startDatePickerRef = useRef();
-    const endDatePickerRef = useRef();
+    const dateRangePickerRef = useRef(null);
+    const startDatePickerRef = useRef(null);
+    const endDatePickerRef = useRef(null);
 
-    const startDateInputRef = useRef();
-    const endDateInputRef = useRef();
+    const startDateInputRef = useRef(null);
+    const endDateInputRef = useRef(null);
 
     useEffect(() => {
       if (startDatePickerRef.current && endDatePickerRef.current) {

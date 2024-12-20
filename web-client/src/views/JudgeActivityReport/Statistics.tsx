@@ -27,7 +27,7 @@ export const Statistics = connect(
     submitJudgeActivityStatisticsReportSequence,
     validationErrors,
   }) {
-    const closedCases: () => JSX.Element = () => (
+    const closedCases: () => React.JSX.Element = () => (
       <>
         <table
           aria-describedby="casesClosed"
@@ -67,7 +67,7 @@ export const Statistics = connect(
       </>
     );
 
-    const trialSessionsHeld: () => JSX.Element = () => (
+    const trialSessionsHeld: () => React.JSX.Element = () => (
       <>
         <table
           aria-describedby="sessionsHeld"
@@ -108,7 +108,7 @@ export const Statistics = connect(
       </>
     );
 
-    const ordersIssued: () => JSX.Element = () => (
+    const ordersIssued: () => React.JSX.Element = () => (
       <>
         <table
           aria-describedby="ordersIssued"
