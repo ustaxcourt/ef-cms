@@ -88,8 +88,6 @@ export const trialLocationHelper = (
     };
   });
 
-  const trialCityFormatted = location.replace('-', ', ');
-
   const groups = getPriorityGroups(formattedEligibleCases);
 
   const sortedEligibleCases = formattedEligibleCases
@@ -119,7 +117,7 @@ export const trialLocationHelper = (
     eligibleCasesForDisplay,
     formattedBlockedCases,
     formattedEligibleCases,
-    location: trialCityFormatted,
+    location,
     totalPagesBlocked: Math.ceil(formattedBlockedCases.length / pageSize),
     totalPagesEligible: Math.ceil(sortedEligibleCases.length / pageSize),
   };

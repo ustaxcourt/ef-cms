@@ -18,10 +18,8 @@ export const getEligibleCasesForCityInteractor = async (
     );
   }
 
-  const trialCityFormatted = trialCity.replace('-', ', ');
-
   return await getEligibleCasesForCity({
     applicationContext,
-    trialCity: trialCityFormatted,
+    trialCity,
   });
 };

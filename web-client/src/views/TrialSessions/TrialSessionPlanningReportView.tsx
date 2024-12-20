@@ -155,7 +155,11 @@ function TrialSessionPlanningReportTable({
                       />
                     )}
                   </td>
-                  <td>{trialLocation.trialCityState}</td>
+                  <td aria-label="hyperlink to trial location details">
+                    <a href={trialLocation.trialLocationUrl}>
+                      {trialLocation.trialCityState}
+                    </a>
+                  </td>
                   <td>{trialLocation.allCaseCount}</td>
                   <td>{trialLocation.smallCaseCount}</td>
                   <td>{trialLocation.regularCaseCount}</td>

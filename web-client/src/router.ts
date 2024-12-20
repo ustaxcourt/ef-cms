@@ -1149,7 +1149,7 @@ const router = {
         trialLocation => {
           setPageTitle('Trial location');
           return app.getSequence('gotoTrialLocationSequence')({
-            trialLocation,
+            trialLocation: decodeURIComponent(trialLocation),
           });
         },
       ),
