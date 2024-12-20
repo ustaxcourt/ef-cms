@@ -6,6 +6,7 @@ export interface Database {
   dwCaseStatusUpdate: CaseStatusUpdateTable;
   dwMessage: MessageTable;
   dwPetitionerOnCase: PetitionerOnCaseTable;
+  dwPractitionerOnCase: PractitionerOnCaseTable;
   dwStatisticPenalty: StatisticPenaltyTable;
   dwUserCaseNote: UserCaseNoteTable;
   dwWorkItem: WorkItemTable;
@@ -228,3 +229,28 @@ export interface UserCaseNoteTable {
 export type UserCaseNoteKysely = Selectable<UserCaseNoteTable>;
 export type NewUserCaseNoteKysely = Insertable<UserCaseNoteTable>;
 export type UpdateUserCaseNoteKysely = Updateable<UserCaseNoteTable>;
+
+// TODO: This is just a stub to get things out of Open Search and into Postgres
+// 10502 TODO: Make sure DynamoDB Stream code upserts this
+export interface PractitionerOnCaseTable {
+  docketNumber: string;
+  userId: string;
+  email: string;
+}
+
+export type PractitionerOnCaseKysely = Selectable<PractitionerOnCaseTable>;
+export type NewPractitionerOnCaseKysely = Insertable<PractitionerOnCaseTable>;
+export type UpdatePractitionerOnCaseKysely =
+  Updateable<PractitionerOnCaseTable>;
+
+// TODO: This is just a stub to get things out of Open Search and into Postgres
+// 10502 TODO: Make sure DynamoDB Stream code upserts this
+export interface DocketEntryTable {
+  docketNumber: string;
+  filingDate: Date;
+  pending: boolean;
+}
+
+export type DocketEntryKysely = Selectable<DocketEntryTable>;
+export type NewDocketEntryKysely = Insertable<DocketEntryTable>;
+export type UpdateDocketEntryKysely = Updateable<DocketEntryTable>;

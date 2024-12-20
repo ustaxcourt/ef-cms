@@ -3,10 +3,11 @@ import {
   CaseSearchResult,
 } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { casePublicSearch } from '@web-api/persistence/postgres/reports/caseSearch/casePublicSearch';
 import {
   createEndOfDayISO,
   createStartOfDayISO,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 
 export const casePublicSearchInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -41,7 +42,7 @@ export const casePublicSearchInteractor = async (
     });
   }
 
-  return await applicationContext.getPersistenceGateway().casePublicSearch({
+  return await casePublicSearch({
     applicationContext,
     searchTerms: {
       countryType,

@@ -7,7 +7,6 @@ import { associateUserWithCasePending } from './persistence/dynamo/cases/associa
 import { bulkDeleteRecords } from './persistence/elasticsearch/bulkDeleteRecords';
 import { bulkIndexRecords } from './persistence/elasticsearch/bulkIndexRecords';
 import { caseAdvancedSearch } from './persistence/postgres/reports/caseSearch/caseAdvancedSearch';
-import { casePublicSearch as casePublicSearchPersistence } from './persistence/elasticsearch/casePublicSearch';
 import { createCaseDeadline } from './persistence/dynamo/caseDeadlines/createCaseDeadline';
 import { createCaseTrialSortMappingRecords } from './persistence/dynamo/cases/createCaseTrialSortMappingRecords';
 import { createChangeOfAddressJob } from './persistence/dynamo/jobs/ChangeOfAddress/createChangeOfAddressJob';
@@ -51,21 +50,17 @@ import { getAccountConfirmationCode } from '@web-api/persistence/dynamo/users/ge
 import { getAllPendingMotionDocketEntriesForJudge } from '@web-api/persistence/elasticsearch/docketEntry/getAllPendingMotionDocketEntriesForJudge';
 import { getAllUsersByRole } from '@web-api/persistence/elasticsearch/users/getAllUsersByRole';
 import { getAllWebSocketConnections } from './persistence/dynamo/notifications/getAllWebSocketConnections';
-import { getBlockedCases } from './persistence/elasticsearch/getBlockedCases';
 import { getBulkTrialSessionWorkingCopies } from './persistence/dynamo/trialSessions/getBulkTrialSessionWorkingCopies';
 import { getCalendaredCasesForTrialSession } from './persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession';
 import { getCaseDeadlinesByDateRange } from './persistence/elasticsearch/caseDeadlines/getCaseDeadlinesByDateRange';
 import { getCaseDeadlinesByDocketNumber } from './persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
-import { getCaseInventoryReport } from './persistence/elasticsearch/getCaseInventoryReport';
 import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheetsByDocketNumber';
-import { getCasesByUserId } from './persistence/elasticsearch/getCasesByUserId';
 import { getCasesClosedCountByJudge } from './persistence/postgres/reports/caseSearch/getCasesClosedCountByJudge';
 import {
   getCasesForUser,
   getDocketNumbersByUser,
 } from './persistence/dynamo/users/getCasesForUser';
 import { getClientId } from './persistence/cognito/getClientId';
-import { getColdCases } from './persistence/elasticsearch/reports/getColdCases';
 import { getConfigurationItemValue } from './persistence/dynamo/deployTable/getConfigurationItemValue';
 import { getDeployTableStatus } from './persistence/dynamo/getDeployTableStatus';
 import { getDispatchNotification } from './persistence/dynamo/notifications/getDispatchNotification';
@@ -79,7 +74,6 @@ import { getDownloadPolicyUrl } from './persistence/s3/getDownloadPolicyUrl';
 import { getEligibleCasesForTrialCity } from './persistence/dynamo/trialSessions/getEligibleCasesForTrialCity';
 import { getEligibleCasesForTrialSession } from './persistence/dynamo/trialSessions/getEligibleCasesForTrialSession';
 import { getFeatureFlagValue } from './persistence/dynamo/deployTable/getFeatureFlagValue';
-import { getFirstSingleCaseRecord } from './persistence/elasticsearch/getFirstSingleCaseRecord';
 import { getInternalUsers } from './persistence/dynamo/users/getInternalUsers';
 import { getMaintenanceMode } from './persistence/dynamo/deployTable/getMaintenanceMode';
 import { getPractitionerByBarNumber } from './persistence/dynamo/users/getPractitionerByBarNumber';
@@ -230,7 +224,6 @@ const gatewayMethods = {
   // methods below are not known to create or update "entity" records
   advancedDocumentSearch,
   caseAdvancedSearch,
-  casePublicSearch: casePublicSearchPersistence,
   createChangeOfAddressJob,
   createLock,
   decrementJobCounter,
@@ -252,18 +245,14 @@ const gatewayMethods = {
   getAllPendingMotionDocketEntriesForJudge,
   getAllUsersByRole,
   getAllWebSocketConnections,
-  getBlockedCases,
   getBulkTrialSessionWorkingCopyNotes: getBulkTrialSessionWorkingCopies,
   getCalendaredCasesForTrialSession,
   getCaseDeadlinesByDateRange,
   getCaseDeadlinesByDocketNumber,
-  getCaseInventoryReport,
   getCaseWorksheetsByDocketNumber,
-  getCasesByUserId,
   getCasesClosedCountByJudge,
   getCasesForUser,
   getClientId,
-  getColdCases,
   getConfigurationItemValue,
   getDeployTableStatus,
   getDispatchNotification,
@@ -278,7 +267,6 @@ const gatewayMethods = {
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
   getFeatureFlagValue,
-  getFirstSingleCaseRecord,
   getInternalUsers,
   getLimiterByKey,
   getLock,

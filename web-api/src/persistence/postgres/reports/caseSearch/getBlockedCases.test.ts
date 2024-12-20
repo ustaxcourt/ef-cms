@@ -1,5 +1,5 @@
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { getBlockedCases } from './getBlockedCases';
+import { getBlockedCasesForTrialLocation } from './getBlockedCasesForTrialLocation';
 jest.mock('./searchClient');
 import { search } from './searchClient';
 
@@ -7,7 +7,7 @@ describe('getBlockedCases', () => {
   it('returns results when searching with a trialLocation', async () => {
     search.mockReturnValue({ results: ['some', 'matches'], total: 0 });
 
-    const results = await getBlockedCases({
+    const results = await getBlockedCasesForTrialLocation({
       applicationContext,
       trialLocation: 'Memphis, TN',
     });

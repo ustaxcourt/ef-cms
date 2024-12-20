@@ -5,6 +5,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getColdCases } from '@web-api/persistence/postgres/reports/caseSearch/getColdCases';
 
 export type ColdCaseEntry = {
   createdAt: string;
@@ -26,9 +27,7 @@ export const coldCaseReportInteractor = async (
     );
   }
 
-  const coldCases = await applicationContext
-    .getPersistenceGateway()
-    .getColdCases({ applicationContext });
+  const coldCases = await getColdCases({ applicationContext });
 
   return coldCases;
 };
