@@ -1,77 +1,16 @@
-/**
- * HOW TO RUN
- *
- * TABLE_NAME=testing npx ts-node --transpileOnly scripts/postgres/delete-messages.ts
- */
-
 import {
   BatchWriteCommand,
   DynamoDBDocumentClient,
-  ScanCommand,
 } from '@aws-sdk/lib-dynamodb';
-import { DynamoDBClient, ScanCommandInput } from '@aws-sdk/client-dynamodb';
-import { requireEnvVars } from '../../shared/admin-tools/util';
 
-requireEnvVars(['TABLE_NAME']);
-
-const tableNameInput = process.env.TABLE_NAME!;
-
-const dynamoDbClient = new DynamoDBClient({ region: 'us-east-1' });
-const dynamoDbDocClient = DynamoDBDocumentClient.from(dynamoDbClient);
-
-let totalItemsDeleted = 0;
-
-async function main() {
-  // Set up scan parameters
-  const scanParams: ScanCommandInput = {
-    TableName: tableNameInput,
-    TotalSegments: 10,
-  };
-
-  await Promise.all(
-    Array.from({ length: 10 }).map((_, segment) =>
-      runSegmentScan({ ...scanParams, Segment: segment }, dynamoDbDocClient),
-    ),
-  );
-
-  console.log(`Total messages deleted: ${totalItemsDeleted}`);
-}
-
-async function runSegmentScan(
-  params: ScanCommandInput,
-  client: DynamoDBDocumentClient,
-) {
-  const result = await client.send(new ScanCommand(params));
-  const items = result.Items ?? [];
-
-  const itemsToDelete = items
-    .filter(item => {
-      const { pk, sk } = item as { pk: string; sk: string };
-      return pk.startsWith('case|') && sk.startsWith('message|');
-    })
-    .map(item => ({
-      DeleteRequest: {
-        Key: {
-          pk: item.pk,
-          sk: item.sk,
-        },
-      },
-    }));
-
-  await batchDeleteItems(itemsToDelete, client);
-
-  if (result.LastEvaluatedKey) {
-    params.ExclusiveStartKey = result.LastEvaluatedKey;
-    await runSegmentScan(params, client);
-  }
-}
-
-async function batchDeleteItems(
+export async function batchDeleteDynamoItems(
   itemsToDelete: { DeleteRequest: { Key: { pk: string; sk: string } } }[],
   client: DynamoDBDocumentClient,
-) {
+  tableNameInput: string,
+): Promise<number> {
   const BATCH_SIZE = 25;
   const RETRY_DELAY_MS = 5000; // Set the delay between retries (in milliseconds)
+  let totalItemsDeleted = 0;
 
   for (let i = 0; i < itemsToDelete.length; i += BATCH_SIZE) {
     const batch = itemsToDelete.slice(i, i + BATCH_SIZE);
@@ -120,6 +59,5 @@ async function batchDeleteItems(
       console.error('Error in batch delete:', error);
     }
   }
+  return totalItemsDeleted;
 }
-
-main().catch(console.error);
