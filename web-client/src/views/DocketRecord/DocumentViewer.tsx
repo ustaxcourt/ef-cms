@@ -106,12 +106,21 @@ export const DocumentViewer = connect(
                           <div className="grid-col-5">
                             <span
                               className={classNames(
+                                'mobile-text-wrap',
+                                'word-wrap-break-word',
                                 entry.isStricken && 'stricken-docket-record',
                               )}
                             >
                               {entry.descriptionDisplay}
                             </span>
-                            {entry.isStricken && ' (STRICKEN)'}
+                            <span
+                              className={classNames(
+                                'word-wrap-break-word',
+                                'display-block',
+                              )}
+                            >
+                              {entry.isStricken && ' (STRICKEN)'}
+                            </span>
                           </div>
                           <div className="grid-col-2 padding-left-105">
                             {entry.showNotServed && (
