@@ -4,7 +4,6 @@ import {
   RemoveRowHandler,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
   MINUTE_SHEET_FORM_SECTION_MAP,
@@ -65,24 +64,35 @@ export const RespondentsFieldset = ({
               </FormGroup>
             </div>
             <div className="grid-col-5">
-              <DateSelector
-                defaultValue={undefined}
-                formGroupClassNames="margin-bottom-0"
-                id={`respondent-date-of-appearance-${rowIndex}`}
-                labelPosition="hidden"
-                onBlur={() => onBlurHandler()}
-                onChange={e =>
-                  onChangeHandler({
-                    name: 'respondents',
-                    rowInfo: {
-                      key: row.renderKey,
-                      nestedName: 'datesOfAppearance',
-                    },
-                    section: MINUTE_SHEET_FORM_SECTION_MAP.respondentsSection,
-                    value: e.target.value,
-                  })
-                }
-              />
+              <FormGroup className="margin-bottom-0">
+                <label
+                  hidden
+                  htmlFor={`respondent-date-of-appearance-${rowIndex}`}
+                >
+                  Date(s) of Appearance
+                </label>
+                <input
+                  className="usa-input"
+                  id={`respondent-date-of-appearance-${rowIndex}`}
+                  type="text"
+                  value={
+                    respondentsFormState.respondents[row.renderKey]
+                      .datesOfAppearance || ''
+                  }
+                  onBlur={() => onBlurHandler()}
+                  onChange={e =>
+                    onChangeHandler({
+                      name: 'respondents',
+                      rowInfo: {
+                        key: row.renderKey,
+                        nestedName: 'datesOfAppearance',
+                      },
+                      section: MINUTE_SHEET_FORM_SECTION_MAP.respondentsSection,
+                      value: e.target.value,
+                    })
+                  }
+                />
+              </FormGroup>
             </div>
             <div className="grid-col-2">
               <Button
