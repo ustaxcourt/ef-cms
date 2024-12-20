@@ -31,11 +31,13 @@ export const CaseMetadataFieldset = ({
         </div>
         <div className="grid-col-auto">
           <DateSelector
-            defaultValue={undefined}
+            formatDateOnChange
+            defaultValue={caseMetadataFormState.called.date}
             formGroupClassNames="margin-bottom-0"
             id="calledDate"
             label="Date"
             labelPosition="left"
+            onBlur={() => onBlurHandler()}
             onChange={e =>
               onChangeHandler({
                 name: 'called',
@@ -114,11 +116,13 @@ export const CaseMetadataFieldset = ({
         </div>
         <div className="grid-col-auto">
           <DateSelector
-            defaultValue={undefined}
+            formatDateOnChange
+            defaultValue={caseMetadataFormState.notCalled.date}
             formGroupClassNames="margin-bottom-0"
             id="notCalledDate"
             label="Date"
             labelPosition="left"
+            onBlur={() => onBlurHandler()}
             onChange={e =>
               onChangeHandler({
                 name: 'notCalled',

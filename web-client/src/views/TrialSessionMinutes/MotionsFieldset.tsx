@@ -33,11 +33,13 @@ export const MotionsFieldset = ({
             <div className="grid-row grid-gap align-items-center margin-bottom-1">
               <div className="grid-col-auto">
                 <DateSelector
-                  defaultValue={undefined}
+                  formatDateOnChange
+                  defaultValue={row.date}
                   formGroupClassNames="margin-bottom-0"
                   id={`motionFiledDate-${row.renderKey}`}
                   label="Date"
                   labelPosition="left"
+                  onBlur={() => onBlurHandler()}
                   onChange={e =>
                     onChangeHandler({
                       name: 'motions',

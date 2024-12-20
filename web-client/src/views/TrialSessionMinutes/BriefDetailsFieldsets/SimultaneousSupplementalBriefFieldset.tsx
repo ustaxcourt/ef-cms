@@ -29,10 +29,15 @@ export const SimultaneousSupplementalBriefFieldset = ({
       <div className="grid-row grid-gap">
         <div className="grid-col-4">
           <DateSelector
-            defaultValue={undefined}
+            formatDateOnChange
+            defaultValue={
+              simultaneousSupplementalBriefFormState.simultaneousSupplemental
+                .dueDate
+            }
             formGroupClassNames="margin-bottom-0"
             id="simultaneousSupplementalDueDate"
             labelPosition="hidden"
+            onBlur={() => onBlurHandler()}
             onChange={e =>
               onChangeHandler({
                 name: 'briefDetails',

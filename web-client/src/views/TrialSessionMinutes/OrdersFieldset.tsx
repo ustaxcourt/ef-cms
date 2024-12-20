@@ -25,11 +25,13 @@ export const OrdersFieldset = ({
         </legend>
         <div className="grid-col-auto">
           <DateSelector
-            defaultValue={undefined}
+            formatDateOnChange
+            defaultValue={ordersFormState.statusReportOrdered.date}
             formGroupClassNames="margin-bottom-0"
             id="statusReportOrderedDate"
             label="Date"
             labelPosition="left"
+            onBlur={() => onBlurHandler()}
             onChange={e =>
               onChangeHandler({
                 name: 'statusReportOrdered',
@@ -44,11 +46,13 @@ export const OrdersFieldset = ({
         </div>
         <div className="grid-col-auto">
           <DateSelector
-            defaultValue={undefined}
+            formatDateOnChange
+            defaultValue={ordersFormState.statusReportOrdered.dueDate}
             formGroupClassNames="margin-bottom-0"
             id="statusReportOrderedDueDate"
             label="Date due"
             labelPosition="left"
+            onBlur={() => onBlurHandler()}
             onChange={e =>
               onChangeHandler({
                 name: 'statusReportOrdered',
@@ -132,11 +136,13 @@ export const OrdersFieldset = ({
         </legend>
         <div className="grid-col-auto">
           <DateSelector
-            defaultValue={undefined}
+            formatDateOnChange
+            defaultValue={ordersFormState.stipulatedDecisionOrdered.date}
             formGroupClassNames="margin-bottom-0"
             id="stipulatedDecisionOrderedDate"
             label="Date"
             labelPosition="left"
+            onBlur={() => onBlurHandler()}
             onChange={e =>
               onChangeHandler({
                 name: 'stipulatedDecisionOrdered',
@@ -151,11 +157,13 @@ export const OrdersFieldset = ({
         </div>
         <div className="grid-col-auto">
           <DateSelector
-            defaultValue={undefined}
+            formatDateOnChange
+            defaultValue={ordersFormState.stipulatedDecisionOrdered.dueDate}
             formGroupClassNames="margin-bottom-0"
             id="stipulatedDecisionOrderedDueDate"
             label="Date due"
             labelPosition="left"
+            onBlur={() => onBlurHandler()}
             onChange={e =>
               onChangeHandler({
                 name: 'stipulatedDecisionOrdered',
