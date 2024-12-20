@@ -9,9 +9,8 @@ import { getBlockedCasesInteractor } from '@shared/business/useCases/getBlockedC
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const getBlockedCasesLambda = (event, authorizedUser: UnknownAuthUser) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     return await getBlockedCasesInteractor(
-      applicationContext,
       {
         trialLocation: event.pathParameters.trialLocation,
       },

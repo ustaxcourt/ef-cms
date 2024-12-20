@@ -4,6 +4,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseInventoryReport } from '@web-api/persistence/postgres/reports/caseSearch/getCaseInventoryReport';
 export const getCaseInventoryReportInteractor = async (
   applicationContext,
   {
@@ -27,13 +28,10 @@ export const getCaseInventoryReportInteractor = async (
     throw new Error('Either judge or status must be provided');
   }
 
-  return await applicationContext
-    .getPersistenceGateway()
-    .getCaseInventoryReport({
-      applicationContext,
-      associatedJudge,
-      from,
-      pageSize,
-      status,
-    });
+  return await getCaseInventoryReport({
+    associatedJudge,
+    page: from, // 10502 TODO
+    pageSize,
+    status,
+  });
 };

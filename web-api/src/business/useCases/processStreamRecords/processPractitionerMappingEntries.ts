@@ -1,6 +1,7 @@
 import { flattenDeep } from 'lodash';
 import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { marshall } from '@aws-sdk/util-dynamodb';
+import { upsertPractitionersOnCase } from '@web-api/persistence/postgres/cases/write/upsertPractitionersOnCase';
 import type {
   AttributeValueWithName,
   IDynamoDBRecord,
@@ -85,4 +86,20 @@ export const processPractitionerMappingEntries = async ({
     );
     throw new Error('failed to index practitioner mapping records');
   }
+
+  const getDocketNumberFromPractitionerMappingRecord = record => {
+    const practitionerMappingData =
+      record.dynamodb.NewImage || record.dynamodb.OldImage;
+
+    return practitionerMappingData.pk.S.substring('case|'.length);
+  };
+
+  await upsertPractitionersOnCase({
+    practitionersWithDocketNumber: practitionerMappingRecords.map(p => {
+      return {
+        ...p, // 10502 TODO, this is probably wrong
+        docketNumber: getDocketNumberFromPractitionerMappingRecord(p),
+      };
+    }),
+  });
 };

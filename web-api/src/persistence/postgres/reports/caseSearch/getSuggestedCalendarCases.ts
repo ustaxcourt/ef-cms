@@ -1,6 +1,13 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { getDbReader } from '@web-api/database';
 
+type SuggestedCalendarCaseResult = {
+  docketNumber: string;
+  preferredTrialCity: string;
+  procedureType: string;
+  status: string;
+};
+
 export const getSuggestedCalendarCases = async () => {
   return await getDbReader(async reader => {
     const results = await reader
@@ -13,6 +20,6 @@ export const getSuggestedCalendarCases = async () => {
       .limit(10000)
       .execute();
 
-    return results;
+    return results as SuggestedCalendarCaseResult[];
   });
 };

@@ -4,6 +4,7 @@ import {
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getBlockedCasesForTrialLocation } from '@web-api/persistence/postgres/reports/caseSearch/getBlockedCasesForTrialLocation';
 
 /**
  * getBlockedCasesInteractor
@@ -14,7 +15,6 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
  * @returns {object} the case data
  */
 export const getBlockedCasesInteractor = async (
-  applicationContext: IApplicationContext,
   { trialLocation }: { trialLocation: string },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -22,12 +22,7 @@ export const getBlockedCasesInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const foundCases = await applicationContext
-    .getPersistenceGateway()
-    .getBlockedCases({
-      applicationContext,
-      trialLocation,
-    });
+  const foundCases = await getBlockedCasesForTrialLocation(trialLocation);
 
   return foundCases;
 };

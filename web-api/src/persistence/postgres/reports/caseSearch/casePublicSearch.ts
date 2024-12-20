@@ -5,9 +5,9 @@ import {
 import {
   MAX_SEARCH_RESULTS,
   US_STATES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { aggregateCommonQueryParams } from '../../../../shared/src/business/utilities/aggregateCommonQueryParams';
-import { search } from './searchClient';
+} from '@shared/business/entities/EntityConstants';
+import { aggregateCommonQueryParams } from '@shared/business/utilities/aggregateCommonQueryParams';
+import { search } from '@web-api/persistence/elasticsearch/searchClient';
 
 export const casePublicSearch = async ({
   applicationContext,
@@ -32,6 +32,8 @@ export const casePublicSearch = async ({
     'sealedDate',
     'isSealed',
   ];
+
+  // 10502 TODO: This is almost the same as caseAdvanced search, just filtering out sealed cases.
 
   const query = {
     bool: {

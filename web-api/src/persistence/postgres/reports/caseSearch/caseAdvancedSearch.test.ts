@@ -1,7 +1,7 @@
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseAdvancedSearch } from './caseAdvancedSearch';
 jest.mock('./searchClient');
-import { search } from './searchClient';
+import { search } from '@web-api/persistence/elasticsearch/searchClient';
 
 describe('caseAdvancedSearch', () => {
   it('returns results from an exact-matches query', async () => {

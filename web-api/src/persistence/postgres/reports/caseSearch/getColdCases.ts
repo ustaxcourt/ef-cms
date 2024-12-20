@@ -9,7 +9,10 @@ import {
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { formatResults, searchRaw } from '../searchClient';
+import {
+  formatResults,
+  searchRaw,
+} from '@web-api/persistence/elasticsearch/searchClient';
 // import { getDbReader } from '@web-api/database';
 
 export async function getColdCases({

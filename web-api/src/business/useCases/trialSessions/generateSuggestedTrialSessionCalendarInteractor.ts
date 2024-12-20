@@ -98,8 +98,6 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   const cases = await getSuggestedCalendarCases();
 
-  console.log('cases!', cases);
-
   const sessions = await applicationContext
     .getPersistenceGateway()
     .getTrialSessions({ applicationContext });

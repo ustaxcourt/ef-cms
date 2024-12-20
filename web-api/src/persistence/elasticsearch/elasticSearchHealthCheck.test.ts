@@ -1,13 +1,13 @@
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { getFirstSingleCaseRecord } from './getFirstSingleCaseRecord';
+import { elasticSearchHealthCheck } from '@web-api/persistence/elasticsearch/elasticSearchHealthCheck';
 
-describe('getFirstSingleCaseRecord', () => {
-  it('should search for the first single case record', async () => {
+describe('elasticSearchHealthCheck', () => {
+  it('should return results from elastic search', async () => {
     applicationContext.getSearchClient().search.mockReturnValue({
       body: {},
     });
 
-    await getFirstSingleCaseRecord({
+    await elasticSearchHealthCheck({
       applicationContext,
     });
 
