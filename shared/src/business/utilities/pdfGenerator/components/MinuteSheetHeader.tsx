@@ -5,7 +5,7 @@ export const MinuteSheetHeader = ({ trialSessionLocation, trialStartDate }) => {
     <div className="minute-sheet-header">
       <div className="us-tax-court-seal"></div>
       <h1>United States Tax Court</h1>
-      <div
+      {/* <div
         style={{
           float: 'right',
           fontFamily: "'Century Schoolbook Std', 'serif'",
@@ -15,7 +15,7 @@ export const MinuteSheetHeader = ({ trialSessionLocation, trialStartDate }) => {
       >
         Page <span className="pageNumber"></span> of{' '}
         <span className="totalPages"></span>
-      </div>
+      </div> */}
       <div className="court-address">Washington, DC 20217</div>
       <div className="trial-session-location">{trialSessionLocation}</div>
       <div className="court-address">{trialStartDate}</div>

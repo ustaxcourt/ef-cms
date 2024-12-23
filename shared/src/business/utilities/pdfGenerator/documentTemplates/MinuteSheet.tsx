@@ -7,17 +7,144 @@ export const MinuteSheet = ({
 }: {
   formattedMinuteSheet: FormattedMinuteSheet;
 }) => {
+  const insertSemicolon = (stringToCheckFor: string | undefined) =>
+    stringToCheckFor ? ';' : '';
   return (
     <>
       <MinuteSheetHeader
         trialSessionLocation={formattedMinuteSheet.trialLocation}
         trialStartDate={formattedMinuteSheet.trialStartDate}
       />
-      <h1>Minutes of Preceedings</h1>
-      <p>Judge: {formattedMinuteSheet.judge}</p>
-      <p>Court Reporter: {formattedMinuteSheet.courtReporter}</p>
-      <p>Remote Session: {formattedMinuteSheet.remoteSession}</p>
-      <p>Trial Clerk: {formattedMinuteSheet.trialClerk}</p>
+      <h1>Minutes of Proceedings</h1>
+      <div>
+        <div>Docket no(s).</div>
+        <div>{formattedMinuteSheet.docketNumbers}</div>
+      </div>
+      <div>
+        <div>Petitioner(s)</div>
+        <div>{formattedMinuteSheet.petitioners}</div>
+      </div>
+      <hr />
+      <div>
+        <div>
+          <div>Judge</div>
+          <div>{formattedMinuteSheet.judge}</div>
+
+          <div>Trial clerk</div>
+          <div>{formattedMinuteSheet.trialClerk}</div>
+        </div>
+        <div>
+          <div>Court reporter</div>
+          <div>{formattedMinuteSheet.courtReporter}</div>
+
+          <div>Remove session</div>
+          <div>{formattedMinuteSheet.remoteSession}</div>
+        </div>
+      </div>
+      <hr />
+      <div>
+        <div>
+          <div>Called</div>
+          <div>
+            {`${formattedMinuteSheet.called?.date}${insertSemicolon(formattedMinuteSheet.called?.note)}`}
+            <em>
+              {' '}
+              {`${formattedMinuteSheet.called?.note}${insertSemicolon(formattedMinuteSheet.called?.transcriptOrdered)}`}
+            </em>{' '}
+            {`${formattedMinuteSheet.called?.transcriptOrdered}`}
+          </div>
+        </div>
+        <div>
+          <div>Not called</div>
+          <div>
+            {`${formattedMinuteSheet.notCalled?.date}${insertSemicolon(formattedMinuteSheet.notCalled?.note)}`}
+            <em>
+              {' '}
+              {`${formattedMinuteSheet.notCalled?.note}${insertSemicolon(formattedMinuteSheet.notCalled?.transcriptOrdered)}`}
+            </em>{' '}
+            {`${formattedMinuteSheet.notCalled?.transcriptOrdered}`}
+          </div>
+        </div>
+        <div>
+          <div>Recalled</div>
+          <div>
+            {formattedMinuteSheet.recalled.map(row => {
+              const noteSemicolon = row.note ? ';' : '';
+              const transcriptOrderedSemicolon = row.transcriptOrdered
+                ? ';'
+                : '';
+
+              return (
+                <div key={row.renderKey}>
+                  {`${row.date}${noteSemicolon}`}
+                  <em>{` ${row.note}${transcriptOrderedSemicolon}`}</em>
+                  {` ${row.transcriptOrdered}`}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <div>
+          <div>Pretrial conference</div>
+          <div>
+            {`${formattedMinuteSheet.pretrialConference?.date}${insertSemicolon(formattedMinuteSheet.pretrialConference?.note)}`}
+            <em>
+              {' '}
+              {`${formattedMinuteSheet.pretrialConference?.note}${insertSemicolon(formattedMinuteSheet.pretrialConference?.transcriptOrdered)}`}
+            </em>{' '}
+            {`${formattedMinuteSheet.pretrialConference?.transcriptOrdered}`}
+          </div>
+        </div>
+        <div>Trial/Hearing</div>
+        <div>
+          {`${formattedMinuteSheet.trialHearing?.date}${insertSemicolon(formattedMinuteSheet.trialHearing?.trialHearingType)}`}{' '}
+          {`${formattedMinuteSheet.trialHearing?.trialHearingType}${insertSemicolon(formattedMinuteSheet.trialHearing?.note)}`}
+          <em>
+            {' '}
+            {`${formattedMinuteSheet.trialHearing?.note}${insertSemicolon(formattedMinuteSheet.trialHearing?.transcriptOrdered)}`}
+          </em>{' '}
+          {`${formattedMinuteSheet.trialHearing?.transcriptOrdered}`}
+        </div>
+      </div>
+      <hr />
+      <div>
+        <div>
+          <div>Petitioner(s)</div>
+          {formattedMinuteSheet.petitionerAppearances.map(
+            (petitionerAppearance, idx) => (
+              <div key={idx}>{petitionerAppearance}</div>
+            ),
+          )}
+        </div>
+        <div>
+          <div>Respondent</div>
+          {formattedMinuteSheet.respondentAppearances.map(
+            (respondentAppearance, idx) => (
+              <div key={idx}>{respondentAppearance}</div>
+            ),
+          )}
+        </div>
+      </div>
+      <hr />
+      <div>
+        <div>
+          <div>Jurisdiction Retained</div>
+          <div>
+            {`${formattedMinuteSheet.jurisdictionRetained?.continued} - ${formattedMinuteSheet.jurisdictionRetained?.date}` +
+              `${insertSemicolon(formattedMinuteSheet.jurisdictionRetained?.note)}`}
+            <em>{` ${formattedMinuteSheet.jurisdictionRetained?.note}`}</em>
+          </div>
+        </div>
+        <div>
+          <div>Status Report Ordered</div>
+          {/* Using dangerouslySetInnerHTML for status report as a proof of concept for HTML formatting */}
+          <div
+            dangerouslySetInnerHTML={{
+              __html: formattedMinuteSheet.statusReportOrdered.join('; '),
+            }}
+          />
+        </div>
+      </div>
     </>
   );
 };
