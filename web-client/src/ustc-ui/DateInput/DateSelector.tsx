@@ -1,3 +1,8 @@
+import {
+  FORMATS,
+  createISODateString,
+  formatDateString,
+} from '@shared/business/utilities/DateHandler';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import React, { useEffect, useRef } from 'react';
 import datePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-picker/src';
@@ -7,6 +12,7 @@ export const DateSelector = ({
   disabled = false,
   displayOptionalHintText = false,
   errorText,
+  formatDateOnChange = false,
   formGroupClassNames,
   hintText = undefined,
   id,
@@ -31,6 +37,7 @@ export const DateSelector = ({
   id: string;
   label?: string;
   labelPosition?: 'top' | 'left' | 'hidden';
+  formatDateOnChange?: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   showDateHint?: boolean;
@@ -56,22 +63,48 @@ export const DateSelector = ({
 
   useEffect(() => {
     if (formGroupInputRef.current) {
-      /**
-       * The way USWDS date-picker works is it'll search the page for a usa-date-picker and
-       * modify the dom by inserting another input.  This causes a hidden input called
-       * usa-date-picker__input-input to be created in place of the input defined in this
-       * JSX file, and also a usa-date-picker__external-input which is the one that the users
-       * see in the UI and can type into.  This effect hooks into that visible input so that
-       * we can get the actual visible value of the input.
-       */
       datePicker.on(formGroupInputRef.current);
       const myDatePicker =
         formGroupInputRef.current.querySelector(datePickerId);
 
       if (!myDatePicker) throw new Error('could not find expected date picker');
 
-      (myDatePicker as HTMLInputElement).addEventListener('change', onChange);
-      (myDatePicker as HTMLInputElement).addEventListener('input', onChange);
+      let onChangeHandler = onChange;
+      if (formatDateOnChange) {
+        onChangeHandler = originalEvent => {
+          // Create a new event to avoid modifying the original
+          const newEvent = new Event('change', { bubbles: true });
+          const target = Object.create(originalEvent.target, {
+            value: {
+              get: () =>
+                formatDateString(
+                  createISODateString(
+                    originalEvent.target.value,
+                    FORMATS.MMDDYYYY,
+                  ),
+                  FORMATS.YYYYMMDD,
+                ),
+            },
+          });
+
+          Object.defineProperty(newEvent, 'target', {
+            enumerable: true,
+            value: target,
+          });
+
+          // Original input keeps MM/DD/YYYY format
+          onChange(newEvent);
+        };
+      }
+
+      (myDatePicker as HTMLInputElement).addEventListener(
+        'change',
+        onChangeHandler,
+      );
+      (myDatePicker as HTMLInputElement).addEventListener(
+        'input',
+        onChangeHandler,
+      );
       if (onBlur)
         (myDatePicker as HTMLInputElement).addEventListener('blur', onBlur);
     }

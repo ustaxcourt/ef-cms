@@ -44,10 +44,14 @@ export const SimultaneousMemorandumFormFieldset = ({
             </div>
             <div className="grid-col-4">
               <DateSelector
-                defaultValue={undefined}
+                formatDateOnChange
+                defaultValue={
+                  simultaneousMemorandumFormState[rowConfig.key].dueDate
+                }
                 formGroupClassNames="margin-bottom-0"
                 id={`${rowConfig.key}DueDate`}
                 labelPosition="hidden"
+                onBlur={() => onBlurHandler()}
                 onChange={e =>
                   onChangeHandler({
                     name: 'briefDetails',

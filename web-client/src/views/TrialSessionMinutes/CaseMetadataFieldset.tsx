@@ -31,11 +31,13 @@ export const CaseMetadataFieldset = ({
         </div>
         <div className="grid-col-auto">
           <DateSelector
-            defaultValue={undefined}
+            formatDateOnChange
+            defaultValue={caseMetadataFormState.called.date}
             formGroupClassNames="margin-bottom-0"
             id="calledDate"
             label="Date"
             labelPosition="left"
+            onBlur={() => onBlurHandler()}
             onChange={e =>
               onChangeHandler({
                 name: 'called',
@@ -114,11 +116,13 @@ export const CaseMetadataFieldset = ({
         </div>
         <div className="grid-col-auto">
           <DateSelector
-            defaultValue={undefined}
+            formatDateOnChange
+            defaultValue={caseMetadataFormState.notCalled.date}
             formGroupClassNames="margin-bottom-0"
             id="notCalledDate"
             label="Date"
             labelPosition="left"
+            onBlur={() => onBlurHandler()}
             onChange={e =>
               onChangeHandler({
                 name: 'notCalled',
@@ -174,32 +178,35 @@ export const CaseMetadataFieldset = ({
               )}
             </div>
             <div className="grid-col-auto">
-              <FormGroup className="margin-bottom-0 display-flex align-items-center">
-                <label
-                  className="margin-right-2 margin-bottom-0 display-inline-block"
-                  htmlFor={`reCalledDate-${row.renderKey}`}
-                >
-                  Date(s)
-                </label>
-                <input
-                  className="usa-input"
-                  id={`reCalledDate-${row.renderKey}`}
-                  type="text"
-                  value={row.date || ''}
-                  onChange={e =>
-                    onChangeHandler({
-                      name: 'recalled',
-                      rowInfo: {
-                        key: row.renderKey,
-                        nestedName: 'date',
-                      },
-                      section:
-                        MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
-                      value: e.target.value,
-                    })
-                  }
-                />
-              </FormGroup>
+              <div style={{ minWidth: '319px' }}>
+                <FormGroup className="flex-justify-end margin-bottom-0 display-flex align-items-center">
+                  <label
+                    className="margin-right-2 margin-bottom-0 display-inline-block"
+                    htmlFor={`reCalledDate-${row.renderKey}`}
+                  >
+                    Date(s)
+                  </label>
+                  <input
+                    className="usa-input"
+                    id={`reCalledDate-${row.renderKey}`}
+                    type="text"
+                    value={row.date || ''}
+                    onChange={e =>
+                      onChangeHandler({
+                        name: 'recalled',
+                        rowInfo: {
+                          key: row.renderKey,
+                          nestedName: 'date',
+                        },
+                        section:
+                          MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
+                        value: e.target.value,
+                      })
+                    }
+                  />
+                  <div style={{ minWidth: '42px' }}> </div>
+                </FormGroup>
+              </div>
             </div>
             <div className="grid-col-6">
               <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
@@ -295,30 +302,33 @@ export const CaseMetadataFieldset = ({
           <span className="usa-label margin-bottom-0">Pretrial conference</span>
         </div>
         <div className="grid-col-auto">
-          <FormGroup className="margin-bottom-0 display-flex align-items-center">
-            <label
-              className="margin-right-2 margin-bottom-0 display-inline-block"
-              htmlFor="pretrialConferenceDate"
-            >
-              Date(s)
-            </label>
-            <input
-              className="usa-input"
-              id="pretrialConferenceDate"
-              type="text"
-              value={caseMetadataFormState.pretrialConference.date || ''}
-              onChange={e =>
-                onChangeHandler({
-                  name: 'pretrialConference',
-                  rowInfo: {
-                    key: 'date',
-                  },
-                  section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
-                  value: e.target.value,
-                })
-              }
-            />
-          </FormGroup>
+          <div style={{ minWidth: '319px' }}>
+            <FormGroup className="flex-justify-end margin-bottom-0 display-flex align-items-center">
+              <label
+                className="margin-right-2 margin-bottom-0 display-inline-block"
+                htmlFor="pretrialConferenceDate"
+              >
+                Date(s)
+              </label>
+              <input
+                className="usa-input"
+                id="pretrialConferenceDate"
+                type="text"
+                value={caseMetadataFormState.pretrialConference.date || ''}
+                onChange={e =>
+                  onChangeHandler({
+                    name: 'pretrialConference',
+                    rowInfo: {
+                      key: 'date',
+                    },
+                    section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
+                    value: e.target.value,
+                  })
+                }
+              />
+              <div style={{ minWidth: '42px' }}> </div>
+            </FormGroup>
+          </div>
         </div>
         <div className="grid-col-6">
           <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
@@ -387,30 +397,33 @@ export const CaseMetadataFieldset = ({
           <span className="usa-label margin-bottom-0">Trial/Hearing</span>
         </div>
         <div className="grid-col-auto">
-          <FormGroup className="margin-bottom-0 display-flex align-items-center">
-            <label
-              className="margin-right-2 margin-bottom-0 display-inline-block"
-              htmlFor="trialHearingDate"
-            >
-              Date(s)
-            </label>
-            <input
-              className="usa-input"
-              id="trialHearingDate"
-              type="text"
-              value={caseMetadataFormState.trialHearing.date || ''}
-              onChange={e => {
-                onChangeHandler({
-                  name: 'trialHearing',
-                  rowInfo: {
-                    key: 'date',
-                  },
-                  section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
-                  value: e.target.value,
-                });
-              }}
-            />
-          </FormGroup>
+          <div style={{ minWidth: '319px' }}>
+            <FormGroup className="flex-justify-end margin-bottom-0 display-flex align-items-center">
+              <label
+                className="margin-right-2 margin-bottom-0 display-inline-block"
+                htmlFor="trialHearingDate"
+              >
+                Date(s)
+              </label>
+              <input
+                className="usa-input"
+                id="trialHearingDate"
+                type="text"
+                value={caseMetadataFormState.trialHearing.date || ''}
+                onChange={e => {
+                  onChangeHandler({
+                    name: 'trialHearing',
+                    rowInfo: {
+                      key: 'date',
+                    },
+                    section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
+                    value: e.target.value,
+                  });
+                }}
+              />
+              <div style={{ minWidth: '42px' }}> </div>
+            </FormGroup>
+          </div>
         </div>
         <div className="grid-col-3">
           <FormGroup className="margin-bottom-0 display-flex align-items-center">

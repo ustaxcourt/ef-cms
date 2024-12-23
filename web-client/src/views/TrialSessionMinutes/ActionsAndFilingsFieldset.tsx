@@ -34,10 +34,12 @@ export const ActionsAndFilingsFieldset = ({
       <>
         <div className="grid-col-auto">
           <DateSelector
+            formatDateOnChange
             defaultValue={row.date}
             formGroupClassNames="margin-bottom-0"
             id={`actionsAndFilingsDate-${row.renderKey}`}
             labelPosition="hidden"
+            onBlur={() => onBlurHandler()}
             onChange={e =>
               onChangeHandler({
                 name: 'actionsAndFilings',

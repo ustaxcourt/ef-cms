@@ -53,11 +53,13 @@ export const JurisdictionRetainedFieldset = ({
         </div>
         <div className="grid-col-auto">
           <DateSelector
-            defaultValue={undefined}
+            formatDateOnChange
+            defaultValue={jurisdictionRetainedFormState.date}
             formGroupClassNames="margin-bottom-0"
             id="jurisdictionRetainedDate"
             label="Date"
             labelPosition="left"
+            onBlur={() => onBlurHandler()}
             onChange={e =>
               onChangeHandler({
                 name: 'date',
