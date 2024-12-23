@@ -47,7 +47,7 @@ export const WarningNotificationComponent =
             className={classNames(
               'usa-alert',
               'usa-alert--warning',
-              isMessageOnly && 'usa-alert-warning-message-only',
+              isMessageOnly ? 'usa-alert-warning-message-only' : null,
             )}
             data-testid="warning-alert"
             ref={notificationRef}
