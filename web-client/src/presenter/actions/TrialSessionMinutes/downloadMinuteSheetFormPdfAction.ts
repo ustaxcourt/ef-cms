@@ -1,35 +1,18 @@
-import { FormattedMinuteSheet } from '@web-api/business/useCases/trialSessionMinutes/generateTrialSessionMinutesPdfInteractor';
-import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const downloadMinuteSheetFormPdfAction = async ({
   applicationContext,
   get,
 }) => {
-  const minuteSheetFormState = get(state.minuteSheetForm);
-
-  const formattedMinuteSheet = formatMinuteSheet(minuteSheetFormState);
+  const { docketNumber } = get(state.caseDetail);
+  const { trialSessionId } = get(state.trialSession);
 
   const pdfUrl = await applicationContext
     .getUseCases()
     .generateTrialSessionMinutesPdfInteractor(applicationContext, {
-      docketNumber: 'docketNumber',
-      formattedMinuteSheet,
-      trialSessionId: 'trialSessionId',
+      docketNumber,
+      trialSessionId,
     });
 
   await applicationContext.getUtilities().openUrlInNewTab({ url: pdfUrl });
-};
-
-const formatMinuteSheet = (
-  minuteSheetFormState: MinuteSheetFormState,
-): FormattedMinuteSheet => {
-  return {
-    courtReporter:
-      minuteSheetFormState.trialSessionMetadataSection.courtReporter,
-    judge: minuteSheetFormState.trialSessionMetadataSection.judge,
-    remoteSession:
-      minuteSheetFormState.trialSessionMetadataSection.remoteSession,
-    trialClerk: minuteSheetFormState.trialSessionMetadataSection.trialClerk,
-  };
 };

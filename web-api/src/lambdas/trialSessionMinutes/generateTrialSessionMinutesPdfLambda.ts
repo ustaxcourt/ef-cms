@@ -11,7 +11,6 @@ export const generateTrialSessionMinutesPdfLambda = (
     async ({ applicationContext }) => {
       const lambdaArguments = {
         ...event.pathParameters,
-        ...JSON.parse(event.body),
       };
       return await generateTrialSessionMinutesPdfInteractor(
         applicationContext,
