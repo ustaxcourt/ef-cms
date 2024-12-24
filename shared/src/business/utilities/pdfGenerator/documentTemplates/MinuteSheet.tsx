@@ -136,14 +136,39 @@ export const MinuteSheet = ({
           </div>
         </div>
         <div>
-          <div>Status Report Ordered</div>
-          {/* Using dangerouslySetInnerHTML for status report as a proof of concept for HTML formatting */}
+          <div>Status Report ordered</div>
           <div
             dangerouslySetInnerHTML={{
               __html: formattedMinuteSheet.statusReportOrdered.join('; '),
             }}
           />
+          <div>Stipulated Decision ordered</div>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: formattedMinuteSheet.stipulatedDecisionOrdered.join('; '),
+            }}
+          />
         </div>
+      </div>
+      <hr />
+      <div>
+        {formattedMinuteSheet.motions.map(motion => (
+          <div key={motion.renderKey}>
+            <div>{motion.motionType}</div>
+            <div
+              dangerouslySetInnerHTML={{ __html: motion.content.join('; ') }}
+            />
+          </div>
+        ))}
+      </div>
+      <hr />
+      <div>
+        {formattedMinuteSheet.actionsAndFilings.map(action => (
+          <div
+            dangerouslySetInnerHTML={{ __html: action.content.join('; ') }}
+            key={action.renderKey}
+          />
+        ))}
       </div>
     </>
   );

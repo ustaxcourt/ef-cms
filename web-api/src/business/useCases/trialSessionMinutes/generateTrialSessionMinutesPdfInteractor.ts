@@ -3,14 +3,20 @@
 //   isAuthorized,
 // } from '@shared/authorization/authorizationClientService';
 import {
-  FORMATS,
-  formatDateString,
-} from '@shared/business/utilities/DateHandler';
-import {
+  ACTION_DOCUMENT_TYPE_OPTIONS,
+  ACTION_FILED_BY_OPTIONS,
+  ACTION_STATUS_OPTIONS,
+  MOTION_FILED_BY_OPTIONS,
+  MOTION_STATUS_OPTIONS,
+  MOTION_TYPE_OPTIONS,
   MinuteSheetFormState,
   STATUS_REPORT_ORDERED_FOR_OPTIONS,
   TRIAL_HEARING_OPTIONS,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+import {
+  FORMATS,
+  formatDateString,
+} from '@shared/business/utilities/DateHandler';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { query } from '@web-api/persistence/dynamodbClientService';
@@ -107,18 +113,20 @@ export type FormattedMinuteSheet = {
   respondentAppearances: string[];
   jurisdictionRetained?: { date: string; note: string; continued: string };
   statusReportOrdered: string[];
-  stipulatedDecisionOrdered: {
-    date: string;
-    dateDue: string;
-    note: string;
-  };
-  // statusReport?: string;
-  // motions?: Array<{
-  //   type: string;
-  //   details: string;
-  // }>;
-  // otherFilings?: string;
-  // generatedDate: string;
+  stipulatedDecisionOrdered: string[];
+  motions: {
+    motionType: string;
+    renderKey: string;
+    content: string[];
+  }[];
+  actionsAndFilings: {
+    renderKey: string;
+    content: string[];
+  }[];
+  // trialBrief: string[];???
+  // petitionerWitnesses: string[];
+  // respondentWitnesses: string[];
+  // exhibits: { renderKey: string; content: string[] }[];
 };
 
 type FormattedCaseMetadataRow = {
@@ -241,22 +249,54 @@ const formatMinuteSheet = ({
   ].filter(Boolean);
 
   const { stipulatedDecisionOrdered } = minuteSheetFormState.ordersSection;
-  const formattedStipulatedDecisionOrdered = {
-    date: formatDateString(stipulatedDecisionOrdered.date, FORMATS.MMDDYYYY),
-    dateDue: formatDateString(
-      stipulatedDecisionOrdered.dueDate,
-      FORMATS.MMDDYYYY,
-    ),
-    note: stipulatedDecisionOrdered.note,
-  };
+  const formattedStipulatedDecisionOrdered = [
+    formatDateString(stipulatedDecisionOrdered.date, FORMATS.MMDDYYYY),
+    stipulatedDecisionOrdered.dueDate &&
+      `Due ${formatDateString(stipulatedDecisionOrdered.dueDate, FORMATS.MMDDYYYY)}`,
+    stipulatedDecisionOrdered.note &&
+      `<em>${stipulatedDecisionOrdered.note}</em>`,
+  ].filter(Boolean);
+
+  const formattedMotions = Object.values(
+    minuteSheetFormState.motionsSection.motions,
+  ).map(motion => {
+    return {
+      content: [
+        `${motion.oralMotion ? 'ORAL ' : ''}${MOTION_TYPE_OPTIONS[motion.type]}`,
+        `${formatDateString(motion.date, FORMATS.MMDDYYYY)}`,
+        `Filed by ${MOTION_FILED_BY_OPTIONS[motion.filedBy]}`,
+        `${MOTION_STATUS_OPTIONS[motion.status]}`,
+        `<em>${motion.note}</em>`,
+      ],
+      motionType: MOTION_TYPE_OPTIONS[motion.type],
+      renderKey: motion.renderKey,
+    };
+  });
+
+  const formattedActionsAndFilings = Object.values(
+    minuteSheetFormState.actionsAndFilingsSection.actionsAndFilings,
+  ).map(action => {
+    return {
+      content: [
+        formatDateString(action.date, FORMATS.MMDDYYYY),
+        `${ACTION_DOCUMENT_TYPE_OPTIONS[action.documentType]}` +
+          (action.note ? ` - <em>${action.note}</em>` : ''),
+        ACTION_FILED_BY_OPTIONS[action.filedBy],
+        ACTION_STATUS_OPTIONS[action.status],
+      ],
+      renderKey: action.renderKey,
+    };
+  });
 
   return {
+    actionsAndFilings: formattedActionsAndFilings,
     called: formattedCalled,
     courtReporter:
       minuteSheetFormState.trialSessionMetadataSection.courtReporter,
     docketNumbers,
     judge: minuteSheetFormState.trialSessionMetadataSection.judge,
     jurisdictionRetained: formattedJurisdictionRetained,
+    motions: formattedMotions,
     notCalled: formattedNotCalled,
     petitionerAppearances: formattedPetitioners,
     petitioners,
