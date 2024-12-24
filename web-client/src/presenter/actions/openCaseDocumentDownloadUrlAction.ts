@@ -1,11 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * opens the document in a new tab
- * @param {object} providers the providers object
- * @param {object} providers.props the cerebral props object
- * @param {object} providers.store the cerebral store object used for clearing alertError, alertSuccess
- */
 export const openCaseDocumentDownloadUrlAction = async ({
   applicationContext,
   props,
