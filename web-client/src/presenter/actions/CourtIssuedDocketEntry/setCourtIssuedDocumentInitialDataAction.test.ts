@@ -1,5 +1,6 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { judgeColvin } from '@shared/test/mockUsers';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setCourtIssuedDocumentInitialDataAction } from './setCourtIssuedDocumentInitialDataAction';
@@ -27,14 +28,14 @@ describe('setCourtIssuedDocumentInitialDataAction', () => {
     MOCK_CASE.docketEntries.push({
       docketEntryId: docketEntryIds[2],
       eventCode: 'OJR',
-      signedByUserId: '4497d22-0874-4c5e-ac98-a843d1472baf',
-      signedJudgeName: 'John O. Colvin',
+      signedByUserId: judgeColvin.userId,
+      signedJudgeName: judgeColvin.judgeFullName,
     });
     MOCK_CASE.docketEntries.push({
       docketEntryId: docketEntryIds[3],
       eventCode: 'OJR',
       signedByUserId: 'not-colvins-id',
-      signedJudgeName: 'John O. Colvin',
+      signedJudgeName: judgeColvin.judgeFullName,
     });
   });
 
@@ -136,9 +137,9 @@ describe('setCourtIssuedDocumentInitialDataAction', () => {
         form: {},
         judges: [
           {
-            judgeFullName: 'John O. Colvin',
-            name: 'Colvin',
-            userId: '4497d22-0874-4c5e-ac98-a843d1472baf',
+            judgeFullName: judgeColvin.judgeFullName,
+            name: judgeColvin.name,
+            userId: judgeColvin.userId,
           },
         ],
       },
@@ -159,9 +160,9 @@ describe('setCourtIssuedDocumentInitialDataAction', () => {
         form: {},
         judges: [
           {
-            judgeFullName: 'John O. Colvin',
-            name: 'Colvin',
-            userId: '4497d22-0874-4c5e-ac98-a843d1472baf',
+            judgeFullName: judgeColvin.judgeFullName,
+            name: judgeColvin.name,
+            userId: judgeColvin.userId,
           },
         ],
       },

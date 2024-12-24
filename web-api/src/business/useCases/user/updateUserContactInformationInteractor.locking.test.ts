@@ -10,6 +10,7 @@ import {
   handleLockError,
   updateUserContactInformationInteractor,
 } from './updateUserContactInformationInteractor';
+import { sleep } from '@shared/tools/helpers';
 
 const contactInfo = {
   address1: '234 Main St',
@@ -62,14 +63,6 @@ describe('determineEntitiesToLock', () => {
       expect(identifiers).toContain(`case|${mockCase.docketNumber}`);
     });
   });
-
-  function sleep(timeInMilliseconds: number) {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve(null);
-      }, timeInMilliseconds);
-    });
-  }
 
   it('should wait until user is free before calling getCasesForUser', async () => {
     let resolver: Function;

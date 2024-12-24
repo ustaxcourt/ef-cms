@@ -18,6 +18,7 @@ import {
   mockPetitionsClerkUser,
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { sleep } from '@shared/tools/helpers';
 import { validUser } from '../../../../../shared/src/test/mockUsers';
 
 describe('Verify User Pending Email', () => {
@@ -308,14 +309,6 @@ describe('Verify User Pending Email', () => {
   });
 
   describe('verifyUserPendingEmailInteractor - Wait until User is free', () => {
-    function sleep(timeInMilliseconds: number) {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve(null);
-        }, timeInMilliseconds);
-      });
-    }
-
     it('should wait until the user record is free to run the interactor', async () => {
       let resolver: Function;
       let errorMessage: string;

@@ -1,3 +1,5 @@
+import { openUrlInNewTab } from '../../utilities/openUrlInNewTab';
+
 export const loadPdfForTabAction = ({
   applicationContext,
   props,
@@ -23,7 +25,7 @@ export const loadPdfForTabAction = ({
           // @ts-ignore
           new Blob([binaryFile], { type: 'application/pdf' }),
         );
-        window.open(pdfDataUri, '_blank');
+        openUrlInNewTab({ url: pdfDataUri });
         resolve();
       } catch (err) {
         reject(err);

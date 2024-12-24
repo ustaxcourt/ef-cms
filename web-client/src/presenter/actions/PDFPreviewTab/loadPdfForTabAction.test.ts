@@ -1,8 +1,11 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { loadPdfForTabAction } from '../PDFPreviewTab/loadPdfForTabAction';
+import { openUrlInNewTab } from '@web-client/presenter/utilities/openUrlInNewTab';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
+
+jest.mock('@web-client/presenter/utilities/openUrlInNewTab');
 
 describe('loadPdfForTabAction', () => {
   let originalWindowOpen;
@@ -52,11 +55,13 @@ describe('loadPdfForTabAction', () => {
       createObjectURL: jest.fn().mockReturnValue('some url'),
     };
     originalWindowOpen = window.open;
+    (openUrlInNewTab as jest.Mock).mockImplementation(jest.fn());
     window.open = jest.fn();
   });
 
   afterAll(() => {
     window.open = originalWindowOpen;
+    jest.restoreAllMocks();
   });
 
   it('should call window.open with correcturl for pdf file', async () => {
@@ -67,7 +72,7 @@ describe('loadPdfForTabAction', () => {
       props: { file: fakeFile },
     });
 
-    expect(window.open).toHaveBeenCalledWith('some url', '_blank');
+    expect(openUrlInNewTab).toHaveBeenCalledWith({ url: 'some url' });
   });
 
   it('should detect binary (not base64-encoded) pdf data and read it successfully', async () => {

@@ -35,6 +35,8 @@ export const DOCUMENT_EXTERNAL_CATEGORIES_MAP: {
 } = externalFilingEventsJson;
 export const COURT_ISSUED_EVENT_CODES = courtIssuedEventCodesJson;
 
+export const EVENT_CODES_THAT_ALLOW_FREE_TEXT = ['O', 'NOT', 'OJR'];
+
 export const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
 
 export const CURRENT_YEAR = +formatNow(FORMATS.YEAR);

@@ -1,14 +1,8 @@
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
-import {
-  Practitioner,
-  RawPractitioner,
-} from '../../../../../shared/src/business/entities/Practitioner';
-import { ROLES } from '@shared/business/entities/EntityConstants';
-import {
-  RawUser,
-  User,
-} from '../../../../../shared/src/business/entities/User';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
+import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UserFactory } from '@shared/business/entities/factories/UserFactory';
 
 async function disableIsUserUpdatingFlag({
   applicationContext,
@@ -17,17 +11,11 @@ async function disableIsUserUpdatingFlag({
   applicationContext: ServerApplicationContext;
   user: RawUser | RawPractitioner;
 }): Promise<void> {
+  const userFactory = new UserFactory(user);
+  const UserClass = userFactory.getClass();
+
   user.isUpdatingInformation = false;
-  let userEntity;
-  if (
-    user.role === ROLES.privatePractitioner ||
-    user.role === ROLES.irsPractitioner ||
-    user.role === ROLES.inactivePractitioner
-  ) {
-    userEntity = new Practitioner(user);
-  } else {
-    userEntity = new User(user);
-  }
+  const userEntity = new UserClass(user);
 
   await applicationContext.getPersistenceGateway().updateUser({
     applicationContext,
@@ -48,12 +36,10 @@ export const queueEmailUpdateAssociatedCasesWorker = async (
     });
 
   if (!docketNumbersByUser.length) {
-    console.log('*** USER DOES NOT HAVE ANY CASES TO UPDATE');
     await disableIsUserUpdatingFlag({ applicationContext, user });
     return;
   }
 
-  console.log(`*** QUEUING WORKERS TO UPDATE (${docketNumbersByUser.length})`);
   await applicationContext
     .getUseCases()
     .queueUpdateAssociatedCasesWorker(
@@ -62,7 +48,6 @@ export const queueEmailUpdateAssociatedCasesWorker = async (
       authorizedUser,
     );
 
-  console.log('*** STARTING TO CHECK COUNT');
   await waitUntilAllExpectedCasesAreUpdatedWithEmail({
     applicationContext,
     userEmail: user.email!,
@@ -77,7 +62,7 @@ export const queueEmailUpdateAssociatedCasesWorker = async (
 
 const WAIT_TIMEOUT = 2000;
 const MAX_WAITTIME_IN_MINUTES = 14;
-const MAX_ITERATIONS = Math.floor(
+export const MAX_ITERATIONS = Math.floor(
   (MAX_WAITTIME_IN_MINUTES * 60 * 1000) / WAIT_TIMEOUT,
 );
 
@@ -90,6 +75,8 @@ async function waitUntilAllExpectedCasesAreUpdatedWithEmail({
   iteration?: number;
   userEmail: string;
 }): Promise<void> {
+  await applicationContext.getUtilities().sleep(WAIT_TIMEOUT);
+
   const docketNumbersByUser = await applicationContext
     .getPersistenceGateway()
     .getDocketNumbersByUser({
@@ -106,12 +93,6 @@ async function waitUntilAllExpectedCasesAreUpdatedWithEmail({
     });
 
   if (actualCount >= expectedCount) return;
-
-  if (iteration % 10 === 0) {
-    console.log('*** Expected Count: ', expectedCount);
-    console.log('*** Actual Count: ', actualCount);
-  }
-
   if (iteration >= MAX_ITERATIONS) return;
   return waitUntilAllExpectedCasesAreUpdatedWithEmail({
     applicationContext,

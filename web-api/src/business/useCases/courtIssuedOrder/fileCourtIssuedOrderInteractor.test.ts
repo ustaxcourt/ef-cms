@@ -9,6 +9,7 @@ import {
   PARTY_TYPES,
   PETITIONS_SECTION,
   ROLES,
+  STATUS_REPORT_ORDER_OPTIONS,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
@@ -522,7 +523,8 @@ describe('fileCourtIssuedOrderInteractor', () => {
               draftOrderState: {},
               dueDate: '2024-11-05',
               eventCode: 'O',
-              orderType: 'statusReport',
+              orderType:
+                STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.statusReport,
               strickenFromTrialSessions: false,
             },
             primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -552,7 +554,8 @@ describe('fileCourtIssuedOrderInteractor', () => {
               draftOrderState: {},
               dueDate: '2024-11-05',
               eventCode: 'O',
-              orderType: 'statusReport',
+              orderType:
+                STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.statusReport,
               strickenFromTrialSessions: true,
             },
             primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -584,8 +587,10 @@ describe('fileCourtIssuedOrderInteractor', () => {
               draftOrderState: {},
               dueDate: '2024-11-05',
               eventCode: 'O',
-              jurisdiction: 'restoredToGeneralDocket',
-              orderType: 'statusReport',
+              jurisdiction:
+                STATUS_REPORT_ORDER_OPTIONS.jurisdictionOptions.restored,
+              orderType:
+                STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.statusReport,
               strickenFromTrialSessions: true,
             },
             primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -617,7 +622,8 @@ describe('fileCourtIssuedOrderInteractor', () => {
               draftOrderState: {},
               dueDate: '2024-11-05',
               eventCode: 'O',
-              orderType: 'statusReportStipulatedDecision',
+              orderType:
+                STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.stipulatedDecision,
               strickenFromTrialSessions: false,
             },
             primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -649,7 +655,8 @@ describe('fileCourtIssuedOrderInteractor', () => {
               draftOrderState: {},
               dueDate: '2024-11-05',
               eventCode: 'O',
-              orderType: 'statusReportStipulatedDecision',
+              orderType:
+                STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.stipulatedDecision,
               strickenFromTrialSessions: true,
             },
             primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -681,8 +688,10 @@ describe('fileCourtIssuedOrderInteractor', () => {
               draftOrderState: {},
               dueDate: '2024-11-05',
               eventCode: 'O',
-              jurisdiction: 'restoredToGeneralDocket',
-              orderType: 'statusReportStipulatedDecision',
+              jurisdiction:
+                STATUS_REPORT_ORDER_OPTIONS.jurisdictionOptions.restored,
+              orderType:
+                STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.stipulatedDecision,
               strickenFromTrialSessions: true,
             },
             primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -717,8 +726,10 @@ describe('fileCourtIssuedOrderInteractor', () => {
               draftOrderState: {},
               dueDate: '2024-11-05',
               eventCode: 'O',
-              jurisdiction: 'retained',
-              orderType: 'statusReport',
+              jurisdiction:
+                STATUS_REPORT_ORDER_OPTIONS.jurisdictionOptions.retained,
+              orderType:
+                STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.statusReport,
               strickenFromTrialSessions: true,
             },
             primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -750,8 +761,10 @@ describe('fileCourtIssuedOrderInteractor', () => {
               draftOrderState: {},
               dueDate: '2024-11-05',
               eventCode: 'O',
-              jurisdiction: 'retained',
-              orderType: 'statusReportStipulatedDecision',
+              jurisdiction:
+                STATUS_REPORT_ORDER_OPTIONS.jurisdictionOptions.retained,
+              orderType:
+                STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.stipulatedDecision,
               strickenFromTrialSessions: true,
             },
             primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -782,7 +795,8 @@ describe('fileCourtIssuedOrderInteractor', () => {
               docketNumber: caseRecord.docketNumber,
               draftOrderState: {},
               eventCode: 'O',
-              jurisdiction: 'retained',
+              jurisdiction:
+                STATUS_REPORT_ORDER_OPTIONS.jurisdictionOptions.retained,
               strickenFromTrialSessions: true,
             },
             primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

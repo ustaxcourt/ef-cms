@@ -17,20 +17,28 @@ export const SearchDateRangePickerComponent = connect(
     validateSequence,
     validationErrors,
   }) {
-    const dateRangePickerRef = useRef();
-    const startDatePickerRef = useRef();
-    const endDatePickerRef = useRef();
+    const dateRangePickerRef = useRef<HTMLDivElement>(null);
+    const startDatePickerRef = useRef<HTMLDivElement>(null);
+    const endDatePickerRef = useRef<HTMLDivElement>(null);
 
-    const startDateInputRef = useRef();
-    const endDateInputRef = useRef();
+    const startDateInputRef = useRef<HTMLDivElement>(null);
+    const endDateInputRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-      if (startDatePickerRef.current && endDatePickerRef.current) {
+      if (
+        startDatePickerRef.current &&
+        endDatePickerRef.current &&
+        dateRangePickerRef.current
+      ) {
         datePicker.on(startDatePickerRef.current);
         datePicker.on(endDatePickerRef.current);
         dateRangePicker.on(dateRangePickerRef.current);
       }
-    }, [dateRangePickerRef]);
+    }, [
+      startDatePickerRef.current,
+      endDatePickerRef.current,
+      dateRangePickerRef.current,
+    ]);
 
     useEffect(() => {
       const startInput = window.document.getElementById('startDate-date-start');
