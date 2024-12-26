@@ -1,5 +1,10 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getCaseDeadlinesForCaseInteractor } from './getCaseDeadlinesForCaseInteractor';
+
+const getCaseDeadlinesByDocketNumber =
+  getCaseDeadlinesByDocketNumberMock as jest.Mock;
 
 describe('getCaseDeadlinesForCaseInteractor', () => {
   const mockCaseDeadline = {
@@ -11,19 +16,14 @@ describe('getCaseDeadlinesForCaseInteractor', () => {
   };
 
   it('gets the case deadlines', async () => {
-    applicationContext.environment.stage = 'local';
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockReturnValue([mockCaseDeadline]);
+    getCaseDeadlinesByDocketNumber.mockReturnValue([mockCaseDeadline]);
     applicationContext.getUniqueId.mockReturnValue(
       '6ba578e7-5736-435b-a41b-2de3eec29fe7',
     );
 
-    const caseDeadlines = await getCaseDeadlinesForCaseInteractor(
-      applicationContext,
-      { docketNumber: mockCaseDeadline.docketNumber },
-    );
+    const caseDeadlines = await getCaseDeadlinesForCaseInteractor({
+      docketNumber: mockCaseDeadline.docketNumber,
+    });
 
     expect(caseDeadlines).toBeDefined();
   });
