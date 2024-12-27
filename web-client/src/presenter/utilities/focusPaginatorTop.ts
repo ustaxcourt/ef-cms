@@ -1,4 +1,6 @@
-export const focusPaginatorTop = (ref: React.RefObject<HTMLDivElement>) => {
+export const focusPaginatorTop = (
+  ref: React.RefObject<HTMLDivElement | null>,
+) => {
   if (!ref.current) {
     return;
   }
