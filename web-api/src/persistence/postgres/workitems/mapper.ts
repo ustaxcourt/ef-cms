@@ -36,8 +36,8 @@ export function toKyselyNewWorkItem(workItem: RawWorkItem): NewWorkItemKysely {
 }
 
 export function workItemEntity(workItem) {
-  return new WorkItem(
-    transformNullToUndefined({
+  return new WorkItem({
+    ...transformNullToUndefined({
       ...workItem,
       caseStatus: workItem.status,
       caseTitle: Case.getCaseTitle(workItem.caption),
@@ -46,5 +46,6 @@ export function workItemEntity(workItem) {
       trialDate: workItem.trialDate?.toISOString(),
       updatedAt: workItem.createdAt.toISOString(),
     }),
-  );
+    assigneeId: workItem.assigneeId, // this needs to be null because it replicates what was done in dynamo
+  });
 }
