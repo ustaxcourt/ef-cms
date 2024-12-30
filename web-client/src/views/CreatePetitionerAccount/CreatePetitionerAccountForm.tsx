@@ -57,7 +57,9 @@ export const CreatePetitionerAccountForm = connect(
           style={{ width: 'fit-content' }}
         >
           <div>
-            <h1 className="margin-bottom-1">Create Petitioner Account</h1>
+            <h2 className="margin-bottom-1 h1-size">
+              Create Petitioner Account
+            </h2>
             <form
               onSubmit={e => {
                 e.preventDefault();
