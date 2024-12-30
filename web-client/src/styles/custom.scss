@@ -2228,7 +2228,7 @@ button.change-scanner-button {
 }
 
 .before-case-button {
-  margin: 2.5rem 0 0;
+  margin: 2.5rem 1rem 0 0;
 }
 
 .before-case-follow-up-button {
@@ -2384,5 +2384,24 @@ button.change-scanner-button {
       display: inline-flex;
       margin: 0;
     }
+  }
+}
+
+.custom-case-report-button-container,
+.before-case-button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: ($medium-screen - 1px)) {
+    > * {
+      margin-inline: 0;
+    }
+  }
+
+  @media (min-width: $medium-screen) {
+    flex-direction: row;
+    justify-content: flex-start;
   }
 }
