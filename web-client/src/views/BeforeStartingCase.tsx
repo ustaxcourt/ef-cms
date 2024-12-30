@@ -185,7 +185,7 @@ export const BeforeStartingCase = connect(
             </div>
           </div>
           <BeforeStartingCaseAccordion isPetitioner={isPetitioner} />
-          <div className="display-flex flex-column align-items-center">
+          <div className="before-case-button-container">
             <Button
               className="before-case-button"
               data-testid="go-to-step-1"
