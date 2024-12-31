@@ -281,9 +281,7 @@ export const Header = connect(
                     </a>
                   </div>
                   {!headerHelper.isLoggedIn && (
-                    <h1 className="header-welcome text-no-wrap">
-                      Welcome to DAWSON
-                    </h1>
+                    <div className="header-welcome">Welcome to DAWSON</div>
                   )}
                   {headerHelper.showMobileAccountMenu && (
                     <button
