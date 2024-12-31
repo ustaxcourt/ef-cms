@@ -24,7 +24,7 @@ describe('getCalendaredCasesForTrialSession', () => {
       ],
     });
 
-    queryFullMock.mockReturnValue([
+    queryFullMock.mockResolvedValue([
       {
         docketNumber: MOCK_CASE.docketNumber,
         pk: `case|${MOCK_CASE.docketNumber}`,
