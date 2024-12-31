@@ -76,6 +76,7 @@ import { getDocketNumbersByStatusAndByJudge } from './persistence/elasticsearch/
 import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
 import { getDownloadPolicyUrl } from './persistence/s3/getDownloadPolicyUrl';
+import { getEligibleCasesForCity } from '@web-api/persistence/postgres/cases/getEligibleCasesForCity';
 import { getEligibleCasesForTrialCity } from './persistence/dynamo/trialSessions/getEligibleCasesForTrialCity';
 import { getEligibleCasesForTrialSession } from './persistence/dynamo/trialSessions/getEligibleCasesForTrialSession';
 import { getFeatureFlagValue } from './persistence/dynamo/deployTable/getFeatureFlagValue';
@@ -276,6 +277,7 @@ const gatewayMethods = {
   getDocument,
   getDocumentIdFromSQSMessage,
   getDownloadPolicyUrl,
+  getEligibleCasesForCity,
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
   getFeatureFlagValue,

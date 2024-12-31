@@ -46,9 +46,8 @@ import {
   compareStrings,
 } from '@shared/business/utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
-import { createCase } from '@web-api/persistence/dynamo/cases/createCase';
+import { createCase } from '@web-api/persistence/postgres/cases/createCase';
 import { createCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/createCaseAndAssociations';
-import { createDocketNumber } from '@web-api/persistence/dynamo/cases/docketNumberGenerator';
 import { createMockDocumentClient } from './createMockDocumentClient';
 import { deleteRecord } from '@web-api/persistence/elasticsearch/deleteRecord';
 import { documentUrlTranslator } from '@web-api/utilities/documentUrlTranslator';
@@ -70,6 +69,7 @@ import { formatPendingItem } from '@shared/business/utilities/formatPendingItem'
 import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { generateChangeOfAddressHelper } from '@web-api/business/useCaseHelper/generateChangeOfAddressHelper';
+import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from '@web-api/business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
 import {
   getAddressPhoneDiff,
@@ -113,7 +113,7 @@ import { setPdfFormFields } from '@web-api/business/useCaseHelper/pdf/setPdfForm
 import { setServiceIndicatorsForCase } from '@shared/business/utilities/setServiceIndicatorsForCase';
 import { setupPdfDocument } from '@shared/business/utilities/setupPdfDocument';
 import { unsealDocketEntryInteractor } from '@web-api/business/useCases/docketEntry/unsealDocketEntryInteractor';
-import { updateCase } from '@web-api/persistence/dynamo/cases/updateCase';
+import { updateCase } from '@web-api/persistence/postgres/cases/updateCase';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { updateCaseCorrespondence } from '@web-api/persistence/dynamo/correspondence/updateCaseCorrespondence';
@@ -539,13 +539,15 @@ export const createTestApplicationContext = () => {
   };
 
   const mockGetMessagingClient = {
-    send: jest.fn().mockReturnValue({ promise: () => {} }),
+    send: jest.fn().mockReturnValue({
+      promise: () => {},
+    }),
   };
 
   const mockDocumentClient = createMockDocumentClient();
 
   const mockCreateDocketNumberGenerator = {
-    createDocketNumber: jest.fn().mockImplementation(createDocketNumber),
+    createDocketNumber: jest.fn().mockImplementation(generateDocketNumber),
   };
 
   const mockBroadcastGateway = {
@@ -648,7 +650,9 @@ export const createTestApplicationContext = () => {
     getUserGateway: appContextProxy({}),
     getUtilities: mockGetUtilities,
     getWorkerGateway: appContextProxy({
-      initialize: jest.fn().mockReturnValue({ promise: () => {} }),
+      initialize: jest.fn().mockReturnValue({
+        promise: () => {},
+      }),
     }),
     isFeatureEnabled: jest.fn(),
     logger: {
