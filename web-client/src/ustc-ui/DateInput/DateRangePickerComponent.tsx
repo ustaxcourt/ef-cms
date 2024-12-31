@@ -49,10 +49,9 @@ export const DateRangePickerComponent = ({
   maxDate?: string; // Must be in YYYY-MM-DD format
   minDate?: string; // Must be in YYYY-MM-DD format
 }) => {
-  const dateRangePickerRef = useRef();
-  const startDatePickerRef = useRef();
-  const endDatePickerRef = useRef();
-
+  const dateRangePickerRef = useRef<HTMLInputElement>(null);
+  const startDatePickerRef = useRef<HTMLInputElement>(null);
+  const endDatePickerRef = useRef<HTMLInputElement>(null);
   const startDateInputRef = useRef<HTMLInputElement>(null);
   const endDateInputRef = useRef<HTMLInputElement>(null);
 
