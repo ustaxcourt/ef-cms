@@ -117,7 +117,10 @@
         margin-top: 15px;
         margin-right: auto;
         margin-left: 10px;
-        font-size: 26px;
+        font-family: "Noto Serif", serif;
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 4.3em;
       }
 
       .usa-navbar.usa-navbar-public {
@@ -217,29 +220,14 @@
       }
 
       .header-welcome {
+        padding-bottom: .4rem;
+        margin-top: auto;
+        margin-bottom: auto;
+        margin-left: 10px;
         font-family: "Noto Serif", serif;
         font-size: 26px;
         font-weight: 700;
-        line-height: 2em;
-
-        @media only screen and (max-width: $medium-screen) {
-          display: none;
-        }
-
-        @media only screen and (width <= 1150px) {
-          font-size: 26px;
-          line-height: 2.8em;
-        }
-
-        @media only screen and (width <= 1000px) {
-          font-size: 18px;
-          line-height: 4.3em;
-        }
-
-        @media only screen and (width <= 750px) {
-          font-size: 14px;
-          line-height: 5.3em;
-        }
+        line-height: 2.8em;
       }
 
       .ustc-navigation-items {
