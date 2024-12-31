@@ -202,6 +202,10 @@
       }
 
       .usa-navbar {
+        display: flex;
+        width: 100% !important;
+        flex-flow: row nowrap;
+        align-items: flex-start;
         margin-top: initial;
         margin-bottom: initial;
       }
@@ -210,6 +214,32 @@
         width: 75px;
         max-width: 75px;
         margin-bottom: 0.5rem;
+      }
+
+      .header-welcome {
+        font-family: "Noto Serif", serif;
+        font-size: 26px;
+        font-weight: 700;
+        line-height: 2em;
+
+        @media only screen and (max-width: $medium-screen) {
+          display: none;
+        }
+
+        @media only screen and (width <= 1150px) {
+          font-size: 26px;
+          line-height: 2.8em;
+        }
+
+        @media only screen and (width <= 1000px) {
+          font-size: 18px;
+          line-height: 4.3em;
+        }
+
+        @media only screen and (width <= 750px) {
+          font-size: 14px;
+          line-height: 5.3em;
+        }
       }
 
       .ustc-navigation-items {
