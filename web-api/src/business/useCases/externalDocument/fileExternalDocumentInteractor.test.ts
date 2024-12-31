@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
@@ -16,11 +17,15 @@ import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { fileExternalDocumentInteractor } from './fileExternalDocumentInteractor';
+import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import {
   mockDocketClerkUser,
   mockIrsPractitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+
+const getCaseDeadlinesByDocketNumber =
+  getCaseDeadlinesByDocketNumberMock as jest.Mock;
 
 describe('fileExternalDocumentInteractor', () => {
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
@@ -506,13 +511,11 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should automatically block the case with deadlines if the document filed is a tracked document and the case has a deadline', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockReturnValue([
-        {
-          deadlineDate: 'something',
-        },
-      ]);
+    getCaseDeadlinesByDocketNumber.mockReturnValue([
+      {
+        deadlineDate: 'something',
+      },
+    ]);
 
     await fileExternalDocumentInteractor(
       applicationContext,

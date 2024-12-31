@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
@@ -15,8 +16,12 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { addPaperFilingInteractor } from './addPaperFilingInteractor';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+
+const getCaseDeadlinesByDocketNumber =
+  getCaseDeadlinesByDocketNumberMock as jest.Mock;
 
 describe('addPaperFilingInteractor', () => {
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
@@ -325,11 +330,7 @@ describe('addPaperFilingInteractor', () => {
   });
 
   it('sets the case as blocked with due dates if the document filed is a tracked document type and the case has due dates', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockReturnValue([
-        { deadline: 'something' },
-      ]);
+    getCaseDeadlinesByDocketNumber.mockReturnValue([{ deadline: 'something' }]);
 
     await addPaperFilingInteractor(
       applicationContext,

@@ -78,7 +78,6 @@ import {
 import { getAllFeatureFlagsInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
 import { getAllWebSocketConnections } from '@web-api/persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
-import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
 import { getConfigurationItemValue } from '@web-api/persistence/dynamo/deployTable/getConfigurationItemValue';
 import { getConstants } from '@web-client/getConstants';
@@ -116,10 +115,10 @@ import { unsealDocketEntryInteractor } from '@web-api/business/useCases/docketEn
 import { updateCase } from '@web-api/persistence/dynamo/cases/updateCase';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
-import { updateCaseCorrespondence } from '@web-api/persistence/dynamo/correspondence/updateCaseCorrespondence';
 import { updateDocketEntry } from '@web-api/persistence/dynamo/documents/updateDocketEntry';
 import { updateUserRecords } from '@web-api/persistence/dynamo/users/updateUserRecords';
 import { uploadDocumentAndMakeSafeInteractor } from '@shared/business/useCases/uploadDocumentAndMakeSafeInteractor';
+import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { validatePenaltiesInteractor } from '@shared/business/useCases/validatePenaltiesInteractor';
 import { verifyCaseForUser } from '@web-api/persistence/dynamo/cases/verifyCaseForUser';
 import path from 'path';
@@ -477,10 +476,7 @@ export const createTestApplicationContext = () => {
       .mockImplementation(getAllWebSocketConnections),
     getCalendaredCasesForTrialSession: jest.fn(),
     getCaseByDocketNumber: jest.fn().mockImplementation(getCaseByDocketNumber),
-    getCaseDeadlinesByDateRange: jest.fn(),
-    getCaseDeadlinesByDocketNumber: jest
-      .fn()
-      .mockImplementation(getCaseDeadlinesByDocketNumber),
+    getCasesByFilters: jest.fn(),
     getConfigurationItemValue: jest
       .fn()
       .mockImplementation(getConfigurationItemValue),
@@ -524,13 +520,13 @@ export const createTestApplicationContext = () => {
     setTrialSessionJobStatusForCase: jest.fn(),
     setTrialSessionProcessingStatus: jest.fn(),
     updateCase: jest.fn().mockImplementation(updateCase),
-    updateCaseCorrespondence: jest
-      .fn()
-      .mockImplementation(updateCaseCorrespondence),
     updateCaseHearing: jest.fn(),
     updateDocketEntry: jest.fn().mockImplementation(updateDocketEntry),
     uploadDocument: jest.fn(),
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
+    upsertCaseCorrespondences: jest
+      .fn()
+      .mockImplementation(upsertCaseCorrespondences),
     verifyCaseForUser: jest.fn().mockImplementation(verifyCaseForUser),
   });
 
