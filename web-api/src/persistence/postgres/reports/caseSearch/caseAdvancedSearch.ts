@@ -1,11 +1,12 @@
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getDbReader } from '@web-api/database';
+import { removeAdvancedSyntaxSymbols } from '@shared/business/utilities/aggregateCommonQueryParams';
 import { sql } from 'kysely';
 
 // 10502 TODO: Make sure this is efficient! And add full-text indices!
 
 type CaseAdvancedSearchTerms = {
-  petitionerName?: string;
+  petitionerName: string;
   petitionerState?: string;
   countryType?: string;
   startDate?: string;
@@ -19,13 +20,10 @@ type CaseAdvancedSearchResultItem = {
   docketNumber: string;
   docketNumberWithSuffix: string;
   isSealed?: boolean;
-  receivedAt: string;
-  sealedDate?: string;
+  receivedAt: Date | null;
+  sealedDate?: Date | null;
   partyType: string;
   petitioners: {
-    contactId: string;
-    countryType: string;
-    contactType: string;
     name: string;
     state?: string;
   }[];
@@ -38,173 +36,113 @@ export const caseAdvancedSearch = async ({
 }) => {
   console.log('searchTerms', searchTerms);
 
-  const needPetitionerInformation = [
-    searchTerms.petitionerName,
-    searchTerms.petitionerState,
-    searchTerms.countryType,
-  ].some(Boolean);
-
-  const getDocketNumbersForPetitionerInfo = async () => {
-    const results = await getDbReader(reader => {
-      let query = reader
-        .selectFrom('dwCase as c')
-        .innerJoin(
-          'dwPetitionerOnCase as p',
-          'c.docketNumber',
-          'p.docketNumber',
-        )
-        .select(['c.docketNumber']);
-      if (searchTerms.countryType) {
-        query = query.where('p.countryType', '=', searchTerms.countryType);
-      }
-      if (searchTerms.petitionerState) {
-        query = query.where('p.state', '=', searchTerms.petitionerState);
-      }
-      if (searchTerms.petitionerName) {
-        // We will do a postgres full-text search on petitioner name, based on tokens
-        // Split the string into tokens, and do an OR match (i.e., find any of these strings)
-        const petitionerNameSearchString = searchTerms.petitionerName
-          .split(' ')
-          .join(' | ');
-        query = query
-          .where(
-            // @ts-ignore: 10502 TODO: Can this be typed effectively?
-            sql`to_tsvector('english', p.name) @@ to_tsquery('english', ${petitionerNameSearchString})`,
-          )
-          .orderBy(
-            sql`ts_rank_cd(
-            setweight(to_tsvector('english', p.name), 'A'),
-            to_tsquery('english', ${petitionerNameSearchString})
-          ) +
-          ts_rank_cd(
-            setweight(to_tsvector('english', c.caption), 'D'),
-            to_tsquery('english', ${petitionerNameSearchString})
-          )`,
-            'desc',
-          );
-      }
-
-      return query.execute();
-    });
-
-    // De-duplicate and maintain order
-    const filteredResults: string[] = [results[0].docketNumber];
-    for (let i = 1; i < results.length; i++) {
-      if (results[i].docketNumber !== results[i - 1].docketNumber) {
-        filteredResults.push(results[i].docketNumber);
-      }
-    }
-    return filteredResults;
+  const sanitizeSearchString = (searchString: string) => {
+    return removeAdvancedSyntaxSymbols(searchString);
   };
 
-  const results = await getDbReader(async reader => {
-    let petitionerDocketNumbers: string[] = [];
+  const sanitizedSearchString = sanitizeSearchString(
+    searchTerms.petitionerName,
+  );
 
-    // If we need petitioner data, we filter docket numbers by that data
-    if (needPetitionerInformation) {
-      petitionerDocketNumbers = await getDocketNumbersForPetitionerInfo();
-      if (!petitionerDocketNumbers) {
-        return [];
-      }
-    }
-    let casesQuery = reader
-      .selectFrom('dwCase as case')
-      .leftJoin(
-        'dwPetitionerOnCase as petitioner',
-        'case.docketNumber',
-        'petitioner.docketNumber',
+  const newQuery = await getDbReader(reader => {
+    let query = reader
+      // Get all cases, aggregating petitioner names and case caption data
+      .with('cases', db =>
+        db
+          .selectFrom('dwCase as case')
+          .leftJoin(
+            'dwPetitionerOnCase as petitioner',
+            'case.docketNumber',
+            'petitioner.docketNumber',
+          )
+          .select([
+            'case.docketNumber',
+            'case.receivedAt',
+            'case.docketNumberSuffix',
+            'case.isSealed',
+            'case.caption',
+            'case.isSealed',
+            'case.partyType',
+            'case.sealedDate',
+            'case.status',
+            sql<string>`string_agg("petitioner".name, ', ') || ' '`.as(
+              'nameToMatch',
+            ),
+            sql<string[]>`array_agg("petitioner".state)`.as('petitionerStates'),
+            sql<string[]>`array_agg("petitioner".country_type)`.as(
+              'petitionerCountryTypes',
+            ),
+          ])
+          .groupBy(['case.docketNumber']),
       )
-      .selectAll()
-      .select('case.docketNumber');
-    if (petitionerDocketNumbers) {
-      casesQuery = casesQuery.where(
-        'case.docketNumber',
-        'in',
-        petitionerDocketNumbers,
+      // Weight matches of our search string with petitioner names (high weight) and case captions (low weight)
+      .with('cases_with_scores', db =>
+        db
+          .selectFrom('cases')
+          .selectAll()
+          .select(
+            sql`5 * word_similarity(${sanitizedSearchString}, name_to_match) + word_similarity(${sanitizedSearchString}, caption)`.as(
+              'total_rank',
+            ),
+          ),
+      )
+      .selectFrom('cases_with_scores')
+      .where('total_rank', '>', 3); // Filter out unmatched data
+    // Do additional filtering as needed
+    if (searchTerms.countryType) {
+      query = query.where(eb =>
+        eb.and([
+          sql<boolean>`${searchTerms.countryType} = ANY(${eb.ref('petitionerCountryTypes')})`,
+        ]),
       );
     }
-    if (searchTerms.startDate && searchTerms.endDate) {
-      casesQuery = casesQuery
-        .where(
-          'case.receivedAt',
-          '>=',
-          calculateDate({ dateString: searchTerms.startDate }),
-        )
-        .where(
-          'case.receivedAt',
-          '<=',
-          calculateDate({ dateString: searchTerms.endDate }),
-        );
-    }
-    const cases = await casesQuery
-      .select([
-        'case.caption',
-        'case.docketNumber',
-        'case.docketNumberSuffix',
-        'case.isSealed',
-        'case.partyType',
-        'case.receivedAt',
-        'case.sealedDate',
-        'case.status',
-        'petitioner.contactId',
-        'petitioner.contactType',
-        'petitioner.countryType',
-        'petitioner.name',
-        'petitioner.state',
-      ])
-      .execute();
-
-    if (petitionerDocketNumbers) {
-      const docketNumberToRank = new Map(
-        petitionerDocketNumbers.map((item, index) => [item, index]),
-      );
-
-      // Sort by the rank
-      cases.sort(
-        (a, b) =>
-          (docketNumberToRank.get(a.docketNumber) || Infinity) -
-          (docketNumberToRank.get(b.docketNumber) || Infinity),
+    if (searchTerms.petitionerState) {
+      query = query.where(eb =>
+        eb.and([
+          sql<boolean>`${searchTerms.petitionerState} = ANY(${eb.ref('petitionerStates')})`,
+        ]),
       );
     }
-    return cases;
+    if (searchTerms.startDate) {
+      query = query.where(
+        'receivedAt',
+        '>=',
+        calculateDate({ dateString: searchTerms.startDate }),
+      );
+    }
+    if (searchTerms.endDate) {
+      query = query.where(
+        'receivedAt',
+        '<=',
+        calculateDate({ dateString: searchTerms.endDate }),
+      );
+    }
+    // Order by our weighted match scores
+    return query.selectAll().orderBy('total_rank', 'desc').execute();
   });
 
-  const caseMap = new Map<string, CaseAdvancedSearchResultItem>();
-  for (const result of results) {
-    if (caseMap.has(result.docketNumber)) {
-      if (result.contactId) {
-        caseMap.get(result.docketNumber)!.petitioners.push({
-          contactId: result.contactId,
-          contactType: result.contactType,
-          country: result.countryType,
-          name: result.name,
-          state: result.state,
-        });
-      }
-    } else {
-      caseMap.set(result.docketNumber, {
-        caseCaption: result.caption,
-        docketNumber: result.docketNumber,
-        docketNumberWithSuffix: result.docketNumber + result.docketNumberSuffix,
-        isSealed: result.isSealed || undefined,
-        partyType: result.partyType,
-        petitioners: result.contactId
-          ? [
-              {
-                contactId: result.contactId,
-                contactType: result.contactType,
-                country: result.countryType,
-                name: result.name,
-                state: result.state,
-              },
-            ]
-          : [],
-        receivedAt: result.receivedAt,
-        sealedDate: result.sealedDate,
-        status: result.status,
-      });
-    }
-  }
+  console.log(newQuery);
 
-  return Array.from(caseMap.values());
+  return Array.from(newQuery.values()).map<CaseAdvancedSearchResultItem>(
+    data => {
+      console.log('DATA', data);
+      console.log(data.nameToMatch.split(','));
+      console.log(data.nameToMatch.split(',')[0].trim());
+      return {
+        caseCaption: data.caption,
+        docketNumber: data.docketNumber,
+        docketNumberWithSuffix:
+          data.docketNumber + (data.docketNumberSuffix || ''),
+        isSealed: data.isSealed || undefined,
+        partyType: data.partyType,
+        petitioners: data.nameToMatch.split(',').map((name, index) => ({
+          name: name.trim(),
+          state: data.petitionerStates?.[index],
+        })),
+        receivedAt: data.receivedAt,
+        sealedDate: data.sealedDate,
+        status: data.status,
+      };
+    },
+  );
 };

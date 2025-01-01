@@ -95,8 +95,6 @@ export const caseAdvancedSearchInteractor = async (
     MAX_SEARCH_RESULTS,
   );
 
-  console.log('filteredCases', filteredCases);
-
   return filteredCases.map(filteredCase => {
     return {
       caseCaption: filteredCase.caseCaption,

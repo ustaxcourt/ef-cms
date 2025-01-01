@@ -2,7 +2,6 @@ import {
   AuthUser,
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
-import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -57,18 +56,14 @@ export const formatSealedAddresses = (
 };
 
 export const caseSearchFilter = (searchResults, currentUser: AuthUser) => {
-  return searchResults
-    .filter(
-      searchResult =>
-        !(
-          isSealedCase(searchResult) ||
-          searchResult.isCaseSealed ||
-          searchResult.isDocketEntrySealed
-        ) ||
-        isAssociatedUser({ caseRaw: searchResult, user: currentUser }) ||
-        isAuthorized(currentUser, ROLE_PERMISSIONS.VIEW_SEALED_CASE),
-    )
-    .map(filteredCase =>
-      CaseFactory.getCase({ rawCase: filteredCase, user: currentUser }),
-    );
+  return searchResults.filter(
+    searchResult =>
+      !(
+        isSealedCase(searchResult) ||
+        searchResult.isCaseSealed ||
+        searchResult.isDocketEntrySealed
+      ) ||
+      isAssociatedUser({ caseRaw: searchResult, user: currentUser }) ||
+      isAuthorized(currentUser, ROLE_PERMISSIONS.VIEW_SEALED_CASE),
+  ); // 10502 TODO: I don't think we even need to construct a case entity here, which we were doing before
 };
