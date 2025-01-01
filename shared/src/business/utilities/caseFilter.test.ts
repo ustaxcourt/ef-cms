@@ -3,7 +3,10 @@ import {
   COUNTRY_TYPES,
   ROLES,
 } from '../entities/EntityConstants';
-import { caseSearchFilter, formatSealedAddresses } from './caseFilter';
+import {
+  filterCaseSearchResultsNotAccessibleToUser,
+  formatSealedAddresses,
+} from './caseFilter';
 import {
   mockIrsPractitionerUser,
   mockIrsSuperuser,
@@ -158,7 +161,7 @@ describe('caseFilter', () => {
     ];
 
     it('should remove sealed cases from a set of advanced search results', () => {
-      const result = caseSearchFilter(
+      const result = filterCaseSearchResultsNotAccessibleToUser(
         caseSearchResults,
         mockIrsPractitionerUser,
       );
@@ -175,7 +178,10 @@ describe('caseFilter', () => {
     });
 
     it('should format sealed addresses in search results if user does not have permission to see sealed contact addresses', () => {
-      let result = caseSearchFilter(caseSearchResults, mockPetitionsClerkUser);
+      let result = filterCaseSearchResultsNotAccessibleToUser(
+        caseSearchResults,
+        mockPetitionsClerkUser,
+      );
 
       expect(result.length).toEqual(4);
       expect(result[2].petitioners[0]).toMatchObject({
@@ -186,26 +192,35 @@ describe('caseFilter', () => {
     });
 
     it('should keep sealed cases in search results if user is an internal user with permission to see sealed cases', () => {
-      let result = caseSearchFilter(caseSearchResults, mockPetitionsClerkUser);
+      let result = filterCaseSearchResultsNotAccessibleToUser(
+        caseSearchResults,
+        mockPetitionsClerkUser,
+      );
 
       expect(result.length).toEqual(4);
     });
 
     it('should keep sealed cases in search results if user is an IRS superuser with permission to see sealed cases', () => {
-      let result = caseSearchFilter(caseSearchResults, mockIrsSuperuser);
+      let result = filterCaseSearchResultsNotAccessibleToUser(
+        caseSearchResults,
+        mockIrsSuperuser,
+      );
 
       expect(result.length).toEqual(4);
     });
 
     it('should keep sealed cases in search results if user is associated as practitioner or respondent', () => {
-      let result = caseSearchFilter(caseSearchResults, {
-        ...mockPrivatePractitionerUser,
-        userId: 'authPractitioner',
-      });
+      let result = filterCaseSearchResultsNotAccessibleToUser(
+        caseSearchResults,
+        {
+          ...mockPrivatePractitionerUser,
+          userId: 'authPractitioner',
+        },
+      );
 
       expect(result.length).toEqual(4);
 
-      result = caseSearchFilter(caseSearchResults, {
+      result = filterCaseSearchResultsNotAccessibleToUser(caseSearchResults, {
         ...mockPrivatePractitionerUser,
         userId: 'authRespondent',
       });
@@ -214,7 +229,7 @@ describe('caseFilter', () => {
     });
 
     it('should filter out sealed documents in search results when the user is not associated with the case', () => {
-      const result = caseSearchFilter(
+      const result = filterCaseSearchResultsNotAccessibleToUser(
         documentSearchResults,
         mockPrivatePractitionerUser,
       );
@@ -224,10 +239,13 @@ describe('caseFilter', () => {
     });
 
     it('should NOT filter out sealed documents in search results when the user is associated with the case', () => {
-      const result = caseSearchFilter(documentSearchResults, {
-        ...mockPrivatePractitionerUser,
-        userId: 'associatedPractitioner',
-      });
+      const result = filterCaseSearchResultsNotAccessibleToUser(
+        documentSearchResults,
+        {
+          ...mockPrivatePractitionerUser,
+          userId: 'associatedPractitioner',
+        },
+      );
 
       expect(result.length).toEqual(2);
     });

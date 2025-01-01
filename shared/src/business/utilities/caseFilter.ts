@@ -1,11 +1,8 @@
 import {
-  AuthUser,
-  UnknownAuthUser,
-} from '@shared/business/entities/authUser/AuthUser';
-import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { cloneDeep, pick } from 'lodash';
 import { isAssociatedUser, isSealedCase } from '../entities/cases/Case';
 
@@ -55,7 +52,10 @@ export const formatSealedAddresses = (
   return formattedCase;
 };
 
-export const caseSearchFilter = (searchResults, currentUser: AuthUser) => {
+export const filterCaseSearchResultsNotAccessibleToUser = <T>(
+  searchResults,
+  currentUser: UnknownAuthUser,
+) => {
   return searchResults.filter(
     searchResult =>
       !(
@@ -65,5 +65,5 @@ export const caseSearchFilter = (searchResults, currentUser: AuthUser) => {
       ) ||
       isAssociatedUser({ caseRaw: searchResult, user: currentUser }) ||
       isAuthorized(currentUser, ROLE_PERMISSIONS.VIEW_SEALED_CASE),
-  ); // 10502 TODO: I don't think we even need to construct a case entity here, which we were doing before
+  ) as T[]; // 10502 TODO: I don't think we even need to construct a case entity here, which we were doing before
 };

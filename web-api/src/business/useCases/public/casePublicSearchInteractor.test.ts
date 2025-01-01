@@ -1,4 +1,4 @@
-import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
+import { CaseAdvancedSearchTerms } from '@web-api/persistence/postgres/reports/caseSearch/caseAdvancedSearch';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { casePublicSearchInteractor } from '@web-api/business/useCases/public/casePublicSearchInteractor';
 
@@ -12,7 +12,7 @@ describe('casePublicSearchInteractor', () => {
   });
 
   it('make a public case search request with formatted dates', async () => {
-    const requestParams: CaseAdvancedSearchParamsRequestType = {
+    const requestParams: CaseAdvancedSearchTerms = {
       countryType: 'domestic',
       endDate: '12/20/2023',
       petitionerName: 'test person',

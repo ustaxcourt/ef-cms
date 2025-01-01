@@ -1,9 +1,9 @@
-import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
+import { CaseAdvancedSearchTerms } from '@web-api/persistence/postgres/reports/caseSearch/caseAdvancedSearch';
 import { get } from './requests';
 
 export const caseAdvancedSearchInteractor = (
   applicationContext,
-  { searchParams }: { searchParams: CaseAdvancedSearchParamsRequestType },
+  { searchParams }: { searchParams: CaseAdvancedSearchTerms },
 ) => {
   return get({
     applicationContext,
