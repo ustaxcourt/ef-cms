@@ -3,7 +3,7 @@ import { getDbReader } from '@web-api/database';
 import { removeAdvancedSyntaxSymbols } from '@shared/business/utilities/aggregateCommonQueryParams';
 import { sql } from 'kysely';
 
-// 10502 TODO: Make sure this is efficient! And add full-text indices!
+// 10502 TODO: Make sure this is efficient! Probably want some gtin indexing.
 
 type CaseAdvancedSearchTerms = {
   petitionerName: string;
@@ -13,7 +13,6 @@ type CaseAdvancedSearchTerms = {
   endDate?: string;
 };
 
-// 10502 TODO: Fix types here, maybe by appealing to the Kysely mappers
 type CaseAdvancedSearchResultItem = {
   caseCaption: string;
   status?: string;
@@ -125,9 +124,6 @@ export const caseAdvancedSearch = async ({
 
   return Array.from(newQuery.values()).map<CaseAdvancedSearchResultItem>(
     data => {
-      console.log('DATA', data);
-      console.log(data.nameToMatch.split(','));
-      console.log(data.nameToMatch.split(',')[0].trim());
       return {
         caseCaption: data.caption,
         docketNumber: data.docketNumber,
