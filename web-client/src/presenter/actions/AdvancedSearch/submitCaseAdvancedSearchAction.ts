@@ -3,14 +3,14 @@ import {
   COUNTRY_TYPES,
   CountryTypes,
 } from '@shared/business/entities/EntityConstants';
-import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
+import { CaseAdvancedSearchTerms } from '@web-api/persistence/postgres/reports/caseSearch/caseAdvancedSearch';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const prepareFormDataForCaseSearchApi = (
-  form: Omit<CaseAdvancedSearchParamsRequestType, 'countryType'> & {
+  form: Omit<CaseAdvancedSearchTerms, 'countryType'> & {
     countryType: typeof ALL_COUNTRY_TYPE | CountryTypes;
   },
-): CaseAdvancedSearchParamsRequestType => {
+): CaseAdvancedSearchTerms => {
   return {
     ...form,
     countryType:

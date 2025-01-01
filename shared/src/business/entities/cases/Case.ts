@@ -2272,8 +2272,11 @@ export const isAssociatedUser = function ({
   user,
 }: {
   caseRaw: any;
-  user: { userId: string; role: Role };
+  user: UnknownAuthUser;
 }) {
+  if (!user) {
+    return false;
+  }
   const isIrsPractitioner =
     caseRaw.irsPractitioners &&
     caseRaw.irsPractitioners.find(r => r.userId === user.userId);

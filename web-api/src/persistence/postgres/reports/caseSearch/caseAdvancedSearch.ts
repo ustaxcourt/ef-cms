@@ -1,19 +1,23 @@
+import {
+  AbbreviatedStates,
+  CountryTypes,
+} from '@shared/business/entities/EntityConstants';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getDbReader } from '@web-api/database';
-import { removeAdvancedSyntaxSymbols } from '@shared/business/utilities/aggregateCommonQueryParams';
 import { sql } from 'kysely';
 
 // 10502 TODO: Make sure this is efficient! Probably want some gtin indexing.
 
-type CaseAdvancedSearchTerms = {
+export type CaseAdvancedSearchTerms = {
   petitionerName: string;
-  petitionerState?: string;
-  countryType?: string;
+  countryType?: CountryTypes;
+  petitionerState?: AbbreviatedStates;
   startDate?: string;
   endDate?: string;
+  hideSealedCases?: boolean;
 };
 
-type CaseAdvancedSearchResultItem = {
+export type CaseAdvancedSearchResultItem = {
   caseCaption: string;
   status?: string;
   docketNumber: string;
@@ -21,11 +25,15 @@ type CaseAdvancedSearchResultItem = {
   isSealed?: boolean;
   receivedAt: Date | null;
   sealedDate?: Date | null;
-  partyType: string;
   petitioners: {
     name: string;
     state?: string;
   }[];
+};
+
+const removeAdvancedSyntaxSymbols = text => {
+  const nonWordCharacters = /[-+\s[\]{}:?!*()<>=]+/gims;
+  return text.replace(nonWordCharacters, ' ').trim();
 };
 
 export const caseAdvancedSearch = async ({
@@ -58,7 +66,6 @@ export const caseAdvancedSearch = async ({
             'case.docketNumber',
             'case.receivedAt',
             'case.docketNumberSuffix',
-            'case.isSealed',
             'case.caption',
             'case.isSealed',
             'case.partyType',
@@ -116,6 +123,10 @@ export const caseAdvancedSearch = async ({
         calculateDate({ dateString: searchTerms.endDate }),
       );
     }
+    if (searchTerms.hideSealedCases) {
+      query = query.where('isSealed', 'is not', true);
+      query = query.where('sealedDate', 'is', null);
+    }
     // Order by our weighted match scores
     return query.selectAll().orderBy('total_rank', 'desc').execute();
   });
@@ -130,7 +141,6 @@ export const caseAdvancedSearch = async ({
         docketNumberWithSuffix:
           data.docketNumber + (data.docketNumberSuffix || ''),
         isSealed: data.isSealed || undefined,
-        partyType: data.partyType,
         petitioners: data.nameToMatch.split(',').map((name, index) => ({
           name: name.trim(),
           state: data.petitionerStates?.[index],

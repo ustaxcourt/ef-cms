@@ -1,29 +1,23 @@
 import {
-  AbbrevatedStates,
-  CountryTypes,
+  CaseAdvancedSearchResultItem,
+  CaseAdvancedSearchTerms,
+  caseAdvancedSearch,
+} from '@web-api/persistence/postgres/reports/caseSearch/caseAdvancedSearch';
+import {
   MAX_SEARCH_RESULTS,
   US_STATES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { caseAdvancedSearch } from '@web-api/persistence/postgres/reports/caseSearch/caseAdvancedSearch';
-import { caseSearchFilter } from '../../../../shared/src/business/utilities/caseFilter';
 import {
   createEndOfDayISO,
   createStartOfDayISO,
-} from '../../../../shared/src/business/utilities/DateHandler';
-
-export type CaseAdvancedSearchParamsRequestType = {
-  petitionerName: string;
-  countryType?: CountryTypes;
-  petitionerState?: AbbrevatedStates;
-  endDate?: string;
-  startDate?: string;
-};
+} from '@shared/business/utilities/DateHandler';
+import { filterCaseSearchResultsNotAccessibleToUser } from '@shared/business/utilities/caseFilter';
 
 export type CaseSearchResult = {
   petitionerNames: string[];
@@ -41,7 +35,7 @@ export const caseAdvancedSearchInteractor = async (
     petitionerName,
     petitionerState,
     startDate,
-  }: CaseAdvancedSearchParamsRequestType,
+  }: CaseAdvancedSearchTerms,
   authorizedUser: UnknownAuthUser,
 ): Promise<CaseSearchResult[]> => {
   let searchStartDate;
@@ -81,19 +75,11 @@ export const caseAdvancedSearchInteractor = async (
     },
   });
 
-  // console.log(
-  //   foundCases.map(p => {
-  //     return {
-  //       docketNumber: p.docketNumber,
-  //       petitioners: JSON.stringify(p.petitioners),
-  //     };
-  //   }),
-  // );
-
-  const filteredCases = caseSearchFilter(foundCases, authorizedUser).slice(
-    0,
-    MAX_SEARCH_RESULTS,
-  );
+  const filteredCases =
+    filterCaseSearchResultsNotAccessibleToUser<CaseAdvancedSearchResultItem>(
+      foundCases,
+      authorizedUser,
+    ).slice(0, MAX_SEARCH_RESULTS);
 
   return filteredCases.map(filteredCase => {
     return {
@@ -102,9 +88,9 @@ export const caseAdvancedSearchInteractor = async (
       docketNumberWithSuffix: filteredCase.docketNumberWithSuffix,
       petitionerNames: filteredCase.petitioners?.map(p => p.name),
       petitionerStateNames: filteredCase.petitioners?.map(
-        p => US_STATES[p.state] || p.state,
+        p => US_STATES[p.state || ''] || p.state,
       ),
-      receivedAt: filteredCase.receivedAt,
+      receivedAt: filteredCase.receivedAt?.toISOString() || '',
     };
   });
 };
