@@ -140,7 +140,7 @@ export const cases310_399: NewCaseKysely[] = [
     associatedJudge: CHIEF_JUDGE,
     automaticBlocked: false,
     caption: 'Hanae Guerrero, Petitioner',
-    caseType: CASE_TYPES_MAP.other,
+    caseType: CASE_TYPES_MAP.workerClassification,
     createdAt: calculateDate({ dateString: '2021-10-25T18:56:28.863Z' }),
     docketNumber: SEEDED_DOCKET_NUMBERS_310_399['313-21'],
     hasPendingItems: false,
