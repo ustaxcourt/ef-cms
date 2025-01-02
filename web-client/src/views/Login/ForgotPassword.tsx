@@ -29,9 +29,9 @@ export const ForgotPassword = connect(
               <div className="grid-container bg-white padding-y-3 border border-base-lighter">
                 <div className="display-flex flex-column">
                   <div className="flex-align-self-center">
-                    <h2 className="margin-bottom-1 margin-top-1 inherit-body-font-family h1-size">
+                    <h1 className="margin-bottom-1 margin-top-1 inherit-body-font-family">
                       Forgot Password?
-                    </h2>
+                    </h1>
                     <span>
                       Enter your email address to receive an email to reset your
                       password.
