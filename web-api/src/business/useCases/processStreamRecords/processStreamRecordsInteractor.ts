@@ -91,7 +91,6 @@ export const processStreamRecordsInteractor = async (
     });
 
     await processPractitionerMappingEntries({
-      applicationContext,
       practitionerMappingRecords,
     }).catch(err => {
       applicationContext.logger.error(

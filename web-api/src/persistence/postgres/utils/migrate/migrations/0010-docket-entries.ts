@@ -5,7 +5,10 @@ export async function up(db: Kysely<any>): Promise<void> {
     .createTable('dwDocketEntry')
     .addColumn('docketEntryId', 'varchar')
     .addColumn('docketNumber', 'varchar')
-    .addPrimaryKeyConstraint('pk', ['docketEntryId', 'docketNumber'])
+    .addPrimaryKeyConstraint('pk_docket_entry', [
+      'docketEntryId',
+      'docketNumber',
+    ])
     .addColumn('filingDate', 'timestamptz')
     .addColumn('eventCode', 'varchar')
     .addColumn('pending', 'boolean')
