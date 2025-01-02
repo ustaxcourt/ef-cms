@@ -12,7 +12,6 @@ import {
 import { getDbReader } from '@web-api/database';
 import { isEmpty } from 'lodash';
 import { sql } from 'kysely';
-// import { getDbReader } from '@web-api/database';
 
 export async function getColdCases() {
   const coldCaseLookBackDate = calculateDate({
