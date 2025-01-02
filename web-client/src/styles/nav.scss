@@ -206,11 +206,15 @@
 
       .usa-navbar {
         display: flex;
-        width: 100% !important;
+        width: initial;
         flex-flow: row nowrap;
         align-items: flex-start;
         margin-top: initial;
         margin-bottom: initial;
+
+        .usa-navbar[data-header-available="true"] {
+          width: 100% !important;
+        }
       }
 
       .usa-logo {
