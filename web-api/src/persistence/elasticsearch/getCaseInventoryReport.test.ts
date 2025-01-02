@@ -1,14 +1,14 @@
 import {
+  CASE_INVENTORY_PRINT_REPORT_MAX_SIZE,
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
-} from '../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseInventoryReport } from './getCaseInventoryReport';
 import { marshall } from '@aws-sdk/util-dynamodb';
 
 describe('getCaseInventoryReport', () => {
   const searchSpy = jest.fn();
-  const CASE_INVENTORY_PRINT_REPORT_MAX_SIZE = 10;
 
   const mockDataOne = {
     associatedJudge: CHIEF_JUDGE,
@@ -31,9 +31,6 @@ describe('getCaseInventoryReport', () => {
   ];
 
   beforeEach(() => {
-    applicationContext.getConstants.mockReturnValue({
-      CASE_INVENTORY_PRINT_REPORT_MAX_SIZE,
-    });
     applicationContext.getSearchClient.mockReturnValue({
       search: searchSpy,
     });
