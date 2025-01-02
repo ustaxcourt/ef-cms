@@ -1,6 +1,6 @@
+import { CASE_INVENTORY_PRINT_REPORT_MAX_SIZE } from '@shared/business/entities/EntityConstants';
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { search } from './searchClient';
-
 /**
  * getCaseInventoryReport
  *
@@ -37,8 +37,6 @@ export const getCaseInventoryReport = async ({
     'leadDocketNumber',
     'status',
   ];
-  const { CASE_INVENTORY_PRINT_REPORT_MAX_SIZE } =
-    applicationContext.getConstants();
   const size = pageSize || CASE_INVENTORY_PRINT_REPORT_MAX_SIZE;
 
   const searchParameters = {
