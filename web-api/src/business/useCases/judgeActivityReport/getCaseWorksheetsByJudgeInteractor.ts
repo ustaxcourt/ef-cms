@@ -6,7 +6,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { SubmittedCAVTableFields } from '@web-api/persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
+import { SubmittedCAVTableFields } from '@web-api/persistence/postgres/reports/caseSearch/getDocketNumbersByStatusAndByJudge';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getConsolidatedCasesCount } from '@web-api/persistence/postgres/cases/getConsolidatedCasesCount';
 
@@ -62,7 +62,6 @@ const getCases = async (
   const allCaseRecords = await applicationContext
     .getPersistenceGateway()
     .getDocketNumbersByStatusAndByJudge({
-      applicationContext,
       params: {
         excludeMemberCases: true,
         judges: searchEntity.judges,
