@@ -2,151 +2,105 @@ import {
   CASE_STATUS_TYPES,
   COLD_CASE_LOOKBACK_IN_DAYS,
 } from '@shared/business/entities/EntityConstants';
-import { Case } from '@shared/business/entities/cases/Case';
 import { ColdCaseEntry } from '@web-api/business/useCases/reports/coldCaseReportInteractor';
 import {
   FORMATS,
+  calculateDate,
   formatDateString,
+  formatNow,
 } from '@shared/business/utilities/DateHandler';
-import { ServerApplicationContext } from '@web-api/applicationContext';
-import {
-  formatResults,
-  searchRaw,
-} from '@web-api/persistence/elasticsearch/searchClient';
+import { getDbReader } from '@web-api/database';
+import { isEmpty } from 'lodash';
+import { sql } from 'kysely';
 // import { getDbReader } from '@web-api/database';
 
-export async function getColdCases({
-  applicationContext,
-}: {
-  applicationContext: ServerApplicationContext;
-}) {
-  // 10502 TODO: We need to get a minimum viable docket entry (docket number, filingDate, pending, etc.) into postgres
-
-  // const generalDocketCases = await getDbReader(reader =>
-  //   reader
-  //     .selectFrom('dwCase')
-  //     .where('status', '=', CASE_STATUS_TYPES.generalDocket)
-  //     .select([
-  //       'caseType',
-  //       'createdAt',
-  //       'docketNumber',
-  //       'docketNumberSuffix',
-  //       'leadDocketNumber',
-  //       'preferredTrialCity',
-  //     ])
-  //     .execute(),
-  // );
-
-  const searchParameters = {
-    body: {
-      _source: [
-        'docketNumber',
-        'docketNumberWithSuffix',
-        'filingDate',
-        'createdAt',
-        'caseType',
-        'preferredTrialCity',
-        'leadDocketNumber',
-      ],
-      query: {
-        bool: {
-          filter: [
-            {
-              term: {
-                'status.S': CASE_STATUS_TYPES.generalDocket,
-              },
-            },
-            {
-              term: {
-                'entityName.S': 'CaseDocketEntryMapping',
-              },
-            },
-          ],
-          must: [
-            {
-              has_child: {
-                inner_hits: {
-                  _source: ['filingDate.S', 'eventCode.S'],
-                  name: 'most_recent_child',
-                  size: 1,
-                  sort: [{ 'filingDate.S': { order: 'desc' } }],
-                },
-                min_children: 1,
-                query: {
-                  match_all: {},
-                },
-                type: 'document',
-              },
-            },
-          ],
-          must_not: [
-            {
-              has_child: {
-                query: {
-                  bool: {
-                    should: [
-                      {
-                        term: {
-                          'pending.BOOL': true,
-                        },
-                      },
-                      {
-                        range: {
-                          'filingDate.S': {
-                            gt: `now-${COLD_CASE_LOOKBACK_IN_DAYS}d/d`,
-                          },
-                        },
-                      },
-                    ],
-                  },
-                },
-                type: 'document',
-              },
-            },
-          ],
-        },
-      },
-    },
-    index: 'efcms-docket-entry',
-    size: 10000,
-  };
-
-  const entriesOfNotAtIssueCases = await searchRaw({
-    applicationContext,
-    searchParameters,
+export async function getColdCases() {
+  const coldCaseLookBackDate = calculateDate({
+    dateString: formatNow(),
+    howMuch: -COLD_CASE_LOOKBACK_IN_DAYS,
+    units: 'days',
   });
 
-  entriesOfNotAtIssueCases.body.hits.hits.forEach(hit => {
-    hit._source.filingDate =
-      hit.inner_hits.most_recent_child.hits.hits[0]._source.filingDate;
-    hit._source.eventCode =
-      hit.inner_hits.most_recent_child.hits.hits[0]._source.eventCode;
-  });
+  // Get all of the docket numbers that fit the requirements
+  const validDocketNumbers = await getDbReader(reader =>
+    reader
+      .selectFrom('dwDocketEntry as d')
+      .select('d.docketNumber')
+      .groupBy('d.docketNumber')
+      // We want cases such that the most recent docket entry is before our cold case constant and such that no docket entries are pending
+      .having(eb => eb.fn.max('d.filingDate'), '<=', coldCaseLookBackDate)
+      .having(
+        eb => eb.fn.sum(sql`CASE WHEN d.pending THEN 1 ELSE 0 END`),
+        '=',
+        0,
+      )
+      .execute(),
+  );
 
-  entriesOfNotAtIssueCases.body.hits.hits.sort((a, b) => {
-    const compareFilingDate = a._source.filingDate.S.localeCompare(
-      b._source.filingDate.S,
-    );
+  if (isEmpty(validDocketNumbers)) {
+    return [];
+  }
 
-    if (compareFilingDate === 0) {
-      return Case.docketNumberSort(
-        a._source.docketNumber.S,
-        b._source.docketNumber.S,
-      );
-    } else {
-      return compareFilingDate;
-    }
-  });
+  const rawResults = await getDbReader(reader =>
+    reader
+      .selectFrom('dwCase as c')
+      // Limit to not-at-issue (general docket) cases
+      .where('c.status', '=', CASE_STATUS_TYPES.generalDocket)
+      .where(
+        'c.docketNumber',
+        'in',
+        validDocketNumbers.map(d => d.docketNumber),
+      )
+      .select([
+        'c.caseType',
+        'c.createdAt',
+        'c.docketNumber',
+        'c.docketNumberSuffix',
+        'c.leadDocketNumber',
+        'c.preferredTrialCity',
+      ])
+      // Sub-select #1: most recent filingDate
+      .select(eb =>
+        eb
+          .selectFrom('dwDocketEntry as recent')
+          .select('recent.filingDate')
+          .whereRef('recent.docketNumber', '=', 'c.docketNumber')
+          .orderBy('recent.filingDate', 'desc')
+          .limit(1)
+          .as('mostRecentFilingDate'),
+      )
+      // Sub-select #2: eventCode from that same row
+      .select(eb =>
+        eb
+          .selectFrom('dwDocketEntry as recent')
+          .select('recent.eventCode')
+          .whereRef('recent.docketNumber', '=', 'c.docketNumber')
+          .orderBy('recent.filingDate', 'desc')
+          .limit(1)
+          .as('mostRecentEventCode'),
+      )
+      .execute(),
+  );
 
-  const { results } = formatResults(entriesOfNotAtIssueCases.body) as {
-    results: ColdCaseEntry[];
-  };
-
-  results.forEach(result => {
-    delete (result as any)._score;
-    delete (result as any).sort;
-    result.createdAt = formatDateString(result.createdAt, FORMATS.MMDDYYYY);
-    result.filingDate = formatDateString(result.filingDate, FORMATS.MMDDYYYY);
+  // 10502 TODO: Sort these results
+  const results = rawResults.map(result => {
+    return {
+      caseType: result.caseType,
+      createdAt: formatDateString(
+        result.createdAt.toISOString(),
+        FORMATS.MMDDYYYY,
+      ),
+      docketNumber: result.docketNumber,
+      docketNumberWithSuffix:
+        result.docketNumber + (result.docketNumberSuffix || ''),
+      eventCode: result.mostRecentEventCode,
+      filingDate: formatDateString(
+        result.mostRecentFilingDate?.toISOString(),
+        FORMATS.MMDDYYYY,
+      ),
+      leadDocketNumber: result.leadDocketNumber,
+      preferredTrialCity: result.preferredTrialCity,
+    };
   });
 
   return results as ColdCaseEntry[];

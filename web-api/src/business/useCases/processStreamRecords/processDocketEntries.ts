@@ -1,5 +1,6 @@
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import type { IDynamoDBRecord } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
 
@@ -90,4 +91,11 @@ export const processDocketEntries = async ({
     );
     throw new Error('failed to index docket entry records');
   }
+
+  const pgDocketEntries: any[] = records.map(record => {
+    return unmarshall(record.dynamodb.NewImage);
+  });
+
+  // 10502 TODO: account for failed records
+  await upsertDocketEntries(pgDocketEntries);
 };
