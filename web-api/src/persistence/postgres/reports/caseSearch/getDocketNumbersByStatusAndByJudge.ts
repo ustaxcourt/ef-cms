@@ -2,6 +2,7 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import { getDbReader } from '@web-api/database';
 import { isEmpty } from 'lodash';
+import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export type DocketNumberByStatusRequest = {
   statuses: string[];
@@ -12,14 +13,12 @@ export type DocketNumberByStatusRequest = {
 export type SubmittedCAVTableFields = Pick<
   RawCase,
   | 'caseCaption'
-  | 'caseStatusHistory'
   | 'docketNumber'
   | 'docketNumberWithSuffix'
   | 'associatedJudge'
   | 'leadDocketNumber'
   | 'status'
-  | 'petitioners'
->;
+> & { statusDate: string };
 
 export const getDocketNumbersByStatusAndByJudge = async ({
   params,
@@ -28,32 +27,44 @@ export const getDocketNumbersByStatusAndByJudge = async ({
 }): Promise<SubmittedCAVTableFields[]> => {
   const rawResults = await getDbReader(reader => {
     let query = reader
-      .selectFrom('dwCase')
-      .where('status', 'in', params.statuses);
+      .selectFrom('dwCase as c')
+      .leftJoin('dwCaseStatusUpdate as cs', 'c.docketNumber', 'cs.docketNumber')
+      .where('c.status', 'in', params.statuses);
+
     if (!isEmpty(params.judges)) {
-      query = query.where('associatedJudge', 'in', params.judges);
+      query = query.where('c.associatedJudge', 'in', params.judges);
     }
-    // if (params.excludeMemberCases) {
-    //   query = query.where('leadDocketNumber', 'is not', null); // fake: need lead docket number is not docket number, or just do this in code after the query
-    // }
+
     return query
-      .select([
-        'associatedJudge',
-        'status',
-        'caption',
-        'docketNumber',
-        'leadDocketNumber',
-        'docketNumberSuffix',
-      ]) // select other fields, and get case status history and petitioners ... but check these are actually needed in the response first
+      .select(({ fn }) => [
+        'c.associatedJudge',
+        'c.status',
+        'c.caption',
+        'c.docketNumber',
+        'c.leadDocketNumber',
+        'c.docketNumberSuffix',
+        fn.max('cs.date').as('statusDate'),
+      ])
+      .groupBy([
+        'c.associatedJudge',
+        'c.status',
+        'c.caption',
+        'c.docketNumber',
+        'c.docketNumberSuffix',
+      ])
       .limit(MAX_ELASTICSEARCH_PAGINATION)
       .execute();
   });
 
-  let results = rawResults.map(result => ({
-    ...result,
-    caseCaption: result.caption,
-    docketNumberWithSuffix: result.docketNumber + result.docketNumberSuffix,
-  }));
+  let results = rawResults.map(result =>
+    transformNullToUndefined({
+      ...result,
+      caseCaption: result.caption,
+      docketNumberWithSuffix:
+        result.docketNumber + (result.docketNumberSuffix || ''),
+      statusDate: result.statusDate ? result.statusDate.toISOString() : '',
+    }),
+  );
 
   if (params.excludeMemberCases) {
     results = results.filter(

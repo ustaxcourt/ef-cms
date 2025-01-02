@@ -1,7 +1,7 @@
 import { ASCENDING } from '@shared/business/entities/EntityConstants';
 import { CaseDocumentsCountType } from '@web-api/persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -59,12 +59,7 @@ export const judgeActivityReportHelper = (
 
   const showResultsTables = hasFormBeenSubmitted && totalResults > 0;
 
-  const currentDate: string = applicationContext
-    .getUtilities()
-    .formatDateString(
-      applicationContext.getUtilities().prepareDateFromString(),
-      applicationContext.getConstants().DATE_FORMATS.MMDDYY,
-    );
+  const currentDate: string = formatNow();
 
   const reportHeader: string = `${judgeName} ${currentDate}`;
 
@@ -95,7 +90,7 @@ export const judgeActivityReportHelper = (
 
     const { daysElapsedSinceLastStatusChange, statusDate } = applicationContext
       .getUtilities()
-      .calculateDaysElapsedSinceLastStatusChange(applicationContext, aCase);
+      .calculateDaysElapsedSinceLastStatusChange(aCase.statusDate);
 
     return {
       ...aCase,

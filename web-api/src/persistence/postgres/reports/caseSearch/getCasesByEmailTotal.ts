@@ -1,28 +1,24 @@
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { getDbReader } from '@web-api/database';
 
-export const getCasesByEmailTotal = async (email: string) => {
+export const getCasesByEmailTotal = async ({
+  email,
+  role,
+}: {
+  email: string;
+  role: string;
+}) => {
+  let table: 'dwPetitionerOnCase' | 'dwPractitionerOnCase' =
+    'dwPractitionerOnCase';
+  if (role === ROLES.petitioner) {
+    table = 'dwPetitionerOnCase';
+  }
   const total = await getDbReader(reader =>
     reader
-      .selectFrom('dwCase as case')
-      .innerJoin(
-        'dwPractitionerOnCase as practitioner',
-        'case.docketNumber',
-        'practitioner.docketNumber',
-      )
-      .innerJoin(
-        'dwPetitionerOnCase as petitioner',
-        'case.docketNumber',
-        'petitioner.docketNumber',
-      )
-      .where(eb =>
-        eb.or([
-          eb('practitioner.email', '=', email), // 10502 TODO make sure this is indexed
-          eb('petitioner.email', '=', email), // 10502 TODO make sure this is indexed
-        ]),
-      )
+      .selectFrom(table)
+      .where('email', '=', email)
       .select(({ fn }) => fn.count('docketNumber').as('count'))
       .execute(),
   );
-
   return Number(total[0].count);
 };
