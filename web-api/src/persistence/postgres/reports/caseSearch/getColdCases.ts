@@ -2,6 +2,7 @@ import {
   CASE_STATUS_TYPES,
   COLD_CASE_LOOKBACK_IN_DAYS,
 } from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
 import { ColdCaseEntry } from '@web-api/business/useCases/reports/coldCaseReportInteractor';
 import {
   FORMATS,
@@ -81,7 +82,6 @@ export async function getColdCases() {
       .execute(),
   );
 
-  // 10502 TODO: Sort these results
   const results = rawResults.map(result => {
     return {
       caseType: result.caseType,
@@ -93,14 +93,24 @@ export async function getColdCases() {
       docketNumberWithSuffix:
         result.docketNumber + (result.docketNumberSuffix || ''),
       eventCode: result.mostRecentEventCode,
-      filingDate: formatDateString(
-        result.mostRecentFilingDate?.toISOString(),
-        FORMATS.MMDDYYYY,
-      ),
+      filingDate: result.mostRecentFilingDate?.toISOString(),
       leadDocketNumber: result.leadDocketNumber,
       preferredTrialCity: result.preferredTrialCity,
     };
   });
 
-  return results as ColdCaseEntry[];
+  results.sort((a, b) => {
+    const compareFilingDate = a.filingDate!.localeCompare(b.filingDate!);
+
+    if (compareFilingDate === 0) {
+      return Case.docketNumberSort(a.docketNumber, b.docketNumber);
+    } else {
+      return compareFilingDate;
+    }
+  });
+
+  return results.map(result => ({
+    ...result,
+    filingDate: formatDateString(result.filingDate, FORMATS.MMDDYYYY),
+  })) as ColdCaseEntry[];
 }
