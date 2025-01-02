@@ -100,7 +100,8 @@ export const TrialBriefFieldset = ({
       <div className="grid-row grid-gap align-items-center margin-bottom-2">
         <div className="grid-col-auto">
           <DateSelector
-            defaultValue={undefined}
+            formatDateOnChange
+            defaultValue={trialBriefFormState.dateSubmitted}
             formGroupClassNames="margin-bottom-0"
             id="trialBriefDateSubmitted"
             label="Date submitted"
@@ -141,7 +142,8 @@ export const TrialBriefFieldset = ({
         </div>
         <div className="grid-col-auto">
           <DateSelector
-            defaultValue={undefined}
+            formatDateOnChange
+            defaultValue={trialBriefFormState.dateBenchOpinionRendered}
             formGroupClassNames="margin-bottom-0"
             id="dateBenchOpinionRendered"
             label="Bench Opinion rendered"

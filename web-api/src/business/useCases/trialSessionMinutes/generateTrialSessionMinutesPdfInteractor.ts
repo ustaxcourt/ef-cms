@@ -6,6 +6,9 @@ import {
   ACTION_DOCUMENT_TYPE_OPTIONS,
   ACTION_FILED_BY_OPTIONS,
   ACTION_STATUS_OPTIONS,
+  BriefDetailsType,
+  EXHIBIT_STATUS_OPTIONS,
+  ExhibitStatusOption,
   MOTION_FILED_BY_OPTIONS,
   MOTION_STATUS_OPTIONS,
   MOTION_TYPE_OPTIONS,
@@ -112,27 +115,54 @@ export type FormattedMinuteSheet = {
   trialHearing?: FormattedCaseMetadataRow & { trialHearingType: string };
   respondentAppearances: string[];
   jurisdictionRetained?: { date: string; note: string; continued: string };
-  statusReportOrdered: string[];
-  stipulatedDecisionOrdered: string[];
+  statusReportOrdered: string;
+  stipulatedDecisionOrdered: string;
   motions: {
     motionType: string;
     renderKey: string;
-    content: string[];
+    content: string;
   }[];
   actionsAndFilings: {
     renderKey: string;
-    content: string[];
+    content: string;
   }[];
-  // trialBrief: string[];???
-  // petitionerWitnesses: string[];
-  // respondentWitnesses: string[];
-  // exhibits: { renderKey: string; content: string[] }[];
+  trialBrief: {
+    dateSubmitted: string;
+    benchOpinionRendered: string;
+    totalTrialHours: number;
+    briefType: string;
+    briefDetails: string[];
+  };
+  petitionerWitnesses: { renderKey: string; name: string }[];
+  respondentWitnesses: { renderKey: string; name: string }[];
+  exhibits: {
+    renderKey: string;
+    description: string;
+    status: ExhibitStatusOption;
+    note: string;
+  }[];
 };
 
 type FormattedCaseMetadataRow = {
   date: string;
   note: string;
   transcriptOrdered: string;
+};
+
+const getBriefDetails = (briefDetails: BriefDetailsType) => {
+  // TODO 10419 Handle Simultaneous Supplemental Brief
+  // TODO 10419 Casing of briefSubtype isn't quite right
+  const briefSubtypes = Object.keys(briefDetails);
+  return briefSubtypes.map(briefSubtype => {
+    const briefDetail = briefDetails[briefSubtype];
+    return [
+      `${briefSubtype} - ${briefDetail.partyType}`,
+      `Due ${formatDateString(briefDetail.dueDate, FORMATS.MMDDYYYY)}`,
+      `${briefDetail.note ? `<em>${briefDetail.note}</em>` : ''}`,
+    ]
+      .filter(Boolean)
+      .join('; ');
+  });
 };
 
 const formatMinuteSheet = ({
@@ -144,7 +174,6 @@ const formatMinuteSheet = ({
   trialSession: RawTrialSession;
   aCase: RawCase;
 }): FormattedMinuteSheet => {
-  console.log('consolidatedCases', aCase.consolidatedCases);
   // Is this a consolidated group?
   let docketNumbers = aCase.docketNumber;
 
@@ -236,17 +265,15 @@ const formatMinuteSheet = ({
     ? STATUS_REPORT_ORDERED_FOR_OPTIONS[statusReportOrdered.orderedFor]
     : '';
 
-  // TODO 10419 We should discuss whether or not we like this pattern
-  // It relies on dangerouslySetInnerHTML to render the note as HTML for italics,
-  // but it does make the jsx significantly simpler
-  // Nate sez: As much as I was harping on markup in this format function, I think the tradeoff may be worth it.
   const formattedStatusReportOrdered = [
     formatDateString(statusReportOrdered.date, FORMATS.MMDDYYYY),
     orderedFor && `Ordered for ${orderedFor}`,
     statusReportOrdered.dueDate &&
       `Due ${formatDateString(statusReportOrdered.dueDate, FORMATS.MMDDYYYY)}`,
     statusReportOrdered.note && `<em>${statusReportOrdered.note}</em>`,
-  ].filter(Boolean);
+  ]
+    .filter(Boolean)
+    .join('; ');
 
   const { stipulatedDecisionOrdered } = minuteSheetFormState.ordersSection;
   const formattedStipulatedDecisionOrdered = [
@@ -255,7 +282,9 @@ const formatMinuteSheet = ({
       `Due ${formatDateString(stipulatedDecisionOrdered.dueDate, FORMATS.MMDDYYYY)}`,
     stipulatedDecisionOrdered.note &&
       `<em>${stipulatedDecisionOrdered.note}</em>`,
-  ].filter(Boolean);
+  ]
+    .filter(Boolean)
+    .join('; ');
 
   const formattedMotions = Object.values(
     minuteSheetFormState.motionsSection.motions,
@@ -267,7 +296,7 @@ const formatMinuteSheet = ({
         `Filed by ${MOTION_FILED_BY_OPTIONS[motion.filedBy]}`,
         `${MOTION_STATUS_OPTIONS[motion.status]}`,
         `<em>${motion.note}</em>`,
-      ],
+      ].join('; '),
       motionType: MOTION_TYPE_OPTIONS[motion.type],
       renderKey: motion.renderKey,
     };
@@ -283,10 +312,46 @@ const formatMinuteSheet = ({
           (action.note ? ` - <em>${action.note}</em>` : ''),
         ACTION_FILED_BY_OPTIONS[action.filedBy],
         ACTION_STATUS_OPTIONS[action.status],
-      ],
+      ].join('; '),
       renderKey: action.renderKey,
     };
   });
+
+  const formattedTrialBrief = {
+    benchOpinionRendered: [
+      `${formatDateString(minuteSheetFormState.trialBriefSection.dateBenchOpinionRendered, FORMATS.MMDDYYYY)}`,
+      `${minuteSheetFormState.trialBriefSection.transcriptOrdered ? 'Transcript ordered' : ''}`,
+      `${minuteSheetFormState.trialBriefSection.note ? `<em>${minuteSheetFormState.trialBriefSection.note}</em>` : ''}`,
+    ]
+      .filter(Boolean)
+      .join('; '),
+    briefDetails: getBriefDetails(
+      minuteSheetFormState.trialBriefSection.briefDetails,
+    ),
+    briefType: minuteSheetFormState.trialBriefSection.briefType,
+    dateSubmitted: formatDateString(
+      minuteSheetFormState.trialBriefSection.dateSubmitted,
+      FORMATS.MMDDYYYY,
+    ),
+    totalTrialHours: minuteSheetFormState.trialBriefSection.totalTrialHours,
+  };
+
+  const formattedPetitionerWitnesses = Object.values(
+    minuteSheetFormState.witnessesSection.petitionerWitnesses,
+  );
+
+  const formattedRespondentWitnesses = Object.values(
+    minuteSheetFormState.witnessesSection.respondentWitnesses,
+  );
+
+  const formattedExhibits = Object.values(
+    minuteSheetFormState.exhibitsSection.exhibits,
+  ).map(exhibit => ({
+    description: exhibit.description,
+    note: exhibit.note,
+    renderKey: exhibit.renderKey,
+    status: EXHIBIT_STATUS_OPTIONS[exhibit.status],
+  }));
 
   return {
     actionsAndFilings: formattedActionsAndFilings,
@@ -294,11 +359,13 @@ const formatMinuteSheet = ({
     courtReporter:
       minuteSheetFormState.trialSessionMetadataSection.courtReporter,
     docketNumbers,
+    exhibits: formattedExhibits,
     judge: minuteSheetFormState.trialSessionMetadataSection.judge,
     jurisdictionRetained: formattedJurisdictionRetained,
     motions: formattedMotions,
     notCalled: formattedNotCalled,
     petitionerAppearances: formattedPetitioners,
+    petitionerWitnesses: formattedPetitionerWitnesses,
     petitioners,
     pretrialConference: formattedPretrialConference,
     recalled: formattedRecallRows,
@@ -307,8 +374,10 @@ const formatMinuteSheet = ({
       ? 'Yes'
       : 'No',
     respondentAppearances: formattedRespondents,
+    respondentWitnesses: formattedRespondentWitnesses,
     statusReportOrdered: formattedStatusReportOrdered,
     stipulatedDecisionOrdered: formattedStipulatedDecisionOrdered,
+    trialBrief: formattedTrialBrief,
     trialClerk: minuteSheetFormState.trialSessionMetadataSection.trialClerk,
     trialHearing: formattedTrialHearing,
     trialLocation: trialSession.trialLocation!,

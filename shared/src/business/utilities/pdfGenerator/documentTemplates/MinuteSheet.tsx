@@ -139,13 +139,13 @@ export const MinuteSheet = ({
           <div>Status Report ordered</div>
           <div
             dangerouslySetInnerHTML={{
-              __html: formattedMinuteSheet.statusReportOrdered.join('; '),
+              __html: formattedMinuteSheet.statusReportOrdered,
             }}
           />
           <div>Stipulated Decision ordered</div>
           <div
             dangerouslySetInnerHTML={{
-              __html: formattedMinuteSheet.stipulatedDecisionOrdered.join('; '),
+              __html: formattedMinuteSheet.stipulatedDecisionOrdered,
             }}
           />
         </div>
@@ -155,9 +155,7 @@ export const MinuteSheet = ({
         {formattedMinuteSheet.motions.map(motion => (
           <div key={motion.renderKey}>
             <div>{motion.motionType}</div>
-            <div
-              dangerouslySetInnerHTML={{ __html: motion.content.join('; ') }}
-            />
+            <div dangerouslySetInnerHTML={{ __html: motion.content }} />
           </div>
         ))}
       </div>
@@ -165,10 +163,71 @@ export const MinuteSheet = ({
       <div>
         {formattedMinuteSheet.actionsAndFilings.map(action => (
           <div
-            dangerouslySetInnerHTML={{ __html: action.content.join('; ') }}
+            dangerouslySetInnerHTML={{ __html: action.content }}
             key={action.renderKey}
           />
         ))}
+      </div>
+      <hr />
+      <div>
+        <div>
+          <div>Date Submitted</div>
+          <div>{formattedMinuteSheet.trialBrief.dateSubmitted}</div>
+          <div>Total Trial Hours</div>
+          <div>{formattedMinuteSheet.trialBrief.totalTrialHours}</div>
+        </div>
+        <div>Bench opinion rendered</div>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: formattedMinuteSheet.trialBrief.benchOpinionRendered,
+          }}
+        />
+        <div>
+          <div>{formattedMinuteSheet.trialBrief.briefType}</div>
+          {formattedMinuteSheet.trialBrief.briefDetails.map(
+            (briefDetail, index) => (
+              <div
+                dangerouslySetInnerHTML={{ __html: briefDetail }}
+                key={index}
+              />
+            ),
+          )}
+        </div>
+      </div>
+      <hr />
+      <div>
+        <div>
+          <div>Petitioner Witnesses</div>
+          {formattedMinuteSheet.petitionerWitnesses.map(witness => (
+            <div key={witness.renderKey}>{witness.name}</div>
+          ))}
+        </div>
+        <div>
+          <div>Respondent Witnesses</div>
+          {formattedMinuteSheet.respondentWitnesses.map(witness => (
+            <div key={witness.renderKey}>{witness.name}</div>
+          ))}
+        </div>
+      </div>
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th>Exhibit</th>
+              <th>Status</th>
+              <th>Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            {formattedMinuteSheet.exhibits.map(exhibit => (
+              <tr key={exhibit.renderKey}>
+                <td>{exhibit.description}</td>
+                <td>{exhibit.status}</td>
+                <td>{exhibit.note}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </>
   );

@@ -76,6 +76,15 @@ export type SimultaneousSupplementalFormFields = {
   simultaneousSupplemental: BaseBriefFormFields;
 };
 
+export type BriefDetailsType =
+  | SeriatimBriefFormFields
+  | SeriatimMemorandumFormFields
+  | SimultaneousMemorandumFormFields
+  | SimultaneousMemorandaOfLawFormFields
+  | SimultaneousSupplementalFormFields
+  | SimultaneousBriefFormFields
+  | {};
+
 // 10419 TODO: consider whether optional fields are the best approach here, or
 // if we should have explicit types for each sort of "case metadata entry".
 type CaseMetadataEntry = {
@@ -189,14 +198,7 @@ export type MinuteSheetFormState = {
     transcriptOrdered: boolean;
     note: string;
     briefType: string;
-    briefDetails:
-      | SeriatimBriefFormFields
-      | SeriatimMemorandumFormFields
-      | SimultaneousMemorandumFormFields
-      | SimultaneousMemorandaOfLawFormFields
-      | SimultaneousSupplementalFormFields
-      | SimultaneousBriefFormFields
-      | {};
+    briefDetails: BriefDetailsType;
   };
 
   witnessesSection: {
