@@ -274,7 +274,12 @@ export const Header = connect(
               role="banner"
             >
               <div className="usa-nav-container">
-                <div className="usa-navbar">
+                <div
+                  className="usa-navbar"
+                  data-header-available={
+                    headerHelper.isLoggedIn ? 'false' : 'true'
+                  }
+                >
                   <div className="usa-logo">
                     <a href={headerHelper.ustcSealLink}>
                       <img alt="USTC Seal" src={seal} />
