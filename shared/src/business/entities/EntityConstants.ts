@@ -1588,6 +1588,7 @@ export const CASE_LIST_PAGE_SIZE = 20; // number of results returned for each pa
 export const TODAYS_ORDERS_PAGE_SIZE = 100; // number of results returned for each page for the today's orders page
 export const PRACTITIONER_SEARCH_PAGE_SIZE = 100; // number of results returned for each page for the practitioner search page
 export const CASE_INVENTORY_PAGE_SIZE = 100; // number of results returned for each page in the case inventory report
+export const CASE_INVENTORY_PRINT_REPORT_MAX_SIZE = 20000; // number of results returned for each page in the case inventory report
 export const PENDING_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the pending report
 export const COLD_CASE_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the cold case report
 export const CASE_DEADLINES_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the case deadlines report
