@@ -27,7 +27,7 @@ export const coldCaseReportInteractor = async (
     );
   }
 
-  const coldCases = await getColdCases({ applicationContext });
+  const coldCases = await getColdCases();
 
   return coldCases;
 };
