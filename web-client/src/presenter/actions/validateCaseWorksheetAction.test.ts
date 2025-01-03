@@ -1,5 +1,6 @@
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { judgeColvin } from '@shared/test/mockUsers';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { validateCaseWorksheetAction } from './validateCaseWorksheetAction';
@@ -18,6 +19,12 @@ describe('validateCaseWorksheetAction', () => {
     };
 
     presenter.providers.applicationContext = applicationContext;
+
+    applicationContext
+      .getUseCases()
+      .getJudgeInSectionInteractor.mockResolvedValue({
+        userId: judgeColvin.userId,
+      });
   });
 
   it('should call the success path when the updated case worksheet is valid', async () => {
@@ -36,6 +43,7 @@ describe('validateCaseWorksheetAction', () => {
           primaryIssue: 'This is a primary issue.',
           statusOfMatter: undefined,
         },
+        user: { section: '', userId: '' },
       },
     });
 
@@ -64,6 +72,7 @@ describe('validateCaseWorksheetAction', () => {
           primaryIssue: 'This is a primary issue.',
           statusOfMatter: undefined,
         },
+        user: { section: '', userId: '' },
       },
     });
 

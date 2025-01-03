@@ -4,6 +4,7 @@ describe('Correspondence', () => {
   const validCorrespondence: RawCorrespondence = {
     archived: false,
     correspondenceId: 'e9ab90a9-2150-4dd1-90b4-fee2097c23db',
+    docketNumber: '101-23',
     documentTitle: 'A Title',
     entityName: 'Correspondence',
     filedBy: 'Nika Manpreet',
@@ -24,6 +25,7 @@ describe('Correspondence', () => {
     const correspondence = new Correspondence({
       archived: true,
       correspondenceId: 'e9ab90a9-2150-4dd1-90b4-fee2097c23db',
+      docketNumber: '101-23',
       documentTitle: 'A Title',
       filedBy: 'A dog',
       filingDate: undefined,
