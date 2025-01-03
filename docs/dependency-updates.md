@@ -77,6 +77,10 @@ regex search the entire project for `aws = "\d+.\d+.\d+"` and make sure it's to 
 
 - fortawesome packages are locked down to pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes `@fortawesome/free-solid-svg-icons`, `@fortawesome/free-regular-svg-icons`, and `@fortawesome/fontawesome-svg-core`.
 
+# canvas
+
+- [node-canvas](https://github.com/Automattic/node-canvas) v3.x conflicts with jest-environment-jsdom's peer dependency requirement (^2.5.0). We will need to stay on node-canvas v2.x until jest-environment-jsdom updates its peer dependencies.
+
 ## Caveats
 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
