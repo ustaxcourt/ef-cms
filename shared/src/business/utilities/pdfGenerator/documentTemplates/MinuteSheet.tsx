@@ -7,8 +7,6 @@ export const MinuteSheet = ({
 }: {
   formattedMinuteSheet: FormattedMinuteSheet;
 }) => {
-  const insertSemicolon = (stringToCheckFor: string | undefined) =>
-    stringToCheckFor ? ';' : '';
   return (
     <>
       <MinuteSheetHeader
@@ -37,7 +35,7 @@ export const MinuteSheet = ({
           <div>Court reporter</div>
           <div>{formattedMinuteSheet.courtReporter}</div>
 
-          <div>Remove session</div>
+          <div>Remote session</div>
           <div>{formattedMinuteSheet.remoteSession}</div>
         </div>
       </div>
@@ -45,65 +43,46 @@ export const MinuteSheet = ({
       <div>
         <div>
           <div>Called</div>
-          <div>
-            {`${formattedMinuteSheet.called?.date}${insertSemicolon(formattedMinuteSheet.called?.note)}`}
-            <em>
-              {' '}
-              {`${formattedMinuteSheet.called?.note}${insertSemicolon(formattedMinuteSheet.called?.transcriptOrdered)}`}
-            </em>{' '}
-            {`${formattedMinuteSheet.called?.transcriptOrdered}`}
-          </div>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: formattedMinuteSheet.called,
+            }}
+          />
         </div>
         <div>
           <div>Not called</div>
-          <div>
-            {`${formattedMinuteSheet.notCalled?.date}${insertSemicolon(formattedMinuteSheet.notCalled?.note)}`}
-            <em>
-              {' '}
-              {`${formattedMinuteSheet.notCalled?.note}${insertSemicolon(formattedMinuteSheet.notCalled?.transcriptOrdered)}`}
-            </em>{' '}
-            {`${formattedMinuteSheet.notCalled?.transcriptOrdered}`}
-          </div>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: formattedMinuteSheet.notCalled,
+            }}
+          />
         </div>
         <div>
           <div>Recalled</div>
           <div>
-            {formattedMinuteSheet.recalled.map(row => {
-              const noteSemicolon = row.note ? ';' : '';
-              const transcriptOrderedSemicolon = row.transcriptOrdered
-                ? ';'
-                : '';
-
-              return (
-                <div key={row.renderKey}>
-                  {`${row.date}${noteSemicolon}`}
-                  <em>{` ${row.note}${transcriptOrderedSemicolon}`}</em>
-                  {` ${row.transcriptOrdered}`}
-                </div>
-              );
-            })}
+            {formattedMinuteSheet.recalled.map(row => (
+              <div
+                dangerouslySetInnerHTML={{ __html: row.content }}
+                key={row.renderKey}
+              />
+            ))}
           </div>
         </div>
         <div>
           <div>Pretrial conference</div>
-          <div>
-            {`${formattedMinuteSheet.pretrialConference?.date}${insertSemicolon(formattedMinuteSheet.pretrialConference?.note)}`}
-            <em>
-              {' '}
-              {`${formattedMinuteSheet.pretrialConference?.note}${insertSemicolon(formattedMinuteSheet.pretrialConference?.transcriptOrdered)}`}
-            </em>{' '}
-            {`${formattedMinuteSheet.pretrialConference?.transcriptOrdered}`}
-          </div>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: formattedMinuteSheet.pretrialConference || '',
+            }}
+          />
         </div>
-        <div>Trial/Hearing</div>
         <div>
-          {`${formattedMinuteSheet.trialHearing?.date}${insertSemicolon(formattedMinuteSheet.trialHearing?.trialHearingType)}`}{' '}
-          {`${formattedMinuteSheet.trialHearing?.trialHearingType}${insertSemicolon(formattedMinuteSheet.trialHearing?.note)}`}
-          <em>
-            {' '}
-            {`${formattedMinuteSheet.trialHearing?.note}${insertSemicolon(formattedMinuteSheet.trialHearing?.transcriptOrdered)}`}
-          </em>{' '}
-          {`${formattedMinuteSheet.trialHearing?.transcriptOrdered}`}
+          <div>Trial/Hearing</div>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: formattedMinuteSheet.trialHearing || '',
+            }}
+          />
         </div>
       </div>
       <hr />
@@ -129,11 +108,13 @@ export const MinuteSheet = ({
       <div>
         <div>
           <div>Jurisdiction Retained</div>
-          <div>
-            {`${formattedMinuteSheet.jurisdictionRetained?.continued} - ${formattedMinuteSheet.jurisdictionRetained?.date}` +
-              `${insertSemicolon(formattedMinuteSheet.jurisdictionRetained?.note)}`}
-            <em>{` ${formattedMinuteSheet.jurisdictionRetained?.note}`}</em>
-          </div>
+          {formattedMinuteSheet.jurisdictionRetained && (
+            <div
+              dangerouslySetInnerHTML={{
+                __html: formattedMinuteSheet.jurisdictionRetained,
+              }}
+            />
+          )}
         </div>
         <div>
           <div>Status Report ordered</div>

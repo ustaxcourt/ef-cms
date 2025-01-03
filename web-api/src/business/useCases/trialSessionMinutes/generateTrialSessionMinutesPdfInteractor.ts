@@ -108,13 +108,13 @@ export type FormattedMinuteSheet = {
   docketNumbers: string;
   petitioners: string;
   petitionerAppearances: string[];
-  called: FormattedCaseMetadataRow;
-  notCalled: FormattedCaseMetadataRow;
-  recalled: (FormattedCaseMetadataRow & { renderKey: string })[];
-  pretrialConference?: FormattedCaseMetadataRow;
-  trialHearing?: FormattedCaseMetadataRow & { trialHearingType: string };
+  called: string;
+  notCalled: string;
+  recalled: { renderKey: string; content: string }[];
+  pretrialConference?: string;
+  trialHearing?: string;
   respondentAppearances: string[];
-  jurisdictionRetained?: { date: string; note: string; continued: string };
+  jurisdictionRetained?: string;
   statusReportOrdered: string;
   stipulatedDecisionOrdered: string;
   motions: {
@@ -143,12 +143,6 @@ export type FormattedMinuteSheet = {
   }[];
 };
 
-type FormattedCaseMetadataRow = {
-  date: string;
-  note: string;
-  transcriptOrdered: string;
-};
-
 const getBriefDetails = (briefDetails: BriefDetailsType) => {
   // TODO 10419 Handle Simultaneous Supplemental Brief
   // TODO 10419 Casing of briefSubtype isn't quite right
@@ -165,6 +159,159 @@ const getBriefDetails = (briefDetails: BriefDetailsType) => {
   });
 };
 
+const getConsolidatedDocketNumbers = (aCase: RawCase): string => {
+  if (aCase.consolidatedCases.length === 0) {
+    return aCase.docketNumber;
+  }
+  return aCase.consolidatedCases
+    .map(consolidatedCase => consolidatedCase.docketNumber)
+    .join(', ');
+};
+
+const formatCalledSection = (section: {
+  date: string;
+  note?: string;
+  transcriptOrdered?: boolean;
+}): string => {
+  return [
+    formatDateString(section.date, FORMATS.MMDDYYYY),
+    section.note && `<em>${section.note}</em>`,
+    section.transcriptOrdered ? 'Transcript ordered' : '',
+  ]
+    .filter(Boolean)
+    .join('; ');
+};
+
+const formatPetitionerAppearances = (petitionersSection: any): string[] => {
+  return petitionersSection.noAppearance
+    ? ['No appearance']
+    : Object.values(petitionersSection.petitioners).map(
+        (petitioner: any) =>
+          `${petitioner.name} (${petitioner.role}) - ${petitioner.datesOfAppearance}`,
+      );
+};
+
+const formatRespondentAppearances = (respondentsSection: any): string[] => {
+  return Object.values(respondentsSection.respondents).map(
+    (respondent: any) => `${respondent.name} - ${respondent.datesOfAppearance}`,
+  );
+};
+
+const formatJurisdictionRetained = (section: any): string => {
+  return [
+    `${section.continued ? 'Continued - ' : ''}${formatDateString(
+      section.date,
+      FORMATS.MMDDYYYY,
+    )}`,
+    `<em>${section.note}</em>`,
+  ]
+    .filter(Boolean)
+    .join('; ');
+};
+
+const formatStatusReportOrdered = (section: any): string => {
+  const orderedFor =
+    STATUS_REPORT_ORDERED_FOR_OPTIONS[section.orderedFor] || '';
+  return [
+    formatDateString(section.date, FORMATS.MMDDYYYY),
+    orderedFor && `Ordered for ${orderedFor}`,
+    section.dueDate &&
+      `Due ${formatDateString(section.dueDate, FORMATS.MMDDYYYY)}`,
+    section.note && `<em>${section.note}</em>`,
+  ]
+    .filter(Boolean)
+    .join('; ');
+};
+
+const formatStipulatedDecision = (section: any): string => {
+  return [
+    formatDateString(section.date, FORMATS.MMDDYYYY),
+    section.dueDate &&
+      `Due ${formatDateString(section.dueDate, FORMATS.MMDDYYYY)}`,
+    section.note && `<em>${section.note}</em>`,
+  ]
+    .filter(Boolean)
+    .join('; ');
+};
+
+const formatMotions = (motionsSection: any) => {
+  return Object.values(motionsSection.motions).map((motion: any) => ({
+    content: [
+      `${motion.oralMotion ? 'ORAL ' : ''}${MOTION_TYPE_OPTIONS[motion.type]}`,
+      formatDateString(motion.date, FORMATS.MMDDYYYY),
+      `Filed by ${MOTION_FILED_BY_OPTIONS[motion.filedBy]}`,
+      MOTION_STATUS_OPTIONS[motion.status],
+      `<em>${motion.note}</em>`,
+    ].join('; '),
+    motionType: MOTION_TYPE_OPTIONS[motion.type],
+    renderKey: motion.renderKey,
+  }));
+};
+
+const formatActionsAndFilings = (section: any) => {
+  return Object.values(section.actionsAndFilings).map((action: any) => ({
+    content: [
+      formatDateString(action.date, FORMATS.MMDDYYYY),
+      `${ACTION_DOCUMENT_TYPE_OPTIONS[action.documentType]}${
+        action.note ? ` - <em>${action.note}</em>` : ''
+      }`,
+      ACTION_FILED_BY_OPTIONS[action.filedBy],
+      ACTION_STATUS_OPTIONS[action.status],
+    ].join('; '),
+    renderKey: action.renderKey,
+  }));
+};
+
+const formatTrialBrief = (section: any) => {
+  return {
+    benchOpinionRendered: [
+      formatDateString(section.dateBenchOpinionRendered, FORMATS.MMDDYYYY),
+      section.transcriptOrdered ? 'Transcript ordered' : '',
+      section.note ? `<em>${section.note}</em>` : '',
+    ]
+      .filter(Boolean)
+      .join('; '),
+    briefDetails: getBriefDetails(section.briefDetails),
+    briefType: section.briefType,
+    dateSubmitted: formatDateString(section.dateSubmitted, FORMATS.MMDDYYYY),
+    totalTrialHours: section.totalTrialHours,
+  };
+};
+
+const formatPretrialConference = (section: any): string => {
+  return [
+    section.date,
+    section.note && `<em>${section.note}</em>`,
+    section.transcriptOrdered ? 'Transcript ordered' : '',
+  ]
+    .filter(Boolean)
+    .join('; ');
+};
+
+const formatTrialHearing = (section: any): string => {
+  return [
+    section.date,
+    section.trialHearingType && TRIAL_HEARING_OPTIONS[section.trialHearingType],
+    section.note && `<em>${section.note}</em>`,
+    section.transcriptOrdered ? 'Transcript ordered' : '',
+  ]
+    .filter(Boolean)
+    .join('; ');
+};
+
+const formatRecalledRow = (section: any) => {
+  return {
+    content: [
+      section.date,
+      section.note && `<em>${section.note}</em>`,
+      section.transcriptOrdered ? 'Transcript ordered' : '',
+    ]
+      .filter(Boolean)
+      .join('; '),
+    renderKey: section.renderKey,
+  };
+};
+
 const formatMinuteSheet = ({
   aCase,
   minuteSheetFormState,
@@ -174,212 +321,64 @@ const formatMinuteSheet = ({
   trialSession: RawTrialSession;
   aCase: RawCase;
 }): FormattedMinuteSheet => {
-  // Is this a consolidated group?
-  let docketNumbers = aCase.docketNumber;
-
-  if (aCase.consolidatedCases.length > 0) {
-    // we're in a consolidated group
-    docketNumbers = aCase.consolidatedCases
-      .map(consolidatedCase => consolidatedCase.docketNumber)
-      .join(', ');
-  }
-  // if yes, get the docket numbers from each case in the consolidated group, join on commas
-  // if no, just use the docket number from the case
+  const docketNumbers = getConsolidatedDocketNumbers(aCase);
   const petitioners = aCase.petitioners
     .map(petitioner => petitioner.name)
     .join(', ');
 
-  const { called } = minuteSheetFormState.caseMetadataSection;
-  const formattedCalled = {
-    date: formatDateString(called.date, FORMATS.MMDDYYYY),
-    note: called.note,
-    transcriptOrdered: called.transcriptOrdered ? 'Transcript ordered' : '',
-  };
-
-  const { notCalled } = minuteSheetFormState.caseMetadataSection;
-  const formattedNotCalled = {
-    date: formatDateString(notCalled.date, FORMATS.MMDDYYYY),
-    note: notCalled.note,
-    transcriptOrdered: notCalled.transcriptOrdered ? 'Transcript ordered' : '',
-  };
-
-  const formattedRecallRows = Object.values(
-    minuteSheetFormState.caseMetadataSection.recalled,
-  ).map(recalledRow => {
-    return {
-      date: recalledRow.date,
-      note: recalledRow.note,
-      renderKey: recalledRow.renderKey,
-      transcriptOrdered: recalledRow.transcriptOrdered
-        ? 'Transcript ordered'
-        : '',
-    };
-  });
-
-  const { pretrialConference } = minuteSheetFormState.caseMetadataSection;
-  const formattedPretrialConference = {
-    date: pretrialConference.date,
-    note: pretrialConference.note,
-    transcriptOrdered: pretrialConference.transcriptOrdered
-      ? 'Transcript ordered'
-      : '',
-  };
-
-  const { trialHearing } = minuteSheetFormState.caseMetadataSection;
-  const formattedTrialHearing = {
-    date: trialHearing.date,
-    note: trialHearing.note,
-    transcriptOrdered: trialHearing.transcriptOrdered
-      ? 'Transcript ordered'
-      : '',
-    trialHearingType: trialHearing.trialHearingType
-      ? TRIAL_HEARING_OPTIONS[trialHearing.trialHearingType]
-      : '',
-  };
-
-  const { petitionersSection } = minuteSheetFormState;
-  const formattedPetitioners = petitionersSection.noAppearance
-    ? ['No appearance']
-    : Object.values(petitionersSection.petitioners).map(petitioner => {
-        return `${petitioner.name} (${petitioner.role}) - ${petitioner.datesOfAppearance}`;
-      });
-
-  const { respondentsSection } = minuteSheetFormState;
-  const formattedRespondents = Object.values(
-    respondentsSection.respondents,
-  ).map(respondent => {
-    return `${respondent.name} - ${respondent.datesOfAppearance}`;
-  });
-
-  const { jurisdictionRetainedSection } = minuteSheetFormState;
-  const formattedJurisdictionRetained = {
-    continued: jurisdictionRetainedSection.continued ? 'Continued' : '',
-    date: jurisdictionRetainedSection.date,
-    note: jurisdictionRetainedSection.note,
-  };
-
-  const { statusReportOrdered } = minuteSheetFormState.ordersSection;
-  const orderedFor = STATUS_REPORT_ORDERED_FOR_OPTIONS[
-    statusReportOrdered.orderedFor
-  ]
-    ? STATUS_REPORT_ORDERED_FOR_OPTIONS[statusReportOrdered.orderedFor]
-    : '';
-
-  const formattedStatusReportOrdered = [
-    formatDateString(statusReportOrdered.date, FORMATS.MMDDYYYY),
-    orderedFor && `Ordered for ${orderedFor}`,
-    statusReportOrdered.dueDate &&
-      `Due ${formatDateString(statusReportOrdered.dueDate, FORMATS.MMDDYYYY)}`,
-    statusReportOrdered.note && `<em>${statusReportOrdered.note}</em>`,
-  ]
-    .filter(Boolean)
-    .join('; ');
-
-  const { stipulatedDecisionOrdered } = minuteSheetFormState.ordersSection;
-  const formattedStipulatedDecisionOrdered = [
-    formatDateString(stipulatedDecisionOrdered.date, FORMATS.MMDDYYYY),
-    stipulatedDecisionOrdered.dueDate &&
-      `Due ${formatDateString(stipulatedDecisionOrdered.dueDate, FORMATS.MMDDYYYY)}`,
-    stipulatedDecisionOrdered.note &&
-      `<em>${stipulatedDecisionOrdered.note}</em>`,
-  ]
-    .filter(Boolean)
-    .join('; ');
-
-  const formattedMotions = Object.values(
-    minuteSheetFormState.motionsSection.motions,
-  ).map(motion => {
-    return {
-      content: [
-        `${motion.oralMotion ? 'ORAL ' : ''}${MOTION_TYPE_OPTIONS[motion.type]}`,
-        `${formatDateString(motion.date, FORMATS.MMDDYYYY)}`,
-        `Filed by ${MOTION_FILED_BY_OPTIONS[motion.filedBy]}`,
-        `${MOTION_STATUS_OPTIONS[motion.status]}`,
-        `<em>${motion.note}</em>`,
-      ].join('; '),
-      motionType: MOTION_TYPE_OPTIONS[motion.type],
-      renderKey: motion.renderKey,
-    };
-  });
-
-  const formattedActionsAndFilings = Object.values(
-    minuteSheetFormState.actionsAndFilingsSection.actionsAndFilings,
-  ).map(action => {
-    return {
-      content: [
-        formatDateString(action.date, FORMATS.MMDDYYYY),
-        `${ACTION_DOCUMENT_TYPE_OPTIONS[action.documentType]}` +
-          (action.note ? ` - <em>${action.note}</em>` : ''),
-        ACTION_FILED_BY_OPTIONS[action.filedBy],
-        ACTION_STATUS_OPTIONS[action.status],
-      ].join('; '),
-      renderKey: action.renderKey,
-    };
-  });
-
-  const formattedTrialBrief = {
-    benchOpinionRendered: [
-      `${formatDateString(minuteSheetFormState.trialBriefSection.dateBenchOpinionRendered, FORMATS.MMDDYYYY)}`,
-      `${minuteSheetFormState.trialBriefSection.transcriptOrdered ? 'Transcript ordered' : ''}`,
-      `${minuteSheetFormState.trialBriefSection.note ? `<em>${minuteSheetFormState.trialBriefSection.note}</em>` : ''}`,
-    ]
-      .filter(Boolean)
-      .join('; '),
-    briefDetails: getBriefDetails(
-      minuteSheetFormState.trialBriefSection.briefDetails,
-    ),
-    briefType: minuteSheetFormState.trialBriefSection.briefType,
-    dateSubmitted: formatDateString(
-      minuteSheetFormState.trialBriefSection.dateSubmitted,
-      FORMATS.MMDDYYYY,
-    ),
-    totalTrialHours: minuteSheetFormState.trialBriefSection.totalTrialHours,
-  };
-
-  const formattedPetitionerWitnesses = Object.values(
-    minuteSheetFormState.witnessesSection.petitionerWitnesses,
-  );
-
-  const formattedRespondentWitnesses = Object.values(
-    minuteSheetFormState.witnessesSection.respondentWitnesses,
-  );
-
-  const formattedExhibits = Object.values(
-    minuteSheetFormState.exhibitsSection.exhibits,
-  ).map(exhibit => ({
-    description: exhibit.description,
-    note: exhibit.note,
-    renderKey: exhibit.renderKey,
-    status: EXHIBIT_STATUS_OPTIONS[exhibit.status],
-  }));
+  const { called, notCalled, pretrialConference, recalled, trialHearing } =
+    minuteSheetFormState.caseMetadataSection;
 
   return {
-    actionsAndFilings: formattedActionsAndFilings,
-    called: formattedCalled,
+    actionsAndFilings: formatActionsAndFilings(
+      minuteSheetFormState.actionsAndFilingsSection,
+    ),
+    called: formatCalledSection(called),
     courtReporter:
       minuteSheetFormState.trialSessionMetadataSection.courtReporter,
     docketNumbers,
-    exhibits: formattedExhibits,
+    exhibits: Object.values(minuteSheetFormState.exhibitsSection.exhibits).map(
+      exhibit => ({
+        description: exhibit.description,
+        note: exhibit.note,
+        renderKey: exhibit.renderKey,
+        status: EXHIBIT_STATUS_OPTIONS[exhibit.status],
+      }),
+    ),
     judge: minuteSheetFormState.trialSessionMetadataSection.judge,
-    jurisdictionRetained: formattedJurisdictionRetained,
-    motions: formattedMotions,
-    notCalled: formattedNotCalled,
-    petitionerAppearances: formattedPetitioners,
-    petitionerWitnesses: formattedPetitionerWitnesses,
+    jurisdictionRetained: formatJurisdictionRetained(
+      minuteSheetFormState.jurisdictionRetainedSection,
+    ),
+    motions: formatMotions(minuteSheetFormState.motionsSection),
+    notCalled: formatCalledSection(notCalled),
+    petitionerAppearances: formatPetitionerAppearances(
+      minuteSheetFormState.petitionersSection,
+    ),
+    petitionerWitnesses: Object.values(
+      minuteSheetFormState.witnessesSection.petitionerWitnesses,
+    ),
     petitioners,
-    pretrialConference: formattedPretrialConference,
-    recalled: formattedRecallRows,
+    pretrialConference: formatPretrialConference(pretrialConference),
+    recalled: Object.values(recalled).map(row => formatRecalledRow(row)),
     remoteSession: minuteSheetFormState.trialSessionMetadataSection
       .remoteSession
       ? 'Yes'
       : 'No',
-    respondentAppearances: formattedRespondents,
-    respondentWitnesses: formattedRespondentWitnesses,
-    statusReportOrdered: formattedStatusReportOrdered,
-    stipulatedDecisionOrdered: formattedStipulatedDecisionOrdered,
-    trialBrief: formattedTrialBrief,
+    respondentAppearances: formatRespondentAppearances(
+      minuteSheetFormState.respondentsSection,
+    ),
+    respondentWitnesses: Object.values(
+      minuteSheetFormState.witnessesSection.respondentWitnesses,
+    ),
+    statusReportOrdered: formatStatusReportOrdered(
+      minuteSheetFormState.ordersSection.statusReportOrdered,
+    ),
+    stipulatedDecisionOrdered: formatStipulatedDecision(
+      minuteSheetFormState.ordersSection.stipulatedDecisionOrdered,
+    ),
+    trialBrief: formatTrialBrief(minuteSheetFormState.trialBriefSection),
     trialClerk: minuteSheetFormState.trialSessionMetadataSection.trialClerk,
-    trialHearing: formattedTrialHearing,
+    trialHearing: formatTrialHearing(trialHearing),
     trialLocation: trialSession.trialLocation!,
     trialStartDate: formatDateString(
       trialSession.startDate,
