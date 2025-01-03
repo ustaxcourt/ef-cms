@@ -1,12 +1,14 @@
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
-import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 /**
  * getWorkItem
@@ -22,11 +24,13 @@ export const assignWorkItemsInteractor = async (
   {
     assigneeId,
     assigneeName,
+    workItem,
     workItemId,
   }: {
     assigneeId: string;
     assigneeName: string;
-    workItemId: string;
+    workItemId?: string;
+    workItem?: RawWorkItem;
   },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -46,14 +50,18 @@ export const assignWorkItemsInteractor = async (
       userId: assigneeId,
     });
 
-  const workItemRecord = await applicationContext
-    .getPersistenceGateway()
-    .getWorkItemById({
-      applicationContext,
+  let workItemEntity;
+  if (!workItem && workItemId) {
+    workItemEntity = await getWorkItemById({
       workItemId,
     });
+    if (!workItemEntity) {
+      throw new NotFoundError(`WorkItem ${workItemId} was not found.`);
+    }
+  } else {
+    workItemEntity = new WorkItem(workItem);
+  }
 
-  const workItemEntity = new WorkItem(workItemRecord);
   const userIsCaseServices = User.isCaseServicesUser({ section: user.section });
   const userBeingAssignedIsCaseServices = User.isCaseServicesUser({
     section: userBeingAssigned.section,
@@ -77,8 +85,7 @@ export const assignWorkItemsInteractor = async (
     sentByUserId: user.userId,
   });
 
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
-    workItem: workItemEntity.validate().toRawObject(),
+  await upsertWorkItems({
+    workItems: [workItemEntity.validate().toRawObject()],
   });
 };

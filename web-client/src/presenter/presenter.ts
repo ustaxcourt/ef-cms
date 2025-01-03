@@ -44,7 +44,6 @@ import { cancelAddStatisticSequence } from './sequences/cancelAddStatisticSequen
 import { cancelAndNavigateToCorrespondenceSequence } from './sequences/cancelAndNavigateToCorrespondenceSequence';
 import { cancelRemovePetitionerSequence } from './sequences/cancelRemovePetitionerSequence';
 import { caseDetailPrimaryTabChangeSequence } from './sequences/caseDetailPrimaryTabChangeSequence';
-import { caseInventoryReportLoadMoreSequence } from './sequences/caseInventoryReportLoadMoreSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { changeTabAndSetViewerDocumentToDisplaySequence } from './sequences/changeTabAndSetViewerDocumentToDisplaySequence';
 import { checkForNegativeValueSequence } from './sequences/checkForNegativeValueSequence';
@@ -216,7 +215,7 @@ import { gotoStartCaseWizardSequence } from './sequences/gotoStartCaseWizardSequ
 import { gotoStatusReportOrderSequence } from './sequences/StatusReportOrder/gotoStatusReportOrderSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
 import { gotoTrialSessionDetailsSequence } from './sequences/gotoTrialSessionDetailsSequence';
-import { gotoTrialSessionPlanningReportSequence } from './sequences/gotoTrialSessionPlanningReportSequence';
+import { gotoTrialSessionPlanningReportViewSequence } from '@web-client/presenter/sequences/gotoTrialSessionPlanningReportViewSequence';
 import { gotoTrialSessionWorkingCopySequence } from './sequences/gotoTrialSessionWorkingCopySequence';
 import { gotoTrialSessionsSequence } from './sequences/gotoTrialSessionsSequence';
 import { gotoUploadCorrespondenceDocumentSequence } from './sequences/gotoUploadCorrespondenceDocumentSequence';
@@ -232,8 +231,6 @@ import { leaveCaseForLaterServiceSequence } from './sequences/leaveCaseForLaterS
 import { loadDefaultDocketViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDocketViewerDocumentToDisplaySequence';
 import { loadDefaultDraftViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDraftViewerDocumentToDisplaySequence';
 import { loadDefaultViewerCorrespondenceSequence } from './sequences/loadDefaultViewerCorrespondenceSequence';
-import { loadMoreCaseDeadlinesSequence } from './sequences/loadMoreCaseDeadlinesSequence';
-import { loadMorePendingItemsSequence } from './sequences/loadMorePendingItemsSequence';
 import { loadPdfForTabSequence } from './sequences/PDFPreviewTab/loadPdfForTabSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCaseDetailFromPaperServiceSequence } from './sequences/navigateToCaseDetailFromPaperServiceSequence';
@@ -248,6 +245,7 @@ import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { navigateToPrintPaperServiceSequence } from './sequences/navigateToPrintPaperServiceSequence';
 import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigateToPrintableCaseConfirmationSequence';
 import { navigateToStatusReportOrderSequence } from './sequences/StatusReportOrder/navigateToStatusReportOrderSequence';
+import { navigateToTrialSessionPlanningReportSequence } from '@web-client/presenter/sequences/navigateToTrialSessionPlanningReportViewSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { noticeGenerationCompleteSequence } from './sequences/noticeGenerationCompleteSequence';
 import { onPractitionerInformationTabSelectSequence } from './sequences/onPractitionerInformationTabSelectSequence';
@@ -676,8 +674,6 @@ export const presenterSequences = {
     cancelRemovePetitionerSequence as unknown as Function,
   caseDetailPrimaryTabChangeSequence:
     caseDetailPrimaryTabChangeSequence as unknown as Function,
-  caseInventoryReportLoadMoreSequence:
-    caseInventoryReportLoadMoreSequence as unknown as Function,
   cerebralBindSimpleSetStateSequence:
     cerebralBindSimpleSetStateSequence as unknown as Function,
   changeTabAndSetViewerDocumentToDisplaySequence:
@@ -949,8 +945,7 @@ export const presenterSequences = {
   gotoStatusReportOrderSequence,
   gotoStyleGuideSequence: gotoStyleGuideSequence as unknown as Function,
   gotoTrialSessionDetailSequence: gotoTrialSessionDetailsSequence,
-  gotoTrialSessionPlanningReportSequence:
-    gotoTrialSessionPlanningReportSequence as unknown as Function,
+  gotoTrialSessionPlanningReportViewSequence,
   gotoTrialSessionWorkingCopySequence:
     gotoTrialSessionWorkingCopySequence as unknown as Function,
   gotoTrialSessionsSequence,
@@ -973,10 +968,6 @@ export const presenterSequences = {
     loadDefaultDraftViewerDocumentToDisplaySequence as unknown as Function,
   loadDefaultViewerCorrespondenceSequence:
     loadDefaultViewerCorrespondenceSequence as unknown as Function,
-  loadMoreCaseDeadlinesSequence:
-    loadMoreCaseDeadlinesSequence as unknown as Function,
-  loadMorePendingItemsSequence:
-    loadMorePendingItemsSequence as unknown as Function,
   loadPdfForTabSequence: loadPdfForTabSequence as unknown as Function,
   navigateBackSequence: navigateBackSequence as unknown as Function,
   navigateToCaseDetailFromPaperServiceSequence:
@@ -997,6 +988,7 @@ export const presenterSequences = {
   navigateToPrintableCaseConfirmationSequence:
     navigateToPrintableCaseConfirmationSequence as unknown as Function,
   navigateToStatusReportOrderSequence,
+  navigateToTrialSessionPlanningReportSequence,
   notFoundErrorSequence: notFoundErrorSequence as unknown as Function,
   noticeGenerationCompleteSequence:
     noticeGenerationCompleteSequence as unknown as Function,
@@ -1195,8 +1187,7 @@ export const presenterSequences = {
     reviewCaseAssociationRequestSequence as unknown as Function,
   reviewExternalDocumentInformationSequence:
     reviewExternalDocumentInformationSequence as unknown as Function,
-  runTrialSessionPlanningReportSequence:
-    runTrialSessionPlanningReportSequence as unknown as Function,
+  runTrialSessionPlanningReportSequence,
   saveCourtIssuedDocketEntrySequence:
     saveCourtIssuedDocketEntrySequence as unknown as Function,
   saveDocketEntryForLaterCompleteSequence:
@@ -1608,8 +1599,7 @@ export const presenterSequences = {
     validateTrialSessionHearingNoteSequence as unknown as Function,
   validateTrialSessionNoteSequence:
     validateTrialSessionNoteSequence as unknown as Function,
-  validateTrialSessionPlanningSequence:
-    validateTrialSessionPlanningSequence as unknown as Function,
+  validateTrialSessionPlanningSequence,
   validateTrialSessionSequence:
     validateTrialSessionSequence as unknown as Function,
   validateUpdateCaseModalSequence:

@@ -10,6 +10,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { getDocumentQCInboxForSection } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForSection';
 
 /**
  *
@@ -40,13 +41,10 @@ export const getDocumentQCInboxForSectionInteractor = async (
     sectionToShow = DOCKET_SECTION;
   }
 
-  const workItems = await applicationContext
-    .getPersistenceGateway()
-    .getDocumentQCInboxForSection({
-      applicationContext,
-      judgeUserName,
-      section: sectionToShow,
-    });
+  const workItems = await getDocumentQCInboxForSection({
+    judgeUserName,
+    section: sectionToShow,
+  });
 
   return WorkItem.validateRawCollection(workItems);
 };
