@@ -15,7 +15,7 @@
     "@aws-sdk/client-apigatewaymanagementapi": "3.721.0",
     "@aws-sdk/client-apigatewayv2": "3.721.0",
     "@aws-sdk/client-batch": "3.721.0",
-    "@aws-sdk/client-cloudfront": "3.716.0",
+    "@aws-sdk/client-cloudfront": "3.721.0",
     "@aws-sdk/client-cloudwatch": "3.721.0",
     "@aws-sdk/client-cloudwatch-logs": "3.721.0",
     "@aws-sdk/client-cognito-identity-provider": "3.721.0",
