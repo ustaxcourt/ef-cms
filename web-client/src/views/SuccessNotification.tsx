@@ -59,8 +59,8 @@ export const SuccessNotification = connect<
             className={classNames(
               'usa-alert',
               'usa-alert--success',
-              `${className}`,
-              isMessageOnly && 'usa-alert-success-message-only',
+              className,
+              isMessageOnly ? 'usa-alert-success-message-only' : null,
             )}
             data-metadata={`${alertSuccess.metaData}`}
             data-testid="success-alert"

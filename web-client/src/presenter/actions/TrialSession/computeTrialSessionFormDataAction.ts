@@ -1,4 +1,7 @@
-import { SESSION_TERMS_BY_MONTH } from '@shared/business/entities/EntityConstants';
+import {
+  SESSION_TERMS_BY_MONTH,
+  SESSION_TERMS_DICT,
+} from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const computeTermAndUpdateState = (
@@ -14,13 +17,13 @@ export const computeTermAndUpdateState = (
     const monthAsNumber = +date.month;
 
     if (SESSION_TERMS_BY_MONTH.winter.includes(monthAsNumber)) {
-      term = 'Winter';
+      term = SESSION_TERMS_DICT.WINTER;
     } else if (SESSION_TERMS_BY_MONTH.spring.includes(monthAsNumber)) {
-      term = 'Spring';
+      term = SESSION_TERMS_DICT.SPRING;
     } else if (SESSION_TERMS_BY_MONTH.summer.includes(monthAsNumber)) {
-      term = 'Summer';
+      term = SESSION_TERMS_DICT.SUMMER;
     } else if (SESSION_TERMS_BY_MONTH.fall.includes(monthAsNumber)) {
-      term = 'Fall';
+      term = SESSION_TERMS_DICT.FALL;
     }
 
     store.set(state.form.term, term);

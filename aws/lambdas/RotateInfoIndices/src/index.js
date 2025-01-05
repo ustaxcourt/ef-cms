@@ -1,9 +1,9 @@
 const { DateTime } = require('luxon');
 const { defaultProvider } = require('@aws-sdk/credential-provider-node');
-const { HttpRequest } = require('@aws-sdk/protocol-http');
-const { NodeHttpHandler } = require('@aws-sdk/node-http-handler');
+const { HttpRequest } = require('@smithy/protocol-http');
+const { NodeHttpHandler } = require('@smithy/node-http-handler');
 const { Sha256 } = require('@aws-crypto/sha256-browser');
-const { SignatureV4 } = require('@aws-sdk/signature-v4');
+const { SignatureV4 } = require('@smithy/signature-v4');
 
 const EXPIRATION = process.env.expiration; // days
 
@@ -31,9 +31,8 @@ exports.handler = async (input, context) => {
       }
     } else {
       // snapshot does not exist, let's create one
-      const { responseBody, statusCode } = await exports.snapshotForIndexName(
-        ei,
-      );
+      const { responseBody, statusCode } =
+        await exports.snapshotForIndexName(ei);
       responses.createSnapshot.push({
         indexName: ei,
         responseBody,

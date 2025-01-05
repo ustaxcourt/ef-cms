@@ -17,7 +17,7 @@ export const FormGroup = ({
   confirmationText?: string;
   errorText?: string | string[];
   errorMessageId?: string;
-  formGroupRef?: React.RefObject<HTMLInputElement>;
+  formGroupRef?: React.RefObject<HTMLInputElement | null>;
   id?: string;
   grow?: boolean;
   omitFormGroupClass?: boolean;

@@ -69,6 +69,10 @@ regex search the entire project for `aws = "\d+.\d+.\d+"` and make sure it's to 
 
 ## Do Not Upgrade
 
+### React and ReactDOM
+
+- cerebral version 5.2.1 and @cerebral/react version 4.2.1 are not compatible with React and ReactDOM version 19. Keep these pinned at version 18 for the time being. See https://github.com/cerebral/cerebral/pull/1441.
+
 ### @fortawesome
 
 - fortawesome packages are locked down to pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes `@fortawesome/free-solid-svg-icons`, `@fortawesome/free-regular-svg-icons`, and `@fortawesome/fontawesome-svg-core`.
