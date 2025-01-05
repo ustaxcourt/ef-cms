@@ -155,6 +155,7 @@ export const StatusReportOrder = connect(
                             .statusReport
                         }
                         className="usa-radio__input"
+                        data-testid="order-type-status-report"
                         id="order-type-status-report"
                         name="orderType"
                         type="radio"

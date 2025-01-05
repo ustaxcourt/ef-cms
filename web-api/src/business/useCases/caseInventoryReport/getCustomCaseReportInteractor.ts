@@ -46,6 +46,7 @@ export type CaseInventory = Pick<
   | 'caseCaption'
   | 'caseType'
   | 'docketNumber'
+  | 'docketNumberWithSuffix'
   | 'leadDocketNumber'
   | 'preferredTrialCity'
   | 'receivedAt'
