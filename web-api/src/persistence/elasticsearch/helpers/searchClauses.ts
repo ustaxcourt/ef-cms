@@ -1,7 +1,7 @@
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 
 // because searching for entityName matches is not sufficient!
-export const IS_USER = [
+const IS_USER = [
   { prefix: { 'pk.S': 'user|' } },
   { prefix: { 'sk.S': 'user|' } },
 ];
@@ -27,20 +27,3 @@ export const IS_PRACTITIONER = [
     },
   },
 ];
-export const GET_PARENT_CASE = {
-  has_parent: {
-    inner_hits: {
-      _source: {
-        includes: [
-          'leadDocketNumber',
-          'docketNumber',
-          'trialDate',
-          'trialLocation',
-        ],
-      },
-      name: 'case-mappings',
-    },
-    parent_type: 'case',
-    query: { match_all: {} },
-  },
-};
