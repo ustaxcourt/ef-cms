@@ -216,7 +216,7 @@ import { gotoStartCaseWizardSequence } from './sequences/gotoStartCaseWizardSequ
 import { gotoStatusReportOrderSequence } from './sequences/StatusReportOrder/gotoStatusReportOrderSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
 import { gotoTrialSessionDetailsSequence } from './sequences/gotoTrialSessionDetailsSequence';
-import { gotoTrialSessionPlanningReportSequence } from './sequences/gotoTrialSessionPlanningReportSequence';
+import { gotoTrialSessionPlanningReportViewSequence } from '@web-client/presenter/sequences/gotoTrialSessionPlanningReportViewSequence';
 import { gotoTrialSessionWorkingCopySequence } from './sequences/gotoTrialSessionWorkingCopySequence';
 import { gotoTrialSessionsSequence } from './sequences/gotoTrialSessionsSequence';
 import { gotoUploadCorrespondenceDocumentSequence } from './sequences/gotoUploadCorrespondenceDocumentSequence';
@@ -248,6 +248,7 @@ import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { navigateToPrintPaperServiceSequence } from './sequences/navigateToPrintPaperServiceSequence';
 import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigateToPrintableCaseConfirmationSequence';
 import { navigateToStatusReportOrderSequence } from './sequences/StatusReportOrder/navigateToStatusReportOrderSequence';
+import { navigateToTrialSessionPlanningReportSequence } from '@web-client/presenter/sequences/navigateToTrialSessionPlanningReportViewSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { noticeGenerationCompleteSequence } from './sequences/noticeGenerationCompleteSequence';
 import { onPractitionerInformationTabSelectSequence } from './sequences/onPractitionerInformationTabSelectSequence';
@@ -949,8 +950,7 @@ export const presenterSequences = {
   gotoStatusReportOrderSequence,
   gotoStyleGuideSequence: gotoStyleGuideSequence as unknown as Function,
   gotoTrialSessionDetailSequence: gotoTrialSessionDetailsSequence,
-  gotoTrialSessionPlanningReportSequence:
-    gotoTrialSessionPlanningReportSequence as unknown as Function,
+  gotoTrialSessionPlanningReportViewSequence,
   gotoTrialSessionWorkingCopySequence:
     gotoTrialSessionWorkingCopySequence as unknown as Function,
   gotoTrialSessionsSequence,
@@ -997,6 +997,7 @@ export const presenterSequences = {
   navigateToPrintableCaseConfirmationSequence:
     navigateToPrintableCaseConfirmationSequence as unknown as Function,
   navigateToStatusReportOrderSequence,
+  navigateToTrialSessionPlanningReportSequence,
   notFoundErrorSequence: notFoundErrorSequence as unknown as Function,
   noticeGenerationCompleteSequence:
     noticeGenerationCompleteSequence as unknown as Function,
@@ -1195,8 +1196,7 @@ export const presenterSequences = {
     reviewCaseAssociationRequestSequence as unknown as Function,
   reviewExternalDocumentInformationSequence:
     reviewExternalDocumentInformationSequence as unknown as Function,
-  runTrialSessionPlanningReportSequence:
-    runTrialSessionPlanningReportSequence as unknown as Function,
+  runTrialSessionPlanningReportSequence,
   saveCourtIssuedDocketEntrySequence:
     saveCourtIssuedDocketEntrySequence as unknown as Function,
   saveDocketEntryForLaterCompleteSequence:
@@ -1608,8 +1608,7 @@ export const presenterSequences = {
     validateTrialSessionHearingNoteSequence as unknown as Function,
   validateTrialSessionNoteSequence:
     validateTrialSessionNoteSequence as unknown as Function,
-  validateTrialSessionPlanningSequence:
-    validateTrialSessionPlanningSequence as unknown as Function,
+  validateTrialSessionPlanningSequence,
   validateTrialSessionSequence:
     validateTrialSessionSequence as unknown as Function,
   validateUpdateCaseModalSequence:
