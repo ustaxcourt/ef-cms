@@ -35,10 +35,10 @@ export const fetchPendingItems = async ({
       );
 
     if (docketNumber) {
-      query = query.where('docketNumber', '=', docketNumber);
+      query = query.where('c.docketNumber', '=', docketNumber);
     }
     if (judge) {
-      query = query.where('associatedJudge', '=', judge);
+      query = query.where('c.associatedJudge', '=', judge);
     }
 
     const countResult = await query
@@ -62,7 +62,8 @@ export const fetchPendingItems = async ({
         'd.receivedAt',
       ])
       .orderBy('d.receivedAt', 'asc')
-      .orderBy('d.docketEntryId', 'asc')
+      .orderBy('d.docketEntryId', 'asc') // This was how our secondary sort was originally set up. In moving to Postgres, we kept it.
+      .orderBy('d.docketNumber', 'asc') // We added this tertiary sort to add some clarity around sorting when receivedAt and docketEntryId are the same.
       .offset(offset)
       .limit(size)
       .execute();
