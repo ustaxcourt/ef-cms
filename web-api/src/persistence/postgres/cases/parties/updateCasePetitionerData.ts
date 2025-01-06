@@ -31,8 +31,7 @@ export const updateCasePetitionerData = async ({
         placeOfLegalResidence: petitionerData.placeOfLegalResidence,
         postalCode: petitionerData.postalCode,
         sealedAndUnavailable: petitionerData.sealedAndUnavailable,
-        secondaryName: petitionerData.secondaryName,
-        // how is this different from additional name?
+        secondaryName: petitionerData.secondaryName, // how is this different from additional name?
         serviceIndicator: petitionerData.serviceIndicator,
         state: petitionerData.state,
         title: petitionerData.title,

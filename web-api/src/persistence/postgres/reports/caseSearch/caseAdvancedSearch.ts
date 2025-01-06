@@ -41,8 +41,6 @@ export const caseAdvancedSearch = async ({
 }: {
   searchTerms: CaseAdvancedSearchTerms;
 }) => {
-  console.log('searchTerms', searchTerms);
-
   const sanitizeSearchString = (searchString: string) => {
     return removeAdvancedSyntaxSymbols(searchString);
   };
@@ -130,8 +128,6 @@ export const caseAdvancedSearch = async ({
     // Order by our weighted match scores
     return query.selectAll().orderBy('total_rank', 'desc').execute();
   });
-
-  console.log(newQuery);
 
   return Array.from(newQuery.values()).map<CaseAdvancedSearchResultItem>(
     data => {

@@ -1,5 +1,5 @@
 import { unmarshall } from '@aws-sdk/util-dynamodb';
-import { upsertPractitionersOnCase } from '@web-api/persistence/postgres/cases/write/upsertPractitionersOnCase';
+import { upsertPractitionersOnCase } from '@web-api/persistence/postgres/cases/parties/upsertPractitionersOnCase';
 
 export const processPractitionerMappingEntries = async ({
   practitionerMappingRecords,

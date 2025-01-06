@@ -16,9 +16,22 @@ export const getBlockedCasesForTrialLocation = async (
           eb('blocked', '=', true), // 10502 TODO make sure this is indexed
         ]),
       )
-      .selectAll()
+      .select([
+        'automaticBlocked',
+        'automaticBlockedDate',
+        'automaticBlockedReason',
+        'blocked',
+        'blockedDate',
+        'blockedReason',
+        'caption',
+        'docketNumber',
+        'docketNumberSuffix',
+        'leadDocketNumber',
+        'status',
+        'procedureType',
+      ])
       .limit(MAX_RESULTS)
       .execute(),
   );
-  return results.map(result => convertDbRowToRawCase(result)); // 10502 TODO: Audit the return type, try to limit to info we need
+  return results.map(result => convertDbRowToRawCase(result));
 };
