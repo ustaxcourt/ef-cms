@@ -69,6 +69,8 @@ regex search the entire project for `aws = "\d+.\d+.\d+"` and make sure it's to 
 
 	> aws = "<LATEST_VERSION>"
 
+**Note**: Through January 3, 2025, the Terraform AWS provider must remain at version 5.78.0 due to issues with RDS.
+
 5. Check through the list of caveats to see if any of the documented issues have been resolved.
 
 6. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
