@@ -15,22 +15,9 @@ import {
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
 import { Case } from '../../shared/src/business/entities/cases/Case';
-import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import { Correspondence } from '../../shared/src/business/entities/Correspondence';
-import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
-import { IrsPractitioner } from '../../shared/src/business/entities/IrsPractitioner';
-import { Message } from '../../shared/src/business/entities/Message';
 import { NodeHttpHandler } from '@smithy/node-http-handler';
-import { Practitioner } from '../../shared/src/business/entities/Practitioner';
-import { PrivatePractitioner } from '../../shared/src/business/entities/PrivatePractitioner';
 import { SQSClient } from '@aws-sdk/client-sqs';
-import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
-import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
-import { User } from '../../shared/src/business/entities/User';
-import { UserCase } from '../../shared/src/business/entities/UserCase';
-import { UserCaseNote } from '../../shared/src/business/entities/notes/UserCaseNote';
-import { WorkItem } from '../../shared/src/business/entities/WorkItem';
 import { WorkerMessage } from '@web-api/gateways/worker/workerRouter';
 import { environment } from '@web-api/environment';
 import { getBatchClient } from '@web-api/persistence/batch/getBatchClient';
@@ -46,6 +33,7 @@ import { getDocumentClient } from '@web-api/persistence/dynamo/getDocumentClient
 import { getDocumentGenerators } from './getDocumentGenerators';
 import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
 import { getEmailClient } from './persistence/messages/getEmailClient';
+import { getEntityByName } from '@web-api/business/getEntityByName';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { getNotificationClient } from '@web-api/notifications/notificationClient/getNotificationClient';
@@ -74,23 +62,6 @@ import pug from 'pug';
 import sass from 'sass';
 
 let sqsCache: SQSClient;
-
-const entitiesByName = {
-  Case,
-  CaseDeadline,
-  Correspondence,
-  DocketEntry,
-  IrsPractitioner,
-  Message,
-  Practitioner,
-  PrivatePractitioner,
-  TrialSession,
-  TrialSessionWorkingCopy,
-  User,
-  UserCase,
-  UserCaseNote,
-  WorkItem,
-};
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createApplicationContext = (appContextUser = {}) => {
@@ -153,9 +124,7 @@ export const createApplicationContext = (appContextUser = {}) => {
     getDocumentGenerators,
     getDynamoClient,
     getEmailClient,
-    getEntityByName: name => {
-      return entitiesByName[name];
-    },
+    getEntityByName,
     getEnvironment,
     getHttpClient: () => axios,
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
