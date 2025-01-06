@@ -254,7 +254,7 @@ export interface DocketEntryTable {
   isLegacyServed: boolean;
   pending: boolean;
   receivedAt: Date;
-  servedAt: Date;
+  servedAt: Date | null;
 }
 
 export type DocketEntryKysely = Selectable<DocketEntryTable>;
