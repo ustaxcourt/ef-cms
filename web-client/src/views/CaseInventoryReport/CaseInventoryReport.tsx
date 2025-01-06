@@ -143,10 +143,12 @@ export const CaseInventoryReport = connect(
                             Consolidated Case Indicator
                           </span>
                         </th>
-                        <th aria-label="Docket number">Docket No.</th>
+                        <th aria-label="Docket number" className="width-15">
+                          Docket No.
+                        </th>
                         <th>Case Title</th>
                         {caseInventoryReportHelper.showJudgeColumn && (
-                          <th>Judge</th>
+                          <th className="width-15">Judge</th>
                         )}
                         {caseInventoryReportHelper.showStatusColumn && (
                           <th>Case Status</th>
@@ -166,12 +168,14 @@ export const CaseInventoryReport = connect(
                                 showLeadCaseIcon={row.isLeadCase}
                               />
                             </td>
-                            <td>
+                            <td className="width-15">
                               <CaseLink formattedCase={row} />
                             </td>
                             <td>{row.caseTitle}</td>
                             {caseInventoryReportHelper.showJudgeColumn && (
-                              <td>{row.associatedJudge}</td>
+                              <td className="width-15">
+                                {row.associatedJudge}
+                              </td>
                             )}
                             {caseInventoryReportHelper.showStatusColumn && (
                               <td>{row.status}</td>
