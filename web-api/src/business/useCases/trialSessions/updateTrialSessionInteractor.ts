@@ -362,12 +362,20 @@ export const determineEntitiesToLock = async (
   applicationContext: ServerApplicationContext,
   { trialSession }: { trialSession: TrialSession },
 ) => {
-  const { caseOrder } = await applicationContext
+  const currentTrialSession = await applicationContext
     .getPersistenceGateway()
     .getTrialSessionById({
       applicationContext,
       trialSessionId: trialSession.trialSessionId || '',
     });
+
+  if (!currentTrialSession) {
+    throw new NotFoundError(
+      `Trial session ${trialSession.trialSessionId} was not found.`,
+    );
+  }
+
+  const { caseOrder } = currentTrialSession;
 
   const entitiesToLock = [`trial-session|${trialSession.trialSessionId}`];
 
