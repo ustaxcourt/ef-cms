@@ -5,6 +5,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { fetchPendingItems } from '@web-api/persistence/postgres/reports/caseSearch/fetchPendingItems';
 import { stringify } from 'csv-stringify/sync';
 
 export const exportPendingReportInteractor = async (
@@ -16,12 +17,10 @@ export const exportPendingReportInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { foundDocuments: pendingDocuments } = await applicationContext
-    .getPersistenceGateway()
-    .fetchPendingItems({
-      applicationContext,
-      judge,
-    });
+  const { foundDocuments: pendingDocuments } = await fetchPendingItems({
+    applicationContext,
+    judge,
+  });
 
   const formattedPendingItems = pendingDocuments.map(pendingItem =>
     applicationContext

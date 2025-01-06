@@ -44,7 +44,6 @@ import { deleteUserConnection } from './persistence/dynamo/notifications/deleteU
 import { deleteUserFromCase } from './persistence/dynamo/cases/deleteUserFromCase';
 import { editPractitionerDocument } from './persistence/dynamo/practitioners/editPractitionerDocument';
 import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
-import { fetchPendingItems } from './persistence/elasticsearch/fetchPendingItems';
 import { generateAccountConfirmationCode } from '@web-api/persistence/dynamo/users/generateAccountConfirmationCode';
 import { getAccountConfirmationCode } from '@web-api/persistence/dynamo/users/getAccountConfirmationCode';
 import { getAllPendingMotionDocketEntriesForJudge } from '@web-api/persistence/elasticsearch/docketEntry/getAllPendingMotionDocketEntriesForJudge';
@@ -194,7 +193,6 @@ const gatewayMethods = {
     createUserRecords,
     deleteKeyCount,
     editPractitionerDocument,
-    fetchPendingItems,
     incrementCounter,
     incrementKeyCount,
     persistUser,
