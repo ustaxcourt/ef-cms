@@ -101,6 +101,9 @@ export const convertDbRowToRawCase = (dbCase: any): RawCase => {
     caseCaption: dbCase.caption,
     closedDate: dbCase.closedDate?.toISOString(),
     createdAt: dbCase.createdAt?.toISOString(),
+    docketNumberWithSuffix:
+      dbCase.docketNumber +
+      (dbCase.docketNumberSuffix ? dbCase.docketNumberSuffix : ''),
     hearings: dbCase.hearings || [],
     irsNoticeDate: dbCase.irsNoticeDate?.toISOString(),
     noticeOfTrialDate: dbCase.noticeOfTrialDate?.toISOString(),
