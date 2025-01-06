@@ -29,10 +29,10 @@ export const getCaseInventoryReport = async ({
         CASE_STATUS_TYPES.closedDismissed,
       ]);
     if (associatedJudge) {
-      query = query.where('associatedJudge', '==', associatedJudge);
+      query = query.where('associatedJudge', '=', associatedJudge);
     }
     if (status) {
-      query = query.where('status', '==', status);
+      query = query.where('status', '=', status);
     }
     const totalCount = await query
       .select(({ fn }) => fn.count<number>('docketNumber').as('value'))
