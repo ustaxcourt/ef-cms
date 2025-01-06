@@ -7,9 +7,14 @@ export const upsertDocketEntries = async (docketEntries: RawDocketEntry[]) => {
   const docketEntriesToUpsert = docketEntries.map(docketEntry => ({
     docketEntryId: docketEntry.docketEntryId,
     docketNumber: docketEntry.docketNumber,
+    documentTitle: docketEntry.documentTitle,
+    documentType: docketEntry.documentType,
     eventCode: docketEntry.eventCode,
     filingDate: calculateDate({ dateString: docketEntry.filingDate }),
+    isLegacyServed: docketEntry.isLegacyServed || false,
     pending: docketEntry.pending || false,
+    receivedAt: calculateDate({ dateString: docketEntry.receivedAt }),
+    servedAt: calculateDate({ dateString: docketEntry.servedAt }),
   }));
 
   console.log('docketEntries', docketEntries);

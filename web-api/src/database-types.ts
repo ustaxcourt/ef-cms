@@ -232,7 +232,6 @@ export type NewUserCaseNoteKysely = Insertable<UserCaseNoteTable>;
 export type UpdateUserCaseNoteKysely = Updateable<UserCaseNoteTable>;
 
 // TODO: This is just a stub to get things out of Open Search and into Postgres
-// 10502 TODO: Make sure DynamoDB Stream code upserts this
 export interface PractitionerOnCaseTable {
   docketNumber: string;
   userId: string;
@@ -245,13 +244,17 @@ export type UpdatePractitionerOnCaseKysely =
   Updateable<PractitionerOnCaseTable>;
 
 // TODO: This is just a stub to get things out of Open Search and into Postgres
-// 10502 TODO: Make sure DynamoDB Stream code upserts this
 export interface DocketEntryTable {
   docketEntryId: string;
   docketNumber: string;
+  documentTitle: string;
+  documentType: string;
   eventCode: string;
   filingDate: Date;
+  isLegacyServed: boolean;
   pending: boolean;
+  receivedAt: Date;
+  servedAt: Date;
 }
 
 export type DocketEntryKysely = Selectable<DocketEntryTable>;

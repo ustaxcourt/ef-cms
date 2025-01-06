@@ -12,6 +12,11 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('filingDate', 'timestamptz')
     .addColumn('eventCode', 'varchar')
     .addColumn('pending', 'boolean')
+    .addColumn('servedAt', 'timestamptz')
+    .addColumn('isLegacyServed', 'boolean')
+    .addColumn('receivedAt', 'timestamptz')
+    .addColumn('documentTitle', 'varchar')
+    .addColumn('documentType', 'varchar')
     .execute();
 }
 
