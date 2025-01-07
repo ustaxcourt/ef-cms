@@ -1,7 +1,5 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-// usage: scripts/reports/cases-open-on-date.ts 12 31
-
 import { DateTime } from 'luxon';
 import {
   type ScriptConfig,

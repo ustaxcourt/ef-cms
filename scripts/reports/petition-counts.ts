@@ -1,7 +1,5 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-// usage: scripts/reports/petition-counts.js 2022
-
 import { DateTime } from 'luxon';
 import {
   type ScriptConfig,

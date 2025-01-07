@@ -221,8 +221,7 @@ describe('parseArgsAndEnvVars', () => {
         short: 'h',
         type: 'string',
       };
-      process.argv.push('-h');
-      process.argv.push('jest');
+      process.argv.push(...['-h', 'jest']);
       const result = parseArgsAndEnvVars(itsScriptConfig);
       expect(result.hostname).toEqual('jest');
       expect(mockConsoleLog).not.toHaveBeenCalled();
@@ -296,8 +295,7 @@ describe('parseArgsAndEnvVars', () => {
       expect(shortArgs).toContain('veryCool');
     });
     it('prints verbose help output if both the verbose and help flags are set', () => {
-      process.argv.push('-v');
-      process.argv.push('-h');
+      process.argv.push(...['-v', '-h']);
       try {
         parseArgsAndEnvVars(mockScriptConfig);
       } catch (err: any) {
