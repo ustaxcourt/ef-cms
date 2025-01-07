@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { ConfirmTrialSessionLocationChangeModalDialog } from '@web-client/views/ConfirmTrialSessionLocationChangeModalDialog';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { LocationInformationForm } from './LocationInformationForm';
@@ -14,6 +15,8 @@ export const EditTrialSession = connect(
   {
     closeModalAndNavigateBackSequence:
       sequences.closeModalAndNavigateBackSequence,
+    displayTrialSessionLocationChangeModalSequence:
+      sequences.displayTrialSessionLocationChangeModalSequence,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
@@ -24,6 +27,7 @@ export const EditTrialSession = connect(
   },
   function EditTrialSession({
     closeModalAndNavigateBackSequence,
+    displayTrialSessionLocationChangeModalSequence,
     form,
     formattedTrialSessionDetails,
     formCancelToggleCancelSequence,
@@ -49,6 +53,12 @@ export const EditTrialSession = connect(
             {showModal === 'FormCancelModalDialog' && (
               <FormCancelModalDialog
                 onCancelSequence={closeModalAndNavigateBackSequence}
+              />
+            )}
+            {showModal === 'ConfirmTrialSessionLocationChangeModalDialog' && (
+              <ConfirmTrialSessionLocationChangeModalDialog
+                cancelSequence={closeModalAndNavigateBackSequence}
+                confirmSequence={updateTrialSessionSequence}
               />
             )}
             <ErrorNotification />
@@ -88,7 +98,7 @@ export const EditTrialSession = connect(
               data-testid="submit-edit-trial-session"
               type="submit"
               onClick={() => {
-                updateTrialSessionSequence();
+                displayTrialSessionLocationChangeModalSequence();
               }}
             >
               Save
