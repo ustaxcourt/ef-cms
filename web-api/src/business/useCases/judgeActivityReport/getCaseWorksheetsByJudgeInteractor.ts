@@ -6,7 +6,10 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { SubmittedCAVTableFields } from '@web-api/persistence/postgres/reports/caseSearch/getDocketNumbersByStatusAndByJudge';
+import {
+  SubmittedCAVTableFields,
+  getDocketNumbersByStatusAndByJudge,
+} from '@web-api/persistence/postgres/reports/caseSearch/getDocketNumbersByStatusAndByJudge';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getConsolidatedCasesCount } from '@web-api/persistence/postgres/cases/getConsolidatedCasesCount';
 
@@ -59,15 +62,13 @@ const getCases = async (
   applicationContext: ServerApplicationContext,
   searchEntity: JudgeActivityReportSearch,
 ) => {
-  const allCaseRecords = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByStatusAndByJudge({
-      params: {
-        excludeMemberCases: true,
-        judges: searchEntity.judges,
-        statuses: searchEntity.statuses,
-      },
-    });
+  const allCaseRecords = await getDocketNumbersByStatusAndByJudge({
+    params: {
+      excludeMemberCases: true,
+      judges: searchEntity.judges,
+      statuses: searchEntity.statuses,
+    },
+  });
 
   const completeCaseRecords = await attachCaseWorkSheets(
     applicationContext,

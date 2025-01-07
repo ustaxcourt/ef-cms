@@ -8,6 +8,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCasesClosedCountByJudge } from '@web-api/persistence/postgres/reports/caseSearch/getCasesClosedCountByJudge';
 
 export type CasesClosedReturnType = {
   aggregations: {
@@ -32,11 +33,9 @@ export const getCasesClosedByJudgeInteractor = async (
     throw new InvalidRequest('Invalid search terms');
   }
 
-  return await applicationContext
-    .getPersistenceGateway()
-    .getCasesClosedCountByJudge({
-      endDate: searchEntity.endDate,
-      judges: searchEntity.judges,
-      startDate: searchEntity.startDate,
-    });
+  return await getCasesClosedCountByJudge({
+    endDate: searchEntity.endDate,
+    judges: searchEntity.judges,
+    startDate: searchEntity.startDate,
+  });
 };

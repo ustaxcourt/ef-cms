@@ -17,6 +17,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('receivedAt', 'timestamptz')
     .addColumn('documentTitle', 'varchar')
     .addColumn('documentType', 'varchar')
+    .addColumn('isStricken', 'boolean')
     .execute();
 }
 

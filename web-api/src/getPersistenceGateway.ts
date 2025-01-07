@@ -6,7 +6,6 @@ import { associateUserWithCase } from './persistence/dynamo/cases/associateUserW
 import { associateUserWithCasePending } from './persistence/dynamo/cases/associateUserWithCasePending';
 import { bulkDeleteRecords } from './persistence/elasticsearch/bulkDeleteRecords';
 import { bulkIndexRecords } from './persistence/elasticsearch/bulkIndexRecords';
-import { caseAdvancedSearch } from './persistence/postgres/reports/caseSearch/caseAdvancedSearch';
 import { createCaseDeadline } from './persistence/dynamo/caseDeadlines/createCaseDeadline';
 import { createCaseTrialSortMappingRecords } from './persistence/dynamo/cases/createCaseTrialSortMappingRecords';
 import { createChangeOfAddressJob } from './persistence/dynamo/jobs/ChangeOfAddress/createChangeOfAddressJob';
@@ -53,7 +52,6 @@ import { getCalendaredCasesForTrialSession } from './persistence/dynamo/trialSes
 import { getCaseDeadlinesByDateRange } from './persistence/elasticsearch/caseDeadlines/getCaseDeadlinesByDateRange';
 import { getCaseDeadlinesByDocketNumber } from './persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheetsByDocketNumber';
-import { getCasesClosedCountByJudge } from './persistence/postgres/reports/caseSearch/getCasesClosedCountByJudge';
 import {
   getCasesForUser,
   getDocketNumbersByUser,
@@ -65,7 +63,6 @@ import { getDispatchNotification } from './persistence/dynamo/notifications/getD
 import { getDocketEntriesServedWithinTimeframe } from './persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
 import { getDocketEntryOnCase } from './persistence/dynamo/cases/getDocketEntryOnCase';
 import { getDocketEntryWorksheetsByDocketEntryIds } from '@web-api/persistence/dynamo/docketEntryWorksheet/getDocketEntryWorksheetsByDocketEntryIds';
-import { getDocketNumbersByStatusAndByJudge } from './persistence/postgres/reports/caseSearch/getDocketNumbersByStatusAndByJudge';
 import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
 import { getDownloadPolicyUrl } from './persistence/s3/getDownloadPolicyUrl';
@@ -78,7 +75,6 @@ import { getPractitionerByBarNumber } from './persistence/dynamo/users/getPracti
 import { getPractitionerDocumentByFileId } from './persistence/dynamo/practitioners/getPractitionerDocumentByFileId';
 import { getPractitionerDocuments } from './persistence/dynamo/practitioners/getPractitionerDocuments';
 import { getPractitionersByName } from './persistence/elasticsearch/getPractitionersByName';
-import { getReadyForTrialCases } from './persistence/elasticsearch/getReadyForTrialCases';
 import { getReconciliationReport } from './persistence/elasticsearch/getReconciliationReport';
 import { getRequestResults } from '@web-api/persistence/dynamo/polling/getRequestResults';
 import { getSesStatus } from './persistence/ses/getSesStatus';
@@ -93,8 +89,6 @@ import { getUploadPolicy } from './persistence/s3/getUploadPolicy';
 import { getUserByEmail } from './persistence/dynamo/users/getUserByEmail';
 import { getUserById } from './persistence/dynamo/users/getUserById';
 import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/dynamo/users/getUserByIdOnceAllUpdatesComplete';
-import { getUserCaseNote } from '@web-api/persistence/postgres/userCaseNotes/getUserCaseNote';
-import { getUserCaseNoteForCases } from '@web-api/persistence/postgres/userCaseNotes/getUserCaseNoteForCases';
 import { getUsersById } from './persistence/dynamo/users/getUsersById';
 import { getUsersBySearchKey } from './persistence/dynamo/users/getUsersBySearchKey';
 import { getUsersInSection } from './persistence/dynamo/users/getUsersInSection';
@@ -220,7 +214,6 @@ const gatewayMethods = {
   }),
   // methods below are not known to create or update "entity" records
   advancedDocumentSearch,
-  caseAdvancedSearch,
   createChangeOfAddressJob,
   createLock,
   decrementJobCounter,
@@ -246,7 +239,6 @@ const gatewayMethods = {
   getCaseDeadlinesByDateRange,
   getCaseDeadlinesByDocketNumber,
   getCaseWorksheetsByDocketNumber,
-  getCasesClosedCountByJudge,
   getCasesForUser,
   getClientId,
   getConfigurationItemValue,
@@ -255,7 +247,6 @@ const gatewayMethods = {
   getDocketEntriesServedWithinTimeframe,
   getDocketEntryOnCase,
   getDocketEntryWorksheetsByDocketEntryIds,
-  getDocketNumbersByStatusAndByJudge,
   getDocketNumbersByUser,
   getDocument,
   getDocumentIdFromSQSMessage,
@@ -271,7 +262,6 @@ const gatewayMethods = {
   getPractitionerDocumentByFileId,
   getPractitionerDocuments,
   getPractitionersByName,
-  getReadyForTrialCases,
   getReconciliationReport,
   getRequestResults,
   getSesStatus,
@@ -286,8 +276,6 @@ const gatewayMethods = {
   getUserByEmail,
   getUserById,
   getUserByIdOnceAllUpdatesComplete,
-  getUserCaseNote,
-  getUserCaseNoteForCases,
   getUsersById,
   getUsersBySearchKey,
   getUsersInSection,

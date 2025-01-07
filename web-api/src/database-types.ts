@@ -255,6 +255,7 @@ export interface DocketEntryTable {
   pending: boolean;
   receivedAt: Date;
   servedAt: Date | null;
+  isStricken: boolean | null;
 }
 
 export type DocketEntryKysely = Selectable<DocketEntryTable>;
