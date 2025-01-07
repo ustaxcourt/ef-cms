@@ -19,7 +19,7 @@ export const MinuteSheet = ({
           <div>
             <strong>Docket no(s).</strong>
           </div>
-          <div>{formattedMinuteSheet.docketNumbers}</div>
+          <div>{formattedMinuteSheet.formattedDocketNumbers}</div>
         </div>
         <div>
           <div>
@@ -54,7 +54,7 @@ export const MinuteSheet = ({
         </div>
       </div>
       <hr />
-      <div className="minute-sheet-pdf">
+      <div>
         <div>
           <div>
             <strong>Called</strong>
@@ -75,39 +75,40 @@ export const MinuteSheet = ({
             }}
           />
         </div>
-      </div>
-      <div>
+
         <div>
-          <strong>Recalled</strong>
+          <div>
+            <strong>Recalled</strong>
+          </div>
+          <div>
+            {formattedMinuteSheet.recalled.map(row => (
+              <div
+                dangerouslySetInnerHTML={{ __html: row.content }}
+                key={row.renderKey}
+              />
+            ))}
+          </div>
         </div>
         <div>
-          {formattedMinuteSheet.recalled.map(row => (
-            <div
-              dangerouslySetInnerHTML={{ __html: row.content }}
-              key={row.renderKey}
-            />
-          ))}
+          <div>
+            <strong>Pretrial conference</strong>
+          </div>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: formattedMinuteSheet.pretrialConference || '',
+            }}
+          />
         </div>
-      </div>
-      <div>
         <div>
-          <strong>Pretrial conference</strong>
+          <div>
+            <strong>Trial/Hearing</strong>
+          </div>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: formattedMinuteSheet.trialHearing || '',
+            }}
+          />
         </div>
-        <div
-          dangerouslySetInnerHTML={{
-            __html: formattedMinuteSheet.pretrialConference || '',
-          }}
-        />
-      </div>
-      <div>
-        <div>
-          <strong>Trial/Hearing</strong>
-        </div>
-        <div
-          dangerouslySetInnerHTML={{
-            __html: formattedMinuteSheet.trialHearing || '',
-          }}
-        />
       </div>
       <hr />
       <div className="minute-sheet-pdf">
@@ -133,7 +134,7 @@ export const MinuteSheet = ({
         </div>
       </div>
       <hr />
-      <div className="minute-sheet-pdf">
+      <div>
         <div>
           <div>
             <strong>Jurisdiction Retained</strong>
@@ -178,6 +179,9 @@ export const MinuteSheet = ({
       </div>
       <hr />
       <div>
+        <div>
+          <strong>Other actions and filings</strong>
+        </div>
         {formattedMinuteSheet.actionsAndFilings.map(action => (
           <div
             dangerouslySetInnerHTML={{ __html: action.content }}
@@ -188,10 +192,14 @@ export const MinuteSheet = ({
       <hr />
       <div className="minute-sheet-pdf">
         <div>
-          <div>
-            <strong>Date Submitted</strong>
-          </div>
-          <div>{formattedMinuteSheet.trialBrief.dateSubmitted}</div>
+          {formattedMinuteSheet.trialBrief.dateSubmitted && (
+            <>
+              <div>
+                <strong>Date Submitted</strong>
+              </div>
+              <div>{formattedMinuteSheet.trialBrief.dateSubmitted}</div>
+            </>
+          )}
           <div>
             <strong>Total Trial Hours</strong>
           </div>
@@ -208,7 +216,7 @@ export const MinuteSheet = ({
           />
         </div>
       </div>
-      <div className="minute-sheet-pdf">
+      <div>
         <div>
           <div>
             <strong>{formattedMinuteSheet.trialBrief.briefType}</strong>
@@ -243,7 +251,7 @@ export const MinuteSheet = ({
         </div>
       </div>
       <div>
-        <table>
+        <table className="exhibits-table">
           <thead>
             <tr>
               <th>Exhibit</th>

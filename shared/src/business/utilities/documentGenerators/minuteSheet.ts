@@ -1,5 +1,8 @@
+import { DateGeneratedFooter } from '@shared/business/utilities/pdfGenerator/components/DateGeneratedFooter';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { FormattedMinuteSheet } from '@web-api/business/useCases/trialSessionMinutes/generateTrialSessionMinutesPdfInteractor';
 import { MinuteSheet } from '../pdfGenerator/documentTemplates/MinuteSheet';
+import { PageMetaHeaderDocket } from '@shared/business/utilities/pdfGenerator/components/PageMetaHeaderDocket';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import React from 'react';
@@ -22,6 +25,22 @@ export const minuteSheet = async ({
     }),
   );
 
+  const headerHtml = ReactDOM.renderToString(
+    React.createElement(PageMetaHeaderDocket, {
+      addedDocketNumbers: formattedMinuteSheet.docketNumbers,
+      docketNumber: formattedMinuteSheet.docketNumberWithSuffix,
+      useCenturySchoolbookFont: true,
+    }),
+  );
+
+  const footerHtml = ReactDOM.renderToString(
+    React.createElement(DateGeneratedFooter, {
+      dateGenerated: applicationContext
+        .getUtilities()
+        .formatNow(FORMATS.MMDDYYYY),
+    }),
+  );
+
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: minuteSheetComponent,
@@ -32,6 +51,8 @@ export const minuteSheet = async ({
     .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
+      footerHtml,
+      headerHtml,
     });
 
   return pdf;

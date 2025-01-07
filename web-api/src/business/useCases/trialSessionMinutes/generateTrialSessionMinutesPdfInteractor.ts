@@ -100,12 +100,14 @@ export const generateTrialSessionMinutesPdfInteractor = async (
 
 export type FormattedMinuteSheet = {
   courtReporter: string;
+  docketNumbers: string[];
+  docketNumberWithSuffix?: string;
   judge: string;
   remoteSession: string;
   trialClerk: string;
   trialLocation: string;
   trialStartDate: string;
-  docketNumbers: string;
+  formattedDocketNumbers: string;
   petitioners: string;
   petitionerAppearances: string[];
   called: string;
@@ -242,7 +244,9 @@ const formatMotions = (motionsSection: any) => {
       `Filed by ${MOTION_FILED_BY_OPTIONS[motion.filedBy]}`,
       MOTION_STATUS_OPTIONS[motion.status],
       `<em>${motion.note}</em>`,
-    ].join('; '),
+    ]
+      .filter(Boolean)
+      .join('; '),
     motionType: MOTION_TYPE_OPTIONS[motion.type],
     renderKey: motion.renderKey,
   }));
@@ -257,7 +261,9 @@ const formatActionsAndFilings = (section: any) => {
       }`,
       ACTION_FILED_BY_OPTIONS[action.filedBy],
       ACTION_STATUS_OPTIONS[action.status],
-    ].join('; '),
+    ]
+      .filter(Boolean)
+      .join('; '),
     renderKey: action.renderKey,
   }));
 };
@@ -321,10 +327,15 @@ const formatMinuteSheet = ({
   trialSession: RawTrialSession;
   aCase: RawCase;
 }): FormattedMinuteSheet => {
-  const docketNumbers = getConsolidatedDocketNumbers(aCase);
+  const formattedDocketNumbers = getConsolidatedDocketNumbers(aCase);
   const petitioners = aCase.petitioners
     .map(petitioner => petitioner.name)
     .join(', ');
+  const docketNumbers = aCase.consolidatedCases.map(
+    consolidatedCase => consolidatedCase.docketNumber,
+  );
+
+  const { docketNumberWithSuffix } = aCase;
 
   const { called, notCalled, pretrialConference, recalled, trialHearing } =
     minuteSheetFormState.caseMetadataSection;
@@ -336,6 +347,7 @@ const formatMinuteSheet = ({
     called: formatCalledSection(called),
     courtReporter:
       minuteSheetFormState.trialSessionMetadataSection.courtReporter,
+    docketNumberWithSuffix,
     docketNumbers,
     exhibits: Object.values(minuteSheetFormState.exhibitsSection.exhibits).map(
       exhibit => ({
@@ -345,6 +357,7 @@ const formatMinuteSheet = ({
         status: EXHIBIT_STATUS_OPTIONS[exhibit.status],
       }),
     ),
+    formattedDocketNumbers,
     judge: minuteSheetFormState.trialSessionMetadataSection.judge,
     jurisdictionRetained: formatJurisdictionRetained(
       minuteSheetFormState.jurisdictionRetainedSection,
