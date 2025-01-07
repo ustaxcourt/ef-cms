@@ -132,7 +132,6 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
   it('returns the case in v1 format - when the user has access to the case', async () => {
     // Careful! Changing this test would mean that the v1 format is changing;
     // this would mean breaking changes for any user of the v1 API
-    // getAllFeatureFlagsInteractor.mockResolvedValue(isFeatureFlagOn);
     getCaseByDocketNumber.mockResolvedValue({
       ...mockDynamoCaseRecord,
       docketEntries: [],
