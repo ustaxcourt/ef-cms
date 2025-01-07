@@ -1,3 +1,4 @@
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
 import { TrialSessionLocationInfo } from '@shared/business/entities/trialSessions/TrialSession';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setTrialSessionLocationDifferencesAction } from '@web-client/presenter/actions/setTrialSessionLocationDifferencesAction';
@@ -9,6 +10,7 @@ describe('setTrialSessionLocationDifferencesAction', () => {
     city: 'TEST_CITY',
     courthouseName: 'TEST_COURTHOUSE_NAME',
     postalCode: 'TEST_POSTAL_CODE',
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
     state: 'TEST_STATE',
     trialLocation: 'TEST_CURRENT_TRIAL_LOCATION',
   };
@@ -19,6 +21,7 @@ describe('setTrialSessionLocationDifferencesAction', () => {
     city: 'TEST_CITY',
     courthouseName: 'TEST_COURTHOUSE_NAME',
     postalCode: 'TEST_POSTAL_CODE',
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
     state: 'TEST_STATE',
     trialLocation: 'TEST_UPDATED_TRIAL_LOCATION',
   };
