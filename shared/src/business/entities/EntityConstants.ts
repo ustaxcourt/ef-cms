@@ -35,6 +35,8 @@ export const DOCUMENT_EXTERNAL_CATEGORIES_MAP: {
 } = externalFilingEventsJson;
 export const COURT_ISSUED_EVENT_CODES = courtIssuedEventCodesJson;
 
+export const EVENT_CODES_THAT_ALLOW_FREE_TEXT = ['O', 'NOT', 'OJR'];
+
 export const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
 
 export const CURRENT_YEAR = +formatNow(FORMATS.YEAR);
@@ -1402,7 +1404,19 @@ export const LEGACY_TRIAL_CITY_STRINGS = LEGACY_TRIAL_CITIES.map(
   trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
 );
 
-export const SESSION_TERMS = ['Winter', 'Fall', 'Spring', 'Summer'];
+export const SESSION_TERMS_DICT = {
+  WINTER: 'Winter',
+  FALL: 'Fall',
+  SPRING: 'Spring',
+  SUMMER: 'Summer',
+} as const;
+
+export const SESSION_TERMS = [
+  SESSION_TERMS_DICT.WINTER,
+  SESSION_TERMS_DICT.FALL,
+  SESSION_TERMS_DICT.SPRING,
+  SESSION_TERMS_DICT.SUMMER,
+];
 
 export const SESSION_TERMS_BY_MONTH = {
   fall: [9, 10, 11, 12],
