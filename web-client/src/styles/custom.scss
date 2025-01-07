@@ -1120,6 +1120,10 @@ header.usa-header {
   }
 }
 
+@mixin h1-underline-border {
+  border-bottom: 3px solid color($theme-color-primary);
+}
+
 .title {
   border-bottom: 1px solid color($theme-color-base-lighter);
   margin-bottom: 20px;
@@ -1130,14 +1134,19 @@ header.usa-header {
   }
 
   h1 {
+    @include h1-underline-border;
+
     position: relative;
     top: 2px;
     display: inline-block;
     padding-bottom: 10px;
-    border-bottom: 3px solid color($theme-color-primary);
     margin-top: -2px;
     margin-bottom: 0;
   }
+}
+
+.h1-underline-border {
+  @include h1-underline-border;
 }
 
 hr.lighter {
@@ -2404,4 +2413,17 @@ button.change-scanner-button {
     flex-direction: row;
     justify-content: flex-start;
   }
+}
+
+.trial-session-planning-report-header {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 32px;
+}
+
+.cities-not-calendared-header {
+  font-weight: 600;
+}
+
+.cities-not-calendated-yellow-background {
+  background-color: #ffe396;
 }
