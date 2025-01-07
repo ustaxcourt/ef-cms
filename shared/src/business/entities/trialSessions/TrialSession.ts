@@ -551,6 +551,7 @@ export class TrialSession extends JoiValidationEntity {
 export type RawTrialSession = ExcludeMethods<TrialSession>;
 
 export const TRIAL_SESSION_ADDRESS_PROPERTIES = [
+  'proceedingType',
   'trialLocation',
   'courthouseName',
   'address1',
