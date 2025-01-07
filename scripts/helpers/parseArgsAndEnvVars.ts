@@ -507,7 +507,7 @@ const requireEnvironmentVariables = (
   }
 };
 
-const getEnvironmentVariables = (environment?: {
+export const getEnvironmentVariables = (environment?: {
   [key: string]: string;
 }): { [key: string]: string } => {
   const ret: { [key: string]: string } = {};
