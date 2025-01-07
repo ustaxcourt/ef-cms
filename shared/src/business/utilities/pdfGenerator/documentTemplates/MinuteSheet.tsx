@@ -14,35 +14,51 @@ export const MinuteSheet = ({
         trialStartDate={formattedMinuteSheet.trialStartDate}
       />
       <h1>Minutes of Proceedings</h1>
-      <div>
-        <div>Docket no(s).</div>
-        <div>{formattedMinuteSheet.docketNumbers}</div>
-      </div>
-      <div>
-        <div>Petitioner(s)</div>
-        <div>{formattedMinuteSheet.petitioners}</div>
+      <div className="minute-sheet-pdf">
+        <div>
+          <div>
+            <strong>Docket no(s).</strong>
+          </div>
+          <div>{formattedMinuteSheet.docketNumbers}</div>
+        </div>
+        <div>
+          <div>
+            <strong>Petitioner(s)</strong>
+          </div>
+          <div>{formattedMinuteSheet.petitioners}</div>
+        </div>
       </div>
       <hr />
-      <div>
+      <div className="minute-sheet-pdf">
         <div>
-          <div>Judge</div>
+          <div>
+            <strong>Judge</strong>
+          </div>
           <div>{formattedMinuteSheet.judge}</div>
 
-          <div>Trial clerk</div>
+          <div>
+            <strong>Trial clerk</strong>
+          </div>
           <div>{formattedMinuteSheet.trialClerk}</div>
         </div>
         <div>
-          <div>Court reporter</div>
+          <div>
+            <strong>Court reporter</strong>
+          </div>
           <div>{formattedMinuteSheet.courtReporter}</div>
 
-          <div>Remote session</div>
+          <div>
+            <strong>Remote session</strong>
+          </div>
           <div>{formattedMinuteSheet.remoteSession}</div>
         </div>
       </div>
       <hr />
-      <div>
+      <div className="minute-sheet-pdf">
         <div>
-          <div>Called</div>
+          <div>
+            <strong>Called</strong>
+          </div>
           <div
             dangerouslySetInnerHTML={{
               __html: formattedMinuteSheet.called,
@@ -50,45 +66,55 @@ export const MinuteSheet = ({
           />
         </div>
         <div>
-          <div>Not called</div>
+          <div>
+            <strong>Not called</strong>
+          </div>
           <div
             dangerouslySetInnerHTML={{
               __html: formattedMinuteSheet.notCalled,
             }}
           />
         </div>
-        <div>
-          <div>Recalled</div>
-          <div>
-            {formattedMinuteSheet.recalled.map(row => (
-              <div
-                dangerouslySetInnerHTML={{ __html: row.content }}
-                key={row.renderKey}
-              />
-            ))}
-          </div>
-        </div>
-        <div>
-          <div>Pretrial conference</div>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: formattedMinuteSheet.pretrialConference || '',
-            }}
-          />
-        </div>
-        <div>
-          <div>Trial/Hearing</div>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: formattedMinuteSheet.trialHearing || '',
-            }}
-          />
-        </div>
       </div>
-      <hr />
       <div>
         <div>
-          <div>Petitioner(s)</div>
+          <strong>Recalled</strong>
+        </div>
+        <div>
+          {formattedMinuteSheet.recalled.map(row => (
+            <div
+              dangerouslySetInnerHTML={{ __html: row.content }}
+              key={row.renderKey}
+            />
+          ))}
+        </div>
+      </div>
+      <div>
+        <div>
+          <strong>Pretrial conference</strong>
+        </div>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: formattedMinuteSheet.pretrialConference || '',
+          }}
+        />
+      </div>
+      <div>
+        <div>
+          <strong>Trial/Hearing</strong>
+        </div>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: formattedMinuteSheet.trialHearing || '',
+          }}
+        />
+      </div>
+      <hr />
+      <div className="minute-sheet-pdf">
+        <div>
+          <div>
+            <strong>Petitioner(s)</strong>
+          </div>
           {formattedMinuteSheet.petitionerAppearances.map(
             (petitionerAppearance, idx) => (
               <div key={idx}>{petitionerAppearance}</div>
@@ -96,7 +122,9 @@ export const MinuteSheet = ({
           )}
         </div>
         <div>
-          <div>Respondent</div>
+          <div>
+            <strong>Respondent</strong>
+          </div>
           {formattedMinuteSheet.respondentAppearances.map(
             (respondentAppearance, idx) => (
               <div key={idx}>{respondentAppearance}</div>
@@ -105,9 +133,11 @@ export const MinuteSheet = ({
         </div>
       </div>
       <hr />
-      <div>
+      <div className="minute-sheet-pdf">
         <div>
-          <div>Jurisdiction Retained</div>
+          <div>
+            <strong>Jurisdiction Retained</strong>
+          </div>
           {formattedMinuteSheet.jurisdictionRetained && (
             <div
               dangerouslySetInnerHTML={{
@@ -117,13 +147,17 @@ export const MinuteSheet = ({
           )}
         </div>
         <div>
-          <div>Status Report ordered</div>
+          <div>
+            <strong>Status Report ordered</strong>
+          </div>
           <div
             dangerouslySetInnerHTML={{
               __html: formattedMinuteSheet.statusReportOrdered,
             }}
           />
-          <div>Stipulated Decision ordered</div>
+          <div>
+            <strong>Stipulated Decision ordered</strong>
+          </div>
           <div
             dangerouslySetInnerHTML={{
               __html: formattedMinuteSheet.stipulatedDecisionOrdered,
@@ -135,7 +169,9 @@ export const MinuteSheet = ({
       <div>
         {formattedMinuteSheet.motions.map(motion => (
           <div key={motion.renderKey}>
-            <div>{motion.motionType}</div>
+            <div>
+              <strong>{motion.motionType}</strong>
+            </div>
             <div dangerouslySetInnerHTML={{ __html: motion.content }} />
           </div>
         ))}
@@ -150,21 +186,33 @@ export const MinuteSheet = ({
         ))}
       </div>
       <hr />
-      <div>
+      <div className="minute-sheet-pdf">
         <div>
-          <div>Date Submitted</div>
+          <div>
+            <strong>Date Submitted</strong>
+          </div>
           <div>{formattedMinuteSheet.trialBrief.dateSubmitted}</div>
-          <div>Total Trial Hours</div>
+          <div>
+            <strong>Total Trial Hours</strong>
+          </div>
           <div>{formattedMinuteSheet.trialBrief.totalTrialHours}</div>
         </div>
-        <div>Bench opinion rendered</div>
-        <div
-          dangerouslySetInnerHTML={{
-            __html: formattedMinuteSheet.trialBrief.benchOpinionRendered,
-          }}
-        />
         <div>
-          <div>{formattedMinuteSheet.trialBrief.briefType}</div>
+          <div>
+            <strong>Bench opinion rendered</strong>
+          </div>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: formattedMinuteSheet.trialBrief.benchOpinionRendered,
+            }}
+          />
+        </div>
+      </div>
+      <div className="minute-sheet-pdf">
+        <div>
+          <div>
+            <strong>{formattedMinuteSheet.trialBrief.briefType}</strong>
+          </div>
           {formattedMinuteSheet.trialBrief.briefDetails.map(
             (briefDetail, index) => (
               <div
@@ -176,15 +224,19 @@ export const MinuteSheet = ({
         </div>
       </div>
       <hr />
-      <div>
+      <div className="minute-sheet-pdf">
         <div>
-          <div>Petitioner Witnesses</div>
+          <div>
+            <strong>Petitioner Witnesses</strong>
+          </div>
           {formattedMinuteSheet.petitionerWitnesses.map(witness => (
             <div key={witness.renderKey}>{witness.name}</div>
           ))}
         </div>
         <div>
-          <div>Respondent Witnesses</div>
+          <div>
+            <strong>Respondent Witnesses</strong>
+          </div>
           {formattedMinuteSheet.respondentWitnesses.map(witness => (
             <div key={witness.renderKey}>{witness.name}</div>
           ))}
