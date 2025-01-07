@@ -1,6 +1,7 @@
 import { PendingItem } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
 
 export type PendingItemFormatted = {
+  docketEntryId: string;
   docketNumber: string;
   caseTitle: string;
   formattedFiledDate: string;
@@ -13,11 +14,12 @@ export type PendingItemFormatted = {
   shouldIndent: boolean;
   isLeadCase: boolean;
   docketNumberWithSuffix: string;
+  receivedAt: string;
 };
 
 export const formatPendingItem = (
   item: PendingItem,
-  { applicationContext }: { applicationContext: IApplicationContext },
+  { applicationContext },
 ): PendingItemFormatted => {
   const pendingItemWithConsolidatedFlags = applicationContext
     .getUtilities()
@@ -51,6 +53,7 @@ export const formatPendingItem = (
     caseTitle,
     consolidatedIconTooltipText:
       pendingItemWithConsolidatedFlags.consolidatedIconTooltipText,
+    docketEntryId: item.docketEntryId,
     docketNumber: item.docketNumber,
     docketNumberWithSuffix:
       pendingItemWithConsolidatedFlags.docketNumberWithSuffix!,
@@ -60,6 +63,7 @@ export const formatPendingItem = (
     formattedStatus,
     inConsolidatedGroup: pendingItemWithConsolidatedFlags.inConsolidatedGroup,
     isLeadCase: pendingItemWithConsolidatedFlags.isLeadCase,
+    receivedAt: item.receivedAt,
     shouldIndent: pendingItemWithConsolidatedFlags.shouldIndent,
   };
 };

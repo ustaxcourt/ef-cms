@@ -22,8 +22,14 @@ note: we have 3 package.json files, be sure to update them all
    > **Why am I seeing a medium severity for `quill`?**
    > Quill is used as our rich text editor for open text submissions. It currently has a potential XSS vulnerability if used incorrectly. This vulnerability can be avoided by using getContents/setContents in combination with the quill delta. Currently we are not at risk for how we are using Quill and this vulnerability is actively being disputed: https://github.com/quilljs/quill/issues/3364
 
-   > **Why am I seeing a hight severity for `cross-spawn`?**
+   > **Why am I seeing a high severity for `cross-spawn`?**
    > We use pdf2pic to generate pdf to images which depends on gm (GraphicsMagick and ImageMagick for node). This issue has existed for over two weeks as of 11/22/2024. Our risk factor for this issue should be low. It doesn't appear that we can force gm from 4.0.0 to 6.0.6 or 7.0.5.
+
+   > **Why am I seeing a high severity for `pdfjs-dist`?**
+   > [See below](#pdfjs-dist).
+
+   > **Why am I seeing a high severity for `ws`?**
+   > [See below](#ws-3rd-party-dependency-of-cerebral).
 
 3. Check if there are updates to either of the following in the main `Dockerfile`. Changing the `Dockerfile` requires publishing a new ECR image which is used as the docker image in CircleCI.
 
@@ -63,15 +69,25 @@ regex search the entire project for `aws = "\d+.\d+.\d+"` and make sure it's to 
 
 	> aws = "<LATEST_VERSION>"
 
+**Note**: Through January 3, 2025, the Terraform AWS provider must remain at version 5.78.0 due to issues with RDS.
+
 5. Check through the list of caveats to see if any of the documented issues have been resolved.
 
 6. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
 
 ## Do Not Upgrade
 
+### React and ReactDOM
+
+- cerebral version 5.2.1 and @cerebral/react version 4.2.1 are not compatible with React and ReactDOM version 19. Keep these pinned at version 18 for the time being. See https://github.com/cerebral/cerebral/pull/1441.
+
 ### @fortawesome
 
 - fortawesome packages are locked down to pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes `@fortawesome/free-solid-svg-icons`, `@fortawesome/free-regular-svg-icons`, and `@fortawesome/fontawesome-svg-core`.
+
+# canvas
+
+- [node-canvas](https://github.com/Automattic/node-canvas) v3.x conflicts with jest-environment-jsdom's peer dependency requirement (^2.5.0). We will need to stay on node-canvas v2.x until jest-environment-jsdom updates its peer dependencies.
 
 ## Caveats
 
@@ -87,7 +103,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 ### pdfjs-dist
 
 - `pdfjs-dist` has a major version update to ^3.x,x. A devex card has been created to track work being done towards updating the package. Please add notes and comments to [this card](https://trello.com/c/gjDzhUkb/1111-upgrade-pdfjs-dist).
-- The high-severity security issue "vulnerable to arbitrary JavaScript execution" has been addressed by us here: https://app.zenhub.com/workspaces/flexionef-cms-5bbe4bed4b5806bc2bec65d3/issues/gh/flexion/ef-cms/10407 and can therefore be ignored.
+- The high-severity security issue "vulnerable to arbitrary JavaScript execution" has been addressed by us here: https://github.com/flexion/ef-cms/issues/10407 and can therefore be ignored.
 
 ### @uswds/uswds
 - Keep pinned on 3.7.1, upgrading to 3.8.0+ will cause DAWSON UI issues with icon spacing and break Cypress Snapshots in the Cypress UI (as you hover over each step after initial run, it loses styles, making it harder to debug issues).

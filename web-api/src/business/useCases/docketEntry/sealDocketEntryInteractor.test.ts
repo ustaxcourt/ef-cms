@@ -1,3 +1,5 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { DOCKET_ENTRY_SEALED_TO_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
@@ -40,6 +42,9 @@ describe('sealDocketEntryInteractor', () => {
   });
 
   it('should throw an error when the docket entry is not found', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
     await expect(
       sealDocketEntryInteractor(
         applicationContext,
