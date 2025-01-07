@@ -20,6 +20,7 @@ import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawMessage } from '@shared/business/entities/Message';
 import { RawUser, UserContact } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
+import { TrialSessionLocationInfo } from '@shared/business/entities/trialSessions/TrialSession';
 import { TroubleshootingLinkInfo } from '@web-client/presenter/sequences/showFileUploadErrorModalSequence';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
@@ -644,6 +645,9 @@ export const baseState = {
   createOrderSelectedCases: [] as any[],
   currentJudges: [],
   currentPage: 'Loading',
+  currentTrialSessionLocation: undefined as
+    | TrialSessionLocationInfo
+    | undefined,
   currentViewMetadata: {
     caseDetail: {
       caseDetailInternalTabs: {
@@ -870,6 +874,9 @@ export const baseState = {
   trialSessions: [] as any[],
   // Sometimes trialSessions, sometimes TrialSessionInfoDTO, sometimes ad-hoc trial sessions
   trialSessionsPage: cloneDeep(initialTrialSessionPageState),
+  updatedTrialSessionLocation: undefined as
+    | TrialSessionLocationInfo
+    | undefined,
   user: cloneDeep(emptyUserState),
   userContactEditProgress: {} as { inProgress?: boolean },
   users: [] as RawUser[],
