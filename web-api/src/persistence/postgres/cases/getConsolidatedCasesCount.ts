@@ -12,5 +12,6 @@ export const getConsolidatedCasesCount = async ({
       .select(reader.fn.countAll().as('count'))
       .executeTakeFirst(),
   );
-  return (countResult?.count as number) || 0;
+
+  return Number(countResult?.count) || 0;
 };
