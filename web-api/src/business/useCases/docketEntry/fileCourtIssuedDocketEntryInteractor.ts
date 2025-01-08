@@ -77,12 +77,10 @@ export const fileCourtIssuedDocketEntry = async (
 
   await Promise.all(
     [subjectDocketNumber, ...docketNumbers].map(async docketNumber => {
-      const caseToUpdate = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber,
-        });
+      const caseToUpdate = await getCaseByDocketNumber({
+        applicationContext,
+        docketNumber,
+      });
 
       let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
