@@ -4,15 +4,27 @@ import tseslint from 'typescript-eslint';
 import pluginCypress from 'eslint-plugin-cypress/flat';
 
 export default tseslint.config(
-  eslint.configs.recommended,
-  tseslint.configs.recommendedTypeChecked,
+  {
+    ...eslint.configs.recommended,
+    ignores: [
+      '**/node_modules/',
+      '**/dist/',
+      '**/dist-lambdas/',
+      '**/*.js',
+      '**/build/',
+      '*.config.js',
+      '**/*_.js',
+      'scripts/run-once-scripts/**/*',
+    ],
+  },
   pluginCypress.configs.recommended,
+  tseslint.configs.recommendedTypeChecked,
   {
     rules: {
       '@typescript-eslint/await-thenable': 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
       'no-array-constructor': 'off',
-      '@typescript-eslint/no-array-constructor': 'off',
+      '@typescript-eslint/no-array-constructor': 'error',
       '@typescript-eslint/no-array-delete': 'off',
       '@typescript-eslint/no-base-to-string': 'off',
       '@typescript-eslint/no-duplicate-enum-values': 'off',
@@ -23,7 +35,7 @@ export default tseslint.config(
       '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/no-for-in-array': 'off',
       'no-implied-eval': 'off',
-      '@typescript-eslint/no-implied-eval': 'off',
+      '@typescript-eslint/no-implied-eval': 'error',
       '@typescript-eslint/no-misused-new': 'off',
       '@typescript-eslint/no-misused-promises': [
         'error',
@@ -47,19 +59,19 @@ export default tseslint.config(
       '@typescript-eslint/no-unsafe-member-access': 'off',
       '@typescript-eslint/no-unsafe-return': 'off',
       '@typescript-eslint/no-unsafe-unary-minus': 'off',
-      'no-unused-expressions': 'error',
-      '@typescript-eslint/no-unused-expressions': 'off',
-      'no-unused-vars': 'error',
-      '@typescript-eslint/no-unused-vars': 'off',
+      'no-unused-expressions': 'off',
+      '@typescript-eslint/no-unused-expressions': 'error',
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-wrapper-object-types': 'off',
       'no-throw-literal': 'off',
       '@typescript-eslint/only-throw-error': 'off',
       '@typescript-eslint/prefer-as-const': 'off',
       '@typescript-eslint/prefer-namespace-keyword': 'off',
       'prefer-promise-reject-errors': 'off',
-      '@typescript-eslint/prefer-promise-reject-errors': 'off',
+      '@typescript-eslint/prefer-promise-reject-errors': 'error',
       'require-await': 'off',
-      '@typescript-eslint/require-await': 'off',
+      '@typescript-eslint/require-await': 'error',
       '@typescript-eslint/restrict-plus-operands': 'off',
       '@typescript-eslint/restrict-template-expressions': 'off',
       '@typescript-eslint/triple-slash-reference': 'off',
@@ -88,6 +100,7 @@ export default tseslint.config(
       '**/*_.js',
       'scripts/run-once-scripts/**/*',
     ],
+    rules: {}
   },
   {
     files: ['**/*.js', 'scripts/run-once-scripts/**/*'],

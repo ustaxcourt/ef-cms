@@ -39,7 +39,7 @@
       "tsconfig-paths/register"
     ]
   },
-  "include": ["./**/*.ts", "./**/*.tsx"],
+  "include": ["./**/*.ts", "./**/*.tsx", "eslint.config.mjs"],
   "exclude": [
     "node_modules",
     "targetBranch",
