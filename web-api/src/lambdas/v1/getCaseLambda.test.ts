@@ -85,7 +85,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
   });
 
   it('returns 200 when the user is not associated and the case is found', async () => {
-    getCaseByDocketNumber.mockResolvedValue(mockDynamoCaseRecord);
+    getCaseByDocketNumber.mockResolvedValue(mockDynamoCaseRecord as any);
 
     const response = await getCaseLambda(REQUEST_EVENT, mockPetitionerUser);
 
@@ -135,7 +135,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
     getCaseByDocketNumber.mockResolvedValue({
       ...mockDynamoCaseRecord,
       docketEntries: [],
-    });
+    } as any);
 
     const response = await getCaseLambda(REQUEST_EVENT, mockDocketClerkUser);
 
