@@ -18,6 +18,7 @@ import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/Entity
 import { TrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { get } from 'lodash';
+import { hasTrialLocationBeenUpdated } from '@shared/business/utilities/trialSession/hasTrialLocationBeenUpdated';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const updateTrialSession = async (
@@ -149,6 +150,18 @@ export const updateTrialSession = async (
         TRIAL_SESSION_PROCEEDING_TYPES.remote &&
       updatedTrialSessionEntity.isCalendared;
 
+    //create a new flag for when location is changed
+    // ask Tenille about including notcalendared cases when auto generating
+    const shouldSetNoticeOfTrialSessionLocationChange =
+      currentTrialSession.proceedingType ===
+        TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
+      updatedTrialSessionEntity.proceedingType ===
+        TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
+      hasTrialLocationBeenUpdated(
+        currentTrialSession,
+        updatedTrialSessionEntity,
+      );
+
     await updateCasesAndSetNoticeOfChange({
       applicationContext,
       authorizedUser,
@@ -157,6 +170,7 @@ export const updateTrialSession = async (
       shouldIssueNoticeOfChangeOfTrialJudge,
       shouldSetNoticeOfChangeToInPersonProceeding,
       shouldSetNoticeOfChangeToRemoteProceeding,
+      shouldSetNoticeOfTrialSessionLocationChange,
       updatedTrialSessionEntity,
     });
 
@@ -219,6 +233,7 @@ const updateCasesAndSetNoticeOfChange = async ({
   shouldIssueNoticeOfChangeOfTrialJudge,
   shouldSetNoticeOfChangeToInPersonProceeding,
   shouldSetNoticeOfChangeToRemoteProceeding,
+  shouldSetNoticeOfTrialSessionLocationChange,
   updatedTrialSessionEntity,
 }: {
   applicationContext: ServerApplicationContext;
@@ -227,6 +242,7 @@ const updateCasesAndSetNoticeOfChange = async ({
   updatedTrialSessionEntity: TrialSession;
   authorizedUser: AuthUser;
   shouldSetNoticeOfChangeToRemoteProceeding: boolean;
+  shouldSetNoticeOfTrialSessionLocationChange: boolean;
   shouldSetNoticeOfChangeToInPersonProceeding: boolean;
   shouldIssueNoticeOfChangeOfTrialJudge: boolean;
 }): Promise<void> => {
@@ -291,6 +307,14 @@ const updateCasesAndSetNoticeOfChange = async ({
           },
           authorizedUser,
         );
+    }
+
+    //i
+    //check if location change flag is true
+    // call another method
+
+    if (shouldSetNoticeOfTrialSessionLocationChange) {
+      console.log('random');
     }
 
     caseEntity.updateTrialSessionInformation(updatedTrialSessionEntity);
