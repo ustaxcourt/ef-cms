@@ -26,7 +26,10 @@ export const hasTrialSessionLocationChangedAction = ({
       acc[prop] = currentTrialSessionLocation[prop];
       return acc;
     },
-    {} as TrialSessionLocationInfo,
+    {} as Record<
+      keyof TrialSessionLocationInfo,
+      TrialSessionLocationInfo[keyof TrialSessionLocationInfo]
+    >,
   );
 
   const updatedLocation = TRIAL_SESSION_ADDRESS_PROPERTIES.reduce(
@@ -34,7 +37,10 @@ export const hasTrialSessionLocationChangedAction = ({
       acc[prop] = updatedTrialSessionLocation[prop];
       return acc;
     },
-    {} as TrialSessionLocationInfo,
+    {} as Record<
+      keyof TrialSessionLocationInfo,
+      TrialSessionLocationInfo[keyof TrialSessionLocationInfo]
+    >,
   );
 
   const hasNotChanged = isEqual(currentLocation, updatedLocation);
