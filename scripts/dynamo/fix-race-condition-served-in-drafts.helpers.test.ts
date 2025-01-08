@@ -7,7 +7,7 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import {
   fixRaceConditionServedInDrafts,
   getDocumentFromDynamo,
-} from './fix-race-condition-served-in-drafts';
+} from './fix-race-condition-served-in-drafts.helpers';
 import { marshall } from '@aws-sdk/util-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
 
