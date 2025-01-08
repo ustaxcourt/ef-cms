@@ -12,6 +12,8 @@ export const noticeOfChangeOfTrialLocation = async ({
 }: {
   applicationContext: ServerApplicationContext;
   data: {
+    caseCaptionExtension: string;
+    caseTitle: string;
     docketNumberWithSuffix: string;
     trialSession: RawTrialSession;
   };
