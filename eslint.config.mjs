@@ -1,9 +1,9 @@
 // @ts-check
 import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import pluginCypress from 'eslint-plugin-cypress/flat';
 import prettierConfig from 'eslint-config-prettier';
+import pluginCypress from 'eslint-plugin-cypress/flat';
 import pluginJest from 'eslint-plugin-jest';
+import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
