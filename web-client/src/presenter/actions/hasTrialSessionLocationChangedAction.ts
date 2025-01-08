@@ -1,9 +1,5 @@
-import {
-  TRIAL_SESSION_ADDRESS_PROPERTIES,
-  TrialSessionLocationInfo,
-} from '@shared/business/entities/trialSessions/TrialSession';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
-import { isEqual } from 'lodash';
+import { hasTrialLocationBeenUpdated } from '@shared/business/utilities/trialSession/hasTrialLocationBeenUpdated';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const hasTrialSessionLocationChangedAction = ({
@@ -21,30 +17,12 @@ export const hasTrialSessionLocationChangedAction = ({
   )
     return path.unchanged();
 
-  const currentLocation = TRIAL_SESSION_ADDRESS_PROPERTIES.reduce(
-    (acc, prop) => {
-      acc[prop] = currentTrialSessionLocation[prop];
-      return acc;
-    },
-    {} as Record<
-      keyof TrialSessionLocationInfo,
-      TrialSessionLocationInfo[keyof TrialSessionLocationInfo]
-    >,
+  const isUpdated = hasTrialLocationBeenUpdated(
+    currentTrialSessionLocation,
+    updatedTrialSessionLocation,
   );
 
-  const updatedLocation = TRIAL_SESSION_ADDRESS_PROPERTIES.reduce(
-    (acc, prop) => {
-      acc[prop] = updatedTrialSessionLocation[prop];
-      return acc;
-    },
-    {} as Record<
-      keyof TrialSessionLocationInfo,
-      TrialSessionLocationInfo[keyof TrialSessionLocationInfo]
-    >,
-  );
-
-  const hasNotChanged = isEqual(currentLocation, updatedLocation);
-  if (hasNotChanged) return path.unchanged();
+  if (!isUpdated) return path.unchanged();
   return path.updated({
     currentTrialSessionLocation,
     updatedTrialSessionLocation,
