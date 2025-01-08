@@ -44,7 +44,7 @@
     "@fortawesome/react-fontawesome": "0.2.2",
     "@joi/date": "2.1.1",
     "@opensearch-project/opensearch": "2.13.0",
-    "@smithy/node-http-handler" : "3.3.3",
+    "@smithy/node-http-handler": "3.3.3",
     "@smithy/protocol-http": "4.1.8",
     "@smithy/signature-v4": "4.2.4",
     "@sparticuz/chromium": "127.0.0",
@@ -266,6 +266,7 @@
     "@babel/preset-typescript": "7.26.0",
     "@babel/register": "7.25.9",
     "@cypress/puppeteer": "0.1.5",
+    "@eslint/js": "^9.17.0",
     "@faker-js/faker": "9.3.0",
     "@miovision/eslint-plugin-disallow-date": "2.0.0",
     "@types/aws-lambda": "8.10.147",
@@ -274,8 +275,8 @@
     "@types/luxon": "3.4.2",
     "@types/node": "22.10.5",
     "@types/promise-retry": "1.1.6",
-    "@types/react-dom": "19.0.2",
     "@types/react": "19.0.2",
+    "@types/react-dom": "19.0.2",
     "@types/uuid": "10.0.0",
     "@types/websocket": "1.0.10",
     "@typescript-eslint/eslint-plugin": "8.19.0",
@@ -354,6 +355,7 @@
     "ts-node": "10.9.2",
     "tsconfig-paths": "4.2.0",
     "typescript": "5.7.2",
+    "typescript-eslint": "^8.19.1",
     "utf8": "3.0.0"
   }
 }
