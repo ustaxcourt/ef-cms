@@ -2,6 +2,7 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import pluginCypress from 'eslint-plugin-cypress/flat';
+import prettierConfig from 'eslint-config-prettier';
 
 export default tseslint.config(
   {
@@ -17,6 +18,7 @@ export default tseslint.config(
       'scripts/run-once-scripts/**/*',
     ],
   },
+  prettierConfig, // This config ignores formatting rules in the linter. Linters are not formatters.
   pluginCypress.configs.recommended,
   tseslint.configs.recommendedTypeChecked,
   {
@@ -83,7 +85,9 @@ export default tseslint.config(
       parserOptions: {
         ecmaVersion: 2020,
         sourceType: 'module',
-        projectService: true,
+        projectService: {
+          allowDefaultProject: ['*.js', '*.mjs'],
+        },
         tsconfigRootDir: import.meta.dirname,
         ecmaFeatures: {
           jsx: true,
@@ -100,7 +104,6 @@ export default tseslint.config(
       '**/*_.js',
       'scripts/run-once-scripts/**/*',
     ],
-    rules: {}
   },
   {
     files: ['**/*.js', 'scripts/run-once-scripts/**/*'],
