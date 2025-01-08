@@ -12,6 +12,7 @@ const scriptConfig: ScriptConfig = {
     'trial-sessions - Generates a CSV of trial sessions within the given year.',
   environment: {
     env: 'ENV',
+    home: 'HOME',
     sourceTableVersion: 'SOURCE_TABLE_VERSION',
   },
   parameters: {
@@ -34,13 +35,14 @@ const scriptConfig: ScriptConfig = {
   },
   requireActiveAwsSession: true,
 };
-const { fiscal, stats, year } = parseArgsAndEnvVars(scriptConfig) as {
+const { fiscal, home, stats, year } = parseArgsAndEnvVars(scriptConfig) as {
   fiscal: boolean;
+  home: string;
   stats: boolean;
   year: number;
 };
 
-const OUTPUT_DIR = `${process.env.HOME}/Documents`;
+const OUTPUT_DIR = `${home}/Documents`;
 const filename = `${OUTPUT_DIR}/${fiscal ? 'fy-' : ''}${year}-trial-sessions.csv`;
 const start = fiscal
   ? `${year - 1}-10-01T04:00:00Z`
