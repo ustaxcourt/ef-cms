@@ -52,7 +52,7 @@ export const DateSelector = ({
   const labelClassNames =
     labelPosition === 'left'
       ? 'margin-right-2 margin-bottom-0 display-inline-block'
-      : // TODO 10419 this is not REALLY hidden at the moment, only wiping styles. rethink
+      : // 10419 TODO this is not REALLY hidden at the moment, only wiping styles. rethink
         labelPosition === 'hidden'
         ? ''
         : 'usa-label';
