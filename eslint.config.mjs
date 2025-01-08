@@ -4,6 +4,7 @@ import prettierConfig from 'eslint-config-prettier';
 import pluginCypress from 'eslint-plugin-cypress/flat';
 import pluginJest from 'eslint-plugin-jest';
 import tseslint from 'typescript-eslint';
+import reactPlugin from 'eslint-plugin-react';
 
 export default tseslint.config(
   {
@@ -80,6 +81,8 @@ export default tseslint.config(
       'jest/no-export': 'off',
     },
   },
+  // @ts-ignore
+  reactPlugin.configs.flat.recommended,
   prettierConfig, // This config ignores formatting rules in the linter. Linters are not formatters.
   pluginCypress.configs.recommended,
   tseslint.configs.recommendedTypeChecked,
