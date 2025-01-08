@@ -314,7 +314,6 @@ const updateCasesAndSetNoticeOfChange = async ({
     // call another method
 
     if (shouldSetNoticeOfTrialSessionLocationChange) {
-      console.log('random');
       await applicationContext
         .getUseCaseHelpers()
         .setNoticeOfChangeOfTrialLocation(
