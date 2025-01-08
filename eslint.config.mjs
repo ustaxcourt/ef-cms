@@ -5,7 +5,6 @@ import pluginCypress from 'eslint-plugin-cypress/flat';
 import prettierConfig from 'eslint-config-prettier';
 import pluginJest from 'eslint-plugin-jest';
 
-
 export default tseslint.config(
   {
     // eslint defaults
@@ -20,6 +19,50 @@ export default tseslint.config(
       '**/*_.js',
       'scripts/run-once-scripts/**/*',
     ],
+  },
+  {
+    // eslint default rules that we added. No plugin required.
+    rules: {
+      complexity: ['warn', { max: 20 }],
+      'eol-last': ['error', 'always'],
+      'id-denylist': ['error', /* 'error', 'err', 'cb', 'callback',*/ 'test'],
+      'max-lines': [
+        'error',
+        { max: 700, skipBlankLines: true, skipComments: true },
+      ],
+      'no-restricted-globals': [
+        'error',
+        { name: 'error' },
+        { name: 'event' },
+        { name: 'status' },
+        { name: 'name' },
+        { name: 'document' },
+      ],
+      'no-trailing-spaces': 'error',
+      'no-unneeded-ternary': ['error', { defaultAssignment: false }],
+      'no-var': 'error',
+      'no-warning-comments': [
+        'error',
+        { location: 'anywhere', terms: ['fixme', 'xxx'] },
+      ],
+      'object-shorthand': 'warn',
+      'prefer-destructuring': [
+        'error',
+        {
+          AssignmentExpression: {
+            array: false,
+            object: true,
+          },
+          VariableDeclarator: {
+            array: false,
+            object: true,
+          },
+        },
+        {
+          enforceForRenamedProperties: false,
+        },
+      ],
+    },
   },
   {
     // jest configuration
@@ -41,6 +84,7 @@ export default tseslint.config(
   pluginCypress.configs.recommended,
   tseslint.configs.recommendedTypeChecked,
   {
+    // Typescript specific rules. Most are turned off as we have not been using typescript for long enough.
     rules: {
       '@typescript-eslint/await-thenable': 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
@@ -97,45 +141,6 @@ export default tseslint.config(
       '@typescript-eslint/restrict-template-expressions': 'off',
       '@typescript-eslint/triple-slash-reference': 'off',
       '@typescript-eslint/unbound-method': 'off',
-      complexity: ['warn', { max: 20 }],
-      'eol-last': ['error', 'always'],
-      'id-denylist': ['error', /* 'error', 'err', 'cb', 'callback',*/ 'test'],
-      'max-lines': [
-        'error',
-        { max: 700, skipBlankLines: true, skipComments: true },
-      ],
-      'no-restricted-globals': [
-        'error',
-        { name: 'error' },
-        { name: 'event' },
-        { name: 'status' },
-        { name: 'name' },
-        { name: 'document' },
-      ],
-      'no-trailing-spaces': 'error',
-      'no-unneeded-ternary': ['error', { defaultAssignment: false }],
-      'no-var': 'error',
-      'no-warning-comments': [
-        'error',
-        { location: 'anywhere', terms: ['fixme', 'xxx'] },
-      ],
-      'object-shorthand': 'warn',
-      'prefer-destructuring': [
-        'error',
-        {
-          AssignmentExpression: {
-            array: false,
-            object: true,
-          },
-          VariableDeclarator: {
-            array: false,
-            object: true,
-          },
-        },
-        {
-          enforceForRenamedProperties: false,
-        },
-      ],
     },
   },
   {
