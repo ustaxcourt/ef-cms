@@ -81,6 +81,14 @@ describe('fixRaceConditionServedInDrafts', () => {
     };
   });
 
+  it('logs an error and returns if it can not look up the docket entry', async () => {
+    mockedDDBClient.on(GetItemCommand).resolvesOnce({});
+    await fixRaceConditionServedInDrafts(applicationContext, mockCall);
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).not.toHaveBeenCalled();
+  });
+
   it('looks up the subject case for the specified docketNumber', async () => {
     await fixRaceConditionServedInDrafts(applicationContext, mockCall);
     expect(
