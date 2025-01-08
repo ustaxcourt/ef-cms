@@ -5,8 +5,10 @@ import pluginCypress from 'eslint-plugin-cypress/flat';
 import prettierConfig from 'eslint-config-prettier';
 import pluginJest from 'eslint-plugin-jest';
 
+
 export default tseslint.config(
   {
+    // eslint defaults
     ...eslint.configs.recommended,
     ignores: [
       '**/node_modules/',
@@ -20,7 +22,7 @@ export default tseslint.config(
     ],
   },
   {
-    // update this to match your test files
+    // jest configuration
     files: ['**/*.test.ts', '**/*.test.js'],
     plugins: { jest: pluginJest },
     languageOptions: {
@@ -32,7 +34,7 @@ export default tseslint.config(
       'jest/no-identical-title': 'warn',
       'jest/prefer-to-have-length': 'off',
       'jest/valid-expect': 'error',
-      'jest/no-export': 'off'
+      'jest/no-export': 'off',
     },
   },
   prettierConfig, // This config ignores formatting rules in the linter. Linters are not formatters.
@@ -95,6 +97,45 @@ export default tseslint.config(
       '@typescript-eslint/restrict-template-expressions': 'off',
       '@typescript-eslint/triple-slash-reference': 'off',
       '@typescript-eslint/unbound-method': 'off',
+      complexity: ['warn', { max: 20 }],
+      'eol-last': ['error', 'always'],
+      'id-denylist': ['error', /* 'error', 'err', 'cb', 'callback',*/ 'test'],
+      'max-lines': [
+        'error',
+        { max: 700, skipBlankLines: true, skipComments: true },
+      ],
+      'no-restricted-globals': [
+        'error',
+        { name: 'error' },
+        { name: 'event' },
+        { name: 'status' },
+        { name: 'name' },
+        { name: 'document' },
+      ],
+      'no-trailing-spaces': 'error',
+      'no-unneeded-ternary': ['error', { defaultAssignment: false }],
+      'no-var': 'error',
+      'no-warning-comments': [
+        'error',
+        { location: 'anywhere', terms: ['fixme', 'xxx'] },
+      ],
+      'object-shorthand': 'warn',
+      'prefer-destructuring': [
+        'error',
+        {
+          AssignmentExpression: {
+            array: false,
+            object: true,
+          },
+          VariableDeclarator: {
+            array: false,
+            object: true,
+          },
+        },
+        {
+          enforceForRenamedProperties: false,
+        },
+      ],
     },
   },
   {
@@ -123,7 +164,7 @@ export default tseslint.config(
     ],
   },
   {
-    files: ['**/*.js', 'scripts/run-once-scripts/**/*'],
+    files: ['**/*.js', 'scripts/run-once-scripts/**/*', 'cypress/**/*.ts'], // Do not use typechecking on javascript files, run once scripts, or cypress which has different promise chains
     extends: [tseslint.configs.disableTypeChecked],
   },
 );
