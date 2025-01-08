@@ -3,6 +3,7 @@ import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import pluginCypress from 'eslint-plugin-cypress/flat';
 import prettierConfig from 'eslint-config-prettier';
+import pluginJest from 'eslint-plugin-jest';
 
 export default tseslint.config(
   {
@@ -17,6 +18,22 @@ export default tseslint.config(
       '**/*_.js',
       'scripts/run-once-scripts/**/*',
     ],
+  },
+  {
+    // update this to match your test files
+    files: ['**/*.test.ts', '**/*.test.js'],
+    plugins: { jest: pluginJest },
+    languageOptions: {
+      globals: pluginJest.environments.globals.globals,
+    },
+    rules: {
+      'jest/no-disabled-tests': 'error',
+      'jest/no-focused-tests': 'error',
+      'jest/no-identical-title': 'warn',
+      'jest/prefer-to-have-length': 'off',
+      'jest/valid-expect': 'error',
+      'jest/no-export': 'off'
+    },
   },
   prettierConfig, // This config ignores formatting rules in the linter. Linters are not formatters.
   pluginCypress.configs.recommended,
