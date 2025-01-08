@@ -315,6 +315,17 @@ const updateCasesAndSetNoticeOfChange = async ({
 
     if (shouldSetNoticeOfTrialSessionLocationChange) {
       console.log('random');
+      await applicationContext
+        .getUseCaseHelpers()
+        .setNoticeOfChangeOfTrialLocation(
+          applicationContext,
+          {
+            caseEntity,
+            newPdfDoc: paperServicePdfsCombined,
+            newTrialSessionEntity: updatedTrialSessionEntity,
+          },
+          authorizedUser,
+        );
     }
 
     caseEntity.updateTrialSessionInformation(updatedTrialSessionEntity);
