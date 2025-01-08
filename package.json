@@ -176,7 +176,7 @@
     "lint:fix": "npm run lint:css:fix & npm run lint:js/ts:fix",
     "lint:js/ts:fix:plain": "npm run lint:js/ts:fix -- --rule 'prettier/prettier: 0'",
     "lint:js/ts:fix": "npm run lint:js/ts -- --fix",
-    "lint:js/ts": "TIMING=1 eslint --ext .js,.jsx,.ts,.tsx shared/src/ web-api/storage/ web-api/src/ web-client/src/ web-client/integration-tests/ web-client/integration-tests-public/",
+    "lint:js/ts": "TIMING=1 eslint shared/src/ web-api/storage/ web-api/src/ web-client/src/",
     "lint:swagger": "swagger-cli validate web-api/swagger.json && swagger-cli validate docs/api/v1.yaml && swagger-cli validate docs/api/v2.yaml",
     "lint": "npm run lint:swagger & npm run lint:css & npm run lint:js/ts",
     "loadtest:pdf-generation": "npx ts-node --transpile-only ./web-api/storage/scripts/loadTest/loadTestPdfGeneration.ts",
