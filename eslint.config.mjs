@@ -5,6 +5,7 @@ import pluginCypress from 'eslint-plugin-cypress/flat';
 import pluginJest from 'eslint-plugin-jest';
 import tseslint from 'typescript-eslint';
 import reactPlugin from 'eslint-plugin-react';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
 
 export default tseslint.config(
   {
@@ -66,28 +67,41 @@ export default tseslint.config(
     },
   },
   {
-    // jest configuration
+    // jest configuration and recommendation
     files: ['**/*.test.ts', '**/*.test.js'],
-    plugins: { jest: pluginJest },
-    languageOptions: {
-      globals: pluginJest.environments.globals.globals,
-    },
-    rules: {
-      'jest/no-disabled-tests': 'error',
-      'jest/no-focused-tests': 'error',
-      'jest/no-identical-title': 'warn',
-      'jest/prefer-to-have-length': 'off',
-      'jest/valid-expect': 'error',
-      'jest/no-export': 'off',
-    },
+    ...pluginJest.configs['flat/recommended'],
   },
   // @ts-ignore
-  reactPlugin.configs.flat.recommended,
+  reactPlugin.configs.flat.recommended, // React recommendations
+  jsxA11y.flatConfigs.recommended, // Accessibility recommendations
   prettierConfig, // This config ignores formatting rules in the linter. Linters are not formatters.
-  pluginCypress.configs.recommended,
+  pluginCypress.configs.recommended, // cypress recommendations
   tseslint.configs.recommendedTypeChecked,
   {
     // Typescript specific rules. Most are turned off as we have not been using typescript for long enough.
+    languageOptions: {
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: 'module',
+        projectService: {
+          allowDefaultProject: ['*.js', '*.mjs'],
+        },
+        tsconfigRootDir: import.meta.dirname,
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    ignores: [
+      '**/node_modules/',
+      '**/dist/',
+      '**/dist-lambdas/',
+      '**/*.js',
+      '**/build/',
+      '*.config.js',
+      '**/*_.js',
+      'scripts/run-once-scripts/**/*',
+    ],
     rules: {
       '@typescript-eslint/await-thenable': 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
@@ -145,31 +159,6 @@ export default tseslint.config(
       '@typescript-eslint/triple-slash-reference': 'off',
       '@typescript-eslint/unbound-method': 'off',
     },
-  },
-  {
-    languageOptions: {
-      parserOptions: {
-        ecmaVersion: 2020,
-        sourceType: 'module',
-        projectService: {
-          allowDefaultProject: ['*.js', '*.mjs'],
-        },
-        tsconfigRootDir: import.meta.dirname,
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-    },
-    ignores: [
-      '**/node_modules/',
-      '**/dist/',
-      '**/dist-lambdas/',
-      '**/*.js',
-      '**/build/',
-      '*.config.js',
-      '**/*_.js',
-      'scripts/run-once-scripts/**/*',
-    ],
   },
   {
     files: ['**/*.js', 'scripts/run-once-scripts/**/*', 'cypress/**/*.ts'], // Do not use typechecking on javascript files, run once scripts, or cypress which has different promise chains
