@@ -10,7 +10,7 @@ export const setNoticeOfChangeOfTrialLocation = async (
   const noticePdf = await applicationContext
     .getUseCases()
     .generateNoticeOfChangeOfTrialLocationInteractor(applicationContext, {
-      docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
+      docketNumber: caseEntity.docketNumber,
       trialSession: newTrialSessionEntity,
     });
 
