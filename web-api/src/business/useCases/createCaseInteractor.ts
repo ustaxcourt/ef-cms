@@ -21,7 +21,7 @@ import { WorkItem } from '../../../../shared/src/business/entities/WorkItem';
 import { createCasePetitionersData } from '@web-api/persistence/postgres/cases/parties/createCasePetitionerData';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
-import { setServiceIndicatorsForCase } from '../../../../shared/src/business/utilities/setServiceIndicatorsForCase';
+import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 
@@ -134,7 +134,7 @@ export const createCaseInteractor = async (
     },
   );
 
-  setServiceIndicatorsForCase(caseToAdd);
+  setServiceIndicatorsForPetitionersOnCase(caseToAdd);
 
   if (user.role === ROLES.petitioner) {
     caseToAdd.getContactPrimary().contactId = user.userId;

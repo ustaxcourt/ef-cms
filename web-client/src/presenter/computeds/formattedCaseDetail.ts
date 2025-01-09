@@ -85,14 +85,14 @@ export const formattedCaseDetail = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const { formatCase, setServiceIndicatorsForCase } =
+  const { formatCase, setServiceIndicatorsForPetitionersOnCase } =
     applicationContext.getUtilities();
 
   const caseDetail = get(state.caseDetail);
   const user = get(state.user);
 
   const result = {
-    ...setServiceIndicatorsForCase(caseDetail),
+    ...setServiceIndicatorsForPetitionersOnCase(caseDetail),
     ...formatCase(applicationContext, caseDetail, user),
   };
 
