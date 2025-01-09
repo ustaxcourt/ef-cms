@@ -3,6 +3,11 @@ import { PrimaryHeader } from '@shared/business/utilities/pdfGenerator/component
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import React from 'react';
 
+export type TrialSessionLocationChangeInfo = Pick<
+  RawTrialSession,
+  'trialSessionId'
+>;
+
 export const NoticeOfChangeOfTrialLocation = ({
   caseCaptionExtension,
   caseTitle,
@@ -12,7 +17,7 @@ export const NoticeOfChangeOfTrialLocation = ({
   caseCaptionExtension: string;
   caseTitle: string;
   docketNumberWithSuffix: string;
-  trialSession: RawTrialSession;
+  trialSession: TrialSessionLocationChangeInfo;
 }) => {
   return (
     <div>
