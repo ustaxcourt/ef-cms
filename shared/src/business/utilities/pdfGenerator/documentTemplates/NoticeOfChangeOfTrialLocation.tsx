@@ -56,7 +56,7 @@ export const NoticeOfChangeOfTrialLocation = ({
                           {prop
                             .filter(key => !!trialSession[key])
                             .map(key => trialSession[key])
-                            .join(',')}
+                            .join(', ')}
                         </div>
                       );
 
