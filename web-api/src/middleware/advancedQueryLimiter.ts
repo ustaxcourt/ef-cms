@@ -11,6 +11,7 @@ export const advancedQueryLimiter =
       .getPersistenceGateway()
       .incrementKeyCount({ applicationContext, key });
 
+    // eslint-disable-next-line prefer-const
     let { expiresAt, id: count } = limiterCache;
 
     if (!expiresAt || Date.now() > expiresAt) {

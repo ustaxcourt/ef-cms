@@ -16,7 +16,7 @@ describe('validateUploadPetitionStep5Action', () => {
     };
   });
 
-  it('should call the valid path when the data gathered step 5 passes validation', async () => {
+  it('should call the valid path when the data gathered step 5 passes validation', () => {
     runAction(validateUploadPetitionStep5Action, {
       modules: {
         presenter,
@@ -33,7 +33,7 @@ describe('validateUploadPetitionStep5Action', () => {
     expect(mockErrorPath).not.toHaveBeenCalled();
   });
 
-  it('should call the invalid path the data gathered step 5 does not pass validation', async () => {
+  it('should call the invalid path the data gathered step 5 does not pass validation', () => {
     runAction(validateUploadPetitionStep5Action, {
       modules: {
         presenter,
