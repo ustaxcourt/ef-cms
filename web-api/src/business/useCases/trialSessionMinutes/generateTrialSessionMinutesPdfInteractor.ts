@@ -146,8 +146,8 @@ export type FormattedMinuteSheet = {
 };
 
 const getBriefDetails = (briefDetails: BriefDetailsType) => {
-  // TODO 10419 Handle Simultaneous Supplemental Brief
-  // TODO 10419 Casing of briefSubtype isn't quite right
+  // 10419 TODO Handle Simultaneous Supplemental Brief
+  // 10419 TODO Casing of briefSubtype isn't quite right
   const briefSubtypes = Object.keys(briefDetails);
   return briefSubtypes.map(briefSubtype => {
     const briefDetail = briefDetails[briefSubtype];
