@@ -21,15 +21,15 @@ export type TrialSessionLocationChangePDFInfo = Pick<
 export const NoticeOfChangeOfTrialLocation = ({
   caseCaptionExtension,
   caseTitle,
-  currentTrialSession,
   docketNumberWithSuffix,
-  trialSession,
+  previousTrialSession,
+  updatedTrialSession,
 }: {
   caseCaptionExtension: string;
   caseTitle: string;
   docketNumberWithSuffix: string;
-  currentTrialSession: TrialSessionLocationChangePDFInfo;
-  trialSession: TrialSessionLocationChangePDFInfo;
+  previousTrialSession: TrialSessionLocationChangePDFInfo;
+  updatedTrialSession: TrialSessionLocationChangePDFInfo;
 }) => {
   return (
     <div>
@@ -51,21 +51,21 @@ export const NoticeOfChangeOfTrialLocation = ({
                 {['courthouseName', 'address1', 'address2', ['city', 'state']]
                   .filter(prop => {
                     if (Array.isArray(prop))
-                      return prop.some(key => !!trialSession[key]);
-                    return !!trialSession[prop];
+                      return prop.some(key => !!updatedTrialSession[key]);
+                    return !!updatedTrialSession[prop];
                   })
                   .map(prop => {
                     if (Array.isArray(prop))
                       return (
                         <div key={prop[0]}>
                           {prop
-                            .filter(key => !!trialSession[key])
-                            .map(key => trialSession[key])
+                            .filter(key => !!updatedTrialSession[key])
+                            .map(key => updatedTrialSession[key])
                             .join(', ')}
                         </div>
                       );
 
-                    return <div key={prop}>{trialSession[prop]}</div>;
+                    return <div key={prop}>{updatedTrialSession[prop]}</div>;
                   })}
                 <div>In Person</div>
               </td>
@@ -78,7 +78,7 @@ export const NoticeOfChangeOfTrialLocation = ({
               <th>Judge</th>
             </thead>
             <tr>
-              <td>{trialSession.judge?.name}</td>
+              <td>{updatedTrialSession.judge?.name}</td>
             </tr>
           </table>
         </div>
@@ -86,17 +86,22 @@ export const NoticeOfChangeOfTrialLocation = ({
       <div>
         &emsp;The parties are hereby notified that the Court’s Notice of Trial
         for this case is amended in that the location of the Court&apos;s{' '}
-        {currentTrialSession.trialLocation} Trial Session scheduled to begin on{' '}
-        {formatDateString(trialSession.startDate, 'MMDDYYYY')}, will be held in{' '}
-        {trialSession.trialLocation} at:
+        {previousTrialSession.trialLocation} Trial Session scheduled to begin on{' '}
+        {formatDateString(updatedTrialSession.startDate, 'MMDDYYYY')}, will be
+        held in {updatedTrialSession.trialLocation} at:
         <div style={{ paddingTop: '1rem', textAlign: 'center' }}>
-          {trialSession.courthouseName && (
-            <div>{trialSession.courthouseName}</div>
+          {updatedTrialSession.courthouseName && (
+            <div>{updatedTrialSession.courthouseName}</div>
           )}
-          {trialSession.address1 && <div>{trialSession.address1}</div>}
-          {trialSession.address2 && <div>{trialSession.address2}</div>}
+          {updatedTrialSession.address1 && (
+            <div>{updatedTrialSession.address1}</div>
+          )}
+          {updatedTrialSession.address2 && (
+            <div>{updatedTrialSession.address2}</div>
+          )}
           <div>
-            {trialSession.city}, {trialSession.state} {trialSession.postalCode}
+            {updatedTrialSession.city}, {updatedTrialSession.state}{' '}
+            {updatedTrialSession.postalCode}
           </div>
         </div>
         <div style={{ fontStyle: 'italic', paddingTop: '1rem' }}>

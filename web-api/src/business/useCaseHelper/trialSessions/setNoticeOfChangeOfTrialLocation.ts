@@ -4,15 +4,15 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const setNoticeOfChangeOfTrialLocation = async (
   applicationContext: ServerApplicationContext,
-  { caseEntity, currentTrialSession, newPdfDoc, newTrialSessionEntity },
+  { caseEntity, newPdfDoc, newTrialSessionEntity, previousTrialSession },
   authorizedUser: AuthUser,
 ) => {
   const noticePdf = await applicationContext
     .getUseCases()
     .generateNoticeOfChangeOfTrialLocationInteractor(applicationContext, {
-      currentTrialSession,
       docketNumber: caseEntity.docketNumber,
-      trialSession: newTrialSessionEntity,
+      previousTrialSession,
+      updatedTrialSession: newTrialSessionEntity,
     });
 
   await applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry(
