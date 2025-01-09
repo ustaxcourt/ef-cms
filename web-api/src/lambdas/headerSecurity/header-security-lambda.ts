@@ -3,7 +3,7 @@ import { CloudFrontResponse, CloudFrontResponseEvent } from 'aws-lambda';
 // AWS lambda handlers must be async to work properly
 export const handler = async (
   awsEvent: CloudFrontResponseEvent,
-// eslint-disable-next-line @typescript-eslint/require-await
+  // eslint-disable-next-line @typescript-eslint/require-await
 ): Promise<CloudFrontResponse> => {
   //Get contents of response
   const { request, response } = awsEvent.Records[0].cf;

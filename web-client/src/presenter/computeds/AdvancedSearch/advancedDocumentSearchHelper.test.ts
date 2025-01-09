@@ -1,5 +1,3 @@
- 
-
 import { ADVANCED_SEARCH_TABS } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed,

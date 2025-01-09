@@ -1,4 +1,3 @@
- 
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';

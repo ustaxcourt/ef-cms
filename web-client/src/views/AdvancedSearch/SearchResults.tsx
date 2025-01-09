@@ -76,7 +76,7 @@ export const SearchResults = connect(
                         <td>
                           {result.petitionerNames.map((name, index) => (
                             // No need to have a better key here since the data does not need to re-render
-                             
+
                             <div key={index}>{name}</div>
                           ))}
                         </td>
@@ -91,7 +91,7 @@ export const SearchResults = connect(
                           {result.petitionerStateNames.map(
                             (stateName, index) => (
                               // No need to have a better key here since the data does not need to re-render
-                               
+
                               <div key={index}>{stateName}</div>
                             ),
                           )}

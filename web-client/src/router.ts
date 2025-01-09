@@ -100,7 +100,7 @@ const router = {
   initialize: (app, registerRoute) => {
     setPageTitle('U.S. Tax Court');
     // expose route function on window for use with cypress
-     
+
     window.__cy_route = path => route(path || '/');
     const { ROLE_PERMISSIONS } = app.getState('constants');
 

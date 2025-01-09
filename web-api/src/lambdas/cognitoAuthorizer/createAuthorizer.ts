@@ -68,7 +68,7 @@ export const createAuthorizer =
     let token;
     try {
       token = getToken(event);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       logger.info('An error occured trying to get the token out of the event');
       throw401GatewayError();
@@ -84,7 +84,7 @@ export const createAuthorizer =
     try {
       const decodedToken = decodeToken(token);
       ({ iss, kid } = decodedToken);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       logger.info(
         'The token provided in the header could not be decoded successfully',

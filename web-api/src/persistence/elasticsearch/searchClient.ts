@@ -157,7 +157,6 @@ export const searchAll = async ({
     throw new Error('Search client encountered an error.');
   }
 
-   
   const _source = searchParameters.body?._source || [];
   let search_after = [0];
   const sort = searchParameters.body?.sort || [{ 'pk.S': 'asc' }]; // sort is required for paginated queries
