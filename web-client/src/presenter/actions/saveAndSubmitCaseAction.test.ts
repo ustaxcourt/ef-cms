@@ -257,7 +257,7 @@ describe('saveAndSubmitCaseAction', () => {
     applicationContext
       .getUseCases()
       .generateDocumentIds.mockImplementation(
-        () => new Promise((_resolve, reject) => reject(null)),
+        () => new Promise((_resolve, reject) => reject(new Error())),
       );
 
     await runAction(saveAndSubmitCaseAction, {

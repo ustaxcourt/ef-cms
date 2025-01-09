@@ -14,17 +14,7 @@ import {
   mockJudgeUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
-
-const mockClosedCases = 3;
-const mockClosedDismissedCases = 2;
-
-export const casesClosedResults: CasesClosedReturnType = {
-  aggregations: {
-    [CASE_STATUS_TYPES.closed]: mockClosedCases,
-    [CASE_STATUS_TYPES.closedDismissed]: mockClosedDismissedCases,
-  },
-  total: 5,
-};
+import { casesClosedResults } from '@web-api/business/useCases/judgeActivityReport/mockCasesClosedResults';
 
 describe('getCasesClosedByJudgeInteractor', () => {
   const mockEndDate = '03/21/2020';

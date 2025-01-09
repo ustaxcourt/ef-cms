@@ -65,6 +65,16 @@ export default tseslint.config(
         },
       ],
     },
+    ignores: [
+      '**/node_modules/',
+      '**/dist/',
+      '**/dist-lambdas/',
+      '**/*.js',
+      '**/build/',
+      '*.config.js',
+      '**/*_.js',
+      'scripts/run-once-scripts/**/*',
+    ],
   },
   {
     // jest configuration and recommendation
