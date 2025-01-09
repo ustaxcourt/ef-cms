@@ -1,7 +1,7 @@
 import { DateServedFooter } from '@shared/business/utilities/pdfGenerator/components/DateServedFooter';
 import {
   NoticeOfChangeOfTrialLocation,
-  TrialSessionLocationChangeInfo,
+  TrialSessionLocationChangePDFInfo,
 } from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfChangeOfTrialLocation';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
@@ -17,7 +17,7 @@ export const noticeOfChangeOfTrialLocation = async ({
     caseCaptionExtension: string;
     caseTitle: string;
     docketNumberWithSuffix: string;
-    trialSession: TrialSessionLocationChangeInfo;
+    trialSession: TrialSessionLocationChangePDFInfo;
   };
 }): Promise<Uint8Array> => {
   const { docketNumberWithSuffix } = data;
