@@ -1,7 +1,19 @@
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { processWorkItemEntries } from './processWorkItemEntries';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+
 jest.mock('./processEntries');
 
+const mockLogger = {
+  debug: jest.fn(),
+  error: jest.fn(),
+};
+jest.mock('@web-api/utilities/logger/getLogger', () => {
+  return {
+    getLogger: () => mockLogger,
+  };
+});
 describe('processWorkItemEntries', () => {
   const mockWorkItemRecord = {
     dynamodb: {
@@ -73,6 +85,15 @@ describe('processWorkItemEntries', () => {
     ]);
   });
 
+  it('should upsert records to postgres', async () => {
+    await processWorkItemEntries({
+      applicationContext,
+      workItemRecords: [mockWorkItemRecord],
+    });
+
+    expect(upsertWorkItems).toHaveBeenCalled();
+  });
+
   it('should log an error and throw an exception when bulk index returns failed records', async () => {
     applicationContext
       .getPersistenceGateway()
@@ -87,6 +108,6 @@ describe('processWorkItemEntries', () => {
       }),
     ).rejects.toThrow('failed to index work item records');
 
-    expect(applicationContext.logger.error).toHaveBeenCalled();
+    expect(mockLogger.error).toHaveBeenCalled();
   });
 });

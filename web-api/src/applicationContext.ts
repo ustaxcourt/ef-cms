@@ -4,6 +4,7 @@ import * as docketNumberGenerator from './persistence/dynamo/cases/docketNumberG
 import * as pdfLib from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
 import {
+  CASE_INVENTORY_PAGE_SIZE,
   CASE_STATUS_TYPES,
   CLERK_OF_THE_COURT_CONFIGURATION,
   CLOSED_CASE_STATUSES,
@@ -119,7 +120,7 @@ export const createApplicationContext = (appContextUser = {}) => {
     getConstants: () => ({
       ADVANCED_DOCUMENT_IP_LIMITER_KEY: 'document-search-ip-limiter',
       ADVANCED_DOCUMENT_LIMITER_KEY: 'document-search-limiter',
-      CASE_INVENTORY_MAX_PAGE_SIZE: 20000,
+      CASE_INVENTORY_PAGE_SIZE,
       // the Chief Judge will have ~15k records, so setting to 20k to be safe
       CASE_STATUSES: Object.values(CASE_STATUS_TYPES),
       CHANGE_OF_ADDRESS_CONCURRENCY: process.env.CHANGE_OF_ADDRESS_CONCURRENCY
