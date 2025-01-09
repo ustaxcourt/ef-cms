@@ -1,6 +1,6 @@
 import { Case } from '../entities/cases/Case';
 import { SERVICE_INDICATOR_TYPES } from '../entities/EntityConstants';
-import { setServiceIndicatorsForCase } from './setServiceIndicatorsForCase';
+import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 
 export const aggregatePartiesForService = (
   rawCase: RawCase,
@@ -10,7 +10,7 @@ export const aggregatePartiesForService = (
   paper: any[];
   electronic: Array<{ email: string; name: string }>;
 } => {
-  const formattedCase = setServiceIndicatorsForCase(rawCase);
+  const formattedCase = setServiceIndicatorsForPetitionersOnCase(rawCase);
 
   let allParties;
 

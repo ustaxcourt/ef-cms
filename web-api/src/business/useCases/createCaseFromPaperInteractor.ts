@@ -1,22 +1,25 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
-import { PaperPetition } from '../../../../shared/src/business/entities/cases/PaperPetition';
+} from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { PaperPetition } from '@shared/business/entities/cases/PaperPetition';
+import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '../../errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { WorkItem } from '../../../../shared/src/business/entities/WorkItem';
+import { WorkItem } from '@shared/business/entities/WorkItem';
+import { createCasePetitionersData } from '@web-api/persistence/postgres/cases/parties/createCasePetitionerData';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
-import { replaceBracketed } from '../../../../shared/src/business/utilities/replaceBracketed';
+import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd,
@@ -278,16 +281,24 @@ export const createCaseFromPaperInteractor = async (
     caseToAdd.addDocketEntry(atpDocketEntryEntity);
   }
 
-  await Promise.all([
-    applicationContext.getUseCaseHelpers().createCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToCreate: caseToAdd.validate().toRawObject(),
-    }),
-    saveWorkItem({
-      workItem: newWorkItem.validate().toRawObject(),
-    }),
-  ]);
+  await applicationContext.getUseCaseHelpers().createCaseAndAssociations({
+    applicationContext,
+    authorizedUser,
+    caseToCreate: caseToAdd.validate().toRawObject(),
+  });
+
+  // 10502 TODO: This wasn't being called before, but without it I was running into errors
+  // I am not sure why.
+  setServiceIndicatorsForPetitionersOnCase(caseToAdd);
+
+  await createCasePetitionersData({
+    docketNumber: caseToAdd.docketNumber,
+    petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)), // 10502 TODO: is this correct?
+  });
+
+  await saveWorkItem({
+    workItem: newWorkItem.validate().toRawObject(),
+  });
 
   return new Case(caseToAdd, { authorizedUser }).toRawObject();
 };
