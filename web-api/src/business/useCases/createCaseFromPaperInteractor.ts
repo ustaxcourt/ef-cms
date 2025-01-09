@@ -16,6 +16,7 @@ import { UnauthorizedError } from '../../errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { createCasePetitionersData } from '@web-api/persistence/postgres/cases/parties/createCasePetitionerData';
+import { createCaseStatistic } from '@web-api/persistence/postgres/cases/ statistics/createCaseStatistic';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
@@ -295,6 +296,10 @@ export const createCaseFromPaperInteractor = async (
     docketNumber: caseToAdd.docketNumber,
     petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)), // 10502 TODO: is this correct?
   });
+
+  caseToAdd.statistics?.forEach(statistic =>
+    createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
+  );
 
   await saveWorkItem({
     workItem: newWorkItem.validate().toRawObject(),

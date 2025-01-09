@@ -105,7 +105,6 @@ export interface CaseTable {
   receivedAt: Date;
   sealedDate?: Date | null;
   sortableDocketNumber: number;
-  statistics?: any[];
   status: string;
   trialDate?: Date | null;
   trialLocation?: string | null;
