@@ -320,6 +320,7 @@ const updateCasesAndSetNoticeOfChange = async ({
           applicationContext,
           {
             caseEntity,
+            currentTrialSession,
             newPdfDoc: paperServicePdfsCombined,
             newTrialSessionEntity: updatedTrialSessionEntity,
           },
