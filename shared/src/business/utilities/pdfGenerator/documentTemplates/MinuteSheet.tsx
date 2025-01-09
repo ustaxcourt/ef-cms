@@ -2,6 +2,7 @@ import { FormattedMinuteSheet } from '@web-api/business/useCases/trialSessionMin
 import { MinuteSheetHeader } from '../components/MinuteSheetHeader';
 import React from 'react';
 
+/* eslint-disable complexity */
 export const MinuteSheet = ({
   formattedMinuteSheet,
 }: {
@@ -31,21 +32,33 @@ export const MinuteSheet = ({
       <hr />
       <div className="minute-sheet-pdf">
         <div>
-          <div>
-            <strong>Judge</strong>
-          </div>
-          <div>{formattedMinuteSheet.judge}</div>
+          {formattedMinuteSheet.judge && (
+            <>
+              <div>
+                <strong>Judge</strong>
+              </div>
+              <div>{formattedMinuteSheet.judge}</div>
+            </>
+          )}
 
-          <div>
-            <strong>Trial clerk</strong>
-          </div>
-          <div>{formattedMinuteSheet.trialClerk}</div>
+          {formattedMinuteSheet.trialClerk && (
+            <>
+              <div>
+                <strong>Trial clerk</strong>
+              </div>
+              <div>{formattedMinuteSheet.trialClerk}</div>
+            </>
+          )}
         </div>
         <div>
-          <div>
-            <strong>Court reporter</strong>
-          </div>
-          <div>{formattedMinuteSheet.courtReporter}</div>
+          {formattedMinuteSheet.courtReporter && (
+            <>
+              <div>
+                <strong>Court reporter</strong>
+              </div>
+              <div>{formattedMinuteSheet.courtReporter}</div>
+            </>
+          )}
 
           <div>
             <strong>Remote session</strong>
@@ -53,223 +66,260 @@ export const MinuteSheet = ({
           <div>{formattedMinuteSheet.remoteSession}</div>
         </div>
       </div>
-      <hr />
+      {(formattedMinuteSheet.called ||
+        formattedMinuteSheet.notCalled ||
+        formattedMinuteSheet.recalled.length > 0 ||
+        formattedMinuteSheet.pretrialConference ||
+        formattedMinuteSheet.trialHearing) && <hr />}
       <div>
-        <div>
+        {formattedMinuteSheet.called && (
           <div>
-            <strong>Called</strong>
+            <div>
+              <strong>Called</strong>
+            </div>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: formattedMinuteSheet.called,
+              }}
+            />
           </div>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: formattedMinuteSheet.called,
-            }}
-          />
-        </div>
-        <div>
+        )}
+        {formattedMinuteSheet.notCalled && (
           <div>
-            <strong>Not called</strong>
+            <div>
+              <strong>Not called</strong>
+            </div>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: formattedMinuteSheet.notCalled,
+              }}
+            />
           </div>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: formattedMinuteSheet.notCalled,
-            }}
-          />
-        </div>
+        )}
 
-        <div>
+        {formattedMinuteSheet.recalled.length > 0 && (
           <div>
-            <strong>Recalled</strong>
+            <div>
+              <strong>Recalled</strong>
+            </div>
+            <div>
+              {formattedMinuteSheet.recalled.map(row => (
+                <div
+                  dangerouslySetInnerHTML={{ __html: row.content }}
+                  key={row.renderKey}
+                />
+              ))}
+            </div>
           </div>
+        )}
+        {formattedMinuteSheet.pretrialConference && (
           <div>
-            {formattedMinuteSheet.recalled.map(row => (
-              <div
-                dangerouslySetInnerHTML={{ __html: row.content }}
-                key={row.renderKey}
-              />
-            ))}
+            <div>
+              <strong>Pretrial conference</strong>
+            </div>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: formattedMinuteSheet.pretrialConference,
+              }}
+            />
           </div>
-        </div>
-        <div>
+        )}
+        {formattedMinuteSheet.trialHearing && (
           <div>
-            <strong>Pretrial conference</strong>
+            <div>
+              <strong>Trial/Hearing</strong>
+            </div>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: formattedMinuteSheet.trialHearing,
+              }}
+            />
           </div>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: formattedMinuteSheet.pretrialConference || '',
-            }}
-          />
-        </div>
-        <div>
-          <div>
-            <strong>Trial/Hearing</strong>
-          </div>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: formattedMinuteSheet.trialHearing || '',
-            }}
-          />
-        </div>
+        )}
       </div>
       <hr />
       <div className="minute-sheet-pdf">
-        <div>
+        {formattedMinuteSheet.petitionerAppearances.length > 0 && (
           <div>
-            <strong>Petitioner(s)</strong>
+            <div>
+              <strong>Petitioner(s)</strong>
+            </div>
+            {formattedMinuteSheet.petitionerAppearances.map(
+              (petitionerAppearance, idx) => (
+                <div key={idx}>{petitionerAppearance}</div>
+              ),
+            )}
           </div>
-          {formattedMinuteSheet.petitionerAppearances.map(
-            (petitionerAppearance, idx) => (
-              <div key={idx}>{petitionerAppearance}</div>
-            ),
-          )}
-        </div>
-        <div>
+        )}
+        {formattedMinuteSheet.respondentAppearances.length > 0 && (
           <div>
-            <strong>Respondent</strong>
+            <div>
+              <strong>Respondent</strong>
+            </div>
+            {formattedMinuteSheet.respondentAppearances.map(
+              (respondentAppearance, idx) => (
+                <div key={idx}>{respondentAppearance}</div>
+              ),
+            )}
           </div>
-          {formattedMinuteSheet.respondentAppearances.map(
-            (respondentAppearance, idx) => (
-              <div key={idx}>{respondentAppearance}</div>
-            ),
-          )}
-        </div>
+        )}
       </div>
-      <hr />
+      {(formattedMinuteSheet.jurisdictionRetained ||
+        formattedMinuteSheet.statusReportOrdered ||
+        formattedMinuteSheet.stipulatedDecisionOrdered) && <hr />}
       <div>
-        <div>
+        {formattedMinuteSheet.jurisdictionRetained && (
           <div>
-            <strong>Jurisdiction Retained</strong>
-          </div>
-          {formattedMinuteSheet.jurisdictionRetained && (
+            <div>
+              <strong>Jurisdiction Retained</strong>
+            </div>
             <div
               dangerouslySetInnerHTML={{
                 __html: formattedMinuteSheet.jurisdictionRetained,
               }}
             />
-          )}
-        </div>
-        <div>
-          <div>
-            <strong>Status Report ordered</strong>
           </div>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: formattedMinuteSheet.statusReportOrdered,
-            }}
-          />
+        )}
+        {formattedMinuteSheet.statusReportOrdered && (
           <div>
-            <strong>Stipulated Decision ordered</strong>
-          </div>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: formattedMinuteSheet.stipulatedDecisionOrdered,
-            }}
-          />
-        </div>
-      </div>
-      <hr />
-      <div>
-        {formattedMinuteSheet.motions.map(motion => (
-          <div key={motion.renderKey}>
             <div>
-              <strong>{motion.motionType}</strong>
+              <strong>Status Report ordered</strong>
             </div>
-            <div dangerouslySetInnerHTML={{ __html: motion.content }} />
+            <div
+              dangerouslySetInnerHTML={{
+                __html: formattedMinuteSheet.statusReportOrdered,
+              }}
+            />
           </div>
-        ))}
+        )}
+        {formattedMinuteSheet.stipulatedDecisionOrdered && (
+          <div>
+            <div>
+              <strong>Stipulated Decision ordered</strong>
+            </div>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: formattedMinuteSheet.stipulatedDecisionOrdered,
+              }}
+            />
+          </div>
+        )}
       </div>
-      <hr />
-      <div>
-        <div>
-          <strong>Other actions and filings</strong>
-        </div>
-        {formattedMinuteSheet.actionsAndFilings.map(action => (
-          <div
-            dangerouslySetInnerHTML={{ __html: action.content }}
-            key={action.renderKey}
-          />
-        ))}
-      </div>
-      <hr />
-      <div className="minute-sheet-pdf">
-        <div>
-          {formattedMinuteSheet.trialBrief.dateSubmitted && (
-            <>
-              <div>
-                <strong>Date Submitted</strong>
+
+      {formattedMinuteSheet.motions?.length > 0 && (
+        <>
+          <hr />
+          <div>
+            {formattedMinuteSheet.motions.map(motion => (
+              <div key={motion.renderKey}>
+                <div>
+                  <strong>{motion.motionType}</strong>
+                </div>
+                <div dangerouslySetInnerHTML={{ __html: motion.content }} />
               </div>
-              <div>{formattedMinuteSheet.trialBrief.dateSubmitted}</div>
-            </>
-          )}
-          <div>
-            <strong>Total Trial Hours</strong>
-          </div>
-          <div>{formattedMinuteSheet.trialBrief.totalTrialHours}</div>
-        </div>
-        <div>
-          <div>
-            <strong>Bench opinion rendered</strong>
-          </div>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: formattedMinuteSheet.trialBrief.benchOpinionRendered,
-            }}
-          />
-        </div>
-      </div>
-      <div>
-        <div>
-          <div>
-            <strong>{formattedMinuteSheet.trialBrief.briefType}</strong>
-          </div>
-          {formattedMinuteSheet.trialBrief.briefDetails.map(
-            (briefDetail, index) => (
-              <div
-                dangerouslySetInnerHTML={{ __html: briefDetail }}
-                key={index}
-              />
-            ),
-          )}
-        </div>
-      </div>
-      <hr />
-      <div className="minute-sheet-pdf">
-        <div>
-          <div>
-            <strong>Petitioner Witnesses</strong>
-          </div>
-          {formattedMinuteSheet.petitionerWitnesses.map(witness => (
-            <div key={witness.renderKey}>{witness.name}</div>
-          ))}
-        </div>
-        <div>
-          <div>
-            <strong>Respondent Witnesses</strong>
-          </div>
-          {formattedMinuteSheet.respondentWitnesses.map(witness => (
-            <div key={witness.renderKey}>{witness.name}</div>
-          ))}
-        </div>
-      </div>
-      <div>
-        <table className="exhibits-table">
-          <thead>
-            <tr>
-              <th>Exhibit</th>
-              <th>Status</th>
-              <th>Note</th>
-            </tr>
-          </thead>
-          <tbody>
-            {formattedMinuteSheet.exhibits.map(exhibit => (
-              <tr key={exhibit.renderKey}>
-                <td>{exhibit.description}</td>
-                <td>{exhibit.status}</td>
-                <td>{exhibit.note}</td>
-              </tr>
             ))}
-          </tbody>
-        </table>
-      </div>
+          </div>
+        </>
+      )}
+
+      {formattedMinuteSheet.actionsAndFilings?.length > 0 && (
+        <>
+          <hr />
+          <div>
+            <div>
+              <strong>Other actions and filings</strong>
+            </div>
+            {formattedMinuteSheet.actionsAndFilings.map(action => (
+              <div
+                dangerouslySetInnerHTML={{ __html: action.content }}
+                key={action.renderKey}
+              />
+            ))}
+          </div>
+        </>
+      )}
+
+      {(formattedMinuteSheet.trialBrief.dateSubmitted ||
+        formattedMinuteSheet.trialBrief.totalTrialHours ||
+        formattedMinuteSheet.trialBrief.benchOpinionRendered) && (
+        <>
+          <hr />
+          <div className="minute-sheet-pdf">
+            {formattedMinuteSheet.trialBrief.dateSubmitted && (
+              <>
+                <div>
+                  <strong>Date Submitted</strong>
+                </div>
+                <div>{formattedMinuteSheet.trialBrief.dateSubmitted}</div>
+              </>
+            )}
+            {formattedMinuteSheet.trialBrief.totalTrialHours && (
+              <>
+                <div>
+                  <strong>Total Trial Hours</strong>
+                </div>
+                <div>{formattedMinuteSheet.trialBrief.totalTrialHours}</div>
+              </>
+            )}
+          </div>
+        </>
+      )}
+
+      {((formattedMinuteSheet.petitionerWitnesses &&
+        formattedMinuteSheet.petitionerWitnesses.length > 0) ||
+        (formattedMinuteSheet.respondentWitnesses &&
+          formattedMinuteSheet.respondentWitnesses.length > 0)) && (
+        <>
+          <hr />
+          <div className="minute-sheet-pdf">
+            {formattedMinuteSheet.petitionerWitnesses?.length > 0 && (
+              <div>
+                <div>
+                  <strong>Petitioner Witnesses</strong>
+                </div>
+                {formattedMinuteSheet.petitionerWitnesses.map(witness => (
+                  <div key={witness.renderKey}>{witness.name}</div>
+                ))}
+              </div>
+            )}
+            {formattedMinuteSheet.respondentWitnesses?.length > 0 && (
+              <div>
+                <div>
+                  <strong>Respondent Witnesses</strong>
+                </div>
+                {formattedMinuteSheet.respondentWitnesses.map(witness => (
+                  <div key={witness.renderKey}>{witness.name}</div>
+                ))}
+              </div>
+            )}
+          </div>
+        </>
+      )}
+
+      {formattedMinuteSheet.exhibits?.length > 0 && (
+        <>
+          <div>
+            <table className="exhibits-table">
+              <thead>
+                <tr>
+                  <th>Exhibit</th>
+                  <th>Status</th>
+                  <th>Note</th>
+                </tr>
+              </thead>
+              <tbody>
+                {formattedMinuteSheet.exhibits.map(exhibit => (
+                  <tr key={exhibit.renderKey}>
+                    <td>{exhibit.description}</td>
+                    <td>{exhibit.status}</td>
+                    <td>{exhibit.note}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
     </>
   );
 };

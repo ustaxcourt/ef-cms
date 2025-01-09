@@ -24,9 +24,12 @@ export const getMinuteSheetInteractor = async (
 
   console.log('getting minute sheet', `${docketNumber} - ${trialSessionId}`);
 
-  const minuteSheet: any = results[0];
-  delete minuteSheet.pk;
-  delete minuteSheet.sk;
+  let minuteSheet: any;
+  if (results.length > 0) {
+    minuteSheet = results[0];
+    delete minuteSheet.pk;
+    delete minuteSheet.sk;
+  }
 
   return minuteSheet;
 };
