@@ -18,7 +18,8 @@ describe('noticeOfChangeOfTrialLocation', () => {
           caseCaptionExtension: 'Petitioner(s)',
           caseTitle: 'Jerad Mayer',
           docketNumberWithSuffix: '123-45S',
-          trialSession: TRIAL_SESSION,
+          previousTrialSession: TRIAL_SESSION,
+          updatedTrialSession: TRIAL_SESSION,
         },
       });
     },

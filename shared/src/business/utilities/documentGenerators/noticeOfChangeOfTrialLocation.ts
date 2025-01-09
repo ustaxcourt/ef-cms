@@ -17,8 +17,8 @@ export const noticeOfChangeOfTrialLocation = async ({
     caseCaptionExtension: string;
     caseTitle: string;
     docketNumberWithSuffix: string;
-    trialSession: TrialSessionLocationChangePDFInfo;
-    currentTrialSession: TrialSessionLocationChangePDFInfo;
+    updatedTrialSession: TrialSessionLocationChangePDFInfo;
+    previousTrialSession: TrialSessionLocationChangePDFInfo;
   };
 }): Promise<Uint8Array> => {
   const { docketNumberWithSuffix } = data;

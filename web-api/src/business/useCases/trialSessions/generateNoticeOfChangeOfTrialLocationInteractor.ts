@@ -5,13 +5,13 @@ import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMet
 export const generateNoticeOfChangeOfTrialLocationInteractor = async (
   applicationContext: ServerApplicationContext,
   {
-    currentTrialSession,
     docketNumber,
-    trialSession,
+    previousTrialSession,
+    updatedTrialSession,
   }: {
     docketNumber: string;
-    currentTrialSession: RawTrialSession;
-    trialSession: RawTrialSession;
+    previousTrialSession: RawTrialSession;
+    updatedTrialSession: RawTrialSession;
   },
 ): Promise<Uint8Array> => {
   const caseDetail = await applicationContext
@@ -30,9 +30,9 @@ export const generateNoticeOfChangeOfTrialLocationInteractor = async (
       data: {
         caseCaptionExtension,
         caseTitle,
-        currentTrialSession,
         docketNumberWithSuffix: caseDetail.docketNumberWithSuffix!,
-        trialSession,
+        previousTrialSession,
+        updatedTrialSession,
       },
     });
 };
