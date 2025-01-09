@@ -8,6 +8,7 @@ export const MinuteSheet = ({
 }: {
   formattedMinuteSheet: FormattedMinuteSheet;
 }) => {
+  // TODO 10419: there's something weird going on with the header here. The font seems to be more heavily weighted than other PDFs and the seal is smol.
   return (
     <>
       <MinuteSheetHeader

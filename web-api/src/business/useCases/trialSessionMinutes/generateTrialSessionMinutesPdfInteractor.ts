@@ -251,21 +251,26 @@ const formatMotions = (
   motionsSection: MinuteSheetFormState['motionsSection'],
 ) => {
   if (Object.entries(motionsSection.motions).length === 0) return [];
-  return Object.values(motionsSection.motions).map((motion: any) => ({
-    content: [
-      `${motion.oralMotion ? 'ORAL ' : ''}${MOTION_TYPE_OPTIONS[motion.type] || ''}`,
-      formatDateString(motion.date, FORMATS.MMDDYYYY),
-      MOTION_FILED_BY_OPTIONS[motion.filedBy]
-        ? `Filed by ${MOTION_FILED_BY_OPTIONS[motion.filedBy]}`
-        : '',
-      MOTION_STATUS_OPTIONS[motion.status],
-      `<em>${motion.note}</em>`,
-    ]
-      .filter(Boolean)
-      .join('; '),
-    motionType: MOTION_TYPE_OPTIONS[motion.type],
-    renderKey: motion.renderKey,
-  }));
+  return Object.values(motionsSection.motions)
+    .map((motion: any) => ({
+      content: [
+        `${motion.oralMotion ? 'ORAL ' : ''}${MOTION_TYPE_OPTIONS[motion.type] || ''}`,
+        formatDateString(motion.date, FORMATS.MMDDYYYY),
+        MOTION_FILED_BY_OPTIONS[motion.filedBy]
+          ? `Filed by ${MOTION_FILED_BY_OPTIONS[motion.filedBy]}`
+          : '',
+        MOTION_STATUS_OPTIONS[motion.status],
+        `<em>${motion.note}</em>`,
+      ]
+        .filter(Boolean)
+        .join('; '),
+      motionType: MOTION_TYPE_OPTIONS[motion.type],
+      renderKey: motion.renderKey,
+    }))
+    .filter(
+      formattedMotion =>
+        !!formattedMotion.content && !!formattedMotion.motionType,
+    );
 };
 
 const formatActionsAndFilings = (
