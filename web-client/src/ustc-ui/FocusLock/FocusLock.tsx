@@ -56,7 +56,7 @@ export const FocusLock = ({ children }) => {
       appRoot.inert = false;
       appRoot.setAttribute('aria-hidden', 'false');
       window.document.removeEventListener('keydown', onKey);
-      previousElementWithFocus.focus && previousElementWithFocus.focus();
+      previousElementWithFocus?.focus();
     };
   }, []);
 

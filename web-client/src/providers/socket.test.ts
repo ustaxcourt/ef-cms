@@ -135,6 +135,7 @@ describe('socket', () => {
     //attempt #4
     // eslint-disable-next-line jest/valid-expect-in-promise
     oncloseFn({ code: 2000 }).catch(e => {
+      // eslint-disable-next-line jest/no-conditional-expect
       expect(e).toBeUndefined();
     });
     await new Promise(resolve => setTimeout(resolve, 0));
