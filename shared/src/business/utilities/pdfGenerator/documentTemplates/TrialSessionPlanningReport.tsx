@@ -1,4 +1,4 @@
-/* eslint-disable react/no-array-index-key */
+ 
 import {
   PreviousTerm,
   TrialLocationData,

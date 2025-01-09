@@ -9,7 +9,7 @@ import { archiveCorrespondenceDocumentInteractor } from './archiveCorrespondence
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('archiveCorrespondenceDocumentInteractor', () => {
-  let mockUserId = '2474e5c0-f741-4120-befa-b77378ac8bf0';
+  const mockUserId = '2474e5c0-f741-4120-befa-b77378ac8bf0';
   const mockCorrespondenceId = applicationContext.getUniqueId();
   let mockCorrespondence;
   let mockLock;

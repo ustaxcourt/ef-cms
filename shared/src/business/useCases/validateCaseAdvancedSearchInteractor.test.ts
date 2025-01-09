@@ -5,7 +5,7 @@ describe('validateCaseAdvancedSearchInteractor', () => {
   const mockValidationErrors = {
     petitionerName: 'Enter a name',
   };
-  let validatorSpy = jest
+  const validatorSpy = jest
     .spyOn(CaseSearch.prototype, 'getValidationErrors')
     .mockReturnValue(mockValidationErrors);
 

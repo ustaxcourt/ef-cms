@@ -1,4 +1,4 @@
-/* eslint-disable max-lines */
+ 
 import { efcmsCaseIndex } from '../../../elasticsearch/efcms-case-mappings';
 import { efcmsDocketEntryIndex } from '../../../elasticsearch/efcms-docket-entry-mappings';
 import { efcmsWorkItemIndex } from '../../../elasticsearch/efcms-work-item-mappings';

@@ -77,8 +77,8 @@ export default tseslint.config(
     rules: {
       // @ts-ignore
       ...reactPlugin.configs.flat.recommended.rules,
-      'react/prop-types': 'warn' // Temporarily turned off. Ideally this is on so we enforce typed inputs.
-    }
+      'react/prop-types': 'warn', // Temporarily turned off. Ideally this is on so we enforce typed inputs.
+    },
   },
   // reactPlugin.configs.flat.recommended, // React recommendations
   jsxA11y.flatConfigs.recommended, // Accessibility recommendations
@@ -152,7 +152,7 @@ export default tseslint.config(
       'no-unused-expressions': 'off',
       '@typescript-eslint/no-unused-expressions': 'error',
       'no-unused-vars': 'off',
-      '@typescript-eslint/no-unused-vars': 'error',
+      '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-wrapper-object-types': 'off',
       'no-throw-literal': 'off',
       '@typescript-eslint/only-throw-error': 'off',

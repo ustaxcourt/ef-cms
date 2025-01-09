@@ -37,7 +37,7 @@ export const formatResults = <T>(body: Record<string, any>) => {
   const total: number = get(body, 'hits.total.value', 0);
   const aggregations = get(body, 'aggregations');
 
-  let caseMap = {};
+  const caseMap = {};
   const results: T[] = get(body, 'hits.hits', []).map(hit => {
     delete hit['_source']['case_relations'];
     const sourceUnmarshalled = unmarshall(hit['_source']);
@@ -157,7 +157,7 @@ export const searchAll = async ({
     throw new Error('Search client encountered an error.');
   }
 
-  // eslint-disable-next-line no-underscore-dangle
+   
   const _source = searchParameters.body?._source || [];
   let search_after = [0];
   const sort = searchParameters.body?.sort || [{ 'pk.S': 'asc' }]; // sort is required for paginated queries

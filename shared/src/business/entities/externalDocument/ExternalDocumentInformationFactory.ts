@@ -96,7 +96,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
   }
 
   getValidationRules() {
-    let schema = {
+    const schema = {
       attachments: joi
         .boolean()
         .required()
@@ -138,7 +138,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
       }),
     };
 
-    let schemaOptionalItems = {
+    const schemaOptionalItems = {
       certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max(
         'now',
       ).messages({

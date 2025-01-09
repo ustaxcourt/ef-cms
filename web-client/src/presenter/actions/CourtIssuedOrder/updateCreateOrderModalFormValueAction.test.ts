@@ -100,7 +100,7 @@ describe('updateCreateOrderModalFormValueAction', () => {
         },
       },
     };
-    let result = await runAction(updateCreateOrderModalFormValueAction, params);
+    const result = await runAction(updateCreateOrderModalFormValueAction, params);
     expect(result.state.modal.documentTitle).toEqual('Order to Do Something');
   });
 
@@ -118,7 +118,7 @@ describe('updateCreateOrderModalFormValueAction', () => {
         },
       },
     };
-    let result = await runAction(updateCreateOrderModalFormValueAction, params);
+    const result = await runAction(updateCreateOrderModalFormValueAction, params);
     expect(result.state.modal.documentTitle).toBeUndefined();
   });
 
@@ -136,7 +136,7 @@ describe('updateCreateOrderModalFormValueAction', () => {
         },
       },
     };
-    let result = await runAction(updateCreateOrderModalFormValueAction, params);
+    const result = await runAction(updateCreateOrderModalFormValueAction, params);
     expect(result.state.modal.documentTitle).toEqual('Order');
     expect(result.state.modal.documentType).toEqual('Order');
   });

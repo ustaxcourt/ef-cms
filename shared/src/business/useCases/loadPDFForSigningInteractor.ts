@@ -26,7 +26,7 @@ export const loadPDFForSigningInteractor = async (
 
   try {
     const pdfjsLib = await applicationContext.getPdfJs();
-    let pdfData = await applicationContext.getPersistenceGateway().getDocument({
+    const pdfData = await applicationContext.getPersistenceGateway().getDocument({
       applicationContext,
       docketNumber,
       key: docketEntryId,

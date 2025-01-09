@@ -1,4 +1,4 @@
-/* eslint-disable max-lines */
+ 
 import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerator';
 import * as docketNumberGenerator from './persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
@@ -212,7 +212,7 @@ export const createApplicationContext = (appContextUser = {}) => {
     isAuthorized,
     isCurrentColorActive,
     logger: getLogger(),
-    setTimeout: (callback, timeout) => setTimeout(callback, timeout),
+    setTimeout: (callback: Function, timeout) => setTimeout(callback, timeout),
   };
 };
 
