@@ -467,7 +467,8 @@ export const formattedWorkQueue = (
       outbox: 'desc',
     },
   };
-  const sortField = sortFields[workQueueToDisplay.queue][workQueueToDisplay.box];
+  const sortField =
+    sortFields[workQueueToDisplay.queue][workQueueToDisplay.box];
   const sortDirection =
     sortDirections[workQueueToDisplay.queue][workQueueToDisplay.box];
 

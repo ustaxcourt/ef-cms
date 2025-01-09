@@ -1,5 +1,3 @@
- 
-
 import { Button } from '../../ustc-ui/Button/Button';
 import { ExternalConsolidatedGroupCards } from './ExternalConsolidatedGroupCards';
 import { FileEntryOfAppearanceReview } from '@web-client/views/FileDocument/FileEntryOfAppearanceReview';

@@ -1,4 +1,3 @@
- 
 import {
   PreviousTerm,
   TrialLocationData,

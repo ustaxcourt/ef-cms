@@ -184,19 +184,15 @@ const applicationContextPublic = {
   },
   getLogger: () => ({
     error: () => {
-       
       // console.error(value);
     },
     info: (key, value) => {
-       
       console.info(key, JSON.stringify(value));
     },
     time: key => {
-       
       console.time(key);
     },
     timeEnd: key => {
-       
       console.timeEnd(key);
     },
   }),

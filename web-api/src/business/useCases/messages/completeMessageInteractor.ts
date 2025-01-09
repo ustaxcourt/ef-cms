@@ -52,7 +52,7 @@ export const completeMessageInteractor = async (
 
       completedMessageIds.push(validatedRawMessage.messageId);
     }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,

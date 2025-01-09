@@ -92,7 +92,7 @@ async function createConnection<T>({
     });
 
     return await cb(dbInstances[dbKey]!);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {
     clearToken(region);
     const token = await getToken(region, host);
