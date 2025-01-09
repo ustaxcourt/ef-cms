@@ -82,7 +82,6 @@ export const convertRawCaseToDbRow = (rawCase: RawCase) => {
       ? calculateDate({ dateString: rawCase.sealedDate })
       : null,
     sortableDocketNumber: rawCase.sortableDocketNumber,
-    statistics: rawCase.statistics,
     status: rawCase.status,
     trialDate: rawCase.trialDate
       ? calculateDate({ dateString: rawCase.trialDate })

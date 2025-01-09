@@ -80,7 +80,6 @@ export const cases110_129: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2019-12-11T15:25:09.284Z' }),
     sortableDocketNumber: 2019000111,
-    statistics: [],
     status: CASE_STATUS_TYPES.generalDocket,
   },
   {
@@ -115,7 +114,6 @@ export const cases110_129: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2019-12-11T15:25:55.006Z' }),
     sortableDocketNumber: 2019000112,
-    statistics: [],
     status: CASE_STATUS_TYPES.generalDocket,
   },
   {
@@ -148,7 +146,6 @@ export const cases110_129: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2019-12-11T16:02:31.173Z' }),
     sortableDocketNumber: 2019000113,
-    statistics: [],
     status: CASE_STATUS_TYPES.generalDocket,
   },
   {
@@ -182,7 +179,6 @@ export const cases110_129: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2020-06-25T20:40:13.682Z' }),
     sortableDocketNumber: 2020000117,
-    statistics: [],
     status: CASE_STATUS_TYPES.new,
   },
   {
@@ -216,7 +212,6 @@ export const cases110_129: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2020-06-25T20:58:55.411Z' }),
     sortableDocketNumber: 2020000120,
-    statistics: [],
     status: CASE_STATUS_TYPES.new,
   },
   {
@@ -253,7 +248,6 @@ export const cases110_129: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2020-08-10T04:00:00.000Z' }),
     sortableDocketNumber: 2020000121,
-    statistics: [],
     status: CASE_STATUS_TYPES.new,
   },
   {
@@ -287,7 +281,6 @@ export const cases110_129: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2020-09-25T19:27:00.201Z' }),
     sortableDocketNumber: 2020000122,
-    statistics: [],
     status: CASE_STATUS_TYPES.new,
   },
   {
@@ -321,7 +314,6 @@ export const cases110_129: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2020-09-30T20:22:10.381Z' }),
     sortableDocketNumber: 2020000123,
-    statistics: [],
     status: CASE_STATUS_TYPES.new,
   },
   {
@@ -358,7 +350,6 @@ export const cases110_129: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2020-09-02T04:00:00.000Z' }),
     sortableDocketNumber: 2020000124,
-    statistics: [],
     status: CASE_STATUS_TYPES.generalDocket,
   },
   {
@@ -391,7 +382,6 @@ export const cases110_129: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2020-10-13T20:23:17.557Z' }),
     sortableDocketNumber: 2020000125,
-    statistics: [],
     status: CASE_STATUS_TYPES.new,
   },
   {
@@ -424,7 +414,6 @@ export const cases110_129: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2020-10-16T15:19:38.086Z' }),
     sortableDocketNumber: 2020000126,
-    statistics: [],
     status: CASE_STATUS_TYPES.new,
   },
   {
@@ -457,7 +446,6 @@ export const cases110_129: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2020-11-18T19:32:11.463Z' }),
     sortableDocketNumber: 2020000127,
-    statistics: [],
     status: CASE_STATUS_TYPES.new,
   },
   {
@@ -490,7 +478,6 @@ export const cases110_129: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2020-11-30T21:58:13.407Z' }),
     sortableDocketNumber: 2020000128,
-    statistics: [],
     status: CASE_STATUS_TYPES.new,
   },
   {
@@ -524,7 +511,6 @@ export const cases110_129: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2020-01-20T05:00:00.000Z' }),
     sortableDocketNumber: 2020000129,
-    statistics: [],
     status: CASE_STATUS_TYPES.generalDocket,
   },
 ];

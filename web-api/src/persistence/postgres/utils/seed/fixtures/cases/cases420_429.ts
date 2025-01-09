@@ -65,7 +65,6 @@ export const cases420_429: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2022000120,
-    statistics: [],
     status: CASE_STATUS_TYPES.submitted,
   },
   {
@@ -99,7 +98,6 @@ export const cases420_429: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000120,
-    statistics: [],
     status: CASE_STATUS_TYPES.cav,
   },
   {
@@ -133,7 +131,6 @@ export const cases420_429: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2022000121,
-    statistics: [],
     status: CASE_STATUS_TYPES.submitted,
   },
   {
@@ -167,7 +164,6 @@ export const cases420_429: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000121,
-    statistics: [],
     status: CASE_STATUS_TYPES.cav,
   },
   {
@@ -201,7 +197,6 @@ export const cases420_429: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2022000122,
-    statistics: [],
     status: CASE_STATUS_TYPES.submitted,
   },
   {
@@ -235,7 +230,6 @@ export const cases420_429: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000122,
-    statistics: [],
     status: CASE_STATUS_TYPES.cav,
   },
   {
@@ -269,7 +263,6 @@ export const cases420_429: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2022000123,
-    statistics: [],
     status: CASE_STATUS_TYPES.submitted,
   },
   {
@@ -303,7 +296,6 @@ export const cases420_429: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000123,
-    statistics: [],
     status: CASE_STATUS_TYPES.cav,
   },
   {
@@ -337,7 +329,6 @@ export const cases420_429: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2022000124,
-    statistics: [],
     status: CASE_STATUS_TYPES.submitted,
   },
   {
@@ -371,7 +362,6 @@ export const cases420_429: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000124,
-    statistics: [],
     status: CASE_STATUS_TYPES.cav,
   },
   {
@@ -405,7 +395,6 @@ export const cases420_429: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2022000125,
-    statistics: [],
     status: CASE_STATUS_TYPES.submitted,
   },
   {
@@ -439,7 +428,6 @@ export const cases420_429: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000125,
-    statistics: [],
     status: CASE_STATUS_TYPES.cav,
   },
   {
@@ -473,7 +461,6 @@ export const cases420_429: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2022000126,
-    statistics: [],
     status: CASE_STATUS_TYPES.submitted,
   },
   {
@@ -507,7 +494,6 @@ export const cases420_429: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000126,
-    statistics: [],
     status: CASE_STATUS_TYPES.cav,
   },
   {
@@ -541,7 +527,6 @@ export const cases420_429: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2022000127,
-    statistics: [],
     status: CASE_STATUS_TYPES.submitted,
   },
   {
@@ -575,7 +560,6 @@ export const cases420_429: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000127,
-    statistics: [],
     status: CASE_STATUS_TYPES.cav,
   },
   {
@@ -609,7 +593,6 @@ export const cases420_429: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2022000128,
-    statistics: [],
     status: CASE_STATUS_TYPES.submitted,
   },
   {
@@ -643,7 +626,6 @@ export const cases420_429: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000128,
-    statistics: [],
     status: CASE_STATUS_TYPES.cav,
   },
   {
@@ -677,7 +659,6 @@ export const cases420_429: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2022000129,
-    statistics: [],
     status: CASE_STATUS_TYPES.submitted,
   },
   {
@@ -711,7 +692,6 @@ export const cases420_429: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000129,
-    statistics: [],
     status: CASE_STATUS_TYPES.cav,
   },
 ];
