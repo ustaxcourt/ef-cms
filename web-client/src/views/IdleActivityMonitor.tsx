@@ -26,7 +26,6 @@ export const IdleActivityMonitor = connect(
   }) {
     useIdleTimer({
       debounce: constants.SESSION_DEBOUNCE,
-      // eslint-disable-next-line spellcheck/spell-checker
       // we do not want 'visibilitychange', so we override the defaults
       events: [
         'mousemove',
