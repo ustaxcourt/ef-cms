@@ -3,8 +3,8 @@ import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('hasUpdatedEmailFactoryAction', () => {
-  let pathNoStub = jest.fn();
-  let pathYesStub = jest.fn();
+  const pathNoStub = jest.fn();
+  const pathYesStub = jest.fn();
 
   beforeAll(() => {
     presenter.providers.path = {

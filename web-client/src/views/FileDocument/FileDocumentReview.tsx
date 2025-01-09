@@ -1,4 +1,4 @@
-/* eslint-disable complexity */
+ 
 
 import { Button } from '../../ustc-ui/Button/Button';
 import { ExternalConsolidatedGroupCards } from './ExternalConsolidatedGroupCards';

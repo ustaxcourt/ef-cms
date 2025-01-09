@@ -1,4 +1,4 @@
-/* eslint-disable max-lines */
+ 
 import { FORMATS, prepareDateFromString } from '../../utilities/DateHandler';
 import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
 import {
@@ -412,7 +412,7 @@ describe('TrialSession entity', () => {
           sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
           trialLocation: mockTrialLocation,
         },
-        // eslint-disable-next-line max-lines
+         
       );
 
       expect(trialSession.trialLocation).toBe(mockTrialLocation);

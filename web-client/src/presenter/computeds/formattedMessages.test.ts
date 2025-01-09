@@ -1,4 +1,4 @@
-/* eslint-disable max-lines */
+ 
 
 import { DESCENDING } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';

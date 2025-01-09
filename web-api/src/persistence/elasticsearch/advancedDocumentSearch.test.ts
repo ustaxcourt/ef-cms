@@ -1,4 +1,4 @@
-/* eslint-disable max-lines */
+ 
 import {
   BENCH_OPINION_EVENT_CODE,
   MAX_SEARCH_CLIENT_RESULTS,
@@ -63,7 +63,7 @@ describe('advancedDocumentSearch', () => {
     caseTitleOrPetitioner?: string,
     docketNumber?: string,
   ) => {
-    let query: QueryDslQueryContainer = {
+    const query: QueryDslQueryContainer = {
       bool: {
         filter: [],
       },

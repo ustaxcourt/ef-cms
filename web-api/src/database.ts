@@ -14,7 +14,7 @@ export const POOL = {
     : undefined,
 };
 
-let dbInstances: Record<string, Kysely<Database> | null> = {
+const dbInstances: Record<string, Kysely<Database> | null> = {
   reader: null,
   writer: null,
 };
@@ -92,6 +92,7 @@ async function createConnection<T>({
     });
 
     return await cb(dbInstances[dbKey]!);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {
     clearToken(region);
     const token = await getToken(region, host);

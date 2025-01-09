@@ -10,7 +10,7 @@ describe('getCasesClosedCountByJudge', () => {
   const mockEndDate = '03/21/2020';
   const mockStartDate = '02/12/2020';
 
-  let mockValidRequest = {
+  const mockValidRequest = {
     endDate: mockEndDate,
     judges: [judgeUser.name],
     startDate: mockStartDate,
@@ -26,7 +26,7 @@ describe('getCasesClosedCountByJudge', () => {
     key: CASE_STATUS_TYPES.closedDismissed,
   };
 
-  let mockAggregationsResult = {
+  const mockAggregationsResult = {
     aggregations: {
       closed_cases: {
         buckets: [mockCaseClosed, mockCaseClosedDismissed],
@@ -35,7 +35,7 @@ describe('getCasesClosedCountByJudge', () => {
     total: 5,
   };
 
-  let mockBodyQuery = {
+  const mockBodyQuery = {
     aggs: {
       closed_cases: {
         terms: {
