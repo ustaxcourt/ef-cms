@@ -18,6 +18,7 @@ export const noticeOfChangeOfTrialLocation = async ({
     caseTitle: string;
     docketNumberWithSuffix: string;
     trialSession: TrialSessionLocationChangePDFInfo;
+    currentTrialSession: TrialSessionLocationChangePDFInfo;
   };
 }): Promise<Uint8Array> => {
   const { docketNumberWithSuffix } = data;
