@@ -1090,8 +1090,8 @@ const router = {
         (trialSessionId, docketNumber) => {
           setPageTitle('Trial session minutes');
           return app.getSequence('goToTrialSessionMinutesSequence')({
-            trialSessionId,
             docketNumber,
+            trialSessionId,
           });
         },
       ),

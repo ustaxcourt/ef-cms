@@ -1,6 +1,6 @@
 import { FormattedMinuteSheet } from '@web-api/business/useCases/trialSessionMinutes/generateTrialSessionMinutesPdfInteractor';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { put, query } from '@web-api/persistence/dynamodbClientService';
+import { put } from '@web-api/persistence/dynamodbClientService';
 
 export const updateMinuteSheetInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -12,23 +12,9 @@ export const updateMinuteSheetInteractor = async (
   //     throw new UnauthorizedError('Unauthorized');
   //   }
 
-  // const minuteSheet = await query({
-  //   ExpressionAttributeNames: {
-  //     '#pk': 'pk',
-  //   },
-  //   ExpressionAttributeValues: {
-  //     ':pk': `${trialSessionId}|${docketNumber}`,
-  //   },
-  //   KeyConditionExpression: '#pk = :pk',
-  //   applicationContext,
-  // });
-  // console.log('Docket Number: ', docketNumber);
-  // console.log('TrialSessionId: ', trialSessionId);
-  // console.log('minuteSheet: ', minuteSheet);
-
-  console.log('*************** minute sheet before save', minuteSheet);
+  // TODO 10419: discuss peristence options, modify this as needed.
   const serializedMinuteSheet = JSON.stringify(minuteSheet);
-  const updatedMinuteSheet = await put({
+  const updatedMinuteSheet: any = await put({
     Item: {
       minuteSheet: serializedMinuteSheet,
       pk: `${trialSessionId}|${docketNumber}`,
@@ -36,6 +22,9 @@ export const updateMinuteSheetInteractor = async (
     },
     applicationContext,
   });
+
+  delete updatedMinuteSheet.pk;
+  delete updatedMinuteSheet.sk;
 
   return updatedMinuteSheet;
 };
