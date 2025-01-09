@@ -15,7 +15,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('canAllowPrintableDocketRecord', 'boolean')
     .addColumn('canDojPractitionersRepresentParty', 'boolean')
     .addColumn('caseNote', 'varchar')
-    .addColumn('caseStatusHistory', 'jsonb') // TODO: separate table?
     .addColumn('caseType', 'varchar', col => col.notNull())
     .addColumn('closedDate', 'timestamptz')
     .addColumn('correspondence', 'jsonb')
@@ -78,7 +77,6 @@ export async function down(db: Kysely<any>): Promise<void> {
     .dropColumn('canAllowPrintableDocketRecord')
     .dropColumn('canDojPractitionersRepresentParty')
     .dropColumn('caseNote')
-    .dropColumn('caseStatusHistory')
     .dropColumn('caseType')
     .dropColumn('closedDate')
     .dropColumn('createdAt')

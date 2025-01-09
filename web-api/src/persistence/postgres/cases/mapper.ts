@@ -97,6 +97,7 @@ export const convertRawCaseToDbRow = (rawCase: RawCase) => {
 export const convertDbRowToRawCase = (dbCase: any): RawCase => {
   return {
     ...dbCase,
+    automaticBlockedDate: dbCase.automaticBlockedDate?.toISOString(),
     blockedDate: dbCase.blockedDate?.toISOString(),
     caseCaption: dbCase.caption,
     closedDate: dbCase.closedDate?.toISOString(),
