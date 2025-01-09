@@ -309,10 +309,6 @@ const updateCasesAndSetNoticeOfChange = async ({
         );
     }
 
-    //i
-    //check if location change flag is true
-    // call another method
-
     if (shouldSetNoticeOfTrialSessionLocationChange) {
       await applicationContext
         .getUseCaseHelpers()
