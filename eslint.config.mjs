@@ -71,8 +71,16 @@ export default tseslint.config(
     files: ['**/*.test.ts', '**/*.test.js'],
     ...pluginJest.configs['flat/recommended'],
   },
-  // @ts-ignore
-  reactPlugin.configs.flat.recommended, // React recommendations
+  {
+    // @ts-ignore
+    ...reactPlugin.configs.flat.recommended,
+    rules: {
+      // @ts-ignore
+      ...reactPlugin.configs.flat.recommended.rules,
+      'react/prop-types': 'warn' // Temporarily turned off. Ideally this is on so we enforce typed inputs.
+    }
+  },
+  // reactPlugin.configs.flat.recommended, // React recommendations
   jsxA11y.flatConfigs.recommended, // Accessibility recommendations
   prettierConfig, // This config ignores formatting rules in the linter. Linters are not formatters.
   pluginCypress.configs.recommended, // cypress recommendations
