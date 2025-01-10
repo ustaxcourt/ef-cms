@@ -153,7 +153,7 @@ export const cases100_104: NewCaseKysely[] = [
     filingType: 'Myself',
     initialCaption: 'Brett Osborne, Petitioner',
     partyType: PARTY_TYPES.petitioner,
-    petitionPaymentStatus: PAYMENT_STATUS.PAID, // Needed? I added this.
+    petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     preferredTrialCity: 'Birmingham, Alabama',
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2019-03-01T21:40:46.415Z' }),
