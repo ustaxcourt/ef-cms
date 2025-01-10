@@ -61,10 +61,10 @@ const lookupUsers = async () => {
 
     return results.body.hits.hits.map(hit => {
       return {
-        Email: hit['_source']['email'].S,
-        Name: hit['_source']['name'].S,
-        Role: hit['_source']['role'].S,
-        UserId: hit['_source']['userId'].S,
+        Email: hit._source?.email?.S,
+        Name: hit._source?.name?.S,
+        Role: hit._source?.role?.S,
+        UserId: hit._source?.userId?.S,
       };
     });
   } catch (err) {
