@@ -8,7 +8,7 @@ import {
   getContactSecondary,
   getPetitionerById,
 } from '../entities/cases/Case';
-import { setServiceIndicatorsForCase } from './setServiceIndicatorsForCase';
+import { setServiceIndicatorsForPetitionersOnCase } from './setServiceIndicatorsForPetitionersOnCase';
 
 describe('setServiceIndicatorsForCases', () => {
   let baseCaseDetail;
@@ -56,7 +56,7 @@ describe('setServiceIndicatorsForCases', () => {
       petitioners: [{ ...baseCaseDetail.petitioners[0], email: undefined }],
     };
 
-    const result = setServiceIndicatorsForCase(caseDetail);
+    const result = setServiceIndicatorsForPetitionersOnCase(caseDetail);
 
     expect(getContactPrimary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -66,7 +66,7 @@ describe('setServiceIndicatorsForCases', () => {
   it(`should return ${SERVICE_INDICATOR_TYPES.SI_ELECTRONIC} for a Petitioner (contactPrimary) with no representing counsel filing electronically`, () => {
     const caseDetail = { ...baseCaseDetail };
 
-    const result = setServiceIndicatorsForCase(caseDetail);
+    const result = setServiceIndicatorsForPetitionersOnCase(caseDetail);
 
     expect(getContactPrimary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -87,7 +87,7 @@ describe('setServiceIndicatorsForCases', () => {
       privatePractitioners: [{ ...basePractitioner }],
     };
 
-    const result = setServiceIndicatorsForCase(caseDetail);
+    const result = setServiceIndicatorsForPetitionersOnCase(caseDetail);
 
     expect(getContactSecondary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -109,7 +109,7 @@ describe('setServiceIndicatorsForCases', () => {
       privatePractitioners: [{ ...basePractitioner }],
     };
 
-    const result = setServiceIndicatorsForCase(caseDetail);
+    const result = setServiceIndicatorsForPetitionersOnCase(caseDetail);
 
     expect(getContactSecondary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -129,7 +129,7 @@ describe('setServiceIndicatorsForCases', () => {
       ],
     };
 
-    const result = setServiceIndicatorsForCase(caseDetail);
+    const result = setServiceIndicatorsForPetitionersOnCase(caseDetail);
 
     expect(getContactPrimary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_NONE,
@@ -145,7 +145,7 @@ describe('setServiceIndicatorsForCases', () => {
       ],
     };
 
-    const result = setServiceIndicatorsForCase(caseDetail);
+    const result = setServiceIndicatorsForPetitionersOnCase(caseDetail);
 
     expect(getContactPrimary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_NONE,
@@ -161,7 +161,7 @@ describe('setServiceIndicatorsForCases', () => {
       ],
     };
 
-    const result = setServiceIndicatorsForCase(caseDetail);
+    const result = setServiceIndicatorsForPetitionersOnCase(caseDetail);
 
     expect(getContactPrimary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_NONE,
@@ -181,7 +181,7 @@ describe('setServiceIndicatorsForCases', () => {
       privatePractitioners: [{ ...basePractitioner }],
     };
 
-    const result = setServiceIndicatorsForCase(caseDetail);
+    const result = setServiceIndicatorsForPetitionersOnCase(caseDetail);
 
     expect(getContactSecondary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -202,7 +202,7 @@ describe('setServiceIndicatorsForCases', () => {
       privatePractitioners: [],
     };
 
-    const result = setServiceIndicatorsForCase(caseDetail);
+    const result = setServiceIndicatorsForPetitionersOnCase(caseDetail);
 
     expect(getContactPrimary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -223,7 +223,7 @@ describe('setServiceIndicatorsForCases', () => {
       privatePractitioners: [{ ...basePractitioner }],
     };
 
-    const result = setServiceIndicatorsForCase(caseDetail);
+    const result = setServiceIndicatorsForPetitionersOnCase(caseDetail);
 
     expect(getContactSecondary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_NONE,
@@ -246,7 +246,7 @@ describe('setServiceIndicatorsForCases', () => {
       ],
     };
 
-    const result = setServiceIndicatorsForCase(caseDetail);
+    const result = setServiceIndicatorsForPetitionersOnCase(caseDetail);
 
     expect(getContactSecondary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_NONE,
@@ -260,7 +260,7 @@ describe('setServiceIndicatorsForCases', () => {
       privatePractitioners: [{ ...basePractitioner }],
     };
 
-    const result = setServiceIndicatorsForCase(caseDetail);
+    const result = setServiceIndicatorsForPetitionersOnCase(caseDetail);
 
     expect(result.privatePractitioners[0].serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -272,7 +272,7 @@ describe('setServiceIndicatorsForCases', () => {
       ...baseCaseDetail,
       irsPractitioners: [{ ...baseRespondent }],
     };
-    const result = setServiceIndicatorsForCase(caseDetail);
+    const result = setServiceIndicatorsForPetitionersOnCase(caseDetail);
 
     expect(result.irsPractitioners[0].serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -295,7 +295,7 @@ describe('setServiceIndicatorsForCases', () => {
       ],
     };
 
-    const result = setServiceIndicatorsForCase(caseDetail);
+    const result = setServiceIndicatorsForPetitionersOnCase(caseDetail);
 
     expect(
       getPetitionerById(result, OTHER_CONTACT_ID).serviceIndicator,
@@ -316,7 +316,7 @@ describe('setServiceIndicatorsForCases', () => {
       privatePractitioners: undefined,
     };
 
-    const result = setServiceIndicatorsForCase(caseDetail);
+    const result = setServiceIndicatorsForPetitionersOnCase(caseDetail);
 
     expect(
       getPetitionerById(result, OTHER_CONTACT_ID).serviceIndicator,

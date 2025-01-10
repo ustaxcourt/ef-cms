@@ -1,14 +1,13 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { CaseDeadline } from '../../../../../shared/src/business/entities/CaseDeadline';
-import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
-import { Correspondence } from '../../../../../shared/src/business/entities/Correspondence';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
-import { IrsPractitioner } from '../../../../../shared/src/business/entities/IrsPractitioner';
-import { Message } from '../../../../../shared/src/business/entities/Message';
-import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
+import { Case } from '@shared/business/entities/cases/Case';
+import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
+import { Correspondence } from '@shared/business/entities/Correspondence';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { Message } from '@shared/business/entities/Message';
+import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
@@ -425,9 +424,8 @@ export const updateCaseAndAssociations = async ({
 }): Promise<RawCase> => {
   const newCaseEntity: Case = caseToUpdate.validate
     ? caseToUpdate
-    : CaseFactory.getFullCase({
-        rawCase: caseToUpdate,
-        user: authorizedUser,
+    : new Case(caseToUpdate, {
+        authorizedUser,
       });
 
   const oldCaseEntity = await getCaseByDocketNumber({
@@ -437,9 +435,8 @@ export const updateCaseAndAssociations = async ({
 
   const validNewRawCaseEntity = newCaseEntity.validate().toRawObject();
 
-  const validRawOldCaseEntity = CaseFactory.getFullCase({
-    rawCase: oldCaseEntity,
-    user: authorizedUser,
+  const validRawOldCaseEntity = new Case(oldCaseEntity, {
+    authorizedUser,
   })
     .validate()
     .toRawObject();

@@ -13,6 +13,7 @@ import { TUserContact } from '@web-api/business/useCases/user/generateChangeOfAd
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { clone } from 'lodash';
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 /**
  * generateChangeOfAddressHelper
@@ -52,12 +53,10 @@ export const generateChangeOfAddressHelper = async ({
   try {
     const newData = contactInfo;
 
-    const userCase = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+    const userCase = await getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
     let caseEntity = new Case(userCase, {
       authorizedUser,
     });
