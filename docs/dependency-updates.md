@@ -67,9 +67,7 @@ regex search the entire project for `version = ">= \d+.\d+.\d+"` and make sure i
  - ./web-api/terraform/applyables/switch-colors-cron/switch-colors-cron-applyable.tf
  - ./web-api/terraform/applyables/wait-for-workflow/wait-for-workflow-cron-applyable.tf
 
-	> aws = "<LATEST_VERSION>"
-
-**Note**: Through January 3, 2025, the Terraform AWS provider must remain at version 5.78.0 due to issues with RDS.
+	> version = ">= <LATEST_VERSION>"
 
 5. Check through the list of caveats to see if any of the documented issues have been resolved.
 
