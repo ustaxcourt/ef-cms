@@ -56,7 +56,8 @@ export const FocusLock = ({ children }) => {
       appRoot.inert = false;
       appRoot.setAttribute('aria-hidden', 'false');
       window.document.removeEventListener('keydown', onKey);
-      previousElementWithFocus?.focus();
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      previousElementWithFocus.focus && previousElementWithFocus.focus();
     };
   }, []);
 
