@@ -1,8 +1,4 @@
-import { CASE_STATUS_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import {
-  CasesClosedReturnType,
-  getCasesClosedByJudgeInteractor,
-} from './getCasesClosedByJudgeInteractor';
+import { getCasesClosedByJudgeInteractor } from './getCasesClosedByJudgeInteractor';
 import { JudgeActivityStatisticsRequest } from '@web-api/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {

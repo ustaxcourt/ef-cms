@@ -85,7 +85,7 @@ export const handle = async (event, fun) => {
  * @param {number} statusCode the statusCode to return in the api gateway response object (defaults to 302)
  * @returns {object} the api gateway response object with the Location set to the url returned from fun
  */
-export const redirect = async (event, fun, statusCode = 302) => {
+export const redirect = async (_event, fun, statusCode = 302) => {
   try {
     const { url } = await fun();
     return {

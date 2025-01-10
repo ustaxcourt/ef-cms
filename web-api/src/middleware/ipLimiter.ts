@@ -3,7 +3,7 @@ import { getCurrentInvoke } from '@vendia/serverless-express';
 
 export const ipLimiter =
   ({ applicationContext, key }) =>
-  async (req, res, next) => {
+  async (_req, res, next) => {
     const currentInvoke = getCurrentInvoke();
 
     const MAX_COUNT = parseInt(process.env.IP_LIMITER_THRESHOLD ?? '15');

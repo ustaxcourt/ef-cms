@@ -1,6 +1,6 @@
 export const advancedQueryLimiter =
   ({ applicationContext, key }) =>
-  async (req, res, next) => {
+  async (_req, res, next) => {
     const maxRequests = await applicationContext
       .getPersistenceGateway()
       .getLimiterByKey({ applicationContext, key: `${key}-configuration` });
