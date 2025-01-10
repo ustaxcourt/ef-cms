@@ -11,7 +11,7 @@ const scriptConfig: ScriptConfig = {
     'create-and-enable-smoketest-user - Creates and enables the smoketest user in ' +
     'a deployed DAWSON environment.',
   environment: {
-    defaultAccountPass: 'DEFAULT_ACCOUNT_PASSWORD',
+    defaultAccountPass: 'DEFAULT_ACCOUNT_PASS',
     env: 'ENV',
     userPoolId: 'USER_POOL_ID',
   },
