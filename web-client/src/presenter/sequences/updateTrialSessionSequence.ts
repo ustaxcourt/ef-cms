@@ -1,4 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearModalAction } from '@web-client/presenter/actions/clearModalAction';
 import { clearPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/clearPdfPreviewUrlAction';
 import { computeSubmitTrialSessionDataAction } from '../actions/TrialSession/computeSubmitTrialSessionDataAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
@@ -22,6 +23,7 @@ export const updateTrialSessionSequence = [
       setValidationErrorsAction,
       setScrollToErrorNotificationAction,
       setValidationAlertErrorsAction,
+      clearModalAction,
     ],
     success: [
       setWaitingForResponseAction,
