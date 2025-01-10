@@ -33,18 +33,12 @@ export const updateTrialSession = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const currentTrialSession = await applicationContext
+  const currentTrialSession = (await applicationContext
     .getPersistenceGateway()
     .getTrialSessionById({
       applicationContext,
       trialSessionId: trialSession.trialSessionId!,
-    });
-
-  if (!currentTrialSession) {
-    throw new NotFoundError(
-      `Trial session ${trialSession.trialSessionId} was not found.`,
-    );
-  }
+    }))!;
 
   if (
     currentTrialSession.startDate <
@@ -185,10 +179,12 @@ export const updateTrialSession = async (
           file: paperServicePdfData,
           fileNamePrefix: 'paper-service-pdf/',
         }));
+
       const paperServicePdfName = getPaperServicePdfName({
         shouldIssueNoticeOfChangeOfTrialJudge,
         shouldSetNoticeOfChangeToInPersonProceeding,
         shouldSetNoticeOfChangeToRemoteProceeding,
+        shouldSetNoticeOfTrialSessionLocationChange,
       });
 
       updatedTrialSessionEntity.addPaperServicePdf(fileId, paperServicePdfName);
@@ -373,10 +369,12 @@ const getPaperServicePdfName = ({
   shouldIssueNoticeOfChangeOfTrialJudge,
   shouldSetNoticeOfChangeToInPersonProceeding,
   shouldSetNoticeOfChangeToRemoteProceeding,
+  shouldSetNoticeOfTrialSessionLocationChange,
 }: {
   shouldSetNoticeOfChangeToRemoteProceeding: boolean;
   shouldSetNoticeOfChangeToInPersonProceeding: boolean;
   shouldIssueNoticeOfChangeOfTrialJudge: boolean;
+  shouldSetNoticeOfTrialSessionLocationChange: boolean;
 }): string => {
   if (shouldIssueNoticeOfChangeOfTrialJudge) {
     return 'Notice of Change of Trial Judge';
@@ -384,6 +382,8 @@ const getPaperServicePdfName = ({
     return 'Notice of Change to In Person Proceeding';
   } else if (shouldSetNoticeOfChangeToRemoteProceeding) {
     return 'Notice of Change to Remote Proceeding';
+  } else if (shouldSetNoticeOfTrialSessionLocationChange) {
+    return 'Notice of Change of Trial Location';
   } else {
     return 'Notice of Change';
   }
