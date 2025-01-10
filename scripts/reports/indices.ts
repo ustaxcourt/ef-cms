@@ -1,6 +1,5 @@
 // usage: npx ts-node --transpile-only scripts/reports/indices.ts
 
-import { esAliasType } from '../../web-api/elasticsearch/elasticsearch-aliases';
 import { getClient } from '../../web-api/elasticsearch/client';
 import { requireEnvVars } from '../../shared/admin-tools/util';
 
@@ -22,8 +21,10 @@ requireEnvVars(['ENV', 'ELASTICSEARCH_ENDPOINT']);
     counts[index] = Number(count.body?.count || 0);
   }
   const aliases = {};
-  (await client.cat.aliases({ format: 'json' })).body?.map((a: esAliasType) => {
-    aliases[a.alias] = a.index;
+  (await client.cat.aliases({ format: 'json' })).body.forEach(a => {
+    if (a.alias) {
+      aliases[a.alias] = a.index;
+    }
   });
   console.log('indices:', counts);
   console.log('aliases:', aliases);

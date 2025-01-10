@@ -9,9 +9,12 @@
  *   npx ts-node --transpile-only scripts/run-once-scripts/delete-efcms-user-practitioner-firm-index.ts
  */
 
+import { Search_Request } from '@opensearch-project/opensearch/api';
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
-import { Search } from '@opensearch-project/opensearch/api/requestParams';
-import { createApplicationContext } from '@web-api/applicationContext';
+import {
+  applicationContext,
+  ServerApplicationContext,
+} from '@web-api/applicationContext';
 import { search } from '@web-api/persistence/elasticsearch/searchClient';
 
 const firmTerms: string[] = process.argv.slice(2);
@@ -25,7 +28,7 @@ if (!firmTerms.length) {
 const getFirmsPractitioners = async ({
   applicationContext,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
 }): Promise<{ userId: string }[]> => {
   const must: {}[] = [
     {
@@ -48,7 +51,7 @@ const getFirmsPractitioners = async ({
       },
     });
   }
-  const searchParameters: Search = {
+  const searchParameters: Search_Request = {
     body: {
       query: {
         bool: {
@@ -67,7 +70,7 @@ const getFirmsCases = async ({
   applicationContext,
   firmsPractitionerIds,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   firmsPractitionerIds: string[];
 }): Promise<
   {
@@ -77,7 +80,7 @@ const getFirmsCases = async ({
     status: string;
   }[]
 > => {
-  const searchParameters: Search = {
+  const searchParameters: Search_Request = {
     body: {
       query: {
         bool: {
@@ -100,7 +103,6 @@ const getFirmsCases = async ({
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext: IApplicationContext = createApplicationContext({});
   const firmsPractitionerIds = (
     await getFirmsPractitioners({
       applicationContext,

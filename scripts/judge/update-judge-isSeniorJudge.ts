@@ -2,7 +2,10 @@
 
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import { User } from '@shared/business/entities/User';
-import { createApplicationContext } from '@web-api/applicationContext';
+import {
+  createApplicationContext,
+  ServerApplicationContext,
+} from '@web-api/applicationContext';
 import { requireEnvVars } from '../../shared/admin-tools/util';
 import { search } from '@web-api/persistence/elasticsearch/searchClient';
 
@@ -33,7 +36,7 @@ const seniorJudges = [
 const getJudges = async ({
   applicationContext,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
 }) => {
   return (
     await search({
@@ -74,7 +77,7 @@ let judgesToUpdateIds: { userId: string; isSeniorJudge: boolean }[];
     }),
   );
 
-  for (let judge of judgesToUpdateIds) {
+  for (const judge of judgesToUpdateIds) {
     const { userId } = judge;
 
     const userToUpdate = await applicationContext
