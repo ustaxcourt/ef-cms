@@ -82,7 +82,6 @@ export const convertRawCaseToDbRow = (rawCase: RawCase) => {
       ? calculateDate({ dateString: rawCase.sealedDate })
       : null,
     sortableDocketNumber: rawCase.sortableDocketNumber,
-    statistics: rawCase.statistics,
     status: rawCase.status,
     trialDate: rawCase.trialDate
       ? calculateDate({ dateString: rawCase.trialDate })
@@ -97,6 +96,7 @@ export const convertRawCaseToDbRow = (rawCase: RawCase) => {
 export const convertDbRowToRawCase = (dbCase: any): RawCase => {
   return {
     ...dbCase,
+    automaticBlockedDate: dbCase.automaticBlockedDate?.toISOString(),
     blockedDate: dbCase.blockedDate?.toISOString(),
     caseCaption: dbCase.caption,
     closedDate: dbCase.closedDate?.toISOString(),

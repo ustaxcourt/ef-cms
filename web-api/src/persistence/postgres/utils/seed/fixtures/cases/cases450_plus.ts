@@ -60,7 +60,6 @@ export const cases450_plus: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000150,
-    statistics: [],
     status: CASE_STATUS_TYPES.cav,
   },
   {
@@ -94,7 +93,6 @@ export const cases450_plus: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000151,
-    statistics: [],
     status: CASE_STATUS_TYPES.cav,
   },
   {
@@ -128,7 +126,6 @@ export const cases450_plus: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000152,
-    statistics: [],
     status: CASE_STATUS_TYPES.cav,
   },
   {
@@ -162,7 +159,6 @@ export const cases450_plus: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000153,
-    statistics: [],
     status: CASE_STATUS_TYPES.cav,
   },
   {
@@ -196,7 +192,6 @@ export const cases450_plus: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000154,
-    statistics: [],
     status: CASE_STATUS_TYPES.cav,
   },
   {
@@ -230,7 +225,6 @@ export const cases450_plus: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000155,
-    statistics: [],
     status: CASE_STATUS_TYPES.cav,
   },
   {
@@ -264,7 +258,6 @@ export const cases450_plus: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000156,
-    statistics: [],
     status: CASE_STATUS_TYPES.cav,
   },
   {
@@ -298,7 +291,6 @@ export const cases450_plus: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000157,
-    statistics: [],
     status: CASE_STATUS_TYPES.cav,
   },
   {
@@ -332,7 +324,6 @@ export const cases450_plus: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000158,
-    statistics: [],
     status: CASE_STATUS_TYPES.cav,
   },
   {
@@ -366,7 +357,6 @@ export const cases450_plus: NewCaseKysely[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2023000159,
-    statistics: [],
     status: CASE_STATUS_TYPES.cav,
   },
   {
@@ -403,7 +393,6 @@ export const cases450_plus: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2021-02-16T16:16:19.660Z' }),
     sortableDocketNumber: 2015000999,
-    statistics: [],
     status: CASE_STATUS_TYPES.calendared,
     trialDate: calculateDate({ dateString: '2020-11-27T05:00:00.000Z' }),
     trialLocation: 'Houston, Texas',
@@ -447,7 +436,6 @@ export const cases450_plus: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2021-02-16T15:38:54.239Z' }),
     sortableDocketNumber: 2020001338,
-    statistics: [],
     status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
   },
   {
@@ -483,7 +471,6 @@ export const cases450_plus: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2021-02-16T16:29:48.990Z' }),
     sortableDocketNumber: 1987069312,
-    statistics: [],
     status: CASE_STATUS_TYPES.new,
   },
 ];

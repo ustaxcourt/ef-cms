@@ -19,6 +19,7 @@ export const getReadyForTrialCases = async () => {
       .where(
         'createdAt',
         '<=',
+        // 10502 TODO: This is hideous
         calculateDate({
           dateString: createISODateAtStartOfDayEST(
             calculateDate({ howMuch: -44, units: 'days' }).toISOString(),

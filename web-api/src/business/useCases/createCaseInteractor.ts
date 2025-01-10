@@ -19,9 +19,10 @@ import { UserCase } from '../../../../shared/src/business/entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '../../../../shared/src/business/entities/WorkItem';
 import { createCasePetitionersData } from '@web-api/persistence/postgres/cases/parties/createCasePetitionerData';
+import { createCaseStatistic } from '@web-api/persistence/postgres/cases/ statistics/createCaseStatistic';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
-import { setServiceIndicatorsForCase } from '../../../../shared/src/business/utilities/setServiceIndicatorsForCase';
+import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 
@@ -134,7 +135,7 @@ export const createCaseInteractor = async (
     },
   );
 
-  setServiceIndicatorsForCase(caseToAdd);
+  setServiceIndicatorsForPetitionersOnCase(caseToAdd);
 
   if (user.role === ROLES.petitioner) {
     caseToAdd.getContactPrimary().contactId = user.userId;
@@ -290,6 +291,10 @@ export const createCaseInteractor = async (
     docketNumber: caseToAdd.docketNumber,
     petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)), // 10502 TODO: is this correct?
   });
+
+  caseToAdd.statistics?.forEach(statistic =>
+    createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
+  );
 
   const userCaseEntity = new UserCase(caseToAdd);
 

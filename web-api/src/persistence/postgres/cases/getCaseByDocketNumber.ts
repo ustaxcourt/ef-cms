@@ -33,8 +33,11 @@ export const getCaseByDocketNumber = async ({
       .execute(),
   );
   const petitionersOnCase =
-    dbPetitionersOnCase.map(x => {
-      return new Petitioner(transformNullToUndefined(x))
+    dbPetitionersOnCase.map(p => {
+      return new Petitioner({
+        ...transformNullToUndefined(p),
+        state: p.state || null, // 10502 TODO: This is silly :/ but necessary to be in line with validation rules
+      })
         .validate()
         .toRawObject();
     }) || [];

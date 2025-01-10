@@ -71,7 +71,6 @@ export const cases100_104: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2022-02-01T17:21:05.483Z' }),
     sortableDocketNumber: 2022000100,
-    statistics: [],
     status: CASE_STATUS_TYPES.closed,
   },
   {
@@ -105,7 +104,6 @@ export const cases100_104: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2011-10-11T04:00:00.000Z' }),
     sortableDocketNumber: 2011000101,
-    statistics: [],
     status: CASE_STATUS_TYPES.generalDocket,
   },
   {
@@ -143,7 +141,6 @@ export const cases100_104: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2016-03-29T04:00:00.000Z' }),
     sortableDocketNumber: 2016000101,
-    statistics: [],
     status: CASE_STATUS_TYPES.generalDocket,
   },
   {
@@ -156,7 +153,7 @@ export const cases100_104: NewCaseKysely[] = [
     filingType: 'Myself',
     initialCaption: 'Brett Osborne, Petitioner',
     partyType: PARTY_TYPES.petitioner,
-    petitionPaymentStatus: PAYMENT_STATUS.PAID, // Needed? I added this.
+    petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     preferredTrialCity: 'Birmingham, Alabama',
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: calculateDate({ dateString: '2019-03-01T21:40:46.415Z' }),
@@ -229,7 +226,6 @@ export const cases100_104: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2021-03-01T16:26:49.114Z' }),
     sortableDocketNumber: 2021000101,
-    statistics: [],
     status: CASE_STATUS_TYPES.new,
   },
   {
@@ -264,7 +260,6 @@ export const cases100_104: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2022-02-15T16:52:11.651Z' }),
     sortableDocketNumber: 2022000101,
-    statistics: [],
     status: CASE_STATUS_TYPES.closed,
   },
   {
@@ -294,7 +289,6 @@ export const cases100_104: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2023-03-13T22:23:32.843Z' }),
     sortableDocketNumber: 2023000101,
-    statistics: [],
     status: CASE_STATUS_TYPES.new,
   },
   {
@@ -325,7 +319,6 @@ export const cases100_104: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2024-05-26T00:00:00.000-04:00' }),
     sortableDocketNumber: 2024000101,
-    statistics: [],
     status: CASE_STATUS_TYPES.generalDocket,
   },
   {
@@ -408,7 +401,6 @@ export const cases100_104: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2022-12-21T19:03:01.909Z' }),
     sortableDocketNumber: 2022000102,
-    statistics: [],
     status: CASE_STATUS_TYPES.new,
   },
   {
@@ -446,7 +438,6 @@ export const cases100_104: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2023-04-01T04:00:00.000Z' }),
     sortableDocketNumber: 2023000102,
-    statistics: [],
     status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
   },
   {
@@ -548,7 +539,6 @@ export const cases100_104: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2023-03-25T04:00:00.000Z' }),
     sortableDocketNumber: 2023000103,
-    statistics: [],
     status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
   },
   {
@@ -716,7 +706,6 @@ export const cases100_104: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2023-01-02T05:00:00.000Z' }),
     sortableDocketNumber: 2023000105,
-    statistics: [],
     status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
   },
   {
@@ -760,7 +749,6 @@ export const cases100_104: NewCaseKysely[] = [
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2023-03-18T04:00:00.000Z' }),
     sortableDocketNumber: 2023000104,
-    statistics: [],
     status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
     useSameAsPrimary: true,
   },

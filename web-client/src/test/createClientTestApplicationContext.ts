@@ -43,7 +43,6 @@ import {
   compareStrings,
 } from '@shared/business/utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
-import { createCase } from '@web-api/persistence/dynamo/cases/createCase';
 import { createMockDocumentClient } from '@shared/business/test/createMockDocumentClient';
 import { deleteRecord } from '@web-api/persistence/elasticsearch/deleteRecord';
 import { filterEmptyStrings } from '@shared/business/utilities/filterEmptyStrings';
@@ -96,10 +95,8 @@ import { serveCaseDocument } from '@shared/business/utilities/serveCaseDocument'
 import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
 import { setItem } from '@web-client/persistence/localStorage/setItem';
 import { setNoticesForCalendaredTrialSessionInteractor } from '@shared/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
-import { setServiceIndicatorsForCase } from '@shared/business/utilities/setServiceIndicatorsForCase';
 import { setupPdfDocument } from '@shared/business/utilities/setupPdfDocument';
 import { unsealDocketEntryInteractor } from '@shared/proxies/editDocketEntry/unsealDocketEntryProxy';
-import { updateCase } from '@web-api/persistence/dynamo/cases/updateCase';
 import { updateCaseCorrespondence } from '@web-api/persistence/dynamo/correspondence/updateCaseCorrespondence';
 import { updateDocketEntry } from '@web-api/persistence/dynamo/documents/updateDocketEntry';
 import { updateUserRecords } from '@web-api/persistence/dynamo/users/createNewPractitionerUser';
@@ -316,9 +313,6 @@ const createTestApplicationContext = () => {
     setConsolidationFlagsForDisplay: jest
       .fn()
       .mockImplementation(setConsolidationFlagsForDisplay),
-    setServiceIndicatorsForCase: jest
-      .fn()
-      .mockImplementation(setServiceIndicatorsForCase),
     setupPdfDocument: jest.fn().mockImplementation(setupPdfDocument),
     sortDocketEntries: jest.fn().mockImplementation(sortDocketEntries),
     validateDateAndCreateISO: jest
@@ -414,7 +408,6 @@ const createTestApplicationContext = () => {
     addCaseToHearing: jest.fn(),
     bulkDeleteRecords: jest.fn().mockImplementation(bulkDeleteRecords),
     bulkIndexRecords: jest.fn().mockImplementation(bulkIndexRecords),
-    createCase: jest.fn().mockImplementation(createCase),
     createCaseTrialSortMappingRecords: jest.fn(),
     createElasticsearchReindexRecord: jest.fn(),
     deleteCaseTrialSortMappingRecords: jest.fn(),
@@ -465,7 +458,6 @@ const createTestApplicationContext = () => {
     setItem: jest.fn().mockImplementation(setItem),
     setPriorityOnAllWorkItems: jest.fn(),
     setTrialSessionJobStatusForCase: jest.fn(),
-    updateCase: jest.fn().mockImplementation(updateCase),
     updateCaseCorrespondence: jest
       .fn()
       .mockImplementation(updateCaseCorrespondence),
