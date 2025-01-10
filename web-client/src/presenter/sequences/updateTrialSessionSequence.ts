@@ -23,7 +23,6 @@ export const updateTrialSessionSequence = [
       setValidationErrorsAction,
       setScrollToErrorNotificationAction,
       setValidationAlertErrorsAction,
-      clearModalAction,
     ],
     success: [
       setWaitingForResponseAction,
@@ -37,4 +36,5 @@ export const updateTrialSessionSequence = [
       },
     ],
   },
+  clearModalAction,
 ];
