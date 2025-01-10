@@ -1,5 +1,7 @@
+import { Search_Request } from '@opensearch-project/opensearch/api';
 import { DEADLINE_REPORT_PAGE_SIZE } from '../../../../../shared/src/business/entities/EntityConstants';
 import { search } from '../searchClient';
+import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl';
 
 export const getCaseDeadlinesByDateRange = async ({
   applicationContext,
@@ -14,7 +16,7 @@ export const getCaseDeadlinesByDateRange = async ({
       ? pageSize
       : DEADLINE_REPORT_PAGE_SIZE;
 
-  const queryArray = [];
+  const queryArray: QueryContainer[] = [];
   const filterArray = [
     {
       range: {
@@ -36,7 +38,7 @@ export const getCaseDeadlinesByDateRange = async ({
     });
   }
 
-  const query = {
+  const query: Search_Request = {
     body: {
       from,
       query: {

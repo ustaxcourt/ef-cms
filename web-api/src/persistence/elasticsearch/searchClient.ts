@@ -25,15 +25,6 @@ export type SearchClientResultsType = {
   total: number;
   results: any;
 };
-export type SearchAllParametersType = {
-  index?: string;
-  body?: {
-    _source?: string[];
-    query?: any;
-    sort?: any;
-  };
-  size?: number;
-};
 
 export type SearchClientCountResultsType = number;
 
@@ -141,7 +132,7 @@ export const searchAll = async ({
   searchParameters,
 }: {
   applicationContext: IApplicationContext;
-  searchParameters: SearchAllParametersType;
+  searchParameters: Search_Request;
 }): Promise<SearchClientResultsType> => {
   updateIndex({ searchParameters });
   const index = searchParameters.index || '';
