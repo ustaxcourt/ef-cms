@@ -23,6 +23,7 @@ export const getCasesByFilters = async ({
     'caseCaption',
     'caseType',
     'docketNumber',
+    'docketNumberWithSuffix',
     'leadDocketNumber',
     'preferredTrialCity',
     'receivedAt',
