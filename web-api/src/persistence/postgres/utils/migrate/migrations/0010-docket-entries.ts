@@ -18,6 +18,11 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('documentTitle', 'varchar')
     .addColumn('documentType', 'varchar')
     .addColumn('isStricken', 'boolean')
+    .addColumn('judge', 'varchar')
+    .addColumn('signedJudgeName', 'varchar')
+    .addColumn('isSealed', 'boolean')
+    .addColumn('sealedTo', 'varchar')
+    .addColumn('numberOfPages', 'integer')
     .execute();
 }
 

@@ -256,6 +256,11 @@ export interface DocketEntryTable {
   receivedAt: Date;
   servedAt: Date | null;
   isStricken: boolean | null;
+  judge: string | null;
+  signedJudgeName: string | null;
+  isSealed: boolean | null;
+  sealedTo?: string;
+  numberOfPages?: number;
 }
 
 export type DocketEntryKysely = Selectable<DocketEntryTable>;
