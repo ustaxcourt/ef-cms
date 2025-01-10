@@ -1,5 +1,5 @@
+import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl.js';
 import { MAX_ELASTICSEARCH_PAGINATION } from '../../shared/src/business/entities/EntityConstants';
-import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { createApplicationContext } from '../../web-api/src/applicationContext';
 import { search } from '../../web-api/src/persistence/elasticsearch/searchClient';
 
@@ -62,8 +62,8 @@ import { search } from '../../web-api/src/persistence/elasticsearch/searchClient
   };
   const applicationContext = createApplicationContext({});
 
-  const shouldFilters: QueryDslQueryContainer[] = [];
-  const filters: QueryDslQueryContainer[] = [
+  const shouldFilters: QueryContainer[] = [];
+  const filters: QueryContainer[] = [
     {
       terms: { 'status.S': params.statuses },
     },
