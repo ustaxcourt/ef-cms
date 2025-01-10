@@ -193,7 +193,7 @@ export type MinuteSheetFormState = {
 
   trialBriefSection: {
     dateSubmitted: string;
-    totalTrialHours: number;
+    totalTrialHours: number | undefined;
     dateBenchOpinionRendered: string;
     transcriptOrdered: boolean;
     note: string;
@@ -280,7 +280,7 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
     dateBenchOpinionRendered: '',
     dateSubmitted: '',
     note: '',
-    totalTrialHours: 0,
+    totalTrialHours: undefined,
     transcriptOrdered: false,
   },
 
@@ -304,8 +304,7 @@ export const TRIAL_HEARING_OPTIONS = {
   partialTrial: 'Partial Trial',
   trial: 'Trial',
 } as const;
-type TrialHearingOption =
-  (typeof TRIAL_HEARING_OPTIONS)[keyof typeof TRIAL_HEARING_OPTIONS];
+type TrialHearingOption = keyof typeof TRIAL_HEARING_OPTIONS;
 
 export const STATUS_REPORT_ORDERED_FOR_OPTIONS = {
   joint: 'Joint',
@@ -315,7 +314,7 @@ export const STATUS_REPORT_ORDERED_FOR_OPTIONS = {
   respondent: 'Respondent',
 } as const;
 type StatusReportOrderedForOption =
-  (typeof STATUS_REPORT_ORDERED_FOR_OPTIONS)[keyof typeof STATUS_REPORT_ORDERED_FOR_OPTIONS];
+  keyof typeof STATUS_REPORT_ORDERED_FOR_OPTIONS;
 
 export const MOTION_FILED_BY_OPTIONS = {
   intervenor: 'Intervenor',
@@ -324,8 +323,7 @@ export const MOTION_FILED_BY_OPTIONS = {
   respondent: 'Respondent',
   thirdParty: 'Third Party',
 } as const;
-type MotionFiledByOption =
-  (typeof MOTION_FILED_BY_OPTIONS)[keyof typeof MOTION_FILED_BY_OPTIONS];
+type MotionFiledByOption = keyof typeof MOTION_FILED_BY_OPTIONS;
 
 export const MOTION_STATUS_OPTIONS = {
   cav: 'CAV',
@@ -339,8 +337,7 @@ export const MOTION_STATUS_OPTIONS = {
   // question applies broadly speaking for these option constants.
   seeOrder: 'See Order',
 } as const;
-export type MotionStatusOption =
-  (typeof MOTION_STATUS_OPTIONS)[keyof typeof MOTION_STATUS_OPTIONS];
+export type MotionStatusOption = keyof typeof MOTION_STATUS_OPTIONS;
 
 export const MOTION_TYPE_OPTIONS = {
   motionForContinuance: 'Motion for Continuance',
@@ -351,8 +348,7 @@ export const MOTION_TYPE_OPTIONS = {
   motionToDismissLackOfJurisdiction: 'Motion to Dismiss - Lack of Jurisdiction',
   motionToDismissLackOfProsecution: 'Motion to Dismiss - Lack of Prosecution',
 } as const;
-export type MotionTypeOption =
-  (typeof MOTION_TYPE_OPTIONS)[keyof typeof MOTION_TYPE_OPTIONS];
+export type MotionTypeOption = keyof typeof MOTION_TYPE_OPTIONS;
 
 export const ACTION_DOCUMENT_TYPE_OPTIONS = {
   entryOfAppearance: 'Entry of Appearance',
@@ -366,7 +362,7 @@ export const ACTION_DOCUMENT_TYPE_OPTIONS = {
 } as const;
 
 export type ActionDocumentTypeOption =
-  (typeof ACTION_DOCUMENT_TYPE_OPTIONS)[keyof typeof ACTION_DOCUMENT_TYPE_OPTIONS];
+  keyof typeof ACTION_DOCUMENT_TYPE_OPTIONS;
 
 export const ACTION_FILED_BY_OPTIONS = {
   joint: 'Joint',
@@ -376,8 +372,7 @@ export const ACTION_FILED_BY_OPTIONS = {
   respondent: 'Respondent',
 } as const;
 
-export type ActionFiledByOption =
-  (typeof ACTION_FILED_BY_OPTIONS)[keyof typeof ACTION_FILED_BY_OPTIONS];
+export type ActionFiledByOption = keyof typeof ACTION_FILED_BY_OPTIONS;
 
 export const ACTION_STATUS_OPTIONS = {
   cav: 'CAV',
@@ -390,8 +385,7 @@ export const ACTION_STATUS_OPTIONS = {
   seeOrder: 'See Order',
 } as const;
 
-export type ActionStatusOption =
-  (typeof ACTION_STATUS_OPTIONS)[keyof typeof ACTION_STATUS_OPTIONS];
+export type ActionStatusOption = keyof typeof ACTION_STATUS_OPTIONS;
 
 export const BRIEF_TYPE_OPTIONS = {
   seriatimBrief: 'Seriatim brief',
@@ -402,8 +396,7 @@ export const BRIEF_TYPE_OPTIONS = {
   simultaneousSupplemental: 'Simultaneous Supplemental Brief',
 } as const;
 
-export type BriefTypeOption =
-  (typeof BRIEF_TYPE_OPTIONS)[keyof typeof BRIEF_TYPE_OPTIONS];
+export type BriefTypeOption = keyof typeof BRIEF_TYPE_OPTIONS;
 
 export const EXHIBIT_STATUS_OPTIONS = {
   admitted: 'Admitted',
@@ -416,12 +409,10 @@ export const EXHIBIT_STATUS_OPTIONS = {
   withdrawn: 'Withdrawn',
 } as const;
 
-export type ExhibitStatusOption =
-  (typeof EXHIBIT_STATUS_OPTIONS)[keyof typeof EXHIBIT_STATUS_OPTIONS];
+export type ExhibitStatusOption = keyof typeof EXHIBIT_STATUS_OPTIONS;
 
 export const PARTY_TYPE_OPTIONS_MAP = {
   petitioner: 'Petitioner',
   respondent: 'Respondent',
 } as const;
-type PartyTypeOptions =
-  (typeof PARTY_TYPE_OPTIONS_MAP)[keyof typeof PARTY_TYPE_OPTIONS_MAP];
+type PartyTypeOptions = keyof typeof PARTY_TYPE_OPTIONS_MAP;

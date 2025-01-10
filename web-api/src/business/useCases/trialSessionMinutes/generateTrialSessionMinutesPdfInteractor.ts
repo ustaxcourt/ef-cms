@@ -15,7 +15,6 @@ import {
   formatMotions,
   formatPetitionerAppearances,
   formatPretrialConference,
-  formatRecalledRow,
   formatRecalledRows,
   formatRespondentAppearances,
   formatStatusReportOrdered,

@@ -50,7 +50,7 @@ export type FormattedMinuteSheet = {
   trialBrief: {
     dateSubmitted: string;
     benchOpinionRendered: string;
-    totalTrialHours: number;
+    totalTrialHours: string;
     briefType: string;
     briefDetails: string[];
   };
@@ -97,7 +97,7 @@ export const getConsolidatedDocketNumbers = (aCase: RawCase): string => {
 export const formatCalledSection = (section: {
   date: string;
   note: string;
-  transcriptOrdered: boolean;
+  transcriptOrdered?: boolean;
 }): string => {
   return [
     formatDateString(section.date, FORMATS.MMDDYYYY),
@@ -243,7 +243,9 @@ export const formatTrialBrief = (
     dateSubmitted: trialBriefSection.dateSubmitted
       ? formatDateString(trialBriefSection.dateSubmitted, FORMATS.MMDDYYYY)
       : '',
-    totalTrialHours: trialBriefSection.totalTrialHours || '',
+    totalTrialHours: trialBriefSection.totalTrialHours
+      ? `${trialBriefSection.totalTrialHours}`
+      : '',
   };
 };
 

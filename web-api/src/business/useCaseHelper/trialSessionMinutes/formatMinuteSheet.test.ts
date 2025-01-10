@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import {
   ACTION_DOCUMENT_TYPE_OPTIONS,
   ACTION_FILED_BY_OPTIONS,
@@ -322,7 +323,7 @@ describe('formatMinuteSheet', () => {
         dueDate: '2023-02-15',
         note: 'test note',
         orderedFor: 'joint',
-      };
+      } as MinuteSheetFormState['ordersSection']['statusReportOrdered'];
       const result = formatStatusReportOrdered(section);
       expect(result).toBe(
         '01/15/2023; Ordered for Joint; Due 02/15/2023; <em>test note</em>',
@@ -335,7 +336,7 @@ describe('formatMinuteSheet', () => {
         dueDate: '',
         note: '',
         orderedFor: '',
-      };
+      } as MinuteSheetFormState['ordersSection']['statusReportOrdered'];
       const result = formatStatusReportOrdered(section);
       expect(result).toBe('01/15/2023');
     });
@@ -348,7 +349,7 @@ describe('formatMinuteSheet', () => {
             dueDate: '',
             note: '',
             orderedFor: key,
-          };
+          } as MinuteSheetFormState['ordersSection']['statusReportOrdered'];
           const result = formatStatusReportOrdered(section);
           expect(result).toBe(`01/15/2023; Ordered for ${value}`);
         },
@@ -501,7 +502,7 @@ describe('formatMinuteSheet', () => {
             status: 'filed',
           },
         },
-      };
+      } as MinuteSheetFormState['actionsAndFilingsSection'];
       const result = formatActionsAndFilings(section);
       expect(result).toEqual([
         {
@@ -556,7 +557,7 @@ describe('formatMinuteSheet', () => {
         ],
         briefType: 'seriatimBrief', // TODO 10419 we need to fix this, but this is currently the expected behavior
         dateSubmitted: '01/01/2023',
-        totalTrialHours: 5,
+        totalTrialHours: '5',
       });
     });
 
