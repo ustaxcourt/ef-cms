@@ -27,7 +27,7 @@ Follow these steps to perform a glue job manually.
 1. In a **new terminal session** with environment variables pointed to the production environment, start the glue job:
    ```zsh
    . scripts/env/set-env.zsh ustc-prod
-   LOWER_ENV=test npx ts-node --transpile-only scripts/glue/start-glue-job.ts "efcms-${LOWER_ENV}-alpha"
+   LOWER_ENV=test ./scripts/glue/start-glue-job.ts "efcms-${LOWER_ENV}-alpha"
    ```
 1. Back in the terminal session with environment variables pointed to the target lower environment, synchronize the S3 documents buckets:
    ```zsh
@@ -35,7 +35,7 @@ Follow these steps to perform a glue job manually.
    ```
 1. Wait for the glue job and S3 documents sync to complete before proceeding. The S3 sync will output each copy/delete operation to the terminal, so you will know when it is finished. You will need to periodically check on the glue job's status in the terminal session with environment variables pointed to the production environment:
    ```zsh
-   npx ts-node --transpile-only scripts/glue/glue-job-status.ts
+   ./scripts/glue/glue-job-status.ts
    ```
    Once the `JobRunState` is `SUCCEEDED`, close the terminal session:
    ```zsh

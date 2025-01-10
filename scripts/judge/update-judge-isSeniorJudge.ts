@@ -1,20 +1,29 @@
-// usage: npx ts-node --transpile-only scripts/judgeUpdates/update-judge-isSeniorJudge.ts
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
-import { User } from '@shared/business/entities/User';
 import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import {
+  type ServerApplicationContext,
   createApplicationContext,
-  ServerApplicationContext,
 } from '@web-api/applicationContext';
-import { requireEnvVars } from '../../shared/admin-tools/util';
+import { User } from '@shared/business/entities/User';
 import { search } from '@web-api/persistence/elasticsearch/searchClient';
 
-requireEnvVars([
-  'DYNAMODB_TABLE_NAME',
-  'ELASTICSEARCH_ENDPOINT',
-  'ENV',
-  'REGION',
-]);
+const scriptConfig: ScriptConfig = {
+  description:
+    "update-judge-isSeniorJudge - Sets Judges' isSeniorJudge attribute",
+  environment: {
+    dynamoDbTableName: 'DYNAMODB_TABLE_NAME',
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+    env: 'ENV',
+    region: 'REGION',
+  },
+  requireActiveAwsSession: true,
+};
+parseArgsAndEnvVars(scriptConfig);
 
 // WARNING: this list is subject to change! check https://www.ustaxcourt.gov/judges.html
 const seniorJudges = [

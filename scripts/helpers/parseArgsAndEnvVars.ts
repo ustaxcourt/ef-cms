@@ -1,20 +1,41 @@
+import {
+  FORMATS,
+  formatDateString,
+  formatNow,
+} from '@shared/business/utilities/DateHandler';
 import { type ParseArgsConfig, parseArgs } from 'node:util';
+import { missingEnvironmentVariables } from '../../shared/admin-tools/util';
+import path from 'node:path';
 
 export type ScriptConfig = {
+  environment?: {
+    /**
+     * List of environment variables that are required to be present.
+     * The key is the property by which the parsed value will be
+     * returned and the value is the environment variable name
+     * (e.g. `env: 'ENV'`).
+     */
+    [key: string]: string;
+  };
   /**
    * The `description` will be printed to the console when errors are
    * encountered or when the `--help` or `--verbose` parameters are provided.
    */
   description?: string;
-  parameters: {
+  parameters?: {
     /**
-     * If the `long` and `position` properties are not defined in the
-     * `ScriptParameter` object, the parameter is called by its key
-     * prefixed with two dashes (e.g. `--year`). This key will also be used
-     * when retrieving this parameter's parsed value with `parseArguments`.
+     * List of required and optional parameters. If the `long` and `position`
+     * properties are not defined in the `ScriptParameter` object, the
+     * parameter is called by its key prefixed with two dashes (e.g. `--year`).
+     * The key is the property by which the parsed value will be returned.
      */
     [key: string]: ScriptParameter;
   };
+  /**
+   * The `requireActiveAwsSession` property indicates whether the AWS session
+   * token should be currently active.
+   */
+  requireActiveAwsSession?: boolean;
 };
 
 export type ScriptParameter = {
@@ -25,6 +46,10 @@ export type ScriptParameter = {
    * always be an array, even if only one value was provided.
    */
   commaDelimited?: boolean;
+  /**
+   * The `description` property may be utilized to provide additional
+   * context for a parameter, such as the expected format of the value.
+   */
   description?: string;
   /**
    * If no value is provided for this parameter, `parseArguments` will
@@ -86,7 +111,7 @@ export const parseIntRange = (intRange: string): number[] => {
     .map(s => parseInt(s));
   const min = Math.min(...ints);
   const max = Math.max(...ints);
-  let rangeNums: number[] = [];
+  const rangeNums: number[] = [];
   for (let i = min; i <= max; i++) {
     rangeNums.push(i);
   }
@@ -140,7 +165,7 @@ const collateArguments = (parameters: {
   const reverseSortedRequiredPositionals: ScriptParameter[] = [];
   const reverseSortedOptionalPositionals: ScriptParameter[] = [];
   const reverseSortedPositionals = allPositionals.sort(
-    (a, b) => (b.position || 0) - (a.position || 0),
+    (a, b) => b.position! - a.position!,
   );
   let requiredOverride = false;
   for (const positional of reverseSortedPositionals) {
@@ -152,10 +177,10 @@ const collateArguments = (parameters: {
     }
   }
   const requiredPositionals = reverseSortedRequiredPositionals
-    .sort((a, b) => (a.position || 0) - (b.position || 0))
+    .sort((a, b) => a.position! - b.position!)
     .map(p => ({ ...p, required: true }));
   const optionalPositionals = reverseSortedOptionalPositionals.sort(
-    (a, b) => (a.position || 0) - (b.position || 0),
+    (a, b) => a.position! - b.position!,
   );
   return {
     optionalParameters,
@@ -165,25 +190,27 @@ const collateArguments = (parameters: {
   };
 };
 
+const getRelativePath = (scriptFullPath: string): string => {
+  const repoRootDir = path.dirname(__filename).replace('/scripts/helpers', '');
+  return scriptFullPath.replace(repoRootDir, '.');
+};
+
 const buildExample = (parameters: {
   [key: string]: ScriptParameter;
 }): string => {
+  let example = getRelativePath(process.argv[1]);
   const {
     optionalParameters,
     optionalPositionals,
     requiredParameters,
     requiredPositionals,
   } = collateArguments(parameters);
-  let example = `${process.argv[1]}`;
   if (requiredPositionals.length) {
     example += requiredPositionals.map(p => ` <${p.long!}>`).join('');
   }
   if (requiredParameters.length) {
     example += requiredParameters
-      .map(
-        p =>
-          ` ${p.short ? '-' + p.short : '--' + p.long!}${p.type !== 'boolean' ? ' <' + p.long! + '>' : ''}`,
-      )
+      .map(p => ` ${p.short ? '-' + p.short : '--' + p.long!} <${p.long!}>`)
       .join('');
   }
   if (optionalPositionals.length || optionalParameters.length) {
@@ -205,7 +232,7 @@ const buildExample = (parameters: {
 };
 
 const usage = (sc: ScriptConfig, warning?: string): void => {
-  const example = buildExample(sc.parameters);
+  const example = buildExample(sc.parameters!);
   if (warning) {
     console.log(`${warning}\n`);
   }
@@ -213,24 +240,42 @@ const usage = (sc: ScriptConfig, warning?: string): void => {
     console.log(`${sc.description}\n`);
   }
   console.log(`Usage: ${example}\n`);
-  console.log('Options:', sc.parameters);
+  console.log('Parameters:', sc.parameters);
+  if (sc.environment) {
+    console.log(
+      '\nRequired Environment Variables:',
+      Object.values(sc.environment),
+    );
+  }
+  if (sc.requireActiveAwsSession) {
+    console.log('\nActive AWS session required.');
+  }
+};
+
+const showErrorAndExit = (
+  errorMessage: string,
+  sc: ScriptConfig,
+  verbose: boolean,
+): void => {
+  if (verbose) {
+    console.log(errorMessage);
+  } else {
+    usage(sc, errorMessage);
+  }
+  process.exit(1);
 };
 
 const buildParseArgsConfigObject = (parameters: {
   [key: string]: ScriptParameter;
 }): ParseArgsConfig => {
-  const options = {
+  const options = {} as const;
+  const defaultOptions = {
     help: {
       default: false,
       short: 'h',
       type: 'boolean',
     },
-    verbose: {
-      default: false,
-      short: 'v',
-      type: 'boolean',
-    },
-  } as const;
+  };
   const argConfig = {
     allowPositionals: false,
     options,
@@ -260,6 +305,10 @@ const buildParseArgsConfigObject = (parameters: {
     }
     options[param] = { ...paramOptions } as const;
   }
+  if (!Object.values(parameters).find(p => p.short && p.short === 'h')) {
+    options['help'] = { ...defaultOptions.help } as const;
+  }
+
   return { ...argConfig } as const as ParseArgsConfig;
 };
 
@@ -315,20 +364,13 @@ const splitValueIntoArrayOfStrings = (
   commaDelimited: boolean | undefined,
 ): string[] => {
   const strings: string[] = [];
-  if (typeof value === 'string') {
-    value = [value];
-  }
-  if (typeof value === 'number') {
+  if (typeof value === 'string' || typeof value === 'number') {
     value = [`${value}`];
   }
   for (const aVal of value) {
-    if (typeof aVal === 'string') {
-      if (commaDelimited) {
-        strings.push(...aVal.split(','));
-      } else {
-        strings.push(aVal);
-      }
-    } else if (typeof aVal === 'number') {
+    if (commaDelimited) {
+      strings.push(...`${aVal}`.split(','));
+    } else {
       strings.push(`${aVal}`);
     }
   }
@@ -421,16 +463,8 @@ const validateParsedValues = (
   },
   verbose: boolean,
 ): void => {
-  const showErrorAndExit = (errorMessage: string): void => {
-    if (verbose) {
-      console.log(errorMessage);
-    } else {
-      usage(sc, errorMessage);
-    }
-    process.exit(1);
-  };
   const { optionalPositionals, requiredParameters, requiredPositionals } =
-    collateArguments(sc.parameters);
+    collateArguments(sc.parameters!);
   const allPositionals = [...requiredPositionals, ...optionalPositionals];
   if (allPositionals.length) {
     const positionsReversed = [...requiredPositionals, ...optionalPositionals]
@@ -443,29 +477,108 @@ const validateParsedValues = (
       positionsReversed[0] !== uniquePositions.length - 1
     ) {
       showErrorAndExit(
-        'invalid positionals: positions must be sequential starting at 0',
+        'Invalid positionals: positions must be sequential starting at 0',
+        sc,
+        verbose,
       );
     }
   }
   for (const requiredParam of [...requiredPositionals, ...requiredParameters]) {
     const longName = requiredParam.long!;
     if (!(longName in parsedValues) || !parsedValues[longName]) {
-      showErrorAndExit(`invalid input: expected ${longName}`);
+      showErrorAndExit(`Invalid input: expected ${longName}`, sc, verbose);
     }
   }
 };
 
-export const parseArguments = (
+const requireEnvironmentVariables = (
+  sc: ScriptConfig,
+  verbose: boolean,
+): void => {
+  if (sc.environment) {
+    const missing = missingEnvironmentVariables(Object.values(sc.environment));
+    if (missing.length > 0) {
+      showErrorAndExit(
+        `Missing environment variable${missing.length > 1 ? 's' : ''}: ${missing.join(', ')}`,
+        sc,
+        verbose,
+      );
+    }
+  }
+};
+
+export const getEnvironmentVariables = (environment?: {
+  [key: string]: string;
+}): { [key: string]: string } => {
+  const ret: { [key: string]: string } = {};
+  if (environment) {
+    for (const varName in environment) {
+      ret[varName] = process.env[environment[varName]]!;
+    }
+  }
+  return ret;
+};
+
+const checkAwsSessionExpiration = (
+  sc: ScriptConfig,
+  verbose: boolean,
+): void => {
+  const { awsSessionExpiration, ci } = getEnvironmentVariables({
+    awsSessionExpiration: 'AWS_SESSION_EXPIRATION',
+    ci: 'CI',
+  });
+  if (ci) {
+    return;
+  }
+  if (!awsSessionExpiration || awsSessionExpiration.length === 0) {
+    showErrorAndExit('AWS session has expired', sc, verbose);
+  }
+  const awsSessionExpirationSeconds = Number(
+    formatDateString(awsSessionExpiration, FORMATS.UNIX_TIMESTAMP_SECONDS),
+  );
+  const now = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
+  if (awsSessionExpirationSeconds < now) {
+    showErrorAndExit(
+      `AWS session expired ${awsSessionExpiration}`,
+      sc,
+      verbose,
+    );
+  }
+  if (verbose) {
+    console.log(`AWS session will expire ${awsSessionExpiration}`);
+  }
+};
+
+export const parseArgsAndEnvVars = (
   sc: ScriptConfig,
 ): { [k: string]: string | string[] | boolean | number | number[] } => {
-  sc.parameters.verbose = { default: false, short: 'v', type: 'boolean' };
+  if (!sc.parameters) {
+    sc.parameters = {};
+  }
+  if (!Object.values(sc.parameters).find(p => p.short && p.short === 'v')) {
+    sc.parameters.verbose = { default: false, short: 'v', type: 'boolean' };
+  }
+
   const config = buildParseArgsConfigObject(sc.parameters);
   const { positionals, values } = rawParseArgs(config, sc);
+
   showHelpAndVerbose(sc, positionals, values);
+
   const parsedParameters = parseAndTransformValues(sc, positionals, values);
   if (parsedParameters.verbose) {
     console.log('parsed arguments:', parsedParameters);
   }
   validateParsedValues(sc, parsedParameters, !!parsedParameters.verbose);
-  return parsedParameters;
+
+  requireEnvironmentVariables(sc, !!parsedParameters.verbose);
+  const environmentVariables = getEnvironmentVariables(sc.environment);
+  if (parsedParameters.verbose) {
+    console.log('environment variables:', environmentVariables);
+  }
+
+  if (sc.requireActiveAwsSession) {
+    checkAwsSessionExpiration(sc, !!parsedParameters.verbose);
+  }
+
+  return { ...environmentVariables, ...parsedParameters };
 };

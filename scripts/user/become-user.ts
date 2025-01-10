@@ -1,27 +1,34 @@
-/**
- * This script is to grant the user running it the ability to become the specified
- * UserId by utilizing the custom:userId attribute
- *
- * You must have the following Environment variables set:
- * - ENV: The name of the environment you are working with (mig)
- * - COGNITO_USER_EMAIL: The email address you use to access this environment (your.email@example.com)
- * - COGNITO_USER_POOL: The Cognito User Pool for the environment (us-east-1_ExAmPlES)
- *
- * Example usage:
- *
- * $ npm run admin:become-user 432143213-4321-1234-4321-432143214321
- */
+#!/usr/bin/env -S npx ts-node --transpile-only
+
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import {
-  getSourceTableInfo,
-  requireEnvVars,
-} from '../../shared/admin-tools/util';
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 
-requireEnvVars(['COGNITO_USER_EMAIL', 'COGNITO_USER_POOL', 'ENV']);
-
-const { COGNITO_USER_EMAIL, COGNITO_USER_POOL, ENV } = process.env;
+const scriptConfig: ScriptConfig = {
+  description:
+    "become-user - Overwrites your cognito user's custom:userId attribute with the provided user id.",
+  environment: {
+    TableName: 'DYNAMODB_TABLE_NAME',
+    UserPoolId: 'COGNITO_USER_POOL',
+    Username: 'COGNITO_USER_EMAIL',
+    env: 'ENV',
+  },
+  parameters: {
+    userId: {
+      position: 0,
+      required: true,
+      type: 'string',
+    },
+  },
+  requireActiveAwsSession: true,
+};
+const { TableName, userId, Username, UserPoolId } = parseArgsAndEnvVars(
+  scriptConfig,
+) as { [k: string]: string };
 
 const usage = () => {
   console.log(`Assume the account of another user in the system. 
@@ -31,6 +38,7 @@ const usage = () => {
   - ENV: The name of the environment you are working with (mig)
   - COGNITO_USER_EMAIL: The email address you use to access this environment (your.email@example.com)
   - COGNITO_USER_POOL: The Cognito User Pool for the environment (us-east-1_ABCdefGHI)
+  - DYNAMODB_TABLE_NAME: The name of this environment's source dynamodb table (efcms-mig-beta)
   
   Usage:
 
@@ -55,20 +63,18 @@ if (process.argv.length < 3) {
   usage();
 }
 
-const lookupRoleForUser = async (userId: string): Promise<string> => {
+const lookupRoleForUser = async (id: string): Promise<string> => {
   const dynamodb = new DynamoDBClient({ region: 'us-east-1' });
   const documentClient = DynamoDBDocument.from(dynamodb, {
     marshallOptions: { removeUndefinedValues: true },
   });
-  const { version } = await getSourceTableInfo();
-  const TableName = `efcms-${ENV}-${version}`;
   const data = await documentClient.get({
     ExpressionAttributeNames: {
       '#role': 'role',
     },
     Key: {
-      pk: `user|${userId}`,
-      sk: `user|${userId}`,
+      pk: `user|${id}`,
+      sk: `user|${id}`,
     },
     ProjectionExpression: '#role',
     TableName,
@@ -81,7 +87,7 @@ const lookupRoleForUser = async (userId: string): Promise<string> => {
     !('role' in data.Item) ||
     !data.Item.role
   ) {
-    throw new Error(`Could not find a user for ${userId}`);
+    throw new Error(`Could not find a user for ${id}`);
   }
   return data.Item.role;
 };
@@ -89,7 +95,6 @@ const lookupRoleForUser = async (userId: string): Promise<string> => {
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   try {
-    const userId = process.argv[2];
     const role = await lookupRoleForUser(userId);
     const params = {
       UserAttributes: [
@@ -102,8 +107,8 @@ const lookupRoleForUser = async (userId: string): Promise<string> => {
           Value: userId,
         },
       ],
-      UserPoolId: COGNITO_USER_POOL,
-      Username: COGNITO_USER_EMAIL,
+      UserPoolId,
+      Username,
     };
 
     console.log(params);

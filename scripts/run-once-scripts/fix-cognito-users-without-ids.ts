@@ -1,13 +1,30 @@
-import { RawUser } from '@shared/business/entities/User';
+#!/usr/bin/env -S npx ts-node --transpile-only
+
+import { type RawUser } from '@shared/business/entities/User';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import {
   type ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
+import { type UserType } from '@aws-sdk/client-cognito-identity-provider';
 import { createPetitionerUserRecords } from '@web-api/persistence/dynamo/users/createPetitionerUserRecords';
 import { createUserConfirmation } from '@web-api/business/useCaseHelper/auth/createUserConfirmation';
 import { omit } from 'lodash';
 import { usersWithoutUserIds } from './fix-cognito-users-without-ids-constants';
-import type { UserType } from '@aws-sdk/client-cognito-identity-provider';
+
+const scriptConfig: ScriptConfig = {
+  description:
+    'fix-cognito-users-without-ids - Populates the custom:userId attribute for cognito users that are missing it.',
+  environment: {
+    env: 'ENV',
+    userPoolId: 'USER_POOL_ID',
+  },
+  requireActiveAwsSession: true,
+};
+parseArgsAndEnvVars(scriptConfig);
 
 const getAttributeValue = (
   cognitoUser: UserType,
