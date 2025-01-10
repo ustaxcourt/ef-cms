@@ -1,224 +1,243 @@
-/**
- * To run: npx ts-node --transpile-only scripts/run-once-scripts/cleanup-usercase-records.ts
- */
-import {
-  BatchWriteCommandOutput,
-  DynamoDBDocument,
-} from '@aws-sdk/lib-dynamodb';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import {
-  IServerApplicationContext,
-  createApplicationContext,
-} from '../../web-api/src/applicationContext';
-import {
-  PutRequest,
-  TDynamoRecord,
-} from '../../web-api/src/persistence/dynamo/dynamoTypes';
-import { UserCase } from '../../shared/src/business/entities/UserCase';
-import { chunk, isEmpty } from 'lodash';
-import { filterEmptyStrings } from '../../shared/src/business/utilities/filterEmptyStrings';
+// #!/usr/bin/env -S npx ts-node --transpile-only
 
-const dynamodb = new DynamoDBClient({ maxAttempts: 0, region: 'us-east-1' });
-const documentClient = DynamoDBDocument.from(dynamodb, {
-  marshallOptions: { removeUndefinedValues: true },
-});
+// import {
+//   BatchWriteCommandOutput,
+//   DynamoDBDocument,
+// } from '@aws-sdk/lib-dynamodb';
+// import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+// import {
+//   PutRequest,
+//   TDynamoRecord,
+// } from '@web-api/persistence/dynamo/dynamoTypes';
+// import {
+//   type ScriptConfig,
+//   parseArgsAndEnvVars,
+// } from '../helpers/parseArgsAndEnvVars';
+// import {
+//   type ServerApplicationContext,
+//   createApplicationContext,
+// } from '@web-api/applicationContext';
+// import { UserCase } from '@shared/business/entities/UserCase';
+// import { chunk, isEmpty } from 'lodash';
+// import { filterEmptyStrings } from '@shared/business/utilities/filterEmptyStrings';
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-(async () => {
-  const applicationContext = createApplicationContext({});
+// const scriptConfig: ScriptConfig = {
+//   description: 'cleanup-usercase-records - Cleans UserCase entities.',
+//   environment: {
+//     dynamoDbTableName: 'DYNAMODB_TABLE_NAME',
+//     env: 'ENV',
+//   },
+//   requireActiveAwsSession: true,
+// };
+// parseArgsAndEnvVars(scriptConfig);
 
-  console.time('es query');
-  const users = await getAllExternalUsers(applicationContext);
-  console.timeEnd('es query');
+// const dynamodb = new DynamoDBClient({ maxAttempts: 0, region: 'us-east-1' });
+// const documentClient = DynamoDBDocument.from(dynamodb, {
+//   marshallOptions: { removeUndefinedValues: true },
+// });
 
-  const migratedRecords: TDynamoRecord[] = [];
+// // eslint-disable-next-line @typescript-eslint/no-floating-promises
+// (async () => {
+//   const applicationContext = createApplicationContext({});
 
-  console.time('dynamo query');
-  await Promise.all(
-    users.map(async user => {
-      const userId = user._source.pk.S.split('|')[1];
+//   console.time('es query');
+//   const users = await getAllExternalUsers(applicationContext);
+//   console.timeEnd('es query');
 
-      const userCaseRecords = await getUserCaseRecords(
-        applicationContext,
-        userId,
-      );
+//   const migratedRecords: TDynamoRecord[] = [];
 
-      if (isEmpty(userCaseRecords)) {
-        return;
-      }
+//   console.time('dynamo query');
+//   await Promise.all(
+//     users.map(async user => {
+//       const userId = user._source.pk.S.split('|')[1];
 
-      const migratedUserCaseRecords = cleanupUserCaseRecords(userCaseRecords);
+//       const userCaseRecords = await getUserCaseRecords(
+//         applicationContext,
+//         userId,
+//       );
 
-      migratedRecords.push(...migratedUserCaseRecords);
-    }),
-  );
-  console.timeEnd('dynamo query');
+//       if (isEmpty(userCaseRecords)) {
+//         return;
+//       }
 
-  console.time('dynamo batchWrite');
-  await updateUserCaseRecords(applicationContext, migratedRecords);
-  console.timeEnd('dynamo batchWrite');
-})();
+//       const migratedUserCaseRecords = cleanupUserCaseRecords(userCaseRecords);
 
-async function getAllExternalUsers(
-  applicationContext: IServerApplicationContext,
-) {
-  const users = [];
-  let role: string = '';
-  let pk: string = '';
+//       migratedRecords.push(...migratedUserCaseRecords);
+//     }),
+//   );
+//   console.timeEnd('dynamo query');
 
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
-    const query = {
-      _source: ['pk', 'role'],
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                terms: {
-                  'role.S': [
-                    'petitioner',
-                    'privatePractitioner',
-                    'irsPractitioner',
-                    'inactivePractitioner',
-                  ],
-                },
-              },
-            ],
-          },
-        },
-        search_after: [role, pk],
-        sort: [{ 'role.S': 'asc' }, { 'pk.S': 'asc' }],
-      },
-      index: 'efcms-user',
-      size: 10000,
-      track_total_hits: true,
-    };
+//   console.time('dynamo batchWrite');
+//   await updateUserCaseRecords(applicationContext, migratedRecords);
+//   console.timeEnd('dynamo batchWrite');
+// })();
 
-    const results = await applicationContext.getSearchClient().search(query);
+// async function getAllExternalUsers(
+//   applicationContext: ServerApplicationContext,
+// ) {
+//   const users: TDynamoRecord[] = [];
+//   let role: string = '';
+//   let pk: string = '';
 
-    users.push(...results.body.hits.hits);
+//   // eslint-disable-next-line no-constant-condition
+//   while (true) {
+//     const query = {
+//       _source: ['pk', 'role'],
+//       body: {
+//         query: {
+//           bool: {
+//             must: [
+//               {
+//                 terms: {
+//                   'role.S': [
+//                     'petitioner',
+//                     'privatePractitioner',
+//                     'irsPractitioner',
+//                     'inactivePractitioner',
+//                   ],
+//                 },
+//               },
+//             ],
+//           },
+//         },
+//         search_after: [role, pk],
+//         sort: [{ 'role.S': 'asc' }, { 'pk.S': 'asc' }],
+//       },
+//       index: 'efcms-user',
+//       size: 10000,
+//       track_total_hits: true,
+//     };
 
-    if (isEmpty(results.body.hits.hits)) {
-      return users;
-    }
+//     const results = await applicationContext.getSearchClient().search(query);
 
-    const lastUser =
-      results.body.hits.hits?.[results.body.hits.hits.length - 1];
-    role = lastUser.sort[0];
-    pk = lastUser.sort[1];
-  }
-}
+//     users.push(...results.body.hits.hits);
 
-async function getUserCaseRecords(
-  applicationContext: IServerApplicationContext,
-  userId: string,
-): Promise<TDynamoRecord[]> {
-  const userCases = await applicationContext
-    .getPersistenceGateway()
-    .getCasesForUser({
-      applicationContext,
-      userId,
-    });
+//     if (isEmpty(results.body.hits.hits)) {
+//       return users;
+//     }
 
-  return userCases;
-}
+//     const lastUser =
+//       results.body.hits.hits?.[results.body.hits.hits.length - 1];
+//     role = lastUser.sort[0];
+//     pk = lastUser.sort[1];
+//   }
+// }
 
-function cleanupUserCaseRecords(
-  userCaseRecords: TDynamoRecord[],
-): TDynamoRecord[] {
-  const itemsAfter: TDynamoRecord[] = [];
+// async function getUserCaseRecords(
+//   applicationContext: ServerApplicationContext,
+//   userId: string,
+// ): Promise<TDynamoRecord[]> {
+//   const userCases: TDynamoRecord[] = [];
+//   const results = await applicationContext
+//     .getPersistenceGateway()
+//     .getCasesForUser({
+//       applicationContext,
+//       userId,
+//     });
+//   for (const user of results) {
+//     userCases.push(user as unknown as TDynamoRecord);
+//   }
 
-  for (const userCase of userCaseRecords) {
-    const updated = new UserCase(userCase);
-    updated.validate();
+//   return userCases;
+// }
 
-    itemsAfter.push({
-      ...updated.toRawObject(),
-      gsi1pk: userCase.gsi1pk,
-      pk: userCase.pk,
-      sk: userCase.sk,
-    });
-  }
+// function cleanupUserCaseRecords(
+//   userCaseRecords: TDynamoRecord[],
+// ): TDynamoRecord[] {
+//   const itemsAfter: TDynamoRecord[] = [];
 
-  return itemsAfter;
-}
+//   for (const userCase of userCaseRecords) {
+//     const updated = new UserCase(userCase);
+//     updated.validate();
 
-async function updateUserCaseRecords(
-  applicationContext: IServerApplicationContext,
-  migratedRecords: TDynamoRecord[],
-): Promise<void> {
-  const putRequests: PutRequest[] = migratedRecords.map(userCaseRecord => {
-    return {
-      PutRequest: { Item: userCaseRecord },
-    };
-  });
-  await batchWrite(applicationContext, putRequests);
-}
+//     itemsAfter.push({
+//       ...updated.toRawObject(),
+//       gsi1pk: userCase.gsi1pk,
+//       pk: userCase.pk,
+//       sk: userCase.sk,
+//     });
+//   }
 
-async function batchWrite(
-  applicationContext: IServerApplicationContext,
-  commands: PutRequest[],
-): Promise<void> {
-  commands.forEach(command => filterEmptyStrings(command));
+//   return itemsAfter;
+// }
 
-  const chunks = chunk(commands, 25);
-  const parallelRequests = 10;
+// async function updateUserCaseRecords(
+//   applicationContext: ServerApplicationContext,
+//   migratedRecords: TDynamoRecord[],
+// ): Promise<void> {
+//   const putRequests: PutRequest[] = migratedRecords.map(userCaseRecord => {
+//     return {
+//       PutRequest: { Item: userCaseRecord },
+//     };
+//   });
+//   await batchWrite(applicationContext, putRequests);
+// }
 
-  for (let i = 0; i < chunks.length; i += parallelRequests) {
-    await Promise.all(
-      chunks
-        .slice(i, i + parallelRequests)
-        .map(commandChunk => writeChunk(applicationContext, commandChunk, 0)),
-    );
-  }
+// async function batchWrite(
+//   applicationContext: ServerApplicationContext,
+//   commands: PutRequest[],
+// ): Promise<void> {
+//   commands.forEach(command => filterEmptyStrings(command));
 
-  return;
-}
+//   const chunks = chunk(commands, 25);
+//   const parallelRequests = 10;
 
-async function writeChunk(
-  applicationContext: IServerApplicationContext,
-  commandChunk: PutRequest[],
-  attempt: number,
-) {
-  let result: BatchWriteCommandOutput;
-  try {
-    result = await documentClient.batchWrite({
-      RequestItems: {
-        [applicationContext.environment.dynamoDbTableName]: commandChunk,
-      },
-    });
-  } catch (err) {
-    const wholeError = JSON.stringify(err);
-    console.log('An error occurred: ', wholeError);
-    if (wholeError.includes('ThrottlingException')) {
-      console.log('All requests in the chunk failed.', err);
+//   for (let i = 0; i < chunks.length; i += parallelRequests) {
+//     await Promise.all(
+//       chunks
+//         .slice(i, i + parallelRequests)
+//         .map(commandChunk => writeChunk(applicationContext, commandChunk, 0)),
+//     );
+//   }
 
-      await new Promise(resolve => setTimeout(resolve, 2000 * 2 ** attempt));
+//   return;
+// }
 
-      return writeChunk(applicationContext, commandChunk, attempt + 1);
-    }
-    console.log('Unhandled Exception occurred!');
-  }
+// async function writeChunk(
+//   applicationContext: ServerApplicationContext,
+//   commandChunk: PutRequest[],
+//   attempt: number,
+// ) {
+//   let result: BatchWriteCommandOutput =
+//     {} as unknown as BatchWriteCommandOutput;
+//   try {
+//     result = await documentClient.batchWrite({
+//       RequestItems: {
+//         [applicationContext.environment.dynamoDbTableName]: commandChunk,
+//       },
+//     });
+//   } catch (err) {
+//     const wholeError = JSON.stringify(err);
+//     console.log('An error occurred: ', wholeError);
+//     if (wholeError.includes('ThrottlingException')) {
+//       console.log('All requests in the chunk failed.', err);
 
-  if (isEmpty(result.UnprocessedItems)) {
-    console.log('Successfully processed Chunk');
-    return;
-  } else {
-    console.log(
-      'Unprocessed items: ',
-      result.UnprocessedItems[applicationContext.environment.dynamoDbTableName]
-        .length,
-      'Attempt #',
-      attempt,
-    );
+//       await new Promise(resolve => setTimeout(resolve, 2000 * 2 ** attempt));
 
-    await new Promise(resolve => setTimeout(resolve, 2000 * 2 ** attempt));
+//       return writeChunk(applicationContext, commandChunk, attempt + 1);
+//     }
+//     console.log('Unhandled Exception occurred!');
+//   }
 
-    return writeChunk(
-      applicationContext,
-      result.UnprocessedItems[applicationContext.environment.dynamoDbTableName],
-      attempt + 1,
-    );
-  }
-}
+//   if (isEmpty(result.UnprocessedItems)) {
+//     console.log('Successfully processed Chunk');
+//     return;
+//   } else {
+//     console.log(
+//       'Unprocessed items: ',
+//       result.UnprocessedItems[applicationContext.environment.dynamoDbTableName]
+//         .length,
+//       'Attempt #',
+//       attempt,
+//     );
+
+//     await new Promise(resolve => setTimeout(resolve, 2000 * 2 ** attempt));
+
+//     return writeChunk(
+//       applicationContext,
+//       // @ts-ignore
+//       result.UnprocessedItems[applicationContext.environment.dynamoDbTableName],
+//       attempt + 1,
+//     );
+//   }
+// }

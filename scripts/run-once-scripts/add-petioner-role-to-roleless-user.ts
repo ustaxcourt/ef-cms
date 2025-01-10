@@ -1,6 +1,23 @@
-import { createApplicationContext } from '../../web-api/src/applicationContext';
-import { environment } from '../../web-api/src/environment';
-import { ROLES } from '../../shared/src/business/entities/EntityConstants';
+#!/usr/bin/env -S npx ts-node --transpile-only
+
+import { ROLES } from '@shared/business/entities/EntityConstants';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import { createApplicationContext } from '@web-api/applicationContext';
+import { environment } from '@web-api/environment';
+
+const scriptConfig: ScriptConfig = {
+  description:
+    'add-petitioner-role-to-roleless-user - Sets the custom:role attribute for Cognito users missing it.',
+  environment: {
+    env: 'ENV',
+    userPoolId: 'USER_POOL_ID',
+  },
+  requireActiveAwsSession: true,
+};
+parseArgsAndEnvVars(scriptConfig);
 
 async function main() {
   const applicationContext = createApplicationContext({});
@@ -17,6 +34,7 @@ async function main() {
       UserPoolId: environment.userPoolId,
     });
 
+    // eslint-disable-next-line prefer-destructuring
     PaginationToken = response.PaginationToken;
     response.Users?.forEach(async user => {
       const userHasRole = user.Attributes?.find(

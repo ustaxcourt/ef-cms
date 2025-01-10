@@ -7,7 +7,7 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import {
   fixRaceConditionServedInDrafts,
   getDocumentFromDynamo,
-} from './fix-race-condition-served-in-drafts';
+} from './fix-race-condition-served-in-drafts.helpers';
 import { marshall } from '@aws-sdk/util-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
 
@@ -47,7 +47,7 @@ describe('fixRaceConditionServedInDrafts', () => {
   const mockedFilingDate = '2018-03-01T00:01:00.000Z';
   let mockCall;
   let mockPerformUpdate = true;
-  let mockRequest = {
+  const mockRequest = {
     form: {
       attachments: true,
       date: mockedFilingDate,
@@ -79,6 +79,14 @@ describe('fixRaceConditionServedInDrafts', () => {
       request: mockRequest,
       timestamp: mockedFilingDate,
     };
+  });
+
+  it('logs an error and returns if it can not look up the docket entry', async () => {
+    mockedDDBClient.on(GetItemCommand).resolvesOnce({});
+    await fixRaceConditionServedInDrafts(applicationContext, mockCall);
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).not.toHaveBeenCalled();
   });
 
   it('looks up the subject case for the specified docketNumber', async () => {

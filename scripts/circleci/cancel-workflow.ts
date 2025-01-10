@@ -1,10 +1,23 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
+
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { cancelWorkflow } from '../../shared/admin-tools/circleci/circleci-helper';
-import { requireEnvVars } from '../../shared/admin-tools/util';
 
-requireEnvVars(['CIRCLE_MACHINE_USER_TOKEN', 'CIRCLE_WORKFLOW_ID']);
-
-const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN!;
-const workflowId = process.env.CIRCLE_WORKFLOW_ID!;
+const scriptConfig: ScriptConfig = {
+  description: 'cancel-workflow - Cancel a CircleCI workflow',
+  environment: {
+    apiToken: 'CIRCLE_MACHINE_USER_TOKEN',
+    workflowId: 'CIRCLE_WORKFLOW_ID',
+  },
+};
+const { apiToken, workflowId } = parseArgsAndEnvVars(scriptConfig) as {
+  apiToken: string;
+  jobName: string;
+  workflowId: string;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {

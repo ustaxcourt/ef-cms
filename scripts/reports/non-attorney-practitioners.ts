@@ -1,9 +1,15 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
+
 // usages:
-// npx ts-node --transpile-only scripts/reports/non-attorney-practitioners.ts > ~/Desktop/non-attorney-practitioners.csv
-// npx ts-node --transpile-only scripts/reports/non-attorney-practitioners.ts --stats > ~/Desktop/non-attorney-practitioners-stats.csv
+// scripts/reports/non-attorney-practitioners.ts > ~/Desktop/non-attorney-practitioners.csv
+// scripts/reports/non-attorney-practitioners.ts --stats > ~/Desktop/non-attorney-practitioners-stats.csv
 
 import {
-  ServerApplicationContext,
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import {
+  type ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
 import {
@@ -11,13 +17,29 @@ import {
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
 import { pick, sortBy } from 'lodash';
-import { requireEnvVars } from '../../shared/admin-tools/util';
 import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 import { substantiveEventCodes } from './non-attorney-practitioners-constants';
 import type { RawPractitioner } from '@shared/business/entities/Practitioner';
 
-requireEnvVars(['ENV', 'REGION']);
-const stats: boolean = !!(process.argv[2] && process.argv[2] === '--stats');
+const scriptConfig: ScriptConfig = {
+  description:
+    'non-attorney-practitioners - Generates a spreadsheet of cases in which ' +
+    'a non-attorney practitioner appears or a spreadsheet of non-attorney ' +
+    'practitioner statistics.',
+  environment: {
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+    environmentName: 'ENV',
+  },
+  parameters: {
+    stats: {
+      default: false,
+      short: 's',
+      type: 'boolean',
+    },
+  },
+  requireActiveAwsSession: true,
+};
+const { stats } = parseArgsAndEnvVars(scriptConfig) as { stats: boolean };
 
 type tCase = {
   caseCaption: string;
@@ -317,7 +339,7 @@ const calculateCaseDuration = (caseRecord: tCase): number => {
   if (!caseRecord.receivedAt) {
     return 0;
   }
-  let initialClosureDate = determineInitialClosureDate(caseRecord);
+  const initialClosureDate = determineInitialClosureDate(caseRecord);
   if (!initialClosureDate) {
     return 0;
   }

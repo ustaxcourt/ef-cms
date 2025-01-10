@@ -1,9 +1,23 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
 import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl.js';
 import { MAX_ELASTICSEARCH_PAGINATION } from '../../shared/src/business/entities/EntityConstants';
 import { createApplicationContext } from '../../web-api/src/applicationContext';
-import { search } from '../../web-api/src/persistence/elasticsearch/searchClient';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import { search } from '@web-api/persistence/elasticsearch/searchClient';
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
+const scriptConfig: ScriptConfig = {
+  description: 'open-search-playground - Play with OpenSearch queries.',
+  environment: {
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+    env: 'ENV',
+  },
+  requireActiveAwsSession: true,
+};
+parseArgsAndEnvVars(scriptConfig);
+
 (async () => {
   const source = [
     'caseCaption',
@@ -14,7 +28,7 @@ import { search } from '../../web-api/src/persistence/elasticsearch/searchClient
     'leadDocketNumber',
     'petitioners',
     'status',
-  ] as const;
+  ];
 
   const judges = [
     'Ashford',
