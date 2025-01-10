@@ -1,4 +1,3 @@
-import { Search } from '@opensearch-project/opensearch/api/requestParams';
 import { formatDocketEntryResult } from './helpers/formatDocketEntryResult';
 import { formatMessageResult } from './helpers/formatMessageResult';
 import { formatWorkItemResult } from './helpers/formatWorkItemResult';
@@ -6,6 +5,11 @@ import { get } from 'lodash';
 import { getIndexNameFromAlias } from '../../../elasticsearch/elasticsearch-aliases';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { updateIndex } from '@web-api/persistence/elasticsearch/helpers/getIndexName';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import {
+  Count_Request,
+  Search_Request,
+} from '@opensearch-project/opensearch/api';
 
 const CHUNK_SIZE = 10000;
 export type SearchClientResultsType = {
@@ -79,8 +83,8 @@ export const count = async ({
   applicationContext,
   searchParameters,
 }: {
-  applicationContext: IApplicationContext;
-  searchParameters: Search;
+  applicationContext: ServerApplicationContext;
+  searchParameters: Count_Request;
 }): Promise<SearchClientCountResultsType> => {
   updateIndex({ searchParameters });
   try {
@@ -98,8 +102,8 @@ export const search = async <T>({
   applicationContext,
   searchParameters,
 }: {
-  applicationContext: IApplicationContext;
-  searchParameters: Search;
+  applicationContext: ServerApplicationContext;
+  searchParameters: Search_Request;
 }): Promise<SearchClientResultsType> => {
   updateIndex({ searchParameters });
   try {
@@ -118,7 +122,7 @@ export const searchRaw = async ({
   searchParameters,
 }: {
   applicationContext: IApplicationContext;
-  searchParameters: Search;
+  searchParameters: Search_Request;
 }): Promise<any> => {
   updateIndex({ searchParameters });
   try {

@@ -1,14 +1,14 @@
-import { Search } from '@opensearch-project/opensearch/api/requestParams';
 import { SearchAllParametersType } from '@web-api/persistence/elasticsearch/searchClient';
 import {
   baseAliases,
   getIndexNameFromAlias,
 } from '../../../../elasticsearch/elasticsearch-aliases';
+import { Search_Request } from '@opensearch-project/opensearch/api';
 
 export const updateIndex = ({
   searchParameters,
 }: {
-  searchParameters: Search | SearchAllParametersType;
+  searchParameters: Search_Request | SearchAllParametersType;
 }) => {
   if (
     searchParameters.index &&
