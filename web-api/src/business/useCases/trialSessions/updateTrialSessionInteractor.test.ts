@@ -9,13 +9,11 @@ import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '@shared/business/entities/EntityConstants';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { judgeUser, trialClerkUser } from '@shared/test/mockUsers';
-import {
-  mockDocketClerkUser,
-  mockPetitionerUser,
-} from '@shared/test/mockAuthUsers';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateTrialSessionInteractor } from './updateTrialSessionInteractor';
 
 describe('updateTrialSessionInteractor', () => {
@@ -32,7 +30,7 @@ describe('updateTrialSessionInteractor', () => {
       .updateTrialSession.mockImplementation(trial => trial.trialSession);
   });
 
-  it('should throw an error when the user is not unauthorized to update a trial session', async () => {
+  it('should throw an error when the trial session is not found', async () => {
     await expect(
       updateTrialSessionInteractor(
         applicationContext,
@@ -40,9 +38,31 @@ describe('updateTrialSessionInteractor', () => {
           clientConnectionId: '123',
           trialSession: MOCK_TRIAL_REMOTE,
         },
-        mockPetitionerUser,
+        undefined,
       ),
-    ).rejects.toThrow();
+    ).rejects.toThrow(
+      `Trial session ${MOCK_TRIAL_REMOTE.trialSessionId} was not found.`,
+    );
+  });
+
+  it('should throw an error when the user is not unauthorized to update a trial session', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockResolvedValue({
+        ...MOCK_TRIAL_REMOTE,
+        startDate: '1776-12-01',
+      });
+
+    await expect(
+      updateTrialSessionInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '123',
+          trialSession: { ...MOCK_TRIAL_REMOTE, startDate: '1776-12-01' },
+        },
+        undefined as UnknownAuthUser,
+      ),
+    ).rejects.toThrow('Unauthorized');
   });
 
   it('should throw an error when the trial session start date is in the past', async () => {
@@ -558,6 +578,8 @@ describe('updateTrialSessionInteractor', () => {
       });
       applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge =
         jest.fn();
+      applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialLocation =
+        jest.fn();
       applicationContext.getUseCaseHelpers().setNoticeOfChangeToInPersonProceeding =
         jest.fn();
       applicationContext.getUseCaseHelpers().setNoticeOfChangeToRemoteProceeding =
@@ -599,6 +621,27 @@ describe('updateTrialSessionInteractor', () => {
         applicationContext.getPersistenceGateway().updateTrialSession.mock
           .calls[0][0].trialSessionToUpdate.paperServicePdfs[0].title,
       ).toEqual('Notice of Change of Trial Judge');
+    });
+
+    it('should be generated when the location has changed', async () => {
+      desiredTrialSession.address1 = 'UPDATED ADDRESS 1';
+
+      await updateTrialSessionInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '123',
+          trialSession: desiredTrialSession,
+        },
+        mockDocketClerkUser,
+      );
+
+      expect(
+        applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialLocation,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().updateTrialSession.mock
+          .calls[0][0].trialSessionToUpdate.paperServicePdfs[0].title,
+      ).toEqual('Notice of Change of Trial Location');
     });
 
     it('should be generated when the proceeding type has changed to remote', async () => {
