@@ -43,7 +43,6 @@
   "exclude": [
     "node_modules",
     "targetBranch",
-    "./scripts/run-once-scripts/**/*",
     "./cypress/**/*",
     "./cypress.config.ts",
     "./cypress-smoketests.config.ts",

@@ -1,10 +1,28 @@
-// usage: npx ts-node --transpile-only scripts/reports/sealed-documents-and-cases.ts > ~/Desktop/sealed-cases.csv
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import {
-  ServerApplicationContext,
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import {
+  type ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
+import { generateCsv } from '../helpers/generate-csv';
+import { pick } from 'lodash';
 import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
+
+const scriptConfig: ScriptConfig = {
+  description:
+    'sealed-documents-and-cases - Generates a CSV of sealed documents and cases.',
+  environment: {
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+    environmentName: 'ENV',
+  },
+  requireActiveAwsSession: true,
+};
+parseArgsAndEnvVars(scriptConfig);
+const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 
 const loadCaseFromInitialBlackstoneMigrationDb = async ({
   applicationContext,
@@ -241,16 +259,41 @@ const getOrdersSinceDawson = async ({
 (async () => {
   const applicationContext = createApplicationContext({});
   const sealedCases = await getSealedCases({ applicationContext });
-  console.log(
-    'Docket Number,Associated Judge,Case Caption,Case Status,Closed in Blackstone,' +
-      'Has Document(s) Sealed in Blackstone,Has Document(s) Sealed in DAWSON,Has Order(s) Since DAWSON Launched',
-  );
-  for (let sc of Object.keys(sealedCases)) {
-    console.log(
-      `"${sealedCases[sc].docketNumberWithSuffix}","${sealedCases[sc].associatedJudge}",` +
-        `"${sealedCases[sc].caseCaption}","${sealedCases[sc].status}","${sealedCases[sc].closedInBlackstone}",` +
-        `"${sealedCases[sc].hasLegacySealedDocketEntries}","${sealedCases[sc].hasSealedDocketEntries}",` +
-        `"${sealedCases[sc].hasOrdersSinceDawson}"`,
+  const columns = [
+    { header: 'Docket Number', key: 'docketNumberWithSuffix' },
+    { header: 'Judge', key: 'associatedJudge' },
+    { header: 'Case Title', key: 'caseCaption' },
+    { header: 'Status', key: 'status' },
+    { header: 'Closed in Blackstone', key: 'closedInBlackstone' },
+    {
+      header: 'Has Document(s) Sealed in Blackstone',
+      key: 'hasLegacySealedDocketEntries',
+    },
+    {
+      header: 'Has Document(s) Sealed in DAWSON',
+      key: 'hasSealedDocketEntries',
+    },
+    {
+      header: 'Has Order(s) Since DAWSON Launched',
+      key: 'hasOrdersSinceDawson',
+    },
+  ];
+  const rows: {}[] = [];
+  for (const sc in sealedCases) {
+    rows.push(
+      pick(sealedCases[sc], [
+        'associatedJudge',
+        'caseCaption',
+        'closedInBlackstone',
+        'docketNumberWithSuffix',
+        'hasLegacySealedDocketEntries',
+        'hasOrdersSinceDawson',
+        'hasSealedDocketEntries',
+        'status',
+      ]),
     );
   }
+  const filename = `${OUTPUT_DIR}/sealed-documents-and-cases.csv`;
+  generateCsv({ columns, filename, rows });
+  console.log(`Generated ${filename}`);
 })();
