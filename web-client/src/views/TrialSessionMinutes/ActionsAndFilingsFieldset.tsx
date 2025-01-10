@@ -192,6 +192,7 @@ export const ActionsAndFilingsFieldset = ({
 
   return (
     <fieldset className="border-0 padding-0">
+      <div className="usa-label">Actions & Filings</div>
       <div className="grid-row grid-gap-2">
         <div className="grid-col-auto usa-label" style={{ minWidth: '266px' }}>
           Date

@@ -1,4 +1,3 @@
-import { FormattedMinuteSheet } from '@web-api/business/useCases/trialSessionMinutes/generateTrialSessionMinutesPdfInteractor';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { put } from '@web-api/persistence/dynamodbClientService';
 
@@ -32,5 +31,5 @@ export const updateMinuteSheetInteractor = async (
 export type MinuteSheetUpdateBody = {
   docketNumber: string;
   trialSessionId: string;
-  minuteSheet: FormattedMinuteSheet;
+  minuteSheet: any; // TODO 10419: define this type
 };

@@ -3,23 +3,28 @@
 //   isAuthorized,
 // } from '@shared/authorization/authorizationClientService';
 import {
-  ACTION_DOCUMENT_TYPE_OPTIONS,
-  ACTION_FILED_BY_OPTIONS,
-  ACTION_STATUS_OPTIONS,
-  BriefDetailsType,
-  EXHIBIT_STATUS_OPTIONS,
-  ExhibitStatusOption,
-  MOTION_FILED_BY_OPTIONS,
-  MOTION_STATUS_OPTIONS,
-  MOTION_TYPE_OPTIONS,
-  MinuteSheetFormState,
-  STATUS_REPORT_ORDERED_FOR_OPTIONS,
-  TRIAL_HEARING_OPTIONS,
-} from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
-import {
   FORMATS,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
+import {
+  FormattedMinuteSheet,
+  formatActionsAndFilings,
+  formatCalledSection,
+  formatExhibits,
+  formatJurisdictionRetained,
+  formatMotions,
+  formatPetitionerAppearances,
+  formatPretrialConference,
+  formatRecalledRow,
+  formatRecalledRows,
+  formatRespondentAppearances,
+  formatStatusReportOrdered,
+  formatStipulatedDecision,
+  formatTrialBrief,
+  formatTrialHearing,
+  getConsolidatedDocketNumbers,
+} from '@web-api/business/useCaseHelper/trialSessionMinutes/formatMinuteSheet';
+import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { query } from '@web-api/persistence/dynamodbClientService';
@@ -35,17 +40,6 @@ export const generateTrialSessionMinutesPdfInteractor = async (
   //   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.MINUTES_SHEET)) {
   //     throw new UnauthorizedError('Unauthorized');
   //   }
-
-  const results = await query({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `${trialSessionId}|${docketNumber}`,
-    },
-    KeyConditionExpression: '#pk = :pk',
-    applicationContext,
-  });
 
   const aCase = await applicationContext
     .getPersistenceGateway()
@@ -64,6 +58,18 @@ export const generateTrialSessionMinutesPdfInteractor = async (
   if (!aCase || !trialSession) {
     throw new Error('Case and trial session could not be retrieved');
   }
+
+  // 10419 TODO: rework this call so that it does not know it's coming from dynamo
+  const results = await query({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `${trialSessionId}|${docketNumber}`,
+    },
+    KeyConditionExpression: '#pk = :pk',
+    applicationContext,
+  });
 
   const formattedMinuteSheet = formatMinuteSheet({
     aCase,
@@ -98,286 +104,6 @@ export const generateTrialSessionMinutesPdfInteractor = async (
   return url;
 };
 
-export type FormattedMinuteSheet = {
-  courtReporter: string;
-  docketNumbers: string[];
-  docketNumberWithSuffix?: string;
-  judge: string;
-  remoteSession: string;
-  trialClerk: string;
-  trialLocation: string;
-  trialStartDate: string;
-  formattedDocketNumbers: string;
-  petitioners: string;
-  petitionerAppearances: string[];
-  called: string;
-  notCalled: string;
-  recalled: { renderKey: string; content: string }[];
-  pretrialConference?: string;
-  trialHearing?: string;
-  respondentAppearances: string[];
-  jurisdictionRetained?: string;
-  statusReportOrdered: string;
-  stipulatedDecisionOrdered: string;
-  motions: {
-    motionType: string;
-    renderKey: string;
-    content: string;
-  }[];
-  actionsAndFilings: {
-    renderKey: string;
-    content: string;
-  }[];
-  trialBrief: {
-    dateSubmitted: string;
-    benchOpinionRendered: string;
-    totalTrialHours: number;
-    briefType: string;
-    briefDetails: string[];
-  };
-  petitionerWitnesses: { renderKey: string; name: string }[];
-  respondentWitnesses: { renderKey: string; name: string }[];
-  exhibits: {
-    renderKey: string;
-    description: string;
-    status: ExhibitStatusOption;
-    note: string;
-  }[];
-};
-
-const getBriefDetails = (briefDetails: BriefDetailsType) => {
-  // 10419 TODO Handle Simultaneous Supplemental Brief
-  // 10419 TODO Casing of briefSubtype isn't quite right
-  const briefSubtypes = Object.keys(briefDetails);
-  return briefSubtypes.map(briefSubtype => {
-    const briefDetail = briefDetails[briefSubtype];
-    return [
-      `${briefSubtype} - ${briefDetail.partyType}`,
-      `Due ${formatDateString(briefDetail.dueDate, FORMATS.MMDDYYYY)}`,
-      `${briefDetail.note ? `<em>${briefDetail.note}</em>` : ''}`,
-    ]
-      .filter(Boolean)
-      .join('; ');
-  });
-};
-
-const getConsolidatedDocketNumbers = (aCase: RawCase): string => {
-  if (aCase.consolidatedCases.length === 0) {
-    return aCase.docketNumber;
-  }
-  return aCase.consolidatedCases
-    .map(consolidatedCase => consolidatedCase.docketNumber)
-    .join(', ');
-};
-
-const formatCalledSection = (section: {
-  date: string;
-  note?: string;
-  transcriptOrdered?: boolean;
-}): string => {
-  return [
-    formatDateString(section.date, FORMATS.MMDDYYYY),
-    section.note && `<em>${section.note}</em>`,
-    section.transcriptOrdered ? 'Transcript ordered' : '',
-  ]
-    .filter(Boolean)
-    .join('; ');
-};
-
-const formatPetitionerAppearances = (
-  petitionersSection: MinuteSheetFormState['petitionersSection'],
-): string[] => {
-  return petitionersSection.noAppearance
-    ? ['No appearance']
-    : Object.values(petitionersSection.petitioners).map(
-        (petitioner: any) =>
-          `${petitioner.name} (${petitioner.role}) - ${petitioner.datesOfAppearance}`,
-      );
-};
-
-const formatRespondentAppearances = (
-  respondentsSection: MinuteSheetFormState['respondentsSection'],
-): string[] => {
-  return Object.values(respondentsSection.respondents).map(
-    (respondent: any) => `${respondent.name} - ${respondent.datesOfAppearance}`,
-  );
-};
-
-const formatJurisdictionRetained = (
-  section: MinuteSheetFormState['jurisdictionRetainedSection'],
-): string | undefined => {
-  if (!section?.date) return undefined;
-  return [
-    `${section.continued ? 'Continued - ' : ''}${formatDateString(
-      section.date,
-      FORMATS.MMDDYYYY,
-    )}`,
-    `<em>${section.note}</em>`,
-  ]
-    .filter(Boolean)
-    .join('; ');
-};
-
-const formatStatusReportOrdered = (
-  section: MinuteSheetFormState['ordersSection']['statusReportOrdered'],
-): string => {
-  const orderedFor =
-    STATUS_REPORT_ORDERED_FOR_OPTIONS[section.orderedFor] || '';
-  return [
-    formatDateString(section.date, FORMATS.MMDDYYYY),
-    orderedFor && `Ordered for ${orderedFor}`,
-    section.dueDate &&
-      `Due ${formatDateString(section.dueDate, FORMATS.MMDDYYYY)}`,
-    section.note && `<em>${section.note}</em>`,
-  ]
-    .filter(Boolean)
-    .join('; ');
-};
-
-const formatStipulatedDecision = (
-  section: MinuteSheetFormState['ordersSection']['stipulatedDecisionOrdered'],
-): string => {
-  return [
-    formatDateString(section.date, FORMATS.MMDDYYYY),
-    section.dueDate &&
-      `Due ${formatDateString(section.dueDate, FORMATS.MMDDYYYY)}`,
-    section.note && `<em>${section.note}</em>`,
-  ]
-    .filter(Boolean)
-    .join('; ');
-};
-
-const formatMotions = (
-  motionsSection: MinuteSheetFormState['motionsSection'],
-) => {
-  if (Object.entries(motionsSection.motions).length === 0) return [];
-  return Object.values(motionsSection.motions)
-    .map((motion: any) => ({
-      content: [
-        `${motion.oralMotion ? 'ORAL ' : ''}${MOTION_TYPE_OPTIONS[motion.type] || ''}`,
-        formatDateString(motion.date, FORMATS.MMDDYYYY),
-        MOTION_FILED_BY_OPTIONS[motion.filedBy]
-          ? `Filed by ${MOTION_FILED_BY_OPTIONS[motion.filedBy]}`
-          : '',
-        MOTION_STATUS_OPTIONS[motion.status],
-        `<em>${motion.note}</em>`,
-      ]
-        .filter(Boolean)
-        .join('; '),
-      motionType: MOTION_TYPE_OPTIONS[motion.type],
-      renderKey: motion.renderKey,
-    }))
-    .filter(
-      formattedMotion =>
-        !!formattedMotion.content && !!formattedMotion.motionType,
-    );
-};
-
-const formatActionsAndFilings = (
-  section: MinuteSheetFormState['actionsAndFilingsSection'],
-) => {
-  return Object.values(section.actionsAndFilings)
-    .map(action => ({
-      content: [
-        formatDateString(action.date, FORMATS.MMDDYYYY),
-        [
-          ACTION_DOCUMENT_TYPE_OPTIONS[action.documentType]
-            ? `${ACTION_DOCUMENT_TYPE_OPTIONS[action.documentType]}`
-            : '',
-          action.note ? `<em>${action.note}</em>` : '',
-        ]
-          .filter(substring => !!substring)
-          .join(' - '),
-        ACTION_FILED_BY_OPTIONS[action.filedBy],
-        ACTION_STATUS_OPTIONS[action.status],
-      ]
-        .filter(substring => !!substring)
-        .join('; '),
-      renderKey: action.renderKey,
-    }))
-    .filter(action => !!action.content);
-};
-
-const formatTrialBrief = (
-  section: MinuteSheetFormState['trialBriefSection'],
-) => {
-  if (!section) return {};
-  return {
-    benchOpinionRendered: section.dateBenchOpinionRendered
-      ? [
-          formatDateString(section.dateBenchOpinionRendered, FORMATS.MMDDYYYY),
-          section.transcriptOrdered ? 'Transcript ordered' : '',
-          section.note ? `<em>${section.note}</em>` : '',
-        ]
-          .filter(Boolean)
-          .join('; ')
-      : '',
-    briefDetails: getBriefDetails(section.briefDetails || {}),
-    briefType: section.briefType || '',
-    dateSubmitted: section.dateSubmitted
-      ? formatDateString(section.dateSubmitted, FORMATS.MMDDYYYY)
-      : '',
-    totalTrialHours: section.totalTrialHours || '',
-  };
-};
-
-const formatPretrialConference = (section: any): string => {
-  return [
-    section.date,
-    section.note && `<em>${section.note}</em>`,
-    section.transcriptOrdered ? 'Transcript ordered' : '',
-  ]
-    .filter(Boolean)
-    .join('; ');
-};
-
-const formatTrialHearing = (section: any): string => {
-  return [
-    section.date,
-    section.trialHearingType && TRIAL_HEARING_OPTIONS[section.trialHearingType],
-    section.note && `<em>${section.note}</em>`,
-    section.transcriptOrdered ? 'Transcript ordered' : '',
-  ]
-    .filter(Boolean)
-    .join('; ');
-};
-
-const formatRecalledRow = (section: any) => {
-  const formattedRow = {
-    content: [
-      section.date,
-      section.note && `<em>${section.note}</em>`,
-      section.transcriptOrdered ? 'Transcript ordered' : '',
-    ]
-      .filter(Boolean)
-      .join('; '),
-    renderKey: section.renderKey,
-  };
-
-  if (formattedRow.content) {
-    return formattedRow;
-  }
-};
-
-const formatExhibits = (
-  exhibitsSection: MinuteSheetFormState['exhibitsSection'],
-) => {
-  return Object.values(exhibitsSection.exhibits)
-    .map(exhibit => ({
-      description: exhibit.description,
-      note: exhibit.note,
-      renderKey: exhibit.renderKey,
-      status: EXHIBIT_STATUS_OPTIONS[exhibit.status],
-    }))
-    .filter(
-      formattedExhibit =>
-        !!formattedExhibit.description ||
-        !!formattedExhibit.note ||
-        !!formattedExhibit.status,
-    );
-};
-
-// TODO 10419: consider moving this to a helper?
 const formatMinuteSheet = ({
   aCase,
   minuteSheetFormState,
@@ -425,9 +151,7 @@ const formatMinuteSheet = ({
     ).filter(witness => !!witness.name),
     petitioners,
     pretrialConference: formatPretrialConference(pretrialConference),
-    recalled: Object.values(recalled)
-      .map(row => formatRecalledRow(row))
-      .filter(Boolean),
+    recalled: formatRecalledRows(recalled),
     remoteSession: minuteSheetFormState.trialSessionMetadataSection
       .remoteSession
       ? 'Yes'

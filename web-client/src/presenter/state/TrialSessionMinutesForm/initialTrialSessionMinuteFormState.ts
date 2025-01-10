@@ -329,17 +329,11 @@ type MotionFiledByOption =
 
 export const MOTION_STATUS_OPTIONS = {
   cav: 'CAV',
-
   denied: 'Denied',
-
   filed: 'Filed',
-
   granted: 'Granted',
-
   lodged: 'Lodged',
-
   noObjection: 'No Objection',
-
   objection: 'Objection',
   // 10419 TODO: can we derive these options from an existing constant? Same
   // question applies broadly speaking for these option constants.

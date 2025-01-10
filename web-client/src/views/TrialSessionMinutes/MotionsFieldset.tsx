@@ -27,6 +27,9 @@ export const MotionsFieldset = ({
 }) => {
   return (
     <fieldset className="border-0 padding-0">
+      <div className="usa-label">
+        Motion to Dismiss / Motion for Continuance
+      </div>
       {Object.values(motionsFormState.motions).map(row => {
         return (
           <div className="margin-bottom-3" key={row.renderKey}>
