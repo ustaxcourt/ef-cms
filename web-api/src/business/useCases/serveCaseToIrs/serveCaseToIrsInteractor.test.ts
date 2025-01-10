@@ -111,7 +111,7 @@ describe('serveCaseToIrsInteractor', () => {
 
     applicationContext.getStorageClient.mockReturnValue({
       getObject: getObjectMock,
-      upload: (params, cb) => {
+      upload: (_params, cb) => {
         return cb(null, true);
       },
     });
