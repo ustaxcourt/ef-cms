@@ -56,16 +56,6 @@ regex search the entire project for `version = ">= \d+.\d+.\d+"` and make sure i
 
  - ./shared/admin-tools/glue/glue_migrations/main.tf
  - ./shared/admin-tools/glue/remote_role/main.tf
- - ./web-api/terraform/applyables/account-specific/account-specific.tf
- - ./web-api/terraform/applyables/allColors/allColors.tf
- - ./web-api/terraform/applyables/blue/blue.tf
- - ./web-api/terraform/applyables/glue-cron/glue-cron-applyable.tf
- - ./web-api/terraform/applyables/green/green.tf
- - ./web-api/terraform/applyables/migration/migration-applyable.tf
- - ./web-api/terraform/applyables/migration-cron/migration-cron-applyable.tf
- - ./web-api/terraform/applyables/reindex-cron/reindex-cron-applyable.tf
- - ./web-api/terraform/applyables/switch-colors-cron/switch-colors-cron-applyable.tf
- - ./web-api/terraform/applyables/wait-for-workflow/wait-for-workflow-cron-applyable.tf
 
 	> version = ">= <LATEST_VERSION>"
 
