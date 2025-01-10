@@ -2,6 +2,9 @@ import { createHash } from 'crypto';
 
 export const efcmsUserMappings = {
   properties: {
+    'admissionsDate.S': {
+      type: 'date',
+    },
     'admissionsStatus.S': {
       type: 'keyword',
     },

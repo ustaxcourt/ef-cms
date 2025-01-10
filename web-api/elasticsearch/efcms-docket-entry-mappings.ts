@@ -112,6 +112,9 @@ export const efcmsDocketEntryMappings = {
     'status.S': {
       type: 'keyword',
     },
+    'userId.S': {
+      type: 'keyword',
+    },
   },
 };
 
