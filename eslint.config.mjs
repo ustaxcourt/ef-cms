@@ -83,14 +83,13 @@ export default tseslint.config(
   },
   {
     // @ts-ignore
-    ...reactPlugin.configs.flat.recommended,
+    ...reactPlugin.configs.flat.recommended, // React recommendations
     rules: {
       // @ts-ignore
       ...reactPlugin.configs.flat.recommended.rules,
       'react/prop-types': 'warn', // Temporarily turned off. Ideally this is on so we enforce typed inputs.
     },
   },
-  // reactPlugin.configs.flat.recommended, // React recommendations
   jsxA11y.flatConfigs.recommended, // Accessibility recommendations
   prettierConfig, // This config ignores formatting rules in the linter. Linters are not formatters.
   pluginCypress.configs.recommended, // cypress recommendations
@@ -162,7 +161,19 @@ export default tseslint.config(
       'no-unused-expressions': 'off',
       '@typescript-eslint/no-unused-expressions': 'error',
       'no-unused-vars': 'off',
-      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        // Do not allow unused variables unless they have the _ prefix or they are an error
+        'error',
+        {
+          args: 'all',
+          argsIgnorePattern: '^_',
+          caughtErrors: 'none',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
+      ],
       '@typescript-eslint/no-wrapper-object-types': 'off',
       'no-throw-literal': 'off',
       '@typescript-eslint/only-throw-error': 'off',
