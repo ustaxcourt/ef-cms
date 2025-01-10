@@ -106,7 +106,7 @@ export const NoticeOfChangeOfTrialLocation = ({
         </div>
         <div style={{ fontStyle: 'italic', paddingTop: '1rem' }}>
           The Standing Pretrial Order served in this case remains in full force
-          and effect
+          and effect.
         </div>
       </div>
     </div>

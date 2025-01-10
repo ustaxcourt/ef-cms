@@ -47,8 +47,8 @@ function TrialLocationComparison({
   locationInfo: TrialSessionLocationInfo;
 }) {
   return (
-    <div className="grid-col-6">
-      <div className="text-bold padding-bottom-1">{headerLabel}</div>
+    <div className="grid-col-6 padding-right-1">
+      <div className="semi-bold padding-bottom-1">{headerLabel}</div>
       <TrialLocationInformation locationInfo={locationInfo} />
     </div>
   );
@@ -74,18 +74,18 @@ export const ConfirmTrialSessionLocationChangeModalDialog = connect<
         message=""
         title="Are You Sure You Want to Change the Trial Location?"
       >
-        <div>
+        <div className="font-sans-pro">
           <div className="grid-row padding-bottom-3">
             Changing the trial location will automatically generate a Notice of
             Change of Trial Location.
           </div>
           <div className="grid-row padding-bottom-3">
             <TrialLocationComparison
-              headerLabel="Previous Location"
+              headerLabel="Previous location"
               locationInfo={currentTrialSessionLocation!}
             />
             <TrialLocationComparison
-              headerLabel="New Location"
+              headerLabel="New location"
               locationInfo={updatedTrialSessionLocation!}
             />
           </div>
