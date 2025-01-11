@@ -17,8 +17,8 @@ const scriptConfig: ScriptConfig = {
   description:
     'lea-stats - Generates statistics related to Limited Entry of Appearance documents.',
   environment: {
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
     env: 'ENV',
-    region: 'REGION',
   },
   parameters: {
     fiscal: {
