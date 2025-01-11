@@ -1,16 +1,37 @@
-// usage: npx ts-node --transpile-only scripts/reports/practitioner-stats.ts 2022
-
-import { getUniqueValues } from './trial-sessions-report-helpers';
-import { requireEnvVars } from '../../shared/admin-tools/util';
-requireEnvVars(['ENV', 'REGION']);
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import { DateTime } from 'luxon';
-import { createApplicationContext } from '@web-api/applicationContext';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import {
+  type ServerApplicationContext,
+  createApplicationContext,
+} from '@web-api/applicationContext';
+import { getUniqueValues } from './trial-sessions-report-helpers';
 import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
 import type { RawPractitioner } from '@shared/business/entities/Practitioner';
 
-const year = Number(process.argv[2]) || Number(DateTime.now().toObject().year);
+const scriptConfig: ScriptConfig = {
+  description:
+    'practitioner-stats - Outputs practitioner stats over a given year',
+  environment: {
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+    env: 'ENV',
+  },
+  parameters: {
+    year: {
+      default: `${DateTime.now().toObject().year}`,
+      position: 0,
+      transform: 'number',
+      type: 'string',
+    },
+  },
+  requireActiveAwsSession: true,
+};
+const { year } = parseArgsAndEnvVars(scriptConfig) as { year: number };
 
 const fromDate = validateDateAndCreateISO({
   day: '1',
@@ -24,8 +45,8 @@ const toDate = validateDateAndCreateISO({
 });
 
 const getAllPractitioners = async (
-  applicationContext: IApplicationContext,
-): Promise<Array<RawPractitioner>> => {
+  applicationContext: ServerApplicationContext,
+): Promise<RawPractitioner[]> => {
   const { results } = await searchAll({
     applicationContext,
     searchParameters: {

@@ -1,13 +1,44 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
+
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+
+const scriptConfig: ScriptConfig = {
+  description:
+    'read-segment - Reads <totalSegments> from the source table starting from <segment>',
+  environment: {
+    env: 'ENV',
+    sourceTable: 'SOURCE_TABLE',
+  },
+  parameters: {
+    segmentArg: {
+      position: 0,
+      required: true,
+      transform: 'number',
+      type: 'string',
+    },
+    totalSegmentsArg: {
+      position: 1,
+      required: true,
+      transform: 'number',
+      type: 'string',
+    },
+  },
+  requireActiveAwsSession: true,
+};
+const { segmentArg, totalSegmentsArg } = parseArgsAndEnvVars(scriptConfig) as {
+  segmentArg: number;
+  totalSegmentsArg: number;
+};
 
 const dynamodb = new DynamoDBClient({ region: 'us-east-1' });
 const documentClient = DynamoDBDocument.from(dynamodb, {
   marshallOptions: { removeUndefinedValues: true },
 });
-
-const segmentArg = Number(process.argv[2]) || 0;
-const totalSegmentsArg = Number(process.argv[3]) || 0;
 
 const scanTableSegment = async (segment: number, totalSegments: number) => {
   let hasMoreResults = true;
