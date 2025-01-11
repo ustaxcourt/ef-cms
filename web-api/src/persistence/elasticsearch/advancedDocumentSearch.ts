@@ -208,10 +208,20 @@ export const advancedDocumentSearch = async ({
           subQuery = subQuery
             .where('c.isSealed', 'is not', true)
             .where('d.isSealed', 'is not', true)
-            .where('d.sealedTo', 'is not', 'External');
+            .where(eb =>
+              eb.or([
+                eb('d.sealedTo', 'is', null),
+                eb('d.sealedTo', '!=', 'External'),
+              ]),
+            );
         } else {
           if (isExternalUser) {
-            subQuery = subQuery.where('d.sealedTo', 'is not', 'External');
+            subQuery = subQuery.where(eb =>
+              eb.or([
+                eb('d.sealedTo', 'is', null),
+                eb('d.sealedTo', '!=', 'External'),
+              ]),
+            );
           }
         }
 
@@ -300,6 +310,8 @@ export const advancedDocumentSearch = async ({
   });
 
   console.log('sortField for document results', sortField);
+
+  console.log('openSearch results', opensearchResults);
 
   console.log(
     'combinedSearchResults',

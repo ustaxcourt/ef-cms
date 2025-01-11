@@ -5,12 +5,12 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
@@ -129,6 +129,12 @@ export const fileExternalDocument = async (
           applicationContext,
           docketNumber: individualDocumentMetadata.docketNumber,
         });
+
+        if (!caseToUpdate) {
+          throw new NotFoundError(
+            `Case ${individualDocumentMetadata.docketNumber} not found`,
+          );
+        }
 
         let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
