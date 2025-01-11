@@ -259,13 +259,13 @@ export const advancedDocumentSearch = async ({
           .selectFrom('docketEntries')
           .selectAll()
           .select(
-            sql`5 * word_similarity(${caseTitleOrPetitioner}, name_to_match) + word_similarity(${caseTitleOrPetitioner}, caption)`.as(
+            sql`word_similarity(${caseTitleOrPetitioner}, COALESCE(name_to_match, '')) + word_similarity(${caseTitleOrPetitioner}, COALESCE(caption, ''))`.as(
               'total_rank',
             ),
           ),
       )
       .selectFrom('docketEntryWithScores')
-      .where('total_rank', '>=', 1);
+      .where('total_rank', '>=', 0.5);
 
     if (!docketNumber && caseTitleOrPetitioner) {
       return query2.selectAll().execute();
