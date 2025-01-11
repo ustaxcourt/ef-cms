@@ -13,7 +13,7 @@ export const getMessageThreadByParentId = async ({
       .leftJoin('dwCase as c', 'c.docketNumber', 'm.docketNumber')
       .where('m.parentMessageId', '=', parentMessageId)
       .selectAll()
-      .select('m.docketNumber')
+      .select(['m.docketNumber', 'm.createdAt'])
       .execute(),
   );
 

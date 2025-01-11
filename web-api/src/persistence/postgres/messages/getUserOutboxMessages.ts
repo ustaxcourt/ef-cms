@@ -17,7 +17,7 @@ export const getUserOutboxMessages = async ({
       .where('m.fromUserId', '=', userId)
       .where('m.createdAt', '>=', filterDate)
       .selectAll()
-      .select('m.docketNumber')
+      .select(['m.docketNumber', 'm.createdAt'])
       .limit(5000)
       .execute(),
   );
