@@ -54,15 +54,19 @@ export const updateCaseContext = async (
   // if this case status is changing FROM calendared
   // we need to remove it from the trial session
   if (caseStatus && caseStatus !== oldCase.status) {
-    const date = applicationContext.getUtilities().createISODateString();
     newCase.setCaseStatus({
       changedBy: authorizedUser.name,
-      date,
       updatedCaseStatus: caseStatus,
     });
 
     if (oldCase.status === CASE_STATUS_TYPES.calendared) {
       const disposition = `Status was changed to ${caseStatus}`;
+
+      if (!oldCase.trialSessionId) {
+        throw new NotFoundError(
+          `Cannot find trialSessionId for case ${docketNumber}`,
+        );
+      }
 
       const trialSession = await applicationContext
         .getPersistenceGateway()
