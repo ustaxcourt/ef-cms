@@ -83,6 +83,7 @@ export const getCasesByFilters = async ({
         'caption',
         'caseType',
         'docketNumber',
+        'docketNumberSuffix',
         'leadDocketNumber',
         'preferredTrialCity',
         'receivedAt',
@@ -95,10 +96,14 @@ export const getCasesByFilters = async ({
     return { count: totalCount[0].value, results: filteredResults };
   });
 
-  // 10502 TODO: rename caseCaption to caption? How to handle this gracefully?
   return {
     foundCases: results.map(r =>
-      transformNullToUndefined({ ...r, caseCaption: r.caption }),
+      transformNullToUndefined({
+        ...r,
+        caseCaption: r.caption,
+        docketNumberWithSuffix: r.docketNumber + (r.docketNumberSuffix || ''),
+        receivedAt: r.receivedAt?.toISOString(),
+      }),
     ) as CaseInventory[],
     totalCount: count,
   };

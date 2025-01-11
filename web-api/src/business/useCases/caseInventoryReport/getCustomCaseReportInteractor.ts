@@ -65,7 +65,7 @@ export const getCustomCaseReportInteractor = async (
   params.caseTypes = params.caseTypes || [];
   params.judges = params.judges || [];
   params.preferredTrialCities = params.preferredTrialCities || [];
-  params.page = params.page || 1;
+  params.page = params.page || 0;
 
   new CustomCaseReportSearch(params).validate();
 

@@ -45,7 +45,7 @@ export const createCsvCustomCaseReportFileInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let page = 1;
+  let page = 0;
   const pageSize = 9000;
 
   const loops = Math.floor(totalCount / pageSize) + 1;
