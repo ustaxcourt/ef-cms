@@ -54,7 +54,7 @@ export const cases130_309: NewCaseKysely[] = [
     orderToShowCause: false,
     partyType: PARTY_TYPES.petitioner,
     petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
-    preferredTrialCity: 'Washington, District of Columbia, 1613493436635',
+    preferredTrialCity: 'Washington, District of Columbia',
     procedureType: PROCEDURE_TYPES_MAP.regular,
     qcCompleteForTrial: {},
     receivedAt: calculateDate({ dateString: '2021-02-16T16:37:16.782Z' }),

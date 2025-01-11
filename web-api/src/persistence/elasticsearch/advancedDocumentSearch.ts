@@ -309,8 +309,6 @@ export const advancedDocumentSearch = async ({
       }));
   });
 
-  console.log('sortField for document results', sortField);
-
   console.log('openSearch results', opensearchResults);
 
   console.log(
