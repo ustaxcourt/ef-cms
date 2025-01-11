@@ -152,19 +152,15 @@ const getNocFiledAfterLeaInCase = ({
     }
     procedureTypeAggs[caseEntity.procedureType]++;
   }
-  const stats = {
-    procedureTypeAggs,
-    totalLeas: leas.length,
-    totalSubsequentNocs: 0,
-  };
+  const subsequentNocs: string[] = [];
   const rows: {}[] = [];
   for (const lea of leas) {
     const subsequentNoc = getNocFiledAfterLeaInCase({
       docketNumber: lea.docketNumber,
       leaReceivedAt: lea.receivedAt,
     });
-    if (subsequentNoc) {
-      stats.totalSubsequentNocs++;
+    if (subsequentNoc && subsequentNoc.docketEntryId) {
+      subsequentNocs.push(subsequentNoc.docketEntryId);
     }
     rows.push({
       docketNumber: lea.docketNumber,
@@ -174,6 +170,16 @@ const getNocFiledAfterLeaInCase = ({
       nocIndex: subsequentNoc?.index ?? '',
       procedureType: caseCache[lea.docketNumber].procedureType,
     });
+  }
+  const uniqueSubsequentNocs = [...new Set(subsequentNocs)];
+  const stats = {
+    procedureTypeAggs,
+    totalUniqueCases: 0,
+    totalUniqueLeas: leas.length,
+    totalUniqueSubsequentNocs: uniqueSubsequentNocs.length,
+  };
+  for (const pt in procedureTypeAggs) {
+    stats.totalUniqueCases += procedureTypeAggs[pt];
   }
 
   const columns = [
