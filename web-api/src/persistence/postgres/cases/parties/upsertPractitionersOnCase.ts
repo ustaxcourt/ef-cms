@@ -1,10 +1,11 @@
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { getDbWriter } from '@web-api/database';
 import { isEmpty } from 'lodash';
 
 export const upsertPractitionersOnCase = async ({
   practitionersWithDocketNumber,
 }: {
-  practitionersWithDocketNumber: any; // 10502 TODO
+  practitionersWithDocketNumber: (RawPractitioner & { docketNumber: string })[];
 }): Promise<void> => {
   if (isEmpty(practitionersWithDocketNumber)) {
     return;
@@ -15,7 +16,7 @@ export const upsertPractitionersOnCase = async ({
       .values(
         practitionersWithDocketNumber.map(p => ({
           docketNumber: p.docketNumber,
-          email: p.email,
+          email: p.email || '',
           userId: p.userId,
         })),
       )

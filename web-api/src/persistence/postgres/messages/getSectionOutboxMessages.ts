@@ -18,7 +18,7 @@ export const getSectionOutboxMessages = async ({
       .where('m.fromSection', '=', section)
       .where('m.createdAt', '>=', filterDate)
       .selectAll()
-      .select('m.docketNumber')
+      .select(['m.docketNumber', 'm.createdAt'])
       .execute(),
   );
 

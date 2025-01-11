@@ -3,7 +3,7 @@ import {
   formatDateString,
   formatNow,
   getMonthDayYearInETObj,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 import { getDbWriter } from '@web-api/database';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
