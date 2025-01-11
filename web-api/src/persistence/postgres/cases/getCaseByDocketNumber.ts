@@ -19,7 +19,7 @@ export const getCaseByDocketNumber = async ({
   docketNumber: string;
   applicationContext: ServerApplicationContext;
   includeConsolidatedCases?: boolean;
-}): Promise<RawCase | undefined> => {
+}): Promise<RawCase> => {
   const dbCaseMetadata = await getCaseMetadataByDocketNumber({ docketNumber });
   if (!dbCaseMetadata) {
     throw new NotFoundError(`Case ${docketNumber} not found`);

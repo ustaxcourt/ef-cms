@@ -1,3 +1,4 @@
+import { NotFoundError } from '@web-api/errors/errors';
 import { flattenDeep } from 'lodash';
 import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { marshall } from '@aws-sdk/util-dynamodb';
@@ -29,6 +30,10 @@ export const processCaseEntries = async ({
       applicationContext,
       docketNumber: caseNewImage.docketNumber.S,
     });
+
+    if (!caseMetadataWithCounsel) {
+      throw new NotFoundError(`Case ${caseNewImage.docketNumber.S} not found`);
+    }
 
     const marshalledCase = marshall(caseMetadataWithCounsel);
 

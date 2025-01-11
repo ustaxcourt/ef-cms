@@ -69,7 +69,7 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
       ),
       caseCaptionExtension,
       caseTitle,
-      docketNumberWithSuffix,
+      docketNumberWithSuffix: docketNumberWithSuffix || docketNumber,
       nameOfClerk,
       orderContent: contentHtml,
       orderTitle: documentTitle,

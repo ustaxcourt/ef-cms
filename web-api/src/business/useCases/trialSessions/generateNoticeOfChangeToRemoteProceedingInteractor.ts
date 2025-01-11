@@ -73,7 +73,7 @@ export const generateNoticeOfChangeToRemoteProceedingInteractor = async (
       data: {
         caseCaptionExtension,
         caseTitle,
-        docketNumberWithSuffix,
+        docketNumberWithSuffix: docketNumberWithSuffix || docketNumber,
         nameOfClerk: name,
         titleOfClerk: title,
         trialInfo,
