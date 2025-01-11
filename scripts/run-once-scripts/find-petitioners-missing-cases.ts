@@ -1,20 +1,33 @@
-// usage: npx ts-node --transpile-only scripts/run-once-scripts/find-petitioners-missing-cases.ts
+#!/usr/bin/env -S npx ts-node --transpile-only
 
-import '../../types/IApplicationContext';
+import { type RawUser } from '@shared/business/entities/User';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import {
+  type ServerApplicationContext,
+  createApplicationContext,
+} from '@web-api/applicationContext';
 import { chunk, isObject } from 'lodash';
-import { createApplicationContext } from '../../web-api/src/applicationContext';
-import { requireEnvVars } from '../../shared/admin-tools/util';
-import { searchAll } from '../../web-api/src/persistence/elasticsearch/searchClient';
-import type { RawUser } from '../../shared/src/business/entities/User';
+import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 
-requireEnvVars(['ENV', 'REGION']);
-
+const scriptConfig: ScriptConfig = {
+  description:
+    'find-petitioners-missing-cases - Identifies cases from which petitioners are missing.',
+  environment: {
+    dynamoDbTableName: 'DYNAMODB_TABLE_NAME',
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+  },
+  requireActiveAwsSession: true,
+};
+parseArgsAndEnvVars(scriptConfig);
 const CHUNK_SIZE = 100;
 
 const queryForPetitioners = async ({
   applicationContext,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
 }): Promise<RawUser[]> => {
   const { results } = await searchAll({
     applicationContext,
@@ -43,7 +56,7 @@ const checkUser = async ({
   applicationContext,
   user,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   user: RawUser;
 }): Promise<void> => {
   const documentClient =
@@ -61,52 +74,53 @@ const checkUser = async ({
     TableName: applicationContext.environment.dynamoDbTableName,
   });
 
-  await Promise.all(
-    userCases.map(async theUserCase => {
-      const theCase: RawCase = await documentClient
-        .get({
-          Key: {
-            pk: `case|${theUserCase.docketNumber}`,
-            sk: `case|${theUserCase.docketNumber}`,
-          },
-          TableName: applicationContext.environment.dynamoDbTableName,
-        })
-        .promise()
-        .then(({ Item }) => Item);
+  if (userCases && userCases.length > 0) {
+    await Promise.all(
+      userCases.map(async theUserCase => {
+        const theCase: RawCase = (await documentClient
+          .get({
+            Key: {
+              pk: `case|${theUserCase.docketNumber}`,
+              sk: `case|${theUserCase.docketNumber}`,
+            },
+            TableName: applicationContext.environment.dynamoDbTableName,
+          })
+          .then(({ Item }) => Item)) as unknown as RawCase;
 
-      if (theCase.petitioners) {
-        const found = theCase.petitioners.find(
-          petitioner => petitioner.contactId === user.userId,
-        );
-        if (!found) {
-          console.log(
-            `ERROR: user ${user.userId} is associated with ${theCase.docketNumber}, but does not exist on the petitioners array`,
+        if (theCase.petitioners) {
+          const found = theCase.petitioners.find(
+            petitioner => petitioner.contactId === user.userId,
           );
+          if (!found) {
+            console.log(
+              `ERROR: user ${user.userId} is associated with ${theCase.docketNumber}, but does not exist on the petitioners array`,
+            );
+          }
+        } else {
+          const primaryContactId =
+            'contactPrimary' in theCase &&
+            isObject(theCase.contactPrimary) &&
+            'contactId' in theCase.contactPrimary
+              ? theCase.contactPrimary.contactId
+              : '';
+          const secondaryContactId =
+            'contactSecondary' in theCase &&
+            isObject(theCase.contactSecondary) &&
+            'contactId' in theCase.contactSecondary
+              ? theCase.contactSecondary.contactId
+              : '';
+          if (
+            user.userId !== primaryContactId &&
+            user.userId !== secondaryContactId
+          ) {
+            console.log(
+              `ERROR: user ${user.userId} is associated with ${theCase.docketNumber}, but does not exist on the contactPrimary / contactSecondary`,
+            );
+          }
         }
-      } else {
-        const primaryContactId =
-          'contactPrimary' in theCase &&
-          isObject(theCase.contactPrimary) &&
-          'contactId' in theCase.contactPrimary
-            ? theCase.contactPrimary.contactId
-            : '';
-        const secondaryContactId =
-          'contactSecondary' in theCase &&
-          isObject(theCase.contactSecondary) &&
-          'contactId' in theCase.contactSecondary
-            ? theCase.contactSecondary.contactId
-            : '';
-        if (
-          user.userId !== primaryContactId &&
-          user.userId !== secondaryContactId
-        ) {
-          console.log(
-            `ERROR: user ${user.userId} is associated with ${theCase.docketNumber}, but does not exist on the contactPrimary / contactSecondary`,
-          );
-        }
-      }
-    }),
-  );
+      }),
+    );
+  }
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises

@@ -34,10 +34,10 @@ fi
 if [[ "$S3_SYNC_RESULT" -eq 0 ]]; then
   echo "Sync completed, approving referrer"
   export APPROVAL_JOB_NAME="wait-for-s3-sync-workflow"
-  CIRCLE_WORKFLOW_ID="$REFERRER" npx ts-node --transpile-only ./scripts/circleci/approve-pending-job.ts
+  CIRCLE_WORKFLOW_ID="$REFERRER" ./scripts/circleci/approve-pending-job.ts
   exit 0
 fi
 
 echo "Error syncing S3 buckets, canceling referrer"
-CIRCLE_WORKFLOW_ID="$REFERRER" npx ts-node --transpile-only ./scripts/circleci/cancel-workflow.ts
+CIRCLE_WORKFLOW_ID="$REFERRER" ./scripts/circleci/cancel-workflow.ts
 exit $S3_SYNC_RESULT
