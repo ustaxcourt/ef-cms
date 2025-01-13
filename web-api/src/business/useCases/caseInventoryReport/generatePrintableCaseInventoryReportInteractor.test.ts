@@ -16,7 +16,7 @@ describe('generatePrintableCaseInventoryReportInteractor', () => {
       .getCaseInventoryReport.mockReturnValue({ foundCases: [] });
   });
 
-  it('calls generateCaseInventoryReportPdf function and returns result', async () => {
+  it('should call generateCaseInventoryReportPdf function and return result', async () => {
     const results = await generatePrintableCaseInventoryReportInteractor(
       applicationContext,
       {
