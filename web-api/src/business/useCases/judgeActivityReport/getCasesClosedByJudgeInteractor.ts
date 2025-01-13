@@ -8,7 +8,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getCasesClosedCountByJudge } from '@web-api/persistence/postgres/reports/caseSearch/getCasesClosedCountByJudge';
+import { getCasesClosedCountByJudge } from '@web-api/persistence/postgres/cases/reports/getCasesClosedCountByJudge';
 
 export type CasesClosedReturnType = {
   aggregations: {

@@ -3,7 +3,7 @@ import {
   GetCustomCaseReportRequest,
   getCustomCaseReportInteractor,
 } from './getCustomCaseReportInteractor';
-import { getCasesByFilters as getCasesByFiltersMock } from '@web-api/persistence/postgres/reports/caseSearch/getCasesByFilters';
+import { getCasesByFilters as getCasesByFiltersMock } from '@web-api/persistence/postgres/cases/reports/getCasesByFilters';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,

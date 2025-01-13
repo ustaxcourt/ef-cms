@@ -4,7 +4,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getCaseInventoryReport } from '@web-api/persistence/postgres/reports/caseSearch/getCaseInventoryReport';
+import { getCaseInventoryReport } from '@web-api/persistence/postgres/cases/reports/getCaseInventoryReport';
 export const getCaseInventoryReportInteractor = async (
   applicationContext,
   {

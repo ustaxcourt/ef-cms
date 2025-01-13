@@ -5,7 +5,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { fetchPendingItems } from '@web-api/persistence/postgres/reports/caseSearch/fetchPendingItems';
+import { fetchPendingItems } from '@web-api/persistence/postgres/cases/reports/fetchPendingItems';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 export const generatePrintablePendingReportInteractor = async (

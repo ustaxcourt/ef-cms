@@ -1,4 +1,5 @@
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generatePrintableCaseInventoryReportInteractor } from './generatePrintableCaseInventoryReportInteractor';
 import {
   mockPetitionerUser,

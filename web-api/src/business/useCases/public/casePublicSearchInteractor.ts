@@ -1,27 +1,23 @@
 import {
   CaseAdvancedSearchResultItem,
   CaseAdvancedSearchTerms,
-} from '@web-api/persistence/postgres/reports/caseSearch/caseAdvancedSearch';
+} from '@web-api/persistence/postgres/cases/reports/caseAdvancedSearch';
 import { CaseSearchResult } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { US_STATES } from '@shared/business/entities/EntityConstants';
-import { casePublicSearch } from '@web-api/persistence/postgres/reports/caseSearch/casePublicSearch';
+import { casePublicSearch } from '@web-api/persistence/postgres/cases/reports/casePublicSearch';
 import {
   createEndOfDayISO,
   createStartOfDayISO,
 } from '@shared/business/utilities/DateHandler';
 import { filterCaseSearchResultsNotAccessibleToUser } from '@shared/business/utilities/caseFilter';
 
-export const casePublicSearchInteractor = async (
-  applicationContext: ServerApplicationContext,
-  {
-    countryType,
-    endDate,
-    petitionerName,
-    petitionerState,
-    startDate,
-  }: CaseAdvancedSearchTerms,
-): Promise<CaseSearchResult[]> => {
+export const casePublicSearchInteractor = async ({
+  countryType,
+  endDate,
+  petitionerName,
+  petitionerState,
+  startDate,
+}: CaseAdvancedSearchTerms): Promise<CaseSearchResult[]> => {
   let searchStartDate;
   let searchEndDate;
 
@@ -46,7 +42,6 @@ export const casePublicSearchInteractor = async (
   }
 
   const foundCases = await casePublicSearch({
-    applicationContext,
     searchTerms: {
       countryType,
       endDate: searchEndDate,

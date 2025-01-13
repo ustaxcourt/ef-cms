@@ -9,7 +9,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   SubmittedCAVTableFields,
   getDocketNumbersByStatusAndByJudge,
-} from '@web-api/persistence/postgres/reports/caseSearch/getDocketNumbersByStatusAndByJudge';
+} from '@web-api/persistence/postgres/cases/reports/getDocketNumbersByStatusAndByJudge';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getConsolidatedCasesCount } from '@web-api/persistence/postgres/cases/getConsolidatedCasesCount';
 
