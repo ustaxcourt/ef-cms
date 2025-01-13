@@ -34,6 +34,44 @@ describe('processWorkItemEntries', () => {
     },
   };
 
+  const mockSectionOutboxWorkItemRecord = {
+    dynamodb: {
+      NewImage: {
+        docketNumber: {
+          S: '123-45',
+        },
+        entityName: {
+          S: 'WorkItem',
+        },
+        pk: {
+          S: 'section-outbox|docket|2021-04-14',
+        },
+        sk: {
+          S: '2021-04-14T13:20:24.0732',
+        },
+      },
+    },
+  };
+
+  const mockUserOutboxWorkItemRecord = {
+    dynamodb: {
+      NewImage: {
+        docketNumber: {
+          S: '123-45',
+        },
+        entityName: {
+          S: 'WorkItem',
+        },
+        pk: {
+          S: 'user-outbox|50e3b92c-5dgf-1ad8-a9dc-44e3fb2f7309|2021-w15',
+        },
+        sk: {
+          S: '2021-04-14T13:20:24.0732',
+        },
+      },
+    },
+  };
+
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
@@ -85,13 +123,17 @@ describe('processWorkItemEntries', () => {
     ]);
   });
 
-  it('should upsert records to postgres', async () => {
+  it('should upsert non-outbox work item records to postgres', async () => {
     await processWorkItemEntries({
       applicationContext,
-      workItemRecords: [mockWorkItemRecord],
+      workItemRecords: [
+        mockWorkItemRecord,
+        mockSectionOutboxWorkItemRecord,
+        mockUserOutboxWorkItemRecord,
+      ],
     });
 
-    expect(upsertWorkItems).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalledTimes(1);
   });
 
   it('should log an error and throw an exception when bulk index returns failed records', async () => {

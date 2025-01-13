@@ -65,12 +65,18 @@ export const processWorkItemEntries = async ({
     throw new Error('failed to index work item records');
   }
 
+  // In Dynamo, we often have multiple copies of a work item with different pks: the "main" record, and outbox records.
+  // In SQL, we want only one copy of the work item, and we want that copy to be the "main" copy, not an outbox item.
+  const nonOutboxWorkItemRecords = workItemRecords.filter(record =>
+    record.dynamodb.NewImage.pk.S.startsWith('case|'),
+  );
+
   getLogger().debug(
-    `Upserting ${workItemRecords.length} work item records into postgres`,
+    `Upserting ${nonOutboxWorkItemRecords.length} work item records into postgres`,
   );
 
   await upsertWorkItems({
-    workItems: workItemRecords.map(record => {
+    workItems: nonOutboxWorkItemRecords.map(record => {
       return unmarshall(record.dynamodb.NewImage) as RawWorkItem;
     }),
   });
