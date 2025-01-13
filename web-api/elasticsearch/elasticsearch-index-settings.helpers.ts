@@ -30,7 +30,7 @@ export const setupIndexes = async ({
           return client.indices.create({
             body: {
               mappings: {
-                dynamic: false,
+                dynamic: 'false',
                 ...elasticsearchMappings[index],
               },
               settings: esSettings,
@@ -41,8 +41,8 @@ export const setupIndexes = async ({
           return client.indices.putSettings({
             body: {
               index: {
-                max_result_window: esSettings.index.max_result_window,
-                number_of_replicas: esSettings.index.number_of_replicas,
+                max_result_window: esSettings.index!.max_result_window,
+                number_of_replicas: esSettings.index!.number_of_replicas,
               },
             },
             index,

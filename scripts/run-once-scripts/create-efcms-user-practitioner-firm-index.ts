@@ -56,6 +56,7 @@ const esSettings = settings({
     await client.indices.create({
       body: {
         mappings: {
+          dynamic: 'false',
           properties: {
             ...efcmsUserMappings.properties,
             'firmName.S': {

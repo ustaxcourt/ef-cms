@@ -111,7 +111,7 @@ export const efcmsDocketEntryMappings = {
       type: 'keyword',
     },
   },
-};
+} as const;
 
 const efcmsDocketEntryMappingsHash: string = createHash('md5')
   .update(JSON.stringify(efcmsDocketEntryMappings), 'utf8')
