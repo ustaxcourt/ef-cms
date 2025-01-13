@@ -1,15 +1,17 @@
-import { CASE_STATUS_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import {
   CasesClosedReturnType,
   getCasesClosedByJudgeInteractor,
 } from './getCasesClosedByJudgeInteractor';
 import { JudgeActivityStatisticsRequest } from '@web-api/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   createEndOfDayISO,
   createStartOfDayISO,
-} from '../../../../../shared/src/business/utilities/DateHandler';
-import { judgeUser } from '../../../../../shared/src/test/mockUsers';
+} from '@shared/business/utilities/DateHandler';
+import { getCasesClosedCountByJudge as getCasesClosedCountByJudgeMock } from '@web-api/persistence/postgres/cases/reports/getCasesClosedCountByJudge';
+import { judgeUser } from '@shared/test/mockUsers';
 import {
   mockJudgeUser,
   mockPetitionsClerkUser,
@@ -25,6 +27,8 @@ export const casesClosedResults: CasesClosedReturnType = {
   },
   total: 5,
 };
+
+const getCasesClosedCountByJudge = getCasesClosedCountByJudgeMock as jest.Mock;
 
 describe('getCasesClosedByJudgeInteractor', () => {
   const mockEndDate = '03/21/2020';
@@ -55,9 +59,7 @@ describe('getCasesClosedByJudgeInteractor', () => {
       .getPersistenceGateway()
       .getUserById.mockReturnValue(judgeUser);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesClosedCountByJudge.mockResolvedValue(casesClosedResults);
+    getCasesClosedCountByJudge.mockResolvedValue(casesClosedResults);
   });
 
   it('should return an error when the user is not authorized to generate the report', async () => {
@@ -91,10 +93,7 @@ describe('getCasesClosedByJudgeInteractor', () => {
       mockJudgeUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCasesClosedCountByJudge.mock
-        .calls[0][0],
-    ).toMatchObject({
+    expect(getCasesClosedCountByJudge.mock.calls[0][0]).toMatchObject({
       endDate: calculatedEndDate,
       judges: [judgeUser.name],
       startDate: calculatedStartDate,
