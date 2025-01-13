@@ -8,6 +8,7 @@ export const clearUserAction = async ({
   store,
 }: ActionProps) => {
   store.set(state.user, cloneDeep(emptyUserState));
+  store.unset(state.judgeUser);
   store.unset(state.token);
   store.unset(state.permissions);
 

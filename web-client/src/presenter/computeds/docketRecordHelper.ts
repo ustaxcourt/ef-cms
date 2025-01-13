@@ -9,7 +9,7 @@ export const docketRecordHelper = (
   countOfDocumentsForDownload: number;
   showBatchDownloadControls: boolean;
   showEditOrSealDocketRecordEntry: boolean;
-  showPrintableDocketRecord: boolean;
+  showPrintableDocketRecord?: boolean;
   sortLabelTextMobile: string;
 } => {
   const permissions = get(state.permissions);
