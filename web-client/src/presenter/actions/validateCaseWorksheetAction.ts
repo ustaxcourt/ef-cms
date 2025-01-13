@@ -1,6 +1,7 @@
+import { getJudgeForCurrentUserAction } from '@web-client/presenter/actions/getJudgeForCurrentUserAction';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const validateCaseWorksheetAction = ({
+export const validateCaseWorksheetAction = async ({
   applicationContext,
   get,
   path,
@@ -9,12 +10,18 @@ export const validateCaseWorksheetAction = ({
     state.form,
   );
 
+  const { judgeUser } = await getJudgeForCurrentUserAction({
+    applicationContext,
+    get,
+  } as ActionProps);
+
   const errors = applicationContext
     .getUseCases()
     .validateCaseWorksheetInteractor({
       caseWorksheet: {
         docketNumber,
         finalBriefDueDate,
+        judgeUserId: judgeUser.userId,
         primaryIssue,
         statusOfMatter,
       },

@@ -1,14 +1,14 @@
 import {
+  CASE_INVENTORY_PRINT_REPORT_MAX_SIZE,
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
-} from '../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseInventoryReport } from './getCaseInventoryReport';
 import { marshall } from '@aws-sdk/util-dynamodb';
 
 describe('getCaseInventoryReport', () => {
   const searchSpy = jest.fn();
-  const CASE_INVENTORY_MAX_PAGE_SIZE = 10;
 
   const mockDataOne = {
     associatedJudge: CHIEF_JUDGE,
@@ -31,9 +31,6 @@ describe('getCaseInventoryReport', () => {
   ];
 
   beforeEach(() => {
-    applicationContext.getConstants.mockReturnValue({
-      CASE_INVENTORY_MAX_PAGE_SIZE,
-    });
     applicationContext.getSearchClient.mockReturnValue({
       search: searchSpy,
     });
@@ -186,7 +183,7 @@ describe('getCaseInventoryReport', () => {
     });
   });
 
-  it('calls the search function with a default page size if one is not provided', async () => {
+  it("calls the search function with the print report's max size if one is not provided", async () => {
     await getCaseInventoryReport({
       applicationContext,
       associatedJudge: CHIEF_JUDGE,
@@ -194,32 +191,20 @@ describe('getCaseInventoryReport', () => {
     });
 
     expect(searchSpy.mock.calls[0][0].body.size).toEqual(
-      CASE_INVENTORY_MAX_PAGE_SIZE,
+      CASE_INVENTORY_PRINT_REPORT_MAX_SIZE,
     );
   });
 
   it('calls the search function with the given page size', async () => {
+    const givenPageSize = 100;
     await getCaseInventoryReport({
       applicationContext,
       associatedJudge: CHIEF_JUDGE,
-      pageSize: 3,
+      pageSize: givenPageSize,
       status: CASE_STATUS_TYPES.new,
     });
 
-    expect(searchSpy.mock.calls[0][0].body.size).toEqual(3);
-  });
-
-  it('calls the search function with max page size if the given page size exceeds the max page size', async () => {
-    await getCaseInventoryReport({
-      applicationContext,
-      associatedJudge: CHIEF_JUDGE,
-      pageSize: 11,
-      status: CASE_STATUS_TYPES.new,
-    });
-
-    expect(searchSpy.mock.calls[0][0].body.size).toEqual(
-      CASE_INVENTORY_MAX_PAGE_SIZE,
-    );
+    expect(searchSpy.mock.calls[0][0].body.size).toEqual(givenPageSize);
   });
 
   it('calls the search function with a default starting index (`from` param) of 0 if one is not provided', async () => {

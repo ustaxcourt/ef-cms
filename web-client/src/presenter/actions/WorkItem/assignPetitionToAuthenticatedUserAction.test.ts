@@ -37,12 +37,14 @@ describe('assignPetitionToAuthenticatedUserAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        workItem: { workItemId: '123' },
+      },
       state: {
         caseDetail: {
           docketEntries: [
             {
               documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
-              workItem: { workItemId: '123' },
             },
           ],
         },

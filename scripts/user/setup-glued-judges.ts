@@ -72,7 +72,6 @@ const createOrUpdateCognitoUser = async ({
     const { code }: any = err;
     if (code !== 'UserNotFoundException') {
       console.error(`ERROR checking for cognito user for ${name}:`, err);
-      return;
     }
   }
 

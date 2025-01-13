@@ -52,10 +52,11 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
         cy.intercept('POST', '**/paper').as('postPaperCase');
         cy.get('#submit-case').click();
         cy.wait('@postPaperCase').then(({ response: paperCaseResponse }) => {
-          const petitionId = paperCaseResponse?.body.docketEntries.find(
-            (d: any) => d.documentTitle === 'Petition',
-          ).docketEntryId;
-          const docketNumber = paperCaseResponse?.body.docketNumber;
+          const petitionId =
+            paperCaseResponse?.body.caseDetail.docketEntries.find(
+              (d: any) => d.documentTitle === 'Petition',
+            ).docketEntryId;
+          const docketNumber = paperCaseResponse?.body.caseDetail.docketNumber;
           cy.visit(
             `/case-detail/${docketNumber}/petition-qc/document-view/${petitionId}`,
           );

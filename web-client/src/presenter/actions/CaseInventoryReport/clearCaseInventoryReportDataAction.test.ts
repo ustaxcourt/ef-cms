@@ -6,13 +6,10 @@ describe('clearCaseInventoryReportDataAction', () => {
     const result = await runAction(clearCaseInventoryReportDataAction, {
       state: {
         caseInventoryReportData: [{ docketNumber: '123-20' }],
-        screenMetadata: {
-          page: 20,
-        },
+        screenMetadata: {},
       },
     });
 
     expect(result.state.caseInventoryReportData).toBeUndefined();
-    expect(result.state.screenMetadata.page).toEqual(1);
   });
 });
