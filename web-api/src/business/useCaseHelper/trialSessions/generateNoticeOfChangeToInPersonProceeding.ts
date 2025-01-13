@@ -2,12 +2,12 @@ import {
   FORMATS,
   createISODateString,
   formatDateString,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { formatPhoneNumber } from '../../../../../shared/src/business/utilities/formatPhoneNumber';
+import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
-import { getJudgeWithTitle } from '../../../../../shared/src/business/utilities/getJudgeWithTitle';
+import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
+import { getJudgeWithTitle } from '@shared/business/utilities/getJudgeWithTitle';
 
 export const generateNoticeOfChangeToInPersonProceeding = async (
   applicationContext: ServerApplicationContext,

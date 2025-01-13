@@ -1,15 +1,20 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { sealInLowerEnvironment } from './sealInLowerEnvironment';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 describe('sealInLowerEnvironment', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCase = updateCaseMock as jest.Mock;
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
+    updateCase.mockImplementation(({ caseToUpdate }) => {
+      return Promise.resolve(caseToUpdate);
+    });
     applicationContext.getNotificationGateway().sendNotificationOfSealing =
       jest.fn();
     applicationContext.isCurrentColorActive = jest.fn().mockReturnValue(true);
