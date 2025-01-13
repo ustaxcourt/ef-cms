@@ -3,7 +3,7 @@ import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UserFactory } from '@shared/business/entities/factories/UserFactory';
-import { getCasesByEmailTotal } from '@web-api/persistence/postgres/reports/caseSearch/getCasesByEmailTotal';
+import { getCasesByEmailTotal } from '@web-api/persistence/postgres/cases/reports/getCasesByEmailTotal';
 
 async function disableIsUserUpdatingFlag({
   applicationContext,

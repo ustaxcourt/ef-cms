@@ -2,12 +2,11 @@ import {
   CaseAdvancedSearchResultItem,
   CaseAdvancedSearchTerms,
   caseAdvancedSearch,
-} from '@web-api/persistence/postgres/reports/caseSearch/caseAdvancedSearch';
+} from '@web-api/persistence/postgres/cases/reports/caseAdvancedSearch';
 
 export const casePublicSearch = async ({
   searchTerms,
 }: {
-  applicationContext: IApplicationContext;
   searchTerms: CaseAdvancedSearchTerms;
 }): Promise<CaseAdvancedSearchResultItem[]> => {
   // The same results as caseAdvancedSearch, but with sealed cases filtered out

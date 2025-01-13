@@ -2,7 +2,7 @@ import {
   CaseAdvancedSearchResultItem,
   CaseAdvancedSearchTerms,
   caseAdvancedSearch,
-} from '@web-api/persistence/postgres/reports/caseSearch/caseAdvancedSearch';
+} from '@web-api/persistence/postgres/cases/reports/caseAdvancedSearch';
 import {
   MAX_SEARCH_RESULTS,
   US_STATES,

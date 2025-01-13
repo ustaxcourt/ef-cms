@@ -13,7 +13,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getCasesByFilters } from '@web-api/persistence/postgres/reports/caseSearch/getCasesByFilters';
+import { getCasesByFilters } from '@web-api/persistence/postgres/cases/reports/getCasesByFilters';
 
 export type CustomCaseReportFilters = {
   caseStatuses: CaseStatus[];

@@ -4,7 +4,7 @@ import {
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getBlockedCasesForTrialLocation } from '@web-api/persistence/postgres/reports/caseSearch/getBlockedCasesForTrialLocation';
+import { getBlockedCasesForTrialLocation } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
 
 /**
  * getBlockedCasesInteractor
