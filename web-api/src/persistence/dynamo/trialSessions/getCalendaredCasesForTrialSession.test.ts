@@ -1,16 +1,18 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { CASE_STATUS_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { get, queryFull } from '../../dynamodbClientService';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { get } from '../../dynamodbClientService';
 import { getCalendaredCasesForTrialSession } from './getCalendaredCasesForTrialSession';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 jest.mock('../../dynamodbClientService', () => ({
   get: jest.fn(),
   queryFull: jest.fn(),
 }));
 const getMock = get as jest.Mock;
-const queryFullMock = queryFull as jest.Mock;
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
 describe('getCalendaredCasesForTrialSession', () => {
   beforeAll(() => {
@@ -24,7 +26,7 @@ describe('getCalendaredCasesForTrialSession', () => {
       ],
     });
 
-    queryFullMock.mockReturnValue([
+    getCaseByDocketNumber.mockReturnValue([
       {
         docketNumber: MOCK_CASE.docketNumber,
         pk: `case|${MOCK_CASE.docketNumber}`,
