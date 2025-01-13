@@ -1,5 +1,5 @@
-import { DocketHeader } from '@shared/business/utilities/pdfGenerator/components/DocketHeader';
-import { PrimaryHeader } from '@shared/business/utilities/pdfGenerator/components/PrimaryHeader';
+import { ChangeOfTrialLocationDocketHeader } from '@shared/business/utilities/pdfGenerator/components/ChangeOfTrialLocationDocketHeader';
+import { OrderPrimaryHeader } from '@shared/business/utilities/pdfGenerator/components/OrderPrimaryHeader';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
 import React from 'react';
@@ -33,8 +33,8 @@ export const NoticeOfChangeOfTrialLocation = ({
 }) => {
   return (
     <div>
-      <PrimaryHeader />
-      <DocketHeader
+      <OrderPrimaryHeader />
+      <ChangeOfTrialLocationDocketHeader
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
         docketNumberWithSuffix={docketNumberWithSuffix}
@@ -67,7 +67,7 @@ export const NoticeOfChangeOfTrialLocation = ({
 
                     return <div key={prop}>{updatedTrialSession[prop]}</div>;
                   })}
-                <div>In Person</div>
+                <div style={{ fontWeight: 'bold' }}>In-Person</div>
               </td>
             </tr>
           </table>
