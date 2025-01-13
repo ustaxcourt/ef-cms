@@ -34,18 +34,3 @@ export const settings = ({
     },
   };
 };
-
-/*
-It looks like we have two analyzers. ustc_analyzer, english_exact. ustc_analyzer is unused. english_exact is using something very close to the standard analyzer. The only extra thing standard does is remove punctuation with stop filter.
-
-english_exact is specified in the docket-entry-mappings, meaning that when the documents are indexed they use this analyzer.
-
-filters remove words from analysis. So common words to remove are "if" "the" "is".
-
-For filters there are 4 specified. english, filter_shingle, filter_stemmer, ustc_stop. None of these filters are specified in a mapping, or analyzer.filter which means they are likely unused.
-
-Links: 
-Search Analyzer: https://opensearch.org/docs/latest/analyzers/search-analyzers/
-Index Analyzer: https://opensearch.org/docs/latest/analyzers/index-analyzers/
-Standard Analyzer: https://opensearch.org/docs/latest/analyzers/supported-analyzers/standard/
-*/

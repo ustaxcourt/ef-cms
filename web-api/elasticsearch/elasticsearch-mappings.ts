@@ -37,4 +37,4 @@ export const elasticsearchMappings = {
   [efcmsDocketEntryIndex]: efcmsDocketEntryMappings,
   [efcmsUserIndex]: efcmsUserMappings,
   [efcmsWorkItemIndex]: efcmsWorkItemMappings,
-} as const;
+};
