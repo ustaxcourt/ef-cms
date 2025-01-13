@@ -12,7 +12,10 @@ import {
   STATUS_REPORT_ORDERED_FOR_OPTIONS,
   TRIAL_HEARING_OPTIONS,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
-import { MOCK_CASE } from '@shared/test/mockCase';
+import {
+  MOCK_CASE,
+  MOCK_CONSOLIDATED_CASE_SUMMARY,
+} from '@shared/test/mockCase';
 import {
   formatActionsAndFilings,
   formatCalledSection,
@@ -20,13 +23,16 @@ import {
   formatJurisdictionRetained,
   formatMotions,
   formatPetitionerAppearances,
+  formatPetitioners,
   formatPretrialConference,
   formatRecalledRows,
+  formatRemoteSession,
   formatRespondentAppearances,
   formatStatusReportOrdered,
   formatStipulatedDecision,
   formatTrialBrief,
   formatTrialHearing,
+  formatWitnesses,
   getBriefDetails,
   getConsolidatedDocketNumbers,
 } from './formatMinuteSheet';
@@ -741,13 +747,114 @@ describe('formatMinuteSheet', () => {
       const aCase = {
         ...MOCK_CASE,
         consolidatedCases: [
-          { docketNumber: '123-45' },
-          { docketNumber: '234-56' },
+          { ...MOCK_CONSOLIDATED_CASE_SUMMARY, docketNumber: '123-45' },
+          { ...MOCK_CONSOLIDATED_CASE_SUMMARY, docketNumber: '234-56' },
         ],
         docketNumber: '123-45',
       };
       const result = getConsolidatedDocketNumbers(aCase);
       expect(result).toBe('123-45, 234-56');
+    });
+  });
+
+  describe('formatWitnesses', () => {
+    it('should filter out witnesses without names', () => {
+      const witnessSection = {
+        '1': { name: 'John Doe', renderKey: '1' },
+        '2': { name: '', renderKey: '2' },
+        '3': { name: 'Jane Smith', renderKey: '3' },
+      };
+      const result = formatWitnesses(witnessSection);
+      expect(result).toEqual([
+        { name: 'John Doe', renderKey: '1' },
+        { name: 'Jane Smith', renderKey: '3' },
+      ]);
+    });
+
+    it('should return empty array when no witnesses have names', () => {
+      const witnessSection = {
+        '1': { name: '', renderKey: '1' },
+        '2': { name: '', renderKey: '2' },
+      };
+      const result = formatWitnesses(witnessSection);
+      expect(result).toEqual([]);
+    });
+
+    it('should return empty array when witness section is empty', () => {
+      const witnessSection = {};
+      const result = formatWitnesses(witnessSection);
+      expect(result).toEqual([]);
+    });
+  });
+
+  describe('formatPetitioners', () => {
+    const mockPetitioner1: TPetitioner = {
+      address1: '123 Main St',
+      city: 'Somewhere',
+      contactId: '1234-5678',
+      contactType: 'primary',
+      countryType: 'domestic',
+      entityName: '',
+      isAddressSealed: false,
+      name: 'John Doe',
+      phone: '123-456-7890',
+      postalCode: '12345',
+      sealedAndUnavailable: false,
+      state: 'CA',
+    };
+
+    const mockPetitioner2: TPetitioner = {
+      address1: '456 Oak Ave',
+      city: 'Elsewhere',
+      contactId: '8765-4321',
+      contactType: 'primary',
+      countryType: 'domestic',
+      entityName: '',
+      isAddressSealed: false,
+      name: 'Jane Smith',
+      phone: '098-765-4321',
+      postalCode: '54321',
+      sealedAndUnavailable: false,
+      state: 'NY',
+    };
+
+    it('should join multiple petitioner names with commas', () => {
+      const testCase = {
+        ...MOCK_CASE,
+        petitioners: [mockPetitioner1, mockPetitioner2],
+      };
+      const result = formatPetitioners(testCase);
+      expect(result).toBe('John Doe, Jane Smith');
+    });
+
+    it('should return single petitioner name without comma', () => {
+      const testCase = {
+        ...MOCK_CASE,
+        petitioners: [mockPetitioner1],
+      };
+      const result = formatPetitioners(testCase);
+      expect(result).toBe('John Doe');
+    });
+
+    it('should return empty string when no petitioners', () => {
+      const testCase = {
+        ...MOCK_CASE,
+        petitioners: [],
+      };
+      const result = formatPetitioners(testCase);
+      expect(result).toBe('');
+    });
+  });
+
+  describe('formatRemoteSession', () => {
+    it('should return "Yes" when remote session is true', () => {
+      const result = formatRemoteSession(true);
+      expect(result).toBe('Yes');
+    });
+
+    it('should return "No" when remote session is false', () => {
+      const result = formatRemoteSession(false);
+      expect(result).toBe('No');
     });
   });
 });

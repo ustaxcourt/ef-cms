@@ -94,6 +94,22 @@ export const getConsolidatedDocketNumbers = (aCase: RawCase): string => {
     .join(', ');
 };
 
+export const formatWitnesses = (
+  witnessesSection:
+    | MinuteSheetFormState['witnessesSection']['petitionerWitnesses']
+    | MinuteSheetFormState['witnessesSection']['respondentWitnesses'],
+) => {
+  return Object.values(witnessesSection).filter(witness => !!witness.name);
+};
+
+export const formatPetitioners = (aCase: RawCase) => {
+  return aCase.petitioners.map(petitioner => petitioner.name).join(', ');
+};
+
+export const formatRemoteSession = (isRemoteSession: boolean) => {
+  return isRemoteSession ? 'Yes' : 'No';
+};
+
 export const formatCalledSection = (section: {
   date: string;
   note: string;

@@ -14,13 +14,16 @@ import {
   formatJurisdictionRetained,
   formatMotions,
   formatPetitionerAppearances,
+  formatPetitioners,
   formatPretrialConference,
   formatRecalledRows,
+  formatRemoteSession,
   formatRespondentAppearances,
   formatStatusReportOrdered,
   formatStipulatedDecision,
   formatTrialBrief,
   formatTrialHearing,
+  formatWitnesses,
   getConsolidatedDocketNumbers,
 } from '@web-api/business/useCaseHelper/trialSessionMinutes/formatMinuteSheet';
 import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
@@ -112,16 +115,10 @@ const formatMinuteSheet = ({
   trialSession: RawTrialSession;
   aCase: RawCase;
 }): FormattedMinuteSheet => {
-  const formattedDocketNumbers = getConsolidatedDocketNumbers(aCase);
-  const petitioners = aCase.petitioners
-    .map(petitioner => petitioner.name)
-    .join(', ');
+  const { docketNumberWithSuffix } = aCase;
   const docketNumbers = aCase.consolidatedCases.map(
     consolidatedCase => consolidatedCase.docketNumber,
   );
-
-  const { docketNumberWithSuffix } = aCase;
-
   const { called, notCalled, pretrialConference, recalled, trialHearing } =
     minuteSheetFormState.caseMetadataSection;
 
@@ -135,7 +132,7 @@ const formatMinuteSheet = ({
     docketNumberWithSuffix,
     docketNumbers,
     exhibits: formatExhibits(minuteSheetFormState.exhibitsSection),
-    formattedDocketNumbers,
+    formattedDocketNumbers: getConsolidatedDocketNumbers(aCase),
     judge: minuteSheetFormState.trialSessionMetadataSection.judge,
     jurisdictionRetained: formatJurisdictionRetained(
       minuteSheetFormState.jurisdictionRetainedSection,
@@ -145,22 +142,21 @@ const formatMinuteSheet = ({
     petitionerAppearances: formatPetitionerAppearances(
       minuteSheetFormState.petitionersSection,
     ),
-    petitionerWitnesses: Object.values(
+    petitionerWitnesses: formatWitnesses(
       minuteSheetFormState.witnessesSection.petitionerWitnesses,
-    ).filter(witness => !!witness.name),
-    petitioners,
+    ),
+    petitioners: formatPetitioners(aCase),
     pretrialConference: formatPretrialConference(pretrialConference),
     recalled: formatRecalledRows(recalled),
-    remoteSession: minuteSheetFormState.trialSessionMetadataSection
-      .remoteSession
-      ? 'Yes'
-      : 'No',
+    remoteSession: formatRemoteSession(
+      minuteSheetFormState.trialSessionMetadataSection.remoteSession,
+    ),
     respondentAppearances: formatRespondentAppearances(
       minuteSheetFormState.respondentsSection,
     ),
-    respondentWitnesses: Object.values(
+    respondentWitnesses: formatWitnesses(
       minuteSheetFormState.witnessesSection.respondentWitnesses,
-    ).filter(witness => !!witness.name),
+    ),
     statusReportOrdered: formatStatusReportOrdered(
       minuteSheetFormState.ordersSection.statusReportOrdered,
     ),
