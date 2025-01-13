@@ -21,7 +21,7 @@ const scriptConfig: ScriptConfig = {
   environment: {
     Password: 'DEFAULT_ACCOUNT_PASS',
     TableName: 'DESTINATION_TABLE',
-    UserPoolId: 'COGNITO_USER_POOL',
+    UserPoolId: 'USER_POOL_ID',
     elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
     env: 'ENV',
   },
