@@ -33,11 +33,9 @@ export const efcmsDocketEntryMappings = {
       type: 'keyword',
     },
     'documentContents.S': {
-      analyzer: 'english_exact',
       type: 'text',
     },
     'documentTitle.S': {
-      analyzer: 'english_exact',
       type: 'text',
     },
     'documentType.S': {

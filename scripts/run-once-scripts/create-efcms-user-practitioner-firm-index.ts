@@ -7,10 +7,7 @@ import {
 } from '../helpers/parseArgsAndEnvVars';
 import { areAllReindexTasksFinished } from '../elasticsearch/check-reindex-complete';
 import { efcmsUserMappings } from '../../web-api/elasticsearch/efcms-user-mappings';
-import {
-  esSettingsType,
-  settings,
-} from '../../web-api/elasticsearch/elasticsearch-settings';
+import { settings } from '../../web-api/elasticsearch/elasticsearch-settings';
 import { getClient } from '../../web-api/elasticsearch/client';
 
 const scriptConfig: ScriptConfig = {
@@ -36,20 +33,12 @@ const overriddenNumberOfReplicasIfNonProd: number = Number(
   overrideEsNumberOfReplicas,
 );
 const index: string = 'efcms-user-practitioner-firm';
-const efcmsUserPractitionerFirmMappings = {
-  properties: {
-    ...efcmsUserMappings.properties,
-    'firmName.S': {
-      type: 'text',
-    },
-  },
-};
-const esSettings: esSettingsType = settings({
+
+const esSettings = settings({
   environment: environmentName,
   overriddenNumberOfReplicasIfNonProd,
 });
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const client: Client = await getClient({
     elasticsearchEndpoint,
@@ -67,8 +56,12 @@ const esSettings: esSettingsType = settings({
     await client.indices.create({
       body: {
         mappings: {
-          dynamic: false,
-          ...efcmsUserPractitionerFirmMappings,
+          properties: {
+            ...efcmsUserMappings.properties,
+            'firmName.S': {
+              type: 'text',
+            },
+          },
         },
         settings: esSettings,
       },
