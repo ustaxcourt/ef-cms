@@ -51,7 +51,7 @@ export const efcmsWorkItemMappings = {
       type: 'keyword',
     },
   },
-};
+} as const;
 
 const efcmsWorkItemMappingsHash: string = createHash('md5')
   .update(JSON.stringify(efcmsWorkItemMappings), 'utf8')

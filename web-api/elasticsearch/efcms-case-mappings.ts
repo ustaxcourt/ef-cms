@@ -149,7 +149,7 @@ export const efcmsCaseMappings = {
       type: 'keyword',
     },
   },
-};
+} as const;
 
 const efcmsCaseMappingsHash: string = createHash('md5')
   .update(JSON.stringify(efcmsCaseMappings), 'utf-8')

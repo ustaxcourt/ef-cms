@@ -39,7 +39,7 @@ export const efcmsUserMappings = {
       type: 'keyword',
     },
   },
-};
+} as const;
 
 const efcmsUserMappingsHash: string = createHash('md5')
   .update(JSON.stringify(efcmsUserMappings), 'utf8')
