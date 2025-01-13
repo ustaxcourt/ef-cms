@@ -58,17 +58,24 @@ export const getDestinationTableInfo = async (): Promise<{
   }
 };
 
-// Exit if any of the provided strings are not set as environment variables
-export const requireEnvVars = (requiredEnvVars: Array<string>): void => {
+export const missingEnvironmentVariables = (
+  requiredEnvVars: string[],
+): string[] => {
   const envVars = Object.keys(process.env);
-  let missing = '';
+  const missing: string[] = [];
   for (const key of requiredEnvVars) {
     if (!envVars.includes(key) || !process.env[key]) {
-      missing += `${missing.length > 0 ? ', ' : ''}${key}`;
+      missing.push(key);
     }
   }
-  if (missing) {
-    console.error(`Missing environment variable(s): ${missing}`);
+  return missing;
+};
+
+// Exit if any of the provided strings are not set as environment variables
+export const requireEnvVars = (requiredEnvVars: string[]): void => {
+  const missing = missingEnvironmentVariables(requiredEnvVars);
+  if (missing.length > 0) {
+    console.error(`Missing environment variable(s): ${missing.join(', ')}`);
     process.exit(1);
   }
 };

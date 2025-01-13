@@ -1,23 +1,27 @@
-/**
- * This node script can be run to remove a bunch of old dynamodb records
- * which are no longer needed but are blocking our alpha -> beta migrations.
- */
+#!/usr/bin/env -S npx ts-node --transpile-only
+
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { chunk, isEmpty } from 'lodash';
 import type { TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 
-const args = process.argv.slice(2);
+const scriptConfig: ScriptConfig = {
+  description:
+    'delete-unused-dynamo-items - Deletes dynamodb records which are no longer ' +
+    'needed but are blocking alpha -> beta migrations.',
+  environment: {
+    TableName: 'SOURCE_TABLE',
+  },
+  requireActiveAwsSession: true,
+};
+const { TableName } = parseArgsAndEnvVars(scriptConfig) as {
+  TableName: string;
+};
 const CHUNK_SIZE = 25;
-
-if (args.length < 1) {
-  console.error(
-    'must provide a dynamodb table name: [efcms-dev-beta, efcms-dev-alpha, etc]',
-  );
-  process.exit(1);
-}
-
-const TableName = args[0];
 
 const dynamodb = new DynamoDBClient({
   maxAttempts: 10,
