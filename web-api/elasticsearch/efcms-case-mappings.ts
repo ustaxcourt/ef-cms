@@ -1,6 +1,7 @@
+import { Property } from '@opensearch-project/opensearch/api/_types/_common.mapping';
 import { createHash } from 'crypto';
 
-export const efcmsCaseMappings = {
+export const efcmsCaseMappings: Property = {
   properties: {
     'associatedJudge.S': {
       fields: {
@@ -149,7 +150,7 @@ export const efcmsCaseMappings = {
       type: 'keyword',
     },
   },
-} as const;
+};
 
 const efcmsCaseMappingsHash: string = createHash('md5')
   .update(JSON.stringify(efcmsCaseMappings), 'utf-8')

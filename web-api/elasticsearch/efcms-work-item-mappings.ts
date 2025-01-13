@@ -1,6 +1,7 @@
+import { Property } from '@opensearch-project/opensearch/api/_types/_common.mapping';
 import { createHash } from 'crypto';
 
-export const efcmsWorkItemMappings = {
+export const efcmsWorkItemMappings: Property = {
   properties: {
     'assigneeId.S': {
       type: 'keyword',
@@ -51,7 +52,7 @@ export const efcmsWorkItemMappings = {
       type: 'keyword',
     },
   },
-} as const;
+};
 
 const efcmsWorkItemMappingsHash: string = createHash('md5')
   .update(JSON.stringify(efcmsWorkItemMappings), 'utf8')
