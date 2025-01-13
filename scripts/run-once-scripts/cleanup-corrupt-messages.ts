@@ -1,37 +1,49 @@
-#!/usr/bin/env npx ts-node --transpile-only
+#!/usr/bin/env -S npx ts-node --transpile-only
 
-import { type ScriptConfig, parseArguments } from '../reports/reportUtils';
+import { Database } from '@web-api/database-types';
+import { Kysely } from 'kysely';
+import { RawCorrespondence } from '@shared/business/entities/Correspondence';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import {
   type ServerApplicationContext,
   createApplicationContext,
-} from '../../web-api/src/applicationContext';
-import { requireEnvVars } from '../../shared/admin-tools/util';
-import { connect } from '../../web-api/src/database';
+} from '@web-api/applicationContext';
+import { Signer } from '@aws-sdk/rds-signer';
+import { connect } from '@web-api/database';
+import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import PQueue from 'p-queue';
 import fs from 'fs';
-import { queryFull } from '../../web-api/src/persistence/dynamodbClientService';
-import { Signer } from '@aws-sdk/rds-signer';
 import path from 'path';
-import { Kysely } from 'kysely';
-import { Database } from '../../web-api/src/database-types';
-import { RawCorrespondence } from '../../shared/src/business/entities/Correspondence';
-
-requireEnvVars(['REGION', 'DB_NAME', 'DB_HOST', 'DB_USER']);
-const { DB_NAME, DB_HOST, DB_USER } = process.env;
-const DB_PORT = 5432;
 
 const scriptConfig: ScriptConfig = {
+  description:
+    'cleanup-corrupt-messages - Cleans up attachments on corrupt messages.',
+  environment: {
+    database: 'DB_NAME',
+    host: 'DB_HOST',
+    user: 'DB_USER',
+  },
   parameters: {
     liveRun: {
-      required: false,
-      type: 'boolean',
       default: false,
-      long: 'live-run',
       description:
         'If true, will proceed with removing the attachments from the impacted messages.',
+      long: 'live-run',
+      type: 'boolean',
     },
   },
+  requireActiveAwsSession: true,
 };
+const { database, host, liveRun, user } = parseArgsAndEnvVars(scriptConfig) as {
+  database: string;
+  host: string;
+  liveRun: boolean;
+  user: string;
+};
+const port = 5432;
 
 type MessageFragment = {
   attachments: any[] | undefined;
@@ -46,7 +58,7 @@ const getDocketEntryIdsByDocketNumbers = async ({
   applicationContext: ServerApplicationContext;
   docketNumbers: string[];
 }): Promise<any> => {
-  console.log(`Fetching docket entries for each docket number...`);
+  console.log('Fetching docket entries for each docket number...');
 
   const priorityQueue = new PQueue({ concurrency: 50 });
 
@@ -86,30 +98,30 @@ const getDocketEntryIdsByDocketNumbers = async ({
       );
 
       correspondenceIdsByDocketNumber[docketNumber] = correspondence.map(
-        correspondence => correspondence.correspondenceId,
+        c => c.correspondenceId,
       );
     },
   );
 
   await priorityQueue.addAll(getDocketEntriesFunctions);
-  return { docketEntryIdsByDocketNumber, correspondenceIdsByDocketNumber };
+  return { correspondenceIdsByDocketNumber, docketEntryIdsByDocketNumber };
 };
 
-const removePoisonAttachmentsFromMessages = async ({
-  messageFragments,
-  docketEntryIdsByDocketNumber,
+const removePoisonAttachmentsFromMessages = ({
   correspondenceIdsByDocketNumber,
+  docketEntryIdsByDocketNumber,
+  messageFragments,
 }: {
   messageFragments: MessageFragment[];
   docketEntryIdsByDocketNumber: Record<string, string[]>;
   correspondenceIdsByDocketNumber: Record<string, string[]>;
-}): Promise<{
+}): {
   deletedAttachmentAuditRecords: {
     messageId: string;
     docketEntryId: string;
   }[];
   updatedMessageFragments: MessageFragment[];
-}> => {
+} => {
   const updatedMessageFragments: MessageFragment[] = [];
   const deletedAttachmentAuditRecords: {
     messageId: string;
@@ -127,8 +139,8 @@ const removePoisonAttachmentsFromMessages = async ({
           )
         ) {
           deletedAttachmentAuditRecords.push({
-            messageId: message.messageId,
             docketEntryId: attachment.documentId,
+            messageId: message.messageId,
           });
           console.log(
             `Removing attachment ${attachment.documentId} from message ${message.messageId}`,
@@ -169,30 +181,28 @@ const udpateMessagesInDb = async (
     {},
   );
 
-  const { liveRun } = parseArguments(scriptConfig);
-
   const sourceSigner = new Signer({
-    hostname: DB_HOST!,
-    port: DB_PORT,
+    hostname: host,
+    port,
     region: 'us-east-1',
-    username: DB_USER!,
+    username: user,
   });
   const sourcePassword = await sourceSigner.getAuthToken();
 
   const config = {
-    database: DB_NAME,
-    host: DB_HOST,
+    database,
+    host,
     idleTimeoutMillis: 1000,
     max: 1,
     password: sourcePassword,
-    port: DB_PORT,
-    user: DB_USER,
+    port,
     ssl: {
       ca: fs.readFileSync('global-bundle.pem').toString(),
     },
+    user,
   };
 
-  const db = await connect(config);
+  const db = connect(config);
 
   console.log('Fetching messages that have not been replied to...');
   const messageFragments = await db
@@ -206,17 +216,17 @@ const udpateMessagesInDb = async (
     new Set(messageFragments.map(message => message.docketNumber)),
   );
 
-  const { docketEntryIdsByDocketNumber, correspondenceIdsByDocketNumber } =
+  const { correspondenceIdsByDocketNumber, docketEntryIdsByDocketNumber } =
     await getDocketEntryIdsByDocketNumbers({
       applicationContext,
       docketNumbers,
     });
 
   const { deletedAttachmentAuditRecords, updatedMessageFragments } =
-    await removePoisonAttachmentsFromMessages({
+    removePoisonAttachmentsFromMessages({
+      correspondenceIdsByDocketNumber,
       docketEntryIdsByDocketNumber,
       messageFragments,
-      correspondenceIdsByDocketNumber,
     });
 
   if (liveRun) {

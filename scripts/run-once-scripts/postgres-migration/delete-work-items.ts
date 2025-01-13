@@ -3,12 +3,12 @@
  * npx ts-node --transpileOnly scripts/run-once-scripts/postgres-migration/delete-work-items.ts
  */
 
-import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { getDbReader } from '../../../web-api/src/database';
-import { isEmpty } from 'lodash';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { batchDeleteDynamoItems } from './batch-delete-dynamo-items';
 import { environment } from '../../../web-api/src/environment';
+import { getDbReader } from '../../../web-api/src/database';
+import { isEmpty } from 'lodash';
 
 const workItemsPageSize = 10000;
 const dynamoDbClient = new DynamoDBClient({ region: 'us-east-1' });
@@ -41,7 +41,7 @@ async function main() {
       DeleteRequest: {
         Key: {
           pk: `work-item|${c.workItemId}`,
-          sk: `case$|{c.docketNumber}`,
+          sk: 'case$|{c.docketNumber}',
         },
       },
     }));

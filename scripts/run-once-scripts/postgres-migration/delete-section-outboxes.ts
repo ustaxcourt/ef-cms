@@ -3,8 +3,8 @@
  * npx ts-node --transpileOnly scripts/postgres/delete-section-outboxes.ts
  */
 
-import { DynamoDBDocumentClient, ScanCommand } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient, ScanCommandInput } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, ScanCommand } from '@aws-sdk/lib-dynamodb';
 import { batchDeleteDynamoItems } from './batch-delete-dynamo-items';
 import { environment } from '../../../web-api/src/environment';
 

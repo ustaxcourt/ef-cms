@@ -3,12 +3,12 @@
  * TABLE_NAME=testing npx ts-node --transpileOnly scripts/run-once-scripts/postgres-migration/delete-case-correspondences.ts
  */
 
-import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { getDbReader } from '../../../web-api/src/database';
-import { isEmpty } from 'lodash';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { batchDeleteDynamoItems } from './batch-delete-dynamo-items';
 import { environment } from '../../../web-api/src/environment';
+import { getDbReader } from '../../../web-api/src/database';
+import { isEmpty } from 'lodash';
 
 const caseCorrespondencePageSize = 10000;
 const dynamoDbClient = new DynamoDBClient({ region: 'us-east-1' });
