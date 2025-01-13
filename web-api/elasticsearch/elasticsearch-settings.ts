@@ -24,50 +24,9 @@ export const settings = ({
     actualNumberOfReplicas,
   );
 
+  // When no analyzer is specified the standard analyzer is used. https://opensearch.org/docs/latest/analyzers/index-analyzers/
   return {
     index: {
-      analysis: {
-        analyzer: {
-          english_exact: {
-            filter: ['lowercase'],
-            tokenizer: 'standard',
-          },
-          ustc_analyzer: {
-            default: {
-              type: 'simple',
-            },
-            default_search: {
-              type: 'stop',
-            },
-            filter: [
-              'lowercase',
-              'asciifolding',
-              'english',
-              'ustc_stop',
-              'filter_stemmer',
-              'filter_shingle',
-            ],
-            tokenizer: 'standard',
-          },
-        },
-        filter: {
-          english: { stopwords: '_english_', type: 'stop' },
-          filter_shingle: {
-            max_shingle_size: 3,
-            min_shingle_size: 2,
-            output_unigrams: true,
-            type: 'shingle',
-          },
-          filter_stemmer: {
-            language: '_english_',
-            type: 'porter_stem',
-          },
-          ustc_stop: {
-            stopwords: ['tax', 'court'],
-            type: 'stop',
-          },
-        },
-      },
       'mapping.total_fields.limit': '1000',
       max_result_window: 20000,
       number_of_replicas: actualNumberOfReplicas,
@@ -75,3 +34,18 @@ export const settings = ({
     },
   };
 };
+
+/*
+It looks like we have two analyzers. ustc_analyzer, english_exact. ustc_analyzer is unused. english_exact is using something very close to the standard analyzer. The only extra thing standard does is remove punctuation with stop filter.
+
+english_exact is specified in the docket-entry-mappings, meaning that when the documents are indexed they use this analyzer.
+
+filters remove words from analysis. So common words to remove are "if" "the" "is".
+
+For filters there are 4 specified. english, filter_shingle, filter_stemmer, ustc_stop. None of these filters are specified in a mapping, or analyzer.filter which means they are likely unused.
+
+Links: 
+Search Analyzer: https://opensearch.org/docs/latest/analyzers/search-analyzers/
+Index Analyzer: https://opensearch.org/docs/latest/analyzers/index-analyzers/
+Standard Analyzer: https://opensearch.org/docs/latest/analyzers/supported-analyzers/standard/
+*/
