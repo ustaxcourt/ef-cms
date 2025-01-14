@@ -253,12 +253,14 @@ const updateCasesAndSetNoticeOfChange = async ({
         return new Case(aCase, { authorizedUser });
       }),
   );
+
   const casesThatShouldReceiveNotices = calendaredCaseEntities
     .filter(aCase => !aCase.isClosed())
     .filter(
       aCase =>
         aCase.trialSessionId === updatedTrialSessionEntity.trialSessionId,
     );
+
   for (const caseEntity of casesThatShouldReceiveNotices) {
     if (shouldSetNoticeOfChangeToRemoteProceeding) {
       await applicationContext
