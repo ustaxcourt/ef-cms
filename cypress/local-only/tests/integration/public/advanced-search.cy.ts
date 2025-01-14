@@ -1,26 +1,31 @@
+import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import {
   docketRecordTable,
   enterDocumentDocketNumber,
   enterDocumentKeywordForAdvancedSearch,
-  enterPetitionerName,
   firstSearchResultJudgeField,
   navigateTo as navigateToDashboard,
   noSearchResultsContainer,
   searchForCaseByDocketNumber,
-  searchForCaseByPetitionerInformation,
   searchForDocuments,
   searchForOrderByJudge,
   searchResultsTable,
   unselectOpinionTypesExceptBench,
 } from '../../../support/pages/public/advanced-search';
+import { faker } from '@faker-js/faker';
 
 describe('Advanced search', () => {
   describe('case - by name', () => {
     it('should route to case detail when a match is found and the user clicks on the docket record link in the table', () => {
-      navigateToDashboard();
-      enterPetitionerName('Osborne');
-      searchForCaseByPetitionerInformation();
-      expect(searchResultsTable()).to.exist;
+      const name = `d'Artagnan ${faker.person.lastName()}`;
+      createAndServePaperPetition({ name }).then(({ docketNumber }) => {
+        cy.visit('/');
+        cy.get('[data-testid=petitioner-name]').type(name);
+        cy.get('[data-testid=submit-case-search-by-name-button]').click();
+        cy.get(
+          `[data-testid=advanced-case-search-result-${docketNumber}]`,
+        ).click();
+      });
     });
   });
 
