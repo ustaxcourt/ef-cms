@@ -177,6 +177,7 @@ in the global state tree
 #### 2. Get derived and computed values based on the current state tree
 
 Pros:
+
 - Automatic recalculation of derived values when dependent state changes
 - Business logic stays isolated from components
 - Computed values can be reused across components
@@ -296,10 +297,10 @@ Managing workflows with state machines offers several advantages that align well
 ### Example Implementation Using XState
 
 ```typescript
-// useFormStore.ts
+// useNameFormStore.ts
 import { create } from 'zustand'
 
-type FormState = {
+type NameFormState = {
   name: string
   setName: (name: string) => void
   reset: () => void
@@ -307,7 +308,7 @@ type FormState = {
 
 const initialState = { name: '' }
 
-export const useFormStore = create<FormState>((set) => ({
+export const useFormStore = create<NameFormState>((set) => ({
   ...initialState,
   setName: (name) => set({ name }),
   reset: () => set(initialState),
@@ -317,7 +318,7 @@ export const useFormStore = create<FormState>((set) => ({
 import { createMachine } from 'xstate'
 
 export const createFormMachine = createMachine({
-  id: 'form',
+  id: 'nameForm',
   initial: 'idle',
   states: {
     idle: {
@@ -343,7 +344,7 @@ import { useFormStore } from './useFormStore'
 import { createFormMachine } from './createFormMachine'
 
 export const useNameForm = () => {
-  const { name, setName, reset } = useFormStore()
+  const { name, setName, reset } = useFormStore();
 
   const [state, send] = useMachine(createFormMachine, {
     services: {
@@ -351,13 +352,13 @@ export const useNameForm = () => {
         // Simulate async work--in practice, this should be isolated in
         // a separate service function that isolates network calls,
         // etc.
-        await new Promise((resolve) => setTimeout(resolve, 500))
+        await new Promise((resolve) => setTimeout(resolve, 500));
       },
     },
   })
 
-  const handleChange = (value: string) => setName(value)
-  const handleSubmit = () => send('SUBMIT')
+  const handleChange = (value: string) => setName(value);
+  const handleSubmit = () => send('SUBMIT');
 
   return {
     name,
@@ -373,7 +374,13 @@ import React from 'react'
 import { useNameForm } from './useNameForm'
 
 export const NameForm: React.FC = () => {
-  const { name, isSubmitting, isSuccess, handleChange, handleSubmit } = useNameForm();
+  const {
+    name,
+    isSubmitting,
+    isSuccess,
+    handleChange,
+    handleSubmit
+  } = useNameForm();
 
   return (
     <form
@@ -397,6 +404,18 @@ export const NameForm: React.FC = () => {
 }
 ```
 
+```mermaid
+graph TD
+    NameForm[NameForm.tsx] --> useNameForm[useNameForm.ts]
+    useNameForm --> FormStore[useFormStore.tsZustand]
+    useNameForm --> FormMachine[createFormMachine.tsXState]
+
+    style NameForm fill:#fff,stroke:#333
+    style useNameForm fill:#fff,stroke:#333
+    style FormStore fill:#fff,stroke:#333
+    style FormMachine fill:#fff,stroke:#333
+```
+
 ### Pros and Cons of Using Two Separate Tools
 
 Pros:
@@ -407,6 +426,6 @@ Pros:
 
 Cons:
 
-- Requires designing an abstraction to isolate state management implementation details from components (e.g., the `useNameForm.ts` hook above)
+- Requires designing an abstraction to isolate state management implementation details from components
 - Steep learning curve requiring developer competency in two disparate tools
 - Overkill for simple workflows
