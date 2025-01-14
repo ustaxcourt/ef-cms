@@ -21,7 +21,7 @@ import { loginAsDocketClerk1 } from '../../../../helpers/authentication/login-as
 
 describe('Advanced search', () => {
   describe('Case Search By Name', () => {
-    it('should have the right order', () => {
+    it('should show order search results by [petitioner name, secondary contact name, case caption] when searching', () => {
       const nameToSearchFor = `${faker.person.firstName()} ${faker.person.lastName()}`;
       createAndServePaperPetition({ name: nameToSearchFor }).then(
         ({ docketNumber: primaryContactDocketNumber }) => {
