@@ -19,7 +19,7 @@ export type PendingItemFormatted = {
 
 export const formatPendingItem = (
   item: PendingItem,
-  { applicationContext },
+  { applicationContext }: { applicationContext: IApplicationContext },
 ): PendingItemFormatted => {
   const pendingItemWithConsolidatedFlags = applicationContext
     .getUtilities()
