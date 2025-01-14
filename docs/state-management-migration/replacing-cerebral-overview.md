@@ -10,7 +10,6 @@ This document will:
 2. Describe the challenges of migrating away from Cerebral.
 3. Describe the current design of the application's frontend state management solution.
 4. Analyze the characteristics of the current design.
-5. Explore tools that could replace Cerebral by way of nonfunctional code.
 
 ## Technical Scope
 
@@ -24,7 +23,7 @@ Several factors require moving away from Cerebral:
 2. React 19.x, the latest major version as of December, 2024, is not supported.
 3. Cerebral has poor TypeScript support.
 
-## Challenges  of Migrating from Cerebral
+## Challenges of Migrating from Cerebral
 
 There are a number of significant challenges the team will need to overcome in order to migrate off Cerebral.
 
