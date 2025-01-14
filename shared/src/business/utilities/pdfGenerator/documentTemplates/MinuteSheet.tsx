@@ -1,4 +1,4 @@
-import { FormattedMinuteSheet } from '@web-api/business/useCases/trialSessionMinutes/generateTrialSessionMinutesPdfInteractor';
+import { FormattedMinuteSheet } from '@web-api/business/useCaseHelper/trialSessionMinutes/formatMinuteSheet';
 import { MinuteSheetHeader } from '../components/MinuteSheetHeader';
 import React from 'react';
 
@@ -8,15 +8,14 @@ export const MinuteSheet = ({
 }: {
   formattedMinuteSheet: FormattedMinuteSheet;
 }) => {
-  // TODO 10419: there's something weird going on with the header here. The font seems to be more heavily weighted than other PDFs and the seal is smol.
   return (
-    <>
+    <div className="minute-sheet-pdf">
       <MinuteSheetHeader
         trialSessionLocation={formattedMinuteSheet.trialLocation}
         trialStartDate={formattedMinuteSheet.trialStartDate}
       />
-      <h1>Minutes of Proceedings</h1>
-      <div className="minute-sheet-pdf">
+      <h2>Minutes of Proceedings</h2>
+      <div className="minute-sheet-section">
         <div>
           <div>
             <strong>Docket no(s).</strong>
@@ -31,7 +30,7 @@ export const MinuteSheet = ({
         </div>
       </div>
       <hr />
-      <div className="minute-sheet-pdf">
+      <div className="minute-sheet-section">
         <div>
           {formattedMinuteSheet.judge && (
             <>
@@ -139,7 +138,7 @@ export const MinuteSheet = ({
         )}
       </div>
       <hr />
-      <div className="minute-sheet-pdf">
+      <div className="minute-sheet-section">
         {formattedMinuteSheet.petitionerAppearances.length > 0 && (
           <div>
             <div>
@@ -245,7 +244,7 @@ export const MinuteSheet = ({
         formattedMinuteSheet.trialBrief.benchOpinionRendered) && (
         <>
           <hr />
-          <div className="minute-sheet-pdf">
+          <div className="minute-sheet-section">
             {formattedMinuteSheet.trialBrief.dateSubmitted && (
               <>
                 <div>
@@ -272,7 +271,7 @@ export const MinuteSheet = ({
           formattedMinuteSheet.respondentWitnesses.length > 0)) && (
         <>
           <hr />
-          <div className="minute-sheet-pdf">
+          <div className="minute-sheet-section">
             {formattedMinuteSheet.petitionerWitnesses?.length > 0 && (
               <div>
                 <div>
@@ -321,6 +320,6 @@ export const MinuteSheet = ({
           </div>
         </>
       )}
-    </>
+    </div>
   );
 };

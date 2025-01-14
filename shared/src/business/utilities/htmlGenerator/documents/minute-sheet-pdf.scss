@@ -1,15 +1,25 @@
 .minute-sheet-pdf {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
+  font-family: 'nimbus_roman', serif;
+  font-size: 14px;
 
-.minute-sheet-pdf > div {
-  width: 48%;
-}
+  h2 {
+    font-size: 25px;
+    font-weight: bold;
+  }
 
-.exhibits-table {
-  margin-top: 2rem;
+  .minute-sheet-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .minute-sheet-section > div {
+    width: 48%;
+  }
+
+  .exhibits-table {
+    margin-top: 2rem;
+  }
 }
 
 // TODO 10419: confirm what font size we're using for body of PDF, consider setting it explictly here?

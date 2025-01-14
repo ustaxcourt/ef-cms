@@ -113,8 +113,6 @@ type KeyedPartyFormFields = KeyedEntry & {
   name: string;
   datesOfAppearance: string;
   role?: string;
-  // 10419 TODO: should there be a type dropdown to indicate whether the party
-  // is "Counsel", "Pro se", "Intervenor", or "Participant"?
 };
 
 type RenderKey = string;
@@ -137,7 +135,6 @@ type KeyedExhibitFormFields = KeyedEntry & {
 type KeyedExhibitFormFieldsByKey = Record<RenderKey, KeyedExhibitFormFields>;
 
 export type MinuteSheetFormState = {
-  // 10419 TODO: rename all first-level properties by appending "Section"
   trialSessionMetadataSection: {
     judge: string;
     trialClerk: string;
