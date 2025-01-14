@@ -21,59 +21,52 @@ import { loginAsDocketClerk1 } from '../../../../helpers/authentication/login-as
 
 describe('Advanced search', () => {
   describe('Case Search By Name', () => {
-    it('should show a match is found when the user searches by petitioner primary name', () => {
-      const name = `d'Artagnan ${faker.person.lastName()}`;
-      createAndServePaperPetition({ name }).then(({ docketNumber }) => {
-        cy.visit('/');
-        cy.get('[data-testid=petitioner-name]').type(name);
-        cy.get('[data-testid=submit-case-search-by-name-button]').click();
-        cy.get(
-          `[data-testid=advanced-case-search-result-${docketNumber}]`,
-        ).click();
-      });
-    });
+    it('should have the right order', () => {
+      const nameToSearchFor = `${faker.person.firstName()} ${faker.person.lastName()}`;
+      createAndServePaperPetition({ name: nameToSearchFor }).then(
+        ({ docketNumber: primaryContactDocketNumber }) => {
+          createAndServePaperPetitionMyselfAndSpouse({
+            secondaryContactName: nameToSearchFor,
+          }).then(({ docketNumber: secondaryContactDocketNumber }) => {
+            createAndServePaperPetition().then(
+              ({ docketNumber: caseCaptionDocketNumber }) => {
+                const updatedCaseCaption = `${nameToSearchFor}, name on caseCaption, third-best match, Petitioner`;
+                loginAsDocketClerk1();
+                goToCase(caseCaptionDocketNumber);
+                cy.get('[data-testid=tab-case-information]').click();
+                cy.get('[data-testid=menu-edit-case-context-button]').click();
+                cy.get('[data-testid=edit-case-caption-textarea]').clear();
+                cy.get('[data-testid=edit-case-caption-textarea]').type(
+                  updatedCaseCaption,
+                );
+                cy.get('[data-testid="modal-button-confirm"]').click();
+                cy.get('[data-testid="success-alert"]').should('be.visible');
 
-    it('should show a match when the user searches by case caption', () => {
-      createAndServePaperPetition().then(({ docketNumber }) => {
-        const updatedCaseCaption = faker.word.noun();
-        loginAsDocketClerk1();
-        goToCase(docketNumber);
-        cy.get('[data-testid=tab-case-information]').click();
-        cy.get('[data-testid=menu-edit-case-context-button]').click();
-        cy.get('[data-testid=edit-case-caption-textarea]').clear();
-        cy.get('[data-testid=edit-case-caption-textarea]').type(
-          updatedCaseCaption,
-        );
-        cy.get('[data-testid="modal-button-confirm"]').click();
-        cy.get('[data-testid="success-alert"]').should('be.visible');
-        cy.visit('/');
-        cy.get('[data-testid=petitioner-name]').type(updatedCaseCaption);
-        cy.get('[data-testid=submit-case-search-by-name-button]').click();
-        cy.get(
-          `[data-testid=advanced-case-search-result-${docketNumber}]`,
-        ).click();
-      });
-    });
+                cy.visit('/');
+                cy.get('[data-testid=petitioner-name]').type(nameToSearchFor);
+                cy.get(
+                  '[data-testid=submit-case-search-by-name-button]',
+                ).click();
 
-    it('should show a match is found when the user searches by secondary petitioner name', () => {
-      const secondaryContactName = `${faker.person.firstName()} ${faker.person.lastName()}`;
-      createAndServePaperPetitionMyselfAndSpouse({ secondaryContactName }).then(
-        ({ docketNumber }) => {
-          cy.visit('/');
-          cy.get('[data-testid=petitioner-name]').type(secondaryContactName);
-          cy.get('[data-testid=submit-case-search-by-name-button]').click();
-          cy.get(
-            `[data-testid=advanced-case-search-result-${docketNumber}]`,
-          ).click();
+                cy.get(
+                  //7355: Primary contact Name is most important
+                  `[data-testid=advanced-case-search-result-${primaryContactDocketNumber}]`,
+                ).find(`[data-testid=advanced-case-search-result-order-${0}]`);
+                cy.get(
+                  //7355: Secondary contact name is second most important
+                  `[data-testid=advanced-case-search-result-${secondaryContactDocketNumber}]`,
+                ).find(`[data-testid=advanced-case-search-result-order-${1}]`);
+                cy.get(
+                  //7355: Case caption is third most important
+                  `[data-testid=advanced-case-search-result-${caseCaptionDocketNumber}]`,
+                ).find(`[data-testid=advanced-case-search-result-order-${2}]`);
+              },
+            );
+          });
         },
       );
     });
   });
-
-  // Petitioner name
-  // Secondary contact name
-  // case caption
-  // petitioner name out of order
 
   describe('case - by docket number', () => {
     it('should display "No Matches Found" when case search yields no results', () => {
