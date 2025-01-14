@@ -187,8 +187,18 @@ export function createAndServePaperPetition(
     });
 }
 
-export function createAndServePaperPetitionMyselfAndSpouse() {
-  cy.login('petitionsclerk1');
+export function createAndServePaperPetitionMyselfAndSpouse(
+  {
+    secondaryContactName = 'John Spouse',
+  }: Partial<{
+    secondaryContactName: string;
+  }> = {
+    secondaryContactName: 'John Spouse',
+  },
+): Cypress.Chainable<{
+  docketNumber: string;
+}> {
+  loginAsPetitionsClerk1();
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
   cy.get('[data-testid="document-qc-nav-item"]').click();
   cy.get('[data-testid="start-a-petition"]').click();
@@ -200,7 +210,7 @@ export function createAndServePaperPetitionMyselfAndSpouse() {
   cy.get('[data-testid="contactPrimary.state"]').select('AK');
   cy.get('[data-testid="contactPrimary.postalCode"]').type('09876');
   cy.get('[data-testid="phone"]').type('3232323232');
-  cy.get('[data-testid="contact-secondary-name"]').type('John Spouse');
+  cy.get('[data-testid="contact-secondary-name"]').type(secondaryContactName);
   cy.get('[data-testid="contactSecondary.address1"]').type('address1');
   cy.get('[data-testid="contactSecondary.city"]').type('jackson');
   cy.get('[data-testid="contactSecondary.state"]').select('AL');
@@ -263,6 +273,6 @@ export function createAndServePaperPetitionMyselfAndSpouse() {
 
       cy.get('[data-testid="search-docket-number"]').click();
 
-      return cy.wrap(docketNumber);
+      return cy.wrap({ docketNumber: docketNumber! });
     });
 }

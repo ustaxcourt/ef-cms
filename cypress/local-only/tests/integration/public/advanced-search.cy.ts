@@ -1,4 +1,7 @@
-import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
+import {
+  createAndServePaperPetition,
+  createAndServePaperPetitionMyselfAndSpouse,
+} from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import {
   docketRecordTable,
   enterDocumentDocketNumber,
@@ -17,8 +20,8 @@ import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import { loginAsDocketClerk1 } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Advanced search', () => {
-  describe('case - by name', () => {
-    it('should show a match is found when the user searches by petitioner name', () => {
+  describe('Case Search By Name', () => {
+    it('should show a match is found when the user searches by petitioner primary name', () => {
       const name = `d'Artagnan ${faker.person.lastName()}`;
       createAndServePaperPetition({ name }).then(({ docketNumber }) => {
         cy.visit('/');
@@ -29,10 +32,8 @@ describe('Advanced search', () => {
         ).click();
       });
     });
-  });
 
-  describe('case - by case caption', () => {
-    it('should show a match wen the user searches by case caption', () => {
+    it('should show a match when the user searches by case caption', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
         const updatedCaseCaption = faker.word.noun();
         loginAsDocketClerk1();
@@ -53,7 +54,26 @@ describe('Advanced search', () => {
         ).click();
       });
     });
+
+    it('should show a match is found when the user searches by secondary petitioner name', () => {
+      const secondaryContactName = `${faker.person.firstName()} ${faker.person.lastName()}`;
+      createAndServePaperPetitionMyselfAndSpouse({ secondaryContactName }).then(
+        ({ docketNumber }) => {
+          cy.visit('/');
+          cy.get('[data-testid=petitioner-name]').type(secondaryContactName);
+          cy.get('[data-testid=submit-case-search-by-name-button]').click();
+          cy.get(
+            `[data-testid=advanced-case-search-result-${docketNumber}]`,
+          ).click();
+        },
+      );
+    });
   });
+
+  // Petitioner name
+  // Secondary contact name
+  // case caption
+  // petitioner name out of order
 
   describe('case - by docket number', () => {
     it('should display "No Matches Found" when case search yields no results', () => {
