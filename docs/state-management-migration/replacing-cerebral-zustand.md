@@ -11,7 +11,7 @@ This document contains an example design of how Zustand could be used to handle 
 
 ## Example Implementation
 
-Note: This chapter provides a stripped-down reference implementation to demonstrate core concepts. The code prioritizes clarity over production concerns like testing, error boundaries, etc.
+Note: This document provides a stripped-down reference implementation to demonstrate core concepts. The code prioritizes clarity over production concerns like testing, error boundaries, etc.
 
 ```typescript
 // nameFormStore.ts
