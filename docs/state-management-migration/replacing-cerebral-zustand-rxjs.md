@@ -9,7 +9,7 @@ This document contains an example design of how Zustand can be used to handle st
 
 ## Example Implementation using RxJS
 
-Note: This chapter provides a stripped-down reference implementation to demonstrate core concepts. The code prioritizes clarity over production concerns like testing, error boundaries, etc.
+Note: This document provides a stripped-down reference implementation to demonstrate core concepts. The code prioritizes clarity over production concerns like testing, error boundaries, etc.
 
 ```typescript
 // nameFormStore.ts
