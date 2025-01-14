@@ -65,5 +65,5 @@ export const filterCaseSearchResultsNotAccessibleToUser = <T>(
       ) ||
       isAssociatedUser({ caseRaw: searchResult, user: currentUser }) ||
       isAuthorized(currentUser, ROLE_PERMISSIONS.VIEW_SEALED_CASE),
-  ) as T[]; // 10502 TODO: I don't think we even need to construct a case entity here, which we were doing before
+  ) as T[];
 };

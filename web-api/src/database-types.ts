@@ -42,19 +42,11 @@ export type MessageKysely = Selectable<MessageTable>;
 export type NewMessageKysely = Insertable<MessageTable>;
 export type UpdateMessageKysely = Updateable<MessageTable>;
 
-// 10502 TODO: I have added | null to optional dates because otherwise an undefined date does not update postgres
-// (e.g., if sealedDate exists for a case in the db, it will still exist even if we update with a rawCase that has sealedDate = undefined)
-// Is there a better way to handle this?
 export interface CaseTable {
-  // archivedCorrespondences?: any[];
-  // archivedDocketEntries?: RawDocketEntry[];
-  // consolidatedCases: RawConsolidatedCaseSummary[] = []
-  // irsPractitioners?: any[];
-  // privatePractitioners?: any[];
   associatedJudge?: string;
   associatedJudgeId?: string;
   automaticBlocked?: boolean;
-  automaticBlockedDate?: Date | null; // do we need this and blockedDate?
+  automaticBlockedDate?: Date | null;
   automaticBlockedReason?: string;
   blocked?: boolean;
   blockedDate?: Date | null;
@@ -84,7 +76,7 @@ export interface CaseTable {
   judgeUserId?: string;
   leadDocketNumber?: string | null;
   litigationCosts?: number;
-  mailingDate?: string; // this seems like a display field more than an actual date
+  mailingDate?: string;
   noticeOfAttachments?: boolean;
   noticeOfTrialDate?: Date | null;
   orderDesignatingPlaceOfTrial?: boolean;
@@ -148,7 +140,6 @@ export type NewWorkItemKysely = Insertable<WorkItemTable>;
 export type UpdateWorkItemKysely = Updateable<WorkItemTable>;
 
 export interface PetitionerOnCaseTable {
-  // Once user table is created, maybe an optional foreign key to that?
   additionalName?: string;
   contactType: string;
   docketNumber: string;
@@ -159,7 +150,7 @@ export interface PetitionerOnCaseTable {
   paperPetitionEmail?: string;
   placeOfLegalResidence?: string;
   sealedAndUnavailable?: boolean;
-  secondaryName?: string; // how is this different from additional name?
+  secondaryName?: string;
   serviceIndicator?: string;
   title?: string;
 

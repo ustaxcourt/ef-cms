@@ -133,7 +133,6 @@ function constructCaseForUser({
   return new PublicCase(rawCase, { authorizedUser: user });
 }
 
-// 10502 TODO: Move onto constructors?
 export const decorateForCaseStatus = (caseRecord: RawCase) => {
   caseRecord.canAllowDocumentService =
     canAllowDocumentServiceForCase(caseRecord);

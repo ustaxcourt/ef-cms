@@ -13,17 +13,12 @@ import {
   mockOpenCasesReceivedOnJulyFourthSearchResult2,
   mockOpenCasesReceivedOnJulyFourthSearchResults,
   mockPractitionerRoleAggregationResult,
-  mockWorkItemSearchResult,
   openCasesReceivedOnJulyFourthSearchParameters,
 } from './searchClient.test.constants';
 import { formatDocketEntryResult } from './helpers/formatDocketEntryResult';
-import { formatWorkItemResult } from './helpers/formatWorkItemResult';
 
 jest.mock('./helpers/formatDocketEntryResult', () => ({
   formatDocketEntryResult: jest.fn(),
-}));
-jest.mock('./helpers/formatWorkItemResult.ts', () => ({
-  formatWorkItemResult: jest.fn(),
 }));
 
 describe('searchClient', () => {
@@ -402,22 +397,6 @@ describe('searchClient', () => {
         1,
       );
       expect(formatDocketEntryResult).toHaveBeenCalledTimes(1);
-    });
-
-    it('should format and return the list of results when they are work item search results', async () => {
-      applicationContext
-        .getSearchClient()
-        .search.mockReturnValue(mockWorkItemSearchResult);
-
-      await search({
-        applicationContext,
-        searchParameters: {},
-      });
-
-      expect(applicationContext.getSearchClient().search).toHaveBeenCalledTimes(
-        1,
-      );
-      expect(formatWorkItemResult).toHaveBeenCalledTimes(1);
     });
   });
 });
