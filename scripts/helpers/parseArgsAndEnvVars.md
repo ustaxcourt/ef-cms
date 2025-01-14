@@ -33,7 +33,7 @@ const scriptConfig: ScriptConfig = {
 And then elsewhere in the script you can get the values from the argument parser thusly:
 
 ```typescript
-const { eventCode, fiscal, verbose, year } = parseArguments(scriptConfig);
+const { eventCode, fiscal, verbose, year } = parseArgsAndEnvVars(scriptConfig);
 ```
 
 ### In Action
