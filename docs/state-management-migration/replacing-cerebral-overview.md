@@ -38,8 +38,8 @@ This section describes the current architectural principles for state management
 
 - All state lives in a single state tree: there is as little component-specific state as possible
 - React components are strictly presentational where possible: "fancy HTML"
-- Event handlers delegate to Cerebral "sequences" for all business logic
-- These "sequences" comprise more granular "actions" that can be:
+- Event handlers delegate to sequences for all business logic
+- These sequences comprise granular actions that can be:
     - Chained together
     - Pass data along as they execute
     - Branch based on results of prior actions
