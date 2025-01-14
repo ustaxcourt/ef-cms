@@ -1,17 +1,14 @@
 import { PendingItem } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
+import { formatPendingItem } from '@shared/business/utilities/formatPendingItem';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setPendingItemsAction = ({
-  applicationContext,
-
   props,
   store,
 }: ActionProps<{ pendingItems: PendingItem[] }>) => {
   const { pendingItems } = props;
   const formattedPendingItems = pendingItems.map(item =>
-    applicationContext
-      .getUtilities()
-      .formatPendingItem(item, { applicationContext }),
+    formatPendingItem(item),
   );
 
   store.set(state.pendingReports.pendingItems, formattedPendingItems);
