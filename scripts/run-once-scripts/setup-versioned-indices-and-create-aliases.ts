@@ -1,19 +1,31 @@
 import { Client } from '@opensearch-project/opensearch';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { areAllReindexTasksFinished } from '../elasticsearch/check-reindex-complete';
 import { baseAliases } from '../../web-api/elasticsearch/elasticsearch-aliases';
 import { getClient } from '../../web-api/elasticsearch/client';
 import { reindexIfNecessary } from '../elasticsearch/reindex.helpers';
-import { requireEnvVars } from '../../shared/admin-tools/util';
 import { setupAliases } from '../../web-api/elasticsearch/elasticsearch-alias-settings.helpers';
 import { setupIndexes } from '../../web-api/elasticsearch/elasticsearch-index-settings.helpers';
 
-requireEnvVars(['ENV', 'ELASTICSEARCH_ENDPOINT']);
+const scriptConfig: ScriptConfig = {
+  description:
+    'setup-versioned-indices-and-create-aliases - Creates new versioned indices, indexes ' +
+    'them, deletes the source indices, and creates aliases with the source names.',
+  environment: {
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+    environmentName: 'ENV',
+  },
+  requireActiveAwsSession: true,
+};
+const { elasticsearchEndpoint, environmentName } = parseArgsAndEnvVars(
+  scriptConfig,
+) as { elasticsearchEndpoint: string; environmentName: string };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const elasticsearchEndpoint = process.env.ELASTICSEARCH_ENDPOINT!;
-  const environmentName = process.env.ENV!;
-
   const client: Client = await getClient({
     elasticsearchEndpoint,
     environmentName,
