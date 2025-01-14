@@ -1,3 +1,4 @@
+import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import { search } from '../searchClient';
 
 export const getCaseDeadlinesByDateRange = async ({
@@ -42,7 +43,7 @@ export const getCaseDeadlinesByDateRange = async ({
       ],
     },
     index: 'efcms-case-deadline',
-    size: 10000,
+    size: MAX_ELASTICSEARCH_PAGINATION,
   };
 
   const { results } = await search({

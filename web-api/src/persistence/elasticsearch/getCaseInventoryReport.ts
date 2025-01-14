@@ -1,17 +1,7 @@
 import { CASE_INVENTORY_PRINT_REPORT_MAX_SIZE } from '@shared/business/entities/EntityConstants';
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { search } from './searchClient';
-/**
- * getCaseInventoryReport
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.associatedJudge the optional judge filter
- * * @param {number} providers.from the item index to start from
- * @param {number} providers.pageSize the number of items to retrieve
- * @param {string} providers.status the optional status filter
- * @returns {object} the items found and the total count
- */
+
 export const getCaseInventoryReport = async ({
   applicationContext,
   associatedJudge,

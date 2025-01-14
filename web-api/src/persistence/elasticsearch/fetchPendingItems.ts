@@ -1,3 +1,4 @@
+import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import {
   PendingItem,
   pendingItemCaseSource,
@@ -93,7 +94,7 @@ export const fetchPendingItems = async ({
       ],
     },
     index: 'efcms-docket-entry',
-    size: 10000,
+    size: MAX_ELASTICSEARCH_PAGINATION,
   };
 
   const { results } = await search({
