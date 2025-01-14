@@ -1,34 +1,43 @@
-# Migrating From Cerebral
+# Replacing Cerebral: Current Architecture and Alternative Approaches
 
-## Project Description
+## Overview
 
-The DAWSON engineering team needs to migrate from the no-longer-maintained Cerebral state management library to some better-maintained library. This is a tricky endeavor for a number of reasons, some of which are orthogonal (that is, they represent distinct challenges that don't necessarily intersect).
+The DAWSON engineering team needs to migrate from the no-longer-maintained Cerebral state management library to some better-maintained library. This is a tricky endeavor for a number of reasons, some of which are orthogonal (i.e., they represent distinct challenges that don't necessarily intersect).
 
 This document will:
 
-1. Describe the circumstances that require a migration away from Cerebral
-2. Describe the current design of the application
-3. Discuss each problem area first in isolation, then in context
-4. Put forth some ideas for successful migration
-5. Share detailed implementation approaches for feedback
-
-## Circumstances Requiring Migration
-
-Several factors require moving away from Cerebral:
-
-1. Cerebral is no longer actively maintained
-2. React 19.x, the latest major version as of December, 2024, is not supported
-3. Cerebral has poor TypeScript support
+1. Describe the circumstances that require a migration away from Cerebral.
+2. Describe the challenges of migrating away from Cerebral.
+3. Describe the current design of the application's frontend state management solution.
+4. Analyze the characteristics of the current design.
+5. Explore tools that could replace Cerebral by way of nonfunctional code.
 
 ## Technical Scope
 
 This document focuses on state management within our single-page application (SPA) running in the browser. Server-side considerations and other system components are out of scope.
 
+## Circumstances Requiring Migration
+
+Several factors require moving away from Cerebral:
+
+1. Cerebral is no longer actively maintained.
+2. React 19.x, the latest major version as of December, 2024, is not supported.
+3. Cerebral has poor TypeScript support.
+
+## Challenges  of Migrating from Cerebral
+
+There are a number of significant challenges the team will need to overcome in order to migrate off Cerebral.
+
+1. Any React component that interacts with state in the application is wrapped in a call to the Cerebral `connect` function. This tightly couples presentational concerns with Cerebral.
+2. Workflows triggered by event handlers in components that work with Cerebral state are modeled using Cerebral sequences and actions. This tightly couples business processes to Cerebral.
+
+**Note**: Throughout this document, the unquoted terms "sequence" and "action" refer specifically to _Cerebral sequences_ and _Cerebral actions_. These are fundamental abstractions provided by Cerebral.
+
 ## Current Design
 
-The driving architectural principles for state management in this application are:
+This section describes the current architectural principles for state management in DAWSON:
 
-- All state lives in a single state tree: there is no component-specific state
+- All state lives in a single state tree: there is as little component-specific state as possible
 - React components are strictly presentational where possible: "fancy HTML"
 - Event handlers delegate to Cerebral "sequences" for all business logic
 - These "sequences" comprise more granular "actions" that can be:
@@ -36,11 +45,9 @@ The driving architectural principles for state management in this application ar
     - Pass data along as they execute
     - Branch based on results of prior actions
 
-**Note**: Throughout this document, the unquoted terms "sequence" and "action" refer specifically to _Cerebral sequences_ and _Cerebral actions_. These are fundamental abstractions provided by Cerebral.
-
 ### Example Implementation
 
-Let's look at a simple form that demonstrates how Cerebral is used in DAWSON:
+Here is a simple form that demonstrates how Cerebral is used in DAWSON:
 
 ```tsx
 // NameForm.tsx
@@ -138,26 +145,73 @@ And set state like this:
 
 `store.set(state.someProperty, 'someValue');`
 
-### Characteristics of Current Implementation
+### Characteristics of Current Design
 
 DAWSON uses Cerebral to:
 
 1. Get and set state on a single state tree
 2. Get derived and computed values based on the current state tree
-3. Orchestrate workflows triggered by event handlers
+3. Declaratively define workflows that are triggered by event handlers
 
 These are the primary technical use cases we need to account for when considering how to replace Cerebral.
 
-## Paths Forward
+### Ramifications of Current Design
 
-Two possible approaches for migrating away from Cerebral are:
+Each way that Cerebral satisfies the characteristics above comes with distinct advantages and limitations that inform the selection of replacement tools.
 
-1. Direct migration to Zustand
-2. Workflow management using XState, in conjunction with Zustand
+#### 1. Get and set state on a single state tree
 
-Let's examine each approach.
+Pros:
 
-## 1. Direct Migration to Zustand With Bespoke Workflows
+- Predictable state updates through a single source of truth
+- Simple state debugging since all data flows through one tree
+- Simple mental model
+
+Cons:
+
+- Complex state shape becomes difficult to maintain as application grows
+- State data relevant only to a specific component could be deeply nested
+in the global state tree
+- TypeScript types become unwieldy for deeply nested state
+
+#### 2. Get derived and computed values based on the current state tree
+
+Pros:
+- Automatic recalculation of derived values when dependent state changes
+- Business logic stays isolated from components
+- Computed values can be reused across components
+
+Cons:
+
+- Computed values can create hidden dependencies
+- Performance overhead from unnecessary recalculations
+
+#### 3. Orchestrate workflows triggered by event handlers
+
+Pros:
+
+- Clear separation between UI components and business logic
+- Reusable sequences can be composed from smaller actions
+- Declarative branching based on action results
+
+Cons:
+
+- Tight coupling to Cerebral's sequence/action model
+- Complex workflows become difficult to debug
+- Testing requires mocking Cerebral's infrastructure
+
+***
+
+## Possible Paths Forward
+
+The tool or tools that replace Cerebral will need to account both for both:
+
+- Traditional get/set/derive state access patterns
+- Workflow orchestration of some sort
+
+## Direct Migration to Zustand With Bespoke Workflows
+
+This section contains an example design of how Zustand could be used to handle state access, while workflows are simply imperative functions with conditional logic.
 
 ### Example Implementation
 
@@ -187,7 +241,13 @@ export const NameForm: React.FC = () => {
   const { name, setName, resetForm } = useNameFormStore();
 
   const handleSubmit = (e: React.FormEvent) => {
+    // In a practical application, the workflow logic in this
+    // callback would be extracted into its own routine. The
+    // event handler in this component could pass user input to
+    // that routine. This would ensure that business processes
+    // are modeled outside of the context of a React component.
     e.preventDefault();
+
     if (name.trim()) {
       alert(`Name submitted: ${name}`);
       resetForm();
@@ -209,36 +269,31 @@ export const NameForm: React.FC = () => {
 };
 ```
 
-### Pros and Cons of Direct Migration
+### Pros and Cons of Bespoke Workflows
 
 Pros:
 
 - Simple mental model
-- Minimal learning curve
-- Quick to implement
-- Good TypeScript support
-- Active maintenance
+- Relatively small learning curve
+- Quick to implement for simple workflows
 
 Cons:
 
-- Loss of workflow orchestration
-- More component-level logic
-- Manual error handling
-- Less predictable state updates
-- Harder to test complex flows
+- Loss of declarative workflow orchestration
+- Manual error handling in workflows
+- Potentially very difficult to implement for complex workflows
 
-## 2. Workflow Abstraction Using State Machines
+## Use Two Tools in Conjunction to Replace Cerebral
 
 ### Why Consider This Approach?
 
 Managing workflows with state machines offers several advantages that align well with our migration needs:
 
-1. **Declarative Workflows**: Similar to Cerebral's sequences, workflows can be defined declaratively
-3. **Type Safety**: First-class TypeScript support
-4. **Testing**: Workflows can be tested in isolation
-5. **Active Maintenance**: Well-maintained libraries available (e.g., XState)
+1. **Declarative Workflows**: Similar to Cerebral's sequences, workflows can be defined declaratively.
+2. **Type Safety**: TypeScript support.
+3. **Testing**: Workflows can be tested in isolation.
 
-### Implementation Example
+### Example Implementation Using XState
 
 ```typescript
 // useFormStore.ts
@@ -342,51 +397,16 @@ export const NameForm: React.FC = () => {
 }
 ```
 
-### Pros and Cons of Using XState
+### Pros and Cons of Using Two Separate Tools
 
 Pros:
 
-- **Declarative Workflows**: Intuitive and familiar, similar to Cerebral's sequences.
-- **Type Safety**: First-class support for TypeScript ensures robust typing.
-- **Testing**: Isolated workflows simplify unit and integration testing.
-- **Visualization**: Built-in tools enhance debugging and understanding of state transitions.
-- **Active Maintenance**: Well-maintained libraries with strong community support and documentation.
+- Declarative approach is similar to Cerebral's sequences
+- Workflows with a great deal of complexity are easier to build
+- Isolated workflows could be unit tested independently
 
 Cons:
 
-- **Learning Curve**: Requires understanding state machine concepts and XState-specific APIs.
-- **Overhead**: May be overkill for simpler workflows or smaller projects.
-- **Complexity**: Additional abstraction could make debugging harder if not well-documented.
-
-## Migration Strategy
-
-Given the complexity of migrating from Cerebral to a new state management solution, the strategy should prioritize incremental changes to minimize disruption and ensure business continuity. Below are the proposed steps for the migration:
-
-### 1. **Preparation Phase**
-
-- **Audit the Codebase**: Identify all components and modules dependent on Cerebral, focusing on sequences, state access patterns, and computed values.
-- **Choose a Replacement**: Decide on the primary replacement for Cerebral based on team input and project requirements. (E.g., Zustand + XState or Zustand alone.)
-- **Setup New Tools**: Integrate the chosen libraries (e.g., Zustand, XState) into the project and configure basic scaffolding, such as a global state store and example workflows.
-
-### 2. **Prototyping and Validation**
-
-- **Prototype Key Features**: Re-implement a few critical workflows and components using the new state management solution to validate feasibility and ergonomics.
-- **Gather Feedback**: Solicit team feedback to identify pain points and refine the approach before committing to a broader rollout.
-
-### 3. **Incremental Migration**
-
-- **Module-Level Replacement**: Migrate modules one at a time, starting with low-risk or isolated features. Replace Cerebral sequences with equivalent workflows in XState (or simple Zustand actions where appropriate).
-- **Maintain Backward Compatibility**: Create adapters or shims, if necessary, to allow Cerebral and the new state management library to coexist temporarily.
-- **Monitor Performance and Bugs**: Carefully observe the impact on performance and track bugs during the migration.
-
-### 4. **Full Migration**
-
-- **Deprecate Cerebral**: Gradually remove all dependencies on Cerebral, ensuring that all components and workflows are fully migrated.
-- **Comprehensive Testing**: Perform extensive unit, integration, and end-to-end testing to validate the migrated system.
-- **Documentation Update**: Update internal documentation to reflect the new state management approach, including usage patterns and best practices.
-
-### 5. **Post-Migration Cleanup**
-
-- **Remove Legacy Code**: Eliminate all remaining Cerebral-specific code and configurations.
-- **Optimize**: Refactor and optimize the newly migrated code to fully leverage the benefits of the chosen state management tools.
-- **Retrospective**: Conduct a retrospective to document lessons learned and areas for improvement in similar migrations.
+- Requires designing an abstraction to isolate state management implementation details from components (e.g., the `useNameForm.ts` hook above)
+- Steep learning curve requiring developer competency in two disparate tools
+- Overkill for simple workflows
