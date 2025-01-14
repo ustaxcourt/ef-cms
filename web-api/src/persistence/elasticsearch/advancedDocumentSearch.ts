@@ -1,11 +1,11 @@
 import { DocketEntryMapping } from '../../../elasticsearch/index-types';
 import { MAX_SEARCH_CLIENT_RESULTS } from '../../../../shared/src/business/entities/EntityConstants';
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
-import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { flatMap } from 'lodash';
 import { getDbReader } from '@web-api/database';
 import { getSealedQuery } from './advancedDocumentSearchHelpers/getSealedQuery';
 import { getSortQuery } from './advancedDocumentSearchHelpers/getSortQuery';
+import { roundDateDownToNearestHour } from '@shared/business/utilities/DateHandler';
 import { search } from './searchClient';
 import { sql } from 'kysely';
 
@@ -192,7 +192,7 @@ export const advancedDocumentSearch = async ({
           subQuery = subQuery.where(
             'd.filingDate',
             '>=',
-            calculateDate({ dateString: startDate }),
+            roundDateDownToNearestHour(startDate),
           );
         }
 
@@ -200,7 +200,7 @@ export const advancedDocumentSearch = async ({
           subQuery = subQuery.where(
             'd.filingDate',
             '<=',
-            calculateDate({ dateString: endDate }),
+            roundDateDownToNearestHour(endDate),
           );
         }
 

@@ -1,4 +1,4 @@
-import { Kysely } from 'kysely';
+import { CompiledQuery, Kysely } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
@@ -59,6 +59,10 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('trialTime', 'varchar')
     .addColumn('useSameAsPrimary', 'boolean')
     .execute();
+
+  await db.executeQuery(
+    CompiledQuery.raw('CREATE EXTENSION IF NOT EXISTS pg_trgm;'),
+  );
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
@@ -118,4 +122,6 @@ export async function down(db: Kysely<any>): Promise<void> {
     .dropColumn('trialTime')
     .dropColumn('useSameAsPrimary')
     .execute();
+
+  await db.executeQuery(CompiledQuery.raw('DROP EXTENSION IF EXISTS pg_trgm;'));
 }

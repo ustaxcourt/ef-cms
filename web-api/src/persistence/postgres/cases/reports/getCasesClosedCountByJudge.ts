@@ -1,7 +1,7 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { CasesClosedReturnType } from '@web-api/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor';
-import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getDbReader } from '@web-api/database';
+import { roundDateDownToNearestHour } from '@shared/business/utilities/DateHandler';
 
 type ClosedCaseResult = {
   status: string;
@@ -17,14 +17,6 @@ export const getCasesClosedCountByJudge = async ({
   judges: string[];
   startDate: string;
 }): Promise<CasesClosedReturnType> => {
-  const roundDateDownToNearestHour = (isoDateString: string) => {
-    const formattedDate = calculateDate({ dateString: isoDateString });
-    formattedDate.setMinutes(0);
-    formattedDate.setSeconds(0);
-    formattedDate.setMilliseconds(0);
-    return formattedDate;
-  };
-
   const casesAggregatedByStatus: ClosedCaseResult[] = await getDbReader(
     async reader => {
       let query = reader.selectFrom('dwCase');

@@ -12,12 +12,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('determinationTotalPenalties', 'decimal')
     .addColumn('determinationDeficiencyAmount', 'decimal')
     .addColumn('lastDateOfPeriod', 'timestamptz')
-    .addForeignKeyConstraint(
-      'case_statistic_to_case_fk',
-      ['docketNumber'],
-      'dwCase',
-      ['docketNumber'],
-    )
     .execute();
 
   await db.schema
@@ -27,12 +21,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('penaltyAmount', 'decimal')
     .addColumn('penaltyId', 'varchar', col => col.primaryKey())
     .addColumn('penaltyType', 'varchar')
-    .addForeignKeyConstraint(
-      'statistic_penalty_to_case_statistic_fk',
-      ['statisticId'],
-      'dwCaseStatistic',
-      ['statisticId'],
-    )
     .execute();
 }
 

@@ -54,30 +54,28 @@ export const caseAdvancedSearch = async ({
       // Get all cases, aggregating petitioner names and case caption data
       .with('cases', db =>
         db
-          .selectFrom('dwCase as case')
+          .selectFrom('dwCase as c')
           .leftJoin(
-            'dwPetitionerOnCase as petitioner',
-            'case.docketNumber',
-            'petitioner.docketNumber',
+            'dwPetitionerOnCase as p',
+            'c.docketNumber',
+            'p.docketNumber',
           )
           .select([
-            'case.docketNumber',
-            'case.receivedAt',
-            'case.docketNumberSuffix',
-            'case.caption',
-            'case.isSealed',
-            'case.partyType',
-            'case.sealedDate',
-            'case.status',
-            sql<string>`string_agg("petitioner".name, ', ') || ' '`.as(
-              'nameToMatch',
-            ),
-            sql<string[]>`array_agg("petitioner".state)`.as('petitionerStates'),
-            sql<string[]>`array_agg("petitioner".country_type)`.as(
+            'c.docketNumber',
+            'c.receivedAt',
+            'c.docketNumberSuffix',
+            'c.caption',
+            'c.isSealed',
+            'c.partyType',
+            'c.sealedDate',
+            'c.status',
+            sql<string>`string_agg("p".name, ', ') || ' '`.as('nameToMatch'),
+            sql<string[]>`array_agg("p".state)`.as('petitionerStates'),
+            sql<string[]>`array_agg("p".country_type)`.as(
               'petitionerCountryTypes',
             ),
           ])
-          .groupBy(['case.docketNumber']),
+          .groupBy(['c.docketNumber']),
       )
       // Weight matches of our search string with petitioner names (high weight) and case captions (low weight)
       .with('cases_with_scores', db =>

@@ -29,16 +29,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('phone', 'varchar', col => col.notNull())
     .addColumn('postalCode', 'varchar', col => col.notNull())
     .addColumn('state', 'varchar', col => col.notNull())
-    .addPrimaryKeyConstraint('pk_user_case_mapping', [
-      'docketNumber',
-      'contactId',
-    ])
-    .addForeignKeyConstraint(
-      'user_case_to_case_fk',
-      ['docketNumber'],
-      'dwCase',
-      ['docketNumber'],
-    )
+    .addPrimaryKeyConstraint('pkUserCaseMapping', ['docketNumber', 'contactId'])
     .execute();
 }
 
