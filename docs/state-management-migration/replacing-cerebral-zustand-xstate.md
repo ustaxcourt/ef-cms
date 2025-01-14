@@ -10,7 +10,7 @@ This document contains an example design of how Zustand could be used to handle 
 ## Example Implementation using XState
 
 ```typescript
-// useNameFormStore.ts
+// nameFormStore.ts
 import { create } from 'zustand'
 
 type NameFormState = {
@@ -52,7 +52,7 @@ export const nameFormMachine = createMachine({
 
 // useNameForm.ts
 import { useMachine } from '@xstate/react'
-import { useNameFormStore } from './useNameFormStore'
+import { useNameFormStore } from './nameFormStore'
 import { nameFormMachine } from './nameFormMachine'
 
 export const useNameForm = () => {
@@ -119,8 +119,8 @@ export const NameForm: React.FC = () => {
 ```mermaid
 graph TD
     NameForm[NameForm.tsx] --> useNameForm[useNameForm.ts]
-    useNameForm --> NameFormStore[useNameFormStore.tsZustand]
-    useNameForm --> NameFormMachine[nameFormMachine.tsXState]
+    useNameForm --> NameFormStore[nameFormStore.ts (Zustand)]
+    useNameForm --> NameFormMachine[nameFormMachine.ts (XState)]
 
     style NameForm fill:#fff,stroke:#333
     style useNameForm fill:#fff,stroke:#333
