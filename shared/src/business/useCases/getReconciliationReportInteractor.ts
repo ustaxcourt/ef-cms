@@ -1,17 +1,17 @@
-import { DocketEntryDynamoRecord } from '../../../../web-api/src/persistence/dynamo/dynamoTypes';
+import { DocketEntryDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import {
   FORMATS,
   formatNow,
   isValidDateString,
   isValidReconciliationDate,
   normalizeIsoDateRange,
-} from '../../business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import { InvalidRequest } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
-import { ReconciliationReportEntry } from '../entities/ReconciliationReportEntry';
+} from '@shared/authorization/authorizationClientService';
+import { ReconciliationReportEntry } from '@shared/business/entities/ReconciliationReportEntry';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCasesMetadataByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
@@ -90,18 +90,11 @@ export const getReconciliationReportInteractor = async (
   return report;
 };
 
-/**
- * assignCaseCaptionFromPersistence
- *  modifies docket entries by reference
- *
- * @param {object} applicationContext the application context
- * @param {string} docketEntries the docketEntries to assign case captions
- */
 const assignCaseCaptionFromPersistence = async (
-  docketEntries: DocketEntryDynamoRecord,
+  docketEntries: (DocketEntryDynamoRecord & { caseCaption?: string })[],
 ) => {
   const docketNumbers = docketEntries.map(e => {
-    const docketNumber = e.docketNumber || e.pk.substr(e.pk.indexOf('|') + 1);
+    const docketNumber = e.docketNumber || e.pk.slice(e.pk.indexOf('|') + 1);
     e.docketNumber = docketNumber;
     return e.docketNumber;
   });
@@ -111,10 +104,9 @@ const assignCaseCaptionFromPersistence = async (
     throw new Error('No cases found for the given docket numbers');
   }
 
-  // 10502 TODO: Fix type error
   docketEntries.forEach(docketEntry => {
     docketEntry.caseCaption = casesDetails.find(
       detail => detail.docketNumber === docketEntry.docketNumber,
-    ).caseCaption;
+    )?.caseCaption;
   });
 };
