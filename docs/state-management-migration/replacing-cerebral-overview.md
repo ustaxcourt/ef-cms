@@ -1,4 +1,4 @@
-# Replacing Cerebral: Current Architecture and Alternative Approaches
+# Replacing Cerebral: Overview of Current Architecture
 
 ## Overview
 
