@@ -13,14 +13,40 @@ import {
   unselectOpinionTypesExceptBench,
 } from '../../../support/pages/public/advanced-search';
 import { faker } from '@faker-js/faker';
+import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
+import { loginAsDocketClerk1 } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Advanced search', () => {
   describe('case - by name', () => {
-    it('should route to case detail when a match is found and the user clicks on the docket record link in the table', () => {
+    it('should show a match is found when the user searches by petitioner name', () => {
       const name = `d'Artagnan ${faker.person.lastName()}`;
       createAndServePaperPetition({ name }).then(({ docketNumber }) => {
         cy.visit('/');
         cy.get('[data-testid=petitioner-name]').type(name);
+        cy.get('[data-testid=submit-case-search-by-name-button]').click();
+        cy.get(
+          `[data-testid=advanced-case-search-result-${docketNumber}]`,
+        ).click();
+      });
+    });
+  });
+
+  describe('case - by case caption', () => {
+    it('should show a match wen the user searches by case caption', () => {
+      createAndServePaperPetition().then(({ docketNumber }) => {
+        const updatedCaseCaption = faker.word.noun();
+        loginAsDocketClerk1();
+        goToCase(docketNumber);
+        cy.get('[data-testid=tab-case-information]').click();
+        cy.get('[data-testid=menu-edit-case-context-button]').click();
+        cy.get('[data-testid=edit-case-caption-textarea]').clear();
+        cy.get('[data-testid=edit-case-caption-textarea]').type(
+          updatedCaseCaption,
+        );
+        cy.get('[data-testid="modal-button-confirm"]').click();
+        cy.get('[data-testid="success-alert"]').should('be.visible');
+        cy.visit('/');
+        cy.get('[data-testid=petitioner-name]').type(updatedCaseCaption);
         cy.get('[data-testid=submit-case-search-by-name-button]').click();
         cy.get(
           `[data-testid=advanced-case-search-result-${docketNumber}]`,
