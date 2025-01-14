@@ -1,13 +1,15 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { Correspondence } from '../../../../../shared/src/business/entities/Correspondence';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/entities/EntityConstants';
+import { Correspondence } from '@shared/business/entities/Correspondence';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
@@ -16,6 +18,7 @@ import { updateCorrespondenceDocumentInteractor } from './updateCorrespondenceDo
 
 describe('updateCorrespondenceDocumentInteractor', () => {
   const mockDocketEntryId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
   const mockCorrespondence = new Correspondence({
     correspondenceId: '74e36bf7-dcbd-4ee7-a9ec-6d7446096df8',
@@ -65,12 +68,10 @@ describe('updateCorrespondenceDocumentInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
+    getCaseByDocketNumber.mockReturnValue(mockCase);
   });
 
-  it('should throw an Unauthorized error if the user role does not have the CASE_CORRESPONDENCE permission', async () => {
+  it('should throw an Unauthorized error when the user role does not have the CASE_CORRESPONDENCE permission', async () => {
     await expect(
       updateCorrespondenceDocumentInteractor(
         applicationContext,

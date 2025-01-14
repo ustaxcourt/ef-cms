@@ -1,4 +1,5 @@
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { processDocketEntries } from './processDocketEntries';
 
 describe('processDocketEntries', () => {

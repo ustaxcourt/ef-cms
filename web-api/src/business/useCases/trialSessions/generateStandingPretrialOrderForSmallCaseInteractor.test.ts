@@ -1,11 +1,15 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   DOCKET_NUMBER_SUFFIXES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateStandingPretrialOrderForSmallCaseInteractor } from './generateStandingPretrialOrderForSmallCaseInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 describe('generateStandingPretrialOrderForSmallCaseInteractor', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+
   const TEST_JUDGE = {
     judgeTitle: 'Judge',
     name: 'Test Judge',
@@ -18,32 +22,30 @@ describe('generateStandingPretrialOrderForSmallCaseInteractor', () => {
         ({ contentHtml }) => contentHtml,
       );
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
-        if (docketNumber === '123-45') {
-          return {
-            caseCaption: 'Test Case Caption',
-            docketNumber: '123-45',
-            docketNumberSuffix: '',
-            docketNumberWithSuffix: '123-45',
-            irsPractitioners: [],
-          };
-        } else {
-          return {
-            caseCaption: 'Test Case Caption',
-            docketNumber: '234-56',
-            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-            docketNumberWithSuffix: '234-56S',
-            irsPractitioners: [
-              {
-                contact: { phone: '123-123-1234' },
-                name: 'Test IRS Practitioner',
-              },
-            ],
-          };
-        }
-      });
+    getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
+      if (docketNumber === '123-45') {
+        return {
+          caseCaption: 'Test Case Caption',
+          docketNumber: '123-45',
+          docketNumberSuffix: '',
+          docketNumberWithSuffix: '123-45',
+          irsPractitioners: [],
+        };
+      } else {
+        return {
+          caseCaption: 'Test Case Caption',
+          docketNumber: '234-56',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+          docketNumberWithSuffix: '234-56S',
+          irsPractitioners: [
+            {
+              contact: { phone: '123-123-1234' },
+              name: 'Test IRS Practitioner',
+            },
+          ],
+        };
+      }
+    });
 
     applicationContext
       .getPersistenceGateway()
@@ -74,16 +76,14 @@ describe('generateStandingPretrialOrderForSmallCaseInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators()
         .standingPretrialOrderForSmallCase,
     ).toHaveBeenCalled();
   });
 
-  it('should append the docket number suffix if present on the caseDetail', async () => {
+  it('should append the docket number suffix when present on the caseDetail', async () => {
     await generateStandingPretrialOrderForSmallCaseInteractor(
       applicationContext,
       {
@@ -130,7 +130,7 @@ describe('generateStandingPretrialOrderForSmallCaseInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should send formattedTrialLocation with Remote Proceedings text if proceedingType is remote', async () => {
+  it('should send formattedTrialLocation with Remote Proceedings text when proceedingType is remote', async () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({

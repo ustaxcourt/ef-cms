@@ -12,15 +12,6 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { getJudgeWithTitle } from '@shared/business/utilities/getJudgeWithTitle';
 
-/**
- * generateStandingPretrialOrderForSmallCaseInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docketNumber for the case
- * @param {string} providers.trialSessionId the id for the trial session
- * @returns {Uint8Array} notice of trial session pdf
- */
 export const generateStandingPretrialOrderForSmallCaseInteractor = async (
   applicationContext: ServerApplicationContext,
   {
@@ -58,7 +49,7 @@ export const generateStandingPretrialOrderForSmallCaseInteractor = async (
 
   const formattedJudgeName = await getJudgeWithTitle({
     applicationContext,
-    judgeUserName: trialSession.judge.name,
+    judgeUserName: trialSession.judge?.name,
   });
 
   const formattedChambersPhoneNumber = formatPhoneNumber(

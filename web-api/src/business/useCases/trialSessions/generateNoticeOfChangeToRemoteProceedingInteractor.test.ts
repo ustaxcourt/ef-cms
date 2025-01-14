@@ -1,11 +1,15 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   DOCKET_NUMBER_SUFFIXES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateNoticeOfChangeToRemoteProceedingInteractor } from './generateNoticeOfChangeToRemoteProceedingInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 describe('generateNoticeOfChangeToRemoteProceedingInteractor', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+
   const TEST_JUDGE = {
     judgeTitle: 'Judge',
     name: 'Test Judge',
@@ -40,24 +44,22 @@ describe('generateNoticeOfChangeToRemoteProceedingInteractor', () => {
         title: 'clerk of court',
       }));
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
-        if (docketNumber === '123-45') {
-          return {
-            caseCaption: 'Test Case Caption',
-            docketNumber: '123-45',
-            docketNumberWithSuffix: '123-45',
-          };
-        } else {
-          return {
-            caseCaption: 'Test Case Caption',
-            docketNumber: '234-56',
-            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-            docketNumberWithSuffix: '234-56S',
-          };
-        }
-      });
+    getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
+      if (docketNumber === '123-45') {
+        return {
+          caseCaption: 'Test Case Caption',
+          docketNumber: '123-45',
+          docketNumberWithSuffix: '123-45',
+        };
+      } else {
+        return {
+          caseCaption: 'Test Case Caption',
+          docketNumber: '234-56',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+          docketNumberWithSuffix: '234-56S',
+        };
+      }
+    });
 
     applicationContext
       .getUseCases()
@@ -79,9 +81,7 @@ describe('generateNoticeOfChangeToRemoteProceedingInteractor', () => {
       },
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators()
         .noticeOfChangeToRemoteProceeding.mock.calls[0][0],
@@ -105,7 +105,7 @@ describe('generateNoticeOfChangeToRemoteProceedingInteractor', () => {
     });
   });
 
-  it('should append the docket number suffix if present on the caseDetail', async () => {
+  it('should append the docket number suffix when present on the caseDetail', async () => {
     await generateNoticeOfChangeToRemoteProceedingInteractor(
       applicationContext,
       {
@@ -114,9 +114,7 @@ describe('generateNoticeOfChangeToRemoteProceedingInteractor', () => {
       },
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators()
         .noticeOfChangeToRemoteProceeding.mock.calls[0][0],
@@ -136,9 +134,7 @@ describe('generateNoticeOfChangeToRemoteProceedingInteractor', () => {
       },
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators()
         .noticeOfChangeToRemoteProceeding.mock.calls[0][0].data,

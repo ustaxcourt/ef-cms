@@ -1,33 +1,36 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { updateOtherStatisticsInteractor } from './updateOtherStatisticsInteractor';
 
 describe('updateOtherStatisticsInteractor', () => {
   let mockLock;
   let authorizedUser: UnknownAuthUser;
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCase = updateCaseMock as jest.Mock;
 
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
+    updateCase.mockImplementation(({ caseToUpdate }) => caseToUpdate);
   });
 
   beforeEach(() => {
     mockLock = undefined;
     authorizedUser = mockDocketClerkUser;
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
   });
 
-  it('should throw an error if the user is unauthorized to update case statistics', async () => {
+  it('should throw an error when the user is unauthorized to update case statistics', async () => {
     authorizedUser = {} as UnknownAuthUser;
 
     await expect(
@@ -54,7 +57,7 @@ describe('updateOtherStatisticsInteractor', () => {
       litigationCosts: 5678,
     });
   });
-  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+  it('should throw a ServiceUnavailableError when the Case is currently locked', async () => {
     mockLock = MOCK_LOCK;
 
     await expect(
@@ -69,9 +72,7 @@ describe('updateOtherStatisticsInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {

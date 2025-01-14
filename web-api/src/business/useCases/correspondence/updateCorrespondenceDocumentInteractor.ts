@@ -1,9 +1,9 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { Correspondence } from '../../../../../shared/src/business/entities/Correspondence';
+import { Case } from '@shared/business/entities/cases/Case';
+import { Correspondence } from '@shared/business/entities/Correspondence';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';

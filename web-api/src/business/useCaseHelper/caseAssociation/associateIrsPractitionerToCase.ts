@@ -1,9 +1,9 @@
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { IrsPractitioner } from '../../../../../shared/src/business/entities/IrsPractitioner';
+import { Case } from '@shared/business/entities/cases/Case';
+import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
+import { UserCase } from '@shared/business/entities/UserCase';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 export const associateIrsPractitionerToCase = async ({
