@@ -23,15 +23,15 @@ import {
   getConsolidatedDocketNumbers,
 } from '@web-api/business/useCaseHelper/trialSessionMinutes/formatMinuteSheet';
 import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { query } from '@web-api/persistence/dynamodbClientService';
+import { getMinuteSheet } from '@web-api/persistence/postgres/minuteSheets/getMinuteSheet';
 
 export const generateTrialSessionMinutesPdfInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -60,21 +60,16 @@ export const generateTrialSessionMinutesPdfInteractor = async (
     throw new Error('Case and trial session could not be retrieved');
   }
 
-  // 10419 TODO: rework this call so that it does not know it's coming from dynamo
-  const results = await query({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `${trialSessionId}|${docketNumber}`,
-    },
-    KeyConditionExpression: '#pk = :pk',
-    applicationContext,
-  });
+  const minuteSheet = await getMinuteSheet({ docketNumber, trialSessionId });
+
+  if (!minuteSheet)
+    throw new NotFoundError(
+      `Minute sheet for trial session ${trialSessionId} case ${docketNumber} was not found.`,
+    );
 
   const formattedMinuteSheet = formatMinuteSheet({
     aCase,
-    minuteSheetFormState: JSON.parse(results[0].minuteSheet),
+    minuteSheetFormState: minuteSheet.content,
     trialSession,
   });
 

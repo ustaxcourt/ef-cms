@@ -8,9 +8,8 @@ export const updateMinuteSheetLambda = (
 ) =>
   genericHandler(
     event,
-    async ({ applicationContext }) => {
+    async () => {
       return await updateMinuteSheetInteractor(
-        applicationContext,
         JSON.parse(event.body),
         authorizedUser,
       );

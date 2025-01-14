@@ -5,9 +5,8 @@ import { getMinuteSheetInteractor } from '@web-api/business/useCases/trialSessio
 export const getMinuteSheetLambda = (event, authorizedUser: UnknownAuthUser) =>
   genericHandler(
     event,
-    async ({ applicationContext }) => {
+    async () => {
       return await getMinuteSheetInteractor(
-        applicationContext,
         {
           ...event.queryStringParameters,
         },

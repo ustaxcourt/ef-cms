@@ -18,7 +18,6 @@ export const trialSessionMinutesAutosaveAction = async ({
     oldMinuteSheetFormStateSnapshot !== currentMinuteSheetFormStateSnapshot;
 
   if (hasFormChanged || forceAutosave) {
-    console.log('Make network request to update hash (autosave)');
     await applicationContext
       .getUseCases()
       .updateMinuteSheetInteractor(applicationContext, {
@@ -31,7 +30,5 @@ export const trialSessionMinutesAutosaveAction = async ({
       state.minuteSheetFormSnapshot,
       currentMinuteSheetFormStateSnapshot,
     );
-  } else {
-    console.log('No changes!');
   }
 };
