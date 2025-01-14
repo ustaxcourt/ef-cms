@@ -117,15 +117,13 @@ export const NameForm: React.FC = () => {
 ## Dependency Graph
 
 ```mermaid
-graph TD
-    NameForm[NameForm.tsx] --> useNameForm[useNameForm.ts]
-    useNameForm --> NameFormStore[nameFormStore.ts (Zustand)]
-    useNameForm --> NameFormMachine[nameFormMachine.ts (XState)]
+flowchart TD
+    A["NameForm.tsx"] --> B["useNameForm.ts"]
+    B --> C["nameFormStore.ts\n(Zustand)"]
+    B --> D["nameFormMachine.ts\n(XState)"]
 
-    style NameForm fill:#fff,stroke:#333
-    style useNameForm fill:#fff,stroke:#333
-    style NameFormStore fill:#fff,stroke:#333
-    style NameFormMachine fill:#fff,stroke:#333
+    classDef default fill:#fff,stroke:#333,stroke-width:2px
+    class A,B,C,D default
 ```
 
 ## Pros and Cons of Approach
