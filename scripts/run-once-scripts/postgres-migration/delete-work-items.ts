@@ -40,8 +40,8 @@ async function main() {
     const dynamoItemsToDelete = workItemsToDelete.map(c => ({
       DeleteRequest: {
         Key: {
-          pk: `work-item|${c.workItemId}`,
-          sk: `case$|{c.docketNumber}`,
+          pk: `case$|{c.docketNumber}`,
+          sk: `work-item|${c.workItemId}`,
         },
       },
     }));
