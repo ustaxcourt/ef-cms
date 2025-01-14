@@ -144,8 +144,6 @@ export const updateTrialSession = async (
         TRIAL_SESSION_PROCEEDING_TYPES.remote &&
       updatedTrialSessionEntity.isCalendared;
 
-    //create a new flag for when location is changed
-    // ask Tenille about including notcalendared cases when auto generating
     const shouldSetNoticeOfTrialSessionLocationChange =
       currentTrialSession.proceedingType ===
         TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
