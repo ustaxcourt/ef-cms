@@ -1,15 +1,20 @@
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { put } from '@web-api/persistence/dynamodbClientService';
 
 export const updateMinuteSheetInteractor = async (
   applicationContext: ServerApplicationContext,
   { docketNumber, minuteSheet, trialSessionId }: MinuteSheetUpdateBody,
-  // authorizedUser: UnknownAuthUser,
+  authorizedUser: UnknownAuthUser,
 ): Promise<any> => {
-  // 10419 TODO: add role-permissions configuration for minutes sheet
-  //   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.MINUTES_SHEET)) {
-  //     throw new UnauthorizedError('Unauthorized');
-  //   }
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
   // TODO 10419: discuss peristence options, modify this as needed.
   const serializedMinuteSheet = JSON.stringify(minuteSheet);

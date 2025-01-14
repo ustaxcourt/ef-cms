@@ -1,7 +1,3 @@
-// import {
-//   ROLE_PERMISSIONS,
-//   isAuthorized,
-// } from '@shared/authorization/authorizationClientService';
 import {
   FORMATS,
   formatDateString,
@@ -27,21 +23,24 @@ import {
   getConsolidatedDocketNumbers,
 } from '@web-api/business/useCaseHelper/trialSessionMinutes/formatMinuteSheet';
 import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '@shared/authorization/authorizationClientService';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { query } from '@web-api/persistence/dynamodbClientService';
-// import { UnauthorizedError } from '@web-api/errors/errors';
-// import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const generateTrialSessionMinutesPdfInteractor = async (
   applicationContext: ServerApplicationContext,
   { docketNumber, trialSessionId },
-  // authorizedUser: UnknownAuthUser,
+  authorizedUser: UnknownAuthUser,
 ): Promise<string> => {
-  // 10419 TODO: add role-permissions configuration for minutes sheet
-  //   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.MINUTES_SHEET)) {
-  //     throw new UnauthorizedError('Unauthorized');
-  //   }
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
   const aCase = await applicationContext
     .getPersistenceGateway()

@@ -1,15 +1,20 @@
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { query } from '@web-api/persistence/dynamodbClientService';
 
 export const getMinuteSheetInteractor = async (
   applicationContext: ServerApplicationContext,
   { docketNumber, trialSessionId },
-  // authorizedUser: UnknownAuthUser,
+  authorizedUser: UnknownAuthUser,
 ): Promise<any> => {
-  // 10419 TODO: add role-permissions configuration for minutes sheet
-  //   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.MINUTES_SHEET)) {
-  //     throw new UnauthorizedError('Unauthorized');
-  //   }
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
   const results = await query({
     ExpressionAttributeNames: {

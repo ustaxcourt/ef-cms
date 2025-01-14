@@ -1082,11 +1082,10 @@ const router = {
       }),
     );
 
-    // 10419 TODO: Update permissions
     registerRoute(
       '/trial-session-detail/*/case/*/minutes',
       ifHasAccess(
-        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
+        { app, permissionToCheck: ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET },
         (trialSessionId, docketNumber) => {
           setPageTitle('Trial session minutes');
           return app.getSequence('goToTrialSessionMinutesSequence')({
