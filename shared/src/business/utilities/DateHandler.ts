@@ -726,3 +726,11 @@ export const getWeeksInRange = ({
 
   return weeks;
 };
+
+export const roundDateDownToNearestHour = (isoDateString: string) => {
+  const formattedDate = calculateDate({ dateString: isoDateString });
+  formattedDate.setMinutes(0);
+  formattedDate.setSeconds(0);
+  formattedDate.setMilliseconds(0);
+  return formattedDate;
+};

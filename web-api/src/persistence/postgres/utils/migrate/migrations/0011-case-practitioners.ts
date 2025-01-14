@@ -5,10 +5,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .createTable('dwPractitionerOnCase')
     .addColumn('docketNumber', 'varchar')
     .addColumn('userId', 'varchar')
-    .addPrimaryKeyConstraint('pk_practitioner_on_case', [
-      'docketNumber',
-      'userId',
-    ])
+    .addPrimaryKeyConstraint('pkPractitionerOnCase', ['docketNumber', 'userId'])
     .addColumn('email', 'varchar')
     .execute();
 }

@@ -7,13 +7,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('date', 'timestamptz')
     .addColumn('docketNumber', 'varchar')
     .addColumn('updatedCaseStatus', 'varchar')
-    .addPrimaryKeyConstraint('pk_case_status_update', ['docketNumber', 'date'])
-    .addForeignKeyConstraint(
-      'case_status_update_to_case_fk',
-      ['docketNumber'],
-      'dwCase',
-      ['docketNumber'],
-    )
+    .addPrimaryKeyConstraint('pkCaseStatusUpdate', ['docketNumber', 'date'])
     .execute();
 }
 

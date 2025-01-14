@@ -5,6 +5,7 @@ export const upsertDocketEntries = async (docketEntries: RawDocketEntry[]) => {
   if (docketEntries.length === 0) return;
 
   const docketEntriesToUpsert = docketEntries.map(docketEntry => ({
+    createdAt: calculateDate({ dateString: docketEntry.createdAt }),
     docketEntryId: docketEntry.docketEntryId,
     docketNumber: docketEntry.docketNumber,
     documentTitle: docketEntry.documentTitle,

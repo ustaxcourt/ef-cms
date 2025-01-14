@@ -17,7 +17,7 @@ export const getReadyForTrialCases = async () => {
       .where('d.eventCode', 'in', ANSWER_DOCUMENT_CODES)
       .where('d.isStricken', 'is not', true)
       .where(
-        'createdAt',
+        'd.createdAt',
         '<=',
         // 10502 TODO: This is hideous
         calculateDate({

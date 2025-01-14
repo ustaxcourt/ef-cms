@@ -3,12 +3,10 @@ import { Kysely } from 'kysely';
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .createTable('dwDocketEntry')
+    .addColumn('createdAt', 'timestamptz')
     .addColumn('docketEntryId', 'varchar')
     .addColumn('docketNumber', 'varchar')
-    .addPrimaryKeyConstraint('pk_docket_entry', [
-      'docketEntryId',
-      'docketNumber',
-    ])
+    .addPrimaryKeyConstraint('pkDocketEntry', ['docketEntryId', 'docketNumber'])
     .addColumn('filingDate', 'timestamptz')
     .addColumn('eventCode', 'varchar')
     .addColumn('pending', 'boolean')

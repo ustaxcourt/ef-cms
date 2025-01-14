@@ -244,6 +244,7 @@ export type UpdatePractitionerOnCaseKysely =
 
 // TODO: This is just a stub to get things out of Open Search and into Postgres
 export interface DocketEntryTable {
+  createdAt: Date;
   docketEntryId: string;
   docketNumber: string;
   documentTitle: string;
