@@ -4,6 +4,7 @@ import { loginAsPetitionsClerk1 } from '../authentication/login-as-helpers';
 
 export function createAndServePaperPetition(
   {
+    name = 'rick james ' + Date.now(),
     procedureType = 'Regular',
     trialLocation = 'Birmingham, Alabama',
     yearReceived = '2020',
@@ -11,7 +12,9 @@ export function createAndServePaperPetition(
     yearReceived: string;
     procedureType: ProcedureType;
     trialLocation: string;
+    name: string;
   }> = {
+    name: 'rick james ' + Date.now(),
     procedureType: 'Regular',
     trialLocation: 'Birmingham, Alabama',
     yearReceived: '2020',
@@ -25,7 +28,6 @@ export function createAndServePaperPetition(
   }[];
   name: string;
 }> {
-  const name = 'rick james ' + Date.now();
   loginAsPetitionsClerk1();
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
   cy.get('[data-testid="document-qc-nav-item"]').click();
