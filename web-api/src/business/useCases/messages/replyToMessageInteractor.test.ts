@@ -1,12 +1,14 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
   ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { createMessageAsReply as createMessageAsReplyMock } from '@web-api/persistence/postgres/messages/createMessageAsReply';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
@@ -14,6 +16,7 @@ import {
 import { replyToMessageInteractor } from './replyToMessageInteractor';
 
 const createMessageAsReply = createMessageAsReplyMock as jest.Mock;
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
 describe('replyToMessageInteractor', () => {
   const mockAttachments = [
@@ -25,7 +28,7 @@ describe('replyToMessageInteractor', () => {
     },
   ];
 
-  it('throws unauthorized for a user without MESSAGES permission', async () => {
+  it('should throw unauthorized for a user without MESSAGES permission', async () => {
     await expect(
       replyToMessageInteractor(
         applicationContext,
@@ -43,7 +46,7 @@ describe('replyToMessageInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('creates the message reply and marks the parent message as replied to', async () => {
+  it('should create the message reply and mark the parent message as replied to', async () => {
     const messageData = {
       docketNumber: '101-20',
       message: "How's it going?",
@@ -67,14 +70,12 @@ describe('replyToMessageInteractor', () => {
         userId: 'd90c8a79-9628-4ca9-97c6-02a161a02904',
       });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        caseCaption: 'Roslindis Angelino, Petitioner',
-        docketNumber: '123-45',
-        docketNumberWithSuffix: '123-45S',
-        status: CASE_STATUS_TYPES.generalDocket,
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      caseCaption: 'Roslindis Angelino, Petitioner',
+      docketNumber: '123-45',
+      docketNumberWithSuffix: '123-45S',
+      status: CASE_STATUS_TYPES.generalDocket,
+    });
 
     await replyToMessageInteractor(
       applicationContext,

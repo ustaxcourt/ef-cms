@@ -1,8 +1,10 @@
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../shared/src/test/mockLock';
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { blockCaseFromTrialInteractor } from './blockCaseFromTrialInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
@@ -10,6 +12,7 @@ import {
 
 describe('blockCaseFromTrialInteractor', () => {
   let mockLock;
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
@@ -17,9 +20,7 @@ describe('blockCaseFromTrialInteractor', () => {
   });
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
     applicationContext
       .getUseCaseHelpers()
       .updateCaseAndAssociations.mockImplementation(
@@ -52,7 +53,7 @@ describe('blockCaseFromTrialInteractor', () => {
     ).toEqual(MOCK_CASE.docketNumber);
   });
 
-  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+  it('should throw a ServiceUnavailableError when the Case is currently locked', async () => {
     mockLock = MOCK_LOCK;
 
     await expect(
@@ -66,9 +67,7 @@ describe('blockCaseFromTrialInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {
@@ -97,7 +96,7 @@ describe('blockCaseFromTrialInteractor', () => {
     });
   });
 
-  it('should throw an unauthorized error if the user has no access to block cases', async () => {
+  it('should throw an unauthorized error when the user has no access to block cases', async () => {
     await expect(
       blockCaseFromTrialInteractor(
         applicationContext,

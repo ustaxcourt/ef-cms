@@ -1,23 +1,14 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { Correspondence } from '../../../../../shared/src/business/entities/Correspondence';
+import { Case } from '@shared/business/entities/cases/Case';
+import { Correspondence } from '@shared/business/entities/Correspondence';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
-/**
- * fileCorrespondenceDocumentInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.documentMetadata the document metadata
- * @param {string} providers.primaryDocumentFileId the id of the primary document
- * @returns {Promise<*>} the raw case object
- */
 export const fileCorrespondenceDocumentInteractor = async (
   applicationContext: ServerApplicationContext,
   {

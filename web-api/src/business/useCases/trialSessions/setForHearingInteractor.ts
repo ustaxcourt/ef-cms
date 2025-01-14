@@ -10,16 +10,6 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
-/**
- * setForHearingInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.calendarNotes notes for why the trial session/hearing was added
- * @param {string} providers.trialSessionId the id of the trial session
- * @param {string} providers.docketNumber the docket number of the case
- * @returns {Promise} the promise of the setForHearingInteractor call
- */
 export const setForHearingInteractor = async (
   applicationContext: ServerApplicationContext,
   {
@@ -53,7 +43,7 @@ export const setForHearingInteractor = async (
 
   const trialSessionEntity = new TrialSession(trialSession);
 
-  const existingTrialSessionIds = [];
+  const existingTrialSessionIds: string[] = [];
   if (caseEntity.trialSessionId) {
     existingTrialSessionIds.push(caseEntity.trialSessionId);
     caseEntity.hearings.forEach(_trialSession => {

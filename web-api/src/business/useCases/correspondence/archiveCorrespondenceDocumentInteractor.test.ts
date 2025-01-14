@@ -1,13 +1,15 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { Correspondence } from '../../../../../shared/src/business/entities/Correspondence';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { Correspondence } from '@shared/business/entities/Correspondence';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { archiveCorrespondenceDocumentInteractor } from './archiveCorrespondenceDocumentInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 describe('archiveCorrespondenceDocumentInteractor', () => {
   let mockUserId = '2474e5c0-f741-4120-befa-b77378ac8bf0';
@@ -15,10 +17,14 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
   let mockCorrespondence;
   let mockLock;
 
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCase = updateCaseMock as jest.Mock;
+
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
+    updateCase.mockImplementation(({ caseToUpdate }) => caseToUpdate);
   });
 
   beforeEach(() => {
@@ -30,15 +36,13 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
       userId: mockUserId,
     });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        correspondence: [mockCorrespondence],
-      });
+    getCaseByDocketNumber.mockReturnValue({
+      ...MOCK_CASE,
+      correspondence: [mockCorrespondence],
+    });
   });
 
-  it('should throw an Unauthorized error if the user role does not have the CASE_CORRESPONDENCE permission', async () => {
+  it('should throw an Unauthorized error when the user role does not have the CASE_CORRESPONDENCE permission', async () => {
     const user = { ...mockDocketClerkUser, role: ROLES.petitioner };
 
     await expect(
@@ -103,17 +107,13 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
+    expect(updateCase.mock.calls[0][0].caseToUpdate.correspondence).toEqual([]);
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.correspondence,
-    ).toEqual([]);
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.archivedCorrespondences,
+      updateCase.mock.calls[0][0].caseToUpdate.archivedCorrespondences,
     ).toEqual([{ ...mockCorrespondence, archived: true }]);
   });
 
-  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+  it('should throw a ServiceUnavailableError when the Case is currently locked', async () => {
     mockLock = MOCK_LOCK;
 
     await expect(
@@ -127,9 +127,7 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {

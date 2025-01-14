@@ -59,7 +59,7 @@ export const generateStandingPretrialOrderInteractor = async (
 
   const formattedJudgeName = await getJudgeWithTitle({
     applicationContext,
-    judgeUserName: trialSession.judge.name,
+    judgeUserName: trialSession.judge?.name,
   });
 
   const trialStartTimeIso = createISODateString(

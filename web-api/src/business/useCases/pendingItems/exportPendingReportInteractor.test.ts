@@ -1,15 +1,19 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { exportPendingReportInteractor } from '@web-api/business/useCases/pendingItems/exportPendingReportInteractor';
+import { fetchPendingItems as fetchPendingItemsMock } from '@web-api/persistence/postgres/cases/reports/fetchPendingItems';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 
 describe('exportPendingReportInteractor', () => {
+  const fetchPendingItems = fetchPendingItemsMock as jest.Mock;
+
   const judge = 'Colvin';
 
   const mockFoundDocuments = [
@@ -91,11 +95,9 @@ describe('exportPendingReportInteractor', () => {
   ];
 
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .fetchPendingItems.mockResolvedValue({
-        foundDocuments: mockFoundDocuments,
-      });
+    fetchPendingItems.mockResolvedValue({
+      foundDocuments: mockFoundDocuments,
+    });
   });
 
   it('should throw an unauthorized error when the user does not have access', async () => {
@@ -119,9 +121,10 @@ describe('exportPendingReportInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().fetchPendingItems,
-    ).toHaveBeenCalledWith({ applicationContext, judge });
+    expect(fetchPendingItems).toHaveBeenCalledWith({
+      applicationContext,
+      judge,
+    });
     expect(
       applicationContext.getUtilities().formatPendingItem,
     ).toHaveBeenCalledTimes(mockFoundDocuments.length);
