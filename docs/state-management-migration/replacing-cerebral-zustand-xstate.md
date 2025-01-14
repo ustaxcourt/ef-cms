@@ -27,10 +27,10 @@ export const useNameFormStore = create<NameFormState>((set) => ({
   reset: () => set(() => ({ ...initialState })),
 }))
 
-// createFormMachine.ts
+// nameFormMachine.ts
 import { createMachine } from 'xstate'
 
-export const createNameFormMachine = createMachine({
+export const nameFormMachine = createMachine({
   id: 'nameForm',
   initial: 'idle',
   states: {
@@ -45,7 +45,6 @@ export const createNameFormMachine = createMachine({
       },
     },
     success: {
-      // Automatically transitions to 'idle' after 1 second
       after: { 1000: 'idle' },
     },
   },
@@ -54,12 +53,12 @@ export const createNameFormMachine = createMachine({
 // useNameForm.ts
 import { useMachine } from '@xstate/react'
 import { useNameFormStore } from './useNameFormStore'
-import { createNameFormMachine } from './createNameFormMachine'
+import { nameFormMachine } from './nameFormMachine'
 
 export const useNameForm = () => {
   const { name, setName, reset } = useNameFormStore();
 
-  const [state, send] = useMachine(createNameFormMachine, {
+  const [state, send] = useMachine(nameFormMachine, {
     services: {
       submitForm: async () => {
         // Simulate async form submission (e.g., replace with network call)
@@ -121,7 +120,7 @@ export const NameForm: React.FC = () => {
 graph TD
     NameForm[NameForm.tsx] --> useNameForm[useNameForm.ts]
     useNameForm --> NameFormStore[useNameFormStore.tsZustand]
-    useNameForm --> NameFormMachine[createNameFormMachine.tsXState]
+    useNameForm --> NameFormMachine[nameFormMachine.tsXState]
 
     style NameForm fill:#fff,stroke:#333
     style useNameForm fill:#fff,stroke:#333
