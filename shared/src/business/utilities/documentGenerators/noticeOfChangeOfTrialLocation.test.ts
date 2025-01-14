@@ -38,6 +38,6 @@ describe('noticeOfChangeOfTrialLocation', () => {
         },
       });
     },
-    testDescription: 'generates a Notice of Change of Trial Judge document',
+    testDescription: 'generates a Notice of Change of Trial Location document',
   });
 });
