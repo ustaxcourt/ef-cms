@@ -1,8 +1,8 @@
 import { BROADCAST_MESSAGES } from '@shared/business/entities/EntityConstants';
 import { checkClientNeedsToRefresh } from '@web-client/presenter/actions/checkClientNeedsToRefresh';
 import { isLoggedInAction } from '@web-client/presenter/actions/isLoggedInAction';
+import { navigateToIdleLogoutAction } from '@web-client/presenter/actions/IdleLogout/navigateToIdleLogoutAction';
 import { setLogoutTypeAction } from '@web-client/presenter/actions/setLogoutTypeAction';
-import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { signOutSequence } from '@web-client/presenter/sequences/signOutSequence';
 
 // The sequence to call when the user is forced to sign out due to idle activity
@@ -18,7 +18,7 @@ export const signOutIdleSequence = [
         clientDoesNotNeedToRefresh: [
           setLogoutTypeAction(BROADCAST_MESSAGES.idleLogout),
           signOutSequence,
-          setupCurrentPageAction('IdleLogout'),
+          navigateToIdleLogoutAction,
         ],
         // If the client needs to refresh, the sign-out will fail,
         // and this can lead to inconsistent front-end behavior.
