@@ -374,6 +374,11 @@ const clientSupportsES2022 = (() => {
       return false;
     }
 
+    // Check structuredClone exists
+    if (typeof structuredClone !== 'function') {
+      return false;
+    }
+
     // Check Array.prototype.at
     if (!Array.prototype.at) {
       return false;
