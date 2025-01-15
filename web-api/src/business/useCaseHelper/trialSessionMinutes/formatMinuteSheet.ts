@@ -129,18 +129,32 @@ export const formatPetitionerAppearances = (
 ): string[] => {
   return petitionersSection.noAppearance
     ? ['No appearance']
-    : Object.values(petitionersSection.petitioners).map(
-        (petitioner: any) =>
-          `${petitioner.name} (${petitioner.role}) - ${petitioner.datesOfAppearance}`,
-      );
+    : Object.values(petitionersSection.petitioners)
+        .map((petitioner: any) => {
+          const parts = [
+            petitioner.name,
+            petitioner.role && `(${petitioner.role})`,
+            petitioner.datesOfAppearance && `- ${petitioner.datesOfAppearance}`,
+          ].filter(substring => !!substring);
+
+          return parts.length > 0 ? parts.join(' ') : null;
+        })
+        .filter((appearance): appearance is string => !!appearance);
 };
 
 export const formatRespondentAppearances = (
   respondentsSection: MinuteSheetFormState['respondentsSection'],
 ): string[] => {
-  return Object.values(respondentsSection.respondents).map(
-    (respondent: any) => `${respondent.name} - ${respondent.datesOfAppearance}`,
-  );
+  return Object.values(respondentsSection.respondents)
+    .map((respondent: any) => {
+      const parts = [
+        respondent.name,
+        respondent.datesOfAppearance && `- ${respondent.datesOfAppearance}`,
+      ].filter(substring => !!substring);
+
+      return parts.length > 0 ? parts.join(' ') : null;
+    })
+    .filter((appearance): appearance is string => !!appearance);
 };
 
 export const formatJurisdictionRetained = (
