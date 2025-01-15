@@ -22,21 +22,26 @@ describe('Trial Session - Notice Change of Location', () => {
     cy.get('[data-testid="set-calendar-button"]').click();
     cy.get('[data-testid="modal-button-confirm"]').click();
 
-    loginAsPetitioner();
-    externalUserCreatesElectronicCase().then(docketNumber => {
-      loginAsCaseServicesSupervisor();
-      goToCase(docketNumber);
-    });
+    const createdDocketNumbers: string[] = [];
+    for (let index = 0; index < 3; index++) {
+      loginAsPetitioner();
+      externalUserCreatesElectronicCase().then(docketNumber => {
+        loginAsCaseServicesSupervisor();
+        goToCase(docketNumber);
+        createdDocketNumbers.push(docketNumber);
+        cy.wrap(createdDocketNumbers).as('CREATED_DOCKET_NUMBERS');
+      });
 
-    cy.get('[data-testid="tab-case-information"]').click();
-    cy.get('[data-testid="add-to-trial-session-btn"]').click();
-    cy.get('[data-testid="all-locations-option"]').click();
-    cy.get<{ trialSessionId: string }>('@TRIAL_SESSION_INFO').then(
-      ({ trialSessionId }) => {
-        cy.get('[data-testid="trial-session-select"]').select(trialSessionId);
-      },
-    );
-    cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('[data-testid="tab-case-information"]').click();
+      cy.get('[data-testid="add-to-trial-session-btn"]').click();
+      cy.get('[data-testid="all-locations-option"]').click();
+      cy.get<{ trialSessionId: string }>('@TRIAL_SESSION_INFO').then(
+        ({ trialSessionId }) => {
+          cy.get('[data-testid="trial-session-select"]').select(trialSessionId);
+        },
+      );
+      cy.get('[data-testid="modal-button-confirm"]').click();
+    }
 
     cy.get('[data-testid="trial-session-location-link"]').click();
     cy.get('[data-testid="edit-trial-session"]').click();
@@ -46,14 +51,22 @@ describe('Trial Session - Notice Change of Location', () => {
     cy.get('[data-testid="submit-edit-trial-session"]').click();
     cy.get('[data-testid="modal-button-confirm"]').click();
 
-    cy.get('[data-testid="case-link"]').click();
-    cy.get('[data-testid="docket-record-table"] tr').last().as('NCTL_ROW');
-    cy.get('@NCTL_ROW').find('td').eq(3).should('contain.text', 'NCTL');
-    cy.get('@NCTL_ROW')
-      .find('td')
-      .eq(5)
-      .should('contain.text', 'Notice of Change of Trial Location');
-    cy.get('@NCTL_ROW').find('td').eq(6).should('contain.text', '1');
-    cy.get('[data-testid="document-viewer-link-NCTL"]').click();
+    cy.get<string[]>('@CREATED_DOCKET_NUMBERS').then(
+      (docketNumbers: string[]) => {
+        for (let index = 0; index < docketNumbers.length; index++) {
+          goToCase(docketNumbers[index]);
+          cy.get('[data-testid="docket-record-table"] tr')
+            .last()
+            .as('NCTL_ROW');
+          cy.get('@NCTL_ROW').find('td').eq(3).should('contain.text', 'NCTL');
+          cy.get('@NCTL_ROW')
+            .find('td')
+            .eq(5)
+            .should('contain.text', 'Notice of Change of Trial Location');
+          cy.get('@NCTL_ROW').find('td').eq(6).should('contain.text', '1');
+          cy.get('[data-testid="document-viewer-link-NCTL"]').click();
+        }
+      },
+    );
   });
 });
