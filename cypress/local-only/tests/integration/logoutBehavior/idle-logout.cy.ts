@@ -80,12 +80,6 @@ describe('Idle Logout Behavior', () => {
     cy.get('body').click();
 
     cy.get('[data-testid="idle-logout-login-button"]').should('exist');
-    urls.forEach(url =>
-      cy.puppeteer(
-        'openExistingTabAndCheckSelectorExists',
-        url,
-        '[data-testid="idle-logout-login-button"]',
-      ),
-    );
+    cy.puppeteer('verifyAllTabsAreOnIdleLogout');
   });
 });
