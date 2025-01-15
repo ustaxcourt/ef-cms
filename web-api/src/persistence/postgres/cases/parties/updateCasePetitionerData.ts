@@ -31,12 +31,12 @@ export const updateCasePetitionerData = async ({
         placeOfLegalResidence: petitionerData.placeOfLegalResidence,
         postalCode: petitionerData.postalCode,
         sealedAndUnavailable: petitionerData.sealedAndUnavailable,
-        secondaryName: petitionerData.secondaryName, // how is this different from additional name?
+        secondaryName: petitionerData.secondaryName,
         serviceIndicator: petitionerData.serviceIndicator,
         state: petitionerData.state,
         title: petitionerData.title,
       })
-      .where('contactId', '=', petitionerData.contactId!) // 10502 TODO: Why is contactId optional?!
+      .where('contactId', '=', petitionerData.contactId!)
       .where('docketNumber', '=', docketNumber)
       .returningAll()
       .executeTakeFirst(),

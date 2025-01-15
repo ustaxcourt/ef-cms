@@ -1,12 +1,11 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseInventoryReport } from '@web-api/persistence/postgres/cases/reports/getCaseInventoryReport';
 export const getCaseInventoryReportInteractor = async (
-  applicationContext,
   {
     associatedJudge,
     from,
@@ -30,7 +29,7 @@ export const getCaseInventoryReportInteractor = async (
 
   return await getCaseInventoryReport({
     associatedJudge,
-    page: from, // 10502 TODO
+    page: from ? Number(from) : 0,
     pageSize,
     status,
   });

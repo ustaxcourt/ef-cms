@@ -1,7 +1,7 @@
 import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { createISODateString } from '../../../../shared/src/business/utilities/DateHandler';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getReadyForTrialCases } from '@web-api/persistence/postgres/docketEntries/reports/getReadyForTrialCases';
 import { uniqBy } from 'lodash';

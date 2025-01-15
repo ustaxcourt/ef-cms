@@ -289,7 +289,7 @@ export const createCaseInteractor = async (
 
   await createCasePetitionersData({
     docketNumber: caseToAdd.docketNumber,
-    petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)), // 10502 TODO: is this correct?
+    petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
   });
 
   caseToAdd.statistics?.forEach(statistic =>

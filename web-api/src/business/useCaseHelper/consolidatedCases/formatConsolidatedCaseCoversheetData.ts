@@ -22,13 +22,11 @@ export const formatConsolidatedCaseCoversheetData = async ({
     leadDocketNumber: caseEntity.leadDocketNumber,
   });
 
-  // 10502 TODO: Fix type errors
-
   consolidatedCases = Case.sortByDocketNumber(consolidatedCases);
 
   let caseTitle;
   let caseCaptionExtension;
-  consolidatedCases = consolidatedCases
+  const consolidatedCasesFiltered = consolidatedCases
     ?.map(consolidatedCase => {
       if (consolidatedCase.docketNumber === caseEntity.leadDocketNumber) {
         ({ caseCaptionExtension, caseTitle } = formatCaseTitle({
@@ -49,8 +47,8 @@ export const formatConsolidatedCaseCoversheetData = async ({
     })
     .filter(consolidatedCase => consolidatedCase.documentNumber !== undefined);
 
-  if (consolidatedCases.length > 1) {
-    coverSheetData.consolidatedCases = consolidatedCases;
+  if (consolidatedCasesFiltered.length > 1) {
+    coverSheetData.consolidatedCases = consolidatedCasesFiltered;
     coverSheetData.caseTitle = caseTitle;
     coverSheetData.caseCaptionExtension = caseCaptionExtension;
   }

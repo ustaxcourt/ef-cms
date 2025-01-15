@@ -96,6 +96,5 @@ export const processDocketEntries = async ({
     return unmarshall(record.dynamodb.NewImage);
   });
 
-  // 10502 TODO: account for failed records
   await upsertDocketEntries(pgDocketEntries);
 };
