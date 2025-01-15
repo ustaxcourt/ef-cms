@@ -12,9 +12,8 @@ export const getCaseInventoryReportLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     return await getCaseInventoryReportInteractor(
-      applicationContext,
       {
         ...event.queryStringParameters,
       },

@@ -2,10 +2,7 @@ import {
   ANSWER_DOCUMENT_CODES,
   CASE_STATUS_TYPES,
 } from '@shared/business/entities/EntityConstants';
-import {
-  calculateDate,
-  createISODateAtStartOfDayEST,
-} from '@shared/business/utilities/DateHandler';
+import { calculateDateAtStartOfDayEST } from '@shared/business/utilities/DateHandler';
 import { getDbReader } from '@web-api/database';
 
 export const getReadyForTrialCases = async () => {
@@ -19,11 +16,10 @@ export const getReadyForTrialCases = async () => {
       .where(
         'd.createdAt',
         '<=',
-        // 10502 TODO: This is hideous
-        calculateDate({
-          dateString: createISODateAtStartOfDayEST(
-            calculateDate({ howMuch: -44, units: 'days' }).toISOString(),
-          ),
+        calculateDateAtStartOfDayEST({
+          // 10502 TODO: Make sure this new date function matches the old date
+          howMuch: -44,
+          units: 'days',
         }),
       )
       .select('d.docketNumber')

@@ -1,15 +1,8 @@
 import { NotFoundError } from '@web-api/errors/errors';
-import { flattenDeep } from 'lodash';
 import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
-import { marshall } from '@aws-sdk/util-dynamodb';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
-import type {
-  AttributeValueWithName,
-  IDynamoDBRecord,
-} from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
+import type { IDynamoDBRecord } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
-
-// 10502 TODO: Figure out how to do process case entries correctly!
 
 export const processCaseEntries = async ({
   applicationContext,
@@ -22,7 +15,7 @@ export const processCaseEntries = async ({
 
   const casesToUpsert: RawCase[] = [];
 
-  const indexCaseEntry = async caseRecord => {
+  async caseRecord => {
     const caseNewImage = caseRecord.dynamodb.NewImage;
     const caseRecords: IDynamoDBRecord[] = [];
 
@@ -35,102 +28,10 @@ export const processCaseEntries = async ({
       throw new NotFoundError(`Case ${caseNewImage.docketNumber.S} not found`);
     }
 
-    const marshalledCase = marshall(caseMetadataWithCounsel);
-
     casesToUpsert.push(caseMetadataWithCounsel);
-
-    caseRecords.push({
-      dynamodb: {
-        Keys: {
-          pk: {
-            S: caseNewImage.pk.S,
-          },
-          sk: {
-            S: `${caseNewImage.sk.S}`,
-          },
-        },
-        NewImage: {
-          ...marshalledCase,
-          case_relations: { name: 'case' },
-          entityName: { S: 'CaseDocketEntryMapping' },
-        },
-      },
-      eventName: 'MODIFY',
-    });
-
-    caseRecords.push({
-      dynamodb: {
-        Keys: {
-          pk: {
-            S: caseNewImage.pk.S,
-          },
-          sk: {
-            S: `${caseNewImage.sk.S}`,
-          },
-        },
-        NewImage: {
-          ...marshalledCase,
-          case_relations: { name: 'case' },
-          entityName: { S: 'CaseMessageMapping' },
-        },
-      },
-      eventName: 'MODIFY',
-    });
-
-    caseRecords.push({
-      dynamodb: {
-        Keys: {
-          pk: {
-            S: caseNewImage.pk.S,
-          },
-          sk: {
-            S: `${caseNewImage.sk.S}`,
-          },
-        },
-        NewImage: {
-          ...marshalledCase,
-          case_relations: { name: 'case' },
-          entityName: { S: 'CaseWorkItemMapping' },
-        },
-      },
-      eventName: 'MODIFY',
-    });
-
-    caseRecords.push({
-      dynamodb: {
-        Keys: {
-          pk: {
-            S: caseNewImage.pk.S,
-          },
-          sk: {
-            S: caseNewImage.sk.S,
-          },
-        },
-        NewImage: marshalledCase as { [key: string]: AttributeValueWithName },
-      },
-      eventName: 'MODIFY',
-    });
 
     return caseRecords;
   };
 
-  const indexRecords = await Promise.all(caseEntityRecords.map(indexCaseEntry));
-
-  const { failedRecords } = await applicationContext
-    .getPersistenceGateway()
-    .bulkIndexRecords({
-      applicationContext,
-      records: flattenDeep(indexRecords),
-    });
-
-  // 10502 TODO: make sure all the case data we need is upserted
   await upsertCases(casesToUpsert);
-
-  if (failedRecords.length > 0) {
-    applicationContext.logger.error(
-      'the case or docket entry records that failed to index',
-      { failedRecords },
-    );
-    throw new Error('failed to index case entry or docket entry records');
-  }
 };

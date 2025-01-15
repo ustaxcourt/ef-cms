@@ -158,6 +158,12 @@ export async function up(db: Kysely<any>): Promise<void> {
     .execute();
 
   await db.schema
+    .createIndex('idxPetitionerOnCaseContactId')
+    .on('dwPetitionerOnCase')
+    .column('contactId')
+    .execute();
+
+  await db.schema
     .createIndex('idxPetitionerOnCaseName')
     .on('dwPetitionerOnCase')
     .column('name')
@@ -180,15 +186,30 @@ export async function up(db: Kysely<any>): Promise<void> {
     .on('dwPetitionerOnCase')
     .column('email')
     .execute();
+
+  await db.schema
+    .createIndex('idxPractitionerOnCaseUserId')
+    .on('dwPractitionerOnCase')
+    .column('userId')
+    .execute();
+
+  await db.schema
+    .createIndex('idxPractitionerOnCaseEmail')
+    .on('dwPractitionerOnCase')
+    .column('email')
+    .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
   // Drop indexes in reverse order to ensure clean rollback
 
+  await db.schema.dropIndex('idxPractitionerOnCaseEmail').execute();
+  await db.schema.dropIndex('idxPractitionerOnCaseUserId').execute();
   await db.schema.dropIndex('idxPetitionerOnCaseEmail').execute();
   await db.schema.dropIndex('idxPetitionerOnCasePetitionerState').execute();
   await db.schema.dropIndex('idxPetitionerOnCaseCountryType').execute();
   await db.schema.dropIndex('idxPetitionerOnCaseName').execute();
+  await db.schema.dropIndex('idxPetitionerOnCaseContactId').execute();
   await db.schema.dropIndex('idxPetitionerOnCaseDocketNumber').execute();
   await db.schema.dropIndex('idxCaseStatusUpdateDate').execute();
   await db.schema.dropIndex('idxCaseStatusUpdateDocketNumber').execute();

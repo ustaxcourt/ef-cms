@@ -144,6 +144,23 @@ export const calculateDate = ({
     .toJSDate();
 };
 
+export const calculateDateAtStartOfDayEST = ({
+  dateString = undefined,
+  howMuch = 0,
+  units = 'days',
+}: {
+  dateString?: string;
+  howMuch?: number;
+  units?: string;
+}): Date => {
+  if (!howMuch) return prepareDateFromString(dateString).toJSDate();
+
+  return prepareDateFromString(dateString)
+    .plus({ [units]: howMuch })
+    .startOf('day')
+    .toJSDate();
+};
+
 /**
  * @param {string?} dateString a date string to be sent to persistence
  * @param {string?} inputFormat optional parameter containing hints on how to parse dateString

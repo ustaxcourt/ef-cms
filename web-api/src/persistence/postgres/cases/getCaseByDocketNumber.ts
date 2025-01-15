@@ -36,7 +36,7 @@ export const getCaseByDocketNumber = async ({
     dbPetitionersOnCase.map(p => {
       return new Petitioner({
         ...transformNullToUndefined(p),
-        state: p.state || null, // 10502 TODO: This is silly :/ but necessary to be in line with validation rules
+        state: p.state || null, // this needs to be null
       })
         .validate()
         .toRawObject();
@@ -116,7 +116,7 @@ export const getCaseByDocketNumber = async ({
   if (includeConsolidatedCases) {
     consolidatedCases = await getCasesMetadataWithCounselByLeadDocketNumber({
       applicationContext,
-      leadDocketNumber: dbCaseMetadata!.leadDocketNumber!, // 10502 TODO
+      leadDocketNumber: dbCaseMetadata.leadDocketNumber!,
     });
   }
 

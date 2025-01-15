@@ -14,25 +14,21 @@ export const getCasesMetadataByUserId = async ({
 
   const dbCases = await getDbReader(reader =>
     reader
-      .selectFrom('dwCase as case')
+      .selectFrom('dwCase as c')
       .innerJoin(
-        'dwPractitionerOnCase as practitioner',
-        'case.docketNumber',
-        'practitioner.docketNumber',
+        'dwPractitionerOnCase as pr',
+        'c.docketNumber',
+        'pr.docketNumber',
       )
-      .innerJoin(
-        'dwPetitionerOnCase as petitioner',
-        'case.docketNumber',
-        'petitioner.docketNumber',
-      )
+      .innerJoin('dwPetitionerOnCase as p', 'c.docketNumber', 'p.docketNumber')
       .selectAll()
       .where(eb =>
         eb.or([
-          eb('practitioner.userId', '=', 'userId'), // 10502 TODO make sure this is indexed
-          eb('petitioner.contactId', '=', 'userId'), // 10502 TODO make sure this is indexed
+          eb('pr.userId', '=', 'userId'),
+          eb('p.contactId', '=', 'userId'),
         ]),
       )
-      .select('case.docketNumber')
+      .select('c.docketNumber')
       .execute(),
   );
 

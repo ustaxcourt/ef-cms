@@ -5,7 +5,7 @@ import { roundDateDownToNearestHour } from '@shared/business/utilities/DateHandl
 
 type ClosedCaseResult = {
   status: string;
-  count: string; // 10502 TODO: Why can't I get this as a number?
+  count: string;
 };
 
 export const getCasesClosedCountByJudge = async ({

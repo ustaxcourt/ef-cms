@@ -17,8 +17,6 @@ export const updateCase = async ({
       .executeTakeFirst(),
   );
 
-  // 10502 TODO: This is stupid. We should be able to update this only when needed.
-  // The current structure of the code--in which we update the case entity and then re-save the whole thing--makes it non-trivial.
   await upsertCaseStatusUpdates({
     docketNumber: caseToUpdate.docketNumber,
     statusUpdates: caseToUpdate.caseStatusHistory as CaseStatusChange[],

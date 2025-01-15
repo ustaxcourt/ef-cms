@@ -288,13 +288,11 @@ export const createCaseFromPaperInteractor = async (
     caseToCreate: caseToAdd.validate().toRawObject(),
   });
 
-  // 10502 TODO: This wasn't being called before, but without it I was running into errors
-  // I am not sure why.
   setServiceIndicatorsForPetitionersOnCase(caseToAdd);
 
   await createCasePetitionersData({
     docketNumber: caseToAdd.docketNumber,
-    petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)), // 10502 TODO: is this correct?
+    petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
   });
 
   caseToAdd.statistics?.forEach(statistic =>

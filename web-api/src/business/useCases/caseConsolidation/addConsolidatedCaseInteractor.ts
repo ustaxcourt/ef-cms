@@ -53,8 +53,6 @@ export const addConsolidatedCase = async (
 
   let allCasesToConsolidate: RawCase[] = [];
 
-  // 10502 TODO: fix type errors
-
   if (
     caseToUpdate.leadDocketNumber &&
     caseToUpdate.leadDocketNumber !== caseToConsolidateWith.leadDocketNumber
