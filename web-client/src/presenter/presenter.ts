@@ -186,6 +186,7 @@ import { gotoEditRespondentCounselSequence } from './sequences/gotoEditResponden
 import { gotoEditTrialSessionSequence } from './sequences/gotoEditTrialSessionSequence';
 import { gotoEditUploadCourtIssuedDocumentSequence } from './sequences/gotoEditUploadCourtIssuedDocumentSequence';
 import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
+import { gotoIdleLogoutSequence } from '@web-client/presenter/sequences/goToIdleLogoutSequence';
 import { gotoJudgeActivityReportSequence } from './sequences/JudgeActivityReport/gotoJudgeActivityReportSequence';
 import { gotoLoginSequence } from '@web-client/presenter/sequences/Login/gotoLoginSequence';
 import { gotoMaintenanceSequence } from './sequences/gotoMaintenanceSequence';
@@ -904,6 +905,7 @@ export const presenterSequences = {
   gotoEditUploadCourtIssuedDocumentSequence:
     gotoEditUploadCourtIssuedDocumentSequence as unknown as Function,
   gotoFileDocumentSequence: gotoFileDocumentSequence as unknown as Function,
+  gotoIdleLogoutSequence,
   gotoJudgeActivityReportSequence:
     gotoJudgeActivityReportSequence as unknown as Function,
   gotoLoginSequence,
