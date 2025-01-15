@@ -23,6 +23,7 @@ export const AppInstanceManager = connect(
     resetIdleTimerSequence: sequences.resetIdleTimerSequence,
     signOutIdleSequence: sequences.signOutIdleSequence,
     signOutUserInitiatedSequence: sequences.signOutUserInitiatedSequence,
+    token: state.token,
   },
   function AppInstanceManager({
     appInstanceManagerHelper,
@@ -31,26 +32,31 @@ export const AppInstanceManager = connect(
     resetIdleTimerSequence,
     signOutIdleSequence,
     signOutUserInitiatedSequence,
+    token,
   }) {
     const { channelHandle } = appInstanceManagerHelper;
 
     channelHandle.onmessage = msg => {
       switch (msg.subject) {
         case BROADCAST_MESSAGES.idleStatusActive:
-          resetIdleTimerSequence();
+          if (token) resetIdleTimerSequence();
           break;
         case BROADCAST_MESSAGES.stayLoggedIn:
-          confirmStayLoggedInSequence();
+          if (token) confirmStayLoggedInSequence();
           break;
         case BROADCAST_MESSAGES.idleLogout:
-          signOutIdleSequence({
-            skipBroadcast: true,
-          });
+          if (token) {
+            signOutIdleSequence({
+              skipBroadcast: true,
+            });
+          }
           break;
         case BROADCAST_MESSAGES.userLogout:
-          signOutUserInitiatedSequence({
-            skipBroadcast: true,
-          });
+          if (token) {
+            signOutUserInitiatedSequence({
+              skipBroadcast: true,
+            });
+          }
           break;
         case BROADCAST_MESSAGES.appHasUpdated:
           handleAppHasUpdatedSequence({ skipBroadcast: true });
