@@ -1,3 +1,6 @@
+import { Case } from '@shared/business/entities/cases/Case';
+import { DOCUMENT_RELATIONSHIPS } from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   FORMATS,
   formatDateString,
@@ -32,6 +35,8 @@ import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSe
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getMinuteSheet } from '@web-api/persistence/postgres/minuteSheets/getMinuteSheet';
+import { getUniqueId } from '@shared/sharedAppContext';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const generateTrialSessionMinutesPdfInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -80,22 +85,55 @@ export const generateTrialSessionMinutesPdfInteractor = async (
     },
   });
 
-  const key = `minutes-sheet-${applicationContext.getUniqueId()}.pdf`;
+  const docketEntryId = getUniqueId();
+  const documentTitle = `minute-sheet-${docketEntryId}`;
 
   await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: pdf,
-    pdfName: key,
-    useTempBucket: true,
+    pdfName: docketEntryId,
   });
 
   const { url } = await applicationContext
     .getPersistenceGateway()
     .getDownloadPolicyUrl({
       applicationContext,
-      key,
-      useTempBucket: true,
+      key: docketEntryId,
     });
+
+  // 10419 TODO consider creating an "attachAsDraft" function?
+  // found myself thinking that would've been super nice to have rather than
+  // trying to sus out all that needs to happen for a document to show up properly
+  // as a draft.
+  const documentMetadata = {
+    docketNumber,
+    documentTitle,
+    primaryDocumentFileSize: pdf.byteLength,
+  };
+
+  const draftDocketEntry = new DocketEntry(
+    {
+      ...documentMetadata,
+      docketEntryId,
+      filedBy: authorizedUser.name,
+      isDraft: true,
+      isFileAttached: true,
+      relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
+    },
+    { authorizedUser },
+  );
+  draftDocketEntry.setFiledBy(authorizedUser);
+
+  draftDocketEntry.setAsProcessingStatusAsCompleted();
+
+  const caseEntity = new Case(aCase, { authorizedUser });
+  caseEntity.addDocketEntry(draftDocketEntry);
+
+  await updateCaseAndAssociations({
+    applicationContext,
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 
   return url;
 };
