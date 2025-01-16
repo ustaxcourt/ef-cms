@@ -12,8 +12,6 @@ export const IdleActivityMonitor = () => {
   const onPrompt = () => {
     if (getCurrentUserToken()) {
       setIdleModalIsOpen(true);
-    } else {
-      activate();
     }
   };
 
@@ -26,6 +24,12 @@ export const IdleActivityMonitor = () => {
         console.error('Error deleting auth cookie on idle', e);
       }
       window.location.href = '/idle-logout';
+    }
+  };
+
+  const onAction = () => {
+    if (!getCurrentUserToken()) {
+      activate();
     }
   };
 
@@ -48,6 +52,7 @@ export const IdleActivityMonitor = () => {
     ],
     eventsThrottle: 200,
     leaderElection: true,
+    onAction,
     onActive,
     onIdle,
     onPrompt,
