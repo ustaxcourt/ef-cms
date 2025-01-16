@@ -1,4 +1,5 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
+
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
