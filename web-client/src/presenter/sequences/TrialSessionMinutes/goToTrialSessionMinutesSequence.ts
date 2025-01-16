@@ -1,4 +1,5 @@
 import { checkForExistingMinuteSheetAction } from '@web-client/presenter/actions/TrialSessionMinutes/checkForExistingMinuteSheetAction';
+import { clearMinuteSheetFormStateAction } from '@web-client/presenter/actions/TrialSessionMinutes/clearMinuteSheetFormState';
 import { getCaseAction } from '@web-client/presenter/actions/getCaseAction';
 import { getTrialSessionDetailsAction } from '../../actions/TrialSession/getTrialSessionDetailsAction';
 import { initializeTrialSessionMinuteSheetFormAction } from '@web-client/presenter/actions/TrialSessionMinutes/initializeTrialSessionMinuteSheetFormAction';
@@ -17,6 +18,7 @@ export const goToTrialSessionMinutesSequence = [
     [getTrialSessionDetailsAction, setTrialSessionDetailsAction],
     [getCaseAction, setCaseAction],
   ]),
+  clearMinuteSheetFormStateAction,
   checkForExistingMinuteSheetAction,
   {
     no: [initializeTrialSessionMinuteSheetFormAction],

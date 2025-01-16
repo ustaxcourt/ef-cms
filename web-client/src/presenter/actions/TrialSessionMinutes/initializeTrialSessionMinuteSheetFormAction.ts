@@ -2,6 +2,7 @@ import {
   ACTION_DOCUMENT_TYPE_OPTIONS,
   KeyedActionFilingFormFieldsByRenderKey,
   KeyedPartyFormFieldsByRenderKey,
+  initialMinuteSheetFormState,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import {
   CONTACT_TYPES,
@@ -12,7 +13,7 @@ import {
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
 import { applicationContext } from '@web-client/applicationContext';
-import { invert } from 'lodash';
+import { cloneDeep, invert } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -33,6 +34,8 @@ export const initializeTrialSessionMinuteSheetFormAction = ({
       applicationContext,
       trialSession,
     });
+
+  store.set(state.minuteSheetForm, cloneDeep(initialMinuteSheetFormState));
 
   store.set(state.minuteSheetForm.trialSessionMetadataSection, {
     courtReporter: formattedTrialSession.courtReporter,
