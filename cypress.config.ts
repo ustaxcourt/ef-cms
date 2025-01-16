@@ -107,14 +107,14 @@ export default defineConfig({
           async openNewTab(
             browser: any,
             url: string,
-            sessionModalTimeout: number,
+            areYouStillThereTime: number,
             sessionTimeout: number,
           ) {
             const page = await browser.newPage();
             await page.goto(url, { waitUntil: 'networkidle2' });
 
             await page.evaluate(overrideIdleTimeouts, {
-              sessionModalTimeout,
+              areYouStillThereTime,
               sessionTimeout,
             });
 
