@@ -64,7 +64,7 @@ export const IdleActivityMonitor = () => {
 
   return (
     <>
-      <p>Active Time: {remainingTime}</p>
+      <p>Remaining Time: {remainingTime}</p>
       {idleModalIsOpen && <AppTimeoutModal onConfirm={activate} />}
     </>
   );
