@@ -17,7 +17,6 @@ export const getReadyForTrialCases = async () => {
         'd.createdAt',
         '<=',
         calculateDateAtStartOfDayEST({
-          // 10502 TODO: Make sure this new date function matches the old date
           howMuch: -44,
           units: 'days',
         }),
