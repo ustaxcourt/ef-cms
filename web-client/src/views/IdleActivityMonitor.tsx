@@ -3,10 +3,11 @@ import { applicationContext } from '@web-client/applicationContext';
 import { deleteAuthCookieInteractor } from '@shared/proxies/auth/deleteAuthCookieProxy';
 import { getCurrentUserToken } from '@shared/proxies/requests';
 import { useIdleTimer } from 'react-idle-timer';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export const IdleActivityMonitor = () => {
   const [idleModalIsOpen, setIdleModalIsOpen] = useState(false);
+  const [remainingTime, setRemainingTime] = useState(0);
 
   const onPrompt = () => {
     if (getCurrentUserToken()) {
@@ -30,7 +31,7 @@ export const IdleActivityMonitor = () => {
     setIdleModalIsOpen(false);
   };
 
-  const { activate } = useIdleTimer({
+  const { activate, getRemainingTime } = useIdleTimer({
     crossTab: true,
     debounce: 500,
     events: [
@@ -44,17 +45,29 @@ export const IdleActivityMonitor = () => {
       'MSPointerMove',
     ],
     eventsThrottle: 200,
-    name: 'idle-timer',
+    leaderElection: true,
     onActive,
     onIdle,
     onPrompt,
     promptBeforeIdle: 10000,
-    syncTimers: 500,
-    throttle: 0,
+    syncTimers: 200,
     timeout: 20000,
   });
 
-  return <>{idleModalIsOpen && <AppTimeoutModal onConfirm={activate} />}</>;
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRemainingTime(getRemainingTime());
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [getRemainingTime]);
+
+  return (
+    <>
+      <p>Active Time: {remainingTime}</p>
+      {idleModalIsOpen && <AppTimeoutModal onConfirm={activate} />}
+    </>
+  );
 };
 
 IdleActivityMonitor.displayName = 'IdleActivityMonitor';
