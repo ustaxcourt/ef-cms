@@ -5,9 +5,25 @@ import { getCurrentUserToken } from '@shared/proxies/requests';
 import { useIdleTimer } from 'react-idle-timer';
 import React, { useEffect, useState } from 'react';
 
+type IdleLogoutTesting = {
+  idleActivityMonitor?: {
+    isInTestingMode?: boolean;
+    sessionTimeout?: number;
+    areYouStillThereTime?: number;
+  };
+};
+
 export const IdleActivityMonitor = () => {
+  const defaultSessionTimeout = 55 * 60 * 1000;
+  const defaultAreYouStillThereTime = 5 * 60 * 1000;
+
   const [idleModalIsOpen, setIdleModalIsOpen] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
+  const [isInTestingMode, setIsInTestingMode] = useState(false);
+  const [sessionTimeout, setSessionTimeout] = useState(defaultSessionTimeout);
+  const [areYouStillThereTime, setAreYouStillThereTime] = useState(
+    defaultAreYouStillThereTime,
+  );
 
   const onPrompt = () => {
     if (getCurrentUserToken()) {
@@ -56,22 +72,41 @@ export const IdleActivityMonitor = () => {
     onActive,
     onIdle,
     onPrompt,
-    promptBeforeIdle: 10000,
+    promptBeforeIdle: areYouStillThereTime,
     syncTimers: 200,
-    timeout: 20000,
+    timeout: sessionTimeout,
   });
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setRemainingTime(getRemainingTime());
-    }, 100);
+    let interval: NodeJS.Timeout;
+    if (process.env.ENV !== 'prod') {
+      interval = setInterval(() => {
+        setIsInTestingMode(
+          (window as unknown as IdleLogoutTesting)?.idleActivityMonitor
+            ?.isInTestingMode || false,
+        );
+        setSessionTimeout(
+          (window as unknown as IdleLogoutTesting)?.idleActivityMonitor
+            ?.sessionTimeout || defaultSessionTimeout,
+        );
+        setAreYouStillThereTime(
+          (window as unknown as IdleLogoutTesting)?.idleActivityMonitor
+            ?.areYouStillThereTime || defaultAreYouStillThereTime,
+        );
+        setRemainingTime(getRemainingTime());
+      }, 100);
+    }
 
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
   }, [getRemainingTime]);
 
   return (
     <>
-      <p>Remaining Time: {remainingTime}</p>
+      {isInTestingMode && <p>Time Before Logout: {remainingTime}</p>}
       {idleModalIsOpen && <AppTimeoutModal onConfirm={activate} />}
     </>
   );
