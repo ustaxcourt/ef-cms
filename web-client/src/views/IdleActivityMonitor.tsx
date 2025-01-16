@@ -1,72 +1,60 @@
 import { AppTimeoutModal } from './AppTimeoutModal';
-import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { applicationContext } from '@web-client/applicationContext';
+import { deleteAuthCookieInteractor } from '@shared/proxies/auth/deleteAuthCookieProxy';
+import { getCurrentUserToken } from '@shared/proxies/requests';
 import { useIdleTimer } from 'react-idle-timer';
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 
-export const IdleActivityMonitor = connect(
-  {
-    broadcastIdleStatusActiveSequence:
-      sequences.broadcastIdleStatusActiveSequence,
-    clientNeedsToRefresh: state.clientNeedsToRefresh,
-    constants: state.constants,
-    handleIdleLogoutSequence: sequences.handleIdleLogoutSequence,
-    lastIdleAction: state.lastIdleAction,
-    showAppTimeoutModalHelper: state.showAppTimeoutModalHelper,
-    user: state.user,
-  },
-  function IdleActivityMonitor({
-    broadcastIdleStatusActiveSequence,
-    clientNeedsToRefresh,
-    constants,
-    handleIdleLogoutSequence,
-    lastIdleAction,
-    showAppTimeoutModalHelper,
-  }) {
-    useIdleTimer({
-      debounce: constants.SESSION_DEBOUNCE,
-      // eslint-disable-next-line spellcheck/spell-checker
-      // we do not want 'visibilitychange', so we override the defaults
-      events: [
-        'mousemove',
-        'keydown',
-        'wheel',
-        'DOMMouseScroll',
-        'mousewheel',
-        'mousedown',
-        'touchstart',
-        'touchmove',
-        'MSPointerDown',
-        'MSPointerMove',
-      ],
-      onAction: broadcastIdleStatusActiveSequence,
-    });
+export const IdleActivityMonitor = () => {
+  const [idleModalIsOpen, setIdleModalIsOpen] = useState(false);
 
-    useEffect(() => {
-      // Broadcast activity as soon as a new tab loads to keep idle sign in times in sync across browser tabs.
-      // Also, dismiss modals in other, potentially unseen tabs to ensure
-      // unseen tabs do not trigger a surprise logout in the current tab.
-      broadcastIdleStatusActiveSequence({ closeModal: true });
-    }, []);
+  const onPrompt = () => {
+    if (getCurrentUserToken()) {
+      setIdleModalIsOpen(true);
+    }
+  };
 
-    useEffect(() => {
-      // The user needs to refresh, so stop tracking idle timeout
-      if (clientNeedsToRefresh) {
-        return;
+  const onIdle = async () => {
+    if (getCurrentUserToken()) {
+      setIdleModalIsOpen(false);
+      try {
+        await deleteAuthCookieInteractor(applicationContext);
+      } catch (e) {
+        console.error('Error deleting auth cookie on idle', e);
       }
+      window.location.href = '/idle-logout';
+    }
+  };
 
-      const interval = setInterval(() => {
-        handleIdleLogoutSequence();
-      }, 1000);
+  const onActive = () => {
+    setIdleModalIsOpen(false);
+  };
 
-      return () => {
-        clearInterval(interval);
-      };
-    }, [lastIdleAction]);
+  const { activate } = useIdleTimer({
+    crossTab: true,
+    debounce: 500,
+    events: [
+      'keydown',
+      'wheel',
+      'DOMMouseScroll',
+      'mousedown',
+      'touchstart',
+      'touchmove',
+      'MSPointerDown',
+      'MSPointerMove',
+    ],
+    eventsThrottle: 200,
+    name: 'idle-timer',
+    onActive,
+    onIdle,
+    onPrompt,
+    promptBeforeIdle: 10000,
+    syncTimers: 500,
+    throttle: 0,
+    timeout: 20000,
+  });
 
-    return <>{showAppTimeoutModalHelper.showModal && <AppTimeoutModal />}</>;
-  },
-);
+  return <>{idleModalIsOpen && <AppTimeoutModal onConfirm={activate} />}</>;
+};
 
 IdleActivityMonitor.displayName = 'IdleActivityMonitor';
