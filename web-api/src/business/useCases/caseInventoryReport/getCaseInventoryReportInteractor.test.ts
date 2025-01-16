@@ -4,7 +4,6 @@ import {
   CHIEF_JUDGE,
   DOCKET_NUMBER_SUFFIXES,
 } from '@shared/business/entities/EntityConstants';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getCaseInventoryReportInteractor } from './getCaseInventoryReportInteractor';
 import { getCaseInventoryReport as getCaseInventoryReportMock } from '@web-api/persistence/postgres/cases/reports/getCaseInventoryReport';
 import {
@@ -17,7 +16,6 @@ describe('getCaseInventoryReportInteractor', () => {
   it('should throw an error when user is not authorized for case inventory report', async () => {
     await expect(
       getCaseInventoryReportInteractor(
-        applicationContext,
         {
           associatedJudge: CHIEF_JUDGE,
         },
@@ -28,11 +26,7 @@ describe('getCaseInventoryReportInteractor', () => {
 
   it('should throw an error when associatedJudge and status are not passed in', async () => {
     await expect(
-      getCaseInventoryReportInteractor(
-        applicationContext,
-        {},
-        mockDocketClerkUser,
-      ),
+      getCaseInventoryReportInteractor({}, mockDocketClerkUser),
     ).rejects.toThrow('Either judge or status must be provided');
   });
 
@@ -48,7 +42,6 @@ describe('getCaseInventoryReportInteractor', () => {
     ]);
 
     const result = await getCaseInventoryReportInteractor(
-      applicationContext,
       {
         associatedJudge: CHIEF_JUDGE,
         status: CASE_STATUS_TYPES.new,
@@ -58,6 +51,7 @@ describe('getCaseInventoryReportInteractor', () => {
 
     expect(getCaseInventoryReport).toHaveBeenCalledWith({
       associatedJudge: CHIEF_JUDGE,
+      page: 0,
       status: CASE_STATUS_TYPES.new,
     });
     expect(result).toEqual([

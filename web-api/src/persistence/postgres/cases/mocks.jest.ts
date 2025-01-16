@@ -52,8 +52,8 @@ jest.mock('@web-api/persistence/postgres/cases/upsertCases', () =>
 // Parties
 
 jest.mock(
-  '@web-api/persistence/postgres/cases/parties/createCasePetitionerData',
-  () => mockFactory('createCasePetitionerData'),
+  '@web-api/persistence/postgres/cases/parties/createCasePetitionersData',
+  () => mockFactory('createCasePetitionersData'),
 );
 
 jest.mock(

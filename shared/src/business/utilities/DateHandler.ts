@@ -153,9 +153,8 @@ export const calculateDateAtStartOfDayEST = ({
   howMuch?: number;
   units?: string;
 }): Date => {
-  if (!howMuch) return prepareDateFromString(dateString).toJSDate();
-
   return prepareDateFromString(dateString)
+    .setZone(USTC_TZ)
     .plus({ [units]: howMuch })
     .startOf('day')
     .toJSDate();
