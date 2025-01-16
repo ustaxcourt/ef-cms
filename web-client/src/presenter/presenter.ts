@@ -34,9 +34,7 @@ import { batchDownloadErrorSequence } from './sequences/batchDownloadErrorSequen
 import { batchDownloadReadySequence } from './sequences/batchDownloadReadySequence';
 import { batchDownloadTrialSessionSequence } from './sequences/batchDownloadTrialSessionSequence';
 import { blockCaseFromTrialSequence } from './sequences/blockCaseFromTrialSequence';
-import { broadcastIdleStatusActiveSequence } from './sequences/broadcastIdleStatusActiveSequence';
 import { broadcastLogoutSequence } from './sequences/broadcastLogoutSequence';
-import { broadcastStayLoggedInSequence } from './sequences/broadcastStayLoggedInSequence';
 import { calculatePenaltiesSequence } from './sequences/calculatePenaltiesSequence';
 import { canEditContactInformationSequence } from './sequences/canEditContactInformationSequence';
 import { cancelAddDraftDocumentSequence } from './sequences/cancelAddDraftDocumentSequence';
@@ -86,7 +84,6 @@ import { completeMessageSequence } from './sequences/completeMessageSequence';
 import { completePrintPaperPetitionReceiptSequence } from './sequences/completePrintPaperPetitionReceiptSequence';
 import { completeTrialSessionCalendarSequence } from '@web-client/presenter/sequences/completeTrialSessionCalendarSequence';
 import { confirmSignUpSequence } from './sequences/Login/confirmSignUpSequence';
-import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
 import { confirmWorkItemAlreadyCompleteSequence } from './sequences/confirmWorkItemAlreadyCompleteSequence';
 import { consolidatedCaseCheckboxAllChangeSequence } from './sequences/consolidatedCaseCheckboxAllChangeSequence';
 import { contactPrimaryCountryTypeChangeSequence } from './sequences/contactPrimaryCountryTypeChangeSequence';
@@ -226,7 +223,6 @@ import { gotoUserContactEditSequence } from './sequences/gotoUserContactEditSequ
 import { gotoVerifyEmailSequence } from './sequences/gotoVerifyEmailSequence';
 import { gotoWorkQueueSequence } from './sequences/gotoWorkQueueSequence';
 import { handleAppHasUpdatedSequence } from './sequences/handleAppHasUpdatedSequence';
-import { handleIdleLogoutSequence } from './sequences/handleIdleLogoutSequence';
 import { initAppSequence } from '@web-client/presenter/sequences/Init/initAppSequence';
 import { initialState } from '@web-client/presenter/state';
 import { leaveCaseForLaterServiceSequence } from './sequences/leaveCaseForLaterServiceSequence';
@@ -354,7 +350,6 @@ import { rescanBatchSequence } from './sequences/rescanBatchSequence';
 import { resendVerifyPendingUserEmailSequence } from '@web-client/presenter/sequences/resendVerifyPendingUserEmailSequence';
 import { resetCaseMenuSequence } from './sequences/resetCaseMenuSequence';
 import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordionsSequence';
-import { resetIdleTimerSequence } from './sequences/resetIdleTimerSequence';
 import { resetPasswordSequence } from '@web-client/presenter/sequences/Login/resetPasswordSequence';
 import { resetSecondaryAddressSequence } from './sequences/resetSecondaryAddressSequence';
 import { resetTrialSessionsFiltersSequence } from '@web-client/presenter/sequences/resetTrialSessionsFiltersSequence';
@@ -396,7 +391,6 @@ import { setDocumentForUploadSequence } from './sequences/setDocumentForUploadSe
 import { setDocumentUploadModeSequence } from './sequences/setDocumentUploadModeSequence';
 import { setForHearingSequence } from './sequences/setForHearingSequence';
 import { setHasIrsNoticeSequence } from '@web-client/presenter/sequences/setHasIrsNoticeSequence';
-import { setIdleStatusActiveSequence } from './sequences/setIdleStatusActiveSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
 import { setIsLoadingSequence } from '@web-client/presenter/sequences/setIsLoadingSequence';
 import { setIsNotLoadingSequence } from '@web-client/presenter/sequences/setIsNotLoadingSequence';
@@ -430,7 +424,6 @@ import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { showPaperServiceProgressSequence } from './sequences/showPaperServiceProgressSequence';
 import { showThirtyDayNoticeModalSequence } from './sequences/showThirtyDayNoticeModalSequence';
 import { showViewPetitionerCounselModalSequence } from './sequences/showViewPetitionerCounselModalSequence';
-import { signOutIdleSequence } from './sequences/signOutIdleSequence';
 import { signOutSequence } from './sequences/signOutSequence';
 import { signOutUserInitiatedSequence } from './sequences/signOutUserInitiatedSequence';
 import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
@@ -661,11 +654,7 @@ export const presenterSequences = {
   batchDownloadTrialSessionSequence:
     batchDownloadTrialSessionSequence as unknown as Function,
   blockCaseFromTrialSequence: blockCaseFromTrialSequence as unknown as Function,
-  broadcastIdleStatusActiveSequence:
-    broadcastIdleStatusActiveSequence as unknown as Function,
   broadcastLogoutSequence: broadcastLogoutSequence as unknown as Function,
-  broadcastStayLoggedInSequence:
-    broadcastStayLoggedInSequence as unknown as Function,
   calculatePenaltiesSequence: calculatePenaltiesSequence as unknown as Function,
   canEditContactInformationSequence:
     canEditContactInformationSequence as unknown as Function,
@@ -748,8 +737,6 @@ export const presenterSequences = {
     completePrintPaperPetitionReceiptSequence as unknown as Function,
   completeTrialSessionCalendarSequence,
   confirmSignUpSequence,
-  confirmStayLoggedInSequence:
-    confirmStayLoggedInSequence as unknown as Function,
   confirmWorkItemAlreadyCompleteSequence:
     confirmWorkItemAlreadyCompleteSequence as unknown as Function,
   consolidatedCaseCheckboxAllChangeSequence:
@@ -965,7 +952,6 @@ export const presenterSequences = {
   gotoVerifyEmailSequence,
   gotoWorkQueueSequence: gotoWorkQueueSequence as unknown as Function,
   handleAppHasUpdatedSequence,
-  handleIdleLogoutSequence: handleIdleLogoutSequence as unknown as Function,
   initAppSequence,
   leaveCaseForLaterServiceSequence:
     leaveCaseForLaterServiceSequence as unknown as Function,
@@ -1189,7 +1175,6 @@ export const presenterSequences = {
   resetCaseMenuSequence: resetCaseMenuSequence as unknown as Function,
   resetHeaderAccordionsSequence:
     resetHeaderAccordionsSequence as unknown as Function,
-  resetIdleTimerSequence: resetIdleTimerSequence as unknown as Function,
   resetPasswordSequence,
   resetSecondaryAddressSequence,
   resetTrialSessionsFiltersSequence,
@@ -1250,8 +1235,6 @@ export const presenterSequences = {
     setDocumentUploadModeSequence as unknown as Function,
   setForHearingSequence: setForHearingSequence as unknown as Function,
   setHasIrsNoticeSequence,
-  setIdleStatusActiveSequence:
-    setIdleStatusActiveSequence as unknown as Function,
   setIrsNoticeFalseSequence: setIrsNoticeFalseSequence as unknown as Function,
   setIsLoadingSequence,
   setIsNotLoadingSequence,
@@ -1301,7 +1284,6 @@ export const presenterSequences = {
     showThirtyDayNoticeModalSequence as unknown as Function,
   showViewPetitionerCounselModalSequence:
     showViewPetitionerCounselModalSequence as unknown as Function,
-  signOutIdleSequence,
   signOutSequence: signOutSequence as unknown as Function,
   signOutUserInitiatedSequence,
   skipSigningOrderSequence: skipSigningOrderSequence as unknown as Function,
