@@ -2,16 +2,14 @@
 import { Contact } from '@shared/business/useCases/generatePetitionPdfInteractor';
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
+import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
+import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
+import { JudgeChambersInfo } from '@web-client/presenter/actions/getJudgesChambersAction';
 import {
-  IDLE_LOGOUT_STATES,
-  IdleLogoutStateType,
   PRACTICE_TYPE,
   SERVICE_INDICATOR_TYPES,
   STATE_KEYS,
 } from '@shared/business/entities/EntityConstants';
-import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
-import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
-import { JudgeChambersInfo } from '@web-client/presenter/actions/getJudgesChambersAction';
 import {
   PreviousTerm,
   TrialLocationData,
@@ -143,7 +141,6 @@ import { selectCriteriaHelper } from '@web-client/presenter/computeds/selectCrit
 import { serveThirtyDayNoticeModalHelper } from './computeds/serveThirtyDayNoticeModalHelper';
 import { sessionAssignmentHelper } from './computeds/sessionAssignmentHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
-import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
@@ -162,7 +159,7 @@ import { userContactEditProgressHelper } from './computeds/userContactEditProgre
 import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 
-const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS, IDLE_STATUS } = getConstants();
+const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
 export const computeds = {
   addCourtIssuedDocketEntryHelper:
@@ -518,9 +515,6 @@ export const computeds = {
   setForHearingModalHelper: setForHearingModalHelper as unknown as ReturnType<
     typeof setForHearingModalHelper
   >,
-  showAppTimeoutModalHelper: showAppTimeoutModalHelper as unknown as ReturnType<
-    typeof showAppTimeoutModalHelper
-  >,
   startCaseInternalHelper: startCaseInternalHelper as unknown as ReturnType<
     typeof startCaseInternalHelper
   >,
@@ -693,11 +687,6 @@ export const baseState = {
     showUsaBannerDetails: false,
   },
   health: undefined as any,
-  idleLogoutState: {
-    logoutAt: undefined,
-    state: IDLE_LOGOUT_STATES.INITIAL as IdleLogoutStateType,
-  },
-  idleStatus: IDLE_STATUS.ACTIVE,
   iframeSrc: '',
   individualInProgressCount: 0,
   individualInboxCount: 0,
@@ -710,7 +699,6 @@ export const baseState = {
   judgeUser: {} as any,
   judges: [] as RawUser[],
   judgesChambers: [] as JudgeChambersInfo[],
-  lastIdleAction: undefined,
   legacyAndCurrentJudges: [] as RawUser[],
   login: {} as any,
   logoutType: '',
