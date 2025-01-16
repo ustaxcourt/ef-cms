@@ -1,7 +1,7 @@
 import { ModalDialog } from './ModalDialog';
 import React from 'react';
 
-export const AppTimeoutModal = ({ onConfirm }: { onConfirm: () => {} }) => {
+export const AppTimeoutModal = ({ onConfirm }: { onConfirm: () => void }) => {
   return (
     <ModalDialog
       className="app-timeout-modal"

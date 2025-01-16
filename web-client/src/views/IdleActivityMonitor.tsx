@@ -53,7 +53,7 @@ export const IdleActivityMonitor = () => {
     setIdleModalIsOpen(false);
   };
 
-  const { activate, getRemainingTime } = useIdleTimer({
+  const { activate, getRemainingTime, message } = useIdleTimer({
     crossTab: true,
     debounce: 500,
     events: [
@@ -71,11 +71,20 @@ export const IdleActivityMonitor = () => {
     onAction,
     onActive,
     onIdle,
+    onMessage: theMessage => {
+      if (theMessage === 'Opened a new tab') {
+        setIdleModalIsOpen(false);
+      }
+    },
     onPrompt,
     promptBeforeIdle: areYouStillThereTime,
     syncTimers: 200,
     timeout: sessionTimeout,
   });
+
+  useEffect(() => {
+    message('Opened a new tab');
+  }, []);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -107,7 +116,14 @@ export const IdleActivityMonitor = () => {
   return (
     <>
       {isInTestingMode && <p>Time Before Logout: {remainingTime}</p>}
-      {idleModalIsOpen && <AppTimeoutModal onConfirm={activate} />}
+      {idleModalIsOpen && (
+        <AppTimeoutModal
+          onConfirm={() => {
+            setIdleModalIsOpen(false);
+            activate();
+          }}
+        />
+      )}
     </>
   );
 };
