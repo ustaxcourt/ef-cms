@@ -5,6 +5,7 @@ import {
 } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError } from '../../../errors/errors';
+import { PDFDocument as PDFDocumentType } from 'pdf-lib';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -120,9 +121,6 @@ export const updateTrialSession = async (
   let pdfUrl: string | undefined;
   let fileId: string | undefined;
   if (currentTrialSession.caseOrder?.length) {
-    const { PDFDocument } = await applicationContext.getPdfLib();
-    const paperServicePdfsCombined = await PDFDocument.create();
-
     const shouldSetNoticeOfChangeToInPersonProceeding =
       currentTrialSession.proceedingType ===
         TRIAL_SESSION_PROCEEDING_TYPES.remote &&
@@ -154,11 +152,10 @@ export const updateTrialSession = async (
         updatedTrialSessionEntity,
       );
 
-    await updateCasesAndSetNoticeOfChange({
+    const paperServicePdfsCombined = await updateCasesAndSetNoticeOfChange({
       applicationContext,
       authorizedUser,
       currentTrialSession,
-      paperServicePdfsCombined,
       shouldIssueNoticeOfChangeOfTrialJudge,
       shouldSetNoticeOfChangeToInPersonProceeding,
       shouldSetNoticeOfChangeToRemoteProceeding,
@@ -223,7 +220,6 @@ const updateCasesAndSetNoticeOfChange = async ({
   applicationContext,
   authorizedUser,
   currentTrialSession,
-  paperServicePdfsCombined,
   shouldIssueNoticeOfChangeOfTrialJudge,
   shouldSetNoticeOfChangeToInPersonProceeding,
   shouldSetNoticeOfChangeToRemoteProceeding,
@@ -232,14 +228,13 @@ const updateCasesAndSetNoticeOfChange = async ({
 }: {
   applicationContext: ServerApplicationContext;
   currentTrialSession: RawTrialSession;
-  paperServicePdfsCombined: any;
   updatedTrialSessionEntity: TrialSession;
   authorizedUser: AuthUser;
   shouldSetNoticeOfChangeToRemoteProceeding: boolean;
   shouldSetNoticeOfTrialSessionLocationChange: boolean;
   shouldSetNoticeOfChangeToInPersonProceeding: boolean;
   shouldIssueNoticeOfChangeOfTrialJudge: boolean;
-}): Promise<void> => {
+}): Promise<PDFDocumentType> => {
   const calendaredCaseEntities = await Promise.all(
     currentTrialSession
       .caseOrder!.filter(c => !c.removedFromTrial)
@@ -253,13 +248,18 @@ const updateCasesAndSetNoticeOfChange = async ({
         return new Case(aCase, { authorizedUser });
       }),
   );
+
   const casesThatShouldReceiveNotices = calendaredCaseEntities
     .filter(aCase => !aCase.isClosed())
     .filter(
       aCase =>
         aCase.trialSessionId === updatedTrialSessionEntity.trialSessionId,
     );
-  for (const caseEntity of casesThatShouldReceiveNotices) {
+
+  const TASKS = casesThatShouldReceiveNotices.map(async (caseEntity: Case) => {
+    const { PDFDocument } = await applicationContext.getPdfLib();
+    const newPdfDoc = await PDFDocument.create();
+
     if (shouldSetNoticeOfChangeToRemoteProceeding) {
       await applicationContext
         .getUseCaseHelpers()
@@ -267,7 +267,7 @@ const updateCasesAndSetNoticeOfChange = async ({
           applicationContext,
           {
             caseEntity,
-            newPdfDoc: paperServicePdfsCombined,
+            newPdfDoc,
             newTrialSessionEntity: updatedTrialSessionEntity,
           },
           authorizedUser,
@@ -281,7 +281,7 @@ const updateCasesAndSetNoticeOfChange = async ({
           applicationContext,
           {
             caseEntity,
-            newPdfDoc: paperServicePdfsCombined,
+            newPdfDoc,
             newTrialSessionEntity: updatedTrialSessionEntity,
           },
           authorizedUser,
@@ -296,7 +296,7 @@ const updateCasesAndSetNoticeOfChange = async ({
           {
             caseEntity,
             currentTrialSession,
-            newPdfDoc: paperServicePdfsCombined,
+            newPdfDoc,
             newTrialSessionEntity: updatedTrialSessionEntity,
           },
           authorizedUser,
@@ -310,7 +310,7 @@ const updateCasesAndSetNoticeOfChange = async ({
           applicationContext,
           {
             caseEntity,
-            newPdfDoc: paperServicePdfsCombined,
+            newPdfDoc,
             newTrialSessionEntity: updatedTrialSessionEntity,
             previousTrialSession: currentTrialSession,
           },
@@ -325,7 +325,14 @@ const updateCasesAndSetNoticeOfChange = async ({
       authorizedUser,
       caseToUpdate: caseEntity,
     });
-  }
+
+    return newPdfDoc;
+  });
+
+  const casePdfDocuments = await Promise.all(TASKS);
+  const paperServicePdfsCombined = await applicationContext
+    .getUtilities()
+    .combineAllPdfDocuments(applicationContext, casePdfDocuments);
 
   const updatedHearingPromises = calendaredCaseEntities.map(async aCase => {
     const matchingHearing = aCase.hearings.find(
@@ -340,7 +347,9 @@ const updateCasesAndSetNoticeOfChange = async ({
       });
     }
   });
+
   await Promise.all(updatedHearingPromises);
+  return paperServicePdfsCombined;
 };
 
 const createWorkingCopyForNewUserOnSession = async ({

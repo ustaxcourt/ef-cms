@@ -26,6 +26,12 @@ describe('determineEntitiesToLock', () => {
     mockParams = {
       trialSession: { trialSessionId },
     };
+
+    applicationContext.getUtilities().combineAllPdfDocuments.mockResolvedValue({
+      getPageCount: () => {},
+      save: () => {},
+    });
+
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({ caseOrder: mockCases });
