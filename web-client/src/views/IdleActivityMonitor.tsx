@@ -12,6 +12,8 @@ export const IdleActivityMonitor = () => {
   const onPrompt = () => {
     if (getCurrentUserToken()) {
       setIdleModalIsOpen(true);
+    } else {
+      activate();
     }
   };
 
