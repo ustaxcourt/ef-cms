@@ -67,7 +67,7 @@ export const NoticeOfChangeOfTrialLocation = ({
 
                     return <div key={prop}>{updatedTrialSession[prop]}</div>;
                   })}
-                <div style={{ fontWeight: 'bold' }}>In-Person</div>
+                <div style={{ fontWeight: 'bold' }}>In Person</div>
               </td>
             </tr>
           </table>
