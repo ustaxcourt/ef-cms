@@ -43,8 +43,6 @@ import {
   DOCKET_RECORD_FILTER_OPTIONS,
   DOCKET_SECTION,
   DOCUMENT_EXTERNAL_CATEGORIES,
-  DOCUMENT_EXTERNAL_CATEGORIES_MAP,
-  DOCUMENT_INTERNAL_CATEGORIES_MAP,
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_RELATIONSHIPS,
@@ -139,6 +137,8 @@ import {
 import { FORMATS } from '../../shared/src/business/utilities/DateHandler';
 import { ROLE_PERMISSIONS } from '../../shared/src/authorization/authorizationClientService';
 import { SERVICE_INDICATOR_ERROR } from '../../shared/src/business/entities/EntityValidationConstants';
+import { INTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/internalFilingEvents';
+import { EXTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/externalFilingEvents';
 
 const MINUTES = 60 * 1000;
 
@@ -187,7 +187,7 @@ export const getConstants = () => ({
   CASE_TYPES,
   CASE_TYPES_MAP,
   CATEGORIES: DOCUMENT_EXTERNAL_CATEGORIES,
-  CATEGORY_MAP: DOCUMENT_EXTERNAL_CATEGORIES_MAP,
+  CATEGORY_MAP: EXTERNAL_FILING_EVENTS,
   CHAMBERS_SECTION,
   CHANNEL_NAME: 'ustc-broadcast',
   CHIEF_JUDGE,
@@ -236,7 +236,7 @@ export const getConstants = () => ({
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_FILE_MAP,
   INITIAL_DOCUMENT_TYPES_MAP,
-  INTERNAL_CATEGORY_MAP: DOCUMENT_INTERNAL_CATEGORIES_MAP,
+  INTERNAL_CATEGORY_MAP: INTERNAL_FILING_EVENTS,
   INTERNAL_DOCUMENTS_ARRAY,
   IRS_SYSTEM_SECTION,
   JURISDICTIONAL_OPTIONS,

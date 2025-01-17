@@ -12,7 +12,7 @@ type CourtIssuedEvent = {
   requiresCoversheet?: boolean;
 };
 
-export const courtIssuedEvents: CourtIssuedEvent[] = [
+export const COURT_ISSUED_EVENTS: CourtIssuedEvent[] = [
   {
     eventCode: 'O',
     documentType: 'Order',
