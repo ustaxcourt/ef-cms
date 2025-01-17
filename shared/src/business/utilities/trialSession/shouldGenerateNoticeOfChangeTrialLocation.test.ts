@@ -8,13 +8,14 @@ describe('shouldGenerateNoticeOfChangeTrialLocation', () => {
     address2: 'TEST_ADDRESS_2',
     city: 'TEST_CITY',
     courthouseName: 'TEST_COURT_HOUSE_NAME',
+    isCalendared: true,
     postalCode: 'TEST_POSTAL_CODE',
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
     state: 'TEST_STATE',
     trialLocation: 'TEST_TRIAL_LOCATION',
   };
 
-  it('return "false" isCalendared is ', () => {
+  it('return "false" when location has not been updated', () => {
     const CURRENT_LOCATION = {
       ...TEST_LOCATION,
     } as RawTrialSession;
@@ -31,13 +32,16 @@ describe('shouldGenerateNoticeOfChangeTrialLocation', () => {
     expect(result).toEqual(false);
   });
 
-  it('return "false" when location has not been updated', () => {
+  it('return "false" if the current/updated Trial Session is not calendared', () => {
     const CURRENT_LOCATION = {
       ...TEST_LOCATION,
+      isCalendared: false,
     } as RawTrialSession;
 
     const UPDATED_LOCATION = {
       ...TEST_LOCATION,
+      address1: 'UPDATE_TEST_aDDRESS_1',
+      isCalendared: false,
     } as RawTrialSession;
 
     const result = shouldGenerateNoticeOfChangeTrialLocation(
