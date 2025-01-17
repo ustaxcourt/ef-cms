@@ -424,7 +424,7 @@ describe('updateCaseAndAssociations', () => {
         caseToUpdate,
       });
 
-      expect(upsertCaseCorrespondences).toHaveBeenCalledTimes(4);
+      expect(upsertCaseCorrespondences).toHaveBeenCalledTimes(1);
     });
   });
 
