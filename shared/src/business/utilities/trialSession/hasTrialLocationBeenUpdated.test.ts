@@ -1,6 +1,6 @@
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
-import { hasTrialLocationBeenUpdated } from '@shared/business/utilities/trialSession/hasTrialLocationBeenUpdated';
+import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/hasTrialLocationBeenUpdated';
 
 describe('hasTrialLocationBeenUpdated', () => {
   const TEST_LOCATION = {
@@ -23,7 +23,7 @@ describe('hasTrialLocationBeenUpdated', () => {
       ...TEST_LOCATION,
     } as RawTrialSession;
 
-    const result = hasTrialLocationBeenUpdated(
+    const result = shouldGenerateNoticeOfChangeTrialLocation(
       CURRENT_LOCATION,
       UPDATED_LOCATION,
     );
@@ -41,7 +41,7 @@ describe('hasTrialLocationBeenUpdated', () => {
       address1: 'UPDATE_TEST_aDDRESS_1',
     } as RawTrialSession;
 
-    const result = hasTrialLocationBeenUpdated(
+    const result = shouldGenerateNoticeOfChangeTrialLocation(
       CURRENT_LOCATION,
       UPDATED_LOCATION,
     );

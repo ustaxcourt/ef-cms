@@ -5,7 +5,7 @@ import {
 } from '@shared/business/entities/trialSessions/TrialSession';
 import { isEqual } from 'lodash';
 
-export function hasTrialLocationBeenUpdated(
+export function shouldGenerateNoticeOfChangeTrialLocation(
   currentTrialSessionLocation: RawTrialSession,
   updatedTrialSessionLocation: RawTrialSession,
 ): boolean {
