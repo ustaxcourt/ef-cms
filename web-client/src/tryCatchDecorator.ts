@@ -15,13 +15,16 @@ export const tryCatchDecorator = useCases => {
    */
   function decorate(method) {
     return function () {
+      // eslint-disable-next-line prefer-spread
       const response = method.apply(
         null,
+        // eslint-disable-next-line prefer-rest-params
         Array.prototype.slice.call(arguments),
       );
       if (response && response.then) {
         return new Promise((resolve, reject) => {
           response.then(resolve).catch(e => {
+            // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
             reject(ErrorFactory.getError(e));
           });
         });

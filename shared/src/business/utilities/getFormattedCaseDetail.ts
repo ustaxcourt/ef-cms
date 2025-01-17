@@ -186,12 +186,10 @@ const formattedTrialSessionDetails = ({
   trialLocation,
   trialTime,
 }) => {
-  let formattedTrialCity;
-  let formattedAssociatedJudge;
   let formattedTrialDate;
 
-  formattedTrialCity = trialLocation || 'Not assigned';
-  formattedAssociatedJudge = judgeName || 'Not assigned';
+  const formattedTrialCity = trialLocation || 'Not assigned';
+  const formattedAssociatedJudge = judgeName || 'Not assigned';
 
   if (!trialDate) {
     formattedTrialDate = 'Not scheduled';

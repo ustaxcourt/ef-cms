@@ -533,13 +533,10 @@ describe('trialSessionsHelper', () => {
       it('should show regular trial sessions when session type filter is regular', () => {
         trialSession1.sessionType = SESSION_TYPES.regular;
         trialSession2.sessionType = SESSION_TYPES.hybridSmall;
-        (trialSessionsPageState.filters.sessionTypes = {
+        trialSessionsPageState.filters.sessionTypes = {
           [SESSION_TYPES.regular]: SESSION_TYPES.regular,
-        }),
-          (trialSessionsPageState.trialSessions = [
-            trialSession1,
-            trialSession2,
-          ]);
+        };
+        trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
 
         const result = runCompute(trialSessionsHelper, {
           state: {
@@ -709,8 +706,10 @@ describe('trialSessionsHelper', () => {
           result.trialSessionRows.filter(isTrialSessionRow);
         trialSessionsOnly.forEach(t => {
           if (t.trialSessionId === trialSession1.trialSessionId) {
+            // eslint-disable-next-line jest/no-conditional-expect
             expect(t.userIsAssignedToSession).toEqual(true);
           } else {
+            // eslint-disable-next-line jest/no-conditional-expect
             expect(t.userIsAssignedToSession).toEqual(false);
           }
         });

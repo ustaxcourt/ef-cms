@@ -188,7 +188,7 @@ const getJudgeUsersByName = async (): Promise<{
   });
   const { results }: SearchClientResultsType = formatResults(queryResults.body);
 
-  let judgeUsers = {};
+  const judgeUsers = {};
   for (const judge of results) {
     const emailDomain = judge.email.split('@')[1];
     if (!(judge.name in judgeUsers)) {

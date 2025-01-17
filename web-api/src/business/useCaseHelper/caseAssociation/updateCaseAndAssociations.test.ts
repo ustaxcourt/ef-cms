@@ -41,7 +41,7 @@ const getCaseDeadlinesByDocketNumber =
 const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
 
 describe('updateCaseAndAssociations', () => {
-  let updateCaseMock = jest.fn();
+  const updateCaseMock = jest.fn();
   let validMockCase;
 
   beforeAll(() => {

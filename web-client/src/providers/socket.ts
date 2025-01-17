@@ -37,6 +37,7 @@ export const socketProvider = ({ socketRouter }) => {
 
           socket.onerror = error => {
             console.error(error);
+            // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
             return reject(error);
           };
 
@@ -47,10 +48,11 @@ export const socketProvider = ({ socketRouter }) => {
               const timeToWaitBeforeReconnect = 1000 * 2 ** reconnectAttempt;
 
               if (reconnectAttempt > 4) {
-                reject();
+                reject(
+                  new Error('Error connecting within 4 attempts to websocket'),
+                );
                 return;
               }
-              // eslint-disable-next-line promise/param-names
               await applicationContext
                 .getUtilities()
                 .sleep(timeToWaitBeforeReconnect);
@@ -75,7 +77,7 @@ export const socketProvider = ({ socketRouter }) => {
           if (applicationContext) {
             console.error(e);
           }
-          reject();
+          reject(new Error('Error starting socket'));
         }
       });
     }

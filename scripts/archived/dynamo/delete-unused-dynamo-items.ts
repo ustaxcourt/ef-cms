@@ -5,7 +5,7 @@ import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from '../helpers/parseArgsAndEnvVars';
+} from '../../helpers/parseArgsAndEnvVars';
 import { chunk, isEmpty } from 'lodash';
 import type { TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 
@@ -33,6 +33,7 @@ const documentClient = DynamoDBDocument.from(dynamodb, {
 
 const queryForItems = async (pk: string): Promise<TDynamoRecord[]> => {
   let hasMoreResults = true;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let lastKey: Record<string, any> | undefined;
   let allResults: TDynamoRecord[] = [];
   while (hasMoreResults) {
@@ -77,7 +78,7 @@ const reprocessItems = async ({ unprocessedItems }): Promise<void> => {
 
 const deleteItems = async (items: TDynamoRecord[]): Promise<void> => {
   const chunks = chunk(items, CHUNK_SIZE);
-  for (let c of chunks) {
+  for (const c of chunks) {
     const results = await documentClient.batchWrite({
       RequestItems: {
         [TableName]: c.map(item => ({
@@ -99,7 +100,6 @@ const deleteItems = async (items: TDynamoRecord[]): Promise<void> => {
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async function () {
   const catalogItems = await queryForItems('catalog');
   await deleteItems(catalogItems);

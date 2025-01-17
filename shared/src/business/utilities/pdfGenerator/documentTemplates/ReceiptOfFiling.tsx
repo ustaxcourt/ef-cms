@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 import { CompressedDocketHeader } from '../components/CompressedDocketHeader.tsx';
 import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
 import React from 'react';

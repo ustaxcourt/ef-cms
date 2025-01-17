@@ -4,7 +4,7 @@ import { type RawUser } from '@shared/business/entities/User';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from '../helpers/parseArgsAndEnvVars';
+} from '../../helpers/parseArgsAndEnvVars';
 import {
   type ServerApplicationContext,
   createApplicationContext,
@@ -123,7 +123,6 @@ const checkUser = async ({
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
 
@@ -134,7 +133,7 @@ const checkUser = async ({
   console.log(
     `processing ${userChunks.length} chunks of users with each chunk being ${CHUNK_SIZE}`,
   );
-  for (let userChunk of userChunks) {
+  for (const userChunk of userChunks) {
     console.log(`processing chunk ${i++} of ${userChunks.length}`);
     await Promise.all(
       userChunk.map(user => checkUser({ applicationContext, user })),
