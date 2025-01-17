@@ -9,6 +9,12 @@ export function hasTrialLocationBeenUpdated(
   currentTrialSessionLocation: RawTrialSession,
   updatedTrialSessionLocation: RawTrialSession,
 ): boolean {
+  if (
+    !currentTrialSessionLocation.isCalendared ||
+    !updatedTrialSessionLocation.isCalendared
+  )
+    return false;
+
   const currentLocation = TRIAL_SESSION_ADDRESS_PROPERTIES.reduce(
     (acc, prop) => {
       acc[prop] = currentTrialSessionLocation[prop];
