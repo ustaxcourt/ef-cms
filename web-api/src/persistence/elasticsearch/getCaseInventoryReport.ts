@@ -1,19 +1,9 @@
 import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl';
+import { CASE_INVENTORY_PRINT_REPORT_MAX_SIZE } from '@shared/business/entities/EntityConstants';
 import { search } from './searchClient';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { Search_Request } from '@opensearch-project/opensearch/api';
 
-/**
- * getCaseInventoryReport
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.associatedJudge the optional judge filter
- * @param {number} providers.from the item index to start from
- * @param {number} providers.pageSize the number of items to retrieve
- * @param {string} providers.status the optional status filter
- * @returns {object} the items found and the total count
- */
 export const getCaseInventoryReport = async ({
   applicationContext,
   associatedJudge,
@@ -39,11 +29,7 @@ export const getCaseInventoryReport = async ({
     'leadDocketNumber',
     'status',
   ];
-  const { CASE_INVENTORY_MAX_PAGE_SIZE } = applicationContext.getConstants();
-  const size =
-    pageSize && pageSize <= CASE_INVENTORY_MAX_PAGE_SIZE
-      ? pageSize
-      : CASE_INVENTORY_MAX_PAGE_SIZE;
+  const size = pageSize || CASE_INVENTORY_PRINT_REPORT_MAX_SIZE;
 
   const must: QueryContainer[] = [];
 
@@ -88,8 +74,5 @@ export const getCaseInventoryReport = async ({
     searchParameters,
   });
 
-  return {
-    foundCases: results,
-    totalCount: total,
-  };
+  return { foundCases: results, totalCount: total };
 };
