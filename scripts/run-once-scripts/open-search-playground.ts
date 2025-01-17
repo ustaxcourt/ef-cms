@@ -1,7 +1,8 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
+
 import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl.js';
-import { MAX_ELASTICSEARCH_PAGINATION } from '../../shared/src/business/entities/EntityConstants';
-import { createApplicationContext } from '../../web-api/src/applicationContext';
+import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
+import { createApplicationContext } from '@web-api/applicationContext';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
@@ -18,6 +19,7 @@ const scriptConfig: ScriptConfig = {
 };
 parseArgsAndEnvVars(scriptConfig);
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const source = [
     'caseCaption',

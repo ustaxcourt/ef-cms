@@ -1,3 +1,4 @@
+import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import {
   PendingItem,
   pendingItemCaseSource,
@@ -13,19 +14,11 @@ export const fetchPendingItems = async ({
   applicationContext,
   docketNumber,
   judge,
-  page,
 }: {
   applicationContext: ServerApplicationContext;
   docketNumber?: string;
   judge?: string;
-  page?: number;
-}): Promise<{ foundDocuments: PendingItem[]; total: number }> => {
-  const { PENDING_ITEMS_PAGE_SIZE } = applicationContext.getConstants();
-
-  const size = page ? PENDING_ITEMS_PAGE_SIZE : 5000;
-
-  const from = page ? page * size : undefined;
-
+}): Promise<{ foundDocuments: PendingItem[] }> => {
   const mustFilters: QueryContainer[] = [];
   mustFilters.push({ term: { 'entityName.S': 'DocketEntry' } });
   mustFilters.push({ term: { 'pending.BOOL': true } });
@@ -62,7 +55,6 @@ export const fetchPendingItems = async ({
   const searchParameters: Search_Request = {
     body: {
       _source: pendingItemDocketEntrySource as unknown as string[],
-      from,
       query: {
         bool: {
           must: [
@@ -90,7 +82,6 @@ export const fetchPendingItems = async ({
           ],
         },
       },
-      size,
       sort: [
         {
           'receivedAt.S': {
@@ -105,12 +96,13 @@ export const fetchPendingItems = async ({
       ],
     },
     index: 'efcms-docket-entry',
+    size: MAX_ELASTICSEARCH_PAGINATION,
   };
 
-  const { results, total } = await search({
+  const { results } = await search({
     applicationContext,
     searchParameters,
   });
 
-  return { foundDocuments: results, total };
+  return { foundDocuments: results };
 };

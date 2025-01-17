@@ -1,16 +1,5 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-/**
- * INITIAL SETUP:
- *   scripts/run-once-scripts/create-efcms-user-practitioner-firm-index.ts
- *
- * USAGE:
- *   scripts/reports/firms-cases.ts Firm Search Terms
- *
- * CLEANUP:
- *   scripts/run-once-scripts/delete-efcms-user-practitioner-firm-index.ts
- */
-
 import { Search_Request } from '@opensearch-project/opensearch/api';
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import {
@@ -69,7 +58,7 @@ const getFirmsPractitioners = async ({
       },
     },
     from: 0,
-    index: 'efcms-user-practitioner-firm',
+    index: 'efcms-user',
     size: MAX_ELASTICSEARCH_PAGINATION,
   };
   return (await search({ applicationContext, searchParameters }))?.results;

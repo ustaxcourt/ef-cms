@@ -19,7 +19,7 @@ export default tseslint.config(
       '**/build/',
       '*.config.js',
       '**/*_.js',
-      'scripts/run-once-scripts/**/*',
+      'scripts/archived/**/*',
     ],
   },
   {
@@ -73,7 +73,7 @@ export default tseslint.config(
       '**/build/',
       '*.config.js',
       '**/*_.js',
-      'scripts/run-once-scripts/**/*',
+      'scripts/archived/**/*',
     ],
   },
   {
@@ -117,7 +117,7 @@ export default tseslint.config(
       '**/build/',
       '*.config.js',
       '**/*_.js',
-      'scripts/run-once-scripts/**/*',
+      'scripts/archived/**/*',
     ],
     rules: {
       '@typescript-eslint/await-thenable': 'off',
@@ -190,7 +190,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['**/*.js', 'scripts/run-once-scripts/**/*', 'cypress/**/*.ts'], // Do not use typechecking on javascript files, run once scripts, or cypress which has different promise chains
+    files: ['**/*.js', 'scripts/archived/**/*', 'cypress/**/*.ts'], // Do not use typechecking on javascript files, archived scripts, or cypress which has different promise chains
     extends: [tseslint.configs.disableTypeChecked],
   },
 );
