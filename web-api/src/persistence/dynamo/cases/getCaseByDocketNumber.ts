@@ -4,6 +4,8 @@ import {
   PrivatePractitionerOnCaseRecord,
 } from '@web-api/persistence/dynamo/dynamoTypes';
 import { RawConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
+import { RawCorrespondence } from '@shared/business/entities/Correspondence';
+import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import {
   aggregateCaseItems,
   aggregateConsolidatedCaseItems,
@@ -19,10 +21,12 @@ export const getCaseByDocketNumber = async ({
   applicationContext,
   docketNumber,
   includeConsolidatedCases = true,
+  includeCorrespondenceAndWorkItems = true,
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
   includeConsolidatedCases?: boolean;
+  includeCorrespondenceAndWorkItems?: boolean;
 }): Promise<RawCase> => {
   const [caseItems] = await Promise.all([
     queryFull({
@@ -45,63 +49,70 @@ export const getCaseByDocketNumber = async ({
     (Bonus 4: We introduce a finer-grained way of asking for exactly what case data is needed rather than getting it all by default.)
     Below, we do 3.
   */
-  const postgresCaseData =
-    (await getCaseByDocketNumberPostgres(docketNumber)) || [];
+  let workItems: RawWorkItem[] = [];
+  let correspondences: RawCorrespondence[] = [];
+  if (includeCorrespondenceAndWorkItems) {
+    const postgresCaseData =
+      (await getCaseByDocketNumberPostgres(docketNumber)) || [];
 
-  const workItemsMap = new Map<string, any>();
-  const correspondencesMap = new Map<string, any>();
+    const workItemsMap = new Map<string, any>();
+    const correspondencesMap = new Map<string, any>();
 
-  for (const row of postgresCaseData) {
-    if (row.workItemId && !workItemsMap.has(row.workItemId)) {
-      workItemsMap.set(
-        row.workItemId,
-        workItemEntity({
-          assigneeId: row.assigneeId,
-          assigneeName: row.assigneeName,
-          associatedJudge: row.associatedJudge,
-          associatedJudgeId: row.associatedJudgeId,
-          caption: row.caption,
-          caseIsInProgress: row.caseIsInProgress,
-          completedAt: row.completedAt,
-          completedBy: row.completedBy,
-          completedByUserId: row.completedByUserId,
-          completedMessage: row.completedMessage,
-          createdAt: row.createdAt,
-          docketEntry: row.docketEntry,
-          docketNumber,
-          hideFromPendingMessages: row.hideFromPendingMessages,
-          highPriority: row.highPriority,
-          inProgress: row.inProgress,
-          isInitializeCase: row.isInitializeCase,
-          isRead: row.isRead,
-          section: row.section,
-          sentBy: row.sentBy,
-          sentBySection: row.sentBySection,
-          sentByUserId: row.sentByUserId,
-          updatedAt: row.updatedAt,
-          workItemId: row.workItemId,
-        }),
-      );
+    for (const row of postgresCaseData) {
+      if (row.workItemId && !workItemsMap.has(row.workItemId)) {
+        workItemsMap.set(
+          row.workItemId,
+          workItemEntity({
+            assigneeId: row.assigneeId,
+            assigneeName: row.assigneeName,
+            associatedJudge: row.associatedJudge,
+            associatedJudgeId: row.associatedJudgeId,
+            caption: row.caption,
+            caseIsInProgress: row.caseIsInProgress,
+            completedAt: row.completedAt,
+            completedBy: row.completedBy,
+            completedByUserId: row.completedByUserId,
+            completedMessage: row.completedMessage,
+            createdAt: row.createdAt,
+            docketEntry: row.docketEntry,
+            docketNumber,
+            hideFromPendingMessages: row.hideFromPendingMessages,
+            highPriority: row.highPriority,
+            inProgress: row.inProgress,
+            isInitializeCase: row.isInitializeCase,
+            isRead: row.isRead,
+            section: row.section,
+            sentBy: row.sentBy,
+            sentBySection: row.sentBySection,
+            sentByUserId: row.sentByUserId,
+            updatedAt: row.updatedAt,
+            workItemId: row.workItemId,
+          }),
+        );
+      }
+
+      if (
+        row.correspondenceId &&
+        !correspondencesMap.has(row.correspondenceId)
+      ) {
+        correspondencesMap.set(
+          row.correspondenceId,
+          caseCorrespondenceEntity({
+            archived: row.archived,
+            correspondenceId: row.correspondenceId,
+            docketNumber,
+            documentTitle: row.documentTitle,
+            filedBy: row.filedBy,
+            filingDate: row.filingDate,
+            userId: row.userId,
+          }),
+        );
+      }
     }
 
-    if (row.correspondenceId && !correspondencesMap.has(row.correspondenceId)) {
-      correspondencesMap.set(
-        row.correspondenceId,
-        caseCorrespondenceEntity({
-          archived: row.archived,
-          correspondenceId: row.correspondenceId,
-          docketNumber,
-          documentTitle: row.documentTitle,
-          filedBy: row.filedBy,
-          filingDate: row.filingDate,
-          userId: row.userId,
-        }),
-      );
-    }
+    workItems = Array.from(workItemsMap.values());
+    correspondences = Array.from(correspondencesMap.values());
   }
-
-  const workItems = Array.from(workItemsMap.values());
-  const correspondences = Array.from(correspondencesMap.values());
 
   const leadDocketNumber = caseItems.find((caseItem): caseItem is CaseRecord =>
     isCaseItem(caseItem),
