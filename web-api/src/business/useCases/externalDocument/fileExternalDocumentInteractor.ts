@@ -46,6 +46,7 @@ export const fileExternalDocument = async (
     .getCaseByDocketNumber({
       applicationContext,
       docketNumber,
+      includeCorrespondenceAndWorkItems: false,
     });
 
   const currentCaseEntity = new Case(currentCase, { authorizedUser });
@@ -131,6 +132,7 @@ export const fileExternalDocument = async (
           .getCaseByDocketNumber({
             applicationContext,
             docketNumber: individualDocumentMetadata.docketNumber,
+            includeCorrespondenceAndWorkItems: false,
           });
 
         let caseEntity = new Case(caseToUpdate, { authorizedUser });
@@ -216,13 +218,9 @@ export const fileExternalDocument = async (
           applicationContext,
           authorizedUser,
           caseToUpdate: caseEntity,
+          includeCorrespondenceAndWorkItems: false,
         });
 
-        for (const workItem of workItems) {
-          await upsertWorkItems({
-            workItems: [workItem.validate().toRawObject()],
-          });
-        }
         const rawCaseEntity = caseEntity.toRawObject();
         return rawCaseEntity;
       },
@@ -231,6 +229,11 @@ export const fileExternalDocument = async (
   const resolvedCaseEntities: RawCase[] = await Promise.all(
     consolidatedCaseEntities,
   );
+
+  await upsertWorkItems({
+    workItems,
+  });
+
   return resolvedCaseEntities.find(
     caseEntity => caseEntity.docketNumber === docketNumber,
   );
