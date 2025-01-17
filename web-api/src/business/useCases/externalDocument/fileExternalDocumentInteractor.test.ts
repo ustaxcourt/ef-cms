@@ -307,7 +307,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalledTimes(5);
-    expect(upsertWorkItems).toHaveBeenCalledTimes(4);
+    expect(upsertWorkItems).toHaveBeenCalledTimes(1);
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalledTimes(2);
