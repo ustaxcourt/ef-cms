@@ -11,6 +11,7 @@ import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
+import { isEmpty } from 'lodash';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { upsertCase } from '@web-api/persistence/postgres/cases/upsertCase';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
@@ -150,7 +151,11 @@ const updateCorrespondence = ({
     ...updatedArchivedCorrespondences,
   ]);
 
-  return upsertCaseCorrespondences(validCorrespondence);
+  if (isEmpty(validCorrespondence)) {
+    return [];
+  }
+
+  return [() => upsertCaseCorrespondences(validCorrespondence)];
 };
 
 /**
@@ -349,7 +354,7 @@ const updateCaseWorkItems = async ({ caseToUpdate, oldCase }) => {
 
   const validWorkItems = WorkItem.validateRawCollection(updatedWorkItems);
 
-  return upsertWorkItems({ workItems: validWorkItems });
+  return [() => upsertWorkItems({ workItems: validWorkItems })];
 };
 
 const updateCaseDeadlines = async ({
@@ -371,7 +376,7 @@ const updateCaseDeadlines = async ({
   });
   const validCaseDeadlines = CaseDeadline.validateRawCollection(deadlines);
 
-  return upsertCaseDeadlines(validCaseDeadlines);
+  return [() => upsertCaseDeadlines(validCaseDeadlines)];
 };
 
 /**
@@ -403,6 +408,7 @@ export const updateCaseAndAssociations = async ({
     .getCaseByDocketNumber({
       applicationContext,
       docketNumber: caseToUpdate.docketNumber,
+      includeCorrespondenceAndWorkItems,
     });
 
   const validRawCaseEntity = caseEntity.validate().toRawObject();
