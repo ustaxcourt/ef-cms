@@ -12,11 +12,11 @@ import { RawUser } from '@shared/business/entities/User';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from '../helpers/parseArgsAndEnvVars';
+} from '../../helpers/parseArgsAndEnvVars';
 import { type TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { environment } from '@web-api/environment';
-import { getDestinationTableInfo } from '../../shared/admin-tools/util';
+import { getDestinationTableInfo } from '../../../shared/admin-tools/util';
 import { getTestJudgesChambers } from '@shared/test/mockJudgesChambers';
 
 const scriptConfig: ScriptConfig = {
@@ -35,7 +35,6 @@ const getPhoneNumberForJudgeUser = (judgeUser: RawUser): string | undefined => {
   )?.phoneNumber;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext();
 
