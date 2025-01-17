@@ -412,7 +412,7 @@ export const assignWorkItems = async (cerebralTest, to, workItems) => {
     assigneeId: users[to].userId,
     assigneeName: users[to].name,
   });
-  for (let workItem of workItems) {
+  for (const workItem of workItems) {
     await cerebralTest.runSequence('selectWorkItemSequence', {
       workItem,
     });
@@ -615,6 +615,7 @@ export const loginAs = (cerebralTest, email, password = 'Testing1234$') =>
   });
 
 export const setupTest = ({ constantsOverrides = {} } = {}) => {
+  // eslint-disable-next-line prefer-const
   let cerebralTest;
   global.FormData = FormDataHelper;
   global.Blob = () => {
@@ -799,8 +800,7 @@ const mockQuery = routeToGoTo => {
 };
 
 export const gotoRoute = (routes, routeToGoTo) => {
-  for (let route of routes) {
-    // eslint-disable-next-line security/detect-non-literal-regexp
+  for (const route of routes) {
     const regex = new RegExp(
       route.route.replace(/\*/g, '([a-z\\-A-Z0-9]+)').replace(/\.\./g, '(.*)') +
         '$',
@@ -957,7 +957,7 @@ export const setBatchPages = ({ cerebralTest }) => {
   const selectedDocumentType = cerebralTest.getState(
     'currentViewMetadata.documentSelectedForScan',
   );
-  let batches = cerebralTest.getState(
+  const batches = cerebralTest.getState(
     `scanner.batches.${selectedDocumentType}`,
   );
 
@@ -991,7 +991,7 @@ export const embedWithLegalIpsumText = (phrase = '') => {
 };
 
 export const updateForm = async (cerebralTest, formValues, sequenceName) => {
-  for (let [key, value] of Object.entries(formValues)) {
+  for (const [key, value] of Object.entries(formValues)) {
     await cerebralTest.runSequence(sequenceName, {
       key,
       value,
@@ -1024,7 +1024,7 @@ export const updateOrderForm = async (cerebralTest, formValues) => {
 };
 
 export const verifySortedReceivedAtDateOfPendingItems = pendingItems => {
-  return pendingItems.every((elm, i, arr) =>
+  return pendingItems.every((_elm, i, arr) =>
     i === 0 ? true : arr[i - 1].receivedAt <= arr[i].receivedAt,
   );
 };

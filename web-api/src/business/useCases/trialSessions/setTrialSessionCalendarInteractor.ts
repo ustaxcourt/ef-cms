@@ -145,7 +145,7 @@ export const setTrialSessionCalendarInteractor = async (
     // We chunk this array of functions so that we don't fire all of them at once.
     // If firing all at once, we exhaust the available connections and will run into connection timeouts.
     const chunkedFunctions = chunk(funcs, CHUNK_SIZE);
-    for (let singleChunk of chunkedFunctions) {
+    for (const singleChunk of chunkedFunctions) {
       await Promise.all(singleChunk.map(func => func()));
     }
 

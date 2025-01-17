@@ -1,6 +1,7 @@
+import { Property } from '@opensearch-project/opensearch/api/_types/_common.mapping';
 import { createHash } from 'crypto';
 
-export const efcmsWorkItemMappings = {
+export const efcmsWorkItemMappings: Property = {
   properties: {
     'assigneeId.S': {
       type: 'keyword',

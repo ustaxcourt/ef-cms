@@ -6,7 +6,7 @@ import { RawCorrespondence } from '@shared/business/entities/Correspondence';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from '../helpers/parseArgsAndEnvVars';
+} from '../../helpers/parseArgsAndEnvVars';
 import {
   type ServerApplicationContext,
   createApplicationContext,
@@ -46,6 +46,7 @@ const { database, host, liveRun, user } = parseArgsAndEnvVars(scriptConfig) as {
 const port = 5432;
 
 type MessageFragment = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   attachments: any[] | undefined;
   docketNumber: string;
   messageId: string;
@@ -57,6 +58,7 @@ const getDocketEntryIdsByDocketNumbers = async ({
 }: {
   applicationContext: ServerApplicationContext;
   docketNumbers: string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }): Promise<any> => {
   console.log('Fetching docket entries for each docket number...');
 
@@ -175,7 +177,6 @@ const udpateMessagesInDb = async (
   });
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext: ServerApplicationContext = createApplicationContext(
     {},
