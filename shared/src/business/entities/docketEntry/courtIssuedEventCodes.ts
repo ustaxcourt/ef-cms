@@ -1,4 +1,18 @@
-export const courtIssuedEvents = [
+type CourtIssuedEvent = {
+  eventCode: string;
+  documentType: string;
+  documentTitle: string;
+  scenario: string;
+  isOrder?: boolean;
+  requiresSignature?: boolean;
+  isUnservable?: boolean;
+  closesAndDismissesCase?: boolean;
+  isOpinion?: boolean;
+  isNotice?: boolean;
+  requiresCoversheet?: boolean;
+};
+
+export const courtIssuedEvents: CourtIssuedEvent[] = [
   {
     eventCode: 'O',
     documentType: 'Order',
