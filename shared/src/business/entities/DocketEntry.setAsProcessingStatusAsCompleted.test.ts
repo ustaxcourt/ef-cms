@@ -1,21 +1,8 @@
-import { DOCUMENT_PROCESSING_STATUS_OPTIONS, ROLES } from './EntityConstants';
+import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from './EntityConstants';
 import { DocketEntry } from './DocketEntry';
+import { A_VALID_DOCKET_ENTRY } from '@shared/business/entities/DocketEntryTestFixtures';
 
 describe('setAsProcessingStatusAsCompleted', () => {
-  const mockPrimaryId = '7111b30b-ad38-42c8-9db0-d938cb2cb16b';
-  const A_VALID_DOCKET_ENTRY = {
-    createdAt: '2020-07-17T19:28:29.675Z',
-    docketEntryId: '0f5e035c-efa8-49e4-ba69-daf8a166a98f',
-    docketNumber: '101-21',
-    documentType: 'Petition',
-    eventCode: 'A',
-    filedBy: 'Test Petitioner',
-    filedByRole: ROLES.petitioner,
-    filers: [mockPrimaryId],
-    receivedAt: '2020-07-17T19:28:29.675Z',
-    userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
-  };
-
   it('sets the docket entry processing status as completed', () => {
     const docketEntry = new DocketEntry(
       {
