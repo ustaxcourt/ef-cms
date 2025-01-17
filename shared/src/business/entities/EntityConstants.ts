@@ -2,9 +2,9 @@
 import { ENTERED_AND_SERVED_EVENT_CODES } from './courtIssuedDocument/CourtIssuedDocumentConstants';
 import { FORMATS, formatNow } from '../utilities/DateHandler';
 import { flatten, omit, pick, sortBy, union, uniq, without } from 'lodash';
-import courtIssuedEventCodesJson from '../../tools/courtIssuedEventCodes.json';
-import externalFilingEventsJson from '../../tools/externalFilingEvents.json';
-import internalFilingEventsJson from '../../tools/internalFilingEvents.json';
+import { courtIssuedEvents } from '@shared/business/entities/docketEntry/courtIssuedEventCodes';
+import { externalFilingEvents } from '@shared/business/entities/docketEntry/externalFilingEvents';
+import { internalFilingEvents } from '@shared/business/entities/docketEntry/internalFilingEvents';
 
 export const STATE_KEYS = {
   DOCKET_RECORD_TABLE_SORT:
@@ -29,11 +29,11 @@ interface FilingEvent {
 // a number (100 to 99999) followed by a - and a 2 digit year
 export const DOCUMENT_INTERNAL_CATEGORIES_MAP: {
   [key: string]: FilingEvent[];
-} = internalFilingEventsJson;
+} = internalFilingEvents;
 export const DOCUMENT_EXTERNAL_CATEGORIES_MAP: {
   [key: string]: FilingEvent[];
-} = externalFilingEventsJson;
-export const COURT_ISSUED_EVENT_CODES = courtIssuedEventCodesJson;
+} = externalFilingEvents;
+export const COURT_ISSUED_EVENT_CODES = courtIssuedEvents;
 
 export const EVENT_CODES_THAT_ALLOW_FREE_TEXT = ['O', 'NOT', 'OJR'];
 
