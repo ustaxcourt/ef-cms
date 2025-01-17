@@ -26,11 +26,58 @@ describe('hasTrialSessionLocationChangedAction', () => {
       state: {
         form: {
           address1: 'TEST_ADDRESS_1',
+          isCalendated: true,
           proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
         },
         formattedTrialSessionDetails: {
           address1: 'TEST_ADDRESS_2',
+          isCalendated: true,
           proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+        },
+      },
+    });
+
+    expect(unchangedMock.mock.calls.length).toEqual(1);
+    expect(updatedMock.mock.calls.length).toEqual(0);
+  });
+
+  it('call "unchanged" path when either location data is not calendared', async () => {
+    const CURRENT_LOCATION: TrialSessionLocationInfo = {
+      address1: 'TEST_ADDRESS_1',
+      address2: 'TEST_ADDTESS_2',
+      city: 'TEST_CITY',
+      courthouseName: 'TEST_COURTHOUSE_NAME',
+      postalCode: 'TEST_POSTAL_CODE',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+      state: 'TEST_STATE',
+      trialLocation: 'TEST_TRIAL_LOCATION',
+    };
+
+    const UPDATED_LOCATION: TrialSessionLocationInfo = {
+      address1: 'TEST_ADDRESS_1',
+      address2: 'TEST_ADDTESS_2',
+      city: 'TEST_CITY',
+      courthouseName: 'TEST_COURTHOUSE_NAME',
+      postalCode: 'TEST_POSTAL_CODE',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+      state: 'TEST_STATE',
+      trialLocation: 'UPDATED__TEST_TRIAL_LOCATION',
+    };
+
+    await runAction(hasTrialSessionLocationChangedAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          ...UPDATED_LOCATION,
+          isCalendared: false,
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+        },
+        formattedTrialSessionDetails: {
+          ...CURRENT_LOCATION,
+          isCalendared: false,
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         },
       },
     });
@@ -47,10 +94,12 @@ describe('hasTrialSessionLocationChangedAction', () => {
       state: {
         form: {
           address1: 'TEST_ADDRESS_1',
+          isCalendared: true,
           proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         },
         formattedTrialSessionDetails: {
           address1: 'TEST_ADDRESS_1',
+          isCalendared: true,
           proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         },
       },
@@ -90,10 +139,12 @@ describe('hasTrialSessionLocationChangedAction', () => {
       state: {
         form: {
           ...UPDATED_LOCATION,
+          isCalendared: true,
           proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         },
         formattedTrialSessionDetails: {
           ...CURRENT_LOCATION,
+          isCalendared: true,
           proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         },
       },
@@ -105,8 +156,14 @@ describe('hasTrialSessionLocationChangedAction', () => {
     expect(updatedCalls.length).toEqual(1);
     expect(updatedCalls[0]).toEqual([
       {
-        currentTrialSessionLocation: CURRENT_LOCATION,
-        updatedTrialSessionLocation: UPDATED_LOCATION,
+        currentTrialSessionLocation: {
+          ...CURRENT_LOCATION,
+          isCalendared: true,
+        },
+        updatedTrialSessionLocation: {
+          ...UPDATED_LOCATION,
+          isCalendared: true,
+        },
       },
     ]);
   });
