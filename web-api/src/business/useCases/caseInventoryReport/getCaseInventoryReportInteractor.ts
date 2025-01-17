@@ -4,6 +4,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+
 export const getCaseInventoryReportInteractor = async (
   applicationContext,
   {
@@ -18,7 +19,7 @@ export const getCaseInventoryReportInteractor = async (
     status?: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<{ foundCases: RawCase[]; totalCount: number }> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_INVENTORY_REPORT)) {
     throw new UnauthorizedError('Unauthorized for case inventory report');
   }

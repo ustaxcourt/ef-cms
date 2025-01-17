@@ -5,7 +5,7 @@ import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from '../helpers/parseArgsAndEnvVars';
+} from '../../helpers/parseArgsAndEnvVars';
 import { chunk, isEmpty } from 'lodash';
 import type { TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 
@@ -100,7 +100,6 @@ const deleteItems = async (items: TDynamoRecord[]): Promise<void> => {
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async function () {
   const catalogItems = await queryForItems('catalog');
   await deleteItems(catalogItems);

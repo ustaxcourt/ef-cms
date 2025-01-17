@@ -3,14 +3,10 @@ import {
   TRIAL_SESSION_SCOPE_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { caseStatusWithTrialInformation } from '@shared/business/utilities/caseStatusWithTrialInformation';
-import { createTestApplicationContext } from '@shared/business/test/createTestApplicationContext';
 
 describe('caseStatusWithTrialInformation', () => {
-  const applicationContext = createTestApplicationContext();
-
   it('should add the trial location and trial date to the case status when the case is calendared', () => {
     const caseStatusWithTrialInfo = caseStatusWithTrialInformation({
-      applicationContext,
       caseStatus: CASE_STATUS_TYPES.calendared,
       trialDate: '2022-02-01T17:21:05.486Z',
       trialLocation: 'Houston, Texas',
@@ -23,7 +19,6 @@ describe('caseStatusWithTrialInformation', () => {
 
   it('should not add the trial location and trial date to the case status when the case is not calendared', () => {
     const caseStatusWithTrialInfo = caseStatusWithTrialInformation({
-      applicationContext,
       caseStatus: CASE_STATUS_TYPES.new,
     });
 
@@ -32,7 +27,6 @@ describe('caseStatusWithTrialInformation', () => {
 
   it('should add the trial location and trial date to the case status when the case is calendared and the trail location is standalone remote', () => {
     const caseStatusWithTrialInfo = caseStatusWithTrialInformation({
-      applicationContext,
       caseStatus: CASE_STATUS_TYPES.calendared,
       trialDate: '2022-02-01T17:21:05.486Z',
       trialLocation: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,

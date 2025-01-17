@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 // import { DateTime } from 'luxon';
 import { UserType } from '@aws-sdk/client-cognito-identity-provider';
 
