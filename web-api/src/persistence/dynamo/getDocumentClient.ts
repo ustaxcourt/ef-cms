@@ -116,4 +116,4 @@ export const getDocumentClient = (
   return dynamoClientCache[type];
 };
 
-let dynamoClientCache: Record<string, DynamoDBDocument> = {};
+const dynamoClientCache: Record<string, DynamoDBDocument> = {};

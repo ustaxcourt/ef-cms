@@ -41,7 +41,7 @@ export const getElasticsearchAliases = async ({
   let aliases: esAliasType[];
   const existingAliases = (
     await client.cat.aliases({ format: 'json' })
-  ).body?.filter((a: esAliasType) => {
+  ).body?.filter(a => {
     return a.alias !== '.kibana';
   });
   if (!existingAliases.length) {
@@ -50,9 +50,11 @@ export const getElasticsearchAliases = async ({
       return { alias, index: alias };
     });
   } else {
-    aliases = existingAliases.map((a: esAliasType) => {
-      return { alias: a.alias, index: a.index };
-    });
+    aliases = existingAliases
+      .filter(a => !!a.alias && !!a.index)
+      .map(a => {
+        return { alias: a.alias!, index: a.index! };
+      });
   }
   return aliases;
 };

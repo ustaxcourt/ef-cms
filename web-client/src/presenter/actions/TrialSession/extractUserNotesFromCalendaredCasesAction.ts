@@ -13,7 +13,7 @@ export const extractUserNotesFromCalendaredCasesAction = ({
   store,
 }: ActionProps) => {
   const calendaredCases = get(state.trialSession.calendaredCases);
-  let userNotes = [];
+  const userNotes = [];
 
   for (const calendaredCase of calendaredCases) {
     userNotes.push(calendaredCase.notes);

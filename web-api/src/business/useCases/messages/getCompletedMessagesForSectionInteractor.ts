@@ -17,7 +17,7 @@ import { getCompletedSectionInboxMessages } from '@web-api/persistence/postgres/
  * @returns {object} the messages in the user inbox
  */
 export const getCompletedMessagesForSectionInteractor = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { section }: { section },
   authorizedUser: UnknownAuthUser,
 ) => {

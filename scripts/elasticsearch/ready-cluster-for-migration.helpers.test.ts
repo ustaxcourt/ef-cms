@@ -14,7 +14,7 @@ import { elasticsearchIndexes } from '../../web-api/elasticsearch/elasticsearch-
 import { getBaseAliasFromIndexName } from '../../web-api/elasticsearch/elasticsearch-aliases';
 import { mockClient } from 'aws-sdk-client-mock';
 
-let mockedStatusCode: number = 200;
+const mockedStatusCode: number = 200;
 let mockedCount: number = 0;
 const aliases = jest
   .fn()
@@ -47,7 +47,7 @@ jest.mock('../../web-api/elasticsearch/client', () => ({
 const mockedOpenSearch = mockClient(OpenSearchClient);
 const mockedExit = jest
   .spyOn(process, 'exit')
-  .mockImplementation((code?: number | undefined): never => {
+  .mockImplementation((code?: string | number | null | undefined): never => {
     throw new Error('process.exit: ' + code);
   });
 
@@ -99,7 +99,7 @@ describe('checkIfEmpty', () => {
 });
 
 describe('readyClusterForMigration', () => {
-  let mockedDomainName = 'efcms-search-foo-bar';
+  const mockedDomainName = 'efcms-search-foo-bar';
 
   beforeEach(() => {
     mockedOpenSearch.reset();
@@ -111,7 +111,7 @@ describe('readyClusterForMigration', () => {
     expect(mockedClient.count).not.toHaveBeenCalled();
   });
 
-  it('does not check to see if the cluster is empty if an invalid DomainName is passed in', async () => {
+  it('does not check to see if the cluster is empty if an empty DomainName is passed in', async () => {
     await readyClusterForMigration('');
     expect(mockedOpenSearch.commandCalls(DescribeDomainCommand).length).toBe(0);
     expect(mockedClient.count).not.toHaveBeenCalled();

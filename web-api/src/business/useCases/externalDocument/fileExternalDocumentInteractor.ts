@@ -47,7 +47,7 @@ export const fileExternalDocument = async (
       docketNumber,
     });
 
-  let currentCaseEntity = new Case(currentCase, { authorizedUser });
+  const currentCaseEntity = new Case(currentCase, { authorizedUser });
 
   const {
     consolidatedCasesToFileAcross,
@@ -107,7 +107,7 @@ export const fileExternalDocument = async (
     }
   }
 
-  let documentMetadataForConsolidatedCases: TDocumentMetaData[] = [];
+  const documentMetadataForConsolidatedCases: TDocumentMetaData[] = [];
   if (
     consolidatedCasesToFileAcross &&
     consolidatedCasesToFileAcross.length > 0
@@ -136,7 +136,7 @@ export const fileExternalDocument = async (
 
         const servedParties = aggregatePartiesForService(caseEntity);
 
-        for (let [docketEntryId, metadata, relationship] of documentsToAdd) {
+        for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
           if (docketEntryId && metadata) {
             const docketEntryEntity = new DocketEntry(
               {
@@ -217,7 +217,7 @@ export const fileExternalDocument = async (
           caseToUpdate: caseEntity,
         });
 
-        for (let workItem of workItems) {
+        for (const workItem of workItems) {
           await applicationContext.getPersistenceGateway().saveWorkItem({
             applicationContext,
             workItem: workItem.validate().toRawObject(),
