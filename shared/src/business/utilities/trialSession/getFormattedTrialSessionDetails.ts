@@ -8,8 +8,13 @@ import {
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
 import { FORMATS } from '../DateHandler';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '@shared/authorization/authorizationClientService';
 import { RawEligibleCase } from '../../entities/cases/EligibleCase';
 import { RawIrsCalendarAdministratorInfo } from '@shared/business/entities/trialSessions/IrsCalendarAdministratorInfo';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { compact, partition } from 'lodash';
 import { isClosed } from '@shared/business/entities/cases/Case';
 import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
@@ -180,9 +185,11 @@ export type FormattedTrialSessionDetailsType = TrialSessionState & {
 
 export const getFormattedTrialSessionDetails = ({
   applicationContext,
+  currentUser,
   trialSession,
 }: {
   applicationContext: any;
+  currentUser: UnknownAuthUser;
   trialSession: TrialSessionState;
 }): FormattedTrialSessionDetailsType => {
   const allCases = (trialSession.calendaredCases || []).map(caseItem =>
@@ -197,20 +204,26 @@ export const getFormattedTrialSessionDetails = ({
     allCases,
     item => item.removedFromTrial === true,
   );
-
+  // 10419 TODO: make sure all roles that should see this link other than trialClerk are included
+  const isUserEligableForMinuteSheet = !!isAuthorized(
+    currentUser,
+    ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET,
+  );
   const openCasesFormatted = openCases
     .map(caseItem => setConsolidationFlagsForDisplay(caseItem, openCases))
     .map(caseItem => {
       let displayMinuteSheetFormButton = false;
       let minuteSheetRoute;
 
-      const isEligibleForButton =
-        trialSession.isCalendared && !isClosed(caseItem);
+      const isEligibleForMinuteSheetButton =
+        trialSession.isCalendared &&
+        !isClosed(caseItem) &&
+        isUserEligableForMinuteSheet;
 
       const isLeadCase = caseItem.inConsolidatedGroup && caseItem.isLeadCase;
 
       if (
-        isEligibleForButton &&
+        isEligibleForMinuteSheetButton &&
         (isLeadCase || !caseItem.inConsolidatedGroup)
       ) {
         displayMinuteSheetFormButton = true;
@@ -235,8 +248,10 @@ export const getFormattedTrialSessionDetails = ({
       let displayMinuteSheetFormButton = false;
       let minuteSheetRoute;
 
-      const isEligibleForButton =
-        trialSession.isCalendared && !isClosed(caseItem);
+      const isEligibleForMinuteSheetButton =
+        trialSession.isCalendared &&
+        !isClosed(caseItem) &&
+        isUserEligableForMinuteSheet;
 
       const isLeadCase = caseItem.inConsolidatedGroup && caseItem.isLeadCase;
 
@@ -253,7 +268,7 @@ export const getFormattedTrialSessionDetails = ({
 
       // 10419 TODO somehow we need to only show the minutes sheet link for users who have permission
       if (
-        isEligibleForButton &&
+        isEligibleForMinuteSheetButton &&
         (isLeadCase || !caseItem.inConsolidatedGroup) &&
         caseWasRemovedFromTrialSessionAfterStartDate
       ) {
