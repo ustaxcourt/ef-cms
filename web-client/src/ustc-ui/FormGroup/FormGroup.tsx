@@ -23,7 +23,7 @@ export const FormGroup = ({
   omitFormGroupClass?: boolean;
 }) => {
   let hasError = false;
-  let hasConfirmation = !!confirmationText;
+  const hasConfirmation = !!confirmationText;
 
   if (Array.isArray(errorText)) {
     hasError = errorText.some(text => !!text);

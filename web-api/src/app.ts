@@ -7,6 +7,7 @@ import { addPaperFilingLambda } from './lambdas/documents/addPaperFilingLambda';
 import { addPetitionerToCaseLambda } from './lambdas/cases/addPetitionerToCaseLambda';
 import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
 import { appendAmendedPetitionFormLambda } from './lambdas/courtIssuedOrder/appendAmendedPetitionFormLambda';
+import { createApplicationContext } from '@web-api/applicationContext';
 import { archiveCorrespondenceDocumentLambda } from './lambdas/correspondence/archiveCorrespondenceDocumentLambda';
 import { archiveDraftDocumentLambda } from './lambdas/documents/archiveDraftDocumentLambda';
 import { assignWorkItemsLambda } from './lambdas/workitems/assignWorkItemsLambda';
@@ -25,7 +26,6 @@ import { completeDocketEntryQCLambda } from './lambdas/documents/completeDocketE
 import { completeMessageLambda } from './lambdas/messages/completeMessageLambda';
 import { completeWorkItemLambda } from './lambdas/workitems/completeWorkItemLambda';
 import { confirmSignUpLambda } from './lambdas/auth/confirmSignUpLambda';
-import { createApplicationContext } from './applicationContext';
 import { createCaseDeadlineLambda } from './lambdas/caseDeadline/createCaseDeadlineLambda';
 import { createCaseFromPaperLambda } from './lambdas/cases/createCaseFromPaperLambda';
 import { createCaseLambda } from './lambdas/cases/createCaseLambda';
@@ -246,7 +246,7 @@ app.use('/auth', cors(authCorsOptions));
 app.use(cors(defaultCorsOptions));
 app.use(express.json({ limit: '1200kb' }));
 app.use(express.urlencoded({ extended: true }));
-app.use((req, res, next) => {
+app.use((req, _res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     // we added this to suppress error `Missing x-apigateway-event or x-apigateway-context header(s)` locally
     // aws-serverless-express/middleware plugin is looking for these headers, which are needed on the lambdas
@@ -255,7 +255,7 @@ app.use((req, res, next) => {
   }
   return next();
 });
-app.use((req, res, next) => {
+app.use((_req, _res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     const currentInvoke = getCurrentInvoke();
     set(currentInvoke, 'event.requestContext.identity.sourceIp', 'localhost');

@@ -35,7 +35,7 @@ export const setPriorityOnAllWorkItems = async ({
   });
 
   const requests = [];
-  for (let mapping of workItemMappings) {
+  for (const mapping of workItemMappings) {
     const workItems = await query({
       ExpressionAttributeNames: {
         '#gsi1pk': 'gsi1pk',
@@ -48,7 +48,7 @@ export const setPriorityOnAllWorkItems = async ({
       applicationContext,
     });
 
-    for (let workItem of workItems) {
+    for (const workItem of workItems) {
       requests.push(
         update({
           ExpressionAttributeNames: {

@@ -3,7 +3,7 @@
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from '../helpers/parseArgsAndEnvVars';
+} from '../../helpers/parseArgsAndEnvVars';
 import { type UserType } from '@aws-sdk/client-cognito-identity-provider';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { environment } from '@web-api/environment';
@@ -42,7 +42,6 @@ async function main() {
       UserPoolId: environment.userPoolId,
     });
 
-    // eslint-disable-next-line prefer-destructuring
     PaginationToken = response.PaginationToken;
     response.Users?.forEach(user => {
       const userHasAllAttributes = expectedAttributes.every(

@@ -64,7 +64,7 @@ export const ServiceIndicatorRadios = connect(
                     key: e.target.name,
                     value: e.target.value,
                   });
-                  validateSequence && validateSequence();
+                  if (validateSequence) validateSequence();
                 }}
               />
               <label
@@ -90,7 +90,7 @@ export const ServiceIndicatorRadios = connect(
                   key: e.target.name,
                   value: e.target.value,
                 });
-                validateSequence && validateSequence();
+                if (validateSequence) validateSequence();
               }}
             />
             <label
@@ -116,7 +116,7 @@ export const ServiceIndicatorRadios = connect(
                   key: e.target.name,
                   value: e.target.value,
                 });
-                validateSequence && validateSequence();
+                if (validateSequence) validateSequence();
               }}
             />
             <label

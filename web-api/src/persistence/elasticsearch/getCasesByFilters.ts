@@ -3,9 +3,9 @@ import {
   CaseInventory,
   GetCustomCaseReportRequest,
 } from '../../business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
-import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { formatResults } from './searchClient';
 import { getSearchClient } from '@web-api/persistence/elasticsearch/searchClient/getSearchClient';
+import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl';
 
 export const getCasesByFilters = async ({
   params,
@@ -31,7 +31,7 @@ export const getCasesByFilters = async ({
     'highPriority',
   ];
 
-  const mustClause: QueryDslQueryContainer[] = [];
+  const mustClause: QueryContainer[] = [];
 
   const createDateFilter = {
     range: {
@@ -87,7 +87,7 @@ export const getCasesByFilters = async ({
           'associatedJudgeId.S': judgesIds,
         },
       });
-      const shouldObject: QueryDslQueryContainer = {
+      const shouldObject: QueryContainer = {
         bool: {
           should: shouldArray,
         },
