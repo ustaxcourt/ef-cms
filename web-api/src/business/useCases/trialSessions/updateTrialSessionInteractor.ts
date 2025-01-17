@@ -143,10 +143,6 @@ export const updateTrialSession = async (
       updatedTrialSessionEntity.isCalendared;
 
     const shouldSetNoticeOfTrialSessionLocationChange =
-      currentTrialSession.proceedingType ===
-        TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
-      updatedTrialSessionEntity.proceedingType ===
-        TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
       shouldGenerateNoticeOfChangeTrialLocation(
         currentTrialSession,
         updatedTrialSessionEntity,
