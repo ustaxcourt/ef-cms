@@ -30,7 +30,7 @@ const { tableNameInput } = parseArgsAndEnvVars(scriptConfig) as {
 const dynamoDbClient = new DynamoDBClient({ region: 'us-east-1' });
 const dynamoDbDocClient = DynamoDBDocumentClient.from(dynamoDbClient);
 
-const totalItemsDeleted = 0;
+let totalItemsDeleted = 0;
 
 async function main() {
   // Set up scan parameters
@@ -70,6 +70,7 @@ async function runSegmentScan(
     }));
 
   await batchDeleteDynamoItems(itemsToDelete, client, tableNameInput);
+  totalItemsDeleted = totalItemsDeleted + itemsToDelete.length;
 
   if (result.LastEvaluatedKey) {
     params.ExclusiveStartKey = result.LastEvaluatedKey;
