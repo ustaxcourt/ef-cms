@@ -3,8 +3,8 @@
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from '../helpers/parseArgsAndEnvVars';
-import { getClient } from '../../web-api/elasticsearch/client';
+} from '../../helpers/parseArgsAndEnvVars';
+import { getClient } from '../../../web-api/elasticsearch/client';
 
 const scriptConfig: ScriptConfig = {
   environment: {
@@ -18,7 +18,6 @@ const { environmentName, version } = parseArgsAndEnvVars(scriptConfig) as {
   version: string;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const esClient = await getClient({ environmentName, version });
 

@@ -3,12 +3,12 @@
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from '../helpers/parseArgsAndEnvVars';
+} from '../../helpers/parseArgsAndEnvVars';
 import {
   type ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
-import { generateCsv } from '../helpers/generate-csv';
+import { generateCsv } from '../../helpers/generate-csv';
 import { pick } from 'lodash';
 import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 import { Search_Request } from '@opensearch-project/opensearch/api';
@@ -42,7 +42,7 @@ const loadCaseFromInitialBlackstoneMigrationDb = async ({
       TableName: 'efcms-prod-first',
     });
 
-  return (result as any as RawCase) || {};
+  return (result as unknown as RawCase) || {};
 };
 
 const getSealedCases = async ({
@@ -256,7 +256,6 @@ const getOrdersSinceDawson = async ({
   return ordersSinceDawson;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
   const sealedCases = await getSealedCases({ applicationContext });
@@ -279,7 +278,7 @@ const getOrdersSinceDawson = async ({
       key: 'hasOrdersSinceDawson',
     },
   ];
-  const rows: {}[] = [];
+  const rows: { [k: string]: string; }[] = [];
   for (const sc in sealedCases) {
     rows.push(
       pick(sealedCases[sc], [

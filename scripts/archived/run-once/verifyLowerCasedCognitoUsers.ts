@@ -7,7 +7,7 @@ import {
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from '../helpers/parseArgsAndEnvVars';
+} from '../../helpers/parseArgsAndEnvVars';
 import {
   type ServerApplicationContext,
   createApplicationContext,
@@ -32,7 +32,6 @@ const scriptConfig: ScriptConfig = {
 };
 const { dryRun } = parseArgsAndEnvVars(scriptConfig) as { dryRun: boolean };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
   const start = Date.now();

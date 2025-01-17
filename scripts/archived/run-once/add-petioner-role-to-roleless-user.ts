@@ -4,7 +4,7 @@ import { ROLES } from '@shared/business/entities/EntityConstants';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from '../helpers/parseArgsAndEnvVars';
+} from '../../helpers/parseArgsAndEnvVars';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { environment } from '@web-api/environment';
 
@@ -34,7 +34,6 @@ async function main() {
       UserPoolId: environment.userPoolId,
     });
 
-    // eslint-disable-next-line prefer-destructuring
     PaginationToken = response.PaginationToken;
     response.Users?.forEach(async user => {
       const userHasRole = user.Attributes?.find(
