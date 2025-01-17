@@ -13,26 +13,10 @@ export const STATE_KEYS = {
 
 export const DEBOUNCE_TIME_MILLISECONDS = 500;
 
-interface FilingEvent {
-  documentTitle: string;
-  documentType: string;
-  category: string;
-  eventCode: string;
-  scenario: string;
-  labelPreviousDocument: string;
-  labelFreeText: string;
-  labelFreeText2?: string;
-  ordinalField: string;
-}
-
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
 // a number (100 to 99999) followed by a - and a 2 digit year
-export const DOCUMENT_INTERNAL_CATEGORIES_MAP: {
-  [key: string]: FilingEvent[];
-} = internalFilingEvents;
-export const DOCUMENT_EXTERNAL_CATEGORIES_MAP: {
-  [key: string]: FilingEvent[];
-} = externalFilingEvents;
+export const DOCUMENT_INTERNAL_CATEGORIES_MAP = internalFilingEvents;
+export const DOCUMENT_EXTERNAL_CATEGORIES_MAP = externalFilingEvents;
 export const COURT_ISSUED_EVENT_CODES = courtIssuedEvents;
 
 export const EVENT_CODES_THAT_ALLOW_FREE_TEXT = ['O', 'NOT', 'OJR'];

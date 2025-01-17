@@ -17,9 +17,28 @@ type ExternalFilingEvent = {
   isContactChange?: boolean;
 };
 
-export const externalFilingEvents: {
-  [key: string]: ExternalFilingEvent[];
-} = {
+type AllExternalFilingEvents = {
+  'Answer (filed by respondent only)': ExternalFilingEvent[];
+  'Appearance and Representation': ExternalFilingEvent[];
+  Application: ExternalFilingEvent[];
+  Decision: ExternalFilingEvent[];
+  Miscellaneous: ExternalFilingEvent[];
+  Motion: ExternalFilingEvent[];
+  Notice: ExternalFilingEvent[];
+  Petition: ExternalFilingEvent[];
+  'Pretrial Memorandum': ExternalFilingEvent[];
+  Reply: ExternalFilingEvent[];
+  Request: ExternalFilingEvent[];
+  'Response, Opposition or Objection': ExternalFilingEvent[];
+  'Seriatim Brief': ExternalFilingEvent[];
+  'Simultaneous Brief': ExternalFilingEvent[];
+  Statement: ExternalFilingEvent[];
+  Stipulation: ExternalFilingEvent[];
+  Supplement: ExternalFilingEvent[];
+  'Supporting Document': ExternalFilingEvent[];
+};
+
+export const externalFilingEvents: AllExternalFilingEvents = {
   'Answer (filed by respondent only)': [
     {
       documentTitle: 'Answer',
