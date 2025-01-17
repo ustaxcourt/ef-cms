@@ -4,7 +4,7 @@ import {
   UnsanitizedEntityError,
 } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { applicationContext } from '@web-api/applicationContext';
+import { createApplicationContext } from '../applicationContext';
 import { headerOverride } from '../lambdaWrapper';
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
@@ -17,6 +17,7 @@ import jwt from 'jsonwebtoken';
  * @returns {object} the api gateway response object containing the statusCode, body, and headers
  */
 export const handle = async (event, fun) => {
+  const applicationContext = createApplicationContext({});
   try {
     let response = await fun();
     // Check to see if the server responded with a pdf buffer

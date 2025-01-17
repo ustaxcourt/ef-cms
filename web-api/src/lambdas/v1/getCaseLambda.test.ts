@@ -1,22 +1,61 @@
-jest.mock(
-  '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor',
-);
-jest.mock('@web-api/persistence/dynamo/cases/getCaseByDocketNumber');
-jest.mock('@web-api/persistence/dynamo/deployTable/getMaintenanceMode');
 import { MOCK_CASE_WITH_TRIAL_SESSION } from '../../../../shared/src/test/mockCase';
 import { getCaseLambda } from './getCaseLambda';
-import { getMaintenanceMode as getMaintenanceModeMock } from '@web-api/persistence/dynamo/deployTable/getMaintenanceMode';
+import { createTestApplicationContext as mockCreateTestApplicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { getCaseByDocketNumber as mockGetCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getCaseInteractor as mockGetCaseInteractor } from '@shared/business/useCases/getCaseInteractor';
+
+jest.mock('@web-api/applicationContext', () => {
+  return {
+    createApplicationContext: () => {
+      const appContext = mockCreateTestApplicationContext();
+      appContext.getUseCases().getAllFeatureFlagsInteractor = jest
+        .fn()
+        .mockResolvedValue(mockFeatureFlag);
+      appContext.getDocumentClient = jest.fn().mockReturnValue({
+        query: jest.fn().mockResolvedValue({
+          Items: mockItems, // no items with docket number is found
+        }),
+      });
+      appContext.getUseCases().getCaseInteractor = jest
+        .fn()
+        .mockImplementation(mockGetCaseInteractor);
+
+      if (mockShouldThrowError) {
+        appContext.getDocumentClient = jest.fn().mockReturnValue({
+          query: jest.fn().mockRejectedValue(new Error('test error')),
+        });
+      }
+
+      return appContext;
+    },
+  };
+});
 
 const mockDynamoCaseRecord = Object.assign({}, MOCK_CASE_WITH_TRIAL_SESSION, {
   noticeOfTrialDate: '2020-10-20T01:38:43.489Z',
   pk: 'case|123-20',
   sk: 'case|23',
 });
+
+let mockItems;
+let mockFeatureFlag;
+let mockShouldThrowError;
+const setupMock = ({
+  featureFlag,
+  items,
+  shouldThrowError,
+}: {
+  items: (typeof mockDynamoCaseRecord)[];
+  featureFlag: boolean;
+  shouldThrowError: boolean;
+}) => {
+  mockItems = items;
+  mockShouldThrowError = shouldThrowError;
+  mockFeatureFlag = featureFlag;
+};
 
 const REQUEST_EVENT = {
   body: {},
@@ -30,8 +69,6 @@ const REQUEST_EVENT = {
 
 describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANGE TESTS)', () => {
   let CI;
-  const getCaseByDocketNumber = jest.mocked(mockGetCaseByDocketNumber);
-  const getMaintenanceMode = jest.mocked(getMaintenanceModeMock);
 
   const mockExpectedResponse = {
     caseCaption: 'Test Petitioner, Petitioner',
@@ -63,16 +100,17 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
     ({ CI } = process.env);
     process.env.CI = 'true';
   });
-  beforeEach(() => {
-    getMaintenanceMode.mockResolvedValue({ current: false });
-  });
 
   afterAll(() => (process.env.CI = CI));
 
   // the 401 case is handled by API Gateway, and as such isn’t tested here.
 
   it('returns 404 when the user is not authorized and the case is not found', async () => {
-    getCaseByDocketNumber.mockResolvedValue({} as any);
+    setupMock({
+      featureFlag: true,
+      items: [],
+      shouldThrowError: false,
+    });
 
     const response = await getCaseLambda(REQUEST_EVENT, mockPetitionerUser);
 
@@ -85,7 +123,11 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
   });
 
   it('returns 200 when the user is not associated and the case is found', async () => {
-    getCaseByDocketNumber.mockResolvedValue(mockDynamoCaseRecord as any);
+    setupMock({
+      featureFlag: true,
+      items: [mockDynamoCaseRecord],
+      shouldThrowError: false,
+    });
 
     const response = await getCaseLambda(REQUEST_EVENT, mockPetitionerUser);
 
@@ -104,7 +146,11 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
   });
 
   it('returns 404 when the docket number isn’t found', async () => {
-    getCaseByDocketNumber.mockResolvedValue({} as any);
+    setupMock({
+      featureFlag: true,
+      items: [],
+      shouldThrowError: false,
+    });
 
     const response = await getCaseLambda(REQUEST_EVENT, mockDocketClerkUser);
 
@@ -117,7 +163,11 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
   });
 
   it('returns 500 on an unexpected error', async () => {
-    getCaseByDocketNumber.mockRejectedValue(new Error('I had a problem :('));
+    setupMock({
+      featureFlag: true,
+      items: [],
+      shouldThrowError: true,
+    });
 
     const response = await getCaseLambda(REQUEST_EVENT, mockDocketClerkUser);
 
@@ -129,18 +179,21 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
     );
   });
 
-  it('returns the case in v1 format - when the user has access to the case', async () => {
-    // Careful! Changing this test would mean that the v1 format is changing;
-    // this would mean breaking changes for any user of the v1 API
-    getCaseByDocketNumber.mockResolvedValue({
-      ...mockDynamoCaseRecord,
-      docketEntries: [],
-    } as any);
+  [true, false].forEach(isFeatureFlagOn => {
+    it(`returns the case in v1 format - when feature flag is ${isFeatureFlagOn}`, async () => {
+      // Careful! Changing this test would mean that the v1 format is changing;
+      // this would mean breaking changes for any user of the v1 API
+      setupMock({
+        featureFlag: isFeatureFlagOn,
+        items: [mockDynamoCaseRecord],
+        shouldThrowError: false,
+      });
 
-    const response = await getCaseLambda(REQUEST_EVENT, mockDocketClerkUser);
+      const response = await getCaseLambda(REQUEST_EVENT, mockDocketClerkUser);
 
-    expect(response.statusCode).toBe('200');
-    expect(response.headers['Content-Type']).toBe('application/json');
-    expect(JSON.parse(response.body)).toMatchObject(mockExpectedResponse);
+      expect(response.statusCode).toBe('200');
+      expect(response.headers['Content-Type']).toBe('application/json');
+      expect(JSON.parse(response.body)).toMatchObject(mockExpectedResponse);
+    });
   });
 });
