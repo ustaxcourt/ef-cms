@@ -17,9 +17,28 @@ type InternalFilingEvent = {
   isContactChange?: boolean;
 };
 
-export const internalFilingEvents: {
-  [key: string]: InternalFilingEvent[];
-} = {
+type AllInteralFilingEvents = {
+  'Answer (filed by respondent only)': InternalFilingEvent[];
+  'Appearance and Representation': InternalFilingEvent[];
+  Application: InternalFilingEvent[];
+  Decision: InternalFilingEvent[];
+  Miscellaneous: InternalFilingEvent[];
+  Motion: InternalFilingEvent[];
+  Notice: InternalFilingEvent[];
+  Petition: InternalFilingEvent[];
+  'Pretrial Memorandum': InternalFilingEvent[];
+  Reply: InternalFilingEvent[];
+  Request: InternalFilingEvent[];
+  'Response, Opposition or Objection': InternalFilingEvent[];
+  'Seriatim Brief': InternalFilingEvent[];
+  'Simultaneous Brief': InternalFilingEvent[];
+  Statement: InternalFilingEvent[];
+  Stipulation: InternalFilingEvent[];
+  Supplement: InternalFilingEvent[];
+  'Supporting Document': InternalFilingEvent[];
+};
+
+export const internalFilingEvents: AllInteralFilingEvents = {
   'Answer (filed by respondent only)': [
     {
       documentTitle: 'Answer',
