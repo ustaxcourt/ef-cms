@@ -1,5 +1,5 @@
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
-import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/hasTrialLocationBeenUpdated';
+import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const hasTrialSessionLocationChangedAction = ({
