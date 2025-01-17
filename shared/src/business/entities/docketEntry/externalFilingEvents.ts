@@ -38,7 +38,7 @@ type AllExternalFilingEvents = {
   'Supporting Document': ExternalFilingEvent[];
 };
 
-export const externalFilingEvents: AllExternalFilingEvents = {
+export const EXTERNAL_FILING_EVENTS: AllExternalFilingEvents = {
   'Answer (filed by respondent only)': [
     {
       documentTitle: 'Answer',

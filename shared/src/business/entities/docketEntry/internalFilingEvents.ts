@@ -38,7 +38,7 @@ type AllInteralFilingEvents = {
   'Supporting Document': InternalFilingEvent[];
 };
 
-export const internalFilingEvents: AllInteralFilingEvents = {
+export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
   'Answer (filed by respondent only)': [
     {
       documentTitle: 'Answer',
