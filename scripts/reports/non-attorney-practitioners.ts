@@ -305,7 +305,7 @@ const calculateCaseDuration = (caseRecord: tCase): number => {
   if (!caseRecord.receivedAt) {
     return 0;
   }
-  let initialClosureDate = determineInitialClosureDate(caseRecord);
+  const initialClosureDate = determineInitialClosureDate(caseRecord);
   if (!initialClosureDate) {
     return 0;
   }

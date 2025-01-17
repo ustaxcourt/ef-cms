@@ -3,14 +3,15 @@
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from '../helpers/parseArgsAndEnvVars';
+} from '../../helpers/parseArgsAndEnvVars';
 import {
   type ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
-import { generateCsv } from '../helpers/generate-csv';
+import { generateCsv } from '../../helpers/generate-csv';
 import { pick } from 'lodash';
 import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
+import { Search_Request } from '@opensearch-project/opensearch/api';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -41,7 +42,7 @@ const loadCaseFromInitialBlackstoneMigrationDb = async ({
       TableName: 'efcms-prod-first',
     });
 
-  return (result as any as RawCase) || {};
+  return (result as unknown as RawCase) || {};
 };
 
 const getSealedCases = async ({
@@ -49,7 +50,7 @@ const getSealedCases = async ({
 }: {
   applicationContext: ServerApplicationContext;
 }) => {
-  const searchParameters = {
+  const searchParameters: Search_Request = {
     body: {
       _source: [
         'associatedJudge.S',
@@ -126,7 +127,7 @@ const getSealedDocketEntries = async ({
   applicationContext: ServerApplicationContext;
   docketNumbers: string[];
 }) => {
-  const searchParameters = {
+  const searchParameters: Search_Request = {
     body: {
       _source: [
         'docketNumber.S',
@@ -168,7 +169,7 @@ const getSealedDocketEntries = async ({
   };
 
   const { results } = await searchAll({ applicationContext, searchParameters });
-  let sealedDocketEntries = {};
+  const sealedDocketEntries = {};
   for (const hit of results) {
     const { docketEntryId, docketNumber, isLegacySealed, isSealed } = hit;
     if (!(docketNumber in sealedDocketEntries)) {
@@ -200,7 +201,7 @@ const getOrdersSinceDawson = async ({
   applicationContext: ServerApplicationContext;
   docketNumbers: string[];
 }) => {
-  const searchParameters = {
+  const searchParameters: Search_Request = {
     body: {
       _source: ['docketNumber.S', 'docketEntryId.S'],
       query: {
@@ -242,7 +243,7 @@ const getOrdersSinceDawson = async ({
   };
 
   const { results } = await searchAll({ applicationContext, searchParameters });
-  let ordersSinceDawson = {};
+  const ordersSinceDawson = {};
   for (const hit of results) {
     const { docketEntryId, docketNumber } = hit;
     if (!(docketNumber in ordersSinceDawson)) {
@@ -255,7 +256,6 @@ const getOrdersSinceDawson = async ({
   return ordersSinceDawson;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
   const sealedCases = await getSealedCases({ applicationContext });
@@ -278,7 +278,7 @@ const getOrdersSinceDawson = async ({
       key: 'hasOrdersSinceDawson',
     },
   ];
-  const rows: {}[] = [];
+  const rows: { [k: string]: string; }[] = [];
   for (const sc in sealedCases) {
     rows.push(
       pick(sealedCases[sc], [

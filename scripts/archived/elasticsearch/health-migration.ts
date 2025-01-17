@@ -4,10 +4,9 @@ import { Client } from '@opensearch-project/opensearch';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from '../helpers/parseArgsAndEnvVars';
-import { esIndexType } from '../../web-api/elasticsearch/elasticsearch-indexes';
-import { getBaseAliasFromIndexName } from '../../web-api/elasticsearch/elasticsearch-aliases';
-import { getClient } from '../../web-api/elasticsearch/client';
+} from '../../helpers/parseArgsAndEnvVars';
+import { getBaseAliasFromIndexName } from '../../../web-api/elasticsearch/elasticsearch-aliases';
+import { getClient } from '../../../web-api/elasticsearch/client';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -56,16 +55,14 @@ const listIndices = async ({
   const esClient = await getEsClient({ version });
   const indices = await esClient.cat.indices({ format: 'json' });
 
-  return (
-    indices.body
-      ?.filter((i: esIndexType) => {
-        return i.index.includes('efcms');
-      })
-      .map((i: esIndexType) => i.index) || []
-  );
+  return indices.body
+    .map(i => i.index)
+    .filter(i => typeof i === 'string')
+    .filter(i => {
+      return i.includes('efcms');
+    });
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const counts = { alpha: {}, beta: {} };
   const totals: { alpha: number; beta: number } = {
@@ -96,7 +93,6 @@ const listIndices = async ({
     totals.beta += countBeta;
     out.push({
       indexName: aliasName,
-      // eslint-disable-next-line sort-keys-fix/sort-keys-fix
       countAlpha,
       countBeta,
       diff: Math.abs(countAlpha - countBeta),

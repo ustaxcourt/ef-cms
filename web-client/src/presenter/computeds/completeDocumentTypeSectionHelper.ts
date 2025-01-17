@@ -18,7 +18,7 @@ export const completeDocumentTypeSectionHelper = (
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
 
-  let returnData: {
+  const returnData: {
     primary: any;
     secondary: any;
     documentTypesForSelect: (DocumentTypeBase & { documentTitle: string })[];

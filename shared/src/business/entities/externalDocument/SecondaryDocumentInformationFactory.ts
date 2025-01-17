@@ -25,9 +25,9 @@ export class SecondaryDocumentInformationFactory extends JoiValidationEntity {
   }
 
   getValidationRules() {
-    let schema = {};
+    const schema = {};
 
-    let schemaOptionalItems = {
+    const schemaOptionalItems = {
       attachments: joi
         .boolean()
         .messages({ '*': 'Enter selection for Attachments.' }),

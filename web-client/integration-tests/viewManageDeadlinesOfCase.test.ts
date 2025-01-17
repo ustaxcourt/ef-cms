@@ -93,6 +93,7 @@ describe('View and manage the deadlines of a case', () => {
     });
   });
 
+  // eslint-disable-next-line jest/no-identical-title
   describe('View a case with no deadlines', () => {
     loginAs(cerebralTest, 'petitionsclerk@example.com');
     petitionsClerkViewsCaseWithNoDeadlines(cerebralTest);

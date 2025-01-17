@@ -567,7 +567,6 @@ export const DECISION_EVENT_CODE = 'DEC';
 
 export const LODGED_EVENT_CODE = 'MISCL';
 
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 export const OBJECTIONS_OPTIONS_MAP = {
   YES: 'Yes',
   NO: 'No',

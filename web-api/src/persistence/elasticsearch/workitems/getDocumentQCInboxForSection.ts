@@ -1,5 +1,7 @@
+import { Search_Request } from '@opensearch-project/opensearch/api';
 import { GET_PARENT_CASE } from '../helpers/searchClauses';
 import { search } from '../searchClient';
+import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl';
 
 export const getDocumentQCInboxForSection = async ({
   applicationContext,
@@ -7,23 +9,24 @@ export const getDocumentQCInboxForSection = async ({
   section,
 }) => {
   applicationContext.logger.info('getDocumentQCInboxForSection start');
-  const query = {
+  const must: QueryContainer[] = [
+    {
+      prefix: { 'pk.S': 'case|' },
+    },
+    {
+      prefix: { 'sk.S': 'work-item|' },
+    },
+    {
+      term: {
+        'section.S': section,
+      },
+    },
+  ];
+  const query: Search_Request = {
     body: {
       query: {
         bool: {
-          must: [
-            {
-              prefix: { 'pk.S': 'case|' },
-            },
-            {
-              prefix: { 'sk.S': 'work-item|' },
-            },
-            {
-              term: {
-                'section.S': section,
-              },
-            },
-          ],
+          must,
           must_not: {
             exists: {
               field: 'completedAt.S',
@@ -48,7 +51,7 @@ export const getDocumentQCInboxForSection = async ({
   };
 
   if (judgeUserName) {
-    query.body.query.bool.must.push({
+    must.push({
       match: {
         'associatedJudge.S': `${judgeUserName}`,
       },

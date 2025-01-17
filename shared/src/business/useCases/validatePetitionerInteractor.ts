@@ -14,7 +14,7 @@ import { isEmpty } from 'lodash';
  */
 
 export const validatePetitionerInteractor = (
-  applicationContext: IApplicationContext,
+  _applicationContext: IApplicationContext,
   {
     contactInfo,
     existingPetitioners,

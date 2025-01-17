@@ -1,4 +1,7 @@
-import { A_VALID_DOCKET_ENTRY, MOCK_PETITIONERS } from './DocketEntry.test';
+import {
+  A_VALID_DOCKET_ENTRY,
+  MOCK_PETITIONERS,
+} from '@shared/business/entities/DocketEntryTestFixtures';
 import { DocketEntry } from './DocketEntry';
 
 describe('setQCed', () => {

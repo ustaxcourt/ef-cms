@@ -70,7 +70,7 @@ export const addPaperFiling = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  let caseEntities: Case[] = [];
+  const caseEntities: Case[] = [];
   let filedByFromLeadCase;
 
   for (const docketNumber of consolidatedGroupDocketNumbers) {
