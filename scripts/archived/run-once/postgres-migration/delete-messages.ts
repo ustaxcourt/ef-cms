@@ -11,8 +11,8 @@ import { DynamoDBDocumentClient, ScanCommand } from '@aws-sdk/lib-dynamodb';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from '../../helpers/parseArgsAndEnvVars';
-import { batchDeleteDynamoItems } from './batch-delete-dynamo-items';
+} from '../../../helpers/parseArgsAndEnvVars';
+import { batchDeleteDynamoItems } from '../../../run-once-scripts/postgres-migration/batch-delete-dynamo-items';
 
 const scriptConfig: ScriptConfig = {
   description:

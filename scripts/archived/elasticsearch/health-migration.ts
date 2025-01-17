@@ -4,9 +4,9 @@ import { Client } from '@opensearch-project/opensearch';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from '../helpers/parseArgsAndEnvVars';
-import { getBaseAliasFromIndexName } from '../../web-api/elasticsearch/elasticsearch-aliases';
-import { getClient } from '../../web-api/elasticsearch/client';
+} from '../../helpers/parseArgsAndEnvVars';
+import { getBaseAliasFromIndexName } from '../../../web-api/elasticsearch/elasticsearch-aliases';
+import { getClient } from '../../../web-api/elasticsearch/client';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -63,7 +63,6 @@ const listIndices = async ({
     });
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const counts = { alpha: {}, beta: {} };
   const totals: { alpha: number; beta: number } = {

@@ -6,7 +6,7 @@ import { RawCorrespondence } from '@shared/business/entities/Correspondence';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from '../helpers/parseArgsAndEnvVars';
+} from '../../helpers/parseArgsAndEnvVars';
 import {
   type ServerApplicationContext,
   createApplicationContext,
