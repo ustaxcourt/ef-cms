@@ -71,7 +71,12 @@ export const SearchResults = connect(
                       data-testid={`advanced-case-search-result-${result.docketNumber}`}
                       key={result.docketNumber}
                     >
-                      <td className="center-column">{idx + 1}</td>
+                      <td
+                        className="center-column"
+                        data-testid={`advanced-case-search-result-order-${idx}`}
+                      >
+                        {idx + 1}
+                      </td>
                       <NonMobile>
                         <td>
                           {result.petitionerNames.map((name, index) => (

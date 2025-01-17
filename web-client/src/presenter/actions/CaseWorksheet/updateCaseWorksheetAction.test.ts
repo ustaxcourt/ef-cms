@@ -2,6 +2,7 @@ import { CaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorks
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_CASE_WORKSHEET } from '@shared/test/mockCaseWorksheet';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { judgeColvin } from '@shared/test/mockUsers';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { updateCaseWorksheetAction } from './updateCaseWorksheetAction';
@@ -18,12 +19,19 @@ describe('updateCaseWorksheetAction', () => {
       .getUseCases()
       .updateCaseWorksheetInteractor.mockResolvedValue(MOCK_CASE_WORKSHEET);
 
+    applicationContext
+      .getUseCases()
+      .getJudgeInSectionInteractor.mockResolvedValue({
+        userId: judgeColvin.userId,
+      });
+
     const { output } = await runAction(updateCaseWorksheetAction, {
       modules: {
         presenter,
       },
       state: {
         form: mockForm,
+        user: { section: '', userId: '' },
       },
     });
 
