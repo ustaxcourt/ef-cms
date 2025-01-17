@@ -21,7 +21,7 @@ export default defineConfig({
   requestTimeout: 60000,
   screenshotOnRunFailure: false,
   screenshotsFolder: 'cypress/readonly/screenshots',
-  video: true,
+  video: false,
   videoCompression: 10,
   videosFolder: 'cypress/readonly/videos',
   viewportHeight: 900,

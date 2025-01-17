@@ -153,7 +153,7 @@ export default defineConfig({
   retries: 0,
   screenshotOnRunFailure: false,
   screenshotsFolder: 'cypress/deployed-and-local/screenshots',
-  video: true,
+  video: false,
   videoCompression: 10,
   videosFolder: 'cypress/deployed-and-local/videos',
   viewportHeight: 900,

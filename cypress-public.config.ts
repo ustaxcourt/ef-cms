@@ -45,7 +45,7 @@ export default defineConfig({
   requestTimeout: 12000,
   screenshotOnRunFailure: false,
   screenshotsFolder: 'cypress/local-only/screenshots',
-  video: true,
+  video: false,
   videosFolder: 'cypress/local-only/videos',
   viewportHeight: 900,
   viewportWidth: 1200,
