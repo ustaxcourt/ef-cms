@@ -1,5 +1,4 @@
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
-import { hasTrialLocationBeenUpdated } from '@shared/business/utilities/trialSession/hasTrialLocationBeenUpdated';
+import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const hasTrialSessionLocationChangedAction = ({
@@ -9,20 +8,12 @@ export const hasTrialSessionLocationChangedAction = ({
   const updatedTrialSessionLocation = get(state.form);
   const currentTrialSessionLocation = get(state.formattedTrialSessionDetails);
 
-  if (
-    currentTrialSessionLocation.proceedingType !==
-      TRIAL_SESSION_PROCEEDING_TYPES.inPerson ||
-    updatedTrialSessionLocation.proceedingType !==
-      TRIAL_SESSION_PROCEEDING_TYPES.inPerson
-  )
-    return path.unchanged();
-
-  const isUpdated = hasTrialLocationBeenUpdated(
+  const shouldGenerateNCTL = shouldGenerateNoticeOfChangeTrialLocation(
     currentTrialSessionLocation,
     updatedTrialSessionLocation,
   );
 
-  if (!isUpdated) return path.unchanged();
+  if (!shouldGenerateNCTL) return path.unchanged();
   return path.updated({
     currentTrialSessionLocation,
     updatedTrialSessionLocation,

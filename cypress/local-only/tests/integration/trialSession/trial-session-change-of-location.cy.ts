@@ -16,7 +16,20 @@ describe('Trial Session - Notice Change of Location', () => {
         cy.get(
           `[data-testid="trial-location-link-${trialSessionInfo.trialSessionId}"]`,
         ).click();
+
+        cy.get('[data-testid="edit-trial-session"]').click();
+        cy.get('[data-testid="trial-session-courthouse-name"]').clear();
+        cy.get('[data-testid="trial-session-courthouse-name"]').type(
+          'Since this is not calendared it should not display modal',
+        );
+        cy.get('[data-testid="submit-edit-trial-session"]').click();
       },
+    );
+
+    cy.get('[data-testid="success-alert"]').should('exist');
+    cy.get('[data-testid="success-alert"]').should(
+      'contain.text',
+      'Trial session updated',
     );
 
     cy.get('[data-testid="set-calendar-button"]').click();
@@ -45,8 +58,9 @@ describe('Trial Session - Notice Change of Location', () => {
 
     cy.get('[data-testid="trial-session-location-link"]').click();
     cy.get('[data-testid="edit-trial-session"]').click();
+    cy.get('[data-testid="trial-session-courthouse-name"]').clear();
     cy.get('[data-testid="trial-session-courthouse-name"]').type(
-      'a courthouse Update',
+      'Updated Courthouse Name',
     );
     cy.get('[data-testid="submit-edit-trial-session"]').click();
     cy.get('[data-testid="modal-button-confirm"]').click();

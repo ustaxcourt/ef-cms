@@ -19,7 +19,7 @@ import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/Entity
 import { TrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { get } from 'lodash';
-import { hasTrialLocationBeenUpdated } from '@shared/business/utilities/trialSession/hasTrialLocationBeenUpdated';
+import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const updateTrialSession = async (
@@ -143,11 +143,7 @@ export const updateTrialSession = async (
       updatedTrialSessionEntity.isCalendared;
 
     const shouldSetNoticeOfTrialSessionLocationChange =
-      currentTrialSession.proceedingType ===
-        TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
-      updatedTrialSessionEntity.proceedingType ===
-        TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
-      hasTrialLocationBeenUpdated(
+      shouldGenerateNoticeOfChangeTrialLocation(
         currentTrialSession,
         updatedTrialSessionEntity,
       );

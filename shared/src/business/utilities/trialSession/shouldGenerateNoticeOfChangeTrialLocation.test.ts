@@ -1,13 +1,14 @@
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
-import { hasTrialLocationBeenUpdated } from '@shared/business/utilities/trialSession/hasTrialLocationBeenUpdated';
+import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation';
 
-describe('hasTrialLocationBeenUpdated', () => {
+describe('shouldGenerateNoticeOfChangeTrialLocation', () => {
   const TEST_LOCATION = {
     address1: 'TEST_ADDRESS_1',
     address2: 'TEST_ADDRESS_2',
     city: 'TEST_CITY',
     courthouseName: 'TEST_COURT_HOUSE_NAME',
+    isCalendared: true,
     postalCode: 'TEST_POSTAL_CODE',
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
     state: 'TEST_STATE',
@@ -23,7 +24,27 @@ describe('hasTrialLocationBeenUpdated', () => {
       ...TEST_LOCATION,
     } as RawTrialSession;
 
-    const result = hasTrialLocationBeenUpdated(
+    const result = shouldGenerateNoticeOfChangeTrialLocation(
+      CURRENT_LOCATION,
+      UPDATED_LOCATION,
+    );
+
+    expect(result).toEqual(false);
+  });
+
+  it('return "false" if the current/updated Trial Session is not calendared', () => {
+    const CURRENT_LOCATION = {
+      ...TEST_LOCATION,
+      isCalendared: false,
+    } as RawTrialSession;
+
+    const UPDATED_LOCATION = {
+      ...TEST_LOCATION,
+      address1: 'UPDATE_TEST_aDDRESS_1',
+      isCalendared: false,
+    } as RawTrialSession;
+
+    const result = shouldGenerateNoticeOfChangeTrialLocation(
       CURRENT_LOCATION,
       UPDATED_LOCATION,
     );
@@ -41,7 +62,7 @@ describe('hasTrialLocationBeenUpdated', () => {
       address1: 'UPDATE_TEST_aDDRESS_1',
     } as RawTrialSession;
 
-    const result = hasTrialLocationBeenUpdated(
+    const result = shouldGenerateNoticeOfChangeTrialLocation(
       CURRENT_LOCATION,
       UPDATED_LOCATION,
     );
