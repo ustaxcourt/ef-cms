@@ -1,5 +1,3 @@
-/* eslint-disable @miovision/disallow-date/no-new-date */
-
 import { NewCaseCorrespondenceKysely } from '@web-api/database-types';
 
 export const correspondence: NewCaseCorrespondenceKysely[] = [
