@@ -3,7 +3,6 @@ import { casePublicSearch } from './casePublicSearch';
 jest.mock('./searchClient');
 import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import { MAX_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
-import { MOCK_CASE_SEARCH_RESULT } from '@web-api/business/useCases/caseAdvancedSearchInteractor.test';
 import { search } from './searchClient';
 
 jest.mock(
@@ -17,6 +16,31 @@ jest.mock(
     };
   },
 );
+
+const MOCK_CASE_SEARCH_RESULT = {
+  caseCaption: 'Test Case Caption',
+  docketNumber: '101-20',
+  docketNumberWithSuffix: '101-20L',
+  fakeField: 'Hide this',
+  irsPractitioners: [
+    {
+      address: 'Hide this',
+      name: 'TestIRSPractitioner',
+      state: 'California',
+    },
+  ],
+  petitioners: [
+    {
+      address: 'Hide this',
+      name: 'Test Petitioner',
+      state: 'California',
+    },
+  ],
+  privatePractitioners: [
+    { address: 'Hide this', name: 'TestPrivatePractitioner' },
+  ],
+  receivedAt: '2023-01-24T22:34:48.100Z',
+};
 
 describe('casePublicSearch', () => {
   const searchTerms: CaseAdvancedSearchParamsRequestType = {

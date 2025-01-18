@@ -8,7 +8,7 @@ import {
 } from '@shared/test/mockAuthUsers';
 
 describe('addDocketEntryForPaymentStatus', () => {
-  let user = mockPetitionerUser;
+  const user = mockPetitionerUser;
 
   it('adds a docketRecord for a paid petition payment', async () => {
     const caseEntity = new Case(

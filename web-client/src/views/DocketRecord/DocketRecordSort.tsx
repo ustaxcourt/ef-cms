@@ -8,7 +8,6 @@ export function DocketRecordSort({ name, onChange, value }) {
       data-testid="docket-record-sort-select"
       id="docket-record-sort"
       name={name}
-      role="listbox"
       value={value}
       onChange={e => {
         onChange({
@@ -35,7 +34,7 @@ export function DocketRecordSort({ name, onChange, value }) {
           value: 'byIndexDesc',
         },
       ].map(item => (
-        <option key={item.value} role="option" value={item.value}>
+        <option key={item.value} value={item.value}>
           {item.label}
         </option>
       ))}

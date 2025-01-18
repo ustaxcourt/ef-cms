@@ -8,7 +8,7 @@ import {
 export const aggregateTrialSessionItems = (
   items: TDynamoRecord[],
 ): RawTrialSession | undefined => {
-  let paperServicePdfs: { title: string; fileId: string }[] = [];
+  const paperServicePdfs: { title: string; fileId: string }[] = [];
 
   let trialSession: RawTrialSession | undefined;
   items

@@ -1,5 +1,3 @@
-/* eslint-disable @miovision/disallow-date/no-new-date */
-
 import { NewCaseDeadlineKysely } from '@web-api/database-types';
 
 export const caseDeadlines: NewCaseDeadlineKysely[] = [

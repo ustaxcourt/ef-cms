@@ -28,11 +28,13 @@ export const loadPdfForTabAction = ({
         openUrlInNewTab({ url: pdfDataUri });
         resolve();
       } catch (err) {
+        // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
         reject(err);
       }
     };
 
     reader.onerror = function (err) {
+      // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
       reject(err);
     };
 

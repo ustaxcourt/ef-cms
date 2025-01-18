@@ -1,26 +1,29 @@
+import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import {
   PendingItem,
   pendingItemCaseSource,
   pendingItemDocketEntrySource,
 } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
-import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { UNSERVABLE_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 import { search } from './searchClient';
+import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { Search_Request } from '@opensearch-project/opensearch/api';
 
 export const fetchPendingItems = async ({
   applicationContext,
   docketNumber,
   judge,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   docketNumber?: string;
   judge?: string;
 }): Promise<{ foundDocuments: PendingItem[] }> => {
-  const mustFilters: QueryDslQueryContainer[] = [];
+  const mustFilters: QueryContainer[] = [];
   mustFilters.push({ term: { 'entityName.S': 'DocketEntry' } });
   mustFilters.push({ term: { 'pending.BOOL': true } });
 
-  const hasParentParam: QueryDslQueryContainer = {
+  const hasParentParam: QueryContainer = {
     has_parent: {
       inner_hits: {
         _source: {
@@ -49,9 +52,9 @@ export const fetchPendingItems = async ({
     mustFilters.push({ term: { 'docketNumber.S': docketNumber } });
   }
 
-  const searchParameters = {
+  const searchParameters: Search_Request = {
     body: {
-      _source: pendingItemDocketEntrySource,
+      _source: pendingItemDocketEntrySource as unknown as string[],
       query: {
         bool: {
           must: [
@@ -93,7 +96,7 @@ export const fetchPendingItems = async ({
       ],
     },
     index: 'efcms-docket-entry',
-    size: 10000,
+    size: MAX_ELASTICSEARCH_PAGINATION,
   };
 
   const { results } = await search({

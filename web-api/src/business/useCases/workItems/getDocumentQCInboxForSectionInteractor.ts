@@ -20,7 +20,7 @@ import { getDocumentQCInboxForSection } from '@web-api/persistence/postgres/work
  * @returns {object} the work items in the section document inbox
  */
 export const getDocumentQCInboxForSectionInteractor = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     judgeUserName,
     section,

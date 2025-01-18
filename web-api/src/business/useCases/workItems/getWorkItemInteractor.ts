@@ -17,7 +17,7 @@ import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWork
  * @returns {object} the work item data
  */
 export const getWorkItemInteractor = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { workItemId }: { workItemId: string },
   authorizedUser: UnknownAuthUser,
 ) => {

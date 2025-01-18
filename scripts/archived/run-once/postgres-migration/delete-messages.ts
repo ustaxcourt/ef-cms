@@ -11,8 +11,8 @@ import { DynamoDBDocumentClient, ScanCommand } from '@aws-sdk/lib-dynamodb';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from '../../helpers/parseArgsAndEnvVars';
-import { batchDeleteDynamoItems } from './batch-delete-dynamo-items';
+} from '../../../helpers/parseArgsAndEnvVars';
+import { batchDeleteDynamoItems } from '../../../run-once-scripts/postgres-migration/batch-delete-dynamo-items';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -70,6 +70,7 @@ async function runSegmentScan(
     }));
 
   await batchDeleteDynamoItems(itemsToDelete, client, tableNameInput);
+  totalItemsDeleted = totalItemsDeleted + itemsToDelete.length;
 
   if (result.LastEvaluatedKey) {
     params.ExclusiveStartKey = result.LastEvaluatedKey;

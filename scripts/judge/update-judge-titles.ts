@@ -32,7 +32,7 @@ const judgesToUpdateIds: { userId: string; judgeTitle: string }[] = [
 (async () => {
   const applicationContext = createApplicationContext({});
 
-  for (let judge of judgesToUpdateIds) {
+  for (const judge of judgesToUpdateIds) {
     const { userId } = judge;
 
     const userToUpdate = await applicationContext

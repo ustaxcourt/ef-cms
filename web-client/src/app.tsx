@@ -302,7 +302,7 @@ const app = {
     const wrappedRoute = (path, cb) => {
       route(path, function () {
         return (processQueue = processQueue.then(() => {
-          // eslint-disable-next-line promise/no-callback-in-promise
+          // eslint-disable-next-line prefer-rest-params
           return cb(...arguments);
         }));
       });

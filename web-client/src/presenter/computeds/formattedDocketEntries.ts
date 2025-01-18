@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
@@ -16,7 +15,7 @@ export const isSelectableForDownload = (entry: RawDocketEntry) => {
 };
 
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
-  let iconsToDisplay: any[] = [];
+  const iconsToDisplay: any[] = [];
 
   if (formattedResult.sealedTo) {
     iconsToDisplay.push({

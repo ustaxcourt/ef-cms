@@ -1134,7 +1134,7 @@ header.usa-header {
   }
 
   h1 {
-		@include h1-underline-border;
+    @include h1-underline-border;
 
     position: relative;
     top: 2px;
@@ -2397,14 +2397,14 @@ button.change-scanner-button {
 }
 
 .trial-session-planning-report-header {
-	font-family: 'Noto Serif JP', serif;
-	font-size: 32px;
+  font-family: 'Noto Serif JP', serif;
+  font-size: 32px;
 }
 
 .cities-not-calendared-header {
-	font-weight: 600;
+  font-weight: 600;
 }
 
 .cities-not-calendated-yellow-background {
-	background-color: #FFE396;
+  background-color: #ffe396;
 }

@@ -21,7 +21,7 @@ import { getDocumentQCServedForUser } from '@web-api/persistence/postgres/workit
  * @returns {object} the work items in the user document served inbox
  */
 export const getDocumentQCServedForUserInteractor = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { userId }: { userId: string },
   authorizedUser: UnknownAuthUser,
 ) => {

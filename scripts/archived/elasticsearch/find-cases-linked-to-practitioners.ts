@@ -4,7 +4,7 @@ import { type RawPractitioner } from '@shared/business/entities/Practitioner';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from '../helpers/parseArgsAndEnvVars';
+} from '../../helpers/parseArgsAndEnvVars';
 import {
   type ServerApplicationContext,
   createApplicationContext,
@@ -78,7 +78,6 @@ const getPrivatePractitionersOnCase = async ({
   return privatePractitioners;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
   const allOpenCases = await getOpenCases({ applicationContext });
@@ -86,7 +85,7 @@ const getPrivatePractitionersOnCase = async ({
   console.log(`found ${allOpenCases.length} open cases`);
   let i = 1;
 
-  for (let openCase of allOpenCases) {
+  for (const openCase of allOpenCases) {
     console.log(`case ${i++} / ${allOpenCases.length}`);
     const primaryPetitioner = openCase.petitioners.find(
       p => p.contactType === 'primary',

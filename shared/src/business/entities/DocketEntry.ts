@@ -416,20 +416,23 @@ export class DocketEntry extends JoiValidationEntity {
       !DocketEntry.isServed(this);
 
     if (shouldGenerateFiledBy) {
-      let partiesArray: string[] = [];
+      const partiesArray: string[] = [];
       const privatePractitionerIsFiling = this.privatePractitioners?.some(
         practitioner => practitioner.partyPrivatePractitioner,
       );
 
       if (privatePractitionerIsFiling) {
-        Array.isArray(this.privatePractitioners) &&
+        if (Array.isArray(this.privatePractitioners)) {
           this.privatePractitioners.forEach(practitioner => {
-            practitioner.partyPrivatePractitioner &&
+            if (practitioner.partyPrivatePractitioner) {
               partiesArray.push(practitioner.name);
+            }
           });
+        }
       } else {
-        this.partyIrsPractitioner && partiesArray.push('Resp.');
-
+        if (this.partyIrsPractitioner) {
+          partiesArray.push('Resp.');
+        }
         const petitionersArray: string[] = [];
         const intervenorsArray: string[] = [];
         this.filers.forEach(contactId =>

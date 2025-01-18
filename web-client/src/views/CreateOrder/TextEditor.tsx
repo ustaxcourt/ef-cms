@@ -107,7 +107,7 @@ export const TextEditor = ({
             ],
           }}
           tabIndex={0}
-          onChange={(content, delta, source, editor) => {
+          onChange={(_content, _delta, _source, editor) => {
             const fullDelta = editor.getContents();
             const documentContents = editor.getText();
             const converter = new QuillDeltaToHtmlConverter(fullDelta.ops, {
