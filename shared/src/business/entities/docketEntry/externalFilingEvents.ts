@@ -1828,6 +1828,25 @@ export const EXTERNAL_FILING_EVENTS: AllExternalFilingEvents = {
       labelFreeText: '',
       ordinalField: '',
       allowStamp: true,
+      deprecated: {
+        deprecatedOn: '01/2025',
+        deprecationReson: `10578: The Pro Se committee has recommended that we re-characterize M129 to indicate 
+          that it can be used to either complete OR supplement the administrative record. 
+          M129 is being deprecated in favor of M129A to reflect this recharacterization.`,
+      },
+    },
+    {
+      documentTitle:
+        'Motion to Complete or Supplement the Administrative Record',
+      documentType:
+        'Motion to Complete or Supplement the Administrative Record',
+      category: 'Motion',
+      eventCode: 'M129A',
+      scenario: 'Standard',
+      labelPreviousDocument: '',
+      labelFreeText: '',
+      ordinalField: '',
+      allowStamp: true,
     },
     {
       documentTitle: 'Motion to Suppress Evidence',
