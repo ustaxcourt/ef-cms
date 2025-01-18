@@ -5,6 +5,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { INTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION } from '@shared/business/entities/EntityConstants';
+import { INTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/internalFilingEvents';
 export const editDocketEntryMetaHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -14,12 +15,11 @@ export const editDocketEntryMetaHelper = (
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
 
-  const { AMENDMENT_EVENT_CODES, INTERNAL_CATEGORY_MAP } =
-    applicationContext.getConstants();
+  const { AMENDMENT_EVENT_CODES } = applicationContext.getConstants();
 
   let categoryInformation;
   find(
-    INTERNAL_CATEGORY_MAP,
+    INTERNAL_FILING_EVENTS,
     entries => (categoryInformation = find(entries, { eventCode })),
   );
 

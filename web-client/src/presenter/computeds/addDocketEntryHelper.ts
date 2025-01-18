@@ -5,6 +5,7 @@ import { find, orderBy } from 'lodash';
 import { getOptionsForCategory } from './selectDocumentTypeHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 import { supportingDocumentFreeTextTypes } from './fileDocumentHelper';
+import { INTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/internalFilingEvents';
 
 const getInternalDocumentTypes = typeMap => {
   let filteredTypeList = [];
@@ -34,7 +35,6 @@ export const addDocketEntryHelper = (
 ): any => {
   const {
     AMENDMENT_EVENT_CODES,
-    INTERNAL_CATEGORY_MAP,
     NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
   } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
@@ -44,10 +44,12 @@ export const addDocketEntryHelper = (
   const showDateReceivedEdit = caseDetail.isPaper;
   const form = get(state.form);
 
-  const internalDocumentTypes = getInternalDocumentTypes(INTERNAL_CATEGORY_MAP);
+  const internalDocumentTypes = getInternalDocumentTypes(
+    INTERNAL_FILING_EVENTS,
+  );
 
   const supportingDocumentTypeList = getSupportingDocumentTypeList(
-    INTERNAL_CATEGORY_MAP,
+    INTERNAL_FILING_EVENTS,
   );
 
   const { certificateOfServiceDate } = form;
@@ -67,13 +69,13 @@ export const addDocketEntryHelper = (
   let secondaryCategoryInformation;
 
   find(
-    INTERNAL_CATEGORY_MAP,
+    INTERNAL_FILING_EVENTS,
     entries =>
       (categoryInformation = find(entries, { eventCode: selectedEventCode })),
   );
 
   find(
-    INTERNAL_CATEGORY_MAP,
+    INTERNAL_FILING_EVENTS,
     entries =>
       (secondaryCategoryInformation = find(entries, {
         eventCode: secondarySelectedEventCode,
