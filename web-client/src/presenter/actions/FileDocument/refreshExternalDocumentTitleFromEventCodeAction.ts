@@ -1,3 +1,4 @@
+import { EXTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/externalFilingEvents';
 import { INTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/internalFilingEvents';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -15,7 +16,6 @@ export const refreshExternalDocumentTitleFromEventCodeAction = ({
 }: ActionProps) => {
   const { category, eventCode } = get(state.form);
   const {
-    CATEGORY_MAP,
     PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP,
   } = applicationContext.getConstants();
 
@@ -26,7 +26,7 @@ export const refreshExternalDocumentTitleFromEventCodeAction = ({
 
   if (category && eventCode && !isPractitionerAssociationDocument) {
     const internalAndExternalFilingEventForCategory = [
-      ...CATEGORY_MAP[category],
+      ...EXTERNAL_FILING_EVENTS[category],
       ...INTERNAL_FILING_EVENTS[category],
     ];
 
@@ -42,7 +42,7 @@ export const refreshExternalDocumentTitleFromEventCodeAction = ({
     secondaryDocument.eventCode
   ) {
     const internalAndExternalFilingEventForCategory = [
-      ...CATEGORY_MAP[secondaryDocument.category],
+      ...EXTERNAL_FILING_EVENTS[secondaryDocument.category],
       ...INTERNAL_FILING_EVENTS[secondaryDocument.category],
     ];
 
