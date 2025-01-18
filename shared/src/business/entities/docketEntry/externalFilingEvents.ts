@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 
-type ExternalFilingEvent = {
+export type ExternalFilingEvent = {
   documentTitle: string;
   documentType: string;
   category: string;
@@ -15,6 +15,10 @@ type ExternalFilingEvent = {
   allowStatusReportOrder?: boolean;
   canBeFirstIrsDocument?: boolean;
   isContactChange?: boolean;
+  deprecated?: {
+    deprecatedOn: string;
+    deprecationReson: string;
+  };
 };
 
 type AllExternalFilingEvents = {
@@ -185,6 +189,11 @@ export const EXTERNAL_FILING_EVENTS: AllExternalFilingEvents = {
       labelFreeText: 'Name',
       ordinalField: '',
       allowStamp: true,
+      deprecated: {
+        deprecatedOn: '07/2023',
+        deprecationReson:
+          'The DSC is a remnant from the days when the court maintained all paper docket records, and is no longer supported as a document by the Court as a matter of policy',
+      },
     },
   ],
   Application: [

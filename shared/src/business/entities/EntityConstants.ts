@@ -44,13 +44,6 @@ export const FETCHED_TRIAL_SESSIONS_TIMESTAMP_KEY =
 
 export const PUBLIC_TRIAL_SESSIONS_DATA_KEY = 'publicTrialSessionsData';
 
-export const LEGACY_DOCUMENT_TYPES = [
-  {
-    documentType: 'Designation of Counsel to Receive Service',
-    eventCode: 'DSC',
-  },
-];
-
 // city, state, optional unique ID (generated automatically in testing files)
 export const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 

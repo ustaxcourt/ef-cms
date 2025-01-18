@@ -7,52 +7,52 @@ import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('internalTypesHelper', () => {
-  const INTERNAL_CATEGORY_MAP = {
-    'Answer (filed by respondent only)': [
-      {
-        category: 'Answer (filed by respondent only)',
-        documentTitle: 'Amended Answer',
-        documentType: 'Amended Answer',
-        eventCode: 'AA',
-        labelFreeText: '',
-        labelPreviousDocument: '',
-        ordinalField: '',
-        scenario: 'Standard',
-      },
-      {
-        category: 'Answer (filed by respondent only)',
-        documentTitle: 'Answer',
-        documentType: 'Answer',
-        eventCode: 'A',
-        labelFreeText: '',
-        labelPreviousDocument: '',
-        ordinalField: '',
-        scenario: 'Standard',
-      },
-      {
-        category: 'Answer (filed by respondent only)',
-        documentTitle: '[First, Second, etc.] Amendment to Answer',
-        documentType: 'Amendment to Answer',
-        eventCode: 'ATAN',
-        labelFreeText: '',
-        labelPreviousDocument: '',
-        ordinalField: 'What iteration is this filing?',
-        scenario: 'Nonstandard G',
-      },
-    ],
-    'Seriatim Brief': [
-      {
-        category: 'Seriatim Brief',
-        documentTitle: 'Seriatim Answering Memorandum Brief',
-        documentType: 'Seriatim Answering Memorandum Brief',
-        eventCode: 'SAMB',
-        labelFreeText: '',
-        labelPreviousDocument: '',
-        ordinalField: '',
-        scenario: 'Standard',
-      },
-    ],
-  };
+  // const INTERNAL_CATEGORY_MAP = {
+  //   'Answer (filed by respondent only)': [
+  //     {
+  //       category: 'Answer (filed by respondent only)',
+  //       documentTitle: 'Amended Answer',
+  //       documentType: 'Amended Answer',
+  //       eventCode: 'AA',
+  //       labelFreeText: '',
+  //       labelPreviousDocument: '',
+  //       ordinalField: '',
+  //       scenario: 'Standard',
+  //     },
+  //     {
+  //       category: 'Answer (filed by respondent only)',
+  //       documentTitle: 'Answer',
+  //       documentType: 'Answer',
+  //       eventCode: 'A',
+  //       labelFreeText: '',
+  //       labelPreviousDocument: '',
+  //       ordinalField: '',
+  //       scenario: 'Standard',
+  //     },
+  //     {
+  //       category: 'Answer (filed by respondent only)',
+  //       documentTitle: '[First, Second, etc.] Amendment to Answer',
+  //       documentType: 'Amendment to Answer',
+  //       eventCode: 'ATAN',
+  //       labelFreeText: '',
+  //       labelPreviousDocument: '',
+  //       ordinalField: 'What iteration is this filing?',
+  //       scenario: 'Nonstandard G',
+  //     },
+  //   ],
+  //   'Seriatim Brief': [
+  //     {
+  //       category: 'Seriatim Brief',
+  //       documentTitle: 'Seriatim Answering Memorandum Brief',
+  //       documentType: 'Seriatim Answering Memorandum Brief',
+  //       eventCode: 'SAMB',
+  //       labelFreeText: '',
+  //       labelPreviousDocument: '',
+  //       ordinalField: '',
+  //       scenario: 'Standard',
+  //     },
+  //   ],
+  // };
 
   const internalTypesHelper = withAppContextDecorator(
     internalTypesHelperComputed,

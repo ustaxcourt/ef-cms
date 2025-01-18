@@ -1,17 +1,16 @@
 import { find, includes, omit, pick } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+import { INTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/internalFilingEvents';
 
 const setDocumentPropsFromFormAndBaseDocument = ({
-  applicationContext,
   eventCode,
   formProperties,
   propertyList,
 }) => {
   let entry;
-  const { INTERNAL_CATEGORY_MAP } = applicationContext.getConstants();
 
   find(
-    INTERNAL_CATEGORY_MAP,
+    INTERNAL_FILING_EVENTS,
     entries => (entry = find(entries, { eventCode })),
   );
 
@@ -42,7 +41,6 @@ export const updateDocketEntryWizardDataAction = ({
   switch (props.key) {
     case 'initEventCode':
       form = setDocumentPropsFromFormAndBaseDocument({
-        applicationContext,
         eventCode: props.value,
         formProperties: get(state.form),
         propertyList: ['category', 'documentType', 'scenario'],
@@ -54,7 +52,6 @@ export const updateDocketEntryWizardDataAction = ({
       break;
     case 'eventCode':
       form = setDocumentPropsFromFormAndBaseDocument({
-        applicationContext,
         eventCode: props.value,
         formProperties: get(state.form),
         propertyList: ['category', 'documentType', 'documentTitle', 'scenario'],
@@ -91,7 +88,6 @@ export const updateDocketEntryWizardDataAction = ({
       break;
     case 'secondaryDocument.eventCode':
       form = setDocumentPropsFromFormAndBaseDocument({
-        applicationContext,
         eventCode: props.value,
         formProperties: get(state.form.secondaryDocument),
         propertyList: ['category', 'documentType', 'documentTitle', 'scenario'],

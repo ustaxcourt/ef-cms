@@ -61,7 +61,6 @@ import {
   INTERNAL_DOCUMENTS_ARRAY,
   IRS_SYSTEM_SECTION,
   JURISDICTIONAL_OPTIONS,
-  LEGACY_DOCUMENT_TYPES,
   LODGED_EVENT_CODE,
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
@@ -137,7 +136,6 @@ import {
 import { FORMATS } from '../../shared/src/business/utilities/DateHandler';
 import { ROLE_PERMISSIONS } from '../../shared/src/authorization/authorizationClientService';
 import { SERVICE_INDICATOR_ERROR } from '../../shared/src/business/entities/EntityValidationConstants';
-import { INTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/internalFilingEvents';
 import { EXTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/externalFilingEvents';
 
 const MINUTES = 60 * 1000;
@@ -236,11 +234,9 @@ export const getConstants = () => ({
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_FILE_MAP,
   INITIAL_DOCUMENT_TYPES_MAP,
-  INTERNAL_CATEGORY_MAP: INTERNAL_FILING_EVENTS,
   INTERNAL_DOCUMENTS_ARRAY,
   IRS_SYSTEM_SECTION,
   JURISDICTIONAL_OPTIONS,
-  LEGACY_DOCUMENT_TYPES,
   LODGED_EVENT_CODE,
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
