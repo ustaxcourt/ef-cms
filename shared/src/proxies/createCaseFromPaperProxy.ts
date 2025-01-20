@@ -1,4 +1,5 @@
 import { CreatedCaseType } from '@shared/business/entities/EntityConstants';
+import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import { post } from './requests';
 
 export const createCaseFromPaperInteractor = (
@@ -20,7 +21,7 @@ export const createCaseFromPaperInteractor = (
     requestForPlaceOfTrialFileId: string;
     stinFileId: string;
   },
-): Promise<RawCase> => {
+): Promise<{ caseDetail: RawCase; workItem: RawWorkItem }> => {
   return post({
     applicationContext,
     body: {

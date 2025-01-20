@@ -5,6 +5,7 @@ import {
 } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError } from '../../../errors/errors';
+import { PDFDocument as PDFDocumentType } from 'pdf-lib';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -18,6 +19,7 @@ import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/Entity
 import { TrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { get } from 'lodash';
+import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const updateTrialSession = async (
@@ -32,18 +34,12 @@ export const updateTrialSession = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const currentTrialSession = await applicationContext
+  const currentTrialSession = (await applicationContext
     .getPersistenceGateway()
     .getTrialSessionById({
       applicationContext,
       trialSessionId: trialSession.trialSessionId!,
-    });
-
-  if (!currentTrialSession) {
-    throw new NotFoundError(
-      `Trial session ${trialSession.trialSessionId} was not found.`,
-    );
-  }
+    }))!;
 
   if (
     currentTrialSession.startDate <
@@ -125,9 +121,6 @@ export const updateTrialSession = async (
   let pdfUrl: string | undefined;
   let fileId: string | undefined;
   if (currentTrialSession.caseOrder?.length) {
-    const { PDFDocument } = await applicationContext.getPdfLib();
-    const paperServicePdfsCombined = await PDFDocument.create();
-
     const shouldSetNoticeOfChangeToInPersonProceeding =
       currentTrialSession.proceedingType ===
         TRIAL_SESSION_PROCEEDING_TYPES.remote &&
@@ -149,14 +142,20 @@ export const updateTrialSession = async (
         TRIAL_SESSION_PROCEEDING_TYPES.remote &&
       updatedTrialSessionEntity.isCalendared;
 
-    await updateCasesAndSetNoticeOfChange({
+    const shouldSetNoticeOfTrialSessionLocationChange =
+      shouldGenerateNoticeOfChangeTrialLocation(
+        currentTrialSession,
+        updatedTrialSessionEntity,
+      );
+
+    const paperServicePdfsCombined = await updateCasesAndSetNoticeOfChange({
       applicationContext,
       authorizedUser,
       currentTrialSession,
-      paperServicePdfsCombined,
       shouldIssueNoticeOfChangeOfTrialJudge,
       shouldSetNoticeOfChangeToInPersonProceeding,
       shouldSetNoticeOfChangeToRemoteProceeding,
+      shouldSetNoticeOfTrialSessionLocationChange,
       updatedTrialSessionEntity,
     });
 
@@ -171,10 +170,12 @@ export const updateTrialSession = async (
           file: paperServicePdfData,
           fileNamePrefix: 'paper-service-pdf/',
         }));
+
       const paperServicePdfName = getPaperServicePdfName({
         shouldIssueNoticeOfChangeOfTrialJudge,
         shouldSetNoticeOfChangeToInPersonProceeding,
         shouldSetNoticeOfChangeToRemoteProceeding,
+        shouldSetNoticeOfTrialSessionLocationChange,
       });
 
       updatedTrialSessionEntity.addPaperServicePdf(fileId, paperServicePdfName);
@@ -215,21 +216,21 @@ const updateCasesAndSetNoticeOfChange = async ({
   applicationContext,
   authorizedUser,
   currentTrialSession,
-  paperServicePdfsCombined,
   shouldIssueNoticeOfChangeOfTrialJudge,
   shouldSetNoticeOfChangeToInPersonProceeding,
   shouldSetNoticeOfChangeToRemoteProceeding,
+  shouldSetNoticeOfTrialSessionLocationChange,
   updatedTrialSessionEntity,
 }: {
   applicationContext: ServerApplicationContext;
   currentTrialSession: RawTrialSession;
-  paperServicePdfsCombined: any;
   updatedTrialSessionEntity: TrialSession;
   authorizedUser: AuthUser;
   shouldSetNoticeOfChangeToRemoteProceeding: boolean;
+  shouldSetNoticeOfTrialSessionLocationChange: boolean;
   shouldSetNoticeOfChangeToInPersonProceeding: boolean;
   shouldIssueNoticeOfChangeOfTrialJudge: boolean;
-}): Promise<void> => {
+}): Promise<PDFDocumentType> => {
   const calendaredCaseEntities = await Promise.all(
     currentTrialSession
       .caseOrder!.filter(c => !c.removedFromTrial)
@@ -243,13 +244,18 @@ const updateCasesAndSetNoticeOfChange = async ({
         return new Case(aCase, { authorizedUser });
       }),
   );
+
   const casesThatShouldReceiveNotices = calendaredCaseEntities
     .filter(aCase => !aCase.isClosed())
     .filter(
       aCase =>
         aCase.trialSessionId === updatedTrialSessionEntity.trialSessionId,
     );
-  for (const caseEntity of casesThatShouldReceiveNotices) {
+
+  const TASKS = casesThatShouldReceiveNotices.map(async (caseEntity: Case) => {
+    const { PDFDocument } = await applicationContext.getPdfLib();
+    const newPdfDoc = await PDFDocument.create();
+
     if (shouldSetNoticeOfChangeToRemoteProceeding) {
       await applicationContext
         .getUseCaseHelpers()
@@ -257,7 +263,7 @@ const updateCasesAndSetNoticeOfChange = async ({
           applicationContext,
           {
             caseEntity,
-            newPdfDoc: paperServicePdfsCombined,
+            newPdfDoc,
             newTrialSessionEntity: updatedTrialSessionEntity,
           },
           authorizedUser,
@@ -271,7 +277,7 @@ const updateCasesAndSetNoticeOfChange = async ({
           applicationContext,
           {
             caseEntity,
-            newPdfDoc: paperServicePdfsCombined,
+            newPdfDoc,
             newTrialSessionEntity: updatedTrialSessionEntity,
           },
           authorizedUser,
@@ -286,8 +292,23 @@ const updateCasesAndSetNoticeOfChange = async ({
           {
             caseEntity,
             currentTrialSession,
-            newPdfDoc: paperServicePdfsCombined,
+            newPdfDoc,
             newTrialSessionEntity: updatedTrialSessionEntity,
+          },
+          authorizedUser,
+        );
+    }
+
+    if (shouldSetNoticeOfTrialSessionLocationChange) {
+      await applicationContext
+        .getUseCaseHelpers()
+        .setNoticeOfChangeOfTrialLocation(
+          applicationContext,
+          {
+            caseEntity,
+            newPdfDoc,
+            newTrialSessionEntity: updatedTrialSessionEntity,
+            previousTrialSession: currentTrialSession,
           },
           authorizedUser,
         );
@@ -300,7 +321,14 @@ const updateCasesAndSetNoticeOfChange = async ({
       authorizedUser,
       caseToUpdate: caseEntity,
     });
-  }
+
+    return newPdfDoc;
+  });
+
+  const casePdfDocuments = await Promise.all(TASKS);
+  const paperServicePdfsCombined = await applicationContext
+    .getUtilities()
+    .combineAllPdfDocuments(applicationContext, casePdfDocuments);
 
   const updatedHearingPromises = calendaredCaseEntities.map(async aCase => {
     const matchingHearing = aCase.hearings.find(
@@ -315,7 +343,9 @@ const updateCasesAndSetNoticeOfChange = async ({
       });
     }
   });
+
   await Promise.all(updatedHearingPromises);
+  return paperServicePdfsCombined;
 };
 
 const createWorkingCopyForNewUserOnSession = async ({
@@ -342,10 +372,12 @@ const getPaperServicePdfName = ({
   shouldIssueNoticeOfChangeOfTrialJudge,
   shouldSetNoticeOfChangeToInPersonProceeding,
   shouldSetNoticeOfChangeToRemoteProceeding,
+  shouldSetNoticeOfTrialSessionLocationChange,
 }: {
   shouldSetNoticeOfChangeToRemoteProceeding: boolean;
   shouldSetNoticeOfChangeToInPersonProceeding: boolean;
   shouldIssueNoticeOfChangeOfTrialJudge: boolean;
+  shouldSetNoticeOfTrialSessionLocationChange: boolean;
 }): string => {
   if (shouldIssueNoticeOfChangeOfTrialJudge) {
     return 'Notice of Change of Trial Judge';
@@ -353,6 +385,8 @@ const getPaperServicePdfName = ({
     return 'Notice of Change to In Person Proceeding';
   } else if (shouldSetNoticeOfChangeToRemoteProceeding) {
     return 'Notice of Change to Remote Proceeding';
+  } else if (shouldSetNoticeOfTrialSessionLocationChange) {
+    return 'Notice of Change of Trial Location';
   } else {
     return 'Notice of Change';
   }
@@ -362,12 +396,20 @@ export const determineEntitiesToLock = async (
   applicationContext: ServerApplicationContext,
   { trialSession }: { trialSession: TrialSession },
 ) => {
-  const { caseOrder } = await applicationContext
+  const currentTrialSession = await applicationContext
     .getPersistenceGateway()
     .getTrialSessionById({
       applicationContext,
       trialSessionId: trialSession.trialSessionId || '',
     });
+
+  if (!currentTrialSession) {
+    throw new NotFoundError(
+      `Trial session ${trialSession.trialSessionId} was not found.`,
+    );
+  }
+
+  const { caseOrder } = currentTrialSession;
 
   const entitiesToLock = [`trial-session|${trialSession.trialSessionId}`];
 

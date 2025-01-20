@@ -1,4 +1,7 @@
+import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_TRIAL_INPERSON, MOCK_TRIAL_REMOTE } from '@shared/test/mockTrial';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
@@ -6,17 +9,19 @@ import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '@shared/business/entities/EntityConstants';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { judgeUser, trialClerkUser } from '@shared/test/mockUsers';
-import {
-  mockDocketClerkUser,
-  mockPetitionerUser,
-} from '@shared/test/mockAuthUsers';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateTrialSessionInteractor } from './updateTrialSessionInteractor';
 
 describe('updateTrialSessionInteractor', () => {
+  let TEST_MOCK_TRIAL_INPERSON: typeof MOCK_TRIAL_INPERSON;
+
   beforeEach(() => {
+    TEST_MOCK_TRIAL_INPERSON = cloneDeep(MOCK_TRIAL_INPERSON);
+
     applicationContext
       .getUseCaseHelpers()
       .saveFileAndGenerateUrl.mockReturnValue({
@@ -24,12 +29,17 @@ describe('updateTrialSessionInteractor', () => {
         url: 'www.example.com',
       });
 
+    applicationContext.getUtilities().combineAllPdfDocuments.mockReturnValue({
+      getPageCount: () => 3,
+      save: () => {},
+    });
+
     applicationContext
       .getPersistenceGateway()
       .updateTrialSession.mockImplementation(trial => trial.trialSession);
   });
 
-  it('should throw an error when the user is not unauthorized to update a trial session', async () => {
+  it('should throw an error when the trial session is not found', async () => {
     await expect(
       updateTrialSessionInteractor(
         applicationContext,
@@ -37,9 +47,31 @@ describe('updateTrialSessionInteractor', () => {
           clientConnectionId: '123',
           trialSession: MOCK_TRIAL_REMOTE,
         },
-        mockPetitionerUser,
+        undefined,
       ),
-    ).rejects.toThrow();
+    ).rejects.toThrow(
+      `Trial session ${MOCK_TRIAL_REMOTE.trialSessionId} was not found.`,
+    );
+  });
+
+  it('should throw an error when the user is not unauthorized to update a trial session', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockResolvedValue({
+        ...MOCK_TRIAL_REMOTE,
+        startDate: '1776-12-01',
+      });
+
+    await expect(
+      updateTrialSessionInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '123',
+          trialSession: { ...MOCK_TRIAL_REMOTE, startDate: '1776-12-01' },
+        },
+        undefined as UnknownAuthUser,
+      ),
+    ).rejects.toThrow('Unauthorized');
   });
 
   it('should throw an error when the trial session start date is in the past', async () => {
@@ -84,13 +116,13 @@ describe('updateTrialSessionInteractor', () => {
   it('should make a call to persistence to update the trial session', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getTrialSessionById.mockResolvedValue(MOCK_TRIAL_INPERSON);
+      .getTrialSessionById.mockResolvedValue(TEST_MOCK_TRIAL_INPERSON);
 
     await updateTrialSessionInteractor(
       applicationContext,
       {
         clientConnectionId: '123',
-        trialSession: MOCK_TRIAL_INPERSON,
+        trialSession: TEST_MOCK_TRIAL_INPERSON,
       },
       mockDocketClerkUser,
     );
@@ -104,7 +136,7 @@ describe('updateTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockResolvedValue({
-        ...MOCK_TRIAL_INPERSON,
+        ...TEST_MOCK_TRIAL_INPERSON,
         judge: undefined,
       });
 
@@ -113,7 +145,7 @@ describe('updateTrialSessionInteractor', () => {
       {
         clientConnectionId: '123',
         trialSession: {
-          ...MOCK_TRIAL_INPERSON,
+          ...TEST_MOCK_TRIAL_INPERSON,
           judge: undefined,
         },
       },
@@ -127,7 +159,7 @@ describe('updateTrialSessionInteractor', () => {
 
   it('should create a trial session working copy when the updated trial session has a judge assigned and a judge was not set on the old trial session', async () => {
     const mockTrialSessionWithJudge = {
-      ...MOCK_TRIAL_INPERSON,
+      ...TEST_MOCK_TRIAL_INPERSON,
       judge: undefined,
     };
     applicationContext
@@ -139,7 +171,7 @@ describe('updateTrialSessionInteractor', () => {
       {
         clientConnectionId: '123',
         trialSession: {
-          ...MOCK_TRIAL_INPERSON,
+          ...TEST_MOCK_TRIAL_INPERSON,
           judge: judgeUser,
         },
       },
@@ -150,7 +182,7 @@ describe('updateTrialSessionInteractor', () => {
       applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy
         .mock.calls[0][0].trialSessionWorkingCopy,
     ).toMatchObject({
-      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+      trialSessionId: TEST_MOCK_TRIAL_INPERSON.trialSessionId,
       userId: judgeUser.userId,
     });
   });
@@ -159,7 +191,7 @@ describe('updateTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockResolvedValue({
-        ...MOCK_TRIAL_INPERSON,
+        ...TEST_MOCK_TRIAL_INPERSON,
         judge: {
           name: 'Judge South',
           userId: '7c062db4-ea1e-4a51-a615-9ef8d6499ed7',
@@ -171,7 +203,7 @@ describe('updateTrialSessionInteractor', () => {
       {
         clientConnectionId: '123',
         trialSession: {
-          ...MOCK_TRIAL_INPERSON,
+          ...TEST_MOCK_TRIAL_INPERSON,
           judge: {
             name: 'Judge North',
             userId: 'c7d90c05-f6cd-442c-a168-202db587f16f', // different judge id
@@ -185,7 +217,7 @@ describe('updateTrialSessionInteractor', () => {
       applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy
         .mock.calls[0][0].trialSessionWorkingCopy,
     ).toMatchObject({
-      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+      trialSessionId: TEST_MOCK_TRIAL_INPERSON.trialSessionId,
       userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
     });
   });
@@ -194,7 +226,7 @@ describe('updateTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockResolvedValue({
-        ...MOCK_TRIAL_INPERSON,
+        ...TEST_MOCK_TRIAL_INPERSON,
         trialClerk: undefined,
       });
 
@@ -203,7 +235,7 @@ describe('updateTrialSessionInteractor', () => {
       {
         clientConnectionId: '123',
         trialSession: {
-          ...MOCK_TRIAL_INPERSON,
+          ...TEST_MOCK_TRIAL_INPERSON,
           trialClerk: trialClerkUser,
         },
       },
@@ -214,7 +246,7 @@ describe('updateTrialSessionInteractor', () => {
       applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy
         .mock.calls[0][0].trialSessionWorkingCopy,
     ).toMatchObject({
-      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+      trialSessionId: TEST_MOCK_TRIAL_INPERSON.trialSessionId,
       userId: trialClerkUser.userId,
     });
   });
@@ -223,7 +255,7 @@ describe('updateTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({
-        ...MOCK_TRIAL_INPERSON,
+        ...TEST_MOCK_TRIAL_INPERSON,
         trialClerk: {
           name: 'Clerk Tom Haberford',
           userId: 'a2d6531c-93fb-432b-a71d-5ea11f953963',
@@ -235,7 +267,7 @@ describe('updateTrialSessionInteractor', () => {
       {
         clientConnectionId: '123',
         trialSession: {
-          ...MOCK_TRIAL_INPERSON,
+          ...TEST_MOCK_TRIAL_INPERSON,
           trialClerk: {
             name: 'Clerk Magni',
             userId: 'c7d90c05-f6cd-442c-a168-202db587f16f', // different trial clerk id
@@ -249,7 +281,7 @@ describe('updateTrialSessionInteractor', () => {
       applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy
         .mock.calls[0][0].trialSessionWorkingCopy,
     ).toMatchObject({
-      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+      trialSessionId: TEST_MOCK_TRIAL_INPERSON.trialSessionId,
       userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
     });
   });
@@ -257,31 +289,38 @@ describe('updateTrialSessionInteractor', () => {
   it('should update the hearing associated with the updated trial session when a hearing trialSessionId matches the case.trialSessionId', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        hearings: [MOCK_TRIAL_INPERSON],
+      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
+        return {
+          ...MOCK_CASE,
+          docketNumber,
+          hearings: [TEST_MOCK_TRIAL_INPERSON],
+        };
       });
 
     applicationContext
       .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
+      .getTrialSessionById.mockReturnValue(TEST_MOCK_TRIAL_INPERSON);
 
     await updateTrialSessionInteractor(
       applicationContext,
       {
         clientConnectionId: '123',
-        trialSession: MOCK_TRIAL_INPERSON,
+        trialSession: TEST_MOCK_TRIAL_INPERSON,
       },
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCaseHearing.mock
-        .calls[0][0],
-    ).toMatchObject({
+    const updateCaseHearingCalls =
+      applicationContext.getPersistenceGateway().updateCaseHearing.mock.calls;
+
+    expect(updateCaseHearingCalls.length).toEqual(2);
+    expect(updateCaseHearingCalls[0][0]).toMatchObject({
       applicationContext,
       docketNumber: MOCK_CASE.docketNumber,
-      hearingToUpdate: MOCK_TRIAL_INPERSON,
+    });
+    expect(updateCaseHearingCalls[1][0]).toMatchObject({
+      applicationContext,
+      docketNumber: '123-45',
     });
   });
 
@@ -290,19 +329,19 @@ describe('updateTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
-        trialDate: MOCK_TRIAL_INPERSON.startDate,
-        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+        trialDate: TEST_MOCK_TRIAL_INPERSON.startDate,
+        trialSessionId: TEST_MOCK_TRIAL_INPERSON.trialSessionId,
       });
 
     applicationContext
       .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
+      .getTrialSessionById.mockReturnValue(TEST_MOCK_TRIAL_INPERSON);
 
     await updateTrialSessionInteractor(
       applicationContext,
       {
         clientConnectionId: '123',
-        trialSession: MOCK_TRIAL_INPERSON,
+        trialSession: TEST_MOCK_TRIAL_INPERSON,
       },
       mockDocketClerkUser,
     );
@@ -311,7 +350,7 @@ describe('updateTrialSessionInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate,
     ).toMatchObject({
-      trialDate: MOCK_TRIAL_INPERSON.startDate,
+      trialDate: TEST_MOCK_TRIAL_INPERSON.startDate,
     });
   });
 
@@ -353,14 +392,14 @@ describe('updateTrialSessionInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
+      .getTrialSessionById.mockReturnValue(TEST_MOCK_TRIAL_INPERSON);
 
     await updateTrialSessionInteractor(
       applicationContext,
       {
         clientConnectionId: '123',
         trialSession: {
-          ...MOCK_TRIAL_INPERSON,
+          ...TEST_MOCK_TRIAL_INPERSON,
           ...updatedFields,
         },
       },
@@ -371,7 +410,7 @@ describe('updateTrialSessionInteractor', () => {
       applicationContext.getPersistenceGateway().updateTrialSession.mock
         .calls[0][0].trialSessionToUpdate,
     ).toMatchObject({
-      ...MOCK_TRIAL_INPERSON,
+      ...TEST_MOCK_TRIAL_INPERSON,
       ...updatedFields,
     });
   });
@@ -383,14 +422,14 @@ describe('updateTrialSessionInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
+      .getTrialSessionById.mockReturnValue(TEST_MOCK_TRIAL_INPERSON);
 
     await updateTrialSessionInteractor(
       applicationContext,
       {
         clientConnectionId: '123',
         trialSession: {
-          ...MOCK_TRIAL_INPERSON,
+          ...TEST_MOCK_TRIAL_INPERSON,
           ...updatedFields,
         },
       },
@@ -401,7 +440,7 @@ describe('updateTrialSessionInteractor', () => {
       applicationContext.getPersistenceGateway().updateTrialSession.mock
         .calls[0][0].trialSessionToUpdate,
     ).toMatchObject({
-      ...MOCK_TRIAL_INPERSON,
+      ...TEST_MOCK_TRIAL_INPERSON,
       ...updatedFields,
     });
   });
@@ -410,7 +449,7 @@ describe('updateTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({
-        ...MOCK_TRIAL_INPERSON,
+        ...TEST_MOCK_TRIAL_INPERSON,
         isCalendared: false,
       });
 
@@ -419,7 +458,7 @@ describe('updateTrialSessionInteractor', () => {
       {
         clientConnectionId: '123',
         trialSession: {
-          ...MOCK_TRIAL_INPERSON,
+          ...TEST_MOCK_TRIAL_INPERSON,
           isCalendared: true,
         },
       },
@@ -442,13 +481,13 @@ describe('updateTrialSessionInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
+      .getTrialSessionById.mockReturnValue(TEST_MOCK_TRIAL_INPERSON);
 
     await updateTrialSessionInteractor(
       applicationContext,
       {
         clientConnectionId: '123',
-        trialSession: MOCK_TRIAL_INPERSON,
+        trialSession: TEST_MOCK_TRIAL_INPERSON,
       },
       mockDocketClerkUser,
     );
@@ -462,7 +501,7 @@ describe('updateTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({
-        ...MOCK_TRIAL_INPERSON,
+        ...TEST_MOCK_TRIAL_INPERSON,
         caseOrder: [],
       });
 
@@ -470,7 +509,7 @@ describe('updateTrialSessionInteractor', () => {
       applicationContext,
       {
         clientConnectionId: '123',
-        trialSession: MOCK_TRIAL_INPERSON,
+        trialSession: TEST_MOCK_TRIAL_INPERSON,
       },
       mockDocketClerkUser,
     );
@@ -485,14 +524,14 @@ describe('updateTrialSessionInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
+      .getTrialSessionById.mockReturnValue(TEST_MOCK_TRIAL_INPERSON);
 
     await updateTrialSessionInteractor(
       applicationContext,
       {
         clientConnectionId: '123',
         trialSession: {
-          ...MOCK_TRIAL_INPERSON,
+          ...TEST_MOCK_TRIAL_INPERSON,
           caseOrder: [
             {
               docketNumber: mockCaseRemovedFromTrialDocketNumber,
@@ -520,7 +559,7 @@ describe('updateTrialSessionInteractor', () => {
       {
         clientConnectionId: '123',
         trialSession: {
-          ...MOCK_TRIAL_INPERSON,
+          ...TEST_MOCK_TRIAL_INPERSON,
           swingSession: true,
           swingSessionId: mockSwingSessionId,
         },
@@ -542,8 +581,8 @@ describe('updateTrialSessionInteractor', () => {
     let originalTrialSession: RawTrialSession;
 
     beforeEach(() => {
-      desiredTrialSession = cloneDeep(MOCK_TRIAL_INPERSON);
-      originalTrialSession = cloneDeep(MOCK_TRIAL_INPERSON);
+      desiredTrialSession = cloneDeep(TEST_MOCK_TRIAL_INPERSON);
+      originalTrialSession = cloneDeep(TEST_MOCK_TRIAL_INPERSON);
       originalTrialSession.isCalendared = true;
       applicationContext.getPdfLib = jest.fn().mockResolvedValue({
         PDFDocument: {
@@ -554,6 +593,8 @@ describe('updateTrialSessionInteractor', () => {
         },
       });
       applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge =
+        jest.fn();
+      applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialLocation =
         jest.fn();
       applicationContext.getUseCaseHelpers().setNoticeOfChangeToInPersonProceeding =
         jest.fn();
@@ -592,10 +633,37 @@ describe('updateTrialSessionInteractor', () => {
       expect(
         applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge,
       ).toHaveBeenCalled();
+
+      const updateTrialSessionCalls =
+        applicationContext.getPersistenceGateway().updateTrialSession.mock
+          .calls;
+
+      expect(updateTrialSessionCalls.length).toEqual(1);
+      expect(
+        updateTrialSessionCalls[0][0].trialSessionToUpdate.paperServicePdfs[0]
+          .title,
+      ).toEqual('Notice of Change of Trial Judge');
+    });
+
+    it('should be generated when the location has changed', async () => {
+      desiredTrialSession.address1 = 'UPDATED ADDRESS 1';
+
+      await updateTrialSessionInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '123',
+          trialSession: desiredTrialSession,
+        },
+        mockDocketClerkUser,
+      );
+
+      expect(
+        applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialLocation,
+      ).toHaveBeenCalled();
       expect(
         applicationContext.getPersistenceGateway().updateTrialSession.mock
           .calls[0][0].trialSessionToUpdate.paperServicePdfs[0].title,
-      ).toEqual('Notice of Change of Trial Judge');
+      ).toEqual('Notice of Change of Trial Location');
     });
 
     it('should be generated when the proceeding type has changed to remote', async () => {

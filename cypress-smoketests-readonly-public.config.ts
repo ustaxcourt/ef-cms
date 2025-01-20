@@ -2,7 +2,7 @@ import { defineConfig } from 'cypress';
 
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
-  defaultCommandTimeout: 20000,
+  defaultCommandTimeout: 60000,
   e2e: {
     specPattern: 'cypress/readonly/integration/public/*.cy.ts',
     supportFile: 'cypress/readonly/support/index.ts',
@@ -13,7 +13,7 @@ export default defineConfig({
   reporterOptions: {
     toConsole: true,
   },
-  requestTimeout: 20000,
+  requestTimeout: 60000,
   screenshotOnRunFailure: false,
   screenshotsFolder: 'cypress/readonly/screenshots',
   video: true,
