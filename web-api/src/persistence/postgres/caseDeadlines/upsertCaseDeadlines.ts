@@ -4,10 +4,15 @@ import {
   toKyselyNewCaseDeadline,
 } from '@web-api/persistence/postgres/caseDeadlines/mapper';
 import { getDbWriter } from '@web-api/database';
+import { isEmpty } from 'lodash';
 
 export const upsertCaseDeadlines = async (
   caseDeadlinesToUpsert: RawCaseDeadline[],
 ) => {
+  if (isEmpty(caseDeadlinesToUpsert)) {
+    return [];
+  }
+
   const caseDeadlines = await getDbWriter(writer =>
     writer
       .insertInto('dwCaseDeadline')
