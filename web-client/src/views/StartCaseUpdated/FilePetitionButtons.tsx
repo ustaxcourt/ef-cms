@@ -59,7 +59,7 @@ export const FilePetitionButtons = connect<
     };
 
     return (
-      <div className="create-petition-navigation-buttons-container">
+      <div className="button-container">
         <Button
           className="create-petition-navigation-buttons"
           data-testid={`step-${currentStep}-next-button`}

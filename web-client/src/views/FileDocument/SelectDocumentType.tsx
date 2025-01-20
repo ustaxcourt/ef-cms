@@ -25,7 +25,7 @@ export const SelectDocumentType = connect(
               <div className="blue-container margin-bottom-5 complete-document-type-section">
                 <CompleteDocumentTypeSection />
               </div>
-              <div className="select-document-button-container">
+              <div className="button-container">
                 <Button
                   data-testid="submit-document"
                   id="submit-document"
