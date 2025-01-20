@@ -6,32 +6,14 @@ import {
   INTERNAL_DOCUMENT_TYPES,
   OPINION_DOCUMENT_TYPES,
   ORDER_TYPES,
-  ROLES,
   TRANSCRIPT_EVENT_CODE,
 } from './EntityConstants';
 import { DocketEntry } from './DocketEntry';
 import { applicationContext } from '../test/createTestApplicationContext';
-
-const mockPrimaryId = '7111b30b-ad38-42c8-9db0-d938cb2cb16b';
-const mockSecondaryId = '55e5129c-ab54-4a9d-a8cf-5a4479ec08b6';
-
-const A_VALID_DOCKET_ENTRY = {
-  createdAt: '2020-07-17T19:28:29.675Z',
-  docketEntryId: '0f5e035c-efa8-49e4-ba69-daf8a166a98f',
-  docketNumber: '101-21',
-  documentType: 'Petition',
-  eventCode: 'A',
-  filedBy: 'Test Petitioner',
-  filedByRole: ROLES.petitioner,
-  filers: [mockPrimaryId],
-  receivedAt: '2020-07-17T19:28:29.675Z',
-  userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
-};
-
-const MOCK_PETITIONERS = [
-  { contactId: mockPrimaryId, name: 'Bob' },
-  { contactId: mockSecondaryId, name: 'Bill' },
-];
+import {
+  A_VALID_DOCKET_ENTRY,
+  MOCK_PETITIONERS,
+} from '@shared/business/entities/DocketEntryTestFixtures';
 
 describe('validate', () => {
   const mockUserId = applicationContext.getUniqueId();
@@ -289,7 +271,7 @@ describe('validate', () => {
         'should be invalid if filedBy is undefined, filers is valid, and servedAt is populated',
       docketEntry: {
         filedBy: undefined,
-        filers: [mockPrimaryId, mockSecondaryId],
+        filers: [MOCK_PETITIONERS[0].contactId, MOCK_PETITIONERS[1].contactId],
         isLegacyServed: undefined,
         servedAt: '2019-08-25T05:00:00.000Z',
         servedParties: [{ name: 'Test Petitioner' }],
