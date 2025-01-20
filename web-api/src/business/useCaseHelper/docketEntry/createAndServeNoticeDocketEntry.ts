@@ -1,16 +1,16 @@
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import {
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  PARTIES_CODES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   DocketEntry,
   getServedPartiesCode,
-} from '../../../../../shared/src/business/entities/DocketEntry';
+} from '@shared/business/entities/DocketEntry';
+import {
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  PARTIES_CODES,
+} from '@shared/business/entities/EntityConstants';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
-import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
 
 export const createAndServeNoticeDocketEntry = async (
   applicationContext: ServerApplicationContext,
