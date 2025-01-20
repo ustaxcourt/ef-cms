@@ -33,6 +33,7 @@ export default defineConfig({
     baseUrl: 'http://localhost:1234',
     experimentalStudio: true,
     setupNodeEvents(on) {
+      require('tsconfig-paths/register');
       on('task', {
         confirmUser({ email }) {
           return confirmUser({ email });
