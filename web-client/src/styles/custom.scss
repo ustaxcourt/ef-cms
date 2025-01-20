@@ -849,6 +849,15 @@ textarea#case-caption {
   margin-right: 0;
 }
 
+.view-pdf-button {
+  @media only screen and (max-width: $small-screen) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
 .view-pdf-button svg {
   color: $color-white;
 }
