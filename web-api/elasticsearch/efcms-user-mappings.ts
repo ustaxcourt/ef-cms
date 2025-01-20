@@ -1,7 +1,11 @@
+import { Property } from '@opensearch-project/opensearch/api/_types/_common.mapping';
 import { createHash } from 'crypto';
 
-export const efcmsUserMappings = {
+export const efcmsUserMappings: Property = {
   properties: {
+    'admissionsDate.S': {
+      type: 'date',
+    },
     'admissionsStatus.S': {
       type: 'keyword',
     },
@@ -16,6 +20,9 @@ export const efcmsUserMappings = {
     },
     'firstName.S': {
       type: 'keyword',
+    },
+    'firmName.S': {
+      type: 'text',
     },
     'indexedTimestamp.N': {
       type: 'text',

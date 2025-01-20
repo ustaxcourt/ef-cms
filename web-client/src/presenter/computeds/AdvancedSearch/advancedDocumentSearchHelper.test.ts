@@ -1,5 +1,3 @@
-/* eslint-disable max-lines */
-
 import { ADVANCED_SEARCH_TABS } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed,
@@ -23,7 +21,7 @@ describe('advancedDocumentSearchHelper', () => {
     USER_ROLES,
   } = applicationContext.getConstants();
 
-  let globalUser = {
+  const globalUser = {
     role: USER_ROLES.docketClerk,
     userId: 'docketClerk',
   };

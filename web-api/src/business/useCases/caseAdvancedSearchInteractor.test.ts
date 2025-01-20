@@ -7,7 +7,7 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 
-export const MOCK_CASE_SEARCH_RESULT = {
+const MOCK_CASE_SEARCH_RESULT = {
   caseCaption: 'Test Case Caption',
   docketNumber: '101-20',
   docketNumberWithSuffix: '101-20L',

@@ -29,7 +29,7 @@ const getMessagesByDocketNumber = getMessagesByDocketNumberMock as jest.Mock;
 const updateMessage = updateMessageMock as jest.Mock;
 
 describe('updateCaseAndAssociations', () => {
-  let updateCaseMock = jest.fn();
+  const updateCaseMock = jest.fn();
   let validMockCase;
 
   beforeAll(() => {

@@ -25,7 +25,6 @@ import {
 } from '../../shared/admin-tools/util';
 import { isEmpty } from 'lodash';
 
-// eslint-disable-next-line spellcheck/spell-checker
 /**
  * This script will update the judge user in a deployed environment.
  * It updates both the Cognito record (if necessary) and the associated Dynamo record.
@@ -241,7 +240,7 @@ const updateDynamoChambersRecords = async ({
     .getPersistenceGateway()
     .getUsersInSection({ applicationContext, section: oldChambersSection });
 
-  for (let chambersUser of chambersUsers) {
+  for (const chambersUser of chambersUsers) {
     console.log(`Updating ${chambersUser.role} user ${chambersUser.userId}`);
     chambersUser.section = updatedChambersSection;
     const rawChambersUser = new User(chambersUser).validate().toRawObject();

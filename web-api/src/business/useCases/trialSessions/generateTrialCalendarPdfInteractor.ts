@@ -40,8 +40,9 @@ export const generateTrialCalendarPdfInteractor = async (
 
   let startTimeFormatted;
   if (trialSession.startTime) {
+    // eslint-disable-next-line prefer-const
     let [hour, min]: any = trialSession.startTime.split(':');
-    let startTimeExtension = +hour >= 12 ? 'pm' : 'am';
+    const startTimeExtension = +hour >= 12 ? 'pm' : 'am';
 
     if (+hour > 12) {
       hour = +hour - 12;

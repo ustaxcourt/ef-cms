@@ -180,7 +180,7 @@ describe('migration-status', () => {
 
   it('should fail fast on any error when getting metrics statistics for errors', async () => {
     process.env.MIGRATE_FLAG = 'true';
-    getMetricStatistics.mockReturnValueOnce(Promise.reject()); // error statistics
+    getMetricStatistics.mockReturnValueOnce(Promise.reject(new Error())); // error statistics
     await handler({}, mockContext, () => {});
     expect(approvePendingJob).toHaveBeenCalledTimes(0);
     expect(cancelWorkflow).toHaveBeenCalledTimes(0);
@@ -195,7 +195,7 @@ describe('migration-status', () => {
     process.env.MIGRATE_FLAG = 'true';
     getMetricStatistics
       .mockReturnValueOnce(Promise.resolve(mockErrorStatistics))
-      .mockReturnValueOnce(Promise.reject()); // invocation statistics
+      .mockReturnValueOnce(Promise.reject(new Error())); // invocation statistics
     await handler({}, mockContext, () => {});
     expect(approvePendingJob).toHaveBeenCalledTimes(0);
     expect(cancelWorkflow).toHaveBeenCalledTimes(0);

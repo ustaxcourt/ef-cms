@@ -19,7 +19,6 @@ import {
 } from 'scripts/user/add-or-update-judge-helpers';
 import { getNewPasswordForEnvironment } from './make-new-password';
 
-// eslint-disable-next-line spellcheck/spell-checker
 /**
  * This script will add a judge user to a deployed environment.
  * It creates both the Cognito record and the associated Dynamo record.
@@ -126,7 +125,7 @@ const scriptConfig: ScriptConfig = {
   const section = getChambersNameFromJudgeName(name);
   const role = 'judge';
 
-  let dynamoUserInfo: RawUser = {
+  const dynamoUserInfo: RawUser = {
     email,
     entityName: 'User',
     isSeniorJudge,
