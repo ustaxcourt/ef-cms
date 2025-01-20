@@ -1,11 +1,22 @@
-// usage: npx ts-node --transpile-only scripts/glue/start-glue-job.ts
+#!/usr/bin/env -S npx ts-node --transpile-only
 
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { getRunStateOfMostRecentJobRun } from '../../shared/admin-tools/aws/glueHelper';
-import { requireEnvVars } from '../../shared/admin-tools/util';
 
-requireEnvVars(['ENV']);
+const scriptConfig: ScriptConfig = {
+  description:
+    'glue-job-status - Check the status of the most recent glue job.',
+  environment: {
+    env: 'ENV',
+  },
+  requireActiveAwsSession: true,
+};
+const { env } = parseArgsAndEnvVars(scriptConfig) as { env: string };
 
-if (process.env.ENV !== 'prod') {
+if (env !== 'prod') {
   console.error('Glue jobs are performed in the production environment.');
   process.exit();
 }

@@ -9,11 +9,13 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const calculatePenaltiesAction = ({ get }: ActionProps) => {
   let {
     penalties: currentPenalties,
+    // eslint-disable-next-line prefer-const
     statisticIndex,
+    // eslint-disable-next-line prefer-const
     subkey: modalPenaltyType,
   } = get(state.modal);
 
-  let initialPenalties = statisticIndex
+  const initialPenalties = statisticIndex
     ? get(state.form.statistics[statisticIndex].penalties) || []
     : get(state.form.penalties) || [];
 

@@ -1,19 +1,34 @@
-// usage:
-// npx ts-node --transpile-only scripts/reports/practitioners-email-in-cases.ts 84c865f0-3867-40c8-aa31-f35c7e45998f
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import {
-  ServerApplicationContext,
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import {
+  type ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
 import { search } from '@web-api/persistence/elasticsearch/searchClient';
 
-const practitionerId = process.argv[2];
-if (!practitionerId) {
-  console.log(
-    'Usage: npx ts-node --transpile-only scripts/reports/practitioners-email-in-cases.ts <USER ID>',
-  );
-  process.exit(1);
-}
+const scriptConfig: ScriptConfig = {
+  description:
+    "practitioners-email-in-cases - Lists the email address defined in each of a practitioner's cases",
+  environment: {
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+    environmentName: 'ENV',
+  },
+  parameters: {
+    practitionerId: {
+      position: 0,
+      required: true,
+      type: 'string',
+    },
+  },
+  requireActiveAwsSession: true,
+};
+const { practitionerId } = parseArgsAndEnvVars(scriptConfig) as {
+  practitionerId: string;
+};
 
 const getUsersRole = async ({
   applicationContext,

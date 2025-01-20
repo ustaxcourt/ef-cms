@@ -1,5 +1,5 @@
+import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl';
 import { MOTION_EVENT_CODES } from '@shared/business/entities/EntityConstants';
-import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { calculateISODate } from '@shared/business/utilities/DateHandler';
 import { pendingItemCaseSource } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
 import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
@@ -12,7 +12,7 @@ export const getAllPendingMotionDocketEntriesForJudge = async ({
   judgeIds: string[];
 }): Promise<{ results: RawDocketEntry[]; total: number }> => {
   const filterDate = calculateISODate({ howMuch: -180 });
-  const hasParentParam: QueryDslQueryContainer = {
+  const hasParentParam: QueryContainer = {
     has_parent: {
       inner_hits: {
         _source: {

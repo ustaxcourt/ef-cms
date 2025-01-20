@@ -16,7 +16,7 @@ const decodeToken = requestToken => {
   return { iss: payload.iss, kid: header.kid };
 };
 
-let keyCache = {};
+const keyCache = {};
 const getKeysForIssuer = async iss => {
   if (keyCache[iss]) {
     return keyCache[iss];
@@ -40,6 +40,7 @@ const verify = (key, token) =>
 
     jwk.verify(token, pem, options, (err, payload) => {
       if (err) {
+        // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
         reject(err);
       } else {
         resolve(payload);
@@ -67,6 +68,7 @@ export const createAuthorizer =
     let token;
     try {
       token = getToken(event);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       logger.info('An error occured trying to get the token out of the event');
       throw401GatewayError();
@@ -82,6 +84,7 @@ export const createAuthorizer =
     try {
       const decodedToken = decodeToken(token);
       ({ iss, kid } = decodedToken);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       logger.info(
         'The token provided in the header could not be decoded successfully',

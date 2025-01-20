@@ -149,8 +149,8 @@ const getRowsByCity = ({
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
   weeks: string[];
 }): Record<string, object> => {
-  let rowsByCity = {};
-  let allWeekOfSlots = weeks.reduce((acc, weekOfString) => {
+  const rowsByCity = {};
+  const allWeekOfSlots = weeks.reduce((acc, weekOfString) => {
     acc[weekOfString] = '';
     return acc;
   }, {});
@@ -247,7 +247,7 @@ const getCellStyle = (
   };
   let fill;
   let font = { color: { argb: blackColor } };
-  let alignment = { horizontal: 'left', vertical: 'middle' };
+  const alignment = { horizontal: 'left', vertical: 'middle' };
 
   switch (cellValue) {
     case SESSION_TYPES.hybrid:
@@ -303,7 +303,7 @@ const getCounterCellData = (
   cellLetter,
   countColumnLength,
 ): { alignment: object; border: object; value: ExcelJS.CellValue } => {
-  let alignment = { horizontal: 'left', vertical: 'middle' };
+  const alignment = { horizontal: 'left', vertical: 'middle' };
   const border = {
     bottom: { style: 'thin' },
     left: { style: 'thin' },

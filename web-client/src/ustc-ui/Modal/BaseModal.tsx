@@ -48,7 +48,6 @@ export const BaseModal = ({
           open
           aria-modal="true"
           className={classNames('modal-screen', className)}
-          role="dialog"
           title={title}
         >
           <div className="modal-dialog padding-205">{children}</div>

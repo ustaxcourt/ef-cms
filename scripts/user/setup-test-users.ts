@@ -1,18 +1,35 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
+
+import { RawUser } from '@shared/business/entities/User';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import {
   ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
 import { createOrUpdateUser } from '../../shared/admin-tools/user/admin';
 import { environment } from '@web-api/environment';
-import {
-  getDestinationTableInfo,
-  getUserPoolId,
-  requireEnvVars,
-} from '../../shared/admin-tools/util';
 
-requireEnvVars(['DEFAULT_ACCOUNT_PASS', 'USTC_ADMIN_PASS', 'USTC_ADMIN_USER']);
+const scriptConfig: ScriptConfig = {
+  description: 'setup-test-users - Creates test users.',
+  environment: {
+    destinationTable: 'DESTINATION_TABLE',
+    env: 'ENV',
+    password: 'DEFAULT_ACCOUNT_PASS',
+    userPoolId: 'USER_POOL_ID',
+  },
+  requireActiveAwsSession: true,
+};
+const { destinationTable, env, password } = parseArgsAndEnvVars(
+  scriptConfig,
+) as { [k: string]: string };
 
-const { DEFAULT_ACCOUNT_PASS } = process.env;
+if (env === 'prod') {
+  console.error('ERROR: attempted to create test users in production');
+  process.exit(1);
+}
 
 const createManyAccounts = async (
   applicationContext: ServerApplicationContext,
@@ -43,10 +60,10 @@ const createManyAccounts = async (
       role,
       section,
       suffix: '',
-    };
+    } as unknown as RawUser;
 
     await createOrUpdateUser(applicationContext, {
-      password: DEFAULT_ACCOUNT_PASS!,
+      password,
       setPasswordAsPermanent: true,
       user,
     });
@@ -203,16 +220,16 @@ const setupPractitioners = async (
         lastName: 'Test',
         name: `Test ${emailUsername || role}${j + 1}`,
         originalBarState: 'WA',
-        password: DEFAULT_ACCOUNT_PASS,
+        password,
         practiceType,
         practitionerType: 'Attorney',
         role,
         section: role,
         suffix: '',
-      };
+      } as unknown as RawUser;
 
       await createOrUpdateUser(applicationContext, {
-        password: DEFAULT_ACCOUNT_PASS!,
+        password,
         setPasswordAsPermanent: true,
         user,
       });
@@ -222,10 +239,7 @@ const setupPractitioners = async (
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const userPoolId = await getUserPoolId();
-  const { tableName } = await getDestinationTableInfo();
-  environment.userPoolId = userPoolId;
-  environment.dynamoDbTableName = tableName;
+  environment.dynamoDbTableName = destinationTable;
   const applicationContext = createApplicationContext({});
 
   console.log('== Creating Court Users');

@@ -8,7 +8,7 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateDeficiencyStatisticInteractor } from './updateDeficiencyStatisticInteractor';
 
 describe('updateDeficiencyStatisticInteractor', () => {
-  let statistic = {
+  const statistic = {
     determinationDeficiencyAmount: 123,
     determinationTotalPenalties: 456,
     irsDeficiencyAmount: 789,

@@ -1,4 +1,5 @@
-#docket-header, #petition-header {
+#docket-header,
+#petition-header {
   .case-information #caption,
   #case-caption {
     width: 49%;
@@ -42,7 +43,8 @@
     }
   }
 
-  .case-information #temp-docket-number, .case-information #electronically-filed {
+  .case-information #temp-docket-number,
+  .case-information #electronically-filed {
     width: 48%;
     float: right;
     font-size: 14px;

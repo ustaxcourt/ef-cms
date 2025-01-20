@@ -1,13 +1,12 @@
-/* eslint-disable max-lines */
 import {
   BENCH_OPINION_EVENT_CODE,
   MAX_SEARCH_CLIENT_RESULTS,
   TODAYS_ORDERS_SORTS,
 } from '../../../../shared/src/business/entities/EntityConstants';
-import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { advancedDocumentSearch } from './advancedDocumentSearch';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { search as searchClient } from './searchClient';
+import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl';
 jest.mock('./searchClient');
 
 const search = searchClient as jest.Mock;
@@ -63,7 +62,7 @@ describe('advancedDocumentSearch', () => {
     caseTitleOrPetitioner?: string,
     docketNumber?: string,
   ) => {
-    let query: QueryDslQueryContainer = {
+    const query: QueryContainer = {
       bool: {
         filter: [],
       },
@@ -81,7 +80,7 @@ describe('advancedDocumentSearch', () => {
     }
 
     if (docketNumber) {
-      (query.bool!.filter! as QueryDslQueryContainer[]).push({
+      (query.bool!.filter! as QueryContainer[]).push({
         term: {
           'docketNumber.S': docketNumber,
         },

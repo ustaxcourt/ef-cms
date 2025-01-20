@@ -49,7 +49,7 @@ export const fileCourtIssuedDocketEntry = async (
       docketNumber: subjectDocketNumber,
     });
 
-  let subjectCaseToUpdateEntity = new Case(subjectCaseToUpdate, {
+  const subjectCaseToUpdateEntity = new Case(subjectCaseToUpdate, {
     authorizedUser,
   });
 
@@ -84,7 +84,7 @@ export const fileCourtIssuedDocketEntry = async (
           docketNumber,
         });
 
-      let caseEntity = new Case(caseToUpdate, { authorizedUser });
+      const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
       const docketEntryEntity = new DocketEntry(
         {

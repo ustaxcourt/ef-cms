@@ -414,7 +414,7 @@ export const formattedWorkQueue = (
   const selectedWorkItems = get(state.selectedWorkItems);
   const selectedWorkItemIds = map(selectedWorkItems, 'workItemId');
   let { assignmentFilterValue } = get(state.screenMetadata);
-  let { STATUS_TYPES } = applicationContext.getConstants();
+  const { STATUS_TYPES } = applicationContext.getConstants();
   const users = get(state.users);
   const authorizedUser = get(state.user);
 
@@ -467,8 +467,9 @@ export const formattedWorkQueue = (
       outbox: 'desc',
     },
   };
-  let sortField = sortFields[workQueueToDisplay.queue][workQueueToDisplay.box];
-  let sortDirection =
+  const sortField =
+    sortFields[workQueueToDisplay.queue][workQueueToDisplay.box];
+  const sortDirection =
     sortDirections[workQueueToDisplay.queue][workQueueToDisplay.box];
 
   let highPriorityField = [];
