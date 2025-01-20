@@ -6,17 +6,15 @@ import {
 import { getOptionsForCategory } from './selectDocumentTypeHelper';
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
-import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import {
   EXTERNAL_FILING_EVENTS,
   ExternalFilingEvent,
 } from '@shared/business/entities/docketEntry/externalFilingEvents';
-import { EXTERNAL_DOCUMENTS_ARRAY } from '@shared/business/entities/EntityConstants';
+import { EXTERNAL_DOCUMENTS_ARRAY, NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES, ROLES } from '@shared/business/entities/EntityConstants';
 
 export const completeDocumentTypeSectionHelper = (
   get: Get,
-  applicationContext: ClientApplicationContext,
 ): {
   primary: any;
   secondary: any;
@@ -35,8 +33,6 @@ export const completeDocumentTypeSectionHelper = (
     return {};
   }
 
-  const { NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES, USER_ROLES } =
-    applicationContext.getConstants();
   const searchText = get(state.screenMetadata.searchText) || '';
   const documentTypesForSelect = getDocumentTypesForSelect(
     EXTERNAL_DOCUMENTS_ARRAY,
@@ -50,7 +46,7 @@ export const completeDocumentTypeSectionHelper = (
       }
 
       const currentUser = get(state.user);
-      if (currentUser.role === USER_ROLES.irsPractitioner) {
+      if (currentUser.role === ROLES.irsPractitioner) {
         if (
           Case.isFirstIrsFiling(caseDetail) &&
           !documentType.canBeFirstIrsDocument
@@ -72,7 +68,7 @@ export const completeDocumentTypeSectionHelper = (
       return {
         ...documentType,
         documentTitle:
-          get(state.user).role === USER_ROLES.irsPractitioner &&
+          get(state.user).role === ROLES.irsPractitioner &&
           documentType.eventCode === 'EA'
             ? `${documentType.documentTitle} for Respondent`
             : documentType.documentTitle,
