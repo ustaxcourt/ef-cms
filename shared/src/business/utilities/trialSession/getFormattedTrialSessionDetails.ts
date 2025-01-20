@@ -266,7 +266,6 @@ export const getFormattedTrialSessionDetails = ({
       //   caseWasRemovedFromTrialSessionAfterStartDate = true;
       // }
 
-      // 10419 TODO somehow we need to only show the minutes sheet link for users who have permission
       if (
         isEligibleForMinuteSheetButton &&
         (isLeadCase || !caseItem.inConsolidatedGroup) &&
