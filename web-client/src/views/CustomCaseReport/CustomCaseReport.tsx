@@ -454,7 +454,7 @@ export const CustomCaseReport = connect(
               Calendaring high priority
             </label>
           </div>
-          <div className="custom-case-report-button-container">
+          <div className="button-container">
             <Button
               data-testid="submit-custom-case-report-button"
               tooltip="Run Report"

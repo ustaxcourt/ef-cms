@@ -83,24 +83,25 @@ export const EditTrialSession = connect(
                 />
               </div>
             </div>
-
-            <Button
-              data-testid="submit-edit-trial-session"
-              type="submit"
-              onClick={() => {
-                updateTrialSessionSequence();
-              }}
-            >
-              Save
-            </Button>
-            <Button
-              link
-              onClick={() => {
-                formCancelToggleCancelSequence();
-              }}
-            >
-              Cancel
-            </Button>
+            <div className="button-container">
+              <Button
+                data-testid="submit-edit-trial-session"
+                type="submit"
+                onClick={() => {
+                  updateTrialSessionSequence();
+                }}
+              >
+                Save
+              </Button>
+              <Button
+                link
+                onClick={() => {
+                  formCancelToggleCancelSequence();
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
           </div>
         </section>
       </>

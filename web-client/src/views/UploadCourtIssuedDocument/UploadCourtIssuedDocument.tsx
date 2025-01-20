@@ -98,7 +98,7 @@ export const UploadCourtIssuedDocument = connect(
                     </FormGroup>
                   </div>
                   <div className="grid-row grid-gap margin-top-4">
-                    <div className="grid-col-8 save-uploaded-pdf-button-container">
+                    <div className="grid-col-8 button-container">
                       <Button
                         data-testid="save-uploaded-pdf-button"
                         id="save-uploaded-pdf-button"
