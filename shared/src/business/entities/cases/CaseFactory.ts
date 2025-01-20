@@ -85,27 +85,32 @@ function constructCaseForUser({
   rawCase = formatSealedAddresses(rawCase, user);
   rawCase = decorateForCaseStatus(rawCase);
 
+  // If user has access to all case data, return the full case data
+  if (
+    userIsLoggedIn &&
+    isAuthorized(user, ROLE_PERMISSIONS.GET_ALL_CASE_DATA)
+  ) {
+    return new Case(rawCase, { authorizedUser: user });
+  }
+
+  // Users who do not have access to all case data should not see docket entries that are not on the record, like drafts,
+  // EXCEPT the IRS superuser, who can see only the non-docket STIN document
+  filterDocketEntriesNotOnDocketRecord({ authorizedUser: user, rawCase });
+
+  // If the user is not logged in, return whatever subset of data is allowed to the public
   if (!userIsLoggedIn) {
     return caseIsSealed
       ? new RestrictedCase(rawCase)
       : new PublicCase(rawCase, { authorizedUser: user });
   }
 
-  if (isAuthorized(user, ROLE_PERMISSIONS.GET_ALL_CASE_DATA)) {
-    return new Case(rawCase, { authorizedUser: user });
-  }
-
-  // Users who cannot get all case data should not see entries that are not on the record, like drafts,
-  // EXCEPT the IRS superuser, who can see only the non-docket STIN document
-  filterDocketEntriesNotOnDocketRecord({ authorizedUser: user, rawCase });
+  const userIsAssociated = userIsAssociatedWithCase({
+    authorizedUser: user as AuthUser,
+    rawCase,
+  });
 
   // Petitioners and practitioners on a case have full read access to the case
-  if (
-    userIsAssociatedWithCase({
-      authorizedUser: user as AuthUser,
-      rawCase,
-    })
-  ) {
+  if (userIsAssociated) {
     return new Case(rawCase, { authorizedUser: user });
   }
 
@@ -119,18 +124,11 @@ function constructCaseForUser({
     return new Case(rawCase, { authorizedUser: user });
   }
 
-  // User is logged in but neither has permissions to view all cases nor is associated with the case
-  if (
-    !isAuthorized(user, ROLE_PERMISSIONS.GET_ALL_CASE_DATA) &&
-    !userIsAssociatedWithCase
-  ) {
-    return caseIsSealed
-      ? new RestrictedCase(rawCase)
-      : new PublicCase(rawCase, { authorizedUser: user });
-  }
-
-  // By default, return a PublicCase
-  return new PublicCase(rawCase, { authorizedUser: user });
+  // User is logged in but neither has permissions to view all cases nor is associated with the case,
+  // so they see whatever subset of data is allowed to the public
+  return caseIsSealed
+    ? new RestrictedCase(rawCase)
+    : new PublicCase(rawCase, { authorizedUser: user });
 }
 
 export const decorateForCaseStatus = (caseRecord: RawCase) => {
@@ -189,12 +187,13 @@ const filterDocketEntriesNotOnDocketRecord = ({
   rawCase,
 }: {
   rawCase: RawCase;
-  authorizedUser: AuthUser;
+  authorizedUser: UnknownAuthUser;
 }) => {
   rawCase.docketEntries = rawCase.docketEntries.filter(
     d =>
       d.isOnDocketRecord ||
-      (d.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType &&
+      (authorizedUser &&
+        d.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType &&
         authorizedUser.role === ROLES.irsSuperuser),
   );
 };
