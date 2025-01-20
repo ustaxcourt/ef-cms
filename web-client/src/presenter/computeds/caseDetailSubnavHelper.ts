@@ -27,7 +27,7 @@ export const caseDetailSubnavHelper = (
   const showNotesIcon =
     get(state.caseDetail.caseNote) || get(state.judgesNote.notes);
 
-  const draftDocketEntryCount = getDraftItems(get);
+  const draftDocketEntryCount = getNumDraftItems(get);
 
   return {
     draftDocketEntryCount,
@@ -46,7 +46,7 @@ export const caseDetailSubnavHelper = (
   };
 };
 
-const getDraftItems = get => {
+const getNumDraftItems = get => {
   const caseDetails = get(state.caseDetail);
 
   const caseDetailsWithDraftDocketEntries = caseDetails.docketEntries.filter(
