@@ -1,26 +1,29 @@
-import { find } from 'lodash';
 import { getOptionsForCategory } from './selectDocumentTypeHelper';
 import { state } from '@web-client/presenter/app.cerebral';
-import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import { INTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION } from '@shared/business/entities/EntityConstants';
-import { INTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/internalFilingEvents';
+import {
+  AMENDMENT_EVENT_CODES,
+  INTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION,
+  INTERNAL_DOCUMENTS_ARRAY,
+} from '@shared/business/entities/EntityConstants';
+import { formatDateString } from '@shared/business/utilities/DateHandler';
 
 export const editDocketEntryMetaHelper = (
   get: Get,
-  applicationContext: ClientApplicationContext,
-): any => {
+): {
+  isStricken: boolean;
+  primary: any;
+  showObjection: boolean;
+  strickenAtFormatted: string;
+  strickenBy: string;
+} => {
   const { eventCode, isStricken, strickenAt, strickenBy } = get(state.form);
 
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
 
-  const { AMENDMENT_EVENT_CODES } = applicationContext.getConstants();
-
-  let categoryInformation;
-  find(
-    INTERNAL_FILING_EVENTS,
-    entries => (categoryInformation = find(entries, { eventCode })),
+  const categoryInformation = INTERNAL_DOCUMENTS_ARRAY.find(
+    d => d.eventCode === eventCode,
   );
 
   const selectedDocketEntryId = get(state.docketEntryId);
@@ -36,9 +39,7 @@ export const editDocketEntryMetaHelper = (
     optionsForCategory.showSecondaryDocumentForm = true;
   }
 
-  const strickenAtFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(strickenAt, 'MMDDYYYY');
+  const strickenAtFormatted = formatDateString(strickenAt, 'MMDDYYYY');
 
   const showObjection =
     INTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION.has(form.documentType) ||
