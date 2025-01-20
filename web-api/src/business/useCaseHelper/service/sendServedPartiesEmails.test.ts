@@ -1,16 +1,17 @@
 jest.mock('react');
 jest.mock('react-dom/server');
-import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
-import { sendServedPartiesEmails } from './sendServedPartiesEmails';
-import React from 'react';
-import ReactDOM from 'react-dom/server';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { Case } from '@shared/business/entities/cases/Case';
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
 } from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
 import { MOCK_CASE } from '@shared/test/mockCase';
+import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
+import { sendServedPartiesEmails } from './sendServedPartiesEmails';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 describe('sendServedPartiesEmails', () => {
   beforeAll(() => {
