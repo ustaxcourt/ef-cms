@@ -9,9 +9,10 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { omit } from 'lodash';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const opinionAdvancedSearchInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     caseTitleOrPetitioner,
     dateRange,

@@ -91,7 +91,6 @@ describe('getCaseDeadlinesInteractor', () => {
       .getPersistenceGateway()
       .getCaseDeadlinesByDateRange.mockReturnValue({
         foundDeadlines: mockDeadlines,
-        totalCount: 2,
       });
     applicationContext
       .getPersistenceGateway()
@@ -146,7 +145,6 @@ describe('getCaseDeadlinesInteractor', () => {
           sortableDocketNumber: 2019000102,
         },
       ],
-      totalCount: 2,
     });
   });
 
@@ -155,9 +153,7 @@ describe('getCaseDeadlinesInteractor', () => {
       applicationContext,
       {
         endDate: END_DATE,
-        from: 20,
         judge: 'Buch',
-        pageSize: 50,
         startDate: START_DATE,
       },
       mockPetitionsClerkUser,
@@ -168,9 +164,7 @@ describe('getCaseDeadlinesInteractor', () => {
         .mock.calls[0][0],
     ).toMatchObject({
       endDate: END_DATE,
-      from: 20,
       judge: 'Buch',
-      pageSize: 50,
       startDate: START_DATE,
     });
   });
@@ -237,7 +231,6 @@ describe('getCaseDeadlinesInteractor', () => {
             docketNumber: '2000-20',
           },
         ],
-        totalCount: 3,
       });
 
     const result = await getCaseDeadlinesInteractor(
@@ -277,7 +270,6 @@ describe('getCaseDeadlinesInteractor', () => {
           sortableDocketNumber: 2019000102,
         },
       ],
-      totalCount: 3,
     });
     expect(applicationContext.logger.error).toHaveBeenCalled();
   });

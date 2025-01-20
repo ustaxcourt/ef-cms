@@ -27,7 +27,7 @@ export const messagesHelper = (
     ? `${capitalize(selectedSection)} Section Messages`
     : 'Section Messages';
 
-  let messagesTitle = showIndividualMessages ? 'My Messages' : sectionTitle;
+  const messagesTitle = showIndividualMessages ? 'My Messages' : sectionTitle;
 
   const showSwitchToSectionMessagesButton =
     showIndividualMessages && !isCaseServicesSupervisor;

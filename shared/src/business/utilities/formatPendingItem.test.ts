@@ -4,7 +4,6 @@ import {
   DOCKET_NUMBER_SUFFIXES,
 } from '@shared/business/entities/EntityConstants';
 import { PendingItem } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { formatPendingItem } from '@shared/business/utilities/formatPendingItem';
 
 describe('formatPendingItem', () => {
@@ -65,12 +64,8 @@ describe('formatPendingItem', () => {
     ];
   });
 
-  it('should return a list of formatted pending items', () => {
-    const result = mockPendingItems.map(item =>
-      formatPendingItem(item, {
-        applicationContext,
-      }),
-    );
+  it('should return a list of formatted pending items with correct display properties', () => {
+    const result = mockPendingItems.map(item => formatPendingItem(item));
 
     expect(result).toMatchObject([
       {
@@ -100,7 +95,7 @@ describe('formatPendingItem', () => {
   it('should add consolidated properties to a pending item in a consolidated group', () => {
     pendingItem.leadDocketNumber = '100-19';
 
-    const result = formatPendingItem(pendingItem, { applicationContext });
+    const result = formatPendingItem(pendingItem);
 
     expect(result).toMatchObject({
       inConsolidatedGroup: true,

@@ -88,7 +88,7 @@ describe('handleLockError', () => {
 });
 
 describe('updateTrialSessionInteractor', () => {
-  let mockRequest = {
+  const mockRequest = {
     clientConnectionId: '987654',
     trialSession: MOCK_TRIAL_INPERSON,
   };
@@ -180,7 +180,7 @@ describe('updateTrialSessionInteractor', () => {
         mockDocketClerkUser,
       );
 
-      let expectedIdentifiers = MOCK_TRIAL_INPERSON.caseOrder!.map(
+      const expectedIdentifiers = MOCK_TRIAL_INPERSON.caseOrder!.map(
         ({ docketNumber }) => `case|${docketNumber}`,
       );
       expectedIdentifiers.unshift(

@@ -1,16 +1,28 @@
-// usage: npx ts-node --transpile-only scripts/reports/indices.ts
+#!/usr/bin/env -S npx ts-node --transpile-only
 
-import { esAliasType } from '../../web-api/elasticsearch/elasticsearch-aliases';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { getClient } from '../../web-api/elasticsearch/client';
-import { requireEnvVars } from '../../shared/admin-tools/util';
 
-requireEnvVars(['ENV', 'ELASTICSEARCH_ENDPOINT']);
+const scriptConfig: ScriptConfig = {
+  description: 'indices - Lists elasticsearch indices, counts, and aliases.',
+  environment: {
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+    environmentName: 'ENV',
+  },
+  requireActiveAwsSession: true,
+};
+const { elasticsearchEndpoint, environmentName } = parseArgsAndEnvVars(
+  scriptConfig,
+) as {
+  elasticsearchEndpoint: string;
+  environmentName: string;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const environmentName = process.env.ENV!;
-  const elasticsearchEndpoint = process.env.ELASTICSEARCH_ENDPOINT!;
-
   const client = await getClient({ elasticsearchEndpoint, environmentName });
   const stats = await client.indices.stats({
     index: '_all',
@@ -22,8 +34,10 @@ requireEnvVars(['ENV', 'ELASTICSEARCH_ENDPOINT']);
     counts[index] = Number(count.body?.count || 0);
   }
   const aliases = {};
-  (await client.cat.aliases({ format: 'json' })).body?.map((a: esAliasType) => {
-    aliases[a.alias] = a.index;
+  (await client.cat.aliases({ format: 'json' })).body.forEach(a => {
+    if (a.alias) {
+      aliases[a.alias] = a.index;
+    }
   });
   console.log('indices:', counts);
   console.log('aliases:', aliases);
