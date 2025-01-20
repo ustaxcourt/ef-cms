@@ -11,6 +11,7 @@ import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
+import { isEmpty } from 'lodash';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { upsertCase } from '@web-api/persistence/postgres/cases/upsertCase';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
@@ -150,12 +151,11 @@ const updateCorrespondence = ({
     ...updatedArchivedCorrespondences,
   ]);
 
-  return validCorrespondence.map(
-    correspondence =>
-      function updateCorrespondence_cb() {
-        return upsertCaseCorrespondences([correspondence]);
-      },
-  );
+  if (isEmpty(validCorrespondence)) {
+    return [];
+  }
+
+  return [() => upsertCaseCorrespondences(validCorrespondence)];
 };
 
 /**
@@ -334,11 +334,15 @@ const updateCaseWorkItems = async ({ caseToUpdate, oldCase }) => {
   const workItemsRequireUpdate =
     oldCase.associatedJudge !== caseToUpdate.associatedJudge;
 
+  if (!workItemsRequireUpdate) {
+    return [];
+  }
+
   const workItems = await getWorkItemsByDocketNumber({
     docketNumber: caseToUpdate.docketNumber,
   });
 
-  if (!workItems || !workItemsRequireUpdate) {
+  if (!workItems) {
     return [];
   }
 
@@ -350,14 +354,7 @@ const updateCaseWorkItems = async ({ caseToUpdate, oldCase }) => {
 
   const validWorkItems = WorkItem.validateRawCollection(updatedWorkItems);
 
-  return validWorkItems.map(
-    validWorkItem =>
-      function () {
-        return upsertWorkItems({
-          workItems: [validWorkItem],
-        });
-      },
-  );
+  return [() => upsertWorkItems({ workItems: validWorkItems })];
 };
 
 const updateCaseDeadlines = async ({
@@ -379,12 +376,7 @@ const updateCaseDeadlines = async ({
   });
   const validCaseDeadlines = CaseDeadline.validateRawCollection(deadlines);
 
-  return validCaseDeadlines.map(
-    caseDeadline =>
-      function updateCaseDeadlines_cb() {
-        return upsertCaseDeadlines([caseDeadline]);
-      },
-  );
+  return [() => upsertCaseDeadlines(validCaseDeadlines)];
 };
 
 /**
@@ -398,12 +390,13 @@ export const updateCaseAndAssociations = async ({
   applicationContext,
   authorizedUser,
   caseToUpdate,
+  includeCorrespondenceAndWorkItems = true,
 }: {
   applicationContext: ServerApplicationContext;
   authorizedUser: UnknownAuthUser;
   caseToUpdate: any;
+  includeCorrespondenceAndWorkItems?: boolean;
 }): Promise<RawCase> => {
-  console.log('updateCaseAndAssociations');
   const caseEntity: Case = caseToUpdate.validate
     ? caseToUpdate
     : new Case(caseToUpdate, {
@@ -415,6 +408,7 @@ export const updateCaseAndAssociations = async ({
     .getCaseByDocketNumber({
       applicationContext,
       docketNumber: caseToUpdate.docketNumber,
+      includeCorrespondenceAndWorkItems,
     });
 
   const validRawCaseEntity = caseEntity.validate().toRawObject();
@@ -425,16 +419,21 @@ export const updateCaseAndAssociations = async ({
     .validate()
     .toRawObject();
 
-  const RELATED_CASE_OPERATIONS = [
+  let RELATED_CASE_OPERATIONS = [
     updateCaseDeadlines,
     updateCaseDocketEntries,
     updateCaseMessages,
-    updateCaseWorkItems,
-    updateCorrespondence,
     updateHearings,
     updateIrsPractitioners,
     updatePrivatePractitioners,
   ];
+
+  if (includeCorrespondenceAndWorkItems) {
+    RELATED_CASE_OPERATIONS = RELATED_CASE_OPERATIONS.concat([
+      updateCaseWorkItems,
+      updateCorrespondence,
+    ]);
+  }
 
   const validationRequests = RELATED_CASE_OPERATIONS.map(fn =>
     fn({
