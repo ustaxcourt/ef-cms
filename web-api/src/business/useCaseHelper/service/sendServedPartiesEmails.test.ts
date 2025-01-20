@@ -1,16 +1,16 @@
 jest.mock('react');
 jest.mock('react-dom/server');
-import {
-  CASE_STATUS_TYPES,
-  CASE_TYPES_MAP,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { sendServedPartiesEmails } from './sendServedPartiesEmails';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { Case } from '@shared/business/entities/cases/Case';
+import {
+  CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
 
 describe('sendServedPartiesEmails', () => {
   beforeAll(() => {
@@ -53,6 +53,8 @@ describe('sendServedPartiesEmails', () => {
           { email: '1@example.com', name: '1' },
           { email: '2@example.com', name: '2' },
         ],
+        all: [],
+        paper: [],
       },
     });
 
@@ -98,6 +100,8 @@ describe('sendServedPartiesEmails', () => {
           { email: '1@example.com', name: '1' },
           { email: '2@example.com', name: '2' },
         ],
+        all: [],
+        paper: [],
       },
       skipEmailToIrs: true,
     });
@@ -139,6 +143,8 @@ describe('sendServedPartiesEmails', () => {
           { email: '1@example.com', name: '1' },
           { email: '2@example.com', name: '2' },
         ],
+        all: [],
+        paper: [],
       },
     });
 
@@ -176,6 +182,8 @@ describe('sendServedPartiesEmails', () => {
       docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
       servedParties: {
         electronic: [],
+        all: [],
+        paper: [],
       },
     });
 
@@ -214,6 +222,8 @@ describe('sendServedPartiesEmails', () => {
       docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
       servedParties: {
         electronic: [],
+        all: [],
+        paper: [],
       },
     });
 
@@ -246,6 +256,8 @@ describe('sendServedPartiesEmails', () => {
         caseEntity,
         docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
         servedParties: {
+          all: [],
+          paper: [],
           electronic: [],
         },
       }),
@@ -280,6 +292,8 @@ describe('sendServedPartiesEmails', () => {
 
     const servedParties = {
       electronic: [],
+      all: [],
+      paper: [],
     };
 
     await sendServedPartiesEmails({
@@ -338,6 +352,8 @@ describe('sendServedPartiesEmails', () => {
       docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
       servedParties: {
         electronic: [],
+        all: [],
+        paper: [],
       },
     });
 
