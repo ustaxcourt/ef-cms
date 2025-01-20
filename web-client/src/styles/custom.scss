@@ -2398,7 +2398,10 @@ button.change-scanner-button {
 
 .custom-case-report-button-container,
 .before-case-button-container,
-.create-petition-navigation-buttons-container {
+.create-petition-navigation-buttons-container,
+.save-uploaded-pdf-button-container,
+.modal-dialog-button-container,
+.select-document-button-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2427,13 +2430,4 @@ button.change-scanner-button {
 
 .cities-not-calendated-yellow-background {
   background-color: #ffe396;
-}
-
-.save-uploaded-pdf-button-container {
-  @media only screen and (max-width: ($large-screen - 1)) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
 }
