@@ -67,7 +67,7 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
   });
 
   it('should add mapping for a practitioner', async () => {
-    let mockUser = {
+    const mockUser = {
       email: 'emmet.brown@example.com',
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.adc,

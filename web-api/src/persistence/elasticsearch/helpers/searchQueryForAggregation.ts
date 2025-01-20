@@ -1,12 +1,12 @@
+import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl';
 import { FetchEventCodesParamsType } from '../fetchEventCodesCountForJudges';
-import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 
 export const computeShouldFilters = ({
   params,
 }: {
   params: FetchEventCodesParamsType;
 }) => {
-  const shouldFilters: QueryDslQueryContainer[] = [];
+  const shouldFilters: QueryContainer[] = [];
 
   if (params.judges) {
     params.judges.forEach(judgeName => {
@@ -32,7 +32,7 @@ export const computeShouldFilters = ({
 
 export const computeDocumentFilters = ({ params }) => {
   // add filters to return 'served'/'stricken' orders/opinions
-  const documentFilters: QueryDslQueryContainer[] = [
+  const documentFilters: QueryContainer[] = [
     { term: { 'entityName.S': 'DocketEntry' } },
     {
       exists: {

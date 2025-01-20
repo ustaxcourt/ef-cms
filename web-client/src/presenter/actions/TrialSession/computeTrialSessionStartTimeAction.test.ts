@@ -3,9 +3,7 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('computeTrialSessionStartTimeAction', () => {
   it('should return a midnight start time in 12hr format', async () => {
-    let result;
-
-    result = await runAction(computeTrialSessionStartTimeAction, {
+    const result = await runAction(computeTrialSessionStartTimeAction, {
       props: {
         trialSession: {
           startTime: '00:00',
@@ -21,9 +19,7 @@ describe('computeTrialSessionStartTimeAction', () => {
   });
 
   it('should return a noon start time in 12hr format', async () => {
-    let result;
-
-    result = await runAction(computeTrialSessionStartTimeAction, {
+    const result = await runAction(computeTrialSessionStartTimeAction, {
       props: {
         trialSession: {
           startTime: '12:00',
@@ -39,9 +35,7 @@ describe('computeTrialSessionStartTimeAction', () => {
   });
 
   it('should return an afternoon (pm) start time in 12hr format', async () => {
-    let result;
-
-    result = await runAction(computeTrialSessionStartTimeAction, {
+    const result = await runAction(computeTrialSessionStartTimeAction, {
       props: {
         trialSession: {
           startTime: '15:45',
@@ -57,9 +51,7 @@ describe('computeTrialSessionStartTimeAction', () => {
   });
 
   it('should return a morning (am) start time in 12hr format', async () => {
-    let result;
-
-    result = await runAction(computeTrialSessionStartTimeAction, {
+    const result = await runAction(computeTrialSessionStartTimeAction, {
       props: {
         trialSession: {
           startTime: '8:29',

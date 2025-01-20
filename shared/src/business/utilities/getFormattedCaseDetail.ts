@@ -19,6 +19,17 @@ import { cloneDeep, isEmpty, sortBy } from 'lodash';
 import { isMiscellaneousDocketEntry } from '@shared/business/utilities/isMiscellaneousDocketEntry';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 
+export type FormattedCaseInventoryReportEntry = {
+  docketNumber: string;
+  caseTitle: string;
+  consolidatedIconTooltipText: string;
+  inConsolidatedGroup: boolean;
+  isLeadCase: boolean;
+  associatedJudge?: string;
+  status: string;
+  [key: string]: unknown;
+};
+
 const computeIsInProgress = ({ formattedEntry }) => {
   return (
     (!formattedEntry.isCourtIssuedDocument &&
@@ -176,12 +187,10 @@ const formattedTrialSessionDetails = ({
   trialLocation,
   trialTime,
 }) => {
-  let formattedTrialCity;
-  let formattedAssociatedJudge;
   let formattedTrialDate;
 
-  formattedTrialCity = trialLocation || 'Not assigned';
-  formattedAssociatedJudge = judgeName || 'Not assigned';
+  const formattedTrialCity = trialLocation || 'Not assigned';
+  const formattedAssociatedJudge = judgeName || 'Not assigned';
 
   if (!trialDate) {
     formattedTrialDate = 'Not scheduled';
@@ -382,7 +391,7 @@ export const formatCase = (
   const caseEntity = new Case(caseDetail, {
     authorizedUser,
   });
-  result.canConsolidate = caseEntity.canConsolidate();
+  result.canConsolidate = caseEntity.canConsolidate(caseEntity);
   result.canUnconsolidate = !!caseEntity.leadDocketNumber;
   result.irsSendDate = caseEntity.getIrsSendDate();
   result.showPrintConfirmationLink =

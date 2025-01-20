@@ -373,6 +373,11 @@ const clientSupportsES2022 = (() => {
       return false;
     }
 
+    // Check structuredClone exists
+    if (typeof structuredClone !== 'function') {
+      return false;
+    }
+
     // Check Array.prototype.at
     if (!Array.prototype.at) {
       return false;
@@ -394,6 +399,7 @@ const clientSupportsES2022 = (() => {
     }
 
     return true;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     return false; // Any failure indicates lack of support
   }
@@ -691,19 +697,15 @@ const applicationContext = {
   },
   getLogger: () => ({
     error: value => {
-      // eslint-disable-next-line no-console
       console.error(value);
     },
     info: (key, value) => {
-      // eslint-disable-next-line no-console
       console.info(key, JSON.stringify(value));
     },
     time: key => {
-      // eslint-disable-next-line no-console
       console.time(key);
     },
     timeEnd: key => {
-      // eslint-disable-next-line no-console
       console.timeEnd(key);
     },
   }),
@@ -853,7 +855,7 @@ const applicationContext = {
   setForceRefreshCallback(callback) {
     forceRefreshCallback = callback;
   },
-  setTimeout: (callback, timeout) => setTimeout(callback, timeout),
+  setTimeout: (callback: Function, timeout) => setTimeout(callback, timeout),
 };
 
 export { applicationContext };

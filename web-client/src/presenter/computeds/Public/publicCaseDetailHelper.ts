@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import {
   ALLOWLIST_FEATURE_FLAGS,
   PUBLIC_DOCKET_RECORD_FILTER,
@@ -192,7 +191,7 @@ export const publicCaseDetailHelper = (
     ],
   );
 
-  let formattedDocketEntriesOnDocketRecord = docketEntries?.map(entry => {
+  const formattedDocketEntriesOnDocketRecord = docketEntries?.map(entry => {
     return formatDocketEntryOnDocketRecord(applicationContext, {
       entry,
       isTerminalUser,

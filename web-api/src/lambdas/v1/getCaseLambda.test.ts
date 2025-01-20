@@ -12,7 +12,7 @@ import { getCaseInteractor as mockGetCaseInteractor } from '@shared/business/use
 jest.mock('@web-api/applicationContext', () => {
   return {
     createApplicationContext: () => {
-      let appContext = mockCreateTestApplicationContext();
+      const appContext = mockCreateTestApplicationContext();
       appContext.getUseCases().getAllFeatureFlagsInteractor = jest
         .fn()
         .mockResolvedValue(mockFeatureFlag);
