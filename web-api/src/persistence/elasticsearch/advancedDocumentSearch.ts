@@ -27,7 +27,7 @@ export const advancedDocumentSearch = async ({
   sortField,
   startDate,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   caseTitleOrPetitioner?: string;
   docketNumber?: string;
   documentEventCodes: string[];
@@ -60,7 +60,7 @@ export const advancedDocumentSearch = async ({
     'signedJudgeName',
   ];
 
-  const documentMust: QueryDslQueryContainer[] = [];
+  const documentMust: QueryContainer[] = [];
 
   if (keyword) {
     documentMust.push({
@@ -103,7 +103,7 @@ export const advancedDocumentSearch = async ({
     ];
   }
 
-  const documentFilter: QueryDslQueryContainer[] = [
+  const documentFilter: QueryContainer[] = [
     { term: { 'entityName.S': 'DocketEntry' } },
     {
       exists: {
@@ -158,7 +158,7 @@ export const advancedDocumentSearch = async ({
   const judgeName = judge?.replace(/Chief\s|Legacy\s|Judge\s/g, '');
 
   const postgresResults = await getDbReader(reader => {
-    let query = reader
+    const query = reader
       // Get all cases, aggregating petitioner names and case caption data
       .with('docketEntries', db => {
         let subQuery = db

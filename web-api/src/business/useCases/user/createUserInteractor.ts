@@ -24,7 +24,6 @@ export const createUserInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  // eslint-disable-next-line spellcheck/spell-checker
   /* NOTE: This is a very unique interactor and breaks some convention.
   This interactor is only meant to be run by admins and zendesk automations, not by real users.
   That is why this interactor is not attached to applicationContext and is doing a direct import from the scripts directory

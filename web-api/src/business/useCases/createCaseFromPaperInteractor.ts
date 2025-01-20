@@ -156,7 +156,7 @@ export const createCaseFromPaperInteractor = async (
   });
 
   if (applicationForWaiverOfFilingFeeFileId) {
-    let { documentTitle } =
+    const { documentTitle } =
       INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee;
 
     const applicationForWaiverOfFilingFeeDocketEntryEntity = new DocketEntry(
@@ -184,7 +184,7 @@ export const createCaseFromPaperInteractor = async (
   }
 
   if (requestForPlaceOfTrialFileId) {
-    let { documentTitle } = INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial;
+    const { documentTitle } = INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial;
 
     const requestForPlaceOfTrialDocketEntryEntity = new DocketEntry(
       {

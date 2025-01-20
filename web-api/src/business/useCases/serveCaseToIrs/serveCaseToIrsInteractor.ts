@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import {
   AuthUser,
   UnknownAuthUser,
@@ -84,7 +83,7 @@ const addDocketEntries = ({ caseEntity }) => {
       doc === INITIAL_DOCUMENT_TYPES.stin.documentType,
   );
 
-  for (let documentType of initialDocumentTypesListRequiringDocketEntry) {
+  for (const documentType of initialDocumentTypesListRequiringDocketEntry) {
     const foundDocketEntry = caseEntity.docketEntries.find(
       caseDocument => caseDocument.documentType === documentType,
     );
@@ -482,7 +481,7 @@ export const serveCaseToIrs = async (
       docketNumber,
     });
 
-    let caseEntity = new Case(caseToBatch, { authorizedUser });
+    const caseEntity = new Case(caseToBatch, { authorizedUser });
 
     caseEntity.markAsSentToIRS();
 

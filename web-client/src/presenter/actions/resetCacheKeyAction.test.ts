@@ -9,7 +9,7 @@ describe('resetCacheKeyAction', () => {
   });
 
   it('should set a new cache key every call', async () => {
-    let { state } = await runAction(resetCacheKeyAction, {
+    const { state } = await runAction(resetCacheKeyAction, {
       modules: { presenter },
       state: {
         messageCacheKey: '',

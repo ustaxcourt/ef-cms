@@ -52,7 +52,7 @@ export const createMockDocumentClient = () => {
     batchGet: jest.fn().mockImplementation(({ RequestItems }) => {
       const { Keys } = RequestItems['efcms-local'];
       const arr = [];
-      for (let { pk, sk } of Keys) {
+      for (const { pk, sk } of Keys) {
         arr.push(cloneDeep(mockDynamoRecords[`${pk} ${sk}`]));
       }
       return Promise.resolve({
@@ -87,7 +87,7 @@ export const createMockDocumentClient = () => {
       .fn()
       .mockImplementation(({ ExpressionAttributeValues, IndexName }) => {
         const arr = [];
-        for (let key in mockDynamoRecords) {
+        for (const key in mockDynamoRecords) {
           if (IndexName === 'gsi1') {
             const gsi1pk = ExpressionAttributeValues[':gsi1pk'];
             if (mockDynamoRecords[key].gsi1pk === gsi1pk) {
@@ -115,7 +115,7 @@ export const createMockDocumentClient = () => {
       .fn()
       .mockImplementation(({ ExpressionAttributeValues, IndexName }) => {
         const arr = [];
-        for (let key in mockDynamoRecords) {
+        for (const key in mockDynamoRecords) {
           if (IndexName === 'gsi1') {
             const gsi1pk = ExpressionAttributeValues[':gsi1pk'];
             if (mockDynamoRecords[key].gsi1pk === gsi1pk) {
@@ -153,7 +153,7 @@ export const createMockDocumentClient = () => {
           Key,
           UpdateExpression,
         }) => {
-          for (let expressionAttributeName in ExpressionAttributeNames) {
+          for (const expressionAttributeName in ExpressionAttributeNames) {
             UpdateExpression = UpdateExpression.replace(
               expressionAttributeName,
               ExpressionAttributeNames[expressionAttributeName],
@@ -165,6 +165,7 @@ export const createMockDocumentClient = () => {
           const expressions = UpdateExpression.split(',').map(t => t.trim());
           const gg = expressions.map(v => v.split('=').map(x => x.trim()));
           let obj = {};
+          // eslint-disable-next-line prefer-const
           for (let [k, v] of gg) {
             v = ExpressionAttributeValues[v];
             if (v === 'true' || v === 'false') {
@@ -172,7 +173,6 @@ export const createMockDocumentClient = () => {
             } else {
               if (k.includes('workItem')) {
                 obj = mockDynamoRecords[`${Key.pk} ${Key.sk}`];
-                // eslint-disable-next-line security/detect-eval-with-expression
                 eval(`obj.${k} = ${JSON.stringify(v)};`);
               } else {
                 obj[k] = v;
@@ -186,7 +186,7 @@ export const createMockDocumentClient = () => {
               ...obj,
             };
           } else {
-            let { id } = mockDynamoRecords[`${Key.pk} ${Key.sk}`] || {};
+            const { id } = mockDynamoRecords[`${Key.pk} ${Key.sk}`] || {};
             mockDynamoRecords[`${Key.pk} ${Key.sk}`] = {
               id: (id || 0) + 1,
             };

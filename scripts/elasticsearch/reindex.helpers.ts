@@ -23,17 +23,19 @@ export const reindexIfNecessary = async ({
       indexesWithoutAliases.map(index => {
         const baseAlias = getBaseAliasFromIndexName(index);
         const currentIndex = aliases.find(a => a.alias === baseAlias)?.index;
-        return client.reindex({
-          body: {
-            dest: {
-              index,
+        if (currentIndex) {
+          return client.reindex({
+            body: {
+              dest: {
+                index,
+              },
+              source: {
+                index: currentIndex,
+              },
             },
-            source: {
-              index: currentIndex,
-            },
-          },
-          wait_for_completion: false,
-        });
+            wait_for_completion: false,
+          });
+        }
       }),
     );
   }

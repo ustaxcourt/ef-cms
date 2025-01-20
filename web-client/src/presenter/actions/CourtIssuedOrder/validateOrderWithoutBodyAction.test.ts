@@ -3,9 +3,9 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { validateOrderWithoutBodyAction } from './validateOrderWithoutBodyAction';
 
 describe('validateOrderWithoutBodyAction', () => {
-  let validateOrderWithoutBodyStub = jest.fn();
+  const validateOrderWithoutBodyStub = jest.fn();
 
-  let mockOrderWithoutBody = {
+  const mockOrderWithoutBody = {
     documentTitle: 'Order of Dismissal and Decision',
     documentType: 'Order of Dismissal and Decision',
     eventCode: 'ODD',

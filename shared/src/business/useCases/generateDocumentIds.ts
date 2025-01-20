@@ -84,7 +84,7 @@ export const generateDocumentIds = async (
       });
   }
 
-  let attachmentToPetitionUploadPromises: Promise<string>[] = [];
+  const attachmentToPetitionUploadPromises: Promise<string>[] = [];
 
   if (attachmentToPetitionUploadProgress) {
     attachmentToPetitionUploadProgress.forEach(progress => {
@@ -123,6 +123,7 @@ export const generateDocumentIds = async (
       requestForPlaceOfTrialFileId,
       stinFileId,
     };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     throw new Error('Error generating document Ids');
   }

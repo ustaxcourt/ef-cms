@@ -82,7 +82,7 @@ describe('serveCaseToIrsInteractor', () => {
   };
 
   let mockCase;
-  let getObjectMock = () => {
+  const getObjectMock = () => {
     return {
       promise: () => ({
         Body: testPdfDoc,
@@ -112,7 +112,7 @@ describe('serveCaseToIrsInteractor', () => {
 
     applicationContext.getStorageClient.mockReturnValue({
       getObject: getObjectMock,
-      upload: (params, cb) => {
+      upload: (_params, cb) => {
         return cb(null, true);
       },
     });
@@ -900,7 +900,7 @@ describe('serveCaseToIrsInteractor', () => {
         .getPersistenceGateway()
         .isFileExists.mockReturnValueOnce(true);
 
-      let secondaryContactId = 'f30c6634-4c3d-4cda-874c-d9a9387e00e2';
+      const secondaryContactId = 'f30c6634-4c3d-4cda-874c-d9a9387e00e2';
       mockCase = {
         ...MOCK_CASE,
         contactSecondary: {

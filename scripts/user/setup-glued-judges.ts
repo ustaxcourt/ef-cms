@@ -21,7 +21,7 @@ const scriptConfig: ScriptConfig = {
   environment: {
     Password: 'DEFAULT_ACCOUNT_PASS',
     TableName: 'DESTINATION_TABLE',
-    UserPoolId: 'COGNITO_USER_POOL',
+    UserPoolId: 'USER_POOL_ID',
     elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
     env: 'ENV',
   },
@@ -189,7 +189,7 @@ const getJudgeUsersByName = async (): Promise<{
   });
   const { results }: SearchClientResultsType = formatResults(queryResults.body);
 
-  let judgeUsers = {};
+  const judgeUsers = {};
   for (const judge of results) {
     const emailDomain = judge.email.split('@')[1];
     if (!(judge.name in judgeUsers)) {

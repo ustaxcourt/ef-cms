@@ -243,7 +243,7 @@ const asyncTifToPdf = ({
         if (result.code === 0) {
           resolve(fileName);
         } else {
-          reject();
+          reject(new Error('Unable convert tif to pdf'));
         }
       }
     });
@@ -260,7 +260,8 @@ const moveLocalFile = async ({
   return new Promise((resolve, reject) => {
     fs.rename(oldPath, newPath, err => {
       if (err) {
-        reject();
+        console.error(err);
+        reject(new Error('unable to moveLocalFile'));
       } else {
         resolve(true);
       }

@@ -159,7 +159,7 @@ describe('searchClient', () => {
     it('searchAll should return the same results that search returns', async () => {
       // 1 - run query with searchAll
 
-      const openCasesReceivedOnJulyFourthSearchAllParameters = {
+      const openCasesReceivedOnJulyFourthSearchAllParameters: Search_Request = {
         ...openCasesReceivedOnJulyFourthSearchParameters,
         size: 5,
       };
@@ -303,7 +303,7 @@ describe('searchClient', () => {
         applicationContext,
         searchParameters: {
           body: {
-            aggs: {
+            aggregations: {
               roles: {
                 terms: {
                   field: 'role.S',

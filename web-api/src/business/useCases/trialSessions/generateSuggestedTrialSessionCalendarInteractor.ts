@@ -113,6 +113,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     termStartDate,
   });
 
+  // eslint-disable-next-line prefer-const
   let { caseCountsAndSessionsByCity, incorrectSizeRegularCases } =
     getDataForCalendaring({ cases });
   let userMessages: string[];
@@ -136,6 +137,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     reservedWeekOfAtLocationConstraint,
   ];
 
+  // eslint-disable-next-line prefer-const
   ({ caseCountsAndSessionsByCity, userMessages } = generateCalendar({
     calendaringConfig,
     caseCountsAndSessionsByCity,
