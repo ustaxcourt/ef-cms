@@ -1,3 +1,10 @@
+import { mockEntireFile } from '@shared/test/mockFactory';
+jest.mock('@shared/business/utilities/getDocumentTitleWithAdditionalInfo', () =>
+  mockEntireFile({
+    module: '@shared/business/utilities/getDocumentTitleWithAdditionalInfo',
+    keepImplementation: true,
+  }),
+);
 import { INITIAL_DOCUMENT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import {
   MAX_TITLE_LENGTH,
@@ -7,9 +14,12 @@ import {
 } from './selectDocumentTypeHelper';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
-import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { getDocumentTitleWithAdditionalInfo as getDocumentTitleWithAdditionalInfoMock } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
 
 describe('selectDocumentTypeHelper', () => {
+  const getDocumentTitleWithAdditionalInfo = jest.mocked(
+    getDocumentTitleWithAdditionalInfoMock,
+  );
   describe('getOptionsForCategory', () => {
     const mockSelectedDocketEntryId = MOCK_CASE.docketEntries.find(
       d => d.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode,
@@ -27,7 +37,6 @@ describe('selectDocumentTypeHelper', () => {
 
     it('should return an empty object if categoryInformation is undefined', () => {
       const result = getOptionsForCategory({
-        applicationContext,
         caseDetail: MOCK_CASE,
         categoryInformation: undefined,
         selectedDocketEntryId: undefined,
@@ -42,7 +51,6 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getOptionsForCategory({
-        applicationContext,
         caseDetail: MOCK_CASE,
         categoryInformation: mockCategoryInformation,
         selectedDocketEntryId: undefined,
@@ -60,7 +68,6 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getOptionsForCategory({
-        applicationContext,
         caseDetail: {
           ...MOCK_CASE,
           docketEntries: mockServedDocuments,
@@ -85,7 +92,6 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getOptionsForCategory({
-        applicationContext,
         caseDetail: MOCK_CASE,
         categoryInformation: mockCategoryInformation,
         selectedDocketEntryId: undefined,
@@ -107,7 +113,6 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getOptionsForCategory({
-        applicationContext,
         caseDetail: {
           ...MOCK_CASE,
           docketEntries: mockServedDocuments,
@@ -137,7 +142,6 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getOptionsForCategory({
-        applicationContext,
         caseDetail: {
           ...MOCK_CASE,
           docketEntries: mockServedDocuments,
@@ -165,7 +169,6 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getOptionsForCategory({
-        applicationContext,
         caseDetail: MOCK_CASE,
         categoryInformation: mockCategoryInformation,
         selectedDocketEntryId: undefined,
@@ -186,7 +189,6 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getOptionsForCategory({
-        applicationContext,
         caseDetail: {
           ...MOCK_CASE,
           docketEntries: mockServedDocuments,
@@ -212,7 +214,6 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getOptionsForCategory({
-        applicationContext,
         caseDetail: MOCK_CASE,
         categoryInformation: mockCategoryInformation,
         selectedDocketEntryId: undefined,
@@ -230,7 +231,6 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getOptionsForCategory({
-        applicationContext,
         caseDetail: MOCK_CASE,
         categoryInformation: mockCategoryInformation,
         selectedDocketEntryId: undefined,
@@ -252,7 +252,6 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getOptionsForCategory({
-        applicationContext,
         caseDetail: MOCK_CASE,
         categoryInformation: mockCategoryInformation,
         selectedDocketEntryId: undefined,
@@ -274,7 +273,6 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getOptionsForCategory({
-        applicationContext,
         caseDetail: MOCK_CASE,
         categoryInformation: mockCategoryInformation,
         selectedDocketEntryId: undefined,
@@ -337,7 +335,6 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getValidPreviouslyFiledDocuments(
-        applicationContext,
         mockCaseDetail,
         undefined,
       );
@@ -371,7 +368,6 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getValidPreviouslyFiledDocuments(
-        applicationContext,
         mockCaseDetail,
         mockSelectedDocketEntryId,
       );
@@ -405,26 +401,20 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getValidPreviouslyFiledDocuments(
-        applicationContext,
         mockCaseDetail,
         mockSelectedDocketEntryId,
       );
-      expect(
-        applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo,
-      ).toHaveBeenCalled();
-      expect(
-        applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo
-          .mock.calls[0][0],
-      ).toMatchObject({ docketEntry: mockExhibit });
+      expect(getDocumentTitleWithAdditionalInfo).toHaveBeenCalled();
+      expect(getDocumentTitleWithAdditionalInfo.mock.calls[0][0]).toMatchObject(
+        { docketEntry: mockExhibit },
+      );
       expect(result[0].documentTitle).toEqual('Exhibit(s) First');
     });
 
     it('should return documentTitle truncated to MAX_TITLE_LENGTH', () => {
-      applicationContext
-        .getUtilities()
-        .getDocumentTitleWithAdditionalInfo.mockReturnValueOnce(
-          "MOTION FOR PROTECTIVE ORDER PURSUANT TO RULE 103 REGARDING RESPONDING TO RESP'S INTERROGATORIES & REQUEST FOR PRODUCTION OF DOCUMENTS. by Petrs. Michael R. Bridges & Casie L. Bridges; Marvin R. Allen & Susan A. Allen; & Michael R. Bridges & Casie L. Bridges (EXHIBIT)",
-        );
+      getDocumentTitleWithAdditionalInfo.mockReturnValueOnce(
+        "MOTION FOR PROTECTIVE ORDER PURSUANT TO RULE 103 REGARDING RESPONDING TO RESP'S INTERROGATORIES & REQUEST FOR PRODUCTION OF DOCUMENTS. by Petrs. Michael R. Bridges & Casie L. Bridges; Marvin R. Allen & Susan A. Allen; & Michael R. Bridges & Casie L. Bridges (EXHIBIT)",
+      );
       const mockSelectedDocketEntryId = 'f9fbccfb-88cb-4bf6-a90d-174b6f4130d0';
       const mockExhibit = {
         addToCoversheet: true,
@@ -450,18 +440,14 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getValidPreviouslyFiledDocuments(
-        applicationContext,
         mockCaseDetail,
         mockSelectedDocketEntryId,
       );
 
-      expect(
-        applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo,
-      ).toHaveBeenCalled();
-      expect(
-        applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo
-          .mock.calls[0][0],
-      ).toMatchObject({ docketEntry: mockExhibit });
+      expect(getDocumentTitleWithAdditionalInfo).toHaveBeenCalled();
+      expect(getDocumentTitleWithAdditionalInfo.mock.calls[0][0]).toMatchObject(
+        { docketEntry: mockExhibit },
+      );
       expect(result[0].documentTitle.length).toBe(MAX_TITLE_LENGTH);
       expect(result[0].documentTitle).toEqual(
         "MOTION FOR PROTECTIVE ORDER PURSUANT TO RULE 103 REGARDING RESPONDING TO RESP'S INTERROGATORIES & R…",
@@ -469,9 +455,7 @@ describe('selectDocumentTypeHelper', () => {
     });
 
     it('should return documentTitle undefined if utility function returns undefined', () => {
-      applicationContext
-        .getUtilities()
-        .getDocumentTitleWithAdditionalInfo.mockReturnValueOnce(undefined);
+      getDocumentTitleWithAdditionalInfo.mockReturnValueOnce(undefined);
       const mockSelectedDocketEntryId = 'f9fbccfb-88cb-4bf6-a90d-174b6f4130d0';
       const mockExhibit = {
         addToCoversheet: true,
@@ -497,18 +481,14 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getValidPreviouslyFiledDocuments(
-        applicationContext,
         mockCaseDetail,
         mockSelectedDocketEntryId,
       );
 
-      expect(
-        applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo,
-      ).toHaveBeenCalled();
-      expect(
-        applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo
-          .mock.calls[0][0],
-      ).toMatchObject({ docketEntry: mockExhibit });
+      expect(getDocumentTitleWithAdditionalInfo).toHaveBeenCalled();
+      expect(getDocumentTitleWithAdditionalInfo.mock.calls[0][0]).toMatchObject(
+        { docketEntry: mockExhibit },
+      );
       expect(result[0].documentTitle).toBeUndefined();
     });
 
@@ -526,7 +506,6 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getValidPreviouslyFiledDocuments(
-        applicationContext,
         mockCaseDetail,
         undefined,
       );
@@ -548,7 +527,6 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getValidPreviouslyFiledDocuments(
-        applicationContext,
         mockCaseDetail,
         undefined,
       );
@@ -570,7 +548,6 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getValidPreviouslyFiledDocuments(
-        applicationContext,
         mockCaseDetail,
         undefined,
       );
