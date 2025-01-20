@@ -11,6 +11,20 @@ import {
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { PDFDocument } from 'pdf-lib';
+
+type CreateAndServeNoticeDocketEntryParams = {
+  additionalDocketEntryInfo?: any;
+  caseEntity: Case;
+  documentInfo: {
+    documentType: string;
+    documentTitle: string;
+    eventCode: string;
+  };
+  newPdfDoc: PDFDocument;
+  noticePdf: Uint8Array;
+  onlyProSePetitioners?: boolean;
+};
 
 export const createAndServeNoticeDocketEntry = async (
   applicationContext: ServerApplicationContext,
@@ -21,18 +35,7 @@ export const createAndServeNoticeDocketEntry = async (
     newPdfDoc,
     noticePdf,
     onlyProSePetitioners,
-  }: {
-    additionalDocketEntryInfo?: any;
-    caseEntity: Case;
-    documentInfo: {
-      documentType: string;
-      documentTitle: string;
-      eventCode: string;
-    };
-    newPdfDoc: any;
-    noticePdf: Uint8Array;
-    onlyProSePetitioners?: boolean;
-  },
+  }: CreateAndServeNoticeDocketEntryParams,
   authorizedUser: AuthUser,
 ) => {
   const docketEntryId = applicationContext.getUniqueId();
