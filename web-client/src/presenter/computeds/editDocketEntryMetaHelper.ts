@@ -21,17 +21,19 @@ export const editDocketEntryMetaHelper = (
 
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
+  const user = get(state.user);
 
   const categoryInformation = INTERNAL_DOCUMENTS_ARRAY.find(
     d => d.eventCode === eventCode,
   );
 
-  const selectedDocketEntryId = get(state.docketEntryId);
+  const selectedDocketEntryId = get(state.docketEntryId) as unknown as string;
 
   const optionsForCategory = getOptionsForCategory({
     caseDetail,
     categoryInformation,
     selectedDocketEntryId,
+    authorizedUser: user,
   });
 
   if (optionsForCategory.showSecondaryDocumentSelect) {

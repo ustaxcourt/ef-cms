@@ -15,6 +15,7 @@ import {
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 import { getDocumentTitleWithAdditionalInfo as getDocumentTitleWithAdditionalInfoMock } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('selectDocumentTypeHelper', () => {
   const getDocumentTitleWithAdditionalInfo = jest.mocked(
@@ -37,9 +38,10 @@ describe('selectDocumentTypeHelper', () => {
 
     it('should return an empty object if categoryInformation is undefined', () => {
       const result = getOptionsForCategory({
+        authorizedUser: mockDocketClerkUser,
         caseDetail: MOCK_CASE,
         categoryInformation: undefined,
-        selectedDocketEntryId: undefined,
+        selectedDocketEntryId: '',
       });
 
       expect(result).toEqual({});
@@ -51,9 +53,10 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getOptionsForCategory({
+        authorizedUser: mockDocketClerkUser,
         caseDetail: MOCK_CASE,
         categoryInformation: mockCategoryInformation,
-        selectedDocketEntryId: undefined,
+        selectedDocketEntryId: '',
       });
 
       expect(result).toEqual({
@@ -68,6 +71,7 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getOptionsForCategory({
+        authorizedUser: mockDocketClerkUser,
         caseDetail: {
           ...MOCK_CASE,
           docketEntries: mockServedDocuments,
@@ -92,9 +96,10 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getOptionsForCategory({
+        authorizedUser: mockDocketClerkUser,
         caseDetail: MOCK_CASE,
         categoryInformation: mockCategoryInformation,
-        selectedDocketEntryId: undefined,
+        selectedDocketEntryId: '',
       });
 
       expect(result).toEqual({
@@ -113,6 +118,7 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getOptionsForCategory({
+        authorizedUser: mockDocketClerkUser,
         caseDetail: {
           ...MOCK_CASE,
           docketEntries: mockServedDocuments,
@@ -142,6 +148,7 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getOptionsForCategory({
+        authorizedUser: mockDocketClerkUser,
         caseDetail: {
           ...MOCK_CASE,
           docketEntries: mockServedDocuments,
@@ -169,9 +176,10 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getOptionsForCategory({
+        authorizedUser: mockDocketClerkUser,
         caseDetail: MOCK_CASE,
         categoryInformation: mockCategoryInformation,
-        selectedDocketEntryId: undefined,
+        selectedDocketEntryId: '',
       });
 
       expect(result).toMatchObject({
@@ -189,6 +197,7 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getOptionsForCategory({
+        authorizedUser: mockDocketClerkUser,
         caseDetail: {
           ...MOCK_CASE,
           docketEntries: mockServedDocuments,
@@ -214,9 +223,10 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getOptionsForCategory({
+        authorizedUser: mockDocketClerkUser,
         caseDetail: MOCK_CASE,
         categoryInformation: mockCategoryInformation,
-        selectedDocketEntryId: undefined,
+        selectedDocketEntryId: '',
       });
 
       expect(result).toEqual({
@@ -231,9 +241,10 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getOptionsForCategory({
+        authorizedUser: mockDocketClerkUser,
         caseDetail: MOCK_CASE,
         categoryInformation: mockCategoryInformation,
-        selectedDocketEntryId: undefined,
+        selectedDocketEntryId: '',
       });
 
       expect(result).toEqual({
@@ -252,9 +263,10 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getOptionsForCategory({
+        authorizedUser: mockDocketClerkUser,
         caseDetail: MOCK_CASE,
         categoryInformation: mockCategoryInformation,
-        selectedDocketEntryId: undefined,
+        selectedDocketEntryId: '',
       });
 
       expect(result).toEqual({
@@ -273,9 +285,10 @@ describe('selectDocumentTypeHelper', () => {
       };
 
       const result = getOptionsForCategory({
+        authorizedUser: mockDocketClerkUser,
         caseDetail: MOCK_CASE,
         categoryInformation: mockCategoryInformation,
-        selectedDocketEntryId: undefined,
+        selectedDocketEntryId: '',
       });
 
       expect(result).toEqual({
@@ -318,14 +331,14 @@ describe('selectDocumentTypeHelper', () => {
       const mockCaseDetail = {
         docketEntries: [
           {
-            docketEntryId: '',
+            docketEntryId: '91d1667d-82d7-48a3-814b-4cefe4de4795',
             documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
             isOnDocketRecord: true,
             isStricken: false,
             servedAt: '2019-08-25T05:00:00.000Z',
           },
           {
-            docketEntryId: '',
+            docketEntryId: 'dea81d23-1c88-447c-9bd7-272437a20281',
             documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
             isOnDocketRecord: true,
             isStricken: false,
@@ -334,10 +347,11 @@ describe('selectDocumentTypeHelper', () => {
         ],
       };
 
-      const result = getValidPreviouslyFiledDocuments(
-        mockCaseDetail,
-        undefined,
-      );
+      const result = getValidPreviouslyFiledDocuments({
+        authorizedUser: mockDocketClerkUser,
+        caseDetail: mockCaseDetail,
+        selectedDocketEntryId: '',
+      });
       expect(result.length).toEqual(1);
       expect(result[0].documentType).toEqual(
         INITIAL_DOCUMENT_TYPES.petition.documentType,
@@ -367,10 +381,11 @@ describe('selectDocumentTypeHelper', () => {
         ],
       };
 
-      const result = getValidPreviouslyFiledDocuments(
-        mockCaseDetail,
-        mockSelectedDocketEntryId,
-      );
+      const result = getValidPreviouslyFiledDocuments({
+        authorizedUser: mockDocketClerkUser,
+        caseDetail: mockCaseDetail,
+        selectedDocketEntryId: mockSelectedDocketEntryId,
+      });
       expect(result.length).toEqual(1);
       expect(result[0]).toMatchObject(mockCaseDetail.docketEntries[0]);
     });
@@ -400,10 +415,11 @@ describe('selectDocumentTypeHelper', () => {
         ],
       };
 
-      const result = getValidPreviouslyFiledDocuments(
-        mockCaseDetail,
-        mockSelectedDocketEntryId,
-      );
+      const result = getValidPreviouslyFiledDocuments({
+        authorizedUser: mockDocketClerkUser,
+        caseDetail: mockCaseDetail,
+        selectedDocketEntryId: mockSelectedDocketEntryId,
+      });
       expect(getDocumentTitleWithAdditionalInfo).toHaveBeenCalled();
       expect(getDocumentTitleWithAdditionalInfo.mock.calls[0][0]).toMatchObject(
         { docketEntry: mockExhibit },
@@ -439,10 +455,11 @@ describe('selectDocumentTypeHelper', () => {
         ],
       };
 
-      const result = getValidPreviouslyFiledDocuments(
-        mockCaseDetail,
-        mockSelectedDocketEntryId,
-      );
+      const result = getValidPreviouslyFiledDocuments({
+        authorizedUser: mockDocketClerkUser,
+        caseDetail: mockCaseDetail,
+        selectedDocketEntryId: mockSelectedDocketEntryId,
+      });
 
       expect(getDocumentTitleWithAdditionalInfo).toHaveBeenCalled();
       expect(getDocumentTitleWithAdditionalInfo.mock.calls[0][0]).toMatchObject(
@@ -480,10 +497,11 @@ describe('selectDocumentTypeHelper', () => {
         ],
       };
 
-      const result = getValidPreviouslyFiledDocuments(
-        mockCaseDetail,
-        mockSelectedDocketEntryId,
-      );
+      const result = getValidPreviouslyFiledDocuments({
+        authorizedUser: mockDocketClerkUser,
+        caseDetail: mockCaseDetail,
+        selectedDocketEntryId: mockSelectedDocketEntryId,
+      });
 
       expect(getDocumentTitleWithAdditionalInfo).toHaveBeenCalled();
       expect(getDocumentTitleWithAdditionalInfo.mock.calls[0][0]).toMatchObject(
@@ -505,10 +523,11 @@ describe('selectDocumentTypeHelper', () => {
         ],
       };
 
-      const result = getValidPreviouslyFiledDocuments(
-        mockCaseDetail,
-        undefined,
-      );
+      const result = getValidPreviouslyFiledDocuments({
+        authorizedUser: mockDocketClerkUser,
+        caseDetail: mockCaseDetail,
+        selectedDocketEntryId: '',
+      });
 
       expect(result.length).toEqual(0);
     });
@@ -526,10 +545,11 @@ describe('selectDocumentTypeHelper', () => {
         ],
       };
 
-      const result = getValidPreviouslyFiledDocuments(
-        mockCaseDetail,
-        undefined,
-      );
+      const result = getValidPreviouslyFiledDocuments({
+        authorizedUser: mockDocketClerkUser,
+        caseDetail: mockCaseDetail,
+        selectedDocketEntryId: '',
+      });
 
       expect(result.length).toEqual(0);
     });
@@ -547,10 +567,11 @@ describe('selectDocumentTypeHelper', () => {
         ],
       };
 
-      const result = getValidPreviouslyFiledDocuments(
-        mockCaseDetail,
-        undefined,
-      );
+      const result = getValidPreviouslyFiledDocuments({
+        authorizedUser: mockDocketClerkUser,
+        caseDetail: mockCaseDetail,
+        selectedDocketEntryId: '',
+      });
 
       expect(result.length).toEqual(0);
     });
