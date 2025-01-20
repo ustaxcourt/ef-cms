@@ -1,4 +1,4 @@
-import { applicationContext } from './applicationContext';
+import { createApplicationContext } from './applicationContext';
 import { expressLogger } from './logger';
 import { get } from './persistence/dynamodbClientService';
 import { getCurrentInvoke } from '@vendia/serverless-express';
@@ -9,6 +9,8 @@ import cors from 'cors';
 import express from 'express';
 
 export const app = express();
+
+const applicationContext = createApplicationContext({});
 
 app.use(cors());
 app.use(json());
