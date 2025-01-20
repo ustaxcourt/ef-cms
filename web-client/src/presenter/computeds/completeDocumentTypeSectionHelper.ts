@@ -11,24 +11,29 @@ import {
   EXTERNAL_FILING_EVENTS,
   ExternalFilingEvent,
 } from '@shared/business/entities/docketEntry/externalFilingEvents';
-import { EXTERNAL_DOCUMENTS_ARRAY, NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES, ROLES } from '@shared/business/entities/EntityConstants';
+import {
+  EXTERNAL_DOCUMENTS_ARRAY,
+  NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
 
 export const completeDocumentTypeSectionHelper = (
   get: Get,
 ): {
-  primary: any;
-  secondary: any;
-  documentTypesForSelectSorted: (ExternalFilingEvent & {
+  primary?: any;
+  secondary?: any;
+  documentTypesForSelectSorted?: (ExternalFilingEvent & {
     label: string;
     value: string;
   })[];
-  documentTypesForSecondarySelectSorted: (ExternalFilingEvent & {
+  documentTypesForSecondarySelectSorted?: (ExternalFilingEvent & {
     label: string;
     value: string;
   })[];
 } => {
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
+  const user = get(state.user);
   if (isEmpty(caseDetail)) {
     return {};
   }
@@ -92,6 +97,7 @@ export const completeDocumentTypeSectionHelper = (
     caseDetail,
     categoryInformation,
     selectedDocketEntryId,
+    authorizedUser: user,
   });
   let secondary;
   if (primary.showSecondaryDocumentSelect) {
@@ -112,6 +118,7 @@ export const completeDocumentTypeSectionHelper = (
         caseDetail,
         categoryInformation: secondaryCategoryInformation,
         selectedDocketEntryId,
+        authorizedUser: user,
       });
     }
   }
