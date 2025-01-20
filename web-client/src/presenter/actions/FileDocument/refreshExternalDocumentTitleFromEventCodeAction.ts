@@ -1,23 +1,13 @@
 import { EXTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/externalFilingEvents';
 import { INTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/internalFilingEvents';
+import { PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * Refresh External Document Title From Event Code
- * @param {object} providers the providers object
- * @param {object} providers.get the cerebral get function
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.store the cerebral store
- */
 export const refreshExternalDocumentTitleFromEventCodeAction = ({
-  applicationContext,
   get,
   store,
 }: ActionProps) => {
   const { category, eventCode } = get(state.form);
-  const {
-    PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP,
-  } = applicationContext.getConstants();
 
   const eventCodeMatches = docketEntry => docketEntry.eventCode === eventCode;
 
