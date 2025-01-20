@@ -32,7 +32,14 @@ export const addDocketEntryHelper = (
 } => {
   const caseDetail = get(state.caseDetail);
   if (!caseDetail.partyType) {
-    return {};
+    return {
+      primary: undefined,
+      secondary: undefined,
+      showDateReceivedEdit: false,
+      showFilingPartiesForm: false,
+      showObjection: false,
+      showTrackOption: false,
+    };
   }
   const showDateReceivedEdit = !!caseDetail.isPaper;
   const form = get(state.form);
