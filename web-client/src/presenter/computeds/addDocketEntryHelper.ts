@@ -30,6 +30,7 @@ export const addDocketEntryHelper = (
   showObjection: boolean;
   showTrackOption: boolean;
 } => {
+  const user = get(state.user);
   const caseDetail = get(state.caseDetail);
   if (!caseDetail.partyType) {
     return {
@@ -62,12 +63,14 @@ export const addDocketEntryHelper = (
     caseDetail,
     categoryInformation,
     selectedDocketEntryId,
+    authorizedUser: user,
   });
 
   const secondaryOptionsForCategory = getOptionsForCategory({
     caseDetail,
     categoryInformation: secondaryCategoryInformation,
     selectedDocketEntryId,
+    authorizedUser: user,
   });
 
   if (optionsForCategory.showSecondaryDocumentSelect) {
