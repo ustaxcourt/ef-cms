@@ -40,7 +40,7 @@ const trackMigration = async (key: string) => {
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const migrationFiles = migrationsToRun;
-  for (let { key } of migrationFiles) {
+  for (const { key } of migrationFiles) {
     await trackMigration(key);
   }
 })();

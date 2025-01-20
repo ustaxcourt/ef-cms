@@ -25,7 +25,7 @@ export const createCaseDeadlineAction = async ({
     leadDocketNumber,
   };
 
-  let createCaseDeadlineResult = await applicationContext
+  const createCaseDeadlineResult = await applicationContext
     .getUseCases()
     .createCaseDeadlineInteractor(applicationContext, {
       caseDeadline,

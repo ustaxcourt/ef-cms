@@ -219,9 +219,7 @@ export const generateAndServeDocketEntry = async ({
     }
   }
 
-  let changeOfAddressDocketEntry;
-  let url;
-  ({ changeOfAddressDocketEntry, url } = await createDocketEntryForChange({
+  const { changeOfAddressDocketEntry, url } = await createDocketEntryForChange({
     applicationContext,
     authorizedUser,
     barNumber,
@@ -233,7 +231,7 @@ export const generateAndServeDocketEntry = async ({
     oldData,
     servedParties,
     user,
-  }));
+  });
 
   if (shouldCreateWorkItem) {
     await createWorkItemForChange({

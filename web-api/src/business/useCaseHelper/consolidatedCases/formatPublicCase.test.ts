@@ -57,7 +57,7 @@ describe('getPublicCaseInteractor', () => {
       isSealed: false,
     };
 
-    let result = await formatPublicCase({
+    const result = await formatPublicCase({
       rawCaseRecord: {
         ...mockCase,
         docketEntries: sealedDocketEntries,
@@ -82,7 +82,7 @@ describe('getPublicCaseInteractor', () => {
       isSealed: false,
     };
 
-    let result = await formatPublicCase({
+    const result = await formatPublicCase({
       rawCaseRecord: { ...mockCase, petitioners: [sealedContactPrimary] },
     });
 
@@ -104,7 +104,7 @@ describe('getPublicCaseInteractor', () => {
       isSealed: false,
     };
 
-    let result = await formatPublicCase({
+    const result = await formatPublicCase({
       rawCaseRecord: mockCase,
     });
 

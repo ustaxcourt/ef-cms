@@ -16,7 +16,7 @@ export const getDocumentTypesForSelect = <T extends DocumentTypeBase>(
   label: string;
   value: string;
 })[] => {
-  let filteredTypeList = flatten(values(typeMap)).map(t => {
+  const filteredTypeList = flatten(values(typeMap)).map(t => {
     return { ...t, label: t.documentType, value: t.eventCode };
   });
   return orderBy(filteredTypeList, ['label'], ['asc']);
@@ -28,7 +28,7 @@ export const getSortFunction = searchText => {
   }
   const str = searchText.toUpperCase();
   return (first, second) => {
-    let [a, b] = [first.value.toUpperCase(), second.value.toUpperCase()];
+    const [a, b] = [first.value.toUpperCase(), second.value.toUpperCase()];
     if (a == str) return -1; // exact match for a
     if (b == str) return 1; // exact match for b
 
@@ -44,7 +44,7 @@ export const getSortFunction = searchText => {
 
     // neither has a "good match" for the value.
     // continue comparing labels without regard to search string
-    let [x, y] = [first.label, second.label];
+    const [x, y] = [first.label, second.label];
     return x.localeCompare(y, { sensitivity: 'base' }); // a == A
   };
 };

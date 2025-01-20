@@ -12,7 +12,7 @@ export const externalConsolidatedCaseGroupHelper = (
 
   let formattedCurrentCasePetitionerNames;
   let formattedConsolidatedCaseList: string[] = [];
-  let consolidatedGroupServiceParties: any[] = [];
+  const consolidatedGroupServiceParties: any[] = [];
 
   if (caseDetail.consolidatedCases) {
     const currentCasePetitioners = caseDetail.petitioners
