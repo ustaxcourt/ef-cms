@@ -1,5 +1,9 @@
+import { INITIAL_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
+import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
+import { getFormattedCaseDetail } from '@shared/business/utilities/getFormattedCaseDetail';
+import { applicationContext } from '@web-client/applicationContext';
+
 export const getOptionsForCategory = ({
-  applicationContext,
   caseDetail,
   categoryInformation,
   selectedDocketEntryId,
@@ -20,7 +24,6 @@ export const getOptionsForCategory = ({
       options = {
         previousDocumentSelectLabel: categoryInformation.labelPreviousDocument,
         previouslyFiledDocuments: getValidPreviouslyFiledDocuments(
-          applicationContext,
           caseDetail,
           selectedDocketEntryId,
         ),
@@ -40,7 +43,6 @@ export const getOptionsForCategory = ({
       options = {
         previousDocumentSelectLabel: categoryInformation.labelPreviousDocument,
         previouslyFiledDocuments: getValidPreviouslyFiledDocuments(
-          applicationContext,
           caseDetail,
           selectedDocketEntryId,
         ),
@@ -54,7 +56,6 @@ export const getOptionsForCategory = ({
       options = {
         previousDocumentSelectLabel: categoryInformation.labelPreviousDocument,
         previouslyFiledDocuments: getValidPreviouslyFiledDocuments(
-          applicationContext,
           caseDetail,
           selectedDocketEntryId,
         ),
@@ -77,7 +78,6 @@ export const getOptionsForCategory = ({
         ordinalField: categoryInformation.ordinalField,
         previousDocumentSelectLabel: categoryInformation.labelPreviousDocument,
         previouslyFiledDocuments: getValidPreviouslyFiledDocuments(
-          applicationContext,
           caseDetail,
           selectedDocketEntryId,
         ),
@@ -134,27 +134,23 @@ export const getOrdinalValuesForUploadIteration = (): string[] => {
 
 export const MAX_TITLE_LENGTH = 100;
 export const getValidPreviouslyFiledDocuments = (
-  applicationContext,
   caseDetail,
   selectedDocketEntryId,
 ) => {
-  const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
   const withDocumentTitle = doc => {
-    let documentTitle = applicationContext
-      .getUtilities()
-      .getDocumentTitleWithAdditionalInfo({ docketEntry: doc });
+    let documentTitle = getDocumentTitleWithAdditionalInfo({
+      docketEntry: doc,
+    });
     if (documentTitle && documentTitle.length > MAX_TITLE_LENGTH) {
       documentTitle = documentTitle.substring(0, MAX_TITLE_LENGTH - 1) + '…';
     }
     return { ...doc, documentTitle };
   };
 
-  const formattedCaseDetail = applicationContext
-    .getUtilities()
-    .getFormattedCaseDetail({
-      applicationContext,
-      caseDetail,
-    });
+  const formattedCaseDetail = getFormattedCaseDetail({
+    applicationContext,
+    caseDetail,
+  });
 
   return formattedCaseDetail.formattedDocketEntries
     .filter(

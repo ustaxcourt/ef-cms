@@ -93,7 +93,6 @@ export const completeDocumentTypeSectionHelper = (
   const selectedDocketEntryId = get(state.docketEntryId);
 
   const primary = getOptionsForCategory({
-    applicationContext,
     caseDetail,
     categoryInformation,
     selectedDocketEntryId,
@@ -114,7 +113,6 @@ export const completeDocumentTypeSectionHelper = (
       ].find(entry => entry.documentType === selectedSecondaryDocumentType);
 
       secondary = getOptionsForCategory({
-        applicationContext,
         caseDetail,
         categoryInformation: secondaryCategoryInformation,
         selectedDocketEntryId,
