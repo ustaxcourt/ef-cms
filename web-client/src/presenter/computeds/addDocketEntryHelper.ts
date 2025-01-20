@@ -1,22 +1,13 @@
-import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import { INTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION } from '@shared/business/entities/EntityConstants';
-import { find, orderBy } from 'lodash';
+import {
+  AMENDMENT_EVENT_CODES,
+  INTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION,
+  INTERNAL_DOCUMENTS_ARRAY,
+  NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
+} from '@shared/business/entities/EntityConstants';
 import { getOptionsForCategory } from './selectDocumentTypeHelper';
 import { state } from '@web-client/presenter/app.cerebral';
-import { supportingDocumentFreeTextTypes } from './fileDocumentHelper';
-import { INTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/internalFilingEvents';
-
-const getInternalDocumentTypes = typeMap => {
-  let filteredTypeList = [];
-  Object.keys(typeMap).forEach(category => {
-    filteredTypeList.push(...typeMap[category]);
-  });
-  filteredTypeList = filteredTypeList.map(e => {
-    return { label: e.documentType, value: e.eventCode };
-  });
-  return orderBy(filteredTypeList, ['label'], ['asc']);
-};
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 export const getSupportingDocumentTypeList = categoryMap => {
   return categoryMap['Supporting Document'].map(entry => {
@@ -31,68 +22,42 @@ export const getSupportingDocumentTypeList = categoryMap => {
 
 export const addDocketEntryHelper = (
   get: Get,
-  applicationContext: ClientApplicationContext,
-): any => {
-  const {
-    AMENDMENT_EVENT_CODES,
-    NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
-  } = applicationContext.getConstants();
+): {
+  primary: any;
+  secondary: any;
+  showDateReceivedEdit: boolean;
+  showFilingPartiesForm: boolean;
+  showObjection: boolean;
+  showTrackOption: boolean;
+} => {
   const caseDetail = get(state.caseDetail);
   if (!caseDetail.partyType) {
     return {};
   }
-  const showDateReceivedEdit = caseDetail.isPaper;
+  const showDateReceivedEdit = !!caseDetail.isPaper;
   const form = get(state.form);
-
-  const internalDocumentTypes = getInternalDocumentTypes(
-    INTERNAL_FILING_EVENTS,
-  );
-
-  const supportingDocumentTypeList = getSupportingDocumentTypeList(
-    INTERNAL_FILING_EVENTS,
-  );
-
-  const { certificateOfServiceDate } = form;
-  let certificateOfServiceDateFormatted;
-  if (certificateOfServiceDate) {
-    certificateOfServiceDateFormatted = applicationContext
-      .getUtilities()
-      .formatDateString(certificateOfServiceDate, 'MMDDYY');
-  }
 
   const selectedEventCode = form.eventCode;
   const secondarySelectedEventCode = get(
     state.form.secondaryDocument.eventCode,
   );
 
-  let categoryInformation;
-  let secondaryCategoryInformation;
-
-  find(
-    INTERNAL_FILING_EVENTS,
-    entries =>
-      (categoryInformation = find(entries, { eventCode: selectedEventCode })),
+  const categoryInformation = INTERNAL_DOCUMENTS_ARRAY.find(
+    d => d.eventCode === selectedEventCode,
   );
-
-  find(
-    INTERNAL_FILING_EVENTS,
-    entries =>
-      (secondaryCategoryInformation = find(entries, {
-        eventCode: secondarySelectedEventCode,
-      })),
+  const secondaryCategoryInformation = INTERNAL_DOCUMENTS_ARRAY.find(
+    d => d.eventCode === secondarySelectedEventCode,
   );
 
   const selectedDocketEntryId = get(state.docketEntryId);
 
   const optionsForCategory = getOptionsForCategory({
-    applicationContext,
     caseDetail,
     categoryInformation,
     selectedDocketEntryId,
   });
 
   const secondaryOptionsForCategory = getOptionsForCategory({
-    applicationContext,
     caseDetail,
     categoryInformation: secondaryCategoryInformation,
     selectedDocketEntryId,
@@ -103,9 +68,7 @@ export const addDocketEntryHelper = (
     optionsForCategory.showSecondaryDocumentForm = true;
   }
 
-  const showTrackOption = !applicationContext
-    .getUtilities()
-    .isPendingOnCreation(form);
+  const showTrackOption = !DocketEntry.isPendingOnCreation(form);
 
   const isSystemGeneratedNoticeOfChangeOfAddress =
     NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.includes(form.eventCode) &&
@@ -120,23 +83,11 @@ export const addDocketEntryHelper = (
       ));
 
   return {
-    certificateOfServiceDateFormatted,
-    internalDocumentTypes,
     primary: optionsForCategory,
     secondary: secondaryOptionsForCategory,
     showDateReceivedEdit,
     showFilingPartiesForm,
     showObjection,
-    showPrimaryDocumentValid: !!form.primaryDocumentFile,
-    showSecondaryDocumentValid: !!form.secondaryDocumentFile,
-    showSecondarySupportingDocumentValid:
-      !!form.secondarySupportingDocumentFile,
-    showSupportingDocumentFreeText: supportingDocumentFreeTextTypes.includes(
-      form.documentType,
-    ),
-    showSupportingDocumentSelect: form.documentType && form.documentType !== '',
-    showSupportingDocumentValid: !!form.supportingDocumentFile,
     showTrackOption,
-    supportingDocumentTypeList,
   };
 };
