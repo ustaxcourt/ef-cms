@@ -1,10 +1,15 @@
 import { RawCorrespondence } from '@shared/business/entities/Correspondence';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getDbWriter } from '@web-api/database';
+import { isEmpty } from 'lodash';
 
 export const upsertCaseCorrespondences = async (
   correspondences: RawCorrespondence[],
 ) => {
+  if (isEmpty(correspondences)) {
+    return [];
+  }
+
   const correspondencesToUpsert = correspondences.map(correspondence => {
     return {
       archived: correspondence.archived,
