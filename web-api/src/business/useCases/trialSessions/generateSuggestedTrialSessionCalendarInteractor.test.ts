@@ -213,7 +213,7 @@ const allSessionsMeetCountPerWeekConstraint = (
     scheduledSessions.push(...caseCountsAndSessions.scheduledSessions);
   });
 
-  let initialSessionCountPerWeek: Record<string, number> = {};
+  const initialSessionCountPerWeek: Record<string, number> = {};
   const sessionCountsPerWeek = scheduledSessions.reduce((acc, session) => {
     if (!acc[session.weekOf]) acc[session.weekOf] = 0;
     acc[session.weekOf]++;

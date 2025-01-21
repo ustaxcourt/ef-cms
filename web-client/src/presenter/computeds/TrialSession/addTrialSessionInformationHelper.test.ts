@@ -84,30 +84,6 @@ describe('addTrialSessionInformationHelper', () => {
     });
   });
 
-  describe('isStandaloneSession', () => {
-    it(`should be true when form.sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`, () => {
-      const result = runCompute(addTrialSessionInformationHelper, {
-        state: {
-          form: { sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote },
-          user: { role: 'docketclerk' },
-        },
-      });
-
-      expect(result.displayRemoteProceedingForm).toEqual(true);
-    });
-
-    it(`should be false when the session scope is ${TRIAL_SESSION_SCOPE_TYPES.locationBased}`, () => {
-      const result = runCompute(addTrialSessionInformationHelper, {
-        state: {
-          form: { sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased },
-          user: { role: 'docketclerk' },
-        },
-      });
-
-      expect(result.displayRemoteProceedingForm).toEqual(false);
-    });
-  });
-
   describe('title', () => {
     it(`should be 'Remote Proceeding Information' when form.sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`, () => {
       const result = runCompute(addTrialSessionInformationHelper, {

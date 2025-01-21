@@ -13,7 +13,7 @@ describe('deleteUserCaseNoteInteractor', () => {
   const deleteUserCaseNote = deleteUserCaseNoteMock as jest.Mock;
 
   it('throws an error if the user is not valid or authorized', async () => {
-    let user = {} as UnknownAuthUser;
+    const user = {} as UnknownAuthUser;
 
     await expect(
       deleteUserCaseNoteInteractor(

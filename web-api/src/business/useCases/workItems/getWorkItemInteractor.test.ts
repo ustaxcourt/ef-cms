@@ -7,7 +7,7 @@ import {
 } from '@shared/test/mockAuthUsers';
 
 describe('getWorkItemInteractor', () => {
-  let mockWorkItem = {
+  const mockWorkItem = {
     createdAt: '',
     docketEntry: {
       createdAt: '2019-03-11T21:56:01.625Z',

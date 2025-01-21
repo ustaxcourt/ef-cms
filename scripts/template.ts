@@ -58,8 +58,7 @@ const { env, eventCodes, fiscal, verbose, years } = parseArgsAndEnvVars(
   years: number[];
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-(async () => {
+(() => {
   const applicationContext: ServerApplicationContext = createApplicationContext(
     {},
   );

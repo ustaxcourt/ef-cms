@@ -37,7 +37,7 @@ const hasMigrationRan = async key => {
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  for (let { key } of migrationsToRun) {
+  for (const { key } of migrationsToRun) {
     const hasRan = await hasMigrationRan(key);
     if (!hasRan) {
       console.log(

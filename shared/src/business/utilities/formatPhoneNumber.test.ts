@@ -27,7 +27,7 @@ describe('formatPhoneNumber', () => {
     },
   ];
 
-  for (let stringTest of originalStringTests) {
+  for (const stringTest of originalStringTests) {
     it(`should return the original string if ${stringTest.description}`, () => {
       const result = formatPhoneNumber(stringTest.phone);
 

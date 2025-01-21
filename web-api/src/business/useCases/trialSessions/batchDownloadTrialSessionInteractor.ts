@@ -71,7 +71,7 @@ const batchDownloadTrialSessionInteractorHelper = async (
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
-  let allSessionCases = await applicationContext
+  const allSessionCases = await applicationContext
     .getPersistenceGateway()
     .getCalendaredCasesForTrialSession({
       applicationContext,
