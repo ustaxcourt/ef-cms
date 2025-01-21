@@ -148,11 +148,17 @@ export const updateCasesAndSetNoticeOfChange = async ({
   return paperServicePdfsCombined;
 };
 
+type CreateWorkingCopyForNewUserOnSessionParams = {
+  applicationContext: ServerApplicationContext;
+  trialSessionId: string | undefined;
+  userId: string | undefined;
+};
+
 export const createWorkingCopyForNewUserOnSession = async ({
   applicationContext,
   trialSessionId,
   userId,
-}) => {
+}: CreateWorkingCopyForNewUserOnSessionParams) => {
   const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy({
     trialSessionId,
     userId,
