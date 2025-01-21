@@ -1,7 +1,6 @@
 import { NotFoundError } from '@web-api/errors/errors';
 import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
-import type { IDynamoDBRecord } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const processCaseEntries = async ({
@@ -13,11 +12,10 @@ export const processCaseEntries = async ({
 }) => {
   if (!caseEntityRecords.length) return;
 
-  const casesToUpsert: RawCase[] = [];
+  const casesToUpsert: Record<string, RawCase> = {};
 
-  async caseRecord => {
+  for (const caseRecord of caseEntityRecords) {
     const caseNewImage = caseRecord.dynamodb.NewImage;
-    const caseRecords: IDynamoDBRecord[] = [];
 
     const caseMetadataWithCounsel = await getCaseMetadataWithCounsel({
       applicationContext,
@@ -28,10 +26,10 @@ export const processCaseEntries = async ({
       throw new NotFoundError(`Case ${caseNewImage.docketNumber.S} not found`);
     }
 
-    casesToUpsert.push(caseMetadataWithCounsel);
+    // Only upsert the most recent update of any duplicate case record since otherwise Postgres will throw an error.
+    casesToUpsert[caseMetadataWithCounsel.docketNumber] =
+      caseMetadataWithCounsel;
+  }
 
-    return caseRecords;
-  };
-
-  await upsertCases(casesToUpsert);
+  await upsertCases(Object.values(casesToUpsert));
 };
