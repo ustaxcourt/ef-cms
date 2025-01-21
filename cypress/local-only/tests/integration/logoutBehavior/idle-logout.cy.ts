@@ -33,7 +33,7 @@ describe('Idle Logout Behavior', () => {
 
   it('should close modal in other tab when loading new tab', () => {
     const sessionTimeout = 31000;
-    const areYouStillThereTime = 30000;
+    const areYouStillThereTime = 25000;
     loginAsColvin();
     cy.get('[data-testid="header-text"]');
     cy.window().then((window: Window) => {
