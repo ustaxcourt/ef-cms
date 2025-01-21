@@ -5,17 +5,10 @@ import { getCurrentUserToken } from '@shared/proxies/requests';
 import { useIdleTimer } from 'react-idle-timer';
 import React, { useEffect, useState } from 'react';
 
-type IdleLogoutTesting = {
-  idleActivityMonitor?: {
-    isInTestingMode?: boolean;
-    sessionTimeout?: number;
-    areYouStillThereTime?: number;
-  };
-};
-
 export const IdleActivityMonitor = () => {
   const defaultSessionTimeout = 55 * 60 * 1000;
   const defaultAreYouStillThereTime = 5 * 60 * 1000;
+  const openedANewTabMessage = 'Opened a new tab';
 
   const [idleModalIsOpen, setIdleModalIsOpen] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
@@ -72,7 +65,7 @@ export const IdleActivityMonitor = () => {
     onActive,
     onIdle,
     onMessage: theMessage => {
-      if (theMessage === 'Opened a new tab') {
+      if (theMessage === openedANewTabMessage) {
         setIdleModalIsOpen(false);
       }
     },
@@ -83,7 +76,7 @@ export const IdleActivityMonitor = () => {
   });
 
   useEffect(() => {
-    message('Opened a new tab');
+    message(openedANewTabMessage);
   }, []);
 
   useEffect(() => {
@@ -129,3 +122,11 @@ export const IdleActivityMonitor = () => {
 };
 
 IdleActivityMonitor.displayName = 'IdleActivityMonitor';
+
+type IdleLogoutTesting = {
+  idleActivityMonitor?: {
+    isInTestingMode?: boolean;
+    sessionTimeout?: number;
+    areYouStillThereTime?: number;
+  };
+};
