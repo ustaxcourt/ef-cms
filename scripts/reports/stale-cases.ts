@@ -1,10 +1,13 @@
-// usage:
-// npx ts-node --transpile-only scripts/reports/stale-cases.ts
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import {
   CASE_STATUS_TYPES,
   CaseStatus,
 } from '@shared/business/entities/EntityConstants';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import {
   ServerApplicationContext,
   createApplicationContext,
@@ -20,6 +23,17 @@ import {
   searchAll,
 } from '@web-api/persistence/elasticsearch/searchClient';
 import PQueue from 'p-queue';
+
+const scriptConfig: ScriptConfig = {
+  description:
+    'stale-cases - Generates a spreadsheet of open cases that have not had a document filed within the last year',
+  environment: {
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+    environmentName: 'ENV',
+  },
+  requireActiveAwsSession: true,
+};
+parseArgsAndEnvVars(scriptConfig);
 
 const todayISO = createISODateString();
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;

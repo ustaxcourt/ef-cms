@@ -1,19 +1,12 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { Mobile, NonMobile } from '../ustc-ui/Responsive/Responsive';
-import { PDFPreviewErrorModal } from './PDFPreviewErrorModal';
-import { PDFPreviewModal } from './PDFPreviewModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { getStringAbbreviation } from '../utilities/getStringAbbreviation';
 import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 const pdfPreviewButtonDeps = {
   loadPdfForTabSequence: sequences.loadPdfForTabSequence,
-  openCaseDocumentDownloadUrlSequence:
-    sequences.openCaseDocumentDownloadUrlSequence,
-  pdfPreviewModalHelper: state.pdfPreviewModalHelper,
-  showModal: state.modal.showModal,
 };
 
 export const PDFPreviewButton = connect<
@@ -33,15 +26,12 @@ export const PDFPreviewButton = connect<
     file,
     id,
     loadPdfForTabSequence,
-    pdfPreviewModalHelper,
     shouldAbbreviateTitle = false,
     shouldWrapText = true,
     showIcon = true,
-    showModal,
     title,
     ...props
   }) {
-    const modalId = `PDFPreviewModal-${title}`;
     const fullTitle = file.name || file.documentType || title;
     const abbrevTitle = getStringAbbreviation(fullTitle, 50);
     const displayTitle = shouldAbbreviateTitle ? abbrevTitle : fullTitle;
@@ -80,12 +70,6 @@ export const PDFPreviewButton = connect<
             {displayTitle}
           </Button>
         </NonMobile>
-        {showModal == modalId &&
-          (pdfPreviewModalHelper.displayErrorText ? (
-            <PDFPreviewErrorModal title={title} />
-          ) : (
-            <PDFPreviewModal preventScrolling={true} title={title} />
-          ))}
       </>
     );
   },

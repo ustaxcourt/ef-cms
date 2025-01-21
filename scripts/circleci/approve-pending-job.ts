@@ -1,15 +1,24 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
+
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { approvePendingJob } from '../../shared/admin-tools/circleci/circleci-helper';
-import { requireEnvVars } from '../../shared/admin-tools/util';
 
-requireEnvVars([
-  'APPROVAL_JOB_NAME',
-  'CIRCLE_MACHINE_USER_TOKEN',
-  'CIRCLE_WORKFLOW_ID',
-]);
-
-const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN!;
-const jobName = process.env.APPROVAL_JOB_NAME!;
-const workflowId = process.env.CIRCLE_WORKFLOW_ID!;
+const scriptConfig: ScriptConfig = {
+  description: 'approve-pending-job - Approve a pending CircleCI job',
+  environment: {
+    apiToken: 'CIRCLE_MACHINE_USER_TOKEN',
+    jobName: 'APPROVAL_JOB_NAME',
+    workflowId: 'CIRCLE_WORKFLOW_ID',
+  },
+};
+const { apiToken, jobName, workflowId } = parseArgsAndEnvVars(scriptConfig) as {
+  apiToken: string;
+  jobName: string;
+  workflowId: string;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {

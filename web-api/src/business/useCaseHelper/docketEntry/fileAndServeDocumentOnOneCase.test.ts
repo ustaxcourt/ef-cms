@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import {
   AUTOMATIC_BLOCKED_REASONS,
   COURT_ISSUED_EVENT_CODES,

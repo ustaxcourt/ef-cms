@@ -35,6 +35,8 @@ export const DOCUMENT_EXTERNAL_CATEGORIES_MAP: {
 } = externalFilingEventsJson;
 export const COURT_ISSUED_EVENT_CODES = courtIssuedEventCodesJson;
 
+export const EVENT_CODES_THAT_ALLOW_FREE_TEXT = ['O', 'NOT', 'OJR'];
+
 export const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
 
 export const CURRENT_YEAR = +formatNow(FORMATS.YEAR);
@@ -565,7 +567,6 @@ export const DECISION_EVENT_CODE = 'DEC';
 
 export const LODGED_EVENT_CODE = 'MISCL';
 
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 export const OBJECTIONS_OPTIONS_MAP = {
   YES: 'Yes',
   NO: 'No',
@@ -1402,7 +1403,19 @@ export const LEGACY_TRIAL_CITY_STRINGS = LEGACY_TRIAL_CITIES.map(
   trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
 );
 
-export const SESSION_TERMS = ['Winter', 'Fall', 'Spring', 'Summer'];
+export const SESSION_TERMS_DICT = {
+  WINTER: 'Winter',
+  FALL: 'Fall',
+  SPRING: 'Spring',
+  SUMMER: 'Summer',
+} as const;
+
+export const SESSION_TERMS = [
+  SESSION_TERMS_DICT.WINTER,
+  SESSION_TERMS_DICT.FALL,
+  SESSION_TERMS_DICT.SPRING,
+  SESSION_TERMS_DICT.SUMMER,
+];
 
 export const SESSION_TERMS_BY_MONTH = {
   fall: [9, 10, 11, 12],
@@ -1581,13 +1594,15 @@ export const ADMISSIONS_STATUS_OPTIONS = [
 
 export const DEFAULT_PROCEDURE_TYPE = PROCEDURE_TYPES[0];
 
-export const CASE_SEARCH_MIN_YEAR = 1986;
 export const CASE_SEARCH_PAGE_SIZE = 25; // number of results returned for each page when searching for a case
-export const CASE_INVENTORY_PAGE_SIZE = 25; // number of results returned for each page in the case inventory report
 export const CASE_LIST_PAGE_SIZE = 20; // number of results returned for each page for the external user dashboard case list
-export const DEADLINE_REPORT_PAGE_SIZE = 100; // number of results returned for each page for the case deadline report
 export const TODAYS_ORDERS_PAGE_SIZE = 100; // number of results returned for each page for the today's orders page
 export const PRACTITIONER_SEARCH_PAGE_SIZE = 100; // number of results returned for each page for the practitioner search page
+export const CASE_INVENTORY_PAGE_SIZE = 100; // number of results returned for each page in the case inventory report when rendered in the browser
+export const CASE_INVENTORY_PRINT_REPORT_MAX_SIZE = 20000; // number of results to include in the printed version of the case inventory report
+export const PENDING_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the pending report
+export const COLD_CASE_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the cold case report
+export const CASE_DEADLINES_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the case deadlines report
 
 // TODO: event codes need to be reorganized
 export const ALL_EVENT_CODES = flatten([

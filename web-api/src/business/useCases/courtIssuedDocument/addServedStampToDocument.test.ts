@@ -163,7 +163,7 @@ describe('computeCoordinates', () => {
   const mockBoxWidth = 2;
   const mockCropBoxY = 20;
 
-  let args = {
+  const args = {
     applicationContext,
     boxHeight: mockBoxHeight,
     boxWidth: mockBoxWidth,

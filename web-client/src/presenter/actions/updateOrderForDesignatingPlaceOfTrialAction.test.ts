@@ -16,7 +16,7 @@ describe('updateOrderForDesignatingPlaceOfTrialAction', () => {
     expect(result.state.form.orderDesignatingPlaceOfTrial).toBe(true);
   });
 
-  it('sets orderDesignatingPlaceOfTrial false when preferredTrialCity or requestForPlaceOfTrialFile are defined', async () => {
+  it('sets orderDesignatingPlaceOfTrial false when preferredTrialCity is defined', async () => {
     const result = await runAction(
       updateOrderForDesignatingPlaceOfTrialAction,
       {
@@ -32,7 +32,7 @@ describe('updateOrderForDesignatingPlaceOfTrialAction', () => {
     expect(result.state.form.orderDesignatingPlaceOfTrial).toBe(false);
   });
 
-  it('sets orderDesignatingPlaceOfTrial false when preferredTrialCity or requestForPlaceOfTrialFile are defined', async () => {
+  it('sets orderDesignatingPlaceOfTrial false when requestForPlaceOfTrialFile is defined', async () => {
     const result = await runAction(
       updateOrderForDesignatingPlaceOfTrialAction,
       {

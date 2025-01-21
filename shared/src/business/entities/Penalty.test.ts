@@ -3,7 +3,7 @@ import { Penalty } from './Penalty';
 
 describe('Penalty', () => {
   describe('validation', () => {
-    let mockStatisticId = '5666ad04-4814-4b0c-8090-ba01683917ac';
+    const mockStatisticId = '5666ad04-4814-4b0c-8090-ba01683917ac';
 
     it('should fail if name is undefined', () => {
       const penalty = new Penalty({

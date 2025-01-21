@@ -1,6 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-// eslint-disable-next-line spellcheck/spell-checker
 /**
  * Negates workitemAllCheckbox and:
  * checks/unchecks all work items as appropriate

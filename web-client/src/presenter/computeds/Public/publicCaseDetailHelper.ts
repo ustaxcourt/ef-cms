@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import {
   ALLOWLIST_FEATURE_FLAGS,
   PUBLIC_DOCKET_RECORD_FILTER,

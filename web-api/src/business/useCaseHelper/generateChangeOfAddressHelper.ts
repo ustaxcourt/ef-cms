@@ -58,7 +58,7 @@ export const generateChangeOfAddressHelper = async ({
         applicationContext,
         docketNumber,
       });
-    let caseEntity = new Case(userCase, {
+    const caseEntity = new Case(userCase, {
       authorizedUser,
     });
 
