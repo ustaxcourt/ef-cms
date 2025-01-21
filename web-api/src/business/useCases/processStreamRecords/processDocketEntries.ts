@@ -92,9 +92,15 @@ export const processDocketEntries = async ({
     throw new Error('failed to index docket entry records');
   }
 
-  const pgDocketEntries: any[] = records.map(record => {
-    return unmarshall(record.dynamodb.NewImage);
-  });
+  const pgDocketEntries: Record<string, RawDocketEntry> = {};
 
-  await upsertDocketEntries(pgDocketEntries);
+  for (const record of records) {
+    const unmarshalledRecord = unmarshall(record.dynamodb.NewImage);
+    const key =
+      unmarshalledRecord.docketNumber + unmarshalledRecord.docketEntryId;
+    // Only upsert the most recent update of any duplicate docket entry record since otherwise Postgres will throw an error.
+    pgDocketEntries[key] = unmarshalledRecord as RawDocketEntry;
+  }
+
+  await upsertDocketEntries(Object.values(pgDocketEntries));
 };
