@@ -3,7 +3,7 @@
 /**
  * HOW TO RUN
  *
- * TABLE_NAME=testing scripts/postgres/delete-messages.ts
+ * TABLE_NAME=testing npx ts-node --transpileOnly scripts/run-once-scripts/postgres-migration/delete-messages.ts
  */
 
 import { DynamoDBClient, ScanCommandInput } from '@aws-sdk/client-dynamodb';
