@@ -59,7 +59,7 @@ export const removeConsolidatedCases = async (
   ) {
     const newLeadCase = Case.findLeadCaseForCases(newConsolidatedCases);
 
-    for (let newConsolidatedCaseToUpdate of newConsolidatedCases) {
+    for (const newConsolidatedCaseToUpdate of newConsolidatedCases) {
       const caseEntity = new Case(newConsolidatedCaseToUpdate, {
         authorizedUser,
       });
@@ -89,7 +89,7 @@ export const removeConsolidatedCases = async (
     );
   }
 
-  for (let docketNumberToRemove of docketNumbersToRemove) {
+  for (const docketNumberToRemove of docketNumbersToRemove) {
     const caseToRemove = await applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber({

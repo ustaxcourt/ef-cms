@@ -36,7 +36,7 @@ export async function zipDocuments(
   });
 
   const writable = new Writable({
-    write(chunk, encoding, callback) {
+    write(_chunk, _encoding, callback) {
       callback();
     },
   });

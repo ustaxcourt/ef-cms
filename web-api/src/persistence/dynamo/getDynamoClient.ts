@@ -3,7 +3,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { NodeHttpHandler } from '@smithy/node-http-handler';
 import AWSXRay from 'aws-xray-sdk';
 
-let dynamoCache: Record<string, DynamoDBClient> = {};
+const dynamoCache: Record<string, DynamoDBClient> = {};
 
 export const getDynamoClient = (
   applicationContext: IApplicationContext,

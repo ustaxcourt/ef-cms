@@ -40,7 +40,7 @@ export const messageModalHelper = (
     isAlreadyAttached: boolean;
     title: string;
   })[] = [];
-  for (let entry of formattedDocketEntries) {
+  for (const entry of formattedDocketEntries) {
     if (entry.isFileAttached && entry.isOnDocketRecord) {
       entry.title = entry.descriptionDisplay || entry.documentType;
       entry.isAlreadyAttached = computeIsAlreadyAttached(entry);
@@ -49,12 +49,12 @@ export const messageModalHelper = (
     }
   }
 
-  for (let entry of draftDocuments) {
+  for (const entry of draftDocuments) {
     entry.title = entry.documentTitle || entry.documentType;
     entry.isAlreadyAttached = computeIsAlreadyAttached(entry);
   }
 
-  for (let corr of correspondence) {
+  for (const corr of correspondence) {
     corr.isAlreadyAttached = currentAttachments.some(
       attachment => attachment.docketEntryId === corr.correspondenceId,
     );
