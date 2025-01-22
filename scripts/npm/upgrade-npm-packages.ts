@@ -5,14 +5,12 @@ import { execSync, spawnSync } from 'child_process';
 // Caveats list: packages to exclude from upgrade
 const caveats: string[] = [
   'react',
-  '@types/react',
   'react-dom',
   '@fortawesome/fontawesome-svg-core',
   '@fortawesome/free-regular-svg-icons',
   '@fortawesome/free-solid-svg-icons',
   '@fortawesome/react-fontawesome',
   'canvas',
-  'jsdom',
   'puppeteer',
   'puppeteer-core',
   '@sparticuz/chromium',
