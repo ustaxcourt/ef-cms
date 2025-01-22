@@ -1,32 +1,33 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   AUTOMATIC_BLOCKED_REASONS,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
   ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
-import { ENTERED_AND_SERVED_EVENT_CODES } from '../../../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+} from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { ENTERED_AND_SERVED_EVENT_CODES } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import {
   MOCK_CASE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-} from '../../../../../shared/src/test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
-import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
-import {
-  docketClerkUser,
-  judgeUser,
-} from '../../../../../shared/src/test/mockUsers';
+} from '@shared/test/mockCase';
+import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
+import { WorkItem } from '@shared/business/entities/WorkItem';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { docketClerkUser, judgeUser } from '@shared/test/mockUsers';
 import { fileAndServeDocumentOnOneCase } from './fileAndServeDocumentOnOneCase';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 describe('fileAndServeDocumentOnOneCase', () => {
   let mockCaseEntity;
   let mockWorkItem;
   let mockDocketEntry;
 
+  const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const mockDocketEntryId = '85a5b1c81eed44b6932a967af060597a';
   const differentDocketNumber = '3875-32';
   const docketEntriesWithCaseClosingEventCodes =
@@ -39,7 +40,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
         {
           docketEntryId: mockDocketEntryId,
           docketNumber: MOCK_CASE.docketNumber,
-          documentType: eventCodeMap.documentType,
+          documentType: eventCodeMap?.documentType,
           eventCode,
           filedByRole: ROLES.judge,
           signedAt: createISODateString(),
@@ -238,10 +239,9 @@ describe('fileAndServeDocumentOnOneCase', () => {
       user: docketClerkUser,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-        .workItem.leadDocketNumber,
-    ).toBe(MOCK_CASE.docketNumber);
+    expect(upsertWorkItems.mock.calls[0][0].workItems[0].leadDocketNumber).toBe(
+      MOCK_CASE.docketNumber,
+    );
   });
 
   it('should assign the docketEntry`s work item to the provided user', async () => {
@@ -358,23 +358,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
       user: docketClerkUser,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
-  });
-
-  it('should make a call to put the docketEntry`s work item in the user`s outbox', async () => {
-    await fileAndServeDocumentOnOneCase({
-      applicationContext,
-      caseEntity: mockCaseEntity,
-      docketEntryEntity: mockDocketEntry,
-      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
-      user: docketClerkUser,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
-    ).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalled();
   });
 
   it('should pass the caseEntity`s trialDate and trialLocation to the docketEntry`s work item when they exist', async () => {

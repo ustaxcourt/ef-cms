@@ -6,12 +6,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { upsertCaseWorksheets } from '@web-api/persistence/postgres/caseWorksheets/upsertCaseWorksheets';
 
 export const updateCaseWorksheetInteractor = async (
-  applicationContext: ServerApplicationContext,
   {
     worksheet,
   }: {
@@ -23,19 +22,11 @@ export const updateCaseWorksheetInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const judgeUser = await applicationContext
-    .getUseCaseHelpers()
-    .getJudgeForUserHelper(applicationContext, { user: authorizedUser });
-
   const caseWorksheetEntity = new CaseWorksheet(worksheet).validate();
 
   const rawCaseWorksheet = caseWorksheetEntity.toRawObject();
 
-  await applicationContext.getPersistenceGateway().updateCaseWorksheet({
-    applicationContext,
-    caseWorksheet: rawCaseWorksheet,
-    judgeUserId: judgeUser.userId,
-  });
+  await upsertCaseWorksheets([rawCaseWorksheet]);
 
   return rawCaseWorksheet;
 };

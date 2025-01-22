@@ -60,7 +60,7 @@ import axios from 'axios';
 import pug from 'pug';
 import sass from 'sass';
 import { getEntityByName } from '@web-api/business/getEntityByName';
-
+import { type SendBulkTemplatedEmailCommandInput } from '@aws-sdk/client-ses';
 let sqsCache: SQSClient;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -129,7 +129,13 @@ export const createApplicationContext = (appContextUser = {}) => {
     getHttpClient: () => axios,
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMessageGateway: () => ({
-      sendEmailEventToQueue: async ({ applicationContext, emailParams }) => {
+      sendEmailEventToQueue: async ({
+        applicationContext,
+        emailParams,
+      }: {
+        applicationContext: ServerApplicationContext;
+        emailParams: SendBulkTemplatedEmailCommandInput;
+      }) => {
         if (environment.stage !== 'local') {
           await sendEmailEventToQueue({
             applicationContext,

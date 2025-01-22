@@ -1,4 +1,6 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -17,6 +19,11 @@ describe('updateTrialSessionInteractor should Generate Notices of', () => {
         fileId: 'f1501fb1-c2c8-4489-b28e-00212d45c93e',
         url: 'www.example.com',
       });
+
+    applicationContext.getUtilities().combineAllPdfDocuments.mockResolvedValue({
+      getPageCount: () => {},
+      save: () => {},
+    });
   });
 
   describe('In-Person Proceeding', () => {

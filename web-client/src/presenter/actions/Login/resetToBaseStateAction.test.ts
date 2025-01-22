@@ -7,9 +7,6 @@ describe('resetToBaseStateAction', () => {
     const stateThatShouldNotBeReset = {
       featureFlags: {},
       header: {},
-      idleLogoutState: {},
-      idleStatus: {},
-      lastIdleAction: {},
       maintenanceMode: {},
     };
 

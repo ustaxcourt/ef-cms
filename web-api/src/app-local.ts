@@ -12,7 +12,7 @@ localApiApp.listen(localApiPort);
 console.log(`Listening on http://localhost:${localApiPort}`);
 
 // ************************ app-public-local *********************************
-const localPublicApiPort = 5000;
+const localPublicApiPort = 4001;
 
 localPublicApiApp.listen(localPublicApiPort);
 console.log(`Listening on http://localhost:${localPublicApiPort}`);

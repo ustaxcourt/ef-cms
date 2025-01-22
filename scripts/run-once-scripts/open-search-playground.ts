@@ -19,6 +19,7 @@ const scriptConfig: ScriptConfig = {
 };
 parseArgsAndEnvVars(scriptConfig);
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const source = [
     'caseCaption',

@@ -6,6 +6,7 @@ export class CaseWorksheet extends JoiValidationEntity {
   public finalBriefDueDate?: string;
   public primaryIssue?: string;
   public statusOfMatter?: string;
+  public judgeUserId?: string;
 
   constructor(rawProps) {
     super('CaseWorksheet');
@@ -14,6 +15,7 @@ export class CaseWorksheet extends JoiValidationEntity {
     this.finalBriefDueDate = rawProps.finalBriefDueDate;
     this.primaryIssue = rawProps.primaryIssue;
     this.statusOfMatter = rawProps.statusOfMatter;
+    this.judgeUserId = rawProps.judgeUserId;
   }
 
   static STATUS_OF_MATTER_OPTIONS = [
@@ -35,6 +37,7 @@ export class CaseWorksheet extends JoiValidationEntity {
       .messages({
         '*': 'Enter a valid due date',
       }),
+    judgeUserId: JoiValidationConstants.UUID.optional(),
     primaryIssue: JoiValidationConstants.STRING.allow('').optional(),
     statusOfMatter: JoiValidationConstants.STRING.valid(
       ...CaseWorksheet.STATUS_OF_MATTER_OPTIONS,
