@@ -23,7 +23,7 @@ export const initializeTrialSessionMinuteSheetFormAction = ({
   store,
 }: ActionProps) => {
   const { caseDetail, trialSession } = props;
-  const user = get(state.user);
+  const currentUser = get(state.user);
 
   console.log('caseDetail', caseDetail);
   console.log('trial session', trialSession);
@@ -32,6 +32,7 @@ export const initializeTrialSessionMinuteSheetFormAction = ({
     .getUtilities()
     .getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser,
       trialSession,
     });
 
@@ -81,7 +82,7 @@ export const initializeTrialSessionMinuteSheetFormAction = ({
     state.minuteSheetForm.actionsAndFilingsSection.actionsAndFilings,
     getPendingItemsFromCase({
       caseDetail,
-      user,
+      user: currentUser,
     }),
   );
   store.set(state.minuteSheetForm.witnessesSection.petitionerWitnesses, {

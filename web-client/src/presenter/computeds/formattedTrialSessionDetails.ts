@@ -20,10 +20,10 @@ export type FormatTrialSessionHelperType = FormattedTrialSessionDetailsType & {
   showOpenCases?: boolean;
 };
 
-export const formattedTrialSessionDetails = async (
+export const formattedTrialSessionDetails = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): Promise<FormatTrialSessionHelperType> => {
+): FormatTrialSessionHelperType => {
   let canClose = false;
   let showOpenCases = false;
   let showOnlyClosedCases = false;
@@ -37,11 +37,13 @@ export const formattedTrialSessionDetails = async (
   let chambersPhoneNumber: string | undefined;
 
   const trialSession = get(state.trialSession);
+  const currentUser = get(state.user);
 
   const formattedTrialSession = applicationContext
     .getUtilities()
     .getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser,
       trialSession,
     });
 
