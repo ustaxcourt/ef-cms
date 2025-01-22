@@ -4,6 +4,11 @@ import {
   getUniqueValues,
   trialSessionsReport,
 } from './trial-sessions-report-helpers';
+import fs from 'fs';
+
+jest.spyOn(fs, 'existsSync').mockReturnValue(false);
+const unlink = jest.spyOn(fs, 'unlinkSync').mockImplementation(jest.fn());
+const append = jest.spyOn(fs, 'appendFileSync').mockImplementation(jest.fn());
 
 describe('getUniqueValues', () => {
   it('counts instances of each unique value for a given key in an array of objects', () => {
@@ -66,6 +71,7 @@ describe('getUniqueValues', () => {
 describe('trialSessionsReport', () => {
   const start = '2020-01-01T05:00:00Z';
   const end = '2021-01-01T05:00:00Z';
+  const filename = '/tmp/2020-trial-sessions.csv';
   const mockTrialSessions = [MOCK_TRIAL_REMOTE, MOCK_TRIAL_REGULAR];
 
   beforeAll(() => {
@@ -75,22 +81,26 @@ describe('trialSessionsReport', () => {
     jest.spyOn(console, 'log').mockImplementation(() => {});
   });
 
-  it('retrieves trial sessions and returns them in CSV format', async () => {
+  it('retrieves trial sessions and outputs a CSV file', async () => {
     await trialSessionsReport({
       applicationContext,
       end,
+      filename,
       start,
       stats: false,
     });
     expect(
       applicationContext.getPersistenceGateway().getTrialSessions,
     ).toHaveBeenCalled();
+    expect(unlink).not.toHaveBeenCalled();
+    expect(append).toHaveBeenCalled();
   });
 
   it('retrieves trial sessions and returns aggregated statistics', async () => {
     await trialSessionsReport({
       applicationContext,
       end,
+      filename,
       start,
       stats: true,
     });

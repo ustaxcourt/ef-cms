@@ -87,8 +87,7 @@ describe('JoiValidationConstants', () => {
 
   describe('docket record', () => {
     it('validates a valid docket record', () => {
-      let result;
-      result = JoiValidationConstants.DOCKET_RECORD.validate([
+      const result = JoiValidationConstants.DOCKET_RECORD.validate([
         {
           index: 1,
         },
@@ -101,15 +100,13 @@ describe('JoiValidationConstants', () => {
     });
 
     it('validates a docket record with no indexes', () => {
-      let result;
-      result = JoiValidationConstants.DOCKET_RECORD.validate([{}, {}]);
+      const result = JoiValidationConstants.DOCKET_RECORD.validate([{}, {}]);
 
       expect(result.error).toBeFalsy();
     });
 
     it('invalidates a docket record with non-unique', () => {
-      let result;
-      result = JoiValidationConstants.DOCKET_RECORD.validate([
+      const result = JoiValidationConstants.DOCKET_RECORD.validate([
         {
           index: 1,
         },

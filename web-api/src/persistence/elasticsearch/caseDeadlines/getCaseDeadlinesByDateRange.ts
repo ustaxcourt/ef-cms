@@ -1,20 +1,15 @@
-import { DEADLINE_REPORT_PAGE_SIZE } from '../../../../../shared/src/business/entities/EntityConstants';
+import { Search_Request } from '@opensearch-project/opensearch/api';
+import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import { search } from '../searchClient';
+import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl';
 
 export const getCaseDeadlinesByDateRange = async ({
   applicationContext,
   endDate,
-  from = 0,
   judge,
-  pageSize,
   startDate,
 }) => {
-  const size =
-    pageSize && pageSize <= DEADLINE_REPORT_PAGE_SIZE
-      ? pageSize
-      : DEADLINE_REPORT_PAGE_SIZE;
-
-  const queryArray = [];
+  const queryArray: QueryContainer[] = [];
   const filterArray = [
     {
       range: {
@@ -36,31 +31,27 @@ export const getCaseDeadlinesByDateRange = async ({
     });
   }
 
-  const query = {
+  const query: Search_Request = {
     body: {
-      from,
       query: {
         bool: {
           filter: filterArray,
           must: queryArray,
         },
       },
-      size,
       sort: [
         { 'deadlineDate.S': { order: 'asc' } },
         { 'sortableDocketNumber.N': { order: 'asc' } },
       ],
     },
     index: 'efcms-case-deadline',
+    size: MAX_ELASTICSEARCH_PAGINATION,
   };
 
-  const { results, total } = await search({
+  const { results } = await search({
     applicationContext,
     searchParameters: query,
   });
 
-  return {
-    foundDeadlines: results,
-    totalCount: total,
-  };
+  return { foundDeadlines: results };
 };

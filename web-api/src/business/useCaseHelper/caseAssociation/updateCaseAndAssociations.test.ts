@@ -29,7 +29,7 @@ const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
 const getWorkItemsByDocketNumber = getWorkItemsByDocketNumberMock as jest.Mock;
 
 describe('updateCaseAndAssociations', () => {
-  let updateCaseMock = jest.fn();
+  const updateCaseMock = jest.fn();
   let validMockCase;
 
   beforeAll(() => {

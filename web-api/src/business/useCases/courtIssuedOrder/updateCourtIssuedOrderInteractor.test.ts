@@ -22,7 +22,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
   const mockUserId = applicationContext.getUniqueId();
   let mockUserById;
 
-  let caseRecord = {
+  const caseRecord = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.deficiency,
     createdAt: '',
@@ -389,7 +389,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
   });
 
   it('should still contain the case caption in documentContents when edited', async () => {
-    let mockContents = 'the contents!';
+    const mockContents = 'the contents!';
 
     await updateCourtIssuedOrderInteractor(
       applicationContext,
