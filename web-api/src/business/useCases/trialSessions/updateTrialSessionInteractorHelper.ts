@@ -8,6 +8,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
 import { TrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
+import { get } from 'lodash';
 
 type UpdateCasesAndSetNoticeOfChangeParams = {
   applicationContext: ServerApplicationContext;
@@ -233,5 +234,33 @@ export function shouldGenerateNoticeOfChangeToInPersonProceeding(
     updatedTrialSessionEntity.proceedingType ===
       TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
     updatedTrialSessionEntity.isCalendared
+  );
+}
+
+export function shouldCreateWorkingCopyForNewJudge(
+  currentTrialSession: RawTrialSession,
+  updatedTrialSessionEntity: TrialSession,
+): boolean {
+  return Boolean(
+    (!get(currentTrialSession, 'judge.userId') &&
+      get(updatedTrialSessionEntity, 'judge.userId')) ||
+      (currentTrialSession.judge &&
+        updatedTrialSessionEntity.judge &&
+        currentTrialSession.judge.userId !==
+          updatedTrialSessionEntity.judge.userId),
+  );
+}
+
+export function shouldCreateWorkingCopyForNewTrialClerk(
+  currentTrialSession: RawTrialSession,
+  updatedTrialSessionEntity: TrialSession,
+): boolean {
+  return Boolean(
+    (!get(currentTrialSession, 'trialClerk.userId') &&
+      get(updatedTrialSessionEntity, 'trialClerk.userId')) ||
+      (currentTrialSession.trialClerk &&
+        updatedTrialSessionEntity.trialClerk &&
+        currentTrialSession.trialClerk.userId !==
+          updatedTrialSessionEntity.trialClerk.userId),
   );
 }
