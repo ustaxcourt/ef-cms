@@ -13,6 +13,8 @@ import { MOCK_CASE } from '@shared/test/mockCase';
 import {
   createWorkingCopyForNewUserOnSession,
   getPaperServicePdfName,
+  shouldCreateWorkingCopyForNewJudge,
+  shouldCreateWorkingCopyForNewTrialClerk,
   shouldGenerateNoticeOfChangeOfTrialJudge,
   shouldGenerateNoticeOfChangeToInPersonProceeding,
   shouldGenerateNoticeOfChangeToRemoteProceeding,
@@ -508,6 +510,160 @@ describe('updateTrialSessionInteractorHelper', () => {
       const results = await shouldGenerateNoticeOfChangeToInPersonProceeding(
         currentTrialSession,
         updatedTrialSession,
+      );
+
+      expect(results).toEqual(false);
+    });
+  });
+
+  describe('shouldCreateWorkingCopyForNewJudge', () => {
+    it('should return "true" when judge id changed from an existing one to another', async () => {
+      const CURRENT_TRIAL_SESSION = {
+        judge: {
+          userId: 'current-user-id',
+        },
+      } as RawTrialSession;
+      const UPDATED_TRIAL_SESSION = {
+        judge: {
+          userId: 'updated-user-id',
+        },
+      } as TrialSession;
+
+      const results = await shouldCreateWorkingCopyForNewJudge(
+        CURRENT_TRIAL_SESSION,
+        UPDATED_TRIAL_SESSION,
+      );
+
+      expect(results).toEqual(true);
+    });
+
+    it('should return "true" when there was no judge user id to begin with and then one assigned', async () => {
+      const CURRENT_TRIAL_SESSION = {
+        judge: {
+          userId: '',
+        },
+      } as RawTrialSession;
+      const UPDATED_TRIAL_SESSION = {
+        judge: {
+          userId: 'updated-user-id',
+        },
+      } as TrialSession;
+
+      const results = await shouldCreateWorkingCopyForNewJudge(
+        CURRENT_TRIAL_SESSION,
+        UPDATED_TRIAL_SESSION,
+      );
+
+      expect(results).toEqual(true);
+    });
+
+    it('should return "false" when judge id did not changed at all', async () => {
+      const CURRENT_TRIAL_SESSION = {
+        judge: {
+          userId: 'current-user-id',
+        },
+      } as RawTrialSession;
+      const UPDATED_TRIAL_SESSION = {
+        judge: {
+          userId: 'current-user-id',
+        },
+      } as TrialSession;
+
+      const results = await shouldCreateWorkingCopyForNewJudge(
+        CURRENT_TRIAL_SESSION,
+        UPDATED_TRIAL_SESSION,
+      );
+
+      expect(results).toEqual(false);
+    });
+
+    it('should return "false" when there is no judge id at all', async () => {
+      const CURRENT_TRIAL_SESSION = {
+        judge: undefined,
+      } as RawTrialSession;
+      const UPDATED_TRIAL_SESSION = {
+        judge: undefined,
+      } as TrialSession;
+
+      const results = await shouldCreateWorkingCopyForNewJudge(
+        CURRENT_TRIAL_SESSION,
+        UPDATED_TRIAL_SESSION,
+      );
+
+      expect(results).toEqual(false);
+    });
+  });
+
+  describe('shouldCreateWorkingCopyForNewTrialClerk', () => {
+    it('should return "true" when trial clerk id changed from an existing one to another', async () => {
+      const CURRENT_TRIAL_SESSION = {
+        trialClerk: {
+          userId: 'current-user-id',
+        },
+      } as RawTrialSession;
+      const UPDATED_TRIAL_SESSION = {
+        trialClerk: {
+          userId: 'updated-user-id',
+        },
+      } as TrialSession;
+
+      const results = await shouldCreateWorkingCopyForNewTrialClerk(
+        CURRENT_TRIAL_SESSION,
+        UPDATED_TRIAL_SESSION,
+      );
+
+      expect(results).toEqual(true);
+    });
+
+    it('should return "true" when there was no trial clerk user id to begin with and then one assigned', async () => {
+      const CURRENT_TRIAL_SESSION = {
+        trialClerk: undefined,
+      } as RawTrialSession;
+      const UPDATED_TRIAL_SESSION = {
+        trialClerk: {
+          userId: 'updated-user-id',
+        },
+      } as TrialSession;
+
+      const results = await shouldCreateWorkingCopyForNewTrialClerk(
+        CURRENT_TRIAL_SESSION,
+        UPDATED_TRIAL_SESSION,
+      );
+
+      expect(results).toEqual(true);
+    });
+
+    it('should return "false" when trial clerk id did not changed at all', async () => {
+      const CURRENT_TRIAL_SESSION = {
+        trialClerk: {
+          userId: 'current-user-id',
+        },
+      } as RawTrialSession;
+      const UPDATED_TRIAL_SESSION = {
+        trialClerk: {
+          userId: 'current-user-id',
+        },
+      } as TrialSession;
+
+      const results = await shouldCreateWorkingCopyForNewTrialClerk(
+        CURRENT_TRIAL_SESSION,
+        UPDATED_TRIAL_SESSION,
+      );
+
+      expect(results).toEqual(false);
+    });
+
+    it('should return "false" when there is no trial clerk id at all', async () => {
+      const CURRENT_TRIAL_SESSION = {
+        trialClerk: undefined,
+      } as RawTrialSession;
+      const UPDATED_TRIAL_SESSION = {
+        trialClerk: undefined,
+      } as TrialSession;
+
+      const results = await shouldCreateWorkingCopyForNewTrialClerk(
+        CURRENT_TRIAL_SESSION,
+        UPDATED_TRIAL_SESSION,
       );
 
       expect(results).toEqual(false);
