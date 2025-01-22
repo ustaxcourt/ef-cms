@@ -84,4 +84,39 @@ describe('combineAllPdfDocuments', () => {
     const copyPagesCalls = CreateMock.copyPages.mock.calls;
     expect(copyPagesCalls.length).toBe(0);
   });
+
+  it('should return the only PDF in the array', async () => {
+    const TEST_PDFS = Array.from({ length: 1 }, (_, index) => {
+      return {
+        getPageIndices: () =>
+          Array.from(
+            { length: index + 1 },
+            (_temp, subIndex) => `${index + 1}_${subIndex + 1}`,
+          ),
+        index,
+      } as unknown as PDFDocument;
+    });
+
+    const CreateMock = {
+      addPage: jest.fn(),
+      copyPages: jest.fn().mockImplementation((_pdfDoc, pdfPages) => pdfPages),
+    };
+
+    const PDFDocumentMock = {
+      create: jest.fn().mockReturnValue(CreateMock),
+    };
+
+    applicationContext.getPdfLib = () => {
+      return {
+        PDFDocument: PDFDocumentMock,
+      };
+    };
+
+    const results = await combineAllPdfDocuments(applicationContext, TEST_PDFS);
+
+    expect(results).toBe(TEST_PDFS[0]);
+
+    const copyPagesCalls = CreateMock.copyPages.mock.calls;
+    expect(copyPagesCalls.length).toBe(0);
+  });
 });
