@@ -8,7 +8,7 @@ export const setPriorityOnAllWorkItems = async ({
   highPriority: boolean;
 }) => {
   await getDbWriter(writer => {
-    let builder = writer
+    const builder = writer
       .updateTable('dwWorkItem')
       .set('highPriority', highPriority);
 
