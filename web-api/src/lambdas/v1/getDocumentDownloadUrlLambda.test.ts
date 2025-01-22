@@ -1,6 +1,9 @@
-import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
-import '@web-api/persistence/postgres/cases/mocks.jest';
-import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor',
+);
+jest.mock('@web-api/persistence/dynamo/cases/getCaseByDocketNumber');
+jest.mock('@web-api/persistence/s3/getDownloadPolicyUrl');
+jest.mock('@web-api/persistence/dynamo/deployTable/getMaintenanceMode');
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_PETITION } from '@shared/test/mockDocketEntry';
 import { getAllFeatureFlagsInteractor as getAllFeatureFlagsInteractorMock } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
