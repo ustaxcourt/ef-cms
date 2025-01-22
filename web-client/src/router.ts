@@ -91,6 +91,7 @@ const ifHasAccess = (
     }
 
     app.getSequence('clearAlertSequence')();
+    // eslint-disable-next-line prefer-spread, prefer-rest-params
     return cb.apply(null, arguments);
   };
 };
@@ -99,7 +100,7 @@ const router = {
   initialize: (app, registerRoute) => {
     setPageTitle('U.S. Tax Court');
     // expose route function on window for use with cypress
-    // eslint-disable-next-line no-underscore-dangle
+
     window.__cy_route = path => route(path || '/');
     const { ROLE_PERMISSIONS } = app.getState('constants');
 
@@ -1109,11 +1110,17 @@ const router = {
     );
 
     registerRoute(
-      '/trial-session-planning-report',
-      ifHasAccess({ app }, () => {
-        setPageTitle('Trial session planning report');
-        return app.getSequence('gotoTrialSessionPlanningReportSequence')();
-      }),
+      '/trial-session-planning-report/*/*',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
+        (term: string, year: string) => {
+          setPageTitle('Trial session planning report');
+          return app.getSequence('gotoTrialSessionPlanningReportViewSequence')({
+            term: term.toLocaleLowerCase(),
+            year,
+          });
+        },
+      ),
     );
 
     registerRoute(

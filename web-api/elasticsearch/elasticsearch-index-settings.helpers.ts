@@ -1,8 +1,7 @@
 import { Client } from '@opensearch-project/opensearch';
-import { baseAliases, esAliasType } from './elasticsearch-aliases';
-import { elasticsearchIndexes, esIndexType } from './elasticsearch-indexes';
+import { baseAliases } from './elasticsearch-aliases';
+import { elasticsearchIndexes } from './elasticsearch-indexes';
 import { elasticsearchMappings } from './elasticsearch-mappings';
-import { esSettingsType } from './elasticsearch-settings';
 import { settings } from './elasticsearch-settings';
 
 export const setupIndexes = async ({
@@ -15,7 +14,7 @@ export const setupIndexes = async ({
   const overriddenNumberOfReplicasIfNonProd: number = Number(
     process.env.OVERRIDE_ES_NUMBER_OF_REPLICAS,
   );
-  const esSettings: esSettingsType = settings({
+  const esSettings = settings({
     environment: environmentName,
     overriddenNumberOfReplicasIfNonProd,
   });
@@ -31,7 +30,7 @@ export const setupIndexes = async ({
           return client.indices.create({
             body: {
               mappings: {
-                dynamic: false,
+                dynamic: 'false',
                 ...elasticsearchMappings[index],
               },
               settings: esSettings,
@@ -42,8 +41,8 @@ export const setupIndexes = async ({
           return client.indices.putSettings({
             body: {
               index: {
-                max_result_window: esSettings.index.max_result_window,
-                number_of_replicas: esSettings.index.number_of_replicas,
+                max_result_window: esSettings.index!.max_result_window,
+                number_of_replicas: esSettings.index!.number_of_replicas,
               },
             },
             index,
@@ -64,18 +63,20 @@ export const deleteUnaliasedIndices = async ({
 }: {
   client: Client;
 }): Promise<void> => {
-  const indices: string[] =
-    (await client.cat.indices({ format: 'json' })).body
-      ?.filter((i: esIndexType) => {
-        return i.index.includes('efcms');
-      })
-      .map((i: esIndexType) => i.index) || [];
-  const aliasedIndices: string[] =
-    (await client.cat.aliases({ format: 'json' })).body
-      ?.filter((a: esAliasType) => {
-        return baseAliases.map((ba: esAliasType) => ba.alias).includes(a.alias);
-      })
-      .map((a: esAliasType) => a.index) || [];
+  const indices: string[] = (await client.cat.indices({ format: 'json' })).body
+    .map(i => i.index)
+    .filter(i => typeof i === 'string')
+    .filter(i => i.includes('efcms'));
+
+  const aliasedIndices: string[] = (
+    await client.cat.aliases({ format: 'json' })
+  ).body
+    .filter(a => typeof a.alias === 'string')
+    .filter(a => {
+      return baseAliases.map(ba => ba.alias).includes(a.alias!);
+    })
+    .map(a => a.index)
+    .filter(i => typeof i === 'string');
   const unaliasedIndices =
     indices.filter(index => {
       return !aliasedIndices.includes(index);

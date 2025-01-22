@@ -1,15 +1,35 @@
-// usage: npx ts-node --transpile-only scripts/reports/closed-dates.ts 2022
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import { DateTime } from 'luxon';
 import {
-  ServerApplicationContext,
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import {
+  type ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
 import { generateCsv } from '../helpers/generate-csv';
 import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
 
-const year = process.argv[2] || `${DateTime.now().toObject().year}`;
+const scriptConfig: ScriptConfig = {
+  description:
+    'closed-dates - Generates a spreadsheet of the closed date of all cases opened in the given year.',
+  environment: {
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+    env: 'ENV',
+  },
+  parameters: {
+    year: {
+      default: `${DateTime.now().toObject().year}`,
+      position: 0,
+      type: 'string',
+    },
+  },
+  requireActiveAwsSession: true,
+};
+const { year } = parseArgsAndEnvVars(scriptConfig) as { year: string };
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 
 const getAllCasesOpenedInYear = async ({

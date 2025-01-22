@@ -7,6 +7,7 @@ const config: Config = {
   collectCoverage: true,
   collectCoverageFrom: [
     '**/*.{js,ts}',
+    '!archived/**',
     '!checkAllFilesForTypeErrorCount.ts',
     '!circleci/*.ts',
     '!circleci/judge/bulkImportJudgeUsers.ts',
@@ -42,6 +43,7 @@ const config: Config = {
     '!upload-practitioner-application-packages.ts',
     '!user/**',
     '!postgres/**',
+    '!npm/upgrade-npm-packages.ts',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
@@ -69,5 +71,4 @@ const config: Config = {
   verbose: false,
 };
 
-// eslint-disable-next-line import/no-default-export
 export default config;

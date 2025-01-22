@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable max-lines */
 import { addCaseToHearing } from './persistence/dynamo/trialSessions/addCaseToHearing';
 import { advancedDocumentSearch } from './persistence/elasticsearch/advancedDocumentSearch';
 import { associateUserWithCase } from './persistence/dynamo/cases/associateUserWithCase';
@@ -167,6 +165,7 @@ const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
    */
   function decorate(method) {
     return function () {
+      // eslint-disable-next-line prefer-rest-params
       const argumentsAsArray = Array.prototype.slice.call(arguments);
 
       argumentsAsArray.forEach(argument => {
@@ -183,6 +182,7 @@ const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
           }
         });
       });
+      // eslint-disable-next-line prefer-spread
       return method.apply(null, argumentsAsArray);
     };
   }

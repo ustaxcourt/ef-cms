@@ -155,48 +155,6 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
     expect(result.output.pdfUrl).toEqual(url);
   });
 
-  it('should get trial status from case metadata and return the printable trial session copy pdf URL', async () => {
-    const result = await runAction(
-      generatePrintableTrialSessionCopyReportAction,
-      {
-        modules: {
-          presenter,
-        },
-        props: {
-          formattedCases: [formattedCaseMock],
-        },
-        state: {
-          formattedTrialSessionDetails: {
-            estimatedEndDate: '12/12/12',
-          },
-          trialSessionWorkingCopy: {
-            caseMetadata: formattedCaseMock,
-            filters: {
-              basisReached: true,
-              continued: true,
-              definiteTrial: true,
-              dismissed: true,
-              motionToDismiss: true,
-              probableSettlement: true,
-              probableTrial: true,
-              recall: true,
-              rule122: true,
-              setForTrial: true,
-              settled: true,
-              showAll: true,
-              statusUnassigned: true,
-              submittedCAV: true,
-            },
-          },
-          trialSessionWorkingCopyHelper: {
-            trialStatusFilters,
-          },
-        },
-      },
-    );
-    expect(result.output.pdfUrl).toEqual(url);
-  });
-
   it('should filter out unselected and deprecated filters from the trial session working copy', async () => {
     const result = await runAction(
       generatePrintableTrialSessionCopyReportAction,
@@ -252,7 +210,7 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
     expect(result.output.pdfUrl).toEqual(url);
   });
 
-  it('should get trial status from formattedCase and return the printable trial session copy pdf URL', async () => {
+  it('should get trial status from formattedCase and return the printable trial session copy pdf URL 2', async () => {
     const mockFormattedTrialSessionDetails = {
       estimatedEndDate: '2020-11-27T05:00:00.000Z',
       formattedChambersPhoneNumber: MOCK_TRIAL_REGULAR.chambersPhoneNumber,

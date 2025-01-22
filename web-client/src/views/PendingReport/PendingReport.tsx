@@ -10,13 +10,13 @@ import React, { useState } from 'react';
 export const PendingReport = connect(
   {
     exportPendingReportSequence: sequences.exportPendingReportSequence,
-    formattedPendingItemsHelper: state.formattedPendingItemsHelper,
     hasPendingItemsResults: state.pendingReports.hasPendingItemsResults,
+    pendingReportHelper: state.pendingReportHelper,
   },
   function PendingReport({
     exportPendingReportSequence,
-    formattedPendingItemsHelper,
     hasPendingItemsResults,
+    pendingReportHelper,
   }) {
     const [isSubmitDebounced, setIsSubmitDebounced] = useState(false);
 
@@ -61,7 +61,7 @@ export const PendingReport = connect(
                     aria-label="print pending report"
                     className="margin-top-2"
                     data-testid="print-pending-report"
-                    href={formattedPendingItemsHelper.printUrl}
+                    href={pendingReportHelper.printUrl}
                     icon="print"
                   >
                     Printable Report
