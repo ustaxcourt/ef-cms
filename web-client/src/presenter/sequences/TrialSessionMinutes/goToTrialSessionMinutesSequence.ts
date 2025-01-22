@@ -1,6 +1,7 @@
 import { checkForExistingMinuteSheetAction } from '@web-client/presenter/actions/TrialSessionMinutes/checkForExistingMinuteSheetAction';
 import { clearMinuteSheetFormStateAction } from '@web-client/presenter/actions/TrialSessionMinutes/clearMinuteSheetFormState';
 import { getCaseAction } from '@web-client/presenter/actions/getCaseAction';
+import { getJudgeFullNameAction } from '@web-client/presenter/actions/TrialSessionMinutes/getJudgeFullNameAction';
 import { getTrialSessionDetailsAction } from '../../actions/TrialSession/getTrialSessionDetailsAction';
 import { initializeTrialSessionMinuteSheetFormAction } from '@web-client/presenter/actions/TrialSessionMinutes/initializeTrialSessionMinuteSheetFormAction';
 import { parallel } from 'cerebral/factories';
@@ -18,6 +19,7 @@ export const goToTrialSessionMinutesSequence = [
     [getTrialSessionDetailsAction, setTrialSessionDetailsAction],
     [getCaseAction, setCaseAction],
   ]),
+  getJudgeFullNameAction,
   clearMinuteSheetFormStateAction,
   checkForExistingMinuteSheetAction,
   {

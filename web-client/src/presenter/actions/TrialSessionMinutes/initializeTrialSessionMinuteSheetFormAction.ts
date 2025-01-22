@@ -22,11 +22,8 @@ export const initializeTrialSessionMinuteSheetFormAction = ({
   props,
   store,
 }: ActionProps) => {
-  const { caseDetail, trialSession } = props;
+  const { caseDetail, judgeFullName, trialSession } = props;
   const currentUser = get(state.user);
-
-  console.log('caseDetail', caseDetail);
-  console.log('trial session', trialSession);
 
   const formattedTrialSession = applicationContext
     .getUtilities()
@@ -40,7 +37,7 @@ export const initializeTrialSessionMinuteSheetFormAction = ({
 
   store.set(state.minuteSheetForm.trialSessionMetadataSection, {
     courtReporter: formattedTrialSession.courtReporter,
-    judge: formattedTrialSession.judge!.name,
+    judge: judgeFullName,
     remoteSession: formattedTrialSession.isRemoteSession,
     trialClerk: formattedTrialSession.trialClerk!.name,
   });
