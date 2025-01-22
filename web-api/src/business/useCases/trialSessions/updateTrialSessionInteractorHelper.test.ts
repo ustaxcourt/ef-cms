@@ -1,16 +1,195 @@
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
-import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import {
+  CASE_STATUS_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '@shared/business/entities/EntityConstants';
+import {
+  RawTrialSession,
+  TrialSession,
+} from '@shared/business/entities/trialSessions/TrialSession';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getUniqueId } from '@shared/sharedAppContext';
+import { mockCaseServicesSupervisorUser } from '@shared/test/mockAuthUsers';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import {
   createWorkingCopyForNewUserOnSession,
   getPaperServicePdfName,
   shouldGenerateNoticeOfChangeOfTrialJudge,
   shouldGenerateNoticeOfChangeToInPersonProceeding,
   shouldGenerateNoticeOfChangeToRemoteProceeding,
+  updateCasesAndSetNoticeOfChange,
 } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper';
 
 describe('updateTrialSessionInteractorHelper', () => {
+  describe('updateCasesAndSetNoticeOfChange', () => {
+    const TEST_DOCKET_NUMBERS = ['111-25', '222-25', '333-25', '444-25'];
+    const TEST_TRIAL_SESSION_ID: string = getUniqueId();
+    const MOCK_PAPER_SERVICE_PDF_COMBINED = 'MOCK_PAPER_SERVICE_PDF_COMBINED';
+    const VALIDATED_TRIAL_SESSION_ENTITY = 'VALIDATED_TRIAL_SESSION_ENTITY';
+
+    beforeEach(() => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
+          return {
+            ...MOCK_CASE,
+            docketNumber,
+            status:
+              docketNumber === '222-25'
+                ? CASE_STATUS_TYPES.closed
+                : CASE_STATUS_TYPES.calendared,
+            trialSessionId:
+              docketNumber === '333-25' ? getUniqueId() : TEST_TRIAL_SESSION_ID,
+            trialDate: '9999-03-01T21:40:46.415Z',
+            hearings:
+              docketNumber === '222-25'
+                ? [{ trialSessionId: TEST_TRIAL_SESSION_ID }]
+                : [],
+          } as RawCase;
+        });
+
+      applicationContext.getUseCaseHelpers().setNoticeOfChangeToRemoteProceeding =
+        jest.fn();
+
+      applicationContext.getUseCaseHelpers().setNoticeOfChangeToInPersonProceeding =
+        jest.fn();
+
+      applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge =
+        jest.fn();
+
+      applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialLocation =
+        jest.fn();
+
+      applicationContext
+        .getUtilities()
+        .combineAllPdfDocuments.mockImplementation(
+          () => MOCK_PAPER_SERVICE_PDF_COMBINED,
+        );
+
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations =
+        jest.fn();
+    });
+
+    it('should generate all notices for the cases that are callendared and update case hearing', async () => {
+      const TEST_PARAMS = {
+        applicationContext,
+        authorizedUser: mockCaseServicesSupervisorUser,
+        currentTrialSession: {
+          caseOrder: TEST_DOCKET_NUMBERS.map(docketNumber => {
+            return {
+              docketNumber,
+              removedFromTrial: docketNumber === '111-25',
+            };
+          }),
+        } as unknown as RawTrialSession,
+        shouldIssueNoticeOfChangeOfTrialJudge: true,
+        shouldSetNoticeOfChangeToInPersonProceeding: true,
+        shouldSetNoticeOfChangeToRemoteProceeding: true,
+        shouldSetNoticeOfTrialSessionLocationChange: true,
+        updatedTrialSessionEntity: {
+          caseOrder: TEST_DOCKET_NUMBERS,
+          trialSessionId: TEST_TRIAL_SESSION_ID,
+          validate: () => ({
+            toRawObject: () => VALIDATED_TRIAL_SESSION_ENTITY,
+          }),
+        } as unknown as TrialSession,
+      };
+
+      const results = await updateCasesAndSetNoticeOfChange(TEST_PARAMS);
+      expect(results).toBe(MOCK_PAPER_SERVICE_PDF_COMBINED);
+
+      const setNoticeOfChangeToRemoteProceedingCalls =
+        applicationContext.getUseCaseHelpers()
+          .setNoticeOfChangeToRemoteProceeding.mock.calls;
+      expect(setNoticeOfChangeToRemoteProceedingCalls.length).toEqual(1);
+      expect(
+        setNoticeOfChangeToRemoteProceedingCalls[0][1].caseEntity.docketNumber,
+      ).toEqual('444-25');
+
+      const setNoticeOfChangeToInPersonProceedingCalls =
+        applicationContext.getUseCaseHelpers()
+          .setNoticeOfChangeToInPersonProceeding.mock.calls;
+      expect(setNoticeOfChangeToInPersonProceedingCalls.length).toEqual(1);
+      expect(
+        setNoticeOfChangeToInPersonProceedingCalls[0][1].caseEntity
+          .docketNumber,
+      ).toEqual('444-25');
+
+      const setNoticeOfChangeOfTrialJudgeCalls =
+        applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge
+          .mock.calls;
+      expect(setNoticeOfChangeOfTrialJudgeCalls.length).toEqual(1);
+      expect(
+        setNoticeOfChangeOfTrialJudgeCalls[0][1].caseEntity.docketNumber,
+      ).toEqual('444-25');
+
+      const setNoticeOfChangeOfTrialLocationCalls =
+        applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialLocation
+          .mock.calls;
+      expect(setNoticeOfChangeOfTrialLocationCalls.length).toEqual(1);
+      expect(
+        setNoticeOfChangeOfTrialLocationCalls[0][1].caseEntity.docketNumber,
+      ).toEqual('444-25');
+
+      const updateCaseHearingCalls =
+        applicationContext.getPersistenceGateway().updateCaseHearing.mock.calls;
+
+      expect(updateCaseHearingCalls.length).toEqual(1);
+      expect(updateCaseHearingCalls[0][0]).toMatchObject({
+        docketNumber: '222-25',
+        hearingToUpdate: VALIDATED_TRIAL_SESSION_ENTITY,
+      });
+    });
+
+    it('should not generate notices when flags are "false"', async () => {
+      const TEST_PARAMS = {
+        applicationContext,
+        authorizedUser: mockCaseServicesSupervisorUser,
+        currentTrialSession: {
+          caseOrder: TEST_DOCKET_NUMBERS.map(docketNumber => {
+            return {
+              docketNumber,
+              removedFromTrial: docketNumber === '111-25',
+            };
+          }),
+        } as unknown as RawTrialSession,
+        shouldIssueNoticeOfChangeOfTrialJudge: false,
+        shouldSetNoticeOfChangeToInPersonProceeding: false,
+        shouldSetNoticeOfChangeToRemoteProceeding: false,
+        shouldSetNoticeOfTrialSessionLocationChange: false,
+        updatedTrialSessionEntity: {
+          caseOrder: TEST_DOCKET_NUMBERS,
+          trialSessionId: TEST_TRIAL_SESSION_ID,
+          validate: () => ({
+            toRawObject: () => VALIDATED_TRIAL_SESSION_ENTITY,
+          }),
+        } as unknown as TrialSession,
+      };
+
+      const results = await updateCasesAndSetNoticeOfChange(TEST_PARAMS);
+      expect(results).toBe(MOCK_PAPER_SERVICE_PDF_COMBINED);
+
+      const setNoticeOfChangeToRemoteProceedingCalls =
+        applicationContext.getUseCaseHelpers()
+          .setNoticeOfChangeToRemoteProceeding.mock.calls;
+      expect(setNoticeOfChangeToRemoteProceedingCalls.length).toEqual(0);
+
+      const setNoticeOfChangeToInPersonProceedingCalls =
+        applicationContext.getUseCaseHelpers()
+          .setNoticeOfChangeToInPersonProceeding.mock.calls;
+      expect(setNoticeOfChangeToInPersonProceedingCalls.length).toEqual(0);
+
+      const setNoticeOfChangeOfTrialJudgeCalls =
+        applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge
+          .mock.calls;
+      expect(setNoticeOfChangeOfTrialJudgeCalls.length).toEqual(0);
+
+      const setNoticeOfChangeOfTrialLocationCalls =
+        applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialLocation
+          .mock.calls;
+      expect(setNoticeOfChangeOfTrialLocationCalls.length).toEqual(0);
+    });
+  });
+
   describe('createWorkingCopyForNewUserOnSession', () => {
     it('should call method with correct parameters', async () => {
       const TEST_TRIAL_SESSION_ID = getUniqueId();
