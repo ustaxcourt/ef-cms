@@ -1,3 +1,9 @@
+import { Case } from '@shared/business/entities/cases/Case';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
+import { createCaseTrialSortMappingRecords } from '@web-api/persistence/dynamo/cases/createCaseTrialSortMappingRecords';
+import { deleteCaseTrialSortMappingRecords } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
+
 /**
  * updateCaseAutomaticBlock
  *
@@ -9,34 +15,32 @@
 export const updateCaseAutomaticBlock = async ({
   applicationContext,
   caseEntity,
+}: {
+  applicationContext: ServerApplicationContext;
+  caseEntity: Case;
 }) => {
   if (caseEntity.trialDate || caseEntity.highPriority) {
     return caseEntity;
   }
-  const caseDeadlines = await applicationContext
-    .getPersistenceGateway()
-    .getCaseDeadlinesByDocketNumber({
-      applicationContext,
-      docketNumber: caseEntity.docketNumber,
-    });
+  const caseDeadlines = await getCaseDeadlinesByDocketNumber({
+    applicationContext,
+    docketNumber: caseEntity.docketNumber,
+  });
 
   caseEntity.updateAutomaticBlocked({ caseDeadlines });
 
   if (caseEntity.automaticBlocked) {
-    await applicationContext
-      .getPersistenceGateway()
-      .deleteCaseTrialSortMappingRecords({
-        applicationContext,
-        docketNumber: caseEntity.docketNumber,
-      });
+    await deleteCaseTrialSortMappingRecords({
+      applicationContext,
+      docketNumber: caseEntity.docketNumber,
+      deleteConsolidatedCases: true,
+    });
   } else if (caseEntity.isReadyForTrial()) {
-    await applicationContext
-      .getPersistenceGateway()
-      .createCaseTrialSortMappingRecords({
-        applicationContext,
-        caseSortTags: caseEntity.generateTrialSortTags(),
-        docketNumber: caseEntity.docketNumber,
-      });
+    await createCaseTrialSortMappingRecords({
+      applicationContext,
+      caseSortTags: caseEntity.generateTrialSortTags(),
+      docketNumber: caseEntity.docketNumber,
+    });
   }
 
   return caseEntity;

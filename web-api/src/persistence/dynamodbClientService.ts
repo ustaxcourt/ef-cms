@@ -426,9 +426,25 @@ export const batchWrite = async (
   applicationContext: IApplicationContext,
 ): Promise<void> => {
   commands.forEach(command => filterEmptyStrings(command));
+  const uniqueCommands = commands.filter(
+    (item, index, self) =>
+      index ===
+      self.findIndex(
+        t =>
+          ('DeleteRequest' in item &&
+            'DeleteRequest' in t &&
+            t.DeleteRequest.Key.pk === item.DeleteRequest.Key.pk &&
+            t.DeleteRequest.Key.sk === item.DeleteRequest.Key.sk) ||
+          ('PutRequest' in item &&
+            'PutRequest' in t &&
+            t.PutRequest.Item.pk === item.PutRequest.Item.pk &&
+            t.PutRequest.Item.sk === item.PutRequest.Item.sk),
+      ),
+  );
+
   const documentClient =
     applicationContext.getDocumentClient(applicationContext);
-  const chunks = chunk(commands, 25);
+  const chunks = chunk(uniqueCommands, 25);
 
   await Promise.all(
     chunks.map(commandChunk =>

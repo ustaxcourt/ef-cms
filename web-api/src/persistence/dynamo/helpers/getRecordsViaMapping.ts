@@ -1,3 +1,4 @@
+import { TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { batchGet, query } from '../../dynamodbClientService';
 
 export const getRecordsViaMapping = async ({
@@ -8,7 +9,7 @@ export const getRecordsViaMapping = async ({
   applicationContext: IApplicationContext;
   pk: string;
   prefix: string;
-}) => {
+}): Promise<TDynamoRecord[]> => {
   const mappings = await query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
@@ -32,7 +33,7 @@ export const getRecordsViaMapping = async ({
     })),
   });
 
-  const results = [];
+  const results: TDynamoRecord[] = [];
   mappings.forEach(mapping => {
     const entry = batchGetResults.find(
       batchGetEntry => mapping.sk === batchGetEntry.pk,
