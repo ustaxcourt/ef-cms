@@ -13,12 +13,13 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   createWorkingCopyForNewUserOnSession,
   getPaperServicePdfName,
+  shouldCreateWorkingCopyForNewJudge,
+  shouldCreateWorkingCopyForNewTrialClerk,
   shouldGenerateNoticeOfChangeOfTrialJudge,
   shouldGenerateNoticeOfChangeToInPersonProceeding,
   shouldGenerateNoticeOfChangeToRemoteProceeding,
   updateCasesAndSetNoticeOfChange,
 } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper';
-import { get } from 'lodash';
 import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -85,15 +86,12 @@ export const updateTrialSession = async (
     ...editableFields,
   });
 
-  const shouldCreateWorkingCopyForNewJudge =
-    (!get(currentTrialSession, 'judge.userId') &&
-      get(updatedTrialSessionEntity, 'judge.userId')) ||
-    (currentTrialSession.judge &&
-      updatedTrialSessionEntity.judge &&
-      currentTrialSession.judge.userId !==
-        updatedTrialSessionEntity.judge.userId);
+  const createWorkingCopyForNewJudge = shouldCreateWorkingCopyForNewJudge(
+    currentTrialSession,
+    updatedTrialSessionEntity,
+  );
 
-  if (shouldCreateWorkingCopyForNewJudge) {
+  if (createWorkingCopyForNewJudge) {
     await createWorkingCopyForNewUserOnSession({
       applicationContext,
       trialSessionId: updatedTrialSessionEntity.trialSessionId,
@@ -101,15 +99,13 @@ export const updateTrialSession = async (
     });
   }
 
-  const shouldCreateWorkingCopyForNewTrialClerk =
-    (!get(currentTrialSession, 'trialClerk.userId') &&
-      get(updatedTrialSessionEntity, 'trialClerk.userId')) ||
-    (currentTrialSession.trialClerk &&
-      updatedTrialSessionEntity.trialClerk &&
-      currentTrialSession.trialClerk.userId !==
-        updatedTrialSessionEntity.trialClerk.userId);
+  const createWorkingCopyForNewTrialClerk =
+    shouldCreateWorkingCopyForNewTrialClerk(
+      currentTrialSession,
+      updatedTrialSessionEntity,
+    );
 
-  if (shouldCreateWorkingCopyForNewTrialClerk) {
+  if (createWorkingCopyForNewTrialClerk) {
     await createWorkingCopyForNewUserOnSession({
       applicationContext,
       trialSessionId: updatedTrialSessionEntity.trialSessionId,
