@@ -12,7 +12,7 @@ export const upsertCasePetitionersData = async ({
     writer
       .insertInto('dwPetitionerOnCase')
       .values(
-        petitionersData.map(p => ({
+        petitionersData.map((p, index) => ({
           additionalName: p.additionalName,
           address1: p.address1,
           address2: p.address2,
@@ -38,6 +38,7 @@ export const upsertCasePetitionersData = async ({
           serviceIndicator: p.serviceIndicator,
           state: p.state,
           title: p.title,
+          orderOnCase: index,
         })),
       )
       .onConflict(oc =>

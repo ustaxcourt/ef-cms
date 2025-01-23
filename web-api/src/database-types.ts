@@ -153,6 +153,7 @@ export interface PetitionerOnCaseTable {
   secondaryName?: string;
   serviceIndicator?: string;
   title?: string;
+  orderOnCase: number;
 
   // Maybe break this out into a contact table down the road
   address1: string;

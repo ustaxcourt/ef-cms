@@ -29,6 +29,7 @@ export const getCaseByDocketNumber = async ({
     reader
       .selectFrom('dwPetitionerOnCase')
       .where('docketNumber', '=', docketNumber)
+      .orderBy('orderOnCase', 'asc')
       .selectAll()
       .execute(),
   );
@@ -42,6 +43,7 @@ export const getCaseByDocketNumber = async ({
         .toRawObject();
     }) || [];
 
+  console.log('petitionersOnCase', petitionersOnCase);
   const dbCaseStatusHistory = await getDbReader(reader =>
     reader
       .selectFrom('dwCaseStatusUpdate')
