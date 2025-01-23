@@ -17,6 +17,9 @@ import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamo
 import { queryFull } from '../../dynamodbClientService';
 import { workItemEntity } from '@web-api/persistence/postgres/workitems/mapper';
 
+// These case items are no longer in dynamoDB
+const SK_FILTER_OUT = ['work-item'];
+
 export const getCaseByDocketNumber = async ({
   applicationContext,
   docketNumber,
@@ -38,7 +41,11 @@ export const getCaseByDocketNumber = async ({
       },
       KeyConditionExpression: '#pk = :pk',
       applicationContext,
-    }),
+    }).then(items =>
+      items.filter(
+        item => !SK_FILTER_OUT.some(prefix => item.sk.startsWith(prefix)),
+      ),
+    ),
   ]);
 
   /*

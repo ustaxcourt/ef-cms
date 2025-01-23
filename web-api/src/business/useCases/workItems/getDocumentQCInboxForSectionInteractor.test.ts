@@ -1,6 +1,5 @@
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { DOCKET_SECTION } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getDocumentQCInboxForSectionInteractor } from './getDocumentQCInboxForSectionInteractor';
 import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionMock } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForSection';
 import { getTestJudgesChambers } from '@shared/test/mockJudgesChambers';
@@ -17,7 +16,6 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
   it('should throw an error when the user does not have permission to retrieve work items', async () => {
     await expect(
       getDocumentQCInboxForSectionInteractor(
-        applicationContext,
         {
           section: DOCKET_SECTION,
         },
@@ -28,7 +26,6 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
 
   it('should query workItems for the provided section', async () => {
     await getDocumentQCInboxForSectionInteractor(
-      applicationContext,
       {
         section: DOCKET_SECTION,
       },
@@ -42,7 +39,6 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
 
   it('should default to query workItems for the DOCKET_SECTION when a section is provided that is NOT PETITIONS_SECTION', async () => {
     await getDocumentQCInboxForSectionInteractor(
-      applicationContext,
       {
         section: 'ANY_OTHER_SECTION',
       },
@@ -56,7 +52,6 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
 
   it('should query workItems using a judge name when one is provided', async () => {
     await getDocumentQCInboxForSectionInteractor(
-      applicationContext,
       {
         judgeUserName: 'Ashford',
         section: getTestJudgesChambers().ASHFORDS_CHAMBERS_SECTION.section,

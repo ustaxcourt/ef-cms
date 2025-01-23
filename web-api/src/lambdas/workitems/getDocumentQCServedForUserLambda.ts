@@ -12,11 +12,10 @@ export const getDocumentQCServedForUserLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     const { userId } = event.pathParameters || {};
 
     return await getDocumentQCServedForUserInteractor(
-      applicationContext,
       {
         userId,
       },
