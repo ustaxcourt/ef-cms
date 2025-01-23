@@ -7,13 +7,14 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { formatResults, searchRaw } from '../searchClient';
+import { Search_Request } from '@opensearch-project/opensearch/api';
 
 export async function getColdCases({
   applicationContext,
 }: {
   applicationContext: ServerApplicationContext;
 }) {
-  const searchParameters = {
+  const searchParameters: Search_Request = {
     body: {
       _source: [
         'docketNumber',

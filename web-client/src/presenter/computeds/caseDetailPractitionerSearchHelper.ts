@@ -41,10 +41,10 @@ export const caseDetailPractitionerSearchHelper = (get: Get): any => {
     : undefined;
 
   const showOnePractitioner = practitionerSearchResultsCount === 1;
-  let showMultiplePractitioners = practitionerSearchResultsCount > 1;
+  const showMultiplePractitioners = practitionerSearchResultsCount > 1;
 
-  let showOneRespondent = respondentSearchResultsCount === 1;
-  let showMultipleRespondents = respondentSearchResultsCount > 1;
+  const showOneRespondent = respondentSearchResultsCount === 1;
+  const showMultipleRespondents = respondentSearchResultsCount > 1;
 
   return {
     practitionerMatchesFormatted,

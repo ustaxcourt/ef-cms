@@ -72,7 +72,7 @@ export const caseAdvancedSearchInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let foundCases = await applicationContext
+  const foundCases = await applicationContext
     .getPersistenceGateway()
     .caseAdvancedSearch({
       applicationContext,

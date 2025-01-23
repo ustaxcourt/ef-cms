@@ -50,7 +50,7 @@ describe('fixRaceConditionServedInDrafts', () => {
   const mockedFilingDate = '2018-03-01T00:01:00.000Z';
   let mockCall;
   let mockPerformUpdate = true;
-  let mockRequest = {
+  const mockRequest = {
     form: {
       attachments: true,
       date: mockedFilingDate,

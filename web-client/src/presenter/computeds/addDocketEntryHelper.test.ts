@@ -21,7 +21,7 @@ describe('addDocketEntryHelper', () => {
   });
 
   it('returns correct values when documentType is undefined', () => {
-    let testState = { ...state, form: { documentType: undefined } };
+    const testState = { ...state, form: { documentType: undefined } };
 
     const expected = {
       showObjection: false,
@@ -37,7 +37,7 @@ describe('addDocketEntryHelper', () => {
   });
 
   it('does not error with empty caseDetail (for cerebral debugger)', () => {
-    let testState = {
+    const testState = {
       caseDetail: {},
     };
 

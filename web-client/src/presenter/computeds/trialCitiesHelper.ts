@@ -1,17 +1,9 @@
 import { findIndex, sortBy } from 'lodash';
-
-/**
- * gets the trial cities based on procedureType
- *
- * @param {Function} get the cerebral get function used
- * for getting state.constants
- * @param {object} applicationContext the application context
- * @returns {object} trialCitiesByState
- */
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+
 export const trialCitiesHelper =
-  (get: Get, applicationContext: ClientApplicationContext): any =>
+  (_get: Get, applicationContext: ClientApplicationContext): any =>
   procedureType => {
     const { TRIAL_CITIES, TRIAL_SESSION_SCOPE_TYPES } =
       applicationContext.getConstants();

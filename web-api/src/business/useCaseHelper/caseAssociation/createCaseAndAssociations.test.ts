@@ -8,7 +8,7 @@ import { createCaseAndAssociations } from './createCaseAndAssociations';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('createCaseAndAssociations', () => {
-  let createCaseMock = jest.fn();
+  const createCaseMock = jest.fn();
   let validMockCase;
 
   beforeAll(() => {

@@ -48,7 +48,7 @@ export const createProspectiveTrialSessions = ({
     const cityWasNotVisitedInLastTwoTerms =
       !citiesFromLastTwoTerms.includes(city);
 
-    let remainingCaseCounts = {
+    const remainingCaseCounts = {
       regular: caseCountsAndSessionsByCity[city].remainingRegularCases,
       small: caseCountsAndSessionsByCity[city].remainingSmallCases,
     };

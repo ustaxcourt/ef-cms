@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-conditional-expect */
 import {
   FORMATS,
   formatNow,
@@ -79,7 +80,7 @@ describe('parseInts', () => {
   });
 
   it('should return array of ints', () => {
-    let ints = parseInts('1,2,3');
+    const ints = parseInts('1,2,3');
     expect(ints).toEqual([1, 2, 3]);
     ints.forEach(n => {
       expect(typeof n).toBe('number');

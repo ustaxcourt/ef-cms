@@ -71,7 +71,7 @@ describe('messagesHelper', () => {
   });
 
   it('should set messagesTitle to a capitalized section specific title if messageBoxToDisplay.section exists', () => {
-    let result = runCompute(messagesHelper, {
+    const result = runCompute(messagesHelper, {
       state: {
         messageBoxToDisplay: {
           queue: 'section',

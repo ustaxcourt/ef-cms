@@ -111,7 +111,7 @@ export const parseIntRange = (intRange: string): number[] => {
     .map(s => parseInt(s));
   const min = Math.min(...ints);
   const max = Math.max(...ints);
-  let rangeNums: number[] = [];
+  const rangeNums: number[] = [];
   for (let i = min; i <= max; i++) {
     rangeNums.push(i);
   }
