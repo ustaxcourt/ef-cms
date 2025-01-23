@@ -2406,20 +2406,26 @@ button.change-scanner-button {
 }
 
 .button-container {
-  display: flex;
-  width: fit-content;
-  flex-flow: column nowrap;
-  align-items: center;
+  width: 100%;
 
   .usa-button {
-    width: fit-content;
-    flex: 0 0 auto;
-    margin-right: 1rem;
+    display: block;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    text-align: center;
   }
 
   @media (min-width: $medium-screen) {
-    flex-direction: row;
-    justify-content: flex-start;
+    display: flex;
+    align-items: flex-start;
+
+    .usa-button {
+      width: auto;
+
+      &:not(:last-child) {
+        margin-right: 1rem;
+      }
+    }
   }
 }
 
