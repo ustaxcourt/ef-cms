@@ -12,6 +12,8 @@ import {
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { queryFull } from '../../dynamodbClientService';
+import { caseContactAddressSealedFormatter } from '@shared/business/utilities/caseFilter';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 // These case items are no longer in dynamoDB
 const SK_FILTER_OUT = ['work-item'];
@@ -20,10 +22,12 @@ export const getCaseByDocketNumber = async ({
   applicationContext,
   docketNumber,
   includeConsolidatedCases = true,
+  user = undefined, // Only needed to check permissions on sealed addresses for consolidated cases
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
   includeConsolidatedCases?: boolean;
+  user?: UnknownAuthUser;
 }): Promise<RawCase> => {
   const [caseItems, workItems] = await Promise.all([
     queryFull({
@@ -50,7 +54,7 @@ export const getCaseByDocketNumber = async ({
   )?.leadDocketNumber;
   let consolidatedCases: RawConsolidatedCaseSummary[] = [];
   if (leadDocketNumber && includeConsolidatedCases) {
-    const consolidatedCaseItems = await queryFull<
+    let consolidatedCaseItems = await queryFull<
       IrsPractitionerOnCaseRecord | PrivatePractitionerOnCaseRecord | CaseRecord
     >({
       ExpressionAttributeNames: {
@@ -63,6 +67,12 @@ export const getCaseByDocketNumber = async ({
       KeyConditionExpression: '#gsi1pk = :gsi1pk',
       applicationContext,
     });
+
+    if (user) {
+      consolidatedCaseItems = consolidatedCaseItems.map(c =>
+        caseContactAddressSealedFormatter(c, user),
+      );
+    }
 
     consolidatedCases = aggregateConsolidatedCaseItems(consolidatedCaseItems);
   }
