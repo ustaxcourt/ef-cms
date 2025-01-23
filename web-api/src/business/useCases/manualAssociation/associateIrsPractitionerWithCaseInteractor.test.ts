@@ -14,7 +14,7 @@ import { associateIrsPractitionerWithCaseInteractor } from './associateIrsPracti
 import { mockAdcUser, mockPetitionerUser } from '@shared/test/mockAuthUsers';
 
 describe('associateIrsPractitionerWithCaseInteractor', () => {
-  let caseRecord = {
+  const caseRecord = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.deficiency,
     docketEntries: MOCK_CASE.docketEntries,

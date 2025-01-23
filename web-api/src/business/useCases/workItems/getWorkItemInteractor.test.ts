@@ -11,7 +11,7 @@ import {
 
 describe('getWorkItemInteractor', () => {
   const getWorkItemById = getWorkItemByIdMock as jest.Mock;
-  let mockWorkItem = {
+  const mockWorkItem = {
     createdAt: '',
     docketEntry: {
       createdAt: '2019-03-11T21:56:01.625Z',

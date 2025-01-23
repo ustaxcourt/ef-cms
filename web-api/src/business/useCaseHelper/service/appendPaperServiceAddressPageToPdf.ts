@@ -25,7 +25,7 @@ const getAddressPages = async ({
   servedParties,
 }) => {
   const addressPages = [];
-  for (let party of servedParties.paper) {
+  for (const party of servedParties.paper) {
     addressPages.push(
       await applicationContext.getDocumentGenerators().addressLabelCoverSheet({
         applicationContext,
@@ -47,7 +47,7 @@ const copyToNewPdf = async ({
 }) => {
   const { PDFDocument } = await applicationContext.getPdfLib();
 
-  for (let addressPage of addressPages) {
+  for (const addressPage of addressPages) {
     const addressPageDoc = await PDFDocument.load(addressPage);
     let copiedPages = await newPdfDoc.copyPages(
       addressPageDoc,

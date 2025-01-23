@@ -10,8 +10,7 @@ export const areAllReindexTasksFinished = async ({
   const tasks = await esClient.cat.tasks({ format: 'json' });
   if (tasks && tasks.body && tasks.body.length) {
     const reindexTasks = tasks.body.filter(
-      (task: { action: string }) =>
-        task.action === 'indices:data/write/reindex',
+      task => task.action === 'indices:data/write/reindex',
     );
     const numReindexTasks = reindexTasks.length;
     console.log(`found ${numReindexTasks} reindex tasks running`);

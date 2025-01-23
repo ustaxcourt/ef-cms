@@ -1,12 +1,12 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
+import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl.js';
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
-import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
+import { createApplicationContext } from '@web-api/applicationContext';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { createApplicationContext } from '@web-api/applicationContext';
 import { search } from '@web-api/persistence/elasticsearch/searchClient';
 
 const scriptConfig: ScriptConfig = {
@@ -18,7 +18,6 @@ const scriptConfig: ScriptConfig = {
   requireActiveAwsSession: true,
 };
 parseArgsAndEnvVars(scriptConfig);
-
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const source = [
@@ -30,7 +29,7 @@ parseArgsAndEnvVars(scriptConfig);
     'leadDocketNumber',
     'petitioners',
     'status',
-  ] as const;
+  ];
 
   const judges = [
     'Ashford',
@@ -78,8 +77,8 @@ parseArgsAndEnvVars(scriptConfig);
   };
   const applicationContext = createApplicationContext({});
 
-  const shouldFilters: QueryDslQueryContainer[] = [];
-  const filters: QueryDslQueryContainer[] = [
+  const shouldFilters: QueryContainer[] = [];
+  const filters: QueryContainer[] = [
     {
       terms: { 'status.S': params.statuses },
     },

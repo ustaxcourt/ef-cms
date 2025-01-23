@@ -29,7 +29,9 @@ export const StateSelect = ({
           key: e.target.name,
           value: e.target.value,
         });
-        onChangeValidationSequence && onChangeValidationSequence();
+        if (onChangeValidationSequence) {
+          onChangeValidationSequence();
+        }
       }}
     >
       <option value="">- Select -</option>

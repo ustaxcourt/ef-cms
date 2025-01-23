@@ -82,7 +82,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     { ...MOCK_CASE, docketNumber: '100-23' },
     { ...MOCK_CASE, docketNumber: '101-23' },
   ];
-  let mockRequest = {
+  const mockRequest = {
     clientConnectionId: '8916f743-a22d-4946-ab06-57ddcf386912',
     trialSessionId,
   };

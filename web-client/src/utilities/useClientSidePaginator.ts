@@ -1,0 +1,37 @@
+import { useState } from 'react';
+
+type PaginationResult<T> = {
+  activePage: number;
+  pageRecords: T[];
+  setActivePage: React.Dispatch<React.SetStateAction<number>>;
+  totalPages: number;
+};
+
+export function getPaginationResult<T>(
+  fullDataSet: T[],
+  pageSize: number,
+  activePage: number,
+) {
+  const totalPages = Math.ceil(fullDataSet.length / pageSize);
+  const pageRecords = fullDataSet.slice(
+    activePage * pageSize,
+    activePage * pageSize + pageSize,
+  );
+
+  return { pageRecords, totalPages };
+}
+
+export function useClientSidePaginator<T>(
+  fullDataSet: T[],
+  pageSize: number,
+): PaginationResult<T> {
+  const [activePage, setActivePage] = useState(0);
+
+  const { pageRecords, totalPages } = getPaginationResult(
+    fullDataSet,
+    pageSize,
+    activePage,
+  );
+
+  return { activePage, pageRecords, setActivePage, totalPages };
+}
