@@ -1,5 +1,8 @@
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  SESSION_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation';
 
 describe('shouldGenerateNoticeOfChangeTrialLocation', () => {
@@ -13,6 +16,7 @@ describe('shouldGenerateNoticeOfChangeTrialLocation', () => {
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
     state: 'TEST_STATE',
     trialLocation: 'TEST_TRIAL_LOCATION',
+    sessionType: SESSION_TYPES.regular,
   };
 
   it('return "false" when location has not been updated', () => {
@@ -68,5 +72,43 @@ describe('shouldGenerateNoticeOfChangeTrialLocation', () => {
     );
 
     expect(result).toEqual(true);
+  });
+
+  it('should return "false" when the current Trial Session sessionType is "Motion/Hearing"', () => {
+    const CURRENT_LOCATION = {
+      ...TEST_LOCATION,
+      sessionType: SESSION_TYPES.motionHearing,
+    } as RawTrialSession;
+
+    const UPDATED_LOCATION = {
+      ...TEST_LOCATION,
+      address1: 'UPDATE_TEST_aDDRESS_1',
+    } as RawTrialSession;
+
+    const result = shouldGenerateNoticeOfChangeTrialLocation(
+      CURRENT_LOCATION,
+      UPDATED_LOCATION,
+    );
+
+    expect(result).toEqual(false);
+  });
+
+  it('should return "false" when the updated Trial Session sessionType is "Motion/Hearing"', () => {
+    const CURRENT_LOCATION = {
+      ...TEST_LOCATION,
+    } as RawTrialSession;
+
+    const UPDATED_LOCATION = {
+      ...TEST_LOCATION,
+      sessionType: SESSION_TYPES.motionHearing,
+      address1: 'UPDATE_TEST_ADDRESS_1',
+    } as RawTrialSession;
+
+    const result = shouldGenerateNoticeOfChangeTrialLocation(
+      CURRENT_LOCATION,
+      UPDATED_LOCATION,
+    );
+
+    expect(result).toEqual(false);
   });
 });

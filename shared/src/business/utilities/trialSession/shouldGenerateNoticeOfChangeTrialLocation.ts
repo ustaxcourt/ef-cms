@@ -3,7 +3,10 @@ import {
   TRIAL_SESSION_ADDRESS_PROPERTIES,
   TrialSessionLocationInfo,
 } from '@shared/business/entities/trialSessions/TrialSession';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  SESSION_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { isEqual } from 'lodash';
 
 export function shouldGenerateNoticeOfChangeTrialLocation(
@@ -21,6 +24,12 @@ export function shouldGenerateNoticeOfChangeTrialLocation(
       TRIAL_SESSION_PROCEEDING_TYPES.inPerson ||
     updatedTrialSessionLocation.proceedingType !==
       TRIAL_SESSION_PROCEEDING_TYPES.inPerson
+  )
+    return false;
+
+  if (
+    currentTrialSessionLocation.sessionType === SESSION_TYPES.motionHearing ||
+    updatedTrialSessionLocation.sessionType === SESSION_TYPES.motionHearing
   )
     return false;
 
