@@ -1,7 +1,7 @@
 import { CaseDeadline, RawCaseDeadline } from '../../entities/CaseDeadline';
 
 export const validateCaseDeadlineInteractor = (
-  applicationContext,
+  applicationContext, // eslint-disable-line @typescript-eslint/no-unused-vars
   { caseDeadline }: { caseDeadline: RawCaseDeadline },
 ): Record<string, string> | null => {
   const errors = new CaseDeadline(caseDeadline).getFormattedValidationErrors();
