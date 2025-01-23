@@ -28,12 +28,12 @@ describe('Notes Icon triggered by Judges Notes', () => {
     cy.get('#submit-case').click();
 
     cy.wait('@postPaperCase').then(({ response }) => {
-      if (!response || !response.body?.docketNumber) {
+      if (!response || !response.body?.caseDetail.docketNumber) {
         throw new Error(
           'Unable to get Docket Number from postPaperCase HTTP request',
         );
       }
-      newDocketNumber = response.body?.docketNumber;
+      newDocketNumber = response.body?.caseDetail.docketNumber;
     });
   });
 

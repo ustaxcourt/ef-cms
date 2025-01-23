@@ -365,7 +365,7 @@ const reduce = ImageBlobReduce({
 });
 
 let user;
-let broadcastChannel;
+let broadcastChannel: BroadcastChannel;
 const clientSupportsES2022 = (() => {
   try {
     // Check Object.hasOwn (introduced in ES2022)
@@ -832,7 +832,6 @@ const applicationContext = {
       isInternalUser: User.isInternalUser,
       isLeadCase,
       isPending: DocketEntry.isPending,
-      isPendingOnCreation: DocketEntry.isPendingOnCreation,
       isSealedCase,
       isStringISOFormatted,
       isUserPartOfGroup,
