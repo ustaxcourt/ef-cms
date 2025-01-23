@@ -1,3 +1,4 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { search } from './searchClient';
 
 /**
@@ -11,8 +12,11 @@ import { search } from './searchClient';
 export const getBlockedCases = async ({
   applicationContext,
   trialLocation,
-}) => {
-  const { results } = await search({
+}: {
+  applicationContext: ServerApplicationContext;
+  trialLocation: string;
+}): Promise<any> => {
+  const { results: blockedCaseResults } = await search({
     applicationContext,
     searchParameters: {
       body: {
@@ -52,5 +56,56 @@ export const getBlockedCases = async ({
     },
   });
 
-  return results;
+  const leadDocketNumbers = blockedCaseResults
+    .map(c => c.leadDocketNumber)
+    .filter(docketNumber => docketNumber);
+
+  const { results: consolidatedCaseSearchResults } = await search({
+    applicationContext,
+    searchParameters: {
+      body: {
+        _source: [
+          'automaticBlocked',
+          'automaticBlockedDate',
+          'automaticBlockedReason',
+          'blocked',
+          'blockedDate',
+          'blockedReason',
+          'caseCaption',
+          'docketNumber',
+          'docketNumberSuffix',
+          'docketNumberWithSuffix',
+          'leadDocketNumber',
+          'status',
+          'procedureType',
+        ],
+        query: {
+          bool: {
+            must: [
+              { term: { 'preferredTrialCity.S': trialLocation } },
+            ],
+            should: [
+              {
+                bool: {
+                  should: [
+                    { match: { 'automaticBlocked.BOOL': true } },
+                    { match: { 'blocked.BOOL': true } },
+                  ],
+                },
+              },
+              {
+                terms: {
+                  'leadDocketNumber.S': leadDocketNumbers,
+                },
+              },
+            ],
+          },
+        },
+        size: 5000,
+      },
+      index: 'efcms-case',
+    },
+  });
+
+  return consolidatedCaseSearchResults;
 };
