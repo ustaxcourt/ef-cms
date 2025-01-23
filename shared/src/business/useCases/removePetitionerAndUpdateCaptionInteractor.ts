@@ -7,7 +7,7 @@ import {
 } from '../../authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { deleteCasePetitionerData } from '@web-api/persistence/postgres/cases/parties/deleteCasePetitionerData';
+import { deletePetitionerOnCase } from '@web-api/persistence/postgres/cases/parties/deletePetitionerOnCase';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -87,7 +87,7 @@ export const removePetitionerAndUpdateCaption = async (
       caseToUpdate: caseEntity,
     });
 
-  await deleteCasePetitionerData({
+  await deletePetitionerOnCase({
     contactId: petitionerContactId,
     docketNumber,
   });

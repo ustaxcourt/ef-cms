@@ -8,7 +8,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { createCasePetitionersData } from '@web-api/persistence/postgres/cases/parties/createCasePetitionersData';
+import { createPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/createPetitionersOnCase';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -52,7 +52,7 @@ export const addPetitionerToCase = async (
       caseToUpdate: caseEntity,
     });
 
-  await createCasePetitionersData({
+  await createPetitionersOnCase({
     docketNumber,
     petitioners: [petitionerEntity],
   });

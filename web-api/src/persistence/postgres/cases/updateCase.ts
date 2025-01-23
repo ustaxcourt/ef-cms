@@ -2,8 +2,9 @@ import { CaseStatusChange } from '@shared/business/entities/cases/Case';
 import { convertRawCaseToDbRow } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbWriter } from '@web-api/database';
 import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
-import { upsertCasePetitionersData } from '@web-api/persistence/postgres/cases/parties/upsertCasePetitionersData';
+import { upsertPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/upsertPetitionersOnCase';
 import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
+import { upsertCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/upsertCaseStatistics';
 
 export const updateCase = async ({
   caseToUpdate,
@@ -27,10 +28,17 @@ export const updateCase = async ({
     statusUpdates: caseToUpdate.caseStatusHistory as CaseStatusChange[],
   });
 
-  await upsertCasePetitionersData({
+  await upsertPetitionersOnCase({
     docketNumber: caseToUpdate.docketNumber,
-    petitionersData: caseToUpdate.petitioners.map(p => new Petitioner(p)),
+    petitioners: caseToUpdate.petitioners.map(p => new Petitioner(p)),
   });
+
+  if (caseToUpdate.statistics) {
+    await upsertCaseStatistics({
+      docketNumber: caseToUpdate.docketNumber,
+      statistics: caseToUpdate.statistics,
+    });
+  }
 
   if (!updatedCase) {
     throw new Error('could not update the case');

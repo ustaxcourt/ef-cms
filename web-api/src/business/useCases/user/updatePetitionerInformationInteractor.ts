@@ -22,7 +22,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { defaults, pick } from 'lodash';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCasePetitionerData } from '@web-api/persistence/postgres/cases/parties/updateCasePetitionerData';
+import { updatePetitionerOnCase } from '@web-api/persistence/postgres/cases/parties/updatePetitionerOnCase';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const getIsUserAuthorized = ({
@@ -313,9 +313,9 @@ export const updatePetitionerInformation = async (
     }
   }
 
-  await updateCasePetitionerData({
+  await updatePetitionerOnCase({
     docketNumber: caseEntity.docketNumber,
-    petitionerData: updatedCaseContact,
+    petitioner: updatedCaseContact,
   });
 
   const updatedCase = await applicationContext

@@ -15,7 +15,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '../../errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import { createCasePetitionersData } from '@web-api/persistence/postgres/cases/parties/createCasePetitionersData';
+import { createPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/createPetitionersOnCase';
 import { createCaseStatistic } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistic';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
@@ -290,7 +290,7 @@ export const createCaseFromPaperInteractor = async (
 
   setServiceIndicatorsForPetitionersOnCase(caseToAdd);
 
-  await createCasePetitionersData({
+  await createPetitionersOnCase({
     docketNumber: caseToAdd.docketNumber,
     petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
   });
