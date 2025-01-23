@@ -109,7 +109,6 @@ export const ModalDialog = ({
           aria-modal="true"
           className="modal-screen"
           data-testid={dataTestId}
-          role="dialog"
         >
           <div className={classNames('modal-dialog padding-205', className)}>
             <div className="modal-header grid-container padding-x-0">

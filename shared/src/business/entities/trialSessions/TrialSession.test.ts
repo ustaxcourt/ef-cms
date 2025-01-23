@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { FORMATS, prepareDateFromString } from '../../utilities/DateHandler';
 import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
 import {
@@ -406,14 +405,11 @@ describe('TrialSession entity', () => {
     it(`should be set to the provided trialLocation when sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.locationBased}`, () => {
       const mockTrialLocation = 'Asgard';
 
-      const trialSession = new TrialSession(
-        {
-          ...MOCK_TRIAL_REGULAR,
-          sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
-          trialLocation: mockTrialLocation,
-        },
-        // eslint-disable-next-line max-lines
-      );
+      const trialSession = new TrialSession({
+        ...MOCK_TRIAL_REGULAR,
+        sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+        trialLocation: mockTrialLocation,
+      });
 
       expect(trialSession.trialLocation).toBe(mockTrialLocation);
     });

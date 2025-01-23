@@ -840,7 +840,7 @@ textarea#case-caption {
     padding: 10px 10px 0 10px;
   }
 
-  @media only screen and (max-width: $large-screen - 1px) {
+  @media only screen and (max-width: ($large-screen - 1px)) {
     padding: 10px;
   }
 }

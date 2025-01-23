@@ -58,12 +58,12 @@ export const generateChangeOfAddressHelper = async ({
         applicationContext,
         docketNumber,
       });
-    let caseEntity = new Case(userCase, {
+    const caseEntity = new Case(userCase, {
       authorizedUser,
     });
 
     const practitionerName = updatedName || user.name;
-    const practitionerObject = caseEntity.privatePractitioners
+    const practitionerObject = (caseEntity.privatePractitioners || [])
       .concat(caseEntity.irsPractitioners)
       .find(practitioner => practitioner.userId === user.userId);
 

@@ -1,118 +1,108 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import {
-  DocumentTypeBase,
   getDocumentTypesForSelect,
   getSortFunction,
 } from './internalTypesHelper';
 import { getOptionsForCategory } from './selectDocumentTypeHelper';
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
-
-import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import {
+  EXTERNAL_FILING_EVENTS,
+  ExternalFilingEvent,
+} from '@shared/business/entities/docketEntry/externalFilingEvents';
+import {
+  EXTERNAL_DOCUMENTS_ARRAY,
+  NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
 
 export const completeDocumentTypeSectionHelper = (
   get: Get,
-  applicationContext: ClientApplicationContext,
-): any => {
+): {
+  primary?: any;
+  secondary?: any;
+  documentTypesForSelectSorted?: (ExternalFilingEvent & {
+    label: string;
+    value: string;
+  })[];
+  documentTypesForSecondarySelectSorted?: (ExternalFilingEvent & {
+    label: string;
+    value: string;
+  })[];
+} => {
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
-
-  let returnData: {
-    primary: any;
-    secondary: any;
-    documentTypesForSelect: (DocumentTypeBase & { documentTitle: string })[];
-    documentTypesForSecondarySelect: (DocumentTypeBase & {
-      documentTitle: string;
-    })[];
-    documentTypesForSelectSorted: (DocumentTypeBase & {
-      documentTitle: string;
-    })[];
-    documentTypesForSecondarySelectSorted: (DocumentTypeBase & {
-      documentTitle: string;
-    })[];
-  } = {
-    documentTypesForSecondarySelect: [],
-    documentTypesForSecondarySelectSorted: [],
-    documentTypesForSelect: [],
-    documentTypesForSelectSorted: [],
-    primary: undefined,
-    secondary: undefined,
-  };
-
+  const user = get(state.user);
   if (isEmpty(caseDetail)) {
     return {};
   }
-  const {
-    CATEGORY_MAP,
-    LEGACY_DOCUMENT_TYPES,
-    NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
-    USER_ROLES,
-  } = applicationContext.getConstants();
+
   const searchText = get(state.screenMetadata.searchText) || '';
-  const documentTypesForSelect = getDocumentTypesForSelect<
-    DocumentTypeBase & { documentTitle: string }
-  >(CATEGORY_MAP);
+  const documentTypesForSelect = getDocumentTypesForSelect(
+    EXTERNAL_DOCUMENTS_ARRAY,
+  );
 
-  const documentTypesForSelectFilterFunction = (documentType): boolean => {
-    const legacyDocumentCodes = LEGACY_DOCUMENT_TYPES.map(
-      value => value.eventCode,
-    );
-
-    const currentUser = get(state.user);
-    if (currentUser.role === USER_ROLES.irsPractitioner) {
-      if (
-        Case.isFirstIrsFiling(caseDetail) &&
-        !documentType.canBeFirstIrsDocument
-      )
-        return false;
-
-      if (!Case.isFirstIrsFiling(caseDetail) && documentType.eventCode === 'EA')
-        return false;
-    } else if (documentType.eventCode === 'EA') return false;
-
-    return (
-      !NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.includes(
-        documentType.eventCode,
-      ) && legacyDocumentCodes.indexOf(documentType.eventCode) === -1
-    );
-  };
-
-  returnData.documentTypesForSelectSorted = documentTypesForSelect
+  const documentTypesForSelectSorted = documentTypesForSelect
     .sort(getSortFunction(searchText))
-    .filter(documentType => documentTypesForSelectFilterFunction(documentType))
+    .filter(documentType => {
+      if (documentType?.deprecated) {
+        return false;
+      }
+
+      const currentUser = get(state.user);
+      if (currentUser.role === ROLES.irsPractitioner) {
+        if (
+          Case.isFirstIrsFiling(caseDetail) &&
+          !documentType.canBeFirstIrsDocument
+        )
+          return false;
+
+        if (
+          !Case.isFirstIrsFiling(caseDetail) &&
+          documentType.eventCode === 'EA'
+        )
+          return false;
+      } else if (documentType.eventCode === 'EA') return false;
+
+      return !NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.includes(
+        documentType.eventCode,
+      );
+    })
     .map(documentType => {
       return {
         ...documentType,
         documentTitle:
-          get(state.user).role === USER_ROLES.irsPractitioner &&
+          get(state.user).role === ROLES.irsPractitioner &&
           documentType.eventCode === 'EA'
             ? `${documentType.documentTitle} for Respondent`
             : documentType.documentTitle,
       };
     });
-  returnData.documentTypesForSecondarySelectSorted =
-    returnData.documentTypesForSelectSorted.filter(
+  const documentTypesForSecondarySelectSorted =
+    documentTypesForSelectSorted.filter(
       entry => entry.scenario !== 'Nonstandard H',
     );
 
-  const selectedDocumentCategory = form.category;
+  const selectedDocumentCategory: keyof typeof EXTERNAL_FILING_EVENTS =
+    form.category;
   const selectedDocumentType = form.documentType;
   const categoryInformation = (
-    CATEGORY_MAP[selectedDocumentCategory] || []
+    EXTERNAL_FILING_EVENTS[selectedDocumentCategory] || []
   ).find(entry => entry.documentType === selectedDocumentType);
 
   const selectedDocketEntryId = get(state.docketEntryId);
 
-  returnData.primary = getOptionsForCategory({
-    applicationContext,
+  const primary = getOptionsForCategory({
     caseDetail,
     categoryInformation,
     selectedDocketEntryId,
+    authorizedUser: user,
   });
-  if (returnData.primary.showSecondaryDocumentSelect) {
-    returnData.secondary = {};
-    returnData.primary.showSecondaryDocumentSelect = false;
+  let secondary;
+  if (primary.showSecondaryDocumentSelect) {
+    secondary = {};
+    primary.showSecondaryDocumentSelect = false;
   }
 
   if (form.secondaryDocument) {
@@ -120,18 +110,23 @@ export const completeDocumentTypeSectionHelper = (
     const selectedSecondaryDocumentType = form.secondaryDocument.documentType;
 
     if (selectedSecondaryDocumentCategory && selectedSecondaryDocumentType) {
-      const secondaryCategoryInformation = CATEGORY_MAP[
+      const secondaryCategoryInformation = EXTERNAL_FILING_EVENTS[
         selectedSecondaryDocumentCategory
       ].find(entry => entry.documentType === selectedSecondaryDocumentType);
 
-      returnData.secondary = getOptionsForCategory({
-        applicationContext,
+      secondary = getOptionsForCategory({
         caseDetail,
         categoryInformation: secondaryCategoryInformation,
         selectedDocketEntryId,
+        authorizedUser: user,
       });
     }
   }
 
-  return returnData;
+  return {
+    documentTypesForSecondarySelectSorted,
+    documentTypesForSelectSorted,
+    primary,
+    secondary,
+  };
 };

@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import {
   FORMATS,
   createISODateString,
@@ -86,6 +85,7 @@ export class TrialSession extends JoiValidationEntity {
   public irsCalendarAdministrator?: string;
   public irsCalendarAdministratorInfo?: RawIrsCalendarAdministratorInfo;
   public isCalendared: boolean;
+  public isStartDateWithinNOTTReminderRange?: boolean;
   public joinPhoneNumber?: string;
   public judge?: TJudge;
   public maxCases?: number;
@@ -549,3 +549,20 @@ export class TrialSession extends JoiValidationEntity {
 }
 
 export type RawTrialSession = ExcludeMethods<TrialSession>;
+
+export const TRIAL_SESSION_ADDRESS_PROPERTIES = [
+  'proceedingType',
+  'trialLocation',
+  'courthouseName',
+  'address1',
+  'address2',
+  'city',
+  'state',
+  'postalCode',
+] as const;
+
+type AddressProperties = (typeof TRIAL_SESSION_ADDRESS_PROPERTIES)[number];
+
+export type TrialSessionLocationInfo = {
+  [P in AddressProperties]: RawTrialSession[P];
+};

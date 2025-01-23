@@ -29,7 +29,7 @@ let chunks: any[] = [];
  * This endpoint is hit to know when the streams queue is empty.  An empty queue
  * means everything added to dynamo should have been indexed into elasticsearch.
  */
-localStreamsApp.get('/isDone', (req, res) => {
+localStreamsApp.get('/isDone', (_req, res) => {
   res.send(chunks.length === 0);
 });
 
@@ -55,7 +55,7 @@ localStreamsApp.get('/isDone', (req, res) => {
     readable.pipe(
       new Writable({
         objectMode: true,
-        write: (chunk, encoding, processNextChunk) => {
+        write: (chunk, _encoding, processNextChunk) => {
           chunks.push(chunk);
           processNextChunk();
         },

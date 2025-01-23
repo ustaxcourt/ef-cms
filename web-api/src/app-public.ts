@@ -15,7 +15,7 @@ const applicationContext = createApplicationContext({});
 app.use(cors());
 app.use(json());
 app.use(urlencoded({ extended: true }));
-app.use((req, res, next) => {
+app.use((req, _res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     // we added this to suppress error `Missing x-apigateway-event or x-apigateway-context header(s)` locally
     // aws-serverless-express/middleware plugin is looking for these headers, which are needed on the lambdas
@@ -24,7 +24,7 @@ app.use((req, res, next) => {
   }
   return next();
 });
-app.use(async (req, res, next) => {
+app.use(async (_req, _res, next) => {
   // This code is here so that we have a way to mock out the terminal user
   // via using dynamo locally.  This is only ran locally and on CI/CD which is
   // why we also lazy require some of these packages.  See story 8955 for more info.
@@ -182,7 +182,7 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
 }
 
 /**
- * Trial sessions
+ * Trial Sessions
  */
 {
   app.get(

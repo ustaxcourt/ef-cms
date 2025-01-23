@@ -1,9 +1,10 @@
 import { DocketEntryMapping } from '../../../elasticsearch/index-types';
 import { MAX_SEARCH_CLIENT_RESULTS } from '../../../../shared/src/business/entities/EntityConstants';
-import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { getSealedQuery } from './advancedDocumentSearchHelpers/getSealedQuery';
 import { getSortQuery } from './advancedDocumentSearchHelpers/getSortQuery';
 import { search } from './searchClient';
+import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 const simpleQueryFlags = 'OR|AND|ESCAPE|PHRASE'; // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
 
@@ -23,7 +24,7 @@ export const advancedDocumentSearch = async ({
   sortField,
   startDate,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   caseTitleOrPetitioner?: string;
   docketNumber?: string;
   documentEventCodes: string[];
@@ -60,7 +61,7 @@ export const advancedDocumentSearch = async ({
     'signedJudgeName',
   ];
 
-  const documentMust: QueryDslQueryContainer[] = [];
+  const documentMust: QueryContainer[] = [];
 
   if (keyword) {
     documentMust.push({
@@ -73,7 +74,7 @@ export const advancedDocumentSearch = async ({
     });
   }
 
-  let caseQueryParams: any = {
+  const caseQueryParams: any = {
     has_parent: {
       inner_hits: {
         _source: {
@@ -91,7 +92,7 @@ export const advancedDocumentSearch = async ({
     },
   };
 
-  let documentMustNot: QueryDslQueryContainer[] = [
+  let documentMustNot: QueryContainer[] = [
     { term: { 'isStricken.BOOL': true } },
   ];
   if (omitSealed) {
@@ -133,7 +134,7 @@ export const advancedDocumentSearch = async ({
     ];
   }
 
-  const documentFilter: QueryDslQueryContainer[] = [
+  const documentFilter: QueryContainer[] = [
     { term: { 'entityName.S': 'DocketEntry' } },
     {
       exists: {

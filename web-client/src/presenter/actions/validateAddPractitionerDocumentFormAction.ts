@@ -17,7 +17,7 @@ export const validateAddPractitionerDocumentFormAction = ({
 }: ActionProps) => {
   const form = get(state.form);
 
-  let errors = applicationContext
+  const errors = applicationContext
     .getUseCases()
     .validateAddPractitionerDocumentFormInteractor(applicationContext, form);
 
