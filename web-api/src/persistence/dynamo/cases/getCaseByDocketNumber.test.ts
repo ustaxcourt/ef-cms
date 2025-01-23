@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
@@ -117,14 +118,7 @@ describe('getCaseByDocketNumber', () => {
     });
 
     expect(result).toEqual({
-      archivedCorrespondences: [
-        {
-          archived: true,
-          correspondenceId: 'abc-123',
-          entityName: 'Correspondence',
-          filingDate: '2024-11-06T21:05:08.191Z',
-        },
-      ],
+      archivedCorrespondences: [],
       archivedDocketEntries: [
         {
           archived: true,
@@ -133,18 +127,12 @@ describe('getCaseByDocketNumber', () => {
       ],
       associatedJudge: 'Judge Fieri',
       consolidatedCases: [],
-      correspondence: [
-        {
-          archived: false,
-          correspondenceId: 'abc-124',
-          entityName: 'Correspondence',
-          filingDate: '2024-11-06T21:05:08.191Z',
-        },
-      ],
+      correspondence: [],
       docketEntries: [
         {
           archived: false,
           docketEntryId: 'abc-124',
+          workItem: undefined,
         },
       ],
       docketNumber: '123-20',
