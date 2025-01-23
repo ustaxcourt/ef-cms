@@ -13,7 +13,7 @@ export const createCasePetitionersData = async ({
     writer
       .insertInto('dwPetitionerOnCase')
       .values(
-        petitioners.map(petitionerData => ({
+        petitioners.map((petitionerData, index) => ({
           additionalName: petitionerData.additionalName,
           address1: petitionerData.address1,
           address2: petitionerData.address2,
@@ -39,6 +39,7 @@ export const createCasePetitionersData = async ({
           serviceIndicator: petitionerData.serviceIndicator,
           state: petitionerData.state,
           title: petitionerData.title,
+          orderOnCase: index,
         })),
       )
       .execute(),
