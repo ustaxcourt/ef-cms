@@ -10,6 +10,7 @@ import { getFilerParties } from './getFilerParties';
 import { getSupportingDocumentTypeList } from './addDocketEntryHelper';
 import { showGenerationType } from '@web-client/presenter/actions/setDefaultGenerationTypeAction';
 import { state } from '@web-client/presenter/app.cerebral';
+import { EXTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/externalFilingEvents';
 
 export const supportingDocumentFreeTextTypes = [
   'Affidavit in Support',
@@ -23,14 +24,14 @@ export const fileDocumentHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const { AMENDMENT_EVENT_CODES, CATEGORY_MAP, PARTY_TYPES } =
+  const { AMENDMENT_EVENT_CODES, PARTY_TYPES } =
     applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
   const validationErrors = get(state.validationErrors);
 
   const supportingDocumentTypeList =
-    getSupportingDocumentTypeList(CATEGORY_MAP);
+    getSupportingDocumentTypeList(EXTERNAL_FILING_EVENTS);
 
   const partyValidationError =
     validationErrors.filers || validationErrors.partyIrsPractitioner;
