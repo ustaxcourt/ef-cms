@@ -12,12 +12,11 @@ export const workerLocal: WorkerHandler = async (
 // eslint-disable-next-line @typescript-eslint/require-await
 ): Promise<void> => {
   // Simulate what happens on a deployed environment when a message is sent to SQS.
-  const appContext = applicationContext;
   getLogger().addUser({ user: message.authorizedUser });
   setTimeout(
     async () => {
       try {
-        await workerRouter(appContext, { message });
+        await workerRouter(applicationContext, { message });
       } catch (error) {
         console.error('Worker Local Error: ', error);
       }
