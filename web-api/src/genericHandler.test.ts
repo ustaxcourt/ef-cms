@@ -247,7 +247,7 @@ describe('genericHandler', () => {
 
   describe('checkMaintenanceMode', () => {
     it('should throw an error if maintenance mode is true', async () => {
-      getMaintenanceMode.mockReturnValue({ current: true });
+      getMaintenanceMode.mockResolvedValue({ current: true });
 
       await expect(checkMaintenanceMode()).rejects.toThrow(
         'Maintenance mode is enabled',
@@ -255,13 +255,13 @@ describe('genericHandler', () => {
     });
 
     it('should not throw an error if maintenance mode is false', async () => {
-      getMaintenanceMode.mockReturnValue({ current: false });
+      getMaintenanceMode.mockResolvedValue({ current: false });
 
       await expect(checkMaintenanceMode()).resolves.toBe(false);
     });
 
     it('should NOT throw an error if maintenance mode is undefined', async () => {
-      getMaintenanceMode.mockReturnValue(undefined);
+      getMaintenanceMode.mockResolvedValue(undefined);
 
       await expect(checkMaintenanceMode()).resolves.not.toThrow();
     });
