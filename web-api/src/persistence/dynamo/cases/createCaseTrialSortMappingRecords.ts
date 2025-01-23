@@ -15,11 +15,11 @@ import {
 
 export const createCaseTrialSortMappingRecords = async ({
   applicationContext,
-  // caseSortTags, // 10440 Zach is worried about removing.
+  caseSortTags,
   docketNumber,
 }: {
   applicationContext: IApplicationContext;
-  // caseSortTags: { hybrid: string; nonHybrid: string };
+  caseSortTags: { hybrid: string; nonHybrid: string };
   docketNumber: string;
 }): Promise<void> => {
   const oldSortRecords = await query({
@@ -87,7 +87,8 @@ export const createCaseTrialSortMappingRecords = async ({
   const recordsToAdd: PutRequest[] = [];
 
   casesToUpdate.forEach(c => {
-    const { hybrid, nonHybrid } = generateTrialSortTags(c);
+    const { hybrid, nonHybrid } =
+      c.docketNumber === docketNumber ? caseSortTags : generateTrialSortTags(c);
     recordsToAdd.push({
       PutRequest: {
         Item: {
