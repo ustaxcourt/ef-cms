@@ -15,7 +15,7 @@ export const createCaseTrialSortMappingRecords = async ({
   docketNumber,
 }: {
   applicationContext: IApplicationContext;
-  caseSortTags: any;
+  caseSortTags: { hybrid: string; nonHybrid: string };
   docketNumber: string;
 }) => {
   const { hybrid, nonHybrid } = caseSortTags;
