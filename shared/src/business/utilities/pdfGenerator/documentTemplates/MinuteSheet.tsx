@@ -241,7 +241,8 @@ export const MinuteSheet = ({
 
       {(formattedMinuteSheet.trialBrief.dateSubmitted ||
         formattedMinuteSheet.trialBrief.totalTrialHours ||
-        formattedMinuteSheet.trialBrief.benchOpinionRendered) && (
+        formattedMinuteSheet.trialBrief.benchOpinionRendered ||
+        formattedMinuteSheet.trialBrief.briefDetails.length > 0) && (
         <>
           <hr />
           <div className="minute-sheet-section">
@@ -262,6 +263,33 @@ export const MinuteSheet = ({
               </>
             )}
           </div>
+          {formattedMinuteSheet.trialBrief.benchOpinionRendered && (
+            <div>
+              <div>
+                <strong>Bench opinion rendered</strong>
+              </div>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: formattedMinuteSheet.trialBrief.benchOpinionRendered,
+                }}
+              />
+            </div>
+          )}
+          {formattedMinuteSheet.trialBrief.briefDetails.length > 0 && (
+            <div>
+              <div>
+                <strong>{formattedMinuteSheet.trialBrief.briefType}</strong>
+              </div>
+              {formattedMinuteSheet.trialBrief.briefDetails.map(
+                (briefDetail, index) => (
+                  <div
+                    dangerouslySetInnerHTML={{ __html: briefDetail }}
+                    key={index}
+                  />
+                ),
+              )}
+            </div>
+          )}
         </>
       )}
 

@@ -1,9 +1,10 @@
-import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
-import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
+  BRIEF_SUBTYPE,
   MINUTE_SHEET_FORM_SECTION_MAP,
   SimultaneousMemorandumFormFields,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
+import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { OnChangeHandler } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import React from 'react';
 
@@ -17,9 +18,9 @@ export const SimultaneousMemorandumFormFieldset = ({
   simultaneousMemorandumFormState: SimultaneousMemorandumFormFields;
 }) => {
   const rowsConfig = [
-    { key: 'opening', rowLabel: 'Opening' },
-    { key: 'answering', rowLabel: 'Answering' },
-    { key: 'surReply', rowLabel: 'Sur-reply' },
+    { key: 'opening', rowLabel: BRIEF_SUBTYPE.opening },
+    { key: 'answering', rowLabel: BRIEF_SUBTYPE.answering },
+    { key: 'surReply', rowLabel: BRIEF_SUBTYPE.surReply },
   ];
 
   return (

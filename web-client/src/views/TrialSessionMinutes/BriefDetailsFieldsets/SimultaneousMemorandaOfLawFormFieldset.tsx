@@ -1,9 +1,10 @@
-import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
-import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
+  BRIEF_SUBTYPE,
   MINUTE_SHEET_FORM_SECTION_MAP,
   SimultaneousMemorandaOfLawFormFields,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
+import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { OnChangeHandler } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import React from 'react';
 
@@ -17,8 +18,8 @@ export const SimultaneousMemorandaOfLawFormFieldset = ({
   simultaneousMemorandaOfLawFormState: SimultaneousMemorandaOfLawFormFields;
 }) => {
   const rowsConfig = [
-    { key: 'memoranda', rowLabel: 'Memoranda' },
-    { key: 'answering', rowLabel: 'Answering' },
+    { key: 'memoranda', rowLabel: BRIEF_SUBTYPE.memoranda },
+    { key: 'answering', rowLabel: BRIEF_SUBTYPE.answering },
   ];
 
   return (

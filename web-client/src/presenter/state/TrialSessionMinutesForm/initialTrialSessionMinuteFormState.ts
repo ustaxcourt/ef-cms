@@ -413,3 +413,12 @@ export const PARTY_TYPE_OPTIONS_MAP = {
   respondent: 'Respondent',
 } as const;
 type PartyTypeOptions = keyof typeof PARTY_TYPE_OPTIONS_MAP;
+
+export const BRIEF_SUBTYPE = {
+  answering: 'Answering',
+  memoranda: 'Memoranda',
+  opening: 'Opening',
+  reply: 'Reply',
+  simultaneousSupplemental: '',
+  surReply: 'Sur-reply',
+} as const;

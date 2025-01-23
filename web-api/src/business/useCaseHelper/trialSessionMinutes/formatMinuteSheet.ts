@@ -2,6 +2,7 @@ import {
   ACTION_DOCUMENT_TYPE_OPTIONS,
   ACTION_FILED_BY_OPTIONS,
   ACTION_STATUS_OPTIONS,
+  BRIEF_SUBTYPE,
   BriefDetailsType,
   EXHIBIT_STATUS_OPTIONS,
   ExhibitStatusOption,
@@ -70,19 +71,36 @@ type FormattedRow = {
 };
 
 export const getBriefDetails = (briefDetails: BriefDetailsType) => {
-  // 10419 TODO Handle Simultaneous Supplemental Brief
-  // 10419 TODO Casing of briefSubtype isn't quite right
+  const sortOrder = {
+    answering: 2,
+    memoranda: 1,
+    opening: 0,
+    reply: 3,
+    surReply: 4,
+  };
+
   const briefSubtypes = Object.keys(briefDetails);
-  return briefSubtypes.map(briefSubtype => {
-    const briefDetail = briefDetails[briefSubtype];
-    return [
-      `${briefSubtype} - ${briefDetail.partyType}`,
-      `Due ${formatDateString(briefDetail.dueDate, FORMATS.MMDDYYYY)}`,
-      `${briefDetail.note ? `<em>${briefDetail.note}</em>` : ''}`,
-    ]
-      .filter(Boolean)
-      .join('; ');
-  });
+  const result = briefSubtypes
+    .sort((a, b) => sortOrder[a] - sortOrder[b])
+    .map(briefSubtype => {
+      const briefDetail = briefDetails[briefSubtype];
+      let stringSubtype = [
+        briefDetail.partyType ? briefDetail.partyType : '',
+        briefDetail.dueDate
+          ? `Due ${formatDateString(briefDetail.dueDate, FORMATS.MMDDYYYY)}`
+          : '',
+        briefDetail.note ? `<em>${briefDetail.note}</em>` : '',
+      ]
+        .filter(stringBriefSubtype => !!stringBriefSubtype)
+        .join('; ');
+      stringSubtype = [BRIEF_SUBTYPE[briefSubtype], stringSubtype]
+        .filter(thing => !!thing)
+        .join(' - ');
+      return stringSubtype;
+    })
+    .filter(stringSubtype => !!stringSubtype);
+
+  return result;
 };
 
 export const getConsolidatedDocketNumbers = (aCase: RawCase): string => {
@@ -255,7 +273,7 @@ export const formatActionsAndFilings = (
 export const formatTrialBrief = (
   trialBriefSection: MinuteSheetFormState['trialBriefSection'],
 ) => {
-  return {
+  const result = {
     benchOpinionRendered: trialBriefSection.dateBenchOpinionRendered
       ? [
           formatDateString(
@@ -277,6 +295,10 @@ export const formatTrialBrief = (
       ? `${trialBriefSection.totalTrialHours}`
       : '',
   };
+
+  console.log('result of formatTrialBrief', result);
+
+  return result;
 };
 
 export const formatPretrialConference = (section: any): string => {
