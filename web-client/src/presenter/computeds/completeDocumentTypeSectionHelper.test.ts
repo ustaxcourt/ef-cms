@@ -55,7 +55,7 @@ describe('completeDocumentTypeSectionHelper', () => {
 
     const { category, documentType } = EXTERNAL_FILING_EVENTS[categoryKey].find(
       document => document.documentType === 'Motion for Leave to File',
-    );
+    )!;
 
     const result = runCompute(completeDocumentTypeSectionHelper, {
       state: {
@@ -101,7 +101,7 @@ describe('completeDocumentTypeSectionHelper', () => {
 
     expect(result.primary).toBeTruthy();
     expect(result.documentTypesForSelectSorted).toBeDefined();
-    expect(result.documentTypesForSelectSorted.length).toBeGreaterThan(0);
+    expect(result.documentTypesForSelectSorted!.length).toBeGreaterThan(0);
     expect(result.documentTypesForSelectSorted).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -137,7 +137,7 @@ describe('completeDocumentTypeSectionHelper', () => {
 
     expect(result.primary).toBeTruthy();
     expect(result.documentTypesForSelectSorted).toBeDefined();
-    expect(result.documentTypesForSelectSorted.length).toBeGreaterThan(0);
+    expect(result.documentTypesForSelectSorted!.length).toBeGreaterThan(0);
     expect(result.documentTypesForSelectSorted).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -165,9 +165,9 @@ describe('completeDocumentTypeSectionHelper', () => {
 
     expect(result.primary).toBeTruthy();
     expect(result.documentTypesForSelectSorted).toBeDefined();
-    expect(result.documentTypesForSelectSorted.length).toBeGreaterThan(0);
+    expect(result.documentTypesForSelectSorted!.length).toBeGreaterThan(0);
     expect(
-      result.documentTypesForSelectSorted.every(
+      result.documentTypesForSelectSorted!.every(
         entry => entry.canBeFirstIrsDocument === true,
       ),
     ).toBeTruthy();
@@ -191,7 +191,7 @@ describe('completeDocumentTypeSectionHelper', () => {
 
     expect(result.primary).toBeTruthy();
     expect(result.documentTypesForSelectSorted).toBeDefined();
-    expect(result.documentTypesForSelectSorted.length).toBeGreaterThan(0);
+    expect(result.documentTypesForSelectSorted!.length).toBeGreaterThan(0);
     expect(result.documentTypesForSelectSorted).not.toEqual(
       expect.arrayContaining([expect.objectContaining({ eventCode: 'EA' })]),
     );
@@ -211,7 +211,7 @@ describe('completeDocumentTypeSectionHelper', () => {
 
     expect(result.primary).toBeTruthy();
     expect(result.documentTypesForSelectSorted).toBeDefined();
-    expect(result.documentTypesForSelectSorted.length).toBeGreaterThan(0);
+    expect(result.documentTypesForSelectSorted!.length).toBeGreaterThan(0);
     expect(result.documentTypesForSelectSorted).not.toEqual(
       expect.arrayContaining([expect.objectContaining({ eventCode: 'EA' })]),
     );
