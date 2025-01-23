@@ -1,6 +1,6 @@
 import { getDbWriter } from '@web-api/database';
 
-export const deleteCasePetitionerData = async ({
+export const deletePetitionerOnCase = async ({
   contactId,
   docketNumber,
 }: {

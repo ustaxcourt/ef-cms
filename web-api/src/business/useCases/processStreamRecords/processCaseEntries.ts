@@ -32,4 +32,5 @@ export const processCaseEntries = async ({
   }
 
   await upsertCases(Object.values(casesToUpsert));
+  // 10502 TODO: upsert petitioners, practitioners, case status history, statistics
 };

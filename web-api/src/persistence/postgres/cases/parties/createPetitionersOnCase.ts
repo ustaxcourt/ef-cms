@@ -2,7 +2,7 @@ import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import { getDbWriter } from '@web-api/database';
 import { getUniqueId } from '@shared/sharedAppContext';
 
-export const createCasePetitionersData = async ({
+export const createPetitionersOnCase = async ({
   docketNumber,
   petitioners,
 }: {

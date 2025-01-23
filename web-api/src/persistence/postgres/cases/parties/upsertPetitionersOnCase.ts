@@ -1,18 +1,18 @@
 import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import { getDbWriter } from '@web-api/database';
 
-export const upsertCasePetitionersData = async ({
+export const upsertPetitionersOnCase = async ({
   docketNumber,
-  petitionersData,
+  petitioners,
 }: {
   docketNumber: string;
-  petitionersData: Petitioner[];
+  petitioners: Petitioner[];
 }) => {
   await getDbWriter(writer =>
     writer
       .insertInto('dwPetitionerOnCase')
       .values(
-        petitionersData.map((p, index) => ({
+        petitioners.map((p, index) => ({
           additionalName: p.additionalName,
           address1: p.address1,
           address2: p.address2,
