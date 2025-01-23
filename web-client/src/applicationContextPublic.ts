@@ -171,7 +171,7 @@ let forceRefreshCallback: () => {};
 
 const applicationContextPublic = {
   getBaseUrl: () => {
-    return process.env.API_URL || 'http://localhost:5000';
+    return process.env.API_URL || 'http://localhost:4001';
   },
   getCaseTitle: Case.getCaseTitle,
   getConstants: () => frozenConstants,
