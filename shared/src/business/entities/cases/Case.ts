@@ -1889,14 +1889,10 @@ export class Case extends JoiValidationEntity {
     return this.status === CASE_STATUS_TYPES.calendared;
   }
 
-  /**
-   * returns true if the case status is ready for trial
-   * @returns {boolean} if the case is calendared
-   */
-  isReadyForTrial() {
+  isReadyForTrial(): boolean {
     return (
       this.status === CASE_STATUS_TYPES.generalDocketReadyForTrial &&
-      this.preferredTrialCity &&
+      !!this.preferredTrialCity &&
       !this.blocked &&
       !this.automaticBlocked
     );
