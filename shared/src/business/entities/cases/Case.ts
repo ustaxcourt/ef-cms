@@ -32,6 +32,8 @@ import {
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import {
+  CASE_AUTOMATIC_BLOCKED_RULE,
+  CASE_BLOCKED_RULE,
   CASE_CAPTION_RULE,
   CASE_DOCKET_NUMBER_RULE,
   CASE_IRS_PRACTITIONERS_RULE,
@@ -75,6 +77,7 @@ import { compareStrings } from '../../utilities/sortFunctions';
 import { getDocketNumberSuffix } from '../../utilities/getDocketNumberSuffix';
 import { shouldGenerateDocketRecordIndex } from '../../utilities/shouldGenerateDocketRecordIndex';
 import joi from 'joi';
+import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 
 export class Case extends JoiValidationEntity {
   public associatedJudge?: string;
@@ -400,12 +403,7 @@ export class Case extends JoiValidationEntity {
         then: JoiValidationConstants.UUID.optional(),
       })
       .description('Judge ID assigned to this case.'),
-    automaticBlocked: joi
-      .boolean()
-      .optional()
-      .description(
-        'Temporarily blocked from trial due to a pending item or due date.',
-      ),
+    automaticBlocked: CASE_AUTOMATIC_BLOCKED_RULE,
     automaticBlockedDate: JoiValidationConstants.ISO_DATE.when(
       'automaticBlocked',
       {
@@ -423,16 +421,7 @@ export class Case extends JoiValidationEntity {
         otherwise: joi.optional().allow(null),
         then: joi.required(),
       }),
-    blocked: joi
-      .boolean()
-      .optional()
-      .meta({ tags: ['Restricted'] })
-      .when('status', {
-        is: CASE_STATUS_TYPES.calendared,
-        otherwise: joi.optional(),
-        then: joi.invalid(true),
-      })
-      .description('Temporarily blocked from trial.'),
+    blocked: CASE_BLOCKED_RULE,
     blockedDate: JoiValidationConstants.ISO_DATE.when('blocked', {
       is: true,
       otherwise: joi.optional().allow(null),
@@ -1401,7 +1390,11 @@ export class Case extends JoiValidationEntity {
    * @param {object} caseDeadlines - the case deadlines
    * @returns {Case} the updated case entity
    */
-  updateAutomaticBlocked({ caseDeadlines }) {
+  updateAutomaticBlocked({
+    caseDeadlines,
+  }: {
+    caseDeadlines?: RawCaseDeadline[];
+  }) {
     const hasPendingItems = this.doesHavePendingItems();
     let automaticBlockedReason;
     if (hasPendingItems && !isEmpty(caseDeadlines)) {
@@ -1420,6 +1413,13 @@ export class Case extends JoiValidationEntity {
       this.automaticBlockedDate = undefined;
       this.automaticBlockedReason = undefined;
     }
+
+    this.consolidatedCases.forEach(c => {
+      if (c.docketNumber === this.docketNumber) {
+        c.automaticBlocked = this.automaticBlocked;
+      }
+    });
+
     return this;
   }
 
@@ -1771,10 +1771,10 @@ export class Case extends JoiValidationEntity {
   }
 
   generateTrialSortTags(): {
-    hybrid: string,
-    nonHybrid: string,
+    hybrid: string;
+    nonHybrid: string;
   } {
-    return generateTrialSortTags(this)
+    return generateTrialSortTags(this);
   }
 
   /**
@@ -1859,6 +1859,11 @@ export class Case extends JoiValidationEntity {
     this.blocked = true;
     this.blockedReason = blockedReason;
     this.blockedDate = createISODateString();
+    this.consolidatedCases.forEach(c => {
+      if (c.docketNumber === this.docketNumber) {
+        c.blocked = true;
+      }
+    });
     return this;
   }
 
@@ -1870,6 +1875,11 @@ export class Case extends JoiValidationEntity {
     this.blocked = false;
     this.blockedReason = undefined;
     this.blockedDate = undefined;
+    this.consolidatedCases.forEach(c => {
+      if (c.docketNumber === this.docketNumber) {
+        c.blocked = false;
+      }
+    });
     return this;
   }
 
@@ -2079,8 +2089,8 @@ export const generateTrialSortTags = function ({
   procedureType: string;
   receivedAt: string;
 }): {
-  hybrid: string,
-  nonHybrid: string,
+  hybrid: string;
+  nonHybrid: string;
 } {
   const caseProcedureSymbol =
     procedureType.toLowerCase() === 'regular' ? 'R' : 'S';
