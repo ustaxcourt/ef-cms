@@ -2407,14 +2407,14 @@ button.change-scanner-button {
 
 .button-container {
   display: flex;
-  flex-direction: column;
+  width: fit-content;
+  flex-flow: column nowrap;
   align-items: center;
-  justify-content: center;
 
-  @media (max-width: ($medium-screen - 1px)) {
-    > * {
-      margin-inline: 0;
-    }
+  .usa-button {
+    width: fit-content;
+    flex: 0 0 auto;
+    margin-right: 1rem;
   }
 
   @media (min-width: $medium-screen) {
