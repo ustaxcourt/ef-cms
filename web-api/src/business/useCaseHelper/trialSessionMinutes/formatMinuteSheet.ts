@@ -258,12 +258,16 @@ export const formatActionsAndFilings = (
           ACTION_DOCUMENT_TYPE_OPTIONS[action.documentType]
             ? `${ACTION_DOCUMENT_TYPE_OPTIONS[action.documentType]}`
             : '',
-          action.note ? `<em>${action.note}</em>` : '',
+          [
+            action.oralMotion ? 'Oral Motion ' : '',
+            action.note ? `<em>${action.note}</em>` : '',
+          ].join(''),
         ]
           .filter(substring => !!substring)
           .join(' - '),
         ACTION_FILED_BY_OPTIONS[action.filedBy],
         ACTION_STATUS_OPTIONS[action.status],
+        MOTION_OBJECTION_OPTIONS[action.objection],
       ]
         .filter(substring => !!substring)
         .join('; '),

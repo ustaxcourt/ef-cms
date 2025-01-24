@@ -215,6 +215,8 @@ const getPendingItemsFromCase = ({
     filedBy: '',
     isOnDocketRecord: false,
     note: '',
+    objection: '',
+    oralMotion: false,
     renderKey,
     status: '',
   };

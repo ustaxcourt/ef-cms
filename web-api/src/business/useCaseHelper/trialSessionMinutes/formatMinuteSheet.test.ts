@@ -486,6 +486,7 @@ describe('formatMinuteSheet', () => {
             isOnDocketRecord: true,
             note: 'test note',
             objection: '',
+            oralMotion: false,
             renderKey: '1',
             status: 'filed' as keyof typeof ACTION_STATUS_OPTIONS,
           },
@@ -509,6 +510,8 @@ describe('formatMinuteSheet', () => {
             filedBy: 'petitioner',
             isOnDocketRecord: true,
             note: '',
+            objection: '',
+            oralMotion: false,
             renderKey: '1',
             status: 'filed',
           },
@@ -532,6 +535,8 @@ describe('formatMinuteSheet', () => {
             filedBy: '',
             isOnDocketRecord: false,
             note: '',
+            objection: '',
+            oralMotion: false,
             renderKey: '1',
             status: '',
           },
@@ -539,6 +544,58 @@ describe('formatMinuteSheet', () => {
       } as MinuteSheetFormState['actionsAndFilingsSection'];
       const result = formatActionsAndFilings(section);
       expect(result).toEqual([]);
+    });
+
+    it('should format an oral motion correctly', () => {
+      const section = {
+        actionsAndFilings: {
+          '1': {
+            date: '2023-01-15',
+            documentType: 'motion',
+            filedBy: 'petitioner',
+            isOnDocketRecord: true,
+            note: 'test note',
+            objection: '',
+            oralMotion: true,
+            renderKey: '1',
+            status: 'filed',
+          },
+        },
+      } as MinuteSheetFormState['actionsAndFilingsSection'];
+      const result = formatActionsAndFilings(section);
+      expect(result).toEqual([
+        {
+          content:
+            '01/15/2023; Motion - Oral Motion <em>test note</em>; Petitioner; Filed',
+          renderKey: '1',
+        },
+      ]);
+    });
+
+    it('should format an objection correctly', () => {
+      const section = {
+        actionsAndFilings: {
+          '1': {
+            date: '2023-01-15',
+            documentType: 'motion',
+            filedBy: 'petitioner',
+            isOnDocketRecord: true,
+            note: 'test note',
+            objection: 'noObjection',
+            oralMotion: false,
+            renderKey: '1',
+            status: 'filed',
+          },
+        },
+      } as MinuteSheetFormState['actionsAndFilingsSection'];
+      const result = formatActionsAndFilings(section);
+      expect(result).toEqual([
+        {
+          content:
+            '01/15/2023; Motion - <em>test note</em>; Petitioner; Filed; No Objection',
+          renderKey: '1',
+        },
+      ]);
     });
   });
 

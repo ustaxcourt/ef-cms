@@ -29,6 +29,8 @@ type ActionFilingFormFields = {
   status: ActionStatusOption | '';
   note: string;
   isOnDocketRecord: boolean;
+  oralMotion: boolean;
+  objection: string;
 };
 
 export type KeyedActionFilingFormFields = KeyedEntry & ActionFilingFormFields;
