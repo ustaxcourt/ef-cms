@@ -1,40 +1,17 @@
-import { ServerApplicationContext } from '@web-api/applicationContext';
+import { applicationContext } from '@web-api/applicationContext';
 import { search } from './searchClient';
+import { Case } from '@shared/business/entities/cases/Case';
 
-/**
- * getBlockedCases
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.trialLocation the preferredTrialLocation to filter the blocked cases by
- * @returns {object} the case data
- */
 export const getBlockedCases = async ({
-  applicationContext,
   trialLocation,
 }: {
-  applicationContext: ServerApplicationContext;
   trialLocation: string;
-}): Promise<any> => {
+}): Promise<BlockedCasesResponse> => {
   const { results: blockedCaseResults } = await search({
     applicationContext,
     searchParameters: {
       body: {
-        _source: [
-          'automaticBlocked',
-          'automaticBlockedDate',
-          'automaticBlockedReason',
-          'blocked',
-          'blockedDate',
-          'blockedReason',
-          'caseCaption',
-          'docketNumber',
-          'docketNumberSuffix',
-          'docketNumberWithSuffix',
-          'leadDocketNumber',
-          'status',
-          'procedureType',
-        ],
+        _source: source as unknown as string[],
         query: {
           bool: {
             must: [
@@ -64,44 +41,36 @@ export const getBlockedCases = async ({
     applicationContext,
     searchParameters: {
       body: {
-        _source: [
-          'automaticBlocked',
-          'automaticBlockedDate',
-          'automaticBlockedReason',
-          'blocked',
-          'blockedDate',
-          'blockedReason',
-          'caseCaption',
-          'docketNumber',
-          'docketNumberSuffix',
-          'docketNumberWithSuffix',
-          'leadDocketNumber',
-          'status',
-          'procedureType',
-        ],
+        _source: source as unknown as string[],
         query: {
           bool: {
             must: [
               { term: { 'preferredTrialCity.S': trialLocation } },
-            ],
-            should: [
               {
                 bool: {
                   should: [
-                    { match: { 'automaticBlocked.BOOL': true } },
-                    { match: { 'blocked.BOOL': true } },
+                    {
+                      terms: {
+                        'leadDocketNumber.S': leadDocketNumbers, // Are you in a consolidated group with a blocked case
+                      },
+                    },
+                    {
+                      match: {
+                        'automaticBlocked.BOOL': true,
+                      },
+                    },
+                    {
+                      match: {
+                        'blocked.BOOL': true,
+                      },
+                    },
                   ],
-                },
-              },
-              {
-                terms: {
-                  'leadDocketNumber.S': leadDocketNumbers,
                 },
               },
             ],
           },
         },
-        size: 5000,
+        size: 10000,
       },
       index: 'efcms-case',
     },
@@ -109,3 +78,21 @@ export const getBlockedCases = async ({
 
   return consolidatedCaseSearchResults;
 };
+
+const source = [
+  'automaticBlocked',
+  'automaticBlockedDate',
+  'automaticBlockedReason',
+  'blocked',
+  'blockedDate',
+  'blockedReason',
+  'caseCaption',
+  'docketNumber',
+  'docketNumberSuffix',
+  'docketNumberWithSuffix',
+  'leadDocketNumber',
+  'status',
+  'procedureType',
+] as const;
+
+export type BlockedCasesResponse = Pick<Case, (typeof source)[number]>[];
