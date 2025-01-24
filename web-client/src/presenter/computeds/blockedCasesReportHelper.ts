@@ -59,6 +59,12 @@ export const blockedCasesReportHelper = (
         blockedDateEarliest,
       };
     })
+    .map(blockedCase => {
+      if (!blockedCase.blocked && !blockedCase.automaticBlocked) {
+        blockedCase.blockedReason = 'Grouped with blocked case';
+      }
+      return blockedCase;
+    })
     .filter(blockedCase => {
       return procedureTypeFilter && procedureTypeFilter !== 'All'
         ? blockedCase.procedureType === procedureTypeFilter

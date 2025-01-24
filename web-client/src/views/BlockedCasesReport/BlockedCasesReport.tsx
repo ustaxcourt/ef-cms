@@ -4,13 +4,14 @@ import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ErrorNotification } from '../ErrorNotification';
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
-import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SelectCriteria } from './SelectCriteria';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { download, generateCsv, mkConfig } from 'export-to-csv';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
+import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
+import classNames from 'classnames';
 
 export const BlockedCasesReport = connect(
   {
@@ -108,25 +109,23 @@ export const BlockedCasesReport = connect(
                               key={item.docketNumber}
                             >
                               <td className="consolidated-case-column">
-                                {item.inConsolidatedGroup && (
-                                  <span
-                                    className="fa-layers fa-fw"
-                                    title={item.consolidatedIconTooltipText}
-                                  >
-                                    <Icon
-                                      aria-label={
-                                        item.consolidatedIconTooltipText
-                                      }
-                                      className="fa-icon-blue"
-                                      icon="copy"
-                                    />
-                                    {item.isLeadCase && (
-                                      <span className="fa-inverse lead-case-icon-text">
-                                        L
-                                      </span>
-                                    )}
-                                  </span>
-                                )}
+                                <span
+                                  className={classNames({
+                                    'margin-left-2':
+                                      item.inConsolidatedGroup &&
+                                      !item.isLeadCase,
+                                  })}
+                                >
+                                  <ConsolidatedCaseIcon
+                                    consolidatedIconTooltipText={
+                                      item.consolidatedIconTooltipText
+                                    }
+                                    inConsolidatedGroup={
+                                      item.inConsolidatedGroup
+                                    }
+                                    showLeadCaseIcon={item.isLeadCase}
+                                  />
+                                </span>
                               </td>
                               <td>
                                 <CaseLink formattedCase={item} />
