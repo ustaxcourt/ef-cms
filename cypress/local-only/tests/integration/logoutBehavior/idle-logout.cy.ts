@@ -55,7 +55,7 @@ describe('Idle Logout Behavior', () => {
     cy.puppeteer('closeTab', newTabUrl);
   });
 
-  it.only('should sign out of all tabs after idle', () => {
+  it('should sign out of all tabs after idle', () => {
     // Note that throughout this test, we interact with the first tab via cypress
     // and all other tabs through the puppeteer plugin. Mixing this up will cause errors.
     const sessionTimeout = 15000;
