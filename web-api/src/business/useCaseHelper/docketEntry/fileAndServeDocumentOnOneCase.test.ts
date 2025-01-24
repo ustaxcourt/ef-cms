@@ -1,3 +1,5 @@
+/* eslint-disable max-lines */
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   AUTOMATIC_BLOCKED_REASONS,
   COURT_ISSUED_EVENT_CODES,
@@ -21,12 +23,14 @@ import {
 } from '../../../../../shared/src/test/mockUsers';
 import { fileAndServeDocumentOnOneCase } from './fileAndServeDocumentOnOneCase';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 describe('fileAndServeDocumentOnOneCase', () => {
   let mockCaseEntity;
   let mockWorkItem;
   let mockDocketEntry;
 
+  const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const mockDocketEntryId = '85a5b1c81eed44b6932a967af060597a';
   const differentDocketNumber = '3875-32';
   const docketEntriesWithCaseClosingEventCodes =
@@ -39,7 +43,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
         {
           docketEntryId: mockDocketEntryId,
           docketNumber: MOCK_CASE.docketNumber,
-          documentType: eventCodeMap.documentType,
+          documentType: eventCodeMap?.documentType,
           eventCode,
           filedByRole: ROLES.judge,
           signedAt: createISODateString(),
@@ -238,10 +242,9 @@ describe('fileAndServeDocumentOnOneCase', () => {
       user: docketClerkUser,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-        .workItem.leadDocketNumber,
-    ).toBe(MOCK_CASE.docketNumber);
+    expect(upsertWorkItems.mock.calls[0][0].workItems[0].leadDocketNumber).toBe(
+      MOCK_CASE.docketNumber,
+    );
   });
 
   it('should assign the docketEntry`s work item to the provided user', async () => {
@@ -358,23 +361,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
       user: docketClerkUser,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
-  });
-
-  it('should make a call to put the docketEntry`s work item in the user`s outbox', async () => {
-    await fileAndServeDocumentOnOneCase({
-      applicationContext,
-      caseEntity: mockCaseEntity,
-      docketEntryEntity: mockDocketEntry,
-      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
-      user: docketClerkUser,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
-    ).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalled();
   });
 
   it('should pass the caseEntity`s trialDate and trialLocation to the docketEntry`s work item when they exist', async () => {
