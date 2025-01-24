@@ -111,7 +111,7 @@ describe('workQueueHelper', () => {
   });
 
   it('should set workQueueTitle to a capitalized section specific title when the user is caseServicesSupervisor and workQueueToDisplay.section exists', () => {
-    let result = runCompute(workQueueHelper, {
+    const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(caseServicesSupervisorUser),
         selectedWorkItems: [],
@@ -127,7 +127,7 @@ describe('workQueueHelper', () => {
   });
 
   it('should set workQueueTitle to "My Document QC" when the user is caseServicesSupervisor and workQueueToDisplay.section does not exist', () => {
-    let result = runCompute(workQueueHelper, {
+    const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(caseServicesSupervisorUser),
         selectedWorkItems: [],

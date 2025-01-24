@@ -5,7 +5,7 @@ import { retryAsyncRequestSequence } from './retryAsyncRequestSequence';
 
 describe('retryAsyncRequestSequence', () => {
   let cerebralTest;
-  let mockMessage = {
+  const mockMessage = {
     originalRequest: {
       foo: 'bar',
     },

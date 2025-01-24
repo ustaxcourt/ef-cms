@@ -1,17 +1,9 @@
-import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
+import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl';
+import { CASE_INVENTORY_PRINT_REPORT_MAX_SIZE } from '@shared/business/entities/EntityConstants';
 import { search } from './searchClient';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { Search_Request } from '@opensearch-project/opensearch/api';
 
-/**
- * getCaseInventoryReport
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.associatedJudge the optional judge filter
- * @param {number} providers.from the item index to start from
- * @param {number} providers.pageSize the number of items to retrieve
- * @param {string} providers.status the optional status filter
- * @returns {object} the items found and the total count
- */
 export const getCaseInventoryReport = async ({
   applicationContext,
   associatedJudge,
@@ -19,7 +11,7 @@ export const getCaseInventoryReport = async ({
   pageSize,
   status,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   associatedJudge?: string;
   from?: number;
   pageSize?: number;
@@ -37,19 +29,17 @@ export const getCaseInventoryReport = async ({
     'leadDocketNumber',
     'status',
   ];
-  const { CASE_INVENTORY_MAX_PAGE_SIZE } = applicationContext.getConstants();
-  const size =
-    pageSize && pageSize <= CASE_INVENTORY_MAX_PAGE_SIZE
-      ? pageSize
-      : CASE_INVENTORY_MAX_PAGE_SIZE;
+  const size = pageSize || CASE_INVENTORY_PRINT_REPORT_MAX_SIZE;
 
-  const searchParameters = {
+  const must: QueryContainer[] = [];
+
+  const searchParameters: Search_Request = {
     body: {
       _source: source,
       from,
       query: {
         bool: {
-          must: [] as QueryDslQueryContainer[],
+          must,
           must_not: [
             {
               term: { 'status.S': 'Closed' },
@@ -68,13 +58,13 @@ export const getCaseInventoryReport = async ({
   };
 
   if (associatedJudge) {
-    searchParameters.body.query!.bool!.must.push({
+    must.push({
       match_phrase: { 'associatedJudge.S': associatedJudge },
     });
   }
 
   if (status) {
-    searchParameters.body.query.bool.must.push({
+    must.push({
       term: { 'status.S': status },
     });
   }
@@ -84,8 +74,5 @@ export const getCaseInventoryReport = async ({
     searchParameters,
   });
 
-  return {
-    foundCases: results,
-    totalCount: total,
-  };
+  return { foundCases: results, totalCount: total };
 };

@@ -213,7 +213,7 @@ describe('createProspectiveTrialSessions', () => {
       const indexOfMockLowVolumeCityString = TRIAL_CITY_STRINGS.length - 2;
       const mockLowVolumeCityString =
         TRIAL_CITY_STRINGS[indexOfMockLowVolumeCityString];
-      let mockTrialCitiesFromLastTwoTerms = [...TRIAL_CITY_STRINGS];
+      const mockTrialCitiesFromLastTwoTerms = [...TRIAL_CITY_STRINGS];
       mockTrialCitiesFromLastTwoTerms.splice(indexOfMockLowVolumeCityString, 1);
 
       const mockCases = [
@@ -274,7 +274,7 @@ describe('createProspectiveTrialSessions', () => {
       const indexOfMockLowVolumeCityString = TRIAL_CITY_STRINGS.length - 2;
       const mockLowVolumeCityString =
         TRIAL_CITY_STRINGS[indexOfMockLowVolumeCityString];
-      let mockTrialCitiesFromLastTwoTerms = [...TRIAL_CITY_STRINGS];
+      const mockTrialCitiesFromLastTwoTerms = [...TRIAL_CITY_STRINGS];
       mockTrialCitiesFromLastTwoTerms.splice(indexOfMockLowVolumeCityString, 1);
 
       const mockCases = [
@@ -335,7 +335,7 @@ describe('createProspectiveTrialSessions', () => {
       const indexOfMockLowVolumeCityString = TRIAL_CITY_STRINGS.length - 2;
       const mockLowVolumeCityString =
         TRIAL_CITY_STRINGS[indexOfMockLowVolumeCityString];
-      let mockTrialCitiesFromLastTwoTerms = [...TRIAL_CITY_STRINGS];
+      const mockTrialCitiesFromLastTwoTerms = [...TRIAL_CITY_STRINGS];
       mockTrialCitiesFromLastTwoTerms.splice(indexOfMockLowVolumeCityString, 1);
 
       const mockCases = [

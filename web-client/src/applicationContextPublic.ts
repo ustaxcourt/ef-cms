@@ -171,7 +171,7 @@ let forceRefreshCallback: () => {};
 
 const applicationContextPublic = {
   getBaseUrl: () => {
-    return process.env.API_URL || 'http://localhost:5000';
+    return process.env.API_URL || 'http://localhost:4001';
   },
   getCaseTitle: Case.getCaseTitle,
   getConstants: () => frozenConstants,
@@ -184,19 +184,15 @@ const applicationContextPublic = {
   },
   getLogger: () => ({
     error: () => {
-      // eslint-disable-next-line no-console
       // console.error(value);
     },
     info: (key, value) => {
-      // eslint-disable-next-line no-console
       console.info(key, JSON.stringify(value));
     },
     time: key => {
-      // eslint-disable-next-line no-console
       console.time(key);
     },
     timeEnd: key => {
-      // eslint-disable-next-line no-console
       console.timeEnd(key);
     },
   }),

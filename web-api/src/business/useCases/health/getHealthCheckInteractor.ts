@@ -5,7 +5,7 @@ const regionEast = 'us-east-1';
 const regionWest = 'us-west-1';
 
 const handleAxiosTimeout = axios => {
-  let source = axios.CancelToken.source();
+  const source = axios.CancelToken.source();
   setTimeout(() => {
     source.cancel();
   }, 1000);
@@ -190,7 +190,7 @@ const getS3BucketStatus = async ({
     westTempDocuments: westS3TempBucketName,
   };
 
-  let bucketStatus: S3BucketsStatus = {
+  const bucketStatus: S3BucketsStatus = {
     app: false,
     appFailover: false,
     eastDocuments: false,
