@@ -17,10 +17,10 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     USER_ROLES,
   } = applicationContext.getConstants();
 
-  let user = {
+  const user = {
     role: USER_ROLES.docketClerk,
   };
-  let mockConstants = {
+  const mockConstants = {
     CONTACT_TYPE_TITLES,
     COURT_ISSUED_EVENT_CODES: [
       { code: 'Simba', documentType: 'Lion', eventCode: 'ROAR' },

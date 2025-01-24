@@ -20,6 +20,7 @@ import {
 import { faAddressCard } from '@fortawesome/free-regular-svg-icons/faAddressCard';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftRegular } from '@fortawesome/free-regular-svg-icons/faArrowAltCircleLeft';
 import { faCalendar } from '@fortawesome/free-regular-svg-icons/faCalendar';
+import { faCalendarTimes } from '@fortawesome/free-regular-svg-icons';
 import { faCheckCircle as faCheckCircleRegular } from '@fortawesome/free-regular-svg-icons/faCheckCircle';
 import { faClock } from '@fortawesome/free-regular-svg-icons/faClock';
 import { faClone } from '@fortawesome/free-regular-svg-icons/faClone';
@@ -159,6 +160,7 @@ const app = {
       faTimes,
       faCalendarCheck,
       faCalendarPlus,
+      faCalendarTimes,
       faCaretDown,
       faCaretLeft,
       faCaretRight,
@@ -306,7 +308,7 @@ const app = {
     const wrappedRoute = (path, cb) => {
       route(path, function () {
         return (processQueue = processQueue.then(() => {
-          // eslint-disable-next-line promise/no-callback-in-promise
+          // eslint-disable-next-line prefer-rest-params
           return cb(...arguments);
         }));
       });

@@ -1,13 +1,23 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
+
+import { JUDGE_TITLES } from '@shared/business/entities/EntityConstants';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { User } from '@shared/business/entities/User';
-import { requireEnvVars } from '../../shared/admin-tools/util';
-requireEnvVars(['ENV', 'REGION', 'DYNAMODB_TABLE_NAME']);
 import { createApplicationContext } from '@web-api/applicationContext';
 
-/**
-How to Run:
-
-npx ts-node --transpile-only scripts/judgeUpdates/update-senior-judges.ts
-*/
+const scriptConfig: ScriptConfig = {
+  description: "update-judge-titles - Sets Judges' judgeTitle attribute",
+  environment: {
+    dynamoDbTableName: 'DYNAMODB_TABLE_NAME',
+    env: 'ENV',
+    region: 'REGION',
+  },
+  requireActiveAwsSession: true,
+};
+parseArgsAndEnvVars(scriptConfig);
 
 // ******************************** INPUTS ******************************
 const judgesToUpdateIds: { userId: string; judgeTitle: string }[] = [
@@ -22,14 +32,14 @@ const judgesToUpdateIds: { userId: string; judgeTitle: string }[] = [
 (async () => {
   const applicationContext = createApplicationContext({});
 
-  for (let judge of judgesToUpdateIds) {
+  for (const judge of judgesToUpdateIds) {
     const { userId } = judge;
 
     const userToUpdate = await applicationContext
       .getPersistenceGateway()
       .getUserById({ applicationContext, userId });
     const userEntity = new User(userToUpdate);
-    userEntity.judgeTitle = judge.judgeTitle;
+    userEntity.judgeTitle = JUDGE_TITLES.find(jt => jt === judge.judgeTitle);
 
     await applicationContext.getPersistenceGateway().updateUser({
       applicationContext,

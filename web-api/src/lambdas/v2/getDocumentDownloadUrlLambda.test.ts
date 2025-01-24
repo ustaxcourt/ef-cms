@@ -11,7 +11,7 @@ import { getDownloadPolicyUrlInteractor as mockGetDownloadPolicyUrlInteractor } 
 jest.mock('@web-api/applicationContext', () => {
   return {
     createApplicationContext: () => {
-      let appContext = mockCreateTestApplicationContext();
+      const appContext = mockCreateTestApplicationContext();
       appContext.getUseCases().getAllFeatureFlagsInteractor = jest
         .fn()
         .mockResolvedValue(mockFeatureFlag);

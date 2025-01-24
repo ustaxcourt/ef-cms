@@ -1,15 +1,16 @@
+import { RawUser } from '@shared/business/entities/User';
 import { createApplicationContext } from '@web-api/applicationContext';
 import {
   createOrUpdateUser,
   enableUser,
 } from '../../shared/admin-tools/user/admin';
 import { environment } from '@web-api/environment';
-import {
-  getDestinationTableInfo,
-  getUserPoolId,
-} from 'shared/admin-tools/util';
+import { getDestinationTableInfo } from 'shared/admin-tools/util';
+import { getEnvironmentVariables } from '../helpers/parseArgsAndEnvVars';
 
-const { DEFAULT_ACCOUNT_PASS } = process.env;
+const { password } = getEnvironmentVariables({
+  password: 'DEFAULT_ACCOUNT_PASS',
+});
 
 const baseUser = {
   birthYear: '1950',
@@ -24,36 +25,34 @@ const baseUser = {
     state: 'IL',
   },
   lastName: 'Test',
-  password: DEFAULT_ACCOUNT_PASS,
+  password,
   practiceType: '',
   suffix: '',
 };
 
-const user = {
+const user: RawUser = {
   ...baseUser,
   email: 'testAdmissionsClerk@example.com',
   name: 'Test admissionsclerk',
   role: 'admissionsclerk',
   section: 'admissions',
-};
+} as unknown as RawUser;
 
 export const createAndEnableSmoketestUser = async () => {
-  const userPoolId = await getUserPoolId();
   const { tableName } = await getDestinationTableInfo();
-  environment.userPoolId = userPoolId;
   environment.dynamoDbTableName = tableName;
   const applicationContext = createApplicationContext({});
 
   try {
     console.log('About to create test user!');
     await createOrUpdateUser(applicationContext, {
-      password: DEFAULT_ACCOUNT_PASS!,
+      password,
       setPasswordAsPermanent: true,
       user,
     });
     console.log('Successfully created test user!');
 
-    await enableUser(user.email);
+    await enableUser(user.email!);
     console.log('Successfully enabled test user!');
   } catch (e) {
     console.log('Unable to create and enable test user. Error was: ', e);
