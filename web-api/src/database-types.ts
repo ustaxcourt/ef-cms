@@ -171,7 +171,7 @@ export interface PetitionerOnCaseTable {
 }
 
 export type PetitionerOnCaseKysely = Selectable<PetitionerOnCaseTable>;
-export type NewUPetitionerOnCaseKysely = Insertable<PetitionerOnCaseTable>;
+export type NewPetitionerOnCaseKysely = Insertable<PetitionerOnCaseTable>;
 export type UpdatePetitionerOnCaseKysely = Updateable<PetitionerOnCaseTable>;
 
 export interface CaseStatusUpdateTable {

@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { NewUPetitionerOnCaseKysely } from '@web-api/database-types';
+import { NewPetitionerOnCaseKysely } from '@web-api/database-types';
 import { SEEDED_DOCKET_NUMBERS_100_104 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases100_104';
 import { SEEDED_DOCKET_NUMBERS_105_109 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases105_109';
 import { SEEDED_DOCKET_NUMBERS_110_129 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases110_129';
@@ -7,7 +7,7 @@ import { SEEDED_DOCKET_NUMBERS_130_309 } from '@web-api/persistence/postgres/uti
 import { SEEDED_DOCKET_NUMBERS_310_399 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases310_399';
 import { SEEDED_DOCKET_NUMBERS_450_plus } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases450_plus';
 
-export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
+export const petitionerToCaseMappings: NewPetitionerOnCaseKysely[] = [
   // 100-22
   {
     address1: '68 Fabien Freeway',
@@ -26,6 +26,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 101-11
   {
@@ -45,6 +46,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Paper',
     state: 'NC',
+    orderOnCase: 0,
   },
   // 101-16
   {
@@ -64,6 +66,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Paper',
     state: 'NC',
+    orderOnCase: 0,
   },
   // 101-19
   {
@@ -83,6 +86,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'AL',
+    orderOnCase: 0,
   },
   // 101-20
   {
@@ -100,6 +104,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'PA',
+    orderOnCase: 0,
   },
   {
     additionalName: 'Rachael Ray',
@@ -119,6 +124,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     serviceIndicator: 'None',
     state: 'PA',
     title: 'Petitioner',
+    orderOnCase: 1,
   },
   {
     additionalName: 'Roslindis Angelino',
@@ -137,6 +143,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     serviceIndicator: 'None',
     state: 'PA',
     title: 'Petitioner',
+    orderOnCase: 2,
   },
   {
     additionalName: 'Bobby Flay',
@@ -155,6 +162,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     serviceIndicator: 'None',
     state: 'PA',
     title: 'Petitioner',
+    orderOnCase: 3,
   },
   {
     additionalName: 'Kid Rock',
@@ -173,6 +181,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     serviceIndicator: 'None',
     state: 'PA',
     title: 'Petitioner',
+    orderOnCase: 4,
   },
   {
     additionalName: 'Bill Burr',
@@ -191,6 +200,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     serviceIndicator: 'None',
     state: 'PA',
     title: 'Petitioner',
+    orderOnCase: 5,
   },
   {
     additionalName: 'Bill Burr',
@@ -209,6 +219,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     serviceIndicator: 'None',
     state: 'PA',
     title: 'Petitioner',
+    orderOnCase: 6,
   },
   {
     additionalName: 'Bill Burr',
@@ -227,6 +238,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     serviceIndicator: 'None',
     state: 'PA',
     title: 'Petitioner',
+    orderOnCase: 7,
   },
   // 101-21
   {
@@ -246,6 +258,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'CT',
+    orderOnCase: 0,
   },
   // 101-22
   {
@@ -265,6 +278,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 101-23
   {
@@ -284,6 +298,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 101-24
   {
@@ -303,6 +318,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Paper',
     state: 'HI',
+    orderOnCase: 0,
   },
   // 102-19
   {
@@ -322,6 +338,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'DE',
+    orderOnCase: 0,
   },
   {
     address1: '49 First Drive',
@@ -340,6 +357,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'CO',
+    orderOnCase: 0,
   },
   // 102-20
   {
@@ -357,6 +375,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'TN',
+    orderOnCase: 0,
   },
   // 102-22
   {
@@ -376,6 +395,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 102-67
   {
@@ -395,6 +415,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'NM',
+    orderOnCase: 0,
   },
   // 103-19
   {
@@ -414,6 +435,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'MA',
+    orderOnCase: 0,
   },
   //103-20
   {
@@ -433,6 +455,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'DC',
+    orderOnCase: 0,
   },
   // 103-67
   {
@@ -454,6 +477,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Paper',
     state: 'AR',
+    orderOnCase: 0,
   },
   {
     address1: '68 Fabien Freeway',
@@ -472,6 +496,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 104-17
   {
@@ -489,6 +514,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Paper',
     state: '',
+    orderOnCase: 0,
   },
   // 104-18
   {
@@ -506,6 +532,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Paper',
     state: '',
+    orderOnCase: 0,
   },
   // 104-19
   {
@@ -526,6 +553,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'HI',
+    orderOnCase: 0,
   },
   // 104-20
   {
@@ -543,6 +571,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Paper',
     state: '',
+    orderOnCase: 0,
   },
   // 104-23
   {
@@ -561,6 +590,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Paper',
     state: 'NM',
+    orderOnCase: 0,
   },
   // 104-67
   {
@@ -582,6 +612,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Paper',
     state: 'WI',
+    orderOnCase: 0,
   },
   {
     address1: '829 Cowley Extension',
@@ -601,6 +632,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Paper',
     state: 'WI',
+    orderOnCase: 1,
   },
   // 105-19
   {
@@ -620,6 +652,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'AL',
+    orderOnCase: 0,
   },
   // 105-20
   {
@@ -638,6 +671,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'NY',
+    orderOnCase: 1,
   },
   // 105-23
   {
@@ -655,6 +689,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'OR',
+    orderOnCase: 0,
   },
   {
     address1: '783 Avenue Lane',
@@ -670,6 +705,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'WA',
+    orderOnCase: 1,
   },
   // 105-67
   {
@@ -691,6 +727,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'FM',
+    orderOnCase: 0,
   },
   // 106-19
   {
@@ -710,6 +747,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'MS',
+    orderOnCase: 0,
   },
   // 106-23
   {
@@ -729,6 +767,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 107-19
   {
@@ -749,6 +788,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'NM',
+    orderOnCase: 0,
   },
   {
     address1: '42 Lamb Sauce Blvd',
@@ -767,6 +807,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     serviceIndicator: 'None',
     state: 'AK',
     title: 'Intervenor',
+    orderOnCase: 1,
   },
   {
     address1: '1337 12th Ave',
@@ -785,6 +826,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     serviceIndicator: 'None',
     state: 'AK',
     title: 'Partner Other Than Tax Matters Partner',
+    orderOnCase: 2,
   },
   // 108-19
   {
@@ -805,6 +847,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'MD',
+    orderOnCase: 0,
   },
   {
     address1: '42 Lamb Sauce Blvd',
@@ -823,6 +866,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     serviceIndicator: 'None',
     state: 'AK',
     title: 'Intervenor',
+    orderOnCase: 1,
   },
   {
     address1: '1337 12th Ave',
@@ -841,6 +885,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     serviceIndicator: 'None',
     state: 'AK',
     title: 'Partner Other Than Tax Matters Partner',
+    orderOnCase: 2,
   },
   {
     additionalName: 'Coralie Carpenter',
@@ -862,6 +907,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     serviceIndicator: 'None',
     state: 'MD',
     title: 'Trust',
+    orderOnCase: 3,
   },
   {
     additionalName: 'Riya Carpenter',
@@ -883,6 +929,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     serviceIndicator: 'None',
     state: 'MD',
     title: 'Trust',
+    orderOnCase: 4,
   },
   {
     additionalName: 'Chinju Carpenter',
@@ -904,6 +951,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     serviceIndicator: 'None',
     state: 'MD',
     title: 'Trust',
+    orderOnCase: 5,
   },
   // 109-19
   {
@@ -923,6 +971,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'AL',
+    orderOnCase: 0,
   },
   // 110-19
   {
@@ -942,6 +991,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'AL',
+    orderOnCase: 0,
   },
   // 111-19
   {
@@ -959,6 +1009,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'AR',
+    orderOnCase: 0,
   },
   // 112-19
   {
@@ -976,6 +1027,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'CA',
+    orderOnCase: 0,
   },
   // 113-19
   {
@@ -993,6 +1045,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'CA',
+    orderOnCase: 0,
   },
   // 117-20
   {
@@ -1010,6 +1063,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'TN',
+    orderOnCase: 0,
   },
   // 120-20
   {
@@ -1028,6 +1082,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'AL',
+    orderOnCase: 0,
   },
   // 121-20
   {
@@ -1046,6 +1101,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'VA',
+    orderOnCase: 0,
   },
   // 122-20
   {
@@ -1065,6 +1121,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 123-20
   {
@@ -1084,6 +1141,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 124-20
   {
@@ -1101,6 +1159,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     secondaryName: 'Natalya Chaouche',
     serviceIndicator: 'Paper',
     state: 'CO',
+    orderOnCase: 0,
   },
   // 125-20
   {
@@ -1120,6 +1179,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 126-20
   {
@@ -1139,6 +1199,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 127-20
   {
@@ -1158,6 +1219,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 128-20
   {
@@ -1177,6 +1239,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 129-20
   {
@@ -1195,6 +1258,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Paper',
     state: 'CO',
+    orderOnCase: 0,
   },
   // 150-12
   {
@@ -1213,6 +1277,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     serviceIndicator: 'None',
     state: 'TN',
     title: 'Executor',
+    orderOnCase: 0,
   },
   // 151-12
   {
@@ -1231,6 +1296,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     serviceIndicator: 'None',
     state: 'TN',
     title: 'Executor',
+    orderOnCase: 0,
   },
   // 152-12
   {
@@ -1249,6 +1315,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     serviceIndicator: 'None',
     state: 'TN',
     title: 'Executor',
+    orderOnCase: 0,
   },
   // 301-21
   {
@@ -1268,6 +1335,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'None',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 302-21
   {
@@ -1287,6 +1355,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 303-21
   {
@@ -1306,6 +1375,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 304-21
   {
@@ -1325,6 +1395,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 305-21
   {
@@ -1344,6 +1415,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 306-21
   {
@@ -1363,6 +1435,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 307-21
   {
@@ -1382,6 +1455,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 308-21
   {
@@ -1401,6 +1475,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 309-21
   {
@@ -1420,6 +1495,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 310-21
   {
@@ -1439,6 +1515,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 311-21
   {
@@ -1458,6 +1535,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 312-21
   {
@@ -1477,6 +1555,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 313-21
   {
@@ -1495,6 +1574,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Paper',
     state: 'AE',
+    orderOnCase: 0,
   },
   // 314-21
   {
@@ -1514,6 +1594,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 315-21
   {
@@ -1533,6 +1614,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   //316-21
   {
@@ -1552,6 +1634,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 317-21
   {
@@ -1571,6 +1654,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 318-21
   {
@@ -1590,6 +1674,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 319-21
   {
@@ -1609,6 +1694,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'AK',
+    orderOnCase: 0,
   },
   // 320-21
   {
@@ -1626,6 +1712,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     sealedAndUnavailable: false,
     serviceIndicator: 'Electronic',
     state: 'WI',
+    orderOnCase: 0,
   },
   // 1338-20
   {
@@ -1644,6 +1731,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     serviceIndicator: 'None',
     state: 'TN',
     title: 'Executor',
+    orderOnCase: 0,
   },
   // 69312-87
   {
@@ -1663,6 +1751,7 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     serviceIndicator: 'Electronic',
     state: 'TN',
     title: 'Executor',
+    orderOnCase: 0,
   },
   {
     address1: '123 Main St',
@@ -1681,5 +1770,6 @@ export const petitionerToCaseMappings: NewUPetitionerOnCaseKysely[] = [
     serviceIndicator: 'Electronic',
     state: 'TN',
     title: 'Executor',
+    orderOnCase: 1,
   },
 ];
