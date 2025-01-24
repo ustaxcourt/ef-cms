@@ -8,6 +8,7 @@ import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
   MINUTE_SHEET_FORM_SECTION_MAP,
   MOTION_FILED_BY_OPTIONS,
+  MOTION_OBJECTION_OPTIONS,
   MOTION_STATUS_OPTIONS,
   MOTION_TYPE_OPTIONS,
   MinuteSheetFormState,
@@ -128,8 +129,8 @@ export const MotionsFieldset = ({
                 </FormGroup>
               </div>
             </div>
-            <div className="grid-row grid-gap align-items-center margin-bottom-1">
-              <div className="grid-col-3">
+            <div className="grid-row grid-gap-2 align-items-center margin-bottom-1">
+              <div className="grid-col-2">
                 <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
                   <label
                     className="margin-right-2 margin-bottom-0 display-inline-block no-wrap"
@@ -169,7 +170,7 @@ export const MotionsFieldset = ({
                   </select>
                 </FormGroup>
               </div>
-              <div className="grid-col-3">
+              <div className="grid-col-2">
                 <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
                   <label
                     className="margin-right-2 margin-bottom-0 display-inline-block"
@@ -203,6 +204,46 @@ export const MotionsFieldset = ({
                           value={optionKey}
                         >
                           {MOTION_STATUS_OPTIONS[optionKey]}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </FormGroup>
+              </div>
+              <div className="grid-col-2">
+                <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
+                  <label
+                    className="margin-right-2 margin-bottom-0 display-inline-block"
+                    htmlFor={`motionObjection-${row.renderKey}`}
+                  >
+                    Objection
+                  </label>
+                  <select
+                    className="usa-select display-inline-block"
+                    id={`motionObjection-${row.renderKey}`}
+                    name={`motionObjection-${row.renderKey}`}
+                    value={row.objection}
+                    onBlur={() => onBlurHandler()}
+                    onChange={e => {
+                      onChangeHandler({
+                        name: 'motions',
+                        rowInfo: {
+                          key: row.renderKey,
+                          nestedName: 'objection',
+                        },
+                        section: MINUTE_SHEET_FORM_SECTION_MAP.motionsSection,
+                        value: e.target.value,
+                      });
+                    }}
+                  >
+                    <option value="">- Select -</option>
+                    {Object.keys(MOTION_OBJECTION_OPTIONS).map(optionKey => {
+                      return (
+                        <option
+                          key={`${optionKey}-${row.renderKey}`}
+                          value={optionKey}
+                        >
+                          {MOTION_OBJECTION_OPTIONS[optionKey]}
                         </option>
                       );
                     })}

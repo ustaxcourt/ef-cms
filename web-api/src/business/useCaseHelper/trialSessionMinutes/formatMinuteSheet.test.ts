@@ -6,6 +6,7 @@ import {
   BRIEF_TYPE_OPTIONS,
   EXHIBIT_STATUS_OPTIONS,
   MOTION_FILED_BY_OPTIONS,
+  MOTION_OBJECTION_OPTIONS,
   MOTION_STATUS_OPTIONS,
   MOTION_TYPE_OPTIONS,
   MinuteSheetFormState,
@@ -401,6 +402,7 @@ describe('formatMinuteSheet', () => {
             date: '2023-01-15',
             filedBy: 'petitioner' as keyof typeof MOTION_FILED_BY_OPTIONS,
             note: 'test note',
+            objection: '' as keyof typeof MOTION_OBJECTION_OPTIONS,
             oralMotion: false,
             renderKey: '1',
             status: 'granted' as keyof typeof MOTION_STATUS_OPTIONS,
@@ -426,6 +428,7 @@ describe('formatMinuteSheet', () => {
             date: '2023-01-15',
             filedBy: 'petitioner' as keyof typeof MOTION_FILED_BY_OPTIONS,
             note: 'test note',
+            objection: '' as keyof typeof MOTION_OBJECTION_OPTIONS,
             oralMotion: true,
             renderKey: '1',
             status: 'granted' as keyof typeof MOTION_STATUS_OPTIONS,
@@ -437,7 +440,7 @@ describe('formatMinuteSheet', () => {
       expect(result).toEqual([
         {
           content:
-            'ORAL Motion to Dismiss; 01/15/2023; Filed by Petitioner; Granted; <em>test note</em>',
+            'Oral Motion to Dismiss; 01/15/2023; Filed by Petitioner; Granted; <em>test note</em>',
           motionType: 'Motion to Dismiss',
           renderKey: '1',
         },
@@ -451,6 +454,7 @@ describe('formatMinuteSheet', () => {
             date: '2023-01-15',
             filedBy: '' as keyof typeof MOTION_FILED_BY_OPTIONS,
             note: '',
+            objection: '' as keyof typeof MOTION_OBJECTION_OPTIONS,
             oralMotion: false,
             renderKey: '1',
             status: '' as keyof typeof MOTION_STATUS_OPTIONS,
@@ -481,6 +485,7 @@ describe('formatMinuteSheet', () => {
             filedBy: 'petitioner' as keyof typeof ACTION_FILED_BY_OPTIONS,
             isOnDocketRecord: true,
             note: 'test note',
+            objection: '',
             renderKey: '1',
             status: 'filed' as keyof typeof ACTION_STATUS_OPTIONS,
           },
@@ -559,9 +564,9 @@ describe('formatMinuteSheet', () => {
         benchOpinionRendered:
           '01/15/2023; Transcript ordered; <em>bench opinion note</em>',
         briefDetails: [
-          'opening - petitioner; Due 02/15/2023; <em>Opening brief note</em>',
+          'Opening - petitioner; Due 02/15/2023; <em>Opening brief note</em>',
         ],
-        briefType: 'seriatimBrief', // TODO 10419 we need to fix this, but this is currently the expected behavior
+        briefType: 'seriatimBrief',
         dateSubmitted: '01/01/2023',
         totalTrialHours: '5',
       });
@@ -721,8 +726,8 @@ describe('formatMinuteSheet', () => {
       };
       const result = getBriefDetails(briefDetails);
       expect(result).toEqual([
-        'opening - petitioner; Due 02/15/2023; <em>Opening note</em>',
-        'reply - respondent; Due 03/15/2023; <em>Reply note</em>',
+        'Opening - petitioner; Due 02/15/2023; <em>Opening note</em>',
+        'Reply - respondent; Due 03/15/2023; <em>Reply note</em>',
       ]);
     });
 

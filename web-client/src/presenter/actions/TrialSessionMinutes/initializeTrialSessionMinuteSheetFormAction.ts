@@ -69,6 +69,7 @@ export const initializeTrialSessionMinuteSheetFormAction = ({
       date: '',
       filedBy: '',
       note: '',
+      objection: '',
       oralMotion: false,
       renderKey: motionRowRenderKey,
       status: '',

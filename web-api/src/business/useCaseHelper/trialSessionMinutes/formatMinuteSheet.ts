@@ -7,6 +7,7 @@ import {
   EXHIBIT_STATUS_OPTIONS,
   ExhibitStatusOption,
   MOTION_FILED_BY_OPTIONS,
+  MOTION_OBJECTION_OPTIONS,
   MOTION_STATUS_OPTIONS,
   MOTION_TYPE_OPTIONS,
   MinuteSheetFormState,
@@ -232,9 +233,10 @@ export const formatMotions = (
           ? `Filed by ${MOTION_FILED_BY_OPTIONS[motion.filedBy]}`
           : '',
         MOTION_STATUS_OPTIONS[motion.status],
-        `<em>${motion.note}</em>`,
+        MOTION_OBJECTION_OPTIONS[motion.objection],
+        motion.note ? `<em>${motion.note}</em>` : '',
       ]
-        .filter(Boolean)
+        .filter(substring => !!substring)
         .join('; '),
       motionType: MOTION_TYPE_OPTIONS[motion.type],
       renderKey: motion.renderKey,
@@ -295,8 +297,6 @@ export const formatTrialBrief = (
       ? `${trialBriefSection.totalTrialHours}`
       : '',
   };
-
-  console.log('result of formatTrialBrief', result);
 
   return result;
 };

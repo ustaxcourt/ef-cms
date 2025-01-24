@@ -17,6 +17,7 @@ type MotionFormFields = {
   type: MotionTypeOption | '';
   filedBy: MotionFiledByOption | '';
   status: MotionStatusOption | '';
+  objection: MotionObjectionOption | '';
   note: string;
   oralMotion: boolean;
 };
@@ -328,8 +329,6 @@ export const MOTION_STATUS_OPTIONS = {
   filed: 'Filed',
   granted: 'Granted',
   lodged: 'Lodged',
-  noObjection: 'No Objection',
-  objection: 'Objection',
   // 10419 TODO: can we derive these options from an existing constant? Same
   // question applies broadly speaking for these option constants.
   seeOrder: 'See Order',
@@ -346,6 +345,13 @@ export const MOTION_TYPE_OPTIONS = {
   motionToDismissLackOfProsecution: 'Motion to Dismiss - Lack of Prosecution',
 } as const;
 export type MotionTypeOption = keyof typeof MOTION_TYPE_OPTIONS;
+
+export const MOTION_OBJECTION_OPTIONS = {
+  noObjection: 'No Objection',
+  objection: 'Objection',
+  unknown: 'Unknown',
+} as const;
+export type MotionObjectionOption = keyof typeof MOTION_OBJECTION_OPTIONS;
 
 export const ACTION_DOCUMENT_TYPE_OPTIONS = {
   entryOfAppearance: 'Entry of Appearance',
