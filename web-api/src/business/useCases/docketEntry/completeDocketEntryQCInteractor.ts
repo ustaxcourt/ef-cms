@@ -118,12 +118,12 @@ const completeDocketEntryQC = async (
   ).validate();
   updatedDocketEntry.setQCed(user);
 
-  let updatedDocumentTitle = getDocumentTitleForNoticeOfChange({
+  const updatedDocumentTitle = getDocumentTitleForNoticeOfChange({
     applicationContext,
     docketEntry: updatedDocketEntry,
   });
 
-  let currentDocumentTitle = getDocumentTitleForNoticeOfChange({
+  const currentDocumentTitle = getDocumentTitleForNoticeOfChange({
     applicationContext,
     docketEntry: currentDocketEntry,
   });
@@ -191,7 +191,7 @@ const completeDocketEntryQC = async (
     section: user.section || '',
   });
 
-  let sectionToAssignTo =
+  const sectionToAssignTo =
     userIsCaseServices && selectedSection ? selectedSection : user.section;
 
   workItemToUpdate.assignToUser({
@@ -210,7 +210,7 @@ const completeDocketEntryQC = async (
       workItem: workItemToUpdate.validate().toRawObject(),
     });
 
-  let servedParties = aggregatePartiesForService(caseEntity);
+  const servedParties = aggregatePartiesForService(caseEntity);
   let paperServicePdfUrl;
   let paperServiceDocumentTitle;
 
@@ -228,7 +228,7 @@ const completeDocketEntryQC = async (
 
       const noticeDoc = await PDFDocument.load(pdfData);
 
-      let newPdfDoc = await PDFDocument.create();
+      const newPdfDoc = await PDFDocument.create();
 
       await applicationContext
         .getUseCaseHelpers()
@@ -269,7 +269,7 @@ const completeDocketEntryQC = async (
       docketChangeInfo,
     });
 
-    let noticeUpdatedDocketEntry = new DocketEntry(
+    const noticeUpdatedDocketEntry = new DocketEntry(
       {
         ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange,
         docketEntryId: noticeDocketEntryId,

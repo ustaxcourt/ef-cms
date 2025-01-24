@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.25
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.26
 
 parameters:
   run_build_and_deploy:
@@ -881,7 +881,7 @@ jobs:
           name: Restore Postgres User Permissions
           command: |
             cd ./scripts/postgres
-            ./scripts/postgres/create-postgres-users.sh
+            ./create-postgres-users.sh
 
   finish-glue-job:
     docker:

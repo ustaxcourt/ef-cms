@@ -12,7 +12,7 @@ import {
  * @returns {object} errors (null if no errors)
  */
 export const validateTrialSessionInteractor = (
-  applicationContext: IApplicationContext,
+  _applicationContext: IApplicationContext,
   { trialSession }: { trialSession: RawNewTrialSession },
 ) => {
   const errors = new NewTrialSession(

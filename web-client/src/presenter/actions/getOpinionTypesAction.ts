@@ -1,5 +1,5 @@
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import courtIssuedEventCodes from '@shared/tools/courtIssuedEventCodes.json';
+import { COURT_ISSUED_EVENTS } from '@shared/business/entities/docketEntry/courtIssuedEventCodes';
 
 /**
  * get the opinion document types
@@ -8,7 +8,7 @@ import courtIssuedEventCodes from '@shared/tools/courtIssuedEventCodes.json';
  * @returns {object} the list of opinion document types
  */
 export const getOpinionTypesAction = () => {
-  const opinionDocuments = courtIssuedEventCodes.filter(courtIssuedDocument =>
+  const opinionDocuments = COURT_ISSUED_EVENTS.filter(courtIssuedDocument =>
     DocketEntry.isOpinion(courtIssuedDocument.eventCode),
   );
 

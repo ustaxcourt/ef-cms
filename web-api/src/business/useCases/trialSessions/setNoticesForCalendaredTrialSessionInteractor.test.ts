@@ -53,7 +53,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     jest
       .spyOn(global, 'setInterval')
       .mockImplementation((cb): ReturnType<typeof setTimeout> => {
-        // eslint-disable-next-line promise/no-callback-in-promise
         (cb() as any).then(cb);
         return undefined as any;
       });

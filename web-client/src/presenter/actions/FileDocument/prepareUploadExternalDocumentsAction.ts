@@ -7,7 +7,7 @@ export const prepareUploadExternalDocumentsAction = ({ get }: ActionProps) => {
 
   let privatePractitioners: any = null;
 
-  let { filers } = form;
+  const { filers } = form;
   if (
     PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.filter(
       d => d.filedByPractitioner,

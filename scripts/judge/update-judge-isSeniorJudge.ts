@@ -86,7 +86,7 @@ let judgesToUpdateIds: { userId: string; isSeniorJudge: boolean }[];
     }),
   );
 
-  for (let judge of judgesToUpdateIds) {
+  for (const judge of judgesToUpdateIds) {
     const { userId } = judge;
 
     const userToUpdate = await applicationContext
