@@ -9,10 +9,14 @@ import {
   aggregateConsolidatedCaseItems,
   isCaseItem,
 } from '../helpers/aggregateCaseItems';
+import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { queryFull } from '../../dynamodbClientService';
 import { caseContactAddressSealedFormatter } from '@shared/business/utilities/caseFilter';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+
+// These case items are no longer in dynamoDB
+const SK_FILTER_OUT = ['work-item'];
 
 export const getCaseByDocketNumber = async ({
   applicationContext,
@@ -25,16 +29,25 @@ export const getCaseByDocketNumber = async ({
   includeConsolidatedCases?: boolean;
   user?: UnknownAuthUser;
 }): Promise<RawCase> => {
-  const caseItems = await queryFull({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `case|${docketNumber}`,
-    },
-    KeyConditionExpression: '#pk = :pk',
-    applicationContext,
-  });
+  const [caseItems, workItems] = await Promise.all([
+    queryFull({
+      ExpressionAttributeNames: {
+        '#pk': 'pk',
+      },
+      ExpressionAttributeValues: {
+        ':pk': `case|${docketNumber}`,
+      },
+      KeyConditionExpression: '#pk = :pk',
+      applicationContext,
+    }).then(items =>
+      items.filter(
+        item => !SK_FILTER_OUT.some(prefix => item.sk.startsWith(prefix)),
+      ),
+    ),
+    getWorkItemsByDocketNumber({
+      docketNumber,
+    }),
+  ]);
 
   const leadDocketNumber = caseItems.find((caseItem): caseItem is CaseRecord =>
     isCaseItem(caseItem),
@@ -65,7 +78,14 @@ export const getCaseByDocketNumber = async ({
   }
 
   return purgeDynamoKeys({
-    ...aggregateCaseItems(caseItems),
+    ...aggregateCaseItems([
+      ...caseItems,
+      ...workItems.map(workItem => ({
+        ...workItem,
+        pk: `case|${docketNumber}`,
+        sk: `work-item|${workItem.workItemId}`,
+      })),
+    ]),
     consolidatedCases,
   });
 };
