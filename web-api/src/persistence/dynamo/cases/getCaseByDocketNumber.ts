@@ -21,8 +21,6 @@ import { workItemEntity } from '@web-api/persistence/postgres/workitems/mapper';
 
 // These case items are no longer in dynamoDB
 const SK_FILTER_OUT = ['work-item'];
-import { caseContactAddressSealedFormatter } from '@shared/business/utilities/caseFilter';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const getCaseByDocketNumber = async ({
   applicationContext,
