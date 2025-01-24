@@ -1,14 +1,9 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { blockedCasesReportHelper as blockedCasesReportHelperComputed } from './blockedCasesReportHelper';
+import { blockedCasesReportHelper  } from './blockedCasesReportHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../../withAppContext';
 
 describe('blockedCasesReportHelper', () => {
   const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
-
-  const blockedCasesReportHelper = withAppContextDecorator(
-    blockedCasesReportHelperComputed,
-  );
 
   it('returns blockedCasesCount as 0 if the blockedCases array is empty', () => {
     const result = runCompute(blockedCasesReportHelper, {
