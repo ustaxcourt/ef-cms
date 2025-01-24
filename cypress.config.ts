@@ -20,15 +20,12 @@ import { parsePdf } from './cypress/local-only/support/helpers.ts';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
 import { waitForPractitionerEmailUpdate } from './cypress/helpers/cypressTasks/wait-for-practitioner-email-update';
-
 import type { Page } from 'puppeteer-core';
-
 import { retry, setup } from '@cypress/puppeteer';
 
-// eslint-disable-next-line import/no-default-export
 export default defineConfig({
   chromeWebSecurity: false,
-  defaultCommandTimeout: 60000,
+  defaultCommandTimeout: 60000,  
   e2e: {
     baseUrl: 'http://localhost:1234',
     experimentalStudio: true,
