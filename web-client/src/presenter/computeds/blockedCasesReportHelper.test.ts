@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { blockedCasesReportHelper  } from './blockedCasesReportHelper';
+import { blockedCasesReportHelper } from './blockedCasesReportHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('blockedCasesReportHelper', () => {
@@ -333,6 +333,47 @@ describe('blockedCasesReportHelper', () => {
     expect(result.blockedCasesCount).toEqual(4);
   });
 
+  it('should sort cases based on docket number and always keep consolidated groups together', () => {
+    const cases = [
+      { docketNumber: '999-23', leadDocketNumber: '101-10' },
+      { docketNumber: '3247-19', leadDocketNumber: '232-19' },
+      { docketNumber: '107-21' },
+      { docketNumber: '232-19', leadDocketNumber: '232-19' },
+      { docketNumber: '927-02' },
+      { docketNumber: '101-10', leadDocketNumber: '101-10' },
+      { docketNumber: '927-01' },
+    ];
+
+    const result = runCompute(blockedCasesReportHelper, {
+      state: {
+        blockedCaseReportFilter: {
+          caseStatusFilter: 'All',
+          procedureTypeFilter: undefined,
+          reasonFilter: 'All',
+        },
+        blockedCases: cases,
+      },
+    });
+
+    const expected = [
+      { docketNumber: '927-01' },
+      { docketNumber: '927-02' },
+      { docketNumber: '101-10', leadDocketNumber: '101-10' },
+      { docketNumber: '999-23', leadDocketNumber: '101-10' },
+      { docketNumber: '232-19', leadDocketNumber: '232-19' },
+      { docketNumber: '3247-19', leadDocketNumber: '232-19' },
+      { docketNumber: '107-21' },
+    ];
+    expected.forEach((e, i) => {
+      expect(e.docketNumber).toEqual(
+        result.blockedCasesFormatted[i].docketNumber,
+      );
+      expect(e.leadDocketNumber).toEqual(
+        result.blockedCasesFormatted[i].leadDocketNumber,
+      );
+    });
+  });
+
   describe('filters', () => {
     describe('caseStatusFilter', () => {
       it('should return all the blocked cases when "caseStatusFilter" is set to "All', () => {
@@ -428,16 +469,20 @@ describe('blockedCasesReportHelper', () => {
       it('should filter out blocked cases that do not have user added reason if "reasonFilter" is "Manual Block"', () => {
         const TEST_CASES = [
           {
+            automaticBlocked: true,
             automaticBlockedReason: 'RANDOM',
             blockedReason: '',
             docketNumber: '101-19',
           },
           {
+            automaticBlocked: true,
             automaticBlockedReason: 'RANDOM',
             blockedReason: 'RANDOM USER REASON',
+            blocked: true,
             docketNumber: '102-19',
           },
           {
+            automaticBlocked: true,
             automaticBlockedReason: 'RANDOM',
             blockedReason: '',
             docketNumber: '103-19',
