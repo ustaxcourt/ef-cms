@@ -1,3 +1,4 @@
+import { EXTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/externalFilingEvents';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -9,12 +10,9 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @returns {undefined}
  */
 export const setSupportingDocumentScenarioAction = ({
-  applicationContext,
   get,
   store,
 }: ActionProps) => {
-  const { CATEGORY_MAP } = applicationContext.getConstants();
-
   const supportingDocuments = get(state.form.supportingDocuments);
 
   if (supportingDocuments) {
@@ -26,7 +24,7 @@ export const setSupportingDocumentScenarioAction = ({
       ) {
         const { category, documentType } = supportingDocuments[i];
 
-        const categoryInformation = CATEGORY_MAP[category].find(
+        const categoryInformation = EXTERNAL_FILING_EVENTS[category].find(
           itemDocumentType => itemDocumentType.documentType === documentType,
         );
 
@@ -59,7 +57,7 @@ export const setSupportingDocumentScenarioAction = ({
       ) {
         const { category, documentType } = secondarySupportingDocuments[i];
 
-        const categoryInformation = CATEGORY_MAP[category].find(
+        const categoryInformation = EXTERNAL_FILING_EVENTS[category].find(
           itemDocumentType => itemDocumentType.documentType === documentType,
         );
 
