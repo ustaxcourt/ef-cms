@@ -8,7 +8,7 @@ import {
 } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Trial Session - Notice Change of Location', () => {
-  it('should test', () => {
+  it('should generate NCTL for all the cases in a calendared Trial Session', () => {
     loginAsPetitionsClerk1();
     createTrialSession().as('TRIAL_SESSION_INFO');
     cy.get<{ trialSessionId: string }>('@TRIAL_SESSION_INFO').then(

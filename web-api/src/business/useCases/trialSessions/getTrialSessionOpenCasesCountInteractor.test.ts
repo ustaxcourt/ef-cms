@@ -1,0 +1,87 @@
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { getTrialSessionOpenCasesCountInteractor } from '@web-api/business/useCases/trialSessions/getTrialSessionOpenCasesCountInteractor';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
+import { getCasesInTrialSession } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper';
+
+jest.mock(
+  '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper',
+  () => ({
+    getCasesInTrialSession: jest.fn(),
+  }),
+);
+
+describe('getTrialSessionOpenCasesCountInteractor', () => {
+  const TEST_TRIAL_SESSION_ID = 'TEST_TRIAL_SESSION_ID';
+
+  it('should throw error if user is unauthorized', async () => {
+    await expect(
+      getTrialSessionOpenCasesCountInteractor(
+        applicationContext,
+        {
+          trialSessionId: TEST_TRIAL_SESSION_ID,
+        },
+        undefined,
+      ),
+    ).rejects.toThrow(UnauthorizedError);
+  });
+
+  it('should throw error if the trial session does not exist', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue(undefined);
+
+    await expect(
+      getTrialSessionOpenCasesCountInteractor(
+        applicationContext,
+        {
+          trialSessionId: TEST_TRIAL_SESSION_ID,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(NotFoundError);
+
+    const getTrialSessionByIdCalls =
+      applicationContext.getPersistenceGateway().getTrialSessionById.mock.calls;
+    expect(getTrialSessionByIdCalls.length).toEqual(1);
+    expect(getTrialSessionByIdCalls[0][0].trialSessionId).toEqual(
+      TEST_TRIAL_SESSION_ID,
+    );
+  });
+
+  it('should return the correct results', async () => {
+    const TEST_TRIAL_SESSION = {
+      trialSessionId: TEST_TRIAL_SESSION_ID,
+      testProp: 'TEST_PROP',
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue(TEST_TRIAL_SESSION);
+
+    (getCasesInTrialSession as jest.Mock).mockReturnValue({
+      calendaredCaseEntities: [{}, {}, {}],
+      casesThatShouldReceiveNotices: [{}, {}, {}, {}, {}],
+    });
+
+    const { calendaredCaseEntitiesCount, casesThatShouldReceiveNoticesCount } =
+      await getTrialSessionOpenCasesCountInteractor(
+        applicationContext,
+        {
+          trialSessionId: TEST_TRIAL_SESSION_ID,
+        },
+        mockDocketClerkUser,
+      );
+
+    expect(calendaredCaseEntitiesCount).toEqual(3);
+    expect(casesThatShouldReceiveNoticesCount).toEqual(5);
+
+    const getCasesInTrialSessionCalls = (getCasesInTrialSession as jest.Mock)
+      .mock.calls;
+    expect(getCasesInTrialSessionCalls.length).toEqual(1);
+    expect(getCasesInTrialSessionCalls[0][0]).toMatchObject({
+      trialSession: TEST_TRIAL_SESSION,
+      authorizedUser: mockDocketClerkUser,
+    });
+  });
+});
