@@ -17,7 +17,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('caseNote', 'varchar')
     .addColumn('caseType', 'varchar', col => col.notNull())
     .addColumn('closedDate', 'timestamptz')
-    .addColumn('correspondence', 'jsonb')
     .addColumn('createdAt', 'timestamptz')
     .addColumn('damages', 'numeric')
     .addColumn('docketEntries', 'jsonb')
