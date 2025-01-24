@@ -1,10 +1,10 @@
 import { CaseStatus } from '@shared/business/entities/EntityConstants';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import { compareCasesByDocketNumber } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
 import { Case } from '@shared/business/entities/cases/Case';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
+import { BlockedCasesResponse } from '@web-api/persistence/elasticsearch/getBlockedCases';
 
 export const blockedCasesReportHelper = (
   get: Get,
@@ -17,8 +17,9 @@ export const blockedCasesReportHelper = (
     state.blockedCaseReportFilter,
   );
 
-  const blockedCasesFormatted: BlockedFormattedCase[] = blockedCases
-    .sort(compareCasesByDocketNumber)
+  const blockedCasesFormatted: BlockedFormattedCase[] = sortAndGroupCases(
+    blockedCases,
+  )
     .map(blockedCase => {
       const blockedCaseWithConsolidatedProperties =
         setConsolidationFlagsForDisplay(blockedCase);
@@ -86,6 +87,31 @@ export const blockedCasesReportHelper = (
   };
 };
 
+function sortAndGroupCases(cases: BlockedCasesResponse) {
+  const leadDocketNumberMap: Map<string, BlockedCasesResponse> = new Map();
+  console.log('cases', cases);
+
+  cases.forEach(c => {
+    if (c.leadDocketNumber) {
+      if (leadDocketNumberMap.has(c.leadDocketNumber)) {
+        leadDocketNumberMap.get(c.leadDocketNumber)?.push(c);
+      } else {
+        leadDocketNumberMap.set(c.leadDocketNumber, [c]);
+      }
+      console.log('leadDocketNumberMap', leadDocketNumberMap);
+    } else {
+      leadDocketNumberMap.set(c.docketNumber, [c]);
+    }
+  });
+  const stuff = [...leadDocketNumberMap.entries()]
+    .sort((a, b) => Case.docketNumberSort(a[0], b[0]))
+    .map(([_, value]) => value)
+    .flat();
+  //  stuff = Array.from(leadDocketNumberMap.values()).flat();
+  console.log('All grouped', stuff);
+  return stuff;
+}
+
 export type BlockedFormattedCase = {
   docketNumber: string;
   inConsolidatedGroup: boolean;
@@ -98,4 +124,5 @@ export type BlockedFormattedCase = {
   blockedReason?: string;
   automaticBlockedReason?: string;
   docketNumberWithSuffix?: string;
+  leadDocketNumber?: string;
 };
