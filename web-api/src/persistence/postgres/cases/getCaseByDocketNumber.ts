@@ -10,15 +10,19 @@ import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workit
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
 
 export const getCaseByDocketNumber = async ({
   applicationContext,
   docketNumber,
   includeConsolidatedCases = true,
+  user = undefined, // Only needed to check permissions on sealed addresses for consolidated cases
 }: {
   docketNumber: string;
   applicationContext: ServerApplicationContext;
   includeConsolidatedCases?: boolean;
+  user: UnknownAuthUser;
 }): Promise<RawCase> => {
   const dbCaseMetadata = await getCaseMetadataByDocketNumber({ docketNumber });
   if (!dbCaseMetadata) {
@@ -120,6 +124,11 @@ export const getCaseByDocketNumber = async ({
       applicationContext,
       leadDocketNumber: dbCaseMetadata.leadDocketNumber!,
     });
+    if (user) {
+      consolidatedCases = consolidatedCases.map(c =>
+        formatSealedAddresses(c, user),
+      );
+    }
   }
 
   return purgeDynamoKeys({

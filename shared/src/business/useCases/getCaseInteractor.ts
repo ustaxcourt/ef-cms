@@ -22,6 +22,7 @@ export const getCaseInteractor = async (
   const caseRecord = await getCaseByDocketNumber({
     applicationContext,
     docketNumber: Case.formatDocketNumber(docketNumber),
+    user: authorizedUser,
   });
   const isValidCase = Boolean(caseRecord?.docketNumber);
 
