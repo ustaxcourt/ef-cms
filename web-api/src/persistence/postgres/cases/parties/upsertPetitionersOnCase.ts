@@ -1,6 +1,7 @@
 import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import { getDbWriter } from '@web-api/database';
 
+// 10502 TODO: This currently requires ALL case petitioners to maintain order. That's dangerous. Maybe pass in case instead, which is slightly less terrible.
 export const upsertPetitionersOnCase = async ({
   docketNumber,
   petitioners,

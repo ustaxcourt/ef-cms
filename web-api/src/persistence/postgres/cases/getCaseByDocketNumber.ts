@@ -22,7 +22,7 @@ export const getCaseByDocketNumber = async ({
   docketNumber: string;
   applicationContext: ServerApplicationContext;
   includeConsolidatedCases?: boolean;
-  user: UnknownAuthUser;
+  user?: UnknownAuthUser;
 }): Promise<RawCase> => {
   const dbCaseMetadata = await getCaseMetadataByDocketNumber({ docketNumber });
   if (!dbCaseMetadata) {
