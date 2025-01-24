@@ -881,7 +881,7 @@ jobs:
           name: Restore Postgres User Permissions
           command: |
             cd ./scripts/postgres
-            ./scripts/postgres/create-postgres-users.sh
+            ./create-postgres-users.sh
 
   finish-glue-job:
     docker:
