@@ -33,10 +33,11 @@ export const convertRawCaseToDbRow = (rawCase: RawCase) => {
     damages: rawCase.damages,
     docketNumber: rawCase.docketNumber,
     docketNumberSuffix: rawCase.docketNumberSuffix,
+    docketEntries: JSON.stringify(rawCase.docketEntries),
     filingType: rawCase.filingType,
     hasPendingItems: rawCase.hasPendingItems,
     hasVerifiedIrsNotice: rawCase.hasVerifiedIrsNotice,
-    hearings: rawCase.hearings,
+    hearings: JSON.stringify(rawCase.hearings),
     highPriority: rawCase.highPriority,
     highPriorityReason: rawCase.highPriorityReason,
     initialCaption: rawCase.initialCaption,
@@ -73,7 +74,7 @@ export const convertRawCaseToDbRow = (rawCase: RawCase) => {
       : null,
     preferredTrialCity: rawCase.preferredTrialCity,
     procedureType: rawCase.procedureType,
-    qcCompleteForTrial: rawCase.qcCompleteForTrial,
+    qcCompleteForTrial: JSON.stringify(rawCase.qcCompleteForTrial),
     receivedAt: rawCase.receivedAt
       ? calculateDate({ dateString: rawCase.receivedAt })
       : calculateDate({ dateString: formatNow() }),

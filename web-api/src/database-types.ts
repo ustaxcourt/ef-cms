@@ -62,10 +62,15 @@ export interface CaseTable {
   damages?: number;
   docketNumber: string;
   docketNumberSuffix?: string;
+  docketEntries?: ColumnType<
+    { docketEntryId: string; docketNumber: string }[],
+    string,
+    string
+  >;
   filingType?: string;
   hasPendingItems?: boolean;
   hasVerifiedIrsNotice?: boolean;
-  hearings?: any[];
+  hearings?: ColumnType<{ trialSessionId: string }[], string, string>;
   highPriority?: boolean;
   highPriorityReason?: string;
   initialCaption?: string;
@@ -93,7 +98,7 @@ export interface CaseTable {
   petitionPaymentWaivedDate?: Date | null;
   preferredTrialCity?: string;
   procedureType: string;
-  qcCompleteForTrial?: Record<string, any>; // needed
+  qcCompleteForTrial?: ColumnType<{ trialSessionId: string }[], string, string>;
   receivedAt: Date;
   sealedDate?: Date | null;
   sortableDocketNumber: number;
