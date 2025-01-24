@@ -75,7 +75,7 @@ export const petitionsClerkUpdatesCaseDetail = cerebralTest => {
     });
 
     expect(cerebralTest.getState('caseDetail.irsNoticeDate')).toEqual(
-      '2018-12-24T00:00:00.000-05:00',
+      '2018-12-24T05:00:00.000Z',
     );
 
     await cerebralTest.runSequence('gotoPetitionQcSequence', {
@@ -167,10 +167,10 @@ export const petitionsClerkUpdatesCaseDetail = cerebralTest => {
       docketNumber: cerebralTest.docketNumber,
     });
     expect(cerebralTest.getState('caseDetail.irsNoticeDate')).toEqual(
-      '2018-12-24T00:00:00.000-05:00',
+      '2018-12-24T05:00:00.000Z',
     );
     expect(cerebralTest.getState('caseDetail.petitionPaymentDate')).toEqual(
-      '2018-12-24T00:00:00.000-05:00',
+      '2018-12-24T05:00:00.000Z',
     );
   });
 };

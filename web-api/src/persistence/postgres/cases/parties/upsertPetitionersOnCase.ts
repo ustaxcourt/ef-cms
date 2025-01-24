@@ -1,4 +1,5 @@
 import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
+import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 import { getDbWriter } from '@web-api/database';
 
 // 10502 TODO: This currently requires ALL case petitioners to maintain order. That's dangerous. Maybe pass in case instead, which is slightly less terrible.
@@ -36,7 +37,7 @@ export const upsertPetitionersOnCase = async ({
           postalCode: p.postalCode,
           sealedAndUnavailable: p.sealedAndUnavailable,
           secondaryName: p.secondaryName,
-          serviceIndicator: p.serviceIndicator,
+          serviceIndicator: p.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_NONE,
           state: p.state,
           title: p.title,
           orderOnCase: index,

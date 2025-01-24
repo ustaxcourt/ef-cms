@@ -1,4 +1,5 @@
 import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
+import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 import { getDbWriter } from '@web-api/database';
 
 export const updatePetitionerOnCase = async ({
@@ -35,7 +36,8 @@ export const updatePetitionerOnCase = async ({
         postalCode: petitioner.postalCode,
         sealedAndUnavailable: petitioner.sealedAndUnavailable,
         secondaryName: petitioner.secondaryName,
-        serviceIndicator: petitioner.serviceIndicator,
+        serviceIndicator:
+          petitioner.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_NONE,
         state: petitioner.state,
         title: petitioner.title,
       })
