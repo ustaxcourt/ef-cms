@@ -164,7 +164,8 @@ export const MinuteSheet = ({
           </div>
         )}
       </div>
-      {(formattedMinuteSheet.jurisdictionRetained ||
+      {(formattedMinuteSheet.jurisdictionContinued ||
+        formattedMinuteSheet.jurisdictionRetained ||
         formattedMinuteSheet.statusReportOrdered ||
         formattedMinuteSheet.stipulatedDecisionOrdered) && <hr />}
       <div>
@@ -176,6 +177,18 @@ export const MinuteSheet = ({
             <div
               dangerouslySetInnerHTML={{
                 __html: formattedMinuteSheet.jurisdictionRetained,
+              }}
+            />
+          </div>
+        )}
+        {formattedMinuteSheet.jurisdictionContinued && (
+          <div>
+            <div>
+              <strong>Continued</strong>
+            </div>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: formattedMinuteSheet.jurisdictionContinued,
               }}
             />
           </div>

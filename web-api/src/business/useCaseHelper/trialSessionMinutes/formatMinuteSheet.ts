@@ -39,6 +39,7 @@ export type FormattedMinuteSheet = {
   trialHearing?: string;
   respondentAppearances: string[];
   jurisdictionRetained?: string;
+  jurisdictionContinued?: string;
   statusReportOrdered: string;
   stipulatedDecisionOrdered: string;
   motions: {
@@ -178,14 +179,23 @@ export const formatRespondentAppearances = (
 };
 
 export const formatJurisdictionRetained = (
-  section: MinuteSheetFormState['jurisdictionRetainedSection'],
+  section: MinuteSheetFormState['jurisdictionSection']['retained'],
 ): string | undefined => {
   if (!section?.date) return undefined;
   return [
-    `${section.continued ? 'Continued - ' : ''}${formatDateString(
-      section.date,
-      FORMATS.MMDDYYYY,
-    )}`,
+    `${formatDateString(section.date, FORMATS.MMDDYYYY)}`,
+    section.note ? `<em>${section.note}</em>` : '',
+  ]
+    .filter(Boolean)
+    .join('; ');
+};
+
+export const formatJurisdictionContinued = (
+  section: MinuteSheetFormState['jurisdictionSection']['continued'],
+): string | undefined => {
+  if (!section?.date) return undefined;
+  return [
+    `${formatDateString(section.date, FORMATS.MMDDYYYY)}`,
     section.note ? `<em>${section.note}</em>` : '',
   ]
     .filter(Boolean)

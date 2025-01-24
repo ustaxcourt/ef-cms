@@ -10,6 +10,7 @@ import {
   formatActionsAndFilings,
   formatCalledSection,
   formatExhibits,
+  formatJurisdictionContinued,
   formatJurisdictionRetained,
   formatMotions,
   formatPetitionerAppearances,
@@ -169,8 +170,11 @@ const formatMinuteSheet = ({
       minuteSheetFormState.trialSessionMetadataSection.judge.fullName,
     judgeTitle:
       minuteSheetFormState.trialSessionMetadataSection.judge.title || 'Judge',
+    jurisdictionContinued: formatJurisdictionContinued(
+      minuteSheetFormState.jurisdictionSection.continued,
+    ),
     jurisdictionRetained: formatJurisdictionRetained(
-      minuteSheetFormState.jurisdictionRetainedSection,
+      minuteSheetFormState.jurisdictionSection.retained,
     ),
     motions: formatMotions(minuteSheetFormState.motionsSection),
     notCalled: formatCalledSection(notCalled),

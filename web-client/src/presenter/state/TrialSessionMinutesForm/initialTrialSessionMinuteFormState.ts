@@ -2,7 +2,7 @@ export const MINUTE_SHEET_FORM_SECTION_MAP = {
   actionsAndFilingsSection: 'actionsAndFilingsSection',
   caseMetadataSection: 'caseMetadataSection',
   exhibitsSection: 'exhibitsSection',
-  jurisdictionRetainedSection: 'jurisdictionRetainedSection',
+  jurisdictionSection: 'jurisdictionSection',
   motionsSection: 'motionsSection',
   ordersSection: 'ordersSection',
   petitionersSection: 'petitionersSection',
@@ -169,10 +169,15 @@ export type MinuteSheetFormState = {
     respondents: KeyedPartyFormFieldsByRenderKey;
   };
 
-  jurisdictionRetainedSection: {
-    continued: boolean;
-    date: string;
-    note: string;
+  jurisdictionSection: {
+    continued: {
+      date: string;
+      note: string;
+    };
+    retained: {
+      date: string;
+      note: string;
+    };
   };
 
   ordersSection: {
@@ -247,10 +252,15 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
     exhibits: {},
   },
 
-  jurisdictionRetainedSection: {
-    continued: false,
-    date: '',
-    note: '',
+  jurisdictionSection: {
+    continued: {
+      date: '',
+      note: '',
+    },
+    retained: {
+      date: '',
+      note: '',
+    },
   },
 
   motionsSection: {
