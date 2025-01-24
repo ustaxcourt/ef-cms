@@ -359,6 +359,7 @@ import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/ver
 import { verifyUserPendingEmailInteractor } from '../../shared/src/proxies/users/verifyUserPendingEmailProxy';
 import ImageBlobReduce from 'image-blob-reduce';
 import deepFreeze from 'deep-freeze';
+import { getTrialSessionOpenCasesCountInteractor } from '@shared/proxies/trialSessions/getTrialSessionOpenCasesCountProxy';
 
 const reduce = ImageBlobReduce({
   pica: ImageBlobReduce.pica({ features: ['js'] }),
@@ -527,6 +528,7 @@ const allUseCases = {
   getPractitionersByNameInteractor,
   getPrivatePractitionersBySearchKeyInteractor,
   getTrialSessionDetailsInteractor,
+  getTrialSessionOpenCasesCountInteractor,
   getTrialSessionPlanningReportDataInteractor,
   getTrialSessionWorkingCopyInteractor,
   getTrialSessionsForJudgeActivityReportInteractor,
