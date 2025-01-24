@@ -76,6 +76,7 @@ describe('updateTrialSessionInteractorHelper', () => {
         applicationContext,
         authorizedUser: mockCaseServicesSupervisorUser,
         currentTrialSession: {
+          trialSessionId: TEST_TRIAL_SESSION_ID,
           caseOrder: TEST_DOCKET_NUMBERS.map(docketNumber => {
             return {
               docketNumber,
@@ -147,6 +148,7 @@ describe('updateTrialSessionInteractorHelper', () => {
         applicationContext,
         authorizedUser: mockCaseServicesSupervisorUser,
         currentTrialSession: {
+          trialSessionId: TEST_TRIAL_SESSION_ID,
           caseOrder: TEST_DOCKET_NUMBERS.map(docketNumber => {
             return {
               docketNumber,
