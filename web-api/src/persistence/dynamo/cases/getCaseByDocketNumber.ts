@@ -15,6 +15,8 @@ import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/caseCorr
 import { getCaseByDocketNumberPostgres } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { queryFull } from '../../dynamodbClientService';
+import { caseContactAddressSealedFormatter } from '@shared/business/utilities/caseFilter';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { workItemEntity } from '@web-api/persistence/postgres/workitems/mapper';
 
 // These case items are no longer in dynamoDB
