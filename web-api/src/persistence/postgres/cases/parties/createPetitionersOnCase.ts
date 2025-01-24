@@ -1,6 +1,7 @@
 import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import { getDbWriter } from '@web-api/database';
 import { getUniqueId } from '@shared/sharedAppContext';
+import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 
 export const createPetitionersOnCase = async ({
   docketNumber,
@@ -36,7 +37,8 @@ export const createPetitionersOnCase = async ({
           postalCode: petitionerData.postalCode,
           sealedAndUnavailable: petitionerData.sealedAndUnavailable,
           secondaryName: petitionerData.secondaryName,
-          serviceIndicator: petitionerData.serviceIndicator,
+          serviceIndicator:
+            petitionerData.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_NONE,
           state: petitionerData.state,
           title: petitionerData.title,
           orderOnCase: index,
