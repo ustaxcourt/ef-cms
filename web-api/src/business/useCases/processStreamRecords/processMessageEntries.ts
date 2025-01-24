@@ -1,5 +1,5 @@
 import { RawMessage } from '@shared/business/entities/Message';
-import { getLogger } from 'aws-xray-sdk';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 
