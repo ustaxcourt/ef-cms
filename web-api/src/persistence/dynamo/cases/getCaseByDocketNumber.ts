@@ -16,17 +16,17 @@ import { getCaseByDocketNumberPostgres } from '@web-api/persistence/postgres/cas
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { queryFull } from '../../dynamodbClientService';
 import { workItemEntity } from '@web-api/persistence/postgres/workitems/mapper';
-import { caseContactAddressSealedFormatter } from '@shared/business/utilities/caseFilter';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 // These case items are no longer in dynamoDB
 const SK_FILTER_OUT = ['work-item', 'correspondence'];
+import { caseContactAddressSealedFormatter } from '@shared/business/utilities/caseFilter';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const getCaseByDocketNumber = async ({
   applicationContext,
   docketNumber,
   includeConsolidatedCases = true,
-  includeCorrespondenceAndWorkItems,
+  includeCorrespondenceAndWorkItems = true,
   user = undefined, // Only needed to check permissions on sealed addresses for consolidated cases
 }: {
   applicationContext: IApplicationContext;
