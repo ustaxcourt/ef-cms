@@ -152,7 +152,7 @@ export const createCaseFromPaperInteractor = async (
   });
 
   if (applicationForWaiverOfFilingFeeFileId) {
-    let { documentTitle } =
+    const { documentTitle } =
       INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee;
 
     const applicationForWaiverOfFilingFeeDocketEntryEntity = new DocketEntry(

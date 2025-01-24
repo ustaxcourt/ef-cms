@@ -7,7 +7,7 @@ describe('isDocketEntryMultiDocketableAction', () => {
   const mockDocketEntryId = '123333333';
   let pathYesStub;
   let pathNoStub;
-  let {
+  const {
     ENTERED_AND_SERVED_EVENT_CODES,
     SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   } = applicationContext.getConstants();

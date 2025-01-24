@@ -7,7 +7,6 @@ import {
   COURT_ISSUED_EVENT_CODES,
   DECISION_EVENT_CODE,
   DOCKET_ENTRY_SEALED_TO_TYPES,
-  DOCUMENT_EXTERNAL_CATEGORIES_MAP,
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   EXTERNAL_DOCUMENT_TYPES,
@@ -43,6 +42,7 @@ import {
   createISODateString,
 } from '../utilities/DateHandler';
 import { getUniqueId } from '@shared/sharedAppContext';
+import { EXTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/externalFilingEvents';
 
 type PractitionerRole = 'irsPractitioner' | 'privatePractitioner';
 
@@ -416,20 +416,23 @@ export class DocketEntry extends JoiValidationEntity {
       !DocketEntry.isServed(this);
 
     if (shouldGenerateFiledBy) {
-      let partiesArray: string[] = [];
+      const partiesArray: string[] = [];
       const privatePractitionerIsFiling = this.privatePractitioners?.some(
         practitioner => practitioner.partyPrivatePractitioner,
       );
 
       if (privatePractitionerIsFiling) {
-        Array.isArray(this.privatePractitioners) &&
+        if (Array.isArray(this.privatePractitioners)) {
           this.privatePractitioners.forEach(practitioner => {
-            practitioner.partyPrivatePractitioner &&
+            if (practitioner.partyPrivatePractitioner) {
               partiesArray.push(practitioner.name);
+            }
           });
+        }
       } else {
-        this.partyIrsPractitioner && partiesArray.push('Resp.');
-
+        if (this.partyIrsPractitioner) {
+          partiesArray.push('Resp.');
+        }
         const petitionersArray: string[] = [];
         const intervenorsArray: string[] = [];
         this.filers.forEach(contactId =>
@@ -680,8 +683,8 @@ export class DocketEntry extends JoiValidationEntity {
     const documentTypes = [
       AMICUS_BRIEF_DOCUMENT_TYPE,
       ...[
-        ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Simultaneous Brief'],
-        ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Seriatim Brief'],
+        ...EXTERNAL_FILING_EVENTS['Simultaneous Brief'],
+        ...EXTERNAL_FILING_EVENTS['Seriatim Brief'],
       ].map(document => document.documentType),
     ];
 
