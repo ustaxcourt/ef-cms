@@ -23,7 +23,8 @@ export type FormattedMinuteSheet = {
   courtReporter: string;
   docketNumbers: string[];
   docketNumberWithSuffix?: string;
-  judge: string;
+  judgeFullName: string;
+  judgeTitle: string;
   remoteSession: string;
   trialClerk: string;
   trialLocation: string;

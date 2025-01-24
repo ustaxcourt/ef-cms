@@ -23,22 +23,31 @@ export const TrialSessionMetadataFieldset = ({
             <label className="grid-col-2 margin-bottom-0" htmlFor="judge">
               Judge
             </label>
-            <input
-              className="usa-input grid-col-10"
+            <select
+              className="usa-select grid-col-10"
               id="judge"
               name="judge"
-              type="text"
-              value={trialSessionMetadataFormState.judge}
+              value={trialSessionMetadataFormState.judge.userId}
               onBlur={() => onBlurHandler()}
-              onChange={e =>
+              onChange={e => {
+                const selectedJudge =
+                  trialSessionMetadataFormState.judgeOptions[e.target.value];
                 onChangeHandler({
                   name: e.target.name,
                   section:
                     MINUTE_SHEET_FORM_SECTION_MAP.trialSessionMetadataSection,
-                  value: e.target.value,
-                })
-              }
-            />
+                  value: selectedJudge,
+                });
+              }}
+            >
+              {Object.values(trialSessionMetadataFormState.judgeOptions).map(
+                judge => (
+                  <option key={judge.userId} value={judge.userId}>
+                    {judge.fullName}
+                  </option>
+                ),
+              )}
+            </select>
           </FormGroup>
         </div>
         <div className="grid-col">

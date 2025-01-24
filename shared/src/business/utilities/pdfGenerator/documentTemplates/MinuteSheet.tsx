@@ -32,12 +32,12 @@ export const MinuteSheet = ({
       <hr />
       <div className="minute-sheet-section">
         <div>
-          {formattedMinuteSheet.judge && (
+          {formattedMinuteSheet.judgeFullName && (
             <>
               <div>
-                <strong>Judge</strong>
+                <strong>{formattedMinuteSheet.judgeTitle}</strong>
               </div>
-              <div>{formattedMinuteSheet.judge}</div>
+              <div>{formattedMinuteSheet.judgeFullName}</div>
             </>
           )}
 

@@ -137,9 +137,16 @@ type KeyedExhibitFormFields = KeyedEntry & {
 };
 type KeyedExhibitFormFieldsByKey = Record<RenderKey, KeyedExhibitFormFields>;
 
+export type JudgeOption = {
+  fullName: string;
+  title: string;
+  userId: string;
+};
+
 export type MinuteSheetFormState = {
   trialSessionMetadataSection: {
-    judge: string;
+    judge: JudgeOption;
+    judgeOptions: Record<string, JudgeOption>;
     trialClerk: string;
     courtReporter: string;
     remoteSession: boolean;
@@ -162,7 +169,6 @@ export type MinuteSheetFormState = {
     respondents: KeyedPartyFormFieldsByRenderKey;
   };
 
-  // 10419 TODO: Could this be lumped in with orders below
   jurisdictionRetainedSection: {
     continued: boolean;
     date: string;
@@ -286,7 +292,8 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
 
   trialSessionMetadataSection: {
     courtReporter: '',
-    judge: '',
+    judge: { fullName: '', title: '', userId: '' },
+    judgeOptions: {},
     remoteSession: false,
     trialClerk: '',
   },

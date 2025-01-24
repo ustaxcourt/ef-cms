@@ -1,3 +1,5 @@
+import { JudgeOption } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+
 export type OnChangeHandler = ({
   name,
   rowInfo,
@@ -7,7 +9,7 @@ export type OnChangeHandler = ({
   name: string;
   rowInfo?: { key: string; nestedName?: string };
   section: string;
-  value: string | boolean;
+  value: string | boolean | JudgeOption;
 }) => void;
 
 export type AddRowHandler = ({

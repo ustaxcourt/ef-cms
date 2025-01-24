@@ -165,7 +165,10 @@ const formatMinuteSheet = ({
     docketNumbers,
     exhibits: formatExhibits(minuteSheetFormState.exhibitsSection),
     formattedDocketNumbers: getConsolidatedDocketNumbers(aCase),
-    judge: minuteSheetFormState.trialSessionMetadataSection.judge,
+    judgeFullName:
+      minuteSheetFormState.trialSessionMetadataSection.judge.fullName,
+    judgeTitle:
+      minuteSheetFormState.trialSessionMetadataSection.judge.title || 'Judge',
     jurisdictionRetained: formatJurisdictionRetained(
       minuteSheetFormState.jurisdictionRetainedSection,
     ),

@@ -22,9 +22,8 @@ export const initializeTrialSessionMinuteSheetFormAction = ({
   props,
   store,
 }: ActionProps) => {
-  const { caseDetail, judgeFullName, trialSession } = props;
+  const { caseDetail, judgeOptions, trialSession } = props;
   const currentUser = get(state.user);
-
   const formattedTrialSession = applicationContext
     .getUtilities()
     .getFormattedTrialSessionDetails({
@@ -32,12 +31,18 @@ export const initializeTrialSessionMinuteSheetFormAction = ({
       currentUser,
       trialSession,
     });
+  const judge = judgeOptions[formattedTrialSession.judge?.userId!];
 
   store.set(state.minuteSheetForm, cloneDeep(initialMinuteSheetFormState));
 
   store.set(state.minuteSheetForm.trialSessionMetadataSection, {
     courtReporter: formattedTrialSession.courtReporter,
-    judge: judgeFullName,
+    judge: {
+      fullName: judge.fullName,
+      title: judge.title,
+      userId: judge.userId,
+    },
+    judgeOptions,
     remoteSession: formattedTrialSession.isRemoteSession,
     trialClerk: formattedTrialSession.trialClerk!.name,
   });
