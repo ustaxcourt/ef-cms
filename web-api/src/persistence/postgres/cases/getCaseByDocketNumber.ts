@@ -47,7 +47,6 @@ export const getCaseByDocketNumber = async ({
         .toRawObject();
     }) || [];
 
-  console.log('petitionersOnCase', petitionersOnCase);
   const dbCaseStatusHistory = await getDbReader(reader =>
     reader
       .selectFrom('dwCaseStatusUpdate')

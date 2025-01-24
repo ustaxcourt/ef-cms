@@ -1,7 +1,7 @@
 import { Statistic } from '@shared/business/entities/Statistic';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getDbWriter } from '@web-api/database';
-import { flatten } from 'lodash';
+import { flatten, isEmpty } from 'lodash';
 
 // Prefer createCaseStatistic, deleteCaseStatistic, or updateCaseStatistic.
 // This is here for backwards compatibility with our Dynamo persistence patterns. In an ideal world, it wouldn't exist.
@@ -12,6 +12,10 @@ export const upsertCaseStatistics = async ({
   docketNumber: string;
   statistics: Statistic[];
 }) => {
+  if (isEmpty(statistics)) {
+    return;
+  }
+
   await getDbWriter(writer =>
     writer
       .insertInto('dwCaseStatistic')
@@ -53,11 +57,16 @@ export const upsertCaseStatistics = async ({
   );
 
   // Upsert related penalties
+  const penalties = flatten(statistics.map(s => s.penalties));
+  if (isEmpty(penalties)) {
+    return;
+  }
+
   await getDbWriter(writer =>
     writer
       .insertInto('dwStatisticPenalty')
       .values(
-        flatten(statistics.map(s => s.penalties)).map(p => ({
+        penalties.map(p => ({
           name: p.name,
           penaltyAmount: p.penaltyAmount,
           penaltyId: p.penaltyId,
