@@ -7,7 +7,7 @@ import { addPaperFilingLambda } from './lambdas/documents/addPaperFilingLambda';
 import { addPetitionerToCaseLambda } from './lambdas/cases/addPetitionerToCaseLambda';
 import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
 import { appendAmendedPetitionFormLambda } from './lambdas/courtIssuedOrder/appendAmendedPetitionFormLambda';
-import { createApplicationContext } from '@web-api/applicationContext';
+import { applicationContext } from '@web-api/applicationContext';
 import { archiveCorrespondenceDocumentLambda } from './lambdas/correspondence/archiveCorrespondenceDocumentLambda';
 import { archiveDraftDocumentLambda } from './lambdas/documents/archiveDraftDocumentLambda';
 import { assignWorkItemsLambda } from './lambdas/workitems/assignWorkItemsLambda';
@@ -207,8 +207,6 @@ import { verifyPendingCaseForUserLambda } from './lambdas/cases/verifyPendingCas
 import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingEmailLambda';
 import cors from 'cors';
 import express from 'express';
-
-const applicationContext = createApplicationContext({});
 
 export const app = express();
 
