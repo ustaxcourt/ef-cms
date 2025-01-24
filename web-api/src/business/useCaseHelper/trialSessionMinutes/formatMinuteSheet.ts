@@ -226,7 +226,7 @@ export const formatMotions = (
   return Object.values(motionsSection.motions)
     .map((motion: any) => ({
       content: [
-        `${motion.oralMotion ? 'ORAL ' : ''}${MOTION_TYPE_OPTIONS[motion.type] || ''}`,
+        `${motion.oralMotion ? 'Oral ' : ''}${MOTION_TYPE_OPTIONS[motion.type] || ''}`,
         formatDateString(motion.date, FORMATS.MMDDYYYY),
         MOTION_FILED_BY_OPTIONS[motion.filedBy]
           ? `Filed by ${MOTION_FILED_BY_OPTIONS[motion.filedBy]}`
@@ -241,7 +241,7 @@ export const formatMotions = (
     }))
     .filter(
       formattedMotion =>
-        !!formattedMotion.content && !!formattedMotion.motionType,
+        !!formattedMotion.content && !!formattedMotion.motionType, // 10419 TODO ask UX about whether or not to show a motion on the PDF if no type is selected
     );
 };
 

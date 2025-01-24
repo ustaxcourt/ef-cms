@@ -183,7 +183,7 @@ export const TrialBriefFieldset = ({
                 className="usa-checkbox__label margin-bottom-0"
                 htmlFor="trialBriefTranscriptOrdered"
               >
-                Remote Session
+                Transcript Ordered
               </label>
             </div>
           </FormGroup>

@@ -75,7 +75,7 @@ export const MinuteSheet = ({
         {formattedMinuteSheet.called && (
           <div>
             <div>
-              <strong>Called</strong>
+              <strong>Calendar Called</strong>
             </div>
             <div
               dangerouslySetInnerHTML={{

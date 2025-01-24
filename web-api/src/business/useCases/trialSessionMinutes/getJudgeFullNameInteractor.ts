@@ -15,10 +15,12 @@ export const getJudgeFullNameInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { judgeFullName } = await getUserById({
+  const { judgeFullName, judgeTitle } = await getUserById({
     applicationContext,
     userId: judgeUserId,
   });
 
-  return { judgeFullName };
+  const judgeFullNameAndTitle = `${judgeTitle} ${judgeFullName}`;
+
+  return { judgeFullName: judgeFullNameAndTitle };
 };

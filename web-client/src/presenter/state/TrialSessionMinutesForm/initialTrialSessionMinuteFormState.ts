@@ -362,6 +362,7 @@ export type ActionDocumentTypeOption =
   keyof typeof ACTION_DOCUMENT_TYPE_OPTIONS;
 
 export const ACTION_FILED_BY_OPTIONS = {
+  court: 'Court',
   joint: 'Joint',
   other: 'Other',
   petitioner: 'Petitioner',

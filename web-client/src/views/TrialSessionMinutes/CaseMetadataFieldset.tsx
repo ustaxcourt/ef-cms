@@ -27,7 +27,7 @@ export const CaseMetadataFieldset = ({
     <fieldset className="border-0 padding-0">
       <div className="grid-row grid-gap align-items-center margin-bottom-1">
         <div className="grid-col">
-          <span className="usa-label margin-bottom-0">Called</span>
+          <span className="usa-label margin-bottom-0">Calendar Called</span>
         </div>
         <div className="grid-col-auto">
           <DateSelector

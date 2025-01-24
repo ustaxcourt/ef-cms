@@ -76,14 +76,16 @@ export const DateSelector = ({
           const newEvent = new Event('change', { bubbles: true });
           const target = Object.create(originalEvent.target, {
             value: {
-              get: () =>
-                formatDateString(
+              get: () => {
+                if (originalEvent.target.value === '') return '';
+                return formatDateString(
                   createISODateString(
                     originalEvent.target.value,
                     FORMATS.MMDDYYYY,
                   ),
                   FORMATS.YYYYMMDD,
-                ),
+                );
+              },
             },
           });
 
