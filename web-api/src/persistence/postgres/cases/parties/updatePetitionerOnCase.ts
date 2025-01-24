@@ -4,9 +4,11 @@ import { getDbWriter } from '@web-api/database';
 export const updatePetitionerOnCase = async ({
   docketNumber,
   petitioner,
+  oldContactId,
 }: {
   docketNumber: string;
   petitioner: Petitioner;
+  oldContactId?: string;
 }): Promise<Petitioner> => {
   const updatedPetitionerData = await getDbWriter(writer =>
     writer
@@ -17,6 +19,7 @@ export const updatePetitionerOnCase = async ({
         address2: petitioner.address2,
         address3: petitioner.address3,
         city: petitioner.city,
+        contactId: petitioner.contactId,
         contactType: petitioner.contactType,
         country: petitioner.country,
         countryType: petitioner.countryType,
@@ -36,7 +39,7 @@ export const updatePetitionerOnCase = async ({
         state: petitioner.state,
         title: petitioner.title,
       })
-      .where('contactId', '=', petitioner.contactId!)
+      .where('contactId', '=', oldContactId || petitioner.contactId!)
       .where('docketNumber', '=', docketNumber)
       .returningAll()
       .executeTakeFirst(),
