@@ -1,5 +1,5 @@
 import { RawCorrespondence } from '@shared/business/entities/Correspondence';
-import { getLogger } from 'aws-xray-sdk';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 
