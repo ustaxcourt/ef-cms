@@ -1,6 +1,6 @@
 /**
  * HOW TO RUN
- * npx ts-node --transpileOnly scripts/postgres/delete-section-outboxes.ts
+ * npx ts-node --transpileOnly scripts/run-once-scripts/postgres-migration/delete-section-outboxes.ts
  */
 
 import { DynamoDBDocumentClient, ScanCommand } from '@aws-sdk/lib-dynamodb';
@@ -16,11 +16,11 @@ let totalItemsDeleted = 0;
 async function main() {
   const scanParams: ScanCommandInput = {
     TableName: environment.dynamoDbTableName,
-    TotalSegments: 10,
+    TotalSegments: 20,
   };
 
   await Promise.all(
-    Array.from({ length: 10 }).map((_, segment) =>
+    Array.from({ length: 20 }).map((_, segment) =>
       runSegmentScan({ ...scanParams, Segment: segment }, dynamoDbDocClient),
     ),
   );
@@ -44,6 +44,7 @@ async function runSegmentScan(
       DeleteRequest: {
         Key: {
           pk: item.pk,
+          sk: item.sk,
         },
       },
     }));
@@ -54,6 +55,8 @@ async function runSegmentScan(
     environment.dynamoDbTableName,
   );
   totalItemsDeleted += itemsDeletedCount;
+
+  console.log(`Items deleted so far: ${totalItemsDeleted}`);
 
   if (result.LastEvaluatedKey) {
     params.ExclusiveStartKey = result.LastEvaluatedKey;

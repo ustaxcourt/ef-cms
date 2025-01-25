@@ -1,6 +1,6 @@
 /**
  * HOW TO RUN
- * npx ts-node --transpileOnly scripts/run-once-scripts/postgres-migration/delete-work-items.ts
+ * CIRCLE_BRANCH=test npx ts-node --transpileOnly scripts/run-once-scripts/postgres-migration/delete-work-items.ts
  */
 
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';

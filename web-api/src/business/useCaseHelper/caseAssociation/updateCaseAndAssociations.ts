@@ -8,10 +8,14 @@ import { PrivatePractitioner } from '../../../../../shared/src/business/entities
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
+import { isEmpty } from 'lodash';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { upsertCase } from '@web-api/persistence/postgres/cases/upsertCase';
+import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
+import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import diff from 'diff-arrays-of-objects';
 
@@ -120,6 +124,7 @@ const updateCaseMessages = async ({
  * @returns {Array<function>} the persistence functions required to complete this action
  */
 const updateCorrespondence = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   applicationContext,
   caseToUpdate,
   oldCase,
@@ -146,18 +151,11 @@ const updateCorrespondence = ({
     ...updatedArchivedCorrespondences,
   ]);
 
-  return validCorrespondence.map(
-    correspondence =>
-      function updateCorrespondence_cb() {
-        return applicationContext
-          .getPersistenceGateway()
-          .updateCaseCorrespondence({
-            applicationContext,
-            correspondence,
-            docketNumber: caseToUpdate.docketNumber,
-          });
-      },
-  );
+  if (isEmpty(validCorrespondence)) {
+    return [];
+  }
+
+  return [() => upsertCaseCorrespondences(validCorrespondence)];
 };
 
 /**
@@ -336,11 +334,15 @@ const updateCaseWorkItems = async ({ caseToUpdate, oldCase }) => {
   const workItemsRequireUpdate =
     oldCase.associatedJudge !== caseToUpdate.associatedJudge;
 
+  if (!workItemsRequireUpdate) {
+    return [];
+  }
+
   const workItems = await getWorkItemsByDocketNumber({
     docketNumber: caseToUpdate.docketNumber,
   });
 
-  if (!workItems || !workItemsRequireUpdate) {
+  if (!workItems) {
     return [];
   }
 
@@ -352,57 +354,29 @@ const updateCaseWorkItems = async ({ caseToUpdate, oldCase }) => {
 
   const validWorkItems = WorkItem.validateRawCollection(updatedWorkItems);
 
-  return validWorkItems.map(
-    validWorkItem =>
-      function () {
-        return upsertWorkItems({
-          workItems: [validWorkItem],
-        });
-      },
-  );
+  return [() => upsertWorkItems({ workItems: validWorkItems })];
 };
 
-/**
- * Identifies user case mappings which require updates and issues persistence calls
- * @param {object} args the arguments for updating the case
- * @param {object} args.applicationContext the application context
- * @param {object} args.caseToUpdate the case with its updated document data
- * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
- * @returns {Array<function>} the persistence functions required to complete this action
- */
 const updateCaseDeadlines = async ({
-  applicationContext,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  applicationContext, // cannot remove till remaining RELATED_CASE_OPERATIONS functions no longer use applicationContext
   caseToUpdate,
   oldCase,
 }) => {
   if (oldCase.associatedJudge === caseToUpdate.associatedJudge) {
     return [];
   }
-
-  const deadlines = await applicationContext
-    .getPersistenceGateway()
-    .getCaseDeadlinesByDocketNumber({
-      applicationContext,
-      docketNumber: caseToUpdate.docketNumber,
-    });
+  const deadlines = await getCaseDeadlinesByDocketNumber({
+    docketNumber: caseToUpdate.docketNumber,
+  });
 
   deadlines.forEach(caseDeadline => {
     caseDeadline.associatedJudge = caseToUpdate.associatedJudge;
     caseDeadline.associatedJudgeId = caseToUpdate.associatedJudgeId;
   });
-  const validCaseDeadlines = CaseDeadline.validateRawCollection(deadlines, {
-    applicationContext,
-  });
+  const validCaseDeadlines = CaseDeadline.validateRawCollection(deadlines);
 
-  return validCaseDeadlines.map(
-    caseDeadline =>
-      function updateCaseDeadlines_cb() {
-        return applicationContext.getPersistenceGateway().createCaseDeadline({
-          applicationContext,
-          caseDeadline,
-        });
-      },
-  );
+  return [() => upsertCaseDeadlines(validCaseDeadlines)];
 };
 
 /**
@@ -416,10 +390,12 @@ export const updateCaseAndAssociations = async ({
   applicationContext,
   authorizedUser,
   caseToUpdate,
+  includeCorrespondenceAndWorkItems = true,
 }: {
   applicationContext: ServerApplicationContext;
   authorizedUser: UnknownAuthUser;
   caseToUpdate: any;
+  includeCorrespondenceAndWorkItems?: boolean;
 }): Promise<RawCase> => {
   const caseEntity: Case = caseToUpdate.validate
     ? caseToUpdate
@@ -432,6 +408,7 @@ export const updateCaseAndAssociations = async ({
     .getCaseByDocketNumber({
       applicationContext,
       docketNumber: caseToUpdate.docketNumber,
+      includeCorrespondenceAndWorkItems,
     });
 
   const validRawCaseEntity = caseEntity.validate().toRawObject();
@@ -442,16 +419,21 @@ export const updateCaseAndAssociations = async ({
     .validate()
     .toRawObject();
 
-  const RELATED_CASE_OPERATIONS = [
+  let RELATED_CASE_OPERATIONS = [
     updateCaseDeadlines,
     updateCaseDocketEntries,
     updateCaseMessages,
-    updateCaseWorkItems,
-    updateCorrespondence,
     updateHearings,
     updateIrsPractitioners,
     updatePrivatePractitioners,
   ];
+
+  if (includeCorrespondenceAndWorkItems) {
+    RELATED_CASE_OPERATIONS = RELATED_CASE_OPERATIONS.concat([
+      updateCaseWorkItems,
+      updateCorrespondence,
+    ]);
+  }
 
   const validationRequests = RELATED_CASE_OPERATIONS.map(fn =>
     fn({

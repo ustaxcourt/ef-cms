@@ -1,12 +1,24 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { calculateDate } from '@shared/business/utilities/DateHandler';
+import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
 import { getCaseByDocketNumber } from './getCaseByDocketNumber';
+import { getCaseCorrespondenceByDocketNumber as getCaseCorrespondenceByDocketNumberMock } from '@web-api/persistence/postgres/caseCorrespondences/getCaseCorrespondenceByDocketNumber';
+
+const getCaseCorrespondenceByDocketNumber =
+  getCaseCorrespondenceByDocketNumberMock as jest.Mock;
 
 describe('getCaseByDocketNumber', () => {
+  beforeEach(() => {
+    (getCaseCorrespondenceByDocketNumber as jest.Mock).mockResolvedValue([]);
+  });
+
   it('should return data as received from persistence', async () => {
     applicationContext.getDocumentClient().query.mockResolvedValue({
       Items: [
@@ -39,6 +51,21 @@ describe('getCaseByDocketNumber', () => {
   });
 
   it('should return case and its associated data', async () => {
+    getCaseCorrespondenceByDocketNumber.mockResolvedValue([
+      caseCorrespondenceEntity({
+        archived: false,
+        correspondenceId: 'abc-124',
+        filingDate: calculateDate({ dateString: '2024-11-06T21:05:08.191Z' }),
+      }),
+      caseCorrespondenceEntity({
+        archived: true,
+        correspondenceId: 'abc-123',
+        filingDate: calculateDate({
+          dateString: '2024-11-06T21:05:08.191Z',
+        }),
+      }),
+    ]);
+
     applicationContext.getDocumentClient().query.mockResolvedValue({
       Items: [
         {
@@ -76,18 +103,6 @@ describe('getCaseByDocketNumber', () => {
           sk: 'docket-entry|124',
         },
         {
-          archived: true,
-          correspondenceId: 'abc-123',
-          pk: 'case|123-20',
-          sk: 'correspondence|123',
-        },
-        {
-          archived: false,
-          correspondenceId: 'abc-124',
-          pk: 'case|123-20',
-          sk: 'correspondence|124',
-        },
-        {
           name: 'Judge Fieri',
           pk: 'case|123-20',
           role: ROLES.legacyJudge,
@@ -103,12 +118,7 @@ describe('getCaseByDocketNumber', () => {
     });
 
     expect(result).toEqual({
-      archivedCorrespondences: [
-        {
-          archived: true,
-          correspondenceId: 'abc-123',
-        },
-      ],
+      archivedCorrespondences: [],
       archivedDocketEntries: [
         {
           archived: true,
@@ -117,16 +127,12 @@ describe('getCaseByDocketNumber', () => {
       ],
       associatedJudge: 'Judge Fieri',
       consolidatedCases: [],
-      correspondence: [
-        {
-          archived: false,
-          correspondenceId: 'abc-124',
-        },
-      ],
+      correspondence: [],
       docketEntries: [
         {
           archived: false,
           docketEntryId: 'abc-124',
+          workItem: undefined,
         },
       ],
       docketNumber: '123-20',
