@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { AUTOMATIC_BLOCKED_REASONS } from '../entities/EntityConstants';
@@ -5,11 +6,15 @@ import { MOCK_CASE } from '../../test/mockCase';
 import { MOCK_LOCK } from '../../test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
+import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { removeCasePendingItemInteractor } from './removeCasePendingItemInteractor';
+
+const getCaseDeadlinesByDocketNumber =
+  getCaseDeadlinesByDocketNumberMock as jest.Mock;
 
 describe('removeCasePendingItemInteractor', () => {
   let mockLock;
@@ -61,10 +66,6 @@ describe('removeCasePendingItemInteractor', () => {
   });
 
   it('should call updateCase with automaticBlocked=false if there are no deadlines or pending items remaining on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockReturnValue([]);
-
     await removeCasePendingItemInteractor(
       applicationContext,
       {
@@ -85,11 +86,7 @@ describe('removeCasePendingItemInteractor', () => {
   });
 
   it('should call updateCase with automaticBlocked=true and a reason and call deleteCaseTrialSortMappingRecords if there are deadlines remaining on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockReturnValue([
-        { deadline: 'something' },
-      ]);
+    getCaseDeadlinesByDocketNumber.mockReturnValue([{ deadline: 'something' }]);
 
     await removeCasePendingItemInteractor(
       applicationContext,

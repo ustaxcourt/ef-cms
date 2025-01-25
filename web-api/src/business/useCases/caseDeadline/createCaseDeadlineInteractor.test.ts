@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
@@ -16,7 +17,11 @@ import {
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createCaseDeadlineInteractor } from './createCaseDeadlineInteractor';
+import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
+
+const getCaseDeadlinesByDocketNumber =
+  getCaseDeadlinesByDocketNumberMock as jest.Mock;
 
 describe('createCaseDeadlineInteractor', () => {
   const mockCaseDeadline = {
@@ -39,15 +44,8 @@ describe('createCaseDeadlineInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .createCaseDeadline.mockImplementation(v => v);
-    applicationContext
-      .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(() => mockCase);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockReturnValue([
-        { deadline: 'something' },
-      ]);
+    getCaseDeadlinesByDocketNumber.mockReturnValue([{ deadline: 'something' }]);
   });
 
   it('throws an error if the user is not valid or authorized', async () => {
