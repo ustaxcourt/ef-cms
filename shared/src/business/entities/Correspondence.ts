@@ -10,7 +10,7 @@ export class Correspondence extends JoiValidationEntity {
   public filedBy: string;
   public filingDate: string;
   public userId: string;
-  public docketNumber: string;
+  public docketNumber?: string; // Not optional but required as such to enable migration with dynamoDB
 
   constructor(rawProps) {
     super('Correspondence');
@@ -30,7 +30,7 @@ export class Correspondence extends JoiValidationEntity {
       .optional()
       .description('A correspondence document that was archived.'),
     correspondenceId: JoiValidationConstants.UUID.required(),
-    docketNumber: JoiValidationConstants.STRING.max(10).required(),
+    docketNumber: JoiValidationConstants.STRING.max(10).optional(),
     documentTitle: JoiValidationConstants.STRING.max(500).required(),
     filedBy: JoiValidationConstants.STRING.max(500).allow('').optional(),
     filingDate: JoiValidationConstants.ISO_DATE.max('now')
