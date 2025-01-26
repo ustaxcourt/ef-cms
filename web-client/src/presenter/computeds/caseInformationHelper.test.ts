@@ -294,7 +294,7 @@ describe('caseInformationHelper', () => {
     [ROLES.docketClerk, ROLES.petitionsClerk, ROLES.admissionsClerk].forEach(
       role => {
         it('should be true when the user has permission to edit petitioner counsel and there are privatePractitioners on the case', () => {
-          let mockUser = { ...mockDocketClerk, role };
+          const mockUser = { ...mockDocketClerk, role };
 
           const result = runCompute(caseInformationHelper, {
             state: {

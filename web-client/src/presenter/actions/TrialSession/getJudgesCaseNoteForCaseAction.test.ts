@@ -39,7 +39,7 @@ describe('getJudgesCaseNoteForCaseAction', () => {
     applicationContext
       .getUseCases()
       .getUserCaseNoteInteractor.mockImplementation(
-        () => new Promise((_resolve, reject) => reject(null)),
+        () => new Promise((_resolve, reject) => reject(new Error())),
       );
 
     const results = await runAction(getJudgesCaseNoteForCaseAction, {

@@ -85,7 +85,7 @@ export class Case extends JoiValidationEntity {
   public blocked?: boolean;
   public blockedDate?: string;
   public blockedReason?: string;
-  public caseStatusHistory: CaseStatusChange[];
+  public caseStatusHistory?: CaseStatusChange[];
   public caseNote?: string;
   public damages?: number;
   public highPriority?: boolean;
@@ -134,7 +134,7 @@ export class Case extends JoiValidationEntity {
   public noticeOfTrialDate?: string;
   public docketNumberWithSuffix?: string;
   public canAllowDocumentService?: boolean;
-  public canAllowPrintableDocketRecord!: boolean;
+  public canAllowPrintableDocketRecord?: boolean;
   public canDojPractitionersRepresentParty?: boolean;
   public archivedDocketEntries?: RawDocketEntry[];
   public docketEntries: any[];
@@ -246,8 +246,8 @@ export class Case extends JoiValidationEntity {
   static sortByDocketNumberAndGroupConsolidatedCases<
     T extends { leadDocketNumber?: string; docketNumber: string },
   >(cases: T[]): T[] {
-    let nonMemberCases: T[] = [];
-    let memberCases: { [key: string]: T[] } = {};
+    const nonMemberCases: T[] = [];
+    const memberCases: { [key: string]: T[] } = {};
 
     // Create a set of docket numbers for quick lookup
     const docketNumbers = new Set(cases.map(c => c.docketNumber));
@@ -953,7 +953,13 @@ export class Case extends JoiValidationEntity {
   assignCorrespondences({ rawCase }) {
     if (Array.isArray(rawCase.correspondence)) {
       this.correspondence = rawCase.correspondence
-        .map(correspondence => new Correspondence(correspondence))
+        .map(
+          correspondence =>
+            new Correspondence({
+              ...correspondence,
+              docketNumber: rawCase.docketNumber,
+            }),
+        )
         .sort((a, b) => compareStrings(a.filingDate, b.filingDate));
     } else {
       this.correspondence = [];
@@ -961,7 +967,11 @@ export class Case extends JoiValidationEntity {
 
     if (Array.isArray(rawCase.archivedCorrespondences)) {
       this.archivedCorrespondences = rawCase.archivedCorrespondences.map(
-        correspondence => new Correspondence(correspondence),
+        correspondence =>
+          new Correspondence({
+            ...correspondence,
+            docketNumber: rawCase.docketNumber,
+          }),
       );
     } else {
       this.archivedCorrespondences = [];
@@ -1534,7 +1544,7 @@ export class Case extends JoiValidationEntity {
     const date = createISODateString();
 
     this.status = updatedCaseStatus;
-    this.caseStatusHistory.push({
+    this.caseStatusHistory?.push({
       changedBy,
       date,
       updatedCaseStatus,
@@ -2185,11 +2195,11 @@ export const shouldGenerateNoticesForCase = rawCase => {
 
 /**
  *  determines whether or not we should show the printable docket record
- * @param {Object} rawCase  the case we are using to determine whether we should show the printable docket record
+ * @param {Object} rawCase the case we are using to determine whether we should show the printable docket record
  * @returns {Boolean} whether or not we should show the printable docket record
  */
 export const canAllowPrintableDocketRecord = rawCase => {
-  if (typeof rawCase.canAllowPrintableDocketRecord !== 'undefined') {
+  if (rawCase.canAllowPrintableDocketRecord !== undefined) {
     return rawCase.canAllowPrintableDocketRecord;
   }
   return rawCase.status !== CASE_STATUS_TYPES.new;

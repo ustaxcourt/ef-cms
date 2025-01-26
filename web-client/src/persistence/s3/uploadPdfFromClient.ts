@@ -4,7 +4,7 @@ function convertBytesToString(pdfBytes: number[]): string {
   const chunkSize = 10000;
   let resultString = '';
   for (let i = 0; i < pdfBytes.length; i += chunkSize) {
-    let chunk = pdfBytes.slice(i, i + chunkSize);
+    const chunk = pdfBytes.slice(i, i + chunkSize);
     resultString += String.fromCharCode.apply(null, chunk);
   }
 
@@ -44,6 +44,7 @@ function handleAdobeAdditionalMetadata(pdfBytes: number[]): BlobPart {
     }
 
     return modifiedPdfBytes;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_) {
     return pdfBytes as unknown as BlobPart;
   }
@@ -55,6 +56,7 @@ export const cleanFileMetadata = async (pdfLib, fileReader: FileReader) => {
       ignoreEncryption: true,
       updateMetadata: false,
     });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return fileReader.result;
   }
@@ -75,7 +77,6 @@ export const cleanFileMetadata = async (pdfLib, fileReader: FileReader) => {
 
   pdfDoc.setKeywords([]);
 
-  // eslint-disable-next-line @miovision/disallow-date/no-new-date
   const nowDateString = new Date();
   pdfDoc.setCreationDate(nowDateString);
   pdfDoc.setModificationDate(nowDateString);
@@ -104,7 +105,9 @@ export const readAndCleanFileMetadata = async (
 
       resolve(updatedFile);
     });
-    fileReader.addEventListener('error', () => reject('Failed to read file'));
+    fileReader.addEventListener('error', () =>
+      reject(new Error('Failed to read file')),
+    );
   });
 };
 

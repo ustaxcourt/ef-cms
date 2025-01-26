@@ -9,7 +9,7 @@ import { HearingNote } from '../entities/notes/HearingNote';
  * @returns {object} the errors or null
  */
 export const validateHearingNoteInteractor = (
-  applicationContext: IApplicationContext,
+  _applicationContext: IApplicationContext,
   { note }: { note: string },
 ) => {
   const errors = new HearingNote({ note }).getFormattedValidationErrors();

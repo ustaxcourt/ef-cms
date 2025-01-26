@@ -13,6 +13,7 @@ import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '@shared/business/entities/E
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { chunk, flatten, partition, uniq } from 'lodash';
+import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 
 const CHUNK_SIZE = 50;
 
@@ -145,7 +146,7 @@ export const setTrialSessionCalendarInteractor = async (
     // We chunk this array of functions so that we don't fire all of them at once.
     // If firing all at once, we exhaust the available connections and will run into connection timeouts.
     const chunkedFunctions = chunk(funcs, CHUNK_SIZE);
-    for (let singleChunk of chunkedFunctions) {
+    for (const singleChunk of chunkedFunctions) {
       await Promise.all(singleChunk.map(func => func()));
     }
 
@@ -236,11 +237,9 @@ const setManuallyAddedCaseAsCalendared = async (
   caseEntity.setAsCalendared(trialSessionEntity);
 
   await Promise.all([
-    applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
-      applicationContext,
+    setPriorityOnAllWorkItems({
       docketNumber: caseEntity.docketNumber,
       highPriority: true,
-      trialDate: caseEntity.trialDate,
     }),
     applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
@@ -268,11 +267,9 @@ const setTrialSessionCalendarForEligibleCase = async (
   trialSessionEntity.addCaseToCalendar(caseEntity);
 
   await Promise.all([
-    applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
-      applicationContext,
+    setPriorityOnAllWorkItems({
       docketNumber: caseEntity.docketNumber,
       highPriority: true,
-      trialDate: caseEntity.trialDate,
     }),
     applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,

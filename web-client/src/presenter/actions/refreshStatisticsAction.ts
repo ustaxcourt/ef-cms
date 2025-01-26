@@ -15,6 +15,7 @@ export const refreshStatisticsAction = ({
   store,
 }: ActionProps) => {
   const { CASE_TYPES_MAP } = applicationContext.getConstants();
+  // eslint-disable-next-line prefer-const
   let { caseType, hasVerifiedIrsNotice, statistics } = get(state.form);
 
   if (caseType !== CASE_TYPES_MAP.deficiency || !hasVerifiedIrsNotice) {
