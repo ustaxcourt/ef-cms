@@ -1,14 +1,27 @@
-/**
- * HOW TO RUN
- * CIRCLE_BRANCH=test npx ts-node --transpileOnly scripts/run-once-scripts/postgres-migration/delete-case-correspondences.ts
- */
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { getDbReader } from '../../../web-api/src/database';
+import {
+  parseArgsAndEnvVars,
+  type ScriptConfig,
+} from '../../helpers/parseArgsAndEnvVars';
+import { getDbReader } from '@web-api/database';
 import { isEmpty } from 'lodash';
 import { batchDeleteDynamoItems } from './batch-delete-dynamo-items';
-import { environment } from '../../../web-api/src/environment';
+import { environment } from '@web-api/environment';
+
+const scriptConfig: ScriptConfig = {
+  description:
+    'delete-case-correspondences - Delete from dynamodb case correspondence entities ' +
+    'that have been migrated to postgres',
+  environment: {
+    env: 'ENV',
+    sourceTable: 'SOURCE_TABLE',
+  },
+  requireActiveAwsSession: true,
+};
+parseArgsAndEnvVars(scriptConfig);
 
 const caseCorrespondencePageSize = 10000;
 const dynamoDbClient = new DynamoDBClient({ region: 'us-east-1' });
@@ -18,7 +31,7 @@ const dynamoDbDocClient = DynamoDBDocumentClient.from(dynamoDbClient);
 environment.nodeEnv = 'production';
 
 const getCaseCorrespondencesToDelete = async (offset: number) => {
-  const caseCorrespondences = await getDbReader(reader =>
+  return await getDbReader(reader =>
     reader
       .selectFrom('dwCaseCorrespondence')
       .select(['docketNumber', 'correspondenceId'])
@@ -27,7 +40,6 @@ const getCaseCorrespondencesToDelete = async (offset: number) => {
       .offset(offset)
       .execute(),
   );
-  return caseCorrespondences;
 };
 
 let totalItemsDeleted = 0;
