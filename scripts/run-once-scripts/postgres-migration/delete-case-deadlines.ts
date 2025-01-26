@@ -1,15 +1,27 @@
-/**
- * HOW TO RUN
- *
- * CIRCLE_BRANCH=test npx ts-node --transpileOnly scripts/run-once-scripts/postgres-migration/delete-case-deadlines.ts
- */
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { getDbReader } from '../../../web-api/src/database';
+import {
+  parseArgsAndEnvVars,
+  type ScriptConfig,
+} from '../../helpers/parseArgsAndEnvVars';
+import { getDbReader } from '@web-api/database';
 import { isEmpty } from 'lodash';
 import { batchDeleteDynamoItems } from './batch-delete-dynamo-items';
-import { environment } from '../../../web-api/src/environment';
+import { environment } from '@web-api/environment';
+
+const scriptConfig: ScriptConfig = {
+  description:
+    'delete-case-deadlines - Delete from dynamodb case deadline entities ' +
+    'that have been migrated to postgres',
+  environment: {
+    env: 'ENV',
+    sourceTable: 'SOURCE_TABLE',
+  },
+  requireActiveAwsSession: true,
+};
+parseArgsAndEnvVars(scriptConfig);
 
 const caseDeadlinePageSize = 10000;
 const dynamoDbClient = new DynamoDBClient({ region: 'us-east-1' });
@@ -19,7 +31,7 @@ const dynamoDbDocClient = DynamoDBDocumentClient.from(dynamoDbClient);
 environment.nodeEnv = 'production';
 
 const getCaseDeadlinesToDelete = async (offset: number) => {
-  const caseDeadlines = await getDbReader(reader =>
+  return await getDbReader(reader =>
     reader
       .selectFrom('dwCaseDeadline')
       .select(['docketNumber', 'caseDeadlineId'])
@@ -28,7 +40,6 @@ const getCaseDeadlinesToDelete = async (offset: number) => {
       .offset(offset)
       .execute(),
   );
-  return caseDeadlines;
 };
 
 let totalItemsDeleted = 0;
