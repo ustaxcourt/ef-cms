@@ -161,7 +161,7 @@ export const TrialBriefFieldset = ({
           <div style={{ marginBottom: '42px' }}>
             {/* 10419 TODO this is a stopgap means of approximating consistent vertical alignment*/}
           </div>
-          <FormGroup className="margin-bottom-0">
+          <FormGroup className="margin-bottom-0 display-inline-block">
             <div className="usa-checkbox">
               <input
                 aria-describedby="representing-legend"

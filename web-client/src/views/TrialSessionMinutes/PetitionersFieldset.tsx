@@ -30,30 +30,32 @@ export const PetitionersFieldset = ({
       <div className="grid-row grid-gap-2 margin-bottom-1">
         <div className="grid-col-1">Petitioner(s)</div>
         <div className="grid-col-2">
-          <div className="usa-checkbox">
-            <input
-              aria-describedby="representing-legend"
-              checked={petitionersFormState.noAppearance}
-              className="usa-checkbox__input"
-              id="noAppearance"
-              name="noAppearance"
-              type="checkbox"
-              onBlur={() => onBlurHandler()}
-              onChange={e =>
-                onChangeHandler({
-                  name: 'noAppearance',
-                  section: MINUTE_SHEET_FORM_SECTION_MAP.petitionersSection,
-                  value: e.target.checked,
-                })
-              }
-            />
-            <label
-              className="usa-checkbox__label margin-0"
-              htmlFor="noAppearance"
-            >
-              No appearance
-            </label>
-          </div>
+          <FormGroup className="margin-bottom-0 display-inline-block">
+            <div className="usa-checkbox">
+              <input
+                aria-describedby="representing-legend"
+                checked={petitionersFormState.noAppearance}
+                className="usa-checkbox__input"
+                id="noAppearance"
+                name="noAppearance"
+                type="checkbox"
+                onBlur={() => onBlurHandler()}
+                onChange={e =>
+                  onChangeHandler({
+                    name: 'noAppearance',
+                    section: MINUTE_SHEET_FORM_SECTION_MAP.petitionersSection,
+                    value: e.target.checked,
+                  })
+                }
+              />
+              <label
+                className="usa-checkbox__label margin-0"
+                htmlFor="noAppearance"
+              >
+                No appearance
+              </label>
+            </div>
+          </FormGroup>
         </div>
         <div className="grid-col-2">Role</div>
         <div className="grid-col-3">Date(s) of Appearance</div>
