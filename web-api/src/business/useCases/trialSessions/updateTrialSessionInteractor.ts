@@ -22,9 +22,14 @@ import {
 } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper';
 import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
+import { applicationContext } from '@web-api/applicationContext';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { saveFileAndGenerateUrl } from '@web-api/business/useCaseHelper/saveFileAndGenerateUrl';
+import { associateSwingTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/associateSwingTrialSessions';
+import { sendNotificationToUser } from '@web-api/notifications/sendNotificationToUser';
 
 export const updateTrialSession = async (
-  applicationContext: ServerApplicationContext,
   {
     clientConnectionId,
     trialSession,
@@ -35,17 +40,12 @@ export const updateTrialSession = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const currentTrialSession = (await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
-      trialSessionId: trialSession.trialSessionId!,
-    }))!;
+  const currentTrialSession = (await getTrialSessionById({
+    applicationContext,
+    trialSessionId: trialSession.trialSessionId!,
+  }))!;
 
-  if (
-    currentTrialSession.startDate <
-    applicationContext.getUtilities().createISODateString()
-  ) {
+  if (currentTrialSession.startDate < createISODateString()) {
     throw new Error('Trial session cannot be updated after its start date');
   }
 
@@ -156,13 +156,11 @@ export const updateTrialSession = async (
     const paperServicePdfData = await paperServicePdfsCombined.save();
 
     if (hasPaper) {
-      ({ fileId, url: pdfUrl } = await applicationContext
-        .getUseCaseHelpers()
-        .saveFileAndGenerateUrl({
-          applicationContext,
-          file: paperServicePdfData,
-          fileNamePrefix: 'paper-service-pdf/',
-        }));
+      ({ fileId, url: pdfUrl } = await saveFileAndGenerateUrl({
+        applicationContext,
+        file: paperServicePdfData,
+        fileNamePrefix: 'paper-service-pdf/',
+      }));
 
       const paperServicePdfName = getPaperServicePdfName({
         shouldIssueNoticeOfChangeOfTrialJudge,
@@ -176,7 +174,7 @@ export const updateTrialSession = async (
   }
 
   if (trialSession.swingSession && trialSession.swingSessionId) {
-    await applicationContext.getUseCaseHelpers().associateSwingTrialSessions(
+    await associateSwingTrialSessions(
       applicationContext,
       {
         swingSessionId: trialSession.swingSessionId,
@@ -191,7 +189,7 @@ export const updateTrialSession = async (
     trialSessionToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
   });
 
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
+  await sendNotificationToUser({
     applicationContext,
     clientConnectionId,
     message: {
