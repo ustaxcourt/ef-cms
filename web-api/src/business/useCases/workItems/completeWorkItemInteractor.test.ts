@@ -73,7 +73,7 @@ describe('completeWorkItemInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(getWorkItemById.mock.calls[0][0]).toMatchObject({
+    expect(getWorkItemById.mock.calls[1][0]).toMatchObject({
       workItemId: mockWorkItemId,
     });
   });

@@ -16,8 +16,8 @@ import { applicationContext } from '../test/createTestApplicationContext';
 import { fakeData } from '../test/getFakeFile';
 import { getContactPrimary } from '../entities/cases/Case';
 import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 import { updateContactInteractor } from './updateContactInteractor';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 describe('updates the contact on a case', () => {
   let mockCase;
@@ -164,7 +164,7 @@ describe('updates the contact on a case', () => {
       mockPetitionerUser,
     );
 
-    expect(saveWorkItem).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalled();
   });
 
   it('creates a work item if the contact is represented by a privatePractitioner and there is paper service on the case', async () => {
@@ -202,7 +202,7 @@ describe('updates the contact on a case', () => {
       mockPetitionerUser,
     );
 
-    expect(saveWorkItem).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalled();
   });
 
   it('does not create a work item if the contact is represented by a privatePractitioner and there is no paper service on the case', async () => {
@@ -240,7 +240,7 @@ describe('updates the contact on a case', () => {
       mockPetitionerUser,
     );
 
-    expect(saveWorkItem).not.toHaveBeenCalled();
+    expect(upsertWorkItems).not.toHaveBeenCalled();
   });
 
   it('throws an error if the case was not found', async () => {

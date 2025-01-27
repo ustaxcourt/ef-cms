@@ -21,8 +21,8 @@ import { WorkItem } from '@shared/business/entities/WorkItem';
 import { createPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/createPetitionersOnCase';
 import { createCaseStatistic } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistic';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 
@@ -305,8 +305,8 @@ export const createCaseInteractor = async (
     userId: user.userId,
   });
 
-  await saveWorkItem({
-    workItem: newWorkItem.validate().toRawObject(),
+  await upsertWorkItems({
+    workItems: [newWorkItem.validate().toRawObject()],
   });
 
   applicationContext.logger.info('filed a new petition', {

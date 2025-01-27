@@ -1,7 +1,6 @@
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { DOCKET_SECTION } from '../../../../../shared/src/business/entities/EntityConstants';
+import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getWorkItemById as getWorkItemByIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import { getWorkItemInteractor } from './getWorkItemInteractor';
 import {
@@ -11,7 +10,7 @@ import {
 
 describe('getWorkItemInteractor', () => {
   const getWorkItemById = getWorkItemByIdMock as jest.Mock;
-  let mockWorkItem = {
+  const mockWorkItem = {
     createdAt: '',
     docketEntry: {
       createdAt: '2019-03-11T21:56:01.625Z',
@@ -39,7 +38,6 @@ describe('getWorkItemInteractor', () => {
     let error;
     try {
       await getWorkItemInteractor(
-        applicationContext,
         {
           workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },
@@ -57,7 +55,6 @@ describe('getWorkItemInteractor', () => {
     let error;
     try {
       await getWorkItemInteractor(
-        applicationContext,
         {
           workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },
@@ -73,7 +70,6 @@ describe('getWorkItemInteractor', () => {
     getWorkItemById.mockResolvedValue(new WorkItem(mockWorkItem));
 
     const result = await getWorkItemInteractor(
-      applicationContext,
       {
         workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },

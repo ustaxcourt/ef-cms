@@ -9,7 +9,7 @@ jest.mock('@web-api/persistence/postgres/cases/generateDocketNumber', () =>
 );
 
 jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber', () =>
-  mockFactory('getCaseByDocketNumber'),
+  mockFactory('getCaseByDocketNumberPostgres'),
 );
 
 jest.mock(

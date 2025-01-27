@@ -33,8 +33,8 @@ jest.mock(
   () => mockFactory('getWorkItemsByDocketNumber', []),
 );
 
-jest.mock('@web-api/persistence/postgres/workitems/saveWorkItem', () =>
-  mockFactory('saveWorkItem'),
+jest.mock('@web-api/persistence/postgres/workitems/upsertWorkItems', () =>
+  mockFactory('upsertWorkItems'),
 );
 
 jest.mock(

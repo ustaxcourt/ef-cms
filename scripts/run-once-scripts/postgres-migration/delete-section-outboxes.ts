@@ -1,17 +1,25 @@
-/**
- * HOW TO RUN
- *
- * TABLE_NAME=testing npx ts-node --transpileOnly scripts/postgres/delete-section-outboxes.ts
- */
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import { DynamoDBDocumentClient, ScanCommand } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient, ScanCommandInput } from '@aws-sdk/client-dynamodb';
-import { requireEnvVars } from '../../../shared/admin-tools/util';
+import {
+  parseArgsAndEnvVars,
+  type ScriptConfig,
+} from '../../helpers/parseArgsAndEnvVars';
 import { batchDeleteDynamoItems } from './batch-delete-dynamo-items';
+import { environment } from '@web-api/environment';
 
-requireEnvVars(['TABLE_NAME']);
-
-const tableNameInput = process.env.TABLE_NAME!;
+const scriptConfig: ScriptConfig = {
+  description:
+    'delete-section-outboxes - Delete from dynamodb section-outbox entities ' +
+    'that have been migrated to postgres',
+  environment: {
+    env: 'ENV',
+    sourceTable: 'SOURCE_TABLE',
+  },
+  requireActiveAwsSession: true,
+};
+parseArgsAndEnvVars(scriptConfig);
 
 const dynamoDbClient = new DynamoDBClient({ region: 'us-east-1' });
 const dynamoDbDocClient = DynamoDBDocumentClient.from(dynamoDbClient);
@@ -20,12 +28,12 @@ let totalItemsDeleted = 0;
 
 async function main() {
   const scanParams: ScanCommandInput = {
-    TableName: tableNameInput,
-    TotalSegments: 10,
+    TableName: environment.dynamoDbTableName,
+    TotalSegments: 20,
   };
 
   await Promise.all(
-    Array.from({ length: 10 }).map((_, segment) =>
+    Array.from({ length: 20 }).map((_, segment) =>
       runSegmentScan({ ...scanParams, Segment: segment }, dynamoDbDocClient),
     ),
   );
@@ -49,6 +57,7 @@ async function runSegmentScan(
       DeleteRequest: {
         Key: {
           pk: item.pk,
+          sk: item.sk,
         },
       },
     }));
@@ -56,9 +65,11 @@ async function runSegmentScan(
   const itemsDeletedCount = await batchDeleteDynamoItems(
     itemsToDelete,
     client,
-    tableNameInput,
+    environment.dynamoDbTableName,
   );
   totalItemsDeleted += itemsDeletedCount;
+
+  console.log(`Items deleted so far: ${totalItemsDeleted}`);
 
   if (result.LastEvaluatedKey) {
     params.ExclusiveStartKey = result.LastEvaluatedKey;

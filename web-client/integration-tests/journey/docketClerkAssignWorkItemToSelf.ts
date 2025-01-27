@@ -26,7 +26,7 @@ export const docketClerkAssignWorkItemToSelf = (
 
     cerebralTest.docketEntryId = selectedWorkItem.docketEntry.docketEntryId;
 
-    expect(selectedWorkItem.assigneeId).toBeUndefined();
+    expect(selectedWorkItem.assigneeId).toBeFalsy();
 
     cerebralTest.setState('selectedWorkItems', [selectedWorkItem]);
     cerebralTest.setState('assigneeName', 'Test Docketclerk');

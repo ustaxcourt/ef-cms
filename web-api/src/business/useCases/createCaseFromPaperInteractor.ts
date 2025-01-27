@@ -12,15 +12,15 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { WorkItem } from '@shared/business/entities/WorkItem';
+import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { createPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/createPetitionersOnCase';
 import { createCaseStatistic } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistic';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd,
@@ -87,7 +87,7 @@ export const createCaseFromPaperInteractor = async (
     stinFileId?: string;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<RawCase> => {
+): Promise<{ caseDetail: RawCase; workItem: RawWorkItem }> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.START_PAPER_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -299,9 +299,12 @@ export const createCaseFromPaperInteractor = async (
     createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
   );
 
-  await saveWorkItem({
-    workItem: newWorkItem.validate().toRawObject(),
+  await upsertWorkItems({
+    workItems: [newWorkItem.validate().toRawObject()],
   });
 
-  return new Case(caseToAdd, { authorizedUser }).toRawObject();
+  return {
+    caseDetail: new Case(caseToAdd, { authorizedUser }).toRawObject(),
+    workItem: newWorkItem.validate().toRawObject(),
+  };
 };

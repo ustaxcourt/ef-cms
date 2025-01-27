@@ -21,7 +21,7 @@ import { aggregatePartiesForService } from '../utilities/aggregatePartiesForServ
 import { cloneDeep, isEmpty } from 'lodash';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -194,8 +194,8 @@ export const updateContact = async (
 
       changeOfAddressDocketEntry.setWorkItem(workItem);
 
-      await saveWorkItem({
-        workItem: workItem.validate().toRawObject(),
+      await upsertWorkItems({
+        workItems: [workItem.validate().toRawObject()],
       });
     }
 

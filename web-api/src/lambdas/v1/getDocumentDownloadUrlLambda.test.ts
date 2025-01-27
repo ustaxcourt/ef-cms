@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';

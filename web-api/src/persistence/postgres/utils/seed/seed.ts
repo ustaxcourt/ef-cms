@@ -11,6 +11,9 @@ import { cases420_429 } from '@web-api/persistence/postgres/utils/seed/fixtures/
 import { cases430_439 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases430_439';
 import { cases440_449 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases440_449';
 import { cases450_plus } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases450_plus';
+import { caseDeadlines } from '@web-api/persistence/postgres/utils/seed/fixtures/caseDeadlines';
+import { caseWorksheets } from '@web-api/persistence/postgres/utils/seed/fixtures/caseWorksheets';
+import { correspondence } from '@web-api/persistence/postgres/utils/seed/fixtures/correspodence';
 import { getDbWriter } from '../../../../database';
 import { messages } from './fixtures/messages';
 import { petitionerToCaseMappings } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/petitionerToCaseMappings';
@@ -18,7 +21,7 @@ import { statisticPenalties } from '@web-api/persistence/postgres/utils/seed/fix
 import { workItems } from './fixtures/workItems';
 
 export const seed = async () => {
-  await getDbWriter(writer =>
+  const insertMessages = getDbWriter(writer =>
     writer
       .insertInto('dwMessage')
       .values(messages)
@@ -26,7 +29,31 @@ export const seed = async () => {
       .execute(),
   );
 
-  await getDbWriter(writer =>
+  const insertCaseDeadline = getDbWriter(writer =>
+    writer
+      .insertInto('dwCaseDeadline')
+      .values(caseDeadlines)
+      .onConflict(oc => oc.column('caseDeadlineId').doNothing()) // ensure doesn't fail if exists
+      .execute(),
+  );
+
+  const insertCorrespondence = getDbWriter(writer =>
+    writer
+      .insertInto('dwCaseCorrespondence')
+      .values(correspondence)
+      .onConflict(oc => oc.column('correspondenceId').doNothing()) // ensure doesn't fail if exists
+      .execute(),
+  );
+
+  const insertCaseWorksheet = getDbWriter(writer =>
+    writer
+      .insertInto('dwCaseWorksheet')
+      .values(caseWorksheets)
+      .onConflict(oc => oc.column('docketNumber').doNothing()) // ensure doesn't fail if exists
+      .execute(),
+  );
+
+  const insertWorkItem = await getDbWriter(writer =>
     writer
       .insertInto('dwWorkItem')
       .values(workItems)
@@ -90,6 +117,13 @@ export const seed = async () => {
       .onConflict(oc => oc.columns(['contactId', 'docketNumber']).doNothing())
       .execute(),
   );
+  await Promise.all([
+    insertMessages,
+    insertCaseDeadline,
+    insertCorrespondence,
+    insertCaseWorksheet,
+    insertWorkItem,
+  ]);
 };
 
 seed()

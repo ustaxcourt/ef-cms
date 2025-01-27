@@ -1,14 +1,14 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const updateCourtIssuedDocketEntry = async (
@@ -89,8 +89,8 @@ export const updateCourtIssuedDocketEntry = async (
   const rawValidWorkItem = workItem.validate().toRawObject();
 
   const saveItems = [
-    saveWorkItem({
-      workItem: rawValidWorkItem,
+    upsertWorkItems({
+      workItems: [rawValidWorkItem],
     }),
     applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,

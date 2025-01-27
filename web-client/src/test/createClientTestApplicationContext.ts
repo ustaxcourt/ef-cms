@@ -65,7 +65,6 @@ import {
 } from '@shared/business/utilities/generateChangeOfAddressTemplate';
 import { getAllWebSocketConnections } from '@web-api/persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
 import { getConstants } from '@web-client/getConstants';
 import { getCropBox } from '@shared/business/utilities/getCropBox';
@@ -96,7 +95,6 @@ import { setItem } from '@web-client/persistence/localStorage/setItem';
 import { setNoticesForCalendaredTrialSessionInteractor } from '@shared/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
 import { setupPdfDocument } from '@shared/business/utilities/setupPdfDocument';
 import { unsealDocketEntryInteractor } from '@shared/proxies/editDocketEntry/unsealDocketEntryProxy';
-import { updateCaseCorrespondence } from '@web-api/persistence/dynamo/correspondence/updateCaseCorrespondence';
 import { updateDocketEntry } from '@web-api/persistence/dynamo/documents/updateDocketEntry';
 import { updateUserRecords } from '@web-api/persistence/dynamo/users/createNewPractitionerUser';
 import { uploadDocumentAndMakeSafeInteractor } from '@shared/business/useCases/uploadDocumentAndMakeSafeInteractor';
@@ -421,10 +419,7 @@ const createTestApplicationContext = () => {
       .mockImplementation(getAllWebSocketConnections),
     getCalendaredCasesForTrialSession: jest.fn(),
     getCaseByDocketNumber: jest.fn().mockImplementation(getCaseByDocketNumber),
-    getCaseDeadlinesByDateRange: jest.fn(),
-    getCaseDeadlinesByDocketNumber: jest
-      .fn()
-      .mockImplementation(getCaseDeadlinesByDocketNumber),
+    getCasesByFilters: jest.fn(),
     getDispatchNotification: jest.fn(),
     getDocument: jest.fn(),
     getDocumentQCInboxForSection: jest.fn(),
@@ -444,7 +439,6 @@ const createTestApplicationContext = () => {
     getTrialSessionJobStatusForCase: jest.fn(),
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getUserCaseMappingsByDocketNumber: jest.fn().mockReturnValue([]),
-    getWorkItemsByDocketNumber: jest.fn().mockReturnValue([]),
     incrementCounter,
     incrementKeyCount: jest.fn(),
     isEmailAvailable: jest.fn(),
@@ -457,9 +451,6 @@ const createTestApplicationContext = () => {
     setItem: jest.fn().mockImplementation(setItem),
     setPriorityOnAllWorkItems: jest.fn(),
     setTrialSessionJobStatusForCase: jest.fn(),
-    updateCaseCorrespondence: jest
-      .fn()
-      .mockImplementation(updateCaseCorrespondence),
     updateCaseHearing: jest.fn(),
     updateDocketEntry: jest.fn().mockImplementation(updateDocketEntry),
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),

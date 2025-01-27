@@ -13,7 +13,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../entities/WorkItem';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { isEmpty } from 'lodash';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -154,8 +154,8 @@ export const saveCaseDetailInternalEdit = async (
       { caseEntity },
     );
 
-    await saveWorkItem({
-      workItem: workItemEntity.validate().toRawObject(),
+    await upsertWorkItems({
+      workItems: [workItemEntity.validate().toRawObject()],
     });
   }
 
