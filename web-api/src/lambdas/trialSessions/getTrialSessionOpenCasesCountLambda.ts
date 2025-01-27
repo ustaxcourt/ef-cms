@@ -6,11 +6,10 @@ export const getTrialSessionOpenCasesCountLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     const { trialSessionId } = event.pathParameters || {};
 
     return await getTrialSessionOpenCasesCountInteractor(
-      applicationContext,
       {
         trialSessionId,
       },
