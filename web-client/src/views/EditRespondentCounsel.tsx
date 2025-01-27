@@ -72,7 +72,7 @@ export const EditRespondentCounsel = connect(
             </div>
           </div>
 
-          <div>
+          <div className="button-container">
             <Button
               id="submit-edit-respondent-information"
               onClick={() => {

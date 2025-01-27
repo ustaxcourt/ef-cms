@@ -107,7 +107,7 @@ export const CaseAssociationRequest = connect(
           )}
           <CaseAssociationRequestDocumentForm />
 
-          <div className="margin-top-5">
+          <div className="margin-top-5 button-container">
             <Button
               data-testid="request-access-submit-document"
               id="submit-document"

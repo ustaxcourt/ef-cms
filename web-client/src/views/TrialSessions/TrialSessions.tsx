@@ -47,12 +47,11 @@ export const TrialSessions = connect(
           <WarningNotification />
           <ErrorNotification />
           <div className="display-flex flex-justify-end flex-align-center flex-wrap gap-205">
-            <div>
+            <div className="display-flex flex-justify-end flex-align-center flex-wrap gap-205">
               {trialSessionsHelper.showCreateTermButton && (
                 <Button
                   link
-                  noMargin
-                  className="margin-right-0 padding-0"
+                  overrideMargin
                   data-testid="open-create-term-modal-button"
                   icon={['far', 'calendar']}
                   onClick={() => openCreateTermModalSequence()}
