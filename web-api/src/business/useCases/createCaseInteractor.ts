@@ -18,6 +18,7 @@ import { UserCase } from '../../../../shared/src/business/entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '../../../../shared/src/business/entities/WorkItem';
 import { setServiceIndicatorsForCase } from '../../../../shared/src/business/utilities/setServiceIndicatorsForCase';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 
@@ -294,9 +295,8 @@ export const createCaseInteractor = async (
     userId: user.userId,
   });
 
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
-    workItem: newWorkItem.validate().toRawObject(),
+  await upsertWorkItems({
+    workItems: [newWorkItem.validate().toRawObject()],
   });
 
   applicationContext.logger.info('filed a new petition', {

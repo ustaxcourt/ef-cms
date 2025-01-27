@@ -19,20 +19,20 @@ TABLE_VERSION=$(aws dynamodb get-item \
   --table-name "efcms-deploy-${ENV}" \
   --key '{"pk":{"S":"source-table-version"}, "sk":{"S":"source-table-version"}}' \
   --output text \
-  --region ${REGION} \
+  --region "${REGION}" \
   --query 'Item.current.S')
 
 # get judge name from dynamo table
 NEW_JUDGE_NAME=$(aws dynamodb get-item \
   --table-name "efcms-${ENV}-${TABLE_VERSION}" \
-  --key '{"pk":{"S":"user|'"${NEW_JUDGE_ID}"'"}, "sk":{"S":"user|'"${NEW_JUDGE_ID}"'"}}' \
+  --key "{\"pk\":{\"S\":\"user|${NEW_JUDGE_ID}\"}, \"sk\":{\"S\":\"user|${NEW_JUDGE_ID}\"}}" \
   --output text \
-  --region ${REGION} \
+  --region "${REGION}" \
   --query 'Item.judgeFullName.S')
 
-if [[ ${NEW_JUDGE_NAME} == "None" ]]; then
- echo "ERROR: Judge with userId: ${NEW_JUDGE_ID} has no dynamo record"
- exit 1;
+if [[ "${NEW_JUDGE_NAME}" == "None" ]]; then
+  echo "ERROR: Judge with userId: ${NEW_JUDGE_ID} has no dynamo record"
+  exit 1
 fi
 
 # update the judge's signature in deploy table
@@ -52,30 +52,30 @@ END
 )
 
 aws dynamodb put-item \
-    --region ${REGION} \
+    --region "${REGION}" \
     --table-name "efcms-deploy-${ENV}" \
     --item "${ITEM}"
 
 # update the old judge's title to now only be Judge
 OLD_JUDGE_NAME=$(aws dynamodb update-item \
-    --region ${REGION} \
+    --region "${REGION}" \
     --table-name "efcms-${ENV}-${TABLE_VERSION}" \
     --update-expression "SET #judgeTitle = :judgeTitle" \
     --expression-attribute-names '{"#judgeTitle":"judgeTitle"}' \
     --expression-attribute-values '{":judgeTitle":{"S":"Judge"}}' \
-    --key '{"pk":{"S":"user|'"${OLD_JUDGE_ID}"'"}, "sk":{"S":"user|'"${OLD_JUDGE_ID}"'"}}' \
+    --key "{\"pk\":{\"S\":\"user|${OLD_JUDGE_ID}\"}, \"sk\":{\"S\":\"user|${OLD_JUDGE_ID}\"}}" \
     --return-values "ALL_NEW" | jq -r '.Attributes.name.S')
 
 echo "Updating judge with last name: ${OLD_JUDGE_NAME} to Judge"
 
 # update the new judge's title to be Chief Judge
 NEW_JUDGE_NAME=$(aws dynamodb update-item \
-    --region ${REGION} \
+    --region "${REGION}" \
     --table-name "efcms-${ENV}-${TABLE_VERSION}" \
     --update-expression "SET #judgeTitle = :judgeTitle" \
     --expression-attribute-names '{"#judgeTitle":"judgeTitle"}' \
     --expression-attribute-values '{":judgeTitle":{"S":"Chief Judge"}}' \
-    --key '{"pk":{"S":"user|'"${NEW_JUDGE_ID}"'"}, "sk":{"S":"user|'"${NEW_JUDGE_ID}"'"}}' \
+    --key "{\"pk\":{\"S\":\"user|${NEW_JUDGE_ID}\"}, \"sk\":{\"S\":\"user|${NEW_JUDGE_ID}\"}}" \
     --return-values "ALL_NEW" | jq -r '.Attributes.name.S')
 
 echo "Updating judge with last name: ${NEW_JUDGE_NAME} to Chief Judge"
@@ -84,13 +84,13 @@ echo "Updating judge with last name: ${NEW_JUDGE_NAME} to Chief Judge"
 USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}" --output text)
 
 aws cognito-idp admin-update-user-attributes \
-    --user-pool-id ${USER_POOL_ID} \
-    --region ${REGION} \
-    --username ${OLD_JUDGE_ID} \
-    --user-attributes Name="name",Value="Judge ${OLD_JUDGE_NAME}"
+    --user-pool-id "${USER_POOL_ID}" \
+    --region "${REGION}" \
+    --username "${OLD_JUDGE_ID}" \
+    --user-attributes "Name=name,Value=\"Judge ${OLD_JUDGE_NAME}\""
 
 aws cognito-idp admin-update-user-attributes \
-    --user-pool-id ${USER_POOL_ID} \
-    --region ${REGION} \
-    --username ${NEW_JUDGE_ID} \
-    --user-attributes Name="name",Value="Chief Judge ${NEW_JUDGE_NAME}"
+    --user-pool-id "${USER_POOL_ID}" \
+    --region "${REGION}" \
+    --username "${NEW_JUDGE_ID}" \
+    --user-attributes "Name=name,Value=\"Chief Judge ${NEW_JUDGE_NAME}\""
