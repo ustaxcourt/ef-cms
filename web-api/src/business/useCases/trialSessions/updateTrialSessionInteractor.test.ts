@@ -1,3 +1,7 @@
+import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   RawTrialSession,
