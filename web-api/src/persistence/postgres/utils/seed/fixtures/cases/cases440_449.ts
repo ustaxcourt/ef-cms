@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
