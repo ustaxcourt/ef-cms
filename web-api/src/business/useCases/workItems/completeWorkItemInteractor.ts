@@ -6,7 +6,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -19,6 +19,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the completed work item
  */
 export const completeWorkItem = async (
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   applicationContext: ServerApplicationContext,
   {
     completedMessage,
@@ -49,17 +50,18 @@ export const completeWorkItem = async (
     .validate()
     .toRawObject();
 
-  await saveWorkItem({
-    workItem: completedWorkItem,
+  await upsertWorkItems({
+    workItems: [completedWorkItem],
   });
 
   return completedWorkItem;
 };
 
-export const determineEntitiesToLock = async (
-  applicationContext: ServerApplicationContext,
-  { workItemId }: { workItemId: string },
-) => {
+export const determineEntitiesToLock = async ({
+  workItemId,
+}: {
+  workItemId: string;
+}) => {
   const originalWorkItem = await getWorkItemById({
     workItemId,
   });

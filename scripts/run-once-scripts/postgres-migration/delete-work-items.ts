@@ -1,26 +1,37 @@
-/**
- * HOW TO RUN
- *
- * TABLE_NAME=testing npx ts-node --transpileOnly scripts/run-once-scripts/postgres-migration/delete-work-items.ts
- */
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { requireEnvVars } from '../../../shared/admin-tools/util';
-import { getDbReader } from '../../../web-api/src/database';
+import {
+  parseArgsAndEnvVars,
+  type ScriptConfig,
+} from '../../helpers/parseArgsAndEnvVars';
+import { getDbReader } from '@web-api/database';
 import { isEmpty } from 'lodash';
 import { batchDeleteDynamoItems } from './batch-delete-dynamo-items';
+import { environment } from '@web-api/environment';
+
+const scriptConfig: ScriptConfig = {
+  description:
+    'delete-work-items - Delete from dynamodb work-item entities ' +
+    'that have been migrated to postgres',
+  environment: {
+    env: 'ENV',
+    sourceTable: 'SOURCE_TABLE',
+  },
+  requireActiveAwsSession: true,
+};
+parseArgsAndEnvVars(scriptConfig);
 
 const workItemsPageSize = 10000;
 const dynamoDbClient = new DynamoDBClient({ region: 'us-east-1' });
 const dynamoDbDocClient = DynamoDBDocumentClient.from(dynamoDbClient);
 
-requireEnvVars(['TABLE_NAME']);
-
-const tableNameInput = process.env.TABLE_NAME!;
+// We set the environment as 'production' (= "a deployed environment") to get the RDS connection to work properly
+environment.nodeEnv = 'production';
 
 const getWorkItemsToDelete = async (offset: number) => {
-  const workItems = await getDbReader(reader =>
+  return await getDbReader(reader =>
     reader
       .selectFrom('dwWorkItem')
       .select(['docketNumber', 'workItemId'])
@@ -29,7 +40,6 @@ const getWorkItemsToDelete = async (offset: number) => {
       .offset(offset)
       .execute(),
   );
-  return workItems;
 };
 
 let totalItemsDeleted = 0;
@@ -42,15 +52,15 @@ async function main() {
     const dynamoItemsToDelete = workItemsToDelete.map(c => ({
       DeleteRequest: {
         Key: {
-          pk: `work-item|${c.workItemId}`,
-          sk: `case$|{c.docketNumber}`,
+          pk: `case|${c.docketNumber}`,
+          sk: `work-item|${c.workItemId}`,
         },
       },
     }));
     totalItemsDeleted += await batchDeleteDynamoItems(
       dynamoItemsToDelete,
       dynamoDbDocClient,
-      tableNameInput,
+      environment.dynamoDbTableName,
     );
     console.log(`Total work items deleted so far: ${totalItemsDeleted}`);
     offset += workItemsPageSize;

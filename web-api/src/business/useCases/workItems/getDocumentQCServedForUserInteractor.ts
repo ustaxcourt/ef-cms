@@ -1,12 +1,11 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { WorkItem } from '@shared/business/entities/WorkItem';
 import {
   calculateDate,
   createISODateAtStartOfDayEST,
@@ -21,7 +20,6 @@ import { getDocumentQCServedForUser } from '@web-api/persistence/postgres/workit
  * @returns {object} the work items in the user document served inbox
  */
 export const getDocumentQCServedForUserInteractor = async (
-  applicationContext: ServerApplicationContext,
   { userId }: { userId: string },
   authorizedUser: UnknownAuthUser,
 ) => {

@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   AUTOMATIC_BLOCKED_REASONS,
@@ -23,14 +24,14 @@ import {
 } from '../../../../../shared/src/test/mockUsers';
 import { fileAndServeDocumentOnOneCase } from './fileAndServeDocumentOnOneCase';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
-import { saveWorkItem as saveWorkItemMock } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 describe('fileAndServeDocumentOnOneCase', () => {
   let mockCaseEntity;
   let mockWorkItem;
   let mockDocketEntry;
 
-  const saveWorkItem = saveWorkItemMock as jest.Mock;
+  const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const mockDocketEntryId = '85a5b1c81eed44b6932a967af060597a';
   const differentDocketNumber = '3875-32';
   const docketEntriesWithCaseClosingEventCodes =
@@ -43,7 +44,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
         {
           docketEntryId: mockDocketEntryId,
           docketNumber: MOCK_CASE.docketNumber,
-          documentType: eventCodeMap.documentType,
+          documentType: eventCodeMap?.documentType,
           eventCode,
           filedByRole: ROLES.judge,
           signedAt: createISODateString(),
@@ -242,7 +243,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
       user: docketClerkUser,
     });
 
-    expect(saveWorkItem.mock.calls[0][0].workItem.leadDocketNumber).toBe(
+    expect(upsertWorkItems.mock.calls[0][0].workItems[0].leadDocketNumber).toBe(
       MOCK_CASE.docketNumber,
     );
   });
@@ -361,7 +362,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
       user: docketClerkUser,
     });
 
-    expect(saveWorkItem).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalled();
   });
 
   it('should pass the caseEntity`s trialDate and trialLocation to the docketEntry`s work item when they exist', async () => {

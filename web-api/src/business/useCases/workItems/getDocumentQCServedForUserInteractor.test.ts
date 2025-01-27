@@ -64,7 +64,6 @@ describe('getDocumentQCServedForUserInteractor', () => {
   it('throws an error if the user does not have access to the work item', async () => {
     await expect(
       getDocumentQCServedForUserInteractor(
-        applicationContext,
         {
           userId: '123',
         },
@@ -75,7 +74,6 @@ describe('getDocumentQCServedForUserInteractor', () => {
 
   it('successfully returns the work item for a petitions clerk', async () => {
     const result = await getDocumentQCServedForUserInteractor(
-      applicationContext,
       {
         userId: '123',
       },
@@ -100,7 +98,6 @@ describe('getDocumentQCServedForUserInteractor', () => {
 
   it('successfully returns the work items for a docket clerk', async () => {
     const result = await getDocumentQCServedForUserInteractor(
-      applicationContext,
       {
         userId: 'abc',
       },

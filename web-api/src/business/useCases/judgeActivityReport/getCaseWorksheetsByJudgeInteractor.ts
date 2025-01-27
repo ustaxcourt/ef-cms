@@ -1,17 +1,17 @@
 import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
-import { JudgeActivityReportSearch } from '../../../../../shared/src/business/entities/judgeActivityReport/JudgeActivityReportSearch';
+import { JudgeActivityReportSearch } from '@shared/business/entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   SubmittedCAVTableFields,
   getDocketNumbersByStatusAndByJudge,
 } from '@web-api/persistence/postgres/cases/reports/getDocketNumbersByStatusAndByJudge';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getConsolidatedCasesCount } from '@web-api/persistence/postgres/cases/getConsolidatedCasesCount';
+import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/postgres/caseWorksheets/getCaseWorksheetsByDocketNumber';
 
 export type GetCasesByStatusAndByJudgeRequest = {
   statuses: string[];
@@ -24,7 +24,6 @@ export type GetCasesByStatusAndByJudgeResponse = SubmittedCAVTableFields & {
 };
 
 export const getCaseWorksheetsByJudgeInteractor = async (
-  applicationContext: ServerApplicationContext,
   params: GetCasesByStatusAndByJudgeRequest,
   authorizedUser: UnknownAuthUser,
 ): Promise<{
@@ -39,7 +38,7 @@ export const getCaseWorksheetsByJudgeInteractor = async (
     throw new InvalidRequest('Invalid search terms');
   }
 
-  const caseRecords = await getCases(applicationContext, searchEntity);
+  const caseRecords = await getCases(searchEntity);
 
   const allCaseResults = await Promise.all(
     caseRecords.map(async caseRecord => {
@@ -58,10 +57,7 @@ export const getCaseWorksheetsByJudgeInteractor = async (
   };
 };
 
-const getCases = async (
-  applicationContext: ServerApplicationContext,
-  searchEntity: JudgeActivityReportSearch,
-) => {
+const getCases = async (searchEntity: JudgeActivityReportSearch) => {
   const allCaseRecords = await getDocketNumbersByStatusAndByJudge({
     params: {
       excludeMemberCases: true,
@@ -70,10 +66,7 @@ const getCases = async (
     },
   });
 
-  const completeCaseRecords = await attachCaseWorkSheets(
-    applicationContext,
-    allCaseRecords,
-  );
+  const completeCaseRecords = await attachCaseWorkSheets(allCaseRecords);
 
   return completeCaseRecords;
 };
@@ -90,16 +83,10 @@ const calculateNumberOfConsolidatedCases = async (caseInfo: {
   });
 };
 
-async function attachCaseWorkSheets(
-  applicationContext: ServerApplicationContext,
-  cases: SubmittedCAVTableFields[],
-) {
-  const caseWorksheets = await applicationContext
-    .getPersistenceGateway()
-    .getCaseWorksheetsByDocketNumber({
-      applicationContext,
-      docketNumbers: cases.map(c => c.docketNumber),
-    });
+async function attachCaseWorkSheets(cases: SubmittedCAVTableFields[]) {
+  const caseWorksheets = await getCaseWorksheetsByDocketNumber({
+    docketNumbers: cases.map(c => c.docketNumber),
+  });
   const caseWorksheetMap: Map<string, RawCaseWorksheet> = new Map();
   caseWorksheets.forEach(caseWorksheet =>
     caseWorksheetMap.set(caseWorksheet.docketNumber, caseWorksheet),

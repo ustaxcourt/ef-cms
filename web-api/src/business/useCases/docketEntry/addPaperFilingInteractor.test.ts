@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
@@ -15,11 +16,15 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { addPaperFilingInteractor } from './addPaperFilingInteractor';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
-import { saveWorkItem as saveWorkItemMock } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+
+const getCaseDeadlinesByDocketNumber =
+  getCaseDeadlinesByDocketNumberMock as jest.Mock;
 
 describe('addPaperFilingInteractor', () => {
-  const saveWorkItem = saveWorkItemMock as jest.Mock;
+  const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const mockClientConnectionId = '987654';
   const mockCase = { ...MOCK_CASE, leadDocketNumber: MOCK_CASE.docketNumber };
   let defaultParamaters: {
@@ -105,7 +110,7 @@ describe('addPaperFilingInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(saveWorkItem).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -218,9 +223,11 @@ describe('addPaperFilingInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(saveWorkItem.mock.calls[0][0].workItem).toMatchObject({
-      leadDocketNumber: mockCase.leadDocketNumber,
-    });
+    expect(upsertWorkItems.mock.calls[0][0].workItems).toMatchObject([
+      {
+        leadDocketNumber: mockCase.leadDocketNumber,
+      },
+    ]);
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -250,7 +257,7 @@ describe('addPaperFilingInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(saveWorkItem).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -280,7 +287,7 @@ describe('addPaperFilingInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(saveWorkItem).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalled();
   });
 
   it('sets the case as blocked if the document filed is a tracked document type', async () => {
@@ -323,11 +330,7 @@ describe('addPaperFilingInteractor', () => {
   });
 
   it('sets the case as blocked with due dates if the document filed is a tracked document type and the case has due dates', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockReturnValue([
-        { deadline: 'something' },
-      ]);
+    getCaseDeadlinesByDocketNumber.mockReturnValue([{ deadline: 'something' }]);
 
     await addPaperFilingInteractor(
       applicationContext,
@@ -524,7 +527,7 @@ describe('addPaperFilingInteractor', () => {
       expect(
         applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
       ).toHaveBeenCalledTimes(1);
-      expect(saveWorkItem).toHaveBeenCalledTimes(1);
+      expect(upsertWorkItems).toHaveBeenCalledTimes(1);
     });
 
     it('should still save only one copy of the document to s3', async () => {

@@ -11,7 +11,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { omit } from 'lodash';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -172,8 +172,8 @@ export const fileCourtIssuedDocketEntry = async (
       const rawValidWorkItem = workItem.validate().toRawObject();
 
       saveItems.push(
-        saveWorkItem({
-          workItem: rawValidWorkItem,
+        upsertWorkItems({
+          workItems: [rawValidWorkItem],
         }),
       );
 

@@ -1,12 +1,11 @@
 import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
@@ -20,7 +19,6 @@ import { getDocumentQCInboxForSection } from '@web-api/persistence/postgres/work
  * @returns {object} the work items in the section document inbox
  */
 export const getDocumentQCInboxForSectionInteractor = async (
-  applicationContext: ServerApplicationContext,
   {
     judgeUserName,
     section,

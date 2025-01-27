@@ -1,13 +1,14 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { CaseDeadline } from '../../../../../shared/src/business/entities/CaseDeadline';
+import { Case } from '@shared/business/entities/cases/Case';
+import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const createCaseDeadline = async (
@@ -25,21 +26,13 @@ export const createCaseDeadline = async (
   });
   let caseEntity = new Case(caseDetail, { authorizedUser });
 
-  const newCaseDeadline = new CaseDeadline(
-    {
-      ...caseDeadline,
-      associatedJudge: caseEntity.associatedJudge,
-      associatedJudgeId: caseEntity.associatedJudgeId,
-    },
-    {
-      applicationContext,
-    },
-  );
-
-  await applicationContext.getPersistenceGateway().createCaseDeadline({
-    applicationContext,
-    caseDeadline: newCaseDeadline.validate().toRawObject(),
+  const newCaseDeadline = new CaseDeadline({
+    ...caseDeadline,
+    associatedJudge: caseEntity.associatedJudge,
+    associatedJudgeId: caseEntity.associatedJudgeId,
   });
+
+  await upsertCaseDeadlines([newCaseDeadline.validate().toRawObject()]);
 
   caseEntity = await applicationContext
     .getUseCaseHelpers()

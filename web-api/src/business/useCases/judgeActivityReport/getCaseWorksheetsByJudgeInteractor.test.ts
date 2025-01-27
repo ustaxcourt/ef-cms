@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/caseWorksheets/mocks.jest';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import {
   GetCasesByStatusAndByJudgeRequest,
@@ -11,11 +12,15 @@ import {
 import { MOCK_CASE_WORKSHEET } from '@shared/test/mockCaseWorksheet';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { getCaseWorksheetsByDocketNumber as getCaseWorksheetsByDocketNumberMock } from '@web-api/persistence/postgres/caseWorksheets/getCaseWorksheetsByDocketNumber';
 import { judgeUser } from '@shared/test/mockUsers';
 import {
   mockJudgeUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+
+const getCaseWorksheetsByDocketNumber =
+  getCaseWorksheetsByDocketNumberMock as jest.Mock;
 
 describe('getCaseWorksheetsByJudgeInteractor', () => {
   let mockGetDocketNumbersByStatusAndByJudgeResult: RawCase[] = [];
@@ -52,12 +57,10 @@ describe('getCaseWorksheetsByJudgeInteractor', () => {
 
   beforeAll(() => {
     applicationContext.getSearchClient().count = jest.fn();
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseWorksheetsByDocketNumber.mockImplementation(() => [
-        mockCaseWorksheet10123,
-        mockCaseWorksheet10223,
-      ]);
+    getCaseWorksheetsByDocketNumber.mockImplementation(() => [
+      mockCaseWorksheet10123,
+      mockCaseWorksheet10223,
+    ]);
   });
   applicationContext
     .getPersistenceGateway()
@@ -68,7 +71,6 @@ describe('getCaseWorksheetsByJudgeInteractor', () => {
   it('should return an error when the user is not authorized to generate the report', async () => {
     await expect(
       getCaseWorksheetsByJudgeInteractor(
-        applicationContext,
         mockValidRequest,
         mockPetitionsClerkUser,
       ),
@@ -78,7 +80,6 @@ describe('getCaseWorksheetsByJudgeInteractor', () => {
   it('should return an error when the search parameters are not valid', async () => {
     await expect(
       getCaseWorksheetsByJudgeInteractor(
-        applicationContext,
         {
           judges: [judgeUser.name],
           statuses: [undefined as any],
@@ -89,11 +90,7 @@ describe('getCaseWorksheetsByJudgeInteractor', () => {
   });
 
   it('calls getDocketNumbersByStatusAndByJudge with excludeMemberCases flag = true (stripping out the consolidated member case)', async () => {
-    await getCaseWorksheetsByJudgeInteractor(
-      applicationContext,
-      mockValidRequest,
-      mockJudgeUser,
-    );
+    await getCaseWorksheetsByJudgeInteractor(mockValidRequest, mockJudgeUser);
 
     expect(
       applicationContext.getPersistenceGateway()
@@ -131,7 +128,6 @@ describe('getCaseWorksheetsByJudgeInteractor', () => {
       .getCountOfConsolidatedCases.mockReturnValueOnce(3);
 
     const result = await getCaseWorksheetsByJudgeInteractor(
-      applicationContext,
       mockValidRequest,
       mockJudgeUser,
     );
@@ -167,7 +163,6 @@ describe('getCaseWorksheetsByJudgeInteractor', () => {
       );
 
     const result = await getCaseWorksheetsByJudgeInteractor(
-      applicationContext,
       mockValidRequest,
       mockJudgeUser,
     );

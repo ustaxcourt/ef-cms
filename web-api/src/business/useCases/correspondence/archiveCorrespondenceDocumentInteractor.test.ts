@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { Correspondence } from '@shared/business/entities/Correspondence';
@@ -10,6 +11,9 @@ import { archiveCorrespondenceDocumentInteractor } from './archiveCorrespondence
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { upsertCaseCorrespondences as upsertCaseCorrespondencesMock } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
+
+const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
 
 describe('archiveCorrespondenceDocumentInteractor', () => {
   const mockUserId = '2474e5c0-f741-4120-befa-b77378ac8bf0';
@@ -31,6 +35,7 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
     mockLock = undefined;
     mockCorrespondence = new Correspondence({
       correspondenceId: mockCorrespondenceId,
+      docketNumber: MOCK_CASE.docketNumber,
       documentTitle: 'My Correspondence',
       filedBy: 'Docket clerk',
       userId: mockUserId,
@@ -85,16 +90,9 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCaseCorrespondence.mock
-        .calls[0][0],
-    ).toMatchObject({
-      correspondence: {
-        ...mockCorrespondence,
-        archived: true,
-      },
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    expect(upsertCaseCorrespondences.mock.calls[0][0]).toMatchObject([
+      { ...mockCorrespondence, archived: true },
+    ]);
   });
 
   it('should update the case to reflect the archived correspondence', async () => {
