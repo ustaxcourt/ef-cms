@@ -1,10 +1,10 @@
 import {
   CaseAdvancedSearchResultItem,
   CaseAdvancedSearchTerms,
-} from '@web-api/persistence/postgres/cases/reports/caseAdvancedSearch';
+} from '@web-api/persistence/elasticsearch/caseAdvancedSearch';
 import { CaseSearchResult } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import { US_STATES } from '@shared/business/entities/EntityConstants';
-import { casePublicSearch } from '@web-api/persistence/postgres/cases/reports/casePublicSearch';
+import { casePublicSearch } from '@web-api/persistence/elasticsearch/casePublicSearch';
 import {
   createEndOfDayISO,
   createStartOfDayISO,

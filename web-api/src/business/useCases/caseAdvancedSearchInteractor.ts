@@ -1,9 +1,6 @@
 import {
-  CaseAdvancedSearchResultItem,
-  CaseAdvancedSearchTerms,
-  caseAdvancedSearch,
-} from '@web-api/persistence/postgres/cases/reports/caseAdvancedSearch';
-import {
+  AbbreviatedStates,
+  CountryTypes,
   MAX_SEARCH_RESULTS,
   US_STATES,
 } from '@shared/business/entities/EntityConstants';
@@ -11,13 +8,23 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { filterCaseSearchResultsNotAccessibleToUser } from '@shared/business/utilities/caseFilter';
 import {
   createEndOfDayISO,
   createStartOfDayISO,
 } from '@shared/business/utilities/DateHandler';
-import { filterCaseSearchResultsNotAccessibleToUser } from '@shared/business/utilities/caseFilter';
+import { caseAdvancedSearch } from '@web-api/persistence/elasticsearch/caseAdvancedSearch';
+
+export type CaseAdvancedSearchParamsRequestType = {
+  petitionerName: string;
+  countryType?: CountryTypes;
+  petitionerState?: AbbreviatedStates;
+  endDate?: string;
+  startDate?: string;
+};
 
 export type CaseSearchResult = {
   petitionerNames: string[];
@@ -29,13 +36,14 @@ export type CaseSearchResult = {
 };
 
 export const caseAdvancedSearchInteractor = async (
+  applicationContext: ServerApplicationContext,
   {
     countryType,
     endDate,
     petitionerName,
     petitionerState,
     startDate,
-  }: CaseAdvancedSearchTerms,
+  }: CaseAdvancedSearchParamsRequestType,
   authorizedUser: UnknownAuthUser,
 ): Promise<CaseSearchResult[]> => {
   let searchStartDate;
@@ -61,11 +69,12 @@ export const caseAdvancedSearchInteractor = async (
     });
   }
 
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {
-    throw new UnauthorizedError('Unauthorized');
-  }
+  // if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {
+  //   throw new UnauthorizedError('Unauthorized');
+  // }
 
-  let foundCases = await caseAdvancedSearch({
+  const foundCases = await caseAdvancedSearch({
+    applicationContext,
     searchTerms: {
       countryType,
       endDate: searchEndDate,
@@ -75,11 +84,10 @@ export const caseAdvancedSearchInteractor = async (
     },
   });
 
-  const filteredCases =
-    filterCaseSearchResultsNotAccessibleToUser<CaseAdvancedSearchResultItem>(
-      foundCases,
-      authorizedUser,
-    ).slice(0, MAX_SEARCH_RESULTS);
+  const filteredCases = filterCaseSearchResultsNotAccessibleToUser(
+    foundCases,
+    authorizedUser,
+  ).slice(0, MAX_SEARCH_RESULTS);
 
   return filteredCases.map(filteredCase => {
     return {
@@ -88,9 +96,9 @@ export const caseAdvancedSearchInteractor = async (
       docketNumberWithSuffix: filteredCase.docketNumberWithSuffix,
       petitionerNames: filteredCase.petitioners?.map(p => p.name),
       petitionerStateNames: filteredCase.petitioners?.map(
-        p => US_STATES[p.state || ''] || p.state,
+        p => US_STATES[p.state] || p.state,
       ),
-      receivedAt: filteredCase.receivedAt?.toISOString() || '',
+      receivedAt: filteredCase.receivedAt,
     };
   });
 };

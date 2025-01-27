@@ -52,7 +52,7 @@ export const formatSealedAddresses = (
   return formattedCase;
 };
 
-export const filterCaseSearchResultsNotAccessibleToUser = <T>(
+export const filterCaseSearchResultsNotAccessibleToUser = (
   searchResults,
   currentUser: UnknownAuthUser,
 ) => {
@@ -65,5 +65,5 @@ export const filterCaseSearchResultsNotAccessibleToUser = <T>(
       ) ||
       isAssociatedUser({ caseRaw: searchResult, user: currentUser }) ||
       isAuthorized(currentUser, ROLE_PERMISSIONS.VIEW_SEALED_CASE),
-  ) as T[];
+  );
 };

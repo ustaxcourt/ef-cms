@@ -11,13 +11,15 @@ export const updateCase = async ({
 }: {
   caseToUpdate: RawCase;
 }): Promise<RawCase> => {
-  const updatedCase = await getDbWriter(writer =>
-    writer
-      .updateTable('dwCase')
-      .set(convertRawCaseToDbRow(caseToUpdate))
-      .where('docketNumber', '=', caseToUpdate.docketNumber)
-      .returningAll()
-      .executeTakeFirst(),
+  const updatedCase = await getDbWriter(
+    writer =>
+      writer
+        .updateTable('dwCase')
+        .set(convertRawCaseToDbRow(caseToUpdate))
+        .where('docketNumber', '=', caseToUpdate.docketNumber)
+        .returningAll()
+        .executeTakeFirst(),
+    'dwCase',
   );
 
   // Because we used to have nested objects in our case records, we upserted everything.

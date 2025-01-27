@@ -1,7 +1,7 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import { CaseAdvancedSearchTerms } from '@web-api/persistence/postgres/cases/reports/caseAdvancedSearch';
+import { CaseAdvancedSearchTerms } from '@web-api/persistence/elasticsearch/caseAdvancedSearch';
 import { casePublicSearchInteractor } from '@web-api/business/useCases/public/casePublicSearchInteractor';
-import { casePublicSearch as casePublicSearchMock } from '@web-api/persistence/postgres/cases/reports/casePublicSearch';
+import { casePublicSearch as casePublicSearchMock } from '@web-api/persistence/elasticsearch/casePublicSearch';
 
 describe('casePublicSearchInteractor', () => {
   const casePublicSearch = casePublicSearchMock as jest.Mock;

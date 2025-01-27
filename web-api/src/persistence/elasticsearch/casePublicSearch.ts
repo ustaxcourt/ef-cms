@@ -2,7 +2,7 @@ import {
   CaseAdvancedSearchResultItem,
   CaseAdvancedSearchTerms,
   caseAdvancedSearch,
-} from '@web-api/persistence/postgres/cases/reports/caseAdvancedSearch';
+} from '@web-api/persistence/elasticsearch/caseAdvancedSearch';
 
 export const casePublicSearch = async ({
   searchTerms,
