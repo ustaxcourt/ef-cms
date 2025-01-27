@@ -39,6 +39,17 @@ export const updateTrialSessionMinutesFormAction = ({
     );
   }
 
+  // 10419 TODO refactor away from magic strings
+  if (
+    section === 'actionsAndFilingsSection' &&
+    name === 'actionsAndFilings' &&
+    rowInfo.nestedName === 'documentType' &&
+    value !== 'motion'
+  ) {
+    store.unset(state.minuteSheetForm[section][name][rowInfo.key].oralMotion);
+    store.unset(state.minuteSheetForm[section][name][rowInfo.key].objection);
+  }
+
   if (section === 'trialBriefSection' && name === 'briefType') {
     const defaultBriefDetailsValuesMap = {
       [BRIEF_TYPE_OPTIONS.seriatimBrief]: {
