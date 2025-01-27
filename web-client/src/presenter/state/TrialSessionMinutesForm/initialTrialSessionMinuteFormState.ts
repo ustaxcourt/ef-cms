@@ -1,3 +1,6 @@
+/* eslint-disable sort-keys-fix/sort-keys-fix */
+// Note: the order of properties in the costants defined below
+// is important to the business and should not be changed.
 export const MINUTE_SHEET_FORM_SECTION_MAP = {
   actionsAndFilingsSection: 'actionsAndFilingsSection',
   caseMetadataSection: 'caseMetadataSection',
@@ -315,11 +318,11 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
 };
 
 export const TRIAL_HEARING_OPTIONS = {
-  furtherHearing: 'Further Hearing',
-  furtherTrial: 'Further Trial',
+  trial: 'Trial',
   hearing: 'Hearing',
   partialTrial: 'Partial Trial',
-  trial: 'Trial',
+  furtherTrial: 'Further Trial',
+  furtherHearing: 'Further Hearing',
 } as const;
 type TrialHearingOption = keyof typeof TRIAL_HEARING_OPTIONS;
 
@@ -343,25 +346,23 @@ export const MOTION_FILED_BY_OPTIONS = {
 type MotionFiledByOption = keyof typeof MOTION_FILED_BY_OPTIONS;
 
 export const MOTION_STATUS_OPTIONS = {
+  seeOrder: 'See Order',
   cav: 'CAV',
   denied: 'Denied',
-  filed: 'Filed',
   granted: 'Granted',
+  filed: 'Filed',
   lodged: 'Lodged',
-  // 10419 TODO: can we derive these options from an existing constant? Same
-  // question applies broadly speaking for these option constants.
-  seeOrder: 'See Order',
 } as const;
 export type MotionStatusOption = keyof typeof MOTION_STATUS_OPTIONS;
 
 export const MOTION_TYPE_OPTIONS = {
-  motionForContinuance: 'Motion for Continuance',
-  motionForGeneralContinuance: 'Motion for General Continuance',
-  motionToDismiss: 'Motion to Dismiss',
+  motionToDismissLackOfProsecution: 'Motion to Dismiss - Lack of Prosecution',
+  motionToDismissLackOfJurisdiction: 'Motion to Dismiss - Lack of Jurisdiction',
   motionToDismissFailureToProperlyProsecute:
     'Motion to Dismiss - Failure to Properly Prosecute',
-  motionToDismissLackOfJurisdiction: 'Motion to Dismiss - Lack of Jurisdiction',
-  motionToDismissLackOfProsecution: 'Motion to Dismiss - Lack of Prosecution',
+  motionToDismiss: 'Motion to Dismiss',
+  motionForContinuance: 'Motion for Continuance',
+  motionForGeneralContinuance: 'Motion for General Continuance',
 } as const;
 export type MotionTypeOption = keyof typeof MOTION_TYPE_OPTIONS;
 
@@ -374,12 +375,12 @@ export type MotionObjectionOption = keyof typeof MOTION_OBJECTION_OPTIONS;
 
 export const ACTION_DOCUMENT_TYPE_OPTIONS = {
   entryOfAppearance: 'Entry of Appearance',
-  filing: 'Filing',
   limitedEntryOfAppearance: 'Limited Entry of Appearance',
+  orderToShowCause: 'Order to Show Cause',
+  filing: 'Filing',
   motion: 'Motion',
   notice: 'Notice',
   order: 'Order',
-  orderToShowCause: 'Order to Show Cause',
   other: 'Other',
 } as const;
 
@@ -387,35 +388,33 @@ export type ActionDocumentTypeOption =
   keyof typeof ACTION_DOCUMENT_TYPE_OPTIONS;
 
 export const ACTION_FILED_BY_OPTIONS = {
-  court: 'Court',
+  petitioner: 'Petitioner',
+  respondent: 'Respondent',
+  petitionerAndRespondent: 'Petitioner and Respondent',
   joint: 'Joint',
   other: 'Other',
-  petitioner: 'Petitioner',
-  petitionerAndRespondent: 'Petitioner and Respondent',
-  respondent: 'Respondent',
+  court: 'Court',
 } as const;
 
 export type ActionFiledByOption = keyof typeof ACTION_FILED_BY_OPTIONS;
 
 export const ACTION_STATUS_OPTIONS = {
+  seeOrder: 'See Order',
   cav: 'CAV',
   denied: 'Denied',
-  filed: 'Filed',
   granted: 'Granted',
+  filed: 'Filed',
   lodged: 'Lodged',
-  noObjection: 'No Objection',
-  objection: 'Objection',
-  seeOrder: 'See Order',
 } as const;
 
 export type ActionStatusOption = keyof typeof ACTION_STATUS_OPTIONS;
 
 export const BRIEF_TYPE_OPTIONS = {
-  seriatimBrief: 'Seriatim brief',
-  seriatimMemorandum: 'Seriatim memorandum brief',
-  simultaneous: 'Simultaneous brief',
-  simultaneousMemoranda: 'Simultaneous Memoranda of law',
-  simultaneousMemorandum: 'Simultaneous memorandum brief',
+  seriatimBrief: 'Seriatim Brief',
+  seriatimMemorandum: 'Seriatim Memorandum Brief',
+  simultaneous: 'Simultaneous Brief',
+  simultaneousMemoranda: 'Simultaneous Memoranda of Law',
+  simultaneousMemorandum: 'Simultaneous Memorandum Brief',
   simultaneousSupplemental: 'Simultaneous Supplemental Brief',
 } as const;
 
@@ -423,13 +422,13 @@ export type BriefTypeOption = keyof typeof BRIEF_TYPE_OPTIONS;
 
 export const EXHIBIT_STATUS_OPTIONS = {
   admitted: 'Admitted',
-  demonstrative: 'Demonstrative',
-  identificationOnly: 'Identification only',
   notAdmitted: 'Not admitted',
-  notOffered: 'Not offered',
-  otherSeeNote: 'Other - see note',
-  reserved: 'Reserved',
   withdrawn: 'Withdrawn',
+  notOffered: 'Not offered',
+  reserved: 'Reserved',
+  identificationOnly: 'Identification only',
+  demonstrative: 'Demonstrative',
+  otherSeeNote: 'Other - see note',
 } as const;
 
 export type ExhibitStatusOption = keyof typeof EXHIBIT_STATUS_OPTIONS;
@@ -451,12 +450,11 @@ export const BRIEF_SUBTYPE = {
 
 export const PETITIONER_ROLE_OPTIONS = {
   counsel: 'Councel',
-  intervenor: 'Intervenor',
-  other: 'Other',
-  participant: 'Participant',
-  petitioner: 'Petitioner',
   proSe: 'Pro Se',
-  studentIntern: 'Student Intern',
+  intervenor: 'Intervenor',
+  participant: 'Participant',
   translator: 'Translator',
+  studentIntern: 'Student Intern',
+  other: 'Other',
 } as const;
 export type PetitionerRoleOptions = keyof typeof PETITIONER_ROLE_OPTIONS;
