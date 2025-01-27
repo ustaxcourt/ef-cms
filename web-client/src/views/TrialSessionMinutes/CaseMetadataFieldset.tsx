@@ -79,7 +79,7 @@ export const CaseMetadataFieldset = ({
           </FormGroup>
         </div>
         <div className="grid-col-2">
-          <FormGroup className="margin-bottom-0 display-flex align-items-center">
+          <FormGroup className="margin-bottom-0 display-inline-block align-items-center">
             <div className="usa-checkbox">
               <input
                 aria-describedby="representing-legend"

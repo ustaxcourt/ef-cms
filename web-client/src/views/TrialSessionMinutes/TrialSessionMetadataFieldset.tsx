@@ -102,7 +102,7 @@ export const TrialSessionMetadataFieldset = ({
           </FormGroup>
         </div>
         <div className="grid-col">
-          <FormGroup className="margin-bottom-0">
+          <FormGroup className="margin-bottom-0 display-inline-block">
             <div className="usa-checkbox">
               <input
                 aria-describedby="representing-legend"
