@@ -27,6 +27,7 @@ import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { saveFileAndGenerateUrl } from '@web-api/business/useCaseHelper/saveFileAndGenerateUrl';
 import { associateSwingTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/associateSwingTrialSessions';
 import { sendNotificationToUser } from '@web-api/notifications/sendNotificationToUser';
+import { updateTrialSession as updateTrialSessionPersistence } from '@web-api/persistence/dynamo/trialSessions/updateTrialSession';
 
 type UpdateTrialSessionParams = {
   trialSession: RawTrialSession;
@@ -186,7 +187,7 @@ export const updateTrialSession = async (
     );
   }
 
-  await applicationContext.getPersistenceGateway().updateTrialSession({
+  await updateTrialSessionPersistence({
     applicationContext,
     trialSessionToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
   });
@@ -242,7 +243,7 @@ export const handleLockError = async (
   authorizedUser: UnknownAuthUser,
 ) => {
   if (authorizedUser?.userId) {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
+    await sendNotificationToUser({
       applicationContext,
       message: {
         action: 'retry_async_request',
