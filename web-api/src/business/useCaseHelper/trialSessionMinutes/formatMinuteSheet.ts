@@ -11,6 +11,7 @@ import {
   MOTION_STATUS_OPTIONS,
   MOTION_TYPE_OPTIONS,
   MinuteSheetFormState,
+  PETITIONER_ROLE_OPTIONS,
   STATUS_REPORT_ORDERED_FOR_OPTIONS,
   TRIAL_HEARING_OPTIONS,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
@@ -152,7 +153,7 @@ export const formatPetitionerAppearances = (
         .map((petitioner: any) => {
           const parts = [
             petitioner.name,
-            petitioner.role && `(${petitioner.role})`,
+            petitioner.role && `(${PETITIONER_ROLE_OPTIONS[petitioner.role]})`,
             petitioner.datesOfAppearance && `- ${petitioner.datesOfAppearance}`,
           ].filter(substring => !!substring);
 

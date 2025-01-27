@@ -431,3 +431,15 @@ export const BRIEF_SUBTYPE = {
   simultaneousSupplemental: '',
   surReply: 'Sur-reply',
 } as const;
+
+export const PETITIONER_ROLE_OPTIONS = {
+  counsel: 'Councel',
+  intervenor: 'Intervenor',
+  other: 'Other',
+  participant: 'Participant',
+  petitioner: 'Petitioner',
+  proSe: 'Pro Se',
+  studentIntern: 'Student Intern',
+  translator: 'Translator',
+} as const;
+export type PetitionerRoleOptions = keyof typeof PETITIONER_ROLE_OPTIONS;

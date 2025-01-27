@@ -4,10 +4,7 @@ import {
   KeyedPartyFormFieldsByRenderKey,
   initialMinuteSheetFormState,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
-import {
-  CONTACT_TYPES,
-  CONTACT_TYPE_TITLES,
-} from '@shared/business/entities/EntityConstants';
+import { CONTACT_TYPES } from '@shared/business/entities/EntityConstants';
 import {
   FORMATS,
   formatDateString,
@@ -146,20 +143,21 @@ const getPetitionersFromCase = (
   });
 
   if (petitioners && petitioners.length > 0) {
-    petitioners.forEach(obj => {
+    petitioners.forEach(petitioner => {
       let role;
-      if (obj.contactType === CONTACT_TYPES.petitioner) {
-        role = petitionersWithCounselUserIds.includes(obj.contactId)
-          ? 'Counsel'
-          : 'Pro Se';
+      if (petitioner.contactType === CONTACT_TYPES.petitioner) {
+        // 10419 TODO refactor away from magic strings
+        role = petitionersWithCounselUserIds.includes(petitioner.contactId)
+          ? 'counsel'
+          : 'proSe';
       } else {
-        role = CONTACT_TYPE_TITLES[obj.contactType];
+        role = petitioner.contactType;
       }
 
       const renderKey = uuidv4();
       keyedPartyFormFieldsByRenderKey[renderKey] = {
         datesOfAppearance: '',
-        name: obj.name,
+        name: petitioner.name,
         renderKey,
         role,
       };
