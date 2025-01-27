@@ -23,17 +23,19 @@ import {
 import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
-import { applicationContext } from '@web-api/applicationContext';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { saveFileAndGenerateUrl } from '@web-api/business/useCaseHelper/saveFileAndGenerateUrl';
 import { associateSwingTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/associateSwingTrialSessions';
 import { sendNotificationToUser } from '@web-api/notifications/sendNotificationToUser';
 
+type UpdateTrialSessionParams = {
+  trialSession: RawTrialSession;
+  clientConnectionId: string;
+};
+
 export const updateTrialSession = async (
-  {
-    clientConnectionId,
-    trialSession,
-  }: { trialSession: RawTrialSession; clientConnectionId: string },
+  applicationContext: ServerApplicationContext,
+  { clientConnectionId, trialSession }: UpdateTrialSessionParams,
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
@@ -252,8 +254,7 @@ export const handleLockError = async (
   }
 };
 
-export const updateTrialSessionInteractor = withLocking(
-  updateTrialSession,
-  determineEntitiesToLock,
-  handleLockError,
-);
+export const updateTrialSessionInteractor = withLocking<
+  UpdateTrialSessionParams,
+  void
+>(updateTrialSession, determineEntitiesToLock, handleLockError);
