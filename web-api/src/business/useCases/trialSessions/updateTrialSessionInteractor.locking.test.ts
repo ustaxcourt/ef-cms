@@ -12,6 +12,11 @@ import {
   updateTrialSessionInteractor,
 } from './updateTrialSessionInteractor';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { sendNotificationToUser } from '@web-api/notifications/sendNotificationToUser';
+import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
+
+jest.mock('@web-api/notifications/sendNotificationToUser');
+jest.mock('@web-api/persistence/dynamo/trialSessions/getTrialSessionById');
 
 describe('determineEntitiesToLock', () => {
   const trialSessionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
@@ -32,16 +37,14 @@ describe('determineEntitiesToLock', () => {
       save: () => {},
     });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue({ caseOrder: mockCases });
+    (getTrialSessionById as jest.Mock).mockReturnValue({
+      caseOrder: mockCases,
+    });
   });
 
   it('should lookup the specified trial session', async () => {
     await determineEntitiesToLock(applicationContext, mockParams);
-    expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById,
-    ).toHaveBeenCalledWith({
+    expect(getTrialSessionById as jest.Mock).toHaveBeenCalledWith({
       applicationContext,
       trialSessionId,
     });
@@ -80,8 +83,7 @@ describe('handleLockError', () => {
       mockDocketClerkUser,
     );
     expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message,
+      (sendNotificationToUser as jest.Mock).mock.calls[0][0].message,
     ).toMatchObject({
       action: 'retry_async_request',
       originalRequest: mockOriginalRequest,
@@ -98,9 +100,7 @@ describe('updateTrialSessionInteractor', () => {
   let mockLock;
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
+    (getTrialSessionById as jest.Mock).mockReturnValue(MOCK_TRIAL_INPERSON);
 
     applicationContext
       .getPersistenceGateway()
@@ -135,9 +135,7 @@ describe('updateTrialSessionInteractor', () => {
         ),
       ).rejects.toThrow(ServiceUnavailableError);
 
-      expect(
-        applicationContext.getNotificationGateway().sendNotificationToUser,
-      ).toHaveBeenCalledWith({
+      expect(sendNotificationToUser).toHaveBeenCalledWith({
         applicationContext,
         message: {
           action: 'retry_async_request',
