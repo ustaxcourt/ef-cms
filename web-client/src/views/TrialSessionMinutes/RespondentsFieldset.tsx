@@ -25,10 +25,11 @@ export const RespondentsFieldset = ({
   respondentsFormState: MinuteSheetFormState['respondentsSection'];
 }) => {
   return (
-    <fieldset className="border-0 grid-container padding-0 margin-left-4">
+    <fieldset className="border-0 grid-container padding-0 margin-top-4">
       <div className="grid-row grid-gap-2 margin-bottom-1">
-        <div className="grid-col-5">Respondent(s)</div>
-        <div className="grid-col-7">Date(s) of Appearance</div>
+        <div className="grid-col-3">Respondent(s)</div>
+        <div className="grid-col-3">Date(s) of Appearance</div>
+        <div className="grid-col-auto"></div>
       </div>
       {Object.values(respondentsFormState.respondents).map((row, rowIndex) => {
         return (
@@ -36,7 +37,7 @@ export const RespondentsFieldset = ({
             className="grid-row grid-gap-2 align-items-center margin-bottom-1"
             key={`respondent-row-${row.renderKey}`}
           >
-            <div className="grid-col-5">
+            <div className="grid-col-3">
               <FormGroup className="margin-bottom-0">
                 <label hidden htmlFor={`respondent-${rowIndex}`}>
                   {`Respondent ${rowIndex}`}
@@ -63,7 +64,7 @@ export const RespondentsFieldset = ({
                 />
               </FormGroup>
             </div>
-            <div className="grid-col-5">
+            <div className="grid-col-3">
               <FormGroup className="margin-bottom-0">
                 <label
                   hidden
@@ -94,7 +95,7 @@ export const RespondentsFieldset = ({
                 />
               </FormGroup>
             </div>
-            <div className="grid-col-2">
+            <div className="grid-col-auto">
               <Button
                 link
                 className="padding-0"

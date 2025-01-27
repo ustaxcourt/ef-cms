@@ -51,26 +51,20 @@ export const TrialSessionMinutesForm = connect(
           onChangeHandler={updateTrialSessionMinutesFormSequence}
         />
         <hr />
-        <div className="grid-row">
-          <div className="grid-col-6 border-right">
-            <PetitionersFieldset
-              addRowHandler={addMinuteSheetFormRowSequence}
-              petitionersFormState={trialSessionMinutesForm.petitionersSection}
-              removeRowHandler={removeMinuteSheetFormRowSequence}
-              onBlurHandler={trialSessionMinutesAutosaveSequence}
-              onChangeHandler={updateTrialSessionMinutesFormSequence}
-            />
-          </div>
-          <div className="grid-col-6">
-            <RespondentsFieldset
-              addRowHandler={addMinuteSheetFormRowSequence}
-              removeRowHandler={removeMinuteSheetFormRowSequence}
-              respondentsFormState={trialSessionMinutesForm.respondentsSection}
-              onBlurHandler={trialSessionMinutesAutosaveSequence}
-              onChangeHandler={updateTrialSessionMinutesFormSequence}
-            />
-          </div>
-        </div>
+        <PetitionersFieldset
+          addRowHandler={addMinuteSheetFormRowSequence}
+          petitionersFormState={trialSessionMinutesForm.petitionersSection}
+          removeRowHandler={removeMinuteSheetFormRowSequence}
+          onBlurHandler={trialSessionMinutesAutosaveSequence}
+          onChangeHandler={updateTrialSessionMinutesFormSequence}
+        />
+        <RespondentsFieldset
+          addRowHandler={addMinuteSheetFormRowSequence}
+          removeRowHandler={removeMinuteSheetFormRowSequence}
+          respondentsFormState={trialSessionMinutesForm.respondentsSection}
+          onBlurHandler={trialSessionMinutesAutosaveSequence}
+          onChangeHandler={updateTrialSessionMinutesFormSequence}
+        />
         <hr />
         <JurisdictionFieldset
           jurisdictionFormState={trialSessionMinutesForm.jurisdictionSection}

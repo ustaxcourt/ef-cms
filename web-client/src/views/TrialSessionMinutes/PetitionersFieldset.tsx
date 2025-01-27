@@ -8,6 +8,7 @@ import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
   MINUTE_SHEET_FORM_SECTION_MAP,
   MinuteSheetFormState,
+  PETITIONER_ROLE_OPTIONS,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import React from 'react';
 
@@ -27,8 +28,8 @@ export const PetitionersFieldset = ({
   return (
     <fieldset className="border-0 grid-container padding-0">
       <div className="grid-row grid-gap-2 margin-bottom-1">
-        <div className="grid-col-2">Petitioner(s)</div>
-        <div className="grid-col-3">
+        <div className="grid-col-1">Petitioner(s)</div>
+        <div className="grid-col-2">
           <div className="usa-checkbox">
             <input
               aria-describedby="representing-legend"
@@ -56,14 +57,14 @@ export const PetitionersFieldset = ({
         </div>
         <div className="grid-col-2">Role</div>
         <div className="grid-col-3">Date(s) of Appearance</div>
-        <div className="grid-col-2"></div>
+        <div className="grid-col-4"></div>
       </div>
       {Object.values(petitionersFormState.petitioners).map((row, rowIndex) => (
         <div
           className="grid-row grid-gap-2 flex-justify-start align-items-center margin-bottom-1"
           key={row.renderKey}
         >
-          <div className="grid-col-5">
+          <div className="grid-col-3">
             <FormGroup className="margin-bottom-0">
               <label hidden htmlFor="petitioner">
                 {`Petitioner ${rowIndex}`}
@@ -90,18 +91,17 @@ export const PetitionersFieldset = ({
             </FormGroup>
           </div>
           <div className="grid-col-2">
-            <FormGroup className="margin-bottom-0">
+            <FormGroup className="margin-bottom-0 display-flex align-items-center">
               <label hidden htmlFor={`petitionerRole-${rowIndex}`}>
-                {`Petitioner Role ${rowIndex}`}
+                Role
               </label>
-              <input
-                className="usa-input"
+              <select
+                className="usa-select display-inline-block"
                 id={`petitionerRole-${rowIndex}`}
                 name={`petitionerRole-${rowIndex}`}
-                type="text"
                 value={petitionersFormState.petitioners[row.renderKey].role}
                 onBlur={() => onBlurHandler()}
-                onChange={e =>
+                onChange={e => {
                   onChangeHandler({
                     name: 'petitioners',
                     rowInfo: {
@@ -110,9 +110,18 @@ export const PetitionersFieldset = ({
                     },
                     section: MINUTE_SHEET_FORM_SECTION_MAP.petitionersSection,
                     value: e.target.value,
-                  })
-                }
-              />
+                  });
+                }}
+              >
+                <option value="">- Select -</option>
+                {Object.keys(PETITIONER_ROLE_OPTIONS).map(optionKey => {
+                  return (
+                    <option key={optionKey} value={optionKey}>
+                      {PETITIONER_ROLE_OPTIONS[optionKey]}
+                    </option>
+                  );
+                })}
+              </select>
             </FormGroup>
           </div>
           <div className="grid-col-3">
@@ -147,7 +156,7 @@ export const PetitionersFieldset = ({
               />
             </FormGroup>
           </div>
-          <div className="grid-col-2">
+          <div className="grid-col-4">
             <Button
               link
               className="padding-0"
