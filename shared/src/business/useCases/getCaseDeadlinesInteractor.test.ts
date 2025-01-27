@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -8,11 +9,16 @@ import {
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { applicationContext } from '../test/createTestApplicationContext';
+import { getCaseDeadlinesByDateRange as getCaseDeadlinesByDateRangeMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDateRange';
+
 import { getCaseDeadlinesInteractor } from './getCaseDeadlinesInteractor';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+
+const getCaseDeadlinesByDateRange =
+  getCaseDeadlinesByDateRangeMock as jest.Mock;
 
 describe('getCaseDeadlinesInteractor', () => {
   const mockDeadlines = [
@@ -87,11 +93,10 @@ describe('getCaseDeadlinesInteractor', () => {
 
   beforeEach(() => {
     applicationContext.environment.stage = 'local';
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDateRange.mockReturnValue({
-        foundDeadlines: mockDeadlines,
-      });
+    getCaseDeadlinesByDateRange.mockReturnValue({
+      foundDeadlines: mockDeadlines,
+      totalCount: 2,
+    });
     applicationContext
       .getPersistenceGateway()
       .getCasesByDocketNumbers.mockReturnValue(mockCases);
@@ -159,10 +164,7 @@ describe('getCaseDeadlinesInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseDeadlinesByDateRange
-        .mock.calls[0][0],
-    ).toMatchObject({
+    expect(getCaseDeadlinesByDateRange.mock.calls[0][0]).toMatchObject({
       endDate: END_DATE,
       judge: 'Buch',
       startDate: START_DATE,
@@ -216,22 +218,21 @@ describe('getCaseDeadlinesInteractor', () => {
           ],
         },
       ]);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDateRange.mockReturnValue({
-        foundDeadlines: [
-          ...mockDeadlines,
-          {
-            associatedJudge: 'Judge Carluzzo',
-            associatedJudgeId: 'dabbad03-18d0-43ec-bafb-654e83405416',
-            caseDeadlineId: 'c63d6904-1234-4321-8259-9f8f65824bb7',
-            createdAt: '2019-02-01T21:40:46.415Z',
-            deadlineDate: '2019-04-01T21:40:46.415Z',
-            description: 'Yet anotherA deadline!',
-            docketNumber: '2000-20',
-          },
-        ],
-      });
+    getCaseDeadlinesByDateRange.mockReturnValue({
+      foundDeadlines: [
+        ...mockDeadlines,
+        {
+          associatedJudge: 'Judge Carluzzo',
+          associatedJudgeId: 'dabbad03-18d0-43ec-bafb-654e83405416',
+          caseDeadlineId: 'c63d6904-1234-4321-8259-9f8f65824bb7',
+          createdAt: '2019-02-01T21:40:46.415Z',
+          deadlineDate: '2019-04-01T21:40:46.415Z',
+          description: 'Yet anotherA deadline!',
+          docketNumber: '2000-20',
+        },
+      ],
+      totalCount: 3,
+    });
 
     const result = await getCaseDeadlinesInteractor(
       applicationContext,
