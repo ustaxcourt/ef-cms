@@ -3,7 +3,7 @@ import {
   COUNTRY_TYPES,
   CountryTypes,
 } from '@shared/business/entities/EntityConstants';
-import { CaseAdvancedSearchTerms } from '@web-api/persistence/postgres/cases/reports/caseAdvancedSearch';
+import { CaseAdvancedSearchTerms } from '@web-api/persistence/elasticsearch/caseAdvancedSearch';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const prepareFormDataForCaseSearchApi = (

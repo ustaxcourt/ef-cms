@@ -1,4 +1,4 @@
-import { CaseAdvancedSearchTerms } from '@web-api/persistence/postgres/cases/reports/caseAdvancedSearch';
+import { CaseAdvancedSearchTerms } from '@web-api/persistence/elasticsearch/caseAdvancedSearch';
 import { get } from './requests';
 
 export const caseAdvancedSearchInteractor = (

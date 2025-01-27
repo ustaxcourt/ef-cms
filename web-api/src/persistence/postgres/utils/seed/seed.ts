@@ -75,12 +75,15 @@ export const seed = async () => {
     ...cases440_449,
     ...cases450_plus,
   ];
-  await getDbWriter(writer =>
-    writer
-      .insertInto('dwCase')
-      .values(cases)
-      .onConflict(oc => oc.column('docketNumber').doNothing())
-      .execute(),
+  await getDbWriter(
+    writer =>
+      writer
+        .insertInto('dwCase')
+        .values(cases)
+        .onConflict(oc => oc.column('docketNumber').doNothing())
+        .returningAll()
+        .execute(),
+    'dwCase',
   );
 
   // Attach the case status updates to their respective cases

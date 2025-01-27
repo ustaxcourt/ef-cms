@@ -9,6 +9,10 @@ import { Pool } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
 import { environment } from './environment';
 import fs from 'fs';
+import { opensearchGateway } from '@web-api/gateways/opensearch/opensearchGateway';
+import { TABLES_TO_INDEX_IN_OPENSEARCH } from '@web-api/gateways/opensearch/opensearchWorkerRouter';
+import { formatNow } from '@shared/business/utilities/DateHandler';
+import { isArray } from 'lodash';
 
 export const POOL = {
   ...environment.rds.pool,
@@ -102,7 +106,6 @@ async function getConnection<T>({
     });
 
     return await cb(dbInstances[dbKey]!);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {
     clearToken(region);
     const token = await getToken(region, host);
@@ -140,11 +143,50 @@ export function getDbReader<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
   });
 }
 
-export function getDbWriter<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
+export function executeWriter<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
   return getConnection({
     cb,
     dbKey: 'writer',
     host: environment.rds.pool.host,
     region: 'us-east-1',
   });
+}
+
+export async function getDbWriter<T>(
+  cb: (db: Kysely<Database>) => Promise<T>,
+  tableName: string = '',
+): Promise<T> {
+  console.log('tableName', tableName);
+
+  if (!TABLES_TO_INDEX_IN_OPENSEARCH.includes(tableName)) {
+    console.log('not includes');
+    return await executeWriter(cb);
+  }
+
+  let result: any = await executeWriter(cb);
+  if (!isArray(result)) {
+    result = [result];
+  }
+  console.log('result', result);
+
+  // Check if this entity type should send SQS notifications
+  if (result) {
+    try {
+      // Construct the SQS message
+      const message = {
+        timestamp: formatNow(),
+        payload: result,
+        type: tableName,
+      };
+
+      console.log('getDbWriter message', message);
+
+      // Send the message to SQS
+      await opensearchGateway().queueWork({ message });
+    } catch (err) {
+      console.error('Failed to send SQS message', err);
+    }
+  }
+
+  return result;
 }
