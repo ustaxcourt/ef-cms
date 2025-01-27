@@ -8,6 +8,42 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
 import { TrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
+import { get } from 'lodash';
+
+type GetCasesInTrialSessionParams = {
+  applicationContext: ServerApplicationContext;
+  trialSession: RawTrialSession;
+  authorizedUser: AuthUser;
+};
+
+export async function getCasesInTrialSession({
+  applicationContext,
+  trialSession,
+  authorizedUser,
+}: GetCasesInTrialSessionParams): Promise<{
+  calendaredCaseEntities: Case[];
+  casesThatShouldReceiveNotices: Case[];
+}> {
+  const calendaredCaseEntities = await Promise.all(
+    trialSession
+      .caseOrder!.filter(c => !c.removedFromTrial)
+      .map(async c => {
+        const aCase = await applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber({
+            applicationContext,
+            docketNumber: c.docketNumber,
+          });
+        return new Case(aCase, { authorizedUser });
+      }),
+  );
+
+  const casesThatShouldReceiveNotices = calendaredCaseEntities
+    .filter(aCase => !aCase.isClosed())
+    .filter(aCase => aCase.trialSessionId === trialSession.trialSessionId);
+
+  return { calendaredCaseEntities, casesThatShouldReceiveNotices };
+}
 
 type UpdateCasesAndSetNoticeOfChangeParams = {
   applicationContext: ServerApplicationContext;
@@ -30,26 +66,12 @@ export const updateCasesAndSetNoticeOfChange = async ({
   shouldSetNoticeOfTrialSessionLocationChange,
   updatedTrialSessionEntity,
 }: UpdateCasesAndSetNoticeOfChangeParams): Promise<PDFDocumentType> => {
-  const calendaredCaseEntities = await Promise.all(
-    currentTrialSession
-      .caseOrder!.filter(c => !c.removedFromTrial)
-      .map(async c => {
-        const aCase = await applicationContext
-          .getPersistenceGateway()
-          .getCaseByDocketNumber({
-            applicationContext,
-            docketNumber: c.docketNumber,
-          });
-        return new Case(aCase, { authorizedUser });
-      }),
-  );
-
-  const casesThatShouldReceiveNotices = calendaredCaseEntities
-    .filter(aCase => !aCase.isClosed())
-    .filter(
-      aCase =>
-        aCase.trialSessionId === updatedTrialSessionEntity.trialSessionId,
-    );
+  const { calendaredCaseEntities, casesThatShouldReceiveNotices } =
+    await getCasesInTrialSession({
+      applicationContext,
+      trialSession: currentTrialSession,
+      authorizedUser,
+    });
 
   const TASKS = casesThatShouldReceiveNotices.map(async (caseEntity: Case) => {
     const { PDFDocument } = await applicationContext.getPdfLib();
@@ -233,5 +255,33 @@ export function shouldGenerateNoticeOfChangeToInPersonProceeding(
     updatedTrialSessionEntity.proceedingType ===
       TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
     updatedTrialSessionEntity.isCalendared
+  );
+}
+
+export function shouldCreateWorkingCopyForNewJudge(
+  currentTrialSession: RawTrialSession,
+  updatedTrialSessionEntity: TrialSession,
+): boolean {
+  return Boolean(
+    (!get(currentTrialSession, 'judge.userId') &&
+      get(updatedTrialSessionEntity, 'judge.userId')) ||
+      (currentTrialSession.judge &&
+        updatedTrialSessionEntity.judge &&
+        currentTrialSession.judge.userId !==
+          updatedTrialSessionEntity.judge.userId),
+  );
+}
+
+export function shouldCreateWorkingCopyForNewTrialClerk(
+  currentTrialSession: RawTrialSession,
+  updatedTrialSessionEntity: TrialSession,
+): boolean {
+  return Boolean(
+    (!get(currentTrialSession, 'trialClerk.userId') &&
+      get(updatedTrialSessionEntity, 'trialClerk.userId')) ||
+      (currentTrialSession.trialClerk &&
+        updatedTrialSessionEntity.trialClerk &&
+        currentTrialSession.trialClerk.userId !==
+          updatedTrialSessionEntity.trialClerk.userId),
   );
 }

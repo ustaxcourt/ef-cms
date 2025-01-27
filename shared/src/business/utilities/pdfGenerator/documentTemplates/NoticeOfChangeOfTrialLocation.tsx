@@ -48,25 +48,19 @@ export const NoticeOfChangeOfTrialLocation = ({
             </thead>
             <tr>
               <td>
-                {['courthouseName', 'address1', 'address2', ['city', 'state']]
-                  .filter(prop => {
-                    if (Array.isArray(prop))
-                      return prop.some(key => !!updatedTrialSession[key]);
-                    return !!updatedTrialSession[prop];
-                  })
-                  .map(prop => {
-                    if (Array.isArray(prop))
-                      return (
-                        <div key={prop[0]}>
-                          {prop
-                            .filter(key => !!updatedTrialSession[key])
-                            .map(key => updatedTrialSession[key])
-                            .join(', ')}
-                        </div>
-                      );
-
-                    return <div key={prop}>{updatedTrialSession[prop]}</div>;
-                  })}
+                {updatedTrialSession.courthouseName && (
+                  <div>{updatedTrialSession.courthouseName}</div>
+                )}
+                {updatedTrialSession.address1 && (
+                  <div>{updatedTrialSession.address1}</div>
+                )}
+                {updatedTrialSession.address2 && (
+                  <div>{updatedTrialSession.address2}</div>
+                )}
+                <div>
+                  {updatedTrialSession.city}, {updatedTrialSession.state}{' '}
+                  {updatedTrialSession.postalCode}
+                </div>
                 <div style={{ fontWeight: 'bold' }}>In Person</div>
               </td>
             </tr>

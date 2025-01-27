@@ -8,6 +8,7 @@ export const combineAllPdfDocuments = async (
   const { PDFDocument } = await applicationContext.getPdfLib();
   const mergedPdf = await PDFDocument.create();
   if (allPDFDocuments.length === 0) return mergedPdf;
+  if (allPDFDocuments.length === 1) return allPDFDocuments[0];
 
   for (const pdfDoc of allPDFDocuments) {
     const copiedPages = await mergedPdf.copyPages(

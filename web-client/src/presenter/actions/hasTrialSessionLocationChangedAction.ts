@@ -1,7 +1,8 @@
 import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const hasTrialSessionLocationChangedAction = ({
+export const hasTrialSessionLocationChangedAction = async ({
+  applicationContext,
   get,
   path,
 }: ActionProps) => {
@@ -13,7 +14,15 @@ export const hasTrialSessionLocationChangedAction = ({
     updatedTrialSessionLocation,
   );
 
-  if (!shouldGenerateNCTL) return path.unchanged();
+  const { casesThatShouldReceiveNoticesCount } = await applicationContext
+    .getUseCases()
+    .getTrialSessionOpenCasesCountInteractor(applicationContext, {
+      trialSessionId: currentTrialSessionLocation.trialSessionId,
+    });
+
+  if (!shouldGenerateNCTL || !casesThatShouldReceiveNoticesCount)
+    return path.unchanged();
+
   return path.updated({
     currentTrialSessionLocation,
     updatedTrialSessionLocation,
