@@ -9,10 +9,12 @@ import {
   MINUTE_SHEET_FORM_SECTION_MAP,
   MinuteSheetFormState,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import React from 'react';
 
 export const RespondentsFieldset = ({
   addRowHandler,
+  formOptions,
   onBlurHandler,
   onChangeHandler,
   removeRowHandler,
@@ -23,6 +25,7 @@ export const RespondentsFieldset = ({
   onBlurHandler: () => void;
   removeRowHandler: RemoveRowHandler;
   respondentsFormState: MinuteSheetFormState['respondentsSection'];
+  formOptions;
 }) => {
   return (
     <fieldset className="border-0 grid-container padding-0 margin-top-4">
@@ -42,14 +45,17 @@ export const RespondentsFieldset = ({
                 <label hidden htmlFor={`respondent-${rowIndex}`}>
                   {`Respondent ${rowIndex}`}
                 </label>
-                <input
-                  className="usa-input"
-                  id={`respondent-${rowIndex}`}
-                  name={`respondent-${rowIndex}`}
-                  type="text"
-                  value={respondentsFormState.respondents[row.renderKey].name}
-                  onBlur={() => onBlurHandler()}
-                  onChange={e =>
+                <SelectSearch
+                  aria-labelledby={`respondent-label-${rowIndex}"`}
+                  id={`respondent-${rowIndex}"`}
+                  isClearable={true}
+                  name={`respondent-${rowIndex}"`}
+                  options={formOptions}
+                  value={{
+                    label: respondentsFormState.respondents[row.renderKey].name,
+                    value: respondentsFormState.respondents[row.renderKey].name,
+                  }}
+                  onChange={inputValue =>
                     // 10419 TODO make default object to spread in name and section
                     onChangeHandler({
                       name: 'respondents',
@@ -58,7 +64,7 @@ export const RespondentsFieldset = ({
                         nestedName: 'name',
                       },
                       section: MINUTE_SHEET_FORM_SECTION_MAP.respondentsSection,
-                      value: e.target.value,
+                      value: inputValue?.value || '',
                     })
                   }
                 />

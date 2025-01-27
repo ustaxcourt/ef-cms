@@ -146,6 +146,11 @@ export type JudgeOption = {
   userId: string;
 };
 
+export type IrsPractitionerOption = {
+  label: string;
+  value: string;
+};
+
 export type MinuteSheetFormState = {
   trialSessionMetadataSection: {
     judge: JudgeOption;
@@ -222,6 +227,10 @@ export type MinuteSheetFormState = {
 
   exhibitsSection: {
     exhibits: KeyedExhibitFormFieldsByKey;
+  };
+
+  options: {
+    irsPractitionerOptions: IrsPractitionerOption[];
   };
 };
 
@@ -314,6 +323,10 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
   witnessesSection: {
     petitionerWitnesses: {},
     respondentWitnesses: {},
+  },
+
+  options: {
+    irsPractitionerOptions: [],
   },
 };
 

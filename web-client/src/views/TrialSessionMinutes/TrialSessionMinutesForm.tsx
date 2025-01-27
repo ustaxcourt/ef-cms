@@ -24,6 +24,8 @@ export const TrialSessionMinutesForm = connect(
     trialSessionMinutesAutosaveSequence:
       sequences.trialSessionMinutesAutosaveSequence,
     trialSessionMinutesForm: state.minuteSheetForm,
+    trialSessionMinutesFormOptionsHelper:
+      state.trialSessionMinutesFormOptionsHelper,
     updateTrialSessionMinutesFormSequence:
       sequences.updateTrialSessionMinutesFormSequence,
   },
@@ -32,6 +34,7 @@ export const TrialSessionMinutesForm = connect(
     removeMinuteSheetFormRowSequence,
     trialSessionMinutesAutosaveSequence,
     trialSessionMinutesForm,
+    trialSessionMinutesFormOptionsHelper,
     updateTrialSessionMinutesFormSequence,
   }) => {
     return (
@@ -60,6 +63,9 @@ export const TrialSessionMinutesForm = connect(
         />
         <RespondentsFieldset
           addRowHandler={addMinuteSheetFormRowSequence}
+          formOptions={
+            trialSessionMinutesFormOptionsHelper.filteredIrsPractitionerOptions
+          }
           removeRowHandler={removeMinuteSheetFormRowSequence}
           respondentsFormState={trialSessionMinutesForm.respondentsSection}
           onBlurHandler={trialSessionMinutesAutosaveSequence}
