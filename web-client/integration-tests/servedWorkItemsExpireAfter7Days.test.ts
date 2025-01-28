@@ -1,3 +1,4 @@
+import { CHIEF_JUDGE } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { createApplicationContext as applicationContextFactory } from '../../web-api/src/applicationContext';
 import {
@@ -8,6 +9,7 @@ import {
   uploadPetition,
 } from './helpers';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 const {
   IRS_SYSTEM_SECTION,
@@ -18,9 +20,9 @@ const {
 const cerebralTest = setupTest();
 
 describe('verify old served work items do not show up in the outbox', () => {
-  let workItem6Days;
-  let workItem7Days;
   let workItem8Days;
+  let workItem7Days;
+  let workItem6Days;
   let caseDetail;
 
   let workItemId6;
@@ -62,6 +64,7 @@ describe('verify old served work items do not show up in the outbox', () => {
     workItem8Days = {
       assigneeId: mockUser.userId,
       assigneeName: 'Test petitionsclerk1',
+      associatedJudge: CHIEF_JUDGE,
       caseStatus: CASE_STATUS_TYPES.new,
       completedAt: '2019-06-26T16:31:17.643Z',
       completedByUserId: mockUser.userId,
@@ -96,22 +99,8 @@ describe('verify old served work items do not show up in the outbox', () => {
       workItemId: `${workItemId6}`,
     };
 
-    await appContext.getPersistenceGateway().putWorkItemInOutbox({
-      applicationContext: appContext,
-      authorizedUser: mockUser,
-      workItem: workItem8Days,
-    });
-
-    await appContext.getPersistenceGateway().putWorkItemInOutbox({
-      applicationContext: appContext,
-      authorizedUser: mockUser,
-      workItem: workItem7Days,
-    });
-
-    await appContext.getPersistenceGateway().putWorkItemInOutbox({
-      applicationContext: appContext,
-      authorizedUser: mockUser,
-      workItem: workItem6Days,
+    await upsertWorkItems({
+      workItems: [workItem8Days, workItem7Days, workItem6Days],
     });
   });
 

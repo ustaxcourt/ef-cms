@@ -4,7 +4,7 @@ import {
 } from '@aws-sdk/lib-dynamodb';
 
 export async function batchDeleteDynamoItems(
-  itemsToDelete: { DeleteRequest: { Key: { pk: string; sk: string } } }[],
+  itemsToDelete: { DeleteRequest: { Key: { pk: string; sk?: string } } }[],
   client: DynamoDBDocumentClient,
   tableNameInput: string,
 ): Promise<number> {

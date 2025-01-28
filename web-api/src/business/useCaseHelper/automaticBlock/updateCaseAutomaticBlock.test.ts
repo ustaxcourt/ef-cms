@@ -5,7 +5,7 @@ jest.mock(
   '@web-api/persistence/dynamo/cases/createCaseTrialSortMappingRecords',
 );
 jest.mock(
-  '@web-api/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber',
+  '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber',
 );
 import {
   AUTOMATIC_BLOCKED_REASONS,
@@ -19,11 +19,11 @@ import {
 import { PENDING_DOCKET_ENTRY } from '../../../../../shared/src/test/mockDocketEntry';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
+import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseAutomaticBlock } from './updateCaseAutomaticBlock';
 import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { createCaseTrialSortMappingRecords as createCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/createCaseTrialSortMappingRecords';
-import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
 
 describe('updateCaseAutomaticBlock', () => {
   let mockCase;
