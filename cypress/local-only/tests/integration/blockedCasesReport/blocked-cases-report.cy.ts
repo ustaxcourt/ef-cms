@@ -68,4 +68,8 @@ describe('Blocked Cases Report', () => {
       );
     });
   });
+
+  it('should show the entire consolidated case group when any of the consolidated cases have been blocked', () => {
+    
+  });
 });
