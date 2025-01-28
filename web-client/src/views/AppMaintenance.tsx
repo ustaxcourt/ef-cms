@@ -3,6 +3,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 const seal = require('../images/ustc_seal.svg') as string;
 
+// eslint-disable-next-line no-new-dates/no-new-dates
 const updateTime = `${new Date().toLocaleString('en-US', {
   day: 'numeric',
   hour: 'numeric',

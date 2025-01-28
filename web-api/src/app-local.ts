@@ -45,6 +45,7 @@ const server = http.createServer((request, response) => {
 const PORT = 3011;
 
 server.listen(PORT, function () {
+  // eslint-disable-next-line no-new-dates/no-new-dates
   console.log(new Date() + ` Server is listening on port ${PORT}`);
 });
 
