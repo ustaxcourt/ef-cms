@@ -1,23 +1,24 @@
 import {
-  CaseAdvancedSearchResultItem,
-  CaseAdvancedSearchTerms,
-} from '@web-api/persistence/elasticsearch/caseAdvancedSearch';
-import { CaseSearchResult } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
-import { US_STATES } from '@shared/business/entities/EntityConstants';
-import { casePublicSearch } from '@web-api/persistence/elasticsearch/casePublicSearch';
+  CaseAdvancedSearchParamsRequestType,
+  CaseSearchResult,
+} from '@web-api/business/useCases/caseAdvancedSearchInteractor';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   createEndOfDayISO,
   createStartOfDayISO,
 } from '@shared/business/utilities/DateHandler';
-import { filterCaseSearchResultsNotAccessibleToUser } from '@shared/business/utilities/caseFilter';
+import { casePublicSearch } from '@web-api/persistence/elasticsearch/casePublicSearch';
 
-export const casePublicSearchInteractor = async ({
-  countryType,
-  endDate,
-  petitionerName,
-  petitionerState,
-  startDate,
-}: CaseAdvancedSearchTerms): Promise<CaseSearchResult[]> => {
+export const casePublicSearchInteractor = async (
+  applicationContext: ServerApplicationContext,
+  {
+    countryType,
+    endDate,
+    petitionerName,
+    petitionerState,
+    startDate,
+  }: CaseAdvancedSearchParamsRequestType,
+): Promise<{ results: CaseSearchResult[] }> => {
   let searchStartDate;
   let searchEndDate;
 
@@ -41,7 +42,8 @@ export const casePublicSearchInteractor = async ({
     });
   }
 
-  const foundCases = await casePublicSearch({
+  return await casePublicSearch({
+    applicationContext,
     searchTerms: {
       countryType,
       endDate: searchEndDate,
@@ -49,24 +51,5 @@ export const casePublicSearchInteractor = async ({
       petitionerState,
       startDate: searchStartDate,
     },
-  });
-
-  const filteredCases =
-    filterCaseSearchResultsNotAccessibleToUser<CaseAdvancedSearchResultItem>(
-      foundCases,
-      undefined,
-    );
-
-  return filteredCases.map(filteredCase => {
-    return {
-      caseCaption: filteredCase.caseCaption,
-      docketNumber: filteredCase.docketNumber,
-      docketNumberWithSuffix: filteredCase.docketNumberWithSuffix,
-      petitionerNames: filteredCase.petitioners?.map(p => p.name),
-      petitionerStateNames: filteredCase.petitioners?.map(
-        p => US_STATES[p.state || ''] || p.state,
-      ),
-      receivedAt: filteredCase.receivedAt?.toISOString() || '',
-    };
   });
 };
