@@ -92,25 +92,25 @@ function sortAndGroupCases(cases: BlockedCasesResponse) {
 
   cases.forEach(c => {
     if (c.leadDocketNumber) {
-      if (leadDocketNumberMap.has(c.leadDocketNumber)) {
-        leadDocketNumberMap.get(c.leadDocketNumber)?.push(c);
-        leadDocketNumberMap
-          .get(c.leadDocketNumber)
-          ?.sort((a, b) =>
-            Case.docketNumberSort(a.docketNumber, b.docketNumber),
-          );
-      } else {
-        leadDocketNumberMap.set(c.leadDocketNumber, [c]);
-      }
+      const consolidatedGroup =
+        leadDocketNumberMap.get(c.leadDocketNumber) || [];
+      consolidatedGroup.push(c);
+      leadDocketNumberMap.set(c.leadDocketNumber, consolidatedGroup);
     } else {
       leadDocketNumberMap.set(c.docketNumber, [c]);
     }
   });
-  const stuff = [...leadDocketNumberMap.entries()]
-    .sort((a, b) => Case.docketNumberSort(a[0], b[0]))
-    .map(([_, value]) => value)
+  const sortedCases = [...leadDocketNumberMap.entries()]
+    .sort((a, b) => {
+      return Case.docketNumberSort(a[0], b[0]);
+    })
+    .map(([_, value]) => {
+      return value.sort((a, b) =>
+        Case.docketNumberSort(a.docketNumber, b.docketNumber),
+      );
+    })
     .flat();
-  return stuff;
+  return sortedCases;
 }
 
 export type BlockedFormattedCase = {
