@@ -1,9 +1,20 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { blockedCasesReportHelper } from './blockedCasesReportHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
+import { initialBlockedCaseReportFilter } from '@web-client/presenter/state/blockedCasesReportState';
+import { cloneDeep } from 'lodash';
+import { BlockedCasesResponse } from '@web-api/persistence/elasticsearch/getBlockedCases';
+import { MOCK_CASE } from '@shared/test/mockCase';
 
 describe('blockedCasesReportHelper', () => {
   const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
+  let blockedCaseReportFilter: typeof initialBlockedCaseReportFilter;
+  let blockedCasesState: BlockedCasesResponse;
+
+  beforeEach(() => {
+    blockedCaseReportFilter = cloneDeep(initialBlockedCaseReportFilter);
+    blockedCasesState = [];
+  });
 
   describe('formatting', () => {
     it('formats blocked cases with caseTitle, docketNumberWithSuffix, and blockedDateFormatted and sorts by docket number', () => {
@@ -122,8 +133,26 @@ describe('blockedCasesReportHelper', () => {
       });
     });
 
-    it('should mark cases as "Grouped with blocked cases" when they are in a consolidated group and are not directly blocked themselves', () => {
-      
+    it('should mark cases as "Grouped with blocked case" when they are in a consolidated group and are not directly blocked themselves', () => {
+      const leadBlockedCase = cloneDeep(MOCK_CASE);
+      leadBlockedCase.leadDocketNumber = MOCK_CASE.docketNumber;
+      leadBlockedCase.blocked = true;
+      leadBlockedCase.blockedReason = 'The judge says block';
+      const groupedCase = cloneDeep(MOCK_CASE);
+      groupedCase.leadDocketNumber = MOCK_CASE.leadDocketNumber;
+      groupedCase.docketNumber = '107-25';
+      blockedCasesState = [leadBlockedCase, groupedCase];
+
+      const result = runCompute(blockedCasesReportHelper, {
+        state: { blockedCaseReportFilter, blockedCases: blockedCasesState },
+      });
+
+      const formattedGroupedCase = result.blockedCasesFormatted.find(
+        c => c.docketNumber === '107-25',
+      );
+      expect(formattedGroupedCase?.blockedReason).toEqual(
+        'Grouped with blocked case',
+      );
     });
   });
 
