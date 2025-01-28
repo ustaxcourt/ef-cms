@@ -45,7 +45,7 @@ export const blockedCasesReportHelper = (
     })
     .map(([_, value]) => {
       return value.sort((a, b) =>
-        Case.docketNumberSort(a.docketNumber, b.docketNumber),
+        Case.docketNumberSort(a.docketNumber, b.docketNumber), // This is for internal sorting of consolidated group
       );
     })
     .flat()
