@@ -121,6 +121,10 @@ describe('blockedCasesReportHelper', () => {
         ],
       });
     });
+
+    it('should mark cases as "Grouped with blocked cases" when they are in a consolidated group and are not directly blocked themselves', () => {
+      
+    });
   });
 
   describe('sorting', () => {
@@ -416,6 +420,10 @@ describe('blockedCasesReportHelper', () => {
         });
         expect(result.blockedCasesCount).toEqual(4);
       });
+    });
+
+    describe('consolidated cases', () => {
+      it('should keep the entire consolidated group of cases in the results when one of them matches the filter criteria', () => {});
     });
   });
 });
