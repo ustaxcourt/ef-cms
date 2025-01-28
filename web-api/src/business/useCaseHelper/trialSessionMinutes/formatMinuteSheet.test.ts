@@ -10,6 +10,7 @@ import {
   MOTION_STATUS_OPTIONS,
   MOTION_TYPE_OPTIONS,
   MinuteSheetFormState,
+  PETITIONER_ROLE_OPTIONS,
   STATUS_REPORT_ORDERED_FOR_OPTIONS,
   TRIAL_HEARING_OPTIONS,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
@@ -21,6 +22,7 @@ import {
   formatActionsAndFilings,
   formatCalledSection,
   formatExhibits,
+  formatJurisdictionContinued,
   formatJurisdictionRetained,
   formatMotions,
   formatPetitionerAppearances,
@@ -37,6 +39,7 @@ import {
   getBriefDetails,
   getConsolidatedDocketNumbers,
 } from './formatMinuteSheet';
+import { invert } from 'lodash';
 
 describe('formatMinuteSheet', () => {
   describe('formatRecalledRows', () => {
@@ -175,6 +178,8 @@ describe('formatMinuteSheet', () => {
   });
 
   describe('formatPetitionerAppearances', () => {
+    const invertedPetitionerRoleOptions = invert(PETITIONER_ROLE_OPTIONS);
+
     it('should return "No appearance" when noAppearance is true', () => {
       const petitionersSection = {
         noAppearance: true,
@@ -192,12 +197,14 @@ describe('formatMinuteSheet', () => {
             datesOfAppearance: '01/15/2023',
             name: 'John Smith',
             renderKey: '1',
-            role: 'Petitioner',
+            role: invertedPetitionerRoleOptions[PETITIONER_ROLE_OPTIONS.proSe],
           },
         },
       };
       const result = formatPetitionerAppearances(petitionersSection);
-      expect(result).toEqual(['John Smith (Petitioner) - 01/15/2023']);
+      expect(result).toEqual([
+        `John Smith (${PETITIONER_ROLE_OPTIONS.proSe}) - 01/15/2023`,
+      ]);
     });
 
     it('should format multiple petitioner appearances correctly', () => {
@@ -208,20 +215,22 @@ describe('formatMinuteSheet', () => {
             datesOfAppearance: '01/15/2023',
             name: 'John Smith',
             renderKey: '1',
-            role: 'Petitioner',
+            role: invertedPetitionerRoleOptions[PETITIONER_ROLE_OPTIONS.proSe],
           },
           '2': {
             datesOfAppearance: '01/16/2023',
             name: 'Jane Doe',
             renderKey: '2',
-            role: 'Counsel',
+            role: invertedPetitionerRoleOptions[
+              PETITIONER_ROLE_OPTIONS.counsel
+            ],
           },
         },
       };
       const result = formatPetitionerAppearances(petitionersSection);
       expect(result).toEqual([
-        'John Smith (Petitioner) - 01/15/2023',
-        'Jane Doe (Counsel) - 01/16/2023',
+        `John Smith (${PETITIONER_ROLE_OPTIONS.proSe}) - 01/15/2023`,
+        `Jane Doe (${PETITIONER_ROLE_OPTIONS.counsel}) - 01/16/2023`,
       ]);
     });
 
@@ -229,6 +238,72 @@ describe('formatMinuteSheet', () => {
       const petitionersSection = {
         noAppearance: false,
         petitioners: {},
+      };
+      const result = formatPetitionerAppearances(petitionersSection);
+      expect(result).toEqual([]);
+    });
+
+    it('should handle petitioner with missing datesOfAppearance', () => {
+      const petitionersSection = {
+        noAppearance: false,
+        petitioners: {
+          '1': {
+            datesOfAppearance: '',
+            name: 'John Smith',
+            renderKey: '1',
+            role: invertedPetitionerRoleOptions[PETITIONER_ROLE_OPTIONS.proSe],
+          },
+        },
+      };
+      const result = formatPetitionerAppearances(petitionersSection);
+      expect(result).toEqual([`John Smith (${PETITIONER_ROLE_OPTIONS.proSe})`]);
+    });
+
+    it('should handle petitioner with missing name', () => {
+      const petitionersSection = {
+        noAppearance: false,
+        petitioners: {
+          '1': {
+            datesOfAppearance: '01/15/2023',
+            name: '',
+            renderKey: '1',
+            role: invertedPetitionerRoleOptions[PETITIONER_ROLE_OPTIONS.proSe],
+          },
+        },
+      };
+      const result = formatPetitionerAppearances(petitionersSection);
+      expect(result).toEqual([
+        `(${PETITIONER_ROLE_OPTIONS.proSe}) - 01/15/2023`,
+      ]);
+    });
+
+    it('should handle petitioner with missing name and datesOfAppearance', () => {
+      const petitionersSection = {
+        noAppearance: false,
+        petitioners: {
+          '1': {
+            datesOfAppearance: '',
+            name: '',
+            renderKey: '1',
+            role: invertedPetitionerRoleOptions[PETITIONER_ROLE_OPTIONS.proSe],
+          },
+        },
+      };
+      const result = formatPetitionerAppearances(petitionersSection);
+      expect(result).toEqual([`(${PETITIONER_ROLE_OPTIONS.proSe})`]);
+    });
+
+    it('should handle completely empty petitioner appearance', () => {
+      const petitionersSection = {
+        noAppearance: false,
+        petitioners: {
+          '1': {
+            datesOfAppearance: '',
+            name: '',
+            renderKey: '1',
+            role: '',
+          },
+        },
       };
       const result = formatPetitionerAppearances(petitionersSection);
       expect(result).toEqual([]);
@@ -279,6 +354,48 @@ describe('formatMinuteSheet', () => {
       const result = formatRespondentAppearances(respondentsSection);
       expect(result).toEqual([]);
     });
+
+    it('should handle respondent with missing datesOfAppearance', () => {
+      const respondentsSection = {
+        respondents: {
+          '1': {
+            datesOfAppearance: '',
+            name: 'John Smith',
+            renderKey: '1',
+          },
+        },
+      };
+      const result = formatRespondentAppearances(respondentsSection);
+      expect(result).toEqual(['John Smith']);
+    });
+
+    it('should handle respondent with missing name', () => {
+      const respondentsSection = {
+        respondents: {
+          '1': {
+            datesOfAppearance: '01/15/2023',
+            name: '',
+            renderKey: '1',
+          },
+        },
+      };
+      const result = formatRespondentAppearances(respondentsSection);
+      expect(result).toEqual(['- 01/15/2023']);
+    });
+
+    it('should handle respondent with missing name and datesOfAppearance', () => {
+      const respondentsSection = {
+        respondents: {
+          '1': {
+            datesOfAppearance: '',
+            name: '',
+            renderKey: '1',
+          },
+        },
+      };
+      const result = formatRespondentAppearances(respondentsSection);
+      expect(result).toEqual([]);
+    });
   });
 
   describe('formatJurisdictionRetained', () => {
@@ -299,7 +416,7 @@ describe('formatMinuteSheet', () => {
         note: 'test note',
       };
       const result = formatJurisdictionRetained(section);
-      expect(result).toBe('Continued - 01/15/2023; <em>test note</em>');
+      expect(result).toBe('01/15/2023; <em>test note</em>');
     });
 
     it('should format jurisdiction retained without continued status', () => {
@@ -319,7 +436,7 @@ describe('formatMinuteSheet', () => {
         note: '',
       };
       const result = formatJurisdictionRetained(section);
-      expect(result).toBe('Continued - 01/15/2023');
+      expect(result).toBe('01/15/2023');
     });
   });
 
@@ -597,6 +714,33 @@ describe('formatMinuteSheet', () => {
         },
       ]);
     });
+
+    // 10419 TODO -- this one is interesting...should we be sanitizing inputs before generating the PDF?
+    // it('should handle special characters in notes', () => {
+    //   const section = {
+    //     actionsAndFilings: {
+    //       '1': {
+    //         date: '2023-01-15',
+    //         documentType: 'motion' as keyof typeof ACTION_DOCUMENT_TYPE_OPTIONS,
+    //         filedBy: 'petitioner' as keyof typeof ACTION_FILED_BY_OPTIONS,
+    //         isOnDocketRecord: true,
+    //         note: '<script>alert("XSS")</script>',
+    //         objection: '',
+    //         oralMotion: false,
+    //         renderKey: '1',
+    //         status: 'filed' as keyof typeof ACTION_STATUS_OPTIONS,
+    //       },
+    //     },
+    //   };
+    //   const result = formatActionsAndFilings(section);
+    //   expect(result).toEqual([
+    //     {
+    //       content:
+    //         '01/15/2023; Motion - <em>&lt;script&gt;alert("XSS")&lt;/script&gt;</em>; Petitioner; Filed',
+    //       renderKey: '1',
+    //     },
+    //   ]);
+    // });
   });
 
   describe('formatTrialBrief', () => {
@@ -648,6 +792,95 @@ describe('formatMinuteSheet', () => {
         totalTrialHours: '',
       });
     });
+
+    it('should format benchOpinionRendered correctly when all fields are present', () => {
+      const section = {
+        briefDetails: [],
+        briefType: '',
+        dateBenchOpinionRendered: '2023-01-15',
+        dateSubmitted: '',
+        note: 'bench opinion note',
+        totalTrialHours: 0,
+        transcriptOrdered: true,
+      };
+      const result = formatTrialBrief(section);
+      expect(result.benchOpinionRendered).toBe(
+        '01/15/2023; Transcript ordered; <em>bench opinion note</em>',
+      );
+    });
+
+    it('should format benchOpinionRendered correctly when only date is present', () => {
+      const section = {
+        briefDetails: [],
+        briefType: '',
+        dateBenchOpinionRendered: '2023-01-15',
+        dateSubmitted: '',
+        note: '',
+        totalTrialHours: 0,
+        transcriptOrdered: false,
+      };
+      const result = formatTrialBrief(section);
+      expect(result.benchOpinionRendered).toBe('01/15/2023');
+    });
+
+    it('should format benchOpinionRendered correctly when only note is present', () => {
+      const section = {
+        briefDetails: [],
+        briefType: '',
+        dateBenchOpinionRendered: '',
+        dateSubmitted: '',
+        note: 'bench opinion note',
+        totalTrialHours: 0,
+        transcriptOrdered: false,
+      };
+      const result = formatTrialBrief(section);
+      expect(result.benchOpinionRendered).toBe('<em>bench opinion note</em>');
+    });
+
+    it('should format benchOpinionRendered correctly when only transcriptOrdered is present', () => {
+      const section = {
+        briefDetails: [],
+        briefType: '',
+        dateBenchOpinionRendered: '',
+        dateSubmitted: '',
+        note: '',
+        totalTrialHours: 0,
+        transcriptOrdered: true,
+      };
+      const result = formatTrialBrief(section);
+      expect(result.benchOpinionRendered).toBe('Transcript ordered');
+    });
+
+    it('should format benchOpinionRendered correctly when no fields are present', () => {
+      const section = {
+        briefDetails: [],
+        briefType: '',
+        dateBenchOpinionRendered: '',
+        dateSubmitted: '',
+        note: '',
+        totalTrialHours: 0,
+        transcriptOrdered: false,
+      };
+      const result = formatTrialBrief(section);
+      expect(result.benchOpinionRendered).toBe('');
+    });
+
+    // 10419 TODO -- this one is interesting...should we be sanitizing inputs before generating the PDF?
+    // it('should handle special characters in notes', () => {
+    //   const section = {
+    //     briefDetails: [],
+    //     briefType: '',
+    //     dateBenchOpinionRendered: '2023-01-15',
+    //     dateSubmitted: '',
+    //     note: '<script>alert("XSS")</script>',
+    //     totalTrialHours: 0,
+    //     transcriptOrdered: true,
+    //   };
+    //   const result = formatTrialBrief(section);
+    //   expect(result.benchOpinionRendered).toBe(
+    //     '01/15/2023; Transcript ordered; <em>&lt;script&gt;alert("XSS")&lt;/script&gt;</em>',
+    //   );
+    // });
   });
 
   describe('formatPretrialConference', () => {
@@ -792,6 +1025,54 @@ describe('formatMinuteSheet', () => {
       const result = getBriefDetails({});
       expect(result).toEqual([]);
     });
+
+    it('should handle brief details with missing optional fields', () => {
+      const briefDetails = {
+        opening: {
+          dueDate: '2023-02-15',
+          note: '',
+          partyType: '',
+        },
+      };
+      const result = getBriefDetails(briefDetails);
+      expect(result).toEqual(['Opening - Due 02/15/2023']);
+    });
+
+    it('should handle brief details with only note', () => {
+      const briefDetails = {
+        opening: {
+          dueDate: '',
+          note: 'Only note',
+          partyType: '',
+        },
+      };
+      const result = getBriefDetails(briefDetails);
+      expect(result).toEqual(['Opening - <em>Only note</em>']);
+    });
+
+    it('should handle brief details with only partyType', () => {
+      const briefDetails = {
+        opening: {
+          dueDate: '',
+          note: '',
+          partyType: 'petitioner',
+        },
+      };
+      const result = getBriefDetails(briefDetails);
+      expect(result).toEqual(['Opening - petitioner']);
+    });
+
+    it('should handle brief details with all fields empty', () => {
+      const briefDetails = {
+        opening: {
+          dueDate: '',
+          note: '',
+          partyType: '',
+        },
+      };
+      const result = getBriefDetails(briefDetails);
+      expect(result).toEqual([]);
+    });
   });
 
   describe('getConsolidatedDocketNumbers', () => {
@@ -917,6 +1198,35 @@ describe('formatMinuteSheet', () => {
     it('should return "No" when remote session is false', () => {
       const result = formatRemoteSession(false);
       expect(result).toBe('No');
+    });
+  });
+
+  describe('formatJurisdictionContinued', () => {
+    it('should return undefined when no date is provided', () => {
+      const section = {
+        date: '',
+        note: 'test note',
+      };
+      const result = formatJurisdictionContinued(section);
+      expect(result).toBeUndefined();
+    });
+
+    it('should format jurisdiction continued with date and note', () => {
+      const section = {
+        date: '2023-01-15',
+        note: 'test note',
+      };
+      const result = formatJurisdictionContinued(section);
+      expect(result).toBe('01/15/2023; <em>test note</em>');
+    });
+
+    it('should format jurisdiction continued with date only', () => {
+      const section = {
+        date: '2023-01-15',
+        note: '',
+      };
+      const result = formatJurisdictionContinued(section);
+      expect(result).toBe('01/15/2023');
     });
   });
 });

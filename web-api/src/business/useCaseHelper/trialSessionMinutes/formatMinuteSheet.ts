@@ -97,9 +97,10 @@ export const getBriefDetails = (briefDetails: BriefDetailsType) => {
       ]
         .filter(stringBriefSubtype => !!stringBriefSubtype)
         .join('; ');
-      stringSubtype = [BRIEF_SUBTYPE[briefSubtype], stringSubtype]
-        .filter(thing => !!thing)
-        .join(' - ');
+
+      stringSubtype = stringSubtype
+        ? `${BRIEF_SUBTYPE[briefSubtype]} - ${stringSubtype}`
+        : '';
       return stringSubtype;
     })
     .filter(stringSubtype => !!stringSubtype);
@@ -292,19 +293,19 @@ export const formatTrialBrief = (
   trialBriefSection: MinuteSheetFormState['trialBriefSection'],
 ) => {
   const result = {
-    benchOpinionRendered: trialBriefSection.dateBenchOpinionRendered
-      ? [
-          formatDateString(
+    benchOpinionRendered: [
+      trialBriefSection.dateBenchOpinionRendered
+        ? formatDateString(
             trialBriefSection.dateBenchOpinionRendered,
             FORMATS.MMDDYYYY,
-          ),
-          trialBriefSection.transcriptOrdered ? 'Transcript ordered' : '',
-          trialBriefSection.note ? `<em>${trialBriefSection.note}</em>` : '',
-        ]
-          .filter(substring => !!substring)
-          .join('; ')
-      : '',
-    briefDetails: getBriefDetails(trialBriefSection.briefDetails || {}),
+          )
+        : '',
+      trialBriefSection.transcriptOrdered ? 'Transcript ordered' : '',
+      trialBriefSection.note ? `<em>${trialBriefSection.note}</em>` : '',
+    ]
+      .filter(substring => !!substring)
+      .join('; '),
+    briefDetails: getBriefDetails(trialBriefSection.briefDetails),
     briefType: trialBriefSection.briefType || '',
     dateSubmitted: trialBriefSection.dateSubmitted
       ? formatDateString(trialBriefSection.dateSubmitted, FORMATS.MMDDYYYY)
