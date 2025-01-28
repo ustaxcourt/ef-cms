@@ -6,6 +6,7 @@ import pluginJest from 'eslint-plugin-jest';
 import tseslint from 'typescript-eslint';
 import reactPlugin from 'eslint-plugin-react';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
+import noNewDatesPlugin from './eslint-no-new-dates-plugin.mjs';
 
 export default tseslint.config(
   {
@@ -201,5 +202,13 @@ export default tseslint.config(
       './cypress-public.config.ts',
     ], // Do not use typechecking on javascript files, archived scripts, or cypress which has different promise chains
     extends: [tseslint.configs.disableTypeChecked],
+  },
+  {
+    plugins: {
+      'no-new-dates': noNewDatesPlugin,
+    },
+    rules: {
+      'no-new-dates/no-new-dates': 'error',
+    },
   },
 );
