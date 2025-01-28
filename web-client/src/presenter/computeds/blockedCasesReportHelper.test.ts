@@ -5,6 +5,7 @@ import { initialBlockedCaseReportFilter } from '@web-client/presenter/state/bloc
 import { cloneDeep } from 'lodash';
 import { BlockedCasesResponse } from '@web-api/persistence/elasticsearch/getBlockedCases';
 import { MOCK_CASE } from '@shared/test/mockCase';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 
 describe('blockedCasesReportHelper', () => {
   const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
@@ -452,7 +453,29 @@ describe('blockedCasesReportHelper', () => {
     });
 
     describe('consolidated cases', () => {
-      it('should keep the entire consolidated group of cases in the results when one of them matches the filter criteria', () => {});
+      it('should keep the entire consolidated group of cases in the results when one of them matches the filter criteria', () => {
+        const submittedFilter = CASE_STATUS_TYPES.submitted;
+        blockedCaseReportFilter.caseStatusFilter = submittedFilter;
+        const leadCase = cloneDeep(MOCK_CASE);
+        leadCase.leadDocketNumber = leadCase.docketNumber;
+        leadCase.blocked = true;
+        leadCase.blockedReason = 'The judge says block';
+        leadCase.status = CASE_STATUS_TYPES.cav;
+        const groupedCase = cloneDeep(MOCK_CASE);
+        groupedCase.leadDocketNumber = leadCase.docketNumber;
+        groupedCase.docketNumber = '107-25';
+        groupedCase.status = submittedFilter;
+        const soloCase = cloneDeep(MOCK_CASE);
+        soloCase.status = submittedFilter;
+        soloCase.docketNumber = '584-24';
+        blockedCasesState = [leadCase, soloCase, groupedCase];
+
+        const result = runCompute(blockedCasesReportHelper, {
+          state: { blockedCaseReportFilter, blockedCases: blockedCasesState },
+        });
+
+        expect(result.blockedCasesCount).toEqual(3);
+      });
     });
   });
 });
