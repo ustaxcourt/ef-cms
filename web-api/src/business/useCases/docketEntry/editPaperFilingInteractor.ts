@@ -19,6 +19,7 @@ import {
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { cloneDeep, uniq } from 'lodash';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 interface IEditPaperFilingRequest {
@@ -459,7 +460,6 @@ const updateDocketEntry = async ({
 };
 
 const updateAndSaveWorkItem = async ({
-  applicationContext,
   docketEntry,
   user,
 }: {
@@ -480,9 +480,8 @@ const updateAndSaveWorkItem = async ({
     sentByUserId: user.userId,
   });
 
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
-    workItem: workItem.validate().toRawObject(),
+  await upsertWorkItems({
+    workItems: [workItem.validate().toRawObject()],
   });
 };
 

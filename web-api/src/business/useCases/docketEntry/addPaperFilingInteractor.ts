@@ -17,6 +17,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const addPaperFiling = async (
@@ -145,9 +146,7 @@ export const addPaperFiling = async (
       docketEntryEntity.setAsServed(servedParties.all);
     }
 
-    await saveWorkItem({
-      applicationContext,
-      isReadyForService,
+    await saveWorkItemInternal({
       workItem,
     });
 
@@ -232,25 +231,11 @@ export const addPaperFiling = async (
  * @param {boolean} providers.isSavingForLater Whether or not we are saving these work items for later
  * @param {object} providers.workItem The work item we are saving
  */
-const saveWorkItem = async ({
-  applicationContext,
-  isReadyForService,
-  workItem,
-}) => {
+const saveWorkItemInternal = async ({ workItem }) => {
   const workItemRaw = workItem.validate().toRawObject();
 
-  if (isReadyForService) {
-    await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-      applicationContext,
-      section: workItem.section,
-      userId: workItem.assigneeId,
-      workItem: workItemRaw,
-    });
-  }
-
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
-    workItem: workItemRaw,
+  await upsertWorkItems({
+    workItems: [workItemRaw],
   });
 };
 

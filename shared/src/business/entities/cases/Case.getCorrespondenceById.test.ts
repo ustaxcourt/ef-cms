@@ -7,6 +7,7 @@ describe('getCorrespondenceById', () => {
   it('should get a correspondence document by id', () => {
     const mockCorrespondence = new Correspondence({
       correspondenceId: '123-abc',
+      docketNumber: '101-23',
       documentTitle: 'My Correspondence',
       filedBy: 'Docket clerk',
     });
