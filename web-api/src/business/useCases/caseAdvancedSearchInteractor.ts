@@ -69,9 +69,9 @@ export const caseAdvancedSearchInteractor = async (
     });
   }
 
-  // if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {
-  //   throw new UnauthorizedError('Unauthorized');
-  // }
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
   const foundCases = await caseAdvancedSearch({
     applicationContext,
