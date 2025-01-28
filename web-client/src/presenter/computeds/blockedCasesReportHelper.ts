@@ -37,6 +37,9 @@ export const blockedCasesReportHelper = (
       return group.some(blockedCase => {
         if (reasonFilter === 'All') return true;
         if (reasonFilter === 'Manual Block') return !!blockedCase.blockedReason;
+        if (reasonFilter === 'Grouped with blocked case') {
+          return !blockedCase.blocked && !blockedCase.automaticBlocked;
+        }
         return blockedCase.automaticBlockedReason === reasonFilter;
       });
     })
@@ -44,8 +47,8 @@ export const blockedCasesReportHelper = (
       return Case.docketNumberSort(a[0], b[0]);
     })
     .map(([_, value]) => {
-      return value.sort((a, b) =>
-        Case.docketNumberSort(a.docketNumber, b.docketNumber), // This is for internal sorting of consolidated group
+      return value.sort(
+        (a, b) => Case.docketNumberSort(a.docketNumber, b.docketNumber), // This is for internal sorting of consolidated group
       );
     })
     .flat()
