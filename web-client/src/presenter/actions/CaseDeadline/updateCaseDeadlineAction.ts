@@ -4,6 +4,7 @@ export const updateCaseDeadlineAction = async ({
   applicationContext,
   get,
   path,
+  store,
 }: ActionProps) => {
   const { associatedJudge, associatedJudgeId, docketNumber, leadDocketNumber } =
     get(state.caseDetail);
@@ -21,6 +22,16 @@ export const updateCaseDeadlineAction = async ({
     .updateCaseDeadlineInteractor(applicationContext, {
       caseDeadline,
     });
+
+  const existingCaseDeadlines = get(state.caseDeadlines);
+
+  const updatedCaseDeadlines = existingCaseDeadlines.map(deadline =>
+    deadline.caseDeadlineId === updateCaseDeadlineResult.caseDeadlineId
+      ? updateCaseDeadlineResult
+      : deadline,
+  );
+
+  store.set(state.caseDeadlines, updatedCaseDeadlines);
 
   return path.success({
     alertSuccess: {
