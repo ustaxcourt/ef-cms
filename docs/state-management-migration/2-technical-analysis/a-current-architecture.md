@@ -1,6 +1,6 @@
-# Replacing Cerebral: Overview of Current Architecture
+# 2a. Overview of Current Architecture
 
-## Overview
+## Goals
 
 The DAWSON engineering team needs to migrate from the no-longer-maintained Cerebral state management library to some better-maintained library. This is a tricky endeavor for a number of reasons, some of which are orthogonal (i.e., they represent distinct challenges that don't necessarily intersect).
 
@@ -159,43 +159,34 @@ These are the primary technical use cases we need to account for when considerin
 Each way that Cerebral satisfies the characteristics above comes with distinct advantages and limitations that inform the selection of replacement tools.
 
 #### 1. Get and set state on a single state tree
-
-Pros:
-
+**Pros**:
 - Predictable state updates through a single source of truth
 - Simple state debugging since all data flows through one tree
 - Simple mental model
 
-Cons:
-
+**Cons**:
 - Complex state shape becomes difficult to maintain as application grows
 - State data relevant only to a specific component could be deeply nested
 in the global state tree
 - TypeScript types become unwieldy for deeply nested state
 
 #### 2. Get derived and computed values based on the current state tree
-
-Pros:
-
+**Pros**:
 - Automatic recalculation of derived values when dependent state changes
 - Business logic stays isolated from components
 - Computed values can be reused across components
 
-Cons:
-
+**Cons**:
 - Computed values can create hidden dependencies
 - Performance overhead from unnecessary recalculations
 
 #### 3. Orchestrate workflows triggered by event handlers
-
-Pros:
-
+**Pros**:
 - Clear separation between UI components and business logic
 - Reusable sequences can be composed from smaller actions
 - Declarative branching based on action results
 
-Cons:
-
+**Cons**:
 - Tight coupling to Cerebral's sequence/action model
 - Complex workflows become difficult to debug
 - Testing requires mocking Cerebral's infrastructure
