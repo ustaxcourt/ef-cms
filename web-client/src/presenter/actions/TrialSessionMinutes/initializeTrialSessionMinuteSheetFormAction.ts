@@ -227,6 +227,9 @@ const getPendingItemsFromCase = ({
   return keyedActionFilingFormFieldsByRenderKey;
 };
 
+// 10419 TODO we need to be more intelligent here.
+// Determine the CATEGORY of the pending document, then that maps to the action document type option.
+// Then, put the actual full document type in the note field.
 const transformDocumentType = (documentType: string) => {
   const reverseLookupStructure = invert(ACTION_DOCUMENT_TYPE_OPTIONS);
 
