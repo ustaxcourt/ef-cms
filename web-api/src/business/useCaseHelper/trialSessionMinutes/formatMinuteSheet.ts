@@ -278,9 +278,9 @@ export const formatActionsAndFilings = (
         ]
           .filter(substring => !!substring)
           .join(' - '),
-        ACTION_FILED_BY_OPTIONS[action.filedBy],
-        ACTION_STATUS_OPTIONS[action.status],
-        MOTION_OBJECTION_OPTIONS[action.objection],
+        action.filedBy ? ACTION_FILED_BY_OPTIONS[action.filedBy] : '',
+        action.status ? ACTION_STATUS_OPTIONS[action.status] : '',
+        action.objection ? MOTION_OBJECTION_OPTIONS[action.objection] : '',
       ]
         .filter(substring => !!substring)
         .join('; '),
