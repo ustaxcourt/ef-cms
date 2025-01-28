@@ -17,9 +17,38 @@ export const blockedCasesReportHelper = (
     state.blockedCaseReportFilter,
   );
 
-  const blockedCasesFormatted: BlockedFormattedCase[] = sortAndGroupCases(
-    blockedCases,
-  )
+  const groupedCases = groupCases(blockedCases);
+
+  const blockedCasesFormatted = [...groupedCases.entries()]
+    .filter(([_docketNumber, group]) => {
+      return group.some(blockedCase => {
+        return procedureTypeFilter && procedureTypeFilter !== 'All'
+          ? blockedCase.procedureType === procedureTypeFilter
+          : true;
+      });
+    })
+    .filter(([_docketNumber, group]) => {
+      return group.some(blockedCase => {
+        if (caseStatusFilter === 'All') return true;
+        return blockedCase.status === caseStatusFilter;
+      });
+    })
+    .filter(([_docketNumber, group]) => {
+      return group.some(blockedCase => {
+        if (reasonFilter === 'All') return true;
+        if (reasonFilter === 'Manual Block') return !!blockedCase.blockedReason;
+        return blockedCase.automaticBlockedReason === reasonFilter;
+      });
+    })
+    .sort((a, b) => {
+      return Case.docketNumberSort(a[0], b[0]);
+    })
+    .map(([_, value]) => {
+      return value.sort((a, b) =>
+        Case.docketNumberSort(a.docketNumber, b.docketNumber),
+      );
+    })
+    .flat()
     .map(blockedCase => {
       const blockedCaseWithConsolidatedProperties =
         setConsolidationFlagsForDisplay(blockedCase);
@@ -65,20 +94,6 @@ export const blockedCasesReportHelper = (
         blockedCase.blockedReason = 'Grouped with blocked case';
       }
       return blockedCase;
-    })
-    .filter(blockedCase => {
-      return procedureTypeFilter && procedureTypeFilter !== 'All'
-        ? blockedCase.procedureType === procedureTypeFilter
-        : true;
-    })
-    .filter(blockedCase => {
-      if (caseStatusFilter === 'All') return true;
-      return blockedCase.status === caseStatusFilter;
-    })
-    .filter(blockedCase => {
-      if (reasonFilter === 'All') return true;
-      if (reasonFilter === 'Manual Block') return !!blockedCase.blockedReason;
-      return blockedCase.automaticBlockedReason === reasonFilter;
     });
 
   return {
@@ -87,7 +102,9 @@ export const blockedCasesReportHelper = (
   };
 };
 
-function sortAndGroupCases(cases: BlockedCasesResponse) {
+function groupCases(
+  cases: BlockedCasesResponse,
+): Map<string, BlockedCasesResponse> {
   const leadDocketNumberMap: Map<string, BlockedCasesResponse> = new Map();
 
   cases.forEach(c => {
@@ -100,17 +117,8 @@ function sortAndGroupCases(cases: BlockedCasesResponse) {
       leadDocketNumberMap.set(c.docketNumber, [c]);
     }
   });
-  const sortedCases = [...leadDocketNumberMap.entries()]
-    .sort((a, b) => {
-      return Case.docketNumberSort(a[0], b[0]);
-    })
-    .map(([_, value]) => {
-      return value.sort((a, b) =>
-        Case.docketNumberSort(a.docketNumber, b.docketNumber),
-      );
-    })
-    .flat();
-  return sortedCases;
+
+  return leadDocketNumberMap;
 }
 
 export type BlockedFormattedCase = {
