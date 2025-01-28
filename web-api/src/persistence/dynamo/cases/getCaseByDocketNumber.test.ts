@@ -4,8 +4,8 @@ import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getCaseByDocketNumber } from './getCaseByDocketNumber';
 import { getCaseByDocketNumberPostgres as getCaseByDocketNumberPostgresMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';

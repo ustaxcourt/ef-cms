@@ -3,12 +3,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
+import { applicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCasesInTrialSession } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper';
+import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 
 export const getTrialSessionOpenCasesCountInteractor = async (
-  applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<{
@@ -19,12 +19,10 @@ export const getTrialSessionOpenCasesCountInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const TRIAL_SESSION = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
-      trialSessionId,
-    });
+  const TRIAL_SESSION = await getTrialSessionById({
+    applicationContext,
+    trialSessionId,
+  });
 
   if (!TRIAL_SESSION) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);

@@ -2,8 +2,7 @@ import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
+} from '@shared/authorization/authorizationClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
@@ -17,7 +16,6 @@ import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWork
  * @returns {object} the work item data
  */
 export const getWorkItemInteractor = async (
-  _applicationContext: ServerApplicationContext,
   { workItemId }: { workItemId: string },
   authorizedUser: UnknownAuthUser,
 ) => {

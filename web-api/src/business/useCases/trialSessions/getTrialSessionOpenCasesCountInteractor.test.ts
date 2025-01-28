@@ -1,15 +1,13 @@
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+jest.mock(
+  '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper',
+);
+jest.mock('@web-api/persistence/dynamo/trialSessions/getTrialSessionById');
+
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getTrialSessionOpenCasesCountInteractor } from '@web-api/business/useCases/trialSessions/getTrialSessionOpenCasesCountInteractor';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { getCasesInTrialSession } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper';
-
-jest.mock(
-  '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper',
-  () => ({
-    getCasesInTrialSession: jest.fn(),
-  }),
-);
+import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 
 describe('getTrialSessionOpenCasesCountInteractor', () => {
   const TEST_TRIAL_SESSION_ID = 'TEST_TRIAL_SESSION_ID';
@@ -17,7 +15,6 @@ describe('getTrialSessionOpenCasesCountInteractor', () => {
   it('should throw error if user is unauthorized', async () => {
     await expect(
       getTrialSessionOpenCasesCountInteractor(
-        applicationContext,
         {
           trialSessionId: TEST_TRIAL_SESSION_ID,
         },
@@ -27,13 +24,10 @@ describe('getTrialSessionOpenCasesCountInteractor', () => {
   });
 
   it('should throw error if the trial session does not exist', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue(undefined);
+    (getTrialSessionById as jest.Mock).mockReturnValue(undefined);
 
     await expect(
       getTrialSessionOpenCasesCountInteractor(
-        applicationContext,
         {
           trialSessionId: TEST_TRIAL_SESSION_ID,
         },
@@ -41,8 +35,8 @@ describe('getTrialSessionOpenCasesCountInteractor', () => {
       ),
     ).rejects.toThrow(NotFoundError);
 
-    const getTrialSessionByIdCalls =
-      applicationContext.getPersistenceGateway().getTrialSessionById.mock.calls;
+    const getTrialSessionByIdCalls = (getTrialSessionById as jest.Mock).mock
+      .calls;
     expect(getTrialSessionByIdCalls.length).toEqual(1);
     expect(getTrialSessionByIdCalls[0][0].trialSessionId).toEqual(
       TEST_TRIAL_SESSION_ID,
@@ -55,9 +49,7 @@ describe('getTrialSessionOpenCasesCountInteractor', () => {
       testProp: 'TEST_PROP',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue(TEST_TRIAL_SESSION);
+    (getTrialSessionById as jest.Mock).mockReturnValue(TEST_TRIAL_SESSION);
 
     (getCasesInTrialSession as jest.Mock).mockReturnValue({
       calendaredCaseEntities: [{}, {}, {}],
@@ -66,7 +58,6 @@ describe('getTrialSessionOpenCasesCountInteractor', () => {
 
     const { calendaredCaseEntitiesCount, casesThatShouldReceiveNoticesCount } =
       await getTrialSessionOpenCasesCountInteractor(
-        applicationContext,
         {
           trialSessionId: TEST_TRIAL_SESSION_ID,
         },

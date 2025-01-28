@@ -16,11 +16,11 @@ import { getCaseByDocketNumberPostgres } from '@web-api/persistence/postgres/cas
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { queryFull } from '../../dynamodbClientService';
 import { workItemEntity } from '@web-api/persistence/postgres/workitems/mapper';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { caseContactAddressSealedFormatter } from '@shared/business/utilities/caseFilter';
 
 // These case items are no longer in dynamoDB
 const SK_FILTER_OUT = ['work-item', 'correspondence'];
-import { caseContactAddressSealedFormatter } from '@shared/business/utilities/caseFilter';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const getCaseByDocketNumber = async ({
   applicationContext,

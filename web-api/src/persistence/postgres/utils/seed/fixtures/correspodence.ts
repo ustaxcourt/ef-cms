@@ -1,3 +1,4 @@
+import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { NewCaseCorrespondenceKysely } from '@web-api/database-types';
 
 export const correspondence: NewCaseCorrespondenceKysely[] = [
@@ -6,7 +7,7 @@ export const correspondence: NewCaseCorrespondenceKysely[] = [
     docketNumber: '103-19',
     documentTitle: 'Internal Memo',
     filedBy: 'Test Petitionsclerk',
-    filingDate: new Date('2019-08-14T20:35:52.915Z'),
+    filingDate: calculateDate({ dateString: '2019-08-14T20:35:52.915Z' }),
     userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
   },
 ];

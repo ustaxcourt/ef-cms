@@ -38,20 +38,21 @@ export const seed = async () => {
       .execute(),
   );
 
-  await Promise.all([
-    insertMessages,
-    insertCaseDeadline,
-    insertCorrespondence,
-    insertCaseWorksheet,
-  ]);
-
-  await getDbWriter(writer =>
+  const insertWorkItem = await getDbWriter(writer =>
     writer
       .insertInto('dwWorkItem')
       .values(workItems)
       .onConflict(oc => oc.column('workItemId').doNothing()) // ensure doesn't fail if exists
       .execute(),
   );
+
+  await Promise.all([
+    insertMessages,
+    insertCaseDeadline,
+    insertCorrespondence,
+    insertCaseWorksheet,
+    insertWorkItem,
+  ]);
 };
 
 seed()

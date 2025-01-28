@@ -1,8 +1,4 @@
-/**
- * HOW TO RUN
- *
- * TABLE_NAME=testing npx ts-node --transpileOnly scripts/run-once-scripts/postgres-migration/delete-case-worksheets.ts
- */
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
@@ -17,10 +13,9 @@ const dynamoDbDocClient = DynamoDBDocumentClient.from(dynamoDbClient);
 
 // We set the environment as 'production' (= "a deployed environment") to get the RDS connection to work properly
 environment.nodeEnv = 'production';
-process.env.CIRCLE_BRANCH = 'test';
 
 const getCaseWorksheetsToDelete = async (offset: number) => {
-  const caseWorksheets = await getDbReader(reader =>
+  return await getDbReader(reader =>
     reader
       .selectFrom('dwCaseWorksheet')
       .select(['docketNumber'])
@@ -29,7 +24,6 @@ const getCaseWorksheetsToDelete = async (offset: number) => {
       .offset(offset)
       .execute(),
   );
-  return caseWorksheets;
 };
 
 let totalItemsDeleted = 0;
