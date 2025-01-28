@@ -26,7 +26,7 @@ export const CaseMetadataFieldset = ({
   return (
     <fieldset className="border-0 padding-0">
       <div className="grid-row grid-gap align-items-center margin-bottom-1">
-        <div className="grid-col minw-15">
+        <div className="grid-col-fill" style={{ minWidth: '100px' }}>
           <span className="usa-label margin-bottom-0">Calendar Called</span>
         </div>
         <div className="grid-col-auto">
@@ -111,7 +111,7 @@ export const CaseMetadataFieldset = ({
         </div>
       </div>
       <div className="grid-row grid-gap align-items-center margin-bottom-1">
-        <div className="grid-col-fill minw-15">
+        <div className="grid-col-fill" style={{ minWidth: '100px' }}>
           <span className="usa-label margin-bottom-0">Not Called</span>
         </div>
         <div className="grid-col-auto">
@@ -172,7 +172,7 @@ export const CaseMetadataFieldset = ({
             className="grid-row grid-gap align-items-center margin-bottom-1"
             key={row.renderKey}
           >
-            <div className="grid-col-fill minw-15">
+            <div className="grid-col-fill" style={{ minWidth: '100px' }}>
               {rowIndex === 0 && (
                 <span className="usa-label margin-bottom-0">Re-called</span>
               )}
@@ -278,7 +278,7 @@ export const CaseMetadataFieldset = ({
         );
       })}
       <div className="grid-row grid-gap align-items-center margin-bottom-1">
-        <div className="grid-col-fill"></div>
+        <div className="grid-col-fill" style={{ minWidth: '100px' }}></div>
         <div className="grid-col-auto" style={{ minWidth: '350px' }}>
           <Button
             link
@@ -298,7 +298,7 @@ export const CaseMetadataFieldset = ({
         <div className="grid-col-8"></div>
       </div>
       <div className="grid-row grid-gap align-items-center margin-bottom-1">
-        <div className="grid-col-fill minw-15">
+        <div className="grid-col-fill" style={{ minWidth: '100px' }}>
           <span className="usa-label margin-bottom-0">Pretrial conference</span>
         </div>
         <div className="grid-col-auto">
@@ -393,7 +393,7 @@ export const CaseMetadataFieldset = ({
         </div>
       </div>
       <div className="grid-row grid-gap align-items-center">
-        <div className="grid-col-fill minw-15">
+        <div className="grid-col-fill" style={{ minWidth: '100px' }}>
           <span className="usa-label margin-bottom-0">Trial/Hearing</span>
         </div>
         <div className="grid-col-auto">
