@@ -61,9 +61,6 @@ export const seed = async () => {
       .execute(),
   );
 
-  // Attach petitioners to their respective cases
-  // 10502 TODO: This needs to happen before cases are seeded unless we also send worker queue messages
-  // upon updates to the petitioners
   await getDbWriter(writer =>
     writer
       .insertInto('dwPetitionerOnCase')

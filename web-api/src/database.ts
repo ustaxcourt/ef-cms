@@ -10,9 +10,14 @@ import { Signer } from '@aws-sdk/rds-signer';
 import { environment } from './environment';
 import fs from 'fs';
 import { opensearchGateway } from '@web-api/gateways/opensearch/opensearchGateway';
-import { TABLES_TO_INDEX_IN_OPENSEARCH } from '@web-api/gateways/opensearch/opensearchWorkerRouter';
+import {
+  OpensearchWorkerMessage,
+  TABLES_TO_OPENSEARCH_MAPPING,
+  WorkerMessageType,
+} from '@web-api/gateways/opensearch/opensearchWorkerRouter';
 import { formatNow } from '@shared/business/utilities/DateHandler';
 import { isArray } from 'lodash';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 
 export const POOL = {
   ...environment.rds.pool,
@@ -143,7 +148,7 @@ export function getDbReader<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
   });
 }
 
-export function executeWriter<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
+function executeWriter<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
   return getConnection({
     cb,
     dbKey: 'writer',
@@ -154,37 +159,28 @@ export function executeWriter<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
 
 export async function getDbWriter<T>(
   cb: (db: Kysely<Database>) => Promise<T>,
-  tableName: DatabaseTableName | '' = '',
+  tableName: DatabaseTableName,
 ): Promise<T> {
-  console.log('tableName', tableName);
-
-  if (!TABLES_TO_INDEX_IN_OPENSEARCH.includes(tableName)) {
-    console.log('not includes');
+  if (!Object.keys(TABLES_TO_OPENSEARCH_MAPPING).includes(tableName)) {
     return await executeWriter(cb);
   }
 
-  let result: any = await executeWriter(cb);
-  if (!isArray(result)) {
-    result = [result];
-  }
-  console.log('result', result);
+  const result: T = await executeWriter(cb);
 
-  // Check if this entity type should send SQS notifications
   if (result) {
     try {
-      // Construct the SQS message
-      const message = {
+      const message: OpensearchWorkerMessage = {
         timestamp: formatNow(),
         payload: result,
-        type: tableName,
+        type: tableName as WorkerMessageType,
       };
 
-      console.log('getDbWriter message', message);
-
-      // Send the message to SQS
       await opensearchGateway().queueWork({ message });
     } catch (err) {
-      console.error('Failed to send SQS message', err);
+      getLogger().error(
+        'Error queuing message for opensearch from postgres',
+        err,
+      );
     }
   }
 
