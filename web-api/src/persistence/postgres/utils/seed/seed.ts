@@ -61,6 +61,17 @@ export const seed = async () => {
       .execute(),
   );
 
+  // Attach petitioners to their respective cases
+  // 10502 TODO: This needs to happen before cases are seeded unless we also send worker queue messages
+  // upon updates to the petitioners
+  await getDbWriter(writer =>
+    writer
+      .insertInto('dwPetitionerOnCase')
+      .values(petitionerToCaseMappings)
+      .onConflict(oc => oc.columns(['contactId', 'docketNumber']).doNothing())
+      .execute(),
+  );
+
   // Seed the cases
   const cases = [
     ...cases100_104,
@@ -112,14 +123,6 @@ export const seed = async () => {
       .execute(),
   );
 
-  // Attach petitioners to their respective cases
-  await getDbWriter(writer =>
-    writer
-      .insertInto('dwPetitionerOnCase')
-      .values(petitionerToCaseMappings)
-      .onConflict(oc => oc.columns(['contactId', 'docketNumber']).doNothing())
-      .execute(),
-  );
   await Promise.all([
     insertMessages,
     insertCaseDeadline,
