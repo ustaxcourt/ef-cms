@@ -1,3 +1,4 @@
+/* eslint-disable no-new-dates/no-new-dates*/
 import { DateTime, Settings } from 'luxon';
 import {
   FORMATS,

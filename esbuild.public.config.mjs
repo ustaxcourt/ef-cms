@@ -1,4 +1,4 @@
-/* eslint-disable @miovision/disallow-date/no-new-date */
+/* eslint-disable no-new-dates/no-new-dates*/
 import esbuildHelper from './esbuildHelper.mjs';
 import fs from 'fs';
 
