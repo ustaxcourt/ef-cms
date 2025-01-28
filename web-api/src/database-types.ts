@@ -1,5 +1,7 @@
 import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
 
+export type DatabaseTableName = keyof Database;
+
 export interface Database {
   dwCase: CaseTable;
   dwCaseStatistic: CaseStatisticTable;

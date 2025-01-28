@@ -4,7 +4,7 @@ import {
   Kysely,
   PostgresDialect,
 } from 'kysely';
-import { Database } from './database-types';
+import { Database, DatabaseTableName } from './database-types';
 import { Pool } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
 import { environment } from './environment';
@@ -154,7 +154,7 @@ export function executeWriter<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
 
 export async function getDbWriter<T>(
   cb: (db: Kysely<Database>) => Promise<T>,
-  tableName: string = '',
+  tableName: DatabaseTableName | '' = '',
 ): Promise<T> {
   console.log('tableName', tableName);
 
