@@ -1,6 +1,8 @@
-import { updateCaseWorker } from '@web-api/lambdas/opensearch/updateCaseWorker';
+import { opensearchUpdateCaseWorker } from '@web-api/lambdas/opensearch/updateCaseWorker';
 
-export const TABLES_TO_INDEX_IN_OPENSEARCH = ['dwCase', 'dwDocketEntry'];
+export const TABLES_TO_OPENSEARCH_MAPPING = {
+  dwCase: opensearchUpdateCaseWorker,
+};
 
 export type OpensearchWorkerMessage = {
   payload: any;
@@ -8,8 +10,7 @@ export type OpensearchWorkerMessage = {
   timestamp: string;
 };
 
-export type WorkerMessageType =
-  (typeof TABLES_TO_INDEX_IN_OPENSEARCH)[keyof typeof TABLES_TO_INDEX_IN_OPENSEARCH];
+export type WorkerMessageType = keyof typeof TABLES_TO_OPENSEARCH_MAPPING;
 
 export type WorkerHandler = ({
   message,
@@ -22,13 +23,11 @@ export const workerRouter = async ({
 }: {
   message: OpensearchWorkerMessage;
 }): Promise<void> => {
-  switch (message.type) {
-    case TABLES_TO_INDEX_IN_OPENSEARCH[0]:
-      await updateCaseWorker({ message });
-      break;
-    default:
-      throw new Error(
-        `No matching router found for message: ${JSON.stringify(message)}`,
-      );
+  const routerFn = TABLES_TO_OPENSEARCH_MAPPING[message.type];
+  if (!routerFn) {
+    throw new Error(
+      `No matching router found for message: ${JSON.stringify(message)}`,
+    );
   }
+  await routerFn({ message });
 };

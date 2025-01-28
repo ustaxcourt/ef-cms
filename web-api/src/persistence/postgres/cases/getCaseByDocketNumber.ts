@@ -12,6 +12,7 @@ import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
+import { getPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/getPetitionersOnCase';
 
 export const getCaseByDocketNumber = async ({
   applicationContext,
@@ -29,14 +30,9 @@ export const getCaseByDocketNumber = async ({
     throw new NotFoundError(`Case ${docketNumber} not found`);
   }
 
-  const dbPetitionersOnCase = await getDbReader(reader =>
-    reader
-      .selectFrom('dwPetitionerOnCase')
-      .where('docketNumber', '=', docketNumber)
-      .orderBy('orderOnCase', 'asc')
-      .selectAll()
-      .execute(),
-  );
+  const dbPetitionersOnCase = await getPetitionersOnCase({
+    docketNumber,
+  });
   const petitionersOnCase =
     dbPetitionersOnCase.map(p => {
       return new Petitioner({
