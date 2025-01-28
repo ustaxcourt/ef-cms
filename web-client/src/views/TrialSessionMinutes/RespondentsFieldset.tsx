@@ -4,12 +4,12 @@ import {
   RemoveRowHandler,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import { Button } from '@web-client/ustc-ui/Button/Button';
+import { CreatableSelect } from '@web-client/ustc-ui/Select/CreatableSelect';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
   MINUTE_SHEET_FORM_SECTION_MAP,
   MinuteSheetFormState,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
-import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import React from 'react';
 
 export const RespondentsFieldset = ({
@@ -45,7 +45,7 @@ export const RespondentsFieldset = ({
                 <label hidden htmlFor={`respondent-${rowIndex}`}>
                   {`Respondent ${rowIndex}`}
                 </label>
-                <SelectSearch
+                <CreatableSelect
                   aria-labelledby={`respondent-label-${rowIndex}"`}
                   id={`respondent-${rowIndex}"`}
                   isClearable={true}
