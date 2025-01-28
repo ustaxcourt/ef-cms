@@ -40,13 +40,13 @@ export const ExhibitsFieldset = ({
         >
           <div className="grid-col-5">
             <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
-              <label hidden htmlFor={`exhibitDescription${rowIndex}`}>
+              <label hidden htmlFor={`exhibit-description-${rowIndex}`}>
                 {`Description ${rowIndex}`}
               </label>
               <input
                 className="usa-input maxw-full"
-                id={`exhibitDescription${rowIndex}`}
-                name={`exhibitDescription${rowIndex}`}
+                id={`exhibit-description-${rowIndex}`}
+                name={`exhibit-description-${rowIndex}`}
                 type="text"
                 value={exhibitsFormState.exhibits[row.renderKey].description}
                 onBlur={() => onBlurHandler()}
@@ -68,14 +68,14 @@ export const ExhibitsFieldset = ({
             <FormGroup className="margin-bottom-0 display-flex align-items-center">
               <label
                 className="margin-right-2 margin-bottom-0 display-inline-block"
-                htmlFor={`exhibitStatus${rowIndex}`}
+                htmlFor={`exhibit-status-${rowIndex}`}
               >
-                Type
+                Status
               </label>
               <select
                 className="usa-select display-inline-block"
-                id={`exhibitStatus${rowIndex}`}
-                name={`exhibitStatus${rowIndex}`}
+                id={`exhibit-status-${rowIndex}`}
+                name={`exhibit-status-${rowIndex}`}
                 value={exhibitsFormState.exhibits[row.renderKey].status}
                 onBlur={() => onBlurHandler()}
                 onChange={e => {
@@ -105,14 +105,14 @@ export const ExhibitsFieldset = ({
             <FormGroup className="margin-bottom-0 display-flex align-items-center">
               <label
                 className="margin-right-2 margin-bottom-0 display-inline-block"
-                htmlFor={`exhibitNote${rowIndex}`}
+                htmlFor={`exhibit-note-${rowIndex}`}
               >
                 Note
               </label>
               <input
                 className="usa-input"
-                id={`exhibitNote${rowIndex}`}
-                name={`exhibitNote${rowIndex}`}
+                id={`exhibit-note-${rowIndex}`}
+                name={`exhibit-note-${rowIndex}`}
                 type="text"
                 value={exhibitsFormState.exhibits[row.renderKey].note}
                 onBlur={() => onBlurHandler()}
