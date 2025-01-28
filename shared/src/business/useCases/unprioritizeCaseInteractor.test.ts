@@ -1,4 +1,3 @@
-import '@web-api/persistence/postgres/cases/mocks.jest';
 jest.mock('@web-api/persistence/dynamo/locks/acquireLock');
 jest.mock(
   '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock',
@@ -13,6 +12,7 @@ jest.mock(
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { MOCK_LOCK } from '../../test/mockLock';

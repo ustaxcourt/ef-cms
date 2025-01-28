@@ -1,8 +1,8 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { createCaseTrialSortMappingRecords } from '@web-api/persistence/dynamo/cases/createCaseTrialSortMappingRecords';
 import { deleteCaseTrialSortMappingRecords } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
+import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 
 /**
  * updateCaseAutomaticBlock
@@ -23,7 +23,6 @@ export const updateCaseAutomaticBlock = async ({
     return caseEntity;
   }
   const caseDeadlines = await getCaseDeadlinesByDocketNumber({
-    applicationContext,
     docketNumber: caseEntity.docketNumber,
   });
 
