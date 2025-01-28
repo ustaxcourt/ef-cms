@@ -9,9 +9,12 @@ import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { download, generateCsv, mkConfig } from 'export-to-csv';
 import { state } from '@web-client/presenter/app.cerebral';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
 import classNames from 'classnames';
+import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
+import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
+import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 
 export const BlockedCasesReport = connect(
   {
@@ -23,6 +26,13 @@ export const BlockedCasesReport = connect(
     blockedCasesReportHelper,
   }) {
     const [isSubmitDebounced, setIsSubmitDebounced] = useState(false);
+    const paginatorTop = useRef(null);
+
+    const { activePage, pageRecords, setActivePage, totalPages } =
+      useClientSidePaginator(
+        blockedCasesReportHelper.blockedCasesFormatted,
+        100,
+      );
 
     const debounceSubmit = (timeout: number) => {
       setIsSubmitDebounced(true);
@@ -102,7 +112,7 @@ export const BlockedCasesReport = connect(
                         </tr>
                       </thead>
                       <tbody>
-                        {blockedCasesReportHelper.blockedCasesFormatted.map(
+                        {pageRecords.map(
                           item => (
                             <tr
                               data-testid={`blocked-case-${item.docketNumber}-row`}
@@ -155,6 +165,17 @@ export const BlockedCasesReport = connect(
                 <p className="margin-0 text-semibold">
                   Select a trial location to view blocked cases
                 </p>
+              )}
+
+              {totalPages > 1 && (
+                <Paginator
+                  currentPageIndex={activePage}
+                  totalPages={totalPages}
+                  onPageChange={pageChange => {
+                    setActivePage(pageChange);
+                    focusPaginatorTop(paginatorTop);
+                  }}
+                />
               )}
             </div>
           </div>
