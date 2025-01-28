@@ -1,4 +1,4 @@
-jest.mock(
+  jest.mock(
   '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor',
 );
 jest.mock('@web-api/persistence/dynamo/cases/getCaseByDocketNumber');

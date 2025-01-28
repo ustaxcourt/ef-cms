@@ -28,6 +28,7 @@ describe('updateCaseDeadlineAction', () => {
     await runAction(updateCaseDeadlineAction, {
       modules: { presenter },
       state: {
+        caseDeadlines: [{ caseDeadlineId: '123' }],
         caseDetail: {
           associatedJudge: 'TEST_ASSOCIATED_JUDGE',
           associatedJudgeId: 'TEST_ASSOCIATED_JUDGE_ID',
