@@ -1,3 +1,6 @@
+jest.mock('@web-api/notifications/sendNotificationToUser');
+jest.mock('@web-api/persistence/dynamo/trialSessions/getTrialSessionById');
+
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
@@ -14,9 +17,6 @@ import {
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { sendNotificationToUser } from '@web-api/notifications/sendNotificationToUser';
 import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
-
-jest.mock('@web-api/notifications/sendNotificationToUser');
-jest.mock('@web-api/persistence/dynamo/trialSessions/getTrialSessionById');
 
 describe('determineEntitiesToLock', () => {
   const trialSessionId = '6805d1ab-18d0-43ec-bafb-654e83405416';

@@ -1,22 +1,13 @@
+jest.mock(
+  '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper',
+);
+jest.mock('@web-api/persistence/dynamo/trialSessions/getTrialSessionById');
+
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getTrialSessionOpenCasesCountInteractor } from '@web-api/business/useCases/trialSessions/getTrialSessionOpenCasesCountInteractor';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { getCasesInTrialSession } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper';
 import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
-
-jest.mock(
-  '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper',
-  () => ({
-    getCasesInTrialSession: jest.fn(),
-  }),
-);
-
-jest.mock(
-  '@web-api/persistence/dynamo/trialSessions/getTrialSessionById',
-  () => ({
-    getTrialSessionById: jest.fn(),
-  }),
-);
 
 describe('getTrialSessionOpenCasesCountInteractor', () => {
   const TEST_TRIAL_SESSION_ID = 'TEST_TRIAL_SESSION_ID';
