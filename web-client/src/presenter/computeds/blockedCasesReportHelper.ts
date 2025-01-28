@@ -89,16 +89,19 @@ export const blockedCasesReportHelper = (
 
 function sortAndGroupCases(cases: BlockedCasesResponse) {
   const leadDocketNumberMap: Map<string, BlockedCasesResponse> = new Map();
-  console.log('cases', cases);
 
   cases.forEach(c => {
     if (c.leadDocketNumber) {
       if (leadDocketNumberMap.has(c.leadDocketNumber)) {
         leadDocketNumberMap.get(c.leadDocketNumber)?.push(c);
+        leadDocketNumberMap
+          .get(c.leadDocketNumber)
+          ?.sort((a, b) =>
+            Case.docketNumberSort(a.docketNumber, b.docketNumber),
+          );
       } else {
         leadDocketNumberMap.set(c.leadDocketNumber, [c]);
       }
-      console.log('leadDocketNumberMap', leadDocketNumberMap);
     } else {
       leadDocketNumberMap.set(c.docketNumber, [c]);
     }
@@ -107,8 +110,6 @@ function sortAndGroupCases(cases: BlockedCasesResponse) {
     .sort((a, b) => Case.docketNumberSort(a[0], b[0]))
     .map(([_, value]) => value)
     .flat();
-  //  stuff = Array.from(leadDocketNumberMap.values()).flat();
-  console.log('All grouped', stuff);
   return stuff;
 }
 
