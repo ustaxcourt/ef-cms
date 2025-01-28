@@ -25,7 +25,7 @@ import { retry, setup } from '@cypress/puppeteer';
 
 export default defineConfig({
   chromeWebSecurity: false,
-  defaultCommandTimeout: 60000,  
+  defaultCommandTimeout: 60000,
   e2e: {
     baseUrl: 'http://localhost:1234',
     experimentalStudio: true,
@@ -121,26 +121,27 @@ export default defineConfig({
             browser: any,
             close: boolean = true,
           ) {
-            // Note that browser.pages is *not* sorted in any particular order.
-            // Therefore we pass in the URL we want to find rather than an index.
-            const pages: Page[] = await browser.pages();
-            for (const page of pages) {
-              if (page.url().includes('.cy.ts')) {
-                continue;
-              }
+            // We must retry this call as the pages are sometimes not fully loaded.
+            await retry(
+              async () => {
+                // Note that browser.pages is *not* sorted in any particular order.
+                const pages: Page[] = await browser.pages();
+                for (const page of pages) {
+                  if (page.url().includes('.cy.ts')) {
+                    continue;
+                  }
 
-              await page.bringToFront();
+                  if (!page.url().includes('/idle-logout')) {
+                    throw new Error('Page is not on idle logout screen!');
+                  }
 
-              // Make sure selector exists
-              await page.waitForSelector(
-                '[data-testid="idle-logout-login-button"]',
-                { timeout: 30000 },
-              );
-
-              if (close) {
-                await page.close();
-              }
-            }
+                  if (close) {
+                    await page.close();
+                  }
+                }
+              },
+              { delayBetweenTries: 1000, timeout: 30000 },
+            );
 
             return true;
           },
