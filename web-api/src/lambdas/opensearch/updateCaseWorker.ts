@@ -43,6 +43,7 @@ export const updateCaseWorker = async ({
       irsPractitioners: [],
       privatePractitioners: [],
       petitioners: dbPetitionersOnCase || [],
+      receivedAt: caseRecord.receivedAt.toISOString(),
     });
     console.log('marshalledCase', marshalledCase);
     const caseRecords: IDynamoDBRecord[] = [];
