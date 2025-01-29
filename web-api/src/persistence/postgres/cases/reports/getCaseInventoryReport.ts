@@ -29,13 +29,13 @@ export const getCaseInventoryReport = async ({
         CASE_STATUS_TYPES.closedDismissed,
       ]);
     if (associatedJudge) {
-      query = query.where('associatedJudge', '=', associatedJudge);
+      query = query.where('associatedJudge', 'like', `%${associatedJudge}`); // Judge X or X. Ideally, we would save in one form, but we don't.
     }
     if (status) {
       query = query.where('status', '=', status);
     }
     const totalCount = await query
-      .select(({ fn }) => fn.count<number>('docketNumber').as('value'))
+      .select(({ fn }) => fn.count<string>('docketNumber').as('value')) // Casting to a number with <number> here does not actually cast it as a number
       .execute();
 
     query = query
@@ -48,6 +48,6 @@ export const getCaseInventoryReport = async ({
 
   return {
     foundCases: results.map(result => convertDbRowToRawCase(result)),
-    totalCount: count,
+    totalCount: Number(count),
   };
 };
