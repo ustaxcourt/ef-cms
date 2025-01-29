@@ -1,3 +1,4 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { deleteCaseTrialSortMappingRecords } from './deleteCaseTrialSortMappingRecords';
 import { batchWrite, query, queryFull } from '../../dynamodbClientService';
 import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
@@ -38,7 +39,7 @@ export const createCaseTrialSortMappingRecords = async ({
 
   if (oldSortRecords.length) {
     await deleteCaseTrialSortMappingRecords({
-      applicationContext,
+      applicationContext: applicationContext as ServerApplicationContext,
       docketNumber,
     });
   }

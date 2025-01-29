@@ -120,7 +120,7 @@ export const EditPetitionerCounsel = connect(
             </div>
           </div>
 
-          <div>
+          <div className="button-container">
             <Button
               data-testid="submit-edit-petitioner-information-button"
               id="submit-edit-petitioner-information"
