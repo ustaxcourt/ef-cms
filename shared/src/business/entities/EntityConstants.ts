@@ -1774,23 +1774,7 @@ export type UserMessageType =
 export const BROADCAST_MESSAGES = {
   appHasUpdated: 'appHasUpdated',
   userLogout: 'userLogout',
-  idleLogout: 'idleLogout',
-  idleStatusActive: 'idleStatusActive',
-  stayLoggedIn: 'stayLoggedIn',
 };
-
-export const IDLE_LOGOUT_STATES = {
-  INITIAL: 'INITIAL',
-  MONITORING: 'MONITORING',
-  COUNTDOWN: 'COUNTDOWN',
-};
-
-export type IdleLogoutStateType =
-  (typeof IDLE_LOGOUT_STATES)[keyof typeof IDLE_LOGOUT_STATES];
-
-export type IdleLogoutType =
-  | (typeof BROADCAST_MESSAGES)['idleLogout']
-  | (typeof BROADCAST_MESSAGES)['userLogout'];
 
 export const STATUS_REPORT_ORDER_OPTIONS = {
   issueOrderOptions: {
