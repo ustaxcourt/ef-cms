@@ -16,9 +16,9 @@ export const trialSessionMinutesAutosaveAction = async ({
   const currentMinuteSheetFormStateSnapshot = hash(currentMinuteSheetFormState);
   const hasFormChanged =
     oldMinuteSheetFormStateSnapshot !== currentMinuteSheetFormStateSnapshot;
-
+  let updateMinuteSheetFormState;
   if (hasFormChanged || forceAutosave) {
-    await applicationContext
+    updateMinuteSheetFormState = await applicationContext
       .getUseCases()
       .updateMinuteSheetInteractor(applicationContext, {
         docketNumber: caseDetail.docketNumber,
@@ -26,9 +26,6 @@ export const trialSessionMinutesAutosaveAction = async ({
         trialSessionId: trialSession.trialSessionId,
       });
 
-    store.set(
-      state.minuteSheetFormSnapshot,
-      currentMinuteSheetFormStateSnapshot,
-    );
+    store.set(state.minuteSheetFormSnapshot, updateMinuteSheetFormState);
   }
 };

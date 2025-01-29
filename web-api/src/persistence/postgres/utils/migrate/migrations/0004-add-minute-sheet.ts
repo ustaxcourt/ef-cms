@@ -5,7 +5,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .createTable('dwMinuteSheet')
     .addColumn('trialSessionId', 'varchar', col => col.notNull())
     .addColumn('docketNumber', 'varchar', col => col.notNull())
-    .addColumn('content', 'jsonb')
+    .addColumn('content', 'json')
     .addPrimaryKeyConstraint('pk_minute_sheet', [
       'trialSessionId',
       'docketNumber',

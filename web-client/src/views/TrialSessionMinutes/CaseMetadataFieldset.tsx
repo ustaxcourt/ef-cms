@@ -191,6 +191,7 @@ export const CaseMetadataFieldset = ({
                     id={`reCalledDate-${row.renderKey}`}
                     type="text"
                     value={row.date || ''}
+                    onBlur={() => onBlurHandler()}
                     onChange={e =>
                       onChangeHandler({
                         name: 'recalled',
@@ -315,6 +316,7 @@ export const CaseMetadataFieldset = ({
                 id="pretrialConferenceDate"
                 type="text"
                 value={caseMetadataFormState.pretrialConference.date || ''}
+                onBlur={() => onBlurHandler()}
                 onChange={e =>
                   onChangeHandler({
                     name: 'pretrialConference',
@@ -410,6 +412,7 @@ export const CaseMetadataFieldset = ({
                 id="trialHearingDate"
                 type="text"
                 value={caseMetadataFormState.trialHearing.date || ''}
+                onBlur={() => onBlurHandler()}
                 onChange={e => {
                   onChangeHandler({
                     name: 'trialHearing',
