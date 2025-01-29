@@ -107,7 +107,7 @@ export const initializeTrialSessionMinuteSheetFormAction = ({
   });
 };
 
-const getRespondentsFromCase = (
+export const getRespondentsFromCase = (
   caseDetail: RawCase,
 ): KeyedPartyFormFieldsByRenderKey => {
   const respondents = caseDetail.irsPractitioners;
@@ -135,7 +135,7 @@ const getRespondentsFromCase = (
   return keyedPartyFormFieldsByRenderKey;
 };
 
-const getPetitionersFromCase = (
+export const getPetitionersFromCase = (
   caseDetail: RawCase,
 ): KeyedPartyFormFieldsByRenderKey => {
   const { petitioners } = caseDetail;
@@ -180,7 +180,7 @@ const getPetitionersFromCase = (
   return keyedPartyFormFieldsByRenderKey;
 };
 
-const getPendingItemsFromCase = ({
+export const getPendingItemsFromCase = ({
   caseDetail,
   user,
 }: {
@@ -236,7 +236,7 @@ const transformDocumentType = (documentType: string) => {
   return reverseLookupStructure[documentType] ?? 'other';
 };
 
-const transformFiledBy = (caseDetail: RawCase, pendingItem): string => {
+export const transformFiledBy = (caseDetail: RawCase, pendingItem): string => {
   const isPetitioner = pendingItem.filers.some(id =>
     caseDetail.petitioners.some(petitioner => id === petitioner.contactId),
   );
