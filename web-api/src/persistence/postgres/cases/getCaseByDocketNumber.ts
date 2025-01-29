@@ -12,6 +12,7 @@ import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
+import { getCaseCorrespondenceByDocketNumber } from '@web-api/persistence/postgres/caseCorrespondences/getCaseCorrespondenceByDocketNumber';
 
 export const getCaseByDocketNumber = async ({
   applicationContext,
@@ -68,6 +69,10 @@ export const getCaseByDocketNumber = async ({
       .select('cs.statisticId')
       .execute(),
   );
+
+  const dbCaseCorrespondences = await getCaseCorrespondenceByDocketNumber({
+    docketNumber,
+  });
 
   // Group penalties by statisticId
   const statisticsWithPenalties = dbCaseStatistics.reduce((acc, row) => {
@@ -141,6 +146,11 @@ export const getCaseByDocketNumber = async ({
         sk: `case|${dbCaseMetadata.docketNumber}`,
         statistics: Object.values(statisticsWithPenalties),
       },
+      ...dbCaseCorrespondences.map(correspondenceItem => ({
+        ...correspondenceItem,
+        pk: `case|${docketNumber}`,
+        sk: `correspondence|${correspondenceItem.correspondenceId}`,
+      })),
       ...caseItems,
       ...workItems.map(workItem => ({
         ...workItem,
