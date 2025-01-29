@@ -2,14 +2,6 @@ import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCase
 import { batchWrite, query } from '../../dynamodbClientService';
 import { DeleteRequest } from '@web-api/persistence/dynamo/dynamoTypes';
 
-/**
- * deleteCaseTrialSortMappingRecords
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.docketNumber the docket number of the case to delete the mapping records for
- * @returns {Promise} the return from the persistence delete calls
- */
 export const deleteCaseTrialSortMappingRecords = async ({
   applicationContext,
   docketNumber,
@@ -18,7 +10,7 @@ export const deleteCaseTrialSortMappingRecords = async ({
   applicationContext: IApplicationContext;
   docketNumber: string;
   deleteConsolidatedCases?: boolean;
-}) => {
+}): Promise<void> => {
   const docketNumbersToDelete: string[] = [docketNumber];
   const recordsToDelete: DeleteRequest[] = [];
   if (deleteConsolidatedCases) {
