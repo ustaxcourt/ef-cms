@@ -11,6 +11,8 @@ import { AsyncZipDeflate, Zip } from 'fflate';
 import { PassThrough, Writable } from 'stream';
 import { Upload } from '@aws-sdk/lib-storage';
 
+import '@aws-sdk/crc64-nvme-crt';
+
 type DocketEntryDownloadInfo = {
   key: string;
   filePathInZip: string;
@@ -135,7 +137,7 @@ export async function zipDocuments({
   });
 
   const writable = new Writable({
-    write(chunk, encoding, callback) {
+    write(_chunk, _encoding, callback) {
       callback();
     },
   });
@@ -256,10 +258,10 @@ export async function app({
   console.log('Zip and upload complete, link sent to client.');
 }
 
-app({
+void app({
   connectionId: WEBSOCKET_CONNECTION_ID!,
   documentsReference: DOCKET_ENTRY_FILES_REFRENCE!,
   s3Client: storageClient,
   wsClient: notificationClient,
   zipName: ZIP_FILE_NAME!,
-}).catch(console.error);
+});
