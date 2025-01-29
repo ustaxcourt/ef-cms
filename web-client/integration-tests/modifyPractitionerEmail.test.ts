@@ -33,7 +33,7 @@ describe('Modify Practitioner Email', () => {
 
   userUpdatesEmailAddressToOneAlreadyInUse(cerebralTest, 'practitioner');
 
-  const mockUpdatedEmail = `${faker.internet.userName()}_no_error@example.com`;
+  const mockUpdatedEmail = `${faker.internet.username()}_no_error@example.com`;
 
   userSuccessfullyUpdatesEmailAddress(
     cerebralTest,
