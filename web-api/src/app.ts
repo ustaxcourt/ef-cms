@@ -100,7 +100,6 @@ import { getInboxMessagesForSectionLambda } from './lambdas/messages/getInboxMes
 import { getInboxMessagesForUserLambda } from './lambdas/messages/getInboxMessagesForUserLambda';
 import { getInternalUsersLambda } from './lambdas/users/getInternalUsersLambda';
 import { getIrsPractitionersBySearchKeyLambda } from './lambdas/users/getIrsPractitionersBySearchKeyLambda';
-import { getJudgeFullNameLambda } from './lambdas/trialSessionMinutes/getJudgeFullNameLambda';
 import { getJudgeInSectionLambda } from './lambdas/users/getJudgeInSectionLambda';
 import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceModeLambda';
 import { getMessageThreadLambda } from './lambdas/messages/getMessageThreadLambda';
@@ -904,10 +903,6 @@ app.delete(
  */
 {
   app.get('/trial-sessions/minutes', lambdaWrapper(getMinuteSheetLambda));
-  app.get(
-    '/trial-sessions/minutes/judge',
-    lambdaWrapper(getJudgeFullNameLambda),
-  );
   app.put('/trial-sessions/minutes', lambdaWrapper(updateMinuteSheetLambda));
   app.post(
     '/trial-sessions/:trialSessionId/case/:docketNumber/minutes',

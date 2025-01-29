@@ -11,6 +11,8 @@ export const trialSessionMinutesAutosaveAction = async ({
   const trialSession = get(state.trialSession);
   const currentMinuteSheetFormState = get(state.minuteSheetForm);
 
+  console.log('before saved', currentMinuteSheetFormState);
+
   const { forceAutosave } = props;
   const oldMinuteSheetFormStateSnapshot = get(state.minuteSheetFormSnapshot);
   const currentMinuteSheetFormStateSnapshot = hash(currentMinuteSheetFormState);
@@ -25,6 +27,8 @@ export const trialSessionMinutesAutosaveAction = async ({
         minuteSheet: currentMinuteSheetFormState,
         trialSessionId: trialSession.trialSessionId,
       });
+
+    console.log('after saved', currentMinuteSheetFormState);
 
     store.set(
       state.minuteSheetFormSnapshot,
