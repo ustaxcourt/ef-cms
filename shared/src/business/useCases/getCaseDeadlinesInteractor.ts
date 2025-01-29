@@ -1,20 +1,28 @@
-import {
-  AuthUser,
-  UnknownAuthUser,
-} from '@shared/business/entities/authUser/AuthUser';
-import { Case } from '../entities/cases/Case';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { CaseDeadline } from '../entities/CaseDeadline';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { getCasesMetadataByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
 import { getCaseDeadlinesByDateRange } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDateRange';
 import { pick } from 'lodash';
 
+type CaseDeadlineResponseInfo = {
+  associatedJudge: string;
+  caseCaption?: string;
+  caseDeadlineId: string;
+  createdAt: string;
+  deadlineDate: string;
+  description: string;
+  docketNumber: string;
+  docketNumberWithSuffix?: string;
+  entityName: string;
+  sortableDocketNumber: number;
+};
+
 export const getCaseDeadlinesInteractor = async (
-  applicationContext: IApplicationContext,
   {
     endDate,
     judge,
@@ -25,7 +33,7 @@ export const getCaseDeadlinesInteractor = async (
     startDate;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<{ deadlines: CaseDeadlineResponseInfo[] }> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_DEADLINE)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -40,64 +48,26 @@ export const getCaseDeadlinesInteractor = async (
   const validatedCaseDeadlines =
     CaseDeadline.validateRawCollection(foundDeadlines);
 
-  const caseMap = await getCasesByDocketNumbers({
-    applicationContext,
-    authorizedUser,
+  const associatedCases = await getCasesMetadataByDocketNumbers({
     docketNumbers: validatedCaseDeadlines.map(item => item.docketNumber),
   });
 
-  const afterCaseMapping = validatedCaseDeadlines
-    .filter(deadline => caseMap?.[deadline.docketNumber])
-    .map(deadline => ({
+  const deadlinesWithFullInfo: CaseDeadlineResponseInfo[] = [];
+  for (const deadline of validatedCaseDeadlines) {
+    deadlinesWithFullInfo.push({
       ...deadline,
-      ...pick(caseMap?.[deadline.docketNumber], [
-        'caseCaption',
-        'docketNumber',
-        'docketNumberSuffix',
-        'docketNumberWithSuffix',
-        'leadDocketNumber',
-      ]),
-    }));
+      ...pick(
+        associatedCases?.find(c => c.docketNumber === deadline.docketNumber),
+        [
+          'caseCaption',
+          'docketNumber',
+          'docketNumberSuffix',
+          'docketNumberWithSuffix',
+          'leadDocketNumber',
+        ],
+      ),
+    });
+  }
 
-  return { deadlines: afterCaseMapping };
-};
-
-const getCasesByDocketNumbers = async ({
-  applicationContext,
-  authorizedUser,
-  docketNumbers,
-}: {
-  applicationContext: IApplicationContext;
-  docketNumbers: string[];
-  authorizedUser: AuthUser;
-}) => {
-  const caseData = await getCasesMetadataByDocketNumbers({
-    docketNumbers,
-  });
-
-  return caseData
-    ?.map(
-      caseRecord =>
-        new Case(caseRecord, {
-          authorizedUser,
-        }),
-    )
-    .filter(caseEntity => {
-      try {
-        caseEntity.validate();
-        return true;
-      } catch (err) {
-        applicationContext.logger.error(
-          `getCasesByDocketNumber: case ${caseEntity.docketNumber} failed validation`,
-          {
-            message: caseEntity.getFormattedValidationErrors(),
-          },
-        );
-        return false;
-      }
-    })
-    .reduce((acc, item) => {
-      acc[item.docketNumber] = item;
-      return acc;
-    }, {});
+  return { deadlines: deadlinesWithFullInfo };
 };
