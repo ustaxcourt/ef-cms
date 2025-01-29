@@ -136,7 +136,7 @@ describe('Petition clerk creates a paper filing', function () {
     });
 
     it('should submit case when secondary contact phone number is not provided', () => {
-      createAndServePaperPetitionMyselfAndSpouse().then(docketNumber => {
+      createAndServePaperPetitionMyselfAndSpouse().then(({ docketNumber }) => {
         cy.get('[data-testid="case-link"]').should(
           'have.text',
           `Docket Number: ${docketNumber}`,
