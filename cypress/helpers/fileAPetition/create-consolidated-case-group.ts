@@ -1,16 +1,57 @@
+import {
+  CASE_STATUS_TYPES,
+  CaseStatus,
+  ProcedureType,
+} from '@shared/business/entities/EntityConstants';
 import { loginAsDocketClerk1 } from 'cypress/helpers/authentication/login-as-helpers';
 import { addCaseToGroup } from 'cypress/helpers/caseDetail/add-case-to-group';
+import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/update-case-status';
+import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
 
-export function createAndServeConsolidatedGroup() {
-  createAndServePaperPetition().then(({ docketNumber: childDocketNumber }) => {
+export function createAndServeConsolidatedGroup(
+  {
+    caseStatus = CASE_STATUS_TYPES.generalDocketReadyForTrial,
+    judge = '',
+    procedureType = undefined,
+    trialLocation = undefined,
+  }: Partial<{
+    caseStatus: CaseStatus;
+    judge: string;
+    procedureType: ProcedureType;
+    trialLocation: string;
+  }> = {
+    caseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+    judge: '',
+    procedureType: undefined,
+    trialLocation: undefined,
+  },
+): Cypress.Chainable<{
+  leadDocketNumber: string;
+  memberDocketNumber: string;
+}> {
+  return createAndServePaperPetition({
+    yearReceived: '2019',
+    procedureType,
+    trialLocation,
+  }).then(({ docketNumber: leadDocketNumber }) => {
     loginAsDocketClerk1();
-    createAndServePaperPetition({ yearReceived: '2019' }).then(
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      ({ docketNumber }) => {
-        loginAsDocketClerk1();
-        addCaseToGroup(childDocketNumber);
-      },
-    );
+    goToCase(leadDocketNumber);
+    updateCaseStatus(caseStatus, judge);
+
+    return createAndServePaperPetition({
+      yearReceived: '2023',
+      procedureType,
+      trialLocation,
+    }).then(({ docketNumber: memberDocketNumber }) => {
+      loginAsDocketClerk1();
+      goToCase(memberDocketNumber);
+      updateCaseStatus(caseStatus);
+      addCaseToGroup(leadDocketNumber);
+      return cy.wrap({
+        leadDocketNumber,
+        memberDocketNumber,
+      });
+    });
   });
 }

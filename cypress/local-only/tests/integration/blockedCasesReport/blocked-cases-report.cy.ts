@@ -6,27 +6,29 @@ import {
   FORMATS,
   formatNow,
 } from '../../../../../shared/src/business/utilities/DateHandler';
-import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import { loginAsColvin } from '../../../../helpers/authentication/login-as-helpers';
 import { retry } from '../../../../helpers/retry';
+import { createAndServeConsolidatedGroup } from 'cypress/helpers/fileAPetition/create-consolidated-case-group';
 
 describe('Blocked Cases Report', () => {
   beforeEach(() => {
     cy.task('deleteAllFilesInFolder', 'cypress/downloads');
   });
 
-  it('should show a blocked case in the blocked cases report and the downloaded csv report', () => {
+  it('should show a consolidated group in the blocked cases report and the downloaded csv report', () => {
     const trialLocation = 'Portland, Maine';
     const [trialCity, trialState] = trialLocation.split(', ');
     const procedureType = PROCEDURE_TYPES_MAP.small;
-    createAndServePaperPetition({
+    const caseStatus = CASE_STATUS_TYPES.generalDocketReadyForTrial;
+    createAndServeConsolidatedGroup({
       procedureType,
       trialLocation,
-    }).then(({ docketNumber }) => {
+      caseStatus,
+    }).then(({ leadDocketNumber, memberDocketNumber }) => {
       //block case
       loginAsColvin();
-      goToCase(docketNumber);
+      goToCase(memberDocketNumber);
       cy.get('[data-testid="tab-case-information"]').click();
       cy.get('[data-testid="add-manual-block-button"]').click();
       cy.get('[data-testid="blocked-from-trial-reason-textarea"]').type(
@@ -45,17 +47,16 @@ describe('Blocked Cases Report', () => {
         cy.reload();
         cy.get('[data-testid="trial-location-filter"]').select(trialLocation);
         cy.get('[data-testid="procedure-type-filter"]').select(procedureType);
-        cy.get('[data-testid="case-status-filter"]').select(
-          CASE_STATUS_TYPES.generalDocket,
-        );
+        cy.get('[data-testid="case-status-filter"]').select(caseStatus);
         cy.get('[data-testid="blocked-reason-filter"]').select('Manual Block');
-        const selector = `[data-testid="blocked-case-${docketNumber}-row"]`;
+        const selector = `[data-testid="blocked-case-${leadDocketNumber}-row"]`;
         return cy.get(selector).then(elements => elements.length > 0);
       }
 
       retry(checkIfOpensearchHasIndexedBlockedCase);
 
       cy.get('[data-testid="blocked-cases-count"]').should('exist');
+      cy.get(`[data-testid="blocked-case-${leadDocketNumber}-row"]`).contains('Grouped with blocked case')
 
       //download csv
       cy.get('[data-testid="export-blocked-case-report"]').click();
@@ -63,13 +64,10 @@ describe('Blocked Cases Report', () => {
       const fileName = `Blocked Cases Report - ${trialCity}_${trialState} ${today}.csv`;
       cy.readFile(`cypress/downloads/${fileName}`, 'utf-8').should(
         fileContent => {
-          expect(fileContent).to.include(docketNumber);
+          expect(fileContent).to.include(leadDocketNumber);
+          expect(fileContent).to.include(memberDocketNumber);
         },
       );
     });
-  });
-
-  it('should show the entire consolidated case group when any of the consolidated cases have been blocked', () => {
-    
   });
 });
