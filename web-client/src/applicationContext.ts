@@ -366,7 +366,7 @@ const reduce = ImageBlobReduce({
 });
 
 let user;
-let broadcastChannel;
+let broadcastChannel: BroadcastChannel;
 const clientSupportsES2022 = (() => {
   try {
     // Check Object.hasOwn (introduced in ES2022)
