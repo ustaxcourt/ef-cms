@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
@@ -390,7 +389,7 @@ export const cases450_plus: NewCaseKysely[] = [
     petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     preferredTrialCity: 'Washington, District of Columbia',
     procedureType: PROCEDURE_TYPES_MAP.regular,
-    qcCompleteForTrial: JSON.stringify([]),
+    qcCompleteForTrial: JSON.stringify({}),
     receivedAt: calculateDate({ dateString: '2021-02-16T16:16:19.660Z' }),
     sortableDocketNumber: 2015000999,
     status: CASE_STATUS_TYPES.calendared,
@@ -433,7 +432,7 @@ export const cases450_plus: NewCaseKysely[] = [
     partyType: PARTY_TYPES.petitioner,
     petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     procedureType: PROCEDURE_TYPES_MAP.regular,
-    qcCompleteForTrial: JSON.stringify([]),
+    qcCompleteForTrial: JSON.stringify({}),
     receivedAt: calculateDate({ dateString: '2021-02-16T15:38:54.239Z' }),
     sortableDocketNumber: 2020001338,
     status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
@@ -468,7 +467,7 @@ export const cases450_plus: NewCaseKysely[] = [
     petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     preferredTrialCity: 'Washington, District of Columbia',
     procedureType: PROCEDURE_TYPES_MAP.regular,
-    qcCompleteForTrial: JSON.stringify([]),
+    qcCompleteForTrial: JSON.stringify({}),
     receivedAt: calculateDate({ dateString: '2021-02-16T16:29:48.990Z' }),
     sortableDocketNumber: 1987069312,
     status: CASE_STATUS_TYPES.new,

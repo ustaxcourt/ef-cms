@@ -101,7 +101,7 @@ export interface CaseTable {
   petitionPaymentWaivedDate?: Date | null;
   preferredTrialCity?: string;
   procedureType: string;
-  qcCompleteForTrial?: ColumnType<{ trialSessionId: string }[], string, string>;
+  qcCompleteForTrial?: ColumnType<{ trialSessionId: string }, string, string>;
   receivedAt: Date;
   sealedDate?: Date | null;
   sortableDocketNumber: number;
