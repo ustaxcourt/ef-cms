@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -13,6 +14,9 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { upsertCaseCorrespondences as upsertCaseCorrespondencesMock } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
+
+const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
 
 describe('fileCorrespondenceDocumentInteractor', () => {
   const mockCase = {
@@ -119,19 +123,16 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       },
       docketClerkUser,
     );
-    expect(
-      applicationContext.getPersistenceGateway().updateCaseCorrespondence.mock
-        .calls[0][0],
-    ).toMatchObject({
-      correspondence: {
+    expect(upsertCaseCorrespondences.mock.calls[0][0]).toMatchObject([
+      {
         correspondenceId: mockCorrespondenceId,
+        docketNumber: mockCase.docketNumber,
         documentTitle: mockDocumentTitle,
         filedBy: docketClerkUser.name,
         filingDate: mockFilingDate,
         userId: docketClerkUser.userId,
       },
-      docketNumber: mockCase.docketNumber,
-    });
+    ]);
   });
 
   it('should return an updated raw case object', async () => {
@@ -156,6 +157,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       correspondence: [
         {
           correspondenceId: mockCorrespondenceId,
+          docketNumber: mockCase.docketNumber,
           documentTitle: mockDocumentTitle,
           filedBy: docketClerkUser.name,
           filingDate: mockFilingDate,
