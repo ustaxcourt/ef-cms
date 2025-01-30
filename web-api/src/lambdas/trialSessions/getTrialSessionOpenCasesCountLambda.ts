@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { getTrialSessionOpenCasesCountInteractor } from '@web-api/business/useCases/trialSessions/getTrialSessionOpenCasesCountInteractor';
+import { getTrialSessionAssociatedCasesCountInteractor } from '@web-api/business/useCases/trialSessions/getTrialSessionAssociatedCasesCountInteractor';
 
 export const getTrialSessionOpenCasesCountLambda = (
   event,
@@ -9,7 +9,7 @@ export const getTrialSessionOpenCasesCountLambda = (
   genericHandler(event, async () => {
     const { trialSessionId } = event.pathParameters || {};
 
-    return await getTrialSessionOpenCasesCountInteractor(
+    return await getTrialSessionAssociatedCasesCountInteractor(
       {
         trialSessionId,
       },
