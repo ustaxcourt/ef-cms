@@ -66,19 +66,16 @@ export const createCaseTrialSortMappingRecords = async ({
     consolidatedCaseItems
       .filter((item): item is CaseRecord => isCaseItem(item))
       .forEach(c => {
-        if (c.docketNumber === docketNumber) {
-          c.blocked = false;
-          c.automaticBlocked = false;
-        }
         casesToUpdate.push(c);
       });
   } else {
     casesToUpdate.push(theCase);
   }
 
-  const hasBlockedCase = casesToUpdate.find(
-    c => c.blocked || c.automaticBlocked,
-  );
+  const hasBlockedCase = casesToUpdate.some(c => {
+    if (c.docketNumber === docketNumber) return false;
+    return c.blocked || c.automaticBlocked;
+  });
 
   if (hasBlockedCase) {
     return;
