@@ -26,7 +26,7 @@ export const ExhibitsFieldset = ({
   removeRowHandler: RemoveRowHandler;
 }) => {
   return (
-    <fieldset className="border-0 grid-container padding-0">
+    <fieldset className="grid-container border-0 padding-0">
       <div className="grid-row grid-gap-2">
         <div className="grid-col-5">
           <div className="usa-label margin-right-2">Exhibits</div>

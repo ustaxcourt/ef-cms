@@ -24,7 +24,7 @@ export const CaseMetadataFieldset = ({
   caseMetadataFormState: MinuteSheetFormState['caseMetadataSection'];
 }) => {
   return (
-    <fieldset className="border-0 padding-0">
+    <fieldset className="grid-container border-0 padding-0">
       <div className="grid-row grid-gap align-items-center margin-bottom-1">
         <div className="grid-col-fill" style={{ minWidth: '100px' }}>
           <span className="usa-label margin-bottom-0">Calendar Called</span>
@@ -249,8 +249,8 @@ export const CaseMetadataFieldset = ({
                         ?.transcriptOrdered
                     }
                     className="usa-checkbox__input"
-                    id={`reCalledTranscriptOrdered${rowIndex}`}
-                    name={`reCalledTranscriptOrdered${rowIndex}`}
+                    id={`reCalledTranscriptOrdered-${rowIndex}`}
+                    name={`reCalledTranscriptOrdered-${rowIndex}`}
                     type="checkbox"
                     onBlur={() => onBlurHandler()}
                     onChange={e => {
@@ -268,7 +268,7 @@ export const CaseMetadataFieldset = ({
                   />
                   <label
                     className="usa-checkbox__label margin-0"
-                    htmlFor={`reCalledTranscriptOrdered${rowIndex}`}
+                    htmlFor={`reCalledTranscriptOrdered-${rowIndex}`}
                   >
                     Transcript ordered
                   </label>

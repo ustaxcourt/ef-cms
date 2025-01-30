@@ -41,7 +41,7 @@ export const ActionsAndFilingsFieldset = ({
     row: KeyedActionFilingFormFields,
     nestedName: string,
   ) => (
-    <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
+    <FormGroup className="display-flex align-items-center maxw-full margin-bottom-0">
       <label hidden htmlFor={id}>
         {name}
       </label>

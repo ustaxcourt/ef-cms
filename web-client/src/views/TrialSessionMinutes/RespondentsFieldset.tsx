@@ -28,7 +28,7 @@ export const RespondentsFieldset = ({
   formOptions;
 }) => {
   return (
-    <fieldset className="border-0 grid-container padding-0 margin-top-4">
+    <fieldset className="grid-container border-0 padding-0 margin-top-4">
       <div className="grid-row grid-gap-2 margin-bottom-1">
         <div className="grid-col-3">Respondent(s)</div>
         <div className="grid-col-3">Date(s) of Appearance</div>

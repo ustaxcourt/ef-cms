@@ -27,7 +27,7 @@ export const MotionsFieldset = ({
   motionsFormState: MinuteSheetFormState['motionsSection'];
 }) => {
   return (
-    <fieldset className="border-0 padding-0">
+    <fieldset className="grid-container border-0 padding-0">
       <div className="usa-label">
         Motion to Dismiss / Motion for Continuance
       </div>

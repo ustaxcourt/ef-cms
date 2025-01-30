@@ -30,7 +30,7 @@ export const WitnessesFieldset = ({
 }) => {
   const capitalizedWitnessType = capitalize(witnessType);
   return (
-    <fieldset className="border-0 grid-container padding-0">
+    <fieldset className="grid-container border-0 padding-0">
       <div className="grid-row grid-gap-2">
         <div className="grid-col-12">
           <div className="usa-label margin-right-2">{`${capitalizedWitnessType} witness(es)`}</div>

@@ -16,7 +16,7 @@ export const TrialSessionMetadataFieldset = ({
   trialSessionMetadataFormState: MinuteSheetFormState['trialSessionMetadataSection'];
 }) => {
   return (
-    <fieldset className="border-0 grid-container padding-0">
+    <fieldset className="grid-container border-0 padding-0">
       <div className="grid-row grid-gap">
         <div className="grid-col">
           <FormGroup className="grid-row grid-gap margin-bottom-0">

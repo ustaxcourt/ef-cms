@@ -26,7 +26,7 @@ export const PetitionersFieldset = ({
   removeRowHandler: RemoveRowHandler;
 }) => {
   return (
-    <fieldset className="border-0 grid-container padding-0">
+    <fieldset className="grid-container border-0 padding-0">
       <div className="grid-row grid-gap-2 margin-bottom-1">
         <div className="grid-col-1">Petitioner(s)</div>
         <div className="grid-col-2">

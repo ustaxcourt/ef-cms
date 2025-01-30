@@ -17,7 +17,7 @@ export const JurisdictionFieldset = ({
   jurisdictionFormState: MinuteSheetFormState['jurisdictionSection'];
 }) => {
   return (
-    <fieldset className="border-0 grid-container padding-0">
+    <fieldset className="grid-container border-0 padding-0">
       <div className="grid-row grid-gap-2 align-items-center margin-bottom-1">
         <legend className="usa-legend grid-col-2 margin-bottom-0">
           Jurisdiction Retained
