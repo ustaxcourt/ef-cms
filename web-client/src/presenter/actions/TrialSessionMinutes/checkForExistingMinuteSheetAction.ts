@@ -1,16 +1,12 @@
-export const checkForExistingMinuteSheetAction = async ({
-  applicationContext,
-  path,
-  props,
-}) => {
+import { getMinuteSheetInteractor } from '@shared/proxies/trialSessionMinutes/getMinuteSheetProxy';
+
+export const checkForExistingMinuteSheetAction = async ({ path, props }) => {
   const { caseDetail, trialSession } = props;
 
-  const minuteSheet = await applicationContext
-    .getUseCases()
-    .getMinuteSheetInteractor(applicationContext, {
-      docketNumber: caseDetail.docketNumber,
-      trialSessionId: trialSession.trialSessionId,
-    });
+  const minuteSheet = await getMinuteSheetInteractor({
+    docketNumber: caseDetail.docketNumber,
+    trialSessionId: trialSession.trialSessionId,
+  });
 
   const isExistingMinuteSheet = !!minuteSheet;
 
