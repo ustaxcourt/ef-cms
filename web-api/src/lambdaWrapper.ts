@@ -2,7 +2,10 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { get } from 'lodash';
 import { getCurrentInvoke } from '@vendia/serverless-express';
-import { getUserFromAuthHeader } from '@web-api/middleware/apiGatewayHelper';
+import {
+  getUserFromAuthHeader,
+  sendError,
+} from '@web-api/middleware/apiGatewayHelper';
 
 export const headerOverride = {
   'Access-Control-Expose-Headers': 'X-Terminal-User',
@@ -67,7 +70,13 @@ export const lambdaWrapper = (
         logger: req.locals.logger,
       },
       user,
-    );
+    ).catch((error: any) => {
+      if (!isAsyncEndpoint) throw error;
+      return sendError({
+        message: 'There was an Error thrown in an Async Endpoint',
+        statusCode: '500',
+      });
+    });
 
     const { asyncsyncid } = req.headers;
 
