@@ -1,10 +1,26 @@
-export const appendPaperServiceAddressPageToPdf = async ({
+import { Case } from '@shared/business/entities/cases/Case';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { PDFDocument } from 'pdf-lib';
+
+type AppendPaperServiceAddressPageToPdfParams = {
+  applicationContext: ServerApplicationContext;
+  caseEntity: Case;
+  newPdfDoc: PDFDocument;
+  noticeDoc: PDFDocument;
+  servedParties: {
+    all: any[];
+    paper: any[];
+    electronic: Array<{ email: string; name: string }>;
+  };
+};
+
+export async function appendPaperServiceAddressPageToPdf({
   applicationContext,
   caseEntity,
   newPdfDoc,
   noticeDoc,
   servedParties,
-}) => {
+}: AppendPaperServiceAddressPageToPdfParams) {
   const addressPages = await getAddressPages({
     applicationContext,
     caseEntity,
@@ -17,14 +33,24 @@ export const appendPaperServiceAddressPageToPdf = async ({
     newPdfDoc,
     noticeDoc,
   });
+}
+
+type GetAddressPagesParams = {
+  applicationContext: ServerApplicationContext;
+  caseEntity: Case;
+  servedParties: {
+    all: any[];
+    paper: any[];
+    electronic: Array<{ email: string; name: string }>;
+  };
 };
 
-const getAddressPages = async ({
+async function getAddressPages({
   applicationContext,
   caseEntity,
   servedParties,
-}) => {
-  const addressPages = [];
+}: GetAddressPagesParams) {
+  const addressPages: Uint8Array<ArrayBufferLike>[] = [];
   for (const party of servedParties.paper) {
     addressPages.push(
       await applicationContext.getDocumentGenerators().addressLabelCoverSheet({
@@ -37,14 +63,21 @@ const getAddressPages = async ({
     );
   }
   return addressPages;
+}
+
+type CopyToNewPdfParams = {
+  applicationContext: ServerApplicationContext;
+  addressPages: Uint8Array<ArrayBufferLike>[];
+  newPdfDoc: PDFDocument;
+  noticeDoc: PDFDocument;
 };
 
-const copyToNewPdf = async ({
+async function copyToNewPdf({
   addressPages,
   applicationContext,
   newPdfDoc,
   noticeDoc,
-}) => {
+}: CopyToNewPdfParams) {
   const { PDFDocument } = await applicationContext.getPdfLib();
 
   for (const addressPage of addressPages) {
@@ -65,4 +98,4 @@ const copyToNewPdf = async ({
       newPdfDoc.addPage(page);
     });
   }
-};
+}
