@@ -1,70 +1,20 @@
-import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
-import '@web-api/persistence/postgres/cases/mocks.jest';
-import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor',
+);
+jest.mock('@web-api/persistence/dynamo/cases/getCaseByDocketNumber');
+jest.mock('@web-api/persistence/s3/getDownloadPolicyUrl');
+jest.mock('@web-api/persistence/dynamo/deployTable/getMaintenanceMode');
 import {
   CASE_STATUS_TYPES,
   Role,
 } from '@shared/business/entities/EntityConstants';
 import { MOCK_PETITION } from '@shared/test/mockDocketEntry';
+import { getAllFeatureFlagsInteractor as getAllFeatureFlagsInteractorMock } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
 import { getDocumentDownloadUrlLambda } from './getDocumentDownloadUrlLambda';
-import { createTestApplicationContext as mockCreateTestApplicationContext } from '@shared/business/test/createTestApplicationContext';
+import { getDownloadPolicyUrl as getDownloadPolicyUrlMock } from '@web-api/persistence/s3/getDownloadPolicyUrl';
+import { getMaintenanceMode as getMaintenanceModeMock } from '@web-api/persistence/dynamo/deployTable/getMaintenanceMode';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
-import { getDownloadPolicyUrlInteractor as mockGetDownloadPolicyUrlInteractor } from '@web-api/business/useCases/document/getDownloadPolicyUrlInteractor';
-
-jest.mock('@web-api/applicationContext', () => {
-  return {
-    createApplicationContext: () => {
-      const appContext = mockCreateTestApplicationContext();
-      appContext.getUseCases().getAllFeatureFlagsInteractor = jest
-        .fn()
-        .mockResolvedValue(mockFeatureFlag);
-      appContext.getUseCases().getDownloadPolicyUrlInteractor = jest
-        .fn()
-        .mockImplementation(mockGetDownloadPolicyUrlInteractor);
-
-      appContext.getDocumentClient = jest.fn().mockReturnValue({
-        query: jest.fn().mockResolvedValue({
-          Items: mockItems,
-        }),
-      });
-
-      appContext.getPersistenceGateway().getDownloadPolicyUrl = jest
-        .fn()
-        .mockImplementation(({ key, useTempBucket }) => {
-          return {
-            url: `https://example.com/download-policy-url/${
-              useTempBucket ? 'temp-' : ''
-            }bucket/item/${key}`,
-          };
-        });
-
-      if (mockShouldThrowError) {
-        appContext.getDocumentClient = jest.fn().mockReturnValue({
-          query: jest.fn().mockRejectedValue(new Error('test error')),
-        });
-      }
-
-      return appContext;
-    },
-  };
-});
-
-let mockFeatureFlag;
-let mockShouldThrowError;
-let mockItems;
-const setupMock = ({
-  featureFlag,
-  items,
-  shouldThrowError,
-}: {
-  items: any[];
-  featureFlag: boolean;
-  shouldThrowError: boolean;
-}) => {
-  mockShouldThrowError = shouldThrowError;
-  mockFeatureFlag = featureFlag;
-  mockItems = items;
-};
 
 const REQUEST_EVENT = {
   body: {},
@@ -76,10 +26,29 @@ const REQUEST_EVENT = {
 
 describe('getDocumentDownloadUrlLambda', () => {
   let CI;
+  const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+  const getMaintenanceMode = jest.mocked(getMaintenanceModeMock);
+  const getAllFeatureFlagsInteractor = jest.mocked(
+    getAllFeatureFlagsInteractorMock,
+  );
+  const getDownloadPolicyUrl = jest.mocked(getDownloadPolicyUrlMock);
+
   // disable logging by mimicking CI for this test
   beforeAll(() => {
     ({ CI } = process.env);
     process.env.CI = 'true';
+  });
+
+  beforeEach(() => {
+    getAllFeatureFlagsInteractor.mockResolvedValue({});
+    getMaintenanceMode.mockResolvedValue({ current: false });
+    getDownloadPolicyUrl.mockImplementation(({ key, useTempBucket }) => {
+      return Promise.resolve({
+        url: `https://example.com/download-policy-url/${
+          useTempBucket ? 'temp-' : ''
+        }bucket/item/${key}`,
+      });
+    });
   });
 
   afterAll(() => (process.env.CI = CI));
@@ -87,11 +56,7 @@ describe('getDocumentDownloadUrlLambda', () => {
   // the 401 case is handled by API Gateway, and as such isn’t tested here.
 
   it('returns 403 when the user is not authorized', async () => {
-    setupMock({
-      featureFlag: true,
-      items: [],
-      shouldThrowError: false,
-    });
+    getCaseByDocketNumber.mockResolvedValue({} as any);
 
     const response = await getDocumentDownloadUrlLambda(REQUEST_EVENT, {
       email: 'test@e.mail',
@@ -112,12 +77,7 @@ describe('getDocumentDownloadUrlLambda', () => {
         key: '530d4b65-620a-489d-8414-6623653ebb3a',
       },
     });
-
-    setupMock({
-      featureFlag: true,
-      items: [],
-      shouldThrowError: false,
-    });
+    getCaseByDocketNumber.mockResolvedValue({} as any);
 
     const response = await getDocumentDownloadUrlLambda(
       request,
@@ -139,27 +99,18 @@ describe('getDocumentDownloadUrlLambda', () => {
         key: '530d4b65-620a-489d-8414-6623653ebb3a',
       },
     });
-
-    setupMock({
-      featureFlag: true,
-      items: [
-        {
-          docketNumber: '123-20',
-          judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
-          pk: 'case|123-20',
-          sk: 'case|123-20',
-          status: CASE_STATUS_TYPES.generalDocket,
-        },
+    getCaseByDocketNumber.mockResolvedValue({
+      docketEntries: [
         {
           ...MOCK_PETITION,
           // docket entry does not match the requested entry
           docketEntryId: '26c6a0e5-5d11-45f0-9904-04d103ada04f',
-          pk: 'case|123-20',
-          sk: 'docket-entry|26c6a0e5-5d11-45f0-9904-04d103ada04f',
         },
       ],
-      shouldThrowError: false,
-    });
+      docketNumber: '123-20',
+      judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
+      status: CASE_STATUS_TYPES.generalDocket,
+    } as any);
 
     const response = await getDocumentDownloadUrlLambda(
       request,
@@ -181,12 +132,7 @@ describe('getDocumentDownloadUrlLambda', () => {
         key: '530d4b65-620a-489d-8414-6623653ebb3a',
       },
     });
-
-    setupMock({
-      featureFlag: true,
-      items: [],
-      shouldThrowError: true,
-    });
+    getCaseByDocketNumber.mockRejectedValue(new Error('I broke'));
 
     const response = await getDocumentDownloadUrlLambda(
       request,
@@ -201,47 +147,36 @@ describe('getDocumentDownloadUrlLambda', () => {
     );
   });
 
-  [true, false].forEach(isFeatureFlagOn => {
-    it(`returns the document download URL in v2 format - when feature flag is ${isFeatureFlagOn}`, async () => {
-      const request = Object.assign({}, REQUEST_EVENT, {
-        pathParameters: {
-          docketNumber: '123-30',
-          key: '26c6a0e5-5d11-45f0-9904-04d103ada04f',
-        },
-      });
-
-      setupMock({
-        featureFlag: isFeatureFlagOn,
-        items: [
-          {
-            docketNumber: '123-20',
-            judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
-            pk: 'case|123-20',
-            sk: 'case|123-20',
-            status: CASE_STATUS_TYPES.generalDocket,
-          },
-          {
-            ...MOCK_PETITION,
-            // docket entry does not match the requested entry
-            docketEntryId: '26c6a0e5-5d11-45f0-9904-04d103ada04f',
-            pk: 'case|123-20',
-            sk: 'docket-entry|26c6a0e5-5d11-45f0-9904-04d103ada04f',
-          },
-        ],
-        shouldThrowError: false,
-      });
-
-      const response = await getDocumentDownloadUrlLambda(
-        request,
-        mockDocketClerkUser,
-      );
-
-      expect(response.statusCode).toBe('200');
-      expect(response.headers['Content-Type']).toBe('application/json');
-      expect(JSON.parse(response.body)).toHaveProperty(
-        'url',
-        'https://example.com/download-policy-url/bucket/item/26c6a0e5-5d11-45f0-9904-04d103ada04f',
-      );
+  it('returns the document download URL in v1 format - when the document exists', async () => {
+    const request = Object.assign({}, REQUEST_EVENT, {
+      pathParameters: {
+        docketNumber: '123-30',
+        key: '26c6a0e5-5d11-45f0-9904-04d103ada04f',
+      },
     });
+    getCaseByDocketNumber.mockResolvedValue({
+      docketEntries: [
+        {
+          ...MOCK_PETITION,
+          // docket entry does not match the requested entry
+          docketEntryId: '26c6a0e5-5d11-45f0-9904-04d103ada04f',
+        },
+      ],
+      docketNumber: '123-20',
+      judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
+      status: CASE_STATUS_TYPES.generalDocket,
+    } as any);
+
+    const response = await getDocumentDownloadUrlLambda(
+      request,
+      mockDocketClerkUser,
+    );
+
+    expect(response.statusCode).toBe('200');
+    expect(response.headers['Content-Type']).toBe('application/json');
+    expect(JSON.parse(response.body)).toHaveProperty(
+      'url',
+      'https://example.com/download-policy-url/bucket/item/26c6a0e5-5d11-45f0-9904-04d103ada04f',
+    );
   });
 });

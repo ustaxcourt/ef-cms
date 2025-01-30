@@ -1,12 +1,12 @@
 import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
 
 export interface Database {
+  dwUserCaseNote: UserCaseNoteTable;
+  dwMessage: MessageTable;
   dwCase: CaseTable;
   dwCaseCorrespondence: CaseCorrespondenceTable;
   dwCaseDeadline: CaseDeadlineTable;
   dwCaseWorksheet: CaseWorksheetTable;
-  dwMessage: MessageTable;
-  dwUserCaseNote: UserCaseNoteTable;
   dwWorkItem: WorkItemTable;
 }
 

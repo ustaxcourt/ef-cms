@@ -22,7 +22,7 @@ export const AccountMenu = connect(
   }) {
     return (
       <>
-        <ul className="usa-nav__primary usa-accordion nav-large">
+        <ul className="usa-nav__primary usa-accordion nav-large ustc-account">
           <li
             className={classNames(
               'usa-nav__primary-item',

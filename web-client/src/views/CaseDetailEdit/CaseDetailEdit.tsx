@@ -53,19 +53,21 @@ export const CaseDetailEdit = connect(
           </Tab>
         </Tabs>
 
-        <Button
-          data-testid="submit-case"
-          id="submit-case"
-          type="button"
-          onClick={() => {
-            saveSavedCaseForLaterSequence();
-          }}
-        >
-          Review Petition
-        </Button>
-        <Button link onClick={() => navigateBackSequence()}>
-          Cancel
-        </Button>
+        <div className="button-container">
+          <Button
+            data-testid="submit-case"
+            id="submit-case"
+            type="button"
+            onClick={() => {
+              saveSavedCaseForLaterSequence();
+            }}
+          >
+            Review Petition
+          </Button>
+          <Button link onClick={() => navigateBackSequence()}>
+            Cancel
+          </Button>
+        </div>
         {screenMetadata.showSaveSuccess && (
           <span aria-live="polite" className="mini-success" role="alert">
             <FontAwesomeIcon icon="check-circle" size="sm" />
