@@ -44,7 +44,6 @@ function handleAdobeAdditionalMetadata(pdfBytes: number[]): BlobPart {
     }
 
     return modifiedPdfBytes;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_) {
     return pdfBytes as unknown as BlobPart;
   }
@@ -56,7 +55,6 @@ export const cleanFileMetadata = async (pdfLib, fileReader: FileReader) => {
       ignoreEncryption: true,
       updateMetadata: false,
     });
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return fileReader.result;
   }
@@ -77,6 +75,7 @@ export const cleanFileMetadata = async (pdfLib, fileReader: FileReader) => {
 
   pdfDoc.setKeywords([]);
 
+  // eslint-disable-next-line custom-rules-plugin/no-new-dates
   const nowDateString = new Date();
   pdfDoc.setCreationDate(nowDateString);
   pdfDoc.setModificationDate(nowDateString);

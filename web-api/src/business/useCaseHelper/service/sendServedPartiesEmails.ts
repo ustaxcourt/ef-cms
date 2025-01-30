@@ -1,9 +1,22 @@
-import { CASE_STATUS_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { DocumentService } from '@shared/business/utilities/emailGenerator/emailTemplates/DocumentService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { cloneDeep } from 'lodash';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
+
+type SendServedPartiesEmailsParams = {
+  applicationContext: ServerApplicationContext;
+  caseEntity: Case;
+  docketEntryId: string;
+  servedParties: {
+    all: any[];
+    paper: any[];
+    electronic: Array<{ email: string; name: string }>;
+  };
+  skipEmailToIrs?: boolean;
+};
 
 export const sendServedPartiesEmails = async ({
   applicationContext,
@@ -11,7 +24,7 @@ export const sendServedPartiesEmails = async ({
   docketEntryId,
   servedParties,
   skipEmailToIrs = false,
-}) => {
+}: SendServedPartiesEmailsParams) => {
   const { caseCaption, docketNumber, docketNumberWithSuffix } = caseEntity;
   const partiesToServe = cloneDeep(servedParties);
 
@@ -36,7 +49,7 @@ export const sendServedPartiesEmails = async ({
 
   if (!skipEmailToIrs && caseEntity.status !== CASE_STATUS_TYPES.new) {
     partiesToServe.electronic.push({
-      email: applicationContext.getIrsSuperuserEmail(),
+      email: applicationContext.getIrsSuperuserEmail()!,
       name: 'IRS',
     });
   }
@@ -77,7 +90,7 @@ export const sendServedPartiesEmails = async ({
         emailContent: '',
       },
       destinations,
-      templateName: process.env.EMAIL_DOCUMENT_SERVED_TEMPLATE,
+      templateName: process.env.EMAIL_DOCUMENT_SERVED_TEMPLATE!,
     });
   }
 };
