@@ -1,4 +1,4 @@
-/* eslint-disable no-new-dates/no-new-dates */
+/* eslint-disable custom-rules-plugin/no-new-dates */
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { waitForSpinnerAction } from './waitForSpinnerAction';
 

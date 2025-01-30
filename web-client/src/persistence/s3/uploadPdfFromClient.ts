@@ -75,7 +75,7 @@ export const cleanFileMetadata = async (pdfLib, fileReader: FileReader) => {
 
   pdfDoc.setKeywords([]);
 
-  // eslint-disable-next-line no-new-dates/no-new-dates
+  // eslint-disable-next-line custom-rules-plugin/no-new-dates
   const nowDateString = new Date();
   pdfDoc.setCreationDate(nowDateString);
   pdfDoc.setModificationDate(nowDateString);
