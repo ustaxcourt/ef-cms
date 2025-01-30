@@ -11,8 +11,6 @@ import { AsyncZipDeflate, Zip } from 'fflate';
 import { PassThrough, Writable } from 'stream';
 import { Upload } from '@aws-sdk/lib-storage';
 
-import '@aws-sdk/crc64-nvme-crt';
-
 type DocketEntryDownloadInfo = {
   key: string;
   filePathInZip: string;
