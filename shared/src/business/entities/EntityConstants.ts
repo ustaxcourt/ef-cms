@@ -835,6 +835,11 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentType: 'Notice of Change to In Person Proceeding',
     eventCode: 'NOIP',
   },
+  noticeOfChangeOfTrialLocation: {
+    documentTitle: 'Notice of Change of Trial Location',
+    documentType: 'Notice of Change of Trial Location',
+    eventCode: 'NCTL',
+  },
   noticeOfTrial: {
     documentTitle: 'Notice of Trial on [Date] at [Time]',
     documentType: 'Notice of Trial',
@@ -1769,23 +1774,7 @@ export type UserMessageType =
 export const BROADCAST_MESSAGES = {
   appHasUpdated: 'appHasUpdated',
   userLogout: 'userLogout',
-  idleLogout: 'idleLogout',
-  idleStatusActive: 'idleStatusActive',
-  stayLoggedIn: 'stayLoggedIn',
 };
-
-export const IDLE_LOGOUT_STATES = {
-  INITIAL: 'INITIAL',
-  MONITORING: 'MONITORING',
-  COUNTDOWN: 'COUNTDOWN',
-};
-
-export type IdleLogoutStateType =
-  (typeof IDLE_LOGOUT_STATES)[keyof typeof IDLE_LOGOUT_STATES];
-
-export type IdleLogoutType =
-  | (typeof BROADCAST_MESSAGES)['idleLogout']
-  | (typeof BROADCAST_MESSAGES)['userLogout'];
 
 export const STATUS_REPORT_ORDER_OPTIONS = {
   issueOrderOptions: {
