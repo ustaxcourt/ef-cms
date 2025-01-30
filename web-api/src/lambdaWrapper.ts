@@ -63,20 +63,23 @@ export const lambdaWrapper = (
       res.status(204).send('');
     }
 
-    const response = await lambda(
-      {
-        ...event,
-        body: JSON.stringify(req.body),
-        logger: req.locals.logger,
-      },
-      user,
-    ).catch((error: any) => {
+    let response;
+    try {
+      response = await lambda(
+        {
+          ...event,
+          body: JSON.stringify(req.body),
+          logger: req.locals.logger,
+        },
+        user,
+      );
+    } catch (error) {
       if (!isAsyncEndpoint) throw error;
-      return sendError({
+      response = sendError({
         message: 'There was an Error thrown in an Async Endpoint',
         statusCode: '500',
       });
-    });
+    }
 
     const { asyncsyncid } = req.headers;
 
