@@ -19,6 +19,7 @@ export const setProgressForFileUploadAction = ({
 } => {
   const { files } = props;
   const loadedAmounts: Record<string, number> = {};
+  // eslint-disable-next-line custom-rules-plugin/no-new-dates
   const startTime = new Date();
   const sizeOfFiles: Record<string, number> = {};
 
@@ -60,6 +61,7 @@ export const setProgressForFileUploadAction = ({
 
       loadedAmounts[key] = isDone ? sizeOfFiles[key] : loaded;
       const totalSize = calculateTotalSize();
+      // eslint-disable-next-line custom-rules-plugin/no-new-dates
       const timeElapsed = new Date() - startTime;
       const uploadedBytes = calculateTotalLoaded();
       const uploadSpeed = uploadedBytes / (timeElapsed / 1000);

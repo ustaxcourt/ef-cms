@@ -141,6 +141,7 @@ export const TrialInformation = connect(
                   <tr>
                     <td>
                       <a
+                        data-testid="trial-session-location-link"
                         href={
                           caseDetail.userIsAssignedToSession
                             ? `/trial-session-working-copy/${caseDetail.trialSessionId}`
@@ -236,6 +237,7 @@ export const TrialInformation = connect(
             <div className="margin-bottom-1">
               <Button
                 link
+                data-testid="add-to-trial-session-btn"
                 icon="plus-circle"
                 id="add-to-trial-session-btn"
                 onClick={() => {
