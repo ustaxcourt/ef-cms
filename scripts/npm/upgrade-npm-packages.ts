@@ -12,7 +12,6 @@ const caveats: string[] = [
   '@fortawesome/free-solid-svg-icons',
   '@fortawesome/react-fontawesome',
   'canvas',
-  'jsdom',
   'puppeteer',
   'puppeteer-core',
   '@sparticuz/chromium',
