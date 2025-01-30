@@ -63,6 +63,16 @@ describe('Trial Session - Notice Change of Location', () => {
       'Updated Courthouse Name',
     );
     cy.get('[data-testid="submit-edit-trial-session"]').click();
+
+    cy.get('[data-testid="current-location-info"]').should(
+      'contain.text',
+      'this is not calendared',
+    );
+    cy.get('[data-testid="updated-location-info"]').should(
+      'contain.text',
+      'Updated Courthouse Name',
+    );
+
     cy.get('[data-testid="modal-button-confirm"]').click();
 
     cy.get<string[]>('@CREATED_DOCKET_NUMBERS').then(

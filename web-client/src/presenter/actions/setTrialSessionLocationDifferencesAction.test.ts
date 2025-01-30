@@ -37,7 +37,9 @@ describe('setTrialSessionLocationDifferencesAction', () => {
       },
     );
 
-    expect(state.currentTrialSessionLocation).toEqual(TEST_CURRENT_LOCATION);
-    expect(state.updatedTrialSessionLocation).toEqual(TEST_UPDATED_LOCATION);
+    expect(state.trialSessionLocationChangeModalInfo).toEqual({
+      currentTrialSessionLocation: TEST_CURRENT_LOCATION,
+      updatedTrialSessionLocation: TEST_UPDATED_LOCATION,
+    });
   });
 });
