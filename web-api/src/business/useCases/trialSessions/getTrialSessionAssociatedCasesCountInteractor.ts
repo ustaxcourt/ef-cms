@@ -8,7 +8,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCasesInTrialSession } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper';
 import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 
-export const getTrialSessionOpenCasesCountInteractor = async (
+export const getTrialSessionAssociatedCasesCountInteractor = async (
   { trialSessionId }: { trialSessionId: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<{
