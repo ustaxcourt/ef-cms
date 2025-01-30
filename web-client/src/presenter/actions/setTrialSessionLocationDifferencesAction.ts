@@ -9,6 +9,8 @@ export const setTrialSessionLocationDifferencesAction = ({
   updatedTrialSessionLocation: TrialSessionLocationInfo;
 }>) => {
   const { currentTrialSessionLocation, updatedTrialSessionLocation } = props;
-  store.set(state.currentTrialSessionLocation, currentTrialSessionLocation);
-  store.set(state.updatedTrialSessionLocation, updatedTrialSessionLocation);
+  store.set(state.trialSessionLocationChangeModalInfo, {
+    currentTrialSessionLocation,
+    updatedTrialSessionLocation,
+  });
 };
