@@ -158,7 +158,7 @@ export const TrialBriefFieldset = ({
           />
         </div>
         <div className="grid-col-2">
-          <div style={{ marginBottom: '42px' }}>
+          <div style={{ marginBottom: '28px' }}>
             {/* 10419 TODO this is a stopgap means of approximating consistent vertical alignment*/}
           </div>
           <FormGroup className="margin-bottom-0 display-inline-block">

@@ -58,22 +58,25 @@ export const TrialSessionMetadataFieldset = ({
             >
               Court reporter
             </label>
-            <input
-              className="usa-input grid-col-10"
-              id="courtReporter"
-              name="courtReporter"
-              type="text"
-              value={trialSessionMetadataFormState.courtReporter}
-              onBlur={() => onBlurHandler()}
-              onChange={e =>
-                onChangeHandler({
-                  name: e.target.name,
-                  section:
-                    MINUTE_SHEET_FORM_SECTION_MAP.trialSessionMetadataSection,
-                  value: e.target.value,
-                })
-              }
-            />
+            <div style={{ left: '100px', position: 'absolute', right: 0 }}>
+              <input
+                className="usa-input grid-col-10"
+                id="courtReporter"
+                name="courtReporter"
+                style={{ maxWidth: 'none', width: '100%' }}
+                type="text"
+                value={trialSessionMetadataFormState.courtReporter}
+                onBlur={() => onBlurHandler()}
+                onChange={e =>
+                  onChangeHandler({
+                    name: e.target.name,
+                    section:
+                      MINUTE_SHEET_FORM_SECTION_MAP.trialSessionMetadataSection,
+                    value: e.target.value,
+                  })
+                }
+              />
+            </div>
           </FormGroup>
         </div>
       </div>
