@@ -65,9 +65,6 @@ regex search the entire project for `version = ">= \d+.\d+.\d+"` and make sure i
 
 ## Do Not Upgrade
 
-### @aws-sdk/client-s3 and @aws-sdk/lib-storage
-- @aws-sdk/client-s3 and it's peer dependency @aws-sdk/lib-storage are locked to 3.726.0. Upgrading client-s3 results in s3 files not being downloaded properly in AWS Batch jobs. Unclear why at this time.
-
 ### React and ReactDOM
 
 - cerebral version 5.2.1 and @cerebral/react version 4.2.1 are not compatible with React and ReactDOM version 19. Keep these pinned at version 18 for the time being. See https://github.com/cerebral/cerebral/pull/1441.
