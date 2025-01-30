@@ -33,7 +33,7 @@ describe('Trial Session Eligible Cases Journey', () => {
   );
 
   const trialLocation = `Madison, Wisconsin, ${Date.now()}`;
-  // eslint-disable-next-line no-new-dates/no-new-dates
+  // eslint-disable-next-line custom-rules-plugin/no-new-dates
   const currentYearPlusFive = new Date().getFullYear() + 5;
   const overrides = {
     maxCases: 4,
