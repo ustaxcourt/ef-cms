@@ -1,21 +1,5 @@
-import { publicCaseDetailHelper as publicCaseDetailHelperComputed } from '../src/presenter/computeds/Public/publicCaseDetailHelper';
-import { runCompute } from '@web-client/presenter/test.cerebral';
-import { setTerminalUserIps } from '../integration-tests/helpers';
-import { setupTest } from './helpers';
-import { withAppContextDecorator } from '../src/withAppContext';
-
-describe('Amended And Redacted Brief Visibility Journey', () => {
-  const cerebralTest = setupTest();
-
-  const publicCaseDetailHelper = withAppContextDecorator(
-    publicCaseDetailHelperComputed,
-  );
-
-  afterAll(() => {
-    cerebralTest.closeSocket();
-  });
-
-  describe('Unauthorized Public User', () => {
+describe('Amended And Redacted Brief Visibility', () => {
+  it('Unauthorized Public User', () => {
     const expectedDocketRecordVisibility = {
       1: { eventCode: 'P', showLinkToDocument: false },
       2: { eventCode: 'RQT', showLinkToDocument: false },
@@ -49,32 +33,27 @@ describe('Amended And Redacted Brief Visibility Journey', () => {
       30: { eventCode: 'REPL', showLinkToDocument: false },
     };
 
-    it('view case detail', async () => {
-      await cerebralTest.runSequence('gotoPublicCaseDetailSequence', {
-        docketNumber: '105-23',
-      });
+    cy.visit('/');
+    cy.get('[data-testid="docket-number"]').type('105-23');
+    cy.get('[data-testid="docket-search-button"]').click();
+    cy.get('[data-testid="header-public-case-detail"]');
 
-      const publicCaseDetail = runCompute(publicCaseDetailHelper, {
-        state: cerebralTest.getState(),
-      });
-
-      const { formattedDocketEntriesOnDocketRecord } = publicCaseDetail;
-
-      const actualDocketRecordVisibility = {};
-      formattedDocketEntriesOnDocketRecord.forEach(docketEntry => {
-        actualDocketRecordVisibility[docketEntry.index] = {
-          eventCode: docketEntry.eventCode,
-          showLinkToDocument: docketEntry.showLinkToDocument,
-        };
-      });
-
-      expect(actualDocketRecordVisibility).toEqual(
-        expectedDocketRecordVisibility,
-      );
-    });
+    Object.entries(expectedDocketRecordVisibility).forEach(
+      ([docketOrder, documentExpectation]) => {
+        if (documentExpectation.showLinkToDocument) {
+          cy.get(`[data-testid=public-docket-record-no-${docketOrder}]`).find(
+            '[data-testid=Filing-and-Proceedings-link-to-docket-entry]',
+          );
+        } else {
+          cy.get(`[data-testid=public-docket-record-no-${docketOrder}]`)
+            .find('[data-testid=Filing-and-Proceedings-link-to-docket-entry]')
+            .should('not.exist');
+        }
+      },
+    );
   });
 
-  describe('Terminal User', () => {
+  it('Terminal User', () => {
     const expectedDocketRecordVisibility = {
       1: { eventCode: 'P', showLinkToDocument: true },
       2: { eventCode: 'RQT', showLinkToDocument: false },
@@ -107,37 +86,27 @@ describe('Amended And Redacted Brief Visibility Journey', () => {
       29: { eventCode: 'AMAT', showLinkToDocument: true },
       30: { eventCode: 'REPL', showLinkToDocument: true },
     };
+    cy.task('setAllowedTerminalIpAddresses', ['localhost']);
 
-    beforeAll(async () => {
-      await setTerminalUserIps(['localhost']);
-    });
+    cy.visit('/');
+    cy.get('[data-testid="docket-number"]').type('105-23');
+    cy.get('[data-testid="docket-search-button"]').click();
+    cy.get('[data-testid="header-public-case-detail"]');
 
-    afterAll(async () => {
-      await setTerminalUserIps([]);
-    });
+    Object.entries(expectedDocketRecordVisibility).forEach(
+      ([docketOrder, documentExpectation]) => {
+        if (documentExpectation.showLinkToDocument) {
+          cy.get(`[data-testid=public-docket-record-no-${docketOrder}]`).find(
+            '[data-testid=Filing-and-Proceedings-link-to-docket-entry]',
+          );
+        } else {
+          cy.get(`[data-testid=public-docket-record-no-${docketOrder}]`)
+            .find('[data-testid=Filing-and-Proceedings-link-to-docket-entry]')
+            .should('not.exist');
+        }
+      },
+    );
 
-    it('view case detail', async () => {
-      await cerebralTest.runSequence('gotoPublicCaseDetailSequence', {
-        docketNumber: '105-23',
-      });
-
-      const publicCaseDetail = runCompute(publicCaseDetailHelper, {
-        state: cerebralTest.getState(),
-      });
-
-      const { formattedDocketEntriesOnDocketRecord } = publicCaseDetail;
-
-      const actualDocketRecordVisibility = {};
-      formattedDocketEntriesOnDocketRecord.forEach(docketEntry => {
-        actualDocketRecordVisibility[docketEntry.index] = {
-          eventCode: docketEntry.eventCode,
-          showLinkToDocument: docketEntry.showLinkToDocument,
-        };
-      });
-
-      expect(actualDocketRecordVisibility).toEqual(
-        expectedDocketRecordVisibility,
-      );
-    });
+    cy.task('setAllowedTerminalIpAddresses', []);
   });
 });
