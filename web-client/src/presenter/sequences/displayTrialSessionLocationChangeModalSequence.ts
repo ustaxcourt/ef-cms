@@ -1,10 +1,10 @@
-import { hasTrialSessionLocationChangedAction } from '@web-client/presenter/actions/hasTrialSessionLocationChangedAction';
+import { shouldGenerateNoticeOfChangeTrialLocationAction } from '@web-client/presenter/actions/shouldGenerateNoticeOfChangeTrialLocationAction';
 import { setConfirmTrialSessionLocationChangeModalAction } from '@web-client/presenter/actions/setConfirmTrialSessionLocationChangeModalAction';
 import { setTrialSessionLocationDifferencesAction } from '@web-client/presenter/actions/setTrialSessionLocationDifferencesAction';
 import { updateTrialSessionSequence } from '@web-client/presenter/sequences/updateTrialSessionSequence';
 
 export const displayTrialSessionLocationChangeModalSequence = [
-  hasTrialSessionLocationChangedAction,
+  shouldGenerateNoticeOfChangeTrialLocationAction,
   {
     unchanged: [updateTrialSessionSequence],
     updated: [

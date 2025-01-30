@@ -1,7 +1,7 @@
 import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const hasTrialSessionLocationChangedAction = async ({
+export const shouldGenerateNoticeOfChangeTrialLocationAction = async ({
   applicationContext,
   get,
   path,
