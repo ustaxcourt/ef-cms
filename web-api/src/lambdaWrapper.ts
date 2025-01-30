@@ -26,12 +26,14 @@ export const lambdaWrapper = (
   applicationContext?: ServerApplicationContext,
 ) => {
   return async (req, res) => {
+    const { isAsync, isAsyncSync } = options;
+    const isAsyncEndpoint = isAsync || isAsyncSync;
+
     // 'shouldMimicApiGatewayAsyncEndpoint' flag is set to mimic how API gateway async endpoints work locally.
     // When an async endpoint invoked in API gateway, the service immediately returns a 204 response with no body.
     // This behavior causes discrepancies between how these endpoints behave locally vs in a deployed AWS environment.
     const shouldMimicApiGatewayAsyncEndpoint =
-      (options.isAsync || options.isAsyncSync) &&
-      process.env.NODE_ENV != 'production';
+      isAsyncEndpoint && process.env.NODE_ENV != 'production';
 
     // If you'd like to test the terminal user functionality locally, make this boolean true
     const { event: currentInvokeEvent } = getCurrentInvoke();
@@ -69,7 +71,7 @@ export const lambdaWrapper = (
 
     const { asyncsyncid } = req.headers;
 
-    if (options.isAsyncSync && asyncsyncid && applicationContext && user) {
+    if (isAsyncSync && asyncsyncid && applicationContext && user) {
       try {
         const fullResponse = {
           ...response,
