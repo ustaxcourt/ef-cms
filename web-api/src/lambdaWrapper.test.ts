@@ -47,14 +47,14 @@ describe('lambdaWrapper', () => {
   });
 
   it('sets res.headers', async () => {
-    await lambdaWrapper(() => {
-      return {
+    await lambdaWrapper(
+      jest.fn().mockResolvedValue({
         body: 'hello world',
         headers: {
           'Content-Type': 'application/pdf',
         },
-      };
-    })(req, res);
+      }),
+    )(req, res);
 
     expect(res.set).toHaveBeenCalledWith({
       'Access-Control-Expose-Headers': 'X-Terminal-User',
@@ -71,77 +71,77 @@ describe('lambdaWrapper', () => {
   });
 
   it('sends response.body if header is application/pdf', async () => {
-    await lambdaWrapper(() => {
-      return {
+    await lambdaWrapper(
+      jest.fn().mockResolvedValue({
         body: 'hello world',
         headers: {
           'Content-Type': 'application/pdf',
         },
-      };
-    })(req, res);
+      }),
+    )(req, res);
     expect(res.send).toHaveBeenCalled();
     expect(res.set.mock.calls[1][0]).toBe('Content-Type');
     expect(res.set.mock.calls[1][1]).toBe('application/pdf');
   });
 
   it('sends response.body if header is application/text', async () => {
-    await lambdaWrapper(() => {
-      return {
+    await lambdaWrapper(
+      jest.fn().mockResolvedValue({
         body: 'hello world',
         headers: {
           'Content-Type': 'text/html',
         },
-      };
-    })(req, res);
+      }),
+    )(req, res);
     expect(res.send).toHaveBeenCalled();
   });
 
   it('calls res.send with a JSON parsed body when header is application/json', async () => {
-    await lambdaWrapper(() => {
-      return {
+    await lambdaWrapper(
+      jest.fn().mockResolvedValue({
         body: '{}',
         headers: {
           'Content-Type': 'application/json',
         },
-      };
-    })(req, res);
+      }),
+    )(req, res);
     expect(JSON.parse).toHaveBeenCalled();
     expect(res.send).toHaveBeenCalled();
   });
 
   it('calls res.send with when there is no res.body and when header is application/json', async () => {
-    await lambdaWrapper(() => {
-      return {
+    await lambdaWrapper(
+      jest.fn().mockResolvedValue({
         body: undefined,
         headers: {
           'Content-Type': 'application/json',
         },
-      };
-    })(req, res);
+      }),
+    )(req, res);
     expect(JSON.parse).toHaveBeenCalled();
     expect(res.send).toHaveBeenCalledWith(null);
   });
 
   it('calls res.redirect if header Location is set', async () => {
-    await lambdaWrapper(() => {
-      return {
+    await lambdaWrapper(
+      jest.fn().mockResolvedValue({
         body: null,
         headers: {
           Location: 'http://example.com',
         },
-      };
-    })(req, res);
+      }),
+    )(req, res);
     expect(res.redirect).toHaveBeenCalled();
   });
 
   it('logs exception if unhandled response', async () => {
     jest.spyOn(console, 'log');
-    await lambdaWrapper(() => {
-      return {
+    await lambdaWrapper(
+      jest.fn().mockResolvedValue({
         body: null,
         headers: {},
-      };
-    })(req, res);
+      }),
+    )(req, res);
     expect(console.log).toHaveBeenCalledWith(
       'ERROR: we do not support this return type',
     );
@@ -151,14 +151,14 @@ describe('lambdaWrapper', () => {
     (getCurrentInvoke as jest.Mock).mockReturnValue({
       event: { requestContext: { authorizer: { isTerminalUser: 'true' } } },
     });
-    await lambdaWrapper(() => {
-      return {
+    await lambdaWrapper(
+      jest.fn().mockResolvedValue({
         body: 'hello world',
         headers: {
           'Content-Type': 'application/pdf',
         },
-      };
-    })(req, res);
+      }),
+    )(req, res);
 
     expect(res.set.mock.calls[0][0]).toEqual({
       'Access-Control-Expose-Headers': 'X-Terminal-User',
@@ -179,14 +179,12 @@ describe('lambdaWrapper', () => {
       event: { requestContext: { authorizer: { isTerminalUser: 'false' } } },
     });
     await lambdaWrapper(
-      () => {
-        return {
-          body: 'hello world',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        };
-      },
+      jest.fn().mockResolvedValue({
+        body: 'hello world',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }),
       { isAsync: true },
     )(req, res);
 
@@ -195,14 +193,12 @@ describe('lambdaWrapper', () => {
 
   it('should return 204 when simulating an async/sync function', async () => {
     await lambdaWrapper(
-      () => {
-        return {
-          body: 'hello world',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        };
-      },
+      jest.fn().mockResolvedValue({
+        body: 'hello world',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }),
       { isAsyncSync: true },
     )(req, res);
 
@@ -216,7 +212,7 @@ describe('lambdaWrapper', () => {
     };
     const response = { a: 'LAMBDA_RESULTS', body: JSON.stringify(TEST_BODY) };
     await lambdaWrapper(
-      () => response,
+      jest.fn().mockResolvedValue(response),
       { isAsyncSync: true },
       applicationContext,
     )(req, res);
@@ -240,7 +236,7 @@ describe('lambdaWrapper', () => {
     };
     let response = { a: 'LAMBDA_RESULTS', body: JSON.stringify(TEST_BODY) };
     await lambdaWrapper(
-      () => response,
+      jest.fn().mockResolvedValue(response),
       { isAsyncSync: true },
       applicationContext,
     )(req, res);
