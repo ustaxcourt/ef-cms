@@ -4,17 +4,17 @@ jest.mock(
 jest.mock('@web-api/persistence/dynamo/trialSessions/getTrialSessionById');
 
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
-import { getTrialSessionOpenCasesCountInteractor } from '@web-api/business/useCases/trialSessions/getTrialSessionOpenCasesCountInteractor';
+import { getTrialSessionAssociatedCasesCountInteractor } from '@web-api/business/useCases/trialSessions/getTrialSessionAssociatedCasesCountInteractor';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { getCasesInTrialSession } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper';
 import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 
-describe('getTrialSessionOpenCasesCountInteractor', () => {
+describe('getTrialSessionAssociatedCasesCountInteractor', () => {
   const TEST_TRIAL_SESSION_ID = 'TEST_TRIAL_SESSION_ID';
 
   it('should throw error if user is unauthorized', async () => {
     await expect(
-      getTrialSessionOpenCasesCountInteractor(
+      getTrialSessionAssociatedCasesCountInteractor(
         {
           trialSessionId: TEST_TRIAL_SESSION_ID,
         },
@@ -27,7 +27,7 @@ describe('getTrialSessionOpenCasesCountInteractor', () => {
     (getTrialSessionById as jest.Mock).mockReturnValue(undefined);
 
     await expect(
-      getTrialSessionOpenCasesCountInteractor(
+      getTrialSessionAssociatedCasesCountInteractor(
         {
           trialSessionId: TEST_TRIAL_SESSION_ID,
         },
@@ -57,7 +57,7 @@ describe('getTrialSessionOpenCasesCountInteractor', () => {
     });
 
     const { calendaredCaseEntitiesCount, casesThatShouldReceiveNoticesCount } =
-      await getTrialSessionOpenCasesCountInteractor(
+      await getTrialSessionAssociatedCasesCountInteractor(
         {
           trialSessionId: TEST_TRIAL_SESSION_ID,
         },

@@ -11,8 +11,8 @@ type Props = {
 
 const deps = {
   cancelSequence: sequences.dismissModalSequence,
-  currentTrialSessionLocation: state.currentTrialSessionLocation,
-  updatedTrialSessionLocation: state.updatedTrialSessionLocation,
+  trialSessionLocationChangeModalInfo:
+    state.trialSessionLocationChangeModalInfo,
 };
 
 function TrialLocationInformation({
@@ -46,8 +46,14 @@ function TrialLocationComparison({
   headerLabel: string;
   locationInfo: TrialSessionLocationInfo;
 }) {
+  const isCurrent = headerLabel.includes('Previous');
   return (
-    <div className="grid-col-6 padding-right-1">
+    <div
+      className="grid-col-6 padding-right-1"
+      data-testid={
+        isCurrent ? 'current-location-info' : 'updated-location-info'
+      }
+    >
       <div className="semi-bold padding-bottom-1">{headerLabel}</div>
       <TrialLocationInformation locationInfo={locationInfo} />
     </div>
@@ -62,9 +68,11 @@ export const ConfirmTrialSessionLocationChangeModalDialog = connect<
   function ConfirmTrialSessionLocationChangeModalDialog({
     cancelSequence,
     confirmSequence,
-    currentTrialSessionLocation,
-    updatedTrialSessionLocation,
+    trialSessionLocationChangeModalInfo,
   }) {
+    const { currentTrialSessionLocation, updatedTrialSessionLocation } =
+      trialSessionLocationChangeModalInfo;
+
     return (
       <ModalDialog
         cancelLabel="No, Cancel"

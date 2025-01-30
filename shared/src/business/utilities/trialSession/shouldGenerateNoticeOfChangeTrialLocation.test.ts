@@ -19,7 +19,7 @@ describe('shouldGenerateNoticeOfChangeTrialLocation', () => {
     sessionType: SESSION_TYPES.regular,
   };
 
-  it('return "false" when location has not been updated', () => {
+  it('should return "false" when location has not been updated', () => {
     const CURRENT_LOCATION = {
       ...TEST_LOCATION,
     } as RawTrialSession;
@@ -36,7 +36,7 @@ describe('shouldGenerateNoticeOfChangeTrialLocation', () => {
     expect(result).toEqual(false);
   });
 
-  it('return "false" if the current/updated Trial Session is not calendared', () => {
+  it('should return "false" if the current/updated Trial Session is not calendared', () => {
     const CURRENT_LOCATION = {
       ...TEST_LOCATION,
       isCalendared: false,
@@ -56,7 +56,7 @@ describe('shouldGenerateNoticeOfChangeTrialLocation', () => {
     expect(result).toEqual(false);
   });
 
-  it('return "true" when location has been updated', () => {
+  it('should return "true" when location has been updated', () => {
     const CURRENT_LOCATION = {
       ...TEST_LOCATION,
     } as RawTrialSession;
