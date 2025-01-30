@@ -1,16 +1,30 @@
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import {
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  PARTIES_CODES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   DocketEntry,
   getServedPartiesCode,
-} from '../../../../../shared/src/business/entities/DocketEntry';
+} from '@shared/business/entities/DocketEntry';
+import {
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  PARTIES_CODES,
+} from '@shared/business/entities/EntityConstants';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
-import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
+import { PDFDocument } from 'pdf-lib';
+
+type CreateAndServeNoticeDocketEntryParams = {
+  additionalDocketEntryInfo?: any;
+  caseEntity: Case;
+  documentInfo: {
+    documentType: string;
+    documentTitle: string;
+    eventCode: string;
+  };
+  newPdfDoc: PDFDocument;
+  noticePdf: Uint8Array;
+  onlyProSePetitioners?: boolean;
+};
 
 export const createAndServeNoticeDocketEntry = async (
   applicationContext: ServerApplicationContext,
@@ -21,18 +35,7 @@ export const createAndServeNoticeDocketEntry = async (
     newPdfDoc,
     noticePdf,
     onlyProSePetitioners,
-  }: {
-    additionalDocketEntryInfo?: any;
-    caseEntity: Case;
-    documentInfo: {
-      documentType: string;
-      documentTitle: string;
-      eventCode: string;
-    };
-    newPdfDoc: any;
-    noticePdf: Uint8Array;
-    onlyProSePetitioners?: boolean;
-  },
+  }: CreateAndServeNoticeDocketEntryParams,
   authorizedUser: AuthUser,
 ) => {
   const docketEntryId = applicationContext.getUniqueId();
