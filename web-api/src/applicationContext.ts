@@ -72,7 +72,7 @@ import { User } from '@shared/business/entities/User';
 import { UserCase } from '@shared/business/entities/UserCase';
 import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-
+import { type SendBulkTemplatedEmailCommandInput } from '@aws-sdk/client-ses';
 let sqsCache: SQSClient;
 
 const entitiesByName = {
@@ -160,7 +160,13 @@ export const createApplicationContext = (appContextUser = {}) => {
     getHttpClient: () => axios,
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMessageGateway: () => ({
-      sendEmailEventToQueue: async ({ applicationContext, emailParams }) => {
+      sendEmailEventToQueue: async ({
+        applicationContext,
+        emailParams,
+      }: {
+        applicationContext: ServerApplicationContext;
+        emailParams: SendBulkTemplatedEmailCommandInput;
+      }) => {
         if (environment.stage !== 'local') {
           await sendEmailEventToQueue({
             applicationContext,
