@@ -78,8 +78,8 @@ export const NoticeOfChangeOfTrialLocation = ({
         </div>
       </div>
       <div>
-        &emsp;The parties are hereby notified that the Court’s Notice of Trial
-        for this case is amended in that the location of the Court&apos;s{' '}
+        &emsp;The parties are hereby notified that the Courtt&apos;s Notice of
+        Trial for this case is amended in that the location of the Court&apos;s{' '}
         {previousTrialSession.trialLocation} Trial Session scheduled to begin on{' '}
         {formatDateString(updatedTrialSession.startDate, 'MMDDYYYY')}, will be
         held in {updatedTrialSession.trialLocation} at:
