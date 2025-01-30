@@ -2,10 +2,15 @@
 
 source "./scripts/env/unset-env.zsh"
 source "./scripts/env/defaults"
-source "./scripts/helpers/suppress-output.sh"
 
 env="${1:-$DEFAULT_ENV}"
-quiet=$(should_suppress_output "$@")
+
+quiet=0
+DEPLOYING=0
+for param in "$@"; do
+  { [[ "$param" == "--deploying" ]] || [[ "$param" == "-d" ]]; } && DEPLOYING=1
+  { [[ "$param" == "--quiet" ]] || [[ "$param" == "-q" ]]; } && quiet=1
+done
 
 # friendly aliases
 DEVGLOB="develop development"
