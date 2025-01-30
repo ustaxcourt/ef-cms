@@ -3,7 +3,7 @@ import { setConfirmTrialSessionLocationChangeModalAction } from '@web-client/pre
 import { setTrialSessionLocationDifferencesAction } from '@web-client/presenter/actions/setTrialSessionLocationDifferencesAction';
 import { updateTrialSessionSequence } from '@web-client/presenter/sequences/updateTrialSessionSequence';
 
-export const displayTrialSessionLocationChangeModalSequence = [
+export const handleEditedTrialSessionSequence = [
   shouldGenerateNoticeOfChangeTrialLocationAction,
   {
     unchanged: [updateTrialSessionSequence],
