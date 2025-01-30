@@ -318,6 +318,10 @@ describe('editPaperFilingInteractor', () => {
     describe('Single Docketing', () => {
       describe('Happy Path', () => {
         it('should update only allowed editable fields on a docket entry document', async () => {
+          fileAndServeDocumentOnOneCase.mockImplementation(
+            ({ caseEntity }) => caseEntity,
+          );
+
           await editPaperFilingInteractor(
             applicationContext,
             {
@@ -343,11 +347,7 @@ describe('editPaperFilingInteractor', () => {
             mockDocketClerkUser,
           );
 
-          const updatedDocketEntry = applicationContext
-            .getPersistenceGateway()
-            .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
-              d => d.docketEntryId === mockDocketEntryId,
-            );
+          const updatedDocketEntry = fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
 
           expect(updatedDocketEntry).toMatchObject({
             docketEntryId: mockDocketEntryId,
