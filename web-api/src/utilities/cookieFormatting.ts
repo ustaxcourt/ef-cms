@@ -1,3 +1,4 @@
+/* eslint-disable custom-rules-plugin/no-new-dates */
 import { parse, serialize } from 'cookie';
 
 export const createCookieString = (
