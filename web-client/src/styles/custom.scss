@@ -849,6 +849,15 @@ textarea#case-caption {
   margin-right: 0;
 }
 
+.view-pdf-button {
+  @media only screen and (max-width: $small-screen) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
 .view-pdf-button svg {
   color: $color-white;
 }
@@ -1134,7 +1143,7 @@ header.usa-header {
   }
 
   h1 {
-		@include h1-underline-border;
+    @include h1-underline-border;
 
     position: relative;
     top: 2px;
@@ -1252,7 +1261,7 @@ hr.lighter {
 
   .pages {
     position: relative;
-    top: -6px;
+    top: -12px;
     font-size: 18px;
     font-weight: $font-semibold;
   }
@@ -2237,7 +2246,7 @@ button.change-scanner-button {
 }
 
 .before-case-button {
-  margin-top: 2.5rem;
+  margin: 2.5rem 1rem 0 0;
 }
 
 .before-case-follow-up-button {
@@ -2396,15 +2405,33 @@ button.change-scanner-button {
   }
 }
 
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: ($medium-screen - 1px)) {
+    > * {
+      margin-inline: 0;
+    }
+  }
+
+  @media (min-width: $medium-screen) {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+}
+
 .trial-session-planning-report-header {
-	font-family: 'Noto Serif JP', serif;
-	font-size: 32px;
+  font-family: 'Noto Serif JP', serif;
+  font-size: 32px;
 }
 
 .cities-not-calendared-header {
-	font-weight: 600;
+  font-weight: 600;
 }
 
 .cities-not-calendated-yellow-background {
-	background-color: #FFE396;
+  background-color: #ffe396;
 }

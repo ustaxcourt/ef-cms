@@ -48,26 +48,20 @@ export const NoticeOfChangeOfTrialLocation = ({
             </thead>
             <tr>
               <td>
-                {['courthouseName', 'address1', 'address2', ['city', 'state']]
-                  .filter(prop => {
-                    if (Array.isArray(prop))
-                      return prop.some(key => !!updatedTrialSession[key]);
-                    return !!updatedTrialSession[prop];
-                  })
-                  .map(prop => {
-                    if (Array.isArray(prop))
-                      return (
-                        <div key={prop[0]}>
-                          {prop
-                            .filter(key => !!updatedTrialSession[key])
-                            .map(key => updatedTrialSession[key])
-                            .join(', ')}
-                        </div>
-                      );
-
-                    return <div key={prop}>{updatedTrialSession[prop]}</div>;
-                  })}
-                <div style={{ fontWeight: 'bold' }}>In-Person</div>
+                {updatedTrialSession.courthouseName && (
+                  <div>{updatedTrialSession.courthouseName}</div>
+                )}
+                {updatedTrialSession.address1 && (
+                  <div>{updatedTrialSession.address1}</div>
+                )}
+                {updatedTrialSession.address2 && (
+                  <div>{updatedTrialSession.address2}</div>
+                )}
+                <div>
+                  {updatedTrialSession.city}, {updatedTrialSession.state}{' '}
+                  {updatedTrialSession.postalCode}
+                </div>
+                <div style={{ fontWeight: 'bold' }}>In Person</div>
               </td>
             </tr>
           </table>
@@ -84,8 +78,8 @@ export const NoticeOfChangeOfTrialLocation = ({
         </div>
       </div>
       <div>
-        &emsp;The parties are hereby notified that the Court’s Notice of Trial
-        for this case is amended in that the location of the Court&apos;s{' '}
+        &emsp;The parties are hereby notified that the Courtt&apos;s Notice of
+        Trial for this case is amended in that the location of the Court&apos;s{' '}
         {previousTrialSession.trialLocation} Trial Session scheduled to begin on{' '}
         {formatDateString(updatedTrialSession.startDate, 'MMDDYYYY')}, will be
         held in {updatedTrialSession.trialLocation} at:

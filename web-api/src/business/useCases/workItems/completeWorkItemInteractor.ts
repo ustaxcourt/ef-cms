@@ -19,7 +19,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the completed work item
  */
 export const completeWorkItem = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     completedMessage,
     workItemId,
@@ -57,7 +57,7 @@ export const completeWorkItem = async (
 };
 
 export const determineEntitiesToLock = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { workItemId }: { workItemId: string },
 ) => {
   const originalWorkItem = await getWorkItemById({

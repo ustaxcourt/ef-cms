@@ -158,11 +158,13 @@ export class Statistic extends JoiValidationEntity {
 
 const assignPenalties = (obj, { rawPenalties, statisticId }) => {
   rawPenalties.forEach(penalty => {
-    penalty.statisticId
-      ? obj.addPenalty({ rawPenalty: penalty })
-      : obj.addPenalty({
-          rawPenalty: { ...penalty, statisticId },
-        });
+    if (penalty.statisticId) {
+      obj.addPenalty({ rawPenalty: penalty });
+    } else {
+      obj.addPenalty({
+        rawPenalty: { ...penalty, statisticId },
+      });
+    }
   });
 };
 

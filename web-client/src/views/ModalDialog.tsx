@@ -109,7 +109,6 @@ export const ModalDialog = ({
           aria-modal="true"
           className="modal-screen"
           data-testid={dataTestId}
-          role="dialog"
         >
           <div className={classNames('modal-dialog padding-205', className)}>
             <div className="modal-header grid-container padding-x-0">
@@ -153,7 +152,7 @@ export const ModalDialog = ({
             {message && <p className={messageClass}>{message}</p>}
             {children}
             {showButtons && (
-              <div className="margin-top-5">
+              <div className="margin-top-5 button-container">
                 <Button
                   aria-label={`${confirmLabel} submit button`}
                   className="modal-button-confirm"

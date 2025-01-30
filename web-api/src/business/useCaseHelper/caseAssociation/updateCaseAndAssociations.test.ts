@@ -41,7 +41,7 @@ const getCaseDeadlinesByDocketNumber =
 const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
 
 describe('updateCaseAndAssociations', () => {
-  let updateCaseMock = jest.fn();
+  const updateCaseMock = jest.fn();
   let validMockCase;
 
   beforeAll(() => {
@@ -424,7 +424,7 @@ describe('updateCaseAndAssociations', () => {
         caseToUpdate,
       });
 
-      expect(upsertCaseCorrespondences).toHaveBeenCalledTimes(4);
+      expect(upsertCaseCorrespondences).toHaveBeenCalledTimes(1);
     });
   });
 

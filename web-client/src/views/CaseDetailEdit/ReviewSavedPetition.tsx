@@ -244,7 +244,7 @@ export const ReviewSavedPetition = connect(
             </div>
           </div>
 
-          <div className="margin-top-5">
+          <div className="margin-top-5 button-container">
             <Button
               data-testid="serve-case-to-irs"
               id="submit-case"

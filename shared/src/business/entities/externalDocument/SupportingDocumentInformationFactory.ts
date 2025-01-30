@@ -51,9 +51,9 @@ export class SupportingDocumentInformationFactory extends JoiValidationEntity {
   };
 
   getValidationRules() {
-    let schema = { ...SupportingDocumentInformationFactory.VALIDATION_RULES };
+    const schema = { ...SupportingDocumentInformationFactory.VALIDATION_RULES };
 
-    let schemaOptionalItems = {
+    const schemaOptionalItems = {
       supportingDocumentFile: joi
         .object()
         .messages({ '*': 'Upload a document' }),

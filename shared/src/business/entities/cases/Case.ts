@@ -246,8 +246,8 @@ export class Case extends JoiValidationEntity {
   static sortByDocketNumberAndGroupConsolidatedCases<
     T extends { leadDocketNumber?: string; docketNumber: string },
   >(cases: T[]): T[] {
-    let nonMemberCases: T[] = [];
-    let memberCases: { [key: string]: T[] } = {};
+    const nonMemberCases: T[] = [];
+    const memberCases: { [key: string]: T[] } = {};
 
     // Create a set of docket numbers for quick lookup
     const docketNumbers = new Set(cases.map(c => c.docketNumber));

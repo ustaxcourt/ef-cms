@@ -31,7 +31,7 @@ export const AddOtherStatistics = connect(
             <OtherStatisticsForm />
           </div>
 
-          <div className="margin-top-3">
+          <div className="margin-top-3 button-container">
             <Button
               onClick={() => {
                 submitAddOtherStatisticsSequence();

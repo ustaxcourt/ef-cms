@@ -9,6 +9,7 @@ export class ActionError extends CerebralError {
     return this.constructor.name;
   }
   constructor(message) {
+    // eslint-disable-next-line prefer-rest-params
     super(arguments);
     this.title = 'An error occurred';
     this.message = message || 'An unspecified error occurred.';

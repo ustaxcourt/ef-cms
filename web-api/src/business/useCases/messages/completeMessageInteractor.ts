@@ -26,7 +26,7 @@ export const completeMessageInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  let completedMessageIds: string[] = [];
+  const completedMessageIds: string[] = [];
 
   try {
     for (const message of messages) {
@@ -52,6 +52,7 @@ export const completeMessageInteractor = async (
 
       completedMessageIds.push(validatedRawMessage.messageId);
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,

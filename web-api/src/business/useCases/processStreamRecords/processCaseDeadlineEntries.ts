@@ -1,5 +1,5 @@
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
-import { getLogger } from 'aws-xray-sdk';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 

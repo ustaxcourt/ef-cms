@@ -64,7 +64,7 @@ const generateChangeOfAddressForPractitioner = async ({
     return [];
   }
 
-  let completedCases = 0;
+  const completedCases = 0;
   const NOTIFICATION_ACTION:
     | 'user_contact_update_progress'
     | 'admin_contact_update_progress' =

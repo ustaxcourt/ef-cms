@@ -1,7 +1,4 @@
-/**
- * HOW TO RUN
- * npx ts-node --transpileOnly scripts/run-once-scripts/postgres-migration/delete-work-items.ts
- */
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
@@ -18,7 +15,7 @@ const dynamoDbDocClient = DynamoDBDocumentClient.from(dynamoDbClient);
 environment.nodeEnv = 'production';
 
 const getWorkItemsToDelete = async (offset: number) => {
-  const workItems = await getDbReader(reader =>
+  return await getDbReader(reader =>
     reader
       .selectFrom('dwWorkItem')
       .select(['docketNumber', 'workItemId'])
@@ -27,7 +24,6 @@ const getWorkItemsToDelete = async (offset: number) => {
       .offset(offset)
       .execute(),
   );
-  return workItems;
 };
 
 let totalItemsDeleted = 0;
@@ -40,7 +36,7 @@ async function main() {
     const dynamoItemsToDelete = workItemsToDelete.map(c => ({
       DeleteRequest: {
         Key: {
-          pk: 'case|${c.docketNumber}',
+          pk: `case|${c.docketNumber}`,
           sk: `work-item|${c.workItemId}`,
         },
       },
