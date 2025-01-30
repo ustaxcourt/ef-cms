@@ -1,18 +1,15 @@
+import { generateTrialSessionMinutesPdfInteractor } from '@shared/proxies/trialSessionMinutes/generateTrialSessionMinutesPdfProxy';
+import { openUrlInNewTab } from '@web-client/presenter/utilities/openUrlInNewTab';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const downloadMinuteSheetFormPdfAction = async ({
-  applicationContext,
-  get,
-}) => {
+export const downloadMinuteSheetFormPdfAction = async ({ get }) => {
   const { docketNumber } = get(state.caseDetail);
   const { trialSessionId } = get(state.trialSession);
 
-  const pdfUrl = await applicationContext
-    .getUseCases()
-    .generateTrialSessionMinutesPdfInteractor(applicationContext, {
-      docketNumber,
-      trialSessionId,
-    });
+  const pdfUrl = await generateTrialSessionMinutesPdfInteractor({
+    docketNumber,
+    trialSessionId,
+  });
 
-  await applicationContext.getUtilities().openUrlInNewTab({ url: pdfUrl });
+  await openUrlInNewTab({ url: pdfUrl });
 };

@@ -1,10 +1,8 @@
+import { applicationContext } from '@web-client/applicationContext';
 import { get } from '../requests';
 import qs from 'qs';
 
-export const getMinuteSheetInteractor = (
-  applicationContext,
-  { docketNumber, trialSessionId },
-) => {
+export const getMinuteSheetInteractor = ({ docketNumber, trialSessionId }) => {
   const queryString = qs.stringify({
     docketNumber,
     trialSessionId,
