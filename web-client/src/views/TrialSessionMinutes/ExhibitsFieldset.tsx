@@ -6,10 +6,10 @@ import {
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import {
   EXHIBIT_STATUS_OPTIONS,
-  MINUTE_SHEET_FORM_SECTION_MAP,
   MinuteSheetFormState,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
+import { MINUTE_SHEET_FORM_SECTION_MAP } from '@shared/business/entities/EntityConstants';
 import React from 'react';
 
 export const ExhibitsFieldset = ({

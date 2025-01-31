@@ -4,7 +4,11 @@ import {
   KeyedPartyFormFieldsByRenderKey,
   initialMinuteSheetFormState,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
-import { CONTACT_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  CONTACT_TYPES,
+  FILDED_BY_TYPES,
+  REPRESENTATIVE_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import {
   FORMATS,
   formatDateString,
@@ -151,10 +155,9 @@ export const getPetitionersFromCase = (
     petitioners.forEach(petitioner => {
       let role;
       if (petitioner.contactType === CONTACT_TYPES.petitioner) {
-        // 10419 TODO refactor away from magic strings
         role = petitionersWithCounselUserIds.includes(petitioner.contactId)
-          ? 'counsel'
-          : 'proSe';
+          ? REPRESENTATIVE_TYPES.counsel
+          : REPRESENTATIVE_TYPES.prose;
       } else {
         role = petitioner.contactType;
       }
@@ -249,12 +252,12 @@ export const transformFiledBy = (caseDetail: RawCase, pendingItem): string => {
   // 10419 TODO figure out what constitutes a "joint" filed by
 
   if (isPetitioner && isRespondent) {
-    return 'petitionerAndRespondent';
+    return FILDED_BY_TYPES.petitionerAndRespondent;
   } else if (isPetitioner) {
-    return 'petitioner';
+    return FILDED_BY_TYPES.petitioner;
   } else if (isRespondent) {
-    return 'respondent';
+    return FILDED_BY_TYPES.respondent;
   }
 
-  return 'other';
+  return FILDED_BY_TYPES.other;
 };

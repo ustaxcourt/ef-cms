@@ -1817,3 +1817,29 @@ export const TROUBLESHOOTING_INFO = {
   FILE_UPLOAD_TROUBLESHOOTING_LINK:
     'https://ustaxcourt.gov/dawson_faqs_case_management.html#FileUpload',
 };
+
+export const REPRESENTATIVE_TYPES = {
+  counsel: 'counsel',
+  prose: 'proSe',
+} as const;
+
+export const FILDED_BY_TYPES = {
+  petitionerAndRespondent: 'petitionerAndRespondent',
+  petitioner: 'petitioner',
+  respondent: 'respondent',
+  other: 'other',
+} as const;
+
+export const MINUTE_SHEET_FORM_SECTION_MAP = {
+  actionsAndFilingsSection: 'actionsAndFilingsSection',
+  caseMetadataSection: 'caseMetadataSection',
+  exhibitsSection: 'exhibitsSection',
+  jurisdictionSection: 'jurisdictionSection',
+  motionsSection: 'motionsSection',
+  ordersSection: 'ordersSection',
+  petitionersSection: 'petitionersSection',
+  respondentsSection: 'respondentsSection',
+  trialBriefSection: 'trialBriefSection',
+  trialSessionMetadataSection: 'trialSessionMetadataSection',
+  witnessesSection: 'witnessesSection',
+} as const;

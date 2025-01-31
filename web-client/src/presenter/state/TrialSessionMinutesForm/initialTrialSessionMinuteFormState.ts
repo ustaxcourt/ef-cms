@@ -1,20 +1,6 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
-// Note: the order of properties in the costants defined below
+// Note: the order of properties in the constants defined below
 // is important to the business and should not be changed.
-export const MINUTE_SHEET_FORM_SECTION_MAP = {
-  actionsAndFilingsSection: 'actionsAndFilingsSection',
-  caseMetadataSection: 'caseMetadataSection',
-  exhibitsSection: 'exhibitsSection',
-  jurisdictionSection: 'jurisdictionSection',
-  motionsSection: 'motionsSection',
-  ordersSection: 'ordersSection',
-  petitionersSection: 'petitionersSection',
-  respondentsSection: 'respondentsSection',
-  trialBriefSection: 'trialBriefSection',
-  trialSessionMetadataSection: 'trialSessionMetadataSection',
-  witnessesSection: 'witnessesSection',
-} as const;
-
 type MotionFormFields = {
   date: string;
   type: MotionTypeOption | '';

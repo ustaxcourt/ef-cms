@@ -6,10 +6,8 @@ import {
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CreatableSelect } from '@web-client/ustc-ui/Select/CreatableSelect';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import {
-  MINUTE_SHEET_FORM_SECTION_MAP,
-  MinuteSheetFormState,
-} from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+import { MINUTE_SHEET_FORM_SECTION_MAP } from '@shared/business/entities/EntityConstants';
+import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import React from 'react';
 
 export const RespondentsFieldset = ({
