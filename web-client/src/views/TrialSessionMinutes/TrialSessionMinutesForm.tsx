@@ -13,8 +13,6 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-// http://localhost:1234/trial-session-detail/959c4338-0fac-42eb-b0eb-d53b8d0195cc/case/101-20/minutes
-// 959c4338-0fac-42eb-b0eb-d53b8d0195cc|101-20
 
 export const TrialSessionMinutesForm = connect(
   {

@@ -12,6 +12,7 @@ import classNames from 'classnames';
 type CaseDetailHeaderProps = {
   hideActionButtons?: boolean;
   className?: string;
+  openCaseInNewTab?: boolean;
 };
 
 const caseDetailHeaderDeps = {
@@ -31,6 +32,7 @@ export const CaseDetailHeader = connect<
     className,
     formattedCaseDetail,
     hideActionButtons,
+    openCaseInNewTab,
   }) {
     const consolidatedCasesString = formattedCaseDetail.consolidatedCases
       .map(eachCase => eachCase.docketNumberWithSuffix)
@@ -168,7 +170,11 @@ export const CaseDetailHeader = connect<
                         size="1x"
                       />
                     )}
-                    <CaseLink formattedCase={formattedCaseDetail}>
+                    <CaseLink
+                      formattedCase={formattedCaseDetail}
+                      rel={openCaseInNewTab ? 'noreferrer noopener' : ''}
+                      target={openCaseInNewTab ? '_blank' : ''}
+                    >
                       Docket Number:{' '}
                       {formattedCaseDetail.docketNumberWithSuffix}
                     </CaseLink>

@@ -16,7 +16,7 @@ export const TrialSessionMinutesPage = connect(
   ({ downloadMinuteSheetFormPdfSequence, formattedTrialSessionDetails }) => {
     return (
       <>
-        <CaseDetailHeader hideActionButtons />
+        <CaseDetailHeader hideActionButtons openCaseInNewTab />
         <div className="grid-container">
           <div className="grid-row">
             <h1 className="grid-col-fill">
