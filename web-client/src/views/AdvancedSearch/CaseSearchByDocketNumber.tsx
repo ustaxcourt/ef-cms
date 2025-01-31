@@ -37,7 +37,7 @@ export const CaseSearchByDocketNumber = connect(
               <div className="tablet:grid-col-6">
                 <FormGroup errorText={validationErrors.docketNumber}>
                   <label
-                    className="usa-label  margin-bottom-0"
+                    className="usa-label margin-bottom-0"
                     htmlFor="docket-number"
                   >
                     Docket number <span className="usa-hint">(required)</span>
@@ -72,10 +72,11 @@ export const CaseSearchByDocketNumber = connect(
             </div>
 
             <div className="grid-row">
-              <div className="tablet:grid-col-6">
+              <div className="tablet:grid-col-6 button-container">
                 <Button
+                  overrideMargin
                   aria-describedby="search-by-docket-number"
-                  className="advanced-search__button"
+                  className="margin-bottom-0"
                   data-testid="docket-search-button"
                   id="docket-search-button"
                   onClick={e => {
@@ -87,8 +88,9 @@ export const CaseSearchByDocketNumber = connect(
                 </Button>
                 <Button
                   link
+                  overrideMargin
                   aria-describedby="search-by-docket-number"
-                  className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
+                  className="margin-bottom-0 margin-top-3 tablet:margin-top-0 tablet:margin-left-205"
                   data-testid="clear-docket-number"
                   onClick={e => {
                     e.preventDefault();
