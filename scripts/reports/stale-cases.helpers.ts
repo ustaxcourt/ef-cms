@@ -1,17 +1,8 @@
-#!/usr/bin/env -S npx ts-node --transpile-only
-
 import {
   CASE_STATUS_TYPES,
   CaseStatus,
 } from '@shared/business/entities/EntityConstants';
-import {
-  type ScriptConfig,
-  parseArgsAndEnvVars,
-} from '../helpers/parseArgsAndEnvVars';
-import {
-  ServerApplicationContext,
-  createApplicationContext,
-} from '@web-api/applicationContext';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   calculateDifferenceInDays,
   createISODateString,
@@ -24,20 +15,7 @@ import {
 } from '@web-api/persistence/elasticsearch/searchClient';
 import PQueue from 'p-queue';
 
-const scriptConfig: ScriptConfig = {
-  description:
-    'stale-cases - Generates a spreadsheet of open cases that have not had a document filed within the last year',
-  environment: {
-    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
-    environmentName: 'ENV',
-  },
-  requireActiveAwsSession: true,
-};
-parseArgsAndEnvVars(scriptConfig);
-
 const todayISO = createISODateString();
-const OUTPUT_DIR = `${process.env.HOME}/Documents`;
-const OUTPUT_FILENAME = `${OUTPUT_DIR}/stale-cases_${todayISO.split('T')[0]}.csv`;
 const CONCURRENCY = 50;
 const YEAR_IN_DAYS = 365;
 const excludedCaseStatuses = [
@@ -163,10 +141,13 @@ const isCaseStale = async ({
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-(async () => {
-  const applicationContext = createApplicationContext({});
-
+export const generateStaleCasesReport = async ({
+  applicationContext,
+  filename,
+}: {
+  applicationContext: ServerApplicationContext;
+  filename: string;
+}): Promise<void> => {
   const casesNotClosedOrOnAppeal = await getAllCasesNotInExcludedStatus({
     applicationContext,
   });
@@ -181,7 +162,7 @@ const isCaseStale = async ({
   await queue.addAll(funcs);
   console.log(`Found ${staleCases.length} stale cases.`);
 
-  console.log(`Writing CSV to ${OUTPUT_FILENAME}...`);
+  console.log(`Writing CSV to ${filename}...`);
   const columns = [
     { header: 'Judge', key: 'judge' },
     { header: 'Docket Number', key: 'docketNumber' },
@@ -193,5 +174,5 @@ const isCaseStale = async ({
   const rows = staleCases
     .sort((a, b) => b.deAge - a.deAge)
     .sort((a, b) => compareStrings(a.judge, b.judge));
-  generateCsv({ columns, filename: OUTPUT_FILENAME, rows });
-})();
+  generateCsv({ columns, filename, rows });
+};
