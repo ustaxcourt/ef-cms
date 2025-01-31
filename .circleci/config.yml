@@ -266,7 +266,7 @@ jobs:
           name: Restore Postgres User Permissions
           command: |
             cd ./scripts/postgres
-            ./create-postgres-users.sh
+            ./create-rds-users.sh
       - run:
           name: Enable Check Migration Status Cron
           command: |
@@ -881,7 +881,7 @@ jobs:
           name: Restore Postgres User Permissions
           command: |
             cd ./scripts/postgres
-            ./create-postgres-users.sh
+            ./create-rds-users.sh
 
   finish-glue-job:
     docker:
