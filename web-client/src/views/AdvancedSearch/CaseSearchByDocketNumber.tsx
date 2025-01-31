@@ -90,8 +90,7 @@ export const CaseSearchByDocketNumber = connect(
                   link
                   overrideMargin
                   aria-describedby="search-by-docket-number"
-                  className="margin-bottom-0 margin-top-3 tablet:margin-top-0 tablet:margin-left-205"
-                  data-testid="clear-docket-number"
+                  className="margin-bottom-0 mobile:margin-top-2 tablet:margin-top-0 tablet:margin-left-205"
                   onClick={e => {
                     e.preventDefault();
                     clearAdvancedSearchFormSequence({
