@@ -441,7 +441,7 @@ export const CaseSearchByName = connect(
                   overrideMargin
                   aria-describedby="case-search-by-name"
                   className="margin-bottom-0"
-                  data-testid="submit-search-for-case-by-name-button"
+                  data-testid="submit-case-search-by-name-button"
                   id="advanced-search-button"
                   onClick={e => {
                     e.preventDefault();
@@ -452,8 +452,9 @@ export const CaseSearchByName = connect(
                 </Button>
                 <Button
                   link
+                  overrideMargin
                   aria-describedby="case-search-by-name"
-                  className="margin-bottom-0 margin-top-3 tablet:margin-top-0 tablet:margin-left-205"
+                  className="margin-bottom-0 margin-top-2 tablet:margin-top-0 tablet:margin-left-205"
                   onClick={e => {
                     e.preventDefault();
                     clearAdvancedSearchFormSequence({
