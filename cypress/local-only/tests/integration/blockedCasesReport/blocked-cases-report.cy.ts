@@ -166,50 +166,65 @@ describe('Blocked Cases Report', () => {
     const procedureType = PROCEDURE_TYPES_MAP.small;
     const [_trialCity, _trialState] = trialLocation.split(', ');
     const caseStatus = CASE_STATUS_TYPES.generalDocketReadyForTrial;
-    createAndServePaperPetition({ trialLocation, procedureType }).then(
-      ({ docketNumber }) => {
-        loginAsDocketClerk1();
-        goToCase(docketNumber);
-        updateCaseStatus(caseStatus);
-        loginAsPetitionsClerk1();
-        createTrialSession({ trialLocation, sessionType: procedureType }).then(
-          ({ trialSessionId }) => {
-            // Add case deadline
-            goToCase(docketNumber);
-            cy.get('[data-testid="case-detail-menu-button"]').click();
-            cy.get('[data-testid=menu-button-create-deadline]').click();
-            cy.get(
-              '.usa-date-picker__wrapper > [data-testid="deadline-date-picker"]',
-            ).type('03/01/2200');
-            cy.get('[data-testid=case-deadline-description-input]').type(
-              'deadline description',
-            );
-            cy.get('[data-testid="modal-button-confirm"]').click();
-            cy.get('[data-testid=success-alert]').contains('Deadline saved');
+    createAndServePaperPetition({
+      trialLocation,
+      procedureType,
+      includeApwDocument: false,
+    }).then(({ docketNumber }) => {
+      loginAsDocketClerk1();
+      goToCase(docketNumber);
+      updateCaseStatus(caseStatus);
+      loginAsPetitionsClerk1();
+      createTrialSession({ trialLocation, sessionType: procedureType }).then(
+        ({ trialSessionId }) => {
+          // Add case deadline
+          goToCase(docketNumber);
+          cy.get('[data-testid="case-detail-menu-button"]').click();
+          cy.get('[data-testid=menu-button-create-deadline]').click();
+          cy.get(
+            '.usa-date-picker__wrapper > [data-testid="deadline-date-picker"]',
+          ).type('03/01/2200');
+          cy.get('[data-testid=case-deadline-description-input]').type(
+            'deadline description',
+          );
+          cy.get('[data-testid="modal-button-confirm"]').click();
+          cy.get('[data-testid=success-alert]').contains('Deadline saved');
 
-            // Should not show as eligible
-            cy.get('[data-testid="trial-session-link"]').click();
-            cy.visit(`/trial-session-detail/${trialSessionId}`);
-            cy.get(`label[for="qc-complete-${docketNumber}"]`).should(
-              'not.exist',
-            );
+          // Should not show as eligible
+          cy.get('[data-testid="trial-session-link"]').click();
+          cy.visit(`/trial-session-detail/${trialSessionId}`);
+          cy.get(`label[for="qc-complete-${docketNumber}"]`).should(
+            'not.exist',
+          );
 
-            // Shows in blocked cases report
-            cy.get('[data-testid="dropdown-select-report"]').click();
-            cy.get('[data-testid="blocked-cases-report"]').click();
-            cy.get('[data-testid="trial-location-filter"]').select(
-              trialLocation,
-            );
-            cy.get('[data-testid="procedure-type-filter"]').select(
-              procedureType,
-            );
-            cy.get('[data-testid="case-status-filter"]').select(caseStatus);
-            cy.get(`[data-testid="blocked-case-${docketNumber}-row"]`);
+          // Shows in blocked cases report
+          cy.get('[data-testid="dropdown-select-report"]').click();
+          cy.get('[data-testid="blocked-cases-report"]').click();
+          cy.get('[data-testid="trial-location-filter"]').select(trialLocation);
+          cy.get('[data-testid="procedure-type-filter"]').select(procedureType);
+          cy.get('[data-testid="case-status-filter"]').select(caseStatus);
+          cy.get(`[data-testid="blocked-case-${docketNumber}-row"]`);
 
-            // Remove deadline
-          },
-        );
-      },
-    );
+          // Remove deadline
+          goToCase(docketNumber);
+          cy.get('[data-testid=tab-tracked-items]').click();
+          cy.get('[data-testid=delete-case-deadline-button]').click();
+          cy.get('[data-testid="modal-button-confirm"]').click();
+
+          //Shows as eligible
+          cy.get('[data-testid="trial-session-link"]').click();
+          cy.visit(`/trial-session-detail/${trialSessionId}`);
+          cy.get(`label[for="qc-complete-${docketNumber}"]`);
+
+          //Does not shows in blocked cases report
+          cy.get('[data-testid="dropdown-select-report"]').click();
+          cy.get('[data-testid="blocked-cases-report"]').click();
+          cy.get('[data-testid="trial-location-filter"]').select(trialLocation);
+          cy.get(`[data-testid="blocked-case-${docketNumber}-row"]`).should(
+            'not.exist',
+          );
+        },
+      );
+    });
   });
 });
