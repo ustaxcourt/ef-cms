@@ -1,3 +1,4 @@
+/* eslint-disable custom-rules-plugin/no-new-dates */
 import { cloneDeep, get } from 'lodash';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
