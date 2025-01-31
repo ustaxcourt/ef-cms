@@ -72,7 +72,7 @@ export const CaseSearchByDocketNumber = connect(
             </div>
 
             <div className="grid-row">
-              <div className="tablet:grid-col-6 button-container">
+              <div className="button-container">
                 <Button
                   overrideMargin
                   aria-describedby="search-by-docket-number"
