@@ -263,6 +263,11 @@ jobs:
           command: |
             NODE_ENV=production npm run migration:postgres
       - run:
+          name: Restore Postgres User Permissions
+          command: |
+            cd ./scripts/postgres
+            ./create-postgres-users.sh
+      - run:
           name: Enable Check Migration Status Cron
           command: |
             ./scripts/migration/enable-migration-cron.sh
@@ -869,9 +874,14 @@ jobs:
               exit 1
             fi
       - run:
-          name: Restore Postgres
+          name: Restore Postgres Data
           command: |
             TARGET_ENV=$LOWER_ENV TARGET_ACCOUNT_ID="${LOWER_ENV_ACCOUNT_ID}" ./scripts/postgres/restoreDbFromSource.ts
+      - run:
+          name: Restore Postgres User Permissions
+          command: |
+            cd ./scripts/postgres
+            ./create-postgres-users.sh
 
   finish-glue-job:
     docker:
