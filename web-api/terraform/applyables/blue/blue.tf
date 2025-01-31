@@ -140,7 +140,6 @@ module "zip_batch_west" {
   }
 }
 
-
 module "api-east-blue" {
   source              = "../../modules/api"
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_east.arn

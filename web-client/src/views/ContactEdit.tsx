@@ -122,22 +122,24 @@ export const ContactEdit = connect(
               />
             </FormGroup>
           </div>
-          <Button
-            onClick={() => {
-              submitEditContactSequence();
-            }}
-          >
-            Save
-          </Button>
-          <Button
-            link
-            onClick={() => {
-              formCancelToggleCancelSequence();
-              return false;
-            }}
-          >
-            Cancel
-          </Button>
+          <div className="button-container">
+            <Button
+              onClick={() => {
+                submitEditContactSequence();
+              }}
+            >
+              Save
+            </Button>
+            <Button
+              link
+              onClick={() => {
+                formCancelToggleCancelSequence();
+                return false;
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
         </section>
 
         {showModal === 'FormCancelModalDialog' && (

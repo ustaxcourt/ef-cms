@@ -13,7 +13,8 @@
     'desktop': true,
     'desktop-lg': true,
     'widescreen': true,
-  )
+  ),
+  $theme-button-icon-gap: 0
 );
 @forward 'uswds-global';
 @forward 'usa-date-picker';
