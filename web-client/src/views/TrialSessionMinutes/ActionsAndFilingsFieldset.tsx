@@ -74,7 +74,7 @@ export const ActionsAndFilingsFieldset = ({
   );
 
   const getFieldsByRow = (row: KeyedActionFilingFormFields) => {
-    const editableRow = (
+    return (
       <>
         <div className="grid-col-auto">
           <DateSelector
@@ -129,23 +129,6 @@ export const ActionsAndFilingsFieldset = ({
         </div>
       </>
     );
-
-    const nonEditableRow = (
-      <>
-        <div className="grid-col-auto" style={{ minWidth: '266px' }}>
-          {row.date}
-        </div>
-        <div className="grid-col-2">
-          {ACTION_DOCUMENT_TYPE_OPTIONS[row.documentType]}
-        </div>
-        <div className="grid-col-2">
-          {ACTION_FILED_BY_OPTIONS[row.filedBy]}{' '}
-        </div>
-        <div className="grid-col-2">{ACTION_STATUS_OPTIONS[row.status]}</div>
-      </>
-    );
-
-    return row.isOnDocketRecord ? nonEditableRow : editableRow;
   };
 
   const getMotionDetailsByRow = (row: KeyedActionFilingFormFields) => {

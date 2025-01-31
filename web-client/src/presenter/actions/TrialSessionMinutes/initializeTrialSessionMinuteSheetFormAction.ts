@@ -2,19 +2,23 @@ import {
   ACTION_DOCUMENT_TYPE_OPTIONS,
   KeyedActionFilingFormFieldsByRenderKey,
   KeyedPartyFormFieldsByRenderKey,
+  MOTION_OBJECTION_OPTIONS,
   initialMinuteSheetFormState,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import {
   CONTACT_TYPES,
   FILDED_BY_TYPES,
+  OBJECTIONS_OPTIONS_MAP,
   REPRESENTATIVE_TYPES,
 } from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   FORMATS,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
 import { applicationContext } from '@web-client/applicationContext';
 import { cloneDeep, invert } from 'lodash';
+import { formatCase } from '@shared/business/utilities/getFormattedCaseDetail';
 import { state } from '@web-client/presenter/app.cerebral';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -190,9 +194,7 @@ export const getPendingItemsFromCase = ({
   caseDetail: RawCase;
   user;
 }): KeyedActionFilingFormFieldsByRenderKey => {
-  const formattedCaseDetail = applicationContext
-    .getUtilities()
-    .formatCase(applicationContext, caseDetail, user);
+  const formattedCaseDetail = formatCase(applicationContext, caseDetail, user);
 
   const pendingItems = formattedCaseDetail.formattedDocketEntries.filter(
     docketEntry => applicationContext.getUtilities().isPending(docketEntry),
@@ -201,13 +203,15 @@ export const getPendingItemsFromCase = ({
   const keyedActionFilingFormFieldsByRenderKey = {};
   if (pendingItems?.length > 0) {
     pendingItems.forEach(pendingItem => {
+      const transformedPendingItemDetails =
+        getTransformedPendingItemDetails(pendingItem);
       const renderKey = uuidv4();
       keyedActionFilingFormFieldsByRenderKey[renderKey] = {
-        date: formatDateString(pendingItem.createdAt, FORMATS.MMDDYYYY),
-        documentType: transformDocumentType(pendingItem.documentType),
+        date: formatDateString(pendingItem.createdAt, FORMATS.YYYYMMDD),
+        documentType: transformedPendingItemDetails.documentType,
         filedBy: transformFiledBy(caseDetail, pendingItem),
-        isOnDocketRecord: true,
-        note: '',
+        note: transformedPendingItemDetails.description,
+        objection: transformedPendingItemDetails.objection,
         renderKey,
         status: '',
       };
@@ -219,7 +223,6 @@ export const getPendingItemsFromCase = ({
     date: '',
     documentType: '',
     filedBy: '',
-    isOnDocketRecord: false,
     note: '',
     objection: '',
     oralMotion: false,
@@ -230,13 +233,47 @@ export const getPendingItemsFromCase = ({
   return keyedActionFilingFormFieldsByRenderKey;
 };
 
-// 10419 TODO we need to be more intelligent here.
-// Determine the CATEGORY of the pending document, then that maps to the action document type option.
-// Then, put the actual full document type in the note field.
-const transformDocumentType = (documentType: string) => {
+export const getTransformedPendingItemDetails = (
+  pendingItem,
+): { documentType: string; description: string; objection: string } => {
   const reverseLookupStructure = invert(ACTION_DOCUMENT_TYPE_OPTIONS);
+  const objectionReverseLookup = invert(MOTION_OBJECTION_OPTIONS);
+  const objectionsToObjectionOptionMap = {
+    [OBJECTIONS_OPTIONS_MAP.NO]:
+      objectionReverseLookup[MOTION_OBJECTION_OPTIONS.noObjection],
+    [OBJECTIONS_OPTIONS_MAP.YES]:
+      objectionReverseLookup[MOTION_OBJECTION_OPTIONS.objection],
+    [OBJECTIONS_OPTIONS_MAP.UNKNOWN]:
+      objectionReverseLookup[MOTION_OBJECTION_OPTIONS.unknown],
+  };
 
-  return reverseLookupStructure[documentType] ?? 'other';
+  const directMatch = reverseLookupStructure[pendingItem.documentType];
+  if (directMatch) {
+    return { description: '', documentType: directMatch, objection: '' };
+  }
+
+  let transformedDocumentType;
+  let objection = '';
+  if (DocketEntry.isNotice(pendingItem.eventCode)) {
+    transformedDocumentType = 'notice';
+  } else if (DocketEntry.isOrder(pendingItem.eventCode)) {
+    transformedDocumentType = 'order';
+  } else if (DocketEntry.isMotion(pendingItem.eventCode)) {
+    transformedDocumentType = 'motion';
+    objection = objectionsToObjectionOptionMap[pendingItem.objections]
+      ? objectionsToObjectionOptionMap[pendingItem.objections]
+      : objectionReverseLookup[MOTION_OBJECTION_OPTIONS.unknown];
+  } else {
+    transformedDocumentType = 'other';
+  }
+
+  const description = pendingItem.documentType;
+
+  return {
+    description,
+    documentType: transformedDocumentType,
+    objection,
+  };
 };
 
 export const transformFiledBy = (caseDetail: RawCase, pendingItem): string => {

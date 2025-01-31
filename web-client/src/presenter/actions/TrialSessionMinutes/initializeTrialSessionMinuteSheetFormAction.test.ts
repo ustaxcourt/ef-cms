@@ -6,6 +6,7 @@ import {
   getPendingItemsFromCase,
   getPetitionersFromCase,
   getRespondentsFromCase,
+  getTransformedPendingItemDetails,
   initializeTrialSessionMinuteSheetFormAction,
   transformFiledBy,
 } from './initializeTrialSessionMinuteSheetFormAction';
@@ -163,13 +164,112 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
       const entries = Object.values(result);
       expect(entries).toHaveLength(2); // One pending item + one empty row
       expect(entries[0]).toMatchObject({
-        date: '11/21/2018',
-        isOnDocketRecord: true,
+        date: '2018-11-21',
       });
       expect(entries[1]).toMatchObject({
         date: '',
-        isOnDocketRecord: false,
       });
+    });
+  });
+});
+
+describe('getTransformedPendingItemDetails', () => {
+  it('should return the matching option when documentType directly matches an option value', () => {
+    const result = getTransformedPendingItemDetails({
+      documentType: 'Order to Show Cause',
+      eventCode: 'OSC',
+    });
+    expect(result).toEqual({
+      description: '',
+      documentType: 'orderToShowCause',
+      objection: '',
+    });
+  });
+
+  it('should identify and return "notice" category and description for notice documents by eventCode', () => {
+    const result = getTransformedPendingItemDetails({
+      documentType: '30-Day Notice of Trial',
+      eventCode: 'NOTT',
+    });
+    expect(result).toEqual({
+      description: '30-Day Notice of Trial',
+      documentType: 'notice',
+      objection: '',
+    });
+  });
+
+  it('should identify and return "order" category and description for order documents by eventCode', () => {
+    const result = getTransformedPendingItemDetails({
+      documentType: 'Order that caption of case is amended',
+      eventCode: 'OCA',
+    });
+    expect(result).toEqual({
+      description: 'Order that caption of case is amended',
+      documentType: 'order',
+      objection: '',
+    });
+  });
+
+  it('should identify and return "motion" category and description for motion documents by eventCode', () => {
+    const result = getTransformedPendingItemDetails({
+      documentType: 'Motion for a New Trial',
+      eventCode: 'M218',
+    });
+    expect(result).toEqual({
+      description: 'Motion for a New Trial',
+      documentType: 'motion',
+      objection: 'unknown',
+    });
+  });
+
+  it('should identify and return "motion" category and description for motion documents by eventCode, with unknown objection', () => {
+    const result = getTransformedPendingItemDetails({
+      documentType: 'Motion for a New Trial',
+      eventCode: 'M218',
+      objections: 'unknown',
+    });
+    expect(result).toEqual({
+      description: 'Motion for a New Trial',
+      documentType: 'motion',
+      objection: 'unknown',
+    });
+  });
+
+  it('should identify and return "motion" category and description for motion documents by eventCode, with no objection', () => {
+    const result = getTransformedPendingItemDetails({
+      documentType: 'Motion for a New Trial',
+      eventCode: 'M218',
+      objections: 'noObjection',
+    });
+    expect(result).toEqual({
+      description: 'Motion for a New Trial',
+      documentType: 'motion',
+      objection: 'unknown',
+    });
+  });
+
+  it('should identify and return "motion" category and description for motion documents by eventCode, with objection', () => {
+    const result = getTransformedPendingItemDetails({
+      documentType: 'Motion for a New Trial',
+      eventCode: 'M218',
+      objections: 'objection',
+    });
+    expect(result).toEqual({
+      description: 'Motion for a New Trial',
+      documentType: 'motion',
+      objection: 'unknown',
+    });
+  });
+
+  it('should return "other" category and description when no match is found', () => {
+    const result = getTransformedPendingItemDetails({
+      documentType: 'Something Else Entirely',
+      eventCode: 'XXX',
+    });
+    expect(result).toEqual({
+      description: 'Something Else Entirely',
+      documentType: 'other',
+      objection: '',
     });
   });
 });
