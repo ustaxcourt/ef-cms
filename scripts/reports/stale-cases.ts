@@ -10,7 +10,8 @@ import { generateStaleCasesReport } from './stale-cases.helpers';
 
 const scriptConfig: ScriptConfig = {
   description:
-    'stale-cases - Generates a spreadsheet of open cases that have not had a document filed within the last year',
+    'stale-cases - Generates a spreadsheet of open cases that have not had ' +
+    'a document filed within the last year',
   environment: {
     elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
     environmentName: 'ENV',
@@ -19,9 +20,9 @@ const scriptConfig: ScriptConfig = {
 };
 parseArgsAndEnvVars(scriptConfig);
 
-const todayISO = createISODateString();
+const today = createISODateString().split('T')[0];
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
-const OUTPUT_FILENAME = `${OUTPUT_DIR}/12-month-inactivity_${todayISO.split('T')[0]}.csv`;
+const OUTPUT_FILENAME = `${OUTPUT_DIR}/12-month-inactivity_${today}.csv`;
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
