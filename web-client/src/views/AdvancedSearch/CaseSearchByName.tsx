@@ -436,7 +436,7 @@ export const CaseSearchByName = connect(
             </Mobile>
 
             <div className="grid-row">
-              <div className="tablet:grid-col-6 button-container">
+              <div className="button-container">
                 <Button
                   overrideMargin
                   aria-describedby="case-search-by-name"
