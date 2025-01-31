@@ -454,7 +454,7 @@ export const CaseSearchByName = connect(
                   link
                   overrideMargin
                   aria-describedby="case-search-by-name"
-                  className="margin-bottom-0 margin-top-2 tablet:margin-top-0 tablet:margin-left-205"
+                  className="margin-bottom-0 mobile:margin-top-2 tablet:margin-top-0 tablet:margin-left-205"
                   onClick={e => {
                     e.preventDefault();
                     clearAdvancedSearchFormSequence({
