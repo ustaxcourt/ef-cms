@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable max-lines */
 import { addCaseToHearing } from './persistence/dynamo/trialSessions/addCaseToHearing';
 import { advancedDocumentSearch } from './persistence/elasticsearch/advancedDocumentSearch';
 import { associateUserWithCase } from './persistence/dynamo/cases/associateUserWithCase';
@@ -9,7 +7,6 @@ import { bulkIndexRecords } from './persistence/elasticsearch/bulkIndexRecords';
 import { caseAdvancedSearch } from './persistence/elasticsearch/caseAdvancedSearch';
 import { casePublicSearch as casePublicSearchPersistence } from './persistence/elasticsearch/casePublicSearch';
 import { createCase } from './persistence/dynamo/cases/createCase';
-import { createCaseDeadline } from './persistence/dynamo/caseDeadlines/createCaseDeadline';
 import { createCaseTrialSortMappingRecords } from './persistence/dynamo/cases/createCaseTrialSortMappingRecords';
 import { createChangeOfAddressJob } from './persistence/dynamo/jobs/ChangeOfAddress/createChangeOfAddressJob';
 import { createJobStatus } from './persistence/dynamo/trialSessions/createJobStatus';
@@ -26,7 +23,6 @@ import { createTrialSession } from './persistence/dynamo/trialSessions/createTri
 import { createTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/createTrialSessionWorkingCopy';
 import { createUserRecords } from './persistence/dynamo/users/createUserRecords';
 import { decrementJobCounter } from './persistence/dynamo/trialSessions/decrementJobCounter';
-import { deleteCaseDeadline } from './persistence/dynamo/caseDeadlines/deleteCaseDeadline';
 import { deleteCaseTrialSortMappingRecords } from './persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { deleteDocketEntry } from './persistence/dynamo/documents/deleteDocketEntry';
 import { deleteDocketEntryWorksheetRecord } from '@web-api/persistence/dynamo/pendingMotion/deleteDocketEntryWorksheetRecord';
@@ -44,7 +40,6 @@ import { deleteTrialSession } from './persistence/dynamo/trialSessions/deleteTri
 import { deleteTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/deleteTrialSessionWorkingCopy';
 import { deleteUserConnection } from './persistence/dynamo/notifications/deleteUserConnection';
 import { deleteUserFromCase } from './persistence/dynamo/cases/deleteUserFromCase';
-import { deleteWorkItem } from './persistence/dynamo/workitems/deleteWorkItem';
 import { editPractitionerDocument } from './persistence/dynamo/practitioners/editPractitionerDocument';
 import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { fetchPendingItems } from './persistence/elasticsearch/fetchPendingItems';
@@ -57,12 +52,9 @@ import { getBlockedCases } from './persistence/elasticsearch/getBlockedCases';
 import { getBulkTrialSessionWorkingCopies } from './persistence/dynamo/trialSessions/getBulkTrialSessionWorkingCopies';
 import { getCalendaredCasesForTrialSession } from './persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession';
 import { getCaseByDocketNumber } from './persistence/dynamo/cases/getCaseByDocketNumber';
-import { getCaseDeadlinesByDateRange } from './persistence/elasticsearch/caseDeadlines/getCaseDeadlinesByDateRange';
-import { getCaseDeadlinesByDocketNumber } from './persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getCaseInventoryReport } from './persistence/elasticsearch/getCaseInventoryReport';
 import { getCaseMetadataByDocketNumber } from './persistence/dynamo/cases/getCaseMetadataByDocketNumber';
 import { getCaseMetadataWithCounsel } from './persistence/dynamo/cases/getCaseMetadataWithCounsel';
-import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheetsByDocketNumber';
 import { getCasesByDocketNumbers } from './persistence/dynamo/cases/getCasesByDocketNumbers';
 import { getCasesByEmailTotal } from '@web-api/persistence/elasticsearch/getCasesByEmailTotal';
 import { getCasesByLeadDocketNumber } from './persistence/dynamo/cases/getCasesByLeadDocketNumber';
@@ -86,10 +78,6 @@ import { getDocketEntryWorksheetsByDocketEntryIds } from '@web-api/persistence/d
 import { getDocketNumbersByStatusAndByJudge } from './persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
 import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
-import { getDocumentQCInboxForSection } from './persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
-import { getDocumentQCInboxForUser } from './persistence/dynamo/workitems/getDocumentQCInboxForUser';
-import { getDocumentQCServedForSection } from './persistence/dynamo/workitems/getDocumentQCServedForSection';
-import { getDocumentQCServedForUser } from './persistence/dynamo/workitems/getDocumentQCServedForUser';
 import { getDownloadPolicyUrl } from './persistence/s3/getDownloadPolicyUrl';
 import { getEligibleCasesForTrialCity } from './persistence/dynamo/trialSessions/getEligibleCasesForTrialCity';
 import { getEligibleCasesForTrialSession } from './persistence/dynamo/trialSessions/getEligibleCasesForTrialSession';
@@ -123,15 +111,10 @@ import { getUsersById } from './persistence/dynamo/users/getUsersById';
 import { getUsersBySearchKey } from './persistence/dynamo/users/getUsersBySearchKey';
 import { getUsersInSection } from './persistence/dynamo/users/getUsersInSection';
 import { getWebSocketConnectionsByUserId } from './persistence/dynamo/notifications/getWebSocketConnectionsByUserId';
-import { getWorkItemById } from './persistence/dynamo/workitems/getWorkItemById';
-import { getWorkItemsByDocketNumber } from './persistence/dynamo/workitems/getWorkItemsByDocketNumber';
-import { getWorkItemsByWorkItemId } from './persistence/dynamo/workitems/getWorkItemsByWorkItemId';
 import { incrementCounter } from './persistence/dynamo/helpers/incrementCounter';
 import { isEmailAvailable } from './persistence/cognito/isEmailAvailable';
 import { isFileExists } from './persistence/s3/isFileExists';
 import { persistUser } from './persistence/dynamo/users/persistUser';
-import { putWorkItemInOutbox } from './persistence/dynamo/workitems/putWorkItemInOutbox';
-import { putWorkItemInUsersOutbox } from './persistence/dynamo/workitems/putWorkItemInUsersOutbox';
 import { refreshConfirmationCodeExpiration } from '@web-api/persistence/dynamo/users/refreshConfirmationCodeExpiration';
 import { removeCaseFromHearing } from './persistence/dynamo/trialSessions/removeCaseFromHearing';
 import {
@@ -141,17 +124,12 @@ import {
 import { saveDispatchNotification } from './persistence/dynamo/notifications/saveDispatchNotification';
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
 import { saveUserConnection } from './persistence/dynamo/notifications/saveUserConnection';
-import { saveWorkItem } from './persistence/dynamo/workitems/saveWorkItem';
-import { saveWorkItemForDocketClerkFilingExternalDocument } from './persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument';
 import { setChangeOfAddressCaseAsDone } from './persistence/dynamo/jobs/ChangeOfAddress/setChangeOfAddressCaseAsDone';
-import { setPriorityOnAllWorkItems } from './persistence/dynamo/workitems/setPriorityOnAllWorkItems';
 import { setStoredApplicationHealth } from '@web-api/persistence/dynamo/deployTable/setStoredApplicationHealth';
 import { setTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
 import { setTrialSessionProcessingStatus } from './persistence/dynamo/trialSessions/setTrialSessionProcessingStatus';
 import { updateCase } from './persistence/dynamo/cases/updateCase';
-import { updateCaseCorrespondence } from './persistence/dynamo/correspondence/updateCaseCorrespondence';
 import { updateCaseHearing } from './persistence/dynamo/trialSessions/updateCaseHearing';
-import { updateCaseWorksheet } from '@web-api/persistence/dynamo/caseWorksheet/updateCaseWorksheet';
 import { updateDocketEntry } from './persistence/dynamo/documents/updateDocketEntry';
 import { updateDocketEntryPendingServiceStatus } from './persistence/dynamo/documents/updateDocketEntryPendingServiceStatus';
 import { updateDocketEntryProcessingStatus } from './persistence/dynamo/documents/updateDocketEntryProcessingStatus';
@@ -180,6 +158,7 @@ const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
    */
   function decorate(method) {
     return function () {
+      // eslint-disable-next-line prefer-rest-params
       const argumentsAsArray = Array.prototype.slice.call(arguments);
 
       argumentsAsArray.forEach(argument => {
@@ -196,6 +175,7 @@ const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
           }
         });
       });
+      // eslint-disable-next-line prefer-spread
       return method.apply(null, argumentsAsArray);
     };
   }
@@ -214,7 +194,6 @@ const gatewayMethods = {
     bulkDeleteRecords,
     bulkIndexRecords,
     createCase,
-    createCaseDeadline,
     createCaseTrialSortMappingRecords,
     createJobStatus,
     createNewPetitionerUser,
@@ -230,22 +209,15 @@ const gatewayMethods = {
     incrementCounter,
     incrementKeyCount,
     persistUser,
-    putWorkItemInOutbox,
-    putWorkItemInUsersOutbox,
     removeCaseFromHearing,
     saveDispatchNotification,
     saveDocumentFromLambda,
     saveUserConnection,
-    saveWorkItem,
-    saveWorkItemForDocketClerkFilingExternalDocument,
     setExpiresAt,
-    setPriorityOnAllWorkItems,
     setTrialSessionJobStatusForCase,
     setTrialSessionProcessingStatus,
     updateCase,
-    updateCaseCorrespondence,
     updateCaseHearing,
-    updateCaseWorksheet,
     updateDocketEntry,
     updateDocketEntryPendingServiceStatus,
     updateDocketEntryProcessingStatus,
@@ -266,7 +238,6 @@ const gatewayMethods = {
   createChangeOfAddressJob,
   createLock,
   decrementJobCounter,
-  deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
   deleteDocketEntryWorksheetRecord,
@@ -278,7 +249,6 @@ const gatewayMethods = {
   deleteTrialSessionWorkingCopy,
   deleteUserConnection,
   deleteUserFromCase,
-  deleteWorkItem,
   fetchEventCodesCountForJudges,
   generateAccountConfirmationCode,
   getAccountConfirmationCode,
@@ -289,12 +259,9 @@ const gatewayMethods = {
   getBulkTrialSessionWorkingCopyNotes: getBulkTrialSessionWorkingCopies,
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,
-  getCaseDeadlinesByDateRange,
-  getCaseDeadlinesByDocketNumber,
   getCaseInventoryReport,
   getCaseMetadataByDocketNumber,
   getCaseMetadataWithCounsel,
-  getCaseWorksheetsByDocketNumber,
   getCasesByDocketNumbers,
   getCasesByEmailTotal,
   getCasesByLeadDocketNumber,
@@ -316,10 +283,6 @@ const gatewayMethods = {
   getDocketNumbersByUser,
   getDocument,
   getDocumentIdFromSQSMessage,
-  getDocumentQCInboxForSection,
-  getDocumentQCInboxForUser,
-  getDocumentQCServedForSection,
-  getDocumentQCServedForUser,
   getDownloadPolicyUrl,
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
@@ -355,9 +318,6 @@ const gatewayMethods = {
   getUsersBySearchKey,
   getUsersInSection,
   getWebSocketConnectionsByUserId,
-  getWorkItemById,
-  getWorkItemsByDocketNumber,
-  getWorkItemsByWorkItemId,
   isEmailAvailable,
   isFileExists,
   refreshConfirmationCodeExpiration,

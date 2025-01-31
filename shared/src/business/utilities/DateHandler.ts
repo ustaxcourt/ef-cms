@@ -96,7 +96,7 @@ export const prepareDateFromString = (
   dateString?: string,
   inputFormat?: TimeFormats,
 ): DateTime => {
-  let dateToFormat: string = dateString || createISODateString();
+  const dateToFormat: string = dateString || createISODateString();
   let result: DateTime;
   if (inputFormat === FORMATS.ISO) {
     result = DateTime.fromISO(dateToFormat, { zone: 'utc' });
@@ -256,7 +256,7 @@ export const formatDateString = (
   formatArg: TimeFormatNames | TimeFormats = FORMATS.ISO,
 ): string => {
   if (!dateString) return '';
-  let formatString = FORMATS[formatArg] || formatArg;
+  const formatString = FORMATS[formatArg] || formatArg;
 
   if (!Object.values(FORMATS).includes(formatString)) {
     throw new Error(`Must use a formatting constant: "${formatString}"`); // TODO: test coverage

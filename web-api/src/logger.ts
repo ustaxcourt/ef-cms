@@ -1,4 +1,4 @@
-/* eslint-disable @miovision/disallow-date/no-new-date */
+/* eslint-disable custom-rules-plugin/no-new-dates */
 import { cloneDeep, get } from 'lodash';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
@@ -40,16 +40,19 @@ export const expressLogger = (req, res, next) => {
   const { end } = res;
 
   res.end = function () {
+    // eslint-disable-next-line prefer-rest-params
     end.apply(this, arguments);
     const responseTimeMs = new Date() - req.locals.startTime;
 
-    logger.info(`Request ended: ${req.method} ${req.url}`, {
+    logger.addContext({
       response: {
         responseSize: parseInt(res.get('content-length') ?? '0'),
         responseTimeMs,
         statusCode: res.statusCode,
       },
     });
+
+    logger.info(`Request ended: ${req.method} ${req.url}`);
     logger.clearContext();
   };
 

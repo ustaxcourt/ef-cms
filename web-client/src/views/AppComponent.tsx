@@ -92,7 +92,7 @@ import { StyleGuide } from './StyleGuide/StyleGuide';
 import { TrialSessionDetails } from './TrialSessionDetails/TrialSessionDetails';
 import { TrialSessionMinutesPage } from '@web-client/views/TrialSessionMinutes/TrialSessionMinutesPage';
 import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
-import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
+import { TrialSessionPlanningReportView } from '@web-client/views/TrialSessions/TrialSessionPlanningReportView';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
 import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCourtIssuedDocument';
@@ -192,7 +192,7 @@ const pages = {
   StyleGuide,
   TrialSessionDetails,
   TrialSessionMinutesPage,
-  TrialSessionPlanningReport,
+  TrialSessionPlanningReportView,
   TrialSessionWorkingCopy,
   TrialSessions,
   UploadCourtIssuedDocument,
@@ -226,7 +226,7 @@ export const AppComponent = connect(
     zipInProgress,
   }) {
     const focusMain = (e?: any) => {
-      e && e.preventDefault();
+      e?.preventDefault();
       const header = window.document.querySelector(
         '#main-content h1',
       ) as HTMLElement;
@@ -243,7 +243,7 @@ export const AppComponent = connect(
       }
     }, [currentPage]);
 
-    let showHeaderAndFooter = currentPage !== 'AppMaintenance';
+    const showHeaderAndFooter = currentPage !== 'AppMaintenance';
 
     const CurrentPage = pages[currentPage];
     const IsPageWithBlueBackground = pagesWithBlueBackground[currentPage];

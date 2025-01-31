@@ -117,7 +117,10 @@ export const PublicDocketRecord = connect(
                 {publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord.map(
                   entry => {
                     return (
-                      <tr key={entry.index}>
+                      <tr
+                        data-testid={`public-docket-record-no-${entry.index}`}
+                        key={entry.index}
+                      >
                         <td className="center-column hide-on-mobile">
                           {entry.index}
                         </td>

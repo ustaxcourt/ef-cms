@@ -9,21 +9,18 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { getCaseDeadlinesByDateRange } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDateRange';
 import { pick } from 'lodash';
 
 export const getCaseDeadlinesInteractor = async (
   applicationContext: IApplicationContext,
   {
     endDate,
-    from,
     judge,
-    pageSize,
     startDate,
   }: {
     endDate: string;
-    from: number;
     judge: string;
-    pageSize: number;
     startDate;
   },
   authorizedUser: UnknownAuthUser,
@@ -32,23 +29,15 @@ export const getCaseDeadlinesInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { foundDeadlines, totalCount } = await applicationContext
-    .getPersistenceGateway()
-    .getCaseDeadlinesByDateRange({
-      applicationContext,
-      endDate,
-      from,
-      judge,
-      pageSize,
-      startDate,
-    });
+  const { foundDeadlines } = await getCaseDeadlinesByDateRange({
+    endDate,
+    judge,
+    pageSize: undefined,
+    startDate,
+  });
 
-  const validatedCaseDeadlines = CaseDeadline.validateRawCollection(
-    foundDeadlines,
-    {
-      applicationContext,
-    },
-  );
+  const validatedCaseDeadlines =
+    CaseDeadline.validateRawCollection(foundDeadlines);
 
   const caseMap = await getCasesByDocketNumbers({
     applicationContext,
@@ -69,7 +58,7 @@ export const getCaseDeadlinesInteractor = async (
       ]),
     }));
 
-  return { deadlines: afterCaseMapping, totalCount };
+  return { deadlines: afterCaseMapping };
 };
 
 const getCasesByDocketNumbers = async ({

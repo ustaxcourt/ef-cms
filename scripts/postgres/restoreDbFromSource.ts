@@ -1,25 +1,33 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
+
+// This script can copy the contents of one database and overwrite the contents
+// of another in a different account. It must be run from the AWS account that
+// is creating the backup, and it will assume a role in the target account.
+
 import { AssumeRoleCommand, STSClient } from '@aws-sdk/client-sts';
 import { DescribeDBClustersCommand, RDSClient } from '@aws-sdk/client-rds';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { Signer } from '@aws-sdk/rds-signer';
-import { requireEnvVars } from 'shared/admin-tools/util';
 import { spawn } from 'child_process';
 
-// eslint-disable-next-line spellcheck/spell-checker
-/*
-This script can copy the contents of one database and overwrite the contents of another in a different account.
-This script REQUIRES that it be run from the AWS account that is creating the backup, and it will assume a role in the target account.
-So if you wanted to restore Test environment from prod, use the environment switcher to point to prod, then fill out all TARGET environment variables with test info.
-
-ENV=test TARGET_ENV=exp3 TARGET_ACCOUNT_ID=xxxxxxxxxx npx ts-node --transpile-only scripts/postgres/restoreDbFromSource.ts
-*/
+const scriptConfig: ScriptConfig = {
+  description:
+    'restoreDbFromSource - Replaces the target database with a dump of the source database',
+  environment: {
+    sourceEnv: 'ENV',
+    targetAccountId: 'TARGET_ACCOUNT_ID',
+    targetEnv: 'TARGET_ENV',
+  },
+  requireActiveAwsSession: true,
+};
 
 async function main() {
-  const sourceEnv = process.env.ENV!;
-  const targetEnv = process.env.TARGET_ENV!;
-  const targetAccountId = process.env.TARGET_ACCOUNT_ID!;
-
-  requireEnvVars(['ENV', 'TARGET_ENV', 'TARGET_ACCOUNT_ID']);
-
+  const { sourceEnv, targetAccountId, targetEnv } = parseArgsAndEnvVars(
+    scriptConfig,
+  ) as { sourceEnv: string; targetAccountId: string; targetEnv: string };
   const targetRoleArn = `arn:aws:iam::${targetAccountId}:role/restore_role_${targetEnv}`;
 
   const { targetAccessKeyId, targetSecretAccessKey, targetSessionToken } =
@@ -215,8 +223,18 @@ async function restoreFromBackup({
   });
   const targetPassword = await targetSigner.getAuthToken();
 
+  // pg_restore --clean only drops tables that exist in the source dump, so we drop all target tables before calling pg_restore.
+  // We could drop the whole target db or the schema, but then we would have to deal with stricter permissions.
+  await dropAllTargetTables({
+    dbName,
+    host,
+    port,
+    targetPassword,
+    username,
+  });
+
   await new Promise(resolve => {
-    const result = spawn(
+    const restoreDbResult = spawn(
       'pg_restore',
       [
         `--host=${host}`,
@@ -225,7 +243,6 @@ async function restoreFromBackup({
         `--port=${port}`,
         '--format=c',
         '--verbose',
-        '--clean',
         '--no-privileges',
         '--no-owner',
         `${backUpFileName}`,
@@ -240,15 +257,15 @@ async function restoreFromBackup({
       },
     );
 
-    result.stdout.on('data', data => {
+    restoreDbResult.stdout.on('data', data => {
       console.log(data.toString('utf-8'));
     });
 
-    result.stderr.on('data', data => {
+    restoreDbResult.stderr.on('data', data => {
       console.error(data.toString('utf-8'));
     });
 
-    result.on('close', code => {
+    restoreDbResult.on('close', code => {
       if (code) {
         console.log(
           `DB ${dbName} may have been restored with errors. Check output for errors. Exit code: ${code}`,
@@ -286,4 +303,69 @@ async function getTargetAccountCredentials({
     targetSecretAccessKey,
     targetSessionToken,
   };
+}
+
+async function dropAllTargetTables({
+  dbName,
+  host,
+  port,
+  targetPassword,
+  username,
+}: {
+  host: string;
+  username: string;
+  port: number;
+  dbName: string;
+  targetPassword: string;
+}): Promise<void> {
+  await new Promise(resolve => {
+    // For each table in the target db public schema, we will create a SQL DROP command and then execute it.
+    const dropTableQuery = spawn(
+      'psql',
+      [
+        `--host=${host}`,
+        `--username=${username}`,
+        `--dbname=${dbName}`,
+        `--port=${port}`,
+        '--no-password',
+        `--command=DO $$ DECLARE
+          stmt text;
+        BEGIN
+          FOR stmt IN
+            SELECT 'DROP TABLE IF EXISTS "' || tablename || '" CASCADE;'
+            FROM pg_tables
+            WHERE schemaname = 'public'
+          LOOP
+            EXECUTE stmt;
+          END LOOP;
+        END
+        $$;`,
+      ],
+      {
+        env: {
+          ...process.env,
+          PGPASSWORD: targetPassword,
+        },
+      },
+    );
+
+    dropTableQuery.stdout.on('data', data => {
+      console.log(data.toString('utf-8'));
+    });
+
+    dropTableQuery.stderr.on('data', data => {
+      console.error(data.toString('utf-8'));
+    });
+
+    dropTableQuery.on('close', code => {
+      if (code) {
+        console.log(
+          `Attempted to drop all tables from DB ${dbName}. Check output for errors. Exit code: ${code}`,
+        );
+      } else {
+        console.log(`Successfully dropped all tables from DB ${dbName}.`);
+      }
+      resolve(undefined);
+    });
+  });
 }

@@ -26,11 +26,13 @@ export const loadPDFForSigningInteractor = async (
 
   try {
     const pdfjsLib = await applicationContext.getPdfJs();
-    let pdfData = await applicationContext.getPersistenceGateway().getDocument({
-      applicationContext,
-      docketNumber,
-      key: docketEntryId,
-    });
+    const pdfData = await applicationContext
+      .getPersistenceGateway()
+      .getDocument({
+        applicationContext,
+        docketNumber,
+        key: docketEntryId,
+      });
 
     let formattedArrayBuffer;
     const arrayBuffer = await new Response(pdfData).arrayBuffer();

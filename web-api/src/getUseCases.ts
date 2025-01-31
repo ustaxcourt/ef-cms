@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable max-lines */
 import { addCaseToTrialSessionInteractor } from './business/useCases/trialSessions/addCaseToTrialSessionInteractor';
 import { addConsolidatedCaseInteractor } from './business/useCases/caseConsolidation/addConsolidatedCaseInteractor';
 import { addCoversheetInteractor } from './business/useCases/addCoversheetInteractor';
@@ -58,6 +56,7 @@ import { generateDocketRecordPdfInteractor } from './business/useCases/generateD
 import { generateDraftStampOrderInteractor } from '../../shared/src/business/useCases/generateDraftStampOrderInteractor';
 import { generateEntryOfAppearancePdfInteractor } from './business/useCases/caseAssociationRequest/generateEntryOfAppearancePdfInteractor';
 import { generateNoticeOfChangeOfTrialJudgeInteractor } from './business/useCases/trialSessions/generateNoticeOfChangeOfTrialJudgeInteractor';
+import { generateNoticeOfChangeOfTrialLocationInteractor } from '@web-api/business/useCases/trialSessions/generateNoticeOfChangeOfTrialLocationInteractor';
 import { generateNoticeOfChangeToRemoteProceedingInteractor } from './business/useCases/trialSessions/generateNoticeOfChangeToRemoteProceedingInteractor';
 import { generateNoticeOfTrialIssuedInteractor } from './business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from './business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
@@ -125,6 +124,7 @@ import { getReconciliationReportInteractor } from '../../shared/src/business/use
 import { getTodaysOpinionsInteractor } from './business/useCases/public/getTodaysOpinionsInteractor';
 import { getTodaysOrdersInteractor } from './business/useCases/public/getTodaysOrdersInteractor';
 import { getTrialSessionDetailsInteractor } from './business/useCases/trialSessions/getTrialSessionDetailsInteractor';
+import { getTrialSessionPlanningReportDataInteractor } from '@web-api/business/useCases/trialSessions/getTrialSessionPlanningReportDataInteractor';
 import { getTrialSessionWorkingCopyInteractor } from './business/useCases/trialSessions/getTrialSessionWorkingCopyInteractor';
 import { getTrialSessionsForJudgeActivityReportInteractor } from './business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
 import { getTrialSessionsForJudgeInteractor } from './business/useCases/trialSessions/getTrialSessionsForJudgeInteractor';
@@ -273,6 +273,7 @@ const useCases = {
   generateDraftStampOrderInteractor,
   generateEntryOfAppearancePdfInteractor,
   generateNoticeOfChangeOfTrialJudgeInteractor,
+  generateNoticeOfChangeOfTrialLocationInteractor,
   generateNoticeOfChangeToRemoteProceedingInteractor,
   generateNoticeOfTrialIssuedInteractor,
   generateNoticesForCaseTrialSessionCalendarInteractor,
@@ -340,6 +341,7 @@ const useCases = {
   getTodaysOpinionsInteractor,
   getTodaysOrdersInteractor,
   getTrialSessionDetailsInteractor,
+  getTrialSessionPlanningReportDataInteractor,
   getTrialSessionWorkingCopyInteractor,
   getTrialSessionsForJudgeActivityReportInteractor,
   getTrialSessionsForJudgeInteractor,

@@ -39,17 +39,4 @@ describe('shouldRefreshCaseAction', () => {
     });
     expect(pathYesStub).toHaveBeenCalled();
   });
-
-  it('returns the yes path if caseDetail is set', () => {
-    runAction(shouldRefreshCaseAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        docketNumber: '101-19',
-      },
-      state: {},
-    });
-    expect(pathYesStub).toHaveBeenCalled();
-  });
 });

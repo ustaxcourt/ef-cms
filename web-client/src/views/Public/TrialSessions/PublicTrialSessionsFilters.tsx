@@ -185,7 +185,9 @@ function FilterSelect({ label, name, onChange, options, selectedValues }) {
             options={options}
             value={'- Select one or more -'}
             onChange={value => {
-              value && onChange(`${name}.${value}`, value);
+              if (value) {
+                onChange(`${name}.${value}`, value);
+              }
             }}
           />
         </Phone>

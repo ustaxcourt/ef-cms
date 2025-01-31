@@ -61,7 +61,7 @@ export const generateCalendar = ({
     return aNotVisited === bNotVisited ? 0 : aNotVisited ? -1 : 1;
   });
 
-  let userMessages: string[] = [];
+  const userMessages: string[] = [];
   // special sessions handled ahead of all reg, small
   specialSessions
     .sort((a, b) => {
@@ -205,7 +205,6 @@ const decrementRemainingCaseCounters = (
   calendaringConfig: CalendaringConfig,
 ) => {
   const { sessionType, trialLocation } = session;
-  // eslint-disable-next-line spellcheck/spell-checker
   // Decrement by the max count for that session type. If that's less than 0, then we scheduled
   // a session that was more than the min and less than the max, so just set it to 0
   if (sessionType === SESSION_TYPES.regular) {

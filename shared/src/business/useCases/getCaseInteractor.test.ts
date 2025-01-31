@@ -53,6 +53,12 @@ describe('getCaseInteractor', () => {
     ).toEqual({
       applicationContext,
       docketNumber: '123-19',
+      user: {
+        email: 'mockPetitionsClerk@example.com',
+        name: 'Patty Petitions Clerk',
+        role: 'petitionsclerk',
+        userId: 'd5234a80-64aa-4e3e-b0fd-59e6a835585e',
+      },
     });
   });
 

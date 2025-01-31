@@ -11,6 +11,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { addCoverToPdf } from '../../useCases/addCoverToPdf';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 /**
  * This function isolates task of generating the Docket Entry
@@ -135,7 +136,6 @@ const createDocketEntryForChange = async ({
 };
 
 const createWorkItemForChange = async ({
-  applicationContext,
   caseEntity,
   changeOfAddressDocketEntry,
   user,
@@ -165,9 +165,8 @@ const createWorkItemForChange = async ({
 
   changeOfAddressDocketEntry.setWorkItem(workItem);
 
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
-    workItem: workItem.validate().toRawObject(),
+  await upsertWorkItems({
+    workItems: [workItem.validate().toRawObject()],
   });
 };
 
@@ -219,9 +218,7 @@ export const generateAndServeDocketEntry = async ({
     }
   }
 
-  let changeOfAddressDocketEntry;
-  let url;
-  ({ changeOfAddressDocketEntry, url } = await createDocketEntryForChange({
+  const { changeOfAddressDocketEntry, url } = await createDocketEntryForChange({
     applicationContext,
     authorizedUser,
     barNumber,
@@ -233,11 +230,10 @@ export const generateAndServeDocketEntry = async ({
     oldData,
     servedParties,
     user,
-  }));
+  });
 
   if (shouldCreateWorkItem) {
     await createWorkItemForChange({
-      applicationContext,
       caseEntity,
       changeOfAddressDocketEntry,
       user,

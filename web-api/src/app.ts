@@ -7,6 +7,7 @@ import { addPaperFilingLambda } from './lambdas/documents/addPaperFilingLambda';
 import { addPetitionerToCaseLambda } from './lambdas/cases/addPetitionerToCaseLambda';
 import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
 import { appendAmendedPetitionFormLambda } from './lambdas/courtIssuedOrder/appendAmendedPetitionFormLambda';
+import { createApplicationContext } from '@web-api/applicationContext';
 import { archiveCorrespondenceDocumentLambda } from './lambdas/correspondence/archiveCorrespondenceDocumentLambda';
 import { archiveDraftDocumentLambda } from './lambdas/documents/archiveDraftDocumentLambda';
 import { assignWorkItemsLambda } from './lambdas/workitems/assignWorkItemsLambda';
@@ -25,7 +26,6 @@ import { completeDocketEntryQCLambda } from './lambdas/documents/completeDocketE
 import { completeMessageLambda } from './lambdas/messages/completeMessageLambda';
 import { completeWorkItemLambda } from './lambdas/workitems/completeWorkItemLambda';
 import { confirmSignUpLambda } from './lambdas/auth/confirmSignUpLambda';
-import { createApplicationContext } from './applicationContext';
 import { createCaseDeadlineLambda } from './lambdas/caseDeadline/createCaseDeadlineLambda';
 import { createCaseFromPaperLambda } from './lambdas/cases/createCaseFromPaperLambda';
 import { createCaseLambda } from './lambdas/cases/createCaseLambda';
@@ -118,6 +118,7 @@ import { getPractitionerDocumentsLambda } from './lambdas/practitioners/getPract
 import { getPractitionersByNameLambda } from './lambdas/practitioners/getPractitionersByNameLambda';
 import { getPrivatePractitionersBySearchKeyLambda } from './lambdas/users/getPrivatePractitionersBySearchKeyLambda';
 import { getTrialSessionDetailsLambda } from './lambdas/trialSessions/getTrialSessionDetailsLambda';
+import { getTrialSessionPlanningReportLambda } from '@web-api/lambdas/trialSessions/getTrialSessionPlanningReportLambda';
 import { getTrialSessionWorkingCopyLambda } from './lambdas/trialSessions/getTrialSessionWorkingCopyLambda';
 import { getTrialSessionsForJudgeActivityReportLambda } from './lambdas/reports/getTrialSessionsForJudgeActivityReportLambda';
 import { getTrialSessionsForJudgeLambda } from './lambdas/trialSessions/getTrialSessionsForJudgeLambda';
@@ -209,6 +210,7 @@ import { verifyPendingCaseForUserLambda } from './lambdas/cases/verifyPendingCas
 import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingEmailLambda';
 import cors from 'cors';
 import express from 'express';
+import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessions/getTrialSessionOpenCasesCountLambda';
 
 const applicationContext = createApplicationContext({});
 
@@ -248,7 +250,7 @@ app.use('/auth', cors(authCorsOptions));
 app.use(cors(defaultCorsOptions));
 app.use(express.json({ limit: '1200kb' }));
 app.use(express.urlencoded({ extended: true }));
-app.use((req, res, next) => {
+app.use((req, _res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     // we added this to suppress error `Missing x-apigateway-event or x-apigateway-context header(s)` locally
     // aws-serverless-express/middleware plugin is looking for these headers, which are needed on the lambdas
@@ -257,7 +259,7 @@ app.use((req, res, next) => {
   }
   return next();
 });
-app.use((req, res, next) => {
+app.use((_req, _res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     const currentInvoke = getCurrentInvoke();
     set(currentInvoke, 'event.requestContext.identity.sourceIp', 'localhost');
@@ -858,6 +860,10 @@ app.delete(
     '/reports/trial-calendar-pdf',
     lambdaWrapper(generateTrialCalendarPdfLambda),
   );
+  app.get(
+    '/reports/planning-report',
+    lambdaWrapper(getTrialSessionPlanningReportLambda),
+  );
   app.post(
     '/reports/planning-report',
     lambdaWrapper(runTrialSessionPlanningReportLambda),
@@ -959,6 +965,10 @@ app.delete(
   app.get(
     '/trial-sessions/:trialSessionId',
     lambdaWrapper(getTrialSessionDetailsLambda),
+  );
+  app.get(
+    '/trial-sessions-open-cases-count/:trialSessionId',
+    lambdaWrapper(getTrialSessionOpenCasesCountLambda),
   );
   app.delete(
     '/trial-sessions/:trialSessionId',

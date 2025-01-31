@@ -71,12 +71,17 @@ export const SearchResults = connect(
                       data-testid={`advanced-case-search-result-${result.docketNumber}`}
                       key={result.docketNumber}
                     >
-                      <td className="center-column">{idx + 1}</td>
+                      <td
+                        className="center-column"
+                        data-testid={`advanced-case-search-result-order-${idx}`}
+                      >
+                        {idx + 1}
+                      </td>
                       <NonMobile>
                         <td>
                           {result.petitionerNames.map((name, index) => (
                             // No need to have a better key here since the data does not need to re-render
-                            // eslint-disable-next-line react/no-array-index-key
+
                             <div key={index}>{name}</div>
                           ))}
                         </td>
@@ -91,7 +96,7 @@ export const SearchResults = connect(
                           {result.petitionerStateNames.map(
                             (stateName, index) => (
                               // No need to have a better key here since the data does not need to re-render
-                              // eslint-disable-next-line react/no-array-index-key
+
                               <div key={index}>{stateName}</div>
                             ),
                           )}

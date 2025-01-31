@@ -174,6 +174,7 @@ export const CaseDetailHeader = connect<
                       formattedCase={formattedCaseDetail}
                       rel={openCaseInNewTab ? 'noreferrer noopener' : ''}
                       target={openCaseInNewTab ? '_blank' : ''}
+                      className="mobile-text-wrap"
                     >
                       Docket Number:{' '}
                       {formattedCaseDetail.docketNumberWithSuffix}
