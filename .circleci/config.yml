@@ -266,7 +266,7 @@ jobs:
           name: Restore Postgres User Permissions
           command: |
             cd ./scripts/postgres
-            ./create-rds-users.sh
+            DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
       - run:
           name: Enable Check Migration Status Cron
           command: |
@@ -876,12 +876,12 @@ jobs:
       - run:
           name: Restore Postgres Data
           command: |
-            TARGET_ENV=$LOWER_ENV TARGET_ACCOUNT_ID="${LOWER_ENV_ACCOUNT_ID}" ./scripts/postgres/restoreDbFromSource.ts
+            TARGET_ENV="$LOWER_ENV" TARGET_ACCOUNT_ID="$LOWER_ENV_ACCOUNT_ID" ./scripts/postgres/restoreDbFromSource.ts
       - run:
           name: Restore Postgres User Permissions
           command: |
             cd ./scripts/postgres
-            ./create-rds-users.sh
+            DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
 
   finish-glue-job:
     docker:
