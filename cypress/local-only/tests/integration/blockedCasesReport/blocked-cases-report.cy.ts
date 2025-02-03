@@ -16,68 +16,12 @@ import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/upd
 import { petitionsClerkAddsRespondentToCase } from 'cypress/helpers/caseDetail/caseInformation/petitionsclerk-adds-respondent-to-case';
 import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
 import { attachFile } from 'cypress/helpers/file/upload-file';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 describe('Blocked Cases Report', () => {
   beforeEach(() => {
     cy.task('deleteAllFilesInFolder', 'cypress/downloads');
   });
-
-  // it('should show a consolidated group in the blocked cases report and the downloaded csv report', () => {
-  //   const trialLocation = 'Portland, Maine';
-  //   const [trialCity, trialState] = trialLocation.split(', ');
-  //   const procedureType = PROCEDURE_TYPES_MAP.small;
-  //   const caseStatus = CASE_STATUS_TYPES.generalDocketReadyForTrial;
-  //   createAndServeConsolidatedGroup({
-  //     procedureType,
-  //     trialLocation,
-  //     caseStatus,
-  //   }).then(({ leadDocketNumber, memberDocketNumber }) => {
-  //     //block case
-  //     loginAsColvin();
-  //     goToCase(memberDocketNumber);
-  //     cy.get('[data-testid="tab-case-information"]').click();
-  //     cy.get('[data-testid="add-manual-block-button"]').click();
-  //     cy.get('[data-testid="blocked-from-trial-reason-textarea"]').type(
-  //       'This case cannot go to trial.',
-  //     );
-  //     cy.get('[data-testid="modal-button-confirm"]').click();
-  //     cy.get('[data-testid="success-alert"]').contains(
-  //       'Case blocked from being set for trial.',
-  //     );
-
-  //     //View report
-  //     cy.get('[data-testid="dropdown-select-report"]').click();
-  //     cy.get('[data-testid="blocked-cases-report"]').click();
-
-  //     function checkIfOpensearchHasIndexedBlockedCase() {
-  //       cy.reload();
-  //       cy.get('[data-testid="trial-location-filter"]').select(trialLocation);
-  //       cy.get('[data-testid="procedure-type-filter"]').select(procedureType);
-  //       cy.get('[data-testid="case-status-filter"]').select(caseStatus);
-  //       cy.get('[data-testid="blocked-reason-filter"]').select('Manual Block');
-  //       const selector = `[data-testid="blocked-case-${leadDocketNumber}-row"]`;
-  //       return cy.get(selector).then(elements => elements.length > 0);
-  //     }
-
-  //     retry(checkIfOpensearchHasIndexedBlockedCase);
-
-  //     cy.get('[data-testid="blocked-cases-count"]').should('exist');
-  //     cy.get(`[data-testid="blocked-case-${leadDocketNumber}-row"]`).contains(
-  //       'Grouped with blocked case',
-  //     );
-
-  //     //download csv
-  //     cy.get('[data-testid="export-blocked-case-report"]').click();
-  //     const today = formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
-  //     const fileName = `Blocked Cases Report - ${trialCity}_${trialState} ${today}.csv`;
-  //     cy.readFile(`cypress/downloads/${fileName}`, 'utf-8').should(
-  //       fileContent => {
-  //         expect(fileContent).to.include(leadDocketNumber);
-  //         expect(fileContent).to.include(memberDocketNumber);
-  //       },
-  //     );
-  //   });
-  // });
 
   it('should show a consolidated group in the eligible cases list, then when blocked, show in the blocked cases report', () => {
     const trialLocation = 'Portland, Maine';
@@ -87,6 +31,7 @@ describe('Blocked Cases Report', () => {
       procedureType,
       trialLocation,
       caseStatus,
+      includeApwDocument: false,
     }).then(({ leadDocketNumber, memberDocketNumber }) => {
       loginAsPetitionsClerk1();
       createTrialSession({ trialLocation, sessionType: procedureType }).then(
@@ -167,7 +112,7 @@ describe('Blocked Cases Report', () => {
   it('should show a case as ineligible for trial when it has a case deadline or a pending item', () => {
     const trialLocation = 'Knoxville, Tennessee';
     const procedureType = PROCEDURE_TYPES_MAP.small;
-    const [_trialCity, _trialState] = trialLocation.split(', ');
+    const [trialCity, trialState] = trialLocation.split(', ');
     const caseStatus = CASE_STATUS_TYPES.generalDocketReadyForTrial;
     createAndServePaperPetition({
       trialLocation,
@@ -207,6 +152,16 @@ describe('Blocked Cases Report', () => {
           cy.get('[data-testid="procedure-type-filter"]').select(procedureType);
           cy.get('[data-testid="case-status-filter"]').select(caseStatus);
           cy.get(`[data-testid="blocked-case-${docketNumber}-row"]`);
+
+          // shows in blocked cases csv
+          cy.get('[data-testid="export-blocked-case-report"]').click();
+          const today = formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
+          const fileName = `Blocked Cases Report - ${trialCity}_${trialState} ${today}.csv`;
+          cy.readFile(`cypress/downloads/${fileName}`, 'utf-8').should(
+            fileContent => {
+              expect(fileContent).to.include(docketNumber);
+            },
+          );
 
           // Remove deadline
           goToCase(docketNumber);
@@ -270,7 +225,7 @@ describe('Blocked Cases Report', () => {
     });
   });
 
-  it.only('should not show a case with a case deadline as blocked when it has been manually added to a trial session', () => {
+  it('should not show a case with a case deadline as blocked when it has been manually added to a trial session', () => {
     const trialLocation = 'Knoxville, Tennessee';
     const procedureType = PROCEDURE_TYPES_MAP.small;
     const caseStatus = CASE_STATUS_TYPES.generalDocketReadyForTrial;
