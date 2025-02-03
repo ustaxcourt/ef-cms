@@ -10,17 +10,17 @@ export const getPractitionerByBarNumber = async ({
 }): Promise<RawPractitioner | undefined> => {
   const upperCaseBarNumber = barNumber.toUpperCase();
   const users = [
-    ...(await getRecordsViaMapping({
+    ...(await getRecordsViaMapping<RawPractitioner>({
       applicationContext,
       pk: `irsPractitioner|${upperCaseBarNumber}`,
       prefix: 'user',
     })),
-    ...(await getRecordsViaMapping({
+    ...(await getRecordsViaMapping<RawPractitioner>({
       applicationContext,
       pk: `privatePractitioner|${upperCaseBarNumber}`,
       prefix: 'user',
     })),
-    ...(await getRecordsViaMapping({
+    ...(await getRecordsViaMapping<RawPractitioner>({
       applicationContext,
       pk: `inactivePractitioner|${upperCaseBarNumber}`,
       prefix: 'user',
