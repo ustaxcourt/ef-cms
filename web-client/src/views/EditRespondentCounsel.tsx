@@ -72,24 +72,25 @@ export const EditRespondentCounsel = connect(
             </div>
           </div>
 
-          <div className="button-container">
-            <Button
-              id="submit-edit-respondent-information"
-              onClick={() => {
-                submitEditRespondentCounselSequence();
-              }}
-            >
-              Save
-            </Button>
-            <Button
-              link
-              onClick={() => {
-                formCancelToggleCancelSequence();
-              }}
-            >
-              Cancel
-            </Button>
-
+          <div className="display-flex flex-row flex-justify">
+            <div>
+              <Button
+                id="submit-edit-respondent-information"
+                onClick={() => {
+                  submitEditRespondentCounselSequence();
+                }}
+              >
+                Save
+              </Button>
+              <Button
+                link
+                onClick={() => {
+                  formCancelToggleCancelSequence();
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
             <Button
               link
               className="red-warning no-wrap float-right"

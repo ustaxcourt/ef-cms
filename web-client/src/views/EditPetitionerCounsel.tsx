@@ -120,25 +120,26 @@ export const EditPetitionerCounsel = connect(
             </div>
           </div>
 
-          <div className="button-container">
-            <Button
-              data-testid="submit-edit-petitioner-information-button"
-              id="submit-edit-petitioner-information"
-              onClick={() => {
-                submitEditPetitionerCounselSequence();
-              }}
-            >
-              Save
-            </Button>
-            <Button
-              link
-              onClick={() => {
-                formCancelToggleCancelSequence();
-              }}
-            >
-              Cancel
-            </Button>
-
+          <div className="display-flex flex-row flex-justify">
+            <div>
+              <Button
+                data-testid="submit-edit-petitioner-information-button"
+                id="submit-edit-petitioner-information"
+                onClick={() => {
+                  submitEditPetitionerCounselSequence();
+                }}
+              >
+                Save
+              </Button>
+              <Button
+                link
+                onClick={() => {
+                  formCancelToggleCancelSequence();
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
             <Button
               link
               className="red-warning no-wrap float-right"
