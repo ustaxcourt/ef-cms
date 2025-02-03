@@ -348,7 +348,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         cy.visit('/case-detail/107-19');
         cy.get('[data-testid="docket-record-table"]').should('exist');
         cy.get('[data-testid=tab-tracked-items]').click();
-        cy.get('#tab-pending-report').click();
+        cy.get('[data-testid="pending-report-tab"]').click();
 
         checkA11y();
       });
