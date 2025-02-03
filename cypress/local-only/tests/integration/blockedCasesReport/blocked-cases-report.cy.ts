@@ -18,7 +18,7 @@ import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/selec
 import { attachFile } from 'cypress/helpers/file/upload-file';
 import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
-describe('Blocked Cases Report', () => {
+describe('Blocked Cases', () => {
   beforeEach(() => {
     cy.task('deleteAllFilesInFolder', 'cypress/downloads');
   });
@@ -55,6 +55,9 @@ describe('Blocked Cases Report', () => {
           cy.get('[data-testid="success-alert"]').contains(
             'Case blocked from being set for trial.',
           );
+          cy.get('[data-testid="blocked-case-icon"]');
+          goToCase(leadDocketNumber);
+          cy.get('[data-testid="blocked-case-icon"]');
 
           //Does not show in eligible case list
           loginAsPetitionsClerk1();
@@ -87,6 +90,7 @@ describe('Blocked Cases Report', () => {
           cy.get('[data-testid="success-alert"]').contains(
             'Block removed. Case is eligible for next available trial session.',
           );
+          cy.get('[data-testid="blocked-case-icon"]').should('not.exist');
 
           //Shows as eligible
           cy.get('[data-testid="trial-session-link"]').click();
