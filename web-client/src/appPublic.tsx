@@ -34,7 +34,6 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 
 // Icons - Regular
 import { GlobalModalWrapper } from '@web-client/views/GlobalModalWrapper';
-import { createRoot } from 'react-dom/client';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftRegular } from '@fortawesome/free-regular-svg-icons/faArrowAltCircleLeft';
 import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons/faExchangeAlt';
 import { faExclamation } from '@fortawesome/free-solid-svg-icons/faExclamation';
@@ -49,13 +48,16 @@ import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter-public';
 import App from 'cerebral';
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
+import { createLazyRoute } from '@tanstack/react-router';
+import { applicationContextPublic } from '@web-client/applicationContextPublic';
 
 /**
  * Instantiates the Cerebral app with React
  */
-const appPublic = {
-  initialize: (applicationContext, debugTools) => {
+export function CerebralPublicComponent() {
+  const cerebralApp = useMemo(() => {
+    const applicationContext = applicationContextPublic;
     const withAppContextDecorator = (f, context) => {
       return get => f(get, context || applicationContext);
     };
@@ -137,25 +139,28 @@ const appPublic = {
       route,
     };
 
-    const cerebralApp = App(presenter, debugTools);
+    const app = App(presenter);
 
     applicationContext.setForceRefreshCallback(async () => {
-      await cerebralApp.getSequence('handleAppHasUpdatedSequence')();
+      await app.getSequence('handleAppHasUpdatedSequence')();
     });
 
+    return app;
+  }, []);
+
+  useEffect(() => {
     router.initialize(cerebralApp);
+  }, [cerebralApp]);
 
-    const container = window.document.querySelector('#app-public');
-    const root = createRoot(container);
+  return (
+    <Container app={cerebralApp}>
+      <AppComponentPublic />
+      <GlobalModalWrapper />
+      {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
+    </Container>
+  );
+}
 
-    root.render(
-      <Container app={cerebralApp}>
-        <AppComponentPublic />
-        <GlobalModalWrapper />
-        {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
-      </Container>,
-    );
-  },
-};
-
-export { appPublic };
+export const catchAllRoute = createLazyRoute('/*')({
+  component: CerebralPublicComponent,
+});
