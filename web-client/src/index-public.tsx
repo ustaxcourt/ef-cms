@@ -1,25 +1,12 @@
 import {
-  Outlet,
   RouterProvider,
-  createRootRoute,
   createRoute,
   createRouter,
 } from '@tanstack/react-router';
 import { createRoot } from 'react-dom/client';
 import React from 'react';
 import { todaysOpinionsRoute } from 'web-client-public/src/routes/todays-opinions/TodaysOpinions';
-
-export const rootRoute = createRootRoute({
-  component: RootComponent,
-});
-
-function RootComponent() {
-  return (
-    <>
-      <Outlet />
-    </>
-  );
-}
+import { rootRoute } from 'web-client-public/src/routes/PublicRoot';
 
 const catchAllRouteInFile = createRoute({
   getParentRoute: () => rootRoute,
@@ -27,7 +14,6 @@ const catchAllRouteInFile = createRoute({
 }).lazy(() => import('@web-client/appPublic').then(app => app.catchAllRoute));
 
 const routeTree = rootRoute.addChildren([
-  // cerebralRoute,
   todaysOpinionsRoute,
   catchAllRouteInFile,
 ]);

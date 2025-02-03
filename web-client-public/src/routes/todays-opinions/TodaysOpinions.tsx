@@ -1,6 +1,6 @@
 import { createRoute } from '@tanstack/react-router';
-import { rootRoute } from '@web-client/index-public';
 import React from 'react';
+import { rootRoute } from 'web-client-public/src/routes/PublicRoot';
 
 export function TodaysOpinions() {
   return (
