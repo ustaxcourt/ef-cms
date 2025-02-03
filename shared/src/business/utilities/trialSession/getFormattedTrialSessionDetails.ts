@@ -17,7 +17,6 @@ import { RawIrsCalendarAdministratorInfo } from '@shared/business/entities/trial
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { compact, partition } from 'lodash';
 import { isClosed } from '@shared/business/entities/cases/Case';
-import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
 
 export const setPretrialMemorandumFiler = ({ caseItem }): string => {
   if (caseItem.PMTServedPartiesCode !== undefined) {
@@ -210,7 +209,11 @@ export const getFormattedTrialSessionDetails = ({
     ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET,
   );
   const openCasesFormatted = openCases
-    .map(caseItem => setConsolidationFlagsForDisplay(caseItem, openCases))
+    .map(caseItem =>
+      applicationContext
+        .getUtilities()
+        .setConsolidationFlagsForDisplay(caseItem, openCases),
+    )
     .map(caseItem => {
       let displayMinuteSheetFormButton = false;
       let minuteSheetRoute;
@@ -255,7 +258,7 @@ export const getFormattedTrialSessionDetails = ({
 
       const isLeadCase = caseItem.inConsolidatedGroup && caseItem.isLeadCase;
 
-      let caseWasRemovedFromTrialSessionAfterStartDate = false;
+      const caseWasRemovedFromTrialSessionAfterStartDate = false;
 
       // 10419 TODO the comparison below needs to be an actual check of two
       // date/time. We need to make sure we have the actual trial session
