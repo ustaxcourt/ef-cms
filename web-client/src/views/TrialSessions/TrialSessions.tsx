@@ -59,10 +59,12 @@ export const TrialSessions = connect(
                   Create Term
                 </Button>
               )}
+            </div>
+            <div>
               <Button
                 link
                 noMargin
-                className="margin-right-0"
+                className="margin-right-0 padding-0"
                 data-testid="trial-session-planning-report-button"
                 icon="print"
                 onClick={() => openTrialSessionPlanningModalSequence()}

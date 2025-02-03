@@ -125,8 +125,6 @@ export const docketClerkAddsAnUnservableDocument = cerebralTest => {
       judge: 'Chief Judge',
     });
 
-    await cerebralTest.runSequence('loadMorePendingItemsSequence');
-
     const pendingItems = cerebralTest.getState('pendingReports.pendingItems');
     expect(
       pendingItems.find(

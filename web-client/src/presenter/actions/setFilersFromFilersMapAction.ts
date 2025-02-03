@@ -6,10 +6,9 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.store the cerebral store object
  */
 export const setFilersFromFilersMapAction = ({ get, store }: ActionProps) => {
-  let filers;
   const form = get(state.form);
 
-  filers = Object.keys(form.filersMap)
+  const filers = Object.keys(form.filersMap)
     .map(contactId => (form.filersMap[contactId] ? contactId : null))
     .filter(Boolean);
 

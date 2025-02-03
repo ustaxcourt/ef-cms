@@ -51,14 +51,14 @@ export const isPrivatePractitionerItem = (
   item.pk?.startsWith('case|') && item.sk.startsWith('privatePractitioner|');
 
 export const aggregateCaseItems = (caseAndCaseItems): RawCase => {
-  let archivedCorrespondences = [];
-  let archivedDocketEntries = [];
-  let caseRecords = [];
-  let correspondences = [];
-  let docketEntries = []; // documents
-  let hearings = [];
-  let irsPractitioners = [];
-  let privatePractitioners = [];
+  const archivedCorrespondences = [];
+  const archivedDocketEntries = [];
+  const caseRecords = [];
+  const correspondences = [];
+  const docketEntries = []; // documents
+  const hearings = [];
+  const irsPractitioners = [];
+  const privatePractitioners = [];
 
   caseAndCaseItems.forEach(item => {
     if (isDocketEntryItem(item)) {

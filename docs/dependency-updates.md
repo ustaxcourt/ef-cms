@@ -52,30 +52,21 @@ note: we have 3 package.json files, be sure to update them all
 
 4. Check if there is an update to the Terraform AWS provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
 
-regex search the entire project for `aws = "\d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
+regex search the entire project for `version = ">= \d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
 
  - ./shared/admin-tools/glue/glue_migrations/main.tf
  - ./shared/admin-tools/glue/remote_role/main.tf
- - ./web-api/terraform/applyables/account-specific/account-specific.tf
- - ./web-api/terraform/applyables/allColors/allColors.tf
- - ./web-api/terraform/applyables/blue/blue.tf
- - ./web-api/terraform/applyables/glue-cron/glue-cron-applyable.tf
- - ./web-api/terraform/applyables/green/green.tf
- - ./web-api/terraform/applyables/migration/migration-applyable.tf
- - ./web-api/terraform/applyables/migration-cron/migration-cron-applyable.tf
- - ./web-api/terraform/applyables/reindex-cron/reindex-cron-applyable.tf
- - ./web-api/terraform/applyables/switch-colors-cron/switch-colors-cron-applyable.tf
- - ./web-api/terraform/applyables/wait-for-workflow/wait-for-workflow-cron-applyable.tf
 
-	> aws = "<LATEST_VERSION>"
-
-**Note**: Through January 3, 2025, the Terraform AWS provider must remain at version 5.78.0 due to issues with RDS.
+	> version = ">= <LATEST_VERSION>"
 
 5. Check through the list of caveats to see if any of the documented issues have been resolved.
 
 6. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
 
 ## Do Not Upgrade
+
+### @aws-sdk/client-s3 and @aws-sdk/lib-storage
+- @aws-sdk/client-s3 and it's peer dependency @aws-sdk/lib-storage are locked to 3.726.0. Upgrading client-s3 results in s3 files not being downloaded properly in AWS Batch jobs. Unclear why at this time.
 
 ### React and ReactDOM
 
@@ -84,10 +75,6 @@ regex search the entire project for `aws = "\d+.\d+.\d+"` and make sure it's to 
 ### @fortawesome
 
 - fortawesome packages are locked down to pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes `@fortawesome/free-solid-svg-icons`, `@fortawesome/free-regular-svg-icons`, and `@fortawesome/fontawesome-svg-core`.
-
-# canvas
-
-- [node-canvas](https://github.com/Automattic/node-canvas) v3.x conflicts with jest-environment-jsdom's peer dependency requirement (^2.5.0). We will need to stay on node-canvas v2.x until jest-environment-jsdom updates its peer dependencies.
 
 ## Caveats
 
@@ -108,15 +95,9 @@ Below is a list of dependencies that are locked down due to known issues with se
 ### @uswds/uswds
 - Keep pinned on 3.7.1, upgrading to 3.8.0+ will cause DAWSON UI issues with icon spacing and break Cypress Snapshots in the Cypress UI (as you hover over each step after initial run, it loses styles, making it harder to debug issues).
 
-### eslint
-- Keep pinned to 8.57.0 as most plugins are not yet compatible with v9.0.0: https://eslint.org/blog/2023/09/preparing-custom-rules-eslint-v9/
-See: https://github.com/jsx-eslint/eslint-plugin-react/issues/3699
-- Keep eslint-plugin-cypress pinned to 3.5.0 due do the aforementioned compatibility issues.
-
 ### ws, 3rd party dependency of Cerebral
 - When running npm audit, you'll see a high severity issue with ws, 'affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q'. This doesn't affect us as the vulnerability is on the server side and we're not using this package on the server. We tried to override this to 5.2.4 and 8.18.0 and weren't able to make this work as import paths have changed. In the mean time, we recommend skipping this issue. We could always fork the cerebral repo in the future if needed.
 
 ## Incrementing the Node Cache Key Version
 
 It's rare to need modify cache key. One reason you may want to do so is if a package fails to install properly, and CircleCI, unaware of the failed installation, stores the corrupted cache. In this case, we will need to increment the cache key version so that CircleCI is forced to reinstall the node dependencies and save them using the new key. To update the cache key, locate `vX-npm` and `vX-cypress` (where X represents the current cache key version) in the config.yml file, and then increment the identified version.
-

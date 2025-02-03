@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-conditional-expect */
 import { v2ApiWrapper } from './v2ApiWrapper';
 
 describe('v2ApiWrapper', () => {

@@ -1,9 +1,15 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
+
 // usages:
-// npx ts-node --transpile-only scripts/reports/non-attorney-practitioners.ts > ~/Desktop/non-attorney-practitioners.csv
-// npx ts-node --transpile-only scripts/reports/non-attorney-practitioners.ts --stats > ~/Desktop/non-attorney-practitioners-stats.csv
+// scripts/reports/non-attorney-practitioners.ts > ~/Desktop/non-attorney-practitioners.csv
+// scripts/reports/non-attorney-practitioners.ts --stats > ~/Desktop/non-attorney-practitioners-stats.csv
 
 import {
-  ServerApplicationContext,
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import {
+  type ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
 import {
@@ -11,13 +17,29 @@ import {
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
 import { pick, sortBy } from 'lodash';
-import { requireEnvVars } from '../../shared/admin-tools/util';
 import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 import { substantiveEventCodes } from './non-attorney-practitioners-constants';
 import type { RawPractitioner } from '@shared/business/entities/Practitioner';
 
-requireEnvVars(['ENV', 'REGION']);
-const stats: boolean = !!(process.argv[2] && process.argv[2] === '--stats');
+const scriptConfig: ScriptConfig = {
+  description:
+    'non-attorney-practitioners - Generates a spreadsheet of cases in which ' +
+    'a non-attorney practitioner appears or a spreadsheet of non-attorney ' +
+    'practitioner statistics.',
+  environment: {
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+    environmentName: 'ENV',
+  },
+  parameters: {
+    stats: {
+      default: false,
+      short: 's',
+      type: 'boolean',
+    },
+  },
+  requireActiveAwsSession: true,
+};
+const { stats } = parseArgsAndEnvVars(scriptConfig) as { stats: boolean };
 
 type tCase = {
   caseCaption: string;
@@ -25,10 +47,10 @@ type tCase = {
   closedDateFormatted: string;
   docketEntries?: tDocketEntry[];
   docketNumber: string;
-  docketNumberSuffix: string;
   noticeOfTrialDate: string;
   noticeOfTrialDateFormatted: string;
   privatePractitioners: RawPractitioner[];
+  procedureType: string;
   receivedAt: string;
   receivedAtFormatted: string;
   status: string;
@@ -50,12 +72,12 @@ type tUsersCase = {
   closedDate: string;
   closedDateFormatted: string;
   docketNumber: string;
-  docketNumberSuffix: string;
   duration: number;
   hasNoticeOfAppeal: boolean;
   noticeOfTrialDate: string;
   noticeOfTrialDateFormatted: string;
   privatePractitioners: RawPractitioner[];
+  procedureType: string;
   receivedAt: string;
   receivedAtFormatted: string;
   status: string;
@@ -91,8 +113,7 @@ const formatNonAttorneys = ({
     const userId = hit.pk?.replace('user|', '');
     if (userId) {
       nonAttorneys[userId] = {
-        barNumber: hit.barNumber,
-        name: hit.name,
+        ...pick(hit, ['barNumber', 'name']),
         userId,
       };
     }
@@ -129,39 +150,6 @@ const retrieveNonAttorneys = async ({
   return formatNonAttorneys({ results });
 };
 
-// const retrieveNonAttorneysByBarNos = async ({
-//   applicationContext,
-//   barNos,
-// }: {
-//   applicationContext: IApplicationContext;
-//   barNos: string[];
-// }): Promise<{
-//   [key: string]: { barNumber: string; name: string; userId: string };
-// }> => {
-//   const searchParameters = {
-//     body: {
-//       _source: ['barNumber.S', 'name.S', 'pk.S'],
-//       from: 0,
-//       query: {
-//         bool: {
-//           must: [
-//             {
-//               terms: {
-//                 'barNumber.S': barNos,
-//               },
-//             },
-//           ],
-//         },
-//       },
-//       size: 10000,
-//     },
-//     index: 'efcms-user',
-//   };
-//
-//   const { results } = await search({ applicationContext, searchParameters });
-//   return formatNonAttorneys({ results });
-// };
-
 const retrieveCases = async ({
   applicationContext,
   userIds,
@@ -175,9 +163,9 @@ const retrieveCases = async ({
         'caseCaption.S',
         'closedDate.S',
         'docketNumber.S',
-        'docketNumberSuffix.S',
         'noticeOfTrialDate.S',
         'privatePractitioners.L.M.userId.S',
+        'procedureType.S',
         'receivedAt.S',
         'status.S',
         'trialDate.S',
@@ -204,9 +192,9 @@ const retrieveCases = async ({
         'caseCaption',
         'closedDate',
         'docketNumber',
-        'docketNumberSuffix',
         'noticeOfTrialDate',
         'privatePractitioners',
+        'procedureType',
         'receivedAt',
         'status',
         'trialDate',
@@ -317,7 +305,7 @@ const calculateCaseDuration = (caseRecord: tCase): number => {
   if (!caseRecord.receivedAt) {
     return 0;
   }
-  let initialClosureDate = determineInitialClosureDate(caseRecord);
+  const initialClosureDate = determineInitialClosureDate(caseRecord);
   if (!initialClosureDate) {
     return 0;
   }
@@ -473,7 +461,7 @@ const generateCompositeStatistics = ({
 
 const outputHeader = (): void => {
   console.log(
-    '"Bar Number","Name","Docket Number","Case Type","Case Caption","Case Status","Documents Filed",' +
+    '"Bar Number","Name","Docket Number","Procedure Type","Case Caption","Case Status","Documents Filed",' +
       '"Substantive Documents Filed","Filed Pretrial Memorandum","Closed by Stipulated Decision","Went to Trial",' +
       '"Date of Receipt of Petition","Date of Notice of Trial","Date Closed","Total Duration in Days",' +
       '"Trial Date","Has Notice of Appeal"',
@@ -489,7 +477,7 @@ const outputRow = ({
 }): void => {
   console.log(
     `"${nonAttorney.barNumber}","${nonAttorney.name}","${usersCase.docketNumber}",` +
-      `"${usersCase.docketNumberSuffix || ''}","${usersCase.caseCaption}","${usersCase.status}",` +
+      `"${usersCase.procedureType || ''}","${usersCase.caseCaption}","${usersCase.status}",` +
       `"${usersCase.usersDocumentsCount}","${usersCase.usersSubstantiveDocumentsCount}",` +
       `"${usersCase.userFiledPretrialMemorandum}","${usersCase.closedByStipulatedDecision}",` +
       `"${usersCase.wentToTrial}","${usersCase.receivedAtFormatted}","${usersCase.noticeOfTrialDateFormatted}",` +

@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-conditional-expect */
 import { DOCUMENT_SERVED_MESSAGES } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsAndServesDocketEntryFromOrder } from './journey/docketClerkAddsAndServesDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
@@ -118,7 +119,7 @@ describe('Case Consolidation Journey', () => {
       'caseDetail.consolidatedCases',
     );
 
-    for (let consolidatedCase of consolidatedCases) {
+    for (const consolidatedCase of consolidatedCases) {
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: consolidatedCase.docketNumber,
       });
@@ -145,7 +146,7 @@ describe('Case Consolidation Journey', () => {
         expect(orderDocument.workItem.completedBy).toEqual('Test Docketclerk');
         expect(orderDocument.workItem.completedMessage).toEqual('completed');
         expect(orderDocument.workItem.completedAt).toBeDefined();
-        expect(orderDocument.workItem.inProgress).toBeUndefined();
+        expect(orderDocument.workItem.inProgress).toBeFalsy();
       } else {
         expect(orderDocument).toBeUndefined();
       }
@@ -167,7 +168,7 @@ describe('Case Consolidation Journey', () => {
       'caseDetail.consolidatedCases',
     );
 
-    for (let consolidatedCase of consolidatedCases) {
+    for (const consolidatedCase of consolidatedCases) {
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: consolidatedCase.docketNumber,
       });
@@ -194,7 +195,7 @@ describe('Case Consolidation Journey', () => {
         expect(orderDocument.workItem.completedBy).toEqual('Test Docketclerk');
         expect(orderDocument.workItem.completedMessage).toEqual('completed');
         expect(orderDocument.workItem.completedAt).toBeDefined();
-        expect(orderDocument.workItem.inProgress).toBeUndefined();
+        expect(orderDocument.workItem.inProgress).toBeFalsy();
       } else {
         expect(orderDocument).toBeUndefined();
       }
