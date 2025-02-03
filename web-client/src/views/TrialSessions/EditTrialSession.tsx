@@ -15,8 +15,8 @@ export const EditTrialSession = connect(
   {
     closeModalAndNavigateBackSequence:
       sequences.closeModalAndNavigateBackSequence,
-    displayTrialSessionLocationChangeModalSequence:
-      sequences.displayTrialSessionLocationChangeModalSequence,
+    handleEditedTrialSessionSequence:
+      sequences.handleEditedTrialSessionSequence,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
@@ -27,7 +27,7 @@ export const EditTrialSession = connect(
   },
   function EditTrialSession({
     closeModalAndNavigateBackSequence,
-    displayTrialSessionLocationChangeModalSequence,
+    handleEditedTrialSessionSequence,
     form,
     formattedTrialSessionDetails,
     formCancelToggleCancelSequence,
@@ -98,7 +98,7 @@ export const EditTrialSession = connect(
                 data-testid="submit-edit-trial-session"
                 type="submit"
                 onClick={() => {
-                  displayTrialSessionLocationChangeModalSequence();
+                  handleEditedTrialSessionSequence();
                 }}
               >
                 Save

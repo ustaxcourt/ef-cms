@@ -1,11 +1,11 @@
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
 import { TrialSessionLocationInfo } from '@shared/business/entities/trialSessions/TrialSession';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { hasTrialSessionLocationChangedAction } from '@web-client/presenter/actions/hasTrialSessionLocationChangedAction';
+import { shouldGenerateNoticeOfChangeTrialLocationAction } from '@web-client/presenter/actions/shouldGenerateNoticeOfChangeTrialLocationAction';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-describe('hasTrialSessionLocationChangedAction', () => {
+describe('shouldGenerateNoticeOfChangeTrialLocationAction', () => {
   let updatedMock: jest.Mock;
   let unchangedMock: jest.Mock;
 
@@ -29,7 +29,7 @@ describe('hasTrialSessionLocationChangedAction', () => {
         casesThatShouldReceiveNoticesCount: 1,
       });
 
-    await runAction(hasTrialSessionLocationChangedAction, {
+    await runAction(shouldGenerateNoticeOfChangeTrialLocationAction, {
       modules: {
         presenter,
       },
@@ -81,7 +81,7 @@ describe('hasTrialSessionLocationChangedAction', () => {
       trialLocation: 'UPDATED__TEST_TRIAL_LOCATION',
     };
 
-    await runAction(hasTrialSessionLocationChangedAction, {
+    await runAction(shouldGenerateNoticeOfChangeTrialLocationAction, {
       modules: {
         presenter,
       },
@@ -111,7 +111,7 @@ describe('hasTrialSessionLocationChangedAction', () => {
         casesThatShouldReceiveNoticesCount: 1,
       });
 
-    await runAction(hasTrialSessionLocationChangedAction, {
+    await runAction(shouldGenerateNoticeOfChangeTrialLocationAction, {
       modules: {
         presenter,
       },
@@ -163,7 +163,7 @@ describe('hasTrialSessionLocationChangedAction', () => {
       trialLocation: 'UPDATED__TEST_TRIAL_LOCATION',
     };
 
-    await runAction(hasTrialSessionLocationChangedAction, {
+    await runAction(shouldGenerateNoticeOfChangeTrialLocationAction, {
       modules: {
         presenter,
       },
@@ -215,7 +215,7 @@ describe('hasTrialSessionLocationChangedAction', () => {
       trialLocation: 'UPDATED__TEST_TRIAL_LOCATION',
     };
 
-    await runAction(hasTrialSessionLocationChangedAction, {
+    await runAction(shouldGenerateNoticeOfChangeTrialLocationAction, {
       modules: {
         presenter,
       },
