@@ -58,7 +58,7 @@ export const createCaseTrialSortMappingRecords = async ({
         '#gsi1pk': 'gsi1pk',
       },
       ExpressionAttributeValues: {
-        ':gsi1pk': `leadCase|${docketNumber}`,
+        ':gsi1pk': `leadCase|${theCase.leadDocketNumber!}`,
       },
       IndexName: 'gsi1',
       KeyConditionExpression: '#gsi1pk = :gsi1pk',
@@ -67,19 +67,16 @@ export const createCaseTrialSortMappingRecords = async ({
     consolidatedCaseItems
       .filter((item): item is CaseRecord => isCaseItem(item))
       .forEach(c => {
-        if (c.docketNumber === docketNumber) {
-          c.blocked = false;
-          c.automaticBlocked = false;
-        }
         casesToUpdate.push(c);
       });
   } else {
     casesToUpdate.push(theCase);
   }
 
-  const hasBlockedCase = casesToUpdate.find(
-    c => c.blocked || c.automaticBlocked,
-  );
+  const hasBlockedCase = casesToUpdate.some(c => {
+    if (c.docketNumber === docketNumber) return false;
+    return c.blocked || c.automaticBlocked;
+  });
 
   if (hasBlockedCase) {
     return;

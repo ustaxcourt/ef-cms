@@ -15,12 +15,15 @@ export function createAndServeConsolidatedGroup(
     judge = '',
     procedureType = undefined,
     trialLocation = undefined,
+    includeApwDocument = undefined,
   }: Partial<{
+    includeApwDocument: boolean;
     caseStatus: CaseStatus;
     judge: string;
     procedureType: ProcedureType;
     trialLocation: string;
   }> = {
+    includeApwDocument: undefined,
     caseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
     judge: '',
     procedureType: undefined,
@@ -32,6 +35,7 @@ export function createAndServeConsolidatedGroup(
 }> {
   return createAndServePaperPetition({
     yearReceived: '2019',
+    includeApwDocument,
     procedureType,
     trialLocation,
   }).then(({ docketNumber: leadDocketNumber }) => {
@@ -41,6 +45,7 @@ export function createAndServeConsolidatedGroup(
 
     return createAndServePaperPetition({
       yearReceived: '2023',
+      includeApwDocument,
       procedureType,
       trialLocation,
     }).then(({ docketNumber: memberDocketNumber }) => {
