@@ -120,7 +120,7 @@ export const EditPetitionerCounsel = connect(
             </div>
           </div>
 
-          <div className="display-flex flex-row flex-justify">
+          <div className="display-flex flex-column mobile-lg:flex-row flex-justify flex-align-center text-align-center">
             <div>
               <Button
                 data-testid="submit-edit-petitioner-information-button"
@@ -142,7 +142,7 @@ export const EditPetitionerCounsel = connect(
             </div>
             <Button
               link
-              className="red-warning no-wrap float-right"
+              className="red-warning"
               data-testid="remove-petitioner-counsel-button"
               icon="trash"
               onClick={() => {
