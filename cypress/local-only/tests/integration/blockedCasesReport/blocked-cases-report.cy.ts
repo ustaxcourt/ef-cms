@@ -164,7 +164,7 @@ describe('Blocked Cases Report', () => {
     });
   });
 
-  it.only('should show a case as ineligible for trial when it has a case deadline or a pending item', () => {
+  it('should show a case as ineligible for trial when it has a case deadline or a pending item', () => {
     const trialLocation = 'Knoxville, Tennessee';
     const procedureType = PROCEDURE_TYPES_MAP.small;
     const [_trialCity, _trialState] = trialLocation.split(', ');
@@ -257,6 +257,80 @@ describe('Blocked Cases Report', () => {
           cy.get('[data-testid="trial-session-link"]').click();
           cy.visit(`/trial-session-detail/${trialSessionId}`);
           cy.get(`label[for="qc-complete-${docketNumber}"]`);
+
+          //Does not shows in blocked cases report
+          cy.get('[data-testid="dropdown-select-report"]').click();
+          cy.get('[data-testid="blocked-cases-report"]').click();
+          cy.get('[data-testid="trial-location-filter"]').select(trialLocation);
+          cy.get(`[data-testid="blocked-case-${docketNumber}-row"]`).should(
+            'not.exist',
+          );
+        },
+      );
+    });
+  });
+
+  it.only('should not show a case with a case deadline as blocked when it has been manually added to a trial session', () => {
+    const trialLocation = 'Knoxville, Tennessee';
+    const procedureType = PROCEDURE_TYPES_MAP.small;
+    const caseStatus = CASE_STATUS_TYPES.generalDocketReadyForTrial;
+    createAndServePaperPetition({
+      trialLocation,
+      procedureType,
+      includeApwDocument: false,
+    }).then(({ docketNumber }) => {
+      loginAsDocketClerk1();
+      goToCase(docketNumber);
+      updateCaseStatus(caseStatus);
+      loginAsPetitionsClerk1();
+      createTrialSession({ trialLocation, sessionType: procedureType }).then(
+        ({ trialSessionId }) => {
+          // Add case deadline
+          goToCase(docketNumber);
+          cy.get('[data-testid="case-detail-menu-button"]').click();
+          cy.get('[data-testid=menu-button-create-deadline]').click();
+          cy.get(
+            '.usa-date-picker__wrapper > [data-testid="deadline-date-picker"]',
+          ).type('03/01/2200');
+          cy.get('[data-testid=case-deadline-description-input]').type(
+            'deadline description',
+          );
+          cy.get('[data-testid="modal-button-confirm"]').click();
+          cy.get('[data-testid=success-alert]').contains('Deadline saved');
+
+          // Manually add to trial session
+          cy.get('[data-testid="tab-case-information"]').click();
+          cy.get('[data-testid="add-to-trial-session-btn"]').click();
+          cy.get('[data-testid="all-locations-option"]').click();
+          cy.get('[data-testid="trial-session-select"]').select(trialSessionId);
+          cy.get('[data-testid="modal-button-confirm"]').click();
+          cy.get('[data-testid=success-alert]').contains(
+            'Case scheduled for trial.',
+          );
+
+          //Does not shows in blocked cases report
+          cy.get('[data-testid="dropdown-select-report"]').click();
+          cy.get('[data-testid="blocked-cases-report"]').click();
+          cy.get('[data-testid="trial-location-filter"]').select(trialLocation);
+          cy.get(`[data-testid="blocked-case-${docketNumber}-row"]`).should(
+            'not.exist',
+          );
+
+          //Shows as eligible
+          cy.get('[data-testid="trial-session-link"]').click();
+          cy.visit(`/trial-session-detail/${trialSessionId}`);
+          cy.get(`label[for="qc-complete-${docketNumber}"]`);
+
+          // calendar a trial session
+          cy.get(`label[for="qc-complete-${docketNumber}"]`).click();
+          cy.get(`[data-testid="qc-complete-${docketNumber}"]:checked`).should(
+            'exist',
+          );
+          cy.get('[data-testid="set-calendar-button"]').click();
+          cy.get('#modal-button-confirm').click();
+          cy.url().should('include', 'print-paper-trial-notices');
+          cy.get('[data-testid="printing-complete"]').click();
+          cy.url().should('include', `trial-session-detail/${trialSessionId}`);
 
           //Does not shows in blocked cases report
           cy.get('[data-testid="dropdown-select-report"]').click();
