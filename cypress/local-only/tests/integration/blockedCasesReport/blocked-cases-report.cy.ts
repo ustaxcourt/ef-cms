@@ -6,12 +6,16 @@ import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import {
   loginAsColvin,
   loginAsDocketClerk1,
+  loginAsIrsPractitioner1,
   loginAsPetitionsClerk1,
 } from '../../../../helpers/authentication/login-as-helpers';
 import { createAndServeConsolidatedGroup } from 'cypress/helpers/fileAPetition/create-consolidated-case-group';
 import { createTrialSession } from 'cypress/helpers/trialSession/create-trial-session';
 import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
 import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/update-case-status';
+import { petitionsClerkAddsRespondentToCase } from 'cypress/helpers/caseDetail/caseInformation/petitionsclerk-adds-respondent-to-case';
+import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
+import { attachFile } from 'cypress/helpers/file/upload-file';
 
 describe('Blocked Cases Report', () => {
   beforeEach(() => {
@@ -77,7 +81,6 @@ describe('Blocked Cases Report', () => {
 
   it('should show a consolidated group in the eligible cases list, then when blocked, show in the blocked cases report', () => {
     const trialLocation = 'Portland, Maine';
-    const [_trialCity, _trialState] = trialLocation.split(', ');
     const procedureType = PROCEDURE_TYPES_MAP.small;
     const caseStatus = CASE_STATUS_TYPES.generalDocketReadyForTrial;
     createAndServeConsolidatedGroup({
@@ -223,8 +226,77 @@ describe('Blocked Cases Report', () => {
           cy.get(`[data-testid="blocked-case-${docketNumber}-row"]`).should(
             'not.exist',
           );
+
+          addPendingItemToCase(docketNumber);
+
+          loginAsPetitionsClerk1();
+          // Should not show as eligible
+          cy.get('[data-testid="trial-session-link"]').click();
+          cy.visit(`/trial-session-detail/${trialSessionId}`);
+          cy.get(`label[for="qc-complete-${docketNumber}"]`).should(
+            'not.exist',
+          );
+
+          // Shows in blocked cases report
+          cy.get('[data-testid="dropdown-select-report"]').click();
+          cy.get('[data-testid="blocked-cases-report"]').click();
+          cy.get('[data-testid="trial-location-filter"]').select(trialLocation);
+          cy.get('[data-testid="procedure-type-filter"]').select(procedureType);
+          cy.get('[data-testid="case-status-filter"]').select(caseStatus);
+          cy.get(`[data-testid="blocked-case-${docketNumber}-row"]`);
+
+          // Remove pending item
+          goToCase(docketNumber);
+          cy.get('[data-testid=tab-tracked-items]').click();
+          cy.get('[data-testid="pending-report-tab"]').click();
+          cy.get('[data-testid="remove-pending-item-button"]').click();
+          cy.get('[data-testid="modal-confirm"]').click();
+          cy.contains('There is nothing pending');
+
+          //Shows as eligible
+          cy.get('[data-testid="trial-session-link"]').click();
+          cy.visit(`/trial-session-detail/${trialSessionId}`);
+          cy.get(`label[for="qc-complete-${docketNumber}"]`);
+
+          //Does not shows in blocked cases report
+          cy.get('[data-testid="dropdown-select-report"]').click();
+          cy.get('[data-testid="blocked-cases-report"]').click();
+          cy.get('[data-testid="trial-location-filter"]').select(trialLocation);
+          cy.get(`[data-testid="blocked-case-${docketNumber}-row"]`).should(
+            'not.exist',
+          );
         },
       );
     });
   });
 });
+
+function addPendingItemToCase(docketNumber: string) {
+  const IRS_PRACTITIONER_1_BAR_NUMBER = 'RT0987';
+  petitionsClerkAddsRespondentToCase(
+    docketNumber,
+    IRS_PRACTITIONER_1_BAR_NUMBER,
+  );
+  loginAsIrsPractitioner1();
+  cy.get('[data-testid=docket-search-field]').type(docketNumber);
+  cy.get('[data-testid=search-by-docket-number]').click();
+  cy.get('[data-testid="button-file-document"]').click();
+  cy.get('[data-testid="ready-to-file"]').click();
+  selectTypeaheadInput(
+    'complete-doc-document-type-search',
+    'Proposed Stipulated Decision',
+  );
+  cy.get('[data-testid="submit-document"]').click();
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: '[data-testid="primary-document"]',
+    selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+  });
+  cy.get('[data-testid=party-irs-practitioner-label]').click();
+  cy.get('#submit-document').click();
+  cy.get('[data-testid=redaction-acknowledgement-label]').click();
+  cy.get('#submit-document').click();
+  cy.get('[data-testid="success-alert"]').contains(
+    'Document filed and is accessible from the Docket Record',
+  );
+}
