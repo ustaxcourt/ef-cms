@@ -1,10 +1,10 @@
 import { DateGeneratedFooter } from '@shared/business/utilities/pdfGenerator/components/DateGeneratedFooter';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { FormattedMinuteSheet } from '@web-api/business/useCases/trialSessionMinutes/generateTrialSessionMinutesPdfInteractor';
 import { MinuteSheet } from '../pdfGenerator/documentTemplates/MinuteSheet';
 import { PageMetaHeaderDocket } from '@shared/business/utilities/pdfGenerator/components/PageMetaHeaderDocket';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
+import { FormattedMinuteSheet } from '@web-api/business/useCaseHelper/trialSessionMinutes/formatMinuteSheet';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 

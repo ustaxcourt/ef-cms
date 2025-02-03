@@ -73,7 +73,9 @@ export const DateSelector = ({
       if (formatDateOnChange) {
         onChangeHandler = originalEvent => {
           // Create a new event to avoid modifying the original
-          const newEvent = new Event('change', { bubbles: true });
+          const newEvent = new Event('change', {
+            bubbles: true,
+          }) as unknown as React.ChangeEvent<HTMLInputElement>;
           const target = Object.create(originalEvent.target, {
             value: {
               get: () => {

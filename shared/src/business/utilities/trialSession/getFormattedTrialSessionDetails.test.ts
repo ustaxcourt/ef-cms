@@ -8,6 +8,7 @@ import {
   getFormattedTrialSessionDetails,
 } from './getFormattedTrialSessionDetails';
 import { omit } from 'lodash';
+import { mockTrialClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('getFormattedTrialSessionDetails', () => {
   let TRIAL_SESSION: TrialSessionState;
@@ -50,6 +51,7 @@ describe('getFormattedTrialSessionDetails', () => {
 
     const result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: TRIAL_SESSION,
     });
 
@@ -76,6 +78,7 @@ describe('getFormattedTrialSessionDetails', () => {
 
     const result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: {
         ...TRIAL_SESSION,
         irsCalendarAdministratorInfo,
@@ -90,6 +93,7 @@ describe('getFormattedTrialSessionDetails', () => {
   it('formats trial session when address fields are empty', () => {
     let result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: omit(TRIAL_SESSION, ['city', 'state', 'postalCode']),
     });
 
@@ -100,6 +104,7 @@ describe('getFormattedTrialSessionDetails', () => {
 
     result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: omit(TRIAL_SESSION, ['city']),
     });
     expect(result).toMatchObject({
@@ -109,6 +114,7 @@ describe('getFormattedTrialSessionDetails', () => {
 
     result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: omit(TRIAL_SESSION, ['state']),
     });
     expect(result).toMatchObject({
@@ -118,6 +124,7 @@ describe('getFormattedTrialSessionDetails', () => {
 
     result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: omit(TRIAL_SESSION, ['state']),
     });
     expect(result).toMatchObject({
@@ -127,6 +134,7 @@ describe('getFormattedTrialSessionDetails', () => {
 
     result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: omit(TRIAL_SESSION, ['postalCode']),
     });
     expect(result).toMatchObject({
@@ -138,6 +146,7 @@ describe('getFormattedTrialSessionDetails', () => {
   it('formats trial session when session assignments are empty', () => {
     const result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: {
         ...omit(TRIAL_SESSION, [
           'courtReporter',
@@ -163,6 +172,7 @@ describe('getFormattedTrialSessionDetails', () => {
 
     const result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: {
         ...TRIAL_SESSION,
         alternateTrialClerkName,
@@ -179,6 +189,7 @@ describe('getFormattedTrialSessionDetails', () => {
     it('formats trial session start time in the morning', () => {
       const result = getFormattedTrialSessionDetails({
         applicationContext,
+        currentUser: mockTrialClerkUser,
         trialSession: {
           ...TRIAL_SESSION,
           startTime: '10:00',
@@ -193,6 +204,7 @@ describe('getFormattedTrialSessionDetails', () => {
     it('formats trial session start time at noon', () => {
       const result = getFormattedTrialSessionDetails({
         applicationContext,
+        currentUser: mockTrialClerkUser,
         trialSession: {
           ...TRIAL_SESSION,
           startTime: '12:00',
@@ -208,6 +220,7 @@ describe('getFormattedTrialSessionDetails', () => {
     it('does not format trial session estimated end date when estimatedEndDate is an invalid DateTime', () => {
       const result = getFormattedTrialSessionDetails({
         applicationContext,
+        currentUser: mockTrialClerkUser,
         trialSession: {
           ...TRIAL_SESSION,
           estimatedEndDate: 'Am I an ISO8601 date string?',
@@ -222,6 +235,7 @@ describe('getFormattedTrialSessionDetails', () => {
     it('formats trial session estimated end date', () => {
       const result = getFormattedTrialSessionDetails({
         applicationContext,
+        currentUser: mockTrialClerkUser,
         trialSession: {
           ...TRIAL_SESSION,
           estimatedEndDate: '2040-11-25T15:00:00.000Z',
@@ -236,6 +250,7 @@ describe('getFormattedTrialSessionDetails', () => {
   it('displays swing session area if session is a swing session', () => {
     const result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: {
         ...TRIAL_SESSION,
         swingSession: true,
@@ -252,6 +267,7 @@ describe('getFormattedTrialSessionDetails', () => {
   it('formats docket numbers with suffixes and case caption names without postfix on calendared cases and splits them by open and closed cases', () => {
     const result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: {
         ...TRIAL_SESSION,
         calendaredCases: [
@@ -299,6 +315,7 @@ describe('getFormattedTrialSessionDetails', () => {
   it('sorts calendared cases by docket number', () => {
     const result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: {
         ...TRIAL_SESSION,
         calendaredCases: [
@@ -326,6 +343,7 @@ describe('getFormattedTrialSessionDetails', () => {
   it('should set the correct consolidated case flags', () => {
     const result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: {
         ...TRIAL_SESSION,
         calendaredCases: [
