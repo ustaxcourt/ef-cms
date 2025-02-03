@@ -315,7 +315,7 @@ export const EditPetitionerInformationInternal = connect(
               )}
           </div>
 
-          <div className="display-flex flex-row flex-justify">
+          <div className="display-flex flex-column mobile-lg:flex-row flex-justify flex-align-center text-align-center">
             <div>
               <Button
                 data-testid="submit-edit-petitioner-information-button"
@@ -340,7 +340,7 @@ export const EditPetitionerInformationInternal = connect(
             {editPetitionerInformationHelper.showRemovePetitionerButton && (
               <Button
                 link
-                className="red-warning no-wrap float-right"
+                className="red-warning"
                 data-testid="remove-petitioner-button"
                 icon="trash"
                 onClick={() => {
