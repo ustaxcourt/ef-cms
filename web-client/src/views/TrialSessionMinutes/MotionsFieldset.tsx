@@ -1,5 +1,6 @@
 import {
   AddRowHandler,
+  AutoSaveHandler,
   OnChangeHandler,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import { Button } from '@web-client/ustc-ui/Button/Button';
@@ -23,7 +24,7 @@ export const MotionsFieldset = ({
 }: {
   addRowHandler: AddRowHandler;
   onChangeHandler: OnChangeHandler;
-  onBlurHandler: () => void;
+  onBlurHandler: AutoSaveHandler;
   motionsFormState: MinuteSheetFormState['motionsSection'];
 }) => {
   return (

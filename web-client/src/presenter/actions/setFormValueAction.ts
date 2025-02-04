@@ -17,8 +17,6 @@ export const setFormValueAction = ({
     return store.unset(state[stateRoot][key]);
   }
 
-  // minutsheetform.casemetadata.recalled.key.date
-
   if (typeof index === 'number') {
     return store.set(state[stateRoot][key][index], value);
   }

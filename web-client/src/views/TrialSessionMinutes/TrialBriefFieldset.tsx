@@ -11,7 +11,10 @@ import {
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { MINUTE_SHEET_FORM_SECTION_MAP } from '@shared/business/entities/EntityConstants';
-import { OnChangeHandler } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
+import {
+  AutoSaveHandler,
+  OnChangeHandler,
+} from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import { SeriatimFieldset } from './BriefDetailsFieldsets/SeriatimFieldset';
 import { SimultaneousBriefFormFieldset } from './BriefDetailsFieldsets/SimultaneousBriefFormFieldset';
 import { SimultaneousMemorandaOfLawFormFieldset } from './BriefDetailsFieldsets/SimultaneousMemorandaOfLawFormFieldset';
@@ -25,7 +28,7 @@ export const TrialBriefFieldset = ({
   trialBriefFormState,
 }: {
   onChangeHandler: OnChangeHandler;
-  onBlurHandler: () => void;
+  onBlurHandler: AutoSaveHandler;
   trialBriefFormState: MinuteSheetFormState['trialBriefSection'];
 }) => {
   const renderBriefForm = (briefType: string) => {

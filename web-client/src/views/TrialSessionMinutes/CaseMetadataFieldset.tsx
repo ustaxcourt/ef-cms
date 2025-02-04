@@ -1,5 +1,6 @@
 import {
   AddRowHandler,
+  AutoSaveHandler,
   OnChangeHandler,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import { Button } from '@web-client/ustc-ui/Button/Button';
@@ -20,7 +21,7 @@ export const CaseMetadataFieldset = ({
 }: {
   addRowHandler: AddRowHandler;
   onChangeHandler: OnChangeHandler;
-  onBlurHandler: () => void;
+  onBlurHandler: AutoSaveHandler;
   caseMetadataFormState: MinuteSheetFormState['caseMetadataSection'];
 }) => {
   return (

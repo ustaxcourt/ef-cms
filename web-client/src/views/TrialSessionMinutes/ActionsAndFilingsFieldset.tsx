@@ -8,6 +8,7 @@ import {
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import {
   AddRowHandler,
+  AutoSaveHandler,
   OnChangeHandler,
   RemoveRowHandler,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
@@ -28,7 +29,7 @@ export const ActionsAndFilingsFieldset = ({
   addRowHandler: AddRowHandler;
   onChangeHandler: OnChangeHandler;
   removeRowHandler: RemoveRowHandler;
-  onBlurHandler: () => void;
+  onBlurHandler: AutoSaveHandler;
   actionsAndFilingsFormState: MinuteSheetFormState['actionsAndFilingsSection'];
 }) => {
   const SHOW_MOTION_DETAILS_TYPE: ActionDocumentTypeOption = 'motion';

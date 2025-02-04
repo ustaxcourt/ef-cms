@@ -1,6 +1,6 @@
 import { checkForExistingMinuteSheetAction } from '@web-client/presenter/actions/TrialSessionMinutes/checkForExistingMinuteSheetAction';
 import { clearMinuteSheetFormStateAction } from '@web-client/presenter/actions/TrialSessionMinutes/clearMinuteSheetFormState';
-import { getAndSetCurrentJudgesForMinuteSheetAction } from '@web-client/presenter/actions/TrialSessionMinutes/getAndSetCurrentJudgesForMinuteSheetAction';
+import { fetchCurrentJudgesAsOptionsForMinuteSheetAction } from '@web-client/presenter/actions/TrialSessionMinutes/fetchCurrentJudgesAsOptionsForMinuteSheetAction';
 import { getCaseAction } from '@web-client/presenter/actions/getCaseAction';
 import { getIrsPractitionerUsersAction } from '@web-client/presenter/actions/TrialSession/getIrsPractitionerUsersAction';
 import { getTrialSessionDetailsAction } from '../../actions/TrialSession/getTrialSessionDetailsAction';
@@ -21,7 +21,7 @@ export const goToTrialSessionMinutesSequence = [
     [getTrialSessionDetailsAction, setTrialSessionDetailsAction],
     [getCaseAction, setCaseAction],
   ]),
-  getAndSetCurrentJudgesForMinuteSheetAction,
+  fetchCurrentJudgesAsOptionsForMinuteSheetAction,
   clearMinuteSheetFormStateAction,
   checkForExistingMinuteSheetAction,
   {

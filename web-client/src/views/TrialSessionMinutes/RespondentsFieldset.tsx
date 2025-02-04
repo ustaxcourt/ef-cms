@@ -1,5 +1,6 @@
 import {
   AddRowHandler,
+  AutoSaveHandler,
   OnChangeHandler,
   RemoveRowHandler,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
@@ -20,7 +21,7 @@ export const RespondentsFieldset = ({
 }: {
   addRowHandler: AddRowHandler;
   onChangeHandler: OnChangeHandler;
-  onBlurHandler: () => void;
+  onBlurHandler: AutoSaveHandler;
   removeRowHandler: RemoveRowHandler;
   respondentsFormState: MinuteSheetFormState['respondentsSection'];
   formOptions;

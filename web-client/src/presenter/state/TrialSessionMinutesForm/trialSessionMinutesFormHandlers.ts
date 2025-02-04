@@ -31,3 +31,5 @@ export type RemoveRowHandler = ({
 }) => void;
 
 export type DownloadPdfHandler = () => void;
+
+export type AutoSaveHandler = () => void;

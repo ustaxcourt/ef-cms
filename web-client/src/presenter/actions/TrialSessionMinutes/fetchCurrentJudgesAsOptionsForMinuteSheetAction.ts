@@ -1,11 +1,11 @@
 import { getConstants } from '@web-client/getConstants';
 import { getUsersInSectionInteractor } from '@shared/proxies/users/getUsersInSectionProxy';
 
-export const getAndSetCurrentJudgesForMinuteSheetAction = async ({
+export const fetchCurrentJudgesAsOptionsForMinuteSheetAction = async ({
   applicationContext,
 }) => {
   const { USER_ROLES } = getConstants();
-  let judgeOptions: Record<
+  const judgeOptions: Record<
     string,
     { fullName: string; title: string; userId: string }
   > = {};

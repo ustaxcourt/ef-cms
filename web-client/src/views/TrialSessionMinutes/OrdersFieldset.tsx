@@ -5,7 +5,10 @@ import {
   MinuteSheetFormState,
   STATUS_REPORT_ORDERED_FOR_OPTIONS,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
-import { OnChangeHandler } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
+import {
+  AutoSaveHandler,
+  OnChangeHandler,
+} from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import React from 'react';
 
 export const OrdersFieldset = ({
@@ -14,7 +17,7 @@ export const OrdersFieldset = ({
   ordersFormState,
 }: {
   onChangeHandler: OnChangeHandler;
-  onBlurHandler: () => void;
+  onBlurHandler: AutoSaveHandler;
   ordersFormState: MinuteSheetFormState['ordersSection'];
 }) => {
   return (
