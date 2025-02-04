@@ -38,10 +38,10 @@ const router = {
       });
     });
 
-    // route('/todays-opinions', () => {
-    //   setPageTitle('Today’s Opinions');
-    //   app.getSequence('gotoTodaysOpinionsSequence')();
-    // });
+    route('/todays-opinions-old', () => {
+      setPageTitle('Today’s Opinions');
+      app.getSequence('gotoTodaysOpinionsSequence')();
+    });
 
     route('/todays-orders', () => {
       setPageTitle('Today’s Orders');

@@ -7,6 +7,7 @@ import { createRoot } from 'react-dom/client';
 import React from 'react';
 import { todaysOpinionsRoute } from 'web-client-public/src/routes/todays-opinions/TodaysOpinions';
 import { rootRoute } from 'web-client-public/src/routes/PublicRoot';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const catchAllRouteInFile = createRoute({
   getParentRoute: () => rootRoute,
@@ -18,10 +19,15 @@ const routeTree = rootRoute.addChildren([
   catchAllRouteInFile,
 ]);
 
+const queryClient = new QueryClient();
+
 const router = createRouter({
   defaultPreload: 'intent',
   defaultStaleTime: 5000,
   routeTree,
+  context: {
+    queryClient,
+  },
 });
 
 // Register things for typesafety
@@ -36,5 +42,9 @@ const rootElement = window.document.getElementById('app-public')!;
 if (!rootElement.innerHTML) {
   const root = createRoot(rootElement);
 
-  root.render(<RouterProvider router={router} />);
+  root.render(
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>,
+  );
 }
