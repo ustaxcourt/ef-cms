@@ -13,6 +13,7 @@ import {
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
 import { caseStatusWithTrialInformation } from '@shared/business/utilities/caseStatusWithTrialInformation';
+import { combineAllPdfDocuments } from '@shared/business/utilities/documentGenerators/combineAllPdfDocuments';
 import { combineTwoPdfs } from '../../shared/src/business/utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
@@ -57,6 +58,7 @@ const utilities = {
   calculateDifferenceInDays,
   calculateISODate,
   caseStatusWithTrialInformation,
+  combineAllPdfDocuments,
   combineTwoPdfs,
   compareCasesByDocketNumber,
   compareISODateStrings,
