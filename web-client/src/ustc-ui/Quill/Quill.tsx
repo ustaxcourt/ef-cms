@@ -4,7 +4,6 @@ https://github.com/zenoamaro/react-quill
 */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import isEqual from 'lodash/isEqual';
 
 import Quill, {
@@ -147,7 +146,7 @@ class ReactQuill extends React.Component<ReactQuillProps, ReactQuillState> {
   /*
   Reference to the element holding the Quill editing area.
   */
-  editingArea?: React.ReactInstance | null
+  editingArea: React.RefObject<Element | null>;
 
   /*
   Tracks the internal value of the Quill editor
@@ -182,6 +181,7 @@ class ReactQuill extends React.Component<ReactQuillProps, ReactQuillState> {
     super(props);
     const value = this.isControlled()? props.value : props.defaultValue;
     this.value = value ?? '';
+    this.editingArea = React.createRef();
   }
 
   validateProps(props: ReactQuillProps): void {
@@ -436,14 +436,17 @@ class ReactQuill extends React.Component<ReactQuillProps, ReactQuillState> {
     if (!this.editingArea) {
       throw new Error('Instantiating on missing editing area');
     }
-    const element = ReactDOM.findDOMNode(this.editingArea);
+
+    const element = this.editingArea.current;
+
     if (!element) {
       throw new Error('Cannot find element for editing area');
     }
     if (element.nodeType === 3) {
       throw new Error('Editing area cannot be a text node');
     }
-    return element as Element;
+
+    return element;
   }
 
   /*
@@ -455,9 +458,7 @@ class ReactQuill extends React.Component<ReactQuillProps, ReactQuillState> {
 
     const properties = {
       key: generation,
-      ref: (instance: React.ReactInstance | null) => {
-        this.editingArea = instance
-      },
+      ref: this.editingArea
     };
 
     if (React.Children.count(children)) {
@@ -474,6 +475,7 @@ class ReactQuill extends React.Component<ReactQuillProps, ReactQuillState> {
 
   render() {
     return (
+      // eslint-disable-next-line jsx-a11y/no-static-element-interactions
       <div
         id={this.props.id}
         style={this.props.style}
@@ -491,7 +493,7 @@ class ReactQuill extends React.Component<ReactQuillProps, ReactQuillState> {
   onEditorChange = (
     eventName: 'text-change' | 'selection-change',
     rangeOrDelta: Range | DeltaStatic,
-    oldRangeOrDelta: Range | DeltaStatic,
+    _oldRangeOrDelta: Range | DeltaStatic,
     source: Sources,
   ) => {
     if (eventName === 'text-change') {
@@ -577,4 +579,4 @@ function postpone(fn: (value: void) => void) {
 
 // Compatibility Export to avoid `require(...).default` on CommonJS.
 // See: https://github.com/Microsoft/TypeScript/issues/2719
-export = ReactQuill;
+export default ReactQuill;
