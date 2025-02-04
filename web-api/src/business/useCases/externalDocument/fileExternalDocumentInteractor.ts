@@ -19,13 +19,6 @@ import { pick } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
-/**
- * fileExternalDocumentInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.documentMetadata the metadata for all the documents
- * @returns {object} the updated case after the documents have been added
- */
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
   { documentMetadata }: { documentMetadata: any },
@@ -139,6 +132,8 @@ export const fileExternalDocument = async (
         let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
         const servedParties = aggregatePartiesForService(caseEntity);
+        const highPriorityWorkItem =
+          caseEntity.status === CASE_STATUS_TYPES.calendared;
 
         for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
           if (docketEntryId && metadata) {
@@ -160,9 +155,6 @@ export const fileExternalDocument = async (
             docketEntryEntity.setFiledBy(user);
 
             docketEntryEntity.validate();
-
-            const highPriorityWorkItem =
-              caseEntity.status === CASE_STATUS_TYPES.calendared;
 
             const workItem = new WorkItem({
               assigneeId: null,
