@@ -387,6 +387,109 @@ describe('getFormattedTrialSessionDetails', () => {
       expect.objectContaining({ docketNumber: '102-19' }),
     ]);
   });
+
+  it('should format trial session cases with minute sheet buttons based on user permissions', () => {
+    applicationContext.getCurrentUser = () => ({
+      ...mockTrialClerkUser,
+      role: 'docketClerk', // user without MANAGE_MINUTE_SHEET permission
+    });
+
+    let result = getFormattedTrialSessionDetails({
+      applicationContext,
+      currentUser: applicationContext.getCurrentUser(),
+      trialSession: {
+        ...TRIAL_SESSION,
+        calendaredCases: [mockCase],
+        isCalendared: true,
+      },
+    });
+
+    expect(result.openCases[0].displayMinuteSheetFormButton).toBeFalsy();
+    expect(result.openCases[0].minuteSheetRoute).toBeUndefined();
+
+    applicationContext.getCurrentUser = () => ({
+      ...mockTrialClerkUser, // user with MANAGE_MINUTE_SHEET permission
+    });
+
+    result = getFormattedTrialSessionDetails({
+      applicationContext,
+      currentUser: applicationContext.getCurrentUser(),
+      trialSession: {
+        ...TRIAL_SESSION,
+        calendaredCases: [mockCase],
+        isCalendared: true,
+      },
+    });
+
+    expect(result.openCases[0].displayMinuteSheetFormButton).toBeTruthy();
+    expect(result.openCases[0].minuteSheetRoute).toBe(
+      `/trial-session-detail/${TRIAL_SESSION.trialSessionId}/case/${mockCase.docketNumber}/minutes`,
+    );
+  });
+
+  it('should not display minute sheet button for non-calendared trial sessions', () => {
+    const result = getFormattedTrialSessionDetails({
+      applicationContext,
+      currentUser: mockTrialClerkUser,
+      trialSession: {
+        ...TRIAL_SESSION,
+        calendaredCases: [mockCase],
+        isCalendared: false,
+      },
+    });
+
+    expect(result.openCases[0].displayMinuteSheetFormButton).toBeFalsy();
+    expect(result.openCases[0].minuteSheetRoute).toBeUndefined();
+  });
+
+  it('should display minute sheet button only for lead case in consolidated group', () => {
+    const result = getFormattedTrialSessionDetails({
+      applicationContext,
+      currentUser: mockTrialClerkUser,
+      trialSession: {
+        ...TRIAL_SESSION,
+        calendaredCases: [
+          {
+            ...mockCase,
+            docketNumber: '101-20',
+            leadDocketNumber: '101-20',
+          },
+          {
+            ...mockCase,
+            docketNumber: '102-20',
+            leadDocketNumber: '101-20',
+          },
+        ],
+        isCalendared: true,
+      },
+    });
+
+    expect(result.openCases[0].displayMinuteSheetFormButton).toBeTruthy();
+    expect(result.openCases[0].minuteSheetRoute).toBeDefined();
+    expect(result.openCases[1].displayMinuteSheetFormButton).toBeFalsy();
+    expect(result.openCases[1].minuteSheetRoute).toBeUndefined();
+  });
+
+  it('should display minute sheet button for non-consolidated cases', () => {
+    const result = getFormattedTrialSessionDetails({
+      applicationContext,
+      currentUser: mockTrialClerkUser,
+      trialSession: {
+        ...TRIAL_SESSION,
+        calendaredCases: [
+          {
+            ...mockCase,
+            docketNumber: '101-20',
+            leadDocketNumber: undefined,
+          },
+        ],
+        isCalendared: true,
+      },
+    });
+
+    expect(result.openCases[0].displayMinuteSheetFormButton).toBeTruthy();
+    expect(result.openCases[0].minuteSheetRoute).toBeDefined();
+  });
 });
 
 describe('formatCaseForTrialSession', () => {
