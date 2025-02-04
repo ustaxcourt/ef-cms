@@ -6,13 +6,9 @@ export const updateMinuteSheetLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async () => {
-      return await updateMinuteSheetInteractor(
-        JSON.parse(event.body),
-        authorizedUser,
-      );
-    },
-    { logResults: false },
-  );
+  genericHandler(event, async () => {
+    return await updateMinuteSheetInteractor(
+      JSON.parse(event.body),
+      authorizedUser,
+    );
+  });

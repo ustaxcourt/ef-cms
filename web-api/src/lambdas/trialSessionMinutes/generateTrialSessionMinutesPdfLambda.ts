@@ -6,19 +6,15 @@ export const generateTrialSessionMinutesPdfLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      const lambdaArguments = {
-        ...event.pathParameters,
-      };
-      return await generateTrialSessionMinutesPdfInteractor(
-        applicationContext,
-        {
-          ...lambdaArguments,
-        },
-        authorizedUser,
-      );
-    },
-    { logResults: false },
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    const lambdaArguments = {
+      ...event.pathParameters,
+    };
+    return await generateTrialSessionMinutesPdfInteractor(
+      applicationContext,
+      {
+        ...lambdaArguments,
+      },
+      authorizedUser,
+    );
+  });
