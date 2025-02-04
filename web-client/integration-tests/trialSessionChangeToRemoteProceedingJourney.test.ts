@@ -33,7 +33,7 @@ describe('Trial Session Eligible Cases Journey', () => {
   );
 
   const trialLocation = `Madison, Wisconsin, ${Date.now()}`;
-  // eslint-disable-next-line @miovision/disallow-date/no-new-date
+  // eslint-disable-next-line custom-rules-plugin/no-new-dates
   const currentYearPlusFive = new Date().getFullYear() + 5;
   const overrides = {
     maxCases: 4,
@@ -291,6 +291,7 @@ describe('Trial Session Eligible Cases Journey', () => {
 
       await waitForLoadingComponentToHide({ cerebralTest });
       if (caseDetail.status !== CASE_STATUS_TYPES.closed) {
+        // eslint-disable-next-line jest/no-conditional-expect
         expect(norpDocketEntry).toMatchObject({
           servedParties: [
             {
@@ -299,6 +300,7 @@ describe('Trial Session Eligible Cases Journey', () => {
           ],
         });
       } else {
+        // eslint-disable-next-line jest/no-conditional-expect
         expect(norpDocketEntry).toBeUndefined();
       }
     }

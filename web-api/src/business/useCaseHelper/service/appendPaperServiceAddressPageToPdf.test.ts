@@ -2,6 +2,7 @@ import { PDFDocument } from 'pdf-lib';
 import { appendPaperServiceAddressPageToPdf } from './appendPaperServiceAddressPageToPdf';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
+import { Case } from '@shared/business/entities/cases/Case';
 
 describe('appendPaperServiceAddressPageToPdf', () => {
   applicationContext
@@ -14,10 +15,14 @@ describe('appendPaperServiceAddressPageToPdf', () => {
 
     await appendPaperServiceAddressPageToPdf({
       applicationContext,
-      caseEntity: { docketNumber: '123-20' },
+      caseEntity: { docketNumber: '123-20' } as Case,
       newPdfDoc,
       noticeDoc,
-      servedParties: { paper: [{ name: '1' }, { name: '2' }] },
+      servedParties: {
+        paper: [{ name: '1' }, { name: '2' }],
+        all: [],
+        electronic: [],
+      },
     });
 
     expect(newPdfDoc.getPages().length).toEqual(4);

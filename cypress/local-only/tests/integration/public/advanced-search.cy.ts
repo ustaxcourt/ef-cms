@@ -1,26 +1,70 @@
 import {
+  createAndServePaperPetition,
+  createAndServePaperPetitionMyselfAndSpouse,
+} from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
+import {
   docketRecordTable,
   enterDocumentDocketNumber,
   enterDocumentKeywordForAdvancedSearch,
-  enterPetitionerName,
   firstSearchResultJudgeField,
   navigateTo as navigateToDashboard,
   noSearchResultsContainer,
   searchForCaseByDocketNumber,
-  searchForCaseByPetitionerInformation,
   searchForDocuments,
   searchForOrderByJudge,
   searchResultsTable,
   unselectOpinionTypesExceptBench,
 } from '../../../support/pages/public/advanced-search';
+import { faker } from '@faker-js/faker';
+import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
+import { loginAsDocketClerk1 } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Advanced search', () => {
-  describe('case - by name', () => {
-    it('should route to case detail when a match is found and the user clicks on the docket record link in the table', () => {
-      navigateToDashboard();
-      enterPetitionerName('Osborne');
-      searchForCaseByPetitionerInformation();
-      expect(searchResultsTable()).to.exist;
+  describe('Case Search By Name', () => {
+    it('should show order search results by [petitioner name, secondary contact name, case caption] when searching', () => {
+      const nameToSearchFor = `${faker.person.firstName()} ${faker.person.lastName()}`;
+      createAndServePaperPetition({ name: nameToSearchFor }).then(
+        ({ docketNumber: primaryContactDocketNumber }) => {
+          createAndServePaperPetitionMyselfAndSpouse({
+            secondaryContactName: nameToSearchFor,
+          }).then(({ docketNumber: secondaryContactDocketNumber }) => {
+            createAndServePaperPetition().then(
+              ({ docketNumber: caseCaptionDocketNumber }) => {
+                const updatedCaseCaption = `${nameToSearchFor}, name on caseCaption, third-best match, Petitioner`;
+                loginAsDocketClerk1();
+                goToCase(caseCaptionDocketNumber);
+                cy.get('[data-testid=tab-case-information]').click();
+                cy.get('[data-testid=menu-edit-case-context-button]').click();
+                cy.get('[data-testid=edit-case-caption-textarea]').clear();
+                cy.get('[data-testid=edit-case-caption-textarea]').type(
+                  updatedCaseCaption,
+                );
+                cy.get('[data-testid="modal-button-confirm"]').click();
+                cy.get('[data-testid="success-alert"]').should('be.visible');
+
+                cy.visit('/');
+                cy.get('[data-testid=petitioner-name]').type(nameToSearchFor);
+                cy.get(
+                  '[data-testid=submit-case-search-by-name-button]',
+                ).click();
+
+                cy.get(
+                  //7355: Primary contact Name is most important
+                  `[data-testid=advanced-case-search-result-${primaryContactDocketNumber}]`,
+                ).find(`[data-testid=advanced-case-search-result-order-${0}]`);
+                cy.get(
+                  //7355: Secondary contact name is second most important
+                  `[data-testid=advanced-case-search-result-${secondaryContactDocketNumber}]`,
+                ).find(`[data-testid=advanced-case-search-result-order-${1}]`);
+                cy.get(
+                  //7355: Case caption is third most important
+                  `[data-testid=advanced-case-search-result-${caseCaptionDocketNumber}]`,
+                ).find(`[data-testid=advanced-case-search-result-order-${2}]`);
+              },
+            );
+          });
+        },
+      );
     });
   });
 
@@ -28,13 +72,13 @@ describe('Advanced search', () => {
     it('should display "No Matches Found" when case search yields no results', () => {
       navigateToDashboard();
       searchForCaseByDocketNumber('999-99');
-      expect(noSearchResultsContainer()).to.exist;
+      noSearchResultsContainer().should('exist');
     });
 
     it('should route to case detail when a case search match is found', () => {
       navigateToDashboard();
       searchForCaseByDocketNumber('103-20');
-      expect(docketRecordTable()).to.exist;
+      docketRecordTable().should('exist');
     });
   });
 
@@ -45,7 +89,7 @@ describe('Advanced search', () => {
       enterDocumentKeywordForAdvancedSearch('opinion');
       enterDocumentDocketNumber('124-20L');
       searchForDocuments();
-      expect(searchResultsTable()).to.exist;
+      searchResultsTable().should('exist');
     });
 
     it('should display results with a judge name', () => {
@@ -56,8 +100,8 @@ describe('Advanced search', () => {
       unselectOpinionTypesExceptBench();
       searchForDocuments();
 
-      expect(searchResultsTable()).to.exist;
-      expect(firstSearchResultJudgeField()).to.exist;
+      searchResultsTable().should('exist');
+      firstSearchResultJudgeField().should('exist');
     });
   });
 
@@ -71,7 +115,7 @@ describe('Advanced search', () => {
       searchForOrderByJudge(wantedLegacyJudge);
       searchForDocuments();
 
-      expect(searchResultsTable()).to.exist;
+      searchResultsTable().should('exist');
 
       //assert that every judge in the search result list is the wanted legacy judge
       cy.get('tr.search-result').each(element => {

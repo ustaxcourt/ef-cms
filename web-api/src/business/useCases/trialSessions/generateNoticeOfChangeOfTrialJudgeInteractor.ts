@@ -55,7 +55,6 @@ export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
         applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
     });
 
-  const { docketNumberWithSuffix } = caseDetail;
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
   return await applicationContext
@@ -65,7 +64,7 @@ export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
       data: {
         caseCaptionExtension,
         caseTitle,
-        docketNumberWithSuffix: docketNumberWithSuffix || docketNumber,
+        docketNumberWithSuffix: caseDetail.docketNumber,
         nameOfClerk: name,
         titleOfClerk: title,
         trialInfo,

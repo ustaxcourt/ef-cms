@@ -76,7 +76,7 @@ const resendServiceEmail = async (
       applicationContext,
       caseEntity,
       docketEntryId,
-      servedParties: { electronic: [] },
+      servedParties: { electronic: [], all: [], paper: [] },
     });
   }
 };
