@@ -77,6 +77,14 @@ export const MinuteSheet = ({
             <div>
               <strong>Calendar Called</strong>
             </div>
+            {/*
+              Since we're relying on formatting helpers to describe the content that should displayed in this PDF, including
+              certain markup (e.g., <em> tags), we need to use `dangerouslySetInnerHTML` to render the content as HTML; otherwise the markup
+              itself is rendered as text.
+
+              Since this is only being used to render PDF content as HTML before converting to PDF and does not rely on re-rendering as
+              content changes, this is safe to do.
+            */}
             <div
               dangerouslySetInnerHTML={{
                 __html: formattedMinuteSheet.called,
