@@ -37,6 +37,7 @@ export default defineConfig({
     testIsolation: false,
   },
   fixturesFolder: 'cypress/local-only/fixtures',
+  injectDocumentDomain: true,
   reporter: 'spec',
   reporterOptions: {
     toConsole: true,
