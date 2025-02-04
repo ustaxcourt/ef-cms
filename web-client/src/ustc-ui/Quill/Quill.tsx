@@ -15,77 +15,66 @@ import Quill, {
   Sources,
 } from 'quill';
 
-// Merged namespace hack to export types along with default object
-// See: https://github.com/Microsoft/TypeScript/issues/2719
-namespace ReactQuill {
-  export type Value = string | DeltaStatic;
-  export type Range = RangeStatic | null;
+type Value = string | DeltaStatic;
+type Range = RangeStatic | null;
 
-  export interface QuillOptions extends QuillOptionsStatic {
-    tabIndex?: number,
-  }
-
-  export interface ReactQuillProps {
-    bounds?: string | HTMLElement,
-    children?: React.ReactElement<any>,
-    className?: string,
-    defaultValue?: Value,
-    formats?: string[],
-    id?: string,
-    modules?: StringMap,
-    onChange?(
-      value: string,
-      delta: DeltaStatic,
-      source: Sources,
-      editor: UnprivilegedEditor,
-    ): void,
-    onChangeSelection?(
-      selection: Range,
-      source: Sources,
-      editor: UnprivilegedEditor,
-    ): void,
-    onFocus?(
-      selection: Range,
-      source: Sources,
-      editor: UnprivilegedEditor,
-    ): void,
-    onBlur?(
-      previousSelection: Range,
-      source: Sources,
-      editor: UnprivilegedEditor,
-    ): void,
-    onKeyDown?: React.EventHandler<any>,
-    onKeyPress?: React.EventHandler<any>,
-    onKeyUp?: React.EventHandler<any>,
-    placeholder?: string,
-    preserveWhitespace?: boolean,
-    readOnly?: boolean,
-    scrollingContainer?: string | HTMLElement,
-    style?: React.CSSProperties,
-    tabIndex?: number,
-    theme?: string,
-    value?: Value,
-  }
-
-  export interface UnprivilegedEditor {
-    getLength(): number;
-    getText(index?: number, length?: number): string;
-    getHTML(): string;
-    getBounds(index: number, length?: number): BoundsStatic;
-    getSelection(focus?: boolean): RangeStatic;
-    getContents(index?: number, length?: number): DeltaStatic;
-  }
+interface QuillOptions extends QuillOptionsStatic {
+  tabIndex?: number;
 }
 
-// Re-import everything from namespace into scope for comfort
-import Value = ReactQuill.Value;
-import Range = ReactQuill.Range;
-import QuillOptions = ReactQuill.QuillOptions;
-import ReactQuillProps = ReactQuill.ReactQuillProps;
-import UnprivilegedEditor = ReactQuill.UnprivilegedEditor;
+interface ReactQuillProps {
+  bounds?: string | HTMLElement;
+  children?: React.ReactElement<any>;
+  className?: string;
+  defaultValue?: Value;
+  formats?: string[];
+  id?: string;
+  modules?: StringMap;
+  onChange?(
+    value: string,
+    delta: DeltaStatic,
+    source: Sources,
+    editor: UnprivilegedEditor
+  ): void;
+  onChangeSelection?(
+    selection: Range,
+    source: Sources,
+    editor: UnprivilegedEditor
+  ): void;
+  onFocus?(
+    selection: Range,
+    source: Sources,
+    editor: UnprivilegedEditor
+  ): void;
+  onBlur?(
+    previousSelection: Range,
+    source: Sources,
+    editor: UnprivilegedEditor
+  ): void;
+  onKeyDown?: React.EventHandler<any>;
+  onKeyPress?: React.EventHandler<any>;
+  onKeyUp?: React.EventHandler<any>;
+  placeholder?: string;
+  preserveWhitespace?: boolean;
+  readOnly?: boolean;
+  scrollingContainer?: string | HTMLElement;
+  style?: React.CSSProperties;
+  tabIndex?: number;
+  theme?: string;
+  value?: Value;
+}
+
+interface UnprivilegedEditor {
+  getLength(): number;
+  getText(index?: number, length?: number): string;
+  getHTML(): string;
+  getBounds(index: number, length?: number): BoundsStatic;
+  getSelection(focus?: boolean): RangeStatic;
+  getContents(index?: number, length?: number): DeltaStatic;
+}
 
 interface ReactQuillState {
-  generation: number,
+  generation: number;
 }
 
 class ReactQuill extends React.Component<ReactQuillProps, ReactQuillState> {
@@ -452,7 +441,7 @@ class ReactQuill extends React.Component<ReactQuillProps, ReactQuillState> {
   /*
   Renders an editor area, unless it has been provided one to clone.
   */
-  renderEditingArea(): JSX.Element {
+  renderEditingArea() {
     const {children, preserveWhitespace} = this.props;
     const {generation} = this.state;
 
@@ -577,6 +566,5 @@ function postpone(fn: (value: void) => void) {
   void Promise.resolve().then(fn);
 }
 
-// Compatibility Export to avoid `require(...).default` on CommonJS.
-// See: https://github.com/Microsoft/TypeScript/issues/2719
+export { Quill }
 export default ReactQuill;
