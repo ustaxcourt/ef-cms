@@ -1,13 +1,14 @@
+/* eslint-disable jest/no-conditional-expect */
 import {
   CASE_STATUS_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkEditsTrialSession } from './journey/docketClerkEditsTrialSession';
 import { docketClerkUpdatesCaseStatusTo } from './journey/docketClerkUpdatesCaseStatusTo';
 import { docketClerkVerifiesCaseStatusIsUnchanged } from './journey/docketClerkVerifiesCaseStatusIsUnchanged';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
-import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from '../src/presenter/computeds/formattedTrialSessionDetails';
+import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from '@web-client/presenter/computeds/formattedTrialSessionDetails';
 import {
   loginAs,
   setupTest,
@@ -19,7 +20,7 @@ import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkManuallyAddsCaseToTrial } from './journey/petitionsClerkManuallyAddsCaseToTrial';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../src/withAppContext';
+import { withAppContextDecorator } from '@web-client/withAppContext';
 
 describe('Docket Clerk edits a calendared trial session', () => {
   const cerebralTest = setupTest();
@@ -78,7 +79,7 @@ describe('Docket Clerk edits a calendared trial session', () => {
   );
   petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
 
-  it('verify that there are 3 cases on the trial session', async () => {
+  it('verify that there are 3 cases on the trial session after scheduling the trial session', async () => {
     await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
       trialSessionId: cerebralTest.trialSessionId,
     });
@@ -91,7 +92,7 @@ describe('Docket Clerk edits a calendared trial session', () => {
 
   docketClerkEditsTrialSession(cerebralTest, overrides);
 
-  it('verify that there are 3 cases on the trial session', async () => {
+  it('verify that there are 3 cases on the trial session after the docket clerk edits the trial session', async () => {
     await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
       trialSessionId: cerebralTest.trialSessionId,
     });
