@@ -4,7 +4,7 @@ import { DomUtils, parseDocument } from 'htmlparser2';
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
 import { render as renderHtml } from 'dom-serializer';
 import React, { Suspense, useEffect, useRef } from 'react';
-import reactQuill from 'react-quill';
+import reactQuill from '@web-client/ustc-ui/Quill/Quill';
 
 const inlineStylesFontSizes = {};
 const fontSizes = ['10px', '12px', '14px', '16px', '18px', '20px'];
