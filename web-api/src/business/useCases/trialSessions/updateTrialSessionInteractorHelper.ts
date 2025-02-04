@@ -9,6 +9,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
 import { TrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { get } from 'lodash';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 type GetCasesInTrialSessionParams = {
   applicationContext: ServerApplicationContext;
@@ -28,12 +29,10 @@ export async function getCasesInTrialSession({
     trialSession
       .caseOrder!.filter(c => !c.removedFromTrial)
       .map(async c => {
-        const aCase = await applicationContext
-          .getPersistenceGateway()
-          .getCaseByDocketNumber({
-            applicationContext,
-            docketNumber: c.docketNumber,
-          });
+        const aCase = await getCaseByDocketNumber({
+          applicationContext,
+          docketNumber: c.docketNumber,
+        });
         return new Case(aCase, { authorizedUser });
       }),
   );
