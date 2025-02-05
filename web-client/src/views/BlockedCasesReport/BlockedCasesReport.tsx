@@ -78,11 +78,11 @@ export const BlockedCasesReport = connect(
             <div className="grid-col-9">
               {blockedCaseReportFilter.trialLocationFilter && (
                 <>
-                  <div className="grid-row">
-                    <div className="grid-col-4">
+                  <div className="grid-row flex-align-center flex-wrap">
+                    <div className="grid-col-2">
                       <h2>{blockedCaseReportFilter.trialLocationFilter}</h2>
                     </div>
-                    <div className="grid-col-4">
+                    <div ref={paginatorTop} className="grid-col">
                       {totalPages > 1 && (
                         <Paginator
                           currentPageIndex={activePage}
@@ -94,7 +94,7 @@ export const BlockedCasesReport = connect(
                         />
                       )}
                     </div>
-                    <div className="grid-col-4 text-right margin-top-1">
+                    <div className="grid-col-2 text-right">
                       <span className="text-semibold">
                         Count:{' '}
                         <span data-testid="blocked-cases-count">
