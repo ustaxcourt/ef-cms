@@ -46,6 +46,7 @@ export const handler: Handler = async (_event, context) => {
       await sendEmailWithAttachment({
         applicationContext,
         body,
+        contentType: 'text/csv',
         filePath: filename,
         recipient,
         subject,
