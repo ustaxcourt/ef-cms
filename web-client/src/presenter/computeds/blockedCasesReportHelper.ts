@@ -85,6 +85,12 @@ export const blockedCasesReportHelper = (
           blockedCase.automaticBlockedDate!,
           'MMDDYY',
         );
+      } else {
+        const blockedDate = getBlockedDateFromBlockedGroup(
+          blockedCase.leadDocketNumber!,
+          groupedCases,
+        );
+        blockedDateEarliest = formatDateString(blockedDate, 'MMDDYY');
       }
 
       return {
@@ -104,6 +110,22 @@ export const blockedCasesReportHelper = (
     blockedCasesFormatted,
   };
 };
+
+function getBlockedDateFromBlockedGroup(
+  leadDocketNumber: string,
+  blockCaseGroups: Map<string, BlockedCasesResponse>,
+) {
+  const cases = blockCaseGroups.get(leadDocketNumber);
+  if (!cases || cases.length === 0) return undefined;
+
+  return cases
+    .flatMap(({ blockedDate, automaticBlockedDate }) => [
+      blockedDate,
+      automaticBlockedDate,
+    ])
+    .filter((date): date is string => !!date)
+    .sort()[0];
+}
 
 function groupCases(
   cases: BlockedCasesResponse,
