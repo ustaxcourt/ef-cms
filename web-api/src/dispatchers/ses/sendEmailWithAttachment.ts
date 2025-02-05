@@ -1,15 +1,16 @@
 import { SendRawEmailCommand, SESClient } from '@aws-sdk/client-ses';
-import { applicationContext } from '@web-api/applicationContext';
+import { type ServerApplicationContext } from '@web-api/applicationContext';
 import { basename } from 'path';
-import { environment } from '@web-api/environment';
 import { existsSync, readFileSync } from 'fs';
 
 export const sendEmailWithAttachment = async ({
+  applicationContext,
   body,
   filePath,
   recipient,
   subject,
 }: {
+  applicationContext: ServerApplicationContext;
   body: string;
   filePath: string;
   recipient: string;
@@ -23,7 +24,7 @@ export const sendEmailWithAttachment = async ({
   if (!existsSync(filePath)) {
     throw new Error('Error sending email: attachment not found.');
   }
-  const sender = environment.emailFromAddress;
+  const sender = applicationContext.environment.emailFromAddress;
   const sesClient: SESClient = applicationContext.getEmailClient();
   const fileContent = readFileSync(filePath);
 
