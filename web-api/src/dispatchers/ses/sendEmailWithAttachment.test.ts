@@ -33,13 +33,14 @@ const applicationContext = {
 
 const mockEmail = {
   body: 'Jest: Test email with attachment',
+  contentType: 'text/csv',
   filePath: '/tmp/test.csv',
   recipient: 'jest@example.com',
   subject: 'Jest: Test email',
 };
 
 describe('sendEmailWithAttachment', () => {
-  it.each(['body', 'filePath', 'recipient', 'subject'])(
+  it.each(['body', 'contentType', 'filePath', 'recipient', 'subject'])(
     'throws if %s is empty',
     async key => {
       const itsEmail = cloneDeep(mockEmail);

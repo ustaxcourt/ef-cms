@@ -6,17 +6,19 @@ import { existsSync, readFileSync } from 'fs';
 export const sendEmailWithAttachment = async ({
   applicationContext,
   body,
+  contentType,
   filePath,
   recipient,
   subject,
 }: {
   applicationContext: ServerApplicationContext;
   body: string;
+  contentType: string;
   filePath: string;
   recipient: string;
   subject: string;
 }): Promise<void> => {
-  if (!body || !filePath || !recipient || !subject) {
+  if (!body || !contentType || !filePath || !recipient || !subject) {
     throw new Error(
       'Error sending email: missing recipient, body, subject, or attachment.',
     );
@@ -32,6 +34,7 @@ export const sendEmailWithAttachment = async ({
     RawMessage: {
       Data: buildRawEmail({
         body,
+        contentType,
         fileContent,
         filename: basename(filePath),
         recipient,
@@ -48,6 +51,7 @@ export const sendEmailWithAttachment = async ({
 
 const buildRawEmail = ({
   body,
+  contentType,
   fileContent,
   filename,
   recipient,
@@ -55,6 +59,7 @@ const buildRawEmail = ({
   subject,
 }: {
   body: string;
+  contentType: string;
   fileContent: Buffer;
   filename: string;
   recipient: string;
@@ -76,7 +81,7 @@ const buildRawEmail = ({
     body,
     '',
     `--${boundary}`,
-    `Content-Type: text/csv; name="${filename}"`,
+    `Content-Type: ${contentType}; name="${filename}"`,
     'Content-Transfer-Encoding: base64',
     `Content-Disposition: attachment; filename="${filename}"`,
     '',
