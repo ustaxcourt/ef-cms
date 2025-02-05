@@ -79,10 +79,22 @@ export const BlockedCasesReport = connect(
               {blockedCaseReportFilter.trialLocationFilter && (
                 <>
                   <div className="grid-row">
-                    <div className="grid-col-6">
+                    <div className="grid-col-4">
                       <h2>{blockedCaseReportFilter.trialLocationFilter}</h2>
                     </div>
-                    <div className="grid-col-6 text-right margin-top-1">
+                    <div className="grid-col-4">
+                      {totalPages > 1 && (
+                        <Paginator
+                          currentPageIndex={activePage}
+                          totalPages={totalPages}
+                          onPageChange={pageChange => {
+                            setActivePage(pageChange);
+                            focusPaginatorTop(paginatorTop);
+                          }}
+                        />
+                      )}
+                    </div>
+                    <div className="grid-col-4 text-right margin-top-1">
                       <span className="text-semibold">
                         Count:{' '}
                         <span data-testid="blocked-cases-count">
@@ -91,6 +103,7 @@ export const BlockedCasesReport = connect(
                       </span>
                     </div>
                   </div>
+
                   {blockedCasesReportHelper.blockedCasesCount > 0 && (
                     <table
                       className="usa-table subsection ustc-table deadlines"
@@ -112,46 +125,42 @@ export const BlockedCasesReport = connect(
                         </tr>
                       </thead>
                       <tbody>
-                        {pageRecords.map(
-                          item => (
-                            <tr
-                              data-testid={`blocked-case-${item.docketNumber}-row`}
-                              key={item.docketNumber}
-                            >
-                              <td className="consolidated-case-column">
-                                <span
-                                  className={classNames({
-                                    'margin-left-2':
-                                      item.inConsolidatedGroup &&
-                                      !item.isLeadCase,
-                                  })}
-                                >
-                                  <ConsolidatedCaseIcon
-                                    consolidatedIconTooltipText={
-                                      item.consolidatedIconTooltipText
-                                    }
-                                    inConsolidatedGroup={
-                                      item.inConsolidatedGroup
-                                    }
-                                    showLeadCaseIcon={item.isLeadCase}
-                                  />
-                                </span>
-                              </td>
-                              <td>
-                                <CaseLink formattedCase={item} />
-                              </td>
-                              <td>{item.blockedDateEarliest}</td>
-                              <td>{item.caseTitle}</td>
-                              <td>{item.status}</td>
-                              <td>
-                                {item.blockedReason}
-                                {item.blockedReason &&
-                                  item.automaticBlockedReason && <br />}
-                                {item.automaticBlockedReason}
-                              </td>
-                            </tr>
-                          ),
-                        )}
+                        {pageRecords.map(item => (
+                          <tr
+                            data-testid={`blocked-case-${item.docketNumber}-row`}
+                            key={item.docketNumber}
+                          >
+                            <td className="consolidated-case-column">
+                              <span
+                                className={classNames({
+                                  'margin-left-2':
+                                    item.inConsolidatedGroup &&
+                                    !item.isLeadCase,
+                                })}
+                              >
+                                <ConsolidatedCaseIcon
+                                  consolidatedIconTooltipText={
+                                    item.consolidatedIconTooltipText
+                                  }
+                                  inConsolidatedGroup={item.inConsolidatedGroup}
+                                  showLeadCaseIcon={item.isLeadCase}
+                                />
+                              </span>
+                            </td>
+                            <td>
+                              <CaseLink formattedCase={item} />
+                            </td>
+                            <td>{item.blockedDateEarliest}</td>
+                            <td>{item.caseTitle}</td>
+                            <td>{item.status}</td>
+                            <td>
+                              {item.blockedReason}
+                              {item.blockedReason &&
+                                item.automaticBlockedReason && <br />}
+                              {item.automaticBlockedReason}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   )}
