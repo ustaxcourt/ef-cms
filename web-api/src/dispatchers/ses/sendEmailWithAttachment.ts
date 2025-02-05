@@ -27,21 +27,6 @@ export const sendEmailWithAttachment = async ({
   let sent = false;
 
   const params = {
-    ReturnPath: environment.bouncedEmailRecipient,
-    Source: sender,
-    Destination: { ToAddresses: [recipient] },
-    Message: {
-      Subject: {
-        Data: subject,
-        Charset: 'UTF-8',
-      },
-      Body: {
-        Text: {
-          Data: body,
-          Charset: 'UTF-8',
-        },
-      },
-    },
     RawMessage: {
       Data: buildRawEmail({
         body,
@@ -105,5 +90,5 @@ const buildRawEmail = ({
     `--${boundary}--`,
   ].join('\n');
 
-  return Buffer.from(rawEmail, 'base64');
+  return Buffer.from(rawEmail, 'utf-8');
 };

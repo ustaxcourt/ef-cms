@@ -52,6 +52,18 @@ resource "aws_iam_role_policy" "stale_cases_email_lambda_policy" {
       ]
     },
     {
+      "Effect": "Allow",
+      "Action": [
+        "es:ESHttpDelete",
+        "es:ESHttpGet",
+        "es:ESHttpPost",
+        "es:ESHttpPut"
+      ],
+      "Resource": [
+        "arn:aws:es:us-east-1:${data.aws_caller_identity.current.account_id}:domain/efcms-search-${var.environment}-*"
+      ]
+    },
+    {
       "Effect":"Allow",
       "Action":[
         "ses:SendEmail",
@@ -76,8 +88,8 @@ module "stale_cases_email_lambda" {
     STAGE                        = var.environment
     NODE_ENV                     = "production"
     ACCOUNT_ID                   = data.aws_caller_identity.current.account_id
-    BOUNCED_EMAIL_RECIPIENT      = var.bounced_email_recipient
     DISABLE_EMAILS               = "false"
+    ELASTICSEARCH_ENDPOINT       = var.elasticsearch_endpoint
     EMAIL_SOURCE                 = var.email_source
     INACTIVITY_REPORT_RECIPIENTS = var.inactivity_report_recipients
   }

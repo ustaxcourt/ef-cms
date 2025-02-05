@@ -6,11 +6,11 @@ variable "environment" {
   type = string
 }
 
-variable "bounced_email_recipient" {
+variable "disable_emails" {
   type = string
 }
 
-variable "disable_emails" {
+variable "elasticsearch_endpoint" {
   type = string
 }
 

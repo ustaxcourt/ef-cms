@@ -3,11 +3,10 @@ import { applicationContext } from '@web-api/applicationContext';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { generateStaleCasesReport } from '../../../../scripts/reports/stale-cases.helpers';
 import { existsSync } from 'fs';
-import { join } from 'path';
 import { sendEmailWithAttachment } from '@web-api/dispatchers/ses/sendEmailWithAttachment';
 
 const today = createISODateString().split('T')[0];
-const filename = `12-month-inactivity_${today}.csv`;
+const filename = `/tmp/12-month-inactivity_${today}.csv`;
 const recipients = process.env.INACTIVITY_REPORT_RECIPIENTS?.split(',') || [];
 const subject = `12 Month Inactivity List - ${today}`;
 const body =
@@ -27,15 +26,14 @@ export const handler: Handler = async (_event, context) => {
     fail({ context, results: 'No Recipients found.' });
   }
   await generateStaleCasesReport({ applicationContext, filename });
-  const filePath = join(process.cwd(), filename);
-  if (!existsSync(filePath)) {
+  if (!existsSync(filename)) {
     fail({ context, results: 'Unable to generate stale cases report.' });
   }
   const results = {};
   for (const recipient of recipients) {
     const sent = await sendEmailWithAttachment({
       body,
-      filePath,
+      filePath: filename,
       recipient,
       subject,
     });
