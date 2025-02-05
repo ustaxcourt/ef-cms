@@ -2,7 +2,7 @@ import { SendRawEmailCommand, SESClient } from '@aws-sdk/client-ses';
 import { applicationContext } from '@web-api/applicationContext';
 import { basename } from 'path';
 import { environment } from '@web-api/environment';
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 
 export const sendEmailWithAttachment = async ({
   body,
@@ -14,17 +14,18 @@ export const sendEmailWithAttachment = async ({
   filePath: string;
   recipient: string;
   subject: string;
-}): Promise<boolean> => {
+}): Promise<void> => {
   if (!body || !filePath || !recipient || !subject) {
-    console.error(
+    throw new Error(
       'Error sending email: missing recipient, body, subject, or attachment.',
     );
-    return false;
+  }
+  if (!existsSync(filePath)) {
+    throw new Error('Error sending email: attachment not found.');
   }
   const sender = environment.emailFromAddress;
   const sesClient: SESClient = applicationContext.getEmailClient();
   const fileContent = readFileSync(filePath);
-  let sent = false;
 
   const params = {
     RawMessage: {
@@ -40,15 +41,8 @@ export const sendEmailWithAttachment = async ({
   };
   const rawEmailCommand = new SendRawEmailCommand(params);
 
-  try {
-    const result = await sesClient.send(rawEmailCommand);
-    console.log('Email sent successfully:', result);
-    sent = true;
-  } catch (error) {
-    console.error('Error sending email:', error);
-  }
-
-  return sent;
+  const result = await sesClient.send(rawEmailCommand);
+  console.log('Email sent:', result);
 };
 
 const buildRawEmail = ({

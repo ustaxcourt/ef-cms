@@ -25,21 +25,38 @@ export const handler: Handler = async (_event, context) => {
   if (!recipients.length) {
     fail({ context, results: 'No Recipients found.' });
   }
-  await generateStaleCasesReport({ applicationContext, filename });
+  try {
+    await generateStaleCasesReport({ applicationContext, filename });
+  } catch (err) {
+    const results = 'Unable to generate stale cases report.';
+    console.error(results, err);
+    fail({ context, results });
+  }
   if (!existsSync(filename)) {
     fail({ context, results: 'Unable to generate stale cases report.' });
   }
   const results = {};
   for (const recipient of recipients) {
-    const sent = await sendEmailWithAttachment({
-      body,
-      filePath: filename,
-      recipient,
-      subject,
-    });
-    results[recipient] = sent ? 'sent' : 'error';
+    let result: string;
+    try {
+      await sendEmailWithAttachment({
+        body,
+        filePath: filename,
+        recipient,
+        subject,
+      });
+      result = 'sent';
+    } catch (err) {
+      console.error('Unable to send email: ', err);
+      result = 'error';
+    }
+    results[recipient] = result;
   }
-  succeed({ context, results });
+  if (Object.values(results).filter(res => res === 'error').length) {
+    fail({ context, results });
+  } else {
+    succeed({ context, results });
+  }
 };
 
 const succeed = ({ context, results }) => {
