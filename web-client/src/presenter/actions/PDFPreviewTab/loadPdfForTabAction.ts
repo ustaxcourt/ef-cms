@@ -1,4 +1,5 @@
 import { openUrlInNewTab } from '../../utilities/openUrlInNewTab';
+
 export const loadPdfForTabAction = ({
   applicationContext,
   props,
