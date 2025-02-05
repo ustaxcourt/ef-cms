@@ -84,6 +84,6 @@ npm run cypress:integration:file cypress/local-only/integration/start-a-case-pra
 
 This runs only the specified Cypress Integration test in isolation. Simply create a workflow in the `.github/workflows/` directory to ensure this test is run every time you push your branch. And be sure to remove this file when you are ready to submit a PR to the `staging` branch. 
 
-Troubleshotoing flaky Unit tests or Cerebral integration tests could also employ a similar strategy.
+Troubleshooting flaky Unit tests or Cerebral integration tests could also employ a similar strategy.
 
 ## Workarounds and Solutions
