@@ -7,7 +7,6 @@ import { sendEmailWithAttachment } from '@web-api/dispatchers/ses/sendEmailWithA
 
 const today = createISODateString().split('T')[0];
 const filename = `/tmp/12-month-inactivity_${today}.csv`;
-const recipients = process.env.INACTIVITY_REPORT_RECIPIENTS?.split(',') || [];
 const subject = `12 Month Inactivity List - ${today}`;
 const body =
   'Attached is a DAWSON-generated list of cases that have had no ' +
@@ -22,18 +21,23 @@ const body =
   'Thank You,\nThe DAWSON Team';
 
 export const handler: Handler = async (_event, context) => {
+  const commaDelimitedRecipients = process.env.INACTIVITY_REPORT_RECIPIENTS!;
+  const recipients =
+    commaDelimitedRecipients && commaDelimitedRecipients.length
+      ? commaDelimitedRecipients.split(',')
+      : [];
   if (!recipients.length) {
-    fail({ context, results: 'No Recipients found.' });
+    return fail({ context, results: 'No Recipients found.' });
   }
   try {
     await generateStaleCasesReport({ applicationContext, filename });
   } catch (err) {
     const results = 'Unable to generate stale cases report.';
     console.error(results, err);
-    fail({ context, results });
+    return fail({ context, results });
   }
   if (!existsSync(filename)) {
-    fail({ context, results: 'Unable to generate stale cases report.' });
+    return fail({ context, results: 'Unable to generate stale cases report.' });
   }
   const results = {};
   for (const recipient of recipients) {
@@ -53,9 +57,9 @@ export const handler: Handler = async (_event, context) => {
     results[recipient] = result;
   }
   if (Object.values(results).filter(res => res === 'error').length) {
-    fail({ context, results });
+    return fail({ context, results });
   } else {
-    succeed({ context, results });
+    return succeed({ context, results });
   }
 };
 
