@@ -38,6 +38,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getMinuteSheet } from '@web-api/persistence/postgres/minuteSheets/getMinuteSheet';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { encode } from 'he';
 
 export const generateTrialSessionMinutesPdfInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -157,9 +158,9 @@ const formatMinuteSheet = ({
 
   return {
     actionsAndFilings: formatActionsAndFilings(
-      minuteSheetFormState.actionsAndFilingsSection,
+      sanitizeMinuteSheetForm(minuteSheetFormState.actionsAndFilingsSection),
     ),
-    called: formatCalledSection(called),
+    called: formatCalledSection(sanitizeMinuteSheetForm(called)),
     courtReporter:
       minuteSheetFormState.trialSessionMetadataSection.courtReporter,
     docketNumberWithSuffix,
@@ -171,13 +172,19 @@ const formatMinuteSheet = ({
     judgeTitle:
       minuteSheetFormState.trialSessionMetadataSection.judge.title || 'Judge',
     jurisdictionContinued: formatJurisdictionContinued(
-      minuteSheetFormState.jurisdictionSection.continued,
+      sanitizeMinuteSheetForm(
+        minuteSheetFormState.jurisdictionSection.continued,
+      ),
     ),
     jurisdictionRetained: formatJurisdictionRetained(
-      minuteSheetFormState.jurisdictionSection.retained,
+      sanitizeMinuteSheetForm(
+        minuteSheetFormState.jurisdictionSection.retained,
+      ),
     ),
-    motions: formatMotions(minuteSheetFormState.motionsSection),
-    notCalled: formatCalledSection(notCalled),
+    motions: formatMotions(
+      sanitizeMinuteSheetForm(minuteSheetFormState.motionsSection),
+    ),
+    notCalled: formatCalledSection(sanitizeMinuteSheetForm(notCalled)),
     petitionerAppearances: formatPetitionerAppearances(
       minuteSheetFormState.petitionersSection,
     ),
@@ -185,8 +192,10 @@ const formatMinuteSheet = ({
       minuteSheetFormState.witnessesSection.petitionerWitnesses,
     ),
     petitioners: formatPetitioners(aCase),
-    pretrialConference: formatPretrialConference(pretrialConference),
-    recalled: formatRecalledRows(recalled),
+    pretrialConference: formatPretrialConference(
+      sanitizeMinuteSheetForm(pretrialConference),
+    ),
+    recalled: formatRecalledRows(sanitizeMinuteSheetForm(recalled)),
     remoteSession: formatRemoteSession(
       minuteSheetFormState.trialSessionMetadataSection.remoteSession,
     ),
@@ -197,18 +206,43 @@ const formatMinuteSheet = ({
       minuteSheetFormState.witnessesSection.respondentWitnesses,
     ),
     statusReportOrdered: formatStatusReportOrdered(
-      minuteSheetFormState.ordersSection.statusReportOrdered,
+      sanitizeMinuteSheetForm(
+        minuteSheetFormState.ordersSection.statusReportOrdered,
+      ),
     ),
     stipulatedDecisionOrdered: formatStipulatedDecision(
-      minuteSheetFormState.ordersSection.stipulatedDecisionOrdered,
+      sanitizeMinuteSheetForm(
+        minuteSheetFormState.ordersSection.stipulatedDecisionOrdered,
+      ),
     ),
-    trialBrief: formatTrialBrief(minuteSheetFormState.trialBriefSection),
+    trialBrief: formatTrialBrief(
+      sanitizeMinuteSheetForm(minuteSheetFormState.trialBriefSection),
+    ),
     trialClerk: minuteSheetFormState.trialSessionMetadataSection.trialClerk,
-    trialHearing: formatTrialHearing(trialHearing),
+    trialHearing: formatTrialHearing(sanitizeMinuteSheetForm(trialHearing)),
     trialLocation: trialSession.trialLocation!,
     trialStartDate: formatDateString(
       trialSession.startDate,
       FORMATS.MONTH_DAY_YEAR,
     ),
   };
+};
+
+const sanitizeMinuteSheetForm = (minuteSheetForm: any): any => {
+  if (typeof minuteSheetForm === 'string') {
+    return encode(minuteSheetForm);
+  }
+
+  if (Array.isArray(minuteSheetForm)) {
+    return minuteSheetForm.map(item => sanitizeMinuteSheetForm(item));
+  }
+
+  if (minuteSheetForm && typeof minuteSheetForm === 'object') {
+    return Object.entries(minuteSheetForm).reduce((acc, [key, value]) => {
+      acc[key] = sanitizeMinuteSheetForm(value);
+      return acc;
+    }, {});
+  }
+
+  return minuteSheetForm;
 };

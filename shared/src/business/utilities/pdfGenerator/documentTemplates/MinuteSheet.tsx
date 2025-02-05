@@ -83,7 +83,7 @@ export const MinuteSheet = ({
               itself is rendered as text.
 
               Since this is only being used to render PDF content as HTML before converting to PDF and does not rely on re-rendering as
-              content changes, this is safe to do.
+              content changes, this is safe to do. Additionally, we are sanitizing any user input prior to feeding into the doc generator.
             */}
             <div
               dangerouslySetInnerHTML={{
