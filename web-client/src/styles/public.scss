@@ -22,11 +22,11 @@
     }
 
     .header-welcome-public {
-      padding-bottom: .5rem;
+      padding-bottom: 0.5rem;
       margin-top: auto;
       margin-bottom: auto;
       margin-left: 10px;
-      font-family: "Noto Serif", serif;
+      font-family: 'Noto Serif', serif;
       font-size: 26px;
       font-weight: 700;
       line-height: 2em;
@@ -51,7 +51,10 @@
       }
     }
 
-    .login-container, .create-container {
+    .login-container,
+    .create-container {
+      display: flex;
+      align-items: center;
       margin-top: 25px;
       margin-left: auto;
       color: color($theme-color-primary);
@@ -74,12 +77,12 @@
       }
     }
 
-		.create-container {
-			margin-left: unset;
+    .create-container {
+      margin-left: unset;
 
-			&.mobile {
-				padding-left: 2px;
-			}
-		}
+      &.mobile {
+        padding-left: 2px;
+      }
+    }
   }
 }
