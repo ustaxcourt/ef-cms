@@ -714,33 +714,6 @@ describe('formatMinuteSheet', () => {
         },
       ]);
     });
-
-    // 10419 TODO -- this one is interesting...should we be sanitizing inputs before generating the PDF?
-    // it('should handle special characters in notes', () => {
-    //   const section = {
-    //     actionsAndFilings: {
-    //       '1': {
-    //         date: '2023-01-15',
-    //         documentType: 'motion' as keyof typeof ACTION_DOCUMENT_TYPE_OPTIONS,
-    //         filedBy: 'petitioner' as keyof typeof ACTION_FILED_BY_OPTIONS,
-    //         isOnDocketRecord: true,
-    //         note: '<script>alert("XSS")</script>',
-    //         objection: '',
-    //         oralMotion: false,
-    //         renderKey: '1',
-    //         status: 'filed' as keyof typeof ACTION_STATUS_OPTIONS,
-    //       },
-    //     },
-    //   };
-    //   const result = formatActionsAndFilings(section);
-    //   expect(result).toEqual([
-    //     {
-    //       content:
-    //         '01/15/2023; Motion - <em>&lt;script&gt;alert("XSS")&lt;/script&gt;</em>; Petitioner; Filed',
-    //       renderKey: '1',
-    //     },
-    //   ]);
-    // });
   });
 
   describe('formatTrialBrief', () => {
@@ -864,23 +837,6 @@ describe('formatMinuteSheet', () => {
       const result = formatTrialBrief(section);
       expect(result.benchOpinionRendered).toBe('');
     });
-
-    // 10419 TODO -- this one is interesting...should we be sanitizing inputs before generating the PDF?
-    // it('should handle special characters in notes', () => {
-    //   const section = {
-    //     briefDetails: [],
-    //     briefType: '',
-    //     dateBenchOpinionRendered: '2023-01-15',
-    //     dateSubmitted: '',
-    //     note: '<script>alert("XSS")</script>',
-    //     totalTrialHours: 0,
-    //     transcriptOrdered: true,
-    //   };
-    //   const result = formatTrialBrief(section);
-    //   expect(result.benchOpinionRendered).toBe(
-    //     '01/15/2023; Transcript ordered; <em>&lt;script&gt;alert("XSS")&lt;/script&gt;</em>',
-    //   );
-    // });
   });
 
   describe('formatPretrialConference', () => {

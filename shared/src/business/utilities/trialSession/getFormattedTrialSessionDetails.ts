@@ -203,7 +203,6 @@ export const getFormattedTrialSessionDetails = ({
     allCases,
     item => item.removedFromTrial === true,
   );
-  // 10419 TODO: make sure all roles that should see this link other than trialClerk are included
   const isUserEligableForMinuteSheet = !!isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET,
