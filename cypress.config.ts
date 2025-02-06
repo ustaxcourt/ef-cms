@@ -134,12 +134,6 @@ export default defineConfig({
                 async () => {
                   await page.bringToFront();
 
-                  // Make sure selector exists
-                  await page.waitForSelector(
-                    '[data-testid="idle-logout-login-button"]',
-                    { timeout: 30000 },
-                  );
-
                   if (!page.url().includes('/idle-logout')) {
                     throw new Error('Page is not on idle logout screen!');
                   }

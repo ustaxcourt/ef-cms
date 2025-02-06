@@ -58,8 +58,8 @@ describe('Idle Logout Behavior', () => {
   it('should sign out of all tabs after idle', () => {
     // Note that throughout this test, we interact with the first tab via cypress
     // and all other tabs through the puppeteer plugin. Mixing this up will cause errors.
-    const sessionTimeout = 15000;
-    const areYouStillThereTime = 2000;
+    const sessionTimeout = 8000;
+    const areYouStillThereTime = 1000;
     loginAsColvin();
     const urls = [
       '/messages/my/inbox',
