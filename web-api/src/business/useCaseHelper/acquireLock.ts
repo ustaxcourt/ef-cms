@@ -5,17 +5,11 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const checkLock = async ({
   applicationContext,
-  authorizedUser,
   identifier,
-  onLockError,
-  options = {},
 }: {
-  authorizedUser: UnknownAuthUser;
   applicationContext: ServerApplicationContext;
   identifier: string;
-  onLockError?: TOnLockError;
-  options?: any;
-}): Promise<void> => {
+}): Promise<boolean> => {
   const featureFlags = await applicationContext
     .getUseCases()
     .getAllFeatureFlagsInteractor(applicationContext);
@@ -31,7 +25,7 @@ export const checkLock = async ({
     applicationContext.logger.warn('Entity is NOT currently locked', {
       identifier,
     });
-    return;
+    return false;
   }
 
   applicationContext.logger.warn('Entity is currently locked', {
@@ -39,17 +33,10 @@ export const checkLock = async ({
   });
 
   if (!isCaseLockingEnabled) {
-    return;
+    return false;
   }
 
-  if (onLockError instanceof Error) {
-    throw onLockError;
-  } else if (typeof onLockError === 'function') {
-    await onLockError(applicationContext, options, authorizedUser);
-  }
-  throw new ServiceUnavailableError(
-    'One of the items you are trying to update is being updated by someone else',
-  );
+  return true;
 };
 
 export const acquireLock = async ({
@@ -81,17 +68,27 @@ export const acquireLock = async ({
   while (!isLockAcquired) {
     try {
       attempts++;
-      await Promise.all(
+      const results = await Promise.all(
         identifiers.map(entityIdentifier =>
           checkLock({
             applicationContext,
-            authorizedUser,
             identifier: entityIdentifier,
-            onLockError,
-            options,
           }),
         ),
       );
+
+      const hasLockedItems = results.some(result => !!result);
+
+      if (hasLockedItems) {
+        if (onLockError instanceof Error) {
+          throw onLockError;
+        } else if (typeof onLockError === 'function') {
+          await onLockError(applicationContext, options, authorizedUser);
+        }
+        throw new ServiceUnavailableError(
+          'One of the items you are trying to update is being updated by someone else',
+        );
+      }
       isLockAcquired = true;
     } catch (err) {
       if (attempts > retries) {
