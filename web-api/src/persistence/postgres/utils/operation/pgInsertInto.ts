@@ -2,6 +2,7 @@ import { getDbWriter } from '@web-api/database';
 import { Database, DatabaseTableName } from '@web-api/database-types';
 import { getColumnsForTable } from '@web-api/persistence/postgres/utils/getColumnsForTable';
 import { AnyColumn } from 'kysely';
+import { isEmpty } from 'lodash';
 
 export const pgInsertInto = async ({
   table,
@@ -12,6 +13,10 @@ export const pgInsertInto = async ({
   values: Record<string, unknown>[];
   onConflictColumns?: AnyColumn<Database, keyof Database>[];
 }) => {
+  if (isEmpty(values)) {
+    return [];
+  }
+
   return await getDbWriter({
     cb: async writer => {
       let query = writer.insertInto(table).values(values);

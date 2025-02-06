@@ -1,7 +1,6 @@
 import { CaseStatusChange } from '@shared/business/entities/cases/Case';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
-import { getDbWriter } from '@web-api/database';
-import { isEmpty } from 'lodash';
+import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 export const upsertCaseStatusUpdates = async ({
   docketNumber,
@@ -10,30 +9,14 @@ export const upsertCaseStatusUpdates = async ({
   docketNumber: string;
   statusUpdates: CaseStatusChange[];
 }): Promise<void> => {
-  if (isEmpty(statusUpdates)) {
-    return;
-  }
-
-  await getDbWriter(writer =>
-    writer
-      .insertInto('dwCaseStatusUpdate')
-      .values(
-        statusUpdates.map(s => ({
-          changedBy: s.changedBy,
-          date: calculateDate({ dateString: s.date }),
-          docketNumber,
-          updatedCaseStatus: s.updatedCaseStatus,
-        })),
-      )
-      .onConflict(oc =>
-        oc.columns(['docketNumber', 'date']).doUpdateSet(s => {
-          return {
-            changedBy: s.ref('excluded.changedBy'),
-            date: s.ref('excluded.date'),
-            updatedCaseStatus: s.ref('excluded.updatedCaseStatus'),
-          };
-        }),
-      )
-      .execute(),
-  );
+  await pgInsertInto({
+    table: 'dwCaseStatusUpdate',
+    values: statusUpdates.map(s => ({
+      changedBy: s.changedBy,
+      date: calculateDate({ dateString: s.date }),
+      docketNumber,
+      updatedCaseStatus: s.updatedCaseStatus,
+    })),
+    onConflictColumns: ['docketNumber', 'date'],
+  });
 };
