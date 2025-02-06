@@ -111,6 +111,7 @@ export const MinuteSheet = ({
               <strong>Recalled</strong>
             </div>
             <div>
+              {/* TODO 10419 we don't need render keys in these maps. Part of the effort to rethink where our interfaces our defined */}
               {formattedMinuteSheet.recalled.map(row => (
                 <div
                   dangerouslySetInnerHTML={{ __html: row.content }}
