@@ -251,6 +251,7 @@ export const handleLockError = async (
         requestToRetry: 'update_trial_session',
       },
       userId: authorizedUser.userId,
+      clientConnectionId: originalRequest.clientConnectionId,
     });
   }
 };
