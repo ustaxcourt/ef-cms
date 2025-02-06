@@ -44,6 +44,7 @@ resource "aws_dynamodb_table" "efcms-table-east" {
   }
 
   lifecycle { ignore_changes = [replica] }
+
   ttl {
     attribute_name = "ttl"
     enabled        = true
