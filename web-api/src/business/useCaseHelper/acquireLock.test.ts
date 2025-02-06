@@ -1,9 +1,22 @@
+const mockLogger = {
+  addContext: jest.fn(),
+  clearContext: jest.fn(),
+  info: jest.fn(),
+  warn: jest.fn(),
+};
+jest.mock('@web-api/utilities/logger/getLogger', () => {
+  return {
+    getLogger: () => mockLogger,
+  };
+});
+jest.mock('@shared/tools/helpers');
 import { ALLOWLIST_FEATURE_FLAGS } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_LOCK } from '../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { acquireLock, checkLock, removeLock, withLocking } from './acquireLock';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { sleep } from '@shared/tools/helpers';
 
 const onLockError = new ServiceUnavailableError('The case is currently locked');
 
@@ -80,13 +93,53 @@ describe('acquireLock', () => {
     });
 
     describe('feature flag enabled', () => {
-      it('throws the onLockError provided', async () => {
+      it('throws ServiceUnavailableError if onLockError is not specified', async () => {
+        mockCall.onLockError = undefined;
         await expect(acquireLock(mockCall)).rejects.toThrow(
           ServiceUnavailableError,
         );
-        expect(
-          applicationContext.getPersistenceGateway().createLock,
-        ).not.toHaveBeenCalled();
+      });
+
+      it('throws the specified error if one is specified', async () => {
+        mockCall.onLockError = new Error('oh no something went wrong');
+        await expect(acquireLock(mockCall)).rejects.toThrow(
+          mockCall.onLockError,
+        );
+      });
+
+      it('calls the specified onLockError function', async () => {
+        const mockCallbackFunction = jest.fn();
+        mockCall.onLockError = mockCallbackFunction;
+        await expect(acquireLock(mockCall)).rejects.toThrow(
+          ServiceUnavailableError,
+        );
+        expect(mockCallbackFunction).toHaveBeenCalled();
+      });
+
+      it('calls the specified onLockError function with applicationContext and options passed in', async () => {
+        const mockCallbackFunction = jest.fn();
+        mockCall.onLockError = mockCallbackFunction;
+        mockCall.options = { foo: 'bar' };
+
+        await expect(acquireLock(mockCall)).rejects.toThrow(
+          ServiceUnavailableError,
+        );
+        expect(mockCallbackFunction).toHaveBeenCalled();
+        expect(mockCallbackFunction).toHaveBeenCalledWith(
+          applicationContext,
+          mockCall.options,
+          mockDocketClerkUser,
+        );
+      });
+
+      it('only calls the onLockError function once when there are multiple locked items', async () => {
+        const mockCallbackFunction = jest.fn();
+        mockCall.onLockError = mockCallbackFunction;
+        mockCall.identifiers = ['101-20', '928', '291-30']
+        await expect(acquireLock(mockCall)).rejects.toThrow(
+          ServiceUnavailableError,
+        );
+        expect(mockCallbackFunction).toHaveBeenCalledTimes(1);
       });
 
       it('does not create a lock for any of the cases if one of the cases is locked', async () => {
@@ -132,12 +185,8 @@ describe('acquireLock', () => {
         expect(
           applicationContext.getPersistenceGateway().getLock,
         ).toHaveBeenCalledTimes(1 + mockCall.retries);
-        expect(applicationContext.getUtilities().sleep).toHaveBeenCalledTimes(
-          mockCall.retries,
-        );
-        expect(applicationContext.getUtilities().sleep).toHaveBeenCalledWith(
-          mockCall.waitTime,
-        );
+        expect(sleep).toHaveBeenCalledTimes(mockCall.retries);
+        expect(sleep).toHaveBeenCalledWith(mockCall.waitTime);
       });
 
       it('calls the onLockError function if one is provided', async () => {
@@ -274,7 +323,7 @@ describe('withLocking', () => {
 
       it('logs a warning that the entity was locked', async () => {
         await func(applicationContext, { docketNumber: '123-45' });
-        expect(applicationContext.logger.warn).toHaveBeenCalledWith(
+        expect(mockLogger.warn).toHaveBeenCalledWith(
           'Entity is currently locked',
           { currentLock: MOCK_LOCK },
         );
@@ -470,41 +519,9 @@ describe('checkLock', () => {
         mockFeatureFlagValue = true; // disabled
       });
 
-      it('throws ServiceUnavailableError if onLockError is not specified', async () => {
-        mockCall.onLockError = undefined;
-        await expect(checkLock(mockCall)).rejects.toThrow(
-          ServiceUnavailableError,
-        );
-      });
-
-      it('throws the specified error if one is specified', async () => {
-        mockCall.onLockError = new Error('oh no something went wrong');
-        await expect(checkLock(mockCall)).rejects.toThrow(mockCall.onLockError);
-      });
-
-      it('calls the specified onLockError function', async () => {
-        const mockCallbackFunction = jest.fn();
-        mockCall.onLockError = mockCallbackFunction;
-        await expect(checkLock(mockCall)).rejects.toThrow(
-          ServiceUnavailableError,
-        );
-        expect(mockCallbackFunction).toHaveBeenCalled();
-      });
-
-      it('calls the specified onLockError function with applicationContext and options passed in', async () => {
-        const mockCallbackFunction = jest.fn();
-        mockCall.onLockError = mockCallbackFunction;
-        mockCall.options = { foo: 'bar' };
-
-        await expect(checkLock(mockCall)).rejects.toThrow(
-          ServiceUnavailableError,
-        );
-        expect(mockCallbackFunction).toHaveBeenCalled();
-        expect(mockCallbackFunction).toHaveBeenCalledWith(
-          applicationContext,
-          mockCall.options,
-          mockDocketClerkUser,
-        );
+      it('does show an entity as being locked', async () => {
+        const isLocked = await checkLock(mockCall);
+        await expect(isLocked).toEqual(true);
       });
     });
 
@@ -512,8 +529,9 @@ describe('checkLock', () => {
       beforeEach(() => {
         mockFeatureFlagValue = false; // disabled
       });
-      it('does not throw an error', async () => {
-        await expect(checkLock(mockCall)).resolves.not.toThrow();
+      it('does not show an entity as being locked', async () => {
+        const isLocked = await checkLock(mockCall);
+        await expect(isLocked).toEqual(false);
       });
     });
   });
