@@ -42,8 +42,10 @@ resource "aws_dynamodb_table" "efcms-table-east" {
     range_key       = "sk"
     projection_type = "ALL"
   }
+
   stream_enabled   = true
   stream_view_type = "NEW_AND_OLD_IMAGES"
+
   tags = {
     Name        = var.table_name
     Environment = var.environment
