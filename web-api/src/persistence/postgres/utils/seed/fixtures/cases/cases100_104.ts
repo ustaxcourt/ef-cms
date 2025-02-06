@@ -38,15 +38,15 @@ export const SEEDED_DOCKET_NUMBERS_100_104 = {
 };
 
 // If this file gets too big, we can separate out into, say, 100s, 101s, etc.
-export const cases100_104: NewCaseKysely[] = [
+export const cases100_104: RawCase[] = [
   {
     associatedJudge: CHIEF_JUDGE,
     automaticBlocked: false,
     blocked: false,
-    caption: 'Brett Osborne, Petitioner',
+    caseCaption: 'Brett Osborne, Petitioner',
     caseType: CASE_TYPES_MAP.whistleblower,
-    closedDate: calculateDate({ dateString: '2022-02-01T17:21:07.674Z' }),
-    createdAt: calculateDate({ dateString: '2022-02-01T17:21:05.483Z' }),
+    closedDate: '2022-02-01T17:21:07.674Z',
+    createdAt: '2022-02-01T17:21:05.483Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_100_104['100-22'],
     docketNumberSuffix: 'W',
     filingType: 'Myself',
@@ -68,10 +68,16 @@ export const cases100_104: NewCaseKysely[] = [
     petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     preferredTrialCity: 'Birmingham, Alabama',
     procedureType: PROCEDURE_TYPES_MAP.regular,
-    qcCompleteForTrial: JSON.stringify({}),
-    receivedAt: calculateDate({ dateString: '2022-02-01T17:21:05.483Z' }),
+    qcCompleteForTrial: {},
+    receivedAt: '2022-02-01T17:21:05.483Z',
     sortableDocketNumber: 2022000100,
     status: CASE_STATUS_TYPES.closed,
+    trialLocation: undefined,
+    petitioners: [],
+    docketEntries: [],
+    hearings: [],
+    correspondence: [],
+    consolidatedCases: [],
   },
   {
     associatedJudge: CHIEF_JUDGE,

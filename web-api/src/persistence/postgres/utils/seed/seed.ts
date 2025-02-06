@@ -19,55 +19,56 @@ import { messages } from './fixtures/messages';
 import { petitionerToCaseMappings } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/petitionerToCaseMappings';
 import { statisticPenalties } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/statisticPenalties';
 import { workItems } from './fixtures/workItems';
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 
 export const seed = async () => {
-  const insertMessages = getDbWriter(writer =>
-    writer
-      .insertInto('dwMessage')
-      .values(messages)
-      .onConflict(oc => oc.column('messageId').doNothing()) // ensure doesn't fail if exists
-      .execute(),
-  );
+  // const insertMessages = getDbWriter(writer =>
+  //   writer
+  //     .insertInto('dwMessage')
+  //     .values(messages)
+  //     .onConflict(oc => oc.column('messageId').doNothing()) // ensure doesn't fail if exists
+  //     .execute(),
+  // );
 
-  const insertCaseDeadline = getDbWriter(writer =>
-    writer
-      .insertInto('dwCaseDeadline')
-      .values(caseDeadlines)
-      .onConflict(oc => oc.column('caseDeadlineId').doNothing()) // ensure doesn't fail if exists
-      .execute(),
-  );
+  // const insertCaseDeadline = getDbWriter(writer =>
+  //   writer
+  //     .insertInto('dwCaseDeadline')
+  //     .values(caseDeadlines)
+  //     .onConflict(oc => oc.column('caseDeadlineId').doNothing()) // ensure doesn't fail if exists
+  //     .execute(),
+  // );
 
-  const insertCorrespondence = getDbWriter(writer =>
-    writer
-      .insertInto('dwCaseCorrespondence')
-      .values(correspondence)
-      .onConflict(oc => oc.column('correspondenceId').doNothing()) // ensure doesn't fail if exists
-      .execute(),
-  );
+  // const insertCorrespondence = getDbWriter(writer =>
+  //   writer
+  //     .insertInto('dwCaseCorrespondence')
+  //     .values(correspondence)
+  //     .onConflict(oc => oc.column('correspondenceId').doNothing()) // ensure doesn't fail if exists
+  //     .execute(),
+  // );
 
-  const insertCaseWorksheet = getDbWriter(writer =>
-    writer
-      .insertInto('dwCaseWorksheet')
-      .values(caseWorksheets)
-      .onConflict(oc => oc.column('docketNumber').doNothing()) // ensure doesn't fail if exists
-      .execute(),
-  );
+  // const insertCaseWorksheet = getDbWriter(writer =>
+  //   writer
+  //     .insertInto('dwCaseWorksheet')
+  //     .values(caseWorksheets)
+  //     .onConflict(oc => oc.column('docketNumber').doNothing()) // ensure doesn't fail if exists
+  //     .execute(),
+  // );
 
-  const insertWorkItem = await getDbWriter(writer =>
-    writer
-      .insertInto('dwWorkItem')
-      .values(workItems)
-      .onConflict(oc => oc.column('workItemId').doNothing()) // ensure doesn't fail if exists
-      .execute(),
-  );
+  // const insertWorkItem = await getDbWriter(writer =>
+  //   writer
+  //     .insertInto('dwWorkItem')
+  //     .values(workItems)
+  //     .onConflict(oc => oc.column('workItemId').doNothing()) // ensure doesn't fail if exists
+  //     .execute(),
+  // );
 
-  await getDbWriter(writer =>
-    writer
-      .insertInto('dwPetitionerOnCase')
-      .values(petitionerToCaseMappings)
-      .onConflict(oc => oc.columns(['contactId', 'docketNumber']).doNothing())
-      .execute(),
-  );
+  // await getDbWriter(writer =>
+  //   writer
+  //     .insertInto('dwPetitionerOnCase')
+  //     .values(petitionerToCaseMappings)
+  //     .onConflict(oc => oc.columns(['contactId', 'docketNumber']).doNothing())
+  //     .execute(),
+  // );
 
   // Seed the cases
   const cases = [
@@ -83,42 +84,44 @@ export const seed = async () => {
     ...cases440_449,
     ...cases450_plus,
   ];
-  await getDbWriter(
-    writer =>
-      writer
-        .insertInto('dwCase')
-        .values(cases)
-        .onConflict(oc => oc.column('docketNumber').doNothing())
-        .returningAll()
-        .execute(),
-    'dwCase',
-  );
+  console.log('This Case!', cases100_104[0]);
+  await upsertCases([cases100_104[0]]);
+  // await getDbWriter(
+  //   writer =>
+  //     writer
+  //       .insertInto('dwCase')
+  //       .values(cases)
+  //       .onConflict(oc => oc.column('docketNumber').doNothing())
+  //       .returningAll()
+  //       .execute(),
+  //   'dwCase',
+  // );
 
   // Attach the case status updates to their respective cases
-  await getDbWriter(writer =>
-    writer
-      .insertInto('dwCaseStatusUpdate')
-      .values(caseStatusUpdates)
-      .onConflict(oc => oc.columns(['docketNumber', 'date']).doNothing())
-      .execute(),
-  );
+  // await getDbWriter(writer =>
+  //   writer
+  //     .insertInto('dwCaseStatusUpdate')
+  //     .values(caseStatusUpdates)
+  //     .onConflict(oc => oc.columns(['docketNumber', 'date']).doNothing())
+  //     .execute(),
+  // );
 
-  // Attach the case statistics to their respective cases
-  await getDbWriter(writer =>
-    writer
-      .insertInto('dwCaseStatistic')
-      .values(caseStatistics)
-      .onConflict(oc => oc.column('statisticId').doNothing())
-      .execute(),
-  );
+  // // Attach the case statistics to their respective cases
+  // await getDbWriter(writer =>
+  //   writer
+  //     .insertInto('dwCaseStatistic')
+  //     .values(caseStatistics)
+  //     .onConflict(oc => oc.column('statisticId').doNothing())
+  //     .execute(),
+  // );
 
-  await getDbWriter(writer =>
-    writer
-      .insertInto('dwStatisticPenalty')
-      .values(statisticPenalties)
-      .onConflict(oc => oc.column('penaltyId').doNothing())
-      .execute(),
-  );
+  // await getDbWriter(writer =>
+  //   writer
+  //     .insertInto('dwStatisticPenalty')
+  //     .values(statisticPenalties)
+  //     .onConflict(oc => oc.column('penaltyId').doNothing())
+  //     .execute(),
+  // );
 
   await Promise.all([
     insertMessages,

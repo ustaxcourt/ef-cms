@@ -16,7 +16,6 @@ import {
   WorkerMessageType,
 } from '@web-api/gateways/opensearch/opensearchWorkerRouter';
 import { formatNow } from '@shared/business/utilities/DateHandler';
-import { isArray } from 'lodash';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 
 export const POOL = {
@@ -157,11 +156,14 @@ function executeWriter<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
   });
 }
 
-export async function getDbWriter<T>(
-  cb: (db: Kysely<Database>) => Promise<T>,
-  tableName: DatabaseTableName,
-): Promise<T> {
-  if (!Object.keys(TABLES_TO_OPENSEARCH_MAPPING).includes(tableName)) {
+export async function getDbWriter<T>({
+  cb,
+  table,
+}: {
+  cb: (db: Kysely<Database>) => Promise<T>;
+  table: DatabaseTableName | null;
+}): Promise<T> {
+  if (table && !Object.keys(TABLES_TO_OPENSEARCH_MAPPING).includes(table)) {
     return await executeWriter(cb);
   }
 
@@ -172,7 +174,7 @@ export async function getDbWriter<T>(
       const message: OpensearchWorkerMessage = {
         timestamp: formatNow(),
         payload: result,
-        type: tableName as WorkerMessageType,
+        type: table as WorkerMessageType,
       };
 
       await opensearchGateway().queueWork({ message });
