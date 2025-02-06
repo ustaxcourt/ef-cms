@@ -13,6 +13,7 @@ export const upsertCaseStatusUpdates = async ({
   if (isEmpty(statusUpdates)) {
     return;
   }
+
   await getDbWriter(writer =>
     writer
       .insertInto('dwCaseStatusUpdate')
