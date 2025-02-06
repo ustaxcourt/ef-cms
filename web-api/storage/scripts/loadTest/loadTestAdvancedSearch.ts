@@ -7,6 +7,7 @@ import {
 import axios from 'axios';
 import { existsSync, readFileSync } from 'fs';
 import PQueue from 'p-queue';
+import { setEnvironmentVariables } from '../../../../shared/admin-tools/aws/lambdaHelper';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -14,6 +15,7 @@ const scriptConfig: ScriptConfig = {
   environment: {
     deployingColor: 'DEPLOYING_COLOR',
     efcmsDomain: 'EFCMS_DOMAIN',
+    env: 'ENV',
   },
   parameters: {
     searchesFile: {
@@ -23,7 +25,7 @@ const scriptConfig: ScriptConfig = {
     },
   },
 };
-const { deployingColor, efcmsDomain, searchesFile } = parseArgsAndEnvVars(
+const { deployingColor, efcmsDomain, env, searchesFile } = parseArgsAndEnvVars(
   scriptConfig,
 ) as {
   [k: string]: string;
@@ -38,6 +40,16 @@ const concurrency = 100;
     process.exit(1);
   }
   const searches: string[] = readFileSync(searchesFile, 'utf8').split('\n');
+
+  // TODO: set concurrency values in deploy table to allow lots of API requests
+
+  // trigger cold start of api_public lambda
+  await setEnvironmentVariables({
+    Environment: { Variables: { CI_CD_LOAD_TESTING: 'true' } },
+    FunctionName: `api_public_${env}_${deployingColor}`,
+    region: undefined, // edit both east & west
+  });
+
   const queue = new PQueue({ concurrency });
   const funcs = searches.map(
     (search: string) => async () => await axios.get(`${apiUrl}${search}`),
