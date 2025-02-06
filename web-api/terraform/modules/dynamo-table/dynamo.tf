@@ -42,6 +42,8 @@ resource "aws_dynamodb_table" "efcms-table-east" {
     Name        = var.table_name
     Environment = var.environment
   }
+
+  lifecycle { ignore_changes = [replica] }
   ttl {
     attribute_name = "ttl"
     enabled        = true
@@ -57,6 +59,14 @@ resource "aws_dynamodb_table_replica" "efcms_table_west" {
   global_table_arn = aws_dynamodb_table.efcms-table-east.arn
 
   provider = aws.us-west-1
+
+  point_in_time_recovery = true
+
+  tags = {
+    Name        = var.table_name
+    Environment = var.environment
+  }
+
   timeouts {
     create = "2h"
     update = "2h"
