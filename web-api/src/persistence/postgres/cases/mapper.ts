@@ -66,6 +66,54 @@ export const DW_CASE_COLUMNS = [
   'useSameAsPrimary',
 ];
 
+export const DW_CASE_STATUS_UPDATES_COLUMNS = [
+  'changedBy',
+  'date',
+  'docketNumber',
+  'updatedCaseStatus',
+];
+
+export const DW_PETITIONERS_ON_CASE = [
+  'additionalName',
+  'contactType',
+  'docketNumber',
+  'hasConsentedToEService',
+  'hasEAccess',
+  'inCareOf',
+  'isAddressSealed',
+  'paperPetitionEmail',
+  'placeOfLegalResidence',
+  'sealedAndUnavailable',
+  'secondaryName',
+  'serviceIndicator',
+  'title',
+  'orderOnCase',
+  'address1',
+  'address2',
+  'address3',
+  'city',
+  'contactId',
+  'country',
+  'countryType',
+  'email',
+  'name',
+  'phone',
+  'postalCode',
+  'state',
+];
+
+export const DW_CASE_STATISTIC_COLUMN = [
+  'docketNumber',
+  'irsDeficiencyAmount',
+  'irsTotalPenalties',
+  'statisticId',
+  'year',
+  'yearOrPeriod',
+  'determinationDeficiencyAmount',
+  'determinationTotalPenalties',
+  'lastDateOfPeriod',
+];
+
 export const convertRawCaseToDbRow = (rawCase: RawCase) => {
   return {
     associatedJudge: rawCase.associatedJudge,
