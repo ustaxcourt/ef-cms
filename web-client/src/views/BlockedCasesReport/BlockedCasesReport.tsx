@@ -78,30 +78,34 @@ export const BlockedCasesReport = connect(
             <div className="grid-col-9">
               {blockedCaseReportFilter.trialLocationFilter && (
                 <>
-                  <div className="grid-row flex-align-center flex-wrap">
-                    <div className="grid-col-2">
+                  <div>
+                    <div>
                       <h2>{blockedCaseReportFilter.trialLocationFilter}</h2>
                     </div>
-                    <div ref={paginatorTop} className="grid-col">
-                      {totalPages > 1 && (
-                        <Paginator
-                          currentPageIndex={activePage}
-                          totalPages={totalPages}
-                          onPageChange={pageChange => {
-                            setActivePage(pageChange);
-                            focusPaginatorTop(paginatorTop);
-                          }}
-                        />
-                      )}
-                    </div>
-                    <div className="grid-col-2 text-right">
-                      <span className="text-semibold">
-                        Count:{' '}
-                        <span data-testid="blocked-cases-count">
-                          {blockedCasesReportHelper.blockedCasesCount}
+                    <div className="grid-row flex-align-center flex-wrap">
+                      <div className="grid-col-2"></div>
+                      <div ref={paginatorTop} className="grid-col">
+                        {totalPages > 1 && (
+                          <Paginator
+                            currentPageIndex={activePage}
+                            totalPages={totalPages}
+                            onPageChange={pageChange => {
+                              setActivePage(pageChange);
+                              focusPaginatorTop(paginatorTop);
+                            }}
+                          />
+                        )}
+                      </div>
+                      <div className="grid-col-2 text-right">
+                        <span className="text-semibold">
+                          Count:{' '}
+                          <span data-testid="blocked-cases-count">
+                            {blockedCasesReportHelper.blockedCasesCount}
+                          </span>
                         </span>
-                      </span>
+                      </div>
                     </div>
+                    <div className='padding-2'></div>
                   </div>
 
                   {blockedCasesReportHelper.blockedCasesCount > 0 && (
