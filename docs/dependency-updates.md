@@ -37,12 +37,12 @@ note: we have 3 package.json files, be sure to update them all
       - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
       - Change the version in `scripts/verify-terraform-version.sh`
     - `aws-cli`: check for a newer version on [AWS CLI](https://github.com/aws/aws-cli/tags) and use the latest version you can find for 2.x, replace it in the DockerFile
-    - `docker cypress/base image`: [Check DockerHub](https://hub.docker.com/r/cypress/browsers/tags?page=1&name=node-20) if an update is available for the current node version the project is using.
+    - `docker cypress/base image`: [Check DockerHub](https://hub.docker.com/r/cypress/browsers/tags?page=1&name=node-22) if an update is available for the current node version the project is using.
 
    To publish a new ECR docker image:
 
    - Increment the docker image version being used in `.circleci/config.yml` in the docker variable:
-   `efcms-docker-image: &efcms-docker-image`. e.g. `ef-cms-us-east-1:3.1.6` -> `ef-cms-us-east-1:3.1.7`
+   `efcms-docker-image: &efcms-docker-image`. e.g. `ef-cms-us-east-1:4.3.27` -> `ef-cms-us-east-1:4.3.28`
    - Publish a docker image tagged with the incremented version number to ECR with the command: `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`. Do this for both the USTC account AND the Flexion account (using environment switcher).
      - example: `export DESTINATION_TAG=3.1.6 && npm run deploy:ci-image`
 		 - you can verify the image deployed on AWS ECR repository "ef-cms-us-east-1"
@@ -52,24 +52,12 @@ note: we have 3 package.json files, be sure to update them all
 
 4. Check if there is an update to the Terraform AWS provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
 
-regex search the entire project for `aws = "\d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
+regex search the entire project for `version = ">= \d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
 
  - ./shared/admin-tools/glue/glue_migrations/main.tf
  - ./shared/admin-tools/glue/remote_role/main.tf
- - ./web-api/terraform/applyables/account-specific/account-specific.tf
- - ./web-api/terraform/applyables/allColors/allColors.tf
- - ./web-api/terraform/applyables/blue/blue.tf
- - ./web-api/terraform/applyables/glue-cron/glue-cron-applyable.tf
- - ./web-api/terraform/applyables/green/green.tf
- - ./web-api/terraform/applyables/migration/migration-applyable.tf
- - ./web-api/terraform/applyables/migration-cron/migration-cron-applyable.tf
- - ./web-api/terraform/applyables/reindex-cron/reindex-cron-applyable.tf
- - ./web-api/terraform/applyables/switch-colors-cron/switch-colors-cron-applyable.tf
- - ./web-api/terraform/applyables/wait-for-workflow/wait-for-workflow-cron-applyable.tf
 
-	> aws = "<LATEST_VERSION>"
-
-**Note**: Through January 3, 2025, the Terraform AWS provider must remain at version 5.78.0 due to issues with RDS.
+	> version = ">= <LATEST_VERSION>"
 
 5. Check through the list of caveats to see if any of the documented issues have been resolved.
 
@@ -85,10 +73,6 @@ regex search the entire project for `aws = "\d+.\d+.\d+"` and make sure it's to 
 
 - fortawesome packages are locked down to pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes `@fortawesome/free-solid-svg-icons`, `@fortawesome/free-regular-svg-icons`, and `@fortawesome/fontawesome-svg-core`.
 
-# canvas
-
-- [node-canvas](https://github.com/Automattic/node-canvas) v3.x conflicts with jest-environment-jsdom's peer dependency requirement (^2.5.0). We will need to stay on node-canvas v2.x until jest-environment-jsdom updates its peer dependencies.
-
 ## Caveats
 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
@@ -97,8 +81,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json.  Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
 - Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on. The chromium versions supported by puppeteer can be found [here](https://pptr.dev/supported-browsers)
-- There is a high-severity security issue with ws (ws affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q); however, we only use ws on the client side, so this should not be an issue. (We tried to upgrade puppeteer anyway, but unsurprisingly the PDF tests failed because there is no newer version of Chromium that supports puppeteer.)
-- Note that we tried and failed to upgrade puppeteer-core from 23.0.0 to 23.6.0 and @sparticuz/chromium from 127.0.0 to 130.0.0 on October 24-25, 2024, as well as 23.9.0 and 131.0.0 on November 22, 2024. There were substantial differences in the layouts of the expected PDF images versus the PDF images generated by a local test run.
+- There is a high-severity security issue with ws (ws affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q); however, we only use ws on the client side, so this should not be an issue. (Only @cypress/puppeteer depends  on vulnerable version of puppeteer-core)
 
 ### pdfjs-dist
 
@@ -108,15 +91,9 @@ Below is a list of dependencies that are locked down due to known issues with se
 ### @uswds/uswds
 - Keep pinned on 3.7.1, upgrading to 3.8.0+ will cause DAWSON UI issues with icon spacing and break Cypress Snapshots in the Cypress UI (as you hover over each step after initial run, it loses styles, making it harder to debug issues).
 
-### eslint
-- Keep pinned to 8.57.0 as most plugins are not yet compatible with v9.0.0: https://eslint.org/blog/2023/09/preparing-custom-rules-eslint-v9/
-See: https://github.com/jsx-eslint/eslint-plugin-react/issues/3699
-- Keep eslint-plugin-cypress pinned to 3.5.0 due do the aforementioned compatibility issues.
-
 ### ws, 3rd party dependency of Cerebral
 - When running npm audit, you'll see a high severity issue with ws, 'affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q'. This doesn't affect us as the vulnerability is on the server side and we're not using this package on the server. We tried to override this to 5.2.4 and 8.18.0 and weren't able to make this work as import paths have changed. In the mean time, we recommend skipping this issue. We could always fork the cerebral repo in the future if needed.
 
 ## Incrementing the Node Cache Key Version
 
 It's rare to need modify cache key. One reason you may want to do so is if a package fails to install properly, and CircleCI, unaware of the failed installation, stores the corrupted cache. In this case, we will need to increment the cache key version so that CircleCI is forced to reinstall the node dependencies and save them using the new key. To update the cache key, locate `vX-npm` and `vX-cypress` (where X represents the current cache key version) in the config.yml file, and then increment the identified version.
-

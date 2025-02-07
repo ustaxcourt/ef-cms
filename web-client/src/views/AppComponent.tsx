@@ -224,7 +224,7 @@ export const AppComponent = connect(
     zipInProgress,
   }) {
     const focusMain = (e?: any) => {
-      e && e.preventDefault();
+      e?.preventDefault();
       const header = window.document.querySelector(
         '#main-content h1',
       ) as HTMLElement;
@@ -241,7 +241,7 @@ export const AppComponent = connect(
       }
     }, [currentPage]);
 
-    let showHeaderAndFooter = currentPage !== 'AppMaintenance';
+    const showHeaderAndFooter = currentPage !== 'AppMaintenance';
 
     const CurrentPage = pages[currentPage];
     const IsPageWithBlueBackground = pagesWithBlueBackground[currentPage];

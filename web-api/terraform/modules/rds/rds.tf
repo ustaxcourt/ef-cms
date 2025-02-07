@@ -10,15 +10,15 @@ resource "aws_rds_global_cluster" "global_cluster" {
 }
 
 resource "aws_rds_cluster" "postgres" {
-  cluster_identifier  = "${var.environment}-dawson-cluster"
-  engine              = "aurora-postgresql"
-  engine_mode         = "provisioned"
-  engine_version      = var.engine_version
-  deletion_protection = var.delete_protection
-  database_name       = "${var.environment}_dawson"
-  master_username     = var.postgres_master_username
-  master_password     = var.postgres_master_password
-  storage_encrypted   = true
+  cluster_identifier        = "${var.environment}-dawson-cluster"
+  engine                    = "aurora-postgresql"
+  engine_mode               = "provisioned"
+  engine_version            = var.engine_version
+  deletion_protection       = var.delete_protection
+  database_name             = "${var.environment}_dawson"
+  master_username           = var.postgres_master_username
+  master_password           = var.postgres_master_password
+  storage_encrypted         = true
   global_cluster_identifier = aws_rds_global_cluster.global_cluster.id
   # snapshot_identifier                 = "exp4-dawson-cluster-1" - used for a snapshot restore
   iam_database_authentication_enabled = true
@@ -60,8 +60,7 @@ resource "aws_rds_cluster" "west_replica" {
   global_cluster_identifier           = aws_rds_global_cluster.global_cluster.id
   iam_database_authentication_enabled = true
   kms_key_id                          = var.kms_key_id_replica
-
-  depends_on = [aws_rds_cluster.postgres]
+  replication_source_identifier       = aws_rds_cluster.postgres.arn
 
   serverlessv2_scaling_configuration {
     max_capacity = var.max_capacity

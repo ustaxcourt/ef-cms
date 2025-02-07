@@ -68,7 +68,7 @@ export const getEligibleCasesForTrialSessionInteractor = async (
       skPrefix: trialSessionEntity.generateSortKeyPrefix(),
     });
 
-  let eligibleCasesFiltered = calendaredCases
+  const eligibleCasesFiltered = calendaredCases
     .concat(eligibleCases)
     .map(rawCase => {
       return new EligibleCase(rawCase).validate().toRawObject();

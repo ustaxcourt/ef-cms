@@ -3,7 +3,7 @@ import { setPdfFormFields } from './setPdfFormFields';
 describe('setFields function', () => {
   const getTextMock = jest.fn();
   const setTextMock = jest.fn();
-  let name = 'PDFButton';
+  const name = 'PDFButton';
   let fields;
 
   beforeEach(() => {

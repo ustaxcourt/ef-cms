@@ -7,7 +7,6 @@ export const trimDocketNumberSearch = (applicationContext, searchTerm = '') => {
 
   const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
   const suffixes = Object.values(DOCKET_NUMBER_SUFFIXES).join('|');
-  // eslint-disable-next-line security/detect-non-literal-regexp
   const docketNumberMatcher = new RegExp(
     `^(\\d{3,6}-\\d{2})(${suffixes})?$`,
     'i',
