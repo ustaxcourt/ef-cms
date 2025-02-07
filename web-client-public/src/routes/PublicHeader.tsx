@@ -53,12 +53,12 @@ export function PublicHeader() {
                 Welcome to DAWSON {isTerminalUser && ': US Tax Court Terminal'}
               </div>
               <div className="login-container padding-x-1">
+                <a href={`${applicationContextPublic.getPrivateUrl()}/login`}>
                 <FontAwesomeIcon
                   icon={['far', 'user']}
                   size="1x"
                   className="margin-right-05"
                 />
-                <a href={`${applicationContextPublic.getPrivateUrl()}/login`}>
                   Log In
                 </a>
               </div>

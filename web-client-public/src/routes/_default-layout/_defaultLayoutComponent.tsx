@@ -3,12 +3,16 @@ import React from 'react';
 import { PublicFooter } from 'web-client-public/src/routes/PublicFooter';
 import { PublicHeader } from 'web-client-public/src/routes/PublicHeader';
 import { rootRoute } from 'web-client-public/src/routes/PublicRoot';
+import { UsaBanner } from 'web-client-public/src/routes/UsaBanner';
 
 function PublicDefaultLayout() {
   return (
     <>
+      <UsaBanner />
       <PublicHeader />
-      <Outlet />
+      <main id="main-content" role="main">
+        <Outlet />
+      </main>
       <PublicFooter />
     </>
   );
