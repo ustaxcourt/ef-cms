@@ -3,7 +3,6 @@ import { NotFoundError } from '@web-api/errors/errors';
 import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregateCaseItems } from '@web-api/persistence/dynamo/helpers/aggregateCaseItems';
-import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 import { getCasesMetadataWithCounselByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesMetadataWithCounselByLeadDocketNumber';
 import { getDbReader } from '@web-api/database';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
@@ -13,6 +12,7 @@ import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/tr
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
 import { getPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/getPetitionersOnCase';
+import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 
 export const getCaseByDocketNumber = async ({
   applicationContext,
@@ -25,7 +25,10 @@ export const getCaseByDocketNumber = async ({
   includeConsolidatedCases?: boolean;
   user?: UnknownAuthUser;
 }): Promise<RawCase> => {
-  const dbCaseMetadata = await getCaseMetadataByDocketNumber({ docketNumber });
+  const dbCaseMetadata = await getCaseMetadataWithCounsel({
+    applicationContext,
+    docketNumber,
+  });
   if (!dbCaseMetadata) {
     throw new NotFoundError(`Case ${docketNumber} not found`);
   }

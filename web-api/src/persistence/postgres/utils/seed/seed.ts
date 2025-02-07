@@ -97,8 +97,7 @@ export const seed = async () => {
     ...cases440_449,
     ...cases450_plus,
   ];
-  console.log('This Case!', cases100_104[0]);
-  await upsertCases([cases100_104[0]]);
+  await upsertCases(cases);
   // await getDbWriter(
   //   writer =>
   //     writer

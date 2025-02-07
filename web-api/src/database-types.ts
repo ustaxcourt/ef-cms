@@ -4,16 +4,15 @@ export type DatabaseTableName = keyof Database;
 
 export interface Database {
   dwCase: CaseTable;
+  dwCaseCorrespondence: CaseCorrespondenceTable;
+  dwCaseDeadline: CaseDeadlineTable;
   dwCaseStatistic: CaseStatisticTable;
   dwCaseStatusUpdate: CaseStatusUpdateTable;
+  dwCaseWorksheet: CaseWorksheetTable;
   dwDocketEntry: DocketEntryTable;
   dwMessage: MessageTable;
   dwPetitionerOnCase: PetitionerOnCaseTable;
-  dwPractitionerOnCase: PractitionerOnCaseTable;
   dwStatisticPenalty: StatisticPenaltyTable;
-  dwCaseCorrespondence: CaseCorrespondenceTable;
-  dwCaseDeadline: CaseDeadlineTable;
-  dwCaseWorksheet: CaseWorksheetTable;
   dwUserCaseNote: UserCaseNoteTable;
   dwWorkItem: WorkItemTable;
 }
@@ -272,18 +271,6 @@ export interface UserCaseNoteTable {
 export type UserCaseNoteKysely = Selectable<UserCaseNoteTable>;
 export type NewUserCaseNoteKysely = Insertable<UserCaseNoteTable>;
 export type UpdateUserCaseNoteKysely = Updateable<UserCaseNoteTable>;
-
-// TODO: This is just a stub to get things out of Open Search and into Postgres
-export interface PractitionerOnCaseTable {
-  docketNumber: string;
-  userId: string;
-  email: string;
-}
-
-export type PractitionerOnCaseKysely = Selectable<PractitionerOnCaseTable>;
-export type NewPractitionerOnCaseKysely = Insertable<PractitionerOnCaseTable>;
-export type UpdatePractitionerOnCaseKysely =
-  Updateable<PractitionerOnCaseTable>;
 
 // TODO: This is just a stub to get things out of Open Search and into Postgres
 export interface DocketEntryTable {

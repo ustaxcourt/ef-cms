@@ -1,12 +1,13 @@
 import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 import { query } from '../../dynamodbClientService';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const getCaseMetadataWithCounsel = async ({
   applicationContext,
   docketNumber,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   docketNumber: string;
 }): Promise<RawCase | undefined> => {
   const caseMetaData = await getCaseMetadataByDocketNumber({ docketNumber });

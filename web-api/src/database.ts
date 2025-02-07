@@ -163,7 +163,7 @@ export async function getDbWriter<T>({
   cb: (db: Kysely<Database>) => Promise<T>;
   table: DatabaseTableName | null;
 }): Promise<T> {
-  if (table && !Object.keys(TABLES_TO_OPENSEARCH_MAPPING).includes(table)) {
+  if (!table || !Object.keys(TABLES_TO_OPENSEARCH_MAPPING).includes(table)) {
     return await executeWriter(cb);
   }
 
