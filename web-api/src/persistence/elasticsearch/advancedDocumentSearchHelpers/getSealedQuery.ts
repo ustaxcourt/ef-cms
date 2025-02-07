@@ -8,5 +8,33 @@ export const getSealedQuery = () => {
     { term: { 'sealedTo.S': 'External' } },
   ];
 
-  return { sealedDocumentMustNotQuery };
+  const sealedCaseQuery: QueryContainer = {
+    bool: {
+      must: [
+        {
+          bool: {
+            minimum_should_match: 1,
+            should: [
+              {
+                bool: {
+                  must: {
+                    term: { 'isSealed.BOOL': false },
+                  },
+                },
+              },
+              {
+                bool: {
+                  must_not: {
+                    exists: { field: 'isSealed' },
+                  },
+                },
+              },
+            ],
+          },
+        },
+      ],
+    },
+  };
+
+  return { sealedCaseQuery, sealedDocumentMustNotQuery };
 };

@@ -810,8 +810,10 @@ export class Case extends JoiValidationEntity {
 
     this.noticeOfTrialDate = rawCase.noticeOfTrialDate;
 
-    this.docketNumberWithSuffix =
-      this.docketNumber + (this.docketNumberSuffix || '');
+    this.docketNumberWithSuffix = Case.getDocketNumberWithSuffix({
+      docketNumber: this.docketNumber,
+      docketNumberSuffix: this.docketNumberSuffix,
+    });
 
     this.canAllowDocumentService = rawCase.canAllowDocumentService;
     this.canAllowPrintableDocketRecord = rawCase.canAllowPrintableDocketRecord;
@@ -1030,6 +1032,16 @@ export class Case extends JoiValidationEntity {
    */
   static getCaseTitle(caseCaption): string {
     return caseCaption.replace(/\s*,\s*Petitioner(s|\(s\))?\s*$/, '').trim();
+  }
+
+  static getDocketNumberWithSuffix({
+    docketNumber,
+    docketNumberSuffix,
+  }: {
+    docketNumber: string;
+    docketNumberSuffix: string | undefined;
+  }): string {
+    return docketNumber + (docketNumberSuffix || '');
   }
 
   /**

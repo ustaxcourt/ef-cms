@@ -1,23 +1,21 @@
 import { Message, RawMessage } from '@shared/business/entities/Message';
-import { getDbWriter } from '@web-api/database';
 import { toKyselyUpdateMessage } from './mapper';
 import { transformNullToUndefined } from '../utils/transformNullToUndefined';
+import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
+import { isEmpty } from 'lodash';
 
 export const updateMessage = async ({
   message,
 }: {
   message: RawMessage;
 }): Promise<Message> => {
-  const updatedMessage = await getDbWriter(writer =>
-    writer
-      .updateTable('dwMessage')
-      .set(toKyselyUpdateMessage(message))
-      .where('messageId', '=', message.messageId)
-      .returningAll()
-      .executeTakeFirst(),
-  );
+  const updatedMessage = await pgUpdateTable({
+    table: 'dwMessage',
+    values: toKyselyUpdateMessage(message),
+    where: cb => cb.where('messageId', '=', message.messageId),
+  });
 
-  if (!updatedMessage) {
+  if (isEmpty(updatedMessage)) {
     throw new Error('could not update the message');
   }
 

@@ -1,5 +1,5 @@
-import { getDbWriter } from '@web-api/database';
 import { getMessageThreadByParentId } from './getMessageThreadByParentId';
+import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
 
 export const markMessageThreadRepliedTo = async ({
   parentMessageId,
@@ -13,15 +13,11 @@ export const markMessageThreadRepliedTo = async ({
   if (messages.length) {
     await Promise.all(
       messages.map(async message => {
-        await getDbWriter(writer =>
-          writer
-            .updateTable('dwMessage')
-            .set({
-              isRepliedTo: true,
-            })
-            .where('messageId', '=', message.messageId)
-            .execute(),
-        );
+        await pgUpdateTable({
+          table: 'dwMessage',
+          values: { isRepliedTo: true },
+          where: cb => cb.where('messageId', '=', message.messageId),
+        });
       }),
     );
   }

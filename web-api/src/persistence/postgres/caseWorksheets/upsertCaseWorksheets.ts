@@ -3,7 +3,7 @@ import {
   RawCaseWorksheet,
 } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
-import { getDbWriter } from '@web-api/database';
+import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 export const upsertCaseWorksheets = async (
   caseWorksheets: RawCaseWorksheet[],
@@ -20,23 +20,11 @@ export const upsertCaseWorksheets = async (
     };
   });
 
-  const results = await getDbWriter(writer =>
-    writer
-      .insertInto('dwCaseWorksheet')
-      .values(caseWorksheetsToUpsert)
-      .onConflict(oc =>
-        oc.column('docketNumber').doUpdateSet(cd => {
-          return {
-            docketNumber: cd.ref('excluded.docketNumber'),
-            finalBriefDueDate: cd.ref('excluded.finalBriefDueDate'),
-            judgeUserId: cd.ref('excluded.judgeUserId'),
-            primaryIssue: cd.ref('excluded.primaryIssue'),
-            statusOfMatter: cd.ref('excluded.statusOfMatter'),
-          };
-        }),
-      )
-      .execute(),
-  );
+  const results = await pgInsertInto({
+    table: 'dwCaseWorksheet',
+    values: caseWorksheetsToUpsert,
+    onConflictColumns: ['docketNumber'],
+  });
 
   return results.map(cw => new CaseWorksheet(cw));
 };
