@@ -197,7 +197,7 @@ export const DateRangePickerComponent = ({
   return (
     <FormGroup
       className={formGroupCls}
-      formGroupRef={dateRangePickerRef}
+      ref={dateRangePickerRef}
       omitFormGroupClass={omitFormGroupClass}
     >
       <div
@@ -208,7 +208,7 @@ export const DateRangePickerComponent = ({
         <div className={startPickerCls} data-testid={`${startName}-date-start`}>
           <FormGroup
             errorText={startDateErrorText}
-            formGroupRef={startDatePickerRef}
+            ref={startDatePickerRef}
           >
             <label
               className="usa-label"
@@ -236,7 +236,7 @@ export const DateRangePickerComponent = ({
         <div className={endPickerCls} data-testid={`${endName}-date-end}`}>
           <FormGroup
             errorText={endDateErrorText}
-            formGroupRef={endDatePickerRef}
+            ref={endDatePickerRef}
           >
             <label
               className="usa-label"
