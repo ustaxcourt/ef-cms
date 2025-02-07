@@ -26,7 +26,6 @@ import {
   formatWitnesses,
   getConsolidatedDocketNumbers,
 } from '@web-api/business/useCaseHelper/trialSessionMinutes/formatMinuteSheet';
-import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -39,6 +38,12 @@ import { getMinuteSheet } from '@web-api/persistence/postgres/minuteSheets/getMi
 import { getUniqueId } from '@shared/sharedAppContext';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { encode } from 'he';
+import { MinuteSheet } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
+import { minuteSheet as minuteSheetDocumentGenerator } from '@shared/business/utilities/documentGenerators/minuteSheet';
+import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
+import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
+import { getDownloadPolicyUrl } from '@web-api/persistence/s3/getDownloadPolicyUrl';
 
 export const generateTrialSessionMinutesPdfInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -49,19 +54,15 @@ export const generateTrialSessionMinutesPdfInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const aCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const aCase = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
-      trialSessionId,
-    });
+  const trialSession = await getTrialSessionById({
+    applicationContext,
+    trialSessionId,
+  });
 
   if (!aCase || !trialSession) {
     throw new Error('Case and trial session could not be retrieved');
@@ -74,13 +75,15 @@ export const generateTrialSessionMinutesPdfInteractor = async (
       `Minute sheet for trial session ${trialSessionId} case ${docketNumber} was not found.`,
     );
 
+  console.log('minuteSheet', minuteSheet);
+
   const formattedMinuteSheet = formatMinuteSheet({
     aCase,
-    minuteSheetFormState: minuteSheet.content,
+    minuteSheet: minuteSheet.content,
     trialSession,
   });
 
-  const pdf = await applicationContext.getDocumentGenerators().minuteSheet({
+  const pdf = await minuteSheetDocumentGenerator({
     applicationContext,
     data: {
       formattedMinuteSheet,
@@ -90,18 +93,16 @@ export const generateTrialSessionMinutesPdfInteractor = async (
   const docketEntryId = getUniqueId();
   const documentTitle = `minute-sheet-${docketEntryId}`;
 
-  await applicationContext.getPersistenceGateway().uploadDocument({
+  await uploadDocument({
     applicationContext,
     pdfData: pdf,
     pdfName: docketEntryId,
   });
 
-  const { url } = await applicationContext
-    .getPersistenceGateway()
-    .getDownloadPolicyUrl({
-      applicationContext,
-      key: docketEntryId,
-    });
+  const { url } = await getDownloadPolicyUrl({
+    applicationContext,
+    key: docketEntryId,
+  });
 
   // 10419 TODO consider creating an "attachAsDraft" function?
   // found myself thinking that would've been super nice to have rather than
@@ -142,10 +143,10 @@ export const generateTrialSessionMinutesPdfInteractor = async (
 
 const formatMinuteSheet = ({
   aCase,
-  minuteSheetFormState,
+  minuteSheet,
   trialSession,
 }: {
-  minuteSheetFormState: MinuteSheetFormState;
+  minuteSheet: MinuteSheet;
   trialSession: RawTrialSession;
   aCase: RawCase;
 }): FormattedMinuteSheet => {
@@ -153,72 +154,57 @@ const formatMinuteSheet = ({
   const docketNumbers = aCase.consolidatedCases.map(
     consolidatedCase => consolidatedCase.docketNumber,
   );
-  const { called, notCalled, pretrialConference, recalled, trialHearing } =
-    minuteSheetFormState.caseMetadataSection;
+  const { calendarCall, notCalled, pretrialConference, recalls, trialHearing } =
+    minuteSheet.caseRecord;
 
   return {
     actionsAndFilings: formatActionsAndFilings(
-      sanitizeMinuteSheetForm(minuteSheetFormState.actionsAndFilingsSection),
+      sanitizeMinuteSheetForm(minuteSheet.proceedings.actionsAndFilings),
     ),
-    called: formatCalledSection(sanitizeMinuteSheetForm(called)),
-    courtReporter:
-      minuteSheetFormState.trialSessionMetadataSection.courtReporter,
+    called: formatCalledSection(sanitizeMinuteSheetForm(calendarCall)),
+    courtReporter: minuteSheet.trialSession.courtReporter,
     docketNumberWithSuffix,
     docketNumbers,
-    exhibits: formatExhibits(minuteSheetFormState.exhibitsSection),
+    exhibits: formatExhibits(minuteSheet.evidence.exhibits),
     formattedDocketNumbers: getConsolidatedDocketNumbers(aCase),
-    judgeFullName:
-      minuteSheetFormState.trialSessionMetadataSection.judge.fullName,
-    judgeTitle:
-      minuteSheetFormState.trialSessionMetadataSection.judge.title || 'Judge',
+    judgeFullName: minuteSheet.trialSession.judge.fullName,
+    judgeTitle: minuteSheet.trialSession.judge.title || 'Judge',
     jurisdictionContinued: formatJurisdictionContinued(
-      sanitizeMinuteSheetForm(
-        minuteSheetFormState.jurisdictionSection.continued,
-      ),
+      sanitizeMinuteSheetForm(minuteSheet.jurisdiction.continued),
     ),
     jurisdictionRetained: formatJurisdictionRetained(
-      sanitizeMinuteSheetForm(
-        minuteSheetFormState.jurisdictionSection.retained,
-      ),
+      sanitizeMinuteSheetForm(minuteSheet.jurisdiction.retained),
     ),
     motions: formatMotions(
-      sanitizeMinuteSheetForm(minuteSheetFormState.motionsSection),
+      sanitizeMinuteSheetForm(minuteSheet.proceedings.motions),
     ),
     notCalled: formatCalledSection(sanitizeMinuteSheetForm(notCalled)),
     petitionerAppearances: formatPetitionerAppearances(
-      minuteSheetFormState.petitionersSection,
+      minuteSheet.appearances.petitioners,
     ),
     petitionerWitnesses: formatWitnesses(
-      minuteSheetFormState.witnessesSection.petitionerWitnesses,
+      minuteSheet.evidence.petitionerWitnesses,
     ),
     petitioners: formatPetitioners(aCase),
     pretrialConference: formatPretrialConference(
       sanitizeMinuteSheetForm(pretrialConference),
     ),
-    recalled: formatRecalledRows(sanitizeMinuteSheetForm(recalled)),
-    remoteSession: formatRemoteSession(
-      minuteSheetFormState.trialSessionMetadataSection.remoteSession,
-    ),
+    recalled: formatRecalledRows(sanitizeMinuteSheetForm(recalls)),
+    remoteSession: formatRemoteSession(minuteSheet.trialSession.isRemote),
     respondentAppearances: formatRespondentAppearances(
-      minuteSheetFormState.respondentsSection,
+      minuteSheet.appearances.respondents,
     ),
     respondentWitnesses: formatWitnesses(
-      minuteSheetFormState.witnessesSection.respondentWitnesses,
+      minuteSheet.evidence.respondentWitnesses,
     ),
     statusReportOrdered: formatStatusReportOrdered(
-      sanitizeMinuteSheetForm(
-        minuteSheetFormState.ordersSection.statusReportOrdered,
-      ),
+      sanitizeMinuteSheetForm(minuteSheet.orders.statusReport),
     ),
     stipulatedDecisionOrdered: formatStipulatedDecision(
-      sanitizeMinuteSheetForm(
-        minuteSheetFormState.ordersSection.stipulatedDecisionOrdered,
-      ),
+      sanitizeMinuteSheetForm(minuteSheet.orders.stipulatedDecision),
     ),
-    trialBrief: formatTrialBrief(
-      sanitizeMinuteSheetForm(minuteSheetFormState.trialBriefSection),
-    ),
-    trialClerk: minuteSheetFormState.trialSessionMetadataSection.trialClerk,
+    trialBrief: formatTrialBrief(sanitizeMinuteSheetForm(minuteSheet.brief)),
+    trialClerk: minuteSheet.trialSession.trialClerk,
     trialHearing: formatTrialHearing(sanitizeMinuteSheetForm(trialHearing)),
     trialLocation: trialSession.trialLocation!,
     trialStartDate: formatDateString(
