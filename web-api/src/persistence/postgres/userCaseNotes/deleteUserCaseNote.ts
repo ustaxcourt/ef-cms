@@ -1,4 +1,4 @@
-import { getDbWriter } from '@web-api/database';
+import { pgDeleteFrom } from '@web-api/persistence/postgres/utils/operation/pgDeleteFrom';
 
 export const deleteUserCaseNote = async ({
   docketNumber,
@@ -7,11 +7,9 @@ export const deleteUserCaseNote = async ({
   docketNumber: string;
   userId: string;
 }) => {
-  await getDbWriter(writer =>
-    writer
-      .deleteFrom('dwUserCaseNote')
-      .where('docketNumber', '=', docketNumber)
-      .where('userId', '=', userId)
-      .execute(),
-  );
+  await pgDeleteFrom({
+    table: 'dwUserCaseNote',
+    where: cb =>
+      cb.where('docketNumber', '=', docketNumber).where('userId', '=', userId),
+  });
 };

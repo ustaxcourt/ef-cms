@@ -1,11 +1,11 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { UserCaseNote } from '../../../../../shared/src/business/entities/notes/UserCaseNote';
-import { upsertUserCaseNote } from '@web-api/persistence/postgres/userCaseNotes/upsertUserCaseNote';
+import { upsertUserCaseNotes } from '@web-api/persistence/postgres/userCaseNotes/upsertUserCaseNotes';
 
 export const updateUserCaseNoteInteractor = async (
   applicationContext,
@@ -30,9 +30,7 @@ export const updateUserCaseNoteInteractor = async (
     userId,
   }).validate();
 
-  await upsertUserCaseNote({
-    caseNoteToUpsert: caseNoteEntity,
-  });
+  await upsertUserCaseNotes([caseNoteEntity]);
 
   return caseNoteEntity;
 };

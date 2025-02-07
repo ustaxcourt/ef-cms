@@ -86,7 +86,7 @@ function getFormattedValidationErrors(entity): Record<string, any> | null {
 }
 
 export abstract class JoiValidationEntity {
-  public entityName: string;
+  public entityName?: string;
 
   constructor(entityName: string) {
     this.entityName = entityName;

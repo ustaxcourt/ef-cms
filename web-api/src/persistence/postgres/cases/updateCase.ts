@@ -1,24 +1,22 @@
 import { CaseStatusChange } from '@shared/business/entities/cases/Case';
 import { convertRawCaseToDbRow } from '@web-api/persistence/postgres/cases/mapper';
-import { getDbWriter } from '@web-api/database';
 import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
 import { upsertPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/upsertPetitionersOnCase';
 import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import { upsertCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/upsertCaseStatistics';
+import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
+import { isEmpty } from 'lodash';
 
 export const updateCase = async ({
   caseToUpdate,
 }: {
   caseToUpdate: RawCase;
 }): Promise<RawCase> => {
-  const updatedCase = await getDbWriter(writer =>
-    writer
-      .updateTable('dwCase')
-      .set(convertRawCaseToDbRow(caseToUpdate))
-      .where('docketNumber', '=', caseToUpdate.docketNumber)
-      .returningAll()
-      .executeTakeFirst(),
-  );
+  const updatedCase = await pgUpdateTable({
+    table: 'dwCase',
+    values: convertRawCaseToDbRow(caseToUpdate),
+    where: qb => qb.where('docketNumber', '=', caseToUpdate.docketNumber),
+  });
 
   // Because we used to have nested objects in our case records, we upserted everything.
   // Now, with separate tables, we need to update these separate tables as well.
@@ -40,7 +38,7 @@ export const updateCase = async ({
     });
   }
 
-  if (!updatedCase) {
+  if (isEmpty(updatedCase)) {
     throw new Error('could not update the case');
   }
 

@@ -12,8 +12,9 @@ export const caseAdvancedSearchLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async () => {
+  genericHandler(event, async ({ applicationContext }) => {
     return await caseAdvancedSearchInteractor(
+      applicationContext,
       {
         ...event.queryStringParameters,
       },

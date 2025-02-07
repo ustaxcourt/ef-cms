@@ -1,13 +1,10 @@
 import { DocketEntryMapping } from '../../../elasticsearch/index-types';
 import { MAX_SEARCH_CLIENT_RESULTS } from '../../../../shared/src/business/entities/EntityConstants';
-import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
-import { flatMap } from 'lodash';
-import { getDbReader } from '@web-api/database';
 import { getSealedQuery } from './advancedDocumentSearchHelpers/getSealedQuery';
 import { getSortQuery } from './advancedDocumentSearchHelpers/getSortQuery';
-import { roundDateDownToNearestHour } from '@shared/business/utilities/DateHandler';
 import { search } from './searchClient';
-import { sql } from 'kysely';
+import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 const simpleQueryFlags = 'OR|AND|ESCAPE|PHRASE'; // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
 
@@ -51,11 +48,15 @@ export const advancedDocumentSearch = async ({
     'documentType',
     'eventCode',
     'filingDate',
+    'irsPractitioners',
     'isFileAttached',
     'isSealed',
     'isStricken',
     'judge',
     'numberOfPages',
+    'petitioners',
+    'privatePractitioners',
+    'sealedDate',
     'sealedTo',
     'signedJudgeName',
   ];
@@ -73,12 +74,31 @@ export const advancedDocumentSearch = async ({
     });
   }
 
-  let documentMustNot: QueryDslQueryContainer[] = [
+  const caseQueryParams: any = {
+    has_parent: {
+      inner_hits: {
+        _source: {
+          includes: sourceFields,
+        },
+        name: 'case-mappings',
+      },
+      parent_type: 'case',
+      query: {
+        bool: {
+          filter: [],
+        },
+      },
+      score: true,
+    },
+  };
+
+  let documentMustNot: QueryContainer[] = [
     { term: { 'isStricken.BOOL': true } },
   ];
   if (omitSealed) {
-    const { sealedDocumentMustNotQuery } = getSealedQuery();
+    const { sealedCaseQuery, sealedDocumentMustNotQuery } = getSealedQuery();
 
+    caseQueryParams.has_parent.query.bool.filter.push(sealedCaseQuery);
     documentMustNot = [...documentMustNot, ...sealedDocumentMustNotQuery];
   } else {
     if (isExternalUser) {
@@ -88,11 +108,22 @@ export const advancedDocumentSearch = async ({
     }
   }
 
-  if (!caseTitleOrPetitioner && docketNumber) {
-    documentMust.push({
+  if (docketNumber) {
+    caseQueryParams.has_parent.query.bool.filter.push({
       term: { 'docketNumber.S': docketNumber },
     });
+  } else if (caseTitleOrPetitioner) {
+    caseQueryParams.has_parent.query.bool.must = {
+      simple_query_string: {
+        default_operator: 'and',
+        fields: ['caseCaption.S', 'petitioners.L.M.name.S'],
+        flags: simpleQueryFlags,
+        query: caseTitleOrPetitioner,
+      },
+    };
   }
+
+  documentMust.push(caseQueryParams);
 
   if (isOpinionSearch) {
     documentMustNot = [
@@ -113,6 +144,29 @@ export const advancedDocumentSearch = async ({
     { term: { 'isFileAttached.BOOL': true } },
     { terms: { 'eventCode.S': documentEventCodes } },
   ];
+
+  if (judge) {
+    const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
+    documentFilter.push({
+      bool: {
+        should: [
+          {
+            match: {
+              ['signedJudgeName.S']: {
+                operator: 'and',
+                query: judgeName,
+              },
+            },
+          },
+          {
+            match: {
+              ['judge.S']: judgeName,
+            },
+          },
+        ],
+      },
+    });
+  }
 
   if (endDate && startDate) {
     documentFilter.push({
@@ -150,175 +204,10 @@ export const advancedDocumentSearch = async ({
     index: 'efcms-docket-entry',
   };
 
-  const { results: opensearchResults } = await search<DocketEntryMapping>({
+  const { results, total } = await search<DocketEntryMapping>({
     applicationContext,
     searchParameters: documentQuery,
   });
 
-  const judgeName = judge?.replace(/Chief\s|Legacy\s|Judge\s/g, '');
-
-  const postgresResults = await getDbReader(reader => {
-    const query = reader
-      // Get all cases, aggregating petitioner names and case caption data
-      .with('docketEntries', db => {
-        let subQuery = db
-          .selectFrom('dwDocketEntry as d')
-          .leftJoin('dwCase as c', 'd.docketNumber', 'c.docketNumber')
-          .leftJoin(
-            'dwPetitionerOnCase as p',
-            'd.docketNumber',
-            'p.docketNumber',
-          )
-          .where('d.isStricken', 'is not', true);
-
-        if (docketNumber) {
-          subQuery = subQuery.where('c.docketNumber', '=', docketNumber);
-        }
-
-        if (isOpinionSearch) {
-          subQuery = subQuery.where('d.isSealed', 'is not', true);
-        }
-
-        if (judgeName) {
-          subQuery = subQuery.where(eb =>
-            eb.or([
-              eb('d.judge', 'like', `%${judgeName}%`),
-              eb('d.signedJudgeName', 'like', `%${judgeName}%`),
-            ]),
-          );
-        }
-
-        if (startDate) {
-          subQuery = subQuery.where(
-            'd.filingDate',
-            '>=',
-            roundDateDownToNearestHour(startDate),
-          );
-        }
-
-        if (endDate) {
-          subQuery = subQuery.where(
-            'd.filingDate',
-            '<=',
-            roundDateDownToNearestHour(endDate),
-          );
-        }
-
-        if (omitSealed) {
-          subQuery = subQuery
-            .where('c.isSealed', 'is not', true)
-            .where('d.isSealed', 'is not', true)
-            .where(eb =>
-              eb.or([
-                eb('d.sealedTo', 'is', null),
-                eb('d.sealedTo', '!=', 'External'),
-              ]),
-            );
-        } else {
-          if (isExternalUser) {
-            subQuery = subQuery.where(eb =>
-              eb.or([
-                eb('d.sealedTo', 'is', null),
-                eb('d.sealedTo', '!=', 'External'),
-              ]),
-            );
-          }
-        }
-
-        subQuery = subQuery.select([
-          'd.docketEntryId',
-          'd.docketNumber',
-          'd.filingDate',
-          'd.sealedTo',
-          'd.numberOfPages',
-          'c.docketNumberSuffix',
-          'd.isSealed as docketEntrySealed',
-          'c.isSealed as caseSealed',
-          'c.sealedDate',
-          'c.associatedJudge',
-          'c.caption',
-        ]);
-
-        if (caseTitleOrPetitioner) {
-          subQuery = subQuery
-            .select([
-              sql<string>`string_agg("p".name, ', ') || ' '`.as('nameToMatch'),
-            ])
-            .groupBy([
-              'd.docketEntryId',
-              'd.docketNumber',
-              'd.filingDate',
-              'd.sealedTo',
-              'd.numberOfPages',
-              'd.isSealed',
-              'c.isSealed',
-              'c.docketNumberSuffix',
-              'c.sealedDate',
-              'c.associatedJudge',
-              'c.caption',
-            ]);
-        }
-        subQuery = subQuery.orderBy('d.filingDate', 'desc');
-
-        return subQuery;
-      });
-
-    const query2 = query
-      .with('docketEntryWithScores', db =>
-        db
-          .selectFrom('docketEntries')
-          .selectAll()
-          .select(
-            sql`word_similarity(${caseTitleOrPetitioner}, COALESCE(name_to_match, '')) + word_similarity(${caseTitleOrPetitioner}, COALESCE(caption, ''))`.as(
-              'total_rank',
-            ),
-          ),
-      )
-      .selectFrom('docketEntryWithScores')
-      .where('total_rank', '>=', 0.5);
-
-    if (!docketNumber && caseTitleOrPetitioner) {
-      return query2.selectAll().execute();
-    }
-
-    return query.selectFrom('docketEntries').selectAll().execute();
-  });
-
-  console.log('postgresResults', postgresResults);
-  console.log('opensearchResults', opensearchResults);
-
-  const combinedSearchResults = flatMap<any, any>(postgresResults, pgRecord => {
-    return opensearchResults
-      .filter(
-        osRecord =>
-          osRecord.docketNumber === pgRecord.docketNumber &&
-          osRecord.docketEntryId === pgRecord.docketEntryId,
-      )
-      .map(osRecord => ({
-        ...{
-          ...pgRecord,
-          caseCaption: pgRecord.caption,
-          docketNumberWithSuffix:
-            pgRecord.docketNumber + (pgRecord.docketNumberSuffix || ''),
-          isCaseSealed: pgRecord.caseSealed || false,
-          isDocketEntrySealed: pgRecord.docketEntrySealed || false,
-          judge: pgRecord.associatedJudge,
-          sealedDate: pgRecord.sealedDate?.toISOString(),
-        },
-        ...osRecord,
-      }));
-  });
-
-  console.log('openSearch results', opensearchResults);
-
-  console.log(
-    'combinedSearchResults',
-    combinedSearchResults,
-    combinedSearchResults.length,
-  );
-
-  return {
-    results: combinedSearchResults,
-    totalCount: combinedSearchResults.length,
-  };
+  return { results, totalCount: total };
 };
