@@ -417,3 +417,9 @@ td.message-select-control {
 .usa-nav {
   padding-bottom: 4px !important; // USWDS added botton padding as part of releases 8-10
 }
+
+.usa-footer {
+  [class^='grid-col-'] {
+    width: 100%;
+  }
+}
