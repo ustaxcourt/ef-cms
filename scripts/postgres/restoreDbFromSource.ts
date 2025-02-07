@@ -223,57 +223,14 @@ async function restoreFromBackup({
   });
   const targetPassword = await targetSigner.getAuthToken();
 
-  // pg_restore only drops tables that exist in the source dump, so we drop all target tables before calling pg_restore.
+  // pg_restore --clean only drops tables that exist in the source dump, so we drop all target tables before calling pg_restore.
   // We could drop the whole target db or the schema, but then we would have to deal with stricter permissions.
-  await new Promise(resolve => {
-    // For each table in the target db public schema, we will create a SQL DROP command and then execute it.
-    const dropTableQuery = spawn(
-      'psql',
-      [
-        `--host=${host}`,
-        `--username=${username}`,
-        `--dbname=${dbName}`,
-        `--port=${port}`,
-        '--no-password',
-        `--command=DO $$ DECLARE
-          stmt text;
-        BEGIN
-          FOR stmt IN
-            SELECT 'DROP TABLE IF EXISTS "' || tablename || '" CASCADE;'
-            FROM pg_tables
-            WHERE schemaname = 'public'
-          LOOP
-            EXECUTE stmt;
-          END LOOP;
-        END
-        $$;`,
-      ],
-      {
-        env: {
-          ...process.env,
-          PGPASSWORD: targetPassword,
-        },
-      },
-    );
-
-    dropTableQuery.stdout.on('data', data => {
-      console.log(data.toString('utf-8'));
-    });
-
-    dropTableQuery.stderr.on('data', data => {
-      console.error(data.toString('utf-8'));
-    });
-
-    dropTableQuery.on('close', code => {
-      if (code) {
-        console.log(
-          `Attempted to drop all tables from DB ${dbName}. Check output for errors. Exit code: ${code}`,
-        );
-      } else {
-        console.log(`Successfully dropped all tables from DB ${dbName}.`);
-      }
-      resolve(undefined);
-    });
+  await dropAllTargetTables({
+    dbName,
+    host,
+    port,
+    targetPassword,
+    username,
   });
 
   await new Promise(resolve => {
@@ -286,7 +243,6 @@ async function restoreFromBackup({
         `--port=${port}`,
         '--format=c',
         '--verbose',
-        '--clean',
         '--no-privileges',
         '--no-owner',
         `${backUpFileName}`,
@@ -347,4 +303,69 @@ async function getTargetAccountCredentials({
     targetSecretAccessKey,
     targetSessionToken,
   };
+}
+
+async function dropAllTargetTables({
+  dbName,
+  host,
+  port,
+  targetPassword,
+  username,
+}: {
+  host: string;
+  username: string;
+  port: number;
+  dbName: string;
+  targetPassword: string;
+}): Promise<void> {
+  await new Promise(resolve => {
+    // For each table in the target db public schema, we will create a SQL DROP command and then execute it.
+    const dropTableQuery = spawn(
+      'psql',
+      [
+        `--host=${host}`,
+        `--username=${username}`,
+        `--dbname=${dbName}`,
+        `--port=${port}`,
+        '--no-password',
+        `--command=DO $$ DECLARE
+          stmt text;
+        BEGIN
+          FOR stmt IN
+            SELECT 'DROP TABLE IF EXISTS "' || tablename || '" CASCADE;'
+            FROM pg_tables
+            WHERE schemaname = 'public'
+          LOOP
+            EXECUTE stmt;
+          END LOOP;
+        END
+        $$;`,
+      ],
+      {
+        env: {
+          ...process.env,
+          PGPASSWORD: targetPassword,
+        },
+      },
+    );
+
+    dropTableQuery.stdout.on('data', data => {
+      console.log(data.toString('utf-8'));
+    });
+
+    dropTableQuery.stderr.on('data', data => {
+      console.error(data.toString('utf-8'));
+    });
+
+    dropTableQuery.on('close', code => {
+      if (code) {
+        console.log(
+          `Attempted to drop all tables from DB ${dbName}. Check output for errors. Exit code: ${code}`,
+        );
+      } else {
+        console.log(`Successfully dropped all tables from DB ${dbName}.`);
+      }
+      resolve(undefined);
+    });
+  });
 }

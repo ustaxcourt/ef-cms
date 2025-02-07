@@ -131,6 +131,8 @@ export default defineConfig({
                     continue;
                   }
 
+                  await page.bringToFront();
+
                   if (!page.url().includes('/idle-logout')) {
                     throw new Error('Page is not on idle logout screen!');
                   }
