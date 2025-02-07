@@ -9,7 +9,7 @@ import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { MINUTE_SHEET_FORM_SECTION_MAP } from '@shared/business/entities/EntityConstants';
 import {
   WitnessesRecord,
-  witnessTypeOptions,
+  WitnessTypeOption,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { capitalize } from 'lodash';
 import React from 'react';
@@ -25,7 +25,7 @@ export const WitnessesFieldset = ({
   onChangeHandler: OnChangeHandler;
   onBlurHandler: AutoSaveHandler;
   addRowHandler: AddRowHandler;
-  witnessesFormState: WitnessesRecord<typeof witnessTypeOptions>;
+  witnessesFormState: WitnessesRecord<WitnessTypeOption>;
   witnessType: string;
   removeRowHandler: RemoveRowHandler;
 }) => {

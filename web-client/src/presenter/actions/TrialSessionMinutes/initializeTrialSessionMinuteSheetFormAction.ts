@@ -1,13 +1,13 @@
 import {
-  ACTION_DOCUMENT_TYPE_OPTIONS,
   KeyedActionFilingFormFieldsByRenderKey,
   KeyedPartyFormFieldsByRenderKey,
-  MOTION_OBJECTION_OPTIONS,
   initialMinuteSheetFormState,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import {
+  ACTION_DOCUMENT_TYPE_OPTIONS,
   CONTACT_TYPES,
   FILDED_BY_TYPES,
+  MOTION_OBJECTION_OPTIONS,
   OBJECTIONS_OPTIONS_MAP,
   REPRESENTATIVE_TYPES,
 } from '@shared/business/entities/EntityConstants';

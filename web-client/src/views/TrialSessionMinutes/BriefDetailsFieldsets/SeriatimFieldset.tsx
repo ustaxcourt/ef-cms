@@ -1,12 +1,14 @@
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import { MINUTE_SHEET_FORM_SECTION_MAP } from '@shared/business/entities/EntityConstants';
+import {
+  MINUTE_SHEET_FORM_SECTION_MAP,
+  PARTY_TYPE_OPTIONS_MAP,
+} from '@shared/business/entities/EntityConstants';
 import {
   AutoSaveHandler,
   OnChangeHandler,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import {
-  PARTY_TYPE_OPTIONS_MAP,
   SeriatimBriefFormFields,
   SeriatimMemorandumFormFields,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';

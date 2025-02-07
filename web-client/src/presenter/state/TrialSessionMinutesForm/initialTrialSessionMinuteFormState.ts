@@ -1,157 +1,70 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
-// Note: the order of properties in the constants defined below
-// is important to the business and should not be changed.
-type MotionFormFields = {
-  date: string;
-  type: MotionTypeOption | '';
-  filedBy: MotionFiledByOption | '';
-  status: MotionStatusOption | '';
-  objection: MotionObjectionOption | '';
-  note: string;
-  oralMotion: boolean;
-};
+import {
+  BriefTypeOption,
+  StatusReportOrderedForOption,
+} from '@shared/business/entities/EntityConstants';
+import {
+  ActionAndFiling,
+  Appearance,
+  BriefDetailsType,
+  CalendarEvent,
+  Exhibit,
+  Judge,
+  Motion,
+  PetitionerAppearance,
+  Witness,
+} from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 
-type ActionFilingFormFields = {
-  date: string;
-  documentType: ActionDocumentTypeOption | '';
-  filedBy: ActionFiledByOption | '';
-  status: ActionStatusOption | '';
-  note: string;
-  isOnDocketRecord: boolean;
-  oralMotion?: boolean;
-  objection?: string;
-};
-
-export type KeyedActionFilingFormFields = KeyedEntry & ActionFilingFormFields;
-export type KeyedActionFilingFormFieldsByRenderKey = Record<
-  RenderKey,
-  KeyedActionFilingFormFields
->;
-
-type BaseBriefFormFields = {
-  dueDate: string;
-  note: string;
-};
-
-type BriefFormFieldsWithPartyType = BaseBriefFormFields & {
-  partyType: PartyTypeOptions;
-};
-
-export type SeriatimBriefFormFields = {
-  opening: BriefFormFieldsWithPartyType;
-  answering: BriefFormFieldsWithPartyType;
-  reply: BriefFormFieldsWithPartyType;
-  surreply: BriefFormFieldsWithPartyType;
-};
-
-export type SeriatimMemorandumFormFields = SeriatimBriefFormFields;
-
-export type SimultaneousBriefFormFields = {
-  opening: BaseBriefFormFields;
-  answering: BaseBriefFormFields;
-  reply: BaseBriefFormFields;
-  surreply: BaseBriefFormFields;
-};
-
-export type SimultaneousMemorandumFormFields = {
-  opening: BaseBriefFormFields;
-  answering: BaseBriefFormFields;
-  surreply: BaseBriefFormFields;
-};
-
-export type SimultaneousMemorandaOfLawFormFields = {
-  memoranda: BaseBriefFormFields;
-  answering: BaseBriefFormFields;
-};
-
-export type SimultaneousSupplementalFormFields = {
-  simultaneousSupplemental: BaseBriefFormFields;
-};
-
-export type BriefDetailsType =
-  | SeriatimBriefFormFields
-  | SeriatimMemorandumFormFields
-  | SimultaneousMemorandumFormFields
-  | SimultaneousMemorandaOfLawFormFields
-  | SimultaneousSupplementalFormFields
-  | SimultaneousBriefFormFields
-  | {};
-
-// 10419 TODO: consider whether optional fields are the best approach here, or
-// if we should have explicit types for each sort of "case metadata entry".
-type CaseMetadataEntry = {
-  date: string;
-  note: string;
-  transcriptOrdered?: boolean;
-  trialHearingType?: TrialHearingOption;
-};
-
+type RenderKey = string;
 type KeyedEntry = {
   renderKey: string;
 };
 
-type KeyedCaseMetadataEntry = KeyedEntry & CaseMetadataEntry;
+type KeyedCaseMetadataEntry = KeyedEntry & CalendarEvent;
 type KeyedCaseMetadataEntryByKey = Record<RenderKey, KeyedCaseMetadataEntry>;
 
-type KeyedWitnessEntry = KeyedEntry & { name: string };
-type KeyedWitnessEntryByKey = Record<RenderKey, KeyedWitnessEntry>;
-
-export let witnessTypeOptions: 'petitioner' | 'respondent';
-export type WitnessesRecord<T extends 'petitioner' | 'respondent'> =
-  MinuteSheetFormState['witnessesSection'][`${T}Witnesses`];
-
-type KeyedPartyFormFields = KeyedEntry & {
-  renderKey: string;
-  name: string;
-  datesOfAppearance: string;
-  role?: string;
-};
-
-type RenderKey = string;
+type KeyedPartyFormFields = KeyedEntry & (Appearance | PetitionerAppearance);
 export type KeyedPartyFormFieldsByRenderKey = Record<
   RenderKey,
   KeyedPartyFormFields
 >;
 
-type KeyedMotionFormFields = KeyedEntry & MotionFormFields;
+type KeyedMotionFormFields = KeyedEntry & Motion;
 type KeyedMotionFormFieldsByRenderKey = Record<
   RenderKey,
   KeyedMotionFormFields
 >;
 
-type KeyedExhibitFormFields = KeyedEntry & {
-  description: string;
-  status: string;
-  note: string;
-};
+export type KeyedActionFilingFormFields = KeyedEntry & ActionAndFiling;
+export type KeyedActionFilingFormFieldsByRenderKey = Record<
+  RenderKey,
+  KeyedActionFilingFormFields
+>;
+
+type KeyedWitnessEntry = KeyedEntry & Witness;
+type KeyedWitnessEntryByKey = Record<RenderKey, KeyedWitnessEntry>;
+
+type KeyedExhibitFormFields = KeyedEntry & Exhibit;
 type KeyedExhibitFormFieldsByKey = Record<RenderKey, KeyedExhibitFormFields>;
 
-export type JudgeOption = {
-  fullName: string;
-  title: string;
-  userId: string;
-};
-
-export type IrsPractitionerOption = {
-  label: string;
-  value: string;
-};
+export type WitnessTypeOption = 'petitioner' | 'respondent';
+export type WitnessesRecord<T extends WitnessTypeOption> =
+  MinuteSheetFormState['witnessesSection'][`${T}Witnesses`];
 
 export type MinuteSheetFormState = {
   trialSessionMetadataSection: {
-    judge: JudgeOption;
-    judgeOptions: Record<string, JudgeOption>;
+    judge: Judge;
+    judgeOptions: Record<string, Judge>;
     trialClerk: string;
     courtReporter: string;
     remoteSession: boolean;
   };
 
   caseMetadataSection: {
-    called: CaseMetadataEntry;
-    notCalled: CaseMetadataEntry;
+    called: CalendarEvent;
+    notCalled: CalendarEvent;
     recalled: KeyedCaseMetadataEntryByKey;
-    pretrialConference: CaseMetadataEntry;
-    trialHearing: CaseMetadataEntry;
+    pretrialConference: CalendarEvent;
+    trialHearing: CalendarEvent;
   };
 
   petitionersSection: {
@@ -202,7 +115,7 @@ export type MinuteSheetFormState = {
     dateBenchOpinionRendered: string;
     transcriptOrdered: boolean;
     note: string;
-    briefType: string;
+    briefType: BriefTypeOption | '';
     briefDetails: BriefDetailsType;
   };
 
@@ -216,7 +129,10 @@ export type MinuteSheetFormState = {
   };
 
   options: {
-    irsPractitionerOptions: IrsPractitionerOption[];
+    irsPractitionerOptions: {
+      label: string;
+      value: string;
+    }[];
   };
 };
 
@@ -315,145 +231,3 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
     irsPractitionerOptions: [],
   },
 };
-
-export const TRIAL_HEARING_OPTIONS = {
-  trial: 'Trial',
-  hearing: 'Hearing',
-  partialTrial: 'Partial Trial',
-  furtherTrial: 'Further Trial',
-  furtherHearing: 'Further Hearing',
-} as const;
-export type TrialHearingOption = keyof typeof TRIAL_HEARING_OPTIONS;
-
-export const STATUS_REPORT_ORDERED_FOR_OPTIONS = {
-  joint: 'Joint',
-  other: 'Other',
-  petitioner: 'Petitioner',
-  petitionerAndRespondent: 'Petitioner and Respondent',
-  respondent: 'Respondent',
-} as const;
-export type StatusReportOrderedForOption =
-  keyof typeof STATUS_REPORT_ORDERED_FOR_OPTIONS;
-
-export const MOTION_FILED_BY_OPTIONS = {
-  intervenor: 'Intervenor',
-  joint: 'Joint',
-  petitioner: 'Petitioner',
-  respondent: 'Respondent',
-  thirdParty: 'Third Party',
-} as const;
-export type MotionFiledByOption = keyof typeof MOTION_FILED_BY_OPTIONS;
-
-export const MOTION_STATUS_OPTIONS = {
-  seeOrder: 'See Order',
-  cav: 'CAV',
-  denied: 'Denied',
-  granted: 'Granted',
-  filed: 'Filed',
-  lodged: 'Lodged',
-} as const;
-export type MotionStatusOption = keyof typeof MOTION_STATUS_OPTIONS;
-
-export const MOTION_TYPE_OPTIONS = {
-  motionToDismissLackOfProsecution: 'Motion to Dismiss - Lack of Prosecution',
-  motionToDismissLackOfJurisdiction: 'Motion to Dismiss - Lack of Jurisdiction',
-  motionToDismissFailureToProperlyProsecute:
-    'Motion to Dismiss - Failure to Properly Prosecute',
-  motionToDismiss: 'Motion to Dismiss',
-  motionForContinuance: 'Motion for Continuance',
-  motionForGeneralContinuance: 'Motion for General Continuance',
-} as const;
-export type MotionTypeOption = keyof typeof MOTION_TYPE_OPTIONS;
-
-export const MOTION_OBJECTION_OPTIONS = {
-  noObjection: 'No Objection',
-  objection: 'Objection',
-  unknown: 'Unknown',
-} as const;
-export type MotionObjectionOption = keyof typeof MOTION_OBJECTION_OPTIONS;
-
-export const ACTION_DOCUMENT_TYPE_OPTIONS = {
-  entryOfAppearance: 'Entry of Appearance',
-  limitedEntryOfAppearance: 'Limited Entry of Appearance',
-  orderToShowCause: 'Order to Show Cause',
-  filing: 'Filing',
-  motion: 'Motion',
-  notice: 'Notice',
-  order: 'Order',
-  other: 'Other',
-} as const;
-
-export type ActionDocumentTypeOption =
-  keyof typeof ACTION_DOCUMENT_TYPE_OPTIONS;
-
-export const ACTION_FILED_BY_OPTIONS = {
-  petitioner: 'Petitioner',
-  respondent: 'Respondent',
-  petitionerAndRespondent: 'Petitioner and Respondent',
-  joint: 'Joint',
-  other: 'Other',
-  court: 'Court',
-} as const;
-
-export type ActionFiledByOption = keyof typeof ACTION_FILED_BY_OPTIONS;
-
-export const ACTION_STATUS_OPTIONS = {
-  seeOrder: 'See Order',
-  cav: 'CAV',
-  denied: 'Denied',
-  granted: 'Granted',
-  filed: 'Filed',
-  lodged: 'Lodged',
-} as const;
-
-export type ActionStatusOption = keyof typeof ACTION_STATUS_OPTIONS;
-
-export const BRIEF_TYPE_OPTIONS = {
-  seriatimBrief: 'Seriatim Brief',
-  seriatimMemorandum: 'Seriatim Memorandum Brief',
-  simultaneous: 'Simultaneous Brief',
-  simultaneousMemoranda: 'Simultaneous Memoranda of Law',
-  simultaneousMemorandum: 'Simultaneous Memorandum Brief',
-  simultaneousSupplemental: 'Simultaneous Supplemental Brief',
-} as const;
-
-export type BriefTypeOption = keyof typeof BRIEF_TYPE_OPTIONS;
-
-export const EXHIBIT_STATUS_OPTIONS = {
-  admitted: 'Admitted',
-  notAdmitted: 'Not admitted',
-  withdrawn: 'Withdrawn',
-  notOffered: 'Not offered',
-  reserved: 'Reserved',
-  identificationOnly: 'Identification only',
-  demonstrative: 'Demonstrative',
-  otherSeeNote: 'Other - see note',
-} as const;
-
-export type ExhibitStatusOption = keyof typeof EXHIBIT_STATUS_OPTIONS;
-
-export const PARTY_TYPE_OPTIONS_MAP = {
-  petitioner: 'Petitioner',
-  respondent: 'Respondent',
-} as const;
-type PartyTypeOptions = keyof typeof PARTY_TYPE_OPTIONS_MAP;
-
-export const BRIEF_SUBTYPE = {
-  answering: 'Answering',
-  memoranda: 'Memoranda',
-  opening: 'Opening',
-  reply: 'Reply',
-  simultaneousSupplemental: '',
-  surReply: 'Sur-reply',
-} as const;
-
-export const PETITIONER_ROLE_OPTIONS = {
-  counsel: 'Councel',
-  proSe: 'Pro Se',
-  intervenor: 'Intervenor',
-  participant: 'Participant',
-  translator: 'Translator',
-  studentIntern: 'Student Intern',
-  other: 'Other',
-} as const;
-export type PetitionerRoleOptions = keyof typeof PETITIONER_ROLE_OPTIONS;

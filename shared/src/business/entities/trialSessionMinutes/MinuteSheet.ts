@@ -1,104 +1,192 @@
 import {
-  ActionDocumentTypeOption,
-  ActionFiledByOption,
-  ActionStatusOption,
-  BriefDetailsType,
+  BriefTypeOption,
+  ExhibitStatusOption,
   MotionFiledByOption,
   MotionObjectionOption,
   MotionStatusOption,
   MotionTypeOption,
+  PartyTypeOption,
+  PetitionerRoleOption,
   StatusReportOrderedForOption,
   TrialHearingOption,
-} from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+} from '../EntityConstants';
 
 export type MinuteSheet = {
-  trialSessionId: string;
-  docketNumber: string;
-  judge: { fullName: string; title: string; userId: string };
-  trialClerk: string;
-  courtReporter: string;
-  isRemoteSession: boolean;
+  trialSession: {
+    id: string;
+    judge: Judge;
+    trialClerk: string;
+    courtReporter: string;
+    isRemote: boolean;
+  };
 
-  caseCalendarCallDate: string;
-  caseCalendarCallNote: string;
-  caseCalendarCallTranscriptOrdered: boolean;
-  caseNotCalledDate: string;
-  caseNotCalledNote: string;
-  caseNotCalledTranscriptOrdered: boolean;
-  caseRecalls: { date: string; note: string; transcriptOrdered: boolean }[];
-  pretrialConferenceDate: string;
-  pretrialConferenceNote: string;
-  pretrialConferenceTranscriptOrdered: boolean;
-  trialHearingDate: string;
-  trialHearingNote: string;
-  trialHearingTranscriptOrdered: boolean;
-  trialHearingTytpe: TrialHearingOption;
+  caseRecord: {
+    docketNumber: string;
+    calendarCall?: CalendarEvent;
+    notCalled?: CalendarEvent;
+    recalls: CalendarEvent[];
+    pretrialConference?: Event;
+    trialHearing?: CalendarEvent;
+  };
 
-  petitionerNoAppearance: boolean;
-  petitionerAppearances: PetitionerAppearance[];
-  respondentAppearances: RespondentAppearance[];
-  jurisdictionRetainedDate: string;
-  jurisdictionRetainedNote: string;
-  jurisdictionContinuedDate: string;
-  jurisdictionContinuedNote: string;
-  statusReportOrderedDate: string;
-  statusReportOrderedNote: string;
-  statusReportOrderedDueDate: string;
-  statusReportOrderedFor: StatusReportOrderedForOption | '';
-  stipulatedDecisionOrderedDate: string;
-  stipulatedDecisionOrderedNote: string;
-  stipulatedDecisionOrderedDueDate: string;
-  motions: Motion[];
-  actionsAndFilings: ActionAndFiling[];
+  appearances: {
+    petitioners: {
+      noAppearance: boolean;
+      appearances: PetitionerAppearance[];
+    };
+    respondents: Appearance[];
+  };
 
-  trialBriefSubmittedDate: string;
-  totalTrialHours: number | undefined;
-  benchOpinionRenderedDate: string;
-  trialBriefTranscriptOrdered: boolean;
-  trialBriefNote: string;
-  trialBriefType: string;
-  trialBriefDetails: BriefDetailsType;
+  jurisdiction: {
+    retained?: JurisdictionEvent;
+    continued?: JurisdictionEvent;
+  };
 
-  petitionerWitnesses: { name: string }[];
-  respondentWitnesses: { name: string }[];
-  exhibits: Exhibit[];
+  orders: {
+    statusReport?: StatusReportOrder;
+    stipulatedDecision?: Order;
+  };
+
+  proceedings: {
+    motions: Motion[];
+    actionsAndFilings: ActionAndFiling[];
+  };
+
+  brief: Brief;
+
+  evidence: {
+    petitionerWitnesses: Witness[];
+    respondentWitnesses: Witness[];
+    exhibits: Exhibit[];
+  };
 };
 
-type PetitionerAppearance = {
-  name: string;
-  role: string;
-  datesOfAppearance: string;
-  note: string;
-};
-
-type RespondentAppearance = {
-  name: string;
-  datesOfAppearance: string;
-  note: string;
+export type Judge = {
+  fullName: string;
+  title: string;
   userId: string;
 };
 
-type Motion = {
+type Event = {
   date: string;
-  type: MotionTypeOption | '';
-  filedBy: MotionFiledByOption | '';
-  status: MotionStatusOption | '';
-  objection: MotionObjectionOption | '';
-  note: string;
+  note?: string;
+  transcriptOrdered?: boolean;
+};
+
+export type CalendarEvent = Event & {
+  trialHearingType?: TrialHearingOption;
+};
+
+export type Appearance = {
+  name: string;
+  datesOfAppearance: string;
+};
+
+export type PetitionerAppearance = Appearance & {
+  role?: PetitionerRoleOption;
+};
+
+type JurisdictionEvent = {
+  date: string;
+  note?: string;
+};
+
+type Order = {
+  date: string;
+  dueDate: string;
+  note?: string;
+};
+
+type StatusReportOrder = Order & {
+  orderedFor: StatusReportOrderedForOption;
+};
+
+export type Motion = {
+  date: string;
+  type: MotionTypeOption;
+  filedBy: MotionFiledByOption;
+  status: MotionStatusOption;
+  objection: MotionObjectionOption;
+  note?: string;
   oralMotion: boolean;
 };
-type ActionAndFiling = {
+
+export type ActionAndFiling = {
   date: string;
-  documentType: ActionDocumentTypeOption | '';
-  filedBy: ActionFiledByOption | '';
-  status: ActionStatusOption | '';
-  note: string;
+  documentType: DocumentType;
+  filedBy: MotionFiledByOption;
+  status: MotionStatusOption;
+  note?: string;
   isOnDocketRecord: boolean;
   oralMotion?: boolean;
   objection?: string;
 };
-type Exhibit = {
-  description: string;
-  status: string;
+
+type Brief = {
+  type: BriefTypeOption | '';
+  details: BriefDetailsType;
+  dateSubmitted?: string;
+  hoursOfTrial?: number;
+  benchOpinionDate?: string;
+  transcriptOrdered: boolean;
+  note?: string;
+};
+
+type BaseBrief = {
+  dueDate: string;
   note: string;
+};
+
+type BriefWithPartyType = BaseBrief & {
+  partyType: PartyTypeOption;
+};
+
+export type SeriatimBrief = {
+  opening: BriefWithPartyType;
+  answering: BriefWithPartyType;
+  reply: BriefWithPartyType;
+  surreply: BriefWithPartyType;
+};
+
+export type SeriatimMemorandum = SeriatimBrief;
+
+export type SimultaneousBrief = {
+  opening: BaseBrief;
+  answering: BaseBrief;
+  reply: BaseBrief;
+  surreply: BaseBrief;
+};
+
+export type SimultaneousMemorandum = {
+  opening: BaseBrief;
+  answering: BaseBrief;
+  surreply: BaseBrief;
+};
+
+export type SimultaneousMemorandaOfLaw = {
+  memoranda: BaseBrief;
+  answering: BaseBrief;
+};
+
+export type SimultaneousSupplemental = {
+  simultaneousSupplemental: BaseBrief;
+};
+
+export type BriefDetailsType =
+  | SeriatimBrief
+  | SeriatimMemorandum
+  | SimultaneousMemorandum
+  | SimultaneousMemorandaOfLaw
+  | SimultaneousSupplemental
+  | SimultaneousBrief
+  | {};
+
+export type Witness = {
+  name: string;
+};
+
+export type Exhibit = {
+  description: string;
+  status: ExhibitStatusOption;
+  note?: string;
 };
