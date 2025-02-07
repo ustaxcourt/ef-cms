@@ -323,7 +323,7 @@ export const TRIAL_HEARING_OPTIONS = {
   furtherTrial: 'Further Trial',
   furtherHearing: 'Further Hearing',
 } as const;
-type TrialHearingOption = keyof typeof TRIAL_HEARING_OPTIONS;
+export type TrialHearingOption = keyof typeof TRIAL_HEARING_OPTIONS;
 
 export const STATUS_REPORT_ORDERED_FOR_OPTIONS = {
   joint: 'Joint',
@@ -332,7 +332,7 @@ export const STATUS_REPORT_ORDERED_FOR_OPTIONS = {
   petitionerAndRespondent: 'Petitioner and Respondent',
   respondent: 'Respondent',
 } as const;
-type StatusReportOrderedForOption =
+export type StatusReportOrderedForOption =
   keyof typeof STATUS_REPORT_ORDERED_FOR_OPTIONS;
 
 export const MOTION_FILED_BY_OPTIONS = {
@@ -342,7 +342,7 @@ export const MOTION_FILED_BY_OPTIONS = {
   respondent: 'Respondent',
   thirdParty: 'Third Party',
 } as const;
-type MotionFiledByOption = keyof typeof MOTION_FILED_BY_OPTIONS;
+export type MotionFiledByOption = keyof typeof MOTION_FILED_BY_OPTIONS;
 
 export const MOTION_STATUS_OPTIONS = {
   seeOrder: 'See Order',
