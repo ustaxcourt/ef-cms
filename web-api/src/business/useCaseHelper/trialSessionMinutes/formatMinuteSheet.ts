@@ -35,7 +35,7 @@ export type FormattedMinuteSheet = {
   petitionerAppearances: string[];
   called: string;
   notCalled: string;
-  recalled: { renderKey: string; content: string }[];
+  recalled: { content: string }[];
   pretrialConference?: string;
   trialHearing?: string;
   respondentAppearances: string[];
@@ -45,11 +45,9 @@ export type FormattedMinuteSheet = {
   stipulatedDecisionOrdered: string;
   motions: {
     motionType: string;
-    renderKey: string;
     content: string;
   }[];
   actionsAndFilings: {
-    renderKey: string;
     content: string;
   }[];
   trialBrief: {
@@ -59,10 +57,9 @@ export type FormattedMinuteSheet = {
     briefType: string;
     briefDetails: string[];
   };
-  petitionerWitnesses: { renderKey: string; name: string }[];
-  respondentWitnesses: { renderKey: string; name: string }[];
+  petitionerWitnesses: { name: string }[];
+  respondentWitnesses: { name: string }[];
   exhibits: {
-    renderKey: string;
     description: string;
     status: ExhibitStatusOption;
     note: string;
@@ -71,7 +68,6 @@ export type FormattedMinuteSheet = {
 
 type FormattedRow = {
   content: string;
-  renderKey: string;
 };
 
 export const getBriefDetails = (briefDetails: BriefDetailsType) => {

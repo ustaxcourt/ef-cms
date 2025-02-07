@@ -19,8 +19,8 @@ export const TrialSessionMinutesForm = connect(
     addMinuteSheetFormRowSequence: sequences.addMinuteSheetFormRowSequence,
     removeMinuteSheetFormRowSequence:
       sequences.removeMinuteSheetFormRowSequence,
-    trialSessionMinutesAutosaveSequence:
-      sequences.trialSessionMinutesAutosaveSequence,
+    autosaveTrialSessionMinuteSheetSequence:
+      sequences.autosaveTrialSessionMinuteSheetSequence,
     trialSessionMinutesForm: state.minuteSheetForm,
     trialSessionMinutesFormOptionsHelper:
       state.trialSessionMinutesFormOptionsHelper,
@@ -30,7 +30,7 @@ export const TrialSessionMinutesForm = connect(
   ({
     addMinuteSheetFormRowSequence,
     removeMinuteSheetFormRowSequence,
-    trialSessionMinutesAutosaveSequence,
+    autosaveTrialSessionMinuteSheetSequence,
     trialSessionMinutesForm,
     trialSessionMinutesFormOptionsHelper,
     updateTrialSessionMinutesFormSequence,
@@ -41,14 +41,14 @@ export const TrialSessionMinutesForm = connect(
           trialSessionMetadataFormState={
             trialSessionMinutesForm.trialSessionMetadataSection
           }
-          onBlurHandler={trialSessionMinutesAutosaveSequence}
+          onBlurHandler={autosaveTrialSessionMinuteSheetSequence}
           onChangeHandler={updateTrialSessionMinutesFormSequence}
         />
         <hr />
         <CaseMetadataFieldset
           addRowHandler={addMinuteSheetFormRowSequence}
           caseMetadataFormState={trialSessionMinutesForm.caseMetadataSection}
-          onBlurHandler={trialSessionMinutesAutosaveSequence}
+          onBlurHandler={autosaveTrialSessionMinuteSheetSequence}
           onChangeHandler={updateTrialSessionMinutesFormSequence}
         />
         <hr />
@@ -56,7 +56,7 @@ export const TrialSessionMinutesForm = connect(
           addRowHandler={addMinuteSheetFormRowSequence}
           petitionersFormState={trialSessionMinutesForm.petitionersSection}
           removeRowHandler={removeMinuteSheetFormRowSequence}
-          onBlurHandler={trialSessionMinutesAutosaveSequence}
+          onBlurHandler={autosaveTrialSessionMinuteSheetSequence}
           onChangeHandler={updateTrialSessionMinutesFormSequence}
         />
         <RespondentsFieldset
@@ -66,26 +66,26 @@ export const TrialSessionMinutesForm = connect(
           }
           removeRowHandler={removeMinuteSheetFormRowSequence}
           respondentsFormState={trialSessionMinutesForm.respondentsSection}
-          onBlurHandler={trialSessionMinutesAutosaveSequence}
+          onBlurHandler={autosaveTrialSessionMinuteSheetSequence}
           onChangeHandler={updateTrialSessionMinutesFormSequence}
         />
         <hr />
         <JurisdictionFieldset
           jurisdictionFormState={trialSessionMinutesForm.jurisdictionSection}
-          onBlurHandler={trialSessionMinutesAutosaveSequence}
+          onBlurHandler={autosaveTrialSessionMinuteSheetSequence}
           onChangeHandler={updateTrialSessionMinutesFormSequence}
         />
         <hr />
         <OrdersFieldset
           ordersFormState={trialSessionMinutesForm.ordersSection}
-          onBlurHandler={trialSessionMinutesAutosaveSequence}
+          onBlurHandler={autosaveTrialSessionMinuteSheetSequence}
           onChangeHandler={updateTrialSessionMinutesFormSequence}
         />
         <hr />
         <MotionsFieldset
           addRowHandler={addMinuteSheetFormRowSequence}
           motionsFormState={trialSessionMinutesForm.motionsSection}
-          onBlurHandler={trialSessionMinutesAutosaveSequence}
+          onBlurHandler={autosaveTrialSessionMinuteSheetSequence}
           onChangeHandler={updateTrialSessionMinutesFormSequence}
         />
         <hr />
@@ -95,13 +95,13 @@ export const TrialSessionMinutesForm = connect(
           }
           addRowHandler={addMinuteSheetFormRowSequence}
           removeRowHandler={removeMinuteSheetFormRowSequence}
-          onBlurHandler={trialSessionMinutesAutosaveSequence}
+          onBlurHandler={autosaveTrialSessionMinuteSheetSequence}
           onChangeHandler={updateTrialSessionMinutesFormSequence}
         />
         <hr />
         <TrialBriefFieldset
           trialBriefFormState={trialSessionMinutesForm.trialBriefSection}
-          onBlurHandler={trialSessionMinutesAutosaveSequence}
+          onBlurHandler={autosaveTrialSessionMinuteSheetSequence}
           onChangeHandler={updateTrialSessionMinutesFormSequence}
         />
         <hr />
@@ -114,7 +114,7 @@ export const TrialSessionMinutesForm = connect(
               witnessesFormState={
                 trialSessionMinutesForm.witnessesSection.petitionerWitnesses
               }
-              onBlurHandler={trialSessionMinutesAutosaveSequence}
+              onBlurHandler={autosaveTrialSessionMinuteSheetSequence}
               onChangeHandler={updateTrialSessionMinutesFormSequence}
             />
           </div>
@@ -126,7 +126,7 @@ export const TrialSessionMinutesForm = connect(
               witnessesFormState={
                 trialSessionMinutesForm.witnessesSection.respondentWitnesses
               }
-              onBlurHandler={trialSessionMinutesAutosaveSequence}
+              onBlurHandler={autosaveTrialSessionMinuteSheetSequence}
               onChangeHandler={updateTrialSessionMinutesFormSequence}
             />
           </div>
@@ -137,7 +137,7 @@ export const TrialSessionMinutesForm = connect(
             addRowHandler={addMinuteSheetFormRowSequence}
             exhibitsFormState={trialSessionMinutesForm.exhibitsSection}
             removeRowHandler={removeMinuteSheetFormRowSequence}
-            onBlurHandler={trialSessionMinutesAutosaveSequence}
+            onBlurHandler={autosaveTrialSessionMinuteSheetSequence}
             onChangeHandler={updateTrialSessionMinutesFormSequence}
           />
         </div>

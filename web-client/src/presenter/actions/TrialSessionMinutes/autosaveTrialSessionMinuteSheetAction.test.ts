@@ -1,9 +1,9 @@
 import { mockMinuteSheetFormState } from './mockMinuteSheetFormState';
 import { presenter } from '@web-client/presenter/presenter';
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { trialSessionMinutesAutosaveAction } from './trialSessionMinutesAutosaveAction';
 import { updateMinuteSheetInteractor } from '@shared/proxies/trialSessionMinutes/updateMinuteSheetProxy';
 import hash from 'object-hash';
+import { autosaveTrialSessionMinuteSheetAction } from '@web-client/presenter/actions/TrialSessionMinutes/autosaveTrialSessionMinuteSheetAction';
 
 jest.mock('@shared/proxies/trialSessionMinutes/updateMinuteSheetProxy');
 
@@ -15,7 +15,7 @@ describe('trialSessionMinutesAutosaveAction', () => {
   it('should not autosave when form has not changed', async () => {
     const mockSnapshot = hash(mockMinuteSheetFormState);
 
-    await runAction(trialSessionMinutesAutosaveAction, {
+    await runAction(autosaveTrialSessionMinuteSheetAction, {
       modules: {
         presenter,
       },
@@ -37,7 +37,7 @@ describe('trialSessionMinutesAutosaveAction', () => {
       mockUpdateResponse,
     );
 
-    const { state } = await runAction(trialSessionMinutesAutosaveAction, {
+    const { state } = await runAction(autosaveTrialSessionMinuteSheetAction, {
       modules: {
         presenter,
       },
@@ -65,7 +65,7 @@ describe('trialSessionMinutesAutosaveAction', () => {
       mockUpdateResponse,
     );
 
-    const { state } = await runAction(trialSessionMinutesAutosaveAction, {
+    const { state } = await runAction(autosaveTrialSessionMinuteSheetAction, {
       modules: {
         presenter,
       },

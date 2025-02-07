@@ -2,7 +2,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import { updateMinuteSheetInteractor } from '@shared/proxies/trialSessionMinutes/updateMinuteSheetProxy';
 import hash from 'object-hash';
 
-export const trialSessionMinutesAutosaveAction = async ({
+export const autosaveTrialSessionMinuteSheetAction = async ({
   get,
   props,
   store,
