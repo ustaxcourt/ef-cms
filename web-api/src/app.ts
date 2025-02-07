@@ -207,6 +207,7 @@ import { verifyPendingCaseForUserLambda } from './lambdas/cases/verifyPendingCas
 import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingEmailLambda';
 import cors from 'cors';
 import express from 'express';
+import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessions/getTrialSessionOpenCasesCountLambda';
 
 export const app = express();
 
@@ -953,6 +954,10 @@ app.delete(
   app.get(
     '/trial-sessions/:trialSessionId',
     lambdaWrapper(getTrialSessionDetailsLambda),
+  );
+  app.get(
+    '/trial-sessions-open-cases-count/:trialSessionId',
+    lambdaWrapper(getTrialSessionOpenCasesCountLambda),
   );
   app.delete(
     '/trial-sessions/:trialSessionId',
