@@ -1,57 +1,43 @@
 import { Statistic } from '@shared/business/entities/Statistic';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
-import { getDbWriter } from '@web-api/database';
+import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
+import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
 
 export const updateCaseStatistic = async ({
   statistic,
 }: {
   statistic: Statistic;
 }): Promise<Statistic> => {
-  const updatedStatistic = await getDbWriter(writer =>
-    writer
-      .updateTable('dwCaseStatistic')
-      .set({
-        determinationDeficiencyAmount:
-          statistic.determinationDeficiencyAmount || null,
-        determinationTotalPenalties:
-          statistic.determinationTotalPenalties || null,
-        irsDeficiencyAmount: statistic.irsDeficiencyAmount,
-        irsTotalPenalties: statistic.irsTotalPenalties,
-        lastDateOfPeriod: statistic.lastDateOfPeriod
-          ? calculateDate({ dateString: statistic.lastDateOfPeriod })
-          : null,
-        year: statistic.year ? parseInt(statistic.year) : null,
-        yearOrPeriod: statistic.yearOrPeriod,
-      })
-      .where('statisticId', '=', statistic.statisticId)
-      .returningAll()
-      .executeTakeFirst(),
-  );
+  const updatedStatistic = await pgUpdateTable({
+    table: 'dwCaseStatistic',
+    values: {
+      determinationDeficiencyAmount:
+        statistic.determinationDeficiencyAmount || null,
+      determinationTotalPenalties:
+        statistic.determinationTotalPenalties || null,
+      irsDeficiencyAmount: statistic.irsDeficiencyAmount,
+      irsTotalPenalties: statistic.irsTotalPenalties,
+      lastDateOfPeriod: statistic.lastDateOfPeriod
+        ? calculateDate({ dateString: statistic.lastDateOfPeriod })
+        : null,
+      year: statistic.year ? parseInt(statistic.year) : null,
+      yearOrPeriod: statistic.yearOrPeriod,
+    },
+    where: cb => cb.where('statisticId', '=', statistic.statisticId),
+  });
 
   // Upsert related penalties
-  await getDbWriter(writer =>
-    writer
-      .insertInto('dwStatisticPenalty')
-      .values(
-        statistic.penalties.map(p => ({
-          name: p.name,
-          penaltyAmount: p.penaltyAmount,
-          penaltyId: p.penaltyId,
-          penaltyType: p.penaltyType,
-          statisticId: p.statisticId,
-        })),
-      )
-      .onConflict(oc =>
-        oc.column('penaltyId').doUpdateSet(p => {
-          return {
-            name: p.ref('excluded.name'),
-            penaltyAmount: p.ref('excluded.penaltyAmount'),
-            penaltyType: p.ref('excluded.penaltyType'),
-          };
-        }),
-      )
-      .execute(),
-  );
+  await pgInsertInto({
+    table: 'dwStatisticPenalty',
+    values: statistic.penalties.map(p => ({
+      name: p.name,
+      penaltyAmount: p.penaltyAmount,
+      penaltyId: p.penaltyId,
+      penaltyType: p.penaltyType,
+      statisticId: p.statisticId,
+    })),
+    onConflictColumns: ['penaltyId'],
+  });
 
   return new Statistic(updatedStatistic);
 };

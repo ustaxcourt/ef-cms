@@ -73,7 +73,7 @@ export const DW_CASE_STATUS_UPDATES_COLUMNS = [
   'updatedCaseStatus',
 ];
 
-export const DW_PETITIONERS_ON_CASE = [
+export const DW_PETITIONERS_ON_CASE_COLUMNS = [
   'additionalName',
   'contactType',
   'docketNumber',
@@ -102,7 +102,7 @@ export const DW_PETITIONERS_ON_CASE = [
   'state',
 ];
 
-export const DW_CASE_STATISTIC_COLUMN = [
+export const DW_CASE_STATISTIC_COLUMNS = [
   'docketNumber',
   'irsDeficiencyAmount',
   'irsTotalPenalties',
@@ -112,6 +112,14 @@ export const DW_CASE_STATISTIC_COLUMN = [
   'determinationDeficiencyAmount',
   'determinationTotalPenalties',
   'lastDateOfPeriod',
+];
+
+export const DW_STATISTIC_PENALTY_COLUMNS = [
+  'statisticId',
+  'name',
+  'penaltyAmount',
+  'penaltyId',
+  'penaltyType',
 ];
 
 export const convertRawCaseToDbRow = (rawCase: RawCase) => {

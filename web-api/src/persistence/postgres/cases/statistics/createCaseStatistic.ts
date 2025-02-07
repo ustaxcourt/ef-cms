@@ -1,6 +1,6 @@
 import { Statistic } from '@shared/business/entities/Statistic';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
-import { getDbWriter } from '@web-api/database';
+import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 export const createCaseStatistic = async ({
   docketNumber,
@@ -9,10 +9,10 @@ export const createCaseStatistic = async ({
   docketNumber: string;
   statistic: Statistic;
 }): Promise<void> => {
-  await getDbWriter(writer =>
-    writer
-      .insertInto('dwCaseStatistic')
-      .values({
+  await pgInsertInto({
+    table: 'dwCaseStatistic',
+    values: [
+      {
         determinationDeficiencyAmount: statistic.determinationDeficiencyAmount,
         determinationTotalPenalties: statistic.determinationTotalPenalties,
         docketNumber,
@@ -24,7 +24,7 @@ export const createCaseStatistic = async ({
         statisticId: statistic.statisticId,
         year: statistic.year ? parseInt(statistic.year) : null,
         yearOrPeriod: statistic.yearOrPeriod,
-      })
-      .execute(),
-  );
+      },
+    ],
+  });
 };
