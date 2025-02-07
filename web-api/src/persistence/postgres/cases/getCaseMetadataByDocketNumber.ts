@@ -12,11 +12,6 @@ export const getCaseMetadataByDocketNumber = async ({
     reader
       .selectFrom('dwCase as c')
       .leftJoin('dwPetitionerOnCase as p', 'c.docketNumber', 'p.docketNumber')
-      .leftJoin(
-        'dwPractitionerOnCase as pr',
-        'c.docketNumber',
-        'pr.docketNumber',
-      )
       .selectAll('c')
       .select(sql`jsonb_agg(to_jsonb(p))`.as('petitioners'))
       .where('c.docketNumber', '=', docketNumber)

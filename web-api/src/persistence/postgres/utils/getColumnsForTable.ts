@@ -15,17 +15,17 @@ import { DW_WORK_ITEM_COLUMNS } from '@web-api/persistence/postgres/workitems/ma
 
 const columnsByTable: Record<string, any[]> = {
   dwCase: DW_CASE_COLUMNS,
-  dwCaseStatusUpdate: DW_CASE_STATUS_UPDATES_COLUMNS,
-  dwPetitionerOnCase: DW_PETITIONERS_ON_CASE_COLUMNS,
-  dwCaseStatistic: DW_CASE_STATISTIC_COLUMNS,
-  dwStatisticPenalty: DW_STATISTIC_PENALTY_COLUMNS,
-  dwWorkItem: DW_WORK_ITEM_COLUMNS,
-  dwUserCaseNote: DW_USER_CASE_NOTE_COLUMNS,
-  dwMessage: DW_MESSAGE_COLUMNS,
   dwCaseCorrespondence: DW_CASE_CORRESPONDENCE_COLUMNS,
-  dwCaseDeadLine: DW_CASE_DEADLINE_COLUMNS,
+  dwCaseDeadline: DW_CASE_DEADLINE_COLUMNS,
+  dwCaseStatistic: DW_CASE_STATISTIC_COLUMNS,
+  dwCaseStatusUpdate: DW_CASE_STATUS_UPDATES_COLUMNS,
   dwCaseWorksheet: DW_CASE_WORKSHEET_COLUMNS,
   dwDocketEntry: DW_DOCKET_ENTRY_COLUMNS,
+  dwMessage: DW_MESSAGE_COLUMNS,
+  dwPetitionerOnCase: DW_PETITIONERS_ON_CASE_COLUMNS,
+  dwStatisticPenalty: DW_STATISTIC_PENALTY_COLUMNS,
+  dwUserCaseNote: DW_USER_CASE_NOTE_COLUMNS,
+  dwWorkItem: DW_WORK_ITEM_COLUMNS,
 };
 
 export const getColumnsForTable = (table: string): any[] => {
