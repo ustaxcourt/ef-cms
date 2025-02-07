@@ -10,7 +10,7 @@ import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
 import { BigHeader } from '@web-client/views/BigHeader';
 import React from 'react';
-import { rootRoute } from 'web-client-public/src/routes/PublicRoot';
+import { publicDefaultLayoutRoute } from 'web-client-public/src/routes/_default-layout/_defaultLayoutComponent';
 
 export function TodaysOpinions() {
   const query = useQuery({
@@ -108,6 +108,6 @@ export function TodaysOpinions() {
 
 export const todaysOpinionsRoute = createRoute({
   component: TodaysOpinions,
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => publicDefaultLayoutRoute,
   path: '/todays-opinions',
 });

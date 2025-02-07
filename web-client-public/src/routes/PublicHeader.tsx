@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import closeImg from '../../../node_modules/@uswds/uswds/dist/img/usa-icons/close.svg';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { applicationContextPublic } from '@web-client/applicationContextPublic';
-import { useNavigate } from '@tanstack/react-router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const seal = require('../../../web-client/src/images/ustc_seal.svg') as string;
 
 const BetaBar = ({ closeBetaBar }: { closeBetaBar: () => void }) => {
@@ -26,9 +26,8 @@ const BetaBar = ({ closeBetaBar }: { closeBetaBar: () => void }) => {
   );
 };
 
-export function HeaderPublic() {
+export function PublicHeader() {
   const [betaBarIsOpen, setBetaBarIsOpen] = useState(true);
-  const navigate = useNavigate();
   const isProduction =
     applicationContextPublic.getEnvironment().stage === 'prod';
 
@@ -53,43 +52,44 @@ export function HeaderPublic() {
               <div className="header-welcome-public">
                 Welcome to DAWSON {isTerminalUser && ': US Tax Court Terminal'}
               </div>
-              <div className="login-container">
+              <div className="login-container padding-x-1">
+                <FontAwesomeIcon
+                  icon={['far', 'user']}
+                  size="1x"
+                  className="margin-right-05"
+                />
                 <a href={`${applicationContextPublic.getPrivateUrl()}/login`}>
                   Log In
                 </a>
+              </div>
+              <div className="login-container mobile">
                 <Button
-                  className="usa-button--unstyled"
-                  icon={['far', 'user']}
-                  onClick={() => navigate({ href: '' })}
+                  noMargin={true}
+                  overrideMargin={true}
+                  className={'margin-0'}
+                  href={`${applicationContextPublic.getPrivateUrl()}/login`}
                 >
                   Log In
                 </Button>
-              </div>
-              <div className="login-container mobile">
-                <button
-                  className="usa-menu-btn"
-                  // onClick={() => navigate({href})}
-                >
-                  Log In
-                </button>
               </div>
 
               <div className="create-container">
-                <Button
-                  className="usa-button--unstyled"
+                <a
                   data-testid="create-account-button"
-                  // onClick={() => redirectToCreatePetitionerAccountSequence()}
+                  href={`${applicationContextPublic.getPrivateUrl()}/create-account/petitioner`}
+                >
+                  Create Account
+                </a>
+              </div>
+              <div className="create-container mobile">
+                <Button
+                  noMargin={true}
+                  overrideMargin={true}
+                  className={'margin-0'}
+                  href={`${applicationContextPublic.getPrivateUrl()}/create-account/petitioner`}
                 >
                   Create Account
                 </Button>
-              </div>
-              <div className="create-container mobile">
-                <button
-                  className="usa-menu-btn"
-                  // onClick={() => redirectToCreatePetitionerAccountSequence()}
-                >
-                  Create Account
-                </button>
               </div>
             </div>
           </div>

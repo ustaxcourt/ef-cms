@@ -8,6 +8,7 @@ import React from 'react';
 import { todaysOpinionsRoute } from 'web-client-public/src/routes/todays-opinions/TodaysOpinions';
 import { rootRoute } from 'web-client-public/src/routes/PublicRoot';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { publicDefaultLayoutRoute } from 'web-client-public/src/routes/_default-layout/_defaultLayoutComponent';
 
 const catchAllRouteInFile = createRoute({
   getParentRoute: () => rootRoute,
@@ -15,7 +16,7 @@ const catchAllRouteInFile = createRoute({
 }).lazy(() => import('@web-client/appPublic').then(app => app.catchAllRoute));
 
 const routeTree = rootRoute.addChildren([
-  todaysOpinionsRoute,
+  publicDefaultLayoutRoute.addChildren([todaysOpinionsRoute]),
   catchAllRouteInFile,
 ]);
 
