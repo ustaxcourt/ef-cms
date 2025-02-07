@@ -4,6 +4,7 @@ This file was brought into the repository as 'react-quill' is no longer maintain
 and is not compatible with v19 of React.
 Only minor changes have been made to this package to allow it to work with React 19. 
 Any major overhauls of the WYSIWYG should use another package or quill more directly.
+There are a few areas that type error exist but are being ignored as we are trying to directly bring over react-quill.
 */
 
 import React from 'react';
@@ -305,7 +306,7 @@ class ReactQuill extends React.Component<ReactQuillProps, ReactQuillState> {
       scrollingContainer: this.props.scrollingContainer,
       tabIndex: this.props.tabIndex,
       theme: this.props.theme,
-    };
+    } as any; // Intentionally ignoring type errors to keep exactly what react-quill implemented.
   }
 
   getEditor(): Quill {
@@ -451,7 +452,7 @@ class ReactQuill extends React.Component<ReactQuillProps, ReactQuillState> {
     const properties = {
       key: generation,
       ref: this.editingArea,
-    };
+    } as any; // Intentionally setting to any to remove type errors
 
     if (React.Children.count(children)) {
       return React.cloneElement(React.Children.only(children)!, properties);
