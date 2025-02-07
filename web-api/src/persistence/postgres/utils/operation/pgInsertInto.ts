@@ -25,12 +25,14 @@ export const pgInsertInto = async ({
         query = query.onConflict(oc =>
           oc.columns(onConflictColumns).doUpdateSet(c => {
             return Object.fromEntries(
-              getColumnsForTable(table).map(column => [
-                column,
-                // Needed for excluded.${column} to be dynamically filled in
-                // @ts-ignore
-                c.ref(`excluded.${column}`),
-              ]),
+              getColumnsForTable(table)
+                .filter(x => !onConflictColumns.includes(x))
+                .map(column => [
+                  column,
+                  // Needed for excluded.${column} to be dynamically filled in
+                  // @ts-ignore
+                  c.ref(`excluded.${column}`),
+                ]),
             );
           }),
         );

@@ -1,6 +1,5 @@
 import { Statistic } from '@shared/business/entities/Statistic';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
-import { getDbWriter } from '@web-api/database';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 import { flatten, isEmpty } from 'lodash';
 
@@ -37,28 +36,15 @@ export const upsertCaseStatistics = async ({
     return;
   }
 
-  // TODO 10502
-  // await getDbWriter(writer =>
-  //   writer
-  //     .insertInto('dwStatisticPenalty')
-  //     .values(
-  //       penalties.map(p => ({
-  //         name: p.name,
-  //         penaltyAmount: p.penaltyAmount,
-  //         penaltyId: p.penaltyId,
-  //         penaltyType: p.penaltyType,
-  //         statisticId: p.statisticId,
-  //       })),
-  //     )
-  //     .onConflict(oc =>
-  //       oc.column('penaltyId').doUpdateSet(p => {
-  //         return {
-  //           name: p.ref('excluded.name'),
-  //           penaltyAmount: p.ref('excluded.penaltyAmount'),
-  //           penaltyType: p.ref('excluded.penaltyType'),
-  //         };
-  //       }),
-  //     )
-  //     .execute(),
-  // );
+  await pgInsertInto({
+    table: 'dwStatisticPenalty',
+    values: penalties.map(p => ({
+      name: p.name,
+      penaltyAmount: p.penaltyAmount,
+      penaltyId: p.penaltyId,
+      penaltyType: p.penaltyType,
+      statisticId: p.statisticId,
+    })),
+    onConflictColumns: ['penaltyId'],
+  });
 };

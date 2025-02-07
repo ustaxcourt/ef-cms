@@ -1,12 +1,10 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { convertRawCaseToDbRow } from '@web-api/persistence/postgres/cases/mapper';
-import { getDbWriter } from '@web-api/database';
+import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 export const createCase = async ({ caseToCreate }: { caseToCreate: Case }) => {
-  await getDbWriter(writer =>
-    writer
-      .insertInto('dwCase')
-      .values(convertRawCaseToDbRow(caseToCreate))
-      .execute(),
-  );
+  await pgInsertInto({
+    table: 'dwCase',
+    values: [convertRawCaseToDbRow(caseToCreate)],
+  });
 };

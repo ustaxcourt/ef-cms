@@ -15,14 +15,16 @@ const incrementCounter = async (year: string): Promise<number> => {
   const twoDigitYear = year.slice(-2);
 
   // Using DbWriter instead of DbReader to avoid latency between writer and reader
-  const theCase = await getDbWriter(writer =>
-    writer
-      .selectFrom('dwCase')
-      .where('docketNumber', 'like', `%-${twoDigitYear}`)
-      .select('docketNumber')
-      .orderBy('docketNumber', 'desc')
-      .executeTakeFirst(),
-  );
+  const theCase = await getDbWriter({
+    cb: writer =>
+      writer
+        .selectFrom('dwCase')
+        .where('docketNumber', 'like', `%-${twoDigitYear}`)
+        .select('docketNumber')
+        .orderBy('docketNumber', 'desc')
+        .executeTakeFirst(),
+    table: null,
+  });
 
   if (!theCase) {
     return 101;

@@ -1,5 +1,5 @@
 import { calculateDate } from '@shared/business/utilities/DateHandler';
-import { getDbWriter } from '@web-api/database';
+import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 export const upsertDocketEntries = async (docketEntries: RawDocketEntry[]) => {
   if (docketEntries.length === 0) return;
@@ -28,29 +28,9 @@ export const upsertDocketEntries = async (docketEntries: RawDocketEntry[]) => {
     signedJudgeName: docketEntry.signedJudgeName || null,
   }));
 
-  await getDbWriter(writer =>
-    writer
-      .insertInto('dwDocketEntry')
-      .values(docketEntriesToUpsert)
-      .onConflict(oc =>
-        oc.columns(['docketNumber', 'docketEntryId']).doUpdateSet(c => {
-          return {
-            documentTitle: c.ref('excluded.documentTitle'),
-            documentType: c.ref('excluded.documentType'),
-            eventCode: c.ref('excluded.eventCode'),
-            filingDate: c.ref('excluded.filingDate'),
-            isLegacyServed: c.ref('excluded.isLegacyServed'),
-            isSealed: c.ref('excluded.isSealed'),
-            judge: c.ref('excluded.judge'),
-            numberOfPages: c.ref('excluded.numberOfPages'),
-            pending: c.ref('excluded.pending'),
-            receivedAt: c.ref('excluded.receivedAt'),
-            sealedTo: c.ref('excluded.sealedTo'),
-            servedAt: c.ref('excluded.servedAt'),
-            signedJudgeName: c.ref('excluded.signedJudgeName'),
-          };
-        }),
-      )
-      .execute(),
-  );
+  await pgInsertInto({
+    table: 'dwDocketEntry',
+    values: docketEntriesToUpsert,
+    onConflictColumns: ['docketNumber', 'docketEntryId'],
+  });
 };

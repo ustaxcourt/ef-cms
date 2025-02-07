@@ -14,8 +14,8 @@ export const createMessageAsReply = async ({
     parentMessageId,
   });
 
-  const createdMessage = await getDbWriter(
-    async writer =>
+  const createdMessage = await getDbWriter({
+    cb: async writer =>
       await writer.transaction().execute(async trx => {
         if (messages?.length) {
           await trx
@@ -35,7 +35,8 @@ export const createMessageAsReply = async ({
             throw new Error('could not create a message');
           });
       }),
-  );
+    table: null,
+  });
 
   return new Message(createdMessage);
 };

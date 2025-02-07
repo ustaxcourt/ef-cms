@@ -1,32 +1,18 @@
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
-import { getDbWriter } from '@web-api/database';
-import { isEmpty } from 'lodash';
+import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 export const upsertPractitionersOnCase = async ({
   practitionersWithDocketNumber,
 }: {
   practitionersWithDocketNumber: (RawPractitioner & { docketNumber: string })[];
 }): Promise<void> => {
-  if (isEmpty(practitionersWithDocketNumber)) {
-    return;
-  }
-  await getDbWriter(writer =>
-    writer
-      .insertInto('dwPractitionerOnCase')
-      .values(
-        practitionersWithDocketNumber.map(p => ({
-          docketNumber: p.docketNumber,
-          email: p.email || '',
-          userId: p.userId,
-        })),
-      )
-      .onConflict(oc =>
-        oc.columns(['docketNumber', 'userId']).doUpdateSet(s => {
-          return {
-            email: s.ref('excluded.email'),
-          };
-        }),
-      )
-      .execute(),
-  );
+  await pgInsertInto({
+    table: 'dwPractitionerOnCase',
+    values: practitionersWithDocketNumber.map(p => ({
+      docketNumber: p.docketNumber,
+      email: p.email || '',
+      userId: p.userId,
+    })),
+    onConflictColumns: ['docketNumber', 'userId'],
+  });
 };
