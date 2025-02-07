@@ -1,30 +1,36 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
-import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
+import { PENDING_REPORT_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
+import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
+import React, { useRef } from 'react';
 
 export const PendingReportList = connect(
   {
-    formattedPendingItemsHelper: state.formattedPendingItemsHelper,
     hasPendingItemsResults: state.pendingReports.hasPendingItemsResults,
-    loadMorePendingItemsSequence: sequences.loadMorePendingItemsSequence,
+    pendingItems: state.pendingReports.pendingItems,
     pendingItemsTotal: state.pendingReports.pendingItemsTotal,
     pendingReportListHelper: state.pendingReportListHelper,
     setPendingReportSelectedJudgeSequence:
       sequences.setPendingReportSelectedJudgeSequence,
   },
   function PendingReportList({
-    formattedPendingItemsHelper,
     hasPendingItemsResults,
-    loadMorePendingItemsSequence,
+    pendingItems,
     pendingItemsTotal,
     pendingReportListHelper,
     setPendingReportSelectedJudgeSequence,
   }) {
+    const paginatorTop = useRef(null);
+
+    const { activePage, pageRecords, setActivePage, totalPages } =
+      useClientSidePaginator(pendingItems, PENDING_REPORT_PAGE_SIZE);
+
     return (
       <>
         <div className="grid-row margin-bottom-2">
@@ -45,14 +51,15 @@ export const PendingReportList = connect(
                 data-testid="dropdown-select-judge"
                 id="judgeFilter"
                 name="judge"
-                onChange={judge =>
+                onChange={judge => {
                   setPendingReportSelectedJudgeSequence({
                     judge,
-                  })
-                }
+                  });
+                  setActivePage(0);
+                }}
               >
                 <option value="">-Judge-</option>
-                {formattedPendingItemsHelper.judges.map(judge => (
+                {pendingReportListHelper.judges.map(judge => (
                   <option key={`pending-judge-${judge}`} value={judge}>
                     {judge}
                   </option>
@@ -60,14 +67,28 @@ export const PendingReportList = connect(
               </BindedSelect>
             </div>
           </div>
-          {hasPendingItemsResults && (
-            <div className="grid-col-4 text-right margin-top-1">
-              <span className="text-semibold" data-testid="display-data-count">
-                Count: {pendingItemsTotal}
-              </span>
-            </div>
+        </div>
+
+        <div ref={paginatorTop}>
+          {totalPages > 1 && (
+            <Paginator
+              currentPageIndex={activePage}
+              totalPages={totalPages}
+              onPageChange={pageChange => {
+                setActivePage(pageChange);
+                focusPaginatorTop(paginatorTop);
+              }}
+            />
           )}
         </div>
+
+        {hasPendingItemsResults && (
+          <div className="text-right margin-bottom-2">
+            <span className="text-semibold" data-testid="display-data-count">
+              Count: {pendingItemsTotal}
+            </span>
+          </div>
+        )}
 
         <table
           aria-describedby="judgeFilter"
@@ -87,11 +108,12 @@ export const PendingReportList = connect(
               <th>Judge</th>
             </tr>
           </thead>
-          {formattedPendingItemsHelper.items.map(item => (
-            <tbody
-              key={`pending-item-${item.formattedFiledDate}-${item.caseTitle}`}
-            >
-              <tr className="pending-item-row">
+          <tbody>
+            {pageRecords.map(item => (
+              <tr
+                className="pending-item-row"
+                key={`pending-item-${item.docketNumber}-${item.docketEntryId}`}
+              >
                 <td>
                   <ConsolidatedCaseIcon
                     consolidatedIconTooltipText={
@@ -112,8 +134,8 @@ export const PendingReportList = connect(
                 <td>{item.formattedStatus}</td>
                 <td>{item.associatedJudgeFormatted}</td>
               </tr>
-            </tbody>
-          ))}
+            ))}
+          </tbody>
         </table>
 
         {pendingReportListHelper.showNoPendingItems && (
@@ -124,17 +146,15 @@ export const PendingReportList = connect(
           <p>Select a judge to view their pending items.</p>
         )}
 
-        {pendingReportListHelper.showLoadMore && (
-          <Button
-            secondary
-            className="margin-bottom-20"
-            data-testid="load-more-pending-report-data"
-            onClick={() => {
-              loadMorePendingItemsSequence();
+        {totalPages > 1 && (
+          <Paginator
+            currentPageIndex={activePage}
+            totalPages={totalPages}
+            onPageChange={pageChange => {
+              setActivePage(pageChange);
+              focusPaginatorTop(paginatorTop);
             }}
-          >
-            Load More
-          </Button>
+          />
         )}
       </>
     );

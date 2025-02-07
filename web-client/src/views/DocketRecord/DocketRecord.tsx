@@ -298,15 +298,17 @@ export const DocketRecord = connect(
                                 icon={entry.sealIcon}
                                 tooltip={entry.sealButtonTooltip}
                                 onClick={() => {
-                                  entry.isSealed
-                                    ? openUnsealDocketEntryModalSequence({
-                                        docketEntryId: entry.docketEntryId,
-                                        showModal: 'UnsealDocketEntryModal',
-                                      })
-                                    : openSealDocketEntryModalSequence({
-                                        docketEntryId: entry.docketEntryId,
-                                        showModal: 'SealDocketEntryModal',
-                                      });
+                                  if (entry.isSealed) {
+                                    openUnsealDocketEntryModalSequence({
+                                      docketEntryId: entry.docketEntryId,
+                                      showModal: 'UnsealDocketEntryModal',
+                                    });
+                                  } else {
+                                    openSealDocketEntryModalSequence({
+                                      docketEntryId: entry.docketEntryId,
+                                      showModal: 'SealDocketEntryModal',
+                                    });
+                                  }
                                 }}
                               >
                                 {entry.sealButtonText}

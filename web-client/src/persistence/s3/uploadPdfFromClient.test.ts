@@ -230,9 +230,9 @@ describe('uploadPdfFromClient', () => {
           readAsArrayBuffer: readAsArrayBufferMock,
         })) as any;
 
-        await expect(readAndCleanFileMetadata(file, pdfLibMock)).rejects.toBe(
-          'Failed to read file',
-        );
+        await expect(
+          readAndCleanFileMetadata(file, pdfLibMock),
+        ).rejects.toEqual(new Error('Failed to read file'));
       });
 
       it('should return the original file if the file is encrypted', async () => {

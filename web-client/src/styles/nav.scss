@@ -117,7 +117,10 @@
         margin-top: 15px;
         margin-right: auto;
         margin-left: 10px;
-        font-size: 26px;
+        font-family: "Noto Serif", serif;
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 4.3em;
       }
 
       .usa-navbar.usa-navbar-public {
@@ -228,14 +231,33 @@
       }
 
       .usa-navbar {
+        display: flex;
+        width: initial;
+        flex-flow: row nowrap;
+        align-items: flex-start;
         margin-top: initial;
         margin-bottom: initial;
+
+        &[data-header-available="true"] {
+          width: 100% !important;
+        }
       }
 
       .usa-logo {
         width: 75px;
         max-width: 75px;
         margin-bottom: 0.5rem;
+      }
+
+      .header-welcome {
+        padding-bottom: .4rem;
+        margin-top: auto;
+        margin-bottom: auto;
+        margin-left: 10px;
+        font-family: "Noto Serif", serif;
+        font-size: 26px;
+        font-weight: 700;
+        line-height: 2.8em;
       }
 
       .ustc-navigation-items {

@@ -1,19 +1,16 @@
 import { find, includes, omit, pick } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+import {
+  DOCUMENT_RELATIONSHIPS,
+  INTERNAL_DOCUMENTS_ARRAY,
+} from '@shared/business/entities/EntityConstants';
 
 const setDocumentPropsFromFormAndBaseDocument = ({
-  applicationContext,
   eventCode,
   formProperties,
   propertyList,
 }) => {
-  let entry;
-  const { INTERNAL_CATEGORY_MAP } = applicationContext.getConstants();
-
-  find(
-    INTERNAL_CATEGORY_MAP,
-    entries => (entry = find(entries, { eventCode })),
-  );
+  const entry = INTERNAL_DOCUMENTS_ARRAY.find(d => d.eventCode === eventCode);
 
   return {
     ...omit(formProperties, propertyList),
@@ -21,28 +18,16 @@ const setDocumentPropsFromFormAndBaseDocument = ({
   };
 };
 
-/**
- * clears data in the state.form based on which field is being updated
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Function} providers.get the cerebral get function
- * @param {object} providers.props the cerebral props object
- * @param {object} providers.store the cerebral store object
- * @returns {void}
- */
 export const updateDocketEntryWizardDataAction = ({
-  applicationContext,
   get,
   props,
   store,
 }: ActionProps) => {
-  const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
   let form;
-  let supporting = get(state.screenMetadata.supporting);
+  const supporting = get(state.screenMetadata.supporting);
   switch (props.key) {
     case 'initEventCode':
       form = setDocumentPropsFromFormAndBaseDocument({
-        applicationContext,
         eventCode: props.value,
         formProperties: get(state.form),
         propertyList: ['category', 'documentType', 'scenario'],
@@ -54,7 +39,6 @@ export const updateDocketEntryWizardDataAction = ({
       break;
     case 'eventCode':
       form = setDocumentPropsFromFormAndBaseDocument({
-        applicationContext,
         eventCode: props.value,
         formProperties: get(state.form),
         propertyList: ['category', 'documentType', 'documentTitle', 'scenario'],
@@ -91,7 +75,6 @@ export const updateDocketEntryWizardDataAction = ({
       break;
     case 'secondaryDocument.eventCode':
       form = setDocumentPropsFromFormAndBaseDocument({
-        applicationContext,
         eventCode: props.value,
         formProperties: get(state.form.secondaryDocument),
         propertyList: ['category', 'documentType', 'documentTitle', 'scenario'],

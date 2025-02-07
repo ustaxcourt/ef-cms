@@ -27,7 +27,7 @@ export const getRunStateOfMostRecentJobRun = async (
     }
     mostRecentRunState = getJobRunsResponse.JobRuns[0].JobRunState;
   } else {
-    console.log('Enable to read most recent job run state', getJobRunsResponse);
+    console.log('Unable to read most recent job run state', getJobRunsResponse);
   }
 
   return mostRecentRunState;

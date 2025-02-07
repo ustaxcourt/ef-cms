@@ -17,13 +17,13 @@ export const FormGroup = ({
   confirmationText?: string;
   errorText?: string | string[];
   errorMessageId?: string;
-  formGroupRef?: React.RefObject<HTMLInputElement | null>;
+  formGroupRef?: React.RefObject<HTMLInputElement>;
   id?: string;
   grow?: boolean;
   omitFormGroupClass?: boolean;
 }) => {
   let hasError = false;
-  let hasConfirmation = !!confirmationText;
+  const hasConfirmation = !!confirmationText;
 
   if (Array.isArray(errorText)) {
     hasError = errorText.some(text => !!text);

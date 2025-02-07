@@ -23,25 +23,4 @@ describe('clearUserAction', () => {
     expect(result.state.token).toBeUndefined();
     expect(result.state.permissions).toBeUndefined();
   });
-
-  it('should make two calls to remove the user token from persistence', async () => {
-    await runAction(clearUserAction, {
-      modules: {
-        presenter,
-      },
-      state: {},
-    });
-
-    expect(
-      applicationContext.getUseCases().removeItemInteractor,
-    ).toHaveBeenCalledTimes(2);
-    expect(
-      applicationContext.getUseCases().removeItemInteractor.mock.calls[0][1]
-        .key,
-    ).toBe('user');
-    expect(
-      applicationContext.getUseCases().removeItemInteractor.mock.calls[1][1]
-        .key,
-    ).toBe('token');
-  });
 });

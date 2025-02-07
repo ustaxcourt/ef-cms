@@ -1,27 +1,39 @@
-import { requireEnvVars } from '../../shared/admin-tools/util';
-requireEnvVars([
-  'DEFAULT_ACCOUNT_PASS',
-  'DESTINATION_TABLE',
-  'ELASTICSEARCH_ENDPOINT',
-  'ENV',
-]);
+#!/usr/bin/env -S npx ts-node --transpile-only
+
 import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws-v3';
 import { Client } from '@opensearch-project/opensearch';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { DeleteItemCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import {
   SearchClientResultsType,
   formatResults,
 } from '@web-api/persistence/elasticsearch/searchClient';
 import { defaultProvider } from '@aws-sdk/credential-provider-node';
-import { getUserPoolId } from '../../shared/admin-tools/util';
+
+const scriptConfig: ScriptConfig = {
+  description:
+    'setup-glued-judges - Creates cognito accounts for Judge users that were copied via a glue job.',
+  environment: {
+    Password: 'DEFAULT_ACCOUNT_PASS',
+    TableName: 'DESTINATION_TABLE',
+    UserPoolId: 'USER_POOL_ID',
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+    env: 'ENV',
+  },
+  requireActiveAwsSession: true,
+};
+const { elasticsearchEndpoint, Password, TableName, UserPoolId } =
+  parseArgsAndEnvVars(scriptConfig) as { [k: string]: string };
 
 const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
 const dynamoClient = new DynamoDBClient({
   region: 'us-east-1',
 });
-const elasticsearchEndpoint = process.env.ELASTICSEARCH_ENDPOINT!;
 const esClient = new Client({
   ...AwsSigv4Signer({
     getCredentials: () => {
@@ -38,13 +50,11 @@ const createOrUpdateCognitoUser = async ({
   name,
   role,
   userId,
-  userPoolId,
 }: {
   email: string;
   name: string;
   role: string;
   userId: string;
-  userPoolId: string;
 }): Promise<void> => {
   if (role === 'legacyJudge') {
     return;
@@ -53,7 +63,7 @@ const createOrUpdateCognitoUser = async ({
   let userExists = false;
   try {
     await cognito.adminGetUser({
-      UserPoolId: userPoolId,
+      UserPoolId,
       Username: email,
     });
 
@@ -91,7 +101,7 @@ const createOrUpdateCognitoUser = async ({
             Value: userId,
           },
         ],
-        UserPoolId: userPoolId,
+        UserPoolId,
         Username: email,
       });
     } catch (err) {
@@ -102,7 +112,6 @@ const createOrUpdateCognitoUser = async ({
       bulkImportedUserId: email,
       gluedUserId: userId,
       name,
-      userPoolId,
     });
   }
   console.log(`Enabled login for ${name}`);
@@ -117,8 +126,6 @@ const deleteDuplicateImportedJudgeUser = async ({
   name: string;
   section: string;
 }): Promise<void> => {
-  const TableName = process.env.DESTINATION_TABLE!;
-
   const sectionMappingKey = {
     pk: { S: `section|${section}` },
     sk: { S: `user|${bulkImportedUserId}` },
@@ -182,7 +189,7 @@ const getJudgeUsersByName = async (): Promise<{
   });
   const { results }: SearchClientResultsType = formatResults(queryResults.body);
 
-  let judgeUsers = {};
+  const judgeUsers = {};
   for (const judge of results) {
     const emailDomain = judge.email.split('@')[1];
     if (!(judge.name in judgeUsers)) {
@@ -214,12 +221,10 @@ const updateCognitoUserId = async ({
   bulkImportedUserId,
   gluedUserId,
   name,
-  userPoolId,
 }: {
   bulkImportedUserId: string;
   gluedUserId: string;
   name: string;
-  userPoolId: string;
 }): Promise<void> => {
   try {
     await cognito.adminUpdateUserAttributes({
@@ -229,7 +234,7 @@ const updateCognitoUserId = async ({
           Value: gluedUserId,
         },
       ],
-      UserPoolId: userPoolId,
+      UserPoolId,
       Username: bulkImportedUserId,
     });
     console.log(`Updated user attributes for login for ${name}`);
@@ -240,7 +245,6 @@ const updateCognitoUserId = async ({
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const userPoolId = await getUserPoolId();
   const judgeUsers = await getJudgeUsersByName();
 
   for (const judge in judgeUsers) {
@@ -267,14 +271,13 @@ const updateCognitoUserId = async ({
         name,
         role,
         userId: gluedUserId,
-        userPoolId: userPoolId!,
       });
     }
 
     await cognito.adminSetUserPassword({
-      Password: process.env.DEFAULT_ACCOUNT_PASS,
+      Password,
       Permanent: true,
-      UserPoolId: userPoolId,
+      UserPoolId,
       Username: email,
     });
   }

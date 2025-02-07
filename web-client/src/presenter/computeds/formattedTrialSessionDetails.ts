@@ -76,7 +76,10 @@ export const formattedTrialSessionDetails = (
       .formatPhoneNumber(formattedTrialSession.chambersPhoneNumber);
   }
 
-  isHybridSession = Object.values(HYBRID_SESSION_TYPES).includes(
+  const HYBRID_SESSION_TYPES_ARRAY: string[] =
+    Object.values(HYBRID_SESSION_TYPES);
+
+  isHybridSession = HYBRID_SESSION_TYPES_ARRAY.includes(
     formattedTrialSession.sessionType,
   );
 

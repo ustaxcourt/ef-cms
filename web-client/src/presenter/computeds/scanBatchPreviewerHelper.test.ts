@@ -23,7 +23,7 @@ describe('scanBatchPreviewerHelper', () => {
 
   describe('scannerSourceDisplayName', () => {
     it('returns correct values when no scanner is selected', () => {
-      let testState = { ...state };
+      const testState = { ...state };
 
       const result = runCompute(scanBatchPreviewerHelper, {
         state: testState,
@@ -33,7 +33,7 @@ describe('scanBatchPreviewerHelper', () => {
     });
 
     it('returns correct values when a scanner is selected and is using the feeder, which is by default single sided', () => {
-      let testState = {
+      const testState = {
         ...state,
         scanner: {
           scanMode: SCAN_MODES.FEEDER,
@@ -51,7 +51,7 @@ describe('scanBatchPreviewerHelper', () => {
     });
 
     it('returns correct values when a scanner is selected and is using double sided', () => {
-      let testState = {
+      const testState = {
         ...state,
         scanner: {
           scanMode: SCAN_MODES.DUPLEX,
@@ -69,7 +69,7 @@ describe('scanBatchPreviewerHelper', () => {
     });
 
     it('returns correct values when a scanner is selected and is using flatbed', () => {
-      let testState = {
+      const testState = {
         ...state,
         scanner: {
           scanMode: SCAN_MODES.FLATBED,

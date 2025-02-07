@@ -11,7 +11,7 @@ export const shouldAppendClinicLetter = async ({
   let clinicLetterKey: string;
 
   // add clinic letter for ANY pro se petitioner
-  for (let petitioner of caseEntity.petitioners) {
+  for (const petitioner of caseEntity.petitioners) {
     if (!Case.isPetitionerRepresented(caseEntity, petitioner.contactId)) {
       clinicLetterKey = getClinicLetterKey({
         procedureType,

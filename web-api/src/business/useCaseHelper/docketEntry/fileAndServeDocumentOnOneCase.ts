@@ -4,6 +4,7 @@ import { ENTERED_AND_SERVED_EVENT_CODES } from '../../../../../shared/src/busine
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 export const fileAndServeDocumentOnOneCase = async ({
   applicationContext,
@@ -62,7 +63,6 @@ export const fileAndServeDocumentOnOneCase = async ({
   const workItemToUpdate = docketEntryEntity.workItem;
 
   await completeWorkItem({
-    applicationContext,
     docketEntryEntity,
     leadDocketNumber: caseEntity.leadDocketNumber,
     user,
@@ -104,7 +104,6 @@ export const fileAndServeDocumentOnOneCase = async ({
 };
 
 const completeWorkItem = async ({
-  applicationContext,
   docketEntryEntity,
   leadDocketNumber,
   user,
@@ -129,15 +128,7 @@ const completeWorkItem = async ({
 
   workItemToUpdate.setAsCompleted({ message: 'completed', user });
 
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
-    workItem: workItemToUpdate.validate().toRawObject(),
-  });
-
-  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-    applicationContext,
-    section: user.section,
-    userId: user.userId,
-    workItem: workItemToUpdate.validate().toRawObject(),
+  await upsertWorkItems({
+    workItems: [workItemToUpdate.validate().toRawObject()],
   });
 };

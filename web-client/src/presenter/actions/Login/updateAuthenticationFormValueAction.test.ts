@@ -7,7 +7,7 @@ describe('updateAuthenticationFormValueAction', () => {
   const email = 'isbell@example.com';
   const code = 'TEST_CODE';
 
-  it('should set state.authentication.form.email to the passed in email prop', async () => {
+  it('should set state.authentication.form.password to the passed in password prop', async () => {
     const result = await runAction(updateAuthenticationFormValueAction, {
       props: {
         password,

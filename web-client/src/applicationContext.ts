@@ -359,18 +359,24 @@ import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/ver
 import { verifyUserPendingEmailInteractor } from '../../shared/src/proxies/users/verifyUserPendingEmailProxy';
 import ImageBlobReduce from 'image-blob-reduce';
 import deepFreeze from 'deep-freeze';
+import { getTrialSessionOpenCasesCountInteractor } from '@shared/proxies/trialSessions/getTrialSessionOpenCasesCountProxy';
 
 const reduce = ImageBlobReduce({
   pica: ImageBlobReduce.pica({ features: ['js'] }),
 });
 
 let user;
-let broadcastChannel;
+let broadcastChannel: BroadcastChannel;
 const clientSupportsES2022 = (() => {
   try {
     // Check Object.hasOwn (introduced in ES2022)
     // @ts-ignore
     if (typeof Object.hasOwn !== 'function') {
+      return false;
+    }
+
+    // Check structuredClone exists
+    if (typeof structuredClone !== 'function') {
       return false;
     }
 
@@ -395,6 +401,7 @@ const clientSupportsES2022 = (() => {
     }
 
     return true;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     return false; // Any failure indicates lack of support
   }
@@ -521,6 +528,7 @@ const allUseCases = {
   getPractitionersByNameInteractor,
   getPrivatePractitionersBySearchKeyInteractor,
   getTrialSessionDetailsInteractor,
+  getTrialSessionOpenCasesCountInteractor,
   getTrialSessionPlanningReportDataInteractor,
   getTrialSessionWorkingCopyInteractor,
   getTrialSessionsForJudgeActivityReportInteractor,
@@ -692,19 +700,15 @@ const applicationContext = {
   },
   getLogger: () => ({
     error: value => {
-      // eslint-disable-next-line no-console
       console.error(value);
     },
     info: (key, value) => {
-      // eslint-disable-next-line no-console
       console.info(key, JSON.stringify(value));
     },
     time: key => {
-      // eslint-disable-next-line no-console
       console.time(key);
     },
     timeEnd: key => {
-      // eslint-disable-next-line no-console
       console.timeEnd(key);
     },
   }),
@@ -830,7 +834,6 @@ const applicationContext = {
       isInternalUser: User.isInternalUser,
       isLeadCase,
       isPending: DocketEntry.isPending,
-      isPendingOnCreation: DocketEntry.isPendingOnCreation,
       isSealedCase,
       isStringISOFormatted,
       isUserPartOfGroup,
@@ -855,7 +858,7 @@ const applicationContext = {
   setForceRefreshCallback(callback) {
     forceRefreshCallback = callback;
   },
-  setTimeout: (callback, timeout) => setTimeout(callback, timeout),
+  setTimeout: (callback: Function, timeout) => setTimeout(callback, timeout),
 };
 
 export { applicationContext };

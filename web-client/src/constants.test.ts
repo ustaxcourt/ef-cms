@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-conditional-expect */
 import { applicationContext } from './applicationContext';
 
 describe('frozen constants', () => {

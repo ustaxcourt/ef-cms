@@ -71,15 +71,13 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
 
   const paperServicePdfData = await paperServiceDocumentsPdf.save();
 
-  let fileId, pdfUrl;
-
-  ({ fileId, url: pdfUrl } = await applicationContext
+  const { fileId, url: pdfUrl } = await applicationContext
     .getUseCaseHelpers()
     .saveFileAndGenerateUrl({
       applicationContext,
       file: paperServicePdfData,
       fileNamePrefix: 'paper-service-pdf/',
-    }));
+    });
 
   const trialSession = await applicationContext
     .getPersistenceGateway()
