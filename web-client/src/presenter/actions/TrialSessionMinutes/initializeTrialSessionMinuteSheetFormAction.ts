@@ -36,6 +36,7 @@ export const initializeTrialSessionMinuteSheetFormAction = ({
       currentUser,
       trialSession,
     });
+
   const judge = judgeOptions[formattedTrialSession.judge?.userId!];
 
   store.set(state.minuteSheetForm, cloneDeep(initialMinuteSheetFormState));
@@ -47,7 +48,6 @@ export const initializeTrialSessionMinuteSheetFormAction = ({
       title: judge.title,
       userId: judge.userId,
     },
-    judgeOptions,
     remoteSession: formattedTrialSession.isRemoteSession,
     trialClerk: formattedTrialSession.trialClerk!.name,
   });
@@ -113,6 +113,8 @@ export const initializeTrialSessionMinuteSheetFormAction = ({
       status: '',
     },
   });
+
+  store.set(state.minuteSheetForm.options.judgeOptions, judgeOptions);
 };
 
 export const getRespondentsFromCase = (

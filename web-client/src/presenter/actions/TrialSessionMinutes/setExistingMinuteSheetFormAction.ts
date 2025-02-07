@@ -1,7 +1,10 @@
 import { cloneDeep } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import { arrayToKeyedRecord } from '@web-client/utilities/arrayToKeyedRecord';
-import { MinuteSheet } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
+import {
+  Judge,
+  MinuteSheet,
+} from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import {
   BriefTypeOption,
@@ -9,15 +12,19 @@ import {
 } from '@shared/business/entities/EntityConstants';
 
 export const setExistingMinuteSheetFormAction = ({ props, store }) => {
-  const { minuteSheet } = props;
+  const { minuteSheet, judgeOptions } = props;
 
-  const minuteSheetForm = transformMinuteSheetToFormState(minuteSheet);
+  const minuteSheetForm = transformMinuteSheetToFormState(
+    minuteSheet,
+    judgeOptions,
+  );
 
   store.set(state.minuteSheetForm, cloneDeep(minuteSheetForm));
 };
 
 export const transformMinuteSheetToFormState = (
   minuteSheet: MinuteSheet,
+  judgeOptions: Record<string, Judge>,
 ): MinuteSheetFormState => ({
   actionsAndFilingsSection: {
     actionsAndFilings: arrayToKeyedRecord(
@@ -50,6 +57,7 @@ export const transformMinuteSheetToFormState = (
   },
   options: {
     irsPractitionerOptions: [],
+    judgeOptions,
   },
 });
 

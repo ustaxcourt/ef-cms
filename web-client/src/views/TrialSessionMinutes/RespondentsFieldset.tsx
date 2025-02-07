@@ -55,7 +55,6 @@ export const RespondentsFieldset = ({
                     value: respondentsFormState.respondents[row.renderKey].name,
                   }}
                   onChange={inputValue =>
-                    // 10419 TODO make default object to spread in name and section
                     onChangeHandler({
                       name: 'respondents',
                       rowInfo: {

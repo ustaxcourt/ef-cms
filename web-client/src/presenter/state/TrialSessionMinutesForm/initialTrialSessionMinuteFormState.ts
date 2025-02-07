@@ -53,7 +53,6 @@ export type WitnessesRecord<T extends WitnessTypeOption> =
 export type MinuteSheetFormState = {
   trialSessionMetadataSection: {
     judge: Judge;
-    judgeOptions: Record<string, Judge>;
     trialClerk: string;
     courtReporter: string;
     remoteSession: boolean;
@@ -133,6 +132,7 @@ export type MinuteSheetFormState = {
       label: string;
       value: string;
     }[];
+    judgeOptions: Record<string, Judge>;
   };
 };
 
@@ -217,7 +217,6 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
   trialSessionMetadataSection: {
     courtReporter: '',
     judge: { fullName: '', title: '', userId: '' },
-    judgeOptions: {},
     remoteSession: false,
     trialClerk: '',
   },
@@ -229,5 +228,6 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
 
   options: {
     irsPractitionerOptions: [],
+    judgeOptions: {},
   },
 };

@@ -10,10 +10,12 @@ import React from 'react';
 export const TrialSessionMetadataFieldset = ({
   onBlurHandler,
   onChangeHandler,
+  formOptions,
   trialSessionMetadataFormState,
 }: {
   onChangeHandler: OnChangeHandler;
   onBlurHandler: AutoSaveHandler;
+  formOptions: MinuteSheetFormState['options']['judgeOptions'];
   trialSessionMetadataFormState: MinuteSheetFormState['trialSessionMetadataSection'];
 }) => {
   return (
@@ -31,8 +33,7 @@ export const TrialSessionMetadataFieldset = ({
               value={trialSessionMetadataFormState.judge.userId}
               onBlur={() => onBlurHandler()}
               onChange={e => {
-                const selectedJudge =
-                  trialSessionMetadataFormState.judgeOptions[e.target.value];
+                const selectedJudge = formOptions[e.target.value];
                 onChangeHandler({
                   name: e.target.name,
                   section:
@@ -41,13 +42,11 @@ export const TrialSessionMetadataFieldset = ({
                 });
               }}
             >
-              {Object.values(trialSessionMetadataFormState.judgeOptions).map(
-                judge => (
-                  <option key={judge.userId} value={judge.userId}>
-                    {judge.fullName}
-                  </option>
-                ),
-              )}
+              {Object.values(formOptions).map(judge => (
+                <option key={judge.userId} value={judge.userId}>
+                  {judge.fullName}
+                </option>
+              ))}
             </select>
           </FormGroup>
         </div>

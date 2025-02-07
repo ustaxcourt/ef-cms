@@ -41,6 +41,7 @@ export const TrialSessionMinutesForm = connect(
           trialSessionMetadataFormState={
             trialSessionMinutesForm.trialSessionMetadataSection
           }
+          formOptions={trialSessionMinutesFormOptionsHelper.judgeOptions}
           onBlurHandler={autosaveTrialSessionMinuteSheetSequence}
           onChangeHandler={updateTrialSessionMinutesFormSequence}
         />
