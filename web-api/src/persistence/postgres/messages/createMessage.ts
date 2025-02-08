@@ -13,7 +13,7 @@ export const createMessage = async ({
     values: [toKyselyNewMessage(message)],
   });
 
-  if (isEmpty(createMessage)) {
+  if (isEmpty(createdMessage)) {
     throw new Error('could not create a message');
   }
 
