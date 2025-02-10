@@ -1,5 +1,8 @@
-jest.mock('@web-api/persistence/dynamo/deployTable/getMaintenanceMode');
+jest.mock(
+  '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor',
+);
 jest.mock('@web-api/persistence/dynamo/cases/getCaseByDocketNumber');
+jest.mock('@web-api/persistence/dynamo/deployTable/getMaintenanceMode');
 import { getCaseLambda } from './getCaseLambda';
 import { getMaintenanceMode as getMaintenanceModeMock } from '@web-api/persistence/dynamo/deployTable/getMaintenanceMode';
 import {
