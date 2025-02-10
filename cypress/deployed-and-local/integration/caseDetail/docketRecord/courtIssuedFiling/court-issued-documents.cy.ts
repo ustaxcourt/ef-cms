@@ -17,14 +17,16 @@ describe('Court Issued Documents', { scrollBehavior: 'center' }, () => {
       cy.get('[data-testid="menu-button-create-order"]').click();
       cy.get('[data-testid="event-code-select"]').select('O');
       cy.get('[data-testid="create-order-document-title"]').clear();
-      cy.get('[data-testid="create-order-document-title"]').type('Order');
+      cy.get('[data-testid="create-order-document-title"]').type('TESTORDER');
       cy.get('[data-testid="modal-button-confirm"]').click();
       cy.get('[data-testid="create-order-page-title"]');
       cy.get('.ql-editor').click();
       cy.get('.ql-editor').type('this is a test order');
       cy.get('[data-testid="save-order-button"]').click();
+
       cy.get('[data-testid="sign-pdf-canvas"]').click();
       cy.get('[data-testid="save-signature-button"]').click();
+      cy.get('[data-testid="success-alert"]').contains('TESTORDER updated');
       cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
       cy.get('[data-testid="service-stamp-Served"]').click();
       cy.get('[data-testid="serve-to-parties-btn"]').click();
@@ -32,7 +34,7 @@ describe('Court Issued Documents', { scrollBehavior: 'center' }, () => {
       cy.get('[data-testid="print-paper-service-done-button"]').click();
       cy.get('[data-testid="document-viewer-link-O"]').should(
         'have.text',
-        'Order',
+        'TESTORDER',
       );
     });
   });
