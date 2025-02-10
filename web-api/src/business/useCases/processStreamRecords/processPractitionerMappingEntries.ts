@@ -7,6 +7,8 @@ import type {
 import type { ServerApplicationContext } from '@web-api/applicationContext';
 import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { getPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/getPetitionersOnCase';
+import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
+import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
 
 export const processPractitionerMappingEntries = async ({
   applicationContext,
@@ -39,6 +41,16 @@ export const processPractitionerMappingEntries = async ({
         docketNumber: caseMetadataWithCounsel.docketNumber,
       });
 
+      const privatePractitioners = await getPrivatePractitionersOnCase({
+        applicationContext,
+        docketNumber: caseMetadataWithCounsel.docketNumber,
+      });
+
+      const irsPractitioners = await getIrsPractitionersOnCase({
+        applicationContext,
+        docketNumber: caseMetadataWithCounsel.docketNumber,
+      });
+
       const marshalledCase = marshall(
         {
           pk: `case|${caseMetadataWithCounsel.docketNumber}`,
@@ -51,6 +63,8 @@ export const processPractitionerMappingEntries = async ({
           isSealed: caseMetadataWithCounsel.isSealed,
           petitioners: petitionersOnCase || [],
           receivedAt: caseMetadataWithCounsel.receivedAt,
+          privatePractitioners,
+          irsPractitioners,
         },
         { removeUndefinedValues: true },
       );
