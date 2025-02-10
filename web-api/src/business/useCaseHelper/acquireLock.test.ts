@@ -13,9 +13,18 @@ jest.mock('@shared/tools/helpers');
 import { ALLOWLIST_FEATURE_FLAGS } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_LOCK } from '../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { acquireLock, checkLock, removeLock, withLocking } from './acquireLock';
+import {
+  acquireLock,
+  asyncHandleLockError,
+  checkLock,
+  removeLock,
+  withLocking,
+} from './acquireLock';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import {
+  mockDocketClerkUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { sleep } from '@shared/tools/helpers';
 
 const onLockError = new ServiceUnavailableError('The case is currently locked');
@@ -135,7 +144,7 @@ describe('acquireLock', () => {
       it('only calls the onLockError function once when there are multiple locked items', async () => {
         const mockCallbackFunction = jest.fn();
         mockCall.onLockError = mockCallbackFunction;
-        mockCall.identifiers = ['101-20', '928', '291-30']
+        mockCall.identifiers = ['101-20', '928', '291-30'];
         await expect(acquireLock(mockCall)).rejects.toThrow(
           ServiceUnavailableError,
         );
@@ -571,5 +580,41 @@ describe('removeLock', () => {
       applicationContext,
       identifiers: ['123-11', '123-22', '123-33'],
     });
+  });
+});
+
+describe('handleLockError', () => {
+  it('should send a notification to the user with "async_service_unavailable_error"', async () => {
+    const mockOriginalRequest = {
+      clientConnectionId: 'TEST_CLIENT_CONNECTION_ID',
+    };
+
+    await asyncHandleLockError(
+      applicationContext,
+      mockOriginalRequest,
+      mockPrivatePractitionerUser,
+    );
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message,
+    ).toMatchObject({
+      action: 'async_service_unavailable_error',
+    });
+  });
+
+  it('should not send a notification to the user when there is no clientConnectionId', async () => {
+    const mockOriginalRequest = {
+      stuff: true,
+    } as any;
+
+    await asyncHandleLockError(
+      applicationContext,
+      mockOriginalRequest,
+      mockPrivatePractitionerUser,
+    );
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).not.toHaveBeenCalled();
   });
 });

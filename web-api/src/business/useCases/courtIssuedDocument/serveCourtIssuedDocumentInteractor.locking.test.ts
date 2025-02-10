@@ -5,7 +5,6 @@ import { addCoverToPdf } from '@web-api/business/useCases/addCoverToPdf';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
-  handleLockError,
   serveCourtIssuedDocumentInteractor,
 } from './serveCourtIssuedDocumentInteractor';
 import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
@@ -42,34 +41,6 @@ describe('determineEntitiesToLock', () => {
     expect(
       determineEntitiesToLock(applicationContext, mockParams).identifiers,
     ).toContain('case|333-20');
-  });
-});
-
-describe('handleLockError', () => {
-  const mockClientConnectionId = '987654';
-
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
-  });
-
-  it('should send a notification to the user with "async_service_unavailable_error"', async () => {
-    const mockOriginalRequest = {
-      clientConnectionId: mockClientConnectionId,
-      foo: 'bar',
-    };
-    await handleLockError(
-      applicationContext,
-      mockOriginalRequest,
-      mockDocketClerkUser,
-    );
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message,
-    ).toMatchObject({
-      action: 'async_service_unavailable_error',
-    });
   });
 });
 
@@ -136,31 +107,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           mockDocketClerkUser,
         ),
       ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('should return a "async_service_unavailable_error" notification', async () => {
-      await expect(
-        serveCourtIssuedDocumentInteractor(
-          applicationContext,
-          mockRequest,
-          mockDocketClerkUser,
-        ),
-      ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getNotificationGateway().sendNotificationToUser,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        clientConnectionId: mockClientConnectionId,
-        message: {
-          action: 'async_service_unavailable_error',
-        },
-        userId: mockDocketClerkUser.userId,
-      });
 
       expect(
         applicationContext.getPersistenceGateway().getCaseByDocketNumber,

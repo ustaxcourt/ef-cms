@@ -119,6 +119,22 @@ export const removeLock = ({
   });
 };
 
+export const asyncHandleLockError = async (
+  applicationContext: ServerApplicationContext,
+  { clientConnectionId }: { clientConnectionId?: string },
+  authorizedUser: UnknownAuthUser,
+) => {
+  if (!authorizedUser?.userId || !clientConnectionId) return;
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'async_service_unavailable_error',
+    },
+    userId: authorizedUser?.userId,
+  });
+};
+
 /**
  * will wrap a function with logic to acquire a lock and delete a lock after finishing.
  * @param {function} interactor the original function to wrap

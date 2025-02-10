@@ -1,4 +1,3 @@
-import { NotFoundError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -8,7 +7,7 @@ import {
   TrialSession,
 } from '@shared/business/entities/trialSessions/TrialSession';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   createWorkingCopyForNewUserOnSession,
@@ -21,7 +20,7 @@ import {
   updateCasesAndSetNoticeOfChange,
 } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper';
 import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { asyncHandleLockError, withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { saveFileAndGenerateUrl } from '@web-api/business/useCaseHelper/saveFileAndGenerateUrl';
@@ -237,23 +236,7 @@ export const determineEntitiesToLock = async (
   };
 };
 
-export const handleLockError = async (
-  applicationContext: ServerApplicationContext,
-  { clientConnectionId }: { clientConnectionId: string },
-  authorizedUser: UnknownAuthUser,
-) => {
-  if (!authorizedUser?.userId || !clientConnectionId) return;
-  await sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'async_service_unavailable_error',
-    },
-    clientConnectionId,
-    userId: authorizedUser.userId,
-  });
-};
-
 export const updateTrialSessionInteractor = withLocking<
   UpdateTrialSessionParams,
   void
->(updateTrialSession, determineEntitiesToLock, handleLockError);
+>(updateTrialSession, determineEntitiesToLock, asyncHandleLockError);

@@ -16,7 +16,6 @@ import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   RawTrialSession,
   TrialSession,
@@ -27,7 +26,7 @@ import { getUniqueId } from '@shared/sharedAppContext';
 import { mockCaseServicesSupervisorUser } from '@shared/test/mockAuthUsers';
 import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
 import {
-  handleLockError,
+  
   determineEntitiesToLock,
   updateTrialSession,
 } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractor';
@@ -371,55 +370,6 @@ describe('updateTrialSessionInteractor', () => {
 
       expect(getTrialSessionByIdCalls.length).toEqual(1);
       expect(getTrialSessionByIdCalls[0][0].trialSessionId).toEqual('');
-    });
-  });
-
-  describe('handleLockError', () => {
-    const TEST_ORIGINAL_REQUEST = {
-      clientConnectionId: 'TEST_ORIGINAL_REQUEST',
-    };
-
-    it('should send an async_service_unavailable_error notification when user id is defined', async () => {
-      const TEST_USER_ID = 'TEST_USER_ID';
-
-      await handleLockError(applicationContext, TEST_ORIGINAL_REQUEST, {
-        userId: TEST_USER_ID,
-      } as UnknownAuthUser);
-
-      const sendNotificationToUserCalls = (sendNotificationToUser as jest.Mock)
-        .mock.calls;
-
-      expect(sendNotificationToUserCalls.length).toEqual(1);
-      expect(sendNotificationToUserCalls[0][0]).toMatchObject({
-        message: {
-          action: 'async_service_unavailable_error',
-        },
-        userId: TEST_USER_ID,
-      });
-    });
-
-    it('should not send an async_service_unavailable_error notification when user id is not defined', async () => {
-      await handleLockError(applicationContext, TEST_ORIGINAL_REQUEST, {
-        userId: '',
-      } as UnknownAuthUser);
-
-      const sendNotificationToUserCalls = (sendNotificationToUser as jest.Mock)
-        .mock.calls;
-
-      expect(sendNotificationToUserCalls.length).toEqual(0);
-    });
-
-    it('should not send an async_service_unavailable_error notification when user is not defined', async () => {
-      await handleLockError(
-        applicationContext,
-        TEST_ORIGINAL_REQUEST,
-        undefined as UnknownAuthUser,
-      );
-
-      const sendNotificationToUserCalls = (sendNotificationToUser as jest.Mock)
-        .mock.calls;
-
-      expect(sendNotificationToUserCalls.length).toEqual(0);
     });
   });
 });

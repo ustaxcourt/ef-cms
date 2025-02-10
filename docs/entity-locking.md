@@ -134,7 +134,7 @@ You may wish for a function to be called if you fail to acquire a lock. One use 
 ```typescript
 // define a function to call when acquiring a lock fails
 
-export const handleLockError = async (
+export const asyncHandleLockError = async (
   applicationContext: ServerApplicationContext,
   { clientConnectionId }: { clientConnectionId: string },
   authorizedUser: UnknownAuthUser,
@@ -157,7 +157,7 @@ Then, pass that function into the attempt to acquire a lock:
 await applicationContext.getUseCaseHelpers().acquireLock({
   applicationContext,
   identifier: 'case|123-20',
-  onLockError: handleLockError,
+  onLockError: asyncHandleLockError,
 });
 ```
 
@@ -167,7 +167,7 @@ Or provide it as the third parameter in the `withLocking` wrapper:
 export const updateSomethingInteractor = withLocking(
   updateSomething,
   determineEntitiesToLock,
-  handleLockError,
+  asyncHandleLockError,
 );
 ```
 
@@ -181,7 +181,7 @@ try {
   });
 } catch (err) {
   if (err instanceof ServiceUnavailableError) {
-    await handleLockError(applicationContext, {
+    await asyncHandleLockError(applicationContext, {
       docketNumber
     });
   }
