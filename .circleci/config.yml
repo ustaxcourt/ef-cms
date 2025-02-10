@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.26
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.28
 
 parameters:
   run_build_and_deploy:
@@ -187,6 +187,12 @@ jobs:
           command: |
             ./web-client/deploy-public.sh
       - run:
+          name: 'Deploy - Inactive Cases Email Lambda and Monthly Cron Trigger'
+          command: |
+            if [ -n "$INACTIVITY_REPORT_RECIPIENTS" ]; then
+              npm run deploy:stale-cases-email-cron -- $ENV
+            fi
+      - run:
           name: 'Deploy - Authorizer Smoke Tests'
           command: |
             npm run verify-authorizers -- $ENV
@@ -200,7 +206,7 @@ jobs:
 
   docker-image-zipper:
     docker:
-      - image: cimg/node:20.14
+      - image: cimg/node:22.13
     resource_class: xlarge
     steps:
       - git-shallow-clone/checkout
@@ -262,6 +268,11 @@ jobs:
           name: Run Postgres Migration
           command: |
             NODE_ENV=production npm run migration:postgres
+      - run:
+          name: Restore Postgres User Permissions
+          command: |
+            cd ./scripts/postgres
+            DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
       - run:
           name: Enable Check Migration Status Cron
           command: |
@@ -869,9 +880,14 @@ jobs:
               exit 1
             fi
       - run:
-          name: Restore Postgres
+          name: Restore Postgres Data
           command: |
-            TARGET_ENV=$LOWER_ENV TARGET_ACCOUNT_ID="${LOWER_ENV_ACCOUNT_ID}" ./scripts/postgres/restoreDbFromSource.ts
+            TARGET_ENV="$LOWER_ENV" TARGET_ACCOUNT_ID="$LOWER_ENV_ACCOUNT_ID" ./scripts/postgres/restoreDbFromSource.ts
+      - run:
+          name: Restore Postgres User Permissions
+          command: |
+            cd ./scripts/postgres
+            DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
 
   finish-glue-job:
     docker:
@@ -994,12 +1010,10 @@ workflows:
           <<: *only-prod
       - docker-image-zipper:
           <<: *only-prod
-          requires:
-            - deploy
       - migrate:
           <<: *only-prod
           requires:
-            - docker-image-zipper
+            - deploy
       - wait-for-migration:
           <<: *only-prod
           type: approval

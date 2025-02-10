@@ -25,6 +25,7 @@ resource "aws_iam_policy" "ci_cd_policy" {
         "dynamodb:TagResource",
         "dynamodb:CreateBackup",
         "dynamodb:DeleteTable",
+        "dynamodb:DeleteTableReplica",
         "dynamodb:DescribeTimeToLive",
         "dynamodb:UpdateContinuousBackups",
         "dynamodb:ListStreams"
@@ -193,6 +194,7 @@ resource "aws_iam_policy" "ci_cd_policy" {
         "dynamodb:DeleteItem",
         "dynamodb:CreateTable",
         "dynamodb:DescribeTable",
+        "dynamodb:DeleteTableReplica",
         "dynamodb:GetItem",
         "dynamodb:Query",
         "dynamodb:BatchGetItem",

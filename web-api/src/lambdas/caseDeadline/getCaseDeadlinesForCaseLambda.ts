@@ -8,8 +8,8 @@ import { getCaseDeadlinesForCaseInteractor } from '@web-api/business/useCases/ca
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const getCaseDeadlinesForCaseLambda = event =>
-  genericHandler(event, async ({ applicationContext }) => {
-    return await getCaseDeadlinesForCaseInteractor(applicationContext, {
+  genericHandler(event, async () => {
+    return await getCaseDeadlinesForCaseInteractor({
       docketNumber: event.pathParameters.docketNumber,
     });
   });

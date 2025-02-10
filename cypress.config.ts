@@ -25,7 +25,7 @@ import { retry, setup } from '@cypress/puppeteer';
 
 export default defineConfig({
   chromeWebSecurity: false,
-  defaultCommandTimeout: 60000,  
+  defaultCommandTimeout: 60000,
   e2e: {
     baseUrl: 'http://localhost:1234',
     experimentalStudio: true,
@@ -101,49 +101,51 @@ export default defineConfig({
             });
             await desiredPage.close();
           },
-          async openExistingTabAndCheckSelectorExists(
-            browser: any,
-            url: string,
-            selector: string,
-            close: boolean = true,
-          ) {
-            // Note that browser.pages is *not* sorted in any particular order.
-            // Therefore we pass in the URL we want to find rather than an index.
-
-            // Wait until the new tab loads
-            const desiredPage = await retry<Promise<Page>>(async () => {
-              const pages = await browser.pages();
-              const page = pages.find(p => p.url().includes(url));
-              if (!page) throw new Error('Could not find page');
-              return page;
-            });
-
-            // Activate it
-            await desiredPage.bringToFront();
-
-            // Make sure selector exists
-            await desiredPage.waitForSelector(selector, { timeout: 30000 });
-
-            if (close) {
-              await desiredPage.close();
-            }
-            return true;
-          },
           async openNewTab(
             browser: any,
             url: string,
-            sessionModalTimeout: number,
+            areYouStillThereTime: number,
             sessionTimeout: number,
           ) {
             const page = await browser.newPage();
             await page.goto(url, { waitUntil: 'networkidle2' });
 
             await page.evaluate(overrideIdleTimeouts, {
-              sessionModalTimeout,
+              areYouStillThereTime,
               sessionTimeout,
             });
 
             return page;
+          },
+          async verifyAllTabsAreOnIdleLogout(
+            browser: any,
+            close: boolean = true,
+          ) {
+            // We must retry this call as the pages are sometimes not fully loaded.
+            await retry(
+              async () => {
+                // Note that browser.pages is *not* sorted in any particular order.
+                const pages: Page[] = await browser.pages();
+                for (const page of pages) {
+                  if (page.url().includes('.cy.ts')) {
+                    continue;
+                  }
+
+                  await page.bringToFront();
+
+                  if (!page.url().includes('/idle-logout')) {
+                    throw new Error('Page is not on idle logout screen!');
+                  }
+
+                  if (close) {
+                    await page.close();
+                  }
+                }
+              },
+              { delayBetweenTries: 1000, timeout: 30000 },
+            );
+
+            return true;
           },
         },
       });
