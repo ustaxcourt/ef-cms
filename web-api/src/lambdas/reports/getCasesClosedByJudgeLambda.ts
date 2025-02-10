@@ -1,5 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { genericHandler } from '../../genericHandler';
+import { genericHandler } from '@web-api/genericHandler';
 import { getCasesClosedByJudgeInteractor } from '@web-api/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor';
 
 export const getCasesClosedByJudgeLambda = (
@@ -8,9 +8,8 @@ export const getCasesClosedByJudgeLambda = (
 ) =>
   genericHandler(
     event,
-    async ({ applicationContext }) => {
+    async () => {
       return await getCasesClosedByJudgeInteractor(
-        applicationContext,
         {
           ...JSON.parse(event.body),
         },

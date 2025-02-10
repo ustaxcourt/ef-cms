@@ -10,7 +10,7 @@ export const getPublicCaseInteractor = async (
   applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
 ) => {
-  let rawCaseRecord: any = await getCaseByDocketNumber({
+  const rawCaseRecord = await getCaseByDocketNumber({
     applicationContext,
     docketNumber: Case.formatDocketNumber(docketNumber),
   });

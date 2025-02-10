@@ -17,7 +17,7 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('associateIrsPractitionerToCase', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  let caseRecord1 = {
+  const caseRecord = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.deficiency,
     docketEntries: MOCK_CASE.docketEntries,
@@ -44,7 +44,7 @@ describe('associateIrsPractitionerToCase', () => {
   };
 
   beforeEach(() => {
-    getCaseByDocketNumber.mockResolvedValue(caseRecord1);
+    getCaseByDocketNumber.mockResolvedValue(caseRecord);
   });
 
   it('should not add mapping when the user is already associated with the case', async () => {
@@ -55,7 +55,7 @@ describe('associateIrsPractitionerToCase', () => {
     await associateIrsPractitionerToCase({
       applicationContext,
       authorizedUser: mockDocketClerkUser,
-      docketNumber: caseRecord1.docketNumber,
+      docketNumber: caseRecord.docketNumber,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       user: irsPractitionerUser,
     });
@@ -76,7 +76,7 @@ describe('associateIrsPractitionerToCase', () => {
     await associateIrsPractitionerToCase({
       applicationContext,
       authorizedUser: mockDocketClerkUser,
-      docketNumber: caseRecord1.docketNumber,
+      docketNumber: caseRecord.docketNumber,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       user: irsPractitionerUser,
     });
