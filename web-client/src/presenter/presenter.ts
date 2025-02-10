@@ -612,6 +612,7 @@ import { validateUpdatePractitionerSequence } from './sequences/validateUpdatePr
 import { validateUploadCorrespondenceDocumentSequence } from './sequences/validateUploadCorrespondenceDocumentSequence';
 import { validateUploadCourtIssuedDocumentSequence } from './sequences/validateUploadCourtIssuedDocumentSequence';
 import { validateUserContactSequence } from './sequences/validateUserContactSequence';
+import { asyncServiceUnavailablrHandlerSequence } from '@web-client/presenter/sequences/asyncServiceUnavailablrHandlerSequence';
 
 export const presenterSequences = {
   addAnotherIrsNoticeToFormSequence,
@@ -642,6 +643,8 @@ export const presenterSequences = {
     associateIrsPractitionerWithCaseSequence as unknown as Function,
   associatePrivatePractitionerWithCaseSequence:
     associatePrivatePractitionerWithCaseSequence as unknown as Function,
+  asyncServiceUnavailablrHandlerSequence:
+    asyncServiceUnavailablrHandlerSequence as unknown as Function,
   autoSaveTrialSessionWorkingCopySequence:
     autoSaveTrialSessionWorkingCopySequence as unknown as Function,
   batchCompleteMessageSequence:
