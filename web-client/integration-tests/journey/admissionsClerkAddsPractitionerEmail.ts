@@ -7,6 +7,7 @@ import {
 } from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
+import { sleep } from '@shared/tools/helpers';
 
 export const admissionsClerkAddsPractitionerEmail = cerebralTest => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
@@ -30,6 +31,8 @@ export const admissionsClerkAddsPractitionerEmail = cerebralTest => {
     });
 
     await cerebralTest.runSequence('submitUpdatePractitionerUserSequence');
+
+    await sleep(10000);  // Bad but necessary to wait on change of address pdfs to be created and served
 
     await waitForLoadingComponentToHide({ cerebralTest });
 
@@ -82,7 +85,9 @@ export const admissionsClerkAddsPractitionerEmail = cerebralTest => {
 
     cerebralTest.setState('practitionerDetail', {});
 
-    await cerebralTest.runSequence('submitUpdatePractitionerUserSequence');
+    await cerebralTest.runSequence('submitUpdatePractitionerUserSequence'); 
+
+    await sleep(10000); // Bad but necessary to wait on change of address pdfs to be created and served
 
     await waitForLoadingComponentToHide({ cerebralTest });
 
@@ -120,5 +125,5 @@ export const admissionsClerkAddsPractitionerEmail = cerebralTest => {
 
     cerebralTest.pendingEmail = mockAvailableEmail;
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
-  });
+  }, 60000);
 };
