@@ -178,20 +178,19 @@ export const updateUserContactInformation = async (
 
 export const handleLockError = async (
   applicationContext: ServerApplicationContext,
-  originalRequest: any,
+  { clientConnectionId }: { clientConnectionId: string },
   authorizedUser: UnknownAuthUser,
 ) => {
-  if (authorizedUser?.userId) {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: 'retry_async_request',
-        originalRequest,
-        requestToRetry: 'update_user_contact_information',
-      },
-      userId: authorizedUser.userId,
-    });
-  }
+  if (!authorizedUser?.userId || !clientConnectionId) return;
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'async_service_unavailable_error',
+    },
+    clientConnectionId,
+    userId: authorizedUser.userId,
+  });
 };
 
 export const determineEntitiesToLock = async (

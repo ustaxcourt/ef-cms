@@ -128,26 +128,26 @@ export const updateSomethingInteractor = withLocking(
 
 ### Advanced Handling on Failure
 
-You may wish for a function to be called if you fail to acquire a lock. One use case for this is if an asynchronous lambda fails to acquire a lock, you will need to send a websocket message to the user in order to retry the request or process the failure.
+You may wish for a function to be called if you fail to acquire a lock. One use case for this is if an asynchronous lambda fails to acquire a lock, you will need to send a websocket message to the user to notify them to wait and try again.
+
 
 ```typescript
 // define a function to call when acquiring a lock fails
-const handleLockError = async (
-  applicationContext: IApplicationContext,
-  originalRequest: any,
-  authorizedUser: UnknownAuthUser
+
+export const handleLockError = async (
+  applicationContext: ServerApplicationContext,
+  { clientConnectionId }: { clientConnectionId: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  if(authorizedUser?.userId) {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: 'retry_async_request',
-        originalRequest,
-        requestToRetry: 'update_something',
-      },
-      userId: user.userId,
-    });
-  }
+  if (!authorizedUser?.userId || !clientConnectionId) return;
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'async_service_unavailable_error',
+    },
+    userId: authorizedUser?.userId,
+  });
 };
 ```
 
