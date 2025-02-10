@@ -6,7 +6,6 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCasesClosedCountByJudge } from '@web-api/persistence/postgres/cases/reports/getCasesClosedCountByJudge';
 
@@ -19,7 +18,6 @@ export type CasesClosedReturnType = {
 };
 
 export const getCasesClosedByJudgeInteractor = async (
-  applicationContext: ServerApplicationContext,
   params: JudgeActivityStatisticsRequest,
   authorizedUser: UnknownAuthUser,
 ): Promise<CasesClosedReturnType> => {

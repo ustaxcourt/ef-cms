@@ -11,7 +11,7 @@ import { updateDeficiencyStatisticInteractor } from './updateDeficiencyStatistic
 
 describe('updateDeficiencyStatisticInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  let statistic = {
+  const statistic = {
     determinationDeficiencyAmount: 123,
     determinationTotalPenalties: 456,
     irsDeficiencyAmount: 789,

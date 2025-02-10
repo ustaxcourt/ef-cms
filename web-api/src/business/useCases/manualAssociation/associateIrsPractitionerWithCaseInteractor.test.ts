@@ -19,7 +19,7 @@ describe('associateIrsPractitionerWithCaseInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCase = updateCaseMock as jest.Mock;
 
-  let caseRecord = {
+  const caseRecord = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.deficiency,
     docketEntries: MOCK_CASE.docketEntries,
