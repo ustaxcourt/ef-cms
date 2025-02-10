@@ -180,6 +180,10 @@ type UserContactUpdateErrorNotification = {
   error: string;
 };
 
+type AsyncServiceUnavailableErrorNotification = {
+  action: 'async_service_unavailable_error';
+};
+
 export type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
@@ -210,7 +214,8 @@ export type NotificationMessage =
   | SetTrialSessionCalendarErrorNotification
   | UpdateTrialSessionCompleteNotification
   | UserContactInitialUpdateCompleteNotification
-  | UserContactUpdateErrorNotification;
+  | UserContactUpdateErrorNotification
+  | AsyncServiceUnavailableErrorNotification;
 
 type MaintenanceModeEngaged = {
   action: 'maintenance_mode_engaged';
