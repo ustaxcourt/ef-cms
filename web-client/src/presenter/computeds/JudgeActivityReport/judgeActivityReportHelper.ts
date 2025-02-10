@@ -1,7 +1,11 @@
 import { ASCENDING } from '@shared/business/entities/EntityConstants';
 import { CaseDocumentsCountType } from '@web-api/persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
+import {
+  FORMATS,
+  formatDateString,
+  formatNow,
+} from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -59,7 +63,7 @@ export const judgeActivityReportHelper = (
 
   const showResultsTables = hasFormBeenSubmitted && totalResults > 0;
 
-  const currentDate: string = formatNow();
+  const currentDate: string = formatNow(FORMATS.MMDDYY);
 
   const reportHeader: string = `${judgeName} ${currentDate}`;
 
@@ -79,12 +83,10 @@ export const judgeActivityReportHelper = (
 
     if (aCase.caseWorksheet) {
       formattedFinalBriefDueDate = aCase.caseWorksheet.finalBriefDueDate
-        ? applicationContext
-            .getUtilities()
-            .formatDateString(
-              aCase.caseWorksheet.finalBriefDueDate,
-              applicationContext.getConstants().DATE_FORMATS.MMDDYY,
-            )
+        ? formatDateString(
+            aCase.caseWorksheet.finalBriefDueDate,
+            FORMATS.MMDDYY,
+          )
         : '';
     }
 
@@ -124,7 +126,7 @@ export const judgeActivityReportHelper = (
     return 0;
   });
 
-  const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
+  const today = formatNow(FORMATS.YYYYMMDD);
 
   const ordersToDisplay = judgeActivityReportData.orders
     ? judgeActivityReportData.orders.aggregations?.filter(agg => agg.count)
