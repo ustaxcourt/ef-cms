@@ -2467,23 +2467,18 @@ export const getOtherFilers = function (rawCase) {
   );
 };
 
-/**
- * Updates the specified contact object in the case petitioner's array
- * @param {object} arguments.rawCase the raw case object
- * @param {object} arguments.updatedPetitioner the updated petitioner object
- */
 export const updatePetitioner = function (rawCase, updatedPetitioner) {
   const petitionerIndex = rawCase.petitioners.findIndex(
     p => p.contactId === updatedPetitioner.contactId,
   );
 
-  if (petitionerIndex !== -1) {
-    rawCase.petitioners[petitionerIndex] = updatedPetitioner;
-  } else {
+  if (petitionerIndex === -1) {
     throw new Error(
       `Petitioner was not found on case ${rawCase.docketNumber}.`,
     );
   }
+
+  rawCase.petitioners[petitionerIndex] = updatedPetitioner;
 };
 
 declare global {
