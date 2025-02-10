@@ -55,7 +55,7 @@ describe('handleLockError', () => {
   it('should determine who the user is based on arguents to handleLockError, not appcontext', async () => {
     await handleLockError(
       applicationContext,
-      { foo: 'bar' },
+      { clientConnectionId: 'TEST_CLIENT_CONNECTION_ID' },
       mockDocketClerkUser,
     );
     expect(
@@ -67,7 +67,7 @@ describe('handleLockError', () => {
     );
   });
 
-  it('should send a notification to the user with "retry_async_request" and the originalRequest', async () => {
+  it('should send a notification to the user with "async_service_unavailable_error"', async () => {
     const mockOriginalRequest = {
       clientConnectionId: mockClientConnectionId,
       foo: 'bar',
@@ -81,9 +81,7 @@ describe('handleLockError', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message,
     ).toMatchObject({
-      action: 'retry_async_request',
-      originalRequest: mockOriginalRequest,
-      requestToRetry: 'serve_externally_filed_document',
+      action: 'async_service_unavailable_error',
     });
   });
 });
@@ -157,7 +155,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       ).not.toHaveBeenCalled();
     });
 
-    it('should return a "retry_async_request" notification with the original request', async () => {
+    it('should return a "async_service_unavailable_error" notification', async () => {
       await expect(
         serveExternallyFiledDocumentInteractor(
           applicationContext,
@@ -172,9 +170,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         applicationContext,
         clientConnectionId: mockClientConnectionId,
         message: {
-          action: 'retry_async_request',
-          originalRequest: mockRequest,
-          requestToRetry: 'serve_externally_filed_document',
+          action: 'async_service_unavailable_error',
         },
         userId: mockDocketClerkUser.userId,
       });

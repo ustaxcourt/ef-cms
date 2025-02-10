@@ -375,8 +375,11 @@ describe('updateTrialSessionInteractor', () => {
   });
 
   describe('handleLockError', () => {
-    it('should send a retry notification when user id is defined', async () => {
-      const TEST_ORIGINAL_REQUEST = 'TEST_ORIGINAL_REQUEST';
+    const TEST_ORIGINAL_REQUEST = {
+      clientConnectionId: 'TEST_ORIGINAL_REQUEST',
+    };
+
+    it('should send an async_service_unavailable_error notification when user id is defined', async () => {
       const TEST_USER_ID = 'TEST_USER_ID';
 
       await handleLockError(applicationContext, TEST_ORIGINAL_REQUEST, {
@@ -389,17 +392,13 @@ describe('updateTrialSessionInteractor', () => {
       expect(sendNotificationToUserCalls.length).toEqual(1);
       expect(sendNotificationToUserCalls[0][0]).toMatchObject({
         message: {
-          action: 'retry_async_request',
-          originalRequest: TEST_ORIGINAL_REQUEST,
-          requestToRetry: 'update_trial_session',
+          action: 'async_service_unavailable_error',
         },
         userId: TEST_USER_ID,
       });
     });
 
-    it('should not send a retry notification when user id is not defined', async () => {
-      const TEST_ORIGINAL_REQUEST = 'TEST_ORIGINAL_REQUEST';
-
+    it('should not send an async_service_unavailable_error notification when user id is not defined', async () => {
       await handleLockError(applicationContext, TEST_ORIGINAL_REQUEST, {
         userId: '',
       } as UnknownAuthUser);
@@ -410,9 +409,7 @@ describe('updateTrialSessionInteractor', () => {
       expect(sendNotificationToUserCalls.length).toEqual(0);
     });
 
-    it('should not send a retry notification when user is not defined', async () => {
-      const TEST_ORIGINAL_REQUEST = 'TEST_ORIGINAL_REQUEST';
-
+    it('should not send an async_service_unavailable_error notification when user is not defined', async () => {
       await handleLockError(
         applicationContext,
         TEST_ORIGINAL_REQUEST,

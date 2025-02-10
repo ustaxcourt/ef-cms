@@ -53,13 +53,17 @@ describe('handleLockError', () => {
   });
 
   it('should send notification to user when there is a lock error', async () => {
-    await handleLockError(applicationContext, { foo: 'bar' }, docketClerkUser);
+    await handleLockError(
+      applicationContext,
+      { clientConnectionId: '8302' },
+      docketClerkUser,
+    );
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).toHaveBeenCalled();
   });
 
-  it('should send a notification to the user with "retry_async_request" and the originalRequest', async () => {
+  it('should send a notification to the user with "async_service_unavailable_error"', async () => {
     const mockOriginalRequest = {
       clientConnectionId: mockClientConnectionId,
       foo: 'bar',
@@ -73,9 +77,7 @@ describe('handleLockError', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message,
     ).toMatchObject({
-      action: 'retry_async_request',
-      originalRequest: mockOriginalRequest,
-      requestToRetry: 'add_paper_filing',
+      action: 'async_service_unavailable_error',
     });
   });
 });
@@ -136,7 +138,7 @@ describe('addPaperFilingInteractor', () => {
       ).not.toHaveBeenCalled();
     });
 
-    it('should return a "retry_async_request" notification with the original request', async () => {
+    it('should return a "async_service_unavailable_error" notification', async () => {
       await expect(
         addPaperFilingInteractor(
           applicationContext,
@@ -151,9 +153,7 @@ describe('addPaperFilingInteractor', () => {
         applicationContext,
         clientConnectionId: mockClientConnectionId,
         message: {
-          action: 'retry_async_request',
-          originalRequest: mockRequest,
-          requestToRetry: 'add_paper_filing',
+          action: 'async_service_unavailable_error',
         },
         userId: docketClerkUser.userId,
       });
