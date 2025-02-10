@@ -10,7 +10,7 @@ describe('navigateToIdleLogoutAction', () => {
     };
   });
 
-  it('calls history.back()', async () => {
+  it('should navigate to idle logout route', async () => {
     await runAction(navigateToIdleLogoutAction, {
       modules: {
         presenter,

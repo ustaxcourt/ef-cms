@@ -11,10 +11,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import {
-  filterCaseSearchResultsNotAccessibleToUser,
-  formatSealedAddresses,
-} from '@shared/business/utilities/caseFilter';
+import { filterCaseSearchResultsNotAccessibleToUser } from '@shared/business/utilities/caseFilter';
 import {
   createEndOfDayISO,
   createStartOfDayISO,
@@ -90,9 +87,7 @@ export const caseAdvancedSearchInteractor = async (
   const filteredCases = filterCaseSearchResultsNotAccessibleToUser(
     foundCases,
     authorizedUser,
-  )
-    .map(filteredCase => formatSealedAddresses(filteredCase, authorizedUser))
-    .slice(0, MAX_SEARCH_RESULTS);
+  ).slice(0, MAX_SEARCH_RESULTS);
 
   return filteredCases.map(filteredCase => {
     return {

@@ -49,6 +49,9 @@ describe('caseFilter', () => {
 
       const result = formatSealedAddresses(caseDetail, {
         role: ROLES.petitioner,
+        userId: '1234',
+        name: 'Test',
+        email: 'test@test.com',
       });
 
       result.petitioners.forEach(party => {
@@ -178,7 +181,7 @@ describe('caseFilter', () => {
     });
 
     it('should format sealed addresses in search results if user does not have permission to see sealed contact addresses', () => {
-      let result = filterCaseSearchResultsNotAccessibleToUser(
+      const result = filterCaseSearchResultsNotAccessibleToUser(
         caseSearchResults,
         mockPetitionsClerkUser,
       );
@@ -192,7 +195,7 @@ describe('caseFilter', () => {
     });
 
     it('should keep sealed cases in search results if user is an internal user with permission to see sealed cases', () => {
-      let result = filterCaseSearchResultsNotAccessibleToUser(
+      const result = filterCaseSearchResultsNotAccessibleToUser(
         caseSearchResults,
         mockPetitionsClerkUser,
       );
@@ -201,7 +204,7 @@ describe('caseFilter', () => {
     });
 
     it('should keep sealed cases in search results if user is an IRS superuser with permission to see sealed cases', () => {
-      let result = filterCaseSearchResultsNotAccessibleToUser(
+      const result = filterCaseSearchResultsNotAccessibleToUser(
         caseSearchResults,
         mockIrsSuperuser,
       );
