@@ -94,10 +94,11 @@ describe('determineEntitiesToLock', () => {
 });
 
 describe('handleLockError', () => {
-  it('should send a notification to the user with "retry_async_request" and the originalRequest', async () => {
+  it('should send a notification to the user with "async_service_unavailable_error"', async () => {
     const mockOriginalRequest = {
-      foo: 'bar',
+      clientConnectionId: 'TEST_CLIENT_CONNECTION_ID',
     };
+
     await handleLockError(
       applicationContext,
       mockOriginalRequest,
@@ -107,9 +108,7 @@ describe('handleLockError', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message,
     ).toMatchObject({
-      action: 'retry_async_request',
-      originalRequest: mockOriginalRequest,
-      requestToRetry: 'update_user_contact_information',
+      action: 'async_service_unavailable_error',
     });
   });
 });
@@ -124,6 +123,7 @@ describe('updateUserContactInformationInteractor', () => {
     },
     firmName: 'some firm',
     userId: MOCK_PRACTITIONER.userId,
+    clientConnectionId: 'TEST_CLIENT_CONNECTION_ID',
   };
 
   beforeAll(() => {
@@ -176,7 +176,7 @@ describe('updateUserContactInformationInteractor', () => {
       ).not.toHaveBeenCalled();
     });
 
-    it('should return a "retry_async_request" notification with the original request', async () => {
+    it('should return a "async_service_unavailable_error" notification', async () => {
       await expect(
         updateUserContactInformationInteractor(
           applicationContext,
@@ -190,10 +190,9 @@ describe('updateUserContactInformationInteractor', () => {
       ).toHaveBeenCalledWith({
         applicationContext,
         message: {
-          action: 'retry_async_request',
-          originalRequest: mockRequest,
-          requestToRetry: 'update_user_contact_information',
+          action: 'async_service_unavailable_error',
         },
+        clientConnectionId: mockRequest.clientConnectionId,
         userId: MOCK_PRACTITIONER.userId,
       });
 

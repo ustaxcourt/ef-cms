@@ -54,7 +54,7 @@ describe('handleLockError', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should send a notification to the user with "retry_file_and_serve_court_issued_document" and the originalRequest', async () => {
+  it('should send a notification to the user with "async_service_unavailable_error"', async () => {
     const mockOriginalRequest = {
       clientConnectionId: mockClientConnectionId,
       foo: 'bar',
@@ -68,9 +68,7 @@ describe('handleLockError', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message,
     ).toMatchObject({
-      action: 'retry_async_request',
-      originalRequest: mockOriginalRequest,
-      requestToRetry: 'file_and_serve_court_issued_document',
+      action: 'async_service_unavailable_error',
     });
   });
 });
@@ -146,7 +144,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       ).not.toHaveBeenCalled();
     });
 
-    it('should return a "retry_async_request" notification with the original request', async () => {
+    it('should return a "async_service_unavailable_error" notification', async () => {
       await expect(
         fileAndServeCourtIssuedDocumentInteractor(
           applicationContext,
@@ -161,9 +159,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         applicationContext,
         clientConnectionId: mockClientConnectionId,
         message: {
-          action: 'retry_async_request',
-          originalRequest: mockRequest,
-          requestToRetry: 'file_and_serve_court_issued_document',
+          action: 'async_service_unavailable_error',
         },
         userId: mockDocketClerkUser.userId,
       });
