@@ -1,9 +1,9 @@
-import { CaseAdvancedSearchTerms } from '@web-api/persistence/elasticsearch/caseAdvancedSearch';
+import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import { get } from './requests';
 
 export const caseAdvancedSearchInteractor = (
   applicationContext,
-  { searchParams }: { searchParams: CaseAdvancedSearchTerms },
+  { searchParams }: { searchParams: CaseAdvancedSearchParamsRequestType },
 ) => {
   return get({
     applicationContext,

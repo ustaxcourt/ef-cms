@@ -56,14 +56,15 @@ export const filterCaseSearchResultsNotAccessibleToUser = (
   searchResults,
   currentUser: UnknownAuthUser,
 ) => {
-  return searchResults.filter(
-    searchResult =>
-      !(
-        isSealedCase(searchResult) ||
-        searchResult.isCaseSealed ||
-        searchResult.isDocketEntrySealed
-      ) ||
-      isAssociatedUser({ caseRaw: searchResult, user: currentUser }) ||
-      isAuthorized(currentUser, ROLE_PERMISSIONS.VIEW_SEALED_CASE),
-  );
+  return searchResults
+    .filter(
+      searchResult =>
+        !(
+          isSealedCase(searchResult) ||
+          searchResult.isCaseSealed ||
+          searchResult.isDocketEntrySealed
+        ) ||
+        isAssociatedUser({ caseRaw: searchResult, user: currentUser }) ||
+        isAuthorized(currentUser, ROLE_PERMISSIONS.VIEW_SEALED_CASE),
+    )
 };
