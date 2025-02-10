@@ -3,7 +3,7 @@ import {
   DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SERVICE_INDICATOR_TYPES,
-} from '../entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '../entities/DocketEntry';
 import {
   NotFoundError,
@@ -15,9 +15,9 @@ import {
   UnknownAuthUser,
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
-import { WorkItem } from '../entities/WorkItem';
-import { addCoverToPdf } from '../../../../web-api/src/business/useCases/addCoverToPdf';
-import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
+import { WorkItem } from '@shared/business/entities/WorkItem';
+import { addCoverToPdf } from '@web-api/business/useCases/addCoverToPdf';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { cloneDeep, isEmpty } from 'lodash';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';

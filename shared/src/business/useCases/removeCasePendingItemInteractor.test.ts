@@ -7,14 +7,20 @@ import { MOCK_LOCK } from '../../test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { removeCasePendingItemInteractor } from './removeCasePendingItemInteractor';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
+// Cast the imported functions as Jest mocks.
 const getCaseDeadlinesByDocketNumber =
   getCaseDeadlinesByDocketNumberMock as jest.Mock;
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const updateCase = updateCaseMock as jest.Mock;
+updateCase.mockImplementation(c => c.caseToUpdate);
 
 describe('removeCasePendingItemInteractor', () => {
   let mockLock;
@@ -27,13 +33,13 @@ describe('removeCasePendingItemInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
+    // Set up the mocked getCaseByDocketNumber to return a Promise resolving to MOCK_CASE.
+    getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
+    // Assign the mocked function to the persistence gateway.
+    applicationContext.getPersistenceGateway().getCaseByDocketNumber =
+      getCaseByDocketNumber;
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-    applicationContext
-      .getPersistenceGateway()
-      .updateCase.mockImplementation(v => v);
+    updateCase.mockImplementation(v => v);
   });
 
   it('should throw an unauthorized error if user is unauthorized for updating a case', async () => {
@@ -60,8 +66,7 @@ describe('removeCasePendingItemInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[3].pending,
+      updateCase.mock.calls[0][0].caseToUpdate.docketEntries[3].pending,
     ).toEqual(false);
   });
 
@@ -75,10 +80,7 @@ describe('removeCasePendingItemInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate,
-    ).toMatchObject({
+    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
       automaticBlocked: false,
       automaticBlockedDate: undefined,
       automaticBlockedReason: undefined,
@@ -86,6 +88,7 @@ describe('removeCasePendingItemInteractor', () => {
   });
 
   it('should call updateCase with automaticBlocked=true and a reason and call deleteCaseTrialSortMappingRecords if there are deadlines remaining on the case', async () => {
+    // Simulate the presence of deadlines on the case.
     getCaseDeadlinesByDocketNumber.mockReturnValue([{ deadline: 'something' }]);
 
     await removeCasePendingItemInteractor(
@@ -97,10 +100,7 @@ describe('removeCasePendingItemInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate,
-    ).toMatchObject({
+    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
@@ -110,6 +110,7 @@ describe('removeCasePendingItemInteractor', () => {
         .deleteCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
   });
+
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
     mockLock = MOCK_LOCK;
 
@@ -124,6 +125,7 @@ describe('removeCasePendingItemInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
+    // Expect getCaseByDocketNumber not to have been called because the lock prevented further processing.
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).not.toHaveBeenCalled();
