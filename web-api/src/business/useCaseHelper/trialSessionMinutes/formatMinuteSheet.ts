@@ -250,7 +250,7 @@ export const formatMotions = (
     }))
     .filter(
       formattedMotion =>
-        !!formattedMotion.content && !!formattedMotion.motionType, // 10419 TODO ask UX about whether or not to show a motion on the PDF if no type is selected
+        !!formattedMotion.content && !!formattedMotion.motionType,
     );
 };
 

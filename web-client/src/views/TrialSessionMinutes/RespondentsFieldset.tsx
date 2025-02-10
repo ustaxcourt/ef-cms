@@ -29,8 +29,8 @@ export const RespondentsFieldset = ({
   return (
     <fieldset className="grid-container border-0 padding-0 margin-top-4">
       <div className="grid-row grid-gap-2 margin-bottom-1">
-        <div className="grid-col-3">Respondent(s)</div>
-        <div className="grid-col-3">Date(s) of Appearance</div>
+        <div className="grid-col-3 usa-label">Respondent(s)</div>
+        <div className="grid-col-3 usa-label">Date(s) of Appearance</div>
         <div className="grid-col-auto"></div>
       </div>
       {Object.values(respondentsFormState.respondents).map((row, rowIndex) => {

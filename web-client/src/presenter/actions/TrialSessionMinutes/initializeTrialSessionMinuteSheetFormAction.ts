@@ -288,8 +288,6 @@ export const transformFiledBy = (caseDetail: RawCase, pendingItem): string => {
     ),
   );
 
-  // 10419 TODO figure out what constitutes a "joint" filed by
-
   if (isPetitioner && isRespondent) {
     return FILDED_BY_TYPES.petitionerAndRespondent;
   } else if (isPetitioner) {

@@ -29,7 +29,7 @@ export const PetitionersFieldset = ({
   return (
     <fieldset className="grid-container border-0 padding-0">
       <div className="grid-row grid-gap-2 margin-bottom-1">
-        <div className="grid-col-1">Petitioner(s)</div>
+        <div className="grid-col-1 usa-label">Petitioner(s)</div>
         <div className="grid-col-2">
           <FormGroup className="margin-bottom-0 display-inline-block">
             <div className="usa-checkbox">
@@ -58,8 +58,8 @@ export const PetitionersFieldset = ({
             </div>
           </FormGroup>
         </div>
-        <div className="grid-col-2">Role</div>
-        <div className="grid-col-3">Date(s) of Appearance</div>
+        <div className="grid-col-2 usa-label">Role</div>
+        <div className="grid-col-3 usa-label">Date(s) of Appearance</div>
         <div className="grid-col-4"></div>
       </div>
       {Object.values(petitionersFormState.petitioners).map((row, rowIndex) => (

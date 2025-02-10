@@ -36,7 +36,7 @@ export const DateSelector = ({
   hintText?: string;
   id: string;
   label?: string;
-  labelPosition?: 'top' | 'left' | 'hidden';
+  labelPosition?: 'top' | 'left';
   formatDateOnChange?: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -52,10 +52,9 @@ export const DateSelector = ({
   const labelClassNames =
     labelPosition === 'left'
       ? 'margin-right-2 margin-bottom-0 display-inline-block'
-      : // 10419 TODO this is not REALLY hidden at the moment, only wiping styles. rethink
-        labelPosition === 'hidden'
-        ? ''
-        : 'usa-label';
+      : label
+        ? 'usa-label'
+        : '';
   const pickerClassNames =
     labelPosition === 'left'
       ? 'usa-date-picker display-inline-block left-labeled'
@@ -174,5 +173,3 @@ export const DateSelector = ({
     </FormGroup>
   );
 };
-
-DateSelector.displayName = 'DateSelector';
