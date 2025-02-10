@@ -1,13 +1,12 @@
-import { NotFoundError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { asyncHandleLockError, withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 const setNoticesForCalendaredTrialSession = async (
   applicationContext: ServerApplicationContext,
@@ -215,24 +214,8 @@ export const determineEntitiesToLock = async (
   };
 };
 
-export const handleLockError = async (
-  applicationContext: ServerApplicationContext,
-  { clientConnectionId }: { clientConnectionId: string },
-  authorizedUser: UnknownAuthUser,
-) => {
-  if (!authorizedUser?.userId || !clientConnectionId) return;
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'async_service_unavailable_error',
-    },
-    clientConnectionId,
-    userId: authorizedUser.userId,
-  });
-};
-
 export const setNoticesForCalendaredTrialSessionInteractor = withLocking(
   setNoticesForCalendaredTrialSession,
   determineEntitiesToLock,
-  handleLockError,
+  asyncHandleLockError,
 );

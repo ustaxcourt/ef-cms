@@ -1,15 +1,18 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { DOCUMENT_SERVED_MESSAGES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
-import {
-  ROLE_PERMISSIONS,
-  isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/business/useCaseHelper/acquireLock';
+import {
+  isAuthorized,
+  ROLE_PERMISSIONS,
+} from '@shared/authorization/authorizationClientService';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { DOCUMENT_SERVED_MESSAGES } from '@shared/business/entities/EntityConstants';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 
 export const serveCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
@@ -212,23 +215,8 @@ export const determineEntitiesToLock = (
   ttl: 15 * 60,
 });
 
-export const handleLockError = async (
-  applicationContext: ServerApplicationContext,
-  { clientConnectionId }: { clientConnectionId: string },
-  authorizedUser: UnknownAuthUser,
-) => {
-  if (!authorizedUser?.userId || !clientConnectionId) return;
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId,
-    message: {
-      action: 'async_service_unavailable_error',
-    },
-    userId: authorizedUser?.userId,
-  });
-};
 export const serveCourtIssuedDocumentInteractor = withLocking(
   serveCourtIssuedDocument,
   determineEntitiesToLock,
-  handleLockError,
+  asyncHandleLockError,
 );

@@ -6,7 +6,7 @@ import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/Entity
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
-  handleLockError,
+  
   setNoticesForCalendaredTrialSessionInteractor,
 } from './setNoticesForCalendaredTrialSessionInteractor';
 import { mockTrialClerkUser } from '@shared/test/mockAuthUsers';
@@ -49,27 +49,6 @@ describe('determineEntitiesToLock', () => {
     expect(identifiers).toContain(`case|${mockCases[0].docketNumber}`);
     expect(identifiers).toContain(`case|${mockCases[1].docketNumber}`);
     expect(identifiers).toContain(`case|${mockCases[2].docketNumber}`);
-  });
-});
-
-describe('handleLockError', () => {
-  it('should send a notification to the user with "async_service_unavailable_error"', async () => {
-    const mockOriginalRequest = {
-      clientConnectionId: 'TEST_CLIENT_CONNECTION_ID',
-    };
-
-    await handleLockError(
-      applicationContext,
-      mockOriginalRequest,
-      mockTrialClerkUser,
-    );
-
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message,
-    ).toMatchObject({
-      action: 'async_service_unavailable_error',
-    });
   });
 });
 
@@ -130,31 +109,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
       expect(
         applicationContext.getPersistenceGateway().updateCaseAndAssociations,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('should return a "async_service_unavailable_error" notification', async () => {
-      await expect(
-        setNoticesForCalendaredTrialSessionInteractor(
-          applicationContext,
-          mockRequest,
-          mockTrialClerkUser,
-        ),
-      ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getNotificationGateway().sendNotificationToUser,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        clientConnectionId: mockRequest.clientConnectionId,
-        message: {
-          action: 'async_service_unavailable_error',
-        },
-        userId: mockTrialClerkUser.userId,
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
       ).not.toHaveBeenCalled();
     });
   });

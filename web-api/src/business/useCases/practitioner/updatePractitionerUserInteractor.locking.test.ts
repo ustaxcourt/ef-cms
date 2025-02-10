@@ -2,14 +2,12 @@ import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import {
   MOCK_PRACTITIONER,
-  admissionsClerkUser,
 } from '../../../../../shared/src/test/mockUsers';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
-  handleLockError,
   updatePractitionerUserInteractor,
 } from './updatePractitionerUserInteractor';
 import { mockAdmissionsClerkUser } from '@shared/test/mockAuthUsers';
@@ -44,34 +42,6 @@ describe('determineEntitiesToLock', () => {
     expect(identifiers).toContain('case|111-20');
     expect(identifiers).toContain('case|222-20');
     expect(identifiers).toContain('case|333-20');
-  });
-});
-
-describe('handleLockError', () => {
-  const mockClientConnectionId = '987654';
-
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(admissionsClerkUser);
-  });
-
-  it('should send a notification to the user with "async_service_unavailable_error"', async () => {
-    const mockOriginalRequest = {
-      clientConnectionId: mockClientConnectionId,
-      foo: 'bar',
-    };
-    await handleLockError(
-      applicationContext,
-      mockOriginalRequest,
-      mockAdmissionsClerkUser,
-    );
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message,
-    ).toMatchObject({
-      action: 'async_service_unavailable_error',
-    });
   });
 });
 
@@ -123,31 +93,6 @@ describe('updatePractitionerUserInteractor', () => {
           mockAdmissionsClerkUser,
         ),
       ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('should return a "async_service_unavailable_error" notification', async () => {
-      await expect(
-        updatePractitionerUserInteractor(
-          applicationContext,
-          mockRequest,
-          mockAdmissionsClerkUser,
-        ),
-      ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getNotificationGateway().sendNotificationToUser,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        message: {
-          action: 'async_service_unavailable_error',
-        },
-        clientConnectionId: mockRequest.clientConnectionId,
-        userId: mockAdmissionsClerkUser.userId,
-      });
 
       expect(
         applicationContext.getPersistenceGateway().getCaseByDocketNumber,

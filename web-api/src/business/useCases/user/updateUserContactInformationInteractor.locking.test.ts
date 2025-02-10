@@ -7,7 +7,6 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
-  handleLockError,
   updateUserContactInformationInteractor,
 } from './updateUserContactInformationInteractor';
 import { sleep } from '@shared/tools/helpers';
@@ -93,26 +92,6 @@ describe('determineEntitiesToLock', () => {
   });
 });
 
-describe('handleLockError', () => {
-  it('should send a notification to the user with "async_service_unavailable_error"', async () => {
-    const mockOriginalRequest = {
-      clientConnectionId: 'TEST_CLIENT_CONNECTION_ID',
-    };
-
-    await handleLockError(
-      applicationContext,
-      mockOriginalRequest,
-      MOCK_PRACTITIONER as UnknownAuthUser,
-    );
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message,
-    ).toMatchObject({
-      action: 'async_service_unavailable_error',
-    });
-  });
-});
-
 describe('updateUserContactInformationInteractor', () => {
   let mockLock;
 
@@ -170,31 +149,6 @@ describe('updateUserContactInformationInteractor', () => {
           MOCK_PRACTITIONER as UnknownAuthUser,
         ),
       ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('should return a "async_service_unavailable_error" notification', async () => {
-      await expect(
-        updateUserContactInformationInteractor(
-          applicationContext,
-          mockRequest,
-          MOCK_PRACTITIONER as UnknownAuthUser,
-        ),
-      ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getNotificationGateway().sendNotificationToUser,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        message: {
-          action: 'async_service_unavailable_error',
-        },
-        clientConnectionId: mockRequest.clientConnectionId,
-        userId: MOCK_PRACTITIONER.userId,
-      });
 
       expect(
         applicationContext.getPersistenceGateway().getCaseByDocketNumber,

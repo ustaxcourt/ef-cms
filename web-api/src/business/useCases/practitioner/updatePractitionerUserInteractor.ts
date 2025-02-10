@@ -1,18 +1,12 @@
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
-import {
-  Practitioner,
-  RawPractitioner,
-} from '../../../../../shared/src/business/entities/Practitioner';
-import {
-  ROLE_PERMISSIONS,
-  isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { generateChangeOfAddress } from '../user/generateChangeOfAddress';
 import { omit, union } from 'lodash';
 import { updateUserPendingEmail } from '@web-api/business/useCases/user/updateUserPendingEmailInteractor';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { asyncHandleLockError, withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { isAuthorized, ROLE_PERMISSIONS } from '@shared/authorization/authorizationClientService';
+import { RawPractitioner, Practitioner } from '@shared/business/entities/Practitioner';
+import { generateChangeOfAddress } from '@web-api/business/useCases/user/generateChangeOfAddress';
 
 export const updatePractitionerUser = async (
   applicationContext: ServerApplicationContext,
@@ -187,22 +181,6 @@ const getUpdatedFieldNames = ({
   return Object.keys(practitionerDetailDiff);
 };
 
-export const handleLockError = async (
-  applicationContext: ServerApplicationContext,
-  { clientConnectionId }: { clientConnectionId: string },
-  authorizedUser: UnknownAuthUser,
-) => {
-  if (!authorizedUser?.userId || !clientConnectionId) return;
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId,
-    message: {
-      action: 'async_service_unavailable_error',
-    },
-    userId: authorizedUser?.userId,
-  });
-};
-
 export const determineEntitiesToLock = async (
   applicationContext: ServerApplicationContext,
   { user }: { user: Practitioner },
@@ -223,5 +201,5 @@ export const determineEntitiesToLock = async (
 export const updatePractitionerUserInteractor = withLocking(
   updatePractitionerUser,
   determineEntitiesToLock,
-  handleLockError,
+  asyncHandleLockError,
 );
