@@ -38,12 +38,6 @@ type ServeDocumentCompleteNotification = {
   pdfUrl?: string;
 };
 
-type RetryAsyncRequestNotification = {
-  action: 'retry_async_request';
-  originalRequest: any;
-  requestToRetry: string;
-};
-
 type BatchDownloadCsvDataNotification = {
   action: 'batch_download_csv_data';
   filesCompleted: number;
@@ -190,7 +184,6 @@ export type NotificationMessage =
   | ContactUpdateCompleteNotification
   | ServeDocumentErrorNotification
   | ServeDocumentCompleteNotification
-  | RetryAsyncRequestNotification
   | BatchDownloadCsvDataNotification
   | DownloadCsvFileNotification
   | SaveDocketEntryForLaterCompleteNotification

@@ -239,21 +239,18 @@ export const determineEntitiesToLock = async (
 
 export const handleLockError = async (
   applicationContext: ServerApplicationContext,
-  originalRequest: any,
+  { clientConnectionId }: { clientConnectionId: string },
   authorizedUser: UnknownAuthUser,
 ) => {
-  if (authorizedUser?.userId) {
-    await sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: 'retry_async_request',
-        originalRequest,
-        requestToRetry: 'update_trial_session',
-      },
-      userId: authorizedUser.userId,
-      clientConnectionId: originalRequest.clientConnectionId,
-    });
-  }
+  if (!authorizedUser?.userId || !clientConnectionId) return;
+  await sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'async_service_unavailable_error',
+    },
+    clientConnectionId,
+    userId: authorizedUser.userId,
+  });
 };
 
 export const updateTrialSessionInteractor = withLocking<

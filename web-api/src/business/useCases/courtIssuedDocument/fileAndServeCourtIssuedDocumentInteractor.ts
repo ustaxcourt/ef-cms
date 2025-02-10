@@ -285,21 +285,18 @@ export const determineEntitiesToLock = (
 
 export const handleLockError = async (
   applicationContext: ServerApplicationContext,
-  originalRequest,
+  { clientConnectionId }: { clientConnectionId: string },
   authorizedUser: UnknownAuthUser,
 ) => {
-  if (authorizedUser?.userId) {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId: originalRequest.clientConnectionId,
-      message: {
-        action: 'retry_async_request',
-        originalRequest,
-        requestToRetry: 'file_and_serve_court_issued_document',
-      },
-      userId: authorizedUser.userId,
-    });
-  }
+  if (!authorizedUser?.userId || !clientConnectionId) return;
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'async_service_unavailable_error',
+    },
+    userId: authorizedUser?.userId,
+  });
 };
 
 export const fileAndServeCourtIssuedDocumentInteractor = withLocking(
