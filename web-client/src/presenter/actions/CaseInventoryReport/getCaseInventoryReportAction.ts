@@ -27,7 +27,7 @@ export const getCaseInventoryReportAction = async ({
 
     store.set(
       state.caseInventoryReportData.foundCasesForCurrentPage,
-      Number(reportData.foundCases),
+      reportData.foundCases,
     );
     store.set(
       state.caseInventoryReportData.foundCasesTotalCount,
