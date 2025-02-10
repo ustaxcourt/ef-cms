@@ -3,9 +3,11 @@ import {
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
 import { getJudgeLastName } from '@shared/business/utilities/getFormattedJudgeName';
+import { getDocumentDownloadUrlInteractor } from '@shared/proxies/getDocumentDownloadUrlProxy';
 import { getTodaysOpinionsInteractor } from '@shared/proxies/public/getTodaysOpinionsProxy';
 import { useQuery } from '@tanstack/react-query';
 import { createRoute } from '@tanstack/react-router';
+import { applicationContextPublic } from '@web-client/applicationContextPublic';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
 import { BigHeader } from '@web-client/views/BigHeader';
@@ -18,10 +20,9 @@ export function TodaysOpinions() {
     queryFn: getTodaysOpinionsInteractor,
   });
 
+  const todaysOpinions = query.data || [];
   const currentDate = createISODateString();
   const formattedCurrentDate = formatDateString(currentDate, 'MONTH_DAY_YEAR');
-
-  const todaysOpinions = query.data || [];
   const formattedOpinions = todaysOpinions.map(opinion => ({
     ...opinion,
     formattedFilingDate: formatDateString(opinion.filingDate, 'MMDDYY'),
@@ -81,13 +82,16 @@ export function TodaysOpinions() {
                       link
                       aria-label={`View PDF: ${opinion.descriptionDisplay}`}
                       className="text-left line-height-standard padding-0"
-                      onClick={() => {
-                        // openCaseDocumentDownloadUrlSequence({
-                        //   docketEntryId: opinion.docketEntryId,
-                        //   docketNumber: opinion.docketNumber,
-                        //   isPublic: true,
-                        //   useSameTab: true,
-                        // });
+                      onClick={async () => {
+                        const { url } = await getDocumentDownloadUrlInteractor(
+                          applicationContextPublic,
+                          {
+                            docketNumber: opinion.docketNumber,
+                            isPublic: true,
+                            key: opinion.docketEntryId,
+                          },
+                        );
+                        window.location.href = url;
                       }}
                     >
                       {opinion.documentType}
