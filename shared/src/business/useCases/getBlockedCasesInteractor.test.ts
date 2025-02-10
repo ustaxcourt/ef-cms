@@ -1,13 +1,16 @@
-import { applicationContext } from '../test/createTestApplicationContext';
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import { getBlockedCasesInteractor } from './getBlockedCasesInteractor';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { getBlockedCasesForTrialLocation as getBlockedCasesForTrialLocationMock } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
 
 describe('getBlockedCasesInteractor', () => {
+  const getBlockedCasesForTrialLocation =
+    getBlockedCasesForTrialLocationMock as jest.Mock;
   it('calls search function with correct params and returns records', async () => {
-    applicationContext.getPersistenceGateway().getBlockedCases.mockReturnValue([
+    getBlockedCasesForTrialLocation.mockResolvedValue([
       {
         docketNumber: '101-20',
       },
@@ -17,7 +20,6 @@ describe('getBlockedCasesInteractor', () => {
     ]);
 
     const results = await getBlockedCasesInteractor(
-      applicationContext,
       {
         trialLocation: 'Boise, Idaho',
       },
@@ -38,7 +40,6 @@ describe('getBlockedCasesInteractor', () => {
     let error;
     try {
       await getBlockedCasesInteractor(
-        applicationContext,
         {
           trialLocation: 'Boise, Idaho',
         },

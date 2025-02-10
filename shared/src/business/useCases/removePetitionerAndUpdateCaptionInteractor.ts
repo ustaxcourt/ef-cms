@@ -1,10 +1,10 @@
-import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
-import { Case } from '../entities/cases/Case';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { deletePetitionerOnCase } from '@web-api/persistence/postgres/cases/parties/deletePetitionerOnCase';

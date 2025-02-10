@@ -67,4 +67,5 @@ export const filterCaseSearchResultsNotAccessibleToUser = (
         isAssociatedUser({ caseRaw: searchResult, user: currentUser }) ||
         isAuthorized(currentUser, ROLE_PERMISSIONS.VIEW_SEALED_CASE),
     )
+    .map(c => formatSealedAddresses(c, currentUser));
 };

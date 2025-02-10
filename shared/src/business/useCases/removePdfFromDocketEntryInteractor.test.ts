@@ -7,9 +7,11 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
-} from '../entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { MOCK_LOCK } from '../../test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 import { applicationContext } from '../test/createTestApplicationContext';
 import {
@@ -19,6 +21,10 @@ import {
 import { removePdfFromDocketEntryInteractor } from './removePdfFromDocketEntryInteractor';
 
 describe('removePdfFromDocketEntryInteractor', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCase = updateCaseMock as jest.Mock;
+  updateCase.mockImplementation(c => c.caseToUpdate);
+
   const MOCK_CASE = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.other,
@@ -77,13 +83,8 @@ describe('removePdfFromDocketEntryInteractor', () => {
       name: 'docket clerk',
     });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getCaseByDocketNumber.mockRejectedValue(MOCK_CASE);
 
-    applicationContext
-      .getPersistenceGateway()
-      .updateCase.mockImplementation(caseDetail => caseDetail);
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
@@ -116,9 +117,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
   });
 
   it('should delete the pdf from s3 and update the case if the docketEntry has a file attached', async () => {
@@ -135,9 +134,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().deleteDocumentFile,
     ).toHaveBeenCalled();
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(updateCase).toHaveBeenCalled();
   });
 
   it('should set the docketEntry isFileAttached flag to false', async () => {
@@ -173,9 +170,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().deleteDocumentFile,
     ).not.toHaveBeenCalled();
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).not.toHaveBeenCalled();
+    expect(updateCase).not.toHaveBeenCalled();
   });
 
   it('does not modify the docketEntry or case if the docketEntry can not be found on the case', async () => {
@@ -192,9 +187,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().deleteDocumentFile,
     ).not.toHaveBeenCalled();
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).not.toHaveBeenCalled();
+    expect(updateCase).not.toHaveBeenCalled();
   });
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
     mockLock = MOCK_LOCK;
@@ -210,9 +203,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {
