@@ -12,7 +12,10 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../entities/User';
-import { filterCaseSearchResultsNotAccessibleToUser } from '../utilities/caseFilter';
+import {
+  filterCaseSearchResultsNotAccessibleToUser,
+  formatSealedAddresses,
+} from '../utilities/caseFilter';
 import { omit } from 'lodash';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
@@ -79,7 +82,9 @@ export const orderAdvancedSearchInteractor = async (
   const filteredResults = filterCaseSearchResultsNotAccessibleToUser(
     results,
     authorizedUser,
-  ).slice(0, MAX_SEARCH_RESULTS);
+  )
+    .slice(0, MAX_SEARCH_RESULTS)
+    .map(c => formatSealedAddresses(c, authorizedUser));
 
   return InternalDocumentSearchResult.validateRawCollection(filteredResults);
 };
