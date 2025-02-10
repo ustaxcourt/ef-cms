@@ -1,18 +1,22 @@
+import { sequences } from '@web-client/presenter/app.cerebral';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 
 export const AsyncServiceUnavailableModal = connect(
-  {},
-  function AsyncServiceUnavailableModal() {
+  {
+    clearModalSequence: sequences.clearModalSequence,
+  },
+  function AsyncServiceUnavailableModal({ clearModalSequence }) {
     return (
       <ModalDialog
-        className="app-maintenance-modal text-center"
-        closeLink={false}
-        confirmLabel="Yes!"
+        closeLink
         showButtons={false}
         title="Test"
-      ></ModalDialog>
+        message="Message"
+        cancelSequence={clearModalSequence}
+        confirmSequence={clearModalSequence}
+      />
     );
   },
 );
