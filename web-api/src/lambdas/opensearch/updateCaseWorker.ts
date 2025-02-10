@@ -6,6 +6,8 @@ import {
   IDynamoDBRecord,
 } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import { OpensearchWorkerMessage } from '@web-api/gateways/opensearch/opensearchWorkerRouter';
+import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
+import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
 import { getPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/getPetitionersOnCase';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { flattenDeep, isArray } from 'lodash';
@@ -19,6 +21,17 @@ export const opensearchUpdateCaseWorker = async ({
     ? message.payload
     : [message.payload]) {
     const petitionersOnCase = await getPetitionersOnCase({
+      docketNumber: caseRecord.docketNumber,
+    });
+
+    // Although we do not search by practitioner, we need this info stored to check permissions on searches
+    const privatePractitioners = await getPrivatePractitionersOnCase({
+      applicationContext,
+      docketNumber: caseRecord.docketNumber,
+    });
+
+    const irsPractitioners = await getIrsPractitionersOnCase({
+      applicationContext,
       docketNumber: caseRecord.docketNumber,
     });
 
@@ -36,6 +49,8 @@ export const opensearchUpdateCaseWorker = async ({
       isSealed: caseRecord.isSealed,
       petitioners: petitionersOnCase || [],
       receivedAt: caseRecord.receivedAt.toISOString(),
+      privatePractitioners,
+      irsPractitioners,
     });
 
     const caseRecords: IDynamoDBRecord[] = [];

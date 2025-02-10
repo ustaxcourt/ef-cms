@@ -1,7 +1,8 @@
 import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
-import { query } from '../../dynamodbClientService';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
+import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
 
 export const getCaseMetadataWithCounsel = async ({
   applicationContext,
@@ -16,30 +17,14 @@ export const getCaseMetadataWithCounsel = async ({
     return undefined;
   }
 
-  const privatePractitioners = await query({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-      '#sk': 'sk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `case|${docketNumber}`,
-      ':prefix': 'privatePractitioner',
-    },
-    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+  const privatePractitioners = await getPrivatePractitionersOnCase({
     applicationContext,
+    docketNumber,
   });
 
-  const irsPractitioners = await query({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-      '#sk': 'sk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `case|${docketNumber}`,
-      ':prefix': 'irsPractitioner',
-    },
-    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+  const irsPractitioners = await getIrsPractitionersOnCase({
     applicationContext,
+    docketNumber,
   });
 
   return transformNullToUndefined({
