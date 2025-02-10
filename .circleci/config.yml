@@ -187,6 +187,12 @@ jobs:
           command: |
             ./web-client/deploy-public.sh
       - run:
+          name: 'Deploy - Inactive Cases Email Lambda and Monthly Cron Trigger'
+          command: |
+            if [ -n "$INACTIVITY_REPORT_RECIPIENTS" ]; then
+              npm run deploy:stale-cases-email-cron -- $ENV
+            fi
+      - run:
           name: 'Deploy - Authorizer Smoke Tests'
           command: |
             npm run verify-authorizers -- $ENV

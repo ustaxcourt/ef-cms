@@ -1,6 +1,6 @@
 # Backend
 
-The backend of our project consists of a REST api used by the private UI, public UI, and various AWS Labda functions for processing data.  This document is written to help outline the backend architecture and how it is used.
+The backend of our project consists of a REST api used by the private UI, public UI, and various AWS Lambda functions for processing data.  This document is written to help outline the backend architecture and how it is used.
 
 ## Project Structure
 
