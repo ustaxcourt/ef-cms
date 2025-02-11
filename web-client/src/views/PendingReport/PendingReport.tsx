@@ -24,7 +24,7 @@ export const PendingReport = connect<
     hasPendingItemsResults,
     pendingReportHelper,
   }) {
-    const { printUrl } = pendingReportHelper;
+    const { printUrl, pendingItems } = pendingReportHelper;
     const [isSubmitDebounced, setIsSubmitDebounced] = useState(false);
 
     const debounceSubmit = timeout => {
@@ -79,7 +79,7 @@ export const PendingReport = connect<
           </div>
 
           <div className="margin-top-5">
-            <PendingReportList />
+            <PendingReportList pendingItems={pendingItems} />
           </div>
         </section>
       </>
