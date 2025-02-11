@@ -45,7 +45,7 @@ export const RespondentsFieldset = ({
                   id={`respondent-${rowIndex}"`}
                   aria-label={`respondent-${rowIndex}"`}
                   isClearable={true}
-                  name={`respondent-${rowIndex}"`}
+                  name={`respondent-selectable-${rowIndex}"`}
                   options={formOptions}
                   value={{
                     label: respondentsFormState.respondents[row.renderKey].name,
@@ -115,6 +115,7 @@ export const RespondentsFieldset = ({
       <div className="grid-row align-items-center margin-bottom-1">
         <Button
           link
+          data-testid="add-respondent-button"
           className="padding-0 margin-top-1"
           icon="plus"
           onClick={e => {

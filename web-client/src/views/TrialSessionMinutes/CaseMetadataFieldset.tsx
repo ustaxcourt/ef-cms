@@ -33,6 +33,7 @@ export const CaseMetadataFieldset = ({
         <div className="grid-col-auto">
           <DateSelector
             formatDateOnChange
+            data-testid="calledDate"
             defaultValue={caseMetadataFormState.called.date}
             formGroupClassNames="margin-bottom-0"
             id="calledDate"
@@ -62,6 +63,7 @@ export const CaseMetadataFieldset = ({
             <input
               className="usa-input display-inline-block maxw-full"
               id="calledNote"
+              data-testid="calledNote"
               name="calledNote"
               type="text"
               value={caseMetadataFormState.called.note}
@@ -86,6 +88,7 @@ export const CaseMetadataFieldset = ({
                 aria-describedby="representing-legend"
                 checked={caseMetadataFormState.called.transcriptOrdered}
                 className="usa-checkbox__input"
+                data-testid="calledTranscriptOrdered"
                 id="calledTranscriptOrdered"
                 name="calledTranscriptOrdered"
                 type="checkbox"
