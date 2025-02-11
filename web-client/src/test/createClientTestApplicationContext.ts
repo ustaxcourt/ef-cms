@@ -81,7 +81,7 @@ import { getItem } from '@web-client/persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
 import { getSelectedConsolidatedCasesToMultiDocketOn } from '@shared/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
 import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
-import { getTextByCount } from '@shared/business/utilities/getTextByCount';
+import { getTextByCount } from '@shared/test/getTextByCount';
 import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 import { getUserById as getUserByIdPersistence } from '@web-api/persistence/dynamo/users/getUserById';
 import { incrementCounter } from '@web-api/persistence/dynamo/helpers/incrementCounter';

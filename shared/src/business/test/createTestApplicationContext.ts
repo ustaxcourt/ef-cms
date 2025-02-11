@@ -92,7 +92,7 @@ import { getFormattedPartiesNameAndTitle } from '@shared/business/utilities/getF
 import { getItem } from '@web-client/persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
 import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
-import { getTextByCount } from '@shared/business/utilities/getTextByCount';
+import { getTextByCount } from '@shared/test/getTextByCount';
 import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 import { getUserById as getUserByIdPersistence } from '@web-api/persistence/dynamo/users/getUserById';
 import { getUserIdForNote } from '@web-api/business/useCaseHelper/getUserIdForNote';

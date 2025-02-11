@@ -20,4 +20,11 @@ describe('calculateDaysElapsedSinceLastStatusChange', () => {
       statusDate: '07/27/18',
     });
   });
+
+  it('should properly handle blank statusDate', () => {
+    expect(calculateDaysElapsedSinceLastStatusChange('')).toMatchObject({
+      daysElapsedSinceLastStatusChange: 0,
+      statusDate: '',
+    });
+  });
 });
