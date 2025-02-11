@@ -21,6 +21,7 @@ import {
   DOCUMENT_SERVED_MESSAGES,
   DOCUMENT_RELATIONSHIPS,
 } from '@shared/business/entities/EntityConstants';
+import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
@@ -283,8 +284,7 @@ const serveDocketEntry = async ({
 
     caseEntitiesToFileOn = await Promise.all(
       caseEntitiesToFileOn.map(aCase =>
-        applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase({
-          applicationContext,
+        fileAndServeDocumentOnOneCase({
           caseEntity: aCase,
           docketEntryEntity: new DocketEntry(cloneDeep(updatedDocketEntry), {
             authorizedUser,

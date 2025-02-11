@@ -1,4 +1,6 @@
 import {
+  CASE_AUTOMATIC_BLOCKED_RULE,
+  CASE_BLOCKED_RULE,
   CASE_CAPTION_RULE,
   CASE_DOCKET_NUMBER_RULE,
   CASE_DOCKET_NUMBER_WITH_SUFFIX_RULE,
@@ -24,6 +26,8 @@ export class ConsolidatedCaseSummary extends JoiValidationEntity {
   public privatePractitioners: object[];
   public sortableDocketNumber: number;
   public status: CaseStatus;
+  public blocked?: boolean;
+  public automaticBlocked?: boolean;
 
   constructor(rawCase: any) {
     super('ConsolidatedCaseSummary');
@@ -38,9 +42,13 @@ export class ConsolidatedCaseSummary extends JoiValidationEntity {
     this.privatePractitioners = rawCase.privatePractitioners || [];
     this.sortableDocketNumber = rawCase.sortableDocketNumber;
     this.status = rawCase.status;
+    this.blocked = rawCase.blocked;
+    this.automaticBlocked = rawCase.automaticBlocked;
   }
 
   static VALIDATION_RULES = {
+    automaticBlocked: CASE_AUTOMATIC_BLOCKED_RULE,
+    blocked: CASE_BLOCKED_RULE,
     caseCaption: CASE_CAPTION_RULE,
     docketNumber: CASE_DOCKET_NUMBER_RULE,
     docketNumberWithSuffix: CASE_DOCKET_NUMBER_WITH_SUFFIX_RULE,

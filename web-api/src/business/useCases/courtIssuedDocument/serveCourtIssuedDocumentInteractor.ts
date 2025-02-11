@@ -13,6 +13,7 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { DOCUMENT_SERVED_MESSAGES } from '@shared/business/entities/EntityConstants';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 export const serveCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
@@ -133,15 +134,12 @@ export const serveCourtIssuedDocument = async (
           },
         );
 
-        return applicationContext
-          .getUseCaseHelpers()
-          .fileAndServeDocumentOnOneCase({
-            applicationContext,
-            caseEntity,
-            docketEntryEntity,
-            subjectCaseDocketNumber,
-            user,
-          });
+        return fileAndServeDocumentOnOneCase({
+          caseEntity,
+          docketEntryEntity,
+          subjectCaseDocketNumber,
+          user,
+        });
       }),
     );
 
