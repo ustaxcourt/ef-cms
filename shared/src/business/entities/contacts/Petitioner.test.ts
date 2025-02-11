@@ -2,9 +2,9 @@ import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
-} from '../EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { Petitioner } from './Petitioner';
-import { getTextByCount } from '../../utilities/getTextByCount';
+import { getTextByCount } from '@shared/business/utilities/getTextByCount';
 
 describe('Petitioner', () => {
   const mockValidPetitioner = {
@@ -106,7 +106,7 @@ describe('Petitioner', () => {
 
       const entity = new Petitioner({
         ...mockValidPetitioner,
-        hasConsentedToEService: mockHasConsentedToEService,
+        hasConsentedToEervice: mockHasConsentedToEService,
       });
 
       expect(entity.hasConsentedToEService).toEqual(mockHasConsentedToEService);
