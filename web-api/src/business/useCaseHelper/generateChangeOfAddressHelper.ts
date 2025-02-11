@@ -3,7 +3,7 @@ import { Case } from '@shared/business/entities/cases/Case';
 import {
   Practitioner,
   RawPractitioner,
-} from '../../../../shared/src/business/entities/Practitioner';
+} from '@shared/business/entities/Practitioner';
 import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
@@ -57,7 +57,7 @@ export const generateChangeOfAddressHelper = async ({
       applicationContext,
       docketNumber,
     });
-    let caseEntity = new Case(userCase, {
+    const caseEntity = new Case(userCase, {
       authorizedUser,
     });
 
