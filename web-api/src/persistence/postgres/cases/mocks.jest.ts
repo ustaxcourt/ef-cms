@@ -71,6 +71,11 @@ jest.mock(
   () => mockFactory('upsertPetitionersOnCase'),
 );
 
+jest.mock(
+  '@web-api/persistence/postgres/cases/parties/getPetitionersOnCase',
+  () => mockFactory('getPetitionersOnCase'),
+);
+
 // Reports
 
 jest.mock('@web-api/persistence/postgres/cases/reports/fetchPendingItems', () =>
