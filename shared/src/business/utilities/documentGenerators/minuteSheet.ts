@@ -7,6 +7,7 @@ import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/genera
 import { FormattedMinuteSheet } from '@web-api/business/useCaseHelper/trialSessionMinutes/formatMinuteSheet';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
+import { generatePdfFromHtmlInteractor } from '@web-api/business/useCases/pdf/generatePdfFromHtmlInteractor';
 
 export const minuteSheet = async ({
   applicationContext,
@@ -46,14 +47,12 @@ export const minuteSheet = async ({
     content: minuteSheetComponent,
   });
 
-  const pdf = await applicationContext
-    .getUseCases()
-    .generatePdfFromHtmlInteractor(applicationContext, {
-      contentHtml: pdfContentHtml,
-      displayHeaderFooter: true,
-      footerHtml,
-      headerHtml,
-    });
+  const pdf = await generatePdfFromHtmlInteractor(applicationContext, {
+    contentHtml: pdfContentHtml,
+    displayHeaderFooter: true,
+    footerHtml,
+    headerHtml,
+  });
 
   return pdf;
 };

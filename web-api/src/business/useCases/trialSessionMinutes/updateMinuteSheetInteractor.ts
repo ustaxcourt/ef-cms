@@ -17,7 +17,7 @@ export const updateMinuteSheetInteractor = async (
 
   const updatedMinuteSheet = await upsertMinuteSheet({
     minuteSheetToUpsert: {
-      content: JSON.stringify(minuteSheet),
+      content: minuteSheet,
       docketNumber,
       trialSessionId,
     },
