@@ -27,29 +27,25 @@ describe('getCalendaredCasesForTrialSession', () => {
       ],
     });
 
-    getCaseByDocketNumber.mockReturnValue([
-      {
-        docketNumber: MOCK_CASE.docketNumber,
-        pk: `case|${MOCK_CASE.docketNumber}`,
-        sk: `case|${MOCK_CASE.docketNumber}`,
-        status: 'New',
-      },
-      {
-        pk: `case|${MOCK_CASE.docketNumber}`,
-        sk: 'irsPractitioner|123',
-        userId: 'abc-123',
-      },
-      {
-        pk: `case|${MOCK_CASE.docketNumber}`,
-        sk: 'privatePractitioner|123',
-        userId: 'abc-123',
-      },
-      {
-        docketEntryId: 'abc-123',
-        pk: `case|${MOCK_CASE.docketNumber}`,
-        sk: 'docket-entry|123',
-      },
-    ]);
+    getCaseByDocketNumber.mockReturnValue({
+      docketEntries: [
+        {
+          docketEntryId: 'abc-123',
+        },
+      ],
+      docketNumber: MOCK_CASE.docketNumber,
+      irsPractitioners: [
+        {
+          userId: 'abc-123',
+        },
+      ],
+      privatePractitioners: [
+        {
+          userId: 'abc-123',
+        },
+      ],
+      status: CASE_STATUS_TYPES.new,
+    });
   });
 
   it('should get the cases calendared for a trial session', async () => {
@@ -57,12 +53,9 @@ describe('getCalendaredCasesForTrialSession', () => {
       applicationContext,
       trialSessionId: 'testId111',
     });
+
     expect(result).toEqual([
       {
-        archivedCorrespondences: [],
-        archivedDocketEntries: [],
-        consolidatedCases: [],
-        correspondence: [],
         disposition: 'something',
         docketEntries: [
           {
@@ -70,7 +63,6 @@ describe('getCalendaredCasesForTrialSession', () => {
           },
         ],
         docketNumber: MOCK_CASE.docketNumber,
-        hearings: [],
         irsPractitioners: [
           {
             userId: 'abc-123',

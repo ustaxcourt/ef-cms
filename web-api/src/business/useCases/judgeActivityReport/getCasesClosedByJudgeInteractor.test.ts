@@ -50,18 +50,13 @@ describe('getCasesClosedByJudgeInteractor', () => {
 
   it('should return an error when the user is not authorized to generate the report', async () => {
     await expect(
-      getCasesClosedByJudgeInteractor(
-        applicationContext,
-        mockValidRequest,
-        mockPetitionsClerkUser,
-      ),
+      getCasesClosedByJudgeInteractor(mockValidRequest, mockPetitionsClerkUser),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should return an error when the search parameters are not valid', async () => {
     await expect(
       getCasesClosedByJudgeInteractor(
-        applicationContext,
         {
           endDate: 'baddabingbaddaboom',
           judges: [judgeUser.name],
@@ -74,7 +69,6 @@ describe('getCasesClosedByJudgeInteractor', () => {
 
   it('should return cases closed count organized by each closed status for selected judges', async () => {
     const closedCases = await getCasesClosedByJudgeInteractor(
-      applicationContext,
       mockValidRequest,
       mockJudgeUser,
     );

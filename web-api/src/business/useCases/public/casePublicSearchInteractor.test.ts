@@ -1,15 +1,18 @@
+jest.mock('@web-api/persistence/elasticsearch/casePublicSearch', () => ({
+  casePublicSearch: jest.fn(),
+}));
+
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import { CaseAdvancedSearchTerms } from '@web-api/persistence/elasticsearch/caseAdvancedSearch';
 import { casePublicSearchInteractor } from '@web-api/business/useCases/public/casePublicSearchInteractor';
 import { casePublicSearch as casePublicSearchMock } from '@web-api/persistence/elasticsearch/casePublicSearch';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+
+const casePublicSearch = casePublicSearchMock as jest.Mock;
+casePublicSearch.mockResolvedValue([]);
 
 describe('casePublicSearchInteractor', () => {
-  const casePublicSearch = casePublicSearchMock as jest.Mock;
-
   it('make a public case search request with formatted dates', async () => {
-    casePublicSearch.mockResolvedValue([]);
-
-    const requestParams: CaseAdvancedSearchTerms = {
+    const requestParams = {
       countryType: 'domestic',
       endDate: '12/20/2023',
       petitionerName: 'test person',
@@ -17,9 +20,10 @@ describe('casePublicSearchInteractor', () => {
       startDate: '01/01/2001',
     };
 
-    await casePublicSearchInteractor(requestParams as any);
+    await casePublicSearchInteractor(applicationContext, requestParams as any);
 
     expect(casePublicSearch).toHaveBeenCalledWith({
+      applicationContext,
       searchTerms: {
         ...requestParams,
         endDate: '2023-12-21T04:59:59.999Z',
