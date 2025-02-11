@@ -9,6 +9,7 @@ import { todaysOpinionsRoute } from 'web-client-public/src/routes/todays-opinion
 import { rootRoute } from 'web-client-public/src/routes/PublicRoot';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { publicDefaultLayoutRoute } from 'web-client-public/src/routes/_default-layout/_defaultLayoutComponent';
+import { publicTrialSessionsRoute } from 'web-client-public/src/routes/trial-sessions/PublicTrialSessions';
 
 const catchAllRouteInFile = createRoute({
   getParentRoute: () => rootRoute,
@@ -16,11 +17,14 @@ const catchAllRouteInFile = createRoute({
 }).lazy(() => import('@web-client/appPublic').then(app => app.catchAllRoute));
 
 const routeTree = rootRoute.addChildren([
-  publicDefaultLayoutRoute.addChildren([todaysOpinionsRoute]),
+  publicDefaultLayoutRoute.addChildren([
+    todaysOpinionsRoute,
+    publicTrialSessionsRoute,
+  ]),
   catchAllRouteInFile,
 ]);
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient(); // Need to modify default behavior of retrying failed requests
 
 const router = createRouter({
   defaultPreload: 'intent',
