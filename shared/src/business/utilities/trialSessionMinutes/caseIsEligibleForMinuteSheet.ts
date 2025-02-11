@@ -12,38 +12,47 @@ export const caseIsEligibleForMinuteSheet = (
   aCase: RawCase & TCaseOrder,
   trialSession: RawTrialSession,
 ): boolean => {
-  let isInConsolidatedGroup = false;
-  let isCaseLeadCase = false;
-  if (aCase.leadDocketNumber) {
-    isCaseLeadCase = isLeadCase(aCase);
-    isInConsolidatedGroup = true;
+  if (!trialSession.isCalendared) {
+    return false;
   }
 
-  if (
-    trialSession.isCalendared &&
-    !isClosed(aCase) &&
-    (isCaseLeadCase || !isInConsolidatedGroup)
-  ) {
-    if (trialSession.startTime) {
-      const trialSessionStartDateTime = combineISOandEasternTime(
-        trialSession.startDate,
-        trialSession.startTime,
-      );
+  if (isClosed(aCase)) {
+    return false;
+  }
 
-      const caseWasRemovedFromTrialBeforeTrialStartDate =
-        !!aCase.removedFromTrialDate &&
-        dateStringsCompared(
-          trialSessionStartDateTime,
-          aCase.removedFromTrialDate,
-        ) > 0;
+  if (!isEligibleConsolidatedCase(aCase)) {
+    return false;
+  }
 
-      if (caseWasRemovedFromTrialBeforeTrialStartDate) {
-        return false;
-      }
-    }
+  if (wasRemovedBeforeTrialStart(aCase, trialSession)) {
+    return false;
+  }
 
+  return true;
+};
+
+const isEligibleConsolidatedCase = (aCase: RawCase & TCaseOrder): boolean => {
+  if (!aCase.leadDocketNumber) {
     return true;
   }
+  return isLeadCase(aCase);
+};
 
-  return false;
+const wasRemovedBeforeTrialStart = (
+  aCase: RawCase & TCaseOrder,
+  trialSession: RawTrialSession,
+): boolean => {
+  if (!trialSession.startTime || !aCase.removedFromTrialDate) {
+    return false;
+  }
+
+  const trialSessionStartDateTime = combineISOandEasternTime(
+    trialSession.startDate,
+    trialSession.startTime,
+  );
+
+  return (
+    dateStringsCompared(trialSessionStartDateTime, aCase.removedFromTrialDate) >
+    0
+  );
 };
