@@ -104,10 +104,6 @@ export const generateTrialSessionMinutesPdfInteractor = async (
     key: docketEntryId,
   });
 
-  // 10419 TODO consider creating an "attachAsDraft" function?
-  // found myself thinking that would've been super nice to have rather than
-  // trying to sus out all that needs to happen for a document to show up properly
-  // as a draft.
   const documentMetadata = {
     docketNumber,
     documentTitle,
