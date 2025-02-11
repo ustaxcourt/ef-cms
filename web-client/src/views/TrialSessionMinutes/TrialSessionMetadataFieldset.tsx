@@ -62,6 +62,7 @@ export const TrialSessionMetadataFieldset = ({
               <input
                 className="usa-input grid-col-10"
                 id="courtReporter"
+                data-testid="courtReporter"
                 name="courtReporter"
                 style={{ maxWidth: 'none', width: '100%' }}
                 type="text"
@@ -111,6 +112,7 @@ export const TrialSessionMetadataFieldset = ({
                 aria-describedby="representing-legend"
                 checked={trialSessionMetadataFormState.remoteSession}
                 className="usa-checkbox__input"
+                data-testid="remoteSession"
                 id="remoteSession"
                 name="remoteSession"
                 type="checkbox"
