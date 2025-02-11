@@ -11,9 +11,10 @@ export const AsyncServiceUnavailableModal = connect(
     return (
       <ModalDialog
         closeLink
-        showButtons={false}
-        title="Test"
-        message="Message"
+        showButtons={true}
+        confirmLabel="Close"
+        title="Unable to Complete Action"
+        message="This Docket Entry, Trial Session or Case is currently being modified. Please try again later. This can take up to 15 minutes."
         cancelSequence={clearModalSequence}
         confirmSequence={clearModalSequence}
       />
