@@ -2,14 +2,12 @@ import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import {
   MOCK_PRACTITIONER,
-  admissionsClerkUser,
 } from '../../../../../shared/src/test/mockUsers';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
-  handleLockError,
   updatePractitionerUserInteractor,
 } from './updatePractitionerUserInteractor';
 import { mockAdmissionsClerkUser } from '@shared/test/mockAuthUsers';
@@ -47,42 +45,13 @@ describe('determineEntitiesToLock', () => {
   });
 });
 
-describe('handleLockError', () => {
-  const mockClientConnectionId = '987654';
-
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(admissionsClerkUser);
-  });
-
-  it('should send a notification to the user with "retry_async_request" and the originalRequest', async () => {
-    const mockOriginalRequest = {
-      clientConnectionId: mockClientConnectionId,
-      foo: 'bar',
-    };
-    await handleLockError(
-      applicationContext,
-      mockOriginalRequest,
-      mockAdmissionsClerkUser,
-    );
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message,
-    ).toMatchObject({
-      action: 'retry_async_request',
-      originalRequest: mockOriginalRequest,
-      requestToRetry: 'update_practitioner_user',
-    });
-  });
-});
-
 describe('updatePractitionerUserInteractor', () => {
   let mockLock;
   const mockRequest = {
     barNumber: 'ab1234',
     bypassDocketEntry: false,
     user: MOCK_PRACTITIONER,
+    clientConnectionId: 'TEST_CLIENT_CONNECTION_ID',
   };
 
   beforeAll(() => {
@@ -124,32 +93,6 @@ describe('updatePractitionerUserInteractor', () => {
           mockAdmissionsClerkUser,
         ),
       ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('should return a "retry_async_request" notification with the original request', async () => {
-      await expect(
-        updatePractitionerUserInteractor(
-          applicationContext,
-          mockRequest,
-          mockAdmissionsClerkUser,
-        ),
-      ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getNotificationGateway().sendNotificationToUser,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        message: {
-          action: 'retry_async_request',
-          originalRequest: mockRequest,
-          requestToRetry: 'update_practitioner_user',
-        },
-        userId: mockAdmissionsClerkUser.userId,
-      });
 
       expect(
         applicationContext.getPersistenceGateway().getCaseByDocketNumber,
