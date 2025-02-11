@@ -2,11 +2,13 @@ import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { Judge } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 
+type JudgeOptions = Record<string, Judge>;
+
 export const trialSessionMinutesFormOptionsHelper = (
   get: Get,
 ): {
   filteredIrsPractitionerOptions: { label: string; value: string }[];
-  judgeOptions: Record<string, Judge>;
+  judgeOptions: JudgeOptions;
 } => {
   const irsPractitionerOptions = get(
     state.minuteSheetForm.options.irsPractitionerOptions,

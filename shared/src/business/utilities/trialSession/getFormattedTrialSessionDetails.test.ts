@@ -8,7 +8,10 @@ import {
   getFormattedTrialSessionDetails,
 } from './getFormattedTrialSessionDetails';
 import { omit } from 'lodash';
-import { mockTrialClerkUser } from '@shared/test/mockAuthUsers';
+import {
+  mockTrialClerkUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getFormattedTrialSessionDetails', () => {
   let TRIAL_SESSION: TrialSessionState;
@@ -489,6 +492,79 @@ describe('getFormattedTrialSessionDetails', () => {
 
     expect(result.openCases[0].displayMinuteSheetFormButton).toBeTruthy();
     expect(result.openCases[0].minuteSheetRoute).toBeDefined();
+  });
+
+  describe('minute sheet button display logic', () => {
+    beforeEach(() => {
+      mockCase = {
+        ...MOCK_CASE,
+        removedFromTrial: false,
+      };
+    });
+
+    it('should not display minute sheet button when user does not have MANAGE_MINUTE_SHEET permission and case is eligible', () => {
+      const result = getFormattedTrialSessionDetails({
+        applicationContext,
+        currentUser: mockPetitionsClerkUser,
+        trialSession: {
+          ...TRIAL_SESSION,
+          calendaredCases: [mockCase],
+          isCalendared: true,
+        },
+      });
+
+      expect(result.openCases[0].displayMinuteSheetFormButton).toBeFalsy();
+      expect(result.openCases[0].minuteSheetRoute).toBeUndefined();
+    });
+
+    it('should not display minute sheet button when user has permission but case is not eligible', () => {
+      const result = getFormattedTrialSessionDetails({
+        applicationContext,
+        currentUser: mockTrialClerkUser,
+        trialSession: {
+          ...TRIAL_SESSION,
+          calendaredCases: [{ ...mockCase, status: 'Closed' }],
+          isCalendared: true,
+        },
+      });
+
+      expect(result.openCases[0].displayMinuteSheetFormButton).toBeFalsy();
+      expect(result.openCases[0].minuteSheetRoute).toBeUndefined();
+    });
+
+    it('should display minute sheet button and correct route when user has permission and case is eligible', () => {
+      const result = getFormattedTrialSessionDetails({
+        applicationContext,
+        currentUser: mockTrialClerkUser,
+        trialSession: {
+          ...TRIAL_SESSION,
+          calendaredCases: [mockCase],
+          isCalendared: true,
+        },
+      });
+
+      expect(result.openCases[0].displayMinuteSheetFormButton).toBeTruthy();
+      expect(result.openCases[0].minuteSheetRoute).toBe(
+        `/trial-session-detail/${TRIAL_SESSION.trialSessionId}/case/${mockCase.docketNumber}/minutes`,
+      );
+    });
+
+    it('should set minute sheet properties for inactive cases as well', () => {
+      const result = getFormattedTrialSessionDetails({
+        applicationContext,
+        currentUser: mockTrialClerkUser,
+        trialSession: {
+          ...TRIAL_SESSION,
+          calendaredCases: [{ ...mockCase, removedFromTrial: true }],
+          isCalendared: true,
+        },
+      });
+
+      expect(result.inactiveCases[0].displayMinuteSheetFormButton).toBeTruthy();
+      expect(result.inactiveCases[0].minuteSheetRoute).toBe(
+        `/trial-session-detail/${TRIAL_SESSION.trialSessionId}/case/${mockCase.docketNumber}/minutes`,
+      );
+    });
   });
 });
 
