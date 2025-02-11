@@ -9,7 +9,7 @@ import {
   createApplicationContext,
 } from '@web-api/applicationContext';
 import { generateCsv } from '../helpers/generate-csv';
-import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 import PQueue from 'p-queue';
 
