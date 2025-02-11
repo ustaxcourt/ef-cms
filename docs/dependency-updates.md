@@ -37,7 +37,7 @@ note: we have 3 package.json files, be sure to update them all
       - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
       - Change the version in `scripts/verify-terraform-version.sh`
     - `aws-cli`: check for a newer version on [AWS CLI](https://github.com/aws/aws-cli/tags) and use the latest version you can find for 2.x, replace it in the DockerFile
-    - `docker cypress/base image`: [Check DockerHub](https://hub.docker.com/r/cypress/browsers/tags?page=1&name=node-22) if an update is available for the current node version the project is using.
+    - `docker cypress/base image`: [Check DockerHub](https://hub.docker.com/r/cypress/browsers/tags?page=1&name=node-22) if an update is available for the current node version the project is using. **Note**: If a Node version upgrade is required, be sure to update the `.nvmrc` file in repository's root directory, in addition to the Dockerfile, with the new Node version.
 
    To publish a new ECR docker image:
 
