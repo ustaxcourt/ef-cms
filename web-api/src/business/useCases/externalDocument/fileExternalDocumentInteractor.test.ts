@@ -23,6 +23,8 @@ import {
   mockIrsPractitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 const getCaseDeadlinesByDocketNumber =
   getCaseDeadlinesByDocketNumberMock as jest.Mock;
@@ -30,6 +32,9 @@ const getCaseDeadlinesByDocketNumber =
 describe('fileExternalDocumentInteractor', () => {
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const mockDocketEntryId = applicationContext.getUniqueId();
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCase = updateCaseMock as jest.Mock;
+  updateCase.mockImplementation(c => c.caseToUpdate);
 
   let caseRecord;
   let mockLock;
@@ -118,9 +123,7 @@ describe('fileExternalDocumentInteractor', () => {
       .getPersistenceGateway()
       .getUserById.mockReturnValue(mockIrsPractitionerUser);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(caseRecord);
+    getCaseByDocketNumber.mockResolvedValue(caseRecord);
   });
 
   it('should throw an error when the user is not authorized to file an external document on a case', async () => {
@@ -160,13 +163,9 @@ describe('fileExternalDocumentInteractor', () => {
       ),
     ).rejects.toThrow('The DocketEntry entity was invalid.');
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(upsertWorkItems).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).not.toHaveBeenCalled();
+    expect(updateCase).not.toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).not.toHaveBeenCalled();
@@ -188,13 +187,9 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(updateCase).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
@@ -304,13 +299,9 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalledTimes(5);
+    expect(getCaseByDocketNumber).toHaveBeenCalledTimes(5);
     expect(upsertWorkItems).toHaveBeenCalledTimes(1);
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalledTimes(2);
+    expect(updateCase).toHaveBeenCalledTimes(2);
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).toHaveBeenCalledTimes(2);
@@ -364,9 +355,7 @@ describe('fileExternalDocumentInteractor', () => {
       },
       mockIrsPractitionerUser,
     );
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(updateCase).toHaveBeenCalled();
     expect(updatedCase!.docketEntries).toMatchObject([
       {}, // first 4 docs were already on the case
       {},
@@ -413,13 +402,9 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(updateCase).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).not.toHaveBeenCalled();
@@ -496,10 +481,7 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate,
-    ).toMatchObject({
+    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
@@ -533,10 +515,7 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate,
-    ).toMatchObject({
+    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,

@@ -8,14 +8,20 @@ import {
   ServiceUnavailableError,
   UnauthorizedError,
 } from '@web-api/errors/errors';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { getContactPrimary } from '../../../../../shared/src/business/entities/cases/Case';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { getContactPrimary } from '@shared/business/entities/cases/Case';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateDocketEntryMetaInteractor } from './updateDocketEntryMetaInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 describe('updateDocketEntryMetaInteractor', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCase = updateCaseMock as jest.Mock;
+  updateCase.mockImplementation(c => c.caseToUpdate);
+
   let mockDocketEntries;
 
   const mockUserId = 'c99dfb85-867d-436b-8b12-1fcb547d490a';
@@ -124,12 +130,10 @@ describe('updateDocketEntryMetaInteractor', () => {
         judge: 'Buch',
       },
     ];
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        docketEntries: mockDocketEntries,
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      docketEntries: mockDocketEntries,
+    });
 
     applicationContext
       .getUseCases()
@@ -166,9 +170,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {
@@ -211,9 +213,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should throw a Not Found error if the case does not exist', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(undefined);
+    getCaseByDocketNumber.mockResolvedValue(undefined);
     await expect(
       updateDocketEntryMetaInteractor(
         applicationContext,
@@ -293,9 +293,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
   });
 
   it('should update editable fields including action, documentTitle, filedBy, filingDate, servedAt, hasOtherFilingParty, and otherFilingParty', async () => {
@@ -581,9 +579,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(updateCase).toHaveBeenCalled();
   });
 
   it('should not throw an error when a null certificate of service date is passed for a docket entry without an associated document', async () => {
