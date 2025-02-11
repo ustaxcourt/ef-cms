@@ -13,6 +13,7 @@ import { setIrsPractitionersForMinuteSheetAction } from '@web-client/presenter/a
 import { setTrialSessionDetailsAction } from '../../actions/TrialSession/setTrialSessionDetailsAction';
 import { setTrialSessionIdAction } from '../../actions/TrialSession/setTrialSessionIdAction';
 import { setupCurrentPageAction } from '../../actions/setupCurrentPageAction';
+import { isEligibleForMinuteSheetAction } from '@web-client/presenter/actions/TrialSessionMinutes/isEligibleForMinuteSheetAction';
 
 export const goToTrialSessionMinutesSequence = [
   setupCurrentPageAction('Interstitial'),
@@ -21,17 +22,23 @@ export const goToTrialSessionMinutesSequence = [
     [getTrialSessionDetailsAction, setTrialSessionDetailsAction],
     [getCaseAction, setCaseAction],
   ]),
-  fetchCurrentJudgesAsOptionsForMinuteSheetAction,
-  clearMinuteSheetFormStateAction,
-  checkForExistingMinuteSheetAction,
+  isEligibleForMinuteSheetAction,
   {
-    no: [initializeTrialSessionMinuteSheetFormAction],
-    yes: [setExistingMinuteSheetFormAction],
+    no: [({ router }) => router.route('/trial-sessions')],
+    yes: [
+      fetchCurrentJudgesAsOptionsForMinuteSheetAction,
+      clearMinuteSheetFormStateAction,
+      checkForExistingMinuteSheetAction,
+      {
+        no: [initializeTrialSessionMinuteSheetFormAction],
+        yes: [setExistingMinuteSheetFormAction],
+      },
+      getIrsPractitionerUsersAction,
+      setIrsPractitionersForMinuteSheetAction,
+      saveMinuteSheetFormSnapshotAction,
+      setupCurrentPageAction('TrialSessionMinutesPage'),
+    ],
   },
-  getIrsPractitionerUsersAction,
-  setIrsPractitionersForMinuteSheetAction,
-  saveMinuteSheetFormSnapshotAction,
-  setupCurrentPageAction('TrialSessionMinutesPage'),
 ] as unknown as ({
   docketNumber,
   trialSessionId,
