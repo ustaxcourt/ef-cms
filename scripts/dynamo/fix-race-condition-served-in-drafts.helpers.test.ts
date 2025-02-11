@@ -13,10 +13,14 @@ import {
 } from './fix-race-condition-served-in-drafts.helpers';
 import { marshall } from '@aws-sdk/util-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { MOCK_CASE } from '@shared/test/mockCase';
 
 const mockedDDBClient = mockClient(DynamoDBClient);
 const mockedItem = MOCK_DOCUMENTS[0];
 const mockedMarshalledItem = marshall(mockedItem);
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 
 describe('getDocumentFromDynamo', () => {
   beforeEach(() => {
@@ -94,9 +98,7 @@ describe('fixRaceConditionServedInDrafts', () => {
 
   it('looks up the subject case for the specified docketNumber', async () => {
     await fixRaceConditionServedInDrafts(applicationContext, mockCall);
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalledWith({
+    expect(getCaseByDocketNumber).toHaveBeenCalledWith({
       applicationContext,
       docketNumber: mockedItem.docketNumber,
     });

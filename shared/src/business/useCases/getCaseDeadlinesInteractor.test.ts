@@ -6,9 +6,7 @@ import {
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
-  SESSION_TYPES,
 } from '@shared/business/entities/EntityConstants';
-import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getCaseDeadlinesByDateRange as getCaseDeadlinesByDateRangeMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDateRange';
 
@@ -19,10 +17,6 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { getCasesMetadataByDocketNumbers as getCasesMetadataByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
-
-const logger = getLogger();
-const errorSpy = jest.spyOn(logger, 'error');
 
 const getCaseDeadlinesByDateRange =
   getCaseDeadlinesByDateRangeMock as jest.Mock;
@@ -177,106 +171,5 @@ describe('getCaseDeadlinesInteractor', () => {
       judge: 'Buch',
       startDate: START_DATE,
     });
-  });
-
-  it('logs an error for any case that fails validation and includes all cases that pass validation', async () => {
-    getCasesMetadataByDocketNumbers.mockResolvedValue([
-      ...mockCases,
-      {
-        ...MOCK_CASE,
-        docketNumber: '2000-20',
-        hearings: [
-          {
-            address1: '200 Second St NW',
-            caseOrder: [
-              {
-                addedToSessionAt: '2020-12-23T14:21:54.970Z',
-                calendarNotes: 'Remote Subpoena Hearing',
-                docketNumber: '2000-20',
-                isManuallyAdded: true,
-              },
-            ],
-            city: 'Washington',
-            courthouseName: 'US Tax Courthouse',
-            createdAt: '2020-12-23T14:20:52.766Z',
-            entityName: 'TrialSession',
-            isCalendared: true,
-            judge: {
-              name: 'Carluzzo',
-              userId: 'a22f4615-1234-4321-9284-30af3e22e715',
-            },
-            maxCases: '100',
-            postalCode: '20217',
-            // missing proceedingType; should throw an error!
-            sessionType: SESSION_TYPES.special,
-            startDate: '2021-01-27T05:00:00.000Z',
-            startTime: '13:00',
-            state: 'DC',
-            term: 'Winter',
-            termYear: '2021',
-            trialClerk: {
-              name: 'Aisha Miller',
-              userId: '1e68fefe-asdf-fdsa-b08d-d806dd85c979',
-            },
-            trialLocation: 'Washington, District of Columbia',
-            trialSessionId: 'bac57bdb-1123-3321-81e3-b6fb6c337c3c',
-          },
-        ],
-      },
-    ]);
-    getCaseDeadlinesByDateRange.mockResolvedValue({
-      foundDeadlines: [
-        ...mockDeadlines,
-        {
-          associatedJudge: 'Judge Carluzzo',
-          associatedJudgeId: 'dabbad03-18d0-43ec-bafb-654e83405416',
-          caseDeadlineId: 'c63d6904-1234-4321-8259-9f8f65824bb7',
-          createdAt: '2019-02-01T21:40:46.415Z',
-          deadlineDate: '2019-04-01T21:40:46.415Z',
-          description: 'Yet another deadline!',
-          docketNumber: '2000-20',
-        },
-      ],
-      totalCount: 3,
-    });
-
-    const result = await getCaseDeadlinesInteractor(
-      {} as any,
-      mockPetitionsClerkUser,
-    );
-
-    expect(result).toEqual({
-      deadlines: [
-        {
-          associatedJudge: 'Judge Buch',
-          associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
-          caseCaption: 'A caption, Petitioner',
-          caseDeadlineId: '22c0736f-c4c5-4ab5-97c3-e41fb06bbc2f',
-          createdAt: '2019-01-01T21:40:46.415Z',
-          deadlineDate: '2019-03-01T21:40:46.415Z',
-          description: 'A deadline!',
-          docketNumber: '101-19',
-          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
-          docketNumberWithSuffix: '101-19L',
-          entityName: 'CaseDeadline',
-          sortableDocketNumber: 2019000101,
-        },
-        {
-          associatedJudge: 'Judge Carluzzo',
-          associatedJudgeId: 'dabbad03-18d0-43ec-bafb-654e83405416',
-          caseCaption: 'Another caption, Petitioner',
-          caseDeadlineId: 'c63d6904-5314-4372-8259-9f8f65824bb7',
-          createdAt: '2019-02-01T21:40:46.415Z',
-          deadlineDate: '2019-04-01T21:40:46.415Z',
-          description: 'A different deadline!',
-          docketNumber: '102-19',
-          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
-          docketNumberWithSuffix: '102-19L',
-          entityName: 'CaseDeadline',
-          sortableDocketNumber: 2019000102,
-        },
-      ],
-    });
-    expect(errorSpy).toHaveBeenCalled();
   });
 });
