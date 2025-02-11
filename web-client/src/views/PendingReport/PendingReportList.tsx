@@ -158,14 +158,7 @@ export const PendingReportList = connect<
                 onSort={sortTableSequence}
                 stateKey={STATE_KEYS.PENDING_REPORT_TABLE_SORT}
               />
-              <SortableHeader
-                sortField="associatedJudgeFormatted"
-                sortType="string"
-                tableSort={pendingReportTableSortData}
-                title="Judge"
-                onSort={sortTableSequence}
-                stateKey={STATE_KEYS.PENDING_REPORT_TABLE_SORT}
-              />
+              <th>Judge</th>
             </tr>
           </thead>
           <tbody>
