@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
+import { CaseStatusChange } from '@shared/business/entities/cases/Case';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
-import { NewCaseStatusUpdateKysely } from '@web-api/database-types';
 import { SEEDED_DOCKET_NUMBERS_100_104 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases100_104';
 import { SEEDED_DOCKET_NUMBERS_105_109 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases105_109';
 import { SEEDED_DOCKET_NUMBERS_400_409 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases400_409';
@@ -10,7 +10,9 @@ import { SEEDED_DOCKET_NUMBERS_430_439 } from '@web-api/persistence/postgres/uti
 import { SEEDED_DOCKET_NUMBERS_440_449 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases440_449';
 import { SEEDED_DOCKET_NUMBERS_450_plus } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases450_plus';
 
-export const caseStatusUpdates: NewCaseStatusUpdateKysely[] = [
+export const caseStatusUpdates: (CaseStatusChange & {
+  docketNumber: string;
+})[] = [
   // 101-24
   {
     changedBy: 'Test Petitionsclerk',
