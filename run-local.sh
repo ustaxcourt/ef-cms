@@ -12,7 +12,7 @@ fi
 
 if [[ -z "$CI" ]]; then
   echo "Stopping postgres in case it's already running"
-  $DOCKER_COMPOSE -f $(pwd)/web-api/src/persistence/postgres/docker-compose.yml down || true
+  $DOCKER_COMPOSE -f $(pwd)/web-api/src/persistence/postgres/docker-compose.yml down --volumes || true
 
   echo "Starting postgres"
   $DOCKER_COMPOSE -f $(pwd)/web-api/src/persistence/postgres/docker-compose.yml up -d || { echo "Failed to start Postgres containers"; exit 1; }
