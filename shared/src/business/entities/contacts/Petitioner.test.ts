@@ -4,7 +4,7 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { Petitioner } from './Petitioner';
-import { getTextByCount } from '@shared/business/utilities/getTextByCount';
+import { getTextByCount } from '@shared/test/getTextByCount';
 
 describe('Petitioner', () => {
   const mockValidPetitioner = {
