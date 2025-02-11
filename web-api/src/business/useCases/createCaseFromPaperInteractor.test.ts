@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
@@ -9,15 +10,16 @@ import {
   PAYMENT_STATUS,
   PETITIONS_SECTION,
   ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { createCaseFromPaperInteractor } from './createCaseFromPaperInteractor';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 
 jest.mock('@shared/business/utilities/DateHandler', () => {
   const originalModule = jest.requireActual(
@@ -36,9 +38,7 @@ describe('createCaseFromPaperInteractor', () => {
   const mockCreateIsoDateString = createISODateString as jest.Mock;
   mockCreateIsoDateString.mockReturnValue(date);
   beforeEach(() => {
-    applicationContext.docketNumberGenerator.createDocketNumber.mockResolvedValue(
-      '00101-00',
-    );
+    (generateDocketNumber as jest.Mock).mockResolvedValue('00101-00');
     applicationContext.environment.stage = 'local';
 
     applicationContext
