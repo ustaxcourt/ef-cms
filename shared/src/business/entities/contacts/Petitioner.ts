@@ -46,8 +46,9 @@ export class Petitioner extends JoiValidationEntity {
     this.countryType = rawProps.countryType;
     this.email = rawProps.email;
     this.paperPetitionEmail = rawProps.paperPetitionEmail;
-    this.hasConsentedToEService =
-      rawProps.hasConsentedToEService || rawProps.hasConsentedToEservice; // 10502 TODO: We get lowercase s from the DB
+    this.hasConsentedToEService = !!(
+      rawProps.hasConsentedToEService || rawProps.hasConsentedToEservice
+    ); // 10502 TODO: We get lowercase s from the DB
     this.hasEAccess = rawProps.hasEAccess || undefined;
     this.inCareOf = rawProps.inCareOf;
     this.isAddressSealed = rawProps.isAddressSealed || false;

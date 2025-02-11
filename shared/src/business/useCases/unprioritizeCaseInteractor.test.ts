@@ -10,9 +10,15 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { unprioritizeCaseInteractor } from './unprioritizeCaseInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 describe('unprioritizeCaseInteractor', () => {
   let mockLock;
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCase = updateCaseMock as jest.Mock;
+  updateCase.mockImplementation(c => c.caseToUpdate);
+
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
@@ -42,9 +48,7 @@ describe('unprioritizeCaseInteractor', () => {
   });
 
   it('should call updateCaseAutomaticBlock', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 
     await unprioritizeCaseInteractor(
       applicationContext,
@@ -60,16 +64,12 @@ describe('unprioritizeCaseInteractor', () => {
   });
 
   it('should set the highPriority flag to false and remove the highPriorityReason and call createCaseTrialSortMappingRecords if the case status is ready for trial', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
-        Promise.resolve({
-          ...MOCK_CASE,
-          highPriority: true,
-          highPriorityReason: 'because',
-          status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-        }),
-      );
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      highPriority: true,
+      highPriorityReason: 'because',
+      status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+    });
 
     const result = await unprioritizeCaseInteractor(
       applicationContext,
@@ -98,16 +98,12 @@ describe('unprioritizeCaseInteractor', () => {
   });
 
   it('should set the highPriority flag to false and remove the highPriorityReason and call deleteCaseTrialSortMappingRecords if the case status is NOT ready for trial', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
-        Promise.resolve({
-          ...MOCK_CASE,
-          highPriority: true,
-          highPriorityReason: 'because',
-          status: CASE_STATUS_TYPES.new,
-        }),
-      );
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      highPriority: true,
+      highPriorityReason: 'because',
+      status: CASE_STATUS_TYPES.new,
+    });
 
     const result = await unprioritizeCaseInteractor(
       applicationContext,
@@ -148,9 +144,7 @@ describe('unprioritizeCaseInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {

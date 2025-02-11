@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import {
   CASE_TYPES_MAP,
@@ -6,9 +7,9 @@ import {
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
   SESSION_TYPES,
-} from '../entities/EntityConstants';
-import { MOCK_CASE } from '../../test/mockCase';
-import { applicationContext } from '../test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getCaseDeadlinesByDateRange as getCaseDeadlinesByDateRangeMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDateRange';
 
 import { getCaseDeadlinesInteractor } from './getCaseDeadlinesInteractor';
@@ -16,9 +17,20 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { getCasesMetadataByDocketNumbers as getCasesMetadataByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
+
+const logger = getLogger();
+const errorSpy = jest.spyOn(logger, 'error');
 
 const getCaseDeadlinesByDateRange =
   getCaseDeadlinesByDateRangeMock as jest.Mock;
+
+const getCasesMetadataByDocketNumbers =
+  getCasesMetadataByDocketNumbersMock as jest.Mock;
+const updateCase = updateCaseMock as jest.Mock;
+updateCase.mockImplementation(c => c.caseToUpdate);
 
 describe('getCaseDeadlinesInteractor', () => {
   const mockDeadlines = [
@@ -49,6 +61,8 @@ describe('getCaseDeadlinesInteractor', () => {
       caseCaption: 'A caption, Petitioner',
       caseType: CASE_TYPES_MAP.cdp,
       docketNumber: '101-19',
+      docketNumberSuffix: 'L',
+      docketNumberWithSuffix: '101-19L',
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
         {
@@ -82,6 +96,8 @@ describe('getCaseDeadlinesInteractor', () => {
         state: 'CA',
       },
       docketNumber: '102-19',
+      docketNumberSuffix: 'L',
+      docketNumberWithSuffix: '102-19L',
       partyType: PARTY_TYPES.petitioner,
       procedureType: 'Regular',
       userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
@@ -93,28 +109,21 @@ describe('getCaseDeadlinesInteractor', () => {
 
   beforeEach(() => {
     applicationContext.environment.stage = 'local';
-    getCaseDeadlinesByDateRange.mockReturnValue({
+    getCaseDeadlinesByDateRange.mockResolvedValue({
       foundDeadlines: mockDeadlines,
       totalCount: 2,
     });
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByDocketNumbers.mockReturnValue(mockCases);
+    getCasesMetadataByDocketNumbers.mockResolvedValue(mockCases);
   });
 
   it('throws an error when the user is not valid or authorized', async () => {
     await expect(
-      getCaseDeadlinesInteractor(
-        applicationContext,
-        {} as any,
-        mockPetitionerUser,
-      ),
+      getCaseDeadlinesInteractor({} as any, mockPetitionerUser),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('gets all the case deadlines and combines them with case data', async () => {
     const result = await getCaseDeadlinesInteractor(
-      applicationContext,
       {} as any,
       mockPetitionsClerkUser,
     );
@@ -155,7 +164,6 @@ describe('getCaseDeadlinesInteractor', () => {
 
   it('passes date and filtering params to getCaseDeadlinesByDateRange persistence call', async () => {
     await getCaseDeadlinesInteractor(
-      applicationContext,
       {
         endDate: END_DATE,
         judge: 'Buch',
@@ -172,53 +180,51 @@ describe('getCaseDeadlinesInteractor', () => {
   });
 
   it('logs an error for any case that fails validation and includes all cases that pass validation', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByDocketNumbers.mockReturnValue([
-        ...mockCases,
-        {
-          ...MOCK_CASE,
-          docketNumber: '2000-20',
-          hearings: [
-            {
-              address1: '200 Second St NW',
-              caseOrder: [
-                {
-                  addedToSessionAt: '2020-12-23T14:21:54.970Z',
-                  calendarNotes: 'Remote Subpoena Hearing',
-                  docketNumber: '2000-20',
-                  isManuallyAdded: true,
-                },
-              ],
-              city: 'Washington',
-              courthouseName: 'US Tax Courthouse',
-              createdAt: '2020-12-23T14:20:52.766Z',
-              entityName: 'TrialSession',
-              isCalendared: true,
-              judge: {
-                name: 'Carluzzo',
-                userId: 'a22f4615-1234-4321-9284-30af3e22e715',
+    getCasesMetadataByDocketNumbers.mockResolvedValue([
+      ...mockCases,
+      {
+        ...MOCK_CASE,
+        docketNumber: '2000-20',
+        hearings: [
+          {
+            address1: '200 Second St NW',
+            caseOrder: [
+              {
+                addedToSessionAt: '2020-12-23T14:21:54.970Z',
+                calendarNotes: 'Remote Subpoena Hearing',
+                docketNumber: '2000-20',
+                isManuallyAdded: true,
               },
-              maxCases: '100',
-              postalCode: '20217',
-              // missing proceedingType; should throw an error!
-              sessionType: SESSION_TYPES.special,
-              startDate: '2021-01-27T05:00:00.000Z',
-              startTime: '13:00',
-              state: 'DC',
-              term: 'Winter',
-              termYear: '2021',
-              trialClerk: {
-                name: 'Aisha Miller',
-                userId: '1e68fefe-asdf-fdsa-b08d-d806dd85c979',
-              },
-              trialLocation: 'Washington, District of Columbia',
-              trialSessionId: 'bac57bdb-1123-3321-81e3-b6fb6c337c3c',
+            ],
+            city: 'Washington',
+            courthouseName: 'US Tax Courthouse',
+            createdAt: '2020-12-23T14:20:52.766Z',
+            entityName: 'TrialSession',
+            isCalendared: true,
+            judge: {
+              name: 'Carluzzo',
+              userId: 'a22f4615-1234-4321-9284-30af3e22e715',
             },
-          ],
-        },
-      ]);
-    getCaseDeadlinesByDateRange.mockReturnValue({
+            maxCases: '100',
+            postalCode: '20217',
+            // missing proceedingType; should throw an error!
+            sessionType: SESSION_TYPES.special,
+            startDate: '2021-01-27T05:00:00.000Z',
+            startTime: '13:00',
+            state: 'DC',
+            term: 'Winter',
+            termYear: '2021',
+            trialClerk: {
+              name: 'Aisha Miller',
+              userId: '1e68fefe-asdf-fdsa-b08d-d806dd85c979',
+            },
+            trialLocation: 'Washington, District of Columbia',
+            trialSessionId: 'bac57bdb-1123-3321-81e3-b6fb6c337c3c',
+          },
+        ],
+      },
+    ]);
+    getCaseDeadlinesByDateRange.mockResolvedValue({
       foundDeadlines: [
         ...mockDeadlines,
         {
@@ -227,7 +233,7 @@ describe('getCaseDeadlinesInteractor', () => {
           caseDeadlineId: 'c63d6904-1234-4321-8259-9f8f65824bb7',
           createdAt: '2019-02-01T21:40:46.415Z',
           deadlineDate: '2019-04-01T21:40:46.415Z',
-          description: 'Yet anotherA deadline!',
+          description: 'Yet another deadline!',
           docketNumber: '2000-20',
         },
       ],
@@ -235,7 +241,6 @@ describe('getCaseDeadlinesInteractor', () => {
     });
 
     const result = await getCaseDeadlinesInteractor(
-      applicationContext,
       {} as any,
       mockPetitionsClerkUser,
     );
@@ -272,6 +277,6 @@ describe('getCaseDeadlinesInteractor', () => {
         },
       ],
     });
-    expect(applicationContext.logger.error).toHaveBeenCalled();
+    expect(errorSpy).toHaveBeenCalled();
   });
 });

@@ -8,12 +8,12 @@ import {
   PARTY_TYPES,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
-import { MOCK_LOCK } from '../../test/mockLock';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
-import { applicationContext } from '../test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
@@ -83,7 +83,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
       name: 'docket clerk',
     });
 
-    getCaseByDocketNumber.mockRejectedValue(MOCK_CASE);
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 
     applicationContext
       .getPersistenceGateway()
@@ -147,9 +147,8 @@ describe('removePdfFromDocketEntryInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const docketEntry = applicationContext
-      .getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
+    const docketEntry =
+      updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
         entry => entry.docketEntryId === '7805d1ab-18d0-43ec-bafb-654e83405416',
       );
 
