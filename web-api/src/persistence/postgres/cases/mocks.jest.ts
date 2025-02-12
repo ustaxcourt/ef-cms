@@ -49,6 +49,11 @@ jest.mock('@web-api/persistence/postgres/cases/upsertCases', () =>
   mockFactory('upsertCases'),
 );
 
+jest.mock(
+  '@web-api/persistence/postgres/cases/reports/getReadyForTrialCases',
+  () => mockFactory('getReadyForTrialCases'),
+);
+
 // Parties
 
 jest.mock(
