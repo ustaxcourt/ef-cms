@@ -5,6 +5,8 @@ import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getReadyForTrialCases } from '@web-api/persistence/postgres/cases/reports/getReadyForTrialCases';
 import { uniqBy } from 'lodash';
+import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 
 export const checkForReadyForTrialCasesInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -36,41 +38,39 @@ export const checkForReadyForTrialCasesInteractor = async (
     }
   };
 
-  // TODO 10502 figure out how to handle locks
-  // const acquireLockForCase = async ({
-  //   docketNumber,
-  //   retry = 0,
-  // }: {
-  //   docketNumber: string;
-  //   retry?: number;
-  // }) => {
-  //   const maxRetries = 20;
-  //   try {
-  //     await acquireLock({
-  //       applicationContext,
-  //       authorizedUser: undefined,
-  //       identifiers: [`case|${docketNumber}`],
-  //       onLockError: new ServiceUnavailableError(
-  //         `${docketNumber} is currently being updated`,
-  //       ),
-  //       ttl: 900,
-  //     });
-  //   } catch (err) {
-  //     if (retry < maxRetries && err instanceof ServiceUnavailableError) {
-  //       await applicationContext.getUtilities().sleep(5000);
-  //       return acquireLockForCase({
-  //         docketNumber,
-  //         retry: retry + 1,
-  //       });
-  //     }
-  //     throw err;
-  //   }
-  // };
+  const acquireLockForCase = async ({
+    docketNumber,
+    retry = 0,
+  }: {
+    docketNumber: string;
+    retry?: number;
+  }) => {
+    const maxRetries = 20;
+    try {
+      await acquireLock({
+        applicationContext,
+        authorizedUser: undefined,
+        identifiers: [`case|${docketNumber}`],
+        onLockError: new ServiceUnavailableError(
+          `${docketNumber} is currently being updated`,
+        ),
+        ttl: 900,
+      });
+    } catch (err) {
+      if (retry < maxRetries && err instanceof ServiceUnavailableError) {
+        await applicationContext.getUtilities().sleep(5000);
+        return acquireLockForCase({
+          docketNumber,
+          retry: retry + 1,
+        });
+      }
+      throw err;
+    }
+  };
 
   const checkReadyForTrial = async caseRecord => {
     const { docketNumber } = caseRecord;
-    // TODO 10502 figure out how to handle locks
-    // await acquireLockForCase({ docketNumber });
+    await acquireLockForCase({ docketNumber });
 
     const caseToCheck = await getCaseByDocketNumber({
       applicationContext,
@@ -91,11 +91,10 @@ export const checkForReadyForTrialCasesInteractor = async (
         }
       }
     }
-    // TODO 10502 figure out how to handle locks
-    // await applicationContext.getPersistenceGateway().removeLock({
-    //   applicationContext,
-    //   identifiers: [`case|${docketNumber}`],
-    // });
+    await applicationContext.getPersistenceGateway().removeLock({
+      applicationContext,
+      identifiers: [`case|${docketNumber}`],
+    });
   };
 
   const caseUpdatePromises: Promise<void>[] =

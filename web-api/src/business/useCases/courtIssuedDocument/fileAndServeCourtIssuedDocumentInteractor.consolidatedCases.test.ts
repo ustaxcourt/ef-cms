@@ -162,7 +162,7 @@ describe('consolidated cases', () => {
         ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
         docketEntries: leadCaseDocketEntries,
       })
-      .mockRejectedValueOnce({
+      .mockResolvedValueOnce({
         ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
         docketEntries: leadCaseDocketEntries,
       })
