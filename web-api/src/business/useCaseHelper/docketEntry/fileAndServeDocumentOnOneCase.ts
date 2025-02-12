@@ -1,19 +1,20 @@
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { DOCKET_SECTION } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ENTERED_AND_SERVED_EVENT_CODES } from '../../../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
-import { ServerApplicationContext } from '@web-api/applicationContext';
+import { applicationContext } from '@web-api/applicationContext';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
+import { closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments } from '@web-api/business/useCaseHelper/docketEntry/closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const fileAndServeDocumentOnOneCase = async ({
-  applicationContext,
   caseEntity,
   docketEntryEntity,
   subjectCaseDocketNumber,
   user,
 }: {
-  applicationContext: ServerApplicationContext;
   caseEntity: any;
   docketEntryEntity: any;
   subjectCaseDocketNumber: any;
@@ -73,26 +74,20 @@ export const fileAndServeDocumentOnOneCase = async ({
 
   caseEntity.updateDocketEntry(docketEntryEntity);
 
-  caseEntity = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAutomaticBlock({
+  caseEntity = await updateCaseAutomaticBlock({
       applicationContext,
       caseEntity,
     });
 
   if (ENTERED_AND_SERVED_EVENT_CODES.includes(docketEntryEntity.eventCode)) {
-    await applicationContext
-      .getUseCaseHelpers()
-      .closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
+    await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
         applicationContext,
         caseEntity,
         eventCode: docketEntryEntity.eventCode,
       });
   }
 
-  const validRawCaseEntity = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
+  const validRawCaseEntity = await updateCaseAndAssociations({
       applicationContext,
       authorizedUser: user,
       caseToUpdate: caseEntity,
