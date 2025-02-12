@@ -38,7 +38,7 @@ describe('saveCalendarNotes', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockImplementation(() => mockTrialSession);
-    getCaseByDocketNumber.mockResolvedValue(mockCase);
+    getCaseByDocketNumber.mockImplementation(() => mockCase);
   });
 
   it('throws an Unauthorized error if the user role is not allowed to access the method', async () => {
