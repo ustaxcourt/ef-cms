@@ -95,7 +95,9 @@ function constructCaseForUser({
 
   // Users who do not have access to all case data should not see docket entries that are not on the record, like drafts,
   // EXCEPT the IRS superuser, who can see only the non-docket STIN document
-  filterDocketEntriesNotOnDocketRecord({ authorizedUser: user, rawCase });
+  if (rawCase.docketEntries) {
+    filterDocketEntriesNotOnDocketRecord({ authorizedUser: user, rawCase });
+  }
 
   // If the user is not logged in, return whatever subset of data is allowed to the public
   if (!userIsLoggedIn) {

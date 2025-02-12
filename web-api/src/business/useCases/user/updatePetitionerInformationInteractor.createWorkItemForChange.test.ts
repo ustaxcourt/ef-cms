@@ -16,12 +16,15 @@ import { updatePetitionerInformationInteractor } from './updatePetitionerInforma
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { updatePetitionerOnCase as updatePetitionerOnCaseMock } from '@web-api/persistence/postgres/cases/parties/updatePetitionerOnCase';
 
 jest.mock('@web-api/business/useCases/addCoverToPdf');
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const updateCase = updateCaseMock as jest.Mock;
 updateCase.mockImplementation(c => c.caseToUpdate);
+const updatePetitionerOnCase = updatePetitionerOnCaseMock as jest.Mock;
+updatePetitionerOnCase.mockImplementation(({ petitioner }) => petitioner);
 
 describe('updatePetitionerInformationInteractor createWorkItemForChange', () => {
   let mockCase;
@@ -66,7 +69,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       status: CASE_STATUS_TYPES.generalDocket,
     };
 
-    getCaseByDocketNumber.mockResolvedValue(mockCase);
+    getCaseByDocketNumber.mockImplementation(() => Promise.resolve(mockCase));
   });
 
   it('should create a work item for the NCA when the petitioner is unrepresented', async () => {

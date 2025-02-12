@@ -1,16 +1,19 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import {
   addPaperFilingInteractor,
   determineEntitiesToLock,
   handleLockError,
 } from './addPaperFilingInteractor';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { docketClerkUser } from '@shared/test/mockUsers';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
@@ -112,9 +115,7 @@ describe('addPaperFilingInteractor', () => {
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
+    getCaseByDocketNumber.mockResolvedValue(mockCase);
   });
 
   describe('locked', () => {
@@ -131,9 +132,7 @@ describe('addPaperFilingInteractor', () => {
         ),
       ).rejects.toThrow(ServiceUnavailableError);
 
-      expect(
-        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-      ).not.toHaveBeenCalled();
+      expect(getCaseByDocketNumber).not.toHaveBeenCalled();
     });
 
     it('should return a "retry_async_request" notification with the original request', async () => {
@@ -158,9 +157,7 @@ describe('addPaperFilingInteractor', () => {
         userId: docketClerkUser.userId,
       });
 
-      expect(
-        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-      ).not.toHaveBeenCalled();
+      expect(getCaseByDocketNumber).not.toHaveBeenCalled();
     });
   });
 

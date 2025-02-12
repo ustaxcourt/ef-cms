@@ -32,7 +32,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
 
   it('should successfully run without error', async () => {
     mockCasesReadyForTrial = [];
-    getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 
     await expect(
       checkForReadyForTrialCasesInteractor(applicationContext),
@@ -44,7 +44,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
   it('should not check case if no case is found', async () => {
     getCaseByDocketNumber.mockResolvedValue(undefined);
 
-    updateCase.mockReturnValue({});
+    updateCase.mockResolvedValue({});
 
     mockCasesReadyForTrial = [{ docketNumber: '101-20' }];
 
@@ -58,7 +58,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
   it("should only check cases that are 'general docket - not at issue'", async () => {
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 
-    updateCase.mockReturnValue({});
+    updateCase.mockResolvedValue({});
 
     mockCasesReadyForTrial = [{ docketNumber: '101-20' }];
 
@@ -107,7 +107,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
       status: CASE_STATUS_TYPES.generalDocket,
     });
 
-    updateCase.mockReturnValue({});
+    updateCase.mockResolvedValue({});
 
     mockCasesReadyForTrial = [
       { docketNumber: '101-20' },
@@ -156,7 +156,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
       status: CASE_STATUS_TYPES.generalDocket,
     });
 
-    updateCase.mockReturnValue({});
+    updateCase.mockResolvedValue({});
 
     mockCasesReadyForTrial = [
       { docketNumber: '101-20' },
