@@ -3,8 +3,19 @@ import { RawOutboxItem } from '@shared/business/entities/OutboxItem';
 import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { RawUser } from '@shared/business/entities/User';
-import { fieldsToOmitBeforePersisting } from '@web-api/persistence/dynamo/cases/createCase';
 import { trialSessionFieldsToOmitBeforePersisting } from '@web-api/persistence/dynamo/trialSessions/updateTrialSession';
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const fieldsToOmitBeforePersisting = [
+  'archivedCorrespondences',
+  'archivedDocketEntries',
+  'consolidatedCases',
+  'correspondence',
+  'docketEntries',
+  'hearings',
+  'irsPractitioners',
+  'privatePractitioners',
+] as const;
 
 type CaseFieldsToOmitBeforePersisting =
   (typeof fieldsToOmitBeforePersisting)[number];
