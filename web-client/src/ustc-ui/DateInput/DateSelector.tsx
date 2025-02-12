@@ -162,6 +162,7 @@ export const DateSelector = ({
       >
         <input
           aria-describedby={`date-picker-label ${id}-date-hint`}
+          aria-label={`${id}-picker`}
           className="usa-input"
           data-testid={`${id}-picker`}
           id={`${id}-picker`}

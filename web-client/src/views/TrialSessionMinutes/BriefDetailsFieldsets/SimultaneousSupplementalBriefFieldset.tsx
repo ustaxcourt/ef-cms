@@ -37,7 +37,6 @@ export const SimultaneousSupplementalBriefFieldset = ({
             }
             formGroupClassNames="margin-bottom-0"
             id="simultaneousSupplementalDueDate"
-            labelPosition="hidden"
             onBlur={() => onBlurHandler()}
             onChange={e =>
               onChangeHandler({
@@ -54,12 +53,10 @@ export const SimultaneousSupplementalBriefFieldset = ({
         </div>
         <div className="grid-col-8">
           <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
-            <label hidden htmlFor="simultaneousSupplementalNote">
-              Note
-            </label>
             <input
               className="usa-input maxw-full"
               id="simultaneousSupplementalNote"
+              aria-label="simultaneousSupplementalNote"
               name="simultaneousSupplementalNote"
               type="text"
               value={

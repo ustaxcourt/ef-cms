@@ -44,13 +44,11 @@ export const WitnessesFieldset = ({
         >
           <div className="grid-col-10">
             <FormGroup className="margin-bottom-0 maxw-full">
-              <label hidden htmlFor={`${witnessType}`}>
-                {`${capitalizedWitnessType} Witness ${rowIndex}`}
-              </label>
               <input
                 className="usa-input maxw-full"
-                id={`${witnessType}`}
-                name={`${witnessType}`}
+                id={`witnessType-${rowIndex}`}
+                name={`witnessType-${rowIndex}`}
+                aria-label={`witnessType-${rowIndex}`}
                 type="text"
                 value={witnessesFormState[row.renderKey].name}
                 onBlur={() => onBlurHandler()}

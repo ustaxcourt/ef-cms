@@ -69,13 +69,11 @@ export const PetitionersFieldset = ({
         >
           <div className="grid-col-3">
             <FormGroup className="margin-bottom-0">
-              <label hidden htmlFor="petitioner">
-                {`Petitioner ${rowIndex}`}
-              </label>
               <input
                 className="usa-input"
-                id="petitioner"
-                name="petitioner"
+                id={`petitioner-${rowIndex}`}
+                name={`petitioner-${rowIndex}`}
+                aria-label={`petitioner-${rowIndex}`}
                 type="text"
                 value={petitionersFormState.petitioners[row.renderKey].name}
                 onBlur={() => onBlurHandler()}
@@ -95,13 +93,11 @@ export const PetitionersFieldset = ({
           </div>
           <div className="grid-col-2">
             <FormGroup className="margin-bottom-0 display-flex align-items-center">
-              <label hidden htmlFor={`petitionerRole-${rowIndex}`}>
-                Role
-              </label>
               <select
                 className="usa-select display-inline-block"
                 id={`petitionerRole-${rowIndex}`}
                 name={`petitionerRole-${rowIndex}`}
+                aria-label={`petitionerRole-${rowIndex}`}
                 value={petitionersFormState.petitioners[row.renderKey].role}
                 onBlur={() => onBlurHandler()}
                 onChange={e => {
@@ -129,16 +125,11 @@ export const PetitionersFieldset = ({
           </div>
           <div className="grid-col-3">
             <FormGroup className="margin-bottom-0">
-              <label
-                hidden
-                htmlFor={`petitioner-dates-of-appearance-${rowIndex}`}
-              >
-                {`Petitioner Role ${rowIndex}`}
-              </label>
               <input
                 className="usa-input"
                 id={`petitioner-dates-of-appearance-${rowIndex}`}
                 name={`petitioner-dates-of-appearance-${rowIndex}`}
+                aria-label={`petitioner-dates-of-appearance-${rowIndex}`}
                 type="text"
                 value={
                   petitionersFormState.petitioners[row.renderKey]

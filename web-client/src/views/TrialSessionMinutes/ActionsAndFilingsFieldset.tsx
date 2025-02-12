@@ -45,11 +45,9 @@ export const ActionsAndFilingsFieldset = ({
     nestedName: string,
   ) => (
     <FormGroup className="display-flex align-items-center maxw-full margin-bottom-0">
-      <label hidden htmlFor={id}>
-        {name}
-      </label>
       <select
         className="usa-select display-inline-block"
+        aria-label={id}
         id={id}
         name={name}
         value={value}
@@ -76,7 +74,7 @@ export const ActionsAndFilingsFieldset = ({
     </FormGroup>
   );
 
-  const getFieldsByRow = (row: KeyedActionFilingFormFields) => {
+  const getFieldsByRow = (row: KeyedActionFilingFormFields, rowIndex) => {
     return (
       <>
         <div className="grid-col-auto">
@@ -85,7 +83,6 @@ export const ActionsAndFilingsFieldset = ({
             defaultValue={row.date}
             formGroupClassNames="margin-bottom-0"
             id={`actionsAndFilingsDate-${row.renderKey}`}
-            labelPosition="hidden"
             onBlur={() => onBlurHandler()}
             onChange={e =>
               onChangeHandler({
@@ -102,7 +99,7 @@ export const ActionsAndFilingsFieldset = ({
         </div>
         <div className="grid-col-2">
           {renderSelectField(
-            `actionsAndFilingsDocumentType-${row.renderKey}`,
+            `actionsAndFilingsDocumentType-${rowIndex}`,
             'Document Type',
             row.documentType,
             ACTION_DOCUMENT_TYPE_OPTIONS,
@@ -112,7 +109,7 @@ export const ActionsAndFilingsFieldset = ({
         </div>
         <div className="grid-col-2">
           {renderSelectField(
-            `actionsAndFilingsFiledBy-${row.renderKey}`,
+            `actionsAndFilingsFiledBy-${rowIndex}`,
             'Filed by',
             row.filedBy,
             ACTION_FILED_BY_OPTIONS,
@@ -122,7 +119,7 @@ export const ActionsAndFilingsFieldset = ({
         </div>
         <div className="grid-col-2">
           {renderSelectField(
-            `actionsAndFilingsStatus-${row.renderKey}`,
+            `actionsAndFilingsStatus-${rowIndex}`,
             'Status',
             row.status,
             ACTION_STATUS_OPTIONS,
@@ -134,7 +131,10 @@ export const ActionsAndFilingsFieldset = ({
     );
   };
 
-  const getMotionDetailsByRow = (row: KeyedActionFilingFormFields) => {
+  const getMotionDetailsByRow = (
+    row: KeyedActionFilingFormFields,
+    rowIndex,
+  ) => {
     if (row.documentType === SHOW_MOTION_DETAILS_TYPE) {
       return (
         <div className="grid-row grid-gap-2 align-items-right margin-bottom-1">
@@ -146,6 +146,7 @@ export const ActionsAndFilingsFieldset = ({
                   checked={row.oralMotion}
                   className="usa-checkbox__input"
                   id={`actionsAndFilingsOralMotion${row.renderKey}`}
+                  aria-label={`actionsAndFilingsOralMotion-${rowIndex}`}
                   name={`actionsAndFilingsOralMotion${row.renderKey}`}
                   type="checkbox"
                   onBlur={() => onBlurHandler()}
@@ -181,6 +182,7 @@ export const ActionsAndFilingsFieldset = ({
               </label>
               <select
                 className="usa-select display-inline-block"
+                aria-label={`actionsAndFilingsObjection-${rowIndex}`}
                 id={`actionsAndFilingsObjection-${row.renderKey}`}
                 name={`actionsAndFilingsObjection-${row.renderKey}`}
                 value={row.objection}
@@ -225,59 +227,59 @@ export const ActionsAndFilingsFieldset = ({
         <div className="grid-col-2 usa-label">Status</div>
         <div className="grid-col-fill usa-label">Description/Note</div>
       </div>
-      {Object.values(actionsAndFilingsFormState.actionsAndFilings).map(row => (
-        <React.Fragment key={row.renderKey}>
-          <div className="grid-row grid-gap-2 align-items-center margin-bottom-1">
-            {getFieldsByRow(row)}
-            <div className="grid-col-fill">
-              <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
-                <label hidden htmlFor={`actionsAndFilingsNote${row.renderKey}`}>
-                  Description/Note
-                </label>
-                <input
-                  className="usa-input display-inline-block maxw-full"
-                  id={`actionsAndFilingsNote${row.renderKey}`}
-                  name={`actionsAndFilingsNote${row.renderKey}`}
-                  type="text"
-                  value={row.note}
-                  onBlur={() => onBlurHandler()}
-                  onChange={e =>
-                    onChangeHandler({
+      {Object.values(actionsAndFilingsFormState.actionsAndFilings).map(
+        (row, rowIndex) => (
+          <React.Fragment key={row.renderKey}>
+            <div className="grid-row grid-gap-2 align-items-center margin-bottom-1">
+              {getFieldsByRow(row, rowIndex)}
+              <div className="grid-col-fill">
+                <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
+                  <input
+                    className="usa-input display-inline-block maxw-full"
+                    id={`actionsAndFilingsNote${row.renderKey}`}
+                    aria-label={`actionsAndFilingsNote-${rowIndex}`}
+                    name={`actionsAndFilingsNote${row.renderKey}`}
+                    type="text"
+                    value={row.note}
+                    onBlur={() => onBlurHandler()}
+                    onChange={e =>
+                      onChangeHandler({
+                        name: 'actionsAndFilings',
+                        rowInfo: {
+                          key: row.renderKey,
+                          nestedName: 'note',
+                        },
+                        section:
+                          MINUTE_SHEET_FORM_SECTION_MAP.actionsAndFilingsSection,
+                        value: e.target.value,
+                      })
+                    }
+                  />
+                </FormGroup>
+              </div>
+              <div className="grid-col-1">
+                <Button
+                  link
+                  className="padding-0"
+                  icon="times"
+                  onClick={e => {
+                    e.preventDefault();
+                    removeRowHandler({
+                      key: row.renderKey,
                       name: 'actionsAndFilings',
-                      rowInfo: {
-                        key: row.renderKey,
-                        nestedName: 'note',
-                      },
                       section:
                         MINUTE_SHEET_FORM_SECTION_MAP.actionsAndFilingsSection,
-                      value: e.target.value,
-                    })
-                  }
-                />
-              </FormGroup>
+                    });
+                  }}
+                >
+                  Remove
+                </Button>
+              </div>
             </div>
-            <div className="grid-col-1">
-              <Button
-                link
-                className="padding-0"
-                icon="times"
-                onClick={e => {
-                  e.preventDefault();
-                  removeRowHandler({
-                    key: row.renderKey,
-                    name: 'actionsAndFilings',
-                    section:
-                      MINUTE_SHEET_FORM_SECTION_MAP.actionsAndFilingsSection,
-                  });
-                }}
-              >
-                Remove
-              </Button>
-            </div>
-          </div>
-          {getMotionDetailsByRow(row)}
-        </React.Fragment>
-      ))}
+            {getMotionDetailsByRow(row, rowIndex)}
+          </React.Fragment>
+        ),
+      )}
       <div className="grid-row grid-gap align-items-center margin-bottom-1">
         <div className="grid-col-auto">
           <Button

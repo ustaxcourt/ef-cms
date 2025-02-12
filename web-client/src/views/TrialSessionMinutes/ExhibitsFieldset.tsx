@@ -41,13 +41,11 @@ export const ExhibitsFieldset = ({
         >
           <div className="grid-col-5">
             <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
-              <label hidden htmlFor={`exhibit-description-${rowIndex}`}>
-                {`Description ${rowIndex}`}
-              </label>
               <input
                 className="usa-input maxw-full"
                 id={`exhibit-description-${rowIndex}`}
                 name={`exhibit-description-${rowIndex}`}
+                aria-label={`exhibit-description-${rowIndex}`}
                 type="text"
                 value={exhibitsFormState.exhibits[row.renderKey].description}
                 onBlur={() => onBlurHandler()}

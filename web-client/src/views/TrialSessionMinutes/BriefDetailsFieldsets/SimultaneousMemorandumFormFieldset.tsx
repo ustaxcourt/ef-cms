@@ -37,7 +37,7 @@ export const SimultaneousMemorandumFormFieldset = ({
           <span className="usa-label">Note</span>
         </div>
       </div>
-      {rowsConfig.map(rowConfig => {
+      {rowsConfig.map((rowConfig, index) => {
         return (
           <div
             className="grid-row grid-gap align-items-center margin-bottom-1"
@@ -54,7 +54,6 @@ export const SimultaneousMemorandumFormFieldset = ({
                 }
                 formGroupClassNames="margin-bottom-0"
                 id={`${rowConfig.key}DueDate`}
-                labelPosition="hidden"
                 onBlur={() => onBlurHandler()}
                 onChange={e =>
                   onChangeHandler({
@@ -71,12 +70,10 @@ export const SimultaneousMemorandumFormFieldset = ({
             </div>
             <div className="grid-col-7">
               <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full padding-right-4">
-                <label hidden htmlFor={`${rowConfig.key}Note`}>
-                  Note
-                </label>
                 <input
                   className="usa-input maxw-full"
                   id={`${rowConfig.key}Note`}
+                  aria-label={`Note-${index}`}
                   name={`${rowConfig.key}Note`}
                   type="text"
                   value={simultaneousMemorandumFormState[rowConfig.key].note}

@@ -41,12 +41,9 @@ export const RespondentsFieldset = ({
           >
             <div className="grid-col-3">
               <FormGroup className="margin-bottom-0">
-                <label hidden htmlFor={`respondent-${rowIndex}`}>
-                  {`Respondent ${rowIndex}`}
-                </label>
                 <CreatableSelect
-                  aria-labelledby={`respondent-label-${rowIndex}"`}
                   id={`respondent-${rowIndex}"`}
+                  aria-label={`respondent-${rowIndex}"`}
                   isClearable={true}
                   name={`respondent-${rowIndex}"`}
                   options={formOptions}
@@ -70,15 +67,11 @@ export const RespondentsFieldset = ({
             </div>
             <div className="grid-col-3">
               <FormGroup className="margin-bottom-0">
-                <label
-                  hidden
-                  htmlFor={`respondent-date-of-appearance-${rowIndex}`}
-                >
-                  Date(s) of Appearance
-                </label>
                 <input
                   className="usa-input"
                   id={`respondent-date-of-appearance-${rowIndex}`}
+                  aria-label={`respondent-date-of-appearance-${rowIndex}`}
+                  name={`respondent-date-of-appearance-${rowIndex}`}
                   type="text"
                   value={
                     respondentsFormState.respondents[row.renderKey]

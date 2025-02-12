@@ -48,7 +48,7 @@ export const JurisdictionFieldset = ({
           <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
             <label
               className="margin-right-2 margin-bottom-0 display-inline-block"
-              htmlFor={'$jurisdictionRetainedNote'}
+              htmlFor="jurisdictionRetainedNote"
             >
               Note
             </label>
@@ -56,6 +56,7 @@ export const JurisdictionFieldset = ({
               className="usa-input maxw-full"
               id="jurisdictionRetainedNote"
               name="jurisdictionRetainedNote"
+              aria-labelledby="jurisdictionRetainedNote"
               type="text"
               value={jurisdictionFormState.retained.note}
               onBlur={() => onBlurHandler()}
@@ -102,7 +103,7 @@ export const JurisdictionFieldset = ({
           <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
             <label
               className="margin-right-2 margin-bottom-0 display-inline-block"
-              htmlFor={'$continuedNote'}
+              htmlFor="continuedNote"
             >
               Note
             </label>
