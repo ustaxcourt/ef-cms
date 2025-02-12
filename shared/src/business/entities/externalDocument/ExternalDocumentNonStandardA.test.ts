@@ -1,5 +1,5 @@
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
-import { getTextByCount } from '../../../test/getTextByCount';
+import { getTextByCount } from '@shared/test/getTextByCount';
 
 describe('ExternalDocumentNonStandardA', () => {
   describe('validation', () => {

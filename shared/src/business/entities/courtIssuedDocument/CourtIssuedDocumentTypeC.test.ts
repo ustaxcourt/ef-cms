@@ -1,5 +1,5 @@
 import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
-import { getTextByCount } from '../../../test/getTextByCount';
+import { getTextByCount } from '@shared/test/getTextByCount';
 
 describe('CourtIssuedDocumentTypeC', () => {
   describe('constructor', () => {
