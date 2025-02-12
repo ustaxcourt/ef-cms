@@ -20,8 +20,8 @@ export const exportPendingReportInteractor = async (
     sortOrder,
   }: {
     judge?: string;
-    sortField: string;
-    sortOrder: 'asc' | 'desc';
+    sortField?: string;
+    sortOrder?: 'asc' | 'desc';
   },
   authorizedUser: UnknownAuthUser,
 ): Promise<string> => {
