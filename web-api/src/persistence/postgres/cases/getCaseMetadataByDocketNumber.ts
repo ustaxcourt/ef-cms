@@ -14,7 +14,6 @@ export const getCaseMetadataByDocketNumber = async ({
       .leftJoin('dwPetitionerOnCase as p', 'c.docketNumber', 'p.docketNumber')
       .selectAll('c')
       .select(sql`jsonb_agg(to_jsonb(p))`.as('petitioners'))
-      .orderBy('orderOnCase', 'asc')
       .where('c.docketNumber', '=', docketNumber)
       .groupBy('c.docketNumber')
       .executeTakeFirst(),
