@@ -16,10 +16,16 @@ import { docketClerkUser } from '@shared/test/mockUsers';
 import { fakeData, testPdfDoc } from '@shared/business/test/getFakeFile';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from './generateNoticesForCaseTrialSessionCalendarInteractor';
 import { shouldAppendClinicLetter } from '@shared/business/utilities/shouldAppendClinicLetter';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 jest.mock('@shared/business/utilities/shouldAppendClinicLetter');
 
 describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCase = updateCaseMock as jest.Mock;
+  updateCase.mockImplementation(c => c.caseToUpdate);
+
   const trialSession = {
     ...MOCK_TRIAL_REGULAR,
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
@@ -41,7 +47,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   const clinicLetterKey = 'I am a key';
 
   beforeAll(() => {
-    shouldAppendClinicLetter.mockResolvedValue({
+    (shouldAppendClinicLetter as jest.Mock).mockResolvedValue({
       appendClinicLetter: true,
       clinicLetterKey,
     });
@@ -58,9 +64,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
     applicationContext
       .getUseCases()
       .generateStandingPretrialOrderInteractor.mockResolvedValue(testPdfDoc);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 
     applicationContext
       .getUseCases()
@@ -87,9 +91,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       applicationContext,
       interactorParamObject,
     );
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should set the job status to processing the first time the job executes', async () => {
@@ -159,7 +161,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   });
 
   it('should only save a notice of trial order and NOT a clinic letter for practitioners', async () => {
-    shouldAppendClinicLetter.mockResolvedValueOnce({
+    (shouldAppendClinicLetter as jest.Mock).mockResolvedValueOnce({
       appendClinicLetter: false,
     });
     await generateNoticesForCaseTrialSessionCalendarInteractor(
