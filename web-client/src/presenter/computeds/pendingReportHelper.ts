@@ -1,14 +1,12 @@
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import qs from 'qs';
-import { PendingItemFormatted } from '@shared/business/utilities/formatPendingItem';
 import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
-import { sortBy } from 'lodash';
 import { Case } from '@shared/business/entities/cases/Case';
-
-type SortedPendingItemFormatted = PendingItemFormatted & {
-  sortableDocketNumber: number;
-};
+import {
+  SortedPendingItemFormatted,
+  sortPendingReportItems,
+} from '@shared/business/utilities/pendingItem/sortPendingReportItems';
 
 type PendingReportHelperResults = {
   printUrl: string;
@@ -37,24 +35,6 @@ export const pendingReportHelper = (get: Get): PendingReportHelperResults => {
 
   return {
     printUrl: `/reports/pending-report/printable?${queryString}`,
-    pendingItems: sortPendingReportTable(pendingItems, sortField, sortOrder),
+    pendingItems: sortPendingReportItems(pendingItems, sortField, sortOrder),
   };
 };
-
-export function sortPendingReportTable(
-  pendingItems: SortedPendingItemFormatted[] = [],
-  pendingItemSortField: string | undefined,
-  pendingItemSortOrder: 'asc' | 'desc' | undefined,
-): SortedPendingItemFormatted[] {
-  if (!pendingItemSortField || !pendingItemSortOrder) {
-    return sortBy(pendingItems, ['receivedAt', 'sortableDocketNumber']);
-  }
-
-  const sorttedPendingItems = sortBy(pendingItems, [
-    pendingItemSortField,
-    'receivedAt',
-  ]);
-
-  if (pendingItemSortOrder === 'desc') return sorttedPendingItems.reverse();
-  return sorttedPendingItems;
-}

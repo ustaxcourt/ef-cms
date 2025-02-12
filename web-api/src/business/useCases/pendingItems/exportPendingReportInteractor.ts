@@ -6,10 +6,23 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { stringify } from 'csv-stringify/sync';
+import {
+  SortedPendingItemFormatted,
+  sortPendingReportItems,
+} from '@shared/business/utilities/pendingItem/sortPendingReportItems';
+import { Case } from '@shared/business/entities/cases/Case';
 
 export const exportPendingReportInteractor = async (
   applicationContext: ServerApplicationContext,
-  { judge }: { judge?: string },
+  {
+    judge,
+    sortField,
+    sortOrder,
+  }: {
+    judge?: string;
+    sortField: string;
+    sortOrder: 'asc' | 'desc';
+  },
   authorizedUser: UnknownAuthUser,
 ): Promise<string> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PENDING_ITEMS)) {
@@ -23,11 +36,24 @@ export const exportPendingReportInteractor = async (
       judge,
     });
 
-  const formattedPendingItems = pendingDocuments.map(pendingItem =>
-    applicationContext.getUtilities().formatPendingItem(pendingItem),
+  const formattedPendingItems: SortedPendingItemFormatted[] =
+    pendingDocuments.map(pendingItem => {
+      const sortablePendingItem: SortedPendingItemFormatted = {
+        ...applicationContext.getUtilities().formatPendingItem(pendingItem),
+        sortableDocketNumber:
+          Case.getSortableDocketNumber(pendingItem.docketNumber) || 0,
+      };
+
+      return sortablePendingItem;
+    });
+
+  const sortedPendingItems = sortPendingReportItems(
+    formattedPendingItems,
+    sortField,
+    sortOrder,
   );
 
-  return getCsv(formattedPendingItems);
+  return getCsv(sortedPendingItems);
 };
 
 const getCsv = data => {
