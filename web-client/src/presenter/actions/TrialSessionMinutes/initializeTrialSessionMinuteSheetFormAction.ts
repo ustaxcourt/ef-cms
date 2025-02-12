@@ -1,13 +1,13 @@
 import {
-  ACTION_DOCUMENT_TYPE_OPTIONS,
   KeyedActionFilingFormFieldsByRenderKey,
   KeyedPartyFormFieldsByRenderKey,
-  MOTION_OBJECTION_OPTIONS,
   initialMinuteSheetFormState,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import {
+  ACTION_DOCUMENT_TYPE_OPTIONS,
   CONTACT_TYPES,
   FILDED_BY_TYPES,
+  MOTION_OBJECTION_OPTIONS,
   OBJECTIONS_OPTIONS_MAP,
   REPRESENTATIVE_TYPES,
 } from '@shared/business/entities/EntityConstants';
@@ -36,6 +36,7 @@ export const initializeTrialSessionMinuteSheetFormAction = ({
       currentUser,
       trialSession,
     });
+
   const judge = judgeOptions[formattedTrialSession.judge?.userId!];
 
   store.set(state.minuteSheetForm, cloneDeep(initialMinuteSheetFormState));
@@ -47,7 +48,6 @@ export const initializeTrialSessionMinuteSheetFormAction = ({
       title: judge.title,
       userId: judge.userId,
     },
-    judgeOptions,
     remoteSession: formattedTrialSession.isRemoteSession,
     trialClerk: formattedTrialSession.trialClerk!.name,
   });
@@ -113,6 +113,8 @@ export const initializeTrialSessionMinuteSheetFormAction = ({
       status: '',
     },
   });
+
+  store.set(state.minuteSheetForm.options.judgeOptions, judgeOptions);
 };
 
 export const getRespondentsFromCase = (
@@ -285,8 +287,6 @@ export const transformFiledBy = (caseDetail: RawCase, pendingItem): string => {
       practitioner => id === practitioner.userId,
     ),
   );
-
-  // 10419 TODO figure out what constitutes a "joint" filed by
 
   if (isPetitioner && isRespondent) {
     return FILDED_BY_TYPES.petitionerAndRespondent;

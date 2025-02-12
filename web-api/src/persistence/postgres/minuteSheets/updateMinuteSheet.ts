@@ -1,4 +1,4 @@
-import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+import { MinuteSheet } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 import { getDbWriter } from '@web-api/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
@@ -8,7 +8,7 @@ export const upsertMinuteSheet = async ({
   minuteSheetToUpsert: {
     trialSessionId: string;
     docketNumber: string;
-    content: MinuteSheetFormState;
+    content: MinuteSheet;
   };
 }) => {
   const newOrUpdatedMinuteSheet = await getDbWriter(writer =>
@@ -31,6 +31,6 @@ export const upsertMinuteSheet = async ({
   return transformNullToUndefined(newOrUpdatedMinuteSheet) as {
     trialSessionId: string;
     docketNumber: string;
-    content: MinuteSheetFormState;
+    content: MinuteSheet;
   };
 };

@@ -1,6 +1,6 @@
 import { checkForExistingMinuteSheetAction } from '@web-client/presenter/actions/TrialSessionMinutes/checkForExistingMinuteSheetAction';
 import { clearMinuteSheetFormStateAction } from '@web-client/presenter/actions/TrialSessionMinutes/clearMinuteSheetFormState';
-import { getAndSetCurrentJudgesForMinuteSheetAction } from '@web-client/presenter/actions/TrialSessionMinutes/getAndSetCurrentJudgesForMinuteSheetAction';
+import { fetchCurrentJudgesAsOptionsForMinuteSheetAction } from '@web-client/presenter/actions/TrialSessionMinutes/fetchCurrentJudgesAsOptionsForMinuteSheetAction';
 import { getCaseAction } from '@web-client/presenter/actions/getCaseAction';
 import { getIrsPractitionerUsersAction } from '@web-client/presenter/actions/TrialSession/getIrsPractitionerUsersAction';
 import { getTrialSessionDetailsAction } from '../../actions/TrialSession/getTrialSessionDetailsAction';
@@ -13,6 +13,7 @@ import { setIrsPractitionersForMinuteSheetAction } from '@web-client/presenter/a
 import { setTrialSessionDetailsAction } from '../../actions/TrialSession/setTrialSessionDetailsAction';
 import { setTrialSessionIdAction } from '../../actions/TrialSession/setTrialSessionIdAction';
 import { setupCurrentPageAction } from '../../actions/setupCurrentPageAction';
+import { isEligibleForMinuteSheetAction } from '@web-client/presenter/actions/TrialSessionMinutes/isEligibleForMinuteSheetAction';
 
 export const goToTrialSessionMinutesSequence = [
   setupCurrentPageAction('Interstitial'),
@@ -21,17 +22,23 @@ export const goToTrialSessionMinutesSequence = [
     [getTrialSessionDetailsAction, setTrialSessionDetailsAction],
     [getCaseAction, setCaseAction],
   ]),
-  getAndSetCurrentJudgesForMinuteSheetAction,
-  clearMinuteSheetFormStateAction,
-  checkForExistingMinuteSheetAction,
+  isEligibleForMinuteSheetAction,
   {
-    no: [initializeTrialSessionMinuteSheetFormAction],
-    yes: [setExistingMinuteSheetFormAction],
+    no: [({ router }) => router.route('/trial-sessions')],
+    yes: [
+      fetchCurrentJudgesAsOptionsForMinuteSheetAction,
+      clearMinuteSheetFormStateAction,
+      checkForExistingMinuteSheetAction,
+      {
+        no: [initializeTrialSessionMinuteSheetFormAction],
+        yes: [setExistingMinuteSheetFormAction],
+      },
+      getIrsPractitionerUsersAction,
+      setIrsPractitionersForMinuteSheetAction,
+      saveMinuteSheetFormSnapshotAction,
+      setupCurrentPageAction('TrialSessionMinutesPage'),
+    ],
   },
-  getIrsPractitionerUsersAction,
-  setIrsPractitionersForMinuteSheetAction,
-  saveMinuteSheetFormSnapshotAction,
-  setupCurrentPageAction('TrialSessionMinutesPage'),
 ] as unknown as ({
   docketNumber,
   trialSessionId,

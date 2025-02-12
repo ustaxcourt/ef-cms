@@ -2,7 +2,10 @@ import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { MINUTE_SHEET_FORM_SECTION_MAP } from '@shared/business/entities/EntityConstants';
 import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
-import { OnChangeHandler } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
+import {
+  AutoSaveHandler,
+  OnChangeHandler,
+} from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import React from 'react';
 
 export const JurisdictionFieldset = ({
@@ -11,7 +14,7 @@ export const JurisdictionFieldset = ({
   onChangeHandler,
 }: {
   onChangeHandler: OnChangeHandler;
-  onBlurHandler: () => void;
+  onBlurHandler: AutoSaveHandler;
   jurisdictionFormState: MinuteSheetFormState['jurisdictionSection'];
 }) => {
   return (
@@ -45,7 +48,7 @@ export const JurisdictionFieldset = ({
           <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
             <label
               className="margin-right-2 margin-bottom-0 display-inline-block"
-              htmlFor={'$jurisdictionRetainedNote'}
+              htmlFor="jurisdictionRetainedNote"
             >
               Note
             </label>
@@ -53,6 +56,7 @@ export const JurisdictionFieldset = ({
               className="usa-input maxw-full"
               id="jurisdictionRetainedNote"
               name="jurisdictionRetainedNote"
+              aria-labelledby="jurisdictionRetainedNote"
               type="text"
               value={jurisdictionFormState.retained.note}
               onBlur={() => onBlurHandler()}
@@ -99,7 +103,7 @@ export const JurisdictionFieldset = ({
           <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
             <label
               className="margin-right-2 margin-bottom-0 display-inline-block"
-              htmlFor={'$continuedNote'}
+              htmlFor="continuedNote"
             >
               Note
             </label>

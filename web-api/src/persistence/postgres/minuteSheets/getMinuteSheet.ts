@@ -1,6 +1,6 @@
-import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { getDbReader } from '@web-api/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import { MinuteSheet } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 
 export const getMinuteSheet = async ({
   docketNumber,
@@ -22,7 +22,7 @@ export const getMinuteSheet = async ({
     return transformNullToUndefined(minuteSheet) as {
       docketNumber: string;
       trialSessionId: string;
-      content: MinuteSheetFormState;
+      content: MinuteSheet;
     };
   } else {
     return undefined;

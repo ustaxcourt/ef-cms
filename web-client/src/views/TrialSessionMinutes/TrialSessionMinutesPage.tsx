@@ -17,7 +17,10 @@ export const TrialSessionMinutesPage = connect(
     return (
       <>
         <CaseDetailHeader hideActionButtons openCaseInNewTab />
-        <div className="grid-container">
+        <div
+          className="grid-container"
+          data-testid="trial-session-minutes-page"
+        >
           <div className="grid-row">
             <h1 className="grid-col-fill">
               Minutes: {formattedTrialSessionDetails.trialLocation} -{' '}

@@ -1,20 +1,21 @@
 import {
+  BRIEF_SUBTYPE,
+  PETITIONER_ROLE_OPTIONS,
+  STATUS_REPORT_ORDERED_FOR_OPTIONS,
+  MOTION_TYPE_OPTIONS,
+  MOTION_FILED_BY_OPTIONS,
+  MOTION_STATUS_OPTIONS,
+  MOTION_OBJECTION_OPTIONS,
   ACTION_DOCUMENT_TYPE_OPTIONS,
   ACTION_FILED_BY_OPTIONS,
   ACTION_STATUS_OPTIONS,
-  BRIEF_SUBTYPE,
-  BriefDetailsType,
-  EXHIBIT_STATUS_OPTIONS,
-  ExhibitStatusOption,
-  MOTION_FILED_BY_OPTIONS,
-  MOTION_OBJECTION_OPTIONS,
-  MOTION_STATUS_OPTIONS,
-  MOTION_TYPE_OPTIONS,
-  MinuteSheetFormState,
-  PETITIONER_ROLE_OPTIONS,
-  STATUS_REPORT_ORDERED_FOR_OPTIONS,
   TRIAL_HEARING_OPTIONS,
-} from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+  EXHIBIT_STATUS_OPTIONS,
+} from '@shared/business/entities/EntityConstants';
+import {
+  BriefDetailsType,
+  MinuteSheet,
+} from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 import {
   FORMATS,
   formatDateString,
@@ -35,7 +36,7 @@ export type FormattedMinuteSheet = {
   petitionerAppearances: string[];
   called: string;
   notCalled: string;
-  recalled: { renderKey: string; content: string }[];
+  recalled: { content: string }[];
   pretrialConference?: string;
   trialHearing?: string;
   respondentAppearances: string[];
@@ -45,11 +46,9 @@ export type FormattedMinuteSheet = {
   stipulatedDecisionOrdered: string;
   motions: {
     motionType: string;
-    renderKey: string;
     content: string;
   }[];
   actionsAndFilings: {
-    renderKey: string;
     content: string;
   }[];
   trialBrief: {
@@ -59,19 +58,17 @@ export type FormattedMinuteSheet = {
     briefType: string;
     briefDetails: string[];
   };
-  petitionerWitnesses: { renderKey: string; name: string }[];
-  respondentWitnesses: { renderKey: string; name: string }[];
+  petitionerWitnesses: { name: string }[];
+  respondentWitnesses: { name: string }[];
   exhibits: {
-    renderKey: string;
     description: string;
-    status: ExhibitStatusOption;
+    status: string;
     note: string;
   }[];
 };
 
 type FormattedRow = {
   content: string;
-  renderKey: string;
 };
 
 export const getBriefDetails = (briefDetails: BriefDetailsType) => {
@@ -119,126 +116,124 @@ export const getConsolidatedDocketNumbers = (aCase: RawCase): string => {
 
 export const formatWitnesses = (
   witnessesSection:
-    | MinuteSheetFormState['witnessesSection']['petitionerWitnesses']
-    | MinuteSheetFormState['witnessesSection']['respondentWitnesses'],
+    | MinuteSheet['evidence']['petitionerWitnesses']
+    | MinuteSheet['evidence']['respondentWitnesses'],
 ) => {
   return Object.values(witnessesSection).filter(witness => !!witness.name);
 };
 
-export const formatPetitioners = (aCase: RawCase) => {
-  return aCase.petitioners.map(petitioner => petitioner.name).join(', ');
-};
+export const formatPetitioners = (aCase: RawCase) =>
+  aCase.petitioners.map(petitioner => petitioner.name).join(', ');
 
-export const formatRemoteSession = (isRemoteSession: boolean) => {
-  return isRemoteSession ? 'Yes' : 'No';
-};
+export const formatRemoteSession = (isRemoteSession: boolean) =>
+  isRemoteSession ? 'Yes' : 'No';
 
-export const formatCalledSection = (section: {
-  date: string;
-  note: string;
-  transcriptOrdered?: boolean;
-}): string => {
+export const formatCalledSection = (
+  calendarCall: MinuteSheet['caseRecord']['calendarCall'],
+): string => {
+  if (!calendarCall) return '';
   return [
-    formatDateString(section.date, FORMATS.MMDDYYYY),
-    section.note && `<em>${section.note}</em>`,
-    section.transcriptOrdered ? 'Transcript ordered' : '',
+    formatDateString(calendarCall.date, FORMATS.MMDDYYYY),
+    calendarCall.note && `<em>${calendarCall.note}</em>`,
+    calendarCall.transcriptOrdered ? 'Transcript ordered' : '',
   ]
     .filter(substring => !!substring)
     .join('; ');
 };
 
 export const formatPetitionerAppearances = (
-  petitionersSection: MinuteSheetFormState['petitionersSection'],
+  petitioners: MinuteSheet['appearances']['petitioners'],
 ): string[] => {
-  return petitionersSection.noAppearance
+  return petitioners.noAppearance
     ? ['No appearance']
-    : Object.values(petitionersSection.petitioners)
-        .map((petitioner: any) => {
+    : petitioners.appearances
+        .map(petitioner => {
           const parts = [
             petitioner.name,
             petitioner.role && `(${PETITIONER_ROLE_OPTIONS[petitioner.role]})`,
             petitioner.datesOfAppearance && `- ${petitioner.datesOfAppearance}`,
           ].filter(substring => !!substring);
 
-          return parts.length > 0 ? parts.join(' ') : null;
+          return parts.length > 0 ? parts.join(' ') : undefined;
         })
         .filter((appearance): appearance is string => !!appearance);
 };
 
 export const formatRespondentAppearances = (
-  respondentsSection: MinuteSheetFormState['respondentsSection'],
+  respondents: MinuteSheet['appearances']['respondents'],
 ): string[] => {
-  return Object.values(respondentsSection.respondents)
-    .map((respondent: any) => {
+  return respondents
+    .map(respondent => {
       const parts = [
         respondent.name,
         respondent.datesOfAppearance && `- ${respondent.datesOfAppearance}`,
       ].filter(substring => !!substring);
 
-      return parts.length > 0 ? parts.join(' ') : null;
+      return parts.length > 0 ? parts.join(' ') : undefined;
     })
     .filter((appearance): appearance is string => !!appearance);
 };
 
 export const formatJurisdictionRetained = (
-  section: MinuteSheetFormState['jurisdictionSection']['retained'],
-): string | undefined => {
-  if (!section?.date) return undefined;
+  retained: MinuteSheet['jurisdiction']['retained'],
+): string => {
+  if (!retained?.date) return '';
   return [
-    `${formatDateString(section.date, FORMATS.MMDDYYYY)}`,
-    section.note ? `<em>${section.note}</em>` : '',
+    `${formatDateString(retained.date, FORMATS.MMDDYYYY)}`,
+    retained.note ? `<em>${retained.note}</em>` : '',
   ]
     .filter(Boolean)
     .join('; ');
 };
 
 export const formatJurisdictionContinued = (
-  section: MinuteSheetFormState['jurisdictionSection']['continued'],
-): string | undefined => {
-  if (!section?.date) return undefined;
+  continued: MinuteSheet['jurisdiction']['continued'],
+): string => {
+  if (!continued?.date) return '';
   return [
-    `${formatDateString(section.date, FORMATS.MMDDYYYY)}`,
-    section.note ? `<em>${section.note}</em>` : '',
+    `${formatDateString(continued.date, FORMATS.MMDDYYYY)}`,
+    continued.note ? `<em>${continued.note}</em>` : '',
   ]
     .filter(Boolean)
     .join('; ');
 };
 
 export const formatStatusReportOrdered = (
-  section: MinuteSheetFormState['ordersSection']['statusReportOrdered'],
+  statusReport: MinuteSheet['orders']['statusReport'],
 ): string => {
+  if (!statusReport) return '';
   const orderedFor =
-    STATUS_REPORT_ORDERED_FOR_OPTIONS[section.orderedFor] || '';
+    STATUS_REPORT_ORDERED_FOR_OPTIONS[statusReport.orderedFor] || '';
   return [
-    formatDateString(section.date, FORMATS.MMDDYYYY),
+    formatDateString(statusReport.date, FORMATS.MMDDYYYY),
     orderedFor && `Ordered for ${orderedFor}`,
-    section.dueDate &&
-      `Due ${formatDateString(section.dueDate, FORMATS.MMDDYYYY)}`,
-    section.note && `<em>${section.note}</em>`,
+    statusReport.dueDate &&
+      `Due ${formatDateString(statusReport.dueDate, FORMATS.MMDDYYYY)}`,
+    statusReport.note && `<em>${statusReport.note}</em>`,
   ]
     .filter(substring => !!substring)
     .join('; ');
 };
 
 export const formatStipulatedDecision = (
-  section: MinuteSheetFormState['ordersSection']['stipulatedDecisionOrdered'],
+  stipulatedDecision: MinuteSheet['orders']['stipulatedDecision'],
 ): string => {
+  if (!stipulatedDecision) return '';
   return [
-    formatDateString(section.date, FORMATS.MMDDYYYY),
-    section.dueDate &&
-      `Due ${formatDateString(section.dueDate, FORMATS.MMDDYYYY)}`,
-    section.note && `<em>${section.note}</em>`,
+    formatDateString(stipulatedDecision.date, FORMATS.MMDDYYYY),
+    stipulatedDecision.dueDate &&
+      `Due ${formatDateString(stipulatedDecision.dueDate, FORMATS.MMDDYYYY)}`,
+    stipulatedDecision.note && `<em>${stipulatedDecision.note}</em>`,
   ]
     .filter(Boolean)
     .join('; ');
 };
 
 export const formatMotions = (
-  motionsSection: MinuteSheetFormState['motionsSection'],
+  motions: MinuteSheet['proceedings']['motions'],
 ) => {
-  if (Object.entries(motionsSection.motions).length === 0) return [];
-  return Object.values(motionsSection.motions)
-    .map((motion: any) => ({
+  return motions
+    .map(motion => ({
       content: [
         `${motion.oralMotion ? 'Oral ' : ''}${MOTION_TYPE_OPTIONS[motion.type] || ''}`,
         formatDateString(motion.date, FORMATS.MMDDYYYY),
@@ -252,18 +247,17 @@ export const formatMotions = (
         .filter(substring => !!substring)
         .join('; '),
       motionType: MOTION_TYPE_OPTIONS[motion.type],
-      renderKey: motion.renderKey,
     }))
     .filter(
       formattedMotion =>
-        !!formattedMotion.content && !!formattedMotion.motionType, // 10419 TODO ask UX about whether or not to show a motion on the PDF if no type is selected
+        !!formattedMotion.content && !!formattedMotion.motionType,
     );
 };
 
 export const formatActionsAndFilings = (
-  section: MinuteSheetFormState['actionsAndFilingsSection'],
+  actionsAndFilings: MinuteSheet['proceedings']['actionsAndFilings'],
 ) => {
-  return Object.values(section.actionsAndFilings)
+  return actionsAndFilings
     .map(action => ({
       content: [
         formatDateString(action.date, FORMATS.MMDDYYYY),
@@ -284,75 +278,73 @@ export const formatActionsAndFilings = (
       ]
         .filter(substring => !!substring)
         .join('; '),
-      renderKey: action.renderKey,
     }))
     .filter(action => !!action.content);
 };
 
-export const formatTrialBrief = (
-  trialBriefSection: MinuteSheetFormState['trialBriefSection'],
-) => {
-  const result = {
+export const formatTrialBrief = (trialBrief: MinuteSheet['brief']) => {
+  return {
     benchOpinionRendered: [
-      trialBriefSection.dateBenchOpinionRendered
-        ? formatDateString(
-            trialBriefSection.dateBenchOpinionRendered,
-            FORMATS.MMDDYYYY,
-          )
+      trialBrief.benchOpinionDate
+        ? formatDateString(trialBrief.benchOpinionDate, FORMATS.MMDDYYYY)
         : '',
-      trialBriefSection.transcriptOrdered ? 'Transcript ordered' : '',
-      trialBriefSection.note ? `<em>${trialBriefSection.note}</em>` : '',
+      trialBrief.transcriptOrdered ? 'Transcript ordered' : '',
+      trialBrief.note ? `<em>${trialBrief.note}</em>` : '',
     ]
       .filter(substring => !!substring)
       .join('; '),
-    briefDetails: getBriefDetails(trialBriefSection.briefDetails),
-    briefType: trialBriefSection.briefType || '',
-    dateSubmitted: trialBriefSection.dateSubmitted
-      ? formatDateString(trialBriefSection.dateSubmitted, FORMATS.MMDDYYYY)
+    briefDetails: getBriefDetails(trialBrief.details),
+    briefType: trialBrief.type || '',
+    dateSubmitted: trialBrief.dateSubmitted
+      ? formatDateString(trialBrief.dateSubmitted, FORMATS.MMDDYYYY)
       : '',
-    totalTrialHours: trialBriefSection.totalTrialHours
-      ? `${trialBriefSection.totalTrialHours}`
+    totalTrialHours: trialBrief.hoursOfTrial
+      ? `${trialBrief.hoursOfTrial}`
       : '',
   };
-
-  return result;
 };
 
-export const formatPretrialConference = (section: any): string => {
+export const formatPretrialConference = (
+  pretrialConference: MinuteSheet['caseRecord']['pretrialConference'],
+): string => {
+  if (!pretrialConference) return '';
   return [
-    section.date,
-    section.note && `<em>${section.note}</em>`,
-    section.transcriptOrdered ? 'Transcript ordered' : '',
+    pretrialConference.date,
+    pretrialConference.note && `<em>${pretrialConference.note}</em>`,
+    pretrialConference.transcriptOrdered ? 'Transcript ordered' : '',
   ]
     .filter(Boolean)
     .join('; ');
 };
 
-export const formatTrialHearing = (section: any): string => {
+export const formatTrialHearing = (
+  trialHearing: MinuteSheet['caseRecord']['trialHearing'],
+): string => {
+  if (!trialHearing) return '';
   return [
-    section.date,
-    section.trialHearingType && TRIAL_HEARING_OPTIONS[section.trialHearingType],
-    section.note && `<em>${section.note}</em>`,
-    section.transcriptOrdered ? 'Transcript ordered' : '',
+    trialHearing.date,
+    trialHearing.trialHearingType &&
+      TRIAL_HEARING_OPTIONS[trialHearing.trialHearingType],
+    trialHearing.note && `<em>${trialHearing.note}</em>`,
+    trialHearing.transcriptOrdered ? 'Transcript ordered' : '',
   ]
     .filter(Boolean)
     .join('; ');
 };
 
 export const formatRecalledRows = (
-  recalledRows: MinuteSheetFormState['caseMetadataSection']['recalled'],
+  recalls: MinuteSheet['caseRecord']['recalls'],
 ): FormattedRow[] => {
-  return Object.values(recalledRows)
-    .map(row => {
+  return recalls
+    .map(recall => {
       const formattedRow = {
         content: [
-          row.date,
-          row.note && `<em>${row.note}</em>`,
-          row.transcriptOrdered ? 'Transcript ordered' : '',
+          recall.date,
+          recall.note && `<em>${recall.note}</em>`,
+          recall.transcriptOrdered ? 'Transcript ordered' : '',
         ]
           .filter(Boolean)
           .join('; '),
-        renderKey: row.renderKey,
       };
 
       if (formattedRow.content.length > 0) {
@@ -363,13 +355,12 @@ export const formatRecalledRows = (
 };
 
 export const formatExhibits = (
-  exhibitsSection: MinuteSheetFormState['exhibitsSection'],
+  exhibits: MinuteSheet['evidence']['exhibits'],
 ) => {
-  return Object.values(exhibitsSection.exhibits)
+  return exhibits
     .map(exhibit => ({
       description: exhibit.description,
-      note: exhibit.note,
-      renderKey: exhibit.renderKey,
+      note: exhibit.note || '',
       status: EXHIBIT_STATUS_OPTIONS[exhibit.status],
     }))
     .filter(

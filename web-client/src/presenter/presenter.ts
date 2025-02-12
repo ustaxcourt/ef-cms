@@ -494,7 +494,6 @@ import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetai
 import { toggleUseContactPrimaryAddressSequence } from './sequences/toggleUseContactPrimaryAddressSequence';
 import { toggleUseExistingAddressSequence } from './sequences/toggleUseExistingAddressSequence';
 import { toggleWorkingCopySortSequence } from './sequences/toggleWorkingCopySortSequence';
-import { trialSessionMinutesAutosaveSequence } from '@web-client/presenter/sequences/TrialSessionMinutes/trialSessionMinutesAutosaveSequence';
 import { unauthorizedErrorSequence } from './sequences/unauthorizedErrorSequence';
 import { unblockCaseFromTrialSequence } from './sequences/unblockCaseFromTrialSequence';
 import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserErrorSequence';
@@ -618,6 +617,7 @@ import { validateUpdatePractitionerSequence } from './sequences/validateUpdatePr
 import { validateUploadCorrespondenceDocumentSequence } from './sequences/validateUploadCorrespondenceDocumentSequence';
 import { validateUploadCourtIssuedDocumentSequence } from './sequences/validateUploadCourtIssuedDocumentSequence';
 import { validateUserContactSequence } from './sequences/validateUserContactSequence';
+import { autosaveTrialSessionMinuteSheetSequence } from '@web-client/presenter/sequences/TrialSessionMinutes/autosaveTrialSessionMinuteSheetSequence';
 
 export const presenterSequences = {
   addAnotherIrsNoticeToFormSequence,
@@ -649,6 +649,7 @@ export const presenterSequences = {
     associateIrsPractitionerWithCaseSequence as unknown as Function,
   associatePrivatePractitionerWithCaseSequence:
     associatePrivatePractitionerWithCaseSequence as unknown as Function,
+  autosaveTrialSessionMinuteSheetSequence,
   autoSaveTrialSessionWorkingCopySequence:
     autoSaveTrialSessionWorkingCopySequence as unknown as Function,
   batchCompleteMessageSequence:
@@ -1401,7 +1402,6 @@ export const presenterSequences = {
   toggleUseExistingAddressSequence:
     toggleUseExistingAddressSequence as unknown as Function,
   toggleWorkingCopySortSequence,
-  trialSessionMinutesAutosaveSequence,
   unauthorizedErrorSequence: unauthorizedErrorSequence as unknown as Function,
   unblockCaseFromTrialSequence:
     unblockCaseFromTrialSequence as unknown as Function,

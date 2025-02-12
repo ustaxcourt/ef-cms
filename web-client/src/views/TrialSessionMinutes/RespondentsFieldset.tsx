@@ -1,5 +1,6 @@
 import {
   AddRowHandler,
+  AutoSaveHandler,
   OnChangeHandler,
   RemoveRowHandler,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
@@ -20,7 +21,7 @@ export const RespondentsFieldset = ({
 }: {
   addRowHandler: AddRowHandler;
   onChangeHandler: OnChangeHandler;
-  onBlurHandler: () => void;
+  onBlurHandler: AutoSaveHandler;
   removeRowHandler: RemoveRowHandler;
   respondentsFormState: MinuteSheetFormState['respondentsSection'];
   formOptions;
@@ -28,8 +29,8 @@ export const RespondentsFieldset = ({
   return (
     <fieldset className="grid-container border-0 padding-0 margin-top-4">
       <div className="grid-row grid-gap-2 margin-bottom-1">
-        <div className="grid-col-3">Respondent(s)</div>
-        <div className="grid-col-3">Date(s) of Appearance</div>
+        <div className="grid-col-3 usa-label">Respondent(s)</div>
+        <div className="grid-col-3 usa-label">Date(s) of Appearance</div>
         <div className="grid-col-auto"></div>
       </div>
       {Object.values(respondentsFormState.respondents).map((row, rowIndex) => {
@@ -40,12 +41,9 @@ export const RespondentsFieldset = ({
           >
             <div className="grid-col-3">
               <FormGroup className="margin-bottom-0">
-                <label hidden htmlFor={`respondent-${rowIndex}`}>
-                  {`Respondent ${rowIndex}`}
-                </label>
                 <CreatableSelect
-                  aria-labelledby={`respondent-label-${rowIndex}"`}
                   id={`respondent-${rowIndex}"`}
+                  aria-label={`respondent-${rowIndex}"`}
                   isClearable={true}
                   name={`respondent-${rowIndex}"`}
                   options={formOptions}
@@ -54,7 +52,6 @@ export const RespondentsFieldset = ({
                     value: respondentsFormState.respondents[row.renderKey].name,
                   }}
                   onChange={inputValue =>
-                    // 10419 TODO make default object to spread in name and section
                     onChangeHandler({
                       name: 'respondents',
                       rowInfo: {
@@ -70,15 +67,11 @@ export const RespondentsFieldset = ({
             </div>
             <div className="grid-col-3">
               <FormGroup className="margin-bottom-0">
-                <label
-                  hidden
-                  htmlFor={`respondent-date-of-appearance-${rowIndex}`}
-                >
-                  Date(s) of Appearance
-                </label>
                 <input
                   className="usa-input"
                   id={`respondent-date-of-appearance-${rowIndex}`}
+                  aria-label={`respondent-date-of-appearance-${rowIndex}`}
+                  name={`respondent-date-of-appearance-${rowIndex}`}
                   type="text"
                   value={
                     respondentsFormState.respondents[row.renderKey]

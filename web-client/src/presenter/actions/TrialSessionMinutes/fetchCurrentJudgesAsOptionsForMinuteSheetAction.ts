@@ -1,14 +1,12 @@
 import { getConstants } from '@web-client/getConstants';
 import { getUsersInSectionInteractor } from '@shared/proxies/users/getUsersInSectionProxy';
+import { Judge } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 
-export const getAndSetCurrentJudgesForMinuteSheetAction = async ({
+export const fetchCurrentJudgesAsOptionsForMinuteSheetAction = async ({
   applicationContext,
 }) => {
   const { USER_ROLES } = getConstants();
-  let judgeOptions: Record<
-    string,
-    { fullName: string; title: string; userId: string }
-  > = {};
+  const judgeOptions: Record<string, Judge> = {};
   (
     await getUsersInSectionInteractor(applicationContext, {
       section: 'judge',

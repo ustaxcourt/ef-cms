@@ -1,15 +1,16 @@
 import {
   AddRowHandler,
+  AutoSaveHandler,
   OnChangeHandler,
   RemoveRowHandler,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import { MINUTE_SHEET_FORM_SECTION_MAP } from '@shared/business/entities/EntityConstants';
 import {
-  MinuteSheetFormState,
+  MINUTE_SHEET_FORM_SECTION_MAP,
   PETITIONER_ROLE_OPTIONS,
-} from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+} from '@shared/business/entities/EntityConstants';
+import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import React from 'react';
 
 export const PetitionersFieldset = ({
@@ -20,7 +21,7 @@ export const PetitionersFieldset = ({
   removeRowHandler,
 }: {
   onChangeHandler: OnChangeHandler;
-  onBlurHandler: () => void;
+  onBlurHandler: AutoSaveHandler;
   addRowHandler: AddRowHandler;
   petitionersFormState: MinuteSheetFormState['petitionersSection'];
   removeRowHandler: RemoveRowHandler;
@@ -28,7 +29,7 @@ export const PetitionersFieldset = ({
   return (
     <fieldset className="grid-container border-0 padding-0">
       <div className="grid-row grid-gap-2 margin-bottom-1">
-        <div className="grid-col-1">Petitioner(s)</div>
+        <div className="grid-col-1 usa-label">Petitioner(s)</div>
         <div className="grid-col-2">
           <FormGroup className="margin-bottom-0 display-inline-block">
             <div className="usa-checkbox">
@@ -57,8 +58,8 @@ export const PetitionersFieldset = ({
             </div>
           </FormGroup>
         </div>
-        <div className="grid-col-2">Role</div>
-        <div className="grid-col-3">Date(s) of Appearance</div>
+        <div className="grid-col-2 usa-label">Role</div>
+        <div className="grid-col-3 usa-label">Date(s) of Appearance</div>
         <div className="grid-col-4"></div>
       </div>
       {Object.values(petitionersFormState.petitioners).map((row, rowIndex) => (
@@ -68,13 +69,11 @@ export const PetitionersFieldset = ({
         >
           <div className="grid-col-3">
             <FormGroup className="margin-bottom-0">
-              <label hidden htmlFor="petitioner">
-                {`Petitioner ${rowIndex}`}
-              </label>
               <input
                 className="usa-input"
-                id="petitioner"
-                name="petitioner"
+                id={`petitioner-${rowIndex}`}
+                name={`petitioner-${rowIndex}`}
+                aria-label={`petitioner-${rowIndex}`}
                 type="text"
                 value={petitionersFormState.petitioners[row.renderKey].name}
                 onBlur={() => onBlurHandler()}
@@ -94,13 +93,11 @@ export const PetitionersFieldset = ({
           </div>
           <div className="grid-col-2">
             <FormGroup className="margin-bottom-0 display-flex align-items-center">
-              <label hidden htmlFor={`petitionerRole-${rowIndex}`}>
-                Role
-              </label>
               <select
                 className="usa-select display-inline-block"
                 id={`petitionerRole-${rowIndex}`}
                 name={`petitionerRole-${rowIndex}`}
+                aria-label={`petitionerRole-${rowIndex}`}
                 value={petitionersFormState.petitioners[row.renderKey].role}
                 onBlur={() => onBlurHandler()}
                 onChange={e => {
@@ -128,16 +125,11 @@ export const PetitionersFieldset = ({
           </div>
           <div className="grid-col-3">
             <FormGroup className="margin-bottom-0">
-              <label
-                hidden
-                htmlFor={`petitioner-dates-of-appearance-${rowIndex}`}
-              >
-                {`Petitioner Role ${rowIndex}`}
-              </label>
               <input
                 className="usa-input"
                 id={`petitioner-dates-of-appearance-${rowIndex}`}
                 name={`petitioner-dates-of-appearance-${rowIndex}`}
+                aria-label={`petitioner-dates-of-appearance-${rowIndex}`}
                 type="text"
                 value={
                   petitionersFormState.petitioners[row.renderKey]

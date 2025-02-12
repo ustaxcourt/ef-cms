@@ -1,5 +1,5 @@
 import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
-import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+import { MinuteSheet } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 
 export interface Database {
   dwUserCaseNote: UserCaseNoteTable;
@@ -138,7 +138,7 @@ export type UpdateUserCaseNoteKysely = Updateable<UserCaseNoteTable>;
 export interface MinuteSheetTable {
   trialSessionId: string;
   docketNumber: string;
-  content: MinuteSheetFormState; // 10419 TODO probably shouldnt define persistence type here based on client-side form state type?
+  content: MinuteSheet;
 }
 
 export type MinuteSheetKysely = Selectable<MinuteSheetTable>;

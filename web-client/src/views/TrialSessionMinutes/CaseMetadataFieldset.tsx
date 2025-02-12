@@ -1,15 +1,16 @@
 import {
   AddRowHandler,
+  AutoSaveHandler,
   OnChangeHandler,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import { MINUTE_SHEET_FORM_SECTION_MAP } from '@shared/business/entities/EntityConstants';
 import {
-  MinuteSheetFormState,
+  MINUTE_SHEET_FORM_SECTION_MAP,
   TRIAL_HEARING_OPTIONS,
-} from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+} from '@shared/business/entities/EntityConstants';
+import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import React from 'react';
 
 export const CaseMetadataFieldset = ({
@@ -20,7 +21,7 @@ export const CaseMetadataFieldset = ({
 }: {
   addRowHandler: AddRowHandler;
   onChangeHandler: OnChangeHandler;
-  onBlurHandler: () => void;
+  onBlurHandler: AutoSaveHandler;
   caseMetadataFormState: MinuteSheetFormState['caseMetadataSection'];
 }) => {
   return (

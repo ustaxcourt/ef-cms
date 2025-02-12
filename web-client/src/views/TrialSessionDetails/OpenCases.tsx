@@ -38,7 +38,7 @@ export const OpenCases = connect(
                 <th>Petitioner Counsel</th>
                 <th>Respondent Counsel</th>
                 <th>Calendar Notes</th>
-                <th></th>
+                <th>{/* Empty header for minute sheet link column */}</th>
               </tr>
             </thead>
             {openCases.map(item => (

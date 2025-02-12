@@ -1,15 +1,16 @@
 import {
   AddRowHandler,
+  AutoSaveHandler,
   OnChangeHandler,
   RemoveRowHandler,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import { Button } from '@web-client/ustc-ui/Button/Button';
+import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
   EXHIBIT_STATUS_OPTIONS,
-  MinuteSheetFormState,
-} from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
-import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import { MINUTE_SHEET_FORM_SECTION_MAP } from '@shared/business/entities/EntityConstants';
+  MINUTE_SHEET_FORM_SECTION_MAP,
+} from '@shared/business/entities/EntityConstants';
 import React from 'react';
 
 export const ExhibitsFieldset = ({
@@ -20,7 +21,7 @@ export const ExhibitsFieldset = ({
   removeRowHandler,
 }: {
   onChangeHandler: OnChangeHandler;
-  onBlurHandler: () => void;
+  onBlurHandler: AutoSaveHandler;
   addRowHandler: AddRowHandler;
   exhibitsFormState: MinuteSheetFormState['exhibitsSection'];
   removeRowHandler: RemoveRowHandler;
@@ -40,13 +41,11 @@ export const ExhibitsFieldset = ({
         >
           <div className="grid-col-5">
             <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
-              <label hidden htmlFor={`exhibit-description-${rowIndex}`}>
-                {`Description ${rowIndex}`}
-              </label>
               <input
                 className="usa-input maxw-full"
                 id={`exhibit-description-${rowIndex}`}
                 name={`exhibit-description-${rowIndex}`}
+                aria-label={`exhibit-description-${rowIndex}`}
                 type="text"
                 value={exhibitsFormState.exhibits[row.renderKey].description}
                 onBlur={() => onBlurHandler()}

@@ -1,11 +1,14 @@
-import {
-  BRIEF_SUBTYPE,
-  SimultaneousMemorandaOfLawFormFields,
-} from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+import { SimultaneousMemorandaOfLawFormFields } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import { MINUTE_SHEET_FORM_SECTION_MAP } from '@shared/business/entities/EntityConstants';
-import { OnChangeHandler } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
+import {
+  BRIEF_SUBTYPE,
+  MINUTE_SHEET_FORM_SECTION_MAP,
+} from '@shared/business/entities/EntityConstants';
+import {
+  AutoSaveHandler,
+  OnChangeHandler,
+} from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import React from 'react';
 
 export const SimultaneousMemorandaOfLawFormFieldset = ({
@@ -14,7 +17,7 @@ export const SimultaneousMemorandaOfLawFormFieldset = ({
   simultaneousMemorandaOfLawFormState,
 }: {
   onChangeHandler: OnChangeHandler;
-  onBlurHandler: () => void;
+  onBlurHandler: AutoSaveHandler;
   simultaneousMemorandaOfLawFormState: SimultaneousMemorandaOfLawFormFields;
 }) => {
   const rowsConfig = [
@@ -33,7 +36,7 @@ export const SimultaneousMemorandaOfLawFormFieldset = ({
           <span className="usa-label">Note</span>
         </div>
       </div>
-      {rowsConfig.map(rowConfig => {
+      {rowsConfig.map((rowConfig, index) => {
         return (
           <div
             className="grid-row grid-gap align-items-center margin-bottom-1"
@@ -50,7 +53,6 @@ export const SimultaneousMemorandaOfLawFormFieldset = ({
                 }
                 formGroupClassNames="margin-bottom-0"
                 id={`${rowConfig.key}DueDate`}
-                labelPosition="hidden"
                 onBlur={() => onBlurHandler()}
                 onChange={e =>
                   onChangeHandler({
@@ -67,12 +69,10 @@ export const SimultaneousMemorandaOfLawFormFieldset = ({
             </div>
             <div className="grid-col-7">
               <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full padding-right-4">
-                <label hidden htmlFor={`${rowConfig.key}Note`}>
-                  Note
-                </label>
                 <input
                   className="usa-input maxw-full"
                   id={`${rowConfig.key}Note`}
+                  aria-label={`Note-${index}`}
                   name={`${rowConfig.key}Note`}
                   type="text"
                   value={

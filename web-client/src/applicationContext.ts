@@ -151,7 +151,6 @@ import { generatePrintableTrialSessionCopyReportInteractor } from '../../shared/
 import { generateSignedDocumentInteractor } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
 import { generateSuggestedTrialSessionCalendarInteractor } from '@shared/proxies/trialSessions/generateSuggestedTrialSessionCalendarProxy';
 import { generateTrialCalendarPdfInteractor } from '../../shared/src/proxies/trialSessions/generateTrialCalendarPdfProxy';
-import { generateTrialSessionMinutesPdfInteractor } from '@shared/proxies/trialSessionMinutes/generateTrialSessionMinutesPdfProxy';
 import { getAllFeatureFlagsInteractor } from '../../shared/src/proxies/featureFlag/getAllFeatureFlagsProxy';
 import { getAllUsersByRoleInteractor } from '@shared/proxies/users/getAllUsersByRoleProxy';
 import { getBlockedCasesInteractor } from '../../shared/src/proxies/reports/getBlockedCasesProxy';
@@ -202,7 +201,6 @@ import { getJudgeInSectionInteractor } from '../../shared/src/proxies/users/getJ
 import { getMaintenanceModeInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModeProxy';
 import { getMessageThreadInteractor } from '../../shared/src/proxies/messages/getMessageThreadProxy';
 import { getMessagesForCaseInteractor } from '../../shared/src/proxies/messages/getMessagesForCaseProxy';
-import { getMinuteSheetInteractor } from '../../shared/src/proxies/trialSessionMinutes/getMinuteSheetProxy';
 import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNotificationsProxy';
 import { getOutboxMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getOutboxMessagesForSectionProxy';
 import { getOutboxMessagesForUserInteractor } from '../../shared/src/proxies/messages/getOutboxMessagesForUserProxy';
@@ -305,7 +303,6 @@ import { updateCourtIssuedOrderInteractor } from '../../shared/src/proxies/court
 import { updateDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/updateDeficiencyStatisticProxy';
 import { updateDocketEntryMetaInteractor } from '../../shared/src/proxies/documents/updateDocketEntryMetaProxy';
 import { updateDocketEntryWorksheetInteractor } from '@shared/proxies/pendingItems/updateDocketEntryWorksheetProxy';
-import { updateMinuteSheetInteractor } from '@shared/proxies/trialSessionMinutes/updateMinuteSheetProxy';
 import { updateOtherStatisticsInteractor } from '../../shared/src/proxies/caseStatistics/updateOtherStatisticsProxy';
 import { updatePetitionerInformationInteractor } from '../../shared/src/proxies/updatePetitionerInformationProxy';
 import { updatePractitionerUserInteractor } from '../../shared/src/proxies/practitioners/updatePractitionerUserProxy';
@@ -483,7 +480,6 @@ const allUseCases = {
   generateSignedDocumentInteractor,
   generateSuggestedTrialSessionCalendarInteractor,
   generateTrialCalendarPdfInteractor,
-  generateTrialSessionMinutesPdfInteractor,
   getAllFeatureFlagsInteractor,
   getAllUsersByRoleInteractor,
   getBlockedCasesInteractor,
@@ -518,7 +514,6 @@ const allUseCases = {
   getMaintenanceModeInteractor,
   getMessageThreadInteractor,
   getMessagesForCaseInteractor,
-  getMinuteSheetInteractor,
   getNotificationsInteractor,
   getOutboxMessagesForSectionInteractor,
   getOutboxMessagesForUserInteractor,
@@ -604,7 +599,6 @@ const allUseCases = {
   updateDeficiencyStatisticInteractor,
   updateDocketEntryMetaInteractor,
   updateDocketEntryWorksheetInteractor,
-  updateMinuteSheetInteractor,
   updateOtherStatisticsInteractor,
   updatePetitionerInformationInteractor,
   updatePractitionerUserInteractor,

@@ -16,8 +16,7 @@ import { RawEligibleCase } from '../../entities/cases/EligibleCase';
 import { RawIrsCalendarAdministratorInfo } from '@shared/business/entities/trialSessions/IrsCalendarAdministratorInfo';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { compact, partition } from 'lodash';
-import { isClosed } from '@shared/business/entities/cases/Case';
-import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
+import { caseIsEligibleForMinuteSheet } from '@shared/business/utilities/trialSessionMinutes/caseIsEligibleForMinuteSheet';
 
 export const setPretrialMemorandumFiler = ({ caseItem }): string => {
   if (caseItem.PMTServedPartiesCode !== undefined) {
@@ -204,27 +203,23 @@ export const getFormattedTrialSessionDetails = ({
     allCases,
     item => item.removedFromTrial === true,
   );
-  // 10419 TODO: make sure all roles that should see this link other than trialClerk are included
   const isUserEligableForMinuteSheet = !!isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET,
   );
   const openCasesFormatted = openCases
-    .map(caseItem => setConsolidationFlagsForDisplay(caseItem, openCases))
+    .map(caseItem =>
+      applicationContext
+        .getUtilities()
+        .setConsolidationFlagsForDisplay(caseItem, openCases),
+    )
     .map(caseItem => {
       let displayMinuteSheetFormButton = false;
       let minuteSheetRoute;
 
-      const isEligibleForMinuteSheetButton =
-        trialSession.isCalendared &&
-        !isClosed(caseItem) &&
-        isUserEligableForMinuteSheet;
-
-      const isLeadCase = caseItem.inConsolidatedGroup && caseItem.isLeadCase;
-
       if (
-        isEligibleForMinuteSheetButton &&
-        (isLeadCase || !caseItem.inConsolidatedGroup)
+        isUserEligableForMinuteSheet &&
+        caseIsEligibleForMinuteSheet(caseItem, trialSession)
       ) {
         displayMinuteSheetFormButton = true;
         minuteSheetRoute = `/trial-session-detail/${trialSession.trialSessionId}/case/${caseItem.docketNumber}/minutes`;
@@ -247,29 +242,9 @@ export const getFormattedTrialSessionDetails = ({
     .map(caseItem => {
       let displayMinuteSheetFormButton = false;
       let minuteSheetRoute;
-
-      const isEligibleForMinuteSheetButton =
-        trialSession.isCalendared &&
-        !isClosed(caseItem) &&
-        isUserEligableForMinuteSheet;
-
-      const isLeadCase = caseItem.inConsolidatedGroup && caseItem.isLeadCase;
-
-      let caseWasRemovedFromTrialSessionAfterStartDate = false;
-
-      // 10419 TODO the comparison below needs to be an actual check of two
-      // date/time. We need to make sure we have the actual trial session
-      // start date/times in hand (there are discrepancies between the time in
-      // the ISO string that trialSession.startDate references versus the
-      // trialSession.startTime property).
-      // if (caseItem.removedFromTrialDate > trialSession.startDate) {
-      //   caseWasRemovedFromTrialSessionAfterStartDate = true;
-      // }
-
       if (
-        isEligibleForMinuteSheetButton &&
-        (isLeadCase || !caseItem.inConsolidatedGroup) &&
-        caseWasRemovedFromTrialSessionAfterStartDate
+        isUserEligableForMinuteSheet &&
+        caseIsEligibleForMinuteSheet(caseItem, trialSession)
       ) {
         displayMinuteSheetFormButton = true;
         minuteSheetRoute = `/trial-session-detail/${trialSession.trialSessionId}/case/${caseItem.docketNumber}/minutes`;

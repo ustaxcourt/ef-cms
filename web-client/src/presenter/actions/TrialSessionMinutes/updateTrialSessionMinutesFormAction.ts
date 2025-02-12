@@ -1,4 +1,7 @@
-import { BRIEF_TYPE_OPTIONS } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+import {
+  BRIEF_TYPE_OPTIONS,
+  MINUTE_SHEET_FORM_SECTION_MAP,
+} from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -166,20 +169,25 @@ export const updateTrialSessionMinutesFormAction = ({
 
   updateFormValue({ name, rowInfo, section, store, value });
 
-  // 10419 TODO still want to refactor away from magic strings
-  if (section === 'petitionersSection' && name === 'noAppearance') {
+  if (
+    section === MINUTE_SHEET_FORM_SECTION_MAP.petitionersSection &&
+    name === 'noAppearance'
+  ) {
     handlePetitionerNoAppearance({ store, value });
   }
 
   if (
-    section === 'actionsAndFilingsSection' &&
+    section === MINUTE_SHEET_FORM_SECTION_MAP.actionsAndFilingsSection &&
     name === 'actionsAndFilings' &&
     rowInfo?.nestedName === 'documentType'
   ) {
     handleActionsAndFilingsDocType({ name, rowInfo, section, store, value });
   }
 
-  if (section === 'trialBriefSection' && name === 'briefType') {
+  if (
+    section === MINUTE_SHEET_FORM_SECTION_MAP.trialBriefSection &&
+    name === 'briefType'
+  ) {
     handleBriefTypeChange({ store, value });
   }
 };

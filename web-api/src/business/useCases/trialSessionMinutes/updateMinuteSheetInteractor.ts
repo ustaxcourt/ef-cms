@@ -1,4 +1,3 @@
-import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -6,6 +5,7 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { upsertMinuteSheet } from '@web-api/persistence/postgres/minuteSheets/updateMinuteSheet';
+import { MinuteSheet } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 
 export const updateMinuteSheetInteractor = async (
   { docketNumber, minuteSheet, trialSessionId }: MinuteSheetUpdateBody,
@@ -29,5 +29,5 @@ export const updateMinuteSheetInteractor = async (
 export type MinuteSheetUpdateBody = {
   docketNumber: string;
   trialSessionId: string;
-  minuteSheet: MinuteSheetFormState; // TODO 10419: define this type better (probs shouldn't have the client defining the interface)
+  minuteSheet: MinuteSheet;
 };

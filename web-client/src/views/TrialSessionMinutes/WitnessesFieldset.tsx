@@ -1,5 +1,6 @@
 import {
   AddRowHandler,
+  AutoSaveHandler,
   OnChangeHandler,
   RemoveRowHandler,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
@@ -8,7 +9,7 @@ import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { MINUTE_SHEET_FORM_SECTION_MAP } from '@shared/business/entities/EntityConstants';
 import {
   WitnessesRecord,
-  witnessTypeOptions,
+  WitnessTypeOption,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { capitalize } from 'lodash';
 import React from 'react';
@@ -22,9 +23,9 @@ export const WitnessesFieldset = ({
   witnessType,
 }: {
   onChangeHandler: OnChangeHandler;
-  onBlurHandler: () => void;
+  onBlurHandler: AutoSaveHandler;
   addRowHandler: AddRowHandler;
-  witnessesFormState: WitnessesRecord<typeof witnessTypeOptions>;
+  witnessesFormState: WitnessesRecord<WitnessTypeOption>;
   witnessType: string;
   removeRowHandler: RemoveRowHandler;
 }) => {
@@ -43,13 +44,11 @@ export const WitnessesFieldset = ({
         >
           <div className="grid-col-10">
             <FormGroup className="margin-bottom-0 maxw-full">
-              <label hidden htmlFor={`${witnessType}`}>
-                {`${capitalizedWitnessType} Witness ${rowIndex}`}
-              </label>
               <input
                 className="usa-input maxw-full"
-                id={`${witnessType}`}
-                name={`${witnessType}`}
+                id={`witnessType-${rowIndex}`}
+                name={`witnessType-${rowIndex}`}
+                aria-label={`witnessType-${rowIndex}`}
                 type="text"
                 value={witnessesFormState[row.renderKey].name}
                 onBlur={() => onBlurHandler()}

@@ -3,15 +3,11 @@ import { genericHandler } from '../../genericHandler';
 import { getMinuteSheetInteractor } from '@web-api/business/useCases/trialSessionMinutes/getMinuteSheetInteractor';
 
 export const getMinuteSheetLambda = (event, authorizedUser: UnknownAuthUser) =>
-  genericHandler(
-    event,
-    async () => {
-      return await getMinuteSheetInteractor(
-        {
-          ...event.queryStringParameters,
-        },
-        authorizedUser,
-      );
-    },
-    { logResults: false },
-  );
+  genericHandler(event, async () => {
+    return await getMinuteSheetInteractor(
+      {
+        ...event.queryStringParameters,
+      },
+      authorizedUser,
+    );
+  });

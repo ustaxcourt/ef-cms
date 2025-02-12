@@ -199,26 +199,5 @@ describe('updateTrialSessionMinutesFormAction', () => {
         surReply: expect.any(Object),
       });
     });
-
-    it('should handle nested form value updates', async () => {
-      const { state } = await runAction(updateTrialSessionMinutesFormAction, {
-        modules: {
-          presenter,
-        },
-        props: {
-          name: 'called',
-          rowInfo: { key: 'date', nestedName: 'note' },
-          section: 'caseMetadataSection',
-          value: 'Test note',
-        },
-        state: {
-          minuteSheetForm: mockMinuteSheetFormState,
-        },
-      });
-
-      expect(state.minuteSheetForm.caseMetadataSection.called.date.note).toBe(
-        'Test note',
-      );
-    });
   });
 });

@@ -1,7 +1,13 @@
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import { MINUTE_SHEET_FORM_SECTION_MAP } from '@shared/business/entities/EntityConstants';
-import { OnChangeHandler } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
+import {
+  MINUTE_SHEET_FORM_SECTION_MAP,
+  PARTY_TYPE_OPTIONS_MAP,
+} from '@shared/business/entities/EntityConstants';
+import {
+  AutoSaveHandler,
+  OnChangeHandler,
+} from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import {
   SeriatimBriefFormFields,
   SeriatimMemorandumFormFields,
@@ -14,7 +20,7 @@ export const SeriatimFieldset = ({
   seriatimFormState,
 }: {
   onChangeHandler: OnChangeHandler;
-  onBlurHandler: () => void;
+  onBlurHandler: AutoSaveHandler;
   seriatimFormState: SeriatimBriefFormFields | SeriatimMemorandumFormFields;
 }) => {
   const rowsConfig = [
@@ -45,7 +51,7 @@ export const SeriatimFieldset = ({
           <span className="usa-label">Note</span>
         </div>
       </div>
-      {rowsConfig.map(rowConfig => {
+      {rowsConfig.map((rowConfig, index) => {
         return (
           <div
             className="grid-row grid-gap align-items-center margin-bottom-1"
@@ -104,7 +110,6 @@ export const SeriatimFieldset = ({
                 defaultValue={seriatimFormState[rowConfig.key].dueDate}
                 formGroupClassNames="margin-bottom-0"
                 id={`${rowConfig.key}DueDate`}
-                labelPosition="hidden"
                 onBlur={() => onBlurHandler()}
                 onChange={e =>
                   onChangeHandler({
@@ -121,13 +126,11 @@ export const SeriatimFieldset = ({
             </div>
             <div className="grid-col-4">
               <div className="padding-right-4">
-                <label hidden htmlFor={`${rowConfig.key}Note`}>
-                  Note
-                </label>
                 <FormGroup className="margin-bottom-0 display-flex align-items-center">
                   <input
                     className="usa-input"
                     id={`${rowConfig.key}Note`}
+                    aria-label={`Note-${index}`}
                     name={`${rowConfig.key}Note`}
                     type="text"
                     value={seriatimFormState[rowConfig.key].note}

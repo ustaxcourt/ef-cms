@@ -77,6 +77,14 @@ export const MinuteSheet = ({
             <div>
               <strong>Calendar Called</strong>
             </div>
+            {/*
+              Since we're relying on formatting helpers to describe the content that should displayed in this PDF, including
+              certain markup (e.g., <em> tags), we need to use `dangerouslySetInnerHTML` to render the content as HTML; otherwise the markup
+              itself is rendered as text.
+
+              Since this is only being used to render PDF content as HTML before converting to PDF and does not rely on re-rendering as
+              content changes, this is safe to do. Additionally, we are sanitizing any user input prior to feeding into the doc generator.
+            */}
             <div
               dangerouslySetInnerHTML={{
                 __html: formattedMinuteSheet.called,
@@ -103,10 +111,10 @@ export const MinuteSheet = ({
               <strong>Recalled</strong>
             </div>
             <div>
-              {formattedMinuteSheet.recalled.map(row => (
+              {formattedMinuteSheet.recalled.map((row, index) => (
                 <div
                   dangerouslySetInnerHTML={{ __html: row.content }}
-                  key={row.renderKey}
+                  key={index}
                 />
               ))}
             </div>
@@ -145,8 +153,8 @@ export const MinuteSheet = ({
               <strong>Petitioner(s)</strong>
             </div>
             {formattedMinuteSheet.petitionerAppearances.map(
-              (petitionerAppearance, idx) => (
-                <div key={idx}>{petitionerAppearance}</div>
+              (petitionerAppearance, index) => (
+                <div key={index}>{petitionerAppearance}</div>
               ),
             )}
           </div>
@@ -157,8 +165,8 @@ export const MinuteSheet = ({
               <strong>Respondent</strong>
             </div>
             {formattedMinuteSheet.respondentAppearances.map(
-              (respondentAppearance, idx) => (
-                <div key={idx}>{respondentAppearance}</div>
+              (respondentAppearance, index) => (
+                <div key={index}>{respondentAppearance}</div>
               ),
             )}
           </div>
@@ -223,8 +231,8 @@ export const MinuteSheet = ({
         <>
           <hr />
           <div>
-            {formattedMinuteSheet.motions.map(motion => (
-              <div key={motion.renderKey}>
+            {formattedMinuteSheet.motions.map((motion, index) => (
+              <div key={index}>
                 <div>
                   <strong>{motion.motionType}</strong>
                 </div>
@@ -242,10 +250,10 @@ export const MinuteSheet = ({
             <div>
               <strong>Other actions and filings</strong>
             </div>
-            {formattedMinuteSheet.actionsAndFilings.map(action => (
+            {formattedMinuteSheet.actionsAndFilings.map((action, index) => (
               <div
                 dangerouslySetInnerHTML={{ __html: action.content }}
-                key={action.renderKey}
+                key={index}
               />
             ))}
           </div>
@@ -318,9 +326,11 @@ export const MinuteSheet = ({
                 <div>
                   <strong>Petitioner Witnesses</strong>
                 </div>
-                {formattedMinuteSheet.petitionerWitnesses.map(witness => (
-                  <div key={witness.renderKey}>{witness.name}</div>
-                ))}
+                {formattedMinuteSheet.petitionerWitnesses.map(
+                  (witness, index) => (
+                    <div key={index}>{witness.name}</div>
+                  ),
+                )}
               </div>
             )}
             {formattedMinuteSheet.respondentWitnesses?.length > 0 && (
@@ -328,9 +338,11 @@ export const MinuteSheet = ({
                 <div>
                   <strong>Respondent Witnesses</strong>
                 </div>
-                {formattedMinuteSheet.respondentWitnesses.map(witness => (
-                  <div key={witness.renderKey}>{witness.name}</div>
-                ))}
+                {formattedMinuteSheet.respondentWitnesses.map(
+                  (witness, index) => (
+                    <div key={index}>{witness.name}</div>
+                  ),
+                )}
               </div>
             )}
           </div>
@@ -349,8 +361,8 @@ export const MinuteSheet = ({
                 </tr>
               </thead>
               <tbody>
-                {formattedMinuteSheet.exhibits.map(exhibit => (
-                  <tr key={exhibit.renderKey}>
+                {formattedMinuteSheet.exhibits.map((exhibit, index) => (
+                  <tr key={index}>
                     <td>{exhibit.description}</td>
                     <td>{exhibit.status}</td>
                     <td>{exhibit.note}</td>
