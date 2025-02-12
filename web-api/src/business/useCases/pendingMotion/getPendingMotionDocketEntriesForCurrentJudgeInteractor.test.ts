@@ -11,12 +11,8 @@ import {
   mockJudgeUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
-import { getCaseMetadataByDocketNumber as getCaseMetadataByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 import { getConsolidatedCasesCount as getConsolidatedCasesCountMock } from '@web-api/persistence/postgres/cases/getConsolidatedCasesCount';
 import { getAllPendingMotionDocketEntriesForJudge as getAllPendingMotionDocketEntriesForJudgeMock } from '@web-api/persistence/postgres/docketEntries/reports/getAllPendingMotionDocketEntriesForJudge';
-
-const getCaseMetadataByDocketNumber =
-  getCaseMetadataByDocketNumberMock as jest.Mock;
 
 const getConsolidatedCasesCount = getConsolidatedCasesCountMock as jest.Mock;
 
@@ -46,17 +42,10 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
   };
   const getDocketEntryWorksheetsByDocketEntryIdsResults: RawDocketEntryWorksheet[] =
     [];
-  const CASE_BY_DOCKET_NUMBER: { [key: string]: any } = {};
 
   beforeEach(() => {
     getAllPendingMotionDocketEntriesForJudge.mockResolvedValue(
       getAllPendingMotionDocketEntriesForJudgeResults,
-    );
-
-    getCaseMetadataByDocketNumber.mockImplementation(
-      ({ docketNumber }: { docketNumber: string }) => {
-        return CASE_BY_DOCKET_NUMBER[docketNumber];
-      },
     );
 
     getConsolidatedCasesCount.mockResolvedValue(1);
@@ -99,6 +88,12 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       eventCode: 'M218',
       filingDate: '2000-04-29T15:52:05.725Z',
       pending: true,
+      daysSinceCreated: 8607,
+      consolidatedGroupCount: 999,
+      judge: 'Colvin',
+      caseCaption: 'TEST_CASE_CAPTION',
+      docketNumberWithSuffix: 'docketNumberWithSuffix',
+      leadDocketNumber: DOCKET_NUMBER,
     });
 
     getDocketEntryWorksheetsByDocketEntryIdsResults.push({
@@ -107,18 +102,6 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       primaryIssue: 'SOME PRIMARY ISSUE',
       statusOfMatter: 'SOME STATUS OF MATTER',
     });
-
-    CASE_BY_DOCKET_NUMBER[DOCKET_NUMBER] = {
-      associatedJudge: 'Colvin',
-      caseCaption: 'TEST_CASE_CAPTION',
-      consolidatedCases: [],
-      docketNumber: DOCKET_NUMBER,
-      docketNumberWithSuffix: 'docketNumberWithSuffix',
-      leadDocketNumber: DOCKET_NUMBER,
-    };
-
-    const EXPECTED_CONSOLIDATED_CASE = 999;
-    getConsolidatedCasesCount.mockResolvedValue(EXPECTED_CONSOLIDATED_CASE);
 
     const results =
       await getPendingMotionDocketEntriesForCurrentJudgeInteractor(
@@ -137,7 +120,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
 
     const expectedDocketEntry: FormattedPendingMotionWithWorksheet = {
       caseCaption: 'TEST_CASE_CAPTION',
-      consolidatedGroupCount: EXPECTED_CONSOLIDATED_CASE,
+      consolidatedGroupCount: 999,
       daysSinceCreated: 8607,
       docketEntryId: '1234-5678-9123-4567-8912',
       docketEntryWorksheet: {
@@ -159,19 +142,27 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
 
   it('should only return the lead case when a motion is mass sent using consolidated cases', async () => {
     getAllPendingMotionDocketEntriesForJudgeResults.results.push({
+      daysSinceCreated: 8607,
       docketEntryId: LEAD_DOCKET_ENTRY_ID,
       docketNumber: LEAD_DOCKET_NUMBER,
       eventCode: 'M218',
       filingDate: '2000-04-29T15:52:05.725Z',
       pending: true,
+      caseCaption: 'TEST_CASE_CAPTION',
+      consolidatedGroupCount: 1,
+      leadDocketNumber: LEAD_DOCKET_NUMBER,
     });
 
     getAllPendingMotionDocketEntriesForJudgeResults.results.push({
+      daysSinceCreated: 8607,
       docketEntryId: LEAD_DOCKET_ENTRY_ID,
       docketNumber: DOCKET_NUMBER,
       eventCode: 'M218',
       filingDate: '2000-04-29T15:52:05.725Z',
       pending: true,
+      caseCaption: 'TEST_CASE_CAPTION',
+      consolidatedGroupCount: 1,
+      leadDocketNumber: LEAD_DOCKET_NUMBER,
     });
 
     getDocketEntryWorksheetsByDocketEntryIdsResults.push({
@@ -196,20 +187,6 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
         filingDate: '2000-04-29T15:52:05.725Z',
         pending: true,
       });
-
-    CASE_BY_DOCKET_NUMBER[DOCKET_NUMBER] = {
-      caseCaption: 'TEST_CASE_CAPTION',
-      consolidatedCases: [],
-      docketNumber: DOCKET_NUMBER,
-      leadDocketNumber: LEAD_DOCKET_NUMBER,
-    };
-
-    CASE_BY_DOCKET_NUMBER[LEAD_DOCKET_NUMBER] = {
-      caseCaption: 'TEST_CASE_CAPTION',
-      consolidatedCases: [],
-      docketNumber: LEAD_DOCKET_NUMBER,
-      leadDocketNumber: LEAD_DOCKET_NUMBER,
-    };
 
     const results =
       await getPendingMotionDocketEntriesForCurrentJudgeInteractor(

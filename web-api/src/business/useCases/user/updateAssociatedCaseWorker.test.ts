@@ -521,28 +521,26 @@ describe('updatePetitionerCases', () => {
   });
 
   it('should update the petitioner service indicator when they are represented', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        partyType: PARTY_TYPES.petitionerDeceasedSpouse,
-        petitioners: [
-          ...MOCK_CASE.petitioners,
-          {
-            ...MOCK_CASE.petitioners[0],
-            contactId: mockPetitionerUser2.userId,
-            contactType: CONTACT_TYPES.secondary,
-            inCareOf: 'Barney',
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
-          },
-        ],
-        privatePractitioners: [
-          {
-            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
-            representing: [mockPetitionerUser2.userId],
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+      petitioners: [
+        ...MOCK_CASE.petitioners,
+        {
+          ...MOCK_CASE.petitioners[0],
+          contactId: mockPetitionerUser2.userId,
+          contactType: CONTACT_TYPES.secondary,
+          inCareOf: 'Barney',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+        },
+      ],
+      privatePractitioners: [
+        {
+          ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
+          representing: [mockPetitionerUser2.userId],
+        },
+      ],
+    });
 
     await updatePetitionerCase({
       applicationContext,
@@ -575,12 +573,10 @@ describe('updatePractitionerCases', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        privatePractitioners: [mockPractitionerUser],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      privatePractitioners: [mockPractitionerUser],
+    });
   });
 
   it('should set the service serviceIndicator to ELECTRONIC when confirming the email', async () => {
