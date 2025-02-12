@@ -1,16 +1,17 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   MOCK_PRACTITIONER,
   petitionerUser,
   privatePractitionerUser,
-} from '../../../../shared/src/test/mockUsers';
+} from '@shared/test/mockUsers';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateDocketRecordPdfInteractor } from './generateDocketRecordPdfInteractor';
 import {
   mockDocketClerkUser,
@@ -18,10 +19,12 @@ import {
   mockPetitionsClerkUser,
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 describe('generateDocketRecordPdfInteractor', () => {
   const mockId = '12345';
   const mockPdfUrlAndID = { fileId: mockId, url: 'www.example.com' };
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
   let caseDetail;
 
@@ -65,9 +68,7 @@ describe('generateDocketRecordPdfInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(true);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => ({ ...caseDetail }));
+    getCaseByDocketNumber.mockResolvedValue(caseDetail);
     applicationContext
       .getUseCases()
       .generatePdfFromHtmlInteractor.mockImplementation(({ contentHtml }) => {
@@ -183,14 +184,12 @@ describe('generateDocketRecordPdfInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...caseDetail,
-        isSealed: true,
-        privatePractitioners: [],
-        sealedDate: '2019-09-19T16:42:00.000Z',
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...caseDetail,
+      isSealed: true,
+      privatePractitioners: [],
+      sealedDate: '2019-09-19T16:42:00.000Z',
+    });
 
     await expect(
       generateDocketRecordPdfInteractor(
@@ -207,12 +206,10 @@ describe('generateDocketRecordPdfInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...caseDetail,
-        sealedDate: '2019-08-25T05:00:00.000Z',
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...caseDetail,
+      sealedDate: '2019-08-25T05:00:00.000Z',
+    });
 
     await expect(
       generateDocketRecordPdfInteractor(
@@ -229,12 +226,10 @@ describe('generateDocketRecordPdfInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...caseDetail,
-        sealedDate: '2019-08-25T05:00:00.000Z',
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...caseDetail,
+      sealedDate: '2019-08-25T05:00:00.000Z',
+    });
 
     const result = await generateDocketRecordPdfInteractor(
       applicationContext,
@@ -251,12 +246,10 @@ describe('generateDocketRecordPdfInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(true);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...caseDetail,
-        userId: petitionerUser.userId,
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...caseDetail,
+      userId: petitionerUser.userId,
+    });
 
     const result = await generateDocketRecordPdfInteractor(
       applicationContext,
@@ -273,12 +266,10 @@ describe('generateDocketRecordPdfInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...caseDetail,
-        userId: petitionerUser.userId,
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...caseDetail,
+      userId: petitionerUser.userId,
+    });
 
     const result = await generateDocketRecordPdfInteractor(
       applicationContext,
