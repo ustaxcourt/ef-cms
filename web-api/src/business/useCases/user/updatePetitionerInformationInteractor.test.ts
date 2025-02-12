@@ -271,16 +271,8 @@ describe('updatePetitionerInformationInteractor', () => {
       {
         docketNumber: MOCK_CASE.docketNumber,
         updatedPetitionerData: {
-          address1: '989 Division St',
-          city: 'Somewhere',
-          contactId: mockPetitioners[0].contactId,
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          name: 'Test Primary Petitioner',
-          phone: '1234568',
-          postalCode: '12345',
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          state: 'TN',
-          title: 'Executor',
+          ...MOCK_CASE.petitioners[0],
+          address2: null,
         },
       },
       mockDocketClerkUser,

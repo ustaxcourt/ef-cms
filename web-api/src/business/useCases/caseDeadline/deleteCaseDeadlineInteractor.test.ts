@@ -23,20 +23,19 @@ const deleteCaseDeadline = deleteCaseDeadlineMock as jest.Mock;
 
 describe('deleteCaseDeadlineInteractor', () => {
   let user;
-  let mockCase;
   let mockDeadlines;
   let mockLock;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCase = updateCaseMock as jest.Mock;
+  updateCase.mockImplementation(c => c.caseToUpdate);
 
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
-    mockCase = MOCK_CASE_WITHOUT_PENDING;
 
     applicationContext.environment.stage = 'local';
-    getCaseByDocketNumber.mockReturnValue(mockCase);
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE_WITHOUT_PENDING);
 
     getCaseDeadlinesByDocketNumber.mockImplementation(() => mockDeadlines);
   });
