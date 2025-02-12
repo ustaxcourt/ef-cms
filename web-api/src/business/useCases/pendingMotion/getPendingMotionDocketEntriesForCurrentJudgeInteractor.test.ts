@@ -1,14 +1,27 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import {
   FormattedPendingMotionWithWorksheet,
   getPendingMotionDocketEntriesForCurrentJudgeInteractor,
 } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { RawDocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   mockJudgeUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { getCaseMetadataByDocketNumber as getCaseMetadataByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
+import { getConsolidatedCasesCount as getConsolidatedCasesCountMock } from '@web-api/persistence/postgres/cases/getConsolidatedCasesCount';
+import { getAllPendingMotionDocketEntriesForJudge as getAllPendingMotionDocketEntriesForJudgeMock } from '@web-api/persistence/postgres/docketEntries/reports/getAllPendingMotionDocketEntriesForJudge';
+
+const getCaseMetadataByDocketNumber =
+  getCaseMetadataByDocketNumberMock as jest.Mock;
+
+const getConsolidatedCasesCount = getConsolidatedCasesCountMock as jest.Mock;
+
+const getAllPendingMotionDocketEntriesForJudge =
+  getAllPendingMotionDocketEntriesForJudgeMock as jest.Mock;
 
 jest.mock('@shared/business/utilities/DateHandler', () => {
   const originalModule = jest.requireActual(
@@ -36,23 +49,17 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
   const CASE_BY_DOCKET_NUMBER: { [key: string]: any } = {};
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getAllPendingMotionDocketEntriesForJudge.mockReturnValue(
-        getAllPendingMotionDocketEntriesForJudgeResults,
-      );
+    getAllPendingMotionDocketEntriesForJudge.mockResolvedValue(
+      getAllPendingMotionDocketEntriesForJudgeResults,
+    );
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseMetadataByDocketNumber.mockImplementation(
-        ({ docketNumber }: { docketNumber: string }) => {
-          return CASE_BY_DOCKET_NUMBER[docketNumber];
-        },
-      );
+    getCaseMetadataByDocketNumber.mockImplementation(
+      ({ docketNumber }: { docketNumber: string }) => {
+        return CASE_BY_DOCKET_NUMBER[docketNumber];
+      },
+    );
 
-    applicationContext
-      .getPersistenceGateway()
-      .getConsolidatedCasesCount.mockResolvedValue(1);
+    getConsolidatedCasesCount.mockResolvedValue(1);
 
     applicationContext
       .getPersistenceGateway()
@@ -111,9 +118,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
     };
 
     const EXPECTED_CONSOLIDATED_CASE = 999;
-    applicationContext
-      .getPersistenceGateway()
-      .getConsolidatedCasesCount.mockResolvedValue(EXPECTED_CONSOLIDATED_CASE);
+    getConsolidatedCasesCount.mockResolvedValue(EXPECTED_CONSOLIDATED_CASE);
 
     const results =
       await getPendingMotionDocketEntriesForCurrentJudgeInteractor(
@@ -125,8 +130,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       );
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .getAllPendingMotionDocketEntriesForJudge.mock.calls[0][0].judgeIds,
+      getAllPendingMotionDocketEntriesForJudge.mock.calls[0][0].judgeIds,
     ).toEqual(['judgeId']);
 
     expect(results.docketEntries.length).toEqual(1);
