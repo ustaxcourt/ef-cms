@@ -114,9 +114,9 @@ export type Motion = {
 
 export type ActionAndFiling = {
   date: string;
-  documentType: ActionDocumentTypeOption;
-  filedBy: MotionFiledByOption;
-  status: MotionStatusOption;
+  documentType: ActionDocumentTypeOption | '';
+  filedBy: MotionFiledByOption | '';
+  status: MotionStatusOption | '';
   note?: string;
   isOnDocketRecord: boolean;
   oralMotion?: boolean;

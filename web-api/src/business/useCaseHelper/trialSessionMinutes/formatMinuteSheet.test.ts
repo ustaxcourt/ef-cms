@@ -1,19 +1,17 @@
 /* eslint-disable max-lines */
 import {
-  ACTION_DOCUMENT_TYPE_OPTIONS,
-  ACTION_FILED_BY_OPTIONS,
-  ACTION_STATUS_OPTIONS,
-  BRIEF_TYPE_OPTIONS,
   EXHIBIT_STATUS_OPTIONS,
-  MOTION_FILED_BY_OPTIONS,
-  MOTION_OBJECTION_OPTIONS,
-  MOTION_STATUS_OPTIONS,
-  MOTION_TYPE_OPTIONS,
-  MinuteSheetFormState,
   PETITIONER_ROLE_OPTIONS,
   STATUS_REPORT_ORDERED_FOR_OPTIONS,
-  TRIAL_HEARING_OPTIONS,
-} from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+  type BriefTypeOption,
+  type MotionFiledByOption,
+  type MotionObjectionOption,
+  type MotionStatusOption,
+  type MotionTypeOption,
+  type PetitionerRoleOption,
+  type StatusReportOrderedForOption,
+  type TrialHearingOption,
+} from '@shared/business/entities/EntityConstants';
 import {
   MOCK_CASE,
   MOCK_CONSOLIDATED_CASE_SUMMARY,
@@ -40,94 +38,79 @@ import {
   getConsolidatedDocketNumbers,
 } from './formatMinuteSheet';
 import { invert } from 'lodash';
+import {
+  MinuteSheet,
+  PetitionerAppearance,
+} from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 
 describe('formatMinuteSheet', () => {
   describe('formatRecalledRows', () => {
-    it('should return an empty array if passed only empty rows', () => {
-      const recalledRows = {
-        '1': {
-          date: '',
-          note: '',
-          renderKey: '1',
-          transcriptOrdered: false,
-        },
-      };
+    it('should return an empty array when passed only empty rows', () => {
+      const recalledRows: MinuteSheet['caseRecord']['recalls'] = [];
       const result = formatRecalledRows(recalledRows);
       expect(result).toHaveLength(0);
     });
 
     it('should properly format an array of differently shaped rows', () => {
-      const mockRecalledRows = {
-        '1': {
+      const mockRecalledRows: MinuteSheet['caseRecord']['recalls'] = [
+        {
           date: '2022-03-01',
           note: 'This is a note',
-          renderKey: '1',
           transcriptOrdered: true,
         },
-        '2': {
+        {
           date: '2022-03-02',
           note: 'This is another note',
-          renderKey: '2',
           transcriptOrdered: false,
         },
-        '3': {
+        {
           date: '',
           note: 'This is another note',
-          renderKey: '3',
           transcriptOrdered: true,
         },
-        '4': {
+        {
           date: '2022-03-04',
           note: '',
-          renderKey: '4',
           transcriptOrdered: false,
         },
-        '5': {
+        {
           date: '',
           note: '',
-          renderKey: '5',
           transcriptOrdered: true,
         },
         // empty row
-        '6': {
+        {
           date: '',
           note: '',
-          renderKey: '6',
           transcriptOrdered: false,
         },
-      };
+      ];
 
       const result = formatRecalledRows(mockRecalledRows);
 
-      // Expecting 1 fewer since the last row is empty
-      expect(result.length).toEqual(Object.values(mockRecalledRows).length - 1);
+      expect(result.length).toEqual(5); // One fewer since the last row is empty
 
       expect(result[0]).toEqual({
         content: '2022-03-01; <em>This is a note</em>; Transcript ordered',
-        renderKey: '1',
       });
       expect(result[1]).toEqual({
         content: '2022-03-02; <em>This is another note</em>',
-        renderKey: '2',
       });
       expect(result[2]).toEqual({
         content: '<em>This is another note</em>; Transcript ordered',
-        renderKey: '3',
       });
       expect(result[3]).toEqual({
         content: '2022-03-04',
-        renderKey: '4',
       });
       expect(result[4]).toEqual({
         content: 'Transcript ordered',
-        renderKey: '5',
       });
     });
   });
 
   describe('formatCalledSection', () => {
     it('should format note and transcript ordered when no date is provided', () => {
-      const section = {
+      const section: MinuteSheet['caseRecord']['calendarCall'] = {
         date: '',
         note: 'some note',
         transcriptOrdered: true,
@@ -183,23 +166,22 @@ describe('formatMinuteSheet', () => {
     it('should return "No appearance" when noAppearance is true', () => {
       const petitionersSection = {
         noAppearance: true,
-        petitioners: {},
+        appearances: [],
       };
       const result = formatPetitionerAppearances(petitionersSection);
       expect(result).toEqual(['No appearance']);
     });
 
     it('should format a single petitioner appearance correctly', () => {
-      const petitionersSection = {
+      const petitionersSection: MinuteSheet['appearances']['petitioners'] = {
         noAppearance: false,
-        petitioners: {
-          '1': {
+        appearances: [
+          {
             datesOfAppearance: '01/15/2023',
             name: 'John Smith',
-            renderKey: '1',
-            role: invertedPetitionerRoleOptions[PETITIONER_ROLE_OPTIONS.proSe],
+            role: 'proSe' as PetitionerRoleOption,
           },
-        },
+        ],
       };
       const result = formatPetitionerAppearances(petitionersSection);
       expect(result).toEqual([
@@ -210,22 +192,20 @@ describe('formatMinuteSheet', () => {
     it('should format multiple petitioner appearances correctly', () => {
       const petitionersSection = {
         noAppearance: false,
-        petitioners: {
-          '1': {
+        appearances: [
+          {
             datesOfAppearance: '01/15/2023',
             name: 'John Smith',
-            renderKey: '1',
             role: invertedPetitionerRoleOptions[PETITIONER_ROLE_OPTIONS.proSe],
           },
-          '2': {
+          {
             datesOfAppearance: '01/16/2023',
             name: 'Jane Doe',
-            renderKey: '2',
             role: invertedPetitionerRoleOptions[
               PETITIONER_ROLE_OPTIONS.counsel
             ],
           },
-        },
+        ] as PetitionerAppearance[],
       };
       const result = formatPetitionerAppearances(petitionersSection);
       expect(result).toEqual([
@@ -234,10 +214,10 @@ describe('formatMinuteSheet', () => {
       ]);
     });
 
-    it('should return an empty array when no petitioners and noAppearance is false', () => {
+    it('should return an empty array when no appearances and noAppearance is false', () => {
       const petitionersSection = {
         noAppearance: false,
-        petitioners: {},
+        appearances: [],
       };
       const result = formatPetitionerAppearances(petitionersSection);
       expect(result).toEqual([]);
@@ -246,14 +226,13 @@ describe('formatMinuteSheet', () => {
     it('should handle petitioner with missing datesOfAppearance', () => {
       const petitionersSection = {
         noAppearance: false,
-        petitioners: {
-          '1': {
+        appearances: [
+          {
             datesOfAppearance: '',
             name: 'John Smith',
-            renderKey: '1',
             role: invertedPetitionerRoleOptions[PETITIONER_ROLE_OPTIONS.proSe],
           },
-        },
+        ] as PetitionerAppearance[],
       };
       const result = formatPetitionerAppearances(petitionersSection);
       expect(result).toEqual([`John Smith (${PETITIONER_ROLE_OPTIONS.proSe})`]);
@@ -262,14 +241,13 @@ describe('formatMinuteSheet', () => {
     it('should handle petitioner with missing name', () => {
       const petitionersSection = {
         noAppearance: false,
-        petitioners: {
-          '1': {
+        appearances: [
+          {
             datesOfAppearance: '01/15/2023',
             name: '',
-            renderKey: '1',
             role: invertedPetitionerRoleOptions[PETITIONER_ROLE_OPTIONS.proSe],
           },
-        },
+        ] as PetitionerAppearance[],
       };
       const result = formatPetitionerAppearances(petitionersSection);
       expect(result).toEqual([
@@ -280,14 +258,13 @@ describe('formatMinuteSheet', () => {
     it('should handle petitioner with missing name and datesOfAppearance', () => {
       const petitionersSection = {
         noAppearance: false,
-        petitioners: {
-          '1': {
+        appearances: [
+          {
             datesOfAppearance: '',
             name: '',
-            renderKey: '1',
             role: invertedPetitionerRoleOptions[PETITIONER_ROLE_OPTIONS.proSe],
           },
-        },
+        ] as PetitionerAppearance[],
       };
       const result = formatPetitionerAppearances(petitionersSection);
       expect(result).toEqual([`(${PETITIONER_ROLE_OPTIONS.proSe})`]);
@@ -296,14 +273,13 @@ describe('formatMinuteSheet', () => {
     it('should handle completely empty petitioner appearance', () => {
       const petitionersSection = {
         noAppearance: false,
-        petitioners: {
-          '1': {
+        appearances: [
+          {
             datesOfAppearance: '',
             name: '',
-            renderKey: '1',
-            role: '',
+            role: undefined,
           },
-        },
+        ] as PetitionerAppearance[],
       };
       const result = formatPetitionerAppearances(petitionersSection);
       expect(result).toEqual([]);
@@ -312,34 +288,27 @@ describe('formatMinuteSheet', () => {
 
   describe('formatRespondentAppearances', () => {
     it('should format a single respondent appearance correctly', () => {
-      const respondentsSection = {
-        respondents: {
-          '1': {
-            datesOfAppearance: '01/15/2023',
-            name: 'John Smith',
-            renderKey: '1',
-          },
+      const respondentsSection: MinuteSheet['appearances']['respondents'] = [
+        {
+          datesOfAppearance: '01/15/2023',
+          name: 'John Smith',
         },
-      };
+      ];
       const result = formatRespondentAppearances(respondentsSection);
       expect(result).toEqual(['John Smith - 01/15/2023']);
     });
 
     it('should format multiple respondent appearances correctly', () => {
-      const respondentsSection = {
-        respondents: {
-          '1': {
-            datesOfAppearance: '01/15/2023',
-            name: 'John Smith',
-            renderKey: '1',
-          },
-          '2': {
-            datesOfAppearance: '01/16/2023',
-            name: 'Jane Doe',
-            renderKey: '2',
-          },
+      const respondentsSection: MinuteSheet['appearances']['respondents'] = [
+        {
+          datesOfAppearance: '01/15/2023',
+          name: 'John Smith',
         },
-      };
+        {
+          datesOfAppearance: '01/16/2023',
+          name: 'Jane Doe',
+        },
+      ];
       const result = formatRespondentAppearances(respondentsSection);
       expect(result).toEqual([
         'John Smith - 01/15/2023',
@@ -348,51 +317,40 @@ describe('formatMinuteSheet', () => {
     });
 
     it('should return an empty array when no respondents', () => {
-      const respondentsSection = {
-        respondents: {},
-      };
+      const respondentsSection = [];
       const result = formatRespondentAppearances(respondentsSection);
       expect(result).toEqual([]);
     });
 
     it('should handle respondent with missing datesOfAppearance', () => {
-      const respondentsSection = {
-        respondents: {
-          '1': {
-            datesOfAppearance: '',
-            name: 'John Smith',
-            renderKey: '1',
-          },
+      const respondentsSection: MinuteSheet['appearances']['respondents'] = [
+        {
+          datesOfAppearance: '',
+          name: 'John Smith',
         },
-      };
+      ];
       const result = formatRespondentAppearances(respondentsSection);
       expect(result).toEqual(['John Smith']);
     });
 
     it('should handle respondent with missing name', () => {
-      const respondentsSection = {
-        respondents: {
-          '1': {
-            datesOfAppearance: '01/15/2023',
-            name: '',
-            renderKey: '1',
-          },
+      const respondentsSection: MinuteSheet['appearances']['respondents'] = [
+        {
+          datesOfAppearance: '01/15/2023',
+          name: '',
         },
-      };
+      ];
       const result = formatRespondentAppearances(respondentsSection);
       expect(result).toEqual(['- 01/15/2023']);
     });
 
     it('should handle respondent with missing name and datesOfAppearance', () => {
-      const respondentsSection = {
-        respondents: {
-          '1': {
-            datesOfAppearance: '',
-            name: '',
-            renderKey: '1',
-          },
+      const respondentsSection: MinuteSheet['appearances']['respondents'] = [
+        {
+          datesOfAppearance: '',
+          name: '',
         },
-      };
+      ];
       const result = formatRespondentAppearances(respondentsSection);
       expect(result).toEqual([]);
     });
@@ -400,28 +358,16 @@ describe('formatMinuteSheet', () => {
 
   describe('formatJurisdictionRetained', () => {
     it('should return undefined when no date is provided', () => {
-      const section = {
-        continued: false,
+      const section: MinuteSheet['jurisdiction']['retained'] = {
         date: '',
         note: 'test note',
       };
       const result = formatJurisdictionRetained(section);
-      expect(result).toBeUndefined();
-    });
-
-    it('should format jurisdiction retained with continued status', () => {
-      const section = {
-        continued: true,
-        date: '2023-01-15',
-        note: 'test note',
-      };
-      const result = formatJurisdictionRetained(section);
-      expect(result).toBe('01/15/2023; <em>test note</em>');
+      expect(result).toBe('');
     });
 
     it('should format jurisdiction retained without continued status', () => {
-      const section = {
-        continued: false,
+      const section: MinuteSheet['jurisdiction']['retained'] = {
         date: '2023-01-15',
         note: 'test note',
       };
@@ -430,8 +376,7 @@ describe('formatMinuteSheet', () => {
     });
 
     it('should handle empty note', () => {
-      const section = {
-        continued: true,
+      const section: MinuteSheet['jurisdiction']['retained'] = {
         date: '2023-01-15',
         note: '',
       };
@@ -442,12 +387,12 @@ describe('formatMinuteSheet', () => {
 
   describe('formatStatusReportOrdered', () => {
     it('should format with all fields present', () => {
-      const section = {
+      const section: MinuteSheet['orders']['statusReport'] = {
         date: '2023-01-15',
         dueDate: '2023-02-15',
         note: 'test note',
-        orderedFor: 'joint',
-      } as MinuteSheetFormState['ordersSection']['statusReportOrdered'];
+        orderedFor: 'joint' as StatusReportOrderedForOption,
+      };
       const result = formatStatusReportOrdered(section);
       expect(result).toBe(
         '01/15/2023; Ordered for Joint; Due 02/15/2023; <em>test note</em>',
@@ -455,12 +400,12 @@ describe('formatMinuteSheet', () => {
     });
 
     it('should format without optional fields', () => {
-      const section = {
+      const section: MinuteSheet['orders']['statusReport'] = {
         date: '2023-01-15',
         dueDate: '',
         note: '',
-        orderedFor: '',
-      } as MinuteSheetFormState['ordersSection']['statusReportOrdered'];
+        orderedFor: '' as StatusReportOrderedForOption,
+      };
       const result = formatStatusReportOrdered(section);
       expect(result).toBe('01/15/2023');
     });
@@ -472,8 +417,8 @@ describe('formatMinuteSheet', () => {
             date: '2023-01-15',
             dueDate: '',
             note: '',
-            orderedFor: key,
-          } as MinuteSheetFormState['ordersSection']['statusReportOrdered'];
+            orderedFor: key as StatusReportOrderedForOption,
+          };
           const result = formatStatusReportOrdered(section);
           expect(result).toBe(`01/15/2023; Ordered for ${value}`);
         },
@@ -483,7 +428,7 @@ describe('formatMinuteSheet', () => {
 
   describe('formatStipulatedDecision', () => {
     it('should format with all fields present', () => {
-      const section = {
+      const section: MinuteSheet['orders']['stipulatedDecision'] = {
         date: '2023-01-15',
         dueDate: '2023-02-15',
         note: 'test note',
@@ -505,80 +450,67 @@ describe('formatMinuteSheet', () => {
 
   describe('formatMotions', () => {
     it('should return empty array when no motions', () => {
-      const motionsSection = {
-        motions: {},
-      };
+      const motionsSection: MinuteSheet['proceedings']['motions'] = [];
       const result = formatMotions(motionsSection);
       expect(result).toEqual([]);
     });
 
     it('should format a single motion correctly', () => {
-      const motionsSection = {
-        motions: {
-          '1': {
-            date: '2023-01-15',
-            filedBy: 'petitioner' as keyof typeof MOTION_FILED_BY_OPTIONS,
-            note: 'test note',
-            objection: '' as keyof typeof MOTION_OBJECTION_OPTIONS,
-            oralMotion: false,
-            renderKey: '1',
-            status: 'granted' as keyof typeof MOTION_STATUS_OPTIONS,
-            type: 'motionToDismiss' as keyof typeof MOTION_TYPE_OPTIONS,
-          },
+      const motionsSection: MinuteSheet['proceedings']['motions'] = [
+        {
+          date: '2023-01-15',
+          type: 'motionToDismiss' as MotionTypeOption,
+          filedBy: 'petitioner' as MotionFiledByOption,
+          status: 'granted' as MotionStatusOption,
+          objection: '' as MotionObjectionOption,
+          note: 'test note',
+          oralMotion: false,
         },
-      };
+      ];
       const result = formatMotions(motionsSection);
       expect(result).toEqual([
         {
           content:
             'Motion to Dismiss; 01/15/2023; Filed by Petitioner; Granted; <em>test note</em>',
           motionType: 'Motion to Dismiss',
-          renderKey: '1',
         },
       ]);
     });
 
     it('should format an oral motion correctly', () => {
-      const motionsSection = {
-        motions: {
-          '1': {
-            date: '2023-01-15',
-            filedBy: 'petitioner' as keyof typeof MOTION_FILED_BY_OPTIONS,
-            note: 'test note',
-            objection: '' as keyof typeof MOTION_OBJECTION_OPTIONS,
-            oralMotion: true,
-            renderKey: '1',
-            status: 'granted' as keyof typeof MOTION_STATUS_OPTIONS,
-            type: 'motionToDismiss' as keyof typeof MOTION_TYPE_OPTIONS,
-          },
+      const motionsSection: MinuteSheet['proceedings']['motions'] = [
+        {
+          date: '2023-01-15',
+          filedBy: 'petitioner' as MotionFiledByOption,
+          note: 'test note',
+          objection: '' as MotionObjectionOption,
+          oralMotion: true,
+          status: 'granted' as MotionStatusOption,
+          type: 'motionToDismiss' as MotionTypeOption,
         },
-      };
+      ];
       const result = formatMotions(motionsSection);
       expect(result).toEqual([
         {
           content:
             'Oral Motion to Dismiss; 01/15/2023; Filed by Petitioner; Granted; <em>test note</em>',
           motionType: 'Motion to Dismiss',
-          renderKey: '1',
         },
       ]);
     });
 
     it('should filter out motions without required fields', () => {
-      const motionsSection = {
-        motions: {
-          '1': {
-            date: '2023-01-15',
-            filedBy: '' as keyof typeof MOTION_FILED_BY_OPTIONS,
-            note: '',
-            objection: '' as keyof typeof MOTION_OBJECTION_OPTIONS,
-            oralMotion: false,
-            renderKey: '1',
-            status: '' as keyof typeof MOTION_STATUS_OPTIONS,
-            type: '' as keyof typeof MOTION_TYPE_OPTIONS,
-          },
+      const motionsSection: MinuteSheet['proceedings']['motions'] = [
+        {
+          date: '2023-01-15',
+          filedBy: '' as MotionFiledByOption,
+          note: '',
+          objection: '' as MotionObjectionOption,
+          oralMotion: false,
+          status: '' as MotionStatusOption,
+          type: '' as MotionTypeOption,
         },
-      };
+      ];
       const result = formatMotions(motionsSection);
       expect(result).toEqual([]);
     });
@@ -586,131 +518,107 @@ describe('formatMinuteSheet', () => {
 
   describe('formatActionsAndFilings', () => {
     it('should return empty array when no actions', () => {
-      const section = {
-        actionsAndFilings: {},
-      };
-      const result = formatActionsAndFilings(section);
+      const actionsSection: MinuteSheet['proceedings']['actionsAndFilings'] =
+        [];
+      const result = formatActionsAndFilings(actionsSection);
       expect(result).toEqual([]);
     });
 
     it('should format a single action correctly', () => {
-      const section = {
-        actionsAndFilings: {
-          '1': {
-            date: '2023-01-15',
-            documentType: 'filing' as keyof typeof ACTION_DOCUMENT_TYPE_OPTIONS,
-            filedBy: 'petitioner' as keyof typeof ACTION_FILED_BY_OPTIONS,
-            isOnDocketRecord: true,
-            note: 'test note',
-            objection: '',
-            oralMotion: false,
-            renderKey: '1',
-            status: 'filed' as keyof typeof ACTION_STATUS_OPTIONS,
-          },
+      const actionsSection: MinuteSheet['proceedings']['actionsAndFilings'] = [
+        {
+          date: '2023-01-15',
+          documentType: 'filing',
+          filedBy: 'petitioner',
+          status: 'filed',
+          note: 'test note',
+          isOnDocketRecord: true,
+          oralMotion: false,
         },
-      };
-      const result = formatActionsAndFilings(section);
+      ];
+      const result = formatActionsAndFilings(actionsSection);
       expect(result).toEqual([
         {
           content: '01/15/2023; Filing - <em>test note</em>; Petitioner; Filed',
-          renderKey: '1',
         },
       ]);
     });
 
     it('should format action without note correctly', () => {
-      const section = {
-        actionsAndFilings: {
-          '1': {
-            date: '2023-01-15',
-            documentType: 'filing',
-            filedBy: 'petitioner',
-            isOnDocketRecord: true,
-            note: '',
-            objection: '',
-            oralMotion: false,
-            renderKey: '1',
-            status: 'filed',
-          },
+      const actionsSection: MinuteSheet['proceedings']['actionsAndFilings'] = [
+        {
+          date: '2023-01-15',
+          documentType: 'filing',
+          filedBy: 'petitioner',
+          status: 'filed',
+          note: '',
+          isOnDocketRecord: true,
+          oralMotion: false,
         },
-      } as MinuteSheetFormState['actionsAndFilingsSection'];
-      const result = formatActionsAndFilings(section);
+      ];
+      const result = formatActionsAndFilings(actionsSection);
       expect(result).toEqual([
         {
           content: '01/15/2023; Filing; Petitioner; Filed',
-          renderKey: '1',
         },
       ]);
     });
 
     it('should filter out actions without required fields', () => {
-      const section = {
-        actionsAndFilings: {
-          '1': {
-            date: '',
-            documentType: '',
-            filedBy: '',
-            isOnDocketRecord: false,
-            note: '',
-            objection: '',
-            oralMotion: false,
-            renderKey: '1',
-            status: '',
-          },
+      const actionsSection: MinuteSheet['proceedings']['actionsAndFilings'] = [
+        {
+          date: '',
+          documentType: '',
+          filedBy: '',
+          status: '',
+          note: '',
+          isOnDocketRecord: false,
+          oralMotion: false,
         },
-      } as MinuteSheetFormState['actionsAndFilingsSection'];
-      const result = formatActionsAndFilings(section);
+      ];
+      const result = formatActionsAndFilings(actionsSection);
       expect(result).toEqual([]);
     });
 
     it('should format an oral motion correctly', () => {
-      const section = {
-        actionsAndFilings: {
-          '1': {
-            date: '2023-01-15',
-            documentType: 'motion',
-            filedBy: 'petitioner',
-            isOnDocketRecord: true,
-            note: 'test note',
-            objection: '',
-            oralMotion: true,
-            renderKey: '1',
-            status: 'filed',
-          },
+      const actionsSection: MinuteSheet['proceedings']['actionsAndFilings'] = [
+        {
+          date: '2023-01-15',
+          documentType: 'motion',
+          filedBy: 'petitioner',
+          status: 'filed',
+          note: 'test note',
+          isOnDocketRecord: true,
+          oralMotion: true,
         },
-      } as MinuteSheetFormState['actionsAndFilingsSection'];
-      const result = formatActionsAndFilings(section);
+      ];
+      const result = formatActionsAndFilings(actionsSection);
       expect(result).toEqual([
         {
           content:
             '01/15/2023; Motion - Oral Motion <em>test note</em>; Petitioner; Filed',
-          renderKey: '1',
         },
       ]);
     });
 
     it('should format an objection correctly', () => {
-      const section = {
-        actionsAndFilings: {
-          '1': {
-            date: '2023-01-15',
-            documentType: 'motion',
-            filedBy: 'petitioner',
-            isOnDocketRecord: true,
-            note: 'test note',
-            objection: 'noObjection',
-            oralMotion: false,
-            renderKey: '1',
-            status: 'filed',
-          },
+      const actionsSection: MinuteSheet['proceedings']['actionsAndFilings'] = [
+        {
+          date: '2023-01-15',
+          documentType: 'motion',
+          filedBy: 'petitioner',
+          status: 'filed',
+          note: 'test note',
+          isOnDocketRecord: true,
+          oralMotion: false,
+          objection: 'noObjection' as MotionObjectionOption,
         },
-      } as MinuteSheetFormState['actionsAndFilingsSection'];
-      const result = formatActionsAndFilings(section);
+      ];
+      const result = formatActionsAndFilings(actionsSection);
       expect(result).toEqual([
         {
           content:
             '01/15/2023; Motion - <em>test note</em>; Petitioner; Filed; No Objection',
-          renderKey: '1',
         },
       ]);
     });
@@ -718,20 +626,20 @@ describe('formatMinuteSheet', () => {
 
   describe('formatTrialBrief', () => {
     it('should format with all fields present', () => {
-      const section = {
-        briefDetails: {
+      const section: MinuteSheet['brief'] = {
+        type: 'seriatimBrief' as BriefTypeOption,
+        details: {
           opening: {
             dueDate: '2023-02-15',
             note: 'Opening brief note',
             partyType: 'petitioner',
           },
         },
-        briefType: 'seriatimBrief' as keyof typeof BRIEF_TYPE_OPTIONS,
-        dateBenchOpinionRendered: '2023-01-15',
         dateSubmitted: '2023-01-01',
-        note: 'bench opinion note',
-        totalTrialHours: 5,
+        hoursOfTrial: 5,
+        benchOpinionDate: '2023-01-15',
         transcriptOrdered: true,
+        note: 'bench opinion note',
       };
       const result = formatTrialBrief(section);
       expect(result).toEqual({
@@ -747,14 +655,14 @@ describe('formatMinuteSheet', () => {
     });
 
     it('should handle empty optional fields', () => {
-      const section = {
-        briefDetails: {},
-        briefType: '',
-        dateBenchOpinionRendered: '',
+      const section: MinuteSheet['brief'] = {
+        type: '' as BriefTypeOption,
+        details: {},
         dateSubmitted: '',
-        note: '',
-        totalTrialHours: 0,
+        hoursOfTrial: 0,
+        benchOpinionDate: '',
         transcriptOrdered: false,
+        note: '',
       };
       const result = formatTrialBrief(section);
       expect(result).toEqual({
@@ -767,14 +675,14 @@ describe('formatMinuteSheet', () => {
     });
 
     it('should format benchOpinionRendered correctly when all fields are present', () => {
-      const section = {
-        briefDetails: [],
-        briefType: '',
-        dateBenchOpinionRendered: '2023-01-15',
+      const section: MinuteSheet['brief'] = {
+        type: '' as BriefTypeOption,
+        details: {},
         dateSubmitted: '',
-        note: 'bench opinion note',
-        totalTrialHours: 0,
+        hoursOfTrial: 0,
+        benchOpinionDate: '2023-01-15',
         transcriptOrdered: true,
+        note: 'bench opinion note',
       };
       const result = formatTrialBrief(section);
       expect(result.benchOpinionRendered).toBe(
@@ -783,56 +691,56 @@ describe('formatMinuteSheet', () => {
     });
 
     it('should format benchOpinionRendered correctly when only date is present', () => {
-      const section = {
-        briefDetails: [],
-        briefType: '',
-        dateBenchOpinionRendered: '2023-01-15',
+      const section: MinuteSheet['brief'] = {
+        type: '' as BriefTypeOption,
+        details: {},
         dateSubmitted: '',
-        note: '',
-        totalTrialHours: 0,
+        hoursOfTrial: 0,
+        benchOpinionDate: '2023-01-15',
         transcriptOrdered: false,
+        note: '',
       };
       const result = formatTrialBrief(section);
       expect(result.benchOpinionRendered).toBe('01/15/2023');
     });
 
     it('should format benchOpinionRendered correctly when only note is present', () => {
-      const section = {
-        briefDetails: [],
-        briefType: '',
-        dateBenchOpinionRendered: '',
+      const section: MinuteSheet['brief'] = {
+        type: '' as BriefTypeOption,
+        details: {},
         dateSubmitted: '',
-        note: 'bench opinion note',
-        totalTrialHours: 0,
+        hoursOfTrial: 0,
+        benchOpinionDate: '',
         transcriptOrdered: false,
+        note: 'bench opinion note',
       };
       const result = formatTrialBrief(section);
       expect(result.benchOpinionRendered).toBe('<em>bench opinion note</em>');
     });
 
     it('should format benchOpinionRendered correctly when only transcriptOrdered is present', () => {
-      const section = {
-        briefDetails: [],
-        briefType: '',
-        dateBenchOpinionRendered: '',
+      const section: MinuteSheet['brief'] = {
+        type: '' as BriefTypeOption,
+        details: {},
         dateSubmitted: '',
-        note: '',
-        totalTrialHours: 0,
+        hoursOfTrial: 0,
+        benchOpinionDate: '',
         transcriptOrdered: true,
+        note: '',
       };
       const result = formatTrialBrief(section);
       expect(result.benchOpinionRendered).toBe('Transcript ordered');
     });
 
     it('should format benchOpinionRendered correctly when no fields are present', () => {
-      const section = {
-        briefDetails: [],
-        briefType: '',
-        dateBenchOpinionRendered: '',
+      const section: MinuteSheet['brief'] = {
+        type: '' as BriefTypeOption,
+        details: {},
         dateSubmitted: '',
-        note: '',
-        totalTrialHours: 0,
+        hoursOfTrial: 0,
+        benchOpinionDate: '',
         transcriptOrdered: false,
+        note: '',
       };
       const result = formatTrialBrief(section);
       expect(result.benchOpinionRendered).toBe('');
@@ -841,7 +749,7 @@ describe('formatMinuteSheet', () => {
 
   describe('formatPretrialConference', () => {
     it('should format with all fields present', () => {
-      const section = {
+      const section: MinuteSheet['caseRecord']['pretrialConference'] = {
         date: '2023-01-15',
         note: 'test note',
         transcriptOrdered: true,
@@ -851,7 +759,7 @@ describe('formatMinuteSheet', () => {
     });
 
     it('should handle empty optional fields', () => {
-      const section = {
+      const section: MinuteSheet['caseRecord']['pretrialConference'] = {
         date: '2023-01-15',
         note: '',
         transcriptOrdered: false,
@@ -861,7 +769,7 @@ describe('formatMinuteSheet', () => {
     });
 
     it('should return empty string when no date', () => {
-      const section = {
+      const section: MinuteSheet['caseRecord']['pretrialConference'] = {
         date: '',
         note: 'test note',
         transcriptOrdered: true,
@@ -873,11 +781,11 @@ describe('formatMinuteSheet', () => {
 
   describe('formatTrialHearing', () => {
     it('should format with all fields present', () => {
-      const section = {
+      const section: MinuteSheet['caseRecord']['trialHearing'] = {
         date: '2023-01-15',
         note: 'test note',
         transcriptOrdered: true,
-        trialHearingType: 'trial' as keyof typeof TRIAL_HEARING_OPTIONS,
+        trialHearingType: 'trial' as TrialHearingOption,
       };
       const result = formatTrialHearing(section);
       expect(result).toBe(
@@ -886,7 +794,7 @@ describe('formatMinuteSheet', () => {
     });
 
     it('should handle empty optional fields', () => {
-      const section = {
+      const section: MinuteSheet['caseRecord']['trialHearing'] = {
         date: '2023-01-15',
         note: '',
         transcriptOrdered: false,
@@ -899,58 +807,47 @@ describe('formatMinuteSheet', () => {
 
   describe('formatExhibits', () => {
     it('should return empty array when no exhibits', () => {
-      const section = {
-        exhibits: {},
-      };
+      const section: MinuteSheet['evidence']['exhibits'] = [];
       const result = formatExhibits(section);
       expect(result).toEqual([]);
     });
 
     it('should format exhibits correctly', () => {
-      const section = {
-        exhibits: {
-          '1': {
-            description: 'Exhibit A',
-            note: 'test note',
-            renderKey: '1',
-            status: 'admitted' as keyof typeof EXHIBIT_STATUS_OPTIONS,
-          },
-          '2': {
-            description: 'Exhibit B',
-            note: '',
-            renderKey: '2',
-            status: 'withdrawn' as keyof typeof EXHIBIT_STATUS_OPTIONS,
-          },
+      const section: MinuteSheet['evidence']['exhibits'] = [
+        {
+          description: 'Exhibit A',
+          note: 'test note',
+          status: 'admitted',
         },
-      };
+        {
+          description: 'Exhibit B',
+          note: '',
+          status: 'withdrawn',
+        },
+      ];
       const result = formatExhibits(section);
       expect(result).toEqual([
         {
           description: 'Exhibit A',
           note: 'test note',
-          renderKey: '1',
           status: 'Admitted',
         },
         {
           description: 'Exhibit B',
           note: '',
-          renderKey: '2',
           status: 'Withdrawn',
         },
       ]);
     });
 
     it('should filter out empty exhibits', () => {
-      const section = {
-        exhibits: {
-          '1': {
-            description: '',
-            note: '',
-            renderKey: '1',
-            status: '' as keyof typeof EXHIBIT_STATUS_OPTIONS,
-          },
+      const section: MinuteSheet['evidence']['exhibits'] = [
+        {
+          description: '',
+          note: '',
+          status: '' as keyof typeof EXHIBIT_STATUS_OPTIONS,
         },
-      };
+      ];
       const result = formatExhibits(section);
       expect(result).toEqual([]);
     });
@@ -958,7 +855,7 @@ describe('formatMinuteSheet', () => {
 
   describe('getBriefDetails', () => {
     it('should format seriatim brief details', () => {
-      const briefDetails = {
+      const briefDetails: MinuteSheet['brief']['details'] = {
         opening: {
           dueDate: '2023-02-15',
           note: 'Opening note',
@@ -983,7 +880,7 @@ describe('formatMinuteSheet', () => {
     });
 
     it('should handle brief details with missing optional fields', () => {
-      const briefDetails = {
+      const briefDetails: MinuteSheet['brief']['details'] = {
         opening: {
           dueDate: '2023-02-15',
           note: '',
@@ -995,7 +892,7 @@ describe('formatMinuteSheet', () => {
     });
 
     it('should handle brief details with only note', () => {
-      const briefDetails = {
+      const briefDetails: MinuteSheet['brief']['details'] = {
         opening: {
           dueDate: '',
           note: 'Only note',
@@ -1007,7 +904,7 @@ describe('formatMinuteSheet', () => {
     });
 
     it('should handle brief details with only partyType', () => {
-      const briefDetails = {
+      const briefDetails: MinuteSheet['brief']['details'] = {
         opening: {
           dueDate: '',
           note: '',
@@ -1019,7 +916,7 @@ describe('formatMinuteSheet', () => {
     });
 
     it('should handle brief details with all fields empty', () => {
-      const briefDetails = {
+      const briefDetails: MinuteSheet['brief']['details'] = {
         opening: {
           dueDate: '',
           note: '',
@@ -1058,31 +955,37 @@ describe('formatMinuteSheet', () => {
 
   describe('formatWitnesses', () => {
     it('should filter out witnesses without names', () => {
-      const witnessSection = {
-        '1': { name: 'John Doe', renderKey: '1' },
-        '2': { name: '', renderKey: '2' },
-        '3': { name: 'Jane Smith', renderKey: '3' },
-      };
+      const witnessSection: MinuteSheet['evidence']['petitionerWitnesses'] = [
+        { name: 'John Doe' },
+        { name: '' },
+        { name: 'Jane Smith' },
+      ];
       const result = formatWitnesses(witnessSection);
-      expect(result).toEqual([
-        { name: 'John Doe', renderKey: '1' },
-        { name: 'Jane Smith', renderKey: '3' },
-      ]);
+      expect(result).toEqual([{ name: 'John Doe' }, { name: 'Jane Smith' }]);
     });
 
     it('should return empty array when no witnesses have names', () => {
-      const witnessSection = {
-        '1': { name: '', renderKey: '1' },
-        '2': { name: '', renderKey: '2' },
-      };
+      const witnessSection: MinuteSheet['evidence']['petitionerWitnesses'] = [
+        { name: '' },
+        { name: '' },
+      ];
       const result = formatWitnesses(witnessSection);
       expect(result).toEqual([]);
     });
 
     it('should return empty array when witness section is empty', () => {
-      const witnessSection = {};
+      const witnessSection: MinuteSheet['evidence']['petitionerWitnesses'] = [];
       const result = formatWitnesses(witnessSection);
       expect(result).toEqual([]);
+    });
+
+    it('should format witnesses correctly', () => {
+      const witnessSection: MinuteSheet['evidence']['petitionerWitnesses'] = [
+        { name: 'John Doe' },
+        { name: 'Jane Smith' },
+      ];
+      const result = formatWitnesses(witnessSection);
+      expect(result).toEqual([{ name: 'John Doe' }, { name: 'Jane Smith' }]);
     });
   });
 
@@ -1135,7 +1038,7 @@ describe('formatMinuteSheet', () => {
       expect(result).toBe('John Doe');
     });
 
-    it('should return empty string when no petitioners', () => {
+    it('should return empty string when no appearances', () => {
       const testCase = {
         ...MOCK_CASE,
         petitioners: [],
@@ -1159,16 +1062,16 @@ describe('formatMinuteSheet', () => {
 
   describe('formatJurisdictionContinued', () => {
     it('should return undefined when no date is provided', () => {
-      const section = {
+      const section: MinuteSheet['jurisdiction']['continued'] = {
         date: '',
         note: 'test note',
       };
       const result = formatJurisdictionContinued(section);
-      expect(result).toBeUndefined();
+      expect(result).toBe('');
     });
 
     it('should format jurisdiction continued with date and note', () => {
-      const section = {
+      const section: MinuteSheet['jurisdiction']['continued'] = {
         date: '2023-01-15',
         note: 'test note',
       };
@@ -1177,7 +1080,7 @@ describe('formatMinuteSheet', () => {
     });
 
     it('should format jurisdiction continued with date only', () => {
-      const section = {
+      const section: MinuteSheet['jurisdiction']['continued'] = {
         date: '2023-01-15',
         note: '',
       };
