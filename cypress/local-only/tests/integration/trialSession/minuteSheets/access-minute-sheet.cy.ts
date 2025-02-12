@@ -76,13 +76,13 @@ describe('Access a minute sheet', () => {
       });
 
       it('Can fill out Re-called date and note', () => {
-        cy.get('#reCalledTranscriptOrdered-0').check({ force: true });
-        cy.get('#reCalledNote').type('Recalled note');
-        cy.get('#reCalledNote').should('have.value', 'Recalled note');
-        cy.get('#reCalledTranscriptOrdered-0').should('be.checked');
+        cy.get('#reCalledNote').first().type('Recalled note');
+        cy.get('#reCalledTranscriptOrdered-0').first().check({ force: true });
+        cy.get('#reCalledNote').first().should('have.value', 'Recalled note');
+        cy.get('#reCalledTranscriptOrdered-0').first().should('be.checked');
 
         // Undo changes
-        cy.get('#reCalledNote').clear();
+        cy.get('#reCalledNote').first().clear();
         cy.get('#reCalledTranscriptOrdered-0').uncheck({ force: true });
       });
 
@@ -205,6 +205,57 @@ describe('Access a minute sheet', () => {
     //   //   cy.get('#respondent-1').should('have.value', 'Test IRS Practitioner');
     //   // });
     // });
+
+    describe('Fill out MotionsFieldset section', () => {
+      // it('Can fill out Motion Type and check Oral Motion - first row', () => {
+      //   const motionType = cy.get('label:contains("Type") + select').first();
+      //   const oralMotionCheckbox = cy
+      //     .get('label:contains("Oral motion") + input')
+      //     .first();
+
+      //   motionType.select('Motion to Dismiss');
+      //   oralMotionCheckbox.check({ force: true });
+
+      //   motionType.should('have.value', 'motionToDismiss');
+      //   oralMotionCheckbox.should('be.checked');
+
+      //   // Undo changes
+      //   motionType.select('');
+      //   oralMotionCheckbox.uncheck({ force: true });
+      // });
+
+      // it('Can fill out Filed By, Status, and Objection', () => {
+      //   const filedBy = cy.get('label:contains("Filed by") + select').first();
+      //   const status = cy.get('label:contains("Status") + select').first();
+      //   const objection = cy
+      //     .get('label:contains("Objection") + select')
+      //     .first();
+
+      //   filedBy.select('Petitioner');
+      //   status.select('Granted');
+      //   objection.select('No Objection');
+
+      //   filedBy.should('have.value', 'petitioner');
+      //   status.should('have.value', 'granted');
+      //   objection.should('have.value', 'noObjection');
+
+      //   // Undo changes
+      //   filedBy.select('');
+      //   status.select('');
+      //   objection.select('');
+      // });
+
+      it('Can fill out Motion Note', () => {
+        const motionNote = cy.get('label:contains("Note") + input').first();
+
+        motionNote.type('Motion note');
+        motionNote.should('have.value', 'Motion note');
+
+        // Undo changes
+        motionNote.clear();
+      });
+    });
+
     describe('Fill out Jurisdiction section', () => {
       it('Can fill out Jurisdiction section', () => {
         // cy.get('#jurisdictionRetainedDate').type('10/06/2023');
@@ -225,7 +276,7 @@ describe('Access a minute sheet', () => {
       });
     });
 
-    describe('Fill out Status Report Orders Section', () => {
+    describe('Fill out Status Report Orders & Stipulated Decision Section', () => {
       it('Can fill out Status Report Orders section', () => {
         cy.get('#statusReportOrderedFor').select('Petitioner');
         cy.get('#statusReportOrderedNote').type('Order note');
@@ -236,6 +287,17 @@ describe('Access a minute sheet', () => {
         // Undo changes
         cy.get('#statusReportOrderedNote').clear();
         cy.get('#statusReportOrderedFor').select('');
+      });
+
+      it('Can fill out Stipulated Decision section', () => {
+        cy.get('#stipulatedDecisionOrderedNote').type('Decision note');
+        cy.get('#stipulatedDecisionOrderedNote').should(
+          'have.value',
+          'Decision note',
+        );
+
+        // Undo changes
+        cy.get('#stipulatedDecisionOrderedNote').clear();
       });
     });
   });
