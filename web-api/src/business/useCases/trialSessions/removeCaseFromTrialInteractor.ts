@@ -1,5 +1,5 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { NotFoundError } from '../../../errors/errors';
+import { NotFoundError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -11,6 +11,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { CaseStatus } from '@shared/business/entities/EntityConstants';
 
 export const removeCaseFromTrial = async (
   applicationContext: ServerApplicationContext,
@@ -24,7 +25,7 @@ export const removeCaseFromTrial = async (
   }: {
     associatedJudge: string;
     associatedJudgeId: string;
-    caseStatus: string;
+    caseStatus: CaseStatus;
     disposition: string;
     docketNumber: string;
     trialSessionId: string;

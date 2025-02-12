@@ -1,24 +1,15 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { deleteCaseStatistic } from '@web-api/persistence/postgres/cases/ statistics/deleteCaseStatistic';
+import { deleteCaseStatistic } from '@web-api/persistence/postgres/cases/statistics/deleteCaseStatistic';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
-/**
- * deleteDeficiencyStatistic
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case to delete statistics
- * @param {string} providers.statisticId id of the statistic on the case to delete
- * @returns {object} the updated case
- */
 export const deleteDeficiencyStatistic = async (
   applicationContext: ServerApplicationContext,
   { docketNumber, statisticId }: { docketNumber: string; statisticId: string },

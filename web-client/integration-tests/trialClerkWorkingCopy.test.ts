@@ -1,7 +1,7 @@
 import {
   CASE_TYPES_MAP,
   SESSION_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { createConsolidatedGroup } from './journey/consolidation/createConsolidatedGroup';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';

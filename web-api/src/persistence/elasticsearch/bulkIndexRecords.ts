@@ -13,7 +13,7 @@ export const bulkIndexRecords = async ({
   const searchClient = applicationContext.getSearchClient();
 
   const CHUNK_SIZE = 50;
-  let chunkOfRecords = chunk(
+  const chunkOfRecords = chunk(
     records,
     Number(process.env.ES_CHUNK_SIZE) || CHUNK_SIZE,
   );
@@ -68,10 +68,11 @@ export const bulkIndexRecords = async ({
           refresh: false,
         });
         if (response.errors) {
+          console.log('bulkInde errors', response.errors);
           response.items.forEach((action, i) => {
             const operation = Object.keys(action)[0];
             if (action[operation].error) {
-              let record = body[i * 2 + 1];
+              const record = body[i * 2 + 1];
               failedRecords.push(record);
             }
           });

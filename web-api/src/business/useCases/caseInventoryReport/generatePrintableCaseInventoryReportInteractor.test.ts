@@ -1,4 +1,5 @@
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generatePrintableCaseInventoryReportInteractor } from './generatePrintableCaseInventoryReportInteractor';
 import {
   mockPetitionerUser,
@@ -15,7 +16,7 @@ describe('generatePrintableCaseInventoryReportInteractor', () => {
       .getCaseInventoryReport.mockReturnValue({ foundCases: [] });
   });
 
-  it('calls generateCaseInventoryReportPdf function and returns result', async () => {
+  it('should call generateCaseInventoryReportPdf function and return result', async () => {
     const results = await generatePrintableCaseInventoryReportInteractor(
       applicationContext,
       {

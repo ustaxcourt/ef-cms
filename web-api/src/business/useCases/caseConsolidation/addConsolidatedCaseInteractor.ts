@@ -1,9 +1,9 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
@@ -52,8 +52,6 @@ export const addConsolidatedCase = async (
   }
 
   let allCasesToConsolidate: RawCase[] = [];
-
-  // 10502 TODO: fix type errors
 
   if (
     caseToUpdate.leadDocketNumber &&

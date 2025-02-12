@@ -1,8 +1,8 @@
-import { Case } from '../entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   UnauthorizedError,
@@ -10,7 +10,7 @@ import {
 } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCasePetitionerData } from '@web-api/persistence/postgres/cases/parties/updateCasePetitionerData';
+import { updatePetitionerOnCase } from '@web-api/persistence/postgres/cases/parties/updatePetitionerOnCase';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -58,9 +58,9 @@ export const sealCaseContactAddress = async (
       caseToUpdate: caseEntity,
     });
 
-  await updateCasePetitionerData({
+  await updatePetitionerOnCase({
     docketNumber,
-    petitionerData: contactToSeal,
+    petitioner: contactToSeal,
   });
 
   return new Case(updatedCase, { authorizedUser }).toRawObject();

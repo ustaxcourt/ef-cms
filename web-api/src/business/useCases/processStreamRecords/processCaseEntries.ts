@@ -1,14 +1,7 @@
-import { flattenDeep } from 'lodash';
+import { NotFoundError } from '@web-api/errors/errors';
 import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
-import { marshall } from '@aws-sdk/util-dynamodb';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
-import type {
-  AttributeValueWithName,
-  IDynamoDBRecord,
-} from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
-
-// 10502 TODO: Figure out how to do process case entries correctly!
 
 export const processCaseEntries = async ({
   applicationContext,
@@ -19,113 +12,25 @@ export const processCaseEntries = async ({
 }) => {
   if (!caseEntityRecords.length) return;
 
-  const casesToUpsert: RawCase[] = [];
+  const casesToUpsert: Record<string, RawCase> = {};
 
-  const indexCaseEntry = async caseRecord => {
+  for (const caseRecord of caseEntityRecords) {
     const caseNewImage = caseRecord.dynamodb.NewImage;
-    const caseRecords: IDynamoDBRecord[] = [];
 
     const caseMetadataWithCounsel = await getCaseMetadataWithCounsel({
       applicationContext,
       docketNumber: caseNewImage.docketNumber.S,
     });
 
-    const marshalledCase = marshall(caseMetadataWithCounsel);
+    if (!caseMetadataWithCounsel) {
+      throw new NotFoundError(`Case ${caseNewImage.docketNumber.S} not found`);
+    }
 
-    casesToUpsert.push(caseMetadataWithCounsel);
-
-    caseRecords.push({
-      dynamodb: {
-        Keys: {
-          pk: {
-            S: caseNewImage.pk.S,
-          },
-          sk: {
-            S: `${caseNewImage.sk.S}`,
-          },
-        },
-        NewImage: {
-          ...marshalledCase,
-          case_relations: { name: 'case' },
-          entityName: { S: 'CaseDocketEntryMapping' },
-        },
-      },
-      eventName: 'MODIFY',
-    });
-
-    caseRecords.push({
-      dynamodb: {
-        Keys: {
-          pk: {
-            S: caseNewImage.pk.S,
-          },
-          sk: {
-            S: `${caseNewImage.sk.S}`,
-          },
-        },
-        NewImage: {
-          ...marshalledCase,
-          case_relations: { name: 'case' },
-          entityName: { S: 'CaseMessageMapping' },
-        },
-      },
-      eventName: 'MODIFY',
-    });
-
-    caseRecords.push({
-      dynamodb: {
-        Keys: {
-          pk: {
-            S: caseNewImage.pk.S,
-          },
-          sk: {
-            S: `${caseNewImage.sk.S}`,
-          },
-        },
-        NewImage: {
-          ...marshalledCase,
-          case_relations: { name: 'case' },
-          entityName: { S: 'CaseWorkItemMapping' },
-        },
-      },
-      eventName: 'MODIFY',
-    });
-
-    caseRecords.push({
-      dynamodb: {
-        Keys: {
-          pk: {
-            S: caseNewImage.pk.S,
-          },
-          sk: {
-            S: caseNewImage.sk.S,
-          },
-        },
-        NewImage: marshalledCase as { [key: string]: AttributeValueWithName },
-      },
-      eventName: 'MODIFY',
-    });
-
-    return caseRecords;
-  };
-
-  const indexRecords = await Promise.all(caseEntityRecords.map(indexCaseEntry));
-
-  const { failedRecords } = await applicationContext
-    .getPersistenceGateway()
-    .bulkIndexRecords({
-      applicationContext,
-      records: flattenDeep(indexRecords),
-    });
-
-  // 10502 TODO: make sure all the case data we need is upserted
-  await upsertCases(casesToUpsert);
-
-  if (failedRecords.length > 0) {
-    applicationContext.logger.error(
-      'the case or docket entry records that failed to index',
-      { failedRecords },
-    );
-    throw new Error('failed to index case entry or docket entry records');
+    // Only upsert the most recent update of any duplicate case record since otherwise Postgres will throw an error.
+    casesToUpsert[caseMetadataWithCounsel.docketNumber] =
+      caseMetadataWithCounsel;
   }
+
+  await upsertCases(Object.values(casesToUpsert));
+  // 10502 TODO: upsert petitioners, practitioners, case status history, statistics
 };

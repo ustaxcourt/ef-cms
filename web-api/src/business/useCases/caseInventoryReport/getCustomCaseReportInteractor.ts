@@ -13,7 +13,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getCasesByFilters } from '@web-api/persistence/postgres/reports/caseSearch/getCasesByFilters';
+import { getCasesByFilters } from '@web-api/persistence/postgres/cases/reports/getCasesByFilters';
 
 export type CustomCaseReportFilters = {
   caseStatuses: CaseStatus[];
@@ -45,6 +45,7 @@ export type CaseInventory = Pick<
   | 'caseCaption'
   | 'caseType'
   | 'docketNumber'
+  | 'docketNumberWithSuffix'
   | 'leadDocketNumber'
   | 'preferredTrialCity'
   | 'receivedAt'
@@ -64,7 +65,7 @@ export const getCustomCaseReportInteractor = async (
   params.caseTypes = params.caseTypes || [];
   params.judges = params.judges || [];
   params.preferredTrialCities = params.preferredTrialCities || [];
-  params.page = params.page || 1;
+  params.page = params.page || 0;
 
   new CustomCaseReportSearch(params).validate();
 

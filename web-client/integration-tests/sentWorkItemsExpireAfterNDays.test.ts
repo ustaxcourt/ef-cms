@@ -1,4 +1,4 @@
-import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { createApplicationContext as applicationContextFactory } from '../../web-api/src/applicationContext';
 import {
   getFormattedDocumentQCMyOutbox,
@@ -8,7 +8,7 @@ import {
   uploadPetition,
 } from './helpers';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 describe('verify old sent work items do not show up in the outbox', () => {
   const cerebralTest = setupTest();
@@ -39,7 +39,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
     const daysToRetrieveKey =
       applicationContext.getConstants().CONFIGURATION_ITEM_KEYS
         .SECTION_OUTBOX_NUMBER_OF_DAYS.key;
-    let daysToRetrieve = await applicationContext
+    const daysToRetrieve = await applicationContext
       .getPersistenceGateway()
       .getConfigurationItemValue({
         applicationContext,
@@ -99,9 +99,9 @@ describe('verify old sent work items do not show up in the outbox', () => {
       workItemId: `${workItemIdNMinus1}`,
     };
 
-    await saveWorkItem({ workItem: workItemNPlus1Days });
-    await saveWorkItem({ workItem: workItemNDays });
-    await saveWorkItem({ workItem: workItemNMinus1Days });
+    await upsertWorkItems({
+      workItems: [workItemNPlus1Days, workItemNDays, workItemNMinus1Days],
+    });
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');

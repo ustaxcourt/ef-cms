@@ -3,7 +3,7 @@ import {
   formatDateString,
   formatNow,
   getMonthDayYearInETObj,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 import { getDbWriter } from '@web-api/database';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
@@ -15,14 +15,16 @@ const incrementCounter = async (year: string): Promise<number> => {
   const twoDigitYear = year.slice(-2);
 
   // Using DbWriter instead of DbReader to avoid latency between writer and reader
-  const theCase = await getDbWriter(writer =>
-    writer
-      .selectFrom('dwCase')
-      .where('docketNumber', 'like', `%-${twoDigitYear}`)
-      .select('docketNumber')
-      .orderBy('docketNumber', 'desc')
-      .executeTakeFirst(),
-  );
+  const theCase = await getDbWriter({
+    cb: writer =>
+      writer
+        .selectFrom('dwCase')
+        .where('docketNumber', 'like', `%-${twoDigitYear}`)
+        .select('docketNumber')
+        .orderBy('docketNumber', 'desc')
+        .executeTakeFirst(),
+    table: null,
+  });
 
   if (!theCase) {
     return 101;

@@ -1,11 +1,14 @@
 import { flattenDeep } from 'lodash';
-import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { marshall } from '@aws-sdk/util-dynamodb';
 import type {
   AttributeValueWithName,
   IDynamoDBRecord,
 } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
+import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
+import { getPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/getPetitionersOnCase';
+import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
+import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
 
 export const processPractitionerMappingEntries = async ({
   applicationContext,
@@ -28,7 +31,45 @@ export const processPractitionerMappingEntries = async ({
         docketNumber: practitionerMappingData.pk.S.substring('case|'.length),
       });
 
-      const marshalledCase = marshall(caseMetadataWithCounsel);
+      if (!caseMetadataWithCounsel) {
+        throw Error(
+          `Unable to index ${practitionerMappingData.pk.S.substring('case|'.length)} case data not found`,
+        );
+      }
+
+      const petitionersOnCase = await getPetitionersOnCase({
+        docketNumber: caseMetadataWithCounsel.docketNumber,
+      });
+
+      const privatePractitioners = await getPrivatePractitionersOnCase({
+        applicationContext,
+        docketNumber: caseMetadataWithCounsel.docketNumber,
+      });
+
+      const irsPractitioners = await getIrsPractitionersOnCase({
+        applicationContext,
+        docketNumber: caseMetadataWithCounsel.docketNumber,
+      });
+
+      const marshalledCase = marshall(
+        {
+          pk: `case|${caseMetadataWithCounsel.docketNumber}`,
+          sk: `case|${caseMetadataWithCounsel.docketNumber}`,
+          entityName: 'Case',
+          caseCaption: caseMetadataWithCounsel.caseCaption,
+          docketNumber: caseMetadataWithCounsel.docketNumber,
+          docketNumberWithSuffix:
+            caseMetadataWithCounsel.docketNumberWithSuffix,
+          isSealed: caseMetadataWithCounsel.isSealed,
+          petitioners: petitionersOnCase || [],
+          receivedAt: caseMetadataWithCounsel.receivedAt,
+          privatePractitioners,
+          irsPractitioners,
+        },
+        { removeUndefinedValues: true },
+      );
+
+      console.log('marshalledCase', marshalledCase);
 
       caseRecords.push({
         dynamodb: {
@@ -70,6 +111,8 @@ export const processPractitionerMappingEntries = async ({
   const indexRecords = await Promise.all(
     practitionerMappingRecords.map(indexCaseEntryForPractitionerMapping),
   );
+
+  console.log('indexRecords', indexRecords);
 
   const { failedRecords } = await applicationContext
     .getPersistenceGateway()

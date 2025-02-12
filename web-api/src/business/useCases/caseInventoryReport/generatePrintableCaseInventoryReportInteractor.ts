@@ -1,10 +1,11 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseInventoryReport } from '@web-api/persistence/postgres/cases/reports/getCaseInventoryReport';
 
 export const generatePrintableCaseInventoryReportInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -22,9 +23,10 @@ export const generatePrintableCaseInventoryReportInteractor = async (
   applicationContext.logger.info(
     'generatePrintableCaseInventoryReportInteractor - authorized',
   );
-  const { foundCases } = await applicationContext
-    .getPersistenceGateway()
-    .getCaseInventoryReport({ applicationContext, associatedJudge, status });
+  const { foundCases } = await getCaseInventoryReport({
+    associatedJudge,
+    status,
+  });
 
   applicationContext.logger.info(
     'generatePrintableCaseInventoryReportInteractor - fetched cases',

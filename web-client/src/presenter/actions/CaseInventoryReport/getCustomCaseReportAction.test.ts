@@ -7,7 +7,7 @@ import {
   CustomCaseReportFilters,
   GetCustomCaseReportRequest,
   GetCustomCaseReportResponse,
-} from '../../../../../web-api/src/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
+} from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { getCustomCaseReportAction } from './getCustomCaseReportAction';
 import { getCustomCaseReportInteractor as getCustomCaseReportInteractorMock } from '@shared/proxies/reports/getCustomCaseReportProxy';
 import { judgeUser } from '@shared/test/mockUsers';
@@ -18,7 +18,6 @@ describe('getCustomCaseReportAction', () => {
   const getCustomCaseReportInteractor = jest.mocked(
     getCustomCaseReportInteractorMock,
   );
-  const lastCaseId = { pk: 'lastCaseId', receivedAt: 8394 };
   let mockCustomCaseReportResponse: GetCustomCaseReportResponse;
   let filterValues: CustomCaseReportFilters;
   let expectedRequest: GetCustomCaseReportRequest;
@@ -26,7 +25,6 @@ describe('getCustomCaseReportAction', () => {
   beforeEach(() => {
     mockCustomCaseReportResponse = {
       foundCases: [],
-      lastCaseId,
       totalCount: 0,
     };
 
@@ -50,8 +48,8 @@ describe('getCustomCaseReportAction', () => {
       ...filterValues,
       endDate: '2022-05-15T03:59:59.999Z',
       pageSize: CUSTOM_CASE_REPORT_PAGE_SIZE,
-      searchAfter: { pk: null, receivedAt: null },
       startDate: '2022-05-10T04:00:00.000Z',
+      page: 0,
     };
   });
 
@@ -66,7 +64,6 @@ describe('getCustomCaseReportAction', () => {
       state: {
         customCaseReport: {
           filters: filterValues,
-          lastIdsOfPages: [{ pk: null, receivedAt: null }],
         },
       },
     });
@@ -78,26 +75,19 @@ describe('getCustomCaseReportAction', () => {
     expect(result.state.customCaseReport.totalCases).toEqual(
       mockCustomCaseReportResponse.totalCount,
     );
-    expect(result.state.customCaseReport.lastIdsOfPages).toMatchObject([
-      { pk: null, receivedAt: null },
-      lastCaseId,
-    ]);
   });
 
-  it('should populate page ID tracking array when navigating to later pages', async () => {
-    const page2SearchId = { pk: 'page2', receivedAt: 890 };
+  it('should paginate properly', async () => {
     mockCustomCaseReportResponse = {
       foundCases: [],
-      lastCaseId: page2SearchId,
       totalCount: 0,
     };
     getCustomCaseReportInteractor.mockResolvedValue(
       mockCustomCaseReportResponse,
     );
-    const page1SearchId = { pk: 'page1', receivedAt: 123 };
     const expectedRequestWithSearchAfter = {
       ...expectedRequest,
-      searchAfter: page1SearchId,
+      page: 1,
     };
 
     const result = await runAction(getCustomCaseReportAction, {
@@ -110,7 +100,6 @@ describe('getCustomCaseReportAction', () => {
       state: {
         customCaseReport: {
           filters: filterValues,
-          lastIdsOfPages: [{ pk: null, receivedAt: null }, page1SearchId],
         },
       },
     });
@@ -124,11 +113,6 @@ describe('getCustomCaseReportAction', () => {
     expect(result.state.customCaseReport.totalCases).toEqual(
       mockCustomCaseReportResponse.totalCount,
     );
-    expect(result.state.customCaseReport.lastIdsOfPages).toMatchObject([
-      { pk: null, receivedAt: null },
-      page1SearchId,
-      page2SearchId,
-    ]);
   });
 
   it('should remove the high priority filter when the value is false', async () => {
@@ -142,7 +126,6 @@ describe('getCustomCaseReportAction', () => {
       state: {
         customCaseReport: {
           filters: { ...filterValues, highPriority: false },
-          lastIdsOfPages: [{ pk: null, receivedAt: null }],
         },
       },
     });
@@ -169,7 +152,6 @@ describe('getCustomCaseReportAction', () => {
       state: {
         customCaseReport: {
           filters: filterValues,
-          lastIdsOfPages: [{ pk: null, receivedAt: null }],
         },
       },
     });
@@ -202,7 +184,6 @@ describe('getCustomCaseReportAction', () => {
       state: {
         customCaseReport: {
           filters: filterValues,
-          lastIdsOfPages: [{ pk: null, receivedAt: null }],
         },
         judges: [judgeSotomayor, judgeColvin],
       },

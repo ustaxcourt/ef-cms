@@ -3,6 +3,7 @@ import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UserFactory } from '@shared/business/entities/factories/UserFactory';
+import { getCasesByEmailTotal } from '@web-api/persistence/postgres/cases/reports/getCasesByEmailTotal';
 
 async function disableIsUserUpdatingFlag({
   applicationContext,
@@ -51,6 +52,7 @@ export const queueEmailUpdateAssociatedCasesWorker = async (
   await waitUntilAllExpectedCasesAreUpdatedWithEmail({
     applicationContext,
     userEmail: user.email!,
+    userRole: user.role,
   })
     .catch(error =>
       console.error(`ERROR CHECKING COUNT OF UPDATED CASES -> ${error}`),
@@ -70,10 +72,12 @@ async function waitUntilAllExpectedCasesAreUpdatedWithEmail({
   applicationContext,
   iteration = 0,
   userEmail,
+  userRole,
 }: {
   applicationContext: ServerApplicationContext;
   iteration?: number;
   userEmail: string;
+  userRole: string;
 }): Promise<void> {
   await applicationContext.getUtilities().sleep(WAIT_TIMEOUT);
 
@@ -85,12 +89,10 @@ async function waitUntilAllExpectedCasesAreUpdatedWithEmail({
     });
   const expectedCount = docketNumbersByUser.length;
 
-  const actualCount = await applicationContext
-    .getPersistenceGateway()
-    .getCasesByEmailTotal({
-      applicationContext,
-      email: userEmail,
-    });
+  const actualCount = await getCasesByEmailTotal({
+    email: userEmail,
+    role: userRole,
+  });
 
   if (actualCount >= expectedCount) return;
   if (iteration >= MAX_ITERATIONS) return;
@@ -98,5 +100,6 @@ async function waitUntilAllExpectedCasesAreUpdatedWithEmail({
     applicationContext,
     iteration: iteration + 1,
     userEmail,
+    userRole,
   });
 }

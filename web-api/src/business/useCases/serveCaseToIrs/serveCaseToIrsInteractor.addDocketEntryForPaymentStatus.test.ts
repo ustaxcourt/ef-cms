@@ -1,6 +1,6 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { PAYMENT_STATUS } from '../../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { PAYMENT_STATUS } from '@shared/business/entities/EntityConstants';
 import { addDocketEntryForPaymentStatus } from './serveCaseToIrsInteractor';
 import {
   mockPetitionerUser,
@@ -8,7 +8,7 @@ import {
 } from '@shared/test/mockAuthUsers';
 
 describe('addDocketEntryForPaymentStatus', () => {
-  let user = mockPetitionerUser;
+  const user = mockPetitionerUser;
 
   it('adds a docketRecord for a paid petition payment', async () => {
     const caseEntity = new Case(

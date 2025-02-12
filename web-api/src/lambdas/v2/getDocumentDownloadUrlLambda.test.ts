@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
@@ -13,7 +14,7 @@ import { getDownloadPolicyUrlInteractor as mockGetDownloadPolicyUrlInteractor } 
 jest.mock('@web-api/applicationContext', () => {
   return {
     createApplicationContext: () => {
-      let appContext = mockCreateTestApplicationContext();
+      const appContext = mockCreateTestApplicationContext();
       appContext.getUseCases().getAllFeatureFlagsInteractor = jest
         .fn()
         .mockResolvedValue(mockFeatureFlag);

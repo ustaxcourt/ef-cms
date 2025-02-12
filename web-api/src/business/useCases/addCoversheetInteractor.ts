@@ -1,5 +1,5 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { addCoverToPdf } from './addCoverToPdf';

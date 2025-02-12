@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { MOCK_CASE_WITH_TRIAL_SESSION } from '../../../../shared/src/test/mockCase';
@@ -14,7 +15,7 @@ import { getCaseInteractor as mockGetCaseInteractor } from '@shared/business/use
 jest.mock('@web-api/applicationContext', () => {
   return {
     createApplicationContext: () => {
-      let appContext = mockCreateTestApplicationContext();
+      const appContext = mockCreateTestApplicationContext();
       appContext.getUseCases().getAllFeatureFlagsInteractor = jest
         .fn()
         .mockResolvedValue(mockFeatureFlag);

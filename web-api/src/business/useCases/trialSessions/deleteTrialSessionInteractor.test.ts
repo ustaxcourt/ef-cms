@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
@@ -11,6 +12,11 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const updateCase = updateCaseMock as jest.Mock;
 
 describe('deleteTrialSessionInteractor', () => {
   let mockTrialSession;
@@ -100,9 +106,7 @@ describe('deleteTrialSessionInteractor', () => {
       startDate: '2100-12-01T00:00:00.000Z',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
     await deleteTrialSessionInteractor(
       applicationContext,
@@ -122,9 +126,7 @@ describe('deleteTrialSessionInteractor', () => {
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(updateCase).toHaveBeenCalled();
   });
 
   it('does not delete the trial session working copy if there is no judge on the trial session', async () => {
@@ -134,9 +136,7 @@ describe('deleteTrialSessionInteractor', () => {
       startDate: '2100-12-01T00:00:00.000Z',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 
     await deleteTrialSessionInteractor(
       applicationContext,
@@ -157,12 +157,10 @@ describe('deleteTrialSessionInteractor', () => {
       startDate: '2100-12-01T00:00:00.000Z',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        preferredTrialCity: null,
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      preferredTrialCity: null,
+    });
 
     await deleteTrialSessionInteractor(
       applicationContext,
@@ -184,9 +182,7 @@ describe('deleteTrialSessionInteractor', () => {
       startDate: '2100-12-01T00:00:00.000Z',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 
     mockLock = MOCK_LOCK;
 
@@ -200,9 +196,7 @@ describe('deleteTrialSessionInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {
@@ -211,9 +205,7 @@ describe('deleteTrialSessionInteractor', () => {
       startDate: '2100-12-01T00:00:00.000Z',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 
     await deleteTrialSessionInteractor(
       applicationContext,

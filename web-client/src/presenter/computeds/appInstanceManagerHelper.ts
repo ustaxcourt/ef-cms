@@ -1,9 +1,11 @@
+import { BroadcastChannel } from 'broadcast-channel';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+
 export const appInstanceManagerHelper = (
-  get: Get,
+  _get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): { channelHandle: BroadcastChannel } => {
   const broadcastChannel = applicationContext.getBroadcastGateway();
 
   return {

@@ -3,6 +3,32 @@ import { NewWorkItemKysely } from '@web-api/database-types';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
+export const DW_WORK_ITEM_COLUMNS = [
+  'assigneeId',
+  'assigneeName',
+  'associatedJudge',
+  'associatedJudgeId',
+  'caseIsInProgress',
+  'completedAt',
+  'completedBy',
+  'completedByUserId',
+  'completedMessage',
+  'createdAt',
+  'docketEntry',
+  'docketNumber',
+  'hideFromPendingMessages',
+  'highPriority',
+  'inProgress',
+  'isInitializeCase',
+  'isRead',
+  'section',
+  'sentBy',
+  'sentBySection',
+  'sentByUserId',
+  'updatedAt',
+  'workItemId',
+];
+
 function pickFields(workItem) {
   return {
     assigneeId: workItem.assigneeId,
@@ -31,13 +57,38 @@ function pickFields(workItem) {
   };
 }
 
+function getWorkItemSection({
+  section,
+  documentTitle,
+}: {
+  section: string;
+  documentTitle: string;
+}) {
+  // We have sections for caseServicesSupervisor and clerkofcourt, but as far as we can tell, they aren't used.
+  // Instead, we need to translate these into either the petitions section or the docket section depending
+  // on the document type.
+  if (!['caseServicesSupervisor', 'clerkofcourt'].includes(section)) {
+    return section;
+  }
+  if (documentTitle.toLocaleLowerCase() == 'petition') {
+    return 'petitions';
+  }
+  return 'docket';
+}
+
 export function toKyselyNewWorkItem(workItem: RawWorkItem): NewWorkItemKysely {
-  return pickFields(workItem);
+  return {
+    ...pickFields(workItem),
+    section: getWorkItemSection({
+      section: workItem.section,
+      documentTitle: workItem.docketEntry.documentTitle,
+    }),
+  };
 }
 
 export function workItemEntity(workItem) {
-  return new WorkItem(
-    transformNullToUndefined({
+  return new WorkItem({
+    ...transformNullToUndefined({
       ...workItem,
       caseStatus: workItem.status,
       caseTitle: Case.getCaseTitle(workItem.caption || ''),
@@ -46,5 +97,6 @@ export function workItemEntity(workItem) {
       trialDate: workItem.trialDate?.toISOString(),
       updatedAt: workItem.createdAt?.toISOString(),
     }),
-  );
+    assigneeId: workItem.assigneeId, // this needs to be null because it replicates what was done in dynamo
+  });
 }

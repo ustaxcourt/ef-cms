@@ -3,7 +3,7 @@ import {
   CASE_TYPES_MAP,
   CHIEF_JUDGE,
   SESSION_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
@@ -290,7 +290,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         trialLocation,
       );
       expect(cerebralTest.getState('caseDetail.trialDate')).toEqual(
-        '2025-12-12T00:00:00.000-05:00',
+        '2025-12-12T05:00:00.000Z',
       );
       expect(cerebralTest.getState('caseDetail.associatedJudge')).toEqual(
         'Cohen',

@@ -1,15 +1,12 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import {
-  Message,
-  RawMessage,
-} from '../../../../../shared/src/business/entities/Message';
+import { Case } from '@shared/business/entities/cases/Case';
+import { Message, RawMessage } from '@shared/business/entities/Message';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ReplyMessageType } from '@web-api/business/useCases/messages/createMessageInteractor';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createMessageAsReply } from '@web-api/persistence/postgres/messages/createMessageAsReply';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
@@ -31,8 +28,16 @@ export const replyToMessage = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { caseCaption, docketNumberWithSuffix, status } =
-    await getCaseByDocketNumber({ applicationContext, docketNumber });
+  const associatedCase = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
+
+  if (!associatedCase) {
+    throw new NotFoundError(`Case ${docketNumber} not found`);
+  }
+
+  const { caseCaption, docketNumberWithSuffix, status } = associatedCase;
 
   const fromUser = await applicationContext
     .getPersistenceGateway()

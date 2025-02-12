@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import * as DateHandler from '@shared/business/utilities/DateHandler';
 import * as pdfLib from 'pdf-lib';
 import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
@@ -46,7 +45,6 @@ import {
   compareStrings,
 } from '@shared/business/utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
-import { createCase } from '@web-api/persistence/postgres/cases/createCase';
 import { createCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/createCaseAndAssociations';
 import { createMockDocumentClient } from './createMockDocumentClient';
 import { deleteRecord } from '@web-api/persistence/elasticsearch/deleteRecord';
@@ -70,6 +68,7 @@ import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber'
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { generateChangeOfAddressHelper } from '@web-api/business/useCaseHelper/generateChangeOfAddressHelper';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
+import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from '@web-api/business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
 import {
   getAddressPhoneDiff,
@@ -78,7 +77,6 @@ import {
 import { getAllFeatureFlagsInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
 import { getAllWebSocketConnections } from '@web-api/persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
 import { getConfigurationItemValue } from '@web-api/persistence/dynamo/deployTable/getConfigurationItemValue';
 import { getConstants } from '@web-client/getConstants';
@@ -95,7 +93,7 @@ import { getFormattedPartiesNameAndTitle } from '@shared/business/utilities/getF
 import { getItem } from '@web-client/persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
 import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
-import { getTextByCount } from '@shared/business/utilities/getTextByCount';
+import { getTextByCount } from '@shared/test/getTextByCount';
 import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 import { getUserById as getUserByIdPersistence } from '@web-api/persistence/dynamo/users/getUserById';
 import { getUserIdForNote } from '@web-api/business/useCaseHelper/getUserIdForNote';
@@ -110,16 +108,14 @@ import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setC
 import { setItem } from '@web-client/persistence/localStorage/setItem';
 import { setNoticesForCalendaredTrialSessionInteractor } from '@shared/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
 import { setPdfFormFields } from '@web-api/business/useCaseHelper/pdf/setPdfFormFields';
-import { setServiceIndicatorsForCase } from '@shared/business/utilities/setServiceIndicatorsForCase';
 import { setupPdfDocument } from '@shared/business/utilities/setupPdfDocument';
 import { unsealDocketEntryInteractor } from '@web-api/business/useCases/docketEntry/unsealDocketEntryInteractor';
-import { updateCase } from '@web-api/persistence/postgres/cases/updateCase';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
-import { updateCaseCorrespondence } from '@web-api/persistence/dynamo/correspondence/updateCaseCorrespondence';
 import { updateDocketEntry } from '@web-api/persistence/dynamo/documents/updateDocketEntry';
 import { updateUserRecords } from '@web-api/persistence/dynamo/users/updateUserRecords';
 import { uploadDocumentAndMakeSafeInteractor } from '@shared/business/useCases/uploadDocumentAndMakeSafeInteractor';
+import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { validatePenaltiesInteractor } from '@shared/business/useCases/validatePenaltiesInteractor';
 import { verifyCaseForUser } from '@web-api/persistence/dynamo/cases/verifyCaseForUser';
 import path from 'path';
@@ -328,9 +324,6 @@ export const createTestApplicationContext = () => {
     setConsolidationFlagsForDisplay: jest
       .fn()
       .mockImplementation(setConsolidationFlagsForDisplay),
-    setServiceIndicatorsForCase: jest
-      .fn()
-      .mockImplementation(setServiceIndicatorsForCase),
     setupPdfDocument: jest.fn().mockImplementation(setupPdfDocument),
     sleep: jest.fn(),
     sortDocketEntries: jest.fn().mockImplementation(sortDocketEntries),
@@ -416,6 +409,7 @@ export const createTestApplicationContext = () => {
     docketRecord: jest.fn().mockImplementation(getFakeFile),
     entryOfAppearance: jest.fn().mockImplementation(getFakeFile),
     noticeOfChangeOfTrialJudge: jest.fn().mockImplementation(getFakeFile),
+    noticeOfChangeOfTrialLocation: jest.fn().mockImplementation(getFakeFile),
     noticeOfChangeToInPersonProceeding: jest
       .fn()
       .mockImplementation(getFakeFile),
@@ -461,7 +455,6 @@ export const createTestApplicationContext = () => {
     addCaseToHearing: jest.fn(),
     bulkDeleteRecords: jest.fn().mockImplementation(bulkDeleteRecords),
     bulkIndexRecords: jest.fn().mockImplementation(bulkIndexRecords),
-    createCase: jest.fn().mockImplementation(createCase),
     createCaseTrialSortMappingRecords: jest.fn(),
     createElasticsearchReindexRecord: jest.fn(),
     createLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
@@ -477,10 +470,7 @@ export const createTestApplicationContext = () => {
       .mockImplementation(getAllWebSocketConnections),
     getCalendaredCasesForTrialSession: jest.fn(),
     getCaseByDocketNumber: jest.fn().mockImplementation(getCaseByDocketNumber),
-    getCaseDeadlinesByDateRange: jest.fn(),
-    getCaseDeadlinesByDocketNumber: jest
-      .fn()
-      .mockImplementation(getCaseDeadlinesByDocketNumber),
+    getCasesByFilters: jest.fn(),
     getConfigurationItemValue: jest
       .fn()
       .mockImplementation(getConfigurationItemValue),
@@ -523,14 +513,13 @@ export const createTestApplicationContext = () => {
     setPriorityOnAllWorkItems: jest.fn(),
     setTrialSessionJobStatusForCase: jest.fn(),
     setTrialSessionProcessingStatus: jest.fn(),
-    updateCase: jest.fn().mockImplementation(updateCase),
-    updateCaseCorrespondence: jest
-      .fn()
-      .mockImplementation(updateCaseCorrespondence),
     updateCaseHearing: jest.fn(),
     updateDocketEntry: jest.fn().mockImplementation(updateDocketEntry),
     uploadDocument: jest.fn(),
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
+    upsertCaseCorrespondences: jest
+      .fn()
+      .mockImplementation(upsertCaseCorrespondences),
     verifyCaseForUser: jest.fn().mockImplementation(verifyCaseForUser),
   });
 

@@ -1,10 +1,10 @@
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
+import { Case } from '@shared/business/entities/cases/Case';
+import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
-import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
+import { UserCase } from '@shared/business/entities/UserCase';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 /**

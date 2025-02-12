@@ -5,27 +5,20 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { pick } from 'lodash';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
-/**
- * fileExternalDocumentInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.documentMetadata the metadata for all the documents
- * @returns {object} the updated case after the documents have been added
- */
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
   { documentMetadata }: { documentMetadata: any },
@@ -47,7 +40,7 @@ export const fileExternalDocument = async (
     docketNumber,
   });
 
-  let currentCaseEntity = new Case(currentCase, { authorizedUser });
+  const currentCaseEntity = new Case(currentCase, { authorizedUser });
 
   const {
     consolidatedCasesToFileAcross,
@@ -107,7 +100,7 @@ export const fileExternalDocument = async (
     }
   }
 
-  let documentMetadataForConsolidatedCases: TDocumentMetaData[] = [];
+  const documentMetadataForConsolidatedCases: TDocumentMetaData[] = [];
   if (
     consolidatedCasesToFileAcross &&
     consolidatedCasesToFileAcross.length > 0
@@ -130,11 +123,19 @@ export const fileExternalDocument = async (
           docketNumber: individualDocumentMetadata.docketNumber,
         });
 
+        if (!caseToUpdate) {
+          throw new NotFoundError(
+            `Case ${individualDocumentMetadata.docketNumber} not found`,
+          );
+        }
+
         let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
         const servedParties = aggregatePartiesForService(caseEntity);
+        const highPriorityWorkItem =
+          caseEntity.status === CASE_STATUS_TYPES.calendared;
 
-        for (let [docketEntryId, metadata, relationship] of documentsToAdd) {
+        for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
           if (docketEntryId && metadata) {
             const docketEntryEntity = new DocketEntry(
               {
@@ -154,9 +155,6 @@ export const fileExternalDocument = async (
             docketEntryEntity.setFiledBy(user);
 
             docketEntryEntity.validate();
-
-            const highPriorityWorkItem =
-              caseEntity.status === CASE_STATUS_TYPES.calendared;
 
             const workItem = new WorkItem({
               assigneeId: null,
@@ -213,13 +211,9 @@ export const fileExternalDocument = async (
           applicationContext,
           authorizedUser,
           caseToUpdate: caseEntity,
+          includeCorrespondenceAndWorkItems: false,
         });
 
-        for (let workItem of workItems) {
-          await saveWorkItem({
-            workItem: workItem.validate().toRawObject(),
-          });
-        }
         const rawCaseEntity = caseEntity.toRawObject();
         return rawCaseEntity;
       },
@@ -228,6 +222,11 @@ export const fileExternalDocument = async (
   const resolvedCaseEntities: RawCase[] = await Promise.all(
     consolidatedCaseEntities,
   );
+
+  await upsertWorkItems({
+    workItems,
+  });
+
   return resolvedCaseEntities.find(
     caseEntity => caseEntity.docketNumber === docketNumber,
   );

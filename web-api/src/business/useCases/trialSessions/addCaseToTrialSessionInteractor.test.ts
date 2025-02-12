@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
@@ -16,6 +17,12 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { setPriorityOnAllWorkItems as setPriorityOnAllWorkItemsMock } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const updateCase = updateCaseMock as jest.Mock;
+updateCase.mockImplementation(c => c.caseToUpdate);
 
 describe('addCaseToTrialSessionInteractor', () => {
   const setPriorityOnAllWorkItems = setPriorityOnAllWorkItemsMock as jest.Mock;
@@ -31,9 +38,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockImplementation(() => mockTrialSession);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => mockCase);
+    getCaseByDocketNumber.mockImplementation(() => mockCase);
   });
 
   beforeEach(() => {

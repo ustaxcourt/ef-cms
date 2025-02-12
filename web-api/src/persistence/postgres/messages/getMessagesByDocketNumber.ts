@@ -13,7 +13,7 @@ export const getMessagesByDocketNumber = async ({
       .leftJoin('dwCase as c', 'c.docketNumber', 'm.docketNumber')
       .where('m.docketNumber', '=', docketNumber)
       .selectAll()
-      .select('m.docketNumber')
+      .select(['m.docketNumber', 'm.createdAt'])
       .execute(),
   );
 

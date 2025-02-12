@@ -4,11 +4,19 @@ import {
   Kysely,
   PostgresDialect,
 } from 'kysely';
-import { Database } from './database-types';
+import { Database, DatabaseTableName } from './database-types';
 import { Pool } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
 import { environment } from './environment';
 import fs from 'fs';
+import { opensearchGateway } from '@web-api/gateways/opensearch/opensearchGateway';
+import {
+  OpensearchWorkerMessage,
+  TABLES_TO_OPENSEARCH_MAPPING,
+  WorkerMessageType,
+} from '@web-api/gateways/opensearch/opensearchWorkerRouter';
+import { formatNow } from '@shared/business/utilities/DateHandler';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 
 export const POOL = {
   ...environment.rds.pool,
@@ -19,7 +27,7 @@ export const POOL = {
     : undefined,
 };
 
-let dbInstances: Record<string, Kysely<Database> | null> = {
+const dbInstances: Record<string, Kysely<Database> | null> = {
   reader: null,
   writer: null,
 };
@@ -139,11 +147,44 @@ export function getDbReader<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
   });
 }
 
-export function getDbWriter<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
+function executeWriter<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
   return getConnection({
     cb,
     dbKey: 'writer',
     host: environment.rds.pool.host,
     region: 'us-east-1',
   });
+}
+
+export async function getDbWriter<T>({
+  cb,
+  table,
+}: {
+  cb: (db: Kysely<Database>) => Promise<T>;
+  table: DatabaseTableName | null;
+}): Promise<T> {
+  if (!table || !Object.keys(TABLES_TO_OPENSEARCH_MAPPING).includes(table)) {
+    return await executeWriter(cb);
+  }
+
+  const result: T = await executeWriter(cb);
+
+  if (result) {
+    try {
+      const message: OpensearchWorkerMessage = {
+        timestamp: formatNow(),
+        payload: result,
+        type: table as WorkerMessageType,
+      };
+
+      await opensearchGateway().queueWork({ message });
+    } catch (err) {
+      getLogger().error(
+        'Error queuing message for opensearch from postgres',
+        err,
+      );
+    }
+  }
+
+  return result;
 }

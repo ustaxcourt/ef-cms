@@ -1,6 +1,7 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { asyncSyncHandler, post, put, remove } from './requests';
 
+// eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
 const mockFail503 = Promise.reject({
   response: {
     headers: {},
@@ -9,6 +10,7 @@ const mockFail503 = Promise.reject({
   },
 });
 
+// eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
 const mockFail503RetryAfter = Promise.reject({
   response: {
     headers: {

@@ -11,7 +11,7 @@ import {
   privatePractitionerUser,
 } from '@shared/test/mockUsers';
 import { getFormattedDocketEntry } from './formattedDocketEntries';
-import { simpleDocketEntries } from './formattedCaseDetail.test';
+import { simpleDocketEntries } from '@web-client/presenter/computeds/mockFormattedCaseDetailTestFixtures';
 
 let mockIsNotServedDocument;
 jest.mock('@shared/business/utilities/getFormattedCaseDetail', () => ({

@@ -1,19 +1,19 @@
-import { CONTACT_TYPES } from '../entities/EntityConstants';
-import { Case } from '../entities/cases/Case';
+import { CONTACT_TYPES } from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   UnauthorizedError,
   UnprocessableEntityError,
 } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { WorkItem } from '../entities/WorkItem';
+import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { isEmpty } from 'lodash';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -154,8 +154,8 @@ export const saveCaseDetailInternalEdit = async (
       { caseEntity },
     );
 
-    await saveWorkItem({
-      workItem: workItemEntity.validate().toRawObject(),
+    await upsertWorkItems({
+      workItems: [workItemEntity.validate().toRawObject()],
     });
   }
 

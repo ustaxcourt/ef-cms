@@ -12,11 +12,12 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../entities/User';
-import { caseSearchFilter } from '../utilities/caseFilter';
+import { filterCaseSearchResultsNotAccessibleToUser } from '../utilities/caseFilter';
 import { omit } from 'lodash';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const orderAdvancedSearchInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     caseTitleOrPetitioner,
     dateRange,
@@ -75,10 +76,10 @@ export const orderAdvancedSearchInteractor = async (
     userRole: authorizedUser.role,
   });
 
-  const filteredResults = caseSearchFilter(results, authorizedUser).slice(
-    0,
-    MAX_SEARCH_RESULTS,
-  );
+  const filteredResults = filterCaseSearchResultsNotAccessibleToUser(
+    results,
+    authorizedUser,
+  ).slice(0, MAX_SEARCH_RESULTS);
 
   return InternalDocumentSearchResult.validateRawCollection(filteredResults);
 };

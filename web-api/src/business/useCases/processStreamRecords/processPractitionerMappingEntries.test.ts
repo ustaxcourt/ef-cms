@@ -1,5 +1,10 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { processPractitionerMappingEntries } from './processPractitionerMappingEntries';
+
+import { getCaseMetadataWithCounsel as getCaseMetadataWithCounselMock } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
+
+const getCaseMetadataWithCounsel = getCaseMetadataWithCounselMock as jest.Mock;
 
 describe('processPractitionerMappingEntries', () => {
   const mockCaseRecord = {
@@ -72,9 +77,7 @@ describe('processPractitionerMappingEntries', () => {
       practitionerMappingRecords: [],
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseMetadataWithCounsel,
-    ).not.toHaveBeenCalled();
+    expect(getCaseMetadataWithCounsel).not.toHaveBeenCalled();
   });
 
   it('should retrieve and index each case for each provided practitioner mapping record', async () => {
@@ -83,31 +86,26 @@ describe('processPractitionerMappingEntries', () => {
         '|',
       )[1];
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseMetadataWithCounsel.mockReturnValue(mockCaseRecord);
+    getCaseMetadataWithCounsel.mockReturnValue(mockCaseRecord);
 
     await processPractitionerMappingEntries({
       applicationContext,
       practitionerMappingRecords: mockPractitionerMappingEntries,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseMetadataWithCounsel,
-    ).toHaveBeenCalledTimes(mockPractitionerMappingEntries.length);
-    expect(
-      applicationContext.getPersistenceGateway().getCaseMetadataWithCounsel.mock
-        .calls[0][0].docketNumber,
-    ).toEqual(docketNumberInPractitionerMapping);
+    expect(getCaseMetadataWithCounsel).toHaveBeenCalledTimes(
+      mockPractitionerMappingEntries.length,
+    );
+    expect(getCaseMetadataWithCounsel.mock.calls[0][0].docketNumber).toEqual(
+      docketNumberInPractitionerMapping,
+    );
     expect(
       applicationContext.getPersistenceGateway().bulkIndexRecords,
     ).toHaveBeenCalled();
   });
 
   it('should log an error and throw an exception when bulk index returns failed records', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseMetadataWithCounsel.mockReturnValue(mockCaseRecord);
+    getCaseMetadataWithCounsel.mockReturnValue(mockCaseRecord);
 
     applicationContext
       .getPersistenceGateway()

@@ -3,6 +3,7 @@ import { Case } from './cases/Case';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { createISODateString } from '../utilities/DateHandler';
+import { getUniqueId } from '@shared/sharedAppContext';
 import joi from 'joi';
 export class CaseDeadline extends JoiValidationEntity {
   public associatedJudge: string;
@@ -15,17 +16,12 @@ export class CaseDeadline extends JoiValidationEntity {
   public leadDocketNumber?: string;
   public sortableDocketNumber: number;
 
-  constructor(rawProps, { applicationContext }) {
+  constructor(rawProps) {
     super('CaseDeadline');
-
-    if (!applicationContext) {
-      throw new TypeError('applicationContext must be defined');
-    }
 
     this.associatedJudge = rawProps.associatedJudge;
     this.associatedJudgeId = rawProps.associatedJudgeId;
-    this.caseDeadlineId =
-      rawProps.caseDeadlineId || applicationContext.getUniqueId();
+    this.caseDeadlineId = rawProps.caseDeadlineId || getUniqueId();
     this.createdAt = rawProps.createdAt || createISODateString();
     this.deadlineDate = rawProps.deadlineDate;
     this.description = rawProps.description;

@@ -1,17 +1,21 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   DOCKET_NUMBER_SUFFIXES,
-  PROCEDURE_TYPES,
+  PROCEDURE_TYPES_MAP,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateNoticeOfChangeOfTrialJudgeInteractor } from './generateNoticeOfChangeOfTrialJudgeInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
 describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
   const formattedPhoneNumber = '123-456-7890';
 
   const mockTrialSessionInformation = {
-    caseProcedureType: PROCEDURE_TYPES.SMALL,
+    caseProcedureType: PROCEDURE_TYPES_MAP.small,
     chambersPhoneNumber: '1234567890',
     priorJudgeTitleWithFullName: 'Special Trial Judge Judifer Judy',
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
@@ -28,24 +32,22 @@ describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
         judge: { name: 'Test Judge' },
       }));
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
-        if (docketNumber === '123-45') {
-          return {
-            caseCaption: 'Test Case Caption',
-            docketNumber: '123-45',
-            docketNumberWithSuffix: '123-45',
-          };
-        } else {
-          return {
-            caseCaption: 'Test Case Caption',
-            docketNumber: '234-56',
-            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-            docketNumberWithSuffix: '234-56S',
-          };
-        }
-      });
+    getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
+      if (docketNumber === '123-45') {
+        return {
+          caseCaption: 'Test Case Caption',
+          docketNumber: '123-45',
+          docketNumberWithSuffix: '123-45',
+        };
+      } else {
+        return {
+          caseCaption: 'Test Case Caption',
+          docketNumber: '234-56',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+          docketNumberWithSuffix: '234-56S',
+        };
+      }
+    });
 
     applicationContext
       .getPersistenceGateway()
@@ -67,9 +69,7 @@ describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
       trialSessionInformation: mockTrialSessionInformation,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().noticeOfChangeOfTrialJudge.mock
         .calls[0][0],
@@ -96,9 +96,7 @@ describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
       },
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().noticeOfChangeOfTrialJudge.mock
         .calls[0][0],
@@ -121,9 +119,7 @@ describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
       },
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().noticeOfChangeOfTrialJudge.mock
         .calls[0][0],
@@ -145,9 +141,7 @@ describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
       },
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().noticeOfChangeOfTrialJudge.mock
         .calls[0][0],

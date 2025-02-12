@@ -1,33 +1,34 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   DOCKET_NUMBER_SUFFIXES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateStandingPretrialOrderInteractor } from './generateStandingPretrialOrderInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 describe('generateStandingPretrialOrderInteractor', () => {
   const TEST_JUDGE = {
     judgeTitle: 'Judge',
     name: 'Test Judge',
   };
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
-        if (docketNumber === '123-45') {
-          return {
-            caseCaption: 'Test Case Caption',
-            docketNumber: '123-45',
-          };
-        } else {
-          return {
-            caseCaption: 'Test Case Caption',
-            docketNumber: '234-56',
-            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-          };
-        }
-      });
+    getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
+      if (docketNumber === '123-45') {
+        return {
+          caseCaption: 'Test Case Caption',
+          docketNumber: '123-45',
+        };
+      } else {
+        return {
+          caseCaption: 'Test Case Caption',
+          docketNumber: '234-56',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+        };
+      }
+    });
 
     applicationContext
       .getPersistenceGateway()
@@ -47,7 +48,7 @@ describe('generateStandingPretrialOrderInteractor', () => {
       .getUsersInSection.mockReturnValue([TEST_JUDGE]);
   });
 
-  it('get the case detail and trial session detail', async () => {
+  it('should get the case detail and trial session detail', async () => {
     await generateStandingPretrialOrderInteractor(applicationContext, {
       docketNumber: '123-45',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
@@ -56,9 +57,7 @@ describe('generateStandingPretrialOrderInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
   });
 
   it('should call the Standing Pretrial Order document generator with correct data', async () => {
@@ -96,7 +95,7 @@ describe('generateStandingPretrialOrderInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should send formattedTrialLocation with Remote Proceedings text if proceedingType is remote', async () => {
+  it('should send formattedTrialLocation with Remote Proceedings text when proceedingType is remote', async () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({

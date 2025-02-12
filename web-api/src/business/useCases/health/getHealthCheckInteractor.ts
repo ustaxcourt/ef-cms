@@ -1,11 +1,12 @@
 import { S3 } from '@aws-sdk/client-s3';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { elasticSearchHealthCheck } from '@web-api/persistence/elasticsearch/elasticSearchHealthCheck';
 
 const regionEast = 'us-east-1';
 const regionWest = 'us-west-1';
 
 const handleAxiosTimeout = axios => {
-  let source = axios.CancelToken.source();
+  const source = axios.CancelToken.source();
   setTimeout(() => {
     source.cancel();
   }, 1000);
@@ -43,9 +44,7 @@ const getElasticSearchStatus = async ({
   applicationContext: ServerApplicationContext;
 }): Promise<boolean> => {
   try {
-    await applicationContext.getPersistenceGateway().getFirstSingleCaseRecord({
-      applicationContext,
-    });
+    await elasticSearchHealthCheck({ applicationContext });
   } catch (e) {
     applicationContext.logger.error('Elasticsearch health check failed. ', e);
     return false;
@@ -190,7 +189,7 @@ const getS3BucketStatus = async ({
     westTempDocuments: westS3TempBucketName,
   };
 
-  let bucketStatus: S3BucketsStatus = {
+  const bucketStatus: S3BucketsStatus = {
     app: false,
     appFailover: false,
     eastDocuments: false,

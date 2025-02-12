@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import {
   AuthUser,
   UnknownAuthUser,
@@ -31,7 +30,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 import { getClinicLetterKey } from '../../../../../shared/src/business/utilities/getClinicLetterKey';
 import { random, remove } from 'lodash';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
@@ -84,7 +83,7 @@ const addDocketEntries = ({ caseEntity }) => {
       doc === INITIAL_DOCUMENT_TYPES.stin.documentType,
   );
 
-  for (let documentType of initialDocumentTypesListRequiringDocketEntry) {
+  for (const documentType of initialDocumentTypesListRequiringDocketEntry) {
     const foundDocketEntry = caseEntity.docketEntries.find(
       caseDocument => caseDocument.documentType === documentType,
     );
@@ -112,8 +111,8 @@ const createPetitionWorkItems = async ({ caseEntity, user }) => {
     user,
   });
 
-  await saveWorkItem({
-    workItem: initializeCaseWorkItem.validate().toRawObject(),
+  await upsertWorkItems({
+    workItems: [initializeCaseWorkItem.validate().toRawObject()],
   });
 };
 
@@ -482,7 +481,7 @@ export const serveCaseToIrs = async (
       docketNumber,
     });
 
-    let caseEntity = new Case(caseToBatch, { authorizedUser });
+    const caseEntity = new Case(caseToBatch, { authorizedUser });
 
     caseEntity.markAsSentToIRS();
 

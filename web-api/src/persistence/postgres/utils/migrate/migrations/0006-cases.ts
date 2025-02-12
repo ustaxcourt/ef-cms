@@ -1,4 +1,4 @@
-import { Kysely } from 'kysely';
+import { CompiledQuery, Kysely } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
@@ -15,10 +15,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('canAllowPrintableDocketRecord', 'boolean')
     .addColumn('canDojPractitionersRepresentParty', 'boolean')
     .addColumn('caseNote', 'varchar')
-    .addColumn('caseStatusHistory', 'jsonb') // TODO: separate table?
     .addColumn('caseType', 'varchar', col => col.notNull())
     .addColumn('closedDate', 'timestamptz')
-    .addColumn('correspondence', 'jsonb')
     .addColumn('createdAt', 'timestamptz')
     .addColumn('damages', 'numeric')
     .addColumn('docketEntries', 'jsonb')
@@ -57,11 +55,14 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('receivedAt', 'timestamptz', col => col.notNull())
     .addColumn('sealedDate', 'timestamptz')
     .addColumn('sortableDocketNumber', 'numeric')
-    .addColumn('statistics', 'jsonb')
     .addColumn('trialSessionId', 'varchar')
     .addColumn('trialTime', 'varchar')
     .addColumn('useSameAsPrimary', 'boolean')
     .execute();
+
+  await db.executeQuery(
+    CompiledQuery.raw('CREATE EXTENSION IF NOT EXISTS pg_trgm;'),
+  );
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
@@ -79,7 +80,6 @@ export async function down(db: Kysely<any>): Promise<void> {
     .dropColumn('canAllowPrintableDocketRecord')
     .dropColumn('canDojPractitionersRepresentParty')
     .dropColumn('caseNote')
-    .dropColumn('caseStatusHistory')
     .dropColumn('caseType')
     .dropColumn('closedDate')
     .dropColumn('createdAt')
@@ -119,9 +119,10 @@ export async function down(db: Kysely<any>): Promise<void> {
     .dropColumn('receivedAt')
     .dropColumn('sealedDate')
     .dropColumn('sortableDocketNumber')
-    .dropColumn('statistics')
     .dropColumn('trialSessionId')
     .dropColumn('trialTime')
     .dropColumn('useSameAsPrimary')
     .execute();
+
+  await db.executeQuery(CompiledQuery.raw('DROP EXTENSION IF EXISTS pg_trgm;'));
 }

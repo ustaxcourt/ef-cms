@@ -1,22 +1,30 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   AUTOMATIC_BLOCKED_REASONS,
   CHIEF_JUDGE,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import {
-  MOCK_CASE,
-  MOCK_CASE_WITHOUT_PENDING,
-} from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE, MOCK_CASE_WITHOUT_PENDING } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
 } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { createCaseDeadlineInteractor } from './createCaseDeadlineInteractor';
+import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+
+const updateCase = updateCaseMock as jest.Mock;
+
+const getCaseDeadlinesByDocketNumber =
+  getCaseDeadlinesByDocketNumberMock as jest.Mock;
 
 describe('createCaseDeadlineInteractor', () => {
   const mockCaseDeadline = {
@@ -37,21 +45,14 @@ describe('createCaseDeadlineInteractor', () => {
 
     applicationContext.environment.stage = 'local';
 
-    applicationContext
-      .getPersistenceGateway()
-      .createCaseDeadline.mockImplementation(v => v);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => mockCase);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockReturnValue([
-        { deadline: 'something' },
-      ]);
+    getCaseByDocketNumber.mockImplementation(() => mockCase);
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([
+      { deadline: 'something' },
+    ]);
   });
 
   it('throws an error if the user is not valid or authorized', async () => {
-    let user = {} as UnknownAuthUser;
+    const user = {} as UnknownAuthUser;
     await expect(
       createCaseDeadlineInteractor(
         applicationContext,
@@ -75,13 +76,8 @@ describe('createCaseDeadlineInteractor', () => {
     expect(caseDeadline).toBeDefined();
     expect(caseDeadline.associatedJudge).toEqual(CHIEF_JUDGE); // judge is not set on the mock case, so it defaults to chief judge
     expect(caseDeadline.associatedJudgeId).toEqual(undefined); // judge is not set on the mock case, so judgeId is not set
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate,
-    ).toMatchObject({
+    expect(updateCase).toHaveBeenCalled();
+    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
@@ -108,13 +104,8 @@ describe('createCaseDeadlineInteractor', () => {
     expect(caseDeadline.associatedJudgeId).toEqual(
       'dabbad02-18d0-43ec-bafb-654e83405416',
     );
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate,
-    ).toMatchObject({
+    expect(updateCase).toHaveBeenCalled();
+    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
@@ -142,9 +133,7 @@ describe('createCaseDeadlineInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the cases', async () => {

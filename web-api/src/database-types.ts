@@ -1,9 +1,15 @@
 import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
 
+export type DatabaseTableName = keyof Database;
+
 export interface Database {
   dwCase: CaseTable;
+  dwCaseCorrespondence: CaseCorrespondenceTable;
+  dwCaseDeadline: CaseDeadlineTable;
   dwCaseStatistic: CaseStatisticTable;
   dwCaseStatusUpdate: CaseStatusUpdateTable;
+  dwCaseWorksheet: CaseWorksheetTable;
+  dwDocketEntry: DocketEntryTable;
   dwMessage: MessageTable;
   dwPetitionerOnCase: PetitionerOnCaseTable;
   dwStatisticPenalty: StatisticPenaltyTable;
@@ -40,19 +46,11 @@ export type MessageKysely = Selectable<MessageTable>;
 export type NewMessageKysely = Insertable<MessageTable>;
 export type UpdateMessageKysely = Updateable<MessageTable>;
 
-// 10502 TODO: I have added | null to optional dates because otherwise an undefined date does not update postgres
-// (e.g., if sealedDate exists for a case in the db, it will still exist even if we update with a rawCase that has sealedDate = undefined)
-// Is there a better way to handle this?
 export interface CaseTable {
-  // archivedCorrespondences?: any[];
-  // archivedDocketEntries?: RawDocketEntry[];
-  // consolidatedCases: RawConsolidatedCaseSummary[] = []
-  // irsPractitioners?: any[];
-  // privatePractitioners?: any[];
   associatedJudge?: string;
   associatedJudgeId?: string;
   automaticBlocked?: boolean;
-  automaticBlockedDate?: Date | null; // do we need this and blockedDate?
+  automaticBlockedDate?: Date | null;
   automaticBlockedReason?: string;
   blocked?: boolean;
   blockedDate?: Date | null;
@@ -68,11 +66,16 @@ export interface CaseTable {
   damages?: number;
   docketNumber: string;
   docketNumberSuffix?: string;
+  docketEntries?: ColumnType<
+    { docketEntryId: string; docketNumber: string }[],
+    string,
+    string
+  >;
   docketNumberWithSuffix?: string;
   filingType?: string;
   hasPendingItems?: boolean;
   hasVerifiedIrsNotice?: boolean;
-  hearings?: any[];
+  hearings?: ColumnType<{ trialSessionId: string }[], string, string>;
   highPriority?: boolean;
   highPriorityReason?: string;
   initialCaption?: string;
@@ -83,7 +86,7 @@ export interface CaseTable {
   judgeUserId?: string;
   leadDocketNumber?: string | null;
   litigationCosts?: number;
-  mailingDate?: string; // this seems like a display field more than an actual date
+  mailingDate?: string;
   noticeOfAttachments?: boolean;
   noticeOfTrialDate?: Date | null;
   orderDesignatingPlaceOfTrial?: boolean;
@@ -100,11 +103,10 @@ export interface CaseTable {
   petitionPaymentWaivedDate?: Date | null;
   preferredTrialCity?: string;
   procedureType: string;
-  qcCompleteForTrial?: Record<string, any>; // needed
+  qcCompleteForTrial?: ColumnType<{ trialSessionId: string }, string, string>;
   receivedAt: Date;
   sealedDate?: Date | null;
   sortableDocketNumber: number;
-  statistics?: any[];
   status: string;
   trialDate?: Date | null;
   trialLocation?: string | null;
@@ -117,6 +119,47 @@ export type CaseKysely = Selectable<CaseTable>;
 export type NewCaseKysely = Insertable<CaseTable>;
 export type UpdateCaseKysely = Updateable<CaseTable>;
 
+export interface CaseCorrespondenceTable {
+  archived?: boolean;
+  correspondenceId: string;
+  documentTitle: string;
+  filedBy?: string;
+  filingDate: Date;
+  userId: string;
+  docketNumber: string;
+}
+
+export type CaseCorrespondenceKysely = Selectable<CaseCorrespondenceTable>;
+export type NewCaseCorrespondenceKysely = Insertable<CaseCorrespondenceTable>;
+export type UpdateCaseCorrespondenceKysely =
+  Updateable<CaseCorrespondenceTable>;
+
+export interface CaseDeadlineTable {
+  associatedJudge: string;
+  associatedJudgeId?: string;
+  caseDeadlineId: string;
+  createdAt: Date;
+  deadlineDate: Date;
+  description: string;
+  docketNumber: string;
+  sortableDocketNumber: number;
+}
+
+export type CaseDeadlineKysely = Selectable<CaseDeadlineTable>;
+export type NewCaseDeadlineKysely = Insertable<CaseDeadlineTable>;
+export type UpdateCaseDeadlineKysely = Updateable<CaseDeadlineTable>;
+
+export interface CaseWorksheetTable {
+  docketNumber: string;
+  finalBriefDueDate?: Date | null;
+  primaryIssue?: string;
+  statusOfMatter?: string;
+  judgeUserId?: string;
+}
+
+export type CaseWorksheetKysely = Selectable<CaseWorksheetTable>;
+export type NewCaseWorksheetKysely = Insertable<CaseWorksheetTable>;
+export type UpdateCaseWorksheetKysely = Updateable<CaseWorksheetTable>;
 export interface WorkItemTable {
   assigneeId?: string;
   assigneeName?: string;
@@ -148,7 +191,6 @@ export type NewWorkItemKysely = Insertable<WorkItemTable>;
 export type UpdateWorkItemKysely = Updateable<WorkItemTable>;
 
 export interface PetitionerOnCaseTable {
-  // Once user table is created, maybe an optional foreign key to that?
   additionalName?: string;
   contactType: string;
   docketNumber: string;
@@ -159,9 +201,10 @@ export interface PetitionerOnCaseTable {
   paperPetitionEmail?: string;
   placeOfLegalResidence?: string;
   sealedAndUnavailable?: boolean;
-  secondaryName?: string; // how is this different from additional name?
+  secondaryName?: string;
   serviceIndicator?: string;
   title?: string;
+  orderOnCase: number;
 
   // Maybe break this out into a contact table down the road
   address1: string;
@@ -179,7 +222,7 @@ export interface PetitionerOnCaseTable {
 }
 
 export type PetitionerOnCaseKysely = Selectable<PetitionerOnCaseTable>;
-export type NewUPetitionerOnCaseKysely = Insertable<PetitionerOnCaseTable>;
+export type NewPetitionerOnCaseKysely = Insertable<PetitionerOnCaseTable>;
 export type UpdatePetitionerOnCaseKysely = Updateable<PetitionerOnCaseTable>;
 
 export interface CaseStatusUpdateTable {
@@ -229,3 +272,28 @@ export interface UserCaseNoteTable {
 export type UserCaseNoteKysely = Selectable<UserCaseNoteTable>;
 export type NewUserCaseNoteKysely = Insertable<UserCaseNoteTable>;
 export type UpdateUserCaseNoteKysely = Updateable<UserCaseNoteTable>;
+
+// TODO: This is just a stub to get things out of Open Search and into Postgres
+export interface DocketEntryTable {
+  createdAt: Date;
+  docketEntryId: string;
+  docketNumber: string;
+  documentTitle: string;
+  documentType: string;
+  eventCode: string;
+  filingDate: Date;
+  isLegacyServed: boolean;
+  pending: boolean;
+  receivedAt: Date;
+  servedAt: Date | null;
+  isStricken: boolean | null;
+  judge: string | null;
+  signedJudgeName: string | null;
+  isSealed: boolean | null;
+  sealedTo?: string;
+  numberOfPages?: number;
+}
+
+export type DocketEntryKysely = Selectable<DocketEntryTable>;
+export type NewDocketEntryKysely = Insertable<DocketEntryTable>;
+export type UpdateDocketEntryKysely = Updateable<DocketEntryTable>;

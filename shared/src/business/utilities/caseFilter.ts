@@ -1,12 +1,8 @@
 import {
-  AuthUser,
-  UnknownAuthUser,
-} from '@shared/business/entities/authUser/AuthUser';
-import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
-import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { cloneDeep, pick } from 'lodash';
 import { isAssociatedUser, isSealedCase } from '../entities/cases/Case';
 
@@ -56,7 +52,10 @@ export const formatSealedAddresses = (
   return formattedCase;
 };
 
-export const caseSearchFilter = (searchResults, currentUser: AuthUser) => {
+export const filterCaseSearchResultsNotAccessibleToUser = (
+  searchResults,
+  currentUser: UnknownAuthUser,
+) => {
   return searchResults
     .filter(
       searchResult =>
@@ -68,7 +67,5 @@ export const caseSearchFilter = (searchResults, currentUser: AuthUser) => {
         isAssociatedUser({ caseRaw: searchResult, user: currentUser }) ||
         isAuthorized(currentUser, ROLE_PERMISSIONS.VIEW_SEALED_CASE),
     )
-    .map(filteredCase =>
-      CaseFactory.getCase({ rawCase: filteredCase, user: currentUser }),
-    );
+    .map(c => formatSealedAddresses(c, currentUser));
 };

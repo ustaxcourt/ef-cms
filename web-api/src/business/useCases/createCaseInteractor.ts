@@ -1,27 +1,28 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
   PETITIONS_SECTION,
   ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
+} from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { ElectronicPetition } from '@shared/business/entities/cases/ElectronicPetition';
 import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { UserCase } from '../../../../shared/src/business/entities/UserCase';
+import { UserCase } from '@shared/business/entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
-import { WorkItem } from '../../../../shared/src/business/entities/WorkItem';
-import { createCasePetitionersData } from '@web-api/persistence/postgres/cases/parties/createCasePetitionerData';
+import { WorkItem } from '@shared/business/entities/WorkItem';
+import { createPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/createPetitionersOnCase';
+import { createCaseStatistic } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistic';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
-import { setServiceIndicatorsForCase } from '../../../../shared/src/business/utilities/setServiceIndicatorsForCase';
+import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 
@@ -134,7 +135,7 @@ export const createCaseInteractor = async (
     },
   );
 
-  setServiceIndicatorsForCase(caseToAdd);
+  setServiceIndicatorsForPetitionersOnCase(caseToAdd);
 
   if (user.role === ROLES.petitioner) {
     caseToAdd.getContactPrimary().contactId = user.userId;
@@ -286,10 +287,14 @@ export const createCaseInteractor = async (
     caseToCreate: caseToAdd.validate().toRawObject(),
   });
 
-  await createCasePetitionersData({
+  await createPetitionersOnCase({
     docketNumber: caseToAdd.docketNumber,
-    petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)), // 10502 TODO: is this correct?
+    petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
   });
+
+  caseToAdd.statistics?.forEach(statistic =>
+    createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
+  );
 
   const userCaseEntity = new UserCase(caseToAdd);
 
@@ -300,8 +305,8 @@ export const createCaseInteractor = async (
     userId: user.userId,
   });
 
-  await saveWorkItem({
-    workItem: newWorkItem.validate().toRawObject(),
+  await upsertWorkItems({
+    workItems: [newWorkItem.validate().toRawObject()],
   });
 
   applicationContext.logger.info('filed a new petition', {

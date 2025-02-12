@@ -1,12 +1,13 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const archiveCorrespondenceDocument = async (
@@ -38,11 +39,9 @@ export const archiveCorrespondenceDocument = async (
 
   caseEntity.archiveCorrespondence(correspondenceToArchiveEntity);
 
-  await applicationContext.getPersistenceGateway().updateCaseCorrespondence({
-    applicationContext,
-    correspondence: correspondenceToArchiveEntity.validate().toRawObject(),
-    docketNumber,
-  });
+  await upsertCaseCorrespondences([
+    correspondenceToArchiveEntity.validate().toRawObject(),
+  ]);
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,

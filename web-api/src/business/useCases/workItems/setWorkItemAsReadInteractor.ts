@@ -1,14 +1,14 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 /**
  * setWorkItemAsReadInteractor
@@ -62,7 +62,7 @@ export const setWorkItemAsReadInteractor = async (
     document: docketEntryEntity.validate().toRawObject(),
   });
 
-  return saveWorkItem({
-    workItem: docketEntryEntity.workItem.validate().toRawObject(),
+  return upsertWorkItems({
+    workItems: [docketEntryEntity.workItem.validate().toRawObject()],
   });
 };

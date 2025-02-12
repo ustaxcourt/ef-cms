@@ -1,17 +1,17 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { DOCKET_SECTION } from '../../../../../shared/src/business/entities/EntityConstants';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { omit } from 'lodash';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -49,7 +49,7 @@ export const fileCourtIssuedDocketEntry = async (
     docketNumber: subjectDocketNumber,
   });
 
-  let subjectCaseToUpdateEntity = new Case(subjectCaseToUpdate, {
+  const subjectCaseToUpdateEntity = new Case(subjectCaseToUpdate, {
     authorizedUser,
   });
 
@@ -77,14 +77,12 @@ export const fileCourtIssuedDocketEntry = async (
 
   await Promise.all(
     [subjectDocketNumber, ...docketNumbers].map(async docketNumber => {
-      const caseToUpdate = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber,
-        });
+      const caseToUpdate = await getCaseByDocketNumber({
+        applicationContext,
+        docketNumber,
+      });
 
-      let caseEntity = new Case(caseToUpdate, { authorizedUser });
+      const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
       const docketEntryEntity = new DocketEntry(
         {
@@ -174,8 +172,8 @@ export const fileCourtIssuedDocketEntry = async (
       const rawValidWorkItem = workItem.validate().toRawObject();
 
       saveItems.push(
-        saveWorkItem({
-          workItem: rawValidWorkItem,
+        upsertWorkItems({
+          workItems: [rawValidWorkItem],
         }),
       );
 

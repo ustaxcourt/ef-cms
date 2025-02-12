@@ -1,9 +1,12 @@
 /* eslint-disable max-lines */
+/* eslint-disable custom-rules-plugin/no-new-dates*/
 import { DateTime, Settings } from 'luxon';
 import {
   FORMATS,
   PATTERNS,
   USTC_TZ,
+  calculateDate,
+  calculateDateAtStartOfDayEST,
   calculateDifferenceInDays,
   calculateDifferenceInHours,
   calculateISODate,
@@ -49,7 +52,6 @@ describe('DateHandler', () => {
     const dateNowMock = jest.fn();
 
     const setDateMockValue = timestamp => {
-      // eslint-disable-next-line @miovision/disallow-date/no-new-date
       dateNowMock.mockReturnValue(new Date(timestamp).valueOf());
     };
     const setupDateMock = () => {
@@ -220,7 +222,6 @@ describe('DateHandler', () => {
     timeZones.forEach(timeZone => {
       it(`should create a timestamp exactly at midnight of today, the first moment of the day in Eastern Time, when the system time zone is ${timeZone}`, () => {
         Settings.defaultZone = timeZone; // Mock the system timezone.
-        // eslint-disable-next-line @miovision/disallow-date/no-new-date
         Settings.now = () => new Date('2021-10-07T00:31:51.621Z').getTime(); // Mock the system time.
 
         const startOfDay = createStartOfDayISO();
@@ -254,7 +255,6 @@ describe('DateHandler', () => {
     timeZones.forEach(timeZone => {
       it(`should create a timestamp one millisecond before midnight of today, the last moment of the day according to Eastern Timezone, when the system time zone is ${timeZone}`, () => {
         Settings.defaultZone = timeZone; // Mock the system timezone.
-        // eslint-disable-next-line @miovision/disallow-date/no-new-date
         Settings.now = () => new Date('2021-10-07T00:31:51.621Z').getTime(); // Mock the system time.
 
         const startOfDay = createEndOfDayISO();
@@ -362,7 +362,7 @@ describe('DateHandler', () => {
       expect(result).toBe('8:40 pm ET');
     });
 
-    it('creates a formatted EST time using DateHandler internal format "TIME_TZ"', () => {
+    it('creates a formatted EST time using DateHandler internal format "TIME_TZ" 2', () => {
       const dateRetrievedFromStorage = '2001-01-01';
       const result = formatDateString(
         dateRetrievedFromStorage,
@@ -387,7 +387,7 @@ describe('DateHandler', () => {
       const result = formatNow('yy');
       expect(result).toEqual('96');
     });
-    it('formats current time stamp using requested format', () => {
+    it('formats current time stamp using requested format in YEAR', () => {
       const result = formatNow(FORMATS.YEAR);
       const numericType = +result;
       expect(result).toEqual('1996');
@@ -409,38 +409,34 @@ describe('DateHandler', () => {
     });
 
     it('should return a non-zero if two calendar-dates appear to be the same but are different according to EST', () => {
-      let result;
       const date1 = '2001-01-02'; // i.e. Jan 2, midnight EST
       const date2 = '2001-01-02T02:40:55.007Z'; // Jan 1, 9:40m EST
 
-      result = dateStringsCompared(date1, date2);
+      const result = dateStringsCompared(date1, date2);
       expect(result).not.toEqual(0);
     });
 
     it('should return zero if two calendar-dates are the same, even if formatted differently', () => {
-      let result;
       const date1 = '2001-01-01';
       const date2 = '2001-01-01T08:40:55.007Z';
 
-      result = dateStringsCompared(date1, date2);
+      const result = dateStringsCompared(date1, date2);
       expect(result).toEqual(0);
     });
 
     it('should by default return zero if provided two ISO timestamps within 30 seconds of each other', () => {
-      let result;
       const date1 = '2001-01-01T08:40:26.007Z';
       const date2 = '2001-01-01T08:40:55.007Z';
 
-      result = dateStringsCompared(date1, date2);
+      const result = dateStringsCompared(date1, date2);
       expect(result).toEqual(0);
     });
 
     it('should not return zero if provided two ISO timestamps within 30 seconds of each other and options specify exact is true', () => {
-      let result;
       const date1 = '2001-01-01T08:40:26.007Z';
       const date2 = '2001-01-01T08:40:55.007Z';
 
-      result = dateStringsCompared(date1, date2, { exact: true });
+      const result = dateStringsCompared(date1, date2, { exact: true });
       expect(result).not.toEqual(0);
       expect(result).toEqual(-29000);
     });
@@ -591,7 +587,7 @@ describe('DateHandler', () => {
       expect(result).toBe('1993-03-09T05:00:00.000Z');
     });
 
-    it('should return undefined when year, month, or day is not provided', () => {
+    it('should return undefined when year, month, or day is not provided 2', () => {
       const result = validateDateAndCreateISO({
         day: '5',
         month: '11',
@@ -840,5 +836,115 @@ describe('DateHandler', () => {
 
       expect(result).toEqual('2024-11-18');
     });
+  });
+
+  describe('calculateDateAtStartOfDayEST', () => {
+    const getActualAndExpectedDate = ({
+      dateString = undefined,
+      howMuch = 0,
+      units = 'days',
+    }: {
+      dateString?: string;
+      howMuch?: number;
+      units?: string;
+    }) => {
+      const actual = calculateDateAtStartOfDayEST({
+        dateString,
+        howMuch,
+        units,
+      }).toISOString();
+
+      const expected = calculateDate({
+        dateString: createISODateAtStartOfDayEST(
+          calculateDate({ dateString, howMuch, units }).toISOString(),
+        ),
+      }).toISOString();
+      return { actual, expected };
+    };
+
+    const scenarios = [
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: 0,
+        testName: 'handles howMuch=0 (default units=days) with no dateString',
+        units: 'days',
+      },
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: 0,
+        testName: 'handles howMuch=0 with units=hours',
+        units: 'hours',
+      },
+      {
+        dateString: '2024-03-02',
+        expectedISO: '2024-03-02T05:00:00.000Z',
+        howMuch: 0,
+        testName: 'handles howMuch=0 with explicit date',
+        units: 'days',
+      },
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: 67,
+        testName: 'handles howMuch>0 (67 days), no dateString',
+        units: 'days',
+      },
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: 67,
+        testName: 'handles howMuch>0 (67 hours), no dateString',
+        units: 'hours',
+      },
+      {
+        dateString: '2024-03-02',
+        expectedISO: '2024-05-08T04:00:00.000Z',
+        howMuch: 67,
+        testName: 'handles howMuch>0 (67 days) with explicit date',
+        units: 'days',
+      },
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: -44,
+        testName: 'handles howMuch<0 (-44 days), no dateString',
+        units: 'days',
+      },
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: -44,
+        testName: 'handles howMuch<0 (-44 hours), no dateString',
+        units: 'hours',
+      },
+      {
+        dateString: '2024-03-02',
+        expectedISO: '2024-01-18T05:00:00.000Z',
+        howMuch: -44,
+        testName: 'handles howMuch<0 (-44 days) with explicit date',
+        units: 'days',
+      },
+    ];
+
+    it.each(scenarios)(
+      '$testName (dateString=$dateString, howMuch=$howMuch, units=$units)',
+      ({ dateString, expectedISO, howMuch, units }) => {
+        const { actual, expected } = getActualAndExpectedDate({
+          dateString,
+          howMuch,
+          units,
+        });
+
+        if (expectedISO) {
+          // If there's an exact expectedISO, make sure the expected matches exactly
+          // eslint-disable-next-line jest/no-conditional-expect
+          expect(expected).toEqual(expectedISO);
+        }
+        // Regardless, actual should match the expected from our helper
+        expect(actual).toEqual(expected);
+      },
+    );
   });
 });

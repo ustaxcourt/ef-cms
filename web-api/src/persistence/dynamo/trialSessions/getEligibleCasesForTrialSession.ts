@@ -1,6 +1,6 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { batchGet, query } from '../../dynamodbClientService';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { query } from '../../dynamodbClientService';
 
 export const getEligibleCasesForTrialSession = async ({
   applicationContext,
@@ -25,43 +25,28 @@ export const getEligibleCasesForTrialSession = async ({
     applicationContext,
   });
 
-  let docketNumbers = [];
-  mappings.map(metadata => {
+  const docketNumbers = new Set<string>();
+
+  mappings.forEach(metadata => {
     const { docketNumber } = metadata;
-    if (docketNumbers.includes(docketNumber)) {
+
+    if (docketNumbers.has(docketNumber)) {
       applicationContext.logger.warn(
         `Encountered duplicate eligible-for-trial-case-catalog mapping for case ${docketNumber}.`,
       );
     } else {
-      docketNumbers.push(docketNumber);
+      docketNumbers.add(docketNumber);
     }
   });
 
-  const results = await batchGet({
-    applicationContext,
-    keys: docketNumbers.map(docketNumber => ({
-      pk: `case|${docketNumber}`,
-      sk: `case|${docketNumber}`,
-    })),
-  });
-
   const aggregatedResults = await Promise.all(
-    results.map(async result => {
-      const caseItems = await getCaseByDocketNumber({
+    [...docketNumbers].map(async docketNumber => {
+      return await getCaseByDocketNumber({
         applicationContext,
-        docketNumber: result.docketNumber,
+        docketNumber,
       });
-
-      return {
-        ...result,
-        ...caseItems,
-      };
     }),
   );
 
-  const afterMapping = docketNumbers.map(docketNumber => ({
-    ...aggregatedResults.find(r => docketNumber === r.docketNumber),
-  }));
-
-  return afterMapping;
+  return aggregatedResults;
 };

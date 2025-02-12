@@ -99,7 +99,7 @@ export const generatePetitionPdfInteractor = async (
   }
   const caseDescription = getCaseDescription(hasIrsNotice, originalCaseType);
 
-  let pdfFile = await applicationContext.getDocumentGenerators().petition({
+  const pdfFile = await applicationContext.getDocumentGenerators().petition({
     applicationContext,
     data: {
       caseCaptionExtension,

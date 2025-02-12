@@ -9,17 +9,18 @@ import {
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { PrivatePractitioner } from '../../../../shared/src/business/entities/PrivatePractitioner';
-import { User } from '../../../../shared/src/business/entities/User';
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { User } from '@shared/business/entities/User';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { createCaseInteractor } from './createCaseInteractor';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import {
   getContactPrimary,
   getContactSecondary,
-} from '../../../../shared/src/business/entities/cases/Case';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+} from '@shared/business/entities/cases/Case';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 
 jest.mock('@shared/business/utilities/DateHandler', () => {
   const originalModule = jest.requireActual(
@@ -74,7 +75,7 @@ describe('createCaseInteractor', () => {
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    applicationContext.docketNumberGenerator.createDocketNumber.mockResolvedValue(
+    (generateDocketNumber as jest.Mock).mockResolvedValue(
       '00101-00',
     );
 
@@ -111,7 +112,7 @@ describe('createCaseInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().createCaseAndAssociations,
     ).not.toHaveBeenCalled();
-    expect(saveWorkItem).not.toHaveBeenCalled();
+    expect(upsertWorkItems).not.toHaveBeenCalled();
   });
 
   it('should create a case (with a case status history) successfully as a petitioner', async () => {
@@ -146,7 +147,7 @@ describe('createCaseInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).toHaveBeenCalled();
-    expect(saveWorkItem).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalled();
   });
 
   it('should create a case (with a case status history) successfully as a private practitioner', async () => {
@@ -184,7 +185,7 @@ describe('createCaseInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).toHaveBeenCalled();
-    expect(saveWorkItem).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalled();
   });
 
   it('should match the current user id to the contactId when the user is petitioner', async () => {
@@ -305,7 +306,7 @@ describe('createCaseInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().createCaseAndAssociations,
     ).toHaveBeenCalled();
-    expect(saveWorkItem).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalled();
   });
 
   it('should create a case successfully with an "Attachment to Petition" document', async () => {
@@ -472,7 +473,7 @@ describe('createCaseInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().createCaseAndAssociations,
     ).toHaveBeenCalled();
-    expect(saveWorkItem).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalled();
   });
 
   it('should set serviceIndicators for each petitioner on the case', async () => {

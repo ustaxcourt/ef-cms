@@ -3,7 +3,7 @@ import {
   isClosed,
   isLeadCase,
   userIsDirectlyAssociated,
-} from '../entities/cases/Case';
+} from '@shared/business/entities/cases/Case';
 import { PaymentStatusTypes } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';

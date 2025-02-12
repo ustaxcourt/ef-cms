@@ -3,7 +3,7 @@ import {
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '@shared/business/entities/cases/Case';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -146,7 +146,7 @@ export const setTrialSessionCalendarInteractor = async (
     // We chunk this array of functions so that we don't fire all of them at once.
     // If firing all at once, we exhaust the available connections and will run into connection timeouts.
     const chunkedFunctions = chunk(funcs, CHUNK_SIZE);
-    for (let singleChunk of chunkedFunctions) {
+    for (const singleChunk of chunkedFunctions) {
       await Promise.all(singleChunk.map(func => func()));
     }
 

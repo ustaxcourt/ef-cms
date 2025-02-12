@@ -1,12 +1,13 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { deleteCaseDeadline as deleteDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const deleteCaseDeadline = async (
@@ -28,10 +29,8 @@ export const deleteCaseDeadline = async (
 
   let updatedCase = new Case(caseToUpdate, { authorizedUser });
 
-  await applicationContext.getPersistenceGateway().deleteCaseDeadline({
-    applicationContext,
+  await deleteDeadline({
     caseDeadlineId,
-    docketNumber,
   });
 
   updatedCase = await applicationContext

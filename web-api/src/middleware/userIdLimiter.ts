@@ -17,6 +17,7 @@ export const userIdLimiter = key => async (req, res, next) => {
     .getPersistenceGateway()
     .incrementKeyCount({ applicationContext, key: KEY });
 
+  // eslint-disable-next-line prefer-const
   let { expiresAt, id: count } = limiterCache;
 
   if (!expiresAt || Date.now() > expiresAt) {

@@ -1,9 +1,9 @@
-import { Case, isClosed } from '../entities/cases/Case';
+import { Case, isClosed } from '@shared/business/entities/cases/Case';
 import { PractitionerCaseDetail } from '@web-client/presenter/state';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';

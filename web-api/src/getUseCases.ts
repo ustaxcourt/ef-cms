@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable max-lines */
 import { addCaseToTrialSessionInteractor } from './business/useCases/trialSessions/addCaseToTrialSessionInteractor';
 import { addConsolidatedCaseInteractor } from './business/useCases/caseConsolidation/addConsolidatedCaseInteractor';
 import { addCoversheetInteractor } from './business/useCases/addCoversheetInteractor';
@@ -15,7 +13,6 @@ import { associatePrivatePractitionerWithCaseInteractor } from './business/useCa
 import { batchDownloadDocketEntriesInteractor } from '@web-api/business/useCases/document/batchDownloadDocketEntriesInteractor';
 import { batchDownloadTrialSessionInteractor } from './business/useCases/trialSessions/batchDownloadTrialSessionInteractor';
 import { blockCaseFromTrialInteractor } from './business/useCases/blockCaseFromTrialInteractor';
-import { caseAdvancedSearchInteractor } from './business/useCases/caseAdvancedSearchInteractor';
 import { casePublicSearchInteractor } from './business/useCases/public/casePublicSearchInteractor';
 import { changePasswordInteractor } from '@web-api/business/useCases/auth/changePasswordInteractor';
 import { checkEmailAvailabilityInteractor } from './business/useCases/user/checkEmailAvailabilityInteractor';
@@ -58,6 +55,7 @@ import { generateDocketRecordPdfInteractor } from './business/useCases/generateD
 import { generateDraftStampOrderInteractor } from '../../shared/src/business/useCases/generateDraftStampOrderInteractor';
 import { generateEntryOfAppearancePdfInteractor } from './business/useCases/caseAssociationRequest/generateEntryOfAppearancePdfInteractor';
 import { generateNoticeOfChangeOfTrialJudgeInteractor } from './business/useCases/trialSessions/generateNoticeOfChangeOfTrialJudgeInteractor';
+import { generateNoticeOfChangeOfTrialLocationInteractor } from '@web-api/business/useCases/trialSessions/generateNoticeOfChangeOfTrialLocationInteractor';
 import { generateNoticeOfChangeToRemoteProceedingInteractor } from './business/useCases/trialSessions/generateNoticeOfChangeToRemoteProceedingInteractor';
 import { generateNoticeOfTrialIssuedInteractor } from './business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from './business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
@@ -229,7 +227,6 @@ const useCases = {
   batchDownloadDocketEntriesInteractor,
   batchDownloadTrialSessionInteractor,
   blockCaseFromTrialInteractor,
-  caseAdvancedSearchInteractor,
   casePublicSearchInteractor,
   changePasswordInteractor,
   checkEmailAvailabilityInteractor,
@@ -272,6 +269,7 @@ const useCases = {
   generateDraftStampOrderInteractor,
   generateEntryOfAppearancePdfInteractor,
   generateNoticeOfChangeOfTrialJudgeInteractor,
+  generateNoticeOfChangeOfTrialLocationInteractor,
   generateNoticeOfChangeToRemoteProceedingInteractor,
   generateNoticeOfTrialIssuedInteractor,
   generateNoticesForCaseTrialSessionCalendarInteractor,

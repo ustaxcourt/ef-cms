@@ -1,11 +1,14 @@
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOTION_DISPOSITIONS } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOTION_DISPOSITIONS } from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateStampedCoversheetInteractor } from './generateStampedCoversheetInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
 
 describe('generateStampedCoversheetInteractor', () => {
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
   const mockCase = {
     ...MOCK_CASE,
@@ -30,12 +33,10 @@ describe('generateStampedCoversheetInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
+    getCaseByDocketNumber.mockReturnValue(mockCase);
   });
 
-  it('clears the servedAt property of the motion docket entry used for coversheet generation', async () => {
+  it('should clear servedAt from the motion docket entry used for coversheet generation', async () => {
     await generateStampedCoversheetInteractor(
       applicationContext,
       {
@@ -53,7 +54,7 @@ describe('generateStampedCoversheetInteractor', () => {
     ).toEqual('');
   });
 
-  it('generates a stamped coversheet pdf document with stampData', async () => {
+  it('should generate a stamped coversheet pdf document with stampData', async () => {
     await generateStampedCoversheetInteractor(
       applicationContext,
       {

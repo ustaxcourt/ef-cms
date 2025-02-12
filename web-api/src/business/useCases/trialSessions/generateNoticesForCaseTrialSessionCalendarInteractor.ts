@@ -59,7 +59,7 @@ const serveNoticesForCase = async ({
   const combinedDocumentsPdf = await PDFDocument.create();
 
   if (servedParties.paper.length > 0) {
-    for (let party of servedParties.paper) {
+    for (const party of servedParties.paper) {
       // practitioners do not have a contactId
       let noticeDocumentPdf;
       const userId = party.userId || party.contactId;
@@ -140,7 +140,7 @@ const setNoticeForCase = async ({
   const caseEntity = new Case(caseRecord, { authorizedUser: undefined });
   const { procedureType } = caseRecord;
 
-  let noticeOfTrialIssued = await applicationContext
+  const noticeOfTrialIssued = await applicationContext
     .getUseCases()
     .generateNoticeOfTrialIssuedInteractor(applicationContext, {
       docketNumber: caseEntity.docketNumber,

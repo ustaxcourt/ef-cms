@@ -1,20 +1,21 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
   DOCKET_NUMBER_SUFFIXES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
 import { getCaseInventoryReportInteractor } from './getCaseInventoryReportInteractor';
+import { getCaseInventoryReport as getCaseInventoryReportMock } from '@web-api/persistence/postgres/cases/reports/getCaseInventoryReport';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 
 describe('getCaseInventoryReportInteractor', () => {
-  it('throws an error if user is not authorized for case inventory report', async () => {
+  const getCaseInventoryReport = getCaseInventoryReportMock as jest.Mock;
+  it('should throw an error when user is not authorized for case inventory report', async () => {
     await expect(
       getCaseInventoryReportInteractor(
-        applicationContext,
         {
           associatedJudge: CHIEF_JUDGE,
         },
@@ -23,31 +24,24 @@ describe('getCaseInventoryReportInteractor', () => {
     ).rejects.toThrow('Unauthorized for case inventory report');
   });
 
-  it('throws an error if associatedJudge and status are not passed in', async () => {
+  it('should throw an error when associatedJudge and status are not passed in', async () => {
     await expect(
-      getCaseInventoryReportInteractor(
-        applicationContext,
-        {},
-        mockDocketClerkUser,
-      ),
+      getCaseInventoryReportInteractor({}, mockDocketClerkUser),
     ).rejects.toThrow('Either judge or status must be provided');
   });
 
-  it('calls getCaseInventoryReport useCaseHelper with appropriate params and returns its result', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseInventoryReport.mockReturnValue([
-        {
-          associatedJudge: CHIEF_JUDGE,
-          caseCaption: 'A Test Caption',
-          docketNumber: '123-20',
-          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
-          status: CASE_STATUS_TYPES.new,
-        },
-      ]);
+  it('should call getCaseInventoryReport with appropriate params and return its result', async () => {
+    getCaseInventoryReport.mockReturnValue([
+      {
+        associatedJudge: CHIEF_JUDGE,
+        caseCaption: 'A Test Caption',
+        docketNumber: '123-20',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
+        status: CASE_STATUS_TYPES.new,
+      },
+    ]);
 
     const result = await getCaseInventoryReportInteractor(
-      applicationContext,
       {
         associatedJudge: CHIEF_JUDGE,
         status: CASE_STATUS_TYPES.new,
@@ -55,11 +49,9 @@ describe('getCaseInventoryReportInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseInventoryReport,
-    ).toHaveBeenCalledWith({
-      applicationContext: expect.anything(),
+    expect(getCaseInventoryReport).toHaveBeenCalledWith({
       associatedJudge: CHIEF_JUDGE,
+      page: 0,
       status: CASE_STATUS_TYPES.new,
     });
     expect(result).toEqual([

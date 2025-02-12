@@ -16,6 +16,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('secondaryName', 'varchar')
     .addColumn('serviceIndicator', 'varchar')
     .addColumn('title', 'varchar')
+    .addColumn('orderOnCase', 'smallint') // 0 for first petitioner on a case, 1 for second, etc.
     // Contact information
     .addColumn('address1', 'varchar', col => col.notNull())
     .addColumn('address2', 'varchar')
@@ -28,17 +29,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('name', 'varchar', col => col.notNull())
     .addColumn('phone', 'varchar', col => col.notNull())
     .addColumn('postalCode', 'varchar', col => col.notNull())
-    .addColumn('state', 'varchar', col => col.notNull())
-    .addPrimaryKeyConstraint('pk_user_case_mapping', [
-      'docketNumber',
-      'contactId',
-    ])
-    .addForeignKeyConstraint(
-      'user_case_to_case_fk',
-      ['docketNumber'],
-      'dwCase',
-      ['docketNumber'],
-    )
+    .addColumn('state', 'varchar')
+    .addPrimaryKeyConstraint('pkUserCaseMapping', ['docketNumber', 'contactId'])
     .execute();
 }
 

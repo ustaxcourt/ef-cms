@@ -1,18 +1,17 @@
 /* eslint-disable max-lines */
 import { Contact } from '@shared/business/useCases/generatePetitionPdfInteractor';
 import { EligibleCase } from '@shared/business/entities/cases/EligibleCase';
+import { FormattedCaseInventoryReportEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
+import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
+import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
+import { JudgeChambersInfo } from '@web-client/presenter/actions/getJudgesChambersAction';
 import {
-  IDLE_LOGOUT_STATES,
-  IdleLogoutStateType,
   PRACTICE_TYPE,
   SERVICE_INDICATOR_TYPES,
   STATE_KEYS,
 } from '@shared/business/entities/EntityConstants';
-import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
-import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
-import { JudgeChambersInfo } from '@web-client/presenter/actions/getJudgesChambersAction';
 import {
   PreviousTerm,
   TrialLocationData,
@@ -21,6 +20,7 @@ import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawMessage } from '@shared/business/entities/Message';
 import { RawUser, UserContact } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
+import { TrialSessionLocationInfo } from '@shared/business/entities/trialSessions/TrialSession';
 import { TroubleshootingLinkInfo } from '@web-client/presenter/sequences/showFileUploadErrorModalSequence';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
@@ -93,7 +93,6 @@ import { formattedDocument } from './computeds/formattedDocument';
 import { formattedEligibleCasesHelper } from './computeds/formattedEligibleCasesHelper';
 import { formattedMessageDetail } from './computeds/formattedMessageDetail';
 import { formattedMessages } from './computeds/formattedMessages';
-import { formattedPendingItemsHelper } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getAllIrsPractitionersForSelectHelper } from '@web-client/presenter/computeds/TrialSession/getAllIrsPractitionersForSelectHelper';
@@ -124,6 +123,7 @@ import { partiesInformationHelper } from './computeds/partiesInformationHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
 import { pendingMotionsHelper } from '@web-client/presenter/computeds/PendingMotions/pendingMotionsHelper';
+import { pendingReportHelper } from './computeds/pendingReportHelper';
 import { pendingReportListHelper } from './computeds/pendingReportListHelper';
 import { petitionQcHelper } from './computeds/petitionQcHelper';
 import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
@@ -144,7 +144,6 @@ import { selectCriteriaHelper } from '@web-client/presenter/computeds/selectCrit
 import { serveThirtyDayNoticeModalHelper } from './computeds/serveThirtyDayNoticeModalHelper';
 import { sessionAssignmentHelper } from './computeds/sessionAssignmentHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
-import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
@@ -164,7 +163,7 @@ import { userContactEditProgressHelper } from './computeds/userContactEditProgre
 import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 
-const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS, IDLE_STATUS } = getConstants();
+const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
 export const computeds = {
   addCourtIssuedDocketEntryHelper:
@@ -384,10 +383,6 @@ export const computeds = {
   formattedOpenCases: formattedOpenCases as unknown as ReturnType<
     typeof formattedOpenCases
   >,
-  formattedPendingItemsHelper:
-    formattedPendingItemsHelper as unknown as ReturnType<
-      typeof formattedPendingItemsHelper
-    >,
   formattedTrialSessionDetails:
     formattedTrialSessionDetails as unknown as ReturnType<
       typeof formattedTrialSessionDetails
@@ -456,6 +451,9 @@ export const computeds = {
   pendingMotionsHelper: pendingMotionsHelper as unknown as ReturnType<
     typeof pendingMotionsHelper
   >,
+  pendingReportHelper: pendingReportHelper as unknown as ReturnType<
+    typeof pendingReportHelper
+  >,
   pendingReportListHelper: pendingReportListHelper as unknown as ReturnType<
     typeof pendingReportListHelper
   >,
@@ -519,9 +517,6 @@ export const computeds = {
   >,
   setForHearingModalHelper: setForHearingModalHelper as unknown as ReturnType<
     typeof setForHearingModalHelper
-  >,
-  showAppTimeoutModalHelper: showAppTimeoutModalHelper as unknown as ReturnType<
-    typeof showAppTimeoutModalHelper
   >,
   startCaseInternalHelper: startCaseInternalHelper as unknown as ReturnType<
     typeof startCaseInternalHelper
@@ -631,11 +626,13 @@ export const baseState = {
       leadDocketNumber: string;
     })[];
     judgeFilter: string;
-    totalCount: number;
-    page: number;
   },
   caseDeadlines: [] as RawCaseDeadline[],
   caseDetail: {} as RawCase,
+  caseInventoryReportData: {
+    foundCasesForCurrentPage: [] as FormattedCaseInventoryReportEntry[],
+    foundCasesTotalCount: 0,
+  },
   clientConnectionId: '',
   clientNeedsToRefresh: false,
   closedCases: [] as TAssociatedCase[],
@@ -649,6 +646,14 @@ export const baseState = {
   createOrderSelectedCases: [] as any[],
   currentJudges: [],
   currentPage: 'Loading',
+  trialSessionLocationChangeModalInfo: {
+    currentTrialSessionLocation: undefined as
+      | TrialSessionLocationInfo
+      | undefined,
+    updatedTrialSessionLocation: undefined as
+      | TrialSessionLocationInfo
+      | undefined,
+  },
   currentViewMetadata: {
     caseDetail: {
       caseDetailInternalTabs: {
@@ -676,7 +681,7 @@ export const baseState = {
     },
   },
   customCaseReport: cloneDeep(initialCustomCaseReportState),
-  docketEntryId: null,
+  docketEntryId: '',
   docketRecordIndex: 0,
   documentToEdit: {} as any,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
@@ -698,11 +703,6 @@ export const baseState = {
     showUsaBannerDetails: false,
   },
   health: undefined as any,
-  idleLogoutState: {
-    logoutAt: undefined,
-    state: IDLE_LOGOUT_STATES.INITIAL as IdleLogoutStateType,
-  },
-  idleStatus: IDLE_STATUS.ACTIVE,
   iframeSrc: '',
   individualInProgressCount: 0,
   individualInboxCount: 0,
@@ -715,7 +715,6 @@ export const baseState = {
   judgeUser: {} as any,
   judges: [] as RawUser[],
   judgesChambers: [] as JudgeChambersInfo[],
-  lastIdleAction: undefined,
   legacyAndCurrentJudges: [] as RawUser[],
   login: {} as any,
   logoutType: '',

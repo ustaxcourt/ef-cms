@@ -66,7 +66,7 @@ export const petitionsClerkSubmitsPaperCaseToIrs = cerebralTest => {
 
     // check that save occurred
     expect(cerebralTest.getState('caseDetail.irsNoticeDate')).toEqual(
-      '2017-12-24T00:00:00.000-05:00',
+      '2017-12-24T05:00:00.000Z',
     );
     expect(cerebralTest.getState('caseDetail.status')).toEqual(
       CASE_STATUS_TYPES.generalDocket,

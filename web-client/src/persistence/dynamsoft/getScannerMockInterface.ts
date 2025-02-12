@@ -36,7 +36,7 @@ const DWObject = {
     DWObject.HowManyImagesInBuffer += 2;
   },
   CloseSource: () => null,
-  ConvertToBlob: (indicies, type, resolve) => {
+  ConvertToBlob: (indicies, _type, resolve) => {
     const blob = scanBuffer[indicies[0]];
     resolve(blob);
   },

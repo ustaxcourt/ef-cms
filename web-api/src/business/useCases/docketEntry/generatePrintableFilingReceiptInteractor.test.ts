@@ -1,12 +1,16 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   MOCK_CASE,
   MOCK_CONSOLIDATED_CASE_SUMMARY,
 } from '@shared/test/mockCase';
 import { RawConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generatePrintableFilingReceiptInteractor } from './generatePrintableFilingReceiptInteractor';
 import { getContactPrimary } from '@shared/business/entities/cases/Case';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
 describe('generatePrintableFilingReceiptInteractor', () => {
   const mockPrimaryDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
@@ -45,9 +49,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
   };
 
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
+    getCaseByDocketNumber.mockReturnValue(mockCase);
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue({
@@ -226,9 +228,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
     const receiptMockCall =
       applicationContext.getDocumentGenerators().receiptOfFiling.mock
         .calls[0][0].data; // 'data' property of first arg (an object) of first call
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalledTimes(1);
+    expect(getCaseByDocketNumber).toHaveBeenCalledTimes(1);
     expect(receiptMockCall.consolidatedCasesDocketNumbers.length).toEqual(0);
   });
 });

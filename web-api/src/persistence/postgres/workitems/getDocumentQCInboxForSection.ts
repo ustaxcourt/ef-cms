@@ -12,14 +12,20 @@ export const getDocumentQCInboxForSection = async ({
   const workItems = await getDbReader(reader => {
     let builder = reader
       .selectFrom('dwWorkItem as w')
+      .where('w.section', '=', section)
+      .where('w.completedAt', 'is', null)
       .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
-      .where('w.section', '=', section);
+      .orderBy('w.highPriority', 'desc')
+      .limit(5000);
 
     if (judgeUserName) {
       builder = builder.where('w.associatedJudge', '=', judgeUserName);
     }
 
-    return builder.selectAll().select('w.docketNumber').execute();
+    return builder
+      .selectAll()
+      .select(['w.docketNumber', 'w.highPriority'])
+      .execute();
   });
 
   return workItems.map(workItem => workItemEntity(workItem));

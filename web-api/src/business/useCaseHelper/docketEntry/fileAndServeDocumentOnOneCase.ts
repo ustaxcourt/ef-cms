@@ -1,10 +1,10 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { DOCKET_SECTION } from '../../../../../shared/src/business/entities/EntityConstants';
-import { ENTERED_AND_SERVED_EVENT_CODES } from '../../../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
+import { ENTERED_AND_SERVED_EVENT_CODES } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
-import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
-import { saveWorkItem } from '@web-api/persistence/postgres/workitems/saveWorkItem';
+import { WorkItem } from '@shared/business/entities/WorkItem';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 export const fileAndServeDocumentOnOneCase = async ({
   applicationContext,
@@ -128,7 +128,7 @@ const completeWorkItem = async ({
 
   workItemToUpdate.setAsCompleted({ message: 'completed', user });
 
-  await saveWorkItem({
-    workItem: workItemToUpdate.validate().toRawObject(),
+  await upsertWorkItems({
+    workItems: [workItemToUpdate.validate().toRawObject()],
   });
 };

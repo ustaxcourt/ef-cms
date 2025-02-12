@@ -96,7 +96,7 @@ export const prepareDateFromString = (
   dateString?: string,
   inputFormat?: TimeFormats,
 ): DateTime => {
-  let dateToFormat: string = dateString || createISODateString();
+  const dateToFormat: string = dateString || createISODateString();
   let result: DateTime;
   if (inputFormat === FORMATS.ISO) {
     result = DateTime.fromISO(dateToFormat, { zone: 'utc' });
@@ -141,6 +141,22 @@ export const calculateDate = ({
 
   return prepareDateFromString(dateString)
     .plus({ [units]: howMuch })
+    .toJSDate();
+};
+
+export const calculateDateAtStartOfDayEST = ({
+  dateString = undefined,
+  howMuch = 0,
+  units = 'days',
+}: {
+  dateString?: string;
+  howMuch?: number;
+  units?: string;
+}): Date => {
+  return prepareDateFromString(dateString)
+    .setZone(USTC_TZ)
+    .plus({ [units]: howMuch })
+    .startOf('day')
     .toJSDate();
 };
 
@@ -256,7 +272,7 @@ export const formatDateString = (
   formatArg: TimeFormatNames | TimeFormats = FORMATS.ISO,
 ): string => {
   if (!dateString) return '';
-  let formatString = FORMATS[formatArg] || formatArg;
+  const formatString = FORMATS[formatArg] || formatArg;
 
   if (!Object.values(FORMATS).includes(formatString)) {
     throw new Error(`Must use a formatting constant: "${formatString}"`); // TODO: test coverage
@@ -725,4 +741,12 @@ export const getWeeksInRange = ({
   }
 
   return weeks;
+};
+
+export const roundDateDownToNearestHour = (isoDateString: string) => {
+  const formattedDate = calculateDate({ dateString: isoDateString });
+  formattedDate.setMinutes(0);
+  formattedDate.setSeconds(0);
+  formattedDate.setMilliseconds(0);
+  return formattedDate;
 };

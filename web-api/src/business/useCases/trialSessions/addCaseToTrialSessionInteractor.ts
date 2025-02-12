@@ -1,5 +1,5 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { NotFoundError } from '../../../errors/errors';
+import { NotFoundError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,

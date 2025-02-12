@@ -45,7 +45,7 @@ export const createCsvCustomCaseReportFileInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let page = 1;
+  let page = 0;
   const pageSize = 9000;
 
   const loops = Math.floor(totalCount / pageSize) + 1;
@@ -139,7 +139,7 @@ export const createCsvCustomCaseReportFileInteractor = async (
 
 const getCsvString = (records: any[]) => {
   const CSV_DICTIONARY = [
-    { header: 'Docket No.', key: 'docketNumber' },
+    { header: 'Docket No.', key: 'docketNumberWithSuffix' },
     { header: 'Date Created', key: 'receivedAt' },
     { header: 'Case Title', key: 'caseCaption' },
     { header: 'Case Status', key: 'status' },
