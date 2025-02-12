@@ -23,7 +23,7 @@ import {
   SUGGESTED_TRIAL_SESSION_TITLES,
   USER_MESSAGE_TYPES,
   UserMessageType,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
