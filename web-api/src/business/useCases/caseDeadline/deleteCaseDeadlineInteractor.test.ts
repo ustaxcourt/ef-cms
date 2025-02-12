@@ -61,6 +61,7 @@ describe('deleteCaseDeadlineInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
+    getCaseDeadlinesByDocketNumber.mockResolvedValueOnce([]);
     await deleteCaseDeadlineInteractor(
       applicationContext,
       {
