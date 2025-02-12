@@ -40,8 +40,9 @@ export const exportPendingReportInteractor = async (
     pendingDocuments.map(pendingItem => {
       const sortablePendingItem: SortedPendingItemFormatted = {
         ...applicationContext.getUtilities().formatPendingItem(pendingItem),
-        sortableDocketNumber:
-          Case.getSortableDocketNumber(pendingItem.docketNumber) || 0,
+        sortableDocketNumber: Case.getSortableDocketNumber(
+          pendingItem.docketNumber,
+        )!,
       };
 
       return sortablePendingItem;
@@ -56,7 +57,7 @@ export const exportPendingReportInteractor = async (
   return getCsv(sortedPendingItems);
 };
 
-const getCsv = data => {
+const getCsv = (data: SortedPendingItemFormatted[]) => {
   return stringify(data, {
     bom: true,
     columns: [
