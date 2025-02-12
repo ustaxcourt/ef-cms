@@ -1,14 +1,15 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { deleteCaseDeadline as deleteDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
+import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 
 export const deleteCaseDeadline = async (
   applicationContext: ServerApplicationContext,
@@ -28,14 +29,25 @@ export const deleteCaseDeadline = async (
 
   let updatedCase = new Case(caseToUpdate, { authorizedUser });
 
+  // To avoid race conditions where we delete a deadline from one DB endpoint but then read immediately from another (which doesn't yet have the update),
+  // we keep track of the deadlines here and pass them directly to updateCaseAutomaticBlock.
+  const deadlinesBeforeDelete = await getCaseDeadlinesByDocketNumber({
+    docketNumber,
+  });
+
   await deleteDeadline({
     caseDeadlineId,
   });
 
+  const deadlinesAfterDelete = deadlinesBeforeDelete.filter(
+    d => d.caseDeadlineId !== caseDeadlineId,
+  );
+
   updatedCase = await updateCaseAutomaticBlock({
-      applicationContext,
-      caseEntity: updatedCase,
-    });
+    applicationContext,
+    caseEntity: updatedCase,
+    deadlines: deadlinesAfterDelete,
+  });
 
   const result = await applicationContext
     .getUseCaseHelpers()

@@ -1,3 +1,4 @@
+import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { Case } from '@shared/business/entities/cases/Case';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { createCaseTrialSortMappingRecords } from '@web-api/persistence/dynamo/cases/createCaseTrialSortMappingRecords';
@@ -15,16 +16,20 @@ import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/ca
 export const updateCaseAutomaticBlock = async ({
   applicationContext,
   caseEntity,
+  deadlines = undefined,
 }: {
   applicationContext: ServerApplicationContext;
   caseEntity: Case;
+  deadlines?: CaseDeadline[];
 }) => {
   if (caseEntity.trialDate || caseEntity.highPriority) {
     return caseEntity;
   }
-  const caseDeadlines = await getCaseDeadlinesByDocketNumber({
-    docketNumber: caseEntity.docketNumber,
-  });
+  const caseDeadlines =
+    deadlines ||
+    (await getCaseDeadlinesByDocketNumber({
+      docketNumber: caseEntity.docketNumber,
+    }));
 
   caseEntity.updateAutomaticBlocked({ caseDeadlines });
 
