@@ -1,8 +1,8 @@
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
-import { IrsPractitioner } from '../../../../../shared/src/business/entities/IrsPractitioner';
-import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { createCase } from '@web-api/persistence/postgres/cases/createCase';
 

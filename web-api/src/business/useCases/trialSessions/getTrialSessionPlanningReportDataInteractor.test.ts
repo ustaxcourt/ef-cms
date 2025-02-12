@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
   SESSION_TERMS_DICT,
@@ -10,6 +11,10 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { getBlockedCasesForTrialLocation as getBlockedCasesForTrialLocationMock } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
+
+const getBlockedCasesForTrialLocation =
+  getBlockedCasesForTrialLocationMock as jest.Mock;
 
 describe('getTrialSessionPlanningReportDataInteractor', () => {
   const ALL_TRIAL_SESSIONS_MOCK: RawTrialSession[] = [
@@ -142,9 +147,7 @@ describe('getTrialSessionPlanningReportDataInteractor', () => {
         return REGULAR_ELIGIBLE_CASES_FOR_TRIAL_CITY_MOCK;
       });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getBlockedCases.mockResolvedValue(BLOCKED_CASES_MOCK);
+    getBlockedCasesForTrialLocation.mockResolvedValue(BLOCKED_CASES_MOCK);
   });
 
   it('should throw error if the user is "Unauthorized"', async () => {

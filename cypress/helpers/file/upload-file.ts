@@ -1,4 +1,3 @@
-// eslint-disable-next-line spellcheck/spell-checker
 /**
  * This function assumes the label associated with the file input has a similar test id:
  * data-testid="{YOUR_ID}-label"
