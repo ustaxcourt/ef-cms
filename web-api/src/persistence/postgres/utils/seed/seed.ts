@@ -20,6 +20,7 @@ import { petitionerToCaseMappings } from '@web-api/persistence/postgres/utils/se
 import { statisticPenalties } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/statisticPenalties';
 import { workItems } from './fixtures/workItems';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
+import { calculateDate } from '@shared/business/utilities/DateHandler';
 
 export const seed = async () => {
   const insertMessages = getDbWriter({
@@ -98,23 +99,18 @@ export const seed = async () => {
     ...cases450_plus,
   ];
   await upsertCases(cases);
-  // await getDbWriter(
-  //   writer =>
-  //     writer
-  //       .insertInto('dwCase')
-  //       .values(cases)
-  //       .onConflict(oc => oc.column('docketNumber').doNothing())
-  //       .returningAll()
-  //       .execute(),
-  //   'dwCase',
-  // );
 
   // Attach the case status updates to their respective cases
   await getDbWriter({
     cb: writer =>
       writer
         .insertInto('dwCaseStatusUpdate')
-        .values(caseStatusUpdates)
+        .values(
+          caseStatusUpdates.map(s => ({
+            ...s,
+            date: calculateDate({ dateString: s.date }),
+          })),
+        )
         .onConflict(oc => oc.columns(['docketNumber', 'date']).doNothing())
         .execute(),
     table: null,

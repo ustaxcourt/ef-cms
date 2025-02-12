@@ -64,7 +64,6 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
           status: CASE_STATUS_TYPES.assignedCase,
         },
       ],
-      lastCaseId: { pk: '', receivedAt: 0 },
       totalCount: 20,
     });
 
@@ -144,7 +143,6 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
           status: 'Assigned - Case',
         },
       ],
-      lastCaseId: { pk: 'case|101-20', receivedAt: 1928743 },
       totalCount: 20,
     });
 
@@ -181,7 +179,6 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
           status: CASE_STATUS_TYPES.calendared,
         },
       ],
-      lastCaseId: { pk: 'case-101-23', receivedAt: 32849 },
       totalCount: 10,
     });
 

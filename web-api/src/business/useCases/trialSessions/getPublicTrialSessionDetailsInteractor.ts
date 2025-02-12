@@ -14,7 +14,7 @@ export type PublicTrialSessionDetails = Pick<
   | 'state'
   | 'postalCode'
 > & {
-  calendaredCases: RawPublicCase[];
+  calendaredCases: RawCase[];
   swingSessionLocation?: string;
 };
 
