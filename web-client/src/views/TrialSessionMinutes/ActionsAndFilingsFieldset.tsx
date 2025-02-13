@@ -236,9 +236,9 @@ export const ActionsAndFilingsFieldset = ({
                 <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
                   <input
                     className="usa-input display-inline-block maxw-full"
-                    id={`actionsAndFilingsNote${row.renderKey}`}
+                    id={`actionsAndFilingsNote-${rowIndex}`}
                     aria-label={`actionsAndFilingsNote-${rowIndex}`}
-                    name={`actionsAndFilingsNote${row.renderKey}`}
+                    name={`actionsAndFilingsNote-${rowIndex}`}
                     type="text"
                     value={row.note}
                     onBlur={() => onBlurHandler()}

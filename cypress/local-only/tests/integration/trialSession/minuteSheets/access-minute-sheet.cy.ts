@@ -345,7 +345,7 @@ describe('Access a minute sheet', () => {
     describe('Fill out ActionsAndFilingsFieldset section', () => {
       it('Can fill out ActionsAndFilingsFieldset section', () => {
         cy.get('[id^=actionsAndFilingsDocumentType]').each($el => {
-          const renderKey = $el.attr('id')?.split('-').slice(1).join('-');
+          const renderKey = $el.attr('id')?.split('-')[1];
           cy.log(`Render key: ${renderKey}`);
 
           cy.get(`#actionsAndFilingsDocumentType-${renderKey}`).select(
@@ -368,17 +368,17 @@ describe('Access a minute sheet', () => {
             'filed',
           );
 
-          cy.get(`#actionsAndFilingsNote${renderKey}`).type(
+          cy.get(`#actionsAndFilingsNote-${renderKey}`).type(
             'Document description',
           );
-          cy.get(`#actionsAndFilingsNote${renderKey}`).should(
+          cy.get(`#actionsAndFilingsNote-${renderKey}`).should(
             'have.value',
             'Document description',
           );
 
           // Undo changes
           cy.get(`#actionsAndFilingsDocumentType-${renderKey}`).select('');
-          cy.get(`#actionsAndFilingsNote${renderKey}`).clear();
+          cy.get(`#actionsAndFilingsNote-${renderKey}`).clear();
           cy.get(`#actionsAndFilingsFiledBy-${renderKey}`).select('');
           cy.get(`#actionsAndFilingsStatus-${renderKey}`).select('');
         });
