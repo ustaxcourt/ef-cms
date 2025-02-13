@@ -42,10 +42,11 @@ export const RespondentsFieldset = ({
             <div className="grid-col-3">
               <FormGroup className="margin-bottom-0">
                 <CreatableSelect
-                  id={`respondent-${rowIndex}"`}
-                  aria-label={`respondent-${rowIndex}"`}
+                  id={`respondent-${rowIndex}`}
+                  data-testid={`respondent-${rowIndex}`}
+                  aria-label={`respondent-${rowIndex}`}
                   isClearable={true}
-                  name={`respondent-selectable-${rowIndex}"`}
+                  name={`respondent-selectable-${rowIndex}`}
                   options={formOptions}
                   value={{
                     label: respondentsFormState.respondents[row.renderKey].name,
@@ -95,6 +96,8 @@ export const RespondentsFieldset = ({
             <div className="grid-col-auto">
               <Button
                 link
+                id={`remove-respondent-button-${rowIndex}`}
+                data-testid={`remove-respondent-button-${rowIndex}`}
                 className="padding-0"
                 icon="times"
                 onClick={e => {
