@@ -385,15 +385,60 @@ describe('Access a minute sheet', () => {
       });
 
       describe('Fill out TrialBriefFieldset section', () => {
-        // TODO 10419: Finish this test and all options of brief type
-        it('Can fill out TrialBriefFieldset section', () => {
+        // TODO 10419: Finish this test and all options of brief types
+        it('Can fill out TrialBriefFieldset section - Seriatim Brief', () => {
           cy.get('#trialBriefNote').type('Brief note');
           cy.get('#trialBriefNote').should('have.value', 'Brief note');
 
-          cy.get('#briefType').select('Appellant');
-          cy.get('#briefType').should('have.value', 'appellant');
+          // Test Seriatim Brief stuff
+          cy.get('#briefType').select('Seriatim Brief');
+          cy.get('#briefType').should('have.value', 'Seriatim Brief');
+
+          // TODO 10419: Fix radio button issue preventing us from deselecting
+          cy.get('#petitioner-openingPartyType').click({ force: true });
+          cy.get('#petitioner-openingPartyType').should('be.checked');
+
+          cy.get('#respondent-openingPartyType').click({ force: true });
+          cy.get('#respondent-openingPartyType').should('be.checked');
+
+          cy.get('#openingNote').type('Opening notes');
+          cy.get('#openingNote').should('have.value', 'Opening notes');
+
+          // Answering
+          cy.get('#petitioner-answeringPartyType').click({ force: true });
+          cy.get('#petitioner-answeringPartyType').should('be.checked');
+
+          cy.get('#respondent-answeringPartyType').click({ force: true });
+          cy.get('#respondent-answeringPartyType').should('be.checked');
+
+          cy.get('#answeringNote').type('Answering notes');
+          cy.get('#answeringNote').should('have.value', 'Answering notes');
+
+          // Reply
+          cy.get('#petitioner-replyPartyType').click({ force: true });
+          cy.get('#petitioner-replyPartyType').should('be.checked');
+
+          cy.get('#respondent-replyPartyType').click({ force: true });
+          cy.get('#respondent-replyPartyType').should('be.checked');
+
+          cy.get('#replyNote').type('Reply notes');
+          cy.get('#replyNote').should('have.value', 'Reply notes');
+
+          // Sur-reply
+          cy.get('#petitioner-surReplyPartyType').click({ force: true });
+          cy.get('#petitioner-surReplyPartyType').should('be.checked');
+
+          cy.get('#respondent-surReplyPartyType').click({ force: true });
+          cy.get('#respondent-surReplyPartyType').should('be.checked');
+
+          cy.get('#surReplyNote').type('Sur-reply notes');
+          cy.get('#surReplyNote').should('have.value', 'Sur-reply notes');
 
           // Undo changes
+          cy.get('#openingNote').clear();
+          cy.get('#answeringNote').clear();
+          cy.get('#replyNote').clear();
+          cy.get('#surReplyNote').clear();
           cy.get('#trialBriefNote').clear();
           cy.get('#briefType').select('');
         });
