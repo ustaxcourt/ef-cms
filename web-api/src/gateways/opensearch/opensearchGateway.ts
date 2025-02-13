@@ -6,7 +6,6 @@ import { OpensearchWorkerMessage } from '@web-api/gateways/opensearch/opensearch
 export const opensearchGateway = () => ({
   queueWork: ({ message }: { message: OpensearchWorkerMessage }) => {
     if (environment.stage === 'local') {
-      console.log('call worker local');
       return workerLocal({ message });
     }
     return worker({ message });

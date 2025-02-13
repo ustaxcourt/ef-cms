@@ -1,3 +1,4 @@
+import { formatNow } from '@shared/business/utilities/DateHandler';
 import { CompiledQuery, Kysely } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
@@ -15,7 +16,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('canAllowPrintableDocketRecord', 'boolean')
     .addColumn('canDojPractitionersRepresentParty', 'boolean')
     .addColumn('caseNote', 'varchar')
-    .addColumn('caseType', 'varchar', col => col.notNull())
+    .addColumn('caseType', 'varchar', col => col.defaultTo('').notNull())
     .addColumn('closedDate', 'timestamptz')
     .addColumn('createdAt', 'timestamptz')
     .addColumn('damages', 'numeric')
@@ -43,15 +44,17 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('orderForFilingFee', 'boolean')
     .addColumn('orderForRatification', 'boolean')
     .addColumn('orderToShowCause', 'boolean')
-    .addColumn('partyType', 'varchar', col => col.notNull())
+    .addColumn('partyType', 'varchar', col => col.defaultTo('').notNull())
     .addColumn('petitionPaymentDate', 'timestamptz')
     .addColumn('petitionPaymentMethod', 'varchar')
     .addColumn('petitionPaymentStatus', 'varchar')
     .addColumn('petitionPaymentWaivedDate', 'timestamptz')
     .addColumn('preferredTrialCity', 'varchar')
-    .addColumn('procedureType', 'varchar', col => col.notNull())
+    .addColumn('procedureType', 'varchar', col => col.defaultTo('').notNull())
     .addColumn('qcCompleteForTrial', 'jsonb')
-    .addColumn('receivedAt', 'timestamptz', col => col.notNull())
+    .addColumn('receivedAt', 'timestamptz', col =>
+      col.defaultTo(formatNow()).notNull(),
+    )
     .addColumn('sealedDate', 'timestamptz')
     .addColumn('sortableDocketNumber', 'numeric')
     .addColumn('trialSessionId', 'varchar')
