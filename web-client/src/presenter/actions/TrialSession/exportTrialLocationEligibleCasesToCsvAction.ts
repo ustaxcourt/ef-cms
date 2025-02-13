@@ -1,15 +1,23 @@
-import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { download, generateCsv, mkConfig } from 'export-to-csv';
-import { state } from '@web-client/presenter/app.cerebral';
 
 export const exportTrialLocationEligibleCasesToCsvAction = ({
-  get,
   props,
 }: ActionProps) => {
-  const [city, usState] = get(state.trialLocationPage.location).split('-');
-  const date = formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
+  const casesForCsv = props.eligibleCases.map(c => {
+    let formattedPrivatePractitioners = '';
+    c.privatePractitioners.forEach(p => {
+      formattedPrivatePractitioners += `${p.name} `;
+    });
 
-  const fileName = `${props.exportFileString} - ${city}_${usState} ${date}`;
+    let formattedIrsPractitioners = '';
+    c.irsPractitioners.forEach(p => {
+      formattedIrsPractitioners += `${p.name} `;
+    });
+
+    c.privatePractitioners = formattedPrivatePractitioners;
+    c.irsPractitioners = formattedIrsPractitioners;
+    return c;
+  });
 
   const csvConfig = mkConfig({
     columnHeaders: [
@@ -34,11 +42,11 @@ export const exportTrialLocationEligibleCasesToCsvAction = ({
         key: 'caseType',
       },
     ],
-    filename: fileName,
+    filename: props.fileName,
     useKeysAsHeaders: false,
   });
 
-  const csv = generateCsv(csvConfig)(props.eligibleCases);
+  const csv = generateCsv(csvConfig)(casesForCsv);
 
   download(csvConfig)(csv);
 };

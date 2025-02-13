@@ -1,19 +1,20 @@
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const getExportTypeAction = ({
-  get,
-  path,
-  props,
-  store,
-}: ActionProps) => {
+export const getExportTypeAction = ({ get, path }: ActionProps) => {
   const exportType = get(state.trialLocationPage.currentTab);
   const exportFileString =
-    exportType === 'eligibleCases' ? 'Eligible Cases' : 'Blocked Cases';
-  store.set(state.trialLocationPage.currentTab, props.currentTab);
+    exportType === 'eligibleCases' ? 'Eligible Cases' : 'Blocked Cases Report';
+
+  // TODO: edge cases
+  const [city, usState] = get(state.trialLocationPage.location).split(',');
+  const date = formatNow(FORMATS.YEAR);
+
+  const fileName = `${exportFileString} - ${city.trim()}_${usState}_${date}`;
 
   if (exportType === 'eligibleCases') {
-    return path.eligibleCases({ exportFileString });
+    return path.eligibleCases({ fileName });
   } else {
-    return path.blockedCases({ exportFileString });
+    return path.blockedCases({ fileName });
   }
 };

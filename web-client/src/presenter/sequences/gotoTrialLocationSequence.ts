@@ -4,14 +4,14 @@ import { getFormattedTrialLocationAction } from '@web-client/presenter/actions/C
 import { parallel } from 'cerebral/factories';
 import { setBlockedCasesAction } from '@web-client/presenter/actions/CaseDetail/setBlockedCasesAction';
 import { setEligibleCasesForLocationAction } from '@web-client/presenter/actions/TrialSession/setEligibleCasesForLocationAction';
-import { setLocationForTrialLocationAction } from '@web-client/presenter/actions/TrialSession/setLocationForTrialLocationAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
+import { setPropsForTrialLocationAction } from '@web-client/presenter/actions/TrialSession/setPropsForTrialLocationAction';
 
 export const gotoTrialLocationSequence =
   startWebSocketConnectionSequenceDecorator([
     setupCurrentPageAction('Interstitial'),
-    setLocationForTrialLocationAction,
+    setPropsForTrialLocationAction,
     parallel([
       [getEligibleCasesForLocationAction, setEligibleCasesForLocationAction],
       [

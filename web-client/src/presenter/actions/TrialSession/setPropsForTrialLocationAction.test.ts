@@ -1,9 +1,9 @@
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { setLocationForTrialLocationAction } from './setLocationForTrialLocationAction';
+import { setPropsForTrialLocationAction } from './setPropsForTrialLocationAction';
 
-describe('setLocationForTrialLocationAction', () => {
+describe('setPropsForTrialLocationAction', () => {
   it('sets the trial location in the store', async () => {
-    const result = await runAction(setLocationForTrialLocationAction, {
+    const result = await runAction(setPropsForTrialLocationAction, {
       props: {
         trialLocation: 'Boise, Idaho',
       },
