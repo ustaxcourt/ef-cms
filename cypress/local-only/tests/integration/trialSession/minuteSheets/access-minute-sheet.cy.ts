@@ -300,5 +300,104 @@ describe('Access a minute sheet', () => {
         cy.get('#stipulatedDecisionOrderedNote').clear();
       });
     });
+
+    describe('Fill out Motion section', () => {
+      it('Can fill out Motion section', () => {
+        cy.get('[id^=motionType]').each($el => {
+          const renderKey = $el.attr('id')?.split('-').slice(1).join('-');
+          cy.log(`Render key: ${renderKey}`);
+
+          cy.get(`#motionType-${renderKey}`).select('Motion to Dismiss');
+          cy.get(`#motionOralMotion${renderKey}`).check({ force: true });
+          cy.get(`#motionFiledBy-${renderKey}`).select('Intervenor');
+          cy.get(`#motionStatus-${renderKey}`).select('Granted');
+          cy.get(`#motionObjection-${renderKey}`).select('No Objection');
+          cy.get(`#motionNote${renderKey}`).type('Motion note');
+
+          // Check values
+          cy.get(`#motionType-${renderKey}`).should(
+            'have.value',
+            'motionToDismiss',
+          );
+
+          cy.get(`#motionOralMotion${renderKey}`).should('be.checked');
+          cy.get(`#motionFiledBy-${renderKey}`).should(
+            'have.value',
+            'intervenor',
+          );
+          cy.get(`#motionStatus-${renderKey}`).should('have.value', 'granted');
+          cy.get(`#motionObjection-${renderKey}`).should(
+            'have.value',
+            'noObjection',
+          );
+          cy.get(`#motionNote${renderKey}`).should('have.value', 'Motion note');
+          // Undo changes
+          cy.get(`#motionType-${renderKey}`).select('');
+          cy.get(`#motionOralMotion${renderKey}`).uncheck({ force: true });
+          cy.get(`#motionFiledBy-${renderKey}`).select('');
+          cy.get(`#motionStatus-${renderKey}`).select('');
+          cy.get(`#motionObjection-${renderKey}`).select('');
+          cy.get(`#motionNote${renderKey}`).clear();
+        });
+      });
+    });
+
+    describe('Fill out ActionsAndFilingsFieldset section', () => {
+      it('Can fill out ActionsAndFilingsFieldset section', () => {
+        cy.get('[id^=actionsAndFilingsDocumentType]').each($el => {
+          const renderKey = $el.attr('id')?.split('-').slice(1).join('-');
+          cy.log(`Render key: ${renderKey}`);
+
+          cy.get(`#actionsAndFilingsDocumentType-${renderKey}`).select(
+            'Entry of Appearance',
+          );
+          cy.get(`#actionsAndFilingsDocumentType-${renderKey}`).should(
+            'have.value',
+            'entryOfAppearance',
+          );
+
+          cy.get(`#actionsAndFilingsFiledBy-${renderKey}`).select('Petitioner');
+          cy.get(`#actionsAndFilingsFiledBy-${renderKey}`).should(
+            'have.value',
+            'petitioner',
+          );
+
+          cy.get(`#actionsAndFilingsStatus-${renderKey}`).select('Filed');
+          cy.get(`#actionsAndFilingsStatus-${renderKey}`).should(
+            'have.value',
+            'filed',
+          );
+
+          cy.get(`#actionsAndFilingsNote${renderKey}`).type(
+            'Document description',
+          );
+          cy.get(`#actionsAndFilingsNote${renderKey}`).should(
+            'have.value',
+            'Document description',
+          );
+
+          // Undo changes
+          cy.get(`#actionsAndFilingsDocumentType-${renderKey}`).select('');
+          cy.get(`#actionsAndFilingsNote${renderKey}`).clear();
+          cy.get(`#actionsAndFilingsFiledBy-${renderKey}`).select('');
+          cy.get(`#actionsAndFilingsStatus-${renderKey}`).select('');
+        });
+      });
+
+      describe('Fill out TrialBriefFieldset section', () => {
+        // TODO 10419: Finish this test and all options of brief type
+        it('Can fill out TrialBriefFieldset section', () => {
+          cy.get('#trialBriefNote').type('Brief note');
+          cy.get('#trialBriefNote').should('have.value', 'Brief note');
+
+          cy.get('#briefType').select('Appellant');
+          cy.get('#briefType').should('have.value', 'appellant');
+
+          // Undo changes
+          cy.get('#trialBriefNote').clear();
+          cy.get('#briefType').select('');
+        });
+      });
+    });
   });
 });
