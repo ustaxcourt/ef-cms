@@ -13,16 +13,19 @@ export const TrialLocation = connect(
     exportTrialLocationToCsvSequence:
       sequences.exportTrialLocationToCsvSequence,
     setCurrentTabSequence: sequences.setCurrentTabSequence,
+    navigateBackSequence: sequences.navigateBackSequence,
     trialLocationHelper: state.trialLocationHelper,
   },
   function TrialLocation({
     currentTab,
     exportTrialLocationToCsvSequence,
     setCurrentTabSequence,
+    navigateBackSequence,
     trialLocationHelper,
   }) {
     const { formattedBlockedCases, formattedEligibleCases, location } =
       trialLocationHelper;
+    //TODO: move to helper
     const isExportDisabled =
       (currentTab === 'eligibleCases' && formattedEligibleCases.length === 0) ||
       (currentTab === 'blockedCases' && formattedBlockedCases.length === 0);
@@ -41,13 +44,12 @@ export const TrialLocation = connect(
               noMargin
               className="margin-right-0"
               icon="print"
-              onClick={() => {}}
+              // TODO: reconsider this for multiple tabs
+              onClick={() => navigateBackSequence()}
             >
               Back to Trial Session Planning Report
             </Button>
           </div>
-
-          {/* disable if no cases for export */}
           <Button
             link
             aria-label="export trial location data as csv"
