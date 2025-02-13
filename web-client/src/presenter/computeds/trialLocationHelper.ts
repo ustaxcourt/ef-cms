@@ -47,10 +47,10 @@ export const trialLocationHelper = (
   );
   const formattedBlockedCases = filteredBlockedCases
     .sort(compareCasesByDocketNumber)
+    .map(blockedCase =>
+      setConsolidationFlagsForDisplay(blockedCase, filteredBlockedCases),
+    )
     .map(blockedCase => {
-      // const blockedCaseWithConsolidatedProperties =
-      //   setConsolidationFlagsForDisplay(blockedCase);
-
       const updatedCase = {
         ...setFormattedBlockDates(blockedCase),
         caseTitle: Case.getCaseTitle(blockedCase.caseCaption || ''),
@@ -60,20 +60,6 @@ export const trialLocationHelper = (
     });
 
   const formattedEligibleCases = eligibleCases.map(c => {
-    let privatePractitioners: string[] = [];
-    if (c.privatePractitioners) {
-      privatePractitioners = '';
-      c.privatePractitioners.forEach(practitioner => {
-        return (privatePractitioners += ` ${practitioner.name}`);
-      });
-    }
-    let irsPractitioners: string[] = [];
-    if (c.irsPractitioners) {
-      irsPractitioners = '';
-      c.irsPractitioners.forEach(practitioner => {
-        return (irsPractitioners += ` ${practitioner.name}`);
-      });
-    }
     const isDocketSuffixHighPriority = HIGH_PRIORITY_SUFFIXES.includes(
       c.docketNumberSuffix!,
     );
@@ -82,9 +68,7 @@ export const trialLocationHelper = (
     return {
       ...c,
       caseTitle,
-      irsPractitioners,
       isDocketSuffixHighPriority,
-      privatePractitioners,
     };
   });
 

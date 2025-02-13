@@ -3,6 +3,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useRef } from 'react';
+import { CaseIcons } from '@web-client/ustc-ui/Icon/CaseIcons';
 
 export const TrialLocationBlockedTable = connect(
   {
@@ -47,9 +48,9 @@ export const TrialLocationBlockedTable = connect(
               <thead>
                 <tr>
                   <th
-                    aria-hidden="true"
-                    className="consolidated-case-column"
-                  ></th>
+                    aria-label="Icons for consolidated cases"
+                    className="icon-column"
+                  />
                   <th className="width-10">Docket No.</th>
                   <th className="width-10">Date Blocked</th>
                   <th className="width-card">Case Title</th>
@@ -60,12 +61,22 @@ export const TrialLocationBlockedTable = connect(
               {trialLocationHelper.blockedCasesForDisplay.map(blockedCase => {
                 return (
                   <tr key={blockedCase.docketNumber}>
-                    <td></td>
+                    <td>
+                      <CaseIcons
+                        formattedCase={blockedCase}
+                        shouldIndent={blockedCase.shouldIndent}
+                      />
+                    </td>
                     <td>{blockedCase.docketNumberWithSuffix}</td>
                     <td>{blockedCase.blockedDateEarliest}</td>
                     <td>{blockedCase.caseTitle}</td>
                     <td>{blockedCase.status}</td>
-                    <td>{blockedCase.blockedReason}</td>
+                    <td>
+                      {blockedCase.blockedReason}
+                      {blockedCase.blockedReason &&
+                        blockedCase.automaticBlockedReason && <br />}
+                      {blockedCase.automaticBlockedReason}
+                    </td>
                   </tr>
                 );
               })}

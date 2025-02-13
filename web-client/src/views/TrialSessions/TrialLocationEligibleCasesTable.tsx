@@ -88,8 +88,20 @@ export const TrialLocationEligibleCasesTable = connect(
                         </span>
                       </td>
                       <td>{eligibleCase.caseTitle}</td>
-                      <td>{eligibleCase.privatePractitioners}</td>
-                      <td>{eligibleCase.irsPractitioners}</td>
+                      <td>
+                        {eligibleCase.privatePractitioners.map(practitioner => (
+                          <div key={practitioner.userId}>
+                            {practitioner.name}
+                          </div>
+                        ))}
+                      </td>
+                      <td>
+                        {eligibleCase.irsPractitioners.map(practitioner => (
+                          <div key={practitioner.userId}>
+                            {practitioner.name}
+                          </div>
+                        ))}
+                      </td>
                       <td>{eligibleCase.caseType}</td>
                     </tr>
                   </tbody>
