@@ -12,7 +12,7 @@ describe('closeFileUploadStatusModalAction', () => {
   });
 
   it('should reset file upload state values', async () => {
-    process.env.FILE_UPLOAD_MODAL_TIMEOUT = 77;
+    process.env.FILE_UPLOAD_MODAL_TIMEOUT = '77';
     const result = await runAction(closeFileUploadStatusModalAction, {
       modules: {
         presenter,
@@ -35,7 +35,7 @@ describe('closeFileUploadStatusModalAction', () => {
   });
 
   it('should not reset file upload state values when a different modal is displayed', async () => {
-    process.env.FILE_UPLOAD_MODAL_TIMEOUT = 77;
+    process.env.FILE_UPLOAD_MODAL_TIMEOUT = '77';
     const result = await runAction(closeFileUploadStatusModalAction, {
       modules: {
         presenter,
