@@ -1,6 +1,6 @@
 import { addMinuteSheetFormRowAction } from './addMinuteSheetFormRowAction';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { mockMinuteSheetFormState } from '@web-client/presenter/actions/TrialSessionMinutes/mockMinuteSheetFormState';
+import { mockMinuteSheetFormState } from '@web-client/presenter/actions/TrialSessionMinutes/minuteSheetMocks';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
