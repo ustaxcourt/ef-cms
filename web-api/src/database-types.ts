@@ -193,8 +193,8 @@ export interface PetitionerOnCaseTable {
   additionalName?: string;
   contactType: string;
   docketNumber: string;
-  hasConsentedToEService?: boolean;
-  hasEAccess?: boolean;
+  hasConsentedToElectronicService?: boolean;
+  hasElectronicAccess?: boolean;
   inCareOf?: string;
   isAddressSealed: boolean;
   paperPetitionEmail?: string;

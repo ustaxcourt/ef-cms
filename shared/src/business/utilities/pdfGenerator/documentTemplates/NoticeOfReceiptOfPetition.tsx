@@ -113,7 +113,8 @@ export const NoticeOfReceiptOfPetition = ({
 
       <div className="info-box margin-bottom-0">
         <div className="info-box-header">Electronic Access to Your Case:</div>
-        {!!contact.paperPetitionEmail && contact.hasConsentedToEService ? (
+        {!!contact.paperPetitionEmail &&
+        contact.hasConsentedToElectronicService ? (
           <ElectronicServiceNOTRText
             accessCode={accessCode}
             contact={contact}

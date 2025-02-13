@@ -2,13 +2,13 @@ import { Contact } from './Contact';
 import { MOCK_CONTACT_PRIMARY } from '../../../test/mockContact';
 
 describe('Contact', () => {
-  describe('hasEAccess validation', () => {
+  describe('hasElectronicAccess validation', () => {
     it('should be invalid when an email is not provided and the contact has eAccess', () => {
       const contact = new Contact(
         {
           ...MOCK_CONTACT_PRIMARY,
           email: undefined,
-          hasEAccess: true,
+          hasElectronicAccess: true,
         },
         'PetitionerPrimaryContact',
       );
@@ -23,7 +23,7 @@ describe('Contact', () => {
         {
           ...MOCK_CONTACT_PRIMARY,
           email: undefined,
-          hasEAccess: false,
+          hasElectronicAccess: false,
         },
         'PetitionerPrimaryContact',
       );

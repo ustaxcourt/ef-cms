@@ -201,8 +201,9 @@ export const updatePetitionerInformation = async (
   petitionerCase.updatePetitioner({
     contactId: existingPetitionerInfo.contactId,
     email: existingPetitionerInfo.email,
-    hasConsentedToEService: existingPetitionerInfo.hasConsentedToEService,
-    hasEAccess: existingPetitionerInfo.hasEAccess,
+    hasConsentedToElectronicService:
+      existingPetitionerInfo.hasConsentedToElectronicService,
+    hasElectronicAccess: existingPetitionerInfo.hasElectronicAccess,
     isAddressSealed: existingPetitionerInfo.isAddressSealed,
     paperPetitionEmail: existingPetitionerInfo.paperPetitionEmail,
     sealedAndUnavailable: existingPetitionerInfo.sealedAndUnavailable,
