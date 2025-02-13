@@ -6,8 +6,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('additionalName', 'varchar')
     .addColumn('contactType', 'varchar', col => col.notNull())
     .addColumn('docketNumber', 'varchar', col => col.notNull())
-    .addColumn('hasConsentedToEService', 'boolean')
-    .addColumn('hasEAccess', 'boolean')
+    .addColumn('hasConsentedToElectronicService', 'boolean')
+    .addColumn('hasElectronicAccess', 'boolean')
     .addColumn('inCareOf', 'varchar')
     .addColumn('isAddressSealed', 'boolean', col => col.defaultTo(false)) // maybe?
     .addColumn('paperPetitionEmail', 'varchar')

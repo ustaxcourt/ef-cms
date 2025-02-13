@@ -369,7 +369,7 @@ describe('updatePetitionerInformationInteractor', () => {
 
   it("should not update the user's paper petition email and e-service consent information", async () => {
     mockPetitioners[0].paperPetitionEmail = 'paperPetitionEmail@example.com';
-    mockPetitioners[0].hasConsentedToEService = true;
+    mockPetitioners[0].hasConsentedToElectronicService = true;
 
     await updatePetitionerInformationInteractor(
       applicationContext,
@@ -385,7 +385,7 @@ describe('updatePetitionerInformationInteractor', () => {
     expect(
       updateCase.mock.calls[0][0].caseToUpdate.petitioners[0],
     ).toMatchObject({
-      hasConsentedToEService: true,
+      hasConsentedToElectronicService: true,
       paperPetitionEmail: 'paperPetitionEmail@example.com',
     });
   });

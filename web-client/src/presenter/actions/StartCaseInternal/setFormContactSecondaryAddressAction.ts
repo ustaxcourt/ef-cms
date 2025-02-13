@@ -17,8 +17,8 @@ export const setFormContactSecondaryAddressAction = ({
   store.set(state.form.contactSecondary, {
     ...contact,
     contactId: get(state.form.contactSecondary.contactId),
-    hasConsentedToEService: get(
-      state.form.contactSecondary.hasConsentedToEService,
+    hasConsentedToElectronicService: get(
+      state.form.contactSecondary.hasConsentedToElectronicService,
     ),
     inCareOf: get(state.form.contactSecondary.inCareOf),
     name: get(state.form.contactSecondary.name),

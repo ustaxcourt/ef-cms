@@ -263,7 +263,9 @@ export const Petition = ({
                 {isPetitioner && (
                   <div>
                     <b>Register for electronic filing and service: </b>
-                    {contactSecondary.hasConsentedToEService ? 'Yes' : 'No'}
+                    {contactSecondary.hasConsentedToElectronicService
+                      ? 'Yes'
+                      : 'No'}
                   </div>
                 )}
                 {contactSecondary.placeOfLegalResidence && (

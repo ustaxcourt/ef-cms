@@ -24,8 +24,9 @@ export const updatePetitionerOnCase = async ({
       country: petitioner.country,
       countryType: petitioner.countryType,
       email: petitioner.email,
-      hasConsentedToEService: petitioner.hasConsentedToEService,
-      hasEAccess: petitioner.hasEAccess,
+      hasConsentedToElectronicService:
+        petitioner.hasConsentedToElectronicService,
+      hasElectronicAccess: petitioner.hasElectronicAccess,
       inCareOf: petitioner.inCareOf,
       isAddressSealed: petitioner.isAddressSealed,
       name: petitioner.name,

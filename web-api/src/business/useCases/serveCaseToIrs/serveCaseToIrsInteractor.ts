@@ -179,7 +179,8 @@ const generateNoticeOfReceipt = async ({
 
   const isSetupForEService = contactInfo => {
     return (
-      contactInfo.hasConsentedToEService && !!contactInfo.paperPetitionEmail
+      contactInfo.hasConsentedToElectronicService &&
+      !!contactInfo.paperPetitionEmail
     );
   };
 

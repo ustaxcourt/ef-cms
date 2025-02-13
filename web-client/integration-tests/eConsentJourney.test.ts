@@ -35,7 +35,6 @@ describe('E-Consent journey', () => {
     it('should display validation errors when creating a paper case with an invalid paper petition email', async () => {
       await cerebralTest.runSequence('gotoStartCaseWizardSequence');
 
-      /* eslint-disable sort-keys-fix/sort-keys-fix */
       const paperPetitionFields = {
         caseCaption: 'Margo Albert, Petitioner',
         mailingDate: '12/27/1999',
@@ -164,7 +163,7 @@ describe('E-Consent journey', () => {
       });
 
       await cerebralTest.runSequence('updateFormValueAndCaseCaptionSequence', {
-        key: 'contactPrimary.hasConsentedToEService',
+        key: 'contactPrimary.hasConsentedToElectronicService',
         value: true,
       });
 
@@ -262,7 +261,7 @@ describe('E-Consent journey', () => {
         docketNumber: cerebralTest.docketNumber,
       });
 
-      let contactPrimary = contactPrimaryFromState(cerebralTest);
+      const contactPrimary = contactPrimaryFromState(cerebralTest);
 
       await cerebralTest.runSequence('openSealAddressModalSequence', {
         contactToSeal: contactPrimary,

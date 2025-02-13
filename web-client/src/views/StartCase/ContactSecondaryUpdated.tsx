@@ -228,7 +228,7 @@ export const ContactSecondaryUpdated = connect<
                 bind="form"
                 contactType="contactSecondary"
               />
-              {addressInfo.hasConsentedToEService && (
+              {addressInfo.hasConsentedToElectronicService && (
                 <WarningNotificationComponent
                   alertWarning={{
                     message:
