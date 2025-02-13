@@ -2,7 +2,7 @@ data "aws_caller_identity" "current" {}
 
 module "opensearch_worker_lambda" {
   source         = "../lambda"
-  handler_file   = "./web-api/src/lambdas/cognitoAuthorizer/worker-handler.ts"
+  handler_file   = "./web-api/src/lambdas/opensearch/worker-handler.ts"
   handler_method = "workerHandler"
   lambda_name    = "opensearch_worker_lambda_${var.environment}_${var.color}"
   role           = var.lambda_role_arn
