@@ -48,7 +48,10 @@ export const opensearchUpdateCaseWorker = async ({
       }),
       isSealed: caseRecord.isSealed,
       petitioners: petitionersOnCase || [],
-      receivedAt: caseRecord.receivedAt.toISOString(),
+      receivedAt:
+        caseRecord.receivedAt instanceof Date
+          ? caseRecord.receivedAt.toISOString()
+          : caseRecord.receivedAt,
       privatePractitioners,
       irsPractitioners,
     });
