@@ -73,7 +73,7 @@ describe('publicTrialSessionDetailsHelper', () => {
       inConsolidatedGroup: false,
       irsPractitioners: [],
       isLeadCase: false,
-      isSealed: undefined,
+      isSealed: false,
       privatePractitioners: [],
     };
 
@@ -97,7 +97,7 @@ describe('publicTrialSessionDetailsHelper', () => {
       inConsolidatedGroup: true,
       irsPractitioners: [],
       isLeadCase: true,
-      isSealed: undefined,
+      isSealed: false,
       privatePractitioners: [],
     };
 
@@ -109,7 +109,7 @@ describe('publicTrialSessionDetailsHelper', () => {
       inConsolidatedGroup: true,
       irsPractitioners: [],
       isLeadCase: false,
-      isSealed: undefined,
+      isSealed: false,
       privatePractitioners: [],
     };
 
