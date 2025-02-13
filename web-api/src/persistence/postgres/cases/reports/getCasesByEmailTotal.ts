@@ -1,3 +1,8 @@
+import { ROLES } from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@web-api/applicationContext';
+import { getDbReader } from '@web-api/database';
+import { getCasesByEmailTotal as getCasesByEmailTotalElasticsearch } from '@web-api/persistence/elasticsearch/getCasesByEmailTotal';
+
 export const getCasesByEmailTotal = async ({
   email,
   role,
@@ -5,22 +10,15 @@ export const getCasesByEmailTotal = async ({
   email: string;
   role: string;
 }) => {
-  return await getCasesByEmailTotal({ email, role });
-
-  // Once practitioners are in postgres, we can do the following:
-  //   import { ROLES } from '@shared/business/entities/EntityConstants';
-  // import { getDbReader } from '@web-api/database';
-  // let table: 'dwPetitionerOnCase' | 'dwPractitionerOnCase' =
-  //   'dwPractitionerOnCase';
-  // if (role === ROLES.petitioner) {
-  //   table = 'dwPetitionerOnCase';
-  // }
-  // const total = await getDbReader(reader =>
-  //   reader
-  //     .selectFrom(table)
-  //     .where('email', '=', email)
-  //     .select(({ fn }) => fn.count('docketNumber').as('count'))
-  //     .execute(),
-  // );
-  // return Number(total[0].count);
+  if (role === ROLES.petitioner) {
+    const total = await getDbReader(reader =>
+      reader
+        .selectFrom('dwPetitionerOnCase')
+        .where('email', '=', email)
+        .select(({ fn }) => fn.count('docketNumber').as('count'))
+        .execute(),
+    );
+    return Number(total[0].count);
+  }
+  return await getCasesByEmailTotalElasticsearch({ applicationContext, email });
 };
