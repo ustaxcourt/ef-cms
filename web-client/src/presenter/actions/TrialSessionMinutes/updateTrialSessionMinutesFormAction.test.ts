@@ -5,7 +5,7 @@ import {
   updateFormValue,
   updateTrialSessionMinutesFormAction,
 } from './updateTrialSessionMinutesFormAction';
-import { mockMinuteSheetFormState } from './mockMinuteSheetFormState';
+import { mockMinuteSheetFormState } from './minuteSheetMocks';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { BRIEF_TYPE_OPTIONS } from '@shared/business/entities/EntityConstants';
