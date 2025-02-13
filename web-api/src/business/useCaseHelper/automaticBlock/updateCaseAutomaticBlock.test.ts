@@ -11,7 +11,6 @@ import { cloneDeep } from 'lodash';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseAutomaticBlock } from './updateCaseAutomaticBlock';
-import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 
 const getCaseDeadlinesByDocketNumber =
   getCaseDeadlinesByDocketNumberMock as jest.Mock;
@@ -193,7 +192,7 @@ describe('updateCaseAutomaticBlock', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should use deadlines that are passed in when available rather than re-fetching the data from persistence', async () => {
+  it('should not fetch deadlines from persistence when hasCaseDeadline is true', async () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE_WITHOUT_PENDING,
@@ -208,7 +207,7 @@ describe('updateCaseAutomaticBlock', () => {
     await updateCaseAutomaticBlock({
       applicationContext,
       caseEntity,
-      deadlines: [{} as CaseDeadline],
+      hasCaseDeadline: true,
     });
 
     expect(getCaseDeadlinesByDocketNumber).not.toHaveBeenCalled();
