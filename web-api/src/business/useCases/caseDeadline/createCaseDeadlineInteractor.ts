@@ -33,14 +33,14 @@ export const createCaseDeadline = async (
     associatedJudgeId: caseEntity.associatedJudgeId,
   });
 
-  const caseDeadlines = await upsertCaseDeadlines([newCaseDeadline.validate().toRawObject()]);
+  await upsertCaseDeadlines([newCaseDeadline.validate().toRawObject()]);
 
   caseEntity = await applicationContext
     .getUseCaseHelpers()
     .updateCaseAutomaticBlock({
       applicationContext,
       caseEntity,
-      deadlines: caseDeadlines
+      hasCaseDeadline: true,
     });
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({

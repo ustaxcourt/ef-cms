@@ -29,8 +29,8 @@ export const deleteCaseDeadline = async (
 
   let updatedCase = new Case(caseToUpdate, { authorizedUser });
 
-  // To avoid race conditions where we delete a deadline from one DB endpoint but then read immediately from another (which doesn't yet have the update),
-  // we keep track of the deadlines here and pass them directly to updateCaseAutomaticBlock.
+  // To avoid race conditions such that we delete a deadline from one DB endpoint but then read immediately from another (which doesn't yet have the update),
+  // we keep track of the deadlines in code and pass the info into updateCaseAutomaticBlocked
   const deadlinesBeforeDelete = await getCaseDeadlinesByDocketNumber({
     docketNumber,
   });
@@ -39,14 +39,10 @@ export const deleteCaseDeadline = async (
     caseDeadlineId,
   });
 
-  const deadlinesAfterDelete = deadlinesBeforeDelete.filter(
-    d => d.caseDeadlineId !== caseDeadlineId,
-  );
-
   updatedCase = await updateCaseAutomaticBlock({
     applicationContext,
     caseEntity: updatedCase,
-    deadlines: deadlinesAfterDelete,
+    hasCaseDeadline: deadlinesBeforeDelete.length > 1,
   });
 
   const result = await applicationContext
