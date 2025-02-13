@@ -1,4 +1,3 @@
-import { BRIEF_TYPE_OPTIONS } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import {
   handleActionsAndFilingsDocType,
   handleBriefTypeChange,
@@ -9,6 +8,7 @@ import {
 import { mockMinuteSheetFormState } from './mockMinuteSheetFormState';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
+import { BRIEF_TYPE_OPTIONS } from '@shared/business/entities/EntityConstants';
 
 jest.mock('uuid', () => ({
   v4: () => 'test-uuid-1234',
