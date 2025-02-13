@@ -254,6 +254,40 @@ module "worker-west-green" {
   environment = var.environment
 }
 
+module "opensearch-worker-east-green" {
+  source              = "../../modules/opensearch-worker"
+  lambda_role_arn     = module.lambda_role_green.role_arn
+  color               = "green"
+  alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_east.arn
+  lambda_environment = merge(terraform_data.locals.output, {
+    CURRENT_COLOR          = "green"
+    DYNAMODB_TABLE_NAME    = var.green_table_name
+    ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.green_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
+    REGION                 = "us-east-1"
+  })
+  providers = {
+    aws = aws.us-east-1
+  }
+  environment = var.environment
+}
+
+module "opensearch-worker-west-green" {
+  source              = "../../modules/opensearch-worker"
+  lambda_role_arn     = module.lambda_role_green.role_arn
+  color               = "green"
+  alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_west.arn
+  lambda_environment = merge(terraform_data.locals.output, {
+    CURRENT_COLOR          = "green"
+    DYNAMODB_TABLE_NAME    = var.green_table_name
+    ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.green_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
+    REGION                 = "us-west-1"
+  })
+  providers = {
+    aws = aws.us-west-1
+  }
+  environment = var.environment
+}
+
 module "ui-green" {
   source                 = "../../modules/ui"
   current_color          = "green"
