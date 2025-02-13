@@ -69,8 +69,6 @@ export const processPractitionerMappingEntries = async ({
         { removeUndefinedValues: true },
       );
 
-      console.log('marshalledCase', marshalledCase);
-
       caseRecords.push({
         dynamodb: {
           Keys: {

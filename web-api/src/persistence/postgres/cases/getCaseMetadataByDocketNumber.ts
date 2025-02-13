@@ -2,6 +2,10 @@ import { convertDbRowToRawCase } from '@web-api/persistence/postgres/cases/mappe
 import { getDbReader } from '@web-api/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { sql } from 'kysely';
+import {
+  Petitioner,
+  RawPetitioner,
+} from '@shared/business/entities/contacts/Petitioner';
 
 export const getCaseMetadataByDocketNumber = async ({
   docketNumber,
@@ -13,7 +17,9 @@ export const getCaseMetadataByDocketNumber = async ({
       .selectFrom('dwCase as c')
       .leftJoin('dwPetitionerOnCase as p', 'c.docketNumber', 'p.docketNumber')
       .selectAll('c')
-      .select(sql`jsonb_agg(to_jsonb(p))`.as('petitioners'))
+      .select(
+        sql`jsonb_agg(to_jsonb(p) ORDER BY p.order_on_case)`.as('petitioners'),
+      )
       .where('c.docketNumber', '=', docketNumber)
       .groupBy('c.docketNumber')
       .executeTakeFirst(),
@@ -22,7 +28,13 @@ export const getCaseMetadataByDocketNumber = async ({
   return dbCase
     ? {
         ...transformNullToUndefined(convertDbRowToRawCase(dbCase)),
-        petitioners: dbCase.petitioners,
+        petitioners:
+          (dbCase.petitioners as RawPetitioner[]).map(p => {
+            return new Petitioner({
+              ...transformNullToUndefined(p),
+              state: p.state || null, // this needs to be null
+            }).toRawObject();
+          }) || [],
       }
     : undefined;
 };

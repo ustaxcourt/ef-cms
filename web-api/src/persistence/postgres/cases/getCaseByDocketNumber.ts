@@ -1,6 +1,5 @@
 import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { NotFoundError } from '@web-api/errors/errors';
-import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregateCaseItems } from '@web-api/persistence/dynamo/helpers/aggregateCaseItems';
 import { getCasesMetadataWithCounselByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesMetadataWithCounselByLeadDocketNumber';
@@ -8,10 +7,8 @@ import { getDbReader } from '@web-api/database';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { queryFull } from '@web-api/persistence/dynamodbClientService';
-import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
-import { getPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/getPetitionersOnCase';
 import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { getCaseCorrespondenceByDocketNumber } from '@web-api/persistence/postgres/caseCorrespondences/getCaseCorrespondenceByDocketNumber';
 
@@ -26,6 +23,9 @@ export const getCaseByDocketNumber = async ({
   includeConsolidatedCases?: boolean;
   user?: UnknownAuthUser;
 }): Promise<RawCase> => {
+  // These case items are no longer in dynamoDB
+  const SK_FILTER_OUT = ['work-item', 'correspondence', 'case'];
+
   const dbCaseMetadata = await getCaseMetadataWithCounsel({
     applicationContext,
     docketNumber,
@@ -33,19 +33,6 @@ export const getCaseByDocketNumber = async ({
   if (!dbCaseMetadata) {
     throw new NotFoundError(`Case ${docketNumber} not found`);
   }
-
-  const dbPetitionersOnCase = await getPetitionersOnCase({
-    docketNumber,
-  });
-  const petitionersOnCase =
-    dbPetitionersOnCase.map(p => {
-      return new Petitioner({
-        ...transformNullToUndefined(p),
-        state: p.state || null, // this needs to be null
-      })
-        .validate()
-        .toRawObject();
-    }) || [];
 
   const dbCaseStatusHistory = await getDbReader(reader =>
     reader
@@ -105,21 +92,24 @@ export const getCaseByDocketNumber = async ({
     return acc;
   }, {});
 
-  const [caseItems, workItems] = await Promise.all([
-    queryFull({
-      ExpressionAttributeNames: {
-        '#pk': 'pk',
-      },
-      ExpressionAttributeValues: {
-        ':pk': `case|${docketNumber}`,
-      },
-      KeyConditionExpression: '#pk = :pk',
-      applicationContext,
-    }),
-    getWorkItemsByDocketNumber({
-      docketNumber,
-    }),
-  ]);
+  const workItems = await getWorkItemsByDocketNumber({
+    docketNumber,
+  });
+
+  const caseItems = await queryFull({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `case|${docketNumber}`,
+    },
+    KeyConditionExpression: '#pk = :pk',
+    applicationContext,
+  }).then(items =>
+    items.filter(
+      item => !SK_FILTER_OUT.some(prefix => item.sk.startsWith(prefix)),
+    ),
+  );
 
   let consolidatedCases: RawCase[] = [];
   if (includeConsolidatedCases) {
@@ -136,11 +126,11 @@ export const getCaseByDocketNumber = async ({
 
   return purgeDynamoKeys({
     ...aggregateCaseItems([
+      ...caseItems,
       {
         ...dbCaseMetadata,
         caseStatusHistory,
         hearings: dbCaseMetadata.hearings || [],
-        petitioners: petitionersOnCase,
         pk: `case|${dbCaseMetadata.docketNumber}`,
         sk: `case|${dbCaseMetadata.docketNumber}`,
         statistics: Object.values(statisticsWithPenalties),
@@ -150,7 +140,6 @@ export const getCaseByDocketNumber = async ({
         pk: `case|${docketNumber}`,
         sk: `correspondence|${correspondenceItem.correspondenceId}`,
       })),
-      ...caseItems,
       ...workItems.map(workItem => ({
         ...workItem,
         pk: `case|${docketNumber}`,
