@@ -11,7 +11,7 @@ export function sortPendingReportItems(
   pendingItemSortOrder: 'asc' | 'desc' | undefined,
 ): SortedPendingItemFormatted[] {
   if (!pendingItemSortField || !pendingItemSortOrder) {
-    return sortBy(pendingItems, ['receivedAt', 'sortableDocketNumber']);
+    return sortBy(pendingItems, ['receivedAt']);
   }
 
   const sorttedPendingItems = sortBy(pendingItems, [
