@@ -1,13 +1,15 @@
 import { convertDbRowToRawCase } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 
 const MAX_RESULTS = 5000;
 
 export const getBlockedCasesForTrialLocation = async (
   trialLocation: string,
+  filterStatusForTrialLocation: boolean = false,
 ) => {
-  const results = await getDbReader(reader =>
-    reader
+  const results = await getDbReader(async reader => {
+    let query = reader
       .selectFrom('dwCase')
       .where('preferredTrialCity', '=', trialLocation)
       .where(eb =>
@@ -23,12 +25,24 @@ export const getBlockedCasesForTrialLocation = async (
         'caption',
         'docketNumber',
         'docketNumberSuffix',
+        'docketNumberWithSuffix',
         'leadDocketNumber',
         'status',
         'procedureType',
       ])
-      .limit(MAX_RESULTS)
-      .execute(),
-  );
+      .limit(MAX_RESULTS);
+
+    if (filterStatusForTrialLocation) {
+      query = query.where('status', 'in', [
+        CASE_STATUS_TYPES.generalDocket,
+        CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        CASE_STATUS_TYPES.assignedCase,
+        CASE_STATUS_TYPES.assignedMotion,
+      ]);
+    }
+
+    return await query.execute();
+  });
+
   return results.map(result => convertDbRowToRawCase(result));
 };

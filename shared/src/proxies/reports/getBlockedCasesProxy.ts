@@ -10,10 +10,11 @@ import { get } from '../requests';
  */
 export const getBlockedCasesInteractor = (
   applicationContext,
-  { trialLocation },
+  { trialLocation, filterStatusForTrialLocation },
 ) => {
   return get({
     applicationContext,
     endpoint: `/reports/blocked/${trialLocation}`,
+    params: { filterStatusForTrialLocation },
   });
 };
