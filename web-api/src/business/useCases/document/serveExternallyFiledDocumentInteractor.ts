@@ -6,6 +6,7 @@ import { isAuthorized, ROLE_PERMISSIONS } from '@shared/authorization/authorizat
 import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { SIMULTANEOUS_DOCUMENT_EVENT_CODES, DOCUMENT_PROCESSING_STATUS_OPTIONS, DOCUMENT_SERVED_MESSAGES } from '@shared/business/entities/EntityConstants';
+import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 export const serveExternallyFiledDocument = async (
   applicationContext: ServerApplicationContext,
@@ -129,15 +130,12 @@ export const serveExternallyFiledDocument = async (
           { authorizedUser },
         );
 
-        return applicationContext
-          .getUseCaseHelpers()
-          .fileAndServeDocumentOnOneCase({
-            applicationContext,
-            caseEntity,
-            docketEntryEntity,
-            subjectCaseDocketNumber,
-            user,
-          });
+        return fileAndServeDocumentOnOneCase({
+          caseEntity,
+          docketEntryEntity,
+          subjectCaseDocketNumber,
+          user,
+        });
       }),
     );
 
