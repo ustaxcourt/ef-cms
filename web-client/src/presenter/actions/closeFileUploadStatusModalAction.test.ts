@@ -17,6 +17,7 @@ describe('closeFileUploadStatusModalAction', () => {
       modules: {
         presenter,
       },
+      state: { modal: { showModal: 'FileUploadStatusModal' } },
     });
 
     // inspecting arguments of 4th call because it seems `store.set` also invokes setTimeout
@@ -31,6 +32,17 @@ describe('closeFileUploadStatusModalAction', () => {
         showModal: '',
       },
     });
+  });
+
+  it('should not reset file upload state values when a different modal is displayed', async () => {
+    process.env.FILE_UPLOAD_MODAL_TIMEOUT = 77;
+    const result = await runAction(closeFileUploadStatusModalAction, {
+      modules: {
+        presenter,
+      },
+      state: { modal: { showModal: 'TEST_MODAL' } },
+    });
+    expect(result.state.modal.showModal).toEqual('TEST_MODAL');
   });
   it('uses a default timeout value if not provided', async () => {
     delete process.env.FILE_UPLOAD_MODAL_TIMEOUT;
