@@ -21,7 +21,6 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseAutomaticBlock } from './updateCaseAutomaticBlock';
 import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { createCaseTrialSortMappingRecords as createCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/createCaseTrialSortMappingRecords';
-import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 
 describe('updateCaseAutomaticBlock', () => {
   let mockCase;
@@ -194,7 +193,7 @@ describe('updateCaseAutomaticBlock', () => {
     expect(createCaseTrialSortMappingRecords).not.toHaveBeenCalled();
   });
 
-  it('should use deadlines that are passed in when available rather than re-fetching the data from persistence', async () => {
+  it('should not fetch deadlines from persistence when hasCaseDeadline is true', async () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE_WITHOUT_PENDING,
@@ -209,7 +208,7 @@ describe('updateCaseAutomaticBlock', () => {
     await updateCaseAutomaticBlock({
       applicationContext,
       caseEntity,
-      deadlines: [{} as CaseDeadline],
+      hasCaseDeadline: true,
     });
 
     expect(getCaseDeadlinesByDocketNumber).not.toHaveBeenCalled();
