@@ -49,6 +49,7 @@ export const WitnessesFieldset = ({
                 id={`witnessType-${rowIndex}`}
                 name={`witnessType-${rowIndex}`}
                 aria-label={`witnessType-${rowIndex}`}
+                data-testid={`${witnessType}-witness-input-${rowIndex}`}
                 type="text"
                 value={witnessesFormState[row.renderKey].name}
                 onBlur={() => onBlurHandler()}
@@ -70,6 +71,7 @@ export const WitnessesFieldset = ({
             <Button
               link
               className="padding-0"
+              data-testid={`remove-${witnessType}-witness-button-${rowIndex}`}
               icon="times"
               onClick={e => {
                 e.preventDefault();
@@ -89,6 +91,7 @@ export const WitnessesFieldset = ({
       <div className="grid-row align-items-center margin-bottom-1">
         <Button
           link
+          data-testid={`add-${witnessType}-witness-button`}
           className="padding-0 margin-top-1"
           icon="plus"
           onClick={e => {

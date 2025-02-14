@@ -44,6 +44,7 @@ export const ExhibitsFieldset = ({
               <input
                 className="usa-input maxw-full"
                 id={`exhibit-description-${rowIndex}`}
+                data-testid={`exhibit-description-${rowIndex}`}
                 name={`exhibit-description-${rowIndex}`}
                 aria-label={`exhibit-description-${rowIndex}`}
                 type="text"
@@ -74,6 +75,7 @@ export const ExhibitsFieldset = ({
               <select
                 className="usa-select display-inline-block"
                 id={`exhibit-status-${rowIndex}`}
+                data-testid={`exhibit-status-${rowIndex}`}
                 name={`exhibit-status-${rowIndex}`}
                 value={exhibitsFormState.exhibits[row.renderKey].status}
                 onBlur={() => onBlurHandler()}
@@ -111,6 +113,7 @@ export const ExhibitsFieldset = ({
               <input
                 className="usa-input"
                 id={`exhibit-note-${rowIndex}`}
+                data-testid={`exhibit-note-${rowIndex}`}
                 name={`exhibit-note-${rowIndex}`}
                 type="text"
                 value={exhibitsFormState.exhibits[row.renderKey].note}
@@ -133,6 +136,7 @@ export const ExhibitsFieldset = ({
             <Button
               link
               className="padding-0"
+              data-testid={`remove-exhibit-button-${rowIndex}`}
               icon="times"
               onClick={e => {
                 e.preventDefault();
@@ -152,6 +156,7 @@ export const ExhibitsFieldset = ({
       <div className="grid-row align-items-center margin-bottom-1">
         <Button
           link
+          data-testid="add-exhibit-button"
           className="padding-0 margin-top-1"
           icon="plus"
           onClick={e => {
