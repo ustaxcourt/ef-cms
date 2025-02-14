@@ -255,8 +255,8 @@ module "worker-west-blue" {
   environment = var.environment
 }
 
-module "opensearch-worker-east-blue" {
-  source              = "../../modules/opensearch-worker"
+module "opensearch-sync-east-blue" {
+  source              = "../../modules/opensearch-sync"
   color               = "blue"
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_east.arn
   lambda_role_arn     = module.lambda_role_blue.role_arn
@@ -273,8 +273,8 @@ module "opensearch-worker-east-blue" {
   environment = var.environment
 }
 
-module "opensearch-worker-west-blue" {
-  source              = "../../modules/opensearch-worker"
+module "opensearch-sync-west-blue" {
+  source              = "../../modules/opensearch-sync"
   color               = "blue"
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_west.arn
   lambda_role_arn     = module.lambda_role_blue.role_arn

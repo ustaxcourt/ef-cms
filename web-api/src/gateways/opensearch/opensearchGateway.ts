@@ -1,13 +1,13 @@
 import { environment } from '@web-api/environment';
-import { worker } from '@web-api/gateways/opensearch/opensearchWorker';
-import { workerLocal } from '@web-api/gateways/opensearch/opensearchWorkerLocal';
-import { OpensearchWorkerMessage } from '@web-api/gateways/opensearch/opensearchWorkerRouter';
+import { sync as sync } from '@web-api/gateways/opensearch/opensearchSync';
+import { syncLocal } from '@web-api/gateways/opensearch/opensearchSyncLocal';
+import { OpensearchSyncMessage } from '@web-api/gateways/opensearch/opensearchSyncRouter';
 
 export const opensearchGateway = () => ({
-  queueWork: ({ message }: { message: OpensearchWorkerMessage }) => {
+  queueSync: ({ message }: { message: OpensearchSyncMessage }) => {
     if (environment.stage === 'local') {
-      return workerLocal({ message });
+      return syncLocal({ message });
     }
-    return worker({ message });
+    return sync({ message });
   },
 });
