@@ -48,7 +48,7 @@ const component = ({
             {serveThirtyDayNoticeModalHelper.trialLocation}
           </span>
         </p>
-        <div className="margin-top-5">
+        <div className="margin-top-5 button-container">
           <Button id="confirm" onClick={() => serveSequence()}>
             Yes, Serve
           </Button>

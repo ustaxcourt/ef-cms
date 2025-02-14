@@ -132,11 +132,13 @@ export const socketRouter = (app, onMessageCallbackFn?) => {
           showModal: 'WorkItemAlreadyCompletedModal',
         });
         break;
-      case 'retry_async_request':
-        await app.getSequence('retryAsyncRequestSequence')(message);
-        break;
       case 'download_csv_file':
         await app.getSequence('downloadCsvFileSequence')(message);
+        break;
+      case 'async_service_unavailable_error':
+        await app.getSequence('asyncServiceUnavailablrHandlerSequence')(
+          message,
+        );
         break;
     }
 
