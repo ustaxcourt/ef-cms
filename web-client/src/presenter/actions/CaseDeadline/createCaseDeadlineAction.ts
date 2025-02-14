@@ -39,6 +39,5 @@ export const createCaseDeadlineAction = async ({
     alertSuccess: {
       message: 'Deadline saved.',
     },
-    caseDeadline: updatedCase,
   });
 };
