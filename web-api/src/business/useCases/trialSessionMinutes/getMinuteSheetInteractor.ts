@@ -2,9 +2,10 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { InvalidEntityError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getMinuteSheet } from '@web-api/persistence/postgres/minuteSheets/getMinuteSheet';
+import { validateMinuteSheet } from '@web-api/business/useCaseHelper/trialSessionMinutes/validateMinuteSheet';
 
 export const getMinuteSheetInteractor = async (
   { docketNumber, trialSessionId },
@@ -19,5 +20,11 @@ export const getMinuteSheetInteractor = async (
     trialSessionId,
   });
 
-  return minuteSheet?.content;
+  const isValid = validateMinuteSheet(minuteSheet?.content);
+
+  if (!isValid || !minuteSheet.content) {
+    throw new InvalidEntityError('Minute Sheet Entity is invalid.');
+  }
+
+  return minuteSheet.content;
 };
