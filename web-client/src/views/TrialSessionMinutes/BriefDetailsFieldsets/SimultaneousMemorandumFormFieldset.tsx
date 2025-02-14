@@ -1,4 +1,3 @@
-import { SimultaneousMemorandumFormFields } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
@@ -10,6 +9,7 @@ import {
   OnChangeHandler,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import React from 'react';
+import { SimultaneousMemorandum } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 
 export const SimultaneousMemorandumFormFieldset = ({
   onBlurHandler,
@@ -18,7 +18,7 @@ export const SimultaneousMemorandumFormFieldset = ({
 }: {
   onChangeHandler: OnChangeHandler;
   onBlurHandler: AutoSaveHandler;
-  simultaneousMemorandumFormState: SimultaneousMemorandumFormFields;
+  simultaneousMemorandumFormState: SimultaneousMemorandum;
 }) => {
   const rowsConfig = [
     { key: 'opening', rowLabel: BRIEF_SUBTYPE.opening },

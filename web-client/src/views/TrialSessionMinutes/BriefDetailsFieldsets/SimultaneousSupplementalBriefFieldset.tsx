@@ -5,8 +5,8 @@ import {
   AutoSaveHandler,
   OnChangeHandler,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
-import { SimultaneousSupplementalFormFields } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import React from 'react';
+import { SimultaneousSupplemental } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 
 export const SimultaneousSupplementalBriefFieldset = ({
   onBlurHandler,
@@ -15,7 +15,7 @@ export const SimultaneousSupplementalBriefFieldset = ({
 }: {
   onChangeHandler: OnChangeHandler;
   onBlurHandler: AutoSaveHandler;
-  simultaneousSupplementalBriefFormState: SimultaneousSupplementalFormFields;
+  simultaneousSupplementalBriefFormState: SimultaneousSupplemental;
 }) => {
   return (
     <fieldset className="border-0 grid-container padding-0">
