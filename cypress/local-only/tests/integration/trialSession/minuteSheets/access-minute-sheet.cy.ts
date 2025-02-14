@@ -71,7 +71,6 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
     );
   });
 
-  // Act
   describe('Fill out minute sheet form', function () {
     describe('Fill out trial session metadata', function () {
       it('Can see auto filled inputs in Metadata section', function () {
@@ -83,7 +82,6 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
         cy.get(
           `[data-testid="minute-sheet-button-${this.docketNumber}"]`,
         ).click();
-        // The select element should have a preselected value
         cy.get('#judge').contains('Lewis R. Carluzzo');
         cy.get('#trialClerk').should('have.value', 'Test trialclerk1');
       });
@@ -95,7 +93,6 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
         cy.get('#courtReporter').should('have.value', 'Test Court Reporter');
         cy.get('#remoteSession').should('be.checked');
 
-        // Undo changes
         cy.get('#courtReporter').clear();
         cy.get('#remoteSession').uncheck({ force: true });
       });
@@ -103,6 +100,9 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
 
     describe('Fill out CaseMetadata section', function () {
       it('Can fill out Calendar Called date, note, and check Transcript ordered', function () {
+        cy.get(
+          '.usa-date-picker__wrapper > [data-testid="calledDate-picker"]',
+        ).type('2/21/2024');
         cy.get('[data-testid="calledNote"]').type('Called note');
         cy.get('[data-testid="calledTranscriptOrdered"]').check({
           force: true,
@@ -111,7 +111,6 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
         cy.get('#calledNote').should('have.value', 'Called note');
         cy.get('#calledTranscriptOrdered').should('be.checked');
 
-        // Undo changes
         cy.get('#calledNote').clear();
         cy.get('#calledTranscriptOrdered').uncheck({ force: true });
       });
@@ -130,7 +129,6 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
         cy.get('#reCalledNote').first().should('have.value', 'Recalled note');
         cy.get('#reCalledTranscriptOrdered-0').first().should('be.checked');
 
-        // Undo changes
         cy.get('#reCalledNote').first().clear();
         cy.get('#reCalledTranscriptOrdered-0').uncheck({
           force: true,
@@ -145,7 +143,6 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
         cy.get('#pretrialConferenceTranscriptOrdered').should('be.checked');
         cy.get('#pretrialConferenceNote').should('have.value', 'Pretrial note');
 
-        // Undo changes
         cy.get('#pretrialConferenceNote').clear();
         cy.get('#pretrialConferenceTranscriptOrdered').uncheck({
           force: true,
@@ -163,7 +160,6 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
         cy.get('#trialHearingNote').should('have.value', 'Trial note');
         cy.get('#trialHearingTranscriptOrdered').should('be.checked');
 
-        // Undo changes
         cy.get('#trialHearingNote').clear();
         cy.get('#trialHearingType').select('');
         cy.get('#trialHearingTranscriptOrdered').uncheck({
@@ -184,10 +180,6 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
           'have.value',
           'Jurisdiction retained note',
         );
-
-        // Undo changes
-        cy.get('#jurisdictionRetainedDate-picker').clear();
-        cy.get('#jurisdictionRetainedNote').clear();
       });
 
       it('Can fill out Continued date and note', function () {
@@ -198,10 +190,6 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
           '10/07/2023',
         );
         cy.get('#continuedNote').should('have.value', 'Continued note');
-
-        // Undo changes
-        cy.get('#jurisdictionContinuedDate-picker').clear();
-        cy.get('#continuedNote').clear();
       });
     });
 
@@ -216,14 +204,9 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
           '10/10/2021, 11/10/2021',
         );
         cy.get('#petitionerRole-0').should('have.value', 'proSe');
-
-        // Undo changes
-        cy.get('#petitioner-dates-of-appearance-0').clear();
-        cy.get('#petitionerRole-0').select('');
       });
     });
 
-    // TODO 10419: fix respondent section
     describe('Fill out Respondent section', function () {
       it('Can fill out Respondent section', function () {
         cy.get('[data-testid="add-respondent-button"]').click();
@@ -253,58 +236,78 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
     });
 
     describe('Fill out MotionsFieldset section', () => {
-      // it('Can fill out Motion Type and check Oral Motion - first row', () => {
-      //   const motionType = cy.get('label:contains("Type") + select').first();
-      //   const oralMotionCheckbox = cy
-      //     .get('label:contains("Oral motion") + input')
-      //     .first();
+      it('Can add and fill out multiple motion rows', () => {
+        // Fill out first motion
+        cy.get('[data-testid="motion-type-0"]').select('Motion to Dismiss');
+        cy.get('[data-testid="motion-oral-0"]').check({ force: true });
+        cy.get('[data-testid="motion-filed-by-0"]').select('Petitioner');
+        cy.get('[data-testid="motion-status-0"]').select('Granted');
+        cy.get('[data-testid="motion-objection-0"]').select('No Objection');
+        cy.get('[data-testid="motion-note-0"]').type('First motion note');
 
-      //   motionType.select('Motion to Dismiss');
-      //   oralMotionCheckbox.check({ force: true });
+        // Add second motion
+        cy.get('[data-testid="add-motion-button"]').click();
 
-      //   motionType.should('have.value', 'motionToDismiss');
-      //   oralMotionCheckbox.should('be.checked');
+        // Fill out second motion
+        cy.get('[data-testid="motion-type-1"]').select(
+          'Motion for Continuance',
+        );
+        cy.get('[data-testid="motion-oral-1"]').check({ force: true });
+        cy.get('[data-testid="motion-filed-by-1"]').select('Respondent');
+        cy.get('[data-testid="motion-status-1"]').select('Denied');
+        cy.get('[data-testid="motion-objection-1"]').select('Objection');
+        cy.get('[data-testid="motion-note-1"]').type('Second motion note');
 
-      //   // Undo changes
-      //   motionType.select('');
-      //   oralMotionCheckbox.uncheck({ force: true });
-      // });
+        // Verify first motion values
+        cy.get('[data-testid="motion-type-0"]').should(
+          'have.value',
+          'motionToDismiss',
+        );
+        cy.get('[data-testid="motion-oral-0"]').should('be.checked');
+        cy.get('[data-testid="motion-filed-by-0"]').should(
+          'have.value',
+          'petitioner',
+        );
+        cy.get('[data-testid="motion-status-0"]').should(
+          'have.value',
+          'granted',
+        );
+        cy.get('[data-testid="motion-objection-0"]').should(
+          'have.value',
+          'noObjection',
+        );
+        cy.get('[data-testid="motion-note-0"]').should(
+          'have.value',
+          'First motion note',
+        );
 
-      // it('Can fill out Filed By, Status, and Objection', () => {
-      //   const filedBy = cy.get('label:contains("Filed by") + select').first();
-      //   const status = cy.get('label:contains("Status") + select').first();
-      //   const objection = cy
-      //     .get('label:contains("Objection") + select')
-      //     .first();
-
-      //   filedBy.select('Petitioner');
-      //   status.select('Granted');
-      //   objection.select('No Objection');
-
-      //   filedBy.should('have.value', 'petitioner');
-      //   status.should('have.value', 'granted');
-      //   objection.should('have.value', 'noObjection');
-
-      //   // Undo changes
-      //   filedBy.select('');
-      //   status.select('');
-      //   objection.select('');
-      // });
-
-      it('Can fill out Motion Note', () => {
-        const motionNote = cy.get('label:contains("Note") + input').first();
-
-        motionNote.type('Motion note');
-        motionNote.should('have.value', 'Motion note');
-
-        // Undo changes
-        motionNote.clear();
+        // Verify second motion values
+        cy.get('[data-testid="motion-type-1"]').should(
+          'have.value',
+          'motionForContinuance',
+        );
+        cy.get('[data-testid="motion-oral-1"]').should('be.checked');
+        cy.get('[data-testid="motion-filed-by-1"]').should(
+          'have.value',
+          'respondent',
+        );
+        cy.get('[data-testid="motion-status-1"]').should(
+          'have.value',
+          'denied',
+        );
+        cy.get('[data-testid="motion-objection-1"]').should(
+          'have.value',
+          'objection',
+        );
+        cy.get('[data-testid="motion-note-1"]').should(
+          'have.value',
+          'Second motion note',
+        );
       });
     });
 
     describe('Fill out Jurisdiction section', () => {
       it('Can fill out Jurisdiction section', () => {
-        // cy.get('#jurisdictionRetainedDate').type('10/06/2023');
         cy.get('#jurisdictionRetainedNote').type('Jurisdiction note');
         cy.get('#continuedNote').type('Continued note');
         cy.get('#jurisdictionRetainedNote').should(
@@ -312,13 +315,6 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
           'Jurisdiction note',
         );
         cy.get('#continuedNote').should('have.value', 'Continued note');
-
-        // cy.get('#jurisdictionRetainedDate').should('have.value', '10/06/2023');
-
-        // Undo changes
-        cy.get('#jurisdictionRetainedNote').clear();
-        cy.get('#continuedNote').clear();
-        // cy.get('#jurisdictionRetainedDate').clear();
       });
     });
 
@@ -330,7 +326,6 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
         cy.get('#statusReportOrderedNote').should('have.value', 'Order note');
         cy.get('#statusReportOrderedFor').should('have.value', 'petitioner');
 
-        // Undo changes
         cy.get('#statusReportOrderedNote').clear();
         cy.get('#statusReportOrderedFor').select('');
       });
@@ -342,7 +337,6 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
           'Decision note',
         );
 
-        // Undo changes
         cy.get('#stipulatedDecisionOrderedNote').clear();
       });
     });
@@ -379,7 +373,6 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
             'noObjection',
           );
           cy.get(`#motionNote${renderKey}`).should('have.value', 'Motion note');
-          // Undo changes
           cy.get(`#motionType-${renderKey}`).select('');
           cy.get(`#motionOralMotion${renderKey}`).uncheck({
             force: true,
@@ -426,7 +419,6 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
             'Document description',
           );
 
-          // Undo changes
           cy.get(`#actionsAndFilingsDocumentType-${renderKey}`).select('');
           cy.get(`#actionsAndFilingsNote-${renderKey}`).clear();
           cy.get(`#actionsAndFilingsFiledBy-${renderKey}`).select('');
@@ -436,16 +428,13 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
     });
 
     describe('Fill out TrialBriefFieldset section', () => {
-      // TODO 10419: Finish this test and all options of brief types
       it('Can fill out TrialBriefFieldset section - Seriatim Brief', () => {
         cy.get('#trialBriefNote').type('Brief note');
         cy.get('#trialBriefNote').should('have.value', 'Brief note');
 
-        // Test Seriatim Brief stuff
         cy.get('#briefType').select('Seriatim Brief');
         cy.get('#briefType').should('have.value', 'Seriatim Brief');
 
-        // TODO 10419: Fix radio button issue preventing us from deselecting
         cy.get('#petitioner-openingPartyType').click({ force: true });
         cy.get('#petitioner-openingPartyType').should('be.checked');
 
@@ -479,7 +468,6 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
         cy.get('#replyNote').type('Reply notes');
         cy.get('#replyNote').should('have.value', 'Reply notes');
 
-        // Sur-reply
         cy.get('#petitioner-surReplyPartyType').click({
           force: true,
         });
@@ -492,6 +480,89 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
 
         cy.get('#surReplyNote').type('Sur-reply notes');
         cy.get('#surReplyNote').should('have.value', 'Sur-reply notes');
+      });
+
+      it('Can open Seriatim Memorandum Brief section', () => {
+        cy.get('#briefType').select('Seriatim Memorandum Brief');
+        cy.get('#briefType').should('have.value', 'Seriatim Memorandum Brief');
+      });
+    });
+
+    describe('Fill out Petitioner WitnessesFieldset section', () => {
+      it('Can add a row and fill in text input', () => {
+        cy.get('[data-testid="petitioner-witness-input-0"]').type('John Smith');
+
+        cy.get('[data-testid="add-petitioner-witness-button"]').click();
+        cy.get('[data-testid="petitioner-witness-input-1"]').type('Jane Doe');
+
+        cy.get('[data-testid^="petitioner-witness-input-"]').should(
+          'have.length',
+          2,
+        );
+        cy.get('[data-testid="remove-petitioner-witness-button-1"]').click();
+        cy.get('[data-testid^="petitioner-witness-input-"]').should(
+          'have.length',
+          1,
+        );
+      });
+    });
+
+    describe('Fill out Respondent WitnessesFieldset section', () => {
+      it('Can add a row and fill in text input', () => {
+        cy.get('[data-testid="respondent-witness-input-0"]').type('John Smith');
+
+        cy.get('[data-testid="add-respondent-witness-button"]').click();
+        cy.get('[data-testid="respondent-witness-input-1"]').type('Jane Doe');
+
+        cy.get('[data-testid^="respondent-witness-input-"]').should(
+          'have.length',
+          2,
+        );
+        cy.get('[data-testid="remove-respondent-witness-button-1"]').click();
+        cy.get('[data-testid^="respondent-witness-input-"]').should(
+          'have.length',
+          1,
+        );
+      });
+    });
+
+    describe('Fill out ExhibitsFieldset section', () => {
+      it('Can add a row and fill in text input', () => {
+        cy.get('[data-testid="exhibit-description-0"]').type('Exhibit A');
+        cy.get('[data-testid="exhibit-status-0"]').select('Admitted');
+        cy.get('[data-testid="exhibit-note-0"]').type('First exhibit note');
+
+        cy.get('[data-testid="add-exhibit-button"]').click();
+        cy.get('[data-testid="exhibit-description-1"]').type('Exhibit B');
+        cy.get('[data-testid="exhibit-status-1"]').select('Not admitted');
+        cy.get('[data-testid="exhibit-note-1"]').type('Second exhibit note');
+
+        cy.get('[data-testid^="exhibit-description-"]').should(
+          'have.length',
+          2,
+        );
+        cy.get('[data-testid="exhibit-status-0"]').should(
+          'have.value',
+          'admitted',
+        );
+        cy.get('[data-testid="exhibit-note-0"]').should(
+          'have.value',
+          'First exhibit note',
+        );
+        cy.get('[data-testid="exhibit-status-1"]').should(
+          'have.value',
+          'notAdmitted',
+        );
+        cy.get('[data-testid="exhibit-note-1"]').should(
+          'have.value',
+          'Second exhibit note',
+        );
+
+        cy.get('[data-testid="remove-exhibit-button-1"]').click();
+        cy.get('[data-testid^="exhibit-description-"]').should(
+          'have.length',
+          1,
+        );
       });
     });
 

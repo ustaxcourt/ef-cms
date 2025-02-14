@@ -32,7 +32,7 @@ export const MotionsFieldset = ({
       <div className="usa-label">
         Motion to Dismiss / Motion for Continuance
       </div>
-      {Object.values(motionsFormState.motions).map(row => {
+      {Object.values(motionsFormState.motions).map((row, rowIndex) => {
         return (
           <div className="margin-bottom-3" key={row.renderKey}>
             <div className="grid-row grid-gap align-items-center margin-bottom-1">
@@ -69,6 +69,7 @@ export const MotionsFieldset = ({
                   <select
                     className="usa-select display-inline-block"
                     id={`motionType-${row.renderKey}`}
+                    data-testid={`motion-type-${rowIndex}`}
                     name={`motionType-${row.renderKey}`}
                     value={row.type}
                     onBlur={() => onBlurHandler()}
@@ -105,6 +106,7 @@ export const MotionsFieldset = ({
                       checked={row.oralMotion}
                       className="usa-checkbox__input"
                       id={`motionOralMotion${row.renderKey}`}
+                      data-testid={`motion-oral-${rowIndex}`}
                       name={`motionOralMotion${row.renderKey}`}
                       type="checkbox"
                       onBlur={() => onBlurHandler()}
@@ -142,6 +144,7 @@ export const MotionsFieldset = ({
                   <select
                     className="usa-select display-inline-block"
                     id={`motionFiledBy-${row.renderKey}`}
+                    data-testid={`motion-filed-by-${rowIndex}`}
                     name={`motionFiledBy-${row.renderKey}`}
                     value={row.filedBy}
                     onBlur={() => onBlurHandler()}
@@ -182,6 +185,7 @@ export const MotionsFieldset = ({
                   <select
                     className="usa-select display-inline-block"
                     id={`motionStatus-${row.renderKey}`}
+                    data-testid={`motion-status-${rowIndex}`}
                     name={`motionStatus-${row.renderKey}`}
                     value={row.status}
                     onBlur={() => onBlurHandler()}
@@ -222,6 +226,7 @@ export const MotionsFieldset = ({
                   <select
                     className="usa-select display-inline-block"
                     id={`motionObjection-${row.renderKey}`}
+                    data-testid={`motion-objection-${rowIndex}`}
                     name={`motionObjection-${row.renderKey}`}
                     value={row.objection}
                     onBlur={() => onBlurHandler()}
@@ -262,6 +267,7 @@ export const MotionsFieldset = ({
                   <input
                     className="usa-input display-inline-block maxw-full"
                     id={`motionNote${row.renderKey}`}
+                    data-testid={`motion-note-${rowIndex}`}
                     name={`motionNote${row.renderKey}`}
                     type="text"
                     value={row.note}
@@ -289,6 +295,7 @@ export const MotionsFieldset = ({
           <Button
             link
             className="padding-0"
+            data-testid="add-motion-button"
             icon="plus"
             onClick={e => {
               e.preventDefault();
