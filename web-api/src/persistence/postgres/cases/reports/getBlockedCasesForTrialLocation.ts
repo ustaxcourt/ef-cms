@@ -1,4 +1,4 @@
-import { convertDbRowToRawCase } from '@web-api/persistence/postgres/cases/mapper';
+import { rawCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
 
 const MAX_RESULTS = 5000;
@@ -30,5 +30,5 @@ export const getBlockedCasesForTrialLocation = async (
       .limit(MAX_RESULTS)
       .execute(),
   );
-  return results.map(result => convertDbRowToRawCase(result));
+  return results.map(result => rawCaseEntity(result));
 };

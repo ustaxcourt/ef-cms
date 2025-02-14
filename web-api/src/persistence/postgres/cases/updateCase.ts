@@ -1,5 +1,5 @@
 import { CaseStatusChange } from '@shared/business/entities/cases/Case';
-import { convertRawCaseToDbRow } from '@web-api/persistence/postgres/cases/mapper';
+import { toKyselyNewCase } from '@web-api/persistence/postgres/cases/mapper';
 import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
 import { upsertPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/upsertPetitionersOnCase';
 import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
@@ -14,7 +14,7 @@ export const updateCase = async ({
 }): Promise<RawCase> => {
   const updatedCase = await pgUpdateTable({
     table: 'dwCase',
-    values: convertRawCaseToDbRow(caseToUpdate),
+    values: toKyselyNewCase(caseToUpdate),
     where: qb => qb.where('docketNumber', '=', caseToUpdate.docketNumber),
   });
 

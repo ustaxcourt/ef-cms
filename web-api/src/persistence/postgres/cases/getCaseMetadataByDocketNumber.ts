@@ -1,4 +1,4 @@
-import { convertDbRowToRawCase } from '@web-api/persistence/postgres/cases/mapper';
+import { rawCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { sql } from 'kysely';
@@ -27,7 +27,7 @@ export const getCaseMetadataByDocketNumber = async ({
 
   return dbCase
     ? {
-        ...transformNullToUndefined(convertDbRowToRawCase(dbCase)),
+        ...transformNullToUndefined(rawCaseEntity(dbCase)),
         petitioners:
           (dbCase.petitioners as RawPetitioner[]).map(p => {
             return new Petitioner({

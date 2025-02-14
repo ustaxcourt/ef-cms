@@ -1,26 +1,25 @@
-import { marshall } from '@aws-sdk/util-dynamodb';
-import { Case } from '@shared/business/entities/cases/Case';
 import { applicationContext } from '@web-api/applicationContext';
 import {
   AttributeValueWithName,
   IDynamoDBRecord,
 } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
-import { OpensearchWorkerMessage } from '@web-api/gateways/opensearch/opensearchWorkerRouter';
+import { OpensearchSyncMessage } from '@web-api/gateways/opensearch/opensearchSyncRouter';
 import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
 import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
+import { indexCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
 import { getPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/getPetitionersOnCase';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { flattenDeep, isArray } from 'lodash';
 
-export const opensearchUpdateCaseWorker = async ({
+export const opensearchCaseSync = async ({
   message,
 }: {
-  message: OpensearchWorkerMessage;
+  message: OpensearchSyncMessage;
 }): Promise<void> => {
   for (const caseRecord of isArray(message.payload)
     ? message.payload
     : [message.payload]) {
-    const petitionersOnCase = await getPetitionersOnCase({
+    const petitioners = await getPetitionersOnCase({
       docketNumber: caseRecord.docketNumber,
     });
 
@@ -36,24 +35,11 @@ export const opensearchUpdateCaseWorker = async ({
     });
 
     // Recommend further optimization so we are not mocking a DynamoDB record after cases are in Postgres
-    const marshalledCase = marshall({
-      pk: `case|${caseRecord.docketNumber}`,
-      sk: `case|${caseRecord.docketNumber}`,
-      entityName: 'Case',
-      caseCaption: caseRecord.caption,
-      docketNumber: caseRecord.docketNumber,
-      docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
-        docketNumber: caseRecord.docketNumber,
-        docketNumberSuffix: caseRecord.docketNumberSuffix,
-      }),
-      isSealed: caseRecord.isSealed,
-      petitioners: petitionersOnCase || [],
-      receivedAt:
-        caseRecord.receivedAt instanceof Date
-          ? caseRecord.receivedAt.toISOString()
-          : caseRecord.receivedAt,
+    const marshalledCase = indexCaseEntity({
+      caseRecord,
       privatePractitioners,
       irsPractitioners,
+      petitioners,
     });
 
     const caseRecords: IDynamoDBRecord[] = [];
