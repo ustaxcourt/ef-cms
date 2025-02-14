@@ -1,4 +1,3 @@
-import { SimultaneousMemorandaOfLawFormFields } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
@@ -10,6 +9,7 @@ import {
   OnChangeHandler,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import React from 'react';
+import { SimultaneousMemorandaOfLaw } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 
 export const SimultaneousMemorandaOfLawFormFieldset = ({
   onBlurHandler,
@@ -18,7 +18,7 @@ export const SimultaneousMemorandaOfLawFormFieldset = ({
 }: {
   onChangeHandler: OnChangeHandler;
   onBlurHandler: AutoSaveHandler;
-  simultaneousMemorandaOfLawFormState: SimultaneousMemorandaOfLawFormFields;
+  simultaneousMemorandaOfLawFormState: SimultaneousMemorandaOfLaw;
 }) => {
   const rowsConfig = [
     { key: 'memoranda', rowLabel: BRIEF_SUBTYPE.memoranda },
