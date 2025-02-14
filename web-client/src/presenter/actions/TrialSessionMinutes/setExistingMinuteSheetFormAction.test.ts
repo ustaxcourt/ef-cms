@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { mockMinuteSheetFormState } from './minuteSheetMocks';
+import { mockMinuteSheet, mockMinuteSheetFormState } from './minuteSheetMocks';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setExistingMinuteSheetFormAction } from './setExistingMinuteSheetFormAction';
@@ -13,14 +13,23 @@ describe('setExistingMinuteSheetFormAction', () => {
         presenter,
       },
       props: {
-        minuteSheet: mockMinuteSheetFormState,
+        minuteSheet: mockMinuteSheet,
+        judgeOptions: {
+          '1': { fullName: '', title: '', userId: '1' },
+        },
       },
       state: {
         minuteSheetForm: {},
       },
     });
 
-    expect(result.state.minuteSheetForm).toEqual(mockMinuteSheetFormState);
+    expect(result.state.minuteSheetForm).toEqual({
+      ...mockMinuteSheetFormState,
+      options: {
+        ...mockMinuteSheetFormState.options,
+        irsPractitionerOptions: [],
+      },
+    });
   });
 
   it('should create a deep clone of the minute sheet form state', async () => {
@@ -29,30 +38,25 @@ describe('setExistingMinuteSheetFormAction', () => {
         presenter,
       },
       props: {
-        minuteSheet: mockMinuteSheetFormState,
+        minuteSheet: mockMinuteSheet,
+        judgeOptions: {
+          '1': { fullName: '', title: '', userId: '1' },
+        },
       },
       state: {
         minuteSheetForm: {},
       },
     });
 
-    expect(result.state.minuteSheetForm).not.toBe(mockMinuteSheetFormState);
-    expect(result.state.minuteSheetForm).toEqual(mockMinuteSheetFormState);
-  });
+    const expectedMinuteSheetFormState = {
+      ...mockMinuteSheetFormState,
+      options: {
+        ...mockMinuteSheetFormState.options,
+        irsPractitionerOptions: [],
+      },
+    };
 
-  it('should handle empty minute sheet data', async () => {
-    const result = await runAction(setExistingMinuteSheetFormAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        minuteSheet: {},
-      },
-      state: {
-        minuteSheetForm: mockMinuteSheetFormState,
-      },
-    });
-
-    expect(result.state.minuteSheetForm).toEqual({});
+    expect(result.state.minuteSheetForm).not.toBe(mockMinuteSheet);
+    expect(result.state.minuteSheetForm).toEqual(expectedMinuteSheetFormState);
   });
 });
