@@ -12,9 +12,14 @@ import qs from 'qs';
  */
 export const generatePrintablePendingReportInteractor = (
   applicationContext,
-  { docketNumber, judge },
+  { docketNumber, judge, sortField, sortOrder },
 ) => {
-  const queryString = qs.stringify({ docketNumber, judge });
+  const queryString = qs.stringify({
+    docketNumber,
+    judge,
+    sortField,
+    sortOrder,
+  });
 
   return get({
     applicationContext,
