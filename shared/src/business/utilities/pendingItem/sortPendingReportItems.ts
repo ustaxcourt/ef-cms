@@ -1,15 +1,11 @@
 import { PendingItemFormatted } from '@shared/business/utilities/formatPendingItem';
 import { sortBy } from 'lodash';
 
-export type SortedPendingItemFormatted = PendingItemFormatted & {
-  sortableDocketNumber: number;
-};
-
 export function sortPendingReportItems(
-  pendingItems: SortedPendingItemFormatted[] = [],
+  pendingItems: PendingItemFormatted[] = [],
   pendingItemSortField: string | undefined,
   pendingItemSortOrder: 'asc' | 'desc' | undefined,
-): SortedPendingItemFormatted[] {
+): PendingItemFormatted[] {
   if (!pendingItemSortField || !pendingItemSortOrder) {
     return sortBy(pendingItems, ['receivedAt']);
   }
