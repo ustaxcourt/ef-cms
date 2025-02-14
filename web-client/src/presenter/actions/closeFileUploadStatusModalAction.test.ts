@@ -9,14 +9,6 @@ describe('closeFileUploadStatusModalAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  beforeAll(() => {
-    jest.spyOn(global, 'setTimeout');
-  });
-
-  afterAll(() => {
-    jest.restoreAllMocks();
-  });
-
   it('should reset file upload state values', async () => {
     process.env.FILE_UPLOAD_MODAL_TIMEOUT = '77';
     const result = await runAction(closeFileUploadStatusModalAction, {
@@ -26,7 +18,6 @@ describe('closeFileUploadStatusModalAction', () => {
       state: { modal: { showModal: 'FileUploadStatusModal' } },
     });
 
-    // inspecting arguments of 4th call because it seems `store.set` also invokes setTimeout
     const sleepCalls = (applicationContext.getUtilities().sleep as jest.Mock)
       .mock.calls;
 
@@ -46,6 +37,7 @@ describe('closeFileUploadStatusModalAction', () => {
 
   it('should not reset file upload state values when a different modal is displayed', async () => {
     process.env.FILE_UPLOAD_MODAL_TIMEOUT = '77';
+
     const result = await runAction(closeFileUploadStatusModalAction, {
       modules: {
         presenter,
@@ -62,8 +54,6 @@ describe('closeFileUploadStatusModalAction', () => {
         presenter,
       },
     });
-
-    // inspecting arguments of 4th call because it seems `store.set` also invokes setTimeout
 
     const sleepCalls = (applicationContext.getUtilities().sleep as jest.Mock)
       .mock.calls;
