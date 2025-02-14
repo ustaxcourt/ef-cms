@@ -10,11 +10,11 @@ export function sortPendingReportItems(
     return sortBy(pendingItems, ['receivedAt']);
   }
 
-  const sorttedPendingItems = sortBy(pendingItems, [
+  const sortedPendingItems = sortBy(pendingItems, [
     pendingItemSortField,
     'receivedAt',
   ]);
 
-  if (pendingItemSortOrder === 'desc') return sorttedPendingItems.reverse();
-  return sorttedPendingItems;
+  if (pendingItemSortOrder === 'desc') return sortedPendingItems.reverse();
+  return sortedPendingItems;
 }
