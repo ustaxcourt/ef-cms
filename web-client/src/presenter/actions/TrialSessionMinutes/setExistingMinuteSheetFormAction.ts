@@ -22,7 +22,7 @@ export const setExistingMinuteSheetFormAction = ({ props, store }) => {
   store.set(state.minuteSheetForm, cloneDeep(minuteSheetForm));
 };
 
-export const transformMinuteSheetToFormState = (
+const transformMinuteSheetToFormState = (
   minuteSheet: MinuteSheet,
   judgeOptions: Record<string, Judge>,
 ): MinuteSheetFormState => ({
@@ -136,7 +136,6 @@ const transformTrialBriefSection = (minuteSheet: MinuteSheet) => ({
 const transformTrialSessionMetadataSection = (minuteSheet: MinuteSheet) => ({
   courtReporter: minuteSheet.trialSession.courtReporter,
   judge: minuteSheet.trialSession.judge,
-  judgeOptions: {}, // This needs to be populated from a different source
   remoteSession: minuteSheet.trialSession.isRemote,
   trialClerk: minuteSheet.trialSession.trialClerk,
 });
