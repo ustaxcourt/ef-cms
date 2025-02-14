@@ -28,6 +28,7 @@ export const TrialSessionMinutesPage = connect(
             </h1>
             <div className="grid-col-auto">
               <Button
+                data-testid="download-pdf-button"
                 onClick={e => {
                   e.preventDefault();
                   downloadMinuteSheetFormPdfSequence();
