@@ -40,7 +40,6 @@ export const caseDetailHeaderHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  console.log('caseDetailHeaderHelper');
   const { USER_ROLES } = applicationContext.getConstants();
 
   const user = get(state.user);
