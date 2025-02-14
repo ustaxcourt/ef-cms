@@ -1,19 +1,20 @@
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { omit } from 'lodash';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import {
+  isAuthorized,
+  ROLE_PERMISSIONS,
+} from '@shared/authorization/authorizationClientService';
 import { Case } from '@shared/business/entities/cases/Case';
 import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
 } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
-import {
-  ROLE_PERMISSIONS,
-  isAuthorized,
-} from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { createISODateString } from '@shared/business/utilities/DateHandler';
-import { omit } from 'lodash';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 export const fileAndServeCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
@@ -203,16 +204,13 @@ export const fileAndServeCourtIssuedDocument = async (
           });
         }
 
-        return applicationContext
-          .getUseCaseHelpers()
-          .fileAndServeDocumentOnOneCase({
-            applicationContext,
-            caseEntity,
-            docketEntryEntity,
-            subjectCaseDocketNumber,
-            user,
-            caseHasDeadline,
-          });
+        return fileAndServeDocumentOnOneCase({
+          caseEntity,
+          docketEntryEntity,
+          subjectCaseDocketNumber,
+          user,
+          caseHasDeadline,
+        });
       }),
     );
 
