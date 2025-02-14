@@ -9,6 +9,7 @@ import {
   OnChangeHandler,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import React from 'react';
+import { SimultaneousBrief } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 
 export const SimultaneousBriefFormFieldset = ({
   onBlurHandler,
@@ -17,7 +18,7 @@ export const SimultaneousBriefFormFieldset = ({
 }: {
   onChangeHandler: OnChangeHandler;
   onBlurHandler: AutoSaveHandler;
-  simultaneousBriefFormState: SimultaneousBriefFormFields;
+  simultaneousBriefFormState: SimultaneousBrief;
 }) => {
   const rowsConfig = [
     { key: 'opening', rowLabel: BRIEF_SUBTYPE.opening },
