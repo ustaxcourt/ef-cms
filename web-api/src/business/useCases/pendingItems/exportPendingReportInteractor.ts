@@ -6,11 +6,8 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { stringify } from 'csv-stringify/sync';
-import {
-  SortedPendingItemFormatted,
-  sortPendingReportItems,
-} from '@shared/business/utilities/pendingItem/sortPendingReportItems';
-import { Case } from '@shared/business/entities/cases/Case';
+import { sortPendingReportItems } from '@shared/business/utilities/pendingItem/sortPendingReportItems';
+import { PendingItemFormatted } from '@shared/business/utilities/formatPendingItem';
 
 export const exportPendingReportInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -36,17 +33,10 @@ export const exportPendingReportInteractor = async (
       judge,
     });
 
-  const formattedPendingItems: SortedPendingItemFormatted[] =
-    pendingDocuments.map(pendingItem => {
-      const sortablePendingItem: SortedPendingItemFormatted = {
-        ...applicationContext.getUtilities().formatPendingItem(pendingItem),
-        sortableDocketNumber: Case.getSortableDocketNumber(
-          pendingItem.docketNumber,
-        )!,
-      };
-
-      return sortablePendingItem;
-    });
+  const formattedPendingItems: PendingItemFormatted[] = pendingDocuments.map(
+    pendingItem =>
+      applicationContext.getUtilities().formatPendingItem(pendingItem),
+  );
 
   const sortedPendingItems = sortPendingReportItems(
     formattedPendingItems,
@@ -57,7 +47,7 @@ export const exportPendingReportInteractor = async (
   return getCsv(sortedPendingItems);
 };
 
-const getCsv = (data: SortedPendingItemFormatted[]) => {
+const getCsv = (data: PendingItemFormatted[]) => {
   return stringify(data, {
     bom: true,
     columns: [

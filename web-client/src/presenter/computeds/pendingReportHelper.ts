@@ -2,15 +2,12 @@ import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import qs from 'qs';
 import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
-import { Case } from '@shared/business/entities/cases/Case';
-import {
-  SortedPendingItemFormatted,
-  sortPendingReportItems,
-} from '@shared/business/utilities/pendingItem/sortPendingReportItems';
+import { sortPendingReportItems } from '@shared/business/utilities/pendingItem/sortPendingReportItems';
+import { PendingItemFormatted } from '@shared/business/utilities/formatPendingItem';
 
 type PendingReportHelperResults = {
   printUrl: string;
-  pendingItems: SortedPendingItemFormatted[];
+  pendingItems: PendingItemFormatted[];
 };
 
 export const pendingReportHelper = (get: Get): PendingReportHelperResults => {
@@ -19,19 +16,8 @@ export const pendingReportHelper = (get: Get): PendingReportHelperResults => {
   );
 
   const judgeFilter = get(state.screenMetadata.pendingItemsFilters.judge);
-  const queryString = qs.stringify({ judgeFilter });
-
-  const pendingItems = get(state.pendingReports.pendingItems).map(
-    pendingItem => {
-      const sortedPendingItemFormatted: SortedPendingItemFormatted = {
-        ...pendingItem,
-        sortableDocketNumber:
-          Case.getSortableDocketNumber(pendingItem.docketNumber) || 0,
-      };
-
-      return sortedPendingItemFormatted;
-    },
-  );
+  const queryString = qs.stringify({ judgeFilter, sortField, sortOrder });
+  const pendingItems = get(state.pendingReports.pendingItems);
 
   return {
     printUrl: `/reports/pending-report/printable?${queryString}`,
