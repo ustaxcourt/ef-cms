@@ -30,6 +30,15 @@ export const startPollingForResultsInteractor = async (
 
     const { response } = results;
     const responseObj = JSON.parse(response);
+    if (+responseObj.statusCode === 503)
+      return await startPollingForResultsInteractor(
+        applicationContext,
+        requestId,
+        expirationTimestamp,
+        resolver,
+        attemptNumber + 1,
+      );
+
     if (resolver) resolver(responseObj);
   });
 };

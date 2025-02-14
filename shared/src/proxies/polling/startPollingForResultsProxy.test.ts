@@ -68,7 +68,11 @@ describe('startPollingForResultsProxy', () => {
     expect(get).toHaveBeenCalledTimes(3);
   });
 
-  it('should resolve the request when it gets the status code 503 in the second iteration', async () => {
+  it('should resolve the request when it gets the status code 200 response in the third try even when we got a 503 in the second iteration', async () => {
+    const responseObj = {
+      statusCode: 200,
+    };
+
     GET_RESPONSES = [
       undefined,
       {
@@ -77,9 +81,7 @@ describe('startPollingForResultsProxy', () => {
         }),
       },
       {
-        response: JSON.stringify({
-          statusCode: 200,
-        }),
+        response: JSON.stringify(responseObj),
       },
     ];
     await startPollingForResultsInteractor(
@@ -89,10 +91,8 @@ describe('startPollingForResultsProxy', () => {
       RESOLVER_MOCK,
     );
 
-    expect(RESOLVER_MOCK).toHaveBeenCalledWith({
-      statusCode: 503,
-    });
-    expect(get).toHaveBeenCalledTimes(2);
+    expect(RESOLVER_MOCK).toHaveBeenCalledWith(responseObj);
+    expect(get).toHaveBeenCalledTimes(3);
   });
 
   it('should resolve the request with 504 status code when expiration time has passed', async () => {
