@@ -35,6 +35,9 @@ jobs:
       - name: NPM Install in your branch
         run: npm ci
 
+      - name: Clear npm cache
+        run: npm cache clean --force
+
       - name: NPM Install in target branch
         working-directory: ./targetBranch
         run: npm ci
