@@ -102,16 +102,12 @@ describe('Petitioner', () => {
     });
 
     it('should populate hasConsentedToElectronicService when one is provided', () => {
-      const mockhasConsentedToElectronicService = false;
-
       const entity = new Petitioner({
         ...mockValidPetitioner,
-        hasConsentedToEervice: mockhasConsentedToElectronicService,
+        hasConsentedToElectronicService: false,
       });
 
-      expect(entity.hasConsentedToElectronicService).toEqual(
-        mockhasConsentedToElectronicService,
-      );
+      expect(entity.hasConsentedToElectronicService).toEqual(false);
     });
   });
 });
