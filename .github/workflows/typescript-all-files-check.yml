@@ -35,11 +35,10 @@ jobs:
       - name: NPM Install in your branch
         run: npm ci
 
-      - name: Clear npm cache
-        run: npm cache clean --force
-
       - name: NPM Install in target branch
         working-directory: ./targetBranch
+        env:
+          NPM_CONFIG_CACHE: ${{ runner.temp }}/npm-cache-target
         run: npm ci
 
       - name: Check files for increased error count
