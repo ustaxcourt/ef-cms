@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.30
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.29
 
 parameters:
   run_build_and_deploy:
@@ -50,10 +50,10 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - v28-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v27-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - restore_cache:
           keys:
-            - v28-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v27-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: |
@@ -75,7 +75,7 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v28-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v27-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
       - save_cache:
@@ -87,7 +87,7 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - v28-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v27-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: |
@@ -100,7 +100,7 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v28-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v27-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
 
