@@ -1,7 +1,10 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
-import { PENDING_REPORT_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
+import {
+  PENDING_REPORT_PAGE_SIZE,
+  STATE_KEYS,
+} from '@shared/business/entities/EntityConstants';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
@@ -9,22 +12,35 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
 import React, { useRef } from 'react';
+import { SortableHeader } from '@web-client/ustc-ui/Table/SortableHeader';
 
-export const PendingReportList = connect(
-  {
-    hasPendingItemsResults: state.pendingReports.hasPendingItemsResults,
-    pendingItems: state.pendingReports.pendingItems,
-    pendingItemsTotal: state.pendingReports.pendingItemsTotal,
-    pendingReportListHelper: state.pendingReportListHelper,
-    setPendingReportSelectedJudgeSequence:
-      sequences.setPendingReportSelectedJudgeSequence,
-  },
+type PendingReportListParams = {
+  pendingItems: any[];
+};
+
+const PendingReportListDeps = {
+  hasPendingItemsResults: state.pendingReports.hasPendingItemsResults,
+  pendingItemsTotal: state.pendingReports.pendingItemsTotal,
+  pendingReportListHelper: state.pendingReportListHelper,
+  setPendingReportSelectedJudgeSequence:
+    sequences.setPendingReportSelectedJudgeSequence,
+  pendingReportTableSortData: state[STATE_KEYS.PENDING_REPORT_TABLE_SORT],
+  sortTableSequence: sequences.sortTableSequence,
+};
+
+export const PendingReportList = connect<
+  PendingReportListParams,
+  typeof PendingReportListDeps
+>(
+  PendingReportListDeps,
   function PendingReportList({
     hasPendingItemsResults,
     pendingItems,
     pendingItemsTotal,
     pendingReportListHelper,
     setPendingReportSelectedJudgeSequence,
+    pendingReportTableSortData,
+    sortTableSequence,
   }) {
     const paginatorTop = useRef(null);
 
@@ -100,11 +116,48 @@ export const PendingReportList = connect(
           <thead>
             <tr>
               <th />
-              <th aria-label="Docket Number">Docket No.</th>
-              <th>Date Filed</th>
-              <th>Case Title</th>
-              <th>Filings and Proceedings</th>
-              <th>Case Status</th>
+              <SortableHeader
+                screenReaderTitle="Docket Number"
+                hideOnMobile={true}
+                sortField="sortableDocketNumber"
+                tableSort={pendingReportTableSortData}
+                sortType="string"
+                title="Docket No."
+                onSort={sortTableSequence}
+                stateKey={STATE_KEYS.PENDING_REPORT_TABLE_SORT}
+              />
+              <SortableHeader
+                sortField="receivedAt"
+                sortType="date"
+                tableSort={pendingReportTableSortData}
+                title="Filed Date"
+                onSort={sortTableSequence}
+                stateKey={STATE_KEYS.PENDING_REPORT_TABLE_SORT}
+              />
+              <SortableHeader
+                sortField="caseTitle"
+                sortType="string"
+                tableSort={pendingReportTableSortData}
+                title="Case Title"
+                onSort={sortTableSequence}
+                stateKey={STATE_KEYS.PENDING_REPORT_TABLE_SORT}
+              />
+              <SortableHeader
+                sortField="formattedName"
+                sortType="string"
+                tableSort={pendingReportTableSortData}
+                title="Filings and Proceedings"
+                onSort={sortTableSequence}
+                stateKey={STATE_KEYS.PENDING_REPORT_TABLE_SORT}
+              />
+              <SortableHeader
+                sortField="formattedStatus"
+                sortType="string"
+                tableSort={pendingReportTableSortData}
+                title="Case Status"
+                onSort={sortTableSequence}
+                stateKey={STATE_KEYS.PENDING_REPORT_TABLE_SORT}
+              />
               <th>Judge</th>
             </tr>
           </thead>

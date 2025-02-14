@@ -7,17 +7,24 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
 
-export const PendingReport = connect(
-  {
-    exportPendingReportSequence: sequences.exportPendingReportSequence,
-    hasPendingItemsResults: state.pendingReports.hasPendingItemsResults,
-    pendingReportHelper: state.pendingReportHelper,
-  },
+type PendingReportProps = {};
+const PendingReportDeps = {
+  exportPendingReportSequence: sequences.exportPendingReportSequence,
+  hasPendingItemsResults: state.pendingReports.hasPendingItemsResults,
+  pendingReportHelper: state.pendingReportHelper,
+};
+
+export const PendingReport = connect<
+  PendingReportProps,
+  typeof PendingReportDeps
+>(
+  PendingReportDeps,
   function PendingReport({
     exportPendingReportSequence,
     hasPendingItemsResults,
     pendingReportHelper,
   }) {
+    const { printUrl, pendingItems } = pendingReportHelper;
     const [isSubmitDebounced, setIsSubmitDebounced] = useState(false);
 
     const debounceSubmit = timeout => {
@@ -61,7 +68,7 @@ export const PendingReport = connect(
                     aria-label="print pending report"
                     className="margin-top-2"
                     data-testid="print-pending-report"
-                    href={pendingReportHelper.printUrl}
+                    href={printUrl}
                     icon="print"
                   >
                     Printable Report
@@ -72,7 +79,7 @@ export const PendingReport = connect(
           </div>
 
           <div className="margin-top-5">
-            <PendingReportList />
+            <PendingReportList pendingItems={pendingItems} />
           </div>
         </section>
       </>
