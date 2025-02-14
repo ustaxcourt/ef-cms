@@ -50,10 +50,10 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - v27-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v28-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - restore_cache:
           keys:
-            - v27-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v28-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: |
@@ -75,7 +75,7 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v27-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v28-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
       - save_cache:
@@ -87,7 +87,7 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - v27-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v28-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: |
@@ -100,7 +100,7 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v27-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v28-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
 
