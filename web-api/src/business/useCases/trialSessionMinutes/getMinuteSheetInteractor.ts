@@ -20,11 +20,11 @@ export const getMinuteSheetInteractor = async (
     trialSessionId,
   });
 
+  if (typeof minuteSheet === 'undefined') return {};
+
   const isValid = validateMinuteSheet(minuteSheet?.content);
 
-  if (!isValid || !minuteSheet.content) {
-    throw new InvalidEntityError('Minute Sheet Entity is invalid.');
-  }
+  if (!isValid) throw new InvalidEntityError('Minute Sheet Entity is invalid.');
 
   return minuteSheet.content;
 };
