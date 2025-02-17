@@ -1,10 +1,15 @@
-import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { TrialSessionTypes } from '@shared/business/entities/EntityConstants';
 import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 import { getPublicTrialSessionsInteractor } from '@shared/proxies/trialSessions/getPublicTrialSessionsProxy';
+import { getPublicUsersInSectionInteractor } from '@shared/proxies/users/getPublicUsersInSectionProxy';
 import { useQuery } from '@tanstack/react-query';
 import { createRoute, useNavigate } from '@tanstack/react-router';
 import { applicationContextPublic } from '@web-client/applicationContextPublic';
+import {
+  TrialSessionRow,
+  TrialSessionWeek,
+} from '@web-client/presenter/computeds/trialSessionsHelper';
+import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
@@ -15,58 +20,157 @@ import {
 } from '@web-client/ustc-ui/Responsive/Responsive';
 import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
 import { BigHeader } from '@web-client/views/BigHeader';
-import React, { useRef, useState } from 'react';
+import React, { ReactNode, useRef, useState } from 'react';
 import { publicDefaultLayoutRoute } from 'web-client-public/src/routes/_default-layout/_defaultLayoutComponent';
+import { publicTrialSessionsComputed } from 'web-client-public/src/routes/trial-sessions/PublicTrialSessionsComputed';
 import { PublicTrialSessionsFilters } from 'web-client-public/src/routes/trial-sessions/PublicTrialSessionsFilters';
+import { PublicTrialSessionsTable } from 'web-client-public/src/routes/trial-sessions/PublicTrialSessionsTable';
 
-export function PublicTrialSessions() {
+export function PublicTrialSessionsPage() {
   const {
     data: publicTrialSessionsData,
-    isLoading,
-    error,
+    isLoading: isLoadingTrialSessions,
+    error: errorFetchingTrialSessions,
   } = useQuery({
     queryKey: ['/public-api/trial-sessions'],
     queryFn: () => getPublicTrialSessionsInteractor(applicationContextPublic),
   });
-  const urlparams = publicTrialSessionsRoute.useSearch();
 
-  const { activePage, setActivePage, pageRecords, totalPages } =
-    useClientSidePaginator(publicTrialSessionsData || [], 100);
+  const {
+    data: judges,
+    isLoading: isLoadingJudges,
+    error: errorFetchingJudges,
+  } = useQuery({
+    queryKey: ['/public-api/sections'],
+    queryFn: () =>
+      getPublicUsersInSectionInteractor(applicationContextPublic, {
+        section: 'judge',
+      }),
+  });
+  const trialSessionFilters = publicTrialSessionsRoute.useSearch();
+
   const fetchedTrialSessionsTimestamp = formatNow(
     FORMATS.CURRENT_AS_OF_TIMESTAMP,
   );
+  const navigate = useNavigate({ from: '/trial-sessions' });
 
-  if (publicTrialSessionsData) {
+  if (publicTrialSessionsData && judges) {
+    const {
+      filtersHaveBeenModified,
+      sessionTypeOptions,
+      trialCitiesByState,
+      trialSessionRows,
+      trialSessionsCount,
+      judgeOptions,
+    } = publicTrialSessionsComputed({
+      trialSessionFilters,
+      trialSessions: publicTrialSessionsData,
+      trialSessionJudges: judges,
+    });
     return (
-      <>
-        <BigHeader text="Scheduled Trial Sessions" />
-        <NonMobilePublicTrialSessions
-          fetchedTrialSessionsTimestamp={fetchedTrialSessionsTimestamp}
-          trialSessionsFilters={urlparams}
-        />
-        <MobilePublicTrialSessions
-          fetchedTrialSessionsTimestamp={fetchedTrialSessionsTimestamp}
-          trialSessionsFilters={urlparams}
-        />
-      </>
+      <PublicTrialSessions
+        fetchedTrialSessionsTimestamp={fetchedTrialSessionsTimestamp}
+        trialSessionFilters={trialSessionFilters}
+        setTrialSessionsFilters={filters => {
+          void navigate({ search: filters });
+        }}
+        trialSessionRows={trialSessionRows}
+        filtersHaveBeenModified={filtersHaveBeenModified}
+        judgeOptions={judgeOptions}
+        sessionTypeOptions={sessionTypeOptions}
+        trialCitiesByState={trialCitiesByState}
+        trialSessionsCount={trialSessionsCount}
+      />
     );
   }
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading trial sessions.</div>;
+  if (isLoadingTrialSessions || isLoadingJudges) return <div>Loading...</div>;
+  if (errorFetchingTrialSessions || errorFetchingJudges)
+    return <div>Error loading trial sessions.</div>;
+}
+
+export function PublicTrialSessions({
+  trialSessionFilters,
+  setTrialSessionsFilters,
+  trialSessionRows,
+  fetchedTrialSessionsTimestamp,
+  filtersHaveBeenModified,
+  judgeOptions,
+  sessionTypeOptions,
+  trialCitiesByState,
+  trialSessionsCount,
+}: {
+  trialSessionFilters: TrialSessionFilters;
+  setTrialSessionsFilters: (filters: TrialSessionFilters) => void;
+  trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
+  fetchedTrialSessionsTimestamp: string;
+  filtersHaveBeenModified: boolean;
+  judgeOptions: Array<{ label: string; value: string }>;
+  sessionTypeOptions: Array<{ label: string; value: string }>;
+  trialCitiesByState: Array<{
+    label: string;
+    options: {
+      label: string;
+      value: string;
+    }[];
+  }>;
+  trialSessionsCount: number;
+}) {
+  return (
+    <>
+      <BigHeader text="Scheduled Trial Sessions" />
+      <NonMobilePublicTrialSessions
+        fetchedTrialSessionsTimestamp={fetchedTrialSessionsTimestamp}
+        trialSessionsFilters={trialSessionFilters}
+        setTrialSessionsFilters={setTrialSessionsFilters}
+        trialSessionRows={trialSessionRows}
+        filtersHaveBeenModified={filtersHaveBeenModified}
+        judgeOptions={judgeOptions}
+        sessionTypeOptions={sessionTypeOptions}
+        trialCitiesByState={trialCitiesByState}
+        trialSessionsCount={trialSessionsCount}
+      />
+      {/* <MobilePublicTrialSessions
+        fetchedTrialSessionsTimestamp={fetchedTrialSessionsTimestamp}
+        trialSessionsFilters={trialSessionFilters}
+      /> */}
+    </>
+  );
 }
 
 function NonMobilePublicTrialSessions({
-  displayProgressSpinnerSequence,
   fetchedTrialSessionsTimestamp,
   trialSessionsFilters,
-  publicTrialSessionsHelper,
-  resetPublicTrialSessionsDataSequence,
-  updateFormValueSequence,
+  setTrialSessionsFilters,
+  trialSessionRows,
+  sessionTypeOptions,
+  trialCitiesByState,
+  judgeOptions,
+  filtersHaveBeenModified,
+  trialSessionsCount,
 }: {
   fetchedTrialSessionsTimestamp: string;
+  filtersHaveBeenModified: boolean;
   trialSessionsFilters: TrialSessionFilters;
+  setTrialSessionsFilters: (filters: TrialSessionFilters) => void;
+  trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
+  sessionTypeOptions: {
+    label: string;
+    value: string;
+  }[];
+  trialCitiesByState: {
+    label: string;
+    options: { label: string; value: string }[];
+  }[];
+  judgeOptions: {
+    label: string;
+    value: string;
+  }[];
+  trialSessionsCount: number;
 }) {
+  const { activePage, setActivePage, pageRecords, totalPages } =
+    useClientSidePaginator(trialSessionRows, 100);
+
   return (
     <NonPhone>
       <section className="usa-section grid-container">
@@ -81,17 +185,11 @@ function NonMobilePublicTrialSessions({
               </div>
             </Mobile>
             <PublicTrialSessionsFilters
-              displayProgressSpinnerSequence={displayProgressSpinnerSequence}
-              judges={trialSessionsFilters.judges}
-              locations={trialSessionsFilters.locations}
-              proceedingType={trialSessionsFilters.proceedingType}
-              sessionTypeOptions={publicTrialSessionsHelper.sessionTypeOptions}
-              sessionTypes={trialSessionsFilters.sessionTypes}
-              trialCitiesByState={publicTrialSessionsHelper.trialCitiesByState}
-              trialSessionJudgeOptions={
-                publicTrialSessionsHelper.trialSessionJudgeOptions
-              }
-              updateFormValueSequence={updateFormValueSequence}
+              sessionTypeOptions={sessionTypeOptions}
+              trialCitiesByState={trialCitiesByState}
+              judgeOptions={judgeOptions}
+              trialSessionsFilters={trialSessionsFilters}
+              setTrialSessionsFilters={setTrialSessionsFilters}
             />
           </div>
           <NonMobile>
@@ -104,10 +202,9 @@ function NonMobilePublicTrialSessions({
           <Button
             link
             data-testid="trial-sessions-reset-filters-button"
-            disabled={!publicTrialSessionsHelper.filtersHaveBeenModified}
+            disabled={!filtersHaveBeenModified}
             onClick={() => {
-              resetPublicTrialSessionsDataSequence();
-              displayProgressSpinnerSequence({ timeInSeconds: 0.25 });
+              setTrialSessionsFilters(defaultTrialSessionFilters);
             }}
           >
             Reset Filters
@@ -115,11 +212,16 @@ function NonMobilePublicTrialSessions({
         </div>
         <div className="grid-row padding-top-1">
           <TablePagination
-            pageNumber={publicTrialSessionsData.pageNumber || 0}
-            totalPages={publicTrialSessionsHelper.totalPages}
-            updateFormValueSequence={updateFormValueSequence}
+            activePage={activePage}
+            totalPages={totalPages}
+            onPageChange={page => {
+              setActivePage(page);
+            }}
           >
-            <PublicTrialSessionsTable />
+            <PublicTrialSessionsTable
+              trialSessionRows={pageRecords}
+              trialSessionsCount={trialSessionsCount}
+            />
           </TablePagination>
         </div>
       </section>
@@ -127,149 +229,158 @@ function NonMobilePublicTrialSessions({
   );
 }
 
-function MobilePublicTrialSessions({
-  displayProgressSpinnerSequence,
-  fetchedTrialSessionsTimestamp,
-  trialSessionsFilters,
-  publicTrialSessionsHelper,
-  resetPublicTrialSessionsDataSequence,
-  updateFormValueSequence,
+// function MobilePublicTrialSessions({
+//   displayProgressSpinnerSequence,
+//   fetchedTrialSessionsTimestamp,
+//   trialSessionsFilters,
+//   publicTrialSessionsHelper,
+//   resetPublicTrialSessionsDataSequence,
+//   updateFormValueSequence,
+// }: {
+//   fetchedTrialSessionsTimestamp: string;
+//   trialSessionsFilters: TrialSessionFilters;
+// }) {
+//   const [isOpen, setIsOpen] = useState(false);
+
+//   const publicTrialSessionUpdateFormValueSequence = (
+//     ...args: Parameters<typeof updateFormValueSequence>
+//   ) => {
+//     if (displayProgressSpinnerSequence)
+//       displayProgressSpinnerSequence({ timeInSeconds: 0.25 });
+//     updateFormValueSequence(...args);
+//     updateFormValueSequence({
+//       key: 'pageNumber',
+//       root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
+//       value: 0,
+//     });
+//   };
+
+//   return (
+//     <Phone>
+//       <section className="usa-section grid-container">
+//         <FetchedTimeMessage
+//           fetchedDateString={fetchedTrialSessionsTimestamp}
+//         ></FetchedTimeMessage>
+//         <div className="padding-top-3">
+//           <PublicTrialSessionsRemoteProceedingsCard />
+//         </div>
+
+//         <Accordion onClick={() => setIsOpen(!isOpen)}>
+//           <AccordionItem contentClassName="display-none" title="Filters">
+//             {''}
+//           </AccordionItem>
+//         </Accordion>
+
+//         {isOpen && (
+//           <>
+//             <PublicTrialSessionsFilters
+//               displayProgressSpinnerSequence={displayProgressSpinnerSequence}
+//               judges={trialSessionsFilters.judges}
+//               locations={trialSessionsFilters.locations}
+//               proceedingType={trialSessionsFilters.proceedingType}
+//               sessionTypeOptions={publicTrialSessionsHelper.sessionTypeOptions}
+//               sessionTypes={trialSessionsFilters.sessionTypes}
+//               trialCitiesByState={publicTrialSessionsHelper.trialCitiesByState}
+//               trialSessionJudgeOptions={
+//                 publicTrialSessionsHelper.trialSessionJudgeOptions
+//               }
+//               updateFormValueSequence={updateFormValueSequence}
+//             />
+//             <Button
+//               link
+//               data-testid="trial-sessions-reset-filters-button"
+//               disabled={!publicTrialSessionsHelper.filtersHaveBeenModified}
+//               onClick={() => {
+//                 resetPublicTrialSessionsDataSequence();
+//                 displayProgressSpinnerSequence({ timeInSeconds: 0.25 });
+//               }}
+//             >
+//               Reset Filters
+//             </Button>
+//           </>
+//         )}
+
+//         <div className="padding-top-2">
+//           {Object.entries(trialSessionsFilters.sessionTypes).map(
+//             ([sessionTypeKey, sessionTypeLabel]) => (
+//               <PillButton
+//                 key={sessionTypeLabel}
+//                 text={sessionTypeLabel}
+//                 onRemove={() => {
+//                   publicTrialSessionUpdateFormValueSequence({
+//                     key: `sessionTypes.${sessionTypeKey}`,
+//                     root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
+//                     value: undefined,
+//                   });
+//                 }}
+//               />
+//             ),
+//           )}
+
+//           {Object.entries(trialSessionsFilters.locations).map(
+//             ([sessionTypeKey, sessionTypeLabel]) => (
+//               <PillButton
+//                 key={sessionTypeLabel}
+//                 text={sessionTypeLabel}
+//                 onRemove={() => {
+//                   publicTrialSessionUpdateFormValueSequence({
+//                     key: `locations.${sessionTypeKey}`,
+//                     root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
+//                     value: undefined,
+//                   });
+//                 }}
+//               />
+//             ),
+//           )}
+
+//           {Object.entries(trialSessionsFilters.judges).map(
+//             ([sessionTypeKey, sessionTypeLabel]) => (
+//               <PillButton
+//                 key={sessionTypeLabel}
+//                 text={sessionTypeLabel}
+//                 onRemove={() => {
+//                   publicTrialSessionUpdateFormValueSequence({
+//                     key: `judges.${sessionTypeKey}`,
+//                     root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
+//                     value: undefined,
+//                   });
+//                 }}
+//               />
+//             ),
+//           )}
+//         </div>
+//         <TablePagination
+//           pageNumber={publicTrialSessionsData.pageNumber || 0}
+//           totalPages={publicTrialSessionsHelper.totalPages}
+//           updateFormValueSequence={updateFormValueSequence}
+//         >
+//           <PublicMobileTrialSessionsTable />
+//         </TablePagination>
+//       </section>
+//     </Phone>
+//   );
+// }
+
+function FetchedTimeMessage({
+  fetchedDateString,
 }: {
-  fetchedTrialSessionsTimestamp: string;
-  trialSessionsFilters: TrialSessionFilters;
+  fetchedDateString: string;
 }) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const publicTrialSessionUpdateFormValueSequence = (
-    ...args: Parameters<typeof updateFormValueSequence>
-  ) => {
-    if (displayProgressSpinnerSequence)
-      displayProgressSpinnerSequence({ timeInSeconds: 0.25 });
-    updateFormValueSequence(...args);
-    updateFormValueSequence({
-      key: 'pageNumber',
-      root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
-      value: 0,
-    });
-  };
-
-  return (
-    <Phone>
-      <section className="usa-section grid-container">
-        <FetchedTimeMessage
-          fetchedDateString={fetchedTrialSessionsTimestamp}
-        ></FetchedTimeMessage>
-        <div className="padding-top-3">
-          <PublicTrialSessionsRemoteProceedingsCard />
-        </div>
-
-        <Accordion onClick={() => setIsOpen(!isOpen)}>
-          <AccordionItem contentClassName="display-none" title="Filters">
-            {''}
-          </AccordionItem>
-        </Accordion>
-
-        {isOpen && (
-          <>
-            <PublicTrialSessionsFilters
-              displayProgressSpinnerSequence={displayProgressSpinnerSequence}
-              judges={trialSessionsFilters.judges}
-              locations={trialSessionsFilters.locations}
-              proceedingType={trialSessionsFilters.proceedingType}
-              sessionTypeOptions={publicTrialSessionsHelper.sessionTypeOptions}
-              sessionTypes={trialSessionsFilters.sessionTypes}
-              trialCitiesByState={publicTrialSessionsHelper.trialCitiesByState}
-              trialSessionJudgeOptions={
-                publicTrialSessionsHelper.trialSessionJudgeOptions
-              }
-              updateFormValueSequence={updateFormValueSequence}
-            />
-            <Button
-              link
-              data-testid="trial-sessions-reset-filters-button"
-              disabled={!publicTrialSessionsHelper.filtersHaveBeenModified}
-              onClick={() => {
-                resetPublicTrialSessionsDataSequence();
-                displayProgressSpinnerSequence({ timeInSeconds: 0.25 });
-              }}
-            >
-              Reset Filters
-            </Button>
-          </>
-        )}
-
-        <div className="padding-top-2">
-          {Object.entries(trialSessionsFilters.sessionTypes).map(
-            ([sessionTypeKey, sessionTypeLabel]) => (
-              <PillButton
-                key={sessionTypeLabel}
-                text={sessionTypeLabel}
-                onRemove={() => {
-                  publicTrialSessionUpdateFormValueSequence({
-                    key: `sessionTypes.${sessionTypeKey}`,
-                    root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
-                    value: undefined,
-                  });
-                }}
-              />
-            ),
-          )}
-
-          {Object.entries(trialSessionsFilters.locations).map(
-            ([sessionTypeKey, sessionTypeLabel]) => (
-              <PillButton
-                key={sessionTypeLabel}
-                text={sessionTypeLabel}
-                onRemove={() => {
-                  publicTrialSessionUpdateFormValueSequence({
-                    key: `locations.${sessionTypeKey}`,
-                    root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
-                    value: undefined,
-                  });
-                }}
-              />
-            ),
-          )}
-
-          {Object.entries(trialSessionsFilters.judges).map(
-            ([sessionTypeKey, sessionTypeLabel]) => (
-              <PillButton
-                key={sessionTypeLabel}
-                text={sessionTypeLabel}
-                onRemove={() => {
-                  publicTrialSessionUpdateFormValueSequence({
-                    key: `judges.${sessionTypeKey}`,
-                    root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
-                    value: undefined,
-                  });
-                }}
-              />
-            ),
-          )}
-        </div>
-        <TablePagination
-          pageNumber={publicTrialSessionsData.pageNumber || 0}
-          totalPages={publicTrialSessionsHelper.totalPages}
-          updateFormValueSequence={updateFormValueSequence}
-        >
-          <PublicMobileTrialSessionsTable />
-        </TablePagination>
-      </section>
-    </Phone>
-  );
-}
-
-function FetchedTimeMessage({ fetchedDateString }) {
   return (
     <div>Information on this page is current as of {fetchedDateString}.</div>
   );
 }
 
 function TablePagination({
-  children,
-  pageNumber,
+  activePage,
   totalPages,
-  updateFormValueSequence,
+  onPageChange,
+  children,
+}: {
+  activePage: number;
+  totalPages: number;
+  onPageChange: (selectedPage: number) => void;
+  children: ReactNode;
 }) {
   const paginatorTop = useRef(null);
   if (totalPages <= 1) return children;
@@ -278,14 +389,10 @@ function TablePagination({
       <div className="width-full grid-row margin-bottom-1 padding-top-1 flex-align-center">
         <div className="grid-col" ref={paginatorTop}>
           <Paginator
-            currentPageIndex={pageNumber}
+            currentPageIndex={activePage}
             totalPages={totalPages}
             onPageChange={selectedPage => {
-              updateFormValueSequence({
-                key: 'pageNumber',
-                root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
-                value: selectedPage,
-              });
+              onPageChange(selectedPage);
               focusPaginatorTop(paginatorTop);
             }}
           />
@@ -297,14 +404,10 @@ function TablePagination({
       <div className="width-full grid-row margin-bottom-2 padding-top-3 flex-align-center">
         <div className="grid-col">
           <Paginator
-            currentPageIndex={pageNumber}
+            currentPageIndex={activePage}
             totalPages={totalPages}
             onPageChange={selectedPage => {
-              updateFormValueSequence({
-                key: 'pageNumber',
-                root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
-                value: selectedPage,
-              });
+              onPageChange(selectedPage);
               focusPaginatorTop(paginatorTop);
             }}
           />
@@ -315,7 +418,7 @@ function TablePagination({
   );
 }
 
-export function PublicTrialSessionsRemoteProceedingsCard() {
+function PublicTrialSessionsRemoteProceedingsCard() {
   return (
     <>
       <div className="card" data-testid="remote-proceedings-card">
@@ -350,7 +453,14 @@ export function PublicTrialSessionsRemoteProceedingsCard() {
   );
 }
 
-type TrialSessionFilters = {
+export const defaultTrialSessionFilters: TrialSessionFilters = {
+  judges: {},
+  locations: {},
+  proceedingType: 'All',
+  sessionTypes: {},
+};
+
+export type TrialSessionFilters = {
   judges: Record<string, { name: string; userId: string }>;
   locations: Record<string, string>;
   sessionTypes: Record<string, TrialSessionTypes>;
@@ -358,7 +468,7 @@ type TrialSessionFilters = {
 };
 
 export const publicTrialSessionsRoute = createRoute({
-  component: PublicTrialSessions,
+  component: PublicTrialSessionsPage,
   getParentRoute: () => publicDefaultLayoutRoute,
   path: '/trial-sessions',
   validateSearch: (stuff: { hello: number }) => {

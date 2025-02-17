@@ -9,12 +9,16 @@ import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 import { Select } from '@web-client/ustc-ui/Select/Selects';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import React from 'react';
-import { useNavigate } from '@tanstack/react-router';
+import { TrialSessionFilters } from 'web-client-public/src/routes/trial-sessions/PublicTrialSessions';
 
-type PublicTrialSessionsFiltersProps = {
-  judges: Record<string, { name: string; userId: string }>;
-  locations: Record<string, string>;
-  sessionTypes: Record<string, TrialSessionTypes>;
+export const PublicTrialSessionsFilters = function ({
+  judgeOptions,
+  sessionTypeOptions,
+  trialCitiesByState,
+  trialSessionsFilters,
+  setTrialSessionsFilters,
+}: {
+  judgeOptions: Array<{ label: string; value: string }>;
   sessionTypeOptions: Array<{ label: string; value: string }>;
   trialCitiesByState: Array<{
     label: string;
@@ -23,22 +27,13 @@ type PublicTrialSessionsFiltersProps = {
       value: string;
     }[];
   }>;
-  trialSessionJudgeOptions: Array<{ label: string; value: string }>;
-};
-
-export const PublicTrialSessionsFilters = function ({
-  judges,
-  locations,
-  sessionTypeOptions,
-  sessionTypes,
-  trialCitiesByState,
-  trialSessionJudgeOptions,
-}: PublicTrialSessionsFiltersProps) {
+  setTrialSessionsFilters: (filters: TrialSessionFilters) => void;
+  trialSessionsFilters: TrialSessionFilters;
+}) {
   const PROCEEDING_TYPES = Object.values({
     all: 'All',
     ...TRIAL_SESSION_PROCEEDING_TYPES,
   });
-  const navigate = useNavigate({ from: '/trial-sessions' });
 
   return (
     <>
@@ -63,13 +58,13 @@ export const PublicTrialSessionsFilters = function ({
                 name="proceedingType"
                 type="radio"
                 value={proceedingType}
-                onChange={e =>
-                  navigate({
-                    search: prev => ({
-                      ...prev,
-                      proceedingType: e.target.value,
-                    }),
-                  })
+                onChange={e => {}
+                  // navigate({
+                  //   search: prev => ({
+                  //     ...prev,
+                  //     proceedingType: e.target.value,
+                  //   }),
+                  // })
                 }
               />
               <label
@@ -119,7 +114,7 @@ export const PublicTrialSessionsFilters = function ({
             <FilterSelect
               label="Judge"
               name="judges"
-              options={trialSessionJudgeOptions}
+              options={judgeOptions}
               selectedValues={judges}
               onChange={handleUpdateFormValue}
             />
