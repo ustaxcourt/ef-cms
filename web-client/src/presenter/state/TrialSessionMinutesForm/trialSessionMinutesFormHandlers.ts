@@ -1,4 +1,4 @@
-import { JudgeOption } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
+import { Judge } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 
 export type OnChangeHandler = ({
   name,
@@ -9,7 +9,7 @@ export type OnChangeHandler = ({
   name: string;
   rowInfo?: { key: string; nestedName?: string };
   section: string;
-  value: string | boolean | JudgeOption;
+  value: string | boolean | Judge;
 }) => void;
 
 export type AddRowHandler = ({
