@@ -193,7 +193,7 @@ export const cases105_109: RawCase[] = [
     orderForRatification: false,
     orderToShowCause: false,
     partyType: PARTY_TYPES.petitioner,
-    petitionPaymentStatus: PAYMENT_STATUS.UNPAID, // 10502 added
+    petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: '2019-07-12T17:09:41.026Z',
@@ -301,7 +301,7 @@ export const cases105_109: RawCase[] = [
     orderForRatification: false,
     orderToShowCause: false,
     partyType: PARTY_TYPES.trust,
-    petitionPaymentStatus: PAYMENT_STATUS.UNPAID, // 10502 added
+    petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     preferredTrialCity: 'Houston, Texas',
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: '2019-08-16T19:21:46.146Z',
@@ -333,7 +333,7 @@ export const cases105_109: RawCase[] = [
     filingType: 'Myself',
     initialCaption: 'Brett Osborne, Petitioner',
     partyType: PARTY_TYPES.petitioner,
-    petitionPaymentStatus: PAYMENT_STATUS.UNPAID, // 10502 added
+    petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     preferredTrialCity: 'Birmingham, Alabama',
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: '2019-03-01T21:40:46.415Z',

@@ -50,6 +50,8 @@ export const sealCaseContactAddress = async (
   }
   contactToSeal.isAddressSealed = true;
 
+  caseEntity.updatePetitioner(contactToSeal);
+
   const updatedCase = await applicationContext
     .getUseCaseHelpers()
     .updateCaseAndAssociations({

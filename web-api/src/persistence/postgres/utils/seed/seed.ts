@@ -73,7 +73,6 @@ export const seed = async () => {
     table: null,
   });
 
-  // TODO 10502: might need to index this
   await getDbWriter({
     cb: writer =>
       writer
