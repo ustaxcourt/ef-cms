@@ -231,6 +231,30 @@ describe('processFormattedMessages', () => {
 
       expect(result).toMatchObject(messages);
     });
+
+    it('should not mutate the original array and consistently sort the array', () => {
+      const formattedCaseMessages = [
+        { createdAt: '2025-02-14T18:13:48.341Z', docketNumber: '101-25' },
+        { createdAt: '2020-08-18T18:07:36.333Z', docketNumber: '104-19' },
+        { createdAt: '2025-02-14T18:14:32.069Z', docketNumber: '101-25' },
+      ];
+
+      const originalFormattedCaseMessages = [...formattedCaseMessages];
+
+      const firstSort = sortFormattedMessages(formattedCaseMessages, {
+        sortField: 'createdAt',
+        sortOrder: 'asc',
+      });
+
+      expect(formattedCaseMessages).toEqual(originalFormattedCaseMessages);
+
+      const secondSort = sortFormattedMessages(formattedCaseMessages, {
+        sortField: 'createdAt',
+        sortOrder: 'asc',
+      });
+
+      expect(secondSort).toEqual(firstSort);
+    });
   });
 
   describe('sortCompletedMessages', () => {
