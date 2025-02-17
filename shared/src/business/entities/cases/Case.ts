@@ -1249,7 +1249,10 @@ export class Case extends JoiValidationEntity {
         ? this.initialDocketNumberSuffix
         : '');
 
-    const newDocketNumber = this.docketNumber + (this.docketNumberSuffix || '');
+    const newDocketNumber = Case.getDocketNumberWithSuffix({
+      docketNumber: this.docketNumber,
+      docketNumberSuffix: this.docketNumberSuffix,
+    });
 
     this.docketEntries.forEach(docketEntry => {
       const result = docketNumberRegex.exec(docketEntry.documentTitle);
