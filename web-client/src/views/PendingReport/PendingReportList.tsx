@@ -115,13 +115,14 @@ export function PendingReportList({
       >
         <thead>
           <tr>
-            <th />
+            <th className="icon-column" />
             <SortableHeader
               screenReaderTitle="Docket Number"
               hideOnMobile={true}
               sortField="sortableDocketNumber"
               tableSort={pendingReportTableSortData}
               sortType="string"
+              className="no-wrap"
               title="Docket No."
               onSort={sortTableSequence}
               stateKey={STATE_KEYS.PENDING_REPORT_TABLE_SORT}
@@ -130,6 +131,7 @@ export function PendingReportList({
               sortField="receivedAt"
               sortType="date"
               tableSort={pendingReportTableSortData}
+              className="no-wrap"
               title="Filed Date"
               onSort={sortTableSequence}
               stateKey={STATE_KEYS.PENDING_REPORT_TABLE_SORT}
@@ -138,6 +140,7 @@ export function PendingReportList({
               sortField="caseTitle"
               sortType="string"
               tableSort={pendingReportTableSortData}
+              className="no-wrap"
               title="Case Title"
               onSort={sortTableSequence}
               stateKey={STATE_KEYS.PENDING_REPORT_TABLE_SORT}
@@ -146,6 +149,7 @@ export function PendingReportList({
               sortField="formattedName"
               sortType="string"
               tableSort={pendingReportTableSortData}
+              className="no-wrap"
               title="Filings and Proceedings"
               onSort={sortTableSequence}
               stateKey={STATE_KEYS.PENDING_REPORT_TABLE_SORT}
@@ -154,6 +158,7 @@ export function PendingReportList({
               sortField="formattedStatus"
               sortType="string"
               tableSort={pendingReportTableSortData}
+              className="no-wrap"
               title="Case Status"
               onSort={sortTableSequence}
               stateKey={STATE_KEYS.PENDING_REPORT_TABLE_SORT}
