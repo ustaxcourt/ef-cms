@@ -61,8 +61,8 @@ function getFilesToCheck(
   return fileToCheck;
 }
 
-const branchDirPath = './';
-const targetDirPath = '../../targetBranch';
+const branchDirPath = './currentBranch';
+const targetDirPath = './targetBranch';
 const branchTypescriptErrorMap = getTypescriptErrorMap(branchDirPath);
 const targetTypescriptErrorMap = getTypescriptErrorMap(targetDirPath);
 
