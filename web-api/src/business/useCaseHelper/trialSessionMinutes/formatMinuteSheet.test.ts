@@ -42,7 +42,7 @@ import {
 import { invert } from 'lodash';
 import {
   MinuteSheet,
-  PetitionerAppearance,
+  Appearance,
 } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { mockMinuteSheet } from '@shared/test/mockMinuteSheet';
@@ -333,7 +333,7 @@ describe('formatMinuteSheet', () => {
                 PETITIONER_ROLE_OPTIONS.counsel
               ],
             },
-          ] as PetitionerAppearance[],
+          ] as Appearance[],
         };
         const result = formatPetitionerAppearances(petitionersSection);
         expect(result).toEqual([
@@ -362,7 +362,7 @@ describe('formatMinuteSheet', () => {
                 PETITIONER_ROLE_OPTIONS.proSe
               ],
             },
-          ] as PetitionerAppearance[],
+          ] as Appearance[],
         };
         const result = formatPetitionerAppearances(petitionersSection);
         expect(result).toEqual([
@@ -381,7 +381,7 @@ describe('formatMinuteSheet', () => {
                 PETITIONER_ROLE_OPTIONS.proSe
               ],
             },
-          ] as PetitionerAppearance[],
+          ] as Appearance[],
         };
         const result = formatPetitionerAppearances(petitionersSection);
         expect(result).toEqual([
@@ -400,7 +400,7 @@ describe('formatMinuteSheet', () => {
                 PETITIONER_ROLE_OPTIONS.proSe
               ],
             },
-          ] as PetitionerAppearance[],
+          ] as Appearance[],
         };
         const result = formatPetitionerAppearances(petitionersSection);
         expect(result).toEqual([`(${PETITIONER_ROLE_OPTIONS.proSe})`]);
@@ -415,7 +415,7 @@ describe('formatMinuteSheet', () => {
               name: '',
               role: undefined,
             },
-          ] as PetitionerAppearance[],
+          ] as Appearance[],
         };
         const result = formatPetitionerAppearances(petitionersSection);
         expect(result).toEqual([]);

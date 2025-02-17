@@ -10,7 +10,6 @@ import {
   Exhibit,
   Judge,
   Motion,
-  PetitionerAppearance,
   Witness,
 } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 
@@ -22,7 +21,7 @@ type KeyedEntry = {
 type KeyedCaseMetadataEntry = KeyedEntry & CalendarEvent;
 type KeyedCaseMetadataEntryByKey = Record<RenderKey, KeyedCaseMetadataEntry>;
 
-type KeyedPartyFormFields = KeyedEntry & (Appearance | PetitionerAppearance);
+type KeyedPartyFormFields = KeyedEntry & Appearance;
 export type KeyedPartyFormFieldsByRenderKey = Record<
   RenderKey,
   KeyedPartyFormFields

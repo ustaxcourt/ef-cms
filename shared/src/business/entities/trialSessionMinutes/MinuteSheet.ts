@@ -33,7 +33,7 @@ export type MinuteSheet = {
   appearances: {
     petitioners: {
       noAppearance: boolean;
-      appearances: PetitionerAppearance[];
+      appearances: Appearance[];
     };
     respondents: Appearance[];
   };
@@ -81,9 +81,6 @@ export type CalendarEvent = Event & {
 export type Appearance = {
   name: string;
   datesOfAppearance: string;
-};
-
-export type PetitionerAppearance = Appearance & {
   role?: PetitionerRoleOption;
 };
 
