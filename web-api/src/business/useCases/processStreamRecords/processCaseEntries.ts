@@ -2,6 +2,11 @@ import { NotFoundError } from '@web-api/errors/errors';
 import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
+import { upsertCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/upsertCaseStatistics';
+import { upsertPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/upsertPetitionersOnCase';
+import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
+import { Statistic } from '@shared/business/entities/Statistic';
+import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 
 export const processCaseEntries = async ({
   applicationContext,
@@ -31,6 +36,31 @@ export const processCaseEntries = async ({
       caseMetadataWithCounsel;
   }
 
-  await upsertCases(Object.values(casesToUpsert));
-  // 10502 TODO: upsert petitioners, practitioners, case status history, statistics
+  const postgresUpserts: Promise<void>[] = [
+    upsertCases(Object.values(casesToUpsert)),
+  ];
+  for (const caseRecord of Object.values(casesToUpsert)) {
+    postgresUpserts.push(
+      upsertPetitionersOnCase({
+        docketNumber: caseRecord.docketNumber,
+        petitioners: caseRecord.petitioners.map(p => new Petitioner(p)),
+      }),
+    );
+    postgresUpserts.push(
+      upsertCaseStatusUpdates({
+        docketNumber: caseRecord.docketNumber,
+        statusUpdates: caseRecord.caseStatusHistory || [],
+      }),
+    );
+    if (caseRecord.statistics) {
+      postgresUpserts.push(
+        upsertCaseStatistics({
+          docketNumber: caseRecord.docketNumber,
+          statistics: caseRecord.statistics.map(s => new Statistic(s)),
+        }),
+      );
+    }
+  }
+
+  await Promise.all(postgresUpserts);
 };
