@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { clearMinuteSheetFormStateAction } from './clearMinuteSheetFormState';
-import { mockMinuteSheetFormState } from './minuteSheetMocks';
+import { mockMinuteSheetFormState } from './mockMinuteSheetFormState';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 

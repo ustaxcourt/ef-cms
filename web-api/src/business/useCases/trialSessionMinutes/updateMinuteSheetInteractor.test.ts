@@ -4,7 +4,7 @@ import {
   mockDocketClerkUser,
   mockTrialClerkUser,
 } from '@shared/test/mockAuthUsers';
-import { mockMinuteSheet } from '@web-client/presenter/actions/TrialSessionMinutes/minuteSheetMocks';
+import { mockMinuteSheet } from '@shared/test/mockMinuteSheet';
 import { upsertMinuteSheet } from '@web-api/persistence/postgres/minuteSheets/updateMinuteSheet';
 
 jest.mock(
