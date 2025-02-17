@@ -3,7 +3,6 @@ import { upsertCaseStatistics } from '@web-api/persistence/postgres/cases/statis
 import { upsertPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/upsertPetitionersOnCase';
 import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
 import { Statistic } from '@shared/business/entities/Statistic';
-import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 
 export const processCaseEntries = async ({
@@ -28,7 +27,7 @@ export const processCaseEntries = async ({
     postgresUpserts.push(
       upsertPetitionersOnCase({
         docketNumber: caseRecord.docketNumber,
-        petitioners: caseRecord.petitioners.map(p => new Petitioner(p)),
+        petitionerCase: caseRecord,
       }),
     );
     postgresUpserts.push(

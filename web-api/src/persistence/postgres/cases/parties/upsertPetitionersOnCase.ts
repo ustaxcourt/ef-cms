@@ -1,15 +1,16 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
-// 10502 TODO: This currently requires ALL case petitioners to maintain order. That's dangerous. Maybe pass in case instead, which is slightly less terrible.
 export const upsertPetitionersOnCase = async ({
   docketNumber,
-  petitioners,
+  petitionerCase,
 }: {
   docketNumber: string;
-  petitioners: Petitioner[];
+  petitionerCase: RawCase | Case;
 }) => {
+  const petitioners = petitionerCase.petitioners.map(p => new Petitioner(p));
   await pgInsertInto({
     table: 'dwPetitionerOnCase',
     values: petitioners.map((p, index) => ({
