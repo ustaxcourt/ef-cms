@@ -8,7 +8,7 @@ import { PublicContact, RawPublicContact } from './PublicContact';
 import { PublicDocketEntry } from './PublicDocketEntry';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { compareStrings } from '../../utilities/sortFunctions';
-import { isSealedCase } from './Case';
+import { Case, isSealedCase } from './Case';
 import joi from 'joi';
 
 export class PublicCase extends JoiValidationEntity {
@@ -54,9 +54,10 @@ export class PublicCase extends JoiValidationEntity {
     this.createdAt = rawCase.createdAt;
     this.docketNumber = rawCase.docketNumber;
     this.docketNumberSuffix = rawCase.docketNumberSuffix;
-    this.docketNumberWithSuffix =
-      rawCase.docketNumberWithSuffix ||
-      `${this.docketNumber}${this.docketNumberSuffix || ''}`;
+    this.docketNumberWithSuffix = Case.getDocketNumberWithSuffix({
+      docketNumber: this.docketNumber,
+      docketNumberSuffix: this.docketNumberSuffix,
+    });
     this.hasIrsPractitioner =
       !!rawCase.irsPractitioners && rawCase.irsPractitioners.length > 0;
 

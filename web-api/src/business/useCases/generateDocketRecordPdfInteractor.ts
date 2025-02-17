@@ -126,9 +126,10 @@ export const generateDocketRecordPdfInteractor = async (
       caseCaptionExtension,
       caseDetail: formattedCaseDetail,
       caseTitle,
-      docketNumberWithSuffix: `${caseEntity.docketNumber}${
-        caseEntity.docketNumberSuffix || ''
-      }`,
+      docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
+        docketNumber: caseEntity.docketNumber,
+        docketNumberSuffix: caseEntity.docketNumberSuffix,
+      }),
       entries: formattedCaseDetail.formattedDocketEntries.filter(
         d => d.isOnDocketRecord,
       ),

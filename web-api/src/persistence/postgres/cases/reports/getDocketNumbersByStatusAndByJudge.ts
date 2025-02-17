@@ -60,8 +60,10 @@ export const getDocketNumbersByStatusAndByJudge = async ({
     transformNullToUndefined({
       ...result,
       caseCaption: result.caption,
-      docketNumberWithSuffix:
-        result.docketNumber + (result.docketNumberSuffix || ''),
+      docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
+        docketNumber: result.docketNumber,
+        docketNumberSuffix: result.docketNumberSuffix,
+      }),
       statusDate: result.statusDate ? result.statusDate.toISOString() : '',
     }),
   );
