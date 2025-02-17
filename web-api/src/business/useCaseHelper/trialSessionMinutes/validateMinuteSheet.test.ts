@@ -1,5 +1,5 @@
 import { validateMinuteSheet } from './validateMinuteSheet';
-import { mockMinuteSheet } from '@web-client/presenter/actions/TrialSessionMinutes/minuteSheetMocks';
+import { mockMinuteSheet } from '@shared/test/mockMinuteSheet';
 
 describe('validateMinuteSheet', () => {
   it('should return true for valid minute sheet', () => {

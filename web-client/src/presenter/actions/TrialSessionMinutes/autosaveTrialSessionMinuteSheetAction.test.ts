@@ -1,4 +1,5 @@
-import { mockMinuteSheet, mockMinuteSheetFormState } from './minuteSheetMocks';
+import { mockMinuteSheet } from '@shared/test/mockMinuteSheet';
+import { mockMinuteSheetFormState } from './mockMinuteSheetFormState';
 import { presenter } from '@web-client/presenter/presenter';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { updateMinuteSheetInteractor } from '@shared/proxies/trialSessionMinutes/updateMinuteSheetProxy';

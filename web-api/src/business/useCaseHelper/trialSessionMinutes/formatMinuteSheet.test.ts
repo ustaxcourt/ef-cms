@@ -45,7 +45,7 @@ import {
   PetitionerAppearance,
 } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
-import { mockMinuteSheet } from '@web-client/presenter/actions/TrialSessionMinutes/minuteSheetMocks';
+import { mockMinuteSheet } from '@shared/test/mockMinuteSheet';
 
 describe('formatMinuteSheet', () => {
   describe('formatMinuteSheet', () => {

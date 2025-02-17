@@ -16,7 +16,7 @@ import { getMinuteSheet } from '@web-api/persistence/postgres/minuteSheets/getMi
 import { formatMinuteSheet } from '@web-api/business/useCaseHelper/trialSessionMinutes/formatMinuteSheet';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { mockMinuteSheet } from '@web-client/presenter/actions/TrialSessionMinutes/minuteSheetMocks';
+import { mockMinuteSheet } from '@shared/test/mockMinuteSheet';
 import { mockFormattedMinuteSheet } from '@web-api/business/useCaseHelper/trialSessionMinutes/mockFormattedMinuteSheet';
 
 jest.mock('@web-api/persistence/dynamo/cases/getCaseByDocketNumber', () => ({
