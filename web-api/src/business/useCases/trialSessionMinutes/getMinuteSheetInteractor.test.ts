@@ -4,17 +4,22 @@ import {
   mockDocketClerkUser,
   mockTrialClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { getMinuteSheet } from '@web-api/persistence/postgres/minuteSheets/getMinuteSheet';
+import { validateMinuteSheet } from '@web-api/business/useCaseHelper/trialSessionMinutes/validateMinuteSheet';
 
 jest.mock('@web-api/persistence/postgres/minuteSheets/getMinuteSheet', () => ({
   getMinuteSheet: jest.fn(),
 }));
+const mockGetMinuteSheet = getMinuteSheet as jest.Mock;
 
 jest.mock(
   '@web-api/business/useCaseHelper/trialSessionMinutes/validateMinuteSheet',
   () => ({
-    validateMinuteSheet: jest.fn(),
+    validateMinuteSheet: jest.fn().mockReturnValue(true),
   }),
 );
+const mockValidateMinuteSheet =
+  validateMinuteSheet as unknown as jest.Mock<boolean>;
 
 describe('getMinuteSheetInteractor', () => {
   const mockParams = {
@@ -45,15 +50,8 @@ describe('getMinuteSheetInteractor', () => {
       content: { text: 'Some minute sheet content' },
     };
 
-    const {
-      getMinuteSheet,
-    } = require('@web-api/persistence/postgres/minuteSheets/getMinuteSheet');
-    const {
-      validateMinuteSheet,
-    } = require('@web-api/business/useCaseHelper/trialSessionMinutes/validateMinuteSheet');
-
-    getMinuteSheet.mockResolvedValue(mockMinuteSheet);
-    validateMinuteSheet.mockReturnValue(true);
+    mockGetMinuteSheet.mockResolvedValue(mockMinuteSheet);
+    mockValidateMinuteSheet.mockReturnValue(true);
 
     const result = await getMinuteSheetInteractor(
       mockParams,
@@ -67,15 +65,8 @@ describe('getMinuteSheetInteractor', () => {
       content: { text: 'Invalid content' },
     };
 
-    const {
-      getMinuteSheet,
-    } = require('@web-api/persistence/postgres/minuteSheets/getMinuteSheet');
-    const {
-      validateMinuteSheet,
-    } = require('@web-api/business/useCaseHelper/trialSessionMinutes/validateMinuteSheet');
-
-    getMinuteSheet.mockResolvedValue(mockMinuteSheet);
-    validateMinuteSheet.mockReturnValue(false);
+    mockGetMinuteSheet.mockResolvedValue(mockMinuteSheet);
+    mockValidateMinuteSheet.mockReturnValue(false);
 
     await expect(
       getMinuteSheetInteractor(mockParams, mockTrialClerkUser),
