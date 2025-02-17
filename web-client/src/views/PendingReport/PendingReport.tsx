@@ -6,12 +6,18 @@ import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
+import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
 
 type PendingReportProps = {};
 const PendingReportDeps = {
+  pendingReportTableSortData: state[STATE_KEYS.PENDING_REPORT_TABLE_SORT],
   exportPendingReportSequence: sequences.exportPendingReportSequence,
-  hasPendingItemsResults: state.pendingReports.hasPendingItemsResults,
+  setPendingReportSelectedJudgeSequence:
+    sequences.setPendingReportSelectedJudgeSequence,
+  pendingReportsData: state.pendingReports,
   pendingReportHelper: state.pendingReportHelper,
+  pendingReportListHelper: state.pendingReportListHelper,
+  sortTableSequence: sequences.sortTableSequence,
 };
 
 export const PendingReport = connect<
@@ -21,9 +27,14 @@ export const PendingReport = connect<
   PendingReportDeps,
   function PendingReport({
     exportPendingReportSequence,
-    hasPendingItemsResults,
     pendingReportHelper,
+    pendingReportsData,
+    pendingReportListHelper,
+    pendingReportTableSortData,
+    sortTableSequence,
+    setPendingReportSelectedJudgeSequence,
   }) {
+    const { pendingItemsTotal, hasPendingItemsResults } = pendingReportsData;
     const { printUrl, pendingItems } = pendingReportHelper;
     const [isSubmitDebounced, setIsSubmitDebounced] = useState(false);
 
@@ -79,7 +90,17 @@ export const PendingReport = connect<
           </div>
 
           <div className="margin-top-5">
-            <PendingReportList pendingItems={pendingItems} />
+            <PendingReportList
+              pendingItems={pendingItems}
+              hasPendingItemsResults={hasPendingItemsResults}
+              pendingItemsTotal={pendingItemsTotal}
+              sortTableSequence={sortTableSequence}
+              setPendingReportSelectedJudgeSequence={
+                setPendingReportSelectedJudgeSequence
+              }
+              pendingReportListHelper={pendingReportListHelper}
+              pendingReportTableSortData={pendingReportTableSortData}
+            />
           </div>
         </section>
       </>
