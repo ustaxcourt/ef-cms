@@ -51,7 +51,6 @@ import { createDocketNumber } from '@web-api/persistence/dynamo/cases/docketNumb
 import { createMockDocumentClient } from './createMockDocumentClient';
 import { deleteRecord } from '@web-api/persistence/elasticsearch/deleteRecord';
 import { documentUrlTranslator } from '@web-api/utilities/documentUrlTranslator';
-import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { filterEmptyStrings } from '@shared/business/utilities/filterEmptyStrings';
 import { formatAttachments } from '@shared/business/utilities/formatAttachments';
 import {
@@ -379,9 +378,6 @@ export const createTestApplicationContext = () => {
     createCaseAndAssociations: jest
       .fn()
       .mockImplementation(createCaseAndAssociations),
-    fileAndServeDocumentOnOneCase: jest
-      .fn()
-      .mockImplementation(fileAndServeDocumentOnOneCase),
     generateAndServeDocketEntry: jest
       .fn()
       .mockImplementation(generateAndServeDocketEntry),

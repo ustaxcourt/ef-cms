@@ -77,6 +77,7 @@ export const PartiesFiling = connect(
                 <label
                   className="usa-checkbox__label"
                   htmlFor="party-irs-practitioner"
+                  data-testid="party-irs-practitioner-label"
                 >
                   Respondent
                 </label>
