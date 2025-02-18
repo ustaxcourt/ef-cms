@@ -453,10 +453,10 @@ export const CaseSearchByName = connect(
                   label: '- Select one or more -',
                   value: '',
                 }}
-                options={[{ label: 'label 1', value: 'value 1' }]}
+                options={caseSearchByNameHelper.caseTypeOptions}
               />
             </div>
-            <div className='padding-2'></div>
+            <div className="padding-2"></div>
 
             <Mobile>
               <div className="grid-row">
