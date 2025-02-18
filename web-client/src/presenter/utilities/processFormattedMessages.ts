@@ -58,26 +58,8 @@ export const sortFormattedMessages = (
   );
 
   if (tableSort && tableSort.sortOrder === DESCENDING) {
-    return sortedFormattedMessages.reverse();
+    return [...sortedFormattedMessages].reverse();
   }
-  return sortedFormattedMessages;
-};
-
-export const sortCompletedMessages = (
-  sortedMessages,
-  tableSort: null | TableSort = null,
-) => {
-  const completedMessages = sortedMessages.filter(
-    message => message.isCompleted,
-  );
-
-  if (!tableSort) {
-    return completedMessages.sort((a, b) =>
-      b.completedAt.localeCompare(a.completedAt),
-    );
-  }
-
-  return completedMessages;
 };
 
 // useful for users that have a large amount of messages (ADC Users) since
