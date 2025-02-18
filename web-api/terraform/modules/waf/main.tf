@@ -114,6 +114,8 @@ resource "aws_wafv2_web_acl" "apis" {
       rate_based_statement {
         limit                 = 300
         evaluation_window_sec = 60
+        aggregate_key_type    = "CONSTANT"
+
         scope_down_statement {
           regex_pattern_set_reference_statement {
             arn = aws_wafv2_regex_pattern_set.expensive_requests.arn
