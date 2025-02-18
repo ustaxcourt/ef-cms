@@ -71,7 +71,11 @@ export function PublicTrialSessionsPage() {
         fetchedTrialSessionsTimestamp={fetchedTrialSessionsTimestamp}
         trialSessionFilters={trialSessionFilters}
         setTrialSessionsFilters={filters => {
-          void navigate({ search: filters });
+          void navigate({
+            search: filters,
+            replace: true,
+            resetScroll: false,
+          });
         }}
         trialSessionRows={trialSessionRows}
         filtersHaveBeenModified={filtersHaveBeenModified}
@@ -474,7 +478,6 @@ export const publicTrialSessionsRoute = createRoute({
   getParentRoute: () => publicDefaultLayoutRoute,
   path: '/trial-sessions',
   validateSearch: stuff => {
-    console.log('ValidateSearch', stuff);
     return {
       judges: stuff.judges || defaultTrialSessionFilters.judges,
       locations: stuff.locations || defaultTrialSessionFilters.locations,

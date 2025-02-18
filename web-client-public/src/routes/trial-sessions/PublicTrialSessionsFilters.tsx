@@ -99,9 +99,15 @@ export const PublicTrialSessionsFilters = function ({
                 });
               }}
               onRemove={sessionType => {
-                const newFilters = { ...trialSessionsFilters };
-                delete newFilters.sessionTypes[sessionType];
-                setTrialSessionsFilters(newFilters);
+                const newSelectedSessions = {
+                  ...trialSessionsFilters.sessionTypes,
+                };
+                delete newSelectedSessions[sessionType];
+
+                setTrialSessionsFilters({
+                  ...trialSessionsFilters,
+                  sessionTypes: newSelectedSessions,
+                });
               }}
             />
           </div>
@@ -124,9 +130,15 @@ export const PublicTrialSessionsFilters = function ({
                 });
               }}
               onRemove={location => {
-                const newFilters = { ...trialSessionsFilters };
-                delete newFilters.locations[location];
-                setTrialSessionsFilters(newFilters);
+                const newSelectedLocations = {
+                  ...trialSessionsFilters.locations,
+                };
+                delete newSelectedLocations[location];
+
+                setTrialSessionsFilters({
+                  ...trialSessionsFilters,
+                  locations: newSelectedLocations,
+                });
               }}
             />
           </div>
@@ -148,10 +160,16 @@ export const PublicTrialSessionsFilters = function ({
                   },
                 });
               }}
-              onRemove={judge => {
-                const newFilters = { ...trialSessionsFilters };
-                delete newFilters.judges[judge.userId];
-                setTrialSessionsFilters(newFilters);
+              onRemove={judgeUserId => {
+                const newSelectedJudges = {
+                  ...trialSessionsFilters.judges,
+                };
+                delete newSelectedJudges[judgeUserId];
+
+                setTrialSessionsFilters({
+                  ...trialSessionsFilters,
+                  judges: newSelectedJudges,
+                });
               }}
             />
           </div>
