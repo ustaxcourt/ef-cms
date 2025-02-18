@@ -39,7 +39,7 @@ const config: Config = {
     uuid: require.resolve('uuid'),
   },
   setupFiles: ['core-js'],
-  testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.js`,
+  testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.ts`,
   // testMatch: ['**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)'], // Uncomment to run all local web-client unit tests.
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
@@ -49,5 +49,4 @@ const config: Config = {
   verbose: false,
 };
 
-// eslint-disable-next-line import/no-default-export
 export default config;
