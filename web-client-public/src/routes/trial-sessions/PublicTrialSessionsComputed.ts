@@ -32,7 +32,7 @@ export const publicTrialSessionsComputed = ({
   }[];
   judgeOptions: {
     label: string;
-    value: string;
+    value: { name: string; userId: string };
   }[];
   filtersHaveBeenModified: boolean;
   trialSessionsCount: number;
@@ -62,7 +62,7 @@ export const publicTrialSessionsComputed = ({
 
   const judgeOptions = trialSessionJudges.map(trialSessionJudge => ({
     label: trialSessionJudge.name,
-    value: trialSessionJudge.name,
+    value: { name: trialSessionJudge.name, userId: trialSessionJudge.userId },
   }));
 
   const filtersHaveBeenModified = areAnyFiltersModified(
@@ -76,7 +76,7 @@ export const publicTrialSessionsComputed = ({
     .filter(
       ts => proceedingType === 'All' || ts.proceedingType === proceedingType,
     )
-    .filter(ts => !Object.entries(judges).length || judges[ts.judge?.name!])
+    .filter(ts => !Object.entries(judges).length || judges[ts.judge?.userId!])
     .filter(
       ts => !Object.entries(locations).length || locations[ts.trialLocation!],
     )

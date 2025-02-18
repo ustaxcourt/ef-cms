@@ -3,7 +3,7 @@ import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 import { getPublicTrialSessionsInteractor } from '@shared/proxies/trialSessions/getPublicTrialSessionsProxy';
 import { getPublicUsersInSectionInteractor } from '@shared/proxies/users/getPublicUsersInSectionProxy';
 import { useQuery } from '@tanstack/react-query';
-import { createRoute, useNavigate } from '@tanstack/react-router';
+import { createRoute, useNavigate, useSearch } from '@tanstack/react-router';
 import { applicationContextPublic } from '@web-client/applicationContextPublic';
 import {
   TrialSessionRow,
@@ -11,7 +11,6 @@ import {
 } from '@web-client/presenter/computeds/trialSessionsHelper';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import {
   Mobile,
@@ -20,7 +19,7 @@ import {
 } from '@web-client/ustc-ui/Responsive/Responsive';
 import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
 import { BigHeader } from '@web-client/views/BigHeader';
-import React, { ReactNode, useRef, useState } from 'react';
+import React, { ReactNode, useRef } from 'react';
 import { publicDefaultLayoutRoute } from 'web-client-public/src/routes/_default-layout/_defaultLayoutComponent';
 import { publicTrialSessionsComputed } from 'web-client-public/src/routes/trial-sessions/PublicTrialSessionsComputed';
 import { PublicTrialSessionsFilters } from 'web-client-public/src/routes/trial-sessions/PublicTrialSessionsFilters';
@@ -47,7 +46,7 @@ export function PublicTrialSessionsPage() {
         section: 'judge',
       }),
   });
-  const trialSessionFilters = publicTrialSessionsRoute.useSearch();
+  const trialSessionFilters = useSearch({ from: '/_layout/trial-sessions' });
 
   const fetchedTrialSessionsTimestamp = formatNow(
     FORMATS.CURRENT_AS_OF_TIMESTAMP,
@@ -105,7 +104,10 @@ export function PublicTrialSessions({
   trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
   fetchedTrialSessionsTimestamp: string;
   filtersHaveBeenModified: boolean;
-  judgeOptions: Array<{ label: string; value: string }>;
+  judgeOptions: {
+    label: string;
+    value: { name: string; userId: string };
+  }[];
   sessionTypeOptions: Array<{ label: string; value: string }>;
   trialCitiesByState: Array<{
     label: string;
@@ -164,7 +166,7 @@ function NonMobilePublicTrialSessions({
   }[];
   judgeOptions: {
     label: string;
-    value: string;
+    value: { name: string; userId: string };
   }[];
   trialSessionsCount: number;
 }) {
@@ -471,8 +473,15 @@ export const publicTrialSessionsRoute = createRoute({
   component: PublicTrialSessionsPage,
   getParentRoute: () => publicDefaultLayoutRoute,
   path: '/trial-sessions',
-  validateSearch: (stuff: { hello: number }) => {
+  validateSearch: stuff => {
     console.log('ValidateSearch', stuff);
-    return stuff as unknown as TrialSessionFilters;
+    return {
+      judges: stuff.judges || defaultTrialSessionFilters.judges,
+      locations: stuff.locations || defaultTrialSessionFilters.locations,
+      sessionTypes:
+        stuff.sessionTypes || defaultTrialSessionFilters.sessionTypes,
+      proceedingType:
+        stuff.proceedingType || defaultTrialSessionFilters.proceedingType,
+    } as TrialSessionFilters;
   },
 });

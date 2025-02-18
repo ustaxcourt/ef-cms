@@ -1,10 +1,6 @@
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
-import {
-  PUBLIC_TRIAL_SESSIONS_DATA_KEY,
-  TRIAL_SESSION_PROCEEDING_TYPES,
-  TrialSessionTypes,
-} from '@shared/business/entities/EntityConstants';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 import { Select } from '@web-client/ustc-ui/Select/Selects';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
@@ -18,7 +14,10 @@ export const PublicTrialSessionsFilters = function ({
   trialSessionsFilters,
   setTrialSessionsFilters,
 }: {
-  judgeOptions: Array<{ label: string; value: string }>;
+  judgeOptions: {
+    label: string;
+    value: { name: string; userId: string };
+  }[];
   sessionTypeOptions: Array<{ label: string; value: string }>;
   trialCitiesByState: Array<{
     label: string;
@@ -58,14 +57,12 @@ export const PublicTrialSessionsFilters = function ({
                 name="proceedingType"
                 type="radio"
                 value={proceedingType}
-                onChange={e => {}
-                  // navigate({
-                  //   search: prev => ({
-                  //     ...prev,
-                  //     proceedingType: e.target.value,
-                  //   }),
-                  // })
-                }
+                onChange={e => {
+                  setTrialSessionsFilters({
+                    ...trialSessionsFilters,
+                    proceedingType: e.target.value,
+                  });
+                }}
               />
               <label
                 aria-label={proceedingType}
@@ -91,8 +88,21 @@ export const PublicTrialSessionsFilters = function ({
               label="Session type"
               name="sessionTypes"
               options={sessionTypeOptions}
-              selectedValues={sessionTypes}
-              onChange={handleUpdateFormValue}
+              selectedValues={trialSessionsFilters.sessionTypes}
+              onAdd={sessionType => {
+                setTrialSessionsFilters({
+                  ...trialSessionsFilters,
+                  sessionTypes: {
+                    ...trialSessionsFilters.sessionTypes,
+                    [sessionType]: sessionType,
+                  },
+                });
+              }}
+              onRemove={sessionType => {
+                const newFilters = { ...trialSessionsFilters };
+                delete newFilters.sessionTypes[sessionType];
+                setTrialSessionsFilters(newFilters);
+              }}
             />
           </div>
           <div
@@ -103,8 +113,21 @@ export const PublicTrialSessionsFilters = function ({
               label="Location"
               name="locations"
               options={trialCitiesByState}
-              selectedValues={locations}
-              onChange={handleUpdateFormValue}
+              selectedValues={trialSessionsFilters.locations}
+              onAdd={location => {
+                setTrialSessionsFilters({
+                  ...trialSessionsFilters,
+                  locations: {
+                    ...trialSessionsFilters.locations,
+                    [location]: location,
+                  },
+                });
+              }}
+              onRemove={location => {
+                const newFilters = { ...trialSessionsFilters };
+                delete newFilters.locations[location];
+                setTrialSessionsFilters(newFilters);
+              }}
             />
           </div>
           <div
@@ -115,8 +138,21 @@ export const PublicTrialSessionsFilters = function ({
               label="Judge"
               name="judges"
               options={judgeOptions}
-              selectedValues={judges}
-              onChange={handleUpdateFormValue}
+              selectedValues={trialSessionsFilters.judges}
+              onAdd={judge => {
+                setTrialSessionsFilters({
+                  ...trialSessionsFilters,
+                  judges: {
+                    ...trialSessionsFilters.judges,
+                    [judge.userId]: judge,
+                  },
+                });
+              }}
+              onRemove={judge => {
+                const newFilters = { ...trialSessionsFilters };
+                delete newFilters.judges[judge.userId];
+                setTrialSessionsFilters(newFilters);
+              }}
             />
           </div>
         </div>
@@ -125,7 +161,32 @@ export const PublicTrialSessionsFilters = function ({
   );
 };
 
-function FilterSelect({ label, name, onChange, options, selectedValues }) {
+function FilterSelect({
+  label,
+  name,
+  onAdd,
+  onRemove,
+  options,
+  selectedValues,
+}: {
+  label: string;
+  name: string;
+  onAdd: (selectedValue) => void;
+  onRemove: (selectedValue) => void;
+  options:
+    | {
+        label: string;
+        value: string;
+      }[]
+    | {
+        label: string;
+        options: {
+          label: string;
+          value: string;
+        }[];
+      }[];
+  selectedValues: Record<string, any>;
+}) {
   return (
     <>
       <div className="margin-bottom-2">
@@ -144,9 +205,7 @@ function FilterSelect({ label, name, onChange, options, selectedValues }) {
               label: '- Select one or more -',
               value: '',
             }}
-            onChange={option =>
-              option && onChange(`${name}.${option.value}`, option.label)
-            }
+            onChange={option => option && onAdd(option.value)}
           />{' '}
         </NonPhone>
         <Phone>
@@ -160,7 +219,7 @@ function FilterSelect({ label, name, onChange, options, selectedValues }) {
             value={'- Select one or more -'}
             onChange={value => {
               if (value) {
-                onChange(`${name}.${value}`, value);
+                onAdd(value);
               }
             }}
           />
@@ -168,17 +227,13 @@ function FilterSelect({ label, name, onChange, options, selectedValues }) {
       </div>
       <NonPhone>
         <div className="margin-bottom-1">
-          {Object.entries(
-            selectedValues as {
-              [key: string]: string;
-            },
-          ).map(([optionKey, optionLabel]) => (
+          {Object.entries(selectedValues).map(([optionKey, optionLabel]) => (
             <PillButton
               data-testid={`${name}-${optionLabel}-pill-button`}
               key={optionLabel}
-              text={optionLabel}
+              text={optionLabel?.name || optionLabel}
               onRemove={() => {
-                onChange(`${name}.${optionKey}`, undefined);
+                onRemove(optionKey);
               }}
             />
           ))}
