@@ -5,11 +5,18 @@ import {
 import {
   DOCKET_NUMBER_SUFFIXES,
   PARTIES_CODES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
 import { FORMATS } from '../DateHandler';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '@shared/authorization/authorizationClientService';
 import { RawEligibleCase } from '../../entities/cases/EligibleCase';
 import { RawIrsCalendarAdministratorInfo } from '@shared/business/entities/trialSessions/IrsCalendarAdministratorInfo';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { compact, partition } from 'lodash';
+import { caseIsEligibleForMinuteSheet } from '@shared/business/utilities/trialSessionMinutes/caseIsEligibleForMinuteSheet';
 
 export const setPretrialMemorandumFiler = ({ caseItem }): string => {
   if (caseItem.PMTServedPartiesCode !== undefined) {
@@ -168,6 +175,7 @@ export type FormattedTrialSessionDetailsType = TrialSessionState & {
   formattedTerm: string;
   formattedTrialClerk: string;
   inactiveCases: any;
+  isRemoteSession: boolean;
   noLocationEntered: boolean;
   openCases: any;
   showSwingSession: boolean;
@@ -176,9 +184,11 @@ export type FormattedTrialSessionDetailsType = TrialSessionState & {
 
 export const getFormattedTrialSessionDetails = ({
   applicationContext,
+  currentUser,
   trialSession,
 }: {
   applicationContext: any;
+  currentUser: UnknownAuthUser;
   trialSession: TrialSessionState;
 }): FormattedTrialSessionDetailsType => {
   const allCases = (trialSession.calendaredCases || []).map(caseItem =>
@@ -193,13 +203,34 @@ export const getFormattedTrialSessionDetails = ({
     allCases,
     item => item.removedFromTrial === true,
   );
-
+  const isUserEligableForMinuteSheet = !!isAuthorized(
+    currentUser,
+    ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET,
+  );
   const openCasesFormatted = openCases
     .map(caseItem =>
       applicationContext
         .getUtilities()
         .setConsolidationFlagsForDisplay(caseItem, openCases),
     )
+    .map(caseItem => {
+      let displayMinuteSheetFormButton = false;
+      let minuteSheetRoute;
+
+      if (
+        isUserEligableForMinuteSheet &&
+        caseIsEligibleForMinuteSheet(caseItem, trialSession)
+      ) {
+        displayMinuteSheetFormButton = true;
+        minuteSheetRoute = `/trial-session-detail/${trialSession.trialSessionId}/case/${caseItem.docketNumber}/minutes`;
+      }
+
+      return {
+        ...caseItem,
+        displayMinuteSheetFormButton,
+        minuteSheetRoute,
+      };
+    })
     .sort(compareCasesByDocketNumberFactory({ allCases: openCases }));
 
   const inactiveCasesFormatted = inactiveCases
@@ -208,6 +239,23 @@ export const getFormattedTrialSessionDetails = ({
         .getUtilities()
         .setConsolidationFlagsForDisplay(caseItem, inactiveCases),
     )
+    .map(caseItem => {
+      let displayMinuteSheetFormButton = false;
+      let minuteSheetRoute;
+      if (
+        isUserEligableForMinuteSheet &&
+        caseIsEligibleForMinuteSheet(caseItem, trialSession)
+      ) {
+        displayMinuteSheetFormButton = true;
+        minuteSheetRoute = `/trial-session-detail/${trialSession.trialSessionId}/case/${caseItem.docketNumber}/minutes`;
+      }
+
+      return {
+        ...caseItem,
+        displayMinuteSheetFormButton,
+        minuteSheetRoute,
+      };
+    })
     .sort(
       compareCasesByDocketNumberFactory({
         allCases: inactiveCases,
@@ -300,6 +348,9 @@ export const getFormattedTrialSessionDetails = ({
     .replace(/\s/g, '_')
     .replace(/,/g, '');
 
+  const isRemoteSession =
+    trialSession.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.remote;
+
   return {
     ...trialSession,
     allCases: allCasesFormatted,
@@ -317,6 +368,7 @@ export const getFormattedTrialSessionDetails = ({
     formattedTerm,
     formattedTrialClerk,
     inactiveCases: inactiveCasesFormatted,
+    isRemoteSession,
     noLocationEntered,
     openCases: openCasesFormatted,
     showSwingSession,
