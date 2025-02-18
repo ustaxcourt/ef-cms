@@ -6,7 +6,7 @@ import { isEmpty, isEqual } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import { thirtyDaysBeforeTrial } from '@web-client/presenter/computeds/trialSessionsHelper';
 
-export type FormatTrialSessionHelperType = FormattedTrialSessionDetailsType & {
+type FormatTrialSessionHelperType = FormattedTrialSessionDetailsType & {
   alertMessageForNOTT?: string;
   canClose?: boolean;
   canDelete?: boolean;
@@ -14,7 +14,6 @@ export type FormatTrialSessionHelperType = FormattedTrialSessionDetailsType & {
   chambersPhoneNumber?: string;
   disableHybridFilter?: boolean;
   isHybridSession?: boolean;
-  isRemoteSession: boolean;
   showAlertForNOTTReminder?: boolean;
   showOnlyClosedCases?: boolean;
   showOpenCases?: boolean;
@@ -37,13 +36,11 @@ export const formattedTrialSessionDetails = (
   let chambersPhoneNumber: string | undefined;
 
   const trialSession = get(state.trialSession);
-  const currentUser = get(state.user);
 
   const formattedTrialSession = applicationContext
     .getUtilities()
     .getFormattedTrialSessionDetails({
       applicationContext,
-      currentUser,
       trialSession,
     });
 

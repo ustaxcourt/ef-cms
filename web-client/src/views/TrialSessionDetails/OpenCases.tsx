@@ -1,4 +1,3 @@
-import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseIcons } from '@web-client/ustc-ui/Icon/CaseIcons';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -38,7 +37,6 @@ export const OpenCases = connect(
                 <th>Petitioner Counsel</th>
                 <th>Respondent Counsel</th>
                 <th>Calendar Notes</th>
-                <th>{/* Empty header for minute sheet link column */}</th>
               </tr>
             </thead>
             {openCases.map(item => (
@@ -80,18 +78,6 @@ export const OpenCases = connect(
                   </td>
                   <td>
                     <PreformattedText text={item.calendarNotes} />
-                  </td>
-                  <td>
-                    {item.displayMinuteSheetFormButton && (
-                      <Button
-                        data-testId={`minute-sheet-button-${item.docketNumber}`}
-                        link
-                        href={item.minuteSheetRoute}
-                        icon="pencil-alt"
-                      >
-                        Minutes
-                      </Button>
-                    )}
                   </td>
                 </tr>
               </tbody>
