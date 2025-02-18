@@ -35,6 +35,7 @@ jobs:
 
       - name: NPM Install
         run: npm ci
+        working-directory: currentBranch
 
       - name: Compare migrations files between the two branches
         run: npx ts-node currentBranch/scripts/postgres/checkKyselyMigrations.ts
