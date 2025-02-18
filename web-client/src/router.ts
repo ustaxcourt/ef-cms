@@ -1084,6 +1084,20 @@ const router = {
     );
 
     registerRoute(
+      '/trial-session-detail/*/case/*/minutes',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET },
+        (trialSessionId, docketNumber) => {
+          setPageTitle('Trial session minutes');
+          return app.getSequence('goToTrialSessionMinutesSequence')({
+            docketNumber,
+            trialSessionId,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
       '/trial-session-detail/*',
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
@@ -1377,10 +1391,12 @@ const router = {
     registerRoute(
       '/reports/pending-report/printable..',
       ifHasAccess({ app }, () => {
-        const { judgeFilter } = route.query();
+        const { judgeFilter, sortField, sortOrder } = route.query();
         setPageTitle('Pending report');
         return app.getSequence('gotoPrintablePendingReportSequence')({
           judgeFilter: decodeURIComponent(judgeFilter),
+          sortField: decodeURIComponent(sortField),
+          sortOrder: decodeURIComponent(sortOrder),
         });
       }),
     );

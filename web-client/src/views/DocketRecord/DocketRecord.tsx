@@ -1,9 +1,4 @@
-import {
-  ASCENDING,
-  SORT_ASCENDING_TEXT,
-  SORT_DESCENDING_TEXT,
-  STATE_KEYS,
-} from '@shared/business/entities/EntityConstants';
+import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordHeader } from './DocketRecordHeader';
 import { DocketRecordOverlay } from './DocketRecordOverlay';
@@ -11,13 +6,13 @@ import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
 import { SealDocketEntryModal } from './SealDocketEntryModal';
-import { SortableColumn } from '@web-client/ustc-ui/Table/SortableColumn';
 import { UnsealDocketEntryModal } from './UnsealDocketEntryModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
+import { SortableHeader } from '@web-client/ustc-ui/Table/SortableHeader';
 
 export const DocketRecord = connect(
   {
@@ -97,46 +92,51 @@ export const DocketRecord = connect(
                       />
                     </th>
                   )}
-                  <SortableDocketRecordHeader
+                  <SortableHeader
                     hideOnMobile={true}
                     screenReaderTitle="Number"
                     sortField="index"
                     tableSort={docketRecordTableSortData}
                     title="No."
                     onSort={sortTableSequence}
+                    stateKey={STATE_KEYS.DOCKET_RECORD_TABLE_SORT}
                   />
-                  <SortableDocketRecordHeader
+                  <SortableHeader
                     sortField="sortingFilingDate"
                     sortType="date"
                     tableSort={docketRecordTableSortData}
                     title="Filed Date"
                     onSort={sortTableSequence}
+                    stateKey={STATE_KEYS.DOCKET_RECORD_TABLE_SORT}
                   />
-                  <SortableDocketRecordHeader
+                  <SortableHeader
                     hideOnMobile={true}
                     sortField="eventCode"
                     sortType="string"
                     tableSort={docketRecordTableSortData}
                     title="Event"
                     onSort={sortTableSequence}
+                    stateKey={STATE_KEYS.DOCKET_RECORD_TABLE_SORT}
                   />
                   <th aria-hidden="true" className="icon-column" />
-                  <SortableDocketRecordHeader
+                  <SortableHeader
                     sortField="descriptionDisplay"
                     sortType="string"
                     tableSort={docketRecordTableSortData}
                     title="Filings and Proceedings"
                     onSort={sortTableSequence}
+                    stateKey={STATE_KEYS.DOCKET_RECORD_TABLE_SORT}
                   />
-                  <SortableDocketRecordHeader
+                  <SortableHeader
                     className="hide-on-mobile"
                     hideOnMobile={true}
                     sortField="numberOfPages"
                     tableSort={docketRecordTableSortData}
                     title="Pages"
                     onSort={sortTableSequence}
+                    stateKey={STATE_KEYS.DOCKET_RECORD_TABLE_SORT}
                   />
-                  <SortableDocketRecordHeader
+                  <SortableHeader
                     className="hide-on-mobile"
                     hideOnMobile={true}
                     sortField="filedBy"
@@ -144,8 +144,9 @@ export const DocketRecord = connect(
                     tableSort={docketRecordTableSortData}
                     title="Filed By"
                     onSort={sortTableSequence}
+                    stateKey={STATE_KEYS.DOCKET_RECORD_TABLE_SORT}
                   />
-                  <SortableDocketRecordHeader
+                  <SortableHeader
                     className="hide-on-mobile"
                     hideOnMobile={true}
                     sortField="action"
@@ -153,15 +154,17 @@ export const DocketRecord = connect(
                     tableSort={docketRecordTableSortData}
                     title="Action"
                     onSort={sortTableSequence}
+                    stateKey={STATE_KEYS.DOCKET_RECORD_TABLE_SORT}
                   />
-                  <SortableDocketRecordHeader
+                  <SortableHeader
                     sortField="servedAt"
                     sortType="date"
                     tableSort={docketRecordTableSortData}
                     title="Served"
                     onSort={sortTableSequence}
+                    stateKey={STATE_KEYS.DOCKET_RECORD_TABLE_SORT}
                   />
-                  <SortableDocketRecordHeader
+                  <SortableHeader
                     className="center-column hide-on-mobile"
                     hideOnMobile={true}
                     sortField="servedPartiesCode"
@@ -169,6 +172,7 @@ export const DocketRecord = connect(
                     tableSort={docketRecordTableSortData}
                     title="Parties"
                     onSort={sortTableSequence}
+                    stateKey={STATE_KEYS.DOCKET_RECORD_TABLE_SORT}
                   />
                   {docketRecordHelper.showEditOrSealDocketRecordEntry && (
                     <th>&nbsp;</th>
@@ -379,54 +383,3 @@ export const DocketRecord = connect(
 );
 
 DocketRecord.displayName = 'DocketRecord';
-
-export function SortableDocketRecordHeader({
-  className,
-  hideOnMobile,
-  onSort,
-  screenReaderTitle,
-  sortField,
-  sortType,
-  tableSort,
-  title,
-}: {
-  className?: string;
-  onSort: (sort: {
-    sortField: string;
-    sortOrder: 'asc' | 'desc';
-    stateKey?: string;
-  }) => void;
-  screenReaderTitle?: string;
-  sortField: string;
-  sortType?: 'string' | 'date';
-  tableSort: {
-    sortField: string;
-    sortOrder: 'asc' | 'desc';
-  };
-  title: string;
-  hideOnMobile?: boolean;
-}) {
-  return (
-    <th className={hideOnMobile ? 'hide-on-mobile' : ''}>
-      <SortableColumn
-        ascText={SORT_ASCENDING_TEXT[sortType!]}
-        className={className}
-        currentlySortedField={tableSort.sortField}
-        currentlySortedOrder={tableSort.sortOrder}
-        data-testid={`${sortField}-sortable-button`}
-        defaultSortOrder={ASCENDING}
-        descText={SORT_DESCENDING_TEXT[sortType!]}
-        hasRows={true}
-        screenReaderTitle={screenReaderTitle}
-        sortField={sortField}
-        title={title}
-        onClickSequence={sortTableInfo =>
-          onSort({
-            ...sortTableInfo,
-            stateKey: STATE_KEYS.DOCKET_RECORD_TABLE_SORT,
-          })
-        }
-      />
-    </th>
-  );
-}

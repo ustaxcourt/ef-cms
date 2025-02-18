@@ -200,6 +200,7 @@ export default tseslint.config(
       './cypress-smoketests-readonly.config.ts',
       './cypress-smoketests-readonly-public.config.ts',
       './cypress-public.config.ts',
+      'jest.config.ts'
     ], // Do not use typechecking on javascript files, archived scripts, or cypress which has different promise chains
     extends: [tseslint.configs.disableTypeChecked],
   },

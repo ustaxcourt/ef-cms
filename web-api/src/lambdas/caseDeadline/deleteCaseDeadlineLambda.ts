@@ -1,5 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { deleteCaseDeadlineInteractor } from '@web-api/business/useCases/caseDeadline/deleteCaseDeadlineInteractor';
 
 /**
  * delete case deadline
@@ -12,7 +13,7 @@ export const deleteCaseDeadlineLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().deleteCaseDeadlineInteractor(
+    return await deleteCaseDeadlineInteractor(
       applicationContext,
       {
         ...event.pathParameters,
