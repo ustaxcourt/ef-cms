@@ -22,7 +22,7 @@ function getMigrationFiles(cwd: string): string[] {
       `Error reading migrations directory at ${migrationsDir}:`,
       error,
     );
-    return [];
+    process.exit(1);
   }
 }
 
