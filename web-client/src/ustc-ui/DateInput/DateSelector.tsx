@@ -1,8 +1,3 @@
-import {
-  FORMATS,
-  createISODateString,
-  formatDateString,
-} from '@shared/business/utilities/DateHandler';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import React, { useEffect, useRef } from 'react';
 import datePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-picker/src';
@@ -12,12 +7,10 @@ export const DateSelector = ({
   disabled = false,
   displayOptionalHintText = false,
   errorText,
-  formatDateOnChange = false,
   formGroupClassNames,
   hintText = undefined,
   id,
   label,
-  labelPosition = 'top',
   maxDate,
   minDate,
   onBlur,
@@ -36,8 +29,6 @@ export const DateSelector = ({
   hintText?: string;
   id: string;
   label?: string;
-  labelPosition?: 'top' | 'left';
-  formatDateOnChange?: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   showDateHint?: boolean;
@@ -45,69 +36,25 @@ export const DateSelector = ({
   const datePickerId = `#${id}-picker.usa-date-picker__external-input`;
   const formGroupInputRef = useRef<HTMLInputElement>(null);
   const defaultMinDate = '0000-01-01';
-  formGroupClassNames =
-    labelPosition === 'left'
-      ? `${formGroupClassNames} display-flex align-items-center`
-      : `${formGroupClassNames}`;
-  const labelClassNames =
-    labelPosition === 'left'
-      ? 'margin-right-2 margin-bottom-0 display-inline-block'
-      : label
-        ? 'usa-label'
-        : '';
-  const pickerClassNames =
-    labelPosition === 'left'
-      ? 'usa-date-picker display-inline-block left-labeled'
-      : 'usa-date-picker';
 
   useEffect(() => {
     if (formGroupInputRef.current) {
+      /**
+       * The way USWDS date-picker works is it'll search the page for a usa-date-picker and
+       * modify the dom by inserting another input.  This causes a hidden input called
+       * usa-date-picker__input-input to be created in place of the input defined in this
+       * JSX file, and also a usa-date-picker__external-input which is the one that the users
+       * see in the UI and can type into.  This effect hooks into that visible input so that
+       * we can get the actual visible value of the input.
+       */
       datePicker.on(formGroupInputRef.current);
       const myDatePicker =
         formGroupInputRef.current.querySelector(datePickerId);
 
       if (!myDatePicker) throw new Error('could not find expected date picker');
 
-      let onChangeHandler = onChange;
-      if (formatDateOnChange) {
-        onChangeHandler = originalEvent => {
-          // Create a new event to avoid modifying the original
-          const newEvent = new Event('change', {
-            bubbles: true,
-          }) as unknown as React.ChangeEvent<HTMLInputElement>;
-          const target = Object.create(originalEvent.target, {
-            value: {
-              get: () => {
-                if (originalEvent.target.value === '') return '';
-                return formatDateString(
-                  createISODateString(
-                    originalEvent.target.value,
-                    FORMATS.MMDDYYYY,
-                  ),
-                  FORMATS.YYYYMMDD,
-                );
-              },
-            },
-          });
-
-          Object.defineProperty(newEvent, 'target', {
-            enumerable: true,
-            value: target,
-          });
-
-          // Original input keeps MM/DD/YYYY format
-          onChange(newEvent);
-        };
-      }
-
-      (myDatePicker as HTMLInputElement).addEventListener(
-        'change',
-        onChangeHandler,
-      );
-      (myDatePicker as HTMLInputElement).addEventListener(
-        'input',
-        onChangeHandler,
-      );
+      (myDatePicker as HTMLInputElement).addEventListener('change', onChange);
+      (myDatePicker as HTMLInputElement).addEventListener('input', onChange);
       if (onBlur)
         (myDatePicker as HTMLInputElement).addEventListener('blur', onBlur);
     }
@@ -139,7 +86,7 @@ export const DateSelector = ({
       formGroupRef={formGroupInputRef}
     >
       <label
-        className={labelClassNames}
+        className="usa-label"
         htmlFor={`${id}-picker`}
         id={`${id}-date-picker-label`}
       >
@@ -155,14 +102,13 @@ export const DateSelector = ({
         </div>
       )}
       <div
-        className={pickerClassNames}
+        className="usa-date-picker"
         data-default-value={defaultValue}
         data-max-date={maxDate}
         data-min-date={minDate ?? defaultMinDate}
       >
         <input
           aria-describedby={`date-picker-label ${id}-date-hint`}
-          aria-label={`${id}-picker`}
           className="usa-input"
           data-testid={`${id}-picker`}
           id={`${id}-picker`}
@@ -174,3 +120,5 @@ export const DateSelector = ({
     </FormGroup>
   );
 };
+
+DateSelector.displayName = 'DateSelector';
