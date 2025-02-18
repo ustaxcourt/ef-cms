@@ -49,7 +49,7 @@ export const initializeTrialSessionMinuteSheetFormAction = ({
       userId: judge.userId,
     },
     remoteSession: formattedTrialSession.isRemoteSession,
-    trialClerk: formattedTrialSession.trialClerk!.name,
+    trialClerk: formattedTrialSession.formattedTrialClerk,
   });
 
   const recalledRowRenderKey = uuidv4();
