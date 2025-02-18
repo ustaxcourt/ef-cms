@@ -139,7 +139,7 @@ resource "aws_wafv2_web_acl" "apis" {
   }
 
   visibility_config {
-    cloudwatch_metrics_enabled = false
+    cloudwatch_metrics_enabled = true
     metric_name                = "wafv2_${var.environment}"
     sampled_requests_enabled   = false
   }
