@@ -29,5 +29,12 @@ jobs:
           ref: ${{ env.TARGET_BRANCH }}
           path: targetBranch
 
-      - name: Check files for increased error count
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.1'
+
+      - name: NPM Install
+        run: npm ci
+
+      - name: Compare migrations files between the two branches
         run: npx ts-node currentBranch/scripts/postgres/checkKyselyMigrations.ts
