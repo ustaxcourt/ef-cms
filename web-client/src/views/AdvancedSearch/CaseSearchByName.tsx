@@ -8,6 +8,7 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 
 export const CaseSearchByName = connect(
   {
@@ -360,7 +361,7 @@ export const CaseSearchByName = connect(
             </div>
 
             <NonMobile>
-              <div className="grid-row grid-gap margin-bottom-2">
+              <div className="grid-row grid-gap">
                 <DateRangePickerComponent
                   omitFormGroupClass
                   endDateErrorText={validationErrors.endDate}
@@ -434,6 +435,28 @@ export const CaseSearchByName = connect(
                 />
               </div>
             </Mobile>
+
+            <div>
+              <label
+                className="usa-label"
+                htmlFor="case-type-filter"
+                id="case-type-filter-label"
+              >
+                Case Type
+              </label>
+              <SelectSearch
+                aria-labelledby="case-type-filter-label"
+                name="caseType"
+                placeholder="- Select one or more -"
+                inputId="case-type-filter"
+                value={{
+                  label: '- Select one or more -',
+                  value: '',
+                }}
+                options={[{ label: 'label 1', value: 'value 1' }]}
+              />
+            </div>
+            <div className='padding-2'></div>
 
             <Mobile>
               <div className="grid-row">
