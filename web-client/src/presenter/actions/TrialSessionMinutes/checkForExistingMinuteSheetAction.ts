@@ -1,4 +1,5 @@
 import { getMinuteSheetInteractor } from '@shared/proxies/trialSessionMinutes/getMinuteSheetProxy';
+import { isEmpty } from 'lodash';
 
 export const checkForExistingMinuteSheetAction = async ({ path, props }) => {
   const { caseDetail, trialSession } = props;
@@ -8,7 +9,7 @@ export const checkForExistingMinuteSheetAction = async ({ path, props }) => {
     trialSessionId: trialSession.trialSessionId,
   });
 
-  const isExistingMinuteSheet = !!minuteSheet;
+  const isExistingMinuteSheet = !isEmpty(minuteSheet);
 
   if (isExistingMinuteSheet) {
     return path.yes({ minuteSheet });

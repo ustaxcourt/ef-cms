@@ -1,44 +1,17 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { DOCUMENT_RELATIONSHIPS } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import {
-  FORMATS,
-  formatDateString,
-} from '@shared/business/utilities/DateHandler';
-import {
-  FormattedMinuteSheet,
-  formatActionsAndFilings,
-  formatCalledSection,
-  formatExhibits,
-  formatJurisdictionContinued,
-  formatJurisdictionRetained,
-  formatMotions,
-  formatPetitionerAppearances,
-  formatPetitioners,
-  formatPretrialConference,
-  formatRecalledRows,
-  formatRemoteSession,
-  formatRespondentAppearances,
-  formatStatusReportOrdered,
-  formatStipulatedDecision,
-  formatTrialBrief,
-  formatTrialHearing,
-  formatWitnesses,
-  getConsolidatedDocketNumbers,
-} from '@web-api/business/useCaseHelper/trialSessionMinutes/formatMinuteSheet';
+import { formatMinuteSheet } from '@web-api/business/useCaseHelper/trialSessionMinutes/formatMinuteSheet';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getMinuteSheet } from '@web-api/persistence/postgres/minuteSheets/getMinuteSheet';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { encode } from 'he';
-import { MinuteSheet } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 import { minuteSheet as minuteSheetDocumentGenerator } from '@shared/business/utilities/documentGenerators/minuteSheet';
 import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
 import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
@@ -74,8 +47,6 @@ export const generateTrialSessionMinutesPdfInteractor = async (
     throw new NotFoundError(
       `Minute sheet for trial session ${trialSessionId} case ${docketNumber} was not found.`,
     );
-
-  console.log('minuteSheet', minuteSheet);
 
   const formattedMinuteSheet = formatMinuteSheet({
     aCase,
@@ -135,96 +106,4 @@ export const generateTrialSessionMinutesPdfInteractor = async (
   });
 
   return url;
-};
-
-const formatMinuteSheet = ({
-  aCase,
-  minuteSheet,
-  trialSession,
-}: {
-  minuteSheet: MinuteSheet;
-  trialSession: RawTrialSession;
-  aCase: RawCase;
-}): FormattedMinuteSheet => {
-  const { docketNumberWithSuffix } = aCase;
-  const docketNumbers = aCase.consolidatedCases.map(
-    consolidatedCase => consolidatedCase.docketNumber,
-  );
-  const { calendarCall, notCalled, pretrialConference, recalls, trialHearing } =
-    minuteSheet.caseRecord;
-
-  return {
-    actionsAndFilings: formatActionsAndFilings(
-      sanitizeMinuteSheetForm(minuteSheet.proceedings.actionsAndFilings),
-    ),
-    called: formatCalledSection(sanitizeMinuteSheetForm(calendarCall)),
-    courtReporter: minuteSheet.trialSession.courtReporter,
-    docketNumberWithSuffix,
-    docketNumbers,
-    exhibits: formatExhibits(minuteSheet.evidence.exhibits),
-    formattedDocketNumbers: getConsolidatedDocketNumbers(aCase),
-    judgeFullName: minuteSheet.trialSession.judge.fullName,
-    judgeTitle: minuteSheet.trialSession.judge.title || 'Judge',
-    jurisdictionContinued: formatJurisdictionContinued(
-      sanitizeMinuteSheetForm(minuteSheet.jurisdiction.continued),
-    ),
-    jurisdictionRetained: formatJurisdictionRetained(
-      sanitizeMinuteSheetForm(minuteSheet.jurisdiction.retained),
-    ),
-    motions: formatMotions(
-      sanitizeMinuteSheetForm(minuteSheet.proceedings.motions),
-    ),
-    notCalled: formatCalledSection(sanitizeMinuteSheetForm(notCalled)),
-    petitionerAppearances: formatPetitionerAppearances(
-      minuteSheet.appearances.petitioners,
-    ),
-    petitionerWitnesses: formatWitnesses(
-      minuteSheet.evidence.petitionerWitnesses,
-    ),
-    petitioners: formatPetitioners(aCase),
-    pretrialConference: formatPretrialConference(
-      sanitizeMinuteSheetForm(pretrialConference),
-    ),
-    recalled: formatRecalledRows(sanitizeMinuteSheetForm(recalls)),
-    remoteSession: formatRemoteSession(minuteSheet.trialSession.isRemote),
-    respondentAppearances: formatRespondentAppearances(
-      minuteSheet.appearances.respondents,
-    ),
-    respondentWitnesses: formatWitnesses(
-      minuteSheet.evidence.respondentWitnesses,
-    ),
-    statusReportOrdered: formatStatusReportOrdered(
-      sanitizeMinuteSheetForm(minuteSheet.orders.statusReport),
-    ),
-    stipulatedDecisionOrdered: formatStipulatedDecision(
-      sanitizeMinuteSheetForm(minuteSheet.orders.stipulatedDecision),
-    ),
-    trialBrief: formatTrialBrief(sanitizeMinuteSheetForm(minuteSheet.brief)),
-    trialClerk: minuteSheet.trialSession.trialClerk,
-    trialHearing: formatTrialHearing(sanitizeMinuteSheetForm(trialHearing)),
-    trialLocation: trialSession.trialLocation!,
-    trialStartDate: formatDateString(
-      trialSession.startDate,
-      FORMATS.MONTH_DAY_YEAR,
-    ),
-  };
-};
-
-const sanitizeMinuteSheetForm = (minuteSheetForm: any): any => {
-  if (typeof minuteSheetForm === 'string') {
-    return encode(minuteSheetForm);
-  }
-
-  if (Array.isArray(minuteSheetForm)) {
-    return minuteSheetForm.map(item => sanitizeMinuteSheetForm(item));
-  }
-
-  if (minuteSheetForm && typeof minuteSheetForm === 'object') {
-    return Object.entries(minuteSheetForm).reduce((acc, [key, value]) => {
-      acc[key] = sanitizeMinuteSheetForm(value);
-      return acc;
-    }, {});
-  }
-
-  return minuteSheetForm;
 };

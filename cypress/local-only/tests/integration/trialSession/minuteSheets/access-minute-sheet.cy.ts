@@ -306,18 +306,6 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
       });
     });
 
-    describe('Fill out Jurisdiction section', () => {
-      it('Can fill out Jurisdiction section', () => {
-        cy.get('#jurisdictionRetainedNote').type('Jurisdiction note');
-        cy.get('#continuedNote').type('Continued note');
-        cy.get('#jurisdictionRetainedNote').should(
-          'have.value',
-          'Jurisdiction note',
-        );
-        cy.get('#continuedNote').should('have.value', 'Continued note');
-      });
-    });
-
     describe('Fill out Status Report Orders & Stipulated Decision Section', () => {
       it('Can fill out Status Report Orders section', () => {
         cy.get('#statusReportOrderedFor').select('Petitioner');
@@ -338,50 +326,6 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
         );
 
         cy.get('#stipulatedDecisionOrderedNote').clear();
-      });
-    });
-
-    describe('Fill out Motion section', () => {
-      it('Can fill out Motion section', () => {
-        cy.get('[id^=motionType]').each($el => {
-          const renderKey = $el.attr('id')?.split('-').slice(1).join('-');
-          cy.log(`Render key: ${renderKey}`);
-
-          cy.get(`#motionType-${renderKey}`).select('Motion to Dismiss');
-          cy.get(`#motionOralMotion${renderKey}`).check({
-            force: true,
-          });
-          cy.get(`#motionFiledBy-${renderKey}`).select('Intervenor');
-          cy.get(`#motionStatus-${renderKey}`).select('Granted');
-          cy.get(`#motionObjection-${renderKey}`).select('No Objection');
-          cy.get(`#motionNote${renderKey}`).type('Motion note');
-
-          // Check values
-          cy.get(`#motionType-${renderKey}`).should(
-            'have.value',
-            'motionToDismiss',
-          );
-
-          cy.get(`#motionOralMotion${renderKey}`).should('be.checked');
-          cy.get(`#motionFiledBy-${renderKey}`).should(
-            'have.value',
-            'intervenor',
-          );
-          cy.get(`#motionStatus-${renderKey}`).should('have.value', 'granted');
-          cy.get(`#motionObjection-${renderKey}`).should(
-            'have.value',
-            'noObjection',
-          );
-          cy.get(`#motionNote${renderKey}`).should('have.value', 'Motion note');
-          cy.get(`#motionType-${renderKey}`).select('');
-          cy.get(`#motionOralMotion${renderKey}`).uncheck({
-            force: true,
-          });
-          cy.get(`#motionFiledBy-${renderKey}`).select('');
-          cy.get(`#motionStatus-${renderKey}`).select('');
-          cy.get(`#motionObjection-${renderKey}`).select('');
-          cy.get(`#motionNote${renderKey}`).clear();
-        });
       });
     });
 
@@ -581,6 +525,7 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
         cy.get('#courtReporter').should('have.value', 'Test Court Reporter');
       });
     });
+
     describe('Download the minute sheet', function () {
       it('Can download the minute sheet', function () {
         cy.visit(

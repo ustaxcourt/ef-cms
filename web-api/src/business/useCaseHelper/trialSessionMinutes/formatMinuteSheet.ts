@@ -16,10 +16,12 @@ import {
   BriefDetailsType,
   MinuteSheet,
 } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
   FORMATS,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
+import { encode } from 'he';
 
 export type FormattedMinuteSheet = {
   courtReporter: string;
@@ -69,6 +71,100 @@ export type FormattedMinuteSheet = {
 
 type FormattedRow = {
   content: string;
+};
+
+export const formatMinuteSheet = ({
+  aCase,
+  minuteSheet,
+  trialSession,
+}: {
+  minuteSheet: MinuteSheet;
+  trialSession: RawTrialSession;
+  aCase: RawCase;
+}): FormattedMinuteSheet => {
+  const { docketNumberWithSuffix } = aCase;
+  const docketNumbers = aCase.consolidatedCases.map(
+    consolidatedCase => consolidatedCase.docketNumber,
+  );
+  const { calendarCall, notCalled, pretrialConference, recalls, trialHearing } =
+    minuteSheet.caseRecord;
+
+  return {
+    actionsAndFilings: formatActionsAndFilings(
+      sanitizeMinuteSheetForm(minuteSheet.proceedings.actionsAndFilings),
+    ),
+    called: formatCalledSection(sanitizeMinuteSheetForm(calendarCall)),
+    courtReporter: minuteSheet.trialSession.courtReporter,
+    docketNumberWithSuffix,
+    docketNumbers,
+    exhibits: formatExhibits(minuteSheet.evidence.exhibits),
+    formattedDocketNumbers: getConsolidatedDocketNumbers(aCase),
+    judgeFullName: minuteSheet.trialSession.judge.fullName,
+    judgeTitle: minuteSheet.trialSession.judge.title || 'Judge',
+    jurisdictionContinued: formatJurisdictionContinued(
+      sanitizeMinuteSheetForm(minuteSheet.jurisdiction.continued),
+    ),
+    jurisdictionRetained: formatJurisdictionRetained(
+      sanitizeMinuteSheetForm(minuteSheet.jurisdiction.retained),
+    ),
+    motions: formatMotions(
+      sanitizeMinuteSheetForm(minuteSheet.proceedings.motions),
+    ),
+    notCalled: formatCalledSection(sanitizeMinuteSheetForm(notCalled)),
+    petitionerAppearances: formatPetitionerAppearances(
+      minuteSheet.appearances.petitioners,
+    ),
+    petitionerWitnesses: formatWitnesses(
+      minuteSheet.evidence.petitionerWitnesses,
+    ),
+    petitioners: formatPetitioners(aCase),
+    pretrialConference: formatPretrialConference(
+      sanitizeMinuteSheetForm(pretrialConference),
+    ),
+    recalled: formatRecalledRows(sanitizeMinuteSheetForm(recalls)),
+    remoteSession: formatRemoteSession(minuteSheet.trialSession.isRemote),
+    respondentAppearances: formatRespondentAppearances(
+      minuteSheet.appearances.respondents,
+    ),
+    respondentWitnesses: formatWitnesses(
+      minuteSheet.evidence.respondentWitnesses,
+    ),
+    statusReportOrdered: formatStatusReportOrdered(
+      sanitizeMinuteSheetForm(minuteSheet.orders.statusReport),
+    ),
+    stipulatedDecisionOrdered: formatStipulatedDecision(
+      sanitizeMinuteSheetForm(minuteSheet.orders.stipulatedDecision),
+    ),
+    trialBrief: formatTrialBrief(sanitizeMinuteSheetForm(minuteSheet.brief)),
+    trialClerk: minuteSheet.trialSession.trialClerk,
+    trialHearing: formatTrialHearing(sanitizeMinuteSheetForm(trialHearing)),
+    trialLocation: trialSession.trialLocation!,
+    trialStartDate: formatDateString(
+      trialSession.startDate,
+      FORMATS.MONTH_DAY_YEAR,
+    ),
+  };
+};
+
+export const sanitizeMinuteSheetForm = (minuteSheetForm: any): any => {
+  if (typeof minuteSheetForm === 'string') {
+    return encode(minuteSheetForm, {
+      useNamedReferences: true,
+    });
+  }
+
+  if (Array.isArray(minuteSheetForm)) {
+    return minuteSheetForm.map(item => sanitizeMinuteSheetForm(item));
+  }
+
+  if (minuteSheetForm && typeof minuteSheetForm === 'object') {
+    return Object.entries(minuteSheetForm).reduce((acc, [key, value]) => {
+      acc[key] = sanitizeMinuteSheetForm(value);
+      return acc;
+    }, {});
+  }
+
+  return minuteSheetForm;
 };
 
 export const getBriefDetails = (briefDetails: BriefDetailsType) => {
