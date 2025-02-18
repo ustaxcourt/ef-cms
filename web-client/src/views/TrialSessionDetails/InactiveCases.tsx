@@ -4,7 +4,6 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
-import { Button } from '@web-client/ustc-ui/Button/Button';
 
 export const InactiveCases = connect(
   {
@@ -34,7 +33,6 @@ export const InactiveCases = connect(
                 <th>Case Title</th>
                 <th>Disposition</th>
                 <th>Disposition Date</th>
-                <th>{/* Empty header for minute sheet link column */}</th>
               </tr>
             </thead>
             {inactiveCases.map(item => (
@@ -55,17 +53,6 @@ export const InactiveCases = connect(
                   <td>{item.caseTitle}</td>
                   <td>{item.disposition}</td>
                   <td>{item.removedFromTrialDateFormatted}</td>
-                  <td className="display-flex flex-justify-end">
-                    {item.displayMinuteSheetFormButton && (
-                      <Button
-                        link
-                        href={item.minuteSheetRoute}
-                        icon="pencil-alt"
-                      >
-                        Minutes
-                      </Button>
-                    )}
-                  </td>
                 </tr>
               </tbody>
             ))}

@@ -3,6 +3,7 @@ import { initialPendingReportsState } from '@web-client/presenter/state/pendingR
 import { pendingReportHelper as pendingReportComputed } from './pendingReportHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
+import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
 
 describe('pendingReportHelper', () => {
   const pendingReportHelper = withAppContextDecorator(pendingReportComputed);
@@ -12,9 +13,14 @@ describe('pendingReportHelper', () => {
   it('appends screenMetadata.pendingItemsFilters.judge on the printUrl if one is present', () => {
     const result = runCompute(pendingReportHelper, {
       state: {
+        [STATE_KEYS.PENDING_REPORT_TABLE_SORT]: {},
         judges: [],
         pendingReports: pendingReportsState,
-        screenMetadata: { pendingItemsFilters: { judge: 'Judge Somebody' } },
+        screenMetadata: {
+          pendingItemsFilters: {
+            judge: 'Judge Somebody',
+          },
+        },
       },
     });
 
@@ -24,6 +30,7 @@ describe('pendingReportHelper', () => {
   it('returns default printUrl if screenMetadata.pendingItemsFilters.judge is not set', () => {
     const result = runCompute(pendingReportHelper, {
       state: {
+        [STATE_KEYS.PENDING_REPORT_TABLE_SORT]: {},
         judges: [],
         pendingReports: pendingReportsState,
         screenMetadata: { pendingItemsFilters: {} },

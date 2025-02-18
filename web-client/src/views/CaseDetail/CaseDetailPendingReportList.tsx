@@ -54,7 +54,7 @@ export const CaseDetailPendingReportList = connect(
             </tr>
           </thead>
           {formattedDocketEntries.formattedPendingDocketEntriesOnDocketRecord.map(
-            (entry, rowIndex) => (
+            entry => (
               <tbody key={entry.docketEntryId}>
                 <tr className="pending-item-row">
                   <td>{entry.index}</td>
@@ -71,7 +71,7 @@ export const CaseDetailPendingReportList = connect(
                         link
                         className="padding-0 no-wrap"
                         icon="trash"
-                        data-testid={`remove-pending-item-button-${rowIndex}`}
+                        data-testid="remove-pending-item-button"
                         onClick={() =>
                           openConfirmRemoveCaseDetailPendingItemModalSequence({
                             docketEntryId: entry.docketEntryId,
