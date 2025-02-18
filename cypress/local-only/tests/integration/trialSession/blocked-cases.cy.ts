@@ -208,7 +208,7 @@ describe('Blocked Cases', () => {
           goToCase(docketNumber);
           cy.get('[data-testid=tab-tracked-items]').click();
           cy.get('[data-testid="pending-report-tab"]').click();
-          cy.get('[data-testid="remove-pending-item-button"]').click();
+          cy.get('[data-testid="remove-pending-item-button-0"]').click();
           cy.get('[data-testid="modal-confirm"]').click();
           cy.contains('There is nothing pending');
 
