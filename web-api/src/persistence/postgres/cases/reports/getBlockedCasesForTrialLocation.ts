@@ -1,4 +1,4 @@
-import { convertDbRowToRawCase } from '@web-api/persistence/postgres/cases/mapper';
+import { rawCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 
@@ -44,5 +44,5 @@ export const getBlockedCasesForTrialLocation = async (
     return await query.execute();
   });
 
-  return results.map(result => convertDbRowToRawCase(result));
+  return results.map(result => rawCaseEntity(result));
 };

@@ -379,9 +379,8 @@ export const cases100_104: RawCase[] = [
     hasVerifiedIrsNotice: true,
     initialCaption: 'Selma Horn & Cairo Harris, Petitioners',
     irsNoticeDate: '1983-03-02T00:00:00.000Z',
-    // isSpouseDeceased: 'No', // looks like seed data nonsense?
     partyType: PARTY_TYPES.petitionerSpouse,
-    petitionPaymentStatus: PAYMENT_STATUS.UNPAID, // 10502 added
+    petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     preferredTrialCity: 'Boise, Idaho',
     procedureType: PROCEDURE_TYPES_MAP.small,
     receivedAt: '2019-03-01T21:42:29.073Z',
@@ -525,7 +524,7 @@ export const cases100_104: RawCase[] = [
     orderForRatification: false,
     orderToShowCause: false,
     partyType: PARTY_TYPES.petitioner,
-    petitionPaymentStatus: PAYMENT_STATUS.PAID, //10502 added
+    petitionPaymentStatus: PAYMENT_STATUS.PAID,
     preferredTrialCity: 'Mobile, Alabama',
     procedureType: PROCEDURE_TYPES_MAP.small,
     receivedAt: '2019-03-01T22:53:50.097Z',
@@ -719,7 +718,7 @@ export const cases100_104: RawCase[] = [
     orderForRatification: true,
     orderToShowCause: true,
     partyType: PARTY_TYPES.corporation,
-    petitionPaymentStatus: PAYMENT_STATUS.PAID, // 10502 added
+    petitionPaymentStatus: PAYMENT_STATUS.PAID,
     preferredTrialCity: 'Birmingham, Alabama',
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: '2019-03-05T17:34:13.490Z',

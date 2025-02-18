@@ -6,6 +6,7 @@ import {
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getDbReader } from '@web-api/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import { Case } from '@shared/business/entities/cases/Case';
 
 export const getCasesByFilters = async ({
   params,
@@ -101,7 +102,10 @@ export const getCasesByFilters = async ({
       transformNullToUndefined({
         ...r,
         caseCaption: r.caption,
-        docketNumberWithSuffix: r.docketNumber + (r.docketNumberSuffix || ''),
+        docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
+          docketNumber: r.docketNumber,
+          docketNumberSuffix: r.docketNumberSuffix,
+        }),
         receivedAt: r.receivedAt?.toISOString(),
       }),
     ) as CaseInventory[],

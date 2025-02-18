@@ -101,15 +101,13 @@ describe('Petitioner', () => {
       expect(entity.paperPetitionEmail).toEqual(mockEmail);
     });
 
-    it('should populate hasConsentedToEService when one is provided', () => {
-      const mockHasConsentedToEService = false;
-
+    it('should populate hasConsentedToElectronicService when one is provided', () => {
       const entity = new Petitioner({
         ...mockValidPetitioner,
-        hasConsentedToEervice: mockHasConsentedToEService,
+        hasConsentedToElectronicService: false,
       });
 
-      expect(entity.hasConsentedToEService).toEqual(mockHasConsentedToEService);
+      expect(entity.hasConsentedToElectronicService).toEqual(false);
     });
   });
 });

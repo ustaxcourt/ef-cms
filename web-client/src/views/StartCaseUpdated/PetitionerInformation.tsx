@@ -146,7 +146,8 @@ export function PetitionerInformation({ isPetitioner, petitionFormatted }) {
                       Register for eService/filing:
                     </span>
                     <span className="margin-left-05">
-                      {petitionFormatted.contactSecondary.hasConsentedToEService
+                      {petitionFormatted.contactSecondary
+                        .hasConsentedToElectronicService
                         ? 'Yes'
                         : 'No'}
                     </span>

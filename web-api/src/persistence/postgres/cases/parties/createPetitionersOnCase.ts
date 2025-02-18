@@ -24,8 +24,9 @@ export const createPetitionersOnCase = async ({
       countryType: petitionerData.countryType,
       docketNumber,
       email: petitionerData.email,
-      hasConsentedToEService: petitionerData.hasConsentedToEService,
-      hasEAccess: petitionerData.hasEAccess,
+      hasConsentedToElectronicService:
+        petitionerData.hasConsentedToElectronicService,
+      hasElectronicAccess: petitionerData.hasElectronicAccess,
       inCareOf: petitionerData.inCareOf,
       isAddressSealed: petitionerData.isAddressSealed,
       name: petitionerData.name,

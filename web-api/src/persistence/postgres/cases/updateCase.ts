@@ -1,8 +1,7 @@
 import { CaseStatusChange } from '@shared/business/entities/cases/Case';
-import { convertRawCaseToDbRow } from '@web-api/persistence/postgres/cases/mapper';
+import { toKyselyNewCase } from '@web-api/persistence/postgres/cases/mapper';
 import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
 import { upsertPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/upsertPetitionersOnCase';
-import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import { upsertCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/upsertCaseStatistics';
 import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
 import { isEmpty } from 'lodash';
@@ -14,7 +13,7 @@ export const updateCase = async ({
 }): Promise<RawCase> => {
   const updatedCase = await pgUpdateTable({
     table: 'dwCase',
-    values: convertRawCaseToDbRow(caseToUpdate),
+    values: toKyselyNewCase(caseToUpdate),
     where: qb => qb.where('docketNumber', '=', caseToUpdate.docketNumber),
   });
 
@@ -28,7 +27,7 @@ export const updateCase = async ({
 
   await upsertPetitionersOnCase({
     docketNumber: caseToUpdate.docketNumber,
-    petitioners: caseToUpdate.petitioners.map(p => new Petitioner(p)),
+    petitionerCase: caseToUpdate,
   });
 
   if (caseToUpdate.statistics) {

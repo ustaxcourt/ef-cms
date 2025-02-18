@@ -7,7 +7,7 @@ import { IrsPractitioner } from '../IrsPractitioner';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { PrivatePractitioner } from '../PrivatePractitioner';
-import { isSealedCase } from '@shared/business/entities/cases/Case';
+import { Case, isSealedCase } from '@shared/business/entities/cases/Case';
 import { setPretrialMemorandumFiler } from '../../utilities/trialSession/getFormattedTrialSessionDetails';
 import joi from 'joi';
 
@@ -30,8 +30,10 @@ export class CalendaredCase extends JoiValidationEntity {
     this.docketNumber = rawProps.docketNumber;
     this.leadDocketNumber = rawProps.leadDocketNumber;
     this.docketNumberSuffix = rawProps.docketNumberSuffix;
-    this.docketNumberWithSuffix =
-      rawProps.docketNumber + (rawProps.docketNumberSuffix || '');
+    this.docketNumberWithSuffix = Case.getDocketNumberWithSuffix({
+      docketNumber: rawProps.docketNumber,
+      docketNumberSuffix: rawProps.docketNumberSuffix,
+    });
     this.status = rawProps.status;
     this.isSealed = isSealedCase(rawProps);
 

@@ -68,7 +68,6 @@ export const bulkIndexRecords = async ({
           refresh: false,
         });
         if (response.errors) {
-          console.log('bulkInde errors', response.errors);
           response.items.forEach((action, i) => {
             const operation = Object.keys(action)[0];
             if (action[operation].error) {

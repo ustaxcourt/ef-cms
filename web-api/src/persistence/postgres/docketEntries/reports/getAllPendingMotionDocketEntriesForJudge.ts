@@ -5,7 +5,7 @@ import {
   calculateDifferenceInDays,
   formatNow,
 } from '@shared/business/utilities/DateHandler';
-import { convertDbRowToRawCase } from '@web-api/persistence/postgres/cases/mapper';
+import { rawCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
 import { getConsolidatedCasesCount } from '@web-api/persistence/postgres/cases/getConsolidatedCasesCount';
 import { getDbReader } from '@web-api/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
@@ -55,7 +55,7 @@ export const getAllPendingMotionDocketEntriesForJudge = async ({
         : 1;
 
       return {
-        ...transformNullToUndefined(convertDbRowToRawCase(r)),
+        ...transformNullToUndefined(rawCaseEntity(r)),
         consolidatedGroupCount,
         daysSinceCreated: calculateDifferenceInDays(
           formatNow(),

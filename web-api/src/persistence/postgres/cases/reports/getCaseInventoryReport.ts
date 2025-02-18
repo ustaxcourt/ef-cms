@@ -2,7 +2,7 @@ import {
   CASE_INVENTORY_PAGE_SIZE,
   CASE_STATUS_TYPES,
 } from '@shared/business/entities/EntityConstants';
-import { convertDbRowToRawCase } from '@web-api/persistence/postgres/cases/mapper';
+import { rawCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
 
 export const getCaseInventoryReport = async ({
@@ -47,7 +47,7 @@ export const getCaseInventoryReport = async ({
   });
 
   return {
-    foundCases: results.map(result => convertDbRowToRawCase(result)),
+    foundCases: results.map(result => rawCaseEntity(result)),
     totalCount: Number(count),
   };
 };

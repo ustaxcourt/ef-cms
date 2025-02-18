@@ -90,8 +90,10 @@ export async function getColdCases() {
         FORMATS.MMDDYYYY,
       ),
       docketNumber: result.docketNumber,
-      docketNumberWithSuffix:
-        result.docketNumber + (result.docketNumberSuffix || ''),
+      docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
+        docketNumber: result.docketNumber,
+        docketNumberSuffix: result.docketNumberSuffix,
+      }),
       eventCode: result.mostRecentEventCode,
       filingDate: result.mostRecentFilingDate?.toISOString(),
       leadDocketNumber: result.leadDocketNumber,

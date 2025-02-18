@@ -29,7 +29,7 @@ export class ContactUpdated extends JoiValidationEntity {
   public state?: string;
   public petitionType: string;
   public partyType: string;
-  public hasConsentedToEService?: boolean;
+  public hasConsentedToElectronicService?: boolean;
   public secondaryName?: string;
   public title?: string;
 
@@ -57,7 +57,8 @@ export class ContactUpdated extends JoiValidationEntity {
     this.state = rawContact.state;
     this.petitionType = petitionType;
     this.partyType = partyType;
-    this.hasConsentedToEService = rawContact.hasConsentedToEService;
+    this.hasConsentedToElectronicService =
+      rawContact.hasConsentedToElectronicService;
     this.secondaryName = rawContact.secondaryName;
     this.title = rawContact.title;
   }

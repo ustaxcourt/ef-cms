@@ -947,7 +947,7 @@ export type PractitionerDetail = {
   pendingEmail?: string;
   additionalPhone?: string;
   firmName?: string;
-  hasEAccess?: boolean;
+  hasElectronicAccess?: boolean;
 };
 
 export type PractitionerAllCasesInfo = {

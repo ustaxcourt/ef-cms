@@ -28,12 +28,12 @@ describe('SpouseContact', () => {
 
   describe('VALIDATION', () => {
     describe('email', () => {
-      it('should not return an error message for "email" when its undefined and "hasConsentedToEService" is false', () => {
+      it('should not return an error message for "email" when its undefined and "hasConsentedToElectronicService" is false', () => {
         const entity = new SpouseContact(
           {
             ...VALID_ENTITY,
             email: undefined,
-            hasConsentedToEService: false,
+            hasConsentedToElectronicService: false,
           },
           TEST_PETITION_TYPE,
           TEST_PARTY_TYPE,
@@ -43,11 +43,11 @@ describe('SpouseContact', () => {
         expect(errors).toEqual(null);
       });
 
-      it('should  return an error message for "email" when its undefined and "hasConsentedToEService" is true', () => {
+      it('should  return an error message for "email" when its undefined and "hasConsentedToElectronicService" is true', () => {
         const entity = new SpouseContact(
           {
             ...VALID_ENTITY,
-            hasConsentedToEService: true,
+            hasConsentedToElectronicService: true,
             paperPetitionEmail: undefined,
           },
           TEST_PETITION_TYPE,
@@ -62,12 +62,12 @@ describe('SpouseContact', () => {
       });
     });
 
-    describe('hasConsentedToEService', () => {
-      it('should not return an error message for "hasConsentedToEService" when its undefined', () => {
+    describe('hasConsentedToElectronicService', () => {
+      it('should not return an error message for "hasConsentedToElectronicService" when its undefined', () => {
         const entity = new SpouseContact(
           {
             ...VALID_ENTITY,
-            hasConsentedToEService: undefined,
+            hasConsentedToElectronicService: undefined,
           },
           TEST_PETITION_TYPE,
           TEST_PARTY_TYPE,

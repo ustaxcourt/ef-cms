@@ -1,8 +1,13 @@
+import { marshall } from '@aws-sdk/util-dynamodb';
+import { Case } from '@shared/business/entities/cases/Case';
+import { RawPetitioner } from '@shared/business/entities/contacts/Petitioner';
 import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
 import {
   calculateDate,
   formatNow,
 } from '@shared/business/utilities/DateHandler';
+import { CaseKysely } from '@web-api/database-types';
+import { TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 
 export const DW_CASE_COLUMNS = [
   'associatedJudge',
@@ -78,8 +83,8 @@ export const DW_PETITIONERS_ON_CASE_COLUMNS = [
   'additionalName',
   'contactType',
   'docketNumber',
-  'hasConsentedToEService',
-  'hasEAccess',
+  'hasConsentedToElectronicService',
+  'hasElectronicAccess',
   'inCareOf',
   'isAddressSealed',
   'paperPetitionEmail',
@@ -123,7 +128,7 @@ export const DW_STATISTIC_PENALTY_COLUMNS = [
   'penaltyType',
 ];
 
-export const convertRawCaseToDbRow = (rawCase: RawCase) => {
+export const toKyselyNewCase = (rawCase: RawCase) => {
   return {
     associatedJudge: rawCase.associatedJudge,
     associatedJudgeId: rawCase.associatedJudgeId,
@@ -215,26 +220,59 @@ export const convertRawCaseToDbRow = (rawCase: RawCase) => {
   };
 };
 
-export const convertDbRowToRawCase = (dbCase: any): RawCase => {
+export const rawCaseEntity = (caseRecord: any): RawCase => {
   return {
-    ...dbCase,
-    automaticBlockedDate: dbCase.automaticBlockedDate?.toISOString(),
-    blockedDate: dbCase.blockedDate?.toISOString(),
-    caseCaption: dbCase.caption,
-    closedDate: dbCase.closedDate?.toISOString(),
-    createdAt: dbCase.createdAt?.toISOString(),
+    ...caseRecord,
+    automaticBlockedDate: caseRecord.automaticBlockedDate?.toISOString(),
+    blockedDate: caseRecord.blockedDate?.toISOString(),
+    caseCaption: caseRecord.caption,
+    closedDate: caseRecord.closedDate?.toISOString(),
+    createdAt: caseRecord.createdAt?.toISOString(),
     docketNumberWithSuffix:
-      dbCase.docketNumber +
-      (dbCase.docketNumberSuffix ? dbCase.docketNumberSuffix : ''),
-    hearings: dbCase.hearings || [],
-    irsNoticeDate: dbCase.irsNoticeDate?.toISOString(),
-    noticeOfTrialDate: dbCase.noticeOfTrialDate?.toISOString(),
-    petitionPaymentDate: dbCase.petitionPaymentDate?.toISOString(),
-    petitionPaymentWaivedDate: dbCase.petitionPaymentWaivedDate?.toISOString(),
-    receivedAt: dbCase.receivedAt?.toISOString(),
-    sealedDate: dbCase.sealedDate?.toISOString(),
-    trialDate: dbCase.trialDate?.toISOString(),
+      caseRecord.docketNumber +
+      (caseRecord.docketNumberSuffix ? caseRecord.docketNumberSuffix : ''),
+    hearings: caseRecord.hearings || [],
+    irsNoticeDate: caseRecord.irsNoticeDate?.toISOString(),
+    noticeOfTrialDate: caseRecord.noticeOfTrialDate?.toISOString(),
+    petitionPaymentDate: caseRecord.petitionPaymentDate?.toISOString(),
+    petitionPaymentWaivedDate:
+      caseRecord.petitionPaymentWaivedDate?.toISOString(),
+    receivedAt: caseRecord.receivedAt?.toISOString(),
+    sealedDate: caseRecord.sealedDate?.toISOString(),
+    trialDate: caseRecord.trialDate?.toISOString(),
   };
+};
+
+export const indexCaseEntity = ({
+  caseRecord,
+  privatePractitioners,
+  irsPractitioners,
+  petitioners,
+}: {
+  caseRecord: CaseKysely;
+  privatePractitioners: TDynamoRecord[];
+  irsPractitioners: TDynamoRecord[];
+  petitioners: RawPetitioner[];
+}) => {
+  return marshall({
+    pk: `case|${caseRecord.docketNumber}`,
+    sk: `case|${caseRecord.docketNumber}`,
+    entityName: 'Case',
+    caseCaption: caseRecord.caption,
+    docketNumber: caseRecord.docketNumber,
+    docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
+      docketNumber: caseRecord.docketNumber,
+      docketNumberSuffix: caseRecord.docketNumberSuffix,
+    }),
+    isSealed: caseRecord.isSealed,
+    petitioners: petitioners || [],
+    receivedAt:
+      caseRecord.receivedAt instanceof Date
+        ? caseRecord.receivedAt.toISOString()
+        : caseRecord.receivedAt,
+    privatePractitioners,
+    irsPractitioners,
+  });
 };
 
 export const convertDbRowToRawEligibleCase = (dbCase: any): RawEligibleCase => {

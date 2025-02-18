@@ -1,3 +1,4 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -20,7 +21,7 @@ export const setAddEditCaseNoteModalStateFromDetailAction = ({
 
   store.set(
     state.modal.docketNumber,
-    `${docketNumber}${docketNumberSuffix || ''}`,
+    Case.getDocketNumberWithSuffix({ docketNumber, docketNumberSuffix }),
   );
   store.set(state.modal.caseTitle, caseTitle);
   store.set(state.modal.notes, caseNote);

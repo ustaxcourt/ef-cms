@@ -324,14 +324,14 @@ describe('serveCaseToIrsInteractor', () => {
       isPaper: false,
       partyType: PARTY_TYPES.petitionerSpouse,
       petitioners: [
-        { ...MOCK_CASE.petitioners[0], hasConsentedToEService: false },
+        { ...MOCK_CASE.petitioners[0], hasConsentedToElectronicService: false },
         {
           ...MOCK_CASE.petitioners[0],
           contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           contactType: CONTACT_TYPES.secondary,
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           name: 'Test Petitioner Secondary',
           paperPetitionEmail: 'testing@example.com',
           phone: '1234547',
@@ -383,7 +383,7 @@ describe('serveCaseToIrsInteractor', () => {
       petitioners: [
         {
           ...MOCK_CASE.petitioners[0],
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           paperPetitionEmail: 'testing@example.com',
         },
         {
@@ -392,7 +392,7 @@ describe('serveCaseToIrsInteractor', () => {
           contactType: CONTACT_TYPES.secondary,
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
-          hasConsentedToEService: false,
+          hasConsentedToElectronicService: false,
           name: 'Test Petitioner Secondary',
           paperPetitionEmail: undefined,
           phone: '1234547',
@@ -422,7 +422,7 @@ describe('serveCaseToIrsInteractor', () => {
       petitioners: [
         {
           ...MOCK_CASE.petitioners[0],
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           paperPetitionEmail: 'testing@example.com',
         },
         {
@@ -430,7 +430,7 @@ describe('serveCaseToIrsInteractor', () => {
           contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           contactType: CONTACT_TYPES.secondary,
           email: 'petitioner@example.com',
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           name: 'Test Petitioner Secondary',
           paperPetitionEmail: 'testing@example.com',
           phone: '1234547',
@@ -468,7 +468,7 @@ describe('serveCaseToIrsInteractor', () => {
       petitioners: [
         {
           ...MOCK_CASE.petitioners[0],
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           paperPetitionEmail: 'testing@example.com',
         },
         {
@@ -478,7 +478,7 @@ describe('serveCaseToIrsInteractor', () => {
           contactType: CONTACT_TYPES.secondary,
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           name: 'Test Petitioner Secondary',
           paperPetitionEmail: 'testing@example.com',
           phone: '1234547',
@@ -516,7 +516,7 @@ describe('serveCaseToIrsInteractor', () => {
       petitioners: [
         {
           ...MOCK_CASE.petitioners[0],
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           paperPetitionEmail: 'testing1@example.com',
         },
         {
@@ -525,7 +525,7 @@ describe('serveCaseToIrsInteractor', () => {
           contactType: CONTACT_TYPES.secondary,
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           name: 'Test Petitioner Secondary',
           paperPetitionEmail: 'testing@example.com',
           phone: '1234547',

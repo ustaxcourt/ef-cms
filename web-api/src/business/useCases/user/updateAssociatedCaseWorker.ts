@@ -102,8 +102,8 @@ export const updatePractitionerCase = async ({
     authorizedUser,
   });
   const practitionerObject = [
-    ...caseEntity.privatePractitioners,
-    ...caseEntity.irsPractitioners,
+    ...(caseEntity.privatePractitioners || []),
+    ...(caseEntity.irsPractitioners || []),
   ].find(practitioner => practitioner.userId === user.userId);
 
   if (!practitionerObject) {

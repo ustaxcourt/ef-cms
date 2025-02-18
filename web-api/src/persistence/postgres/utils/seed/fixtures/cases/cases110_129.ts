@@ -40,7 +40,7 @@ export const cases110_129: RawCase[] = [
     highPriorityReason: 'testing',
     initialCaption: 'Brett Osborne, Petitioner',
     partyType: PARTY_TYPES.petitioner,
-    petitionPaymentStatus: PAYMENT_STATUS.UNPAID, // 10502 added
+    petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     preferredTrialCity: 'Birmingham, Alabama',
     procedureType: PROCEDURE_TYPES_MAP.regular,
     receivedAt: '2019-03-01T21:40:46.415Z',

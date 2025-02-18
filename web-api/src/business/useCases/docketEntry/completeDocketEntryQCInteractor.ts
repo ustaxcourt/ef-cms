@@ -153,9 +153,10 @@ const completeDocketEntryQC = async (
     caseCaptionExtension,
     caseTitle,
     docketEntryIndex: docketRecordIndexUpdated,
-    docketNumber: `${caseToUpdate.docketNumber}${
-      caseToUpdate.docketNumberSuffix || ''
-    }`,
+    docketNumber: Case.getDocketNumberWithSuffix({
+      docketNumber: caseToUpdate.docketNumber,
+      docketNumberSuffix: caseToUpdate.docketNumberSuffix,
+    }),
     filingParties: {
       after: updatedDocketEntry.filedBy,
       before: currentDocketEntry.filedBy,

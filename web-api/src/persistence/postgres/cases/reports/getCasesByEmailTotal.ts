@@ -1,5 +1,7 @@
 import { ROLES } from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@web-api/applicationContext';
 import { getDbReader } from '@web-api/database';
+import { getCasesByEmailTotal as getCasesByEmailTotalElasticsearch } from '@web-api/persistence/elasticsearch/getCasesByEmailTotal';
 
 export const getCasesByEmailTotal = async ({
   email,
@@ -8,17 +10,15 @@ export const getCasesByEmailTotal = async ({
   email: string;
   role: string;
 }) => {
-  let table: 'dwPetitionerOnCase' | 'dwPractitionerOnCase' =
-    'dwPractitionerOnCase';
   if (role === ROLES.petitioner) {
-    table = 'dwPetitionerOnCase';
+    const total = await getDbReader(reader =>
+      reader
+        .selectFrom('dwPetitionerOnCase')
+        .where('email', '=', email)
+        .select(({ fn }) => fn.count('docketNumber').as('count'))
+        .execute(),
+    );
+    return Number(total[0].count);
   }
-  const total = await getDbReader(reader =>
-    reader
-      .selectFrom(table)
-      .where('email', '=', email)
-      .select(({ fn }) => fn.count('docketNumber').as('count'))
-      .execute(),
-  );
-  return Number(total[0].count);
+  return await getCasesByEmailTotalElasticsearch({ applicationContext, email });
 };

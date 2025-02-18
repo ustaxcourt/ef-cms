@@ -29,10 +29,10 @@ export const EConsent = connect(
     return (
       <FormGroup className="grid-col-4">
         <input
-          checked={data[contactType].hasConsentedToEService || false}
+          checked={data[contactType].hasConsentedToElectronicService || false}
           className="usa-checkbox__input"
           id={`electronic-service-consent-${contactType}`}
-          name={`${contactType}.hasConsentedToEService`}
+          name={`${contactType}.hasConsentedToElectronicService`}
           type="checkbox"
           onBlur={onBlur}
           onChange={e => {

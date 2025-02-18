@@ -1,10 +1,11 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getCaseMetadataWithCounsel as getCaseMetadataWithCounselMock } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { processCaseEntries } from './processCaseEntries';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
+
 jest.mock('@web-api/persistence/postgres/cases/upsertCases');
 
 describe('processCaseEntries', () => {
@@ -25,6 +26,12 @@ describe('processCaseEntries', () => {
         sk: {
           S: 'case|123-45',
         },
+        petitioners: {
+          S: [],
+        },
+        caseStatusHistory: {
+          S: [],
+        },
       },
     },
   };
@@ -41,7 +48,6 @@ describe('processCaseEntries', () => {
 
   it('should do nothing when no case records are found', async () => {
     await processCaseEntries({
-      applicationContext,
       caseEntityRecords: [],
     });
 
@@ -50,23 +56,13 @@ describe('processCaseEntries', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should make a call to fetch the full case record with counsel from persistence', async () => {
-    await processCaseEntries({
-      applicationContext,
-      caseEntityRecords: [mockCaseRecord],
-    });
-
-    expect(getCaseMetadataWithCounsel.mock.calls[0][0]).toMatchObject({
-      docketNumber: mockCaseRecord.dynamodb.NewImage.docketNumber.S,
-    });
-  });
-
   it('should index the provided case record', async () => {
     await processCaseEntries({
-      applicationContext,
       caseEntityRecords: [mockCaseRecord],
     });
 
-    expect(upsertCases).toHaveBeenCalledWith([mockCaseRecord]);
+    expect(upsertCases).toHaveBeenCalledWith([
+      expect.objectContaining({ pk: 'case|123-45' }),
+    ]);
   });
 });
