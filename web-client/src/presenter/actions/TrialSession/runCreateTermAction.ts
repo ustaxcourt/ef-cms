@@ -4,7 +4,11 @@ export const runCreateTermAction = async ({
   applicationContext,
   path,
   props,
-}: ActionProps) => {
+}: ActionProps<{
+  termStartDate: string;
+  termEndDate: string;
+  termName: string;
+}>) => {
   const { termEndDate, termName, termStartDate } = props;
 
   const { bufferArray, message } = await applicationContext
