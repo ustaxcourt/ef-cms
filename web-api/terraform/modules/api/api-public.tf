@@ -241,8 +241,8 @@ resource "aws_api_gateway_method_settings" "api_public_default" {
   method_path = "*/*"
 
   settings {
-    throttling_burst_limit = 5000  // concurrent request limit
-    throttling_rate_limit  = 10000 // per second
+    throttling_burst_limit = 500  // concurrent request limit
+    throttling_rate_limit  = 1000 // per second
   }
 }
 
