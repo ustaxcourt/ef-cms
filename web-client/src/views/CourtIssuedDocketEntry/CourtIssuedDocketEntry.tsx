@@ -266,7 +266,7 @@ export const CourtIssuedDocketEntry = connect(
               </div>
 
               <section className="usa-section DocumentDetail">
-                <div className="margin-top-5">
+                <div className="margin-top-5 button-container">
                   {addCourtIssuedDocketEntryHelper.showSaveAndServeButton && (
                     <Button
                       data-testid="serve-to-parties-btn"

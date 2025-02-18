@@ -48,6 +48,7 @@ export const CaseDetailSubnavTabs = connect(
                 id="tab-tracked-items"
                 tabName="trackedItems"
                 title="Tracked Items"
+                data-testid="tab-tracked-items"
               />
             )}
             {caseDetailSubnavHelper.showDraftsTab && (
