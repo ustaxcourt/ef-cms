@@ -9,6 +9,8 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
+import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
+import { isEmpty } from 'lodash';
 
 export const CaseSearchByName = connect(
   {
@@ -454,7 +456,39 @@ export const CaseSearchByName = connect(
                   value: '',
                 }}
                 options={caseSearchByNameHelper.caseTypeOptions}
+                onChange={e => {
+                  if (e?.value) {
+                    const currentCaseTypeFilters =
+                      advancedSearchForm.caseSearchByName?.caseType || {};
+                    updateCaseAdvancedSearchByNameFormValueSequence({
+                      key: 'caseType',
+                      value: { ...currentCaseTypeFilters, [e.value]: e.value },
+                    });
+                  }
+                }}
               />
+            </div>
+            {!isEmpty(advancedSearchForm.caseSearchByName?.caseType) && (
+              <div className="padding-1"></div>
+            )}
+            <div>
+              {Object.values(
+                advancedSearchForm.caseSearchByName?.caseType || {},
+              ).map((caseType: any) => (
+                <PillButton
+                  key={caseType}
+                  text={caseType}
+                  onRemove={() => {
+                    delete advancedSearchForm.caseSearchByName.caseType[
+                      caseType
+                    ];
+                    updateCaseAdvancedSearchByNameFormValueSequence({
+                      key: 'caseType',
+                      value: advancedSearchForm.caseSearchByName.caseType,
+                    });
+                  }}
+                />
+              ))}
             </div>
             <div className="padding-2"></div>
 
