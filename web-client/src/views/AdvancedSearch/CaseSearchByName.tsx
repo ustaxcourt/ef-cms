@@ -448,6 +448,7 @@ export const CaseSearchByName = connect(
               </label>
               <SelectSearch
                 aria-labelledby="case-type-filter-label"
+                data-testid="case-type-selection"
                 name="caseType"
                 placeholder="- Select one or more -"
                 inputId="case-type-filter"

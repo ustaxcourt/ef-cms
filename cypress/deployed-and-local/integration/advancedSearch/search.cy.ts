@@ -10,6 +10,7 @@ import {
   loginAsPetitionsClerk1,
 } from '../../../helpers/authentication/login-as-helpers';
 import { selectTypeaheadInput } from '../../../helpers/components/typeAhead/select-typeahead-input';
+import { CASE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
 
 describe('Advanced Search', () => {
   beforeEach(() => {
@@ -22,6 +23,7 @@ describe('Advanced Search', () => {
       /** Act */
       cy.get('[data-testid="search-link"]').click();
       cy.get('[data-testid="petitioner-name"]').type(name);
+      selectTypeaheadInput('case-type-selection', CASE_TYPES_MAP.cdp);
 
       /** Assert */
       // need to wait for elasticsearch potentially
