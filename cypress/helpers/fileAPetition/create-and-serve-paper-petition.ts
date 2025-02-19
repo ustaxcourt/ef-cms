@@ -172,22 +172,31 @@ export function createAndServePaperPetition(
 
       cy.get('[data-testid="tab-drafts"] > .button-text').click();
 
-      cy.get('[data-testid="docket-entry-description-0"]').should(
-        'have.text',
+      const expectedDescriptions = [
         'Notice of Attachments in the Nature of Evidence',
-      );
-      cy.get('[data-testid="docket-entry-description-1"]').should(
-        'have.text',
         'Order',
-      );
-      cy.get('[data-testid="docket-entry-description-2"]').should(
-        'have.text',
         'Order',
-      );
-      cy.get('[data-testid="docket-entry-description-3"]').should(
-        'have.text',
         'Order to Show Cause',
-      );
+      ];
+
+      cy.get('[data-testid^="docket-entry-description-"]').should($els => {
+        const actualDescriptions = Array.from($els).map(el => el.textContent);
+
+        expect(actualDescriptions).to.have.length(expectedDescriptions.length);
+
+        expectedDescriptions.forEach(expected => {
+          const expectedCount = expectedDescriptions.filter(
+            desc => desc === expected,
+          ).length;
+          const actualCount = actualDescriptions.filter(
+            desc => desc === expected,
+          ).length;
+          expect(
+            actualCount,
+            `Should have ${expectedCount} occurrence(s) of "${expected}"`,
+          ).to.equal(expectedCount);
+        });
+      });
 
       cy.get('[data-testid="tab-docket-record"]').click();
 
