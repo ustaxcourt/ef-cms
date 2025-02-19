@@ -48,105 +48,109 @@ import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter-public';
 import App from 'cerebral';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { createLazyRoute } from '@tanstack/react-router';
 import { applicationContextPublic } from '@web-client/applicationContextPublic';
+
+function oneTimeSetup() {
+  const applicationContext = applicationContextPublic;
+  const withAppContextDecorator = (f, context) => {
+    return get => f(get, context || applicationContext);
+  };
+
+  // decorate all computed functions so they receive applicationContext as second argument ('get' is first)
+  presenter.state = mapValues(presenter.state, value => {
+    if (isFunction(value)) {
+      return withAppContextDecorator(value, applicationContext);
+    }
+    return value;
+  });
+
+  library.add(
+    faExchangeAlt,
+    faFileAltSolid,
+    faLock,
+    faLongArrowAltUp,
+    faLink,
+    faTimes,
+    faPrint,
+    faFilePdf,
+    faSearch,
+    faSync,
+    faLink,
+    faSort,
+    faTimesCircle,
+    faInfoCircle,
+    faCheckCircle,
+    faExclamation,
+    faExclamationCircle,
+    faExclamationTriangle,
+    faChevronUp,
+    faLongArrowAltDown,
+    faEnvelopeSolid,
+    faPhone,
+    faTimesCircleRegular,
+    faArrowAltCircleLeftSolid,
+    faArrowAltCircleLeftRegular,
+    faUser,
+    faCopy,
+    faCopySolid,
+  );
+
+  presenter.providers.applicationContext = applicationContext;
+
+  presenter.state.constants = applicationContext.getConstants();
+
+  const advancedSearchTab = applicationContext
+    .getUseCases()
+    .getItemInteractor(applicationContext, { key: 'advancedSearchTab' });
+
+  if (advancedSearchTab) {
+    presenter.state.advancedSearchTab = advancedSearchTab;
+    applicationContext
+      .getUseCases()
+      .removeItemInteractor(applicationContext, {
+        key: 'advancedSearchTab',
+      });
+  }
+
+  const advancedSearchForm = applicationContext
+    .getUseCases()
+    .getItemInteractor(applicationContext, { key: 'advancedSearchForm' });
+
+  if (advancedSearchForm) {
+    presenter.state.advancedSearchForm = advancedSearchForm;
+    applicationContext
+      .getUseCases()
+      .removeItemInteractor(applicationContext, {
+        key: 'advancedSearchForm',
+      });
+  }
+
+  presenter.providers.router = {
+    back,
+    createObjectURL,
+    externalRoute,
+    revokeObjectURL,
+    route,
+  };
+
+  const app = App(presenter);
+
+  applicationContext.setForceRefreshCallback(async () => {
+    await app.getSequence('handleAppHasUpdatedSequence')();
+  });
+
+  return app;
+}
+
+const cerebralApp = oneTimeSetup();
 
 /**
  * Instantiates the Cerebral app with React
  */
 export function CerebralPublicComponent() {
-  const cerebralApp = useMemo(() => {
-    const applicationContext = applicationContextPublic;
-    const withAppContextDecorator = (f, context) => {
-      return get => f(get, context || applicationContext);
-    };
-
-    // decorate all computed functions so they receive applicationContext as second argument ('get' is first)
-    presenter.state = mapValues(presenter.state, value => {
-      if (isFunction(value)) {
-        return withAppContextDecorator(value, applicationContext);
-      }
-      return value;
-    });
-
-    library.add(
-      faExchangeAlt,
-      faFileAltSolid,
-      faLock,
-      faLongArrowAltUp,
-      faLink,
-      faTimes,
-      faPrint,
-      faFilePdf,
-      faSearch,
-      faSync,
-      faLink,
-      faSort,
-      faTimesCircle,
-      faInfoCircle,
-      faCheckCircle,
-      faExclamation,
-      faExclamationCircle,
-      faExclamationTriangle,
-      faChevronUp,
-      faLongArrowAltDown,
-      faEnvelopeSolid,
-      faPhone,
-      faTimesCircleRegular,
-      faArrowAltCircleLeftSolid,
-      faArrowAltCircleLeftRegular,
-      faUser,
-      faCopy,
-      faCopySolid,
-    );
-
-    presenter.providers.applicationContext = applicationContext;
-
-    presenter.state.constants = applicationContext.getConstants();
-
-    const advancedSearchTab = applicationContext
-      .getUseCases()
-      .getItemInteractor(applicationContext, { key: 'advancedSearchTab' });
-
-    if (advancedSearchTab) {
-      presenter.state.advancedSearchTab = advancedSearchTab;
-      applicationContext
-        .getUseCases()
-        .removeItemInteractor(applicationContext, {
-          key: 'advancedSearchTab',
-        });
-    }
-
-    const advancedSearchForm = applicationContext
-      .getUseCases()
-      .getItemInteractor(applicationContext, { key: 'advancedSearchForm' });
-
-    if (advancedSearchForm) {
-      presenter.state.advancedSearchForm = advancedSearchForm;
-      applicationContext
-        .getUseCases()
-        .removeItemInteractor(applicationContext, {
-          key: 'advancedSearchForm',
-        });
-    }
-
-    presenter.providers.router = {
-      back,
-      createObjectURL,
-      externalRoute,
-      revokeObjectURL,
-      route,
-    };
-
-    const app = App(presenter);
-
-    applicationContext.setForceRefreshCallback(async () => {
-      await app.getSequence('handleAppHasUpdatedSequence')();
-    });
-
-    return app;
-  }, []);
+  console.log('Rendering Cerebral component')
 
   useEffect(() => {
     router.initialize(cerebralApp);
