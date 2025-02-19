@@ -23,6 +23,7 @@ export type CaseAdvancedSearchParamsRequestType = {
   petitionerState?: AbbrevatedStates;
   endDate?: string;
   startDate?: string;
+  caseType?: Record<string, string>;
 };
 
 export type CaseSearchResult = {

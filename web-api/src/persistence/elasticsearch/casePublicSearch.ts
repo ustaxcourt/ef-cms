@@ -38,25 +38,17 @@ export const casePublicSearch = async ({
     bool: {
       must: [...exactMatchesQuery, ...commonQuery],
       must_not: [
-        {
-          exists: {
-            field: 'sealedDate',
-          },
-        },
-        {
-          bool: {
-            must: [
-              {
-                term: {
-                  'isSealed.BOOL': true,
-                },
-              },
-            ],
-          },
-        },
+        { exists: { field: 'sealedDate' } },
+        { bool: { must: [{ term: { 'isSealed.BOOL': true } }] } },
       ],
     },
   };
+
+  if (searchTerms.caseType) {
+    query.bool.must.push({
+      terms: { 'caseType.S': Object.values(searchTerms.caseType) },
+    });
+  }
 
   const cases = await search({
     applicationContext,
