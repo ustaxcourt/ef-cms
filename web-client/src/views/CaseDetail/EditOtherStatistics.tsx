@@ -52,7 +52,7 @@ export const EditOtherStatistics = connect(
             </div>
           </div>
 
-          <div className="margin-top-3">
+          <div className="margin-top-3 button-container">
             <Button
               onClick={() => {
                 submitEditOtherStatisticsSequence();
