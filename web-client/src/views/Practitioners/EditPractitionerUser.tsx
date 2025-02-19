@@ -34,7 +34,7 @@ export const EditPractitionerUser = connect(
           <PractitionerForm validateSequenceName="validateUpdatePractitionerSequence" />
 
           <div className="grid-row margin-bottom-6">
-            <div className="grid-col-12">
+            <div className="grid-col-12 button-container">
               <Button
                 data-testid="save-practitioner-updates-button"
                 onClick={() => {
