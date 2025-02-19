@@ -6,6 +6,7 @@ import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getSetJudgesSequence } from './getSetJudgesSequence';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
+import { setDefaultPendingReportTableSortAction } from '@web-client/presenter/actions/PendingItems/setDefaultPendingReportTableSortAction';
 
 export const gotoPendingReportSequence =
   startWebSocketConnectionSequenceDecorator([
@@ -16,5 +17,6 @@ export const gotoPendingReportSequence =
     clearErrorAlertsAction,
     clearPendingReportsAction,
     getSetJudgesSequence,
+    setDefaultPendingReportTableSortAction,
     setupCurrentPageAction('PendingReport'),
   ]);
