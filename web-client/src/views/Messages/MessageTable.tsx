@@ -136,9 +136,11 @@ export const MessageTable = connect<
             role="alert"
           >
             <div className="usa-alert__body">
-              Message(s) completed at{' '}
-              {messagesIndividualInboxHelper.messagesCompletedAt} by{' '}
-              {messagesIndividualInboxHelper.messagesCompletedBy}
+              <p className="usa-alert__text">
+                Message(s) completed at{' '}
+                {messagesIndividualInboxHelper.messagesCompletedAt} by{' '}
+                {messagesIndividualInboxHelper.messagesCompletedBy}
+              </p>
             </div>
           </div>
         )}
