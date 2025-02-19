@@ -41,13 +41,13 @@ export const CaseSearchForm = connect(
 
         <NonMobile>
           <div className="grid-row grid-gap-6">
-            <div className="grid-col-6 right-gray-border">
+            <div className="grid-col-6 right-gray-border display-flex flex-column">
               <CaseSearchByName
                 submitAdvancedSearchSequence={submitAdvancedSearchSequence}
               />
             </div>
 
-            <div className="grid-col-6">
+            <div className="grid-col-6 display-flex flex-column">
               <CaseSearchByDocketNumber
                 submitDocketNumberSearchSequence={
                   submitDocketNumberSearchSequence

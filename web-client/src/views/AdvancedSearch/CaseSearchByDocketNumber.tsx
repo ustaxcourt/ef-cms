@@ -31,7 +31,7 @@ export const CaseSearchByDocketNumber = connect(
         >
           <h3>Search by Docket Number</h3>
         </div>
-        <div className="blue-container advanced-search__form-container">
+        <div className="blue-container display-flex flex-column height-full">
           <form>
             <div className="grid-row">
               <div className="tablet:grid-col-6">
