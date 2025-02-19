@@ -116,20 +116,22 @@ export const BeforeYouFileADocument = connect(
               </div>
             </div>
           </div>
-          <Button
-            data-testid="ready-to-file"
-            href={`/case-detail/${caseDetail.docketNumber}/file-a-document`}
-          >
-            OK, Iʼm Ready to File
-          </Button>
-          <Button
-            link
-            onClick={() => {
-              formCancelToggleCancelSequence();
-            }}
-          >
-            Cancel
-          </Button>
+          <div className="button-container">
+            <Button
+              data-testid="ready-to-file"
+              href={`/case-detail/${caseDetail.docketNumber}/file-a-document`}
+            >
+              OK, Iʼm Ready to File
+            </Button>
+            <Button
+              link
+              onClick={() => {
+                formCancelToggleCancelSequence();
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
           {showModal === 'FormCancelModalDialog' && (
             <FormCancelModalDialog
               onCancelSequence={closeModalAndReturnToCaseDetailSequence}
