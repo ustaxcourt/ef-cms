@@ -44,12 +44,6 @@ export const casePublicSearch = async ({
     },
   };
 
-  if (searchTerms.caseType) {
-    query.bool.must.push({
-      terms: { 'caseType.S': Object.values(searchTerms.caseType) },
-    });
-  }
-
   const cases = await search({
     applicationContext,
     searchParameters: {

@@ -43,6 +43,7 @@ export const caseAdvancedSearchInteractor = async (
     petitionerName,
     petitionerState,
     startDate,
+    caseType,
   }: CaseAdvancedSearchParamsRequestType,
   authorizedUser: UnknownAuthUser,
 ): Promise<CaseSearchResult[]> => {
@@ -83,6 +84,7 @@ export const caseAdvancedSearchInteractor = async (
         petitionerName,
         petitionerState,
         startDate: searchStartDate,
+        caseType,
       },
     });
 
