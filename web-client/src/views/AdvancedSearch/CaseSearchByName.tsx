@@ -50,7 +50,7 @@ export const CaseSearchByName = connect(
         >
           <h3>Search by Name</h3>
         </div>
-        <div className="blue-container advanced-search__form-container">
+        <div className="blue-container height-full display-flex flex-column">
           <form>
             <div className="grid-row grid-gap">
               <div className="tablet:grid-col-12">
