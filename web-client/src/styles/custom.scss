@@ -1306,7 +1306,7 @@ hr.lighter {
     }
 
     font-weight: $font-bold;
-    overflow-y: overlay;
+    overflow-y: auto;
     text-align: center;
   }
 
@@ -2347,8 +2347,7 @@ button.change-scanner-button {
 }
 
 .petitioner-welcome-name {
-  overflow-wrap: break-word;
-  word-break: break-word;
+  overflow-wrap: anywhere
 }
 
 .stepper-line-height {
