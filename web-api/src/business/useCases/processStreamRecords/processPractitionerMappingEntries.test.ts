@@ -1,27 +1,19 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { processPractitionerMappingEntries } from './processPractitionerMappingEntries';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import * as practitionerModule from './processPractitionerMappingEntries';
+const { processPractitionerMappingEntries } = practitionerModule;
 
 import { getCaseMetadataWithCounsel as getCaseMetadataWithCounselMock } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
-
 const getCaseMetadataWithCounsel = getCaseMetadataWithCounselMock as jest.Mock;
 
 describe('processPractitionerMappingEntries', () => {
   const mockCaseRecord = {
     dynamodb: {
       NewImage: {
-        docketNumber: {
-          S: '123-45',
-        },
-        entityName: {
-          S: 'Case',
-        },
-        pk: {
-          S: 'case|123-45',
-        },
-        sk: {
-          S: 'case|123-45',
-        },
+        docketNumber: { S: '123-45' },
+        entityName: { S: 'Case' },
+        pk: { S: 'case|123-45' },
+        sk: { S: 'case|123-45' },
       },
     },
   };
@@ -29,15 +21,9 @@ describe('processPractitionerMappingEntries', () => {
   const mockModifyIrsPractitionerMappingRecord = {
     dynamodb: {
       NewImage: {
-        entityName: {
-          S: 'IrsPractitioner',
-        },
-        pk: {
-          S: 'case|123-45',
-        },
-        sk: {
-          S: 'irsPractitioner|PT1234',
-        },
+        entityName: { S: 'IrsPractitioner' },
+        pk: { S: 'case|123-45' },
+        sk: { S: 'irsPractitioner|PT1234' },
       },
     },
     eventName: 'MODIFY',
@@ -46,15 +32,9 @@ describe('processPractitionerMappingEntries', () => {
   const mockModifyPrivatePractitionerMappingRecord = {
     dynamodb: {
       NewImage: {
-        entityName: {
-          S: 'PrivatePractitioner',
-        },
-        pk: {
-          S: 'case|123-45',
-        },
-        sk: {
-          S: 'privatePractitioner|PT1234',
-        },
+        entityName: { S: 'PrivatePractitioner' },
+        pk: { S: 'case|123-45' },
+        sk: { S: 'privatePractitioner|PT1234' },
       },
     },
     eventName: 'MODIFY',
@@ -86,7 +66,7 @@ describe('processPractitionerMappingEntries', () => {
         '|',
       )[1];
 
-    getCaseMetadataWithCounsel.mockReturnValue(mockCaseRecord);
+    getCaseMetadataWithCounsel.mockResolvedValue(mockCaseRecord);
 
     await processPractitionerMappingEntries({
       applicationContext,
@@ -105,7 +85,7 @@ describe('processPractitionerMappingEntries', () => {
   });
 
   it('should log an error and throw an exception when bulk index returns failed records', async () => {
-    getCaseMetadataWithCounsel.mockReturnValue(mockCaseRecord);
+    getCaseMetadataWithCounsel.mockResolvedValue(mockCaseRecord);
 
     applicationContext
       .getPersistenceGateway()
@@ -121,5 +101,22 @@ describe('processPractitionerMappingEntries', () => {
     ).rejects.toThrow('failed to index practitioner mapping records');
 
     expect(applicationContext.logger.error).toHaveBeenCalled();
+  });
+
+  it('should fallback to dynamo when case is not found in postgres during re-indexing', async () => {
+    jest
+      .spyOn(practitionerModule, 'getCaseDataFromDynamo')
+      .mockResolvedValue({});
+
+    getCaseMetadataWithCounsel.mockRejectedValue({});
+
+    await processPractitionerMappingEntries({
+      applicationContext,
+      practitionerMappingRecords: mockPractitionerMappingEntries,
+    });
+
+    expect(practitionerModule.getCaseDataFromDynamo).toHaveBeenCalledTimes(
+      mockPractitionerMappingEntries.length,
+    );
   });
 });

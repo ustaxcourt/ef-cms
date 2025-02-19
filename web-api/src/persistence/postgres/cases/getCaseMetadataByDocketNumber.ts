@@ -30,6 +30,9 @@ export const getCaseMetadataByDocketNumber = async ({
         ...transformNullToUndefined(rawCaseEntity(dbCase)),
         petitioners:
           (dbCase.petitioners as RawPetitioner[]).map(p => {
+            if (!p) {
+              return;
+            }
             return new Petitioner({
               ...transformNullToUndefined(p),
               state: p.state || null, // this needs to be null
