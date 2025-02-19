@@ -852,6 +852,21 @@ export const baseState = {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
   },
+  termGeneratorInformation: undefined as
+    | {
+        termEndDate: string;
+        termName: string;
+        termStartDate: string;
+        maxSessionsPerLocation: number;
+        maxSessionsPerWeek: number;
+        smallCaseMinimumQuantity: number;
+        smallCaseMaxQuantity: number;
+        regularCaseMinimumQuantity: number;
+        regularCaseMaxQuantity: number;
+        hybridCaseMinimumQuantity: number;
+        hybridCaseMaxQuantity: number;
+      }
+    | undefined,
   todaysDate: '',
   token: '',
   trialSession: cloneDeep(initialTrialSessionState),

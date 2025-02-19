@@ -1124,6 +1124,17 @@ const router = {
     );
 
     registerRoute(
+      '/trial-session/term-generator',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
+        () => {
+          setPageTitle('Trial session term generator');
+          return app.getSequence('gotoTrialSessionTermGeneratorSequence')();
+        },
+      ),
+    );
+
+    registerRoute(
       '/reports/cold-case-report',
       ifHasAccess({ app }, () => {
         setPageTitle('Cold case report');

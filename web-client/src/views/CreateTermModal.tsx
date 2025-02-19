@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 export const CreateTermModal = connect(
   {
     cancelSequence: sequences.clearModalFormSequence,
-    confirmSequence: sequences.submitCreateTermModalSequence,
+    confirmSequence: sequences.navigateToTermGeneratorPageSequence,
     modal: state.modal,
     todaysDate: state.todaysDate,
     updateModalValueSequence: sequences.updateModalValueSequence,
