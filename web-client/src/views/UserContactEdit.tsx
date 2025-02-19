@@ -75,17 +75,19 @@ export const UserContactEdit = connect(
             )}
             <UserContactEditForm />
           </div>
-          <Button
-            data-testid="save-edit-contact"
-            onClick={() => {
-              submitUpdateUserContactInformationSequence();
-            }}
-          >
-            Save
-          </Button>
-          <Button link onClick={() => navigateBackSequence()}>
-            Cancel
-          </Button>
+          <div className="button-container">
+            <Button
+              data-testid="save-edit-contact"
+              onClick={() => {
+                submitUpdateUserContactInformationSequence();
+              }}
+            >
+              Save
+            </Button>
+            <Button link onClick={() => navigateBackSequence()}>
+              Cancel
+            </Button>
+          </div>
         </section>
       </>
     );
