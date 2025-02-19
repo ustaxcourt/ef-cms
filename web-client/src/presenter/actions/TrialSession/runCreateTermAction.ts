@@ -1,21 +1,42 @@
 import { USER_MESSAGE_TYPES } from '@shared/business/entities/EntityConstants';
+import { CreateTermParams } from '@shared/types/CreateTermParams';
 
 export const runCreateTermAction = async ({
   applicationContext,
   path,
   props,
-}: ActionProps<{
-  termStartDate: string;
-  termEndDate: string;
-  termName: string;
-}>) => {
-  const { termEndDate, termName, termStartDate } = props;
+}: ActionProps<
+  CreateTermParams & {
+    termName: string;
+  }
+>) => {
+  const {
+    termEndDate,
+    termName,
+    termStartDate,
+    maxSessionsPerLocation,
+    maxSessionsPerWeek,
+    smallCaseMinimumQuantity,
+    smallCaseMaxQuantity,
+    regularCaseMinimumQuantity,
+    regularCaseMaxQuantity,
+    hybridCaseMinimumQuantity,
+    hybridCaseMaxQuantity,
+  } = props;
 
   const { bufferArray, message } = await applicationContext
     .getUseCases()
     .generateSuggestedTrialSessionCalendarInteractor(applicationContext, {
       termEndDate,
       termStartDate,
+      maxSessionsPerLocation,
+      maxSessionsPerWeek,
+      smallCaseMinimumQuantity,
+      smallCaseMaxQuantity,
+      regularCaseMinimumQuantity,
+      regularCaseMaxQuantity,
+      hybridCaseMinimumQuantity,
+      hybridCaseMaxQuantity,
     });
 
   switch (message.type) {

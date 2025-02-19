@@ -612,6 +612,8 @@ import { validateUpdatePractitionerSequence } from './sequences/validateUpdatePr
 import { validateUploadCorrespondenceDocumentSequence } from './sequences/validateUploadCorrespondenceDocumentSequence';
 import { validateUploadCourtIssuedDocumentSequence } from './sequences/validateUploadCourtIssuedDocumentSequence';
 import { validateUserContactSequence } from './sequences/validateUserContactSequence';
+import { navigateToTermGeneratorPageSequence } from '@web-client/presenter/sequences/TrialSessions/navigateToTermGeneratorPageSequence';
+import { gotoTrialSessionTermGeneratorSequence } from '@web-client/presenter/sequences/gotoTrialSessionTermGeneratorSequence';
 
 export const presenterSequences = {
   addAnotherIrsNoticeToFormSequence,
@@ -937,6 +939,7 @@ export const presenterSequences = {
   gotoStyleGuideSequence: gotoStyleGuideSequence as unknown as Function,
   gotoTrialSessionDetailSequence: gotoTrialSessionDetailsSequence,
   gotoTrialSessionPlanningReportViewSequence,
+  gotoTrialSessionTermGeneratorSequence,
   gotoTrialSessionWorkingCopySequence:
     gotoTrialSessionWorkingCopySequence as unknown as Function,
   gotoTrialSessionsSequence,
@@ -978,6 +981,7 @@ export const presenterSequences = {
   navigateToPrintableCaseConfirmationSequence:
     navigateToPrintableCaseConfirmationSequence as unknown as Function,
   navigateToStatusReportOrderSequence,
+  navigateToTermGeneratorPageSequence,
   navigateToTrialSessionPlanningReportSequence,
   notFoundErrorSequence: notFoundErrorSequence as unknown as Function,
   noticeGenerationCompleteSequence:
