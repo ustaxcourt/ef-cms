@@ -16,6 +16,7 @@ export const casePublicSearchInteractor = async (
     petitionerName,
     petitionerState,
     startDate,
+    caseType,
   }: CaseAdvancedSearchParamsRequestType,
 ): Promise<{ results: CaseSearchResult[] }> => {
   let searchStartDate;
@@ -41,14 +42,17 @@ export const casePublicSearchInteractor = async (
     });
   }
 
-  return await applicationContext.getPersistenceGateway().casePublicSearch({
-    applicationContext,
-    searchTerms: {
-      countryType,
-      endDate: searchEndDate,
-      petitionerName,
-      petitionerState,
-      startDate: searchStartDate,
-    },
-  });
+  return await applicationContext
+    .getPersistenceGateway()
+    .casePublicSearch({
+      applicationContext,
+      searchTerms: {
+        countryType,
+        endDate: searchEndDate,
+        petitionerName,
+        petitionerState,
+        startDate: searchStartDate,
+        caseType,
+      },
+    });
 };
