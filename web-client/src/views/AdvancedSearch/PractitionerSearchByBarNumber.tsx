@@ -64,9 +64,10 @@ export const PractitionerSearchByBarNumber = connect(
             </div>
 
             <div className="grid-row">
-              <div className="tablet:grid-col-6">
+              <div className="button-container">
                 <Button
-                  className="advanced-search__button margin-top-2"
+                  overrideMargin
+                  className="margin-bottom-0"
                   data-testid="practitioner-search-by-bar-number-button"
                   id="practitioner-search-by-bar-number-button"
                   onClick={e => {
@@ -78,7 +79,8 @@ export const PractitionerSearchByBarNumber = connect(
                 </Button>
                 <Button
                   link
-                  className="margin-top-1"
+                  overrideMargin
+                  className="margin-bottom-0 mobile:margin-top-2 tablet:margin-top-0 tablet:margin-left-205"
                   data-testid="clear-practitioner-search"
                   onClick={e => {
                     e.preventDefault();
