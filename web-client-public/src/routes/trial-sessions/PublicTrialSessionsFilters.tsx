@@ -51,7 +51,7 @@ export const PublicTrialSessionsFilters = function ({
             >
               <input
                 aria-describedby="proceeding-type-legend"
-                checked={proceedingType === proceedingType}
+                checked={trialSessionsFilters.proceedingType === proceedingType}
                 className="usa-radio__input"
                 id={`${proceedingType}-proceeding`}
                 name="proceedingType"
