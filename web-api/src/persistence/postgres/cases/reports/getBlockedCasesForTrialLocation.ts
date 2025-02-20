@@ -11,7 +11,25 @@ export const getBlockedCasesForTrialLocation = async (
       .selectFrom('dwCase')
       .where('preferredTrialCity', '=', trialLocation)
       .where(eb =>
-        eb.or([eb('automaticBlocked', '=', true), eb('blocked', '=', true)]),
+        eb.or([
+          eb('automaticBlocked', '=', true),
+          eb('blocked', '=', true),
+          eb.or([
+            eb.exists(sq =>
+              sq
+                .selectFrom('dwCase as c2')
+                .select('c2.leadDocketNumber')
+                .where('c2.preferredTrialCity', '=', trialLocation)
+                .whereRef('c2.leadDocketNumber', '=', 'dwCase.leadDocketNumber')
+                .where(qb =>
+                  qb.or([
+                    qb('c2.automaticBlocked', '=', true),
+                    qb('c2.blocked', '=', true),
+                  ]),
+                ),
+            ),
+          ]),
+        ]),
       )
       .select([
         'automaticBlocked',
