@@ -32,7 +32,6 @@ export const getCaseDeadlinesInteractor = async (
   const { foundDeadlines } = await getCaseDeadlinesByDateRange({
     endDate,
     judge,
-    pageSize: undefined,
     startDate,
   });
 

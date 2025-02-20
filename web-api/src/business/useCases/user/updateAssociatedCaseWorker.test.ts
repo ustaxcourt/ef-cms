@@ -1,3 +1,4 @@
+jest.mock('@shared/tools/helpers');
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
@@ -126,6 +127,7 @@ describe('updateAssociatedCaseWorker', () => {
       applicationContext
         .getPersistenceGateway()
         .getLock.mockImplementation(() => MOCK_LOCK);
+
       await expect(
         updateAssociatedCaseWorker(
           applicationContext,
