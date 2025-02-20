@@ -67,7 +67,6 @@ app.use((req, res, next) => {
 });
 app.use(expressLogger);
 
-import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
 import { casePublicSearchLambda } from './lambdas/public-api/casePublicSearchLambda';
 import { generatePublicDocketRecordPdfLambda } from './lambdas/public-api/generatePublicDocketRecordPdfLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
@@ -84,7 +83,6 @@ import { getPublicJudgesLambda } from './lambdas/public-api/getPublicJudgesLambd
 import { getPublicTrialSessionDetailsLambda } from '@web-api/lambdas/public-api/getPublicTrialSessionDetailsLambda';
 import { getPublicTrialSessionsLambda } from '@web-api/lambdas/trialSessions/getPublicTrialSessionsLambda';
 import { getUsersInSectionLambda } from '@web-api/lambdas/users/getUsersInSectionLambda';
-import { ipLimiter } from './middleware/ipLimiter';
 import { opinionPublicSearchLambda } from './lambdas/public-api/opinionPublicSearchLambda';
 import { orderPublicSearchLambda } from './lambdas/public-api/orderPublicSearchLambda';
 import { todaysOpinionsLambda } from './lambdas/public-api/todaysOpinionsLambda';
@@ -126,28 +124,9 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
 /** Search */
 {
   app.get('/public-api/search', lambdaWrapper(casePublicSearchLambda));
-  app.get(
-    '/public-api/order-search',
-    ipLimiter({
-      applicationContext,
-      key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
-    }),
-    advancedQueryLimiter({
-      applicationContext,
-      key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
-    }),
-    lambdaWrapper(orderPublicSearchLambda),
-  );
+  app.get('/public-api/order-search', lambdaWrapper(orderPublicSearchLambda));
   app.get(
     '/public-api/opinion-search',
-    ipLimiter({
-      applicationContext,
-      key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
-    }),
-    advancedQueryLimiter({
-      applicationContext,
-      key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
-    }),
     lambdaWrapper(opinionPublicSearchLambda),
   );
   app.get(
