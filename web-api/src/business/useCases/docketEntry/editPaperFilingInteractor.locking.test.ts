@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
+);
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
@@ -13,10 +16,17 @@ import {
 import { docketClerkUser } from '@shared/test/mockUsers';
 import { getContactPrimary } from '../../../../../shared/src/business/entities/cases/Case';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
+  const fileAndServeDocumentOnOneCase = jest.mocked(
+    fileAndServeDocumentOnOneCaseMock,
+  );
   beforeEach(() => {
+    fileAndServeDocumentOnOneCase.mockImplementation(({ caseEntity }) =>
+      Promise.resolve(caseEntity),
+    );
     mockParams = {
       applicationContext,
       consolidatedGroupDocketNumbers: [],

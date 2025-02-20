@@ -1,14 +1,15 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { deleteCaseDeadline as deleteDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
+import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 
 export const deleteCaseDeadline = async (
   applicationContext: ServerApplicationContext,
@@ -38,13 +39,11 @@ export const deleteCaseDeadline = async (
     caseDeadlineId,
   });
 
-  updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAutomaticBlock({
-      applicationContext,
-      caseEntity: updatedCase,
-      hasCaseDeadline: deadlinesBeforeDelete.length > 1
-    });
+  updatedCase = await updateCaseAutomaticBlock({
+    applicationContext,
+    caseEntity: updatedCase,
+    hasCaseDeadline: deadlinesBeforeDelete.length > 1,
+  });
 
   const result = await applicationContext
     .getUseCaseHelpers()

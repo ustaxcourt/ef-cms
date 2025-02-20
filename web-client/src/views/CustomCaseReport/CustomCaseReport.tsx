@@ -454,25 +454,27 @@ export const CustomCaseReport = connect(
               Calendaring high priority
             </label>
           </div>
-          <Button
-            data-testid="submit-custom-case-report-button"
-            tooltip="Run Report"
-            onClick={async () => {
-              setHasRunCustomCaseReport(true);
-              await getCustomCaseReportSequence({ selectedPage: 0 });
-              setActivePage(0);
-            }}
-          >
-            Run Report
-          </Button>
-          <Button
-            link
-            disabled={customCaseReportHelper.clearFiltersIsDisabled}
-            tooltip="Clear Filters"
-            onClick={() => clearOptionalCustomCaseReportFilterSequence()}
-          >
-            Clear Filters
-          </Button>
+          <div className="button-container">
+            <Button
+              data-testid="submit-custom-case-report-button"
+              tooltip="Run Report"
+              onClick={async () => {
+                setHasRunCustomCaseReport(true);
+                await getCustomCaseReportSequence({ selectedPage: 0 });
+                setActivePage(0);
+              }}
+            >
+              Run Report
+            </Button>
+            <Button
+              link
+              disabled={customCaseReportHelper.clearFiltersIsDisabled}
+              tooltip="Clear Filters"
+              onClick={() => clearOptionalCustomCaseReportFilterSequence()}
+            >
+              Clear Filters
+            </Button>
+          </div>
           <hr className="margin-top-3 margin-bottom-3 border-top-1px border-base-lighter" />
           <div ref={paginatorTop}>
             <Paginator
