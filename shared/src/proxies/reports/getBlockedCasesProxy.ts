@@ -1,3 +1,4 @@
+import { BlockedCasesResponse } from '@web-api/persistence/elasticsearch/getBlockedCases';
 import { get } from '../requests';
 
 /**
@@ -11,7 +12,7 @@ import { get } from '../requests';
 export const getBlockedCasesInteractor = (
   applicationContext,
   { trialLocation },
-) => {
+): Promise<BlockedCasesResponse> => {
   return get({
     applicationContext,
     endpoint: `/reports/blocked/${trialLocation}`,

@@ -293,28 +293,32 @@ export const OpinionSearchForm = connect(
             </div>
           </NonMobile>
 
-          <div className="margin-top-4">
-            <Button
-              className="margin-bottom-0"
-              data-testid="advanced-search-button"
-              id="advanced-search-button"
-              type="submit"
-            >
-              Search
-            </Button>
-            <Button
-              link
-              className="padding-0 margin-top-2 text-center"
-              id="clear-search"
-              onClick={e => {
-                e.preventDefault();
-                clearAdvancedSearchFormSequence({
-                  formType: 'opinionSearch',
-                });
-              }}
-            >
-              Clear Search
-            </Button>
+          <div className="grid-row margin-top-3">
+            <div className="button-container">
+              <Button
+                overrideMargin
+                className="margin-bottom-0"
+                data-testid="advanced-search-button"
+                id="advanced-search-button"
+                type="submit"
+              >
+                Search
+              </Button>
+              <Button
+                link
+                overrideMargin
+                className="margin-bottom-0 mobile:margin-top-2 tablet:margin-top-0 tablet:margin-left-205"
+                id="clear-search"
+                onClick={e => {
+                  e.preventDefault();
+                  clearAdvancedSearchFormSequence({
+                    formType: 'opinionSearch',
+                  });
+                }}
+              >
+                Clear Search
+              </Button>
+            </div>
           </div>
         </form>
       </>
