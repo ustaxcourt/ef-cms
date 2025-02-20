@@ -1,22 +1,37 @@
-import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { caseSearchByNameHelper as caseSearchByNameHelperComputed } from '@web-client/presenter/computeds/AdvancedSearch/CaseSearchByNameHelper';
-import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '@web-client/withAppContext';
+import { caseSearchByNameHelper } from '@web-client/presenter/computeds/AdvancedSearch/CaseSearchByNameHelper';
+import { CASE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 describe('caseSearchByNameHelper', () => {
-  const caseSearchByNameHelper = withAppContextDecorator(
-    caseSearchByNameHelperComputed,
-    applicationContext,
-  );
-
   it('returns appropriate defaults if permissions are not defined in state', () => {
-    const TEST_DATE = 'TEST_DATE';
-    applicationContext.getUtilities().formatNow = () => TEST_DATE;
+    const caseTypeOptions = [
+      {
+        label: CASE_TYPES_MAP.djExemptOrg,
+        value: CASE_TYPES_MAP.djExemptOrg,
+      },
+      {
+        label: CASE_TYPES_MAP.djRetirementPlan,
+        value: CASE_TYPES_MAP.djRetirementPlan,
+      },
+      {
+        label: CASE_TYPES_MAP.cdp,
+        value: CASE_TYPES_MAP.cdp,
+      },
+      {
+        label: CASE_TYPES_MAP.passport,
+        value: CASE_TYPES_MAP.passport,
+      },
+      {
+        label: CASE_TYPES_MAP.whistleblower,
+        value: CASE_TYPES_MAP.whistleblower,
+      },
+    ];
 
-    const result = runCompute(caseSearchByNameHelper, {} as any);
+    const result = caseSearchByNameHelper();
 
     expect(result).toEqual({
-      today: 'TEST_DATE',
+      today: formatNow(FORMATS.YYYYMMDD),
+      caseTypeOptions,
     });
   });
 });
