@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
+);
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
@@ -12,15 +15,23 @@ import {
 } from './fileAndServeCourtIssuedDocumentInteractor';
 import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
+  const fileAndServeDocumentOnOneCase = jest.mocked(
+    fileAndServeDocumentOnOneCaseMock,
+  );
   beforeEach(() => {
     mockParams = {
       applicationContext,
       docketNumbers: [],
       subjectCaseDocketNumber: '123-20',
     };
+
+    fileAndServeDocumentOnOneCase.mockImplementation(({ caseEntity }) =>
+      Promise.resolve(caseEntity),
+    );
   });
 
   it('should return an object that includes the documentMetadata.docketNumber in the identifiers', () => {
