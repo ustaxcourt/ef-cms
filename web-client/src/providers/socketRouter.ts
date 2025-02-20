@@ -46,6 +46,7 @@ export const socketRouter = (app, onMessageCallbackFn?) => {
             message:
               'We could not set the trial session calendar. Please contact support.',
             title: 'Error setting trial session calendar.',
+            scrollToErrorNotification: true,
           },
         });
         break;
