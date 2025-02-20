@@ -1,4 +1,8 @@
-import { COUNTRY_TYPES, US_STATES } from '../entities/EntityConstants';
+import {
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  US_STATES,
+} from '../entities/EntityConstants';
 import {
   aggregateCommonQueryParams,
   removeAdvancedSyntaxSymbols,
@@ -194,6 +198,23 @@ describe('aggregateCommonQueryParams', () => {
           },
         },
         { match: { 'entityName.S': 'Case' } },
+      ],
+      exactMatchesQuery: [],
+      nonExactMatchesQuery: [],
+    });
+  });
+
+  it('should include search params for caseType if present in query', () => {
+    const queryParams = {
+      applicationContext,
+      caseType: { [CASE_TYPES_MAP.cdp]: CASE_TYPES_MAP.cdp },
+    };
+
+    const result = aggregateCommonQueryParams(queryParams);
+    expect(result).toMatchObject({
+      commonQuery: [
+        { match: { 'entityName.S': 'Case' } },
+        { terms: { 'caseType.S': Object.values(queryParams.caseType) } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
