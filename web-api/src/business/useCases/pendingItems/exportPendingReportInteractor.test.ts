@@ -1,3 +1,5 @@
+jest.mock('csv-stringify/sync');
+
 import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
@@ -8,6 +10,7 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { stringify } from 'csv-stringify/sync';
 
 describe('exportPendingReportInteractor', () => {
   const judge = 'Colvin';
@@ -99,6 +102,8 @@ describe('exportPendingReportInteractor', () => {
   });
 
   it('should throw an unauthorized error when the user does not have access', async () => {
+    (stringify as jest.Mock).mockReturnValue('MOCK_CSV_STRING');
+
     await expect(
       exportPendingReportInteractor(
         applicationContext,
@@ -126,11 +131,146 @@ describe('exportPendingReportInteractor', () => {
       applicationContext.getUtilities().formatPendingItem,
     ).toHaveBeenCalledTimes(mockFoundDocuments.length);
 
-    expect(results).toEqual(
-      '\ufeffDocket No.,Date Filed,Case Title,Filings and Proceedings,Case Status,Judge\n456-68,02/04/22,Test Caption,Test Document Best,New,Judgey\n' +
-        '456-69,03/04/21,Test Caption,Test Document Best,New,Judger\n456-67,03/04/20,Test Caption,Test Document Best,General Docket - Not at Issue,Foley\n' +
-        '123-45,01/01/90,Test Caption,Test Document Title,General Docket - Not at Issue,Colvin\n123-49,01/01/99,Test Caption,Test Document Title,General Docket - Not at Issue,Judgeson\n' +
-        '234-56S,02/02/20,Test Caption Two,Test Document Type,On Appeal,Buch\n345-67,03/03/20,Test Caption,Test Document Title,On Appeal,Alvin\n456-78,03/03/20,Test Caption,Fear and Trembling,On Appeal,Buch\n',
-    );
+    const stringifyCalls = (stringify as jest.Mock).mock.calls;
+    expect(stringifyCalls.length).toEqual(1);
+    expect(stringifyCalls[0][0]).toEqual([
+      {
+        associatedJudgeFormatted: 'Colvin',
+        caseTitle: 'Test Caption',
+        consolidatedIconTooltipText: '',
+        docketEntryId: undefined,
+        docketNumber: '123-45',
+        docketNumberWithSuffix: '123-45',
+        documentLink:
+          '/case-detail/123-45/document-view?docketEntryId=undefined',
+        formattedFiledDate: '01/01/90',
+        formattedName: 'Test Document Title',
+        formattedStatus: 'General Docket - Not at Issue',
+        inConsolidatedGroup: false,
+        isLeadCase: false,
+        receivedAt: '1990-01-01T12:00:00.000Z',
+        shouldIndent: false,
+      },
+      {
+        associatedJudgeFormatted: 'Judgeson',
+        caseTitle: 'Test Caption',
+        consolidatedIconTooltipText: '',
+        docketEntryId: undefined,
+        docketNumber: '123-49',
+        docketNumberWithSuffix: '123-49',
+        documentLink:
+          '/case-detail/123-49/document-view?docketEntryId=undefined',
+        formattedFiledDate: '01/01/99',
+        formattedName: 'Test Document Title',
+        formattedStatus: 'General Docket - Not at Issue',
+        inConsolidatedGroup: false,
+        isLeadCase: false,
+        receivedAt: '1999-01-01T12:00:00.000Z',
+        shouldIndent: false,
+      },
+      {
+        associatedJudgeFormatted: 'Buch',
+        caseTitle: 'Test Caption Two',
+        consolidatedIconTooltipText: '',
+        docketEntryId: undefined,
+        docketNumber: '234-56',
+        docketNumberWithSuffix: '234-56S',
+        documentLink:
+          '/case-detail/234-56/document-view?docketEntryId=undefined',
+        formattedFiledDate: '02/02/20',
+        formattedName: 'Test Document Type',
+        formattedStatus: 'On Appeal',
+        inConsolidatedGroup: false,
+        isLeadCase: false,
+        receivedAt: '2020-02-02T12:00:00.000Z',
+        shouldIndent: false,
+      },
+      {
+        associatedJudgeFormatted: 'Alvin',
+        caseTitle: 'Test Caption',
+        consolidatedIconTooltipText: 'Consolidated case',
+        docketEntryId: undefined,
+        docketNumber: '345-67',
+        docketNumberWithSuffix: '345-67',
+        documentLink:
+          '/case-detail/345-67/document-view?docketEntryId=undefined',
+        formattedFiledDate: '03/03/20',
+        formattedName: 'Test Document Title',
+        formattedStatus: 'On Appeal',
+        inConsolidatedGroup: true,
+        isLeadCase: false,
+        receivedAt: '2020-03-03T12:00:00.000Z',
+        shouldIndent: false,
+      },
+      {
+        associatedJudgeFormatted: 'Buch',
+        caseTitle: 'Test Caption',
+        consolidatedIconTooltipText: 'Lead case',
+        docketEntryId: undefined,
+        docketNumber: '456-78',
+        docketNumberWithSuffix: '456-78',
+        documentLink:
+          '/case-detail/456-78/document-view?docketEntryId=undefined',
+        formattedFiledDate: '03/03/20',
+        formattedName: 'Fear and Trembling',
+        formattedStatus: 'On Appeal',
+        inConsolidatedGroup: true,
+        isLeadCase: true,
+        receivedAt: '2020-03-03T12:00:00.000Z',
+        shouldIndent: false,
+      },
+      {
+        associatedJudgeFormatted: 'Foley',
+        caseTitle: 'Test Caption',
+        consolidatedIconTooltipText: '',
+        docketEntryId: undefined,
+        docketNumber: '456-67',
+        docketNumberWithSuffix: '456-67',
+        documentLink:
+          '/case-detail/456-67/document-view?docketEntryId=undefined',
+        formattedFiledDate: '03/04/20',
+        formattedName: 'Test Document Best',
+        formattedStatus: 'General Docket - Not at Issue',
+        inConsolidatedGroup: false,
+        isLeadCase: false,
+        receivedAt: '2020-03-04T12:00:00.000Z',
+        shouldIndent: false,
+      },
+      {
+        associatedJudgeFormatted: 'Judger',
+        caseTitle: 'Test Caption',
+        consolidatedIconTooltipText: '',
+        docketEntryId: undefined,
+        docketNumber: '456-69',
+        docketNumberWithSuffix: '456-69',
+        documentLink:
+          '/case-detail/456-69/document-view?docketEntryId=undefined',
+        formattedFiledDate: '03/04/21',
+        formattedName: 'Test Document Best',
+        formattedStatus: 'New',
+        inConsolidatedGroup: false,
+        isLeadCase: false,
+        receivedAt: '2021-03-04T12:00:00.000Z',
+        shouldIndent: false,
+      },
+      {
+        associatedJudgeFormatted: 'Judgey',
+        caseTitle: 'Test Caption',
+        consolidatedIconTooltipText: '',
+        docketEntryId: undefined,
+        docketNumber: '456-68',
+        docketNumberWithSuffix: '456-68',
+        documentLink:
+          '/case-detail/456-68/document-view?docketEntryId=undefined',
+        formattedFiledDate: '02/04/22',
+        formattedName: 'Test Document Best',
+        formattedStatus: 'New',
+        inConsolidatedGroup: false,
+        isLeadCase: false,
+        receivedAt: '2022-02-04T12:00:00.000Z',
+        shouldIndent: false,
+      },
+    ]);
+    expect(results).toEqual('MOCK_CSV_STRING');
   });
 });
