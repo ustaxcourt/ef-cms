@@ -75,7 +75,7 @@ const router = {
       )();
     });
 
-    route('/maintenance', () => {
+    route('/maintenance-old', () => {
       setPageTitle('Maintenance');
       return app.getSequence('gotoMaintenanceSequence')();
     });
