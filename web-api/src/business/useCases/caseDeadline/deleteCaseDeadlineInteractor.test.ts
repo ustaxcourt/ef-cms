@@ -68,6 +68,7 @@ describe('deleteCaseDeadlineInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
+    getCaseDeadlinesByDocketNumber.mockResolvedValueOnce([]);
     await deleteCaseDeadlineInteractor(
       applicationContext,
       {
@@ -134,7 +135,10 @@ describe('deleteCaseDeadlineInteractor', () => {
   });
 
   it('calls persistence to delete a case deadline and leaves the case automatically blocked if there are more deadlines', async () => {
-    mockDeadlines = [{ deadline: 'something' }];
+    mockDeadlines = [
+      { cadeDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416' },
+      { cadeDeadlineId: 'will remain after deletion' },
+    ];
 
     await deleteCaseDeadlineInteractor(
       applicationContext,
