@@ -305,27 +305,15 @@ export const getPendingItemsFromCase = ({
 export const getTransformedPendingItemDetails = (
   pendingItem,
 ): { documentType: string; description: string; objection: string } => {
-  const reverseLookupStructure = invert(ACTION_DOCUMENT_TYPE_OPTIONS);
-  const objectionReverseLookup = invert(MOTION_OBJECTION_OPTIONS);
-  const objectionsToObjectionOptionMap = {
-    [OBJECTIONS_OPTIONS_MAP.NO]:
-      objectionReverseLookup[MOTION_OBJECTION_OPTIONS.noObjection],
-    [OBJECTIONS_OPTIONS_MAP.YES]:
-      objectionReverseLookup[MOTION_OBJECTION_OPTIONS.objection],
-    [OBJECTIONS_OPTIONS_MAP.UNKNOWN]:
-      objectionReverseLookup[MOTION_OBJECTION_OPTIONS.unknown],
-  };
+  const documentTypeReverseLookup = invert(ACTION_DOCUMENT_TYPE_OPTIONS);
 
-  const directMatch = reverseLookupStructure[pendingItem.documentType];
+  const directMatch = documentTypeReverseLookup[pendingItem.documentType];
   if (directMatch) {
     return { description: '', documentType: directMatch, objection: '' };
   }
 
-  let transformedDocumentType;
-  let objection =
-    MOTION_OBJECTION_OPTIONS[
-      objectionsToObjectionOptionMap[pendingItem.objections]
-    ];
+  let transformedDocumentType = 'other';
+  let matchingObjectionOption = '';
 
   if (DocketEntry.isNotice(pendingItem.eventCode)) {
     transformedDocumentType = 'notice';
@@ -333,14 +321,29 @@ export const getTransformedPendingItemDetails = (
     transformedDocumentType = 'order';
   } else if (DocketEntry.isMotion(pendingItem.eventCode)) {
     transformedDocumentType = 'motion';
+  }
 
-    if (objection) {
-      objection = objectionReverseLookup[objection];
+  if (DocketEntry.isMotion(pendingItem.eventCode)) {
+    const objectionReverseLookup = invert(MOTION_OBJECTION_OPTIONS);
+    const objectionsToObjectionOptionMap = {
+      [OBJECTIONS_OPTIONS_MAP.NO]:
+        objectionReverseLookup[MOTION_OBJECTION_OPTIONS.noObjection],
+      [OBJECTIONS_OPTIONS_MAP.YES]:
+        objectionReverseLookup[MOTION_OBJECTION_OPTIONS.objection],
+      [OBJECTIONS_OPTIONS_MAP.UNKNOWN]:
+        objectionReverseLookup[MOTION_OBJECTION_OPTIONS.unknown],
+    };
+
+    matchingObjectionOption =
+      MOTION_OBJECTION_OPTIONS[
+        objectionsToObjectionOptionMap[pendingItem.objections]
+      ];
+    if (matchingObjectionOption) {
+      matchingObjectionOption = objectionReverseLookup[matchingObjectionOption];
     } else {
-      objection = objectionReverseLookup[MOTION_OBJECTION_OPTIONS.unknown];
+      matchingObjectionOption =
+        objectionReverseLookup[MOTION_OBJECTION_OPTIONS.unknown];
     }
-  } else {
-    transformedDocumentType = 'other';
   }
 
   const description = pendingItem.documentType;
@@ -348,7 +351,7 @@ export const getTransformedPendingItemDetails = (
   return {
     description,
     documentType: transformedDocumentType,
-    objection,
+    objection: matchingObjectionOption,
   };
 };
 

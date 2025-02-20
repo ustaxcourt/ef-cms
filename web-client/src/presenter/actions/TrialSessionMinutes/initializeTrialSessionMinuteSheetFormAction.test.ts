@@ -3,7 +3,6 @@ import {
   CONTACT_TYPES,
   MOTION_OBJECTION_OPTIONS,
   OBJECTIONS_OPTIONS_MAP,
-  PETITIONER_CONTACT_TYPES,
   PETITIONER_ROLE_OPTIONS,
   TrialSessionProceedingType,
   TrialSessionScope,
@@ -55,9 +54,6 @@ jest.mock(
     getFormattedTrialSessionDetails: jest.fn(),
   }),
 );
-
-const actionDocumentTypeReversedMap = invert(ACTION_DOCUMENT_TYPE_OPTIONS);
-const motionObjectionReversedMap = invert(MOTION_OBJECTION_OPTIONS);
 
 describe('initializeTrialSessionMinuteSheetFormAction', () => {
   it('should initialize the minute sheet form with all required sections', async () => {
@@ -341,6 +337,9 @@ describe('initializeMinuteSheet', () => {
 });
 
 describe('getTransformedPendingItemDetails', () => {
+  const actionDocumentTypeReversedMap = invert(ACTION_DOCUMENT_TYPE_OPTIONS);
+  const motionObjectionReversedMap = invert(MOTION_OBJECTION_OPTIONS);
+
   beforeEach(() => {
     mockIsNotice.mockReturnValue(false);
     mockIsOrder.mockReturnValue(false);
@@ -404,19 +403,6 @@ describe('getTransformedPendingItemDetails', () => {
       objection: 'unknown',
     });
   });
-
-  // it('should identify and return "motion" category and description for motion documents by eventCode, with no objections whatsoever', () => {
-  //   mockIsMotion.mockReturnValue(true);
-  //   const result = getTransformedPendingItemDetails({
-  //     documentType: 'Motion for a New Trial',
-  //     eventCode: 'M218',
-  //   });
-  //   expect(result).toEqual({
-  //     description: 'Motion for a New Trial',
-  //     documentType: 'motion',
-  //     objection: 'unknown',
-  //   });
-  // });
 
   it('should identify and return "motion" category and description for motion documents by eventCode, with unknown objection', () => {
     mockIsMotion.mockReturnValue(true);
