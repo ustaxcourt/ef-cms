@@ -72,12 +72,11 @@ import { Statistic } from '../Statistic';
 import { TrialSession } from '../trialSessions/TrialSession';
 import { UnprocessableEntityError } from '../../../../../web-api/src/errors/errors';
 import { User } from '../User';
-import { clone, compact, includes, isEmpty, startCase } from 'lodash';
+import { clone, compact, includes, startCase } from 'lodash';
 import { compareStrings } from '../../utilities/sortFunctions';
 import { getDocketNumberSuffix } from '../../utilities/getDocketNumberSuffix';
 import { shouldGenerateDocketRecordIndex } from '../../utilities/shouldGenerateDocketRecordIndex';
 import joi from 'joi';
-import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 
 export class Case extends JoiValidationEntity {
   public associatedJudge?: string;
@@ -1400,18 +1399,14 @@ export class Case extends JoiValidationEntity {
    * @param {object} caseDeadlines - the case deadlines
    * @returns {Case} the updated case entity
    */
-  updateAutomaticBlocked({
-    caseDeadlines,
-  }: {
-    caseDeadlines?: RawCaseDeadline[];
-  }) {
+  updateAutomaticBlocked({ hasCaseDeadline }: { hasCaseDeadline: boolean }) {
     const hasPendingItems = this.doesHavePendingItems();
     let automaticBlockedReason;
-    if (hasPendingItems && !isEmpty(caseDeadlines)) {
+    if (hasPendingItems && hasCaseDeadline) {
       automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate;
     } else if (hasPendingItems) {
       automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pending;
-    } else if (!isEmpty(caseDeadlines)) {
+    } else if (hasCaseDeadline) {
       automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.dueDate;
     }
     if (automaticBlockedReason) {
