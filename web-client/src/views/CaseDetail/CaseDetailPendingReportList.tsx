@@ -71,6 +71,7 @@ export const CaseDetailPendingReportList = connect(
                         link
                         className="padding-0 no-wrap"
                         icon="trash"
+                        data-testid="remove-pending-item-button"
                         onClick={() =>
                           openConfirmRemoveCaseDetailPendingItemModalSequence({
                             docketEntryId: entry.docketEntryId,
