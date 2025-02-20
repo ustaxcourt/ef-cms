@@ -401,7 +401,7 @@ export const FileDocumentReview = connect(
                 </div>
               </div>
             </div>
-            <div className="margin-top-2">
+            <div className="margin-top-2 button-container">
               <Button
                 className="margin-bottom-1"
                 data-testid="file-document-review-submit-document"

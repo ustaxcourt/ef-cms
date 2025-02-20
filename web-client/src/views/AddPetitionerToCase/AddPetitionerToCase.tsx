@@ -277,25 +277,26 @@ export const AddPetitionerToCase = connect(
               </span>
             </FormGroup>
           </div>
-
-          <Button
-            data-testid="add-petitioner-submit-button"
-            id="submit-edit-petitioner-information"
-            onClick={() => {
-              submitAddPetitionerSequence();
-            }}
-          >
-            Save
-          </Button>
-          <Button
-            link
-            onClick={() => {
-              formCancelToggleCancelSequence();
-              return false;
-            }}
-          >
-            Cancel
-          </Button>
+          <div className="button-container">
+            <Button
+              data-testid="add-petitioner-submit-button"
+              id="submit-edit-petitioner-information"
+              onClick={() => {
+                submitAddPetitionerSequence();
+              }}
+            >
+              Save
+            </Button>
+            <Button
+              link
+              onClick={() => {
+                formCancelToggleCancelSequence();
+                return false;
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
         </section>
 
         {showModal === 'FormCancelModalDialog' && (
