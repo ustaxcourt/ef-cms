@@ -1,17 +1,17 @@
+import { Case } from '@shared/business/entities/cases/Case';
+import { DOCUMENT_SERVED_MESSAGES } from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/business/useCaseHelper/acquireLock';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '@shared/authorization/authorizationClientService';
-import { Case } from '@shared/business/entities/cases/Case';
-import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import { DOCUMENT_SERVED_MESSAGES } from '@shared/business/entities/EntityConstants';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
