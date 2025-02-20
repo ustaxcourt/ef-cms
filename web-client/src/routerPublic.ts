@@ -48,7 +48,7 @@ const router = {
       app.getSequence('gotoTodaysOrdersSequence')();
     });
 
-    route('/health', () => {
+    route('/health-old', () => {
       setPageTitle('Health Check');
       return app.getSequence('gotoHealthCheckSequence')();
     });

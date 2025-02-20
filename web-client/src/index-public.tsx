@@ -11,6 +11,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { publicDefaultLayoutRoute } from 'web-client-public/src/routes/_default-layout/_defaultLayoutComponent';
 import { publicTrialSessionsRoute } from 'web-client-public/src/routes/trial-sessions/PublicTrialSessions';
 import { publicTrialSessionDetailsRoute } from 'web-client-public/src/routes/trial-session-detail/PublicaTrialSessionDetails';
+import { healthCheckRoute } from 'web-client-public/src/routes/health/HealthCheck';
 
 const catchAllRouteInFile = createRoute({
   getParentRoute: () => rootRoute,
@@ -22,6 +23,7 @@ const routeTree = rootRoute.addChildren([
     todaysOpinionsRoute,
     publicTrialSessionsRoute,
     publicTrialSessionDetailsRoute,
+    healthCheckRoute
   ]),
   catchAllRouteInFile,
 ]);
