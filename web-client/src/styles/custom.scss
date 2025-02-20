@@ -1306,7 +1306,9 @@ hr.lighter {
     }
 
     font-weight: $font-bold;
-    overflow-y: auto;
+    /* stylelint-disable declaration-property-value-keyword-no-deprecated */
+    overflow-y: overlay;
+    /* stylelint-enable declaration-property-value-keyword-no-deprecated */
     text-align: center;
   }
 
@@ -2347,7 +2349,10 @@ button.change-scanner-button {
 }
 
 .petitioner-welcome-name {
-  overflow-wrap: anywhere
+  overflow-wrap: break-word;
+  /* stylelint-disable declaration-property-value-keyword-no-deprecated */
+  word-break: break-word;
+  /* stylelint-enable declaration-property-value-keyword-no-deprecated */
 }
 
 .stepper-line-height {
