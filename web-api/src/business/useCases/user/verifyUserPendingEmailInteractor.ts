@@ -11,24 +11,14 @@ import {
   createISODateString,
 } from '@shared/business/utilities/DateHandler';
 import { updateUserPendingEmailRecord } from '@web-api/business/useCases/auth/changePasswordInteractor';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/business/useCaseHelper/acquireLock';
 
 export const TOKEN_EXPIRATION_TIME_HOURS = 24;
 
-export const userTokenHasExpired = (
-  tokenExpirationTimestamp?: string,
-): boolean => {
-  if (!tokenExpirationTimestamp) {
-    return true;
-  }
-  return (
-    calculateDifferenceInHours(
-      createISODateString(),
-      tokenExpirationTimestamp,
-    ) > TOKEN_EXPIRATION_TIME_HOURS
-  );
-};
-
-export const verifyUserPendingEmailInteractor = async (
+export const verifyUserPendingEmail = async (
   applicationContext: ServerApplicationContext,
   { token }: { token: string },
   authorizedUser: UnknownAuthUser,
@@ -64,10 +54,7 @@ export const verifyUserPendingEmailInteractor = async (
 
   const isEmailAvailable = await applicationContext
     .getPersistenceGateway()
-    .isEmailAvailable({
-      applicationContext,
-      email: user.pendingEmail,
-    });
+    .isEmailAvailable({ applicationContext, email: user.pendingEmail });
 
   if (!isEmailAvailable) {
     throw new Error('Email is not available');
@@ -75,24 +62,56 @@ export const verifyUserPendingEmailInteractor = async (
 
   const { updatedUser } = await updateUserPendingEmailRecord(
     applicationContext,
-    {
-      setIsUpdatingInformation: true,
-      user,
-    },
+    { setIsUpdatingInformation: true, user },
   );
 
-  await applicationContext.getUserGateway().updateUser(applicationContext, {
-    attributesToUpdate: {
-      email: updatedUser.email,
-    },
-    email: user.email!,
-  });
+  await applicationContext
+    .getUserGateway()
+    .updateUser(applicationContext, {
+      attributesToUpdate: { email: updatedUser.email },
+      email: user.email!,
+    });
 
-  await applicationContext.getWorkerGateway().queueWork(applicationContext, {
-    message: {
-      authorizedUser,
-      payload: { user: updatedUser },
-      type: MESSAGE_TYPES.QUEUE_EMAIL_UPDATE_ASSOCIATED_CASES,
-    },
-  });
+  await applicationContext
+    .getWorkerGateway()
+    .queueWork(applicationContext, {
+      message: {
+        authorizedUser,
+        payload: { user: updatedUser },
+        type: MESSAGE_TYPES.QUEUE_EMAIL_UPDATE_ASSOCIATED_CASES,
+      },
+    });
 };
+
+export const userTokenHasExpired = (
+  tokenExpirationTimestamp?: string,
+): boolean => {
+  if (!tokenExpirationTimestamp) {
+    return true;
+  }
+  return (
+    calculateDifferenceInHours(
+      createISODateString(),
+      tokenExpirationTimestamp,
+    ) > TOKEN_EXPIRATION_TIME_HOURS
+  );
+};
+
+export const verifyUserPendingEmailInteractor = withLocking(
+  verifyUserPendingEmail,
+  async (applicationContext: ServerApplicationContext, _, authorizedUser) => {
+    if (!authorizedUser?.userId) {
+      throw new Error('No authorized User when attempting to lock');
+    }
+    const docketNumbers = await applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByUser({
+        applicationContext,
+        userId: authorizedUser.userId,
+      });
+    const identifiers = docketNumbers.map(dN => `case|${dN}`);
+
+    return { identifiers };
+  },
+  asyncHandleLockError,
+);

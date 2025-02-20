@@ -24,15 +24,11 @@ export const checkLock = async ({
     .getLock({ applicationContext, identifier });
 
   if (!currentLock) {
-    getLogger().warn('Entity is NOT currently locked', {
-      identifier,
-    });
+    getLogger().warn('Entity is NOT currently locked', { identifier });
     return false;
   }
 
-  getLogger().warn('Entity is currently locked', {
-    currentLock,
-  });
+  getLogger().warn('Entity is currently locked', { currentLock });
 
   if (!isCaseLockingEnabled) {
     return false;
@@ -83,10 +79,7 @@ export const acquireLock = async ({
 
     const results = await Promise.all(
       identifiers.map(entityIdentifier =>
-        checkLock({
-          applicationContext,
-          identifier: entityIdentifier,
-        }),
+        checkLock({ applicationContext, identifier: entityIdentifier }),
       ),
     );
 
@@ -97,11 +90,9 @@ export const acquireLock = async ({
   // Second, lock them up so the are unavailable
   await Promise.all(
     identifiers.map(entityIdentifier =>
-      applicationContext.getPersistenceGateway().createLock({
-        applicationContext,
-        identifier: entityIdentifier,
-        ttl,
-      }),
+      applicationContext
+        .getPersistenceGateway()
+        .createLock({ applicationContext, identifier: entityIdentifier, ttl }),
     ),
   );
 };
@@ -113,10 +104,9 @@ export const removeLock = ({
   applicationContext: ServerApplicationContext;
   identifiers: string[];
 }): Promise<void> => {
-  return applicationContext.getPersistenceGateway().removeLock({
-    applicationContext,
-    identifiers,
-  });
+  return applicationContext
+    .getPersistenceGateway()
+    .removeLock({ applicationContext, identifiers });
 };
 
 export const asyncHandleLockError = async (
@@ -125,14 +115,14 @@ export const asyncHandleLockError = async (
   authorizedUser: UnknownAuthUser,
 ) => {
   if (!authorizedUser?.userId || !clientConnectionId) return;
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId,
-    message: {
-      action: 'async_service_unavailable_error',
-    },
-    userId: authorizedUser?.userId,
-  });
+  await applicationContext
+    .getNotificationGateway()
+    .sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: { action: 'async_service_unavailable_error' },
+      userId: authorizedUser?.userId,
+    });
 };
 
 /**
@@ -151,6 +141,7 @@ export function withLocking<InteractorInput, InteractorOutput>(
   getLockInfo: (
     applicationContext: any,
     options: any,
+    authorizedUser: UnknownAuthUser,
   ) =>
     | Promise<{ identifiers: string[]; ttl?: number }>
     | { identifiers: string[]; ttl?: number },
@@ -165,7 +156,11 @@ export function withLocking<InteractorInput, InteractorOutput>(
     options: InteractorInput,
     authorizedUser: UnknownAuthUser,
   ) {
-    const { identifiers, ttl } = await getLockInfo(applicationContext, options);
+    const { identifiers, ttl } = await getLockInfo(
+      applicationContext,
+      options,
+      authorizedUser,
+    );
 
     await acquireLock({
       applicationContext,
@@ -184,10 +179,7 @@ export function withLocking<InteractorInput, InteractorOutput>(
       caughtError = err;
     }
 
-    await removeLock({
-      applicationContext,
-      identifiers,
-    });
+    await removeLock({ applicationContext, identifiers });
 
     if (caughtError) {
       throw caughtError;
