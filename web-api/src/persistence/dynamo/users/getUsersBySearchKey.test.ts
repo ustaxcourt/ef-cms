@@ -1,14 +1,14 @@
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { batchGet, query } from '../../dynamodbClientService';
+import { batchGet, queryFull } from '../../dynamodbClientService';
 import { getUsersBySearchKey } from './getUsersBySearchKey';
 
 jest.mock('../../dynamodbClientService');
 
 const batchGetMock = batchGet as jest.Mock;
-const queryMock = query as jest.Mock;
+const queryFullMock = queryFull as jest.Mock;
 
-queryMock.mockReturnValue([
+queryFullMock.mockReturnValue([
   {
     pk: 'Test Practitioner|privatePractitioner',
     sk: 'user|9805d1ab-18d0-43ec-bafb-654e83405416',
@@ -53,7 +53,7 @@ describe('getUsersBySearchKey', () => {
   });
 
   it('should return an empty array if no mapping records are returned from the query', async () => {
-    queryMock.mockReturnValueOnce([]);
+    queryFullMock.mockReturnValueOnce([]);
     const result = await getUsersBySearchKey({
       applicationContext,
       searchKey: 'Test Practitioner',
@@ -70,7 +70,7 @@ describe('getUsersBySearchKey', () => {
       type: 'privatePractitioner',
     });
 
-    expect(queryMock.mock.calls[0][0]).toMatchObject({
+    expect(queryFullMock.mock.calls[0][0]).toMatchObject({
       ExpressionAttributeValues: {
         ':pk': 'privatePractitioner|PT1234',
       },
