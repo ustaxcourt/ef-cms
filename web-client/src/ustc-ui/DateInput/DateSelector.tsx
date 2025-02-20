@@ -43,7 +43,7 @@ export const DateSelector = ({
   showDateHint?: boolean;
 }) => {
   const datePickerId = `#${id}-picker.usa-date-picker__external-input`;
-  const formGroupInputRef = useRef<HTMLInputElement>(null);
+  const formGroupInputRef = useRef<HTMLDivElement>(null);
   const defaultMinDate = '0000-01-01';
   formGroupClassNames =
     labelPosition === 'left'
@@ -136,7 +136,7 @@ export const DateSelector = ({
     <FormGroup
       className={formGroupClassNames}
       errorText={errorText}
-      formGroupRef={formGroupInputRef}
+      ref={formGroupInputRef}
     >
       <label
         className={labelClassNames}
