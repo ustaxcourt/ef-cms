@@ -81,7 +81,7 @@ export const DocketEntryQc = connect(
               <div className="grid-col-5">
                 <PrimaryDocumentForm />
 
-                <div className="margin-top-5">
+                <div className="margin-top-5 button-container">
                   <Button
                     disableOnClick
                     id="save-and-finish"
