@@ -29,6 +29,7 @@ export const updateDocketEntryMetaAction = async ({
       alertError: {
         message: err.message,
         title: 'Error',
+        scrollToErrorNotification: true,
       },
     });
   }
