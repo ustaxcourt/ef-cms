@@ -88,6 +88,8 @@ describe('Access a minute sheet, fill out sections of the form, navigate away an
 
       it('Can fill out court reporter input and check remote session', function () {
         cy.get('#remoteSession').check({ force: true });
+        cy.get('#courtReporter').should('have.value', 'Not assigned');
+        cy.get('#courtReporter').clear();
         cy.get('#courtReporter').type('Test Court Reporter');
 
         cy.get('#courtReporter').should('have.value', 'Test Court Reporter');
