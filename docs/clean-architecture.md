@@ -1,13 +1,13 @@
 
 # Dawson's Implementation of Clean Architecture
 
-This part of the tutorial is to explain the clean architecture approach we took on this project.  Understanding clean architecture is important to understanding why the code is structured the way that it is today.
+This part of the tutorial explains the clean architecture approach we took on this project.  Understanding clean architecture is important to understanding why the code is structured the way that it is today.
 
 ?> Please read more at [https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) if you need more details.
 
 ## What is Clean Architecture?
 
-The Dawson code base was structured to follow a design principle defined in a book called 
+The Dawson code base was structured to follow a design principle defined in a book called
 [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html).  Reading the book isn't necessary to understanding this codebase since a lot of the examples in the book are dated, way too verbose, and highly focused on enterprise Java, but don't let my opinions stop you from reading it.
 
 The overall idea of the design pattern is to separate your application into various layers where each layer must follow one simple rule:
@@ -26,7 +26,7 @@ Since our project is written in Javascript, it makes more sense to replace the w
 
 ### Dependency Inversion
 
-At this point you may ask, "How does the interactor invoke code from the persistence layer if it isn't allowed to directly import that code?" The answer is using *dependency inversion*.  Basically, instead of requiring the dependency using `import` or `require`, the module is passed into your code externally.  
+At this point you may ask, "How does the interactor invoke code from the persistence layer if it isn't allowed to directly import that code?" The answer is using *dependency inversion*.  Basically, instead of requiring the dependency using `import` or `require`, the module is passed into your code externally.
 
 One way to achieve *dependency inversion* is to use *dependency injection*, which involves passing dependencies directly into the signature of the method which is being called.
 
@@ -62,13 +62,13 @@ exports.getItemInteractor = async (applicationContext, { key }) => {
 };
 ```
 
-This code doesn't depend on the persistence layer's `getItem` method, instead, it depends on an getItem interface in which the actual implementation of the interface is determined externally to this code.  
+This code doesn't depend on the persistence layer's `getItem` method, instead, it depends on an getItem interface in which the actual implementation of the interface is determined externally to this code.
 
 ### Understand a Concrete Example
 
 All this abstract talk about layers and dependencies can get confusing, so let's actually talk about a concrete example.
 
-Imagine you want to write a CLI program that reads names from the users terminal and inserts those names into a database.  Your application would be spit up into 4 main layers.  
+Imagine you want to write a CLI program that reads names from the users terminal and inserts those names into a database.  Your application would be spit up into 4 main layers.
 
 - Your `framework & drivers` layer would have code that reads and write to a SQL database. It would also contain the code that reads and writes to the CLI.
 - Your `interface adapters` layer might have code that takes results from your `application business rules` and formats them in a way that is more user friendly, such as formatting an object into a pretty CLI table.

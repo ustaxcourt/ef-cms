@@ -68,7 +68,7 @@ export const FileDocument = connect(
           <ExternalConsolidatedCaseGroupFilingCard />
         )}
 
-        <div className="margin-top-4">
+        <div className="margin-top-4 button-container">
           <Button
             data-testid="file-document-submit-document"
             id="submit-document"
