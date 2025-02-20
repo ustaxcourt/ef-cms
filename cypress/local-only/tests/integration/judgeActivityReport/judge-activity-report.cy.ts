@@ -1,4 +1,3 @@
-import { addCaseToGroup } from '../../../../helpers/caseDetail/add-case-to-group';
 import {
   assertDoesNotExist,
   assertExists,
@@ -14,6 +13,8 @@ import {
 } from '../../../../helpers/authentication/login-as-helpers';
 import { navigateToJudgeActivityReport } from '../../../../helpers/judgeActivityReport/navigate-to-judge-activity-report';
 import { updateCaseStatus } from '../../../../helpers/caseDetail/caseInformation/update-case-status';
+import { createAndServeConsolidatedGroup } from 'cypress/helpers/fileAPetition/create-consolidated-case-group';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 
 describe('Verify the activity report', () => {
   describe('Statistics table', () => {
@@ -181,34 +182,22 @@ describe('Verify the activity report', () => {
     });
 
     it('should display lead case of a consolidated group', () => {
-      createAndServePaperPetition().then(
-        ({ docketNumber: childDocketNumber }) => {
-          loginAsDocketClerk1();
-          goToCase(childDocketNumber);
-          updateCaseStatus('Submitted', 'Colvin');
-
-          createAndServePaperPetition({ yearReceived: '2019' }).then(
-            ({ docketNumber: leadDocketNumber }) => {
-              loginAsDocketClerk1();
-              goToCase(leadDocketNumber);
-              updateCaseStatus('Submitted', 'Colvin');
-              addCaseToGroup(childDocketNumber);
-
-              retry(() => {
-                loginAsColvin();
-                navigateToJudgeActivityReport('submitted-and-cav');
-                return assertExists(`[data-testid="${leadDocketNumber}"]`).then(
-                  isLeadVisible => {
-                    assertDoesNotExist(
-                      `[data-testid="${childDocketNumber}"]`,
-                    ).then(isChildHidden => isLeadVisible && isChildHidden);
-                  },
-                );
-              });
+      createAndServeConsolidatedGroup({
+        caseStatus: CASE_STATUS_TYPES.submitted,
+        judge: 'Colvin',
+      }).then(({ leadDocketNumber, memberDocketNumber }) => {
+        retry(() => {
+          loginAsColvin();
+          navigateToJudgeActivityReport('submitted-and-cav');
+          return assertExists(`[data-testid="${leadDocketNumber}"]`).then(
+            isLeadVisible => {
+              assertDoesNotExist(`[data-testid="${memberDocketNumber}"]`).then(
+                isChildHidden => isLeadVisible && isChildHidden,
+              );
             },
           );
-        },
-      );
+        });
+      });
     });
   });
 
