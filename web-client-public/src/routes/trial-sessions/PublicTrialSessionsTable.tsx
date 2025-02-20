@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from '@tanstack/react-router';
 import {
   isTrialSessionRow,
   isTrialSessionWeek,
@@ -9,10 +10,10 @@ import React from 'react';
 
 export const PublicTrialSessionsTable = ({
   trialSessionsCount,
-  trialSessionRows
+  trialSessionRows,
 }: {
   trialSessionsCount: number;
-  trialSessionRows: (TrialSessionRow | TrialSessionWeek)[]
+  trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
 }) => {
   return (
     <>
@@ -84,9 +85,12 @@ export const PublicTrialSessionsTable = ({
                     <td
                       data-testid={`trial-location-link-${row.trialSessionId}`}
                     >
-                      <a href={`/trial-session-detail/${row.trialSessionId}`}>
+                      <Link
+                        to="/trial-session-detail/$trialSessionId"
+                        params={{ trialSessionId: row.trialSessionId }}
+                      >
                         {row.trialLocation}
-                      </a>
+                      </Link>
                     </td>
                     <td>{row.proceedingType}</td>
                     <td>{row.sessionType}</td>

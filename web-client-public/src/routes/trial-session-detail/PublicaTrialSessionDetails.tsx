@@ -3,8 +3,12 @@ import React from 'react';
 import { publicDefaultLayoutRoute } from 'web-client-public/src/routes/_default-layout/_defaultLayoutComponent';
 
 export function PublicTrialSessionDetails() {
-  console.log('params', publicTrialSessionDetailsRoute.useParams())
-  return <></>;
+  // const { trialSessionId } = publicTrialSessionDetailsRoute.useParams();
+  return (
+    <>
+      <h1>Hello</h1>
+    </>
+  );
 }
 
 export const publicTrialSessionDetailsRoute = createRoute({
