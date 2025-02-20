@@ -1,10 +1,7 @@
 import { TRIAL_SESSION_TERM_GENERATOR } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const saveTermGeneratorNameAndDatesAction = ({
-  store,
-  get,
-}: ActionProps) => {
+export const saveTermBuilderInfoAction = ({ store, get }: ActionProps) => {
   const { termEndDate, termName, termStartDate } = get(state.modal);
   const TERM_GENERATOR_INFO: typeof state.termGeneratorInformation = {
     termEndDate,
