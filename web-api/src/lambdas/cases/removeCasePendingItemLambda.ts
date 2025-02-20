@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { removeCasePendingItemInteractor } from '@shared/business/useCases/removeCasePendingItemInteractor';
+import { removeCasePendingItemInteractor } from '@web-api/business/useCases/pendingItems/removeCasePendingItemInteractor';
 
 /**
  * used for removing pending items from a case

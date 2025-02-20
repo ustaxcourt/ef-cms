@@ -69,6 +69,7 @@ export const CaseDeadlinesInternal = connect(
                         link
                         className="margin-right-0 padding-0 red-warning"
                         icon="trash"
+                        data-testid="delete-case-deadline-button"
                         onClick={() => {
                           openDeleteCaseDeadlineModalSequence({
                             caseDeadlineId: item.caseDeadlineId,
