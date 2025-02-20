@@ -3,12 +3,8 @@ import {
   isInConsolidatedGroup,
   isLeadCase,
 } from '@shared/business/entities/cases/Case';
-import { ClientPublicApplicationContext } from '@web-client/applicationContextPublic';
 import { FORMATS, formatDateString, formatNow } from '@shared/business/utilities/DateHandler';
-import { Get } from 'cerebral';
 import { compact, some } from 'lodash';
-import { state } from '@web-client/presenter/app-public.cerebral';
-import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { PublicTrialSessionDetails } from '@web-api/business/useCases/trialSessions/getPublicTrialSessionDetailsInteractor';
 
 export type FormattedPublicTrialSession = {

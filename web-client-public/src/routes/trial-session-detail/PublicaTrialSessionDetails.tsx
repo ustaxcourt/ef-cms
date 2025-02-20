@@ -1,9 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getPublicTrialSessionDetailsInteractor } from '@shared/proxies/trialSessions/getPublicTrialSessionDetailsProxy';
 import { useQuery } from '@tanstack/react-query';
-import { createRoute } from '@tanstack/react-router';
+import { createRoute, Link } from '@tanstack/react-router';
 import { applicationContextPublic } from '@web-client/applicationContextPublic';
-import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
 import { CaseIcons } from '@web-client/ustc-ui/Icon/CaseIcons';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
@@ -35,7 +34,6 @@ export function PublicTrialSessionsDetailsPage() {
   });
 
   if (trialSession) {
-    console.log('trialSession', trialSession)
     const { formattedNow, formattedTrialSession } =
       publicTrialSessionDetailsComputed({ trialSession });
 
@@ -82,14 +80,22 @@ const PublicTrialSessionInformation = ({
 }) => {
   return (
     <>
-      <Button
-        link
-        className="margin-bottom-1 text-left"
-        href="/trial-sessions"
-        icon={['fa', 'arrow-alt-circle-left']}
+      <Link
+        to="/trial-sessions"
+        from="/trial-session-detail/$trialSessionId"
+        search={{
+          judges: {},
+          locations: {},
+          proceedingType: 'All',
+          sessionTypes: {},
+        }}
+        className="display-flex flex-align-center"
       >
-        Back to scheduled trial sessions
-      </Button>
+        <Icon icon={'arrow-alt-circle-left'} />
+        <div className="padding-x-05"></div>
+        <span>Back to scheduled trial sessions</span>
+      </Link>
+      <div className="padding-1"></div>
       <h2 className="h1-size">Session Information</h2>
       <div className="margin-bottom-205">
         {`Information on this page is current as of ${formattedNow}.`}
@@ -318,7 +324,4 @@ export const publicTrialSessionDetailsRoute = createRoute({
   component: PublicTrialSessionsDetailsPage,
   getParentRoute: () => publicDefaultLayoutRoute,
   path: '/trial-session-detail/$trialSessionId',
-  // validateSearch: stuff => {
-  //   return stuff;
-  // },
 });
