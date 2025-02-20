@@ -16,7 +16,6 @@ import { createCaseAndAssociations } from './business/useCaseHelper/caseAssociat
 import { createTrialSessionAndWorkingCopy } from './business/useCaseHelper/trialSessions/createTrialSessionAndWorkingCopy';
 import { createUserConfirmation } from '@web-api/business/useCaseHelper/auth/createUserConfirmation';
 import { createUserForContact } from './business/useCaseHelper/caseAssociation/createUserForContact';
-import { fileAndServeDocumentOnOneCase } from './business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { formatConsolidatedCaseCoversheetData } from '@web-api/business/useCaseHelper/consolidatedCases/formatConsolidatedCaseCoversheetData';
 import { generateAndServeDocketEntry } from './business/useCaseHelper/service/createChangeItems';
 import { generateCaseInventoryReportPdf } from './business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf';
@@ -66,7 +65,6 @@ const useCaseHelpers = {
   createTrialSessionAndWorkingCopy,
   createUserConfirmation,
   createUserForContact,
-  fileAndServeDocumentOnOneCase,
   formatConsolidatedCaseCoversheetData,
   generateAndServeDocketEntry,
   generateCaseInventoryReportPdf,

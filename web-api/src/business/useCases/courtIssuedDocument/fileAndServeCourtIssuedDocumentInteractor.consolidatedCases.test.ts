@@ -1,4 +1,7 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
+);
 import {
   DOCKET_SECTION,
   TRANSCRIPT_EVENT_CODE,
@@ -17,8 +20,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { Case } from '@shared/business/entities/cases/Case';
 
 describe('consolidated cases', () => {
+  const fileAndServeDocumentOnOneCase = jest.mocked(
+    fileAndServeDocumentOnOneCaseMock,
+  );
   const mockPdfUrl = 'www.example.com';
   const mockWorkItem = {
     docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
@@ -61,11 +69,11 @@ describe('consolidated cases', () => {
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(1);
 
-    applicationContext
-      .getUseCaseHelpers()
-      .fileAndServeDocumentOnOneCase.mockReturnValue(
-        MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-      );
+    fileAndServeDocumentOnOneCase.mockResolvedValue(
+      new Case(MOCK_LEAD_CASE_WITH_PAPER_SERVICE, {
+        authorizedUser: undefined,
+      }),
+    );
 
     leadCaseDocketEntries = [
       mockDocketEntryWithWorkItem,
@@ -121,10 +129,9 @@ describe('consolidated cases', () => {
 
   it('should set each docketEntry`s pendingStatus to false even when an error occurs while filing the docket entries', async () => {
     const expectedErrorString = 'expected error';
-    applicationContext
-      .getUseCaseHelpers()
-      .fileAndServeDocumentOnOneCase.mockImplementationOnce(() => {})
-      .mockImplementationOnce(() => {})
+    fileAndServeDocumentOnOneCase
+      .mockImplementationOnce(() => undefined as any)
+      .mockImplementationOnce(() => undefined as any)
       .mockRejectedValueOnce(new Error(expectedErrorString));
 
     await expect(
