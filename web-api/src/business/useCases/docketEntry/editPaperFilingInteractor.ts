@@ -19,6 +19,7 @@ import { cloneDeep, uniq } from 'lodash';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
@@ -281,8 +282,7 @@ const serveDocketEntry = async ({
 
     caseEntitiesToFileOn = await Promise.all(
       caseEntitiesToFileOn.map(aCase =>
-        applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase({
-          applicationContext,
+        fileAndServeDocumentOnOneCase({
           caseEntity: aCase,
           docketEntryEntity: new DocketEntry(cloneDeep(updatedDocketEntry), {
             authorizedUser,

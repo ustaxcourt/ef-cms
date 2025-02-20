@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+jest.mock('@web-api/persistence/elasticsearch/getBlockedCases');
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
   SESSION_TERMS_DICT,
@@ -15,6 +16,7 @@ import { getBlockedCasesForTrialLocation as getBlockedCasesForTrialLocationMock 
 
 const getBlockedCasesForTrialLocation =
   getBlockedCasesForTrialLocationMock as jest.Mock;
+import { MOCK_CASE } from '@shared/test/mockCase';
 
 describe('getTrialSessionPlanningReportDataInteractor', () => {
   const ALL_TRIAL_SESSIONS_MOCK: RawTrialSession[] = [
@@ -132,7 +134,7 @@ describe('getTrialSessionPlanningReportDataInteractor', () => {
   ];
   const SMALL_ELIGIBLE_CASES_FOR_TRIAL_CITY_MOCK = [{}];
   const REGULAR_ELIGIBLE_CASES_FOR_TRIAL_CITY_MOCK = [{}, {}];
-  const BLOCKED_CASES_MOCK = [{}, {}, {}];
+  const BLOCKED_CASES_MOCK = [MOCK_CASE, MOCK_CASE, MOCK_CASE];
 
   beforeEach(() => {
     applicationContext

@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_LOCK } from '@shared/test/mockLock';
+jest.mock(
+  '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
+);
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 jest.mock('../addCoverToPdf');
@@ -13,6 +16,7 @@ import {
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { testPdfDoc } from '@shared/business/test/getFakeFile';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
@@ -109,6 +113,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     docketNumbers: [],
     subjectCaseDocketNumber: mockCase.docketNumber,
   };
+  const fileAndServeDocumentOnOneCase = jest.mocked(
+    fileAndServeDocumentOnOneCaseMock,
+  );
 
   beforeAll(() => {
     applicationContext
@@ -121,11 +128,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined; // unlocked
-    applicationContext
-      .getUseCaseHelpers()
-      .fileAndServeDocumentOnOneCase.mockImplementation(
-        ({ caseEntity }) => caseEntity,
-      );
+    fileAndServeDocumentOnOneCase.mockImplementation(
+      ({ caseEntity }) => caseEntity,
+    );
 
     applicationContext
       .getUseCaseHelpers()

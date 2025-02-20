@@ -39,15 +39,18 @@ export const createCaseDeadline = async (
     .updateCaseAutomaticBlock({
       applicationContext,
       caseEntity,
+      hasCaseDeadline: true,
     });
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
-    authorizedUser,
-    caseToUpdate: caseEntity,
-  });
+  const result = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
+      applicationContext,
+      authorizedUser,
+      caseToUpdate: caseEntity,
+    });
 
-  return newCaseDeadline;
+  return new Case(result, { authorizedUser }).validate().toRawObject();
 };
 
 export const createCaseDeadlineInteractor = withLocking(

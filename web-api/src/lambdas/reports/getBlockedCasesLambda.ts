@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { getBlockedCasesInteractor } from '@shared/business/useCases/getBlockedCasesInteractor';
+import { getBlockedCasesInteractor } from '@web-api/business/useCases/blockedCases/getBlockedCasesInteractor';
 
 /**
  * used for getting all the blocked cases for a trial location

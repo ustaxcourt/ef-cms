@@ -1,5 +1,8 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 
+jest.mock(
+  '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
+);
 import {
   DOCKET_SECTION,
   DOCUMENT_SERVED_MESSAGES,
@@ -17,6 +20,8 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
 import { v4 as uuidv4 } from 'uuid';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { Case } from '@shared/business/entities/cases/Case';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
@@ -29,6 +34,9 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
     sentByUserId: docketClerkUser.userId,
     workItemId: 'b4c7337f-9ca0-45d9-9396-75e003f81e32',
   };
+  const fileAndServeDocumentOnOneCase = jest.mocked(
+    fileAndServeDocumentOnOneCaseMock,
+  );
 
   const mockDocketEntryWithWorkItem = {
     docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
@@ -85,11 +93,11 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
       },
     ];
 
-    applicationContext
-      .getUseCaseHelpers()
-      .fileAndServeDocumentOnOneCase.mockReturnValue(
-        MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-      );
+    fileAndServeDocumentOnOneCase.mockResolvedValue(
+      new Case(MOCK_LEAD_CASE_WITH_PAPER_SERVICE, {
+        authorizedUser: undefined,
+      }),
+    );
 
     consolidatedCase1DocketEntries = MOCK_DOCUMENTS.map(docketEntry => {
       return {
@@ -168,10 +176,9 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
   it('should call updateDocketEntryPendingServiceStatus on error', async () => {
     const expectedErrorString = 'expected error';
 
-    applicationContext
-      .getUseCaseHelpers()
-      .fileAndServeDocumentOnOneCase.mockImplementationOnce(() => {})
-      .mockImplementationOnce(() => {})
+    fileAndServeDocumentOnOneCase
+      .mockImplementationOnce(() => undefined as any)
+      .mockImplementationOnce(() => undefined as any)
       .mockRejectedValueOnce(new Error(expectedErrorString));
 
     await expect(
