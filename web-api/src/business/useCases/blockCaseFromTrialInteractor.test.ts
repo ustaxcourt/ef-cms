@@ -1,3 +1,10 @@
+jest.mock('@web-api/persistence/dynamo/cases/getCaseByDocketNumber');
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
+jest.mock(
+  '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
+);
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
@@ -7,9 +14,18 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 
 describe('blockCaseFromTrialInteractor', () => {
   let mockLock;
+  const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const deleteCaseTrialSortMappingRecords = jest.mocked(
+    deleteCaseTrialSortMappingRecordsMock,
+  );
+
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
@@ -17,14 +33,10 @@ describe('blockCaseFromTrialInteractor', () => {
   });
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-    applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mockImplementation(
-        ({ caseToUpdate }) => caseToUpdate,
-      );
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
+    updateCaseAndAssociations.mockImplementation(
+      ({ caseToUpdate }) => caseToUpdate,
+    );
     mockLock = undefined;
   });
 
@@ -42,13 +54,9 @@ describe('blockCaseFromTrialInteractor', () => {
       blocked: true,
       blockedReason: 'just because',
     });
+    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
+      deleteCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
     ).toEqual(MOCK_CASE.docketNumber);
   });
 
@@ -66,9 +74,7 @@ describe('blockCaseFromTrialInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {
