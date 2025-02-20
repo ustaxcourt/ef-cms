@@ -14,6 +14,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { omit } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 export const fileAndServeCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
@@ -201,10 +202,7 @@ export const fileAndServeCourtIssuedDocument = async (
           });
         }
 
-        return applicationContext
-          .getUseCaseHelpers()
-          .fileAndServeDocumentOnOneCase({
-            applicationContext,
+        return fileAndServeDocumentOnOneCase({
             caseEntity,
             docketEntryEntity,
             subjectCaseDocketNumber,

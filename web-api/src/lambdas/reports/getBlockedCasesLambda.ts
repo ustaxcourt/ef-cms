@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { getBlockedCasesInteractor } from '@shared/business/useCases/getBlockedCasesInteractor';
+import { getBlockedCasesInteractor } from '@web-api/business/useCases/blockedCases/getBlockedCasesInteractor';
 
 /**
  * used for getting all the blocked cases for a trial location
@@ -9,9 +9,8 @@ import { getBlockedCasesInteractor } from '@shared/business/useCases/getBlockedC
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const getBlockedCasesLambda = (event, authorizedUser: UnknownAuthUser) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     return await getBlockedCasesInteractor(
-      applicationContext,
       {
         trialLocation: event.pathParameters.trialLocation,
       },
