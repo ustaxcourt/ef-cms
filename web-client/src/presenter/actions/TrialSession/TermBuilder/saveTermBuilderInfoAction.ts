@@ -3,7 +3,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 export const saveTermBuilderInfoAction = ({ store, get }: ActionProps) => {
   const { termEndDate, termName, termStartDate } = get(state.modal);
-  const TERM_GENERATOR_INFO: typeof state.termGeneratorInformation = {
+  const TERM_GENERATOR_INFO: typeof state.termBuilderInformation = {
     termEndDate,
     termName,
     termStartDate,
@@ -23,5 +23,5 @@ export const saveTermBuilderInfoAction = ({ store, get }: ActionProps) => {
       TRIAL_SESSION_TERM_GENERATOR.HYBRID_CASE_MAX_QUANTITY,
   };
 
-  store.set(state.termGeneratorInformation, TERM_GENERATOR_INFO);
+  store.set(state.termBuilderInformation, TERM_GENERATOR_INFO);
 };

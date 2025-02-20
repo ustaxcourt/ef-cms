@@ -1,4 +1,4 @@
-import { checkIfTermInfoIsInStateAction } from '@web-client/presenter/actions/TrialSession/TermGenerator/checkIfTermInfoIsInStateAction';
+import { checkIfTermInfoIsInStateAction } from '@web-client/presenter/actions/TrialSession/TermBuilder/checkIfTermInfoIsInStateAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { gotoTrialSessionsSequence } from '@web-client/presenter/sequences/gotoTrialSessionsSequence';
 import { navigateToTrialSessionsAction } from '@web-client/presenter/actions/TrialSession/navigateToTrialSessionsAction';

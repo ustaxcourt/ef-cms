@@ -1129,7 +1129,7 @@ const router = {
         { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
         () => {
           setPageTitle('Trial session term generator');
-          return app.getSequence('gotoTrialSessionTermGeneratorSequence')();
+          return app.getSequence('gotoTrialSessionTermBuilderSequence')();
         },
       ),
     );

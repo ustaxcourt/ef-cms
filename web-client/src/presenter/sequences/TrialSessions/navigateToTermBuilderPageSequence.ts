@@ -1,5 +1,5 @@
-import { navigateToTermBuilderPageAction } from '@web-client/presenter/actions/TrialSession/TermGenerator/navigateToTermBuilderPageAction';
-import { saveTermBuilderInfoAction } from '@web-client/presenter/actions/TrialSession/TermGenerator/saveTermBuilderInfoAction';
+import { navigateToTermBuilderPageAction } from '@web-client/presenter/actions/TrialSession/TermBuilder/navigateToTermBuilderPageAction';
+import { saveTermBuilderInfoAction } from '@web-client/presenter/actions/TrialSession/TermBuilder/saveTermBuilderInfoAction';
 
 export const navigateToTermBuilderPageSequence = [
   saveTermBuilderInfoAction,
