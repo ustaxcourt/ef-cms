@@ -6,9 +6,6 @@ import type {
 } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
 import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
-import { getPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/getPetitionersOnCase';
-import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
-import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { get, query } from '@web-api/persistence/dynamodbClientService';
 import { aggregateCaseItems } from '@web-api/persistence/dynamo/helpers/aggregateCaseItems';
@@ -36,7 +33,7 @@ export const processPractitionerMappingEntries = async ({
       // After case records have been moved into postgres, we need to get the case data associated with the practitioner from postgres.
       // However, when we try to fetch case data here during the initial blue-green migration re-indexing step (to get case records
       // into postgres in the first place), the case data might not yet have been moved over to postgres. Therefore, we fallback to the case data from Dynamo.
-      // TODO after 10502: Only rely on postgres by lining getCaseDataFromPostgres here.
+      // TODO after 10502: Only rely on postgres by in-lining getCaseDataFromPostgres here.
       let caseRecord: any;
       try {
         caseRecord = await getCaseDataFromPostgres({
@@ -129,20 +126,6 @@ const getCaseDataFromPostgres = async ({
     throw Error(`Unable to index ${docketNumber} case data not found`);
   }
 
-  const petitionersOnCase = await getPetitionersOnCase({
-    docketNumber: caseMetadataWithCounsel.docketNumber,
-  });
-
-  const privatePractitioners = await getPrivatePractitionersOnCase({
-    applicationContext,
-    docketNumber: caseMetadataWithCounsel.docketNumber,
-  });
-
-  const irsPractitioners = await getIrsPractitionersOnCase({
-    applicationContext,
-    docketNumber: caseMetadataWithCounsel.docketNumber,
-  });
-
   const marshalledCase = marshall(
     {
       pk: `case|${caseMetadataWithCounsel.docketNumber}`,
@@ -152,10 +135,10 @@ const getCaseDataFromPostgres = async ({
       docketNumber: caseMetadataWithCounsel.docketNumber,
       docketNumberWithSuffix: caseMetadataWithCounsel.docketNumberWithSuffix,
       isSealed: caseMetadataWithCounsel.isSealed,
-      petitioners: petitionersOnCase || [],
+      petitioners: caseMetadataWithCounsel.petitioners || [],
       receivedAt: caseMetadataWithCounsel.receivedAt,
-      privatePractitioners,
-      irsPractitioners,
+      privatePractitioners: caseMetadataWithCounsel.privatePractitioners,
+      irsPractitioners: caseMetadataWithCounsel.irsPractitioners,
     },
     { removeUndefinedValues: true },
   );
