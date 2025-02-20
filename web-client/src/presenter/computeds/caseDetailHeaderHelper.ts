@@ -108,9 +108,13 @@ export const caseDetailHeaderHelper = (
     .getUtilities()
     .canAllowDocumentServiceForCase(caseDetail);
 
+  const blockedByAssociation = caseDetail.consolidatedCases?.some(
+    c => c.blocked || c.automaticBlocked,
+  );
   const showBlockedTag =
     caseDetail.blocked ||
-    (caseDetail.automaticBlocked && !caseDetail.trialDate);
+    (caseDetail.automaticBlocked && !caseDetail.trialDate) ||
+    blockedByAssociation;
 
   return {
     hidePublicCaseInformation: !isExternalUser,

@@ -143,6 +143,10 @@
         font-weight: $font-semibold;
         text-decoration: none;
       }
+
+      .usa-nav__primary {
+        margin-top: 1.5rem;
+      }
     }
 
     .usa-search.ustc-search {
@@ -190,6 +194,28 @@
           text-align: left;
         }
       }
+    }
+
+    /* Reordering elements for small and medium screens:
+      The flexbox `order` property visually rearranges nav elements
+      such that their natural DOM order is only used on >= $large-screen;
+      $small-screen and $medium-screen require the `usa-search` element
+      to be second in order instead of `ustc-navigation-items`.
+    */
+    .ustc-close {
+      order: 1;
+    }
+
+    .ustc-search {
+      order: 2;
+    }
+
+    .ustc-navigation-items {
+      order: 3;
+    }
+
+    .ustc-account {
+      order: 4;
     }
   }
 
@@ -240,6 +266,10 @@
         .usa-nav__primary-item:not(.nav-medium) {
           display: inline-block;
         }
+      }
+
+      .usa-nav__primary {
+        margin-top: 0;
       }
 
       .usa-nav__primary-item {
