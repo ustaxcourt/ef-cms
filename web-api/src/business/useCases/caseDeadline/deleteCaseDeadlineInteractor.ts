@@ -8,6 +8,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { deleteCaseDeadline as deleteDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 
 export const deleteCaseDeadline = async (
   applicationContext: ServerApplicationContext,
@@ -31,9 +32,7 @@ export const deleteCaseDeadline = async (
     caseDeadlineId,
   });
 
-  updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAutomaticBlock({
+  updatedCase = await updateCaseAutomaticBlock({
       applicationContext,
       caseEntity: updatedCase,
     });

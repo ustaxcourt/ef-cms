@@ -93,17 +93,19 @@ export const EditCaseDetails = connect(
             />
           </div>
 
-          <Button
-            onClick={() => {
-              updateCaseDetailsSequence();
-            }}
-          >
-            Save
-          </Button>
+          <div className="button-container">
+            <Button
+              onClick={() => {
+                updateCaseDetailsSequence();
+              }}
+            >
+              Save
+            </Button>
 
-          <Button link href={`/case-detail/${docketNumber}/case-information`}>
-            Cancel
-          </Button>
+            <Button link href={`/case-detail/${docketNumber}/case-information`}>
+              Cancel
+            </Button>
+          </div>
         </section>
       </>
     );

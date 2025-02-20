@@ -140,7 +140,7 @@ export const CaseDetailHeaderMenu = connect(
             <hr className="margin-0" />
           </li>
         )}
-        <li className="usa-nav__submenu-item" id="menu-button-add-deadline">
+        <li className="usa-nav__submenu-item" id="menu-button-add-deadline" data-testid="menu-button-create-deadline">
           <Button
             onClick={() => {
               resetCaseMenuSequence();

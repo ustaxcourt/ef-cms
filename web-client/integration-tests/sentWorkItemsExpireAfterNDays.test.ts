@@ -39,7 +39,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
     const daysToRetrieveKey =
       applicationContext.getConstants().CONFIGURATION_ITEM_KEYS
         .SECTION_OUTBOX_NUMBER_OF_DAYS.key;
-    let daysToRetrieve = await applicationContext
+    const daysToRetrieve = await applicationContext
       .getPersistenceGateway()
       .getConfigurationItemValue({
         applicationContext,
