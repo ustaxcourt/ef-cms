@@ -1,15 +1,21 @@
 import {
   KeyedActionFilingFormFieldsByRenderKey,
   KeyedPartyFormFieldsByRenderKey,
+  MinuteSheetFormState,
   initialMinuteSheetFormState,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import {
   ACTION_DOCUMENT_TYPE_OPTIONS,
   CONTACT_TYPES,
-  FILDED_BY_TYPES,
+  ExhibitStatusOption,
+  FILED_BY_TYPES,
   MOTION_OBJECTION_OPTIONS,
+  MotionFiledByOption,
+  MotionObjectionOption,
+  MotionStatusOption,
+  MotionTypeOption,
   OBJECTIONS_OPTIONS_MAP,
-  REPRESENTATIVE_TYPES,
+  PETITIONER_ROLE_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
@@ -21,6 +27,12 @@ import { cloneDeep, invert } from 'lodash';
 import { formatCase } from '@shared/business/utilities/getFormattedCaseDetail';
 import { state } from '@web-client/presenter/app.cerebral';
 import { v4 as uuidv4 } from 'uuid';
+import {
+  FormattedTrialSessionDetailsType,
+  getFormattedTrialSessionDetails,
+} from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
+import { GetUserResponse } from '@shared/business/useCases/getUserInteractor';
+import { Judge } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 
 export const initializeTrialSessionMinuteSheetFormAction = ({
   get,
@@ -29,92 +41,145 @@ export const initializeTrialSessionMinuteSheetFormAction = ({
 }: ActionProps) => {
   const { caseDetail, judgeOptions, trialSession } = props;
   const currentUser = get(state.user);
-  const formattedTrialSession = applicationContext
-    .getUtilities()
-    .getFormattedTrialSessionDetails({
-      applicationContext,
-      currentUser,
-      trialSession,
-    });
-
-  const judge = judgeOptions[formattedTrialSession.judge?.userId!];
-
-  store.set(state.minuteSheetForm, cloneDeep(initialMinuteSheetFormState));
-
-  store.set(state.minuteSheetForm.trialSessionMetadataSection, {
-    courtReporter: formattedTrialSession.courtReporter,
-    judge: {
-      fullName: judge.fullName,
-      title: judge.title,
-      userId: judge.userId,
-    },
-    remoteSession: formattedTrialSession.isRemoteSession,
-    trialClerk: formattedTrialSession.trialClerk!.name,
+  const formattedTrialSession = getFormattedTrialSessionDetails({
+    applicationContext,
+    currentUser,
+    trialSession,
   });
 
+  const initializedMinuteSheet = initializeMinuteSheet({
+    emptyMinuteSheet: initialMinuteSheetFormState,
+    caseDetail,
+    formattedTrialSession,
+    currentUser,
+    judgeOptions,
+  });
+
+  store.set(state.minuteSheetForm, initializedMinuteSheet);
+};
+
+export const initializeMinuteSheet = ({
+  emptyMinuteSheet,
+  caseDetail,
+  formattedTrialSession,
+  currentUser,
+  judgeOptions,
+}: {
+  emptyMinuteSheet: MinuteSheetFormState;
+  caseDetail: RawCase;
+  formattedTrialSession: FormattedTrialSessionDetailsType;
+  currentUser: GetUserResponse & { email: string };
+  judgeOptions: Record<string, Judge>;
+}): MinuteSheetFormState => {
+  const judge = judgeOptions[formattedTrialSession.judge?.userId!];
   const recalledRowRenderKey = uuidv4();
   const motionRowRenderKey = uuidv4();
   const petitionerWitnessRowRenderKey = uuidv4();
   const respondentWitnessRowRenderKey = uuidv4();
   const exhibitRowRenderKey = uuidv4();
 
-  store.set(state.minuteSheetForm.caseMetadataSection.recalled, {
-    [recalledRowRenderKey]: {
-      date: '',
-      note: '',
-      renderKey: recalledRowRenderKey,
-      transcriptOrdered: false,
+  const initializedMinuteSheet = cloneDeep(emptyMinuteSheet);
+
+  // Trial session metadata
+  initializedMinuteSheet.trialSessionMetadataSection = {
+    courtReporter: formattedTrialSession.formattedCourtReporter,
+    judge: {
+      fullName: judge.fullName,
+      title: judge.title,
+      userId: judge.userId,
     },
-  });
-  store.set(
-    state.minuteSheetForm.petitionersSection.petitioners,
-    getPetitionersFromCase(caseDetail),
-  );
-  store.set(
-    state.minuteSheetForm.respondentsSection.respondents,
-    getRespondentsFromCase(caseDetail),
-  );
-  store.set(state.minuteSheetForm.motionsSection.motions, {
-    [motionRowRenderKey]: {
-      date: '',
-      filedBy: '',
-      note: '',
-      objection: '',
-      oralMotion: false,
-      renderKey: motionRowRenderKey,
-      status: '',
-      type: '',
+    remoteSession: formattedTrialSession.isRemoteSession,
+    trialClerk: formattedTrialSession.formattedTrialClerk,
+  };
+
+  // Case metadata
+  initializedMinuteSheet.caseMetadataSection = {
+    ...emptyMinuteSheet.caseMetadataSection,
+    recalled: {
+      [recalledRowRenderKey]: {
+        date: '',
+        note: '',
+        renderKey: recalledRowRenderKey,
+        transcriptOrdered: false,
+      },
     },
-  });
-  store.set(
-    state.minuteSheetForm.actionsAndFilingsSection.actionsAndFilings,
-    getPendingItemsFromCase({
+  };
+
+  // Petitioners
+  initializedMinuteSheet.petitionersSection = {
+    ...emptyMinuteSheet.petitionersSection,
+    petitioners: getPetitionersFromCase(caseDetail),
+  };
+
+  // Respondents
+  initializedMinuteSheet.respondentsSection = {
+    ...emptyMinuteSheet.respondentsSection,
+    respondents: getRespondentsFromCase(caseDetail),
+  };
+
+  // Motions
+  initializedMinuteSheet.motionsSection = {
+    ...emptyMinuteSheet.motionsSection,
+    motions: {
+      [motionRowRenderKey]: {
+        date: '',
+        filedBy: '' as MotionFiledByOption,
+        note: '',
+        objection: '' as MotionObjectionOption,
+        oralMotion: false,
+        renderKey: motionRowRenderKey,
+        status: '' as MotionStatusOption,
+        type: '' as MotionTypeOption,
+      },
+    },
+  };
+
+  // Actions and filings
+  initializedMinuteSheet.actionsAndFilingsSection = {
+    ...emptyMinuteSheet.actionsAndFilingsSection,
+    actionsAndFilings: getPendingItemsFromCase({
       caseDetail,
       user: currentUser,
     }),
-  );
-  store.set(state.minuteSheetForm.witnessesSection.petitionerWitnesses, {
-    [petitionerWitnessRowRenderKey]: {
-      name: '',
-      renderKey: petitionerWitnessRowRenderKey,
-    },
-  });
-  store.set(state.minuteSheetForm.witnessesSection.respondentWitnesses, {
-    [respondentWitnessRowRenderKey]: {
-      name: '',
-      renderKey: respondentWitnessRowRenderKey,
-    },
-  });
-  store.set(state.minuteSheetForm.exhibitsSection.exhibits, {
-    [exhibitRowRenderKey]: {
-      description: '',
-      note: '',
-      renderKey: exhibitRowRenderKey,
-      status: '',
-    },
-  });
+  };
 
-  store.set(state.minuteSheetForm.options.judgeOptions, judgeOptions);
+  // Witnesses
+  initializedMinuteSheet.witnessesSection = {
+    ...emptyMinuteSheet.witnessesSection,
+    petitionerWitnesses: {
+      [petitionerWitnessRowRenderKey]: {
+        name: '',
+        renderKey: petitionerWitnessRowRenderKey,
+      },
+    },
+    respondentWitnesses: {
+      [respondentWitnessRowRenderKey]: {
+        name: '',
+        renderKey: respondentWitnessRowRenderKey,
+      },
+    },
+  };
+
+  // Exhibits
+  initializedMinuteSheet.exhibitsSection = {
+    ...emptyMinuteSheet.exhibitsSection,
+    exhibits: {
+      [exhibitRowRenderKey]: {
+        description: '',
+        note: '',
+        renderKey: exhibitRowRenderKey,
+        status: '' as ExhibitStatusOption,
+      },
+    },
+  };
+
+  // Options
+  initializedMinuteSheet.options = {
+    ...emptyMinuteSheet.options,
+    judgeOptions,
+  };
+
+  return initializedMinuteSheet;
 };
 
 export const getRespondentsFromCase = (
@@ -162,10 +227,12 @@ export const getPetitionersFromCase = (
       let role;
       if (petitioner.contactType === CONTACT_TYPES.petitioner) {
         role = petitionersWithCounselUserIds.includes(petitioner.contactId)
-          ? REPRESENTATIVE_TYPES.counsel
-          : REPRESENTATIVE_TYPES.prose;
+          ? PETITIONER_ROLE_OPTIONS.counsel
+          : PETITIONER_ROLE_OPTIONS.proSe;
+      } else if (PETITIONER_ROLE_OPTIONS[petitioner.contactType]) {
+        role = PETITIONER_ROLE_OPTIONS[petitioner.contactType];
       } else {
-        role = petitioner.contactType;
+        role = PETITIONER_ROLE_OPTIONS.other;
       }
 
       const renderKey = uuidv4();
@@ -199,7 +266,7 @@ export const getPendingItemsFromCase = ({
   const formattedCaseDetail = formatCase(applicationContext, caseDetail, user);
 
   const pendingItems = formattedCaseDetail.formattedDocketEntries.filter(
-    docketEntry => applicationContext.getUtilities().isPending(docketEntry),
+    docketEntry => DocketEntry.isPending(docketEntry),
   );
 
   const keyedActionFilingFormFieldsByRenderKey = {};
@@ -255,16 +322,23 @@ export const getTransformedPendingItemDetails = (
   }
 
   let transformedDocumentType;
-  let objection = '';
+  let objection =
+    MOTION_OBJECTION_OPTIONS[
+      objectionsToObjectionOptionMap[pendingItem.objections]
+    ];
+
   if (DocketEntry.isNotice(pendingItem.eventCode)) {
     transformedDocumentType = 'notice';
   } else if (DocketEntry.isOrder(pendingItem.eventCode)) {
     transformedDocumentType = 'order';
   } else if (DocketEntry.isMotion(pendingItem.eventCode)) {
     transformedDocumentType = 'motion';
-    objection = objectionsToObjectionOptionMap[pendingItem.objections]
-      ? objectionsToObjectionOptionMap[pendingItem.objections]
-      : objectionReverseLookup[MOTION_OBJECTION_OPTIONS.unknown];
+
+    if (objection) {
+      objection = objectionReverseLookup[objection];
+    } else {
+      objection = objectionReverseLookup[MOTION_OBJECTION_OPTIONS.unknown];
+    }
   } else {
     transformedDocumentType = 'other';
   }
@@ -289,12 +363,12 @@ export const transformFiledBy = (caseDetail: RawCase, pendingItem): string => {
   );
 
   if (isPetitioner && isRespondent) {
-    return FILDED_BY_TYPES.petitionerAndRespondent;
+    return FILED_BY_TYPES.petitionerAndRespondent;
   } else if (isPetitioner) {
-    return FILDED_BY_TYPES.petitioner;
+    return FILED_BY_TYPES.petitioner;
   } else if (isRespondent) {
-    return FILDED_BY_TYPES.respondent;
+    return FILED_BY_TYPES.respondent;
   }
 
-  return FILDED_BY_TYPES.other;
+  return FILED_BY_TYPES.other;
 };

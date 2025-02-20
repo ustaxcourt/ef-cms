@@ -1791,12 +1791,7 @@ export const TROUBLESHOOTING_INFO = {
     'https://ustaxcourt.gov/dawson_faqs_case_management.html#FileUpload',
 };
 
-export const REPRESENTATIVE_TYPES = {
-  counsel: 'counsel',
-  prose: 'proSe',
-} as const;
-
-export const FILDED_BY_TYPES = {
+export const FILED_BY_TYPES = {
   petitionerAndRespondent: 'petitionerAndRespondent',
   petitioner: 'petitioner',
   respondent: 'respondent',
@@ -1945,7 +1940,7 @@ export const BRIEF_SUBTYPE = {
 } as const;
 
 export const PETITIONER_ROLE_OPTIONS = {
-  counsel: 'Councel',
+  counsel: 'Counsel',
   proSe: 'Pro Se',
   intervenor: 'Intervenor',
   participant: 'Participant',
