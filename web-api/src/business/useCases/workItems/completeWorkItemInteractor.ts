@@ -19,8 +19,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the completed work item
  */
 export const completeWorkItem = async (
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     completedMessage,
     workItemId,
@@ -57,11 +56,10 @@ export const completeWorkItem = async (
   return completedWorkItem;
 };
 
-export const determineEntitiesToLock = async ({
-  workItemId,
-}: {
-  workItemId: string;
-}) => {
+export const determineEntitiesToLock = async (
+  _applicationContext: ServerApplicationContext,
+  { workItemId }: { workItemId: string },
+) => {
   const originalWorkItem = await getWorkItemById({
     workItemId,
   });

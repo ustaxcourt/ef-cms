@@ -1,23 +1,21 @@
 /* eslint-disable react/prop-types */
-import 'react-quill/dist/quill.snow.css';
+import '../../ustc-ui/Quill/quill.snow.css';
 import { DomUtils, parseDocument } from 'htmlparser2';
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
 import { render as renderHtml } from 'dom-serializer';
 import React, { Suspense, useEffect, useRef } from 'react';
-import reactQuill from 'react-quill';
+import reactQuill, { Quill } from '@web-client/ustc-ui/Quill/Quill';
 
 const inlineStylesFontSizes = {};
 const fontSizes = ['10px', '12px', '14px', '16px', '18px', '20px'];
 
 const ReactQuill = React.lazy(async () => {
-  const Size = await reactQuill.Quill.import('attributors/style/size');
+  const Size = await Quill.import('attributors/style/size');
   Size.whitelist = fontSizes;
-  reactQuill.Quill.register(Size, true);
-
+  Quill.register(Size, true);
   fontSizes.forEach(item => {
     inlineStylesFontSizes[item] = `font-size: ${item};`;
   });
-
   return { default: reactQuill };
 });
 

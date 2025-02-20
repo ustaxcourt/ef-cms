@@ -4,6 +4,7 @@ import {
   DescribeTableCommand,
   DescribeTableCommandOutput,
 } from '@aws-sdk/client-dynamodb';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { chunk, flatten, isEmpty, uniqBy } from 'lodash';
 import { filterEmptyStrings } from '../../../shared/src/business/utilities/filterEmptyStrings';
 
@@ -267,7 +268,7 @@ export const query = ({
 export const scan = async params => {
   let hasMoreResults = true;
   let lastKey;
-  const allItems = [];
+  const allItems: any[] = [];
   while (hasMoreResults) {
     hasMoreResults = false;
 
@@ -380,6 +381,11 @@ export const batchGet = async ({
   return flatten(results);
 };
 
+type DynamoRecordKey = {
+  pk: string;
+  sk: string;
+};
+
 /**
  *
  * @param {object} providers the providers object
@@ -387,7 +393,13 @@ export const batchGet = async ({
  * @param {object} providers.items the items to write
  * @returns {Promise|void} the promise of the persistence call
  */
-export const batchDelete = async ({ applicationContext, items }) => {
+export const batchDelete = async ({
+  applicationContext,
+  items,
+}: {
+  applicationContext: ServerApplicationContext;
+  items: DynamoRecordKey[] | undefined;
+}): Promise<void> => {
   if (!items || items.length === 0) {
     return Promise.resolve();
   }

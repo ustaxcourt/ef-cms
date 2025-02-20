@@ -29,6 +29,7 @@ export const trialSessionHeaderHelper = (
     .getUtilities()
     .getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser,
       trialSession,
     });
 

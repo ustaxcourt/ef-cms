@@ -2,7 +2,7 @@ import {
   SpecialTrialSession,
   TrialSessionWorkingCopyNotes,
 } from '@shared/business/entities/trialSessions/SpecialTrialSessions';
-import { post } from '../requests';
+import { post } from '@shared/proxies/requests';
 
 export const getBulkSpecialTrialSessionCopyNotesInteractor = (
   applicationContext,
@@ -11,7 +11,7 @@ export const getBulkSpecialTrialSessionCopyNotesInteractor = (
   }: {
     specialTrialSessions: Array<SpecialTrialSession>;
   },
-): Array<TrialSessionWorkingCopyNotes> =>
+): Promise<Array<TrialSessionWorkingCopyNotes>> =>
   post({
     applicationContext,
     body: { specialTrialSessions },
