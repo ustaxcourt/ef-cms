@@ -852,7 +852,7 @@ export const baseState = {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
   },
-  termGeneratorInformation: undefined as
+  termBuilderInformation: undefined as
     | {
         termEndDate: string;
         termName: string;
