@@ -20,7 +20,7 @@ describe('updateAutomaticBlocked', () => {
 
     expect(caseToUpdate.automaticBlocked).toBeFalsy();
 
-    caseToUpdate.updateAutomaticBlocked({});
+    caseToUpdate.updateAutomaticBlocked({ hasCaseDeadline: false });
 
     expect(caseToUpdate.automaticBlocked).toEqual(true);
     expect(caseToUpdate.consolidatedCases[0].automaticBlocked).toEqual(true);
@@ -48,7 +48,7 @@ describe('updateAutomaticBlocked', () => {
 
     expect(caseToUpdate.automaticBlocked).toBeTruthy();
 
-    caseToUpdate.updateAutomaticBlocked({});
+    caseToUpdate.updateAutomaticBlocked({ hasCaseDeadline: false });
 
     expect(caseToUpdate.consolidatedCases[0].automaticBlocked).toBeFalsy();
     expect(caseToUpdate.automaticBlocked).toBeFalsy();
