@@ -1124,7 +1124,7 @@ const router = {
     );
 
     registerRoute(
-      '/trial-session/term-generator',
+      '/trial-session/term-builder',
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
         () => {

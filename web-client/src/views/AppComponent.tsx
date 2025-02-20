@@ -106,7 +106,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
-import { TrialSessionTermGeneratorView } from '@web-client/views/TrialSessionTermGeneratorView';
+import { TermBuilderView } from '@web-client/views/TermBuilderView';
 
 const pages = {
   AccessibilityStatement,
@@ -193,7 +193,7 @@ const pages = {
   TrialSessionDetails,
   TrialSessionPlanningReportView,
   TrialSessionWorkingCopy,
-  TrialSessionTermGeneratorView,
+  TermBuilderView,
   TrialSessions,
   UploadCourtIssuedDocument,
   UserContactEdit,
