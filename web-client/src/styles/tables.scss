@@ -137,7 +137,9 @@ table,
     &.message-queue-row {
       padding-top: 14px;
       overflow-wrap: break-word;
+      /* stylelint-disable declaration-property-value-keyword-no-deprecated */
       word-break: break-word; // fallback
+      /* stylelint-enable declaration-property-value-keyword-no-deprecated */
     }
 
     &.message-queue-case-title {

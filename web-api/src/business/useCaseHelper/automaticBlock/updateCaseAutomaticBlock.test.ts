@@ -10,14 +10,11 @@ jest.mock(
 import {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import {
-  MOCK_CASE,
-  MOCK_CASE_WITHOUT_PENDING,
-} from '../../../../../shared/src/test/mockCase';
-import { PENDING_DOCKET_ENTRY } from '../../../../../shared/src/test/mockDocketEntry';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import { MOCK_CASE, MOCK_CASE_WITHOUT_PENDING } from '@shared/test/mockCase';
+import { PENDING_DOCKET_ENTRY } from '@shared/test/mockDocketEntry';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
@@ -194,5 +191,26 @@ describe('updateCaseAutomaticBlock', () => {
     });
 
     expect(createCaseTrialSortMappingRecords).not.toHaveBeenCalled();
+  });
+
+  it('should not fetch deadlines from persistence when hasCaseDeadline is true', async () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE_WITHOUT_PENDING,
+        preferredTrialCity: null,
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+      },
+      {
+        authorizedUser: mockDocketClerkUser,
+      },
+    );
+
+    await updateCaseAutomaticBlock({
+      applicationContext,
+      caseEntity,
+      hasCaseDeadline: true,
+    });
+
+    expect(getCaseDeadlinesByDocketNumber).not.toHaveBeenCalled();
   });
 });
