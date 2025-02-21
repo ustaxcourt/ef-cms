@@ -27,7 +27,10 @@ export const PractitionerSearchByName = connect(
   }) {
     return (
       <>
-        <div className="header-with-blue-background display-flex flex-justify">
+        <div
+          className="header-with-blue-background display-flex flex-justify"
+          id="search-by-name"
+        >
           <h3>Search by Name</h3>
         </div>
         <div className="blue-container">
@@ -65,9 +68,10 @@ export const PractitionerSearchByName = connect(
             </div>
 
             <div className="grid-row">
-              <div className="tablet:grid-col-6">
+              <div className="button-container">
                 <Button
-                  className="advanced-search__button margin-top-2"
+                  aria-describedby="search-by-name"
+                  className="margin-bottom-0"
                   data-testid="practitioner-search-by-name-button"
                   id="practitioner-search-by-name-button"
                   onClick={e => {
@@ -81,7 +85,8 @@ export const PractitionerSearchByName = connect(
                 </Button>
                 <Button
                   link
-                  className="margin-top-1"
+                  aria-describedby="search-by-name"
+                  className="margin-bottom-0 mobile:margin-top-2 tablet:margin-top-0 tablet:margin-left-205"
                   onClick={e => {
                     e.preventDefault();
                     clearAdvancedSearchFormSequence({

@@ -113,9 +113,11 @@ export const MessageDetail = connect(
               role="alert"
             >
               <div className="usa-alert__body">
-                Message completed on{' '}
-                {formattedMessageDetail.currentMessage.completedAtFormatted} by{' '}
-                {formattedMessageDetail.currentMessage.completedBy}
+                <p className="usa-alert__text">
+                  Message completed on{' '}
+                  {formattedMessageDetail.currentMessage.completedAtFormatted}{' '}
+                  by {formattedMessageDetail.currentMessage.completedBy}
+                </p>
               </div>
             </div>
           )}
