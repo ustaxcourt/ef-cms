@@ -5,6 +5,7 @@ import {
   Accordion,
   AccordionItem,
 } from '@web-client/ustc-ui/Accordion/Accordion';
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import { BigHeader } from '@web-client/views/BigHeader';
 import React from 'react';
 
@@ -42,7 +43,7 @@ export const TermBuilderView = connect<
       <>
         <BigHeader text="Term Builder" />
         <section className="usa-section grid-container">
-          <h2>
+          <h2 className="margin-bottom-3">
             {termName} ({termStartDate} - {termEndDate}) Term Builder Rules
           </h2>
           <Accordion>
@@ -153,6 +154,26 @@ export const TermBuilderView = connect<
               </p>
             </AccordionItem>
           </Accordion>
+
+          <div className="margin-top-5">
+            <Button
+              href="javascript:void(0);"
+              onClick={() => {
+                console.log('CLICKED');
+              }}
+            >
+              Create Term
+            </Button>
+            <Button
+              link
+              href="javascript:void(0);"
+              onClick={() => {
+                console.log('Cancel clicked');
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
         </section>
       </>
     );
