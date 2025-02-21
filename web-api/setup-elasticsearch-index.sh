@@ -21,7 +21,6 @@
 ENV=$1
 
 DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
-OVERRIDE_ES_NUMBER_OF_REPLICAS=$(./scripts/elasticsearch/get-replicas-override-value.sh "${ENV}")
 
 if [[ "${DESTINATION_DOMAIN}" == *'alpha'* ]]; then
   ELASTICSEARCH_ENDPOINT=$(aws ssm get-parameter \
@@ -37,7 +36,6 @@ fi
 
 echo "- DESTINATION_DOMAIN: ${DESTINATION_DOMAIN}"
 echo "- ELASTICSEARCH_ENDPOINT: ${ELASTICSEARCH_ENDPOINT}"
-echo "- OVERRIDE_ES_NUMBER_OF_REPLICAS: ${OVERRIDE_ES_NUMBER_OF_REPLICAS}"
 
 if [[ -n "${ELASTICSEARCH_ENDPOINT}" ]]; then
   echo " => Setting up ${DESTINATION_DOMAIN} Cluster"
