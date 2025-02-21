@@ -8,7 +8,6 @@ import { get } from '../requests';
  * @returns {Promise<*>} the promise of the api call
  */
 export const getTodaysOpinionsInteractor = async (): Promise<any[]> => {
-  await new Promise(resolve => setTimeout(resolve, 5000));
   return get({
     applicationContext: applicationContextPublic,
     endpoint: '/public-api/todays-opinions',

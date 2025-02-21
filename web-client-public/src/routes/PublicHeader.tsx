@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import closeImg from '../../../node_modules/@uswds/uswds/dist/img/usa-icons/close.svg';
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { applicationContextPublic } from '@web-client/applicationContextPublic';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { publicEnvironment } from 'web-client-public/src/environment/publicEnvironment';
 const seal = require('../../../web-client/src/images/ustc_seal.svg') as string;
 
 const BetaBar = ({ closeBetaBar }: { closeBetaBar: () => void }) => {
@@ -28,8 +28,7 @@ const BetaBar = ({ closeBetaBar }: { closeBetaBar: () => void }) => {
 
 export function PublicHeader() {
   const [betaBarIsOpen, setBetaBarIsOpen] = useState(true);
-  const isProduction =
-    applicationContextPublic.getEnvironment().stage === 'prod';
+  const isProduction = publicEnvironment.env === 'prod';
 
   const showBetaBar = !isProduction && betaBarIsOpen;
   const isTerminalUser = false;
@@ -53,12 +52,12 @@ export function PublicHeader() {
                 Welcome to DAWSON {isTerminalUser && ': US Tax Court Terminal'}
               </div>
               <div className="login-container padding-x-1">
-                <a href={`${applicationContextPublic.getPrivateUrl()}/login`}>
-                <FontAwesomeIcon
-                  icon={['far', 'user']}
-                  size="1x"
-                  className="margin-right-05"
-                />
+                <a href={`${publicEnvironment.privateUrl}/login`}>
+                  <FontAwesomeIcon
+                    icon={['far', 'user']}
+                    size="1x"
+                    className="margin-right-05"
+                  />
                   Log In
                 </a>
               </div>
@@ -67,7 +66,7 @@ export function PublicHeader() {
                   noMargin={true}
                   overrideMargin={true}
                   className={'margin-0'}
-                  href={`${applicationContextPublic.getPrivateUrl()}/login`}
+                  href={`${publicEnvironment.privateUrl}/login`}
                 >
                   Log In
                 </Button>
@@ -76,7 +75,7 @@ export function PublicHeader() {
               <div className="create-container">
                 <a
                   data-testid="create-account-button"
-                  href={`${applicationContextPublic.getPrivateUrl()}/create-account/petitioner`}
+                  href={`${publicEnvironment.privateUrl}/create-account/petitioner`}
                 >
                   Create Account
                 </a>
@@ -86,7 +85,7 @@ export function PublicHeader() {
                   noMargin={true}
                   overrideMargin={true}
                   className={'margin-0'}
-                  href={`${applicationContextPublic.getPrivateUrl()}/create-account/petitioner`}
+                  href={`${publicEnvironment.privateUrl}/create-account/petitioner`}
                 >
                   Create Account
                 </Button>
