@@ -160,6 +160,7 @@ import { userContactEditHelper } from './computeds/userContactEditHelper';
 import { userContactEditProgressHelper } from './computeds/userContactEditProgressHelper';
 import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
+import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
@@ -579,19 +580,7 @@ export const baseState = {
     sortOrder: 'asc' | 'desc';
   },
   [STATE_KEYS.TERM_BUILDER_INFORMATION]: undefined as
-    | {
-        termEndDate: string;
-        termName: string;
-        termStartDate: string;
-        maxSessionsPerLocation: number;
-        maxSessionsPerWeek: number;
-        smallCaseMinimumQuantity: number;
-        smallCaseMaxQuantity: number;
-        regularCaseMinimumQuantity: number;
-        regularCaseMaxQuantity: number;
-        hybridCaseMinimumQuantity: number;
-        hybridCaseMaxQuantity: number;
-      }
+    | RawGenerateSuggestedTermForm
     | undefined,
   advancedSearchForm: {} as any,
   // form for advanced search screen, TODO: replace with state.form

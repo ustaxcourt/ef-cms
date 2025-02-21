@@ -6,12 +6,31 @@ export class GenerateSuggestedTermForm extends JoiValidationEntity {
   public termStartDate: string;
   public termEndDate: string;
   public termName: string;
+  public maxSessionsPerLocation: number;
+  public maxSessionsPerWeek: number;
+  public smallCaseMinimumQuantity: number;
+  public smallCaseMaxQuantity: number;
+  public regularCaseMinimumQuantity: number;
+  public regularCaseMaxQuantity: number;
+  public hybridCaseMinimumQuantity: number;
+  public hybridCaseMaxQuantity: number;
+  public minimumCasesPerLocation: number;
 
-  constructor(rawProps) {
+  constructor(rawProps: any) {
     super('GenerateSuggestedTermForm');
     this.termStartDate = rawProps.termStartDate;
     this.termEndDate = rawProps.termEndDate;
     this.termName = rawProps.termName;
+
+    this.maxSessionsPerLocation = rawProps.maxSessionsPerLocation;
+    this.maxSessionsPerWeek = rawProps.maxSessionsPerWeek;
+    this.smallCaseMinimumQuantity = rawProps.smallCaseMinimumQuantity;
+    this.smallCaseMaxQuantity = rawProps.smallCaseMaxQuantity;
+    this.regularCaseMinimumQuantity = rawProps.regularCaseMinimumQuantity;
+    this.regularCaseMaxQuantity = rawProps.regularCaseMaxQuantity;
+    this.hybridCaseMinimumQuantity = rawProps.hybridCaseMinimumQuantity;
+    this.hybridCaseMaxQuantity = rawProps.hybridCaseMaxQuantity;
+    this.minimumCasesPerLocation = rawProps.minimumCasesPerLocation;
   }
 
   getValidationRules() {
@@ -47,3 +66,7 @@ export class GenerateSuggestedTermForm extends JoiValidationEntity {
     };
   }
 }
+
+export type RawGenerateSuggestedTermForm = ExcludeMethods<
+  Omit<GenerateSuggestedTermForm, 'entityName'>
+>;
