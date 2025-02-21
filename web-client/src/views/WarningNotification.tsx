@@ -59,7 +59,7 @@ export const WarningNotificationComponent =
                   <div
                     className={classNames(
                       dismissible
-                        ? 'tablet:grid-col-10 grid-col-8'
+                        ? 'tablet:grid-col-9 grid-col-8'
                         : 'tablet:grid-col-12 grid-col-10',
                     )}
                   >
@@ -93,10 +93,10 @@ export const WarningNotificationComponent =
                     )}
                   </div>
                   {dismissible && (
-                    <div className="tablet:grid-col-2 grid-col-4 usa-alert__action">
+                    <div className="tablet:grid-col-3 grid-col-4 usa-alert__action display-flex flex-justify-end padding-right-105 no-wrap-white-space">
                       <Button
                         link
-                        className="no-underline padding-0"
+                        className="no-underline padding-0 no-wrap-white-space"
                         icon={alertWarning.dismissIcon || 'times-circle'}
                         iconRight={iconRight}
                         onClick={() => dismissAlertSequence()}

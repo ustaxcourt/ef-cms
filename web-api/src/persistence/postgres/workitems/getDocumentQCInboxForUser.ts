@@ -11,6 +11,7 @@ export const getDocumentQCInboxForUser = async ({
     return reader
       .selectFrom('dwWorkItem as w')
       .where('w.assigneeId', '=', userId)
+      .where('w.completedAt', 'is', null)
       .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
       .selectAll()
       .select('w.docketNumber')

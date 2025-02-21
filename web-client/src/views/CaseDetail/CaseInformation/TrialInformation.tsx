@@ -203,6 +203,7 @@ export const TrialInformation = connect(
                     className="red-warning margin-top-0 padding-0 push-right"
                     icon="trash"
                     id="remove-block"
+                    data-testid="remove-block-button"
                     onClick={() => {
                       openUnblockFromTrialModalSequence();
                     }}

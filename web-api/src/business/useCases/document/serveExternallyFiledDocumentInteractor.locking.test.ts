@@ -1,3 +1,6 @@
+jest.mock(
+  '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
+);
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
@@ -11,6 +14,7 @@ import {
 } from '../../../../../web-api/src/business/useCases/document/serveExternallyFiledDocumentInteractor';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
+import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
@@ -105,6 +109,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     docketNumbers: [],
     subjectCaseDocketNumber: mockCase.docketNumber,
   };
+  const fileAndServeDocumentOnOneCase = jest.mocked(
+    fileAndServeDocumentOnOneCaseMock,
+  );
 
   beforeAll(() => {
     applicationContext
@@ -117,11 +124,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined; // unlocked
-    applicationContext
-      .getUseCaseHelpers()
-      .fileAndServeDocumentOnOneCase.mockImplementation(
-        ({ caseEntity }) => caseEntity,
-      );
+    fileAndServeDocumentOnOneCase.mockImplementation(
+      ({ caseEntity }) => caseEntity,
+    );
 
     applicationContext
       .getUseCaseHelpers()
