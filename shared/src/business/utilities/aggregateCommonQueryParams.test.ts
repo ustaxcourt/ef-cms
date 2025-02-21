@@ -1,4 +1,5 @@
 import {
+  AbbrevatedStates,
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
   US_STATES,
@@ -7,7 +8,6 @@ import {
   aggregateCommonQueryParams,
   removeAdvancedSyntaxSymbols,
 } from './aggregateCommonQueryParams';
-import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('aggregateCommonQueryParams', () => {
   describe('removeAdvancedSyntaxSymbols', () => {
@@ -34,7 +34,9 @@ describe('aggregateCommonQueryParams', () => {
   });
 
   it('should return an object containing aggregated query param arrays', () => {
-    const result = aggregateCommonQueryParams({}, {});
+    const result = aggregateCommonQueryParams({
+      petitionerName: '',
+    });
 
     expect(result).toMatchObject({
       commonQuery: [{ match: { 'entityName.S': 'Case' } }],
@@ -45,7 +47,6 @@ describe('aggregateCommonQueryParams', () => {
 
   it('should include search params for petitionerName if present in query', () => {
     const queryParams = {
-      applicationContext,
       petitionerName: '+Test (-Search)',
     };
 
@@ -97,7 +98,7 @@ describe('aggregateCommonQueryParams', () => {
 
   it('should include search params for countryType if present in query', () => {
     const queryParams = {
-      applicationContext,
+      petitionerName: '',
       countryType: COUNTRY_TYPES.DOMESTIC,
     };
 
@@ -125,8 +126,8 @@ describe('aggregateCommonQueryParams', () => {
 
   it('should include search params for petitionerState if present in query', () => {
     const queryParams = {
-      applicationContext,
-      petitionerState: US_STATES.AR,
+      petitionerName: '',
+      petitionerState: US_STATES.AR as AbbrevatedStates,
     };
 
     const result = aggregateCommonQueryParams(queryParams);
@@ -153,9 +154,9 @@ describe('aggregateCommonQueryParams', () => {
 
   it('should include search params for startDate and endDate if present in query', () => {
     const queryParams = {
-      applicationContext,
       endDate: '2020-12-11T15:25:55.006Z',
       startDate: '2018-12-11T15:25:55.006Z',
+      petitionerName: '',
     };
 
     const result = aggregateCommonQueryParams(queryParams);
@@ -179,7 +180,7 @@ describe('aggregateCommonQueryParams', () => {
 
   it('should trim spaces from beginning and end of startDate and endDate if present in the query', () => {
     const queryParams = {
-      applicationContext,
+      petitionerName: '',
       endDate: ' 2020-12-11T15:25:55.006Z ',
       startDate: '            2018-12-11T15:25:55.006Z',
     };
@@ -206,7 +207,7 @@ describe('aggregateCommonQueryParams', () => {
 
   it('should include search params for caseType if present in query', () => {
     const queryParams = {
-      applicationContext,
+      petitionerName: '',
       caseType: { [CASE_TYPES_MAP.cdp]: CASE_TYPES_MAP.cdp },
     };
 
