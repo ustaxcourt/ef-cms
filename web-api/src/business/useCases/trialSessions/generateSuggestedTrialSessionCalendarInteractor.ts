@@ -38,7 +38,7 @@ import {
 } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/constraints';
 import { sortObjectByKey } from '@shared/tools/helpers';
 import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
-import { CreateTermParams } from '@shared/types/CreateTermParams';
+import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 
 const MAX_SESSIONS_PER_WEEK = 6;
 const MAX_SESSIONS_PER_LOCATION = 5;
@@ -81,7 +81,7 @@ export type CalendarGeneratorMessage = {
 
 export const generateSuggestedTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
-  { termEndDate, termStartDate }: CreateTermParams,
+  { termEndDate, termStartDate }: RawGenerateSuggestedTermForm,
   authorizedUser: UnknownAuthUser,
 ): Promise<{
   message: CalendarGeneratorMessage;

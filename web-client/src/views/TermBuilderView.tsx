@@ -24,8 +24,20 @@ export const TermBuilderView = connect<
     termBuilderInformation,
     updateFormValueSequence,
   }) {
-    const { maxSessionsPerWeek, termName, termStartDate, termEndDate } =
-      termBuilderInformation!;
+    const {
+      maxSessionsPerWeek,
+      maxSessionsPerLocation,
+      smallCaseMinimumQuantity,
+      smallCaseMaxQuantity,
+      regularCaseMinimumQuantity,
+      regularCaseMaxQuantity,
+      hybridCaseMinimumQuantity,
+      hybridCaseMaxQuantity,
+      minimumCasesPerLocation,
+      termName,
+      termStartDate,
+      termEndDate,
+    } = termBuilderInformation!;
     return (
       <>
         <BigHeader text="Term Builder" />
@@ -54,30 +66,72 @@ export const TermBuilderView = connect<
               </p>
 
               <p>
-                Maximum of <input type="number"></input> trial sessions per
-                location per term.
+                Maximum of{' '}
+                <TermBuilderInput
+                  propertyName="maxSessionsPerLocation"
+                  currentValue={maxSessionsPerLocation}
+                  updateFormValueSequence={updateFormValueSequence}
+                />{' '}
+                trial sessions per location per term.
               </p>
 
               <p>
-                Small cases: Minimum of <input type="number"></input> and
-                maximum of <input type="number"></input> per trial session.
+                Small cases: Minimum of{' '}
+                <TermBuilderInput
+                  propertyName="smallCaseMinimumQuantity"
+                  currentValue={smallCaseMinimumQuantity}
+                  updateFormValueSequence={updateFormValueSequence}
+                />{' '}
+                and maximum of{' '}
+                <TermBuilderInput
+                  propertyName="smallCaseMaxQuantity"
+                  currentValue={smallCaseMaxQuantity}
+                  updateFormValueSequence={updateFormValueSequence}
+                />{' '}
+                per trial session.
               </p>
 
               <p>
-                Regular Cases: Minimum of <input type="number"></input> and
-                maximum of <input type="number"></input> per trial session.
+                Regular Cases: Minimum of{' '}
+                <TermBuilderInput
+                  propertyName="regularCaseMinimumQuantity"
+                  currentValue={regularCaseMinimumQuantity}
+                  updateFormValueSequence={updateFormValueSequence}
+                />{' '}
+                and maximum of{' '}
+                <TermBuilderInput
+                  propertyName="regularCaseMaxQuantity"
+                  currentValue={regularCaseMaxQuantity}
+                  updateFormValueSequence={updateFormValueSequence}
+                />{' '}
+                per trial session.
               </p>
 
               <p>
-                Hybrid Cases: Minimum of <input type="number"></input> Small and
-                Regular added together and maximum of{' '}
-                <input type="number"></input> per trial session per location.
+                Hybrid Cases: Minimum of{' '}
+                <TermBuilderInput
+                  propertyName="hybridCaseMinimumQuantity"
+                  currentValue={hybridCaseMinimumQuantity}
+                  updateFormValueSequence={updateFormValueSequence}
+                />{' '}
+                Small and Regular added together and maximum of{' '}
+                <TermBuilderInput
+                  propertyName="hybridCaseMaxQuantity"
+                  currentValue={hybridCaseMaxQuantity}
+                  updateFormValueSequence={updateFormValueSequence}
+                />{' '}
+                per trial session per location.
               </p>
 
               <p>
-                If there are less than <input type="number"></input> cases for a
-                location, and we have already been there this year, do not
-                schedule a session for that location.
+                If there are less than{' '}
+                <TermBuilderInput
+                  propertyName="minimumCasesPerLocation"
+                  currentValue={minimumCasesPerLocation}
+                  updateFormValueSequence={updateFormValueSequence}
+                />{' '}
+                cases for a location, and we have already been there this year,
+                do not schedule a session for that location.
               </p>
 
               <p>

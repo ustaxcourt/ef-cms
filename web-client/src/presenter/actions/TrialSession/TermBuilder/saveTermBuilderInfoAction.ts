@@ -2,11 +2,12 @@ import {
   STATE_KEYS,
   TRIAL_SESSION_TERM_GENERATOR,
 } from '@shared/business/entities/EntityConstants';
+import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const saveTermBuilderInfoAction = ({ store, get }: ActionProps) => {
   const { termEndDate, termName, termStartDate } = get(state.modal);
-  const TERM_GENERATOR_INFO = {
+  const TERM_GENERATOR_INFO: RawGenerateSuggestedTermForm = {
     termEndDate,
     termName,
     termStartDate,
@@ -24,6 +25,8 @@ export const saveTermBuilderInfoAction = ({ store, get }: ActionProps) => {
       TRIAL_SESSION_TERM_GENERATOR.HYBRID_CASE_MINIMUM_QUANTITY,
     hybridCaseMaxQuantity:
       TRIAL_SESSION_TERM_GENERATOR.HYBRID_CASE_MAX_QUANTITY,
+    minimumCasesPerLocation:
+      TRIAL_SESSION_TERM_GENERATOR.MINIMUM_CASES_PER_LOCATION,
   };
 
   store.set(state[STATE_KEYS.TERM_BUILDER_INFORMATION], TERM_GENERATOR_INFO);

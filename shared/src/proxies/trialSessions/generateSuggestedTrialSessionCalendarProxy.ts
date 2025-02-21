@@ -1,6 +1,6 @@
 import { CalendarGeneratorMessage } from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
 import { post } from '../requests';
-import { CreateTermParams } from '@shared/types/CreateTermParams';
+import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 
 export const generateSuggestedTrialSessionCalendarInteractor = (
   applicationContext,
@@ -15,7 +15,8 @@ export const generateSuggestedTrialSessionCalendarInteractor = (
     regularCaseMaxQuantity,
     hybridCaseMinimumQuantity,
     hybridCaseMaxQuantity,
-  }: CreateTermParams,
+    minimumCasesPerLocation,
+  }: RawGenerateSuggestedTermForm,
 ): Promise<{
   message: CalendarGeneratorMessage;
   bufferArray: Buffer | undefined;
@@ -33,6 +34,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = (
       regularCaseMaxQuantity,
       hybridCaseMinimumQuantity,
       hybridCaseMaxQuantity,
+      minimumCasesPerLocation,
     },
     endpoint: '/trial-sessions/generate-term',
   });
