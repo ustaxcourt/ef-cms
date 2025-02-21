@@ -8,8 +8,11 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/business/useCaseHelper/acquireLock';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 export const serveCourtIssuedDocument = async (
@@ -213,27 +216,8 @@ export const determineEntitiesToLock = (
   ttl: 15 * 60,
 });
 
-export const handleLockError = async (
-  applicationContext: ServerApplicationContext,
-  originalRequest,
-  authorizedUser: UnknownAuthUser,
-) => {
-  if (authorizedUser?.userId) {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId: originalRequest.clientConnectionId,
-      message: {
-        action: 'retry_async_request',
-        originalRequest,
-        requestToRetry: 'serve_court_issued_document',
-      },
-      userId: authorizedUser?.userId,
-    });
-  }
-};
-
 export const serveCourtIssuedDocumentInteractor = withLocking(
   serveCourtIssuedDocument,
   determineEntitiesToLock,
-  handleLockError,
+  asyncHandleLockError,
 );

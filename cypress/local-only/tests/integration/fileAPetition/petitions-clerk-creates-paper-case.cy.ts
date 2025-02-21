@@ -82,9 +82,11 @@ describe('Petition clerk creates a paper filing', function () {
   describe('Cancel case', () => {
     it('should route to the Document QC inbox when user confirms to cancel', () => {
       createPaperPetition().then(() => {
-        cy.get('button#cancel-create-case').scrollIntoView().click();
+        cy.get('button#cancel-create-case').scrollIntoView()
+        cy.get('button#cancel-create-case').click();
         cy.get('div.modal-header').should('exist');
-        cy.get('button.modal-button-confirm').scrollIntoView().click();
+        cy.get('button.modal-button-confirm').scrollIntoView()
+        cy.get('button.modal-button-confirm').click();
         cy.url().should('include', 'document-qc/my/inbox');
       });
     });

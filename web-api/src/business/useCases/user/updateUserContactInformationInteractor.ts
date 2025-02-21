@@ -3,17 +3,14 @@ import {
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
-import { Practitioner } from '../../../../../shared/src/business/entities/Practitioner';
-import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
-import {
-  ROLE_PERMISSIONS,
-  isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { isArray, isEqual } from 'lodash';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { asyncHandleLockError, withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { isAuthorized, ROLE_PERMISSIONS } from '@shared/authorization/authorizationClientService';
+import { Practitioner } from '@shared/business/entities/Practitioner';
+import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 
 /**
  * updateUserContactInformationHelper
@@ -176,24 +173,6 @@ export const updateUserContactInformation = async (
   }
 };
 
-export const handleLockError = async (
-  applicationContext: ServerApplicationContext,
-  originalRequest: any,
-  authorizedUser: UnknownAuthUser,
-) => {
-  if (authorizedUser?.userId) {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: 'retry_async_request',
-        originalRequest,
-        requestToRetry: 'update_user_contact_information',
-      },
-      userId: authorizedUser.userId,
-    });
-  }
-};
-
 export const determineEntitiesToLock = async (
   applicationContext: ServerApplicationContext,
   { userId }: { userId: string },
@@ -221,5 +200,5 @@ export const determineEntitiesToLock = async (
 export const updateUserContactInformationInteractor = withLocking(
   updateUserContactInformation,
   determineEntitiesToLock,
-  handleLockError,
+  asyncHandleLockError,
 );
