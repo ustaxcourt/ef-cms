@@ -1,9 +1,12 @@
-import { TRIAL_SESSION_TERM_GENERATOR } from '@shared/business/entities/EntityConstants';
+import {
+  STATE_KEYS,
+  TRIAL_SESSION_TERM_GENERATOR,
+} from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const saveTermBuilderInfoAction = ({ store, get }: ActionProps) => {
   const { termEndDate, termName, termStartDate } = get(state.modal);
-  const TERM_GENERATOR_INFO: typeof state.termBuilderInformation = {
+  const TERM_GENERATOR_INFO = {
     termEndDate,
     termName,
     termStartDate,
@@ -23,5 +26,5 @@ export const saveTermBuilderInfoAction = ({ store, get }: ActionProps) => {
       TRIAL_SESSION_TERM_GENERATOR.HYBRID_CASE_MAX_QUANTITY,
   };
 
-  store.set(state.termBuilderInformation, TERM_GENERATOR_INFO);
+  store.set(state[STATE_KEYS.TERM_BUILDER_INFORMATION], TERM_GENERATOR_INFO);
 };

@@ -578,6 +578,21 @@ export const baseState = {
     sortField: string;
     sortOrder: 'asc' | 'desc';
   },
+  [STATE_KEYS.TERM_BUILDER_INFORMATION]: undefined as
+    | {
+        termEndDate: string;
+        termName: string;
+        termStartDate: string;
+        maxSessionsPerLocation: number;
+        maxSessionsPerWeek: number;
+        smallCaseMinimumQuantity: number;
+        smallCaseMaxQuantity: number;
+        regularCaseMinimumQuantity: number;
+        regularCaseMaxQuantity: number;
+        hybridCaseMinimumQuantity: number;
+        hybridCaseMaxQuantity: number;
+      }
+    | undefined,
   advancedSearchForm: {} as any,
   // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
@@ -852,21 +867,6 @@ export const baseState = {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
   },
-  termBuilderInformation: undefined as
-    | {
-        termEndDate: string;
-        termName: string;
-        termStartDate: string;
-        maxSessionsPerLocation: number;
-        maxSessionsPerWeek: number;
-        smallCaseMinimumQuantity: number;
-        smallCaseMaxQuantity: number;
-        regularCaseMinimumQuantity: number;
-        regularCaseMaxQuantity: number;
-        hybridCaseMinimumQuantity: number;
-        hybridCaseMaxQuantity: number;
-      }
-    | undefined,
   todaysDate: '',
   token: '',
   trialSession: cloneDeep(initialTrialSessionState),
