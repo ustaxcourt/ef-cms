@@ -88,6 +88,7 @@ export const CaseDetailInternal = connect(
                 <CaseDeadlinesInternal />
               </Tab>
               <Tab
+                data-testid="pending-report-tab"
                 id="tab-pending-report"
                 tabName="pendingReport"
                 title="Pending Report"

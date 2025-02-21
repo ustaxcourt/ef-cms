@@ -435,73 +435,37 @@ export const CaseSearchByName = connect(
               </div>
             </Mobile>
 
-            <Mobile>
-              <div className="grid-row">
-                <div className="tablet:grid-col-12">
-                  <Button
-                    aria-describedby="case-search-by-name"
-                    className="advanced-search__button"
-                    data-testid="submit-search-for-case-by-name-button"
-                    id="advanced-search-button"
-                    onClick={e => {
-                      e.preventDefault();
-                      submitAdvancedSearchSequence();
-                    }}
-                  >
-                    Search
-                  </Button>
-                  <div className="margin-top-3 text-align-center">
-                    <Button
-                      link
-                      aria-describedby="case-search-by-name"
-                      className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
-                      data-testid="clear-case-search-by-name-button"
-                      onClick={e => {
-                        e.preventDefault();
-                        clearAdvancedSearchFormSequence({
-                          formType: 'caseSearchByName',
-                        });
-                      }}
-                    >
-                      Clear Search
-                    </Button>
-                  </div>
-                </div>
+            <div className="grid-row">
+              <div className="button-container">
+                <Button
+                  overrideMargin
+                  aria-describedby="case-search-by-name"
+                  className="margin-bottom-0"
+                  data-testid="submit-case-search-by-name-button"
+                  id="advanced-search-button"
+                  onClick={e => {
+                    e.preventDefault();
+                    submitAdvancedSearchSequence();
+                  }}
+                >
+                  Search
+                </Button>
+                <Button
+                  link
+                  overrideMargin
+                  aria-describedby="case-search-by-name"
+                  className="margin-bottom-0 mobile:margin-top-2 tablet:margin-top-0 tablet:margin-left-205"
+                  onClick={e => {
+                    e.preventDefault();
+                    clearAdvancedSearchFormSequence({
+                      formType: 'caseSearchByName',
+                    });
+                  }}
+                >
+                  Clear Search
+                </Button>
               </div>
-            </Mobile>
-
-            <NonMobile>
-              <div className="grid-row">
-                <div className="tablet:grid-col-6">
-                  <Button
-                    aria-describedby="case-search-by-name"
-                    className="advanced-search__button"
-                    data-testid="submit-case-search-by-name-button"
-                    id="advanced-search-button"
-                    onClick={e => {
-                      e.preventDefault();
-                      submitAdvancedSearchSequence();
-                    }}
-                  >
-                    Search
-                  </Button>
-                  <Button
-                    link
-                    aria-describedby="case-search-by-name"
-                    className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
-                    data-testid="clear-search-by-name"
-                    onClick={e => {
-                      e.preventDefault();
-                      clearAdvancedSearchFormSequence({
-                        formType: 'caseSearchByName',
-                      });
-                    }}
-                  >
-                    Clear Search
-                  </Button>
-                </div>
-              </div>
-            </NonMobile>
+            </div>
           </form>
         </div>
       </>
