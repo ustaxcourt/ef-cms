@@ -308,50 +308,57 @@ export const getTransformedPendingItemDetails = (
   const documentTypeReverseLookup = invert(ACTION_DOCUMENT_TYPE_OPTIONS);
 
   const directMatch = documentTypeReverseLookup[pendingItem.documentType];
-  if (directMatch) {
+  if (directMatch)
     return { description: '', documentType: directMatch, objection: '' };
-  }
 
-  let transformedDocumentType = 'other';
-  let matchingObjectionOption = '';
+  const getTransformedDocumentType = (
+    pendingItem: {
+      documuntType: string;
+      eventCode: string;
+      objections: string;
+    } & Record<string, unknown>,
+  ): string => {
+    const documentTypeMap = new Map([
+      [DocketEntry.isNotice, 'notice'],
+      [DocketEntry.isOrder, 'order'],
+      [DocketEntry.isMotion, 'motion'],
+    ]);
 
-  if (DocketEntry.isNotice(pendingItem.eventCode)) {
-    transformedDocumentType = 'notice';
-  } else if (DocketEntry.isOrder(pendingItem.eventCode)) {
-    transformedDocumentType = 'order';
-  } else if (DocketEntry.isMotion(pendingItem.eventCode)) {
-    transformedDocumentType = 'motion';
-  }
-
-  if (DocketEntry.isMotion(pendingItem.eventCode)) {
-    const objectionReverseLookup = invert(MOTION_OBJECTION_OPTIONS);
-    const objectionsToObjectionOptionMap = {
-      [OBJECTIONS_OPTIONS_MAP.NO]:
-        objectionReverseLookup[MOTION_OBJECTION_OPTIONS.noObjection],
-      [OBJECTIONS_OPTIONS_MAP.YES]:
-        objectionReverseLookup[MOTION_OBJECTION_OPTIONS.objection],
-      [OBJECTIONS_OPTIONS_MAP.UNKNOWN]:
-        objectionReverseLookup[MOTION_OBJECTION_OPTIONS.unknown],
-    };
-
-    matchingObjectionOption =
-      MOTION_OBJECTION_OPTIONS[
-        objectionsToObjectionOptionMap[pendingItem.objections]
-      ];
-    if (matchingObjectionOption) {
-      matchingObjectionOption = objectionReverseLookup[matchingObjectionOption];
-    } else {
-      matchingObjectionOption =
-        objectionReverseLookup[MOTION_OBJECTION_OPTIONS.unknown];
+    for (const [isType, typeName] of documentTypeMap) {
+      if (isType(pendingItem.eventCode)) {
+        return typeName;
+      }
     }
-  }
 
-  const description = pendingItem.documentType;
+    return 'other';
+  };
+
+  const getMatchingObjection = (
+    pendingItem: {
+      documuntType: string;
+      eventCode: string;
+      objections: string;
+    } & Record<string, unknown>,
+  ): string => {
+    if (!DocketEntry.isMotion(pendingItem.eventCode)) return '';
+
+    const objectionLookup = new Map([
+      [OBJECTIONS_OPTIONS_MAP.NO, MOTION_OBJECTION_OPTIONS.noObjection],
+      [OBJECTIONS_OPTIONS_MAP.YES, MOTION_OBJECTION_OPTIONS.objection],
+      [OBJECTIONS_OPTIONS_MAP.UNKNOWN, MOTION_OBJECTION_OPTIONS.unknown],
+    ]);
+
+    const matchingObjection =
+      objectionLookup.get(pendingItem.objections) ||
+      MOTION_OBJECTION_OPTIONS.unknown;
+
+    return invert(MOTION_OBJECTION_OPTIONS)[matchingObjection];
+  };
 
   return {
-    description,
-    documentType: transformedDocumentType,
-    objection: matchingObjectionOption,
+    description: pendingItem.documentType,
+    documentType: getTransformedDocumentType(pendingItem),
+    objection: getMatchingObjection(pendingItem),
   };
 };
 
@@ -365,13 +372,10 @@ export const transformFiledBy = (caseDetail: RawCase, pendingItem): string => {
     ),
   );
 
-  if (isPetitioner && isRespondent) {
+  if (isPetitioner && isRespondent)
     return FILED_BY_TYPES.petitionerAndRespondent;
-  } else if (isPetitioner) {
-    return FILED_BY_TYPES.petitioner;
-  } else if (isRespondent) {
-    return FILED_BY_TYPES.respondent;
-  }
+  if (isPetitioner) return FILED_BY_TYPES.petitioner;
+  if (isRespondent) return FILED_BY_TYPES.respondent;
 
   return FILED_BY_TYPES.other;
 };
