@@ -61,7 +61,7 @@ describe('updateCaseAutomaticBlock', () => {
 
   it('sets the case to automaticBlocked and calls deleteCaseTrialSortMappingRecords if it has deadlines', async () => {
     getCaseDeadlinesByDocketNumber.mockResolvedValue([
-      { deadline: 'something' } as any
+      { deadline: 'something' } as any,
     ]);
 
     const caseEntity = new Case(MOCK_CASE_WITHOUT_PENDING, {
@@ -82,7 +82,7 @@ describe('updateCaseAutomaticBlock', () => {
 
   it('does not set the case to automaticBlocked or call deleteCaseTrialSortMappingRecords if it already has a trial date', async () => {
     getCaseDeadlinesByDocketNumber.mockResolvedValue([
-      { deadline: 'something' } as any
+      { deadline: 'something' } as any,
     ]);
 
     const caseEntity = new Case(

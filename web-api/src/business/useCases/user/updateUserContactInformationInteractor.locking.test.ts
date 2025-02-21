@@ -7,7 +7,6 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
-  handleLockError,
   updateUserContactInformationInteractor,
 } from './updateUserContactInformationInteractor';
 import { sleep } from '@shared/tools/helpers';
@@ -93,27 +92,6 @@ describe('determineEntitiesToLock', () => {
   });
 });
 
-describe('handleLockError', () => {
-  it('should send a notification to the user with "retry_async_request" and the originalRequest', async () => {
-    const mockOriginalRequest = {
-      foo: 'bar',
-    };
-    await handleLockError(
-      applicationContext,
-      mockOriginalRequest,
-      MOCK_PRACTITIONER as UnknownAuthUser,
-    );
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message,
-    ).toMatchObject({
-      action: 'retry_async_request',
-      originalRequest: mockOriginalRequest,
-      requestToRetry: 'update_user_contact_information',
-    });
-  });
-});
-
 describe('updateUserContactInformationInteractor', () => {
   let mockLock;
 
@@ -124,6 +102,7 @@ describe('updateUserContactInformationInteractor', () => {
     },
     firmName: 'some firm',
     userId: MOCK_PRACTITIONER.userId,
+    clientConnectionId: 'TEST_CLIENT_CONNECTION_ID',
   };
 
   beforeAll(() => {
@@ -170,32 +149,6 @@ describe('updateUserContactInformationInteractor', () => {
           MOCK_PRACTITIONER as UnknownAuthUser,
         ),
       ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('should return a "retry_async_request" notification with the original request', async () => {
-      await expect(
-        updateUserContactInformationInteractor(
-          applicationContext,
-          mockRequest,
-          MOCK_PRACTITIONER as UnknownAuthUser,
-        ),
-      ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getNotificationGateway().sendNotificationToUser,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        message: {
-          action: 'retry_async_request',
-          originalRequest: mockRequest,
-          requestToRetry: 'update_user_contact_information',
-        },
-        userId: MOCK_PRACTITIONER.userId,
-      });
 
       expect(
         applicationContext.getPersistenceGateway().getCaseByDocketNumber,

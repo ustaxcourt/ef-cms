@@ -159,7 +159,7 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
 }
 
 /**
- * Trial sessions
+ * Trial Sessions
  */
 {
   app.get(
