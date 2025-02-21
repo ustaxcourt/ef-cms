@@ -51,7 +51,7 @@ DynamoDB can basically be boiled down to a few main operations, PutItem, GetItem
 
 DynamoDB has many limitations, and one of the main pitfalls of DynamoDB is that you need to really understand your applications access patterns before you can start using it in a useful way.  You can always add on GSI (global secondary indicies) at a later time if you need to.  These GSIs will allow you to query for items based on something other than the original PK,SK pair defined when creating the table, but know that with each GSI, you will be charged extra money for write requests.
 
-In our project, our data is stored in a table named `efcms-$ENV-alpha` and `efcms-$ENV-beta`.  The `alpha` and `beta` suffixes are due to our blue-green migration process.  We also store data into another table called `efcms-deploy-$ENV` which is used to keep track of environment state, rate limiter configurations, a historical record of ran migration scripts, feature flags, etc.  Lastly, we store the terraform lock state in a table called `efcms-terraform-lock`.  These locks help prevent multiple terraform runs from running at the same time which can cause major issues.
+In our project, our data is stored in a table named `efcms-$ENV-alpha` and `efcms-$ENV-beta`.  The `alpha` and `beta` suffixes are due to our blue-green migration process.  We also store data into another table called `efcms-deploy-$ENV` which is used to keep track of environment state, a historical record of ran migration scripts, feature flags, etc.  Lastly, we store the terraform lock state in a table called `efcms-terraform-lock`.  These locks help prevent multiple terraform runs from running at the same time which can cause major issues.
 
 For more information on DynamoDB, please see the [AWS Documentation](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/).
 
@@ -140,4 +140,3 @@ In Dawson, we use SNS to notify lower environments when a case is sealed in prod
 ## EC2
 
 EC2 is a service which allows you to host a virtual machine.  We use EC2 to host dynamsoft which is a front end library used for scanning documents.  The only reason we host dynamsoft on an EC2 instance is due to how the license works for dynamsoft.  They require the license to be hosted only one machine, so having it hosted on S3 violates that license.
-

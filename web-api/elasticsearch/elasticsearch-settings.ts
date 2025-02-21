@@ -30,7 +30,7 @@ export const settings = ({
       'mapping.total_fields.limit': '1000',
       max_result_window: 20000,
       number_of_replicas: actualNumberOfReplicas,
-      number_of_shards: 1,
+      number_of_shards: 1, // TODO: would like to set to 2 or 3 for prod-like environments; will require a re-index
     },
   };
 };
