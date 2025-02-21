@@ -140,6 +140,7 @@ describe('socketRouter', () => {
     {
       args: {
         alertError: {
+          scrollToErrorNotification: true,
           message:
             'We could not set the trial session calendar. Please contact support.',
           title: 'Error setting trial session calendar.',
