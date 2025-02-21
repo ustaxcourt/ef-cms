@@ -59,7 +59,7 @@ resource "aws_wafv2_web_acl" "apis" {
     }
   }
 
-    rule {
+  rule {
     name     = "expensive_request_limit"
     priority = 2
 
