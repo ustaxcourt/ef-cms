@@ -12,11 +12,12 @@ import {
   statusReportDocketEntryId,
 } from '../../../support/statusReportOrder';
 import { loginAsColvin } from '../../../../helpers/authentication/login-as-helpers';
+import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 
 describe('edit status report order', () => {
   beforeEach(() => {
     loginAsColvin();
-    cy.visit(`/case-detail/${docketNumber}`);
+    goToCase(docketNumber)
   });
 
   describe('editing a status report order from drafts document view', () => {
