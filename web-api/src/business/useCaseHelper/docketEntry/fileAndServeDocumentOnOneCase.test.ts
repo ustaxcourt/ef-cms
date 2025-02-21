@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock(
@@ -9,7 +10,6 @@ jest.mock(
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments',
 );
-jest.mock('@web-api/persistence/dynamo/cases/getCaseByDocketNumber');
 import {
   COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,

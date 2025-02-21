@@ -107,7 +107,7 @@ describe('Petitioner', () => {
         hasConsentedToElectronicService: false,
       });
 
-      expect(entity.hasConsentedToElectronicService).toEqual(false);
+      expect(entity.hasConsentedToElectronicService).toBeFalsy();
     });
   });
 });

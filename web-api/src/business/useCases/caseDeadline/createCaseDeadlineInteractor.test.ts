@@ -58,6 +58,7 @@ describe('createCaseDeadlineInteractor', () => {
     getCaseDeadlinesByDocketNumber.mockResolvedValue([
       new CaseDeadline(MOCK_CASE_DEADLINE),
     ]);
+    updateCase.mockImplementation(c => c.caseToUpdate);
   });
 
   it('throws an error if the user is not valid or authorized', async () => {

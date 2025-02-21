@@ -1,5 +1,4 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
-jest.mock('@web-api/persistence/elasticsearch/getBlockedCases');
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
   SESSION_TERMS_DICT,
