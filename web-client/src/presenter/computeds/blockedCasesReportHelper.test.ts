@@ -3,14 +3,14 @@ import { blockedCasesReportHelper } from './blockedCasesReportHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { initialBlockedCaseReportFilter } from '@web-client/presenter/state/blockedCasesReportState';
 import { cloneDeep } from 'lodash';
-import { BlockedCasesResponse } from '@web-api/persistence/elasticsearch/getBlockedCases';
+import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 
 describe('blockedCasesReportHelper', () => {
   const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
   let blockedCaseReportFilter: typeof initialBlockedCaseReportFilter;
-  let blockedCasesState: BlockedCasesResponse;
+  let blockedCasesState: BlockedCaseData[];
 
   beforeEach(() => {
     blockedCaseReportFilter = cloneDeep(initialBlockedCaseReportFilter);
