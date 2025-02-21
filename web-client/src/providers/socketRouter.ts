@@ -36,10 +36,6 @@ export const socketRouter = (app, onMessageCallbackFn?) => {
         await app.getSequence('completeTrialSessionCalendarSequence')(message);
         break;
       case 'set_trial_session_calendar_error':
-        console.error(
-          'error setting trial session calendar: ',
-          message.message,
-        );
         await app.getSequence('setTrialSessionCalendarErrorSequence')({
           ...message,
           alertError: {
