@@ -3,6 +3,22 @@ import { getDbReader } from '@web-api/database';
 
 const MAX_RESULTS = 5000;
 
+export type BlockedCaseData = Pick<
+  RawCase,
+  | 'automaticBlocked'
+  | 'automaticBlockedDate'
+  | 'automaticBlockedReason'
+  | 'blocked'
+  | 'blockedDate'
+  | 'blockedReason'
+  | 'caseCaption'
+  | 'docketNumber'
+  | 'docketNumberSuffix'
+  | 'leadDocketNumber'
+  | 'status'
+  | 'procedureType'
+>;
+
 export const getBlockedCasesForTrialLocation = async (
   trialLocation: string,
 ) => {
@@ -48,5 +64,5 @@ export const getBlockedCasesForTrialLocation = async (
       .limit(MAX_RESULTS)
       .execute(),
   );
-  return results.map(result => rawCaseEntity(result));
+  return results.map(result => rawCaseEntity(result) as BlockedCaseData);
 };
