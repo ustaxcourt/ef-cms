@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.26
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.30
 
 parameters:
   run_build_and_deploy:
@@ -187,6 +187,22 @@ jobs:
           command: |
             ./web-client/deploy-public.sh
       - run:
+          name: 'Deploy - Inactive Cases Email Lambda and Monthly Cron Trigger'
+          command: |
+            if [ -n "$INACTIVITY_REPORT_RECIPIENTS" ]; then
+              ES_DOMAIN="$SOURCE_ELASTICSEARCH"
+              if [ "$MIGRATE_FLAG" == "true" ]; then
+                ES_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "$ENV")
+              fi
+              ES_ENDPOINT=$(aws es describe-elasticsearch-domain \
+                --domain-name "$ES_DOMAIN" \
+                --region "us-east-1" \
+                --query 'DomainStatus.Endpoint' \
+                --output text)
+              export ELASTICSEARCH_ENDPOINT="$ES_ENDPOINT"
+              npm run deploy:stale-cases-email-cron -- $ENV
+            fi
+      - run:
           name: 'Deploy - Authorizer Smoke Tests'
           command: |
             npm run verify-authorizers -- $ENV
@@ -200,7 +216,7 @@ jobs:
 
   docker-image-zipper:
     docker:
-      - image: cimg/node:20.14
+      - image: cimg/node:22.13
     resource_class: xlarge
     steps:
       - git-shallow-clone/checkout
@@ -1004,12 +1020,10 @@ workflows:
           <<: *only-prod
       - docker-image-zipper:
           <<: *only-prod
-          requires:
-            - deploy
       - migrate:
           <<: *only-prod
           requires:
-            - docker-image-zipper
+            - deploy
       - wait-for-migration:
           <<: *only-prod
           type: approval

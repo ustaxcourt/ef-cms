@@ -1,3 +1,4 @@
+jest.mock('@web-api/persistence/elasticsearch/getBlockedCases');
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
   SESSION_TERMS_DICT,
@@ -10,6 +11,8 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { getBlockedCases as getBlockedCasesMock } from '@web-api/persistence/elasticsearch/getBlockedCases';
+import { MOCK_CASE } from '@shared/test/mockCase';
 
 describe('getTrialSessionPlanningReportDataInteractor', () => {
   const ALL_TRIAL_SESSIONS_MOCK: RawTrialSession[] = [
@@ -127,7 +130,8 @@ describe('getTrialSessionPlanningReportDataInteractor', () => {
   ];
   const SMALL_ELIGIBLE_CASES_FOR_TRIAL_CITY_MOCK = [{}];
   const REGULAR_ELIGIBLE_CASES_FOR_TRIAL_CITY_MOCK = [{}, {}];
-  const BLOCKED_CASES_MOCK = [{}, {}, {}];
+  const BLOCKED_CASES_MOCK = [MOCK_CASE, MOCK_CASE, MOCK_CASE];
+  const getBlockedCases = jest.mocked(getBlockedCasesMock);
 
   beforeEach(() => {
     applicationContext
@@ -142,9 +146,7 @@ describe('getTrialSessionPlanningReportDataInteractor', () => {
         return REGULAR_ELIGIBLE_CASES_FOR_TRIAL_CITY_MOCK;
       });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getBlockedCases.mockResolvedValue(BLOCKED_CASES_MOCK);
+    getBlockedCases.mockResolvedValue(BLOCKED_CASES_MOCK);
   });
 
   it('should throw error if the user is "Unauthorized"', async () => {
