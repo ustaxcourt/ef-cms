@@ -1822,11 +1822,11 @@ export const TRIAL_HEARING_OPTIONS = {
 export type TrialHearingOption = keyof typeof TRIAL_HEARING_OPTIONS;
 
 export const STATUS_REPORT_ORDERED_FOR_OPTIONS = {
+  petitioner: 'Petitioner',
+  respondent: 'Respondent',
+  petitionerAndRespondent: 'Petitioner and Respondent',
   joint: 'Joint',
   other: 'Other',
-  petitioner: 'Petitioner',
-  petitionerAndRespondent: 'Petitioner and Respondent',
-  respondent: 'Respondent',
 } as const;
 export type StatusReportOrderedForOption =
   | keyof typeof STATUS_REPORT_ORDERED_FOR_OPTIONS
