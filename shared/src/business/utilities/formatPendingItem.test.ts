@@ -70,6 +70,7 @@ describe('formatPendingItem', () => {
     expect(result).toMatchObject([
       {
         associatedJudgeFormatted: CHIEF_JUDGE,
+        sortableDocketNumber: 2019000101,
         documentLink:
           '/case-detail/101-19/document-view?docketEntryId=33ddbf4f-90f8-417c-8967-57851b0b9069',
         formattedFiledDate: '01/10/19',
@@ -77,6 +78,7 @@ describe('formatPendingItem', () => {
       },
       {
         associatedJudgeFormatted: CHIEF_JUDGE,
+        sortableDocketNumber: 2019000101,
         documentLink:
           '/case-detail/101-19/document-view?docketEntryId=dd956ab1-5cde-4e78-bae0-fff4aee40426',
         formattedFiledDate: '01/20/18',
@@ -84,6 +86,7 @@ describe('formatPendingItem', () => {
       },
       {
         associatedJudgeFormatted: 'A',
+        sortableDocketNumber: 2019000103,
         documentLink:
           '/case-detail/103-19/document-view?docketEntryId=dd956ab1-5cde-4e78-bae0-ac7faee40426',
         formattedFiledDate: '01/20/18',
