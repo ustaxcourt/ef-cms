@@ -420,6 +420,27 @@ describe('formatMinuteSheet', () => {
         const result = formatPetitionerAppearances(petitionersSection);
         expect(result).toEqual([]);
       });
+
+      it('should handle petitioner with "other" role and display the role note if provided', () => {
+        const mockRoleNote = 'Big Wig';
+        const petitionersSection = {
+          noAppearance: false,
+          appearances: [
+            {
+              datesOfAppearance: '',
+              name: '',
+              role: invertedPetitionerRoleOptions[
+                PETITIONER_ROLE_OPTIONS.other
+              ],
+              roleNote: mockRoleNote,
+            },
+          ] as Appearance[],
+        };
+        const result = formatPetitionerAppearances(petitionersSection);
+        expect(result).toEqual([
+          `(${PETITIONER_ROLE_OPTIONS.other} - <em>${mockRoleNote}</em>)`,
+        ]);
+      });
     });
 
     describe('formatRespondentAppearances', () => {

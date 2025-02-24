@@ -12,6 +12,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import React from 'react';
+import { invert } from 'lodash';
 
 export const PetitionersFieldset = ({
   addRowHandler,
@@ -26,6 +27,10 @@ export const PetitionersFieldset = ({
   petitionersFormState: MinuteSheetFormState['petitionersSection'];
   removeRowHandler: RemoveRowHandler;
 }) => {
+  const SHOW_ROLE_NOTE_ROLE_TYPE = invert(PETITIONER_ROLE_OPTIONS)[
+    PETITIONER_ROLE_OPTIONS.other
+  ];
+
   return (
     <fieldset className="grid-container border-0 padding-0">
       <div className="grid-row grid-gap-2 margin-bottom-1">
@@ -123,6 +128,36 @@ export const PetitionersFieldset = ({
               </select>
             </FormGroup>
           </div>
+          {petitionersFormState.petitioners[row.renderKey].role ===
+            SHOW_ROLE_NOTE_ROLE_TYPE && (
+            <div className="grid-col-2">
+              <FormGroup className="margin-bottom-0">
+                <input
+                  className="usa-input"
+                  id={`petitioner-role-note-${rowIndex}`}
+                  name={`petitioner-role-note-${rowIndex}`}
+                  aria-label={`petitioner-role-note-${rowIndex}`}
+                  type="text"
+                  value={
+                    petitionersFormState.petitioners[row.renderKey].roleNote
+                  }
+                  placeholder="Role note"
+                  onBlur={() => onBlurHandler()}
+                  onChange={e =>
+                    onChangeHandler({
+                      name: 'petitioners',
+                      rowInfo: {
+                        key: row.renderKey,
+                        nestedName: 'roleNote',
+                      },
+                      section: MINUTE_SHEET_FORM_SECTION_MAP.petitionersSection,
+                      value: e.target.value,
+                    })
+                  }
+                />
+              </FormGroup>
+            </div>
+          )}
           <div className="grid-col-3">
             <FormGroup className="margin-bottom-0">
               <input
@@ -150,7 +185,7 @@ export const PetitionersFieldset = ({
               />
             </FormGroup>
           </div>
-          <div className="grid-col-4">
+          <div className="grid-col-auto">
             <Button
               link
               className="padding-0"

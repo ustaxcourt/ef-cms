@@ -154,7 +154,10 @@ export const MinuteSheet = ({
             </div>
             {formattedMinuteSheet.petitionerAppearances.map(
               (petitionerAppearance, index) => (
-                <div key={index}>{petitionerAppearance}</div>
+                <div
+                  key={index}
+                  dangerouslySetInnerHTML={{ __html: petitionerAppearance }}
+                ></div>
               ),
             )}
           </div>

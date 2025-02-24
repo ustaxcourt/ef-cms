@@ -22,6 +22,7 @@ import {
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
 import { encode } from 'he';
+import { invert } from 'lodash';
 
 export type FormattedMinuteSheet = {
   courtReporter: string;
@@ -112,7 +113,7 @@ export const formatMinuteSheet = ({
     ),
     notCalled: formatCalledSection(sanitizeMinuteSheetForm(notCalled)),
     petitionerAppearances: formatPetitionerAppearances(
-      minuteSheet.appearances.petitioners,
+      sanitizeMinuteSheetForm(minuteSheet.appearances.petitioners),
     ),
     petitionerWitnesses: formatWitnesses(
       minuteSheet.evidence.petitionerWitnesses,
@@ -244,9 +245,20 @@ export const formatPetitionerAppearances = (
     ? ['No appearance']
     : petitioners.appearances
         .map(petitioner => {
+          let formattedPetitionerRole;
+          if (
+            petitioner.role &&
+            petitioner.role ===
+              invert(PETITIONER_ROLE_OPTIONS)[PETITIONER_ROLE_OPTIONS.other]
+          ) {
+            formattedPetitionerRole = `(${PETITIONER_ROLE_OPTIONS[petitioner.role]} - <em>${petitioner.roleNote}</em>)`;
+          } else if (petitioner.role) {
+            formattedPetitionerRole = `(${PETITIONER_ROLE_OPTIONS[petitioner.role]})`;
+          }
+
           const parts = [
             petitioner.name,
-            petitioner.role && `(${PETITIONER_ROLE_OPTIONS[petitioner.role]})`,
+            formattedPetitionerRole,
             petitioner.datesOfAppearance && `- ${petitioner.datesOfAppearance}`,
           ].filter(substring => !!substring);
 

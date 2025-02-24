@@ -15,11 +15,11 @@ import {
   ACTION_DOCUMENT_TYPE_OPTIONS,
   ACTION_FILED_BY_OPTIONS,
   ACTION_STATUS_OPTIONS,
-  ActionDocumentTypeOption,
   MINUTE_SHEET_FORM_SECTION_MAP,
   MOTION_OBJECTION_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
 import React from 'react';
+import { invert } from 'lodash';
 
 export const ActionsAndFilingsFieldset = ({
   actionsAndFilingsFormState,
@@ -34,7 +34,9 @@ export const ActionsAndFilingsFieldset = ({
   onBlurHandler: AutoSaveHandler;
   actionsAndFilingsFormState: MinuteSheetFormState['actionsAndFilingsSection'];
 }) => {
-  const SHOW_MOTION_DETAILS_TYPE: ActionDocumentTypeOption = 'motion';
+  const SHOW_MOTION_DETAILS_TYPE = invert(ACTION_DOCUMENT_TYPE_OPTIONS)[
+    ACTION_DOCUMENT_TYPE_OPTIONS.motion
+  ];
 
   const renderSelectField = (
     id: string,

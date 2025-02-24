@@ -306,7 +306,7 @@ describe('initializeMinuteSheet', () => {
     expect(petitionerEntries).toHaveLength(1);
     expect(petitionerEntries[0]).toMatchObject({
       name: mockCasePetitioner.name,
-      role: 'Other',
+      role: invert(PETITIONER_ROLE_OPTIONS)[PETITIONER_ROLE_OPTIONS.other],
       datesOfAppearance: '',
     });
   });
@@ -530,7 +530,7 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
       expect(entries).toHaveLength(1);
       expect(entries[0]).toMatchObject({
         name: 'Test Petitioner',
-        role: PETITIONER_ROLE_OPTIONS.proSe,
+        role: invert(PETITIONER_ROLE_OPTIONS)[PETITIONER_ROLE_OPTIONS.proSe],
       });
     });
 
@@ -550,7 +550,7 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
       expect(entries).toHaveLength(1);
       expect(entries[0]).toMatchObject({
         name: 'Test Petitioner',
-        role: PETITIONER_ROLE_OPTIONS.counsel,
+        role: invert(PETITIONER_ROLE_OPTIONS)[PETITIONER_ROLE_OPTIONS.counsel],
       });
     });
 
@@ -570,7 +570,7 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
       expect(entries).toHaveLength(1);
       expect(entries[0]).toMatchObject({
         name: 'Test Petitioner',
-        role: PETITIONER_ROLE_OPTIONS.other,
+        role: invert(PETITIONER_ROLE_OPTIONS)[PETITIONER_ROLE_OPTIONS.other],
       });
     });
 
@@ -590,7 +590,9 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
       expect(entries).toHaveLength(1);
       expect(entries[0]).toMatchObject({
         name: 'Test Petitioner',
-        role: PETITIONER_ROLE_OPTIONS.intervenor,
+        role: invert(PETITIONER_ROLE_OPTIONS)[
+          PETITIONER_ROLE_OPTIONS.intervenor
+        ],
       });
     });
   });
