@@ -150,7 +150,6 @@ describe('exportPendingReportInteractor', () => {
         isLeadCase: false,
         receivedAt: '1990-01-01T12:00:00.000Z',
         shouldIndent: false,
-        sortableDocketNumber: 2045000123,
       },
       {
         associatedJudgeFormatted: 'Judgeson',
@@ -168,7 +167,6 @@ describe('exportPendingReportInteractor', () => {
         isLeadCase: false,
         receivedAt: '1999-01-01T12:00:00.000Z',
         shouldIndent: false,
-        sortableDocketNumber: 2049000123,
       },
       {
         associatedJudgeFormatted: 'Buch',
@@ -186,7 +184,6 @@ describe('exportPendingReportInteractor', () => {
         isLeadCase: false,
         receivedAt: '2020-02-02T12:00:00.000Z',
         shouldIndent: false,
-        sortableDocketNumber: 2056000234,
       },
       {
         associatedJudgeFormatted: 'Alvin',
@@ -204,7 +201,6 @@ describe('exportPendingReportInteractor', () => {
         isLeadCase: false,
         receivedAt: '2020-03-03T12:00:00.000Z',
         shouldIndent: false,
-        sortableDocketNumber: 1967000345,
       },
       {
         associatedJudgeFormatted: 'Buch',
@@ -222,7 +218,6 @@ describe('exportPendingReportInteractor', () => {
         isLeadCase: true,
         receivedAt: '2020-03-03T12:00:00.000Z',
         shouldIndent: false,
-        sortableDocketNumber: 1978000456,
       },
       {
         associatedJudgeFormatted: 'Foley',
@@ -240,7 +235,6 @@ describe('exportPendingReportInteractor', () => {
         isLeadCase: false,
         receivedAt: '2020-03-04T12:00:00.000Z',
         shouldIndent: false,
-        sortableDocketNumber: 1967000456,
       },
       {
         associatedJudgeFormatted: 'Judger',
@@ -258,7 +252,6 @@ describe('exportPendingReportInteractor', () => {
         isLeadCase: false,
         receivedAt: '2021-03-04T12:00:00.000Z',
         shouldIndent: false,
-        sortableDocketNumber: 1969000456,
       },
       {
         associatedJudgeFormatted: 'Judgey',
@@ -276,7 +269,6 @@ describe('exportPendingReportInteractor', () => {
         isLeadCase: false,
         receivedAt: '2022-02-04T12:00:00.000Z',
         shouldIndent: false,
-        sortableDocketNumber: 1968000456,
       },
     ]);
     expect(results).toEqual('MOCK_CSV_STRING');

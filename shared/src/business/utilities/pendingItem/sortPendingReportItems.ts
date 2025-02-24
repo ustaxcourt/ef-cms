@@ -1,3 +1,4 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import { PendingItemFormatted } from '@shared/business/utilities/formatPendingItem';
 import { sortBy } from 'lodash';
 
@@ -12,12 +13,10 @@ export function sortPendingReportItems(
 
   const KEY = `sortable__${pendingItemSortField}`;
   const SORTABLE_PENDING_ITEMS = pendingItems.map(pi => {
-    const isPropertyString = typeof pi[pendingItemSortField] === 'string';
+    const SORTABLE_VALUE = getSortableValue(pendingItemSortField, pi);
     return {
       ...pi,
-      [KEY]: isPropertyString
-        ? pi[pendingItemSortField].toLocaleLowerCase()
-        : pi[pendingItemSortField],
+      [KEY]: SORTABLE_VALUE,
     };
   });
 
@@ -33,4 +32,16 @@ export function sortPendingReportItems(
 
   if (pendingItemSortOrder === 'desc') return sortedPendingItems.reverse();
   return sortedPendingItems;
+}
+
+function getSortableValue(
+  sortField: string,
+  pendingItem: PendingItemFormatted,
+) {
+  if (sortField === 'docketNumber')
+    return Case.getSortableDocketNumber(pendingItem.docketNumber)!;
+  if (typeof pendingItem[sortField] === 'string')
+    return pendingItem[sortField].toLocaleLowerCase();
+
+  return pendingItem[sortField];
 }
