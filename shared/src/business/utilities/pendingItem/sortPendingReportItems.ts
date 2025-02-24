@@ -1,47 +1,41 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { PendingItemFormatted } from '@shared/business/utilities/formatPendingItem';
-import { sortBy } from 'lodash';
 
 export function sortPendingReportItems(
-  pendingItems: PendingItemFormatted[] = [],
+  _pendingItems: PendingItemFormatted[] = [],
   pendingItemSortField: string | undefined,
   pendingItemSortOrder: 'asc' | 'desc' | undefined,
 ): PendingItemFormatted[] {
+  const pendingItems = [..._pendingItems];
+
   if (!pendingItemSortField || !pendingItemSortOrder) {
-    return sortBy(pendingItems, ['receivedAt']);
+    return pendingItems.sort((a, b) =>
+      a.receivedAt.localeCompare(b.receivedAt),
+    );
   }
 
-  const KEY = `sortable__${pendingItemSortField}`;
-  const SORTABLE_PENDING_ITEMS = pendingItems.map(pi => {
-    const SORTABLE_VALUE = getSortableValue(pendingItemSortField, pi);
-    return {
-      ...pi,
-      [KEY]: SORTABLE_VALUE,
-    };
+  const sortedPendingItems = pendingItems.sort((a, b) => {
+    if (pendingItemSortField === 'docketNumber') {
+      const aDocket = Case.getSortableDocketNumber(a.docketNumber)!;
+      const bDocket = Case.getSortableDocketNumber(b.docketNumber)!;
+      if (aDocket !== bDocket) return aDocket < bDocket ? -1 : 1;
+      return a.receivedAt.localeCompare(b.receivedAt);
+    }
+
+    if (typeof a[pendingItemSortField] === 'string') {
+      const aValue = a[pendingItemSortField].toLocaleLowerCase();
+      const bValue = b[pendingItemSortField].toLocaleLowerCase();
+      if (aValue !== bValue) return aValue < bValue ? -1 : 1;
+      return a.receivedAt.localeCompare(b.receivedAt);
+    }
+
+    const aValue = a[pendingItemSortField];
+    const bValue = b[pendingItemSortField];
+    if (aValue !== bValue) return aValue < bValue ? -1 : 1;
+    return a.receivedAt.localeCompare(b.receivedAt);
   });
 
-  const SORTED_PENDING_ITEMS = sortBy(SORTABLE_PENDING_ITEMS, [
-    KEY,
-    'receivedAt',
-  ]);
-
-  const sortedPendingItems = SORTED_PENDING_ITEMS.map(pi => ({
-    ...pi,
-    [KEY]: undefined,
-  }));
-
-  if (pendingItemSortOrder === 'desc') return sortedPendingItems.reverse();
-  return sortedPendingItems;
-}
-
-function getSortableValue(
-  sortField: string,
-  pendingItem: PendingItemFormatted,
-) {
-  if (sortField === 'docketNumber')
-    return Case.getSortableDocketNumber(pendingItem.docketNumber)!;
-  if (typeof pendingItem[sortField] === 'string')
-    return pendingItem[sortField].toLocaleLowerCase();
-
-  return pendingItem[sortField];
+  return pendingItemSortOrder === 'desc'
+    ? sortedPendingItems.reverse()
+    : sortedPendingItems;
 }

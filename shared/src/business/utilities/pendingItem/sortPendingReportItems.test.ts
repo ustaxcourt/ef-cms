@@ -8,42 +8,42 @@ describe('sortPendingReportItems', () => {
     const PENDING_ITEMS: PendingItemFormatted[] = [
       {
         testProp: 5,
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
       } as unknown as PendingItemFormatted,
       {
         testProp: 2,
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
       } as unknown as PendingItemFormatted,
       {
         testProp: 7,
-        receivedAt: 2,
+        receivedAt: '2',
         sortableDocketNumber: 1,
       } as unknown as PendingItemFormatted,
       {
         testProp: 7,
-        receivedAt: 2,
+        receivedAt: '2',
         sortableDocketNumber: 2,
       } as unknown as PendingItemFormatted,
       {
         testProp: 1,
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
       } as unknown as PendingItemFormatted,
       {
         testProp: 4,
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
       } as unknown as PendingItemFormatted,
       {
         testProp: 3,
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
       } as unknown as PendingItemFormatted,
       {
         testProp: 7,
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
       } as unknown as PendingItemFormatted,
     ];
@@ -56,42 +56,42 @@ describe('sortPendingReportItems', () => {
 
     expect(results).toEqual([
       {
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
         testProp: 1,
       },
       {
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
         testProp: 2,
       },
       {
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
         testProp: 3,
       },
       {
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
         testProp: 4,
       },
       {
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
         testProp: 5,
       },
       {
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
         testProp: 7,
       },
       {
-        receivedAt: 2,
+        receivedAt: '2',
         sortableDocketNumber: 1,
         testProp: 7,
       },
       {
-        receivedAt: 2,
+        receivedAt: '2',
         sortableDocketNumber: 2,
         testProp: 7,
       },
@@ -104,42 +104,42 @@ describe('sortPendingReportItems', () => {
     const PENDING_ITEMS: PendingItemFormatted[] = [
       {
         testProp: 5,
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
       } as unknown as PendingItemFormatted,
       {
         testProp: 2,
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
       } as unknown as PendingItemFormatted,
       {
         testProp: 7,
-        receivedAt: 2,
+        receivedAt: '2',
         sortableDocketNumber: 1,
       } as unknown as PendingItemFormatted,
       {
         testProp: 7,
-        receivedAt: 2,
+        receivedAt: '2',
         sortableDocketNumber: 2,
       } as unknown as PendingItemFormatted,
       {
         testProp: 1,
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
       } as unknown as PendingItemFormatted,
       {
         testProp: 4,
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
       } as unknown as PendingItemFormatted,
       {
         testProp: 3,
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
       } as unknown as PendingItemFormatted,
       {
         testProp: 7,
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
       } as unknown as PendingItemFormatted,
     ];
@@ -152,42 +152,42 @@ describe('sortPendingReportItems', () => {
 
     expect(results).toEqual([
       {
-        receivedAt: 2,
+        receivedAt: '2',
         sortableDocketNumber: 2,
         testProp: 7,
       },
       {
-        receivedAt: 2,
+        receivedAt: '2',
         sortableDocketNumber: 1,
         testProp: 7,
       },
       {
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
         testProp: 7,
       },
       {
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
         testProp: 5,
       },
       {
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
         testProp: 4,
       },
       {
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
         testProp: 3,
       },
       {
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
         testProp: 2,
       },
       {
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
         testProp: 1,
       },
@@ -199,35 +199,35 @@ describe('sortPendingReportItems', () => {
     const SORT_ORDER = 'asc' as const;
     const PENDING_ITEMS: PendingItemFormatted[] = [
       {
-        receivedAt: 8,
+        receivedAt: '8',
         sortableDocketNumber: 1,
       } as unknown as PendingItemFormatted,
       {
-        receivedAt: 3,
+        receivedAt: '3',
         sortableDocketNumber: 1,
       } as unknown as PendingItemFormatted,
       {
-        receivedAt: 2,
+        receivedAt: '2',
         sortableDocketNumber: 1,
       } as unknown as PendingItemFormatted,
       {
-        receivedAt: 2,
+        receivedAt: '2',
         sortableDocketNumber: 2,
       } as unknown as PendingItemFormatted,
       {
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
       } as unknown as PendingItemFormatted,
       {
-        receivedAt: 9,
+        receivedAt: '9',
         sortableDocketNumber: 1,
       } as unknown as PendingItemFormatted,
       {
-        receivedAt: 6,
+        receivedAt: '6',
         sortableDocketNumber: 1,
       } as unknown as PendingItemFormatted,
       {
-        receivedAt: 7,
+        receivedAt: '7',
         sortableDocketNumber: 1,
       } as unknown as PendingItemFormatted,
     ];
@@ -240,35 +240,35 @@ describe('sortPendingReportItems', () => {
 
     expect(results).toEqual([
       {
-        receivedAt: 1,
+        receivedAt: '1',
         sortableDocketNumber: 1,
       },
       {
-        receivedAt: 2,
+        receivedAt: '2',
         sortableDocketNumber: 1,
       },
       {
-        receivedAt: 2,
+        receivedAt: '2',
         sortableDocketNumber: 2,
       },
       {
-        receivedAt: 3,
+        receivedAt: '3',
         sortableDocketNumber: 1,
       },
       {
-        receivedAt: 6,
+        receivedAt: '6',
         sortableDocketNumber: 1,
       },
       {
-        receivedAt: 7,
+        receivedAt: '7',
         sortableDocketNumber: 1,
       },
       {
-        receivedAt: 8,
+        receivedAt: '8',
         sortableDocketNumber: 1,
       },
       {
-        receivedAt: 9,
+        receivedAt: '9',
         sortableDocketNumber: 1,
       },
     ]);
