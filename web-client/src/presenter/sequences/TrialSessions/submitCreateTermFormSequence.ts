@@ -12,7 +12,7 @@ import { showProgressSequenceDecorator } from '@web-client/presenter/utilities/s
 import { startShowValidationAction } from '@web-client/presenter/actions/startShowValidationAction';
 import { validateCreateTermModalAction } from '@web-client/presenter/actions/TrialSession/validateCreateTermModalAction';
 
-export const submitCreateTermModalSequence = [
+export const submitCreateTermFormSequence = [
   startShowValidationAction,
   validateCreateTermModalAction,
   {
