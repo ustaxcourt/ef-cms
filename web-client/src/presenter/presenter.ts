@@ -448,7 +448,7 @@ import { submitCourtIssuedDocketEntrySequence } from './sequences/submitCourtIss
 import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrderSequence';
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
 import { submitCreatePetitionerAccountFormSequence } from '@web-client/presenter/sequences/submitCreatePetitionerAccountFormSequence';
-import { submitCreateTermModalSequence } from '@web-client/presenter/sequences/TrialSessions/submitCreateTermModalSequence';
+import { submitCreateTermFormSequence } from '@web-client/presenter/sequences/TrialSessions/submitCreateTermFormSequence';
 import { submitEditContactSequence } from './sequences/submitEditContactSequence';
 import { submitEditDeficiencyStatisticSequence } from './sequences/submitEditDeficiencyStatisticSequence';
 import { submitEditDocketEntryMetaSequence } from './sequences/submitEditDocketEntryMetaSequence';
@@ -1324,8 +1324,8 @@ export const presenterSequences = {
     submitCreateOrderModalSequence as unknown as Function,
   submitCreatePetitionerAccountFormSequence:
     submitCreatePetitionerAccountFormSequence as unknown as Function,
-  submitCreateTermModalSequence:
-    submitCreateTermModalSequence as unknown as Function,
+  submitCreateTermFormSequence:
+    submitCreateTermFormSequence as unknown as Function,
   submitEditContactSequence: submitEditContactSequence as unknown as Function,
   submitEditDeficiencyStatisticSequence:
     submitEditDeficiencyStatisticSequence as unknown as Function,
