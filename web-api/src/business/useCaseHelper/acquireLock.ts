@@ -2,20 +2,16 @@ import { ALLOWLIST_FEATURE_FLAGS } from '../../../../shared/src/business/entitie
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { sleep } from '@shared/tools/helpers';
 
 export const checkLock = async ({
   applicationContext,
-  authorizedUser,
   identifier,
-  onLockError,
-  options = {},
 }: {
-  authorizedUser: UnknownAuthUser;
   applicationContext: ServerApplicationContext;
   identifier: string;
-  onLockError?: TOnLockError;
-  options?: any;
-}): Promise<void> => {
+}): Promise<boolean> => {
   const featureFlags = await applicationContext
     .getUseCases()
     .getAllFeatureFlagsInteractor(applicationContext);
@@ -28,28 +24,21 @@ export const checkLock = async ({
     .getLock({ applicationContext, identifier });
 
   if (!currentLock) {
-    applicationContext.logger.warn('Entity is NOT currently locked', {
+    getLogger().warn('Entity is NOT currently locked', {
       identifier,
     });
-    return;
+    return false;
   }
 
-  applicationContext.logger.warn('Entity is currently locked', {
+  getLogger().warn('Entity is currently locked', {
     currentLock,
   });
 
   if (!isCaseLockingEnabled) {
-    return;
+    return false;
   }
 
-  if (onLockError instanceof Error) {
-    throw onLockError;
-  } else if (typeof onLockError === 'function') {
-    await onLockError(applicationContext, options, authorizedUser);
-  }
-  throw new ServiceUnavailableError(
-    'One of the items you are trying to update is being updated by someone else',
-  );
+  return true;
 };
 
 export const acquireLock = async ({
@@ -74,32 +63,36 @@ export const acquireLock = async ({
   if (!identifiers) {
     return;
   }
-  let isLockAcquired = false;
   let attempts = 0;
-
-  // First check if any are already locked, if so throw an error
-  while (!isLockAcquired) {
-    try {
-      attempts++;
-      await Promise.all(
-        identifiers.map(entityIdentifier =>
-          checkLock({
-            applicationContext,
-            authorizedUser,
-            identifier: entityIdentifier,
-            onLockError,
-            options,
-          }),
-        ),
-      );
-      isLockAcquired = true;
-    } catch (err) {
-      if (attempts > retries) {
-        throw err;
+  let hasLockedItems = true;
+  do {
+    if (attempts > retries) {
+      if (onLockError instanceof Error) {
+        throw onLockError;
+      } else if (typeof onLockError === 'function') {
+        await onLockError(applicationContext, options, authorizedUser);
       }
-      await applicationContext.getUtilities().sleep(waitTime);
+      throw new ServiceUnavailableError(
+        'One of the items you are trying to update is being updated by someone else',
+      );
     }
-  }
+
+    if (attempts > 0) {
+      await sleep(waitTime);
+    }
+
+    const results = await Promise.all(
+      identifiers.map(entityIdentifier =>
+        checkLock({
+          applicationContext,
+          identifier: entityIdentifier,
+        }),
+      ),
+    );
+
+    hasLockedItems = results.some(isLocked => isLocked);
+    attempts++;
+  } while (hasLockedItems);
 
   // Second, lock them up so the are unavailable
   await Promise.all(
@@ -123,6 +116,22 @@ export const removeLock = ({
   return applicationContext.getPersistenceGateway().removeLock({
     applicationContext,
     identifiers,
+  });
+};
+
+export const asyncHandleLockError = async (
+  applicationContext: ServerApplicationContext,
+  { clientConnectionId }: { clientConnectionId?: string },
+  authorizedUser: UnknownAuthUser,
+) => {
+  if (!authorizedUser?.userId || !clientConnectionId) return;
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'async_service_unavailable_error',
+    },
+    userId: authorizedUser?.userId,
   });
 };
 

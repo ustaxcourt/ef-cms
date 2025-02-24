@@ -1,3 +1,6 @@
+jest.mock(
+  '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
+);
 import { AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
@@ -10,10 +13,14 @@ import {
 } from '../../../../../shared/src/test/mockUsers';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
+import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 describe('serveCourtIssuedDocumentInteractor', () => {
   const mockDocketEntryId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
   const mockClientConnectionId = 'ABC123';
+  const fileAndServeDocumentOnOneCase = jest.mocked(
+    fileAndServeDocumentOnOneCaseMock,
+  );
 
   beforeEach(() => {
     applicationContext
@@ -24,11 +31,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
-    applicationContext
-      .getUseCaseHelpers()
-      .fileAndServeDocumentOnOneCase.mockImplementation(
-        ({ caseEntity }) => caseEntity,
-      );
+    fileAndServeDocumentOnOneCase.mockImplementation(
+      ({ caseEntity }) => caseEntity,
+    );
 
     applicationContext
       .getPersistenceGateway()
@@ -185,8 +190,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     );
 
     const servedDocketEntry =
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity;
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity;
     expect(servedDocketEntry.numberOfPages).toBe(mockNumberOfPages);
   });
 
@@ -291,9 +295,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
-    ).toHaveBeenCalledTimes(3);
+    expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledTimes(3);
   });
 
   it('should set the docket entry`s filing date as today', async () => {
@@ -322,8 +324,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     );
 
     const expectedDocketEntry =
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity;
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity;
     expect(expectedDocketEntry.filingDate).toBeDefined();
   });
 

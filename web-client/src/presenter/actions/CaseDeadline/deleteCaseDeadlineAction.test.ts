@@ -1,7 +1,7 @@
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { deleteCaseDeadlineAction } from './deleteCaseDeadlineAction';
-import { presenter } from '../../presenter-mock';
+import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('deleteCaseDeadlineAction', () => {
@@ -22,7 +22,7 @@ describe('deleteCaseDeadlineAction', () => {
     };
   });
 
-  it('sets automatic blocked fields on state', async () => {
+  it('should set automatic blocked fields on state', async () => {
     const mockAutomaticBlocked = true;
     const mockAutomaticBlockedDate = '2019-11-11';
     const mockAutomaticBlockedReason = 'Because I said so';
@@ -64,7 +64,7 @@ describe('deleteCaseDeadlineAction', () => {
     );
   });
 
-  it('calls the success path with alertSuccess.message', async () => {
+  it('should call the success path with alertSuccess.message', async () => {
     applicationContext
       .getUseCases()
       .deleteCaseDeadlineInteractor.mockReturnValue(MOCK_CASE);

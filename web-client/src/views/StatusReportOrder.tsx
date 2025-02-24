@@ -393,7 +393,7 @@ export const StatusReportOrder = connect(
                 Clear All
               </Button>
 
-              <div className="margin-bottom-2 margin-top-2">
+              <div className="margin-bottom-2 margin-top-2 button-container">
                 <Button
                   className="margin-right-1"
                   data-testid="save-draft-button"

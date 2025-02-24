@@ -51,7 +51,6 @@ import { createDocketNumber } from '@web-api/persistence/dynamo/cases/docketNumb
 import { createMockDocumentClient } from './createMockDocumentClient';
 import { deleteRecord } from '@web-api/persistence/elasticsearch/deleteRecord';
 import { documentUrlTranslator } from '@web-api/utilities/documentUrlTranslator';
-import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { filterEmptyStrings } from '@shared/business/utilities/filterEmptyStrings';
 import { formatAttachments } from '@shared/business/utilities/formatAttachments';
 import {
@@ -379,9 +378,6 @@ export const createTestApplicationContext = () => {
     createCaseAndAssociations: jest
       .fn()
       .mockImplementation(createCaseAndAssociations),
-    fileAndServeDocumentOnOneCase: jest
-      .fn()
-      .mockImplementation(fileAndServeDocumentOnOneCase),
     generateAndServeDocketEntry: jest
       .fn()
       .mockImplementation(generateAndServeDocketEntry),
@@ -467,7 +463,6 @@ export const createTestApplicationContext = () => {
     deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteDocumentFile: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
-    deleteKeyCount: jest.fn(),
     deleteLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
     deleteRecord: jest.fn().mockImplementation(deleteRecord),
     fetchPendingItems: jest.fn(),
@@ -495,7 +490,6 @@ export const createTestApplicationContext = () => {
       }
     }),
     getItem: jest.fn().mockImplementation(getItem),
-    getLimiterByKey: jest.fn(),
     getMaintenanceMode: jest.fn(),
     getPractitionerDocuments: jest.fn(),
     getReconciliationReport: jest.fn(),
@@ -507,14 +501,12 @@ export const createTestApplicationContext = () => {
     getUserCaseMappingsByDocketNumber: jest.fn().mockReturnValue([]),
     getWorkItemsByDocketNumber: jest.fn().mockReturnValue([]),
     incrementCounter,
-    incrementKeyCount: jest.fn(),
     isEmailAvailable: jest.fn(),
     isFileExists: jest.fn(),
     persistUser: jest.fn(),
     removeItem: jest.fn().mockImplementation(removeItem),
     saveDispatchNotification: jest.fn(),
     saveDocumentFromLambda: jest.fn(),
-    setExpiresAt: jest.fn(),
     setItem: jest.fn().mockImplementation(setItem),
     setPriorityOnAllWorkItems: jest.fn(),
     setTrialSessionJobStatusForCase: jest.fn(),

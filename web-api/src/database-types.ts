@@ -2,13 +2,13 @@ import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
 import { MinuteSheet } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 
 export interface Database {
+  dwUserCaseNote: UserCaseNoteTable;
+  dwMessage: MessageTable;
   dwCase: CaseTable;
   dwMinuteSheet: MinuteSheetTable;
   dwCaseCorrespondence: CaseCorrespondenceTable;
   dwCaseDeadline: CaseDeadlineTable;
   dwCaseWorksheet: CaseWorksheetTable;
-  dwMessage: MessageTable;
-  dwUserCaseNote: UserCaseNoteTable;
   dwWorkItem: WorkItemTable;
 }
 

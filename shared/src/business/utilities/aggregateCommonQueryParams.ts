@@ -1,3 +1,4 @@
+import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl';
 import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 
 export const removeAdvancedSyntaxSymbols = text => {
@@ -11,32 +12,32 @@ export const aggregateCommonQueryParams = ({
   petitionerName,
   petitionerState,
   startDate,
+  caseType,
 }: CaseAdvancedSearchParamsRequestType) => {
-  const commonQuery: Record<string, any>[] = [];
-  const exactMatchesQuery: Record<string, any>[] = [];
-  const nonExactMatchesQuery: Record<string, any>[] = [];
+  const commonQuery: QueryContainer[] = [];
+  const exactMatchesQuery: QueryContainer[] = [];
+  const nonExactMatchesQuery: QueryContainer[] = [];
 
   if (petitionerName) {
     const simplePetitionerQuery = removeAdvancedSyntaxSymbols(petitionerName);
-    const simpleQuery = {
-      default_operator: 'and',
-      fields: ['petitioners.L.M.name.S^4', 'caseCaption.S^0.2'],
-      flags: 'AND|PHRASE|PREFIX',
-    };
 
     exactMatchesQuery.push({
       bool: {
         should: [
           {
             simple_query_string: {
-              ...simpleQuery,
+              default_operator: 'and',
+              fields: ['petitioners.L.M.name.S^4', 'caseCaption.S^0.2'],
+              flags: 'AND|PHRASE|PREFIX',
               boost: 20,
               query: `"${simplePetitionerQuery}"`, // match complete phrase
             },
           },
           {
             simple_query_string: {
-              ...simpleQuery,
+              default_operator: 'and',
+              fields: ['petitioners.L.M.name.S^4', 'caseCaption.S^0.2'],
+              flags: 'AND|PHRASE|PREFIX',
               boost: 0.5,
               query: simplePetitionerQuery, // match all terms in any order
             },
@@ -56,13 +57,7 @@ export const aggregateCommonQueryParams = ({
   if (countryType) {
     commonQuery.push({
       bool: {
-        should: [
-          {
-            match: {
-              'petitioners.L.M.countryType.S': countryType,
-            },
-          },
-        ],
+        should: [{ match: { 'petitioners.L.M.countryType.S': countryType } }],
       },
     });
   }
@@ -70,13 +65,7 @@ export const aggregateCommonQueryParams = ({
   if (petitionerState) {
     commonQuery.push({
       bool: {
-        should: [
-          {
-            match: {
-              'petitioners.L.M.state.S': petitionerState,
-            },
-          },
-        ],
+        should: [{ match: { 'petitioners.L.M.state.S': petitionerState } }],
       },
     });
   }
@@ -95,9 +84,9 @@ export const aggregateCommonQueryParams = ({
 
   commonQuery.push({ match: { 'entityName.S': 'Case' } });
 
-  return {
-    commonQuery,
-    exactMatchesQuery,
-    nonExactMatchesQuery,
-  };
+  if (caseType) {
+    commonQuery.push({ terms: { 'caseType.S': Object.values(caseType) } });
+  }
+
+  return { commonQuery, exactMatchesQuery, nonExactMatchesQuery };
 };

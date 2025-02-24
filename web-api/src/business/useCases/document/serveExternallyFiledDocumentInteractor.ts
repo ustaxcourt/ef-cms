@@ -1,18 +1,12 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import {
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  DOCUMENT_SERVED_MESSAGES,
-  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
-import {
-  ROLE_PERMISSIONS,
-  isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { asyncHandleLockError, withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { isAuthorized, ROLE_PERMISSIONS } from '@shared/authorization/authorizationClientService';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { SIMULTANEOUS_DOCUMENT_EVENT_CODES, DOCUMENT_PROCESSING_STATUS_OPTIONS, DOCUMENT_SERVED_MESSAGES } from '@shared/business/entities/EntityConstants';
+import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 export const serveExternallyFiledDocument = async (
   applicationContext: ServerApplicationContext,
@@ -136,15 +130,12 @@ export const serveExternallyFiledDocument = async (
           { authorizedUser },
         );
 
-        return applicationContext
-          .getUseCaseHelpers()
-          .fileAndServeDocumentOnOneCase({
-            applicationContext,
-            caseEntity,
-            docketEntryEntity,
-            subjectCaseDocketNumber,
-            user,
-          });
+        return fileAndServeDocumentOnOneCase({
+          caseEntity,
+          docketEntryEntity,
+          subjectCaseDocketNumber,
+          user,
+        });
       }),
     );
 
@@ -218,27 +209,8 @@ export const determineEntitiesToLock = (
   ttl: 900,
 });
 
-export const handleLockError = async (
-  applicationContext: ServerApplicationContext,
-  originalRequest: any,
-  authorizedUser: UnknownAuthUser,
-) => {
-  if (authorizedUser?.userId) {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId: originalRequest.clientConnectionId,
-      message: {
-        action: 'retry_async_request',
-        originalRequest,
-        requestToRetry: 'serve_externally_filed_document',
-      },
-      userId: authorizedUser.userId,
-    });
-  }
-};
-
 export const serveExternallyFiledDocumentInteractor = withLocking(
   serveExternallyFiledDocument,
   determineEntitiesToLock,
-  handleLockError,
+  asyncHandleLockError,
 );

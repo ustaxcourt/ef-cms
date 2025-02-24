@@ -1,3 +1,4 @@
+import { RawUser } from '@shared/business/entities/User';
 import { getRecordsViaMapping } from '../helpers/getRecordsViaMapping';
 
 export const getUsersInSection = ({
@@ -6,8 +7,8 @@ export const getUsersInSection = ({
 }: {
   applicationContext: IApplicationContext;
   section: string;
-}) => {
-  return getRecordsViaMapping({
+}): Promise<RawUser[]> => {
+  return getRecordsViaMapping<RawUser>({
     applicationContext,
     pk: `section|${section}`,
     prefix: 'user',
