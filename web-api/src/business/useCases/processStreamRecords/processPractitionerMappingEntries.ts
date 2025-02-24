@@ -43,7 +43,7 @@ export const processPractitionerMappingEntries = async ({
       } catch (e) {
         getLogger().warn(
           `Failed to find case ${practitionerMappingData.pk.S} in postgres in processPractitionerMappingEntries: ${e}.
-          If this occurred as part of re-indexing during a blue-green migration, it is safe to ignore.`,
+          If this occurred in a test or as part of re-indexing during a blue-green migration, it is safe to ignore.`,
         );
         caseRecord = await exports.getCaseDataFromDynamo({
           applicationContext,

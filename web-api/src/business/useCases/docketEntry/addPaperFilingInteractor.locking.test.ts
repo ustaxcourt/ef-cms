@@ -12,8 +12,14 @@ import {
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { docketClerkUser } from '@shared/test/mockUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCaseMetadataByDocketNumber as getCaseMetadataByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
+import { getCasesInConsolidatedGroup as getCasesInConsolidatedGroupMock } from '@web-api/persistence/postgres/cases/getCasesInConsolidatedGroup';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const getCaseMetadataByDocketNumber =
+  getCaseMetadataByDocketNumberMock as jest.Mock;
+const getCasesInConsolidatedGroup =
+  getCasesInConsolidatedGroupMock as jest.Mock;
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
@@ -116,6 +122,8 @@ describe('addPaperFilingInteractor', () => {
       .getUserById.mockReturnValue(docketClerkUser);
 
     getCaseByDocketNumber.mockResolvedValue(mockCase);
+    getCaseMetadataByDocketNumber.mockResolvedValue(mockCase);
+    getCasesInConsolidatedGroup.mockResolvedValue([mockCase]);
   });
 
   describe('locked', () => {

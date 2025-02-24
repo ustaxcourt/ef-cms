@@ -1,7 +1,7 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_LOCK } from '@shared/test/mockLock';
 import {
   NotFoundError,
@@ -16,9 +16,12 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateDocketEntryMetaInteractor } from './updateDocketEntryMetaInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { getCaseMetadataByDocketNumber as getCaseMetadataByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 
 describe('updateDocketEntryMetaInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getCaseMetadataByDocketNumber =
+    getCaseMetadataByDocketNumberMock as jest.Mock;
   const updateCase = updateCaseMock as jest.Mock;
   updateCase.mockImplementation(c => c.caseToUpdate);
 
@@ -134,6 +137,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       ...MOCK_CASE,
       docketEntries: mockDocketEntries,
     });
+    getCaseMetadataByDocketNumber.mockResolvedValue(MOCK_CASE);
 
     applicationContext
       .getUseCases()

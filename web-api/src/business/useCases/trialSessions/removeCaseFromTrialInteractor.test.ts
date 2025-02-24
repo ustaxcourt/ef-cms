@@ -24,6 +24,7 @@ import { removeCaseFromTrialInteractor } from './removeCaseFromTrialInteractor';
 import { setPriorityOnAllWorkItems as setPriorityOnAllWorkItemsMock } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { getCaseMetadataByDocketNumber as getCaseMetadataByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 
 describe('removeCaseFromTrialInteractor', () => {
   const setPriorityOnAllWorkItems = setPriorityOnAllWorkItemsMock as jest.Mock;
@@ -32,6 +33,8 @@ describe('removeCaseFromTrialInteractor', () => {
   let mockTrialSession: RawTrialSession;
 
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getCaseMetadataByDocketNumber =
+    getCaseMetadataByDocketNumberMock as jest.Mock;
   const updateCase = updateCaseMock as jest.Mock;
   updateCase.mockImplementation(c => c.caseToUpdate);
 
@@ -48,14 +51,16 @@ describe('removeCaseFromTrialInteractor', () => {
       .getPersistenceGateway()
       .getTrialSessionById.mockResolvedValue(mockTrialSession);
 
-    getCaseByDocketNumber.mockResolvedValue({
+    const mockCase = {
       ...MOCK_CASE,
       associatedJudge: 'someone',
       associatedJudgeId: 'cb8b3a61-9c52-4b1f-b68b-f725656a9a0e',
       trialDate: '2018-03-01T00:00:00.000Z',
       trialLocation: 'Boise, Idaho',
       trialSessionId: '9047d1ab-18d0-43ec-bafb-654e83405416',
-    });
+    };
+    getCaseByDocketNumber.mockResolvedValue(mockCase);
+    getCaseMetadataByDocketNumber.mockResolvedValue(mockCase);
 
     updateCase.mockImplementation(v => v.caseToUpdate);
   });
