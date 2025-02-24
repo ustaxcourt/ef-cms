@@ -119,7 +119,7 @@ export function PendingReportList({
             <SortableHeader
               screenReaderTitle="Docket Number"
               hideOnMobile={true}
-              sortField="sortableDocketNumber"
+              sortField="docketNumber"
               tableSort={pendingReportTableSortData}
               sortType="string"
               className="no-wrap"
