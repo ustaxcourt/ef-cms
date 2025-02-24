@@ -1,6 +1,6 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
-import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -30,10 +30,6 @@ export const sealCase = async (
     applicationContext,
     docketNumber,
   });
-
-  if (!rawCaseToUpdate) {
-    throw new NotFoundError(`Case ${docketNumber} was not found.`);
-  }
 
   const caseToUpdate = new Case(rawCaseToUpdate, { authorizedUser });
 

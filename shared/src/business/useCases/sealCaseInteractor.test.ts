@@ -26,7 +26,7 @@ describe('sealCaseInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
   });
 
   it('should throw an error if the user is unauthorized to seal a case', async () => {

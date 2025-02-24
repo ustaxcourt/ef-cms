@@ -1,19 +1,17 @@
 import { NotFoundError } from '@web-api/errors/errors';
-import { ServerApplicationContext } from '@web-api/applicationContext';
-import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { Case } from '@shared/business/entities/cases/Case';
-import { isEmpty } from 'lodash';
+import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 
-export const getCaseExistsInteractor = async (
-  applicationContext: ServerApplicationContext,
-  { docketNumber }: { docketNumber: string },
-) => {
-  const caseRecord = await getCaseByDocketNumber({
-    applicationContext,
+export const getCaseExistsInteractor = async ({
+  docketNumber,
+}: {
+  docketNumber: string;
+}) => {
+  const caseRecord = await getCaseMetadataByDocketNumber({
     docketNumber: Case.formatDocketNumber(docketNumber),
   });
 
-  if (isEmpty(caseRecord)) {
+  if (!caseRecord) {
     const error = new NotFoundError(`Case ${docketNumber} was not found.`);
     error.skipLogging = true;
     throw error;
