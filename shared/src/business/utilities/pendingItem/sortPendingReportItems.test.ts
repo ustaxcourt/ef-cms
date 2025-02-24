@@ -273,4 +273,44 @@ describe('sortPendingReportItems', () => {
       },
     ]);
   });
+
+  it('should sort Upper/Lower case strings with same priority', () => {
+    const SORT_FIELD = 'testProp';
+    const SORT_ORDER = 'asc' as const;
+    const PENDING_ITEMS: PendingItemFormatted[] = [
+      {
+        testProp: 'A',
+      } as unknown as PendingItemFormatted,
+      {
+        testProp: 'C',
+      } as unknown as PendingItemFormatted,
+      {
+        testProp: 'Bb',
+      } as unknown as PendingItemFormatted,
+      {
+        testProp: 'ba',
+      } as unknown as PendingItemFormatted,
+    ];
+
+    const results = sortPendingReportItems(
+      PENDING_ITEMS,
+      SORT_FIELD,
+      SORT_ORDER,
+    );
+
+    expect(results).toEqual([
+      {
+        testProp: 'A',
+      },
+      {
+        testProp: 'ba',
+      },
+      {
+        testProp: 'Bb',
+      },
+      {
+        testProp: 'C',
+      },
+    ]);
+  });
 });
