@@ -1,10 +1,10 @@
-import { GenerateSuggestedTermForm } from './GenerateSuggestedTermForm';
+import { GenerateSuggestedTermModal } from './GenerateSuggestedTermModal';
 import { yesterdayFormatted } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 
-describe('GenerateSuggestedTermForm', () => {
+describe('GenerateSuggestedTermModal', () => {
   describe('validation', () => {
     it('should pass validation when all required fields are valid', () => {
-      const formEntity = new GenerateSuggestedTermForm({
+      const formEntity = new GenerateSuggestedTermModal({
         termEndDate: '03/31/2050',
         termName: 'Test Term',
         termStartDate: '01/01/2050',
@@ -14,7 +14,7 @@ describe('GenerateSuggestedTermForm', () => {
     });
 
     it('should fail validation when one or more fields is not provided', () => {
-      const formEntity = new GenerateSuggestedTermForm({});
+      const formEntity = new GenerateSuggestedTermModal({});
 
       expect(formEntity.isValid()).toBeFalsy();
       expect(formEntity.getFormattedValidationErrors()).toEqual({
@@ -25,7 +25,7 @@ describe('GenerateSuggestedTermForm', () => {
     });
 
     it('should fail validation when end date is prior to start date', () => {
-      const formEntity = new GenerateSuggestedTermForm({
+      const formEntity = new GenerateSuggestedTermModal({
         termEndDate: '01/01/2050',
         termName: 'Test Term',
         termStartDate: '03/31/2050',
@@ -39,7 +39,7 @@ describe('GenerateSuggestedTermForm', () => {
     });
 
     it('should fail validation when start date is in the past', () => {
-      const formEntity = new GenerateSuggestedTermForm({
+      const formEntity = new GenerateSuggestedTermModal({
         termEndDate: '01/01/2050',
         termName: 'Test Term',
         termStartDate: yesterdayFormatted,
@@ -52,7 +52,7 @@ describe('GenerateSuggestedTermForm', () => {
     });
 
     it('should fail validation when term name is longer than 100 characters', () => {
-      const formEntity = new GenerateSuggestedTermForm({
+      const formEntity = new GenerateSuggestedTermModal({
         termEndDate: '03/31/2050',
         termName:
           'I woke up this morning and shot an elephant in my pajamas; how he got in my pajamas I`ll never know. Here are some more characters to make this string particularly long.',
@@ -66,7 +66,7 @@ describe('GenerateSuggestedTermForm', () => {
     });
 
     it('should fail validation when end date is in the past', () => {
-      const formEntity = new GenerateSuggestedTermForm({
+      const formEntity = new GenerateSuggestedTermModal({
         termEndDate: yesterdayFormatted,
         termName: 'Test Term',
         termStartDate: '01/01/2050',
