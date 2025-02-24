@@ -313,4 +313,44 @@ describe('sortPendingReportItems', () => {
       },
     ]);
   });
+
+  it('should sort by docket numbers correctly', () => {
+    const SORT_FIELD = 'docketNumber';
+    const SORT_ORDER = 'asc' as const;
+    const PENDING_ITEMS: PendingItemFormatted[] = [
+      {
+        docketNumber: '106-21',
+      } as unknown as PendingItemFormatted,
+      {
+        docketNumber: '105-21',
+      } as unknown as PendingItemFormatted,
+      {
+        docketNumber: '101-22',
+      } as unknown as PendingItemFormatted,
+      {
+        docketNumber: '301-20',
+      } as unknown as PendingItemFormatted,
+    ];
+
+    const results = sortPendingReportItems(
+      PENDING_ITEMS,
+      SORT_FIELD,
+      SORT_ORDER,
+    );
+
+    expect(results).toEqual([
+      {
+        docketNumber: '301-20',
+      },
+      {
+        docketNumber: '105-21',
+      },
+      {
+        docketNumber: '106-21',
+      },
+      {
+        docketNumber: '101-22',
+      },
+    ]);
+  });
 });
