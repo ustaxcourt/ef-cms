@@ -10,11 +10,16 @@ export const mockMinuteSheet: MinuteSheet = {
   },
   caseRecord: {
     docketNumber: '123-45',
-    calendarCall: undefined,
-    notCalled: undefined,
-    recalls: [],
-    pretrialConference: undefined,
-    trialHearing: undefined,
+    calendarCall: { date: '', note: '', transcriptOrdered: false },
+    notCalled: { date: '', note: '' },
+    recalls: [{ date: '', note: '', transcriptOrdered: false }],
+    pretrialConference: { date: '', note: '', transcriptOrdered: false },
+    trialHearing: {
+      date: '',
+      note: '',
+      transcriptOrdered: false,
+      trialHearingType: '',
+    },
   },
   appearances: {
     petitioners: { noAppearance: false, appearances: [] },

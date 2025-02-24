@@ -249,9 +249,167 @@ describe('transformFormStateToMinuteSheet', () => {
     });
   });
 
+  const testCases = [
+    {
+      subSection: 'called',
+      transformedSubSection: 'calendarCall',
+      propertyToFillOut: 'date',
+      value: '2020-10-02',
+      expectedOutputForSection: {
+        date: '2020-10-02',
+        note: '',
+        transcriptOrdered: false,
+      },
+    },
+    {
+      subSection: 'called',
+      transformedSubSection: 'calendarCall',
+      propertyToFillOut: 'note',
+      value: 'test note',
+      expectedOutputForSection: {
+        date: '',
+        note: 'test note',
+        transcriptOrdered: false,
+      },
+    },
+    {
+      subSection: 'called',
+      transformedSubSection: 'calendarCall',
+      propertyToFillOut: 'transcriptOrdered',
+      value: true,
+      expectedOutputForSection: { date: '', note: '', transcriptOrdered: true },
+    },
+    {
+      subSection: 'notCalled',
+      transformedSubSection: 'notCalled',
+      propertyToFillOut: 'date',
+      value: '2020-10-02',
+      expectedOutputForSection: { date: '2020-10-02', note: '' },
+    },
+    {
+      subSection: 'notCalled',
+      transformedSubSection: 'notCalled',
+      propertyToFillOut: 'note',
+      value: 'test note',
+      expectedOutputForSection: { date: '', note: 'test note' },
+    },
+    {
+      subSection: 'pretrialConference',
+      transformedSubSection: 'pretrialConference',
+      propertyToFillOut: 'date',
+      value: '2020-10-02',
+      expectedOutputForSection: {
+        date: '2020-10-02',
+        note: '',
+        transcriptOrdered: false,
+      },
+    },
+    {
+      subSection: 'pretrialConference',
+      transformedSubSection: 'pretrialConference',
+      propertyToFillOut: 'note',
+      value: 'test note',
+      expectedOutputForSection: {
+        date: '',
+        note: 'test note',
+        transcriptOrdered: false,
+      },
+    },
+    {
+      subSection: 'pretrialConference',
+      transformedSubSection: 'pretrialConference',
+      propertyToFillOut: 'transcriptOrdered',
+      value: true,
+      expectedOutputForSection: { date: '', note: '', transcriptOrdered: true },
+    },
+    {
+      subSection: 'trialHearing',
+      transformedSubSection: 'trialHearing',
+      propertyToFillOut: 'date',
+      value: '2020-10-02',
+      expectedOutputForSection: {
+        date: '2020-10-02',
+        note: '',
+        trialHearingType: '',
+        transcriptOrdered: false,
+      },
+    },
+    {
+      subSection: 'trialHearing',
+      transformedSubSection: 'trialHearing',
+      propertyToFillOut: 'note',
+      value: 'test note',
+      expectedOutputForSection: {
+        date: '',
+        note: 'test note',
+        trialHearingType: '',
+        transcriptOrdered: false,
+      },
+    },
+    {
+      subSection: 'trialHearing',
+      transformedSubSection: 'trialHearing',
+      propertyToFillOut: 'trialHearingType',
+      value: 'hearing',
+      expectedOutputForSection: {
+        date: '',
+        note: '',
+        trialHearingType: 'hearing',
+        transcriptOrdered: false,
+      },
+    },
+    {
+      subSection: 'trialHearing',
+      transformedSubSection: 'trialHearing',
+      propertyToFillOut: 'transcriptOrdered',
+      value: true,
+      expectedOutputForSection: {
+        date: '',
+        note: '',
+        trialHearingType: '',
+        transcriptOrdered: true,
+      },
+    },
+  ];
+  it.each(testCases)(
+    'should include updated $propertyToFillOut in $subSection when it is the only property with a value',
+    ({
+      subSection,
+      transformedSubSection,
+      propertyToFillOut,
+      value,
+      expectedOutputForSection,
+    }) => {
+      const stateToTransform = {
+        ...mockMinuteSheetFormState,
+        caseMetadataSection: {
+          ...mockMinuteSheetFormState.caseMetadataSection,
+          [subSection]: {
+            ...mockMinuteSheetFormState.caseMetadataSection[subSection],
+            [propertyToFillOut]: value,
+          },
+        },
+      };
+
+      const transformed = transformFormStateToMinuteSheet(
+        stateToTransform,
+        'trial-123',
+        '123-45',
+      );
+
+      expect(transformed.caseRecord[transformedSubSection]).toMatchObject(
+        expectedOutputForSection,
+      );
+    },
+  );
+
   it('should handle empty arrays in recordToSortedArray fields', () => {
     const formStateWithEmptyArrays = {
       ...mockMinuteSheetFormState,
+      caseMetadataSection: {
+        ...mockMinuteSheetFormState.caseMetadataSection,
+        recalled: {},
+      },
       motionsSection: {
         motions: {},
       },
@@ -272,6 +430,10 @@ describe('transformFormStateToMinuteSheet', () => {
 
     expect(transformed).toEqual({
       ...mockMinuteSheet,
+      caseRecord: {
+        ...mockMinuteSheet.caseRecord,
+        recalls: [],
+      },
       proceedings: {
         ...mockMinuteSheet.proceedings,
         motions: [],

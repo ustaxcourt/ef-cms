@@ -67,37 +67,28 @@ export const transformFormStateToMinuteSheet = (
 
     caseRecord: {
       docketNumber,
-      calendarCall: caseMetadataSection.called.date
-        ? {
-            date: caseMetadataSection.called.date,
-            note: caseMetadataSection.called.note,
-            transcriptOrdered: caseMetadataSection.called.transcriptOrdered,
-          }
-        : undefined,
-      notCalled: caseMetadataSection.notCalled.date
-        ? {
-            date: caseMetadataSection.notCalled.date,
-            note: caseMetadataSection.notCalled.note,
-          }
-        : undefined,
+      calendarCall: {
+        date: caseMetadataSection.called.date,
+        note: caseMetadataSection.called.note,
+        transcriptOrdered: caseMetadataSection.called.transcriptOrdered,
+      },
+      notCalled: {
+        date: caseMetadataSection.notCalled.date,
+        note: caseMetadataSection.notCalled.note,
+      },
       recalls: recordToSortedArray(caseMetadataSection.recalled),
-      pretrialConference: caseMetadataSection.pretrialConference.date
-        ? {
-            date: caseMetadataSection.pretrialConference.date,
-            note: caseMetadataSection.pretrialConference.note,
-            transcriptOrdered:
-              caseMetadataSection.pretrialConference.transcriptOrdered,
-          }
-        : undefined,
-      trialHearing: caseMetadataSection.trialHearing.date
-        ? {
-            date: caseMetadataSection.trialHearing.date,
-            note: caseMetadataSection.trialHearing.note,
-            transcriptOrdered:
-              caseMetadataSection.trialHearing.transcriptOrdered,
-            trialHearingType: caseMetadataSection.trialHearing.trialHearingType,
-          }
-        : undefined,
+      pretrialConference: {
+        date: caseMetadataSection.pretrialConference.date,
+        note: caseMetadataSection.pretrialConference.note,
+        transcriptOrdered:
+          caseMetadataSection.pretrialConference.transcriptOrdered,
+      },
+      trialHearing: {
+        date: caseMetadataSection.trialHearing.date,
+        note: caseMetadataSection.trialHearing.note,
+        transcriptOrdered: caseMetadataSection.trialHearing.transcriptOrdered,
+        trialHearingType: caseMetadataSection.trialHearing.trialHearingType,
+      },
     },
 
     appearances: {

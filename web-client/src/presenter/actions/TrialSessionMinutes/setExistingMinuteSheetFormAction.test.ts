@@ -24,40 +24,24 @@ describe('setExistingMinuteSheetFormAction', () => {
       },
     });
 
-    expect(result.state.minuteSheetForm).toEqual({
+    const { renderKey, ...recallWithoutRenderKey } = Object.values(
+      result.state.minuteSheetForm.caseMetadataSection.recalled,
+    )[0];
+
+    expect(renderKey).toBeDefined();
+    expect(recallWithoutRenderKey).toEqual(
+      mockMinuteSheet.caseRecord.recalls[0],
+    );
+    expect(result.state.minuteSheetForm).toMatchObject({
       ...mockMinuteSheetFormState,
+      caseMetadataSection: {
+        ...mockMinuteSheetFormState.caseMetadataSection,
+        recalled: expect.any(Object),
+      },
       options: {
         ...mockMinuteSheetFormState.options,
         irsPractitionerOptions: [],
       },
     });
-  });
-
-  it('should create a deep clone of the minute sheet form state', async () => {
-    const result = await runAction(setExistingMinuteSheetFormAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        minuteSheet: mockMinuteSheet,
-        judgeOptions: {
-          '1': { fullName: '', title: '', userId: '1' },
-        },
-      },
-      state: {
-        minuteSheetForm: {},
-      },
-    });
-
-    const expectedMinuteSheetFormState = {
-      ...mockMinuteSheetFormState,
-      options: {
-        ...mockMinuteSheetFormState.options,
-        irsPractitionerOptions: [],
-      },
-    };
-
-    expect(result.state.minuteSheetForm).not.toBe(mockMinuteSheet);
-    expect(result.state.minuteSheetForm).toEqual(expectedMinuteSheetFormState);
   });
 });
