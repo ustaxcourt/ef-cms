@@ -23,11 +23,11 @@ export type MinuteSheet = {
 
   caseRecord: {
     docketNumber: string;
-    calendarCall?: CalendarEvent;
-    notCalled?: CalendarEvent;
+    calendarCall: CalendarEvent;
+    notCalled: CalendarEvent;
     recalls: CalendarEvent[];
-    pretrialConference?: Event;
-    trialHearing?: CalendarEvent;
+    pretrialConference: Event;
+    trialHearing: CalendarEvent;
   };
 
   appearances: {
@@ -39,13 +39,13 @@ export type MinuteSheet = {
   };
 
   jurisdiction: {
-    retained?: JurisdictionEvent;
-    continued?: JurisdictionEvent;
+    retained: JurisdictionEvent;
+    continued: JurisdictionEvent;
   };
 
   orders: {
-    statusReport?: StatusReportOrder;
-    stipulatedDecision?: Order;
+    statusReport: StatusReportOrder;
+    stipulatedDecision: Order;
   };
 
   proceedings: {
@@ -75,7 +75,7 @@ type Event = {
 };
 
 export type CalendarEvent = Event & {
-  trialHearingType?: TrialHearingOption;
+  trialHearingType?: TrialHearingOption | '';
 };
 
 export type Appearance = {

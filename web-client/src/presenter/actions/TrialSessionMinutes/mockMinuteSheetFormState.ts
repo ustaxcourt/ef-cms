@@ -10,8 +10,15 @@ export const mockMinuteSheetFormState: MinuteSheetFormState = {
     called: { date: '', note: '', transcriptOrdered: false },
     notCalled: { date: '', note: '' },
     pretrialConference: { date: '', note: '', transcriptOrdered: false },
-    recalled: {},
-    trialHearing: { date: '', note: '', transcriptOrdered: false },
+    recalled: {
+      '0': { date: '', note: '', transcriptOrdered: false, renderKey: '0' },
+    },
+    trialHearing: {
+      date: '',
+      note: '',
+      transcriptOrdered: false,
+      trialHearingType: '',
+    },
   },
   exhibitsSection: { exhibits: {} },
   jurisdictionSection: {
