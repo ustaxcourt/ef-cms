@@ -1,11 +1,7 @@
-import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
-import { JoiValidationEntity } from '../JoiValidationEntity';
 import joi from 'joi';
+import { GenerateSuggestedTermModal } from '@shared/business/entities/trialSessions/GenerateSuggestedTermModal';
 
-export class GenerateSuggestedTermForm extends JoiValidationEntity {
-  public termStartDate: string;
-  public termEndDate: string;
-  public termName: string;
+export class GenerateSuggestedTermForm extends GenerateSuggestedTermModal {
   public maxSessionsPerLocation: number;
   public maxSessionsPerWeek: number;
   public smallCaseMinimumQuantity: number;
@@ -17,11 +13,7 @@ export class GenerateSuggestedTermForm extends JoiValidationEntity {
   public minimumCasesPerLocation: number;
 
   constructor(rawProps: any) {
-    super('GenerateSuggestedTermForm');
-    this.termStartDate = rawProps.termStartDate;
-    this.termEndDate = rawProps.termEndDate;
-    this.termName = rawProps.termName;
-
+    super(rawProps, 'GenerateSuggestedTermForm');
     this.maxSessionsPerLocation = rawProps.maxSessionsPerLocation;
     this.maxSessionsPerWeek = rawProps.maxSessionsPerWeek;
     this.smallCaseMinimumQuantity = rawProps.smallCaseMinimumQuantity;
@@ -35,34 +27,43 @@ export class GenerateSuggestedTermForm extends JoiValidationEntity {
 
   getValidationRules() {
     return {
-      termEndDate: JoiValidationConstants.DATE_RANGE_PICKER_DATE.min(
-        joi.ref('termStartDate'),
-      )
-        .greater('now')
-        .required()
-        .messages({
-          '*': 'Enter date in format MM/DD/YYYY.',
-          'any.ref': 'Enter a start date',
-          'date.greater': 'End date cannot be in the past. Enter a valid date.',
-          'date.min':
-            'End date cannot be prior to start date. Enter a valid end date.',
-        }),
-      termName: JoiValidationConstants.STRING.required()
-        .max(100)
-        .description('The name of the term being created.')
-        .messages({
-          '*': 'Enter a term name',
-          'string.max': 'Term name must be 100 characters or fewer.',
-        }),
-      termStartDate: JoiValidationConstants.DATE_RANGE_PICKER_DATE.greater(
-        'now',
-      )
-        .required()
-        .messages({
-          '*': 'Enter date in format MM/DD/YYYY.',
-          'date.greater':
-            'Start date cannot be in the past. Enter a valid date.',
-        }),
+      ...GenerateSuggestedTermModal.VALIDATION_RULES,
+      maxSessionsPerLocation: joi.number().min(0).required().messages({
+        'number.base': 'Max sessions per location must be a number.',
+        'number.min': 'Max sessions per location cannot be negative.',
+      }),
+      maxSessionsPerWeek: joi.number().min(0).required().messages({
+        'number.base': 'Max sessions per week must be a number.',
+        'number.min': 'Max sessions per week cannot be negative.',
+      }),
+      smallCaseMinimumQuantity: joi.number().min(0).required().messages({
+        'number.base': 'Small case minimum quantity must be a number.',
+        'number.min': 'Small case minimum quantity cannot be negative.',
+      }),
+      smallCaseMaxQuantity: joi.number().min(0).required().messages({
+        'number.base': 'Small case max quantity must be a number.',
+        'number.min': 'Small case max quantity cannot be negative.',
+      }),
+      regularCaseMinimumQuantity: joi.number().min(0).required().messages({
+        'number.base': 'Regular case minimum quantity must be a number.',
+        'number.min': 'Regular case minimum quantity cannot be negative.',
+      }),
+      regularCaseMaxQuantity: joi.number().min(0).required().messages({
+        'number.base': 'Regular case max quantity must be a number.',
+        'number.min': 'Regular case max quantity cannot be negative.',
+      }),
+      hybridCaseMinimumQuantity: joi.number().min(0).required().messages({
+        'number.base': 'Hybrid case minimum quantity must be a number.',
+        'number.min': 'Hybrid case minimum quantity cannot be negative.',
+      }),
+      hybridCaseMaxQuantity: joi.number().min(0).required().messages({
+        'number.base': 'Hybrid case max quantity must be a number.',
+        'number.min': 'Hybrid case max quantity cannot be negative.',
+      }),
+      minimumCasesPerLocation: joi.number().min(0).required().messages({
+        'number.base': 'Minimum cases per location must be a number.',
+        'number.min': 'Minimum cases per location cannot be negative.',
+      }),
     };
   }
 }
