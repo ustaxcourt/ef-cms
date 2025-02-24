@@ -52,23 +52,25 @@ export const CaseNotes = connect(
                 <div className="card height-full">
                   <div className="content-wrapper">
                     {!caseDetail.caseNote && (
-                      <Button
-                        link
-                        className="float-right margin-right-0 margin-top-1 padding-0"
-                        icon="sticky-note"
-                        id="add-procedural-note-button"
-                        onClick={() => {
-                          openAddEditCaseNoteModalSequence();
-                        }}
-                      >
-                        Add Case Note
-                      </Button>
+                      <div className="float-right margin-top-1">
+                        <Button
+                          link
+                          className="margin-right-0 margin-top-0 padding-0"
+                          icon="sticky-note"
+                          id="add-procedural-note-button"
+                          onClick={() => {
+                            openAddEditCaseNoteModalSequence();
+                          }}
+                        >
+                          Add Case Note
+                        </Button>
+                      </div>
                     )}
                     {caseDetail.caseNote && (
                       <div className="float-right margin-top-1">
                         <Button
                           link
-                          className="padding-0 margin-right-0"
+                          className="padding-0 margin-right-0 margin-top-0"
                           icon="edit"
                           onClick={() => {
                             openAddEditCaseNoteModalSequence();
@@ -78,7 +80,7 @@ export const CaseNotes = connect(
                         </Button>
                         <Button
                           link
-                          className="red-warning padding-0 margin-left-205 margin-right-0"
+                          className="red-warning padding-0 margin-left-205 margin-right-0 margin-top-0"
                           icon="trash"
                           id="delete-procedural-note-button"
                           onClick={() => {

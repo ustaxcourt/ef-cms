@@ -85,6 +85,7 @@ export class TrialSession extends JoiValidationEntity {
   public irsCalendarAdministrator?: string;
   public irsCalendarAdministratorInfo?: RawIrsCalendarAdministratorInfo;
   public isCalendared: boolean;
+  public isStartDateWithinNOTTReminderRange?: boolean;
   public joinPhoneNumber?: string;
   public judge?: TJudge;
   public maxCases?: number;

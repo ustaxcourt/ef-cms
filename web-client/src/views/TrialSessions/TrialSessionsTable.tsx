@@ -132,7 +132,7 @@ export const TrialSessionsTable = connect(
                                 className="fa-icon-blue"
                                 icon="link"
                                 size="sm"
-                                title="swing session"
+                                title="Swing session"
                               />
                             )}
                           </td>

@@ -7,10 +7,20 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { fetchPendingItems } from '@web-api/persistence/postgres/cases/reports/fetchPendingItems';
 import { stringify } from 'csv-stringify/sync';
+import { sortPendingReportItems } from '@shared/business/utilities/pendingItem/sortPendingReportItems';
+import { PendingItemFormatted } from '@shared/business/utilities/formatPendingItem';
 
 export const exportPendingReportInteractor = async (
   applicationContext: ServerApplicationContext,
-  { judge }: { judge?: string },
+  {
+    judge,
+    sortField,
+    sortOrder,
+  }: {
+    judge?: string;
+    sortField?: string;
+    sortOrder?: 'asc' | 'desc';
+  },
   authorizedUser: UnknownAuthUser,
 ): Promise<string> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PENDING_ITEMS)) {
@@ -22,14 +32,21 @@ export const exportPendingReportInteractor = async (
     judge,
   });
 
-  const formattedPendingItems = pendingDocuments.map(pendingItem =>
-    applicationContext.getUtilities().formatPendingItem(pendingItem),
+  const formattedPendingItems: PendingItemFormatted[] = pendingDocuments.map(
+    pendingItem =>
+      applicationContext.getUtilities().formatPendingItem(pendingItem),
   );
 
-  return getCsv(formattedPendingItems);
+  const sortedPendingItems = sortPendingReportItems(
+    formattedPendingItems,
+    sortField,
+    sortOrder,
+  );
+
+  return getCsv(sortedPendingItems);
 };
 
-const getCsv = data => {
+const getCsv = (data: PendingItemFormatted[]) => {
   return stringify(data, {
     bom: true,
     columns: [

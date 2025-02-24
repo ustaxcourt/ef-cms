@@ -1,19 +1,21 @@
 import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
+import { MinuteSheet } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 
 export type DatabaseTableName = keyof Database;
 
 export interface Database {
+  dwUserCaseNote: UserCaseNoteTable;
+  dwMessage: MessageTable;
   dwCase: CaseTable;
+  dwMinuteSheet: MinuteSheetTable;
   dwCaseCorrespondence: CaseCorrespondenceTable;
   dwCaseDeadline: CaseDeadlineTable;
   dwCaseStatistic: CaseStatisticTable;
   dwCaseStatusUpdate: CaseStatusUpdateTable;
   dwCaseWorksheet: CaseWorksheetTable;
   dwDocketEntry: DocketEntryTable;
-  dwMessage: MessageTable;
   dwPetitionerOnCase: PetitionerOnCaseTable;
   dwStatisticPenalty: StatisticPenaltyTable;
-  dwUserCaseNote: UserCaseNoteTable;
   dwWorkItem: WorkItemTable;
 }
 
@@ -296,3 +298,12 @@ export interface DocketEntryTable {
 export type DocketEntryKysely = Selectable<DocketEntryTable>;
 export type NewDocketEntryKysely = Insertable<DocketEntryTable>;
 export type UpdateDocketEntryKysely = Updateable<DocketEntryTable>;
+export interface MinuteSheetTable {
+  trialSessionId: string;
+  docketNumber: string;
+  content: MinuteSheet;
+}
+
+export type MinuteSheetKysely = Selectable<MinuteSheetTable>;
+export type NewMinuteSheetKysely = Insertable<MinuteSheetTable>;
+export type UpdateMinuteSheetKysely = Updateable<MinuteSheetTable>;

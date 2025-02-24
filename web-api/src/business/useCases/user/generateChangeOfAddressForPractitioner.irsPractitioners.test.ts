@@ -38,7 +38,6 @@ describe('generateChangeOfAddress', () => {
       postalCode: '61234',
       state: 'IL',
     },
-
     email: 'irspractitioner1@example.com',
     entityName: 'IrsPractitioner',
     firstName: 'rick',

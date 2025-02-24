@@ -11,7 +11,6 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import {
   determineEntitiesToLock,
   editPaperFilingInteractor,
-  handleLockError,
 } from './editPaperFilingInteractor';
 import { docketClerkUser } from '@shared/test/mockUsers';
 import { getContactPrimary } from '@shared/business/entities/cases/Case';
@@ -60,30 +59,6 @@ describe('determineEntitiesToLock', () => {
     expect(
       determineEntitiesToLock(applicationContext, mockParams).identifiers,
     ).toContain('case|333-20');
-  });
-});
-
-describe('handleLockError', () => {
-  const mockClientConnectionId = '987654';
-
-  it('should send a notification to the user with "retry_async_request" and the originalRequest', async () => {
-    const mockOriginalRequest = {
-      clientConnectionId: mockClientConnectionId,
-      foo: 'bar',
-    };
-    await handleLockError(
-      applicationContext,
-      mockOriginalRequest,
-      mockDocketClerkUser,
-    );
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message,
-    ).toMatchObject({
-      action: 'retry_async_request',
-      originalRequest: mockOriginalRequest,
-      requestToRetry: 'edit_paper_filing',
-    });
   });
 });
 
@@ -151,31 +126,6 @@ describe('editPaperFilingInteractor', () => {
           mockDocketClerkUser,
         ),
       ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(getCaseByDocketNumber).not.toHaveBeenCalled();
-    });
-
-    it('should return a "retry_async_request" notification with the original request', async () => {
-      await expect(
-        editPaperFilingInteractor(
-          applicationContext,
-          mockRequest,
-          mockDocketClerkUser,
-        ),
-      ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getNotificationGateway().sendNotificationToUser,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        clientConnectionId: mockClientConnectionId,
-        message: {
-          action: 'retry_async_request',
-          originalRequest: mockRequest,
-          requestToRetry: 'edit_paper_filing',
-        },
-        userId: mockDocketClerkUser.userId,
-      });
 
       expect(getCaseByDocketNumber).not.toHaveBeenCalled();
     });

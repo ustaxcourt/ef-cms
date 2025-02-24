@@ -10,7 +10,6 @@ jest.mock('../addCoverToPdf');
 import { addCoverToPdf } from '../addCoverToPdf';
 import {
   determineEntitiesToLock,
-  handleLockError,
   serveExternallyFiledDocumentInteractor,
 } from '@web-api/business/useCases/document/serveExternallyFiledDocumentInteractor';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
@@ -48,51 +47,6 @@ describe('determineEntitiesToLock', () => {
     expect(
       determineEntitiesToLock(applicationContext, mockParams).identifiers,
     ).toContain('case|333-20');
-  });
-});
-
-describe('handleLockError', () => {
-  const mockClientConnectionId = '987654';
-
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(mockDocketClerkUser);
-  });
-
-  it('should determine who the user is based on arguents to handleLockError, not appcontext', async () => {
-    await handleLockError(
-      applicationContext,
-      { foo: 'bar' },
-      mockDocketClerkUser,
-    );
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({
-        userId: mockDocketClerkUser.userId,
-      }),
-    );
-  });
-
-  it('should send a notification to the user with "retry_async_request" and the originalRequest', async () => {
-    const mockOriginalRequest = {
-      clientConnectionId: mockClientConnectionId,
-      foo: 'bar',
-    };
-    await handleLockError(
-      applicationContext,
-      mockOriginalRequest,
-      mockDocketClerkUser,
-    );
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message,
-    ).toMatchObject({
-      action: 'retry_async_request',
-      originalRequest: mockOriginalRequest,
-      requestToRetry: 'serve_externally_filed_document',
-    });
   });
 });
 
@@ -158,31 +112,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           mockDocketClerkUser,
         ),
       ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(getCaseByDocketNumber).not.toHaveBeenCalled();
-    });
-
-    it('should return a "retry_async_request" notification with the original request', async () => {
-      await expect(
-        serveExternallyFiledDocumentInteractor(
-          applicationContext,
-          mockRequest,
-          mockDocketClerkUser,
-        ),
-      ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getNotificationGateway().sendNotificationToUser,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        clientConnectionId: mockClientConnectionId,
-        message: {
-          action: 'retry_async_request',
-          originalRequest: mockRequest,
-          requestToRetry: 'serve_externally_filed_document',
-        },
-        userId: mockDocketClerkUser.userId,
-      });
 
       expect(getCaseByDocketNumber).not.toHaveBeenCalled();
     });

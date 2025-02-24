@@ -1,8 +1,4 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import {
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  DOCUMENT_SERVED_MESSAGES,
-} from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
@@ -14,7 +10,14 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { omit } from 'lodash';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/business/useCaseHelper/acquireLock';
+import {
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  DOCUMENT_SERVED_MESSAGES,
+} from '@shared/business/entities/EntityConstants';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 export const fileAndServeCourtIssuedDocument = async (
@@ -73,10 +76,7 @@ export const fileAndServeCourtIssuedDocument = async (
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       clientConnectionId,
-      message: {
-        action: 'serve_document_error',
-        error: error.message,
-      },
+      message: { action: 'serve_document_error', error: error.message },
       userId: user.userId,
     });
 
@@ -127,9 +127,7 @@ export const fileAndServeCourtIssuedDocument = async (
       documentContents = `${documentContents} ${subjectCase.docketNumberWithSuffix} ${subjectCase.caseCaption}`;
       documentContentsId = applicationContext.getUniqueId();
 
-      const contentToStore = {
-        documentContents,
-      };
+      const contentToStore = { documentContents };
 
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
@@ -202,12 +200,12 @@ export const fileAndServeCourtIssuedDocument = async (
         }
 
         return fileAndServeDocumentOnOneCase({
-            caseEntity,
-            docketEntryEntity,
-            subjectCaseDocketNumber,
-            user,
-            caseHasDeadline,
-          });
+          caseEntity,
+          docketEntryEntity,
+          subjectCaseDocketNumber,
+          user,
+          caseHasDeadline,
+        });
       }),
     );
 
@@ -255,10 +253,7 @@ export const fileAndServeCourtIssuedDocument = async (
     clientConnectionId,
     message: {
       action: 'serve_document_complete',
-      alertSuccess: {
-        message: successMessage,
-        overwritable: false,
-      },
+      alertSuccess: { message: successMessage, overwritable: false },
       pdfUrl: serviceResults ? serviceResults.pdfUrl : undefined,
     },
     userId: user.userId,
@@ -270,10 +265,7 @@ export const determineEntitiesToLock = (
   {
     docketNumbers = [],
     subjectCaseDocketNumber,
-  }: {
-    docketNumbers?: string[];
-    subjectCaseDocketNumber: string;
-  },
+  }: { docketNumbers?: string[]; subjectCaseDocketNumber: string },
 ) => ({
   identifiers: [...new Set([...docketNumbers, subjectCaseDocketNumber])].map(
     item => `case|${item}`,
@@ -281,27 +273,8 @@ export const determineEntitiesToLock = (
   ttl: 900,
 });
 
-export const handleLockError = async (
-  applicationContext: ServerApplicationContext,
-  originalRequest,
-  authorizedUser: UnknownAuthUser,
-) => {
-  if (authorizedUser?.userId) {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId: originalRequest.clientConnectionId,
-      message: {
-        action: 'retry_async_request',
-        originalRequest,
-        requestToRetry: 'file_and_serve_court_issued_document',
-      },
-      userId: authorizedUser.userId,
-    });
-  }
-};
-
 export const fileAndServeCourtIssuedDocumentInteractor = withLocking(
   fileAndServeCourtIssuedDocument,
   determineEntitiesToLock,
-  handleLockError,
+  asyncHandleLockError,
 );

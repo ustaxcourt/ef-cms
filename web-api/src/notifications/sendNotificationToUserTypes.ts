@@ -38,12 +38,6 @@ type ServeDocumentCompleteNotification = {
   pdfUrl?: string;
 };
 
-type RetryAsyncRequestNotification = {
-  action: 'retry_async_request';
-  originalRequest: any;
-  requestToRetry: string;
-};
-
 type BatchDownloadCsvDataNotification = {
   action: 'batch_download_csv_data';
   filesCompleted: number;
@@ -180,13 +174,16 @@ type UserContactUpdateErrorNotification = {
   error: string;
 };
 
+type AsyncServiceUnavailableErrorNotification = {
+  action: 'async_service_unavailable_error';
+};
+
 export type NotificationMessage =
   | MessageCompletionErrorNotification
   | ContactUpdateProgressNotification
   | ContactUpdateCompleteNotification
   | ServeDocumentErrorNotification
   | ServeDocumentCompleteNotification
-  | RetryAsyncRequestNotification
   | BatchDownloadCsvDataNotification
   | DownloadCsvFileNotification
   | SaveDocketEntryForLaterCompleteNotification
@@ -210,7 +207,8 @@ export type NotificationMessage =
   | SetTrialSessionCalendarErrorNotification
   | UpdateTrialSessionCompleteNotification
   | UserContactInitialUpdateCompleteNotification
-  | UserContactUpdateErrorNotification;
+  | UserContactUpdateErrorNotification
+  | AsyncServiceUnavailableErrorNotification;
 
 type MaintenanceModeEngaged = {
   action: 'maintenance_mode_engaged';
