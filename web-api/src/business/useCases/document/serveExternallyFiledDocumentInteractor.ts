@@ -1,11 +1,21 @@
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { asyncHandleLockError, withLocking } from '@web-api/business/useCaseHelper/acquireLock';
-import { isAuthorized, ROLE_PERMISSIONS } from '@shared/authorization/authorizationClientService';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/business/useCaseHelper/acquireLock';
+import {
+  isAuthorized,
+  ROLE_PERMISSIONS,
+} from '@shared/authorization/authorizationClientService';
 import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import { SIMULTANEOUS_DOCUMENT_EVENT_CODES, DOCUMENT_PROCESSING_STATUS_OPTIONS, DOCUMENT_SERVED_MESSAGES } from '@shared/business/entities/EntityConstants';
+import {
+  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  DOCUMENT_SERVED_MESSAGES,
+} from '@shared/business/entities/EntityConstants';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 export const serveExternallyFiledDocument = async (
@@ -60,10 +70,7 @@ export const serveExternallyFiledDocument = async (
 
   const numberOfPages = await applicationContext
     .getUseCaseHelpers()
-    .countPagesInDocument({
-      applicationContext,
-      docketEntryId,
-    });
+    .countPagesInDocument({ applicationContext, docketEntryId });
 
   await applicationContext
     .getPersistenceGateway()
@@ -98,14 +105,9 @@ export const serveExternallyFiledDocument = async (
       docketNumbers.map(async docketNumber => {
         const rawCaseToUpdate = await applicationContext
           .getPersistenceGateway()
-          .getCaseByDocketNumber({
-            applicationContext,
-            docketNumber,
-          });
+          .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-        const caseEntity = new Case(rawCaseToUpdate, {
-          authorizedUser,
-        });
+        const caseEntity = new Case(rawCaseToUpdate, { authorizedUser });
 
         const isSubjectCase =
           caseEntity.docketNumber === subjectCaseDocketNumber;
@@ -145,15 +147,17 @@ export const serveExternallyFiledDocument = async (
     const updatedSubjectDocketEntry =
       updatedSubjectCaseEntity!.getDocketEntryById({ docketEntryId });
 
-    await applicationContext.getUseCases().addCoversheetInteractor(
-      applicationContext,
-      {
-        caseEntity: updatedSubjectCaseEntity,
-        docketEntryId: updatedSubjectDocketEntry.docketEntryId,
-        docketNumber: updatedSubjectCaseEntity!.docketNumber,
-      },
-      authorizedUser,
-    );
+    await applicationContext
+      .getUseCases()
+      .addCoversheetInteractor(
+        applicationContext,
+        {
+          caseEntity: updatedSubjectCaseEntity,
+          docketEntryId: updatedSubjectDocketEntry.docketEntryId,
+          docketNumber: updatedSubjectCaseEntity!.docketNumber,
+        },
+        authorizedUser,
+      );
 
     paperServiceResult = await applicationContext
       .getUseCaseHelpers()
@@ -178,19 +182,18 @@ export const serveExternallyFiledDocument = async (
       ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
       : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
 
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId,
-    message: {
-      action: 'serve_document_complete',
-      alertSuccess: {
-        message: successMessage,
-        overwritable: false,
+  await applicationContext
+    .getNotificationGateway()
+    .sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'serve_document_complete',
+        alertSuccess: { message: successMessage, overwritable: false },
+        pdfUrl: paperServiceResult && paperServiceResult.pdfUrl,
       },
-      pdfUrl: paperServiceResult && paperServiceResult.pdfUrl,
-    },
-    userId: user.userId,
-  });
+      userId: user.userId,
+    });
 };
 
 export const determineEntitiesToLock = (
@@ -198,10 +201,7 @@ export const determineEntitiesToLock = (
   {
     docketNumbers = [],
     subjectCaseDocketNumber,
-  }: {
-    docketNumbers?: string[];
-    subjectCaseDocketNumber: string;
-  },
+  }: { docketNumbers?: string[]; subjectCaseDocketNumber: string },
 ) => ({
   identifiers: [...new Set([...docketNumbers, subjectCaseDocketNumber])].map(
     item => `case|${item}`,
