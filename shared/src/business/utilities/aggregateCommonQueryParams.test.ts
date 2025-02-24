@@ -1,5 +1,5 @@
 import {
-  AbbrevatedStates,
+  AbbreviatedStates,
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
   US_STATES,
@@ -127,7 +127,7 @@ describe('aggregateCommonQueryParams', () => {
   it('should include search params for petitionerState if present in query', () => {
     const queryParams = {
       petitionerName: '',
-      petitionerState: US_STATES.AR as AbbrevatedStates,
+      petitionerState: US_STATES.AR as AbbreviatedStates,
     };
 
     const result = aggregateCommonQueryParams(queryParams);

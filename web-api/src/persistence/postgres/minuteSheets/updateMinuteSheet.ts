@@ -1,6 +1,7 @@
 import { MinuteSheet } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
-import { getDbWriter } from '@web-api/database';
+import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import { isEmpty } from 'lodash';
 
 export const upsertMinuteSheet = async ({
   minuteSheetToUpsert,
@@ -11,24 +12,23 @@ export const upsertMinuteSheet = async ({
     content: MinuteSheet;
   };
 }) => {
-  const newOrUpdatedMinuteSheet = await getDbWriter(writer =>
-    writer
-      .insertInto('dwMinuteSheet')
-      .values({
-        content: minuteSheetToUpsert.content,
+  const newOrUpdatedMinuteSheet = await pgInsertInto({
+    table: 'dwMinuteSheet',
+    values: [
+      {
+        content: minuteSheetToUpsert,
         docketNumber: minuteSheetToUpsert.docketNumber,
         trialSessionId: minuteSheetToUpsert.trialSessionId,
-      })
-      .returning(['content', 'docketNumber', 'trialSessionId'])
-      .onConflict(oc =>
-        oc.columns(['docketNumber', 'trialSessionId']).doUpdateSet({
-          content: minuteSheetToUpsert.content,
-        }),
-      )
-      .executeTakeFirst(),
-  );
+      },
+    ],
+    onConflictColumns: ['content', 'docketNumber', 'trialSessionId'],
+  });
 
-  return transformNullToUndefined(newOrUpdatedMinuteSheet) as {
+  if (isEmpty(newOrUpdatedMinuteSheet)) {
+    throw new Error('Failed to update minute sheet');
+  }
+
+  return transformNullToUndefined(newOrUpdatedMinuteSheet[0]) as {
     trialSessionId: string;
     docketNumber: string;
     content: MinuteSheet;
