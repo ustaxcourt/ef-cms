@@ -20,9 +20,9 @@ export const TrialSessionMetadataFieldset = ({
 }) => {
   return (
     <fieldset className="grid-container border-0 padding-0">
-      <div className="grid-row grid-gap">
+      <div className="grid-row grid-gap margin-bottom-1">
         <div className="grid-col">
-          <FormGroup className="grid-row grid-gap margin-bottom-0">
+          <FormGroup className="grid-row grid-gap margin-bottom-0 align-items-center">
             <label className="grid-col-2 margin-bottom-0" htmlFor="judge">
               Judge
             </label>
@@ -51,12 +51,12 @@ export const TrialSessionMetadataFieldset = ({
           </FormGroup>
         </div>
         <div className="grid-col">
-          <FormGroup className="grid-row grid-gap margin-bottom-0">
+          <FormGroup className="grid-row grid-gap margin-bottom-0 align-items-center">
             <label
               className="grid-col-2 margin-bottom-0"
               htmlFor="courtReporter"
             >
-              Court reporter
+              Reporter
             </label>
             <div style={{ left: '100px', position: 'absolute', right: 0 }}>
               <input
@@ -83,7 +83,7 @@ export const TrialSessionMetadataFieldset = ({
       </div>
       <div className="grid-row grid-gap">
         <div className="grid-col">
-          <FormGroup className="grid-row grid-gap margin-bottom-0">
+          <FormGroup className="grid-row grid-gap margin-bottom-0 align-items-center">
             <label className="grid-col-2 margin-bottom-0" htmlFor="trialClerk">
               Trial clerk
             </label>
