@@ -18,7 +18,7 @@ export const setChangeOfAddressCaseAsDone = ({
   applicationContext: IApplicationContext;
   jobId: string;
   docketNumber: string;
-}) =>
+}): Promise<{ remaining: number }> =>
   promiseRetry(retry =>
     updateConsistent({
       ExpressionAttributeNames: {

@@ -1,25 +1,38 @@
-import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
+jest.mock(
+  '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
+);
+jest.mock(
+  '@web-api/persistence/dynamo/cases/createCaseTrialSortMappingRecords',
+);
+jest.mock(
+  '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber',
+);
 import {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import {
-  MOCK_CASE,
-  MOCK_CASE_WITHOUT_PENDING,
-} from '../../../../../shared/src/test/mockCase';
-import { PENDING_DOCKET_ENTRY } from '../../../../../shared/src/test/mockDocketEntry';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import { MOCK_CASE, MOCK_CASE_WITHOUT_PENDING } from '@shared/test/mockCase';
+import { PENDING_DOCKET_ENTRY } from '@shared/test/mockDocketEntry';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseAutomaticBlock } from './updateCaseAutomaticBlock';
-
-const getCaseDeadlinesByDocketNumber =
-  getCaseDeadlinesByDocketNumberMock as jest.Mock;
+import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
+import { createCaseTrialSortMappingRecords as createCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/createCaseTrialSortMappingRecords';
 
 describe('updateCaseAutomaticBlock', () => {
   let mockCase;
+  const deleteCaseTrialSortMappingRecords = jest.mocked(
+    deleteCaseTrialSortMappingRecordsMock,
+  );
+  const createCaseTrialSortMappingRecords = jest.mocked(
+    createCaseTrialSortMappingRecordsMock,
+  );
+  const getCaseDeadlinesByDocketNumber = jest.mocked(
+    getCaseDeadlinesByDocketNumberMock,
+  );
 
   beforeEach(() => {
     mockCase = cloneDeep(MOCK_CASE);
@@ -27,7 +40,7 @@ describe('updateCaseAutomaticBlock', () => {
   });
 
   it('sets the case to automaticBlocked and calls deleteCaseTrialSortMappingRecords if it has pending documents', async () => {
-    getCaseDeadlinesByDocketNumber.mockReturnValue([]);
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
     mockCase.docketEntries = [PENDING_DOCKET_ENTRY];
 
     const caseEntity = new Case(mockCase, {
@@ -43,14 +56,13 @@ describe('updateCaseAutomaticBlock', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
     });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
+    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 
   it('sets the case to automaticBlocked and calls deleteCaseTrialSortMappingRecords if it has deadlines', async () => {
-    getCaseDeadlinesByDocketNumber.mockReturnValue([{ deadline: 'something' }]);
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([
+      { deadline: 'something' } as any,
+    ]);
 
     const caseEntity = new Case(MOCK_CASE_WITHOUT_PENDING, {
       authorizedUser: mockDocketClerkUser,
@@ -65,14 +77,13 @@ describe('updateCaseAutomaticBlock', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
     });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
+    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 
   it('does not set the case to automaticBlocked or call deleteCaseTrialSortMappingRecords if it already has a trial date', async () => {
-    getCaseDeadlinesByDocketNumber.mockReturnValue([{ deadline: 'something' }]);
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([
+      { deadline: 'something' } as any,
+    ]);
 
     const caseEntity = new Case(
       {
@@ -90,14 +101,13 @@ describe('updateCaseAutomaticBlock', () => {
     });
 
     expect(updatedCase.automaticBlocked).toBeFalsy();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).not.toHaveBeenCalled();
+    expect(deleteCaseTrialSortMappingRecords).not.toHaveBeenCalled();
   });
 
   it('does not set the case to automaticBlocked or call deleteCaseTrialSortMappingRecords when the case is marked as high priority', async () => {
-    getCaseDeadlinesByDocketNumber.mockReturnValue([{ deadline: 'something' }]);
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([
+      { deadline: 'something' } as any,
+    ]);
     const caseEntity = new Case(
       {
         ...MOCK_CASE_WITHOUT_PENDING,
@@ -114,14 +124,11 @@ describe('updateCaseAutomaticBlock', () => {
     });
 
     expect(updatedCase.automaticBlocked).toBeFalsy();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).not.toHaveBeenCalled();
+    expect(deleteCaseTrialSortMappingRecords).not.toHaveBeenCalled();
   });
 
   it('sets the case to not automaticBlocked but does not call createCaseTrialSortMappingRecords if the case does not have deadlines or pending items and the case is not generalDocketReadyForTrial status', async () => {
-    getCaseDeadlinesByDocketNumber.mockReturnValue([]);
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
 
     const caseEntity = new Case(MOCK_CASE_WITHOUT_PENDING, {
       authorizedUser: mockDocketClerkUser,
@@ -136,14 +143,11 @@ describe('updateCaseAutomaticBlock', () => {
       automaticBlockedDate: undefined,
       automaticBlockedReason: undefined,
     });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords,
-    ).not.toHaveBeenCalled();
+    expect(createCaseTrialSortMappingRecords).not.toHaveBeenCalled();
   });
 
   it('sets the case to not automaticBlocked and calls createCaseTrialSortMappingRecords if the case does not have deadlines or pending items and the case is generalDocketReadyForTrial status', async () => {
-    getCaseDeadlinesByDocketNumber.mockReturnValue([]);
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
 
     const caseEntity = new Case(
       {
@@ -164,14 +168,11 @@ describe('updateCaseAutomaticBlock', () => {
       automaticBlockedDate: undefined,
       automaticBlockedReason: undefined,
     });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
+    expect(createCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 
   it('does not call createCaseTrialSortMappingRecords if the case has no trial city', async () => {
-    getCaseDeadlinesByDocketNumber.mockReturnValue([]);
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
 
     const caseEntity = new Case(
       {
@@ -189,9 +190,27 @@ describe('updateCaseAutomaticBlock', () => {
       caseEntity,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords,
-    ).not.toHaveBeenCalled();
+    expect(createCaseTrialSortMappingRecords).not.toHaveBeenCalled();
+  });
+
+  it('should not fetch deadlines from persistence when hasCaseDeadline is true', async () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE_WITHOUT_PENDING,
+        preferredTrialCity: null,
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+      },
+      {
+        authorizedUser: mockDocketClerkUser,
+      },
+    );
+
+    await updateCaseAutomaticBlock({
+      applicationContext,
+      caseEntity,
+      hasCaseDeadline: true,
+    });
+
+    expect(getCaseDeadlinesByDocketNumber).not.toHaveBeenCalled();
   });
 });
