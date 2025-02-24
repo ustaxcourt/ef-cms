@@ -224,15 +224,19 @@ export const getPetitionersFromCase = (
 
   if (petitioners && petitioners.length > 0) {
     petitioners.forEach(petitioner => {
+      const invertedPetitionerRoleOptions = invert(PETITIONER_ROLE_OPTIONS);
       let role;
       if (petitioner.contactType === CONTACT_TYPES.petitioner) {
         role = petitionersWithCounselUserIds.includes(petitioner.contactId)
-          ? PETITIONER_ROLE_OPTIONS.counsel
-          : PETITIONER_ROLE_OPTIONS.proSe;
+          ? invertedPetitionerRoleOptions[PETITIONER_ROLE_OPTIONS.counsel]
+          : invertedPetitionerRoleOptions[PETITIONER_ROLE_OPTIONS.proSe];
       } else if (PETITIONER_ROLE_OPTIONS[petitioner.contactType]) {
-        role = PETITIONER_ROLE_OPTIONS[petitioner.contactType];
+        role =
+          invertedPetitionerRoleOptions[
+            PETITIONER_ROLE_OPTIONS[petitioner.contactType]
+          ];
       } else {
-        role = PETITIONER_ROLE_OPTIONS.other;
+        role = invertedPetitionerRoleOptions[PETITIONER_ROLE_OPTIONS.other];
       }
 
       const renderKey = uuidv4();
