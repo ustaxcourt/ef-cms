@@ -164,13 +164,7 @@ export const TermBuilderView = connect<
             >
               Create Term
             </Button>
-            <Button
-              link
-              href="javascript:void(0);"
-              onClick={() => {
-                console.log('Cancel clicked');
-              }}
-            >
+            <Button link href="/trial-sessions">
               Cancel
             </Button>
           </div>
