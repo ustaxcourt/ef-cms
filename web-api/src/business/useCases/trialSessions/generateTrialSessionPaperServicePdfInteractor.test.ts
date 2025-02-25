@@ -1,11 +1,11 @@
 import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateTrialSessionPaperServicePdfInteractor } from './generateTrialSessionPaperServicePdfInteractor';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
-import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
+import { testPdfDoc } from '@shared/business/test/getFakeFile';
 
 describe('generateTrialSessionPaperServicePdfInteractor', () => {
   const mockPdfUrl = 'www.example.com';

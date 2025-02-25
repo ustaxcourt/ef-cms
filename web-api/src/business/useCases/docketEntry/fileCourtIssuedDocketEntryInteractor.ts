@@ -10,6 +10,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { omit } from 'lodash';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -49,7 +50,7 @@ export const fileCourtIssuedDocketEntry = async (
       docketNumber: subjectDocketNumber,
     });
 
-  let subjectCaseToUpdateEntity = new Case(subjectCaseToUpdate, {
+  const subjectCaseToUpdateEntity = new Case(subjectCaseToUpdate, {
     authorizedUser,
   });
 
@@ -84,7 +85,7 @@ export const fileCourtIssuedDocketEntry = async (
           docketNumber,
         });
 
-      let caseEntity = new Case(caseToUpdate, { authorizedUser });
+      const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
       const docketEntryEntity = new DocketEntry(
         {
@@ -163,7 +164,7 @@ export const fileCourtIssuedDocketEntry = async (
         sentByUserId: user.userId,
       });
 
-      const saveItems = [
+      const saveItems: Promise<any>[] = [
         applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
           applicationContext,
           authorizedUser,
@@ -172,23 +173,12 @@ export const fileCourtIssuedDocketEntry = async (
       ];
 
       const rawValidWorkItem = workItem.validate().toRawObject();
-      if (isUnservable) {
-        saveItems.push(
-          applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-            applicationContext,
-            section: user.section,
-            userId: user.userId,
-            workItem: rawValidWorkItem,
-          }),
-        );
-      } else {
-        saveItems.push(
-          applicationContext.getPersistenceGateway().saveWorkItem({
-            applicationContext,
-            workItem: rawValidWorkItem,
-          }),
-        );
-      }
+
+      saveItems.push(
+        upsertWorkItems({
+          workItems: [rawValidWorkItem],
+        }),
+      );
 
       return Promise.all(saveItems);
     }),

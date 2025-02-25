@@ -1,15 +1,15 @@
+import { externalUserCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { faker } from '@faker-js/faker';
 import { goToCase } from '../../../helpers/caseDetail/go-to-case';
 import { loginAsAdmissionsClerk } from '../../../helpers/authentication/login-as-helpers';
 import { logout } from '../../../helpers/authentication/logout';
 import { petitionsClerkServesPetition } from '../../../helpers/documentQC/petitionsclerk-serves-petition';
-import { practitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/practitioner-creates-electronic-case';
 
 describe('change of address', () => {
   it('changing the address of a private practitioner should generate NCA and update their cases', () => {
     const newAddress = faker.location.streetAddress();
     cy.login('privatePractitioner2');
-    practitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       logout();
 
       cy.login('petitionsclerk1');
@@ -56,7 +56,7 @@ describe('change of address', () => {
     const newAddress = faker.location.streetAddress();
     const newCountry = faker.location.country();
     cy.login('privatePractitioner2');
-    practitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       logout();
 
       cy.login('petitionsclerk1');

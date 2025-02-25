@@ -1,3 +1,4 @@
+import { PublicClientState } from '@web-client/presenter/state-public';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { generatePublicDocketRecordPdfUrlAction } from './generatePublicDocketRecordPdfUrlAction';
 import { presenter } from '../../presenter-public';
@@ -14,16 +15,19 @@ describe('generatePublicDocketRecordPdfUrlAction', () => {
       .getUseCases()
       .generatePublicDocketRecordPdfInteractor.mockReturnValue(mockPdf);
 
-    const result = await runAction(generatePublicDocketRecordPdfUrlAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        caseDetail: {
-          docketNumber: '123-45',
+    const result = await runAction<{ pdfUrl: any }, PublicClientState>(
+      generatePublicDocketRecordPdfUrlAction,
+      {
+        modules: {
+          presenter,
+        },
+        state: {
+          caseDetail: {
+            docketNumber: '123-45',
+          },
         },
       },
-    });
+    );
 
     expect(result.output).toMatchObject({
       pdfUrl: mockPdf.url,

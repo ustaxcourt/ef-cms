@@ -63,10 +63,10 @@ export const HeaderPublic = connect(
                     <img alt="USTC Seal" src={seal} />
                   </a>
                 </div>
-                <h1 className="header-welcome-public">
+                <div className="header-welcome-public">
                   Welcome to DAWSON{' '}
                   {isTerminalUser && ': US Tax Court Terminal'}
-                </h1>
+                </div>
                 {headerPublicHelper && !headerPublicHelper.onCreationPage && (
                   <>
                     <div className="login-container">

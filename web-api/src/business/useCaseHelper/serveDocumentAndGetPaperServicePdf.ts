@@ -20,7 +20,7 @@ export const serveDocumentAndGetPaperServicePdf = async ({
 
   let originalPdfDoc;
 
-  let newPdfDoc = await PDFDocument.create();
+  const newPdfDoc = await PDFDocument.create();
 
   for (const caseEntity of caseEntities) {
     const servedParties = aggregatePartiesForService(caseEntity);

@@ -58,13 +58,7 @@ export function loginAsIrsPractitioner1() {
   cy.get('[data-testid="closed-cases-count"]').contains('Closed Cases');
 }
 
-export function loginAsPetitioner(
-  petitionerUser:
-    | 'petitioner'
-    | 'petitioner1'
-    | 'petitioner2'
-    | 'petitioner7' = 'petitioner1',
-) {
+export function loginAsPetitioner(petitionerUser: string = 'petitioner1') {
   cy.login(petitionerUser);
   cy.get('[data-testid="file-a-petition"]').should('exist');
 }
@@ -90,7 +84,12 @@ export function loginAsDocketClerk() {
 }
 
 export function loginAsDocketClerk1() {
-  cy.login('docketclerk1');
+  login({ email: 'docketclerk1@example.com' });
+  cy.get('[data-testid="inbox-tab-content"]').should('exist');
+}
+
+export function loginAsClerkOfCourt() {
+  login({ email: 'clerkofcourt@example.com' });
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
 }
 

@@ -35,7 +35,7 @@ export const generatePdfFromHtmlHelper = async (
   let result: any = null;
 
   try {
-    let page = await browser?.newPage()!;
+    const page = await browser?.newPage()!;
 
     await page.setContent(contentHtml);
 

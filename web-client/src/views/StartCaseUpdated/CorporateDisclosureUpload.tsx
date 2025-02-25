@@ -1,6 +1,6 @@
-import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
+import { InlineLink } from '@web-client/ustc-ui/InlineLink/InlineLink';
 import { MAX_FILE_SIZE_MB } from '@shared/business/entities/EntityConstants';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
 import React from 'react';
@@ -26,16 +26,9 @@ export function CorporateDisclosureUpload({
       <div>
         {"Download and fill out the form if you haven't already done so:"}
       </div>
-      <Button
-        link
-        className="usa-link--external text-left mobile-text-wrap"
-        href="https://www.ustaxcourt.gov/resources/forms/Corporate_Disclosure_Statement_Form.pdf"
-        overrideMargin="margin-right-0"
-        rel="noopener noreferrer"
-        target="_blank"
-      >
+      <InlineLink href="https://www.ustaxcourt.gov/resources/forms/Corporate_Disclosure_Statement_Form.pdf">
         Corporate Disclosure Statement (T.C. Form 6)
-      </Button>
+      </InlineLink>
       <div className="margin-top-205">
         <FormGroup
           errorMessageId="corporate-disclosure-file-error-message"

@@ -1,8 +1,9 @@
 import {
   CASE_TYPES_MAP,
+  SESSION_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
@@ -25,7 +26,7 @@ describe('petitions clerk sets a remote trial session calendar', () => {
   const overrides = {
     maxCases: 2,
     preferredTrialCity: trialLocation,
-    sessionType: 'Small',
+    sessionType: SESSION_TYPES.small,
     trialLocation,
   };
 
@@ -166,9 +167,9 @@ describe('petitions clerk sets a remote trial session calendar', () => {
     await waitForExpectedItem({
       cerebralTest,
       currentItem: 'currentPage',
-      expectedItem: 'TrialSessionDetail',
+      expectedItem: 'TrialSessionDetails',
     });
-    expect(cerebralTest.getState('currentPage')).toBe('TrialSessionDetail');
+    expect(cerebralTest.getState('currentPage')).toBe('TrialSessionDetails');
   });
 
   it('Petitions clerk verifies NOIP docket entries for open cases', async () => {

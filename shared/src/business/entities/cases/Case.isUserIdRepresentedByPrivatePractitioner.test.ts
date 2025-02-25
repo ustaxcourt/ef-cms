@@ -34,13 +34,13 @@ describe('isUserIdRepresentedByPrivatePractitioner', () => {
     expect(Case.isPetitionerRepresented(caseEntity, '678')).toEqual(false);
   });
 
-  it('returns true if there is a privatePractitioner representing the given userId', () => {
+  it('returns true if there is a privatePractitioner representing the given userId 2', () => {
     expect(
       Case.isPetitionerRepresented(caseEntity.toRawObject(), '456'),
     ).toEqual(true);
   });
 
-  it('returns false if there is NO privatePractitioner representing the given userId', () => {
+  it('returns false if there is NO privatePractitioner representing the given userId 2', () => {
     expect(
       Case.isPetitionerRepresented(caseEntity.toRawObject(), '789'),
     ).toEqual(false);

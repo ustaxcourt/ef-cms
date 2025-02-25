@@ -2,9 +2,9 @@ import { NotFoundError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -21,14 +21,14 @@ const setNoticesForCalendaredTrialSession = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let calendaredCases = await applicationContext
+  const calendaredCases = await applicationContext
     .getPersistenceGateway()
     .getCalendaredCasesForTrialSession({
       applicationContext,
       trialSessionId,
     });
 
-  let trialNoticePdfsKeys: string[] = [];
+  const trialNoticePdfsKeys: string[] = [];
 
   if (calendaredCases.length === 0) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
@@ -105,7 +105,7 @@ const setNoticesForCalendaredTrialSession = async (
     jobId,
   });
 
-  for (let calendaredCase of calendaredCases) {
+  for (const calendaredCase of calendaredCases) {
     await applicationContext
       .getMessageGateway()
       .sendSetTrialSessionCalendarEvent({
@@ -136,7 +136,7 @@ const setNoticesForCalendaredTrialSession = async (
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
 
-  for (let calendaredCase of calendaredCases) {
+  for (const calendaredCase of calendaredCases) {
     const casePdfDocumentsExistsInS3 = await applicationContext
       .getPersistenceGateway()
       .isFileExists({

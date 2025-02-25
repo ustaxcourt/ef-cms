@@ -1,4 +1,5 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import qs from 'qs';
 
 export async function createUserConfirmation(
@@ -45,7 +46,7 @@ export async function createUserConfirmation(
     <a href="${verificationLink}">${verificationLink}</a>
   </div>
     <div style="margin-top: 20px;">
-      <span>If you did not create an account with DAWSON, please contact support at <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.</span>
+      <span>If you did not create an account with DAWSON, please contact support at <a href="mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}">${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}</a>.</span>
     </div>
     <hr style="margin-top: 20px; border-top:1px solid #000000;">
     <div style="margin-top: 20px;">

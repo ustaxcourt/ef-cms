@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable max-lines */
 import { addCaseToTrialSessionInteractor } from './business/useCases/trialSessions/addCaseToTrialSessionInteractor';
 import { addConsolidatedCaseInteractor } from './business/useCases/caseConsolidation/addConsolidatedCaseInteractor';
 import { addCoversheetInteractor } from './business/useCases/addCoversheetInteractor';
@@ -30,7 +28,6 @@ import { createCaseDeadlineInteractor } from './business/useCases/caseDeadline/c
 import { createCaseFromPaperInteractor } from './business/useCases/createCaseFromPaperInteractor';
 import { createCaseInteractor } from './business/useCases/createCaseInteractor';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from './business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor';
-import { createCsvCustomCaseReportFileInteractor } from '@web-api/business/useCases/customCaseReport/createCsvCustomCaseReportFileInteractor';
 import { createMessageInteractor } from './business/useCases/messages/createMessageInteractor';
 import { createPractitionerDocumentInteractor } from './business/useCases/practitioner/createPractitionerDocumentInteractor';
 import { createPractitionerUserInteractor } from './business/useCases/practitioner/createPractitionerUserInteractor';
@@ -59,6 +56,7 @@ import { generateDocketRecordPdfInteractor } from './business/useCases/generateD
 import { generateDraftStampOrderInteractor } from '../../shared/src/business/useCases/generateDraftStampOrderInteractor';
 import { generateEntryOfAppearancePdfInteractor } from './business/useCases/caseAssociationRequest/generateEntryOfAppearancePdfInteractor';
 import { generateNoticeOfChangeOfTrialJudgeInteractor } from './business/useCases/trialSessions/generateNoticeOfChangeOfTrialJudgeInteractor';
+import { generateNoticeOfChangeOfTrialLocationInteractor } from '@web-api/business/useCases/trialSessions/generateNoticeOfChangeOfTrialLocationInteractor';
 import { generateNoticeOfChangeToRemoteProceedingInteractor } from './business/useCases/trialSessions/generateNoticeOfChangeToRemoteProceedingInteractor';
 import { generateNoticeOfTrialIssuedInteractor } from './business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from './business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
@@ -76,7 +74,6 @@ import { generateTrialCalendarPdfInteractor } from './business/useCases/trialSes
 import { generateTrialSessionPaperServicePdfInteractor } from './business/useCases/trialSessions/generateTrialSessionPaperServicePdfInteractor';
 import { getAllFeatureFlagsInteractor } from './business/useCases/featureFlag/getAllFeatureFlagsInteractor';
 import { getAllUsersByRoleInteractor } from '@shared/business/useCases/getAllUsersByRoleInteractor';
-import { getBlockedCasesInteractor } from '../../shared/src/business/useCases/getBlockedCasesInteractor';
 import { getCachedHealthCheckInteractor } from '@web-api/business/useCases/health/getCachedHealthCheckInteractor';
 import { getCalendaredCasesForTrialSessionInteractor } from './business/useCases/trialSessions/getCalendaredCasesForTrialSessionInteractor';
 import { getCaseDeadlinesForCaseInteractor } from './business/useCases/caseDeadline/getCaseDeadlinesForCaseInteractor';
@@ -91,7 +88,6 @@ import { getCasesForUserInteractor } from '../../shared/src/business/useCases/ge
 import { getCompletedMessagesForSectionInteractor } from './business/useCases/messages/getCompletedMessagesForSectionInteractor';
 import { getCompletedMessagesForUserInteractor } from './business/useCases/messages/getCompletedMessagesForUserInteractor';
 import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@web-api/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
-import { getCustomCaseReportInteractor } from './business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { getDocumentContentsForDocketEntryInteractor } from './business/useCases/document/getDocumentContentsForDocketEntryInteractor';
 import { getDocumentQCInboxForSectionInteractor } from './business/useCases/workItems/getDocumentQCInboxForSectionInteractor';
 import { getDocumentQCInboxForUserInteractor } from './business/useCases/workItems/getDocumentQCInboxForUserInteractor';
@@ -115,6 +111,7 @@ import { getOutboxMessagesForUserInteractor } from './business/useCases/messages
 import { getPaperServicePdfUrlInteractor } from '@shared/business/useCases/getPaperServicePdfUrlInteractor';
 import { getPendingMotionDocketEntriesForCurrentJudgeInteractor } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { getPractitionerByBarNumberInteractor } from './business/useCases/practitioner/getPractitionerByBarNumberInteractor';
+import { getPractitionerCasesInteractor } from '@shared/business/useCases/getPractitionerCasesInteractor';
 import { getPractitionerDocumentDownloadUrlInteractor } from './business/useCases/practitioner/getPractitionerDocumentDownloadUrlInteractor';
 import { getPractitionerDocumentInteractor } from './business/useCases/practitioner/getPractitionerDocumentInteractor';
 import { getPractitionerDocumentsInteractor } from './business/useCases/practitioner/getPractitionerDocumentsInteractor';
@@ -126,6 +123,7 @@ import { getReconciliationReportInteractor } from '../../shared/src/business/use
 import { getTodaysOpinionsInteractor } from './business/useCases/public/getTodaysOpinionsInteractor';
 import { getTodaysOrdersInteractor } from './business/useCases/public/getTodaysOrdersInteractor';
 import { getTrialSessionDetailsInteractor } from './business/useCases/trialSessions/getTrialSessionDetailsInteractor';
+import { getTrialSessionPlanningReportDataInteractor } from '@web-api/business/useCases/trialSessions/getTrialSessionPlanningReportDataInteractor';
 import { getTrialSessionWorkingCopyInteractor } from './business/useCases/trialSessions/getTrialSessionWorkingCopyInteractor';
 import { getTrialSessionsForJudgeActivityReportInteractor } from './business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
 import { getTrialSessionsForJudgeInteractor } from './business/useCases/trialSessions/getTrialSessionsForJudgeInteractor';
@@ -140,6 +138,7 @@ import { getUsersInSectionInteractor } from './business/useCases/user/getUsersIn
 import { getUsersPendingEmailInteractor } from './business/useCases/user/getUsersPendingEmailInteractor';
 import { getWorkItemInteractor } from './business/useCases/workItems/getWorkItemInteractor';
 import { handleBounceNotificationInteractor } from './business/useCases/email/handleBounceNotificationInteractor';
+import { logErrorInteractor } from '@web-api/business/useCases/logErrorInteractor';
 import { loginInteractor } from '@web-api/business/useCases/auth/loginInteractor';
 import { onConnectInteractor } from './business/useCases/notifications/onConnectInteractor';
 import { onDisconnectInteractor } from './business/useCases/notifications/onDisconnectInteractor';
@@ -149,9 +148,10 @@ import { orderAdvancedSearchInteractor } from '../../shared/src/business/useCase
 import { orderPublicSearchInteractor } from './business/useCases/public/orderPublicSearchInteractor';
 import { prioritizeCaseInteractor } from '../../shared/src/business/useCases/prioritizeCaseInteractor';
 import { processStreamRecordsInteractor } from './business/useCases/processStreamRecords/processStreamRecordsInteractor';
+import { queueEmailUpdateAssociatedCasesWorker } from '@web-api/business/useCases/user/queueEmailUpdateAssociatedCasesWorker';
 import { queueUpdateAssociatedCasesWorker } from './business/useCases/user/queueUpdateAssociatedCasesWorker';
 import { removeCaseFromTrialInteractor } from './business/useCases/trialSessions/removeCaseFromTrialInteractor';
-import { removeCasePendingItemInteractor } from '../../shared/src/business/useCases/removeCasePendingItemInteractor';
+import { removeCasePendingItemInteractor } from './business/useCases/pendingItems/removeCasePendingItemInteractor';
 import { removeConsolidatedCasesInteractor } from './business/useCases/caseConsolidation/removeConsolidatedCasesInteractor';
 import { removePdfFromDocketEntryInteractor } from '../../shared/src/business/useCases/removePdfFromDocketEntryInteractor';
 import { removePetitionerAndUpdateCaptionInteractor } from '../../shared/src/business/useCases/removePetitionerAndUpdateCaptionInteractor';
@@ -244,7 +244,6 @@ const useCases = {
   createCaseFromPaperInteractor,
   createCaseInteractor,
   createCourtIssuedOrderPdfFromHtmlInteractor,
-  createCsvCustomCaseReportFileInteractor,
   createMessageInteractor,
   createPractitionerDocumentInteractor,
   createPractitionerUserInteractor,
@@ -273,6 +272,7 @@ const useCases = {
   generateDraftStampOrderInteractor,
   generateEntryOfAppearancePdfInteractor,
   generateNoticeOfChangeOfTrialJudgeInteractor,
+  generateNoticeOfChangeOfTrialLocationInteractor,
   generateNoticeOfChangeToRemoteProceedingInteractor,
   generateNoticeOfTrialIssuedInteractor,
   generateNoticesForCaseTrialSessionCalendarInteractor,
@@ -290,7 +290,6 @@ const useCases = {
   generateTrialSessionPaperServicePdfInteractor,
   getAllFeatureFlagsInteractor,
   getAllUsersByRoleInteractor,
-  getBlockedCasesInteractor,
   getCachedHealthCheckInteractor,
   getCalendaredCasesForTrialSessionInteractor,
   getCaseDeadlinesForCaseInteractor,
@@ -305,7 +304,6 @@ const useCases = {
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
   getCountOfCaseDocumentsFiledByJudgesInteractor,
-  getCustomCaseReportInteractor,
   getDocumentContentsForDocketEntryInteractor,
   getDocumentQCInboxForSectionInteractor,
   getDocumentQCInboxForUserInteractor,
@@ -329,6 +327,7 @@ const useCases = {
   getPaperServicePdfUrlInteractor,
   getPendingMotionDocketEntriesForCurrentJudgeInteractor,
   getPractitionerByBarNumberInteractor,
+  getPractitionerCasesInteractor,
   getPractitionerDocumentDownloadUrlInteractor,
   getPractitionerDocumentInteractor,
   getPractitionerDocumentsInteractor,
@@ -340,6 +339,7 @@ const useCases = {
   getTodaysOpinionsInteractor,
   getTodaysOrdersInteractor,
   getTrialSessionDetailsInteractor,
+  getTrialSessionPlanningReportDataInteractor,
   getTrialSessionWorkingCopyInteractor,
   getTrialSessionsForJudgeActivityReportInteractor,
   getTrialSessionsForJudgeInteractor,
@@ -354,6 +354,7 @@ const useCases = {
   getUsersPendingEmailInteractor,
   getWorkItemInteractor,
   handleBounceNotificationInteractor,
+  logErrorInteractor,
   loginInteractor,
   onConnectInteractor,
   onDisconnectInteractor,
@@ -363,6 +364,7 @@ const useCases = {
   orderPublicSearchInteractor,
   prioritizeCaseInteractor,
   processStreamRecordsInteractor,
+  queueEmailUpdateAssociatedCasesWorker,
   queueUpdateAssociatedCasesWorker,
   removeCaseFromTrialInteractor,
   removeCasePendingItemInteractor,

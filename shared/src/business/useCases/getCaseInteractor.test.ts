@@ -53,6 +53,12 @@ describe('getCaseInteractor', () => {
     ).toEqual({
       applicationContext,
       docketNumber: '123-19',
+      user: {
+        email: 'mockPetitionsClerk@example.com',
+        name: 'Patty Petitions Clerk',
+        role: 'petitionsclerk',
+        userId: 'd5234a80-64aa-4e3e-b0fd-59e6a835585e',
+      },
     });
   });
 
@@ -132,6 +138,57 @@ describe('getCaseInteractor', () => {
     );
 
     expect(result.docketNumber).toEqual('101-00');
+  });
+
+  it('should filter out docket entries that are not on the docket record when the currentUser is an external user associated with an unsealed case', async () => {
+    const expectedDocketEntries = testCase.docketEntries.filter(
+      de => de.isOnDocketRecord,
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValue(testCase);
+
+    const result = await getCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: testCase.docketNumber,
+      },
+      {
+        email: mockCaseContactPrimary.email,
+        name: mockCaseContactPrimary.name,
+        role: ROLES.petitioner,
+        userId: mockCaseContactPrimary.contactId,
+      },
+    );
+
+    expect(result.docketEntries).toMatchObject(expectedDocketEntries);
+  });
+
+  it('should filter out docket entries that are not on the docket record when the currentUser is an external user associated with a sealed case', async () => {
+    const expectedDocketEntries = testCase.docketEntries.filter(
+      de => de.isOnDocketRecord,
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValue({
+        ...testCase,
+        isSealed: true,
+      });
+
+    const result = await getCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: testCase.docketNumber,
+      },
+      {
+        email: mockCaseContactPrimary.email,
+        name: mockCaseContactPrimary.name,
+        role: ROLES.petitioner,
+        userId: mockCaseContactPrimary.contactId,
+      },
+    );
+
+    expect(result.docketEntries).toMatchObject(expectedDocketEntries);
   });
 
   it('should return the case when the currentUser is an irs superuser even if the case has sealed documents', async () => {

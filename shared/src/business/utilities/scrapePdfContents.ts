@@ -36,7 +36,7 @@ export const scrapePdfContents = async ({
       let lastY = null,
         pageText = '';
 
-      for (let item of pageTextContent.items) {
+      for (const item of pageTextContent.items) {
         if (lastY === item.transform[5] || !lastY) {
           pageText += '' + item.str;
         } else {

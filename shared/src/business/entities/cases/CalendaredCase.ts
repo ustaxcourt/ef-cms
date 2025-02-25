@@ -7,7 +7,8 @@ import { IrsPractitioner } from '../IrsPractitioner';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { PrivatePractitioner } from '../PrivatePractitioner';
-import { setPretrialMemorandumFiler } from '../../utilities/getFormattedTrialSessionDetails';
+import { isSealedCase } from '@shared/business/entities/cases/Case';
+import { setPretrialMemorandumFiler } from '../../utilities/trialSession/getFormattedTrialSessionDetails';
 import joi from 'joi';
 
 export class CalendaredCase extends JoiValidationEntity {
@@ -20,6 +21,7 @@ export class CalendaredCase extends JoiValidationEntity {
   public PMTServedPartiesCode?: string;
   public privatePractitioners?: PrivatePractitioner[];
   public status: CaseStatus;
+  public isSealed: boolean;
 
   constructor(rawProps) {
     super('CalendaredCase');
@@ -31,6 +33,7 @@ export class CalendaredCase extends JoiValidationEntity {
     this.docketNumberWithSuffix =
       rawProps.docketNumber + (rawProps.docketNumberSuffix || '');
     this.status = rawProps.status;
+    this.isSealed = isSealedCase(rawProps);
 
     // instead of sending EVERY docket entry over, the front end only cares about the filingPartiesCode on PMT documents not stricken
     this.PMTServedPartiesCode = setPretrialMemorandumFiler({

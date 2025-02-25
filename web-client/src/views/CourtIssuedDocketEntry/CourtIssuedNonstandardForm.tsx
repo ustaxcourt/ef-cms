@@ -181,7 +181,7 @@ export const CourtIssuedNonstandardForm = connect(
 
             <textarea
               aria-describedby="free-text-label"
-              className="usa-textarea height-8"
+              className="usa-textarea height-8 textarea-resize-vertical"
               id="free-text"
               name="freeText"
               value={form.freeText || ''}

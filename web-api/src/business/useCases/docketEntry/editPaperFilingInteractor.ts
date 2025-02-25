@@ -19,7 +19,9 @@ import {
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { cloneDeep, uniq } from 'lodash';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
@@ -282,8 +284,7 @@ const serveDocketEntry = async ({
 
     caseEntitiesToFileOn = await Promise.all(
       caseEntitiesToFileOn.map(aCase =>
-        applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase({
-          applicationContext,
+        fileAndServeDocumentOnOneCase({
           caseEntity: aCase,
           docketEntryEntity: new DocketEntry(cloneDeep(updatedDocketEntry), {
             authorizedUser,
@@ -459,7 +460,6 @@ const updateDocketEntry = async ({
 };
 
 const updateAndSaveWorkItem = async ({
-  applicationContext,
   docketEntry,
   user,
 }: {
@@ -480,9 +480,8 @@ const updateAndSaveWorkItem = async ({
     sentByUserId: user.userId,
   });
 
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
-    workItem: workItem.validate().toRawObject(),
+  await upsertWorkItems({
+    workItems: [workItem.validate().toRawObject()],
   });
 };
 
@@ -538,7 +537,7 @@ export const determineEntitiesToLock = (
 });
 
 export const handleLockError = async (
-  applicationContext,
+  applicationContext: ServerApplicationContext,
   originalRequest,
   authorizedUser: UnknownAuthUser,
 ) => {

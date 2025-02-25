@@ -38,7 +38,7 @@ describe('tools/helpers', () => {
         read: mockReadStream, // crudely mocks out a readable stream (see above)
       };
 
-      let output = [];
+      const output = [];
       const columns = ['firstName', 'lastName', 'type']; // omits id
 
       gatherRecords(columns, output).call(ctx);

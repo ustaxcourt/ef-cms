@@ -1,3 +1,6 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
@@ -6,17 +9,21 @@ import {
   PARTY_TYPES,
   PETITIONS_SECTION,
   ROLES,
+  STATUS_REPORT_ORDER_OPTIONS,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { User } from '../../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { fileCourtIssuedOrderInteractor } from './fileCourtIssuedOrderInteractor';
+import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 
+/* eslint-disable max-lines */
 describe('fileCourtIssuedOrderInteractor', () => {
   const mockUserId = applicationContext.getUniqueId();
   const caseRecord = {
@@ -140,41 +147,6 @@ describe('fileCourtIssuedOrderInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries.length,
     ).toEqual(4);
-  });
-
-  it('should add order document to case and set freeText and draftOrderState.freeText to the document title if it is a generic order (eventCode O)', async () => {
-    await fileCourtIssuedOrderInteractor(
-      applicationContext,
-      {
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'Order to do anything',
-          documentType: 'Order',
-          draftOrderState: {},
-          eventCode: 'O',
-          signedAt: '2019-03-01T21:40:46.415Z',
-          signedByUserId: mockUserId,
-          signedJudgeName: 'Dredd',
-        },
-        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries.length,
-    ).toEqual(4);
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[3],
-    ).toMatchObject({
-      draftOrderState: { freeText: 'Order to do anything' },
-      freeText: 'Order to do anything',
-    });
   });
 
   it('should delete draftOrderState properties if they exists on the documentMetadata, after saving the document', async () => {
@@ -340,27 +312,25 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should add order document to most recent message if a parentMessageId is passed in', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getMessageThreadByParentId.mockReturnValue([
-        {
-          caseStatus: caseRecord.status,
-          caseTitle: PARTY_TYPES.petitioner,
-          createdAt: '2019-03-01T21:40:46.415Z',
-          docketNumber: caseRecord.docketNumber,
-          docketNumberWithSuffix: caseRecord.docketNumber,
-          from: 'Test Petitionsclerk',
-          fromSection: PETITIONS_SECTION,
-          fromUserId: '4791e892-14ee-4ab1-8468-0c942ec379d2',
-          message: 'hey there',
-          messageId: 'a10d6855-f3ee-4c11-861c-c7f11cba4dff',
-          parentMessageId: '31687a1e-3640-42cd-8e7e-a8e6df39ce9a',
-          subject: 'hello',
-          to: 'Test Petitionsclerk2',
-          toSection: PETITIONS_SECTION,
-          toUserId: '449b916e-3362-4a5d-bf56-b2b94ba29c12',
-        },
-      ]);
+    (getMessageThreadByParentId as jest.Mock).mockReturnValue([
+      {
+        caseStatus: caseRecord.status,
+        caseTitle: PARTY_TYPES.petitioner,
+        createdAt: '2019-03-01T21:40:46.415Z',
+        docketNumber: caseRecord.docketNumber,
+        docketNumberWithSuffix: caseRecord.docketNumber,
+        from: 'Test Petitionsclerk',
+        fromSection: PETITIONS_SECTION,
+        fromUserId: '4791e892-14ee-4ab1-8468-0c942ec379d2',
+        message: 'hey there',
+        messageId: 'a10d6855-f3ee-4c11-861c-c7f11cba4dff',
+        parentMessageId: '31687a1e-3640-42cd-8e7e-a8e6df39ce9a',
+        subject: 'hello',
+        to: 'Test Petitionsclerk2',
+        toSection: PETITIONS_SECTION,
+        toUserId: '449b916e-3362-4a5d-bf56-b2b94ba29c12',
+      },
+    ]);
 
     await fileCourtIssuedOrderInteractor(
       applicationContext,
@@ -380,12 +350,9 @@ describe('fileCourtIssuedOrderInteractor', () => {
       mockDocketClerkUser,
     );
 
+    expect(updateMessage).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateMessage,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateMessage.mock.calls[0][0]
-        .message.attachments,
+      (updateMessage as jest.Mock).mock.calls[0][0].message.attachments,
     ).toEqual([
       {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -506,6 +473,349 @@ describe('fileCourtIssuedOrderInteractor', () => {
     ).toHaveBeenCalledWith({
       applicationContext,
       identifiers: [`case|${caseRecord.docketNumber}`],
+    });
+  });
+
+  describe('freeText', () => {
+    describe('eventCode "NOT"', () => {
+      it('should add order document to case and set freeText and draftOrderState.freeText to the document title if it eventCode NOT', async () => {
+        await fileCourtIssuedOrderInteractor(
+          applicationContext,
+          {
+            documentMetadata: {
+              docketNumber: caseRecord.docketNumber,
+              documentTitle: 'Order to do anything',
+              documentType: 'Order',
+              draftOrderState: {},
+              eventCode: 'NOT',
+              signedAt: '2019-03-01T21:40:46.415Z',
+              signedByUserId: mockUserId,
+              signedJudgeName: 'Dredd',
+            },
+            primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          },
+          mockDocketClerkUser,
+        );
+
+        expect(
+          applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+        ).toHaveBeenCalled();
+        expect(
+          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+            .caseToUpdate.docketEntries.length,
+        ).toEqual(4);
+        expect(
+          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+            .caseToUpdate.docketEntries[3],
+        ).toMatchObject({
+          draftOrderState: { freeText: 'Order to do anything' },
+          freeText: 'Order to do anything',
+        });
+      });
+    });
+
+    describe('eventCode "O"', () => {
+      it('should add order document to case and set freeText and draftOrderState.freeText correctly for orderType status report', async () => {
+        await fileCourtIssuedOrderInteractor(
+          applicationContext,
+          {
+            documentMetadata: {
+              draftOrderState: {},
+              dueDate: '2024-11-05',
+              eventCode: 'O',
+              orderType:
+                STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.statusReport,
+              strickenFromTrialSessions: false,
+            },
+            primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          },
+          mockDocketClerkUser,
+        );
+
+        expect(
+          applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+        ).toHaveBeenCalled();
+        expect(
+          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+            .caseToUpdate.docketEntries[3],
+        ).toMatchObject({
+          draftOrderState: {
+            freeText: 'Order parties by 11/05/2024 shall file a status report.',
+          },
+          freeText: 'Order parties by 11/05/2024 shall file a status report.',
+        });
+      });
+
+      it('should add order document to case and set freeText and draftOrderState.freeText correctly for orderType status report and when case is stricken from current trial session', async () => {
+        await fileCourtIssuedOrderInteractor(
+          applicationContext,
+          {
+            documentMetadata: {
+              draftOrderState: {},
+              dueDate: '2024-11-05',
+              eventCode: 'O',
+              orderType:
+                STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.statusReport,
+              strickenFromTrialSessions: true,
+            },
+            primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          },
+          mockDocketClerkUser,
+        );
+
+        expect(
+          applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+        ).toHaveBeenCalled();
+        expect(
+          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+            .caseToUpdate.docketEntries[3],
+        ).toMatchObject({
+          draftOrderState: {
+            freeText:
+              'Order parties by 11/05/2024 shall file a status report. Case is stricken from the current trial session.',
+          },
+          freeText:
+            'Order parties by 11/05/2024 shall file a status report. Case is stricken from the current trial session.',
+        });
+      });
+
+      it('should add order document to case and set freeText and draftOrderState.freeText correctly for orderType status report and when case is stricken from current trial session and jurisdiction is restored to general docket', async () => {
+        await fileCourtIssuedOrderInteractor(
+          applicationContext,
+          {
+            documentMetadata: {
+              draftOrderState: {},
+              dueDate: '2024-11-05',
+              eventCode: 'O',
+              jurisdiction:
+                STATUS_REPORT_ORDER_OPTIONS.jurisdictionOptions.restored,
+              orderType:
+                STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.statusReport,
+              strickenFromTrialSessions: true,
+            },
+            primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          },
+          mockDocketClerkUser,
+        );
+
+        expect(
+          applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+        ).toHaveBeenCalled();
+        expect(
+          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+            .caseToUpdate.docketEntries[3],
+        ).toMatchObject({
+          draftOrderState: {
+            freeText:
+              'Order parties by 11/05/2024 shall file a status report. Case is stricken from the current trial session. Case is no longer jurisdiction retained and is restored to the general docket.',
+          },
+          freeText:
+            'Order parties by 11/05/2024 shall file a status report. Case is stricken from the current trial session. Case is no longer jurisdiction retained and is restored to the general docket.',
+        });
+      });
+
+      it('should add order document to case and set freeText and draftOrderState.freeText correctly for orderType status report stipulated decision', async () => {
+        await fileCourtIssuedOrderInteractor(
+          applicationContext,
+          {
+            documentMetadata: {
+              draftOrderState: {},
+              dueDate: '2024-11-05',
+              eventCode: 'O',
+              orderType:
+                STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.stipulatedDecision,
+              strickenFromTrialSessions: false,
+            },
+            primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          },
+          mockDocketClerkUser,
+        );
+
+        expect(
+          applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+        ).toHaveBeenCalled();
+        expect(
+          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+            .caseToUpdate.docketEntries[3],
+        ).toMatchObject({
+          draftOrderState: {
+            freeText:
+              'Order parties by 11/05/2024 shall file a status report or proposed stipulated decision.',
+          },
+          freeText:
+            'Order parties by 11/05/2024 shall file a status report or proposed stipulated decision.',
+        });
+      });
+
+      it('should add order document to case and set freeText and draftOrderState.freeText correctly for orderType status report stipulated decision and when case is stricken from current trial session', async () => {
+        await fileCourtIssuedOrderInteractor(
+          applicationContext,
+          {
+            documentMetadata: {
+              draftOrderState: {},
+              dueDate: '2024-11-05',
+              eventCode: 'O',
+              orderType:
+                STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.stipulatedDecision,
+              strickenFromTrialSessions: true,
+            },
+            primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          },
+          mockDocketClerkUser,
+        );
+
+        expect(
+          applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+        ).toHaveBeenCalled();
+        expect(
+          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+            .caseToUpdate.docketEntries[3],
+        ).toMatchObject({
+          draftOrderState: {
+            freeText:
+              'Order parties by 11/05/2024 shall file a status report or proposed stipulated decision. Case is stricken from the current trial session.',
+          },
+          freeText:
+            'Order parties by 11/05/2024 shall file a status report or proposed stipulated decision. Case is stricken from the current trial session.',
+        });
+      });
+
+      it('should add order document to case and set freeText and draftOrderState.freeText correctly for orderType status report stipulated decision and when case is stricken from current trial session and jurisdiction is restored to general docket', async () => {
+        await fileCourtIssuedOrderInteractor(
+          applicationContext,
+          {
+            documentMetadata: {
+              draftOrderState: {},
+              dueDate: '2024-11-05',
+              eventCode: 'O',
+              jurisdiction:
+                STATUS_REPORT_ORDER_OPTIONS.jurisdictionOptions.restored,
+              orderType:
+                STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.stipulatedDecision,
+              strickenFromTrialSessions: true,
+            },
+            primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          },
+          mockDocketClerkUser,
+        );
+
+        expect(
+          applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+        ).toHaveBeenCalled();
+        expect(
+          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+            .caseToUpdate.docketEntries[3],
+        ).toMatchObject({
+          draftOrderState: {
+            freeText:
+              'Order parties by 11/05/2024 shall file a status report or proposed stipulated decision. Case is stricken from the current trial session. Case is no longer jurisdiction retained and is restored to the general docket.',
+          },
+          freeText:
+            'Order parties by 11/05/2024 shall file a status report or proposed stipulated decision. Case is stricken from the current trial session. Case is no longer jurisdiction retained and is restored to the general docket.',
+        });
+      });
+    });
+
+    describe('eventcode "OJR"', () => {
+      it('should add order document to case and set freeText and draftOrderState.freeText correctly when order type is statusReport', async () => {
+        await fileCourtIssuedOrderInteractor(
+          applicationContext,
+          {
+            documentMetadata: {
+              docketNumber: caseRecord.docketNumber,
+              draftOrderState: {},
+              dueDate: '2024-11-05',
+              eventCode: 'O',
+              jurisdiction:
+                STATUS_REPORT_ORDER_OPTIONS.jurisdictionOptions.retained,
+              orderType:
+                STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.statusReport,
+              strickenFromTrialSessions: true,
+            },
+            primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          },
+          mockDocketClerkUser,
+        );
+        expect(
+          applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+        ).toHaveBeenCalled();
+        expect(
+          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+            .caseToUpdate.docketEntries[3],
+        ).toMatchObject({
+          draftOrderState: {
+            freeText:
+              '. Parties by 11/05/2024 shall file a status report. Case is stricken from the current trial session.',
+          },
+          freeText:
+            '. Parties by 11/05/2024 shall file a status report. Case is stricken from the current trial session.',
+        });
+      });
+
+      it('should add order document to case and set freeText and draftOrderState.freeText correctly when order type is statusReportStipulatedDecision and case is stricken from the current trial session', async () => {
+        await fileCourtIssuedOrderInteractor(
+          applicationContext,
+          {
+            documentMetadata: {
+              docketNumber: caseRecord.docketNumber,
+              draftOrderState: {},
+              dueDate: '2024-11-05',
+              eventCode: 'O',
+              jurisdiction:
+                STATUS_REPORT_ORDER_OPTIONS.jurisdictionOptions.retained,
+              orderType:
+                STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.stipulatedDecision,
+              strickenFromTrialSessions: true,
+            },
+            primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          },
+          mockDocketClerkUser,
+        );
+        expect(
+          applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+        ).toHaveBeenCalled();
+        expect(
+          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+            .caseToUpdate.docketEntries[3],
+        ).toMatchObject({
+          draftOrderState: {
+            freeText:
+              '. Parties by 11/05/2024 shall file a status report or proposed stipulated decision. Case is stricken from the current trial session.',
+          },
+          freeText:
+            '. Parties by 11/05/2024 shall file a status report or proposed stipulated decision. Case is stricken from the current trial session.',
+        });
+      });
+
+      it('should add order document to case and set freeText and draftOrderState.freeText correctly when case is stricken from the current trial session', async () => {
+        await fileCourtIssuedOrderInteractor(
+          applicationContext,
+          {
+            documentMetadata: {
+              docketNumber: caseRecord.docketNumber,
+              draftOrderState: {},
+              eventCode: 'O',
+              jurisdiction:
+                STATUS_REPORT_ORDER_OPTIONS.jurisdictionOptions.retained,
+              strickenFromTrialSessions: true,
+            },
+            primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          },
+          mockDocketClerkUser,
+        );
+        expect(
+          applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+        ).toHaveBeenCalled();
+        expect(
+          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+            .caseToUpdate.docketEntries[3],
+        ).toMatchObject({
+          draftOrderState: {
+            freeText: '. Case is stricken from the current trial session.',
+          },
+          freeText: '. Case is stricken from the current trial session.',
+        });
+      });
     });
   });
 });

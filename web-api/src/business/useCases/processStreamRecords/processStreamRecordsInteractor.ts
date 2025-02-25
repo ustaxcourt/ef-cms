@@ -1,12 +1,17 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { partitionRecords } from './processStreamUtilities';
+import { processCaseCorrespondenceEntries } from '@web-api/business/useCases/processStreamRecords/processCaseCorrespondenceEntries';
+import { processCaseDeadlineEntries } from '@web-api/business/useCases/processStreamRecords/processCaseDeadlineEntries';
 import { processCaseEntries } from './processCaseEntries';
+import { processCaseWorksheetEntries } from '@web-api/business/useCases/processStreamRecords/processCaseWorksheetEntries';
 import { processCompletionMarkers } from './processCompletionMarkers';
 import { processDocketEntries } from './processDocketEntries';
 import { processMessageEntries } from './processMessageEntries';
 import { processOtherEntries } from './processOtherEntries';
 import { processPractitionerMappingEntries } from './processPractitionerMappingEntries';
 import { processRemoveEntries } from './processRemoveEntries';
+import { processUserCaseNoteEntries } from '@web-api/business/useCases/processStreamRecords/processUserCaseNoteEntries';
 import { processWorkItemEntries } from './processWorkItemEntries';
 import type { DynamoDBRecord } from 'aws-lambda';
 
@@ -15,13 +20,17 @@ export const processStreamRecordsInteractor = async (
   { recordsToProcess }: { recordsToProcess: DynamoDBRecord[] },
 ): Promise<void> => {
   const {
+    caseCorrespondenceRecords,
+    caseDeadlineRecords,
     caseEntityRecords,
+    caseWorksheetRecords,
     completionMarkers,
     docketEntryRecords,
     messageRecords,
     otherRecords,
     practitionerMappingRecords,
     removeRecords,
+    userCaseNoteRecords,
     workItemRecords,
   } = partitionRecords(recordsToProcess);
 
@@ -30,7 +39,7 @@ export const processStreamRecordsInteractor = async (
       applicationContext,
       removeRecords,
     }).catch(err => {
-      applicationContext.logger.error('failed to processRemoveEntries', {
+      getLogger().error('failed to processRemoveEntries', {
         err,
       });
       throw err;
@@ -40,7 +49,7 @@ export const processStreamRecordsInteractor = async (
       applicationContext,
       caseEntityRecords,
     }).catch(err => {
-      applicationContext.logger.error('failed to processCaseEntries', {
+      getLogger().error('failed to processCaseEntries', {
         err,
       });
       throw err;
@@ -50,7 +59,7 @@ export const processStreamRecordsInteractor = async (
       applicationContext,
       docketEntryRecords,
     }).catch(err => {
-      applicationContext.logger.error('failed to processDocketEntries', {
+      getLogger().error('failed to processDocketEntries', {
         err,
       });
       throw err;
@@ -58,7 +67,7 @@ export const processStreamRecordsInteractor = async (
 
     await processWorkItemEntries({ applicationContext, workItemRecords }).catch(
       err => {
-        applicationContext.logger.error('failed to process workItem records', {
+        getLogger().error('failed to process workItem records', {
           err,
         });
         throw err;
@@ -66,12 +75,24 @@ export const processStreamRecordsInteractor = async (
     );
 
     await processMessageEntries({
-      applicationContext,
       messageRecords,
     }).catch(err => {
-      applicationContext.logger.error('failed to process message records', {
+      getLogger().error('failed to process message records', {
         err,
       });
+      throw err;
+    });
+
+    await processUserCaseNoteEntries({
+      applicationContext,
+      userCaseNoteRecords,
+    }).catch(err => {
+      applicationContext.logger.error(
+        'failed to process userCaseNote records',
+        {
+          err,
+        },
+      );
       throw err;
     });
 
@@ -79,12 +100,9 @@ export const processStreamRecordsInteractor = async (
       applicationContext,
       practitionerMappingRecords,
     }).catch(err => {
-      applicationContext.logger.error(
-        'failed to process practitioner mapping records',
-        {
-          err,
-        },
-      );
+      getLogger().error('failed to process practitioner mapping records', {
+        err,
+      });
       throw err;
     });
 
@@ -93,16 +111,43 @@ export const processStreamRecordsInteractor = async (
       completionMarkers,
     });
 
+    await processCaseDeadlineEntries({
+      caseDeadlineRecords,
+    }).catch(err => {
+      getLogger().error('failed to process case deadline records', {
+        err,
+      });
+      throw err;
+    });
+
+    await processCaseWorksheetEntries({
+      caseWorksheetRecords,
+    }).catch(err => {
+      getLogger().error('failed to process case correspondence records', {
+        err,
+      });
+      throw err;
+    });
+
+    await processCaseCorrespondenceEntries({
+      caseCorrespondenceRecords,
+    }).catch(err => {
+      getLogger().error('failed to process case correspondence records', {
+        err,
+      });
+      throw err;
+    });
+
     await processOtherEntries({ applicationContext, otherRecords }).catch(
       err => {
-        applicationContext.logger.error('failed to processOtherEntries', {
+        getLogger().error('failed to processOtherEntries', {
           err,
         });
         throw err;
       },
     );
   } catch (err) {
-    applicationContext.logger.error(
+    getLogger().error(
       'processStreamRecordsInteractor failed to process the records',
       { err },
     );

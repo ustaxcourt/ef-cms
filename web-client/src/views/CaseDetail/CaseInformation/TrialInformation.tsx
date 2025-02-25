@@ -141,6 +141,7 @@ export const TrialInformation = connect(
                   <tr>
                     <td>
                       <a
+                        data-testid="trial-session-location-link"
                         href={
                           caseDetail.userIsAssignedToSession
                             ? `/trial-session-working-copy/${caseDetail.trialSessionId}`
@@ -202,6 +203,7 @@ export const TrialInformation = connect(
                     className="red-warning margin-top-0 padding-0 push-right"
                     icon="trash"
                     id="remove-block"
+                    data-testid="remove-block-button"
                     onClick={() => {
                       openUnblockFromTrialModalSequence();
                     }}
@@ -236,6 +238,7 @@ export const TrialInformation = connect(
             <div className="margin-bottom-1">
               <Button
                 link
+                data-testid="add-to-trial-session-btn"
                 icon="plus-circle"
                 id="add-to-trial-session-btn"
                 onClick={() => {

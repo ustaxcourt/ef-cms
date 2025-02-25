@@ -1,15 +1,15 @@
 import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { getDocumentQCInboxForSection } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForSection';
 
 /**
  *
@@ -19,7 +19,6 @@ import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
  * @returns {object} the work items in the section document inbox
  */
 export const getDocumentQCInboxForSectionInteractor = async (
-  applicationContext: ServerApplicationContext,
   {
     judgeUserName,
     section,
@@ -40,13 +39,10 @@ export const getDocumentQCInboxForSectionInteractor = async (
     sectionToShow = DOCKET_SECTION;
   }
 
-  const workItems = await applicationContext
-    .getPersistenceGateway()
-    .getDocumentQCInboxForSection({
-      applicationContext,
-      judgeUserName,
-      section: sectionToShow,
-    });
+  const workItems = await getDocumentQCInboxForSection({
+    judgeUserName,
+    section: sectionToShow,
+  });
 
   return WorkItem.validateRawCollection(workItems);
 };

@@ -9,11 +9,8 @@ export const templateHelper = (
   const initialBetaBarState = get(state.header.showBetaBar);
   const isProduction = applicationContext.getEnvironment().stage === 'prod';
 
-  let showBetaBar;
-  let showDeployedDate;
-
-  showBetaBar = !isProduction && initialBetaBarState;
-  showDeployedDate = !isProduction;
+  const showBetaBar = !isProduction && initialBetaBarState;
+  const showDeployedDate = !isProduction;
 
   return {
     showBetaBar,

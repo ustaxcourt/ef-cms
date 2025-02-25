@@ -18,7 +18,7 @@ describe('formattedWorkQueue', () => {
     TRIAL_SESSION_SCOPE_TYPES,
   } = applicationContext.getConstants();
 
-  let screenMetadata = {};
+  const screenMetadata = {};
 
   const getBaseState = user => {
     return {

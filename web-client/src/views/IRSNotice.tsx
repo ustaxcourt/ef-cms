@@ -4,26 +4,30 @@ import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { StatisticsForm } from './StartCaseInternal/StatisticsForm';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const IRSNotice = connect(
-  {
-    caseDetailEditHelper: state.caseDetailEditHelper,
-    constants: state.constants,
-    form: state.form,
-    formatAndUpdateDateFromDatePickerSequence:
-      sequences.formatAndUpdateDateFromDatePickerSequence,
-    refreshStatisticsSequence: sequences.refreshStatisticsSequence,
-    setIrsNoticeFalseSequence: sequences.setIrsNoticeFalseSequence,
-    showModal: state.modal.showModal,
-    statisticsFormHelper: state.statisticsFormHelper,
-    updateFormValueSequence: sequences.updateFormValueSequence,
-    validation: sequences[props.validationName],
-    validationErrors: state.validationErrors,
-  },
+type IrsNoticeType = {
+  shouldStartWithBlankStatistic?: boolean;
+  validateFormData: Function;
+};
+const irsNoticeDependencies = {
+  caseDetailEditHelper: state.caseDetailEditHelper,
+  constants: state.constants,
+  form: state.form,
+  formatAndUpdateDateFromDatePickerSequence:
+    sequences.formatAndUpdateDateFromDatePickerSequence,
+  refreshStatisticsSequence: sequences.refreshStatisticsSequence,
+  setIrsNoticeFalseSequence: sequences.setIrsNoticeFalseSequence,
+  showModal: state.modal.showModal,
+  statisticsFormHelper: state.statisticsFormHelper,
+  updateFormValueSequence: sequences.updateFormValueSequence,
+  validationErrors: state.validationErrors,
+};
+
+export const IRSNotice = connect<IrsNoticeType, typeof irsNoticeDependencies>(
+  irsNoticeDependencies,
   function IRSNotice({
     caseDetailEditHelper,
     constants,
@@ -35,9 +39,8 @@ export const IRSNotice = connect(
     showModal,
     statisticsFormHelper,
     updateFormValueSequence,
-    validation,
+    validateFormData,
     validationErrors,
-    validationName,
   }) {
     const renderIrsNoticeRadios = () => {
       return (
@@ -65,6 +68,7 @@ export const IRSNotice = connect(
                   if (shouldStartWithBlankStatistic) {
                     refreshStatisticsSequence();
                   }
+                  validateFormData();
                 }}
               />
               <label
@@ -89,6 +93,7 @@ export const IRSNotice = connect(
                 onChange={() => {
                   setIrsNoticeFalseSequence();
                   refreshStatisticsSequence();
+                  validateFormData();
                 }}
               />
               <label
@@ -114,13 +119,13 @@ export const IRSNotice = connect(
           formGroupClassNames={''}
           id="date-of-notice"
           label="Date of notice"
+          onBlur={() => validateFormData()}
           onChange={e => {
             formatAndUpdateDateFromDatePickerSequence({
               key: 'irsNoticeDate',
               toFormat: constants.DATE_FORMATS.ISO,
               value: e.target.value,
             });
-            validation();
           }}
         />
       );
@@ -134,10 +139,10 @@ export const IRSNotice = connect(
           allowDefaultOption={true}
           caseTypes={constants.CASE_TYPES}
           legend="Type of case"
-          validation={validationName}
+          validateFormData={validateFormData}
           value={form.caseType}
-          onChange="updateFormValueSequence"
-          onChangePreValidation="refreshStatisticsSequence"
+          onChange={updateFormValueSequence}
+          onChangePreValidation={refreshStatisticsSequence}
         />
 
         {caseDetailEditHelper.shouldShowIrsNoticeDate && renderIrsNoticeDate()}

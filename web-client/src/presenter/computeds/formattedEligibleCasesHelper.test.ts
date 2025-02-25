@@ -667,7 +667,7 @@ describe('formattedEligibleCasesHelper', () => {
     ]);
   });
 
-  it('should not group the consolidated cases when the lead case has high priority suffix', () => {
+  it('should not group the consolidated cases when the lead case has high priority suffix 2', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
         trialSession: {
@@ -742,7 +742,7 @@ describe('formattedEligibleCasesHelper', () => {
     ]);
   });
 
-  it('should not group the consolidated cases when the lead case has high priority suffix', () => {
+  it('should not group the consolidated cases when the lead case has high priority suffix 3', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
         trialSession: {

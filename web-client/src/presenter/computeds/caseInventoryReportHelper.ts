@@ -1,12 +1,22 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { FormattedCaseInventoryReportEntry } from '@shared/business/utilities/getFormattedCaseDetail';
+import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { without } from 'lodash';
-
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const caseInventoryReportHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): {
+  caseStatuses: string[];
+  formattedReportData: FormattedCaseInventoryReportEntry[];
+  judges: string[];
+  pageCount: number;
+  showResultsTable: boolean;
+  showSelectFilterMessage: boolean;
+  showNoResultsMessage: boolean;
+  showJudgeColumn: boolean;
+  showStatusColumn: boolean;
+} => {
   const {
     CASE_INVENTORY_PAGE_SIZE,
     CHIEF_JUDGE,
@@ -20,13 +30,26 @@ export const caseInventoryReportHelper = (
     .concat(CHIEF_JUDGE)
     .sort();
 
-  const { associatedJudge, page, status } = get(state.screenMetadata);
+  const { associatedJudge, status } = get(state.screenMetadata);
+
+  const reportData =
+    get(state.caseInventoryReportData.foundCasesForCurrentPage) || [];
+  const user = get(state.user);
+
+  const formattedReportData = reportData
+    .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
+    .map(item => formatCase(applicationContext, item, user));
+
+  const foundCasesTotalCount = get(
+    state.caseInventoryReportData.foundCasesTotalCount,
+  );
+  const pageCount = Math.ceil(foundCasesTotalCount / CASE_INVENTORY_PAGE_SIZE);
 
   let showResultsTable = false;
   let showSelectFilterMessage = false;
   let showNoResultsMessage = false;
-  const resultCount = get(state.caseInventoryReportData.totalCount);
-  if (resultCount) {
+
+  if (foundCasesTotalCount) {
     showResultsTable = true;
   } else if (!associatedJudge && !status) {
     showSelectFilterMessage = true;
@@ -34,39 +57,12 @@ export const caseInventoryReportHelper = (
     showNoResultsMessage = true;
   }
 
-  const reportData = get(state.caseInventoryReportData.foundCases) || [];
-  const user = get(state.user);
-
-  const formattedReportData = reportData
-    .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
-    .map(item => formatCase(applicationContext, item, user));
-
-  let displayedCount =
-    resultCount < CASE_INVENTORY_PAGE_SIZE
-      ? resultCount
-      : (page || 1) * CASE_INVENTORY_PAGE_SIZE;
-
-  if (displayedCount > resultCount) {
-    displayedCount = resultCount;
-  }
-
-  const notDisplayedCount = resultCount - displayedCount;
-  const showLoadMoreButton = displayedCount < resultCount;
-
-  let nextPageSize = CASE_INVENTORY_PAGE_SIZE;
-
-  if (notDisplayedCount < CASE_INVENTORY_PAGE_SIZE) {
-    nextPageSize = notDisplayedCount;
-  }
-
   return {
     caseStatuses: without(Object.values(STATUS_TYPES), ...CLOSED_CASE_STATUSES),
     formattedReportData,
     judges,
-    nextPageSize,
-    resultCount,
+    pageCount,
     showJudgeColumn: !associatedJudge,
-    showLoadMoreButton,
     showNoResultsMessage,
     showResultsTable,
     showSelectFilterMessage,

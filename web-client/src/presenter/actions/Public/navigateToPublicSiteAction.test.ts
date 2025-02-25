@@ -1,3 +1,4 @@
+import { PublicClientState } from '@web-client/presenter/state-public';
 import { navigateToPublicSiteAction } from './navigateToPublicSiteAction';
 import { presenter } from '../../presenter-public';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -18,7 +19,7 @@ describe('navigateToPublicSiteAction', () => {
   });
 
   it('Routes to the public site url', async () => {
-    await runAction(navigateToPublicSiteAction, {
+    await runAction<void, PublicClientState>(navigateToPublicSiteAction, {
       modules: {
         presenter,
       },

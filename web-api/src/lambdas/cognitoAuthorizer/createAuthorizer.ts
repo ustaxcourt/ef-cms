@@ -2,42 +2,21 @@ import {
   APIGatewayAuthorizerResult,
   APIGatewayRequestAuthorizerEvent,
 } from 'aws-lambda';
-import { createLogger } from '../../createLogger';
 import { createPublicKey } from 'crypto';
 import { environment } from '@web-api/environment';
-import { transports } from 'winston';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 import axios from 'axios';
 import jwk from 'jsonwebtoken';
 
-const transport = new transports.Console({
-  handleExceptions: true,
-  handleRejections: true,
-});
-
 const issMain = `https://cognito-idp.us-east-1.amazonaws.com/${environment.userPoolId}`;
 const issIrs = `https://cognito-idp.us-east-1.amazonaws.com/${environment.userPoolIrsId}`;
-
-const getLogger = context => {
-  return createLogger({
-    defaultMeta: {
-      environment: {
-        stage: process.env.STAGE,
-      },
-      requestId: {
-        authorizer: context.awsRequestId,
-      },
-    },
-    logLevel: context.logLevel,
-    transports: [transport],
-  });
-};
 
 const decodeToken = requestToken => {
   const { header, payload } = jwk.decode(requestToken, { complete: true });
   return { iss: payload.iss, kid: header.kid };
 };
 
-let keyCache = {};
+const keyCache = {};
 const getKeysForIssuer = async iss => {
   if (keyCache[iss]) {
     return keyCache[iss];
@@ -61,6 +40,7 @@ const verify = (key, token) =>
 
     jwk.verify(token, pem, options, (err, payload) => {
       if (err) {
+        // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
         reject(err);
       } else {
         resolve(payload);
@@ -74,11 +54,21 @@ const throw401GatewayError = () => {
 
 export const createAuthorizer =
   getToken => async (event: APIGatewayRequestAuthorizerEvent, context) => {
-    const logger = getLogger(context);
+    const logger = getLogger();
+    logger.clearContext();
+    logger.addContext({
+      environment: {
+        stage: process.env.STAGE,
+      },
+      requestId: {
+        authorizer: context.awsRequestId,
+      },
+    });
 
     let token;
     try {
       token = getToken(event);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       logger.info('An error occured trying to get the token out of the event');
       throw401GatewayError();
@@ -94,6 +84,7 @@ export const createAuthorizer =
     try {
       const decodedToken = decodeToken(token);
       ({ iss, kid } = decodedToken);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       logger.info(
         'The token provided in the header could not be decoded successfully',

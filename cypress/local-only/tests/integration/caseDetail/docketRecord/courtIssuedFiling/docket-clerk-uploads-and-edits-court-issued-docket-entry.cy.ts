@@ -1,3 +1,4 @@
+import { attachFile } from '../../../../../../helpers/file/upload-file';
 import { faker } from '@faker-js/faker';
 import { goToCase } from '../../../../../../helpers/caseDetail/go-to-case';
 import { loginAsDocketClerk1 } from '../../../../../../helpers/authentication/login-as-helpers';
@@ -15,14 +16,12 @@ describe('Docket clerk uploads and edits court-issued docket entries', () => {
       cy.get('[data-testid="menu-button-upload-pdf"]').click();
       const title = `${faker.word.adjective()} ${faker.word.noun()}`;
       cy.get('[data-testid="upload-description"]').type(title);
-      cy.readFile('cypress/helpers/file/sample.pdf', null).then(fileContent => {
-        cy.get('[data-testid="primary-document-file"]').attachFile({
-          fileContent,
-          fileName: 'sample.pdf',
-          mimeType: 'application/pdf',
-        });
-        cy.get('[data-testid="save-uploaded-pdf-button"]').click();
+      attachFile({
+        filePath: '../../helpers/file/sample.pdf',
+        selector: '[data-testid="primary-document-file"]',
+        selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
+      cy.get('[data-testid="save-uploaded-pdf-button"]').click();
 
       // Act: edit the docket entry
       cy.get('[data-testid="tab-drafts"').click();
@@ -51,14 +50,12 @@ describe('Docket clerk uploads and edits court-issued docket entries', () => {
       cy.get('[data-testid="menu-button-upload-pdf"]').click();
       const title = `${faker.word.adjective()} ${faker.word.noun()}`;
       cy.get('[data-testid="upload-description"]').type(title);
-      cy.readFile('cypress/helpers/file/sample.pdf', null).then(fileContent => {
-        cy.get('[data-testid="primary-document-file"]').attachFile({
-          fileContent,
-          fileName: 'sample.pdf',
-          mimeType: 'application/pdf',
-        });
-        cy.get('[data-testid="save-uploaded-pdf-button"]').click();
+      attachFile({
+        filePath: '../../helpers/file/sample.pdf',
+        selector: '[data-testid="primary-document-file"]',
+        selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
+      cy.get('[data-testid="save-uploaded-pdf-button"]').click();
       cy.get('#apply-signature').click();
       cy.get('[data-testid="sign-pdf-canvas"]').click();
       cy.get('[data-testid="save-signature-button"]').click();
@@ -93,14 +90,12 @@ describe('Docket clerk uploads and edits court-issued docket entries', () => {
       cy.get('[data-testid="menu-button-upload-pdf"]').click();
       const title = `${faker.word.adjective()} ${faker.word.noun()}`;
       cy.get('[data-testid="upload-description"]').type(title);
-      cy.readFile('cypress/helpers/file/sample.pdf', null).then(fileContent => {
-        cy.get('[data-testid="primary-document-file"]').attachFile({
-          fileContent,
-          fileName: 'sample.pdf',
-          mimeType: 'application/pdf',
-        });
-        cy.get('[data-testid="save-uploaded-pdf-button"]').click();
+      attachFile({
+        filePath: '../../helpers/file/sample.pdf',
+        selector: '[data-testid="primary-document-file"]',
+        selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
+      cy.get('[data-testid="save-uploaded-pdf-button"]').click();
 
       cy.get('#apply-signature').click();
       cy.get('[data-testid="sign-pdf-canvas"]').click();
@@ -150,14 +145,12 @@ describe('Docket clerk uploads and edits court-issued docket entries', () => {
       cy.get('[data-testid="menu-button-upload-pdf"]').click();
       const title = `${faker.word.adjective()} ${faker.word.noun()}`;
       cy.get('[data-testid="upload-description"]').type(title);
-      cy.readFile('cypress/helpers/file/sample.pdf', null).then(fileContent => {
-        cy.get('[data-testid="primary-document-file"]').attachFile({
-          fileContent,
-          fileName: 'sample.pdf',
-          mimeType: 'application/pdf',
-        });
-        cy.get('[data-testid="save-uploaded-pdf-button"]').click();
+      attachFile({
+        filePath: '../../helpers/file/sample.pdf',
+        selector: '[data-testid="primary-document-file"]',
+        selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
+      cy.get('[data-testid="save-uploaded-pdf-button"]').click();
       cy.get('[data-testid="case-detail-menu-button"]').click();
       cy.get('[data-testid="menu-button-add-new-message"]').click();
       cy.get('[data-testid="message-to-section"]').select('docket');

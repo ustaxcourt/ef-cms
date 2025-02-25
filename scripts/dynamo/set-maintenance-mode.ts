@@ -1,24 +1,30 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
+
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 
-// # Usage
-// #   npx ts-node set-maintenance-mode.ts true dev
-
-// # Arguments
-// #   - $1 - true to engage maintenance mode, false to disengage maintenance mode
-
-const args = process.argv.slice(2);
-const enableMaintenanceMode: boolean = args[0] === 'true';
-
-const { ENV } = process.env;
-
-if (typeof enableMaintenanceMode !== 'boolean') {
-  throw new Error('A value for enable maintenance mode is required.');
-}
-if (typeof ENV !== 'string') {
-  throw new Error('A value for env is required.');
-}
+const scriptConfig: ScriptConfig = {
+  description: 'set-maintenance-mode - Toggles Maintenance Mode',
+  environment: { env: 'ENV' },
+  parameters: {
+    toggle: {
+      position: 0,
+      required: true,
+      type: 'string',
+    },
+  },
+  requireActiveAwsSession: true,
+};
+const { env, toggle } = parseArgsAndEnvVars(scriptConfig) as {
+  env: string;
+  toggle: string;
+};
+const enableMaintenanceMode: boolean = toggle === 'true';
 
 async function setMaintenanceMode() {
   const dynamoClient = new DynamoDBClient({
@@ -29,7 +35,7 @@ async function setMaintenanceMode() {
   });
   const currentColorRecord = await documentClient.get({
     Key: { pk: 'current-color', sk: 'current-color' },
-    TableName: `efcms-deploy-${ENV}`,
+    TableName: `efcms-deploy-${env}`,
   });
   const activeColor: 'blue' | 'green' | undefined =
     currentColorRecord?.Item?.current;
@@ -48,11 +54,11 @@ async function setMaintenanceMode() {
   });
 
   console.log(
-    `Setting Maintenance mode to ${enableMaintenanceMode} for ${ENV}`,
+    `Setting Maintenance mode to ${enableMaintenanceMode} for ${env}`,
   );
 
   const command = new InvokeCommand({
-    FunctionName: `send_maintenance_notifications_${ENV}_${activeColor}`,
+    FunctionName: `send_maintenance_notifications_${env}_${activeColor}`,
     InvocationType: 'RequestResponse',
     Payload: Buffer.from(
       JSON.stringify({

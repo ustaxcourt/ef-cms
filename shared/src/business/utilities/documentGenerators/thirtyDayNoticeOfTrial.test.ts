@@ -1,3 +1,7 @@
+import {
+  TRIAL_SESSION_PROCEEDING_TYPES,
+  TRIAL_SESSION_SCOPE_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 import { thirtyDayNoticeOfTrial } from './thirtyDayNoticeOfTrial';
@@ -16,8 +20,8 @@ describe('ThirtyDayNoticeOfTrial In Person', () => {
           docketNumberWithSuffix: '123-45S',
           judgeName: 'Chief Special Trial Judge Carluzzo',
           nameOfClerk: 'Stephanie A. Servoss',
-          proceedingType: 'In Person',
-          scopeType: 'Location-based',
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+          scopeType: TRIAL_SESSION_SCOPE_TYPES.locationBased,
           titleOfClerk: 'Clerk of the Court',
           trialDate: '2022-02-15T16:52:14.080Z',
           trialLocation: {
@@ -45,8 +49,8 @@ describe('ThirtyDayNoticeOfTrial In Person', () => {
           docketNumberWithSuffix: '123-45S',
           judgeName: 'Chief Special Trial Judge Carluzzo',
           nameOfClerk: 'Stephanie A. Servoss',
-          proceedingType: 'In Person',
-          scopeType: 'Location-based',
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+          scopeType: TRIAL_SESSION_SCOPE_TYPES.locationBased,
           titleOfClerk: 'Clerk of the Court',
           trialDate: '2022-02-15T16:52:14.080Z',
           trialLocation: {
@@ -76,8 +80,8 @@ describe('ThirtyDayNoticeOfTrial Standalone Remote', () => {
           docketNumberWithSuffix: '123-45S',
           judgeName: 'Chief Special Trial Judge Carluzzo',
           nameOfClerk: 'Stephanie A. Servoss',
-          proceedingType: 'Remote',
-          scopeType: 'Standalone Remote',
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+          scopeType: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
           titleOfClerk: 'Clerk of the Court',
           trialDate: '2022-02-15T16:52:14.080Z',
           trialLocation: {},
@@ -100,8 +104,8 @@ describe('ThirtyDayNoticeOfTrial Standalone Remote', () => {
           docketNumberWithSuffix: '123-45S',
           judgeName: 'Chief Special Trial Judge Carluzzo',
           nameOfClerk: 'Stephanie A. Servoss',
-          proceedingType: 'Remote',
-          scopeType: 'Standalone Remote',
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+          scopeType: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
           titleOfClerk: 'Clerk of the Court',
           trialDate: '2022-02-15T16:52:14.080Z',
           trialLocation: {},
@@ -126,8 +130,8 @@ describe('ThirtyDayNoticeOfTrial Remote', () => {
           docketNumberWithSuffix: '123-45S',
           judgeName: 'Chief Special Trial Judge Carluzzo',
           nameOfClerk: 'Stephanie A. Servoss',
-          proceedingType: 'Remote',
-          scopeType: 'Location-based',
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+          scopeType: TRIAL_SESSION_SCOPE_TYPES.locationBased,
           titleOfClerk: 'Clerk of the Court',
           trialDate: '2022-02-15T16:52:14.080Z',
           trialLocation: {
@@ -151,8 +155,8 @@ describe('ThirtyDayNoticeOfTrial Remote', () => {
           docketNumberWithSuffix: '123-45S',
           judgeName: 'Chief Special Trial Judge Carluzzo',
           nameOfClerk: 'Stephanie A. Servoss',
-          proceedingType: 'Remote',
-          scopeType: 'Location-based',
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+          scopeType: TRIAL_SESSION_SCOPE_TYPES.locationBased,
           titleOfClerk: 'Clerk of the Court',
           trialDate: '2022-02-15T16:52:14.080Z',
           trialLocation: {

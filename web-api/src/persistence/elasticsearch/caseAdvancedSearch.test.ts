@@ -5,7 +5,10 @@ import { search } from './searchClient';
 
 describe('caseAdvancedSearch', () => {
   it('returns results from an exact-matches query', async () => {
-    search.mockReturnValue({ results: ['some', 'matches'], total: 0 });
+    (search as jest.Mock).mockReturnValue({
+      results: ['some', 'matches'],
+      total: 0,
+    });
 
     const results = await caseAdvancedSearch({
       applicationContext,
@@ -13,7 +16,9 @@ describe('caseAdvancedSearch', () => {
     });
 
     expect(search).toHaveBeenCalledTimes(1);
-    expect(search.mock.calls[0][0].searchParameters.body['_source']).toEqual([
+    expect(
+      (search as jest.Mock).mock.calls[0][0].searchParameters.body['_source'],
+    ).toEqual([
       'caseCaption',
       'petitioners',
       'docketNumber',
@@ -29,7 +34,7 @@ describe('caseAdvancedSearch', () => {
   });
 
   it('returns results from an non-exact-matches query when an exact query returns no results', async () => {
-    search
+    (search as jest.Mock)
       .mockImplementation(() => {
         // default behavior
         return Promise.resolve({ results: ['other', 'matches'], total: 2 });

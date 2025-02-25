@@ -19,12 +19,14 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
+import { WorkItem } from '@shared/business/entities/WorkItem';
 import { addServedStampToDocument } from '@web-api/business/useCases/courtIssuedDocument/addServedStampToDocument';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { generateNoticeOfDocketChangePdf } from '@web-api/business/useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { getDocumentTitleForNoticeOfChange } from '@shared/business/utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 const completeDocketEntryQC = async (
@@ -118,12 +120,12 @@ const completeDocketEntryQC = async (
   ).validate();
   updatedDocketEntry.setQCed(user);
 
-  let updatedDocumentTitle = getDocumentTitleForNoticeOfChange({
+  const updatedDocumentTitle = getDocumentTitleForNoticeOfChange({
     applicationContext,
     docketEntry: updatedDocketEntry,
   });
 
-  let currentDocumentTitle = getDocumentTitleForNoticeOfChange({
+  const currentDocumentTitle = getDocumentTitleForNoticeOfChange({
     applicationContext,
     docketEntry: currentDocketEntry,
   });
@@ -173,7 +175,7 @@ const completeDocketEntryQC = async (
     .getUseCaseHelpers()
     .updateCaseAutomaticBlock({ applicationContext, caseEntity });
 
-  const workItemToUpdate = updatedDocketEntry.workItem;
+  const workItemToUpdate = updatedDocketEntry.workItem as WorkItem;
 
   Object.assign(workItemToUpdate, {
     docketEntry: {
@@ -191,7 +193,7 @@ const completeDocketEntryQC = async (
     section: user.section || '',
   });
 
-  let sectionToAssignTo =
+  const sectionToAssignTo =
     userIsCaseServices && selectedSection ? selectedSection : user.section;
 
   workItemToUpdate.assignToUser({
@@ -203,14 +205,11 @@ const completeDocketEntryQC = async (
     sentByUserId: user.userId,
   });
 
-  await applicationContext
-    .getPersistenceGateway()
-    .saveWorkItemForDocketClerkFilingExternalDocument({
-      applicationContext,
-      workItem: workItemToUpdate.validate().toRawObject(),
-    });
+  await upsertWorkItems({
+    workItems: [workItemToUpdate.validate().toRawObject()],
+  });
 
-  let servedParties = aggregatePartiesForService(caseEntity);
+  const servedParties = aggregatePartiesForService(caseEntity);
   let paperServicePdfUrl;
   let paperServiceDocumentTitle;
 
@@ -228,7 +227,7 @@ const completeDocketEntryQC = async (
 
       const noticeDoc = await PDFDocument.load(pdfData);
 
-      let newPdfDoc = await PDFDocument.create();
+      const newPdfDoc = await PDFDocument.create();
 
       await applicationContext
         .getUseCaseHelpers()
@@ -269,7 +268,7 @@ const completeDocketEntryQC = async (
       docketChangeInfo,
     });
 
-    let noticeUpdatedDocketEntry = new DocketEntry(
+    const noticeUpdatedDocketEntry = new DocketEntry(
       {
         ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange,
         docketEntryId: noticeDocketEntryId,

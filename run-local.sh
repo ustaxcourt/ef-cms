@@ -1,10 +1,22 @@
 #!/bin/bash
 # Used for running the API and necessary services (dynamo, s3, elasticsearch) locally
 
+# Determine the docker compose invocation.
+if command -v docker-compose &> /dev/null; then
+  DOCKER_COMPOSE="docker-compose"
+else
+  DOCKER_COMPOSE="docker compose"
+fi
 # shellcheck disable=SC1091
 . ./setup-local-env.sh
 
 if [[ -z "$CI" ]]; then
+  echo "Stopping postgres in case it's already running"
+  $DOCKER_COMPOSE -f $(pwd)/web-api/src/persistence/postgres/docker-compose.yml down --volumes || true
+
+  echo "Starting postgres"
+  $DOCKER_COMPOSE -f $(pwd)/web-api/src/persistence/postgres/docker-compose.yml up -d || { echo "Failed to start Postgres containers"; exit 1; }
+
   echo "Stopping dynamodb in case it's already running"
   pkill -f DynamoDBLocal
 
@@ -49,6 +61,9 @@ else
   fi
 fi
 
+npm run migration:postgres
+npm run seed:postgres
+
 echo "Seeding cognito-local users"
 npx ts-node .cognito/seedCognitoLocal.ts --transpile-only
 
@@ -56,8 +71,7 @@ echo "Starting cognito-local"
 CODE="385030" npx cognito-local &
 COGNITO_PID=$!
 
-
-nodemon --delay 1 -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress/ --exec "npx ts-node --transpile-only web-api/src/app-local.ts"
+npm run dev:api-local
 
 if [[ -z "$CI" ]]; then
   echo "Stopping dynamodb, elasticsearch, and s3rver"

@@ -20,6 +20,7 @@ import { addCoverToPdf } from '../../../../web-api/src/business/useCases/addCove
 import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
 import { cloneDeep, isEmpty } from 'lodash';
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -194,9 +195,8 @@ export const updateContact = async (
 
       changeOfAddressDocketEntry.setWorkItem(workItem);
 
-      await applicationContext.getPersistenceGateway().saveWorkItem({
-        applicationContext,
-        workItem: workItem.validate().toRawObject(),
+      await upsertWorkItems({
+        workItems: [workItem.validate().toRawObject()],
       });
     }
 

@@ -2,7 +2,7 @@ import { DocketEntry } from '../../../../../shared/src/business/entities/DocketE
 import { shouldGenerateCoversheetForDocketEntry } from './updateDocketEntryMetaInteractor';
 
 describe('updateDocketEntryMetaInteractor shouldGenerateCoversheetForDocketEntry', () => {
-  let mockDocketEntry = new DocketEntry(
+  const mockDocketEntry = new DocketEntry(
     {
       docketEntryId: 'e110995d-b825-4f7e-899e-1773aa8e7016',
       documentTitle: 'Summary Opinion',
@@ -18,7 +18,7 @@ describe('updateDocketEntryMetaInteractor shouldGenerateCoversheetForDocketEntry
 
   let entryRequiresCoverSheet = false;
   let filingDateUpdated = false;
-  let originalDocketEntry = mockDocketEntry;
+  const originalDocketEntry = mockDocketEntry;
   let servedAtUpdated = false;
   let shouldAddNewCoverSheet = false;
 

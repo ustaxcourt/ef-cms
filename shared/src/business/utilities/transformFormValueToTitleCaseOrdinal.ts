@@ -10,9 +10,9 @@ export const transformFormValueToTitleCaseOrdinal = formValue => {
   if (!formValue) {
     return;
   }
-  let splitNumberIntoWords = getOrdinal(formValue).split(' ');
+  const splitNumberIntoWords = getOrdinal(formValue).split(' ');
 
-  let wordWithHyphen = splitNumberIntoWords.find(word => word.includes('-'));
+  const wordWithHyphen = splitNumberIntoWords.find(word => word.includes('-'));
   if (wordWithHyphen) {
     const splitWordWithHyphenCapitalized =
       capitalizeWordAfterHyphen(wordWithHyphen);
@@ -20,7 +20,7 @@ export const transformFormValueToTitleCaseOrdinal = formValue => {
       splitWordWithHyphenCapitalized;
   }
 
-  let titleCaseOrdinal = splitNumberIntoWords
+  const titleCaseOrdinal = splitNumberIntoWords
     .map(word => (word !== 'and' ? capitalizeWord(word) : word))
     .join(' ');
 

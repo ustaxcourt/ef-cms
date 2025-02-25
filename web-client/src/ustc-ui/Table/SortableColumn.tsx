@@ -7,19 +7,22 @@ import classNames from 'classnames';
 const { ASCENDING, DESCENDING } = getConstants();
 
 export const SortableColumn = ({
-  ascText = 'in ascending order',
+  ascText = 'In ascending order',
+  className,
   currentlySortedField,
   currentlySortedOrder,
   defaultSortOrder = 'desc',
-  descText = 'in descending order',
+  descText = 'In descending order',
   hasRows,
   onClickSequence,
+  screenReaderTitle,
   sortField,
   title,
   ...props
 }: {
   ascText: string;
   defaultSortOrder?: 'asc' | 'desc';
+  className?: string;
   currentlySortedField: string;
   descText: string;
   hasRows: boolean;
@@ -27,6 +30,7 @@ export const SortableColumn = ({
     sortField: string;
     sortOrder: 'asc' | 'desc';
   }) => void;
+  screenReaderTitle?: string;
   sortField: string;
   title: string;
   currentlySortedOrder: 'asc' | 'desc';
@@ -40,6 +44,7 @@ export const SortableColumn = ({
   } else {
     sortOrder = defaultSortOrder;
   }
+  <span className="usa-sr-only">Number</span>;
 
   return (
     <Button
@@ -52,37 +57,54 @@ export const SortableColumn = ({
           // we invoke the click sequence AFTER the next animation frame to give
           // the browser time to display the spinner in the header before it tries to fetch
           // and re-render the 3000 messages in the message table.
-          requestAnimationFrame(() => {
-            onClickSequence({
+          requestAnimationFrame(async () => {
+            await onClickSequence({
               sortField,
               sortOrder,
-            }).then(() => setIsLoading(false));
+            });
+
+            setIsLoading(false);
           });
         }
       }}
     >
+      {screenReaderTitle && (
+        <span className="usa-sr-only">{screenReaderTitle}</span>
+      )}
       <span
-        className={classNames('margin-right-105', {
-          sortActive: isActive,
-        })}
+        aria-hidden={!!screenReaderTitle}
+        className={classNames(
+          'margin-right-1',
+          {
+            sortActive: isActive,
+          },
+          className,
+        )}
       >
         {title}
       </span>
-      {isLoading && (
-        <FontAwesomeIcon
-          className="fa-spin spinner"
-          icon="sync"
-          size="sm"
-          title="sorting results"
-        />
-      )}
-      {!isLoading &&
-        getFontAwesomeIcon({
-          ascText,
-          descText,
-          direction: currentlySortedOrder,
-          isActiveColumn: isActive,
-        })}
+      <span className="text-no-wrap">
+        {/* We use a non-breaking space to force the icon to wrap with the text, not independently */}
+        &nbsp;
+        {/* We fix the icon width so that switching from double arrow to smaller single arrow icon does not affect line-breaking behavior */}
+        <span className="display-inline-block width-205">
+          {isLoading && (
+            <FontAwesomeIcon
+              className="fa-spin spinner"
+              icon="sync"
+              size="sm"
+              title="sorting results"
+            />
+          )}
+          {!isLoading &&
+            getFontAwesomeIcon({
+              ascText,
+              descText,
+              direction: currentlySortedOrder,
+              isActiveColumn: isActive,
+            })}
+        </span>
+      </span>
     </Button>
   );
 };

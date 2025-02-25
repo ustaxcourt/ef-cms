@@ -53,10 +53,6 @@ export const unselectOpinionTypesExceptBench = () => {
   });
 };
 
-export const searchForCaseByPetitionerInformation = () => {
-  cy.get('button#advanced-search-button').click();
-};
-
 export const searchForDocuments = () => {
   cy.get('button#advanced-search-button').click();
 };
@@ -82,7 +78,7 @@ export const searchForOrderByJudge = judge => {
 };
 
 export const publicHeader = () => {
-  return cy.get('h1.header-welcome-public');
+  return cy.get('div.header-welcome-public');
 };
 
 export const petitionHyperlink = () => {

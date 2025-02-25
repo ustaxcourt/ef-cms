@@ -1,7 +1,9 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearModalAction } from '@web-client/presenter/actions/clearModalAction';
 import { clearPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/clearPdfPreviewUrlAction';
 import { computeSubmitTrialSessionDataAction } from '../actions/TrialSession/computeSubmitTrialSessionDataAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
@@ -18,8 +20,8 @@ export const updateTrialSessionSequence = [
   validateTrialSessionAction,
   {
     error: [
-      setAlertErrorAction,
       setValidationErrorsAction,
+      setScrollToErrorNotificationAction,
       setValidationAlertErrorsAction,
     ],
     success: [
@@ -34,4 +36,5 @@ export const updateTrialSessionSequence = [
       },
     ],
   },
+  clearModalAction,
 ];

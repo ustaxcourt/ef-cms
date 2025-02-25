@@ -1,14 +1,57 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
+
+import { RawUser } from '@shared/business/entities/User';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { createOrUpdateUser } from 'shared/admin-tools/user/admin';
-import { environment } from '@web-api/environment';
-import {
-  getDestinationTableInfo,
-  getUserPoolId,
-  requireEnvVars,
-} from '../../shared/admin-tools/util';
+import { getNewPasswordForEnvironment } from './make-new-password';
+import { judgeUser } from '@shared/test/mockUsers';
+import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import joi from 'joi';
 
-requireEnvVars(['ENV', 'DEFAULT_ACCOUNT_PASS']);
+const scriptConfig: ScriptConfig = {
+  description:
+    'add-user - Creates a new DAWSON user in a deployed environment.',
+  environment: {
+    dynamoDbTableName: 'DYNAMODB_TABLE_NAME',
+    env: 'ENV',
+    userPoolId: 'USER_POOL_ID',
+  },
+  parameters: {
+    email: {
+      position: 0,
+      required: true,
+      transform: 'toLowerCase',
+      type: 'string',
+    },
+    name: {
+      position: 1,
+      required: true,
+      type: 'string',
+    },
+    role: {
+      position: 2,
+      required: true,
+      type: 'string',
+    },
+    section: {
+      position: 3,
+      required: true,
+      type: 'string',
+    },
+  },
+  requireActiveAwsSession: true,
+};
+
+interface UserParamsInterface {
+  email: string;
+  name: string;
+  role: string;
+  section: string;
+}
 
 const usage = error => {
   if (error) {
@@ -27,20 +70,20 @@ const usage = error => {
 
   Example:
 
-    $ npm run admin:create-user user@example.com "Test User" admissionsclerk admissions
-
-  Required Environment Variables:
-
-    - EFCMS_DOMAIN: The URL to access the environment where we are creating a user
-    - DEPLOYING_COLOR: The color to which we are deploying
-    - USTC_ADMIN_USER: The user we use to perform administrative actions
-    - USTC_ADMIN_PASS: The password of the user we use to perform administrative actions\n`);
+    $ npm run admin:create-user user@example.com "Test User" admissionsclerk admissions\n`);
   process.exit();
 };
 
-const applicationContext = createApplicationContext({});
+// We create the context as a judge user to have permissions to access the chambers interactor
+const applicationContext = createApplicationContext(judgeUser);
 
-const checkParams = params => {
+const checkParams = ({
+  params,
+  validChambersSections,
+}: {
+  params: UserParamsInterface;
+  validChambersSections: string[];
+}) => {
   const schema = joi.object().keys({
     email: joi.string().email().required(),
     name: joi.string().required(),
@@ -73,40 +116,7 @@ const checkParams = params => {
           'floater',
           'general',
           'reportersOffice',
-          'ashfordsChambers',
-          'buchsChambers',
-          'cohensChambers',
-          'copelandsChambers',
-          'foleysChambers',
-          'friedsChambers',
-          'galesChambers',
-          'goekesChambers',
-          'greavesChambers',
-          'gustafsonsChambers',
-          'halpernsChambers',
-          'holmesChambers',
-          'jonesChambers',
-          'kerrigansChambers',
-          'landysChambers',
-          'laubersChambers',
-          'marshallsChambers',
-          'marvelsChambers',
-          'morrisonsChambers',
-          'negasChambers',
-          'parisChambers',
-          'pughsChambers',
-          'siegelsChambers',
-          'thorntonsChambers',
-          'torosChambers',
-          'urdasChambers',
-          'vasquezsChambers',
-          'waysChambers',
-          'weilersChambers',
-          'wellsChambers',
-          'carluzzosChambers',
-          'guysChambers',
-          'leydensChambers',
-          'panuthosChambers',
+          ...validChambersSections,
         ],
       ),
   });
@@ -119,12 +129,18 @@ const checkParams = params => {
   return value;
 };
 
-const sendWelcomeEmail = async ({ email }) => {
+export const sendWelcomeEmail = async ({
+  email,
+  userPoolId,
+}: {
+  email: string;
+  userPoolId: string;
+}): Promise<void> => {
   try {
     await applicationContext.getCognito().adminCreateUser({
       MessageAction: 'RESEND',
-      UserPoolId: environment.userPoolId,
-      Username: email.toLowerCase(),
+      UserPoolId: userPoolId,
+      Username: email,
     });
   } catch (err) {
     console.error('Error sending welcome email', err);
@@ -133,20 +149,29 @@ const sendWelcomeEmail = async ({ email }) => {
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const params = {
-    email: process.argv[2],
-    name: process.argv[3],
-    role: process.argv[4],
-    section: process.argv[5],
+  const { email, name, role, section, userPoolId } = parseArgsAndEnvVars(
+    scriptConfig,
+  ) as { [k: string]: string };
+
+  const judgeUsers: RawUser[] = await applicationContext
+    .getUseCases()
+    .getUsersInSectionInteractor(
+      applicationContext,
+      { section: 'judge' },
+      mockJudgeUser,
+    );
+  const validChambersSections = judgeUsers.map(user => user.section!);
+  const params: UserParamsInterface = {
+    email,
+    name,
+    role,
+    section,
   };
-  checkParams(params);
-  environment.userPoolId = await getUserPoolId();
-  const { tableName } = await getDestinationTableInfo();
-  environment.dynamoDbTableName = tableName;
+  checkParams({ params, validChambersSections });
   await createOrUpdateUser(applicationContext, {
-    password: environment.defaultAccountPass,
+    password: getNewPasswordForEnvironment(),
     setPasswordAsPermanent: true,
-    user: params,
+    user: { ...params } as RawUser,
   });
-  await sendWelcomeEmail({ email: params.email });
+  await sendWelcomeEmail({ email, userPoolId });
 })();

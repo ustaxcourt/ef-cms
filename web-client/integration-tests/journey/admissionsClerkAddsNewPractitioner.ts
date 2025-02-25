@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 
 export const admissionsClerkAddsNewPractitioner = (
   cerebralTest,
-  email = `${faker.internet.userName()}@example.com`,
+  email = `${faker.internet.username()}@example.com`,
 ) => {
   return it('admissions clerk adds a new practitioner', async () => {
     cerebralTest.fakeName = faker.person.fullName();

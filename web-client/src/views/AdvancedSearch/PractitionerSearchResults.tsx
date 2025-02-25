@@ -17,8 +17,8 @@ export const PractitionerSearchResults = connect(
     practitionerSearchHelper,
     submitPractitionerNameSearchSequence,
   }) {
-    const paginatorTop = useRef(null);
-    const paginatorBottom = useRef(null);
+    const paginatorTop = useRef<HTMLDivElement>(null);
+    const paginatorBottom = useRef<HTMLDivElement>(null);
     return (
       <>
         {practitionerSearchHelper.showSearchResults && (
@@ -28,6 +28,7 @@ export const PractitionerSearchResults = connect(
               {practitionerSearchHelper.showPaginator && (
                 <Paginator
                   currentPageIndex={practitionerSearchHelper.activePage}
+                  showSinglePage={true}
                   totalPages={practitionerSearchHelper.pageCount}
                   onPageChange={pageChange => {
                     submitPractitionerNameSearchSequence({
@@ -162,6 +163,7 @@ export const PractitionerSearchResults = connect(
               {practitionerSearchHelper.showPaginator && (
                 <Paginator
                   currentPageIndex={practitionerSearchHelper.activePage}
+                  showSinglePage={true}
                   totalPages={practitionerSearchHelper.pageCount}
                   onPageChange={pageChange => {
                     submitPractitionerNameSearchSequence({

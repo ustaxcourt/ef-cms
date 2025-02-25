@@ -6,9 +6,8 @@ import { validateEditRespondentCounselAction } from './validateEditRespondentCou
 describe('validateEditRespondentCounselAction', () => {
   let successStub;
   let errorStub;
-  let SERVICE_INDICATOR_TYPES;
 
-  ({ SERVICE_INDICATOR_TYPES } = applicationContext.getConstants());
+  const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
 
   beforeAll(() => {
     successStub = jest.fn();

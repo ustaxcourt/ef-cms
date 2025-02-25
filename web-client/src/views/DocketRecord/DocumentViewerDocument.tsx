@@ -207,12 +207,12 @@ export const DocumentViewerDocument = connect(
                 link
                 icon="file-pdf"
                 iconColor="white"
-                onClick={() =>
-                  openCaseDocumentDownloadUrlSequence({
+                onClick={() => {
+                  return openCaseDocumentDownloadUrlSequence({
                     docketEntryId: viewerDocumentToDisplay.docketEntryId,
                     docketNumber: caseDetail.docketNumber,
-                  })
-                }
+                  });
+                }}
               >
                 View Full PDF
               </Button>

@@ -2,7 +2,7 @@ import { DatePrintedFooter } from '@shared/business/utilities/pdfGenerator/compo
 import {
   PreviousTerm,
   TrialLocationData,
-} from '@web-api/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
+} from '@shared/business/utilities/trialSessionPlanningReport/trialSessionPlanningReportDataTypes';
 import { ReportsMetaHeader } from '@shared/business/utilities/pdfGenerator/components/ReportsMetaHeader';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSessionPlanningReport } from '@shared/business/utilities/pdfGenerator/documentTemplates/TrialSessionPlanningReport';

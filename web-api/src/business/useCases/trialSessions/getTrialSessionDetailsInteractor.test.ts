@@ -1,4 +1,7 @@
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  SESSION_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getTrialSessionDetailsInteractor } from './getTrialSessionDetailsInteractor';
@@ -12,7 +15,7 @@ describe('Get trial session details', () => {
   const MOCK_TRIAL_SESSION = {
     maxCases: 100,
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-    sessionType: 'Regular',
+    sessionType: SESSION_TYPES.regular,
     startDate: '3000-03-01T00:00:00.000Z',
     term: 'Fall',
     termYear: '3000',

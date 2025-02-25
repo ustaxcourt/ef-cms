@@ -24,9 +24,7 @@ export const exportPendingReportInteractor = async (
     });
 
   const formattedPendingItems = pendingDocuments.map(pendingItem =>
-    applicationContext
-      .getUtilities()
-      .formatPendingItem(pendingItem, { applicationContext }),
+    applicationContext.getUtilities().formatPendingItem(pendingItem),
   );
 
   return getCsv(formattedPendingItems);

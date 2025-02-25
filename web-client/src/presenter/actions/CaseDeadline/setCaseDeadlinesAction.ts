@@ -16,8 +16,4 @@ export const setCaseDeadlinesAction = ({ get, props, store }: ActionProps) => {
     ({ caseDeadlines } = props);
   }
   store.set(state.caseDeadlineReport.caseDeadlines, caseDeadlines);
-  store.set(state.caseDeadlineReport.totalCount, props.totalCount);
-
-  const page = get(state.caseDeadlineReport.page) || 1;
-  store.set(state.caseDeadlineReport.page, page + 1);
 };

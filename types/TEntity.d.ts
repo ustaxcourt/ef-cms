@@ -27,12 +27,6 @@ type TPetitioner = {
   hasConsentedToEService?: boolean;
 };
 
-type TCaseNote = {
-  userId: string;
-  docketNumber: string;
-  notes: string;
-};
-
 interface IValidateRawCollection<I> {
   (collection: I[], options: { applicationContext: IApplicationContext }): I[];
 }

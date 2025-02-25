@@ -7,6 +7,7 @@ import { addPaperFilingLambda } from './lambdas/documents/addPaperFilingLambda';
 import { addPetitionerToCaseLambda } from './lambdas/cases/addPetitionerToCaseLambda';
 import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
 import { appendAmendedPetitionFormLambda } from './lambdas/courtIssuedOrder/appendAmendedPetitionFormLambda';
+import { applicationContext } from '@web-api/applicationContext';
 import { archiveCorrespondenceDocumentLambda } from './lambdas/correspondence/archiveCorrespondenceDocumentLambda';
 import { archiveDraftDocumentLambda } from './lambdas/documents/archiveDraftDocumentLambda';
 import { assignWorkItemsLambda } from './lambdas/workitems/assignWorkItemsLambda';
@@ -25,7 +26,6 @@ import { completeDocketEntryQCLambda } from './lambdas/documents/completeDocketE
 import { completeMessageLambda } from './lambdas/messages/completeMessageLambda';
 import { completeWorkItemLambda } from './lambdas/workitems/completeWorkItemLambda';
 import { confirmSignUpLambda } from './lambdas/auth/confirmSignUpLambda';
-import { createApplicationContext } from './applicationContext';
 import { createCaseDeadlineLambda } from './lambdas/caseDeadline/createCaseDeadlineLambda';
 import { createCaseFromPaperLambda } from './lambdas/cases/createCaseFromPaperLambda';
 import { createCaseLambda } from './lambdas/cases/createCaseLambda';
@@ -50,6 +50,7 @@ import { downloadPolicyUrlLambda } from './lambdas/documents/downloadPolicyUrlLa
 import { editPaperFilingLambda } from './lambdas/documents/editPaperFilingLambda';
 import { editPractitionerDocumentLambda } from './lambdas/practitioners/editPractitionerDocumentLambda';
 import { exportPendingReportLambda } from '@web-api/lambdas/pendingItems/exportPendingReportLambda';
+import { expressLogger } from './logger';
 import { fetchPendingItemsLambda } from './lambdas/pendingItems/fetchPendingItemsLambda';
 import { fileAndServeCourtIssuedDocumentLambda } from './lambdas/cases/fileAndServeCourtIssuedDocumentLambda';
 import { fileCorrespondenceDocumentLambda } from './lambdas/correspondence/fileCorrespondenceDocumentLambda';
@@ -66,10 +67,12 @@ import { generatePractitionerCaseListPdfLambda } from './lambdas/cases/generateP
 import { generatePrintableCaseInventoryReportLambda } from './lambdas/reports/generatePrintableCaseInventoryReportLambda';
 import { generatePrintableFilingReceiptLambda } from './lambdas/documents/generatePrintableFilingReceiptLambda';
 import { generatePrintablePendingReportLambda } from './lambdas/pendingItems/generatePrintablePendingReportLambda';
+import { generateSuggestedTrialSessionCalendarLambda } from '@web-api/lambdas/trialSessions/generateSuggestedTrialSessionCalendarLambda';
 import { generateTrialCalendarPdfLambda } from './lambdas/trialSessions/generateTrialCalendarPdfLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
 import { getAllUsersByRoleLambda } from '@web-api/lambdas/users/getAllUsersByRoleLambda';
 import { getBlockedCasesLambda } from './lambdas/reports/getBlockedCasesLambda';
+import { getBulkTrialSessionCopyNotesLambda } from './lambdas/trialSessions/getBulkTrialSessionCopyNotesLambda';
 import { getCalendaredCasesForTrialSessionLambda } from './lambdas/trialSessions/getCalendaredCasesForTrialSessionLambda';
 import { getCaseDeadlinesForCaseLambda } from './lambdas/caseDeadline/getCaseDeadlinesForCaseLambda';
 import { getCaseDeadlinesLambda } from './lambdas/caseDeadline/getCaseDeadlinesLambda';
@@ -106,12 +109,14 @@ import { getOutboxMessagesForUserLambda } from './lambdas/messages/getOutboxMess
 import { getPaperServicePdfUrlLambda } from '@web-api/lambdas/trialSessions/getPaperServicePdfUrlLambda';
 import { getPendingMotionDocketEntriesForCurrentJudgeLambda } from '@web-api/lambdas/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeLambda';
 import { getPractitionerByBarNumberLambda } from './lambdas/practitioners/getPractitionerByBarNumberLambda';
+import { getPractitionerCasesLambda } from '@web-api/lambdas/cases/getPractitionerCasesLambda';
 import { getPractitionerDocumentDownloadUrlLambda } from './lambdas/practitioners/getPractitionerDocumentDownloadUrlLambda';
 import { getPractitionerDocumentLambda } from './lambdas/practitioners/getPractitionerDocumentLambda';
 import { getPractitionerDocumentsLambda } from './lambdas/practitioners/getPractitionerDocumentsLambda';
 import { getPractitionersByNameLambda } from './lambdas/practitioners/getPractitionersByNameLambda';
 import { getPrivatePractitionersBySearchKeyLambda } from './lambdas/users/getPrivatePractitionersBySearchKeyLambda';
 import { getTrialSessionDetailsLambda } from './lambdas/trialSessions/getTrialSessionDetailsLambda';
+import { getTrialSessionPlanningReportLambda } from '@web-api/lambdas/trialSessions/getTrialSessionPlanningReportLambda';
 import { getTrialSessionWorkingCopyLambda } from './lambdas/trialSessions/getTrialSessionWorkingCopyLambda';
 import { getTrialSessionsForJudgeActivityReportLambda } from './lambdas/reports/getTrialSessionsForJudgeActivityReportLambda';
 import { getTrialSessionsForJudgeLambda } from './lambdas/trialSessions/getTrialSessionsForJudgeLambda';
@@ -127,7 +132,7 @@ import { getUsersPendingEmailLambda } from './lambdas/users/getUsersPendingEmail
 import { getWorkItemLambda } from './lambdas/workitems/getWorkItemLambda';
 import { ipLimiter } from './middleware/ipLimiter';
 import { lambdaWrapper } from './lambdaWrapper';
-import { logger } from './logger';
+import { logErrorLambda } from '@web-api/lambdas/errors/logErrorLambda';
 import { loginLambda } from '@web-api/lambdas/auth/loginLambda';
 import { opinionAdvancedSearchLambda } from './lambdas/documents/opinionAdvancedSearchLambda';
 import { orderAdvancedSearchLambda } from './lambdas/documents/orderAdvancedSearchLambda';
@@ -202,8 +207,7 @@ import { verifyPendingCaseForUserLambda } from './lambdas/cases/verifyPendingCas
 import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingEmailLambda';
 import cors from 'cors';
 import express from 'express';
-
-const applicationContext = createApplicationContext({});
+import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessions/getTrialSessionOpenCasesCountLambda';
 
 export const app = express();
 
@@ -241,7 +245,7 @@ app.use('/auth', cors(authCorsOptions));
 app.use(cors(defaultCorsOptions));
 app.use(express.json({ limit: '1200kb' }));
 app.use(express.urlencoded({ extended: true }));
-app.use((req, res, next) => {
+app.use((req, _res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     // we added this to suppress error `Missing x-apigateway-event or x-apigateway-context header(s)` locally
     // aws-serverless-express/middleware plugin is looking for these headers, which are needed on the lambdas
@@ -250,7 +254,7 @@ app.use((req, res, next) => {
   }
   return next();
 });
-app.use((req, res, next) => {
+app.use((_req, _res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     const currentInvoke = getCurrentInvoke();
     set(currentInvoke, 'event.requestContext.identity.sourceIp', 'localhost');
@@ -276,7 +280,7 @@ app.use((req, res, next) => {
 
   next();
 });
-app.use(logger());
+app.use(expressLogger);
 
 /**
  * Important note: order of routes DOES matter!
@@ -803,6 +807,10 @@ app.delete(
     '/practitioners/:userId/printable-case-list',
     lambdaWrapper(generatePractitionerCaseListPdfLambda),
   );
+  app.get(
+    '/practitioners/:userId/case-list',
+    lambdaWrapper(getPractitionerCasesLambda),
+  );
   app.get('/practitioners', lambdaWrapper(getPractitionersByNameLambda));
   app.post('/practitioners', lambdaWrapper(createPractitionerUserLambda));
 }
@@ -846,6 +854,10 @@ app.delete(
   app.post(
     '/reports/trial-calendar-pdf',
     lambdaWrapper(generateTrialCalendarPdfLambda),
+  );
+  app.get(
+    '/reports/planning-report',
+    lambdaWrapper(getTrialSessionPlanningReportLambda),
   );
   app.post(
     '/reports/planning-report',
@@ -915,6 +927,10 @@ app.delete(
     '/trial-sessions/:trialSessionId/working-copy',
     lambdaWrapper(getTrialSessionWorkingCopyLambda),
   );
+  app.post(
+    '/trial-sessions/bulk-copy-notes',
+    lambdaWrapper(getBulkTrialSessionCopyNotesLambda),
+  );
   app.put(
     '/trial-sessions/:trialSessionId/working-copy',
     lambdaWrapper(updateTrialSessionWorkingCopyLambda),
@@ -938,6 +954,10 @@ app.delete(
   app.get(
     '/trial-sessions/:trialSessionId',
     lambdaWrapper(getTrialSessionDetailsLambda),
+  );
+  app.get(
+    '/trial-sessions-open-cases-count/:trialSessionId',
+    lambdaWrapper(getTrialSessionOpenCasesCountLambda),
   );
   app.delete(
     '/trial-sessions/:trialSessionId',
@@ -976,6 +996,10 @@ app.delete(
   app.post(
     '/judge-activity-report/trial-sessions',
     lambdaWrapper(getTrialSessionsForJudgeActivityReportLambda),
+  );
+  app.post(
+    '/trial-sessions/generate-term',
+    lambdaWrapper(generateSuggestedTrialSessionCalendarLambda),
   );
 }
 
@@ -1084,6 +1108,7 @@ app.delete(
 {
   app.get('/system/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
   app.get('/system/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
+  app.post('/logError', lambdaWrapper(logErrorLambda));
 }
 
 /**

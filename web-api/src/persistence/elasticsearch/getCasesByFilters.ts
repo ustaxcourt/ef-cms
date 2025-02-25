@@ -3,14 +3,13 @@ import {
   CaseInventory,
   GetCustomCaseReportRequest,
 } from '../../business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
-import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { formatResults } from './searchClient';
+import { getSearchClient } from '@web-api/persistence/elasticsearch/searchClient/getSearchClient';
+import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl';
 
 export const getCasesByFilters = async ({
-  applicationContext,
   params,
 }: {
-  applicationContext: IApplicationContext;
   params: GetCustomCaseReportRequest;
 }): Promise<{
   totalCount: number;
@@ -24,6 +23,7 @@ export const getCasesByFilters = async ({
     'caseCaption',
     'caseType',
     'docketNumber',
+    'docketNumberWithSuffix',
     'leadDocketNumber',
     'preferredTrialCity',
     'receivedAt',
@@ -31,7 +31,7 @@ export const getCasesByFilters = async ({
     'highPriority',
   ];
 
-  const mustClause: QueryDslQueryContainer[] = [];
+  const mustClause: QueryContainer[] = [];
 
   const createDateFilter = {
     range: {
@@ -87,7 +87,7 @@ export const getCasesByFilters = async ({
           'associatedJudgeId.S': judgesIds,
         },
       });
-      const shouldObject: QueryDslQueryContainer = {
+      const shouldObject: QueryContainer = {
         bool: {
           should: shouldArray,
         },
@@ -129,7 +129,7 @@ export const getCasesByFilters = async ({
     mustClause.push(procedureTypeFilter);
   }
 
-  const searchResults = await applicationContext.getSearchClient().search({
+  const searchResults = await getSearchClient().search({
     _source: source,
     body: {
       query: {

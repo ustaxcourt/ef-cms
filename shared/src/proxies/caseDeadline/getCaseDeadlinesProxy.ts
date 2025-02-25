@@ -11,19 +11,14 @@ import { get } from '../requests';
  */
 export const getCaseDeadlinesInteractor = (
   applicationContext,
-  { endDate, judge, page = 1, startDate },
+  { endDate, judge, startDate },
 ) => {
-  const { DEADLINE_REPORT_PAGE_SIZE } = applicationContext.getConstants();
-  const from = (page - 1) * DEADLINE_REPORT_PAGE_SIZE;
-
   return get({
     applicationContext,
     endpoint: '/case-deadlines',
     params: {
       endDate,
-      from,
       judge,
-      pageSize: DEADLINE_REPORT_PAGE_SIZE,
       startDate,
     },
   });

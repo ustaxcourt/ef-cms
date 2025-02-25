@@ -167,7 +167,7 @@ describe('documentViewerHelper', () => {
   });
 
   it('should show stricken information if the docket entry has been stricken', () => {
-    let result = runCompute(documentViewerHelper, {
+    const result = runCompute(documentViewerHelper, {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {

@@ -5,7 +5,7 @@ import { withAppContextDecorator } from '../../withAppContext';
 
 const { USER_ROLES } = applicationContext.getConstants();
 
-let user = {
+const user = {
   role: USER_ROLES.petitioner,
 };
 

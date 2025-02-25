@@ -14,11 +14,13 @@ export const CaseDetailEdit = connect(
     navigateBackSequence: sequences.navigateBackSequence,
     saveSavedCaseForLaterSequence: sequences.saveSavedCaseForLaterSequence,
     screenMetadata: state.screenMetadata,
+    validateCaseDetailSequence: sequences.validateCaseDetailSequence,
   },
   function CaseDetailEdit({
     navigateBackSequence,
     saveSavedCaseForLaterSequence,
     screenMetadata,
+    validateCaseDetailSequence,
   }) {
     return (
       <div noValidate id="case-edit-form" role="form">
@@ -46,24 +48,26 @@ export const CaseDetailEdit = connect(
             title="IRS Notice"
           >
             <div className="blue-container">
-              <IRSNotice validationName="validateCaseDetailSequence" />
+              <IRSNotice validateFormData={validateCaseDetailSequence} />
             </div>
           </Tab>
         </Tabs>
 
-        <Button
-          data-testid="submit-case"
-          id="submit-case"
-          type="button"
-          onClick={() => {
-            saveSavedCaseForLaterSequence();
-          }}
-        >
-          Review Petition
-        </Button>
-        <Button link onClick={() => navigateBackSequence()}>
-          Cancel
-        </Button>
+        <div className="button-container">
+          <Button
+            data-testid="submit-case"
+            id="submit-case"
+            type="button"
+            onClick={() => {
+              saveSavedCaseForLaterSequence();
+            }}
+          >
+            Review Petition
+          </Button>
+          <Button link onClick={() => navigateBackSequence()}>
+            Cancel
+          </Button>
+        </div>
         {screenMetadata.showSaveSuccess && (
           <span aria-live="polite" className="mini-success" role="alert">
             <FontAwesomeIcon icon="check-circle" size="sm" />

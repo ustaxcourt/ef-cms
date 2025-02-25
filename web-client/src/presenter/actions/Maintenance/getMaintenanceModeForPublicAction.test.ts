@@ -35,7 +35,7 @@ describe('getMaintenanceModeForPublicAction', () => {
     expect(result.state.isTerminalUser).toEqual(false);
   });
 
-  it('should set maintenanceMode on state', async () => {
+  it('should not set maintenanceMode on state', async () => {
     applicationContext
       .getUseCases()
       .getMaintenanceModePublicInteractor.mockReturnValue({

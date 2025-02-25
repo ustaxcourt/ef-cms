@@ -13,7 +13,7 @@ export const setDefaultWorkingCopyValuesAction = ({
   const sort = get(state.trialSessionWorkingCopy.sort);
   const sortOrder = get(state.trialSessionWorkingCopy.sortOrder);
   const filters = get(state.trialSessionWorkingCopy.filters);
-  let trialSessionWorkingCopy = get(state.trialSessionWorkingCopy);
+  const trialSessionWorkingCopy = get(state.trialSessionWorkingCopy);
 
   Object.values(trialSessionWorkingCopy.caseMetadata).forEach(aCase => {
     if (aCase.trialStatus === 'settled') {

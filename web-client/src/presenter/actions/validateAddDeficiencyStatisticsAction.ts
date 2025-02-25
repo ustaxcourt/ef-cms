@@ -15,7 +15,7 @@ export const validateAddDeficiencyStatisticsAction = ({
 }: ActionProps) => {
   const form = get(state.form);
 
-  let errors = applicationContext
+  const errors = applicationContext
     .getUseCases()
     .validateAddDeficiencyStatisticsInteractor(applicationContext, {
       statistic: form,

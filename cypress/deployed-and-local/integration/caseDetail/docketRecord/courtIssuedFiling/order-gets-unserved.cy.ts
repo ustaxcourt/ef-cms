@@ -1,16 +1,16 @@
+import { externalUserCreatesElectronicCase } from '../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { goToCase } from '../../../../../helpers/caseDetail/go-to-case';
 import {
   loginAsDocketClerk1,
   loginAsPetitioner,
 } from '../../../../../helpers/authentication/login-as-helpers';
-import { petitionerCreatesElectronicCase } from '../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../../helpers/documentQC/petitionsclerk-serves-petition';
 
 if (!Cypress.env('SMOKETESTS_LOCAL')) {
   describe('BUG: order that was served gets unserved', () => {
     before(() => {
       loginAsPetitioner();
-      petitionerCreatesElectronicCase().then(docketNumber => {
+      externalUserCreatesElectronicCase().then(docketNumber => {
         cy.wrap(docketNumber).as('DOCKET_NUMBER');
         petitionsClerkServesPetition(docketNumber);
       });

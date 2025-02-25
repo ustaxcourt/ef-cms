@@ -1,10 +1,10 @@
+import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { loginAsPrivatePractitioner } from '../../../../helpers/authentication/login-as-helpers';
-import { practitionerCreatesElectronicCase } from '../../../../helpers/fileAPetition/practitioner-creates-electronic-case';
 
 describe('Private practitioner views dashboard', () => {
   it('should display filing fee column', () => {
     loginAsPrivatePractitioner();
-    practitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       cy.get('[data-testid="case-list-table"]');
       cy.get('[data-testid="filing-fee"]');
 

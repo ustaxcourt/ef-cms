@@ -14,7 +14,7 @@ export const retrySendNotificationToConnections = async ({
 }) => {
   const maxRetries = 1;
 
-  for (let connection of connections) {
+  for (const connection of connections) {
     for (let retryCount = 0; retryCount <= maxRetries; retryCount++) {
       try {
         await applicationContext

@@ -138,6 +138,7 @@ export const ReportsMenu = connect(
             <li className="usa-nav__submenu-item" id="reports-nav">
               <Button
                 link
+                data-testid="trial-session-planning-btn"
                 id="trial-session-planning-btn"
                 onClick={() => {
                   resetHeaderAccordionsSequence();

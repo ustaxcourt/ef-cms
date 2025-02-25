@@ -1,4 +1,8 @@
-import { CASE_STATUS_TYPES, CHIEF_JUDGE } from '../EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+  SESSION_TYPES,
+} from '../EntityConstants';
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { TrialSession } from '../trialSessions/TrialSession';
@@ -18,7 +22,7 @@ describe('removeFromTrial', () => {
       isCalendared: true,
       judge: { name: 'Judge Buch', userId: 'judge-user-id' },
       maxCases: 100,
-      sessionType: 'Regular',
+      sessionType: SESSION_TYPES.regular,
       startDate: '2025-03-01T00:00:00.000Z',
       term: 'Fall',
       termYear: '2025',
@@ -40,7 +44,7 @@ describe('removeFromTrial', () => {
       changedBy: user,
     });
     const indexOfLastCaseHistoryItem =
-      caseToUpdate.caseStatusHistory.length - 1;
+      caseToUpdate.caseStatusHistory!.length - 1;
 
     expect(caseToUpdate.status).toEqual(
       CASE_STATUS_TYPES.generalDocketReadyForTrial,
@@ -51,7 +55,7 @@ describe('removeFromTrial', () => {
     expect(caseToUpdate.trialSessionId).toBeFalsy();
     expect(caseToUpdate.trialTime).toBeFalsy();
     expect(
-      caseToUpdate.caseStatusHistory[indexOfLastCaseHistoryItem],
+      caseToUpdate.caseStatusHistory![indexOfLastCaseHistoryItem],
     ).toMatchObject({ changedBy: user });
   });
 
@@ -68,7 +72,7 @@ describe('removeFromTrial', () => {
       isCalendared: true,
       judge: { name: 'Judge Buch', userId: 'judge-user-id' },
       maxCases: 100,
-      sessionType: 'Regular',
+      sessionType: SESSION_TYPES.regular,
       startDate: '2025-03-01T00:00:00.000Z',
       term: 'Fall',
       termYear: '2025',
@@ -103,7 +107,7 @@ describe('removeFromTrial', () => {
       isCalendared: true,
       judge: { name: 'Judge Buch', userId: 'judge-user-id' },
       maxCases: 100,
-      sessionType: 'Regular',
+      sessionType: SESSION_TYPES.regular,
       startDate: '2025-03-01T00:00:00.000Z',
       term: 'Fall',
       termYear: '2025',

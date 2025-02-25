@@ -2,10 +2,10 @@ import { NotFoundError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TRIAL_SESSION_SCOPE_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { TRIAL_SESSION_SCOPE_TYPES } from '@shared/business/entities/EntityConstants';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { isEmpty, isEqual } from 'lodash';

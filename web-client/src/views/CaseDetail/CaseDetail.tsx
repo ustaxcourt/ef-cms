@@ -51,8 +51,12 @@ export const CaseDetail = connect(
                   role="alert"
                 >
                   <div className="usa-alert__body">
-                    You will be able to file documents after the Petition is
-                    processed.
+                    <p className="usa-alert__text">
+                      <span className="usa-alert__text--strong">
+                        You will be able to file documents after the Petition is
+                        processed.
+                      </span>
+                    </p>
                   </div>
                 </div>
               )}

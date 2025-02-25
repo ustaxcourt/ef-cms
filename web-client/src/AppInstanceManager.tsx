@@ -18,39 +18,26 @@ import React from 'react';
 export const AppInstanceManager = connect(
   {
     appInstanceManagerHelper: state.appInstanceManagerHelper,
-    confirmStayLoggedInSequence: sequences.confirmStayLoggedInSequence,
     handleAppHasUpdatedSequence: sequences.handleAppHasUpdatedSequence,
-    resetIdleTimerSequence: sequences.resetIdleTimerSequence,
-    signOutIdleSequence: sequences.signOutIdleSequence,
     signOutUserInitiatedSequence: sequences.signOutUserInitiatedSequence,
+    token: state.token,
   },
   function AppInstanceManager({
     appInstanceManagerHelper,
-    confirmStayLoggedInSequence,
     handleAppHasUpdatedSequence,
-    resetIdleTimerSequence,
-    signOutIdleSequence,
     signOutUserInitiatedSequence,
+    token,
   }) {
     const { channelHandle } = appInstanceManagerHelper;
 
     channelHandle.onmessage = msg => {
       switch (msg.subject) {
-        case BROADCAST_MESSAGES.idleStatusActive:
-          resetIdleTimerSequence();
-          break;
-        case BROADCAST_MESSAGES.stayLoggedIn:
-          confirmStayLoggedInSequence();
-          break;
-        case BROADCAST_MESSAGES.idleLogout:
-          signOutIdleSequence({
-            skipBroadcast: true,
-          });
-          break;
         case BROADCAST_MESSAGES.userLogout:
-          signOutUserInitiatedSequence({
-            skipBroadcast: true,
-          });
+          if (token) {
+            signOutUserInitiatedSequence({
+              skipBroadcast: true,
+            });
+          }
           break;
         case BROADCAST_MESSAGES.appHasUpdated:
           handleAppHasUpdatedSequence({ skipBroadcast: true });

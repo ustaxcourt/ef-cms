@@ -12,7 +12,7 @@ import React from 'react';
  * @returns {object} a react component
  */
 export const Icon = props => {
-  let iconProps = cloneDeep(props);
+  const iconProps = cloneDeep(props);
   if (iconProps['aria-label']) {
     iconProps['aria-hidden'] = false;
     iconProps.title = iconProps['aria-label'];

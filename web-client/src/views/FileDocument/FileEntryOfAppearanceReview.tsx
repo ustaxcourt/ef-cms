@@ -1,5 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -107,7 +106,7 @@ export const FileEntryOfAppearanceReview = ({
                 </div>
               </div>
 
-              <div className="margin-top-4">
+              <div className="margin-top-4 button-container">
                 <Button
                   className="margin-bottom-1"
                   data-testid="submit-entry-of-appearance-button"
@@ -146,7 +145,6 @@ export const FileEntryOfAppearanceReview = ({
       </div>
 
       {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
-      {showModal === 'FileUploadErrorModal' && <FileUploadErrorModal />}
     </React.Fragment>
   );
 };

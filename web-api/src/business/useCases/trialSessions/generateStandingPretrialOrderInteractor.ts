@@ -3,13 +3,13 @@ import {
   createISODateString,
   formatDateString,
   formatNow,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import { NotFoundError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { formatPhoneNumber } from '../../../../../shared/src/business/utilities/formatPhoneNumber';
-import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
-import { getJudgeWithTitle } from '../../../../../shared/src/business/utilities/getJudgeWithTitle';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
+import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
+import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
+import { getJudgeWithTitle } from '@shared/business/utilities/getJudgeWithTitle';
 
 /**
  * generateStandingPretrialOrderInteractor

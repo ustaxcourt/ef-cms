@@ -3,7 +3,7 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { getCompleteTrialSessionAlertSuccessAction } from '../actions/getCompleteTrialSessionAlertSuccessAction';
 import { hasPaperAction } from '../actions/hasPaperAction';
 import { navigateToPrintPaperTrialNoticesAction } from '@web-client/presenter/actions/TrialSession/navigateToPrintPaperTrialNoticesAction';
-import { navigateToTrialSessionDetailAction } from '../actions/TrialSession/navigateToTrialSessionDetailAction';
+import { navigateToTrialSessionDetailsAction } from '../actions/TrialSession/navigateToTrialSessionDetailsAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
@@ -18,7 +18,7 @@ export const updateTrialSessionCompleteSequence = [
       getCompleteTrialSessionAlertSuccessAction,
       setAlertSuccessAction,
       setSaveAlertsForNavigationAction,
-      navigateToTrialSessionDetailAction,
+      navigateToTrialSessionDetailsAction,
     ],
     paper: [navigateToPrintPaperTrialNoticesAction],
   },

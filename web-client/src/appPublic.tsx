@@ -17,6 +17,8 @@ import {
 import { faArrowAltCircleLeft as faArrowAltCircleLeftSolid } from '@fortawesome/free-solid-svg-icons/faArrowAltCircleLeft';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons/faCheckCircle';
 import { faChevronUp } from '@fortawesome/free-solid-svg-icons/faChevronUp';
+import { faCopy } from '@fortawesome/free-regular-svg-icons/faCopy';
+import { faCopy as faCopySolid } from '@fortawesome/free-solid-svg-icons/faCopy';
 import { faEnvelope as faEnvelopeSolid } from '@fortawesome/free-solid-svg-icons/faEnvelope';
 import { faFileAlt as faFileAltSolid } from '@fortawesome/free-solid-svg-icons/faFileAlt';
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons/faFilePdf';
@@ -34,9 +36,13 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 import { GlobalModalWrapper } from '@web-client/views/GlobalModalWrapper';
 import { createRoot } from 'react-dom/client';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftRegular } from '@fortawesome/free-regular-svg-icons/faArrowAltCircleLeft';
+import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons/faExchangeAlt';
 import { faExclamation } from '@fortawesome/free-solid-svg-icons/faExclamation';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
+import { faLink } from '@fortawesome/free-solid-svg-icons/faLink';
+import { faLongArrowAltDown } from '@fortawesome/free-solid-svg-icons/faLongArrowAltDown';
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-regular-svg-icons/faTimesCircle';
 import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
 import { isFunction, mapValues } from 'lodash';
@@ -63,13 +69,17 @@ const appPublic = {
     });
 
     library.add(
+      faExchangeAlt,
       faFileAltSolid,
       faLock,
       faLongArrowAltUp,
+      faLink,
+      faTimes,
       faPrint,
       faFilePdf,
       faSearch,
       faSync,
+      faLink,
       faSort,
       faTimesCircle,
       faInfoCircle,
@@ -78,12 +88,15 @@ const appPublic = {
       faExclamationCircle,
       faExclamationTriangle,
       faChevronUp,
+      faLongArrowAltDown,
       faEnvelopeSolid,
       faPhone,
       faTimesCircleRegular,
       faArrowAltCircleLeftSolid,
       faArrowAltCircleLeftRegular,
       faUser,
+      faCopy,
+      faCopySolid,
     );
 
     presenter.providers.applicationContext = applicationContext;

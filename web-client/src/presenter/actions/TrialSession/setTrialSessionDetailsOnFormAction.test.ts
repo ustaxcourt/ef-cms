@@ -1,3 +1,4 @@
+import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -17,7 +18,7 @@ describe('setTrialSessionDetailsOnFormAction', () => {
         trialSession: {
           estimatedEndDate: '2019-05-01T21:40:46.415Z',
           judge: { userId: '456' },
-          sessionType: 'Regular',
+          sessionType: SESSION_TYPES.regular,
           startDate: '2019-03-01T21:40:46.415Z',
           trialClerk: { userId: '098' },
           trialSessionId: '123',
@@ -33,7 +34,7 @@ describe('setTrialSessionDetailsOnFormAction', () => {
       },
       judge: { userId: '456' },
       judgeId: '456',
-      sessionType: 'Regular',
+      sessionType: SESSION_TYPES.regular,
       startDate: '2019-03-01T21:40:46.415Z',
       trialClerk: { userId: '098' },
       trialClerkId: '098',
@@ -51,7 +52,7 @@ describe('setTrialSessionDetailsOnFormAction', () => {
           alternateTrialClerkName: 'Iron Man',
           estimatedEndDate: '2019-05-01T21:40:46.415Z',
           judge: { userId: '456' },
-          sessionType: 'Regular',
+          sessionType: SESSION_TYPES.regular,
           startDate: '2019-03-01T21:40:46.415Z',
           trialSessionId: '123',
         },
@@ -67,7 +68,7 @@ describe('setTrialSessionDetailsOnFormAction', () => {
       },
       judge: { userId: '456' },
       judgeId: '456',
-      sessionType: 'Regular',
+      sessionType: SESSION_TYPES.regular,
       startDate: '2019-03-01T21:40:46.415Z',
       trialClerkId: 'Other',
       trialSessionId: '123',
@@ -85,7 +86,7 @@ describe('setTrialSessionDetailsOnFormAction', () => {
           estimatedEndDate: '2019-05-01T21:40:46.415Z',
           irsCalendarAdministrator: 'SOME_TEST_IRS_CALENDAR_ADMINISTRATOR',
           judge: { userId: '456' },
-          sessionType: 'Regular',
+          sessionType: SESSION_TYPES.regular,
           startDate: '2019-03-01T21:40:46.415Z',
           trialSessionId: '123',
         },
@@ -116,7 +117,7 @@ describe('setTrialSessionDetailsOnFormAction', () => {
             phone: 'TEST_PHONE',
           },
           judge: { userId: '456' },
-          sessionType: 'Regular',
+          sessionType: SESSION_TYPES.regular,
           startDate: '2019-03-01T21:40:46.415Z',
           trialSessionId: '123',
         },

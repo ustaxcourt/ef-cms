@@ -5,9 +5,8 @@ import { presenter } from '../presenter-mock';
 
 describe('gotoReviewSavedPetitionSequence', () => {
   let cerebralTest;
-  let PARTY_TYPES;
 
-  ({ PARTY_TYPES } = applicationContext.getConstants());
+  const { PARTY_TYPES } = applicationContext.getConstants();
 
   const mockCase = {
     docketEntries: [{ docketEntryId: '123', documentType: 'Petition' }],

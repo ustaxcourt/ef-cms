@@ -65,10 +65,10 @@ export const petitionsClerkCompletesAndSetsTrialSession = (
     });
     await waitForPage({
       cerebralTest,
-      expectedPage: 'TrialSessionDetail',
+      expectedPage: 'TrialSessionDetails',
       maxWait: 20000,
     });
-    expect(cerebralTest.getState('currentPage')).toEqual('TrialSessionDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('TrialSessionDetails');
 
     await cerebralTest.runSequence('setTrialSessionCalendarSequence');
 
@@ -89,7 +89,7 @@ export const petitionsClerkCompletesAndSetsTrialSession = (
       });
     } else {
       expect(cerebralTest.getState('currentPage')).toEqual(
-        'TrialSessionDetail',
+        'TrialSessionDetails',
       );
 
       const expectedAlertMessage = 'Eligible cases set for trial.';

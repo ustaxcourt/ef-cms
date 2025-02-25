@@ -1,8 +1,10 @@
-// usage:
-// npx ts-node --transpile-only scripts/reports/cases-open-on-date.ts
-// npx ts-node --transpile-only scripts/reports/cases-open-on-date.ts 12 31
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import { DateTime } from 'luxon';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import {
   ServerApplicationContext,
   createApplicationContext,
@@ -11,8 +13,33 @@ import { appendFileSync } from 'fs';
 import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
 
-const month = process.argv[2] || `${DateTime.now().toObject().month}`;
-const day = process.argv[3] || `${DateTime.now().toObject().day}`;
+const scriptConfig: ScriptConfig = {
+  description:
+    'cases-open-on-date - Generates spreadsheets containing a list of cases ' +
+    'open on a given date in each of the previous 5 years and, if necessary, ' +
+    'spreadsheets containing a list of cases with a NOA filed afterwards.',
+  environment: {
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+    env: 'ENV',
+  },
+  parameters: {
+    day: {
+      default: `${DateTime.now().toObject().day}`,
+      position: 1,
+      type: 'string',
+    },
+    month: {
+      default: `${DateTime.now().toObject().month}`,
+      position: 0,
+      type: 'string',
+    },
+  },
+  requireActiveAwsSession: true,
+};
+const { day, month } = parseArgsAndEnvVars(scriptConfig) as {
+  day: string;
+  month: string;
+};
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 
 const getAllCasesOpenOnDate = async ({

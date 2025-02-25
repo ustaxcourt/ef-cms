@@ -7,7 +7,7 @@ export const setSelectedMessagesAction = ({
 }: ActionProps<{
   messages: { messageId: string; parentMessageId: string }[];
 }>) => {
-  let selectedMessagesMap = get(state.messagesPage.selectedMessages);
+  const selectedMessagesMap = get(state.messagesPage.selectedMessages);
   const allMessagesSelected = get(
     state.messagesIndividualInboxHelper.allMessagesSelected,
   );

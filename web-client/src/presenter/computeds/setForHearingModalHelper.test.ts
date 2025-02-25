@@ -1,3 +1,7 @@
+import {
+  SESSION_STATUS_TYPES,
+  SESSION_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { setForHearingModalHelper as setForHearingModalHelperComputed } from './setForHearingModalHelper';
@@ -12,36 +16,36 @@ describe('set for hearing modal helper', () => {
 
   const trialSessions = [
     {
-      sessionStatus: 'New',
-      sessionType: 'Small',
+      sessionStatus: SESSION_STATUS_TYPES.new,
+      sessionType: SESSION_TYPES.small,
       startDate: '2019-05-01T21:40:46.415Z',
       trialLocation: 'Boise, Idaho',
       trialSessionId: '4',
     },
     {
-      sessionStatus: 'Open',
-      sessionType: 'Regular',
+      sessionStatus: SESSION_STATUS_TYPES.open,
+      sessionType: SESSION_TYPES.regular,
       startDate: '2019-03-01T21:40:46.415Z',
       trialLocation: 'Birmingham, Alabama',
       trialSessionId: '1',
     },
     {
-      sessionStatus: 'Open',
-      sessionType: 'Hybrid',
+      sessionStatus: SESSION_STATUS_TYPES.open,
+      sessionType: SESSION_TYPES.hybrid,
       startDate: '2018-02-01T21:40:46.415Z',
       trialLocation: 'Mobile, Alabama',
       trialSessionId: '2',
     },
     {
-      sessionStatus: 'New',
-      sessionType: 'Special',
+      sessionStatus: SESSION_STATUS_TYPES.new,
+      sessionType: SESSION_TYPES.special,
       startDate: '2019-01-01T21:40:46.415Z',
       trialLocation: 'Birmingham, Alabama',
       trialSessionId: '3',
     },
     {
-      sessionStatus: 'New',
-      sessionType: 'Motion/Hearing',
+      sessionStatus: SESSION_STATUS_TYPES.new,
+      sessionType: SESSION_TYPES.motionHearing,
       startDate: '2018-12-01T21:40:46.415Z',
       trialLocation: 'Mobile, Alabama',
       trialSessionId: '5',
@@ -58,13 +62,13 @@ describe('set for hearing modal helper', () => {
           trialSessions: [
             ...trialSessions,
             {
-              sessionStatus: 'New',
+              sessionStatus: SESSION_STATUS_TYPES.new,
               trialLocation: 'Nashville, Tennessee',
               trialSessionId: '6',
             },
             {
               isCalendared: true,
-              sessionStatus: 'Open',
+              sessionStatus: SESSION_STATUS_TYPES.open,
               startDate: '2021-12-01T21:40:46.415Z',
               trialLocation: 'Little Rock, Arkansas',
               trialSessionId: '1337',
@@ -96,7 +100,7 @@ describe('set for hearing modal helper', () => {
           trialSessions: trialSessions.map(trialSession => ({
             ...trialSession,
             isCalendared: true,
-            sessionStatus: 'Open',
+            sessionStatus: SESSION_STATUS_TYPES.open,
           })),
         },
       },
@@ -112,7 +116,7 @@ describe('set for hearing modal helper', () => {
           trialSessionId: '3',
         }),
         expect.objectContaining({
-          sessionType: 'Hybrid',
+          sessionType: SESSION_TYPES.hybrid,
           startDate: '2018-02-01T21:40:46.415Z',
           trialLocation: 'Mobile, Alabama',
           trialSessionId: '2',
@@ -148,7 +152,7 @@ describe('set for hearing modal helper', () => {
           trialSessions: trialSessions.map(trialSession => ({
             ...trialSession,
             isCalendared: true,
-            sessionStatus: 'Open',
+            sessionStatus: SESSION_STATUS_TYPES.open,
           })),
         },
       },
@@ -164,7 +168,7 @@ describe('set for hearing modal helper', () => {
           trialSessionId: '3',
         }),
         expect.objectContaining({
-          sessionType: 'Regular',
+          sessionType: SESSION_TYPES.regular,
           startDate: '2019-03-01T21:40:46.415Z',
           trialLocation: 'Birmingham, Alabama',
           trialSessionId: '1',

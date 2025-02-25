@@ -50,7 +50,7 @@ export const PetitionFactOrReason = connect<
           <div className="fact-or-reason-text-area-wrapper">
             <textarea
               aria-labelledby={labelId}
-              className="usa-textarea max-width-unset"
+              className="usa-textarea max-width-unset textarea-resize-vertical"
               data-testid={id}
               id={id}
               name={textName}

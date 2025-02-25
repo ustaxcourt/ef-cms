@@ -1,19 +1,23 @@
-import { ITestableWindow } from '../../helpers/ITestableWindow';
+export type IdleLogoutTesting = {
+  idleActivityMonitor?: {
+    isInTestingMode?: boolean;
+    sessionTimeout?: number;
+    areYouStillThereTime?: number;
+  };
+};
 
-// This is a hack, but I do not know a better way.
 export const overrideIdleTimeouts = ({
-  modalTimeout,
+  areYouStillThereTime,
   sessionTimeout,
   windowObj, // For native cypress, this needs to be defined. For the puppeteer plugin, it should be left blank.
 }: {
-  modalTimeout: number;
+  areYouStillThereTime: number;
   sessionTimeout: number;
-  windowObj?: ITestableWindow;
+  windowObj?: IdleLogoutTesting;
 }) => {
-  const currentWindow = windowObj || (window as unknown as ITestableWindow);
-  currentWindow.cerebral.getModel().set(['constants'], {
-    ...currentWindow.cerebral.getState().constants,
-    SESSION_MODAL_TIMEOUT: modalTimeout,
-    SESSION_TIMEOUT: sessionTimeout,
-  });
+  const currentWindow = windowObj || (window as unknown as IdleLogoutTesting);
+  currentWindow.idleActivityMonitor = {
+    areYouStillThereTime,
+    sessionTimeout,
+  };
 };

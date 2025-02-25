@@ -9,16 +9,12 @@ import { DocumentDisplayIframe } from '../DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
-import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { WarningNotificationComponent } from '../WarningNotification';
 import { WorkItemAlreadyCompletedModal } from '../DocketEntryQc/WorkItemAlreadyCompletedModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import {
-  courtIssuedDocketEntryOnChange,
-  onInputChange,
-  reactSelectValue,
-} from '../../ustc-ui/Utils/documentTypeSelectHelper';
+import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -100,7 +96,10 @@ export const CourtIssuedDocketEntry = connect(
             </div>
             <div className="grid-col-7">
               <div className="display-flex flex-row flex-justify flex-align-center">
-                <div className="margin-top-1 margin-bottom-1 docket-entry-preview-text">
+                <div
+                  className="margin-top-1 margin-bottom-1 docket-entry-preview-text"
+                  data-testid="docket-entry-preview-text"
+                >
                   <span className="text-bold">Docket entry preview: </span>
                   {addCourtIssuedDocketEntryHelper.formattedDocumentTitle}
                 </div>
@@ -120,8 +119,9 @@ export const CourtIssuedDocketEntry = connect(
                   </label>
                   <SelectSearch
                     aria-labelledby="document-type-label"
-                    data-testid="primary-document"
+                    data-testid="court-issued-document-type-search"
                     id="document-type"
+                    isClearable={true}
                     name="eventCode"
                     options={addCourtIssuedDocketEntryHelper.documentTypes}
                     value={reactSelectValue({
@@ -129,24 +129,24 @@ export const CourtIssuedDocketEntry = connect(
                         addCourtIssuedDocketEntryHelper.documentTypes,
                       selectedEventCode: form.eventCode,
                     })}
-                    onChange={(inputValue, { action, name }) => {
-                      courtIssuedDocketEntryOnChange({
-                        action,
-                        inputValue,
-                        name,
-                        updateSequence:
-                          updateCourtIssuedDocketEntryFormValueSequence,
-                        validateSequence:
-                          validateCourtIssuedDocketEntrySequence,
-                      });
-                      return true;
+                    onChange={inputValue => {
+                      [
+                        'documentType',
+                        'documentTitle',
+                        'eventCode',
+                        'scenario',
+                      ].forEach(key =>
+                        updateCourtIssuedDocketEntryFormValueSequence({
+                          key,
+                          value: inputValue ? inputValue[key] : '',
+                        }),
+                      );
+                      validateCourtIssuedDocketEntrySequence();
                     }}
-                    onInputChange={(inputText, { action }) => {
-                      onInputChange({
-                        action,
-                        inputText,
-                        updateSequence:
-                          updateCourtIssuedDocketEntryFormValueSequence,
+                    onInputChange={inputText => {
+                      updateCourtIssuedDocketEntryFormValueSequence({
+                        key: 'searchText',
+                        value: inputText,
                       });
                     }}
                   />
@@ -266,7 +266,7 @@ export const CourtIssuedDocketEntry = connect(
               </div>
 
               <section className="usa-section DocumentDetail">
-                <div className="margin-top-5">
+                <div className="margin-top-5 button-container">
                   {addCourtIssuedDocketEntryHelper.showSaveAndServeButton && (
                     <Button
                       data-testid="serve-to-parties-btn"

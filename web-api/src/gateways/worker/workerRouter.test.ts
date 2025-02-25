@@ -51,6 +51,28 @@ describe('workerRouter', () => {
     );
   });
 
+  it('should make a call to queue a user`s email associated cases for update when the message type is QUEUE_EMAIL_UPDATE_ASSOCIATED_CASES', async () => {
+    const mockMessage: WorkerMessage = {
+      authorizedUser: mockDocketClerkUser,
+      payload: {
+        abc: '123',
+      },
+      type: MESSAGE_TYPES.QUEUE_EMAIL_UPDATE_ASSOCIATED_CASES,
+    };
+
+    await workerRouter(applicationContext, {
+      message: mockMessage,
+    });
+
+    expect(
+      applicationContext.getUseCases().queueEmailUpdateAssociatedCasesWorker,
+    ).toHaveBeenCalledWith(
+      applicationContext,
+      mockMessage.payload,
+      mockMessage.authorizedUser,
+    );
+  });
+
   it('should throw an error when the message type provided was not recognized by the router', async () => {
     const mockMessage: WorkerMessage = {
       authorizedUser: mockDocketClerkUser,

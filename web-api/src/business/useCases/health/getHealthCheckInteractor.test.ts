@@ -74,7 +74,7 @@ describe('getHealthCheckInteractor', () => {
               cancel: () => null,
             }),
           },
-          get: () => Promise.reject(true),
+          get: () => Promise.reject(new Error('broken')),
         };
       },
       getPersistenceGateway() {

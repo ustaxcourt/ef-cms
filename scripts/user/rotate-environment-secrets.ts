@@ -1,51 +1,39 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
+
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import {
   GetSecretValueCommand,
   PutSecretValueCommand,
   SecretsManagerClient,
 } from '@aws-sdk/client-secrets-manager';
-import { requireEnvVars } from '../../shared/admin-tools/util';
-import { shuffle } from 'lodash';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import { makeNewPassword } from './make-new-password';
 
-requireEnvVars(['COGNITO_USER_POOL', 'ENV']);
-
-const { COGNITO_USER_POOL, ENV } = process.env;
+const scriptConfig: ScriptConfig = {
+  description:
+    'rotate-environment-secrets - Rotates secrets in a deployed environment.',
+  environment: {
+    UserPoolId: 'COGNITO_USER_POOL',
+    ci: 'CI',
+    env: 'ENV',
+  },
+  requireActiveAwsSession: true,
+};
+const { ci, env, UserPoolId } = parseArgsAndEnvVars(scriptConfig) as {
+  ci: string;
+  env: string;
+  UserPoolId: string;
+};
 
 const secretsClient = new SecretsManagerClient({ region: 'us-east-1' });
 const cognitoClient = new CognitoIdentityProvider({
   region: 'us-east-1',
 });
 
-const isDevelopmentEnvironment =
-  process.argv[2] && process.argv[2] === '--development';
-
-const makeNewPassword = (): string => {
-  const getRandomChar = charSet =>
-    charSet.charAt(Math.floor(Math.random() * charSet.length));
-
-  // get number between 12 and 20
-  const passwordLength = 12 + Math.floor(Math.random() * 9);
-  const charSets = {
-    characters: '^*.()@#%&/,><:;_~=+-',
-    lowercase: 'abcdefghijklmnopqrstuvwxyz',
-    numbers: '0123456789',
-    uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-  };
-  const allCharacters = Object.keys(charSets)
-    .map(key => charSets[key])
-    .join('');
-
-  // get at least one random char from each of the sets
-  let result = Object.keys(key => getRandomChar(charSets[key])).join('');
-
-  // build the password
-  for (let i = result.length; i <= passwordLength; i++) {
-    result += getRandomChar(allCharacters);
-  }
-
-  // shuffle the password
-  return shuffle(result.split('')).join('');
-};
+const isDevelopmentEnvironment = !['prod', 'test'].includes(env);
 
 const loadSecrets = async (environmentName: string): Promise<any> => {
   const getSecretValueCommand = new GetSecretValueCommand({
@@ -72,7 +60,7 @@ const rotateSecrets = async (environmentName: string): Promise<void> => {
   const USTC_ADMIN_PASS = makeNewPassword();
 
   // for local use only!
-  if (!process.env.CI) {
+  if (!ci || !ci.length) {
     console.log({
       DEFAULT_ACCOUNT_PASS,
       USTC_ADMIN_PASS,
@@ -82,13 +70,13 @@ const rotateSecrets = async (environmentName: string): Promise<void> => {
   await cognitoClient.adminSetUserPassword({
     Password: USTC_ADMIN_PASS,
     Permanent: true,
-    UserPoolId: COGNITO_USER_POOL,
+    UserPoolId,
     Username: secrets.USTC_ADMIN_USER,
   });
   console.log('✅ USTC_ADMIN_USER Cognito Password updated');
 
   const putSecretValueCommand = new PutSecretValueCommand({
-    SecretId: `${ENV}_deploy`,
+    SecretId: `${env}_deploy`,
     SecretString: JSON.stringify({
       ...secrets,
       DEFAULT_ACCOUNT_PASS,
@@ -101,7 +89,7 @@ const rotateSecrets = async (environmentName: string): Promise<void> => {
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  await rotateSecrets(ENV!);
+  await rotateSecrets(env);
   console.log(
     '🏁 All done. Be sure to run setup-test-users.ts or wait for the next deploy',
   );

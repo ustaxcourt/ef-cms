@@ -1,6 +1,7 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { SuccessNotification } from '@web-client/views/SuccessNotification';
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -27,7 +28,7 @@ export const ForgotPassword = connect(
 
               <div className="grid-container bg-white padding-y-3 border border-base-lighter">
                 <div className="display-flex flex-column">
-                  <div className="flex-align-self-center">
+                  <div className="flex-align-center">
                     <h1 className="margin-bottom-1 margin-top-1 inherit-body-font-family">
                       Forgot Password?
                     </h1>
@@ -68,8 +69,10 @@ export const ForgotPassword = connect(
                       <p>
                         If you no longer have access to the email address on
                         file, contact{' '}
-                        <a href="mailto:dawson.support@ustaxcourt.gov">
-                          dawson.support@ustaxcourt.gov
+                        <a
+                          href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}
+                        >
+                          {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
                         </a>
                         .
                       </p>

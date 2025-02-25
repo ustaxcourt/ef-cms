@@ -13,11 +13,7 @@ import { petitionsClerkViewsCaseWithNoDeadlines } from './journey/petitionsClerk
 import { petitionsClerkViewsDeadlineReportForSingleCase } from './journey/petitionsClerkViewsDeadlineReportForSingleCase';
 
 describe('View and manage the deadlines of a case', () => {
-  const cerebralTest = setupTest({
-    constantsOverrides: {
-      DEADLINE_REPORT_PAGE_SIZE: 1,
-    },
-  });
+  const cerebralTest = setupTest();
 
   const randomDay = `0${Math.floor(Math.random() * 9) + 1}`;
   const randomMonth = `0${Math.floor(Math.random() * 9) + 1}`;
@@ -97,6 +93,7 @@ describe('View and manage the deadlines of a case', () => {
     });
   });
 
+  // eslint-disable-next-line jest/no-identical-title
   describe('View a case with no deadlines', () => {
     loginAs(cerebralTest, 'petitionsclerk@example.com');
     petitionsClerkViewsCaseWithNoDeadlines(cerebralTest);

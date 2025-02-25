@@ -6,7 +6,7 @@ import {
 import { submitPendingCaseAssociationRequestInteractor } from './submitPendingCaseAssociationRequestInteractor';
 
 describe('submitPendingCaseAssociationRequest', () => {
-  let caseRecord = {
+  const caseRecord = {
     docketNumber: '123-19',
   };
 

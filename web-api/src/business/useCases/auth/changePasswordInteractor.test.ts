@@ -6,7 +6,7 @@ import {
   UserStatusType,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
-import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
+import { MOCK_PRACTITIONER, petitionerUser } from '@shared/test/mockUsers';
 import {
   ROLES,
   Role,
@@ -14,7 +14,10 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { changePasswordInteractor } from './changePasswordInteractor';
+import {
+  changePasswordInteractor,
+  updateUserPendingEmailRecord,
+} from './changePasswordInteractor';
 import jwt from 'jsonwebtoken';
 
 describe('changePasswordInteractor', () => {
@@ -323,6 +326,48 @@ describe('changePasswordInteractor', () => {
         idToken: expect.anything(),
         refreshToken: expect.anything(),
       });
+    });
+  });
+});
+
+describe('updateUserPendingEmailRecord', () => {
+  beforeEach(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .updateUser.mockResolvedValue(null);
+  });
+
+  it('should set isUpdatingInformation to true if flag is enabled', async () => {
+    await updateUserPendingEmailRecord(applicationContext, {
+      setIsUpdatingInformation: true,
+      user: {
+        ...petitionerUser,
+        isUpdatingInformation: false,
+      },
+    });
+
+    const updateUserCalls =
+      applicationContext.getPersistenceGateway().updateUser.mock.calls;
+    expect(updateUserCalls.length).toEqual(1);
+    expect(updateUserCalls[0][0].user).toMatchObject({
+      isUpdatingInformation: true,
+    });
+  });
+
+  it('should not update isUpdatingInformation property when flag is disabled', async () => {
+    await updateUserPendingEmailRecord(applicationContext, {
+      setIsUpdatingInformation: false,
+      user: {
+        ...petitionerUser,
+        isUpdatingInformation: false,
+      },
+    });
+
+    const updateUserCalls =
+      applicationContext.getPersistenceGateway().updateUser.mock.calls;
+    expect(updateUserCalls.length).toEqual(1);
+    expect(updateUserCalls[0][0].user).toMatchObject({
+      isUpdatingInformation: false,
     });
   });
 });

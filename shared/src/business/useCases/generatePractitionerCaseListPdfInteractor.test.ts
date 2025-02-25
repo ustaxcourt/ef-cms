@@ -1,5 +1,6 @@
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { generatePractitionerCaseListPdfInteractor } from './generatePractitionerCaseListPdfInteractor';
 import {
@@ -16,6 +17,11 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
   });
 
   it('returns an unauthorized error on non internal users', async () => {
+    applicationContext
+      .getUseCases()
+      .getPractitionerCasesInteractor.mockImplementation(() => {
+        throw new UnauthorizedError('Unauthorized to view practitioners cases');
+      });
     await expect(
       generatePractitionerCaseListPdfInteractor(
         applicationContext,
@@ -24,26 +30,30 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
         },
         mockPetitionerUser,
       ),
-    ).rejects.toThrow('Unauthorized');
+    ).rejects.toThrow('Unauthorized to view practitioners cases');
   });
 
   it('looks up the practitioner by the given userId', async () => {
     applicationContext
-      .getPersistenceGateway()
-      .getCasesByDocketNumbers.mockResolvedValue([
-        {
-          ...MOCK_CASE,
-          docketNumber: '108-07',
-          status: CASE_STATUS_TYPES.closed,
-        },
-        {
-          ...MOCK_CASE,
-          docketNumber: '101-17',
-          status: CASE_STATUS_TYPES.closed,
-        },
-        { ...MOCK_CASE, docketNumber: '201-07' },
-        { ...MOCK_CASE, docketNumber: '202-17' },
-      ]);
+      .getUseCases()
+      .getPractitionerCasesInteractor.mockResolvedValue({
+        closedCases: [
+          {
+            ...MOCK_CASE,
+            docketNumber: '108-07',
+            status: CASE_STATUS_TYPES.closed,
+          },
+          {
+            ...MOCK_CASE,
+            docketNumber: '101-17',
+            status: CASE_STATUS_TYPES.closed,
+          },
+        ],
+        openCases: [
+          { ...MOCK_CASE, docketNumber: '201-07' },
+          { ...MOCK_CASE, docketNumber: '202-17' },
+        ],
+      });
 
     applicationContext.getDocumentGenerators().practitionerCaseList = jest
       .fn()
@@ -82,75 +92,19 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
     ).rejects.toThrow('Practitioner not found');
   });
 
-  it('sorts open and closed cases before sending them to document generator', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByDocketNumbers.mockResolvedValue([
-        {
-          ...MOCK_CASE,
-          docketNumber: '108-07',
-          status: CASE_STATUS_TYPES.closed,
-        },
-        {
-          ...MOCK_CASE,
-          docketNumber: '2001-17',
-          status: CASE_STATUS_TYPES.closed,
-        },
-        {
-          ...MOCK_CASE,
-          docketNumber: '501-17',
-          status: CASE_STATUS_TYPES.closed,
-        },
-        { ...MOCK_CASE, docketNumber: '201-07' },
-        { ...MOCK_CASE, docketNumber: '1002-17' },
-        { ...MOCK_CASE, docketNumber: '902-17' },
-      ]);
-
-    applicationContext.getDocumentGenerators().practitionerCaseList = jest
-      .fn()
-      .mockResolvedValue('pdf');
-
-    await generatePractitionerCaseListPdfInteractor(
-      applicationContext,
-      {
-        userId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway().getCasesByDocketNumbers,
-    ).toHaveBeenCalled();
-
-    const caseData =
-      applicationContext.getDocumentGenerators().practitionerCaseList.mock
-        .calls[0][0].data;
-
-    // sends cases sorted by descending docket number
-    expect(caseData).toMatchObject({
-      closedCases: expect.arrayContaining([
-        expect.objectContaining({ docketNumber: '2001-17' }),
-        expect.objectContaining({ docketNumber: '501-17' }),
-        expect.objectContaining({ docketNumber: '108-07' }),
-      ]),
-      openCases: expect.arrayContaining([
-        expect.objectContaining({ docketNumber: '1002-17' }),
-        expect.objectContaining({ docketNumber: '902-17' }),
-        expect.objectContaining({ docketNumber: '201-07' }),
-      ]),
-    });
-  });
-
   it('generates the practitioner case list PDF', async () => {
     applicationContext
-      .getPersistenceGateway()
-      .getCasesByDocketNumbers.mockResolvedValue([
-        {
-          ...MOCK_CASE,
-          status: CASE_STATUS_TYPES.closed,
-        },
-        { ...MOCK_CASE },
-      ]);
+      .getUseCases()
+      .getPractitionerCasesInteractor.mockResolvedValue({
+        closedCases: [
+          {
+            ...MOCK_CASE,
+            caseTitle: 'Test Petitioner',
+            status: CASE_STATUS_TYPES.closed,
+          },
+        ],
+        openCases: [{ ...MOCK_CASE, caseTitle: 'Test Petitioner' }],
+      });
 
     applicationContext.getDocumentGenerators().practitionerCaseList = jest
       .fn()
@@ -165,7 +119,7 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().getCasesByDocketNumbers,
+      applicationContext.getUseCases().getPractitionerCasesInteractor,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().practitionerCaseList.mock

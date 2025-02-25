@@ -1,6 +1,6 @@
 import { userIdLimiter } from './userIdLimiter';
 
-let mockPersistenceGateway = {};
+const mockPersistenceGateway = {};
 
 jest.mock('../applicationContext', () => {
   return {
@@ -11,7 +11,7 @@ jest.mock('../applicationContext', () => {
 });
 
 describe('userIdLimiter', () => {
-  let incrementKeyCountMock = jest.fn();
+  const incrementKeyCountMock = jest.fn();
   const deleteKeyCountMock = jest.fn();
   let statusMock;
   let jsonMock;

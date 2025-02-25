@@ -61,7 +61,7 @@ describe('caseAssociationRequestHelper', () => {
   });
 
   it('returns correct values when documentType is undefined', () => {
-    let testState = {
+    const testState = {
       ...state,
       form: { documentType: undefined, filersMap: {} },
     };

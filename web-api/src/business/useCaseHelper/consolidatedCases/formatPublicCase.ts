@@ -17,7 +17,7 @@ import { decorateForCaseStatus } from '@shared/business/useCases/getCaseInteract
 export const formatPublicCase = ({
   rawCaseRecord,
 }: {
-  rawCaseRecord?: Case;
+  rawCaseRecord?: Case | RawCase;
 }) => {
   if (isSealedCase(rawCaseRecord)) {
     rawCaseRecord = caseSealedFormatter(rawCaseRecord);

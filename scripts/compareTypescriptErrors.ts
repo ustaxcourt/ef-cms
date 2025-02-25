@@ -1,3 +1,5 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
+
 import { spawnSync } from 'child_process';
 
 /*

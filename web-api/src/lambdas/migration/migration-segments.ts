@@ -11,7 +11,7 @@ import {
   createISODateString,
   dateStringsCompared,
 } from '@shared/business/utilities/DateHandler';
-import { createLogger } from '@web-api/createLogger';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { migrationsToRun } from './migrationsToRun';
 import { migrateItems as validationMigration } from './migrations/0000-validate-all-items';
 import promiseRetry from 'promise-retry';
@@ -87,7 +87,7 @@ export const migrateRecords = async (
     ranMigrations?: { [key: string]: boolean } | undefined;
   },
 ) => {
-  for (let { key, script } of migrationsToRun) {
+  for (const { key, script } of migrationsToRun) {
     if (!ranMigrations || !ranMigrations[key]) {
       applicationContext.logger.debug(`about to run migration ${key}`);
       items = await script(items, applicationContext);
@@ -120,9 +120,9 @@ export const processItems = async (
     throw err;
   }
   const chunks = chunk(items, MAX_DYNAMO_WRITE_SIZE);
-  for (let aChunk of chunks) {
+  for (const aChunk of chunks) {
     const promises: Promise<string | PutCommandOutput>[] = [];
-    for (let item of aChunk) {
+    for (const item of aChunk) {
       promises.push(
         promiseRetry(retry => {
           return dynamoDbDocumentClient
@@ -150,19 +150,16 @@ export const processItems = async (
 };
 
 export const handler: Handler = async (event: SQSEvent, context: Context) => {
-  const applicationContext = createApplicationContext(
-    {},
-    createLogger({
-      defaultMeta: {
-        environment: {
-          stage: process.env.STAGE || 'local',
-        },
-        requestId: {
-          lambda: context.awsRequestId,
-        },
-      },
-    }),
-  );
+  const applicationContext = createApplicationContext();
+  getLogger().clearContext();
+  getLogger().addContext({
+    environment: {
+      stage: process.env.STAGE || 'local',
+    },
+    requestId: {
+      lambda: context.awsRequestId,
+    },
+  });
   const { Records } = event;
   const { body, receiptHandle } = Records[0];
   const { segment, totalSegments } = JSON.parse(body);
@@ -174,7 +171,7 @@ export const handler: Handler = async (event: SQSEvent, context: Context) => {
     totalSegments,
   });
   const ranMigrations = {};
-  for (let { key } of migrationsToRun) {
+  for (const { key } of migrationsToRun) {
     Object.assign(ranMigrations, await hasMigrationRan(key));
   }
 

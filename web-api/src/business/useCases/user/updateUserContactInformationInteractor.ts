@@ -112,7 +112,7 @@ const updateUserContactInformationHelper = async (
   });
 
   if (isArray(results) && !results.length) {
-    userEntity.setIsUpdatingInformation(undefined);
+    userEntity.setIsUpdatingInformation(false);
     await applicationContext.getPersistenceGateway().updateUser({
       applicationContext,
       user: userEntity.validate().toRawObject(),
@@ -198,6 +198,13 @@ export const determineEntitiesToLock = async (
   applicationContext: ServerApplicationContext,
   { userId }: { userId: string },
 ) => {
+  await applicationContext
+    .getPersistenceGateway()
+    .getUserByIdOnceAllUpdatesComplete({
+      applicationContext,
+      userId,
+    });
+
   const cases = await applicationContext
     .getPersistenceGateway()
     .getCasesForUser({

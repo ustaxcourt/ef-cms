@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { formattedCaseDetail as formattedCaseDetailComputed } from './formattedCaseDetail';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
-import { mockPetitioners } from './formattedCaseDetail.test';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
+import { mockPetitioners } from '@web-client/presenter/computeds/mockFormattedCaseDetailTestFixtures';
 
 describe('getCalendarDetailsForTrialSession', () => {
   const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();

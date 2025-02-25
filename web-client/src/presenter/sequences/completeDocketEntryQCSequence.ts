@@ -5,7 +5,6 @@ import { getCaseAction } from '../actions/getCaseAction';
 import { isWorkItemAlreadyCompletedAction } from '../actions/isWorkItemAlreadyCompletedAction';
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
 import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
@@ -13,6 +12,7 @@ import { setPaperServicePartiesAction } from '../actions/setPaperServicePartiesA
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setPreviousDocumentDocketEntryAction } from '../actions/FileDocument/setPreviousDocumentDocketEntryAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -33,8 +33,8 @@ export const completeDocketEntryQCSequence = [
       validateDocketEntryAction,
       {
         error: [
-          setAlertErrorAction,
           setValidationErrorsAction,
+          setScrollToErrorNotificationAction,
           setValidationAlertErrorsAction,
         ],
         success: showProgressSequenceDecorator([

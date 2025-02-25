@@ -1,4 +1,7 @@
-import { CASE_TYPES_MAP } from '../../shared/src/business/entities/EntityConstants';
+import {
+  CASE_TYPES_MAP,
+  SESSION_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesARemoteTrialSession } from './journey/docketClerkCreatesARemoteTrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
@@ -18,7 +21,7 @@ describe('petitions clerk sets a remote trial session calendar', () => {
   const overrides = {
     maxCases: 2,
     preferredTrialCity: trialLocation,
-    sessionType: 'Small',
+    sessionType: SESSION_TYPES.small,
     trialLocation,
   };
 

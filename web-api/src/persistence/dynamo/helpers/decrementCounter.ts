@@ -1,6 +1,5 @@
 import { updateConsistent } from '../../dynamodbClientService';
 
-// eslint-disable-next-line spellcheck/spell-checker
 /**
  * decrementCounter
  *

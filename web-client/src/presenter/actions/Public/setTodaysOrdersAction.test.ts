@@ -1,3 +1,4 @@
+import { PublicClientState } from '@web-client/presenter/state-public';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setTodaysOrdersAction } from './setTodaysOrdersAction';
 
@@ -24,15 +25,18 @@ describe('setTodaysOrdersAction', () => {
       },
     ];
 
-    const { state } = await runAction(setTodaysOrdersAction, {
-      props: {
-        todaysOrders: mockTodaysOrdersFromProps,
-        totalCount: 17,
+    const { state } = await runAction<void, PublicClientState>(
+      setTodaysOrdersAction,
+      {
+        props: {
+          todaysOrders: mockTodaysOrdersFromProps,
+          totalCount: 17,
+        },
+        state: {
+          todaysOrders: { page: 2, results: mockTodaysOrdersFromState },
+        },
       },
-      state: {
-        todaysOrders: { page: 2, results: mockTodaysOrdersFromState },
-      },
-    });
+    );
 
     expect(state.todaysOrders.results).toMatchObject([
       ...mockTodaysOrdersFromState,
@@ -41,55 +45,67 @@ describe('setTodaysOrdersAction', () => {
   });
 
   it('should set state.todaysOrders.totalCount from props.todaysOrders.totalCount', async () => {
-    const { state } = await runAction(setTodaysOrdersAction, {
-      props: {
-        todaysOrders: [],
-        totalCount: 17,
+    const { state } = await runAction<void, PublicClientState>(
+      setTodaysOrdersAction,
+      {
+        props: {
+          todaysOrders: [],
+          totalCount: 17,
+        },
+        state: {
+          todaysOrders: { results: [] },
+        },
       },
-      state: {
-        todaysOrders: { results: [] },
-      },
-    });
+    );
 
     expect(state.todaysOrders.totalCount).toBe(17);
   });
 
   it('should default state.todaysOrders.page to 1', async () => {
-    const { state } = await runAction(setTodaysOrdersAction, {
-      props: {
-        todaysOrders: [],
+    const { state } = await runAction<void, PublicClientState>(
+      setTodaysOrdersAction,
+      {
+        props: {
+          todaysOrders: [],
+        },
+        state: {
+          todaysOrders: { results: [] },
+        },
       },
-      state: {
-        todaysOrders: { results: [] },
-      },
-    });
+    );
 
     expect(state.todaysOrders.page).toBe(2); // we increment this value before setting it in state
   });
 
   it('should set state.todaysOrders.page to the value in state + 1', async () => {
-    const { state } = await runAction(setTodaysOrdersAction, {
-      props: {
-        todaysOrders: [{ some: 'result' }],
+    const { state } = await runAction<void, PublicClientState>(
+      setTodaysOrdersAction,
+      {
+        props: {
+          todaysOrders: [{ some: 'result' }],
+        },
+        state: {
+          todaysOrders: { page: 4, results: [{ some: 'other' }] },
+        },
       },
-      state: {
-        todaysOrders: { page: 4, results: [{ some: 'other' }] },
-      },
-    });
+    );
 
     expect(state.todaysOrders.page).toBe(5);
     expect(state.todaysOrders.results.length).toBe(2);
   });
 
   it('should set state.todaysOrders.results to the props.todaysOrders if page is 1', async () => {
-    const { state } = await runAction(setTodaysOrdersAction, {
-      props: {
-        todaysOrders: [{ some: 'result' }],
+    const { state } = await runAction<void, PublicClientState>(
+      setTodaysOrdersAction,
+      {
+        props: {
+          todaysOrders: [{ some: 'result' }],
+        },
+        state: {
+          todaysOrders: { page: 1, results: [{ some: 'other' }] },
+        },
       },
-      state: {
-        todaysOrders: { page: 1, results: [{ some: 'other' }] },
-      },
-    });
+    );
 
     expect(state.todaysOrders.results.length).toBe(1);
     expect(state.todaysOrders.results).toEqual([{ some: 'result' }]);

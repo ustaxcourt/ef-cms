@@ -1,12 +1,12 @@
 import {
   COURT_ISSUED_EVENT_CODES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+} from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   FORMATS,
   formatDateString,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import {
   InvalidRequest,
   NotFoundError,
@@ -15,13 +15,13 @@ import {
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
-import { getClinicLetterKey } from '../../../../../shared/src/business/utilities/getClinicLetterKey';
-import { replaceBracketed } from '../../../../../shared/src/business/utilities/replaceBracketed';
+import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
+import { getClinicLetterKey } from '@shared/business/utilities/getClinicLetterKey';
+import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 
 export const serveThirtyDayNoticeInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -138,6 +138,17 @@ export const serveThirtyDayNoticeInteractor = async (
           caseCaption: caseEntity.caseCaption,
         });
 
+        const formatCityState = ({
+          city,
+          state,
+        }: {
+          city?: string;
+          state?: string;
+        }) => {
+          const formattedString = [city, state].filter(Boolean).join(', ');
+          return formattedString;
+        };
+
         let noticePdf = await applicationContext
           .getDocumentGenerators()
           .thirtyDayNoticeOfTrial({
@@ -158,7 +169,10 @@ export const serveThirtyDayNoticeInteractor = async (
               trialLocation: {
                 address1: trialSession.address1,
                 address2: trialSession.address2,
-                cityState: trialSession.trialLocation,
+                cityState: formatCityState({
+                  city: trialSession.city,
+                  state: trialSession.state,
+                }),
                 courthouseName: trialSession.courthouseName,
                 postalCode: trialSession.postalCode,
               },

@@ -42,7 +42,7 @@ export const trialSessionHeaderHelper = (
   const showSwitchToSessionDetail =
     isAssigned && 'TrialSessionWorkingCopy'.includes(get(state.currentPage));
   const showSwitchToWorkingCopy =
-    isAssigned && 'TrialSessionDetail'.includes(get(state.currentPage));
+    isAssigned && 'TrialSessionDetails'.includes(get(state.currentPage));
   const showPrintPaperServicePDFsButton =
     formattedTrialSession!.paperServicePdfs.length > 0 &&
     get(state.permissions!.TRIAL_SESSIONS);

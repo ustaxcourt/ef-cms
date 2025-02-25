@@ -1,5 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
-
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**

@@ -17,6 +17,11 @@ module "dynamo_table_alpha" {
 
   environment = var.environment
   table_name  = "efcms-${var.environment}-alpha"
+
+  providers = {
+    aws           = aws
+    aws.us-west-1 = aws.us-west-1
+  }
 }
 
 module "dynamo_table_beta" {
@@ -24,6 +29,11 @@ module "dynamo_table_beta" {
 
   environment = var.environment
   table_name  = "efcms-${var.environment}-beta"
+
+  providers = {
+    aws           = aws
+    aws.us-west-1 = aws.us-west-1
+  }
 }
 
 module "elasticsearch_alpha" {
@@ -52,7 +62,7 @@ resource "aws_ssm_parameter" "elasticsearch_alpha_endpoint_ssm" {
 module "elasticsearch_beta" {
   source = "../elasticsearch"
 
-  count = var.should_es_beta_exist ? 1 : 0 
+  count = var.should_es_beta_exist ? 1 : 0
 
   environment         = var.environment
   domain_name         = "efcms-search-${var.environment}-beta"

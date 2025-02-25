@@ -20,11 +20,14 @@ describe('migration', () => {
     });
 
     it('migrates items and generates dynamodb PutRequest objects with the resulting data', async () => {
-      const mockCase = marshall({
-        ...MOCK_CASE,
-        pk: `case|${MOCK_CASE.docketNumber}`,
-        sk: `case|${MOCK_CASE.docketNumber}`,
-      });
+      const mockCase = marshall(
+        {
+          ...MOCK_CASE,
+          pk: `case|${MOCK_CASE.docketNumber}`,
+          sk: `case|${MOCK_CASE.docketNumber}`,
+        },
+        { removeUndefinedValues: true },
+      );
       const mockItems: Record<string, any>[] = [mockCase];
       const mockMigrateRecords = jest.fn().mockReturnValue(mockItems);
       const dynamodb = new DynamoDBClient({

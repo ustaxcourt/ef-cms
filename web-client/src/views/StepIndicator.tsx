@@ -108,8 +108,14 @@ export const StepIndicator = connect(
 
 StepIndicator.displayName = 'StepIndicator';
 
-function AccessibilitySpan(isCurrentStep, completed) {
-  if (isCurrentStep) return;
+function AccessibilitySpan({
+  completed,
+  isCurrentStep,
+}: {
+  isCurrentStep: boolean;
+  completed: boolean;
+}) {
+  if (isCurrentStep) return null;
   return (
     <span className="usa-sr-only">
       {completed ? 'completed' : 'not completed'}

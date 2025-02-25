@@ -25,5 +25,4 @@ const config: Config = {
   workerIdleMemoryLimit: '5%', // After a jest runner uses X% of total system memory, recreate the runner.
 };
 
-// eslint-disable-next-line import/no-default-export
 export default config;

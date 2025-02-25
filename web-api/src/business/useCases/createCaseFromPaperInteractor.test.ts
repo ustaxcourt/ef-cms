@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
@@ -129,7 +130,7 @@ describe('createCaseFromPaperInteractor', () => {
       updatedCaseStatus: CASE_STATUS_TYPES.new,
     };
 
-    expect(caseFromPaper).toMatchObject({
+    expect(caseFromPaper.caseDetail).toMatchObject({
       caseStatusHistory: [expectedCaseStatus],
     });
   });
@@ -177,7 +178,7 @@ describe('createCaseFromPaperInteractor', () => {
     );
 
     const applicationForWaiverOfFilingFeeDocketEntry =
-      caseFromPaper.docketEntries.find(
+      caseFromPaper.caseDetail.docketEntries.find(
         d =>
           d.eventCode ===
           INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.eventCode,
@@ -240,9 +241,11 @@ describe('createCaseFromPaperInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    const corporateDisclosureDocketEntry = caseFromPaper.docketEntries.find(
-      d => d.eventCode === INITIAL_DOCUMENT_TYPES.corporateDisclosure.eventCode,
-    );
+    const corporateDisclosureDocketEntry =
+      caseFromPaper.caseDetail.docketEntries.find(
+        d =>
+          d.eventCode === INITIAL_DOCUMENT_TYPES.corporateDisclosure.eventCode,
+      );
     expect(corporateDisclosureDocketEntry).toMatchObject({
       docketEntryId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       docketNumber: '101-00',
@@ -298,7 +301,7 @@ describe('createCaseFromPaperInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    const stinDocketEntry = caseFromPaper.docketEntries.find(
+    const stinDocketEntry = caseFromPaper.caseDetail.docketEntries.find(
       d => d.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode,
     );
     expect(stinDocketEntry).toMatchObject({
@@ -359,7 +362,7 @@ describe('createCaseFromPaperInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    const rqtDocketEntry = caseFromPaper.docketEntries.find(
+    const rqtDocketEntry = caseFromPaper.caseDetail.docketEntries.find(
       d =>
         d.eventCode === INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
     );
@@ -416,7 +419,7 @@ describe('createCaseFromPaperInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    const atpDocketEntry = caseFromPaper.docketEntries.find(
+    const atpDocketEntry = caseFromPaper.caseDetail.docketEntries.find(
       d =>
         d.eventCode === INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
     );
@@ -545,10 +548,12 @@ describe('createCaseFromPaperInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    const reqForPlaceOfTrialDocketEntry = caseFromPaper.docketEntries.find(
-      d =>
-        d.eventCode === INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-    );
+    const reqForPlaceOfTrialDocketEntry =
+      caseFromPaper.caseDetail.docketEntries.find(
+        d =>
+          d.eventCode ===
+          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+      );
 
     expect(reqForPlaceOfTrialDocketEntry).toBeDefined();
 

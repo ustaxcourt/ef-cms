@@ -20,7 +20,7 @@ export const TableFilters = ({ filters, onSelect }) => {
         {filters.map(
           ({ isSelected, key, label, options, useInlineSelect = true }) => {
             // track the input element so we can manually reset the value
-            const ref = useRef();
+            const ref = useRef<HTMLSelectElement>(null);
 
             const clearSelect = e => {
               e.preventDefault();
@@ -30,7 +30,7 @@ export const TableFilters = ({ filters, onSelect }) => {
               });
               // the select input is not resetting back (due to cerebral js state or react) not
               // correctly updating the dom, so we need to reset it manually
-              ref.current.value = '';
+              if (ref.current) ref.current.value = '';
             };
 
             return (

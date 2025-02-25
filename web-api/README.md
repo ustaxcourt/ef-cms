@@ -11,7 +11,7 @@
 
 `npm run start:api`
 
-This will host a local server at http://localhost:5000.
+This will host a local server at http://localhost:4000 and http://localhost:4001.
 
 ### Running Unit Tests with Coverage
 

@@ -1,3 +1,4 @@
+import { PublicClientState } from '@web-client/presenter/state-public';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-public';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -9,18 +10,21 @@ describe('submitPublicOrderAdvancedSearchAction', () => {
   });
 
   it('gets the public order information', async () => {
-    await runAction(submitPublicOrderAdvancedSearchAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        advancedSearchForm: {
-          orderSearch: {
-            keyword: 'a',
+    await runAction<{ searchResults: any }, PublicClientState>(
+      submitPublicOrderAdvancedSearchAction,
+      {
+        modules: {
+          presenter,
+        },
+        state: {
+          advancedSearchForm: {
+            orderSearch: {
+              keyword: 'a',
+            },
           },
         },
       },
-    });
+    );
 
     expect(
       applicationContext.getUseCases().orderPublicSearchInteractor,
@@ -81,7 +85,10 @@ describe('submitPublicOrderAdvancedSearchAction', () => {
         throw e;
       });
 
-    const { state } = await runAction(submitPublicOrderAdvancedSearchAction, {
+    const { state } = await runAction<
+      { searchResults: any },
+      PublicClientState
+    >(submitPublicOrderAdvancedSearchAction, {
       modules: {
         presenter,
       },

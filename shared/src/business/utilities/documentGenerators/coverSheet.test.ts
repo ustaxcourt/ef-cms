@@ -59,7 +59,7 @@ describe('coverSheet', () => {
         data: {
           caseCaptionExtension: PARTY_TYPES.petitioner,
           caseTitle: 'Test Person',
-          consolidatedCases: new Array(38).fill(null).map((v, i) => ({
+          consolidatedCases: new Array(38).fill(null).map((_v, i) => ({
             docketNumber: `${24929 + i}-17`,
             documentNumber: i + 101,
           })),

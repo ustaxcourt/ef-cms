@@ -1,3 +1,7 @@
+import {
+  SESSION_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 import { trialCalendar } from './trialCalendar';
@@ -88,8 +92,8 @@ describe('trialCalendar', () => {
             judge: 'Joseph Dredd',
             notes:
               'The one with the velour shirt is definitely looking at me funny.',
-            proceedingType: 'In Person',
-            sessionType: 'Hybrid',
+            proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+            sessionType: SESSION_TYPES.hybrid,
             startDate: 'May 1, 2020',
             startTime: '10:00am',
             trialClerk: 'Clerky McGee',
@@ -195,8 +199,8 @@ describe('trialCalendar', () => {
             judge: 'Joseph Dredd',
             notes:
               'The one with the velour shirt is definitely looking at me funny.',
-            proceedingType: 'In Person',
-            sessionType: 'Hybrid',
+            proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+            sessionType: SESSION_TYPES.hybrid,
             startDate: 'May 1, 2020',
             startTime: '10:00am',
             trialClerk: 'Clerky McGee',
@@ -296,8 +300,8 @@ describe('trialCalendar', () => {
             notes:
               'The one with the velour shirt is definitely looking at me funny.',
             password: 'Password 1',
-            proceedingType: 'Remote',
-            sessionType: 'Hybrid',
+            proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+            sessionType: SESSION_TYPES.hybrid,
             startDate: 'May 1, 2020',
             startTime: '10:00am',
             trialClerk: 'Clerky McGee',
@@ -407,8 +411,8 @@ describe('trialCalendar', () => {
             notes:
               'The one with the velour shirt is definitely looking at me funny.',
             password: 'Password 1',
-            proceedingType: 'Remote',
-            sessionType: 'Hybrid',
+            proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+            sessionType: SESSION_TYPES.hybrid,
             startDate: 'May 1, 2020',
             startTime: '10:00am',
             trialClerk: 'Clerky McGee',
@@ -457,8 +461,8 @@ describe('trialCalendar', () => {
               'Alexandria Ocasio-Cortez\n alexandria.ocasio.cortez@this_email_should_wrap_too.gov \n Phone: (098) 765-4321',
             judge: 'Joseph Dredd',
             notes: undefined,
-            proceedingType: 'In Person',
-            sessionType: 'Hybrid',
+            proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+            sessionType: SESSION_TYPES.hybrid,
             startDate: 'May 1, 2020',
             startTime: '10:00am',
             trialClerk: 'Clerky McGee',

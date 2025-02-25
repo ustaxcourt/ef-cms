@@ -1,14 +1,22 @@
-/**
- * serveGeneratedNoticesOnCase
- *
- * @param {object} providers the providers object
- * @param {object} applicationContext the application context
- * @param {object} providers.caseEntity the case data
- * @param {object} providers.newPdfDoc the new pdf document
- * @param {object} providers.noticeDocketEntryEntity the notice docket entry entity
- * @param {object} providers.noticeDocumentPdfData the notice document pdf data
- * @param {object} providers.servedParties the served parties
- */
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { PDFDocument } from 'pdf-lib';
+
+type ServeGeneratedNoticesOnCaseParams = {
+  applicationContext: ServerApplicationContext;
+  caseEntity: Case;
+  newPdfDoc: PDFDocument;
+  noticeDocketEntryEntity: DocketEntry;
+  noticeDocumentPdfData: Uint8Array<ArrayBufferLike>;
+  servedParties: {
+    all: any[];
+    paper: any[];
+    electronic: Array<{ email: string; name: string }>;
+  };
+  skipEmailToIrs?: boolean;
+};
+
 export const serveGeneratedNoticesOnCase = async ({
   applicationContext,
   caseEntity,
@@ -17,7 +25,7 @@ export const serveGeneratedNoticesOnCase = async ({
   noticeDocumentPdfData,
   servedParties,
   skipEmailToIrs = false,
-}) => {
+}: ServeGeneratedNoticesOnCaseParams) => {
   await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
     applicationContext,
     caseEntity,

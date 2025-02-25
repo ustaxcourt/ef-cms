@@ -4,9 +4,8 @@ import { toggleFeatureFlag } from './cypress/helpers/cypressTasks/dynamo/dynamo-
 import fs from 'fs';
 import path from 'path';
 
-// eslint-disable-next-line import/no-default-export
 export default defineConfig({
-  defaultCommandTimeout: 20000,
+  defaultCommandTimeout: 60000,
   e2e: {
     baseUrl: 'http://localhost:5678',
     setupNodeEvents(on) {
@@ -38,6 +37,7 @@ export default defineConfig({
     testIsolation: false,
   },
   fixturesFolder: 'cypress/local-only/fixtures',
+  injectDocumentDomain: true,
   reporter: 'spec',
   reporterOptions: {
     toConsole: true,

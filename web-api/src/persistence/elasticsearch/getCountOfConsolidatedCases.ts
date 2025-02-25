@@ -1,10 +1,11 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { count } from './searchClient';
 
 export const getCountOfConsolidatedCases = async ({
   applicationContext,
   leadDocketNumber,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   leadDocketNumber: string;
 }): Promise<number> => {
   const results = await count({

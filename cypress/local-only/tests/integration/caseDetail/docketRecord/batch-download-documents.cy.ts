@@ -1,12 +1,12 @@
 import { createAndServePaperPetition } from '../../../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { createISODateString } from '../../../../../../shared/src/business/utilities/DateHandler';
+import { externalUserCreatesElectronicCase } from '../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { externalUserSearchesDocketNumber } from '../../../../../helpers/advancedSearch/external-user-searches-docket-number';
 import { goToCase } from '../../../../../helpers/caseDetail/go-to-case';
 import {
   loginAsDocketClerk,
   loginAsPetitioner,
 } from '../../../../../helpers/authentication/login-as-helpers';
-import { petitionerCreatesElectronicCase } from '../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkQcsAndServesElectronicCase } from '../../../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
 
 const confirmCountOfDocumentsToDownload = (documentsCreatedCount: number) => {
@@ -276,7 +276,7 @@ describe('Batch Download Documents', () => {
 
   it('should not show download controls for external users', () => {
     loginAsPetitioner();
-    petitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       petitionsClerkQcsAndServesElectronicCase(docketNumber);
       loginAsPetitioner();
       externalUserSearchesDocketNumber(docketNumber);

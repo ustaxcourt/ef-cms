@@ -190,7 +190,10 @@ describe('caseFilter', () => {
     });
 
     it('should format sealed addresses in search results if user does not have permission to see sealed contact addresses', () => {
-      let result = caseSearchFilter(caseSearchResults, mockPetitionsClerkUser);
+      const result = caseSearchFilter(
+        caseSearchResults,
+        mockPetitionsClerkUser,
+      );
 
       expect(result.length).toEqual(4);
       expect(result[2].petitioners[0]).toMatchObject({
@@ -201,13 +204,16 @@ describe('caseFilter', () => {
     });
 
     it('should keep sealed cases in search results if user is an internal user with permission to see sealed cases', () => {
-      let result = caseSearchFilter(caseSearchResults, mockPetitionsClerkUser);
+      const result = caseSearchFilter(
+        caseSearchResults,
+        mockPetitionsClerkUser,
+      );
 
       expect(result.length).toEqual(4);
     });
 
     it('should keep sealed cases in search results if user is an IRS superuser with permission to see sealed cases', () => {
-      let result = caseSearchFilter(caseSearchResults, mockIrsSuperuser);
+      const result = caseSearchFilter(caseSearchResults, mockIrsSuperuser);
 
       expect(result.length).toEqual(4);
     });

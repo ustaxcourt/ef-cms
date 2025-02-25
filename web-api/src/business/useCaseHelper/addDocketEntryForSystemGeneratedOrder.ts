@@ -60,7 +60,7 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
     titleOfClerk = title;
   }
 
-  let orderPdfData = await applicationContext.getDocumentGenerators().order({
+  const orderPdfData = await applicationContext.getDocumentGenerators().order({
     applicationContext,
     data: {
       caseCaptionExtension,

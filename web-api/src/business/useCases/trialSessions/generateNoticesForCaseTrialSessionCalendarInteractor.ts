@@ -1,17 +1,17 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+} from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   RawTrialSession,
   TrialSession,
-} from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+} from '@shared/business/entities/trialSessions/TrialSession';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
-import { copyPagesAndAppendToTargetPdf } from '../../../../../shared/src/business/utilities/copyPagesAndAppendToTargetPdf';
-import { shouldAppendClinicLetter } from '../../../../../shared/src/business/utilities/shouldAppendClinicLetter';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
+import { shouldAppendClinicLetter } from '@shared/business/utilities/shouldAppendClinicLetter';
 
 /**
  * serves a notice of trial session and standing pretrial document on electronic
@@ -58,7 +58,7 @@ const serveNoticesForCase = async ({
   const combinedDocumentsPdf = await PDFDocument.create();
 
   if (servedParties.paper.length > 0) {
-    for (let party of servedParties.paper) {
+    for (const party of servedParties.paper) {
       // practitioners do not have a contactId
       let noticeDocumentPdf;
       const userId = party.userId || party.contactId;
@@ -139,7 +139,7 @@ const setNoticeForCase = async ({
   const caseEntity = new Case(caseRecord, { authorizedUser: undefined });
   const { procedureType } = caseRecord;
 
-  let noticeOfTrialIssued = await applicationContext
+  const noticeOfTrialIssued = await applicationContext
     .getUseCases()
     .generateNoticeOfTrialIssuedInteractor(applicationContext, {
       docketNumber: caseEntity.docketNumber,

@@ -29,7 +29,10 @@ export const BatchDownloadProgress = connect(
         <div className="sticky-footer sticky-footer--container">
           <div className="usa-section grid-container padding-bottom-0 margin-top-1">
             <div className="progress-batch-download">
-              <h3 id="progress-description">
+              <h3
+                data-testid="progress-bar-description"
+                id="progress-description"
+              >
                 {batchDownloadHelper.progressDescription}
               </h3>
               <ProgressBar

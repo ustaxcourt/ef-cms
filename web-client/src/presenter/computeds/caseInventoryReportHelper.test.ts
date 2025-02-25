@@ -74,25 +74,11 @@ describe('caseInventoryReportHelper', () => {
     });
   });
 
-  it('should return a result count from caseInventoryReportData', () => {
+  it('should sort and format cases from caseInventoryReportData.foundCasesForCurrentPage', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
-          totalCount: '1',
-        },
-        screenMetadata: {},
-      },
-    });
-
-    expect(result.resultCount).toEqual('1');
-    expect(result.formattedReportData).toEqual([]);
-  });
-
-  it('should sort and format cases from caseInventoryReportData.foundCases', () => {
-    const result = runCompute(caseInventoryReportHelper, {
-      state: {
-        caseInventoryReportData: {
-          foundCases: [
+          foundCasesForCurrentPage: [
             {
               correspondence: [],
               docketNumber: '123-20',
@@ -110,6 +96,7 @@ describe('caseInventoryReportHelper', () => {
               docketNumberWithSuffix: '135-19',
             },
           ],
+          foundCasesTotalCount: '3',
         },
         screenMetadata: {},
       },
@@ -128,91 +115,47 @@ describe('caseInventoryReportHelper', () => {
     ]);
   });
 
-  it('should return the nextPageSize as a calculation of the number of results on the next page', () => {
+  it('should return the pageCount as a calculation of the number of total results over the case inventory report page size constant', () => {
     let result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
-          foundCases: [],
-          totalCount: testCaseInventoryPageSize * 3, // three pages of data
+          foundCasesTotalCount: testCaseInventoryPageSize * 3, // three pages of data
         },
-        screenMetadata: {
-          page: 1, // the next page should be a full testCaseInventoryPageSize set of results
-        },
+        screenMetadata: {},
       },
     });
 
-    expect(result.nextPageSize).toEqual(testCaseInventoryPageSize);
+    expect(result.pageCount).toEqual(3);
 
     result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
-          foundCases: [],
-          totalCount: testCaseInventoryPageSize + 1, // 1 more than a full page means a second page with 1 result
+          foundCasesTotalCount: testCaseInventoryPageSize + 1,
         },
-        screenMetadata: {
-          page: 1,
-        },
+        screenMetadata: {},
       },
     });
 
-    expect(result.nextPageSize).toEqual(1);
-
-    const lastFullPage = 3;
-    const totalCount = testCaseInventoryPageSize * lastFullPage + 1; // we want to see 1 result on the last page
+    expect(result.pageCount).toEqual(2);
 
     result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
-          foundCases: [],
-          totalCount,
+          foundCasesTotalCount: 0,
         },
-        screenMetadata: {
-          page: lastFullPage + 1, // Last page of results (where there should be only one result)
-        },
+        screenMetadata: {},
       },
     });
 
-    expect(result.nextPageSize).toEqual(0);
+    expect(result.pageCount).toEqual(0);
   });
 
-  it('should show the load more button when there are more results to load', () => {
+  it('should show the no results message if a filter is selected but foundCasesTotalCount is 0', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
-          foundCases: [],
-          totalCount: 200,
-        },
-        screenMetadata: {
-          page: 1,
-        },
-      },
-    });
-
-    expect(result.showLoadMoreButton).toBeTruthy();
-  });
-
-  it('should NOT show the load more button when there are NO MORE results to load', () => {
-    const result = runCompute(caseInventoryReportHelper, {
-      state: {
-        caseInventoryReportData: {
-          foundCases: [],
-          totalCount: testCaseInventoryPageSize,
-        },
-        screenMetadata: {
-          page: 1,
-        },
-      },
-    });
-
-    expect(result.showLoadMoreButton).toBeFalsy();
-  });
-
-  it('should show the no results message if a filter is selected but totalCount is 0', () => {
-    const result = runCompute(caseInventoryReportHelper, {
-      state: {
-        caseInventoryReportData: {
-          foundCases: [],
-          totalCount: 0,
+          foundCasesForCurrentPage: [],
+          foundCasesTotalCount: 0,
         },
         screenMetadata: {
           associatedJudge: CHIEF_JUDGE,
@@ -226,16 +169,14 @@ describe('caseInventoryReportHelper', () => {
     expect(result.showResultsTable).toBeFalsy();
   });
 
-  it('should show the select a filter message if totalCount is 0 and a filter is not selected', () => {
+  it('should show the select a filter message if foundCasesTotalCount is 0 and a filter is not selected', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
-          foundCases: [],
-          totalCount: 0,
+          foundCasesForCurrentPage: [],
+          foundCasesTotalCount: 0,
         },
-        screenMetadata: {
-          page: 1,
-        },
+        screenMetadata: {},
       },
     });
 
@@ -244,16 +185,20 @@ describe('caseInventoryReportHelper', () => {
     expect(result.showResultsTable).toBeFalsy();
   });
 
-  it('should show the results table if totalCount is not 0', () => {
+  it('should show the results table if foundCasesTotalCount is not 0', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
-          foundCases: [{ correspondence: [], docketNumber: '123-20' }],
-          totalCount: 1,
+          foundCasesForCurrentPage: [
+            {
+              correspondence: [],
+              docketNumber: '123-20',
+              docketNumberWithSuffix: '123-20',
+            },
+          ],
+          foundCasesTotalCount: 1,
         },
-        screenMetadata: {
-          page: 1,
-        },
+        screenMetadata: {},
       },
     });
 

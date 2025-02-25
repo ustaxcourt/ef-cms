@@ -5,7 +5,7 @@ import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('computeSubmitTrialSessionDataAction', () => {
-  let form = {};
+  const form = {};
   const trialClerk = { name: 'Test Clerk', userId: '321' };
   let spyCompute24HrTimeAndUpdateState, spyComputeTermAndUpdateState;
 

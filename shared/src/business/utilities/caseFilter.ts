@@ -6,17 +6,18 @@ import {
 import { cloneDeep, pick } from 'lodash';
 import { isAssociatedUser, isSealedCase } from '../entities/cases/Case';
 
-const CASE_ATTRIBUTE_WHITELIST = [
+const CASE_ATTRIBUTE_ALLOWLIST = [
   'docketNumber',
   'docketNumberSuffix',
   'isPaper',
   'isSealed',
   'sealedDate',
+  'leadDocketNumber',
 ] as const;
 
-type CaseAttributeWhitelistKeys = (typeof CASE_ATTRIBUTE_WHITELIST)[number];
+type CaseAttributeAllowlistKeys = (typeof CASE_ATTRIBUTE_ALLOWLIST)[number];
 
-const CASE_CONTACT_ATTRIBUTE_WHITELIST = [
+const CASE_CONTACT_ATTRIBUTE_ALLOWLIST = [
   'additionalName',
   'contactId',
   'contactType',
@@ -29,10 +30,10 @@ const CASE_CONTACT_ATTRIBUTE_WHITELIST = [
   'title',
 ];
 
-export type SealedCase = Record<CaseAttributeWhitelistKeys, any>;
+export type SealedCase = Record<CaseAttributeAllowlistKeys, any>;
 
 export const caseSealedFormatter = caseRaw => {
-  return pick(caseRaw, CASE_ATTRIBUTE_WHITELIST) as SealedCase;
+  return pick(caseRaw, CASE_ATTRIBUTE_ALLOWLIST) as SealedCase;
 };
 
 /**
@@ -40,7 +41,7 @@ export const caseSealedFormatter = caseRaw => {
  * Modifies raw case data if a contact address is sealed
  * and user does not have permission to view sealed addresses.
  * When sealed addresses are being formatted, the contact objects are
- * emptied of all entries, then assigned key/value pairs from a whitelist.
+ * emptied of all entries, then assigned key/value pairs from a allow list.
  *
  * @param {object} caseRaw the raw case detail
  * @param {object} currentUser the current
@@ -58,7 +59,7 @@ export const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
   const formattedCase = cloneDeep(caseRaw);
 
   const formatSealedAddress = contactRaw => {
-    const result = pick(contactRaw, CASE_CONTACT_ATTRIBUTE_WHITELIST);
+    const result = pick(contactRaw, CASE_CONTACT_ATTRIBUTE_ALLOWLIST);
     result.sealedAndUnavailable = true;
     return result;
   };

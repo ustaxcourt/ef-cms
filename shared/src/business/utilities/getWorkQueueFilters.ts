@@ -39,7 +39,6 @@ export const getWorkQueueFilters = ({ section, user }) => {
           (item.assigneeId === user.userId &&
             canViewDocketSection &&
             !item.completedAt &&
-            item.section === sectionToMatch &&
             (item.docketEntry.isFileAttached === false || item.inProgress)) ||
           // PetitionsClerks
           (item.assigneeId === user.userId &&
@@ -53,7 +52,6 @@ export const getWorkQueueFilters = ({ section, user }) => {
         return (
           item.assigneeId === user.userId &&
           !item.completedAt &&
-          item.section === sectionToMatch &&
           item.docketEntry.isFileAttached !== false &&
           !item.inProgress &&
           item.caseIsInProgress !== true

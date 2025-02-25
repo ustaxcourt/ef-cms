@@ -22,6 +22,7 @@ export const messageModalHelper = (
   const draftAttachments = get(state.modal.form.draftAttachments);
   const user = get(state.user);
   const currentAttachments = [...attachments, ...draftAttachments];
+  const judgesChambers = get(state.judgesChambers) || [];
 
   const computeIsAlreadyAttached = doc =>
     currentAttachments.some(
@@ -39,7 +40,7 @@ export const messageModalHelper = (
     isAlreadyAttached: boolean;
     title: string;
   })[] = [];
-  for (let entry of formattedDocketEntries) {
+  for (const entry of formattedDocketEntries) {
     if (entry.isFileAttached && entry.isOnDocketRecord) {
       entry.title = entry.descriptionDisplay || entry.documentType;
       entry.isAlreadyAttached = computeIsAlreadyAttached(entry);
@@ -48,12 +49,12 @@ export const messageModalHelper = (
     }
   }
 
-  for (let entry of draftDocuments) {
+  for (const entry of draftDocuments) {
     entry.title = entry.documentTitle || entry.documentType;
     entry.isAlreadyAttached = computeIsAlreadyAttached(entry);
   }
 
-  for (let corr of correspondence) {
+  for (const corr of correspondence) {
     corr.isAlreadyAttached = currentAttachments.some(
       attachment => attachment.docketEntryId === corr.correspondenceId,
     );
@@ -64,10 +65,6 @@ export const messageModalHelper = (
     currentAttachmentCount < CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT;
   const shouldShowAddDocumentForm =
     currentAttachmentCount === 0 || screenMetadata.showAddDocumentForm;
-
-  const CHAMBERS_SECTIONS_LABELS = applicationContext
-    .getPersistenceGateway()
-    .getChambersSectionsLabels();
 
   const sectionDisplay = key => {
     return (
@@ -85,13 +82,13 @@ export const messageModalHelper = (
     );
   };
 
-  const chambersDisplay = key => {
-    return CHAMBERS_SECTIONS_LABELS[key];
-  };
+  const chambersSections = judgesChambers.map(chambers => {
+    return chambers.section;
+  });
 
-  const chambersSections = applicationContext
-    .getPersistenceGateway()
-    .getChambersSections();
+  const chambersDisplay = key => {
+    return judgesChambers?.filter(s => s.section === key)[0]?.label;
+  };
 
   return {
     chambersDisplay,

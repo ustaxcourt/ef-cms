@@ -1,3 +1,5 @@
+import { GatewayTimeoutError } from '@web-client/presenter/errors/GatewayTimeoutError';
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -19,14 +21,19 @@ describe('verifyUserPendingEmailAction', () => {
   });
 
   it('should return a success message when the user`s pending email is successfully verified', async () => {
-    await runAction(verifyUserPendingEmailAction, {
+    const { state } = await runAction(verifyUserPendingEmailAction, {
       modules: {
         presenter,
       },
       props: {
         token: mockToken,
       },
+      state: {
+        alertInfo: 'TEST_ALERT_INFO',
+      },
     });
+
+    expect(state.alertInfo).toBeUndefined();
 
     expect(
       applicationContext.getUseCases().verifyUserPendingEmailInteractor,
@@ -60,13 +67,71 @@ describe('verifyUserPendingEmailAction', () => {
           <>
             Your request cannot be completed. Please try to log in. If you’re
             still having trouble, contact{' '}
-            <a href="mailto:dawson.support@ustaxcourt.gov">
-              dawson.support@ustaxcourt.gov
+            <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
+              {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
             </a>
             .
           </>
         ),
         title: 'Unable to complete your request',
+      },
+    });
+  });
+
+  it('should return an error message when the token has expired', async () => {
+    applicationContext
+      .getUseCases()
+      .verifyUserPendingEmailInteractor.mockRejectedValue(
+        new Error('Link has expired'),
+      );
+
+    await runAction(verifyUserPendingEmailAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        token: mockToken,
+      },
+    });
+
+    expect(errorMock).toHaveBeenCalledWith({
+      alertError: {
+        message: (
+          <>
+            Enter your old email address and password below, then log in to be
+            sent a new verification email.
+          </>
+        ),
+        title: 'Verification email link expired',
+      },
+    });
+  });
+
+  it('should return an error message when the request timed out', async () => {
+    applicationContext
+      .getUseCases()
+      .verifyUserPendingEmailInteractor.mockRejectedValue(
+        new GatewayTimeoutError(),
+      );
+
+    await runAction(verifyUserPendingEmailAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        token: mockToken,
+      },
+    });
+
+    expect(errorMock).toHaveBeenCalledWith({
+      alertError: {
+        message: (
+          <>
+            DAWSON is updating your other contact information. Please wait and
+            try to verify your email in a few minutes.
+          </>
+        ),
+        title: 'DAWSON can’t verify your email right now.',
       },
     });
   });

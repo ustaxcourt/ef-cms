@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { validatePetitionAction } from './validatePetitionAction';
+import { validatePetitionAction } from '@web-client/presenter/actions/validatePetitionAction';
 
 describe('validatePetitionAction', () => {
   let successStub;
@@ -28,7 +28,7 @@ describe('validatePetitionAction', () => {
         presenter,
       },
       state: {
-        form: {},
+        petitionFormatted: {},
       },
     });
 
@@ -48,7 +48,7 @@ describe('validatePetitionAction', () => {
         presenter,
       },
       state: {
-        form: {},
+        petitionFormatted: {},
       },
     });
 

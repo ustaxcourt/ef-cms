@@ -34,7 +34,7 @@ export const chooseWorkQueueAction = ({
     ...get(state.workQueueToDisplay),
   };
 
-  let workQueuePath = `documentqc${queuePrefs.queue}${queuePrefs.box}`;
+  const workQueuePath = `documentqc${queuePrefs.queue}${queuePrefs.box}`;
 
   if (typeof path[workQueuePath] !== 'function') {
     throw new Error(`Work queue path "${workQueuePath}" not found`);

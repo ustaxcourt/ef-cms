@@ -9,7 +9,7 @@ export const setForHearingModalHelper = (
 ): any => {
   const caseDetail = get(state.caseDetail);
   const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
-  let excludedTrialSessionIds: String[] = [];
+  const excludedTrialSessionIds: String[] = [];
 
   if (caseDetail.trialSessionId) {
     excludedTrialSessionIds.push(caseDetail.trialSessionId);
@@ -24,7 +24,7 @@ export const setForHearingModalHelper = (
   const trialSessionsFilter = trialSession =>
     SESSION_STATUS_GROUPS.open === trialSession.sessionStatus;
 
-  let { trialSessionsFormatted, ...helperProps } = trialSessionsModalHelper({
+  const { trialSessionsFormatted, ...helperProps } = trialSessionsModalHelper({
     applicationContext,
     excludedTrialSessionIds,
     get,

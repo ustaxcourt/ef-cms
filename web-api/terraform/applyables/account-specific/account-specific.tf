@@ -16,7 +16,10 @@ terraform {
   backend "s3" {}
 
   required_providers {
-    aws = "5.67.0"
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.88.0"
+    }
     opensearch = {
       source  = "opensearch-project/opensearch"
       version = "2.2.0"
@@ -43,7 +46,8 @@ module "api-gateway-global-logging-permissions" {
 }
 
 module "ci-cd" {
-  source = "../../modules/ci-cd"
+  source               = "../../modules/ci-cd"
+  lower_env_account_id = var.lower_env_account_id
 }
 
 module "kibana" {
@@ -83,4 +87,18 @@ module "route53-zone" {
 
 module "email-monitoring" {
   source = "../../modules/email-monitoring"
+}
+
+module "default_vpc_east" {
+  source = "../../modules/default-vpc"
+  providers = {
+    aws = aws.us-east-1
+  }
+}
+
+module "default_vpc_west" {
+  source = "../../modules/default-vpc"
+  providers = {
+    aws = aws.us-west-1
+  }
 }

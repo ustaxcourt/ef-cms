@@ -1,8 +1,8 @@
 import {
   DOCKET_NUMBER_SUFFIXES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateNoticeOfTrialIssuedInteractor } from './generateNoticeOfTrialIssuedInteractor';
 
 describe('generateNoticeOfTrialIssuedInteractor', () => {

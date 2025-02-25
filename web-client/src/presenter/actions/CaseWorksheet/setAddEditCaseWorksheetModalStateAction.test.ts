@@ -1,6 +1,7 @@
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { judgeColvin } from '@shared/test/mockUsers';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setAddEditCaseWorksheetModalStateAction } from '@web-client/presenter/actions/CaseWorksheet/setAddEditCaseWorksheetModalStateAction';
@@ -12,6 +13,7 @@ describe('setAddEditCaseWorksheetModalStateAction', () => {
     const mockWorksheet: RawCaseWorksheet = {
       docketNumber: MOCK_CASE.docketNumber,
       entityName: 'CaseWorksheet',
+      judgeUserId: judgeColvin.userId,
     };
 
     const { state } = await runAction(setAddEditCaseWorksheetModalStateAction, {

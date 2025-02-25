@@ -70,7 +70,7 @@ export const toggleFeatureFlag = async ({
       pk: flag,
       sk: flag,
     },
-    TableName: getCypressEnv().dynamoDbTableName,
+    TableName: getCypressEnv().dynamoDbDeployTableName,
     UpdateExpression: 'SET #value = :value',
   });
 
@@ -92,6 +92,23 @@ export const getFeatureFlagValue = async ({
   });
 
   return !!result?.Item?.current;
+};
+
+export const getRawFeatureFlagValue = async ({
+  flag,
+}: {
+  flag: string;
+}): Promise<boolean | undefined> => {
+  const dynamoClient = await getDocumentClient();
+  const result = await dynamoClient.get({
+    Key: {
+      pk: flag,
+      sk: flag,
+    },
+    TableName: getCypressEnv().dynamoDbDeployTableName,
+  });
+
+  return result?.Item?.current || null;
 };
 
 export const getEmailVerificationToken = async ({

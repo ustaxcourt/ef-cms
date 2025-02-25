@@ -2,7 +2,7 @@ import { NotFoundError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
@@ -71,15 +71,13 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
 
   const paperServicePdfData = await paperServiceDocumentsPdf.save();
 
-  let fileId, pdfUrl;
-
-  ({ fileId, url: pdfUrl } = await applicationContext
+  const { fileId, url: pdfUrl } = await applicationContext
     .getUseCaseHelpers()
     .saveFileAndGenerateUrl({
       applicationContext,
       file: paperServicePdfData,
       fileNamePrefix: 'paper-service-pdf/',
-    }));
+    });
 
   const trialSession = await applicationContext
     .getPersistenceGateway()

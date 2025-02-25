@@ -23,7 +23,7 @@ export const getEligibleCasesForTrialSession = async ({
     applicationContext,
   });
 
-  let docketNumbers = [];
+  const docketNumbers = [];
   mappings.map(metadata => {
     const { docketNumber } = metadata;
     if (docketNumbers.includes(docketNumber)) {

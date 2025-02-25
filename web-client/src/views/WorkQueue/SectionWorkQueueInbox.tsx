@@ -163,7 +163,7 @@ SectionWorkQueueTable.Row = React.memo(
             <td className="message-queue-row has-icon padding-right-0">
               {item.showUnassignedIcon && (
                 <Icon
-                  aria-label="unassigned"
+                  aria-label="Unassigned"
                   className="iconStatusUnassigned"
                   icon={['fas', 'question-circle']}
                   size="lg"
@@ -171,7 +171,7 @@ SectionWorkQueueTable.Row = React.memo(
               )}
               {item.showHighPriorityIcon && (
                 <Icon
-                  aria-label="high priority"
+                  aria-label="High priority"
                   className="iconHighPriority"
                   icon={['fas', 'exclamation-circle']}
                   size="lg"

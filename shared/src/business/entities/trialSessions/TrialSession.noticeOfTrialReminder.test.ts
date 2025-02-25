@@ -20,17 +20,22 @@ describe('TrialSession entity', () => {
       { daysFromToday: 34, expectedOutput: true },
       { daysFromToday: 35, expectedOutput: false },
     ];
-    it('should set isStartDateWithinNOTTReminderRange to false when the trial session is not calendared', () => {
+    it('should return false when the trial session is not calendared', () => {
       const trialSession = new TrialSession({
         ...MOCK_TRIAL_REGULAR,
         isCalendared: false,
       });
 
-      expect(trialSession.isStartDateWithinNOTTReminderRange).toBe(false);
+      expect(
+        TrialSession.isStartDateWithinNOTTReminderRange({
+          isCalendared: trialSession.isCalendared,
+          startDate: trialSession.startDate,
+        }),
+      ).toBe(false);
     });
 
     tests.forEach(({ daysFromToday, expectedOutput }) => {
-      it(`should set isStartDateWithinNOTTReminderRange to ${expectedOutput} when the trial session is calendared and the start date is ${daysFromToday} days from today`, () => {
+      it(`should return ${expectedOutput} when the trial session is calendared and the start date is ${daysFromToday} days from today`, () => {
         const thirtyDaysFromToday = today.plus({ ['days']: daysFromToday });
 
         const trialSession = new TrialSession({
@@ -39,9 +44,12 @@ describe('TrialSession entity', () => {
           startDate: thirtyDaysFromToday,
         });
 
-        expect(trialSession.isStartDateWithinNOTTReminderRange).toBe(
-          expectedOutput,
-        );
+        expect(
+          TrialSession.isStartDateWithinNOTTReminderRange({
+            isCalendared: trialSession.isCalendared,
+            startDate: trialSession.startDate,
+          }),
+        ).toBe(expectedOutput);
       });
     });
   });

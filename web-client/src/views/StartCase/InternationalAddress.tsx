@@ -7,7 +7,7 @@ import React from 'react';
 
 const props = cerebralProps as unknown as {
   bind: string;
-  onBlur: string;
+  onBlur: (args: Record<string, any>) => void;
   type: string;
   onChange: string;
   registerRef: (param: string) => void;
@@ -17,7 +17,6 @@ export const InternationalAddress = connect(
   {
     data: state[props.bind],
     onBlur: props.onBlur,
-    onBlurSequence: sequences[props.onBlur],
     registerRef: props.registerRef,
     type: props.type,
     updateFormValueSequence: sequences[props.onChange],
@@ -25,7 +24,7 @@ export const InternationalAddress = connect(
   },
   function InternationalAddress({
     data,
-    onBlurSequence,
+    onBlur,
     registerRef,
     type,
     updateFormValueSequence,
@@ -50,7 +49,7 @@ export const InternationalAddress = connect(
             type="text"
             value={data[type].address1 || ''}
             onBlur={() => {
-              onBlurSequence({
+              onBlur({
                 validationKey: [type, 'address1'],
               });
             }}
@@ -75,7 +74,7 @@ export const InternationalAddress = connect(
             type="text"
             value={data[type].address2 || ''}
             onBlur={() => {
-              onBlurSequence({
+              onBlur({
                 validationKey: [type, 'address2'],
               });
             }}
@@ -100,7 +99,7 @@ export const InternationalAddress = connect(
             type="text"
             value={data[type].address3 || ''}
             onBlur={() => {
-              onBlurSequence({
+              onBlur({
                 validationKey: [type, 'address3'],
               });
             }}
@@ -129,7 +128,7 @@ export const InternationalAddress = connect(
             type="text"
             value={data[type].state || ''}
             onBlur={() => {
-              onBlurSequence({
+              onBlur({
                 validationKey: [type, 'state'],
               });
             }}
@@ -158,7 +157,7 @@ export const InternationalAddress = connect(
             type="text"
             value={data[type].city || ''}
             onBlur={() => {
-              onBlurSequence({
+              onBlur({
                 validationKey: [type, 'city'],
               });
             }}
@@ -187,7 +186,7 @@ export const InternationalAddress = connect(
             type="text"
             value={data[type].postalCode || ''}
             onBlur={() => {
-              onBlurSequence({
+              onBlur({
                 validationKey: [type, 'postalCode'],
               });
             }}

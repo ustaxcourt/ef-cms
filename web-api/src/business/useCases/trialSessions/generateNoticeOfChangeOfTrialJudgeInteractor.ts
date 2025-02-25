@@ -1,13 +1,13 @@
 import {
   FORMATS,
   formatDateString,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import { FormattedTrialInfoType } from '@web-api/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
-import { RawTrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TRIAL_SESSION_SCOPE_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { formatPhoneNumber } from '../../../../../shared/src/business/utilities/formatPhoneNumber';
-import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
+import { TRIAL_SESSION_SCOPE_TYPES } from '@shared/business/entities/EntityConstants';
+import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
+import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 
 export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -56,7 +56,6 @@ export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
         applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
     });
 
-  const { docketNumberWithSuffix } = caseDetail;
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
   return await applicationContext
@@ -66,7 +65,7 @@ export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
       data: {
         caseCaptionExtension,
         caseTitle,
-        docketNumberWithSuffix,
+        docketNumberWithSuffix: caseDetail.docketNumberWithSuffix!,
         nameOfClerk: name,
         titleOfClerk: title,
         trialInfo,

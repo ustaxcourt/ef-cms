@@ -20,7 +20,9 @@ export const ConsolidatedCaseIcon = ({
             icon="copy"
           />
           {showLeadCaseIcon && (
-            <span className="fa-inverse lead-case-icon-text">L</span>
+            <span aria-hidden={true} className="fa-inverse lead-case-icon-text">
+              L
+            </span>
           )}
         </span>
       )}

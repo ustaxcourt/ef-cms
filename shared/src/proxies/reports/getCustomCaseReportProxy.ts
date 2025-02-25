@@ -2,10 +2,10 @@ import {
   GetCustomCaseReportRequest,
   GetCustomCaseReportResponse,
 } from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
+import { applicationContext } from '@web-client/applicationContext';
 import { get } from '../requests';
 
 export const getCustomCaseReportInteractor = (
-  applicationContext,
   filters: GetCustomCaseReportRequest,
 ): Promise<GetCustomCaseReportResponse> => {
   return get({
