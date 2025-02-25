@@ -309,6 +309,26 @@ describe('processFormattedMessages', () => {
         },
       ]);
     });
+
+    it('should consistently return messages sorted in descending order when provided with desc as the sort direction', () => {
+      const formattedCaseMessages = [
+        { createdAt: '2025-02-14T18:13:48.341Z', docketNumber: '101-25' },
+        { createdAt: '2020-08-18T18:07:36.333Z', docketNumber: '104-19' },
+        { createdAt: '2025-02-14T18:14:32.069Z', docketNumber: '101-25' },
+      ];
+
+      const firstSort = sortFormattedMessages(formattedCaseMessages, {
+        sortField: 'createdAt',
+        sortOrder: 'desc',
+      });
+
+      const secondSort = sortFormattedMessages(formattedCaseMessages, {
+        sortField: 'createdAt',
+        sortOrder: 'desc',
+      });
+
+      expect(secondSort).toEqual(firstSort);
+    });
   });
 
   describe('getFormattedMessages', () => {
