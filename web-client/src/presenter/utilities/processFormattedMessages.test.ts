@@ -200,6 +200,42 @@ describe('processFormattedMessages', () => {
       ]);
     });
 
+    it('should maintain the same order when the docket numbers are the same', () => {
+      const aMessage = {
+        completedAt: '2019-01-02T16:29:13.122Z',
+        createdAt: '2019-01-01T16:29:13.122Z',
+        docketNumber: DOCKET_NUMBER_1,
+        message: 'Message 1 sameDocket',
+        parentMessageId: PARENT_MESSAGE_ID,
+        subject: 'AAAA',
+      };
+      messages = [
+        aMessage,
+        { ...aMessage, message: 'Message 2 sameDocket' },
+        { ...aMessage, message: 'Message 3 sameDocket' },
+      ];
+
+      const result1 = sortFormattedMessages(messages, {
+        sortField: 'docketNumber',
+        sortOrder: DESCENDING,
+      });
+
+      expect(result1).toMatchObject([
+        {
+          message: 'Message 1 sameDocket',
+          docketNumber: DOCKET_NUMBER_1,
+        },
+        {
+          message: 'Message 2 sameDocket',
+          docketNumber: DOCKET_NUMBER_1,
+        },
+        {
+          message: 'Message 3 sameDocket',
+          docketNumber: DOCKET_NUMBER_1,
+        },
+      ]);
+    });
+
     it('should not change any order when all messages have the same sort field', () => {
       const result = sortFormattedMessages(messages, {
         sortField: 'UNKNOWN',
