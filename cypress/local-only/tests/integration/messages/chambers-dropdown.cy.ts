@@ -1,3 +1,5 @@
+// make sure the chambers dropdown works in open message, qc, and forward
+
 import {
   createMessage,
   enterSubject,

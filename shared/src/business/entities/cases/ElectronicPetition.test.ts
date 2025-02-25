@@ -19,13 +19,10 @@ describe('ElectronicPetition entity', () => {
   describe('isValid', () => {
     it('requires corporate disclosure if filing type is a business', () => {
       const electronicPetition = new ElectronicPetition({
+        ...validPetitionData,
         businessType: PARTY_TYPES.corporation,
-        caseType: CASE_TYPES_MAP.other,
         filingType: 'A business',
-        hasIrsNotice: false,
         petitionType: undefined,
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
       });
 
       expect(
@@ -36,10 +33,8 @@ describe('ElectronicPetition entity', () => {
 
     it('does not require corporate disclosure if filing type not set', () => {
       const petition = new ElectronicPetition({
-        caseType: CASE_TYPES_MAP.other,
-        hasIrsNotice: false,
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
+        ...validPetitionData,
+        filingType: undefined,
       });
 
       expect(
@@ -49,11 +44,8 @@ describe('ElectronicPetition entity', () => {
 
     it('does not require corporate disclosure if filing type not a business', () => {
       const electronicPetition = new ElectronicPetition({
-        caseType: CASE_TYPES_MAP.other,
+        ...validPetitionData,
         filingType: 'not a biz',
-        hasIrsNotice: false,
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
       });
 
       expect(
@@ -64,12 +56,9 @@ describe('ElectronicPetition entity', () => {
 
     it('requires stinFile', () => {
       const electronicPetition = new ElectronicPetition({
+        ...validPetitionData,
         businessType: PARTY_TYPES.corporation,
-        caseType: CASE_TYPES_MAP.other,
         filingType: 'A business',
-        hasIrsNotice: false,
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
       });
 
       expect(
@@ -373,6 +362,7 @@ describe('ElectronicPetition entity', () => {
   describe('Secondary contact phone', () => {
     it('should use secondary contact phone when provided', () => {
       const electronicPetition = new ElectronicPetition({
+        ...validPetitionData,
         contactSecondary: {
           contactType: CONTACT_TYPES.secondary,
           phone: '123-234-3456',
@@ -387,6 +377,7 @@ describe('ElectronicPetition entity', () => {
 
     it('should use default secondary contact phone when no phone is provided', () => {
       const electronicPetition = new ElectronicPetition({
+        ...validPetitionData,
         contactSecondary: {
           contactType: CONTACT_TYPES.secondary,
         },
