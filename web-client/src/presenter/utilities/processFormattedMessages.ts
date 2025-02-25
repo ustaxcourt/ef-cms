@@ -1,6 +1,7 @@
 import { formatDateIfToday } from '../computeds/formattedWorkQueue';
 import { getConstants } from '../../getConstants';
 import { map, uniq } from 'lodash';
+import { Case } from '@shared/business/entities/cases/Case';
 
 const { CASE_SERVICES_SUPERVISOR_SECTION, DESCENDING } = getConstants();
 
@@ -28,38 +29,28 @@ export const sortFormattedMessages = (
   const sortedFormattedMessages = formattedCaseMessages.sort(
     (messageA, messageB) => {
       let sortNumber = 0;
+      const compare1 =
+        tableSort?.sortOrder === DESCENDING ? messageB : messageA;
+      const compare2 =
+        tableSort?.sortOrder === DESCENDING ? messageA : messageB;
 
       if (!tableSort) {
-        sortNumber = messageA.createdAt.localeCompare(messageB.createdAt);
+        sortNumber = compare1.createdAt.localeCompare(compare2.createdAt);
       } else if (SUPPORTED_SORT_FIELDS.includes(tableSort.sortField)) {
-        const messageASortField: string = messageA[tableSort.sortField] || '';
-        const messageBSortField: string = messageB[tableSort.sortField] || '';
+        const messageASortField: string = compare1[tableSort.sortField] || '';
+        const messageBSortField: string = compare2[tableSort.sortField] || '';
 
         sortNumber = messageASortField.localeCompare(messageBSortField);
       } else if (tableSort.sortField === 'docketNumber') {
-        const [messageADocketNumberIndex, messageADocketNumberYear] =
-          messageA.docketNumber.split('-');
-        const [messageBDocketNumberIndex, messageBDocketNumberYear] =
-          messageB.docketNumber.split('-');
-
-        if (messageADocketNumberYear !== messageBDocketNumberYear) {
-          // compare years if they aren't the same;
-          // compare as strings, because they *might* have suffix
-          sortNumber = messageADocketNumberYear.localeCompare(
-            messageBDocketNumberYear,
-          );
-        } else {
-          // compare index if years are the same, compare as integers
-          sortNumber = +messageADocketNumberIndex - +messageBDocketNumberIndex;
-        }
+        sortNumber = Case.docketNumberSort(
+          compare1.docketNumber,
+          compare2.docketNumber,
+        );
       }
       return sortNumber;
     },
   );
 
-  if (tableSort && tableSort.sortOrder === DESCENDING) {
-    return sortedFormattedMessages.reverse();
-  }
   return sortedFormattedMessages;
 };
 
