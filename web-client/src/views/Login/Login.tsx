@@ -45,7 +45,7 @@ export const Login = connect(
               <ErrorNotification />
               <div className="grid-container bg-white padding-y-3 border border-base-lighter login">
                 <div className="display-flex flex-column">
-                  <div className="flex-align-self-center">
+                  <div className="flex-align-center">
                     <h1
                       className="margin-bottom-1 inherit-body-font-family"
                       data-testid="login-header"
@@ -116,15 +116,17 @@ export const Login = connect(
                         Log in
                       </Button>
                     </form>
-                    <Button
-                      className="margin-top-1 display-block"
-                      data-testid="forgot-password-button"
-                      link={true}
-                      type="button"
-                      onClick={() => navigateToForgotPasswordSequence()}
-                    >
-                      Forgot password?
-                    </Button>
+                    <div className="button-container">
+                      <Button
+                        className="margin-top-1 display-block"
+                        data-testid="forgot-password-button"
+                        link={true}
+                        type="button"
+                        onClick={() => navigateToForgotPasswordSequence()}
+                      >
+                        Forgot password?
+                      </Button>
+                    </div>
                     <span>
                       Don&apos;t have an account?{' '}
                       <Button

@@ -1,6 +1,6 @@
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { batchGet, query } from '../../dynamodbClientService';
+import { batchGet, queryFull } from '../../dynamodbClientService';
 import { getPractitionerByBarNumber } from './getPractitionerByBarNumber';
 
 const mappingRecords = [
@@ -56,12 +56,12 @@ const practitionerRecords = [
 
 jest.mock('../../dynamodbClientService', () => ({
   batchGet: jest.fn(),
-  query: jest.fn().mockImplementation(({ ExpressionAttributeValues }) => {
+  queryFull: jest.fn().mockImplementation(({ ExpressionAttributeValues }) => {
     const pk = ExpressionAttributeValues[':pk'];
     return mappingRecords.filter(record => record.pk === pk);
   }),
 }));
-const queryMock = query as jest.Mock;
+const queryFullMock = queryFull as jest.Mock;
 const batchGetMock = batchGet as jest.Mock;
 
 describe('getPractitionerByBarNumber', () => {
@@ -77,13 +77,13 @@ describe('getPractitionerByBarNumber', () => {
       applicationContext,
       barNumber: 'pt1234',
     });
-    expect(queryMock.mock.calls[0][0].ExpressionAttributeValues[':pk']).toEqual(
+    expect(queryFullMock.mock.calls[0][0].ExpressionAttributeValues[':pk']).toEqual(
       'irsPractitioner|PT1234',
     );
-    expect(queryMock.mock.calls[1][0].ExpressionAttributeValues[':pk']).toEqual(
+    expect(queryFullMock.mock.calls[1][0].ExpressionAttributeValues[':pk']).toEqual(
       'privatePractitioner|PT1234',
     );
-    expect(queryMock.mock.calls[2][0].ExpressionAttributeValues[':pk']).toEqual(
+    expect(queryFullMock.mock.calls[2][0].ExpressionAttributeValues[':pk']).toEqual(
       'inactivePractitioner|PT1234',
     );
   });
