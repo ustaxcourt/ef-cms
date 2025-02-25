@@ -199,7 +199,9 @@ export const getSpecialSessionsInTerm = ({
   });
 };
 
-export const getPreviousTwoTerms = (termStartDate: string) => {
+export const getPreviousTwoTerms = (
+  termStartDate: string,
+): [string, string] => {
   const { month, year } = deconstructDate(termStartDate);
 
   const currentTerm = getCurrentTermByMonth(month);
