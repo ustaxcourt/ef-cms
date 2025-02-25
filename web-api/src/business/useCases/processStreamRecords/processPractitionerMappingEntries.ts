@@ -132,6 +132,7 @@ const getCaseDataFromPostgres = async ({
       sk: `case|${caseMetadataWithCounsel.docketNumber}`,
       entityName: 'Case',
       caseCaption: caseMetadataWithCounsel.caseCaption,
+      caseType: caseMetadataWithCounsel.caseType,
       docketNumber: caseMetadataWithCounsel.docketNumber,
       docketNumberWithSuffix: caseMetadataWithCounsel.docketNumberWithSuffix,
       isSealed: caseMetadataWithCounsel.isSealed,
