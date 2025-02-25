@@ -15,6 +15,7 @@ import { getContactPrimary } from '../../../../shared/src/business/entities/case
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
+import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 
 describe('caseDetailHeaderHelper', () => {
   const getBaseState = user => {
@@ -100,6 +101,50 @@ describe('caseDetailHeaderHelper', () => {
             automaticBlocked: true,
             blocked: false,
             status: CASE_STATUS_TYPES.calendared,
+          },
+        },
+      });
+
+      expect(result.showBlockedTag).toBeTruthy();
+    });
+
+    it('should be true when any of the consolidated cases is blocked', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            ...getBaseState(docketClerkUser).caseDetail,
+            automaticBlocked: false,
+            blocked: false,
+            consolidatedCases: [
+              new ConsolidatedCaseSummary({
+                ...MOCK_CASE,
+                automaticBlocked: false,
+                blocked: true,
+              }).toRawObject(),
+            ],
+          },
+        },
+      });
+
+      expect(result.showBlockedTag).toBeTruthy();
+    });
+
+    it('should be true when any of the consolidated cases is automaticBlocked', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            ...getBaseState(docketClerkUser).caseDetail,
+            automaticBlocked: false,
+            blocked: false,
+            consolidatedCases: [
+              new ConsolidatedCaseSummary({
+                ...MOCK_CASE,
+                automaticBlocked: true,
+                blocked: false,
+              }).toRawObject(),
+            ],
           },
         },
       });

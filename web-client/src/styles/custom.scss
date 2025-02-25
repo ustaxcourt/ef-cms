@@ -849,6 +849,15 @@ textarea#case-caption {
   margin-right: 0;
 }
 
+.view-pdf-button {
+  @media only screen and (max-width: $small-screen) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
 .view-pdf-button svg {
   color: $color-white;
 }
@@ -1252,7 +1261,7 @@ hr.lighter {
 
   .pages {
     position: relative;
-    top: -6px;
+    top: -12px;
     font-size: 18px;
     font-weight: $font-semibold;
   }
@@ -1297,7 +1306,9 @@ hr.lighter {
     }
 
     font-weight: $font-bold;
+    /* stylelint-disable declaration-property-value-keyword-no-deprecated */
     overflow-y: overlay;
+    /* stylelint-enable declaration-property-value-keyword-no-deprecated */
     text-align: center;
   }
 
@@ -2237,7 +2248,7 @@ button.change-scanner-button {
 }
 
 .before-case-button {
-  margin-top: 2.5rem;
+  margin: 2.5rem 1rem 0 0;
 }
 
 .before-case-follow-up-button {
@@ -2343,7 +2354,9 @@ button.change-scanner-button {
 
 .petitioner-welcome-name {
   overflow-wrap: break-word;
+  /* stylelint-disable declaration-property-value-keyword-no-deprecated */
   word-break: break-word;
+  /* stylelint-enable declaration-property-value-keyword-no-deprecated */
 }
 
 .stepper-line-height {
@@ -2392,6 +2405,30 @@ button.change-scanner-button {
     .action-button-wrapper {
       display: inline-flex;
       margin: 0;
+    }
+  }
+}
+
+.button-container {
+  width: 100%;
+
+  .usa-button {
+    display: block;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  @media (min-width: $medium-screen) {
+    display: flex;
+    align-items: center;
+
+    .usa-button {
+      width: auto;
+
+      &:not(:last-child) {
+        margin-right: 1rem;
+      }
     }
   }
 }

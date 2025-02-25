@@ -106,7 +106,7 @@ export const FileEntryOfAppearanceReview = ({
                 </div>
               </div>
 
-              <div className="margin-top-4">
+              <div className="margin-top-4 button-container">
                 <Button
                   className="margin-bottom-1"
                   data-testid="submit-entry-of-appearance-button"
