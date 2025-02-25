@@ -8,8 +8,11 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/business/useCaseHelper/acquireLock';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 export const serveCourtIssuedDocument = async (
@@ -96,10 +99,7 @@ export const serveCourtIssuedDocument = async (
 
   docketEntryToServe.numberOfPages = await applicationContext
     .getUseCaseHelpers()
-    .countPagesInDocument({
-      applicationContext,
-      docketEntryId,
-    });
+    .countPagesInDocument({ applicationContext, docketEntryId });
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -112,10 +112,7 @@ export const serveCourtIssuedDocument = async (
     for (const docketNumber of docketNumbers) {
       const caseToUpdate = await applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber,
-        });
+        .getCaseByDocketNumber({ applicationContext, docketNumber });
 
       caseEntities.push(new Case(caseToUpdate, { authorizedUser }));
     }
@@ -128,9 +125,7 @@ export const serveCourtIssuedDocument = async (
             filingDate: createISODateString(),
             isOnDocketRecord: true,
           },
-          {
-            authorizedUser,
-          },
+          { authorizedUser },
         );
 
         return fileAndServeDocumentOnOneCase({
@@ -171,30 +166,31 @@ export const serveCourtIssuedDocument = async (
     }
   }
 
-  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
-    document: stampedPdf,
-    key: docketEntryId,
-  });
+  await applicationContext
+    .getPersistenceGateway()
+    .saveDocumentFromLambda({
+      applicationContext,
+      document: stampedPdf,
+      key: docketEntryId,
+    });
 
   const successMessage =
     docketNumbers.length > 0
       ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
       : DOCUMENT_SERVED_MESSAGES.GENERIC;
 
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId,
-    message: {
-      action: 'serve_document_complete',
-      alertSuccess: {
-        message: successMessage,
-        overwritable: false,
+  await applicationContext
+    .getNotificationGateway()
+    .sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'serve_document_complete',
+        alertSuccess: { message: successMessage, overwritable: false },
+        pdfUrl: serviceResults ? serviceResults.pdfUrl : undefined,
       },
-      pdfUrl: serviceResults ? serviceResults.pdfUrl : undefined,
-    },
-    userId: user.userId,
-  });
+      userId: user.userId,
+    });
 };
 
 export const determineEntitiesToLock = (
@@ -202,10 +198,7 @@ export const determineEntitiesToLock = (
   {
     docketNumbers = [],
     subjectCaseDocketNumber,
-  }: {
-    docketNumbers?: string[];
-    subjectCaseDocketNumber;
-  },
+  }: { docketNumbers?: string[]; subjectCaseDocketNumber },
 ) => ({
   identifiers: [...new Set([...docketNumbers, subjectCaseDocketNumber])].map(
     item => `case|${item}`,
@@ -213,27 +206,8 @@ export const determineEntitiesToLock = (
   ttl: 15 * 60,
 });
 
-export const handleLockError = async (
-  applicationContext: ServerApplicationContext,
-  originalRequest,
-  authorizedUser: UnknownAuthUser,
-) => {
-  if (authorizedUser?.userId) {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId: originalRequest.clientConnectionId,
-      message: {
-        action: 'retry_async_request',
-        originalRequest,
-        requestToRetry: 'serve_court_issued_document',
-      },
-      userId: authorizedUser?.userId,
-    });
-  }
-};
-
 export const serveCourtIssuedDocumentInteractor = withLocking(
   serveCourtIssuedDocument,
   determineEntitiesToLock,
-  handleLockError,
+  asyncHandleLockError,
 );

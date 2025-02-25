@@ -90,6 +90,7 @@ import { StartCaseInternal } from './StartCaseInternal/StartCaseInternal';
 import { StatusReportOrder } from './StatusReportOrder';
 import { StyleGuide } from './StyleGuide/StyleGuide';
 import { TrialSessionDetails } from './TrialSessionDetails/TrialSessionDetails';
+import { TrialSessionMinutesPage } from '@web-client/views/TrialSessionMinutes/TrialSessionMinutesPage';
 import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
 import { TrialSessionPlanningReportView } from '@web-client/views/TrialSessions/TrialSessionPlanningReportView';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
@@ -106,6 +107,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
+import { AsyncServiceUnavailableModal } from '@web-client/views/AsyncServiceUnavailableModal';
 
 const pages = {
   AccessibilityStatement,
@@ -190,6 +192,7 @@ const pages = {
   StatusReportOrder,
   StyleGuide,
   TrialSessionDetails,
+  TrialSessionMinutesPage,
   TrialSessionPlanningReportView,
   TrialSessionWorkingCopy,
   TrialSessions,
@@ -280,7 +283,9 @@ export const AppComponent = connect(
           <>
             <Footer />
             {zipInProgress && <BatchDownloadProgress />}
-
+            {showModal === 'AsyncServiceUnavailableModal' && (
+              <AsyncServiceUnavailableModal />
+            )}
             {showModal === 'TrialSessionPlanningModal' && (
               <TrialSessionPlanningModal />
             )}
