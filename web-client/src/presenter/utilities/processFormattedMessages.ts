@@ -25,7 +25,7 @@ export const sortFormattedMessages = (
   formattedCaseMessages,
   tableSort: null | TableSort = null,
 ) => {
-  const sortedFormattedMessages = [...formattedCaseMessages].sort(
+  const sortedFormattedMessages = formattedCaseMessages.sort(
     (messageA, messageB) => {
       let sortNumber = 0;
 
@@ -58,7 +58,7 @@ export const sortFormattedMessages = (
   );
 
   if (tableSort && tableSort.sortOrder === DESCENDING) {
-    return [...sortedFormattedMessages].reverse();
+    return sortedFormattedMessages.reverse();
   }
   return sortedFormattedMessages;
 };
