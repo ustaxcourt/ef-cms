@@ -37,10 +37,10 @@ export const sortFormattedMessages = (
       if (!tableSort) {
         sortNumber = compare1.createdAt.localeCompare(compare2.createdAt);
       } else if (SUPPORTED_SORT_FIELDS.includes(tableSort.sortField)) {
-        const messageASortField: string = compare1[tableSort.sortField] || '';
-        const messageBSortField: string = compare2[tableSort.sortField] || '';
+        const compare1SortField: string = compare1[tableSort.sortField] || '';
+        const compare2SortField: string = compare2[tableSort.sortField] || '';
 
-        sortNumber = messageASortField.localeCompare(messageBSortField);
+        sortNumber = compare1SortField.localeCompare(compare2SortField);
       } else if (tableSort.sortField === 'docketNumber') {
         sortNumber = Case.docketNumberSort(
           compare1.docketNumber,

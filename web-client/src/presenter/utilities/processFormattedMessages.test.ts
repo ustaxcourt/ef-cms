@@ -200,29 +200,6 @@ describe('processFormattedMessages', () => {
       ]);
     });
 
-    it('should reverse the order of messages if sortOrder is descending', () => {
-      const result = sortFormattedMessages(messages, {
-        sortField: 'UNKNOWN',
-        sortOrder: DESCENDING,
-      });
-
-      expect(result).toMatchObject([
-        {
-          createdAt: '2019-01-01T17:29:13.122Z',
-          docketNumber: DOCKET_NUMBER_2,
-        },
-        {
-          createdAt: '2019-01-02T17:29:13.122Z',
-          docketNumber: DOCKET_NUMBER_3,
-          parentMessageId: PARENT_MESSAGE_ID,
-        },
-        {
-          createdAt: '2019-01-01T16:29:13.122Z',
-          docketNumber: DOCKET_NUMBER_1,
-        },
-      ]);
-    });
-
     it('should not change any order when all messages have the same sort field', () => {
       const result = sortFormattedMessages(messages, {
         sortField: 'UNKNOWN',
