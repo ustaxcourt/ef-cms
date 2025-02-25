@@ -6,9 +6,8 @@ export const updateCaseWorksheetLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     return await updateCaseWorksheetInteractor(
-      applicationContext,
       JSON.parse(event.body),
       authorizedUser,
     );

@@ -1,8 +1,8 @@
 import {
   DOCKET_NUMBER_SUFFIXES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateNoticeOfChangeToRemoteProceedingInteractor } from './generateNoticeOfChangeToRemoteProceedingInteractor';
 
 describe('generateNoticeOfChangeToRemoteProceedingInteractor', () => {
@@ -98,7 +98,7 @@ describe('generateNoticeOfChangeToRemoteProceedingInteractor', () => {
           joinPhoneNumber: formattedPhoneNumber,
           meetingId: '1111',
           password: '2222',
-          proceedingType: 'Remote',
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
           trialLocation: 'Boise, Idaho',
         },
       },

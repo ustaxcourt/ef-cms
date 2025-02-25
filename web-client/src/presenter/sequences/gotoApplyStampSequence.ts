@@ -6,6 +6,7 @@ import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setDocketEntrySelectedFromMessageAction } from '../actions/setDocketEntrySelectedFromMessageAction';
 import { setPDFForStampAction } from '../actions/setPDFForStampAction';
 import { setPDFPageForSigningAction } from '../actions/setPDFPageForSigningAction';
+import { setParentMessageIdAction } from '@web-client/presenter/actions/setParentMessageIdAction';
 import { setSignatureNameForPdfSigningAction } from '../actions/setSignatureNameForPdfSigningAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
@@ -17,6 +18,7 @@ export const goToApplyStampSequence = startWebSocketConnectionSequenceDecorator(
     setCaseAction,
     setDocketEntryIdAction,
     setDocketEntrySelectedFromMessageAction,
+    setParentMessageIdAction,
     clearPDFStampDataAction,
     clearFormAction,
     setSignatureNameForPdfSigningAction,

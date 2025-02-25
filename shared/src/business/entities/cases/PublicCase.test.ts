@@ -12,10 +12,7 @@ import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_COMPLEX_CASE } from '../../../test/mockComplexCase';
 import { PublicCase } from './PublicCase';
 import { getContactSecondary } from './Case';
-import {
-  mockIrsPractitionerUser,
-  mockPrivatePractitionerUser,
-} from '@shared/test/mockAuthUsers';
+import { mockIrsPractitionerUser } from '@shared/test/mockAuthUsers';
 
 describe('PublicCase', () => {
   const mockContactId = 'b430f7f9-06f3-4a25-915d-5f51adab2f29';
@@ -87,6 +84,7 @@ describe('PublicCase', () => {
         docketNumberSuffix: 'testing',
         irsPractitioners: [],
         isPaper: true,
+        leadDocketNumber: '101-24',
         otherFilers: [],
         partyType: PARTY_TYPES.petitioner,
         petitioners: [
@@ -117,8 +115,10 @@ describe('PublicCase', () => {
       docketNumberWithSuffix: 'testingtesting',
       entityName: 'PublicCase',
       hasIrsPractitioner: false,
+      irsPractitioners: [],
       isPaper: true,
       isSealed: false,
+      leadDocketNumber: '101-24',
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
         {
@@ -136,6 +136,7 @@ describe('PublicCase', () => {
           state: undefined,
         },
       ],
+      privatePractitioners: [],
       receivedAt: 'testing',
     });
   });
@@ -174,6 +175,7 @@ describe('PublicCase', () => {
       docketNumberWithSuffix: 'testingtesting',
       entityName: 'PublicCase',
       hasIrsPractitioner: false,
+      irsPractitioners: [],
       isSealed: false,
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
@@ -300,82 +302,6 @@ describe('PublicCase', () => {
     expect(() => {
       entity.validate();
     }).not.toThrow();
-  });
-
-  it('should not show leadDocketNumber if user is does not have IRS Practitioner role', () => {
-    const rawCase = {
-      ...MOCK_CASE,
-      irsPractitioners: [
-        {
-          userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-      ],
-      isSealed: false,
-      leadDocketNumber: 'number',
-      otherFilers: [
-        {
-          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-      ],
-      partyType: PARTY_TYPES.petitionerDeceasedSpouse,
-      petitioners: [
-        { contactType: CONTACT_TYPES.primary },
-        {
-          contactId: '9905d1ab-18d0-43ec-bafb-654e83405416',
-          contactType: CONTACT_TYPES.otherPetitioner,
-        },
-      ],
-      privatePractitioners: [
-        {
-          userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-      ],
-    };
-    const entity = new PublicCase(rawCase, {
-      authorizedUser: mockPrivatePractitionerUser,
-    });
-
-    expect(entity.irsPractitioners).toBeUndefined();
-    expect(entity.privatePractitioners).toBeUndefined();
-    expect(entity.leadDocketNumber).toBeUndefined();
-  });
-
-  it('should not show leadDocketNumber when authorizedUser does not have IRS Practitioner role', () => {
-    const rawCase = {
-      ...MOCK_CASE,
-      irsPractitioners: [
-        {
-          userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-      ],
-      isSealed: false,
-      leadDocketNumber: 'number',
-      otherFilers: [
-        {
-          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-      ],
-      partyType: PARTY_TYPES.petitionerDeceasedSpouse,
-      petitioners: [
-        { contactType: CONTACT_TYPES.primary },
-        {
-          contactId: '9905d1ab-18d0-43ec-bafb-654e83405416',
-          contactType: CONTACT_TYPES.otherPetitioner,
-        },
-      ],
-      privatePractitioners: [
-        {
-          userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-      ],
-    };
-    const entity = new PublicCase(rawCase, {
-      authorizedUser: mockPrivatePractitionerUser,
-    });
-
-    expect(entity.irsPractitioners).toBeUndefined();
-    expect(entity.privatePractitioners).toBeUndefined();
-    expect(entity.leadDocketNumber).toBeUndefined();
   });
 
   describe('irsPractitioner', () => {
@@ -574,43 +500,4 @@ describe('PublicCase', () => {
       expect(entity.privatePractitioners).toBeUndefined();
     });
   });
-
-  it('should show leadDocketNumber if user is has IRS Practitioner role', () => {
-    const rawCase = {
-      ...MOCK_CASE,
-      irsPractitioners: [
-        {
-          userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-      ],
-      isSealed: false,
-      leadDocketNumber: 'number',
-      otherFilers: [
-        {
-          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-      ],
-      partyType: PARTY_TYPES.petitionerDeceasedSpouse,
-      petitioners: [
-        { contactType: CONTACT_TYPES.primary },
-        {
-          contactId: '9905d1ab-18d0-43ec-bafb-654e83405416',
-          contactType: CONTACT_TYPES.otherPetitioner,
-        },
-      ],
-      privatePractitioners: [
-        {
-          userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-      ],
-    };
-    const entity = new PublicCase(rawCase, {
-      authorizedUser: mockIrsPractitionerUser,
-    });
-
-    expect(entity.irsPractitioners).toBeDefined();
-    expect(entity.privatePractitioners).toBeDefined();
-    expect(entity.leadDocketNumber).toBeDefined();
-  });
-  // eslint-disable-next-line max-lines
 });

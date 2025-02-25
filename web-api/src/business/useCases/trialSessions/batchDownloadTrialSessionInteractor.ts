@@ -1,17 +1,14 @@
-import {
-  Case,
-  isClosed,
-} from '../../../../../shared/src/business/entities/cases/Case';
+import { Case, isClosed } from '@shared/business/entities/cases/Case';
 import {
   FORMATS,
   formatDateString,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import { NotFoundError } from '../../../errors/errors';
 import { ProgressData } from '@web-api/persistence/s3/zipDocuments';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -74,7 +71,7 @@ const batchDownloadTrialSessionInteractorHelper = async (
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
-  let allSessionCases = await applicationContext
+  const allSessionCases = await applicationContext
     .getPersistenceGateway()
     .getCalendaredCasesForTrialSession({
       applicationContext,

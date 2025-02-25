@@ -1,12 +1,16 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { ClientApplicationContext } from '@web-client/applicationContext';
+import {
+  EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
 import { GENERATION_TYPES } from '@web-client/getConstants';
 import { Get } from 'cerebral';
-import { ROLES } from '@shared/business/entities/EntityConstants';
 import { getFilerParties } from './getFilerParties';
 import { getSupportingDocumentTypeList } from './addDocketEntryHelper';
 import { showGenerationType } from '@web-client/presenter/actions/setDefaultGenerationTypeAction';
 import { state } from '@web-client/presenter/app.cerebral';
+import { EXTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/externalFilingEvents';
 
 export const supportingDocumentFreeTextTypes = [
   'Affidavit in Support',
@@ -20,19 +24,19 @@ export const fileDocumentHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const { AMENDMENT_EVENT_CODES, CATEGORY_MAP, PARTY_TYPES } =
+  const { AMENDMENT_EVENT_CODES, PARTY_TYPES } =
     applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
   const validationErrors = get(state.validationErrors);
 
   const supportingDocumentTypeList =
-    getSupportingDocumentTypeList(CATEGORY_MAP);
+    getSupportingDocumentTypeList(EXTERNAL_FILING_EVENTS);
 
   const partyValidationError =
     validationErrors.filers || validationErrors.partyIrsPractitioner;
 
-  let { certificateOfServiceDate } = form;
+  const { certificateOfServiceDate } = form;
   let certificateOfServiceDateFormatted;
   if (certificateOfServiceDate) {
     certificateOfServiceDateFormatted = applicationContext
@@ -67,7 +71,6 @@ export const fileDocumentHelper = (
 
   const { primaryDocument, secondaryDocument } = getPrimarySecondaryDocuments({
     AMENDMENT_EVENT_CODES,
-    CATEGORY_MAP,
     form,
   });
   secondaryDocument.certificateOfServiceDateFormatted =
@@ -117,6 +120,7 @@ export const fileDocumentHelper = (
     supportingDocumentTypeList,
     ...showSecondaryProperties,
     ...supportingDocumentFlags,
+    docketNumber: caseDetail.docketNumber,
   };
 
   if (form.hasSupportingDocuments) {
@@ -194,32 +198,25 @@ const getShowSecondaryProperties = ({ caseDetail, form, PARTY_TYPES }) => {
   };
 };
 
-const getPrimarySecondaryDocuments = ({
-  AMENDMENT_EVENT_CODES,
-  CATEGORY_MAP,
-  form,
-}) => {
-  const objectionDocumentTypes = [
-    ...CATEGORY_MAP['Motion'].map(entry => entry.documentType),
-    'Motion to Withdraw Counsel (filed by petitioner)',
-    'Motion to Withdraw as Counsel',
-    'Application to Take Deposition',
-  ];
-
+const getPrimarySecondaryDocuments = ({ AMENDMENT_EVENT_CODES, form }) => {
   const primarySecondaryDocuments = {
     primaryDocument: {
       showObjection:
-        objectionDocumentTypes.includes(form.documentType) ||
+        EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION.has(form.documentType) ||
         (AMENDMENT_EVENT_CODES.includes(form.eventCode) &&
-          objectionDocumentTypes.includes(form.previousDocument?.documentType)),
+          EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION.has(
+            form.previousDocument?.documentType,
+          )),
     },
     secondaryDocument: {
       showObjection:
         form.secondaryDocument &&
         form.secondaryDocumentFile &&
-        (objectionDocumentTypes.includes(form.secondaryDocument.documentType) ||
+        (EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION.has(
+          form.secondaryDocument.documentType,
+        ) ||
           (AMENDMENT_EVENT_CODES.includes(form.secondaryDocument.eventCode) &&
-            objectionDocumentTypes.includes(
+            EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION.has(
               form.secondaryDocument.previousDocument?.documentType,
             ))),
     },

@@ -157,6 +157,7 @@ export const asyncSyncHandler = (
       if (+results.statusCode === 200) {
         resolve(results.body);
       } else {
+        // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
         reject(results);
       }
     };
@@ -274,7 +275,7 @@ export const remove = async ({
 const getDefaultHeaders = userToken => {
   const authorization = userToken ? `Bearer ${userToken}` : undefined;
 
-  let authorizationHeaderObject = {};
+  const authorizationHeaderObject = {};
   if (authorization) {
     authorizationHeaderObject['Authorization'] = authorization;
   }

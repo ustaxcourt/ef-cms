@@ -1,3 +1,4 @@
+import { attachFile } from '../../../../helpers/file/upload-file';
 import { getCaseDetailTab } from '../../../support/pages/case-detail';
 
 describe('Docket clerk views consolidated case', function () {
@@ -9,17 +10,25 @@ describe('Docket clerk views consolidated case', function () {
     });
 
     it('should persist the selected sort filter by navigating away from the tab', () => {
-      cy.get('select[name="docketRecordSort.111-19"]').should(
-        'have.value',
-        'byDate',
-      );
-      cy.get('select[name="docketRecordSort.111-19"]').select('Newest');
+      cy.get('[data-testid="descriptionDisplay-sortable-button"]')
+        .find('svg')
+        .invoke('attr', 'data-icon')
+        .should('equal', 'exchange-alt');
+
+      cy.get('[data-testid="descriptionDisplay-sortable-button"]').click();
+
+      cy.get('[data-testid="descriptionDisplay-sortable-button"]')
+        .find('svg')
+        .invoke('attr', 'data-icon')
+        .should('equal', 'long-arrow-alt-up');
+
       cy.get('#tab-document-view').click();
       cy.get('#tab-docket-sub-record').click();
-      cy.get('select[name="docketRecordSort.111-19"]').should(
-        'have.value',
-        'byDateDesc',
-      );
+
+      cy.get('[data-testid="descriptionDisplay-sortable-button"]')
+        .find('svg')
+        .invoke('attr', 'data-icon')
+        .should('equal', 'long-arrow-alt-up');
     });
 
     it('should persist the populated consolidated cases in the overview tab when petitioner counsel is added to parties', () => {
@@ -53,9 +62,11 @@ describe('Docket clerk views consolidated case', function () {
       cy.get('input#upload-description').clear();
       cy.get('input#upload-description').type('temp correspondence');
       cy.get('[data-testid="upload-pdf-button"]').click();
-      cy.get('input#primaryDocumentFile-file').attachFile(
-        '../../helpers/file/sample.pdf',
-      );
+      attachFile({
+        filePath: '../../helpers/file/sample.pdf',
+        selector: 'input#primaryDocumentFile-file',
+        selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+      });
       cy.get('[data-testid="remove-pdf"]');
       cy.get('button#upload-correspondence').click();
       // delete correspondence

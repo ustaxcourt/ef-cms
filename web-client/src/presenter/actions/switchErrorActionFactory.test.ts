@@ -8,7 +8,7 @@ describe('switchErrorActionFactory', () => {
     testing: jest.fn(),
   };
 
-  it('should return path.pdfInMemory when props.fileFromBrowserMemory is defined', async () => {
+  it('should return path.testing when testing path is passed in for a given error', async () => {
     await runAction(
       switchErrorActionFactory({
         'some error': 'testing',
@@ -32,7 +32,7 @@ describe('switchErrorActionFactory', () => {
     expect(presenter.providers.path.testing).toHaveBeenCalled();
   });
 
-  it('should return path.pdfInMemory when props.fileFromBrowserMemory is defined', async () => {
+  it('should return path.default when the error cannot be found', async () => {
     await runAction(
       switchErrorActionFactory({
         'some error': 'test',

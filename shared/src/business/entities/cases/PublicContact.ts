@@ -12,7 +12,7 @@ export class PublicContact extends JoiValidationEntity {
   constructor(rawProps) {
     super('PublicContact');
 
-    this.contactId = rawProps.contactId;
+    this.contactId = rawProps.contactId || rawProps.userId;
     this.contactType = rawProps.contactType;
     this.name = rawProps.name;
     this.state = rawProps.state;

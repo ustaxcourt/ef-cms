@@ -51,7 +51,7 @@ export const AddPetitionerToCase = connect(
   }) {
     const type = 'contact';
     const bind = 'form';
-    const onBlur = 'validateAddPetitionerSequence';
+    const onBlur = validateAddPetitionerSequence;
 
     return (
       <>
@@ -260,7 +260,7 @@ export const AddPetitionerToCase = connect(
                 Case caption
               </label>
               <textarea
-                className="usa-textarea"
+                className="usa-textarea textarea-resize-vertical"
                 id="case-caption"
                 name="caseCaption"
                 value={form.contact.caseCaption || ''}
@@ -277,25 +277,26 @@ export const AddPetitionerToCase = connect(
               </span>
             </FormGroup>
           </div>
-
-          <Button
-            data-testid="add-petitioner-submit-button"
-            id="submit-edit-petitioner-information"
-            onClick={() => {
-              submitAddPetitionerSequence();
-            }}
-          >
-            Save
-          </Button>
-          <Button
-            link
-            onClick={() => {
-              formCancelToggleCancelSequence();
-              return false;
-            }}
-          >
-            Cancel
-          </Button>
+          <div className="button-container">
+            <Button
+              data-testid="add-petitioner-submit-button"
+              id="submit-edit-petitioner-information"
+              onClick={() => {
+                submitAddPetitionerSequence();
+              }}
+            >
+              Save
+            </Button>
+            <Button
+              link
+              onClick={() => {
+                formCancelToggleCancelSequence();
+                return false;
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
         </section>
 
         {showModal === 'FormCancelModalDialog' && (

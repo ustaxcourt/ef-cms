@@ -1,20 +1,19 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   MOCK_CASE,
   MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
-} from '../../../../../shared/src/test/mockCase';
-import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
+} from '@shared/test/mockCase';
+import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { PDFDocument } from 'pdf-lib';
 import {
   SERVICE_INDICATOR_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { combineTwoPdfs } from '../../../../../shared/src/business/utilities/documentGenerators/combineTwoPdfs';
-import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
-import {
-  fakeData,
-  testPdfDoc,
-} from '../../../../../shared/src/business/test/getFakeFile';
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { combineTwoPdfs } from '@shared/business/utilities/documentGenerators/combineTwoPdfs';
+import { docketClerkUser } from '@shared/test/mockUsers';
+import { fakeData, testPdfDoc } from '@shared/business/test/getFakeFile';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from './generateNoticesForCaseTrialSessionCalendarInteractor';
 import { shouldAppendClinicLetter } from '@shared/business/utilities/shouldAppendClinicLetter';
 

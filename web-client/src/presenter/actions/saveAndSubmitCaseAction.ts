@@ -27,7 +27,7 @@ export const saveAndSubmitCaseAction = async ({
   let stinFile;
 
   try {
-    let {
+    const {
       attachmentToPetitionFileIds,
       corporateDisclosureFileId,
       petitionFileId,

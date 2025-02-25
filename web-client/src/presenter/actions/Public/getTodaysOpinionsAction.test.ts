@@ -1,3 +1,4 @@
+import { PublicClientState } from '@web-client/presenter/state-public';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getTodaysOpinionsAction } from './getTodaysOpinionsAction';
 import { presenter } from '../../presenter-public';
@@ -23,11 +24,14 @@ describe('getTodaysOpinionsAction', () => {
       .getUseCases()
       .getTodaysOpinionsInteractor.mockReturnValue(mockTodaysOpinions);
 
-    const result = await runAction(getTodaysOpinionsAction, {
-      modules: {
-        presenter,
+    const result = await runAction<{ todaysOpinions: any }, PublicClientState>(
+      getTodaysOpinionsAction,
+      {
+        modules: {
+          presenter,
+        },
       },
-    });
+    );
 
     expect(result.output.todaysOpinions).toMatchObject(mockTodaysOpinions);
   });

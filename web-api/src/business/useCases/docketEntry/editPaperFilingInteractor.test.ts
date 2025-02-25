@@ -1,3 +1,9 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
+);
 import {
   DOCKET_SECTION,
   DOCUMENT_SERVED_MESSAGES,
@@ -13,10 +19,14 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 describe('editPaperFilingInteractor', () => {
   let caseRecord;
-
+  const fileAndServeDocumentOnOneCase = jest.mocked(
+    fileAndServeDocumentOnOneCaseMock,
+  );
   const mockDocketEntryId = '50107716-6d08-4693-bfd5-a07a4e6eadce';
   const mockServedDocketEntryId = '08ecbf7e-b316-46bb-9a66-b7474823d202';
   const mockWorkItemId = 'a956aa05-19cb-4fc3-ba10-d97c1c567c12';
@@ -202,9 +212,7 @@ describe('editPaperFilingInteractor', () => {
         expect(
           applicationContext.getPersistenceGateway().getCaseByDocketNumber,
         ).toHaveBeenCalled();
-        expect(
-          applicationContext.getPersistenceGateway().saveWorkItem,
-        ).toHaveBeenCalled();
+        expect(upsertWorkItems).toHaveBeenCalled();
         expect(updatedDocketEntry.numberOfPages).toEqual(2);
       });
 
@@ -230,9 +238,7 @@ describe('editPaperFilingInteractor', () => {
         expect(
           applicationContext.getPersistenceGateway().getCaseByDocketNumber,
         ).toHaveBeenCalled();
-        expect(
-          applicationContext.getPersistenceGateway().saveWorkItem,
-        ).toHaveBeenCalled();
+        expect(upsertWorkItems).toHaveBeenCalled();
         expect(
           applicationContext.getPersistenceGateway().updateCase,
         ).toHaveBeenCalled();
@@ -312,6 +318,10 @@ describe('editPaperFilingInteractor', () => {
     describe('Single Docketing', () => {
       describe('Happy Path', () => {
         it('should update only allowed editable fields on a docket entry document', async () => {
+          fileAndServeDocumentOnOneCase.mockImplementation(
+            ({ caseEntity }) => caseEntity,
+          );
+
           await editPaperFilingInteractor(
             applicationContext,
             {
@@ -337,11 +347,7 @@ describe('editPaperFilingInteractor', () => {
             mockDocketClerkUser,
           );
 
-          const updatedDocketEntry = applicationContext
-            .getPersistenceGateway()
-            .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
-              d => d.docketEntryId === mockDocketEntryId,
-            );
+          const updatedDocketEntry = fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
 
           expect(updatedDocketEntry).toMatchObject({
             docketEntryId: mockDocketEntryId,
@@ -495,10 +501,9 @@ describe('editPaperFilingInteractor', () => {
             caseRecord.docketNumber,
             ...mockConsolidatedGroupDocketNumbers,
           ].length;
-          expect(
-            applicationContext.getUseCaseHelpers()
-              .fileAndServeDocumentOnOneCase,
-          ).toHaveBeenCalledTimes(expectedCount);
+          expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledTimes(
+            expectedCount,
+          );
         });
 
         it('should send a message to the user with a paper service pdf url when at least one party in the consolidated group has paper service', async () => {
@@ -518,11 +523,9 @@ describe('editPaperFilingInteractor', () => {
                 ],
               }),
             );
-          applicationContext
-            .getUseCaseHelpers()
-            .fileAndServeDocumentOnOneCase.mockImplementation(
-              ({ caseEntity }) => caseEntity,
-            );
+          fileAndServeDocumentOnOneCase.mockImplementation(
+            ({ caseEntity }) => caseEntity,
+          );
           applicationContext
             .getUseCaseHelpers()
             .serveDocumentAndGetPaperServicePdf.mockResolvedValue({
@@ -590,11 +593,9 @@ describe('editPaperFilingInteractor', () => {
                 ],
               }),
             );
-          applicationContext
-            .getUseCaseHelpers()
-            .fileAndServeDocumentOnOneCase.mockImplementation(
-              ({ caseEntity }) => caseEntity,
-            );
+          fileAndServeDocumentOnOneCase.mockImplementation(
+            ({ caseEntity }) => caseEntity,
+          );
           applicationContext
             .getUseCaseHelpers()
             .serveDocumentAndGetPaperServicePdf.mockResolvedValue(undefined);

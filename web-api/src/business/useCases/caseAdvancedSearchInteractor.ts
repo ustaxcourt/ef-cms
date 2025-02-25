@@ -2,6 +2,7 @@ import {
   AbbrevatedStates,
   CountryTypes,
   MAX_SEARCH_RESULTS,
+  US_STATES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
@@ -24,6 +25,15 @@ export type CaseAdvancedSearchParamsRequestType = {
   startDate?: string;
 };
 
+export type CaseSearchResult = {
+  petitionerNames: string[];
+  docketNumberWithSuffix: string;
+  docketNumber: string;
+  receivedAt: string;
+  caseCaption: string;
+  petitionerStateNames?: string[];
+};
+
 export const caseAdvancedSearchInteractor = async (
   applicationContext: ServerApplicationContext,
   {
@@ -34,7 +44,7 @@ export const caseAdvancedSearchInteractor = async (
     startDate,
   }: CaseAdvancedSearchParamsRequestType,
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseSearchResult[]> => {
   let searchStartDate;
   let searchEndDate;
 
@@ -62,7 +72,7 @@ export const caseAdvancedSearchInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let foundCases = await applicationContext
+  const foundCases = await applicationContext
     .getPersistenceGateway()
     .caseAdvancedSearch({
       applicationContext,
@@ -80,5 +90,16 @@ export const caseAdvancedSearchInteractor = async (
     MAX_SEARCH_RESULTS,
   );
 
-  return filteredCases;
+  return filteredCases.map(filteredCase => {
+    return {
+      caseCaption: filteredCase.caseCaption,
+      docketNumber: filteredCase.docketNumber,
+      docketNumberWithSuffix: filteredCase.docketNumberWithSuffix,
+      petitionerNames: filteredCase.petitioners?.map(p => p.name),
+      petitionerStateNames: filteredCase.petitioners?.map(
+        p => US_STATES[p.state] || p.state,
+      ),
+      receivedAt: filteredCase.receivedAt,
+    };
+  });
 };

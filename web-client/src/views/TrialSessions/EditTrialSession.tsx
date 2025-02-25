@@ -1,10 +1,11 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { ConfirmTrialSessionLocationChangeModalDialog } from '@web-client/views/ConfirmTrialSessionLocationChangeModalDialog';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { LocationInformationForm } from './LocationInformationForm';
 import { SessionAssignmentsForm } from './SessionAssignmentsForm';
 import { SessionInformationForm } from './SessionInformationForm';
-import { TrialSessionDetailHeader } from '../TrialSessionDetail/TrialSessionDetailHeader';
+import { TrialSessionDetailsHeader } from '../TrialSessionDetails/TrialSessionDetailsHeader';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -14,8 +15,11 @@ export const EditTrialSession = connect(
   {
     closeModalAndNavigateBackSequence:
       sequences.closeModalAndNavigateBackSequence,
+    handleEditedTrialSessionSequence:
+      sequences.handleEditedTrialSessionSequence,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     showModal: state.modal.showModal,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
@@ -23,7 +27,9 @@ export const EditTrialSession = connect(
   },
   function EditTrialSession({
     closeModalAndNavigateBackSequence,
+    handleEditedTrialSessionSequence,
     form,
+    formattedTrialSessionDetails,
     formCancelToggleCancelSequence,
     showModal,
     updateTrialSessionFormDataSequence,
@@ -31,7 +37,9 @@ export const EditTrialSession = connect(
   }) {
     return (
       <>
-        <TrialSessionDetailHeader />
+        <TrialSessionDetailsHeader
+          formattedTrialSessionDetails={formattedTrialSessionDetails}
+        />
 
         <section className="usa-section grid-container DocumentDetail">
           <h1 id="edit-trial-session-header">Edit Trial Session</h1>
@@ -45,6 +53,12 @@ export const EditTrialSession = connect(
             {showModal === 'FormCancelModalDialog' && (
               <FormCancelModalDialog
                 onCancelSequence={closeModalAndNavigateBackSequence}
+              />
+            )}
+            {showModal === 'ConfirmTrialSessionLocationChangeModalDialog' && (
+              <ConfirmTrialSessionLocationChangeModalDialog
+                cancelSequence={closeModalAndNavigateBackSequence}
+                confirmSequence={updateTrialSessionSequence}
               />
             )}
             <ErrorNotification />
@@ -65,7 +79,7 @@ export const EditTrialSession = connect(
                   <span className="usa-hint">(optional)</span>
                 </label>
                 <textarea
-                  className="usa-textarea"
+                  className="usa-textarea textarea-resize-vertical"
                   id="notes"
                   maxLength={400}
                   name="notes"
@@ -79,24 +93,25 @@ export const EditTrialSession = connect(
                 />
               </div>
             </div>
-
-            <Button
-              data-testid="submit-edit-trial-session"
-              type="submit"
-              onClick={() => {
-                updateTrialSessionSequence();
-              }}
-            >
-              Save
-            </Button>
-            <Button
-              link
-              onClick={() => {
-                formCancelToggleCancelSequence();
-              }}
-            >
-              Cancel
-            </Button>
+            <div className="button-container">
+              <Button
+                data-testid="submit-edit-trial-session"
+                type="submit"
+                onClick={() => {
+                  handleEditedTrialSessionSequence();
+                }}
+              >
+                Save
+              </Button>
+              <Button
+                link
+                onClick={() => {
+                  formCancelToggleCancelSequence();
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
           </div>
         </section>
       </>

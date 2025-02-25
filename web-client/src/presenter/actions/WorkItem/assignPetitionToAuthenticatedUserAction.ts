@@ -1,35 +1,19 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * assigns the current case details qc workitem to the current user
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Function} providers.get the cerebral get helper function
- * @returns {Promise} async action
- */
 export const assignPetitionToAuthenticatedUserAction = async ({
   applicationContext,
   get,
+  props,
 }: ActionProps) => {
-  const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
-  const { docketEntries } = get(state.caseDetail);
   const user = get(state.user);
 
-  const petitionDocument = docketEntries.find(
-    document =>
-      document.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
-  );
-
-  const petitionDocumentQCWorkItem =
-    petitionDocument && petitionDocument.workItem;
-
-  if (petitionDocumentQCWorkItem) {
+  if (props.workItem) {
     await applicationContext
       .getUseCases()
       .assignWorkItemsInteractor(applicationContext, {
         assigneeId: user.userId,
         assigneeName: user.name,
-        workItemId: petitionDocumentQCWorkItem.workItemId,
+        workItem: props.workItem,
       });
   }
 };

@@ -1,10 +1,8 @@
 import { docketClerkUpdatesCaseCaption } from './journey/docketClerkUpdatesCaseCaption';
 import { docketClerkViewsCaseDetail } from './journey/docketClerkViewsCaseDetail';
+import { externalUserCreatesElectronicCase } from './journey/externalUserCreatesElectronicCase';
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { petitionerCancelsCreateCase } from './journey/petitionerCancelsCreateCase';
-import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
-import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
-import { petitionerCreatesNewCaseTestAllOptions } from './journey/petitionerCreatesNewCaseTestAllOptions';
 import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import { petitionsClerkAssignsWorkItemToOther } from './journey/petitionsClerkAssignsWorkItemToOther';
@@ -39,9 +37,7 @@ describe('Case journey', () => {
 
   loginAs(cerebralTest, 'petitioner@example.com');
   petitionerCancelsCreateCase(cerebralTest);
-  petitionerChoosesProcedureType(cerebralTest);
-  petitionerChoosesCaseType(cerebralTest);
-  petitionerCreatesNewCaseTestAllOptions(cerebralTest, fakeFile);
+  externalUserCreatesElectronicCase(cerebralTest, fakeFile, {});
   petitionerViewsDashboard(cerebralTest);
   petitionerViewsCaseDetail(cerebralTest);
 
@@ -58,15 +54,15 @@ describe('Case journey', () => {
 
   loginAs(cerebralTest, 'irspractitioner@example.com');
   respondentViewsDashboard(cerebralTest);
-  const documentCountPreStipDecision = 6;
+  const documentsOnRecordCount = 5;
   respondentAddsAnswer(cerebralTest, fakeFile, {
-    documentCount: documentCountPreStipDecision,
+    documentCount: documentsOnRecordCount,
   });
   respondentAddsStipulatedDecision(cerebralTest, fakeFile, {
-    documentCount: documentCountPreStipDecision + 1,
+    documentCount: documentsOnRecordCount + 1,
   });
   respondentAddsMotionWithBrief(cerebralTest, fakeFile, {
-    documentCount: documentCountPreStipDecision + 3,
+    documentCount: documentsOnRecordCount + 3,
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');

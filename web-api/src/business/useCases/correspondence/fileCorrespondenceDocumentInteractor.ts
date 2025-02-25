@@ -7,6 +7,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 
 /**
  * fileCorrespondenceDocumentInteractor
@@ -51,6 +52,7 @@ export const fileCorrespondenceDocumentInteractor = async (
   const correspondenceEntity = new Correspondence({
     ...documentMetadata,
     correspondenceId: primaryDocumentFileId,
+    docketNumber: caseToUpdate.docketNumber,
     filedBy: user.name,
     userId: user.userId,
   });
@@ -58,11 +60,9 @@ export const fileCorrespondenceDocumentInteractor = async (
   caseEntity.fileCorrespondence(correspondenceEntity);
 
   if (caseEntity.validate()) {
-    await applicationContext.getPersistenceGateway().updateCaseCorrespondence({
-      applicationContext,
-      correspondence: correspondenceEntity.validate().toRawObject(),
-      docketNumber,
-    });
+    await upsertCaseCorrespondences([
+      correspondenceEntity.validate().toRawObject(),
+    ]);
   }
 
   return caseEntity.toRawObject();

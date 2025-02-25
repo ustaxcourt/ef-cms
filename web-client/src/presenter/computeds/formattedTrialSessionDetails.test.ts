@@ -1,4 +1,9 @@
 import {
+  FORMATS,
+  calculateISODate,
+  formatNow,
+} from '@shared/business/utilities/DateHandler';
+import {
   HYBRID_SESSION_TYPES,
   SESSION_STATUS_GROUPS,
   SESSION_STATUS_TYPES,
@@ -9,6 +14,7 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import {
   colvinsChambersUser,
   docketClerkUser,
+  judgeUser,
   trialClerkUser,
 } from '../../../../shared/src/test/mockUsers';
 import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from './formattedTrialSessionDetails';
@@ -372,6 +378,25 @@ describe('formattedTrialSessionDetails', () => {
       });
     });
 
+    it('should  NOT allow judge to edit trial session info page', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        sessionStatus: SESSION_STATUS_GROUPS.open,
+        startDate: FUTURE_DATE,
+      };
+
+      const result: any = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {},
+          user: judgeUser,
+        },
+      });
+
+      expect(result).toMatchObject({
+        canEdit: false,
+      });
+    });
+
     it('should be false when trial session start date is in the future and it is closed', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
@@ -522,12 +547,12 @@ describe('formattedTrialSessionDetails', () => {
   });
 
   describe('NOTT reminder', () => {
-    it('should set showAlertForNOTTReminder to true when the alert has not been previously dismissed and isStartDateWithinNOTTReminderRange is true', () => {
+    it('should set showAlertForNOTTReminder to true when the alert has not been previously dismissed and start date is within NOTT reminder range', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         dismissedAlertForNOTT: false,
-        isStartDateWithinNOTTReminderRange: true,
-        thirtyDaysBeforeTrialFormatted: '2/2/2022',
+        isCalendared: true,
+        startDate: calculateISODate({ howMuch: 29, units: 'days' }),
       };
 
       const result: any = runCompute(formattedTrialSessionDetails, {
@@ -541,7 +566,7 @@ describe('formattedTrialSessionDetails', () => {
 
       expect(result.showAlertForNOTTReminder).toBe(true);
       expect(result.alertMessageForNOTT).toEqual(
-        '30-day trial notices are due by 2/2/2022. Have notices been served?',
+        `30-day trial notices are due by ${formatNow(FORMATS.MMDDYY)}. Have notices been served?`,
       );
     });
 
@@ -549,7 +574,8 @@ describe('formattedTrialSessionDetails', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         dismissedAlertForNOTT: true,
-        isStartDateWithinNOTTReminderRange: true,
+        isCalendared: true,
+        startDate: calculateISODate({ howMuch: 30, units: 'days' }),
       };
 
       const result: any = runCompute(formattedTrialSessionDetails, {
@@ -565,11 +591,12 @@ describe('formattedTrialSessionDetails', () => {
       expect(result.alertMessageForNOTT).toBeUndefined();
     });
 
-    it('should set showAlertForNOTTReminder to false when isStartDateWithinNOTTReminderRange is false', () => {
+    it('should set showAlertForNOTTReminder to false when start date is within NOTT reminder range', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         dismissedAlertForNOTT: true,
-        isStartDateWithinNOTTReminderRange: false,
+        isCalendared: true,
+        startDate: calculateISODate({ howMuch: 60, units: 'days' }),
       };
 
       const result: any = runCompute(formattedTrialSessionDetails, {

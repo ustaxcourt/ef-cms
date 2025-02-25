@@ -1,3 +1,9 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
+);
 import {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
@@ -14,12 +20,25 @@ import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { fileExternalDocumentInteractor } from './fileExternalDocumentInteractor';
+import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import {
   mockDocketClerkUser,
   mockIrsPractitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
+import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
+import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 
 describe('fileExternalDocumentInteractor', () => {
+  const getCaseDeadlinesByDocketNumber = jest.mocked(
+    getCaseDeadlinesByDocketNumberMock,
+  );
+  const deleteCaseTrialSortMappingRecords = jest.mocked(
+    deleteCaseTrialSortMappingRecordsMock,
+  );
+
+  const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const mockDocketEntryId = applicationContext.getUniqueId();
 
   let caseRecord;
@@ -154,9 +173,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).not.toHaveBeenCalled();
+    expect(upsertWorkItems).not.toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).not.toHaveBeenCalled();
@@ -184,9 +201,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -302,9 +317,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalledTimes(5);
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalledTimes(4);
+    expect(upsertWorkItems).toHaveBeenCalledTimes(1);
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalledTimes(2);
@@ -315,30 +328,6 @@ describe('fileExternalDocumentInteractor', () => {
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalledTimes(2);
     expect(updatedCase!.docketEntries[4].servedAt).toBeDefined();
-  });
-
-  it('should use original case caption to create case title when creating work item', async () => {
-    await fileExternalDocumentInteractor(
-      applicationContext,
-      {
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'Memorandum in Support',
-          documentType: 'Memorandum in Support',
-          eventCode: 'A',
-          filedBy: 'Test Petitioner',
-          primaryDocumentId: mockDocketEntryId,
-        },
-      },
-      mockIrsPractitionerUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-        .workItem,
-    ).toMatchObject({
-      caseTitle: caseRecord.caseCaption,
-    });
   });
 
   it('should set secondary document and secondary supporting documents to lodged', async () => {
@@ -437,9 +426,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -470,13 +457,11 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0],
-    ).toMatchObject({
-      workItem: { highPriority: true, trialDate: '2019-03-01T21:40:46.415Z' },
+    expect(upsertWorkItems).toHaveBeenCalled();
+    expect(upsertWorkItems.mock.calls[0][0]).toMatchObject({
+      workItems: [
+        { highPriority: true, trialDate: '2019-03-01T21:40:46.415Z' },
+      ],
     });
   });
 
@@ -498,13 +483,9 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0],
-    ).toMatchObject({
-      workItem: { highPriority: false },
+    expect(upsertWorkItems).toHaveBeenCalled();
+    expect(upsertWorkItems.mock.calls[0][0]).toMatchObject({
+      workItems: [{ highPriority: false }],
     });
   });
 
@@ -533,20 +514,13 @@ describe('fileExternalDocumentInteractor', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
     });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
+    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 
   it('should automatically block the case with deadlines if the document filed is a tracked document and the case has a deadline', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockReturnValue([
-        {
-          deadlineDate: 'something',
-        },
-      ]);
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([
+      new CaseDeadline(MOCK_CASE_DEADLINE),
+    ]);
 
     await fileExternalDocumentInteractor(
       applicationContext,
@@ -572,10 +546,7 @@ describe('fileExternalDocumentInteractor', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
     });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
+    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 
   it('should not sendServedPartiesEmails if docketEntryId is undefined', async () => {

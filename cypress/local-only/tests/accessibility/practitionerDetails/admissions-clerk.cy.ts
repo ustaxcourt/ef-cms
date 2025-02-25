@@ -4,15 +4,21 @@ import { loginAsAdmissionsClerk } from '../../../../helpers/authentication/login
 describe('Practitioner Details - Admissions Clerk Accessibility', () => {
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
+    loginAsAdmissionsClerk();
   });
 
-  describe('Practitioner documentation tab', () => {
+  describe('Practitioner Information Tabs', () => {
     it('should be free of a11y issues', () => {
-      loginAsAdmissionsClerk();
-
       cy.visit('/practitioner-detail/PT1234?tab=practitioner-documentation');
       cy.get('[data-testid="add-practitioner-document-button"]');
+      checkA11y();
 
+      cy.visit('/practitioner-detail/PT1234?tab=practitioner-open-cases');
+      cy.get('[data-testid="practitioner-open-cases-list-container"]');
+      checkA11y();
+
+      cy.visit('/practitioner-detail/PT1234?tab=practitioner-closed-cases');
+      cy.get('[data-testid="practitioner-closed-cases-list-container"]');
       checkA11y();
     });
   });

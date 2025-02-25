@@ -93,6 +93,7 @@ export const PractitionerAddEditDocument = connect(
                         aria-describedby="practitioner-document-file-label"
                         id="practitioner-document-file"
                         name="practitionerDocumentFile"
+                        skipFileTypeValidation={true}
                         updateFormValueSequence="updateFormValueSequence"
                         validationSequence="validateAddPractitionerDocumentSequence"
                       />
@@ -196,7 +197,7 @@ export const PractitionerAddEditDocument = connect(
                 </div>
               </div>
               <div className="grid-row margin-bottom-6 margin-top-5">
-                <div className="grid-col-12">
+                <div className="grid-col-12 button-container">
                   {form.isEditingDocument ? (
                     <Button
                       onClick={() => {

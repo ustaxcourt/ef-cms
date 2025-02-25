@@ -274,16 +274,19 @@ export const Header = connect(
               role="banner"
             >
               <div className="usa-nav-container">
-                <div className="usa-navbar">
+                <div
+                  className="usa-navbar"
+                  data-header-available={
+                    headerHelper.isLoggedIn ? 'false' : 'true'
+                  }
+                >
                   <div className="usa-logo">
                     <a href={headerHelper.ustcSealLink}>
                       <img alt="USTC Seal" src={seal} />
                     </a>
                   </div>
                   {!headerHelper.isLoggedIn && (
-                    <h1 className="header-welcome text-no-wrap">
-                      Welcome to DAWSON
-                    </h1>
+                    <div className="header-welcome">Welcome to DAWSON</div>
                   )}
                   {headerHelper.showMobileAccountMenu && (
                     <button
@@ -305,7 +308,7 @@ export const Header = connect(
                   <Button
                     iconRight
                     link
-                    className="usa-nav__close float-right margin-right-0 padding-top-0"
+                    className="usa-nav__close float-right margin-right-0 padding-top-0 ustc-close"
                     icon="times-circle"
                     onClick={() => toggleMobileMenuSequence()}
                   >

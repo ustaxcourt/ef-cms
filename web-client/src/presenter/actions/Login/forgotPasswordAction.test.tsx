@@ -1,3 +1,4 @@
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { forgotPasswordAction } from '@web-client/presenter/actions/Login/forgotPasswordAction';
 import { presenter } from '../../presenter-mock';
@@ -137,8 +138,8 @@ describe('forgotPasswordAction', () => {
           <>
             We sent you an email to help you log in. If you don’t see it, check
             your spam folder. If you’re still having trouble, email{' '}
-            <a href="mailto:dawson.support@ustaxcourt.gov">
-              dawson.support@ustaxcourt.gov
+            <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
+              {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
             </a>
             .
           </>

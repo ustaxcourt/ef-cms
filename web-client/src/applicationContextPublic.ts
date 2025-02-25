@@ -42,7 +42,7 @@ import {
 } from '../../shared/src/sharedAppContext';
 import { User } from '../../shared/src/business/entities/User';
 import { casePublicSearchInteractor } from '../../shared/src/proxies/casePublicSearchProxy';
-import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
+import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { confirmSignUpInteractor } from '@shared/proxies/auth/confirmSignUpProxy';
 import {
   createISODateString,
@@ -72,6 +72,9 @@ import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseP
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
 import { getPublicPractitionerByBarNumberInteractor } from '@shared/proxies/public/getPublicPractitionerByBarNumberProxy';
 import { getPublicPractitionersByNameInteractor } from '@shared/proxies/public/getPublicPractitionersByNameProxy';
+import { getPublicTrialSessionDetailsInteractor } from '@shared/proxies/trialSessions/getPublicTrialSessionDetailsProxy';
+import { getPublicTrialSessionsInteractor } from '@shared/proxies/trialSessions/getPublicTrialSessionsProxy';
+import { getPublicUsersInSectionInteractor } from '@shared/proxies/users/getPublicUsersInSectionProxy';
 import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
 import { getTodaysOpinionsInteractor } from '../../shared/src/proxies/public/getTodaysOpinionsProxy';
 import { getTodaysOrdersInteractor } from '../../shared/src/proxies/public/getTodaysOrdersProxy';
@@ -113,8 +116,11 @@ const allUseCases = {
     getPublicPractitionerByBarNumberInteractor,
   getPractitionersByNameInteractor: getPublicPractitionersByNameInteractor,
   getPublicJudgesInteractor,
+  getPublicTrialSessionDetailsInteractor,
   getTodaysOpinionsInteractor,
   getTodaysOrdersInteractor,
+  getTrialSessionsInteractor: getPublicTrialSessionsInteractor,
+  getUsersInSectionInteractor: getPublicUsersInSectionInteractor,
   opinionPublicSearchInteractor,
   orderPublicSearchInteractor,
   removeItemInteractor,
@@ -165,7 +171,7 @@ let forceRefreshCallback: () => {};
 
 const applicationContextPublic = {
   getBaseUrl: () => {
-    return process.env.API_URL || 'http://localhost:5000';
+    return process.env.API_URL || 'http://localhost:4001';
   },
   getCaseTitle: Case.getCaseTitle,
   getConstants: () => frozenConstants,
@@ -178,19 +184,15 @@ const applicationContextPublic = {
   },
   getLogger: () => ({
     error: () => {
-      // eslint-disable-next-line no-console
       // console.error(value);
     },
     info: (key, value) => {
-      // eslint-disable-next-line no-console
       console.info(key, JSON.stringify(value));
     },
     time: key => {
-      // eslint-disable-next-line no-console
       console.time(key);
     },
     timeEnd: key => {
-      // eslint-disable-next-line no-console
       console.timeEnd(key);
     },
   }),

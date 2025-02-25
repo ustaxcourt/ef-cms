@@ -6,7 +6,7 @@ import {
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } from '../entities/EntityConstants';
-import { Case } from '../entities/cases/Case';
+import { Case, isSealedCase } from '../entities/cases/Case';
 import { DocketEntry } from '../entities/DocketEntry';
 import {
   FORMATS,
@@ -17,6 +17,17 @@ import {
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { cloneDeep, isEmpty, sortBy } from 'lodash';
 import { isMiscellaneousDocketEntry } from '@shared/business/utilities/isMiscellaneousDocketEntry';
+
+export type FormattedCaseInventoryReportEntry = {
+  docketNumber: string;
+  caseTitle: string;
+  consolidatedIconTooltipText: string;
+  inConsolidatedGroup: boolean;
+  isLeadCase: boolean;
+  associatedJudge?: string;
+  status: string;
+  [key: string]: unknown;
+};
 
 const computeIsInProgress = ({ formattedEntry }) => {
   return (
@@ -111,10 +122,16 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
     formattedEntry.createdAtFormatted = applicationContext
       .getUtilities()
       .formatDateString(formattedEntry.filingDate, 'MMDDYY');
+    formattedEntry.sortingFilingDate = applicationContext
+      .getUtilities()
+      .formatDateString(formattedEntry.filingDate, 'YYYYMMDD_NUMERIC');
   } else {
     formattedEntry.createdAtFormatted = applicationContext
       .getUtilities()
       .formatDateString(formattedEntry.createdAt, 'MMDDYY');
+    formattedEntry.sortingFilingDate = applicationContext
+      .getUtilities()
+      .formatDateString(formattedEntry.createdAt, 'YYYYMMDD_NUMERIC');
   }
 
   formattedEntry.filingsAndProceedings =
@@ -169,12 +186,10 @@ const formattedTrialSessionDetails = ({
   trialLocation,
   trialTime,
 }) => {
-  let formattedTrialCity;
-  let formattedAssociatedJudge;
   let formattedTrialDate;
 
-  formattedTrialCity = trialLocation || 'Not assigned';
-  formattedAssociatedJudge = judgeName || 'Not assigned';
+  const formattedTrialCity = trialLocation || 'Not assigned';
+  const formattedAssociatedJudge = judgeName || 'Not assigned';
 
   if (!trialDate) {
     formattedTrialDate = 'Not scheduled';
@@ -333,6 +348,8 @@ export const formatCase = (
     caseDetail.caseCaption || '',
   );
 
+  result.isSealed = isSealedCase(caseDetail);
+
   formatTrialSessionScheduling({ applicationContext, formattedCase: result });
 
   result.isLeadCase = applicationContext.getUtilities().isLeadCase(result);
@@ -373,7 +390,7 @@ export const formatCase = (
   const caseEntity = new Case(caseDetail, {
     authorizedUser,
   });
-  result.canConsolidate = caseEntity.canConsolidate();
+  result.canConsolidate = caseEntity.canConsolidate(caseEntity);
   result.canUnconsolidate = !!caseEntity.leadDocketNumber;
   result.irsSendDate = caseEntity.getIrsSendDate();
   result.showPrintConfirmationLink =

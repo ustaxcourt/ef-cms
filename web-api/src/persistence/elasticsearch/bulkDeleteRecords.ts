@@ -27,7 +27,7 @@ export const bulkDeleteRecords = async ({ applicationContext, records }) => {
       response.items.forEach((action, i) => {
         const operation = Object.keys(action)[0];
         if (action[operation].error) {
-          let record = body[i];
+          const record = body[i];
           failedRecords.push(record.delete);
         }
       });

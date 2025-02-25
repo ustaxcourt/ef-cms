@@ -2,15 +2,15 @@ import { applicationContext } from '../../../../shared/src/business/test/createT
 import { getCasesClosedCountByJudge } from './getCasesClosedCountByJudge';
 jest.mock('./searchClient');
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
-import { casesClosedResults } from '@web-api/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor.test';
 import { judgeUser } from '@shared/test/mockUsers';
 import { search } from './searchClient';
+import { casesClosedResults } from '@web-api/business/useCases/judgeActivityReport/mockCasesClosedResults';
 
 describe('getCasesClosedCountByJudge', () => {
   const mockEndDate = '03/21/2020';
   const mockStartDate = '02/12/2020';
 
-  let mockValidRequest = {
+  const mockValidRequest = {
     endDate: mockEndDate,
     judges: [judgeUser.name],
     startDate: mockStartDate,
@@ -26,7 +26,7 @@ describe('getCasesClosedCountByJudge', () => {
     key: CASE_STATUS_TYPES.closedDismissed,
   };
 
-  let mockAggregationsResult = {
+  const mockAggregationsResult = {
     aggregations: {
       closed_cases: {
         buckets: [mockCaseClosed, mockCaseClosedDismissed],
@@ -35,7 +35,7 @@ describe('getCasesClosedCountByJudge', () => {
     total: 5,
   };
 
-  let mockBodyQuery = {
+  const mockBodyQuery = {
     aggs: {
       closed_cases: {
         terms: {

@@ -15,6 +15,7 @@ export const InfoNotificationComponent = function InfoNotificationComponent({
 }: {
   alertInfo: {
     title?: string;
+    linkText?: string;
     linkUrl?: string;
     inlineLinkUrl?: string;
     inlineLinkText?: string;

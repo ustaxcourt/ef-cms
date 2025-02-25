@@ -1,4 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { setValidationAlertErrorsAction } from '@web-client/presenter/actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validateAddPetitionerAction } from '../actions/validateAddPetitionerAction';
@@ -10,7 +11,7 @@ export const validateAddPetitionerSequence = [
     validate: [
       validateAddPetitionerAction,
       {
-        error: [setValidationErrorsAction],
+        error: [setValidationErrorsAction, setValidationAlertErrorsAction],
         success: [clearAlertsAction],
       },
     ],

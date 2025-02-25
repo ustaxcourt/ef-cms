@@ -17,23 +17,8 @@ describe('Pending report', () => {
       cy.get('[data-testid="dropdown-select-report"]').click();
       cy.get('[data-testid="select-pending-report"]').click();
       cy.get('[data-testid="dropdown-select-judge"]').select('Chief Judge');
-
-      cy.get('[data-testid="display-pending-report-table"]')
-        .children()
-        .its('length')
-        .then(beforeLength => {
-          cy.get('[data-testid="load-more-pending-report-data"]').click();
-          cy.get('[data-testid="display-pending-report-table"]')
-            .children()
-            .its('length')
-            .then(afterLength => {
-              expect(afterLength).to.be.greaterThan(beforeLength);
-            });
-        });
-
       cy.get('[data-testid="export-pending-report"]').click();
       cy.readFile(path.join(downloadsFolder, fileName));
-
       cy.get('[data-testid="print-pending-report"]').click();
       cy.get('[data-testid="preview-pdf').should('exist');
     });

@@ -7,6 +7,7 @@ const config: Config = {
   collectCoverage: true,
   collectCoverageFrom: [
     '**/*.{js,ts}',
+    '!archived/**',
     '!checkAllFilesForTypeErrorCount.ts',
     '!circleci/*.ts',
     '!circleci/judge/bulkImportJudgeUsers.ts',
@@ -14,7 +15,6 @@ const config: Config = {
     '!compareTypescriptErrors.ts',
     '!coverage/**',
     '!download-all-case-documents.ts',
-    '!dynamo/archive-outboxes.ts',
     '!dynamo/fix-race-condition-served-in-drafts.ts',
     '!migration/is-migration-needed.ts',
     '!migration/migrationFilesHelper.ts',
@@ -39,8 +39,11 @@ const config: Config = {
     '!reports/**',
     '!run-once-scripts/**',
     '!set-maintenance-mode-locally.ts',
+    '!template.ts',
     '!upload-practitioner-application-packages.ts',
     '!user/**',
+    '!postgres/**',
+    '!npm/upgrade-npm-packages.ts',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
@@ -68,5 +71,4 @@ const config: Config = {
   verbose: false,
 };
 
-// eslint-disable-next-line import/no-default-export
 export default config;

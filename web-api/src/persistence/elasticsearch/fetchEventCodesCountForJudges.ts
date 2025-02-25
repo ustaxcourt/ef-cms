@@ -1,3 +1,4 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   computeDocumentFilters,
   computeShouldFilters,
@@ -26,7 +27,7 @@ export const fetchEventCodesCountForJudges = async ({
   applicationContext,
   params,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   params: FetchEventCodesParamsType;
 }): Promise<AggregatedEventCodesType> => {
   const documentFilters = computeDocumentFilters({ params });

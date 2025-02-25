@@ -1,13 +1,10 @@
-import {
-  getFakeFile,
-  testPdfDoc,
-} from '../../../../../shared/src/business/test/getFakeFile';
-
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { serveGeneratedNoticesOnCase } from './serveGeneratedNoticesOnCase';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { getFakeFile, testPdfDoc } from '@shared/business/test/getFakeFile';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { serveGeneratedNoticesOnCase } from '@web-api/business/useCaseHelper/trialSessions/serveGeneratedNoticesOnCase';
+import { PDFDocument } from 'pdf-lib';
 
 describe('serveGeneratedNoticesOnCase', () => {
   const mockOpenCaseEntity = new Case(MOCK_CASE, { authorizedUser: undefined });
@@ -22,12 +19,14 @@ describe('serveGeneratedNoticesOnCase', () => {
   it('should sendServedPartiesEmails and append the paper service info to the docket entry on the case when the case has parties with paper service', async () => {
     const mockServedParties = {
       paper: ['test'],
+      all: [],
+      electronic: [],
     };
 
     await serveGeneratedNoticesOnCase({
       applicationContext,
       caseEntity: mockOpenCaseEntity,
-      newPdfDoc: getFakeFile,
+      newPdfDoc: getFakeFile as unknown as PDFDocument,
       noticeDocketEntryEntity: mockNoticeDocketEntryEntity,
       noticeDocumentPdfData: testPdfDoc,
       servedParties: mockServedParties,
@@ -54,15 +53,19 @@ describe('serveGeneratedNoticesOnCase', () => {
   });
 
   it('should not append the paper service info to the docket entry on the case when servedParties does not include any paper entries', async () => {
+    const mockServedParties = {
+      paper: [],
+      all: [],
+      electronic: [],
+    };
+
     await serveGeneratedNoticesOnCase({
       applicationContext,
       caseEntity: mockOpenCaseEntity,
-      newPdfDoc: getFakeFile,
+      newPdfDoc: getFakeFile as unknown as PDFDocument,
       noticeDocketEntryEntity: mockNoticeDocketEntryEntity,
       noticeDocumentPdfData: testPdfDoc,
-      servedParties: {
-        paper: [],
-      },
+      servedParties: mockServedParties,
     });
 
     expect(

@@ -7,5 +7,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.store the cerebral store
  */
 export const showModalFromQueryAction = ({ props, store }: ActionProps) => {
-  props.openModal && store.set(state.modal.showModal, props.openModal);
+  if (props.openModal) {
+    store.set(state.modal.showModal, props.openModal);
+  }
 };

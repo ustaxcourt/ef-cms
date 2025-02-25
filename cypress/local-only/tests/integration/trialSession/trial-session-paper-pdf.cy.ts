@@ -1,5 +1,6 @@
 import { fillInCreateCaseFromPaperForm } from '../../../support/pages/create-paper-petition';
 import { getCreateACaseButton } from '../../../support/pages/document-qc';
+import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/select-typeahead-input';
 
 describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
   it('should create a trial session, add a case, and generate a pdf for paper service', () => {
@@ -33,13 +34,8 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
     cy.get('[data-testid="trial-session-trial-clerk"]').select('Other');
     cy.get('[data-testid="trial-session-trial-clerk-alternate"]').type('Abu');
     cy.get('[data-testid="trial-session-court-reporter"]').type('Fameet');
-    cy.get(
-      '#irs-calendar-administrator-info-search .select-react-element__input-container input',
-    ).clear();
-    cy.get(
-      '#irs-calendar-administrator-info-search .select-react-element__input-container input',
-    ).type('Nero West');
-    cy.get('#react-select-2-option-0').click({ force: true });
+
+    selectTypeaheadInput('irs-calendar-administrator-info-search', 'Nero West');
 
     cy.intercept('POST', '**/trial-sessions').as('createTrialSession');
     cy.get('[data-testid="submit-trial-session"]').click();
@@ -56,10 +52,11 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
         cy.intercept('POST', '**/paper').as('postPaperCase');
         cy.get('#submit-case').click();
         cy.wait('@postPaperCase').then(({ response: paperCaseResponse }) => {
-          const petitionId = paperCaseResponse?.body.docketEntries.find(
-            (d: any) => d.documentTitle === 'Petition',
-          ).docketEntryId;
-          const docketNumber = paperCaseResponse?.body.docketNumber;
+          const petitionId =
+            paperCaseResponse?.body.caseDetail.docketEntries.find(
+              (d: any) => d.documentTitle === 'Petition',
+            ).docketEntryId;
+          const docketNumber = paperCaseResponse?.body.caseDetail.docketNumber;
           cy.visit(
             `/case-detail/${docketNumber}/petition-qc/document-view/${petitionId}`,
           );
@@ -103,11 +100,11 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
             '+1 (555) 555-5555',
           );
 
-          cy.get(`[data-testid="${docketNumber}-complete"]:checked`).should(
+          cy.get(`[data-testid="qc-complete-${docketNumber}"]:checked`).should(
             'not.exist',
           );
-          cy.get(`label[for="${docketNumber}-complete"]`).click();
-          cy.get(`[data-testid="${docketNumber}-complete"]:checked`).should(
+          cy.get(`label[for="qc-complete-${docketNumber}"]`).click();
+          cy.get(`[data-testid="qc-complete-${docketNumber}"]:checked`).should(
             'exist',
           );
           cy.get('#set-calendar-button').click();
@@ -120,6 +117,10 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
           );
           cy.visit(`/edit-trial-session/${createdTrialSessionId}`);
           cy.get('[data-testid="trial-session-judge"]').select('Colvin');
+          cy.get('[data-testid="trial-session-judge"] option:selected').should(
+            'have.text',
+            'Colvin',
+          );
           cy.get('[data-testid="submit-edit-trial-session"]').click();
           cy.url().should('include', 'print-paper-trial-notices');
           cy.get('[data-testid="printing-complete"]').click();

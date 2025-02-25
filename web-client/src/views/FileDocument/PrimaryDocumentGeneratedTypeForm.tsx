@@ -60,6 +60,7 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
                         key: 'generationType',
                         value: constants.GENERATION_TYPES.AUTO,
                       });
+                      validateCaseAssociationRequestSequence();
                     }}
                   />
                   <label
@@ -85,6 +86,7 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
                       key: 'generationType',
                       value: constants.GENERATION_TYPES.MANUAL,
                     });
+                    validateCaseAssociationRequestSequence();
                   }}
                 />
                 <label

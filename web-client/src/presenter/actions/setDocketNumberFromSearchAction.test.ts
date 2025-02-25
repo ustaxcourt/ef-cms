@@ -34,19 +34,6 @@ describe('setDocketNumberFromSearchAction', () => {
     });
     expect(output.docketNumber).toEqual('101-18');
   });
-  it('matches a docket number with S suffix', async () => {
-    const { output } = await runAction(setDocketNumberFromSearchAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        header: {
-          searchTerm: '101-18S',
-        },
-      },
-    });
-    expect(output.docketNumber).toEqual('101-18');
-  });
   it('matches a docket number with R suffix', async () => {
     const { output } = await runAction(setDocketNumberFromSearchAction, {
       modules: {

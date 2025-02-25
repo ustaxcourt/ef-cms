@@ -123,7 +123,7 @@ export const CreateOrder = connect(
             </Tabs>
 
             <div className="grid-row grid-gap margin-top-4">
-              <div className="grid-col-8">
+              <div className="grid-col-8 button-container">
                 <Button
                   data-testid="save-order-button"
                   id="save-order-button"

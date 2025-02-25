@@ -29,6 +29,16 @@
   margin-left: 95px;
 }
 
+.document-title {
+  margin-top: 30px;
+  font-size: 16px;
+  text-align: center;
+
+  .underline {
+    text-decoration: underline;
+  }
+}
+
 .order-docket-header #docket-number {
   width: 48%;
   margin-top: 50px;

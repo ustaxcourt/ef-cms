@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const crypto = require('crypto');
 const https = require('https');
 const zlib = require('zlib');
@@ -58,7 +59,7 @@ const decompressAndParse = async data => {
 };
 
 const convertLogEventToElasticSearchInsert = (payload, logEvent) => {
-  // eslint-disable-next-line @miovision/disallow-date/no-new-date
+  // eslint-disable-next-line custom-rules-plugin/no-new-dates
   const timestamp = new Date(1 * logEvent.timestamp);
 
   // index name format: cwl-YYYY.MM.DD
@@ -101,7 +102,8 @@ const convertLogEventToElasticSearchInsert = (payload, logEvent) => {
 const tryParse = message => {
   try {
     return JSON.parse(message);
-  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (e) {
     return null;
   }
 };
@@ -213,7 +215,7 @@ function buildRequest(endpoint, body) {
   );
   let region = endpointParts[2];
   let service = endpointParts[3];
-  // eslint-disable-next-line @miovision/disallow-date/no-new-date
+  // eslint-disable-next-line custom-rules-plugin/no-new-dates
   let datetime = new Date().toISOString().replace(/[:-]|\.\d{3}/g, '');
   let date = datetime.substr(0, 8);
   let kDate = hmac('AWS4' + process.env.AWS_SECRET_ACCESS_KEY, date);

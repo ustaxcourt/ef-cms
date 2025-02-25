@@ -123,7 +123,10 @@ export const changePasswordInteractor = async (
 
 export const updateUserPendingEmailRecord = async (
   applicationContext: ServerApplicationContext,
-  { user }: { user: RawUser },
+  {
+    setIsUpdatingInformation = false,
+    user,
+  }: { user: RawUser; setIsUpdatingInformation?: boolean },
 ): Promise<{ updatedUser: RawPractitioner | RawUser }> => {
   let userEntity;
 
@@ -137,6 +140,7 @@ export const updateUserPendingEmailRecord = async (
       email: user.pendingEmail,
       pendingEmail: undefined,
       pendingEmailVerificationToken: undefined,
+      pendingEmailVerificationTokenTimestamp: undefined,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
   } else {
@@ -145,8 +149,11 @@ export const updateUserPendingEmailRecord = async (
       email: user.pendingEmail,
       pendingEmail: undefined,
       pendingEmailVerificationToken: undefined,
+      pendingEmailVerificationTokenTimestamp: undefined,
     });
   }
+
+  if (setIsUpdatingInformation) userEntity.isUpdatingInformation = true;
 
   const rawUser = userEntity.validate().toRawObject();
   await applicationContext.getPersistenceGateway().updateUser({

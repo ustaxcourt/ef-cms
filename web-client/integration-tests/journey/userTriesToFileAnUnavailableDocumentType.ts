@@ -20,7 +20,7 @@ export const userTriesToFileAnUnavailableDocumentType = cerebralTest => {
     );
 
     const M123_document =
-      completeDocumentTypeSection.documentTypesForSelectSorted.find(
+      completeDocumentTypeSection.documentTypesForSelectSorted?.find(
         d => d.eventCode === 'M123',
       );
 

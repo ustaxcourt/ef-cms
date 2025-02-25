@@ -61,8 +61,9 @@ export const CreateCaseDeadlineModalDialog = connect(
               What is this deadline for?
             </label>
             <textarea
-              className="usa-textarea"
+              className="usa-textarea textarea-resize-vertical"
               id="description"
+              data-testid="case-deadline-description-input"
               maxLength={120}
               name="description"
               onChange={e => {

@@ -1,0 +1,97 @@
+@use '../uswds' as *;
+@use '../variables' as *;
+
+// Gap
+.gap-1 {
+  gap: 8px;
+}
+
+.gap-105 {
+  gap: 12px;
+}
+
+.gap-2 {
+  gap: 16px;
+}
+
+.gap-205 {
+  gap: 20px;
+}
+
+.gap-3 {
+  gap: 24px;
+}
+
+.gap-305 {
+  gap: 28px;
+}
+
+.gap-4 {
+  gap: 32px;
+}
+
+.gap-405 {
+  gap: 36px;
+}
+
+.gap-5 {
+  gap: 40px;
+}
+
+.gap-505 {
+  gap: 44px;
+}
+
+.gap-6 {
+  gap: 48px;
+}
+
+.gap-605 {
+  gap: 52px;
+}
+
+.gap-7 {
+  gap: 56px;
+}
+
+.gap-705 {
+  gap: 60px;
+}
+
+.gap-8 {
+  gap: 64px;
+}
+
+.gap-805 {
+  gap: 68px;
+}
+
+// Width
+.minw-card-lg {
+  min-width: 240px;
+}
+
+.minw-mobile {
+  min-width: 320px;
+}
+
+.minw-mobile-lg {
+  min-width: 480px;
+}
+
+.minw-tablet {
+  min-width: 640px;
+}
+
+.minw-tablet-lg {
+  min-width: 880px;
+}
+
+// Visibility
+.visibility-hidden {
+  visibility: hidden;
+}
+
+.visibility-visible {
+  visibility: visible;
+}

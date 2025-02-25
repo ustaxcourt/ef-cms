@@ -1,3 +1,5 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -63,7 +65,7 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
   });
 
   it('should add mapping for a practitioner', async () => {
-    let mockUser = {
+    const mockUser = {
       email: 'emmet.brown@example.com',
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.adc,

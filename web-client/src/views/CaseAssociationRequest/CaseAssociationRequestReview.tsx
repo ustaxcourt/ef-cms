@@ -1,5 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { NonMobile } from '../../ustc-ui/Responsive/Responsive';
@@ -325,7 +324,7 @@ export const CaseAssociationRequestReview = connect(
                   </div>
                 )}
 
-                <div className="margin-top-4">
+                <div className="margin-top-4 button-container">
                   <Button
                     className="margin-bottom-1"
                     data-testid="submit-represent-a-party-button"
@@ -370,11 +369,6 @@ export const CaseAssociationRequestReview = connect(
         </div>
 
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
-        {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal
-            confirmSequence={submitCaseAssociationRequestSequence}
-          />
-        )}
       </React.Fragment>
     );
   },

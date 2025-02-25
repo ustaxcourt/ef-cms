@@ -7,7 +7,9 @@ import { remove } from '../requests';
  * @param {object} providers the providers object
  * @returns {Promise<*>} the promise of the api call
  */
-export const deleteAuthCookieInteractor = applicationContext => {
+export const deleteAuthCookieInteractor = (
+  applicationContext,
+): Promise<void> => {
   return remove({
     applicationContext,
     endpoint: '/auth/login',

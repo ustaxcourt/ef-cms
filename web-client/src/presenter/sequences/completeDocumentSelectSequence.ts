@@ -6,6 +6,7 @@ import { navigateToFileADocumentAction } from '../actions/FileDocument/navigateT
 import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
 import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/setDefaultFileDocumentFormValuesAction';
 import { setDocketNumberPropAction } from '../actions/FileDocument/setDocketNumberPropAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -19,7 +20,11 @@ export const completeDocumentSelectSequence = [
   generateTitleAction,
   validateSelectDocumentTypeAction,
   {
-    error: [setValidationErrorsAction, setValidationAlertErrorsAction],
+    error: [
+      setValidationErrorsAction,
+      setScrollToErrorNotificationAction,
+      setValidationAlertErrorsAction,
+    ],
     success: [
       clearAlertsAction,
       stopShowValidationAction,

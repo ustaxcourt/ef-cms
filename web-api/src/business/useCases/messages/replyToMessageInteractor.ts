@@ -11,6 +11,7 @@ import { ReplyMessageType } from '@web-api/business/useCases/messages/createMess
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { createMessageAsReply } from '@web-api/persistence/postgres/messages/createMessageAsReply';
 
 export const replyToMessage = async (
   applicationContext: ServerApplicationContext,
@@ -29,11 +30,6 @@ export const replyToMessage = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  await applicationContext.getPersistenceGateway().markMessageThreadRepliedTo({
-    applicationContext,
-    parentMessageId,
-  });
-
   const { caseCaption, docketNumberWithSuffix, status } =
     await applicationContext
       .getPersistenceGateway()
@@ -47,31 +43,28 @@ export const replyToMessage = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: toUserId });
 
-  const validatedRawMessage = new Message(
-    {
-      attachments,
-      caseStatus: status,
-      caseTitle: Case.getCaseTitle(caseCaption),
-      docketNumber,
-      docketNumberWithSuffix,
-      from: fromUser.name,
-      fromSection: fromUser.section,
-      fromUserId: fromUser.userId,
-      message,
-      parentMessageId,
-      subject,
-      to: toUser.name,
-      toSection,
-      toUserId,
-    },
-    { applicationContext },
-  )
+  const validatedRawMessage = new Message({
+    attachments,
+    caseStatus: status,
+    caseTitle: Case.getCaseTitle(caseCaption),
+    docketNumber,
+    docketNumberWithSuffix,
+    from: fromUser.name,
+    fromSection: fromUser.section,
+    fromUserId: fromUser.userId,
+    message,
+    parentMessageId,
+    subject,
+    to: toUser.name,
+    toSection,
+    toUserId,
+  })
     .validate()
     .toRawObject();
 
-  await applicationContext.getPersistenceGateway().createMessage({
-    applicationContext,
-    message: validatedRawMessage,
+  await createMessageAsReply({
+    newMessage: validatedRawMessage,
+    parentMessageId,
   });
 
   return validatedRawMessage;

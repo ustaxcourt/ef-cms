@@ -1,19 +1,4 @@
-provider "aws" {
-  region = var.aws_region
-}
-
-provider "aws" {
-  region = "us-east-1"
-  alias  = "us-east-1"
-}
-
-provider "aws" {
-  region = "us-west-1"
-  alias  = "us-west-1"
-}
-
 resource "aws_dynamodb_table" "efcms-table-east" {
-  provider     = aws.us-east-1
   name         = var.table_name
   billing_mode = "PAY_PER_REQUEST"
 
@@ -35,7 +20,7 @@ resource "aws_dynamodb_table" "efcms-table-east" {
     type = "S"
   }
 
-   attribute {
+  attribute {
     name = "gsi2pk"
     type = "S"
   }
@@ -66,13 +51,29 @@ resource "aws_dynamodb_table" "efcms-table-east" {
     Environment = var.environment
   }
 
+  lifecycle { ignore_changes = [replica] }
+
   ttl {
     attribute_name = "ttl"
     enabled        = true
   }
 
-  replica {
-    region_name = "us-west-1"
+  timeouts {
+    create = "2h"
+    update = "2h"
+  }
+}
+
+resource "aws_dynamodb_table_replica" "efcms_table_west" {
+  global_table_arn = aws_dynamodb_table.efcms-table-east.arn
+
+  provider = aws.us-west-1
+
+  point_in_time_recovery = true
+
+  tags = {
+    Name        = var.table_name
+    Environment = var.environment
   }
 
   timeouts {

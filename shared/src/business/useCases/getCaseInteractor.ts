@@ -12,6 +12,10 @@ import {
   isAssociatedUser,
   isUserPartOfGroup,
 } from '../entities/cases/Case';
+import {
+  INITIAL_DOCUMENT_TYPES,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { PublicCase } from '../entities/cases/PublicCase';
 import {
@@ -49,6 +53,10 @@ const getSealedCase = ({
     }
   }
 
+  if (!User.isInternalUser(authorizedUser.role)) {
+    filterDocketEntriesNotOnDocketRecord({ authorizedUser, caseRecord });
+  }
+
   if (isAuthorizedToViewSealedCase || isAssociatedWithCase) {
     return new Case(caseRecord, { authorizedUser }).validate().toRawObject();
   } else {
@@ -68,6 +76,7 @@ const getCaseForExternalUser = ({
   isAssociatedWithCase,
   isAuthorizedToGetCase,
 }) => {
+  filterDocketEntriesNotOnDocketRecord({ authorizedUser, caseRecord });
   if (isAuthorizedToGetCase && isAssociatedWithCase) {
     return new Case(caseRecord, { authorizedUser }).validate().toRawObject();
   } else {
@@ -121,6 +130,7 @@ export const getCaseInteractor = async (
     await applicationContext.getPersistenceGateway().getCaseByDocketNumber({
       applicationContext,
       docketNumber: Case.formatDocketNumber(docketNumber),
+      user: authorizedUser,
     }),
   );
   const isValidCase = Boolean(caseRecord.docketNumber && caseRecord.entityName);
@@ -201,4 +211,19 @@ export const getCaseInteractor = async (
     authorizedUser,
   );
   return caseDetailRaw;
+};
+
+const filterDocketEntriesNotOnDocketRecord = ({
+  authorizedUser,
+  caseRecord,
+}: {
+  caseRecord: RawCase;
+  authorizedUser: AuthUser;
+}) => {
+  caseRecord.docketEntries = caseRecord.docketEntries.filter(
+    d =>
+      d.isOnDocketRecord ||
+      (d.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType &&
+        authorizedUser.role === ROLES.irsSuperuser),
+  );
 };

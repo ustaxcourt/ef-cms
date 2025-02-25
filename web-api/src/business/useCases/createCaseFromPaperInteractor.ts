@@ -10,11 +10,15 @@ import {
   isAuthorized,
 } from '../../../../shared/src/authorization/authorizationClientService';
 import { RawUser } from '@shared/business/entities/User';
+import {
+  RawWorkItem,
+  WorkItem,
+} from '../../../../shared/src/business/entities/WorkItem';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '../../errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { WorkItem } from '../../../../shared/src/business/entities/WorkItem';
 import { replaceBracketed } from '../../../../shared/src/business/utilities/replaceBracketed';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd,
@@ -81,7 +85,7 @@ export const createCaseFromPaperInteractor = async (
     stinFileId?: string;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<RawCase> => {
+): Promise<{ caseDetail: RawCase; workItem: RawWorkItem }> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.START_PAPER_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -152,7 +156,7 @@ export const createCaseFromPaperInteractor = async (
   });
 
   if (applicationForWaiverOfFilingFeeFileId) {
-    let { documentTitle } =
+    const { documentTitle } =
       INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee;
 
     const applicationForWaiverOfFilingFeeDocketEntryEntity = new DocketEntry(
@@ -289,11 +293,13 @@ export const createCaseFromPaperInteractor = async (
       authorizedUser,
       caseToCreate: caseToAdd.validate().toRawObject(),
     }),
-    applicationContext.getPersistenceGateway().saveWorkItem({
-      applicationContext,
-      workItem: newWorkItem.validate().toRawObject(),
+    upsertWorkItems({
+      workItems: [newWorkItem.validate().toRawObject()],
     }),
   ]);
 
-  return new Case(caseToAdd, { authorizedUser }).toRawObject();
+  return {
+    caseDetail: new Case(caseToAdd, { authorizedUser }).toRawObject(),
+    workItem: newWorkItem.validate().toRawObject(),
+  };
 };

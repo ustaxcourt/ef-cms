@@ -10,26 +10,29 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const getCaseInventoryReportAction = async ({
   applicationContext,
   get,
+  props,
   store,
-}: ActionProps) => {
-  const { associatedJudge, page, status } = get(state.screenMetadata);
+}: ActionProps<{ selectedPage: number }>) => {
+  const { associatedJudge, status } = get(state.screenMetadata);
+  const { selectedPage } = props;
 
   if (associatedJudge || status) {
     const reportData = await applicationContext
       .getUseCases()
       .getCaseInventoryReportInteractor(applicationContext, {
         associatedJudge,
-        page,
+        selectedPage,
         status,
       });
-    const currentData = get(state.caseInventoryReportData) || {};
 
-    const results = {
-      foundCases: (currentData.foundCases || []).concat(reportData.foundCases),
-      totalCount: reportData.totalCount,
-    };
-
-    store.set(state.caseInventoryReportData, results);
+    store.set(
+      state.caseInventoryReportData.foundCasesForCurrentPage,
+      reportData.foundCases,
+    );
+    store.set(
+      state.caseInventoryReportData.foundCasesTotalCount,
+      reportData.totalCount,
+    );
   } else {
     store.unset(state.caseInventoryReportData);
   }

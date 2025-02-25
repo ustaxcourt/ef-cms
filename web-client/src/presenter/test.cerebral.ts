@@ -10,8 +10,9 @@ type FakeRunComputeType = <T>(
 ) => T;
 export const runCompute = cerebralRunCompute as unknown as FakeRunComputeType;
 
-type FakeRunActionType = <T>(
+type FakeRunActionType = <T, U = ClientState>(
   action: (actionProps: any) => Promise<T> | T,
   fixtures: { modules?: { presenter: any }; props?: any; state?: any },
-) => { state: ClientState; props: any; output: T };
+) => { state: U; props: any; output: T };
+
 export const runAction = cerebralRunAction as unknown as FakeRunActionType;

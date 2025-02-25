@@ -39,11 +39,10 @@
       "tsconfig-paths/register"
     ]
   },
-  "include": ["./**/*.ts", "./**/*.tsx"],
+  "include": ["./**/*.ts", "./**/*.tsx", "./eslint.config.mjs"],
   "exclude": [
     "node_modules",
     "targetBranch",
-    "./scripts/run-once-scripts/**/*",
     "./cypress/**/*",
     "./cypress.config.ts",
     "./cypress-smoketests.config.ts",

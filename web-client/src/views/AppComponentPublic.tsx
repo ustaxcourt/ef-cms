@@ -11,6 +11,8 @@ import { Privacy } from './Privacy';
 import { PublicCaseDetail } from './Public/PublicCaseDetail';
 import { PublicPrintableDocketRecord } from './Public/PublicPrintableDocketRecord';
 import { PublicSearch } from './Public/PublicSearch';
+import { PublicTrialSessionDetails } from '@web-client/views/Public/TrialSessions/PublicTrialSessionDetails';
+import { PublicTrialSessions } from '@web-client/views/Public/TrialSessions/PublicTrialSessions';
 import { TodaysOpinions } from './Public/TodaysOpinions';
 import { TodaysOrders } from './Public/TodaysOrders';
 import { UsaBanner } from './UsaBanner';
@@ -30,6 +32,8 @@ const pages = {
   PublicCaseDetail,
   PublicPrintableDocketRecord,
   PublicSearch,
+  PublicTrialSessionDetails,
+  PublicTrialSessions,
   TodaysOpinions,
   TodaysOrders,
 };
@@ -41,10 +45,12 @@ export const AppComponentPublic = connect(
     currentPage: state.currentPage,
   },
   function AppComponentPublic({ currentPage }) {
-    const focusMain = e => {
-      e && e.preventDefault();
+    const focusMain = (e?: React.MouseEvent) => {
+      e?.preventDefault();
       const header = window.document.querySelector('#main-content h1');
-      if (header) header.focus();
+      if (header instanceof HTMLElement) {
+        header.focus();
+      }
       return;
     };
 
@@ -57,7 +63,7 @@ export const AppComponentPublic = connect(
       }
     });
 
-    let showHeaderAndFooter = currentPage !== 'AppMaintenance';
+    const showHeaderAndFooter = currentPage !== 'AppMaintenance';
 
     if (!process.env.CI) {
       useScript('https://lynmjtcq5px1.statuspage.io/embed/script.js');

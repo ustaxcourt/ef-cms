@@ -1,3 +1,4 @@
+import { PublicClientState } from '@web-client/presenter/state-public';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { redirectToLoginAction } from '@web-client/presenter/actions/Public/redirectToLoginAction';
@@ -16,7 +17,7 @@ describe('redirectToLoginAction', () => {
     const mockPrivateUrl = 'localhost:5678';
     applicationContext.getPrivateUrl.mockReturnValue(mockPrivateUrl);
 
-    await runAction(redirectToLoginAction, {
+    await runAction<void, PublicClientState>(redirectToLoginAction, {
       modules: {
         presenter,
       },

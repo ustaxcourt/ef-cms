@@ -3,12 +3,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 
 export const updateCaseDeadlineInteractor = async (
-  applicationContext: ServerApplicationContext,
   { caseDeadline }: { caseDeadline: CaseDeadline },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -16,22 +15,11 @@ export const updateCaseDeadlineInteractor = async (
     throw new UnauthorizedError('Unauthorized for updating case deadline');
   }
 
-  const caseDeadlineToUpdate = new CaseDeadline(caseDeadline, {
-    applicationContext,
-  })
+  const caseDeadlineToUpdate = new CaseDeadline(caseDeadline)
     .validate()
     .toRawObject();
 
-  await applicationContext.getPersistenceGateway().deleteCaseDeadline({
-    applicationContext,
-    caseDeadlineId: caseDeadlineToUpdate.caseDeadlineId,
-    docketNumber: caseDeadlineToUpdate.docketNumber,
-  });
-
-  await applicationContext.getPersistenceGateway().createCaseDeadline({
-    applicationContext,
-    caseDeadline: caseDeadlineToUpdate,
-  });
+  await upsertCaseDeadlines([caseDeadlineToUpdate]);
 
   return caseDeadlineToUpdate;
 };

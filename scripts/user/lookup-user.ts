@@ -1,23 +1,42 @@
-/**
- * This script is to help search for users belonging to a certain role in the
- * environment designated by the ENV environment variable
- *
- * You must have the following Environment variables set:
- * - ENV: The name of the environment you are working with (mig)
- *
- * Example usage:
- *
- * $ npm run admin:lookup-user docketClerk "Beth"
- */
+#!/usr/bin/env -S npx ts-node --transpile-only
 
-import { getClient } from '../../web-api/elasticsearch/client';
-import { requireEnvVars } from '../../shared/admin-tools/util';
+import { RawUser } from '@shared/business/entities/User';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import {
+  type ServerApplicationContext,
+  createApplicationContext,
+} from '@web-api/applicationContext';
+import { search } from '@web-api/persistence/elasticsearch/searchClient';
 
-requireEnvVars(['ENV']);
+const scriptConfig: ScriptConfig = {
+  description:
+    'lookup-user - Looks up users and roles in a deployed DAWSON environment.',
+  environment: {
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+    environmentName: 'ENV',
+  },
+  parameters: {
+    role: {
+      position: 0,
+      required: true,
+      type: 'string',
+    },
+    userName: {
+      position: 1,
+      type: 'string',
+    },
+  },
+  requireActiveAwsSession: true,
+};
+const { role, userName } = parseArgsAndEnvVars(scriptConfig) as {
+  role: string;
+  userName: string;
+};
 
-const environmentName = process.env.ENV!;
-
-if (process.argv.length < 3) {
+if (!role.length && !userName.length) {
   console.log(`Lookup User IDs and roles for the specified environment.
   
   Usage:
@@ -35,11 +54,11 @@ if (process.argv.length < 3) {
   process.exit();
 }
 
-const role = process.argv[2];
-const userName = process.argv[3];
-
-const lookupUsers = async () => {
-  const esClient = await getClient({ environmentName });
+const lookupUsers = async ({
+  applicationContext,
+}: {
+  applicationContext: ServerApplicationContext;
+}): Promise<{ [k: string]: string }[]> => {
   const query = userName
     ? {
         bool: {
@@ -53,27 +72,25 @@ const lookupUsers = async () => {
         match: { 'role.S': role },
       };
 
-  try {
-    const results = await esClient.search({
+  const { results } = await search({
+    applicationContext,
+    searchParameters: {
       body: { query },
       index: 'efcms-user',
-    });
+    },
+  });
 
-    return results.body.hits.hits.map(hit => {
-      return {
-        Email: hit['_source']['email'].S,
-        Name: hit['_source']['name'].S,
-        Role: hit['_source']['role'].S,
-        UserId: hit['_source']['userId'].S,
-      };
-    });
-  } catch (err) {
-    console.error(err);
-  }
+  return results.map((hit: RawUser) => ({
+    Email: hit.email,
+    Name: hit.name,
+    Role: hit.role,
+    UserId: hit.userId,
+  }));
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const users = await lookupUsers();
+  const applicationContext = createApplicationContext({});
+  const users = await lookupUsers({ applicationContext });
   console.table(users);
 })();

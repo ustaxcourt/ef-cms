@@ -6,7 +6,6 @@ import {
   mockCaseSearchResult,
   mockDocketEntrySearchResult,
   mockMalformedQueryResult,
-  mockMessageSearchResult,
   mockNonexistentDocumentCountResult,
   mockOpenCasesReceivedOnJulyFourthCountResult,
   mockOpenCasesReceivedOnJulyFourthFormattedResults,
@@ -18,12 +17,9 @@ import {
   openCasesReceivedOnJulyFourthSearchParameters,
 } from './searchClient.test.constants';
 import { formatDocketEntryResult } from './helpers/formatDocketEntryResult';
-import { formatMessageResult } from './helpers/formatMessageResult';
 import { formatWorkItemResult } from './helpers/formatWorkItemResult';
+import { Search_Request } from '@opensearch-project/opensearch/api';
 
-jest.mock('./helpers/formatMessageResult', () => ({
-  formatMessageResult: jest.fn(),
-}));
 jest.mock('./helpers/formatDocketEntryResult', () => ({
   formatDocketEntryResult: jest.fn(),
 }));
@@ -91,7 +87,6 @@ describe('searchClient', () => {
       expect(applicationContext.getSearchClient().search).toHaveBeenCalledTimes(
         0,
       );
-      expect(formatMessageResult).toHaveBeenCalledTimes(0);
     });
 
     it("searchAll should not perform a search query if the count query's results are empty", async () => {
@@ -124,7 +119,6 @@ describe('searchClient', () => {
       expect(applicationContext.getSearchClient().search).toHaveBeenCalledTimes(
         0,
       );
-      expect(formatMessageResult).toHaveBeenCalledTimes(0);
     });
 
     it('searchAll should perform additional search queries if the count is greater than the batch size', async () => {
@@ -171,7 +165,7 @@ describe('searchClient', () => {
     it('searchAll should return the same results that search returns', async () => {
       // 1 - run query with searchAll
 
-      const openCasesReceivedOnJulyFourthSearchAllParameters = {
+      const openCasesReceivedOnJulyFourthSearchAllParameters: Search_Request = {
         ...openCasesReceivedOnJulyFourthSearchParameters,
         size: 5,
       };
@@ -315,7 +309,7 @@ describe('searchClient', () => {
         applicationContext,
         searchParameters: {
           body: {
-            aggs: {
+            aggregations: {
               roles: {
                 terms: {
                   field: 'role.S',
@@ -409,22 +403,6 @@ describe('searchClient', () => {
         1,
       );
       expect(formatDocketEntryResult).toHaveBeenCalledTimes(1);
-    });
-
-    it('search should format and return the list of results when they are message search results', async () => {
-      applicationContext
-        .getSearchClient()
-        .search.mockReturnValue(mockMessageSearchResult);
-
-      await search({
-        applicationContext,
-        searchParameters: {},
-      });
-
-      expect(applicationContext.getSearchClient().search).toHaveBeenCalledTimes(
-        1,
-      );
-      expect(formatMessageResult).toHaveBeenCalledTimes(1);
     });
 
     it('should format and return the list of results when they are work item search results', async () => {

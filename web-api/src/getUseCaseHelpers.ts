@@ -16,7 +16,6 @@ import { createCaseAndAssociations } from './business/useCaseHelper/caseAssociat
 import { createTrialSessionAndWorkingCopy } from './business/useCaseHelper/trialSessions/createTrialSessionAndWorkingCopy';
 import { createUserConfirmation } from '@web-api/business/useCaseHelper/auth/createUserConfirmation';
 import { createUserForContact } from './business/useCaseHelper/caseAssociation/createUserForContact';
-import { fileAndServeDocumentOnOneCase } from './business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { formatConsolidatedCaseCoversheetData } from '@web-api/business/useCaseHelper/consolidatedCases/formatConsolidatedCaseCoversheetData';
 import { generateAndServeDocketEntry } from './business/useCaseHelper/service/createChangeItems';
 import { generateCaseInventoryReportPdf } from './business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf';
@@ -38,6 +37,7 @@ import { sendServedPartiesEmails } from './business/useCaseHelper/service/sendSe
 import { serveDocumentAndGetPaperServicePdf } from './business/useCaseHelper/serveDocumentAndGetPaperServicePdf';
 import { serveGeneratedNoticesOnCase } from './business/useCaseHelper/trialSessions/serveGeneratedNoticesOnCase';
 import { setNoticeOfChangeOfTrialJudge } from './business/useCaseHelper/trialSessions/setNoticeOfChangeOfTrialJudge';
+import { setNoticeOfChangeOfTrialLocation } from '@web-api/business/useCaseHelper/trialSessions/setNoticeOfChangeOfTrialLocation';
 import { setNoticeOfChangeToInPersonProceeding } from './business/useCaseHelper/trialSessions/setNoticeOfChangeToInPersonProceeding';
 import { setNoticeOfChangeToRemoteProceeding } from './business/useCaseHelper/trialSessions/setNoticeOfChangeToRemoteProceeding';
 import { setPdfFormFields } from './business/useCaseHelper/pdf/setPdfFormFields';
@@ -65,7 +65,6 @@ const useCaseHelpers = {
   createTrialSessionAndWorkingCopy,
   createUserConfirmation,
   createUserForContact,
-  fileAndServeDocumentOnOneCase,
   formatConsolidatedCaseCoversheetData,
   generateAndServeDocketEntry,
   generateCaseInventoryReportPdf,
@@ -87,6 +86,7 @@ const useCaseHelpers = {
   serveDocumentAndGetPaperServicePdf,
   serveGeneratedNoticesOnCase,
   setNoticeOfChangeOfTrialJudge,
+  setNoticeOfChangeOfTrialLocation,
   setNoticeOfChangeToInPersonProceeding,
   setNoticeOfChangeToRemoteProceeding,
   setPdfFormFields,

@@ -89,7 +89,7 @@ describe('todaysOrdersHelper', () => {
     ]);
   });
 
-  it('sets numberOfPagesFormatted to n/a if numberOfPages is undefined', () => {
+  it('sets numberOfPagesFormatted to 0 if numberOfPages is 0', () => {
     state.todaysOrders.results[0].numberOfPages = 0;
     const result = runCompute(todaysOrdersHelper, { state });
     expect(result.formattedOrders).toMatchObject([

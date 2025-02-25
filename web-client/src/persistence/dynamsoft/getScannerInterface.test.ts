@@ -46,7 +46,7 @@ describe('getScannerInterface', () => {
       IfDuplexEnabled: false,
       IfFeederLoaded: true,
       OpenSource: mockOpenSource,
-      RegisterEvent: (scannerEvent, cb) => {
+      RegisterEvent: (_scannerEvent, cb) => {
         onPostAllTransfersCb = cb;
       },
       RemoveAllImages: mockRemoveAllImages,

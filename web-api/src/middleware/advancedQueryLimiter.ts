@@ -1,6 +1,6 @@
 export const advancedQueryLimiter =
   ({ applicationContext, key }) =>
-  async (req, res, next) => {
+  async (_req, res, next) => {
     const maxRequests = await applicationContext
       .getPersistenceGateway()
       .getLimiterByKey({ applicationContext, key: `${key}-configuration` });
@@ -11,6 +11,7 @@ export const advancedQueryLimiter =
       .getPersistenceGateway()
       .incrementKeyCount({ applicationContext, key });
 
+    // eslint-disable-next-line prefer-const
     let { expiresAt, id: count } = limiterCache;
 
     if (!expiresAt || Date.now() > expiresAt) {

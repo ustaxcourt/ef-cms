@@ -1,15 +1,35 @@
-// usage: npx ts-node --transpile-only scripts/reports/closed-dates.ts 2022
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import { DateTime } from 'luxon';
 import {
-  ServerApplicationContext,
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import {
+  type ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
-import { appendFileSync } from 'fs';
+import { generateCsv } from '../helpers/generate-csv';
 import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
 
-const year = process.argv[2] || `${DateTime.now().toObject().year}`;
+const scriptConfig: ScriptConfig = {
+  description:
+    'closed-dates - Generates a spreadsheet of the closed date of all cases opened in the given year.',
+  environment: {
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+    env: 'ENV',
+  },
+  parameters: {
+    year: {
+      default: `${DateTime.now().toObject().year}`,
+      position: 0,
+      type: 'string',
+    },
+  },
+  requireActiveAwsSession: true,
+};
+const { year } = parseArgsAndEnvVars(scriptConfig) as { year: string };
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 
 const getAllCasesOpenedInYear = async ({
@@ -58,33 +78,29 @@ const getAllCasesOpenedInYear = async ({
   return results;
 };
 
-const outputCsv = ({
-  casesOpenedInYear,
-  filename,
-}: {
-  casesOpenedInYear: RawCase[];
-  filename: string;
-}): void => {
-  let output =
-    '"Docket Number","Date Created","Date Closed","Case Title",' +
-    '"Case Status","Case Type"';
-  for (const c of casesOpenedInYear) {
-    const rcvdAtHumanized = c.receivedAt.split('T')[0];
-    const closedHumanized = c.closedDate?.split('T')[0] || '';
-    output +=
-      `\n"${c.docketNumber}","${rcvdAtHumanized}","${closedHumanized}",` +
-      `"${c.caseCaption}","${c.status}","${c.caseType}"`;
-  }
-  appendFileSync(`${OUTPUT_DIR}/${filename}`, output);
-};
-
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
   const casesOpenedInYear = await getAllCasesOpenedInYear({
     applicationContext,
   });
-  const filename = `closed-dates-of-cases-opened-in-${year}.csv`;
-  outputCsv({ casesOpenedInYear, filename });
-  console.log(`Generated ${OUTPUT_DIR}/${filename}`);
+  const filename = `${OUTPUT_DIR}/closed-dates-of-cases-opened-in-${year}.csv`;
+  const columns = [
+    { header: 'Docket Number', key: 'docketNumber' },
+    { header: 'Date Created', key: 'rcvdAtHumanized' },
+    { header: 'Date Closed', key: 'closedHumanized' },
+    { header: 'Case Title', key: 'caseCaption' },
+    { header: 'Case Status', key: 'status' },
+    { header: 'Case Type', key: 'caseType' },
+  ];
+  const rows = casesOpenedInYear.map(c => ({
+    caseCaption: c.caseCaption,
+    caseType: c.caseType,
+    closedHumanized: c.closedDate?.split('T')[0] || '',
+    docketNumber: c.docketNumber,
+    rcvdAtHumanized: c.receivedAt.split('T')[0],
+    status: c.status,
+  }));
+  generateCsv({ columns, filename, rows });
+  console.log(`Generated ${filename}`);
 })();

@@ -116,7 +116,7 @@ export const partiesInformationHelper = (
     const userAssociatedWithCase = !!formattedPrivatePractitioners.find(
       practitioner =>
         user.barNumber === practitioner.barNumber &&
-        practitioner.representing.includes(petitioner.contactId),
+        practitioner.representing?.includes(petitioner.contactId),
     );
 
     const canAllowDocumentServiceForCase = !!applicationContext

@@ -1,17 +1,38 @@
-// usage: npx ts-node --transpile-only scripts/download-all-case-documents.js "453-17"
+#!/usr/bin/env -S npx ts-node --transpile-only
 
-import { createApplicationContext } from '@web-api/applicationContext';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from './helpers/parseArgsAndEnvVars';
+import {
+  type ServerApplicationContext,
+  createApplicationContext,
+} from '@web-api/applicationContext';
 import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
 import fs from 'fs';
 
-const DOCKET_NUMBER = process.argv[2];
+const scriptConfig: ScriptConfig = {
+  description:
+    'download-all-case-documents - Downloads all docket entries for the given docket number.',
+  environment: {
+    dynamoDbTableName: 'DYNAMODB_TABLE_NAME',
+    efcmsDomain: 'EFCMS_DOMAIN',
+    env: 'ENV',
+  },
+  parameters: {
+    docketNumber: {
+      position: 0,
+      required: true,
+      type: 'string',
+    },
+  },
+  requireActiveAwsSession: true,
+};
+const { docketNumber } = parseArgsAndEnvVars(scriptConfig) as {
+  docketNumber: string;
+};
 
-if (!DOCKET_NUMBER) {
-  console.error('Error: please provide a docket number.');
-  process.exit(1);
-}
-
-const OUTPUT_DIR = `${process.env.HOME}/Downloads/${DOCKET_NUMBER}`;
+const OUTPUT_DIR = `${process.env.HOME}/Downloads/${docketNumber}`;
 
 const downloadPdf = async ({
   applicationContext,
@@ -19,7 +40,7 @@ const downloadPdf = async ({
   filename,
   path,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   docketEntryId: string;
   filename: string;
   path: string;
@@ -42,10 +63,10 @@ const downloadPdf = async ({
 
 const generateFilename = ({
   caseCaption,
-  docketEntry: { docketNumber, documentType, index },
+  docketEntry: { documentType, index },
 }: {
   caseCaption: string;
-  docketEntry: { docketNumber: string; documentType: string; index: number };
+  docketEntry: { documentType: string; index: number };
 }): string => {
   const MAX_OVERALL_FILE_LENGTH = 64;
   const EXT = '.pdf';
@@ -70,7 +91,7 @@ const generateFilename = ({
   }
   const caseEntity = await getCaseByDocketNumber({
     applicationContext,
-    docketNumber: DOCKET_NUMBER,
+    docketNumber,
   });
   let numSealed = 0;
   let numError = 0;

@@ -1,8 +1,12 @@
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
-import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
+import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { deleteTrialSessionInteractor } from './deleteTrialSessionInteractor';
 import {
   mockDocketClerkUser,

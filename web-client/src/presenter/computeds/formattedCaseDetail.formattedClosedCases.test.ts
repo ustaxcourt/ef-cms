@@ -1,11 +1,11 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { formattedClosedCases as formattedClosedCasesComputed } from './formattedCaseDetail';
+import { runCompute } from '@web-client/presenter/test.cerebral';
+import { withAppContextDecorator } from '../../withAppContext';
 import {
   mockPetitioners,
   simpleDocketEntries,
-} from './formattedCaseDetail.test';
-import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../../withAppContext';
+} from '@web-client/presenter/computeds/mockFormattedCaseDetailTestFixtures';
 
 describe('formattedClosedCases', () => {
   const formattedClosedCases = withAppContextDecorator(

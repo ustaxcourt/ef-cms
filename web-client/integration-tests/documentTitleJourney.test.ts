@@ -5,9 +5,9 @@ import {
   loginAs,
   setupTest,
 } from './helpers';
+import { externalUserCreatesElectronicCase } from './journey/externalUserCreatesElectronicCase';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
-import { practitionerCreatesNewCase } from './journey/practitionerCreatesNewCase';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -27,7 +27,7 @@ describe('Document title journey', () => {
   );
 
   loginAs(cerebralTest, 'privatePractitioner2@example.com');
-  practitionerCreatesNewCase(cerebralTest, fakeFile);
+  externalUserCreatesElectronicCase(cerebralTest, fakeFile);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkServesElectronicCaseToIrs(cerebralTest);

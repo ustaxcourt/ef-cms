@@ -11,13 +11,16 @@ export const validateCaseDetailsAction = async ({
   const form = get(state.form);
   const user = get(state.user);
 
-  let errors = await applicationContext
+  const errors = await applicationContext
     .getUseCases()
     .validateCaseDetailInteractor(
       {
         caseDetail: {
           ...caseDetail,
           ...form,
+          caseType: form.caseType || null,
+          petitionPaymentDate: form.petitionPaymentDate || null,
+          petitionPaymentMethod: form.petitionPaymentMethod || null,
           preferredTrialCity: form.preferredTrialCity
             ? form.preferredTrialCity
             : null,

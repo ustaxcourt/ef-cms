@@ -24,7 +24,7 @@ export const generateTitleForPaperFilingAction = ({
     documentMetadata.documentTitle = matchingDocument.documentTitle;
   }
 
-  let documentTitle = applicationContext
+  const documentTitle = applicationContext
     .getUtilities()
     .generateExternalDocumentTitle(applicationContext, {
       documentMetadata,

@@ -34,7 +34,7 @@ describe('navigateToReviewFileADocumentAction', () => {
   });
 
   it('should set form.redactionAcknowledgement to false', async () => {
-    let result = await runAction(navigateToReviewFileADocumentAction, {
+    const result = await runAction(navigateToReviewFileADocumentAction, {
       modules: {
         presenter,
       },
@@ -49,7 +49,7 @@ describe('navigateToReviewFileADocumentAction', () => {
   });
 
   it('should not set form.redactionAcknowledgement for auto generated entry of appearance', async () => {
-    let result = await runAction(navigateToReviewFileADocumentAction, {
+    const result = await runAction(navigateToReviewFileADocumentAction, {
       modules: {
         presenter,
       },

@@ -1,4 +1,5 @@
 import { PROCEDURE_TYPES_MAP } from '../../../../shared/src/business/entities/EntityConstants';
+import { attachFile } from '../../../helpers/file/upload-file';
 import { faker } from '@faker-js/faker';
 import {
   getCreateACaseButton,
@@ -20,13 +21,13 @@ export const postPaperPetition = () => {
   cy.get('#submit-case').click();
 
   return cy.wait('@postPaperCase').then(({ response }) => {
-    if (!response || !response.body?.docketNumber) {
+    if (!response || !response.body?.caseDetail.docketNumber) {
       throw new Error(
         'Unable to get docket number from postPaperCase HTTP request',
       );
     }
-    expect(response.body).to.have.property('docketNumber');
-    return cy.wrap({ docketNumber: response.body.docketNumber! });
+    expect(response.body.caseDetail).to.have.property('docketNumber');
+    return cy.wrap({ docketNumber: response.body.caseDetail.docketNumber! });
   });
 };
 
@@ -91,31 +92,44 @@ export const fillInCreateCaseFromPaperForm = (testData?: {
 
   // petition
   cy.get('[data-testid="upload-pdf-button"]').click();
-  cy.get('input#petitionFile-file').attachFile('../../helpers/file/sample.pdf');
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: 'input#petitionFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
   cy.get('[data-testid="remove-pdf"]');
 
   //stin
   cy.get('[data-testid="tabButton-stinFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
-  cy.get('input#stinFile-file').attachFile('../../helpers/file/sample.pdf');
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: 'input#stinFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
   cy.get('[data-testid="remove-pdf"]');
 
-  //rqt
+  // rqt
   cy.get('[data-testid="tabButton-requestForPlaceOfTrialFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
-  cy.get('input#requestForPlaceOfTrialFile-file').attachFile(
-    '../../helpers/file/sample.pdf',
-  );
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: 'input#requestForPlaceOfTrialFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
   cy.get('[data-testid="remove-pdf"]');
   cy.get('[data-testid="icon-requestForPlaceOfTrialFile"]').should(
     'be.visible',
   );
 
-  //atp
+  // atp
   cy.get('[data-testid="tabButton-attachmentToPetitionFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
-  cy.get('input#attachmentToPetitionFile-file').attachFile(
-    '../../helpers/file/sample.pdf',
-  );
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: 'input#attachmentToPetitionFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
+
   cy.get('[data-testid="remove-pdf"]');
 };

@@ -1,0 +1,1267 @@
+{
+  "Aberdeen, South Dakota": {
+    "initialRegularCases": 1,
+    "initialSmallCases": 3,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 1,
+    "remainingSmallCases": 3,
+    "scheduledSessions": []
+  },
+  "Albany, New York": {
+    "initialRegularCases": 5,
+    "initialSmallCases": 17,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 5,
+    "remainingSmallCases": 17,
+    "scheduledSessions": []
+  },
+  "Albuquerque, New Mexico": {
+    "initialRegularCases": 44,
+    "initialSmallCases": 24,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 24,
+    "scheduledSessions": [
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Albuquerque, New Mexico",
+        "weekOf": "2025-01-06"
+      }
+    ]
+  },
+  "Anchorage, Alaska": {
+    "initialRegularCases": 24,
+    "initialSmallCases": 9,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 24,
+    "remainingSmallCases": 9,
+    "scheduledSessions": []
+  },
+  "Atlanta, Georgia": {
+    "initialRegularCases": 280,
+    "initialSmallCases": 68,
+    "prospectiveSessions": [
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "Atlanta, Georgia"
+      },
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "Atlanta, Georgia"
+      },
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "Atlanta, Georgia"
+      },
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Small",
+        "trialLocation": "Atlanta, Georgia"
+      }
+    ],
+    "remainingRegularCases": 280,
+    "remainingSmallCases": 68,
+    "scheduledSessions": [
+      {
+        "sessionType": "Special",
+        "trialLocation": "Atlanta, Georgia",
+        "weekOf": "2025-01-27"
+      },
+      {
+        "sessionType": "Special",
+        "trialLocation": "Atlanta, Georgia",
+        "weekOf": "2025-02-03"
+      },
+      {
+        "sessionType": "Special",
+        "trialLocation": "Atlanta, Georgia",
+        "weekOf": "2025-02-17"
+      },
+      {
+        "sessionType": "Special",
+        "trialLocation": "Atlanta, Georgia",
+        "weekOf": "2025-03-03"
+      },
+      {
+        "sessionType": "Special",
+        "trialLocation": "Atlanta, Georgia",
+        "weekOf": "2025-03-03",
+        "ignoresConstraints": true
+      },
+      {
+        "sessionType": "Special",
+        "trialLocation": "Atlanta, Georgia",
+        "weekOf": "2025-03-10"
+      },
+      {
+        "sessionType": "Special",
+        "trialLocation": "Atlanta, Georgia",
+        "weekOf": "2025-03-17"
+      }
+    ]
+  },
+  "Baltimore, Maryland": {
+    "initialRegularCases": 57,
+    "initialSmallCases": 42,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Baltimore, Maryland",
+        "weekOf": "2025-03-10"
+      },
+      {
+        "sessionType": "Small",
+        "trialLocation": "Baltimore, Maryland",
+        "weekOf": "2025-03-17"
+      }
+    ]
+  },
+  "Billings, Montana": {
+    "initialRegularCases": 0,
+    "initialSmallCases": 2,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 2,
+    "scheduledSessions": []
+  },
+  "Birmingham, Alabama": {
+    "initialRegularCases": 64,
+    "initialSmallCases": 22,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 22,
+    "scheduledSessions": [
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Birmingham, Alabama",
+        "weekOf": "2025-01-20"
+      }
+    ]
+  },
+  "Bismarck, North Dakota": {
+    "initialRegularCases": 0,
+    "initialSmallCases": 1,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 1,
+    "scheduledSessions": []
+  },
+  "Boise, Idaho": {
+    "initialRegularCases": 44,
+    "initialSmallCases": 13,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 13,
+    "scheduledSessions": [
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Boise, Idaho",
+        "weekOf": "2025-01-06"
+      }
+    ]
+  },
+  "Boston, Massachusetts": {
+    "initialRegularCases": 142,
+    "initialSmallCases": 60,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Boston, Massachusetts",
+        "weekOf": "2025-03-10"
+      },
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Boston, Massachusetts",
+        "weekOf": "2025-03-17"
+      },
+      {
+        "sessionType": "Small",
+        "trialLocation": "Boston, Massachusetts",
+        "weekOf": "2025-03-24"
+      }
+    ]
+  },
+  "Buffalo, New York": {
+    "initialRegularCases": 37,
+    "initialSmallCases": 13,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Hybrid",
+        "trialLocation": "Buffalo, New York",
+        "weekOf": "2025-03-31"
+      }
+    ]
+  },
+  "Burlington, Vermont": {
+    "initialRegularCases": 1,
+    "initialSmallCases": 5,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 1,
+    "remainingSmallCases": 5,
+    "scheduledSessions": []
+  },
+  "Charleston, West Virginia": {
+    "initialRegularCases": 5,
+    "initialSmallCases": 4,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 5,
+    "remainingSmallCases": 4,
+    "scheduledSessions": []
+  },
+  "Cheyenne, Wyoming": {
+    "initialRegularCases": 0,
+    "initialSmallCases": 6,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 6,
+    "scheduledSessions": []
+  },
+  "Chicago, Illinois": {
+    "initialRegularCases": 126,
+    "initialSmallCases": 129,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 26,
+    "remainingSmallCases": 4,
+    "scheduledSessions": [
+      {
+        "sessionType": "Special",
+        "trialLocation": "Chicago, Illinois",
+        "weekOf": "2025-03-10"
+      },
+      {
+        "sessionType": "Small",
+        "trialLocation": "Chicago, Illinois",
+        "weekOf": "2025-02-24"
+      },
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Chicago, Illinois",
+        "weekOf": "2025-03-24"
+      }
+    ]
+  },
+  "Cincinnati, Ohio": {
+    "initialRegularCases": 20,
+    "initialSmallCases": 12,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 20,
+    "remainingSmallCases": 12,
+    "scheduledSessions": []
+  },
+  "Cleveland, Ohio": {
+    "initialRegularCases": 31,
+    "initialSmallCases": 12,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 31,
+    "remainingSmallCases": 12,
+    "scheduledSessions": []
+  },
+  "Columbia, South Carolina": {
+    "initialRegularCases": 38,
+    "initialSmallCases": 6,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 38,
+    "remainingSmallCases": 6,
+    "scheduledSessions": [
+      {
+        "sessionType": "Special",
+        "trialLocation": "Columbia, South Carolina",
+        "weekOf": "2025-01-13"
+      }
+    ]
+  },
+  "Columbus, Ohio": {
+    "initialRegularCases": 63,
+    "initialSmallCases": 19,
+    "prospectiveSessions": [
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "Columbus, Ohio"
+      }
+    ],
+    "remainingRegularCases": 63,
+    "remainingSmallCases": 19,
+    "scheduledSessions": []
+  },
+  "Dallas, Texas": {
+    "initialRegularCases": 234,
+    "initialSmallCases": 130,
+    "prospectiveSessions": [
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "Dallas, Texas"
+      },
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "Dallas, Texas"
+      },
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Small",
+        "trialLocation": "Dallas, Texas"
+      }
+    ],
+    "remainingRegularCases": 234,
+    "remainingSmallCases": 130,
+    "scheduledSessions": []
+  },
+  "Denver, Colorado": {
+    "initialRegularCases": 103,
+    "initialSmallCases": 128,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 3,
+    "remainingSmallCases": 3,
+    "scheduledSessions": [
+      {
+        "sessionType": "Small",
+        "trialLocation": "Denver, Colorado",
+        "weekOf": "2025-02-17"
+      },
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Denver, Colorado",
+        "weekOf": "2025-02-24"
+      }
+    ]
+  },
+  "Des Moines, Iowa": {
+    "initialRegularCases": 26,
+    "initialSmallCases": 25,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Hybrid",
+        "trialLocation": "Des Moines, Iowa",
+        "weekOf": "2025-02-24"
+      }
+    ]
+  },
+  "Detroit, Michigan": {
+    "initialRegularCases": 190,
+    "initialSmallCases": 67,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Detroit, Michigan",
+        "weekOf": "2025-03-10"
+      },
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Detroit, Michigan",
+        "weekOf": "2025-03-17"
+      },
+      {
+        "sessionType": "Small",
+        "trialLocation": "Detroit, Michigan",
+        "weekOf": "2025-03-24"
+      }
+    ]
+  },
+  "El Paso, Texas": {
+    "initialRegularCases": 49,
+    "initialSmallCases": 10,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 10,
+    "scheduledSessions": [
+      {
+        "sessionType": "Regular",
+        "trialLocation": "El Paso, Texas",
+        "weekOf": "2025-01-13"
+      }
+    ]
+  },
+  "Fresno, California": {
+    "initialRegularCases": 11,
+    "initialSmallCases": 48,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 11,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Small",
+        "trialLocation": "Fresno, California",
+        "weekOf": "2025-01-20"
+      }
+    ]
+  },
+  "Hartford, Connecticut": {
+    "initialRegularCases": 21,
+    "initialSmallCases": 6,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Hybrid",
+        "trialLocation": "Hartford, Connecticut",
+        "weekOf": "2025-01-06"
+      }
+    ]
+  },
+  "Helena, Montana": {
+    "initialRegularCases": 13,
+    "initialSmallCases": 2,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 13,
+    "remainingSmallCases": 2,
+    "scheduledSessions": []
+  },
+  "Honolulu, Hawaii": {
+    "initialRegularCases": 30,
+    "initialSmallCases": 12,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 30,
+    "remainingSmallCases": 12,
+    "scheduledSessions": []
+  },
+  "Houston, Texas": {
+    "initialRegularCases": 143,
+    "initialSmallCases": 28,
+    "prospectiveSessions": [
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "Houston, Texas"
+      },
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "Houston, Texas"
+      }
+    ],
+    "remainingRegularCases": 143,
+    "remainingSmallCases": 28,
+    "scheduledSessions": [
+      {
+        "sessionType": "Special",
+        "trialLocation": "Houston, Texas",
+        "weekOf": "2025-02-17"
+      }
+    ]
+  },
+  "Indianapolis, Indiana": {
+    "initialRegularCases": 25,
+    "initialSmallCases": 10,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 25,
+    "remainingSmallCases": 10,
+    "scheduledSessions": []
+  },
+  "Jackson, Mississippi": {
+    "initialRegularCases": 39,
+    "initialSmallCases": 15,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Hybrid",
+        "trialLocation": "Jackson, Mississippi",
+        "weekOf": "2025-03-24"
+      }
+    ]
+  },
+  "Jacksonville, Florida": {
+    "initialRegularCases": 30,
+    "initialSmallCases": 22,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Hybrid",
+        "trialLocation": "Jacksonville, Florida",
+        "weekOf": "2025-02-17"
+      }
+    ]
+  },
+  "Kansas City, Missouri": {
+    "initialRegularCases": 38,
+    "initialSmallCases": 16,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Hybrid",
+        "trialLocation": "Kansas City, Missouri",
+        "weekOf": "2025-03-31"
+      }
+    ]
+  },
+  "Knoxville, Tennessee": {
+    "initialRegularCases": 27,
+    "initialSmallCases": 17,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 27,
+    "remainingSmallCases": 17,
+    "scheduledSessions": []
+  },
+  "Las Vegas, Nevada": {
+    "initialRegularCases": 89,
+    "initialSmallCases": 25,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 25,
+    "scheduledSessions": [
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Las Vegas, Nevada",
+        "weekOf": "2025-03-31"
+      }
+    ]
+  },
+  "Little Rock, Arkansas": {
+    "initialRegularCases": 25,
+    "initialSmallCases": 19,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 25,
+    "remainingSmallCases": 19,
+    "scheduledSessions": [
+      {
+        "sessionType": "Special",
+        "trialLocation": "Little Rock, Arkansas",
+        "weekOf": "2025-03-03"
+      }
+    ]
+  },
+  "Los Angeles, California": {
+    "initialRegularCases": 411,
+    "initialSmallCases": 249,
+    "prospectiveSessions": [
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "Los Angeles, California"
+      },
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Small",
+        "trialLocation": "Los Angeles, California"
+      },
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Small",
+        "trialLocation": "Los Angeles, California"
+      }
+    ],
+    "remainingRegularCases": 111,
+    "remainingSmallCases": 249,
+    "scheduledSessions": [
+      {
+        "sessionType": "Special",
+        "trialLocation": "Los Angeles, California",
+        "weekOf": "2025-03-03"
+      },
+      {
+        "sessionType": "Special",
+        "trialLocation": "Los Angeles, California",
+        "weekOf": "2025-03-17"
+      },
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Los Angeles, California",
+        "weekOf": "2025-01-27"
+      },
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Los Angeles, California",
+        "weekOf": "2025-02-03"
+      },
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Los Angeles, California",
+        "weekOf": "2025-02-10"
+      }
+    ]
+  },
+  "Louisville, Kentucky": {
+    "initialRegularCases": 35,
+    "initialSmallCases": 33,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Hybrid",
+        "trialLocation": "Louisville, Kentucky",
+        "weekOf": "2025-01-06"
+      }
+    ]
+  },
+  "Lubbock, Texas": {
+    "initialRegularCases": 34,
+    "initialSmallCases": 15,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Hybrid",
+        "trialLocation": "Lubbock, Texas",
+        "weekOf": "2025-01-13"
+      }
+    ]
+  },
+  "Memphis, Tennessee": {
+    "initialRegularCases": 32,
+    "initialSmallCases": 20,
+    "prospectiveSessions": [
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Hybrid",
+        "trialLocation": "Memphis, Tennessee"
+      }
+    ],
+    "remainingRegularCases": 32,
+    "remainingSmallCases": 20,
+    "scheduledSessions": []
+  },
+  "Miami, Florida": {
+    "initialRegularCases": 121,
+    "initialSmallCases": 36,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Special",
+        "trialLocation": "Miami, Florida",
+        "weekOf": "2025-03-24"
+      },
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Miami, Florida",
+        "weekOf": "2025-02-17"
+      },
+      {
+        "sessionType": "Hybrid",
+        "trialLocation": "Miami, Florida",
+        "weekOf": "2025-02-24"
+      }
+    ]
+  },
+  "Milwaukee, Wisconsin": {
+    "initialRegularCases": 70,
+    "initialSmallCases": 51,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Milwaukee, Wisconsin",
+        "weekOf": "2025-01-20"
+      },
+      {
+        "sessionType": "Small",
+        "trialLocation": "Milwaukee, Wisconsin",
+        "weekOf": "2025-01-27"
+      }
+    ]
+  },
+  "Mobile, Alabama": {
+    "initialRegularCases": 5,
+    "initialSmallCases": 8,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Hybrid",
+        "trialLocation": "Mobile, Alabama",
+        "weekOf": "2024-12-30"
+      }
+    ]
+  },
+  "Nashville, Tennessee": {
+    "initialRegularCases": 70,
+    "initialSmallCases": 34,
+    "prospectiveSessions": [
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "Nashville, Tennessee"
+      }
+    ],
+    "remainingRegularCases": 70,
+    "remainingSmallCases": 34,
+    "scheduledSessions": []
+  },
+  "New Orleans, Louisiana": {
+    "initialRegularCases": 89,
+    "initialSmallCases": 57,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Regular",
+        "trialLocation": "New Orleans, Louisiana",
+        "weekOf": "2025-03-10"
+      },
+      {
+        "sessionType": "Small",
+        "trialLocation": "New Orleans, Louisiana",
+        "weekOf": "2025-03-17"
+      }
+    ]
+  },
+  "New York City, New York": {
+    "initialRegularCases": 347,
+    "initialSmallCases": 118,
+    "prospectiveSessions": [
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "New York City, New York"
+      },
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "New York City, New York"
+      },
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "New York City, New York"
+      },
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "New York City, New York"
+      },
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Small",
+        "trialLocation": "New York City, New York"
+      }
+    ],
+    "remainingRegularCases": 347,
+    "remainingSmallCases": 118,
+    "scheduledSessions": []
+  },
+  "Oklahoma City, Oklahoma": {
+    "initialRegularCases": 40,
+    "initialSmallCases": 1,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 1,
+    "scheduledSessions": [
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Oklahoma City, Oklahoma",
+        "weekOf": "2025-01-13"
+      }
+    ]
+  },
+  "Omaha, Nebraska": {
+    "initialRegularCases": 38,
+    "initialSmallCases": 12,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Hybrid",
+        "trialLocation": "Omaha, Nebraska",
+        "weekOf": "2025-03-31"
+      }
+    ]
+  },
+  "Peoria, Illinois": {
+    "initialRegularCases": 1,
+    "initialSmallCases": 16,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Hybrid",
+        "trialLocation": "Peoria, Illinois",
+        "weekOf": "2024-12-30"
+      }
+    ]
+  },
+  "Philadelphia, Pennsylvania": {
+    "initialRegularCases": 140,
+    "initialSmallCases": 125,
+    "prospectiveSessions": [
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "Philadelphia, Pennsylvania"
+      },
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "Philadelphia, Pennsylvania"
+      },
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Small",
+        "trialLocation": "Philadelphia, Pennsylvania"
+      }
+    ],
+    "remainingRegularCases": 140,
+    "remainingSmallCases": 125,
+    "scheduledSessions": []
+  },
+  "Phoenix, Arizona": {
+    "initialRegularCases": 175,
+    "initialSmallCases": 42,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Special",
+        "trialLocation": "Phoenix, Arizona",
+        "weekOf": "2025-01-06"
+      },
+      {
+        "sessionType": "Special",
+        "trialLocation": "Phoenix, Arizona",
+        "weekOf": "2025-02-10"
+      },
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Phoenix, Arizona",
+        "weekOf": "2025-01-20"
+      },
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Phoenix, Arizona",
+        "weekOf": "2025-01-27"
+      },
+      {
+        "sessionType": "Small",
+        "trialLocation": "Phoenix, Arizona",
+        "weekOf": "2025-02-03"
+      }
+    ]
+  },
+  "Pittsburgh, Pennsylvania": {
+    "initialRegularCases": 97,
+    "initialSmallCases": 46,
+    "prospectiveSessions": [
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "Pittsburgh, Pennsylvania"
+      },
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Small",
+        "trialLocation": "Pittsburgh, Pennsylvania"
+      }
+    ],
+    "remainingRegularCases": 97,
+    "remainingSmallCases": 46,
+    "scheduledSessions": []
+  },
+  "Pocatello, Idaho": {
+    "initialRegularCases": 0,
+    "initialSmallCases": 5,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Small",
+        "trialLocation": "Pocatello, Idaho",
+        "weekOf": "2024-12-30"
+      }
+    ]
+  },
+  "Portland, Maine": {
+    "initialRegularCases": 3,
+    "initialSmallCases": 9,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 3,
+    "remainingSmallCases": 9,
+    "scheduledSessions": []
+  },
+  "Portland, Oregon": {
+    "initialRegularCases": 76,
+    "initialSmallCases": 47,
+    "prospectiveSessions": [
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "Portland, Oregon"
+      },
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Small",
+        "trialLocation": "Portland, Oregon"
+      }
+    ],
+    "remainingRegularCases": 76,
+    "remainingSmallCases": 47,
+    "scheduledSessions": []
+  },
+  "Reno, Nevada": {
+    "initialRegularCases": 1,
+    "initialSmallCases": 2,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Hybrid",
+        "trialLocation": "Reno, Nevada",
+        "weekOf": "2025-01-06"
+      }
+    ]
+  },
+  "Richmond, Virginia": {
+    "initialRegularCases": 101,
+    "initialSmallCases": 51,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 1,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Richmond, Virginia",
+        "weekOf": "2025-01-13"
+      },
+      {
+        "sessionType": "Small",
+        "trialLocation": "Richmond, Virginia",
+        "weekOf": "2025-01-20"
+      }
+    ]
+  },
+  "Roanoke, Virginia": {
+    "initialRegularCases": 1,
+    "initialSmallCases": 3,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Hybrid",
+        "trialLocation": "Roanoke, Virginia",
+        "weekOf": "2024-12-30"
+      }
+    ]
+  },
+  "Salt Lake City, Utah": {
+    "initialRegularCases": 59,
+    "initialSmallCases": 39,
+    "prospectiveSessions": [
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "Salt Lake City, Utah"
+      }
+    ],
+    "remainingRegularCases": 59,
+    "remainingSmallCases": 39,
+    "scheduledSessions": []
+  },
+  "San Antonio, Texas": {
+    "initialRegularCases": 96,
+    "initialSmallCases": 27,
+    "prospectiveSessions": [
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "San Antonio, Texas"
+      }
+    ],
+    "remainingRegularCases": 96,
+    "remainingSmallCases": 27,
+    "scheduledSessions": []
+  },
+  "San Diego, California": {
+    "initialRegularCases": 125,
+    "initialSmallCases": 120,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 25,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Regular",
+        "trialLocation": "San Diego, California",
+        "weekOf": "2025-01-27"
+      },
+      {
+        "sessionType": "Small",
+        "trialLocation": "San Diego, California",
+        "weekOf": "2025-02-03"
+      }
+    ]
+  },
+  "San Francisco, California": {
+    "initialRegularCases": 397,
+    "initialSmallCases": 287,
+    "prospectiveSessions": [
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Small",
+        "trialLocation": "San Francisco, California"
+      },
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Small",
+        "trialLocation": "San Francisco, California"
+      }
+    ],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 287,
+    "scheduledSessions": [
+      {
+        "sessionType": "Special",
+        "trialLocation": "San Francisco, California",
+        "weekOf": "2025-03-03"
+      },
+      {
+        "sessionType": "Regular",
+        "trialLocation": "San Francisco, California",
+        "weekOf": "2025-02-03"
+      },
+      {
+        "sessionType": "Regular",
+        "trialLocation": "San Francisco, California",
+        "weekOf": "2025-02-10"
+      },
+      {
+        "sessionType": "Regular",
+        "trialLocation": "San Francisco, California",
+        "weekOf": "2025-02-17"
+      },
+      {
+        "sessionType": "Regular",
+        "trialLocation": "San Francisco, California",
+        "weekOf": "2025-02-24"
+      }
+    ]
+  },
+  "Seattle, Washington": {
+    "initialRegularCases": 155,
+    "initialSmallCases": 96,
+    "prospectiveSessions": [
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "Seattle, Washington"
+      },
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "Seattle, Washington"
+      },
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Small",
+        "trialLocation": "Seattle, Washington"
+      }
+    ],
+    "remainingRegularCases": 155,
+    "remainingSmallCases": 96,
+    "scheduledSessions": []
+  },
+  "Shreveport, Louisiana": {
+    "initialRegularCases": 0,
+    "initialSmallCases": 9,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 9,
+    "scheduledSessions": []
+  },
+  "Spokane, Washington": {
+    "initialRegularCases": 24,
+    "initialSmallCases": 15,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Hybrid",
+        "trialLocation": "Spokane, Washington",
+        "weekOf": "2025-01-13"
+      }
+    ]
+  },
+  "St. Louis, Missouri": {
+    "initialRegularCases": 71,
+    "initialSmallCases": 40,
+    "prospectiveSessions": [
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Small",
+        "trialLocation": "St. Louis, Missouri"
+      }
+    ],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 40,
+    "scheduledSessions": [
+      {
+        "sessionType": "Regular",
+        "trialLocation": "St. Louis, Missouri",
+        "weekOf": "2025-03-31"
+      }
+    ]
+  },
+  "St. Paul, Minnesota": {
+    "initialRegularCases": 71,
+    "initialSmallCases": 57,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Regular",
+        "trialLocation": "St. Paul, Minnesota",
+        "weekOf": "2025-03-24"
+      },
+      {
+        "sessionType": "Small",
+        "trialLocation": "St. Paul, Minnesota",
+        "weekOf": "2025-03-31"
+      }
+    ]
+  },
+  "Syracuse, New York": {
+    "initialRegularCases": 2,
+    "initialSmallCases": 18,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 2,
+    "remainingSmallCases": 18,
+    "scheduledSessions": []
+  },
+  "Tallahassee, Florida": {
+    "initialRegularCases": 0,
+    "initialSmallCases": 3,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Small",
+        "trialLocation": "Tallahassee, Florida",
+        "weekOf": "2024-12-30"
+      }
+    ]
+  },
+  "Tampa, Florida": {
+    "initialRegularCases": 73,
+    "initialSmallCases": 78,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Small",
+        "trialLocation": "Tampa, Florida",
+        "weekOf": "2025-02-24"
+      },
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Tampa, Florida",
+        "weekOf": "2025-03-03"
+      }
+    ]
+  },
+  "Washington (North), District of Columbia": {
+    "initialRegularCases": 0,
+    "initialSmallCases": 0,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Special",
+        "trialLocation": "Washington (North), District of Columbia",
+        "weekOf": "2025-02-10"
+      }
+    ]
+  },
+  "Washington (South), District of Columbia": {
+    "initialRegularCases": 143,
+    "initialSmallCases": 48,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Special",
+        "trialLocation": "Washington (South), District of Columbia",
+        "weekOf": "2025-02-10"
+      },
+      {
+        "sessionType": "Special",
+        "trialLocation": "Washington (South), District of Columbia",
+        "weekOf": "2025-02-10",
+        "ignoresConstraints": true
+      },
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Washington (South), District of Columbia",
+        "weekOf": "2025-01-20"
+      },
+      {
+        "sessionType": "Regular",
+        "trialLocation": "Washington (South), District of Columbia",
+        "weekOf": "2025-01-27"
+      },
+      {
+        "sessionType": "Small",
+        "trialLocation": "Washington (South), District of Columbia",
+        "weekOf": "2025-02-03"
+      }
+    ]
+  },
+  "Wichita, Kansas": {
+    "initialRegularCases": 0,
+    "initialSmallCases": 1,
+    "prospectiveSessions": [],
+    "remainingRegularCases": 0,
+    "remainingSmallCases": 0,
+    "scheduledSessions": [
+      {
+        "sessionType": "Small",
+        "trialLocation": "Wichita, Kansas",
+        "weekOf": "2024-12-30"
+      }
+    ]
+  },
+  "Winston-Salem, North Carolina": {
+    "initialRegularCases": 77,
+    "initialSmallCases": 9,
+    "prospectiveSessions": [
+      {
+        "cityWasNotVisitedInLastTwoTerms": false,
+        "sessionType": "Regular",
+        "trialLocation": "Winston-Salem, North Carolina"
+      }
+    ],
+    "remainingRegularCases": 77,
+    "remainingSmallCases": 9,
+    "scheduledSessions": []
+  }
+}

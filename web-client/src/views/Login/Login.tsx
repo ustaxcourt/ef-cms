@@ -1,5 +1,6 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { ErrorNotification } from '@web-client/views/ErrorNotification';
+import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { SuccessNotification } from '@web-client/views/SuccessNotification';
 import { WarningNotification } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -8,6 +9,7 @@ import React from 'react';
 
 export const Login = connect(
   {
+    alertInfo: state.alertInfo,
     navigateToCreatePetitionerAccountSequence:
       sequences.navigateToCreatePetitionerAccountSequence,
     navigateToForgotPasswordSequence:
@@ -19,6 +21,7 @@ export const Login = connect(
       sequences.updateAuthenticationFormValueSequence,
   },
   ({
+    alertInfo,
     navigateToCreatePetitionerAccountSequence,
     navigateToForgotPasswordSequence,
     showPassword,
@@ -33,10 +36,16 @@ export const Login = connect(
             <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7">
               <SuccessNotification isDismissible={false} />
               <WarningNotification isDismissible={false} />
+              {alertInfo && (
+                <InfoNotificationComponent
+                  alertInfo={alertInfo}
+                  dismissible={false}
+                ></InfoNotificationComponent>
+              )}
               <ErrorNotification />
               <div className="grid-container bg-white padding-y-3 border border-base-lighter login">
                 <div className="display-flex flex-column">
-                  <div className="flex-align-self-center">
+                  <div className="flex-align-center">
                     <h1
                       className="margin-bottom-1 inherit-body-font-family"
                       data-testid="login-header"
@@ -107,15 +116,17 @@ export const Login = connect(
                         Log in
                       </Button>
                     </form>
-                    <Button
-                      className="margin-top-1 display-block"
-                      data-testid="forgot-password-button"
-                      link={true}
-                      type="button"
-                      onClick={() => navigateToForgotPasswordSequence()}
-                    >
-                      Forgot password?
-                    </Button>
+                    <div className="button-container">
+                      <Button
+                        className="margin-top-1 display-block"
+                        data-testid="forgot-password-button"
+                        link={true}
+                        type="button"
+                        onClick={() => navigateToForgotPasswordSequence()}
+                      >
+                        Forgot password?
+                      </Button>
+                    </div>
                     <span>
                       Don&apos;t have an account?{' '}
                       <Button

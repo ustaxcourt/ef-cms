@@ -3,9 +3,9 @@ import { generateEntryOfAppearancePdfAction } from '@web-client/presenter/action
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { generateTitleForSupportingDocumentsAction } from '../actions/FileDocument/generateTitleForSupportingDocumentsAction';
 import { navigateToReviewFileADocumentAction } from '../actions/FileDocument/navigateToReviewFileADocumentAction';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setPdfPreviewUrlAction } from '@web-client/presenter/actions/CourtIssuedOrder/setPdfPreviewUrlAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setSupportingDocumentScenarioAction } from '../actions/FileDocument/setSupportingDocumentScenarioAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -22,8 +22,8 @@ export const reviewExternalDocumentInformationSequence =
     validateExternalDocumentInformationAction,
     {
       error: [
-        setAlertErrorAction,
         setValidationErrorsAction,
+        setScrollToErrorNotificationAction,
         setValidationAlertErrorsAction,
       ],
       success: [

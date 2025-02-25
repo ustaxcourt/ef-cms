@@ -4,7 +4,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { UserCaseNote } from '../../../../../shared/src/business/entities/notes/UserCaseNote';
+import { getUserCaseNoteForCases } from '@web-api/persistence/postgres/userCaseNotes/getUserCaseNoteForCases';
 
 export const getUserCaseNoteForCasesInteractor = async (
   applicationContext,
@@ -21,13 +21,10 @@ export const getUserCaseNoteForCasesInteractor = async (
       userIdMakingRequest: authorizedUser.userId,
     });
 
-  const caseNotes = await applicationContext
-    .getPersistenceGateway()
-    .getUserCaseNoteForCases({
-      applicationContext,
-      docketNumbers,
-      userId,
-    });
+  const caseNotes = await getUserCaseNoteForCases({
+    docketNumbers,
+    userId,
+  });
 
-  return caseNotes.map(note => new UserCaseNote(note).validate().toRawObject());
+  return caseNotes.map(note => note.validate().toRawObject());
 };

@@ -3,7 +3,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 const seal = require('../images/ustc_seal.svg') as string;
 
-// eslint-disable-next-line @miovision/disallow-date/no-new-date
+// eslint-disable-next-line custom-rules-plugin/no-new-dates
 const updateTime = `${new Date().toLocaleString('en-US', {
   day: 'numeric',
   hour: 'numeric',

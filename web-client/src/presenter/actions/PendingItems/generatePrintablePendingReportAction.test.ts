@@ -35,7 +35,7 @@ describe('generatePrintablePendingReportAction', () => {
     });
   });
 
-  it('should call generatePrintablePendingReportInteractor and return caseDetail', async () => {
+  it('should call generatePrintablePendingReportInteractor and return caseDetail 2', async () => {
     const result = await runAction(generatePrintablePendingReportAction, {
       modules: {
         presenter,
@@ -53,7 +53,7 @@ describe('generatePrintablePendingReportAction', () => {
     });
   });
 
-  it('should call generatePrintablePendingReportInteractor and return caseDetail', async () => {
+  it('should call generatePrintablePendingReportInteractor and return caseDetail 3', async () => {
     const result = await runAction(generatePrintablePendingReportAction, {
       modules: {
         presenter,

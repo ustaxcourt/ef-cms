@@ -6,7 +6,10 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
+import { markMessageThreadRepliedTo } from '@web-api/persistence/postgres/messages/markMessageThreadRepliedTo';
 import { orderBy } from 'lodash';
+import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 
 export const completeMessageInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -23,41 +26,33 @@ export const completeMessageInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  let completedMessageIds: string[] = [];
+  const completedMessageIds: string[] = [];
 
   try {
     for (const message of messages) {
-      await applicationContext
-        .getPersistenceGateway()
-        .markMessageThreadRepliedTo({
-          applicationContext,
-          parentMessageId: message.parentMessageId,
-        });
+      await markMessageThreadRepliedTo({
+        parentMessageId: message.parentMessageId,
+      });
 
-      const messageThread = await applicationContext
-        .getPersistenceGateway()
-        .getMessageThreadByParentId({
-          applicationContext,
-          parentMessageId: message.parentMessageId,
-        });
+      const messageThread = await getMessageThreadByParentId({
+        parentMessageId: message.parentMessageId,
+      });
 
       const mostRecentMessage = orderBy(messageThread, 'createdAt', 'desc')[0];
 
-      const updatedMessage = new Message(mostRecentMessage, {
-        applicationContext,
-      }).validate();
+      const updatedMessage = new Message(mostRecentMessage).validate();
 
       updatedMessage.markAsCompleted({ message: message.messageBody, user });
 
       const validatedRawMessage = updatedMessage.validate().toRawObject();
 
-      await applicationContext.getPersistenceGateway().updateMessage({
-        applicationContext,
+      await updateMessage({
         message: validatedRawMessage,
       });
 
       completedMessageIds.push(validatedRawMessage.messageId);
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,

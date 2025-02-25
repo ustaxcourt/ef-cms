@@ -2,19 +2,19 @@ import {
   addOrderToDocketEntry,
   createOrder,
 } from '../../../../helpers/caseDetail/docketRecord/courtIssuedFiling/create-order-and-decision';
+import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import {
   loginAsDocketClerk1,
   loginAsPetitioner,
 } from '../../../../helpers/authentication/login-as-helpers';
-import { petitionerCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { retry } from '../../../../helpers/retry';
 
 describe('Docket clerk', () => {
   it('should should be able to search for orders using the document contents', () => {
     loginAsPetitioner();
-    petitionerCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
       loginAsDocketClerk1();
       goToCase(docketNumber);

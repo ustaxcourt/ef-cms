@@ -17,12 +17,40 @@ jest.mock(
   },
 );
 
+const MOCK_CASE_SEARCH_RESULT = {
+  caseCaption: 'Test Case Caption',
+  docketNumber: '101-20',
+  docketNumberWithSuffix: '101-20L',
+  fakeField: 'Hide this',
+  irsPractitioners: [
+    {
+      address: 'Hide this',
+      name: 'TestIRSPractitioner',
+      state: 'California',
+    },
+  ],
+  petitioners: [
+    {
+      address: 'Hide this',
+      name: 'Test Petitioner',
+      state: 'California',
+    },
+  ],
+  privatePractitioners: [
+    { address: 'Hide this', name: 'TestPrivatePractitioner' },
+  ],
+  receivedAt: '2023-01-24T22:34:48.100Z',
+};
+
 describe('casePublicSearch', () => {
   const searchTerms: CaseAdvancedSearchParamsRequestType = {
     petitionerName: 'test person',
   };
 
-  search.mockReturnValue({ results: ['some', 'matches'], total: 0 });
+  search.mockReturnValue({
+    results: [MOCK_CASE_SEARCH_RESULT],
+    total: 0,
+  });
 
   const mustNotClause = [
     {
@@ -65,5 +93,25 @@ describe('casePublicSearch', () => {
     expect(search.mock.calls[0][0].searchParameters.body.query).toEqual(
       expectedQuery,
     );
+  });
+
+  it('BUG: should return only necessary public search case data', async () => {
+    const { results } = await casePublicSearch({
+      applicationContext,
+      searchTerms,
+    });
+    expect(Object.keys(results[0])).toHaveLength(6);
+    expect(results).toMatchObject([
+      {
+        caseCaption: MOCK_CASE_SEARCH_RESULT.caseCaption,
+        docketNumber: MOCK_CASE_SEARCH_RESULT.docketNumber,
+        docketNumberWithSuffix: MOCK_CASE_SEARCH_RESULT.docketNumberWithSuffix,
+        petitionerNames: MOCK_CASE_SEARCH_RESULT.petitioners.map(p => p.name),
+        petitionerStateNames: MOCK_CASE_SEARCH_RESULT.petitioners.map(
+          p => p.state,
+        ),
+        receivedAt: MOCK_CASE_SEARCH_RESULT.receivedAt,
+      },
+    ]);
   });
 });

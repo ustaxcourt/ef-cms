@@ -30,7 +30,7 @@ export const docketClerkEditsTrialSession = (cerebralTest, overrides = {}) => {
       currentItem: 'currentPage',
       expectedItem: 'PrintPaperTrialNotices',
     });
-    expect(cerebralTest.getState('currentPage')).toEqual('TrialSessionDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('TrialSessionDetails');
 
     const formatted = runCompute(formattedTrialSessionDetails, {
       state: cerebralTest.getState(),

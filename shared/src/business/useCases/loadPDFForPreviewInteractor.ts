@@ -13,7 +13,7 @@ export const loadPDFForPreviewInteractor = async (
     docketEntryId,
     docketNumber,
   }: { docketEntryId?: string; docketNumber?: string },
-): Promise<void> => {
+): Promise<Blob> => {
   try {
     return await applicationContext.getPersistenceGateway().getDocument({
       applicationContext,

@@ -24,9 +24,7 @@ export const generatePrintablePendingReportInteractor = async (
     });
 
   const formattedPendingItems = pendingDocuments.map(pendingItem =>
-    applicationContext
-      .getUtilities()
-      .formatPendingItem(pendingItem, { applicationContext }),
+    applicationContext.getUtilities().formatPendingItem(pendingItem),
   );
 
   let reportTitle = 'All Judges';

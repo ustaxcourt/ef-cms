@@ -16,7 +16,7 @@ export const setPDFForStampAction = async ({
 
   store.set(state.pdfForSigning.docketEntryId, docketEntryId);
 
-  let pdfObj = await applicationContext
+  const pdfObj = await applicationContext
     .getUseCases()
     .loadPDFForSigningInteractor(applicationContext, {
       docketEntryId,

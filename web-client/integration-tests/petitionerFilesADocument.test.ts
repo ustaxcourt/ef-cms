@@ -28,11 +28,11 @@ describe('petitioner files document', () => {
 
   loginAs(cerebralTest, 'petitioner@example.com');
   petitionerViewsCaseDetail(cerebralTest, {
-    documentCount: 4,
+    documentCount: 3,
   });
   petitionerFilesDocumentForCase(cerebralTest, fakeFile);
   petitionerViewsCaseDetailAfterFilingDocument(cerebralTest, {
-    documentCount: 8,
+    documentCount: 7,
   });
   petitionerFilesAmendedMotion(cerebralTest, fakeFile);
 });

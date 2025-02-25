@@ -1,7 +1,10 @@
-import { A_VALID_DOCKET_ENTRY, MOCK_PETITIONERS } from './DocketEntry.test';
 import { CASE_STATUS_TYPES, PETITIONS_SECTION } from './EntityConstants';
 import { DocketEntry } from './DocketEntry';
 import { WorkItem } from './WorkItem';
+import {
+  A_VALID_DOCKET_ENTRY,
+  MOCK_PETITIONERS,
+} from '@shared/business/entities/DocketEntryTestFixtures';
 
 describe('setWorkItem', () => {
   it('should set work item on docket entry to the passed in work item and validate the nested work item', () => {

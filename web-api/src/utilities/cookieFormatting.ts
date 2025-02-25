@@ -1,4 +1,5 @@
-import cookie from 'cookie';
+/* eslint-disable custom-rules-plugin/no-new-dates */
+import { parse, serialize } from 'cookie';
 
 export const createCookieString = (
   cookieKey: string,
@@ -8,9 +9,8 @@ export const createCookieString = (
   secure = true,
   httpOnly = true,
 ) => {
-  return cookie.serialize(cookieKey, cookieValue, {
+  return serialize(cookieKey, cookieValue, {
     domain,
-    // eslint-disable-next-line @miovision/disallow-date/no-new-date
     expires: new Date(expiresDateTime),
     httpOnly,
     secure,
@@ -23,15 +23,16 @@ export const deleteCookieString = (
   secure = true,
   httpOnly = true,
 ) => {
-  return cookie.serialize(cookieKey, 'deleted', {
+  return serialize(cookieKey, 'deleted', {
     domain,
-    // eslint-disable-next-line @miovision/disallow-date/no-new-date
     expires: new Date('Thu, 01 Jan 1970 00:00:00 GMT'),
     httpOnly,
     secure,
   });
 };
 
-export const parseCookieString = (cookieString: string) => {
-  return cookie.parse(cookieString);
+export const parseCookieString = (
+  cookieString: string,
+): Record<string, string> => {
+  return parse(cookieString) as Record<string, string>;
 };

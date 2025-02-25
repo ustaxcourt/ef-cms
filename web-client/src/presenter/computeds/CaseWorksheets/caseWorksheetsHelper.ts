@@ -13,7 +13,7 @@ type CaseWorksheetTableRow = {
   daysSinceLastStatusChange: string;
   caseCaption: string;
   docketNumber: string;
-  docketNumberWithSuffix: string;
+  docketNumberWithSuffix?: string;
   formattedSubmittedCavStatusDate: string;
   finalBriefDueDateFormatted: string;
   status: string;

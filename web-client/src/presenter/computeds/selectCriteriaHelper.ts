@@ -14,16 +14,22 @@ export const selectCriteriaHelper = (
 ): {
   automaticBlockedReasons: {
     key: string;
-    value: AutomaticBlockedReasons | 'Manual Block';
+    value:
+      | AutomaticBlockedReasons
+      | 'Manual Block'
+      | 'Grouped with blocked case';
   }[];
   caseStatuses: { key: string; value: CaseStatus }[];
   procedureTypes: { key: string; value: ProcedureType }[];
 } => {
-  const blockedCases: RawCase[] = get(state.blockedCases);
+  const blockedCases = get(state.blockedCases);
 
   const automaticBlockedReasons: {
     key: string;
-    value: AutomaticBlockedReasons | 'Manual Block';
+    value:
+      | AutomaticBlockedReasons
+      | 'Manual Block'
+      | 'Grouped with blocked case';
   }[] = Object.entries(AUTOMATIC_BLOCKED_REASONS)
     .map(([key, value]) => ({
       key,
@@ -39,6 +45,13 @@ export const selectCriteriaHelper = (
     automaticBlockedReasons.push({
       key: 'manualBlock',
       value: 'Manual Block',
+    });
+  }
+
+  if (blockedCases.some(bc => !bc.blocked && !bc.automaticBlocked)) {
+    automaticBlockedReasons.push({
+      key: 'groupedWithBlockedCase',
+      value: 'Grouped with blocked case',
     });
   }
 

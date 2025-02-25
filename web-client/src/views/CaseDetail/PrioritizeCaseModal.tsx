@@ -43,7 +43,7 @@ export const PrioritizeCaseModal = connect(
               </legend>
               <textarea
                 aria-label="block from trial"
-                className="usa-textarea"
+                className="usa-textarea textarea-resize-vertical"
                 id="reason"
                 maxLength={120}
                 name="reason"

@@ -1,3 +1,4 @@
+// This applies only to docket entries, not to full cases
 export const getSealedDocketEntryTooltip = (applicationContext, entry) => {
   const { DOCKET_ENTRY_SEALED_TO_TYPES } = applicationContext.getConstants();
 

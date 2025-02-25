@@ -254,7 +254,7 @@ describe('Practitioner', () => {
       expect(validPractitioner.isValid()).toBeFalsy();
       expect(validPractitioner.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Email addresses do not match',
-        updatedEmail: 'Enter a valid email address',
+        updatedEmail: 'Enter email address in format: yourname@example.com',
       });
     });
 
@@ -274,7 +274,7 @@ describe('Practitioner', () => {
 
       expect(validPractitioner.isValid()).toBeFalsy();
       expect(validPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail: 'Enter a valid email address',
+        confirmEmail: 'Enter email address in format: yourname@example.com',
       });
     });
 
@@ -305,7 +305,7 @@ describe('Practitioner', () => {
       expect(validPractitioner.isValid()).toBeFalsy();
       expect(validPractitioner.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Enter a valid email address',
-        updatedEmail: 'Enter a valid email address',
+        updatedEmail: 'Enter email address in format: yourname@example.com',
       });
     });
   });

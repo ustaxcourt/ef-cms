@@ -173,11 +173,11 @@ describe('trialSessionHeaderHelper', () => {
       expect(result.showSwitchToSessionDetail).toBe(false);
     });
 
-    it('should be false when the user is assigned to the session but they are already on the TrialSessionDetail screen', () => {
+    it('should be false when the user is assigned to the session but they are already on the TrialSessionDetails screen', () => {
       const result = runCompute(trialSessionHeaderHelper, {
         state: {
           ...baseState,
-          currentPage: 'TrialSessionDetail',
+          currentPage: 'TrialSessionDetails',
           trialSession: {
             trialClerk: { userId: trialClerkUser.userId },
           },
@@ -221,11 +221,11 @@ describe('trialSessionHeaderHelper', () => {
   });
 
   describe('showSwitchToWorkingCopy', () => {
-    it('should be false when the user is a judge, they are on the TrialSessionDetail screen, but they are not assigned to the trial session', () => {
+    it('should be false when the user is a judge, they are on the TrialSessionDetails screen, but they are not assigned to the trial session', () => {
       const result = runCompute(trialSessionHeaderHelper, {
         state: {
           ...baseState,
-          currentPage: 'TrialSessionDetail',
+          currentPage: 'TrialSessionDetails',
           judgeUser: { userId: judgeUser.userId },
           trialSession: {
             judge: { userId: 'NOT_ASSIGNED' },
@@ -237,11 +237,11 @@ describe('trialSessionHeaderHelper', () => {
       expect(result.showSwitchToWorkingCopy).toBe(false);
     });
 
-    it('should be false when the user is a trial clerk, they are on the TrialSessionDetail screen, but they are not assigned to the trial session', () => {
+    it('should be false when the user is a trial clerk, they are on the TrialSessionDetails screen, but they are not assigned to the trial session', () => {
       const result = runCompute(trialSessionHeaderHelper, {
         state: {
           ...baseState,
-          currentPage: 'TrialSessionDetail',
+          currentPage: 'TrialSessionDetails',
           trialSession: {
             trialClerk: { userId: 'NOT_ASSIGNED' },
           },
@@ -267,11 +267,11 @@ describe('trialSessionHeaderHelper', () => {
       expect(result.showSwitchToWorkingCopy).toBe(false);
     });
 
-    it('should be true when the user is a trial clerk assigned to the session and they are on the TrialSessionDetail screen', () => {
+    it('should be true when the user is a trial clerk assigned to the session and they are on the TrialSessionDetails screen', () => {
       const result = runCompute(trialSessionHeaderHelper, {
         state: {
           ...baseState,
-          currentPage: 'TrialSessionDetail',
+          currentPage: 'TrialSessionDetails',
           trialSession: {
             trialClerk: { userId: trialClerkUser.userId },
           },
@@ -282,11 +282,11 @@ describe('trialSessionHeaderHelper', () => {
       expect(result.showSwitchToWorkingCopy).toBe(true);
     });
 
-    it('should be true when the user is a judge assigned to the session and they are on the TrialSessionDetail screen', () => {
+    it('should be true when the user is a judge assigned to the session and they are on the TrialSessionDetails screen', () => {
       const result = runCompute(trialSessionHeaderHelper, {
         state: {
           ...baseState,
-          currentPage: 'TrialSessionDetail',
+          currentPage: 'TrialSessionDetails',
           judgeUser: { userId: judgeUser.userId },
           trialSession: {
             judge: { userId: judgeUser.userId },

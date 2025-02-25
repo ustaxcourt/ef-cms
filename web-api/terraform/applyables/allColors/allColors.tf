@@ -17,7 +17,10 @@ terraform {
   }
 
   required_providers {
-    aws = "5.67.0"
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.88.0"
+    }
   }
 }
 
@@ -113,4 +116,32 @@ module "ui-healthcheck" {
   count      = var.enable_health_checks
   alarm_name = "app.${var.dns_domain} is accessible over HTTPS"
   dns_domain = "app.${var.dns_domain}"
+}
+
+module "kms" {
+  source      = "../../modules/kms"
+  environment = var.environment
+
+  providers = {
+    aws           = aws.us-east-1
+    aws.us-west-1 = aws.us-west-1
+  }
+}
+
+module "rds" {
+  source                   = "../../modules/rds"
+  environment              = var.environment
+  postgres_master_username = var.postgres_master_username
+  postgres_master_password = var.postgres_master_password
+  kms_key_id_primary       = module.kms.kms_key_id_primary
+  kms_key_id_replica       = module.kms.kms_key_id_replica
+  min_capacity             = var.rds_min_capacity
+  max_capacity             = var.rds_max_capacity
+  delete_protection        = true
+  restoring_aws_account_id = var.restoring_aws_account_id
+
+  providers = {
+    aws           = aws.us-east-1
+    aws.us-west-1 = aws.us-west-1
+  }
 }

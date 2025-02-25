@@ -7,7 +7,7 @@ export const docketClerkUpdatesCaseCaption = cerebralTest => {
     });
 
     expect(cerebralTest.getState('caseDetail.caseCaption')).toEqual(
-      'Daenerys Stormborn, Deceased, Daenerys Stormborn 2, Surviving Spouse, Petitioner',
+      'John Doe, Petitioner',
     );
 
     await cerebralTest.runSequence('openUpdateCaseModalSequence');
@@ -22,7 +22,7 @@ export const docketClerkUpdatesCaseCaption = cerebralTest => {
     );
 
     expect(cerebralTest.getState('modal.caseCaption')).toEqual(
-      'Daenerys Stormborn, Deceased, Daenerys Stormborn 2, Surviving Spouse, Petitioner',
+      'John Doe, Petitioner',
     );
 
     await cerebralTest.runSequence('updateModalValueSequence', {
@@ -33,7 +33,7 @@ export const docketClerkUpdatesCaseCaption = cerebralTest => {
     await cerebralTest.runSequence('clearModalSequence');
 
     expect(cerebralTest.getState('caseDetail.caseCaption')).toEqual(
-      'Daenerys Stormborn, Deceased, Daenerys Stormborn 2, Surviving Spouse, Petitioner',
+      'John Doe, Petitioner',
     );
     expect(cerebralTest.getState('modal')).toEqual({});
 
@@ -43,7 +43,7 @@ export const docketClerkUpdatesCaseCaption = cerebralTest => {
       'UpdateCaseModalDialog',
     );
     expect(cerebralTest.getState('modal.caseCaption')).toEqual(
-      'Daenerys Stormborn, Deceased, Daenerys Stormborn 2, Surviving Spouse, Petitioner',
+      'John Doe, Petitioner',
     );
 
     await cerebralTest.runSequence('updateModalValueSequence', {

@@ -28,6 +28,7 @@ const config: Config = {
     '!src/persistence/sqs/getMessages.ts',
     '!src/persistence/messages/*.ts',
     '!src/persistence/dynamo/**/*.ts',
+    '!src/persistence/postgres/**/*.ts',
     '!src/lambdas/websockets/websockets.ts',
     '!src/lambdas/websockets/switch-colors-cron.ts',
     '!src/lambdas/cognitoAuthorizer/worker-handler.ts',

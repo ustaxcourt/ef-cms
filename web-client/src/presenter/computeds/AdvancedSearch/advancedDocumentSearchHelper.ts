@@ -31,7 +31,7 @@ export const advancedDocumentSearchHelper = (
 
   let documentTypeVerbiage = capitalize(advancedSearchTab);
 
-  let formattedJudges = get(state.legacyAndCurrentJudges);
+  const formattedJudges = get(state.legacyAndCurrentJudges);
   formattedJudges.forEach(judge => {
     judge.lastName = applicationContext
       .getUtilities()
@@ -39,7 +39,9 @@ export const advancedDocumentSearchHelper = (
   });
 
   if (advancedSearchTab === ADVANCED_SEARCH_TABS.OPINION) {
-    documentTypeVerbiage = `${documentTypeVerbiage} Type`;
+    documentTypeVerbiage = `${documentTypeVerbiage} Type` as Capitalize<
+      Lowercase<string>
+    >;
   }
 
   if (searchResults) {

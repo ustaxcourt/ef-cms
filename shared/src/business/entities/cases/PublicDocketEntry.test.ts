@@ -4,6 +4,7 @@ import { PublicDocketEntry } from './PublicDocketEntry';
 describe('PublicDocketEntry', () => {
   it('should only have expected fields', () => {
     const entity = new PublicDocketEntry({
+      action: 'some action',
       additionalInfo: 'something',
       additionalInfo2: 'something else',
       anotherThing: false,
@@ -44,6 +45,7 @@ describe('PublicDocketEntry', () => {
     });
 
     expect(entity.toRawObject()).toEqual({
+      action: 'some action',
       additionalInfo: 'something',
       additionalInfo2: 'something else',
       attachments: true,

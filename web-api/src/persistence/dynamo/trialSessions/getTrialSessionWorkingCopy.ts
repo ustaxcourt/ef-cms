@@ -1,14 +1,33 @@
 import { get } from '../../dynamodbClientService';
 
-/**
- * getTrialSessionWorkingCopy
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.trialSessionId the id of the trial session
- * @param {string} providers.userId the id of the user
- * @returns {Promise} the promise of the call to persistence
- */
+type TrialSessionWorkingCopy = {
+  entityName: string;
+  sortOrder: string;
+  sk: string;
+  filters: {
+    definiteTrial: boolean;
+    probableTrial: boolean;
+    motionToDismiss: boolean;
+    settled: boolean;
+    dismissed: boolean;
+    basisReached: boolean;
+    continued: boolean;
+    submittedCAV: boolean;
+    showAll: boolean;
+    probableSettlement: boolean;
+    setForTrial: boolean;
+    recall: boolean;
+    rule122: boolean;
+    statusUnassigned: boolean;
+  };
+  sort: string;
+  pk: string;
+  sessionNotes: string;
+  userId: string;
+  caseMetadata: object;
+  trialSessionId: string;
+};
+
 export const getTrialSessionWorkingCopy = ({
   applicationContext,
   trialSessionId,
@@ -17,7 +36,7 @@ export const getTrialSessionWorkingCopy = ({
   applicationContext: IApplicationContext;
   trialSessionId: string;
   userId: string;
-}) =>
+}): TrialSessionWorkingCopy =>
   get({
     Key: {
       pk: `trial-session-working-copy|${trialSessionId}`,

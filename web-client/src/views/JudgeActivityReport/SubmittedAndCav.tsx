@@ -40,7 +40,7 @@ export const SubmittedAndCav = connect(
               <th aria-label="consolidation icon">
                 <span className="usa-sr-only">Consolidated Case Indicator</span>
               </th>
-              <th aria-label="docket number">Docket No.</th>
+              <th aria-label="Docket number">Docket No.</th>
               <th aria-label="number of cases">No. of Cases</th>
               <th aria-label="judge">
                 <SortableColumn

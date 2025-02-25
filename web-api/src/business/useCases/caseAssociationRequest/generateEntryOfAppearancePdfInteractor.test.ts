@@ -41,7 +41,7 @@ describe('generateEntryOfAppearancePdfInteractor', () => {
   });
 
   it('should throw an unauthorized error if the user has no access to associate self with case', async () => {
-    let bogusUser = {
+    const bogusUser = {
       role: 'nope',
       userId: 'nope',
     } as unknown as AuthUser;

@@ -1,3 +1,5 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
@@ -7,7 +9,7 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateDeficiencyStatisticInteractor } from './updateDeficiencyStatisticInteractor';
 
 describe('updateDeficiencyStatisticInteractor', () => {
-  let statistic = {
+  const statistic = {
     determinationDeficiencyAmount: 123,
     determinationTotalPenalties: 456,
     irsDeficiencyAmount: 789,

@@ -1,5 +1,5 @@
 import { Client } from '@opensearch-project/opensearch';
-import { baseAliases, esAliasType } from './elasticsearch-aliases';
+import { baseAliases } from './elasticsearch-aliases';
 import { elasticsearchIndexes } from './elasticsearch-indexes';
 
 export const setupAliases = async ({
@@ -7,18 +7,20 @@ export const setupAliases = async ({
 }: {
   client: Client;
 }): Promise<void> => {
-  const existingAliases: esAliasType[] =
-    (await client.cat.aliases({ format: 'json' })).body?.filter(
-      (a: esAliasType) => {
-        return a.alias !== '.kibana';
-      },
-    ) || [];
-  const aliasedIndexes: string[] = existingAliases.map(a => a.index) || [];
+  const existingAliases = (await client.cat.aliases({ format: 'json' })).body
+    .filter(a => {
+      return a.alias !== '.kibana';
+    })
+    .filter(a => !!a.index && !!a.alias);
+
+  const aliasedIndexes: string[] = existingAliases
+    .map(a => a.index)
+    .filter(i => typeof i === 'string');
   for (const oldAlias of existingAliases) {
-    if (!elasticsearchIndexes.includes(oldAlias.index)) {
+    if (!elasticsearchIndexes.includes(oldAlias.index!)) {
       await client.indices.deleteAlias({
-        index: oldAlias.index,
-        name: oldAlias.alias,
+        index: oldAlias.index!,
+        name: oldAlias.alias!,
       });
     }
   }

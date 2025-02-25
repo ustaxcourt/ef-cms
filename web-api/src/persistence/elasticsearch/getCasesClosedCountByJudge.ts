@@ -1,7 +1,8 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { CasesClosedReturnType } from '@web-api/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor';
-import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { search } from './searchClient';
+import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const getCasesClosedCountByJudge = async ({
   applicationContext,
@@ -9,14 +10,14 @@ export const getCasesClosedCountByJudge = async ({
   judges,
   startDate,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   endDate: string;
   judges: string[];
   startDate: string;
 }): Promise<CasesClosedReturnType> => {
   const source = ['status'];
 
-  const shouldFilters: QueryDslQueryContainer[] = [];
+  const shouldFilters: QueryContainer[] = [];
 
   judges.forEach(judge => {
     shouldFilters.push({

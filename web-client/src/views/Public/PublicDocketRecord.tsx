@@ -2,23 +2,34 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
 import { PublicDocketRecordHeader } from './PublicDocketRecordHeader';
 import { PublicFilingsAndProceedings } from './PublicFilingsAndProceedings';
+import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
+import { SortableDocketRecordHeader } from '@web-client/views/DocketRecord/DocketRecord';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { state } from '@web-client/presenter/app-public.cerebral';
+import { sequences, state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
 export const PublicDocketRecord = connect(
   {
     docketNumber: state.caseDetail.docketNumber,
+    docketRecordTableSortData: state[STATE_KEYS.DOCKET_RECORD_TABLE_SORT],
     publicCaseDetailHelper: state.publicCaseDetailHelper,
+    sortTableSequence: sequences.sortTableSequence,
   },
-  function ({ publicCaseDetailHelper }) {
+  function ({
+    docketRecordTableSortData,
+    publicCaseDetailHelper,
+    sortTableSequence,
+  }) {
+    const noDocumentsMessage = 'There are no documents of that type.';
     return (
       <>
-        <PublicDocketRecordHeader />
+        <PublicDocketRecordHeader
+          docketRecordTableSortData={docketRecordTableSortData}
+        />
 
         <NonPhone>
-          <div style={{ overflowX: 'scroll', width: '100%' }}>
+          <div className="width-full overflow-x-auto">
             <table
               aria-label="docket record"
               className="usa-table ustc-table usa-table--stacked"
@@ -27,28 +38,89 @@ export const PublicDocketRecord = connect(
             >
               <thead>
                 <tr>
-                  <th className="center-column hide-on-mobile">
-                    <span>
-                      <span className="usa-sr-only">Number</span>
-                      <span aria-hidden="true">No.</span>
-                    </span>
-                  </th>
-                  <th>Filed Date</th>
-                  <th className="center-column hide-on-mobile">Event</th>
+                  <SortableDocketRecordHeader
+                    hideOnMobile={true}
+                    screenReaderTitle="Number"
+                    sortField="index"
+                    tableSort={docketRecordTableSortData}
+                    title="No."
+                    onSort={sortTableSequence}
+                  />
+                  <SortableDocketRecordHeader
+                    sortField="sortingFilingDate"
+                    sortType="date"
+                    tableSort={docketRecordTableSortData}
+                    title="Filed Date"
+                    onSort={sortTableSequence}
+                  />
+                  <SortableDocketRecordHeader
+                    hideOnMobile={true}
+                    sortField="eventCode"
+                    sortType="string"
+                    tableSort={docketRecordTableSortData}
+                    title="Event"
+                    onSort={sortTableSequence}
+                  />
                   <th aria-hidden="true" className="icon-column" />
-                  <th>Filings and Proceedings</th>
-                  <th className="hide-on-mobile">Pages</th>
-                  <th className="hide-on-mobile">Filed By</th>
-                  <th className="hide-on-mobile">Action</th>
-                  <th>Served</th>
-                  <th className="center-column hide-on-mobile">Parties</th>
+                  <SortableDocketRecordHeader
+                    sortField="descriptionDisplay"
+                    sortType="string"
+                    tableSort={docketRecordTableSortData}
+                    title="Filings and Proceedings"
+                    onSort={sortTableSequence}
+                  />
+                  <SortableDocketRecordHeader
+                    className="hide-on-mobile"
+                    hideOnMobile={true}
+                    sortField="numberOfPages"
+                    tableSort={docketRecordTableSortData}
+                    title="Pages"
+                    onSort={sortTableSequence}
+                  />
+                  <SortableDocketRecordHeader
+                    className="hide-on-mobile"
+                    hideOnMobile={true}
+                    sortField="filedBy"
+                    sortType="string"
+                    tableSort={docketRecordTableSortData}
+                    title="Filed By"
+                    onSort={sortTableSequence}
+                  />
+                  <SortableDocketRecordHeader
+                    className="hide-on-mobile"
+                    hideOnMobile={true}
+                    sortField="action"
+                    sortType="string"
+                    tableSort={docketRecordTableSortData}
+                    title="Action"
+                    onSort={sortTableSequence}
+                  />
+                  <SortableDocketRecordHeader
+                    sortField="servedAt"
+                    sortType="date"
+                    tableSort={docketRecordTableSortData}
+                    title="Served"
+                    onSort={sortTableSequence}
+                  />
+                  <SortableDocketRecordHeader
+                    className="center-column hide-on-mobile"
+                    hideOnMobile={true}
+                    sortField="servedPartiesCode"
+                    sortType="string"
+                    tableSort={docketRecordTableSortData}
+                    title="Parties"
+                    onSort={sortTableSequence}
+                  />
                 </tr>
               </thead>
               <tbody>
                 {publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord.map(
                   entry => {
                     return (
-                      <tr key={entry.index}>
+                      <tr
+                        data-testid={`public-docket-record-no-${entry.index}`}
+                        key={entry.index}
+                      >
                         <td className="center-column hide-on-mobile">
                           {entry.index}
                         </td>
@@ -102,6 +174,10 @@ export const PublicDocketRecord = connect(
                 )}
               </tbody>
             </table>
+            {!publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord
+              .length && (
+              <p className="margin-bottom-10">{noDocumentsMessage}</p>
+            )}
           </div>
         </NonPhone>
 
@@ -142,6 +218,8 @@ export const PublicDocketRecord = connect(
               )}
             </tbody>
           </table>
+          {!publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord
+            .length && <p className="margin-bottom-10">{noDocumentsMessage}</p>}
         </Phone>
       </>
     );

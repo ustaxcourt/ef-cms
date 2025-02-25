@@ -131,7 +131,6 @@ export const getScannerInterface = () => {
         const response = { error: null, scannedBuffer: null };
         for (let index = 0; index < count; index++) {
           promises.push(
-            // eslint-disable-next-line promise/param-names
             new Promise((resolveImage, rejectImage) => {
               DWObject.ConvertToBlob(
                 [index],
@@ -165,6 +164,7 @@ export const getScannerInterface = () => {
           })
           .catch(err => {
             response.error = err;
+            // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
             reject(response);
           })
           .finally(() => {
@@ -194,6 +194,7 @@ export const getScannerInterface = () => {
 
       DWObject.AcquireImage(null, null, e => {
         DWObject.UnregisterEvent('OnPostAllTransfers', onScanFinished);
+        // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
         return reject(e);
       });
     });

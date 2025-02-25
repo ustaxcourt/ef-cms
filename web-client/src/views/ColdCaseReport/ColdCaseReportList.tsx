@@ -1,4 +1,5 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
+import { COLD_CASE_REPORT_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ColdCaseEntry } from '@web-api/business/useCases/reports/coldCaseReportInteractor';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
@@ -10,31 +11,14 @@ import {
   isInConsolidatedGroup,
   isLeadCase,
 } from '@shared/business/entities/cases/Case';
-import React, { useRef, useState } from 'react';
-
-const ITEMS_PER_PAGE = 100;
-
-export function useClientSidePaginator<T>(fullDataSet: T[], pageSize) {
-  const [activePage, setActivePage] = useState(0);
-  const totalPages = Math.ceil(fullDataSet.length / pageSize);
-  const entriesInPage = fullDataSet.slice(
-    activePage * pageSize,
-    activePage * pageSize + pageSize,
-  );
-
-  return {
-    activePage,
-    pageRecords: entriesInPage,
-    setActivePage,
-    totalPages,
-  };
-}
+import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
+import React, { useRef } from 'react';
 
 export function ColdCaseReportList({ entries }: { entries: ColdCaseEntry[] }) {
   const paginatorTop = useRef(null);
 
   const { activePage, pageRecords, setActivePage, totalPages } =
-    useClientSidePaginator(entries, ITEMS_PER_PAGE);
+    useClientSidePaginator(entries, COLD_CASE_REPORT_PAGE_SIZE);
 
   function exportColdCaseCsv() {
     const today = formatNow(FORMATS.MMDDYYYY);

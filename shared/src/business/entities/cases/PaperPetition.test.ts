@@ -497,6 +497,7 @@ describe('paperPetition entity', () => {
     const mockGuid = getUniqueId();
     const mockCorrespondence = new Correspondence({
       correspondenceId: mockGuid,
+      docketNumber: '101-23',
       documentTitle: 'My Correspondence',
       filedBy: 'Docket clerk',
       userId: mockGuid,

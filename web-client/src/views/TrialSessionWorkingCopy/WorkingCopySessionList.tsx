@@ -49,7 +49,7 @@ export const WorkingCopySessionList = connect(
                   onClickSequence={toggleWorkingCopySortSequence}
                 />
               </th>
-              <th aria-label="manually added indicator"></th>
+              <th aria-label="Manually added indicator"></th>
               <th>Case Title</th>
               <th>
                 <SortableColumn

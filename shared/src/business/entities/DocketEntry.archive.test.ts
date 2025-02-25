@@ -1,5 +1,5 @@
-import { A_VALID_DOCKET_ENTRY } from './DocketEntry.test';
-import { DocketEntry } from './DocketEntry';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { A_VALID_DOCKET_ENTRY } from '@shared/business/entities/DocketEntryTestFixtures';
 
 describe('archive', () => {
   it('archives the document', () => {

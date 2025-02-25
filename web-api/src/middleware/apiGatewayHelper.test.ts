@@ -67,7 +67,7 @@ describe('handle', () => {
     expect(console.error).not.toHaveBeenCalled();
   });
 
-  it('should log an error if skipLogging is false and CI is false', async () => {
+  it('should not log an error if skipLogging is false and CI is true', async () => {
     process.env.CI = 'true';
     await handle({}, () => {
       const e = new Error();
@@ -77,7 +77,7 @@ describe('handle', () => {
     expect(console.error).not.toHaveBeenCalled();
   });
 
-  it('should log an error if skipLogging is false and CI is false', async () => {
+  it('should not log an error if skipLogging is true and CI is true', async () => {
     process.env.CI = 'true';
     await handle({}, () => {
       const e = new Error();
@@ -365,13 +365,13 @@ describe('getAuthHeader', () => {
 });
 
 describe('getUserFromAuthHeader', () => {
-  let mockUser = {
+  const mockUser = {
     'custom:role': ROLES.privatePractitioner,
     'custom:userId': '188a5b0f-e7ae-4647-98a1-43a0d4d00eee',
     name: 'Test Petitioner',
   };
 
-  let token = jwt.sign(mockUser, 'secret');
+  const token = jwt.sign(mockUser, 'secret');
 
   it('should return the user from the authorization header', () => {
     const user = getUserFromAuthHeader({

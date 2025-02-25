@@ -10,8 +10,8 @@ import { put } from '../requests';
  */
 export const verifyUserPendingEmailInteractor = (
   applicationContext,
-  { token },
-) => {
+  { token }: { token: string },
+): Promise<void> => {
   return put({
     applicationContext,
     body: {

@@ -4,8 +4,8 @@ import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('hasUpdatedPetitionerEmailAction', () => {
-  let pathNoStub = jest.fn();
-  let pathYesStub = jest.fn();
+  const pathNoStub = jest.fn();
+  const pathYesStub = jest.fn();
   const INITIAL_EMAIL = 'test@example.com';
   const UPDATED_EMAIL = 'updated@example.com';
 

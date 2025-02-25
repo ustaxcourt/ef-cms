@@ -4,9 +4,29 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import {
+  calculateDifferenceInHours,
+  createISODateString,
+} from '@shared/business/utilities/DateHandler';
 import { updateUserPendingEmailRecord } from '@web-api/business/useCases/auth/changePasswordInteractor';
+
+export const TOKEN_EXPIRATION_TIME_HOURS = 24;
+
+export const userTokenHasExpired = (
+  tokenExpirationTimestamp?: string,
+): boolean => {
+  if (!tokenExpirationTimestamp) {
+    return true;
+  }
+  return (
+    calculateDifferenceInHours(
+      createISODateString(),
+      tokenExpirationTimestamp,
+    ) > TOKEN_EXPIRATION_TIME_HOURS
+  );
+};
 
 export const verifyUserPendingEmailInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -19,7 +39,10 @@ export const verifyUserPendingEmailInteractor = async (
 
   const user = await applicationContext
     .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+    .getUserByIdOnceAllUpdatesComplete({
+      applicationContext,
+      userId: authorizedUser.userId,
+    });
 
   if (
     !user.pendingEmailVerificationToken ||
@@ -30,6 +53,13 @@ export const verifyUserPendingEmailInteractor = async (
       { email: authorizedUser.email },
     );
     throw new UnauthorizedError('Tokens do not match');
+  }
+
+  if (userTokenHasExpired(user.pendingEmailVerificationTokenTimestamp)) {
+    applicationContext.logger.info('Pending email verification link expired', {
+      email: authorizedUser.email,
+    });
+    throw new UnauthorizedError('Link has expired');
   }
 
   const isEmailAvailable = await applicationContext
@@ -46,6 +76,7 @@ export const verifyUserPendingEmailInteractor = async (
   const { updatedUser } = await updateUserPendingEmailRecord(
     applicationContext,
     {
+      setIsUpdatingInformation: true,
       user,
     },
   );
@@ -54,14 +85,14 @@ export const verifyUserPendingEmailInteractor = async (
     attributesToUpdate: {
       email: updatedUser.email,
     },
-    email: user.email,
+    email: user.email!,
   });
 
   await applicationContext.getWorkerGateway().queueWork(applicationContext, {
     message: {
       authorizedUser,
       payload: { user: updatedUser },
-      type: MESSAGE_TYPES.QUEUE_UPDATE_ASSOCIATED_CASES,
+      type: MESSAGE_TYPES.QUEUE_EMAIL_UPDATE_ASSOCIATED_CASES,
     },
   });
 };

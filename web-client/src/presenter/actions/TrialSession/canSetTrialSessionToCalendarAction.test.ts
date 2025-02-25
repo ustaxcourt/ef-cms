@@ -1,3 +1,4 @@
+import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { canSetTrialSessionToCalendarAction } from './canSetTrialSessionToCalendarAction';
 import { presenter } from '../../presenter-mock';
@@ -11,7 +12,7 @@ describe('canSetTrialSessionToCalendarAction', () => {
 
   const VALID_TRIAL_SESSION = {
     maxCases: 100,
-    sessionType: 'Regular',
+    sessionType: SESSION_TYPES.regular,
     startDate: '2025-03-01T00:00:00.000Z',
     term: 'Fall',
     termYear: '2025',

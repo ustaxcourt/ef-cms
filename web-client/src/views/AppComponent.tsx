@@ -52,7 +52,9 @@ import { ErrorView } from './Error';
 import { ErrorView500 } from './ErrorView500';
 import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
+import { FilePetition } from './StartCaseUpdated/FilePetition';
 import { FilePetitionSuccess } from './StartCase/FilePetitionSuccess';
+import { FileUploadErrorModal } from '@web-client/views/FileUploadErrorModal';
 import { Footer } from './Footer';
 import { ForgotPassword } from '@web-client/views/Login/ForgotPassword';
 import { GenericErrorModal } from './GenericErrorModal';
@@ -75,7 +77,7 @@ import { PrintPaperService } from './PrintPaperService';
 import { PrintPaperTrialNotices } from './PrintPaperTrialNotices';
 import { PrintableCaseInventoryReport } from './CaseInventoryReport/PrintableCaseInventoryReport';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
-import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
+import { PrintableTrialCalendar } from './TrialSessionDetails/PrintableTrialCalendar';
 import { PrintableTrialSessionWorkingCopyModal } from './TrialSessionWorkingCopy/PrintableTrialSessionWorkingCopyModal';
 import { PrintableTrialSessionWorkingCopyPreviewPage } from './TrialSessionWorkingCopy/PrintableTrialSessionWorkingCopyPreviewPage';
 import { Privacy } from './Privacy';
@@ -85,20 +87,19 @@ import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { SignOrder } from './SignOrder';
 import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
 import { StartCaseInternal } from './StartCaseInternal/StartCaseInternal';
-import { StartCaseWizard } from './StartCase/StartCaseWizard';
 import { StatusReportOrder } from './StatusReportOrder';
 import { StyleGuide } from './StyleGuide/StyleGuide';
-import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
+import { TrialSessionDetails } from './TrialSessionDetails/TrialSessionDetails';
 import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
-import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
+import { TrialSessionPlanningReportView } from '@web-client/views/TrialSessions/TrialSessionPlanningReportView';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
-import { UpdatedFilePetition } from './StartCaseUpdated/UpdatedFilePetition';
 import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCourtIssuedDocument';
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
 import { UserContactEditProgress } from './UserContactEditProgress';
 import { VerificationSent } from '@web-client/views/CreatePetitionerAccount/VerificationSent';
+import { VerifyNewEmailModal } from '@web-client/views/MyAccount/VerifyNewEmailModal';
 import { WebSocketErrorModal } from './WebSocketErrorModal';
 import { WorkQueue } from './WorkQueue';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -156,6 +157,7 @@ const pages = {
   ErrorView,
   ErrorView500,
   FileDocumentWizard,
+  FilePetition,
   FilePetitionSuccess,
   ForgotPassword,
   IdleLogout,
@@ -185,14 +187,12 @@ const pages = {
   SignOrder,
   SimplePdfPreviewPage,
   StartCaseInternal,
-  StartCaseWizard,
   StatusReportOrder,
   StyleGuide,
-  TrialSessionDetail,
-  TrialSessionPlanningReport,
+  TrialSessionDetails,
+  TrialSessionPlanningReportView,
   TrialSessionWorkingCopy,
   TrialSessions,
-  UpdatedFilePetition,
   UploadCourtIssuedDocument,
   UserContactEdit,
   UserContactEditProgress,
@@ -224,7 +224,7 @@ export const AppComponent = connect(
     zipInProgress,
   }) {
     const focusMain = (e?: any) => {
-      e && e.preventDefault();
+      e?.preventDefault();
       const header = window.document.querySelector(
         '#main-content h1',
       ) as HTMLElement;
@@ -241,7 +241,7 @@ export const AppComponent = connect(
       }
     }, [currentPage]);
 
-    let showHeaderAndFooter = currentPage !== 'AppMaintenance';
+    const showHeaderAndFooter = currentPage !== 'AppMaintenance';
 
     const CurrentPage = pages[currentPage];
     const IsPageWithBlueBackground = pagesWithBlueBackground[currentPage];
@@ -302,6 +302,8 @@ export const AppComponent = connect(
         {showModal === 'WebSocketErrorModal' && <WebSocketErrorModal />}
         {showModal === 'AppMaintenanceModal' && <AppMaintenanceModal />}
         {showModal === 'GenericErrorModal' && <GenericErrorModal />}
+        {showModal === 'FileUploadErrorModal' && <FileUploadErrorModal />}
+        {showModal === 'VerifyNewEmailModal' && <VerifyNewEmailModal />}
       </>
     );
   },

@@ -1,15 +1,17 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
-  SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { createAndServeNoticeDocketEntry } from './createAndServeNoticeDocketEntry';
-import { getFakeFile } from '../../../../../shared/src/business/test/getFakeFile';
+  SERVICE_INDICATOR_TYPES,
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { getFakeFile } from '@shared/business/test/getFakeFile';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { createAndServeNoticeDocketEntry } from '@web-api/business/useCaseHelper/docketEntry/createAndServeNoticeDocketEntry';
+import { PDFDocument } from 'pdf-lib';
 
 describe('createAndServeDocketEntry', () => {
+  const TEST_PDF_DOCUMENT = getFakeFile as unknown as PDFDocument;
   const mockDocketEntryId = '85a5b1c81eed44b6932a967af060597a';
   const mockNotice = Buffer.from('The rain falls mainly on the plane');
 
@@ -41,7 +43,7 @@ describe('createAndServeDocketEntry', () => {
         caseEntity: mockCaseEntity,
         documentInfo:
           SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
-        newPdfDoc: getFakeFile,
+        newPdfDoc: TEST_PDF_DOCUMENT,
         noticePdf: mockNotice,
       },
       mockDocketClerkUser,
@@ -63,7 +65,7 @@ describe('createAndServeDocketEntry', () => {
         caseEntity: mockCaseEntity,
         documentInfo:
           SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
-        newPdfDoc: getFakeFile,
+        newPdfDoc: TEST_PDF_DOCUMENT,
         noticePdf: mockNotice,
       },
       mockDocketClerkUser,
@@ -87,7 +89,7 @@ describe('createAndServeDocketEntry', () => {
     });
   });
 
-  it('should make a call to serveGeneratedNoticesOnCase', async () => {
+  it('should make a call to serveGeneratedNoticesOnCase when onlyProSePetitioners is "false"', async () => {
     const mockCaseWithPaperService = new Case(
       {
         ...mockCaseEntity,
@@ -108,14 +110,60 @@ describe('createAndServeDocketEntry', () => {
         caseEntity: mockCaseWithPaperService,
         documentInfo:
           SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
-        newPdfDoc: getFakeFile,
+        newPdfDoc: TEST_PDF_DOCUMENT,
         noticePdf: mockNotice,
+        onlyProSePetitioners: false,
       },
       mockDocketClerkUser,
     );
 
+    const serveGeneratedNoticesOnCaseCalls =
+      applicationContext.getUseCaseHelpers().serveGeneratedNoticesOnCase.mock
+        .calls;
+    expect(serveGeneratedNoticesOnCaseCalls.length).toEqual(1);
     expect(
-      applicationContext.getUseCaseHelpers().serveGeneratedNoticesOnCase,
-    ).toHaveBeenCalled();
+      serveGeneratedNoticesOnCaseCalls[0][0].noticeDocketEntryEntity,
+    ).toMatchObject({
+      servedPartiesCode: 'B',
+    });
+  });
+
+  it('should make a call to serveGeneratedNoticesOnCase when onlyProSePetitioners is "true"', async () => {
+    const mockCaseWithPaperService = new Case(
+      {
+        ...mockCaseEntity,
+        petitioners: [
+          {
+            ...mockCaseEntity.petitioners[0],
+            email: undefined,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      },
+      { authorizedUser: mockDocketClerkUser },
+    );
+
+    await createAndServeNoticeDocketEntry(
+      applicationContext,
+      {
+        caseEntity: mockCaseWithPaperService,
+        documentInfo:
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
+        newPdfDoc: TEST_PDF_DOCUMENT,
+        noticePdf: mockNotice,
+        onlyProSePetitioners: true,
+      },
+      mockDocketClerkUser,
+    );
+
+    const serveGeneratedNoticesOnCaseCalls =
+      applicationContext.getUseCaseHelpers().serveGeneratedNoticesOnCase.mock
+        .calls;
+    expect(serveGeneratedNoticesOnCaseCalls.length).toEqual(1);
+    expect(
+      serveGeneratedNoticesOnCaseCalls[0][0].noticeDocketEntryEntity,
+    ).toMatchObject({
+      servedPartiesCode: 'P',
+    });
   });
 });

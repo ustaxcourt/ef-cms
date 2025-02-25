@@ -8,14 +8,12 @@ import {
   ORDER_TYPES,
   TRANSCRIPT_EVENT_CODE,
 } from './EntityConstants';
+import { DocketEntry } from './DocketEntry';
+import { applicationContext } from '../test/createTestApplicationContext';
 import {
   A_VALID_DOCKET_ENTRY,
   MOCK_PETITIONERS,
-  mockPrimaryId,
-  mockSecondaryId,
-} from './DocketEntry.test';
-import { DocketEntry } from './DocketEntry';
-import { applicationContext } from '../test/createTestApplicationContext';
+} from '@shared/business/entities/DocketEntryTestFixtures';
 
 describe('validate', () => {
   const mockUserId = applicationContext.getUniqueId();
@@ -273,7 +271,7 @@ describe('validate', () => {
         'should be invalid if filedBy is undefined, filers is valid, and servedAt is populated',
       docketEntry: {
         filedBy: undefined,
-        filers: [mockPrimaryId, mockSecondaryId],
+        filers: [MOCK_PETITIONERS[0].contactId, MOCK_PETITIONERS[1].contactId],
         isLegacyServed: undefined,
         servedAt: '2019-08-25T05:00:00.000Z',
         servedParties: [{ name: 'Test Petitioner' }],
@@ -464,6 +462,7 @@ describe('validate', () => {
 
       expect(docketEntry.isValid()).toBeFalsy();
       if (item.expectValidationErrors) {
+        // eslint-disable-next-line jest/no-conditional-expect
         expect(
           Object.keys(docketEntry.getFormattedValidationErrors() as object),
         ).toEqual(item.expectValidationErrors);

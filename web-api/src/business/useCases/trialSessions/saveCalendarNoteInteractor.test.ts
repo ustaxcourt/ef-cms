@@ -2,7 +2,10 @@ import {
   MOCK_CASE,
   MOCK_CASE_WITH_TRIAL_SESSION,
 } from '../../../../../shared/src/test/mockCase';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  SESSION_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   mockDocketClerkUser,
@@ -18,7 +21,7 @@ describe('saveCalendarNotes', () => {
     caseOrder: [],
     maxCases: 100,
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-    sessionType: 'Regular',
+    sessionType: SESSION_TYPES.regular,
     startDate: '2025-12-01T00:00:00.000Z',
     term: 'Fall',
     termYear: '2025',

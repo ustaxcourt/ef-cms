@@ -1,9 +1,6 @@
-import {
-  MOCK_CASE,
-  MOCK_CASE_WITH_TRIAL_SESSION,
-} from '../../../../../shared/src/test/mockCase';
-import { MOCK_TRIAL_REMOTE } from '../../../../../shared/src/test/mockTrial';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { MOCK_CASE, MOCK_CASE_WITH_TRIAL_SESSION } from '@shared/test/mockCase';
+import { MOCK_TRIAL_REMOTE } from '@shared/test/mockTrial';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,

@@ -1,21 +1,19 @@
-import { createApplicationContext } from './applicationContext';
+import { applicationContext } from './applicationContext';
+import { expressLogger } from './logger';
 import { get } from './persistence/dynamodbClientService';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { json, urlencoded } from 'body-parser';
 import { lambdaWrapper } from './lambdaWrapper';
-import { logger } from './logger';
 import { set } from 'lodash';
 import cors from 'cors';
 import express from 'express';
 
 export const app = express();
 
-const applicationContext = createApplicationContext({});
-
 app.use(cors());
 app.use(json());
 app.use(urlencoded({ extended: true }));
-app.use((req, res, next) => {
+app.use((req, _res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     // we added this to suppress error `Missing x-apigateway-event or x-apigateway-context header(s)` locally
     // aws-serverless-express/middleware plugin is looking for these headers, which are needed on the lambdas
@@ -24,7 +22,7 @@ app.use((req, res, next) => {
   }
   return next();
 });
-app.use(async (req, res, next) => {
+app.use(async (_req, _res, next) => {
   // This code is here so that we have a way to mock out the terminal user
   // via using dynamo locally.  This is only ran locally and on CI/CD which is
   // why we also lazy require some of these packages.  See story 8955 for more info.
@@ -67,7 +65,7 @@ app.use((req, res, next) => {
 
   next();
 });
-app.use(logger());
+app.use(expressLogger);
 
 import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
 import { casePublicSearchLambda } from './lambdas/public-api/casePublicSearchLambda';
@@ -83,6 +81,9 @@ import { getPublicCaseExistsLambda } from './lambdas/public-api/getPublicCaseExi
 import { getPublicCaseLambda } from './lambdas/public-api/getPublicCaseLambda';
 import { getPublicDocumentDownloadUrlLambda } from './lambdas/public-api/getPublicDocumentDownloadUrlLambda';
 import { getPublicJudgesLambda } from './lambdas/public-api/getPublicJudgesLambda';
+import { getPublicTrialSessionDetailsLambda } from '@web-api/lambdas/public-api/getPublicTrialSessionDetailsLambda';
+import { getPublicTrialSessionsLambda } from '@web-api/lambdas/trialSessions/getPublicTrialSessionsLambda';
+import { getUsersInSectionLambda } from '@web-api/lambdas/users/getUsersInSectionLambda';
 import { ipLimiter } from './middleware/ipLimiter';
 import { opinionPublicSearchLambda } from './lambdas/public-api/opinionPublicSearchLambda';
 import { orderPublicSearchLambda } from './lambdas/public-api/orderPublicSearchLambda';
@@ -175,6 +176,24 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
   app.get(
     '/public-api/maintenance-mode',
     lambdaWrapper(getMaintenanceModeLambda),
+  );
+}
+
+/**
+ * Trial sessions
+ */
+{
+  app.get(
+    '/public-api/trial-sessions',
+    lambdaWrapper(getPublicTrialSessionsLambda),
+  );
+  app.get(
+    '/public-api/sections/:section/users',
+    lambdaWrapper(getUsersInSectionLambda),
+  );
+  app.get(
+    '/public-api/trial-sessions/:trialSessionId',
+    lambdaWrapper(getPublicTrialSessionDetailsLambda),
   );
 }
 

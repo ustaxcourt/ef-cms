@@ -103,7 +103,7 @@ const presorted = {
 };
 
 const presortCategory = (sortedCategory, categoryName) => {
-  let firstEntries = presorted[categoryName];
+  const firstEntries = presorted[categoryName];
   if (!firstEntries) {
     return sortedCategory;
   }
@@ -131,9 +131,9 @@ const main = () => {
   }
   const data = fs.readFileSync(files[0], 'utf8');
 
-  let output = [];
-  let result = {};
-  let sortedResult = {};
+  const output = [];
+  const result = {};
+  const sortedResult = {};
 
   const stream = parse(data, csvOptions);
 
@@ -151,7 +151,7 @@ const main = () => {
     Object.keys(result)
       .sort()
       .forEach(category => {
-        let values = result[category];
+        const values = result[category];
         sortedResult[category] = presortCategory(
           values.sort(documentTypeSort),
           category,

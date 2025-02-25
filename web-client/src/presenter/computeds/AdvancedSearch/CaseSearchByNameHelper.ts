@@ -3,7 +3,7 @@ import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandle
 import { Get } from 'cerebral';
 
 export const caseSearchByNameHelper = (
-  get: Get,
+  _get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
   const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);

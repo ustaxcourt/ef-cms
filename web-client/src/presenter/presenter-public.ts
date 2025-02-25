@@ -9,6 +9,7 @@ import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequen
 import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeModalAndNavigateToMaintenanceSequence';
 import { confirmSignUpSequence } from '@web-client/presenter/sequences/Login/confirmSignUpSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
+import { displayProgressSpinnerSequence } from '@web-client/presenter/sequences/displayProgressSpinnerSequence';
 import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
 import { gotoContactSequence } from './sequences/gotoContactSequence';
 import { gotoHealthCheckSequence } from './sequences/gotoHealthCheckSequence';
@@ -18,6 +19,8 @@ import { gotoPublicCaseDetailSequence } from './sequences/Public/gotoPublicCaseD
 import { gotoPublicEmailVerificationInstructionsSequence } from './sequences/gotoPublicEmailVerificationInstructionsSequence';
 import { gotoPublicPrintableDocketRecordSequence } from './sequences/Public/gotoPublicPrintableDocketRecordSequence';
 import { gotoPublicSearchSequence } from './sequences/Public/gotoPublicSearchSequence';
+import { gotoPublicTrialSessionDetailsSequence } from '@web-client/presenter/sequences/Public/gotoPublicTrialSessionDetailsSequence';
+import { gotoPublicTrialSessionsSequence } from '@web-client/presenter/sequences/Public/gotoPublicTrialSessionsSequence';
 import { gotoTodaysOpinionsSequence } from './sequences/Public/gotoTodaysOpinionsSequence';
 import { gotoTodaysOrdersSequence } from './sequences/Public/gotoTodaysOrdersSequence';
 import { initialPublicState } from './state-public';
@@ -33,9 +36,11 @@ import { persistFormsOnReloadSequence } from './sequences/persistFormsOnReloadSe
 import { redirectToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/redirectToCreatePetitionerAccountSequence';
 import { redirectToDashboardSequence } from '@web-client/presenter/sequences/redirectToDashboardSequence';
 import { redirectToLoginSequence } from '@web-client/presenter/sequences/Public/redirectToLoginSequence';
+import { resetPublicTrialSessionsDataSequence } from '@web-client/presenter/sequences/resetPublicTrialSessionsDataSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
+import { sortTableSequence } from '@web-client/presenter/sequences/sortTableSequence';
 import { sortTodaysOrdersSequence } from './sequences/Public/sortTodaysOrdersSequence';
 import { submitLoginSequence } from '@web-client/presenter/sequences/Login/submitLoginSequence';
 import { submitPractitionerBarNumberSearchSequence } from '@web-client/presenter/sequences/submitPractitionerBarNumberSearchSequence';
@@ -70,6 +75,7 @@ export const presenterSequences = {
   closeModalAndNavigateToMaintenanceSequence,
   confirmSignUpSequence,
   dismissModalSequence,
+  displayProgressSpinnerSequence,
   goToCreatePetitionerAccountSequence,
   gotoContactSequence: showMaintenancePageDecorator(gotoContactSequence),
   gotoHealthCheckSequence: showMaintenancePageDecorator(
@@ -87,6 +93,8 @@ export const presenterSequences = {
   gotoPublicSearchSequence: showMaintenancePageDecorator(
     gotoPublicSearchSequence,
   ),
+  gotoPublicTrialSessionDetailsSequence,
+  gotoPublicTrialSessionsSequence,
   gotoTodaysOpinionsSequence: showMaintenancePageDecorator(
     gotoTodaysOpinionsSequence,
   ),
@@ -105,7 +113,9 @@ export const presenterSequences = {
   redirectToCreatePetitionerAccountSequence,
   redirectToDashboardSequence,
   redirectToLoginSequence,
+  resetPublicTrialSessionsDataSequence,
   showMoreResultsSequence,
+  sortTableSequence,
   sortTodaysOrdersSequence,
   submitLoginSequence,
   submitPractitionerBarNumberSearchSequence,
@@ -141,7 +151,10 @@ export const presenter = {
     [NotFoundError, notFoundErrorSequence], //404
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
-  providers: {},
+  providers: {
+    applicationContext: {} as any,
+    router: {} as any,
+  },
   sequences: presenterSequences,
   state: initialPublicState,
 };

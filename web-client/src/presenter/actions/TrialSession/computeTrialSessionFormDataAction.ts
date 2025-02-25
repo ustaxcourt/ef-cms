@@ -1,3 +1,7 @@
+import {
+  SESSION_TERMS_BY_MONTH,
+  SESSION_TERMS_DICT,
+} from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const computeTermAndUpdateState = (
@@ -12,21 +16,14 @@ export const computeTermAndUpdateState = (
 
     const monthAsNumber = +date.month;
 
-    const termsByMonth = {
-      fall: [9, 10, 11, 12],
-      spring: [4, 5, 6],
-      summer: [7, 8],
-      winter: [1, 2, 3],
-    };
-
-    if (termsByMonth.winter.includes(monthAsNumber)) {
-      term = 'Winter';
-    } else if (termsByMonth.spring.includes(monthAsNumber)) {
-      term = 'Spring';
-    } else if (termsByMonth.summer.includes(monthAsNumber)) {
-      term = 'Summer';
-    } else if (termsByMonth.fall.includes(monthAsNumber)) {
-      term = 'Fall';
+    if (SESSION_TERMS_BY_MONTH.winter.includes(monthAsNumber)) {
+      term = SESSION_TERMS_DICT.WINTER;
+    } else if (SESSION_TERMS_BY_MONTH.spring.includes(monthAsNumber)) {
+      term = SESSION_TERMS_DICT.SPRING;
+    } else if (SESSION_TERMS_BY_MONTH.summer.includes(monthAsNumber)) {
+      term = SESSION_TERMS_DICT.SUMMER;
+    } else if (SESSION_TERMS_BY_MONTH.fall.includes(monthAsNumber)) {
+      term = SESSION_TERMS_DICT.FALL;
     }
 
     store.set(state.form.term, term);
@@ -105,11 +102,9 @@ export const computeTrialSessionFormDataAction = ({
     store.set(state.form.judgeId, selectedJudge.userId);
     store.set(state.form.judge, selectedJudge);
 
-    const JUDGES_CHAMBERS = applicationContext
-      .getUtilities()
-      .getJudgesChambers();
+    const JUDGES_CHAMBERS = get(state.judgesChambers);
 
-    const judge = Object.values(JUDGES_CHAMBERS).find(
+    const judge = JUDGES_CHAMBERS.find(
       ({ section }) => section === selectedJudge.section,
     );
 

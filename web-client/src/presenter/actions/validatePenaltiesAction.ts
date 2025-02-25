@@ -22,7 +22,7 @@ export const validatePenaltiesAction = ({
   }
 
   allPenalties.forEach(penalty => {
-    let error = applicationContext
+    const error = applicationContext
       .getUseCases()
       .validatePenaltiesInteractor(applicationContext, { rawPenalty: penalty });
 

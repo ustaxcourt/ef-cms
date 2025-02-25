@@ -1,8 +1,23 @@
-import { MAX_ELASTICSEARCH_PAGINATION } from '../../shared/src/business/entities/EntityConstants';
-import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
-import { createApplicationContext } from '../../web-api/src/applicationContext';
-import { search } from '../../web-api/src/persistence/elasticsearch/searchClient';
+#!/usr/bin/env -S npx ts-node --transpile-only
 
+import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl.js';
+import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
+import { createApplicationContext } from '@web-api/applicationContext';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import { search } from '@web-api/persistence/elasticsearch/searchClient';
+
+const scriptConfig: ScriptConfig = {
+  description: 'open-search-playground - Play with OpenSearch queries.',
+  environment: {
+    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
+    env: 'ENV',
+  },
+  requireActiveAwsSession: true,
+};
+parseArgsAndEnvVars(scriptConfig);
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const source = [
@@ -14,7 +29,7 @@ import { search } from '../../web-api/src/persistence/elasticsearch/searchClient
     'leadDocketNumber',
     'petitioners',
     'status',
-  ] as const;
+  ];
 
   const judges = [
     'Ashford',
@@ -62,8 +77,8 @@ import { search } from '../../web-api/src/persistence/elasticsearch/searchClient
   };
   const applicationContext = createApplicationContext({});
 
-  const shouldFilters: QueryDslQueryContainer[] = [];
-  const filters: QueryDslQueryContainer[] = [
+  const shouldFilters: QueryContainer[] = [];
+  const filters: QueryContainer[] = [
     {
       terms: { 'status.S': params.statuses },
     },

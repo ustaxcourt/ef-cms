@@ -1,19 +1,39 @@
-// usage: npx ts-node --transpile-only scripts/upload-practitioner-application-packages.ts > "$HOME/Documents/upload/stats-$(date +%s).txt"
+#!/usr/bin/env -S npx ts-node --transpile-only
+
+// usage: ./scripts/upload-practitioner-application-packages.ts > "$HOME/Documents/upload/stats-$(date +%s).txt"
 
 import { DateTime } from 'luxon';
-import { createApplicationContext } from '@web-api/applicationContext';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from './helpers/parseArgsAndEnvVars';
+import {
+  type ServerApplicationContext,
+  createApplicationContext,
+} from '@web-api/applicationContext';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { extname, parse } from 'path';
-import { requireEnvVars } from '../shared/admin-tools/util';
 import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 import tiff2pdf from 'tiff2pdf';
 import type { RawPractitioner } from '@shared/business/entities/Practitioner';
 
-requireEnvVars(['ENV', 'HOME', 'REGION']);
+const scriptConfig: ScriptConfig = {
+  description:
+    'upload-practitioner-application-packages - Converts files named ' +
+    '<bar number>.tif to PDF, uploads them to S3, and inserts ' +
+    'corresponding Document entities into dynamodb.',
+  environment: {
+    efcmsDomain: 'EFCMS_DOMAIN',
+    env: 'ENV',
+    home: 'HOME',
+  },
+  requireActiveAwsSession: true,
+};
+const { home } = parseArgsAndEnvVars(scriptConfig) as { home: string };
 
-const INPUT_DIR = `${process.env.HOME}/Documents/upload`;
+const INPUT_DIR = `${home}/Documents/upload`;
 const MAX_TRIES = 5;
 const DYNAMODB_CHUNK_SIZE = 25;
 
@@ -43,7 +63,7 @@ const output = {
 const getAllBarNumbers = async ({
   applicationContext,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
 }): Promise<string[]> => {
   const { results } = await searchAll({
     applicationContext,
@@ -71,7 +91,7 @@ const uploadDocumentToS3 = async ({
   fileId,
   filePath,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   fileId: string;
   filePath: string;
 }): Promise<boolean> => {
@@ -113,7 +133,7 @@ const uploadFileAndMoveOriginal = async ({
   fileId,
   fileName,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   barNumber: string;
   fileId: string;
   fileName: string;
@@ -223,7 +243,7 @@ const asyncTifToPdf = ({
         if (result.code === 0) {
           resolve(fileName);
         } else {
-          reject();
+          reject(new Error('Unable convert tif to pdf'));
         }
       }
     });
@@ -240,7 +260,8 @@ const moveLocalFile = async ({
   return new Promise((resolve, reject) => {
     fs.rename(oldPath, newPath, err => {
       if (err) {
-        reject();
+        console.error(err);
+        reject(new Error('unable to moveLocalFile'));
       } else {
         resolve(true);
       }
@@ -260,7 +281,7 @@ const uploadChunkToS3 = async ({
   applicationContext,
   chunk,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   chunk: putRequestType[];
 }): Promise<void> => {
   await Promise.all(
@@ -284,11 +305,11 @@ const writeChunkToDynamoDb = async ({
   applicationContext,
   chunk,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   chunk: putRequestType[];
 }): Promise<void> => {
   const { dynamoDbTableName } = applicationContext.environment;
-  let unprocessedItems = { [dynamoDbTableName]: chunk };
+  let unprocessedItems: any = { [dynamoDbTableName]: chunk };
   let tries = 0;
   while (
     unprocessedItems &&
@@ -299,8 +320,7 @@ const writeChunkToDynamoDb = async ({
       const batchWriteParams = { RequestItems: unprocessedItems };
       const res = await applicationContext
         .getDocumentClient(applicationContext)
-        .batchWrite(batchWriteParams)
-        .promise();
+        .batchWrite(batchWriteParams);
       unprocessedItems = res.UnprocessedItems;
     } catch (err) {
       output.failed.writeToDynamoDB.error.push(...chunk);
@@ -378,7 +398,7 @@ const outputStatistics = (): void => {
 const batchUploadPractitionerApplicationPackages = async ({
   applicationContext,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
 }): Promise<void> => {
   console.time('Total execution time');
   const fileNames = fs.readdirSync(uploadDir);

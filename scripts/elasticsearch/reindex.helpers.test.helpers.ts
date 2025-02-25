@@ -15,7 +15,7 @@ export const mockDifferentExistingMappings = (): {
   newCaseIndexName: string;
   newDocketEntryIndexName: string;
 } => {
-  const existingCaseMappings = cloneDeep(efcmsCaseMappings);
+  const existingCaseMappings: any = cloneDeep(efcmsCaseMappings); // Okay to cast as any as this is only for tests
   existingCaseMappings.properties['petitioners.L.M.name.S'].type = 'keyword';
   const existingCaseMappingsHash: string = createHash('md5')
     .update(JSON.stringify(existingCaseMappings), 'utf-8')
@@ -25,7 +25,7 @@ export const mockDifferentExistingMappings = (): {
     return index.includes('efcms-case') && !index.includes('deadline');
   })!;
 
-  const existingDocketEntryMappings = cloneDeep(efcmsDocketEntryMappings);
+  const existingDocketEntryMappings: any = cloneDeep(efcmsDocketEntryMappings);
   existingDocketEntryMappings.properties['signedJudgeName.S'].type = 'keyword';
   const existingDocketEntryMappingsHash: string = createHash('md5')
     .update(JSON.stringify(existingDocketEntryMappings), 'utf-8')

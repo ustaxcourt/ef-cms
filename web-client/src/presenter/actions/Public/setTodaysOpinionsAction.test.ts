@@ -1,3 +1,4 @@
+import { PublicClientState } from '@web-client/presenter/state-public';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setTodaysOpinionsAction } from './setTodaysOpinionsAction';
 
@@ -14,14 +15,17 @@ describe('setTodaysOpinionsAction', () => {
       },
     ];
 
-    const { state } = await runAction(setTodaysOpinionsAction, {
-      props: {
-        todaysOpinions: mockTodaysOpinions,
+    const { state } = await runAction<void, PublicClientState>(
+      setTodaysOpinionsAction,
+      {
+        props: {
+          todaysOpinions: mockTodaysOpinions,
+        },
+        state: {
+          todaysOpinions: [],
+        },
       },
-      state: {
-        todaysOpinions: [],
-      },
-    });
+    );
 
     expect(state.todaysOpinions).toMatchObject(mockTodaysOpinions);
   });

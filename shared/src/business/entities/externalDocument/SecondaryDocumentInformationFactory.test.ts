@@ -10,7 +10,7 @@ describe('SecondaryDocumentInformationFactory', () => {
     it('should not be valid when document is a Motion, a file is selected, and objections is not present', () => {
       const extDoc = new SecondaryDocumentInformationFactory({
         category: 'Motion',
-        documentType: 'Motion for New Trial',
+        documentType: 'Motion for a New Trial',
         secondaryDocumentFile: {},
       });
       expect(extDoc.getValidationErrors()?.objections).toEqual(
@@ -21,7 +21,7 @@ describe('SecondaryDocumentInformationFactory', () => {
     it('should be valid when document is a Motion, a file is not selected, and objections is not present', () => {
       const extDoc = new SecondaryDocumentInformationFactory({
         category: 'Motion',
-        documentType: 'Motion for New Trial',
+        documentType: 'Motion for a New Trial',
       });
       expect(extDoc.getValidationErrors()).toEqual(null);
     });

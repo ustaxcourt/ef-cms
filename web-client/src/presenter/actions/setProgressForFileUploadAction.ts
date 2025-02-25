@@ -1,4 +1,4 @@
-import { FileUploadProgressMapType } from '../../../../shared/src/business/entities/EntityConstants';
+import { FileUploadProgressValueType } from '../../../../shared/src/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setProgressForFileUploadAction = ({
@@ -15,10 +15,11 @@ export const setProgressForFileUploadAction = ({
         name: string;
       }[];
 }>): {
-  fileUploadProgressMap: FileUploadProgressMapType;
+  fileUploadProgressMap: Record<string, FileUploadProgressValueType>;
 } => {
   const { files } = props;
   const loadedAmounts: Record<string, number> = {};
+  // eslint-disable-next-line custom-rules-plugin/no-new-dates
   const startTime = new Date();
   const sizeOfFiles: Record<string, number> = {};
 
@@ -60,6 +61,7 @@ export const setProgressForFileUploadAction = ({
 
       loadedAmounts[key] = isDone ? sizeOfFiles[key] : loaded;
       const totalSize = calculateTotalSize();
+      // eslint-disable-next-line custom-rules-plugin/no-new-dates
       const timeElapsed = new Date() - startTime;
       const uploadedBytes = calculateTotalLoaded();
       const uploadSpeed = uploadedBytes / (timeElapsed / 1000);
@@ -80,7 +82,10 @@ export const setProgressForFileUploadAction = ({
   store.set(state.fileUploadProgress.timeRemaining, Number.POSITIVE_INFINITY);
   store.set(state.fileUploadProgress.isUploading, true);
 
-  const fileUploadProgressMap = {} as FileUploadProgressMapType;
+  const fileUploadProgressMap = {} as Record<
+    string,
+    FileUploadProgressValueType
+  >;
 
   Object.keys(files).forEach(key => {
     if (!files[key]) return;

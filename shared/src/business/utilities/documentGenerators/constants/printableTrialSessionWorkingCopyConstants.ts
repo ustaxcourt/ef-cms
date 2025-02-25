@@ -1,3 +1,5 @@
+import { SESSION_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+
 export const FORMATTED_CASES = [
   {
     calendarNotes:
@@ -451,7 +453,7 @@ export const FORMATTED_TRIAL_SESSION = {
   formattedStartDateFull: 'January 26, 2023',
   formattedTerm: 'Winter 23',
   formattedTrialClerk: 'Test trial clerk',
-  sessionStatus: 'Open',
+  sessionStatus: SESSION_STATUS_TYPES.open,
   startDateForAdditionalPageHeaders: 'Jan 26, 2023',
   trialLocation: 'Washington, District of Columbia',
 };

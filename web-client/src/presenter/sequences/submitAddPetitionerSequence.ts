@@ -5,6 +5,7 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setPartyViewTabAfterUpdatingPetitionersAction } from '../actions/setPartyViewTabAfterUpdatingPetitionersAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
@@ -17,7 +18,11 @@ export const submitAddPetitionerSequence = [
   startShowValidationAction,
   validateAddPetitionerAction,
   {
-    error: [setValidationAlertErrorsAction, setValidationErrorsAction],
+    error: [
+      setValidationErrorsAction,
+      setScrollToErrorNotificationAction,
+      setValidationAlertErrorsAction,
+    ],
     success: showProgressSequenceDecorator([
       addPetitionerToCaseAction,
       setPartyViewTabAfterUpdatingPetitionersAction,

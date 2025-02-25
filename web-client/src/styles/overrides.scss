@@ -213,6 +213,10 @@ option:first-child {
     }
   }
 
+  .usa-alert__text--strong {
+    font-weight: 600;
+  }
+
   &.usa-alert-success-message-only {
     @media only screen and (min-width: $medium-screen) {
       .usa-grid-full {
@@ -336,15 +340,6 @@ p {
   margin-top: 10px;
 }
 
-.payment-options {
-  .usa-accordion__button {
-    padding: 3px;
-    font-family: $font-source-sans;
-    font-size: 17px;
-    font-weight: normal;
-  }
-}
-
 .other-filing-option {
   .usa-accordion__button {
     padding: 3px;
@@ -364,7 +359,6 @@ p {
   padding-top: 20px;
   border-top: 1px solid #dfe1e2;
   margin-bottom: 15px;
-  
 }
 
 .usa-alert__text:only-child {
@@ -409,5 +403,23 @@ input[type='file']::-webkit-file-upload-button {
 td.message-select-control {
   .usa-checkbox {
     padding-bottom: 5px;
+  }
+}
+
+.usa-input.term-name-field {
+  max-width: 100%;
+}
+
+.usa-search {
+  margin-top: 0 !important; // USWDS added top margin as part of releases 8-10
+}
+
+.usa-nav {
+  padding-bottom: 4px !important; // USWDS added botton padding as part of releases 8-10
+}
+
+.usa-footer {
+  [class^='grid-col-'] {
+    width: 100%;
   }
 }

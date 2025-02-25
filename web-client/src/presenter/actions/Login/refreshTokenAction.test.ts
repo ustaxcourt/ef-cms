@@ -51,8 +51,9 @@ describe('refreshTokenAction', () => {
         presenter,
       },
       state: {},
-    }),
-      expect(mockUserIsLoggedInPath).not.toHaveBeenCalled();
+    });
+
+    expect(mockUserIsLoggedInPath).not.toHaveBeenCalled();
     expect(mockUserIsNotLoggedInPath).toHaveBeenCalled();
   });
 });

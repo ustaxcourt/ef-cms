@@ -5,66 +5,12 @@ import {
 } from './internalTypesHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
+import { LODGED_EVENT_CODE } from '@shared/business/entities/EntityConstants';
 
 describe('internalTypesHelper', () => {
-  const INTERNAL_CATEGORY_MAP = {
-    'Answer (filed by respondent only)': [
-      {
-        category: 'Answer (filed by respondent only)',
-        documentTitle: 'Amended Answer',
-        documentType: 'Amended Answer',
-        eventCode: 'AA',
-        labelFreeText: '',
-        labelPreviousDocument: '',
-        ordinalField: '',
-        scenario: 'Standard',
-      },
-      {
-        category: 'Answer (filed by respondent only)',
-        documentTitle: 'Answer',
-        documentType: 'Answer',
-        eventCode: 'A',
-        labelFreeText: '',
-        labelPreviousDocument: '',
-        ordinalField: '',
-        scenario: 'Standard',
-      },
-      {
-        category: 'Answer (filed by respondent only)',
-        documentTitle: '[First, Second, etc.] Amendment to Answer',
-        documentType: 'Amendment to Answer',
-        eventCode: 'ATAN',
-        labelFreeText: '',
-        labelPreviousDocument: '',
-        ordinalField: 'What iteration is this filing?',
-        scenario: 'Nonstandard G',
-      },
-    ],
-    'Seriatim Brief': [
-      {
-        category: 'Seriatim Brief',
-        documentTitle: 'Seriatim Answering Memorandum Brief',
-        documentType: 'Seriatim Answering Memorandum Brief',
-        eventCode: 'SAMB',
-        labelFreeText: '',
-        labelPreviousDocument: '',
-        ordinalField: '',
-        scenario: 'Standard',
-      },
-    ],
-  };
-
   const internalTypesHelper = withAppContextDecorator(
     internalTypesHelperComputed,
-    {
-      ...applicationContext,
-      getConstants: () => {
-        return {
-          ...applicationContext.getConstants(),
-          INTERNAL_CATEGORY_MAP,
-        };
-      },
-    },
+    applicationContext,
   );
 
   describe('custom search function', () => {
@@ -149,110 +95,67 @@ describe('internalTypesHelper', () => {
     });
   });
 
-  describe('produces a list', () => {
-    it('of value/label objects sorted by their label (default) when no search text is provided', () => {
-      const expected = [
-        { label: 'Amended Answer', value: 'AA' },
-        { label: 'Amendment to Answer', value: 'ATAN' },
-        { label: 'Answer', value: 'A' },
-        { label: 'Seriatim Answering Memorandum Brief', value: 'SAMB' },
-      ];
-
+  describe('search sorting', () => {
+    it('sorts on documentType Alphabetical when no search text is provided', () => {
       const result = runCompute(internalTypesHelper, {
         state: {},
       });
 
       expect(
-        result.internalDocumentTypesForSelectWithLegacySorted,
-      ).toMatchObject(expected);
+        result.internalDocumentTypesForSelectWithLegacySorted[0].eventCode,
+      ).toEqual('ADMR');
     });
 
-    describe('when searchText is defined', () => {
-      it('and is an empty string', () => {
-        const expected = [
-          { label: 'Amended Answer', value: 'AA' },
-          { label: 'Amendment to Answer', value: 'ATAN' },
-          { label: 'Answer', value: 'A' },
-          { label: 'Seriatim Answering Memorandum Brief', value: 'SAMB' },
-        ];
-
-        const result = runCompute(internalTypesHelper, {
-          state: {
-            screenMetadata: { searchText: '' },
-          },
-        });
-
-        expect(
-          result.internalDocumentTypesForSelectWithLegacySorted,
-        ).toMatchObject(expected);
+    it('sorts on documentType Alphabeticaland when the search text is an empty string', () => {
+      const result = runCompute(internalTypesHelper, {
+        state: {
+          screenMetadata: { searchText: '' },
+        },
       });
 
-      it('and is not matching an event code', () => {
-        const expected = [
-          { label: 'Amended Answer', value: 'AA' },
-          { label: 'Amendment to Answer', value: 'ATAN' },
-          { label: 'Answer', value: 'A' },
-          { label: 'Seriatim Answering Memorandum Brief', value: 'SAMB' },
-        ];
+      expect(
+        result.internalDocumentTypesForSelectWithLegacySorted[0].eventCode,
+      ).toEqual('ADMR');
+    });
 
-        const result = runCompute(internalTypesHelper, {
-          state: {
-            screenMetadata: { searchText: 'Seriatim' },
-          },
-        });
-
-        expect(
-          result.internalDocumentTypesForSelectWithLegacySorted,
-        ).toMatchObject(expected);
+    it('and is not matching an event code, then should organize by documentType Alphabetical', () => {
+      const result = runCompute(internalTypesHelper, {
+        state: {
+          screenMetadata: { searchText: 'blah' },
+        },
       });
 
-      it('and matches the beginning of an eventCode', () => {
-        const expected = [
-          { label: 'Seriatim Answering Memorandum Brief', value: 'SAMB' },
-          { label: 'Amended Answer', value: 'AA' },
-          { label: 'Amendment to Answer', value: 'ATAN' },
-          { label: 'Answer', value: 'A' },
-        ];
+      expect(
+        result.internalDocumentTypesForSelectWithLegacySorted[0].eventCode,
+      ).toEqual('ADMR');
+    });
 
-        const result = runCompute(internalTypesHelper, {
-          state: {
-            screenMetadata: { searchText: 'SA' },
-          },
-        });
-
-        expect(
-          result.internalDocumentTypesForSelectWithLegacySorted,
-        ).toMatchObject(expected);
+    it('sorts on eventCode when the search matches the beginning of an eventCode', () => {
+      const result = runCompute(internalTypesHelper, {
+        state: {
+          screenMetadata: { searchText: 'AAP' },
+        },
       });
 
-      it('and matches an event code exactly', () => {
-        const expected = [
-          { label: 'Amendment to Answer', value: 'ATAN' },
-          { label: 'Amended Answer', value: 'AA' },
-          { label: 'Answer', value: 'A' },
-          { label: 'Seriatim Answering Memorandum Brief', value: 'SAMB' },
-        ];
+      expect(
+        result.internalDocumentTypesForSelectWithLegacySorted[0].eventCode,
+      ).toEqual('AAPN');
+    });
 
-        const result = runCompute(internalTypesHelper, {
-          state: {
-            screenMetadata: { searchText: 'ATAN' },
-          },
-        });
-
-        expect(
-          result.internalDocumentTypesForSelectWithLegacySorted,
-        ).toMatchObject(expected);
+    it('sorts on eventCode when the search matches an event code exactly', () => {
+      const result = runCompute(internalTypesHelper, {
+        state: {
+          screenMetadata: { searchText: 'AAPN' },
+        },
       });
+
+      expect(
+        result.internalDocumentTypesForSelectWithLegacySorted[0].value,
+      ).toEqual('AAPN');
     });
   });
 
   describe('lodged', () => {
-    let LODGED_EVENT_CODE;
-
-    beforeAll(() => {
-      ({ LODGED_EVENT_CODE } = applicationContext.getConstants());
-    });
-
     it('does not show MISCL in dropdown', () => {
       const result = runCompute(internalTypesHelper, {
         state: {},
@@ -267,23 +170,22 @@ describe('internalTypesHelper', () => {
     });
   });
 
-  describe('legacy document types', () => {
-    let LEGACY_DOCUMENT_TYPES;
-    beforeAll(() => {
-      ({ LEGACY_DOCUMENT_TYPES } = applicationContext.getConstants());
-    });
-
-    it('does not show any legacy document types in dropdown', () => {
+  describe('Deprecated document', () => {
+    it('does not show any deprecated document types in dropdown', () => {
       const result = runCompute(internalTypesHelper, {
         state: {},
       });
 
-      const legacyType =
+      const deprecatedDoc =
         result.internalDocumentTypesForSelectWithLegacySorted.find(
-          d => d.eventCode === LEGACY_DOCUMENT_TYPES[0].eventCode,
+          d => d.eventCode === 'M129',
         );
-
-      expect(legacyType).toBeUndefined();
+      const deprecatedDocIsNotSelectable =
+        result.internalDocumentTypesForSelectSorted.find(
+          d => d.eventCode === 'M129',
+        );
+      expect(deprecatedDoc).toBeDefined();
+      expect(deprecatedDocIsNotSelectable).toBeUndefined();
     });
   });
 });

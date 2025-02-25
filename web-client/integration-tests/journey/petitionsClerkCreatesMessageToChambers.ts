@@ -1,12 +1,10 @@
-import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { getTestJudgesChambers } from '@shared/test/mockJudgesChambers';
 import { messageModalHelper as messageModalHelperComputed } from '../../src/presenter/computeds/messageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const JUDGES_CHAMBERS = applicationContext
-  .getPersistenceGateway()
-  .getJudgesChambers();
+const JUDGES_CHAMBERS = getTestJudgesChambers();
 const messageModalHelper = withAppContextDecorator(messageModalHelperComputed);
 
 export const petitionsClerkCreatesMessageToChambers = cerebralTest => {

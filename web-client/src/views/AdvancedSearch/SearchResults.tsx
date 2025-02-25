@@ -71,11 +71,18 @@ export const SearchResults = connect(
                       data-testid={`advanced-case-search-result-${result.docketNumber}`}
                       key={result.docketNumber}
                     >
-                      <td className="center-column">{idx + 1}</td>
+                      <td
+                        className="center-column"
+                        data-testid={`advanced-case-search-result-order-${idx}`}
+                      >
+                        {idx + 1}
+                      </td>
                       <NonMobile>
                         <td>
-                          {result.petitioners.map(p => (
-                            <div key={p.contactId}>{p.name}</div>
+                          {result.petitionerNames.map((name, index) => (
+                            // No need to have a better key here since the data does not need to re-render
+
+                            <div key={index}>{name}</div>
                           ))}
                         </td>
                       </NonMobile>
@@ -86,9 +93,13 @@ export const SearchResults = connect(
                         <td>{result.formattedFiledDate}</td>
                         <td>{result.caseTitle}</td>
                         <td>
-                          {result.petitionerFullStateNames.map(p => (
-                            <div key={p.contactId}>{p.state}</div>
-                          ))}
+                          {result.petitionerStateNames.map(
+                            (stateName, index) => (
+                              // No need to have a better key here since the data does not need to re-render
+
+                              <div key={index}>{stateName}</div>
+                            ),
+                          )}
                         </td>
                       </NonMobile>
                       <Mobile>

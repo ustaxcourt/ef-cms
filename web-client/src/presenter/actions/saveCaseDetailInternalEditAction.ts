@@ -44,6 +44,7 @@ export const saveCaseDetailInternalEditAction = async ({
             onUploadProgress: fileUploadProgressMap[key].uploadProgress,
           });
 
+        // eslint-disable-next-line prefer-const
         let { documentTitle, documentType } = INITIAL_DOCUMENT_TYPES[key];
 
         if (

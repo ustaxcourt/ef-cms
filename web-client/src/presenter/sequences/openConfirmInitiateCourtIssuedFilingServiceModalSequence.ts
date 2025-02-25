@@ -2,6 +2,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { isDocketEntryMultiDocketableAction } from '../actions/CaseConsolidation/isDocketEntryMultiDocketableAction';
 import { setMultiDocketingCheckboxesAction } from '../actions/CaseConsolidation/setMultiDocketingCheckboxesAction';
+import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -13,7 +14,11 @@ export const openConfirmInitiateCourtIssuedFilingServiceModalSequence = [
   startShowValidationAction,
   validateCourtIssuedDocketEntryAction,
   {
-    error: [setValidationErrorsAction, setValidationAlertErrorsAction],
+    error: [
+      setValidationErrorsAction,
+      setScrollToErrorNotificationAction,
+      setValidationAlertErrorsAction,
+    ],
     success: [
       clearModalStateAction,
       isDocketEntryMultiDocketableAction,

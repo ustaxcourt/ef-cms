@@ -1,23 +1,24 @@
-/**
- * INITIAL SETUP:
- *   npx ts-node --transpile-only scripts/run-once-scripts/create-efcms-user-practitioner-firm-index.ts
- *
- * USAGE:
- *   npx ts-node --transpile-only scripts/reports/firms-cases.ts Firm Search Terms > ~/Desktop/firms-cases.csv
- *
- * CLEANUP:
- *   npx ts-node --transpile-only scripts/run-once-scripts/delete-efcms-user-practitioner-firm-index.ts
- */
+#!/usr/bin/env -S npx ts-node --transpile-only
 
+import { Search_Request } from '@opensearch-project/opensearch/api';
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
-import { Search } from '@opensearch-project/opensearch/api/requestParams';
-import { createApplicationContext } from '@web-api/applicationContext';
+import {
+  type ServerApplicationContext,
+  applicationContext,
+} from '@web-api/applicationContext';
+import { generateCsv } from '../helpers/generate-csv';
+import { pick } from 'lodash';
+import { requireEnvVars } from '../../shared/admin-tools/util';
 import { search } from '@web-api/persistence/elasticsearch/searchClient';
+
+requireEnvVars(['ELASTICSEARCH_ENDPOINT', 'ENV']);
+
+const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 
 const firmTerms: string[] = process.argv.slice(2);
 if (!firmTerms.length) {
   console.error(
-    'usage: npx ts-node --transpile-only scripts/reports/find-firms-cases.ts Firm Search Terms > ~/Desktop/firms-cases.csv',
+    'usage: scripts/reports/find-firms-cases.ts Firm Search Terms > ~/Desktop/firms-cases.csv',
   );
   process.exit(1);
 }
@@ -25,7 +26,7 @@ if (!firmTerms.length) {
 const getFirmsPractitioners = async ({
   applicationContext,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
 }): Promise<{ userId: string }[]> => {
   const must: {}[] = [
     {
@@ -48,7 +49,7 @@ const getFirmsPractitioners = async ({
       },
     });
   }
-  const searchParameters: Search = {
+  const searchParameters: Search_Request = {
     body: {
       query: {
         bool: {
@@ -57,7 +58,7 @@ const getFirmsPractitioners = async ({
       },
     },
     from: 0,
-    index: 'efcms-user-practitioner-firm',
+    index: 'efcms-user',
     size: MAX_ELASTICSEARCH_PAGINATION,
   };
   return (await search({ applicationContext, searchParameters }))?.results;
@@ -67,7 +68,7 @@ const getFirmsCases = async ({
   applicationContext,
   firmsPractitionerIds,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   firmsPractitionerIds: string[];
 }): Promise<
   {
@@ -77,7 +78,7 @@ const getFirmsCases = async ({
     status: string;
   }[]
 > => {
-  const searchParameters: Search = {
+  const searchParameters: Search_Request = {
     body: {
       query: {
         bool: {
@@ -100,7 +101,6 @@ const getFirmsCases = async ({
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext: IApplicationContext = createApplicationContext({});
   const firmsPractitionerIds = (
     await getFirmsPractitioners({
       applicationContext,
@@ -110,12 +110,24 @@ const getFirmsCases = async ({
     applicationContext,
     firmsPractitionerIds,
   });
-  console.log(
-    '"Docket Number","Associated Judge","Case Status","Case Caption"',
-  );
-  for (const firmsCase of firmsCases) {
-    console.log(
-      `"${firmsCase.docketNumber}","${firmsCase.associatedJudge}","${firmsCase.status}","${firmsCase.caseCaption}"`,
-    );
-  }
+  const filename = `${OUTPUT_DIR}/${firmTerms.map(ft => ft.toLowerCase()).join('-')}-cases.csv`;
+  const columns = [
+    { header: 'Docket Number', key: 'docketNumber' },
+    { header: 'Judge', key: 'judge' },
+    { header: 'Case Status', key: 'status' },
+    { header: 'Case Title', key: 'caseCaption' },
+  ];
+  const rows = firmsCases.map(fc => {
+    const judge =
+      fc.associatedJudge
+        ?.replace('Chief Special Trial ', '')
+        .replace('Special Trial ', '')
+        .replace('Judge ', '') || '';
+    return {
+      ...pick(fc, ['caseCaption', 'docketNumber', 'status']),
+      judge,
+    };
+  });
+  generateCsv({ columns, filename, rows });
+  console.log(`Generated ${filename}`);
 })();

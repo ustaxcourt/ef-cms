@@ -1,3 +1,8 @@
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
+import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { NotFoundError } from '../../../errors/errors';
 import { ProgressData } from '@web-api/persistence/s3/zipDocuments';
@@ -7,7 +12,6 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { generateValidDocketEntryFilename } from '@web-api/business/useCases/trialSessions/batchDownloadTrialSessionInteractor';
 
 export type DownloadDocketEntryRequestType = {
@@ -68,17 +72,6 @@ const batchDownloadDocketEntriesHelper = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId,
-    message: {
-      action: 'batch_download_progress',
-      filesCompleted: 0,
-      totalFiles: documentsSelectedForDownload.length,
-    },
-    userId: authorizedUser.userId,
-  });
-
   const caseToBatch = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -136,6 +129,57 @@ const batchDownloadDocketEntriesHelper = async (
     });
   }
 
+  const featureFlags = await applicationContext
+    .getUseCases()
+    .getAllFeatureFlagsInteractor(applicationContext, true);
+
+  const awsBatchMinimumCount =
+    featureFlags[ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key];
+
+  const useAwsBatchMechanism =
+    applicationContext.environment.stage !== 'local' &&
+    !!awsBatchMinimumCount &&
+    documentsToZip.length > awsBatchMinimumCount;
+
+  if (useAwsBatchMechanism) {
+    const UUID = applicationContext.getUniqueId();
+    await applicationContext.getPersistenceGateway().uploadDocument({
+      applicationContext,
+      pdfData: JSON.stringify(documentsToZip),
+      pdfName: UUID,
+      useTempBucket: true,
+    });
+
+    await applicationContext
+      .getDispatchers()
+      .sendZipperBatchJob(
+        applicationContext,
+        UUID,
+        zipName,
+        clientConnectionId,
+        authorizedUser.userId,
+      );
+
+    await displayFakeProgressBarUntilBatchBootsUp(
+      applicationContext,
+      clientConnectionId,
+      authorizedUser,
+    );
+
+    return;
+  }
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'batch_download_progress',
+      filesCompleted: 0,
+      totalFiles: documentsSelectedForDownload.length,
+    },
+    userId: authorizedUser.userId,
+  });
+
   const onProgress = async (progressData: ProgressData) => {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
@@ -175,3 +219,24 @@ const batchDownloadDocketEntriesHelper = async (
     userId: authorizedUser.userId,
   });
 };
+
+async function displayFakeProgressBarUntilBatchBootsUp(
+  applicationContext: ServerApplicationContext,
+  clientConnectionId: string,
+  authorizedUser: AuthUser,
+) {
+  const FAKE_NUMBER = 45;
+  for (let index = 0; index < FAKE_NUMBER; index++) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'aws_batch_download_progress',
+        filesCompleted: index,
+        totalFiles: FAKE_NUMBER,
+      },
+      userId: authorizedUser.userId,
+    });
+    await new Promise(resolve => setTimeout(() => resolve(null), 1000));
+  }
+}

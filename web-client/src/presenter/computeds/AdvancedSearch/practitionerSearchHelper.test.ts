@@ -7,7 +7,7 @@ import { withAppContextDecorator } from '../../../withAppContext';
 describe('practitionerSearchHelper', () => {
   const { USER_ROLES } = applicationContext.getConstants();
 
-  let pageSizeOverride = 5;
+  const pageSizeOverride = 5;
   let globalUser;
 
   const getBaseState = user => {
@@ -163,7 +163,7 @@ describe('practitionerSearchHelper', () => {
 
   describe('practitioner search', () => {
     it('formats results that should be currently shown based on form.currentPage for a practitioner search', () => {
-      let result = runCompute(practitionerSearchHelper, {
+      const result = runCompute(practitionerSearchHelper, {
         state: {
           ...getBaseState(globalUser),
           advancedSearchForm: { currentPage: 1 },
@@ -227,7 +227,7 @@ describe('practitionerSearchHelper', () => {
     });
 
     it('sorts practitioner results based on name and then by bar number if name is identical', () => {
-      let result = runCompute(practitionerSearchHelper, {
+      const result = runCompute(practitionerSearchHelper, {
         state: {
           ...getBaseState(globalUser),
           advancedSearchForm: { currentPage: 1 },

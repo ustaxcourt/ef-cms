@@ -14,7 +14,7 @@ import { isEmpty } from 'lodash';
  */
 
 export const validatePetitionerInteractor = (
-  applicationContext: IApplicationContext,
+  _applicationContext: IApplicationContext,
   {
     contactInfo,
     existingPetitioners,
@@ -30,8 +30,8 @@ export const validatePetitionerInteractor = (
   let updateUserEmailErrors;
   if (contactInfo.updatedEmail || contactInfo.confirmEmail) {
     updateUserEmailErrors = new UpdateUserEmail({
-      ...contactInfo,
-      email: contactInfo.updatedEmail,
+      confirmEmail: contactInfo.confirmEmail!,
+      email: contactInfo.updatedEmail!,
     }).getFormattedValidationErrors();
   }
 

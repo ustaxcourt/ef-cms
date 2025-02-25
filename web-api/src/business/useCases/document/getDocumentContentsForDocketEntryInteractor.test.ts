@@ -22,7 +22,7 @@ describe('getDocumentContentsForDocketEntryInteractor', () => {
   });
 
   it('should throw an error when the logged in user does not have permission to EDIT_ORDER', async () => {
-    let authorizedUser = {
+    const authorizedUser = {
       ...mockPrivatePractitionerUser,
       role: ROLES.inactivePractitioner,
     } as UnknownAuthUser;

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-promise-reject-errors */
 import { ActionError } from './presenter/errors/ActionError';
 import { InvalidRequestError } from './presenter/errors/InvalidRequestError';
 import { ServerInvalidResponseError } from './presenter/errors/ServerInvalidResponseError';

@@ -63,7 +63,7 @@ export const AddTrialSession = connect(
                   <span className="usa-hint">(optional)</span>
                 </label>
                 <textarea
-                  className="usa-textarea"
+                  className="usa-textarea textarea-resize-vertical"
                   id="notes"
                   maxLength={400}
                   name="notes"
@@ -78,26 +78,28 @@ export const AddTrialSession = connect(
               </div>
             </div>
 
-            <Button
-              data-testid="submit-trial-session"
-              id="submit-trial-session"
-              type="button"
-              onClick={() => {
-                submitTrialSessionSequence();
-              }}
-            >
-              Add Session
-            </Button>
-            <Button
-              link
-              id="cancel"
-              type="button"
-              onClick={() => {
-                formCancelToggleCancelSequence();
-              }}
-            >
-              Cancel
-            </Button>
+            <div className="button-container">
+              <Button
+                data-testid="submit-trial-session"
+                id="submit-trial-session"
+                type="button"
+                onClick={() => {
+                  submitTrialSessionSequence();
+                }}
+              >
+                Add Session
+              </Button>
+              <Button
+                link
+                id="cancel"
+                type="button"
+                onClick={() => {
+                  formCancelToggleCancelSequence();
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
           </div>
         </section>
       </>

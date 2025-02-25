@@ -849,6 +849,15 @@ textarea#case-caption {
   margin-right: 0;
 }
 
+.view-pdf-button {
+  @media only screen and (max-width: $small-screen) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
 .view-pdf-button svg {
   color: $color-white;
 }
@@ -1120,6 +1129,10 @@ header.usa-header {
   }
 }
 
+@mixin h1-underline-border {
+  border-bottom: 3px solid color($theme-color-primary);
+}
+
 .title {
   border-bottom: 1px solid color($theme-color-base-lighter);
   margin-bottom: 20px;
@@ -1130,14 +1143,19 @@ header.usa-header {
   }
 
   h1 {
+    @include h1-underline-border;
+
     position: relative;
     top: 2px;
     display: inline-block;
     padding-bottom: 10px;
-    border-bottom: 3px solid color($theme-color-primary);
     margin-top: -2px;
     margin-bottom: 0;
   }
+}
+
+.h1-underline-border {
+  @include h1-underline-border;
 }
 
 hr.lighter {
@@ -1230,10 +1248,6 @@ hr.lighter {
   right: -7px;
 }
 
-.quill {
-  background: $color-white;
-}
-
 .sign-pdf-control {
   .icon-button {
     color: color($theme-color-primary);
@@ -1247,7 +1261,7 @@ hr.lighter {
 
   .pages {
     position: relative;
-    top: -6px;
+    top: -12px;
     font-size: 18px;
     font-weight: $font-semibold;
   }
@@ -1292,7 +1306,9 @@ hr.lighter {
     }
 
     font-weight: $font-bold;
+    /* stylelint-disable declaration-property-value-keyword-no-deprecated */
     overflow-y: overlay;
+    /* stylelint-enable declaration-property-value-keyword-no-deprecated */
     text-align: center;
   }
 
@@ -1324,74 +1340,10 @@ hr.lighter {
   }
 }
 
-.ql-editor {
-  min-height: 640px;
-  max-height: 640px;
-  font-family: 'Times New Roman', Times, serif;
-  font-size: 16px;
-
-  p {
-    max-width: 100%;
-  }
+.usa-accordion__heading:not(:first-child) {
+  margin-top: 1rem;
 }
 
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='10px']::before,
-.ql-snow
-  .ql-picker.ql-size
-  .ql-picker-label.ql-active[data-value='10px']::before {
-  content: '10px';
-  font-size: 10px !important;
-}
-
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='12px']::before,
-.ql-snow
-  .ql-picker.ql-size
-  .ql-picker-label.ql-active[data-value='12px']::before {
-  content: '12px';
-  font-size: 12px !important;
-}
-
-/* default */
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='14px']::before,
-.ql-snow
-  .ql-picker.ql-size
-  .ql-picker-label.ql-active[data-value='14px']::before {
-  content: '14px';
-  font-size: 14px !important;
-}
-
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='16px']::before,
-.ql-snow
-  .ql-picker.ql-size
-  .ql-picker-label.ql-active[data-value='16px']::before,
-.ql-snow .ql-picker.ql-size .ql-picker-label:not(.ql-active)::before {
-  content: '16px';
-  font-size: 16px !important;
-}
-
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='18px']::before,
-.ql-snow
-  .ql-picker.ql-size
-  .ql-picker-label.ql-active[data-value='18px']::before {
-  content: '18px';
-  font-size: 18px !important;
-}
-
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='20px']::before,
-.ql-snow
-  .ql-picker.ql-size
-  .ql-picker-label.ql-active[data-value='20px']::before {
-  content: '20px';
-  font-size: 20px !important;
-}
-
-.need-help-selecting {
-  .usa-accordion__heading:not(:first-child) {
-    margin-top: 1rem;
-  }
-}
-
-.need-help-selecting,
 .submit-reminders {
   .content-header {
     padding: 11px 20px;
@@ -1862,7 +1814,8 @@ button.change-scanner-button {
   margin-right: 4px;
 }
 
-.sealed-docket-entry {
+.sealed-docket-entry,
+.sealed-case-entry {
   color: color($theme-color-secondary-dark);
 }
 
@@ -1932,6 +1885,13 @@ button.change-scanner-button {
 
 #react-deployed-date {
   text-align: right;
+}
+
+.trial-sessions-filters {
+  .usa-fieldset,
+  .usa-form-group {
+    margin-bottom: 0;
+  }
 }
 
 #app-footer {
@@ -2093,10 +2053,6 @@ button.change-scanner-button {
 
 .verify-email-notification {
   background: color($theme-color-warning-lighter);
-
-  svg {
-    color: color($theme-color-warning);
-  }
 }
 
 #document-advanced .advanced-search-full-width {
@@ -2233,10 +2189,6 @@ button.change-scanner-button {
   width: 49%;
 }
 
-.resize-vertical-only {
-  resize: vertical;
-}
-
 .max-width-unset {
   max-width: unset;
 }
@@ -2296,7 +2248,7 @@ button.change-scanner-button {
 }
 
 .before-case-button {
-  margin-top: 2.5rem;
+  margin: 2.5rem 1rem 0 0;
 }
 
 .before-case-follow-up-button {
@@ -2402,9 +2354,94 @@ button.change-scanner-button {
 
 .petitioner-welcome-name {
   overflow-wrap: break-word;
+  /* stylelint-disable declaration-property-value-keyword-no-deprecated */
   word-break: break-word;
+  /* stylelint-enable declaration-property-value-keyword-no-deprecated */
 }
 
 .stepper-line-height {
   line-height: 18px;
+}
+
+.bg-gray {
+  background-color: color($theme-color-base-lightest);
+}
+
+.accordion-title {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.padding-0 {
+  // This has higher importance than uwds padding-0
+  padding: 0;
+}
+
+.trial-session-public-card {
+  line-height: 24px;
+}
+
+.h1-size {
+  font-size: 2em;
+}
+
+.double-border {
+  border-bottom: 1px solid !important;
+  margin-bottom: 5px !important;
+}
+
+.actions-buttons {
+  @media only screen and (max-width: ($medium-screen - 1)) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+.session-card {
+  @media only screen and (max-width: ($medium-screen - 1)) {
+    width: 100%;
+
+    .action-button-wrapper {
+      display: inline-flex;
+      margin: 0;
+    }
+  }
+}
+
+.button-container {
+  width: 100%;
+
+  .usa-button {
+    display: block;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  @media (min-width: $medium-screen) {
+    display: flex;
+    align-items: center;
+
+    .usa-button {
+      width: auto;
+
+      &:not(:last-child) {
+        margin-right: 1rem;
+      }
+    }
+  }
+}
+
+.trial-session-planning-report-header {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 32px;
+}
+
+.cities-not-calendared-header {
+  font-weight: 600;
+}
+
+.cities-not-calendated-yellow-background {
+  background-color: #ffe396;
 }

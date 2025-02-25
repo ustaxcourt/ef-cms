@@ -32,7 +32,7 @@ export const submitCourtIssuedOrderAction = async ({
       consolidatedCasesToMultiDocketOnMetaData,
     );
 
-  let documentMetadata = omit(formData, [
+  const documentMetadata = omit(formData, [
     'primaryDocumentFile',
     'docketEntryIdToEdit',
   ]);

@@ -1,8 +1,8 @@
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
 import { TCaseOrder } from '@shared/business/entities/trialSessions/TrialSession';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateTrialCalendarPdfInteractor } from './generateTrialCalendarPdfInteractor';
 import {
   irsPractitionerUser,

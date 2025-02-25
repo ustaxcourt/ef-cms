@@ -1,17 +1,17 @@
 import {
   DOCKET_NUMBER_SUFFIXES,
-  PROCEDURE_TYPES,
+  PROCEDURE_TYPES_MAP,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateNoticeOfChangeOfTrialJudgeInteractor } from './generateNoticeOfChangeOfTrialJudgeInteractor';
 
 describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
   const formattedPhoneNumber = '123-456-7890';
 
   const mockTrialSessionInformation = {
-    caseProcedureType: PROCEDURE_TYPES.SMALL,
+    caseProcedureType: PROCEDURE_TYPES_MAP.small,
     chambersPhoneNumber: '1234567890',
     priorJudgeTitleWithFullName: 'Special Trial Judge Judifer Judy',
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,

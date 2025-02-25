@@ -4,7 +4,7 @@ import {
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { bulkDeleteRecords } from './bulkDeleteRecords';
-import { efcmsMessageIndex } from '../../../elasticsearch/efcms-message-mappings';
+import { efcmsUserIndex } from '../../../elasticsearch/efcms-user-mappings';
 
 describe('bulkDeleteRecords', () => {
   const oldImageRecord = {
@@ -12,7 +12,7 @@ describe('bulkDeleteRecords', () => {
     createdAt: { S: '2020-06-10T15:10:23.553Z' },
     docketNumber: { S: '105-19' },
     docketNumberWithSuffix: { S: '105-19' },
-    entityName: { S: 'Message' },
+    entityName: { S: 'User' },
     from: { S: 'Test Docketclerk' },
     fromSection: { S: DOCKET_SECTION },
     fromUserId: { S: '1805d1ab-18d0-43ec-bafb-654e83405416' },
@@ -74,9 +74,9 @@ describe('bulkDeleteRecords', () => {
       items: [
         {
           delete: {
-            _index: efcmsMessageIndex,
+            _index: efcmsUserIndex,
             error: {
-              index: efcmsMessageIndex,
+              index: efcmsUserIndex,
               index_uuid: 'aAsFqTI0Tc2W0LCWgPNrOA',
               reason: 'document missing',
               shard: '0',
@@ -97,7 +97,7 @@ describe('bulkDeleteRecords', () => {
     expect(result.failedRecords).toEqual([
       {
         _id: `${oldImageRecord.pk.S}_${oldImageRecord.sk.S}`,
-        _index: efcmsMessageIndex,
+        _index: efcmsUserIndex,
       },
     ]);
   });

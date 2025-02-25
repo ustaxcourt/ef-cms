@@ -21,7 +21,7 @@ source ./scripts/helpers/dynamodb-table-exists.sh
 # shellcheck disable=SC1091
 source ./scripts/helpers/opensearch-domain-exists.sh
 
-npx ts-node --transpile-only scripts/migration/is-migration-needed.ts
+./scripts/migration/is-migration-needed.ts
 SKIP_MIGRATION="$?"
 
 if [[ "$SKIP_MIGRATION" == "1" ]] && [[ "$FORCE_MIGRATION" != "--force" ]]; then
@@ -64,7 +64,7 @@ fi
 
 EXISTS=$(check_opensearch_domain_exists "$NEXT_OPENSEARCH_DOMAIN")
 if [[ "$EXISTS" == "1" ]]; then
-  npx ts-node --transpile-only ./scripts/elasticsearch/ready-cluster-for-migration.ts "$NEXT_OPENSEARCH_DOMAIN"
+  ./scripts/elasticsearch/ready-cluster-for-migration.ts "$NEXT_OPENSEARCH_DOMAIN"
   CLUSTER_IS_NOT_EMPTY="$?"
   if [[ "$CLUSTER_IS_NOT_EMPTY" == "1" ]]; then
     aws es delete-elasticsearch-domain --domain-name "$NEXT_OPENSEARCH_DOMAIN" --region us-east-1

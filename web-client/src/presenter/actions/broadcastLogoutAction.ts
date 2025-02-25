@@ -1,4 +1,4 @@
-import { state } from '@web-client/presenter/app.cerebral';
+import { BROADCAST_MESSAGES } from '@shared/business/entities/EntityConstants';
 
 /**
  * tells all open tabs to also logout
@@ -8,13 +8,12 @@ import { state } from '@web-client/presenter/app.cerebral';
  */
 export const broadcastLogoutAction = async ({
   applicationContext,
-  get,
   props,
 }: ActionProps) => {
   if (!props.skipBroadcast) {
     const broadcastChannel = applicationContext.getBroadcastGateway();
     await broadcastChannel.postMessage({
-      subject: get(state.logoutType),
+      subject: BROADCAST_MESSAGES.userLogout,
     });
   }
 };

@@ -1,24 +1,31 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
-import { MOCK_TRIAL_INPERSON } from '../../../../../shared/src/test/mockTrial';
-import { RawTrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
+import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
 } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { removeCaseFromTrialInteractor } from './removeCaseFromTrialInteractor';
+import { setPriorityOnAllWorkItems as setPriorityOnAllWorkItemsMock } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 
 describe('removeCaseFromTrialInteractor', () => {
+  const setPriorityOnAllWorkItems = setPriorityOnAllWorkItemsMock as jest.Mock;
+
   let mockLock;
   let mockTrialSession: RawTrialSession;
 
@@ -207,13 +214,8 @@ describe('removeCaseFromTrialInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems.mock
-        .calls[0][0],
-    ).toMatchObject({
+    expect(setPriorityOnAllWorkItems).toHaveBeenCalled();
+    expect(setPriorityOnAllWorkItems.mock.calls[0][0]).toMatchObject({
       highPriority: false,
     });
   });

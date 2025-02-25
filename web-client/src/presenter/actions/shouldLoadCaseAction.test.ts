@@ -3,8 +3,8 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { shouldLoadCaseAction } from './shouldLoadCaseAction';
 
 describe('shouldLoadCaseAction', () => {
-  let pathLoadStub = jest.fn();
-  let pathIgnoreStub = jest.fn();
+  const pathLoadStub = jest.fn();
+  const pathIgnoreStub = jest.fn();
 
   beforeAll(() => {
     presenter.providers.path = {

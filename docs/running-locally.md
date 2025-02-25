@@ -14,7 +14,7 @@ After installing git, be sure to clone the project locally:
 
 `git clone git@github.com:flexion/ef-cms.git`
 
-### Node v20.14.0
+### Node v22.13.1
 
 All of our application code is built using Javascript:
 
@@ -22,7 +22,7 @@ All of our application code is built using Javascript:
 - Our backend APIs are written using express and a serverless wrapper.
 
 Because of this, you will need to make sure you node and npm installed locked to the following versions:
-    - Node v20.14.0
+    - Node v22.13.1
     - npm v10.5.0
 
 As of May 2022, AWS Lambda only supports up to [`nodejs20.x`](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
@@ -126,7 +126,7 @@ This will install `node-canvas` dependencies globally. As of 12/05/2022, `node-c
 
 Make sure you are on the `ustaxcourt/staging` branch before you install the npm dependencies or try to start the services.
 
-#### Install the NPM Depedencies
+#### Install the NPM Dependencies
 
 All applications dependencies are managed via our `package.json` and `package-lock.json` files and are installed using `npm`.  You will first need to install of our dependencies by running the following:
 

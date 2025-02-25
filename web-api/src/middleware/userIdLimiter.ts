@@ -1,4 +1,5 @@
 import { createApplicationContext } from '../applicationContext';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { getUserFromAuthHeader } from './apiGatewayHelper';
 
 export const userIdLimiter = key => async (req, res, next) => {
@@ -8,13 +9,15 @@ export const userIdLimiter = key => async (req, res, next) => {
   const WINDOW_TIME = parseInt(
     process.env.USER_LIMITER_WINDOW ?? `${60 * 1000}`,
   );
-  const applicationContext = createApplicationContext(user);
+  const applicationContext = createApplicationContext();
+  getLogger().addUser({ user });
   const KEY = `user-limiter-${key}|${user.userId}`;
 
   const limiterCache = await applicationContext
     .getPersistenceGateway()
     .incrementKeyCount({ applicationContext, key: KEY });
 
+  // eslint-disable-next-line prefer-const
   let { expiresAt, id: count } = limiterCache;
 
   if (!expiresAt || Date.now() > expiresAt) {

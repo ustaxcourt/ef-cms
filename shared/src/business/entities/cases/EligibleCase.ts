@@ -3,6 +3,7 @@ import { IrsPractitioner } from '../IrsPractitioner';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { PrivatePractitioner } from '../PrivatePractitioner';
+import { isSealedCase } from '@shared/business/entities/cases/Case';
 import joi from 'joi';
 
 export class EligibleCase extends JoiValidationEntity {
@@ -16,6 +17,7 @@ export class EligibleCase extends JoiValidationEntity {
   public irsPractitioners?: IrsPractitioner[];
   public privatePractitioners?: PrivatePractitioner[];
   public qcCompleteForTrial?: Record<string, any>;
+  public isSealed: boolean;
 
   constructor(rawProps) {
     super('EligibleCase');
@@ -29,6 +31,7 @@ export class EligibleCase extends JoiValidationEntity {
     this.highPriority = rawProps.highPriority;
     this.caseType = rawProps.caseType;
     this.qcCompleteForTrial = rawProps.qcCompleteForTrial || {};
+    this.isSealed = isSealedCase(rawProps);
 
     if (Array.isArray(rawProps.privatePractitioners)) {
       this.privatePractitioners = rawProps.privatePractitioners.map(

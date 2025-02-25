@@ -1,3 +1,4 @@
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
@@ -35,8 +36,8 @@ export const forgotPasswordAction = async ({
             <>
               We sent you an email to help you log in. If you don’t see it,
               check your spam folder. If you’re still having trouble, email{' '}
-              <a href="mailto:dawson.support@ustaxcourt.gov">
-                dawson.support@ustaxcourt.gov
+              <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
+                {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
               </a>
               .
             </>

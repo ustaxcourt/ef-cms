@@ -24,6 +24,8 @@ export const StatusReportOrder = connect(
       sequences.statusReportOrderPdfPreviewSequence,
     submitStatusReportOrderSequence: sequences.submitStatusReportOrderSequence,
     updateFormValueSequence: sequences.updateStatusReportOrderFormValueSequence,
+    validateStatusReportOrderSequence:
+      sequences.validateStatusReportOrderSequence,
     validationErrors: state.validationErrors,
   },
   function StatusReportOrder({
@@ -36,6 +38,7 @@ export const StatusReportOrder = connect(
     statusReportOrderPdfPreviewSequence,
     submitStatusReportOrderSequence,
     updateFormValueSequence,
+    validateStatusReportOrderSequence,
     validationErrors,
   }) {
     return (
@@ -152,6 +155,7 @@ export const StatusReportOrder = connect(
                             .statusReport
                         }
                         className="usa-radio__input"
+                        data-testid="order-type-status-report"
                         id="order-type-status-report"
                         name="orderType"
                         type="radio"
@@ -226,6 +230,7 @@ export const StatusReportOrder = connect(
                           toFormat: constants.DATE_FORMATS.YYYYMMDD,
                           value: e.target.value,
                         });
+                        validateStatusReportOrderSequence();
                       }}
                     />
                   </FormGroup>
@@ -294,6 +299,7 @@ export const StatusReportOrder = connect(
                             key: e.target.name,
                             value: e.target.value,
                           });
+                          validateStatusReportOrderSequence();
                         }}
                       />
                       <label
@@ -326,6 +332,7 @@ export const StatusReportOrder = connect(
                             key: e.target.name,
                             value: e.target.value,
                           });
+                          validateStatusReportOrderSequence();
                         }}
                       />
                       <label
@@ -355,7 +362,7 @@ export const StatusReportOrder = connect(
                         aria-describedby="additional-order-text-label"
                         aria-label="additional order text"
                         autoCapitalize="none"
-                        className="usa-textarea maxw-none height-8 usa-character-count__field"
+                        className="usa-textarea maxw-none height-8 usa-character-count__field textarea-resize-vertical"
                         id="additional-order-text"
                         maxLength={256}
                         name="additionalOrderText"
@@ -386,7 +393,7 @@ export const StatusReportOrder = connect(
                 Clear All
               </Button>
 
-              <div className="margin-bottom-2 margin-top-2">
+              <div className="margin-bottom-2 margin-top-2 button-container">
                 <Button
                   className="margin-right-1"
                   data-testid="save-draft-button"

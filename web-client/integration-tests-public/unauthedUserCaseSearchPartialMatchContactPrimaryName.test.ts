@@ -104,18 +104,10 @@ describe(`Petitioner searches for partial name match ${searchTerm}`, () => {
     expect(searchResults).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          petitioners: [
-            expect.objectContaining({
-              name: caseNamesToCreate[0],
-            }),
-          ],
+          petitionerNames: [caseNamesToCreate[0]],
         }),
         expect.objectContaining({
-          petitioners: [
-            expect.objectContaining({
-              name: caseNamesToCreate[2],
-            }),
-          ],
+          petitionerNames: [caseNamesToCreate[2]],
         }),
       ]),
     );

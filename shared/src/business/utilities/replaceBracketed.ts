@@ -6,6 +6,7 @@ export const replaceBracketed = (
   while (bracketsMatcher.test(template)) {
     template = template.replace(bracketsMatcher, values.shift() || '');
   }
+  template = template.replace(/\s+\./g, '.');
   template = template.trim();
   return template;
 };

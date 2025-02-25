@@ -15,7 +15,7 @@ export const getPublicCaseInteractor = async (
   applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
 ) => {
-  let rawCaseRecord: any = await applicationContext
+  const rawCaseRecord: any = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
