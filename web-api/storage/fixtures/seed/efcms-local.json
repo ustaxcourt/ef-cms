@@ -10767,6 +10767,28 @@
     "addToCoversheet": false
   },
   {
+    "role": "irsPractitioner",
+    "serviceIndicator": "Electronic",
+    "barNumber": "RT6789",
+    "entityName": "IrsPractitioner",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "name": "Test IRS Practitioner",
+    "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
+    "section": "irsPractitioner",
+    "pk": "case|101-20",
+    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "irspractitioner@example.com"
+  },
+  {
     "stampData": {},
     "servedParties": [
       {
@@ -30405,12 +30427,6 @@
     "sk": "docketNumberCounter-2024",
     "id": 1,
     "pk": "docketNumberCounter-2024"
-  },
-  {
-    "sk": "document-search-limiter-configuration",
-    "windowTime": 1000,
-    "pk": "document-search-limiter-configuration",
-    "maxInvocations": 9999
   },
   {
     "sk": "document-search-limiter",

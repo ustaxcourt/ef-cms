@@ -1,4 +1,10 @@
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
@@ -7,12 +13,6 @@ import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/business/useCaseHelper/acquireLock';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '@shared/authorization/authorizationClientService';
-import { Case } from '@shared/business/entities/cases/Case';
-import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
@@ -204,12 +204,12 @@ export const fileAndServeCourtIssuedDocument = async (
         }
 
         return fileAndServeDocumentOnOneCase({
-            caseEntity,
-            docketEntryEntity,
-            subjectCaseDocketNumber,
-            user,
-            caseHasDeadline,
-          });
+          caseEntity,
+          docketEntryEntity,
+          subjectCaseDocketNumber,
+          user,
+          caseHasDeadline,
+        });
       }),
     );
 

@@ -1,13 +1,14 @@
 import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
 import { batchWrite, query } from '../../dynamodbClientService';
 import { DeleteRequest } from '@web-api/persistence/dynamo/dynamoTypes';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const deleteCaseTrialSortMappingRecords = async ({
   applicationContext,
   docketNumber,
   deleteConsolidatedCases = false,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   docketNumber: string;
   deleteConsolidatedCases?: boolean;
 }): Promise<void> => {

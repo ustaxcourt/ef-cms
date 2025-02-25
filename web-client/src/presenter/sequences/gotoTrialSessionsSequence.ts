@@ -39,5 +39,9 @@ export const gotoTrialSessionsSequence =
     ],
     trialSessionQueryParamsAction,
     setTrialSessionsFiltersAction,
+    [
+      getBulkSpecialTrialSessionCopyNotesAction,
+      setBulkSpecialTrialSessionCopyNotesAction,
+    ],
     setupCurrentPageAction('TrialSessions'),
   ]) as unknown as (props: ActionProps<Partial<TrialSessionsFilters>>) => void;

@@ -1,27 +1,11 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import {
-  parseArgsAndEnvVars,
-  type ScriptConfig,
-} from '../../helpers/parseArgsAndEnvVars';
-import { getDbReader } from '@web-api/database';
-import { isEmpty } from 'lodash';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { batchDeleteDynamoItems } from './batch-delete-dynamo-items';
-import { environment } from '@web-api/environment';
-
-const scriptConfig: ScriptConfig = {
-  description:
-    'delete-case-worksheets - Delete from dynamodb case worksheet entities ' +
-    'that have been migrated to postgres',
-  environment: {
-    env: 'ENV',
-    sourceTable: 'SOURCE_TABLE',
-  },
-  requireActiveAwsSession: true,
-};
-parseArgsAndEnvVars(scriptConfig);
+import { environment } from '../../../web-api/src/environment';
+import { getDbReader } from '../../../web-api/src/database';
+import { isEmpty } from 'lodash';
 
 const caseWorksheetPageSize = 10000;
 const dynamoDbClient = new DynamoDBClient({ region: 'us-east-1' });
