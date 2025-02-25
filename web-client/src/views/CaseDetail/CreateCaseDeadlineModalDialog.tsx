@@ -63,6 +63,7 @@ export const CreateCaseDeadlineModalDialog = connect(
             <textarea
               className="usa-textarea textarea-resize-vertical"
               id="description"
+              data-testid="case-deadline-description-input"
               maxLength={120}
               name="description"
               onChange={e => {

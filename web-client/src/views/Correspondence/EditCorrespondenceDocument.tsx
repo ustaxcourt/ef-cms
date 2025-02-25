@@ -102,7 +102,7 @@ export const EditCorrespondenceDocument = connect(
                   </FormGroup>
                 </div>
                 <div className="grid-row grid-gap margin-top-4">
-                  <div className="grid-col-8">
+                  <div className="grid-col-8 button-container">
                     <Button
                       onClick={() => {
                         editCorrespondenceDocumentSequence({

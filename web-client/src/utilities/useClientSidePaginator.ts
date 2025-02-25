@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 type PaginationResult<T> = {
   activePage: number;
@@ -26,6 +26,10 @@ export function useClientSidePaginator<T>(
   pageSize: number,
 ): PaginationResult<T> {
   const [activePage, setActivePage] = useState(0);
+
+  useEffect(() => {
+    setActivePage(0); // If your data set changes go back to page 0;
+  }, [fullDataSet]);
 
   const { pageRecords, totalPages } = getPaginationResult(
     fullDataSet,

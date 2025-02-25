@@ -19,7 +19,7 @@ jest.mock('../../dynamodbClientService', () => ({
       userId: 'adc1',
     },
   ]),
-  query: jest.fn().mockReturnValue([
+  queryFull: jest.fn().mockReturnValue([
     {
       pk: 'section|petitions',
       sk: 'user|petitionsclerk1',

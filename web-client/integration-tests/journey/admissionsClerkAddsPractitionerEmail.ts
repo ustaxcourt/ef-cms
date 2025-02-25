@@ -11,7 +11,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 export const admissionsClerkAddsPractitionerEmail = cerebralTest => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
   const mockAddress2 = 'A Place';
-  const mockAvailableEmail = `${faker.internet.userName()}@example.com`;
+  const mockAvailableEmail = `${faker.internet.username()}@example.com`;
 
   return it('admissions clerk edits practitioner information', async () => {
     await refreshElasticsearchIndex();
