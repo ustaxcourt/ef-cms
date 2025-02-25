@@ -149,7 +149,7 @@ describe('Messages', () => {
           ).click();
           verifySubjectTitleOrder({
             boxType: 'inbox',
-            isAscending: true,
+            isAscending: false,
             prefix: 'Subject Line',
             queueType: 'individual',
           });
@@ -226,7 +226,7 @@ describe('Messages', () => {
           ).click();
           verifySubjectTitleOrder({
             boxType: 'completed',
-            isAscending: false,
+            isAscending: true,
             prefix: 'Complete',
             queueType: 'individual',
           });
@@ -373,7 +373,7 @@ describe('Messages', () => {
           ).click();
           verifySubjectTitleOrder({
             boxType: 'inbox',
-            isAscending: true,
+            isAscending: false,
             prefix: 'Subject Line',
           });
           cy.get(
@@ -455,7 +455,7 @@ describe('Messages', () => {
           ).click();
           verifySubjectTitleOrder({
             boxType: 'completed',
-            isAscending: false,
+            isAscending: true,
             prefix: 'Complete',
           });
         });
@@ -539,7 +539,7 @@ describe('Messages', () => {
           ).click();
           verifySubjectTitleOrder({
             boxType: 'outbox',
-            isAscending: false,
+            isAscending: true,
             prefix: 'Subject Line',
           });
         });
