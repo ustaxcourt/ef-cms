@@ -6,13 +6,16 @@ import {
   PARTY_TYPES,
   PETITIONS_SECTION,
   ROLES,
-} from '../entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { MOCK_LOCK } from '../../test/mockLock';
 import { MOCK_PRACTITIONER, petitionsClerkUser } from '../../test/mockUsers';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
-import { getContactPrimary, getContactSecondary } from '../entities/cases/Case';
+import {
+  getContactPrimary,
+  getContactSecondary,
+} from '@shared/business/entities/cases/Case';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
@@ -20,9 +23,14 @@ import {
 import { omit } from 'lodash';
 import { saveCaseDetailInternalEditInteractor } from './saveCaseDetailInternalEditInteractor';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
-describe('updateCase', () => {
+describe('saveCaseDetailInternalEditInteractor', () => {
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCase = updateCaseMock as jest.Mock;
+  updateCase.mockImplementation(c => c.caseToUpdate);
 
   const mockCase = {
     ...MOCK_CASE,
@@ -69,9 +77,7 @@ describe('updateCase', () => {
       userId: mockPetitionsClerkUser.userId,
     });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
+    getCaseByDocketNumber.mockReturnValue(mockCase);
   });
 
   it('should throw an error if caseToUpdate is not passed in', async () => {
@@ -212,13 +218,11 @@ describe('updateCase', () => {
       userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [...mockCase.docketEntries, mockRQT],
-        isPaper: true,
-      });
+    getCaseByDocketNumber.mockReturnValue({
+      ...mockCase,
+      docketEntries: [...mockCase.docketEntries, mockRQT],
+      isPaper: true,
+    });
 
     await saveCaseDetailInternalEditInteractor(
       applicationContext,
@@ -294,9 +298,7 @@ describe('updateCase', () => {
   });
 
   it('should remove contactSecondary if changing from a party type with primary and secondary to a party type with only primary', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCaseWithContactSecondary);
+    getCaseByDocketNumber.mockReturnValue(mockCaseWithContactSecondary);
 
     const result = await saveCaseDetailInternalEditInteractor(
       applicationContext,
@@ -333,11 +335,9 @@ describe('updateCase', () => {
       ],
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
-        mockCaseWithContactSecondaryRepresented,
-      );
+    getCaseByDocketNumber.mockReturnValue(
+      mockCaseWithContactSecondaryRepresented,
+    );
 
     const result = await saveCaseDetailInternalEditInteractor(
       applicationContext,
@@ -367,9 +367,7 @@ describe('updateCase', () => {
       isPaper: false,
       receivedAt: '2021-01-01T16:00:00.000Z',
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({ ...currentCaseDetail });
+    getCaseByDocketNumber.mockReturnValue({ ...currentCaseDetail });
 
     const result = await saveCaseDetailInternalEditInteractor(
       applicationContext,
@@ -406,9 +404,7 @@ describe('updateCase', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {

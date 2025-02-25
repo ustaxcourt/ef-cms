@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import * as excelModule from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
 import * as generateCalendarModule from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/generateCalendar';
 import {
@@ -23,12 +24,13 @@ import {
 } from '@shared/test/mockAuthUsers';
 import mockCases from '@shared/test/mockReadyForTrialCases.json';
 import mockSpecialSessions from '@shared/test/mockTrialSessions.json';
+import { getSuggestedCalendarCases as getSuggestedCalendarCasesMock } from '@web-api/persistence/postgres/cases/reports/getSuggestedCalendarCases';
+
+const getSuggestedCalendarCases = getSuggestedCalendarCasesMock as jest.Mock;
 
 describe('generateSuggestedTrialSessionCalendar', () => {
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getSuggestedCalendarCases.mockResolvedValue(mockCases);
+    getSuggestedCalendarCases.mockResolvedValue(mockCases);
 
     applicationContext
       .getPersistenceGateway()
@@ -140,9 +142,7 @@ describe('generateSuggestedTrialSessionCalendar', () => {
     // Arrange
     const mockStartDate = '2019-08-22T00:00:00.000Z';
     const mockEndDate = '2019-09-22T00:00:00.000Z';
-    applicationContext
-      .getPersistenceGateway()
-      .getSuggestedCalendarCases.mockResolvedValue([]);
+    getSuggestedCalendarCases.mockResolvedValue([]);
 
     applicationContext
       .getPersistenceGateway()

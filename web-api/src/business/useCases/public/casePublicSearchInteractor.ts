@@ -6,7 +6,8 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   createEndOfDayISO,
   createStartOfDayISO,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
+import { casePublicSearch } from '@web-api/persistence/elasticsearch/casePublicSearch';
 
 export const casePublicSearchInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -42,17 +43,15 @@ export const casePublicSearchInteractor = async (
     });
   }
 
-  return await applicationContext
-    .getPersistenceGateway()
-    .casePublicSearch({
-      applicationContext,
-      searchTerms: {
-        countryType,
-        endDate: searchEndDate,
-        petitionerName,
-        petitionerState,
-        startDate: searchStartDate,
-        caseType,
-      },
-    });
+  return await casePublicSearch({
+    applicationContext,
+    searchTerms: {
+      countryType,
+      endDate: searchEndDate,
+      petitionerName,
+      petitionerState,
+      startDate: searchStartDate,
+      caseType,
+    },
+  });
 };

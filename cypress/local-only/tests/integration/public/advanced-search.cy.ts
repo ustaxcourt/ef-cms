@@ -73,13 +73,13 @@ describe('Advanced search', () => {
     it('should display "No Matches Found" when case search yields no results', () => {
       navigateToDashboard();
       searchForCaseByDocketNumber('999-99');
-      expect(noSearchResultsContainer()).to.exist;
+      noSearchResultsContainer().should('exist');
     });
 
     it('should route to case detail when a case search match is found', () => {
       navigateToDashboard();
       searchForCaseByDocketNumber('103-20');
-      expect(docketRecordTable()).to.exist;
+      docketRecordTable().should('exist');
     });
   });
 
@@ -90,7 +90,7 @@ describe('Advanced search', () => {
       enterDocumentKeywordForAdvancedSearch('opinion');
       enterDocumentDocketNumber('124-20L');
       searchForDocuments();
-      expect(searchResultsTable()).to.exist;
+      searchResultsTable().should('exist');
     });
 
     it('should display results with a judge name', () => {
@@ -101,8 +101,8 @@ describe('Advanced search', () => {
       unselectOpinionTypesExceptBench();
       searchForDocuments();
 
-      expect(searchResultsTable()).to.exist;
-      expect(firstSearchResultJudgeField()).to.exist;
+      searchResultsTable().should('exist');
+      firstSearchResultJudgeField().should('exist');
     });
   });
 
@@ -116,7 +116,7 @@ describe('Advanced search', () => {
       searchForOrderByJudge(wantedLegacyJudge);
       searchForDocuments();
 
-      expect(searchResultsTable()).to.exist;
+      searchResultsTable().should('exist');
 
       //assert that every judge in the search result list is the wanted legacy judge
       cy.get('tr.search-result').each(element => {

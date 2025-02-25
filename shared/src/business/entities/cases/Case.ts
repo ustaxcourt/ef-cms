@@ -131,7 +131,7 @@ export class Case extends JoiValidationEntity {
   public trialLocation?: string;
   public trialSessionId?: string;
   public trialTime?: string;
-  public useSameAsPrimary?: string;
+  public useSameAsPrimary?: boolean;
   public initialDocketNumberSuffix?: string;
   public noticeOfTrialDate?: string;
   public docketNumberWithSuffix?: string;
@@ -798,8 +798,10 @@ export class Case extends JoiValidationEntity {
 
     this.noticeOfTrialDate = rawCase.noticeOfTrialDate;
 
-    this.docketNumberWithSuffix =
-      this.docketNumber + (this.docketNumberSuffix || '');
+    this.docketNumberWithSuffix = Case.getDocketNumberWithSuffix({
+      docketNumber: this.docketNumber,
+      docketNumberSuffix: this.docketNumberSuffix,
+    });
 
     this.canAllowDocumentService = rawCase.canAllowDocumentService;
     this.canAllowPrintableDocketRecord = rawCase.canAllowPrintableDocketRecord;
@@ -1020,6 +1022,16 @@ export class Case extends JoiValidationEntity {
     return caseCaption.replace(/\s*,\s*Petitioner(s|\(s\))?\s*$/, '').trim();
   }
 
+  static getDocketNumberWithSuffix({
+    docketNumber,
+    docketNumberSuffix,
+  }: {
+    docketNumber: string;
+    docketNumberSuffix: string | undefined;
+  }): string {
+    return docketNumber + (docketNumberSuffix || '');
+  }
+
   /**
    * attaches an IRS practitioner to the case
    * @param {string} practitioner the irsPractitioner to add to the case
@@ -1225,7 +1237,10 @@ export class Case extends JoiValidationEntity {
         ? this.initialDocketNumberSuffix
         : '');
 
-    const newDocketNumber = this.docketNumber + (this.docketNumberSuffix || '');
+    const newDocketNumber = Case.getDocketNumberWithSuffix({
+      docketNumber: this.docketNumber,
+      docketNumberSuffix: this.docketNumberSuffix,
+    });
 
     this.docketEntries.forEach(docketEntry => {
       const result = docketNumberRegex.exec(docketEntry.documentTitle);
@@ -2012,9 +2027,7 @@ export class Case extends JoiValidationEntity {
     const statisticToUpdate = this.statistics?.find(
       statistic => statistic.statisticId === statisticId,
     );
-
     if (statisticToUpdate) Object.assign(statisticToUpdate, statisticEntity);
-
     return this;
   }
 
@@ -2023,14 +2036,10 @@ export class Case extends JoiValidationEntity {
    * @param {string} statisticId the id of the statistic to delete
    * @returns {Case} this case entity
    */
-  deleteStatistic(statisticId) {
-    const statisticIndexToDelete = this.statistics?.findIndex(
-      statistic => statistic.statisticId === statisticId,
+  deleteStatistic(statisticId: string) {
+    this.statistics = this.statistics?.filter(
+      s => !(s.statisticId === statisticId),
     );
-
-    if (statisticIndexToDelete !== -1) {
-      this.statistics!.splice(statisticIndexToDelete, 1);
-    }
 
     return this;
   }
@@ -2304,8 +2313,11 @@ export const isAssociatedUser = function ({
   user,
 }: {
   caseRaw: any;
-  user: { userId: string; role: Role };
+  user: UnknownAuthUser;
 }) {
+  if (!user) {
+    return false;
+  }
   const isIrsPractitioner =
     caseRaw.irsPractitioners &&
     caseRaw.irsPractitioners.find(r => r.userId === user.userId);
@@ -2474,23 +2486,18 @@ export const getOtherFilers = function (rawCase) {
   );
 };
 
-/**
- * Updates the specified contact object in the case petitioner's array
- * @param {object} arguments.rawCase the raw case object
- * @param {object} arguments.updatedPetitioner the updated petitioner object
- */
 export const updatePetitioner = function (rawCase, updatedPetitioner) {
   const petitionerIndex = rawCase.petitioners.findIndex(
     p => p.contactId === updatedPetitioner.contactId,
   );
 
-  if (petitionerIndex !== -1) {
-    rawCase.petitioners[petitionerIndex] = updatedPetitioner;
-  } else {
+  if (petitionerIndex === -1) {
     throw new Error(
       `Petitioner was not found on case ${rawCase.docketNumber}.`,
     );
   }
+
+  rawCase.petitioners[petitionerIndex] = updatedPetitioner;
 };
 
 declare global {

@@ -3,7 +3,7 @@ import { Case } from '@shared/business/entities/cases/Case';
 import {
   Practitioner,
   RawPractitioner,
-} from '../../../../shared/src/business/entities/Practitioner';
+} from '@shared/business/entities/Practitioner';
 import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
@@ -13,6 +13,7 @@ import { TUserContact } from '@web-api/business/useCases/user/generateChangeOfAd
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { clone } from 'lodash';
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 /**
  * generateChangeOfAddressHelper
@@ -52,12 +53,10 @@ export const generateChangeOfAddressHelper = async ({
   try {
     const newData = contactInfo;
 
-    const userCase = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+    const userCase = await getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
     const caseEntity = new Case(userCase, {
       authorizedUser,
     });
@@ -214,12 +213,12 @@ const prepareToGenerateAndServeDocketEntry = async ({
   const { changeOfAddressDocketEntry } = await generateAndServeDocketEntry({
     applicationContext,
     authorizedUser,
-    barNumber: user.barNumber,
     caseEntity,
     docketMeta,
     documentType,
     newData,
     oldData,
+    privatePractitionersRepresentingContact: undefined,
     servedParties,
     user,
   });

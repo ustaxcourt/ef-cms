@@ -23,12 +23,13 @@ import {
   SUGGESTED_TRIAL_SESSION_TITLES,
   USER_MESSAGE_TYPES,
   UserMessageType,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 import { generateCalendar } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/generateCalendar';
+import { getSuggestedCalendarCases } from '@web-api/persistence/postgres/cases/reports/getSuggestedCalendarCases';
 import {
   maxSessionsPerLocationConstraint,
   maxSessionsPerWeekConstraint,
@@ -95,9 +96,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     throw new UnauthorizedError('Unauthorized to generate term');
   }
 
-  const cases = await applicationContext
-    .getPersistenceGateway()
-    .getSuggestedCalendarCases({ applicationContext });
+  const cases = await getSuggestedCalendarCases();
 
   const sessions = await applicationContext
     .getPersistenceGateway()

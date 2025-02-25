@@ -1,129 +1,50 @@
-import { flattenDeep } from 'lodash';
-import { marshall } from '@aws-sdk/util-dynamodb';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
-import type {
-  AttributeValueWithName,
-  IDynamoDBRecord,
-} from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
-import type { ServerApplicationContext } from '@web-api/applicationContext';
+import { upsertCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/upsertCaseStatistics';
+import { upsertPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/upsertPetitionersOnCase';
+import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
+import { Statistic } from '@shared/business/entities/Statistic';
+import { unmarshall } from '@aws-sdk/util-dynamodb';
 
 export const processCaseEntries = async ({
-  applicationContext,
   caseEntityRecords,
 }: {
-  applicationContext: ServerApplicationContext;
   caseEntityRecords: any[];
 }) => {
   if (!caseEntityRecords.length) return;
 
-  const casesToUpsert: RawCase[] = [];
+  const casesToUpsert: Record<string, any> = {};
 
-  const indexCaseEntry = async caseRecord => {
-    const caseNewImage = caseRecord.dynamodb.NewImage;
-    const caseRecords: IDynamoDBRecord[] = [];
+  for (const caseRecord of caseEntityRecords) {
+    const caseNewImage = unmarshall(caseRecord.dynamodb.NewImage);
 
-    const caseMetadataWithCounsel = await applicationContext
-      .getPersistenceGateway()
-      .getCaseMetadataWithCounsel({
-        applicationContext,
-        docketNumber: caseNewImage.docketNumber.S,
-      });
-
-    const marshalledCase = marshall(caseMetadataWithCounsel);
-
-    casesToUpsert.push(caseMetadataWithCounsel);
-
-    caseRecords.push({
-      dynamodb: {
-        Keys: {
-          pk: {
-            S: caseNewImage.pk.S,
-          },
-          sk: {
-            S: `${caseNewImage.sk.S}`,
-          },
-        },
-        NewImage: {
-          ...marshalledCase,
-          case_relations: { name: 'case' },
-          entityName: { S: 'CaseDocketEntryMapping' },
-        },
-      },
-      eventName: 'MODIFY',
-    });
-
-    caseRecords.push({
-      dynamodb: {
-        Keys: {
-          pk: {
-            S: caseNewImage.pk.S,
-          },
-          sk: {
-            S: `${caseNewImage.sk.S}`,
-          },
-        },
-        NewImage: {
-          ...marshalledCase,
-          case_relations: { name: 'case' },
-          entityName: { S: 'CaseMessageMapping' },
-        },
-      },
-      eventName: 'MODIFY',
-    });
-
-    caseRecords.push({
-      dynamodb: {
-        Keys: {
-          pk: {
-            S: caseNewImage.pk.S,
-          },
-          sk: {
-            S: `${caseNewImage.sk.S}`,
-          },
-        },
-        NewImage: {
-          ...marshalledCase,
-          case_relations: { name: 'case' },
-          entityName: { S: 'CaseWorkItemMapping' },
-        },
-      },
-      eventName: 'MODIFY',
-    });
-
-    caseRecords.push({
-      dynamodb: {
-        Keys: {
-          pk: {
-            S: caseNewImage.pk.S,
-          },
-          sk: {
-            S: caseNewImage.sk.S,
-          },
-        },
-        NewImage: marshalledCase as { [key: string]: AttributeValueWithName },
-      },
-      eventName: 'MODIFY',
-    });
-
-    return caseRecords;
-  };
-
-  const indexRecords = await Promise.all(caseEntityRecords.map(indexCaseEntry));
-
-  const { failedRecords } = await applicationContext
-    .getPersistenceGateway()
-    .bulkIndexRecords({
-      applicationContext,
-      records: flattenDeep(indexRecords),
-    });
-
-  await upsertCases(casesToUpsert);
-
-  if (failedRecords.length > 0) {
-    applicationContext.logger.error(
-      'the case or docket entry records that failed to index',
-      { failedRecords },
-    );
-    throw new Error('failed to index case entry or docket entry records');
+    // Only upsert the most recent update of any duplicate case record since otherwise Postgres will throw an error.
+    casesToUpsert[caseNewImage.docketNumber] = caseNewImage;
   }
+
+  await upsertCases(Object.values(casesToUpsert));
+  const postgresUpserts: Promise<void>[] = [];
+  for (const caseRecord of Object.values(casesToUpsert)) {
+    postgresUpserts.push(
+      upsertPetitionersOnCase({
+        docketNumber: caseRecord.docketNumber,
+        petitionerCase: caseRecord,
+      }),
+    );
+    postgresUpserts.push(
+      upsertCaseStatusUpdates({
+        docketNumber: caseRecord.docketNumber,
+        statusUpdates: caseRecord.caseStatusHistory || [],
+      }),
+    );
+    if (caseRecord.statistics) {
+      postgresUpserts.push(
+        upsertCaseStatistics({
+          docketNumber: caseRecord.docketNumber,
+          statistics: caseRecord.statistics.map(s => new Statistic(s)),
+        }),
+      );
+    }
+  }
+
+  await Promise.all(postgresUpserts);
 };

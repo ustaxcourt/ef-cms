@@ -2,7 +2,6 @@ jest.mock('@web-api/persistence/dynamo/locks/acquireLock');
 jest.mock(
   '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock',
 );
-jest.mock('@web-api/persistence/dynamo/cases/getCaseByDocketNumber');
 jest.mock(
   '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
 );
@@ -12,6 +11,7 @@ jest.mock(
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
@@ -23,9 +23,10 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { unprioritizeCaseInteractor } from './unprioritizeCaseInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { getLock as mockGetLock } from '@web-api/persistence/dynamo/locks/acquireLock';
 import { updateCaseAutomaticBlock as updateCaseAutomaticBlockMock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
-import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
 import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { createCaseTrialSortMappingRecords as createCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/createCaseTrialSortMappingRecords';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
@@ -35,6 +36,8 @@ describe('unprioritizeCaseInteractor', () => {
   const getLock = jest.mocked(mockGetLock);
   const updateCaseAutomaticBlock = jest.mocked(updateCaseAutomaticBlockMock);
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+  const updateCase = updateCaseMock as jest.Mock;
+  updateCase.mockImplementation(c => c.caseToUpdate);
   const createCaseTrialSortMappingRecords = jest.mocked(
     createCaseTrialSortMappingRecordsMock,
   );
@@ -85,14 +88,12 @@ describe('unprioritizeCaseInteractor', () => {
   });
 
   it('should set the highPriority flag to false and remove the highPriorityReason and call createCaseTrialSortMappingRecords if the case status is ready for trial', async () => {
-    getCaseByDocketNumber.mockReturnValue(
-      Promise.resolve({
-        ...MOCK_CASE,
-        highPriority: true,
-        highPriorityReason: 'because',
-        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-      }),
-    );
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      highPriority: true,
+      highPriorityReason: 'because',
+      status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+    });
 
     const result = await unprioritizeCaseInteractor(
       applicationContext,
@@ -114,14 +115,12 @@ describe('unprioritizeCaseInteractor', () => {
   });
 
   it('should set the highPriority flag to false and remove the highPriorityReason and call deleteCaseTrialSortMappingRecords if the case status is NOT ready for trial', async () => {
-    getCaseByDocketNumber.mockReturnValue(
-      Promise.resolve({
-        ...MOCK_CASE,
-        highPriority: true,
-        highPriorityReason: 'because',
-        status: CASE_STATUS_TYPES.new,
-      }),
-    );
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      highPriority: true,
+      highPriorityReason: 'because',
+      status: CASE_STATUS_TYPES.new,
+    });
 
     const result = await unprioritizeCaseInteractor(
       applicationContext,

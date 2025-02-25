@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock(
@@ -9,7 +10,6 @@ jest.mock(
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments',
 );
-jest.mock('@web-api/persistence/dynamo/cases/getCaseByDocketNumber');
 import {
   COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
@@ -21,20 +21,17 @@ import { ENTERED_AND_SERVED_EVENT_CODES } from '@shared/business/entities/courtI
 import {
   MOCK_CASE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-} from '../../../../../shared/src/test/mockCase';
-import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
-import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
-import {
-  docketClerkUser,
-  judgeUser,
-} from '../../../../../shared/src/test/mockUsers';
+} from '@shared/test/mockCase';
+import { WorkItem } from '@shared/business/entities/WorkItem';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { docketClerkUser, judgeUser } from '@shared/test/mockUsers';
 import { fileAndServeDocumentOnOneCase } from './fileAndServeDocumentOnOneCase';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { updateCaseAutomaticBlock as updateCaseAutomaticBlockMock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments as closeCaseAndUpdateTrialSessionForEnteredAndServedDocumentsMock } from '@web-api/business/useCaseHelper/docketEntry/closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments';
-import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 describe('fileAndServeDocumentOnOneCase', () => {
   let mockCaseEntity;

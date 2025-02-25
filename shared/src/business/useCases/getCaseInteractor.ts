@@ -1,122 +1,15 @@
+import { Case } from '@shared/business/entities/cases/Case';
+import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
-  AuthUser,
   UnknownAuthUser,
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
-import {
-  Case,
-  canAllowDocumentServiceForCase,
-  canAllowPrintableDocketRecord,
-  canDojPractitionersRepresentPartyForCase,
-  getPetitionerById,
-  isAssociatedUser,
-  isUserPartOfGroup,
-} from '../entities/cases/Case';
-import {
-  INITIAL_DOCUMENT_TYPES,
-  ROLES,
-} from '@shared/business/entities/EntityConstants';
-import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
-import { PublicCase } from '../entities/cases/PublicCase';
-import {
-  ROLE_PERMISSIONS,
-  isAuthorized,
-} from '../../authorization/authorizationClientService';
-import { User } from '../entities/User';
-import {
-  caseContactAddressSealedFormatter,
-  caseSealedFormatter,
-} from '../utilities/caseFilter';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
-const getSealedCase = ({
-  authorizedUser,
-  caseRecord,
-  isAssociatedWithCase,
-}: {
-  caseRecord: RawCase;
-  isAssociatedWithCase: boolean;
-  authorizedUser: AuthUser;
-}): RawCase | RawPublicCase => {
-  let isAuthorizedToViewSealedCase = isAuthorized(
-    authorizedUser,
-    ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-  );
-
-  if (!isAuthorizedToViewSealedCase) {
-    const petitioner = getPetitionerById(caseRecord, authorizedUser.userId);
-    if (petitioner) {
-      isAuthorizedToViewSealedCase = isAuthorized(
-        authorizedUser,
-        ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-        getPetitionerById(caseRecord, authorizedUser.userId).contactId,
-      );
-    }
-  }
-
-  if (!User.isInternalUser(authorizedUser.role)) {
-    filterDocketEntriesNotOnDocketRecord({ authorizedUser, caseRecord });
-  }
-
-  if (isAuthorizedToViewSealedCase || isAssociatedWithCase) {
-    return new Case(caseRecord, { authorizedUser }).validate().toRawObject();
-  } else {
-    caseRecord = caseSealedFormatter(caseRecord);
-
-    return new PublicCase(caseRecord, {
-      authorizedUser,
-    })
-      .validate()
-      .toRawObject();
-  }
-};
-
-const getCaseForExternalUser = ({
-  authorizedUser,
-  caseRecord,
-  isAssociatedWithCase,
-  isAuthorizedToGetCase,
-}) => {
-  filterDocketEntriesNotOnDocketRecord({ authorizedUser, caseRecord });
-  if (isAuthorizedToGetCase && isAssociatedWithCase) {
-    return new Case(caseRecord, { authorizedUser }).validate().toRawObject();
-  } else {
-    return new PublicCase(caseRecord, {
-      authorizedUser,
-    })
-      .validate()
-      .toRawObject();
-  }
-};
-
-/**
- * Decorate a case with some calculations based on the attributes of the case that may be
- * obfuscated to the client
- * @param {Object} caseRecord the original caseRecord
- * @returns {Object} decorated caseRecord
- */
-export const decorateForCaseStatus = (caseRecord: RawCase) => {
-  // allow document service
-  caseRecord.canAllowDocumentService =
-    canAllowDocumentServiceForCase(caseRecord);
-
-  caseRecord.canAllowPrintableDocketRecord =
-    canAllowPrintableDocketRecord(caseRecord);
-
-  caseRecord.canDojPractitionersRepresentParty =
-    canDojPractitionersRepresentPartyForCase(caseRecord);
-
-  return caseRecord;
-};
-
-/**
- * getCaseInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case to get
- * @returns {object} the case data
- */
 export const getCaseInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -126,14 +19,12 @@ export const getCaseInteractor = async (
     );
   }
 
-  const caseRecord = decorateForCaseStatus(
-    await applicationContext.getPersistenceGateway().getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: Case.formatDocketNumber(docketNumber),
-      user: authorizedUser,
-    }),
-  );
-  const isValidCase = Boolean(caseRecord.docketNumber && caseRecord.entityName);
+  const caseRecord = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber: Case.formatDocketNumber(docketNumber),
+    user: authorizedUser,
+  });
+  const isValidCase = Boolean(caseRecord?.docketNumber);
 
   if (!isValidCase) {
     const error = new NotFoundError(`Case ${docketNumber} was not found.`);
@@ -141,89 +32,5 @@ export const getCaseInteractor = async (
     throw error;
   }
 
-  let isAuthorizedToGetCase = isAuthorized(
-    authorizedUser,
-    ROLE_PERMISSIONS.GET_CASE,
-  );
-  if (!isAuthorizedToGetCase) {
-    const petitioner = getPetitionerById(caseRecord, authorizedUser.userId);
-    if (petitioner) {
-      isAuthorizedToGetCase = isAuthorized(
-        authorizedUser,
-        ROLE_PERMISSIONS.GET_CASE,
-        getPetitionerById(caseRecord, authorizedUser.userId).contactId,
-      );
-    } else if (caseRecord.leadDocketNumber) {
-      isAuthorizedToGetCase = isUserPartOfGroup({
-        consolidatedCases: caseRecord.consolidatedCases,
-        userId: authorizedUser.userId,
-      });
-    }
-  }
-
-  let isAssociatedWithCase = isAssociatedUser({
-    caseRaw: caseRecord,
-    user: authorizedUser,
-  });
-
-  if (caseRecord.leadDocketNumber) {
-    isAssociatedWithCase =
-      isAssociatedWithCase ||
-      isUserPartOfGroup({
-        consolidatedCases: caseRecord.consolidatedCases,
-        userId: authorizedUser.userId,
-      });
-  }
-
-  let caseDetailRaw;
-  const isSealedCase = applicationContext
-    .getUtilities()
-    .isSealedCase(caseRecord);
-
-  caseRecord.isSealed = isSealedCase;
-
-  if (isSealedCase) {
-    caseDetailRaw = await getSealedCase({
-      authorizedUser,
-      caseRecord,
-      isAssociatedWithCase,
-    });
-  } else {
-    const { role: userRole } = authorizedUser;
-    const isInternalUser = User.isInternalUser(userRole);
-
-    if (isInternalUser) {
-      caseDetailRaw = new Case(caseRecord, { authorizedUser })
-        .validate()
-        .toRawObject();
-    } else {
-      caseDetailRaw = await getCaseForExternalUser({
-        authorizedUser,
-        caseRecord,
-        isAssociatedWithCase,
-        isAuthorizedToGetCase,
-      });
-    }
-  }
-
-  caseDetailRaw = caseContactAddressSealedFormatter(
-    caseDetailRaw,
-    authorizedUser,
-  );
-  return caseDetailRaw;
-};
-
-const filterDocketEntriesNotOnDocketRecord = ({
-  authorizedUser,
-  caseRecord,
-}: {
-  caseRecord: RawCase;
-  authorizedUser: AuthUser;
-}) => {
-  caseRecord.docketEntries = caseRecord.docketEntries.filter(
-    d =>
-      d.isOnDocketRecord ||
-      (d.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType &&
-        authorizedUser.role === ROLES.irsSuperuser),
-  );
+  return CaseFactory.getCase({ rawCase: caseRecord, user: authorizedUser });
 };

@@ -1,15 +1,15 @@
 jest.mock(
   '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor',
 );
-jest.mock('@web-api/persistence/dynamo/cases/getCaseByDocketNumber');
 jest.mock('@web-api/persistence/dynamo/deployTable/getMaintenanceMode');
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import { getCaseLambda } from './getCaseLambda';
 import { getMaintenanceMode as getMaintenanceModeMock } from '@web-api/persistence/dynamo/deployTable/getMaintenanceMode';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { getCaseByDocketNumber as mockGetCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getCaseByDocketNumber as mockGetCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { MOCK_CASE_WITH_TRIAL_SESSION } from '@shared/test/mockCase';
 
 const mockDynamoCaseRecord = Object.assign({}, MOCK_CASE_WITH_TRIAL_SESSION, {
