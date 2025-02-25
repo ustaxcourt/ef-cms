@@ -65,15 +65,10 @@ export const createProspectiveTrialSessions = ({
       sessionType: SESSION_TYPES.small,
     };
 
-    let primarySessionConfig;
-    let secondarySessionConfig;
-    if (remainingCaseCounts.regular >= remainingCaseCounts.small) {
-      primarySessionConfig = regularSessionConfig;
-      secondarySessionConfig = smallSessionConfig;
-    } else {
-      primarySessionConfig = smallSessionConfig;
-      secondarySessionConfig = regularSessionConfig;
-    }
+    const [primarySessionConfig, secondarySessionConfig] =
+      remainingCaseCounts.regular >= remainingCaseCounts.small
+        ? [regularSessionConfig, smallSessionConfig]
+        : [smallSessionConfig, regularSessionConfig];
 
     scheduleCases({
       caseCountsAndSessionsByCity,
@@ -82,6 +77,7 @@ export const createProspectiveTrialSessions = ({
       schedulingConfig: primarySessionConfig,
       trialLocation: city,
     });
+
     scheduleCases({
       caseCountsAndSessionsByCity,
       cityWasNotVisitedInLastTwoTerms,
