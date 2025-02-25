@@ -28,42 +28,85 @@ export class GenerateSuggestedTermForm extends GenerateSuggestedTermModal {
   getValidationRules() {
     return {
       ...GenerateSuggestedTermModal.VALIDATION_RULES,
-      maxSessionsPerLocation: joi.number().min(0).required().messages({
-        'number.base': 'Max sessions per location must be a number.',
-        'number.min': 'Max sessions per location cannot be negative.',
-      }),
-      maxSessionsPerWeek: joi.number().min(0).required().messages({
+      maxSessionsPerLocation: joi
+        .number()
+        .integer()
+        .min(0)
+        .required()
+        .messages({
+          'number.base': 'Max sessions per location must be a number.',
+          'number.integer': 'Max sessions per location must be a whole number.',
+          'number.min': 'Max sessions per location cannot be negative.',
+        }),
+      maxSessionsPerWeek: joi.number().integer().min(0).required().messages({
         'number.base': 'Max sessions per week must be a number.',
+        'number.integer': 'Max sessions per week must be a whole number.',
         'number.min': 'Max sessions per week cannot be negative.',
       }),
-      smallCaseMinimumQuantity: joi.number().min(0).required().messages({
-        'number.base': 'Small case minimum quantity must be a number.',
-        'number.min': 'Small case minimum quantity cannot be negative.',
-      }),
-      smallCaseMaxQuantity: joi.number().min(0).required().messages({
+      smallCaseMinimumQuantity: joi
+        .number()
+        .integer()
+        .min(0)
+        .required()
+        .messages({
+          'number.base': 'Small case minimum quantity must be a number.',
+          'number.integer':
+            'Small case minimum quantity must be a whole number.',
+          'number.min': 'Small case minimum quantity cannot be negative.',
+        }),
+      smallCaseMaxQuantity: joi.number().integer().min(0).required().messages({
         'number.base': 'Small case max quantity must be a number.',
+        'number.integer': 'Small case max quantity must be a whole number.',
         'number.min': 'Small case max quantity cannot be negative.',
       }),
-      regularCaseMinimumQuantity: joi.number().min(0).required().messages({
-        'number.base': 'Regular case minimum quantity must be a number.',
-        'number.min': 'Regular case minimum quantity cannot be negative.',
-      }),
-      regularCaseMaxQuantity: joi.number().min(0).required().messages({
-        'number.base': 'Regular case max quantity must be a number.',
-        'number.min': 'Regular case max quantity cannot be negative.',
-      }),
-      hybridCaseMinimumQuantity: joi.number().min(0).required().messages({
-        'number.base': 'Hybrid case minimum quantity must be a number.',
-        'number.min': 'Hybrid case minimum quantity cannot be negative.',
-      }),
-      hybridCaseMaxQuantity: joi.number().min(0).required().messages({
+      regularCaseMinimumQuantity: joi
+        .number()
+        .integer()
+        .min(0)
+        .required()
+        .messages({
+          'number.base': 'Regular case minimum quantity must be a number.',
+          'number.integer':
+            'Regular case minimum quantity must be a whole number.',
+          'number.min': 'Regular case minimum quantity cannot be negative.',
+        }),
+      regularCaseMaxQuantity: joi
+        .number()
+        .integer()
+        .min(0)
+        .required()
+        .messages({
+          'number.base': 'Regular case max quantity must be a number.',
+          'number.integer': 'Regular case max quantity must be a whole number.',
+          'number.min': 'Regular case max quantity cannot be negative.',
+        }),
+      hybridCaseMinimumQuantity: joi
+        .number()
+        .integer()
+        .min(0)
+        .required()
+        .messages({
+          'number.base': 'Hybrid case minimum quantity must be a number.',
+          'number.integer':
+            'Hybrid case minimum quantity must be a whole number.',
+          'number.min': 'Hybrid case minimum quantity cannot be negative.',
+        }),
+      hybridCaseMaxQuantity: joi.number().integer().min(0).required().messages({
         'number.base': 'Hybrid case max quantity must be a number.',
+        'number.integer': 'Hybrid case max quantity must be a whole number.',
         'number.min': 'Hybrid case max quantity cannot be negative.',
       }),
-      minimumCasesPerLocation: joi.number().min(0).required().messages({
-        'number.base': 'Minimum cases per location must be a number.',
-        'number.min': 'Minimum cases per location cannot be negative.',
-      }),
+      minimumCasesPerLocation: joi
+        .number()
+        .integer()
+        .min(0)
+        .required()
+        .messages({
+          'number.base': 'Minimum cases per location must be a number.',
+          'number.integer':
+            'Minimum cases per location must be a whole number.',
+          'number.min': 'Minimum cases per location cannot be negative.',
+        }),
     };
   }
 }
