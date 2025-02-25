@@ -16,12 +16,12 @@ export const upsertMinuteSheet = async ({
     table: 'dwMinuteSheet',
     values: [
       {
-        content: minuteSheetToUpsert,
+        content: minuteSheetToUpsert.content,
         docketNumber: minuteSheetToUpsert.docketNumber,
         trialSessionId: minuteSheetToUpsert.trialSessionId,
       },
     ],
-    onConflictColumns: ['content', 'docketNumber', 'trialSessionId'],
+    onConflictColumns: ['docketNumber', 'trialSessionId'],
   });
 
   if (isEmpty(newOrUpdatedMinuteSheet)) {
