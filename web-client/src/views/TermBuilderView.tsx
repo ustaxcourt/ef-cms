@@ -11,8 +11,8 @@ import React from 'react';
 
 type TermBuilderViewProps = {};
 const TermBuilderViewDeps = {
-  validationErrors: state.validationErrors,
   termBuilderInformation: state[STATE_KEYS.TERM_BUILDER_INFORMATION],
+  submitCreateTermFormSequence: sequences.submitCreateTermFormSequence,
   updateFormValueSequence: sequences.updateFormValueSequence,
 };
 
@@ -23,6 +23,7 @@ export const TermBuilderView = connect<
   TermBuilderViewDeps,
   function TermBuilderView({
     termBuilderInformation,
+    submitCreateTermFormSequence,
     updateFormValueSequence,
   }) {
     const {
@@ -158,8 +159,8 @@ export const TermBuilderView = connect<
           <div className="margin-top-5">
             <Button
               href="javascript:void(0);"
-              onClick={() => {
-                console.log('CLICKED');
+              onClick={async () => {
+                await submitCreateTermFormSequence();
               }}
             >
               Create Term
