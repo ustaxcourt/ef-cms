@@ -152,7 +152,7 @@ export const ModalDialog = ({
             {message && <p className={messageClass}>{message}</p>}
             {children}
             {showButtons && (
-              <div className="margin-top-5 button-container">
+              <div className="margin-top-5">
                 <Button
                   aria-label={`${confirmLabel} submit button`}
                   className="modal-button-confirm"
