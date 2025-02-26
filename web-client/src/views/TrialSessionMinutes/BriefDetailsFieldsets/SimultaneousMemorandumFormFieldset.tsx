@@ -48,6 +48,7 @@ export const SimultaneousMemorandumFormFieldset = ({
             </div>
             <div className="grid-col-4">
               <DateSelector
+                placeHolderText="MM/DD/YYYY"
                 formatDateOnChange
                 defaultValue={
                   simultaneousMemorandumFormState[rowConfig.key].dueDate

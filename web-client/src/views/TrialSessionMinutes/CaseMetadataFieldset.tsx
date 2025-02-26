@@ -38,6 +38,7 @@ export const CaseMetadataFieldset = ({
             formGroupClassNames="margin-bottom-0"
             id="calledDate"
             label="Date"
+            placeHolderText="MM/DD/YYYY"
             labelPosition="left"
             onBlur={() => onBlurHandler()}
             onChange={e =>
@@ -125,6 +126,7 @@ export const CaseMetadataFieldset = ({
             formGroupClassNames="margin-bottom-0"
             id="notCalledDate"
             label="Date"
+            placeHolderText="MM/DD/YYYY"
             labelPosition="left"
             onBlur={() => onBlurHandler()}
             onChange={e =>

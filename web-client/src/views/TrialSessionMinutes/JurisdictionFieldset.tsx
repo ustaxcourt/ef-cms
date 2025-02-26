@@ -26,6 +26,7 @@ export const JurisdictionFieldset = ({
         <div className="grid-col-auto">
           <DateSelector
             formatDateOnChange
+            placeHolderText="MM/DD/YYYY"
             defaultValue={jurisdictionFormState.retained.date}
             formGroupClassNames="margin-bottom-0"
             id="jurisdictionRetainedDate"
@@ -80,6 +81,7 @@ export const JurisdictionFieldset = ({
         </legend>
         <div className="grid-col-auto">
           <DateSelector
+            placeHolderText="MM/DD/YYYY"
             formatDateOnChange
             defaultValue={jurisdictionFormState.continued.date}
             formGroupClassNames="margin-bottom-0"

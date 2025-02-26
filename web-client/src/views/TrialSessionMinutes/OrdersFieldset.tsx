@@ -33,6 +33,7 @@ export const OrdersFieldset = ({
             formGroupClassNames="margin-bottom-0"
             id="statusReportOrderedDate"
             label="Date"
+            placeHolderText="MM/DD/YYYY"
             labelPosition="left"
             onBlur={() => onBlurHandler()}
             onChange={e =>
@@ -54,6 +55,7 @@ export const OrdersFieldset = ({
             formGroupClassNames="margin-bottom-0"
             id="statusReportOrderedDueDate"
             label="Date due"
+            placeHolderText="MM/DD/YYYY"
             labelPosition="left"
             onBlur={() => onBlurHandler()}
             onChange={e =>
@@ -144,6 +146,7 @@ export const OrdersFieldset = ({
             formGroupClassNames="margin-bottom-0"
             id="stipulatedDecisionOrderedDate"
             label="Date"
+            placeHolderText="MM/DD/YYYY"
             labelPosition="left"
             onBlur={() => onBlurHandler()}
             onChange={e =>
@@ -165,6 +168,7 @@ export const OrdersFieldset = ({
             formGroupClassNames="margin-bottom-0"
             id="stipulatedDecisionOrderedDueDate"
             label="Date due"
+            placeHolderText="MM/DD/YYYY"
             labelPosition="left"
             onBlur={() => onBlurHandler()}
             onChange={e =>

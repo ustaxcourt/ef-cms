@@ -108,6 +108,7 @@ export const TrialBriefFieldset = ({
             formGroupClassNames="margin-bottom-0"
             id="trialBriefDateSubmitted"
             label="Date submitted"
+            placeHolderText="MM/DD/YYYY"
             onBlur={() => onBlurHandler()}
             onChange={e =>
               onChangeHandler({
@@ -150,6 +151,7 @@ export const TrialBriefFieldset = ({
             formGroupClassNames="margin-bottom-0"
             id="dateBenchOpinionRendered"
             label="Bench Opinion rendered"
+            placeHolderText="MM/DD/YYYY"
             onBlur={() => onBlurHandler()}
             onChange={e =>
               onChangeHandler({

@@ -39,6 +39,7 @@ export const MotionsFieldset = ({
               <div className="grid-col-auto">
                 <DateSelector
                   formatDateOnChange
+                  placeHolderText="MM/DD/YYYY"
                   defaultValue={row.date}
                   formGroupClassNames="margin-bottom-0"
                   id={`motionFiledDate-${row.renderKey}`}

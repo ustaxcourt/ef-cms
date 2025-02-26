@@ -47,6 +47,7 @@ export const SimultaneousMemorandaOfLawFormFieldset = ({
             </div>
             <div className="grid-col-4">
               <DateSelector
+                placeHolderText="MM/DD/YYYY"
                 formatDateOnChange
                 defaultValue={
                   simultaneousMemorandaOfLawFormState[rowConfig.key].dueDate
