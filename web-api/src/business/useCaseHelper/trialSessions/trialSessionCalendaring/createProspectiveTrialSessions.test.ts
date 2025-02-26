@@ -137,6 +137,57 @@ describe('createProspectiveTrialSessions', () => {
     },
   );
 
+  it('should add 2 hybrid to prospectiveSessions', () => {
+    // Arrange
+    const mockCalendaringConfig = getMockCalendaringConfig({
+      hybridCaseMaxQuantity: 3,
+      hybridCaseMinimumQuantity: 1,
+      regularCaseMaxQuantity: 6,
+      regularCaseMinimumQuantity: 5,
+      smallCaseMaxQuantity: 6,
+      smallCaseMinimumQuantity: 5,
+    });
+
+    const totalNumberOfRegularMockCases = 8;
+    const totalNumberOfSmallMockCases = 8;
+
+    const mockCases = [
+      ...generateMockCases({
+        city: mockRegularCityString,
+        count: totalNumberOfRegularMockCases,
+        procedureType: PROCEDURE_TYPES_MAP.regular,
+      }),
+      ...generateMockCases({
+        city: mockRegularCityString,
+        count: totalNumberOfSmallMockCases,
+        procedureType: PROCEDURE_TYPES_MAP.small,
+      }),
+    ];
+
+    const { caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity } =
+      getDataForCalendaring({
+        cases: mockCases,
+      });
+
+    // Act
+    const { caseCountsAndSessionsByCity } = createProspectiveTrialSessions({
+      calendaringConfig: mockCalendaringConfig,
+      caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
+      citiesFromLastTwoTerms: TRIAL_CITY_STRINGS,
+    });
+
+    // Assert
+    const SEESION_TYPES = caseCountsAndSessionsByCity[
+      mockRegularCityString
+    ].prospectiveSessions.map(ps => ps.sessionType);
+    expect(SEESION_TYPES).toEqual([
+      SESSION_TYPES.regular,
+      SESSION_TYPES.small,
+      SESSION_TYPES.hybrid,
+      SESSION_TYPES.hybrid,
+    ]);
+  });
+
   it(
     'should appropriately divide cases into regular, small, and hybrid ' +
       'sessions, and prioritizes regular cases when all the cases are in one ' +
