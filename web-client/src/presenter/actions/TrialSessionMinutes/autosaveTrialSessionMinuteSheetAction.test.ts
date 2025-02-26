@@ -403,7 +403,7 @@ describe('transformFormStateToMinuteSheet', () => {
     },
   );
 
-  it('should handle empty arrays in recordToSortedArray fields', () => {
+  it('should handle empty arrays in recordToArray fields', () => {
     const formStateWithEmptyArrays = {
       ...mockMinuteSheetFormState,
       caseMetadataSection: {
