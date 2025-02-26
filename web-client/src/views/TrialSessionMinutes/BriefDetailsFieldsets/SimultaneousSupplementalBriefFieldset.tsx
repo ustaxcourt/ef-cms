@@ -30,6 +30,7 @@ export const SimultaneousSupplementalBriefFieldset = ({
       <div className="grid-row grid-gap">
         <div className="grid-col-4">
           <DateSelector
+            placeHolderText="MM/DD/YYYY"
             formatDateOnChange
             defaultValue={
               simultaneousSupplementalBriefFormState.simultaneousSupplemental

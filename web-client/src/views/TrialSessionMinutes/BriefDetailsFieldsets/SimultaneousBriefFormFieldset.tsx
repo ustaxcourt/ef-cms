@@ -49,6 +49,7 @@ export const SimultaneousBriefFormFieldset = ({
             </div>
             <div className="grid-col-4">
               <DateSelector
+                placeHolderText="MM/DD/YYYY"
                 formatDateOnChange
                 defaultValue={simultaneousBriefFormState[rowConfig.key].dueDate}
                 formGroupClassNames="margin-bottom-0"

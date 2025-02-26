@@ -85,6 +85,7 @@ export const ActionsAndFilingsFieldset = ({
             defaultValue={row.date}
             formGroupClassNames="margin-bottom-0"
             id={`actionsAndFilingsDate-${row.renderKey}`}
+            placeHolderText="MM/DD/YYYY"
             onBlur={() => onBlurHandler()}
             onChange={e =>
               onChangeHandler({
