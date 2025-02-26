@@ -2568,6 +2568,7 @@ const generateCaptionFromContacts = ({
 };
 
 export type CaseStatusChange = {
+  statusUpdateId?: string; // db creates this if not set thus ensuring ability to insert duplicate status (which isn't ideal but possible)
   changedBy: string;
   date: string;
   updatedCaseStatus: string;

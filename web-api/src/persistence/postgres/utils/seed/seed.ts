@@ -21,6 +21,7 @@ import { statisticPenalties } from '@web-api/persistence/postgres/utils/seed/fix
 import { workItems } from './fixtures/workItems';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
+import { getUniqueId } from '@shared/sharedAppContext';
 
 export const seed = async () => {
   const insertMessages = getDbWriter({
@@ -107,10 +108,11 @@ export const seed = async () => {
         .values(
           caseStatusUpdates.map(s => ({
             ...s,
+            statusUpdateId: s.statusUpdateId ? s.statusUpdateId : getUniqueId(),
             date: calculateDate({ dateString: s.date }),
           })),
         )
-        .onConflict(oc => oc.columns(['docketNumber', 'date']).doNothing())
+        .onConflict(oc => oc.columns(['statusUpdateId']).doNothing())
         .execute(),
     table: null,
   });
