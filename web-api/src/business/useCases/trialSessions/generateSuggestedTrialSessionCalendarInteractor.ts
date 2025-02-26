@@ -29,6 +29,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 import { generateCalendar } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/generateCalendar';
+import { getSuggestedCalendarCases } from '@web-api/persistence/postgres/cases/reports/getSuggestedCalendarCases';
 import {
   maxSessionsPerLocationConstraint,
   maxSessionsPerWeekConstraint,
@@ -77,9 +78,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     ...calendaringConfig
   } = TERM_BUILDER_INFORMATION;
 
-  const cases = await applicationContext
-    .getPersistenceGateway()
-    .getSuggestedCalendarCases({ applicationContext });
+  const cases = await getSuggestedCalendarCases();
 
   const sessions = await applicationContext
     .getPersistenceGateway()

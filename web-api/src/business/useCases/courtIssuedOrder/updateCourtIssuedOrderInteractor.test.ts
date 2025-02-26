@@ -6,21 +6,26 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { updateCourtIssuedOrderInteractor } from './updateCourtIssuedOrderInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 describe('updateCourtIssuedOrderInteractor', () => {
   const mockUserId = applicationContext.getUniqueId();
   let mockUserById;
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCase = updateCaseMock as jest.Mock;
+  updateCase.mockImplementation(c => c.caseToUpdate);
 
   const caseRecord = {
     caseCaption: 'Caption',
@@ -97,9 +102,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
       .getPersistenceGateway()
       .getUserById.mockImplementation(() => mockUserById);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue(caseRecord);
+    getCaseByDocketNumber.mockResolvedValue(caseRecord);
   });
 
   it('should throw an error if not authorized', async () => {
@@ -160,16 +163,11 @@ describe('updateCourtIssuedOrderInteractor', () => {
       mockPetitionsClerkUser,
     );
 
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries.length,
+      updateCase.mock.calls[0][0].caseToUpdate.docketEntries.length,
     ).toEqual(3);
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalledWith(
+    expect(updateCase).toHaveBeenCalledWith(
       expect.objectContaining({
         caseToUpdate: expect.objectContaining({
           docketEntries: expect.arrayContaining([
@@ -205,16 +203,11 @@ describe('updateCourtIssuedOrderInteractor', () => {
       mockPetitionsClerkUser,
     );
 
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries.length,
+      updateCase.mock.calls[0][0].caseToUpdate.docketEntries.length,
     ).toEqual(3);
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalledWith(
+    expect(updateCase).toHaveBeenCalledWith(
       expect.objectContaining({
         caseToUpdate: expect.objectContaining({
           docketEntries: expect.arrayContaining([
@@ -248,16 +241,11 @@ describe('updateCourtIssuedOrderInteractor', () => {
       mockPetitionsClerkUser,
     );
 
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries.length,
+      updateCase.mock.calls[0][0].caseToUpdate.docketEntries.length,
     ).toEqual(3);
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalledWith(
+    expect(updateCase).toHaveBeenCalledWith(
       expect.objectContaining({
         caseToUpdate: expect.objectContaining({
           docketEntries: expect.arrayContaining([
@@ -290,16 +278,11 @@ describe('updateCourtIssuedOrderInteractor', () => {
       mockPetitionsClerkUser,
     );
 
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries.length,
+      updateCase.mock.calls[0][0].caseToUpdate.docketEntries.length,
     ).toEqual(3);
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalledWith(
+    expect(updateCase).toHaveBeenCalledWith(
       expect.objectContaining({
         caseToUpdate: expect.objectContaining({
           docketEntries: expect.arrayContaining([
@@ -327,16 +310,11 @@ describe('updateCourtIssuedOrderInteractor', () => {
       mockPetitionsClerkUser,
     );
 
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries.length,
+      updateCase.mock.calls[0][0].caseToUpdate.docketEntries.length,
     ).toEqual(3);
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalledWith(
+    expect(updateCase).toHaveBeenCalledWith(
       expect.objectContaining({
         caseToUpdate: expect.objectContaining({
           docketEntries: expect.arrayContaining([
@@ -379,12 +357,11 @@ describe('updateCourtIssuedOrderInteractor', () => {
         .calls[0][0],
     ).toMatchObject({ useTempBucket: false });
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[2].documentContents,
+      updateCase.mock.calls[0][0].caseToUpdate.docketEntries[2]
+        .documentContents,
     ).toBeUndefined();
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[2].draftOrderState,
+      updateCase.mock.calls[0][0].caseToUpdate.docketEntries[2].draftOrderState,
     ).toBeUndefined();
   });
 
@@ -450,12 +427,9 @@ describe('updateCourtIssuedOrderInteractor', () => {
       mockPetitionsClerkUser,
     );
 
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries.length,
+      updateCase.mock.calls[0][0].caseToUpdate.docketEntries.length,
     ).toEqual(3);
   });
 
@@ -482,9 +456,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {

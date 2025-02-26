@@ -1,9 +1,13 @@
+/* eslint-disable max-lines */
 /* eslint-disable custom-rules-plugin/no-new-dates*/
+/* eslint-disable max-lines */
 import { DateTime, Settings } from 'luxon';
 import {
   FORMATS,
   PATTERNS,
   USTC_TZ,
+  calculateDate,
+  calculateDateAtStartOfDayEST,
   calculateDifferenceInDays,
   calculateDifferenceInHours,
   calculateISODate,
@@ -68,6 +72,26 @@ describe('DateHandler', () => {
       const inputTimeInEst = '14:00'; //2:00 pm
 
       const outputString = '2021-11-11T19:00:00.000Z';
+
+      const result = combineISOandEasternTime(inputISO, inputTimeInEst);
+      expect(result).toEqual(outputString);
+    });
+
+    it('should combine ISO datestamp and a string representing hours and minutes in Eastern time when the time is in the morning', () => {
+      const inputISO = '2021-11-11T05:00:00.000Z';
+      const inputTimeInEst = '09:00'; // 9:00 am
+
+      const outputString = '2021-11-11T14:00:00.000Z';
+
+      const result = combineISOandEasternTime(inputISO, inputTimeInEst);
+      expect(result).toEqual(outputString);
+    });
+
+    it('should combine ISO datestamp and a string representing hours and minutes in Eastern time when the input ISO is not midnight Eastern', () => {
+      const inputISO = '2021-11-11T15:30:00.000Z'; // 10:30am Eastern
+      const inputTimeInEst = '16:00'; // 4:00 pm
+
+      const outputString = '2021-11-11T21:00:00.000Z';
 
       const result = combineISOandEasternTime(inputISO, inputTimeInEst);
       expect(result).toEqual(outputString);
@@ -833,5 +857,115 @@ describe('DateHandler', () => {
 
       expect(result).toEqual('2024-11-18');
     });
+  });
+
+  describe('calculateDateAtStartOfDayEST', () => {
+    const getActualAndExpectedDate = ({
+      dateString = undefined,
+      howMuch = 0,
+      units = 'days',
+    }: {
+      dateString?: string;
+      howMuch?: number;
+      units?: string;
+    }) => {
+      const actual = calculateDateAtStartOfDayEST({
+        dateString,
+        howMuch,
+        units,
+      }).toISOString();
+
+      const expected = calculateDate({
+        dateString: createISODateAtStartOfDayEST(
+          calculateDate({ dateString, howMuch, units }).toISOString(),
+        ),
+      }).toISOString();
+      return { actual, expected };
+    };
+
+    const scenarios = [
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: 0,
+        testName: 'handles howMuch=0 (default units=days) with no dateString',
+        units: 'days',
+      },
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: 0,
+        testName: 'handles howMuch=0 with units=hours',
+        units: 'hours',
+      },
+      {
+        dateString: '2024-03-02',
+        expectedISO: '2024-03-02T05:00:00.000Z',
+        howMuch: 0,
+        testName: 'handles howMuch=0 with explicit date',
+        units: 'days',
+      },
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: 67,
+        testName: 'handles howMuch>0 (67 days), no dateString',
+        units: 'days',
+      },
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: 67,
+        testName: 'handles howMuch>0 (67 hours), no dateString',
+        units: 'hours',
+      },
+      {
+        dateString: '2024-03-02',
+        expectedISO: '2024-05-08T04:00:00.000Z',
+        howMuch: 67,
+        testName: 'handles howMuch>0 (67 days) with explicit date',
+        units: 'days',
+      },
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: -44,
+        testName: 'handles howMuch<0 (-44 days), no dateString',
+        units: 'days',
+      },
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: -44,
+        testName: 'handles howMuch<0 (-44 hours), no dateString',
+        units: 'hours',
+      },
+      {
+        dateString: '2024-03-02',
+        expectedISO: '2024-01-18T05:00:00.000Z',
+        howMuch: -44,
+        testName: 'handles howMuch<0 (-44 days) with explicit date',
+        units: 'days',
+      },
+    ];
+
+    it.each(scenarios)(
+      '$testName (dateString=$dateString, howMuch=$howMuch, units=$units)',
+      ({ dateString, expectedISO, howMuch, units }) => {
+        const { actual, expected } = getActualAndExpectedDate({
+          dateString,
+          howMuch,
+          units,
+        });
+
+        if (expectedISO) {
+          // If there's an exact expectedISO, make sure the expected matches exactly
+          // eslint-disable-next-line jest/no-conditional-expect
+          expect(expected).toEqual(expectedISO);
+        }
+        // Regardless, actual should match the expected from our helper
+        expect(actual).toEqual(expected);
+      },
+    );
   });
 });

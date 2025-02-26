@@ -20,7 +20,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.86.0"
+      version = "~> 5.88.0"
     }
   }
 }
@@ -140,7 +140,6 @@ module "zip_batch_west" {
   }
 }
 
-
 module "api-east-blue" {
   source              = "../../modules/api"
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_east.arn
@@ -240,6 +239,41 @@ module "worker-east-blue" {
 
 module "worker-west-blue" {
   source              = "../../modules/worker"
+  color               = "blue"
+  alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_west.arn
+  lambda_role_arn     = module.lambda_role_blue.role_arn
+  lambda_environment = merge(terraform_data.locals.output, {
+    CURRENT_COLOR          = "blue"
+    DYNAMODB_TABLE_NAME    = var.blue_table_name
+    ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
+    REGION                 = "us-west-1"
+  })
+  providers = {
+    aws = aws.us-west-1
+  }
+  environment = var.environment
+}
+
+module "opensearch-sync-east-blue" {
+  source              = "../../modules/opensearch-sync"
+  color               = "blue"
+  alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_east.arn
+  lambda_role_arn     = module.lambda_role_blue.role_arn
+  lambda_environment = merge(terraform_data.locals.output, {
+    CURRENT_COLOR          = "blue"
+    DYNAMODB_TABLE_NAME    = var.blue_table_name
+    ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
+    REGION                 = "us-east-1"
+  })
+  providers = {
+    aws = aws.us-east-1
+  }
+
+  environment = var.environment
+}
+
+module "opensearch-sync-west-blue" {
+  source              = "../../modules/opensearch-sync"
   color               = "blue"
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_west.arn
   lambda_role_arn     = module.lambda_role_blue.role_arn

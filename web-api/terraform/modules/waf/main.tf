@@ -60,8 +60,50 @@ resource "aws_wafv2_web_acl" "apis" {
   }
 
   rule {
-    name     = "per_ip_expensive_request_limit"
+    name     = "expensive_request_limit"
     priority = 2
+
+    action {
+      block {
+        custom_response {
+          response_code = 429
+        }
+      }
+    }
+
+    statement {
+      rate_based_statement {
+        limit                 = 300
+        evaluation_window_sec = 60
+        aggregate_key_type    = "CONSTANT"
+
+        scope_down_statement {
+          regex_pattern_set_reference_statement {
+            arn = aws_wafv2_regex_pattern_set.expensive_requests.arn
+
+            field_to_match {
+              uri_path {}
+            }
+
+            text_transformation {
+              priority = 1
+              type = "LOWERCASE"
+            }
+          }
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "expensive_request_limit_${var.environment}"
+      sampled_requests_enabled   = false
+    }
+  }
+
+  rule {
+    name     = "per_ip_expensive_request_limit"
+    priority = 3
 
     action {
       count {} // change to `block {}` when confident in ruleset
@@ -97,7 +139,7 @@ resource "aws_wafv2_web_acl" "apis" {
   }
 
   visibility_config {
-    cloudwatch_metrics_enabled = false
+    cloudwatch_metrics_enabled = true
     metric_name                = "wafv2_${var.environment}"
     sampled_requests_enabled   = false
   }

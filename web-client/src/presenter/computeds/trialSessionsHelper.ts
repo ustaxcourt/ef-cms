@@ -37,13 +37,13 @@ export const trialSessionsHelper = (
   }[];
   trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
   sessionTypeOptions: { label: string; value: TrialSessionTypes }[];
+  showCreateTermButton: boolean;
   trialCitiesByState: {
     label: string;
     options: { label: string; value: string }[];
   }[];
   trialSessionsCount: number;
   endDateErrorMessage?: string;
-  showCreateTermButton: boolean;
   startDateErrorMessage?: string;
   totalPages: number;
 } => {

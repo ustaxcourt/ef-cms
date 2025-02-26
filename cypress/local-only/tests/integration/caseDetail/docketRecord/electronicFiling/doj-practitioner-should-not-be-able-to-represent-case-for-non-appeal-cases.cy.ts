@@ -13,6 +13,22 @@ import { selectTypeaheadInput } from '../../../../../../helpers/components/typeA
 import { updateCaseStatus } from '../../../../../../helpers/caseDetail/caseInformation/update-case-status';
 
 describe('DOJ Practitioners - Represent A Party', () => {
+  before(() => {
+    cy.task('toggleFeatureFlag', {
+      flag: 'updated-petition-flow',
+      flagValue: false,
+    });
+
+    cy.reload(true);
+  });
+
+  after(() => {
+    cy.task('toggleFeatureFlag', {
+      flag: 'updated-petition-flow',
+      flagValue: true,
+    });
+  });
+
   it('should only display the "Represent A Party" button when the case is "On Appeal"', () => {
     const BAR_NUMBER = 'WN7777';
     const primaryFilerName = 'John';

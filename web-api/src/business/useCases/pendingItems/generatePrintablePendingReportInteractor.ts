@@ -5,23 +5,34 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { fetchPendingItems } from '@web-api/persistence/postgres/cases/reports/fetchPendingItems';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { sortPendingReportItems } from '@shared/business/utilities/pendingItem/sortPendingReportItems';
 
 export const generatePrintablePendingReportInteractor = async (
   applicationContext: ServerApplicationContext,
-  { docketNumber, judge }: { docketNumber?: string; judge?: string },
+  {
+    docketNumber,
+    judge,
+    sortField,
+    sortOrder,
+  }: {
+    docketNumber?: string;
+    judge?: string;
+    sortField?: string;
+    sortOrder?: 'asc' | 'desc';
+  },
   authorizedUser: UnknownAuthUser,
 ): Promise<string> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PENDING_ITEMS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { foundDocuments: pendingDocuments } = await applicationContext
-    .getPersistenceGateway()
-    .fetchPendingItems({
-      applicationContext,
-      docketNumber,
-      judge,
-    });
+  const { foundDocuments: pendingDocuments } = await fetchPendingItems({
+    applicationContext,
+    docketNumber,
+    judge,
+  });
 
   const formattedPendingItems = pendingDocuments.map(pendingItem =>
     applicationContext.getUtilities().formatPendingItem(pendingItem),
@@ -32,19 +43,22 @@ export const generatePrintablePendingReportInteractor = async (
   if (judge) {
     reportTitle = `Judge ${judge}`;
   } else if (docketNumber) {
-    const caseResult = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+    const caseResult = await getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
     reportTitle = `Docket ${caseResult.docketNumberWithSuffix}`;
   }
+
+  const sortedPendingItems =
+    !sortField || !sortOrder
+      ? formattedPendingItems
+      : sortPendingReportItems(formattedPendingItems, sortField, sortOrder);
 
   const pdf = await applicationContext.getDocumentGenerators().pendingReport({
     applicationContext,
     data: {
-      pendingItems: formattedPendingItems,
+      pendingItems: sortedPendingItems,
       subtitle: reportTitle,
     },
   });

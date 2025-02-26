@@ -1,19 +1,11 @@
-import { CASE_DEADLINES_REPORT_PAGE_SIZE } from '../../../../../shared/src/business/entities/EntityConstants';
 import { caseDeadlineEntity } from '@web-api/persistence/postgres/caseDeadlines/mapper';
 import { getDbReader } from '@web-api/database';
 
 export const getCaseDeadlinesByDateRange = async ({
   endDate,
-  from = 0,
   judge,
-  pageSize,
   startDate,
 }) => {
-  const size =
-    pageSize && pageSize <= CASE_DEADLINES_REPORT_PAGE_SIZE
-      ? pageSize
-      : CASE_DEADLINES_REPORT_PAGE_SIZE;
-
   const { results: caseDeadlines, total: totalCount } = await getDbReader(
     async reader => {
       let deadlineQuery = reader
@@ -25,12 +17,10 @@ export const getCaseDeadlinesByDateRange = async ({
         .where('cd.deadlineDate', '<=', endDate);
 
       if (judge) {
-        deadlineQuery = deadlineQuery.where('associatedJudge', '=', judge);
+        deadlineQuery = deadlineQuery.where('cd.associatedJudge', '=', judge);
       }
 
       deadlineQuery = deadlineQuery
-        .offset(from)
-        .limit(size)
         .orderBy('cd.deadlineDate', 'asc')
         .orderBy('cd.sortableDocketNumber', 'asc');
 

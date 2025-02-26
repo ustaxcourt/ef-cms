@@ -1,3 +1,4 @@
+import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
 import { get } from '../requests';
 
 /**
@@ -11,7 +12,7 @@ import { get } from '../requests';
 export const getBlockedCasesInteractor = (
   applicationContext,
   { trialLocation },
-) => {
+): Promise<BlockedCaseData[]> => {
   return get({
     applicationContext,
     endpoint: `/reports/blocked/${trialLocation}`,

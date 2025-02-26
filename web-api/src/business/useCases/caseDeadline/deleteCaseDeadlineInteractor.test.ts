@@ -1,38 +1,48 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { AUTOMATIC_BLOCKED_REASONS } from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE_WITHOUT_PENDING } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
+import { AUTOMATIC_BLOCKED_REASONS } from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE_WITHOUT_PENDING } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
+jest.mock(
+  '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
+);
 import {
   ServiceUnavailableError,
   UnauthorizedError,
 } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { deleteCaseDeadlineInteractor } from './deleteCaseDeadlineInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { deleteCaseDeadline as deleteCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
-
-const getCaseDeadlinesByDocketNumber =
-  getCaseDeadlinesByDocketNumberMock as jest.Mock;
-const deleteCaseDeadline = deleteCaseDeadlineMock as jest.Mock;
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 
 describe('deleteCaseDeadlineInteractor', () => {
+  const getCaseDeadlinesByDocketNumber = jest.mocked(
+    getCaseDeadlinesByDocketNumberMock,
+  );
+  const deleteCaseDeadline = jest.mocked(deleteCaseDeadlineMock);
+  const deleteCaseTrialSortMappingRecords = jest.mocked(
+    deleteCaseTrialSortMappingRecordsMock,
+  );
   let user;
-  let mockCase;
   let mockDeadlines;
   let mockLock;
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCase = updateCaseMock as jest.Mock;
+  updateCase.mockImplementation(c => c.caseToUpdate);
+
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
-    mockCase = MOCK_CASE_WITHOUT_PENDING;
 
     applicationContext.environment.stage = 'local';
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE_WITHOUT_PENDING);
 
     getCaseDeadlinesByDocketNumber.mockImplementation(() => mockDeadlines);
   });
@@ -41,7 +51,7 @@ describe('deleteCaseDeadlineInteractor', () => {
     mockLock = undefined;
   });
 
-  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+  it('should throw a ServiceUnavailableError when the Case is currently locked', async () => {
     mockLock = MOCK_LOCK;
 
     await expect(
@@ -55,12 +65,11 @@ describe('deleteCaseDeadlineInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {
+    getCaseDeadlinesByDocketNumber.mockResolvedValueOnce([]);
     await deleteCaseDeadlineInteractor(
       applicationContext,
       {
@@ -86,7 +95,7 @@ describe('deleteCaseDeadlineInteractor', () => {
     });
   });
 
-  it('throws an error if the user is not valid or authorized', async () => {
+  it('should throw an error when the user is not valid or authorized', async () => {
     user = {};
     await expect(
       deleteCaseDeadlineInteractor(
@@ -100,7 +109,7 @@ describe('deleteCaseDeadlineInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('calls persistence to delete a case deadline and sets the case as no longer automatically blocked if there are no more deadlines', async () => {
+  it('should call persistence to delete a case deadline and sets the case as no longer automatically blocked when there are no more deadlines', async () => {
     mockDeadlines = [];
 
     await deleteCaseDeadlineInteractor(
@@ -115,22 +124,19 @@ describe('deleteCaseDeadlineInteractor', () => {
     expect(deleteCaseDeadline.mock.calls[0][0]).toMatchObject({
       caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate,
-    ).toMatchObject({
+    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
       automaticBlocked: false,
       automaticBlockedDate: undefined,
       automaticBlockedReason: undefined,
     });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).not.toHaveBeenCalled();
+    expect(deleteCaseTrialSortMappingRecords).not.toHaveBeenCalled();
   });
 
-  it('calls persistence to delete a case deadline and leaves the case automatically blocked if there are more deadlines', async () => {
-    mockDeadlines = [{ deadline: 'something' }];
+  it('should call persistence to delete a case deadline and leave the case automatically blocked when there are more deadlines', async () => {
+    mockDeadlines = [
+      { cadeDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416' },
+      { cadeDeadlineId: 'will remain after deletion' },
+    ];
 
     await deleteCaseDeadlineInteractor(
       applicationContext,
@@ -144,17 +150,11 @@ describe('deleteCaseDeadlineInteractor', () => {
     expect(deleteCaseDeadline.mock.calls[0][0]).toMatchObject({
       caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate,
-    ).toMatchObject({
+    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
     });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
+    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 });

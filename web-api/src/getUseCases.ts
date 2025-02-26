@@ -13,7 +13,6 @@ import { associatePrivatePractitionerWithCaseInteractor } from './business/useCa
 import { batchDownloadDocketEntriesInteractor } from '@web-api/business/useCases/document/batchDownloadDocketEntriesInteractor';
 import { batchDownloadTrialSessionInteractor } from './business/useCases/trialSessions/batchDownloadTrialSessionInteractor';
 import { blockCaseFromTrialInteractor } from './business/useCases/blockCaseFromTrialInteractor';
-import { caseAdvancedSearchInteractor } from './business/useCases/caseAdvancedSearchInteractor';
 import { casePublicSearchInteractor } from './business/useCases/public/casePublicSearchInteractor';
 import { changePasswordInteractor } from '@web-api/business/useCases/auth/changePasswordInteractor';
 import { checkEmailAvailabilityInteractor } from './business/useCases/user/checkEmailAvailabilityInteractor';
@@ -74,13 +73,11 @@ import { generateTrialCalendarPdfInteractor } from './business/useCases/trialSes
 import { generateTrialSessionPaperServicePdfInteractor } from './business/useCases/trialSessions/generateTrialSessionPaperServicePdfInteractor';
 import { getAllFeatureFlagsInteractor } from './business/useCases/featureFlag/getAllFeatureFlagsInteractor';
 import { getAllUsersByRoleInteractor } from '@shared/business/useCases/getAllUsersByRoleInteractor';
-import { getBlockedCasesInteractor } from '../../shared/src/business/useCases/getBlockedCasesInteractor';
 import { getCachedHealthCheckInteractor } from '@web-api/business/useCases/health/getCachedHealthCheckInteractor';
 import { getCalendaredCasesForTrialSessionInteractor } from './business/useCases/trialSessions/getCalendaredCasesForTrialSessionInteractor';
 import { getCaseDeadlinesForCaseInteractor } from './business/useCases/caseDeadline/getCaseDeadlinesForCaseInteractor';
 import { getCaseDeadlinesInteractor } from '../../shared/src/business/useCases/getCaseDeadlinesInteractor';
 import { getCaseExistsInteractor } from '../../shared/src/business/useCases/getCaseExistsInteractor';
-import { getCaseForPublicDocketSearchInteractor } from './business/useCases/public/getCaseForPublicDocketSearchInteractor';
 import { getCaseInteractor } from '../../shared/src/business/useCases/getCaseInteractor';
 import { getCaseInventoryReportInteractor } from './business/useCases/caseInventoryReport/getCaseInventoryReportInteractor';
 import { getCaseWorksheetsByJudgeInteractor } from './business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
@@ -118,7 +115,6 @@ import { getPractitionerDocumentInteractor } from './business/useCases/practitio
 import { getPractitionerDocumentsInteractor } from './business/useCases/practitioner/getPractitionerDocumentsInteractor';
 import { getPractitionersByNameInteractor } from './business/useCases/practitioner/getPractitionersByNameInteractor';
 import { getPrivatePractitionersBySearchKeyInteractor } from './business/useCases/user/getPrivatePractitionersBySearchKeyInteractor';
-import { getPublicCaseInteractor } from './business/useCases/public/getPublicCaseInteractor';
 import { getPublicDownloadPolicyUrlInteractor } from './business/useCases/public/getPublicDownloadPolicyUrlInteractor';
 import { getReconciliationReportInteractor } from '../../shared/src/business/useCases/getReconciliationReportInteractor';
 import { getTodaysOpinionsInteractor } from './business/useCases/public/getTodaysOpinionsInteractor';
@@ -152,7 +148,7 @@ import { processStreamRecordsInteractor } from './business/useCases/processStrea
 import { queueEmailUpdateAssociatedCasesWorker } from '@web-api/business/useCases/user/queueEmailUpdateAssociatedCasesWorker';
 import { queueUpdateAssociatedCasesWorker } from './business/useCases/user/queueUpdateAssociatedCasesWorker';
 import { removeCaseFromTrialInteractor } from './business/useCases/trialSessions/removeCaseFromTrialInteractor';
-import { removeCasePendingItemInteractor } from '../../shared/src/business/useCases/removeCasePendingItemInteractor';
+import { removeCasePendingItemInteractor } from './business/useCases/pendingItems/removeCasePendingItemInteractor';
 import { removeConsolidatedCasesInteractor } from './business/useCases/caseConsolidation/removeConsolidatedCasesInteractor';
 import { removePdfFromDocketEntryInteractor } from '../../shared/src/business/useCases/removePdfFromDocketEntryInteractor';
 import { removePetitionerAndUpdateCaptionInteractor } from '../../shared/src/business/useCases/removePetitionerAndUpdateCaptionInteractor';
@@ -230,7 +226,6 @@ const useCases = {
   batchDownloadDocketEntriesInteractor,
   batchDownloadTrialSessionInteractor,
   blockCaseFromTrialInteractor,
-  caseAdvancedSearchInteractor,
   casePublicSearchInteractor,
   changePasswordInteractor,
   checkEmailAvailabilityInteractor,
@@ -291,13 +286,11 @@ const useCases = {
   generateTrialSessionPaperServicePdfInteractor,
   getAllFeatureFlagsInteractor,
   getAllUsersByRoleInteractor,
-  getBlockedCasesInteractor,
   getCachedHealthCheckInteractor,
   getCalendaredCasesForTrialSessionInteractor,
   getCaseDeadlinesForCaseInteractor,
   getCaseDeadlinesInteractor,
   getCaseExistsInteractor,
-  getCaseForPublicDocketSearchInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
   getCaseWorksheetsByJudgeInteractor,
@@ -335,7 +328,6 @@ const useCases = {
   getPractitionerDocumentsInteractor,
   getPractitionersByNameInteractor,
   getPrivatePractitionersBySearchKeyInteractor,
-  getPublicCaseInteractor,
   getPublicDownloadPolicyUrlInteractor,
   getReconciliationReportInteractor,
   getTodaysOpinionsInteractor,

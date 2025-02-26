@@ -12,6 +12,7 @@ import classNames from 'classnames';
 type CaseDetailHeaderProps = {
   hideActionButtons?: boolean;
   className?: string;
+  openCaseInNewTab?: boolean;
 };
 
 const caseDetailHeaderDeps = {
@@ -31,6 +32,7 @@ export const CaseDetailHeader = connect<
     className,
     formattedCaseDetail,
     hideActionButtons,
+    openCaseInNewTab,
   }) {
     const consolidatedCasesString = formattedCaseDetail.consolidatedCases
       .map(eachCase => eachCase.docketNumberWithSuffix)
@@ -169,8 +171,10 @@ export const CaseDetailHeader = connect<
                       />
                     )}
                     <CaseLink
-                      className="mobile-text-wrap"
                       formattedCase={formattedCaseDetail}
+                      rel={openCaseInNewTab ? 'noreferrer noopener' : ''}
+                      target={openCaseInNewTab ? '_blank' : ''}
+                      className="mobile-text-wrap"
                     >
                       Docket Number:{' '}
                       {formattedCaseDetail.docketNumberWithSuffix}
@@ -216,7 +220,7 @@ export const CaseDetailHeader = connect<
                         </span>
                       )}
                       {caseDetailHeaderHelper.showBlockedTag && (
-                        <span className="margin-left-1 usa-tag red-tag">
+                        <span className="margin-left-1 usa-tag red-tag" data-testid="blocked-case-icon">
                           <FontAwesomeIcon
                             className="margin-right-1"
                             icon="hand-paper"

@@ -1,20 +1,32 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
+);
 import {
   DOCKET_SECTION,
   TRANSCRIPT_EVENT_CODE,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
   MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-} from '../../../../../shared/src/test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+} from '@shared/test/mockCase';
+import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { docketClerkUser } from '@shared/test/mockUsers';
 import { fileAndServeCourtIssuedDocumentInteractor } from './fileAndServeCourtIssuedDocumentInteractor';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { v4 as uuidv4 } from 'uuid';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { Case } from '@shared/business/entities/cases/Case';
 
 describe('consolidated cases', () => {
+  const fileAndServeDocumentOnOneCase = jest.mocked(
+    fileAndServeDocumentOnOneCaseMock,
+  );
   const mockPdfUrl = 'www.example.com';
   const mockWorkItem = {
     docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
@@ -57,11 +69,11 @@ describe('consolidated cases', () => {
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(1);
 
-    applicationContext
-      .getUseCaseHelpers()
-      .fileAndServeDocumentOnOneCase.mockReturnValue(
-        MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-      );
+    fileAndServeDocumentOnOneCase.mockResolvedValue(
+      new Case(MOCK_LEAD_CASE_WITH_PAPER_SERVICE, {
+        authorizedUser: undefined,
+      }),
+    );
 
     leadCaseDocketEntries = [
       mockDocketEntryWithWorkItem,
@@ -94,35 +106,32 @@ describe('consolidated cases', () => {
       };
     });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
-        switch (docketNumber) {
-          case MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber:
-            return {
-              ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-              docketEntries: leadCaseDocketEntries,
-            };
-          case MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber:
-            return {
-              ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
-              docketEntries: consolidatedCase1DocketEntries,
-            };
-          default:
-            return {
-              ...MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
-              docketEntries: [],
-            };
-        }
-      });
+    getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
+      switch (docketNumber) {
+        case MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber:
+          return {
+            ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+            docketEntries: leadCaseDocketEntries,
+          };
+        case MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber:
+          return {
+            ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+            docketEntries: consolidatedCase1DocketEntries,
+          };
+        default:
+          return {
+            ...MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
+            docketEntries: [],
+          };
+      }
+    });
   });
 
   it('should set each docketEntry`s pendingStatus to false even when an error occurs while filing the docket entries', async () => {
     const expectedErrorString = 'expected error';
-    applicationContext
-      .getUseCaseHelpers()
-      .fileAndServeDocumentOnOneCase.mockImplementationOnce(() => {})
-      .mockImplementationOnce(() => {})
+    fileAndServeDocumentOnOneCase
+      .mockImplementationOnce(() => undefined as any)
+      .mockImplementationOnce(() => undefined as any)
       .mockRejectedValueOnce(new Error(expectedErrorString));
 
     await expect(
@@ -155,19 +164,14 @@ describe('consolidated cases', () => {
   it('should log the failure to call updateDocketEntryPendingServiceStatus in the finally block', async () => {
     const expectedErrorString = 'expected error';
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementationOnce(() => {
-        return {
-          ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-          docketEntries: leadCaseDocketEntries,
-        };
+    getCaseByDocketNumber
+      .mockResolvedValueOnce({
+        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+        docketEntries: leadCaseDocketEntries,
       })
-      .mockImplementationOnce(() => {
-        return {
-          ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-          docketEntries: leadCaseDocketEntries,
-        };
+      .mockResolvedValueOnce({
+        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+        docketEntries: leadCaseDocketEntries,
       })
       .mockRejectedValueOnce(new Error(expectedErrorString));
 

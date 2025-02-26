@@ -21,8 +21,8 @@ export const petitionsClerkAddsOtherStatisticsToCase = cerebralTest => {
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
     expect(cerebralTest.getState('caseDetail')).toMatchObject({
-      damages: 5678,
-      litigationCosts: 1234,
+      damages: '5678',
+      litigationCosts: '1234',
     });
   });
 };

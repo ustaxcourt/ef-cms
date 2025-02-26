@@ -19,11 +19,16 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { getClinicLetterKey } from '@shared/business/utilities/getClinicLetterKey';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/business/useCaseHelper/acquireLock';
 
-export const serveThirtyDayNoticeInteractor = async (
+export const serveThirtyDayNotice = async (
   applicationContext: ServerApplicationContext,
   {
     clientConnectionId,
@@ -97,12 +102,10 @@ export const serveThirtyDayNoticeInteractor = async (
   const generateNottForCases = trialSession.caseOrder
     .filter(aCase => !aCase.removedFromTrial)
     .map(async aCase => {
-      const rawCase = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber: aCase.docketNumber,
-        });
+      const rawCase = await getCaseByDocketNumber({
+        applicationContext,
+        docketNumber: aCase.docketNumber,
+      });
 
       const caseEntity = new Case(rawCase, { authorizedUser });
 
@@ -285,3 +288,44 @@ export const serveThirtyDayNoticeInteractor = async (
     userId: authorizedUser.userId,
   });
 };
+
+export const determineEntitiesToLock = async (
+  applicationContext: ServerApplicationContext,
+  {
+    trialSessionId,
+  }: {
+    trialSessionId: string;
+  },
+) => {
+  const currentTrialSession = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionById({
+      applicationContext,
+      trialSessionId,
+    });
+
+  if (!currentTrialSession) {
+    throw new NotFoundError(
+      `Trial session ${trialSessionId} was not found.`,
+    );
+  }
+
+  const { caseOrder } = currentTrialSession;
+
+  const entitiesToLock = [`trial-session|${trialSessionId}`];
+
+  caseOrder?.forEach(({ docketNumber }) =>
+    entitiesToLock.push(`case|${docketNumber}`),
+  );
+
+  return {
+    identifiers: entitiesToLock,
+    ttl: 900,
+  };
+};
+
+export const serveThirtyDayNoticeInteractor = withLocking(
+  serveThirtyDayNotice,
+  determineEntitiesToLock,
+  asyncHandleLockError,
+);

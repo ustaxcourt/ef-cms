@@ -8,7 +8,7 @@ export const updateAdvancedSearchFormAction =
   }: ActionProps<{
     formType: string;
     key: string;
-    value: string;
+    value: string | object;
   }>) => {
     const formType = formName || props.formType;
     if (props.value) {

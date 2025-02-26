@@ -1,25 +1,24 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { deleteCaseTrialSortMappingRecords } from './deleteCaseTrialSortMappingRecords';
-import { put, query } from '../../dynamodbClientService';
+import { batchWrite, query } from '../../dynamodbClientService';
+import { PutRequest } from '@web-api/persistence/dynamo/dynamoTypes';
+import {
+  generateTrialSortTags,
+  isInConsolidatedGroup,
+} from '@shared/business/entities/cases/Case';
+import { getCasesInConsolidatedGroup } from '@web-api/persistence/postgres/cases/getCasesInConsolidatedGroup';
+import { NotFoundError } from '@web-api/errors/errors';
+import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 
-/**
- * createCaseTrialSortMappingRecords
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.docketNumber the docket number to create the trial sort mapping records for
- * @param {object} providers.caseSortTags the hybrid and nonHybrid sort tags
- */
 export const createCaseTrialSortMappingRecords = async ({
   applicationContext,
   caseSortTags,
   docketNumber,
 }: {
-  applicationContext: IApplicationContext;
-  caseSortTags: any;
+  applicationContext: ServerApplicationContext;
+  caseSortTags: { hybrid: string; nonHybrid: string };
   docketNumber: string;
-}) => {
-  const { hybrid, nonHybrid } = caseSortTags;
-
+}): Promise<void> => {
   const oldSortRecords = await query({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',
@@ -36,29 +35,64 @@ export const createCaseTrialSortMappingRecords = async ({
 
   if (oldSortRecords.length) {
     await deleteCaseTrialSortMappingRecords({
-      applicationContext,
+      applicationContext: applicationContext as ServerApplicationContext,
       docketNumber,
     });
   }
 
-  await Promise.all([
-    put({
-      Item: {
-        docketNumber,
-        gsi1pk: `eligible-for-trial-case-catalog|${docketNumber}`,
-        pk: 'eligible-for-trial-case-catalog',
-        sk: nonHybrid,
+  const theCase = await getCaseMetadataByDocketNumber({
+    docketNumber,
+  });
+
+  if (!theCase) {
+    throw new NotFoundError(`Case ${docketNumber} was not found.`);
+  }
+
+  const isConsolidatedCase = isInConsolidatedGroup(theCase);
+  let casesToUpdate: RawCase[];
+  if (isConsolidatedCase) {
+    casesToUpdate = await getCasesInConsolidatedGroup({
+      leadDocketNumber: theCase.leadDocketNumber!,
+    });
+  } else {
+    casesToUpdate = [theCase];
+  }
+
+  const hasBlockedCase = casesToUpdate.some(c => {
+    if (c.docketNumber === docketNumber) return false;
+    return c.blocked || c.automaticBlocked;
+  });
+
+  if (hasBlockedCase) {
+    return;
+  }
+
+  const recordsToAdd: PutRequest[] = [];
+
+  casesToUpdate.forEach(c => {
+    const { hybrid, nonHybrid } =
+      c.docketNumber === docketNumber ? caseSortTags : generateTrialSortTags(c);
+    recordsToAdd.push({
+      PutRequest: {
+        Item: {
+          docketNumber: c.docketNumber,
+          gsi1pk: `eligible-for-trial-case-catalog|${c.docketNumber}`,
+          pk: 'eligible-for-trial-case-catalog',
+          sk: nonHybrid,
+        },
       },
-      applicationContext,
-    }),
-    put({
-      Item: {
-        docketNumber,
-        gsi1pk: `eligible-for-trial-case-catalog|${docketNumber}`,
-        pk: 'eligible-for-trial-case-catalog',
-        sk: hybrid,
+    });
+    recordsToAdd.push({
+      PutRequest: {
+        Item: {
+          docketNumber: c.docketNumber,
+          gsi1pk: `eligible-for-trial-case-catalog|${c.docketNumber}`,
+          pk: 'eligible-for-trial-case-catalog',
+          sk: hybrid,
+        },
       },
-      applicationContext,
-    }),
-  ]);
+    });
+  });
+
+  await batchWrite(recordsToAdd, applicationContext);
 };

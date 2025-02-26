@@ -1,0 +1,23 @@
+.minute-sheet-pdf {
+  font-family: 'nimbus_roman', serif;
+  font-size: 14px;
+
+  h2 {
+    font-size: 25px;
+    font-weight: bold;
+  }
+
+  .minute-sheet-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .minute-sheet-section > div {
+    width: 48%;
+  }
+
+  .exhibits-table {
+    margin-top: 2rem;
+  }
+}

@@ -1,24 +1,25 @@
-import {
-  Case,
-  isLeadCase,
-} from '../../../../../shared/src/business/entities/cases/Case';
+import { Case, isLeadCase } from '@shared//business/entities/cases/Case';
 import {
   DOCUMENT_RELATIONSHIPS,
   DOCUMENT_SERVED_MESSAGES,
   ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+} from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
-import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
+import { WorkItem } from '@shared/business/entities/WorkItem';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/business/useCaseHelper/acquireLock';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -75,12 +76,10 @@ export const addPaperFiling = async (
   let filedByFromLeadCase;
 
   for (const docketNumber of consolidatedGroupDocketNumbers) {
-    const rawCase = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+    const rawCase = await getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
 
     let caseEntity = new Case(rawCase, { authorizedUser });
 
@@ -271,27 +270,8 @@ export const determineEntitiesToLock = (
   ttl: 900,
 });
 
-export const handleLockError = async (
-  applicationContext: ServerApplicationContext,
-  originalRequest,
-  authorizedUser: UnknownAuthUser,
-) => {
-  if (authorizedUser?.userId) {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId: originalRequest.clientConnectionId,
-      message: {
-        action: 'retry_async_request',
-        originalRequest,
-        requestToRetry: 'add_paper_filing',
-      },
-      userId: authorizedUser.userId,
-    });
-  }
-};
-
 export const addPaperFilingInteractor = withLocking(
   addPaperFiling,
   determineEntitiesToLock,
-  handleLockError,
+  asyncHandleLockError,
 );

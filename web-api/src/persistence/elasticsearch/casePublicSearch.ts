@@ -5,8 +5,8 @@ import {
 import {
   MAX_SEARCH_RESULTS,
   US_STATES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { aggregateCommonQueryParams } from '../../../../shared/src/business/utilities/aggregateCommonQueryParams';
+} from '@shared/business/entities/EntityConstants';
+import { aggregateCommonQueryParams } from '@shared/business/utilities/aggregateCommonQueryParams';
 import { search } from './searchClient';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
@@ -38,22 +38,8 @@ export const casePublicSearch = async ({
     bool: {
       must: [...exactMatchesQuery, ...commonQuery],
       must_not: [
-        {
-          exists: {
-            field: 'sealedDate',
-          },
-        },
-        {
-          bool: {
-            must: [
-              {
-                term: {
-                  'isSealed.BOOL': true,
-                },
-              },
-            ],
-          },
-        },
+        { exists: { field: 'sealedDate' } },
+        { bool: { must: [{ term: { 'isSealed.BOOL': true } }] } },
       ],
     },
   };

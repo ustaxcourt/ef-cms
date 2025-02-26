@@ -10,7 +10,7 @@ export class DeceasedSpouseContact extends ContactUpdated {
   getValidationRules() {
     return {
       ...super.getValidationRules(),
-      hasConsentedToEService: joi
+      hasConsentedToElectronicService: joi
         .boolean()
         .optional()
         .description(
@@ -20,7 +20,7 @@ export class DeceasedSpouseContact extends ContactUpdated {
         .required()
         .messages({ '*': 'Enter name for in care of' }),
       paperPetitionEmail: JoiValidationConstants.EMAIL.when(
-        'hasConsentedToEService',
+        'hasConsentedToElectronicService',
         {
           is: true,
           otherwise: joi.optional(),

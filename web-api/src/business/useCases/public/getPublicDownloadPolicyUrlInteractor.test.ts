@@ -1,24 +1,26 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { getPublicDownloadPolicyUrlInteractor } from './getPublicDownloadPolicyUrlInteractor';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 describe('getPublicDownloadPolicyUrlInteractor', () => {
   let mockCase;
+
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
   beforeEach(() => {
     mockCase = cloneDeep(MOCK_CASE);
     mockCase.docketEntries[0].servedAt = '2019-03-01T21:40:46.415Z';
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
+    getCaseByDocketNumber.mockReturnValue(mockCase);
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockResolvedValue({ url: 'localhost' });
@@ -61,9 +63,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
   });
 
   it('should throw an error for a case that is not found', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({ docketEntries: [] });
+    getCaseByDocketNumber.mockReturnValue({ docketEntries: [] });
 
     await expect(
       getPublicDownloadPolicyUrlInteractor(
@@ -78,12 +78,10 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
   });
 
   it('should throw an error for a public document that is part of a sealed case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        sealedDate: '2019-03-01T21:40:46.415Z',
-      });
+    getCaseByDocketNumber.mockReturnValue({
+      ...mockCase,
+      sealedDate: '2019-03-01T21:40:46.415Z',
+    });
 
     mockCase.docketEntries.push(
       new DocketEntry(
@@ -112,12 +110,10 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
   });
 
   it('should return a url for an opinion document that is part of a sealed case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        sealedDate: '2019-03-01T21:40:46.415Z',
-      });
+    getCaseByDocketNumber.mockReturnValue({
+      ...mockCase,
+      sealedDate: '2019-03-01T21:40:46.415Z',
+    });
 
     mockCase.docketEntries.push(
       new DocketEntry(

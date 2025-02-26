@@ -21,11 +21,16 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { removePetitionerAndUpdateCaptionInteractor } from './removePetitionerAndUpdateCaptionInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 describe('removePetitionerAndUpdateCaptionInteractor', () => {
   let mockCase;
   let petitionerToRemove;
   let mockLock;
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCase = updateCaseMock as jest.Mock;
+  updateCase.mockImplementation(c => c.caseToUpdate);
 
   const SECONDARY_CONTACT_ID = '56387318-0092-49a3-8cc1-921b0432bd16';
 
@@ -56,9 +61,7 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
       status: CASE_STATUS_TYPES.generalDocket,
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => mockCase);
+    getCaseByDocketNumber.mockImplementation(() => mockCase);
 
     applicationContext
       .getPersistenceGateway()
@@ -198,10 +201,9 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.caseCaption,
-    ).toEqual(mockUpdatedCaption);
+    expect(updateCase.mock.calls[0][0].caseToUpdate.caseCaption).toEqual(
+      mockUpdatedCaption,
+    );
   });
 
   it('should remove the petitioner from the representing id of the privatePractitioner', async () => {
@@ -245,8 +247,8 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.privatePractitioners[0].representing,
+      updateCase.mock.calls[0][0].caseToUpdate.privatePractitioners[0]
+        .representing,
     ).toEqual([otherPetitioner.contactId]);
   });
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
@@ -264,9 +266,7 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {

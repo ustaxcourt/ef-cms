@@ -1,16 +1,24 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import {
   addPaperFilingInteractor,
   determineEntitiesToLock,
-  handleLockError,
 } from './addPaperFilingInteractor';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { docketClerkUser } from '@shared/test/mockUsers';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCaseMetadataByDocketNumber as getCaseMetadataByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
+import { getCasesInConsolidatedGroup as getCasesInConsolidatedGroupMock } from '@web-api/persistence/postgres/cases/getCasesInConsolidatedGroup';
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const getCaseMetadataByDocketNumber =
+  getCaseMetadataByDocketNumberMock as jest.Mock;
+const getCasesInConsolidatedGroup =
+  getCasesInConsolidatedGroupMock as jest.Mock;
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
@@ -40,43 +48,6 @@ describe('determineEntitiesToLock', () => {
     expect(
       determineEntitiesToLock(applicationContext, mockParams).identifiers,
     ).toContain('case|333-20');
-  });
-});
-
-describe('handleLockError', () => {
-  const mockClientConnectionId = '987654';
-
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
-  });
-
-  it('should send notification to user when there is a lock error', async () => {
-    await handleLockError(applicationContext, { foo: 'bar' }, docketClerkUser);
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).toHaveBeenCalled();
-  });
-
-  it('should send a notification to the user with "retry_async_request" and the originalRequest', async () => {
-    const mockOriginalRequest = {
-      clientConnectionId: mockClientConnectionId,
-      foo: 'bar',
-    };
-    await handleLockError(
-      applicationContext,
-      mockOriginalRequest,
-      docketClerkUser,
-    );
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message,
-    ).toMatchObject({
-      action: 'retry_async_request',
-      originalRequest: mockOriginalRequest,
-      requestToRetry: 'add_paper_filing',
-    });
   });
 });
 
@@ -112,9 +83,9 @@ describe('addPaperFilingInteractor', () => {
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
+    getCaseByDocketNumber.mockResolvedValue(mockCase);
+    getCaseMetadataByDocketNumber.mockResolvedValue(mockCase);
+    getCasesInConsolidatedGroup.mockResolvedValue([mockCase]);
   });
 
   describe('locked', () => {
@@ -131,36 +102,7 @@ describe('addPaperFilingInteractor', () => {
         ),
       ).rejects.toThrow(ServiceUnavailableError);
 
-      expect(
-        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('should return a "retry_async_request" notification with the original request', async () => {
-      await expect(
-        addPaperFilingInteractor(
-          applicationContext,
-          mockRequest,
-          docketClerkUser,
-        ),
-      ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getNotificationGateway().sendNotificationToUser,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        clientConnectionId: mockClientConnectionId,
-        message: {
-          action: 'retry_async_request',
-          originalRequest: mockRequest,
-          requestToRetry: 'add_paper_filing',
-        },
-        userId: docketClerkUser.userId,
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-      ).not.toHaveBeenCalled();
+      expect(getCaseByDocketNumber).not.toHaveBeenCalled();
     });
   });
 

@@ -1,34 +1,57 @@
-import { batchDelete, query } from '../../dynamodbClientService';
+import { batchWrite, query } from '../../dynamodbClientService';
+import { DeleteRequest } from '@web-api/persistence/dynamo/dynamoTypes';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getCasesInConsolidatedGroup } from '@web-api/persistence/postgres/cases/getCasesInConsolidatedGroup';
+import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
+import { NotFoundError } from '@web-api/errors/errors';
+import { isInConsolidatedGroup } from '@shared/business/entities/cases/Case';
 
-/**
- * deleteCaseTrialSortMappingRecords
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.docketNumber the docket number of the case to delete the mapping records for
- * @returns {Promise} the return from the persistence delete calls
- */
 export const deleteCaseTrialSortMappingRecords = async ({
   applicationContext,
   docketNumber,
+  deleteConsolidatedCases = false,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   docketNumber: string;
-}) => {
-  const records = await query({
-    ExpressionAttributeNames: {
-      '#gsi1pk': 'gsi1pk',
-    },
-    ExpressionAttributeValues: {
-      ':gsi1pk': `eligible-for-trial-case-catalog|${docketNumber}`,
-    },
-    IndexName: 'gsi1',
-    KeyConditionExpression: '#gsi1pk = :gsi1pk',
-    applicationContext,
+  deleteConsolidatedCases?: boolean;
+}): Promise<void> => {
+  let docketNumbersToDelete: string[] = [docketNumber];
+  const theCase = await getCaseMetadataByDocketNumber({
+    docketNumber,
   });
 
-  await batchDelete({
-    applicationContext,
-    items: records,
-  });
+  if (!theCase) {
+    throw new NotFoundError(`Case ${docketNumber} was not found.`);
+  }
+
+  const recordsToDelete: DeleteRequest[] = [];
+  if (deleteConsolidatedCases && isInConsolidatedGroup(theCase)) {
+    docketNumbersToDelete = (
+      await getCasesInConsolidatedGroup({
+        leadDocketNumber: theCase.leadDocketNumber!,
+      })
+    ).map(c => c.docketNumber);
+  }
+  await Promise.all(
+    docketNumbersToDelete.map(async dn => {
+      const records = await query({
+        ExpressionAttributeNames: {
+          '#gsi1pk': 'gsi1pk',
+        },
+        ExpressionAttributeValues: {
+          ':gsi1pk': `eligible-for-trial-case-catalog|${dn}`,
+        },
+        IndexName: 'gsi1',
+        KeyConditionExpression: '#gsi1pk = :gsi1pk',
+        applicationContext,
+      });
+
+      records.forEach(r => {
+        recordsToDelete.push({
+          DeleteRequest: { Key: { pk: r.pk, sk: r.sk } },
+        });
+      });
+    }),
+  );
+  await batchWrite(recordsToDelete, applicationContext);
 };

@@ -33,7 +33,7 @@ export const createUserForContact = async ({
 
   const userEntity = new User({
     contact,
-    hasEAccess: true,
+    hasElectronicAccess: true,
     name,
     pendingEmail: email,
     role: ROLES.petitioner,
