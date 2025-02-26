@@ -1791,13 +1791,6 @@ export const TROUBLESHOOTING_INFO = {
     'https://ustaxcourt.gov/dawson_faqs_case_management.html#FileUpload',
 };
 
-export const FILED_BY_TYPES = {
-  petitionerAndRespondent: 'petitionerAndRespondent',
-  petitioner: 'petitioner',
-  respondent: 'respondent',
-  other: 'other',
-} as const;
-
 export const MINUTE_SHEET_FORM_SECTION_MAP = {
   actionsAndFilingsSection: 'actionsAndFilingsSection',
   caseMetadataSection: 'caseMetadataSection',
