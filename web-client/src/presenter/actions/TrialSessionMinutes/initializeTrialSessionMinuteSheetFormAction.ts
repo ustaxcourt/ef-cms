@@ -5,17 +5,20 @@ import {
   initialMinuteSheetFormState,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import {
-  ACTION_DOCUMENT_TYPE_OPTIONS,
+  ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED,
   ACTION_FILED_BY_OPTIONS,
+  ACTION_FILED_BY_OPTIONS_INVERTED,
   CONTACT_TYPES,
   ExhibitStatusOption,
   MOTION_OBJECTION_OPTIONS,
+  MOTION_OBJECTION_OPTIONS_INVERTED,
   MotionFiledByOption,
   MotionObjectionOption,
   MotionStatusOption,
   MotionTypeOption,
   OBJECTIONS_OPTIONS_MAP,
   PETITIONER_ROLE_OPTIONS,
+  PETITIONER_ROLE_OPTIONS_INVERTED,
 } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
@@ -23,7 +26,7 @@ import {
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
 import { applicationContext } from '@web-client/applicationContext';
-import { cloneDeep, invert } from 'lodash';
+import { cloneDeep } from 'lodash';
 import { formatCase } from '@shared/business/utilities/getFormattedCaseDetail';
 import { state } from '@web-client/presenter/app.cerebral';
 import { v4 as uuidv4 } from 'uuid';
@@ -224,19 +227,18 @@ export const getPetitionersFromCase = (
 
   if (petitioners && petitioners.length > 0) {
     petitioners.forEach(petitioner => {
-      const invertedPetitionerRoleOptions = invert(PETITIONER_ROLE_OPTIONS);
       let role;
       if (petitioner.contactType === CONTACT_TYPES.petitioner) {
         role = petitionersWithCounselUserIds.includes(petitioner.contactId)
-          ? invertedPetitionerRoleOptions[PETITIONER_ROLE_OPTIONS.counsel]
-          : invertedPetitionerRoleOptions[PETITIONER_ROLE_OPTIONS.proSe];
+          ? PETITIONER_ROLE_OPTIONS_INVERTED[PETITIONER_ROLE_OPTIONS.counsel]
+          : PETITIONER_ROLE_OPTIONS_INVERTED[PETITIONER_ROLE_OPTIONS.proSe];
       } else if (PETITIONER_ROLE_OPTIONS[petitioner.contactType]) {
         role =
-          invertedPetitionerRoleOptions[
+          PETITIONER_ROLE_OPTIONS_INVERTED[
             PETITIONER_ROLE_OPTIONS[petitioner.contactType]
           ];
       } else {
-        role = invertedPetitionerRoleOptions[PETITIONER_ROLE_OPTIONS.other];
+        role = PETITIONER_ROLE_OPTIONS_INVERTED[PETITIONER_ROLE_OPTIONS.other];
       }
 
       const renderKey = uuidv4();
@@ -309,9 +311,8 @@ export const getPendingItemsFromCase = ({
 export const getTransformedPendingItemDetails = (
   pendingItem,
 ): { documentType: string; description: string; objection: string } => {
-  const documentTypeReverseLookup = invert(ACTION_DOCUMENT_TYPE_OPTIONS);
-
-  const directMatch = documentTypeReverseLookup[pendingItem.documentType];
+  const directMatch =
+    ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED[pendingItem.documentType];
   if (directMatch)
     return { description: '', documentType: directMatch, objection: '' };
 
@@ -356,7 +357,7 @@ export const getTransformedPendingItemDetails = (
       objectionLookup.get(pendingItem.objections) ||
       MOTION_OBJECTION_OPTIONS.unknown;
 
-    return invert(MOTION_OBJECTION_OPTIONS)[matchingObjection];
+    return MOTION_OBJECTION_OPTIONS_INVERTED[matchingObjection];
   };
 
   return {
@@ -367,9 +368,8 @@ export const getTransformedPendingItemDetails = (
 };
 
 export const transformFiledBy = (caseDetail: RawCase, pendingItem): string => {
-  const invertedFileBy = invert(ACTION_FILED_BY_OPTIONS);
   if (DocketEntry.isOrder(pendingItem.eventCode))
-    return invertedFileBy[ACTION_FILED_BY_OPTIONS.court];
+    return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.court];
 
   const isPetitioner = pendingItem.filers.some(id =>
     caseDetail.petitioners.some(petitioner => id === petitioner.contactId),
@@ -381,9 +381,13 @@ export const transformFiledBy = (caseDetail: RawCase, pendingItem): string => {
   );
 
   if (isPetitioner && isRespondent)
-    return invertedFileBy[ACTION_FILED_BY_OPTIONS.petitionerAndRespondent];
-  if (isPetitioner) return invertedFileBy[ACTION_FILED_BY_OPTIONS.petitioner];
-  if (isRespondent) return invertedFileBy[ACTION_FILED_BY_OPTIONS.respondent];
+    return ACTION_FILED_BY_OPTIONS_INVERTED[
+      ACTION_FILED_BY_OPTIONS.petitionerAndRespondent
+    ];
+  if (isPetitioner)
+    return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.petitioner];
+  if (isRespondent)
+    return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.respondent];
 
-  return invertedFileBy[ACTION_FILED_BY_OPTIONS.other];
+  return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.other];
 };

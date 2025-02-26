@@ -2,6 +2,7 @@
 import {
   EXHIBIT_STATUS_OPTIONS,
   PETITIONER_ROLE_OPTIONS,
+  PETITIONER_ROLE_OPTIONS_INVERTED,
   STATUS_REPORT_ORDERED_FOR_OPTIONS,
   type BriefTypeOption,
   type MotionFiledByOption,
@@ -39,7 +40,6 @@ import {
   getConsolidatedDocketNumbers,
   sanitizeMinuteSheetForm,
 } from './formatMinuteSheet';
-import { invert } from 'lodash';
 import {
   MinuteSheet,
   Appearance,
@@ -287,8 +287,6 @@ describe('formatMinuteSheet', () => {
     });
 
     describe('formatPetitionerAppearances', () => {
-      const invertedPetitionerRoleOptions = invert(PETITIONER_ROLE_OPTIONS);
-
       it('should return "No appearance" when noAppearance is true', () => {
         const petitionersSection = {
           noAppearance: true,
@@ -322,14 +320,14 @@ describe('formatMinuteSheet', () => {
             {
               datesOfAppearance: '01/15/2023',
               name: 'John Smith',
-              role: invertedPetitionerRoleOptions[
+              role: PETITIONER_ROLE_OPTIONS_INVERTED[
                 PETITIONER_ROLE_OPTIONS.proSe
               ],
             },
             {
               datesOfAppearance: '01/16/2023',
               name: 'Jane Doe',
-              role: invertedPetitionerRoleOptions[
+              role: PETITIONER_ROLE_OPTIONS_INVERTED[
                 PETITIONER_ROLE_OPTIONS.counsel
               ],
             },
@@ -358,7 +356,7 @@ describe('formatMinuteSheet', () => {
             {
               datesOfAppearance: '',
               name: 'John Smith',
-              role: invertedPetitionerRoleOptions[
+              role: PETITIONER_ROLE_OPTIONS_INVERTED[
                 PETITIONER_ROLE_OPTIONS.proSe
               ],
             },
@@ -377,7 +375,7 @@ describe('formatMinuteSheet', () => {
             {
               datesOfAppearance: '01/15/2023',
               name: '',
-              role: invertedPetitionerRoleOptions[
+              role: PETITIONER_ROLE_OPTIONS_INVERTED[
                 PETITIONER_ROLE_OPTIONS.proSe
               ],
             },
@@ -396,7 +394,7 @@ describe('formatMinuteSheet', () => {
             {
               datesOfAppearance: '',
               name: '',
-              role: invertedPetitionerRoleOptions[
+              role: PETITIONER_ROLE_OPTIONS_INVERTED[
                 PETITIONER_ROLE_OPTIONS.proSe
               ],
             },
@@ -429,7 +427,7 @@ describe('formatMinuteSheet', () => {
             {
               datesOfAppearance: '',
               name: '',
-              role: invertedPetitionerRoleOptions[
+              role: PETITIONER_ROLE_OPTIONS_INVERTED[
                 PETITIONER_ROLE_OPTIONS.other
               ],
               roleNote: mockRoleNote,

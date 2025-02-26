@@ -1,6 +1,7 @@
 import {
   BRIEF_SUBTYPE,
   PETITIONER_ROLE_OPTIONS,
+  PETITIONER_ROLE_OPTIONS_INVERTED,
   STATUS_REPORT_ORDERED_FOR_OPTIONS,
   MOTION_TYPE_OPTIONS,
   MOTION_FILED_BY_OPTIONS,
@@ -22,7 +23,6 @@ import {
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
 import { encode } from 'he';
-import { invert } from 'lodash';
 
 export type FormattedMinuteSheet = {
   courtReporter: string;
@@ -249,7 +249,7 @@ export const formatPetitionerAppearances = (
           if (
             petitioner.role &&
             petitioner.role ===
-              invert(PETITIONER_ROLE_OPTIONS)[PETITIONER_ROLE_OPTIONS.other]
+              PETITIONER_ROLE_OPTIONS_INVERTED[PETITIONER_ROLE_OPTIONS.other]
           ) {
             formattedPetitionerRole = `(${PETITIONER_ROLE_OPTIONS[petitioner.role]} - <em>${petitioner.roleNote}</em>)`;
           } else if (petitioner.role) {

@@ -1,7 +1,16 @@
 /* eslint-disable max-lines */
 import { ENTERED_AND_SERVED_EVENT_CODES } from './courtIssuedDocument/CourtIssuedDocumentConstants';
 import { FORMATS, formatNow } from '../utilities/DateHandler';
-import { flatten, omit, pick, sortBy, union, uniq, without } from 'lodash';
+import {
+  flatten,
+  invert,
+  omit,
+  pick,
+  sortBy,
+  union,
+  uniq,
+  without,
+} from 'lodash';
 import { COURT_ISSUED_EVENTS } from '@shared/business/entities/docketEntry/courtIssuedEventCodes';
 import { EXTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/externalFilingEvents';
 import { INTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/internalFilingEvents';
@@ -1861,6 +1870,9 @@ export const MOTION_OBJECTION_OPTIONS = {
   unknown: 'Unknown',
 } as const;
 export type MotionObjectionOption = keyof typeof MOTION_OBJECTION_OPTIONS;
+export const MOTION_OBJECTION_OPTIONS_INVERTED = invert(
+  MOTION_OBJECTION_OPTIONS,
+);
 
 export const ACTION_DOCUMENT_TYPE_OPTIONS = {
   entryOfAppearance: 'Entry of Appearance',
@@ -1874,6 +1886,9 @@ export const ACTION_DOCUMENT_TYPE_OPTIONS = {
 } as const;
 export type ActionDocumentTypeOption =
   keyof typeof ACTION_DOCUMENT_TYPE_OPTIONS;
+export const ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED = invert(
+  ACTION_DOCUMENT_TYPE_OPTIONS,
+);
 
 export const ACTION_FILED_BY_OPTIONS = {
   petitioner: 'Petitioner',
@@ -1884,6 +1899,7 @@ export const ACTION_FILED_BY_OPTIONS = {
   court: 'Court',
 } as const;
 export type ActionFiledByOption = keyof typeof ACTION_FILED_BY_OPTIONS;
+export const ACTION_FILED_BY_OPTIONS_INVERTED = invert(ACTION_FILED_BY_OPTIONS);
 
 export const ACTION_STATUS_OPTIONS = {
   seeOrder: 'See Order',
@@ -1942,3 +1958,4 @@ export const PETITIONER_ROLE_OPTIONS = {
   other: 'Other',
 } as const;
 export type PetitionerRoleOption = keyof typeof PETITIONER_ROLE_OPTIONS;
+export const PETITIONER_ROLE_OPTIONS_INVERTED = invert(PETITIONER_ROLE_OPTIONS);

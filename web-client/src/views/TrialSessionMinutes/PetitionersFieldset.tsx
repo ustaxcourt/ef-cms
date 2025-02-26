@@ -9,10 +9,10 @@ import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
   MINUTE_SHEET_FORM_SECTION_MAP,
   PETITIONER_ROLE_OPTIONS,
+  PETITIONER_ROLE_OPTIONS_INVERTED,
 } from '@shared/business/entities/EntityConstants';
 import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import React from 'react';
-import { invert } from 'lodash';
 
 export const PetitionersFieldset = ({
   addRowHandler,
@@ -27,9 +27,8 @@ export const PetitionersFieldset = ({
   petitionersFormState: MinuteSheetFormState['petitionersSection'];
   removeRowHandler: RemoveRowHandler;
 }) => {
-  const SHOW_ROLE_NOTE_ROLE_TYPE = invert(PETITIONER_ROLE_OPTIONS)[
-    PETITIONER_ROLE_OPTIONS.other
-  ];
+  const SHOW_ROLE_NOTE_ROLE_TYPE =
+    PETITIONER_ROLE_OPTIONS_INVERTED[PETITIONER_ROLE_OPTIONS.other];
 
   return (
     <fieldset className="grid-container border-0 padding-0">
