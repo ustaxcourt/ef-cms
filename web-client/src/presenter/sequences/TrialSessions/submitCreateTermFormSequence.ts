@@ -8,7 +8,7 @@ import { setAlertSuccessAction } from '@web-client/presenter/actions/setAlertSuc
 import { setAlertWarningAction } from '@web-client/presenter/actions/setAlertWarningAction';
 import { showProgressSequenceDecorator } from '@web-client/presenter/utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '@web-client/presenter/actions/startShowValidationAction';
-import { validateCreateTermFormAction } from '@web-client/presenter/actions/TrialSession/validateCreateTermfORMAction';
+import { validateCreateTermFormAction } from '@web-client/presenter/actions/TrialSession/validateCreateTermFormAction';
 
 export const submitCreateTermFormSequence = [
   startShowValidationAction,
