@@ -630,6 +630,15 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
       });
       expect(result).toBe('other');
     });
+
+    it('should return "court" when the pending item is an order', () => {
+      (DocketEntry.isOrder as jest.Mock).mockReturnValue(true);
+      const result = transformFiledBy(mockCase, {
+        filers: ['unknown'],
+        eventCode: 'O',
+      });
+      expect(result).toBe('court');
+    });
   });
 
   describe('getPendingItemsFromCase', () => {

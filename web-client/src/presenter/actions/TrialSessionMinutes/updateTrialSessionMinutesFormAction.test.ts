@@ -68,6 +68,30 @@ describe('updateTrialSessionMinutesFormAction', () => {
       expect(mockStore.unset).toHaveBeenCalledTimes(2);
       expect(mockStore.set).toHaveBeenCalledWith(expect.any(Object), 'court');
     });
+
+    it('should set filedBy to "court" when value is order', () => {
+      handleActionsAndFilingsDocType({
+        name: 'actionsAndFilings',
+        rowInfo: { key: '123' },
+        section: 'actionsAndFilingsSection',
+        store: mockStore,
+        value: 'order',
+      });
+
+      expect(mockStore.set).toHaveBeenCalledWith(expect.any(Object), 'court');
+    });
+
+    it('should set filedBy to "court" when value is orderToShowCause', () => {
+      handleActionsAndFilingsDocType({
+        name: 'actionsAndFilings',
+        rowInfo: { key: '123' },
+        section: 'actionsAndFilingsSection',
+        store: mockStore,
+        value: 'orderToShowCause',
+      });
+
+      expect(mockStore.set).toHaveBeenCalledWith(expect.any(Object), 'court');
+    });
   });
 
   describe('handleBriefTypeChange', () => {

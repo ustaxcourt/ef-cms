@@ -6,9 +6,9 @@ import {
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import {
   ACTION_DOCUMENT_TYPE_OPTIONS,
+  ACTION_FILED_BY_OPTIONS,
   CONTACT_TYPES,
   ExhibitStatusOption,
-  FILED_BY_TYPES,
   MOTION_OBJECTION_OPTIONS,
   MotionFiledByOption,
   MotionObjectionOption,
@@ -367,6 +367,10 @@ export const getTransformedPendingItemDetails = (
 };
 
 export const transformFiledBy = (caseDetail: RawCase, pendingItem): string => {
+  const invertedFileBy = invert(ACTION_FILED_BY_OPTIONS);
+  if (DocketEntry.isOrder(pendingItem.eventCode))
+    return invertedFileBy[ACTION_FILED_BY_OPTIONS.court];
+
   const isPetitioner = pendingItem.filers.some(id =>
     caseDetail.petitioners.some(petitioner => id === petitioner.contactId),
   );
@@ -377,9 +381,9 @@ export const transformFiledBy = (caseDetail: RawCase, pendingItem): string => {
   );
 
   if (isPetitioner && isRespondent)
-    return FILED_BY_TYPES.petitionerAndRespondent;
-  if (isPetitioner) return FILED_BY_TYPES.petitioner;
-  if (isRespondent) return FILED_BY_TYPES.respondent;
+    return invertedFileBy[ACTION_FILED_BY_OPTIONS.petitionerAndRespondent];
+  if (isPetitioner) return invertedFileBy[ACTION_FILED_BY_OPTIONS.petitioner];
+  if (isRespondent) return invertedFileBy[ACTION_FILED_BY_OPTIONS.respondent];
 
-  return FILED_BY_TYPES.other;
+  return invertedFileBy[ACTION_FILED_BY_OPTIONS.other];
 };

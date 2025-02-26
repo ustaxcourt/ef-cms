@@ -48,7 +48,7 @@ export const handleActionsAndFilingsDocType = ({
     store.unset(state.minuteSheetForm[section][name][rowInfo.key].objection);
   }
 
-  if (value === 'order') {
+  if (value === 'order' || value === 'orderToShowCause') {
     store.set(
       state.minuteSheetForm[section][name][rowInfo.key].filedBy,
       'court',
