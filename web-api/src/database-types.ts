@@ -225,7 +225,8 @@ export type NewPetitionerOnCaseKysely = Insertable<PetitionerOnCaseTable>;
 export type UpdatePetitionerOnCaseKysely = Updateable<PetitionerOnCaseTable>;
 
 export interface CaseStatusUpdateTable {
-  changedBy: string; // TODO: This should almost certainly be a foreign key to a user (with a user for System), but it isn't set up that way. Probably best to wait until Users are migrated over?
+  statusUpdateId: string;
+  changedBy: string;
   date: Date;
   docketNumber: string;
   updatedCaseStatus: string;
