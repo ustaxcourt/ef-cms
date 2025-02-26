@@ -7,17 +7,21 @@
     font-weight: bold;
   }
 
-  .minute-sheet-section {
+  .two-column-minute-sheet-section {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
   }
 
-  .minute-sheet-section > div {
+  .two-column-minute-sheet-section > div {
     width: 48%;
   }
 
+  .minute-sheet-field {
+    margin-bottom: 8px;
+  }
+
   .exhibits-table {
-    margin-top: 2rem;
+    margin-top: 1rem;
   }
 }
