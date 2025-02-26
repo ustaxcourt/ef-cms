@@ -279,29 +279,32 @@ export const CaseMetadataFieldset = ({
                 </div>
               </FormGroup>
             </div>
+            {Object.values(caseMetadataFormState.recalled).length - 1 ===
+              rowIndex && (
+              <>
+                <div style={{ minWidth: '120px' }}></div>
+                <div>
+                  <Button
+                    link
+                    className="padding-0 margin-top-1"
+                    icon="plus"
+                    onClick={e => {
+                      e.preventDefault();
+                      addRowHandler({
+                        name: 'recalled',
+                        section:
+                          MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
+                      });
+                    }}
+                  >
+                    Add Recall
+                  </Button>
+                </div>
+              </>
+            )}
           </div>
         );
       })}
-      <div className="grid-row grid-gap align-items-center margin-bottom-1">
-        <div className="grid-col-fill" style={{ minWidth: '100px' }}></div>
-        <div className="grid-col-auto" style={{ minWidth: '350px' }}>
-          <Button
-            link
-            className="padding-0"
-            icon="plus"
-            onClick={e => {
-              e.preventDefault();
-              addRowHandler({
-                name: 'recalled',
-                section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
-              });
-            }}
-          >
-            Add Recall
-          </Button>
-        </div>
-        <div className="grid-col-8"></div>
-      </div>
       <div className="grid-row grid-gap align-items-center margin-bottom-1">
         <div className="grid-col-fill" style={{ minWidth: '100px' }}>
           <span className="usa-label margin-bottom-0">Pretrial conference</span>
