@@ -101,6 +101,9 @@ export const documentViewerHelper = (
     permissions.STAMP_MOTION &&
     STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocumentToDisplay.eventCode);
 
+  // TODO 10586: refactor to use document allow list like stampbutton
+  const showOrderResponseButton = permissions.ORDER_RESPONSE;
+
   const showStatusReportOrderButton =
     permissions.STATUS_REPORT_ORDER &&
     STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(
@@ -112,6 +115,7 @@ export const documentViewerHelper = (
     filedLabel,
     servedLabel,
     showApplyStampButton,
+    showOrderResponseButton,
     showCompleteQcButton,
     showNotServed,
     showSealedInBlackstone: formattedDocumentToDisplay.isLegacySealed,
