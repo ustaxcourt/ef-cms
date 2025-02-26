@@ -1,9 +1,12 @@
 import {
   ACTION_DOCUMENT_TYPE_OPTIONS,
+  ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED,
   CONTACT_TYPES,
   MOTION_OBJECTION_OPTIONS,
+  MOTION_OBJECTION_OPTIONS_INVERTED,
   OBJECTIONS_OPTIONS_MAP,
   PETITIONER_ROLE_OPTIONS,
+  PETITIONER_ROLE_OPTIONS_INVERTED,
   TrialSessionProceedingType,
   TrialSessionScope,
 } from '@shared/business/entities/EntityConstants';
@@ -13,7 +16,6 @@ import {
   casePetitioner as mockCasePetitioner,
   validUser as mockValidUser,
 } from '@shared/test/mockUsers';
-
 import {
   getPendingItemsFromCase,
   getPetitionersFromCase,
@@ -29,7 +31,6 @@ import { initialMinuteSheetFormState } from '@web-client/presenter/state/TrialSe
 import { formatCase } from '@shared/business/utilities/getFormattedCaseDetail';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { getFormattedTrialSessionDetails } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
-import { invert } from 'lodash';
 
 jest.mock('@shared/business/utilities/getFormattedCaseDetail', () => ({
   formatCase: jest.fn(),
@@ -306,7 +307,7 @@ describe('initializeMinuteSheet', () => {
     expect(petitionerEntries).toHaveLength(1);
     expect(petitionerEntries[0]).toMatchObject({
       name: mockCasePetitioner.name,
-      role: invert(PETITIONER_ROLE_OPTIONS)[PETITIONER_ROLE_OPTIONS.other],
+      role: PETITIONER_ROLE_OPTIONS_INVERTED[PETITIONER_ROLE_OPTIONS.other],
       datesOfAppearance: '',
     });
   });
@@ -337,9 +338,6 @@ describe('initializeMinuteSheet', () => {
 });
 
 describe('getTransformedPendingItemDetails', () => {
-  const actionDocumentTypeReversedMap = invert(ACTION_DOCUMENT_TYPE_OPTIONS);
-  const motionObjectionReversedMap = invert(MOTION_OBJECTION_OPTIONS);
-
   beforeEach(() => {
     mockIsNotice.mockReturnValue(false);
     mockIsOrder.mockReturnValue(false);
@@ -355,7 +353,7 @@ describe('getTransformedPendingItemDetails', () => {
     expect(result).toEqual({
       description: '',
       documentType:
-        actionDocumentTypeReversedMap[
+        ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED[
           ACTION_DOCUMENT_TYPE_OPTIONS.orderToShowCause
         ],
       objection: '',
@@ -371,7 +369,9 @@ describe('getTransformedPendingItemDetails', () => {
     expect(result).toEqual({
       description: '30-Day Notice of Trial',
       documentType:
-        actionDocumentTypeReversedMap[ACTION_DOCUMENT_TYPE_OPTIONS.notice],
+        ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED[
+          ACTION_DOCUMENT_TYPE_OPTIONS.notice
+        ],
       objection: '',
     });
   });
@@ -385,7 +385,9 @@ describe('getTransformedPendingItemDetails', () => {
     expect(result).toEqual({
       description: 'Order that caption of case is amended',
       documentType:
-        actionDocumentTypeReversedMap[ACTION_DOCUMENT_TYPE_OPTIONS.order],
+        ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED[
+          ACTION_DOCUMENT_TYPE_OPTIONS.order
+        ],
       objection: '',
     });
   });
@@ -399,7 +401,9 @@ describe('getTransformedPendingItemDetails', () => {
     expect(result).toEqual({
       description: 'Motion for a New Trial',
       documentType:
-        actionDocumentTypeReversedMap[ACTION_DOCUMENT_TYPE_OPTIONS.motion],
+        ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED[
+          ACTION_DOCUMENT_TYPE_OPTIONS.motion
+        ],
       objection: 'unknown',
     });
   });
@@ -414,7 +418,9 @@ describe('getTransformedPendingItemDetails', () => {
     expect(result).toEqual({
       description: 'Motion for a New Trial',
       documentType:
-        actionDocumentTypeReversedMap[ACTION_DOCUMENT_TYPE_OPTIONS.motion],
+        ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED[
+          ACTION_DOCUMENT_TYPE_OPTIONS.motion
+        ],
       objection: 'unknown',
     });
   });
@@ -429,9 +435,11 @@ describe('getTransformedPendingItemDetails', () => {
     expect(result).toEqual({
       description: 'Motion for a New Trial',
       documentType:
-        actionDocumentTypeReversedMap[ACTION_DOCUMENT_TYPE_OPTIONS.motion],
+        ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED[
+          ACTION_DOCUMENT_TYPE_OPTIONS.motion
+        ],
       objection:
-        motionObjectionReversedMap[MOTION_OBJECTION_OPTIONS.noObjection],
+        MOTION_OBJECTION_OPTIONS_INVERTED[MOTION_OBJECTION_OPTIONS.noObjection],
     });
   });
 
@@ -530,7 +538,7 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
       expect(entries).toHaveLength(1);
       expect(entries[0]).toMatchObject({
         name: 'Test Petitioner',
-        role: invert(PETITIONER_ROLE_OPTIONS)[PETITIONER_ROLE_OPTIONS.proSe],
+        role: PETITIONER_ROLE_OPTIONS_INVERTED[PETITIONER_ROLE_OPTIONS.proSe],
       });
     });
 
@@ -550,7 +558,7 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
       expect(entries).toHaveLength(1);
       expect(entries[0]).toMatchObject({
         name: 'Test Petitioner',
-        role: invert(PETITIONER_ROLE_OPTIONS)[PETITIONER_ROLE_OPTIONS.counsel],
+        role: PETITIONER_ROLE_OPTIONS_INVERTED[PETITIONER_ROLE_OPTIONS.counsel],
       });
     });
 
@@ -570,7 +578,7 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
       expect(entries).toHaveLength(1);
       expect(entries[0]).toMatchObject({
         name: 'Test Petitioner',
-        role: invert(PETITIONER_ROLE_OPTIONS)[PETITIONER_ROLE_OPTIONS.other],
+        role: PETITIONER_ROLE_OPTIONS_INVERTED[PETITIONER_ROLE_OPTIONS.other],
       });
     });
 
@@ -590,7 +598,7 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
       expect(entries).toHaveLength(1);
       expect(entries[0]).toMatchObject({
         name: 'Test Petitioner',
-        role: invert(PETITIONER_ROLE_OPTIONS)[
+        role: PETITIONER_ROLE_OPTIONS_INVERTED[
           PETITIONER_ROLE_OPTIONS.intervenor
         ],
       });

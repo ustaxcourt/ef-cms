@@ -13,13 +13,13 @@ import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
   ACTION_DOCUMENT_TYPE_OPTIONS,
+  ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED,
   ACTION_FILED_BY_OPTIONS,
   ACTION_STATUS_OPTIONS,
   MINUTE_SHEET_FORM_SECTION_MAP,
   MOTION_OBJECTION_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
 import React from 'react';
-import { invert } from 'lodash';
 
 export const ActionsAndFilingsFieldset = ({
   actionsAndFilingsFormState,
@@ -34,9 +34,8 @@ export const ActionsAndFilingsFieldset = ({
   onBlurHandler: AutoSaveHandler;
   actionsAndFilingsFormState: MinuteSheetFormState['actionsAndFilingsSection'];
 }) => {
-  const SHOW_MOTION_DETAILS_TYPE = invert(ACTION_DOCUMENT_TYPE_OPTIONS)[
-    ACTION_DOCUMENT_TYPE_OPTIONS.motion
-  ];
+  const SHOW_MOTION_DETAILS_TYPE =
+    ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED[ACTION_DOCUMENT_TYPE_OPTIONS.motion];
 
   const renderSelectField = (
     id: string,
