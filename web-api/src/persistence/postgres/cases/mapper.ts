@@ -72,6 +72,7 @@ export const DW_CASE_COLUMNS = [
 ];
 
 export const DW_CASE_STATUS_UPDATES_COLUMNS = [
+  'statusUpdateId',
   'changedBy',
   'date',
   'docketNumber',
