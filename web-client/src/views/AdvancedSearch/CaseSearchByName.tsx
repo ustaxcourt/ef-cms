@@ -450,6 +450,7 @@ export const CaseSearchByName = connect(
                 aria-labelledby="case-type-filter-label"
                 data-testid="case-type-selection"
                 name="caseType"
+                className="case-type-select"
                 placeholder="- Select one or more -"
                 inputId="case-type-filter"
                 value={{
