@@ -15,14 +15,14 @@ export const MinuteSheet = ({
         trialStartDate={formattedMinuteSheet.trialStartDate}
       />
       <h2>Minutes of Proceedings</h2>
-      <div className="minute-sheet-section">
-        <div>
+      <div className="two-column-minute-sheet-section">
+        <div className="minute-sheet-field">
           <div>
             <strong>Docket no(s).</strong>
           </div>
           <div>{formattedMinuteSheet.formattedDocketNumbers}</div>
         </div>
-        <div>
+        <div className="minute-sheet-field">
           <div>
             <strong>Petitioner(s)</strong>
           </div>
@@ -30,40 +30,42 @@ export const MinuteSheet = ({
         </div>
       </div>
       <hr />
-      <div className="minute-sheet-section">
+      <div className="two-column-minute-sheet-section">
         <div>
           {formattedMinuteSheet.judgeFullName && (
-            <>
+            <div className="minute-sheet-field">
               <div>
                 <strong>{formattedMinuteSheet.judgeTitle}</strong>
               </div>
               <div>{formattedMinuteSheet.judgeFullName}</div>
-            </>
+            </div>
           )}
 
           {formattedMinuteSheet.trialClerk && (
-            <>
+            <div className="minute-sheet-field">
               <div>
                 <strong>Trial clerk</strong>
               </div>
               <div>{formattedMinuteSheet.trialClerk}</div>
-            </>
+            </div>
           )}
         </div>
         <div>
           {formattedMinuteSheet.courtReporter && (
-            <>
+            <div className="minute-sheet-field">
               <div>
                 <strong>Court reporter</strong>
               </div>
               <div>{formattedMinuteSheet.courtReporter}</div>
-            </>
+            </div>
           )}
 
-          <div>
-            <strong>Remote session</strong>
+          <div className="minute-sheet-field">
+            <div>
+              <strong>Remote session</strong>
+            </div>
+            <div>{formattedMinuteSheet.remoteSession}</div>
           </div>
-          <div>{formattedMinuteSheet.remoteSession}</div>
         </div>
       </div>
       {(formattedMinuteSheet.called ||
@@ -73,7 +75,7 @@ export const MinuteSheet = ({
         formattedMinuteSheet.trialHearing) && <hr />}
       <div>
         {formattedMinuteSheet.called && (
-          <div>
+          <div className="minute-sheet-field">
             <div>
               <strong>Calendar Called</strong>
             </div>
@@ -93,7 +95,7 @@ export const MinuteSheet = ({
           </div>
         )}
         {formattedMinuteSheet.notCalled && (
-          <div>
+          <div className="minute-sheet-field">
             <div>
               <strong>Not called</strong>
             </div>
@@ -106,7 +108,7 @@ export const MinuteSheet = ({
         )}
 
         {formattedMinuteSheet.recalled.length > 0 && (
-          <div>
+          <div className="minute-sheet-field">
             <div>
               <strong>Recalled</strong>
             </div>
@@ -121,7 +123,7 @@ export const MinuteSheet = ({
           </div>
         )}
         {formattedMinuteSheet.pretrialConference && (
-          <div>
+          <div className="minute-sheet-field">
             <div>
               <strong>Pretrial conference</strong>
             </div>
@@ -133,7 +135,7 @@ export const MinuteSheet = ({
           </div>
         )}
         {formattedMinuteSheet.trialHearing && (
-          <div>
+          <div className="minute-sheet-field">
             <div>
               <strong>Trial/Hearing</strong>
             </div>
@@ -146,9 +148,9 @@ export const MinuteSheet = ({
         )}
       </div>
       <hr />
-      <div className="minute-sheet-section">
+      <div className="two-column-minute-sheet-section">
         {formattedMinuteSheet.petitionerAppearances.length > 0 && (
-          <div>
+          <div className="minute-sheet-field">
             <div>
               <strong>Petitioner(s)</strong>
             </div>
@@ -163,7 +165,7 @@ export const MinuteSheet = ({
           </div>
         )}
         {formattedMinuteSheet.respondentAppearances.length > 0 && (
-          <div>
+          <div className="minute-sheet-field">
             <div>
               <strong>Respondent</strong>
             </div>
@@ -181,7 +183,7 @@ export const MinuteSheet = ({
         formattedMinuteSheet.stipulatedDecisionOrdered) && <hr />}
       <div>
         {formattedMinuteSheet.jurisdictionRetained && (
-          <div>
+          <div className="minute-sheet-field">
             <div>
               <strong>Jurisdiction Retained</strong>
             </div>
@@ -193,7 +195,7 @@ export const MinuteSheet = ({
           </div>
         )}
         {formattedMinuteSheet.jurisdictionContinued && (
-          <div>
+          <div className="minute-sheet-field">
             <div>
               <strong>Continued</strong>
             </div>
@@ -205,7 +207,7 @@ export const MinuteSheet = ({
           </div>
         )}
         {formattedMinuteSheet.statusReportOrdered && (
-          <div>
+          <div className="minute-sheet-field">
             <div>
               <strong>Status Report ordered</strong>
             </div>
@@ -217,7 +219,7 @@ export const MinuteSheet = ({
           </div>
         )}
         {formattedMinuteSheet.stipulatedDecisionOrdered && (
-          <div>
+          <div className="minute-sheet-field">
             <div>
               <strong>Stipulated Decision ordered</strong>
             </div>
@@ -233,7 +235,7 @@ export const MinuteSheet = ({
       {formattedMinuteSheet.motions?.length > 0 && (
         <>
           <hr />
-          <div>
+          <div className="minute-sheet-field">
             {formattedMinuteSheet.motions.map((motion, index) => (
               <div key={index}>
                 <div>
@@ -249,7 +251,7 @@ export const MinuteSheet = ({
       {formattedMinuteSheet.actionsAndFilings?.length > 0 && (
         <>
           <hr />
-          <div>
+          <div className="minute-sheet-field">
             <div>
               <strong>Other actions and filings</strong>
             </div>
@@ -269,26 +271,26 @@ export const MinuteSheet = ({
         formattedMinuteSheet.trialBrief.briefDetails.length > 0) && (
         <>
           <hr />
-          <div className="minute-sheet-section">
+          <div className="two-column-minute-sheet-section">
             {formattedMinuteSheet.trialBrief.dateSubmitted && (
-              <>
+              <div className="minute-sheet-field">
                 <div>
                   <strong>Date Submitted</strong>
                 </div>
                 <div>{formattedMinuteSheet.trialBrief.dateSubmitted}</div>
-              </>
+              </div>
             )}
             {formattedMinuteSheet.trialBrief.totalTrialHours && (
-              <>
+              <div className="minute-sheet-field">
                 <div>
                   <strong>Total Trial Hours</strong>
                 </div>
                 <div>{formattedMinuteSheet.trialBrief.totalTrialHours}</div>
-              </>
+              </div>
             )}
           </div>
           {formattedMinuteSheet.trialBrief.benchOpinionRendered && (
-            <div>
+            <div className="minute-sheet-field">
               <div>
                 <strong>Bench opinion rendered</strong>
               </div>
@@ -300,7 +302,7 @@ export const MinuteSheet = ({
             </div>
           )}
           {formattedMinuteSheet.trialBrief.briefDetails.length > 0 && (
-            <div>
+            <div className="minute-sheet-field">
               <div>
                 <strong>{formattedMinuteSheet.trialBrief.briefType}</strong>
               </div>
@@ -323,9 +325,9 @@ export const MinuteSheet = ({
           formattedMinuteSheet.respondentWitnesses.length > 0)) && (
         <>
           <hr />
-          <div className="minute-sheet-section">
+          <div className="two-column-minute-sheet-section">
             {formattedMinuteSheet.petitionerWitnesses?.length > 0 && (
-              <div>
+              <div className="minute-sheet-field">
                 <div>
                   <strong>Petitioner Witnesses</strong>
                 </div>
@@ -337,7 +339,7 @@ export const MinuteSheet = ({
               </div>
             )}
             {formattedMinuteSheet.respondentWitnesses?.length > 0 && (
-              <div>
+              <div className="minute-sheet-field">
                 <div>
                   <strong>Respondent Witnesses</strong>
                 </div>
