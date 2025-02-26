@@ -889,6 +889,13 @@ textarea#case-caption {
   }
 }
 
+
+@media only screen and (min-width: $large-screen) {
+  .case-type-select {
+    max-width: 80% !important
+  }
+}
+
 .unread,
 .assign-work-item-count {
   display: inline-block;
@@ -2172,12 +2179,6 @@ button.change-scanner-button {
 @media only screen and (max-width: ($large-screen - 1)) {
   .blue-pill {
     max-width: 250px;
-  }
-}
-
-@media only screen and (max-width: ($small-screen)) {
-  .blue-pill {
-    max-width: 150px;
   }
 }
 
