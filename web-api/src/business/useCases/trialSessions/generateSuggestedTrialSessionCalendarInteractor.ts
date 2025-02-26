@@ -40,29 +40,6 @@ import { sortObjectByKey } from '@shared/tools/helpers';
 import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 
-const MAX_SESSIONS_PER_WEEK = 6;
-const MAX_SESSIONS_PER_LOCATION = 5;
-
-const REGULAR_CASE_MINIMUM_QUANTITY = 40;
-const REGULAR_CASE_MAX_QUANTITY = 100;
-
-const SMALL_CASE_MINIMUM_QUANTITY = 40;
-const SMALL_CASE_MAX_QUANTITY = 125;
-
-const HYBRID_CASE_MINIMUM_QUANTITY = 50;
-const HYBRID_CASE_MAX_QUANTITY = 100;
-
-const calendaringConfig = {
-  hybridCaseMaxQuantity: HYBRID_CASE_MAX_QUANTITY,
-  hybridCaseMinimumQuantity: HYBRID_CASE_MINIMUM_QUANTITY,
-  maxSessionsPerLocation: MAX_SESSIONS_PER_LOCATION,
-  maxSessionsPerWeek: MAX_SESSIONS_PER_WEEK,
-  regularCaseMaxQuantity: REGULAR_CASE_MAX_QUANTITY,
-  regularCaseMinimumQuantity: REGULAR_CASE_MINIMUM_QUANTITY,
-  smallCaseMaxQuantity: SMALL_CASE_MAX_QUANTITY,
-  smallCaseMinimumQuantity: SMALL_CASE_MINIMUM_QUANTITY,
-};
-
 export const WASHINGTON_DC_STRING = 'Washington, District of Columbia';
 export const WASHINGTON_DC_NORTH_STRING =
   'Washington (North), District of Columbia'; // specials only
@@ -81,7 +58,7 @@ export type CalendarGeneratorMessage = {
 
 export const generateSuggestedTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
-  { termEndDate, termStartDate }: RawGenerateSuggestedTermForm,
+  TERM_BUILDER_INFORMATION: RawGenerateSuggestedTermForm,
   authorizedUser: UnknownAuthUser,
 ): Promise<{
   message: CalendarGeneratorMessage;
@@ -92,6 +69,13 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   ) {
     throw new UnauthorizedError('Unauthorized to generate term');
   }
+
+  const {
+    termEndDate,
+    termStartDate,
+    minimumCasesPerLocation, //TODO: FIGURE OUT WHERE TO USE THIS
+    ...calendaringConfig
+  } = TERM_BUILDER_INFORMATION;
 
   const cases = await applicationContext
     .getPersistenceGateway()
@@ -115,6 +99,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   // eslint-disable-next-line prefer-const
   let { caseCountsAndSessionsByCity, incorrectSizeRegularCases } =
     getDataForCalendaring({ cases });
+
   let userMessages: string[];
 
   ({ caseCountsAndSessionsByCity } = createProspectiveTrialSessions({
