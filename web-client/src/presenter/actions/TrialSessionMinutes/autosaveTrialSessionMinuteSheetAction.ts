@@ -3,7 +3,7 @@ import { updateMinuteSheetInteractor } from '@shared/proxies/trialSessionMinutes
 import { MinuteSheet } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import hash from 'object-hash';
-import { recordToSortedArray } from '@web-client/utilities/recordToSortedArray';
+import { recordToArray } from '@web-client/utilities/recordToArray';
 
 export const autosaveTrialSessionMinuteSheetAction = async ({
   get,
@@ -76,7 +76,7 @@ export const transformFormStateToMinuteSheet = (
         date: caseMetadataSection.notCalled.date,
         note: caseMetadataSection.notCalled.note,
       },
-      recalls: recordToSortedArray(caseMetadataSection.recalled),
+      recalls: recordToArray(caseMetadataSection.recalled),
       pretrialConference: {
         date: caseMetadataSection.pretrialConference.date,
         note: caseMetadataSection.pretrialConference.note,
@@ -94,9 +94,9 @@ export const transformFormStateToMinuteSheet = (
     appearances: {
       petitioners: {
         noAppearance: petitionersSection.noAppearance,
-        appearances: recordToSortedArray(petitionersSection.petitioners),
+        appearances: recordToArray(petitionersSection.petitioners),
       },
-      respondents: recordToSortedArray(respondentsSection.respondents),
+      respondents: recordToArray(respondentsSection.respondents),
     },
 
     jurisdiction: {
@@ -125,8 +125,8 @@ export const transformFormStateToMinuteSheet = (
     },
 
     proceedings: {
-      motions: recordToSortedArray(motionsSection.motions),
-      actionsAndFilings: recordToSortedArray(
+      motions: recordToArray(motionsSection.motions),
+      actionsAndFilings: recordToArray(
         actionsAndFilingsSection.actionsAndFilings,
       ),
     },
@@ -146,13 +146,9 @@ export const transformFormStateToMinuteSheet = (
     },
 
     evidence: {
-      petitionerWitnesses: recordToSortedArray(
-        witnessesSection.petitionerWitnesses,
-      ),
-      respondentWitnesses: recordToSortedArray(
-        witnessesSection.respondentWitnesses,
-      ),
-      exhibits: recordToSortedArray(exhibitsSection.exhibits),
+      petitionerWitnesses: recordToArray(witnessesSection.petitionerWitnesses),
+      respondentWitnesses: recordToArray(witnessesSection.respondentWitnesses),
+      exhibits: recordToArray(exhibitsSection.exhibits),
     },
   };
 };
