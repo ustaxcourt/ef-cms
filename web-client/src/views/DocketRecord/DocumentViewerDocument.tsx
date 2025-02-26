@@ -186,6 +186,21 @@ export const DocumentViewerDocument = connect(
                   Apply Stamp
                 </Button>
               )}
+              {documentViewerHelper.showOrderResponseButton && (
+                <Button
+                  link
+                  data-testid="order-response-button"
+                  icon="stamp"
+                  // onClick={() => {
+                  //   navigateToPathAndSetRedirectUrlSequence({
+                  //     path: documentViewerLinksHelper.applyStampFromCaseDetailsLink,
+                  //     redirectUrl: documentViewerLinksHelper.redirectUrl,
+                  //   });
+                  // }}
+                >
+                  Order Respones
+                </Button>
+              )}
               {documentViewerHelper.showStatusReportOrderButton && (
                 <Button
                   link
