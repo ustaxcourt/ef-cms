@@ -171,17 +171,21 @@ const scheduleCases = ({
     [SESSION_TYPES.regular]: number;
   };
 }): void => {
-  const [primaryCaseType, secondaryCaseType] =
+  const [primaryType, secondaryType] =
     remainingCaseCounts[SESSION_TYPES.regular] >=
     remainingCaseCounts[SESSION_TYPES.small]
       ? [SESSION_TYPES.regular, SESSION_TYPES.small]
       : [SESSION_TYPES.small, SESSION_TYPES.regular];
+
+  const isHybrid = schedulingConfig.sessionType === SESSION_TYPES.hybrid;
+  const getRemainingCases = (type: TrialSessionTypes) =>
+    remainingCaseCounts[type] || 0;
+
   while (
-    (schedulingConfig.sessionType === SESSION_TYPES.hybrid
-      ? remainingCaseCounts[SESSION_TYPES.small] +
-        remainingCaseCounts[SESSION_TYPES.regular]
-      : remainingCaseCounts[schedulingConfig.sessionType]) >=
-    schedulingConfig.min
+    (isHybrid
+      ? getRemainingCases(SESSION_TYPES.regular) +
+        getRemainingCases(SESSION_TYPES.small)
+      : getRemainingCases(schedulingConfig.sessionType)) >= schedulingConfig.min
   ) {
     addProspectiveTrialSession({
       caseCountsAndSessionsByCity,
@@ -190,28 +194,19 @@ const scheduleCases = ({
       trialLocation,
     });
 
-    if (schedulingConfig.sessionType !== SESSION_TYPES.hybrid) {
-      if (
-        remainingCaseCounts[schedulingConfig.sessionType] -
-          schedulingConfig.max >
-        0
-      ) {
-        remainingCaseCounts[schedulingConfig.sessionType] -=
-          schedulingConfig.max;
-      } else {
-        remainingCaseCounts[schedulingConfig.sessionType] = 0;
-      }
+    if (!isHybrid) {
+      remainingCaseCounts[schedulingConfig.sessionType] = Math.max(
+        getRemainingCases(schedulingConfig.sessionType) - schedulingConfig.max,
+        0,
+      );
     } else {
-      if (remainingCaseCounts[primaryCaseType] - schedulingConfig.max > 0) {
-        remainingCaseCounts[primaryCaseType] -= schedulingConfig.max;
+      if (getRemainingCases(primaryType) > schedulingConfig.max) {
+        remainingCaseCounts[primaryType] -= schedulingConfig.max;
       } else {
-        const sessionSpotsRemainder =
-          schedulingConfig.max - remainingCaseCounts[primaryCaseType];
-
-        remainingCaseCounts[primaryCaseType] = 0;
-
-        remainingCaseCounts[secondaryCaseType] = Math.max(
-          remainingCaseCounts[secondaryCaseType] - sessionSpotsRemainder,
+        const remainder = schedulingConfig.max - getRemainingCases(primaryType);
+        remainingCaseCounts[primaryType] = 0;
+        remainingCaseCounts[secondaryType] = Math.max(
+          getRemainingCases(secondaryType) - remainder,
           0,
         );
       }
