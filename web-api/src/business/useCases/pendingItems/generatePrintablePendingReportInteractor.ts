@@ -5,10 +5,21 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { sortPendingReportItems } from '@shared/business/utilities/pendingItem/sortPendingReportItems';
 
 export const generatePrintablePendingReportInteractor = async (
   applicationContext: ServerApplicationContext,
-  { docketNumber, judge }: { docketNumber?: string; judge?: string },
+  {
+    docketNumber,
+    judge,
+    sortField,
+    sortOrder,
+  }: {
+    docketNumber?: string;
+    judge?: string;
+    sortField?: string;
+    sortOrder?: 'asc' | 'desc';
+  },
   authorizedUser: UnknownAuthUser,
 ): Promise<string> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PENDING_ITEMS)) {
@@ -41,10 +52,15 @@ export const generatePrintablePendingReportInteractor = async (
     reportTitle = `Docket ${caseResult.docketNumberWithSuffix}`;
   }
 
+  const sortedPendingItems =
+    !sortField || !sortOrder
+      ? formattedPendingItems
+      : sortPendingReportItems(formattedPendingItems, sortField, sortOrder);
+
   const pdf = await applicationContext.getDocumentGenerators().pendingReport({
     applicationContext,
     data: {
-      pendingItems: formattedPendingItems,
+      pendingItems: sortedPendingItems,
       subtitle: reportTitle,
     },
   });
