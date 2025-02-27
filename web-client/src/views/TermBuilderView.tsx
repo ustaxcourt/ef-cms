@@ -7,6 +7,9 @@ import {
 } from '@web-client/ustc-ui/Accordion/Accordion';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { BigHeader } from '@web-client/views/BigHeader';
+import { ErrorNotification } from '@web-client/views/ErrorNotification';
+import { SuccessNotification } from '@web-client/views/SuccessNotification';
+import { WarningNotification } from '@web-client/views/WarningNotification';
 import React from 'react';
 
 type TermBuilderViewProps = {};
@@ -43,6 +46,9 @@ export const TermBuilderView = connect<
       <>
         <BigHeader text="Term Builder" />
         <section className="usa-section grid-container">
+          <SuccessNotification className="margin-bottom-2" />
+          <WarningNotification />
+          <ErrorNotification />
           <h2 className="margin-bottom-3">
             {termName} ({termStartDate} - {termEndDate}) Term Builder Rules
           </h2>
@@ -147,6 +153,7 @@ export const TermBuilderView = connect<
           <div className="margin-top-5">
             <Button
               href="javascript:void(0);"
+              data-testid="submit-create-term-form-button"
               onClick={async () => {
                 await submitCreateTermFormSequence();
               }}
@@ -180,11 +187,12 @@ function TermBuilderInput({
       name={propertyName}
       placeholder="Number"
       type="number"
+      min="0"
       value={currentValue}
       onChange={e => {
         updateFormValueSequence({
           key: e.target.name,
-          value: +e.target.value,
+          value: +e.target.value.split('.').join(''),
           root: STATE_KEYS.TERM_BUILDER_INFORMATION,
         });
       }}
