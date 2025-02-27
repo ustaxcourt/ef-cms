@@ -65,8 +65,6 @@ describe('generateSuggestedTrialSessionCalendar', () => {
             TRIAL_SESSION_TERM_GENERATOR.HYBRID_CASE_MINIMUM_QUANTITY,
           hybridCaseMaxQuantity:
             TRIAL_SESSION_TERM_GENERATOR.HYBRID_CASE_MAX_QUANTITY,
-          minimumCasesPerLocation:
-            TRIAL_SESSION_TERM_GENERATOR.MINIMUM_CASES_PER_LOCATION,
         },
         mockPetitionsClerkUser,
       );
@@ -118,8 +116,6 @@ describe('generateSuggestedTrialSessionCalendar', () => {
           TRIAL_SESSION_TERM_GENERATOR.HYBRID_CASE_MINIMUM_QUANTITY,
         hybridCaseMaxQuantity:
           TRIAL_SESSION_TERM_GENERATOR.HYBRID_CASE_MAX_QUANTITY,
-        minimumCasesPerLocation:
-          TRIAL_SESSION_TERM_GENERATOR.MINIMUM_CASES_PER_LOCATION,
       },
       mockPetitionsClerkUser,
     );
@@ -194,8 +190,6 @@ describe('generateSuggestedTrialSessionCalendar', () => {
             TRIAL_SESSION_TERM_GENERATOR.HYBRID_CASE_MINIMUM_QUANTITY,
           hybridCaseMaxQuantity:
             TRIAL_SESSION_TERM_GENERATOR.HYBRID_CASE_MAX_QUANTITY,
-          minimumCasesPerLocation:
-            TRIAL_SESSION_TERM_GENERATOR.MINIMUM_CASES_PER_LOCATION,
         },
         mockPrivatePractitionerUser,
       );
@@ -238,8 +232,6 @@ describe('generateSuggestedTrialSessionCalendar', () => {
             TRIAL_SESSION_TERM_GENERATOR.HYBRID_CASE_MINIMUM_QUANTITY,
           hybridCaseMaxQuantity:
             TRIAL_SESSION_TERM_GENERATOR.HYBRID_CASE_MAX_QUANTITY,
-          minimumCasesPerLocation:
-            TRIAL_SESSION_TERM_GENERATOR.MINIMUM_CASES_PER_LOCATION,
         },
         mockPetitionsClerkUser,
       );
