@@ -161,6 +161,7 @@ import { userContactEditProgressHelper } from './computeds/userContactEditProgre
 import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
+import { BlockedCasesResponse } from '@web-api/persistence/elasticsearch/getBlockedCases';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
@@ -582,6 +583,10 @@ export const baseState = {
   [STATE_KEYS.TERM_BUILDER_INFORMATION]: undefined as
     | RawGenerateSuggestedTermForm
     | undefined,
+  [STATE_KEYS.PENDING_REPORT_TABLE_SORT]: {} as {
+    sortField: string;
+    sortOrder: 'asc' | 'desc';
+  },
   advancedSearchForm: {} as any,
   // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
@@ -615,7 +620,7 @@ export const baseState = {
     title?: string;
   },
   blockedCaseReportFilter: cloneDeep(initialBlockedCaseReportFilter),
-  blockedCases: [] as RawCase[],
+  blockedCases: [] as BlockedCasesResponse,
   caseDeadlineReport: {} as {
     caseDeadlines: (RawCaseDeadline & {
       caseCaption: string;

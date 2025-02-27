@@ -12,6 +12,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          path: currentBranch
 
       - name: Determine Target Branch
         id: target_branch
@@ -33,6 +34,7 @@ jobs:
           node-version: '22.13.1'
 
       - name: NPM Install in your branch
+        working-directory: ./currentBranch
         run: npm ci
 
       - name: NPM Install in target branch
@@ -40,4 +42,4 @@ jobs:
         run: npm ci
 
       - name: Check files for increased error count
-        run: npx ts-node scripts/checkAllFilesForTypeErrorCount.ts
+        run: npx ts-node currentBranch/scripts/checkAllFilesForTypeErrorCount.ts
