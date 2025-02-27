@@ -9,13 +9,13 @@ import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/upd
 import {
   getCaseDetailTab,
   navigateTo as navigateToCaseDetail,
-} from '../../../../support/pages/case-detail';
+} from '../../../support/pages/case-detail';
 import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
 import { attachFile } from 'cypress/helpers/file/upload-file';
 import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 
-describe('Access a minute sheet, fill out sections of the form, navigate away and return to the form with data intact', () => {
+describe('Create a minute sheet, fill out sections of the form, navigate away and return to the form with data intact, and print to PDF', () => {
   before(function () {
     createAndServePaperPetition({ trialLocation: 'Birmingham, Alabama' }).then(
       ({ docketNumber }) => {
