@@ -1,6 +1,7 @@
 import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { casePublicSearchInteractor } from '@web-api/business/useCases/public/casePublicSearchInteractor';
+import { CASE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
 
 describe('casePublicSearchInteractor', () => {
   beforeAll(() => {
@@ -18,6 +19,7 @@ describe('casePublicSearchInteractor', () => {
       petitionerName: 'test person',
       petitionerState: 'NY',
       startDate: '01/01/2001',
+      caseType: { [CASE_TYPES_MAP.cdp]: CASE_TYPES_MAP.cdp },
     };
 
     await casePublicSearchInteractor(applicationContext, requestParams as any);
