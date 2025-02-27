@@ -14,5 +14,6 @@ export const validateCreateTermFormAction = ({ get, path }: ActionProps) => {
   console.log('errors', errors);
 
   //TODO: determine how validation errors are displayed
+  if (errors) return path.error(errors);
   return path.success();
 };
