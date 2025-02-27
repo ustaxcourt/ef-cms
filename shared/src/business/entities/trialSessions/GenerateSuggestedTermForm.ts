@@ -10,7 +10,6 @@ export class GenerateSuggestedTermForm extends GenerateSuggestedTermModal {
   public regularCaseMaxQuantity: number;
   public hybridCaseMinimumQuantity: number;
   public hybridCaseMaxQuantity: number;
-  public minimumCasesPerLocation: number;
 
   constructor(rawProps: any) {
     super(rawProps, 'GenerateSuggestedTermForm');
@@ -22,7 +21,6 @@ export class GenerateSuggestedTermForm extends GenerateSuggestedTermModal {
     this.regularCaseMaxQuantity = rawProps.regularCaseMaxQuantity;
     this.hybridCaseMinimumQuantity = rawProps.hybridCaseMinimumQuantity;
     this.hybridCaseMaxQuantity = rawProps.hybridCaseMaxQuantity;
-    this.minimumCasesPerLocation = rawProps.minimumCasesPerLocation;
   }
 
   getValidationRules() {
@@ -96,17 +94,6 @@ export class GenerateSuggestedTermForm extends GenerateSuggestedTermModal {
         'number.integer': 'Hybrid case max quantity must be a whole number.',
         'number.min': 'Hybrid case max quantity cannot be negative.',
       }),
-      minimumCasesPerLocation: joi
-        .number()
-        .integer()
-        .min(0)
-        .required()
-        .messages({
-          'number.base': 'Minimum cases per location must be a number.',
-          'number.integer':
-            'Minimum cases per location must be a whole number.',
-          'number.min': 'Minimum cases per location cannot be negative.',
-        }),
     };
   }
 }

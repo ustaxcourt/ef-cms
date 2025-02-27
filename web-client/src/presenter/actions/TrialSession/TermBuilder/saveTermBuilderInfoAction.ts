@@ -25,8 +25,6 @@ export const saveTermBuilderInfoAction = ({ store, get }: ActionProps) => {
       TRIAL_SESSION_TERM_GENERATOR.HYBRID_CASE_MINIMUM_QUANTITY,
     hybridCaseMaxQuantity:
       TRIAL_SESSION_TERM_GENERATOR.HYBRID_CASE_MAX_QUANTITY,
-    minimumCasesPerLocation:
-      TRIAL_SESSION_TERM_GENERATOR.MINIMUM_CASES_PER_LOCATION,
   };
 
   store.set(state[STATE_KEYS.TERM_BUILDER_INFORMATION], TERM_GENERATOR_INFO);
