@@ -107,6 +107,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
 import { TermBuilderView } from '@web-client/views/TermBuilderView';
+import { AsyncServiceUnavailableModal } from '@web-client/views/AsyncServiceUnavailableModal';
 
 const pages = {
   AccessibilityStatement,
@@ -282,7 +283,9 @@ export const AppComponent = connect(
           <>
             <Footer />
             {zipInProgress && <BatchDownloadProgress />}
-
+            {showModal === 'AsyncServiceUnavailableModal' && (
+              <AsyncServiceUnavailableModal />
+            )}
             {showModal === 'TrialSessionPlanningModal' && (
               <TrialSessionPlanningModal />
             )}
