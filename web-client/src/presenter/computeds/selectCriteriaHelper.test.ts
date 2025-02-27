@@ -91,7 +91,7 @@ describe('selectCriteriaHelper', () => {
   });
 
   describe('Blocked Reasons', () => {
-    it('should return an empty array of automatic blocked reasons if there are no blocked cases', () => {
+    it('should return an empty array of automatic blocked reasons when there are no blocked cases', () => {
       const { automaticBlockedReasons } = runCompute(selectCriteriaHelper, {
         state: {
           blockedCases: [],
@@ -105,10 +105,19 @@ describe('selectCriteriaHelper', () => {
       const { automaticBlockedReasons } = runCompute(selectCriteriaHelper, {
         state: {
           blockedCases: [
-            { automaticBlockedReason: 'Due Date' },
-            { automaticBlockedReason: 'Pending Item and Due Date' },
-            { automaticBlockedReason: 'Pending Item' },
-            { blockedReason: 'ANYTHING' },
+            { automaticBlocked: true, automaticBlockedReason: 'Due Date' },
+            {
+              automaticBlocked: true,
+              automaticBlockedReason: 'Pending Item and Due Date',
+            },
+            { automaticBlocked: true, automaticBlockedReason: 'Pending Item' },
+            {
+              docketNumber: '123-20',
+              leadDocketNumber: '123-20',
+              blocked: true,
+              blockedReason: 'ANYTHING',
+            },
+            { docketNumber: '859-20', leadDocketNumber: '123-20' },
           ],
         },
       });
@@ -117,6 +126,10 @@ describe('selectCriteriaHelper', () => {
         {
           key: 'dueDate',
           value: 'Due Date',
+        },
+        {
+          key: 'groupedWithBlockedCase',
+          value: 'Grouped with blocked case',
         },
         {
           key: 'manualBlock',

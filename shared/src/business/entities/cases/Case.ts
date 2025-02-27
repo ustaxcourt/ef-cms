@@ -32,6 +32,8 @@ import {
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import {
+  CASE_AUTOMATIC_BLOCKED_RULE,
+  CASE_BLOCKED_RULE,
   CASE_CAPTION_RULE,
   CASE_DOCKET_NUMBER_RULE,
   CASE_IRS_PRACTITIONERS_RULE,
@@ -70,7 +72,7 @@ import { Statistic } from '../Statistic';
 import { TrialSession } from '../trialSessions/TrialSession';
 import { UnprocessableEntityError } from '../../../../../web-api/src/errors/errors';
 import { User } from '../User';
-import { clone, compact, includes, isEmpty, startCase } from 'lodash';
+import { clone, compact, includes, startCase } from 'lodash';
 import { compareStrings } from '../../utilities/sortFunctions';
 import { getDocketNumberSuffix } from '../../utilities/getDocketNumberSuffix';
 import { shouldGenerateDocketRecordIndex } from '../../utilities/shouldGenerateDocketRecordIndex';
@@ -400,12 +402,7 @@ export class Case extends JoiValidationEntity {
         then: JoiValidationConstants.UUID.optional(),
       })
       .description('Judge ID assigned to this case.'),
-    automaticBlocked: joi
-      .boolean()
-      .optional()
-      .description(
-        'Temporarily blocked from trial due to a pending item or due date.',
-      ),
+    automaticBlocked: CASE_AUTOMATIC_BLOCKED_RULE,
     automaticBlockedDate: JoiValidationConstants.ISO_DATE.when(
       'automaticBlocked',
       {
@@ -423,16 +420,7 @@ export class Case extends JoiValidationEntity {
         otherwise: joi.optional().allow(null),
         then: joi.required(),
       }),
-    blocked: joi
-      .boolean()
-      .optional()
-      .meta({ tags: ['Restricted'] })
-      .when('status', {
-        is: CASE_STATUS_TYPES.calendared,
-        otherwise: joi.optional(),
-        then: joi.invalid(true),
-      })
-      .description('Temporarily blocked from trial.'),
+    blocked: CASE_BLOCKED_RULE,
     blockedDate: JoiValidationConstants.ISO_DATE.when('blocked', {
       is: true,
       otherwise: joi.optional().allow(null),
@@ -1411,14 +1399,14 @@ export class Case extends JoiValidationEntity {
    * @param {object} caseDeadlines - the case deadlines
    * @returns {Case} the updated case entity
    */
-  updateAutomaticBlocked({ caseDeadlines }) {
+  updateAutomaticBlocked({ hasCaseDeadline }: { hasCaseDeadline: boolean }) {
     const hasPendingItems = this.doesHavePendingItems();
     let automaticBlockedReason;
-    if (hasPendingItems && !isEmpty(caseDeadlines)) {
+    if (hasPendingItems && hasCaseDeadline) {
       automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate;
     } else if (hasPendingItems) {
       automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pending;
-    } else if (!isEmpty(caseDeadlines)) {
+    } else if (hasCaseDeadline) {
       automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.dueDate;
     }
     if (automaticBlockedReason) {
@@ -1430,6 +1418,13 @@ export class Case extends JoiValidationEntity {
       this.automaticBlockedDate = undefined;
       this.automaticBlockedReason = undefined;
     }
+
+    this.consolidatedCases.forEach(c => {
+      if (c.docketNumber === this.docketNumber) {
+        c.automaticBlocked = this.automaticBlocked;
+      }
+    });
+
     return this;
   }
 
@@ -1780,59 +1775,11 @@ export class Case extends JoiValidationEntity {
     return this;
   }
 
-  /**
-   * generates sort tags used for sorting trials for calendaring
-   * @returns {object} the sort tags
-   */
-  generateTrialSortTags() {
-    const {
-      caseType,
-      docketNumber,
-      highPriority,
-      preferredTrialCity,
-      procedureType,
-      receivedAt,
-    } = this;
-
-    const caseProcedureSymbol =
-      procedureType.toLowerCase() === 'regular' ? 'R' : 'S';
-
-    let casePrioritySymbol = 'D';
-
-    if (highPriority === true) {
-      casePrioritySymbol = 'A';
-    } else if (caseType.toLowerCase() === 'cdp (lien/levy)') {
-      casePrioritySymbol = 'B';
-    } else if (caseType.toLowerCase() === 'passport') {
-      casePrioritySymbol = 'C';
-    }
-
-    const formattedFiledTime = formatDateString(
-      receivedAt,
-      FORMATS.TRIAL_SORT_TAG,
-    );
-    const formattedTrialCity = preferredTrialCity?.replace(/[\s.,]/g, '');
-
-    const nonHybridSortKey = [
-      formattedTrialCity,
-      caseProcedureSymbol,
-      casePrioritySymbol,
-      formattedFiledTime,
-      docketNumber,
-    ].join('-');
-
-    const hybridSortKey = [
-      formattedTrialCity,
-      'H', // Hybrid Tag
-      casePrioritySymbol,
-      formattedFiledTime,
-      docketNumber,
-    ].join('-');
-
-    return {
-      hybrid: hybridSortKey,
-      nonHybrid: nonHybridSortKey,
-    };
+  generateTrialSortTags(): {
+    hybrid: string;
+    nonHybrid: string;
+  } {
+    return generateTrialSortTags(this);
   }
 
   /**
@@ -1899,14 +1846,10 @@ export class Case extends JoiValidationEntity {
     return this.status === CASE_STATUS_TYPES.calendared;
   }
 
-  /**
-   * returns true if the case status is ready for trial
-   * @returns {boolean} if the case is calendared
-   */
-  isReadyForTrial() {
+  isReadyForTrial(): boolean {
     return (
       this.status === CASE_STATUS_TYPES.generalDocketReadyForTrial &&
-      this.preferredTrialCity &&
+      !!this.preferredTrialCity &&
       !this.blocked &&
       !this.automaticBlocked
     );
@@ -1921,6 +1864,11 @@ export class Case extends JoiValidationEntity {
     this.blocked = true;
     this.blockedReason = blockedReason;
     this.blockedDate = createISODateString();
+    this.consolidatedCases.forEach(c => {
+      if (c.docketNumber === this.docketNumber) {
+        c.blocked = true;
+      }
+    });
     return this;
   }
 
@@ -1932,6 +1880,11 @@ export class Case extends JoiValidationEntity {
     this.blocked = false;
     this.blockedReason = undefined;
     this.blockedDate = undefined;
+    this.consolidatedCases.forEach(c => {
+      if (c.docketNumber === this.docketNumber) {
+        c.blocked = false;
+      }
+    });
     return this;
   }
 
@@ -2121,6 +2074,69 @@ export class Case extends JoiValidationEntity {
       : isAssociatedUser({ caseRaw: rawCase, user });
   }
 }
+
+/**
+ * generates sort tags used for sorting trials for calendaring
+ * @returns {object} the sort tags
+ */
+export const generateTrialSortTags = function ({
+  caseType,
+  docketNumber,
+  highPriority,
+  preferredTrialCity,
+  procedureType,
+  receivedAt,
+}: {
+  caseType: CaseType;
+  docketNumber: string;
+  highPriority?: boolean;
+  preferredTrialCity?: string;
+  procedureType: string;
+  receivedAt: string;
+}): {
+  hybrid: string;
+  nonHybrid: string;
+} {
+  const caseProcedureSymbol =
+    procedureType.toLowerCase() === 'regular' ? 'R' : 'S';
+
+  let casePrioritySymbol = 'D';
+
+  if (highPriority === true) {
+    casePrioritySymbol = 'A';
+  } else if (caseType.toLowerCase() === 'cdp (lien/levy)') {
+    casePrioritySymbol = 'B';
+  } else if (caseType.toLowerCase() === 'passport') {
+    casePrioritySymbol = 'C';
+  }
+
+  const formattedFiledTime = formatDateString(
+    receivedAt,
+    FORMATS.TRIAL_SORT_TAG,
+  );
+  const formattedTrialCity = preferredTrialCity?.replace(/[\s.,]/g, '');
+
+  const nonHybridSortKey = [
+    formattedTrialCity,
+    caseProcedureSymbol,
+    casePrioritySymbol,
+    formattedFiledTime,
+    docketNumber,
+  ].join('-');
+
+  const hybridSortKey = [
+    formattedTrialCity,
+    'H', // Hybrid Tag
+    casePrioritySymbol,
+    formattedFiledTime,
+    docketNumber,
+  ].join('-');
+
+  return {
+    hybrid: hybridSortKey,
+    nonHybrid: nonHybridSortKey,
+  };
+};
 
 /**
  * Returns true if at least one party on the case has the provided serviceIndicator type.

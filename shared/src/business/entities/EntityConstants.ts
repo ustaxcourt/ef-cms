@@ -16,9 +16,9 @@ import { EXTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/ex
 import { INTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/internalFilingEvents';
 
 export const STATE_KEYS = {
-  DOCKET_RECORD_TABLE_SORT:
-    'DOCKET_RECORD_TABLE_SORT' as 'DOCKET_RECORD_TABLE_SORT',
-};
+  DOCKET_RECORD_TABLE_SORT: 'DOCKET_RECORD_TABLE_SORT',
+  PENDING_REPORT_TABLE_SORT: 'PENDING_REPORT_TABLE_SORT',
+} as const;
 
 export const DEBOUNCE_TIME_MILLISECONDS = 500;
 
