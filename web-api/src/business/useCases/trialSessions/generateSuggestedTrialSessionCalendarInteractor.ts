@@ -73,7 +73,6 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   const {
     termEndDate,
     termStartDate,
-    minimumCasesPerLocation, //TODO: FIGURE OUT WHERE TO USE THIS
     ...calendaringConfig
   } = TERM_BUILDER_INFORMATION;
 

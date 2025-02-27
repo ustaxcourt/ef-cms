@@ -18,7 +18,6 @@ export const runCreateTermAction = async ({
     regularCaseMaxQuantity,
     hybridCaseMinimumQuantity,
     hybridCaseMaxQuantity,
-    minimumCasesPerLocation,
   } = props;
 
   const { bufferArray, message } = await applicationContext
@@ -35,7 +34,6 @@ export const runCreateTermAction = async ({
       regularCaseMaxQuantity,
       hybridCaseMinimumQuantity,
       hybridCaseMaxQuantity,
-      minimumCasesPerLocation,
     });
 
   switch (message.type) {

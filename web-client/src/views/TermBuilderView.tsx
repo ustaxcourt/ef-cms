@@ -35,7 +35,6 @@ export const TermBuilderView = connect<
       regularCaseMaxQuantity,
       hybridCaseMinimumQuantity,
       hybridCaseMaxQuantity,
-      minimumCasesPerLocation,
       termName,
       termStartDate,
       termEndDate,
@@ -123,17 +122,6 @@ export const TermBuilderView = connect<
                   updateFormValueSequence={updateFormValueSequence}
                 />{' '}
                 per trial session per location.
-              </p>
-
-              <p>
-                If there are less than{' '}
-                <TermBuilderInput
-                  propertyName="minimumCasesPerLocation"
-                  currentValue={minimumCasesPerLocation}
-                  updateFormValueSequence={updateFormValueSequence}
-                />{' '}
-                cases for a location, and we have already been there this year,
-                do not schedule a session for that location.
               </p>
 
               <p>

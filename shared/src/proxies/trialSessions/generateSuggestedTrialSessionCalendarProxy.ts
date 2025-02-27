@@ -15,7 +15,6 @@ export const generateSuggestedTrialSessionCalendarInteractor = (
     regularCaseMaxQuantity,
     hybridCaseMinimumQuantity,
     hybridCaseMaxQuantity,
-    minimumCasesPerLocation,
   }: RawGenerateSuggestedTermForm,
 ): Promise<{
   message: CalendarGeneratorMessage;
@@ -34,7 +33,6 @@ export const generateSuggestedTrialSessionCalendarInteractor = (
       regularCaseMaxQuantity,
       hybridCaseMinimumQuantity,
       hybridCaseMaxQuantity,
-      minimumCasesPerLocation,
     },
     endpoint: '/trial-sessions/generate-term',
   });
