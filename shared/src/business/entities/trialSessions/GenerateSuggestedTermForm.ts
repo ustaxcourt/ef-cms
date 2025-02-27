@@ -52,11 +52,16 @@ export class GenerateSuggestedTermForm extends GenerateSuggestedTermModal {
             'Small case minimum quantity must be a whole number.',
           'number.min': 'Small case minimum quantity cannot be negative.',
         }),
-      smallCaseMaxQuantity: joi.number().integer().min(0).required().messages({
-        'number.base': 'Small case max quantity must be a number.',
-        'number.integer': 'Small case max quantity must be a whole number.',
-        'number.min': 'Small case max quantity cannot be negative.',
-      }),
+      smallCaseMaxQuantity: joi
+        .number()
+        .integer()
+        .min(joi.ref('smallCaseMinimumQuantity'))
+        .required()
+        .messages({
+          'number.base': 'Small case max quantity must be a number.',
+          'number.integer': 'Small case max quantity must be a whole number.',
+          'number.min': 'Small case max quantity cannot be negative.',
+        }),
       regularCaseMinimumQuantity: joi
         .number()
         .integer()
@@ -71,7 +76,7 @@ export class GenerateSuggestedTermForm extends GenerateSuggestedTermModal {
       regularCaseMaxQuantity: joi
         .number()
         .integer()
-        .min(0)
+        .min(joi.ref('regularCaseMinimumQuantity'))
         .required()
         .messages({
           'number.base': 'Regular case max quantity must be a number.',
@@ -89,11 +94,16 @@ export class GenerateSuggestedTermForm extends GenerateSuggestedTermModal {
             'Hybrid case minimum quantity must be a whole number.',
           'number.min': 'Hybrid case minimum quantity cannot be negative.',
         }),
-      hybridCaseMaxQuantity: joi.number().integer().min(0).required().messages({
-        'number.base': 'Hybrid case max quantity must be a number.',
-        'number.integer': 'Hybrid case max quantity must be a whole number.',
-        'number.min': 'Hybrid case max quantity cannot be negative.',
-      }),
+      hybridCaseMaxQuantity: joi
+        .number()
+        .integer()
+        .min(joi.ref('hybridCaseMinimumQuantity'))
+        .required()
+        .messages({
+          'number.base': 'Hybrid case max quantity must be a number.',
+          'number.integer': 'Hybrid case max quantity must be a whole number.',
+          'number.min': 'Hybrid case max quantity cannot be negative.',
+        }),
     };
   }
 }
