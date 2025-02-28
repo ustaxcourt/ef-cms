@@ -300,7 +300,6 @@
     "esbuild-plugin-resolve": "2.0.0",
     "esbuild-plugin-svg": "0.1.0",
     "esbuild-sass-plugin": "3.3.1",
-    "esbuild-serve": "1.0.1",
     "esbuild-visualizer": "0.7.0",
     "eslint": "9.21.0",
     "eslint-config-prettier": "10.0.2",
