@@ -84,7 +84,7 @@ describe('formattedMessages', () => {
           selectedMessages: new Map(),
         },
         screenMetadata: {},
-        tableSort: { sortOrder: DESCENDING },
+        tableSort: { sortOrder: DESCENDING, sortField: 'createdAt' },
         user: {
           role: 'docketclerk',
         },
