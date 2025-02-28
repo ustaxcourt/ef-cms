@@ -9,12 +9,14 @@ import { setAlertWarningAction } from '@web-client/presenter/actions/setAlertWar
 import { showProgressSequenceDecorator } from '@web-client/presenter/utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '@web-client/presenter/actions/startShowValidationAction';
 import { validateCreateTermFormAction } from '@web-client/presenter/actions/TrialSession/validateCreateTermFormAction';
+import { clearErrorAlertsAction } from '@web-client/presenter/actions/clearErrorAlertsAction';
 
 export const submitCreateTermFormSequence = [
+  clearErrorAlertsAction,
   startShowValidationAction,
   validateCreateTermFormAction,
   {
-    error: [console.log],
+    error: [setAlertErrorAction],
     success: showProgressSequenceDecorator([
       formatCreateTermDatesAction,
       runCreateTermAction,

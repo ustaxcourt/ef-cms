@@ -198,6 +198,7 @@ export const SUGGESTED_TRIAL_SESSION_TITLES = {
   invalid: 'Unable to create term',
   success: 'Successfully generated suggested term.',
   warning: 'Successfully generated suggested term with warnings',
+  validation: 'Please fix the following errors.',
 };
 
 export const DOCUMENT_RELATIONSHIPS = {
