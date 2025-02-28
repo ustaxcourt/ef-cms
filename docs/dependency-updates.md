@@ -52,12 +52,12 @@ note: we have 3 package.json files, be sure to update them all
 
 4. Check if there is an update to the Terraform AWS provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
 
-regex search the entire project for `version = ">= \d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
+regex search the entire project for `version = "~> \d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
 
  - ./shared/admin-tools/glue/glue_migrations/main.tf
  - ./shared/admin-tools/glue/remote_role/main.tf
 
-	> version = ">= <LATEST_VERSION>"
+	> version = "~>~ <LATEST_VERSION>"
 
 5. Check through the list of caveats to see if any of the documented issues have been resolved.
 
