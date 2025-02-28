@@ -66,6 +66,10 @@ regex search the entire project for `version = "~> \d+.\d+.\d+"` and make sure i
 
 - cerebral version 5.2.1 and @cerebral/react version 4.2.1 are not compatible with React and ReactDOM version 19. Keep these pinned at version 18 for the time being. See https://github.com/cerebral/cerebral/pull/1441.
 
+### cerebral and @cerebral/react
+
+- New versions of cerebral (5.2.1 to 5.2.2) and @cerebral/react (4.2.1 to 4.2.2) were released on February 27, 2025. These upgrades are the first since spring 2020. The new versions do not work with the import syntax used in `web-client/src/presenter/test.cerebral.ts` for `runAction` and `runCompute`, so keep these pinned to 5.2.1 and 4.2.1 respectively for the time being.
+
 ### @fortawesome
 
 - fortawesome packages are locked down to pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes `@fortawesome/free-solid-svg-icons`, `@fortawesome/free-regular-svg-icons`, and `@fortawesome/fontawesome-svg-core`.
