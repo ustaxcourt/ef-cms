@@ -60,7 +60,8 @@ export class GenerateSuggestedTermForm extends GenerateSuggestedTermModal {
         .messages({
           'number.base': 'Small case max quantity must be a number.',
           'number.integer': 'Small case max quantity must be a whole number.',
-          'number.min': 'Small case max quantity cannot be negative.',
+          'number.min':
+            'Small case max quantity must be greater than or equal to the Small case minimum quantity.',
         }),
       regularCaseMinimumQuantity: joi
         .number()
@@ -81,7 +82,8 @@ export class GenerateSuggestedTermForm extends GenerateSuggestedTermModal {
         .messages({
           'number.base': 'Regular case max quantity must be a number.',
           'number.integer': 'Regular case max quantity must be a whole number.',
-          'number.min': 'Regular case max quantity cannot be negative.',
+          'number.min':
+            'Regular case max quantity must be greater than or equal to the Regular case minimum quantity.',
         }),
       hybridCaseMinimumQuantity: joi
         .number()
@@ -102,7 +104,8 @@ export class GenerateSuggestedTermForm extends GenerateSuggestedTermModal {
         .messages({
           'number.base': 'Hybrid case max quantity must be a number.',
           'number.integer': 'Hybrid case max quantity must be a whole number.',
-          'number.min': 'Hybrid case max quantity cannot be negative.',
+          'number.min':
+            'Hybrid case max quantity must be greater than or equal to the Hybrid case minimum quantity.',
         }),
     };
   }

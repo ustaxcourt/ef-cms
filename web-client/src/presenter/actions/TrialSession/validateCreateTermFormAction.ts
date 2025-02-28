@@ -1,5 +1,9 @@
 import { state } from '@web-client/presenter/app.cerebral';
-import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
+import {
+  STATE_KEYS,
+  SUGGESTED_TRIAL_SESSION_TITLES,
+  USER_MESSAGE_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { GenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 
 export const validateCreateTermFormAction = ({ get, path }: ActionProps) => {
@@ -7,13 +11,19 @@ export const validateCreateTermFormAction = ({ get, path }: ActionProps) => {
     state[STATE_KEYS.TERM_BUILDER_INFORMATION],
   );
 
-  const errors = new GenerateSuggestedTermForm(
+  const TERM_BUILDER_ERRORS = new GenerateSuggestedTermForm(
     TERM_BUILDER_INFORMATION,
   ).getFormattedValidationErrors();
 
-  console.log('errors', errors);
+  if (TERM_BUILDER_ERRORS)
+    return path.error({
+      alertError: {
+        scrollToErrorNotification: true,
+        messages: Object.values(TERM_BUILDER_ERRORS),
+        title: SUGGESTED_TRIAL_SESSION_TITLES.validation,
+        type: USER_MESSAGE_TYPES.error,
+      },
+    });
 
-  //TODO: determine how validation errors are displayed
-  if (errors) return path.error(errors);
   return path.success();
 };
