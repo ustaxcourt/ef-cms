@@ -22,9 +22,6 @@ note: we have 3 package.json files, be sure to update them all
    > **Why am I seeing a medium severity for `quill`?**
    > Quill is used as our rich text editor for open text submissions. It currently has a potential XSS vulnerability if used incorrectly. This vulnerability can be avoided by using getContents/setContents in combination with the quill delta. Currently we are not at risk for how we are using Quill and this vulnerability is actively being disputed: https://github.com/quilljs/quill/issues/3364
 
-   > **Why am I seeing a high severity for `cross-spawn`?**
-   > We use pdf2pic to generate pdf to images which depends on gm (GraphicsMagick and ImageMagick for node). This issue has existed for over two weeks as of 11/22/2024. Our risk factor for this issue should be low. It doesn't appear that we can force gm from 4.0.0 to 6.0.6 or 7.0.5.
-
    > **Why am I seeing a high severity for `pdfjs-dist`?**
    > [See below](#pdfjs-dist).
 
