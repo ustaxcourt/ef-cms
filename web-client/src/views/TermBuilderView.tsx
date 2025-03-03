@@ -173,7 +173,13 @@ export const TermBuilderView = connect<
 type TermBuilderInputParams = {
   propertyName: string;
   currentValue: number;
-  updateFormValueSequence: typeof sequences.updateFormValueSequence;
+  updateFormValueSequence: (props: {
+    index?: number;
+    root?: string;
+    key: string;
+    value: any;
+    allowEmptyString?: boolean;
+  }) => void;
 };
 
 function TermBuilderInput({
