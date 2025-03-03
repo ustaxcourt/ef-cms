@@ -9,7 +9,6 @@ import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
   MINUTE_SHEET_FORM_SECTION_MAP,
   PETITIONER_ROLE_OPTIONS,
-  PETITIONER_ROLE_OPTIONS_INVERTED,
 } from '@shared/business/entities/EntityConstants';
 import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import React from 'react';
@@ -27,9 +26,6 @@ export const PetitionersFieldset = ({
   petitionersFormState: MinuteSheetFormState['petitionersSection'];
   removeRowHandler: RemoveRowHandler;
 }) => {
-  const SHOW_ROLE_NOTE_ROLE_TYPE =
-    PETITIONER_ROLE_OPTIONS_INVERTED[PETITIONER_ROLE_OPTIONS.other];
-
   return (
     <fieldset className="grid-container border-0 padding-0">
       <div className="grid-row grid-gap-2 margin-bottom-1">
@@ -64,7 +60,8 @@ export const PetitionersFieldset = ({
         </div>
         <div className="grid-col-2 usa-label">Role</div>
         <div className="grid-col-3 usa-label">Date(s) of Appearance</div>
-        <div className="grid-col-4"></div>
+        <div className="grid-col-2 usa-label">Note</div>
+        <div className="grid-col-2"></div>
       </div>
       {Object.values(petitionersFormState.petitioners).map((row, rowIndex) => (
         <div
@@ -127,34 +124,6 @@ export const PetitionersFieldset = ({
               </select>
             </FormGroup>
           </div>
-          {petitionersFormState.petitioners[row.renderKey].role ===
-            SHOW_ROLE_NOTE_ROLE_TYPE && (
-            <div className="grid-col-2">
-              <FormGroup className="margin-bottom-0">
-                <input
-                  className="usa-input"
-                  id={`petitioner-role-note-${rowIndex}`}
-                  name={`petitioner-role-note-${rowIndex}`}
-                  aria-label={`petitioner-role-note-${rowIndex}`}
-                  type="text"
-                  value={petitionersFormState.petitioners[row.renderKey].note}
-                  placeholder="Role note"
-                  onBlur={() => onBlurHandler()}
-                  onChange={e =>
-                    onChangeHandler({
-                      name: 'petitioners',
-                      rowInfo: {
-                        key: row.renderKey,
-                        nestedName: 'note',
-                      },
-                      section: MINUTE_SHEET_FORM_SECTION_MAP.petitionersSection,
-                      value: e.target.value,
-                    })
-                  }
-                />
-              </FormGroup>
-            </div>
-          )}
           <div className="grid-col-3">
             <FormGroup className="margin-bottom-0">
               <input
@@ -174,6 +143,30 @@ export const PetitionersFieldset = ({
                     rowInfo: {
                       key: row.renderKey,
                       nestedName: 'datesOfAppearance',
+                    },
+                    section: MINUTE_SHEET_FORM_SECTION_MAP.petitionersSection,
+                    value: e.target.value,
+                  })
+                }
+              />
+            </FormGroup>
+          </div>
+          <div className="grid-col-2">
+            <FormGroup className="margin-bottom-0">
+              <input
+                className="usa-input"
+                id={`petitioner-note-${rowIndex}`}
+                name={`petitioner-note-${rowIndex}`}
+                aria-label={`petitioner-note-${rowIndex}`}
+                type="text"
+                value={petitionersFormState.petitioners[row.renderKey].note}
+                onBlur={() => onBlurHandler()}
+                onChange={e =>
+                  onChangeHandler({
+                    name: 'petitioners',
+                    rowInfo: {
+                      key: row.renderKey,
+                      nestedName: 'note',
                     },
                     section: MINUTE_SHEET_FORM_SECTION_MAP.petitionersSection,
                     value: e.target.value,
