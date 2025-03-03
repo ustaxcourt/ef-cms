@@ -2,7 +2,7 @@ import { applicationContext } from '../../../../shared/src/business/test/createT
 import { casePublicSearch } from './casePublicSearch';
 jest.mock('./searchClient');
 import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
-import { MAX_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
+import { CASE_TYPES_MAP, MAX_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
 import { search } from './searchClient';
 
 jest.mock(
@@ -45,6 +45,7 @@ const MOCK_CASE_SEARCH_RESULT = {
 describe('casePublicSearch', () => {
   const searchTerms: CaseAdvancedSearchParamsRequestType = {
     petitionerName: 'test person',
+    caseType: { [CASE_TYPES_MAP.cdp]: CASE_TYPES_MAP.cdp },
   };
 
   search.mockReturnValue({

@@ -4,10 +4,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 
 export const ErrorNotification = connect(
-  {
-    alertError: state.alertError,
-    alertHelper: state.alertHelper,
-  },
+  { alertError: state.alertError, alertHelper: state.alertHelper },
   function ErrorNotification({
     alertError,
     alertHelper,
@@ -30,7 +27,7 @@ export const ErrorNotification = connect(
     useEffect(() => {
       const notification = notificationRef.current;
       if (notification && alertError?.scrollToErrorNotification) {
-        window.scrollTo(0, 0);
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       }
     });
 
