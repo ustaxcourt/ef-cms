@@ -187,12 +187,11 @@ function TermBuilderInput({
       name={propertyName}
       placeholder="Number"
       type="number"
-      min="0"
       value={currentValue}
       onChange={e => {
         updateFormValueSequence({
           key: e.target.name,
-          value: +e.target.value.split('.').join(''),
+          value: e.target.value.split('.').join(''),
           root: STATE_KEYS.TERM_BUILDER_INFORMATION,
         });
       }}
