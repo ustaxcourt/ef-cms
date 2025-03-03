@@ -419,8 +419,8 @@ describe('formatMinuteSheet', () => {
         expect(result).toEqual([]);
       });
 
-      it('should handle petitioner with "other" role and display the role note if provided', () => {
-        const mockRoleNote = 'Big Wig';
+      it('should display the note after role when note is provided', () => {
+        const mockNote = 'Big Wig';
         const petitionersSection = {
           noAppearance: false,
           appearances: [
@@ -430,14 +430,31 @@ describe('formatMinuteSheet', () => {
               role: PETITIONER_ROLE_OPTIONS_INVERTED[
                 PETITIONER_ROLE_OPTIONS.other
               ],
-              roleNote: mockRoleNote,
+              note: mockNote,
             },
           ] as Appearance[],
         };
         const result = formatPetitionerAppearances(petitionersSection);
         expect(result).toEqual([
-          `(${PETITIONER_ROLE_OPTIONS.other} - <em>${mockRoleNote}</em>)`,
+          `(${PETITIONER_ROLE_OPTIONS.other} - <em>${mockNote}</em>)`,
         ]);
+      });
+
+      it('should not display the note after role when no note is provided', () => {
+        const petitionersSection = {
+          noAppearance: false,
+          appearances: [
+            {
+              datesOfAppearance: '',
+              name: '',
+              role: PETITIONER_ROLE_OPTIONS_INVERTED[
+                PETITIONER_ROLE_OPTIONS.other
+              ],
+            },
+          ] as Appearance[],
+        };
+        const result = formatPetitionerAppearances(petitionersSection);
+        expect(result).toEqual([`(${PETITIONER_ROLE_OPTIONS.other})`]);
       });
     });
 

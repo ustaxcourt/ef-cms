@@ -137,9 +137,7 @@ export const PetitionersFieldset = ({
                   name={`petitioner-role-note-${rowIndex}`}
                   aria-label={`petitioner-role-note-${rowIndex}`}
                   type="text"
-                  value={
-                    petitionersFormState.petitioners[row.renderKey].roleNote
-                  }
+                  value={petitionersFormState.petitioners[row.renderKey].note}
                   placeholder="Role note"
                   onBlur={() => onBlurHandler()}
                   onChange={e =>
@@ -147,7 +145,7 @@ export const PetitionersFieldset = ({
                       name: 'petitioners',
                       rowInfo: {
                         key: row.renderKey,
-                        nestedName: 'roleNote',
+                        nestedName: 'note',
                       },
                       section: MINUTE_SHEET_FORM_SECTION_MAP.petitionersSection,
                       value: e.target.value,
