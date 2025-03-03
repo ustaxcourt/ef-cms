@@ -131,15 +131,15 @@ export const TermBuilderView = connect<
               </p>
 
               <p>
-                If there has been no trial (other than specials) in the last two
+                If there has been no trial (other than Specials) in the last two
                 terms for a location, a session will be added if there are any
-                cases. (This will ignore any minimum cases rules). Motions and
+                cases. (This will ignore any minimum cases rules.) Motions and
                 Hearings will not count as a trial visit to a location.
               </p>
 
               <p>
                 Washington, D.C. - Only one of the two court rooms can be taken
-                by a non-special session per week. Only South can be scheduled
+                by a non-Special session per week. Only South can be scheduled
                 with non-Special sessions.
               </p>
 
@@ -173,7 +173,13 @@ export const TermBuilderView = connect<
 type TermBuilderInputParams = {
   propertyName: string;
   currentValue: number;
-  updateFormValueSequence: typeof sequences.updateFormValueSequence;
+  updateFormValueSequence: (props: {
+    index?: number;
+    root?: string;
+    key: string;
+    value: any;
+    allowEmptyString?: boolean;
+  }) => void;
 };
 
 function TermBuilderInput({
