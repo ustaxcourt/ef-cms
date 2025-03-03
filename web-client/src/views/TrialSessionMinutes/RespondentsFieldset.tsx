@@ -100,6 +100,7 @@ export const RespondentsFieldset = ({
                 data-testid={`remove-respondent-button-${rowIndex}`}
                 className="padding-0"
                 icon="times"
+                type="button"
                 onClick={e => {
                   e.preventDefault();
                   removeRowHandler({
@@ -121,6 +122,7 @@ export const RespondentsFieldset = ({
           data-testid="add-respondent-button"
           className="padding-0 margin-top-1"
           icon="plus"
+          type="button"
           onClick={e => {
             e.preventDefault();
             addRowHandler({

@@ -264,6 +264,7 @@ export const ActionsAndFilingsFieldset = ({
                   link
                   className="padding-0"
                   icon="times"
+                  type="button"
                   onClick={e => {
                     e.preventDefault();
                     removeRowHandler({
@@ -288,6 +289,7 @@ export const ActionsAndFilingsFieldset = ({
             link
             className="padding-0"
             icon="plus"
+            type="button"
             onClick={e => {
               e.preventDefault();
               addRowHandler({

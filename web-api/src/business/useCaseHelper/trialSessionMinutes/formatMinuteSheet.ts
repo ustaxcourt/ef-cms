@@ -1,7 +1,6 @@
 import {
   BRIEF_SUBTYPE,
   PETITIONER_ROLE_OPTIONS,
-  PETITIONER_ROLE_OPTIONS_INVERTED,
   STATUS_REPORT_ORDERED_FOR_OPTIONS,
   MOTION_TYPE_OPTIONS,
   MOTION_FILED_BY_OPTIONS,
@@ -246,12 +245,8 @@ export const formatPetitionerAppearances = (
     : petitioners.appearances
         .map(petitioner => {
           let formattedPetitionerRole;
-          if (
-            petitioner.role &&
-            petitioner.role ===
-              PETITIONER_ROLE_OPTIONS_INVERTED[PETITIONER_ROLE_OPTIONS.other]
-          ) {
-            formattedPetitionerRole = `(${PETITIONER_ROLE_OPTIONS[petitioner.role]} - <em>${petitioner.roleNote}</em>)`;
+          if (petitioner.role && petitioner.note) {
+            formattedPetitionerRole = `(${PETITIONER_ROLE_OPTIONS[petitioner.role]} - <em>${petitioner.note}</em>)`;
           } else if (petitioner.role) {
             formattedPetitionerRole = `(${PETITIONER_ROLE_OPTIONS[petitioner.role]})`;
           }

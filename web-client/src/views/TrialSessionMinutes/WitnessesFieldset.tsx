@@ -73,6 +73,7 @@ export const WitnessesFieldset = ({
               className="padding-0"
               data-testid={`remove-${witnessType}-witness-button-${rowIndex}`}
               icon="times"
+              type="button"
               onClick={e => {
                 e.preventDefault();
                 removeRowHandler({
@@ -94,6 +95,7 @@ export const WitnessesFieldset = ({
           data-testid={`add-${witnessType}-witness-button`}
           className="padding-0 margin-top-1"
           icon="plus"
+          type="button"
           onClick={e => {
             e.preventDefault();
             addRowHandler({
