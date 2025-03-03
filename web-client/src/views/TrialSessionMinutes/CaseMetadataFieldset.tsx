@@ -290,6 +290,7 @@ export const CaseMetadataFieldset = ({
                     link
                     className="padding-0 margin-top-1"
                     icon="plus"
+                    type="button"
                     onClick={e => {
                       e.preventDefault();
                       addRowHandler({

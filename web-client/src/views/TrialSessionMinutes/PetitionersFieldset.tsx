@@ -189,6 +189,7 @@ export const PetitionersFieldset = ({
               link
               className="padding-0"
               icon="times"
+              type="button"
               onClick={e => {
                 e.preventDefault();
                 removeRowHandler({
@@ -210,6 +211,7 @@ export const PetitionersFieldset = ({
             link
             className="padding-0 margin-top-1"
             icon="plus"
+            type="button"
             onClick={e => {
               e.preventDefault();
               addRowHandler({
