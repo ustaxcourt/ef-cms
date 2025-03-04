@@ -889,13 +889,6 @@ textarea#case-caption {
   }
 }
 
-
-@media only screen and (min-width: $large-screen) {
-  .case-type-select {
-    max-width: 80% !important
-  }
-}
-
 .unread,
 .assign-work-item-count {
   display: inline-block;
