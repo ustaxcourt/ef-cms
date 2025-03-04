@@ -1,11 +1,14 @@
 import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
-import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
+import {
+  loginAsIrsPractitioner,
+  loginAsPetitioner,
+} from '../../../../helpers/authentication/login-as-helpers';
 import { petitionsClerkAddsRespondentToCase } from '../../../../helpers/caseDetail/caseInformation/petitionsclerk-adds-respondent-to-case';
 import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { respondentModifiesContactInfo } from '../../../../helpers/myAccount/respondent-modifies-contact-info';
 
 const BAR_NUMBER = 'WN7777';
-const USER = 'irspractitioner2@example.com';
+const USER = 'irsPractitioner2@example.com';
 
 describe('a respondent modifies their address', () => {
   it('should generate a notice of change address for all cases associated with the respondent', function () {
@@ -14,7 +17,8 @@ describe('a respondent modifies their address', () => {
       petitionsClerkServesPetition(docketNumber);
       petitionsClerkAddsRespondentToCase(docketNumber, BAR_NUMBER);
       respondentModifiesContactInfo(USER).then(newAddress => {
-        cy.login(USER, `case-detail/${docketNumber}`);
+        loginAsIrsPractitioner(USER);
+        cy.visit(`case-detail/${docketNumber}`);
         cy.get('[data-testid="document-download-link-NCA"]').should('exist');
         cy.get('[data-testid="tab-case-information"]').click();
         cy.get('[data-testid="tab-parties"]').click();
@@ -31,7 +35,8 @@ describe('a respondent modifies their address', () => {
     externalUserCreatesElectronicCase().then(docketNumber => {
       petitionsClerkAddsRespondentToCase(docketNumber, BAR_NUMBER);
       respondentModifiesContactInfo(USER);
-      cy.login(USER, `case-detail/${docketNumber}`);
+      loginAsIrsPractitioner(USER);
+      cy.visit(`case-detail/${docketNumber}`);
       cy.get('[data-testid="document-download-link-NCA"]').should('not.exist');
     });
   });

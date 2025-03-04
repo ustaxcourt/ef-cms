@@ -4,6 +4,7 @@ import { externalUserCreatesElectronicCase } from '../../../../../helpers/fileAP
 import { externalUserSearchesDocketNumber } from '../../../../../helpers/advancedSearch/external-user-searches-docket-number';
 import { goToCase } from '../../../../../helpers/caseDetail/go-to-case';
 import {
+  login,
   loginAsDocketClerk,
   loginAsPetitioner,
 } from '../../../../../helpers/authentication/login-as-helpers';
@@ -69,20 +70,20 @@ describe('Batch Download Documents', () => {
     createAndServePaperPetition().then(({ docketNumber, documentsCreated }) => {
       // check for all internal roles
       [
-        'adc',
-        'admissionsclerk',
-        'caseservicessupervisor',
-        'clerkofcourt',
-        'colvinschambers',
-        'docketclerk',
-        'floater',
-        'general',
-        'judgecolvin',
-        'petitionsclerk',
-        'reportersoffice',
-        'trialclerk',
-      ].forEach(account => {
-        cy.login(account);
+        'adc@example.com',
+        'admissionsclerk@example.com',
+        'caseservicessupervisor@example.com',
+        'clerkofcourt@example.com',
+        'colvinschambers@example.com',
+        'docketclerk@example.com',
+        'floater@example.com',
+        'general@example.com',
+        'judgecolvin@example.com',
+        'petitionsclerk@example.com',
+        'reportersoffice@example.com',
+        'trialclerk@example.com',
+      ].forEach(email => {
+        login({ email });
         goToCase(docketNumber);
         confirmCountOfDocumentsToDownload(documentsCreated.length);
         includePrintableDocketRecord();
@@ -90,14 +91,16 @@ describe('Batch Download Documents', () => {
       });
 
       // check for external roles
-      ['privatePractitioner', 'petitioner', 'irspractitioner'].forEach(
-        account => {
-          cy.login(account);
-          cy.get('[data-testid="download-docket-records-button"]').should(
-            'not.exist',
-          );
-        },
-      );
+      [
+        'privatePractitioner@example.com',
+        'petitioner@example.com',
+        'irspractitioner@example.com',
+      ].forEach(email => {
+        login({ email });
+        cy.get('[data-testid="download-docket-records-button"]').should(
+          'not.exist',
+        );
+      });
     });
   });
 
@@ -236,9 +239,9 @@ describe('Batch Download Documents', () => {
     createAndServePaperPetition().then(({ docketNumber, name }) => {
       const zipName = `${docketNumber}, ${name}.zip`;
       const documentsFilteredByDocumentType = [{ eventCode: 'O' }];
-      let expectedFileCount = 1;
-      let expectedSealedCount = 0;
-      let expectedStrickenCount = 0;
+      const expectedFileCount = 1;
+      const expectedSealedCount = 0;
+      const expectedStrickenCount = 0;
       const today = createISODateString();
       loginAsDocketClerk();
       goToCase(docketNumber);
