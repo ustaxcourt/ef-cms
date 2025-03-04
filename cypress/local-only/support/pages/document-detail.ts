@@ -1,7 +1,3 @@
-export const navigateTo = (username, docketNumber, docketEntryId) => {
-  cy.login(username, `/case-detail/${docketNumber}/documents/${docketEntryId}`);
-};
-
 export const getMessagesTab = () => {
   return cy.get('button#tab-pending-messages');
 };
