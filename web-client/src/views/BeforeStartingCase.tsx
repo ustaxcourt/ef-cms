@@ -195,7 +195,6 @@ export const BeforeStartingCase = connect(
           <Button
             className="before-case-button before-case-follow-up-button"
             data-testid="print-this-page"
-            href="javascript:void(0);"
             secondary={true}
             onClick={() => {
               const elements = window.document.querySelectorAll(
@@ -216,7 +215,6 @@ export const BeforeStartingCase = connect(
             link
             className="before-case-button before-case-follow-up-button"
             data-testid="cancel-before-starting-case"
-            href="javascript:void(0);"
             id="cancel"
             onClick={() => {
               closeModalAndReturnToDashboardSequence();
