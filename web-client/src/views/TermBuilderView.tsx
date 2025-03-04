@@ -152,7 +152,6 @@ export const TermBuilderView = connect<
 
           <div className="margin-top-5">
             <Button
-              href="javascript:void(0);"
               data-testid="submit-create-term-form-button"
               onClick={async () => {
                 await submitCreateTermFormSequence();
