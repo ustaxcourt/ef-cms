@@ -57,6 +57,7 @@ IRS_CLIENT_ID=$(aws cognito-idp list-user-pool-clients \
   echo "ENVIRONMENT='${ENV}'"
   echo "IRS_CLIENT_ID='${IRS_CLIENT_ID}'"
   echo "MASTER_REGION='${REGION}'"
+  echo "NODE_ENV=production"
   echo "POSTGRES_HOST='${DB_HOST}'"
   echo "REGION='${REGION}'"
   echo "SOURCE_TABLE='${SOURCE_TABLE}'"
