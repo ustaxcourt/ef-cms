@@ -3,6 +3,7 @@ import { faker } from '@faker-js/faker';
 import { goToCase } from '../../../helpers/caseDetail/go-to-case';
 import {
   loginAsAdmissionsClerk,
+  loginAsPetitionsClerk1,
   loginAsPrivatePractitioner,
 } from '../../../helpers/authentication/login-as-helpers';
 import { logout } from '../../../helpers/authentication/logout';
@@ -16,7 +17,7 @@ describe('change of address', () => {
     externalUserCreatesElectronicCase().then(docketNumber => {
       logout();
 
-      cy.login('petitionsclerk1');
+      loginAsPetitionsClerk1();
       petitionsClerkServesPetition(docketNumber);
       logout();
 
@@ -63,7 +64,7 @@ describe('change of address', () => {
     externalUserCreatesElectronicCase().then(docketNumber => {
       logout();
 
-      cy.login('petitionsclerk1');
+      loginAsPetitionsClerk1();
       petitionsClerkServesPetition(docketNumber);
       logout();
 
