@@ -1,6 +1,6 @@
-# 3. Recommendations
+# 3. Recommendation
 
-## Initial Recommendation
+## Recommendation
 
 Based on this spike, the recommended approach for transitioning from Cerebral to
 a new state management library is:
