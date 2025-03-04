@@ -237,7 +237,7 @@ describe('Private privatePractitioner', () => {
       cy.get('[data-testid="practitioner-representing-0"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();
 
-      loginAsPrivatePractitioner('privatePractitioner1');
+      loginAsPrivatePractitioner('privatePractitioner1@example.com');
 
       cy.get('[data-testid="advanced-search-link"]').click();
       cy.get('[data-testid="order-search-tab"]').click();
@@ -282,7 +282,7 @@ describe('Private privatePractitioner', () => {
       cy.get('#docket-entry-sealed-to-external').click();
       cy.get('[data-testid="modal-button-confirm"]').click();
 
-      loginAsPrivatePractitioner('privatePractitioner1');
+      loginAsPrivatePractitioner('privatePractitioner1@example.com');
 
       cy.get('[data-testid="advanced-search-link"]').click();
       cy.get('[data-testid="order-search-tab"]').click();
