@@ -166,6 +166,6 @@ describe('Petitioner Updates e-mail', () => {
         'Your request cannot be completed. Please try to log in. If you’re still having trouble',
       );
 
-    loginAsPetitioner(username);
+    loginAsPetitioner(email);
   });
 });

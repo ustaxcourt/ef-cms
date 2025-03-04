@@ -7,7 +7,7 @@ describe('File a petition: Intro', () => {
   describe('Petitioner', () => {
     describe('Welcome Page', () => {
       beforeEach(() => {
-        loginAsPetitioner('petitioner7');
+        loginAsPetitioner('petitioner7@example.com');
       });
       it('should display correct welcome message for petitioner', () => {
         cy.get('[data-testid="error-alert-title"]').should(
@@ -32,7 +32,7 @@ describe('File a petition: Intro', () => {
 
     describe('Before starting a case', () => {
       beforeEach(() => {
-        loginAsPetitioner('petitioner');
+        loginAsPetitioner('petitioner@example.com');
         cy.get('[data-testid="file-a-petition"]').click();
       });
       it('should display correct text for start a case instructions', () => {
