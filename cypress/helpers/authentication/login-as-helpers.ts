@@ -60,13 +60,19 @@ export function loginAsIrsPractitioner1() {
   cy.get('[data-testid="closed-cases-count"]').contains('Closed Cases');
 }
 
-export function loginAsPetitioner(petitionerUser: string = 'petitioner1@example.com') {
+export function loginAsPetitioner(
+  petitionerUser: string = 'petitioner1@example.com',
+) {
   login({ email: petitionerUser });
   cy.get('[data-testid="file-a-petition"]').should('exist');
 }
 
-export function loginAsCaseServicesSupervisor() {
-  login({ email: 'caseservicessupervisor@example.com' });
+export function loginAsCaseServicesSupervisor(
+  user:
+    | 'caseServicessupervisor@example.com'
+    | 'caseServicesSupervisor1@example.com' = 'caseServicessupervisor@example.com',
+) {
+  login({ email: user });
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
 }
 

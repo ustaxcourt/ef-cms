@@ -1,10 +1,10 @@
-/* eslint-disable promise/no-nesting */
 import { assertExists, retry } from '../../../helpers/retry';
 import { attachSamplePdfFile } from '../../../helpers/file/upload-file';
 import { externalUserCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { goToCase } from '../../../helpers/caseDetail/go-to-case';
 import {
   loginAsAdmissionsClerk,
+  loginAsCaseServicesSupervisor,
   loginAsPetitioner,
 } from '../../../helpers/authentication/login-as-helpers';
 import { petitionsClerkServesPetition } from '../../../helpers/documentQC/petitionsclerk-serves-petition';
@@ -54,7 +54,7 @@ describe('Document QC Complete', () => {
       });
 
       retry(() => {
-        cy.login('caseServicesSupervisor1', '/messages/my/inbox');
+        loginAsCaseServicesSupervisor('caseServicesSupervisor1@example.com');
         cy.get('table.usa-table');
         return assertMessageRecordCountForDocketNumberAndSubjectEscapeHatch(
           docketNumber,
@@ -214,7 +214,7 @@ function assertMessageRecordCountForDocketNumberAndSubject(
 ) {
   cy.get(`[data-testid="messages-${inboxType}-inbox-docketNumber-cell"]`).then(
     $elements => {
-      const parentElements = $elements.map((index, element) =>
+      const parentElements = $elements.map((_index, element) =>
         Cypress.$(element).parent(),
       );
 
@@ -241,7 +241,7 @@ function assertMessageRecordCountForDocketNumberAndSubjectEscapeHatch(
       `[data-testid="messages-${inboxType}-inbox-docketNumber-cell"]`,
     );
 
-    const parentElements = $elements.map((index, element) =>
+    const parentElements = $elements.map((_index, element) =>
       Cypress.$(element).parent(),
     );
 
