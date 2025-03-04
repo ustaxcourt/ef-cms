@@ -12,14 +12,21 @@ import { put } from '../requests';
  */
 export const updateUserContactInformationInteractor = (
   applicationContext,
-  { contactInfo, firmName, userId },
+  {
+    contactInfo,
+    firmName,
+    userId,
+    clientConnectionId,
+  }: {
+    contactInfo: any;
+    firmName: string;
+    userId: string;
+    clientConnectionId: string;
+  },
 ) => {
   return put({
     applicationContext,
-    body: {
-      contactInfo,
-      firmName,
-    },
+    body: { contactInfo, firmName, clientConnectionId },
     endpoint: `/async/users/${userId}/contact-info`,
   });
 };

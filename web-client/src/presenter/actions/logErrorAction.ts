@@ -1,7 +1,12 @@
-export const logErrorAction = ({ applicationContext, props }: ActionProps) => {
+export const logErrorAction = async ({
+  applicationContext,
+  props,
+}: ActionProps) => {
   if (props.errorToLog) {
-    applicationContext.getUseCases().logErrorInteractor(applicationContext, {
-      error: props.errorToLog,
-    });
+    await applicationContext
+      .getUseCases()
+      .logErrorInteractor(applicationContext, {
+        error: props.errorToLog,
+      });
   }
 };
