@@ -8,16 +8,16 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { irsPractitionerUser } from '../../../../../shared/src/test/mockUsers';
-import { updateUserContactInformationInteractor } from './updateUserContactInformationInteractor';
-
+import { updateUserContactInformation } from './updateUserContactInformationInteractor';
 jest.mock('./generateChangeOfAddress');
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { Practitioner } from '@shared/business/entities/Practitioner';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 
-describe('updateUserContactInformationInteractor', () => {
+describe('updateUserContactInformation', () => {
   let mockUser;
+  const clientConnectionId = '384048';
 
   const contactInfo = {
     address1: '234 Main St',
@@ -62,7 +62,7 @@ describe('updateUserContactInformationInteractor', () => {
     mockUser = mockPetitionsClerkUser;
 
     await expect(
-      updateUserContactInformationInteractor(
+      updateUserContactInformation(
         applicationContext,
         {
           contactInfo,
@@ -75,7 +75,7 @@ describe('updateUserContactInformationInteractor', () => {
 
   it('should throw unauthorized error when the user attempts to modify contact information for a different user', async () => {
     await expect(
-      updateUserContactInformationInteractor(
+      updateUserContactInformation(
         applicationContext,
         {
           contactInfo,
@@ -87,12 +87,13 @@ describe('updateUserContactInformationInteractor', () => {
   });
 
   it('should return without updating user or cases when the contact information has not changed', async () => {
-    await updateUserContactInformationInteractor(
+    await updateUserContactInformation(
       applicationContext,
       {
         contactInfo: mockUser.contact,
         firmName: 'broken',
         userId: mockUser.userId,
+        clientConnectionId,
       },
       mockUser,
     );
@@ -125,7 +126,7 @@ describe('updateUserContactInformationInteractor', () => {
       });
 
     await expect(
-      updateUserContactInformationInteractor(
+      updateUserContactInformation(
         applicationContext,
         {
           contactInfo,
@@ -158,7 +159,7 @@ describe('updateUserContactInformationInteractor', () => {
       practitionerType: PRACTITIONER_TYPE_OPTIONS[0],
       role: ROLES.irsPractitioner,
     };
-    await updateUserContactInformationInteractor(
+    await updateUserContactInformation(
       applicationContext,
       {
         contactInfo,
@@ -196,7 +197,7 @@ describe('updateUserContactInformationInteractor', () => {
       role: ROLES.irsPractitioner,
     };
 
-    await updateUserContactInformationInteractor(
+    await updateUserContactInformation(
       applicationContext,
       {
         contactInfo,
@@ -220,7 +221,7 @@ describe('updateUserContactInformationInteractor', () => {
     });
 
     await expect(
-      updateUserContactInformationInteractor(
+      updateUserContactInformation(
         applicationContext,
         {
           contactInfo,
@@ -246,7 +247,7 @@ describe('updateUserContactInformationInteractor', () => {
   });
 
   it('should generate a change of address document', async () => {
-    await updateUserContactInformationInteractor(
+    await updateUserContactInformation(
       applicationContext,
       {
         contactInfo,
@@ -261,7 +262,7 @@ describe('updateUserContactInformationInteractor', () => {
   it('should clean up DB and send websocket message if "generateChangeOfAddress" returns empty array', async () => {
     (generateChangeOfAddress as jest.Mock).mockReturnValue([]);
 
-    await updateUserContactInformationInteractor(
+    await updateUserContactInformation(
       applicationContext,
       {
         contactInfo,
@@ -293,7 +294,7 @@ describe('updateUserContactInformationInteractor', () => {
   it('should not clean up DB and send websocket message if "generateChangeOfAddress" returns undefined', async () => {
     (generateChangeOfAddress as jest.Mock).mockReturnValue(undefined);
 
-    await updateUserContactInformationInteractor(
+    await updateUserContactInformation(
       applicationContext,
       {
         contactInfo,
@@ -316,12 +317,13 @@ describe('updateUserContactInformationInteractor', () => {
   });
 
   it('should update the firmName if user is a practitioner and firmName is passed in', async () => {
-    await updateUserContactInformationInteractor(
+    await updateUserContactInformation(
       applicationContext,
       {
         contactInfo,
         firmName: 'testing',
         userId: mockUser.userId,
+        clientConnectionId,
       },
       mockUser,
     );
@@ -341,12 +343,13 @@ describe('updateUserContactInformationInteractor', () => {
         contact: contactInfo,
       }));
 
-    await updateUserContactInformationInteractor(
+    await updateUserContactInformation(
       applicationContext,
       {
         contactInfo,
         firmName: mockUser.firmName,
         userId: mockUser.userId,
+        clientConnectionId,
       },
       mockUser,
     );
