@@ -147,18 +147,10 @@ export type SeriatimBrief = {
   surreply: BriefWithPartyType;
 };
 
-export type SeriatimMemorandum = SeriatimBrief;
-
 export type SimultaneousBrief = {
   opening: BaseBrief;
   answering: BaseBrief;
   reply: BaseBrief;
-  surreply: BaseBrief;
-};
-
-export type SimultaneousMemorandum = {
-  opening: BaseBrief;
-  answering: BaseBrief;
   surreply: BaseBrief;
 };
 
@@ -173,8 +165,6 @@ export type SimultaneousSupplemental = {
 
 export type BriefDetailsType =
   | SeriatimBrief
-  | SeriatimMemorandum
-  | SimultaneousMemorandum
   | SimultaneousMemorandaOfLaw
   | SimultaneousSupplemental
   | SimultaneousBrief

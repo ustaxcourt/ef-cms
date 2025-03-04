@@ -1913,10 +1913,8 @@ export type ActionStatusOption = keyof typeof ACTION_STATUS_OPTIONS;
 
 export const BRIEF_TYPE_OPTIONS = {
   seriatimBrief: 'Seriatim Brief',
-  seriatimMemorandum: 'Seriatim Memorandum Brief',
   simultaneous: 'Simultaneous Brief',
   simultaneousMemoranda: 'Simultaneous Memoranda of Law',
-  simultaneousMemorandum: 'Simultaneous Memorandum Brief',
   simultaneousSupplemental: 'Simultaneous Supplemental Brief',
 } as const;
 export type BriefTypeOption = keyof typeof BRIEF_TYPE_OPTIONS;

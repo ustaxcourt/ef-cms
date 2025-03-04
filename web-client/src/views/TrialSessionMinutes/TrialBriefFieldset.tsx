@@ -11,16 +11,13 @@ import {
 import { SeriatimFieldset } from './BriefDetailsFieldsets/SeriatimFieldset';
 import { SimultaneousBriefFormFieldset } from './BriefDetailsFieldsets/SimultaneousBriefFormFieldset';
 import { SimultaneousMemorandaOfLawFormFieldset } from './BriefDetailsFieldsets/SimultaneousMemorandaOfLawFormFieldset';
-import { SimultaneousMemorandumFormFieldset } from './BriefDetailsFieldsets/SimultaneousMemorandumFormFieldset';
 import { SimultaneousSupplementalBriefFieldset } from './BriefDetailsFieldsets/SimultaneousSupplementalBriefFieldset';
 import React from 'react';
 import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import {
   SeriatimBrief,
-  SeriatimMemorandum,
   SimultaneousSupplemental,
   SimultaneousBrief,
-  SimultaneousMemorandum,
   SimultaneousMemorandaOfLaw,
 } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 
@@ -43,16 +40,6 @@ export const TrialBriefFieldset = ({
           onChangeHandler={onChangeHandler}
         />
       ),
-      [BRIEF_TYPE_OPTIONS.seriatimMemorandum]: (
-        <SeriatimFieldset
-          key={BRIEF_TYPE_OPTIONS.seriatimMemorandum}
-          seriatimFormState={
-            trialBriefFormState.briefDetails as SeriatimMemorandum
-          }
-          onBlurHandler={onBlurHandler}
-          onChangeHandler={onChangeHandler}
-        />
-      ),
       [BRIEF_TYPE_OPTIONS.simultaneousSupplemental]: (
         <SimultaneousSupplementalBriefFieldset
           key={BRIEF_TYPE_OPTIONS.simultaneousSupplemental}
@@ -68,16 +55,6 @@ export const TrialBriefFieldset = ({
           key={BRIEF_TYPE_OPTIONS.simultaneous}
           simultaneousBriefFormState={
             trialBriefFormState.briefDetails as SimultaneousBrief
-          }
-          onBlurHandler={onBlurHandler}
-          onChangeHandler={onChangeHandler}
-        />
-      ),
-      [BRIEF_TYPE_OPTIONS.simultaneousMemorandum]: (
-        <SimultaneousMemorandumFormFieldset
-          key={BRIEF_TYPE_OPTIONS.simultaneousMemorandum}
-          simultaneousMemorandumFormState={
-            trialBriefFormState.briefDetails as SimultaneousMemorandum
           }
           onBlurHandler={onBlurHandler}
           onChangeHandler={onChangeHandler}

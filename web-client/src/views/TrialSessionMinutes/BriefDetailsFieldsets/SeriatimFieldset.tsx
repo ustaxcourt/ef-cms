@@ -9,10 +9,7 @@ import {
   OnChangeHandler,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import React from 'react';
-import {
-  SeriatimBrief,
-  SeriatimMemorandum,
-} from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
+import { SeriatimBrief } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 
 export const SeriatimFieldset = ({
   onBlurHandler,
@@ -21,7 +18,7 @@ export const SeriatimFieldset = ({
 }: {
   onChangeHandler: OnChangeHandler;
   onBlurHandler: AutoSaveHandler;
-  seriatimFormState: SeriatimBrief | SeriatimMemorandum;
+  seriatimFormState: SeriatimBrief;
 }) => {
   const rowsConfig = [
     { key: 'opening', rowLabel: 'Opening' },
