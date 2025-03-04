@@ -56,11 +56,11 @@ describe('Case Search', () => {
       );
     });
 
-    it.only('should show partial matches for petitioner name and secondary contact', () => {
-      const primaryLastName = faker.person.lastName();
+    it('should show whole first name and last name matches for petitioner name and secondary contact', () => {
+      const primaryFirstName = faker.person.firstName();
+      const primaryName = `${primaryFirstName} Rogers`;
       const secondaryLastName = faker.person.lastName();
       const secondaryName = `Terrance ${secondaryLastName}`;
-      const primaryName = `Jade ${primaryLastName}`;
 
       createAndServePaperPetitionMyselfAndSpouse({
         secondaryContactName: secondaryName,
@@ -68,7 +68,7 @@ describe('Case Search', () => {
       }).then(({ docketNumber }) => {
         cy.visit('/');
         cy.get('[data-testid=petitioner-name]').clear();
-        cy.get('[data-testid=petitioner-name]').type(primaryLastName);
+        cy.get('[data-testid=petitioner-name]').type(primaryFirstName);
         cy.get('[data-testid=submit-case-search-by-name-button]').click();
         cy.get(
           `[data-testid=advanced-case-search-result-${docketNumber}]`,
