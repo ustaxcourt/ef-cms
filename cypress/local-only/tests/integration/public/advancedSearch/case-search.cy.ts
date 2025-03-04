@@ -75,11 +75,22 @@ describe('Case Search', () => {
         ).find(`[data-testid=advanced-case-search-result-order-${0}]`);
 
         cy.get('[data-testid=petitioner-name]').clear();
-        cy.get('[data-testid=petitioner-name]').type(secondaryLastName);        cy.get('[data-testid=submit-case-search-by-name-button]').click();
+        cy.get('[data-testid=petitioner-name]').type(secondaryLastName);
+        cy.get('[data-testid=submit-case-search-by-name-button]').click();
         cy.get(
           `[data-testid=advanced-case-search-result-${docketNumber}]`,
         ).find(`[data-testid=advanced-case-search-result-order-${0}]`);
       });
+    });
+
+    it('should show no matches when searching for names that do not exist', () => {
+      const searchTerm = 'ZeroMatches DoNotMatchThis';
+
+      cy.visit('/');
+      cy.get('[data-testid=petitioner-name]').clear();
+      cy.get('[data-testid=petitioner-name]').type(searchTerm);
+      cy.get('[data-testid=submit-case-search-by-name-button]').click();
+      cy.get('[data-testid=no-search-results]');
     });
   });
 
