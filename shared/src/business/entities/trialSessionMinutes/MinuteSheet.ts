@@ -82,7 +82,7 @@ export type Appearance = {
   name: string;
   datesOfAppearance: string;
   role?: PetitionerRoleOption;
-  roleNote?: string;
+  note?: string;
 };
 
 type JurisdictionEvent = {

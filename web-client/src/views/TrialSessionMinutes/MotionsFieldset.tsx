@@ -298,6 +298,7 @@ export const MotionsFieldset = ({
             className="padding-0"
             data-testid="add-motion-button"
             icon="plus"
+            type="button"
             onClick={e => {
               e.preventDefault();
               addRowHandler({

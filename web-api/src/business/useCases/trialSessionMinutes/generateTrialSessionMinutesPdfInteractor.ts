@@ -62,7 +62,6 @@ export const generateTrialSessionMinutesPdfInteractor = async (
   });
 
   const docketEntryId = getUniqueId();
-  const documentTitle = `minute-sheet-${docketEntryId}`;
 
   await uploadDocument({
     applicationContext,
@@ -74,6 +73,8 @@ export const generateTrialSessionMinutesPdfInteractor = async (
     applicationContext,
     key: docketEntryId,
   });
+
+  const documentTitle = `Minutes`;
 
   const documentMetadata = {
     docketNumber,

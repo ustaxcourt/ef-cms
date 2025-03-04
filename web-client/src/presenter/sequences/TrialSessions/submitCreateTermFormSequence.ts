@@ -1,4 +1,3 @@
-import { clearModalAction } from '@web-client/presenter/actions/clearModalAction';
 import { clearModalStateAction } from '@web-client/presenter/actions/clearModalStateAction';
 import { downloadXlsxAction } from '@web-client/presenter/actions/downloadXlsxAction';
 import { formatAlertWarningForTermGeneratorAction } from '@web-client/presenter/actions/TrialSession/formatAlertWarningForTermGeneratorAction';
@@ -7,18 +6,18 @@ import { runCreateTermAction } from '@web-client/presenter/actions/TrialSession/
 import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '@web-client/presenter/actions/setAlertSuccessAction';
 import { setAlertWarningAction } from '@web-client/presenter/actions/setAlertWarningAction';
-import { setValidationErrorsAction } from '@web-client/presenter/actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '@web-client/presenter/utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '@web-client/presenter/actions/startShowValidationAction';
-import { validateCreateTermModalAction } from '@web-client/presenter/actions/TrialSession/validateCreateTermModalAction';
+import { validateCreateTermFormAction } from '@web-client/presenter/actions/TrialSession/validateCreateTermFormAction';
+import { clearErrorAlertsAction } from '@web-client/presenter/actions/clearErrorAlertsAction';
 
-export const submitCreateTermModalSequence = [
+export const submitCreateTermFormSequence = [
+  clearErrorAlertsAction,
   startShowValidationAction,
-  validateCreateTermModalAction,
+  validateCreateTermFormAction,
   {
-    error: [setValidationErrorsAction],
+    error: [setAlertErrorAction],
     success: showProgressSequenceDecorator([
-      clearModalAction,
       formatCreateTermDatesAction,
       runCreateTermAction,
       {

@@ -138,6 +138,7 @@ export const ExhibitsFieldset = ({
               className="padding-0"
               data-testid={`remove-exhibit-button-${rowIndex}`}
               icon="times"
+              type="button"
               onClick={e => {
                 e.preventDefault();
                 removeRowHandler({
@@ -159,6 +160,7 @@ export const ExhibitsFieldset = ({
           data-testid="add-exhibit-button"
           className="padding-0 margin-top-1"
           icon="plus"
+          type="button"
           onClick={e => {
             e.preventDefault();
             addRowHandler({
