@@ -107,7 +107,7 @@ export function loginAsFloater() {
 }
 
 export function loginAsGeneral() {
-  login({ email: 'general' });
+  login({ email: 'general@example.com' });
   cy.get('[data-testid="section-inbox-tab"]').should('exist');
 }
 
